@@ -1,0 +1,81 @@
+report_wait: "Por favor, aguarde alguns segundos para o próximo report."
+
+invalid_player: "%arg% não é um jogador!"
+not_forget_player: "Não me lembro do jogador!"
+not_permission: "&cVocê não tem permissão para fazer isso."
+
+kick: "&a[&2Negativity&a]&c Você foi kickado deste servidor por Cheat (%cheat%)"
+
+ban:
+  kick_time: "&cProibido por %reason% para cimau %time% por %by%."
+  kick_def: "&cPermanentemente proibido por %reason% por %by%."
+  help:
+  # For the time, there is:
+  # y : years
+  # mo : months
+  # d : days
+  # h : hours
+  # m : minutes
+  # s : seconds
+  #
+  - "/ban <player> <def(true/false) | time (ex: 2h)> <reason> : Proibir o jogador especificado"
+  well_ban: "&a[&2Negativity&a]&c %name% bem proibido por %reason%."
+unban:
+  well_unban: "&a[&2Negativity&a]&c %name% bem unpriobido."
+  not_banned: "&c%name% não é banido."
+  not_exact: "%arg% não é o nome exato válido do jogador banido."
+report:
+  report_usage: "/report <nome> <razão>"
+  well_report: "&a%name% Reportado com sucesso!"
+  report_message: "&a[&2Negativity&a] &c%name% &7foi reportado por: &c%report% &7razão: &c%reason%"
+negativity:
+  alert: "&a[&2Negativity&a] &c%name%&7 pode estar usando &c%cheat% &7(&2Confiabilidade: %reliability%&7)!"
+  alert_hover: "&6Confiabilidade: %reliability%\nPing: %ping%"
+  verif:
+    invalid_cheat: "%arg% não é um cheat válido."
+    start: "&a[&2Negativity&a] &7Começou a analisar %name% por %cheat%"
+    start_all: "&a[&2Negativity&a] Iniciou análise completa para o jogador %name%"
+    help:
+      - "/negativity verif <jogador> [cheats...] : Inicia verificações (tudo se nenhum for dado)" 
+      - "/negativity <jogador> : Para ver algumas informações sobre este jogador"
+inventory:
+  close: "Fechar"
+  back: "Voltar"
+  reset_alert: "Remover alertas"
+  main:
+    freeze: "&a[&2Negativity&a] Você está atualmente congelado por %name%"
+    unfreeze: "&a[&2Negativity&a] Você não está mais congelado por %name%"
+    actual_click: "Atual clicks : %clicks%"
+    max_click: "Máximo de clicks : %clicks%"
+    last_click: "Ultimo segundo : %clicks%"
+    ping: "Ping de %name%: %ping%"
+    see_inv: "Veja o inventário de %name%!"
+    teleportation_to: "Teletransporte para %name%"
+    freezing: "Congelando %name%"
+    active_detection: "Veja a detecção ativa para %name%"
+    see_alerts: "Veja todos os alertas de %name%"
+  detection:
+    name_inv: "Detecção ativa"
+    no_active: "Nenhuma detecção ativa para %name%"
+  alerts:
+    item_name: "Alertas de %exact_name% : %warn%"
+    inv_name: "Alertas"
+  mod:
+    night_vision: "Visão noturna"
+    invisible: "Tornou-se invisível"
+    random_tp: "Teletransporte aleatório"
+    clear_inv: "Limpe seu inventário"
+    inv_cleared: "Inventário limpo!"
+    vision_removed: "Visão noturna desativada"
+    vision_added: "Visão noturna ativada"
+    now_invisible: "Agora, você está invisível"
+    no_longer_invisible: "Agora, você não está mais invisível"
+    you_are_freeze: "Você está congelado. Você não pode fechar este inventário."
+    cheat_manage: "Controlador de Cheats"
+  manager:
+    enabled: "&aLIGADO"
+    disabled: "&cDESLIGADO"
+    setBack: "Cancela a última ação de cheat quando uma é detectada: &l%back%"
+    autoVerif: "Verificação automática: &l%auto%"
+    allowKick: "Kickar jogadores Cheatados: &l%allow%"
+    setActive: "Cheats ativos: &l%active%"

@@ -1,0 +1,92 @@
+report_wait: "Пожалуйста, подождите одну секунду между 2-я репортами."
+
+invalid_player: "%arg% не игрок!"
+not_forget_player: "Не забывайте про игрока!"
+not_permission: "&cУ вас нет разрешения делать это."
+
+kick: "&a[&2Negativity&a]&c Вы были кикнуты с этого сервера за Читы (%cheat%)"
+
+ban {
+  kick_time: "&cБан за %reason% на %time% от %by%."
+  kick_def: "&cБан за %reason% от %by%."
+  # Время:
+  # y : годы
+  # mo : месяцы
+  # d : дни
+  # h : часы
+  # m : минуты
+  # s : секунды
+  #
+  help = [
+    "/ban <игрок> <def(true/false) | время (пример: 2h5m)> <причина> : Забанить указанного игрока"]
+  well_ban: "&a[&2Negativity&a]&c %name% был забанен за %reason%."
+}
+unban {
+  well_unban: "&a[&2Negativity&a]&c %name% был разбанен."
+  not_banned: "&c%name% не был забанен."
+  not_exact: "%arg% не является ником игрока."
+}
+report {
+  report_usage: "/report <игрок> <причина>"
+  well_report: "&aИгрок %name% получил репорт!"
+  report_message: "&a[&2Negativity&a] &c%name% &7получил репорт от &c%report% &7за &c%reason%"
+}
+negativity {
+  alert: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% &7(&2Точность: %reliability%&7)!"
+  alert_hover: "&6Точность: %reliability%\nПинг: %ping%"
+  verif {
+    invalid_cheat: "%arg% не является читом."
+    start: "&a[&2Negativity&a] &7Анализ начался для %name% на чит %cheat%"
+    start_all: "&a[&2Negativity&a] Начался полный анализ игрока %name%"
+    help = [
+      "/negativity verif <игрок> [читы...] : Начинает проверку (проверка на все читы, если ни один не указан)" 
+      "/negativity <игрок> : Увидеть информацию о игроке" ]
+    }
+  }
+}
+inventory {
+  close: "Закрыть"
+  back: "Назад"
+  reset_alert: "удалить оповещения"
+  main {
+    freeze: "&a[&2Negativity&a] Вы заморожены игроком %name%"
+    unfreeze: "&a[&2Negativity&a] Вы разморожены игроком %name%"
+    actual_click: "Клики : %clicks%"
+    max_click: "Максимальные клики : %clicks%"
+    last_click: "Последние клики : %clicks%"
+    ping: "Пинг игрока %name%: %ping%"
+    see_inv: "Вы видите инвентарь игрока %name%"
+    teleportation_to: "Телепортация к %name%"
+    freezing: "Заморозка игрока %name%"
+    active_detection: "Просмотреть активные предупреждения для %name%"
+    see_alerts: "Просмотреть все предупреждения для %name%"
+  }
+  detection {
+    name_inv: "Активные предупреждения"
+    no_active: "Нет активных предупреждений для %name%"
+  }
+  alerts {
+    item_name: "Предупреждения для %exact_name% : %warn%"
+    inv_name: "Все предупреждения"
+  }
+  mod {
+    night_vision: "Ночное зрение"
+    invisible: "Стать невидимым"
+    random_tp: "Случайная телепортация"
+    clear_inv: "Очистить ваш инвентарь"
+    inv_cleared: "Инвентарь очищен!"
+    vision_removed: "Ночное зрение отключено"
+    vision_added: "Ночное зрение включено"
+    now_invisible: "Теперь вы невидимы"
+    no_longer_invisible: "Теперь каждый может увидеть вас"
+    you_are_freeze: "Вы заморожены. Вы не сможете закрыть это меню."
+    cheat_manage: "Управление читами"
+  manager {
+    enabled: "&aВкл"
+    disabled: "&cВыкл"
+    setBack: "Отменяет последнее действие чита, когда оно обнаружено: &l%back%"
+    autoVerif: "Автопроверка: &l%auto%"
+    allowKick: "Кикать читеров: &l%allow%"
+    setActive: "Активные читы: &l%active%"
+  }
+}

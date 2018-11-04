@@ -1,0 +1,90 @@
+report_wait: "Vennligst vent 1 sekkund mellom vær rapport "
+
+invalid_player: "%arg% er ikke en spiller!"
+not_forget_player: "ikke glem spillerens navn !"
+not_permission: "&cdu har ikke tilgang til dette."
+
+kick: "&a[&2Negativity&a]&c du har blitt sparket fra denne serveren for juksing (%cheat%)"
+
+ban {
+  kick_time: "&cForbud grunn %reason% før %time% av %by%."
+  kick_def: "&cForbud definitivt for %reason% av %by%."
+  help = [
+  "/ban <player> <def(true/false) | time (ex: 2h)> <reason> : Forbud den angitte spilleren" ]
+  well_ban: "&a[&2Negativity&a]&c %name% godt forbudt for %reason%."
+}
+unban {
+  well_unban: "&a[&2Negativity&a]&c %name% godt unforbudt."
+  help = [
+    "/unban <player> : unforbudt den angitte spilleren" ]
+}
+report {
+  report_usage: "/report <navn> <grunn>"
+  well_report: "&a%name% rapport vellykket !"
+  report_message: "&a[&2Negativity&a] &c%name% &7har blitt rapportert av &c%report% &7for &c%reason%"
+}
+negativity {
+  alert: "&a[&2Negativity&a] &c%name%&7 ser ut til å bruke &c%cheat% &7(&2Pålitelighet: %reliability%&7) !"
+  alert_hover: "&6Pålitelighet: %reliability%\nPing: %ping%"
+  verif {
+    invalid_cheat: "%arg% er ikke en gyldig juks!"
+    start: "&a[&2Negativity&a] &7begynte å analysere %name% for %cheat%"
+    start_all: "&a[&2Negativity&a] startet full analyse for spilleren %name%"
+    help = [
+      "/negativity verif <spiller> [juks...] : Starter verifikasjoner (alt hvis ingen er gitt)" 
+      "/negativity <spiller> : For å se noen opplysninger om denne spiller"
+    ]
+  }
+}
+inventory {
+  close: "lukke"
+  back: "tilbake"
+  reset_alert: "fjern varsler"
+  main {
+    freeze: "&a[&2Negativity&a] du er frosset av %name%"
+    unfreeze: "&a[&2Negativity&a] du er ikke lengere frosset av %name%"
+    inv_freeze_active: true
+    actual_click: "Faktiske klikk : %clicks%"
+    max_click: "Maks klikk : %clicks%"
+    last_click: "siste sekund : %clicks%"
+    ping: "Ping  %name%: %ping%"
+    see_inv: "se %name%'s inventar"
+    teleportation_to: "Teleportasjon til %name%"
+    freezing: "frys %name%"
+    active_detection: "se aktiv gjennkjenning for %name%"
+    see_alerts: "se alle varslene for %name%"
+  }
+  detection {
+    name_inv: "aktive gjennkjenning"
+    no_active: "ingen aktive gjennkjenning %name%"
+  }
+  alerts {
+    item_name: "varsler for %exact_name% : %warn%"
+    inv_name: "varsler"
+    see {
+      no_started_verif_cheat: false # Ikke se om spilleren ikke analyserer for denne juksen
+      only_cheat_active: true # Den snyte med en aktiv gjenkjenning
+    }
+  }
+  mod {
+    night_vision: "nattsyn"
+    invisible: "bli usynelig"
+    random_tp: "Tilfeldig teleportasjon"
+    clear_inv: "tøm inventaret ditt"
+    inv_cleared: "inventar fjernet!"
+    vision_removed: "nattsyn &4&l&nslått av"
+    vision_added: "nattsyn &a&l&nAktivert"
+    now_invisible: "du er nå usynlig"
+    no_longer_invisible: "nå kan alle se deg"
+    you_are_freeze: "du er frosset du kan ikke gå ut av dette inventaret."
+    cheat_manage: "jukse sjef"
+  }
+  manager {
+    enabled: "&apå"
+    disabled: "&4av"
+    setBack: "avbryter den siste handlingen av juks når en er oppdaget: &l%back%"
+    autoVerif: "automatisk bekreftelse: &l%auto%"
+    allowKick: "spark juks spiller: &l%allow%"
+    setActive: "aktiv antijuks : &l%active%"
+  }
+}

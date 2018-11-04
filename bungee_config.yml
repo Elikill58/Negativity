@@ -1,0 +1,66 @@
+###################################################################
+#                                                                 #
+#                            Negativity                           #
+#                      AntiCheat by Elikill58                     #
+#                                                                 #
+#              If you have a problem or a suggestion,             #
+#                    You can contact me on:                       #
+#                  - Discord: @Elikill58#0743                     #
+#       - my Discord server: https://discord.gg/KHRVTX2           #
+#               - Mail: arpetzouille@gmail.com                    #
+#                   - SpigotMC: Elikill58                         #
+#                  - Minecraft.fr: Elikill                        # 
+#                                                                 #
+###################################################################
+
+Database:
+  isActive: false
+  # To get the information. We use the player uuid to get the information.
+  # We get only what you write. We never add or remove something.
+  # We don't save your private information about your database
+  url: "127.0.0.1/myDb"
+  user: root
+  password: "myPassword"
+  table_perm: "myTable"
+  table_lang: "myTable"
+  table_ban: "ban"
+  column_perm: "rank"
+  column_lang: "lang"
+  saveInCache: false # To do less request to your database
+
+#
+# Configuration about the permissions (basic and custom)
+#
+Permissions:
+  defaultActive: true
+  #
+  # Only if it's an integer.
+  # It's if your rank system work with power.
+  # For example: If a player have 50, and you write 40, he would can use it
+  #
+  canBeHigher: false
+
+  # Use "," to split all possibilites of custom permission
+  showAlert:
+    default: "negativity.alert"
+    custom: "MOD,ADMIN"
+  showReport:
+    default: "negativity.report"
+    custom: "MOD,ADMIN"
+  # To bypass ban system
+  notBanned:
+    default: "negativity.notbanned"
+    custom: "ADMIN"
+    
+Translation:
+  active: false # enable or disable the translation
+  lang_available:
+  - en_US
+  - fr_FR
+  - no_NO
+  - pt_BR
+  - ru_RU
+  use_db: true # to get the lang
+  default: en_US
+
+  no_active_file_name: "messages.yml" # where are the messages if the translation are not active

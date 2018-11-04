@@ -1,0 +1,56 @@
+name: Negativity
+main: com.elikill58.negativity.spigot.SpigotNegativity
+version: 1.1
+author: Elikill58
+description: It's an Advanced AntiCheat Detection, by Elikill58.
+
+commands:
+  negativity:
+    description: See all informations about a player and start verif
+    permission: negativity.negativity
+  report:
+    description: Report a player
+    permission: negativity.report
+  nban:
+    description: Ban a player
+    permission: negativity.ban
+  nunban:
+    description: Unban a player
+    permission: negativity.ban
+  mod:
+    description: Option for mod
+    permission: negativity.mod
+  lang:
+    description: Language management
+    permission: negativity.lang
+  suspect:
+    description: Suspect a player that is cheating
+    permission: negativity.suspect
+
+permissions:
+  negativity.*:
+    description: Gives access to everything.
+    children:
+      negativity.negativity: true
+      negativity.report: true
+      negativity.ban: true
+      negativity.mod: true
+      negativity.suspect: true
+  negativity.negativity:
+    description: See all informations about a player and start verif
+    default: op
+  negativity.report:
+    description: Report a player
+    default: op
+  negativity.ban:
+    description: Ban a player
+    default: op
+  negativity.unban:
+    description: Unban a player
+    default: op
+  negativity.mod:
+    description: Option for mod
+    default: op
+  negativity.suspect:
+    description: Suspect a player
+    default: op

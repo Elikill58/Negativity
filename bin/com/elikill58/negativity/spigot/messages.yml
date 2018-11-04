@@ -1,0 +1,80 @@
+report_wait: "Please, wait one second between 2 report"
+
+invalid_player: "%arg% isn't a player !"
+not_forget_player: "Don't forget the player !"
+not_permission: "&cYou don't have permission to do that"
+
+kick: "&a[&2Negativity&a]&c You're kicked from the server for Cheating (%cheat%)"
+
+ban:
+  kick_time: "&cBan for %reason% until %time% by %by%."
+  kick_def: "&cBan definitly for %reason% by %by%."
+  help:
+  # For the time, there is:
+  # y : years
+  # mo : months
+  # d : days
+  # h : hours
+  # m : minutes
+  # s : seconds
+  #
+  - "/ban <player> <def(true/false) | time (ex: 2h)> <reason> : Ban the specified player"
+  well_ban: "&a[&2Negativity&a]&c %name% well banned for %reason%."
+unban:
+  well_unban: "&a[&2Negativity&a]&c %name% well unbanned."
+  not_banned: "&c%name% isn't banned."
+  not_exact: "%arg% isn't exact valid name of banned player."
+report:
+  report_usage: "/report <name> <reason>"
+  well_report: "&a%name% well reported !"
+  report_message: "&a[&2Negativity&a] &c%name% &7have been report by &c%report% &7for &c%reason%"
+negativity:
+  alert: "&a[&2Negativity&a] &c%name%&7 seem to use &c%cheat% &7(&2Reliability: %reliability%&7) !"
+  alert_hover: "&6Reliability: %reliability%\nPing: %ping%"
+  verif:
+    invalid_cheat: "%arg% isn't a cheat !"
+    start: "&a[&2Negativity&a] &7Start analyze of %cheat% on %name%"
+    start_all: "&a[&2Negativity&a] Start of all analyze on %name%"
+    help:
+      - "/negativity verif <player> [cheats...] : Start verifications (all if nothing is precise)" 
+      - "/negativity <player> : To see some informations about this player"
+inventory:
+  close: "Close"
+  back: "Back"
+  main:
+    freeze: "&a[&2Negativity&a] You're currently freeze by %name%"
+    unfreeze: "&a[&2Negativity&a] You're no longer freeze by %name%"
+    actual_click: "Actual clicks : %clicks%"
+    max_click: "Max clicks : %clicks%"
+    last_click: "Last second : %clicks%"
+    ping: "Ping of %name%: %ping%"
+    see_inv: "See the %name%'s inventory"
+    teleportation_to: "Teleportation to %name%"
+    freezing: "Freeze %name%"
+    active_detection: "See active detection for %name%"
+    see_alerts: "See all alerts for %name%"
+  detection:
+    name_inv: "Active detection"
+    no_active: "No active detection for %name%"
+  alerts:
+    item_name: "Alerts for %exact_name% : %warn%"
+    inv_name: "Alerts"
+  mod:
+    night_vision: "Night vision"
+    invisible: "Become invisible"
+    random_tp: "Random teleportation"
+    clear_inv: "Clear your inventory"
+    inv_cleared: "Inventaire cleared !"
+    vision_removed: "Night vision disabled"
+    vision_added: "Night vision enabled"
+    now_invisible: "Now, you're invisible"
+    no_longer_invisible: "Now, everyone can see you"
+    you_are_freeze: "You are freeze. You cannot leave this inventory."
+    cheat_manage: "Cheat manager"
+  manager:
+    enabled: "&aOn"
+    disabled: "&cOff"
+    setBack: "Add/Remove go back if cheating &l%back%"
+    autoVerif: "Auto verification: &l%auto%"
+    allowKick: "Kick if player cheat: &l%allow%"
+    setActive: "Cheat active: &l%active%"

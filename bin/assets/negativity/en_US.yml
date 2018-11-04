@@ -1,0 +1,86 @@
+report_wait: "Please, wait one second between 2 report"
+
+invalid_player: "%arg% isn't a player !"
+not_forget_player: "Don't forget the player !"
+not_permission: "&cYou don't have permission to do that."
+
+kick: "&a[&2Negativity&a]&c You have been kicked from this server for Cheating (%cheat%)"
+
+ban {
+  kick_time: "&cBan for %reason% until %time% by %by%."
+  kick_def: "&cBan definitly for %reason% by %by%."
+  help = [
+    "/ban <player> <def(true/false) | time> <reason> : Ban the specified player" ]
+  well_ban: "&a[&2Negativity&a]&c %name% well banned for %reason%."
+}
+unban {
+  well_unban: "&a[&2Negativity&a]&c %name% well unbanned."
+  help = [
+    "/unban <player> : Unban specified player" ]
+}
+report {
+  report_usage: "/report <name> <reason>"
+  well_report: "&a%name% reported successfully !"
+  report_message: "&a[&2Negativity&a] &c%name% &7have been reported by &c%report% &7for &c%reason%"
+}
+negativity {
+  alert: "&a[&2Negativity&a] &c%name%&7 seem to use &c%cheat% &7(&2Reliability: %reliability%&7) !"
+  alert_hover: "&6Reliability: %reliability%\nPing: %ping%"
+  verif {
+    invalid_cheat: "%arg% is not a valid cheat !"
+    start: "&a[&2Negativity&a] &7Started analyzing %name% for %cheat%"
+    start_all: "&a[&2Negativity&a] Started full analysis for player %name%"
+    help = [
+     "/negativity verif <player> [cheats...] : Starts verifications (all if none is given)" 
+     "/negativity <player> : To see some informations about this player"
+   ]
+  }
+}
+inventory {
+  close: "Close"
+  back: "Back"
+  reset_alert: "Delete alerts"
+  main {
+    freeze: "&a[&2Negativity&a] You're currently freezed by %name%"
+    unfreeze: "&a[&2Negativity&a] You're no longer freezed by %name%"
+    inv_freeze_active: true
+    actual_click: "Actual clicks : %clicks%"
+    max_click: "Max clicks : %clicks%"
+    last_click: "Last second : %clicks%"
+    ping: "Ping of %name%: %ping%"
+    see_inv: "See %name%'s inventory"
+    teleportation_to: "Teleportation to %name%"
+    freezing: "Freezing %name%"
+    active_detection: "See active detection for %name%"
+    see_alerts: "See all alerts for %name%"
+  }
+  detection {
+    name_inv: "Active detection"
+    no_active: "No active detection for %name%"
+  }
+  alerts {
+    item_name: "Alerts for %exact_name% : %warn%"
+    inv_name: "Alerts"
+  }
+  mod {
+    night_vision: "Night vision"
+    invisible: "Became invisible"
+    random_tp: "Random teleportation"
+    clear_inv: "Clear your inventory"
+    inv_cleared: "Inventory cleared !"
+    vision_removed: "Night vision disabled"
+    vision_added: "Night vision enabled"
+    now_invisible: "Now, you're invisible"
+    no_longer_invisible: "Now, everyone can see you"
+    you_are_freeze: "You are freezed. You cannot leave this inventory."
+    cheat_manage: "Cheat manager"
+  }
+  manager {
+    enabled: "&aOn"
+    disabled: "&cOff"
+    setBack: "Cancels the last action of the cheat when one is detected: &l%back%"
+    autoVerif: "Auto verification: &l%auto%"
+    allowKick: "Kick cheating players: &l%allow%"
+    setActive: "Active cheats: &l%active%"
+  }
+}

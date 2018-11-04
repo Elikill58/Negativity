@@ -1,0 +1,9 @@
+report_message: "&a[&2Negativity&a] &c%name% &7har blitt rapportert av &c%report% &7for &c%reason%"
+alert: "&a[&2Negativity&a] &c%name%&7 ser ut til å bruke &c%cheat% &7(&2Pålitelighet: %reliability%&7) !"
+alert_hover: "&6Pålitelighet: %reliability%\nPing: %ping%"
+ban:
+  kick_time: "&cForbud grunn %reason% før %time% av %by%."
+  kick_def: "&cForbud definitivt for %reason% av %by%."
+  help:
+  - "/ban <player> <def(true/false) | time (ex: 2h)> <reason> : Forbud den angitte spilleren"
+  well_ban: "&a[&2Negativity&a]&c %name% godt forbudt for %reason%."

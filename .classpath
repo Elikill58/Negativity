@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
+	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/BungeeCord.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/PacketGate-0.1.1.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/APISuppressError.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/Precogs-1.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/spigot-1.7.10.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/spigot-1.10.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/SpongeAPI-7.1.0-20180707.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/forge_1.12.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/ProtocolLib-3.4.0 1.7.9.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

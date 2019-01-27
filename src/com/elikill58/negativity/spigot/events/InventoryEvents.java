@@ -19,6 +19,7 @@ import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
+@SuppressWarnings("deprecation")
 public class InventoryEvents implements Listener {
 
 	@EventHandler
@@ -35,38 +36,39 @@ public class InventoryEvents implements Listener {
 				return;
 			}
 			Player cible = Inv.CHECKING.get(p);
-			switch (m) {
-			case EYE_OF_ENDER:
+			if (m == Utils.getMaterialWith1_13_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER")) {
 				p.teleport(cible);
 				p.closeInventory();
 				Inv.CHECKING.remove(p);
-				break;
-			case SPIDER_EYE:
-				p.openInventory(cible.getInventory());
-				Inv.CHECKING.remove(p);
-				break;
-			case TNT:
-				Inv.openActivedCheat(p, cible);
-				break;
-			case PACKED_ICE:
-				p.closeInventory();
-				SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
-				np.isFreeze = !np.isFreeze;
-				if (np.isFreeze) {
-					if (Adapter.getAdapter().getBooleanInConfig("inventory.inv_freeze_active"))
-						Inv.openFreezeMenu(cible);
-					Messages.sendMessage(p, "inventory.main.freeze", "%name%", cible.getName());
-				} else
-					Messages.sendMessage(p, "inventory.main.unfreeze", "%name%", cible.getName());
-				break;
-			case ANVIL:
-				Inv.openAlertMenu(p, cible);
-				break;
-			case GRASS:
-				Inv.openForgeModsMenu(cible);
-				break;
-			default:
-				break;
+			} else {
+				switch (m) {
+				case SPIDER_EYE:
+					p.openInventory(cible.getInventory());
+					Inv.CHECKING.remove(p);
+					break;
+				case TNT:
+					Inv.openActivedCheat(p, cible);
+					break;
+				case PACKED_ICE:
+					p.closeInventory();
+					SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
+					np.isFreeze = !np.isFreeze;
+					if (np.isFreeze) {
+						if (Adapter.getAdapter().getBooleanInConfig("inventory.inv_freeze_active"))
+							Inv.openFreezeMenu(cible);
+						Messages.sendMessage(p, "inventory.main.freeze", "%name%", cible.getName());
+					} else
+						Messages.sendMessage(p, "inventory.main.unfreeze", "%name%", cible.getName());
+					break;
+				case ANVIL:
+					Inv.openAlertMenu(p, cible);
+					break;
+				case GRASS:
+					Inv.openForgeModsMenu(cible);
+					break;
+				default:
+					break;
+				}
 			}
 		} else if (invName.equals(Inv.NAME_ACTIVED_CHEAT_MENU)) {
 			e.setCancelled(true);
@@ -88,12 +90,12 @@ public class InventoryEvents implements Listener {
 					p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 10000, 0));
 					Messages.sendMessage(p, "inventory.mod.vision_added");
 				}
-			} else if (m.equals(Material.IRON_SPADE)) {
+			} else if (m.equals(Utils.getMaterialWith1_13_Compatibility("IRON_SPADE", "LEGACY_IRON_SPADE"))) {
 				p.closeInventory();
 				p.getInventory().clear();
 				p.getInventory().setArmorContents(null);
 				Messages.sendMessage(p, "inventory.mod.inv_cleared");
-			} else if (m.equals(Material.LEASH)) {
+			} else if (m.equals(Utils.getMaterialWith1_13_Compatibility("LEASH", "LEGACY_LEASH"))) {
 				p.closeInventory();
 				Player randomPlayer = (Player) Utils.getOnlinePlayers().toArray()[Utils.getOnlinePlayers().size() - 1];
 				p.teleport(randomPlayer);
@@ -113,6 +115,11 @@ public class InventoryEvents implements Listener {
 			} else if (m.equals(Material.TNT)) {
 				p.closeInventory();
 				Inv.openCheatManagerMenu(p);
+			} else if (m.equals(Material.FEATHER)) {
+				p.closeInventory();
+				p.setAllowFlight(!p.getAllowFlight());
+				p.sendMessage("Flying: "
+						+ Messages.getMessage(p, "inventory.manager." + (p.getAllowFlight() ? "enabled" : "disabled")));
 			}
 		} else if (invName.equals(Inv.NAME_ALERT_MENU)) {
 			e.setCancelled(true);
@@ -121,7 +128,7 @@ public class InventoryEvents implements Listener {
 			else if (m.equals(Material.ARROW))
 				Inv.openCheckMenu(p, Inv.CHECKING.get(p));
 			else if (m.equals(Material.BONE)) {
-				for(Cheat c : Cheat.values())
+				for (Cheat c : Cheat.values())
 					SpigotNegativityPlayer.getNegativityPlayer(Inv.CHECKING.get(p)).setWarn(c, 0);
 				Inv.actualizeAlertMenu(p, Inv.CHECKING.get(p));
 			}
@@ -136,8 +143,10 @@ public class InventoryEvents implements Listener {
 				if (c.isPresent())
 					Inv.openOneCheatMenu(p, c.get());
 			}
-		} else if(invName.equals(Inv.NAME_FORGE_MOD_MENU)) {
+		} else if (invName.equals(Inv.NAME_FORGE_MOD_MENU)) {
 			e.setCancelled(true);
+			if(m.equals(Material.ARROW))
+				Inv.openCheckMenu(p, Inv.CHECKING.get(p));
 		} else if (Utils.getCheatFromName(invName).isPresent()) {
 			e.setCancelled(true);
 			if (m.equals(SpigotNegativity.MATERIAL_CLOSE)) {
@@ -157,7 +166,7 @@ public class InventoryEvents implements Listener {
 						Utils.createItem(m,
 								Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p,
 										"inventory.manager." + (c.setBack(!c.isSetBack()) ? "enabled" : "disabled")))));
-			else if (m.equals(Material.EYE_OF_ENDER))
+			else if (m.equals(Utils.getMaterialWith1_13_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER")))
 				inv.setItem(slot, Utils.createItem(m,
 						Messages.getMessage(p, "inventory.manager.autoVerif", "%auto%", Messages.getMessage(p,
 								"inventory.manager." + (c.setAutoVerif(!c.isAutoVerif()) ? "enabled" : "disabled")))));

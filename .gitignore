@@ -1,0 +1,8 @@
+/dist/
+/build/
+/nbproject/
+.idea/
+/target/
+/.settings/
+/.classpath
+/.project

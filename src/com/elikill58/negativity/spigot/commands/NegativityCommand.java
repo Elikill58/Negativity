@@ -93,12 +93,16 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 					tab.add(p.getName());
 			if ("verif".startsWith(prefix) || prefix.isEmpty())
 				tab.add("verif");
+			if ("reload".startsWith(prefix) || prefix.isEmpty())
+				tab.add("reload");
 		} else if(arg.length == 1 && arg[0].equalsIgnoreCase(prefix)){
 			for (Player p : Utils.getOnlinePlayers())
 				if (p.getName().toLowerCase().startsWith(prefix.toLowerCase()) || prefix.isEmpty())
 					tab.add(p.getName());
 			if ("verif".startsWith(prefix.toLowerCase()) || prefix.isEmpty())
 				tab.add("verif");
+			if ("reload".startsWith(prefix) || prefix.isEmpty())
+				tab.add("reload");
 		} else {
 			if (arg[0].equalsIgnoreCase("verif") && arg.length > 2) {
 				if (Bukkit.getPlayer(arg[1]) != null)

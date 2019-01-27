@@ -171,6 +171,8 @@ public class SpongeAdapter extends Adapter {
 			fileName = "no_NO.yml";
 		else if (lang.toLowerCase().contains("ru"))
 			fileName = "ru_RU.yml";
+		else if (lang.toLowerCase().contains("zh") || lang.toLowerCase().contains("cn"))
+			fileName = "zh_CN.yml";
 		// TODO : Espagnol & Allemand
 		SpongeNegativity.getInstance().getContainer().getAsset(fileName).ifPresent(asset -> {
 			try {

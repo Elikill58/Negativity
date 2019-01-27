@@ -3,7 +3,6 @@ package com.elikill58.negativity.spigot.protocols;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,16 +35,16 @@ public class AntiKnockbackProtocol implements Listener {
 
 			@Override
 			public void run() {
-				Location last = p.getLocation();
+				final Location last = p.getLocation();
 				p.damage(0D);
-				p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0));
+				p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
 				Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new BukkitRunnable() {
 					@Override
 					public void run() {
 						Location actual = p.getLocation();
 						double d = last.distance(actual);
 						int ping = Utils.getPing(p), relia = Utils.parseInPorcent(100 - d);
-						if (d < 0.1 && !actual.getBlock().getType().equals(Material.WEB) && !p.isSneaking()){
+						if (d < 0.1 && !actual.getBlock().getType().equals(Utils.getMaterialWith1_13_Compatibility("WEB", "COBWEB")) && !p.isSneaking()){
 							np.addWarn(Cheat.ANTIKNOCKBACK);
 							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.ANTIKNOCKBACK, relia,
 									"Distance after damage: " + d + "; Damager: " + e.getDamager().getType().name().toLowerCase() + " Ping: " + ping, "Distance after damage: " + d);

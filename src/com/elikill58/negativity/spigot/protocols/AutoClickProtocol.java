@@ -17,6 +17,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
+@SuppressWarnings("deprecation")
 public class AutoClickProtocol implements Listener {
 
 	public static final int CLICK_ALERT = Adapter.getAdapter().getIntegerInConfig("cheats.autoclick.click_alert");

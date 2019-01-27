@@ -62,13 +62,14 @@ import com.elikill58.negativity.universal.adapter.SpigotAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.permissions.Perm;
 
+@SuppressWarnings("deprecation")
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
 	public static boolean isOnBungeecord = false, log = false, hasBypass = true;
 	public static Material MATERIAL_CLOSE = Material.REDSTONE;
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null;
-	
+
 	public void onEnable() {
 		INSTANCE = this;
 		Version v = Version.getVersion();
@@ -112,7 +113,7 @@ public class SpigotNegativity extends JavaPlugin {
 			getConfig().options().copyDefaults();
 			saveDefaultConfig();
 		}
-		if(Adapter.getAdapter() == null)
+		if (Adapter.getAdapter() == null)
 			Adapter.setAdapter(new SpigotAdapter(this, getConfig()));
 		Adapter ada = Adapter.getAdapter();
 		UniversalUtils.init();
@@ -120,7 +121,8 @@ public class SpigotNegativity extends JavaPlugin {
 		log = ada.getBooleanInConfig("log_alerts");
 		hasBypass = ada.getBooleanInConfig("Permissions.bypass.active");
 
-		new Metrics(this).addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
+		new Metrics(this)
+				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersEvents(), this);
@@ -129,23 +131,37 @@ public class SpigotNegativity extends JavaPlugin {
 
 		Messenger messenger = getServer().getMessenger();
 		ChannelEvents channelEvents = new ChannelEvents();
-		if(!messenger.getOutgoingChannels().contains("Negativity"))
-			messenger.registerOutgoingPluginChannel(this, "Negativity");
-		if(!messenger.getIncomingChannels().contains("Negativity"))
-			messenger.registerIncomingPluginChannel(this, "Negativity", channelEvents);
-		if(!messenger.getOutgoingChannels().contains("FML|HS"))
-			messenger.registerOutgoingPluginChannel(this, "FML|HS");
-		if(!messenger.getIncomingChannels().contains("FML|HS"))
-			messenger.registerIncomingPluginChannel(this, "FML|HS", channelEvents);
+		if (Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+			String channelNameNegativity = "custom:negativity";
+			if (!messenger.getOutgoingChannels().contains(channelNameNegativity))
+				messenger.registerOutgoingPluginChannel(this, channelNameNegativity);
+			if (!messenger.getIncomingChannels().contains(channelNameNegativity))
+				messenger.registerIncomingPluginChannel(this, channelNameNegativity, channelEvents);
+			if (!messenger.getOutgoingChannels().contains("test:fml"))
+				messenger.registerOutgoingPluginChannel(this, "test:fml");
+			if (!messenger.getIncomingChannels().contains("test:fml"))
+				messenger.registerIncomingPluginChannel(this, "test:fml", channelEvents);
+		} else {
+			String channelNameNegativity = "negativity";
+			if (!messenger.getOutgoingChannels().contains(channelNameNegativity))
+				messenger.registerOutgoingPluginChannel(this, channelNameNegativity);
+			if (!messenger.getIncomingChannels().contains(channelNameNegativity))
+				messenger.registerIncomingPluginChannel(this, channelNameNegativity, channelEvents);
+			if (!messenger.getOutgoingChannels().contains("FML|HS"))
+				messenger.registerOutgoingPluginChannel(this, "FML|HS");
+			if (!messenger.getIncomingChannels().contains("FML|HS"))
+				messenger.registerIncomingPluginChannel(this, "FML|HS", channelEvents);
+		}
 		for (Player p : Utils.getOnlinePlayers()) {
 			PacketListenerAPI.addPlayer(p);
 			manageAutoVerif(p);
-			/*for (Player pl : Utils.getOnlinePlayers())
-				pl.showPlayer(p);*/
+			/*
+			 * for (Player pl : Utils.getOnlinePlayers()) pl.showPlayer(p);
+			 */
 			Utils.sendUpdateMessageIfNeed(p);
 		}
 		(clickTimer = new ActualizeClickTimer()).runTaskTimer(this, 20, 20);
-		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 1, 1);
+		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
 
 		for (Cheat c : Cheat.values()) {
@@ -202,7 +218,7 @@ public class SpigotNegativity extends JavaPlugin {
 			langCmd.setExecutor(new SuspectCommand());
 
 		getCommand("mod").setExecutor(new ModCommand());
-		
+
 		if (getConfig().get("items") != null) {
 			ConfigurationSection cs = getConfig().getConfigurationSection("items");
 			for (String s : cs.getKeys(false))
@@ -211,7 +227,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (UniversalUtils.hasInternet()
 				&& !UniversalUtils.isLatestVersion(Optional.of(getDescription().getVersion()))) {
 			getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
-					+ "). Download it here: https://www.spigotmc.org/resources/aac-negativity-spigot-1-7-sponge-bungeecord-optimized.48399/");
+					+ "). Download it here: https://www.spigotmc.org/resources/48399/");
 		}
 		getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
 			@Override
@@ -250,25 +266,29 @@ public class SpigotNegativity extends JavaPlugin {
 				np.already_blink = true;
 				return false;
 			}
-		if(np.isInFight)
-			if(c.equals(Cheat.FLY) || c.equals(Cheat.FORCEFIELD) || c.equals(Cheat.STEP))
+		if (np.isInFight)
+			if (c.equals(Cheat.FLY) || c.equals(Cheat.FORCEFIELD) || c.equals(Cheat.STEP))
 				return false;
-		if(p.getItemInHand() != null)
-			if(ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType()))
-				if(ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType()).getWhen().equals(WhenBypass.ALWAYS))
+		if (p.getItemInHand() != null)
+			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType()))
+				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType()).getWhen().equals(WhenBypass.ALWAYS))
 					return false;
 		int ping = Utils.getPing(p);
-		if (np.TIME_INVINCIBILITY > System.currentTimeMillis() || reliability < 30 || ping > c.getMaxAlertPing() || ((double) ((Damageable) p).getHealth()) == 0.0D || getInstance().getConfig().getInt("tps_alert_stop") > Utils.getLastTPS() || ping < 0 || np.isFreeze)
+		if (np.TIME_INVINCIBILITY > System.currentTimeMillis() || reliability < 30 || ping > c.getMaxAlertPing()
+				|| ((double) ((Damageable) p).getHealth()) == 0.0D
+				|| getInstance().getConfig().getInt("tps_alert_stop") > Utils.getLastTPS() || ping < 0 || np.isFreeze)
 			return false;
 		Bukkit.getPluginManager().callEvent(new PlayerCheatEvent(p, c, reliability));
-		if(hasBypass && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "Permissions.bypass." + c.name().toLowerCase())) {
+		if (hasBypass && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p),
+				"Permissions.bypass." + c.name().toLowerCase())) {
 			PlayerCheatBypassEvent bypassEvent = new PlayerCheatBypassEvent(p, c, reliability);
 			Bukkit.getPluginManager().callEvent(bypassEvent);
-			if(!bypassEvent.isCancelled())
+			if (!bypassEvent.isCancelled())
 				return false;
 		}
 		logProof(type, p, c, reliability, proof, ping);
-		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(p, c, reliability,c.getReliabilityAlert() < reliability);
+		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(p, c, reliability,
+				c.getReliabilityAlert() < reliability);
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
@@ -278,25 +298,26 @@ public class SpigotNegativity extends JavaPlugin {
 			if (!kick.isCancelled())
 				p.kickPlayer(Messages.getMessage(p, "kick", "%cheat%", c.getName()));
 		}
-		Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.name() + " (Reliability: " + reliability + ") Ping: " + ping + " Type: " + type.getName());
+		Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.name() + " (Reliability: " + reliability + ") Ping: "
+				+ ping + " Type: " + type.getName());
 		Ban.manageBan(c, np, reliability);
 		if (isOnBungeecord)
 			sendMessage(p, c.getName(), String.valueOf(reliability), String.valueOf(ping), hover_proof);
 		else {
 			if (log)
-				INSTANCE.getLogger().info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString() + ") (ping: " + ping
-						+ ") : suspected of cheating (" + c.getName() + ") Reliability: " + reliability);
+				INSTANCE.getLogger()
+						.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
+								+ ") (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
+								+ reliability);
 			for (Player pl : Utils.getOnlinePlayers())
 				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert"))
-					new ClickableText()
-							.addRunnableHoverEvent(
-									Messages.getMessage(pl, "negativity.alert", "%name%", p.getName(), "%cheat%",
-											c.getName(), "%reliability%", String.valueOf(reliability)),
-									Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
-											String.valueOf(reliability), "%ping%", String.valueOf(ping))
-											+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),
-											"/negativity " + p.getName())
-							.sendToPlayer(pl);
+					new ClickableText().addRunnableHoverEvent(
+							Messages.getMessage(pl, "negativity.alert", "%name%", p.getName(), "%cheat%", c.getName(),
+									"%reliability%", String.valueOf(reliability)),
+							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
+									String.valueOf(reliability), "%ping%", String.valueOf(ping))
+									+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),
+							"/negativity " + p.getName()).sendToPlayer(pl);
 		}
 		return true;
 	}
@@ -323,23 +344,13 @@ public class SpigotNegativity extends JavaPlugin {
 		if (!log)
 			return;
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		SpigotNegativityPlayer.getNegativityPlayer(p).logProof(stamp, stamp + ": (" + ping
-				+ "ms) " + reliability + "% " + c.name() + " > " + proof);
-		/*
-		 * try { File dir = new File(INSTANCE.getDataFolder() + File.separator + "proof"
-		 * + File.separator); dir.mkdir(); dir.mkdirs(); File f = new
-		 * File(INSTANCE.getDataFolder() + File.separator + "proof" + File.separator +
-		 * p.getUniqueId().toString() + ".txt"); if (!f.exists()) f.createNewFile();
-		 * Files.write(f.toPath(), ("\n" + new Timestamp(System.currentTimeMillis()) +
-		 * " " + p.getName() + ": " + type.getName() + " for " + c.getName() +
-		 * " : Reliability: " + reliability + ". Proof: " + proof) .getBytes(),
-		 * StandardOpenOption.APPEND); } catch (Exception e) { e.printStackTrace(); }
-		 */
+		SpigotNegativityPlayer.getNegativityPlayer(p).logProof(stamp,
+				stamp + ": (" + ping + "ms) " + reliability + "% " + c.name() + " > " + proof);
 	}
 
 	public static void manageAutoVerif(Player p) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if(Cheat.ALL.isActive()) {
+		if (Cheat.ALL.isActive()) {
 			np.startAllAnalyze();
 			return;
 		}
@@ -366,11 +377,33 @@ public class SpigotNegativity extends JavaPlugin {
 		return result;
 	}
 
+	private Object getKnownCommands(Object object) {
+		try {
+			Class<?> clazz = object.getClass();
+			Field objectField = clazz.getDeclaredField("knownCommands");
+			objectField.setAccessible(true);
+			Object result = objectField.get(object);
+			objectField.setAccessible(false);
+			return result;
+		} catch (NoSuchFieldException e) {
+			Class<?> clazz = object.getClass();
+			try {
+				return clazz.getMethod("getKnownCommands").invoke(object);
+			} catch (Exception e1) {
+				e1.printStackTrace();
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public void unRegisterBukkitCommand(PluginCommand cmd) {
 		try {
 			Object result = getPrivateField(this.getServer().getPluginManager(), "commandMap");
 			SimpleCommandMap commandMap = (SimpleCommandMap) result;
-			Object map = getPrivateField(commandMap, "knownCommands");
+			Object map = getKnownCommands(commandMap);
 			@SuppressWarnings("unchecked")
 			HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
 			knownCommands.remove(cmd.getName());

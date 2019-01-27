@@ -13,12 +13,12 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.Effect;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Damageable;
@@ -34,6 +34,8 @@ import org.bukkit.scheduler.BukkitTask;
 
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.utils.Cheat;
+import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.utils.Utils.Version;
 import com.elikill58.negativity.universal.AbstractCheat;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityPlayer;
@@ -123,9 +125,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void initMods(Player p) {
 		Plugin pl = SpigotNegativity.getInstance();
-		p.sendPluginMessage(pl, "FML|HS", new byte[] { -2, 0 });
-		p.sendPluginMessage(pl, "FML|HS", new byte[] { 0, 2, 0, 0, 0, 0 });
-		p.sendPluginMessage(pl, "FML|HS", new byte[] { 2, 0, 0, 0, 0 });
+		String channelName = Version.getVersion().isNewerOrEquals(Version.V1_13) ? "test:fml" : "FML|HS";
+		p.sendPluginMessage(pl, channelName, new byte[] { -2, 0 });
+		p.sendPluginMessage(pl, channelName, new byte[] { 0, 2, 0, 0, 0, 0 });
+		p.sendPluginMessage(pl, channelName, new byte[] { 2, 0, 0, 0, 0 });
 	}
 
 	@Override
@@ -316,109 +319,46 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean isBlock(Material m) {
 		// for Last version blocks
 		String mn = m.name();
-		if (mn.equals("PRISMARINE") || mn.contains("_SHULKER_BOX") || mn.equals("PURPUR_BLOCK")
-				|| mn.equals("END_BRICKS") || mn.equals("BEETROOT_BLOCK") || mn.equals("BONE_BLOCK"))
+		if (mn.equals("PRISMARINE") || mn.contains("_SHULKER_BOX") || mn.contains("WOOD") || mn.contains("LOG") || mn.contains("WOOL") || mn.equals("PURPUR_BLOCK")
+				|| mn.equals("END_BRICKS") || mn.equals("BEETROOT_BLOCK") || mn.equals("BONE_BLOCK") || mn.contains("STAINED") || mn.contains("CLAY"))
 			return true;
 		switch (m) {
 		case ANVIL:
-			break;
 		case APPLE:
-			break;
 		case ARROW:
-			break;
 		case BEACON:
-			break;
 		case BRICK:
-			break;
 		case COAL_BLOCK:
-			break;
 		case COBBLESTONE:
-			break;
 		case DIRT:
-			break;
-		case DOUBLE_PLANT:
-			break;
-		case DOUBLE_STEP:
-			break;
 		case EMERALD_BLOCK:
-			break;
 		case FURNACE:
-			break;
 		case GOLD_BLOCK:
-			break;
 		case GRASS:
-			break;
-		case HARD_CLAY:
-			break;
 		case HAY_BLOCK:
-			break;
 		case HOPPER:
-			break;
 		case IRON_AXE:
-			break;
-		case IRON_BARDING:
-			break;
 		case IRON_BLOCK:
-			break;
 		case IRON_ORE:
-			break;
-		case IRON_PLATE:
-			break;
 		case JACK_O_LANTERN:
-			break;
 		case JUKEBOX:
-			break;
 		case LADDER:
-			break;
 		case LAPIS_BLOCK:
-			break;
-		case LOG:
-			break;
-		case LOG_2:
-			break;
 		case MOSSY_COBBLESTONE:
-			break;
 		case NETHER_BRICK:
-			break;
 		case NOTE_BLOCK:
-			break;
 		case OBSIDIAN:
-			break;
 		case QUARTZ_BLOCK:
-			break;
 		case REDSTONE:
-			break;
 		case REDSTONE_BLOCK:
-			break;
 		case REDSTONE_ORE:
-			break;
 		case RED_MUSHROOM:
-			break;
-		case RED_ROSE:
-			break;
 		case SADDLE:
-			break;
 		case SAND:
-			break;
 		case SANDSTONE:
-			break;
 		case SPONGE:
-			break;
-		case STAINED_CLAY:
-			break;
 		case STONE:
-			break;
-		case STONE_PLATE:
-			break;
-		case STORAGE_MINECART:
-			break;
 		case TNT:
-			break;
-		case WOOD:
-			break;
-		case WOOL:
-			break;
-		case WORKBENCH:
 			break;
 		default:
 			return false;
@@ -496,7 +436,12 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 				flameloc.setY(y);
 				flameloc.setZ(flameloc.getZ() + Math.cos(u) * i);
 				flameloc.setX(flameloc.getX() + Math.sin(u) * i);
-				w.playEffect(flameloc.add(0, 1, 0), Effect.COLOURED_DUST, 1);
+				if(Version.isNewerOrEquals(Version.getVersion(), Version.V1_13)) {
+					Particle.DustOptions dustOptions = new Particle.DustOptions(Color.ORANGE, 1);
+		        	w.spawnParticle(Particle.REDSTONE, flameloc, 1, 0, 0, 0, 0, dustOptions);
+				} else {
+					w.playEffect(flameloc.add(0, 1, 0), Utils.getEffect("COLOURED_DUST"), 1);
+				}
 			}
 		}
 	}

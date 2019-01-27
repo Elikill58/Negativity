@@ -19,7 +19,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 
 public class SpeedHackProtocol implements Listener {
 
-	@SuppressWarnings("deprecation")
 	@EventHandler (ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();

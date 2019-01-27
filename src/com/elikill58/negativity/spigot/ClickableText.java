@@ -10,6 +10,11 @@ import org.bukkit.entity.Player;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.spigot.utils.Utils.Version;
 
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
+
 public class ClickableText {
 
 	private List<MessageComponent> component = new ArrayList<>();
@@ -44,26 +49,15 @@ public class ClickableText {
 		component.add(new MessageComponent(text, hover, Action.SHOW_TEXT, cmd, Action.RUN_COMMAND));
 		return this;
 	}
-	
+
 	public ClickableText addOpenURLHoverEvent(String text, String hover, String url) {
 		component.add(new MessageComponent(text, hover, Action.SHOW_TEXT, url, Action.OPEN_URL));
 		return this;
 	}
 
 	public void sendToPlayer(Player player) {
-		for (MessageComponent mc : component) {
-			try {
-				for (Object obj : mc.compile()) {
-					Class<?> chatBaseComponent = Class
-							.forName("net.minecraft.server." + Utils.VERSION + ".ChatBaseComponent");
-					
-					chatBaseComponent.getMethod("a", Iterable.class).invoke(chatBaseComponent, obj);
-					Utils.sendPacket(player, "net.minecraft.server." + Utils.VERSION + ".PacketPlayOutChat", Class.forName("net.minecraft.server." + Utils.VERSION + ".IChatBaseComponent"), obj);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+		for (MessageComponent mc : component)
+			mc.send(player);
 	}
 
 	public void sendToAllPlayers() {
@@ -91,7 +85,7 @@ public class ClickableText {
 				e.printStackTrace();
 			}
 		}
-		
+
 		public MessageComponent(String text, String data, Action a, String data2, Action a2) {
 			this.a = a;
 			this.text = text;
@@ -116,6 +110,43 @@ public class ClickableText {
 			}
 		}
 
+		public void send(Player p) {
+			try {
+				if (Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+					TextComponent text = new TextComponent(this.text);
+					if (a == Action.SHOW_TEXT)
+						text.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
+								new ComponentBuilder(data).create()));
+					else if (a == Action.SUGGEST_COMMAND)
+						text.setClickEvent(
+								new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.SUGGEST_COMMAND, data));
+					else if (a == Action.OPEN_URL)
+						text.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.OPEN_URL, data));
+					else if (a == Action.RUN_COMMAND)
+						text.setClickEvent(
+								new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, data));
+
+					if (a2 == Action.OPEN_URL)
+						text.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.OPEN_URL, data2));
+					else if (a2 == Action.RUN_COMMAND)
+						text.setClickEvent(
+								new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, data2));
+					p.spigot().sendMessage(text);
+				} else {
+					for (Object obj : compile()) {
+						Class<?> chatBaseComponent = Class
+								.forName("net.minecraft.server." + Utils.VERSION + ".ChatBaseComponent");
+
+						chatBaseComponent.getMethod("a", Iterable.class).invoke(chatBaseComponent, obj);
+						Utils.sendPacket(p, "net.minecraft.server." + Utils.VERSION + ".PacketPlayOutChat",
+								Class.forName("net.minecraft.server." + Utils.VERSION + ".IChatBaseComponent"), obj);
+					}
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 		public Object[] compile() {
 			try {
 				for (Object c : nmsChat) {
@@ -130,7 +161,7 @@ public class ClickableText {
 							m = chatModifier.getClass().getMethod("a", chatHoverable);
 						}
 						Class<?> enumHover = null;
-						if(Version.getVersion().equals(Version.V1_7))
+						if (Version.getVersion().equals(Version.V1_7))
 							enumHover = Class.forName("net.minecraft.server." + Utils.VERSION + ".EnumHoverAction");
 						else
 							enumHover = a.getClazz().getDeclaredClasses()[0];
@@ -146,7 +177,7 @@ public class ClickableText {
 								.forName("net.minecraft.server." + Utils.VERSION + ".ChatClickable");
 						Method setChatClickable = chatModifier.getClass().getMethod("setChatClickable", chatClickable);
 						Class<?> enumClick = null;
-						if(Version.getVersion().equals(Version.V1_7))
+						if (Version.getVersion().equals(Version.V1_7))
 							enumClick = Class.forName("net.minecraft.server." + Utils.VERSION + ".EnumClickAction");
 						else
 							enumClick = a.getClazz().getDeclaredClasses()[0];
@@ -154,7 +185,7 @@ public class ClickableText {
 								.newInstance(enumClick.getDeclaredField(a.name()).get(enumClick), data);
 						setChatClickable.invoke(chatModifier, obj);
 					}
-					if(a2 != null && data2 != null){
+					if (a2 != null && data2 != null) {
 						if (a2.isHover()) {
 							Class<?> chatHoverable = Class
 									.forName("net.minecraft.server." + Utils.VERSION + ".ChatHoverable");
@@ -165,7 +196,7 @@ public class ClickableText {
 								m = chatModifier.getClass().getMethod("a", chatHoverable);
 							}
 							Class<?> enumHover = null;
-							if(Version.getVersion().equals(Version.V1_7))
+							if (Version.getVersion().equals(Version.V1_7))
 								enumHover = Class.forName("net.minecraft.server." + Utils.VERSION + ".EnumHoverAction");
 							else
 								enumHover = a2.getClazz().getDeclaredClasses()[0];
@@ -179,9 +210,10 @@ public class ClickableText {
 						} else {
 							Class<?> chatClickable = Class
 									.forName("net.minecraft.server." + Utils.VERSION + ".ChatClickable");
-							Method setChatClickable = chatModifier.getClass().getMethod("setChatClickable", chatClickable);
+							Method setChatClickable = chatModifier.getClass().getMethod("setChatClickable",
+									chatClickable);
 							Class<?> enumClick = null;
-							if(Version.getVersion().equals(Version.V1_7))
+							if (Version.getVersion().equals(Version.V1_7))
 								enumClick = Class.forName("net.minecraft.server." + Utils.VERSION + ".EnumClickAction");
 							else
 								enumClick = a2.getClazz().getDeclaredClasses()[0];
@@ -192,7 +224,8 @@ public class ClickableText {
 					}
 				}
 			} catch (Exception e) {
-				SpigotNegativity.getInstance().getLogger().severe("Error while making ClickableText: " + e.getMessage() + ". Please report this to Elikill58.");
+				SpigotNegativity.getInstance().getLogger().severe(
+						"Error while making ClickableText: " + e.getMessage() + ". Please report this to Elikill58.");
 			}
 			return nmsChat;
 		}

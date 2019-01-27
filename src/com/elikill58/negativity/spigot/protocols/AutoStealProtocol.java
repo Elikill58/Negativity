@@ -14,6 +14,7 @@ import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.ItemUseBypass;
 
+@SuppressWarnings("deprecation")
 public class AutoStealProtocol implements Listener {
 
 	public static final int TIME_CLICK = 55;

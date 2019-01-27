@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.DyeColor;
 import org.spongepowered.api.data.type.DyeColors;
 import org.spongepowered.api.entity.living.player.Player;
@@ -33,42 +34,26 @@ public class Inv {
 	public static void openCheckMenu(Player p, Player cible) {
 		Inventory inv = Inventory.builder()
 				.property(InventoryTitle.PROPERTY_NAME, new InventoryTitle(Text.of(NAME_CHECK_MENU)))
-				.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, 2))
+				.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, 3))
 				.build(SpongeNegativity.INSTANCE);
 		inv = Utils.rempliInvWith(VIDE_ITEM, inv);
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
-		inv.query(new SlotPos(0, 0))
-				.set(Utils
-						.createItem(
-								ItemTypes.STAINED_HARDENED_CLAY, Messages.getStringMessage(p,
-										"inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)),
-								1, getByteFromClick(np.ACTUAL_CLICK)));
-		inv.query(new SlotPos(1, 0)).set(Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY,
-				Messages.getStringMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)),
-				1, getByteFromClick(np.BETTER_CLICK)));
-		inv.query(new SlotPos(2, 0)).set(Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY,
-				Messages.getStringMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1,
-				getByteFromClick(np.LAST_CLICK)));
-		inv.query(new SlotPos(6, 0)).set(Utils.createItem(ItemTypes.DIAMOND_SWORD, Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
-		inv.query(new SlotPos(7, 0)).set(Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p,
-				"inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
-		inv.query(new SlotPos(8, 0))
-				.set(Utils.createSkull(cible.getName(), 1, cible, "&6UUID: " + cible.getUniqueId()));
-		inv.query(new SlotPos(0, 1)).set(Utils.createItem(ItemTypes.SPIDER_EYE,
-				Messages.getStringMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
-		inv.query(new SlotPos(1, 1)).set(Utils.createItem(ItemTypes.ENDER_EYE,
-				Messages.getStringMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
-		inv.query(new SlotPos(2, 1)).set(Utils.createItem(ItemTypes.PACKED_ICE,
-				Messages.getStringMessage(p, "inventory.main.freezing", "%name%", cible.getName())));
-		inv.query(new SlotPos(2, 1)).set(Utils.createItem(ItemTypes.GRASS, "&rMods", "&7Forge: "
-				+ Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
-		inv.query(new SlotPos(3, 1)).set(Utils.createItem(ItemTypes.ANVIL,
-				Messages.getStringMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())));
-		inv.query(new SlotPos(4, 1)).set(Utils.createItem(ItemTypes.TNT,
-				Messages.getStringMessage(p, "inventory.main.active_detection", "%name%", cible.getName())));
-		inv.query(new SlotPos(5, 1)).set(Utils.createItem(ItemTypes.DIAMOND_PICKAXE, "Minerate", np.mineRate.getInventoryLoreString()));
-		inv.query(new SlotPos(9, 1))
-				.set(Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
+		inv.query(new SlotPos(0, 0)).set(Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY, Messages.getStringMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
+		inv.query(new SlotPos(1, 0)).set(Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY, Messages.getStringMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)), 1, getByteFromClick(np.BETTER_CLICK)));
+		inv.query(new SlotPos(2, 0)).set(Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY, Messages.getStringMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
+		inv.query(new SlotPos(7, 0)).set(Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
+		inv.query(new SlotPos(8, 0)).set(Utils.createSkull(cible.getName(), 1, cible, "&6UUID: " + cible.getUniqueId()));
+		
+		inv.query(new SlotPos(0, 1)).set(Utils.createItem(ItemTypes.DIAMOND_SWORD, "&rFight: " + Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
+		inv.query(new SlotPos(1, 1)).set(Utils.createItem(ItemTypes.DIAMOND_PICKAXE, "&rMinerate", np.mineRate.getInventoryLoreString()));
+		inv.query(new SlotPos(2, 1)).set(Utils.createItem(ItemTypes.GRASS, "&rMods", "&7Forge: " + Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
+		
+		inv.query(new SlotPos(0, 2)).set(Utils.createItem(ItemTypes.SPIDER_EYE, Messages.getStringMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
+		inv.query(new SlotPos(1, 2)).set(Utils.createItem(ItemTypes.ENDER_EYE, Messages.getStringMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
+		inv.query(new SlotPos(2, 2)).set(Utils.createItem(ItemTypes.PACKED_ICE, Messages.getStringMessage(p, "inventory.main.freezing", "%name%", cible.getName())));
+		inv.query(new SlotPos(3, 2)).set(Utils.createItem(ItemTypes.ANVIL, Messages.getStringMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())));
+		inv.query(new SlotPos(4, 2)).set(Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p, "inventory.main.active_detection", "%name%", cible.getName())));
+		inv.query(new SlotPos(8, 2)).set(Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 		CHECKING.put(p, cible);
 	}
@@ -77,21 +62,11 @@ public class Inv {
 		Inventory inv = p.getOpenInventory().get();
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
 
-		inv.query(new SlotPos(0, 0))
-				.set(Utils
-						.createItem(
-								ItemTypes.STAINED_HARDENED_CLAY, Messages.getStringMessage(p,
-										"inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)),
-								1, getByteFromClick(np.ACTUAL_CLICK)));
-		inv.query(new SlotPos(1, 0)).set(Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY,
-				Messages.getStringMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)),
-				1, getByteFromClick(np.BETTER_CLICK)));
-		inv.query(new SlotPos(2, 0)).set(Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY,
-				Messages.getStringMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1,
-				getByteFromClick(np.LAST_CLICK)));
-		inv.query(new SlotPos(6, 0)).set(Utils.createItem(ItemTypes.DIAMOND_SWORD, Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
-		inv.query(new SlotPos(7, 0)).set(Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p,
-				"inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
+		inv.query(new SlotPos(0, 0)).set(Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY, Messages.getStringMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
+		inv.query(new SlotPos(1, 0)).set(Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY, Messages.getStringMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)), 1, getByteFromClick(np.BETTER_CLICK)));
+		inv.query(new SlotPos(2, 0)).set(Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY, Messages.getStringMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
+		inv.query(new SlotPos(7, 0)).set(Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
+		inv.query(new SlotPos(0, 1)).set(Utils.createItem(ItemTypes.DIAMOND_SWORD, "&rFight: " + Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
 	}
 
 	public static void openAlertMenu(Player p, Player cible) {
@@ -203,19 +178,14 @@ public class Inv {
 				.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, 3))
 				.build(SpongeNegativity.INSTANCE);
 		inv = Utils.rempliInvWith(VIDE_ITEM, inv);
-		inv.query(new SlotPos(1, 1)).set(
-				Utils.createItem(ItemTypes.GHAST_TEAR, Messages.getStringMessage(p, "inventory.mod.night_vision")));
-		inv.query(new SlotPos(2, 1))
-				.set(Utils.createItem(ItemTypes.PUMPKIN_PIE, Messages.getStringMessage(p, "inventory.mod.invisible")));
+		inv.query(new SlotPos(1, 1)).set(Utils.createItem(ItemTypes.GHAST_TEAR, Messages.getStringMessage(p, "inventory.mod.night_vision")));
+		inv.query(new SlotPos(2, 1)).set(Utils.createItem(ItemTypes.PUMPKIN_PIE, Messages.getStringMessage(p, "inventory.mod.invisible")));
+		inv.query(new SlotPos(3, 1)).set(Utils.createItem(ItemTypes.FEATHER, "&rFly: " + Messages.getStringMessage(p, "inventory.manager." + (p.get(Keys.CAN_FLY).get() ? "enabled" : "disabled"))));
 		if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "manageCheat"))
-			inv.query(new SlotPos(4, 1))
-					.set(Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p, "inventory.mod.cheat_manage")));
-		inv.query(new SlotPos(6, 1))
-				.set(Utils.createItem(ItemTypes.LEAD, Messages.getStringMessage(p, "inventory.mod.random_tp")));
-		inv.query(new SlotPos(7, 1))
-				.set(Utils.createItem(ItemTypes.IRON_SHOVEL, Messages.getStringMessage(p, "inventory.mod.clear_inv")));
-		inv.query(new SlotPos(8, 2))
-				.set(Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
+			inv.query(new SlotPos(4, 1)).set(Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p, "inventory.mod.cheat_manage")));
+		inv.query(new SlotPos(6, 1)).set(Utils.createItem(ItemTypes.LEAD, Messages.getStringMessage(p, "inventory.mod.random_tp")));
+		inv.query(new SlotPos(7, 1)).set(Utils.createItem(ItemTypes.IRON_SHOVEL, Messages.getStringMessage(p, "inventory.mod.clear_inv")));
+		inv.query(new SlotPos(8, 2)).set(Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 

@@ -10,17 +10,22 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class ActualizeInvTimer extends BukkitRunnable {
 
-	public static final boolean INV_FREEZE_ACTIVE = Adapter.getAdapter().getBooleanInConfig("inventory.inv_freeze_active");
+	public static final boolean INV_FREEZE_ACTIVE = Adapter.getAdapter()
+			.getBooleanInConfig("inventory.inv_freeze_active");
 
 	@Override
 	public void run() {
 		for (Player p : Inv.CHECKING.keySet()) {
-			if (p.getOpenInventory().getTopInventory().getTitle().equals(Inv.NAME_ACTIVED_CHEAT_MENU)) {
-			} else if (p.getOpenInventory().getTopInventory().getTitle().equals(Inv.NAME_CHECK_MENU))
-				Inv.actualizeCheckMenu(p, Inv.CHECKING.get(p));
-			else if (p.getOpenInventory().getTopInventory().getTitle().equals(Inv.NAME_ALERT_MENU))
-				Inv.actualizeAlertMenu(p, Inv.CHECKING.get(p));
-			else
+			if (p.getOpenInventory() != null) {
+				String title = p.getOpenInventory().getTopInventory().getTitle();
+				if (title.equals(Inv.NAME_ACTIVED_CHEAT_MENU) || title.equals(Inv.NAME_FORGE_MOD_MENU)) {
+				} else if (title.equals(Inv.NAME_CHECK_MENU))
+					Inv.actualizeCheckMenu(p, Inv.CHECKING.get(p));
+				else if (title.equals(Inv.NAME_ALERT_MENU))
+					Inv.actualizeAlertMenu(p, Inv.CHECKING.get(p));
+				else
+					Inv.CHECKING.remove(p);
+			} else
 				Inv.CHECKING.remove(p);
 		}
 		for (Player p : Utils.getOnlinePlayers()) {

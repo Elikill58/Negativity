@@ -10,6 +10,7 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer.FlyingReason;
 
 public class AutoEatProtocol implements Listener {
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler (ignoreCancelled = true)
 	public void onItemConsume(PlayerItemConsumeEvent e) {
 		Player p = e.getPlayer();

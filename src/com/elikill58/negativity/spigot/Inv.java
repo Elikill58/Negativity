@@ -13,76 +13,62 @@ import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.utils.Utils.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 
+@SuppressWarnings("deprecation")
 public class Inv {
 
 	public static final String NAME_CHECK_MENU = "Check",
 			NAME_ACTIVED_CHEAT_MENU = Messages.getMessage("inventory.detection.name_inv"), NAME_FREEZE_MENU = "Freeze",
 			NAME_MOD_MENU = "Mod", NAME_ALERT_MENU = "Alerts", CHEAT_MANAGER = "Cheat Manager", NAME_FORGE_MOD_MENU = "Mods";
 	public static final HashMap<Player, Player> CHECKING = new HashMap<>();
-	public static final ItemStack EMPTY = new ItemStack(Material.STAINED_GLASS_PANE, 1, (byte) 7);
-
+	public static final ItemStack EMPTY = (Version.isNewerOrEquals(Version.getVersion(), Version.V1_13) ? new ItemStack(Utils.getMaterialWith1_13_Compatibility("STAINED_GLASS_PANE", "GRAY_STAINED_GLASS_PANE"), 1, (byte) 7) : new ItemStack(Utils.getMaterialWith1_13_Compatibility("STAINED_GLASS_PANE", "GRAY_STAINED_GLASS_PANE")));
+	
 	public static void openCheckMenu(Player p, Player cible) {
-		Inventory inv = Bukkit.createInventory(null, 18, NAME_CHECK_MENU);
+		Inventory inv = Bukkit.createInventory(null, 27, NAME_CHECK_MENU);
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
-		inv.setItem(0, Utils.createItem(Material.STAINED_CLAY,
-				Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1,
-				getByteFromClick(np.ACTUAL_CLICK)));
-		inv.setItem(1,
-				Utils.createItem(Material.STAINED_CLAY,
-						Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)),
-						1, getByteFromClick(np.BETTER_CLICK)));
-		inv.setItem(2,
-				Utils.createItem(Material.STAINED_CLAY,
-						Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1,
-						getByteFromClick(np.LAST_CLICK)));
-
-		inv.setItem(6, Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
+		inv.setItem(0, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
+		inv.setItem(1, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)), 1, getByteFromClick(np.BETTER_CLICK)));
+		inv.setItem(2, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
+		
 		inv.setItem(7, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
-		inv.setItem(8, Utils.createSkull(cible.getName(), 1, cible.getName(),
-				ChatColor.GOLD + "UUID: " + cible.getUniqueId()));
+		inv.setItem(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId()));
 
-		inv.setItem(9, Utils.createItem(Material.SPIDER_EYE,
-				Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
-		inv.setItem(10, Utils.createItem(Material.EYE_OF_ENDER,
-				Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
-		inv.setItem(11, Utils.createItem(Material.PACKED_ICE,
-				Messages.getMessage(p, "inventory.main.freezing", "%name%", cible.getName())));
-		inv.setItem(12, Utils.createItem(Material.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
-		inv.setItem(13, Utils.createItem(Material.ANVIL,
-				Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())));
-		inv.setItem(14, Utils.createItem(Material.TNT,
-				Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())));
-		inv.setItem(15, Utils.createItem(Material.DIAMOND_PICKAXE, "Minerate", np.mineRate.getInventoryLoreString()));
+		inv.setItem(9, Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
+		inv.setItem(10, Utils.createItem(Material.DIAMOND_PICKAXE, "Minerate", np.mineRate.getInventoryLoreString()));
+		inv.setItem(11, Utils.createItem(Material.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
+ 
+		//inv.setItem(16, Utils.createItem(Material.SPIDER_EYE, "Kick"));
+		//inv.setItem(17, Utils.createItem(Material.SPIDER_EYE, "Ban"));
+		
+		inv.setItem(18, Utils.createItem(Material.SPIDER_EYE, Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
+		inv.setItem(19, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER"), Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
+		inv.setItem(20, Utils.createItem(Material.PACKED_ICE, Messages.getMessage(p, "inventory.main.freezing", "%name%", cible.getName())));
+		inv.setItem(21, Utils.createItem(Material.ANVIL, Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())));
+		inv.setItem(22, Utils.createItem(Material.TNT, Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())));
 		for (int i = 0; i < inv.getSize(); i++)
 			if (inv.getItem(i) == null)
 				inv.setItem(i, EMPTY);
-		inv.setItem(inv.getSize() - 1,
-				Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
+		inv.setItem(inv.getSize() - 1, Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 
 	public static void actualizeCheckMenu(Player p, Player cible) {
 		Inventory inv = p.getOpenInventory().getTopInventory();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
-
-		inv.setItem(0, Utils.createItem(Material.STAINED_CLAY,
-				Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1,
-				getByteFromClick(np.ACTUAL_CLICK)));
-		inv.setItem(1,
-				Utils.createItem(Material.STAINED_CLAY,
-						Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)),
-						1, getByteFromClick(np.BETTER_CLICK)));
-		inv.setItem(2,
-				Utils.createItem(Material.STAINED_CLAY,
-						Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1,
-						getByteFromClick(np.LAST_CLICK)));
-		
-		inv.setItem(6, Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
-		inv.setItem(7, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
-		p.updateInventory();
+		try {
+			inv.setItem(0, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
+			inv.setItem(1, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)), 1, getByteFromClick(np.BETTER_CLICK)));
+			inv.setItem(2, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
+			
+			inv.setItem(7, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
+			inv.setItem(9, Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
+			//p.updateInventory();
+		} catch (ArrayIndexOutOfBoundsException e) {
+			
+		}
 	}
 
 	public static void openAlertMenu(Player p, Player cible) {
@@ -166,13 +152,13 @@ public class Inv {
 
 		inv.setItem(10, Utils.createItem(Material.GHAST_TEAR, Messages.getMessage(p, "inventory.mod.night_vision")));
 		inv.setItem(11, Utils.createItem(Material.PUMPKIN_PIE, Messages.getMessage(p, "inventory.mod.invisible")));
+		inv.setItem(12, Utils.createItem(Material.FEATHER, "Fly: " + Messages.getMessage(p, "inventory.manager." + (p.isFlying() ? "enabled" : "disabled"))));
 		if(Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "manageCheat"))
 			inv.setItem(13, Utils.createItem(Material.TNT, Messages.getMessage(p, "inventory.mod.cheat_manage")));
-		inv.setItem(15, Utils.createItem(Material.LEASH, Messages.getMessage(p, "inventory.mod.random_tp")));
-		inv.setItem(16, Utils.createItem(Material.IRON_SPADE, Messages.getMessage(p, "inventory.mod.clear_inv")));
-
-		inv.setItem(inv.getSize() - 1,
-				Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
+		inv.setItem(15, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("LEASH", "LEGACY_LEASH"), Messages.getMessage(p, "inventory.mod.random_tp")));
+		inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("IRON_SPADE", "LEGACY_IRON_SPADE"), Messages.getMessage(p, "inventory.mod.clear_inv")));
+		
+		inv.setItem(inv.getSize() - 1, Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
 
 		for (int i = 0; i < inv.getSize(); i++)
 			if (inv.getItem(i) == null)
@@ -195,7 +181,7 @@ public class Inv {
 	public static void openOneCheatMenu(Player p, Cheat c){
 		Inventory inv = Bukkit.createInventory(null, 27, c.getName());
 		inv.setItem(2, Utils.createItem(Material.TNT, Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))));
-		inv.setItem(5, Utils.createItem(Material.EYE_OF_ENDER, Messages.getMessage(p, "inventory.manager.autoVerif", "%auto%", Messages.getMessage(p, "inventory.manager." + (c.isAutoVerif() ? "enabled" : "disabled")))));
+		inv.setItem(5, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER"), Messages.getMessage(p, "inventory.manager.autoVerif", "%auto%", Messages.getMessage(p, "inventory.manager." + (c.isAutoVerif() ? "enabled" : "disabled")))));
 		inv.setItem(9, Utils.createItem(c.getMaterial(), c.getName()));
 		inv.setItem(20, Utils.createItem(Material.BLAZE_ROD, Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))));
 		inv.setItem(23, Utils.createItem(Material.DIAMOND, Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))));
@@ -217,6 +203,7 @@ public class Inv {
 		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(np.MODS.size() + 1, 9, 1), NAME_FORGE_MOD_MENU);
 		if(np.MODS.size() == 0) {
 			inv.setItem(4, Utils.createItem(Material.DIAMOND, "No mods"));
+			inv.setItem(inv.getSize() - 1, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.back")));
 		} else {
 			np.MODS.forEach((name, version) -> {
 				inv.setItem(slot++, Utils.createItem(Material.GRASS, name, ChatColor.GRAY + "Version: " + version));

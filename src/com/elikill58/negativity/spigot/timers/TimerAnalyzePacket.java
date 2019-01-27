@@ -16,6 +16,7 @@ import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
 
+@SuppressWarnings("deprecation")
 public class TimerAnalyzePacket extends BukkitRunnable {
 
 	@Override

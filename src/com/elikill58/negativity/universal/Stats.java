@@ -32,7 +32,7 @@ public class Stats {
 				end += respons;
 			if (!end.equalsIgnoreCase("")) {
 				System.out.println(
-						"[Negativity] Logs while updating stats. Please, report this to Elikill58 (Mail: arpetzouille@gmail.com | Discord: @Elikill58#0743 | Twitter: @Elikill58 / @elinegativity");
+						"[Negativity] Error while updating stats. Please, report this to Elikill58 (Mail: arpetzouille@gmail.com | Discord: @Elikill58#0743 | Twitter: @Elikill58 / @elinegativity");
 				System.out.println(end);
 			}
 			br.close();

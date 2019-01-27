@@ -129,6 +129,8 @@ public class SpigotAdapter extends Adapter {
 			fileName = "no_NO.yml";
 		else if (lang.toLowerCase().contains("ru"))
 			fileName = "ru_RU.yml";
+		else if (lang.toLowerCase().contains("zh") || lang.toLowerCase().contains("cn"))
+			fileName = "zh_CN.yml";
 		// TODO : Espagnol & Allemand
 		try (InputStream in = pl.getResource(fileName); OutputStream out = new FileOutputStream(f)) {
 			ByteStreams.copy(in, out);

@@ -17,6 +17,7 @@ import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.spigot.utils.Utils.Version;
 
+@SuppressWarnings("deprecation")
 public class AutoRegenProtocol implements Listener {
 	
 	@EventHandler (ignoreCancelled = true)

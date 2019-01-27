@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.protocols;
 
 import java.text.NumberFormat;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,7 +27,7 @@ public class ForceFieldProtocol implements Listener {
 			if (!np.ACTIVE_CHEAT.contains(Cheat.FORCEFIELD))
 				return;
 			double dis = e.getEntity().getLocation().distance(p.getLocation());
-			if (dis > Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach") && !p.getItemInHand().getType().equals(Material.BOW)) {
+			if (dis > (Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach") + (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0)) && !p.getItemInHand().getType().equals(Material.BOW)) {
 				NumberFormat nf = NumberFormat.getInstance();
 				nf.setMaximumIntegerDigits(2);
 				np.addWarn(Cheat.FORCEFIELD);

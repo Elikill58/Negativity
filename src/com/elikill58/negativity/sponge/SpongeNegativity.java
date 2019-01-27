@@ -71,7 +71,7 @@ import com.google.inject.Inject;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
-@Plugin(id = "negativity", name = "Negativity", version = "1.1", description = "It's an Advanced AntiCheat Detection", authors = "Elikill58", dependencies = {
+@Plugin(id = "negativity", name = "Negativity", version = "1.1.2", description = "It's an Advanced AntiCheat Detection", authors = "Elikill58", dependencies = {
 		@Dependency(id = "packetgate") })
 public class SpongeNegativity implements RawDataListener {
 

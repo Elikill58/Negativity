@@ -13,6 +13,7 @@ import org.bukkit.potion.Potion;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 
+@SuppressWarnings("deprecation")
 public class FightManager implements Listener {
 
 	@EventHandler

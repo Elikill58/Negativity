@@ -9,6 +9,7 @@ import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -19,13 +20,15 @@ import com.elikill58.negativity.spigot.ClickableText;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.UniversalUtils;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 
+@SuppressWarnings("deprecation")
 public class Utils {
 
 	public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
 			.split(",")[3];
-	public static final ClickableText MESSAGE_UPDATE = new ClickableText().addOpenURLHoverEvent(ChatColor.YELLOW + "New version available (" + UniversalUtils.getLatestVersion().orElse("unknow") +  "). " + ChatColor.BOLD + "Download it here.", "Click here", "https://www.spigotmc.org/resources/aac-negativity-spigot-1-7-sponge-bungeecord-optimized.48399/");
+	public static final ClickableText MESSAGE_UPDATE = new ClickableText().addOpenURLHoverEvent(ChatColor.YELLOW + "New version available (" + UniversalUtils.getLatestVersion().orElse("unknow") +  "). " + ChatColor.BOLD + "Download it here.", "Click here", "https://www.spigotmc.org/resources/48399/");
 
 	public static int getMultipleOf(int i, int multiple, int more) {
 		while (i % multiple != 0)
@@ -96,7 +99,7 @@ public class Utils {
 	}
 
 	public static ItemStack createSkull(String name, int amount, String owner, String... lore) {
-		ItemStack skull = new ItemStack(Material.SKULL_ITEM, 1, (byte) 3);
+		ItemStack skull = new ItemStack(getMaterialWith1_13_Compatibility("SKULL_ITEM", "LEGACY_SKULL_ITEM"), 1, (byte) 3);
 		SkullMeta skullmeta = (SkullMeta) skull.getItemMeta();
 		skullmeta.setDisplayName(ChatColor.RESET + name);
 		skullmeta.setOwner(owner);
@@ -155,6 +158,36 @@ public class Utils {
 			e.printStackTrace();
 		}
 	}
+	
+	public static Material getMaterialWith1_13_Compatibility(String before1_13, String after1_13) {
+		Material m = null;
+		try {
+			m = (Material) Material.class.getField(before1_13).get(Material.class);
+		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchFieldException e1) {
+			try {
+				m = (Material) Material.class.getField(after1_13).get(Material.class);
+			} catch (IllegalArgumentException | IllegalAccessException | SecurityException e2) {
+				e2.printStackTrace();
+			} catch (NoSuchFieldException e) {
+				Adapter.getAdapter().error("Failed to find Material: " + before1_13 + " (1.12 & -) and " + after1_13 + " (1.13 & +)");
+			}
+		}
+		return m;
+	}
+	
+	public static Effect getEffect(String effect) {
+		Effect m = null;
+		try {
+			m = (Effect) Effect.class.getField(effect).get(Effect.class);
+		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
+			e.printStackTrace();
+		} catch (NoSuchFieldException e1) {
+			m = null;
+		}
+		return m;
+	}
 
 	public static Optional<Cheat> getCheatFromName(String s) {
 		for (Cheat c : Cheat.values())
@@ -207,6 +240,10 @@ public class Utils {
 		public boolean isNewerThan(Version other) {
 			return power > other.getPower();
 		}
+		
+		public boolean isNewerOrEquals(Version other) {
+			return power >= other.getPower();
+		}
 
 		public int getPower() {
 			return power;
@@ -214,6 +251,10 @@ public class Utils {
 
 		public static boolean isNewer(Version v1, Version v2) {
 			return v1.isNewerThan(v2);
+		}
+
+		public static boolean isNewerOrEquals(Version v1, Version v2) {
+			return v1.isNewerOrEquals(v2);
 		}
 
 		public static Version getVersion() {

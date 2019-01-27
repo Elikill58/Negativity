@@ -28,11 +28,11 @@ public class JesusProtocol implements Listener {
 			return;
 		Location loc = p.getLocation();
 		Material m = loc.getBlock().getType(), under = loc.clone().add(0, -1, 0).getBlock().getType();
-		if (m.equals(Material.STATIONARY_WATER))
+		if (m.equals(Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER")))
 			np.isInWater = true;
 		else
 			np.isInWater = false;
-		if (under.equals(Material.STATIONARY_WATER))
+		if (under.equals(Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER")))
 			np.isOnWater = true;
 		else
 			np.isOnWater = false;
@@ -41,16 +41,16 @@ public class JesusProtocol implements Listener {
 			if(vehicle instanceof Boat)
 				return;
 		if (!np.isInWater && np.isOnWater && !hasBoatAroundHim(loc)) {
-			if (!np.hasOtherThan(loc.clone().subtract(0, 1, 0), Material.STATIONARY_WATER)
-					&& !p.getLocation().getBlock().getType().equals(Material.WATER_LILY)) {
+			if (!np.hasOtherThan(loc.clone().subtract(0, 1, 0), Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER"))
+					&& !p.getLocation().getBlock().getType().equals(Utils.getMaterialWith1_13_Compatibility("WATER_LILY", "LEGACY_WATER_LILY"))) {
 				boolean has = false, hasWaterLily = hasWaterLily(loc.clone().subtract(0, 1, 0));
 				for (int u = 0; u < 360; u += 3) {
 					Location flameloc = loc.clone().subtract(0, 1, 0);
 					flameloc.setZ(flameloc.getZ() + Math.cos(u) * 3);
 					flameloc.setX(flameloc.getX() + Math.sin(u) * 3);
-					if (!flameloc.getBlock().getType().equals(Material.STATIONARY_WATER)) {
+					if (!flameloc.getBlock().getType().equals(Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER"))) {
 						has = true;
-						if (flameloc.getBlock().getType().equals(Material.WATER_LILY))
+						if (flameloc.getBlock().getType().equals(Utils.getMaterialWith1_13_Compatibility("WATER_LILY", "LEGACY_WATER_LILY")))
 							hasWaterLily = true;
 					}
 				}
@@ -91,7 +91,7 @@ public class JesusProtocol implements Listener {
 		for (int y = (fY - 1); y != (fY + 2); y++)
 			for (int x = (fX - 2); x != (fX + 3); x++)
 				for (int z = (fZ - 2); z != (fZ + 3); z++)
-					if(loc.getWorld().getBlockAt(x, y, z).getType().equals(Material.WATER_LILY))
+					if(loc.getWorld().getBlockAt(x, y, z).getType().equals(Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER")))
 						hasWaterLily = true;
 		return hasWaterLily;
 	}

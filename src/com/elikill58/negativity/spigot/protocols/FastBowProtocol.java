@@ -15,6 +15,7 @@ import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.ItemUseBypass;
 
+@SuppressWarnings("deprecation")
 public class FastBowProtocol implements Listener {
 	
 	public static final Cheat CHEAT = Cheat.FASTBOW;

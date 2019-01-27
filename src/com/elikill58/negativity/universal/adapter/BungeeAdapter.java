@@ -118,6 +118,8 @@ public class BungeeAdapter extends Adapter {
 			fileName = "bungee_no_NO.yml";
 		else if (lang.toLowerCase().contains("ru"))
 			fileName = "bungee_ru_RU.yml";
+		else if (lang.toLowerCase().contains("zh") || lang.toLowerCase().contains("cn"))
+			fileName = "bungee_zh_CN.yml";
 		// TODO : Espagnol & Allemand
 		try (InputStream in = pl.getResourceAsStream(fileName); OutputStream out = new FileOutputStream(f)) {
 			ByteStreams.copy(in, out);

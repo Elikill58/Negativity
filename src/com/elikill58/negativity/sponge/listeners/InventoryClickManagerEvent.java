@@ -14,6 +14,7 @@ import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.property.SlotPos;
+import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.Inv;
 import com.elikill58.negativity.sponge.Messages;
@@ -105,6 +106,11 @@ public class InventoryClickManagerEvent {
                 }
             } else if (m.equals(ItemTypes.TNT)) {
                 Inv.openCheatManagerMenu(p);
+            } else if (m.equals(ItemTypes.FEATHER)) {
+                p.closeInventory();
+                boolean b = !p.get(Keys.CAN_FLY).get();
+                p.offer(Keys.CAN_FLY, b);
+				p.sendMessage(Text.of("Flying: " + Messages.getStringMessage(p, "inventory.manager." + (b ? "enabled" : "disabled"))));
             }
         } else if (invName.equals(Inv.NAME_ALERT_MENU)) {
             e.setCancelled(true);

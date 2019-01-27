@@ -1,0 +1,86 @@
+report_wait: "请稍等 1 秒后再次举报"
+
+invalid_player: "%arg% 不是玩家！"
+not_forget_player: "请勿忘记玩家参数！"
+not_permission: "&c您没有执行此操作的权限。"
+
+kick: "&a[&2弊绝风清&a]&c您由于使用作弊程序 (%cheat%) 而被踢出了此服务器"
+
+ban {
+  kick_time: "&c被 %by% 以 %reason% 封禁至 %time%。"
+  kick_def: "&c被 %by% 以 %reason% 永远封禁。"
+  help = [
+    "/ban <玩家> <def(true/false) | 时长> <理由> : 封禁指定玩家" ]
+  well_ban: "&a[&2弊绝风清&a]&c%name% 由于 %reason% 被合理封禁。"
+}
+unban {
+  well_unban: "&a[&2弊绝风清&a]&c%name% 被合理解封。"
+  help = [
+    "/unban <玩家> : 解封指定玩家。" ]
+}
+report {
+  report_usage: "/report <名称> <理由>"
+  well_report: "&a已成功举报 %name%！"
+  report_message: "&a[&2弊绝风清&a]&c%report% &7由于 &c%reason% &7举报了 &c%name%"
+}
+negativity {
+  alert: "&a[&2弊绝风清&a]&c%name%&7 看似正使用 &c%cheat% &7（&2可信度： %reliability%&7）！"
+  alert_hover: "&6可信度：%reliability%\n延迟：%ping%"
+  verif {
+    invalid_cheat: "%arg% 非有效作弊软件！"
+    start: "&a[&2弊绝风清&a]&7已开始分析&c %name%&7 的&c %cheat%&7 行为"
+    start_all: "&a[&2弊绝风清&a]&7已开始完整分析玩家&c %name%&7 的行为"
+    help = [
+     "/negativity verif <玩家> [作弊软件] : 开始分析（若未指定作弊软件则将进行完整分析）" 
+     "/negativity <玩家> : 查看玩家信息"
+   ]
+  }
+}
+inventory {
+  close: "关闭"
+  back: "返回"
+  reset_alert: "删除警告"
+  main {
+    freeze: "&a[&2&a]您已被 %name% 冻结"
+    unfreeze: "&a[&2弊绝风清&a]您已被&c %name%&7 解冻"
+    inv_freeze_active: true
+    actual_click: "实际点击：%clicks%"
+    max_click: "最大点击：%clicks%"
+    last_click: "上一秒点击：%clicks%"
+    ping: "%name% 的延迟：%ping%"
+    see_inv: "查看 %name% 的背包"
+    teleportation_to: "传送至 %name%"
+    freezing: "正在冻结 %name%"
+    active_detection: "查看 %name% 的活跃检测"
+    see_alerts: "查看 %name% 的警告"
+  }
+  detection {
+    name_inv: "活跃检测"
+    no_active: "%name% 无活跃检测"
+  }
+  alerts {
+    item_name: "%exact_name% 的警告：%warn%"
+    inv_name: "警告"
+  }
+  mod {
+    night_vision: "夜视"
+    invisible: "隐私"
+    random_tp: "随机传送"
+    clear_inv: "清除背包"
+    inv_cleared: "已清除背包！"
+    vision_removed: "已禁用夜视"
+    vision_added: "已启用夜视"
+    now_invisible: "您已悄然无息地消失"
+    no_longer_invisible: "您已出现在大众面前"
+    you_are_freeze: "您已被冻结。您无法离开此背包。"
+    cheat_manage: "作弊管理"
+  }
+  manager {
+    enabled: "&a开"
+    disabled: "&c关"
+    setBack: "取消在检测到作弊时作弊者的最后一次操作：&l%back%"
+    autoVerif: "自动验证：&l%auto%"
+    allowKick: "踢出作弊玩家：&l%allow%"
+    setActive: "活跃作弊：&l%active%"
+  }
+}

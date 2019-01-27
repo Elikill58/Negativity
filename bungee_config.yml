@@ -60,6 +60,7 @@ Translation:
   - no_NO
   - pt_BR
   - ru_RU
+  - zh_CN
   use_db: true # to get the lang
   default: en_US
 

@@ -12,14 +12,18 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	private boolean cancel = false, hasRelia, alert;
 	private Player p;
 	private Cheat c;
-	private int relia;
-
-	public PlayerCheatAlertEvent(Player p, Cheat c, int reliability, boolean hasRelia) {
+	private int relia, ping;
+	private String proof, hover_proof;
+	
+	public PlayerCheatAlertEvent(Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof) {
 		this.p = p;
 		this.c = c;
 		this.relia = reliability;
 		this.hasRelia = hasRelia;
 		this.alert = hasRelia;
+		this.ping = ping;
+		this.proof = proof;
+		this.hover_proof = hover_proof;
 	}
 	
 	@Override
@@ -54,6 +58,18 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	
 	public boolean isAlert() {
 		return alert;
+	}
+	
+	public int getPing() {
+		return ping;
+	}
+	
+	public String getProof() {
+		return proof;
+	}
+	
+	public String getHoverProof() {
+		return hover_proof;
 	}
 	
 	@Override

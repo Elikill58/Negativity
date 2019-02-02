@@ -10,9 +10,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.spigot.ClickableText;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
+import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -28,7 +31,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 		if (arg.length == 0)
 			Messages.sendMessageList(p, "negativity.verif.help");
 		else {
-			if (arg[0].equalsIgnoreCase("verif")) {
+			if (arg[0].startsWith("verif")) {
 				if (!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "verif")) {
 					Messages.sendMessage(p, "not_permission");
 					return false;
@@ -67,6 +70,18 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 						Messages.sendMessage(p, "negativity.verif.start", "%name%", cible.getName(), "%cheat%", cheat);
 					}
 				}
+			} else if (arg[0].startsWith("alert")) {
+				int alertSize = SpigotNegativity.alerts.size();
+				for(int i = alertSize - 1; i < alertSize - 10; i--) {
+					PlayerCheatAlertEvent alert = SpigotNegativity.alerts.get(i);
+					new ClickableText().addRunnableHoverEvent(
+							Messages.getMessage(p, "negativity.alert", "%name%", alert.getPlayer().getName(), "%cheat%", alert.getCheat().getName(),
+									"%reliability%", String.valueOf(alert.getReliability())),
+							Messages.getMessage(p, "negativity.alert_hover", "%reliability%",
+									String.valueOf(alert.getReliability()), "%ping%", String.valueOf(alert.getPing()))
+									+ (alert.getHoverProof().equalsIgnoreCase("") ? "" : "\n" + alert.getHoverProof()),
+							"/negativity " + alert.getPlayer().getName()).sendToPlayer(p);
+				}
 			} else if (arg[0].equalsIgnoreCase("reload")) {
 				Adapter.getAdapter().reload();
 			} else if (Bukkit.getPlayer(arg[0]) != null) {
@@ -95,6 +110,8 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				tab.add("verif");
 			if ("reload".startsWith(prefix) || prefix.isEmpty())
 				tab.add("reload");
+			if ("alert".startsWith(prefix) || prefix.isEmpty())
+				tab.add("alert");
 		} else if(arg.length == 1 && arg[0].equalsIgnoreCase(prefix)){
 			for (Player p : Utils.getOnlinePlayers())
 				if (p.getName().toLowerCase().startsWith(prefix.toLowerCase()) || prefix.isEmpty())
@@ -103,6 +120,8 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				tab.add("verif");
 			if ("reload".startsWith(prefix) || prefix.isEmpty())
 				tab.add("reload");
+			if ("alert".startsWith(prefix) || prefix.isEmpty())
+				tab.add("alert");
 		} else {
 			if (arg[0].equalsIgnoreCase("verif") && arg.length > 2) {
 				if (Bukkit.getPlayer(arg[1]) != null)

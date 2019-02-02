@@ -6,3 +6,6 @@
 /.settings/
 /.classpath
 /.project
+/bin/
+./pasltime.jardesc
+pasltime.jardesc

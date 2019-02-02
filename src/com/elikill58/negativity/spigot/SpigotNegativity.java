@@ -13,13 +13,13 @@ import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
@@ -42,6 +42,7 @@ import com.elikill58.negativity.spigot.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatKickEvent;
 import com.elikill58.negativity.spigot.packets.PacketListenerAPI;
 import com.elikill58.negativity.spigot.packets.PacketManager;
+import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.timers.ActualizeClickTimer;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
@@ -66,9 +67,10 @@ import com.elikill58.negativity.universal.permissions.Perm;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean isOnBungeecord = false, log = false, hasBypass = true;
+	public static boolean isOnBungeecord = false, log = false, hasBypass = true, essentialsSupport = false;
 	public static Material MATERIAL_CLOSE = Material.REDSTONE;
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null;
+	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
 
 	public void onEnable() {
 		INSTANCE = this;
@@ -85,7 +87,6 @@ public class SpigotNegativity extends JavaPlugin {
 			MATERIAL_CLOSE = Material.REDSTONE;
 		}
 		PacketManager.run(this);
-		// PacketHandler.run(this);
 		File localDir = new File("");
 		File confDir = new File(localDir.getAbsolutePath(),
 				"plugins" + File.separator + "Negativity" + File.separator + "config.yml");
@@ -102,10 +103,10 @@ public class SpigotNegativity extends JavaPlugin {
 					"Discord: @Elikill58#0743, mail: arpetzouille@gmail.com, and Elikill58 in all other web site like Twitter, Spigotmc ...");
 			getLogger().info("");
 			getLogger().info("French:");
-			getLogger().info(" > Merci d'avoir téléchargé Negativity :)");
+			getLogger().info(" > Merci d'avoir tï¿½lï¿½chargï¿½ Negativity :)");
 			getLogger().info("J'essaie de faire le meilleur anti-cheat possible.");
 			getLogger().info(
-					"S'il y a des faux positifs, des problèmes ou si vous avez des suggestions, vous pouvez me contacter via:");
+					"S'il y a des faux positifs, des problï¿½mes ou si vous avez des suggestions, vous pouvez me contacter via:");
 			getLogger().info(
 					"Discord: @Elikill58#0743, mail: arpetzouille@gmail.com, et Elikill58 sur tout les autres site comme Twitter, Spigotmc ...");
 			getLogger().info("");
@@ -121,8 +122,7 @@ public class SpigotNegativity extends JavaPlugin {
 		log = ada.getBooleanInConfig("log_alerts");
 		hasBypass = ada.getBooleanInConfig("Permissions.bypass.active");
 
-		new Metrics(this)
-				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
+		new Metrics(this).addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersEvents(), this);
@@ -237,6 +237,10 @@ public class SpigotNegativity extends JavaPlugin {
 			}
 		});
 		ada.loadLang();
+		
+		Plugin essentialsPlugin = Bukkit.getPluginManager().getPlugin("Essentials");
+	    if (essentialsPlugin != null)
+	    	essentialsSupport = true;
 	}
 
 	@Override
@@ -258,16 +262,17 @@ public class SpigotNegativity extends JavaPlugin {
 		return alertMod(type, p, c, reliability, proof, "");
 	}
 
-	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
-			String hover_proof) {
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (c.equals(Cheat.BLINK))
 			if (!np.already_blink) {
 				np.already_blink = true;
 				return false;
 			}
-		if (np.isInFight)
-			if (c.equals(Cheat.FLY) || c.equals(Cheat.FORCEFIELD) || c.equals(Cheat.STEP))
+		if (np.isInFight && c.isBlockedInFight())
+			return false;
+		if (essentialsSupport)
+			if(EssentialsSupport.checkEssentialsPrecondition(p))
 				return false;
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType()))
@@ -288,7 +293,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		logProof(type, p, c, reliability, proof, ping);
 		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(p, c, reliability,
-				c.getReliabilityAlert() < reliability);
+				c.getReliabilityAlert() < reliability, ping, proof, hover_proof);
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
@@ -404,9 +409,9 @@ public class SpigotNegativity extends JavaPlugin {
 			Object result = getPrivateField(this.getServer().getPluginManager(), "commandMap");
 			SimpleCommandMap commandMap = (SimpleCommandMap) result;
 			Object map = getKnownCommands(commandMap);
-			@SuppressWarnings("unchecked")
-			HashMap<String, Command> knownCommands = (HashMap<String, Command>) map;
-			knownCommands.remove(cmd.getName());
+			HashMap<?, ?> knownCommands = (HashMap<?, ?>) map;
+			if(knownCommands.containsKey(cmd.getName()))
+				knownCommands.remove(cmd.getName());
 			for (String alias : cmd.getAliases())
 				if (knownCommands.containsKey(alias) && knownCommands.get(alias).toString().contains(this.getName()))
 					knownCommands.remove(alias);

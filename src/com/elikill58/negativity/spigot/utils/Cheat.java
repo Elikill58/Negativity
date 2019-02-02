@@ -13,46 +13,41 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 
 public enum Cheat implements AbstractCheat {
 
-	FORCEFIELD(true, true, Material.DIAMOND_SWORD, ForceFieldProtocol.class, aliases_forcefield),
-	FASTPLACE(true, false, Material.DIRT, FastPlaceProtocol.class, aliases_fastplace),
-	SPEEDHACK(true, false, Material.BEACON, SpeedHackProtocol.class, aliases_speedhack),
-	AUTOCLICK(true, false, Material.FISHING_ROD, AutoClickProtocol.class, aliases_autoclick),
-	FLY(true, true, Utils.getMaterialWith1_13_Compatibility("FIREWORK", "LEGACY_FIREWORK"), FlyProtocol.class, aliases_fly),
-	ANTIPOTION(true, true, Material.POTION, AntiPotionProtocol.class, aliases_antipotion),
-	AUTOEAT(true, true, Material.COOKED_BEEF, AutoEatProtocol.class, aliases_autoeat),
-	AUTOREGEN(true, true, Material.GOLDEN_APPLE, AutoRegenProtocol.class, aliases_autoregen),
-	ANTIKNOCKBACK(true, false, Material.STICK, AntiKnockbackProtocol.class, aliases_antiknockback),
-	JESUS(true, false, Material.WATER_BUCKET, JesusProtocol.class, aliases_jesus),
-	NOFALL(true, false, Utils.getMaterialWith1_13_Compatibility("WOOL", "RED_WOOL"), NoFallProtocol.class, aliases_nofall),
-	BLINK(true, true, Material.COAL_BLOCK, BlinkProtocol.class, aliases_blink),
-	SPIDER(true, false, Utils.getMaterialWith1_13_Compatibility("WEB", "COBWEB"), SpiderProtocol.class, aliases_spider),
-	SNEAK(true, true, Material.BLAZE_POWDER, SneakProtocol.class, aliases_sneak),
-	FASTBOW(true, true, Material.BOW, FastBowProtocol.class, aliases_fastbow),
-	SCAFFOLD(true, false, Material.GRASS, ScaffoldProtocol.class, aliases_scaffold),
-	STEP(true, false, Material.BRICK_STAIRS, StepProtocol.class, aliases_step),
-	NOSLOWDOWN(true, false, Material.SOUL_SAND, NoSlowDownProtocol.class, aliases_noslowdown),
-	FASTLADDERS(true, false, Material.LADDER, FastLadderProtocol.class, aliases_fastladders),
-	PHASE(true, false, Utils.getMaterialWith1_13_Compatibility("STAINED_GLASS", "WHITE_STAINED_GLASS"), PhaseProtocol.class, aliases_phase),
-	AUTOSTEAL(true, false, Material.CHEST, AutoStealProtocol.class, aliases_autosteal),
-	EDITED_CLIENT(true, false, Material.FEATHER, EditedClientProtocol.class, aliases_edited_client),
-	ALL(false, true, Material.AIR, null, aliases_all);
+	FORCEFIELD(true, true, Material.DIAMOND_SWORD, ForceFieldProtocol.class, true, aliases_forcefield),
+	FASTPLACE(true, false, Material.DIRT, FastPlaceProtocol.class, false, aliases_fastplace),
+	SPEEDHACK(true, false, Material.BEACON, SpeedHackProtocol.class, true, aliases_speedhack),
+	AUTOCLICK(true, false, Material.FISHING_ROD, AutoClickProtocol.class, false, aliases_autoclick),
+	FLY(true, true, Utils.getMaterialWith1_13_Compatibility("FIREWORK", "LEGACY_FIREWORK"), FlyProtocol.class, true, aliases_fly),
+	ANTIPOTION(true, true, Material.POTION, AntiPotionProtocol.class, false, aliases_antipotion),
+	AUTOEAT(true, true, Material.COOKED_BEEF, AutoEatProtocol.class, false, aliases_autoeat),
+	AUTOREGEN(true, true, Material.GOLDEN_APPLE, AutoRegenProtocol.class, false, aliases_autoregen),
+	ANTIKNOCKBACK(true, false, Material.STICK, AntiKnockbackProtocol.class, true, aliases_antiknockback),
+	JESUS(true, false, Material.WATER_BUCKET, JesusProtocol.class, false, aliases_jesus),
+	NOFALL(true, false, Utils.getMaterialWith1_13_Compatibility("WOOL", "RED_WOOL"), NoFallProtocol.class, false, aliases_nofall),
+	BLINK(true, true, Material.COAL_BLOCK, BlinkProtocol.class, false, aliases_blink),
+	SPIDER(true, false, Utils.getMaterialWith1_13_Compatibility("WEB", "COBWEB"), SpiderProtocol.class, false, aliases_spider),
+	SNEAK(true, true, Material.BLAZE_POWDER, SneakProtocol.class, false, aliases_sneak),
+	FASTBOW(true, true, Material.BOW, FastBowProtocol.class, false, aliases_fastbow),
+	SCAFFOLD(true, false, Material.GRASS, ScaffoldProtocol.class, false, aliases_scaffold),
+	STEP(true, false, Material.BRICK_STAIRS, StepProtocol.class, true, aliases_step),
+	NOSLOWDOWN(true, false, Material.SOUL_SAND, NoSlowDownProtocol.class, false, aliases_noslowdown),
+	FASTLADDERS(true, false, Material.LADDER, FastLadderProtocol.class, false, aliases_fastladders),
+	PHASE(true, false, Utils.getMaterialWith1_13_Compatibility("STAINED_GLASS", "WHITE_STAINED_GLASS"), PhaseProtocol.class, false, aliases_phase),
+	AUTOSTEAL(true, false, Material.CHEST, AutoStealProtocol.class, false, aliases_autosteal),
+	EDITED_CLIENT(true, false, Material.FEATHER, EditedClientProtocol.class, false, aliases_edited_client),
+	ALL(false, true, Material.AIR, null, false, aliases_all);
 
-	private boolean needPacket, isRunning = false;
+	private boolean needPacket, isRunning = false, blockedInFight;
 	private String name;
 	private Material m;
 	private Class<?> protocolClass;
 	private String[] aliases;
 
-	Cheat(boolean hasName, boolean needPacket, Material m, Class<?> protocolClass, String... aliases) {
+	Cheat(boolean hasName, boolean needPacket, Material m, Class<?> protocolClass, boolean blockedInFight, String... aliases) {
 		this.needPacket = needPacket;
 		this.m = m;
 		this.protocolClass = protocolClass;
-		/*SpigotNegativity pl = SpigotNegativity.getInstance();
-		if (pl.getConfig().getString("cheats." + this.name().toLowerCase() + ".exact_name") == null) {
-			pl.getConfig().set("cheats." + this.name().toLowerCase() + ".exact_name", this.name().toLowerCase());
-			pl.getConfig().set("cheats." + this.name().toLowerCase() + ".isActive", true);
-			pl.getConfig().set("cheats." + this.name().toLowerCase() + ".autoVerif", false);
-		}*/
+		this.blockedInFight = blockedInFight;
 		this.name = Adapter.getAdapter().getStringInConfig("cheats." + this.name().toLowerCase() + ".exact_name");
 		String[] tempAlias = new String[aliases.length + 1];
 		int i = 0;
@@ -69,6 +64,10 @@ public enum Cheat implements AbstractCheat {
 
 	public boolean isActive() {
 		return Adapter.getAdapter().getBooleanInConfig("cheats." + this.name().toLowerCase() + ".isActive");
+	}
+	
+	public boolean isBlockedInFight() {
+		return blockedInFight;
 	}
 
 	public boolean needPacket() {

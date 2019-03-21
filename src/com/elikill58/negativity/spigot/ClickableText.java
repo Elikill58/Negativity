@@ -8,7 +8,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.spigot.utils.Utils.Version;
+import com.elikill58.negativity.universal.Version;
 
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;

@@ -25,10 +25,10 @@ public class Minerate {
 	
 	public String[] getInventoryLoreString() {
 		String[] s = new String[MinerateType.values().length + 1];//ChatColor.RESET + "";
-		s[0] = "�7" + "Full Mined: " + fullMined;
+		s[0] = "§r§7" + "Full Mined: " + fullMined;
 		int i = 1;
 		for(MinerateType type : MinerateType.values())
-			s[i++] = "�r" + type.getName() + ": " + (mined.get(type) / (fullMined == 0 ? 1 : fullMined)) * 100 + "% (" + mined.get(type) + ")";
+			s[i++] = "§r§7" + type.getName() + ": " + (mined.get(type) / (fullMined == 0 ? 1 : fullMined)) * 100 + "% (" + mined.get(type) + ")";
 		return s;
 	}
 	

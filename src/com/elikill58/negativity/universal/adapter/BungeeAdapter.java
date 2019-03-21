@@ -13,6 +13,7 @@ import com.elikill58.negativity.universal.AbstractCheat;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.google.common.io.ByteStreams;
 
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -173,5 +174,11 @@ public class BungeeAdapter extends Adapter {
 	@Override
 	public Object getItem(String itemName) {
 		return null;
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public String getVersion() {
+		return ProxyServer.getInstance().getGameVersion();
 	}
 }

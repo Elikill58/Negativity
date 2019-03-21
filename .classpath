@@ -10,8 +10,8 @@
 	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/ProtocolLib-3.4.0 1.7.9.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/APISuppressError.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/spigot-1.13.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/spigot-1.10.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/APIs/spigot-1.7.10.jar"/>
 	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Plugins/Plugins/Essentials.jar"/>
+	<classpathentry kind="lib" path="C:/Users/Elikill58/Documents/Minecraft/Serveurs_locaux/Serveurs_minecraft/1.10.2/spigot-1.10.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

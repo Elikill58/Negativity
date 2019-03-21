@@ -5,10 +5,10 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.universal.permissions.Perm;
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.inventories.ModInventory;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class ModCommand implements CommandExecutor {
 
@@ -20,7 +20,7 @@ public class ModCommand implements CommandExecutor {
 		if(!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "mod"))
 			Messages.sendMessage(p, "not_permission");
 		else
-			Inv.openModMenu(p);
+			ModInventory.openModMenu(p);
 		return false;
 	}
 

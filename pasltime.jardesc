@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <jardesc>
-    <jar path="C:/Users/Elikill58/Documents/Minecraft/Serveurs_locaux/Serveurs_minecraft/1.10.2/plugins/Negativity.jar"/>
+    <jar path="C:/Users/Elikill58/Documents/Minecraft/Serveurs_locaux/Serveurs_minecraft/Sponge/mods/Negativity.jar"/>
     <options buildIfNeeded="true" compress="true" descriptionLocation="/NegativityShared/pasltime.jardesc" exportErrors="true" exportWarnings="true" includeDirectoryEntries="false" overwrite="true" saveDescription="true" storeRefactorings="false" useSourceFolders="false"/>
     <storedRefactorings deprecationInfo="true" structuralOnly="false"/>
     <selectedProjects/>
@@ -12,12 +12,14 @@
     </manifest>
     <selectedElements exportClassFiles="true" exportJavaFiles="false" exportOutputFolder="false">
         <file path="/NegativityShared/bungee_config.yml"/>
+        <file path="/NegativityShared/bungee_zh_CN.yml"/>
         <file path="/NegativityShared/no_NO.yml"/>
         <file path="/NegativityShared/en_US.yml"/>
         <file path="/NegativityShared/.project"/>
         <file path="/NegativityShared/bungee_ru_RU.yml"/>
         <file path="/NegativityShared/bungee_pt_BR.yml"/>
         <javaElement handleIdentifier="=NegativityShared/src"/>
+        <file path="/NegativityShared/zh_CN.yml"/>
         <file path="/NegativityShared/ru_RU.yml"/>
         <file path="/NegativityShared/.classpath"/>
         <file path="/NegativityShared/pt_BR.yml"/>

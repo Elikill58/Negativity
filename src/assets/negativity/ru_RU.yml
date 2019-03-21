@@ -41,7 +41,6 @@ negativity {
     help = [
       "/negativity verif <игрок> [читы...] : Начинает проверку (проверка на все читы, если ни один не указан)" 
       "/negativity <игрок> : Увидеть информацию о игроке" ]
-    }
   }
 }
 inventory {
@@ -81,6 +80,7 @@ inventory {
     no_longer_invisible: "Теперь каждый может увидеть вас"
     you_are_freeze: "Вы заморожены. Вы не сможете закрыть это меню."
     cheat_manage: "Управление читами"
+  }
   manager {
     enabled: "&aВкл"
     disabled: "&cВыкл"

@@ -92,7 +92,8 @@ public class SpongeNegativity implements RawDataListener {
 		return plugin;
 	}
 
-	public static boolean log = true, isOnBungeecord = false, hasPacketGate = false, hasPrecogs = false, hasBypass = true;
+	public static boolean log = true, isOnBungeecord = false, hasPacketGate = false, hasPrecogs = false,
+			hasBypass = true;
 
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
@@ -121,17 +122,21 @@ public class SpongeNegativity implements RawDataListener {
 		Task.builder().execute(new ActualizerTimer()).delayTicks(0).interval(1, TimeUnit.SECONDS)
 				.name("negativity-actualizer").submit(this);
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
-		
+
 		if (UniversalUtils.hasInternet() && !UniversalUtils.isLatestVersion(plugin.getVersion())) {
 			getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
-					+ "). Download it here: https://www.spigotmc.org/resources/aac-negativity-spigot-1-7-sponge-bungeecord-optimized.48399/");
+					+ "). Download it here: https://www.spigotmc.org/resources/48399/");
 		}
 		if (!isOnBungeecord)
 			Task.builder().async().delayTicks(1).execute(new Runnable() {
 				@Override
 				public void run() {
-					Stats.updateStats(StatsType.ONLINE, 1);
-					Stats.updateStats(StatsType.PORT, Sponge.getServer().getBoundAddress().get().getPort());
+					try {
+						Stats.updateStats(StatsType.ONLINE, 1);
+						Stats.updateStats(StatsType.PORT, Sponge.getServer().getBoundAddress().get().getPort());
+					} catch (Exception e) {
+
+					}
 				}
 			}).submit(this);
 		Adapter.getAdapter().loadLang();
@@ -282,9 +287,10 @@ public class SpongeNegativity implements RawDataListener {
 
 	@Listener
 	public void onBlockBreak(ChangeBlockEvent.Break e, @First Player p) {
-		SpongeNegativityPlayer.getNegativityPlayer(p).mineRate.addMine(MinerateType.getMinerateType(e.getTransactions().get(0).getFinal().getLocation().get().getBlock().getType().getId()));
+		SpongeNegativityPlayer.getNegativityPlayer(p).mineRate.addMine(MinerateType.getMinerateType(
+				e.getTransactions().get(0).getFinal().getLocation().get().getBlock().getType().getId()));
 	}
-	
+
 	private void loadConfig() {
 		try {
 			File configFile = new File(configDir.toFile(), "config.conf");
@@ -301,8 +307,9 @@ public class SpongeNegativity implements RawDataListener {
 			log = config.getNode("log_alerts").getBoolean();
 			isOnBungeecord = config.getNode("hasBungeecord").getBoolean();
 			hasBypass = config.getNode("Permissions").getNode("bypass").getNode("active").getBoolean();
-			for(ConfigurationNode cn : config.getNode("items").getChildrenList())
-				new ItemUseBypass(cn.getKey().toString(), cn.getNode("cheats").getString(), cn.getNode("when").getString());
+			for (ConfigurationNode cn : config.getNode("items").getChildrenList())
+				new ItemUseBypass(cn.getKey().toString(), cn.getNode("cheats").getString(),
+						cn.getNode("when").getString());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -351,25 +358,31 @@ public class SpongeNegativity implements RawDataListener {
 				np.already_blink = true;
 				return false;
 			}
-		if(np.isInFight)
-			if(c.equals(Cheat.FLY) || c.equals(Cheat.FORCEFIELD) || c.equals(Cheat.STEP))
+		if (np.isInFight)
+			if (c.equals(Cheat.FLY) || c.equals(Cheat.FORCEFIELD) || c.equals(Cheat.STEP))
 				return false;
-		if(p.getItemInHand(HandTypes.MAIN_HAND).isPresent())
-			if(ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand(HandTypes.MAIN_HAND).get().getType()))
-				if(ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand(HandTypes.MAIN_HAND).get().getType()).getWhen().equals(WhenBypass.ALWAYS))
+		if (p.getItemInHand(HandTypes.MAIN_HAND).isPresent())
+			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand(HandTypes.MAIN_HAND).get().getType()))
+				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand(HandTypes.MAIN_HAND).get().getType()).getWhen()
+						.equals(WhenBypass.ALWAYS))
 					return false;
 		int ping = Utils.getPing(p);
-		if (np.TIME_INVINCIBILITY > System.currentTimeMillis() || reliability < 30 || ping > c.getMaxAlertPing() || p.getHealthData().get(Keys.HEALTH).get() == 0.0D || getInstance().config.getNode("tps_alert_stop").getInt() > Utils.getLastTPS() || ping < 0 || np.isFreeze)
+		if (np.TIME_INVINCIBILITY > System.currentTimeMillis() || reliability < 30 || ping > c.getMaxAlertPing()
+				|| p.getHealthData().get(Keys.HEALTH).get() == 0.0D
+				|| getInstance().config.getNode("tps_alert_stop").getInt() > Utils.getLastTPS() || ping < 0
+				|| np.isFreeze)
 			return false;
 		Sponge.getEventManager().post(new PlayerCheatEvent(p, c, reliability));
-		if(hasBypass && Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "Permissions.bypass." + c.name().toLowerCase())) {
+		if (hasBypass && Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p),
+				"Permissions.bypass." + c.name().toLowerCase())) {
 			PlayerCheatEvent.Bypass bypassEvent = new PlayerCheatEvent.Bypass(p, c, reliability);
 			Sponge.getEventManager().post(bypassEvent);
-			if(!bypassEvent.isCancelled())
+			if (!bypassEvent.isCancelled())
 				return false;
 		}
 		logProof(type, p, c, reliability, proof, ping);
-		PlayerCheatEvent.Alert alert = new PlayerCheatEvent.Alert(p, c, reliability,c.getReliabilityAlert() < reliability);
+		PlayerCheatEvent.Alert alert = new PlayerCheatEvent.Alert(p, c, reliability,
+				c.getReliabilityAlert() < reliability);
 		Sponge.getEventManager().post(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
@@ -381,8 +394,10 @@ public class SpongeNegativity implements RawDataListener {
 				p.kick(Messages.getMessage(p, "kick", "%cheat%", c.getName()));
 		}
 		if (log)
-			INSTANCE.getLogger().info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString() + ")  (ping: " + ping
-					+ ") : suspected of cheating (" + c.getName() + ") Reliability: " + reliability);
+			INSTANCE.getLogger()
+					.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
+							+ ")  (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
+							+ reliability);
 		Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.name() + " (Reliability: " + reliability + ") Ping: "
 				+ ping + " Type: " + type.getName());
 		Ban.manageBan(c, np, reliability);
@@ -409,8 +424,8 @@ public class SpongeNegativity implements RawDataListener {
 		if (!log)
 			return;
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		SpongeNegativityPlayer.getNegativityPlayer(p).logProof(stamp, stamp + ": (" + ping
-				+ "ms) " + reliability + "% " + c.name() + " > " + proof);
+		SpongeNegativityPlayer.getNegativityPlayer(p).logProof(stamp,
+				stamp + ": (" + ping + "ms) " + reliability + "% " + c.name() + " > " + proof);
 	}
 
 	public Path getDataFolder() {

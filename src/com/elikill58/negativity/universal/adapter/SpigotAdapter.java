@@ -216,4 +216,9 @@ public class SpigotAdapter extends Adapter {
 				return m;
 		return null;
 	}
+
+	@Override
+	public String getVersion() {
+		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+	}
 }

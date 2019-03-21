@@ -49,7 +49,6 @@ import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
 import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.spigot.utils.Utils.Version;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
@@ -58,6 +57,7 @@ import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.UniversalUtils;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpigotAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -74,6 +74,9 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public void onEnable() {
 		INSTANCE = this;
+		if (Adapter.getAdapter() == null)
+			Adapter.setAdapter(new SpigotAdapter(this, getConfig()));
+		Adapter ada = Adapter.getAdapter();
 		Version v = Version.getVersion();
 		if (v.equals(Version.HIGHER))
 			getLogger().warning("Unknow server version ! Some problems can appears.");
@@ -114,10 +117,8 @@ public class SpigotNegativity extends JavaPlugin {
 			getConfig().options().copyDefaults();
 			saveDefaultConfig();
 		}
-		if (Adapter.getAdapter() == null)
-			Adapter.setAdapter(new SpigotAdapter(this, getConfig()));
-		Adapter ada = Adapter.getAdapter();
 		UniversalUtils.init();
+		FakePlayer.loadClass();
 		isOnBungeecord = ada.getBooleanInConfig("hasBungeecord");
 		log = ada.getBooleanInConfig("log_alerts");
 		hasBypass = ada.getBooleanInConfig("Permissions.bypass.active");

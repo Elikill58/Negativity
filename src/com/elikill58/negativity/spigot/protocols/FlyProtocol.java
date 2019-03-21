@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -27,6 +28,10 @@ public class FlyProtocol implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
+		for(ItemStack item : p.getInventory().getArmorContents())
+			if(item != null && item.getType().name().contains("ELYTRA"))
+				return;
+		
 		if (p.hasPotionEffect(PotionEffectType.SPEED)) {
 			int speed = 0;
 			for (PotionEffect pe : p.getActivePotionEffects())

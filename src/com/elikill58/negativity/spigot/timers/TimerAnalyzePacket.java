@@ -104,14 +104,16 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				if (ping < 140) {
 					int total = np.ALL - np.KEEP_ALIVE;
 					if (total == 0) {
-						np.addWarn(Cheat.BLINK);
-						boolean last = np.IS_LAST_SEC_BLINK == 2;
-						np.IS_LAST_SEC_BLINK++;
-						long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
-						if (last) {
-							SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.BLINK, Utils.parseInPorcent(160 - ping),
-									"No packet. Last other than KeepAlive: " + np.LAST_OTHER_KEEP_ALIVE + " there is: "
-											+ time_last + "ms . Ping: " + ping + ". Warn: " + np.getWarn(Cheat.BLINK));
+						if(Utils.parseInPorcent(160 - ping) >= Cheat.BLINK.getReliabilityAlert()) {
+							np.addWarn(Cheat.BLINK);
+							boolean last = np.IS_LAST_SEC_BLINK == 2;
+							np.IS_LAST_SEC_BLINK++;
+							long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
+							if (last) {
+								SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.BLINK, Utils.parseInPorcent(160 - ping),
+										"No packet. Last other than KeepAlive: " + np.LAST_OTHER_KEEP_ALIVE + " there is: "
+												+ time_last + "ms . Ping: " + ping + ". Warn: " + np.getWarn(Cheat.BLINK));
+							}
 						}
 					} else
 						np.IS_LAST_SEC_BLINK = 0;
@@ -134,9 +136,9 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 			if(np.ACTIVE_CHEAT.contains(Cheat.EDITED_CLIENT)) {
 				if(ping < Cheat.EDITED_CLIENT.getMaxAlertPing()){
 					int allPos = np.POSITION_LOOK + np.POSITION;
-					if(allPos > 38) {
+					if(allPos > 40) {
 						np.addWarn(Cheat.EDITED_CLIENT);
-						SpigotNegativity.alertMod(allPos > 55 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.EDITED_CLIENT, Utils.parseInPorcent(30 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + " Ping: " + ping + " Warn for SpeedHack: " + np.getWarn(Cheat.SPEEDHACK));
+						SpigotNegativity.alertMod(allPos > 60 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.EDITED_CLIENT, Utils.parseInPorcent(25 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + " Ping: " + ping + " Warn for SpeedHack: " + np.getWarn(Cheat.SPEEDHACK));
 					}
 				}
 			}

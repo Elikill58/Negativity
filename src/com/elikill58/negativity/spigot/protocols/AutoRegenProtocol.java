@@ -15,7 +15,7 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer.FlyingReason;
 import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.spigot.utils.Utils.Version;
+import com.elikill58.negativity.universal.Version;
 
 @SuppressWarnings("deprecation")
 public class AutoRegenProtocol implements Listener {
@@ -49,7 +49,7 @@ public class AutoRegenProtocol implements Listener {
 		long actual = System.currentTimeMillis(), dif = actual - np.LAST_REGEN;
 		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && np.ACTIVE_CHEAT.contains(Cheat.AUTOREGEN)) {
 			int ping = Utils.getPing(p);
-			if (dif < (getTimeBetweenTwoRegenFromVersion() + ping)) {
+			if (dif < (Version.getVersion().getTimeBetweenTwoRegenFromVersion() + ping)) {
 				np.addWarn(Cheat.AUTOREGEN);
 				boolean mayCancel = false;
 				if (dif < (50 + ping))
@@ -67,26 +67,5 @@ public class AutoRegenProtocol implements Listener {
 			}
 		}
 		np.LAST_REGEN = actual;
-	}
-	
-	public int getTimeBetweenTwoRegenFromVersion(){
-		switch(Version.getVersion()){
-		case HIGHER:
-			return 200;
-		case V1_12:
-			return 200;
-		case V1_11:
-			return 300;
-		case V1_10:
-			return 500;
-		case V1_9:
-			return 500;
-		case V1_8:
-			return 500;
-		case V1_7:
-			return 500;
-		default:
-			return 300;
-		}
 	}
 }

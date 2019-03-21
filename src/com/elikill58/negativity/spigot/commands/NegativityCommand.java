@@ -15,6 +15,7 @@ import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.inventories.CheckMenuInventory;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -91,7 +92,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 					return false;
 				}
 				Inv.CHECKING.put(p, cible);
-				Inv.openCheckMenu(p, cible);
+				CheckMenuInventory.openCheckMenu(p, cible);
 			} else
 				Messages.sendMessageList(p, "negativity.verif.help");
 		}

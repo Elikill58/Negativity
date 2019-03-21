@@ -6,7 +6,7 @@ import java.util.List;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.packets.PacketAbstract.IPacketListener;
-import com.elikill58.negativity.spigot.utils.Utils.Version;
+import com.elikill58.negativity.universal.Version;
 
 public class ChannelInjector {
 

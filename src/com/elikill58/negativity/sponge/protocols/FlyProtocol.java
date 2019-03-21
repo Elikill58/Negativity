@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import java.util.Optional;
+
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
@@ -8,6 +10,8 @@ import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -35,6 +39,11 @@ public class FlyProtocol implements NeedListener {
 			if(speed > 40)
 				return;
 		}
+		Optional<ItemStack> optChestplate = p.getChestplate();
+		if(optChestplate.isPresent())
+			if(optChestplate.get().getType().equals(ItemTypes.ELYTRA))
+				return;
+		
 		double i = e.getToTransform().getPosition().distance(e.getFromTransform().getPosition());
 		if (!p.getLocation().copy().sub(0, 1, 0).getBlock().getType().equals(BlockTypes.SPONGE)) {
 			if (!(p.getVehicle() != null || np.isFlying()))

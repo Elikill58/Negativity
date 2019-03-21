@@ -111,7 +111,7 @@ public class Utils {
 	public static ItemStack createSkull(String name, int amount, Player owner, String... lore) {
 		ItemStack skull = ItemStack.builder().itemType(ItemTypes.SKULL).add(Keys.SKULL_TYPE, SkullTypes.PLAYER)
 				.quantity(amount == 0 ? 1 : amount).build();
-		skull.offer(Keys.DISPLAY_NAME, Text.of("&r" + name));
+		skull.offer(Keys.DISPLAY_NAME, Text.of(coloredMessage("&r" + name)));
 		skull.offer(Keys.TAMED_OWNER, Optional.of(owner.getUniqueId()));
 		List<Text> textLore = new ArrayList<>();
 		for (String lores : lore)
@@ -171,7 +171,7 @@ public class Utils {
 							+ "). Download it here.")
 					.color(TextColors.YELLOW).onHover(TextActions.showText(Text.of("Click here")))
 					.onClick(TextActions.openUrl(new URL(
-							"https://www.spigotmc.org/resources/aac-negativity-spigot-1-7-sponge-bungeecord-optimized.48399/")))
+							"https://www.spigotmc.org/resources/48399/")))
 					.build());
 		} catch (MalformedURLException e) {
 			e.printStackTrace();

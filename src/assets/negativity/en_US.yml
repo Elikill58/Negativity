@@ -33,7 +33,7 @@ negativity {
     help = [
      "/negativity verif <player> [cheats...] : Starts verifications (all if none is given)" 
      "/negativity <player> : To see some informations about this player"
-   ]
+    ]
   }
 }
 inventory {

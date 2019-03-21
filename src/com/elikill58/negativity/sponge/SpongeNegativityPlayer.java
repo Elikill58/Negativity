@@ -457,7 +457,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			public void run() {
 				isInFight = false;
 			}
-		}).submit(this);
+		}).submit(SpongeNegativity.INSTANCE);
 	}
 
 	public void unfight() {

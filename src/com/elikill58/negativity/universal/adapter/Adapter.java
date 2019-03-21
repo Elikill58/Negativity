@@ -46,5 +46,6 @@ public abstract class Adapter {
 	public abstract List<AbstractCheat> getAbstractCheats();
 	public abstract void reload();
 	public abstract Object getItem(String itemName);
+	public abstract String getVersion();
 	
 }

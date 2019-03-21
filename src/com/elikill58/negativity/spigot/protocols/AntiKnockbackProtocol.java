@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.protocols;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -30,6 +31,8 @@ public class AntiKnockbackProtocol implements Listener {
 		if (!np.ACTIVE_CHEAT.contains(Cheat.ANTIKNOCKBACK))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
+			return;
+		if(e.getDamager().getType().equals(EntityType.EGG))
 			return;
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new BukkitRunnable() {
 

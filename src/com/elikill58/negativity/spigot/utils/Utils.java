@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.utils;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -10,6 +8,7 @@ import java.util.Optional;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -114,13 +113,22 @@ public class Utils {
 	public static int getPing(Player p) {
 		try {
 			Object object = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer").cast(p);
-			Object entityPlayer = object.getClass().getMethod("getHandle", new Class[0]).invoke(object, new Object[0]);
-			Field field = entityPlayer.getClass().getField("ping");
-			return field.getInt(entityPlayer);
+			Object entityPlayer = object.getClass().getMethod("getHandle").invoke(object);
+			return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return 0;
+	}
+
+	public static Object getWorldServer(Location loc) {
+		try {
+			Object object = Class.forName("org.bukkit.craftbukkit." + VERSION + ".CraftWorld").cast(loc.getWorld());
+			return object.getClass().getMethod("getHandle").invoke(object);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 
 	public static int parseInPorcent(int i) {
@@ -133,29 +141,51 @@ public class Utils {
 	}
 
 	public static int parseInPorcent(double i) {
-		if (i > 100)
-			return 100;
-		else if (i < 0)
-			return 0;
-		else
-			return (int) i;
+		return parseInPorcent((int) i);
 	}
 
 	public static void sendPacket(Player p, String packetdir, Class<?> type, Object send) {
 		try {
-			Object craftPlayer = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer").cast(p);
-			Object entityPlayer = craftPlayer.getClass().getMethod("getHandle", new Class[0]).invoke(craftPlayer,
-					new Object[0]);
-			Object playerConnection = entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
-			Class<?> packetClass = Class
-					.forName(packetdir.replaceAll("<version>", VERSION).replaceAll("%version%", VERSION));
-			Constructor<?> packetConstructor = packetClass.getConstructor(type);
-			Object packets = packetConstructor.newInstance(send);
-			playerConnection.getClass()
-					.getMethod("sendPacket", Class.forName("net.minecraft.server." + VERSION + ".Packet"))
-					.invoke(playerConnection, packets);
+			sendPacket(p, Class.forName(packetdir.replaceAll("<version>", VERSION).replaceAll("%version%", VERSION)).getConstructor(type).newInstance(send));
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public static void sendPacket(Player p, Object packet) {
+		try {
+			Object playerConnection = getPlayerConnection(p);
+			playerConnection.getClass()
+					.getMethod("sendPacket", Class.forName("net.minecraft.server." + VERSION + ".Packet"))
+					.invoke(playerConnection, packet);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public static Object getPlayerConnection(Player p) {
+		try {
+			Object craftPlayer = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer").cast(p);
+			Object entityPlayer = craftPlayer.getClass().getMethod("getHandle").invoke(craftPlayer);
+			return entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static Class<?> getEnumPlayerInfoAction() {
+		try {
+			Class<?> playerInfo = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayOutPlayerInfo");
+			for(Class<?> clazz : playerInfo.getDeclaredClasses()) {
+				if(clazz.getName().contains("EnumPlayerInfoAction")) {
+					return clazz;
+				}
+			}
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 	
@@ -225,43 +255,6 @@ public class Utils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new double[] {};
-		}
-	}
-	
-	public enum Version {
-		V1_7(7), V1_8(8), V1_9(9), V1_10(10), V1_11(11), V1_12(12), V1_13(13), V1_14(14), V1_15(15), V1_16(16), V1_17(17), HIGHER(42);
-
-		private int power;
-
-		Version(int power) {
-			this.power = power;
-		}
-
-		public boolean isNewerThan(Version other) {
-			return power > other.getPower();
-		}
-		
-		public boolean isNewerOrEquals(Version other) {
-			return power >= other.getPower();
-		}
-
-		public int getPower() {
-			return power;
-		}
-
-		public static boolean isNewer(Version v1, Version v2) {
-			return v1.isNewerThan(v2);
-		}
-
-		public static boolean isNewerOrEquals(Version v1, Version v2) {
-			return v1.isNewerOrEquals(v2);
-		}
-
-		public static Version getVersion() {
-			for (Version v : Version.values())
-				if (VERSION.toLowerCase().startsWith(v.name().toLowerCase()))
-					return v;
-			return HIGHER;
 		}
 	}
 }

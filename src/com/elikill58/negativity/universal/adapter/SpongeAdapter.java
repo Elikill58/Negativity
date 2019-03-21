@@ -189,19 +189,19 @@ public class SpongeAdapter extends Adapter {
 		try {
 			LANGS.put("no_active",
 					HoconConfigurationLoader.builder().setFile(copy("default",
-							new File(pl.getDataFolder().toAbsolutePath() + "\\messages\\"
+							new File(pl.getDataFolder().toAbsolutePath() + File.separator + "messages" + File.separator
 									+ Adapter.getAdapter().getStringInConfig("Translation.no_active_file_name"))))
 							.build().load());
 		} catch (IOException e1) {
 			e1.printStackTrace();
 		}
 		try {
-			File langDir = new File(SpongeNegativity.getInstance().getDataFolder() + "/messages/");
+			File langDir = new File(SpongeNegativity.getInstance().getDataFolder() + File.separator + "messages" + File.separator);
 			if (!langDir.exists())
 				langDir.mkdir();
 			for (String l : TranslatedMessages.LANGS)
 				LANGS.put(l, HoconConfigurationLoader.builder()
-						.setFile(copy(l, new File(langDir.getAbsolutePath() + "\\" + l + ".yml"))).build().load());
+						.setFile(copy(l, new File(langDir.getAbsolutePath() + File.separator + l + ".yml"))).build().load());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -276,5 +276,10 @@ public class SpongeAdapter extends Adapter {
 			if(it.getName().equalsIgnoreCase(itemName))
 				return it;
 		return null;
+	}
+
+	@Override
+	public String getVersion() {
+		return Sponge.getPlatform().getMinecraftVersion().getName();
 	}
 }

@@ -73,11 +73,10 @@ public class Inv {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
 		for (Cheat c : Cheat.values())
-			if ((c.isActive() && Adapter.getAdapter().getBooleanInConfig("inventory.alerts.see.only_cheat_active")
-					&& np.hasDetectionActive(c))
-					|| (!np.hasDetectionActive(c) && Adapter.getAdapter().getBooleanInConfig("inventory.alerts.see.no_started_verif_cheat")))
+			if((Adapter.getAdapter().getBooleanInConfig("inventory.alerts.only_cheat_active") && np.hasDetectionActive(c))
+					|| (!np.hasDetectionActive(c) && Adapter.getAdapter().getBooleanInConfig("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
-		int size = Utils.getMultipleOf(TO_SEE.size() + 3, 9, 1), nbLine = size / 9;
+		int size = Utils.getMultipleOf(TO_SEE.size() + 4, 9, 1), nbLine = size / 9;
 		Inventory inv = Inventory.builder()
 				.property(InventoryTitle.PROPERTY_NAME, new InventoryTitle(Text.of(NAME_ALERT_MENU)))
 				.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, nbLine))
@@ -90,7 +89,7 @@ public class Inv {
 						.set(Utils.createItem(c.getMaterial(),
 								Messages.getStringMessage(p, "inventory.alerts.item_name", "%exact_name%", c.getName(),
 										"%warn%", String.valueOf(np.getWarn(c))),
-								np.getWarn(c) == 0 ? 1 : np.getWarn(c)));
+								np.getWarn(c) < 1 ? 1 : np.getWarn(c)));
 				x++;
 				if (x > 8) {
 					x = 0;
@@ -98,10 +97,10 @@ public class Inv {
 				}
 			}
 		}
-		inv.query(new SlotPos(6, nbLine)).set(Utils.createItem(ItemTypes.BONE, Messages.getStringMessage(p, "inventory.back")));
-		inv.query(new SlotPos(7, nbLine))
+		inv.query(new SlotPos(6, y)).set(Utils.createItem(ItemTypes.BONE, "&7Clear"));
+		inv.query(new SlotPos(7, y))
 				.set(Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
-		inv.query(new SlotPos(8, nbLine))
+		inv.query(new SlotPos(8, y))
 				.set(Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
@@ -155,9 +154,9 @@ public class Inv {
 		} else
 			inv.query(new SlotPos(5, 1)).set(Utils.createItem(ItemTypes.REDSTONE_BLOCK,
 					Messages.getStringMessage(p, "inventory.detection.no_active", "%name%", cible.getName())));
-		inv.query(new SlotPos(7, nbLine--))
+		inv.query(new SlotPos(7, y))
 				.set(Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
-		inv.query(new SlotPos(8, nbLine--))
+		inv.query(new SlotPos(8, y))
 				.set(Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}

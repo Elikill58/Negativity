@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -31,15 +32,17 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
+import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
+import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.spigot.utils.Utils.Version;
 import com.elikill58.negativity.universal.AbstractCheat;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.Version;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {
 
@@ -47,6 +50,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public static ArrayList<Player> INJECTED = new ArrayList<>();
 	public ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
+	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
 	public HashMap<Cheat, Integer> WARNS = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
@@ -76,6 +80,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public Minerate mineRate;
 	public boolean isInFight = false;
 	public BukkitTask fightTask = null;
+	public int fakePlayerTouched = 0;
+	public long timeStartFakePlayer = 0;
 
 	public SpigotNegativityPlayer(Player p) {
 		this.p = p;
@@ -196,15 +202,109 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void startAnalyze(Cheat c) {
-		if (ACTIVE_CHEAT.contains(c))
-			return;
 		ACTIVE_CHEAT.add(c);
+		if(c.needPacket() && !INJECTED.contains(p))
+			INJECTED.add(p);
+		if(c == Cheat.FORCEFIELD)
+			makeAppearEntities();
 	}
 
 	public void startAllAnalyze() {
 		INJECTED.add(p);
 		for (Cheat c : Cheat.values())
 			startAnalyze(c);
+		makeAppearEntities();
+	}
+	
+	public void makeAppearEntities() {
+		if(!ACTIVE_CHEAT.contains(Cheat.FORCEFIELD))
+			return;
+		timeStartFakePlayer = System.currentTimeMillis();
+
+		spawnRight();
+		spawnLeft();
+		spawnBehind();
+	}
+	
+	public void spawnRandom() {
+		int choice = new Random().nextInt(3);
+		if(choice == 0)
+			spawnRight();
+		else if(choice == 1)
+			spawnBehind();
+		else
+			spawnLeft();
+	}
+
+	private void spawnRight() {
+		Location loc = p.getLocation().clone();
+		Vector dir = p.getEyeLocation().getDirection();
+		double x = dir.getX(), z = dir.getZ();
+		if(x >= 0 && z >= 0) {
+			loc.add(-1, 0, 1);
+		} else if(x >= 0 && z <= 0) {
+			loc.add(-1, 0, 0);
+		} else if(x <= 0 && z >= 0) {
+			loc.add(-1, 0, 0);
+		} else if(x <= 0 && z <= 0) {
+			loc.add(-1, 0, 1);
+		}
+		loc.add(0, 1, 0);
+		FakePlayer fp = new FakePlayer(loc, "FP right").show(p);
+		FAKE_PLAYER.add(fp);
+	}
+	
+	private void spawnLeft() {
+		Location loc = p.getLocation().clone();
+		Vector dir = p.getEyeLocation().getDirection();
+		double x = dir.getX(), z = dir.getZ();
+		if(x >= 0 && z >= 0) {
+			loc.add(0, 0, -1);
+		} else if(x >= 0 && z <= 0) {
+			loc.add(-1, 0, 1);
+		} else if(x <= 0 && z >= 0) {
+			loc.add(1, 0, -1);
+		} else if(x <= 0 && z <= 0) {
+			loc.add(1, 0, 1);
+		}
+		loc.add(0, 1, 0);
+		FakePlayer fp = new FakePlayer(loc, "FP left").show(p);
+		FAKE_PLAYER.add(fp);
+	}
+	
+	private void spawnBehind() {
+		Location loc = p.getLocation().clone();
+		Vector dir = p.getEyeLocation().getDirection();
+		double x = dir.getX(), z = dir.getZ();
+		if(x >= 0 && z >= 0) {
+			loc.add(1, 0, -1);
+		} else if(x >= 0 && z <= 0) {
+			loc.add(1, 0, 1);
+		} else if(x <= 0 && z >= 0) {
+			loc.add(1, 0, 1);
+		} else if(x <= 0 && z <= 0) {
+			loc.add(1, 0, -1);
+		}
+		loc.add(0, 1, 0);
+		FakePlayer fp = new FakePlayer(loc, "FP behind").show(p);
+		FAKE_PLAYER.add(fp);
+	}
+	
+	public void removeFakePlayer(FakePlayer fp) {
+		if(!FAKE_PLAYER.contains(fp)) 
+			return;
+		
+		FAKE_PLAYER.remove(fp);
+		long l = (System.currentTimeMillis() - timeStartFakePlayer);
+		if(l >= 3000) {
+			if(FAKE_PLAYER.size() == 0) {
+				timeStartFakePlayer = 0;
+				ForceFieldProtocol.manageForcefieldForFakeplayer(p, this);
+			}
+		} else {
+			spawnRandom();
+			spawnRandom();
+		}
 	}
 
 	public void logProof(Timestamp stamp, String msg) {

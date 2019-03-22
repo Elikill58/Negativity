@@ -1,11 +1,9 @@
 /dist/
 /build/
-/nbproject/
-.idea/
+/.git/
 /target/
+/bin/
 /.settings/
 /.classpath
 /.project
-/bin/
-./pasltime.jardesc
-pasltime.jardesc
+/pasltime.jardesc

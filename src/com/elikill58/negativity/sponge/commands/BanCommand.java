@@ -14,9 +14,9 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.UniversalUtils;
 import com.elikill58.negativity.universal.ban.BanRequest;
 import com.elikill58.negativity.universal.ban.BanRequest.BanType;

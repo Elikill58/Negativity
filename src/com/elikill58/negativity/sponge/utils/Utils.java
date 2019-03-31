@@ -25,6 +25,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.UniversalUtils;
 import com.elikill58.negativity.universal.permissions.Perm;
 

@@ -11,17 +11,17 @@ import org.bukkit.inventory.Inventory;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
 public class CheatManagerInventory {
 
 	public static void openCheatManagerMenu(Player p){
-		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(Cheat.values().length + 3, 9, 1), Inv.CHEAT_MANAGER);
+		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(Cheat.values().size() + 3, 9, 1), Inv.CHEAT_MANAGER);
 		int slot = 0;
 		for(Cheat c : Cheat.values())
-			if(c.getMaterial() != null && c.getProtocolClass() != null)
-				inv.setItem(slot++, Utils.createItem(c.getMaterial(), c.getName()));
+			if(c.getMaterial() != null)
+				inv.setItem(slot++, Utils.createItem((Material) c.getMaterial(), c.getName()));
 
 		inv.setItem(inv.getSize() - 2, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.back")));
 		inv.setItem(inv.getSize() - 1, Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));

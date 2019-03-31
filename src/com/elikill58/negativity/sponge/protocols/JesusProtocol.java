@@ -2,6 +2,7 @@ package com.elikill58.negativity.sponge.protocols;
 
 import java.util.Optional;
 
+import org.bukkit.Material;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
@@ -15,21 +16,24 @@ import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.sponge.NeedListener;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class JesusProtocol implements NeedListener {
+public class JesusProtocol extends Cheat {
+
+	public JesusProtocol() {
+		super("JESUS", false, Material.WATER_BUCKET, false, true, "waterwalk", "water");
+	}
 
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
 			return;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(Cheat.JESUS))
+		if (!np.hasDetectionActive(this))
 			return;
 		Location<?> loc = p.getLocation();
 		BlockType m = loc.getBlock().getType();
@@ -81,9 +85,9 @@ public class JesusProtocol implements NeedListener {
 					reliability = 90;
 				else isCheating = false;
 				if(isCheating){
-					boolean mayCancel = SpongeNegativity.alertMod(type, p, Cheat.JESUS, Utils.parseInPorcent(reliability), "Warn for Jesus: " + np.getWarn(Cheat.JESUS) + " (Stationary_water aroud him) WalkSpeed: " + p.get(Keys.WALKING_SPEED).get() + ". Diff: " + dif + " and ping: "
+					boolean mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent(reliability), "Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) WalkSpeed: " + p.get(Keys.WALKING_SPEED).get() + ". Diff: " + dif + " and ping: "
 							+ Utils.getPing(p));
-					if(Cheat.JESUS.isSetBack() && mayCancel)
+					if(isSetBack() && mayCancel)
 						p.setLocation(p.getLocation().sub(0, 1, 0));
 				}
 			}

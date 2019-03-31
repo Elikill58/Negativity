@@ -1,20 +1,48 @@
 package com.elikill58.negativity.universal;
 
 import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.jar.JarEntry;
+import java.util.jar.JarInputStream;
 
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.permissions.Perm;
 
 public class UniversalUtils {
+
+	public static List<String> getClasseNamesInPackage(String jarName, String packageName) {
+		ArrayList<String> classes = new ArrayList<>();
+
+		packageName = packageName.replaceAll("\\.", "/");
+		try {
+			JarInputStream jarFile = new JarInputStream(new FileInputStream(jarName));
+			JarEntry jarEntry;
+			while (true) {
+				jarEntry = jarFile.getNextJarEntry();
+				if (jarEntry == null) {
+					break;
+				}
+				if ((jarEntry.getName().startsWith(packageName)) && (jarEntry.getName().endsWith(".class"))) {
+					classes.add(jarEntry.getName().replaceAll("/", "\\."));
+				}
+			}
+			jarFile.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return classes;
+	}
 	
 	public static boolean isMe(String uuid) {
 		if(uuid.equals("195dbcbc-9f2e-389e-82c4-3d017795ca65") || uuid.equals("3437a701-efaf-49d5-95d4-a8814e67760d"))
@@ -74,7 +102,8 @@ public class UniversalUtils {
 	
 	public static boolean isBoolean(String s) {
 		if (s.toLowerCase().contains("true") || s.equalsIgnoreCase("true") || s.toLowerCase().contains("vrai")
-				|| s.equalsIgnoreCase("vrai"))
+				|| s.equalsIgnoreCase("vrai") || s.toLowerCase().contains("false") || s.equalsIgnoreCase("false") || s.toLowerCase().contains("faux")
+				|| s.equalsIgnoreCase("faux"))
 			return true;
 		else
 			return false;

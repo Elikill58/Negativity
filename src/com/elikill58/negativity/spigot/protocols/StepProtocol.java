@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.protocols;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -10,17 +11,21 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class StepProtocol implements Listener {
+public class StepProtocol extends Cheat implements Listener {
+
+	public StepProtocol() {
+		super("STEP", false, Material.BRICK_STAIRS, true, true);
+	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(Cheat.STEP))
+		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
@@ -47,10 +52,10 @@ public class StepProtocol implements Listener {
 					if ((from.getY() - to.getY()) > 0)
 						return;
 					if (dif < -1.499 && ping < 200) {
-						np.addWarn(Cheat.STEP);
-						boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.STEP, relia, "Warn for Step: "
-								+ np.getWarn(Cheat.STEP) + ". Move " + dif + "blocks up. ping: " + ping);
-						if (Cheat.STEP.isSetBack() && mayCancel)
+						np.addWarn(this);
+						boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
+								+ np.getWarn(this) + ". Move " + dif + "blocks up. ping: " + ping);
+						if (isSetBack() && mayCancel)
 							e.setCancelled(true);
 					}
 				}

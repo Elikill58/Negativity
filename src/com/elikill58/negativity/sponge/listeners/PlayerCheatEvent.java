@@ -8,7 +8,7 @@ import org.spongepowered.api.event.entity.living.humanoid.player.TargetPlayerEve
 import org.spongepowered.api.event.impl.AbstractEvent;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
-import com.elikill58.negativity.sponge.utils.Cheat;
+import com.elikill58.negativity.universal.Cheat;
 
 public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent {
 

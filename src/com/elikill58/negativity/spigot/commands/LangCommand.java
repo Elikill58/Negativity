@@ -6,16 +6,17 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.universal.TranslatedMessages;
 
 public class LangCommand implements CommandExecutor {
 	
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
-		if(!(sender instanceof Player))
+		if(!(sender instanceof Player)) {
+			sender.sendMessage(TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, "only_player"));
 			return false;
-		Player p = (Player) sender;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		np.getNegativityAccount().getLang();
+		}
+		SpigotNegativityPlayer.getNegativityPlayer((Player) sender).getNegativityAccount().getLang();
 		return false;
 	}
 

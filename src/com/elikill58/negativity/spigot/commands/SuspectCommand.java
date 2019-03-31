@@ -8,18 +8,21 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.AbstractCheat;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.SuspectManager;
+import com.elikill58.negativity.universal.TranslatedMessages;
 
 public class SuspectCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
-		if (!(sender instanceof Player))
+		if(!(sender instanceof Player)) {
+			sender.sendMessage(TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, "only_player"));
 			return false;
+		}
 		//Player p = (Player) sender;
 		String msg = "";
 		for(String s : arg)
@@ -28,7 +31,7 @@ public class SuspectCommand implements CommandExecutor {
 			else msg += s;
 		String[] content = msg.split(" ");
 		List<Player> suspected = new ArrayList<>();
-		List<AbstractCheat> cheats = new ArrayList<>();
+		List<Cheat> cheats = new ArrayList<>();
 		for(String s : content) {
 			for(Cheat c : Cheat.values())
 				for(String alias : c.getAliases())
@@ -42,8 +45,16 @@ public class SuspectCommand implements CommandExecutor {
 						suspected.add(tempP);
 			}
 		}
-		for(Player suspect : suspected)
+		String players = "";
+		for(Player suspect : suspected) {
+			if(players.equalsIgnoreCase(""))
+				players = suspect.getName();
+			else players += ", " + suspect.getName();
 			SuspectManager.analyzeText(SpigotNegativityPlayer.getNegativityPlayer(suspect), cheats);
+		}
+		if(players.equalsIgnoreCase(""))
+			players = Messages.getMessage((Player) sender, "none");
+		SpigotNegativityPlayer.getNegativityPlayer((Player) sender).sendMessage("well_suspect", "%players%", players);
 		return false;
 	}
 

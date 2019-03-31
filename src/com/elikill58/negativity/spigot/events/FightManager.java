@@ -17,9 +17,9 @@ import org.bukkit.potion.Potion;
 import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
 @SuppressWarnings("deprecation")
 public class FightManager implements Listener {
@@ -32,20 +32,19 @@ public class FightManager implements Listener {
 		Player hit = (Player) e.getEntity();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(damager);
 		FakePlayer willRemoved = null;
-		for(FakePlayer tempFp : np.FAKE_PLAYER) {
-			if(tempFp.getProfile().getId().equals(hit.getUniqueId())) {
+		for(FakePlayer tempFp : np.FAKE_PLAYER)
+			if(tempFp.getProfile().getId().equals(hit.getUniqueId()))
 				willRemoved = tempFp;
-			}
-		}
+		
 		if(willRemoved != null) {
 			np.FAKE_PLAYER.remove(willRemoved);
 			np.fakePlayerTouched++;
 			long diff = System.currentTimeMillis() - np.timeStartFakePlayer;
 			double diffSec = diff / 1000;
 			if(np.fakePlayerTouched >= 20 && np.fakePlayerTouched >= diffSec) {
-				SpigotNegativity.alertMod(ReportType.VIOLATION, damager, Cheat.FORCEFIELD, Utils.parseInPorcent(np.fakePlayerTouched * 10 * (1 / diffSec)), np.fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  np.fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
+				SpigotNegativity.alertMod(ReportType.VIOLATION, damager, Cheat.getCheatFromString("FORCEFIELD").get(), Utils.parseInPorcent(np.fakePlayerTouched * 10 * (1 / diffSec)), np.fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  np.fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
 			} else if(np.fakePlayerTouched >= 5 && np.fakePlayerTouched >= diffSec) {
-				SpigotNegativity.alertMod(ReportType.WARNING, damager, Cheat.FORCEFIELD, Utils.parseInPorcent(np.fakePlayerTouched * 10 * (1 / diffSec)), np.fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  np.fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
+				SpigotNegativity.alertMod(ReportType.WARNING, damager, Cheat.getCheatFromString("FORCEFIELD").get(), Utils.parseInPorcent(np.fakePlayerTouched * 10 * (1 / diffSec)), np.fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  np.fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
 			}
 		}
 		

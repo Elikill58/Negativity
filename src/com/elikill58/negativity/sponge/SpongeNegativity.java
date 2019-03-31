@@ -51,17 +51,17 @@ import com.elikill58.negativity.sponge.listeners.InventoryClickManagerEvent;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
 import com.elikill58.negativity.sponge.timers.PacketsTimers;
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.UniversalUtils;
-import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpongeAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -104,16 +104,10 @@ public class SpongeNegativity implements RawDataListener {
 		UniversalUtils.init();
 		EventManager eventManager = Sponge.getEventManager();
 		for (Cheat c : Cheat.values()) {
-			if (c.getProtocolClass() == null)
+			if (!c.isActive())
 				continue;
-			try {
-				NeedListener need = (NeedListener) c.getProtocolClass().newInstance();
-				if (need != null)
-					eventManager.registerListeners(this, c.getProtocolClass().newInstance());
-			} catch (ClassCastException e) {
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			if(c.hasListener())
+				eventManager.registerListeners(this, c);
 		}
 		eventManager.registerListeners(this, new InventoryClickManagerEvent());
 		eventManager.registerListeners(this, new FightManager());
@@ -353,14 +347,13 @@ public class SpongeNegativity implements RawDataListener {
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 			String hover_proof) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (c.equals(Cheat.BLINK))
+		if (c.equals(Cheat.getCheatFromString("BLINK").get()))
 			if (!np.already_blink) {
 				np.already_blink = true;
 				return false;
 			}
-		if (np.isInFight)
-			if (c.equals(Cheat.FLY) || c.equals(Cheat.FORCEFIELD) || c.equals(Cheat.STEP))
-				return false;
+		if (np.isInFight && c.isBlockedInFight())
+			return false;
 		if (p.getItemInHand(HandTypes.MAIN_HAND).isPresent())
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand(HandTypes.MAIN_HAND).get().getType()))
 				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand(HandTypes.MAIN_HAND).get().getType()).getWhen()

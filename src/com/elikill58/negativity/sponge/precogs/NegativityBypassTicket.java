@@ -6,7 +6,7 @@ import java.util.UUID;
 
 import org.spongepowered.api.entity.living.player.Player;
 
-import com.elikill58.negativity.sponge.utils.Cheat;
+import com.elikill58.negativity.universal.Cheat;
 import com.me4502.precogs.detection.DetectionType;
 import com.me4502.precogs.service.BypassTicket;
 

@@ -4,7 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.elikill58.negativity.spigot.utils.Cheat;
+import com.elikill58.negativity.universal.Cheat;
 
 public class PlayerCheatEvent extends Event {
 

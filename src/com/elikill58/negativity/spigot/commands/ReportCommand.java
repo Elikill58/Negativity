@@ -10,6 +10,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.universal.SuspectManager;
+import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.spigot.Messages;
@@ -23,8 +24,10 @@ public class ReportCommand implements CommandExecutor {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
-		if (!(sender instanceof Player))
+		if(!(sender instanceof Player)) {
+			sender.sendMessage(TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, "only_player"));
 			return false;
+		}
 		Player p = (Player) sender;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if(np.TIME_REPORT > System.currentTimeMillis() && !Perm.hasPerm(np, "report_wait")){

@@ -12,9 +12,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer.FlyingReason;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
 @SuppressWarnings("deprecation")
 public class TimerAnalyzePacket extends BukkitRunnable {
@@ -70,7 +70,8 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					}
 				}
 			}
-			if (np.ACTIVE_CHEAT.contains(Cheat.FLY)) {
+			Cheat FLY = Cheat.getCheatFromString("FLY").get();
+			if (np.ACTIVE_CHEAT.contains(FLY)) {
 				if (np.FLYING > 4 && (np.POSITION + np.POSITION_LOOK + np.FLYING) < 9) {
 					np.NO_PACKET++;
 					if (np.NO_PACKET > 4) {
@@ -78,8 +79,8 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 						ReportType type = ReportType.WARNING;
 						if (np.ONLY_KEEP_ALIVE > 10)
 							type = ReportType.VIOLATION;
-						np.addWarn(Cheat.FLY);
-						SpigotNegativity.alertMod(type, p, Cheat.FLY, reliability,
+						np.addWarn(FLY);
+						SpigotNegativity.alertMod(type, p, FLY, reliability,
 								np.ONLY_KEEP_ALIVE + " second of only KeepAlive. Last other: "
 										+ np.LAST_OTHER_KEEP_ALIVE + "(" + new Timestamp(np.TIME_OTHER_KEEP_ALIVE)
 										+ ", there is: " + (System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE)
@@ -87,32 +88,34 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					}
 				}
 			}
-			if (np.ACTIVE_CHEAT.contains(Cheat.FORCEFIELD)) {
+			Cheat FORCEFIELD = Cheat.getCheatFromString("FORCEFIELD").get();
+			if (np.ACTIVE_CHEAT.contains(FORCEFIELD)) {
 				if (np.ARM > 14 && np.USE_ENTITY > 20) {
-					np.addWarn(Cheat.FORCEFIELD);
+					np.addWarn(FORCEFIELD);
 					ReportType type = ReportType.WARNING;
-					if (np.getWarn(Cheat.FORCEFIELD) > 4)
+					if (np.getWarn(FORCEFIELD) > 4)
 						type = ReportType.VIOLATION;
-					SpigotNegativity.alertMod(type, p, Cheat.FORCEFIELD,
-							Utils.parseInPorcent(np.ARM + np.USE_ENTITY + np.getWarn(Cheat.FORCEFIELD)),
+					SpigotNegativity.alertMod(type, p, FORCEFIELD,
+							Utils.parseInPorcent(np.ARM + np.USE_ENTITY + np.getWarn(FORCEFIELD)),
 							"ArmAnimation (Attack in one second): " + np.ARM
 									+ ", UseEntity (interaction with other entity): " + np.USE_ENTITY + " And warn: "
-									+ np.getWarn(Cheat.FORCEFIELD) + ". Ping: " + ping);
+									+ np.getWarn(FORCEFIELD) + ". Ping: " + ping);
 				}
 			}
-			if (np.ACTIVE_CHEAT.contains(Cheat.BLINK) && !np.bypassBlink) {
+			Cheat BLINK = Cheat.getCheatFromString("BLINK").get();
+			if (np.ACTIVE_CHEAT.contains(BLINK) && !np.bypassBlink) {
 				if (ping < 140) {
 					int total = np.ALL - np.KEEP_ALIVE;
 					if (total == 0) {
-						if(Utils.parseInPorcent(160 - ping) >= Cheat.BLINK.getReliabilityAlert()) {
-							np.addWarn(Cheat.BLINK);
+						if(Utils.parseInPorcent(160 - ping) >= BLINK.getReliabilityAlert()) {
+							np.addWarn(BLINK);
 							boolean last = np.IS_LAST_SEC_BLINK == 2;
 							np.IS_LAST_SEC_BLINK++;
 							long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
 							if (last) {
-								SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.BLINK, Utils.parseInPorcent(160 - ping),
+								SpigotNegativity.alertMod(ReportType.WARNING, p, BLINK, Utils.parseInPorcent(160 - ping),
 										"No packet. Last other than KeepAlive: " + np.LAST_OTHER_KEEP_ALIVE + " there is: "
-												+ time_last + "ms . Ping: " + ping + ". Warn: " + np.getWarn(Cheat.BLINK));
+												+ time_last + "ms . Ping: " + ping + ". Warn: " + np.getWarn(BLINK));
 							}
 						}
 					} else
@@ -120,25 +123,27 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				} else 
 					np.IS_LAST_SEC_BLINK = 0;
 			}
-			if(np.ACTIVE_CHEAT.contains(Cheat.SNEAK)){
+			Cheat SNEAK = Cheat.getCheatFromString("SNEAK").get();
+			if(np.ACTIVE_CHEAT.contains(SNEAK)){
 				if(ping < 140){
 					if(np.ENTITY_ACTION > 35){
 						if(np.IS_LAST_SEC_SNEAK){
-							np.addWarn(Cheat.SNEAK);
-							SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.SNEAK, Utils.parseInPorcent(55 + np.ENTITY_ACTION), "EntityAction packet: " + np.ENTITY_ACTION + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(Cheat.SNEAK));
-							if(Cheat.SNEAK.isSetBack())
+							np.addWarn(SNEAK);
+							SpigotNegativity.alertMod(ReportType.WARNING, p, SNEAK, Utils.parseInPorcent(55 + np.ENTITY_ACTION), "EntityAction packet: " + np.ENTITY_ACTION + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
+							if(SNEAK.isSetBack())
 								p.setSneaking(false);
 						}
 						np.IS_LAST_SEC_SNEAK = true;
 					} else np.IS_LAST_SEC_SNEAK = false;
 				}
 			}
-			if(np.ACTIVE_CHEAT.contains(Cheat.EDITED_CLIENT)) {
-				if(ping < Cheat.EDITED_CLIENT.getMaxAlertPing()){
+			Cheat EDITED_CLIENT = Cheat.getCheatFromString("EDITED_CLIENT").get();
+			if(np.ACTIVE_CHEAT.contains(EDITED_CLIENT)) {
+				if(ping < EDITED_CLIENT.getMaxAlertPing()){
 					int allPos = np.POSITION_LOOK + np.POSITION;
 					if(allPos > 40) {
-						np.addWarn(Cheat.EDITED_CLIENT);
-						SpigotNegativity.alertMod(allPos > 60 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.EDITED_CLIENT, Utils.parseInPorcent(25 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + " Ping: " + ping + " Warn for SpeedHack: " + np.getWarn(Cheat.SPEEDHACK));
+						np.addWarn(EDITED_CLIENT);
+						SpigotNegativity.alertMod(allPos > 60 ? ReportType.VIOLATION : ReportType.WARNING, p, EDITED_CLIENT, Utils.parseInPorcent(25 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + " Ping: " + ping + " Warn for EditedClient: " + np.getWarn(EDITED_CLIENT));
 					}
 				}
 			}

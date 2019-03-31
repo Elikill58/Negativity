@@ -12,11 +12,15 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class JesusProtocol implements Listener {
+public class JesusProtocol extends Cheat implements Listener {
+
+	public JesusProtocol() {
+		super("JESUS", false, Material.WATER_BUCKET, false, true, "waterwalk", "water");
+	}
 
 	@EventHandler (ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
@@ -24,7 +28,7 @@ public class JesusProtocol implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(Cheat.JESUS))
+		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		Location loc = p.getLocation();
 		Material m = loc.getBlock().getType(), under = loc.clone().add(0, -1, 0).getBlock().getType();
@@ -75,10 +79,10 @@ public class JesusProtocol implements Listener {
 					reliability = 95;
 				else isCheating = false;
 				if(isCheating){
-					np.addWarn(Cheat.JESUS);
-					boolean mayCancel = SpigotNegativity.alertMod(type, p, Cheat.JESUS, Utils.parseInPorcent(reliability), "Warn for Jesus: " + np.getWarn(Cheat.JESUS) + " (Stationary_water aroud him) Diff: " + dif + " and ping: "
+					np.addWarn(this);
+					boolean mayCancel = SpigotNegativity.alertMod(type, p, this, Utils.parseInPorcent(reliability), "Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif + " and ping: "
 										+ Utils.getPing(p));
-					if(Cheat.JESUS.isSetBack() && mayCancel)
+					if(isSetBack() && mayCancel)
 						p.teleport(p.getLocation().subtract(0, 1, 0));
 				}
 			}

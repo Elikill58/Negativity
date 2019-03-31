@@ -11,20 +11,20 @@ import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
 public class ActivedCheatInventory {
 
 	public static void openActivedCheat(Player p, Player cible) {
-		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(Cheat.values().length + 3, 9, 1), Inv.NAME_ACTIVED_CHEAT_MENU);
+		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(Cheat.values().size() + 3, 9, 1), Inv.NAME_ACTIVED_CHEAT_MENU);
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		if (np.ACTIVE_CHEAT.size() > 0) {
 			int slot = 0;
 			for (Cheat c : np.ACTIVE_CHEAT) {
 				if (c.equals(Cheat.ALL))
 					continue;
-				inv.setItem(slot, Utils.createItem(c.getMaterial(), ChatColor.RESET + c.getName()));
+				inv.setItem(slot, Utils.createItem((Material) c.getMaterial(), ChatColor.RESET + c.getName()));
 				slot++;
 			}
 		} else

@@ -10,24 +10,28 @@ import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.sponge.NeedListener;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class FastLadderProtocol implements NeedListener {
+public class FastLadderProtocol extends Cheat {
 
+	public FastLadderProtocol() {
+		super("FASTLADDERS", false, ItemTypes.LADDER, false, true, "ladder", "ladders");
+	}
+	
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
 			return;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(Cheat.FASTLADDERS))
+		if (!np.hasDetectionActive(this))
 			return;
 		Location<?> loc = p.getLocation();
 		if (!loc.getBlock().getType().equals(BlockTypes.LADDER)){
@@ -52,9 +56,9 @@ public class FastLadderProtocol implements NeedListener {
 		if (distance > 0.23 && distance < 3.8 && nbLadder > 2) {
 			Location<World> fl = from.getLocation().copy().sub(to.getLocation().getX(), to.getLocation().getY(), to.getLocation().getZ());
 			int ping = Utils.getPing(p);
-			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.FASTLADDERS, Utils.parseInPorcent(distance * 350),
+			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(distance * 350),
 					"On ladders. Distance from/to : " + distance + ". Ping: " + ping + "ms. Number of Ladder: " + nbLadder);
-			if (Cheat.FASTLADDERS.isSetBack() && mayCancel)
+			if (isSetBack() && mayCancel)
 				e.setToTransform(new Transform<>(new Location<World>(from.getExtent(), fl.getX() / 2, (fl.getY() / 2) + 0.5, fl.getZ())));
 		}
 	}

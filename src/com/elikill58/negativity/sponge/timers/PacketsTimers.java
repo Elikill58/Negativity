@@ -12,9 +12,9 @@ import org.spongepowered.api.scheduler.Task;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
 public class PacketsTimers implements Consumer<Task> {
 
@@ -73,7 +73,8 @@ public class PacketsTimers implements Consumer<Task> {
 					}
 				}
 			}
-			if (np.hasDetectionActive(Cheat.FLY)) {
+			Cheat FLY = Cheat.getCheatFromString("FLY").get();
+			if (np.hasDetectionActive(FLY)) {
 				if (np.FLYING > 4 && (np.POSITION + np.POSITION_LOOK + np.FLYING) < 9) {
 					np.NO_PACKET++;
 					if (np.NO_PACKET > 4) {
@@ -81,7 +82,7 @@ public class PacketsTimers implements Consumer<Task> {
 						ReportType type = ReportType.WARNING;
 						if (np.ONLY_KEEP_ALIVE > 10)
 							type = ReportType.VIOLATION;
-						SpongeNegativity.alertMod(type, p, Cheat.FLY, reliability,
+						SpongeNegativity.alertMod(type, p, FLY, reliability,
 								np.ONLY_KEEP_ALIVE + " second of only KeepAlive. Last other: "
 										+ np.LAST_OTHER_KEEP_ALIVE + "(" + new Timestamp(np.TIME_OTHER_KEEP_ALIVE)
 										+ ", there is: " + (System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE)
@@ -89,19 +90,21 @@ public class PacketsTimers implements Consumer<Task> {
 					}
 				}
 			}
-			if (np.hasDetectionActive(Cheat.FORCEFIELD)) {
+			Cheat FORCEFIELD = Cheat.getCheatFromString("FORCEFIELD").get();
+			if (np.hasDetectionActive(FORCEFIELD)) {
 				if (np.ARM > 14 && np.USE_ENTITY > 20) {
 					ReportType type = ReportType.WARNING;
-					if (np.getWarn(Cheat.FORCEFIELD) > 4)
+					if (np.getWarn(FORCEFIELD) > 4)
 						type = ReportType.VIOLATION;
-					SpongeNegativity.alertMod(type, p, Cheat.FORCEFIELD,
-							Utils.parseInPorcent(np.ARM + np.USE_ENTITY + np.getWarn(Cheat.FORCEFIELD)),
+					SpongeNegativity.alertMod(type, p, FORCEFIELD,
+							Utils.parseInPorcent(np.ARM + np.USE_ENTITY + np.getWarn(FORCEFIELD)),
 							"ArmAnimation (Attack in one second): " + np.ARM
 									+ ", UseEntity (interaction with other entity): " + np.USE_ENTITY + " And warn: "
-									+ np.getWarn(Cheat.FORCEFIELD) + ". Ping: " + ping);
+									+ np.getWarn(FORCEFIELD) + ". Ping: " + ping);
 				}
 			}
-			if (np.hasDetectionActive(Cheat.BLINK) && !np.bypassBlink) {
+			Cheat BLINK = Cheat.getCheatFromString("BLINK").get();
+			if (np.hasDetectionActive(BLINK) && !np.bypassBlink) {
 				if (ping < 140) {
 					int total = np.ALL - np.KEEP_ALIVE;
 					if (total == 0) {
@@ -109,37 +112,40 @@ public class PacketsTimers implements Consumer<Task> {
 						np.IS_LAST_SEC_BLINK++;
 						long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
 						if (last) {
-							SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.BLINK, Utils.parseInPorcent(160 - ping),
+							SpongeNegativity.alertMod(ReportType.WARNING, p, BLINK, Utils.parseInPorcent(160 - ping),
 									"No packet. Last other than KeepAlive: " + np.LAST_OTHER_KEEP_ALIVE + " there is: "
-											+ time_last + "ms . Ping: " + ping + ". Warn: " + np.getWarn(Cheat.BLINK));
+											+ time_last + "ms . Ping: " + ping + ". Warn: " + np.getWarn(BLINK));
 						}
 					} else
 						np.IS_LAST_SEC_BLINK = 0;
 				} else
 					np.IS_LAST_SEC_BLINK = 0;
 			}
-			if(np.hasDetectionActive(Cheat.SNEAK)){
+			Cheat SNEAK = Cheat.getCheatFromString("SNEAK").get();
+			if(np.hasDetectionActive(SNEAK)){
 				if(ping < 140){
 					if(np.ENTITY_ACTION > 35){
 						if(np.IS_LAST_SEC_SNEAK)
-							SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.SNEAK, Utils.parseInPorcent(55 + np.ENTITY_ACTION), "EntityAction packet: " + np.ENTITY_ACTION + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(Cheat.SNEAK));
+							SpongeNegativity.alertMod(ReportType.WARNING, p, SNEAK, Utils.parseInPorcent(55 + np.ENTITY_ACTION), "EntityAction packet: " + np.ENTITY_ACTION + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
 						np.IS_LAST_SEC_SNEAK = true;
 					} else np.IS_LAST_SEC_SNEAK = false;
 				}
 			}
-			if(np.hasDetectionActive(Cheat.FASTPLACE)){
+			Cheat FASTPLACE = Cheat.getCheatFromString("FASTPLACE").get();
+			if(np.hasDetectionActive(FASTPLACE)){
 				if(ping < 200){
 					if(np.BLOCK_PLACE > 10){
-						SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.FASTPLACE, Utils.parseInPorcent(np.BLOCK_PLACE * 5), "BLockPlace: " + np.BLOCK_PLACE + " Ping: " + ping + " Warn for BlockPlace: " + np.getWarn(Cheat.FASTPLACE));
+						SpongeNegativity.alertMod(ReportType.WARNING, p, FASTPLACE, Utils.parseInPorcent(np.BLOCK_PLACE * 5), "BLockPlace: " + np.BLOCK_PLACE + " Ping: " + ping + " Warn for BlockPlace: " + np.getWarn(FASTPLACE));
 					}
 				}
 			}
-			if(np.hasDetectionActive(Cheat.EDITED_CLIENT)){
-				if(ping < Cheat.EDITED_CLIENT.getMaxAlertPing()){
+			Cheat EDITED_CLIENT = Cheat.getCheatFromString("EDITED_CLIENT").get();
+			if(np.hasDetectionActive(EDITED_CLIENT)){
+				if(ping < EDITED_CLIENT.getMaxAlertPing()){
 					int allPos = np.POSITION_LOOK + np.POSITION;
 					if(allPos > 30) {
-						np.addWarn(Cheat.EDITED_CLIENT);
-						SpongeNegativity.alertMod(allPos > 55 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.EDITED_CLIENT, Utils.parseInPorcent(30 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + " Ping: " + ping + " Warn for SpeedHack: " + np.getWarn(Cheat.SPEEDHACK));
+						np.addWarn(EDITED_CLIENT);
+						SpongeNegativity.alertMod(allPos > 55 ? ReportType.VIOLATION : ReportType.WARNING, p, EDITED_CLIENT, Utils.parseInPorcent(30 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + " Ping: " + ping + " Warn for EditedClient: " + np.getWarn(EDITED_CLIENT));
 					}
 				}
 			}

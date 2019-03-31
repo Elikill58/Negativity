@@ -9,8 +9,8 @@ import org.bukkit.inventory.Inventory;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
 public class OneCheatInventory {
 
@@ -18,7 +18,7 @@ public class OneCheatInventory {
 		Inventory inv = Bukkit.createInventory(null, 27, c.getName());
 		inv.setItem(2, Utils.createItem(Material.TNT, Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))));
 		inv.setItem(5, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER"), Messages.getMessage(p, "inventory.manager.autoVerif", "%auto%", Messages.getMessage(p, "inventory.manager." + (c.isAutoVerif() ? "enabled" : "disabled")))));
-		inv.setItem(9, Utils.createItem(c.getMaterial(), c.getName()));
+		inv.setItem(9, Utils.createItem((Material) c.getMaterial(), c.getName()));
 		inv.setItem(20, Utils.createItem(Material.BLAZE_ROD, Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))));
 		inv.setItem(23, Utils.createItem(Material.DIAMOND, Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))));
 		

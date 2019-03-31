@@ -10,15 +10,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer.FlyingReason;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ItemUseBypass;
 
 @SuppressWarnings("deprecation")
-public class FastBowProtocol implements Listener {
+public class FastBowProtocol extends Cheat implements Listener {
 	
-	public static final Cheat CHEAT = Cheat.FASTBOW;
+	public FastBowProtocol() {
+		super("FASTBOW", true, Material.BOW, false, true, "bow");
+	}
 	
 	@EventHandler (ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent e) {
@@ -27,7 +29,7 @@ public class FastBowProtocol implements Listener {
 		if(p.getItemInHand() != null)
 			if(ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType())) {
 				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType());
-				if(ib.getWhen().isClick() && ib.isForThisCheat(CHEAT))
+				if(ib.getWhen().isClick() && ib.isForThisCheat(this))
 					if(e.getAction().name().toLowerCase().contains(ib.getWhen().name().toLowerCase()))
 						return;
 			}
@@ -37,17 +39,17 @@ public class FastBowProtocol implements Listener {
 			if (np.LAST_SHOT_BOW != 0) {
 				int ping = Utils.getPing(p);
 				if (dif < (200 + ping)) {
-					np.addWarn(CHEAT);
+					np.addWarn(this);
 					boolean mayCancel = false;
 					if (dif < (50 + ping))
-						mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, CHEAT,
+						mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
 								Utils.parseInPorcent(200 - dif - ping), "Player use Bow, last shot: " + np.LAST_SHOT_BOW
-										+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(CHEAT), "Time between last shot: " + dif + " (in milliseconds).");
+										+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), "Time between last shot: " + dif + " (in milliseconds).");
 					else
-						mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, CHEAT,
+						mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 								Utils.parseInPorcent(100 - dif - ping), "Player use Bow, last shot: " + np.LAST_SHOT_BOW
-								+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(CHEAT), "Time between last shot: " + dif + " (in milliseconds)");
-					if(CHEAT.isSetBack() && mayCancel)
+								+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), "Time between last shot: " + dif + " (in milliseconds)");
+					if(isSetBack() && mayCancel)
 						e.setCancelled(true);
 				}
 			}

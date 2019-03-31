@@ -14,16 +14,19 @@ import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 
-import com.elikill58.negativity.sponge.NeedListener;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
-public class AutoClickProtocol implements NeedListener {
+public class AutoClickProtocol extends Cheat {
+
+	public AutoClickProtocol() {
+		super("AUTOCLICK", false, ItemTypes.FISHING_ROD, false, true, "auto-click", "autoclic");
+	}
 	
 	public static final int CLICK_ALERT = Adapter.getAdapter().getIntegerInConfig("cheats.autoclick.click_alert");
 	
@@ -37,7 +40,7 @@ public class AutoClickProtocol implements NeedListener {
 		if(p.getItemInHand(HandTypes.MAIN_HAND).isPresent())
 			if(ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand(HandTypes.MAIN_HAND).get().getType())) {
 				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand(HandTypes.MAIN_HAND).get().getType());
-				if(ib.getWhen().isClick() && ib.isForThisCheat(Cheat.AUTOSTEAL))
+				if(ib.getWhen().isClick() && ib.isForThisCheat(this))
 					return;
 			}
 		np.ACTUAL_CLICK++;
@@ -50,10 +53,10 @@ public class AutoClickProtocol implements NeedListener {
 						efficiency = en.getLevel();
 		}
 		if (click > CLICK_ALERT) {
-			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.AUTOCLICK, Utils.parseInPorcent(np.ACTUAL_CLICK * 2 - efficiency * 2),
+			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(np.ACTUAL_CLICK * 2 - efficiency * 2),
 					"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
 							+ "; Better click in one second: " + np.BETTER_CLICK + " Ping: " + ping, np.ACTUAL_CLICK + " clicks");
-			if(Cheat.AUTOCLICK.isSetBack() && mayCancel)
+			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
 	}

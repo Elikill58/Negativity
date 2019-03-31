@@ -9,15 +9,20 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.entity.HealEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.sponge.NeedListener;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer.FlyingReason;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class AntiPotionProtocol implements NeedListener {
+public class AntiPotionProtocol extends Cheat {
+
+	public AntiPotionProtocol() {
+		super("ANTIPOTION", true, ItemTypes.POTION, false, true, "antipopo", "nopotion", "anti-potion");
+	}
 
 	@Listener
 	public void onRegen(HealEntityEvent e, @First Player p) {

@@ -10,20 +10,23 @@ import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
 
-import com.elikill58.negativity.sponge.NeedListener;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
-public class ForceFieldProtocol implements NeedListener {
+public class ForceFieldProtocol extends Cheat {
 
+	public ForceFieldProtocol() {
+		super("FORCEFIELD", true, ItemTypes.DIAMOND_SWORD, true, true, "ff", "killaura");
+	}
+	
 	@Listener
 	public void onEntityDamageByEntity(DamageEntityEvent e, @First Player p) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(Cheat.FORCEFIELD))
+		if (!np.hasDetectionActive(this))
 			return;
 		double dis = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());
 		if(p.getItemInHand(HandTypes.MAIN_HAND).isPresent()) {
@@ -33,12 +36,12 @@ public class ForceFieldProtocol implements NeedListener {
 		if (dis > (Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0))) {
 			NumberFormat nf = NumberFormat.getInstance();
 			nf.setMaximumIntegerDigits(2);
-			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.FORCEFIELD,
+			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this,
 					Utils.parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + e.getTargetEntity().getType().getName().toLowerCase() + ". Exact distance: "
 							+ dis + ". Ping: " + Utils.getPing(p),
 					"Distance with " + e.getTargetEntity().getType().getName() + ": " + nf.format(dis));
-			if (Cheat.FORCEFIELD.isSetBack() && mayCancel)
+			if (isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
 	}

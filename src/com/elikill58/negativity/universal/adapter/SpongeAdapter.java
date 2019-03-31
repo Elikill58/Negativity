@@ -12,9 +12,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.util.TypeTokens;
 
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.SpongeNegativity;
-import com.elikill58.negativity.universal.AbstractCheat;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.TranslatedMessages;
 
@@ -32,6 +30,11 @@ public class SpongeAdapter extends Adapter {
 		this.pl = sn;
 		this.logger = sn.getLogger();
 		this.config = SpongeNegativity.getConfig();
+	}
+
+	@Override
+	public String getName() {
+		return "sponge";
 	}
 
 	@Override
@@ -257,14 +260,6 @@ public class SpongeAdapter extends Adapter {
 	}*/
 	
 	@Override
-	public List<AbstractCheat> getAbstractCheats() {
-		List<AbstractCheat> c = new ArrayList<>();
-		for(Cheat tempCheats : Cheat.values())
-			c.add(tempCheats);
-		return c;
-	}
-	
-	@Override
 	public void reload() {
 		
 	}
@@ -281,5 +276,10 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public String getVersion() {
 		return Sponge.getPlatform().getMinecraftVersion().getName();
+	}
+	
+	@Override
+	public void reloadConfig() {
+		
 	}
 }

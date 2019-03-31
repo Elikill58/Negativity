@@ -15,13 +15,17 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 @SuppressWarnings("deprecation")
-public class ForceFieldProtocol implements Listener {
+public class ForceFieldProtocol extends Cheat implements Listener {
+
+	public ForceFieldProtocol() {
+		super("FORCEFIELD", true, Material.DIAMOND_SWORD, true, true, "ff", "killaura");
+	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
@@ -29,7 +33,7 @@ public class ForceFieldProtocol implements Listener {
 			return;
 		Player p = (Player) e.getDamager();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(Cheat.FORCEFIELD))
+		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
@@ -39,13 +43,13 @@ public class ForceFieldProtocol implements Listener {
 				&& !p.getItemInHand().getType().equals(Material.BOW)) {
 			NumberFormat nf = NumberFormat.getInstance();
 			nf.setMaximumIntegerDigits(2);
-			np.addWarn(Cheat.FORCEFIELD);
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.FORCEFIELD,
+			np.addWarn(this);
+			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					Utils.parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis
 							+ ". Ping: " + Utils.getPing(p),
 					"Distance with " + e.getEntity().getType().getName() + ": " + nf.format(dis));
-			if (Cheat.FORCEFIELD.isSetBack() && mayCancel)
+			if (isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
 	}
@@ -54,7 +58,7 @@ public class ForceFieldProtocol implements Listener {
 	public void event(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(Cheat.FORCEFIELD))
+		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
@@ -87,7 +91,7 @@ public class ForceFieldProtocol implements Listener {
 			return;
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
 		double rapport = np.fakePlayerTouched / (timeBehindStart / 1000);
-		SpigotNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.FORCEFIELD,
+		SpigotNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.getCheatFromString("FORCEFIELD").get(),
 				Utils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");

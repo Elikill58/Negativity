@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import com.elikill58.negativity.spigot.ClickableText;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.UniversalUtils;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;

@@ -36,9 +36,8 @@ import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.AbstractCheat;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.TranslatedMessages;
@@ -147,10 +146,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	@Override
-	public int getWarn(AbstractCheat c) {
-		return WARNS.containsKey(c) ? WARNS.get(c) : 0;
-	}
-	
 	public int getWarn(Cheat c) {
 		return WARNS.containsKey(c) ? WARNS.get(c) : 0;
 	}
@@ -205,7 +200,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		ACTIVE_CHEAT.add(c);
 		if(c.needPacket() && !INJECTED.contains(p))
 			INJECTED.add(p);
-		if(c == Cheat.FORCEFIELD)
+		if(c.name().equalsIgnoreCase("FORCEFIELD"))
 			makeAppearEntities();
 	}
 
@@ -217,7 +212,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	public void makeAppearEntities() {
-		if(!ACTIVE_CHEAT.contains(Cheat.FORCEFIELD))
+		if(!ACTIVE_CHEAT.contains(Cheat.getCheatFromString("FORCEFIELD").get()))
 			return;
 		timeStartFakePlayer = System.currentTimeMillis();
 
@@ -314,10 +309,16 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 					+ File.separator + "proof" + File.separator + uuid + ".txt");
 			if(!temp.exists())
 				temp.createNewFile();
-			Files.write(temp.toPath(), ("\n" + msg).getBytes(), StandardOpenOption.APPEND);
+			Files.write(temp.toPath(), (msg + "\n").getBytes(), StandardOpenOption.APPEND);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void sendMessage(String msg, String... arg) {
+		String message = Messages.getMessage(p, msg, arg);
+		if(!message.equalsIgnoreCase(msg))
+			p.sendMessage(message);
 	}
 
 	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {
@@ -419,7 +420,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean isBlock(Material m) {
 		// for Last version blocks
 		String mn = m.name();
-		if (mn.equals("PRISMARINE") || mn.contains("_SHULKER_BOX") || mn.contains("WOOD") || mn.contains("LOG") || mn.contains("WOOL") || mn.equals("PURPUR_BLOCK")
+		if (mn.equals("PRISMARINE") || mn.contains("_SHULKER_BOX") || mn.contains("BLOCK") || mn.contains("WOOD") || mn.contains("LOG") || mn.contains("WOOL") || mn.equals("PURPUR_BLOCK")
 				|| mn.equals("END_BRICKS") || mn.equals("BEETROOT_BLOCK") || mn.equals("BONE_BLOCK") || mn.contains("STAINED") || mn.contains("CLAY"))
 			return true;
 		switch (m) {
@@ -507,7 +508,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public enum FlyingReason {
-		POTION(Cheat.ANTIPOTION), REGEN(Cheat.AUTOREGEN), EAT(Cheat.AUTOEAT), BOW(Cheat.FASTBOW);
+		POTION(Cheat.getCheatFromString("ANTIPOTION").get()), REGEN(Cheat.getCheatFromString("AUTOREGEN").get()), EAT(Cheat.getCheatFromString("AUTOEAT").get()), BOW(Cheat.getCheatFromString("FASTBOW").get());
 
 		private Cheat c;
 
@@ -544,15 +545,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 				}
 			}
 		}
-	}
-
-	@Override
-	public void startAnalyze(AbstractCheat ac) {
-		for (Cheat c : Cheat.values())
-			if (c.getName().equalsIgnoreCase(ac.getName()) && c.getAlertToKick() == ac.getAlertToKick()) {
-				startAnalyze(c);
-				return;
-			}
 	}
 	
 	public void fight() {

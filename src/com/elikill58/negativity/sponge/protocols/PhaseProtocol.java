@@ -7,22 +7,26 @@ import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.sponge.NeedListener;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class PhaseProtocol implements NeedListener {
+public class PhaseProtocol extends Cheat {
 
+	public PhaseProtocol() {
+		super("PHASE", false, ItemTypes.STAINED_GLASS, false, true);
+	}
+	
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(Cheat.PHASE))
+		if (!np.hasDetectionActive(this))
 			return;
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
 			return;
@@ -44,9 +48,9 @@ public class PhaseProtocol implements NeedListener {
 		if (np.hasOtherThan(loc.copy(), BlockTypes.AIR) || np.hasOtherThan(loc.copy().sub(0, 1, 0), BlockTypes.AIR))
 			return;
 		if (!np.isJumpingWithBlock) {
-			SpongeNegativity.alertMod(ReportType.VIOLATION, p, Cheat.PHASE, Utils.parseInPorcent((y * 200) + 20),
+			SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, Utils.parseInPorcent((y * 200) + 20),
 					"Player on air. No jumping. DistanceBetweenFromAndTo: " + y + " (ping: " + Utils.getPing(p)
-							+ "). Warn: " + np.getWarn(Cheat.PHASE));
+							+ "). Warn: " + np.getWarn(this));
 		}
 	}
 }

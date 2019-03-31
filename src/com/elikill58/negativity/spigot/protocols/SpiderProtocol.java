@@ -12,11 +12,15 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class SpiderProtocol implements Listener {
+public class SpiderProtocol extends Cheat implements Listener {
+
+	public SpiderProtocol() {
+		super("SPIDER", false, Utils.getMaterialWith1_13_Compatibility("WEB", "COBWEB"), false, true, "wallhack", "wall");
+	}
 
 	@EventHandler (ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
@@ -25,7 +29,7 @@ public class SpiderProtocol implements Listener {
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		Location loc = p.getLocation();
-		if (!np.ACTIVE_CHEAT.contains(Cheat.SPIDER))
+		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (p.getFallDistance() != 0)
 			return;
@@ -59,13 +63,13 @@ public class SpiderProtocol implements Listener {
 			int relia = (int) ((e.getTo().getY() - e.getFrom().getY()) * 200);
 			if (isAris)
 				relia = relia + 39;
-			np.addWarn(Cheat.SPIDER);
+			np.addWarn(this);
 			ReportType type = ReportType.WARNING;
-			if (np.getWarn(Cheat.SPIDER) > 6)
+			if (np.getWarn(this) > 6)
 				type = ReportType.VIOLATION;
-			boolean mayCancel = SpigotNegativity.alertMod(type, p, Cheat.SPIDER, Utils.parseInPorcent(relia),
+			boolean mayCancel = SpigotNegativity.alertMod(type, p, this, Utils.parseInPorcent(relia),
 						"Nothing around him. To > From: " + y + " isAris: " + isAris + " has not stab slairs.");
-			if(Cheat.SPIDER.isSetBack() && mayCancel){
+			if(isSetBack() && mayCancel){
 				Location locc = p.getLocation();
 				while(locc.getBlock().getType().equals(Material.AIR))
 					locc.subtract(0, 1, 0);

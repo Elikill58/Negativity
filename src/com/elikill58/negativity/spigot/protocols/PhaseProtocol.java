@@ -10,17 +10,21 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class PhaseProtocol implements Listener {
+public class PhaseProtocol extends Cheat implements Listener {
+
+	public PhaseProtocol() {
+		super("PHASE", false, Utils.getMaterialWith1_13_Compatibility("STAINED_GLASS", "WHITE_STAINED_GLASS"), false, true);
+	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(Cheat.PHASE))
+		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
@@ -42,10 +46,10 @@ public class PhaseProtocol implements Listener {
 		if (np.hasOtherThan(loc.clone(), Material.AIR) || np.hasOtherThan(loc.clone().subtract(0, 1, 0), Material.AIR))
 			return;
 		if (!np.isJumpingWithBlock) {
-			np.addWarn(Cheat.PHASE);
-			SpigotNegativity.alertMod(ReportType.VIOLATION, p, Cheat.PHASE, Utils.parseInPorcent((y * 200) + 20),
+			np.addWarn(this);
+			SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, Utils.parseInPorcent((y * 200) + 20),
 					"Player on air. No jumping. DistanceBetweenFromAndTo: " + y + " (ping: " + Utils.getPing(p)
-							+ "). Warn: " + np.getWarn(Cheat.PHASE));
+							+ "). Warn: " + np.getWarn(this));
 		}
 	}
 }

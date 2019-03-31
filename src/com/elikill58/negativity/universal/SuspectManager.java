@@ -21,17 +21,17 @@ public class SuspectManager {
 	
 	public static void analyzeText(NegativityPlayer np, String text) {
 		String[] content = text.split(" ");
-		List<AbstractCheat> cheats = new ArrayList<>();
+		List<Cheat> cheats = new ArrayList<>();
 		for(String s : content) {
-			for(AbstractCheat c : Adapter.getAdapter().getAbstractCheats())
+			for(Cheat c : Adapter.getAdapter().getAbstractCheats())
 				for(String alias : c.getAliases())
 					if(alias.equalsIgnoreCase(s) || alias.contains(s) || alias.startsWith(s))
 						cheats.add(c);
 		}
 	}
 	
-	public static void analyzeText(NegativityPlayer np, List<AbstractCheat> cheats) {
-		for(AbstractCheat ac : cheats) {
+	public static void analyzeText(NegativityPlayer np, List<Cheat> cheats) {
+		for(Cheat ac : cheats) {
 			np.startAnalyze(ac);
 		}
 	}

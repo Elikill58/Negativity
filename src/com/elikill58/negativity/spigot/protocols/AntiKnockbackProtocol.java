@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.protocols;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,20 +16,24 @@ import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-@SuppressWarnings("deprecation")
-public class AntiKnockbackProtocol implements Listener {
+public class AntiKnockbackProtocol extends Cheat implements Listener {
 	
+	public AntiKnockbackProtocol() {
+		super("ANTIKNOCKBACK", false, Material.STICK, false, true, "antikb", "anti-kb", "no-kb");
+	}
+
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e) {
 		if (!(e.getEntity() instanceof Player))
 			return;
 		Player p = (Player) e.getEntity();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(Cheat.ANTIKNOCKBACK))
+		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
@@ -48,10 +53,10 @@ public class AntiKnockbackProtocol implements Listener {
 						double d = last.distance(actual);
 						int ping = Utils.getPing(p), relia = Utils.parseInPorcent(100 - d);
 						if (d < 0.1 && !actual.getBlock().getType().equals(Utils.getMaterialWith1_13_Compatibility("WEB", "COBWEB")) && !p.isSneaking()){
-							np.addWarn(Cheat.ANTIKNOCKBACK);
-							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.ANTIKNOCKBACK, relia,
+							np.addWarn(Cheat.getCheatFromString("ANTIKNOCKBACK").get());
+							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.getCheatFromString("ANTIKNOCKBACK").get(), relia,
 									"Distance after damage: " + d + "; Damager: " + e.getDamager().getType().name().toLowerCase() + " Ping: " + ping, "Distance after damage: " + d);
-							if(Cheat.ANTIKNOCKBACK.isSetBack() && mayCancel)
+							if(isSetBack() && mayCancel)
 								p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));
 						}
 					}

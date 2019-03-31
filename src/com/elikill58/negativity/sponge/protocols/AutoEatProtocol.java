@@ -5,12 +5,17 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.item.inventory.UseItemStackEvent;
+import org.spongepowered.api.item.ItemTypes;
 
-import com.elikill58.negativity.sponge.NeedListener;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer.FlyingReason;
+import com.elikill58.negativity.universal.Cheat;
 
-public class AutoEatProtocol implements NeedListener {
+public class AutoEatProtocol extends Cheat {
+
+	public AutoEatProtocol() {
+		super("AUTOEAT", true, ItemTypes.COOKED_BEEF, false, true, "fasteat");
+	}
 	
 	@Listener
 	public void onItemConsume(UseItemStackEvent.Finish e, @First Player p) {

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -13,8 +14,13 @@ import org.bukkit.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer.FlyingReason;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class AntiPotionProtocol implements Listener {
+public class AntiPotionProtocol extends Cheat implements Listener {
+
+	public AntiPotionProtocol() {
+		super("ANTIPOTION", true, Material.POTION, false, true, "antipopo", "nopotion", "anti-potion");
+	}
 
 	@EventHandler (ignoreCancelled = true)
 	public void onRegen(EntityRegainHealthEvent e) {

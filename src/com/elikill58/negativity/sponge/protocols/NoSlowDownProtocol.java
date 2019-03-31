@@ -10,24 +10,28 @@ import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.sponge.NeedListener;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class NoSlowDownProtocol implements NeedListener {
+public class NoSlowDownProtocol extends Cheat {
+
+	public NoSlowDownProtocol() {
+		super("NOSLOWDOWN", false, ItemTypes.SOUL_SAND, false, true, "slowdown");
+	}
 
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
 			return;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(Cheat.NOSLOWDOWN))
+		if (!np.hasDetectionActive(this))
 			return;
 		Location<?> loc = p.getLocation();
 		if (!loc.getBlock().getType().equals(BlockTypes.SOUL_SAND))
@@ -42,9 +46,9 @@ public class NoSlowDownProtocol implements NeedListener {
 			int ping = Utils.getPing(p), relia = Utils.parseInPorcent(distance * 400);
 			if((from.getYaw() - to.getYaw()) < -0.001)
 				return;
-			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.NOSLOWDOWN, relia,
+			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, relia,
 					"Soul sand under player. Distance from/to : " + distance + ". Ping: " + ping);
-			if (Cheat.NOSLOWDOWN.isSetBack() && mayCancel)
+			if (isSetBack() && mayCancel)
 				e.setToTransform(new Transform<>(new Location<World>(from.getExtent(), fl.getX() / 2, fl.getY() / 2, fl.getZ()).add(0, 0.5, 0)));
 		}
 	}

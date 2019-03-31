@@ -14,17 +14,21 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class FlyProtocol implements Listener {
+public class FlyProtocol extends Cheat implements Listener {
+
+	public FlyProtocol() {
+		super("FLY", true, Utils.getMaterialWith1_13_Compatibility("FIREWORK", "LEGACY_FIREWORK"), true, true, "flyhack");
+	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(Cheat.FLY))
+		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
@@ -47,17 +51,17 @@ public class FlyProtocol implements Listener {
 			if ((p.getFallDistance() == 0.0F)
 					&& (p.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR))
 					&& i > 1.25D && !p.isOnGround()) {
-				np.addWarn(Cheat.FLY);
+				np.addWarn(this);
 				boolean mayCancel = false;
-				if (np.getWarn(Cheat.FLY) > 5)
-					mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, Cheat.FLY,
+				if (np.getWarn(this) > 5)
+					mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
 							Utils.parseInPorcent((int) i * 50),
-							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(Cheat.FLY));
+							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this));
 				else
-					mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.FLY,
+					mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 							Utils.parseInPorcent((int) i * 50),
-							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(Cheat.FLY));
-				if (Cheat.FLY.isSetBack() && mayCancel) {
+							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this));
+				if (isSetBack() && mayCancel) {
 					Location loc = p.getLocation();
 					while (loc.getBlock().getType().equals(Material.AIR)) {
 						loc.subtract(0, 1, 0);

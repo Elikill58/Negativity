@@ -7,20 +7,18 @@ import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
-import com.elikill58.negativity.universal.AbstractCheat;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanRequest.BanType;
 
 public class Ban {
 
-	public static File banDir = new File("");
+	public static File banDir;
 	public static boolean banFileActive, banDbActive;
 	public static final HashMap<String, String> DB_CONTENT = new HashMap<>();
 
 	public static boolean isBanned(NegativityPlayer np) {
-		if (!banFileActive)
-			return false;
 		try {
 			np.loadBanRequest();
 			if (np.getBanRequest().size() == 0)
@@ -37,7 +35,7 @@ public class Ban {
 		}
 	}
 
-	public static void manageBan(AbstractCheat cheat, NegativityPlayer np, int relia) {
+	public static void manageBan(Cheat cheat, NegativityPlayer np, int relia) {
 		Adapter ada = Adapter.getAdapter();
 		if (!cheat.isActive() || !ada.getBooleanInConfig("ban.active"))
 			return;

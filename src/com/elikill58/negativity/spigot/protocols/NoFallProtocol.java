@@ -11,17 +11,21 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class NoFallProtocol implements Listener {
+public class NoFallProtocol extends Cheat implements Listener {
 	
+	public NoFallProtocol() {
+		super("NOFALL", false, Utils.getMaterialWith1_13_Compatibility("WOOL", "RED_WOOL"), false, true, "fall");
+	}
+
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(Cheat.NOFALL))
+		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
@@ -32,31 +36,31 @@ public class NoFallProtocol implements Listener {
 					&& p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
 				if (p.isOnGround()) {
 					if (distance > 0.79D) {
-						np.addWarn(Cheat.NOFALL);
-						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, Cheat.NOFALL,
+						np.addWarn(this);
+						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
 								Utils.parseInPorcent(distance * 100),
 								"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceBetweenFromAndTo: "
 										+ distance + " (ping: " + Utils.getPing(p) + "). Warn: "
-										+ np.getWarn(Cheat.NOFALL));
+										+ np.getWarn(this));
 						if(mayCancel)
 							np.NO_FALL_DAMAGE += 1;
 					} else if (np.NO_FALL_DAMAGE != 0) {
-						if (Cheat.NOFALL.isSetBack())
+						if (isSetBack())
 							p.damage(np.NO_FALL_DAMAGE);
 						np.NO_FALL_DAMAGE = 0;
 					}
 				} else {
 					if (distance > 2D) {
-						np.addWarn(Cheat.NOFALL);
-						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, Cheat.NOFALL,
+						np.addWarn(this);
+						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
 								Utils.parseInPorcent(distance * 100),
 								"Player not in ground no fall Damage. FallDistance: " + p.getFallDistance()
 										+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + Utils.getPing(p)
-										+ "). Warn: " + np.getWarn(Cheat.NOFALL));
+										+ "). Warn: " + np.getWarn(this));
 						if(mayCancel)
 							np.NO_FALL_DAMAGE += 1;
 					} else if (np.NO_FALL_DAMAGE != 0) {
-						if (Cheat.NOFALL.isSetBack())
+						if (isSetBack())
 							p.damage(np.NO_FALL_DAMAGE);
 						np.NO_FALL_DAMAGE = 0;
 					}

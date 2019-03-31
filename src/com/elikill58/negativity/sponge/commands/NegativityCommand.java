@@ -22,8 +22,8 @@ import org.spongepowered.api.world.World;
 import com.elikill58.negativity.sponge.Inv;
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -117,8 +117,7 @@ public class NegativityCommand implements CommandCallable, CommandExecutor {
 			if (arg[0].equalsIgnoreCase("verif") && arg.length > 2) {
 				if (Sponge.getServer().getPlayer(arg[1]).isPresent())
 					for (Cheat c : Cheat.values())
-						if ((c.getName().toLowerCase().startsWith(prefix.toLowerCase()) || prefix.isEmpty())
-								&& c.getProtocolClass() != null)
+						if ((c.getName().toLowerCase().startsWith(prefix.toLowerCase()) || prefix.isEmpty()))
 							tab.add(c.getName());
 			} else
 				for (Player p : Utils.getOnlinePlayers())

@@ -12,14 +12,18 @@ import org.bukkit.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer.FlyingReason;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Version;
 
 @SuppressWarnings("deprecation")
-public class AutoRegenProtocol implements Listener {
+public class AutoRegenProtocol extends Cheat implements Listener {
 	
+	public AutoRegenProtocol() {
+		super("AUTOREGEN", true, Material.GOLDEN_APPLE, false, true, "regen");
+	}
+
 	@EventHandler (ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
@@ -47,22 +51,22 @@ public class AutoRegenProtocol implements Listener {
 		else
 			np.flyingReason = FlyingReason.REGEN;
 		long actual = System.currentTimeMillis(), dif = actual - np.LAST_REGEN;
-		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && np.ACTIVE_CHEAT.contains(Cheat.AUTOREGEN)) {
+		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && np.ACTIVE_CHEAT.contains(this)) {
 			int ping = Utils.getPing(p);
 			if (dif < (Version.getVersion().getTimeBetweenTwoRegenFromVersion() + ping)) {
-				np.addWarn(Cheat.AUTOREGEN);
+				np.addWarn(this);
 				boolean mayCancel = false;
 				if (dif < (50 + ping))
-					mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, Cheat.AUTOREGEN,
+					mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
 							Utils.parseInPorcent(200 - dif - ping), "Player regen, last regen: " + np.LAST_REGEN
 									+ " Actual time: " + actual + " Difference: " + dif + "ms",
 							"Time between two regen: " + dif + " (in milliseconds)");
 				else
-					mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.AUTOREGEN,
+					mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 							Utils.parseInPorcent(100 - dif - ping), "Player regen, last regen: " + np.LAST_REGEN
 									+ " Actual time: " + actual + " Difference: " + dif + "ms",
 							"Time between two regen: " + dif + " (in milliseconds)");
-				if(Cheat.AUTOREGEN.isSetBack() && mayCancel)
+				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}
 		}

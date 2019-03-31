@@ -23,11 +23,11 @@ public class ChannelEvents implements PluginMessageListener {
 			try {
 				if (in.readUTF().equalsIgnoreCase("bungeecord")) {
 					if(!SpigotNegativity.isOnBungeecord){
+						Logger log = SpigotNegativity.getInstance().getLogger();
+						log.warning("A bungeecord system have been detected, nut not written in configuration. Editing config ...");
 						SpigotNegativity.isOnBungeecord = true;
 						Adapter.getAdapter().set("hasBungeecord", true);
-						Logger log = SpigotNegativity.getInstance().getLogger();
-						log.warning("Warning while loading Negativity:");
-						log.warning("A bungeecord system have been detected, but from the config, bungeecord is disabled.");
+						log.warning("Configuration well edited !");
 					}
 				}
 			} catch (IOException e) {

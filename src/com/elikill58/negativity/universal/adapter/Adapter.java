@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.HashMap;
 import java.util.List;
 
-import com.elikill58.negativity.universal.AbstractCheat;
+import com.elikill58.negativity.universal.Cheat;
 
 public abstract class Adapter {
 	
@@ -26,6 +26,7 @@ public abstract class Adapter {
 		return adapter;
 	}
 	
+	public abstract String getName();
 	public abstract Object getConfig();
 	public abstract File getDataFolder();
 	public abstract String getStringInConfig(String dir);
@@ -43,9 +44,12 @@ public abstract class Adapter {
 	public abstract void loadLang();
 	public abstract String getStringFromLang(String lang, String key);
 	public abstract List<String> getStringListFromLang(String lang, String key);
-	public abstract List<AbstractCheat> getAbstractCheats();
+	public List<Cheat> getAbstractCheats() {
+		return Cheat.CHEATS;
+	}
 	public abstract void reload();
 	public abstract Object getItem(String itemName);
 	public abstract String getVersion();
+	public abstract void reloadConfig();
 	
 }

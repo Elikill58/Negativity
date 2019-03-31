@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import com.elikill58.negativity.universal.AbstractCheat;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.google.common.io.ByteStreams;
 
@@ -28,6 +28,11 @@ public class BungeeAdapter extends Adapter {
 	public BungeeAdapter(Plugin pl, Configuration config) {
 		this.pl = pl;
 		this.config = config;
+	}
+
+	@Override
+	public String getName() {
+		return "bungee";
 	}
 
 	@Override
@@ -162,7 +167,7 @@ public class BungeeAdapter extends Adapter {
 	}
 
 	@Override
-	public List<AbstractCheat> getAbstractCheats() {
+	public List<Cheat> getAbstractCheats() {
 		return new ArrayList<>();
 	}
 	
@@ -180,5 +185,10 @@ public class BungeeAdapter extends Adapter {
 	@Override
 	public String getVersion() {
 		return ProxyServer.getInstance().getGameVersion();
+	}
+	
+	@Override
+	public void reloadConfig() {
+		
 	}
 }

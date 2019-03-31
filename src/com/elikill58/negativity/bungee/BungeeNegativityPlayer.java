@@ -2,7 +2,7 @@ package com.elikill58.negativity.bungee;
 
 import java.util.HashMap;
 
-import com.elikill58.negativity.universal.AbstractCheat;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
 
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -63,11 +63,6 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	}
 
 	@Override
-	public int getWarn(AbstractCheat c) {
-		return 0;
-	}
-
-	@Override
 	public void kickPlayer(String reason, String time, String by, boolean def) {
 		p.disconnect(new ComponentBuilder(BungeeMessages.getMessage(p, "ban.kick_" + (def ? "def" : "time"), "%reason%", reason, "%time%", String.valueOf(time), "%by%", by)).create());
 	}
@@ -77,10 +72,16 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	}
 
 	@Override
-	public void startAnalyze(AbstractCheat c) {
+	public void startAllAnalyze() {
 	}
 
 	@Override
-	public void startAllAnalyze() {
+	public int getWarn(Cheat c) {
+		return 0;
+	}
+
+	@Override
+	public void startAnalyze(Cheat c) {
+		
 	}
 }

@@ -11,17 +11,20 @@ import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 @SuppressWarnings("deprecation")
-public class AutoClickProtocol implements Listener {
+public class AutoClickProtocol extends Cheat implements Listener {
+
+	public AutoClickProtocol() {
+		super("AUTOCLICK", false, Material.FISHING_ROD, false, true, "auto-click", "autoclic");
+	}
 
 	public static final int CLICK_ALERT = Adapter.getAdapter().getIntegerInConfig("cheats.autoclick.click_alert");
-	public static final Cheat CHEAT = Cheat.AUTOCLICK;
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent e) {
@@ -36,20 +39,20 @@ public class AutoClickProtocol implements Listener {
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType())) {
 				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType());
-				if (ib.getWhen().isClick() && ib.isForThisCheat(CHEAT))
+				if (ib.getWhen().isClick() && ib.isForThisCheat(this))
 					if (e.getAction().name().toLowerCase().contains(ib.getWhen().name().toLowerCase()))
 						return;
 			}
 		np.ACTUAL_CLICK++;
 		int ping = Utils.getPing(p), click = np.ACTUAL_CLICK - (ping / 9);
 		if (click > CLICK_ALERT) {
-			np.addWarn(CHEAT);
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, CHEAT,
+			np.addWarn(this);
+			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					Utils.parseInPorcent(np.ACTUAL_CLICK * 2.5),
 					"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
 							+ "; Better click in one second: " + np.BETTER_CLICK + " Ping: " + ping,
 					np.ACTUAL_CLICK + " clicks");
-			if (CHEAT.isSetBack() && mayCancel)
+			if (isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
 	}
@@ -61,19 +64,19 @@ public class AutoClickProtocol implements Listener {
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType())) {
 				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType());
-				if (ib.getWhen().isClick() && ib.isForThisCheat(CHEAT))
+				if (ib.getWhen().isClick() && ib.isForThisCheat(this))
 					return;
 			}
 		np.ACTUAL_CLICK++;
 		int ping = Utils.getPing(p), click = np.ACTUAL_CLICK - (ping / 9);
 		if (click > CLICK_ALERT) {
-			np.addWarn(CHEAT);
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, CHEAT,
+			np.addWarn(this);
+			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					Utils.parseInPorcent(np.ACTUAL_CLICK * 2.5),
 					"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
 							+ "; Better click in one second: " + np.BETTER_CLICK + " Ping: " + ping,
 					np.ACTUAL_CLICK + " clicks");
-			if (CHEAT.isSetBack() && mayCancel)
+			if (isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
 	}

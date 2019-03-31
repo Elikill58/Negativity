@@ -15,11 +15,15 @@ import org.spongepowered.api.item.ItemTypes;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer.FlyingReason;
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class AutoRegenProtocol {
+public class AutoRegenProtocol extends Cheat {
+
+	public AutoRegenProtocol() {
+		super("AUTOREGEN", true, ItemTypes.GOLDEN_APPLE, false, true, "regen");
+	}
 
 	@Listener
 	public void onPlayerInteract(InteractEvent e, @First Player p) {
@@ -47,14 +51,14 @@ public class AutoRegenProtocol {
 		if (np.LAST_REGEN != 0
 				&& !p.getOrCreate(PotionEffectData.class).get()
 						.contains(PotionEffect.of(PotionEffectTypes.REGENERATION, 1, 1))
-				&& np.hasDetectionActive(Cheat.AUTOREGEN)) {
+				&& np.hasDetectionActive(this)) {
 			int ping = Utils.getPing(p);
 			if (dif < (300 + ping)) {
-				boolean mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, Cheat.AUTOREGEN,
+				boolean mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this,
 						Utils.parseInPorcent((dif < (50 + ping) ? 200 : 100) - dif - ping), "Player regen, last regen: "
 								+ np.LAST_REGEN + " Actual time: " + actual + " Difference: " + dif,
 						"Time between two regen: " + dif + " (in milliseconds)");
-				if (Cheat.AUTOREGEN.isSetBack() && mayCancel)
+				if (isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}
 		}

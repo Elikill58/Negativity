@@ -46,9 +46,9 @@ import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.timers.ActualizeClickTimer;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
@@ -118,6 +118,7 @@ public class SpigotNegativity extends JavaPlugin {
 			saveDefaultConfig();
 		}
 		UniversalUtils.init();
+		Cheat.loadCheat();
 		FakePlayer.loadClass();
 		isOnBungeecord = ada.getBooleanInConfig("hasBungeecord");
 		log = ada.getBooleanInConfig("log_alerts");
@@ -164,19 +165,43 @@ public class SpigotNegativity extends JavaPlugin {
 		(clickTimer = new ActualizeClickTimer()).runTaskTimer(this, 20, 20);
 		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
-
-		for (Cheat c : Cheat.values()) {
-			if (c.getProtocolClass() != null && c.isActive()) {
-				try {
-					pm.registerEvents((Listener) c.getProtocolClass().newInstance(), this);
-				} catch (InstantiationException | IllegalAccessException e) {
-					e.printStackTrace();
-				} catch (ClassCastException e) {
+		
+		for(Cheat c : Cheat.CHEATS) {
+			if(c.isActive()) {
+				if(c.hasListener()) {
+					pm.registerEvents((Listener) c, this);
 				}
 				c.run();
 			}
 		}
+		
+		loadCommand();
 
+		if (getConfig().get("items") != null) {
+			ConfigurationSection cs = getConfig().getConfigurationSection("items");
+			for (String s : cs.getKeys(false))
+				new ItemUseBypass(s, cs.getString(s + ".cheats"), cs.getString(s + ".when"));
+		}
+		if (UniversalUtils.hasInternet()
+				&& !UniversalUtils.isLatestVersion(Optional.of(getDescription().getVersion()))) {
+			getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
+					+ "). Download it here: https://www.spigotmc.org/resources/48399/");
+		}
+		getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
+			@Override
+			public void run() {
+				Stats.updateStats(StatsType.ONLINE, 1);
+				Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort());
+			}
+		});
+		ada.loadLang();
+		
+		Plugin essentialsPlugin = Bukkit.getPluginManager().getPlugin("Essentials");
+	    if (essentialsPlugin != null)
+	    	essentialsSupport = true;
+	}
+	
+	private void loadCommand() {
 		PluginCommand negativity = getCommand("negativity");
 		NegativityCommand negativityCmd = new NegativityCommand();
 		negativity.setExecutor(negativityCmd);
@@ -219,29 +244,6 @@ public class SpigotNegativity extends JavaPlugin {
 			langCmd.setExecutor(new SuspectCommand());
 
 		getCommand("mod").setExecutor(new ModCommand());
-
-		if (getConfig().get("items") != null) {
-			ConfigurationSection cs = getConfig().getConfigurationSection("items");
-			for (String s : cs.getKeys(false))
-				new ItemUseBypass(s, cs.getString(s + ".cheats"), cs.getString(s + ".when"));
-		}
-		if (UniversalUtils.hasInternet()
-				&& !UniversalUtils.isLatestVersion(Optional.of(getDescription().getVersion()))) {
-			getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
-					+ "). Download it here: https://www.spigotmc.org/resources/48399/");
-		}
-		getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
-			@Override
-			public void run() {
-				Stats.updateStats(StatsType.ONLINE, 1);
-				Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort());
-			}
-		});
-		ada.loadLang();
-		
-		Plugin essentialsPlugin = Bukkit.getPluginManager().getPlugin("Essentials");
-	    if (essentialsPlugin != null)
-	    	essentialsSupport = true;
 	}
 
 	@Override
@@ -265,7 +267,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (c.equals(Cheat.BLINK))
+		if (c.equals(Cheat.getCheatFromString("BLINK").get()))
 			if (!np.already_blink) {
 				np.already_blink = true;
 				return false;

@@ -14,8 +14,8 @@ import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class AlertInventory {
@@ -33,8 +33,8 @@ public class AlertInventory {
 		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(TO_SEE.size() + 3, 9, 1), Inv.NAME_ALERT_MENU);
 		int slot = 0;
 		for (Cheat c : TO_SEE) {
-			if (c.getMaterial() != null && c.getProtocolClass() != null){
-				inv.setItem(slot++, Utils.createItem(c.getMaterial(), Messages.getMessage(p, "inventory.alerts.item_name",
+			if (c.getMaterial() != null){
+				inv.setItem(slot++, Utils.createItem((Material) c.getMaterial(), Messages.getMessage(p, "inventory.alerts.item_name",
 						"%exact_name%", c.getName(), "%warn%", String.valueOf(np.getWarn(c))), np.getWarn(c) == 0 ? 1 : np.getWarn(c)));
 			}
 		}
@@ -56,8 +56,8 @@ public class AlertInventory {
 				TO_SEE.add(c);
 		int slot = 0;
 		for (Cheat c : TO_SEE)
-			if (c.getMaterial() != null && c.getProtocolClass() != null)
-				inv.setItem(slot++, Utils.createItem(c.getMaterial(), Messages.getMessage(p, "inventory.alerts.item_name",
+			if (c.getMaterial() != null)
+				inv.setItem(slot++, Utils.createItem((Material) c.getMaterial(), Messages.getMessage(p, "inventory.alerts.item_name",
 						"%exact_name%", c.getName(), "%warn%", String.valueOf(np.getWarn(c))), np.getWarn(c) == 0 ? 1 : np.getWarn(c)));
 		//p.updateInventory();
 	}

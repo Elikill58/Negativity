@@ -5,7 +5,7 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.elikill58.negativity.spigot.utils.Cheat;
+import com.elikill58.negativity.universal.Cheat;
 
 public class PlayerCheatKickEvent  extends Event implements Cancellable {
 

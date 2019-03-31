@@ -14,9 +14,8 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.universal.AbstractCheat;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.SuspectManager;
 
 public class SuspectCommand implements CommandCallable {
@@ -48,7 +47,7 @@ public class SuspectCommand implements CommandCallable {
 		//Player p = (Player) sender;
 		String[] content = msg.split(" ");
 		List<Player> suspected = new ArrayList<>();
-		List<AbstractCheat> cheats = new ArrayList<>();
+		List<Cheat> cheats = new ArrayList<>();
 		for(String s : content) {
 			for(Cheat c : Cheat.values())
 				for(String alias : c.getAliases())

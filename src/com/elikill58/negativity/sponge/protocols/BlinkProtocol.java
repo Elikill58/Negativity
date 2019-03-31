@@ -5,11 +5,16 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.item.ItemTypes;
 
-import com.elikill58.negativity.sponge.NeedListener;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.universal.Cheat;
 
-public class BlinkProtocol implements NeedListener {
+public class BlinkProtocol extends Cheat {
+
+	public BlinkProtocol() {
+		super("BLINK", true, ItemTypes.COAL_BLOCK, false, true);
+	}
 	
 	@Listener
 	public void onPlayerDeath(DestructEntityEvent.Death e, @First Player p){

@@ -19,8 +19,8 @@ import org.spongepowered.api.text.Text;
 import com.elikill58.negativity.sponge.Inv;
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 import net.minecraft.inventory.ContainerChest;

@@ -10,25 +10,29 @@ import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.sponge.NeedListener;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Cheat;
 import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class SpiderProtocol implements NeedListener {
+public class SpiderProtocol extends Cheat {
 
+	public SpiderProtocol() {
+		super("SPIDER", false, ItemTypes.WEB, false, true, "wallhack", "wall");
+	}
+	
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
 			return;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		Location<World> loc = p.getLocation();
-		if (!np.hasDetectionActive(Cheat.SPIDER))
+		if (!np.hasDetectionActive(this))
 			return;
 		if (np.getFallDistance() != 0.0F)
 			return;
@@ -61,10 +65,10 @@ public class SpiderProtocol implements NeedListener {
 			int relia = (int) (y * 450);
 			if (isAris)
 				relia = relia + 39;
-			ReportType type =  (np.getWarn(Cheat.SPIDER) > 6) ? ReportType.VIOLATION : ReportType.WARNING;
-			boolean mayCancel = SpongeNegativity.alertMod(type, p, Cheat.SPIDER, Utils.parseInPorcent(relia),
+			ReportType type =  (np.getWarn(this) > 6) ? ReportType.VIOLATION : ReportType.WARNING;
+			boolean mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent(relia),
 					"Nothing around him. To > From: " + y + " isAris: " + isAris + " has not stab slairs.");
-			if(Cheat.SPIDER.isSetBack() && mayCancel){
+			if(isSetBack() && mayCancel){
 				Location<World> locc = p.getLocation();
 				while(locc.getBlock().getType().equals(BlockTypes.AIR))
 					locc.sub(0, 1, 0);

@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,8 +15,6 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.utils.Cheat;
-import com.elikill58.negativity.universal.AbstractCheat;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.google.common.io.ByteStreams;
@@ -33,6 +30,11 @@ public class SpigotAdapter extends Adapter {
 		this.config = config;
 	}
 
+	@Override
+	public String getName() {
+		return "spigot";
+	}
+	
 	@Override
 	public Object getConfig() {
 		return config;
@@ -191,14 +193,6 @@ public class SpigotAdapter extends Adapter {
 	public List<String> getStringListFromLang(String lang, String key) {
 		return LANGS.get(lang).getStringList(key);
 	}
-
-	@Override
-	public List<AbstractCheat> getAbstractCheats() {
-		List<AbstractCheat> c = new ArrayList<>();
-		for(Cheat tempCheats : Cheat.values())
-			c.add(tempCheats);
-		return c;
-	}
 	
 	@Override
 	public void reload() {
@@ -220,5 +214,10 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public String getVersion() {
 		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
+	}
+	
+	@Override
+	public void reloadConfig() {
+		SpigotNegativity.getInstance().reloadConfig();
 	}
 }

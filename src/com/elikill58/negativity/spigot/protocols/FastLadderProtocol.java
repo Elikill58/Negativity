@@ -12,11 +12,15 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 
-public class FastLadderProtocol implements Listener {
+public class FastLadderProtocol extends Cheat implements Listener {
+
+	public FastLadderProtocol() {
+		super("FASTLADDERS", false, Material.LADDER, false, true, "ladder", "ladders");
+	}
 
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
@@ -24,7 +28,7 @@ public class FastLadderProtocol implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(Cheat.FASTLADDERS))
+		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		Location loc = p.getLocation();
 		if (!loc.getBlock().getType().equals(Material.LADDER)){
@@ -49,10 +53,10 @@ public class FastLadderProtocol implements Listener {
 		}
 		if (distance > 0.23 && distance < 3.8 && nbLadder > 2) {
 			int ping = Utils.getPing(p);
-			np.addWarn(Cheat.FASTLADDERS);
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.FASTLADDERS, Utils.parseInPorcent(distance * 350),
+			np.addWarn(this);
+			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(distance * 350),
 					"On ladders. Distance from/to : " + distance + ". Ping: " + ping + "ms. Number Ladder: " + nbLadder);
-			if (Cheat.FASTLADDERS.isSetBack() && mayCancel)
+			if (isSetBack() && mayCancel)
 				e.setTo(e.getFrom().clone().add(new Location(fl.getWorld(), fl.getX() / 2, fl.getY() / 2, fl.getZ()))
 						.add(0, 0.5, 0));
 		}

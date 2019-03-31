@@ -9,16 +9,19 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerLoginEvent.Result;
+import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.commands.ReportCommand;
-import com.elikill58.negativity.spigot.utils.Cheat;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.AbstractCheat;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -88,7 +91,7 @@ public class PlayersEvents implements Listener {
 		String msg = e.getMessage().toLowerCase();
 		String[] content = msg.split(" ");
 		List<Player> suspected = new ArrayList<>();
-		List<AbstractCheat> cheats = new ArrayList<>();
+		List<Cheat> cheats = new ArrayList<>();
 		for(String s : content) {
 			for(Cheat c : Cheat.values())
 				for(String alias : c.getAliases())

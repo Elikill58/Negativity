@@ -4,10 +4,10 @@ import org.spongepowered.api.item.ItemTypes;
 
 import com.elikill58.negativity.universal.Cheat;
 
-public class SneakProtocol extends Cheat {
+public class AllProtocol extends Cheat {
 
-	public SneakProtocol() {
-		super("SNEAK", true, ItemTypes.BLAZE_POWDER, false, false, "sneack");
+	public AllProtocol() {
+		super("ALL", true, ItemTypes.GRASS, false, false);
 	}
 
 }

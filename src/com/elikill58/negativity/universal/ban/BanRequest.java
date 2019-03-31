@@ -251,6 +251,6 @@ public class BanRequest {
 	}
 
 	public static enum BanType {
-		PLUGIN, MOD, UNKNOW;
+		PLUGIN, MOD, CONSOLE, UNKNOW;
 	}
 }

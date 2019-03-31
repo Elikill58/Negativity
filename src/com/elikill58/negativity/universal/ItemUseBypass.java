@@ -11,7 +11,7 @@ public class ItemUseBypass {
 	public static final HashMap<Object, ItemUseBypass> ITEM_BYPASS = new HashMap<>();
 	
 	private Object item;
-	private List<AbstractCheat> cheats = new ArrayList<>();
+	private List<Cheat> cheats = new ArrayList<>();
 	private WhenBypass when;
 	
 	public ItemUseBypass(String itemName, String cheats, String when) {
@@ -28,20 +28,20 @@ public class ItemUseBypass {
 			ITEM_BYPASS.put(item, this);
 	}
 	
-	private List<AbstractCheat> updateCheats(String cheats){
-		List<AbstractCheat> list = new ArrayList<>();
-		for(AbstractCheat ac : Adapter.getAdapter().getAbstractCheats())
+	private List<Cheat> updateCheats(String cheats){
+		List<Cheat> list = new ArrayList<>();
+		for(Cheat ac : Cheat.CHEATS)
 			for(String s : cheats.split(","))
 				if(ac.name().equalsIgnoreCase(s))
 					list.add(ac);
 		return list;
 	}
 	
-	public List<AbstractCheat> getCheats(){
+	public List<Cheat> getCheats(){
 		return cheats;
 	}
 	
-	public boolean isForThisCheat(AbstractCheat c) {
+	public boolean isForThisCheat(Cheat c) {
 		return cheats.contains(c);
 	}
 	

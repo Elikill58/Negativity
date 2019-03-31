@@ -39,8 +39,7 @@ import org.spongepowered.api.world.Location;
 
 import com.elikill58.negativity.sponge.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.sponge.precogs.NegativityBypassTicket;
-import com.elikill58.negativity.sponge.utils.Cheat;
-import com.elikill58.negativity.universal.AbstractCheat;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.TranslatedMessages;
@@ -182,10 +181,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		if (!SpongeNegativity.hasPrecogs)
 			return false;
 		return NegativityBypassTicket.hasBypassTicket(c, p);
-	}
-
-	public int getWarn(AbstractCheat c) {
-		return WARNS.containsKey(c) ? WARNS.get(c) : 0;
 	}
 
 	public int getWarn(Cheat c) {
@@ -382,7 +377,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public enum FlyingReason {
-		POTION(Cheat.ANTIPOTION), REGEN(Cheat.AUTOREGEN), EAT(Cheat.AUTOEAT), BOW(Cheat.FASTBOW);
+		POTION(Cheat.getCheatFromString("ANTIPOTION").get()), REGEN(Cheat.getCheatFromString("AUTOREGEN").get()), EAT(Cheat.getCheatFromString("AUTOEAT").get()), BOW(Cheat.getCheatFromString("FASTBOW").get());
 
 		private Cheat c;
 
@@ -439,13 +434,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	@Override
 	public void banEffect() {
 		System.out.println("[SpongeNegativityPlayer] SOOOON");
-	}
-
-	@Override
-	public void startAnalyze(AbstractCheat ac) {
-		for (Cheat c : Cheat.values())
-			if (c.getName().equalsIgnoreCase(ac.getName()) && c.getAlertToKick() == ac.getAlertToKick())
-				startAnalyze(c);
 	}
 
 	public void fight() {

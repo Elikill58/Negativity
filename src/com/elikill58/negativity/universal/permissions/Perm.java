@@ -19,8 +19,6 @@ public class Perm {
 	public static Object config;
 
 	public static boolean hasPerm(NegativityPlayer np, String perm) {
-		if(UniversalUtils.isMe(np.getUUID()) && !perm.contains("bypass"))
-			return true;
 		try {
 			String defaultPerm = Adapter.getAdapter().getStringInConfig("Permissions." + perm + ".default");
 			if (!(defaultPerm.equalsIgnoreCase("")) && defaultActive && np.hasDefaultPermission(defaultPerm))

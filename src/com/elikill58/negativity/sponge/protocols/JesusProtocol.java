@@ -2,7 +2,6 @@ package com.elikill58.negativity.sponge.protocols;
 
 import java.util.Optional;
 
-import org.bukkit.Material;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
@@ -13,6 +12,7 @@ import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -25,7 +25,7 @@ import com.elikill58.negativity.universal.Cheat;
 public class JesusProtocol extends Cheat {
 
 	public JesusProtocol() {
-		super("JESUS", false, Material.WATER_BUCKET, false, true, "waterwalk", "water");
+		super("JESUS", false, ItemTypes.WATER_BUCKET, false, true, "waterwalk", "water");
 	}
 
 	@Listener

@@ -143,6 +143,12 @@ public abstract class Cheat {
 	public static void loadCheat() {
 		try {
 			String dir = Cheat.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+			if (dir.endsWith(".class"))
+				dir = dir.substring(0, dir.lastIndexOf('!'));
+
+			if (dir.startsWith("file:/"))
+				dir = dir.substring(6);
+
 			for (Object classDir : UniversalUtils.getClasseNamesInPackage(dir, "com.elikill58.negativity." + Adapter.getAdapter().getName() + ".protocols")) {
 				try {
 					CHEATS.add((Cheat) Class.forName(classDir.toString().replaceAll(".class", "")).newInstance());

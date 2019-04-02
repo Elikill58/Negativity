@@ -102,6 +102,7 @@ public class SpongeNegativity implements RawDataListener {
 		loadConfig();
 		Adapter.setAdapter(new SpongeAdapter(this));
 		UniversalUtils.init();
+		Cheat.loadCheat();
 		EventManager eventManager = Sponge.getEventManager();
 		for (Cheat c : Cheat.values()) {
 			if (!c.isActive())

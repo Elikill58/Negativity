@@ -1,7 +1,9 @@
 package com.elikill58.negativity.universal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -10,6 +12,7 @@ public abstract class Cheat {
 
 	public static Cheat ALL;
 	public static final List<Cheat> CHEATS = new ArrayList<>();
+	public static final Map<String, Cheat> CHEATS_BY_KEY = new HashMap<>();
 	private boolean needPacket, isRunning = false, blockedInFight, hasListener;
 	private String key, name;
 	private Object m;
@@ -151,7 +154,9 @@ public abstract class Cheat {
 
 			for (Object classDir : UniversalUtils.getClasseNamesInPackage(dir, "com.elikill58.negativity." + Adapter.getAdapter().getName() + ".protocols")) {
 				try {
-					CHEATS.add((Cheat) Class.forName(classDir.toString().replaceAll(".class", "")).newInstance());
+					Cheat cheat = (Cheat) Class.forName(classDir.toString().replaceAll(".class", "")).newInstance();
+					CHEATS.add(cheat);
+					CHEATS_BY_KEY.put(cheat.key, cheat);
 				} catch (Exception temp) {
 					//temp.printStackTrace();
 					// on ignore

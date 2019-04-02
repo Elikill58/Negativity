@@ -14,6 +14,8 @@ import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.command.CommandManager;
+import org.spongepowered.api.command.args.GenericArguments;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
@@ -43,6 +45,7 @@ import org.spongepowered.api.text.format.TextColors;
 import com.elikill58.negativity.sponge.commands.BanCommand;
 import com.elikill58.negativity.sponge.commands.ModCommand;
 import com.elikill58.negativity.sponge.commands.NegativityCommand;
+import com.elikill58.negativity.sponge.commands.NegativityVerifCommand;
 import com.elikill58.negativity.sponge.commands.ReportCommand;
 import com.elikill58.negativity.sponge.commands.SuspectCommand;
 import com.elikill58.negativity.sponge.commands.UnbanCommand;
@@ -180,7 +183,16 @@ public class SpongeNegativity implements RawDataListener {
 			SpongeForgeSupport.isOnSpongeForge = false;
 		}
 		CommandManager cmd = Sponge.getCommandManager();
-		cmd.register(this, new NegativityCommand(), "negativity");
+		cmd.register(this, CommandSpec.builder()
+				.executor(new NegativityCommand())
+				.arguments(GenericArguments.player(Text.of("target")))
+				.child(CommandSpec.builder()
+						.executor(new NegativityVerifCommand())
+						.arguments(GenericArguments.player(Text.of("target")),
+								GenericArguments.allOf(GenericArguments.choices(Text.of("cheats"), Cheat.CHEATS_BY_KEY, true, false)))
+						.build(), "verif")
+				.build(), "negativity");
+
 		cmd.register(this, new ModCommand(), "mod");
 		if (config.getNode("report_command").getBoolean())
 			cmd.register(this, new ReportCommand(), "report");

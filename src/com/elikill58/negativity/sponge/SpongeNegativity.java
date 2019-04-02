@@ -222,7 +222,10 @@ public class SpongeNegativity implements RawDataListener {
 		}
 
 		if (config.getNode("unban_command").getBoolean())
-			cmd.register(this, new UnbanCommand(), "nunban", "negunban");
+			cmd.register(this, CommandSpec.builder()
+					.executor(new UnbanCommand())
+					.arguments(GenericArguments.user(Text.of("target")))
+					.build(), "nunban", "negunban");
 
 		if (SuspectManager.ENABLED_CMD) {
 			cmd.register(this, CommandSpec.builder()

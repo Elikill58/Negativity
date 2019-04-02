@@ -46,6 +46,7 @@ import com.elikill58.negativity.sponge.commands.BanCommand;
 import com.elikill58.negativity.sponge.commands.ModCommand;
 import com.elikill58.negativity.sponge.commands.NegativityCommand;
 import com.elikill58.negativity.sponge.commands.NegativityVerifCommand;
+import com.elikill58.negativity.sponge.commands.PlayersAndCheatsArgument;
 import com.elikill58.negativity.sponge.commands.ReportCommand;
 import com.elikill58.negativity.sponge.commands.SuspectCommand;
 import com.elikill58.negativity.sponge.commands.UnbanCommand;
@@ -222,8 +223,14 @@ public class SpongeNegativity implements RawDataListener {
 
 		if (config.getNode("unban_command").getBoolean())
 			cmd.register(this, new UnbanCommand(), "nunban", "negunban");
-		if (SuspectManager.ENABLED_CMD)
-			cmd.register(this, new SuspectCommand(), "unban");
+
+		if (SuspectManager.ENABLED_CMD) {
+			cmd.register(this, CommandSpec.builder()
+					.executor(new SuspectCommand())
+					.arguments(new PlayersAndCheatsArgument(Text.of("suspect"), Text.of("cheat")))
+					.build(), "suspect");
+		}
+
 		channel = Sponge.getChannelRegistrar().createRawChannel(this, "Negativity");
 		if (Sponge.getChannelRegistrar().isChannelAvailable("FML|HS")) {
 			fmlChannel = Sponge.getChannelRegistrar().getOrCreateRaw(this, "FML|HS");

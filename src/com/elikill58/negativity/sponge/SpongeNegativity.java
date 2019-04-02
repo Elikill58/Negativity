@@ -55,6 +55,7 @@ import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
 import com.elikill58.negativity.sponge.timers.PacketsTimers;
 import com.elikill58.negativity.sponge.utils.ReportType;
+import com.elikill58.negativity.sponge.utils.NegativityCmdSuggestionsEnhancer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
@@ -183,7 +184,10 @@ public class SpongeNegativity implements RawDataListener {
 			SpongeForgeSupport.isOnSpongeForge = false;
 		}
 		CommandManager cmd = Sponge.getCommandManager();
-		cmd.register(this, CommandSpec.builder()
+		// To work around an undesirable behaviour of arguments completion,
+		// we wrap /negativity in a CommandCallable that always suggests online players
+		// in addition to the default suggestion results.
+		cmd.register(this, new NegativityCmdSuggestionsEnhancer(CommandSpec.builder()
 				.executor(new NegativityCommand())
 				.arguments(GenericArguments.player(Text.of("target")))
 				.child(CommandSpec.builder()
@@ -191,7 +195,7 @@ public class SpongeNegativity implements RawDataListener {
 						.arguments(GenericArguments.player(Text.of("target")),
 								GenericArguments.allOf(GenericArguments.choices(Text.of("cheats"), Cheat.CHEATS_BY_KEY, true, false)))
 						.build(), "verif")
-				.build(), "negativity");
+				.build()), "negativity");
 
 		cmd.register(this, new ModCommand(), "mod");
 		if (config.getNode("report_command").getBoolean())

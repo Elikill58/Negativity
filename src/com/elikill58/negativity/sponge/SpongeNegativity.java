@@ -200,8 +200,18 @@ public class SpongeNegativity implements RawDataListener {
 		cmd.register(this, new ModCommand(), "mod");
 		if (config.getNode("report_command").getBoolean())
 			cmd.register(this, new ReportCommand(), "report");
-		if (config.getNode("ban_command").getBoolean())
-			cmd.register(this, new BanCommand(), "nban", "negban");
+
+		if (config.getNode("ban_command").getBoolean()) {
+			cmd.register(this, CommandSpec.builder()
+					.executor(new BanCommand())
+					.arguments(GenericArguments.player(Text.of("target")),
+							GenericArguments.firstParsing(
+									GenericArguments.bool(Text.of("definitive")),
+									GenericArguments.longNum(Text.of("duration"))),
+							GenericArguments.remainingJoinedStrings(Text.of("reason")))
+					.build(), "nban", "negban");
+		}
+
 		if (config.getNode("unban_command").getBoolean())
 			cmd.register(this, new UnbanCommand(), "nunban", "negunban");
 		if (SuspectManager.ENABLED_CMD)

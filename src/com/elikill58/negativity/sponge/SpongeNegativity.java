@@ -54,8 +54,8 @@ import com.elikill58.negativity.sponge.listeners.InventoryClickManagerEvent;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
 import com.elikill58.negativity.sponge.timers.PacketsTimers;
-import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.NegativityCmdSuggestionsEnhancer;
+import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
@@ -197,7 +197,10 @@ public class SpongeNegativity implements RawDataListener {
 						.build(), "verif")
 				.build()), "negativity");
 
-		cmd.register(this, new ModCommand(), "mod");
+		cmd.register(this, CommandSpec.builder()
+				.executor(new ModCommand())
+				.build(), "mod");
+
 		if (config.getNode("report_command").getBoolean())
 			cmd.register(this, new ReportCommand(), "report");
 

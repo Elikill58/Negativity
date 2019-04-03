@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -18,7 +19,7 @@ public class SuspectManager {
 		CHAT = Adapter.getAdapter().getBooleanInConfig("suspect.chat");
 		WITH_REPORT = Adapter.getAdapter().getBooleanInConfig("suspect.with_report_cmd");
 	}
-	
+
 	public static void analyzeText(NegativityPlayer np, String text) {
 		String[] content = text.split(" ");
 		List<Cheat> cheats = new ArrayList<>();
@@ -29,8 +30,8 @@ public class SuspectManager {
 						cheats.add(c);
 		}
 	}
-	
-	public static void analyzeText(NegativityPlayer np, List<Cheat> cheats) {
+
+	public static void analyzeText(NegativityPlayer np, Collection<Cheat> cheats) {
 		for(Cheat ac : cheats) {
 			np.startAnalyze(ac);
 		}

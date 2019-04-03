@@ -2,12 +2,7 @@ package com.elikill58.negativity.sponge.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
-import javax.annotation.Nullable;
-
-import org.spongepowered.api.Sponge;
-import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -15,8 +10,6 @@ import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativity;
@@ -26,90 +19,46 @@ import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 
-public class ReportCommand implements CommandCallable, CommandExecutor {
+public class ReportCommand implements CommandExecutor {
 
-    public static final List<Text> REPORT_LAST = new ArrayList<>();
-    
+	public static final List<Text> REPORT_LAST = new ArrayList<>();
+
 	@Override
-    public CommandResult process(CommandSource sender, String arguments) throws CommandException {
-        if (!(sender instanceof Player))
-            return CommandResult.empty();
-        String[] arg = arguments.split(" ");
-        Player p = (Player) sender;
-        SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-        if(np.TIME_REPORT > System.currentTimeMillis() && !Perm.hasPerm(np, "report_wait")){
-            Messages.sendMessage(p, "report_wait");
-            return CommandResult.empty();
-        }
-        if (arg.length < 2)
-            Messages.sendMessage(p, "report.report_usage");
-        else {
-            Optional<Player> optcible = Sponge.getServer().getPlayer(arg[0]);
-            if (!optcible.isPresent()) {
-                Messages.sendMessage(p, "invalid_player", "%arg%", arg[0]);
-                return CommandResult.empty();
-            }
-            Player cible = optcible.get();
-            String reason = "";
-            for (String s : arg)
-                if (!(s.equalsIgnoreCase(arg[0])))
-                    reason = reason + s + " ";
-            String stringMsg = Messages.getStringMessage(p, "report.report_message", "%name%", cible.getName(), "%report%",
-                    p.getName(), "%reason%", reason);
-            if (SpongeNegativity.isOnBungeecord)
-            	SpongeNegativity.sendReportMessage(p, stringMsg, cible.getName());
-            else {
-            	Text msg = Text.of(stringMsg);
-                boolean hasOp = false;
-                for (Player pl : Utils.getOnlinePlayers())
-                    if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(pl), "showAlert")) {
-                        hasOp = true;
-                        p.sendMessage(msg);
-                    }
-                if (!hasOp)
-                    REPORT_LAST.add(msg);
-            }
-            Messages.sendMessage(p, "report.well_report", "%name%", cible.getName());
-            np.TIME_REPORT = System.currentTimeMillis() + Adapter.getAdapter().getIntegerInConfig("time_between_report");
-			if(SuspectManager.WITH_REPORT && SuspectManager.ENABLED)
-				SuspectManager.analyzeText(np, stringMsg);
-        }
-        return CommandResult.empty();
-    }
+	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+		if (!(src instanceof Player))
+			throw new CommandException(Messages.getMessage(src, "sender_not_a_player"));
 
-    @Override
-    public List<String> getSuggestions(CommandSource source, String arguments, @Nullable Location<World> targetPosition) throws CommandException {
-        List<String> s = new ArrayList<>();
-        Sponge.getServer().getOnlinePlayers().forEach((p) -> {
-            s.add(p.getName());
-        });
-        return s;
-    }
+		Player playerSource = (Player) src;
+		SpongeNegativityPlayer nPlayerSource = SpongeNegativityPlayer.getNegativityPlayer(playerSource);
+		if (nPlayerSource.TIME_REPORT > System.currentTimeMillis() && !Perm.hasPerm(nPlayerSource, "report_wait"))
+			throw new CommandException(Messages.getMessage(playerSource, "report_wait"));
 
-    @Override
-    public boolean testPermission(CommandSource source) {
-        return false;
-    }
+		Player targetPlayer = args.requireOne("target");
+		String reason = args.requireOne("reason");
 
-    @Override
-    public Optional<Text> getShortDescription(CommandSource source) {
-        return Optional.empty();
-    }
+		String message = Messages.getStringMessage(playerSource, "report.report_message",
+				"%name%", targetPlayer.getName(), "%report%", playerSource.getName(), "%reason%", reason);
+		if (SpongeNegativity.isOnBungeecord) {
+			SpongeNegativity.sendReportMessage(playerSource, message, targetPlayer.getName());
+		} else {
+			Text spongeMsg = Text.of(message);
+			boolean hasOp = false;
+			for (Player onlinePlayer : Utils.getOnlinePlayers()) {
+				if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(onlinePlayer), "showAlert")) {
+					hasOp = true;
+					onlinePlayer.sendMessage(spongeMsg);
+				}
+			}
 
-    @Override
-    public Optional<Text> getHelp(CommandSource source) {
-        return Optional.empty();
-    }
+			if (!hasOp)
+				REPORT_LAST.add(spongeMsg);
+		}
 
-    @Override
-    public Text getUsage(CommandSource source) {
-        if(!(source instanceof Player))
-            return Text.of(Messages.getMessage("report.report_usage"));
-        return Messages.getMessage((Player) source, "report.report_usage");
-    }
+		Messages.sendMessage(playerSource, "report.well_report", "%name%", targetPlayer.getName());
+		nPlayerSource.TIME_REPORT = System.currentTimeMillis() + Adapter.getAdapter().getIntegerInConfig("time_between_report");
+		if (SuspectManager.WITH_REPORT && SuspectManager.ENABLED)
+			SuspectManager.analyzeText(nPlayerSource, message);
 
-    @Override
-    public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-        return null;
-    }
+		return CommandResult.success();
+	}
 }

@@ -14,6 +14,8 @@ import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.command.CommandManager;
+import org.spongepowered.api.command.args.GenericArguments;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
@@ -43,6 +45,8 @@ import org.spongepowered.api.text.format.TextColors;
 import com.elikill58.negativity.sponge.commands.BanCommand;
 import com.elikill58.negativity.sponge.commands.ModCommand;
 import com.elikill58.negativity.sponge.commands.NegativityCommand;
+import com.elikill58.negativity.sponge.commands.NegativityVerifCommand;
+import com.elikill58.negativity.sponge.commands.PlayersAndCheatsArgument;
 import com.elikill58.negativity.sponge.commands.ReportCommand;
 import com.elikill58.negativity.sponge.commands.SuspectCommand;
 import com.elikill58.negativity.sponge.commands.UnbanCommand;
@@ -51,6 +55,7 @@ import com.elikill58.negativity.sponge.listeners.InventoryClickManagerEvent;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
 import com.elikill58.negativity.sponge.timers.PacketsTimers;
+import com.elikill58.negativity.sponge.utils.NegativityCmdSuggestionsEnhancer;
 import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -102,6 +107,7 @@ public class SpongeNegativity implements RawDataListener {
 		loadConfig();
 		Adapter.setAdapter(new SpongeAdapter(this));
 		UniversalUtils.init();
+		Cheat.loadCheat();
 		EventManager eventManager = Sponge.getEventManager();
 		for (Cheat c : Cheat.values()) {
 			if (!c.isActive())
@@ -179,16 +185,55 @@ public class SpongeNegativity implements RawDataListener {
 			SpongeForgeSupport.isOnSpongeForge = false;
 		}
 		CommandManager cmd = Sponge.getCommandManager();
-		cmd.register(this, new NegativityCommand(), "negativity");
-		cmd.register(this, new ModCommand(), "mod");
-		if (config.getNode("report_command").getBoolean())
-			cmd.register(this, new ReportCommand(), "report");
-		if (config.getNode("ban_command").getBoolean())
-			cmd.register(this, new BanCommand(), "nban", "negban");
+		// To work around an undesirable behaviour of arguments completion,
+		// we wrap /negativity in a CommandCallable that always suggests online players
+		// in addition to the default suggestion results.
+		cmd.register(this, new NegativityCmdSuggestionsEnhancer(CommandSpec.builder()
+				.executor(new NegativityCommand())
+				.arguments(GenericArguments.player(Text.of("target")))
+				.child(CommandSpec.builder()
+						.executor(new NegativityVerifCommand())
+						.arguments(GenericArguments.player(Text.of("target")),
+								GenericArguments.allOf(GenericArguments.choices(Text.of("cheats"), Cheat.CHEATS_BY_KEY, true, false)))
+						.build(), "verif")
+				.build()), "negativity");
+
+		cmd.register(this, CommandSpec.builder()
+				.executor(new ModCommand())
+				.build(), "mod");
+
+		if (config.getNode("report_command").getBoolean()) {
+			cmd.register(this, CommandSpec.builder()
+					.executor(new ReportCommand())
+					.arguments(GenericArguments.player(Text.of("target")),
+							GenericArguments.remainingJoinedStrings(Text.of("reason")))
+					.build(), "report");
+		}
+
+		if (config.getNode("ban_command").getBoolean()) {
+			cmd.register(this, CommandSpec.builder()
+					.executor(new BanCommand())
+					.arguments(GenericArguments.player(Text.of("target")),
+							GenericArguments.firstParsing(
+									GenericArguments.bool(Text.of("definitive")),
+									GenericArguments.longNum(Text.of("duration"))),
+							GenericArguments.remainingJoinedStrings(Text.of("reason")))
+					.build(), "nban", "negban");
+		}
+
 		if (config.getNode("unban_command").getBoolean())
-			cmd.register(this, new UnbanCommand(), "nunban", "negunban");
-		if (SuspectManager.ENABLED_CMD)
-			cmd.register(this, new SuspectCommand(), "unban");
+			cmd.register(this, CommandSpec.builder()
+					.executor(new UnbanCommand())
+					.arguments(GenericArguments.user(Text.of("target")))
+					.build(), "nunban", "negunban");
+
+		if (SuspectManager.ENABLED_CMD) {
+			cmd.register(this, CommandSpec.builder()
+					.executor(new SuspectCommand())
+					.arguments(new PlayersAndCheatsArgument(Text.of("suspect"), Text.of("cheat")))
+					.build(), "suspect");
+		}
+
 		channel = Sponge.getChannelRegistrar().createRawChannel(this, "Negativity");
 		if (Sponge.getChannelRegistrar().isChannelAvailable("FML|HS")) {
 			fmlChannel = Sponge.getChannelRegistrar().getOrCreateRaw(this, "FML|HS");

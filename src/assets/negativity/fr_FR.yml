@@ -3,6 +3,7 @@ report_wait: "Merci d'attendre une seconde entre 2 reports"
 invalid_player: "%arg% n'est pas un joueur !"
 not_forget_player: "N'oubliez pas le joueur !"
 not_permission: "&cVous n'avez pas la permission de faire ceci."
+sender_not_a_player: "&cOnly a player can use this command"
 
 kick: "&a[&2Negativity&a]&c Vous avez été kick de ce serveur pour cheat (%cheat%)"
 
@@ -18,6 +19,11 @@ unban {
   help = [
     "/unban <joueur> : Débannir le joueur spécifié" ]
 }
+suspect {
+  no_suspects_set: "&cPas de suspects indiqués"
+  starting_full_analysis: "&a[&2Negativity&a] &7Démarrage de l'analyse complète pour &o%suspects%"
+  starting_analysis: "&a[&2Negativity&a] &7Démarrage de l'analyse de &o%suspects% &7pour &o%cheats%"
+}
 report {
   report_usage: "/report <joueur> <raison>"
   well_report: "&a%name% a bien été report !"
@@ -31,7 +37,7 @@ negativity {
     start: "&a[&2Negativity&a] &7Démarrage de l'analyse de %cheat% pour %name%"
     start_all: "&a[&2Negativity&a] Démarrage de toutes les analyses pour %name%"
     help = [
-      "/negativity verif <joueur> [cheats...] : Démarrer les vérifications (Toutes si aucune n'est précisé)" 
+      "/negativity verif <joueur> [cheats...] : Démarrer les vérifications (Toutes si aucune n'est précisé)"
       "/negativity <joueur> : Pour voir les informations a propos de ce joueur"
     ]
   }

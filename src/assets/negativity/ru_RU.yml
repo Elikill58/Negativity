@@ -3,6 +3,7 @@ report_wait: "Пожалуйста, подождите одну секунду �
 invalid_player: "%arg% не игрок!"
 not_forget_player: "Не забывайте про игрока!"
 not_permission: "&cУ вас нет разрешения делать это."
+sender_not_a_player: "&cOnly a player can use this command"
 
 kick: "&a[&2Negativity&a]&c Вы были кикнуты с этого сервера за Читы (%cheat%)"
 
@@ -26,6 +27,11 @@ unban {
   not_banned: "&c%name% не был забанен."
   not_exact: "%arg% не является ником игрока."
 }
+suspect {
+  no_suspects_set: "&cNo suspects specified"
+  starting_full_analysis: "&a[&2Negativity&a] &7Starting full analysis of &o%suspects%"
+  starting_analysis: "&a[&2Negativity&a] &7Starting analysis of &o%suspects% &7for &o%cheats%"
+}
 report {
   report_usage: "/report <игрок> <причина>"
   well_report: "&aИгрок %name% получил репорт!"
@@ -39,7 +45,7 @@ negativity {
     start: "&a[&2Negativity&a] &7Анализ начался для %name% на чит %cheat%"
     start_all: "&a[&2Negativity&a] Начался полный анализ игрока %name%"
     help = [
-      "/negativity verif <игрок> [читы...] : Начинает проверку (проверка на все читы, если ни один не указан)" 
+      "/negativity verif <игрок> [читы...] : Начинает проверку (проверка на все читы, если ни один не указан)"
       "/negativity <игрок> : Увидеть информацию о игроке" ]
   }
 }

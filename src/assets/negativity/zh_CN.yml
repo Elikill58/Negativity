@@ -3,6 +3,7 @@ report_wait: "请稍等 1 秒后再次举报"
 invalid_player: "%arg% 不是玩家！"
 not_forget_player: "请勿忘记玩家参数！"
 not_permission: "&c您没有执行此操作的权限。"
+sender_not_a_player: "&cOnly a player can use this command"
 
 kick: "&a[&2弊绝风清&a]&c您由于使用作弊程序 (%cheat%) 而被踢出了此服务器"
 
@@ -18,6 +19,11 @@ unban {
   help = [
     "/unban <玩家> : 解封指定玩家。" ]
 }
+suspect {
+  no_suspects_set: "&cNo suspects specified"
+  starting_full_analysis: "&a[&2Negativity&a] &7Starting full analysis of &o%suspects%"
+  starting_analysis: "&a[&2Negativity&a] &7Starting analysis of &o%suspects% &7for &o%cheats%"
+}
 report {
   report_usage: "/report <名称> <理由>"
   well_report: "&a已成功举报 %name%！"
@@ -31,7 +37,7 @@ negativity {
     start: "&a[&2弊绝风清&a]&7已开始分析&c %name%&7 的&c %cheat%&7 行为"
     start_all: "&a[&2弊绝风清&a]&7已开始完整分析玩家&c %name%&7 的行为"
     help = [
-     "/negativity verif <玩家> [作弊软件] : 开始分析（若未指定作弊软件则将进行完整分析）" 
+     "/negativity verif <玩家> [作弊软件] : 开始分析（若未指定作弊软件则将进行完整分析）"
      "/negativity <玩家> : 查看玩家信息"
    ]
   }

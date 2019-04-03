@@ -9,9 +9,8 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.format.TextColors;
 
+import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.SuspectManager;
@@ -23,7 +22,7 @@ public class SuspectCommand implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		Collection<Player> suspects = args.getAll("suspect");
 		if (suspects.isEmpty())
-			throw new CommandException(Text.of("No suspects specified"));
+			throw new CommandException(Messages.getMessage(src, "suspect.no_suspects_set"));
 
 		Collection<Cheat> cheats = args.getAll("cheat");
 
@@ -34,12 +33,14 @@ public class SuspectCommand implements CommandExecutor {
 				SpongeNegativityPlayer.getNegativityPlayer(suspect).startAllAnalyze();
 			}
 
-			if (canReceiveMessage)
-				src.sendMessage(Text.of("Starting full analysis of ", TextColors.GRAY, suspectsList));
+			if (canReceiveMessage) {
+				Messages.sendMessage(src, "suspect.starting_full_analysis", "%suspects%", suspectsList);
+			}
 		} else {
 			String cheatsList = cheats.stream().map(Cheat::getName).collect(Collectors.joining(", "));
-			if (canReceiveMessage)
-				src.sendMessage(Text.of("Starting analysis of ", TextColors.GRAY, suspectsList, TextColors.RESET, " for ", TextColors.GRAY, cheatsList));
+			if (canReceiveMessage) {
+				Messages.sendMessage(src, "suspect.starting_analysis", "%suspects%", suspectsList, "%cheats%", cheatsList);
+			}
 
 			for (Player suspect : suspects) {
 				SuspectManager.analyzeText(SpongeNegativityPlayer.getNegativityPlayer(suspect), cheats);

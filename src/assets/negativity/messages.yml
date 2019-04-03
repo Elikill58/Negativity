@@ -18,6 +18,11 @@ unban {
   help = [
     "/unban <player> : Unban specified player" ]
 }
+suspect {
+  no_suspects_set: "&cNo suspects specified"
+  starting_full_analysis: "&a[&2Negativity&a] &7Starting full analysis of &o%suspects%"
+  starting_analysis: "&a[&2Negativity&a] &7Starting analysis of &o%suspects% &7for &o%cheats%"
+}
 report {
   report_usage: "/report <name> <reason>"
   well_report: "&a%name% well reported !"
@@ -31,7 +36,7 @@ negativity {
     start: "&a[&2Negativity&a] &7Start analyze of %cheat% on %name%"
     start_all: "&a[&2Negativity&a] Start of all analyze on %name%"
     help = [
-     "/negativity verif <player> [cheats...] : Start verifications (all if nothing is precise)" 
+     "/negativity verif <player> [cheats...] : Start verifications (all if nothing is precise)"
      "/negativity <player> : To see some informations about this player"
     ]
   }

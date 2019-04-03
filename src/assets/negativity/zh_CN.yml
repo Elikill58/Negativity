@@ -3,6 +3,7 @@ report_wait: "请稍等 1 秒后再次举报"
 invalid_player: "%arg% 不是玩家！"
 not_forget_player: "请勿忘记玩家参数！"
 not_permission: "&c您没有执行此操作的权限。"
+sender_not_a_player: "&cOnly a player can use this command"
 
 kick: "&a[&2弊绝风清&a]&c您由于使用作弊程序 (%cheat%) 而被踢出了此服务器"
 

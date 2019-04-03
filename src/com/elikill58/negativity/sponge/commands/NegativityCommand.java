@@ -15,7 +15,7 @@ public class NegativityCommand implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (!(src instanceof Player))
-			return CommandResult.empty();
+			throw new CommandException(Messages.getMessage(src, "sender_not_a_player"));
 
 		Player playerSource = ((Player) src);
 		Player targetPlayer = args.<Player>getOne("target").orElse(null);
@@ -25,12 +25,11 @@ public class NegativityCommand implements CommandExecutor {
 		}
 
 		if (!playerSource.hasPermission("negativity.verif") && !playerSource.hasPermission("negativity.*")) {
-			Messages.sendMessage(playerSource, "not_permission");
-			return CommandResult.empty();
+			throw new CommandException(Messages.getMessage(playerSource, "not_permission"));
 		}
 
 		Inv.openCheckMenu(playerSource, targetPlayer);
 
-		return CommandResult.empty();
+		return CommandResult.success();
 	}
 }

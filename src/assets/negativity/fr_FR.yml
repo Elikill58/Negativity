@@ -3,6 +3,7 @@ report_wait: "Merci d'attendre une seconde entre 2 reports"
 invalid_player: "%arg% n'est pas un joueur !"
 not_forget_player: "N'oubliez pas le joueur !"
 not_permission: "&cVous n'avez pas la permission de faire ceci."
+sender_not_a_player: "&cOnly a player can use this command"
 
 kick: "&a[&2Negativity&a]&c Vous avez été kick de ce serveur pour cheat (%cheat%)"
 

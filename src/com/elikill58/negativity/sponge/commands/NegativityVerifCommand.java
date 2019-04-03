@@ -43,6 +43,6 @@ public class NegativityVerifCommand implements CommandExecutor {
 			Messages.sendMessage(src, "negativity.verif.start", "%name%", targetPlayer.getName(), "%cheat%", cheatNamesList);
 		}
 
-		return CommandResult.empty();
+		return CommandResult.success();
 	}
 }

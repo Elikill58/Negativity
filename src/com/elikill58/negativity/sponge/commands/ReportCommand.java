@@ -26,7 +26,7 @@ public class ReportCommand implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (!(src instanceof Player))
-			throw new CommandException(Text.of("Only a player can use this command."));
+			throw new CommandException(Messages.getMessage(src, "sender_not_a_player"));
 
 		Player playerSource = (Player) src;
 		SpongeNegativityPlayer nPlayerSource = SpongeNegativityPlayer.getNegativityPlayer(playerSource);

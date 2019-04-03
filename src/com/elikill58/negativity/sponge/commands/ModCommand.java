@@ -6,7 +6,6 @@ import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.Inv;
 import com.elikill58.negativity.sponge.Messages;
@@ -18,7 +17,7 @@ public class ModCommand implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		if (!(src instanceof Player))
-			throw new CommandException(Text.of("Only a player can use this command."));
+			throw new CommandException(Messages.getMessage(src, "sender_not_a_player"));
 
 		Player playerSource = (Player) src;
 		if (!Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(playerSource), "mod"))

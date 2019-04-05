@@ -2,6 +2,8 @@ package com.elikill58.negativity.universal.adapter;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -72,7 +74,7 @@ public class SpongeAdapter extends Adapter {
 			node = node.getNode(s);
 		return node;
 	}
-	
+
 	private ConfigurationNode getFinalNode(String dir, ConfigurationNode localConf) throws Exception {
 		ConfigurationNode node = localConf;
 		String[] parts = dir.split("\\.");
@@ -145,68 +147,89 @@ public class SpongeAdapter extends Adapter {
 	}
 
 	@Override
-	public String getStringInOtherConfig(String fileDir, String valueDir, String fileName) {
-		File f = new File(pl.getDataFolder().toAbsolutePath() + fileDir);
-		if (!f.exists())
-			copy(fileName, f);
+	public String getStringInOtherConfig(String fileDir, String valuePath, String fileName) {
+		// Guard for usages that cannot be changed because other Adapter implementations are not updated.
+		// If fileDir starts with File.separatorChar it is considered an absolute path by Path#resolve, definitely not what we want.
+		if (fileDir.charAt(0) == File.separatorChar)
+			fileDir = fileDir.substring(1);
+
+		Path filePath = pl.getDataFolder().resolve(fileDir).resolve(fileName);
+		if (Files.notExists(filePath))
+			copy(fileName, filePath);
+
 		try {
-			ConfigurationNode node = HoconConfigurationLoader.builder().setFile(f).build().load();
-			String[] parts = valueDir.split("\\.");
+			ConfigurationNode node = loadHoconFile(filePath);
+			String[] parts = valuePath.split("\\.");
 			for (String s : parts)
 				node = node.getNode(s);
+
 			return node.getString();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
 		return "Unknow";
 	}
 
 	@Override
 	public File copy(String lang, File f) {
+		return copy(lang, f.toPath()).toFile();
+	}
+
+	public Path copy(String lang, Path filePath) {
 		String fileName = "en_US.yml";
-		if (lang.equals("no_active"))
+		if (lang.equals("no_active")) {
 			fileName = "messages.yml";
-		else if (lang.toLowerCase().contains("fr") || lang.toLowerCase().contains("be"))
-			fileName = "fr_FR.yml";
-		else if (lang.toLowerCase().contains("pt") || lang.toLowerCase().contains("br"))
-			fileName = "pt_BR.yml";
-		else if (lang.toLowerCase().contains("no"))
-			fileName = "no_NO.yml";
-		else if (lang.toLowerCase().contains("ru"))
-			fileName = "ru_RU.yml";
-		else if (lang.toLowerCase().contains("zh") || lang.toLowerCase().contains("cn"))
-			fileName = "zh_CN.yml";
-		// TODO : Espagnol & Allemand
-		SpongeNegativity.getInstance().getContainer().getAsset(fileName).ifPresent(asset -> {
-			try {
-				asset.copyToFile(f.toPath(), false);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		});
-		return f;
+		} else {
+			String lowercaseLang = lang.toLowerCase();
+			if (lowercaseLang.contains("fr") || lowercaseLang.contains("be"))
+				fileName = "fr_FR.yml";
+			else if (lowercaseLang.contains("pt") || lowercaseLang.contains("br"))
+				fileName = "pt_BR.yml";
+			else if (lowercaseLang.contains("no"))
+				fileName = "no_NO.yml";
+			else if (lowercaseLang.contains("ru"))
+				fileName = "ru_RU.yml";
+			else if (lowercaseLang.contains("zh") || lowercaseLang.contains("cn"))
+				fileName = "zh_CN.yml";
+			// TODO : Espagnol & Allemand
+		}
+
+		if (Files.notExists(filePath)) {
+			pl.getContainer().getAsset(fileName).ifPresent(asset -> {
+				try {
+					Path parentDir = filePath.normalize().getParent();
+					if (parentDir != null) {
+						Files.createDirectories(parentDir);
+					}
+
+					asset.copyToFile(filePath, false);
+				} catch (IOException e) {
+					logger.error("Failed to copy default language file " + asset.getFileName(), e);
+				}
+			});
+		}
+
+		return filePath;
+	}
+
+	private ConfigurationNode loadHoconFile(Path filePath) throws IOException {
+		return HoconConfigurationLoader.builder().setPath(filePath).build().load();
 	}
 
 	@Override
 	public void loadLang() {
+		Path messagesDir = pl.getDataFolder().resolve("messages");
+
 		try {
-			LANGS.put("no_active",
-					HoconConfigurationLoader.builder().setFile(copy("default",
-							new File(pl.getDataFolder().toAbsolutePath() + File.separator + "messages" + File.separator
-									+ Adapter.getAdapter().getStringInConfig("Translation.no_active_file_name"))))
-							.build().load());
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-		try {
-			File langDir = new File(SpongeNegativity.getInstance().getDataFolder() + File.separator + "messages" + File.separator);
-			if (!langDir.exists())
-				langDir.mkdir();
-			for (String l : TranslatedMessages.LANGS)
-				LANGS.put(l, HoconConfigurationLoader.builder()
-						.setFile(copy(l, new File(langDir.getAbsolutePath() + File.separator + l + ".yml"))).build().load());
-		} catch (Exception e) {
-			e.printStackTrace();
+			Path defaultMessagesFile = messagesDir.resolve(Adapter.getAdapter().getStringInConfig("Translation.no_active_file_name"));
+			LANGS.put("no_active", loadHoconFile(copy("default", defaultMessagesFile)));
+
+			for (String lang : TranslatedMessages.LANGS) {
+				LANGS.put(lang, loadHoconFile(copy(lang, messagesDir.resolve(lang + ".yml"))));
+			}
+		} catch (IOException e) {
+			logger.error("Failed to copy default language files", e);
 		}
 	}
 
@@ -230,8 +253,6 @@ public class SpongeAdapter extends Adapter {
 			return new ArrayList<>();
 		}
 	}
-	
-	
 
 	/*private void load(String l, ConfigurationNode config) {
 		config.getChildrenMap().forEach((objKey, cn) -> {
@@ -258,12 +279,11 @@ public class SpongeAdapter extends Adapter {
 			}
 		});
 	}*/
-	
+
 	@Override
 	public void reload() {
-		
 	}
-	
+
 	@Override
 	public Object getItem(String itemName) {
 		Collection<ItemType> list = Sponge.getRegistry().getAllOf(ItemType.class);
@@ -277,9 +297,8 @@ public class SpongeAdapter extends Adapter {
 	public String getVersion() {
 		return Sponge.getPlatform().getMinecraftVersion().getName();
 	}
-	
+
 	@Override
 	public void reloadConfig() {
-		
 	}
 }

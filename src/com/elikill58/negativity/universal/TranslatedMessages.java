@@ -17,7 +17,7 @@ public class TranslatedMessages {
 	public static String column = Adapter.getAdapter().getStringInConfig("Database.column_lang");
 	public static boolean activeTranslation = Adapter.getAdapter().getBooleanInConfig("Translation.active"),
 			useDb = Adapter.getAdapter().getBooleanInConfig("Translation.use_db");
-	
+
 	public static void init() {
 		DEFAULT_LANG = Adapter.getAdapter().getStringInConfig("Translation.default");
 		LANGS = Adapter.getAdapter().getStringListInConfig("Translation.lang_available");
@@ -27,7 +27,7 @@ public class TranslatedMessages {
 		activeTranslation = Adapter.getAdapter().getBooleanInConfig("Translation.active");
 		useDb = Adapter.getAdapter().getBooleanInConfig("Translation.use_db");
 	}
-	
+
 	public static String loadLang(NegativityPlayer np) {
 		try {
 			String value = "";
@@ -40,7 +40,7 @@ public class TranslatedMessages {
 					value = (String) result.getObject(column);
 			}
 			if (value.equalsIgnoreCase(""))
-				value = Adapter.getAdapter().getStringInOtherConfig(File.separator + "user" + File.separator, "lang", np.getUUID() + ".txt");
+				value = Adapter.getAdapter().getStringInOtherConfig(File.separator + "user" + File.separator, "lang", np.getUUID() + ".yml");
 			np.getNegativityAccount().setLang(value);
 			return value;
 		} catch (Exception e) {
@@ -54,7 +54,7 @@ public class TranslatedMessages {
 			return DEFAULT_LANG;
 		else return "no_active";
 	}
-	
+
 	public static String getLang(NegativityPlayer np) {
 		if (!activeTranslation)
 			return "no_active";
@@ -67,7 +67,7 @@ public class TranslatedMessages {
 			return np.getNegativityAccount().getLang();
 		else return loadLang(np);
 	}
-	
+
 	public static List<String> getStringListFromLang(String lang, String key) {
 		return Adapter.getAdapter().getStringListFromLang(lang, key);
 	}

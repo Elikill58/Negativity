@@ -15,7 +15,6 @@ import java.util.UUID;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
-import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -82,12 +81,13 @@ public class UniversalUtils {
 		}
 	}
 
-	public static boolean isLatestVersion(Optional<String> version) {
-		if(!version.isPresent())
+	public static boolean isLatestVersion(String version) {
+		if (version == null)
 			return false;
+
 		Optional<String> optVer = getLatestVersion();
 		if (optVer.isPresent())
-			return version.get().equalsIgnoreCase(optVer.get());
+			return version.equalsIgnoreCase(optVer.get());
 		else
 			return false;
 	}

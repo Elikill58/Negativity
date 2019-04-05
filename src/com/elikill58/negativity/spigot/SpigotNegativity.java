@@ -9,7 +9,6 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -183,7 +182,7 @@ public class SpigotNegativity extends JavaPlugin {
 				new ItemUseBypass(s, cs.getString(s + ".cheats"), cs.getString(s + ".when"));
 		}
 		if (UniversalUtils.hasInternet()
-				&& !UniversalUtils.isLatestVersion(Optional.of(getDescription().getVersion()))) {
+				&& !UniversalUtils.isLatestVersion(getDescription().getVersion())) {
 			getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
 					+ "). Download it here: https://www.spigotmc.org/resources/48399/");
 		}

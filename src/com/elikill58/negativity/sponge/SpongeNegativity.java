@@ -123,7 +123,7 @@ public class SpongeNegativity implements RawDataListener {
 				.name("negativity-actualizer").submit(this);
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
-		if (UniversalUtils.hasInternet() && !UniversalUtils.isLatestVersion(plugin.getVersion())) {
+		if (UniversalUtils.hasInternet() && !UniversalUtils.isLatestVersion(plugin.getVersion().orElse(null))) {
 			getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
 					+ "). Download it here: https://www.spigotmc.org/resources/48399/");
 		}

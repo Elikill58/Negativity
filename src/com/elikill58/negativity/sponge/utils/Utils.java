@@ -164,7 +164,7 @@ public class Utils {
 		if (!Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "showAlert"))
 			return;
 		if (!(UniversalUtils.hasInternet() && !UniversalUtils
-				.isLatestVersion(Optional.of(SpongeNegativity.getInstance().getContainer().getVersion().get()))))
+				.isLatestVersion(SpongeNegativity.getInstance().getContainer().getVersion().orElse(null))))
 			return;
 		try {
 			p.sendMessage(Text

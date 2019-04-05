@@ -99,18 +99,30 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			if (!proofFile.exists())
 				proofFile.createNewFile();
 			config = (configLoader = HoconConfigurationLoader.builder().setFile(file).build()).load();
-			if (config.getChildrenList().size() == 0) {
-				config.getNode("lang").setValue(TranslatedMessages.DEFAULT_LANG);
-				ConfigurationNode cheatNode = config.getNode("cheats");
-				for (Cheat c : Cheat.values())
-					cheatNode.getNode(c.name().toLowerCase()).setValue(0);
+			ConfigurationNode langNode = config.getNode("lang");
+			if (langNode.isVirtual()) {
+				langNode.setValue(TranslatedMessages.DEFAULT_LANG);
+			} else {
+				this.lang = langNode.getString(TranslatedMessages.DEFAULT_LANG);
 			}
+
+			ConfigurationNode cheatsNode = config.getNode("cheats");
+			for (Cheat cheat : Cheat.values()) {
+				String cheatId = cheat.name().toLowerCase();
+				ConfigurationNode cheatNode = cheatsNode.getNode(cheatId);
+				if (cheatNode.isVirtual()) {
+					cheatNode.setValue(0);
+					WARNS.put(cheat, 0);
+				} else {
+					WARNS.put(cheat, cheatNode.getInt());
+				}
+			}
+
 			configLoader.save(config);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for (Cheat c : Cheat.values())
-			WARNS.put(c, config.getNode("cheats").getNode(c.name().toLowerCase()).getInt());
+
 		loadBanRequest();
 		players.put(p, this);
 	}

@@ -123,10 +123,11 @@ public class SpongeNegativity implements RawDataListener {
 				.name("negativity-actualizer").submit(this);
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
-		if (UniversalUtils.hasInternet() && !UniversalUtils.isLatestVersion(plugin.getVersion().orElse(null))) {
-			getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
-					+ "). Download it here: https://www.spigotmc.org/resources/48399/");
-		}
+		SpongeUpdateChecker.ifUpdateAvailable(result -> {
+			getLogger().info("New version available ({}): {}",
+					result.getVersionString(), result.getDownloadUrl());
+		});
+
 		if (!isOnBungeecord)
 			Task.builder().async().delayTicks(1).execute(new Runnable() {
 				@Override
@@ -291,7 +292,18 @@ public class SpongeNegativity implements RawDataListener {
 				 * TextColors.RED).build());
 				 */
 			}
-			Utils.sendUpdateMessageIfNeed(p);
+			SpongeUpdateChecker.ifUpdateAvailable(result -> {
+				try {
+					p.sendMessage(Text
+							.builder("New version available (" + result.getVersionString() + "). Download it here.")
+							.color(TextColors.YELLOW)
+							.onHover(TextActions.showText(Text.of("Click here")))
+							.onClick(TextActions.openUrl(new URL(result.getDownloadUrl())))
+							.build());
+				} catch (MalformedURLException ex) {
+					getLogger().error("Unable to create udpate download URL", ex);
+				}
+			});
 		}
 		if (!isOnBungeecord)
 			Task.builder().async().delayTicks(1).execute(new Runnable() {

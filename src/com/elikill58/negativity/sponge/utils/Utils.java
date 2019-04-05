@@ -1,7 +1,5 @@
 package com.elikill58.negativity.sponge.utils;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -19,15 +17,10 @@ import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.action.TextActions;
-import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
-import com.elikill58.negativity.sponge.SpongeNegativity;
-import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.UniversalUtils;
-import com.elikill58.negativity.universal.permissions.Perm;
 
 public class Utils {
 
@@ -160,25 +153,6 @@ public class Utils {
 		return mods;
 	}
 
-	public static void sendUpdateMessageIfNeed(Player p) {
-		if (!Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "showAlert"))
-			return;
-		if (!(UniversalUtils.hasInternet() && !UniversalUtils
-				.isLatestVersion(SpongeNegativity.getInstance().getContainer().getVersion().orElse(null))))
-			return;
-		try {
-			p.sendMessage(Text
-					.builder("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
-							+ "). Download it here.")
-					.color(TextColors.YELLOW).onHover(TextActions.showText(Text.of("Click here")))
-					.onClick(TextActions.openUrl(new URL(
-							"https://www.spigotmc.org/resources/48399/")))
-					.build());
-		} catch (MalformedURLException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public static double getLastTPS() {
 		return Sponge.getServer().getTicksPerSecond();
 	}

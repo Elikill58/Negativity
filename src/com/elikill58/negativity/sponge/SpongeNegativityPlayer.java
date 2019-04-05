@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -51,7 +52,7 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
 public class SpongeNegativityPlayer extends NegativityPlayer {
 
-	private static HashMap<Player, SpongeNegativityPlayer> players = new HashMap<>();
+	private static final Map<UUID, SpongeNegativityPlayer> PLAYERS_CACHE = new HashMap<>();
 
 	public static ArrayList<Player> INJECTED = new ArrayList<>();
 	private ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
@@ -124,7 +125,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		}
 
 		loadBanRequest();
-		players.put(p, this);
 	}
 
 	public SpongeNegativityPlayer(UUID uuid) {
@@ -135,7 +135,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		players.put(Sponge.getServer().getPlayer(uuid).get(), this);
 		loadBanRequest();
 	}
 
@@ -255,19 +254,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			startAnalyze(c);
 	}
 
-	public static SpongeNegativityPlayer getNegativityPlayer(Player p) {
-		if (players.containsKey(p))
-			return players.get(p);
-		else
-			return new SpongeNegativityPlayer(p);
-	}
-
-	public static SpongeNegativityPlayer getNegativityPlayer(UUID p) {
-		return new SpongeNegativityPlayer(p);
-	}
-
-	public void destroy(boolean isBan) {
-		players.remove(p);
+	private void destroy(boolean isBan) {
 		if (isBan) {
 			FireworkEffect fireEffect = FireworkEffect.builder().shape(FireworkShapes.CREEPER).color(Color.GREEN)
 					.build();
@@ -384,10 +371,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		return m.getBlock().isPresent();
 	}
 
-	public static boolean contains(Player p) {
-		return players.containsKey(p);
-	}
-
 	public enum FlyingReason {
 		POTION(Cheat.getCheatFromString("ANTIPOTION").get()), REGEN(Cheat.getCheatFromString("AUTOREGEN").get()), EAT(Cheat.getCheatFromString("AUTOEAT").get()), BOW(Cheat.getCheatFromString("FASTBOW").get());
 
@@ -467,4 +450,40 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		fightTask = null;
 	}
 
+	public static SpongeNegativityPlayer getNegativityPlayer(Player player) {
+		SpongeNegativityPlayer nPlayer = PLAYERS_CACHE.get(player.getUniqueId());
+		if (nPlayer == null) {
+			nPlayer = new SpongeNegativityPlayer(player);
+			PLAYERS_CACHE.put(player.getUniqueId(), nPlayer);
+		}
+
+		return nPlayer;
+	}
+
+	public static SpongeNegativityPlayer getNegativityPlayer(UUID playerId) {
+		SpongeNegativityPlayer nPlayer = PLAYERS_CACHE.get(playerId);
+		if (nPlayer == null) {
+			Optional<Player> onlinePlayer = Sponge.getServer().getPlayer(playerId);
+			if (onlinePlayer.isPresent()) {
+				nPlayer = new SpongeNegativityPlayer(onlinePlayer.get());
+			} else {
+				nPlayer = new SpongeNegativityPlayer(playerId);
+			}
+
+			PLAYERS_CACHE.put(playerId, nPlayer);
+		}
+
+		return nPlayer;
+	}
+
+	public static void removeFromCache(Player player) {
+		removeFromCache(player.getUniqueId(), false);
+	}
+
+	public static void removeFromCache(UUID playerId, boolean isBan) {
+		SpongeNegativityPlayer nPlayer = PLAYERS_CACHE.remove(playerId);
+		if (nPlayer != null) {
+			nPlayer.destroy(isBan);
+		}
+	}
 }

@@ -328,16 +328,11 @@ public class SpongeNegativity implements RawDataListener {
 
 	@Listener
 	public void onLeave(ClientConnectionEvent.Disconnect e, @First Player p) {
-		if (!isOnBungeecord)
-			Task.builder().async().delayTicks(1).execute(new Runnable() {
-				@Override
-				public void run() {
-					Stats.updateStats(StatsType.PLAYERS, Sponge.getServer().getOnlinePlayers().size());
-				}
-			}).submit(this);
-		if (!SpongeNegativityPlayer.contains(p))
-			return;
-		SpongeNegativityPlayer.getNegativityPlayer(p).destroy(false);
+		Task.builder().async().delayTicks(1).execute(() -> {
+			SpongeNegativityPlayer.removeFromCache(p);
+			if (!isOnBungeecord)
+				Stats.updateStats(StatsType.PLAYERS, Sponge.getServer().getOnlinePlayers().size());
+		}).submit(this);
 	}
 
 	@Listener

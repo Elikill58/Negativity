@@ -1,12 +1,13 @@
 package com.elikill58.negativity.sponge;
 
-import eu.crushedpixel.sponge.packetgate.api.event.PacketEvent;
-import eu.crushedpixel.sponge.packetgate.api.listener.PacketListenerAdapter;
-import eu.crushedpixel.sponge.packetgate.api.registry.PacketConnection;
+import java.util.Optional;
+
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 
-import java.util.Optional;
+import eu.crushedpixel.sponge.packetgate.api.event.PacketEvent;
+import eu.crushedpixel.sponge.packetgate.api.listener.PacketListenerAdapter;
+import eu.crushedpixel.sponge.packetgate.api.registry.PacketConnection;
 
 public class PacketManager  extends PacketListenerAdapter {
 

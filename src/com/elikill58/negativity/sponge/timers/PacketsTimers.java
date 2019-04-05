@@ -21,6 +21,11 @@ public class PacketsTimers implements Consumer<Task> {
 	@Override
 	public void accept(Task task) {
 		for (Player p : Utils.getOnlinePlayers()) {
+			if(!p.isOnline()){
+				SpongeNegativityPlayer.removeFromCache(p);
+				return;
+			}
+
 			SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 			if(np.BETTER_CLICK < np.ACTUAL_CLICK)
 				np.BETTER_CLICK = np.ACTUAL_CLICK;
@@ -30,10 +35,7 @@ public class PacketsTimers implements Consumer<Task> {
 				np.SEC_ACTIVE++;
 				return;
 			}
-			if(!p.isOnline()){
-				np.destroy(false);
-				return;
-			}
+
 			if(!SpongeNegativity.hasPacketGate)
 				return;
 			int ping = Utils.getPing(p);

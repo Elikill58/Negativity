@@ -123,10 +123,13 @@ public class SpongeNegativity implements RawDataListener {
 				.name("negativity-actualizer").submit(this);
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
-		SpongeUpdateChecker.ifUpdateAvailable(result -> {
-			getLogger().info("New version available ({}): {}",
-					result.getVersionString(), result.getDownloadUrl());
-		});
+		Task.builder()
+				.async()
+				.name("Negativity Startup Updater Checker")
+				.execute(() -> SpongeUpdateChecker.ifUpdateAvailable(result ->
+						getLogger().info("New version available ({}): {}",
+								result.getVersionString(), result.getDownloadUrl()))
+				).submit(this);
 
 		if (!isOnBungeecord)
 			Task.builder().async().delayTicks(1).execute(new Runnable() {
@@ -292,18 +295,26 @@ public class SpongeNegativity implements RawDataListener {
 				 * TextColors.RED).build());
 				 */
 			}
-			SpongeUpdateChecker.ifUpdateAvailable(result -> {
-				try {
-					p.sendMessage(Text
-							.builder("New version available (" + result.getVersionString() + "). Download it here.")
-							.color(TextColors.YELLOW)
-							.onHover(TextActions.showText(Text.of("Click here")))
-							.onClick(TextActions.openUrl(new URL(result.getDownloadUrl())))
-							.build());
-				} catch (MalformedURLException ex) {
-					getLogger().error("Unable to create udpate download URL", ex);
-				}
-			});
+
+			Task.builder()
+					.async()
+					.name("Negativity Updater Checker - " + p.getName())
+					.execute(() -> SpongeUpdateChecker.ifUpdateAvailable(result -> {
+						URL downloadUrl;
+						try {
+							downloadUrl = new URL(result.getDownloadUrl());
+						} catch (MalformedURLException ex) {
+							getLogger().error("Unable to create update download URL", ex);
+							return;
+						}
+
+						p.sendMessage(Text
+								.builder("New version available (" + result.getVersionString() + "). Download it here.")
+								.color(TextColors.YELLOW)
+								.onHover(TextActions.showText(Text.of("Click here")))
+								.onClick(TextActions.openUrl(downloadUrl))
+								.build());
+					})).submit(this);
 		}
 		if (!isOnBungeecord)
 			Task.builder().async().delayTicks(1).execute(new Runnable() {

@@ -1,10 +1,12 @@
 package com.elikill58.negativity.sponge.commands;
 
+import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 
 import com.elikill58.negativity.sponge.Inv;
@@ -25,5 +27,11 @@ public class ModCommand implements CommandExecutor {
 
 		Inv.openModMenu(playerSource);
 		return CommandResult.success();
+	}
+
+	public static CommandCallable create() {
+		return CommandSpec.builder()
+				.executor(new ModCommand())
+				.build();
 	}
 }

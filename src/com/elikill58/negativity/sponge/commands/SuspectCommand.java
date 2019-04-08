@@ -3,12 +3,15 @@ package com.elikill58.negativity.sponge.commands;
 import java.util.Collection;
 import java.util.stream.Collectors;
 
+import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
 import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
@@ -48,5 +51,12 @@ public class SuspectCommand implements CommandExecutor {
 		}
 
 		return CommandResult.success();
+	}
+
+	public static CommandCallable create() {
+		return CommandSpec.builder()
+				.executor(new SuspectCommand())
+				.arguments(new PlayersAndCheatsArgument(Text.of("suspect"), Text.of("cheat")))
+				.build();
 	}
 }

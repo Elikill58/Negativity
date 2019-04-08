@@ -1,11 +1,15 @@
 package com.elikill58.negativity.sponge.commands;
 
+import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
+import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
@@ -50,5 +54,16 @@ public class BanCommand implements CommandExecutor {
 					return c.getName();
 
 		return "mod";
+	}
+
+	public static CommandCallable create() {
+		return CommandSpec.builder()
+				.executor(new BanCommand())
+				.arguments(GenericArguments.player(Text.of("target")),
+						GenericArguments.firstParsing(
+								GenericArguments.bool(Text.of("definitive")),
+								GenericArguments.longNum(Text.of("duration"))),
+						GenericArguments.remainingJoinedStrings(Text.of("reason")))
+				.build();
 	}
 }

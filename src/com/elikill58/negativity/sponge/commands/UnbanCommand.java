@@ -17,20 +17,13 @@ import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.ban.BanRequest;
-import com.elikill58.negativity.universal.permissions.Perm;
 
 public class UnbanCommand implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if (src instanceof Player) {
-			Player playerSource = (Player) src;
-			if (!Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(playerSource), "unban")) {
-				throw new CommandException(Messages.getMessage(playerSource, "not_permission"));
-			}
-		}
-
 		User target = args.requireOne("target");
 		Optional<Player> maybeTargetPlayer = target.getPlayer();
 		SpongeNegativityPlayer targetNPlayer;
@@ -50,9 +43,10 @@ public class UnbanCommand implements CommandExecutor {
 	}
 
 	public static CommandCallable create() {
-		return CommandSpec.builder()
+		CommandSpec command = CommandSpec.builder()
 				.executor(new UnbanCommand())
 				.arguments(GenericArguments.user(Text.of("target")))
 				.build();
+		return new NegativityCmdWrapper(command, false, "unban");
 	}
 }

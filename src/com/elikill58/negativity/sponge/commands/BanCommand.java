@@ -13,21 +13,15 @@ import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ban.BanRequest;
 import com.elikill58.negativity.universal.ban.BanRequest.BanType;
-import com.elikill58.negativity.universal.permissions.Perm;
 
 public class BanCommand implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if (src instanceof Player) {
-			Player playerSource = (Player) src;
-			if (!Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(playerSource), "ban"))
-				throw new CommandException(Messages.getMessage(playerSource, "not_permission"));
-		}
-
 		Player targetPlayer = args.<Player>getOne("target").orElse(null);
 		if (targetPlayer == null)
 			throw new CommandException(Messages.getMessage(src, "not_forget_player"));
@@ -57,7 +51,7 @@ public class BanCommand implements CommandExecutor {
 	}
 
 	public static CommandCallable create() {
-		return CommandSpec.builder()
+		CommandSpec command = CommandSpec.builder()
 				.executor(new BanCommand())
 				.arguments(GenericArguments.player(Text.of("target")),
 						GenericArguments.firstParsing(
@@ -65,5 +59,6 @@ public class BanCommand implements CommandExecutor {
 								GenericArguments.longNum(Text.of("duration"))),
 						GenericArguments.remainingJoinedStrings(Text.of("reason")))
 				.build();
+		return new NegativityCmdWrapper(command, false, "ban");
 	}
 }

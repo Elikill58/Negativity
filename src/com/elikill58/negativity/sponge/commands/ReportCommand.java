@@ -3,6 +3,7 @@ package com.elikill58.negativity.sponge.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -16,6 +17,7 @@ import org.spongepowered.api.text.Text;
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -27,9 +29,6 @@ public class ReportCommand implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		if (!(src instanceof Player))
-			throw new CommandException(Messages.getMessage(src, "sender_not_a_player"));
-
 		Player playerSource = (Player) src;
 		SpongeNegativityPlayer nPlayerSource = SpongeNegativityPlayer.getNegativityPlayer(playerSource);
 		if (nPlayerSource.TIME_REPORT > System.currentTimeMillis() && !Perm.hasPerm(nPlayerSource, "report_wait"))
@@ -63,12 +62,13 @@ public class ReportCommand implements CommandExecutor {
 
 		return CommandResult.success();
 	}
-	
-	public static CommandSpec create() {
-		return CommandSpec.builder()
+
+	public static CommandCallable create() {
+		CommandSpec command = CommandSpec.builder()
 				.executor(new ReportCommand())
 				.arguments(GenericArguments.player(Text.of("target")),
 						GenericArguments.remainingJoinedStrings(Text.of("reason")))
 				.build();
+		return new NegativityCmdWrapper(command, true, null);
 	}
 }

@@ -1,10 +1,12 @@
 package com.elikill58.negativity.sponge.commands;
 
+import static org.spongepowered.api.command.args.GenericArguments.player;
+import static org.spongepowered.api.command.args.GenericArguments.requiringPermission;
+
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
@@ -38,7 +40,7 @@ public class NegativityCommand implements CommandExecutor {
 		NegativityCmdSuggestionsEnhancer command = new NegativityCmdSuggestionsEnhancer(CommandSpec.builder()
 				.executor(new NegativityCommand())
 				.permission("negativity.verif")
-				.arguments(GenericArguments.requiringPermission(GenericArguments.player(Text.of("target")), "negativity.verif"))
+				.arguments(requiringPermission(player(Text.of("target")), "negativity.verif"))
 				.child(NegativityVerifCommand.create(), "verif")
 				.build());
 		return new NegativityCmdWrapper(command, true, null);

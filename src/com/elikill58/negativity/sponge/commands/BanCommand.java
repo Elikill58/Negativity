@@ -1,11 +1,16 @@
 package com.elikill58.negativity.sponge.commands;
 
+import static org.spongepowered.api.command.args.GenericArguments.bool;
+import static org.spongepowered.api.command.args.GenericArguments.firstParsing;
+import static org.spongepowered.api.command.args.GenericArguments.longNum;
+import static org.spongepowered.api.command.args.GenericArguments.player;
+import static org.spongepowered.api.command.args.GenericArguments.remainingJoinedStrings;
+
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
@@ -53,11 +58,9 @@ public class BanCommand implements CommandExecutor {
 	public static CommandCallable create() {
 		CommandSpec command = CommandSpec.builder()
 				.executor(new BanCommand())
-				.arguments(GenericArguments.player(Text.of("target")),
-						GenericArguments.firstParsing(
-								GenericArguments.bool(Text.of("definitive")),
-								GenericArguments.longNum(Text.of("duration"))),
-						GenericArguments.remainingJoinedStrings(Text.of("reason")))
+				.arguments(player(Text.of("target")),
+						firstParsing(bool(Text.of("definitive")), longNum(Text.of("duration"))),
+						remainingJoinedStrings(Text.of("reason")))
 				.build();
 		return new NegativityCmdWrapper(command, false, "ban");
 	}

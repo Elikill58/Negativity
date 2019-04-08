@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.commands;
 
+import static org.spongepowered.api.command.args.GenericArguments.user;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -8,7 +10,6 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
@@ -45,7 +46,7 @@ public class UnbanCommand implements CommandExecutor {
 	public static CommandCallable create() {
 		CommandSpec command = CommandSpec.builder()
 				.executor(new UnbanCommand())
-				.arguments(GenericArguments.user(Text.of("target")))
+				.arguments(user(Text.of("target")))
 				.build();
 		return new NegativityCmdWrapper(command, false, "unban");
 	}

@@ -1,5 +1,8 @@
 package com.elikill58.negativity.sponge.commands;
 
+import static org.spongepowered.api.command.args.GenericArguments.player;
+import static org.spongepowered.api.command.args.GenericArguments.remainingJoinedStrings;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +11,6 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
@@ -66,8 +68,8 @@ public class ReportCommand implements CommandExecutor {
 	public static CommandCallable create() {
 		CommandSpec command = CommandSpec.builder()
 				.executor(new ReportCommand())
-				.arguments(GenericArguments.player(Text.of("target")),
-						GenericArguments.remainingJoinedStrings(Text.of("reason")))
+				.arguments(player(Text.of("target")),
+						remainingJoinedStrings(Text.of("reason")))
 				.build();
 		return new NegativityCmdWrapper(command, true, null);
 	}

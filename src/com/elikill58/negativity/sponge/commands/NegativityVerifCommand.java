@@ -1,5 +1,9 @@
 package com.elikill58.negativity.sponge.commands;
 
+import static org.spongepowered.api.command.args.GenericArguments.allOf;
+import static org.spongepowered.api.command.args.GenericArguments.choices;
+import static org.spongepowered.api.command.args.GenericArguments.player;
+
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -9,7 +13,6 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
@@ -46,8 +49,8 @@ public class NegativityVerifCommand implements CommandExecutor {
 	public static CommandCallable create() {
 		CommandSpec command = CommandSpec.builder()
 				.executor(new NegativityVerifCommand())
-				.arguments(GenericArguments.player(Text.of("target")),
-						GenericArguments.allOf(GenericArguments.choices(Text.of("cheats"), Cheat.CHEATS_BY_KEY, true, false)))
+				.arguments(player(Text.of("target")),
+						allOf(choices(Text.of("cheats"), Cheat.CHEATS_BY_KEY, true, false)))
 				.build();
 		return new NegativityCmdWrapper(command, false, "verif");
 	}

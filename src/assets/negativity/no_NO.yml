@@ -14,6 +14,9 @@ ban {
   "/ban <player> <def(true/false) | time (ex: 2h)> <reason> : Forbud den angitte spilleren" ]
   well_ban: "&a[&2Negativity&a]&c %name% godt forbudt for %reason%."
 }
+lang {
+  language_set: "&a[&2Negativity&a] &7Negativity messages will now be in norwegian"
+}
 unban {
   well_unban: "&a[&2Negativity&a]&c %name% godt unforbudt."
   help = [

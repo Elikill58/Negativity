@@ -22,6 +22,9 @@ ban {
     "/ban <игрок> <def(true/false) | время (пример: 2h5m)> <причина> : Забанить указанного игрока"]
   well_ban: "&a[&2Negativity&a]&c %name% был забанен за %reason%."
 }
+lang {
+  language_set: "&a[&2Negativity&a] &7Negativity messages will now be in russian"
+}
 unban {
   well_unban: "&a[&2Negativity&a]&c %name% был разбанен."
   not_banned: "&c%name% не был забанен."

@@ -14,6 +14,9 @@ ban {
    "/ban <jogador> <def (true/false) | tempo (ex: 2h)> <razão> : proibido um jogador" ]
   well_ban: "&a[&2Negativity&a]&c %name% proibido por %reason%."
 }
+lang {
+  language_set: "&a[&2Negativity&a] &7Negativity messages will now be in brazilian portuguese"
+}
 unban {
   well_unban: "&a[&2Negativity&a]&c %name% bem desbanido."
   help = [

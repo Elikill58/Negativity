@@ -41,6 +41,7 @@ import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.elikill58.negativity.sponge.commands.BanCommand;
+import com.elikill58.negativity.sponge.commands.LangCommand;
 import com.elikill58.negativity.sponge.commands.ModCommand;
 import com.elikill58.negativity.sponge.commands.NegativityCommand;
 import com.elikill58.negativity.sponge.commands.ReportCommand;
@@ -187,6 +188,7 @@ public class SpongeNegativity implements RawDataListener {
 
 		cmd.register(this, NegativityCommand.create(), "negativity");
 		cmd.register(this, ModCommand.create(), "mod");
+		cmd.register(this, LangCommand.create(), "nlang");
 
 		if (config.getNode("report_command").getBoolean()) {
 			cmd.register(this, ReportCommand.create(), "report");

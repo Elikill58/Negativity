@@ -71,7 +71,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public double lastY = -3.142654;
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
-	public String LAST_OTHER_KEEP_ALIVE, lang = TranslatedMessages.DEFAULT_LANG;
+	public String LAST_OTHER_KEEP_ALIVE;
 	public boolean isInWater = false, isOnWater = false, IS_LAST_SEC_SNEAK = false, bypassBlink = false,
 			isFreeze = false, isInvisible = false, slime_block = false, already_blink = false,
 			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false, haveClick = false;
@@ -89,6 +89,9 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		this.p = p;
 		this.uuid = p.getUniqueId();
 		this.mineRate = new Minerate();
+
+		loadNegativityAccount();
+
 		try {
 			directory = new File(SpongeNegativity.getInstance().getDataFolder().toAbsolutePath() + File.separator
 					+ "user" + File.separator + "proof" + File.separator);
@@ -104,7 +107,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			if (langNode.isVirtual()) {
 				langNode.setValue(TranslatedMessages.DEFAULT_LANG);
 			} else {
-				this.lang = langNode.getString(TranslatedMessages.DEFAULT_LANG);
+				getNegativityAccount().setLang(langNode.getString(TranslatedMessages.DEFAULT_LANG));
 			}
 
 			ConfigurationNode cheatsNode = config.getNode("cheats");
@@ -175,16 +178,18 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
-	public void updatFile(Timestamp stamp) {
+	public void saveData() {
+		ConfigurationNode cheatsNode = config.getNode("cheats");
+		for (Map.Entry<Cheat, Integer> warn : WARNS.entrySet()) {
+			String cheatId = warn.getKey().name().toLowerCase();
+			cheatsNode.getNode(cheatId).setValue(warn.getValue());
+		}
+
+		config.getNode("lang").setValue(getNegativityAccount().getLang());
 		try {
-			Files.write(file.toPath(), ("lang: " + lang).getBytes(), StandardOpenOption.APPEND);
-			File logFile = new File(directory,
-					stamp.getYear() + "-" + stamp.getMonth() + "-" + stamp.getDay() + ".txt");
-			for (String s : proof)
-				Files.write(logFile.toPath(), ("\n   " + s).getBytes(), StandardOpenOption.APPEND);
-		} catch (Exception e) {
-			e.printStackTrace();
+			configLoader.save(config);
+		} catch (IOException e) {
+			SpongeNegativity.getInstance().getLogger().error("Unable to save data of player " + p.getName(), e);
 		}
 	}
 
@@ -255,6 +260,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	private void destroy(boolean isBan) {
+		saveData();
 		if (isBan) {
 			FireworkEffect fireEffect = FireworkEffect.builder().shape(FireworkShapes.CREEPER).color(Color.GREEN)
 					.build();

@@ -14,6 +14,9 @@ ban {
    "/ban <player> <def(true/false) | time (ex: 2h)> <reason> : Ban the specified player" ]
   well_ban: "&a[&2Negativity&a]&c %name% well banned for %reason%."
 }
+lang {
+  language_set: "&a[&2Negativity&a] &7Negativity messages will now be in english"
+}
 unban {
   well_unban: "&a[&2Negativity&a]&c %name% well unbanned."
   help = [

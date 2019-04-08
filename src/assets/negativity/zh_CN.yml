@@ -14,6 +14,9 @@ ban {
     "/ban <玩家> <def(true/false) | 时长> <理由> : 封禁指定玩家" ]
   well_ban: "&a[&2弊绝风清&a]&c%name% 由于 %reason% 被合理封禁。"
 }
+lang {
+  language_set: "&a[&2Negativity&a] &7Negativity messages will now be in simplified chinese"
+}
 unban {
   well_unban: "&a[&2弊绝风清&a]&c%name% 被合理解封。"
   help = [

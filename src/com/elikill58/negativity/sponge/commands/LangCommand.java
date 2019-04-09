@@ -27,7 +27,7 @@ public class LangCommand implements CommandExecutor {
 
 		String language = args.requireOne("language");
 		SpongeNegativityPlayer nPlayer = SpongeNegativityPlayer.getNegativityPlayer((Player) src);
-		nPlayer.getNegativityAccount().setLang(language);
+		nPlayer.setLang(language);
 		nPlayer.saveData();
 
 		Messages.sendMessage(src, "lang.language_set");

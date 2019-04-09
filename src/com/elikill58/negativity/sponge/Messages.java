@@ -15,11 +15,11 @@ public class Messages {
 	public static String getMessage(String dir, String... placeholders) {
 		String message = "";
 		try {
-			message = TranslatedMessages.getStringFromLang(TranslatedMessages.getLang(), dir);
+			message = TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir);
 			if (message.equalsIgnoreCase(""))
 				return dir;
 		} catch (NullPointerException e) {
-			System.out.println("Unknow ! default: " + Adapter.getAdapter().getStringInConfig("Translation.default") + " Get: " + TranslatedMessages.getLang());
+			System.out.println("Unknow ! default: " + Adapter.getAdapter().getStringInConfig("Translation.default") + " Get: " + TranslatedMessages.getDefaultLang());
 		}
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
 			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
@@ -56,7 +56,7 @@ public class Messages {
 	}
 
 	private static String getLang(MessageReceiver receiver) {
-		return receiver instanceof Player ? TranslatedMessages.getLang(SpongeNegativityPlayer.getNegativityPlayer((Player) receiver)) : TranslatedMessages.getLang();
+		return receiver instanceof Player ? TranslatedMessages.getLang(SpongeNegativityPlayer.getNegativityPlayer((Player) receiver)) : TranslatedMessages.getDefaultLang();
 	}
 
 	public static void broadcastMessageList(String dir, String... placeholders) {

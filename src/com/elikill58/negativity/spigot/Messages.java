@@ -14,10 +14,10 @@ public class Messages {
 		String message = "";
 		try {
 			message = ChatColor.RESET
-					+ TranslatedMessages.getStringFromLang(TranslatedMessages.getLang(), dir);
+					+ TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			System.out.println(TranslatedMessages.getLang() + " unknow. default: " + Adapter.getAdapter().getStringInConfig("Translation.default") + " Get: " + TranslatedMessages.getLang());
+			System.out.println(TranslatedMessages.getDefaultLang() + " unknow. default: " + Adapter.getAdapter().getStringInConfig("Translation.default") + " Get: " + TranslatedMessages.getDefaultLang());
 		}
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
 			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
@@ -44,7 +44,7 @@ public class Messages {
 			p.sendMessage(ChatColor.RED + dir + " not found. (Code error: " + e.getCause() + ")");
 		}
 	}
-	
+
 	public static void sendMessage(Player p, String dir, String... placeholders) {
 		try {
 			String msg = getMessage(p, dir, placeholders);
@@ -56,14 +56,14 @@ public class Messages {
 	}
 
 	public static void sendMessageList(CommandSender p, String dir, String... placeholders) {
-		for (String s : TranslatedMessages.getStringListFromLang(TranslatedMessages.getLang(), dir)) {
+		for (String s : TranslatedMessages.getStringListFromLang(TranslatedMessages.getDefaultLang(), dir)) {
 			for (int index = 0; index <= placeholders.length - 1; index += 2)
 				s = s.replaceAll(placeholders[index], placeholders[index + 1]);
 			if(!s.equalsIgnoreCase(dir))
 				p.sendMessage(Utils.coloredMessage(s));
 		}
 	}
-	
+
 	public static void sendMessageList(Player p, String dir, String... placeholders) {
 		for (String s : TranslatedMessages.getStringListFromLang(TranslatedMessages.getLang(SpigotNegativityPlayer.getNegativityPlayer(p)), dir)) {
 			for (int index = 0; index <= placeholders.length - 1; index += 2)

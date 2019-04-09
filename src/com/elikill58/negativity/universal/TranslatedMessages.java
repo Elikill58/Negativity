@@ -32,16 +32,24 @@ public class TranslatedMessages {
 		try {
 			String value = "";
 			if (useDb) {
-				PreparedStatement stm = Database.getConnection()
-						.prepareStatement("SELECT * FROM " + Adapter.getAdapter().getStringInConfig("Database.table_lang") + " WHERE uuid = ?");
-				stm.setString(1, np.getUUID());
-				ResultSet result = stm.executeQuery();
-				if (result.next())
-					value = (String) result.getObject(column);
+				try (PreparedStatement stm = Database.getConnection()
+						.prepareStatement("SELECT * FROM " + Database.table_lang + " WHERE uuid = ?")) {
+					stm.setString(1, np.getUUID());
+					ResultSet result = stm.executeQuery();
+					if (result.next())
+						value = result.getString(column);
+				}
 			}
-			if (value.equalsIgnoreCase(""))
+
+			if (value.isEmpty()) {
 				value = Adapter.getAdapter().getStringInOtherConfig(File.separator + "user" + File.separator, "lang", np.getUUID() + ".yml");
-			np.getNegativityAccount().setLang(value);
+			}
+
+			if (value.isEmpty()) {
+				value = DEFAULT_LANG;
+			}
+
+			np.setLang(value);
 			return value;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -49,7 +57,7 @@ public class TranslatedMessages {
 		}
 	}
 
-	public static String getLang() {
+	public static String getDefaultLang() {
 		if(activeTranslation)
 			return DEFAULT_LANG;
 		else return "no_active";
@@ -58,14 +66,18 @@ public class TranslatedMessages {
 	public static String getLang(NegativityPlayer np) {
 		if (!activeTranslation)
 			return "no_active";
+
 		if (np == null) {
 			System.out.println("[Negativity] player null (getLang)");
 			return DEFAULT_LANG;
 		}
-		String l = np.getNegativityAccount().getLang();
-		if(l != "")
-			return np.getNegativityAccount().getLang();
-		else return loadLang(np);
+
+		String playerLang = np.getLang();
+		if (!playerLang.isEmpty()) {
+			return playerLang;
+		}
+
+		return loadLang(np);
 	}
 
 	public static List<String> getStringListFromLang(String lang, String key) {

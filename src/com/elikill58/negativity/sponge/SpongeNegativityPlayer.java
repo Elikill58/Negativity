@@ -90,8 +90,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		this.uuid = p.getUniqueId();
 		this.mineRate = new Minerate();
 
-		loadNegativityAccount();
-
 		try {
 			directory = new File(SpongeNegativity.getInstance().getDataFolder().toAbsolutePath() + File.separator
 					+ "user" + File.separator + "proof" + File.separator);
@@ -107,7 +105,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			if (langNode.isVirtual()) {
 				langNode.setValue(TranslatedMessages.DEFAULT_LANG);
 			} else {
-				getNegativityAccount().setLang(langNode.getString(TranslatedMessages.DEFAULT_LANG));
+				setLang(langNode.getString(TranslatedMessages.DEFAULT_LANG));
 			}
 
 			ConfigurationNode cheatsNode = config.getNode("cheats");
@@ -185,7 +183,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			cheatsNode.getNode(cheatId).setValue(warn.getValue());
 		}
 
-		config.getNode("lang").setValue(getNegativityAccount().getLang());
+		config.getNode("lang").setValue(getLang());
 		try {
 			configLoader.save(config);
 		} catch (IOException e) {

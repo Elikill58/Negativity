@@ -14,9 +14,8 @@ import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanRequest;
 import com.elikill58.negativity.universal.ban.BanRequest.BanType;
 
-public abstract class NegativityPlayer {
+public abstract class NegativityPlayer extends NegativityAccount {
 
-	private NegativityAccount na;
 	private boolean gettedBan = false;
 	private List<BanRequest> banRequest = new ArrayList<>();
 
@@ -40,7 +39,6 @@ public abstract class NegativityPlayer {
 		if (gettedBan)
 			return;
 		gettedBan = true;
-		loadNegativityAccount();
 		if (Ban.banFileActive) {
 			File banFile = new File(Ban.banDir.getAbsolutePath(), getUUID() + ".txt");
 			if (!banFile.exists())
@@ -71,14 +69,6 @@ public abstract class NegativityPlayer {
 		}
 	}
 
-	public void loadNegativityAccount() {
-		this.na = new NegativityAccount(this);
-	}
-	
-	public NegativityAccount getNegativityAccount() {
-		return na;
-	}
-	
 	public void addBanRequest(BanRequest br) {
 		List<BanRequest> brList = new ArrayList<>();
 		brList.addAll(banRequest);
@@ -137,7 +127,7 @@ public abstract class NegativityPlayer {
 				return true;
 		return false;
 	}
-	
+
 	public void removeBanRequest(BanRequest br) {
 		banRequest.remove(br);
 	}
@@ -155,5 +145,5 @@ public abstract class NegativityPlayer {
 	public abstract void banEffect();
 	public abstract void startAnalyze(Cheat c);
 	public abstract void startAllAnalyze();
-	
+
 }

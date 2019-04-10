@@ -178,22 +178,18 @@ public class SpongeAdapter extends Adapter {
 
 	public Path copy(String lang, Path filePath) {
 		String fileName = "en_US.yml";
-		if (lang.equals("no_active")) {
-			fileName = "messages.yml";
-		} else {
-			String lowercaseLang = lang.toLowerCase();
-			if (lowercaseLang.contains("fr") || lowercaseLang.contains("be"))
-				fileName = "fr_FR.yml";
-			else if (lowercaseLang.contains("pt") || lowercaseLang.contains("br"))
-				fileName = "pt_BR.yml";
-			else if (lowercaseLang.contains("no"))
-				fileName = "no_NO.yml";
-			else if (lowercaseLang.contains("ru"))
-				fileName = "ru_RU.yml";
-			else if (lowercaseLang.contains("zh") || lowercaseLang.contains("cn"))
-				fileName = "zh_CN.yml";
-			// TODO : Espagnol & Allemand
-		}
+		String lowercaseLang = lang.toLowerCase();
+		if (lowercaseLang.contains("fr") || lowercaseLang.contains("be"))
+			fileName = "fr_FR.yml";
+		else if (lowercaseLang.contains("pt") || lowercaseLang.contains("br"))
+			fileName = "pt_BR.yml";
+		else if (lowercaseLang.contains("no"))
+			fileName = "no_NO.yml";
+		else if (lowercaseLang.contains("ru"))
+			fileName = "ru_RU.yml";
+		else if (lowercaseLang.contains("zh") || lowercaseLang.contains("cn"))
+			fileName = "zh_CN.yml";
+		// TODO : Espagnol & Allemand
 
 		if (Files.notExists(filePath)) {
 			pl.getContainer().getAsset(fileName).ifPresent(asset -> {
@@ -222,9 +218,6 @@ public class SpongeAdapter extends Adapter {
 		Path messagesDir = pl.getDataFolder().resolve("messages");
 
 		try {
-			Path defaultMessagesFile = messagesDir.resolve(Adapter.getAdapter().getStringInConfig("Translation.no_active_file_name"));
-			LANGS.put("no_active", loadHoconFile(copy("default", defaultMessagesFile)));
-
 			for (String lang : TranslatedMessages.LANGS) {
 				LANGS.put(lang, loadHoconFile(copy(lang, messagesDir.resolve(lang + ".yml"))));
 			}

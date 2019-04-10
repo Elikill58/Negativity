@@ -140,10 +140,6 @@ public class BungeeAdapter extends Adapter {
 		if(!TranslatedMessages.activeTranslation)
 			return;
 		try {
-			LANGS.put("no_active",
-					ConfigurationProvider.getProvider(YamlConfiguration.class)
-							.load(copy("default", new File(pl.getDataFolder().getAbsolutePath() + File.separator
-									+ getStringInConfig("Translation.no_active_file_name")))));
 			File langDir = new File(pl.getDataFolder().getAbsolutePath() + File.separator + "lang" + File.separator);
 			if (!langDir.exists())
 				langDir.mkdirs();
@@ -170,12 +166,12 @@ public class BungeeAdapter extends Adapter {
 	public List<Cheat> getAbstractCheats() {
 		return new ArrayList<>();
 	}
-	
+
 	@Override
 	public void reload() {
-		
+
 	}
-	
+
 	@Override
 	public Object getItem(String itemName) {
 		return null;
@@ -186,9 +182,9 @@ public class BungeeAdapter extends Adapter {
 	public String getVersion() {
 		return ProxyServer.getInstance().getGameVersion();
 	}
-	
+
 	@Override
 	public void reloadConfig() {
-		
+
 	}
 }

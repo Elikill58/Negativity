@@ -45,10 +45,6 @@ public class BungeeMessages {
 					LANG_VALUES.put(l, ConfigurationProvider.getProvider(YamlConfiguration.class).load(langFile));
 				}
 			}
-			LANG.add("default");
-			LANG_VALUES.put("default", ConfigurationProvider.getProvider(YamlConfiguration.class)
-					.load(copy(pl, "default", new File(pl.getDataFolder().getAbsolutePath() + "/"
-							+ BungeeNegativity.CONFIG.getString("Translation.no_active_file_name")))));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -71,11 +67,13 @@ public class BungeeMessages {
 
 	public static String getLang(ProxiedPlayer p) {
 		if (!activeTranslation)
-			return "default";
+			return getLang();
+
 		if (p == null) {
 			System.out.println("[Negativity] player null (get lang)");
 			return defaulttrans;
 		}
+
 		if (PLAYER_LANG.containsKey(p))
 			return PLAYER_LANG.get(p);
 		try {
@@ -102,7 +100,7 @@ public class BungeeMessages {
 	}
 
 	public static String getLang() {
-		return "default";
+		return "en_US";
 	}
 
 	public static String getMessage(String dir, String... placeholders) {
@@ -121,7 +119,7 @@ public class BungeeMessages {
 	}
 
 	public static String getMessage(ProxiedPlayer p, String dir, String... placeholders) {
-		String message = ChatColor.RESET + LANG_VALUES.get((p == null ? getLang(p) : getLang())).getString(dir);
+		String message = ChatColor.RESET + LANG_VALUES.get((p != null ? getLang(p) : getLang())).getString(dir);
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
 			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
 		if (message.equalsIgnoreCase("§rnull"))

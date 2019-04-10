@@ -34,7 +34,7 @@ public class SpigotAdapter extends Adapter {
 	public String getName() {
 		return "spigot";
 	}
-	
+
 	@Override
 	public Object getConfig() {
 		return config;
@@ -144,9 +144,6 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public void loadLang() {
-		LANGS.put("no_active",
-				YamlConfiguration.loadConfiguration(copy("default", new File(pl.getDataFolder().getAbsolutePath()
-						+ File.separator + getStringInConfig("Translation.no_active_file_name")))));
 		if (!TranslatedMessages.activeTranslation)
 			return;
 		try {
@@ -193,7 +190,7 @@ public class SpigotAdapter extends Adapter {
 	public List<String> getStringListFromLang(String lang, String key) {
 		return LANGS.get(lang).getStringList(key);
 	}
-	
+
 	@Override
 	public void reload() {
 		SpigotNegativity sn = SpigotNegativity.getInstance();
@@ -202,7 +199,7 @@ public class SpigotAdapter extends Adapter {
         Bukkit.getPluginManager().disablePlugin(sn);
         Bukkit.getPluginManager().enablePlugin(sn);
 	}
-	
+
 	@Override
 	public Object getItem(String itemName) {
 		for(Material m : Material.values())
@@ -215,7 +212,7 @@ public class SpigotAdapter extends Adapter {
 	public String getVersion() {
 		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 	}
-	
+
 	@Override
 	public void reloadConfig() {
 		SpigotNegativity.getInstance().reloadConfig();

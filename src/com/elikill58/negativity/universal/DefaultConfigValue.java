@@ -37,7 +37,7 @@ public class DefaultConfigValue {
 			return false;
 		}
 	}
-	
+
 	public static double getDefaultValueDouble(String dir) {
 		if(DOUBLES.containsKey(dir))
 			return DOUBLES.get(dir);
@@ -54,7 +54,7 @@ public class DefaultConfigValue {
 		BOOLEANS.put("ban_command", true);
 		BOOLEANS.put("unban_command", true);
 		BOOLEANS.put("Database.isActive", true);
-		
+
 		STRINGS.put("Database.url", "127.0.0.1/myDb");
 		STRINGS.put("Database.user", "root");
 		STRINGS.put("Database.password", "myPassword");
@@ -62,7 +62,7 @@ public class DefaultConfigValue {
 		STRINGS.put("Database.table_lang", "myTable");
 		STRINGS.put("Database.table_ban", "ban");
 		BOOLEANS.put("Database.saveInCache", true);
-		
+
 		BOOLEANS.put("inventory.alerts.see.no_started_verif_cheat", false);
 		BOOLEANS.put("inventory.alerts.no_started_verif_cheat", false);
 		BOOLEANS.put("inventory.alerts.see.only_cheat_active", true);
@@ -87,7 +87,7 @@ public class DefaultConfigValue {
 		STRINGS.put("Permissions.ban.default", "negativity.ban");
 		STRINGS.put("Permissions.ban.custom", "MOD,ADMIN");
 		BOOLEANS.put("Permissions.bypass.active", false);
-		
+
 		String[] cheats = new String[] {"all", "forcefield", "fastplace", "speedhack", "autoclick", "fly", "antipotion", "autoeat", "autoregen", "antiknockback", "jesus", "nofall", "blink", "spider", "fastbow", "scaffold", "step", "noslowdown", "fastladders", "phase", "autosteal", "edited_client"};
 		for(String localCheat : cheats) {
 			//STRINGS.put("Permissions.bypass." + localCheat, "negativity.bypass." + localCheat);
@@ -95,17 +95,12 @@ public class DefaultConfigValue {
 			STRINGS.put("Permissions.bypass." + localCheat + ".custom", "ADMIN");
 		}
 
-		STRINGS.put("Translation.no_active_file_name", "messages.yml");
 		BOOLEANS.put("Translation.active", false);
-		STRINGS.put("Translation.lang_available", "en_US");
-		STRINGS.put("Translation.lang_available", "fr_FR");
-		STRINGS.put("Translation.lang_available", "no_NO");
-		STRINGS.put("Translation.lang_available", "pt_BR");
 		BOOLEANS.put("Translation.use_db", true);
 		STRINGS.put("Translation.default", "en_US");
 
 		BOOLEANS.put("hasBungeecord", false);
-		
+
 		INTS.put("time_between_report", 1000);
 
 		BOOLEANS.put("ban.active", true);
@@ -122,7 +117,7 @@ public class DefaultConfigValue {
 		STRINGS.put("ban.db.column.def", "def");
 		STRINGS.put("ban.db.column.reason", "reason");
 		STRINGS.put("ban.db.column.other.name", "%name%");
-		
+
 		for(String lc : cheats) {
 			INTS.put("cheats." + lc + ".ping", 150);
 			STRINGS.put("cheats." + lc + ".exact_name", lc);
@@ -133,7 +128,7 @@ public class DefaultConfigValue {
 			BOOLEANS.put("cheats." + lc + ".kick", false);
 			INTS.put("cheats." + lc + ".alert_kick", 5);
 		}
-		
+
 		DOUBLES.put("cheats.forcefield", 3.9);
 		INTS.put("cheats.autoclick.click_alert", 20);
 	}

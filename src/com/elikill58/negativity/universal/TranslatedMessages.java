@@ -58,19 +58,12 @@ public class TranslatedMessages {
 	}
 
 	public static String getDefaultLang() {
-		if(activeTranslation)
-			return DEFAULT_LANG;
-		else return "no_active";
+		return DEFAULT_LANG;
 	}
 
 	public static String getLang(NegativityPlayer np) {
 		if (!activeTranslation)
-			return "no_active";
-
-		if (np == null) {
-			System.out.println("[Negativity] player null (getLang)");
 			return DEFAULT_LANG;
-		}
 
 		String playerLang = np.getLang();
 		if (!playerLang.isEmpty()) {

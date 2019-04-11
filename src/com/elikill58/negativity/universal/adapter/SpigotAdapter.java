@@ -149,12 +149,17 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public void loadLang() {
-		if (!TranslatedMessages.activeTranslation)
+		File langDir = new File(pl.getDataFolder().getAbsolutePath() + File.separator + "lang" + File.separator);
+		if (!langDir.exists())
+			langDir.mkdirs();
+
+		if (!TranslatedMessages.activeTranslation) {
+			String defaultLang = TranslatedMessages.DEFAULT_LANG;
+			LANGS.put(defaultLang, YamlConfiguration.loadConfiguration(copy(defaultLang, new File(langDir.getAbsolutePath() + "/" + defaultLang + ".yml"))));
 			return;
+		}
+
 		try {
-			File langDir = new File(pl.getDataFolder().getAbsolutePath() + File.separator + "lang" + File.separator);
-			if (!langDir.exists())
-				langDir.mkdirs();
 			for (String l : TranslatedMessages.LANGS)
 				LANGS.put(l, YamlConfiguration
 						.loadConfiguration(copy(l, new File(langDir.getAbsolutePath() + "/" + l + ".yml"))));

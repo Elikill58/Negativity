@@ -240,7 +240,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (!SuspectManager.ENABLED)
 			unRegisterBukkitCommand(suspectCmd);
 		else
-			langCmd.setExecutor(new SuspectCommand());
+			suspectCmd.setExecutor(new SuspectCommand());
 
 		getCommand("mod").setExecutor(new ModCommand());
 	}

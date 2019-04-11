@@ -40,7 +40,7 @@ public class UnbanCommand implements CommandExecutor {
 	public static CommandCallable create() {
 		CommandSpec command = CommandSpec.builder()
 				.executor(new UnbanCommand())
-				.arguments(user(Text.of("target")))
+				.arguments(onlyOne(user(Text.of("target"))))
 				.build();
 		return new NegativityCmdWrapper(command, false, "unban");
 	}

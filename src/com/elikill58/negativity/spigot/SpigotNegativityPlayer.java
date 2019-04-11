@@ -66,7 +66,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public double lastY = -3.141592654;
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, LAST_DAMAGE_RECEIVE = 0, TIME_REPORT = 0;
-	public String LAST_OTHER_KEEP_ALIVE, lang = TranslatedMessages.DEFAULT_LANG;
+	public String LAST_OTHER_KEEP_ALIVE;
 	public boolean PACKET_ANALYZE_STARTED = false, isInWater = false, isOnWater = false, FALL = false,
 			KEEP_ALIVE_BEFORE = false, IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false,
 			isInvisible = false, slime_block = false, already_blink = false, isJumpingWithBlock = false,
@@ -98,7 +98,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		lang = file.getString("lang");
+		setLang(file.getString("lang"));
 		for(Cheat c : Cheat.values())
 			WARNS.put(c, file.getInt("cheats." + c.name().toLowerCase()));
 		initMods(p);
@@ -125,7 +125,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		}
 		for(Cheat c : Cheat.values())
 			WARNS.put(c, file.getInt("cheats." + c.name().toLowerCase()));
-		lang = file.getString("lang");
+		setLang(file.getString("lang"));
 	}
 
 	public void initMods(Player p) {
@@ -144,12 +144,12 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public OfflinePlayer getOfflinePlayer() {
 		return op;
 	}
-	
+
 	@Override
 	public int getWarn(Cheat c) {
 		return WARNS.containsKey(c) ? WARNS.get(c) : 0;
 	}
-	
+
 	public int getAllWarn(Cheat c) {
 		return file.getInt("cheats." + c.name().toLowerCase()) + getWarn(c);
 	}
@@ -163,7 +163,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			WARNS.put(c, 1);
 		setWarn(c, WARNS.get(c));
 	}
-	
+
 	public void setWarn(Cheat c, int cheats) {
 		try {
 			file.set("cheats." + c.name().toLowerCase(), cheats);
@@ -210,7 +210,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			startAnalyze(c);
 		makeAppearEntities();
 	}
-	
+
 	public void makeAppearEntities() {
 		if(!ACTIVE_CHEAT.contains(Cheat.getCheatFromString("FORCEFIELD").get()))
 			return;
@@ -220,7 +220,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		spawnLeft();
 		spawnBehind();
 	}
-	
+
 	public void spawnRandom() {
 		int choice = new Random().nextInt(3);
 		if(choice == 0)
@@ -248,7 +248,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		FakePlayer fp = new FakePlayer(loc, "FP right").show(p);
 		FAKE_PLAYER.add(fp);
 	}
-	
+
 	private void spawnLeft() {
 		Location loc = p.getLocation().clone();
 		Vector dir = p.getEyeLocation().getDirection();
@@ -266,7 +266,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		FakePlayer fp = new FakePlayer(loc, "FP left").show(p);
 		FAKE_PLAYER.add(fp);
 	}
-	
+
 	private void spawnBehind() {
 		Location loc = p.getLocation().clone();
 		Vector dir = p.getEyeLocation().getDirection();
@@ -284,11 +284,11 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		FakePlayer fp = new FakePlayer(loc, "FP behind").show(p);
 		FAKE_PLAYER.add(fp);
 	}
-	
+
 	public void removeFakePlayer(FakePlayer fp) {
-		if(!FAKE_PLAYER.contains(fp)) 
+		if(!FAKE_PLAYER.contains(fp))
 			return;
-		
+
 		FAKE_PLAYER.remove(fp);
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);
 		if(l >= 3000) {
@@ -314,7 +314,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void sendMessage(String msg, String... arg) {
 		String message = Messages.getMessage(p, msg, arg);
 		if(!message.equalsIgnoreCase(msg))
@@ -546,7 +546,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			}
 		}
 	}
-	
+
 	public void fight() {
 		isInFight = true;
 		if(fightTask != null)
@@ -558,7 +558,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			}
 		}, 40);
 	}
-	
+
 	public void unfight() {
 		isInFight = false;
 		if(fightTask != null)

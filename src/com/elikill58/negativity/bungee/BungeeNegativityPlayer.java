@@ -12,17 +12,18 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 
 	private static HashMap<ProxiedPlayer, BungeeNegativityPlayer> players = new HashMap<>();
 	private ProxiedPlayer p;
-	
+
 	public BungeeNegativityPlayer(ProxiedPlayer p) {
+		super(p.getUniqueId());
 		this.p = p;
 		players.put(p, this);
 	}
-	
+
 	@Override
 	public String getUUID() {
 		return p.getUniqueId().toString();
 	}
-	
+
 	public static BungeeNegativityPlayer getNegativityPlayer(ProxiedPlayer p) {
 		return players.containsKey(p) ? players.get(p) : new BungeeNegativityPlayer(p);
 	}
@@ -82,6 +83,6 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 
 	@Override
 	public void startAnalyze(Cheat c) {
-		
+
 	}
 }

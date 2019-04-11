@@ -8,8 +8,12 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
 
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.google.common.io.ByteStreams;
 
@@ -186,5 +190,11 @@ public class BungeeAdapter extends Adapter {
 	@Override
 	public void reloadConfig() {
 
+	}
+
+	@Nonnull
+	@Override
+	public NegativityAccount getNegativityAccount(UUID playerId) {
+		return new NegativityAccount(playerId);
 	}
 }

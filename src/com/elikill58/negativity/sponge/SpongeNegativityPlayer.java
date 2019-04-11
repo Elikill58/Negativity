@@ -45,7 +45,6 @@ import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.flowpowered.math.vector.Vector3d;
-import com.google.common.base.Preconditions;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -86,6 +85,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public Task fightTask = null;
 
 	public SpongeNegativityPlayer(Player p) {
+		super(p.getUniqueId());
 		this.p = p;
 		this.uuid = p.getUniqueId();
 		this.mineRate = new Minerate();
@@ -125,17 +125,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			e.printStackTrace();
 		}
 
-		loadBanRequest();
-	}
-
-	public SpongeNegativityPlayer(UUID uuid) {
-		Preconditions.checkNotNull(uuid);
-		this.uuid = uuid;
-		try {
-			config = (configLoader = HoconConfigurationLoader.builder().setFile(file).build()).load();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		loadBanRequest();
 	}
 
@@ -459,22 +448,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		if (nPlayer == null) {
 			nPlayer = new SpongeNegativityPlayer(player);
 			PLAYERS_CACHE.put(player.getUniqueId(), nPlayer);
-		}
-
-		return nPlayer;
-	}
-
-	public static SpongeNegativityPlayer getNegativityPlayer(UUID playerId) {
-		SpongeNegativityPlayer nPlayer = PLAYERS_CACHE.get(playerId);
-		if (nPlayer == null) {
-			Optional<Player> onlinePlayer = Sponge.getServer().getPlayer(playerId);
-			if (onlinePlayer.isPresent()) {
-				nPlayer = new SpongeNegativityPlayer(onlinePlayer.get());
-			} else {
-				nPlayer = new SpongeNegativityPlayer(playerId);
-			}
-
-			PLAYERS_CACHE.put(playerId, nPlayer);
 		}
 
 		return nPlayer;

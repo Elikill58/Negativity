@@ -8,15 +8,26 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+
+import javax.annotation.Nonnull;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.util.TypeTokens;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
+import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.DefaultConfigValue;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -27,6 +38,9 @@ public class SpongeAdapter extends Adapter {
 	private Logger logger;
 	private SpongeNegativity pl;
 	private final HashMap<String, ConfigurationNode> LANGS = new HashMap<>();
+	private LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
+			.expireAfterAccess(10, TimeUnit.MINUTES)
+			.build(new NegativityAccountLoader());
 
 	public SpongeAdapter(SpongeNegativity sn) {
 		this.pl = sn;
@@ -293,5 +307,35 @@ public class SpongeAdapter extends Adapter {
 
 	@Override
 	public void reloadConfig() {
+	}
+
+	@Nonnull
+	@Override
+	public NegativityAccount getNegativityAccount(UUID playerId) {
+		Player onlinePlayer = Sponge.getServer().getPlayer(playerId).orElse(null);
+		if (onlinePlayer != null) {
+			return SpongeNegativityPlayer.getNegativityPlayer(onlinePlayer);
+		}
+
+		try {
+			return accountCache.get(playerId);
+		} catch (ExecutionException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static class NegativityAccountLoader extends CacheLoader<UUID, NegativityAccount> {
+
+		@Override
+		public NegativityAccount load(UUID playerId) throws Exception {
+			NegativityAccount account = new NegativityAccount(playerId);
+
+			Path userFilePath = SpongeNegativity.getInstance().getDataFolder().resolve("user").resolve(playerId.toString() + ".yml");
+			ConfigurationNode userData = HoconConfigurationLoader.builder().setPath(userFilePath).build().load();
+			account.setLang(userData.getNode("lang").getString(TranslatedMessages.DEFAULT_LANG));
+
+			account.loadBanRequest();
+			return account;
+		}
 	}
 }

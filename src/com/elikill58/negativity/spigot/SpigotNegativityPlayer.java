@@ -83,6 +83,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public long timeStartFakePlayer = 0;
 
 	public SpigotNegativityPlayer(Player p) {
+		super(p.getUniqueId());
 		this.p = p;
 		this.uuid = p.getUniqueId();
 		this.mineRate = new Minerate();
@@ -105,6 +106,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public SpigotNegativityPlayer(OfflinePlayer op) {
+		super(op.getUniqueId());
 		this.op = op;
 		this.uuid = op.getUniqueId();
 		this.mineRate = new Minerate();

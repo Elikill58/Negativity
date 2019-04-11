@@ -6,6 +6,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -15,7 +18,9 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.DefaultConfigValue;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.google.common.io.ByteStreams;
 
@@ -216,5 +221,11 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public void reloadConfig() {
 		SpigotNegativity.getInstance().reloadConfig();
+	}
+
+	@Nonnull
+	@Override
+	public NegativityAccount getNegativityAccount(UUID playerId) {
+		return SpigotNegativityPlayer.getNegativityPlayer(Bukkit.getOfflinePlayer(playerId));
 	}
 }

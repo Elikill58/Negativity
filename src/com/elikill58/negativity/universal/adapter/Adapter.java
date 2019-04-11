@@ -3,13 +3,17 @@ package com.elikill58.negativity.universal.adapter;
 import java.io.File;
 import java.util.HashMap;
 import java.util.List;
+import java.util.UUID;
+
+import javax.annotation.Nonnull;
 
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.NegativityAccount;
 
 public abstract class Adapter {
-	
+
 	private static Adapter adapter = null;
-	
+
 	public static void setAdapter(Adapter adapter) {
 		if(Adapter.adapter != null) {
 			try {
@@ -21,11 +25,11 @@ public abstract class Adapter {
 		Adapter.adapter = adapter;
 		adapter.loadLang();
 	}
-	
+
 	public static Adapter getAdapter() {
 		return adapter;
 	}
-	
+
 	public abstract String getName();
 	public abstract Object getConfig();
 	public abstract File getDataFolder();
@@ -51,5 +55,6 @@ public abstract class Adapter {
 	public abstract Object getItem(String itemName);
 	public abstract String getVersion();
 	public abstract void reloadConfig();
-	
+	@Nonnull
+	public abstract NegativityAccount getNegativityAccount(UUID playerId);
 }

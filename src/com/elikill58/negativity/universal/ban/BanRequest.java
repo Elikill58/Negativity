@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.UUID;
 
 import com.elikill58.negativity.universal.Database;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.UniversalUtils;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -22,7 +23,7 @@ import com.elikill58.negativity.universal.permissions.Perm;
 
 public class BanRequest {
 
-	private NegativityPlayer np = null;
+	private NegativityAccount np = null;
 	private UUID uuid = null;
 	private String reason, by = "Negativity";
 	private boolean def;
@@ -31,7 +32,7 @@ public class BanRequest {
 	private String ac = "unknow";
 	private File f = null;
 
-	public BanRequest(NegativityPlayer np, String banReason, long time, boolean def, BanType banType, String ac) {
+	public BanRequest(NegativityAccount np, String banReason, long time, boolean def, BanType banType, String ac) {
 		this.np = np;
 		this.uuid = UUID.fromString(np.getUUID());
 		this.reason = banReason;
@@ -50,7 +51,7 @@ public class BanRequest {
 		}
 	}
 
-	public BanRequest(NegativityPlayer np, String banReason, long time, boolean def, BanType banType, String ac,
+	public BanRequest(NegativityAccount np, String banReason, long time, boolean def, BanType banType, String ac,
 			String by) {
 		this.np = np;
 		this.uuid = UUID.fromString(np.getUUID());
@@ -71,7 +72,7 @@ public class BanRequest {
 		}
 	}
 
-	public BanRequest(NegativityPlayer np, String line) {
+	public BanRequest(NegativityAccount np, String line) {
 		this.np = np;
 		this.uuid = UUID.fromString(np.getUUID());
 		String[] content = line.split(":");
@@ -113,7 +114,7 @@ public class BanRequest {
 		}
 	}
 
-	public NegativityPlayer getNegativityPlayer() {
+	public NegativityAccount getNegativityPlayer() {
 		return np;
 	}
 
@@ -140,14 +141,14 @@ public class BanRequest {
 	public BanType getBanType() {
 		return banType;
 	}
-	
+
 	public long getFullTime() {
 		return fullTime;
 	}
 
 	public void execute() {
 		Adapter ada = Adapter.getAdapter();
-		if (Perm.hasPerm(np, "notBanned"))
+		if (np instanceof NegativityPlayer && Perm.hasPerm((NegativityPlayer) np, "notBanned"))
 			return;
 		if (Ban.banFileActive) {
 			try {
@@ -193,10 +194,14 @@ public class BanRequest {
 				e.printStackTrace();
 			}
 		}
-		np.banEffect();
-		np.kickPlayer(reason, new Timestamp(fullTime).toString().split("\\.", 2)[0], by, def);
+
+		if (np instanceof NegativityPlayer) {
+			NegativityPlayer np = (NegativityPlayer) this.np;
+			np.banEffect();
+			np.kickPlayer(reason, new Timestamp(fullTime).toString().split("\\.", 2)[0], by, def);
+		}
 	}
-	
+
 	public void unban() {
 		try {
 			Adapter ada = Adapter.getAdapter();
@@ -242,12 +247,26 @@ public class BanRequest {
 			e.printStackTrace();
 		}
 	}
-	
+
 	private String getWithReplaceOlder(String s) {
+		String life = "?";
+		String name = "???";
+		String level = "?";
+		String gamemode = "?";
+		String walkSpeed = "?";
+		if (np instanceof NegativityPlayer) {
+			NegativityPlayer np = (NegativityPlayer) this.np;
+			life = String.valueOf(np.getLife());
+			name = np.getName();
+			level = String.valueOf(np.getLevel());
+			gamemode = np.getGameMode();
+			walkSpeed = String.valueOf(np.getWalkSpeed());
+		}
+
 		return s.replaceAll("%uuid%", uuid.toString()).replaceAll("%name%", "").replaceAll("%reason%", reason)
-				.replaceAll("%life%", String.valueOf(np.getLife())).replaceAll("%name%", np.getName())
-				.replaceAll("%level%", String.valueOf(np.getLevel())).replaceAll("%gm%", np.getGameMode())
-				.replaceAll("%walk_speed%", String.valueOf(np.getWalkSpeed()));
+				.replaceAll("%life%", life).replaceAll("%name%", name)
+				.replaceAll("%level%", level).replaceAll("%gm%", gamemode)
+				.replaceAll("%walk_speed%", walkSpeed);
 	}
 
 	public static enum BanType {

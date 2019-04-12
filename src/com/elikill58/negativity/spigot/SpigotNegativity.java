@@ -89,9 +89,7 @@ public class SpigotNegativity extends JavaPlugin {
 			MATERIAL_CLOSE = Material.REDSTONE;
 		}
 		PacketManager.run(this);
-		File localDir = new File("");
-		File confDir = new File(localDir.getAbsolutePath(),
-				"plugins" + File.separator + "Negativity" + File.separator + "config.yml");
+		File confDir = new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml");
 		new File(getDataFolder().getAbsolutePath() + File.separator + "user").mkdirs();
 		if (!confDir.exists()) {
 			getLogger().info("------ Negativity Information ------");
@@ -105,10 +103,10 @@ public class SpigotNegativity extends JavaPlugin {
 					"Discord: @Elikill58#0743, mail: arpetzouille@gmail.com, and Elikill58 in all other web site like Twitter, Spigotmc ...");
 			getLogger().info("");
 			getLogger().info("French:");
-			getLogger().info(" > Merci d'avoir t�l�charg� Negativity :)");
+			getLogger().info(" > Merci d'avoir téléchargé Negativity :)");
 			getLogger().info("J'essaie de faire le meilleur anti-cheat possible.");
 			getLogger().info(
-					"S'il y a des faux positifs, des probl�mes ou si vous avez des suggestions, vous pouvez me contacter via:");
+					"S'il y a des faux positifs, des problémes ou si vous avez des suggestions, vous pouvez me contacter via:");
 			getLogger().info(
 					"Discord: @Elikill58#0743, mail: arpetzouille@gmail.com, et Elikill58 sur tout les autres site comme Twitter, Spigotmc ...");
 			getLogger().info("");
@@ -371,7 +369,7 @@ public class SpigotNegativity extends JavaPlugin {
 				}
 			}
 		if (needPacket)
-			SpigotNegativityPlayer.INJECTED.add(p);
+			SpigotNegativityPlayer.INJECTED.add(p.getUniqueId());
 	}
 
 	private Object getPrivateField(Object object, String field)

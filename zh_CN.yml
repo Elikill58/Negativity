@@ -37,7 +37,6 @@ inventory:
   main:
     freeze: "&a[&2&a]您已被 %name% 冻结"
     unfreeze: "&a[&2弊绝风清&a]您已被&c %name%&7 解冻"
-    inv_freeze_active: true
     actual_click: "实际点击：%clicks%"
     max_click: "最大点击：%clicks%"
     last_click: "上一秒点击：%clicks%"

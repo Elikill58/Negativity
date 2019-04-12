@@ -90,7 +90,7 @@ public class NegativityAccount {
 				while (rs.next()) {
 					addBanRequest(new BanRequest(this, rs.getString(ada.getStringInConfig("ban.db.column.reason")),
 							rs.getInt(ada.getStringInConfig("ban.db.column.time")),
-							rs.getBoolean(ada.getStringInConfig("ban.db.column.def")), BanRequest.BanType.UNKNOW, "unknow"));
+							rs.getBoolean(ada.getStringInConfig("ban.db.column.def")), BanRequest.BanType.UNKNOW, "unknow", false));
 				}
 				rs.close();
 			} catch (Exception e) {

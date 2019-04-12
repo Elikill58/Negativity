@@ -29,7 +29,7 @@ public class BanCommand implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		Player targetPlayer = args.<Player>getOne("target").orElse(null);
 		if (targetPlayer == null)
-			throw new CommandException(Messages.getMessage(src, "not_forget_player"));
+			throw new CommandException(Messages.getMessage(src, "only_player"));
 
 		boolean isBanDefinitive = args.<Boolean>getOne("definitive").orElse(false);
 		long banDuration = 0;
@@ -39,7 +39,7 @@ public class BanCommand implements CommandExecutor {
 		SpongeNegativityPlayer targetNPlayer = SpongeNegativityPlayer.getNegativityPlayer(targetPlayer);
 		String reason = args.requireOne("reason");
 
-		BanRequest banRequest = new BanRequest(targetNPlayer, reason, banDuration, isBanDefinitive, src instanceof Player ? BanType.MOD : BanType.CONSOLE, getFromReason(reason), src.getName());
+		BanRequest banRequest = new BanRequest(targetNPlayer, reason, banDuration, isBanDefinitive, src instanceof Player ? BanType.MOD : BanType.CONSOLE, getFromReason(reason), src.getName(), false);
 		banRequest.execute();
 
 		Messages.sendMessage(src, "ban.well_ban", "%name%", targetPlayer.getName(), "%reason%", reason);

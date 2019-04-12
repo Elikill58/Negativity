@@ -61,7 +61,7 @@ Translation:
   - pt_BR
   - ru_RU
   - zh_CN
-  use_db: true # to get the lang
+  use_db: false # to get the lang
   default: en_US
 
   no_active_file_name: "messages.yml" # where are the messages if the translation are not active

@@ -52,7 +52,6 @@ inventory {
   main {
     freeze: "&a[&2Negativity&a] du er frosset av %name%"
     unfreeze: "&a[&2Negativity&a] du er ikke lengere frosset av %name%"
-    inv_freeze_active: true
     actual_click: "Faktiske klikk : %clicks%"
     max_click: "Maks klikk : %clicks%"
     last_click: "siste sekund : %clicks%"
@@ -70,10 +69,6 @@ inventory {
   alerts {
     item_name: "varsler for %exact_name% : %warn%"
     inv_name: "varsler"
-    see {
-      no_started_verif_cheat: false # Ikke se om spilleren ikke analyserer for denne juksen
-      only_cheat_active: true # Den snyte med en aktiv gjenkjenning
-    }
   }
   mod {
     night_vision: "nattsyn"

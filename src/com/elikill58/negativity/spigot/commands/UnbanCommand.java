@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanRequest;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -29,11 +30,14 @@ public class UnbanCommand implements CommandExecutor {
 				Messages.sendMessage(sender, "invalid_player", "%arg%", arg[0]);
 				return false;
 			}
-			List<BanRequest> brList =  SpigotNegativityPlayer.getNegativityPlayer(cible).getBanRequest();
+			SpigotNegativityPlayer npCible = SpigotNegativityPlayer.getNegativityPlayer(cible);
+			List<BanRequest> brList =  npCible.getBanRequest();
 			if(brList.size() == 0) {
-				if(cible.isOnline())
+				if(cible.isOnline() || Ban.canConnect(npCible))
 					Messages.sendMessage(sender, "unban.not_banned", "%name%", cible.getName());
-				else Messages.sendMessage(sender, "unban.not_exact", "%arg%", arg[0]);
+				else
+					Messages.sendMessage(sender, "unban.not_exact", "%arg%", arg[0]);
+				return false;
 			} else
 				for(BanRequest br : brList)
 					br.unban();
@@ -55,11 +59,14 @@ public class UnbanCommand implements CommandExecutor {
 			Messages.sendMessage(p, "invalid_player", "%arg%", arg[0]);
 			return false;
 		}
-		List<BanRequest> brList =  SpigotNegativityPlayer.getNegativityPlayer(cible).getBanRequest();
+		SpigotNegativityPlayer npCible = SpigotNegativityPlayer.getNegativityPlayer(cible);
+		List<BanRequest> brList =  npCible.getBanRequest();
 		if(brList.size() == 0) {
-			if(cible.isOnline())
+			if(cible.isOnline() || Ban.canConnect(npCible))
 				Messages.sendMessage(p, "unban.not_banned", "%name%", cible.getName());
-			else Messages.sendMessage(p, "unban.not_exact", "%arg%", arg[0]);
+			else
+				Messages.sendMessage(p, "unban.not_exact", "%arg%", arg[0]);
+			return false;
 		} else
 			for(BanRequest br : brList)
 				br.unban();

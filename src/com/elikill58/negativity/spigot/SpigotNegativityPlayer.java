@@ -45,9 +45,9 @@ import com.elikill58.negativity.universal.Version;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {
 
-	private static HashMap<Player, SpigotNegativityPlayer> players = new HashMap<>();
+	private static HashMap<UUID, SpigotNegativityPlayer> players = new HashMap<>();
 
-	public static ArrayList<Player> INJECTED = new ArrayList<>();
+	public static ArrayList<UUID> INJECTED = new ArrayList<>();
 	public ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
 	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
 	public HashMap<Cheat, Integer> WARNS = new HashMap<>();
@@ -87,7 +87,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		this.p = p;
 		this.uuid = p.getUniqueId();
 		this.mineRate = new Minerate();
-		players.put(p, this);
+		players.put(p.getUniqueId(), this);
 		loadBanRequest();
 		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
 				+ File.separator + "proof" + File.separator);
@@ -110,6 +110,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		this.op = op;
 		this.uuid = op.getUniqueId();
 		this.mineRate = new Minerate();
+		players.put(this.uuid, this);
 		loadBanRequest();
 		File tempfile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
 				+ File.separator + uuid + ".txt");
@@ -200,14 +201,14 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void startAnalyze(Cheat c) {
 		ACTIVE_CHEAT.add(c);
-		if(c.needPacket() && !INJECTED.contains(p))
-			INJECTED.add(p);
+		if(c.needPacket() && !INJECTED.contains(p.getUniqueId()))
+			INJECTED.add(p.getUniqueId());
 		if(c.name().equalsIgnoreCase("FORCEFIELD"))
 			makeAppearEntities();
 	}
 
 	public void startAllAnalyze() {
-		INJECTED.add(p);
+		INJECTED.add(p.getUniqueId());
 		for (Cheat c : Cheat.values())
 			startAnalyze(c);
 		makeAppearEntities();
@@ -324,21 +325,21 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {
-		if (players.containsKey(p))
-			return players.get(p);
+		if (players.containsKey(p.getUniqueId()))
+			return players.get(p.getUniqueId());
 		else
 			return new SpigotNegativityPlayer(p);
 	}
 
 	public static SpigotNegativityPlayer getNegativityPlayer(OfflinePlayer p) {
-		if (players.containsKey(p))
-			return players.get(p);
+		if (players.containsKey(p.getUniqueId()))
+			return players.get(p.getUniqueId());
 		else
 			return new SpigotNegativityPlayer(p);
 	}
 
 	public void destroy(boolean isBan) {
-		players.remove(p);
+		players.remove(p.getUniqueId());
 		if (isBan) {
 			Entity et = p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
 			Firework fire = (Firework) et;
@@ -470,7 +471,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public static boolean contains(Player p) {
-		return players.containsKey(p);
+		return players.containsKey(p.getUniqueId());
 	}
 
 	@Override

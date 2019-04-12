@@ -29,7 +29,7 @@ public class NegativityVerifCommand implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		Player targetPlayer = args.<Player>getOne("target").orElse(null);
 		if (targetPlayer == null) {
-			throw new CommandException(Messages.getMessage(src, "not_forget_player"));
+			throw new CommandException(Messages.getMessage(src, "only_player"));
 		}
 
 		Set<Cheat> cheats = new LinkedHashSet<>(args.getAll("cheats"));

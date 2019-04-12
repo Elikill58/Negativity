@@ -36,7 +36,7 @@ public abstract class PacketHandler {
 			@Override
 			public void onReceive(ReceivedPacket packet) {
 				Player p = packet.getPlayer();
-				if (!SpigotNegativityPlayer.INJECTED.contains(p))
+				if (!SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId()))
 					return;
 				SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 				np.ALL++;

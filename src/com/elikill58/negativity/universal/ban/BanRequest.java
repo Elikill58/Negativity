@@ -26,13 +26,13 @@ public class BanRequest {
 	private NegativityAccount np = null;
 	private UUID uuid = null;
 	private String reason, by = "Negativity";
-	private boolean def;
+	private boolean def, isUnban;
 	private BanType banType;
 	private long fullTime = 0;
 	private String ac = "unknow";
 	private File f = null;
 
-	public BanRequest(NegativityAccount np, String banReason, long time, boolean def, BanType banType, String ac) {
+	public BanRequest(NegativityAccount np, String banReason, long time, boolean def, BanType banType, String ac, boolean isUnban) {
 		this.np = np;
 		this.uuid = UUID.fromString(np.getUUID());
 		this.reason = banReason;
@@ -40,6 +40,7 @@ public class BanRequest {
 		this.banType = banType;
 		this.fullTime = time;
 		this.ac = ac;
+		this.isUnban = isUnban;
 		if (Ban.banFileActive) {
 			f = new File(Ban.banDir, uuid + ".txt");
 			if (!f.exists())
@@ -52,7 +53,7 @@ public class BanRequest {
 	}
 
 	public BanRequest(NegativityAccount np, String banReason, long time, boolean def, BanType banType, String ac,
-			String by) {
+			String by, boolean isUnban) {
 		this.np = np;
 		this.uuid = UUID.fromString(np.getUUID());
 		this.reason = banReason;
@@ -61,6 +62,7 @@ public class BanRequest {
 		this.fullTime = System.currentTimeMillis();
 		this.ac = ac;
 		this.by = by;
+		this.isUnban = isUnban;
 		if (Ban.banFileActive) {
 			f = new File(Ban.banDir, uuid + ".txt");
 			if (!f.exists())
@@ -97,6 +99,9 @@ public class BanRequest {
 				break;
 			case "ac":
 				ac = value;
+				break;
+			case "unban":
+				isUnban = Boolean.valueOf(value);
 				break;
 			default:
 				Adapter.getAdapter().warn("Type " + type + " unknow. Value: " + value);
@@ -145,6 +150,10 @@ public class BanRequest {
 	public long getFullTime() {
 		return fullTime;
 	}
+	
+	public boolean isUnban() {
+		return isUnban;
+	}
 
 	public void execute() {
 		Adapter ada = Adapter.getAdapter();
@@ -157,7 +166,7 @@ public class BanRequest {
 					f.createNewFile();
 				Files.write(f.toPath(),
 						(fullTime + ":reason=" + reason.replaceAll(":", "") + ":def=" + def
-								+ ":bantype=" + banType.name() + ":ac=" + ac + "\n").getBytes(),
+								+ ":bantype=" + banType.name() + ":ac=" + ac + ":unban=false\n").getBytes(),
 						StandardOpenOption.APPEND);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -204,6 +213,7 @@ public class BanRequest {
 
 	public void unban() {
 		try {
+			this.isUnban = true;
 			Adapter ada = Adapter.getAdapter();
 			np.removeBanRequest(this);
 			if(ada.getBooleanInConfig("ban.destroy_when_unban")) {
@@ -220,8 +230,12 @@ public class BanRequest {
 			} else {
 				if(Ban.banFileActive) {
 					List<String> lines = Files.readAllLines(f.toPath()), futurLines = new ArrayList<>();
-					for(String l : lines)
-						futurLines.add(l.replaceAll("def=true", "def=false").replaceAll(l.split(":")[0], "0"));
+					for(String l : lines) {
+						if(l.contains("unban=false")) // rétro compatibilité
+							futurLines.add(l.replaceAll("unban=false", "unban=true"));
+						else
+							futurLines.add(l + ":unban=true");
+					}
 					BufferedWriter bw = new BufferedWriter(new PrintWriter(f.getAbsolutePath()));
 					for(String l : futurLines) {
 						bw.write(l);

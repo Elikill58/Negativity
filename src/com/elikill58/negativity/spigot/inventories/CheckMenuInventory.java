@@ -106,9 +106,9 @@ public class CheckMenuInventory {
 				if (np.isFreeze) {
 					if (Adapter.getAdapter().getBooleanInConfig("inventory.inv_freeze_active"))
 						Inv.openFreezeMenu(cible);
-					Messages.sendMessage(p, "inventory.main.freeze", "%name%", cible.getName());
+					Messages.sendMessage(cible, "inventory.main.freeze", "%name%", p.getName());
 				} else
-					Messages.sendMessage(p, "inventory.main.unfreeze", "%name%", cible.getName());
+					Messages.sendMessage(cible, "inventory.main.unfreeze", "%name%", p.getName());
 				break;
 			case PAPER:
 				AlertInventory.openAlertMenu(p, cible);

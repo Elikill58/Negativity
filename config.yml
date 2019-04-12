@@ -176,7 +176,7 @@ Translation:
   - pt_BR
   - ru_RU
   - zh_CN
-  use_db: true # to get the lang
+  use_db: false # to get the lang
   default: en_US
 
 # 
@@ -207,7 +207,6 @@ ban:
   # To save banned player on config file (/plugins/Negativity/dir)
   #
   file:
-    isActive: false
     dir: "ban"
   db:
     isActive: false

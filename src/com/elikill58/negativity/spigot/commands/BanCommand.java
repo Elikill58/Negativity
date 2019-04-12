@@ -19,7 +19,7 @@ public class BanCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
 		if (!(sender instanceof Player)) {
-			if(arg.length <= 3) {
+			if(arg.length < 3) {
 				Messages.sendMessageList(sender, "ban.help");
 				return false;
 			}
@@ -47,7 +47,7 @@ public class BanCommand implements CommandExecutor {
 					reason = s;
 				else reason += s;
 			}
-			new BanRequest(np, reason, time, def, BanType.CONSOLE, getFromReason(reason), "").execute();
+			new BanRequest(np, reason, time, def, BanType.CONSOLE, getFromReason(reason), "admin", false).execute();
 			Messages.sendMessage(sender, "ban.well_ban", "%name%", cible.getName(), "%reason%", reason);
 			return false;
 		}
@@ -56,7 +56,7 @@ public class BanCommand implements CommandExecutor {
 			Messages.sendMessage(p, "not_permission");
 			return false;
 		}
-		if(arg.length <= 3) {
+		if(arg.length < 3) {
 			Messages.sendMessageList(p, "ban.help");
 			return false;
 		}
@@ -82,9 +82,10 @@ public class BanCommand implements CommandExecutor {
 				continue;
 			if(reason.equalsIgnoreCase(""))
 				reason = s;
-			else reason += s;
+			else reason += " " + s;
 		}
-		new BanRequest(np, reason, time, def, BanType.MOD, getFromReason(reason), p.getName()).execute();
+		new BanRequest(np, reason, time, def, BanType.MOD, getFromReason(reason), p.getName(), false).execute();
+		np.kickPlayer(reason, String.valueOf(time), p.getName(), def);
 		Messages.sendMessage(p, "ban.well_ban", "%name%", cible.getName(), "%reason%", reason);
 		return false;
 	}

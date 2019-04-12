@@ -168,29 +168,6 @@ public class SpigotAdapter extends Adapter {
 		}
 	}
 
-	/*private void load(String l, ConfigurationSection config, String dir) {
-		if (config == null)
-			return;
-		for (String key : config.getKeys(false)) {
-			Object obj = config.get(key);
-			String tempDir = key;
-			if (!dir.equalsIgnoreCase(""))
-				tempDir = dir + "." + key;
-			if (obj instanceof ConfigurationSection) {
-				load(l, (ConfigurationSection) obj, tempDir);
-			} else if (obj instanceof String) {
-				HashMap<String, String> msg = LANG_MSG.containsKey(l) ? LANG_MSG.get(l) : new HashMap<>();
-				msg.put(tempDir, (String) obj);
-				LANG_MSG.put(l, msg);
-			} else if (obj instanceof List) {
-				HashMap<String, List<String>> msg = LANG_MSG_LIST.containsKey(l) ? LANG_MSG_LIST.get(l)
-						: new HashMap<>();
-				msg.put(tempDir, config.getStringList(tempDir));
-				LANG_MSG_LIST.put(l, msg);
-			}
-		}
-	}*/
-
 	@Override
 	public String getStringFromLang(String lang, String key) {
 		return LANGS.get(lang).getString(key);

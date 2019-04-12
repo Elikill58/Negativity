@@ -26,7 +26,7 @@ public class Ban {
 			boolean isBanned = false;
 			long time = System.currentTimeMillis();
 			for (BanRequest br : np.getBanRequest())
-				if ((br.getFullTime()) > time || br.isDef())
+				if (((br.getFullTime()) > time || br.isDef()) && !br.isUnban())
 					isBanned = true;
 			return isBanned;
 		} catch (Exception e) {
@@ -55,23 +55,23 @@ public class Ban {
 		}
 		new BanRequest(np, "Cheat (" + cheat.getName() + ")", i + System.currentTimeMillis(),
 				np.getBanRequest().size() >= ada.getIntegerInConfig("ban.def.ban_time"), BanType.PLUGIN,
-				cheat.getName()).execute();
+				cheat.getName(), false).execute();
 	}
 
 	public static void init() {
 		Adapter adapter = Adapter.getAdapter();
 		banDir = new File(adapter.getDataFolder(), adapter.getStringInConfig("ban.file.dir"));
-		banFileActive = adapter.getBooleanInConfig("ban.file.isActive");
+		banDbActive = adapter.getBooleanInConfig("ban.db.isActive");
+		banFileActive = !banDbActive;
 		if (banFileActive)
 			if (!banDir.exists())
 				banDir.mkdirs();
-		banDbActive = adapter.getBooleanInConfig("ban.db.isActive");
 		DB_CONTENT.putAll(adapter.getKeysListInConfig("ban.db.other"));
 	}
 
 	public static boolean canConnect(NegativityPlayer np) {
 		for (BanRequest br : np.getBanRequest())
-			if (br.isDef() || (br.getFullTime()) > System.currentTimeMillis())
+			if ((br.isDef() || (br.getFullTime()) > System.currentTimeMillis()) && !br.isUnban())
 				return false;
 		return true;
 	}

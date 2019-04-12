@@ -52,7 +52,6 @@ inventory {
   main {
     freeze: "&a[&2Negativity&a] Você está atualmente congelado por %name%"
     unfreeze: "&a[&2Negativity&a] Você não está mais congelado por %name%"
-    inv_freeze_active: true
     actual_click: "Atual clicks : %clicks%"
     max_click: "Máximo de clicks : %clicks%"
     last_click: "Ultimo segundo : %clicks%"

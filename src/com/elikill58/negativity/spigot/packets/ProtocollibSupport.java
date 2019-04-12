@@ -17,7 +17,7 @@ public class ProtocollibSupport {
 					public void onPacketSending(PacketEvent e) {}
 
 					public void onPacketReceiving(PacketEvent e) {
-						if (!SpigotNegativityPlayer.INJECTED.contains(e.getPlayer())) {
+						if (!SpigotNegativityPlayer.INJECTED.contains(e.getPlayer().getUniqueId())) {
 							return;
 						}
 						SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());

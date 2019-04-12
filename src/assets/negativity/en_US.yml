@@ -3,7 +3,7 @@ report_wait: "Please, wait one second between 2 report"
 invalid_player: "%arg% isn't a player !"
 not_forget_player: "Don't forget the player !"
 not_permission: "&cYou don't have permission to do that."
-sender_not_a_player: "&cOnly a player can use this command"
+only_player: "&cOnly a player can use this command"
 
 kick: "&a[&2Negativity&a]&c You have been kicked from this server for Cheating (%cheat%)"
 
@@ -52,7 +52,6 @@ inventory {
   main {
     freeze: "&a[&2Negativity&a] You're currently freezed by %name%"
     unfreeze: "&a[&2Negativity&a] You're no longer freezed by %name%"
-    inv_freeze_active: true
     actual_click: "Actual clicks : %clicks%"
     max_click: "Max clicks : %clicks%"
     last_click: "Last second : %clicks%"

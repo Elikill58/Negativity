@@ -32,26 +32,6 @@ public class BanRequest {
 	private String ac = "unknow";
 	private File f = null;
 
-	public BanRequest(NegativityAccount np, String banReason, long time, boolean def, BanType banType, String ac, boolean isUnban) {
-		this.np = np;
-		this.uuid = UUID.fromString(np.getUUID());
-		this.reason = banReason;
-		this.def = def;
-		this.banType = banType;
-		this.fullTime = time;
-		this.ac = ac;
-		this.isUnban = isUnban;
-		if (Ban.banFileActive) {
-			f = new File(Ban.banDir, uuid + ".txt");
-			if (!f.exists())
-				try {
-					f.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
-	}
-
 	public BanRequest(NegativityAccount np, String banReason, long time, boolean def, BanType banType, String ac,
 			String by, boolean isUnban) {
 		this.np = np;
@@ -99,6 +79,9 @@ public class BanRequest {
 				break;
 			case "ac":
 				ac = value;
+				break;
+			case "by":
+				by = value;
 				break;
 			case "unban":
 				isUnban = Boolean.valueOf(value);
@@ -150,7 +133,7 @@ public class BanRequest {
 	public long getFullTime() {
 		return fullTime;
 	}
-	
+
 	public boolean isUnban() {
 		return isUnban;
 	}
@@ -165,8 +148,8 @@ public class BanRequest {
 				if (!f.exists())
 					f.createNewFile();
 				Files.write(f.toPath(),
-						(fullTime + ":reason=" + reason.replaceAll(":", "") + ":def=" + def
-								+ ":bantype=" + banType.name() + ":ac=" + ac + ":unban=false\n").getBytes(),
+						(fullTime + ":reason=" + reason.replaceAll(":", "") + ":def=" + def + ":bantype="
+								+ banType.name() + ":ac=" + ac + ":by=" + by + ":unban=false\n").getBytes(),
 						StandardOpenOption.APPEND);
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -176,20 +159,24 @@ public class BanRequest {
 			try {
 				String values = ada.getStringInConfig("ban.db.column.uuid") + ","
 						+ ada.getStringInConfig("ban.db.column.time") + "," + ada.getStringInConfig("ban.db.column.def")
-						+ "," + ada.getStringInConfig("ban.db.column.reason"), parentheses = "";
+						+ "," + ada.getStringInConfig("ban.db.column.reason") + ","
+						+ ada.getStringInConfig("ban.db.column.cheat_detect") + ","
+						+ ada.getStringInConfig("ban.db.column.by"), parentheses = "";
 				List<String> content = new ArrayList<>();
 				HashMap<String, String> hash = ada.getKeysListInConfig("ban.db.column.other");
 				for (String keys : hash.keySet()) {
 					values += "," + keys;
 					parentheses += ",?";
-					content.add(hash.get(keys));
+					content.add(getWithReplaceOlder(hash.get(keys)));
 				}
-				PreparedStatement stm = Database.getConnection()
-						.prepareStatement("INSERT INTO " + Database.table_ban + "(" + values + ") VALUES (?,?,?,?" + parentheses +  ")");
+				PreparedStatement stm = Database.getConnection().prepareStatement(
+						"INSERT INTO " + Database.table_ban + "(" + values + ") VALUES (?,?,?,?,?,?" + parentheses + ")");
 				stm.setString(1, uuid.toString());
 				stm.setInt(2, (int) (fullTime));
 				stm.setBoolean(3, def);
 				stm.setString(4, reason);
+				stm.setString(5, ac);
+				stm.setString(6, by);
 				int i = 5;
 				for (String cc : content) {
 					String s = getWithReplaceOlder(cc);
@@ -216,40 +203,43 @@ public class BanRequest {
 			this.isUnban = true;
 			Adapter ada = Adapter.getAdapter();
 			np.removeBanRequest(this);
-			if(ada.getBooleanInConfig("ban.destroy_when_unban")) {
-				if(Ban.banFileActive) {
+			if (ada.getBooleanInConfig("ban.destroy_when_unban")) {
+				if (Ban.banFileActive) {
 					Files.write(f.toPath(), "".getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
 					f.delete();
 					f.deleteOnExit();
 				}
-				if(Ban.banDbActive) {
-					PreparedStatement stm = Database.getConnection().prepareStatement("DELETE FROM " + Database.table_ban + " WHERE uuid = ?");
+				if (Ban.banDbActive) {
+					PreparedStatement stm = Database.getConnection()
+							.prepareStatement("DELETE FROM " + Database.table_ban + " WHERE uuid = ?");
 					stm.setString(1, uuid.toString());
 					stm.execute();
 				}
 			} else {
-				if(Ban.banFileActive) {
+				if (Ban.banFileActive) {
 					List<String> lines = Files.readAllLines(f.toPath()), futurLines = new ArrayList<>();
-					for(String l : lines) {
-						if(l.contains("unban=false")) // rétro compatibilité
+					for (String l : lines) {
+						if (l.contains("unban=false")) // rétro compatibilité
 							futurLines.add(l.replaceAll("unban=false", "unban=true"));
 						else
 							futurLines.add(l + ":unban=true");
 					}
 					BufferedWriter bw = new BufferedWriter(new PrintWriter(f.getAbsolutePath()));
-					for(String l : futurLines) {
+					for (String l : futurLines) {
 						bw.write(l);
 						bw.newLine();
 					}
 					bw.close();
 				}
-				if(Ban.banDbActive) {
+				if (Ban.banDbActive) {
 					String uc = ada.getStringInConfig("ban.db.column.uuid");
-					PreparedStatement stm = Database.getConnection().prepareStatement("UPDATE " + Database.table_ban + " SET " + ada.getStringInConfig("ban.db.column.time") + " = ? WHERE " + uc + " = ?");
+					PreparedStatement stm = Database.getConnection().prepareStatement("UPDATE " + Database.table_ban
+							+ " SET " + ada.getStringInConfig("ban.db.column.time") + " = ? WHERE " + uc + " = ?");
 					stm.setInt(1, 0);
 					stm.setString(2, uuid.toString());
 					stm.execute();
-					PreparedStatement stm2 = Database.getConnection().prepareStatement("UPDATE " + Database.table_ban + " SET " + ada.getStringInConfig("ban.db.column.def") + " = ? WHERE " + uc + " = ?");
+					PreparedStatement stm2 = Database.getConnection().prepareStatement("UPDATE " + Database.table_ban
+							+ " SET " + ada.getStringInConfig("ban.db.column.def") + " = ? WHERE " + uc + " = ?");
 					stm2.setBoolean(1, false);
 					stm2.setString(2, uuid.toString());
 					stm2.execute();
@@ -278,9 +268,8 @@ public class BanRequest {
 		}
 
 		return s.replaceAll("%uuid%", uuid.toString()).replaceAll("%name%", "").replaceAll("%reason%", reason)
-				.replaceAll("%life%", life).replaceAll("%name%", name)
-				.replaceAll("%level%", level).replaceAll("%gm%", gamemode)
-				.replaceAll("%walk_speed%", walkSpeed);
+				.replaceAll("%life%", life).replaceAll("%name%", name).replaceAll("%level%", level)
+				.replaceAll("%gm%", gamemode).replaceAll("%walk_speed%", walkSpeed);
 	}
 
 	public static enum BanType {

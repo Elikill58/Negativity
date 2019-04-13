@@ -79,6 +79,8 @@ public class NegativityListener implements Listener {
 				boolean hasPermitted = false;
 				for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers())
 					if (Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer(pp), "showReport")) {
+						if(pp.getServer().equals(p.getServer()))
+							cmd = "/tp " + parts[0];
 						hasPermitted = true;
 						TextComponent msg = new TextComponent(BungeeMessages.getMessage(pp, "report", place));
 						msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, cmd));
@@ -104,6 +106,7 @@ public class NegativityListener implements Listener {
 				if(br.isDef())
 					isDef = true;
 			p.disconnect(new ComponentBuilder(BungeeMessages.getMessage(e.getPlayer(), "ban.kick_" + (isDef ? "def" : "time"), "%reason%", np.getBanReason(), "%time%" , np.getBanTime(), "%by%", np.getBanBy())).create());
+			return;
 		}
 		Stats.updateStats(StatsType.PLAYERS, ProxyServer.getInstance().getPlayers().size());
 		if (sendBungeecordInfo)

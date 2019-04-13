@@ -167,7 +167,6 @@ Permissions:
       custom: "ADMIN"
 
 Translation:
-  no_active_file_name: "messages.yml" # where are the messages if the translation are not active
   active: false # enable or disable the translation
   lang_available:
   - en_US
@@ -190,7 +189,7 @@ hasBungeecord: false
 time_between_report: 1000
 
 ban:
-  active: true
+  active: false
   # If you want to destroy BDD line / File line
   destroy_when_unban: false
   reliability_need: 90
@@ -219,6 +218,10 @@ ban:
       def: "def"
       # reason of ban
       reason: "reason"
+      # the name of the cheat that ban the player
+      cheat_detect: "cheat"
+      # Who ban the player
+      by: "by"
       # All other column that it must be filled
       other:
         # Replace olders:

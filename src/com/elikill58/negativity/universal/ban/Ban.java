@@ -55,7 +55,7 @@ public class Ban {
 		}
 		new BanRequest(np, "Cheat (" + cheat.getName() + ")", i + System.currentTimeMillis(),
 				np.getBanRequest().size() >= ada.getIntegerInConfig("ban.def.ban_time"), BanType.PLUGIN,
-				cheat.getName(), false).execute();
+				cheat.getName(), "Negativity", false).execute();
 	}
 
 	public static void init() {

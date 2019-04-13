@@ -3,7 +3,7 @@ report_wait: "Vennligst vent 1 sekkund mellom vær rapport "
 invalid_player: "%arg% er ikke en spiller!"
 not_forget_player: "ikke glem spillerens navn !"
 not_permission: "&cdu har ikke tilgang til dette."
-sender_not_a_player: "&cOnly a player can use this command"
+only_player: "&cOnly a player can use this command"
 
 kick: "&a[&2Negativity&a]&c du har blitt sparket fra denne serveren for juksing (%cheat%)"
 

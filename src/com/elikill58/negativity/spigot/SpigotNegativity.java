@@ -45,6 +45,7 @@ import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.timers.ActualizeClickTimer;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
+import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -68,7 +69,7 @@ public class SpigotNegativity extends JavaPlugin {
 	private static SpigotNegativity INSTANCE;
 	public static boolean isOnBungeecord = false, log = false, hasBypass = true, essentialsSupport = false;
 	public static Material MATERIAL_CLOSE = Material.REDSTONE;
-	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null;
+	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null;
 	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
 
 	public void onEnable() {
@@ -162,6 +163,7 @@ public class SpigotNegativity extends JavaPlugin {
 		(clickTimer = new ActualizeClickTimer()).runTaskTimer(this, 20, 20);
 		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
+		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 20);
 		
 		for(Cheat c : Cheat.CHEATS) {
 			if(c.isActive()) {
@@ -252,6 +254,7 @@ public class SpigotNegativity extends JavaPlugin {
 		invTimer.cancel();
 		clickTimer.cancel();
 		packetTimer.cancel();
+		runSpawnFakePlayer.cancel();
 	}
 
 	public static SpigotNegativity getInstance() {

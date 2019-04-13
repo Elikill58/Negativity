@@ -103,7 +103,7 @@ public class DefaultConfigValue {
 
 		INTS.put("time_between_report", 1000);
 
-		BOOLEANS.put("ban.active", true);
+		BOOLEANS.put("ban.active", false);
 		BOOLEANS.put("ban.destroy_when_unban", false);
 		INTS.put("ban.reliability_need", 90);
 		INTS.put("ban.alert_need", 5);
@@ -116,6 +116,8 @@ public class DefaultConfigValue {
 		STRINGS.put("ban.db.column.time", "time");
 		STRINGS.put("ban.db.column.def", "def");
 		STRINGS.put("ban.db.column.reason", "reason");
+		STRINGS.put("ban.db.column.cheat_detect", "cheat");
+		STRINGS.put("ban.db.column.by", "by");
 		STRINGS.put("ban.db.column.other.name", "%name%");
 
 		for(String lc : cheats) {

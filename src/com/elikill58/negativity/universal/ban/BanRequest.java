@@ -35,11 +35,11 @@ public class BanRequest {
 	public BanRequest(NegativityAccount np, String banReason, long time, boolean def, BanType banType, String ac,
 			String by, boolean isUnban) {
 		this.np = np;
-		this.uuid = UUID.fromString(np.getUUID());
+		this.uuid = np.getPlayerId();
 		this.reason = banReason;
 		this.def = def;
 		this.banType = banType;
-		this.fullTime = System.currentTimeMillis();
+		this.fullTime = System.currentTimeMillis() + time;
 		this.ac = ac;
 		this.by = by;
 		this.isUnban = isUnban;
@@ -199,6 +199,8 @@ public class BanRequest {
 	}
 
 	public void unban() {
+		if(this.isUnban)
+			return;
 		try {
 			this.isUnban = true;
 			Adapter ada = Adapter.getAdapter();

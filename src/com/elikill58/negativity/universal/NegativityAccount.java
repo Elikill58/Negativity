@@ -46,6 +46,10 @@ public class NegativityAccount {
 		return lang;
 	}
 
+	public UUID getPlayerId() {
+		return playerId;
+	}
+	
 	public void setLang(String lang) {
 		this.lang = lang;
 	}

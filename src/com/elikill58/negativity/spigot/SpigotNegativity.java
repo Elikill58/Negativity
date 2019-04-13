@@ -163,7 +163,7 @@ public class SpigotNegativity extends JavaPlugin {
 		(clickTimer = new ActualizeClickTimer()).runTaskTimer(this, 20, 20);
 		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
-		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 20);
+		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 20);
 		
 		for(Cheat c : Cheat.CHEATS) {
 			if(c.isActive()) {
@@ -267,15 +267,13 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (c.equals(Cheat.getCheatFromString("BLINK").get()))
-			if (!np.already_blink) {
-				np.already_blink = true;
-				return false;
-			}
+		if (c.equals(Cheat.getCheatFromString("BLINK").get()) && !np.already_blink) {
+			np.already_blink = true;
+			return false;
+		}
 		if (np.isInFight && c.isBlockedInFight())
 			return false;
-		if (essentialsSupport)
-			if(EssentialsSupport.checkEssentialsPrecondition(p))
+		if (essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
 				return false;
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType()))
@@ -308,6 +306,8 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.name() + " (Reliability: " + reliability + ") Ping: "
 				+ ping + " Type: " + type.getName());
+		if(Ban.isBanned(np))
+			return false;
 		Ban.manageBan(c, np, reliability);
 		if (isOnBungeecord)
 			sendMessage(p, c.getName(), String.valueOf(reliability), String.valueOf(ping), hover_proof);
@@ -349,8 +349,6 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 
 	private static void logProof(ReportType type, Player p, Cheat c, int reliability, String proof, int ping) {
-		if (!log)
-			return;
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
 		SpigotNegativityPlayer.getNegativityPlayer(p).logProof(stamp,
 				stamp + ": (" + ping + "ms) " + reliability + "% " + c.name() + " > " + proof);

@@ -15,10 +15,12 @@ import com.elikill58.negativity.universal.ban.BanRequest.BanType;
 public class Ban {
 
 	public static File banDir;
-	public static boolean banFileActive, banDbActive;
+	public static boolean banFileActive, banDbActive, banActive;
 	public static final HashMap<String, String> DB_CONTENT = new HashMap<>();
 
 	public static boolean isBanned(NegativityPlayer np) {
+		if(banActive)
+			return false;
 		try {
 			np.loadBanRequest();
 			if (np.getBanRequest().size() == 0)
@@ -62,6 +64,7 @@ public class Ban {
 		Adapter adapter = Adapter.getAdapter();
 		banDir = new File(adapter.getDataFolder(), adapter.getStringInConfig("ban.file.dir"));
 		banDbActive = adapter.getBooleanInConfig("ban.db.isActive");
+		banActive = adapter.getBooleanInConfig("ban.active");
 		banFileActive = !banDbActive;
 		if (banFileActive)
 			if (!banDir.exists())
@@ -70,6 +73,8 @@ public class Ban {
 	}
 
 	public static boolean canConnect(NegativityPlayer np) {
+		if(banActive)
+			return true;
 		for (BanRequest br : np.getBanRequest())
 			if ((br.isDef() || (br.getFullTime()) > System.currentTimeMillis()) && !br.isUnban())
 				return false;

@@ -3,7 +3,11 @@ report_wait: "Por favor, aguarde alguns segundos para o próximo report."
 invalid_player: "%arg% não é um jogador!"
 not_forget_player: "Não me lembro do jogador!"
 not_permission: "&cVocê não tem permissão para fazer isso."
-only_player: "&cOnly a player can use this command"
+only_player: "Somente jogadores podem fazer isso."
+well_suspect: "%players% é bem suspeito!"
+none: "Nenhum"
+console: "Administrador"
+fake_entities: "Jogadores falsos"
 
 kick: "&a[&2Negativity&a]&c Você foi kickado deste servidor por Cheat (%cheat%)"
 

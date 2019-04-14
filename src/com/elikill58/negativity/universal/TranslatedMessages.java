@@ -28,7 +28,7 @@ public class TranslatedMessages {
 		useDb = Adapter.getAdapter().getBooleanInConfig("Translation.use_db");
 	}
 
-	public static String loadLang(NegativityPlayer np) {
+	public static String loadLang(NegativityAccount np) {
 		try {
 			String value = "";
 			if (useDb) {
@@ -61,7 +61,7 @@ public class TranslatedMessages {
 		return DEFAULT_LANG;
 	}
 
-	public static String getLang(NegativityPlayer np) {
+	public static String getLang(NegativityAccount np) {
 		if (!activeTranslation)
 			return DEFAULT_LANG;
 

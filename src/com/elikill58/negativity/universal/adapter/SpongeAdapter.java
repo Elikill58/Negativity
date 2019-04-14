@@ -314,6 +314,7 @@ public class SpongeAdapter extends Adapter {
 	public NegativityAccount getNegativityAccount(UUID playerId) {
 		Player onlinePlayer = Sponge.getServer().getPlayer(playerId).orElse(null);
 		if (onlinePlayer != null) {
+			invalidateAccount(playerId);
 			return SpongeNegativityPlayer.getNegativityPlayer(onlinePlayer);
 		}
 
@@ -324,6 +325,10 @@ public class SpongeAdapter extends Adapter {
 		}
 	}
 
+	public void invalidateAccount(UUID playerId) {
+		accountCache.invalidate(playerId);
+	}
+	
 	private static class NegativityAccountLoader extends CacheLoader<UUID, NegativityAccount> {
 
 		@Override

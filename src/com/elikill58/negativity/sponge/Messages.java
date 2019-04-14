@@ -7,6 +7,7 @@ import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -30,8 +31,16 @@ public class Messages {
 		return Text.of(getStringMessage(receiver, dir, placeholders));
 	}
 
+	public static Text getMessage(NegativityAccount account, String dir, String... placeholders) {
+		return Text.of(getStringMessage(account.getLang(), dir, placeholders));
+	}
+
 	public static String getStringMessage(MessageReceiver receiver, String dir, String... placeholders) {
-		String message = TranslatedMessages.getStringFromLang(getLang(receiver), dir);
+		return getStringMessage(getLang(receiver), dir, placeholders);
+	}
+
+	private static String getStringMessage(String lang, String dir, String... placeholders) {
+		String message = TranslatedMessages.getStringFromLang(lang, dir);
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
 			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
 		if (message.equalsIgnoreCase("&rnull"))

@@ -211,7 +211,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		INJECTED.add(p.getUniqueId());
 		for (Cheat c : Cheat.values())
 			startAnalyze(c);
-		makeAppearEntities();
 	}
 
 	public void makeAppearEntities() {
@@ -248,7 +247,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			loc.add(-1, 0, 1);
 		}
 		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, "FP right").show(p);
+		FakePlayer fp = new FakePlayer(loc, Utils.getOnlinePlayers().get(new Random().nextInt(Utils.getOnlinePlayers().size() - 1)).getName()).show(p);
 		FAKE_PLAYER.add(fp);
 	}
 
@@ -266,7 +265,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			loc.add(1, 0, 1);
 		}
 		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, "FP left").show(p);
+		FakePlayer fp = new FakePlayer(loc, Utils.getOnlinePlayers().get(new Random().nextInt(Utils.getOnlinePlayers().size() - 1)).getName()).show(p);
 		FAKE_PLAYER.add(fp);
 	}
 
@@ -284,7 +283,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			loc.add(1, 0, -1);
 		}
 		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, "FP behind").show(p);
+		FakePlayer fp = new FakePlayer(loc, Utils.getOnlinePlayers().get(new Random().nextInt(Utils.getOnlinePlayers().size() - 1)).getName()).show(p);
 		FAKE_PLAYER.add(fp);
 	}
 

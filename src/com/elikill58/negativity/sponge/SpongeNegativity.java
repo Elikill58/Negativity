@@ -59,6 +59,7 @@ import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.SuspectManager;
@@ -212,16 +213,16 @@ public class SpongeNegativity implements RawDataListener {
 			fmlChannel.addListener(this);
 		}
 	}
-
+	
 	@Listener
-	public void onLogin(ClientConnectionEvent.Login e, @First Player p) {
-		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (Ban.isBanned(np)) {
-			if (Ban.canConnect(np))
+	public void onLogin(ClientConnectionEvent.Login e) {
+		NegativityAccount userAccount = Adapter.getAdapter().getNegativityAccount(e.getTargetUser().getUniqueId());
+		if (Ban.isBanned(userAccount)) {
+			if (Ban.canConnect(userAccount))
 				return;
 			e.setCancelled(true);
-			e.setMessage(Messages.getMessage(p, "ban.kick_" + (np.isBanDef() ? "def" : "time"), "%reason%",
-					np.getBanReason(), "%time%", (np.getBanTime()), "%by%", np.getBanBy()));
+			e.setMessage(Messages.getMessage(userAccount, "ban.kick_" + (userAccount.isBanDef() ? "def" : "time"), "%reason%",
+					userAccount.getBanReason(), "%time%", (userAccount.getBanTime()), "%by%", userAccount.getBanBy()));
 		}
 	}
 
@@ -298,6 +299,7 @@ public class SpongeNegativity implements RawDataListener {
 	public void onLeave(ClientConnectionEvent.Disconnect e, @First Player p) {
 		Task.builder().async().delayTicks(1).execute(() -> {
 			SpongeNegativityPlayer.removeFromCache(p);
+			((SpongeAdapter) Adapter.getAdapter()).invalidateAccount(p.getUniqueId());
 			if (!isOnBungeecord)
 				Stats.updateStats(StatsType.PLAYERS, Sponge.getServer().getOnlinePlayers().size());
 		}).submit(this);

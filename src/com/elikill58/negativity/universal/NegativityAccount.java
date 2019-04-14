@@ -71,6 +71,10 @@ public class NegativityAccount {
 	}
 
 	public void loadBanRequest() {
+		loadBanRequest(false);
+	}
+	
+	public void loadBanRequest(boolean forceReload) {
 		if (gettedBan)
 			return;
 		gettedBan = true;
@@ -106,7 +110,7 @@ public class NegativityAccount {
 							rs.getInt(ada.getStringInConfig("ban.db.column.time")),
 							rs.getBoolean(ada.getStringInConfig("ban.db.column.def")), BanRequest.BanType.UNKNOW,
 							hasCheatDetect ? rs.getString(ada.getStringInConfig("ban.db.column.cheat_detect")) : "Unknow",
-							hasBy ? rs.getString(ada.getStringInConfig("ban.db.column.by")) : "someone", false));
+							hasBy ? rs.getString(ada.getStringInConfig("ban.db.column.by")) : "console", false));
 				}
 				rs.close();
 			} catch (Exception e) {

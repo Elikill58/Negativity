@@ -8,6 +8,7 @@ import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanRequest.BanType;
@@ -18,8 +19,8 @@ public class Ban {
 	public static boolean banFileActive, banDbActive, banActive;
 	public static final HashMap<String, String> DB_CONTENT = new HashMap<>();
 
-	public static boolean isBanned(NegativityPlayer np) {
-		if(banActive)
+	public static boolean isBanned(NegativityAccount np) {
+		if(!banActive)
 			return false;
 		try {
 			np.loadBanRequest();
@@ -72,8 +73,8 @@ public class Ban {
 		DB_CONTENT.putAll(adapter.getKeysListInConfig("ban.db.other"));
 	}
 
-	public static boolean canConnect(NegativityPlayer np) {
-		if(banActive)
+	public static boolean canConnect(NegativityAccount np) {
+		if(!banActive)
 			return true;
 		for (BanRequest br : np.getBanRequest())
 			if ((br.isDef() || (br.getFullTime()) > System.currentTimeMillis()) && !br.isUnban())

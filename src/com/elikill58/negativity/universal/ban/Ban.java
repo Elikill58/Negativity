@@ -56,7 +56,7 @@ public class Ban {
 		} catch (ScriptException e) {
 			e.printStackTrace();
 		}
-		new BanRequest(np, "Cheat (" + cheat.getName() + ")", i + System.currentTimeMillis(),
+		new BanRequest(np, "Cheat (" + cheat.getName() + ")", i,
 				np.getBanRequest().size() >= ada.getIntegerInConfig("ban.def.ban_time"), BanType.PLUGIN,
 				cheat.getName(), "Negativity", false).execute();
 	}

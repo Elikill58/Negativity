@@ -265,7 +265,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			loc.add(1, 0, 1);
 		}
 		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, Utils.getOnlinePlayers().get(new Random().nextInt(Utils.getOnlinePlayers().size() - 1)).getName()).show(p);
+		FakePlayer fp = new FakePlayer(loc, Utils.getOnlinePlayers().get(new Random().nextInt(Utils.getOnlinePlayers().size())).getName()).show(p);
 		FAKE_PLAYER.add(fp);
 	}
 
@@ -283,7 +283,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			loc.add(1, 0, -1);
 		}
 		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, Utils.getOnlinePlayers().get(new Random().nextInt(Utils.getOnlinePlayers().size() - 1)).getName()).show(p);
+		FakePlayer fp = new FakePlayer(loc, Utils.getOnlinePlayers().get(new Random().nextInt(Utils.getOnlinePlayers().size())).getName()).show(p);
 		FAKE_PLAYER.add(fp);
 	}
 

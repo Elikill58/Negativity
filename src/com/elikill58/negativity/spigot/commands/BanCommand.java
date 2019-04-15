@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.commands;
 
+import java.sql.Timestamp;
+
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -85,7 +87,7 @@ public class BanCommand implements CommandExecutor {
 			else reason += " " + s;
 		}
 		new BanRequest(np, reason, time, def, BanType.MOD, getFromReason(reason), p.getName(), false).execute();
-		np.kickPlayer(reason, String.valueOf(time), p.getName(), def);
+		np.kickPlayer(reason, new Timestamp(time + System.currentTimeMillis()).toString(), p.getName(), def);
 		Messages.sendMessage(p, "ban.well_ban", "%name%", cible.getName(), "%reason%", reason);
 		return false;
 	}

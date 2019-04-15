@@ -247,7 +247,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			loc.add(-1, 0, 1);
 		}
 		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, Utils.getOnlinePlayers().get(new Random().nextInt(Utils.getOnlinePlayers().size() - 1)).getName()).show(p);
+		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(p);
 		FAKE_PLAYER.add(fp);
 	}
 
@@ -265,7 +265,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			loc.add(1, 0, 1);
 		}
 		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, Utils.getOnlinePlayers().get(new Random().nextInt(Utils.getOnlinePlayers().size())).getName()).show(p);
+		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(p);
 		FAKE_PLAYER.add(fp);
 	}
 
@@ -283,10 +283,18 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			loc.add(1, 0, -1);
 		}
 		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, Utils.getOnlinePlayers().get(new Random().nextInt(Utils.getOnlinePlayers().size())).getName()).show(p);
+		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(p);
 		FAKE_PLAYER.add(fp);
 	}
-
+	
+	private String getRandomFakePlayerName() {
+		List<Player> online = Utils.getOnlinePlayers();
+		if(online.size() <= 1) {
+			return new Random().nextBoolean() ? "Elikill58" : "RedNesto";
+		} else
+			return online.get(new Random().nextInt(online.size())).getName();
+	}
+	
 	public void removeFakePlayer(FakePlayer fp) {
 		if(!FAKE_PLAYER.contains(fp))
 			return;

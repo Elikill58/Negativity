@@ -55,7 +55,7 @@ public class ReportCommand implements CommandExecutor {
 				for (Player pl : Utils.getOnlinePlayers())
 					if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert")) {
 						hasOp = true;
-						p.sendMessage(msg);
+						pl.sendMessage(msg);
 					}
 				if (!hasOp)
 					REPORT_LAST.add(msg);

@@ -182,7 +182,7 @@ public class SpongeAdapter extends Adapter {
 			e.printStackTrace();
 		}
 
-		return "Unknow";
+		return null;
 	}
 
 	@Override
@@ -247,7 +247,7 @@ public class SpongeAdapter extends Adapter {
 			return node == null ? DefaultConfigValue.STRINGS.get(key) : node;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return "";
+			return null;
 		}
 	}
 

@@ -6,7 +6,7 @@ import com.me4502.precogs.detection.DetectionType;
 public class PrecogsManager {
 	
 	public static DetectionType toDetectionType(Cheat c) {
-		return new DetectionType(c.name().toLowerCase(), c.getName());
+		return new DetectionType(c.getKey().toLowerCase(), c.getName());
 	}
 	
 }

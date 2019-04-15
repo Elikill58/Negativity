@@ -42,7 +42,7 @@ public class NegativityBypassTicket implements BypassTicket {
 	
 	public boolean containsDetection(Cheat c) {
 		for(DetectionType type : detections)
-			if(type.getId().equalsIgnoreCase(c.name()) || type.getName().equalsIgnoreCase(c.getName()))
+			if(type.getId().equalsIgnoreCase(c.getKey()) || type.getName().equalsIgnoreCase(c.getName()))
 				return true;
 		return false;
 	}

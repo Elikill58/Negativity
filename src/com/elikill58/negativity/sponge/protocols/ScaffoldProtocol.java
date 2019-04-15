@@ -34,7 +34,7 @@ public class ScaffoldProtocol extends Cheat {
 			return;
 		Task.builder().delayTicks(0).execute(() -> {
 			ItemType m = np.getItemTypeInHand();
-			BlockType placed = e.getTransactions().get(0).getFinal().getLocation().get().getBlock().getType();
+			BlockType placed = e.getTransactions().get(0).getOriginal().getLocation().get().getBlock().getType();
 			if(!placed.getItem().isPresent())
 				return;
 			if ((m == null || (!np.isBlock(m) && !m.equals(placed.getItem().get()))) && slot != 0) {

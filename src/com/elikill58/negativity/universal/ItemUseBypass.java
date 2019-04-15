@@ -32,7 +32,7 @@ public class ItemUseBypass {
 		List<Cheat> list = new ArrayList<>();
 		for(Cheat ac : Cheat.CHEATS)
 			for(String s : cheats.split(","))
-				if(ac.name().equalsIgnoreCase(s))
+				if(ac.getKey().equalsIgnoreCase(s))
 					list.add(ac);
 		return list;
 	}

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -27,14 +28,10 @@ public abstract class Cheat {
 		if(key.equalsIgnoreCase("ALL"))
 			ALL = this;
 		this.name = Adapter.getAdapter().getStringInConfig("cheats." + key.toLowerCase() + ".exact_name");
-		/*String[] tempAlias = new String[alias.length + 1];
-		int i = 0;
-		for(String s : aliases)
-			tempAlias[i++] = s;*/
 		this.aliases = alias;
 	}
 	
-	public String name() {
+	public String getKey() {
 		return key;
 	}
 	
@@ -121,10 +118,18 @@ public abstract class Cheat {
 		return active;
 	}
 
-	public static Optional<Cheat> getCheatFromString(String name) {
+	public int getMaxAlertPing() {
+		return Adapter.getAdapter().getIntegerInConfig("cheats." + key + ".ping");
+	}
+	
+	public String[] getAliases() {
+		return aliases;
+	}
+
+	public static Optional<Cheat> fromString(String name) {
 		for (Cheat c : Cheat.values()) {
 			try {
-				if (c.name().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name))
+				if (c.getKey().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name) || Arrays.asList(c.getAliases()).contains(name))
 					return Optional.of(c);
 			} catch (NullPointerException e) {
 				e.printStackTrace();
@@ -134,13 +139,19 @@ public abstract class Cheat {
 			return Optional.of(ALL);
 		return Optional.empty();
 	}
-
-	public int getMaxAlertPing() {
-		return Adapter.getAdapter().getIntegerInConfig("cheats." + key + ".ping");
-	}
 	
-	public String[] getAliases() {
-		return aliases;
+	public static Optional<Cheat> forKey(String key) {
+		for (Cheat c : Cheat.values()) {
+			try {
+				if (c.getKey().equalsIgnoreCase(key))
+					return Optional.of(c);
+			} catch (NullPointerException e) {
+				e.printStackTrace();
+			}
+		}
+		if(key.equalsIgnoreCase("all"))
+			return Optional.of(ALL);
+		return Optional.empty();
 	}
 	
 	public static void loadCheat() {
@@ -158,7 +169,6 @@ public abstract class Cheat {
 					CHEATS.add(cheat);
 					CHEATS_BY_KEY.put(cheat.key, cheat);
 				} catch (Exception temp) {
-					//temp.printStackTrace();
 					// on ignore
 				}
 			}

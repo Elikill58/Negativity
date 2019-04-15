@@ -29,6 +29,7 @@ public class SuspectManager {
 					if(alias.equalsIgnoreCase(s) || alias.contains(s) || alias.startsWith(s))
 						cheats.add(c);
 		}
+		analyzeText(np, cheats);
 	}
 
 	public static void analyzeText(NegativityPlayer np, Collection<Cheat> cheats) {

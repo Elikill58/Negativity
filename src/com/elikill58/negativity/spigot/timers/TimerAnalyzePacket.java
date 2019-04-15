@@ -70,7 +70,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					}
 				}
 			}
-			Cheat FLY = Cheat.getCheatFromString("FLY").get();
+			Cheat FLY = Cheat.fromString("FLY").get();
 			if (np.ACTIVE_CHEAT.contains(FLY)) {
 				if (np.FLYING > 4 && (np.POSITION + np.POSITION_LOOK + np.FLYING) < 9) {
 					np.NO_PACKET++;
@@ -88,7 +88,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					}
 				}
 			}
-			Cheat FORCEFIELD = Cheat.getCheatFromString("FORCEFIELD").get();
+			Cheat FORCEFIELD = Cheat.fromString("FORCEFIELD").get();
 			if (np.ACTIVE_CHEAT.contains(FORCEFIELD)) {
 				if (np.ARM > 14 && np.USE_ENTITY > 20) {
 					np.addWarn(FORCEFIELD);
@@ -102,7 +102,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 									+ np.getWarn(FORCEFIELD) + ". Ping: " + ping);
 				}
 			}
-			Cheat BLINK = Cheat.getCheatFromString("BLINK").get();
+			Cheat BLINK = Cheat.fromString("BLINK").get();
 			if (np.ACTIVE_CHEAT.contains(BLINK) && !np.bypassBlink) {
 				if (ping < 140) {
 					int total = np.ALL - np.KEEP_ALIVE;
@@ -123,7 +123,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				} else 
 					np.IS_LAST_SEC_BLINK = 0;
 			}
-			Cheat SNEAK = Cheat.getCheatFromString("SNEAK").get();
+			Cheat SNEAK = Cheat.fromString("SNEAK").get();
 			if(np.ACTIVE_CHEAT.contains(SNEAK)){
 				if(ping < 140){
 					if(np.ENTITY_ACTION > 35){
@@ -137,7 +137,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					} else np.IS_LAST_SEC_SNEAK = false;
 				}
 			}
-			Cheat EDITED_CLIENT = Cheat.getCheatFromString("EDITED_CLIENT").get();
+			Cheat EDITED_CLIENT = Cheat.fromString("EDITED_CLIENT").get();
 			if(np.ACTIVE_CHEAT.contains(EDITED_CLIENT)) {
 				if(ping < EDITED_CLIENT.getMaxAlertPing()){
 					int allPos = np.POSITION_LOOK + np.POSITION;

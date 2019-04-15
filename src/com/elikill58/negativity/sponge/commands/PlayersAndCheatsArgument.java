@@ -46,7 +46,7 @@ public class PlayersAndCheatsArgument extends CommandElement {
 				continue;
 			}
 
-			Optional<Cheat> maybeCheat = Cheat.getCheatFromString(next);
+			Optional<Cheat> maybeCheat = Cheat.fromString(next);
 			if (maybeCheat.isPresent()) {
 				context.putArg(cheatKey, maybeCheat.get());
 				continue;

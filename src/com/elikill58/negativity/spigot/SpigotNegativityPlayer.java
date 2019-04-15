@@ -101,7 +101,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		}
 		setLang(file.getString("lang"));
 		for(Cheat c : Cheat.values())
-			WARNS.put(c, file.getInt("cheats." + c.name().toLowerCase()));
+			WARNS.put(c, file.getInt("cheats." + c.getKey().toLowerCase()));
 		initMods(p);
 	}
 
@@ -127,7 +127,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			e.printStackTrace();
 		}
 		for(Cheat c : Cheat.values())
-			WARNS.put(c, file.getInt("cheats." + c.name().toLowerCase()));
+			WARNS.put(c, file.getInt("cheats." + c.getKey().toLowerCase()));
 		setLang(file.getString("lang"));
 	}
 
@@ -154,7 +154,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public int getAllWarn(Cheat c) {
-		return file.getInt("cheats." + c.name().toLowerCase()) + getWarn(c);
+		return file.getInt("cheats." + c.getKey().toLowerCase()) + getWarn(c);
 	}
 
 	public void addWarn(Cheat c) {
@@ -169,7 +169,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void setWarn(Cheat c, int cheats) {
 		try {
-			file.set("cheats." + c.name().toLowerCase(), cheats);
+			file.set("cheats." + c.getKey().toLowerCase(), cheats);
 			file.save(configFile);
 			WARNS.put(c, cheats);
 		} catch (IOException e) {
@@ -203,7 +203,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		ACTIVE_CHEAT.add(c);
 		if(c.needPacket() && !INJECTED.contains(p.getUniqueId()))
 			INJECTED.add(p.getUniqueId());
-		if(c.name().equalsIgnoreCase("FORCEFIELD"))
+		if(c.getKey().equalsIgnoreCase("FORCEFIELD"))
 			makeAppearEntities();
 	}
 
@@ -214,7 +214,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void makeAppearEntities() {
-		if(!ACTIVE_CHEAT.contains(Cheat.getCheatFromString("FORCEFIELD").get()))
+		if(!ACTIVE_CHEAT.contains(Cheat.fromString("FORCEFIELD").get()))
 			return;
 		timeStartFakePlayer = System.currentTimeMillis();
 
@@ -510,7 +510,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public enum FlyingReason {
-		POTION(Cheat.getCheatFromString("ANTIPOTION").get()), REGEN(Cheat.getCheatFromString("AUTOREGEN").get()), EAT(Cheat.getCheatFromString("AUTOEAT").get()), BOW(Cheat.getCheatFromString("FASTBOW").get());
+		POTION(Cheat.fromString("ANTIPOTION").get()), REGEN(Cheat.fromString("AUTOREGEN").get()), EAT(Cheat.fromString("AUTOEAT").get()), BOW(Cheat.fromString("FASTBOW").get());
 
 		private Cheat c;
 

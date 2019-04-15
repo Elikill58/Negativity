@@ -315,7 +315,7 @@ public class SpongeNegativity implements RawDataListener {
 	@Listener
 	public void onBlockBreak(ChangeBlockEvent.Break e, @First Player p) {
 		SpongeNegativityPlayer.getNegativityPlayer(p).mineRate.addMine(MinerateType.getMinerateType(
-				e.getTransactions().get(0).getFinal().getLocation().get().getBlock().getType().getId()));
+				e.getTransactions().get(0).getOriginal().getLocation().get().getBlock().getType().getId()));
 	}
 
 	private void loadConfig() {
@@ -380,7 +380,7 @@ public class SpongeNegativity implements RawDataListener {
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 			String hover_proof) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (c.equals(Cheat.getCheatFromString("BLINK").get()))
+		if (c.equals(Cheat.fromString("BLINK").get()))
 			if (!np.already_blink) {
 				np.already_blink = true;
 				return false;
@@ -400,7 +400,7 @@ public class SpongeNegativity implements RawDataListener {
 			return false;
 		Sponge.getEventManager().post(new PlayerCheatEvent(p, c, reliability));
 		if (hasBypass && Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p),
-				"Permissions.bypass." + c.name().toLowerCase())) {
+				"Permissions.bypass." + c.getKey().toLowerCase())) {
 			PlayerCheatEvent.Bypass bypassEvent = new PlayerCheatEvent.Bypass(p, c, reliability);
 			Sponge.getEventManager().post(bypassEvent);
 			if (!bypassEvent.isCancelled())
@@ -424,7 +424,7 @@ public class SpongeNegativity implements RawDataListener {
 					.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
 							+ ")  (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
 							+ reliability);
-		Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.name() + " (Reliability: " + reliability + ") Ping: "
+		Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.getKey() + " (Reliability: " + reliability + ") Ping: "
 				+ ping + " Type: " + type.getName());
 		Ban.manageBan(c, np, reliability);
 		if (isOnBungeecord)
@@ -451,7 +451,7 @@ public class SpongeNegativity implements RawDataListener {
 			return;
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
 		SpongeNegativityPlayer.getNegativityPlayer(p).logProof(stamp,
-				stamp + ": (" + ping + "ms) " + reliability + "% " + c.name() + " > " + proof);
+				stamp + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " > " + proof);
 	}
 
 	public Path getDataFolder() {

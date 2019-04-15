@@ -42,9 +42,9 @@ public class FightManager implements Listener {
 			long diff = System.currentTimeMillis() - np.timeStartFakePlayer;
 			double diffSec = diff / 1000;
 			if(np.fakePlayerTouched >= 20 && np.fakePlayerTouched >= diffSec) {
-				SpigotNegativity.alertMod(ReportType.VIOLATION, damager, Cheat.getCheatFromString("FORCEFIELD").get(), Utils.parseInPorcent(np.fakePlayerTouched * 10 * (1 / diffSec)), np.fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  np.fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
+				SpigotNegativity.alertMod(ReportType.VIOLATION, damager, Cheat.fromString("FORCEFIELD").get(), Utils.parseInPorcent(np.fakePlayerTouched * 10 * (1 / diffSec)), np.fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  np.fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
 			} else if(np.fakePlayerTouched >= 5 && np.fakePlayerTouched >= diffSec) {
-				SpigotNegativity.alertMod(ReportType.WARNING, damager, Cheat.getCheatFromString("FORCEFIELD").get(), Utils.parseInPorcent(np.fakePlayerTouched * 10 * (1 / diffSec)), np.fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  np.fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
+				SpigotNegativity.alertMod(ReportType.WARNING, damager, Cheat.fromString("FORCEFIELD").get(), Utils.parseInPorcent(np.fakePlayerTouched * 10 * (1 / diffSec)), np.fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  np.fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
 			}
 		}
 		

@@ -111,7 +111,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 
 			ConfigurationNode cheatsNode = config.getNode("cheats");
 			for (Cheat cheat : Cheat.values()) {
-				String cheatId = cheat.name().toLowerCase();
+				String cheatId = cheat.getKey().toLowerCase();
 				ConfigurationNode cheatNode = cheatsNode.getNode(cheatId);
 				if (cheatNode.isVirtual()) {
 					cheatNode.setValue(0);
@@ -169,7 +169,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public void saveData() {
 		ConfigurationNode cheatsNode = config.getNode("cheats");
 		for (Map.Entry<Cheat, Integer> warn : WARNS.entrySet()) {
-			String cheatId = warn.getKey().name().toLowerCase();
+			String cheatId = warn.getKey().getKey().toLowerCase();
 			cheatsNode.getNode(cheatId).setValue(warn.getValue());
 		}
 
@@ -192,7 +192,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public int getAllWarn(Cheat c) {
-		return config.getNode("cheats").getNode(c.name().toLowerCase()).getInt() + getWarn(c);
+		return config.getNode("cheats").getNode(c.getKey().toLowerCase()).getInt() + getWarn(c);
 	}
 
 	public void addWarn(Cheat c) {
@@ -207,7 +207,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 
 	public void setWarn(Cheat c, int cheats) {
 		try {
-			config.getNode("cheats").getNode(c.name().toLowerCase()).setValue(cheats);
+			config.getNode("cheats").getNode(c.getKey().toLowerCase()).setValue(cheats);
 			configLoader.save(config);
 			WARNS.put(c, cheats);
 		} catch (IOException e) {
@@ -366,7 +366,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public enum FlyingReason {
-		POTION(Cheat.getCheatFromString("ANTIPOTION").get()), REGEN(Cheat.getCheatFromString("AUTOREGEN").get()), EAT(Cheat.getCheatFromString("AUTOEAT").get()), BOW(Cheat.getCheatFromString("FASTBOW").get());
+		POTION(Cheat.fromString("ANTIPOTION").get()), REGEN(Cheat.fromString("AUTOREGEN").get()), EAT(Cheat.fromString("AUTOEAT").get()), BOW(Cheat.fromString("FASTBOW").get());
 
 		private Cheat c;
 

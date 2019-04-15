@@ -46,8 +46,8 @@ public class AntiKnockbackProtocol extends Cheat {
 						double d = last.getPosition().distance(actual.getPosition());
 						int ping = Utils.getPing(p), relia = Utils.parseInPorcent(100 - d);
 						if (d < 0.1 && !actual.getBlock().getType().equals(BlockTypes.WEB) && !p.get(Keys.IS_SNEAKING).orElse(false)){
-							np.addWarn(Cheat.getCheatFromString("ANTIKNOCKBACK").get());
-							/*boolean mayCancel = */SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.getCheatFromString("ANTIKNOCKBACK").get(), relia,
+							np.addWarn(Cheat.fromString("ANTIKNOCKBACK").get());
+							/*boolean mayCancel = */SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.fromString("ANTIKNOCKBACK").get(), relia,
 									"Distance after damage: " + d + "; Ping: " + ping, "Distance after damage: " + d);
 						}
 					}

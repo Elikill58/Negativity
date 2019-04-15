@@ -267,7 +267,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (c.equals(Cheat.getCheatFromString("BLINK").get()) && !np.already_blink) {
+		if (c.equals(Cheat.fromString("BLINK").get()) && !np.already_blink) {
 			np.already_blink = true;
 			return false;
 		}
@@ -286,7 +286,7 @@ public class SpigotNegativity extends JavaPlugin {
 			return false;
 		Bukkit.getPluginManager().callEvent(new PlayerCheatEvent(p, c, reliability));
 		if (hasBypass && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p),
-				"Permissions.bypass." + c.name().toLowerCase())) {
+				"Permissions.bypass." + c.getKey().toLowerCase())) {
 			PlayerCheatBypassEvent bypassEvent = new PlayerCheatBypassEvent(p, c, reliability);
 			Bukkit.getPluginManager().callEvent(bypassEvent);
 			if (!bypassEvent.isCancelled())
@@ -304,7 +304,7 @@ public class SpigotNegativity extends JavaPlugin {
 			if (!kick.isCancelled())
 				p.kickPlayer(Messages.getMessage(p, "kick", "%cheat%", c.getName()));
 		}
-		Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.name() + " (Reliability: " + reliability + ") Ping: "
+		Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.getKey() + " (Reliability: " + reliability + ") Ping: "
 				+ ping + " Type: " + type.getName());
 		if(Ban.isBanned(np))
 			return false;
@@ -351,7 +351,7 @@ public class SpigotNegativity extends JavaPlugin {
 	private static void logProof(ReportType type, Player p, Cheat c, int reliability, String proof, int ping) {
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
 		SpigotNegativityPlayer.getNegativityPlayer(p).logProof(stamp,
-				stamp + ": (" + ping + "ms) " + reliability + "% " + c.name() + " > " + proof);
+				stamp + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " > " + proof);
 	}
 
 	public static void manageAutoVerif(Player p) {

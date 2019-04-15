@@ -111,7 +111,7 @@ public class BungeeAdapter extends Adapter {
 			return ConfigurationProvider.getProvider(YamlConfiguration.class).load(f).getString(valueDir);
 		} catch (IOException e) {
 			e.printStackTrace();
-			return "Unknow";
+			return null;
 		}
 	}
 
@@ -158,7 +158,7 @@ public class BungeeAdapter extends Adapter {
 
 	@Override
 	public String getStringFromLang(String lang, String key) {
-		return "";
+		return null;
 	}
 
 	@Override

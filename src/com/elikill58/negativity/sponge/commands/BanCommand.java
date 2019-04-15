@@ -49,7 +49,7 @@ public class BanCommand implements CommandExecutor {
 	private String getFromReason(String line) {
 		for (String s : line.split(" "))
 			for (Cheat c : Cheat.values())
-				if (c.getName().equalsIgnoreCase(s) || c.name().equalsIgnoreCase(s))
+				if (c.getName().equalsIgnoreCase(s) || c.getKey().equalsIgnoreCase(s))
 					return c.getName();
 
 		return "mod";

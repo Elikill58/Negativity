@@ -32,6 +32,7 @@ public class BungeeNegativity extends Plugin {
 		Adapter.setAdapter(new BungeeAdapter(this, CONFIG));
 		UniversalUtils.init();
 		BungeeMessages.load(this);
+		Stats.loadStats();
 		Stats.updateStats(StatsType.ONLINE, 1);
 		try {
 			Stats.updateStats(StatsType.PORT,

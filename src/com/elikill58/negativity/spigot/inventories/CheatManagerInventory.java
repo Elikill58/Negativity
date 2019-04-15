@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.inventories;
 
-import java.util.Optional;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -35,9 +33,7 @@ public class CheatManagerInventory {
 		else if (m.equals(Material.ARROW))
 			ModInventory.openModMenu(p);
 		else {
-			Optional<Cheat> c = Utils.getCheatFromItem(m);
-			if (c.isPresent())
-				OneCheatInventory.openOneCheatMenu(p, c.get());
+			Utils.getCheatFromItem(m).ifPresent((c) -> {OneCheatInventory.openOneCheatMenu(p, c);});
 		}
 	}
 }

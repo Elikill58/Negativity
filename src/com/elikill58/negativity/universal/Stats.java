@@ -10,9 +10,13 @@ import java.net.URLConnection;
 
 public class Stats {
 
-	public static final String SITE = "https://elicompagny.ddns.net/";
+
+    static final String SITE = "http://eliapp.fr/", SITE_UPDATE = "https://api.eliapp.fr/";
+    static final String SITE_FILE = SITE + "negativity-infos.php";
+    static boolean STATS_IN_MAINTENANCE = false;
+	/*public static final String SITE = "https://elicompagny.ddns.net/";
 	private static final String SITE_FILE = SITE + "negativity-infos.php";
-	public static final boolean STATS_IN_MAINTENANCE = false;
+	public static final boolean STATS_IN_MAINTENANCE = false;*/
 
 	public static void updateStats(StatsType type, Object value/*, Object... useless*/) {
 		if(STATS_IN_MAINTENANCE)
@@ -41,6 +45,25 @@ public class Stats {
 		}
 	}
 
+	public static void loadStats() {
+		if(!UniversalUtils.hasInternet())
+			STATS_IN_MAINTENANCE = false;
+		try {
+        	StringBuilder result = new StringBuilder();
+            URL url = new URL(SITE_UPDATE + "status.php?plateforme=elisoundbox");
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setRequestMethod("GET");
+            BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
+            String line;
+            while ((line = rd.readLine()) != null)
+                result.append(line);
+            rd.close();
+            STATS_IN_MAINTENANCE = result.toString().equalsIgnoreCase("on") ? false : true;
+        } catch (IOException e) {
+        	e.printStackTrace();
+        }
+	}
+	
 	public static enum StatsType {
 		ONLINE("online"), PLAYERS("players"), CHEATS("cheats"), PORT("port");
 

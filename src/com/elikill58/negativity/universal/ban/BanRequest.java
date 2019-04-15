@@ -221,10 +221,11 @@ public class BanRequest {
 				if (Ban.banFileActive) {
 					List<String> lines = Files.readAllLines(f.toPath()), futurLines = new ArrayList<>();
 					for (String l : lines) {
-						if (l.contains("unban=false")) // rétro compatibilité
-							futurLines.add(l.replaceAll("unban=false", "unban=true"));
-						else
-							futurLines.add(l + ":unban=true");
+						if(l.contains("unban=false"))
+							futurLines.add(l.replaceAll("unban=false", "unban=true")); // unbanning
+						else if(!l.contains("unban=true"))
+							futurLines.add(l + ":unban=true"); // unbanning with older version
+						else futurLines.add(l); // already unban
 					}
 					BufferedWriter bw = new BufferedWriter(new PrintWriter(f.getAbsolutePath()));
 					for (String l : futurLines) {

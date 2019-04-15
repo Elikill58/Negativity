@@ -18,7 +18,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
@@ -189,14 +188,14 @@ public class SpigotNegativity extends JavaPlugin {
 		getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
 			@Override
 			public void run() {
+				Stats.loadStats();
 				Stats.updateStats(StatsType.ONLINE, 1);
 				Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort());
 			}
 		});
 		ada.loadLang();
 		
-		Plugin essentialsPlugin = Bukkit.getPluginManager().getPlugin("Essentials");
-	    if (essentialsPlugin != null)
+	    if (Bukkit.getPluginManager().getPlugin("Essentials") != null)
 	    	essentialsSupport = true;
 	}
 	

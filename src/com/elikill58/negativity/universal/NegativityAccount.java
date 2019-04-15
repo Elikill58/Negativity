@@ -75,7 +75,7 @@ public class NegativityAccount {
 	}
 	
 	public void loadBanRequest(boolean forceReload) {
-		if (gettedBan)
+		if (!forceReload && gettedBan)
 			return;
 		gettedBan = true;
 		if (Ban.banFileActive) {

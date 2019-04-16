@@ -13,6 +13,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
@@ -24,6 +25,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -312,12 +314,6 @@ public class SpongeAdapter extends Adapter {
 	@Nonnull
 	@Override
 	public NegativityAccount getNegativityAccount(UUID playerId) {
-		Player onlinePlayer = Sponge.getServer().getPlayer(playerId).orElse(null);
-		if (onlinePlayer != null) {
-			invalidateAccount(playerId);
-			return SpongeNegativityPlayer.getNegativityPlayer(onlinePlayer);
-		}
-
 		try {
 			return accountCache.get(playerId);
 		} catch (ExecutionException e) {
@@ -325,10 +321,17 @@ public class SpongeAdapter extends Adapter {
 		}
 	}
 
+	@Nullable
+	@Override
+	public NegativityPlayer getNegativityPlayer(UUID playerId) {
+		Player player = Sponge.getServer().getPlayer(playerId).orElse(null);
+		return player != null ? SpongeNegativityPlayer.getNegativityPlayer(player) : null;
+	}
+
 	public void invalidateAccount(UUID playerId) {
 		accountCache.invalidate(playerId);
 	}
-	
+
 	private static class NegativityAccountLoader extends CacheLoader<UUID, NegativityAccount> {
 
 		@Override

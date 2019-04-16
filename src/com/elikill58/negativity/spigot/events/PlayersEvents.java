@@ -32,22 +32,22 @@ import com.elikill58.negativity.universal.ban.BanRequest;
 import com.elikill58.negativity.universal.permissions.Perm;
 
 public class PlayersEvents implements Listener {
-	
+
 	@EventHandler
 	public void onLogin(PlayerLoginEvent e) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());
-		if(Ban.isBanned(np)) {
-			if(Ban.canConnect(np))
+		if(Ban.isBanned(np.getAccount())) {
+			if(Ban.canConnect(np.getAccount()))
 				return;
 			boolean isDef = false;
-			for(BanRequest br : np.getBanRequest())
+			for(BanRequest br : np.getAccount().getBanRequest())
 				if(br.isDef())
 					isDef = true;
 			e.setResult(Result.KICK_BANNED);
-			e.setKickMessage(Messages.getMessage(e.getPlayer(), "ban.kick_" + (isDef ? "def" : "time"), "%reason%", np.getBanReason(), "%time%" , np.getBanTime(), "%by%", np.getBanBy()));
+			e.setKickMessage(Messages.getMessage(e.getPlayer(), "ban.kick_" + (isDef ? "def" : "time"), "%reason%", np.getAccount().getBanReason(), "%time%" , np.getAccount().getBanTime(), "%by%", np.getAccount().getBanBy()));
 		}
 	}
-	
+
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
@@ -75,7 +75,7 @@ public class PlayersEvents implements Listener {
 			return;
 		SpigotNegativityPlayer.getNegativityPlayer(p).destroy(false);
 	}
-	
+
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e){
 		Player p = e.getPlayer();
@@ -108,7 +108,7 @@ public class PlayersEvents implements Listener {
 		for(Player suspect : suspected)
 			SuspectManager.analyzeText(SpigotNegativityPlayer.getNegativityPlayer(suspect), cheats);
 	}
-	
+
 	@EventHandler
 	public void onBlockBreakEvent(BlockBreakEvent e) {
 		SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer()).mineRate.addMine(MinerateType.getMinerateType(e.getBlock().getType().name()));

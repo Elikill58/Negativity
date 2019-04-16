@@ -11,13 +11,17 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
+import com.elikill58.negativity.bungee.BungeeNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.google.common.io.ByteStreams;
 
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
@@ -196,5 +200,12 @@ public class BungeeAdapter extends Adapter {
 	@Override
 	public NegativityAccount getNegativityAccount(UUID playerId) {
 		return new NegativityAccount(playerId);
+	}
+
+	@Nullable
+	@Override
+	public NegativityPlayer getNegativityPlayer(UUID playerId) {
+		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerId);
+		return player != null ? BungeeNegativityPlayer.getNegativityPlayer(player) : null;
 	}
 }

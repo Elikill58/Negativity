@@ -39,9 +39,9 @@ public class UnbanCommand implements CommandExecutor, TabCompleter {
 				return false;
 			}
 			SpigotNegativityPlayer npCible = SpigotNegativityPlayer.getNegativityPlayer(cible);
-			List<BanRequest> brList =  npCible.getBanRequest();
+			List<BanRequest> brList =  npCible.getAccount().getBanRequest();
 			if(brList.size() == 0) {
-				if(cible.isOnline() || Ban.canConnect(npCible))
+				if(cible.isOnline() || Ban.canConnect(npCible.getAccount()))
 					Messages.sendMessage(sender, "unban.not_banned", "%name%", cible.getName());
 				else
 					Messages.sendMessage(sender, "unban.not_exact", "%arg%", arg[0]);
@@ -72,9 +72,9 @@ public class UnbanCommand implements CommandExecutor, TabCompleter {
 			return false;
 		}
 		SpigotNegativityPlayer npCible = SpigotNegativityPlayer.getNegativityPlayer(cible);
-		List<BanRequest> brList =  npCible.getBanRequest();
+		List<BanRequest> brList =  npCible.getAccount().getBanRequest();
 		if(brList.size() == 0) {
-			if(cible.isOnline() || Ban.canConnect(npCible))
+			if(cible.isOnline() || Ban.canConnect(npCible.getAccount()))
 				Messages.sendMessage(p, "unban.not_banned", "%name%", cible.getName());
 			else
 				Messages.sendMessage(p, "unban.not_exact", "%arg%", arg[0]);

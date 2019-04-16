@@ -131,7 +131,8 @@ public class BanRequest {
 
 	public void execute() {
 		Adapter ada = Adapter.getAdapter();
-		if (np instanceof NegativityPlayer && Perm.hasPerm((NegativityPlayer) np, "notBanned"))
+		NegativityPlayer nPlayer = ada.getNegativityPlayer(np.getPlayerId());
+		if (nPlayer != null && Perm.hasPerm(nPlayer, "notBanned"))
 			return;
 		if (Ban.banActiveIsFile) {
 			try {
@@ -182,10 +183,9 @@ public class BanRequest {
 			}
 		}
 
-		if (np instanceof NegativityPlayer) {
-			NegativityPlayer np = (NegativityPlayer) this.np;
-			np.banEffect();
-			np.kickPlayer(reason, new Timestamp(fullTime).toString().split("\\.", 2)[0], by, def);
+		if (nPlayer != null) {
+			nPlayer.banEffect();
+			nPlayer.kickPlayer(reason, new Timestamp(fullTime).toString().split("\\.", 2)[0], by, def);
 		}
 	}
 
@@ -252,13 +252,13 @@ public class BanRequest {
 		String level = "?";
 		String gamemode = "?";
 		String walkSpeed = "?";
-		if (np instanceof NegativityPlayer) {
-			NegativityPlayer np = (NegativityPlayer) this.np;
-			life = String.valueOf(np.getLife());
-			name = np.getName();
-			level = String.valueOf(np.getLevel());
-			gamemode = np.getGameMode();
-			walkSpeed = String.valueOf(np.getWalkSpeed());
+		NegativityPlayer nPlayer = Adapter.getAdapter().getNegativityPlayer(np.getPlayerId());
+		if (nPlayer != null) {
+			life = String.valueOf(nPlayer.getLife());
+			name = nPlayer.getName();
+			level = String.valueOf(nPlayer.getLevel());
+			gamemode = nPlayer.getGameMode();
+			walkSpeed = String.valueOf(nPlayer.getWalkSpeed());
 		}
 
 		return s.replaceAll("%uuid%", uuid.toString()).replaceAll("%name%", "").replaceAll("%reason%", reason)

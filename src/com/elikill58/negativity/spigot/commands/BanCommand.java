@@ -77,7 +77,7 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 				}
 				time = time * 1000;
 			}
-			
+
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 			String reason = "";
 			for(String s : arg) {
@@ -87,7 +87,7 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 					reason = s;
 				else reason += s;
 			}
-			new BanRequest(np, reason, time, def, BanType.CONSOLE, getFromReason(reason), "admin", false).execute();
+			new BanRequest(np.getAccount(), reason, time, def, BanType.CONSOLE, getFromReason(reason), "admin", false).execute();
 			Messages.sendMessage(sender, "ban.well_ban", "%name%", cible.getName(), "%reason%", reason);
 			return false;
 		}
@@ -148,7 +148,7 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 			}
 			time = time * 1000;
 		}
-		
+
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		String reason = "";
 		for(String s : arg) {
@@ -158,12 +158,12 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 				reason = s;
 			else reason += " " + s;
 		}
-		new BanRequest(np, reason, time, def, BanType.MOD, getFromReason(reason), p.getName(), false).execute();
+		new BanRequest(np.getAccount(), reason, time, def, BanType.MOD, getFromReason(reason), p.getName(), false).execute();
 		np.kickPlayer(reason, new Timestamp(time + System.currentTimeMillis()).toString(), p.getName(), def);
 		Messages.sendMessage(p, "ban.well_ban", "%name%", cible.getName(), "%reason%", reason);
 		return false;
 	}
-	
+
 	private String getFromReason(String line) {
 		for(String s : line.split(" "))
 			for(Cheat c : Cheat.values())
@@ -171,7 +171,7 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 					return c.getName();
 		return "mod";
 	}
-	
+
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] arg) {
 

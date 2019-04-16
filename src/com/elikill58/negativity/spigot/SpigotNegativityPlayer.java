@@ -88,18 +88,15 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		this.uuid = p.getUniqueId();
 		this.mineRate = new Minerate();
 		players.put(p.getUniqueId(), this);
-		loadBanRequest();
 		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
 				+ File.separator + "proof" + File.separator);
 		directory.mkdirs();
 		try {
 			file = YamlConfiguration.loadConfiguration(configFile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
 					+ File.separator + uuid + ".yml"));
-			file.addDefault("lang", TranslatedMessages.DEFAULT_LANG);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		setLang(file.getString("lang"));
 		for(Cheat c : Cheat.values())
 			WARNS.put(c, file.getInt("cheats." + c.getKey().toLowerCase()));
 		initMods(p);
@@ -111,7 +108,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		this.uuid = op.getUniqueId();
 		this.mineRate = new Minerate();
 		players.put(this.uuid, this);
-		loadBanRequest();
 		File tempfile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
 				+ File.separator + uuid + ".txt");
 		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
@@ -122,13 +118,11 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 				tempfile.createNewFile();
 			file = YamlConfiguration.loadConfiguration(configFile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
 					+ File.separator + uuid + ".yml"));
-			file.addDefault("lang", TranslatedMessages.DEFAULT_LANG);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		for(Cheat c : Cheat.values())
 			WARNS.put(c, file.getInt("cheats." + c.getKey().toLowerCase()));
-		setLang(file.getString("lang"));
 	}
 
 	public void initMods(Player p) {
@@ -172,6 +166,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public void setWarn(Cheat c, int cheats) {
 		try {
 			file.set("cheats." + c.getKey().toLowerCase(), cheats);
+			// Temporary workaround to save language until we refactor player data loading/saving
+			file.set("lang", getAccount().getLang());
 			file.save(configFile);
 			WARNS.put(c, cheats);
 		} catch (IOException e) {
@@ -194,11 +190,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		USE_ENTITY = 0;
 		ENTITY_ACTION = 0;
 		ALL = 0;
-	}
-
-	@Override
-	public String getUUID() {
-		return uuid.toString();
 	}
 
 	public void startAnalyze(Cheat c) {

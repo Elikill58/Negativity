@@ -39,7 +39,7 @@ public class BanCommand implements CommandExecutor {
 		SpongeNegativityPlayer targetNPlayer = SpongeNegativityPlayer.getNegativityPlayer(targetPlayer);
 		String reason = args.requireOne("reason");
 
-		BanRequest banRequest = new BanRequest(targetNPlayer, reason, banDuration, isBanDefinitive, src instanceof Player ? BanType.MOD : BanType.CONSOLE, getFromReason(reason), src.getName(), false);
+		BanRequest banRequest = new BanRequest(targetNPlayer.getAccount(), reason, banDuration, isBanDefinitive, src instanceof Player ? BanType.MOD : BanType.CONSOLE, getFromReason(reason), src.getName(), false);
 		banRequest.execute();
 
 		Messages.sendMessage(src, "ban.well_ban", "%name%", targetPlayer.getName(), "%reason%", reason);

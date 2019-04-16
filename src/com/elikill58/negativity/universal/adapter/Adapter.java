@@ -6,9 +6,11 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityPlayer;
 
 public abstract class Adapter {
 
@@ -57,4 +59,6 @@ public abstract class Adapter {
 	public abstract void reloadConfig();
 	@Nonnull
 	public abstract NegativityAccount getNegativityAccount(UUID playerId);
+	@Nullable
+	public abstract NegativityPlayer getNegativityPlayer(UUID playerId);
 }

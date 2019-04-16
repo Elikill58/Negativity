@@ -30,7 +30,7 @@ public class Perm {
 			Object value = null;
 			try (Connection con = Database.getConnection();
 					PreparedStatement stm = con.prepareStatement("SELECT * FROM " + Database.table_perm + " WHERE uuid = ?")) {
-				stm.setString(1, np.getUUID().toString());
+				stm.setString(1, np.getAccount().getUUID());
 
 				ResultSet result = stm.executeQuery();
 				if (result.next()) {
@@ -49,7 +49,7 @@ public class Perm {
 			return false;
 		}
 	}
-	
+
 	private static boolean hasPermLocal(NegativityPlayer np, String perm, Object value) throws Exception {
 		String custom = Adapter.getAdapter().getStringInConfig("Permissions." + perm + ".custom");
 		if (value instanceof Integer || value instanceof Long) {

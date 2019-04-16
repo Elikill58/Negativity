@@ -43,7 +43,6 @@ import com.elikill58.negativity.sponge.precogs.NegativityBypassTicket;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.flowpowered.math.vector.Vector3d;
 
@@ -102,13 +101,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			if (!proofFile.exists())
 				proofFile.createNewFile();
 			config = (configLoader = HoconConfigurationLoader.builder().setFile(file).build()).load();
-			ConfigurationNode langNode = config.getNode("lang");
-			if (langNode.isVirtual()) {
-				langNode.setValue(TranslatedMessages.DEFAULT_LANG);
-			} else {
-				setLang(langNode.getString(TranslatedMessages.DEFAULT_LANG));
-			}
-
 			ConfigurationNode cheatsNode = config.getNode("cheats");
 			for (Cheat cheat : Cheat.values()) {
 				String cheatId = cheat.getKey().toLowerCase();
@@ -125,8 +117,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		loadBanRequest();
 	}
 
 	public void initFmlMods() {
@@ -173,7 +163,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			cheatsNode.getNode(cheatId).setValue(warn.getValue());
 		}
 
-		config.getNode("lang").setValue(getLang());
+		config.getNode("lang").setValue(getAccount().getLang());
 		try {
 			configLoader.save(config);
 		} catch (IOException e) {
@@ -377,11 +367,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		public Cheat getCheat() {
 			return c;
 		}
-	}
-
-	@Override
-	public String getUUID() {
-		return uuid.toString();
 	}
 
 	@Override

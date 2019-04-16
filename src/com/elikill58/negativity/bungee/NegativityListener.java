@@ -98,14 +98,14 @@ public class NegativityListener implements Listener {
 	public void onPostLogin(PostLoginEvent e) {
 		ProxiedPlayer p = e.getPlayer();
 		BungeeNegativityPlayer np = BungeeNegativityPlayer.getNegativityPlayer(p);
-		if(Ban.isBanned(np)) {
-			if(Ban.canConnect(np))
+		if(Ban.isBanned(np.getAccount())) {
+			if(Ban.canConnect(np.getAccount()))
 				return;
 			boolean isDef = false;
-			for(BanRequest br : np.getBanRequest())
+			for(BanRequest br : np.getAccount().getBanRequest())
 				if(br.isDef())
 					isDef = true;
-			p.disconnect(new ComponentBuilder(BungeeMessages.getMessage(e.getPlayer(), "ban.kick_" + (isDef ? "def" : "time"), "%reason%", np.getBanReason(), "%time%" , np.getBanTime(), "%by%", np.getBanBy())).create());
+			p.disconnect(new ComponentBuilder(BungeeMessages.getMessage(e.getPlayer(), "ban.kick_" + (isDef ? "def" : "time"), "%reason%", np.getAccount().getBanReason(), "%time%" , np.getAccount().getBanTime(), "%by%", np.getAccount().getBanBy())).create());
 			return;
 		}
 		Stats.updateStats(StatsType.PLAYERS, ProxyServer.getInstance().getPlayers().size());
@@ -127,7 +127,7 @@ public class NegativityListener implements Listener {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	@EventHandler
 	public void onDisconnect(PlayerDisconnectEvent e) {
 		Stats.updateStats(StatsType.PLAYERS, ProxyServer.getInstance().getPlayers().size());

@@ -23,12 +23,12 @@ import com.elikill58.negativity.universal.utils.NonnullByDefault;
 public class NegativityAccount {
 
 	private UUID playerId;
-	private String lang = TranslatedMessages.DEFAULT_LANG;
-	private boolean gettedBan = false;
-	private List<BanRequest> banRequest = new ArrayList<>();
+	private String lang;
+	private boolean gettedBan;
+	private List<BanRequest> banRequest;
 
 	public NegativityAccount(UUID playerId) {
-		this.playerId = playerId;
+		this(playerId, TranslatedMessages.DEFAULT_LANG, false, new ArrayList<>());
 	}
 
 	public NegativityAccount(UUID playerId, String lang, boolean gettedBan, List<BanRequest> banRequest) {
@@ -49,7 +49,7 @@ public class NegativityAccount {
 	public UUID getPlayerId() {
 		return playerId;
 	}
-	
+
 	public void setLang(String lang) {
 		this.lang = lang;
 	}
@@ -73,7 +73,7 @@ public class NegativityAccount {
 	public void loadBanRequest() {
 		loadBanRequest(false);
 	}
-	
+
 	public void loadBanRequest(boolean forceReload) {
 		if(!Ban.banActive)
 			return;

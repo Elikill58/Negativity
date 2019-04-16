@@ -19,11 +19,6 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 		players.put(p, this);
 	}
 
-	@Override
-	public String getUUID() {
-		return p.getUniqueId().toString();
-	}
-
 	public static BungeeNegativityPlayer getNegativityPlayer(ProxiedPlayer p) {
 		return players.containsKey(p) ? players.get(p) : new BungeeNegativityPlayer(p);
 	}

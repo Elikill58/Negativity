@@ -7,21 +7,29 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.google.common.cache.CacheBuilder;
+import com.google.common.cache.CacheLoader;
+import com.google.common.cache.LoadingCache;
 import com.google.common.io.ByteStreams;
 
 public class SpigotAdapter extends Adapter {
@@ -29,6 +37,9 @@ public class SpigotAdapter extends Adapter {
 	private FileConfiguration config;
 	private JavaPlugin pl;
 	private final HashMap<String, YamlConfiguration> LANGS = new HashMap<>();
+	private LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
+			.expireAfterAccess(10, TimeUnit.MINUTES)
+			.build(new NegativityAccountLoader());
 
 	public SpigotAdapter(JavaPlugin pl, FileConfiguration config) {
 		this.pl = pl;
@@ -208,6 +219,32 @@ public class SpigotAdapter extends Adapter {
 	@Nonnull
 	@Override
 	public NegativityAccount getNegativityAccount(UUID playerId) {
-		return SpigotNegativityPlayer.getNegativityPlayer(Bukkit.getOfflinePlayer(playerId));
+		try {
+			return accountCache.get(playerId);
+		} catch (ExecutionException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Nullable
+	@Override
+	public NegativityPlayer getNegativityPlayer(UUID playerId) {
+		Player player = Bukkit.getPlayer(playerId);
+		return player != null ? SpigotNegativityPlayer.getNegativityPlayer(player) : null;
+	}
+
+	private static class NegativityAccountLoader extends CacheLoader<UUID, NegativityAccount> {
+
+		@Override
+		public NegativityAccount load(UUID playerId) {
+			NegativityAccount account = new NegativityAccount(playerId);
+
+			File userFile = new File(SpigotNegativity.getInstance().getDataFolder(), "user" + File.separator + playerId + ".yml");
+			YamlConfiguration userData = YamlConfiguration.loadConfiguration(userFile);
+			account.setLang(userData.getString("lang", TranslatedMessages.DEFAULT_LANG));
+
+			account.loadBanRequest();
+			return account;
+		}
 	}
 }

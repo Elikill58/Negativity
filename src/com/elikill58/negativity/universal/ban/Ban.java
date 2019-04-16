@@ -23,7 +23,7 @@ public class Ban {
 		if(!banActive)
 			return false;
 		try {
-			np.loadBanRequest();
+			np.loadBanRequest(true);
 			if (np.getBanRequest().size() == 0)
 				return false;
 			boolean isBanned = false;

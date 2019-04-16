@@ -23,10 +23,12 @@ import com.elikill58.negativity.spigot.commands.ReportCommand;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.UniversalUtils;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanRequest;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -35,16 +37,16 @@ public class PlayersEvents implements Listener {
 
 	@EventHandler
 	public void onLogin(PlayerLoginEvent e) {
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());
-		if(Ban.isBanned(np.getAccount())) {
-			if(Ban.canConnect(np.getAccount()))
+		NegativityAccount account = Adapter.getAdapter().getNegativityAccount(e.getPlayer().getUniqueId());
+		if(Ban.isBanned(account)) {
+			if(Ban.canConnect(account))
 				return;
 			boolean isDef = false;
-			for(BanRequest br : np.getAccount().getBanRequest())
+			for(BanRequest br : account.getBanRequest())
 				if(br.isDef())
 					isDef = true;
 			e.setResult(Result.KICK_BANNED);
-			e.setKickMessage(Messages.getMessage(e.getPlayer(), "ban.kick_" + (isDef ? "def" : "time"), "%reason%", np.getAccount().getBanReason(), "%time%" , np.getAccount().getBanTime(), "%by%", np.getAccount().getBanBy()));
+			e.setKickMessage(Messages.getMessage(e.getPlayer(), "ban.kick_" + (isDef ? "def" : "time"), "%reason%", account.getBanReason(), "%time%" , account.getBanTime(), "%by%", account.getBanBy()));
 		}
 	}
 

@@ -80,6 +80,7 @@ public class NegativityAccount {
 		if (!forceReload && gettedBan)
 			return;
 		gettedBan = true;
+		banRequest.clear();
 		if (Ban.banActiveIsFile) {
 			File banFile = new File(Ban.banDir.getAbsolutePath(), getUUID() + ".txt");
 			if (!banFile.exists())

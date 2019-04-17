@@ -8,7 +8,6 @@ import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -198,48 +197,6 @@ public class UniversalUtils {
 
 		private boolean isSolaris(String OS) {
 			return (OS.indexOf("sunos") >= 0);
-		}
-	}
-	
-	public static Optional<Integer> parseToInt(String s){
-		try {
-			int hour = 0, min = 0, month = 0, year = 0, day = 0;
-			for(String spliter : Arrays.asList("m", "h", "d", "mo", "y")) {
-				if(!Arrays.asList(s.split("")).contains(spliter))
-					continue;
-				String[] args = s.split("");
-				int slot = 0;
-				String caracter = args[0], i = "";
-				while(isInteger(caracter) || !caracter.equalsIgnoreCase(spliter)) {
-					if(isInteger(caracter))
-						i += caracter;
-					else if(!caracter.equalsIgnoreCase(spliter))
-						i = "";
-					slot++;
-					caracter = args[slot];
-				}
-				int time = Integer.parseInt(i);
-				switch(spliter) {
-				case "m":
-					min = time;
-					break;
-				case "mo":
-					month = time;
-					break;
-				case "h":
-					hour = time;
-					break;
-				case "y":
-					year = time;
-					break;
-				case "d":
-					day = time;
-					break;
-				}
-			}
-			return Optional.of(min * 60 + hour * 3600 + day * 3600 * 24 + month * 3600 * 24 * 30 + year * 3600 * 24 * 365);
-		} catch (Exception e) {
-			return Optional.empty();
 		}
 	}
 }

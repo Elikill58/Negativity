@@ -161,7 +161,7 @@ public abstract class Cheat {
 				dir = dir.substring(0, dir.lastIndexOf('!'));
 
 			if (dir.startsWith("file:/"))
-				dir = dir.substring(6);
+				dir = dir.substring(UniversalUtils.getOs() == UniversalUtils.OS.LINUX ? 5 : 6);
 
 			for (Object classDir : UniversalUtils.getClasseNamesInPackage(dir, "com.elikill58.negativity." + Adapter.getAdapter().getName() + ".protocols")) {
 				try {

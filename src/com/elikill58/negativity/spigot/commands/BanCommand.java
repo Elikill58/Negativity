@@ -50,23 +50,23 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 					else {
 						switch(c) {
 						case "s":
-							time += UniversalUtils.parseToInt(stringTime).orElse(0);
+							time += Integer.parseInt(stringTime);
 							break;
 						case "m":
-							time += UniversalUtils.parseToInt(stringTime).orElse(0) * 60;
+							time += Integer.parseInt(stringTime) * 60;
 							break;
 						case "h":
-							time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600;
+							time += Integer.parseInt(stringTime) * 3600;
 							break;
 						case "j":
 						case "d":
-							time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600 * 24;
+							time += Integer.parseInt(stringTime) * 3600 * 24;
 							break;
 						case "mo":
-							time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600 * 24 * 30;
+							time += Integer.parseInt(stringTime) * 3600 * 24 * 30;
 							break;
 						case "y":
-							time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600 * 24 * 30 * 12;
+							time += Integer.parseInt(stringTime) * 3600 * 24 * 30 * 12;
 							break;
 						default:
 							Messages.sendMessageList(sender, "ban.help");
@@ -121,23 +121,23 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 				else {
 					switch(c) {
 					case "s":
-						time += UniversalUtils.parseToInt(stringTime).orElse(0);
+						time += Integer.parseInt(stringTime);
 						break;
 					case "m":
-						time += UniversalUtils.parseToInt(stringTime).orElse(0) * 60;
+						time += Integer.parseInt(stringTime) * 60;
 						break;
 					case "h":
-						time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600;
+						time += Integer.parseInt(stringTime) * 3600;
 						break;
 					case "j":
 					case "d":
-						time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600 * 24;
+						time += Integer.parseInt(stringTime) * 3600 * 24;
 						break;
 					case "mo":
-						time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600 * 24 * 30;
+						time += Integer.parseInt(stringTime) * 3600 * 24 * 30;
 						break;
 					case "y":
-						time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600 * 24 * 30 * 12;
+						time += Integer.parseInt(stringTime) * 3600 * 24 * 30 * 12;
 						break;
 					default:
 						Messages.sendMessageList(p, "ban.help");

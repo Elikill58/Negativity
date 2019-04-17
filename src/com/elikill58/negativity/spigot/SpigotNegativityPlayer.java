@@ -141,6 +141,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	@Override
 	public Player getPlayer() {
+		if(p == null)
+			p = Bukkit.getPlayer(uuid);
 		return p;
 	}
 
@@ -178,7 +180,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void clearPackets() {
-		PlayerPacketsClearEvent event = new PlayerPacketsClearEvent(p, this);
+		PlayerPacketsClearEvent event = new PlayerPacketsClearEvent(getPlayer(), this);
 		Bukkit.getPluginManager().callEvent(event);
 		if (FLYING > MAX_FLYING)
 			MAX_FLYING = FLYING;
@@ -201,14 +203,14 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void startAnalyze(Cheat c) {
 		ACTIVE_CHEAT.add(c);
-		if(c.needPacket() && !INJECTED.contains(p.getUniqueId()))
-			INJECTED.add(p.getUniqueId());
+		if(c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
+			INJECTED.add(getPlayer().getUniqueId());
 		if(c.getKey().equalsIgnoreCase("FORCEFIELD"))
 			makeAppearEntities();
 	}
 
 	public void startAllAnalyze() {
-		INJECTED.add(p.getUniqueId());
+		INJECTED.add(getPlayer().getUniqueId());
 		for (Cheat c : Cheat.values())
 			startAnalyze(c);
 	}
@@ -234,8 +236,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	private void spawnRight() {
-		Location loc = p.getLocation().clone();
-		Vector dir = p.getEyeLocation().getDirection();
+		Location loc = getPlayer().getLocation().clone();
+		Vector dir = getPlayer().getEyeLocation().getDirection();
 		double x = dir.getX(), z = dir.getZ();
 		if(x >= 0 && z >= 0) {
 			loc.add(-1, 0, 1);
@@ -247,13 +249,13 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			loc.add(-1, 0, 1);
 		}
 		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(p);
+		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
 		FAKE_PLAYER.add(fp);
 	}
 
 	private void spawnLeft() {
-		Location loc = p.getLocation().clone();
-		Vector dir = p.getEyeLocation().getDirection();
+		Location loc = getPlayer().getLocation().clone();
+		Vector dir = getPlayer().getEyeLocation().getDirection();
 		double x = dir.getX(), z = dir.getZ();
 		if(x >= 0 && z >= 0) {
 			loc.add(0, 0, -1);
@@ -265,13 +267,13 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			loc.add(1, 0, 1);
 		}
 		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(p);
+		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
 		FAKE_PLAYER.add(fp);
 	}
 
 	private void spawnBehind() {
-		Location loc = p.getLocation().clone();
-		Vector dir = p.getEyeLocation().getDirection();
+		Location loc = getPlayer().getLocation().clone();
+		Vector dir = getPlayer().getEyeLocation().getDirection();
 		double x = dir.getX(), z = dir.getZ();
 		if(x >= 0 && z >= 0) {
 			loc.add(1, 0, -1);
@@ -283,7 +285,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			loc.add(1, 0, -1);
 		}
 		loc.add(0, 1, 0);
-		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(p);
+		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
 		FAKE_PLAYER.add(fp);
 	}
 	
@@ -304,7 +306,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if(l >= 3000) {
 			if(FAKE_PLAYER.size() == 0) {
 				timeStartFakePlayer = 0;
-				ForceFieldProtocol.manageForcefieldForFakeplayer(p, this);
+				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
 			}
 		} else {
 			spawnRandom();
@@ -326,40 +328,26 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void sendMessage(String msg, String... arg) {
-		String message = Messages.getMessage(p, msg, arg);
+		String message = Messages.getMessage(getPlayer(), msg, arg);
 		if(!message.equalsIgnoreCase(msg))
-			p.sendMessage(message);
-	}
-
-	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {
-		if (players.containsKey(p.getUniqueId()))
-			return players.get(p.getUniqueId());
-		else
-			return new SpigotNegativityPlayer(p);
-	}
-
-	public static SpigotNegativityPlayer getNegativityPlayer(OfflinePlayer p) {
-		if (players.containsKey(p.getUniqueId()))
-			return players.get(p.getUniqueId());
-		else
-			return new SpigotNegativityPlayer(p);
+			getPlayer().sendMessage(message);
 	}
 
 	public void destroy(boolean isBan) {
-		players.remove(p.getUniqueId());
+		players.remove(getPlayer().getUniqueId());
 		if (isBan) {
-			Entity et = p.getWorld().spawnEntity(p.getLocation(), EntityType.FIREWORK);
+			Entity et = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
 			Firework fire = (Firework) et;
 			FireworkMeta fireMeta = fire.getFireworkMeta();
 			fireMeta.addEffect(FireworkEffect.builder().with(Type.CREEPER).withColor(Color.GREEN).build());
 			fireMeta.setPower(2);
 			fire.setFireworkMeta(fireMeta);
 			fire.detonate();
-			Location loc = p.getLocation();
+			Location loc = getPlayer().getLocation();
 			loc.add(0, 1, 0);
 			double more = 0.1, max = 1.5;
 			for (double d = 0; d < max; d += more) {
-				spawnCircle(1, loc, p);
+				spawnCircle(1, loc);
 				loc.subtract(0, more, 0);
 			}
 		}
@@ -410,7 +398,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return false;
 	}
 
-	public void spawnCircle(double d, Location loc, Player p) {
+	public void spawnCircle(double d, Location loc) {
 		for (double u = 0; u < 360; u += d) {
 			double z = Math.cos(u) * d, x = Math.sin(u) * d;
 			loc.add(x, 1, z);
@@ -421,8 +409,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public boolean hasAntiKnockbackByPass() {
-		if ((p.hasPotionEffect(PotionEffectType.SLOW) && p.getWalkSpeed() < 3.0F)
-				|| (p.hasPotionEffect(PotionEffectType.SLOW_DIGGING) && p.getWalkSpeed() < 3.0F))
+		if ((getPlayer().hasPotionEffect(PotionEffectType.SLOW) && getPlayer().getWalkSpeed() < 3.0F)
+				|| (getPlayer().hasPotionEffect(PotionEffectType.SLOW_DIGGING) && getPlayer().getWalkSpeed() < 3.0F))
 			return true;
 		return false;
 	}
@@ -477,43 +465,39 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return true;
 	}
 
-	public static boolean contains(Player p) {
-		return players.containsKey(p.getUniqueId());
-	}
-
 	@Override
 	public boolean hasDefaultPermission(String s) {
-		return p.hasPermission(s);
+		return getPlayer().hasPermission(s);
 	}
 
 	@Override
 	public double getLife() {
-		return ((Damageable) p).getHealth();
+		return ((Damageable) getPlayer()).getHealth();
 	}
 
 	@Override
 	public String getName() {
-		return p.getName();
+		return getPlayer().getName();
 	}
 
 	@Override
 	public String getGameMode() {
-		return p.getGameMode().name();
+		return getPlayer().getGameMode().name();
 	}
 
 	@Override
 	public float getWalkSpeed() {
-		return p.getWalkSpeed();
+		return getPlayer().getWalkSpeed();
 	}
 
 	@Override
 	public int getLevel() {
-		return p.getLevel();
+		return getPlayer().getLevel();
 	}
 
 	@Override
 	public void kickPlayer(String reason, String time, String by, boolean def) {
-		p.kickPlayer(Messages.getMessage(p, "ban.kick_" + (def ? "def" : "time"), "%reason%", reason, "%time%",
+		getPlayer().kickPlayer(Messages.getMessage(getPlayer(), "ban.kick_" + (def ? "def" : "time"), "%reason%", reason, "%time%",
 				String.valueOf(time), "%by%", by));
 	}
 
@@ -534,8 +518,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	@Override
 	public void banEffect() {
 		int i = 2;
-		Location loc = p.getLocation();
-		World w = p.getWorld();
+		Location loc = getPlayer().getLocation();
+		World w = getPlayer().getWorld();
 		w.spawnEntity(loc, EntityType.FIREWORK);
 		w.spawnEntity(loc, EntityType.FIREWORK);
 		w.spawnEntity(loc, EntityType.FIREWORK);
@@ -574,5 +558,23 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if(fightTask != null)
 			fightTask.cancel();
 		fightTask = null;
+	}
+
+	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {
+		if (players.containsKey(p.getUniqueId()))
+			return players.get(p.getUniqueId());
+		else
+			return new SpigotNegativityPlayer(p);
+	}
+
+	public static SpigotNegativityPlayer getNegativityPlayer(OfflinePlayer p) {
+		if (players.containsKey(p.getUniqueId()))
+			return players.get(p.getUniqueId());
+		else
+			return new SpigotNegativityPlayer(p);
+	}
+	
+	public static boolean contains(Player p) {
+		return players.containsKey(p.getUniqueId());
 	}
 }

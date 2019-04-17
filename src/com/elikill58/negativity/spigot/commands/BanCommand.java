@@ -1,22 +1,26 @@
 package com.elikill58.negativity.spigot.commands;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.UniversalUtils;
 import com.elikill58.negativity.universal.ban.BanRequest;
 import com.elikill58.negativity.universal.ban.BanRequest.BanType;
 import com.elikill58.negativity.universal.permissions.Perm;
 
-public class BanCommand implements CommandExecutor {
+public class BanCommand implements CommandExecutor, TabCompleter {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
@@ -25,21 +29,55 @@ public class BanCommand implements CommandExecutor {
 				Messages.sendMessageList(sender, "ban.help");
 				return false;
 			}
+			if(arg[0].equalsIgnoreCase("help")) {
+				Messages.sendMessageList(sender, "ban.help");
+				return false;
+			}
 			Player cible = Bukkit.getPlayer(arg[0]);
 			if (cible == null) {
 				Messages.sendMessage(sender, "invalid_player", "%arg%", arg[0]);
 				return false;
 			}
-			if(!UniversalUtils.isInteger(arg[1]) && !UniversalUtils.isBoolean(arg[1])) {
-				Messages.sendMessageList(sender, "ban.help");
-				return false;
+			boolean def = false;
+			long time = 0;
+			if(arg[1].equalsIgnoreCase("def")) {
+				def = true;
+			} else {
+				String stringTime = "";
+				for(String c : arg[1].split("")) {
+					if(UniversalUtils.isInteger(c))
+						stringTime += c;
+					else {
+						switch(c) {
+						case "s":
+							time += UniversalUtils.parseToInt(stringTime).orElse(0);
+							break;
+						case "m":
+							time += UniversalUtils.parseToInt(stringTime).orElse(0) * 60;
+							break;
+						case "h":
+							time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600;
+							break;
+						case "j":
+						case "d":
+							time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600 * 24;
+							break;
+						case "mo":
+							time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600 * 24 * 30;
+							break;
+						case "y":
+							time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600 * 24 * 30 * 12;
+							break;
+						default:
+							Messages.sendMessageList(sender, "ban.help");
+							return false;
+						}
+						stringTime = "";
+					}
+				}
+				time = time * 1000;
 			}
 			
-			int time = 0;
-			boolean def = false;
-			if(UniversalUtils.isBoolean(arg[1]))
-				def = UniversalUtils.getFromBoolean(arg[1]);
-			else time = Integer.parseInt(arg[1]);
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 			String reason = "";
 			for(String s : arg) {
@@ -62,21 +100,55 @@ public class BanCommand implements CommandExecutor {
 			Messages.sendMessageList(p, "ban.help");
 			return false;
 		}
+		if(arg[0].equalsIgnoreCase("help")) {
+			Messages.sendMessageList(p, "ban.help");
+			return false;
+		}
 		Player cible = Bukkit.getPlayer(arg[0]);
 		if (cible == null) {
 			Messages.sendMessage(p, "invalid_player", "%arg%", arg[0]);
 			return false;
 		}
-		if(!UniversalUtils.isInteger(arg[1]) && !UniversalUtils.isBoolean(arg[1])) {
-			Messages.sendMessageList(p, "ban.help");
-			return false;
+		boolean def = false;
+		long time = 0;
+		if(arg[1].equalsIgnoreCase("def")) {
+			def = true;
+		} else {
+			String stringTime = "";
+			for(String c : arg[1].split("")) {
+				if(UniversalUtils.isInteger(c))
+					stringTime += c;
+				else {
+					switch(c) {
+					case "s":
+						time += UniversalUtils.parseToInt(stringTime).orElse(0);
+						break;
+					case "m":
+						time += UniversalUtils.parseToInt(stringTime).orElse(0) * 60;
+						break;
+					case "h":
+						time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600;
+						break;
+					case "j":
+					case "d":
+						time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600 * 24;
+						break;
+					case "mo":
+						time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600 * 24 * 30;
+						break;
+					case "y":
+						time += UniversalUtils.parseToInt(stringTime).orElse(0) * 3600 * 24 * 30 * 12;
+						break;
+					default:
+						Messages.sendMessageList(p, "ban.help");
+						return false;
+					}
+					stringTime = "";
+				}
+			}
+			time = time * 1000;
 		}
 		
-		int time = 0;
-		boolean def = false;
-		if(UniversalUtils.isBoolean(arg[1]))
-			def = UniversalUtils.getFromBoolean(arg[1]);
-		else time = Integer.parseInt(arg[1]);
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		String reason = "";
 		for(String s : arg) {
@@ -98,5 +170,26 @@ public class BanCommand implements CommandExecutor {
 				if(c.getName().equalsIgnoreCase(s) || c.getKey().equalsIgnoreCase(s))
 					return c.getName();
 		return "mod";
+	}
+	
+	@Override
+	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] arg) {
+
+		List<String> list = new ArrayList<String>();
+
+		String prefix = arg.length == 0 ? " " : arg[arg.length - 1].toLowerCase();
+		if (arg.length == 1 || (arg.length == 2 && arg[1].equalsIgnoreCase(prefix))) {
+			for (Player p : Utils.getOnlinePlayers())
+				if (prefix.isEmpty() || p.getName().startsWith(prefix))
+					list.add(p.getName());
+		} else if(arg.length == 2 && arg[1].equalsIgnoreCase(prefix)) {
+			if("def".startsWith(prefix))
+				list.add("def");
+		} else {
+			for (Player p : Utils.getOnlinePlayers())
+				if (prefix.isEmpty() || p.getName().startsWith(prefix))
+					list.add(p.getName());
+		}
+		return list;
 	}
 }

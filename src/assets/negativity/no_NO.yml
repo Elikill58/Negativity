@@ -11,7 +11,7 @@ ban {
   kick_time: "&cForbud grunn %reason% før %time% av %by%."
   kick_def: "&cForbud definitivt for %reason% av %by%."
   help = [
-  "/ban <player> <def(true/false) | time (ex: 2h)> <reason> : Forbud den angitte spilleren" ]
+  "/ban <player> <def | time (ex: 2h5d)> <reason> : Forbud den angitte spilleren" ]
   well_ban: "&a[&2Negativity&a]&c %name% godt forbudt for %reason%."
 }
 lang {

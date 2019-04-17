@@ -15,7 +15,7 @@ ban {
   kick_time: "&cBanni pour %reason% jusqu'au %time% par %by%."
   kick_def: "&cBanni definitivement pour %reason% par %by%."
   help = [
-   "/ban <joueur> <def (vrai/faux) | temps (ex: 2h)> <raison> : Bannir le joueur spécifié" ]
+   "/ban <joueur> <def | temps (ex: 2h5d)> <raison> : Bannir le joueur spécifié" ]
   well_ban: "&a[&2Negativity&a]&c %name% banni pour %reason%."
 }
 lang {

@@ -16,7 +16,7 @@ import com.elikill58.negativity.universal.ban.BanRequest.BanType;
 public class Ban {
 
 	public static File banDir;
-	public static boolean banFileActive, banDbActive, banActive;
+	public static boolean banActive, banActiveIsFile;
 	public static final HashMap<String, String> DB_CONTENT = new HashMap<>();
 
 	public static boolean isBanned(NegativityAccount np) {
@@ -64,10 +64,23 @@ public class Ban {
 	public static void init() {
 		Adapter adapter = Adapter.getAdapter();
 		banDir = new File(adapter.getDataFolder(), adapter.getStringInConfig("ban.file.dir"));
-		banDbActive = adapter.getBooleanInConfig("ban.db.isActive");
-		banActive = adapter.getBooleanInConfig("ban.active");
-		banFileActive = !banDbActive;
-		if (banFileActive)
+		if(!(banActive = adapter.getBooleanInConfig("ban.active")))
+			return;
+		String storage = adapter.getStringInConfig("ban.storage");
+		if(storage == null) {
+			adapter.log("Some line is missing in the configuration file. Please, remove it then restart your server to get all configuration line.");
+			return;
+		}
+		if(storage.equalsIgnoreCase("file")) {
+			banActiveIsFile = true;
+		} else if(storage.equalsIgnoreCase("db") || storage.equalsIgnoreCase("database")) {
+			banActiveIsFile = false;
+		} else {
+			adapter.error("Error while loading ban system. " + storage + " is an undefined storage type.");
+			adapter.error("Please, write a good storage type in the configuration, then restart you server.");
+			return;
+		}
+		if (banActiveIsFile)
 			if (!banDir.exists())
 				banDir.mkdirs();
 		DB_CONTENT.putAll(adapter.getKeysListInConfig("ban.db.other"));

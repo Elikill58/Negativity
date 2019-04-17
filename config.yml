@@ -190,6 +190,8 @@ time_between_report: 1000
 
 ban:
   active: false
+  # Where he save ban (file or database). For database, don't forget to edit the login information
+  storage: "file"
   # If you want to destroy BDD line / File line
   destroy_when_unban: false
   reliability_need: 90
@@ -208,7 +210,6 @@ ban:
   file:
     dir: "ban"
   db:
-    isActive: false
     column:
       # For the UUID
       uuid: "uuid"

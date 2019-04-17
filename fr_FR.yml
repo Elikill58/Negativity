@@ -23,7 +23,7 @@ ban:
   # m : minutes
   # s : seconds
   #
-  - "/ban <joueur> <def(vrai/faux) | temps (ex: 2h5m)> <raison> : Bannir le joueur spécifié"
+  - "/ban <joueur> <def | temps (ex: 2h5d)> <raison> : Bannir le joueur spécifié"
   well_ban: "&a[&2Negativity&a]&c %name% a bien été banni pour %reason%."
 unban:
   well_unban: "&a[&2Negativity&a]&c %name% a bien été débanni."

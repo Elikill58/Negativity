@@ -26,6 +26,10 @@ public class Database {
 	}
 
 	public static Connection getConnection() throws SQLException {
+		if(!hasCustom) {
+			Adapter.getAdapter().error("You are trying to use database without active it.");
+			return null;
+		}
 		if (connection == null)
 			connect(url, username, password);
 		if(connection.isClosed())

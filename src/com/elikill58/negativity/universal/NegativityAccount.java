@@ -75,10 +75,12 @@ public class NegativityAccount {
 	}
 	
 	public void loadBanRequest(boolean forceReload) {
+		if(!Ban.banActive)
+			return;
 		if (!forceReload && gettedBan)
 			return;
 		gettedBan = true;
-		if (Ban.banFileActive) {
+		if (Ban.banActiveIsFile) {
 			File banFile = new File(Ban.banDir.getAbsolutePath(), getUUID() + ".txt");
 			if (!banFile.exists())
 				return;
@@ -89,7 +91,7 @@ public class NegativityAccount {
 				e.printStackTrace();
 			}
 		}
-		if (Ban.banDbActive) {
+		if (!Ban.banActiveIsFile) {
 			try {
 				Adapter ada = Adapter.getAdapter();
 				PreparedStatement stm = Database.getConnection()

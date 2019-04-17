@@ -43,7 +43,7 @@ public class BanRequest {
 		this.ac = ac;
 		this.by = by;
 		this.isUnban = isUnban;
-		if (Ban.banFileActive) {
+		if (Ban.banActiveIsFile) {
 			f = new File(Ban.banDir, uuid + ".txt");
 			if (!f.exists())
 				try {
@@ -91,15 +91,6 @@ public class BanRequest {
 				break;
 			}
 		}
-		if (Ban.banFileActive) {
-			f = new File(Ban.banDir, uuid + ".txt");
-			if (!f.exists())
-				try {
-					f.createNewFile();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-		}
 	}
 
 	public NegativityAccount getNegativityPlayer() {
@@ -142,7 +133,7 @@ public class BanRequest {
 		Adapter ada = Adapter.getAdapter();
 		if (np instanceof NegativityPlayer && Perm.hasPerm((NegativityPlayer) np, "notBanned"))
 			return;
-		if (Ban.banFileActive) {
+		if (Ban.banActiveIsFile) {
 			try {
 				f = new File(Ban.banDir, uuid + ".txt");
 				if (!f.exists())
@@ -155,7 +146,7 @@ public class BanRequest {
 				e.printStackTrace();
 			}
 		}
-		if (Ban.banDbActive) {
+		if (!Ban.banActiveIsFile) {
 			try {
 				String values = ada.getStringInConfig("ban.db.column.uuid") + ","
 						+ ada.getStringInConfig("ban.db.column.time") + "," + ada.getStringInConfig("ban.db.column.def")
@@ -206,19 +197,19 @@ public class BanRequest {
 			Adapter ada = Adapter.getAdapter();
 			np.removeBanRequest(this);
 			if (ada.getBooleanInConfig("ban.destroy_when_unban")) {
-				if (Ban.banFileActive) {
+				if (Ban.banActiveIsFile) {
 					Files.write(f.toPath(), "".getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
 					f.delete();
 					f.deleteOnExit();
 				}
-				if (Ban.banDbActive) {
+				if (!Ban.banActiveIsFile) {
 					PreparedStatement stm = Database.getConnection()
 							.prepareStatement("DELETE FROM " + Database.table_ban + " WHERE uuid = ?");
 					stm.setString(1, uuid.toString());
 					stm.execute();
 				}
 			} else {
-				if (Ban.banFileActive) {
+				if (Ban.banActiveIsFile) {
 					List<String> lines = Files.readAllLines(f.toPath()), futurLines = new ArrayList<>();
 					for (String l : lines) {
 						if(l.contains("unban=false"))
@@ -234,7 +225,7 @@ public class BanRequest {
 					}
 					bw.close();
 				}
-				if (Ban.banDbActive) {
+				if (!Ban.banActiveIsFile) {
 					String uc = ada.getStringInConfig("ban.db.column.uuid");
 					PreparedStatement stm = Database.getConnection().prepareStatement("UPDATE " + Database.table_ban
 							+ " SET " + ada.getStringInConfig("ban.db.column.time") + " = ? WHERE " + uc + " = ?");

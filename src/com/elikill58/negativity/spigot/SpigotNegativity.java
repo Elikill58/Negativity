@@ -23,40 +23,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.elikill58.negativity.spigot.commands.BanCommand;
-import com.elikill58.negativity.spigot.commands.LangCommand;
-import com.elikill58.negativity.spigot.commands.ModCommand;
-import com.elikill58.negativity.spigot.commands.NegativityCommand;
-import com.elikill58.negativity.spigot.commands.ReportCommand;
-import com.elikill58.negativity.spigot.commands.SuspectCommand;
-import com.elikill58.negativity.spigot.commands.UnbanCommand;
-import com.elikill58.negativity.spigot.events.ChannelEvents;
-import com.elikill58.negativity.spigot.events.FightManager;
-import com.elikill58.negativity.spigot.events.InventoryEvents;
-import com.elikill58.negativity.spigot.events.PlayersEvents;
-import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
-import com.elikill58.negativity.spigot.listeners.PlayerCheatBypassEvent;
-import com.elikill58.negativity.spigot.listeners.PlayerCheatEvent;
-import com.elikill58.negativity.spigot.listeners.PlayerCheatKickEvent;
+import com.elikill58.negativity.spigot.commands.*;
+import com.elikill58.negativity.spigot.events.*;
+import com.elikill58.negativity.spigot.listeners.*;
 import com.elikill58.negativity.spigot.packets.PacketListenerAPI;
 import com.elikill58.negativity.spigot.packets.PacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
-import com.elikill58.negativity.spigot.timers.ActualizeClickTimer;
-import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
-import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
-import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
+import com.elikill58.negativity.spigot.timers.*;
 import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Database;
-import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.*;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
-import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
-import com.elikill58.negativity.universal.SuspectManager;
-import com.elikill58.negativity.universal.TranslatedMessages;
-import com.elikill58.negativity.universal.UniversalUtils;
-import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpigotAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -164,7 +142,7 @@ public class SpigotNegativity extends JavaPlugin {
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
 		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 20);
 		
-		for(Cheat c : Cheat.CHEATS) {
+		for(Cheat c : Cheat.values()) {
 			if(c.isActive()) {
 				if(c.hasListener()) {
 					pm.registerEvents((Listener) c, this);
@@ -208,27 +186,33 @@ public class SpigotNegativity extends JavaPlugin {
 		PluginCommand reportCmd = getCommand("report");
 		if (!getConfig().getBoolean("report_command"))
 			unRegisterBukkitCommand(reportCmd);
-		else
+		else {
 			reportCmd.setExecutor(new ReportCommand());
-
+			reportCmd.setTabCompleter(new ReportCommand());
+		}
+		
 		PluginCommand banCmd = getCommand("nban");
-		List<String> banAlias = new ArrayList<String>();
-		banAlias.add("negban");
-		banCmd.setAliases(banAlias);
 		if (!getConfig().getBoolean("ban_command"))
 			unRegisterBukkitCommand(banCmd);
-		else
+		else {
+			List<String> banAlias = new ArrayList<String>();
+			banAlias.add("negban");
+			banCmd.setAliases(banAlias);
 			banCmd.setExecutor(new BanCommand());
+			banCmd.setTabCompleter(new BanCommand());
+		}
 
 		PluginCommand unbanCmd = getCommand("nunban");
-		List<String> unbanAlias = new ArrayList<String>();
-		unbanAlias.add("negunban");
-		unbanCmd.setAliases(unbanAlias);
 		if (!getConfig().getBoolean("unban_command"))
 			unRegisterBukkitCommand(unbanCmd);
-		else
+		else {
+			List<String> unbanAlias = new ArrayList<String>();
+			unbanAlias.add("negunban");
+			unbanCmd.setAliases(unbanAlias);
 			unbanCmd.setExecutor(new UnbanCommand());
-
+			unbanCmd.setTabCompleter(new UnbanCommand());
+		}
+		
 		PluginCommand langCmd = getCommand("lang");
 		if (!TranslatedMessages.activeTranslation)
 			unRegisterBukkitCommand(langCmd);
@@ -238,9 +222,11 @@ public class SpigotNegativity extends JavaPlugin {
 		PluginCommand suspectCmd = getCommand("suspect");
 		if (!SuspectManager.ENABLED)
 			unRegisterBukkitCommand(suspectCmd);
-		else
+		else {
 			suspectCmd.setExecutor(new SuspectCommand());
-
+			suspectCmd.setTabCompleter(new SuspectCommand());
+		}
+		
 		getCommand("mod").setExecutor(new ModCommand());
 	}
 

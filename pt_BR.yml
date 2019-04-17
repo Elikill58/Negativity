@@ -23,7 +23,7 @@ ban:
   # m : minutes
   # s : seconds
   #
-  - "/ban <player> <def(true/false) | time (ex: 2h)> <reason> : Proibir o jogador especificado"
+  - "/ban <player> <def | time (ex: 2h5d)> <reason> : Proibir o jogador especificado"
   well_ban: "&a[&2Negativity&a]&c %name% bem proibido por %reason%."
 unban:
   well_unban: "&a[&2Negativity&a]&c %name% bem unpriobido."

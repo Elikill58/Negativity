@@ -6,11 +6,17 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.ThreadLocalRandom;
+
+import javax.annotation.Nullable;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.PotionEffectData;
 import org.spongepowered.api.data.type.DyeColor;
 import org.spongepowered.api.data.type.SkullTypes;
+import org.spongepowered.api.effect.potion.PotionEffect;
+import org.spongepowered.api.effect.potion.PotionEffectType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
@@ -36,6 +42,16 @@ public class Utils {
 
 	public static Collection<Player> getOnlinePlayers() {
 		return Sponge.getServer().getOnlinePlayers();
+	}
+
+	@Nullable
+	public static Player getRandomPlayer() {
+		Collection<Player> onlinePlayers = Sponge.getServer().getOnlinePlayers();
+		if (onlinePlayers.isEmpty())
+			return null;
+
+		int randomIndex = ThreadLocalRandom.current().nextInt(onlinePlayers.size());
+		return onlinePlayers.toArray(new Player[0])[randomIndex];
 	}
 
 	public static boolean getFromBoolean(String s) {
@@ -87,11 +103,11 @@ public class Utils {
 	}
 
 	public static ItemStack createItem(ItemType m, String name, int amount, String... lore) {
-		ItemStack item = ItemStack.builder().quantity(amount == 0 ? 1 : amount).itemType(m).build();
-		item.offer(Keys.DISPLAY_NAME, Text.of(coloredMessage(name)));
+		ItemStack item = ItemStack.of(m, Math.max(amount, 1));
+		item.offer(Keys.DISPLAY_NAME, TextSerializers.FORMATTING_CODE.deserialize(name));
 		List<Text> textLore = new ArrayList<>();
 		for (String lores : lore)
-			textLore.add(Text.of(coloredMessage(lores)));
+			textLore.add(TextSerializers.FORMATTING_CODE.deserialize(lores));
 		item.offer(Keys.ITEM_LORE, textLore);
 		return item;
 	}
@@ -103,18 +119,22 @@ public class Utils {
 	}
 
 	public static ItemStack createSkull(String name, int amount, Player owner, String... lore) {
-		ItemStack skull = ItemStack.builder().itemType(ItemTypes.SKULL).add(Keys.SKULL_TYPE, SkullTypes.PLAYER)
-				.quantity(amount == 0 ? 1 : amount).build();
-		skull.offer(Keys.DISPLAY_NAME, Text.of(coloredMessage("&r" + name)));
-		skull.offer(Keys.TAMED_OWNER, Optional.of(owner.getUniqueId()));
+		ItemStack skull = ItemStack.builder()
+				.itemType(ItemTypes.SKULL)
+				.add(Keys.SKULL_TYPE, SkullTypes.PLAYER)
+				.add(Keys.DISPLAY_NAME, TextSerializers.FORMATTING_CODE.deserialize(name))
+				.add(Keys.REPRESENTED_PLAYER, owner.getProfile())
+				.quantity(Math.max(amount, 1))
+				.build();
+
 		List<Text> textLore = new ArrayList<>();
 		for (String lores : lore)
-			textLore.add(Text.of(coloredMessage(lores)));
+			textLore.add(TextSerializers.FORMATTING_CODE.deserialize(lores));
 		skull.offer(Keys.ITEM_LORE, textLore);
 		return skull;
 	}
 
-	public static Inventory rempliInvWith(ItemStack item, Inventory inv) {
+	public static Inventory fillInventoryWith(ItemStack item, Inventory inv) {
 		inv.forEach(inventory -> inventory.slots().forEach(slot -> slot.set(item)));
 		return inv;
 	}
@@ -155,5 +175,13 @@ public class Utils {
 
 	public static double getLastTPS() {
 		return Sponge.getServer().getTicksPerSecond();
+	}
+
+	public static void removePotionEffect(PotionEffectData effects, PotionEffectType effectType) {
+		for (PotionEffect effect : effects.getListValue()) {
+			if (effect.getType().equals(effectType)) {
+				effects.remove(effect);
+			}
+		}
 	}
 }

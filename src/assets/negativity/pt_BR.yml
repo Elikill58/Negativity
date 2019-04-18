@@ -78,6 +78,8 @@ inventory {
     night_vision: "Visão noturna"
     invisible: "Tornou-se invisível"
     random_tp: "Teletransporte aleatório"
+    random_tp_no_target: "You are the only player online."
+    random_tp_failed: "Random teleportation failed. Another plugin may have cancelled it."
     clear_inv: "Limpe seu inventário"
     inv_cleared: "Inventário limpo!"
     vision_removed: "Visão noturna desativada"

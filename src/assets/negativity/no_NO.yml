@@ -74,6 +74,8 @@ inventory {
     night_vision: "nattsyn"
     invisible: "bli usynelig"
     random_tp: "Tilfeldig teleportasjon"
+    random_tp_no_target: "You are the only player online."
+    random_tp_failed: "Random teleportation failed. Another plugin may have cancelled it."
     clear_inv: "tøm inventaret ditt"
     inv_cleared: "inventar fjernet!"
     vision_removed: "nattsyn &4&l&nslått av"

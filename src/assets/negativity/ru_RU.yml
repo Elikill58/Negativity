@@ -86,6 +86,8 @@ inventory {
     night_vision: "Ночное зрение"
     invisible: "Стать невидимым"
     random_tp: "Случайная телепортация"
+    random_tp_no_target: "You are the only player online."
+    random_tp_failed: "Random teleportation failed. Another plugin may have cancelled it."
     clear_inv: "Очистить ваш инвентарь"
     inv_cleared: "Инвентарь очищен!"
     vision_removed: "Ночное зрение отключено"

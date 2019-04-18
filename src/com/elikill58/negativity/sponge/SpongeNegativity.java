@@ -116,7 +116,7 @@ public class SpongeNegativity implements RawDataListener {
 		eventManager.registerListeners(this, new FightManager());
 		Task.builder().execute(new PacketsTimers()).delayTicks(0).interval(1, TimeUnit.SECONDS)
 				.name("negativity-packets").submit(this);
-		Task.builder().execute(new ActualizerTimer()).delayTicks(0).interval(1, TimeUnit.SECONDS)
+		Task.builder().execute(new ActualizerTimer()).interval(1, TimeUnit.SECONDS)
 				.name("negativity-actualizer").submit(this);
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
@@ -214,7 +214,7 @@ public class SpongeNegativity implements RawDataListener {
 			fmlChannel.addListener(this);
 		}
 	}
-	
+
 	@Listener
 	public void onLogin(ClientConnectionEvent.Login e) {
 		NegativityAccount userAccount = Adapter.getAdapter().getNegativityAccount(e.getTargetUser().getUniqueId());

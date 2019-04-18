@@ -5,6 +5,7 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.NegativityAccount;
@@ -60,7 +61,7 @@ public class Messages {
 		for (String s : TranslatedMessages.getStringListFromLang(getLang(receiver), dir)) {
 			for (int index = 0; index <= placeholders.length - 1; index += 2)
 				s = s.replaceAll(placeholders[index], placeholders[index + 1]);
-			receiver.sendMessage(Text.of(Utils.coloredMessage(s)));
+			receiver.sendMessage(TextSerializers.FORMATTING_CODE.deserialize(s));
 		}
 	}
 

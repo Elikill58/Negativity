@@ -73,7 +73,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
 	public String LAST_OTHER_KEEP_ALIVE;
 	public boolean isInWater = false, isOnWater = false, IS_LAST_SEC_SNEAK = false, bypassBlink = false,
-			isFreeze = false, isInvisible = false, slime_block = false, already_blink = false,
+			isFreeze = false, slime_block = false, already_blink = false,
 			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false, haveClick = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public ItemType eatMaterial = ItemTypes.AIR;

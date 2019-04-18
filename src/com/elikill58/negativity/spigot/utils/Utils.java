@@ -55,6 +55,15 @@ public class Utils {
 				.replaceAll("&o", String.valueOf(ChatColor.ITALIC)).replaceAll("&r", String.valueOf(ChatColor.RESET));
 	}
 
+	public static List<String> coloredMessage(String... messages) {
+		List<String> ret = new ArrayList<>();
+		for (String message : messages) {
+			ret.add(coloredMessage(message));
+		}
+
+		return ret;
+	}
+
 	public static ItemStack createItem(Material m, String name, String... lore) {
 		return createItem(m, name, 1, lore);
 	}
@@ -63,7 +72,7 @@ public class Utils {
 		ItemStack item = new ItemStack(m, quantite);
 		ItemMeta meta = (ItemMeta) item.getItemMeta();
 		meta.setDisplayName(ChatColor.RESET + name);
-		meta.setLore(Arrays.asList(lore));
+		meta.setLore(coloredMessage(lore));
 		item.setItemMeta(meta);
 		return item;
 	}
@@ -152,7 +161,7 @@ public class Utils {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static void sendPacket(Player p, Object packet) {
 		try {
 			Object playerConnection = getPlayerConnection(p);
@@ -163,7 +172,7 @@ public class Utils {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public static Object getPlayerConnection(Player p) {
 		try {
 			Object craftPlayer = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer").cast(p);
@@ -174,7 +183,7 @@ public class Utils {
 			return null;
 		}
 	}
-	
+
 	public static Class<?> getEnumPlayerInfoAction() {
 		try {
 			Class<?> playerInfo = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayOutPlayerInfo");
@@ -189,7 +198,7 @@ public class Utils {
 			return null;
 		}
 	}
-	
+
 	public static Material getMaterialWith1_13_Compatibility(String before1_13, String after1_13) {
 		Material m = null;
 		try {
@@ -207,7 +216,7 @@ public class Utils {
 		}
 		return m;
 	}
-	
+
 	public static Effect getEffect(String effect) {
 		Effect m = null;
 		try {
@@ -246,7 +255,7 @@ public class Utils {
 		double[] tps = getTPS();
 		return tps[tps.length - 1];
 	}
-	
+
 	public static double[] getTPS() {
 		try {
 			Class<?> mcServer = Class.forName("net.minecraft.server." + VERSION + ".MinecraftServer");

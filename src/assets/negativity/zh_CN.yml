@@ -78,6 +78,8 @@ inventory {
     night_vision: "夜视"
     invisible: "隐私"
     random_tp: "随机传送"
+    random_tp_no_target: "You are the only player online."
+    random_tp_failed: "Random teleportation failed. Another plugin may have cancelled it."
     clear_inv: "清除背包"
     inv_cleared: "已清除背包！"
     vision_removed: "已禁用夜视"

@@ -202,7 +202,7 @@ public class InventoryClickManagerEvent {
 	private static void updateItemName(ClickInventoryEvent e, boolean state, SlotTransaction transaction, ItemStackSnapshot clickedItem, Player player, SpongeNegativityPlayer np, String diplaynameKey, String statePlaceholder) {
 		ItemStack stack = clickedItem.createStack();
 		String stateString = Messages.getStringMessage(player, "inventory.manager." + (state ? "enabled" : "disabled"));
-		Text displayName = Messages.getMessage(np, diplaynameKey, statePlaceholder, stateString);
+		Text displayName = Messages.getMessage(np.getAccount(), diplaynameKey, statePlaceholder, stateString);
 		stack.offer(Keys.DISPLAY_NAME, displayName);
 		transaction.setCustom(stack);
 		e.getCursorTransaction().setValid(false);

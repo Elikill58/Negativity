@@ -91,6 +91,15 @@ public class BanRequest {
 				break;
 			}
 		}
+		if (Ban.banActiveIsFile) {
+			f = new File(Ban.banDir, uuid + ".txt");
+			if (!f.exists())
+				try {
+					f.createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+		}
 	}
 
 	public NegativityAccount getNegativityPlayer() {

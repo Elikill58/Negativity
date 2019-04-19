@@ -1,6 +1,5 @@
 package com.elikill58.negativity.spigot.commands;
 
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -159,8 +158,8 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 			else reason += " " + s;
 		}
 		new BanRequest(np.getAccount(), reason, time, def, BanType.MOD, getFromReason(reason), p.getName(), false).execute();
-		np.kickPlayer(reason, new Timestamp(time + System.currentTimeMillis()).toString(), p.getName(), def);
-		Messages.sendMessage(p, "ban.well_ban", "%name%", cible.getName(), "%reason%", reason);
+		if (!sender.equals(cible))
+			Messages.sendMessage(p, "ban.well_ban", "%name%", cible.getName(), "%reason%", reason);
 		return false;
 	}
 

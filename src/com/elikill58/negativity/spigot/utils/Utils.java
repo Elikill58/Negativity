@@ -165,9 +165,12 @@ public class Utils {
 	public static void sendPacket(Player p, Object packet) {
 		try {
 			Object playerConnection = getPlayerConnection(p);
-			playerConnection.getClass()
-					.getMethod("sendPacket", Class.forName("net.minecraft.server." + VERSION + ".Packet"))
-					.invoke(playerConnection, packet);
+			if (playerConnection != null) {
+				playerConnection.getClass()
+						.getMethod("sendPacket", Class.forName("net.minecraft.server." + VERSION + ".Packet"))
+						.invoke(playerConnection, packet);
+			}
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

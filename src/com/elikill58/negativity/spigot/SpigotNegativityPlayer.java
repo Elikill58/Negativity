@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.sql.Timestamp;
@@ -53,7 +54,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public HashMap<Cheat, Integer> WARNS = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
-	private Player p = null;
+	private WeakReference<Player> p;
 	private OfflinePlayer op = null;
 	private UUID uuid = null;
 	// Packets
@@ -84,7 +85,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public SpigotNegativityPlayer(Player p) {
 		super(p.getUniqueId());
-		this.p = p;
+		this.p = new WeakReference<>(p);
 		this.uuid = p.getUniqueId();
 		this.mineRate = new Minerate();
 		players.put(p.getUniqueId(), this);
@@ -135,9 +136,16 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	@Override
 	public Player getPlayer() {
-		if(p == null)
-			p = Bukkit.getPlayer(uuid);
-		return p;
+		Player cached = p != null ? p.get() : null;
+		if (cached == null) {
+			cached = Bukkit.getPlayer(uuid);
+			if (p != null)
+				p.clear();
+
+			p = new WeakReference<>(cached);
+		}
+
+		return cached;
 	}
 
 	public OfflinePlayer getOfflinePlayer() {

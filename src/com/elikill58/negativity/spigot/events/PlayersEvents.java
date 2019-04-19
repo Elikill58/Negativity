@@ -47,6 +47,7 @@ public class PlayersEvents implements Listener {
 					isDef = true;
 			e.setResult(Result.KICK_BANNED);
 			e.setKickMessage(Messages.getMessage(e.getPlayer(), "ban.kick_" + (isDef ? "def" : "time"), "%reason%", account.getBanReason(), "%time%" , account.getBanTime(), "%by%", account.getBanBy()));
+			np.destroy(false);
 		}
 	}
 

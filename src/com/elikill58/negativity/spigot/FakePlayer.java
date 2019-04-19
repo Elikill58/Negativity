@@ -74,7 +74,10 @@ public class FakePlayer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		SpigotNegativityPlayer.getNegativityPlayer(p).removeFakePlayer(this);
+
+		if (SpigotNegativityPlayer.contains(p)) {
+			SpigotNegativityPlayer.getNegativityPlayer(p).removeFakePlayer(this);
+		}
 	}
 	
 	public Location getLocation() {

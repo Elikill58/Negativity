@@ -2,6 +2,7 @@ package com.elikill58.negativity.sponge;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.UUID;
@@ -236,8 +237,6 @@ public class Inv {
 		p.openInventory(inv);
 	}
 
-	private static int i = 0;
-
 	public static void openCheatManagerMenu(Player p) {
 		int size = Utils.getMultipleOf(Cheat.values().size() + 3, 9, 1), nbLine = size / 9;
 		Inventory inv = Inventory.builder()
@@ -249,18 +248,17 @@ public class Inv {
 		for (Cheat c : Cheat.values())
 			if (c.getMaterial() != null)
 				inv.offer(Utils.createItem((ItemType) c.getMaterial(), c.getName()));
-		List<Cheat> cheats = Cheat.values();
-		inv.slots().forEach((slot) -> {
-			if (cheats.size() <= i)
-				return;
-			Cheat c = cheats.get(i++);
-			if (!c.equals(Cheat.ALL))
-				slot.set(Utils.createItem((ItemType) c.getMaterial(), c.getName()));
-		});
-		i = 0;
+		Iterator<Inventory> slots = inv.slots().iterator();
+        Iterator<Cheat> cheats = Cheat.values().iterator();
+        while (slots.hasNext() && cheats.hasNext()) {
+            Cheat cheat = cheats.next();
+            if(cheat.equals(Cheat.ALL))
+            	continue;
+            slots.next().set(Utils.createItem((ItemType) cheat.getMaterial(), cheat.getName()));
+        }
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		invGrid.set(7, nbLine--, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
-		invGrid.set(8, nbLine--, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
+		invGrid.set(7, nbLine - 1, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
+		invGrid.set(8, nbLine - 1, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 

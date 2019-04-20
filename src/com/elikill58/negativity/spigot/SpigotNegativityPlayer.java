@@ -41,7 +41,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.Version;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {

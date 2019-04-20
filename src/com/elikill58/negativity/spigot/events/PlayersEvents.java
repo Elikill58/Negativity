@@ -28,7 +28,6 @@ import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.UniversalUtils;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanRequest;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -37,7 +36,8 @@ public class PlayersEvents implements Listener {
 
 	@EventHandler
 	public void onLogin(PlayerLoginEvent e) {
-		NegativityAccount account = Adapter.getAdapter().getNegativityAccount(e.getPlayer().getUniqueId());
+		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());//Adapter.getAdapter().getNegativityAccount(e.getPlayer().getUniqueId());
+		NegativityAccount account = np.getAccount();
 		if(Ban.isBanned(account)) {
 			if(Ban.canConnect(account))
 				return;

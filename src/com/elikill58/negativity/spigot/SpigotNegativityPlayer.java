@@ -332,7 +332,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void destroy(boolean isBan) {
-		players.remove(getPlayer().getUniqueId());
+		players.remove(uuid);
 		if (isBan) {
 			Entity et = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
 			Firework fire = (Firework) et;

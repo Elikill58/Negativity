@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.events;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -47,6 +48,10 @@ public class PlayersEvents implements Listener {
 					isDef = true;
 			e.setResult(Result.KICK_BANNED);
 			e.setKickMessage(Messages.getMessage(e.getPlayer(), "ban.kick_" + (isDef ? "def" : "time"), "%reason%", account.getBanReason(), "%time%" , account.getBanTime(), "%by%", account.getBanBy()));
+			Adapter.getAdapter().invalidateAccount(account.getPlayerId());
+			if (SpigotNegativityPlayer.contains(e.getPlayer())) {
+				SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer()).destroy(false);
+			}
 		}
 	}
 
@@ -73,9 +78,12 @@ public class PlayersEvents implements Listener {
 	public void onLeave(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
 		Stats.updateStats(StatsType.PLAYERS, Utils.getOnlinePlayers().size() - 1);
-		if (!SpigotNegativityPlayer.contains(p))
-			return;
-		SpigotNegativityPlayer.getNegativityPlayer(p).destroy(false);
+
+		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
+			if (SpigotNegativityPlayer.contains(p)) {
+				SpigotNegativityPlayer.getNegativityPlayer(p).destroy(false);
+			}
+		}, 2);
 	}
 
 	@EventHandler

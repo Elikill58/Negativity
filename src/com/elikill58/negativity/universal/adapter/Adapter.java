@@ -61,4 +61,5 @@ public abstract class Adapter {
 	public abstract NegativityAccount getNegativityAccount(UUID playerId);
 	@Nullable
 	public abstract NegativityPlayer getNegativityPlayer(UUID playerId);
+	public abstract void invalidateAccount(UUID playerId);
 }

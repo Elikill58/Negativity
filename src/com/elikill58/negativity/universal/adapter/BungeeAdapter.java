@@ -208,4 +208,7 @@ public class BungeeAdapter extends Adapter {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerId);
 		return player != null ? BungeeNegativityPlayer.getNegativityPlayer(player) : null;
 	}
+
+	@Override
+	public void invalidateAccount(UUID playerId) {}
 }

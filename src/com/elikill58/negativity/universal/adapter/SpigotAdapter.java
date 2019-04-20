@@ -233,6 +233,11 @@ public class SpigotAdapter extends Adapter {
 		return player != null ? SpigotNegativityPlayer.getNegativityPlayer(player) : null;
 	}
 
+	@Override
+	public void invalidateAccount(UUID playerId) {
+		accountCache.invalidate(playerId);
+	}
+
 	private static class NegativityAccountLoader extends CacheLoader<UUID, NegativityAccount> {
 
 		@Override

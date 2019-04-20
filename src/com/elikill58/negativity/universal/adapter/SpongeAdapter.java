@@ -328,6 +328,7 @@ public class SpongeAdapter extends Adapter {
 		return player != null ? SpongeNegativityPlayer.getNegativityPlayer(player) : null;
 	}
 
+	@Override
 	public void invalidateAccount(UUID playerId) {
 		accountCache.invalidate(playerId);
 	}

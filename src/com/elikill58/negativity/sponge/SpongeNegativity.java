@@ -7,6 +7,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.Timestamp;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import org.slf4j.Logger;
@@ -217,7 +218,10 @@ public class SpongeNegativity implements RawDataListener {
 
 	@Listener
 	public void onLogin(ClientConnectionEvent.Login e) {
-		NegativityAccount userAccount = Adapter.getAdapter().getNegativityAccount(e.getTargetUser().getUniqueId());
+		UUID playerId = e.getTargetUser().getUniqueId();
+		SpongeNegativityPlayer.removeFromCache(playerId, false);
+
+		NegativityAccount userAccount = Adapter.getAdapter().getNegativityAccount(playerId);
 		if (Ban.isBanned(userAccount)) {
 			if (Ban.canConnect(userAccount))
 				return;

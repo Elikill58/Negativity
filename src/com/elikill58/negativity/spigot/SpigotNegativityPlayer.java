@@ -575,4 +575,11 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public static boolean contains(Player p) {
 		return players.containsKey(p.getUniqueId());
 	}
+
+	public static void removeFromCache(UUID playerId, boolean isBan) {
+		SpigotNegativityPlayer cached = players.get(playerId);
+		if (cached != null) {
+			cached.destroy(isBan);
+		}
+	}
 }

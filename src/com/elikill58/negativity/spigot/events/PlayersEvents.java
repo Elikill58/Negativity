@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.events;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,7 +39,10 @@ public class PlayersEvents implements Listener {
 
 	@EventHandler
 	public void onLogin(PlayerLoginEvent e) {
-		NegativityAccount account = Adapter.getAdapter().getNegativityAccount(e.getPlayer().getUniqueId());
+		UUID playerId = e.getPlayer().getUniqueId();
+		SpigotNegativityPlayer.removeFromCache(playerId, false);
+
+		NegativityAccount account = Adapter.getAdapter().getNegativityAccount(playerId);
 		if(Ban.isBanned(account)) {
 			if(Ban.canConnect(account))
 				return;
@@ -49,9 +53,6 @@ public class PlayersEvents implements Listener {
 			e.setResult(Result.KICK_BANNED);
 			e.setKickMessage(Messages.getMessage(e.getPlayer(), "ban.kick_" + (isDef ? "def" : "time"), "%reason%", account.getBanReason(), "%time%" , account.getBanTime(), "%by%", account.getBanBy()));
 			Adapter.getAdapter().invalidateAccount(account.getPlayerId());
-			if (SpigotNegativityPlayer.contains(e.getPlayer())) {
-				SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer()).destroy(false);
-			}
 		}
 	}
 
@@ -81,7 +82,7 @@ public class PlayersEvents implements Listener {
 
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
 			if (SpigotNegativityPlayer.contains(p)) {
-				SpigotNegativityPlayer.getNegativityPlayer(p).destroy(false);
+				SpigotNegativityPlayer.removeFromCache(p.getUniqueId(), false);
 			}
 		}, 2);
 	}

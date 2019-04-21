@@ -1,6 +1,5 @@
 package com.elikill58.negativity.sponge;
 
-import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageReceiver;
@@ -53,7 +52,7 @@ public class Messages {
 		try {
 			receiver.sendMessage(getMessage(receiver, dir, placeholders));
 		} catch (Exception e) {
-			Sponge.getServer().getBroadcastChannel().send(Text.builder("[Negativity] " + dir + " not found. (Code error: " + e.getMessage() + ")").color(TextColors.RED).build());
+			receiver.sendMessage(Text.builder("[Negativity] " + dir + " not found. (Code error: " + e.getMessage() + ")").color(TextColors.RED).build());
 		}
 	}
 

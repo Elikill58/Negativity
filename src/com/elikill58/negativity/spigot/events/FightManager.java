@@ -33,7 +33,7 @@ public class FightManager implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(damager);
 		FakePlayer willRemoved = null;
 		for(FakePlayer tempFp : np.FAKE_PLAYER)
-			if(tempFp.getProfile().getId().equals(hit.getUniqueId()))
+			if(tempFp.getId().equals(hit.getUniqueId()))
 				willRemoved = tempFp;
 		
 		if(willRemoved != null) {
@@ -70,20 +70,24 @@ public class FightManager implements Listener {
 	@EventHandler
 	public void onPlayerItemHeld(PlayerItemHeldEvent e) {
 		Player p = e.getPlayer();
-		switch(p.getItemInHand().getType()) {
-		case DIAMOND_SWORD:
-		case IRON_SWORD:
-		case STONE_SWORD:
-		case GOLDEN_SWORD:
-		case WOODEN_SWORD:
-		case DIAMOND_AXE:
-		case IRON_AXE:
-		case STONE_AXE:
-		case GOLDEN_AXE:
-		case WOODEN_AXE:
-		case BOW:
-		case POTION:
-		case GOLDEN_APPLE:
+		switch(p.getItemInHand().getType().name()) {
+		case "DIAMOND_SWORD":
+		case "IRON_SWORD":
+		case "STONE_SWORD":
+		case "GOLDEN_SWORD":
+		case "GOLD_SWORD":
+		case "WOODEN_SWORD":
+		case "WOOD_SWORD":
+		case "DIAMOND_AXE":
+		case "IRON_AXE":
+		case "STONE_AXE":
+		case "GOLDEN_AXE":
+		case "GOLD_AXE":
+		case "WOODEN_AXE":
+		case "WOOD_AXE":
+		case "BOW":
+		case "POTION":
+		case "GOLDEN_APPLE":
 			manageFightBetweenTwoPlayers(p, 20);
 			break;
 		default:

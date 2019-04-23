@@ -33,6 +33,13 @@ public enum Version {
 		return v1.isNewerOrEquals(v2);
 	}
 
+	public static Version getVersion(String version) {
+		for (Version v : Version.values())
+			if (version.toLowerCase().startsWith(v.name().toLowerCase()))
+				return v;
+		return HIGHER;
+	}
+	
 	public static Version getVersion() {
 		for (Version v : Version.values())
 			if (Adapter.getAdapter().getVersion().toLowerCase().startsWith(v.name().toLowerCase()))

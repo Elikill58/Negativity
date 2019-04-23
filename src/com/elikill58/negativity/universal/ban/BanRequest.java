@@ -178,7 +178,7 @@ public class BanRequest {
 				stm.setString(4, reason);
 				stm.setString(5, ac);
 				stm.setString(6, by);
-				int i = 5;
+				int i = 7;
 				for (String cc : content) {
 					String s = getWithReplaceOlder(cc);
 					if (UniversalUtils.isInteger(s))

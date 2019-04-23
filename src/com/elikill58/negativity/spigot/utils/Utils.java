@@ -190,11 +190,9 @@ public class Utils {
 	public static Class<?> getEnumPlayerInfoAction() {
 		try {
 			Class<?> playerInfo = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayOutPlayerInfo");
-			for(Class<?> clazz : playerInfo.getDeclaredClasses()) {
-				if(clazz.getName().contains("EnumPlayerInfoAction")) {
+			for(Class<?> clazz : playerInfo.getDeclaredClasses())
+				if(clazz.getName().contains("EnumPlayerInfoAction"))
 					return clazz;
-				}
-			}
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();

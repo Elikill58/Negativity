@@ -96,7 +96,7 @@ public class NegativityAccount {
 			try {
 				Adapter ada = Adapter.getAdapter();
 				PreparedStatement stm = Database.getConnection()
-						.prepareStatement("SELECT * FROM " + Database.table_ban + " WHERE uuid = ?");
+						.prepareStatement("SELECT * FROM " + Database.table_ban + " WHERE " + ada.getStringInConfig("ban.db.column.uuid") + " = ?");
 				stm.setString(1, this.getUUID());
 				ResultSet rs = stm.executeQuery();
 				while (rs.next()) {

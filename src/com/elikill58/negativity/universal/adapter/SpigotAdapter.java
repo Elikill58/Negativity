@@ -7,8 +7,6 @@ import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,13 +21,12 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.reflection.cache.CacheManager;
+import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.TranslatedMessages;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import com.google.common.io.ByteStreams;
 
 public class SpigotAdapter extends Adapter {
@@ -37,13 +34,15 @@ public class SpigotAdapter extends Adapter {
 	private FileConfiguration config;
 	private JavaPlugin pl;
 	private final HashMap<String, YamlConfiguration> LANGS = new HashMap<>();
-	private LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
+	private final CacheManager accountCache;
+	/*private LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(10, TimeUnit.MINUTES)
-			.build(new NegativityAccountLoader());
+			.build(new NegativityAccountLoader());*/
 
 	public SpigotAdapter(JavaPlugin pl, FileConfiguration config) {
 		this.pl = pl;
 		this.config = config;
+		this.accountCache = CacheManager.getCacheManagerFor(Utils.VERSION);
 	}
 
 	@Override
@@ -219,11 +218,7 @@ public class SpigotAdapter extends Adapter {
 	@Nonnull
 	@Override
 	public NegativityAccount getNegativityAccount(UUID playerId) {
-		try {
-			return accountCache.get(playerId);
-		} catch (ExecutionException e) {
-			throw new RuntimeException(e);
-		}
+		return accountCache.get(playerId);
 	}
 
 	@Nullable
@@ -238,7 +233,7 @@ public class SpigotAdapter extends Adapter {
 		accountCache.invalidate(playerId);
 	}
 
-	private static class NegativityAccountLoader extends CacheLoader<UUID, NegativityAccount> {
+	/*public static class NegativityAccountLoader extends CacheLoader<UUID, NegativityAccount> {
 
 		@Override
 		public NegativityAccount load(UUID playerId) {
@@ -251,5 +246,10 @@ public class SpigotAdapter extends Adapter {
 			account.loadBanRequest();
 			return account;
 		}
-	}
+
+		@Override
+		public Object getRealCacheLoader() {
+			return null;
+		}
+	}*/
 }

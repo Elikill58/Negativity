@@ -10,11 +10,6 @@ import org.bukkit.entity.Player;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Version;
 
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
-
 public class ClickableText {
 
 	private List<MessageComponent> component = new ArrayList<>();
@@ -113,25 +108,7 @@ public class ClickableText {
 		public void send(Player p) {
 			try {
 				if (Version.getVersion().isNewerOrEquals(Version.V1_13)) {
-					TextComponent text = new TextComponent(this.text);
-					if (a == Action.SHOW_TEXT)
-						text.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
-								new ComponentBuilder(data).create()));
-					else if (a == Action.SUGGEST_COMMAND)
-						text.setClickEvent(
-								new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.SUGGEST_COMMAND, data));
-					else if (a == Action.OPEN_URL)
-						text.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.OPEN_URL, data));
-					else if (a == Action.RUN_COMMAND)
-						text.setClickEvent(
-								new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, data));
-
-					if (a2 == Action.OPEN_URL)
-						text.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.OPEN_URL, data2));
-					else if (a2 == Action.RUN_COMMAND)
-						text.setClickEvent(
-								new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, data2));
-					p.spigot().sendMessage(text);
+					ClickableText1_13.send(p, this);
 				} else {
 					for (Object obj : compile()) {
 						Class<?> chatBaseComponent = Class

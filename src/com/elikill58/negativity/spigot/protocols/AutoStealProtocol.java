@@ -15,7 +15,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ItemUseBypass;
 
-@SuppressWarnings("deprecation")
 public class AutoStealProtocol extends Cheat implements Listener {
 
 	public AutoStealProtocol() {
@@ -24,6 +23,7 @@ public class AutoStealProtocol extends Cheat implements Listener {
 
 	public static final int TIME_CLICK = 55;
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true)
 	public void onInvClick(InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();

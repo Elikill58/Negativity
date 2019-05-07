@@ -114,7 +114,7 @@ public class CheckMenuInventory {
 				AlertInventory.openAlertMenu(p, cible);
 				break;
 			case GRASS:
-				ForgeModsInventory.openForgeModsMenu(cible);
+				ForgeModsInventory.openForgeModsMenu(p, cible);
 				break;
 			case ANVIL:
 				// ban

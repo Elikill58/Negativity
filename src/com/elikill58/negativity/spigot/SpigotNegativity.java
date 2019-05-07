@@ -30,7 +30,6 @@ import com.elikill58.negativity.spigot.packets.PacketListenerAPI;
 import com.elikill58.negativity.spigot.packets.PacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.timers.*;
-import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.*;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
@@ -291,9 +290,9 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.getKey() + " (Reliability: " + reliability + ") Ping: "
 				+ ping + " Type: " + type.getName());
+		Ban.manageBan(c, np, reliability);
 		if(Ban.isBanned(np.getAccount()))
 			return false;
-		Ban.manageBan(c, np, reliability);
 		if (isOnBungeecord)
 			sendMessage(p, c.getName(), String.valueOf(reliability), String.valueOf(ping), hover_proof);
 		else {

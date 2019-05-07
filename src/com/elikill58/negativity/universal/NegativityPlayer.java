@@ -28,4 +28,5 @@ public abstract class NegativityPlayer {
 	public abstract void banEffect();
 	public abstract void startAnalyze(Cheat c);
 	public abstract void startAllAnalyze();
+	public abstract void updateMinerateInFile();
 }

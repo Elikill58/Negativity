@@ -493,6 +493,16 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+  # 
+  xray:
+    ping: 300
+    exact_name: "XRay"
+    isActive: true
+    reliability_alert: 60
+    autoVerif: true
+    setBack: false
+    kick: false
+    alert_to_kick: 5
 
   # For all cheats
   all:

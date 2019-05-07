@@ -14,6 +14,14 @@ kick: "&a[&2弊绝风清&a]&c您由于使用作弊程序 (%cheat%) 而被踢出�
 ban {
   kick_time: "&c被 %by% 以 %reason% 封禁至 %time%。"
   kick_def: "&c被 %by% 以 %reason% 永远封禁。"
+  # For the time, there is:
+  # y : years
+  # mo : months
+  # d : days
+  # h : hours
+  # m : minutes
+  # s : seconds
+  #
   help = [
     "/ban <玩家> <def | 时长 (ex: 2h5d)> <理由> : 封禁指定玩家" ]
   well_ban: "&a[&2弊绝风清&a]&c%name% 由于 %reason% 被合理封禁。"
@@ -23,6 +31,8 @@ lang {
 }
 unban {
   well_unban: "&a[&2弊绝风清&a]&c%name% 被合理解封。"
+  not_banned: "&c%name% n'est pas banni."
+  not_exact: "%arg% n'est pas le nom exacte d'un joueur banni."
   help = [
     "/unban <玩家> : 解封指定玩家。" ]
 }

@@ -118,7 +118,7 @@ public class FakePlayer {
 			minecraftServerClass = Class.forName("net.minecraft.server." + Utils.VERSION + ".MinecraftServer");
 	    	playerInteractManagerClass = Class.forName("net.minecraft.server." + Utils.VERSION + ".PlayerInteractManager");
 	    	entityPlayerConstructor = Class.forName("net.minecraft.server." + Utils.VERSION + ".EntityPlayer").getConstructor(minecraftServerClass, Class.forName("net.minecraft.server." + Utils.VERSION + ".WorldServer"), gameProfileClass, playerInteractManagerClass);
-			playerInteractManagerConstructor = playerInteractManagerClass.getConstructor(Class.forName("net.minecraft.server." + Utils.VERSION + ".World"));
+			playerInteractManagerConstructor = playerInteractManagerClass.getConstructor(Class.forName("net.minecraft.server." + Utils.VERSION + ".World" + (Version.getVersion().equals(Version.V1_14) ? "Server" : "")));
 			minecraftServer = minecraftServerClass.getMethod("getServer").invoke(minecraftServerClass);
 			
 			packetEntitySpawnConstructor = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayOutNamedEntitySpawn").getConstructor(Class.forName("net.minecraft.server." + Utils.VERSION + ".EntityHuman"));

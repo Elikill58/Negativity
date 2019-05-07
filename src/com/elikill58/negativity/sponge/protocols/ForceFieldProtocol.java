@@ -12,9 +12,8 @@ import org.spongepowered.api.item.ItemTypes;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
-import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.*;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class ForceFieldProtocol extends Cheat {

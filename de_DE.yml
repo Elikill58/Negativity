@@ -1,0 +1,88 @@
+report_wait: "Bitte warte, bevor du einen 2. Report machst."
+
+invalid_player: "%arg% existiert nicht!"
+not_forget_player: "Vergiss nicht den Spieler!"
+not_permission: "&cDu hast keine Berechtigungen für diese Aktion."
+only_player: "Nur Spieler können diese Aktion ausführen."
+well_suspect: "%players% hat gut geschätzt!"
+none: "-"
+console: "Administrator"
+fake_entities: "Fake players"
+
+kick: "&a[&2Negativity&a] &cDu wurdest aufgrund von Cheating vom Server geworfen (%cheat%)!"
+
+lang:
+  language_set: "&a[&2Negativity&a] &7Les messages de Negativity seront désormais en français"
+ban:
+  kick_time: "&cDu wurdest von %by% bis %time% gebannt. Grund: %reason%"
+  kick_def: "&cDu wurdest von %by% gebannt! Grund: %reason%"
+  help:
+  # For the time, there is:
+  # y : years
+  # mo : months
+  # d : days
+  # h : hours
+  # m : minutes
+  # s : seconds
+  #
+  - "/ban <player> <def | time (ex: 2h5d)> <reason>: Banne Spieler"
+  well_ban: "&a[&2Negativity&a] &c%name% wurfe gebannt. Grund: %reason%"
+unban:
+  well_unban: "&a[&2Negativity&a] &c%name% wurde entbannt."
+  not_banned: "&c%name% ist nicht gebannt."
+  not_exact: "%arg% ist kein Name der gebannten Spieler."
+report:
+  report_usage: "/report <name> <reason>"
+  well_report: "&a%name% wurde erfolgreich reportet!"
+  report_message: "&a[&2Negativity&a] &c%name% &7wurde von &c%report% &7für &c%reason% &7reportet."
+negativity:
+  alert: "&a[&2Negativity&a] &c%name%&7 scheint folgenden Cheat zu benutzen: &c%cheat% &7(&2Wahrscheinlichkeit: %reliability%&7)!"
+  alert_hover: "&6Wahrscheinlichkeit: %reliability%\nPing: %ping%"
+  verif:
+    invalid_cheat: "%arg% ist kein gültiger Cheat!"
+    start: "&a[&2Negativity&a] &7Überprüft nun %name% auf folgenden Cheat: %cheat%"
+    start_all: "&a[&2Negativity&a] Überprüft nun %name% auf alle bekannten Cheats."
+    help:
+      - "/negativity verif <player> [cheats...]: Startet Verifizierung (für alle, wenn nichts angegeben wird)" 
+      - "/negativity <player>: Um weitere Informationen für einen Spieler anzuzeigen"
+inventory:
+  close: "Schließen"
+  back: "Zurücl"
+  reset_alert: "Lösche Warnungen"
+  main:
+    freeze: "&a[&2Negativity&a] Du wurdest von %name% eingefroren"
+    unfreeze: "&a[&2Negativity&a] Du wurdest von %name% wieder bewegungsfähig gemacht."
+    actual_click: "Aktuelle Klicks: %clicks%"
+    max_click: "Max. Klicks: %clicks%"
+    last_click: "Letzte Sekunde: %clicks%"
+    ping: "Ping von %name%: %ping%"
+    see_inv: "Sehe %name%'s Inventar"
+    teleportation_to: "Teleportation zu %name%"
+    freezing: "Friere %name% ein"
+    active_detection: "Zeige aktive Erkennung von %name% an"
+    see_alerts: "Zeige alle Warnungen von %name% an."
+  detection:
+    name_inv: "Aktive Erkennung"
+    no_active: "Keine aktive Erkennung für %name%"
+  alerts:
+    item_name: "Warnungen für %exact_name%: %warn%"
+    inv_name: "Warnungen"
+  mod:
+    night_vision: "Nachtsicht"
+    invisible: "Unsichtbarkeit"
+    random_tp: "Zufällige Teleportation"
+    clear_inv: "Leere dein Inventar"
+    inv_cleared: "Inventar geleert!"
+    vision_removed: "Nachtsicht deaktiviert"
+    vision_added: "Nachtsicht aktiviert"
+    now_invisible: "Du bist nun unsichtbar."
+    no_longer_invisible: "Du bist wieder sichtbar."
+    you_are_freeze: "Du bist eingefroren. Du kannst dieses Inventar nicht schließen."
+    cheat_manage: "Cheat-Manager"
+  manager:
+    enabled: "&aAn"
+    disabled: "&cAus"
+    setBack: "Bricht die letzte Aktion ab, falls ein Cheat erkannt wurde: &l%back%"
+    autoVerif: "Auto Verifizierung: &l%auto%"
+    allowKick: "Kicke cheatende Spieler: &l%allow%"
+    setActive: "Aktiviere Cheaterkennung: &l%active%"

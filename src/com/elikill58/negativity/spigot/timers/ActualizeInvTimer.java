@@ -19,7 +19,7 @@ public class ActualizeInvTimer extends BukkitRunnable {
 	public void run() {
 		for (Player p : Inv.CHECKING.keySet()) {
 			if (p.getOpenInventory() != null) {
-				String title = p.getOpenInventory().getTopInventory().getTitle();
+				String title = Utils.getInventoryTitle(p.getOpenInventory());
 				if (title.equals(Inv.NAME_ACTIVED_CHEAT_MENU) || title.equals(Inv.NAME_FORGE_MOD_MENU)) {
 				} else if (title.equals(Inv.NAME_CHECK_MENU))
 					CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));

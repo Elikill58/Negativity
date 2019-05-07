@@ -42,7 +42,7 @@ public class OneCheatInventory {
 			return;
 		}
 		Inventory inv = e.getClickedInventory();
-		Cheat c = Utils.getCheatFromName(inv.getName()).get();
+		Cheat c = Utils.getCheatFromName(Utils.getInventoryName(e)).get();
 		if (m.equals(c.getMaterial()))
 			return;
 		int slot = e.getRawSlot();

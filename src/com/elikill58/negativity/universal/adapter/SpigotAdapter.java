@@ -23,9 +23,11 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.reflection.cache.CacheManager;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.google.common.io.ByteStreams;
 
@@ -231,6 +233,11 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public void invalidateAccount(UUID playerId) {
 		accountCache.invalidate(playerId);
+	}
+
+	@Override
+	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {
+		SpigotNegativity.alertMod(type, (Player) p, c, reliability, proof, hover_proof);
 	}
 
 	/*public static class NegativityAccountLoader extends CacheLoader<UUID, NegativityAccount> {

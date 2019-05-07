@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.utils;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -11,6 +12,8 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -20,6 +23,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.UniversalUtils;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -266,6 +270,38 @@ public class Utils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new double[] {};
+		}
+	}
+	
+	public static String getInventoryTitle(InventoryView inv) {
+		try {
+			Object nextInv = inv;
+			if(!Version.getVersion().isNewerOrEquals(Version.V1_14)) {
+				nextInv = inv.getTopInventory();
+			}
+			Method getTitle = nextInv.getClass().getMethod("getTitle");
+			getTitle.setAccessible(true);
+			return (String) getTitle.invoke(nextInv);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String getInventoryName(InventoryClickEvent e) {
+		try {
+			if(Version.getVersion().isNewerOrEquals(Version.V1_14)) {
+				Method m = e.getView().getClass().getMethod("getTitle");
+				m.setAccessible(true);
+				return (String) m.invoke(e.getView());
+			} else {
+				Method m = e.getClickedInventory().getClass().getMethod("getName");
+				m.setAccessible(true);
+				return (String) m.invoke(e.getClickedInventory());
+			}
+		} catch (Exception exc) {
+			exc.printStackTrace();
+			return null;
 		}
 	}
 }

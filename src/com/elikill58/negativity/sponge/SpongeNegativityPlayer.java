@@ -43,6 +43,7 @@ import com.elikill58.negativity.sponge.precogs.NegativityBypassTicket;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.flowpowered.math.vector.Vector3d;
 
@@ -88,7 +89,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		super(p.getUniqueId());
 		this.p = p;
 		this.uuid = p.getUniqueId();
-		this.mineRate = new Minerate();
+		this.mineRate = new Minerate(this);
 
 		try {
 			directory = new File(SpongeNegativity.getInstance().getDataFolder().toAbsolutePath() + File.separator
@@ -112,7 +113,16 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 					WARNS.put(cheat, cheatNode.getInt());
 				}
 			}
-
+			ConfigurationNode minerateNode = config.getNode("minerate");
+			for(MinerateType mt : MinerateType.values()) {
+				ConfigurationNode tempNode = minerateNode.getNode(mt.getName().toLowerCase());
+				if (tempNode.isVirtual()) {
+					tempNode.setValue(0);
+					mineRate.setMine(mt, 0);
+				} else {
+					mineRate.setMine(mt, tempNode.getInt());
+				}
+			}
 			configLoader.save(config);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -162,6 +172,10 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			String cheatId = warn.getKey().getKey().toLowerCase();
 			cheatsNode.getNode(cheatId).setValue(warn.getValue());
 		}
+		ConfigurationNode minerateNode = config.getNode("minerate");
+		for (MinerateType mt : MinerateType.values()) {
+			minerateNode.getNode(mt.getName().toLowerCase()).setValue(mineRate.getMinerateType(mt));
+		}
 
 		config.getNode("lang").setValue(getAccount().getLang());
 		try {
@@ -169,6 +183,10 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		} catch (IOException e) {
 			SpongeNegativity.getInstance().getLogger().error("Unable to save data of player " + p.getName(), e);
 		}
+	}
+	
+	public void updateMinerateInFile() {
+		saveData();
 	}
 
 	public boolean hasBypassTicket(Cheat c) {

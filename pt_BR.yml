@@ -11,6 +11,8 @@ fake_entities: "Jogadores falsos"
 
 kick: "&a[&2Negativity&a]&c Você foi kickado deste servidor por Cheat (%cheat%)"
 
+lang:
+  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in portugese"
 ban:
   kick_time: "&cProibido por %reason% para cimau %time% por %by%."
   kick_def: "&cPermanentemente proibido por %reason% por %by%."

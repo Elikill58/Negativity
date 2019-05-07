@@ -14,9 +14,8 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
-import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.*;
 
 public class NoFallProtocol extends Cheat {
 

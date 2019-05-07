@@ -12,10 +12,10 @@ import org.spongepowered.api.item.ItemTypes;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.ReportType;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.ReportType;
 
 public class AutoStealProtocol extends Cheat {
 

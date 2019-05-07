@@ -11,6 +11,8 @@ fake_entities: "Fake players"
 
 kick: "&a[&2Negativity&a]&c You have been kicked from this server for Cheating (%cheat%)"
 
+lang:
+  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in english"
 ban:
   kick_time: "&cBan for %reason% until %time% by %by%."
   kick_def: "&cBan definitly for %reason% by %by%."

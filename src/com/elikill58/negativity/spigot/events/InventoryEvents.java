@@ -24,7 +24,7 @@ public class InventoryEvents implements Listener {
 			return;
 		Player p = (Player) e.getWhoClicked();
 		Material m = e.getCurrentItem().getType();
-		String invName = e.getClickedInventory().getName();
+		String invName = Utils.getInventoryName(e);
 		if (invName.equals(Inv.NAME_CHECK_MENU)) {
 			CheckMenuInventory.manageCheckMenu(e, m, p);
 		} else if (invName.equals(Inv.NAME_ACTIVED_CHEAT_MENU)) {

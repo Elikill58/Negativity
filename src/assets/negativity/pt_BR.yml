@@ -14,6 +14,14 @@ kick: "&a[&2Negativity&a]&c Você foi kickado deste servidor por Cheat (%cheat%)
 ban {
   kick_time: "&cProibido por %reason% para cimau %time% por %by%."
   kick_def: "&cPermanentemente proibido por %reason% por %by%."
+  # For the time, there is:
+  # y : years
+  # mo : months
+  # d : days
+  # h : hours
+  # m : minutes
+  # s : seconds
+  #
   help = [
    "/ban <jogador> <def | tempo (ex: 2h5d)> <razão> : proibido um jogador" ]
   well_ban: "&a[&2Negativity&a]&c %name% proibido por %reason%."
@@ -23,6 +31,8 @@ lang {
 }
 unban {
   well_unban: "&a[&2Negativity&a]&c %name% bem desbanido."
+  not_banned: "&c%name% isn't banned."
+  not_exact: "%arg% isn't the exact name of a banned player."
   help = [
     "/unban <player> : Jogador especificado Unban" ]
 }

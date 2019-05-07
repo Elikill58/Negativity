@@ -1,0 +1,6 @@
+alert: "&a[&2Negativity&a] &c%name%&7 scheint folgenden Cheat zu benutzen: &c%cheat% &7(&2Wahrscheinlichkeit: %reliability%&7)!"
+alert_hover: "&6Wahrscheinlichkeit: %reliability%\nPing: %ping%"
+report: "&a[&2Negativity&a] &c%name% &7wurde von &c%report% &7für &c%reason% &7reportet."
+ban:
+  kick_time: "&cDu wurdest von %by% bis %time% gebannt. Grund: %reason%"
+  kick_def: "&cDu wurdest von %by% gebannt! Grund: %reason%"

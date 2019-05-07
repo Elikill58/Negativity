@@ -4,12 +4,24 @@ invalid_player: "%arg% er ikke en spiller!"
 not_forget_player: "ikke glem spillerens navn !"
 not_permission: "&cdu har ikke tilgang til dette."
 only_player: "&cOnly a player can use this command"
+well_suspect: "%players% has well suspected !"
+none: "none"
+console: "Administrator"
+fake_entities: "Fake players"
 
 kick: "&a[&2Negativity&a]&c du har blitt sparket fra denne serveren for juksing (%cheat%)"
 
 ban {
   kick_time: "&cForbud grunn %reason% før %time% av %by%."
   kick_def: "&cForbud definitivt for %reason% av %by%."
+  # For the time, there is:
+  # y : years
+  # mo : months
+  # d : days
+  # h : hours
+  # m : minutes
+  # s : seconds
+  #
   help = [
   "/ban <player> <def | time (ex: 2h5d)> <reason> : Forbud den angitte spilleren" ]
   well_ban: "&a[&2Negativity&a]&c %name% godt forbudt for %reason%."
@@ -19,6 +31,8 @@ lang {
 }
 unban {
   well_unban: "&a[&2Negativity&a]&c %name% godt unforbudt."
+  not_banned: "&c%name% isn't banned."
+  not_exact: "%arg% isn't the exact name of a banned player."
   help = [
     "/unban <player> : unforbudt den angitte spilleren" ]
 }

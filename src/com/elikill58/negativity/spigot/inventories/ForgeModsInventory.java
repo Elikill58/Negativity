@@ -16,13 +16,13 @@ public class ForgeModsInventory {
 
 	public static int slot = 0;
 	
-	public static void openForgeModsMenu(Player p) {
+	public static void openForgeModsMenu(Player mod, Player p) {
 		slot = 0;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(np.MODS.size() + 1, 9, 1), Inv.NAME_FORGE_MOD_MENU);
 		if(np.MODS.size() == 0) {
 			inv.setItem(4, Utils.createItem(Material.DIAMOND, "No mods"));
-			inv.setItem(inv.getSize() - 1, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.back")));
+			inv.setItem(inv.getSize() - 1, Utils.createItem(Material.ARROW, Messages.getMessage(mod, "inventory.back")));
 		} else {
 			np.MODS.forEach((name, version) -> {
 				inv.setItem(slot++, Utils.createItem(Material.GRASS, name, ChatColor.GRAY + "Version: " + version));
@@ -31,7 +31,7 @@ public class ForgeModsInventory {
 		for (int i = 0; i < inv.getSize(); i++)
 			if (inv.getItem(i) == null)
 				inv.setItem(i, Inv.EMPTY);
-		p.openInventory(inv);
+		mod.openInventory(inv);
 	}
 	
 	public static void manageForgeModsMenu(InventoryClickEvent e, Material m, Player p) {

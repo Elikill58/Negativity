@@ -17,7 +17,7 @@ commands:
     permission: negativity.ban
   nunban:
     description: Unban a player
-    permission: negativity.ban
+    permission: negativity.unban
   mod:
     description: Option for mod
     permission: negativity.mod

@@ -80,4 +80,9 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	public void startAnalyze(Cheat c) {
 
 	}
+
+	@Override
+	public void updateMinerateInFile() {
+		
+	}
 }

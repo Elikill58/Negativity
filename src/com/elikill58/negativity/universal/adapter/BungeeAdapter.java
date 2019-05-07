@@ -17,6 +17,7 @@ import com.elikill58.negativity.bungee.BungeeNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.google.common.io.ByteStreams;
 
@@ -211,4 +212,7 @@ public class BungeeAdapter extends Adapter {
 
 	@Override
 	public void invalidateAccount(UUID playerId) {}
+
+	@Override
+	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {}
 }

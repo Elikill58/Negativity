@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.ReportType;
 
 public abstract class Adapter {
 
@@ -62,4 +63,5 @@ public abstract class Adapter {
 	@Nullable
 	public abstract NegativityPlayer getNegativityPlayer(UUID playerId);
 	public abstract void invalidateAccount(UUID playerId);
+	public abstract void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof);
 }

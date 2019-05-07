@@ -23,9 +23,11 @@ import org.spongepowered.api.util.TypeTokens;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
@@ -346,5 +348,10 @@ public class SpongeAdapter extends Adapter {
 			account.loadBanRequest();
 			return account;
 		}
+	}
+
+	@Override
+	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {
+		SpongeNegativity.alertMod(type, (Player) p, c, reliability, hover_proof);
 	}
 }

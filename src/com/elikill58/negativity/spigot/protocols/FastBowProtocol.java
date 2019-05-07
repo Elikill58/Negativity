@@ -10,10 +10,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer.FlyingReason;
-import com.elikill58.negativity.spigot.utils.ReportType;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.ReportType;
 
 @SuppressWarnings("deprecation")
 public class FastBowProtocol extends Cheat implements Listener {

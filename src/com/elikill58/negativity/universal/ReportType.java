@@ -1,4 +1,4 @@
-package com.elikill58.negativity.spigot.utils;
+package com.elikill58.negativity.universal;
 
 public enum ReportType {
 

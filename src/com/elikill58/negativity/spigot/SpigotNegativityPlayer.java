@@ -42,6 +42,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.Minerate.MinerateType;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {
 
@@ -86,7 +87,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		super(p.getUniqueId());
 		this.p = new WeakReference<>(p);
 		this.uuid = p.getUniqueId();
-		this.mineRate = new Minerate();
+		this.mineRate = new Minerate(this);
 		players.put(p.getUniqueId(), this);
 		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
 				+ File.separator + "proof" + File.separator);
@@ -106,7 +107,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		super(op.getUniqueId());
 		this.op = op;
 		this.uuid = op.getUniqueId();
-		this.mineRate = new Minerate();
+		this.mineRate = new Minerate(this);
 		players.put(this.uuid, this);
 		File tempfile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
 				+ File.separator + uuid + ".txt");
@@ -123,6 +124,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		}
 		for(Cheat c : Cheat.values())
 			WARNS.put(c, file.getInt("cheats." + c.getKey().toLowerCase()));
+		for(MinerateType mt : MinerateType.values())
+			mineRate.setMine(mt, file.getInt("minerate." + mt.getName().toLowerCase(), 0));
 	}
 
 	public void initMods(Player p) {
@@ -163,11 +166,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public void addWarn(Cheat c) {
 		if (System.currentTimeMillis() < TIME_INVINCIBILITY)
 			return;
-		if (WARNS.containsKey(c))
-			WARNS.put(c, WARNS.get(c) + 1);
-		else
-			WARNS.put(c, 1);
-		setWarn(c, WARNS.get(c));
+		setWarn(c, WARNS.containsKey(c) ? WARNS.get(c) + 1 : 1);
 	}
 
 	public void setWarn(Cheat c, int cheats) {
@@ -177,6 +176,16 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			file.set("lang", getAccount().getLang());
 			file.save(configFile);
 			WARNS.put(c, cheats);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateMinerateInFile() {
+		try {
+			for(MinerateType mt : MinerateType.values())
+				file.set("minerate." + mt.getName().toLowerCase(), mineRate.getMinerateType(mt));
+			file.save(configFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

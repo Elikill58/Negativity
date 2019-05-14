@@ -28,6 +28,8 @@ public abstract class Cheat {
 		if(key.equalsIgnoreCase("ALL"))
 			ALL = this;
 		this.name = Adapter.getAdapter().getStringInConfig("cheats." + key.toLowerCase() + ".exact_name");
+		if (this.name == null)
+			this.name = key;
 		this.aliases = alias;
 	}
 	

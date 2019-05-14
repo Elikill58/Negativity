@@ -1,4 +1,7 @@
-package com.elikill58.negativity.spigot.packets;
+package com.elikill58.negativity.spigot.packets.protocollib;
+
+import java.util.Arrays;
+import java.util.List;
 
 import org.bukkit.plugin.Plugin;
 
@@ -7,9 +10,16 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.ReportType;
+
+import io.netty.buffer.ByteBuf;
 
 public class ProtocollibSupport {
+
+	private static List<String> channelCheckAntiJigsaw = Arrays.asList("MC|BEdit", "MC|BSign");
 
 	public static void run(Plugin pl) {
 		ProtocolLibrary.getProtocolManager().addPacketListener(
@@ -40,6 +50,8 @@ public class ProtocollibSupport {
 							np.USE_ENTITY++;
 						} else if (e.getPacketType().equals(PacketType.Play.Client.ENTITY_ACTION)) {
 							np.ENTITY_ACTION++;
+						} else if (e.getPacketType().equals(PacketType.Play.Client.CUSTOM_PAYLOAD)) {
+							manageAntiJigsaw(e, np);
 						}
 						if (!e.getPacketType().equals(PacketType.Play.Client.KEEP_ALIVE)) {
 							np.TIME_OTHER_KEEP_ALIVE = System.currentTimeMillis();
@@ -47,5 +59,19 @@ public class ProtocollibSupport {
 						}
 					}
 				});
+	}
+
+	public static void manageAntiJigsaw(PacketEvent e, SpigotNegativityPlayer np) {
+		String channel = e.getPacket().getStrings().getValues().get(0);
+		int capacity = ((ByteBuf) e.getPacket().getModifier().getValues().get(1)).capacity();
+		if (capacity > 25000) {
+			if(channelCheckAntiJigsaw.contains(channel)) {
+				e.setCancelled(true);
+				SpigotNegativity.alertMod(np.already_jigsaw ? ReportType.VIOLATION : ReportType.WARNING, np.getPlayer(),
+						Cheat.forKey("EDITED_CLIENT").get(), np.already_jigsaw ? 100 : 80, "Trying to crash the server with " + capacity + " requests. Channel used: " + channel + ", ", "Trying to crash the server with " + capacity + " requests");
+				if (!np.already_jigsaw)
+					np.already_jigsaw = true;
+			}
+		}
 	}
 }

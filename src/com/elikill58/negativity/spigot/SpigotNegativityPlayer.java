@@ -71,7 +71,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean PACKET_ANALYZE_STARTED = false, isInWater = false, isOnWater = false, FALL = false,
 			KEEP_ALIVE_BEFORE = false, IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false,
 			isInvisible = false, slime_block = false, already_blink = false, isJumpingWithBlock = false,
-			isOnLadders = false, lastClickInv = false;
+			isOnLadders = false, lastClickInv = false, already_jigsaw = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;
 	public YamlConfiguration file;

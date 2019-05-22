@@ -8,17 +8,16 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
+import com.elikill58.negativity.universal.adapter.Adapter;
+
 public class Stats {
 
 
-    static final String SITE = "http://eliapp.fr/", SITE_UPDATE = "https://api.eliapp.fr/";
+    static final String SITE = "https://eliapp.fr/", SITE_UPDATE = "https://api.eliapp.fr/";
     static final String SITE_FILE = SITE + "negativity-infos.php";
     static boolean STATS_IN_MAINTENANCE = false;
-	/*public static final String SITE = "https://elicompagny.ddns.net/";
-	private static final String SITE_FILE = SITE + "negativity-infos.php";
-	public static final boolean STATS_IN_MAINTENANCE = false;*/
 
-	public static void updateStats(StatsType type, Object value/*, Object... useless*/) {
+	public static void updateStats(StatsType type, Object value) {
 		if(STATS_IN_MAINTENANCE)
 			return;
 		if (!UniversalUtils.hasInternet() || !UniversalUtils.statsServerOnline())
@@ -50,7 +49,7 @@ public class Stats {
 			STATS_IN_MAINTENANCE = false;
 		try {
         	StringBuilder result = new StringBuilder();
-            URL url = new URL(SITE_UPDATE + "status.php?plateforme=elisoundbox");
+            URL url = new URL(SITE_UPDATE + "status.php?plateforme=negativity");
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
             conn.setRequestMethod("GET");
             BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -59,6 +58,8 @@ public class Stats {
                 result.append(line);
             rd.close();
             STATS_IN_MAINTENANCE = result.toString().equalsIgnoreCase("on") ? false : true;
+            if(!STATS_IN_MAINTENANCE)
+            	Adapter.getAdapter().log("Website is in maintenance mode.");
         } catch (IOException e) {
         	e.printStackTrace();
         }

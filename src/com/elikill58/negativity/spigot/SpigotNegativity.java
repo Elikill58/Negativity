@@ -23,17 +23,40 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.elikill58.negativity.spigot.commands.*;
-import com.elikill58.negativity.spigot.events.*;
-import com.elikill58.negativity.spigot.listeners.*;
+import com.elikill58.negativity.spigot.commands.BanCommand;
+import com.elikill58.negativity.spigot.commands.LangCommand;
+import com.elikill58.negativity.spigot.commands.ModCommand;
+import com.elikill58.negativity.spigot.commands.NegativityCommand;
+import com.elikill58.negativity.spigot.commands.ReportCommand;
+import com.elikill58.negativity.spigot.commands.SuspectCommand;
+import com.elikill58.negativity.spigot.commands.UnbanCommand;
+import com.elikill58.negativity.spigot.events.ChannelEvents;
+import com.elikill58.negativity.spigot.events.FightManager;
+import com.elikill58.negativity.spigot.events.InventoryEvents;
+import com.elikill58.negativity.spigot.events.PlayersEvents;
+import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
+import com.elikill58.negativity.spigot.listeners.PlayerCheatBypassEvent;
+import com.elikill58.negativity.spigot.listeners.PlayerCheatEvent;
+import com.elikill58.negativity.spigot.listeners.PlayerCheatKickEvent;
 import com.elikill58.negativity.spigot.packets.PacketListenerAPI;
 import com.elikill58.negativity.spigot.packets.PacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
-import com.elikill58.negativity.spigot.timers.*;
+import com.elikill58.negativity.spigot.timers.ActualizeClickTimer;
+import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
+import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
+import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.*;
+import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Database;
+import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
+import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
+import com.elikill58.negativity.universal.SuspectManager;
+import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.UniversalUtils;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpigotAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -43,7 +66,7 @@ import com.elikill58.negativity.universal.permissions.Perm;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean isOnBungeecord = false, log = false, hasBypass = true, essentialsSupport = false;
+	public static boolean isOnBungeecord = false, log = false, hasBypass = true, essentialsSupport = false, worldGuardSupport = false;
 	public static Material MATERIAL_CLOSE = Material.REDSTONE;
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null;
 	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
@@ -174,6 +197,8 @@ public class SpigotNegativity extends JavaPlugin {
 
 	    if (Bukkit.getPluginManager().getPlugin("Essentials") != null)
 	    	essentialsSupport = true;
+	    if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null)
+	    	worldGuardSupport = true;
 	}
 
 	private void loadCommand() {

@@ -140,6 +140,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	private void sendFmlPacket(byte... data) {
+		if(SpongeNegativity.fmlChannel == null)
+			return;
 		SpongeNegativity.fmlChannel.sendTo(p, (payload) -> {
 			payload.writeBytes(data);
 		});

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge.protocols;
 
 import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
@@ -37,7 +38,7 @@ public class ScaffoldProtocol extends Cheat {
 			BlockType placed = e.getTransactions().get(0).getOriginal().getLocation().get().getBlock().getType();
 			if(!placed.getItem().isPresent())
 				return;
-			if ((m == null || (!np.isBlock(m) && !m.equals(placed.getItem().get()))) && slot != 0) {
+			if ((m == null || (!np.isBlock(m) && !m.equals(placed.getItem().get()))) && slot != 0 && !placed.equals(BlockTypes.AIR)) {
 				int localPing = ping;
 				if (localPing == 0)
 					localPing = 1;

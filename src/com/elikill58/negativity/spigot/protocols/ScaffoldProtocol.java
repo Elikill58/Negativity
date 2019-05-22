@@ -7,7 +7,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -34,11 +33,11 @@ public class ScaffoldProtocol extends Cheat implements Listener {
 		int ping = Utils.getPing(p), slot = p.getInventory().getHeldItemSlot();
 		if(ping > 120)
 			return;
-		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new BukkitRunnable() {
+		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 			@Override
 			public void run() {
 				Material m = p.getItemInHand().getType(), placed = e.getBlockPlaced().getType();
-				if ((m == null || (!np.isBlock(m) && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot()) {
+				if ((m == null || (!np.isBlock(m) && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot() && !placed.equals(Material.AIR)) {
 					int localPing = ping;
 					if(localPing == 0)
 						localPing = 1;

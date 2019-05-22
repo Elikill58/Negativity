@@ -11,11 +11,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.support.WorldGuardSupport;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ReportType;
@@ -23,10 +23,9 @@ import com.elikill58.negativity.universal.ReportType;
 public class AntiKnockbackProtocol extends Cheat implements Listener {
 	
 	public AntiKnockbackProtocol() {
-		super("ANTIKNOCKBACK", false, Material.STICK, false, true, "antikb", "anti-kb", "no-kb");
+		super("ANTIKNOCKBACK", false, Material.STICK, false, true, "antikb", "anti-kb", "no-kb", "nokb");
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e) {
 		if (!(e.getEntity() instanceof Player) || e.isCancelled())
@@ -37,16 +36,16 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if(e.getDamager().getType().equals(EntityType.EGG))
+		if(e.getDamager().getType().equals(EntityType.EGG) || SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p))
 			return;
-		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new BukkitRunnable() {
+		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 
 			@Override
 			public void run() {
 				final Location last = p.getLocation();
 				p.damage(0D);
 				p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
-				Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new BukkitRunnable() {
+				Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 					@Override
 					public void run() {
 						Location actual = p.getLocation();

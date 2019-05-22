@@ -27,9 +27,7 @@ public class NegativityCommand implements CommandExecutor {
 			Messages.sendMessageList(playerSource, "negativity.verif.help");
 			return CommandResult.empty();
 		}
-
 		Inv.openCheckMenu(playerSource, targetPlayer);
-
 		return CommandResult.success();
 	}
 

@@ -212,8 +212,12 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		ACTIVE_CHEAT.add(c);
 		if(c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
 			INJECTED.add(getPlayer().getUniqueId());
-		if(c.getKey().equalsIgnoreCase("FORCEFIELD"))
-			makeAppearEntities();
+		if(c.getKey().equalsIgnoreCase("FORCEFIELD")) {
+			if(timeStartFakePlayer == 0)
+				timeStartFakePlayer = 1; // not on the player connection
+			else
+				makeAppearEntities();
+		}
 	}
 
 	public void startAllAnalyze() {

@@ -252,15 +252,6 @@ public class SpongeNegativity implements RawDataListener {
 				} catch (MalformedURLException e1) {
 					e1.printStackTrace();
 				}
-
-				/*
-				 * p.sendMessage(Text.builder("[Negativity] Dependency not found.").color(
-				 * TextColors.RED).build()); p.sendMessage(Text.
-				 * builder("Please download PacketGate here: https://github.com/CrushedPixel/PacketGate/releases"
-				 * ).color(TextColors.RED).build()); p.sendMessage(Text.
-				 * builder("Then, put it in your mods folder and restart the server.").color(
-				 * TextColors.RED).build());
-				 */
 			}
 
 			Task.builder()

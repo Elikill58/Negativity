@@ -107,13 +107,13 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				if (ping < 140) {
 					int total = np.ALL - np.KEEP_ALIVE;
 					if (total == 0) {
-						if(Utils.parseInPorcent(160 - ping) >= BLINK.getReliabilityAlert()) {
+						if(Utils.parseInPorcent(120 - ping) >= BLINK.getReliabilityAlert()) {
 							np.addWarn(BLINK);
 							boolean last = np.IS_LAST_SEC_BLINK == 2;
 							np.IS_LAST_SEC_BLINK++;
 							long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
 							if (last) {
-								SpigotNegativity.alertMod(ReportType.WARNING, p, BLINK, Utils.parseInPorcent(160 - ping),
+								SpigotNegativity.alertMod(ReportType.WARNING, p, BLINK, Utils.parseInPorcent(120 - ping),
 										"No packet. Last other than KeepAlive: " + np.LAST_OTHER_KEEP_ALIVE + " there is: "
 												+ time_last + "ms . Ping: " + ping + ". Warn: " + np.getWarn(BLINK));
 							}

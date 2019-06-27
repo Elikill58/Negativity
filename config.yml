@@ -254,6 +254,7 @@ cheats:
   # Forcefield is to hit more entity than real people in the same time and further
   forcefield:
     reach: 3.97 # In blocks !
+    ghost_disabled: false
     ping: 150
     exact_name: "ForceField"
     isActive: true

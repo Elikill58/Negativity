@@ -470,4 +470,9 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			Adapter.getAdapter().getNegativityAccount(playerId).loadBanRequest(true);
 		}
 	}
+
+	@Override
+	public boolean isOp() {
+		return false;
+	}
 }

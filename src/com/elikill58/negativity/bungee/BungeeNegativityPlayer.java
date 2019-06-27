@@ -85,4 +85,9 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	public void updateMinerateInFile() {
 		
 	}
+
+	@Override
+	public boolean isOp() {
+		return false;
+	}
 }

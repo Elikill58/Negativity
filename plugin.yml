@@ -35,6 +35,7 @@ permissions:
       negativity.negativity: true
       negativity.report: true
       negativity.ban: true
+      negativity.unban: true
       negativity.mod: true
       negativity.suspect: true
   negativity.negativity:

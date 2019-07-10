@@ -51,7 +51,7 @@ public class AutoRegenProtocol extends Cheat implements Listener {
 		else
 			np.flyingReason = FlyingReason.REGEN;
 		long actual = System.currentTimeMillis(), dif = actual - np.LAST_REGEN;
-		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && np.ACTIVE_CHEAT.contains(this)) {
+		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && np.ACTIVE_CHEAT.contains(this) && (np.LAST_REGEN != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))) {
 			int ping = Utils.getPing(p);
 			if (dif < (Version.getVersion().getTimeBetweenTwoRegenFromVersion() + ping)) {
 				np.addWarn(this);

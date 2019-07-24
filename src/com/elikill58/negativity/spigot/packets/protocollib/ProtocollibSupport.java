@@ -14,6 +14,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Version;
 
 import io.netty.buffer.ByteBuf;
 
@@ -50,7 +51,7 @@ public class ProtocollibSupport {
 							np.USE_ENTITY++;
 						} else if (e.getPacketType().equals(PacketType.Play.Client.ENTITY_ACTION)) {
 							np.ENTITY_ACTION++;
-						} else if (e.getPacketType().equals(PacketType.Play.Client.CUSTOM_PAYLOAD)) {
+						} else if (e.getPacketType().equals(PacketType.Play.Client.CUSTOM_PAYLOAD) && !Version.getVersion().isNewerOrEquals(Version.V1_9)) {
 							manageAntiJigsaw(e, np);
 						}
 						if (!e.getPacketType().equals(PacketType.Play.Client.KEEP_ALIVE)) {
@@ -62,16 +63,21 @@ public class ProtocollibSupport {
 	}
 
 	public static void manageAntiJigsaw(PacketEvent e, SpigotNegativityPlayer np) {
-		String channel = e.getPacket().getStrings().getValues().get(0);
-		int capacity = ((ByteBuf) e.getPacket().getModifier().getValues().get(1)).capacity();
-		if (capacity > 25000) {
-			if(channelCheckAntiJigsaw.contains(channel)) {
-				e.setCancelled(true);
-				SpigotNegativity.alertMod(np.already_jigsaw ? ReportType.VIOLATION : ReportType.WARNING, np.getPlayer(),
-						Cheat.forKey("EDITED_CLIENT").get(), np.already_jigsaw ? 100 : 80, "Trying to crash the server with " + capacity + " requests. Channel used: " + channel + ", ", "Trying to crash the server with " + capacity + " requests");
-				if (!np.already_jigsaw)
-					np.already_jigsaw = true;
+		try {
+			String channel = e.getPacket().getStrings().getValues().get(0);
+			int capacity = ((ByteBuf) e.getPacket().getModifier().getValues().get(1)).capacity();
+			if (capacity > 25000) {
+				if(channelCheckAntiJigsaw.contains(channel)) {
+					e.setCancelled(true);
+					SpigotNegativity.alertMod(np.already_jigsaw ? ReportType.VIOLATION : ReportType.WARNING, np.getPlayer(),
+							Cheat.forKey("EDITED_CLIENT").get(), np.already_jigsaw ? 100 : 80, "Trying to crash the server with " + capacity + " requests. Channel used: " + channel + ", ", "Trying to crash the server with " + capacity + " requests");
+					if (!np.already_jigsaw)
+						np.already_jigsaw = true;
+				}
 			}
+		} catch (ArrayIndexOutOfBoundsException exc) {
+		} catch (Exception exc) {
+			exc.printStackTrace();
 		}
 	}
 }

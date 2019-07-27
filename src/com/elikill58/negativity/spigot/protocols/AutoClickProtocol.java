@@ -2,9 +2,11 @@ package com.elikill58.negativity.spigot.protocols;
 
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -29,37 +31,30 @@ public class AutoClickProtocol extends Cheat implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (e.getAction() != Action.LEFT_CLICK_AIR)
 			return;
 		ItemStack item = e.getItem();
 		if (item != null)
 			if (item.getType() == Material.SUGAR_CANE)
 				return;
-		if (p.getItemInHand() != null)
-			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType())) {
-				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType());
-				if (ib.getWhen().isClick() && ib.isForThisCheat(this))
-					if (e.getAction().name().toLowerCase().contains(ib.getWhen().name().toLowerCase()))
-						return;
-			}
-		np.ACTUAL_CLICK++;
-		int ping = Utils.getPing(p), click = np.ACTUAL_CLICK - (ping / 9);
-		if (click > CLICK_ALERT) {
-			np.addWarn(this);
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
-					Utils.parseInPorcent(np.ACTUAL_CLICK * 2.5),
-					"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
-							+ "; Better click in one second: " + np.BETTER_CLICK + " Ping: " + ping,
-					np.ACTUAL_CLICK + " clicks");
-			if (isSetBack() && mayCancel)
-				e.setCancelled(true);
-		}
+		manageClick(p, e);
 	}
 
 	@EventHandler
 	public void onLeftClickPlayer(PlayerInteractEntityEvent e) {
-		Player p = e.getPlayer();
+		e.getPlayer().sendMessage("Player interact");
+		manageClick(e.getPlayer(), e);
+	}
+	
+	@EventHandler
+	public void onPlayerAttack(EntityDamageByEntityEvent e) {
+		if(!(e.getDamager() instanceof Player))
+			return;
+		e.getDamager().sendMessage("Entity Damage");
+		manageClick((Player) e.getDamager(), e);
+	}
+	
+	private void manageClick(Player p, Cancellable e) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType())) {
@@ -67,7 +62,9 @@ public class AutoClickProtocol extends Cheat implements Listener {
 				if (ib.getWhen().isClick() && ib.isForThisCheat(this))
 					return;
 			}
+		p.sendMessage("add click");
 		np.ACTUAL_CLICK++;
+		np.updateCheckMenu();
 		int ping = Utils.getPing(p), click = np.ACTUAL_CLICK - (ping / 9);
 		if (click > CLICK_ALERT) {
 			np.addWarn(this);

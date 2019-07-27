@@ -17,9 +17,9 @@ import java.util.UUID;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.UniversalUtils;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class BanRequest {
 

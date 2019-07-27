@@ -35,6 +35,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
+import com.elikill58.negativity.spigot.inventories.CheckMenuInventory;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -154,6 +155,15 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return op;
 	}
 
+	public void updateCheckMenu() {
+		for (Player p : Inv.CHECKING.keySet()) {
+			if (p.getOpenInventory() != null) {
+				if (Utils.getInventoryTitle(p.getOpenInventory()).equals(Inv.NAME_CHECK_MENU))
+					CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
+			}
+		}
+	}
+	
 	@Override
 	public int getWarn(Cheat c) {
 		return WARNS.containsKey(c) ? WARNS.get(c) : 0;
@@ -322,6 +332,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			if(FAKE_PLAYER.size() == 0) {
 				timeStartFakePlayer = 0;
 				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
+				fakePlayerTouched = 0;
 			}
 		} else {
 			spawnRandom();

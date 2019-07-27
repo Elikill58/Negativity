@@ -26,7 +26,7 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.UniversalUtils;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Utils {
 

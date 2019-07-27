@@ -9,9 +9,9 @@ import java.util.LinkedHashMap;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
-import com.elikill58.negativity.universal.UniversalUtils;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.BungeeAdapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.io.ByteStreams;
 
 import net.md_5.bungee.api.plugin.Plugin;

@@ -15,9 +15,9 @@ public class FakePlayer {
 
 	// For reflection -- To don't make a lot of time the same request
 	private static Class<?> enumPlayerInfo = Utils.getEnumPlayerInfoAction();
-	private static Class<?> minecraftServerClass, playerInteractManagerClass, gameProfileClass, playOutPlayerInfo;
+	private static Class<?> minecraftServerClass, playerInteractManagerClass, gameProfileClass, playOutPlayerInfo, dataWatcherClass;
 	private static Constructor<?> entityPlayerConstructor, playerInteractManagerConstructor, packetEntitySpawnConstructor,
-				packetEntityDestroyConstructor, packetPlayerInfoConstructor, gameProfileConstructor;
+				packetEntityDestroyConstructor, packetPlayerInfoConstructor, gameProfileConstructor, packetEntityMetadataConstructor;
 	private static Object minecraftServer, playerInfoAddPlayer, playerInfoRemovePlayer;
 	
 	private Object entityPlayer, gameProfile;
@@ -25,11 +25,10 @@ public class FakePlayer {
 	private UUID uuid;
 	
 	public FakePlayer(Location loc, String name) {
-		this(loc, name, UUID.fromString("0-0-0-0-0"));
+		this(loc, name, UUID.fromString("0-0-0-0-0"));//Utils.getRandomAvailableUUID());
 	}
 	
 	public FakePlayer(Location loc, String name, UUID uuid) {
-	    //this(new GameProfile(UUID.fromString("0-0-0-0-0"), name), loc);
 		this.uuid = uuid;
 		this.loc = loc;
         try {
@@ -45,7 +44,11 @@ public class FakePlayer {
 	public FakePlayer show(Player p) {
 		try {
 			entityPlayer.getClass().getMethod("setLocation", double.class, double.class, double.class, float.class, float.class).invoke(entityPlayer, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-			Utils.sendPacket(p, packetEntitySpawnConstructor.newInstance(entityPlayer));
+			Object dw = entityPlayer.getClass().getMethod("getDataWatcher").invoke(entityPlayer);
+			dw.getClass().getMethod("watch", int.class, Object.class).invoke(dw, 0, (Byte) (byte) 0x20);
+	        Object bukkitEntity = entityPlayer.getClass().getMethod("getBukkitEntity").invoke(entityPlayer);
+	        Utils.sendPacket(p, packetEntityMetadataConstructor.newInstance(bukkitEntity.getClass().getMethod("getEntityId").invoke(bukkitEntity), dw, true));
+	        Utils.sendPacket(p, packetEntitySpawnConstructor.newInstance(entityPlayer));
 			if(Version.getVersion().equals(Version.V1_7)) {
 				playOutPlayerInfo.getMethod("addPlayer", entityPlayer.getClass()).invoke(playOutPlayerInfo, entityPlayer);
 			} else {
@@ -121,6 +124,8 @@ public class FakePlayer {
 			playerInteractManagerConstructor = playerInteractManagerClass.getConstructor(Class.forName("net.minecraft.server." + Utils.VERSION + ".World" + (Version.getVersion().equals(Version.V1_14) ? "Server" : "")));
 			minecraftServer = minecraftServerClass.getMethod("getServer").invoke(minecraftServerClass);
 			
+			dataWatcherClass = Class.forName("net.minecraft.server." + Utils.VERSION + ".DataWatcher");
+			packetEntityMetadataConstructor = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayOutEntityMetadata").getConstructor(int.class, dataWatcherClass, boolean.class);
 			packetEntitySpawnConstructor = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayOutNamedEntitySpawn").getConstructor(Class.forName("net.minecraft.server." + Utils.VERSION + ".EntityHuman"));
 			packetEntityDestroyConstructor = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayOutEntityDestroy").getConstructor(int[].class);
 			playOutPlayerInfo = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayOutPlayerInfo");

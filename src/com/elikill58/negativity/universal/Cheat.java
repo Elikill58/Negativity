@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public abstract class Cheat {
 

@@ -56,7 +56,7 @@ public class CheckMenuInventory {
 			
 			inv.setItem(7, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
 			inv.setItem(9, Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
-			//p.updateInventory();
+			p.updateInventory();
 		} catch (ArrayIndexOutOfBoundsException e) {
 			
 		}

@@ -15,6 +15,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanRequest;
 import com.elikill58.negativity.universal.utils.NonnullByDefault;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 /**
  * Contains player-related data that can be accessed when the player is offline.

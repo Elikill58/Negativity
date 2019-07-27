@@ -9,8 +9,8 @@ import java.util.List;
 
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.UniversalUtils;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Perm {
 

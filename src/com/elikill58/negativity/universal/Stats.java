@@ -20,11 +20,12 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Stats {
 
 
-    static final String SITE = "https://eliapp.fr/", SITE_UPDATE = "https://api.eliapp.fr/";
+    public static final String SITE = "https://eliapp.fr/", SITE_UPDATE = "https://api.eliapp.fr/";
     static final String SITE_FILE = SITE_UPDATE + "negativity.php";
     static boolean STATS_IN_MAINTENANCE = false;
 
@@ -71,7 +72,7 @@ public class Stats {
                 result.append(line);
             rd.close();
             STATS_IN_MAINTENANCE = result.toString().equalsIgnoreCase("on") ? false : true;
-            if(!STATS_IN_MAINTENANCE)
+            if(STATS_IN_MAINTENANCE)
             	Adapter.getAdapter().log("Website is in maintenance mode.");
         } catch (SSLHandshakeException e) {
         	STATS_IN_MAINTENANCE = true;

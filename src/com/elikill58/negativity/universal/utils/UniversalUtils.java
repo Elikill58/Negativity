@@ -14,11 +14,7 @@ import java.util.UUID;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
-import com.elikill58.negativity.universal.Database;
-import com.elikill58.negativity.universal.DefaultConfigValue;
-import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.SuspectManager;
-import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.*;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.permissions.Perm;
 

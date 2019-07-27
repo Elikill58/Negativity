@@ -25,7 +25,7 @@ public class FakePlayer {
 	private UUID uuid;
 	
 	public FakePlayer(Location loc, String name) {
-		this(loc, name, UUID.fromString("0-0-0-0-0"));//Utils.getRandomAvailableUUID());
+		this(loc, name, UUID.fromString("0-0-0-0-0"));
 	}
 	
 	public FakePlayer(Location loc, String name, UUID uuid) {

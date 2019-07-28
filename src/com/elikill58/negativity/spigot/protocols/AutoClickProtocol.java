@@ -42,7 +42,6 @@ public class AutoClickProtocol extends Cheat implements Listener {
 
 	@EventHandler
 	public void onLeftClickPlayer(PlayerInteractEntityEvent e) {
-		e.getPlayer().sendMessage("Player interact");
 		manageClick(e.getPlayer(), e);
 	}
 	
@@ -50,7 +49,6 @@ public class AutoClickProtocol extends Cheat implements Listener {
 	public void onPlayerAttack(EntityDamageByEntityEvent e) {
 		if(!(e.getDamager() instanceof Player))
 			return;
-		e.getDamager().sendMessage("Entity Damage");
 		manageClick((Player) e.getDamager(), e);
 	}
 	
@@ -62,11 +60,10 @@ public class AutoClickProtocol extends Cheat implements Listener {
 				if (ib.getWhen().isClick() && ib.isForThisCheat(this))
 					return;
 			}
-		p.sendMessage("add click");
 		np.ACTUAL_CLICK++;
 		np.updateCheckMenu();
 		int ping = Utils.getPing(p), click = np.ACTUAL_CLICK - (ping / 9);
-		if (click > CLICK_ALERT) {
+		if (click > CLICK_ALERT && np.ACTIVE_CHEAT.contains(this)) {
 			np.addWarn(this);
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					Utils.parseInPorcent(np.ACTUAL_CLICK * 2.5),

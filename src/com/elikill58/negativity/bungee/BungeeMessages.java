@@ -1,16 +1,13 @@
 package com.elikill58.negativity.bungee;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.HashMap;
 import java.util.List;
 
 import com.elikill58.negativity.universal.Database;
-import com.google.common.io.ByteStreams;
+import com.elikill58.negativity.universal.adapter.Adapter;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -36,33 +33,18 @@ public class BungeeMessages {
 				langDir.mkdirs();
 				for (String l : LANG)
 					LANG_VALUES.put(l, ConfigurationProvider.getProvider(YamlConfiguration.class)
-							.load(copy(pl, l, new File(langDir.getAbsolutePath() + "/" + l + ".yml"))));
+							.load(Adapter.getAdapter().copy(l, new File(langDir.getAbsolutePath() + "/" + l + ".yml"))));
 			} else {
 				for (String l : LANG) {
 					File langFile = new File(langDir.getAbsolutePath() + "/" + l + ".yml");
 					if (!langFile.exists())
-						copy(pl, l, langFile);
+						Adapter.getAdapter().copy(l, langFile);
 					LANG_VALUES.put(l, ConfigurationProvider.getProvider(YamlConfiguration.class).load(langFile));
 				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-	}
-
-	public static File copy(Plugin pl, String lang, File f) {
-		String fileName = "bungee_en_US.yml";
-		if (lang.toLowerCase().contains("fr") || lang.toLowerCase().contains("be"))
-			fileName = "bungee_fr_FR.yml";
-		if(lang.toLowerCase().contains("pt") || lang.toLowerCase().contains("br"))
-			fileName = "bungee_pt_BR.yml";
-		// TODO : Espagnol & Allemand
-		try (InputStream in = pl.getResourceAsStream(fileName); OutputStream out = new FileOutputStream(f)) {
-			ByteStreams.copy(in, out);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return f;
 	}
 
 	public static String getLang(ProxiedPlayer p) {
@@ -113,7 +95,7 @@ public class BungeeMessages {
 		}
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
 			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
-		if (message.equalsIgnoreCase("§rnull"))
+		if (message.equalsIgnoreCase("ï¿½rnull"))
 			return dir;
 		return coloredBungeeMessage(message);
 	}
@@ -122,7 +104,7 @@ public class BungeeMessages {
 		String message = ChatColor.RESET + LANG_VALUES.get((p != null ? getLang(p) : getLang())).getString(dir);
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
 			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
-		if (message.equalsIgnoreCase("§rnull"))
+		if (message.equalsIgnoreCase("ï¿½rnull"))
 			return dir;
 		return coloredBungeeMessage(message);
 	}

@@ -1,0 +1,110 @@
+report_wait: "Rustig aan! Wacht 1 seconde tussen een report."
+
+invalid_player: "%arg% is geen speler!"
+not_forget_player: "Vergeet de speler niet!"
+not_permission: "&cYou don't have permission to do that."
+only_player: "Alleen spelers kunnen dat doen!"
+well_suspect: "%players% zijn verdacht!"
+none: "geen"
+console: "Administrator"
+fake_entities: "Neppe spelers"
+
+kick: "&a[&2Negativity&a]&c Je bent van de server geschopt voor Cheaten (%cheat%)"
+
+ban {
+  kick_time: "&cBan voor %reason% tot %time% door %by%."
+  kick_def: "&cDefinitief verbannen voor %reason% door %by%."
+  # For the time, there is:
+  # y : years
+  # mo : months
+  # d : days
+  # h : hours
+  # m : minutes
+  # s : seconds
+  #
+  help = [
+    "/ban <speler> <def | tijd (bv: 2h5d)> <reden> : Verban een speler" ]
+  well_ban: "&a[&2Negativity&a]&c %name% is succesvol verbannen voor %reason%."
+}
+lang {
+  language_set: "&a[&2Negativity&a] &7De berichten van Negativity zijn nu in het Nederlands"
+}
+unban {
+  well_unban: "&a[&2Negativity&a]&c %name% is succesvol unbanned."
+  not_banned: "&c%name% is niet verbannen."
+  not_exact: "%arg% is geen geldige naam van een verbannen speler."
+  help = [
+    "/unban <speler> : Unban een speler" ]
+}
+suspect {
+  no_suspects_set: "&cGeen verdachten opgegeven"
+  starting_full_analysis: "&a[&2Negativity&a] &7Volledige analyse gestart voor &o%suspects%"
+  starting_analysis: "&a[&2Negativity&a] &7Bezig met het analyseren van &o%suspects% &7voor &o%cheats%"
+}
+report {
+  report_usage: "/report <naam> <reden>"
+  well_report: "&a%name% is succesvol gerapporteerd!"
+  report_message: "&a[&2Negativity&a] &c%name% &7is gerapporteerd door &c%report% &7voor &c%reason%"
+}
+negativity {
+  alert: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% &7(&2Kans: %reliability%&7)!"
+  alert_hover: "&6Kans: %reliability%\nPing: %ping%"
+  verif {
+    invalid_cheat: "%arg% is geen geldige cheat!"
+    start: "&a[&2Negativity&a] &7Bezig met het analyseren van %name% voor %cheat%"
+    start_all: "&a[&2Negativity&a] Bezig met het volledige analyseren van %name%"
+    help = [
+     "/negativity verif <speler> [cheats...] : Start verificaties (alles indien er geen zijn opgegeven)" 
+     "/negativity <speler> : Om wat informatie over deze speler te zien"
+    ]
+  }
+}
+inventory {
+  close: "Sluiten"
+  back: "Terug"
+  reset_alert: "Verwijder alerts"
+  main {
+    freeze: "&a[&2Negativity&a] Je bent op dit moment bevroren door %name%"
+    unfreeze: "&a[&2Negativity&a] Je bent niet meer bevroren door %name%"
+    actual_click: "Keer geclicked : %clicks%"
+    max_click: "Maximaal aantal clicks : %clicks%"
+    last_click: "Laatste seconde : %clicks%"
+    ping: "Ping van %name%: %ping%"
+    see_inv: "Zie %name%'s inventory"
+    teleportation_to: "Teleporteren naar %name%"
+    freezing: "Bevries %name%"
+    active_detection: "Zie actieve detectie van %name%"
+    see_alerts: "Zie alle alerts van %name%"
+  }
+  detection {
+    name_inv: "Actieve detectie"
+    no_active: "Geen actieve detectie voor %name%"
+  }
+  alerts {
+    item_name: "Alerts van %exact_name% : %warn%"
+    inv_name: "Alerts"
+  }
+  mod {
+    night_vision: "Nachtvisie"
+    invisible: "Word onzichtbaar"
+    random_tp: "Random teleporteren"
+    random_tp_no_target: "Jij bent als enigste speler online."
+    random_tp_failed: "Random teleportatie mislukt! Mogelijk heeft een andere plugin het tegengehouden."
+    clear_inv: "Leeg je inventory"
+    inv_cleared: "Inventory geleegd!"
+    vision_removed: "Nachtvisie uitgeschakeld"
+    vision_added: "Nachtvisie ingeschakeld"
+    now_invisible: "Je bent nu onzichtbaar"
+    no_longer_invisible: "Je bent nu niet meer onzichtbaar"
+    you_are_freeze: "Je bent bevroren en kunt dit menu dit niet weghalen."
+    cheat_manage: "Cheat manager"
+  }
+  manager {
+    enabled: "&aAan"
+    disabled: "&cUit"
+    setBack: "Cancelt de laatste actie van de cheat wanneer er een is gedetecteerd: &l%back%"
+    autoVerif: "Automatische verificatie: &l%auto%"
+    allowKick: "Kick cheatende spelers: &l%allow%"
+    setActive: "Actieve cheats: &l%active%"
+  }
+}

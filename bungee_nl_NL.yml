@@ -1,0 +1,17 @@
+alert: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% &7(&2Kans: %reliability%&7) !"
+alert_hover: "&6Kans: %reliability%\nPing: %ping%"
+report: "&a[&2Negativity&a] &c%name% &7is gerapporteerd door &c%report% &7voor &c%reason%"
+ban:
+  kick_time: "&cBan voor %reason% tot %time% door %by%."
+  kick_def: "&cDefinitief verbannen voor %reason% door %by%."
+  help:
+  # For the time, there is:
+  # y : years
+  # mo : months
+  # d : days
+  # h : hours
+  # m : minutes
+  # s : seconds
+  #
+  - "/ban <speler> <def(true/false) | tijd (bv: 2h)> <reden> : Verban een speler"
+  well_ban: "&a[&2Negativity&a]&c %name% is succesvol verbannen voor %reason%."

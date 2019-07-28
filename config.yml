@@ -169,8 +169,10 @@ Permissions:
 Translation:
   active: false # enable or disable the translation
   lang_available:
+  - de_DE
   - en_US
   - fr_FR
+  - nl_NL
   - no_NO
   - pt_BR
   - ru_RU

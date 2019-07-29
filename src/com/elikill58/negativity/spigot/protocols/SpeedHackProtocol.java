@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -37,6 +38,9 @@ public class SpeedHackProtocol extends Cheat implements Listener {
 				|| p.getEntityId() == 100 || p.getVehicle() != null || p.getAllowFlight() || from.getY() > to.getY()
 				|| p.getWalkSpeed() > 2.0F || p.getFlySpeed() > 3.0F || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
+		for(ItemStack item : p.getInventory().getArmorContents())
+			if(item != null && item.getType().name().contains("ELYTRA"))
+				return;
 		if(np.BYPASS_SPEED != 0){
 			np.BYPASS_SPEED--;
 			return;

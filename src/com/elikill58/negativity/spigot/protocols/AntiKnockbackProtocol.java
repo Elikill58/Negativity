@@ -36,7 +36,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if(e.getDamager().getType().equals(EntityType.EGG) || SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p))
+		if(e.getDamager().getType().equals(EntityType.EGG) || (SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p)))
 			return;
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 

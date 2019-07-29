@@ -141,9 +141,9 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 			if(np.ACTIVE_CHEAT.contains(EDITED_CLIENT)) {
 				if(ping < EDITED_CLIENT.getMaxAlertPing()){
 					int allPos = np.POSITION_LOOK + np.POSITION;
-					if(allPos > 40) {
+					if(allPos > 50) {
 						np.addWarn(EDITED_CLIENT);
-						SpigotNegativity.alertMod(allPos > 60 ? ReportType.VIOLATION : ReportType.WARNING, p, EDITED_CLIENT, Utils.parseInPorcent(25 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + " Ping: " + ping + " Warn for EditedClient: " + np.getWarn(EDITED_CLIENT));
+						SpigotNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, EDITED_CLIENT, Utils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + " Ping: " + ping + " Warn for EditedClient: " + np.getWarn(EDITED_CLIENT));
 					}
 				}
 			}

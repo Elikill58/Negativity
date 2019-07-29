@@ -1,9 +1,17 @@
 package com.elikill58.negativity.spigot.support;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Version;
+import com.sk89q.worldedit.bukkit.BukkitWorld;
+import com.sk89q.worldedit.math.BlockVector3;
+import com.sk89q.worldguard.WorldGuard;
+import com.sk89q.worldguard.protection.flags.Flags;
+import com.sk89q.worldguard.protection.flags.StateFlag.State;
+import com.sk89q.worldguard.protection.managers.RegionManager;
+import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 public class WorldGuardSupport {
 	
@@ -14,9 +22,11 @@ public class WorldGuardSupport {
 				break;
 			case V1_14:
 			case V1_13:
-				/*Location loc = p.getLocation();
-				RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(p.getWorld());
-				regionManager.getApplicableRegions(BlockVector3.at(loc.getX(), loc.getY(), loc.getZ()));*/
+				Location loc = p.getLocation();
+				RegionManager regionManager = WorldGuard.getInstance().getPlatform().getRegionContainer().get(new BukkitWorld(p.getWorld()));
+				for(ProtectedRegion pr : regionManager.getApplicableRegions(BlockVector3.at(loc.getX(), loc.getY(), loc.getZ())).getRegions())
+					if((State) pr.getFlag(Flags.PVP) == State.ALLOW)
+						return true;
 				break;
 			case V1_12:
 			case V1_11:

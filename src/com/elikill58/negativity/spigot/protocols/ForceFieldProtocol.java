@@ -44,7 +44,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 				&& !p.getItemInHand().getType().equals(Material.BOW)) {
 			NumberFormat nf = NumberFormat.getInstance();
 			nf.setMaximumIntegerDigits(2);
-			np.addWarn(this);
+			np.addWarn(this, Utils.parseInPorcent(dis * 2 * 10));
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					Utils.parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis

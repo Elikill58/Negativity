@@ -25,7 +25,7 @@ public class UnbanCommand implements CommandExecutor, TabCompleter {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
 		if(!(sender instanceof Player)) {
 			if(arg.length == 0) {
-				Messages.sendMessageList(sender, "unban.help");
+				Messages.sendMessage(sender, "unban.help");
 				return false;
 			}
 			OfflinePlayer cible = Bukkit.getOfflinePlayer(arg[0]);
@@ -58,7 +58,7 @@ public class UnbanCommand implements CommandExecutor, TabCompleter {
 			return false;
 		}
 		if(arg.length == 0) {
-			Messages.sendMessageList(p, "unban.help");
+			Messages.sendMessage(p, "unban.help");
 			return false;
 		}
 		OfflinePlayer cible = Bukkit.getOfflinePlayer(arg[0]);

@@ -51,7 +51,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			if ((p.getFallDistance() == 0.0F)
 					&& (p.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR))
 					&& i > 1.25D && !p.isOnGround()) {
-				np.addWarn(this);
+				np.addWarn(this, Utils.parseInPorcent((int) i * 50));
 				boolean mayCancel = false;
 				if (np.getWarn(this) > 5)
 					mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,

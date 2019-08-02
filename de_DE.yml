@@ -31,13 +31,18 @@ unban:
   well_unban: "&a[&2Negativity&a] &c%name% wurde entbannt."
   not_banned: "&c%name% ist nicht gebannt."
   not_exact: "%arg% ist kein Name der gebannten Spieler."
+  help: "/nunban <player> : Unban a banned player."
+kick:
+  help: "/kick <player> <reason> : Kick the specified player"
+  well_kick: "&a[&2Negativity&a]&c %name% well kicked for %reason%."
+  kicked: "You have been kick by %playername% for %reason%"
 report:
   report_usage: "/report <name> <reason>"
   well_report: "&a%name% wurde erfolgreich reportet!"
   report_message: "&a[&2Negativity&a] &c%name% &7wurde von &c%report% &7für &c%reason% &7reportet."
 negativity:
-  alert: "&a[&2Negativity&a] &c%name%&7 scheint folgenden Cheat zu benutzen: &c%cheat% &7(&2Wahrscheinlichkeit: %reliability%&7)!"
-  alert_hover: "&6Wahrscheinlichkeit: %reliability%\nPing: %ping%"
+  alert: "&a[&2Negativity&a] &c%name%&7 scheint folgenden Cheat zu benutzen: &c%cheat% &7(&2Wahrscheinlichkeit: %reliability%%&7)!"
+  alert_hover: "&6Wahrscheinlichkeit: %reliability%%\nPing: %ping%"
   verif:
     invalid_cheat: "%arg% ist kein gültiger Cheat!"
     start: "&a[&2Negativity&a] &7Überprüft nun %name% auf folgenden Cheat: %cheat%"

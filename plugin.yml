@@ -18,6 +18,9 @@ commands:
   nunban:
     description: Unban a player
     permission: negativity.unban
+  nkick:
+    description: Kick a player
+    permission: negativity.kick
   mod:
     description: Option for mod
     permission: negativity.mod
@@ -36,6 +39,7 @@ permissions:
       negativity.report: true
       negativity.ban: true
       negativity.unban: true
+      negativity.kik: true
       negativity.mod: true
       negativity.suspect: true
   negativity.negativity:
@@ -49,6 +53,9 @@ permissions:
     default: op
   negativity.unban:
     description: Unban a player
+    default: op
+  negativity.kick:
+    description: Kick a player
     default: op
   negativity.mod:
     description: Option for mod

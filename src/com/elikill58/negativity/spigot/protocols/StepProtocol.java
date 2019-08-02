@@ -52,7 +52,7 @@ public class StepProtocol extends Cheat implements Listener {
 					if ((from.getY() - to.getY()) > 0)
 						return;
 					if (dif < -1.499 && ping < 200) {
-						np.addWarn(this);
+						np.addWarn(this, relia);
 						boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
 								+ np.getWarn(this) + ". Move " + dif + "blocks up. ping: " + ping);
 						if (isSetBack() && mayCancel)

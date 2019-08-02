@@ -47,7 +47,7 @@ public class SpeedHackProtocol extends Cheat implements Listener {
 		}
 		boolean mayCancel = false;
 		if (p.isOnGround() && y >= 0.75D) {
-			np.addWarn(this);
+			np.addWarn(this, Utils.parseInPorcent(y * 100 * 2));
 			ReportType type = ReportType.WARNING;
 			if (np.getWarn(this) > 7)
 				type = ReportType.VIOLATION;
@@ -56,7 +56,7 @@ public class SpeedHackProtocol extends Cheat implements Listener {
 					"Distance Last/New position: " + y + "\n(With same Y)\nPlayer on ground");
 			
 		} else if (!p.isOnGround() && y >= 0.85D) {
-			np.addWarn(this);
+			np.addWarn(this, Utils.parseInPorcent(y * 100 * 2));
 			ReportType type = ReportType.WARNING;
 			if (np.getWarn(this) > 7)
 				type = ReportType.VIOLATION;

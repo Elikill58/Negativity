@@ -147,7 +147,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 			p = new WeakReference<>(cached);
 		}
-
 		return cached;
 	}
 
@@ -170,11 +169,16 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public int getAllWarn(Cheat c) {
-		return file.getInt("cheats." + c.getKey().toLowerCase()) + getWarn(c);
+		return file.getInt("cheats." + c.getKey().toLowerCase());
 	}
-
+	
+	@Deprecated
 	public void addWarn(Cheat c) {
-		if (System.currentTimeMillis() < TIME_INVINCIBILITY)
+		addWarn(c, 100);
+	}
+	
+	public void addWarn(Cheat c, int reliability) {
+		if (System.currentTimeMillis() < TIME_INVINCIBILITY || c.getReliabilityAlert() > reliability)
 			return;
 		setWarn(c, WARNS.containsKey(c) ? WARNS.get(c) + 1 : 1);
 	}

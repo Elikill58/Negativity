@@ -21,6 +21,7 @@ report_command: true
 # To enable or disable /nban /nunban
 ban_command: true
 unban_command: true
+kick_command: true
 
 # To enable or disable /suspect . Auto disable if the 'suspect.enabled' is on false.
 suspect_command: true
@@ -95,6 +96,9 @@ Permissions:
     default: "negativity.notbanned"
     custom: "ADMIN"
   ban:
+    default: "negativity.ban"
+    custom: "MOD,ADMIN"
+  kick:
     default: "negativity.ban"
     custom: "MOD,ADMIN"
   bypass:

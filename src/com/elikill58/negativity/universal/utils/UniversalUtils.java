@@ -111,7 +111,7 @@ public class UniversalUtils {
 	
 	public static Optional<String> getLatestVersion() {
 		try {
-			URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=48399");
+			URL url = new URL("http://api.spigotmc.org/legacy/update.php?resource=48399");
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			/*connection.setConnectTimeout(5);
 			connection.setReadTimeout(5);*/

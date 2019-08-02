@@ -39,7 +39,7 @@ public class FastBowProtocol extends Cheat implements Listener {
 			if (np.LAST_SHOT_BOW != 0) {
 				int ping = Utils.getPing(p);
 				if (dif < (200 + ping)) {
-					np.addWarn(this);
+					np.addWarn(this, Utils.parseInPorcent(200 - dif - ping));
 					boolean mayCancel = false;
 					if (dif < (50 + ping))
 						mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,

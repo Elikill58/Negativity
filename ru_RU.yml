@@ -25,19 +25,24 @@ ban:
   # m : минуты
   # s : секунды
   #
-  - "/ban <игрок> <def | время (пример: 2h5d)> <причина> : Забанить указанного игрока"
+  - "/nban <игрок> <def | время (пример: 2h5d)> <причина> : Забанить указанного игрока"
   well_ban: "&a[&2Negativity&a]&c %name% был забанен за %reason%."
 unban:
   well_unban: "&a[&2Negativity&a]&c %name% был разбанен."
   not_banned: "&c%name% не был забанен."
   not_exact: "%arg% не является ником игрока."
+  help: "/nunban <player> : Unban a banned player."
+kick:
+  help: "/nkick <player> <reason> : Kick the specified player"
+  well_kick: "&a[&2Negativity&a]&c %name% well kicked for %reason%."
+  kicked: "You have been kick by %playername% for %reason%"
 report:
   report_usage: "/report <игрок> <причина>"
   well_report: "&aИгрок %name% получил репорт!"
   report_message: "&a[&2Negativity&a] &c%name% &7получил репорт от &c%report% &7за &c%reason%"
 negativity:
-  alert: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% &7(&2Точность: %reliability%&7)!"
-  alert_hover: "&6Точность: %reliability%\nПинг: %ping%"
+  alert: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% &7(&2Точность: %reliability%%&7)!"
+  alert_hover: "&6Точность: %reliability%%\nПинг: %ping%"
   verif:
     invalid_cheat: "%arg% не является читом."
     start: "&a[&2Negativity&a] &7Анализ начался для %name% на чит %cheat%"

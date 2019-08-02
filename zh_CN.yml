@@ -17,19 +17,24 @@ ban:
   kick_time: "&c被 %by% 以 %reason% 封禁至 %time%。"
   kick_def: "&c被 %by% 以 %reason% 永远封禁。"
   help:
-  - "/ban <玩家> <def | 时长 (ex: 2h5d)> <理由> : 封禁指定玩家"
+  - "/nban <玩家> <def | 时长 (ex: 2h5d)> <理由> : 封禁指定玩家"
   well_ban: "&a[&2弊绝风清&a]&c%name% 由于 %reason% 被合理封禁。"
 unban:
   well_unban: "&a[&2弊绝风清&a]&c%name% 被合理解封。"
-  help:
-  - "/unban <玩家> : 解封指定玩家。"
+  not_banned: "&c%name% isn't banned."
+  not_exact: "%arg% isn't exact valid name of banned player."
+  help: "/nunban <玩家> : 解封指定玩家。"
+kick:
+  help: "/nkick <player> <reason> : Kick the specified player"
+  well_kick: "&a[&2Negativity&a]&c %name% well kicked for %reason%."
+  kicked: "You have been kick by %playername% for %reason%"
 report:
   report_usage: "/report <名称> <理由>"
   well_report: "&a已成功举报 %name%！"
   report_message: "&a[&2弊绝风清&a]&c%report% &7由于 &c%reason% &7举报了 &c%name%"
 negativity:
-  alert: "&a[&2弊绝风清&a]&c%name%&7 看似正使用 &c%cheat% &7（&2可信度： %reliability%&7）！"
-  alert_hover: "&6可信度：%reliability%\n延迟：%ping%"
+  alert: "&a[&2弊绝风清&a]&c%name%&7 看似正使用 &c%cheat% &7（&2可信度： %reliability%%&7）！"
+  alert_hover: "&6可信度：%reliability%%\n延迟：%ping%"
   verif:
     invalid_cheat: "%arg% 非有效作弊软件！"
     start: "&a[&2弊绝风清&a]&7已开始分析&c %name%&7 的&c %cheat%&7 行为"

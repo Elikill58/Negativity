@@ -16,7 +16,7 @@ public class FakePlayer {
 
 	// For reflection -- To don't make a lot of time the same request
 	private static Class<?> enumPlayerInfo = Utils.getEnumPlayerInfoAction();
-	private static Class<?> minecraftServerClass, playerInteractManagerClass, gameProfileClass, playOutPlayerInfo, dataWatcherClass, dataWatcherRegistryClass;
+	private static Class<?> minecraftServerClass, playerInteractManagerClass, gameProfileClass, playOutPlayerInfo, dataWatcherClass;
 	private static Constructor<?> entityPlayerConstructor, playerInteractManagerConstructor, packetEntitySpawnConstructor,
 				packetEntityDestroyConstructor, packetPlayerInfoConstructor, gameProfileConstructor, packetEntityMetadataConstructor;
 	private static Object minecraftServer, playerInfoAddPlayer, playerInfoRemovePlayer;
@@ -48,7 +48,7 @@ public class FakePlayer {
 			Object dw = entityPlayer.getClass().getMethod("getDataWatcher").invoke(entityPlayer);
 			if(Version.getVersion().isNewerThan(Version.V1_8)) {
 				Method setDwMethod = dw.getClass().getMethod("set", Class.forName("net.minecraft.server." + Utils.VERSION + ".DataWatcherObject"), Object.class);
-				Object dataWatcherRegistry = dataWatcherRegistryClass.getDeclaredField("a").get(dataWatcherRegistryClass);
+				Object dataWatcherRegistry = Class.forName("net.minecraft.server." + Utils.VERSION + ".DataWatcherRegistry").getDeclaredField("a").get(Class.forName("net.minecraft.server." + Utils.VERSION + ".DataWatcherRegistry"));
 				setDwMethod.invoke(dw, dataWatcherRegistry.getClass().getMethod("a", int.class).invoke(dataWatcherRegistry, 0), (Byte) (byte) 0x20);
 			} else {
 				dw.getClass().getMethod("watch", int.class, Object.class).invoke(dw, 0, (Byte) (byte) 0x20);
@@ -132,7 +132,6 @@ public class FakePlayer {
 			minecraftServer = minecraftServerClass.getMethod("getServer").invoke(minecraftServerClass);
 			
 			dataWatcherClass = Class.forName("net.minecraft.server." + Utils.VERSION + ".DataWatcher");
-			dataWatcherRegistryClass = Class.forName("net.minecraft.server." + Utils.VERSION + ".DataWatcherRegistry");
 			packetEntityMetadataConstructor = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayOutEntityMetadata").getConstructor(int.class, dataWatcherClass, boolean.class);
 			packetEntitySpawnConstructor = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayOutNamedEntitySpawn").getConstructor(Class.forName("net.minecraft.server." + Utils.VERSION + ".EntityHuman"));
 			packetEntityDestroyConstructor = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayOutEntityDestroy").getConstructor(int[].class);

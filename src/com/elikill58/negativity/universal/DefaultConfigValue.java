@@ -53,6 +53,7 @@ public class DefaultConfigValue {
 		BOOLEANS.put("report_command", true);
 		BOOLEANS.put("ban_command", true);
 		BOOLEANS.put("unban_command", true);
+		BOOLEANS.put("kick_command", true);
 		BOOLEANS.put("Database.isActive", true);
 
 		STRINGS.put("Database.url", "127.0.0.1/myDb");
@@ -131,7 +132,8 @@ public class DefaultConfigValue {
 			INTS.put("cheats." + lc + ".alert_kick", 5);
 		}
 
-		DOUBLES.put("cheats.forcefield", 3.9);
+		DOUBLES.put("cheats.forcefield.reach", 3.9);
+		BOOLEANS.put("cheats.forcefield.ghost_disabled", false);
 		INTS.put("cheats.autoclick.click_alert", 20);
 	}
 }

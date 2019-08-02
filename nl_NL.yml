@@ -31,13 +31,18 @@ unban:
   well_unban: "&a[&2Negativity&a]&c %name% is succesvol unbanned."
   not_banned: "&c%name% is niet verbannen."
   not_exact: "%arg% is geen geldige naam van een verbannen speler."
+  help: "/nunban <speler> : Unban een verbannen speler." 
+kick:
+  help: "/nkick <speler> <reden> : Kick de opgegeven speler."
+  well_kick: "&a[&2Negativity&a]&c %name% is succesvol gekicked voor %reason%."
+  kicked: "Je bent gekicked door %playername% voor %reason%."
 report:
   report_usage: "/report <naam> <reden>"
   well_report: "&a%name% is succesvol gerapporteerd!"
   report_message: "&a[&2Negativity&a] &c%name% &7is gerapporteerd door &c%report% &7voor &c%reason%"
 negativity:
-  alert: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% &7(&2Kans: %reliability%&7)!"
-  alert_hover: "&6Kans: %reliability%\nPing: %ping%"
+  alert: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% &7(&2Kans: %reliability%%&7)!"
+  alert_hover: "&6Kans: %reliability%%\nPing: %ping%"
   verif:
     invalid_cheat: "%arg% is geen geldige cheat!"
     start: "&a[&2Negativity&a] &7Bezig met het analyseren van %name% voor %cheat%"

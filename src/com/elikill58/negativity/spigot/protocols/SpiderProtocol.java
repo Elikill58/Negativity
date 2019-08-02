@@ -63,7 +63,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 			int relia = (int) ((e.getTo().getY() - e.getFrom().getY()) * 200);
 			if (isAris)
 				relia = relia + 39;
-			np.addWarn(this);
+			np.addWarn(this, Utils.parseInPorcent(relia));
 			ReportType type = ReportType.WARNING;
 			if (np.getWarn(this) > 6)
 				type = ReportType.VIOLATION;

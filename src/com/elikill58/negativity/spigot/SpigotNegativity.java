@@ -24,6 +24,7 @@ import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.elikill58.negativity.spigot.commands.BanCommand;
+import com.elikill58.negativity.spigot.commands.KickCommand;
 import com.elikill58.negativity.spigot.commands.LangCommand;
 import com.elikill58.negativity.spigot.commands.ModCommand;
 import com.elikill58.negativity.spigot.commands.NegativityCommand;
@@ -197,12 +198,9 @@ public class SpigotNegativity extends JavaPlugin {
 
 	    if (Bukkit.getPluginManager().getPlugin("Essentials") != null)
 	    	essentialsSupport = true;
-	    if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
-	    	if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
-	    		getLogger().warning("WorldGuard detected, but we cannot use it actually.");
-	    	} else
-	    		worldGuardSupport = true;
-	    }
+	    if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null)
+	    	worldGuardSupport = true;
+	    
 	    if(essentialsSupport || worldGuardSupport) {
 	    	String s = (essentialsSupport ? (worldGuardSupport ? "Essentials and WorldGuard plugins are detected." : "Essentials plugin detected.") : "WorldGuard plugin detected.");
 	    	getLogger().info(s + " Loading support ...");
@@ -243,6 +241,17 @@ public class SpigotNegativity extends JavaPlugin {
 			unbanCmd.setAliases(unbanAlias);
 			unbanCmd.setExecutor(new UnbanCommand());
 			unbanCmd.setTabCompleter(new UnbanCommand());
+		}
+		
+		PluginCommand kickCmd = getCommand("nkick");
+		if (!getConfig().getBoolean("kick_command"))
+			unRegisterBukkitCommand(kickCmd);
+		else {
+			List<String> kickAlias = new ArrayList<String>();
+			kickAlias.add("negkick");
+			kickCmd.setAliases(kickAlias);
+			kickCmd.setExecutor(new KickCommand());
+			kickCmd.setTabCompleter(new KickCommand());
 		}
 
 		PluginCommand langCmd = getCommand("lang");

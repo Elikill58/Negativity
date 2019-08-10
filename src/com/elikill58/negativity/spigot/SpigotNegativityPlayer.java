@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.lang.ref.WeakReference;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -41,9 +40,11 @@ import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate;
-import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
+import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.Stats;
+import com.elikill58.negativity.universal.Stats.StatsType;
+import com.elikill58.negativity.universal.Version;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {
 
@@ -76,6 +77,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;
 	public YamlConfiguration file;
+	public Location lastSpiderLoc;
+	public double lastSpiderDistance;
 	public File directory, configFile;
 	public List<String> proof = new ArrayList<>();
 	public Minerate mineRate;
@@ -90,16 +93,17 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		this.uuid = p.getUniqueId();
 		this.mineRate = new Minerate(this);
 		players.put(p.getUniqueId(), this);
-		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
-				+ File.separator + "proof" + File.separator);
+		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
+				+ "user" + File.separator + "proof" + File.separator);
 		directory.mkdirs();
 		try {
-			file = YamlConfiguration.loadConfiguration(configFile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
-					+ File.separator + uuid + ".yml"));
+			file = YamlConfiguration.loadConfiguration(
+					configFile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath()
+							+ File.separator + "user" + File.separator + uuid + ".yml"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for(Cheat c : Cheat.values())
+		for (Cheat c : Cheat.values())
 			WARNS.put(c, file.getInt("cheats." + c.getKey().toLowerCase()));
 		initMods(p);
 	}
@@ -110,22 +114,23 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		this.uuid = op.getUniqueId();
 		this.mineRate = new Minerate(this);
 		players.put(this.uuid, this);
-		File tempfile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
-				+ File.separator + uuid + ".txt");
-		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
-				+ File.separator + "proof" + File.separator);
+		File tempfile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
+				+ "user" + File.separator + uuid + ".txt");
+		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
+				+ "user" + File.separator + "proof" + File.separator);
 		directory.mkdirs();
 		try {
-			if(!tempfile.exists())
+			if (!tempfile.exists())
 				tempfile.createNewFile();
-			file = YamlConfiguration.loadConfiguration(configFile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
-					+ File.separator + uuid + ".yml"));
+			file = YamlConfiguration.loadConfiguration(
+					configFile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath()
+							+ File.separator + "user" + File.separator + uuid + ".yml"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for(Cheat c : Cheat.values())
+		for (Cheat c : Cheat.values())
 			WARNS.put(c, file.getInt("cheats." + c.getKey().toLowerCase()));
-		for(MinerateType mt : MinerateType.values())
+		for (MinerateType mt : MinerateType.values())
 			mineRate.setMine(mt, file.getInt("minerate." + mt.getName().toLowerCase(), 0));
 	}
 
@@ -162,7 +167,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			}
 		}
 	}
-	
+
 	@Override
 	public int getWarn(Cheat c) {
 		return WARNS.containsKey(c) ? WARNS.get(c) : 0;
@@ -171,12 +176,12 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public int getAllWarn(Cheat c) {
 		return file.getInt("cheats." + c.getKey().toLowerCase());
 	}
-	
+
 	@Deprecated
 	public void addWarn(Cheat c) {
 		addWarn(c, 100);
 	}
-	
+
 	public void addWarn(Cheat c, int reliability) {
 		if (System.currentTimeMillis() < TIME_INVINCIBILITY || c.getReliabilityAlert() > reliability)
 			return;
@@ -186,7 +191,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public void setWarn(Cheat c, int cheats) {
 		try {
 			file.set("cheats." + c.getKey().toLowerCase(), cheats);
-			// Temporary workaround to save language until we refactor player data loading/saving
+			// Temporary workaround to save language until we refactor player data
+			// loading/saving
 			file.set("lang", getAccount().getLang());
 			file.save(configFile);
 			WARNS.put(c, cheats);
@@ -194,10 +200,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void updateMinerateInFile() {
 		try {
-			for(MinerateType mt : MinerateType.values())
+			for (MinerateType mt : MinerateType.values())
 				file.set("minerate." + mt.getName().toLowerCase(), mineRate.getMinerateType(mt));
 			file.save(configFile);
 		} catch (IOException e) {
@@ -221,17 +227,17 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		ENTITY_ACTION = 0;
 		ALL = 0;
 	}
-	
+
 	public boolean isOp() {
 		return getPlayer().isOp();
 	}
 
 	public void startAnalyze(Cheat c) {
 		ACTIVE_CHEAT.add(c);
-		if(c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
+		if (c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
 			INJECTED.add(getPlayer().getUniqueId());
-		if(c.getKey().equalsIgnoreCase("FORCEFIELD")) {
-			if(timeStartFakePlayer == 0)
+		if (c.getKey().equalsIgnoreCase("FORCEFIELD")) {
+			if (timeStartFakePlayer == 0)
 				timeStartFakePlayer = 1; // not on the player connection
 			else
 				makeAppearEntities();
@@ -245,7 +251,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void makeAppearEntities() {
-		if(!ACTIVE_CHEAT.contains(Cheat.fromString("FORCEFIELD").get()) || SpigotNegativity.getInstance().getConfig().getBoolean("cheats.forcefield.ghost_disabled"))
+		if (!ACTIVE_CHEAT.contains(Cheat.fromString("FORCEFIELD").get())
+				|| SpigotNegativity.getInstance().getConfig().getBoolean("cheats.forcefield.ghost_disabled"))
 			return;
 		timeStartFakePlayer = System.currentTimeMillis();
 
@@ -256,9 +263,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void spawnRandom() {
 		int choice = new Random().nextInt(3);
-		if(choice == 0)
+		if (choice == 0)
 			spawnRight();
-		else if(choice == 1)
+		else if (choice == 1)
 			spawnBehind();
 		else
 			spawnLeft();
@@ -268,13 +275,13 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		Location loc = getPlayer().getLocation().clone();
 		Vector dir = getPlayer().getEyeLocation().getDirection();
 		double x = dir.getX(), z = dir.getZ();
-		if(x >= 0 && z >= 0) {
+		if (x >= 0 && z >= 0) {
 			loc.add(-1, 0, 1);
-		} else if(x >= 0 && z <= 0) {
+		} else if (x >= 0 && z <= 0) {
 			loc.add(-1, 0, 0);
-		} else if(x <= 0 && z >= 0) {
+		} else if (x <= 0 && z >= 0) {
 			loc.add(-1, 0, 0);
-		} else if(x <= 0 && z <= 0) {
+		} else if (x <= 0 && z <= 0) {
 			loc.add(-1, 0, 1);
 		}
 		loc.add(0, 1, 0);
@@ -286,13 +293,13 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		Location loc = getPlayer().getLocation().clone();
 		Vector dir = getPlayer().getEyeLocation().getDirection();
 		double x = dir.getX(), z = dir.getZ();
-		if(x >= 0 && z >= 0) {
+		if (x >= 0 && z >= 0) {
 			loc.add(0, 0, -1);
-		} else if(x >= 0 && z <= 0) {
+		} else if (x >= 0 && z <= 0) {
 			loc.add(-1, 0, 1);
-		} else if(x <= 0 && z >= 0) {
+		} else if (x <= 0 && z >= 0) {
 			loc.add(1, 0, -1);
-		} else if(x <= 0 && z <= 0) {
+		} else if (x <= 0 && z <= 0) {
 			loc.add(1, 0, 1);
 		}
 		loc.add(0, 1, 0);
@@ -304,36 +311,36 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		Location loc = getPlayer().getLocation().clone();
 		Vector dir = getPlayer().getEyeLocation().getDirection();
 		double x = dir.getX(), z = dir.getZ();
-		if(x >= 0 && z >= 0) {
+		if (x >= 0 && z >= 0) {
 			loc.add(1, 0, -1);
-		} else if(x >= 0 && z <= 0) {
+		} else if (x >= 0 && z <= 0) {
 			loc.add(1, 0, 1);
-		} else if(x <= 0 && z >= 0) {
+		} else if (x <= 0 && z >= 0) {
 			loc.add(1, 0, 1);
-		} else if(x <= 0 && z <= 0) {
+		} else if (x <= 0 && z <= 0) {
 			loc.add(1, 0, -1);
 		}
 		loc.add(0, 1, 0);
 		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
 		FAKE_PLAYER.add(fp);
 	}
-	
+
 	private String getRandomFakePlayerName() {
 		List<Player> online = Utils.getOnlinePlayers();
-		if(online.size() <= 1) {
+		if (online.size() <= 1) {
 			return new Random().nextBoolean() ? "Elikill58" : "RedNesto";
 		} else
 			return online.get(new Random().nextInt(online.size())).getName();
 	}
-	
+
 	public void removeFakePlayer(FakePlayer fp) {
-		if(!FAKE_PLAYER.contains(fp))
+		if (!FAKE_PLAYER.contains(fp))
 			return;
 
 		FAKE_PLAYER.remove(fp);
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);
-		if(l >= 3000) {
-			if(FAKE_PLAYER.size() == 0) {
+		if (l >= 3000) {
+			if (FAKE_PLAYER.size() == 0) {
 				timeStartFakePlayer = 0;
 				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
 				fakePlayerTouched = 0;
@@ -344,14 +351,25 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		}
 	}
 
-	public void logProof(Timestamp stamp, String msg) {
+	public void logProof(String msg) {
 		proof.add(msg);
+	}
+
+	public void saveProof(boolean sendStats) {
+		if (proof.size() == 0)
+			return;
+		if(sendStats)
+			Stats.updateStats(StatsType.CHEATS, proof.size());
 		try {
-			File temp = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator + "user"
-					+ File.separator + "proof" + File.separator + uuid + ".txt");
-			if(!temp.exists())
+			File temp = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
+					+ "user" + File.separator + "proof" + File.separator + uuid + ".txt");
+			if (!temp.exists())
 				temp.createNewFile();
-			Files.write(temp.toPath(), (msg + "\n").getBytes(), StandardOpenOption.APPEND);
+			String msg = "";
+			for (String s : proof)
+				msg += s + "\n";
+			Files.write(temp.toPath(), msg.getBytes(), StandardOpenOption.APPEND);
+			proof.clear();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -359,12 +377,13 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void sendMessage(String msg, String... arg) {
 		String message = Messages.getMessage(getPlayer(), msg, arg);
-		if(!message.equalsIgnoreCase(msg))
+		if (!message.equalsIgnoreCase(msg))
 			getPlayer().sendMessage(message);
 	}
 
 	public void destroy(boolean isBan) {
 		players.remove(uuid);
+		saveProof(true);
 		if (isBan) {
 			Entity et = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
 			Firework fire = (Firework) et;
@@ -381,6 +400,47 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 				loc.subtract(0, more, 0);
 			}
 		}
+	}
+
+	public boolean hasOtherThanExtended(Location loc, Material m) {
+		Location tempLoc = loc.clone();
+		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(-1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(-1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+			return true;
+		loc = tempLoc;
+		if (!loc.add(0, 0, 2).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		for (int i = 0; i < 4; i++)
+			if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+				return true;
+		for (int i = 0; i < 4; i++)
+			if (!loc.add(-1, 0, 0).getBlock().getType().equals(m))
+				return true;
+		for (int i = 0; i < 4; i++)
+			if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+				return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		return false;
 	}
 
 	public boolean hasOtherThan(Location loc, Material m) {
@@ -448,8 +508,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean isBlock(Material m) {
 		// for Last version blocks
 		String mn = m.name();
-		if (mn.equals("PRISMARINE") || mn.contains("_SHULKER_BOX") || mn.contains("BLOCK") || mn.contains("WOOD") || mn.contains("LOG") || mn.contains("WOOL") || mn.equals("PURPUR_BLOCK")
-				|| mn.equals("END_BRICKS") || mn.equals("BEETROOT_BLOCK") || mn.equals("BONE_BLOCK") || mn.contains("STAINED") || mn.contains("CLAY"))
+		if (mn.equals("PRISMARINE") || mn.contains("_SHULKER_BOX") || mn.contains("BLOCK") || mn.contains("WOOD")
+				|| mn.contains("LOG") || mn.contains("WOOL") || mn.equals("PURPUR_BLOCK") || mn.equals("END_BRICKS")
+				|| mn.equals("BEETROOT_BLOCK") || mn.equals("BONE_BLOCK") || mn.contains("STAINED")
+				|| mn.contains("CLAY"))
 			return true;
 		switch (m) {
 		case ANVIL:
@@ -527,12 +589,13 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	@Override
 	public void kickPlayer(String reason, String time, String by, boolean def) {
-		getPlayer().kickPlayer(Messages.getMessage(getPlayer(), "ban.kick_" + (def ? "def" : "time"), "%reason%", reason, "%time%",
-				String.valueOf(time), "%by%", by));
+		getPlayer().kickPlayer(Messages.getMessage(getPlayer(), "ban.kick_" + (def ? "def" : "time"), "%reason%",
+				reason, "%time%", String.valueOf(time), "%by%", by));
 	}
 
 	public enum FlyingReason {
-		POTION(Cheat.fromString("ANTIPOTION").get()), REGEN(Cheat.fromString("AUTOREGEN").get()), EAT(Cheat.fromString("AUTOEAT").get()), BOW(Cheat.fromString("FASTBOW").get());
+		POTION(Cheat.fromString("ANTIPOTION").get()), REGEN(Cheat.fromString("AUTOREGEN").get()), EAT(
+				Cheat.fromString("AUTOEAT").get()), BOW(Cheat.fromString("FASTBOW").get());
 
 		private Cheat c;
 
@@ -561,9 +624,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 				flameloc.setY(y);
 				flameloc.setZ(flameloc.getZ() + Math.cos(u) * i);
 				flameloc.setX(flameloc.getX() + Math.sin(u) * i);
-				if(Version.isNewerOrEquals(Version.getVersion(), Version.V1_13)) {
+				if (Version.isNewerOrEquals(Version.getVersion(), Version.V1_13)) {
 					Particle.DustOptions dustOptions = new Particle.DustOptions(Color.ORANGE, 1);
-		        	w.spawnParticle(Particle.REDSTONE, flameloc, 1, 0, 0, 0, 0, dustOptions);
+					w.spawnParticle(Particle.REDSTONE, flameloc, 1, 0, 0, 0, 0, dustOptions);
 				} else {
 					w.playEffect(flameloc.add(0, 1, 0), Utils.getEffect("COLOURED_DUST"), 1);
 				}
@@ -573,7 +636,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void fight() {
 		isInFight = true;
-		if(fightTask != null)
+		if (fightTask != null)
 			fightTask.cancel();
 		fightTask = Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 			@Override
@@ -585,7 +648,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void unfight() {
 		isInFight = false;
-		if(fightTask != null)
+		if (fightTask != null)
 			fightTask.cancel();
 		fightTask = null;
 	}
@@ -603,7 +666,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		else
 			return new SpigotNegativityPlayer(p);
 	}
-	
+
 	public static boolean contains(Player p) {
 		return players.containsKey(p.getUniqueId());
 	}

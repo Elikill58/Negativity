@@ -24,8 +24,11 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 @SuppressWarnings("deprecation")
 public class ForceFieldProtocol extends Cheat implements Listener {
 
+	private NumberFormat nf = NumberFormat.getInstance();
+	
 	public ForceFieldProtocol() {
 		super("FORCEFIELD", true, Material.DIAMOND_SWORD, true, true, "ff", "killaura");
+		nf.setMaximumIntegerDigits(2);
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
@@ -42,9 +45,6 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if (dis > (Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach")
 				+ (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0))
 				&& !p.getItemInHand().getType().equals(Material.BOW)) {
-			NumberFormat nf = NumberFormat.getInstance();
-			nf.setMaximumIntegerDigits(2);
-			np.addWarn(this, Utils.parseInPorcent(dis * 2 * 10));
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					Utils.parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis

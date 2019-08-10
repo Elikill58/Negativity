@@ -16,7 +16,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ReportType;
 
-@SuppressWarnings("deprecation")
+@SuppressWarnings({"deprecation", "unchecked"})
 public class TimerAnalyzePacket extends BukkitRunnable {
 
 	@Override
@@ -40,11 +40,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					if(p.getItemInHand().getType().equals(Material.BOW))
 						np.flyingReason = FlyingReason.BOW;
 					int porcent = Utils.parseInPorcent(flying - (ping / 8));
-					ReportType type = ReportType.WARNING;
-					if (flying > 30)
-						type = ReportType.VIOLATION;
-					np.addWarn(np.flyingReason.getCheat(), porcent);
-					SpigotNegativity.alertMod(type, p, np.flyingReason.getCheat(), porcent,
+					SpigotNegativity.alertMod(flying > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, np.flyingReason.getCheat(), porcent,
 							"Flying in one second: " + np.FLYING + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
 							"Too many packet: " + flying + "\n(Valid packets with low ping: 20)");
 					if(np.flyingReason.getCheat().isSetBack()){
@@ -55,7 +51,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 							p.getInventory().addItem(new ItemStack(np.eatMaterial));
 							break;
 						case POTION:
-							@SuppressWarnings("unchecked") List<PotionEffect> po = (List<PotionEffect>) np.POTION_EFFECTS.clone();
+							List<PotionEffect> po = (List<PotionEffect>) np.POTION_EFFECTS.clone();
 							for(PotionEffect pe : po)
 								if(!p.hasPotionEffect(pe.getType())){
 									p.addPotionEffect(pe);
@@ -79,7 +75,6 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 						ReportType type = ReportType.WARNING;
 						if (np.ONLY_KEEP_ALIVE > 10)
 							type = ReportType.VIOLATION;
-						np.addWarn(FLY, reliability);
 						SpigotNegativity.alertMod(type, p, FLY, reliability,
 								np.ONLY_KEEP_ALIVE + " second of only KeepAlive. Last other: "
 										+ np.LAST_OTHER_KEEP_ALIVE + "(" + new Timestamp(np.TIME_OTHER_KEEP_ALIVE)
@@ -91,7 +86,6 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 			Cheat FORCEFIELD = Cheat.fromString("FORCEFIELD").get();
 			if (np.ACTIVE_CHEAT.contains(FORCEFIELD)) {
 				if (np.ARM > 14 && np.USE_ENTITY > 20) {
-					np.addWarn(FORCEFIELD, Utils.parseInPorcent(np.ARM + np.USE_ENTITY + np.getWarn(FORCEFIELD)));
 					ReportType type = ReportType.WARNING;
 					if (np.getWarn(FORCEFIELD) > 4)
 						type = ReportType.VIOLATION;
@@ -108,7 +102,6 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					int total = np.ALL - np.KEEP_ALIVE;
 					if (total == 0) {
 						if(Utils.parseInPorcent(120 - ping) >= BLINK.getReliabilityAlert()) {
-							np.addWarn(BLINK, Utils.parseInPorcent(120 - ping));
 							boolean last = np.IS_LAST_SEC_BLINK == 2;
 							np.IS_LAST_SEC_BLINK++;
 							long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
@@ -128,7 +121,6 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				if(ping < 140){
 					if(np.ENTITY_ACTION > 35){
 						if(np.IS_LAST_SEC_SNEAK){
-							np.addWarn(SNEAK, Utils.parseInPorcent(55 + np.ENTITY_ACTION));
 							SpigotNegativity.alertMod(ReportType.WARNING, p, SNEAK, Utils.parseInPorcent(55 + np.ENTITY_ACTION), "EntityAction packet: " + np.ENTITY_ACTION + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
 							if(SNEAK.isSetBack())
 								p.setSneaking(false);
@@ -142,7 +134,6 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				if(ping < EDITED_CLIENT.getMaxAlertPing()){
 					int allPos = np.POSITION_LOOK + np.POSITION;
 					if(allPos > 50) {
-						np.addWarn(EDITED_CLIENT, Utils.parseInPorcent(20 + allPos));
 						SpigotNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, EDITED_CLIENT, Utils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + " Ping: " + ping + " Warn for EditedClient: " + np.getWarn(EDITED_CLIENT));
 					}
 				}

@@ -67,11 +67,13 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean isOnBungeecord = false, log = false, hasBypass = true, essentialsSupport = false, worldGuardSupport = false;
+	public static boolean isOnBungeecord = false, log = false, hasBypass = true, essentialsSupport = false,
+			worldGuardSupport = false;
 	public static Material MATERIAL_CLOSE = Material.REDSTONE;
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null;
 	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
-
+	
+	@Override
 	public void onEnable() {
 		INSTANCE = this;
 		if (Adapter.getAdapter() == null)
@@ -122,7 +124,8 @@ public class SpigotNegativity extends JavaPlugin {
 		log = ada.getBooleanInConfig("log_alerts");
 		hasBypass = ada.getBooleanInConfig("Permissions.bypass.active");
 
-		new Metrics(this).addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
+		new Metrics(this)
+				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersEvents(), this);
@@ -165,9 +168,9 @@ public class SpigotNegativity extends JavaPlugin {
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
 		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 20);
 
-		for(Cheat c : Cheat.values()) {
-			if(c.isActive()) {
-				if(c.hasListener()) {
+		for (Cheat c : Cheat.values()) {
+			if (c.isActive()) {
+				if (c.hasListener()) {
 					pm.registerEvents((Listener) c, this);
 				}
 				c.run();
@@ -181,8 +184,7 @@ public class SpigotNegativity extends JavaPlugin {
 			for (String s : cs.getKeys(false))
 				new ItemUseBypass(s, cs.getString(s + ".cheats"), cs.getString(s + ".when"));
 		}
-		if (UniversalUtils.hasInternet()
-				&& !UniversalUtils.isLatestVersion(getDescription().getVersion())) {
+		if (UniversalUtils.hasInternet() && !UniversalUtils.isLatestVersion(getDescription().getVersion())) {
 			getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
 					+ "). Download it here: https://www.spigotmc.org/resources/48399/");
 		}
@@ -196,15 +198,18 @@ public class SpigotNegativity extends JavaPlugin {
 		});
 		ada.loadLang();
 
-	    if (Bukkit.getPluginManager().getPlugin("Essentials") != null)
-	    	essentialsSupport = true;
-	    if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null)
-	    	worldGuardSupport = true;
-	    
-	    if(essentialsSupport || worldGuardSupport) {
-	    	String s = (essentialsSupport ? (worldGuardSupport ? "Essentials and WorldGuard plugins are detected." : "Essentials plugin detected.") : "WorldGuard plugin detected.");
-	    	getLogger().info(s + " Loading support ...");
-	    }
+		if (Bukkit.getPluginManager().getPlugin("Essentials") != null)
+			essentialsSupport = true;
+		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null)
+			worldGuardSupport = true;
+
+		if (essentialsSupport || worldGuardSupport) {
+			String s = (essentialsSupport
+					? (worldGuardSupport ? "Essentials and WorldGuard plugins are detected."
+							: "Essentials plugin detected.")
+					: "WorldGuard plugin detected.");
+			getLogger().info(s + " Loading support ...");
+		}
 	}
 
 	private void loadCommand() {
@@ -242,7 +247,7 @@ public class SpigotNegativity extends JavaPlugin {
 			unbanCmd.setExecutor(new UnbanCommand());
 			unbanCmd.setTabCompleter(new UnbanCommand());
 		}
-		
+
 		PluginCommand kickCmd = getCommand("nkick");
 		if (!getConfig().getBoolean("kick_command"))
 			unRegisterBukkitCommand(kickCmd);
@@ -273,8 +278,15 @@ public class SpigotNegativity extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		for (Player p : Utils.getOnlinePlayers())
+		int i = 0;
+		for (Player p : Utils.getOnlinePlayers()) {
+			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+			i += np.proof.size();
+			np.saveProof(false);
+			np.destroy(false);
 			PacketListenerAPI.removePlayer(p);
+		}
+		Stats.updateStats(StatsType.CHEATS, i);
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0);
 		invTimer.cancel();
@@ -291,16 +303,17 @@ public class SpigotNegativity extends JavaPlugin {
 		return alertMod(type, p, c, reliability, proof, "");
 	}
 
-	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
+			String hover_proof) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (c.equals(Cheat.fromString("BLINK").get()) && !np.already_blink) {
+		if (!np.already_blink && c.equals(Cheat.fromString("BLINK").get())) {
 			np.already_blink = true;
 			return false;
 		}
 		if (np.isInFight && c.isBlockedInFight())
 			return false;
 		if (essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
-				return false;
+			return false;
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType()))
 				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType()).getWhen().equals(WhenBypass.ALWAYS))
@@ -318,7 +331,8 @@ public class SpigotNegativity extends JavaPlugin {
 			if (!bypassEvent.isCancelled())
 				return false;
 		}
-		logProof(type, p, c, reliability, proof, ping);
+		np.addWarn(c, reliability);
+		logProof(np, type, p, c, reliability, proof, ping);
 		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(p, c, reliability,
 				c.getReliabilityAlert() < reliability, ping, proof, hover_proof);
 		Bukkit.getPluginManager().callEvent(alert);
@@ -330,10 +344,9 @@ public class SpigotNegativity extends JavaPlugin {
 			if (!kick.isCancelled())
 				p.kickPlayer(Messages.getMessage(p, "kick", "%cheat%", c.getName()));
 		}
-		Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.getKey() + " (Reliability: " + reliability + ") Ping: "
-				+ ping + " Type: " + type.getName());
+		//Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.getKey() + " (Reliability: " + reliability + ") Ping: " + ping + " Type: " + type.getName());
 		Ban.manageBan(c, np, reliability);
-		if(Ban.isBanned(np.getAccount()))
+		if (Ban.isBanned(np.getAccount()))
 			return false;
 		if (isOnBungeecord)
 			sendMessage(p, c.getName(), String.valueOf(reliability), String.valueOf(ping), hover_proof);
@@ -357,12 +370,7 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 
 	private static void sendMessage(Player p, String cheatName, String reliability, String ping, String hover) {
-		try (ByteArrayOutputStream ba = new ByteArrayOutputStream(); DataOutputStream out = new DataOutputStream(ba)) {
-			out.writeUTF(p.getName() + "/**/" + cheatName + "/**/" + reliability + "/**/" + ping + "/**/" + hover);
-			p.sendPluginMessage(SpigotNegativity.getInstance(), "Negativity", ba.toByteArray());
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		sendReportMessage(p, p.getName() + "/**/" + cheatName + "/**/" + reliability + "/**/" + ping + "/**/" + hover);
 	}
 
 	public static void sendReportMessage(Player p, String reportMsg) {
@@ -374,10 +382,10 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 	}
 
-	private static void logProof(ReportType type, Player p, Cheat c, int reliability, String proof, int ping) {
-		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		SpigotNegativityPlayer.getNegativityPlayer(p).logProof(stamp,
-				stamp + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " > " + proof);
+	private static void logProof(SpigotNegativityPlayer np, ReportType type, Player p, Cheat c, int reliability,
+			String proof, int ping) {
+		np.logProof(new Timestamp(System.currentTimeMillis()) + ": (" + ping + "ms) " + reliability + "% " + c.getKey()
+				+ " > " + proof);
 	}
 
 	public static void manageAutoVerif(Player p) {
@@ -401,22 +409,16 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private Object getPrivateField(Object object, String field)
 			throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-		Class<?> clazz = object.getClass();
-		Field objectField = clazz.getDeclaredField(field);
+		Field objectField = object.getClass().getDeclaredField(field);
 		objectField.setAccessible(true);
-		Object result = objectField.get(object);
-		objectField.setAccessible(false);
-		return result;
+		return objectField.get(object);
 	}
 
 	private Object getKnownCommands(Object object) {
 		try {
-			Class<?> clazz = object.getClass();
-			Field objectField = clazz.getDeclaredField("knownCommands");
+			Field objectField = object.getClass().getDeclaredField("knownCommands");
 			objectField.setAccessible(true);
-			Object result = objectField.get(object);
-			objectField.setAccessible(false);
-			return result;
+			return objectField.get(object);
 		} catch (NoSuchFieldException e) {
 			Class<?> clazz = object.getClass();
 			try {
@@ -434,10 +436,8 @@ public class SpigotNegativity extends JavaPlugin {
 	public void unRegisterBukkitCommand(PluginCommand cmd) {
 		try {
 			Object result = getPrivateField(this.getServer().getPluginManager(), "commandMap");
-			SimpleCommandMap commandMap = (SimpleCommandMap) result;
-			Object map = getKnownCommands(commandMap);
-			HashMap<?, ?> knownCommands = (HashMap<?, ?>) map;
-			if(knownCommands.containsKey(cmd.getName()))
+			HashMap<?, ?> knownCommands = (HashMap<?, ?>) getKnownCommands((SimpleCommandMap) result);
+			if (knownCommands.containsKey(cmd.getName()))
 				knownCommands.remove(cmd.getName());
 			for (String alias : cmd.getAliases())
 				if (knownCommands.containsKey(alias) && knownCommands.get(alias).toString().contains(this.getName()))

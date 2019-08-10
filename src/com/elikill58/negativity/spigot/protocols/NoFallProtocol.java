@@ -36,7 +36,6 @@ public class NoFallProtocol extends Cheat implements Listener {
 					&& p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
 				if (p.isOnGround()) {
 					if (distance > 0.79D) {
-						np.addWarn(this, Utils.parseInPorcent(distance * 100));
 						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
 								Utils.parseInPorcent(distance * 100),
 								"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceBetweenFromAndTo: "
@@ -51,7 +50,6 @@ public class NoFallProtocol extends Cheat implements Listener {
 					}
 				} else {
 					if (distance > 2D) {
-						np.addWarn(this, Utils.parseInPorcent(distance * 100));
 						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
 								Utils.parseInPorcent(distance * 100),
 								"Player not in ground no fall Damage. FallDistance: " + p.getFallDistance()

@@ -51,11 +51,7 @@ public class PacketListenerAPI implements IPacketListener, Listener {
 
 	@Override
 	public Object onPacketReceive(Object sender, Object packet) {
-		ReceivedPacket receivedPacket;
-		if (sender instanceof Player)
-			receivedPacket = new ReceivedPacket(packet, (Player) sender);
-		else
-			receivedPacket = new ReceivedPacket(packet, (ChannelWrapper<?>) sender);
+		ReceivedPacket receivedPacket = sender instanceof Player ? new ReceivedPacket(packet, (Player) sender) : new ReceivedPacket(packet, (ChannelWrapper<?>) sender);
 		PacketHandler.notifyHandlers(receivedPacket);
 		if (receivedPacket.getPacket() != null)
 			return receivedPacket.getPacket();

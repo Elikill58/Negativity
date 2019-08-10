@@ -3,10 +3,13 @@ package com.elikill58.negativity.universal.utils;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.security.SecureRandom;
+import java.security.Security;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -14,7 +17,18 @@ import java.util.UUID;
 import java.util.jar.JarEntry;
 import java.util.jar.JarInputStream;
 
-import com.elikill58.negativity.universal.*;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+
+import com.elikill58.negativity.universal.Database;
+import com.elikill58.negativity.universal.DefaultConfigValue;
+import com.elikill58.negativity.universal.Stats;
+import com.elikill58.negativity.universal.SuspectManager;
+import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -111,8 +125,9 @@ public class UniversalUtils {
 	
 	public static Optional<String> getLatestVersion() {
 		try {
-			URL url = new URL("http://api.spigotmc.org/legacy/update.php?resource=48399");
-			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=48399");
+			doTrustToCertificates();
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 			/*connection.setConnectTimeout(5);
 			connection.setReadTimeout(5);*/
 			connection.setUseCaches(true);
@@ -138,6 +153,37 @@ public class UniversalUtils {
 			return false;
 		}
 	}
+	
+	public static void doTrustToCertificates() throws Exception {
+        Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+        TrustManager[] trustAllCerts = new TrustManager[]{
+                new X509TrustManager() {
+                    public X509Certificate[] getAcceptedIssuers() {
+                        return null;
+                    }
+
+                    public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+                        return;
+                    }
+
+                    public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+                        return;
+                    }
+                }
+        };
+        SSLContext sc = SSLContext.getInstance("SSL");
+        sc.init(null, trustAllCerts, new SecureRandom());
+        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+        HostnameVerifier hv = new HostnameVerifier() {
+            public boolean verify(String urlHostName, SSLSession session) {
+                if (!urlHostName.equalsIgnoreCase(session.getPeerHost())) {
+                    System.out.println("Warning: URL host '" + urlHostName + "' is different to SSLSession host '" + session.getPeerHost() + "'.");
+                }
+                return true;
+            }
+        };
+        HttpsURLConnection.setDefaultHostnameVerifier(hv);
+    }
 	
 	public static void init() {
 		DefaultConfigValue.init();

@@ -54,7 +54,6 @@ public class AutoRegenProtocol extends Cheat implements Listener {
 		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && np.ACTIVE_CHEAT.contains(this) && (np.LAST_REGEN != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))) {
 			int ping = Utils.getPing(p);
 			if (dif < (Version.getVersion().getTimeBetweenTwoRegenFromVersion() + ping)) {
-				np.addWarn(this, Utils.parseInPorcent(200 - dif - ping));
 				boolean mayCancel = false;
 				if (dif < (50 + ping))
 					mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,

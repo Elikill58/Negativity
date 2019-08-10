@@ -70,7 +70,7 @@ public abstract class PacketHandler {
 					break;
 				default:
 				}
-				if (!packet.getPacketName().equals("PacketPlayInFlying")) {
+				if (!packet.getPacketName().equals("PacketPlayInKeepAlive")) { // PacketPlayInFlying
 					np.TIME_OTHER_KEEP_ALIVE = System.currentTimeMillis();
 					np.LAST_OTHER_KEEP_ALIVE = packet.getPacketName();
 				}

@@ -79,7 +79,6 @@ public class JesusProtocol extends Cheat implements Listener {
 					reliability = 95;
 				else isCheating = false;
 				if(isCheating){
-					np.addWarn(this, Utils.parseInPorcent(reliability));
 					boolean mayCancel = SpigotNegativity.alertMod(type, p, this, Utils.parseInPorcent(reliability), "Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif + " and ping: "
 										+ Utils.getPing(p));
 					if(isSetBack() && mayCancel)

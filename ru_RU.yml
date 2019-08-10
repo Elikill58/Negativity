@@ -31,11 +31,11 @@ unban:
   well_unban: "&a[&2Negativity&a]&c %name% был разбанен."
   not_banned: "&c%name% не был забанен."
   not_exact: "%arg% не является ником игрока."
-  help: "/nunban <player> : Unban a banned player."
+  help: "/nunban <игрок> : Разбанить забаненного игрока."
 kick:
-  help: "/nkick <player> <reason> : Kick the specified player"
-  well_kick: "&a[&2Negativity&a]&c %name% well kicked for %reason%."
-  kicked: "You have been kick by %playername% for %reason%"
+  help: "/nkick <игрок> <причина> : Кикнуть указанного игрока."
+  well_kick: "&a[&2Negativity&a]&c %name% был кикнут за %reason%."
+  kicked: "Вы кикнуты игроком %playername% за %reason%"
 report:
   report_usage: "/report <игрок> <причина>"
   well_report: "&aИгрок %name% получил репорт!"

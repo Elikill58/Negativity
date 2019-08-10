@@ -43,7 +43,6 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 			int ping = Utils.getPing(p), relia = Utils.parseInPorcent(distance * 400);
 			if((from.getY() - to.getY()) < -0.001)
 				return;
-			np.addWarn(this, relia);
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia,
 					"Soul sand under player. Distance from/to : " + distance + ". Ping: " + ping);
 			if (isSetBack() && mayCancel)

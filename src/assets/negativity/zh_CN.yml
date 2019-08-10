@@ -3,11 +3,11 @@ report_wait: "请稍等 1 秒后再次举报"
 invalid_player: "%arg% 不是玩家！"
 not_forget_player: "请勿忘记玩家参数！"
 not_permission: "&c您没有执行此操作的权限。"
-only_player: "&cOnly a player can use this command"
-well_suspect: "%players% has well suspected !"
-none: "none"
-console: "Administrator"
-fake_entities: "Fake players"
+only_player: "&c只有玩家可以使用此命令"
+well_suspect: "%players% 现在是怀疑对象了"
+none: "无"
+console: "管理员"
+fake_entities: "假的玩家"
 
 kick: "&a[&2弊绝风清&a]&c您由于使用作弊程序 (%cheat%) 而被踢出了此服务器"
 
@@ -27,7 +27,7 @@ ban {
   well_ban: "&a[&2弊绝风清&a]&c%name% 由于 %reason% 被合理封禁。"
 }
 lang {
-  language_set: "&a[&2Negativity&a] &7Negativity messages will now be in simplified chinese"
+  language_set: "&a[&2弊绝风清&a] &7语言文件已成功切换至中文"
 }
 unban {
   well_unban: "&a[&2弊绝风清&a]&c%name% 被合理解封。"

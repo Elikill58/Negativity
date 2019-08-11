@@ -49,6 +49,7 @@ public class DefaultConfigValue {
 
 	public static void init() {
 		BOOLEANS.put("log_alerts", true);
+		BOOLEANS.put("log_alerts_in_console", true);
 		INTS.put("tps_alert_stop", 18);
 		BOOLEANS.put("report_command", true);
 		BOOLEANS.put("ban_command", true);

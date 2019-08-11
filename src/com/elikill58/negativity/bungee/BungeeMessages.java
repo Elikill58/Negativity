@@ -104,7 +104,7 @@ public class BungeeMessages {
 		String message = ChatColor.RESET + LANG_VALUES.get((p != null ? getLang(p) : getLang())).getString(dir);
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
 			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
-		if (message.equalsIgnoreCase("�rnull"))
+		if (message.equalsIgnoreCase("§rnull"))
 			return dir;
 		return coloredBungeeMessage(message);
 	}

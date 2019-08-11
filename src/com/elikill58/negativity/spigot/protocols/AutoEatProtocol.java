@@ -7,8 +7,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer.FlyingReason;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.FlyingReason;
 
 public class AutoEatProtocol extends Cheat implements Listener {
 	

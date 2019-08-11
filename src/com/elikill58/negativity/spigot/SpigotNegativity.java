@@ -42,6 +42,7 @@ import com.elikill58.negativity.spigot.listeners.PlayerCheatKickEvent;
 import com.elikill58.negativity.spigot.packets.PacketListenerAPI;
 import com.elikill58.negativity.spigot.packets.PacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
+import com.elikill58.negativity.spigot.support.WorldGuardAPI;
 import com.elikill58.negativity.spigot.timers.ActualizeClickTimer;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
@@ -67,7 +68,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean isOnBungeecord = false, log = false, hasBypass = true, essentialsSupport = false,
+	public static boolean isOnBungeecord = false, log = false, log_console = false, hasBypass = true, essentialsSupport = false,
 			worldGuardSupport = false;
 	public static Material MATERIAL_CLOSE = Material.REDSTONE;
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null;
@@ -122,6 +123,7 @@ public class SpigotNegativity extends JavaPlugin {
 		FakePlayer.loadClass();
 		isOnBungeecord = ada.getBooleanInConfig("hasBungeecord");
 		log = ada.getBooleanInConfig("log_alerts");
+		log_console = ada.getBooleanInConfig("log_alerts_in_console");
 		hasBypass = ada.getBooleanInConfig("Permissions.bypass.active");
 
 		new Metrics(this)
@@ -200,8 +202,10 @@ public class SpigotNegativity extends JavaPlugin {
 
 		if (Bukkit.getPluginManager().getPlugin("Essentials") != null)
 			essentialsSupport = true;
-		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null)
+		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
 			worldGuardSupport = true;
+			WorldGuardAPI.init();
+		}
 
 		if (essentialsSupport || worldGuardSupport) {
 			String s = (essentialsSupport

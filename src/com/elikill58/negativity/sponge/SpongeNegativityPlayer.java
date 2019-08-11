@@ -41,9 +41,10 @@ import org.spongepowered.api.world.Location;
 import com.elikill58.negativity.sponge.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.sponge.precogs.NegativityBypassTicket;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Minerate;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.flowpowered.math.vector.Vector3d;
 
@@ -373,20 +374,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 
 	public boolean isBlock(ItemType m) {
 		return m.getBlock().isPresent();
-	}
-
-	public enum FlyingReason {
-		POTION(Cheat.fromString("ANTIPOTION").get()), REGEN(Cheat.fromString("AUTOREGEN").get()), EAT(Cheat.fromString("AUTOEAT").get()), BOW(Cheat.fromString("FASTBOW").get());
-
-		private Cheat c;
-
-		FlyingReason(Cheat c) {
-			this.c = c;
-		}
-
-		public Cheat getCheat() {
-			return c;
-		}
 	}
 
 	@Override

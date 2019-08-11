@@ -13,7 +13,9 @@ import org.spongepowered.api.scheduler.Task;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
-import com.elikill58.negativity.universal.*;
+import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.FlyingReason;
+import com.elikill58.negativity.universal.ReportType;
 
 public class PacketsTimers implements Consumer<Task> {
 
@@ -44,7 +46,7 @@ public class PacketsTimers implements Consumer<Task> {
 			if (flying > 28) {
 				if (np.hasDetectionActive(np.flyingReason.getCheat())) {
 					if(np.getItemTypeInHand().getType().equals(ItemTypes.BOW))
-						np.flyingReason = SpongeNegativityPlayer.FlyingReason.BOW;
+						np.flyingReason = FlyingReason.BOW;
 					ReportType type = ReportType.WARNING;
 					if (flying > 25)
 						type = ReportType.VIOLATION;

@@ -39,6 +39,7 @@ import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityPlayer;
@@ -227,11 +228,13 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		ENTITY_ACTION = 0;
 		ALL = 0;
 	}
-
+	
+	@Override
 	public boolean isOp() {
 		return getPlayer().isOp();
 	}
-
+	
+	@Override
 	public void startAnalyze(Cheat c) {
 		ACTIVE_CHEAT.add(c);
 		if (c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
@@ -244,6 +247,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		}
 	}
 
+	@Override
 	public void startAllAnalyze() {
 		INJECTED.add(getPlayer().getUniqueId());
 		for (Cheat c : Cheat.values())
@@ -591,21 +595,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public void kickPlayer(String reason, String time, String by, boolean def) {
 		getPlayer().kickPlayer(Messages.getMessage(getPlayer(), "ban.kick_" + (def ? "def" : "time"), "%reason%",
 				reason, "%time%", String.valueOf(time), "%by%", by));
-	}
-
-	public enum FlyingReason {
-		POTION(Cheat.fromString("ANTIPOTION").get()), REGEN(Cheat.fromString("AUTOREGEN").get()), EAT(
-				Cheat.fromString("AUTOEAT").get()), BOW(Cheat.fromString("FASTBOW").get());
-
-		private Cheat c;
-
-		FlyingReason(Cheat c) {
-			this.c = c;
-		}
-
-		public Cheat getCheat() {
-			return c;
-		}
 	}
 
 	@Override

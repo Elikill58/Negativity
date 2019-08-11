@@ -14,6 +14,7 @@
 ###################################################################
 
 log_alerts: true
+log_alerts_in_console: true
 tps_alert_stop: 19 # if you get less TPS then this value, all alert will be disabled
 
 # To enable or disable /report
@@ -43,7 +44,7 @@ Database:
 
 inventory:
   alerts:
-    no_started_verif_cheat: false # Don't see if the player isn't analsye for this cheat
+    no_started_verif_cheat: false # Don't see if the player isn't analyse for this cheat
     only_cheat_active: true # The cheat with an active detection
   inv_freeze_active: true
 
@@ -56,8 +57,8 @@ items:
   #
   # when available:
   # always : disable when the player get it in their hand
-  # right_click : disale when the player right click 
-  # left_click : disale when the player left click 
+  # right_click : disable when the player right click 
+  # left_click : disable when the player left click 
   #
   COMPASS:
     when: always

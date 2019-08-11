@@ -159,7 +159,7 @@ public abstract class Cheat {
 	
 	public static void loadCheat() {
 		try {
-			String dir = Cheat.class.getProtectionDomain().getCodeSource().getLocation().getFile();
+			String dir = Cheat.class.getProtectionDomain().getCodeSource().getLocation().getFile().replaceAll("%20", " ");
 			if (dir.endsWith(".class"))
 				dir = dir.substring(0, dir.lastIndexOf('!'));
 

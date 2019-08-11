@@ -85,9 +85,11 @@ public class FlyProtocol extends Cheat implements Listener {
 	}
 
 	private void setBack(Player p) {
+		int i = 20;
 		Location loc = p.getLocation();
-		while (loc.getBlock().getType().equals(Material.AIR)) {
+		while (loc.getBlock().getType().equals(Material.AIR) && i > 0) {
 			loc.subtract(0, 1, 0);
+			i--;
 		}
 		p.teleport(loc.add(0, 1, 0));
 	}
@@ -95,7 +97,7 @@ public class FlyProtocol extends Cheat implements Listener {
 	private int getNbAirBlockDown(SpigotNegativityPlayer np) {
 		Location loc = np.getPlayer().getLocation();
 		int i = 0;
-		while (!np.hasOtherThanExtended(loc, Material.AIR)) {
+		while (!np.hasOtherThanExtended(loc, Material.AIR) && i < 20) {
 			loc.subtract(0, 1, 0);
 			i++;
 		}

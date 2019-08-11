@@ -42,6 +42,11 @@ permissions:
       negativity.kick: true
       negativity.mod: true
       negativity.suspect: true
+      negativity.verif: true
+      negativity.alert: true
+      negativity.mod: true
+      negativity.managecheat: true
+      negativity.reportwait: true
   negativity.negativity:
     description: See all informations about a player and start verif
     default: op

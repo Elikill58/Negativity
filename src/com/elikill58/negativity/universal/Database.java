@@ -19,8 +19,9 @@ public class Database {
 		Database.password = password;
 		try {
 			connection = DriverManager.getConnection("jdbc:mysql://" + url, username, password);
+			Database.hasCustom = true;
 		} catch (SQLException e) {
-			System.out.println("[Negativity] Error while connection to the database.");
+			Adapter.getAdapter().error("[Negativity] Error while connection to the database.");
 			e.printStackTrace();
 		}
 	}

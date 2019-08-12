@@ -6,6 +6,11 @@ not_permission: "&cdu har ikke tilgang til dette."
 
 kick: "&a[&2Negativity&a]&c du har blitt sparket fra denne serveren for juksing (%cheat%)"
 
+lang:
+  invalid_lang: "%arg% isn't a valid lang !"
+  help: "/lang <new lang> : Change the default language"
+  current: "The current language is %lang%"
+  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in portugese"
 ban:
   kick_time: "&cForbud grunn %reason% før %time% av %by%."
   kick_def: "&cForbud definitivt for %reason% av %by%."

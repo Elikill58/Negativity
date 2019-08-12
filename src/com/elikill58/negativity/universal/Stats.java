@@ -81,7 +81,7 @@ public class Stats {
 	}
 	
 	public static enum StatsType {
-		ONLINE("online"), PLAYERS("players"), CHEATS("cheats"), PORT("port");
+		ONLINE("online"), PORT("port");
 
 		private String key;
 

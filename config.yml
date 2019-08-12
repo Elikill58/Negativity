@@ -201,14 +201,14 @@ ban:
   storage: "file"
   # If you want to destroy BDD line / File line
   destroy_when_unban: false
-  reliability_need: 90
-  alert_need: 5
+  reliability_need: 95
+  alert_need: 10
   # How to calculate the time during the player will be banned
   # IN MILLISECONDES
   time:
     # %reliability% : reliability of last alert
     # %alert% : number of alert sent
-    calculator: "360000000 + (%reliability% * 10 * %alert%)"
+    calculator: "360000000 + (%reliability% * 20 * %alert%)"
   def:
     # Number that you need to be ban definitly
     ban_time: 4
@@ -491,7 +491,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
-  # AntoSteal help with inventory (Take verything ...)
+
+  # Edited Client correspond to strange action from client
   edited_client:
     ping: 150
     exact_name: "Edited Client"
@@ -501,7 +502,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
-  # 
+  
+  # XRay cannot be detected directly, it's about Minerate
   xray:
     ping: 300
     exact_name: "XRay"

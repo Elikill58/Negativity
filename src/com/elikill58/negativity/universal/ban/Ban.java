@@ -1,7 +1,9 @@
 package com.elikill58.negativity.universal.ban;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -12,15 +14,17 @@ import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanRequest.BanType;
+import com.elikill58.negativity.universal.ban.support.BanPluginSupport;
 
 public class Ban {
 
 	public static File banDir;
 	public static boolean banActive, banActiveIsFile;
 	public static final HashMap<String, String> DB_CONTENT = new HashMap<>();
+	private static List<BanPluginSupport> BAN_SUPPORT = new ArrayList<>();
 
 	public static boolean isBanned(NegativityAccount np) {
-		if(!banActive)
+		if (!banActive)
 			return false;
 		try {
 			np.loadBanRequest(true);
@@ -38,6 +42,8 @@ public class Ban {
 		}
 	}
 
+	private static int i;
+	
 	public static void manageBan(Cheat cheat, NegativityPlayer np, int relia) {
 		Adapter ada = Adapter.getAdapter();
 		if (!cheat.isActive() || !ada.getBooleanInConfig("ban.active"))
@@ -47,7 +53,7 @@ public class Ban {
 			return;
 		ScriptEngineManager factory = new ScriptEngineManager();
 		ScriptEngine engine = factory.getEngineByName("JavaScript");
-		int i = -1;
+		i = -1;
 		try {
 			i = Integer.parseInt(engine.eval(
 					ada.getStringInConfig("ban.time.calculator").replaceAll("%reliability%", String.valueOf(relia))
@@ -56,7 +62,15 @@ public class Ban {
 		} catch (ScriptException e) {
 			e.printStackTrace();
 		}
-		new BanRequest(np.getAccount(), "Cheat (" + cheat.getName() + ")", i,
+		if(BAN_SUPPORT.size() > 0) {
+			for(BanPluginSupport bp : BAN_SUPPORT) {
+				if(np.getAccount().getBanRequest().size() >= ada.getIntegerInConfig("ban.def.ban_time"))
+					bp.banDef(np, "Cheat (" + cheat.getName() + ")", "Negativity");
+				else 
+					bp.ban(np, "Cheat (" + cheat.getName() + ")", "Negativity", i);
+			}
+		} else
+			new BanRequest(np.getAccount(), "Cheat (" + cheat.getName() + ")", i,
 				np.getAccount().getBanRequest().size() >= ada.getIntegerInConfig("ban.def.ban_time"), BanType.PLUGIN,
 				cheat.getName(), "Negativity", false).execute();
 	}
@@ -64,16 +78,17 @@ public class Ban {
 	public static void init() {
 		Adapter adapter = Adapter.getAdapter();
 		banDir = new File(adapter.getDataFolder(), adapter.getStringInConfig("ban.file.dir"));
-		if(!(banActive = adapter.getBooleanInConfig("ban.active")))
+		if (!(banActive = adapter.getBooleanInConfig("ban.active")))
 			return;
 		String storage = adapter.getStringInConfig("ban.storage");
-		if(storage == null) {
-			adapter.log("Some line is missing in the configuration file. Please, remove it then restart your server to get all configuration line.");
+		if (storage == null) {
+			adapter.log(
+					"Some line is missing in the configuration file. Please, remove it then restart your server to get all configuration line.");
 			return;
 		}
-		if(storage.equalsIgnoreCase("file")) {
+		if (storage.equalsIgnoreCase("file")) {
 			banActiveIsFile = true;
-		} else if(storage.equalsIgnoreCase("db") || storage.equalsIgnoreCase("database")) {
+		} else if (storage.equalsIgnoreCase("db") || storage.equalsIgnoreCase("database")) {
 			banActiveIsFile = false;
 		} else {
 			adapter.error("Error while loading ban system. " + storage + " is an undefined storage type.");
@@ -87,11 +102,15 @@ public class Ban {
 	}
 
 	public static boolean canConnect(NegativityAccount np) {
-		if(!banActive)
+		if (!banActive)
 			return true;
 		for (BanRequest br : np.getBanRequest())
 			if ((br.isDef() || (br.getFullTime()) > System.currentTimeMillis()) && !br.isUnban())
 				return false;
 		return true;
+	}
+	
+	public static void addBanPlugin(BanPluginSupport bp) {
+		BAN_SUPPORT.add(bp);
 	}
 }

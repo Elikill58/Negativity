@@ -12,6 +12,9 @@ fake_entities: "Фейковые игроки"
 kick: "&a[&2Negativity&a]&c Вы были кикнуты с этого сервера за Читы (%cheat%)"
 
 lang:
+  invalid_lang: "%arg% isn't a valid lang !"
+  help: "/lang <new lang> : Change the default language"
+  current: "The current language is %lang%"
   language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in russian"
 ban:
   kick_time: "&cБан за %reason% на %time% от %by%."

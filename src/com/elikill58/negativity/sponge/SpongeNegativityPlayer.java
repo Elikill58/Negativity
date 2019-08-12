@@ -151,7 +151,11 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public Player getPlayer() {
 		return p;
 	}
-
+	
+	public String getIP() {
+		return getPlayer().getConnection().getAddress().getAddress().getHostAddress();
+	}
+	
 	public boolean hasDetectionActive(Cheat c) {
 		return ACTIVE_CHEAT.contains(c) && !hasBypassTicket(c);
 	}
@@ -224,6 +228,10 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void setLang(String l) {
+		saveData();
 	}
 
 	public void clearPackets() {

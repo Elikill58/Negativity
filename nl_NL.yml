@@ -12,6 +12,9 @@ fake_entities: "Neppe spelers"
 kick: "&a[&2Negativity&a]&c Je bent van de server geschopt voor Cheaten (%cheat%)"
 
 lang:
+  invalid_lang: "%arg% isn't a valid lang !"
+  help: "/lang <new lang> : Change the default language"
+  current: "The current language is %lang%"
   language_set: "&a[&2Negativity&a] &7De berichten van Negativity zijn nu in het Nederlands"
 ban:
   kick_time: "&cBan voor %reason% tot %time% door %by%."

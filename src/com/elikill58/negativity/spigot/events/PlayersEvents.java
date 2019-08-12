@@ -26,8 +26,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityAccount;
-import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -59,7 +57,6 @@ public class PlayersEvents implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
-		Stats.updateStats(StatsType.PLAYERS, Utils.getOnlinePlayers().size());
 		if(UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());
@@ -78,8 +75,7 @@ public class PlayersEvents implements Listener {
 	@EventHandler
 	public void onLeave(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
-		Stats.updateStats(StatsType.PLAYERS, Utils.getOnlinePlayers().size() - 1);
-
+		
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
 			if (SpigotNegativityPlayer.contains(p)) {
 				SpigotNegativityPlayer.removeFromCache(p.getUniqueId(), false);

@@ -14,13 +14,11 @@ import java.util.UUID;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanRequest;
-import com.elikill58.negativity.universal.utils.NonnullByDefault;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 /**
  * Contains player-related data that can be accessed when the player is offline.
  */
-@NonnullByDefault
 public class NegativityAccount {
 
 	private UUID playerId;
@@ -53,6 +51,7 @@ public class NegativityAccount {
 
 	public void setLang(String lang) {
 		this.lang = lang;
+		Adapter.getAdapter().getNegativityPlayer(getPlayerId()).setLang(lang);
 	}
 
 	public boolean hasGettedBan() {
@@ -78,6 +77,7 @@ public class NegativityAccount {
 	public void loadBanRequest(boolean forceReload) {
 		if(!Ban.banActive)
 			return;
+		
 		if (!forceReload && gettedBan)
 			return;
 		gettedBan = true;

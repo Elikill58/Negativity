@@ -15,7 +15,7 @@ public abstract class Cheat {
 	public static Cheat ALL;
 	public static final List<Cheat> CHEATS = new ArrayList<>();
 	public static final Map<String, Cheat> CHEATS_BY_KEY = new HashMap<>();
-	private boolean needPacket, isRunning = false, blockedInFight, hasListener;
+	private boolean needPacket, blockedInFight, hasListener;
 	private String key, name;
 	private Object m;
 	private String[] aliases;
@@ -60,17 +60,6 @@ public abstract class Cheat {
 	
 	public boolean hasListener() {
 		return hasListener;
-	}
-	
-	@Deprecated
-	public void run() {
-		if(isRunning)
-			return;
-		/*try {
-			((BukkitRunnable) protocolClass.newInstance()).runTaskTimer(SpigotNegativity.getInstance(), 20, 20);
-			isRunning = true;
-		} catch (Exception e) {
-		}*/
 	}
 
 	public boolean isAutoVerif() {

@@ -8,7 +8,6 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.domains.Association;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
@@ -37,9 +36,7 @@ public class WorldGuardAPI {
 			Class<?> worldGuardClass = Class.forName("com.sk89q.worldguard.WorldGuard");
 			Method getInstanceMethod = worldGuardClass.getMethod("getInstance");
 			worldGuard = getInstanceMethod.invoke(null);
-			SpigotNegativity.getInstance().getLogger().info("Found WorldGuard 7+");
 		} catch (Exception ex) {
-			SpigotNegativity.getInstance().getLogger().info("Found WorldGuard <7");
 		}
 	}
 

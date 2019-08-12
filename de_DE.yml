@@ -12,6 +12,9 @@ fake_entities: "Fake players"
 kick: "&a[&2Negativity&a] &cDu wurdest aufgrund von Cheating vom Server geworfen (%cheat%)!"
 
 lang:
+  invalid_lang: "%arg% isn't a valid lang !"
+  help: "/lang <new lang> : Change the default language"
+  current: "The current language is %lang%"
   language_set: "&a[&2Negativity&a] &7Les messages de Negativity seront désormais en français"
 ban:
   kick_time: "&cDu wurdest von %by% bis %time% gebannt. Grund: %reason%"

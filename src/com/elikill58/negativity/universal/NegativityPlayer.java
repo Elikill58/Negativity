@@ -15,6 +15,10 @@ public abstract class NegativityPlayer {
 	public NegativityAccount getAccount() {
 		return Adapter.getAdapter().getNegativityAccount(playerId);
 	}
+	
+	public UUID getUUID() {
+		return playerId;
+	}
 
 	public abstract Object getPlayer();
 	public abstract boolean hasDefaultPermission(String s);
@@ -29,6 +33,7 @@ public abstract class NegativityPlayer {
 	public abstract void startAnalyze(Cheat c);
 	public abstract void startAllAnalyze();
 	public abstract void updateMinerateInFile();
-
 	public abstract boolean isOp();
+	public abstract void setLang(String newLang);
+	public abstract String getIP();
 }

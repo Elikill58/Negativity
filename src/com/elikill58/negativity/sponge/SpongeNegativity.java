@@ -54,10 +54,16 @@ import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
 import com.elikill58.negativity.sponge.timers.PacketsTimers;
 import com.elikill58.negativity.sponge.utils.Utils;
-import com.elikill58.negativity.universal.*;
+import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Database;
+import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
+import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
+import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpongeAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -115,13 +121,16 @@ public class SpongeNegativity implements RawDataListener {
 				.name("negativity-actualizer").submit(this);
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
-		Task.builder()
+		if(SpongeUpdateChecker.ifUpdateAvailable()) {
+			getLogger().info("New version available (" + SpongeUpdateChecker.getVersionString() + ") : " + SpongeUpdateChecker.getDownloadUrl());
+		}
+		/*Task.builder()
 				.async()
 				.name("Negativity Startup Updater Checker")
 				.execute(() -> SpongeUpdateChecker.ifUpdateAvailable(result ->
 						getLogger().info("New version available ({}): {}",
 								result.getVersionString(), result.getDownloadUrl()))
-				).submit(this);
+				).submit(this);*/
 
 		if (!isOnBungeecord)
 			Task.builder().async().delayTicks(1).execute(new Runnable() {
@@ -254,34 +263,24 @@ public class SpongeNegativity implements RawDataListener {
 					e1.printStackTrace();
 				}
 			}
+			
 
-			Task.builder()
-					.async()
-					.name("Negativity Updater Checker - " + p.getName())
-					.execute(() -> SpongeUpdateChecker.ifUpdateAvailable(result -> {
-						URL downloadUrl;
-						try {
-							downloadUrl = new URL(result.getDownloadUrl());
-						} catch (MalformedURLException ex) {
-							getLogger().error("Unable to create update download URL", ex);
-							return;
-						}
-
-						p.sendMessage(Text
-								.builder("New version available (" + result.getVersionString() + "). Download it here.")
-								.color(TextColors.YELLOW)
-								.onHover(TextActions.showText(Text.of("Click here")))
-								.onClick(TextActions.openUrl(downloadUrl))
-								.build());
-					})).submit(this);
-		}
-		if (!isOnBungeecord)
-			Task.builder().async().delayTicks(1).execute(new Runnable() {
-				@Override
-				public void run() {
-					Stats.updateStats(StatsType.PLAYERS, Sponge.getServer().getOnlinePlayers().size());
+			if(SpongeUpdateChecker.ifUpdateAvailable()) {
+				URL downloadUrl;
+				try {
+					downloadUrl = new URL(SpongeUpdateChecker.getDownloadUrl());
+				} catch (MalformedURLException ex) {
+					getLogger().error("Unable to create update download URL", ex);
+					return;
 				}
-			}).submit(this);
+				p.sendMessage(Text
+						.builder("New version available (" + SpongeUpdateChecker.getVersionString() + "). Download it here.")
+						.color(TextColors.YELLOW)
+						.onHover(TextActions.showText(Text.of("Click here")))
+						.onClick(TextActions.openUrl(downloadUrl))
+						.build());
+			}
+		}
 		manageAutoVerif(p);
 	}
 
@@ -290,11 +289,6 @@ public class SpongeNegativity implements RawDataListener {
 		Task.builder().delayTicks(5).execute(() -> {
 			SpongeNegativityPlayer.removeFromCache(p);
 			Adapter.getAdapter().invalidateAccount(p.getUniqueId());
-		}).submit(this);
-
-		Task.builder().async().delayTicks(1).execute(() -> {
-			if (!isOnBungeecord)
-				Stats.updateStats(StatsType.PLAYERS, Sponge.getServer().getOnlinePlayers().size());
 		}).submit(this);
 	}
 
@@ -417,8 +411,6 @@ public class SpongeNegativity implements RawDataListener {
 					.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
 							+ ")  (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
 							+ reliability);
-		Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.getKey() + " (Reliability: " + reliability + ") Ping: "
-				+ ping + " Type: " + type.getName());
 		Ban.manageBan(c, np, reliability);
 		if (isOnBungeecord)
 			sendMessage(p, c.getName(), reliability, ping, hover_proof);

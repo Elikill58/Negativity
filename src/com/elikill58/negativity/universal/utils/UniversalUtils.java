@@ -56,17 +56,17 @@ public class UniversalUtils {
 		}
 		return classes;
 	}
-	
+
 	public static boolean isMe(String uuid) {
-		if(uuid.equals("195dbcbc-9f2e-389e-82c4-3d017795ca65") || uuid.equals("3437a701-efaf-49d5-95d4-a8814e67760d"))
+		if (uuid.equals("195dbcbc-9f2e-389e-82c4-3d017795ca65") || uuid.equals("3437a701-efaf-49d5-95d4-a8814e67760d"))
 			return true;
 		return false;
 	}
-	
+
 	public static boolean isMe(UUID uuid) {
 		return isMe(uuid.toString());
 	}
-	
+
 	public static boolean isInteger(String s) {
 		try {
 			Integer.parseInt(s);
@@ -113,23 +113,25 @@ public class UniversalUtils {
 		else
 			return false;
 	}
-	
+
 	public static boolean isBoolean(String s) {
 		if (s.toLowerCase().contains("true") || s.equalsIgnoreCase("true") || s.toLowerCase().contains("vrai")
-				|| s.equalsIgnoreCase("vrai") || s.toLowerCase().contains("false") || s.equalsIgnoreCase("false") || s.toLowerCase().contains("faux")
-				|| s.equalsIgnoreCase("faux"))
+				|| s.equalsIgnoreCase("vrai") || s.toLowerCase().contains("false") || s.equalsIgnoreCase("false")
+				|| s.toLowerCase().contains("faux") || s.equalsIgnoreCase("faux"))
 			return true;
 		else
 			return false;
 	}
-	
+
 	public static Optional<String> getLatestVersion() {
 		try {
 			URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=48399");
 			doTrustToCertificates();
 			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			/*connection.setConnectTimeout(5);
-			connection.setReadTimeout(5);*/
+			/*
+			 * connection.setConnectTimeout(5); connection.setReadTimeout(5);
+			 */
+			connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
 			connection.setUseCaches(true);
 			connection.setDoOutput(true);
 			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
@@ -153,38 +155,64 @@ public class UniversalUtils {
 			return false;
 		}
 	}
-	
+
+	public static boolean isValidIP(String ip) {
+		try {
+			if (ip == null || ip.isEmpty()) {
+				return false;
+			}
+
+			String[] parts = ip.split("\\.");
+			if (parts.length != 4) {
+				return false;
+			}
+
+			for (String s : parts) {
+				int i = Integer.parseInt(s);
+				if ((i < 0) || (i > 255)) {
+					return false;
+				}
+			}
+			if (ip.endsWith(".")) {
+				return false;
+			}
+
+			return true;
+		} catch (NumberFormatException nfe) {
+			return false;
+		}
+	}
+
 	public static void doTrustToCertificates() throws Exception {
-        Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
-        TrustManager[] trustAllCerts = new TrustManager[]{
-                new X509TrustManager() {
-                    public X509Certificate[] getAcceptedIssuers() {
-                        return null;
-                    }
+		Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());
+		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+			public X509Certificate[] getAcceptedIssuers() {
+				return null;
+			}
 
-                    public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
-                        return;
-                    }
+			public void checkServerTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+				return;
+			}
 
-                    public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
-                        return;
-                    }
-                }
-        };
-        SSLContext sc = SSLContext.getInstance("SSL");
-        sc.init(null, trustAllCerts, new SecureRandom());
-        HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
-        HostnameVerifier hv = new HostnameVerifier() {
-            public boolean verify(String urlHostName, SSLSession session) {
-                if (!urlHostName.equalsIgnoreCase(session.getPeerHost())) {
-                    System.out.println("Warning: URL host '" + urlHostName + "' is different to SSLSession host '" + session.getPeerHost() + "'.");
-                }
-                return true;
-            }
-        };
-        HttpsURLConnection.setDefaultHostnameVerifier(hv);
-    }
-	
+			public void checkClientTrusted(X509Certificate[] certs, String authType) throws CertificateException {
+				return;
+			}
+		} };
+		SSLContext sc = SSLContext.getInstance("SSL");
+		sc.init(null, trustAllCerts, new SecureRandom());
+		HttpsURLConnection.setDefaultSSLSocketFactory(sc.getSocketFactory());
+		HostnameVerifier hv = new HostnameVerifier() {
+			public boolean verify(String urlHostName, SSLSession session) {
+				if (!urlHostName.equalsIgnoreCase(session.getPeerHost())) {
+					System.out.println("Warning: URL host '" + urlHostName + "' is different to SSLSession host '"
+							+ session.getPeerHost() + "'.");
+				}
+				return true;
+			}
+		};
+		HttpsURLConnection.setDefaultHostnameVerifier(hv);
+	}
+
 	public static void init() {
 		DefaultConfigValue.init();
 		Database.init();
@@ -193,7 +221,7 @@ public class UniversalUtils {
 		SuspectManager.init();
 		TranslatedMessages.init();
 	}
-	
+
 	public static OS os = null;
 
 	public static OS getOs() {
@@ -201,7 +229,7 @@ public class UniversalUtils {
 			os = OS.getOs();
 		return os;
 	}
-	
+
 	public enum OS {
 		WINDOWS(StandardCharsets.ISO_8859_1), MAC(StandardCharsets.UTF_16), LINUX(StandardCharsets.UTF_8), SOLARIS(
 				StandardCharsets.UTF_8), OTHER(StandardCharsets.UTF_16);

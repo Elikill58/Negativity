@@ -77,6 +77,11 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	}
 
 	@Override
+	public void setLang(String s) {
+		
+	}
+	
+	@Override
 	public void startAnalyze(Cheat c) {
 
 	}
@@ -89,5 +94,10 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	@Override
 	public boolean isOp() {
 		return false;
+	}
+	
+	@Override
+	public String getIP() {
+		return p.getAddress().getHostName();
 	}
 }

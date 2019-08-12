@@ -61,6 +61,9 @@ import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpigotAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.support.AdvancedBanSupport;
+import com.elikill58.negativity.universal.ban.support.EssentialsBanSupport;
+import com.elikill58.negativity.universal.ban.support.MaxBansSupport;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -93,9 +96,8 @@ public class SpigotNegativity extends JavaPlugin {
 			MATERIAL_CLOSE = Material.REDSTONE;
 		}
 		PacketManager.run(this);
-		File confDir = new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml");
 		new File(getDataFolder().getAbsolutePath() + File.separator + "user").mkdirs();
-		if (!confDir.exists()) {
+		if (!new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml").exists()) {
 			getLogger().info("------ Negativity Information ------");
 			getLogger().info("");
 			getLogger().info("English:");
@@ -105,14 +107,6 @@ public class SpigotNegativity extends JavaPlugin {
 					"If there is any false positive, problem or if you have a suggestion you can contact me via:");
 			getLogger().info(
 					"Discord: @Elikill58#0743, mail: arpetzouille@gmail.com, and Elikill58 in all other web site like Twitter, Spigotmc ...");
-			getLogger().info("");
-			getLogger().info("French:");
-			getLogger().info(" > Merci d'avoir téléchargé Negativity :)");
-			getLogger().info("J'essaie de faire le meilleur anti-cheat possible.");
-			getLogger().info(
-					"S'il y a des faux positifs, des problémes ou si vous avez des suggestions, vous pouvez me contacter via:");
-			getLogger().info(
-					"Discord: @Elikill58#0743, mail: arpetzouille@gmail.com, et Elikill58 sur tout les autres site comme Twitter, Spigotmc ...");
 			getLogger().info("");
 			getLogger().info("------ Negativity Information ------");
 			getConfig().options().copyDefaults();
@@ -136,27 +130,23 @@ public class SpigotNegativity extends JavaPlugin {
 
 		Messenger messenger = getServer().getMessenger();
 		ChannelEvents channelEvents = new ChannelEvents();
+		String channelNameNegativity = "", channelNameFml = "";
 		if (Version.getVersion().isNewerOrEquals(Version.V1_13)) {
-			String channelNameNegativity = "custom:negativity";
-			if (!messenger.getOutgoingChannels().contains(channelNameNegativity))
-				messenger.registerOutgoingPluginChannel(this, channelNameNegativity);
-			if (!messenger.getIncomingChannels().contains(channelNameNegativity))
-				messenger.registerIncomingPluginChannel(this, channelNameNegativity, channelEvents);
-			if (!messenger.getOutgoingChannels().contains("test:fml"))
-				messenger.registerOutgoingPluginChannel(this, "test:fml");
-			if (!messenger.getIncomingChannels().contains("test:fml"))
-				messenger.registerIncomingPluginChannel(this, "test:fml", channelEvents);
+			channelNameNegativity = "custom:negativity";
+			channelNameFml = "test:fml";
 		} else {
-			String channelNameNegativity = "negativity";
-			if (!messenger.getOutgoingChannels().contains(channelNameNegativity))
-				messenger.registerOutgoingPluginChannel(this, channelNameNegativity);
-			if (!messenger.getIncomingChannels().contains(channelNameNegativity))
-				messenger.registerIncomingPluginChannel(this, channelNameNegativity, channelEvents);
-			if (!messenger.getOutgoingChannels().contains("FML|HS"))
-				messenger.registerOutgoingPluginChannel(this, "FML|HS");
-			if (!messenger.getIncomingChannels().contains("FML|HS"))
-				messenger.registerIncomingPluginChannel(this, "FML|HS", channelEvents);
+			channelNameNegativity = "negativity";
+			channelNameFml = "FML|HS";
 		}
+		if (!messenger.getOutgoingChannels().contains(channelNameNegativity))
+			messenger.registerOutgoingPluginChannel(this, channelNameNegativity);
+		if (!messenger.getIncomingChannels().contains(channelNameNegativity))
+			messenger.registerIncomingPluginChannel(this, channelNameNegativity, channelEvents);
+		if (!messenger.getOutgoingChannels().contains(channelNameFml))
+			messenger.registerOutgoingPluginChannel(this, channelNameFml);
+		if (!messenger.getIncomingChannels().contains(channelNameFml))
+			messenger.registerIncomingPluginChannel(this, channelNameFml, channelEvents);
+		
 		for (Player p : Utils.getOnlinePlayers()) {
 			PacketListenerAPI.addPlayer(p);
 			manageAutoVerif(p);
@@ -171,11 +161,8 @@ public class SpigotNegativity extends JavaPlugin {
 		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 20);
 
 		for (Cheat c : Cheat.values()) {
-			if (c.isActive()) {
-				if (c.hasListener()) {
-					pm.registerEvents((Listener) c, this);
-				}
-				c.run();
+			if (c.isActive() && c.hasListener()) {
+				pm.registerEvents((Listener) c, this);
 			}
 		}
 
@@ -200,8 +187,10 @@ public class SpigotNegativity extends JavaPlugin {
 		});
 		ada.loadLang();
 
-		if (Bukkit.getPluginManager().getPlugin("Essentials") != null)
+		if (Bukkit.getPluginManager().getPlugin("Essentials") != null) {
 			essentialsSupport = true;
+			Ban.addBanPlugin(new EssentialsBanSupport());
+		}
 		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
 			worldGuardSupport = true;
 			WorldGuardAPI.init();
@@ -212,7 +201,17 @@ public class SpigotNegativity extends JavaPlugin {
 					? (worldGuardSupport ? "Essentials and WorldGuard plugins are detected."
 							: "Essentials plugin detected.")
 					: "WorldGuard plugin detected.");
-			getLogger().info(s + " Loading support ...");
+			getLogger().info(s + " Loading support ..." + (essentialsSupport ? " (Essentials also used as Ban plugin)" : ""));
+		}
+
+		if (Bukkit.getPluginManager().getPlugin("MaxBans") != null) {
+			Ban.addBanPlugin(new MaxBansSupport());
+			getLogger().info("Ban plugin MaxBans found ! Loading support ...");
+		}
+
+		if (Bukkit.getPluginManager().getPlugin("AdvancedBan") != null) {
+			Ban.addBanPlugin(new AdvancedBanSupport());
+			getLogger().info("Ban plugin AdvancedBan found ! Loading support ...");
 		}
 	}
 
@@ -282,15 +281,10 @@ public class SpigotNegativity extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		int i = 0;
 		for (Player p : Utils.getOnlinePlayers()) {
-			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-			i += np.proof.size();
-			np.saveProof(false);
-			np.destroy(false);
+			SpigotNegativityPlayer.getNegativityPlayer(p).destroy(false);
 			PacketListenerAPI.removePlayer(p);
 		}
-		Stats.updateStats(StatsType.CHEATS, i);
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0);
 		invTimer.cancel();
@@ -346,16 +340,15 @@ public class SpigotNegativity extends JavaPlugin {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			Bukkit.getPluginManager().callEvent(kick);
 			if (!kick.isCancelled())
-				p.kickPlayer(Messages.getMessage(p, "kick", "%cheat%", c.getName()));
+				p.kickPlayer(Messages.getMessage(p, "kick.kicked", "%cheat%", c.getName(), "%reason%", c.getName(), "%playername%", p.getName(), "%cheat%", c.getName()));
 		}
-		//Stats.updateStats(StatsType.CHEATS, p.getName() + ": " + c.getKey() + " (Reliability: " + reliability + ") Ping: " + ping + " Type: " + type.getName());
 		Ban.manageBan(c, np, reliability);
 		if (Ban.isBanned(np.getAccount()))
 			return false;
 		if (isOnBungeecord)
 			sendMessage(p, c.getName(), String.valueOf(reliability), String.valueOf(ping), hover_proof);
 		else {
-			if (log)
+			if (log_console)
 				INSTANCE.getLogger()
 						.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
 								+ ") (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "

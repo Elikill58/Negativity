@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanRequest;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -22,7 +20,6 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.plugin.Listener;
@@ -108,7 +105,6 @@ public class NegativityListener implements Listener {
 			p.disconnect(new ComponentBuilder(BungeeMessages.getMessage(e.getPlayer(), "ban.kick_" + (isDef ? "def" : "time"), "%reason%", np.getAccount().getBanReason(), "%time%" , np.getAccount().getBanTime(), "%by%", np.getAccount().getBanBy())).create());
 			return;
 		}
-		Stats.updateStats(StatsType.PLAYERS, ProxyServer.getInstance().getPlayers().size());
 		if (sendBungeecordInfo)
 			return;
 		if (Perm.hasPerm(np, "showAlert"))
@@ -126,11 +122,6 @@ public class NegativityListener implements Listener {
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-	}
-
-	@EventHandler
-	public void onDisconnect(PlayerDisconnectEvent e) {
-		Stats.updateStats(StatsType.PLAYERS, ProxyServer.getInstance().getPlayers().size());
 	}
 
 	public static class Report {

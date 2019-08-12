@@ -43,8 +43,6 @@ import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.Version;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {
@@ -160,6 +158,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return op;
 	}
 
+	public String getIP() {
+		return p.get().getAddress().getAddress().getHostAddress();
+	}
+	
 	public void updateCheckMenu() {
 		for (Player p : Inv.CHECKING.keySet()) {
 			if (p.getOpenInventory() != null) {
@@ -197,6 +199,15 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			file.set("lang", getAccount().getLang());
 			file.save(configFile);
 			WARNS.put(c, cheats);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void setLang(String newLang) {
+		try {
+			file.set("lang", getAccount().getLang());
+			file.save(configFile);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -359,11 +370,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		proof.add(msg);
 	}
 
-	public void saveProof(boolean sendStats) {
+	public void saveProof() {
 		if (proof.size() == 0)
 			return;
-		if(sendStats)
-			Stats.updateStats(StatsType.CHEATS, proof.size());
 		try {
 			File temp = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
 					+ "user" + File.separator + "proof" + File.separator + uuid + ".txt");
@@ -387,7 +396,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void destroy(boolean isBan) {
 		players.remove(uuid);
-		saveProof(true);
+		saveProof();
 		if (isBan) {
 			Entity et = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
 			Firework fire = (Firework) et;

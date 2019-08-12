@@ -59,6 +59,9 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 								}
 							break;
 						case REGEN:
+							for(int i = 20; i < flying; i++) {
+								p.damage(0.5);
+							}
 							break;
 						default:
 							break;

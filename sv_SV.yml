@@ -1,0 +1,96 @@
+report_wait: "Snälla, vänta en sekund mellan 2 rapporter"
+
+invalid_player: "%arg% är inte en spelare !"
+not_forget_player: "Glöm inte bort spelaren !"
+not_permission: "&cDu har inte tillstånd till att göra det där."
+only_player: "Bara Spelare Kan Göra Det Där."
+well_suspect: "%players% är misstänkt"
+none: "none"
+console: "Administrator"
+fake_entities: "Fake players"
+
+kick: "&a[&2Negativity&a]&c Du har blivit kickad för att du fuska. (%cheat%)"
+
+lang:
+  invalid_lang: "%arg% isn't a valid lang !"
+  help: "/lang <new lang> : Byta originella språket"
+  current: "Det nuvarande språket är %lang%"
+  language_set: "&a[&2Negativity&a] &7Meddelandena av Negativity är nu på Svenska"
+ban:
+  kick_time: "&cBannad för %reason% tills %time% bannad av: %by%."
+  kick_def: "&cBannad definitivt för %reason% bannad av: %by%."
+  help:
+  # För tid finns det:
+  # y : år
+  # mo : månader
+  # d : dagar
+  # h : timmar
+  # m : minuter
+  # s : sekunder
+  #
+  - "/ban <spelare> <def | time (ex: 2h5d)> <anledning> : Banna den specificerade spelaren"
+  well_ban: "&a[&2Negativity&a]&c %name% blev bannad för %reason%."
+unban:
+  well_unban: "&a[&2Negativity&a]&c %name% blev unbannad."
+  not_banned: "&c%name% är inte bannad."
+  not_exact: "%arg% är inte ett exakt namn av en bannad spelare."
+  help: "/nunban <player> : Unbanna en spelare."
+kick:
+  help: "/kick <spelare> <anledning> : Kicka den specificerade spelaren"
+  well_kick: "&a[&2Negativity&a]&c %name% blev kickad för %reason%."
+  kicked: "Du blev kickad av %playername% för %reason%"
+report:
+  report_usage: "/report <namn> <anledning>"
+  well_report: "&a%name% blev raporterad !"
+  report_message: "&a[&2Negativity&a] &c%name% &7har blivit raporterad av &c%report% &7för &c%reason%"
+negativity:
+  alert: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% &7(&2Reliability: %Pålitlighet%%&7) !"
+  alert_hover: "&6Pålitlighet: %reliability%%\nPing: %ping%"
+  verif:
+    invalid_cheat: "%arg% är inte ett slags fusk !"
+    start: "&a[&2Negativity&a] &7Började analysera %name% för %cheat%"
+    start_all: "&a[&2Negativity&a] Började fullständig analys för spelare %name%"
+    help:
+      - "/negativity verif <spelare> [fusk...] : Börjar kontroller (alla om inget fusk är givet)"
+      - "/negativity <spelare> : För att se lite information av denna spelare"
+inventory:
+  close: "Stäng"
+  back: "Tillbaks"
+  reset_alert: "Ta bort varningar"
+  main:
+    freeze: "&a[&2Negativity&a] Du är fryst av %name%"
+    unfreeze: "&a[&2Negativity&a] Du är inte längre fryst av %name%"
+    actual_click: "Riktiga klickar : %clicks%"
+    max_click: "Max klickar : %clicks%"
+    last_click: "Sista sekund : %clicks%"
+    ping: "Ping av %name%: %ping%"
+    see_inv: "Se %name%'s inventory"
+    teleportation_to: "Teleporterar dig till %name%"
+    freezing: "Fryser %name%"
+    active_detection: "Se aktiva upptäckt för %name%"
+    see_alerts: "Se alla varningar för %name%"
+  detection:
+    name_inv: "Aktiv upptäckt"
+    no_active: "Inga akitva upptäckter för %name%"
+  alerts:
+    item_name: "Varningar för %exact_name% : %warn%"
+    inv_name: "Varningar"
+  mod:
+    night_vision: "Natt Seende"
+    invisible: "Bli osynlig"
+    random_tp: "Slumpmässig Tepelortering"
+    clear_inv: "Rensa ditt inventory"
+    inv_cleared: "Inventory Rensat !"
+    vision_removed: "Natt Seende avstängt"
+    vision_added: "Natt Seende påslaget"
+    now_invisible: "Nu, är du osynlig"
+    no_longer_invisible: "Nu, kan alla se dig"
+    you_are_freeze: "Du är fryst, du kan inte lämna detta inventory."
+    cheat_manage: "Fusk Manager"
+  manager:
+    enabled: "&aPå"
+    disabled: "&cAv"
+    setBack: "Stoppar den sista aktionen av fusket när någon är upptäckt: &l%back%"
+    autoVerif: "Automatisk verifiering: &l%auto%"
+    allowKick: "Kicka fuskande spelare: &l%allow%"
+    setActive: "Aktiva fusk: &l%active%"

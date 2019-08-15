@@ -42,8 +42,7 @@ public class CacheManager1_8 extends CacheManager {
 		public NegativityAccount load(UUID playerId) {
 			NegativityAccount account = new NegativityAccount(playerId);
 
-			File userFile = new File(SpigotNegativity.getInstance().getDataFolder(), "user" + File.separator + playerId + ".yml");
-			YamlConfiguration userData = YamlConfiguration.loadConfiguration(userFile);
+			YamlConfiguration userData = YamlConfiguration.loadConfiguration(new File(SpigotNegativity.getInstance().getDataFolder(), "user" + File.separator + playerId + ".yml"));
 			account.setLang(userData.getString("lang", TranslatedMessages.DEFAULT_LANG));
 
 			account.loadBanRequest();

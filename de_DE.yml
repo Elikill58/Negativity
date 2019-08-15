@@ -29,7 +29,7 @@ ban:
   # s : seconds
   #
   - "/ban <player> <def | time (ex: 2h5d)> <reason>: Banne Spieler"
-  well_ban: "&a[&2Negativity&a] &c%name% wurfe gebannt. Grund: %reason%"
+  well_ban: "&a[&2Negativity&a] &c%name% wurde gebannt. Grund: %reason%"
 unban:
   well_unban: "&a[&2Negativity&a] &c%name% wurde entbannt."
   not_banned: "&c%name% ist nicht gebannt."
@@ -55,7 +55,7 @@ negativity:
       - "/negativity <player>: Um weitere Informationen für einen Spieler anzuzeigen"
 inventory:
   close: "Schließen"
-  back: "Zurücl"
+  back: "Zurück"
   reset_alert: "Lösche Warnungen"
   main:
     freeze: "&a[&2Negativity&a] Du wurdest von %name% eingefroren"

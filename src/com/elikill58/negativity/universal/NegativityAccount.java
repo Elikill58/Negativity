@@ -25,6 +25,7 @@ public class NegativityAccount {
 	private String lang;
 	private boolean gettedBan;
 	private List<BanRequest> banRequest;
+	private NegativityPlayer np;
 
 	public NegativityAccount(UUID playerId) {
 		this(playerId, TranslatedMessages.DEFAULT_LANG, false, new ArrayList<>());
@@ -35,6 +36,7 @@ public class NegativityAccount {
 		this.lang = lang;
 		this.gettedBan = gettedBan;
 		this.banRequest = banRequest;
+		this.np = Adapter.getAdapter().getNegativityPlayer(playerId);
 	}
 
 	public String getUUID() {
@@ -49,9 +51,18 @@ public class NegativityAccount {
 		return playerId;
 	}
 
+	public void setNegativityPlayer(NegativityPlayer np) {
+		this.np = np;
+	}
+	
+	public NegativityPlayer getNegativityPlayer() {
+		return np;
+	}
+
 	public void setLang(String lang) {
 		this.lang = lang;
-		Adapter.getAdapter().getNegativityPlayer(getPlayerId()).setLang(lang);
+		if(np != null)
+			np.setLang(lang);
 	}
 
 	public boolean hasGettedBan() {
@@ -94,10 +105,9 @@ public class NegativityAccount {
 			}
 		}
 		if (!Ban.banActiveIsFile) {
-			try {
-				Adapter ada = Adapter.getAdapter();
-				PreparedStatement stm = Database.getConnection()
-						.prepareStatement("SELECT * FROM " + Database.table_ban + " WHERE " + ada.getStringInConfig("ban.db.column.uuid") + " = ?");
+			Adapter ada = Adapter.getAdapter();
+			try (PreparedStatement stm = Database.getConnection()
+						.prepareStatement("SELECT * FROM " + Database.table_ban + " WHERE " + ada.getStringInConfig("ban.db.column.uuid") + " = ?")) {
 				stm.setString(1, this.getUUID());
 				ResultSet rs = stm.executeQuery();
 				while (rs.next()) {
@@ -116,7 +126,6 @@ public class NegativityAccount {
 							hasCheatDetect ? rs.getString(ada.getStringInConfig("ban.db.column.cheat_detect")) : "Unknow",
 							hasBy ? rs.getString(ada.getStringInConfig("ban.db.column.by")) : "console", false));
 				}
-				rs.close();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -154,6 +154,8 @@ public class SpigotAdapter extends Adapter {
 			fileName = "de_DE.yml";
 		else if (lang.toLowerCase().contains("nl"))
 			fileName = "nl_NL.yml";
+		else if (lang.toLowerCase().contains("sv"))
+			fileName = "sv_SV.yml";
 		try (InputStream in = pl.getResource(fileName); OutputStream out = new FileOutputStream(f)) {
 			ByteStreams.copy(in, out);
 		} catch (Exception e) {
@@ -242,24 +244,4 @@ public class SpigotAdapter extends Adapter {
 	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {
 		SpigotNegativity.alertMod(type, (Player) p, c, reliability, proof, hover_proof);
 	}
-
-	/*public static class NegativityAccountLoader extends CacheLoader<UUID, NegativityAccount> {
-
-		@Override
-		public NegativityAccount load(UUID playerId) {
-			NegativityAccount account = new NegativityAccount(playerId);
-
-			File userFile = new File(SpigotNegativity.getInstance().getDataFolder(), "user" + File.separator + playerId + ".yml");
-			YamlConfiguration userData = YamlConfiguration.loadConfiguration(userFile);
-			account.setLang(userData.getString("lang", TranslatedMessages.DEFAULT_LANG));
-
-			account.loadBanRequest();
-			return account;
-		}
-
-		@Override
-		public Object getRealCacheLoader() {
-			return null;
-		}
-	}*/
 }

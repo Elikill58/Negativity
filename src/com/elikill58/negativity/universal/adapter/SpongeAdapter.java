@@ -207,10 +207,12 @@ public class SpongeAdapter extends Adapter {
 			fileName = "ru_RU.yml";
 		else if (lowercaseLang.contains("zh") || lowercaseLang.contains("cn"))
 			fileName = "zh_CN.yml";
-		else if (lang.toLowerCase().contains("de"))
+		else if (lowercaseLang.contains("de"))
 			fileName = "de_DE.yml";
-		else if (lang.toLowerCase().contains("nl"))
+		else if (lowercaseLang.contains("nl"))
 			fileName = "nl_NL.yml";
+		else if (lowercaseLang.contains("sv"))
+			fileName = "sv_SV.yml";
 
 		if (Files.notExists(filePath)) {
 			pl.getContainer().getAsset(fileName).ifPresent(asset -> {

@@ -44,6 +44,7 @@ import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {
 
@@ -397,6 +398,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public void destroy(boolean isBan) {
 		players.remove(uuid);
 		saveProof();
+		Adapter.getAdapter().invalidateAccount(getUUID());
 		if (isBan) {
 			Entity et = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
 			Firework fire = (Firework) et;

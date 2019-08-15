@@ -139,6 +139,8 @@ public class BungeeAdapter extends Adapter {
 			fileName = "bungee_de_DE.yml";
 		else if (lang.toLowerCase().contains("nl"))
 			fileName = "bungee_nl_NL.yml";
+		else if (lang.toLowerCase().contains("sv"))
+			fileName = "bungee_sv_SV.yml";
 		try (InputStream in = pl.getResourceAsStream(fileName); OutputStream out = new FileOutputStream(f)) {
 			ByteStreams.copy(in, out);
 		} catch (Exception e) {

@@ -78,7 +78,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 			return;
 		double y = e.getTo().getY() - e.getFrom().getY();
 		boolean isAris = ((float) y) == p.getWalkSpeed();
-		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld())) {
+		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
 			loc.setX(np.lastSpiderLoc.getX());
 			loc.setZ(np.lastSpiderLoc.getZ());
 			double tempDis = loc.distance(np.lastSpiderLoc);

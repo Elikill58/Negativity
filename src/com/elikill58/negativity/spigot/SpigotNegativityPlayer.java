@@ -207,7 +207,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	
 	public void setLang(String newLang) {
 		try {
-			file.set("lang", getAccount().getLang());
+			file.set("lang", newLang);
 			file.save(configFile);
 		} catch (IOException e) {
 			e.printStackTrace();

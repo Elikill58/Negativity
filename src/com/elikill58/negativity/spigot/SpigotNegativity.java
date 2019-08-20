@@ -150,9 +150,6 @@ public class SpigotNegativity extends JavaPlugin {
 		for (Player p : Utils.getOnlinePlayers()) {
 			PacketListenerAPI.addPlayer(p);
 			manageAutoVerif(p);
-			/*
-			 * for (Player pl : Utils.getOnlinePlayers()) pl.showPlayer(p);
-			 */
 			Utils.sendUpdateMessageIfNeed(p);
 		}
 		(clickTimer = new ActualizeClickTimer()).runTaskTimer(this, 20, 20);
@@ -189,7 +186,8 @@ public class SpigotNegativity extends JavaPlugin {
 
 		if (Bukkit.getPluginManager().getPlugin("Essentials") != null) {
 			essentialsSupport = true;
-			Ban.addBanPlugin(new EssentialsBanSupport());
+			if(ada.getStringInConfig("ban.other_plugin.plugin_used").equalsIgnoreCase("essentials"))
+				Ban.addBanPlugin(new EssentialsBanSupport());
 		}
 		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
 			worldGuardSupport = true;
@@ -201,15 +199,15 @@ public class SpigotNegativity extends JavaPlugin {
 					? (worldGuardSupport ? "Essentials and WorldGuard plugins are detected."
 							: "Essentials plugin detected.")
 					: "WorldGuard plugin detected.");
-			getLogger().info(s + " Loading support ..." + (essentialsSupport ? " (Essentials also used as Ban plugin)" : ""));
+			getLogger().info(s + " Loading support ..." + (ada.getStringInConfig("ban.other_plugin.plugin_used").equalsIgnoreCase("essentials") && essentialsSupport ? " (Essentials also used as Ban plugin)" : ""));
 		}
 
-		if (Bukkit.getPluginManager().getPlugin("MaxBans") != null) {
+		if (Bukkit.getPluginManager().getPlugin("MaxBans") != null && ada.getStringInConfig("ban.other_plugin.plugin_used").equalsIgnoreCase("MaxBans")) {
 			Ban.addBanPlugin(new MaxBansSupport());
 			getLogger().info("Ban plugin MaxBans found ! Loading support ...");
 		}
 
-		if (Bukkit.getPluginManager().getPlugin("AdvancedBan") != null) {
+		if (Bukkit.getPluginManager().getPlugin("AdvancedBan") != null && ada.getStringInConfig("ban.other_plugin.plugin_used").equalsIgnoreCase("AdvancedBan")) {
 			Ban.addBanPlugin(new AdvancedBanSupport());
 			getLogger().info("Ban plugin AdvancedBan found ! Loading support ...");
 		}

@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -26,7 +27,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 		super("ANTIKNOCKBACK", false, Material.STICK, false, true, "antikb", "anti-kb", "no-kb", "nokb");
 	}
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onDamage(EntityDamageByEntityEvent e) {
 		if (!(e.getEntity() instanceof Player) || e.isCancelled())
 			return;
@@ -36,7 +37,9 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if(e.getDamager().getType().equals(EntityType.EGG) || (SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p)))
+		if(e.getDamager().getType().equals(EntityType.EGG) || (SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p)) || e.isCancelled())
+			return;
+		if(e.getDamager().getType().name().contains("TNT"))
 			return;
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 
@@ -49,6 +52,8 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 					@Override
 					public void run() {
 						Location actual = p.getLocation();
+						if(last.getWorld() != actual.getWorld())
+							return;
 						double d = last.distance(actual);
 						int ping = Utils.getPing(p), relia = Utils.parseInPorcent(100 - d);
 						if (d < 0.1 && !actual.getBlock().getType().equals(Utils.getMaterialWith1_13_Compatibility("WEB", "COBWEB")) && !p.isSneaking()){

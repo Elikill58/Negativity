@@ -16,7 +16,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ban.BanRequest;
 import com.elikill58.negativity.universal.ban.BanRequest.BanType;
-import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class BanCommand implements CommandExecutor, TabCompleter {
@@ -91,10 +90,6 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 			return false;
 		}
 		Player p = (Player) sender;
-		if(!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "ban")) {
-			Messages.sendMessage(p, "not_permission");
-			return false;
-		}
 		if(arg.length < 3) {
 			Messages.sendMessageList(p, "ban.help");
 			return false;

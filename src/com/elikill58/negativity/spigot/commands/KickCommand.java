@@ -11,9 +11,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.permissions.Perm;
 
 public class KickCommand implements CommandExecutor, TabCompleter {
 	
@@ -47,10 +45,6 @@ public class KickCommand implements CommandExecutor, TabCompleter {
 			return true;
 		}
 		Player p = (Player) sender;
-		if(!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "kick")) {
-			Messages.sendMessage(p, "not_permission");
-			return false;
-		}
 		if(arg.length == 0) {
 			Messages.sendMessage(p, "kick.help");
 			return false;

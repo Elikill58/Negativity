@@ -6,7 +6,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -33,11 +32,6 @@ public class AutoClickProtocol extends Cheat implements Listener {
 		if (item != null)
 			if (item.getType() == Material.SUGAR_CANE)
 				return;
-		manageClick(e.getPlayer(), e);
-	}
-
-	@EventHandler
-	public void onLeftClickPlayer(PlayerInteractEntityEvent e) {
 		manageClick(e.getPlayer(), e);
 	}
 	

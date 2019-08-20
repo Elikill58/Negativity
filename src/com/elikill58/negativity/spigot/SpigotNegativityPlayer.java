@@ -177,6 +177,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return WARNS.containsKey(c) ? WARNS.get(c) : 0;
 	}
 
+	@Override
 	public int getAllWarn(Cheat c) {
 		return file.getInt("cheats." + c.getKey().toLowerCase());
 	}

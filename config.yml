@@ -83,9 +83,6 @@ Permissions:
   verif:
     default: "negativity.verif"
     custom: "MOD,ADMIN"
-  mod:
-    default: "negativity.mod"
-    custom: "MOD,ADMIN"
   manageCheat:
     default: "negativity.managecheat"
     custom: "MOD,ADMIN"
@@ -96,12 +93,6 @@ Permissions:
   notBanned:
     default: "negativity.notbanned"
     custom: "ADMIN"
-  ban:
-    default: "negativity.ban"
-    custom: "MOD,ADMIN"
-  kick:
-    default: "negativity.ban"
-    custom: "MOD,ADMIN"
   bypass:
     active: false
     all:
@@ -197,10 +188,27 @@ time_between_report: 1000
 
 ban:
   active: false
+  # To use other plugin
+  other_plugin:
+    # You must to active ban just above
+    active: false
+    # Available plugin : Essentials, MaxBans & AdvancedBan
+    # Write nothing to don't use it
+    plugin_used: "APlugin"
+    # If you write nothing, Negativity will not do anything
+    # Available place holders:
+    # %uuid% : uuid of banned player
+    # %name% : name of banned player
+    # %ip% : ip of the banned player
+    # %reason% : detected cheat
+    # %alert% : number of alert for detected cheat
+    # %all_alert% : all alert for the detected cheat since you add Negativity on your server
+    command_to_run: "" # example : "/ban %uuid% %reason%"
   # Where he save ban (file or database). For database, don't forget to edit the login information
   storage: "file"
   # If you want to destroy BDD line / File line
   destroy_when_unban: false
+  # Need to be banned
   reliability_need: 95
   alert_need: 10
   # How to calculate the time during the player will be banned
@@ -211,7 +219,7 @@ ban:
     calculator: "360000000 + (%reliability% * 20 * %alert%)"
   def:
     # Number that you need to be ban definitly
-    ban_time: 4
+    ban_time: 2
   # To save banned player on config file (/plugins/Negativity/dir)
   #
   file:

@@ -220,4 +220,9 @@ public class BungeeAdapter extends Adapter {
 
 	@Override
 	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {}
+
+	@Override
+	public void runConsoleCommand(String cmd) {
+		pl.getProxy().getPluginManager().dispatchCommand(pl.getProxy().getConsole(), cmd);
+	}
 }

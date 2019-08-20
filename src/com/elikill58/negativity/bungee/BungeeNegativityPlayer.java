@@ -100,4 +100,9 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	public String getIP() {
 		return p.getAddress().getHostName();
 	}
+
+	@Override
+	public int getAllWarn(Cheat c) {
+		return 0;
+	}
 }

@@ -34,6 +34,8 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
+		if(!p.getLocation().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR) || !p.getLocation().subtract(0, 2, 0).getBlock().getType().equals(Material.AIR))
+			return;
 		for (ItemStack item : p.getInventory().getArmorContents())
 			if (item != null && item.getType().name().contains("ELYTRA"))
 				return;

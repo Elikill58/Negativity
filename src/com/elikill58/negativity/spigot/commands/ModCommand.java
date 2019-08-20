@@ -5,11 +5,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.ModInventory;
 import com.elikill58.negativity.universal.TranslatedMessages;
-import com.elikill58.negativity.universal.permissions.Perm;
 
 public class ModCommand implements CommandExecutor {
 
@@ -19,11 +16,7 @@ public class ModCommand implements CommandExecutor {
 			sender.sendMessage(TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, "only_player"));
 			return false;
 		}
-		Player p = (Player) sender;
-		if(!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "mod"))
-			Messages.sendMessage(p, "not_permission");
-		else
-			ModInventory.openModMenu(p);
+		ModInventory.openModMenu((Player) sender);
 		return false;
 	}
 

@@ -359,4 +359,9 @@ public class SpongeAdapter extends Adapter {
 	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {
 		SpongeNegativity.alertMod(type, (Player) p, c, reliability, hover_proof);
 	}
+
+	@Override
+	public void runConsoleCommand(String cmd) {
+		Sponge.getCommandManager().process(Sponge.getServer().getConsole(), cmd);
+	}
 }

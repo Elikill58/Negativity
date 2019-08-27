@@ -301,6 +301,8 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 			String hover_proof) {
+		if(!c.isActive())
+			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.already_blink && c.equals(Cheat.fromString("BLINK").get())) {
 			np.already_blink = true;

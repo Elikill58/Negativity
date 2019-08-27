@@ -75,6 +75,8 @@ public class Inv {
 		invGrid.set(1, 1, Utils.createItem(ItemTypes.DIAMOND_PICKAXE, "&rMinerate", np.mineRate.getInventoryLoreString()));
 		invGrid.set(2, 1, Utils.createItem(ItemTypes.GRASS, "&rMods", "&7Forge: "
 				+ Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
+		/*if(Cheat.forKey("FORCEFIELD").get().isActive() && !SpongeNegativity.getConfig().getNode("cheats").getNode("forcefield").getNode("ghost_disabled").getBoolean())
+			invGrid.set(3, 1, Utils.createItem(ItemTypes.SKULL, "&rFake entities"));*/
 
 		invGrid.set(0, 2, Utils.createItem(ItemTypes.SPIDER_EYE,
 				Messages.getStringMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));

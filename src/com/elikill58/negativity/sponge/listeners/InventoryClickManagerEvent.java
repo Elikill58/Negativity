@@ -78,6 +78,9 @@ public class InventoryClickManagerEvent {
 				delayed(() -> Inv.openAlertMenu(p, cible));
 			} else if (m.equals(ItemTypes.GRASS)) {
 				delayed(() -> Inv.openForgeModsMenu(cible));
+			} else if (m.equals(ItemTypes.SKULL)) {
+				delayedInvClose(p);
+				SpongeNegativityPlayer.getNegativityPlayer(cible).makeAppearEntities();
 			}
 		} else if (invId.equals(Inv.ACTIVE_CHEAT_INV_ID)) {
 			e.setCancelled(true);

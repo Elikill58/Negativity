@@ -68,8 +68,7 @@ public class NegativityCmdWrapper implements CommandCallable {
 		}
 
 		if (negativityPermission != null && source instanceof Player) {
-			SpongeNegativityPlayer negativityPlayer = SpongeNegativityPlayer.getNegativityPlayer((Player) source);
-			return Perm.hasPerm(negativityPlayer, negativityPermission);
+			return ((Player) source).hasPermission("negativity." + negativityPermission);
 		}
 
 		return delegate.testPermission(source);

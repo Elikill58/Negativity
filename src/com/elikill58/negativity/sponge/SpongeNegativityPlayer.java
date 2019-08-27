@@ -2,15 +2,18 @@ package com.elikill58.negativity.sponge;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 import org.spongepowered.api.Sponge;
@@ -37,9 +40,11 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.util.Color;
 import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.sponge.precogs.NegativityBypassTicket;
+import com.elikill58.negativity.sponge.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Minerate;
@@ -60,6 +65,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public HashMap<Cheat, Integer> WARNS = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
+	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
 	private Player p = null;
 	private UUID uuid = null;
 	// Packets
@@ -69,7 +75,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public int ONLY_KEEP_ALIVE = 0, NO_PACKET = 0, BETTER_CLICK = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0;
 	// setBack
 	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, LAST_SLOT_CLICK = -1;
-	public double lastY = -3.142654;
+	public double lastY = -3.142654, lastSpiderDistance;
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
 	public String LAST_OTHER_KEEP_ALIVE;
@@ -85,6 +91,9 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public Minerate mineRate;
 	public boolean isInFight = false;
 	public Task fightTask = null;
+	public int fakePlayerTouched = 0;
+	public long timeStartFakePlayer = 0;
+	public Location<World> lastSpiderLoc = null;
 
 	public SpongeNegativityPlayer(Player p) {
 		super(p.getUniqueId());
@@ -125,6 +134,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 				}
 			}
 			configLoader.save(config);
+		} catch (AccessDeniedException e) {
+			System.out.println("[Negativity - SpongeNegativityPlayer] The access is denied for file: " + e.getFile() + " (specific reason: " + e.getReason() + ")");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -285,6 +296,107 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		}
 	}
 
+	public void makeAppearEntities() {
+		if (!ACTIVE_CHEAT.contains(Cheat.fromString("FORCEFIELD").get())
+				|| SpongeNegativity.getConfig().getNode("cheats").getNode("forcefield").getNode("ghost_disabled").getBoolean())
+			return;
+		timeStartFakePlayer = System.currentTimeMillis();
+
+		spawnRight();
+		spawnLeft();
+		spawnBehind();
+	}
+	
+	public void removeFakePlayer(FakePlayer fp) {
+		if (!FAKE_PLAYER.contains(fp))
+			return;
+
+		FAKE_PLAYER.remove(fp);
+		long l = (System.currentTimeMillis() - timeStartFakePlayer);
+		if (l >= 3000) {
+			if (FAKE_PLAYER.size() == 0) {
+				timeStartFakePlayer = 0;
+				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
+				fakePlayerTouched = 0;
+			}
+		} else {
+			spawnRandom();
+			spawnRandom();
+		}
+	}
+
+	public void spawnRandom() {
+		int choice = new Random().nextInt(3);
+		if (choice == 0)
+			spawnRight();
+		else if (choice == 1)
+			spawnBehind();
+		else
+			spawnLeft();
+	}
+
+	private void spawnRight() {
+		Location<World> loc = getPlayer().getLocation().copy();
+		Vector3d dir = getPlayer().getHeadRotation();
+		double x = dir.getX(), z = dir.getZ();
+		if (x >= 0 && z >= 0) {
+			loc.add(-1, 0, 1);
+		} else if (x >= 0 && z <= 0) {
+			loc.add(-1, 0, 0);
+		} else if (x <= 0 && z >= 0) {
+			loc.add(-1, 0, 0);
+		} else if (x <= 0 && z <= 0) {
+			loc.add(-1, 0, 1);
+		}
+		loc.add(0, 1, 0);
+		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
+		FAKE_PLAYER.add(fp);
+	}
+
+	private void spawnLeft() {
+		Location<World> loc = getPlayer().getLocation().copy();
+		Vector3d dir = getPlayer().getHeadRotation();
+		double x = dir.getX(), z = dir.getZ();
+		if (x >= 0 && z >= 0) {
+			loc.add(0, 0, -1);
+		} else if (x >= 0 && z <= 0) {
+			loc.add(-1, 0, 1);
+		} else if (x <= 0 && z >= 0) {
+			loc.add(1, 0, -1);
+		} else if (x <= 0 && z <= 0) {
+			loc.add(1, 0, 1);
+		}
+		loc.add(0, 1, 0);
+		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
+		FAKE_PLAYER.add(fp);
+	}
+
+	private void spawnBehind() {
+		Location<World> loc = getPlayer().getLocation().copy();
+		Vector3d dir = getPlayer().getHeadRotation();
+		double x = dir.getX(), z = dir.getZ();
+		if (x >= 0 && z >= 0) {
+			loc.add(1, 0, -1);
+		} else if (x >= 0 && z <= 0) {
+			loc.add(1, 0, 1);
+		} else if (x <= 0 && z >= 0) {
+			loc.add(1, 0, 1);
+		} else if (x <= 0 && z <= 0) {
+			loc.add(1, 0, -1);
+		}
+		loc.add(0, 1, 0);
+		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
+		FAKE_PLAYER.add(fp);
+	}
+
+	private String getRandomFakePlayerName() {
+		Collection<Player> online = Sponge.getServer().getOnlinePlayers();
+		if (online.size() <= 1) {
+			return new Random().nextBoolean() ? "Elikill58" : "RedNesto";
+		} else
+			return online.stream().skip(new Random().nextInt(online.size())).findFirst().get().getName();
+	}
+
 	public boolean hasOtherThan(Location<?> loc, BlockType m) {
 		try {
 			if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
@@ -308,6 +420,47 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		} catch (Exception e) {
 
 		}
+		return false;
+	}
+
+	public boolean hasOtherThanExtended(Location<World> loc, BlockType m) {
+		Location<World> tempLoc = loc.copy();
+		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(-1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(-1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+			return true;
+		loc = tempLoc;
+		if (!loc.add(0, 0, 2).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		for (int i = 0; i < 4; i++)
+			if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+				return true;
+		for (int i = 0; i < 4; i++)
+			if (!loc.add(-1, 0, 0).getBlock().getType().equals(m))
+				return true;
+		for (int i = 0; i < 4; i++)
+			if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+				return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+			return true;
 		return false;
 	}
 

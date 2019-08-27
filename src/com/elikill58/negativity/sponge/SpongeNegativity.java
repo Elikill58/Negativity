@@ -74,7 +74,7 @@ import com.google.inject.Inject;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
-@Plugin(id = "negativity", name = "Negativity", version = "1.3.1", description = "It's an Advanced AntiCheat Detection", authors = "Elikill58", dependencies = {
+@Plugin(id = "negativity", name = "Negativity", version = "1.3.2", description = "It's an Advanced AntiCheat Detection", authors = "Elikill58", dependencies = {
 		@Dependency(id = "packetgate") })
 public class SpongeNegativity implements RawDataListener {
 
@@ -366,6 +366,8 @@ public class SpongeNegativity implements RawDataListener {
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 			String hover_proof) {
+		if(!c.isActive())
+			return false;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		if (c.equals(Cheat.fromString("BLINK").get()))
 			if (!np.already_blink) {

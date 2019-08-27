@@ -78,16 +78,12 @@ public class DefaultConfigValue {
 		STRINGS.put("Permissions.showAlert.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.verif.default", "negativity.verif");
 		STRINGS.put("Permissions.verif.custom", "MOD,ADMIN");
-		STRINGS.put("Permissions.mod.default", "negativity.mod");
-		STRINGS.put("Permissions.mod.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.manageCheat.default", "negativity.managecheat");
 		STRINGS.put("Permissions.manageCheat.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.report_wait.default", "negativity.reportwait");
 		STRINGS.put("Permissions.report_wait.custom", "negativity.reportwait");
 		STRINGS.put("Permissions.notBanned.default", "negativity.notbanned");
 		STRINGS.put("Permissions.notBanned.custom", "ADMIN");
-		STRINGS.put("Permissions.ban.default", "negativity.ban");
-		STRINGS.put("Permissions.ban.custom", "MOD,ADMIN");
 		BOOLEANS.put("Permissions.bypass.active", false);
 
 		String[] cheats = new String[] {"all", "forcefield", "fastplace", "speedhack", "autoclick", "fly", "antipotion", "autoeat", "autoregen", "antiknockback", "jesus", "nofall", "blink", "spider", "fastbow", "scaffold", "step", "noslowdown", "fastladders", "phase", "autosteal", "edited_client"};

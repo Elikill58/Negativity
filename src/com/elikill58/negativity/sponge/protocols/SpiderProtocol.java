@@ -19,6 +19,7 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ReportType;
+import com.flowpowered.math.vector.Vector3d;
 
 public class SpiderProtocol extends Cheat {
 
@@ -75,6 +76,34 @@ public class SpiderProtocol extends Cheat {
 				p.setLocation(locc.add(0, 1, 0));
 			}
 		}
+	}
+
+	@Listener
+	public void onPlayerMove2(MoveEntityEvent e, @First Player p) {
+		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
+			return;
+		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
+		Location<World> loc = p.getLocation();
+		if (!np.hasDetectionActive(this))
+			return;
+		double y = e.getToTransform().getPosition().getY() - e.getFromTransform().getPosition().getY();
+		boolean isAris = ((float) y) == p.get(Keys.WALKING_SPEED).get();
+		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getExtent().equals(loc.getExtent()) && y > 0) {
+			loc.setPosition(new Vector3d(np.lastSpiderLoc.getX(), loc.getY(), np.lastSpiderLoc.getZ()));
+			double tempDis = loc.getPosition().distance(np.lastSpiderLoc.getPosition());
+			if (np.lastSpiderDistance == tempDis && tempDis != 0) {
+				int porcent = Utils.parseInPorcent(tempDis * 450);
+				if (SpongeNegativity.alertMod(ReportType.WARNING, p, this, porcent, "Nothing around him. To > From: "
+						+ y + " isAris: " + isAris + ". Walk on wall with always same y.") && isSetBack()) {
+					Location<World> locc = p.getLocation();
+					while (locc.getBlock().getType().equals(BlockTypes.AIR))
+						locc.sub(0, 1, 0);
+					p.setLocation(locc.add(0, 1, 0));
+				}
+			}
+			np.lastSpiderDistance = tempDis;
+		}
+		np.lastSpiderLoc = loc;
 	}
 
 	public boolean hasOtherThan(Location<World> loc, BlockType m) {

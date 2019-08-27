@@ -5,8 +5,10 @@ import java.util.Optional;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.InteractEvent;
+import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
@@ -17,7 +19,9 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
-import com.elikill58.negativity.universal.*;
+import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class AutoClickProtocol extends Cheat {
@@ -30,8 +34,17 @@ public class AutoClickProtocol extends Cheat {
 	
 	@Listener
 	public void onPlayerInteract(InteractEvent e, @First Player p){
+		manageClick(p, e, e.getCause().first(ItemType.class));
+	}
+	
+
+	@Listener
+	public void onEntityDamageByEntity(DamageEntityEvent e, @First Player p) {
+		manageClick(p, e, e.getCause().first(ItemType.class));
+	}
+	
+	private void manageClick(Player p, Cancellable e, Optional<ItemType> item) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		Optional<ItemType> item = e.getCause().first(ItemType.class);
 		if(item.isPresent())
 			if(item.get().equals(ItemTypes.REEDS))
 				return;

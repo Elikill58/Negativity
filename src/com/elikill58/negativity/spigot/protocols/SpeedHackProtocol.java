@@ -36,7 +36,7 @@ public class SpeedHackProtocol extends Cheat implements Listener {
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)
 				|| p.getEntityId() == 100 || p.getVehicle() != null || p.getAllowFlight() || from.getY() > to.getY()
-				|| p.getWalkSpeed() > 2.0F || p.getFlySpeed() > 3.0F || p.hasPotionEffect(PotionEffectType.SPEED))
+				|| p.getWalkSpeed() > 2.0F || p.getFlySpeed() > 3.0F || p.hasPotionEffect(PotionEffectType.SPEED) || p.isInsideVehicle())
 			return;
 		for(ItemStack item : p.getInventory().getArmorContents())
 			if(item != null && item.getType().name().contains("ELYTRA"))

@@ -51,17 +51,7 @@ public class SpiderProtocol extends Cheat {
 		nf.setMaximumIntegerDigits(4);
 		boolean isAris = ((float) y) == p.get(Keys.WALKING_SPEED).get();
 		if (((y > 0.499 && y < 0.7) || isAris || last == y) && hasOtherThan(loc, BlockTypes.AIR)) {
-			boolean hasSlabStairs = false;
-			for (int u = 0; u < 360; u += 3) {
-				Location<World> flameloc = loc.copy();
-				flameloc.add(Math.sin(u) * 3, 0, Math.cos(u) * 3);
-				String name = flameloc.copy().getBlock().getType().getName(),
-						secondname = flameloc.copy().add(0, 1, 0).getBlock().getType().getName();
-				if (name.contains("SLAB") || name.contains("STAIRS") || secondname.contains("SLAB")
-						|| secondname.contains("STAIRS"))
-					hasSlabStairs = true;
-			}
-			if (hasSlabStairs)
+			if (hasBypassBlockAround(loc))
 				return;
 			int relia = (int) (y * 450);
 			if (isAris)
@@ -89,6 +79,10 @@ public class SpiderProtocol extends Cheat {
 		double y = e.getToTransform().getPosition().getY() - e.getFromTransform().getPosition().getY();
 		boolean isAris = ((float) y) == p.get(Keys.WALKING_SPEED).get();
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getExtent().equals(loc.getExtent()) && y > 0) {
+			if (hasBypassBlockAround(loc)) {
+				np.lastSpiderLoc = loc;
+				return;
+			}
 			loc.setPosition(new Vector3d(np.lastSpiderLoc.getX(), loc.getY(), np.lastSpiderLoc.getZ()));
 			double tempDis = loc.getPosition().distance(np.lastSpiderLoc.getPosition());
 			if (np.lastSpiderDistance == tempDis && tempDis != 0) {
@@ -115,6 +109,22 @@ public class SpiderProtocol extends Cheat {
 			return true;
 		if (!loc.copy().add(-1, 0, 1).getBlock().getType().equals(m))
 			return true;
+		return false;
+	}
+
+	private boolean hasBypassBlockAround(Location<World> loc) {
+		for (int u = 0; u < 360; u += 3) {
+			Location<World> flameloc = loc.copy();
+			flameloc.add(Math.sin(u) * 3, 0, Math.cos(u) * 3);
+			String name = flameloc.copy().getBlock().getType().getName(),
+					secondname = flameloc.copy().add(0, 1, 0).getBlock().getType().getName();
+			if (name.contains("SLAB") || name.contains("STAIRS") || secondname.contains("SLAB")
+					|| secondname.contains("STAIRS"))
+				return true;
+		}
+		if(loc.getBlock().getType().getName().contains("WATER") || loc.copy().sub(0, 1, 0).getBlock().getType().getName().contains("WATER"))
+			return true;
+		
 		return false;
 	}
 }

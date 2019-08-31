@@ -45,16 +45,8 @@ public class SpiderProtocol extends Cheat implements Listener {
 		np.lastY = y;
 		boolean isAris = ((float) y) == p.getWalkSpeed();
 		if (((y > 0.499 && y < 0.7) || isAris || last == y) && hasOtherThan(loc, Material.AIR)) {
-			for (int u = 0; u < 360; u += 3) {
-				Location flameloc = loc.clone();
-				flameloc.setZ(flameloc.getZ() + Math.cos(u) * 3);
-				flameloc.setX(flameloc.getX() + Math.sin(u) * 3);
-				String name = flameloc.clone().getBlock().getType().name(),
-						secondname = flameloc.clone().add(0, 1, 0).getBlock().getType().name();
-				if (name.contains("SLAB") || name.contains("STAIRS") || secondname.contains("SLAB")
-						|| secondname.contains("STAIRS"))
-					return;
-			}
+			if(hasBypassBlockAround(loc))
+				return;
 			int relia = Utils.parseInPorcent((e.getTo().getY() - e.getFrom().getY()) * 200 + (isAris ? 39 : 0));
 			if (SpigotNegativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this,
 					relia, "Nothing around him. To > From: " + y + " isAris: " + isAris + " has not stab slairs.")
@@ -79,6 +71,10 @@ public class SpiderProtocol extends Cheat implements Listener {
 		double y = e.getTo().getY() - e.getFrom().getY();
 		boolean isAris = ((float) y) == p.getWalkSpeed();
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
+			if(hasBypassBlockAround(loc)) {
+				np.lastSpiderLoc = loc;
+				return;
+			}
 			loc.setX(np.lastSpiderLoc.getX());
 			loc.setZ(np.lastSpiderLoc.getZ());
 			double tempDis = loc.distance(np.lastSpiderLoc);
@@ -106,6 +102,23 @@ public class SpiderProtocol extends Cheat implements Listener {
 			return true;
 		if (!loc.clone().add(-1, 0, 1).getBlock().getType().equals(m))
 			return true;
+		return false;
+	}
+	
+	private boolean hasBypassBlockAround(Location loc) {
+		for (int u = 0; u < 360; u += 3) {
+			Location flameloc = loc.clone();
+			flameloc.setZ(flameloc.getZ() + Math.cos(u) * 3);
+			flameloc.setX(flameloc.getX() + Math.sin(u) * 3);
+			String name = flameloc.clone().getBlock().getType().name(),
+					secondname = flameloc.clone().add(0, 1, 0).getBlock().getType().name();
+			if (name.contains("SLAB") || name.contains("STAIRS") || secondname.contains("SLAB")
+					|| secondname.contains("STAIRS"))
+				return true;
+		}
+		if(loc.getBlock().getType().name().contains("WATER") || loc.clone().subtract(0, 1, 0).getBlock().getType().name().contains("WATER"))
+			return true;
+		
 		return false;
 	}
 }

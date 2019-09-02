@@ -2,10 +2,13 @@ package com.elikill58.negativity.sponge.protocols;
 
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
+import org.spongepowered.api.event.entity.SpawnEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.world.Location;
@@ -14,7 +17,9 @@ import org.spongepowered.api.world.World;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
-import com.elikill58.negativity.universal.*;
+import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.ReportType;
+import com.flowpowered.math.vector.Vector3d;
 
 public class StepProtocol extends Cheat {
 
@@ -28,6 +33,8 @@ public class StepProtocol extends Cheat {
 		if (!np.hasDetectionActive(this))
 			return;
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
+			return;
+		if ((System.currentTimeMillis() - np.launchFirework) < 1000)
 			return;
 		Location<World> from = e.getFromTransform().getLocation(), to = e.getToTransform().getLocation();
 		double dif = from.getY() - to.getY();
@@ -58,4 +65,13 @@ public class StepProtocol extends Cheat {
 		}
 	}
 
+	@Listener
+	public void onSpawn(SpawnEntityEvent e, @First Entity et) {
+		if(!et.getType().equals(EntityTypes.FIREWORK))
+			return;
+		Vector3d loc = et.getLocation().getPosition();
+		for(Player p : Utils.getOnlinePlayers())
+			if(p.getLocation().getPosition().distance(loc) < 2)
+				SpongeNegativityPlayer.getNegativityPlayer(p).launchFirework = System.currentTimeMillis();
+	}
 }

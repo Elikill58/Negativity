@@ -92,7 +92,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public boolean isInFight = false;
 	public Task fightTask = null;
 	public int fakePlayerTouched = 0;
-	public long timeStartFakePlayer = 0;
+	public long timeStartFakePlayer = 0, launchFirework = 0;
 	public Location<World> lastSpiderLoc = null;
 
 	public SpongeNegativityPlayer(Player p) {

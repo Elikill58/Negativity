@@ -85,7 +85,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean isInFight = false;
 	public BukkitTask fightTask = null;
 	public int fakePlayerTouched = 0;
-	public long timeStartFakePlayer = 0;
+	public long timeStartFakePlayer = 0, launchFirework = 0;
 
 	public SpigotNegativityPlayer(Player p) {
 		super(p.getUniqueId());

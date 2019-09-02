@@ -8,7 +8,6 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.InteractEvent;
-import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
@@ -37,11 +36,10 @@ public class AutoClickProtocol extends Cheat {
 		manageClick(p, e, e.getCause().first(ItemType.class));
 	}
 	
-
-	@Listener
+	/*@Listener
 	public void onEntityDamageByEntity(DamageEntityEvent e, @First Player p) {
 		manageClick(p, e, e.getCause().first(ItemType.class));
-	}
+	}*/
 	
 	private void manageClick(Player p, Cancellable e, Optional<ItemType> item) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);

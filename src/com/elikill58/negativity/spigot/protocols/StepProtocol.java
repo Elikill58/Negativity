@@ -3,9 +3,11 @@ package com.elikill58.negativity.spigot.protocols;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffectType;
 
@@ -28,6 +30,8 @@ public class StepProtocol extends Cheat implements Listener {
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
+			return;
+		if ((System.currentTimeMillis() - np.launchFirework) < 1000)
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double dif = from.getY() - to.getY();
@@ -61,5 +65,14 @@ public class StepProtocol extends Cheat implements Listener {
 			}
 		}
 	}
-
+	
+	@EventHandler
+	public void onSpawn(EntitySpawnEvent e) {
+		if(!e.getEntityType().equals(EntityType.FIREWORK))
+			return;
+		Location loc = e.getLocation();
+		for(Player p : Utils.getOnlinePlayers())
+			if(p.getLocation().distance(loc) < 2)
+				SpigotNegativityPlayer.getNegativityPlayer(p).launchFirework = System.currentTimeMillis();
+	}
 }

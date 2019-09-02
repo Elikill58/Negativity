@@ -35,7 +35,7 @@ public class AntiKnockbackProtocol extends Cheat {
 			return;
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
 			return;
-		if(e.getTargetEntity().getType().equals(EntityTypes.EGG) || e.getTargetEntity().getType().getName().contains("TNT"))
+		if(e.getTargetEntity().getType().equals(EntityTypes.EGG) || e.getTargetEntity().getType().equals(EntityTypes.SNOWBALL) || e.getTargetEntity().getType().getName().contains("TNT"))
 			return;
 		Task.builder().delay(20, TimeUnit.MILLISECONDS).execute(new Runnable() {
 			@Override

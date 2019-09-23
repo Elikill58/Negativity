@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -31,11 +30,8 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		Location loc = p.getLocation();
-		if (!loc.getBlock().getType().equals(Material.SOUL_SAND))
+		if (!loc.getBlock().getType().equals(Material.SOUL_SAND) || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
-		for (PotionEffect pe : p.getActivePotionEffects())
-			if (pe.getType().equals(PotionEffectType.SPEED) && pe.getAmplifier() > 1)
-				return;
 		Location from = e.getFrom(), to = e.getTo();
 		Location fl = from.clone().subtract(to.clone());
 		double distance = to.toVector().distance(from.toVector());

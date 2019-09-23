@@ -18,10 +18,10 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ReportType;
 
-public class SpeedHackProtocol extends Cheat implements Listener {
+public class SpeedProtocol extends Cheat implements Listener {
 
-	public SpeedHackProtocol() {
-		super("SPEEDHACK", false, Material.BEACON, true, true, "speed");
+	public SpeedProtocol() {
+		super("SPEED", false, Material.BEACON, true, true, "speed", "speedhack");
 	}
 
 	@EventHandler (ignoreCancelled = true)
@@ -33,7 +33,6 @@ public class SpeedHackProtocol extends Cheat implements Listener {
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		Location from = e.getFrom().clone(), to = e.getTo().clone();
-		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)
 				|| p.getEntityId() == 100 || p.getVehicle() != null || p.getAllowFlight() || from.getY() > to.getY()
 				|| p.getWalkSpeed() > 2.0F || p.getFlySpeed() > 3.0F || p.hasPotionEffect(PotionEffectType.SPEED) || p.isInsideVehicle())
@@ -45,6 +44,9 @@ public class SpeedHackProtocol extends Cheat implements Listener {
 			np.BYPASS_SPEED--;
 			return;
 		}
+		if(p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().name().contains("PACKED_ICE") && np.hasOtherThan(p.getLocation().add(0, 1, 0).getBlock().getRelative(BlockFace.UP).getLocation(), "TRAPDOOR"))
+			return;
+		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		boolean mayCancel = false;
 		if (p.isOnGround() && y >= 0.75D) {
 			ReportType type = ReportType.WARNING;

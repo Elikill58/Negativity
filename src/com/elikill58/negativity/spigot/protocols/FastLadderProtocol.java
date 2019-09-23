@@ -19,7 +19,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class FastLadderProtocol extends Cheat implements Listener {
 
 	public FastLadderProtocol() {
-		super("FASTLADDERS", false, Material.LADDER, false, true, "ladder", "ladders");
+		super("FASTLADDER", false, Material.LADDER, false, true, "ladder", "ladders");
 	}
 
 	@EventHandler(ignoreCancelled = true)

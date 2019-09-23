@@ -18,10 +18,10 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 
 @SuppressWarnings("deprecation")
-public class AutoRegenProtocol extends Cheat implements Listener {
+public class RegenProtocol extends Cheat implements Listener {
 	
-	public AutoRegenProtocol() {
-		super("AUTOREGEN", true, Material.GOLDEN_APPLE, false, true, "regen");
+	public RegenProtocol() {
+		super("REGEN", true, Material.GOLDEN_APPLE, false, true, "regen", "autoregen");
 	}
 
 	@EventHandler (ignoreCancelled = true)

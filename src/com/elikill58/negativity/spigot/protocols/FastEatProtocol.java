@@ -10,10 +10,10 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.FlyingReason;
 
-public class AutoEatProtocol extends Cheat implements Listener {
+public class FastEatProtocol extends Cheat implements Listener {
 	
-	public AutoEatProtocol() {
-		super("AUTOEAT", true, Material.COOKED_BEEF, false, true, "fasteat");
+	public FastEatProtocol() {
+		super("FASTEAT", true, Material.COOKED_BEEF, false, true, "fasteat", "autoeat");
 	}
 
 	@SuppressWarnings("deprecation")

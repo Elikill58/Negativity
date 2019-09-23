@@ -132,7 +132,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					} else np.IS_LAST_SEC_SNEAK = false;
 				}
 			}
-			Cheat EDITED_CLIENT = Cheat.fromString("EDITED_CLIENT").get();
+			Cheat EDITED_CLIENT = Cheat.fromString("TIMER").get();
 			if(np.ACTIVE_CHEAT.contains(EDITED_CLIENT)) {
 				if(ping < EDITED_CLIENT.getMaxAlertPing()){
 					int allPos = np.POSITION_LOOK + np.POSITION;

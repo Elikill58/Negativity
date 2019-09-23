@@ -310,6 +310,8 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		if (np.isInFight && c.isBlockedInFight())
 			return false;
+		if (c.equals(Cheat.forKey("FLY").get()) && p.hasPermission("essentials.fly"))
+			return false;
 		if (essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
 			return false;
 		if (p.getItemInHand() != null)
@@ -353,8 +355,9 @@ public class SpigotNegativity extends JavaPlugin {
 						.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
 								+ ") (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
 								+ reliability);
+			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers())
-				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert"))
+				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert")) {
 					new ClickableText().addRunnableHoverEvent(
 							Messages.getMessage(pl, "negativity.alert", "%name%", p.getName(), "%cheat%", c.getName(),
 									"%reliability%", String.valueOf(reliability)),
@@ -362,6 +365,10 @@ public class SpigotNegativity extends JavaPlugin {
 									String.valueOf(reliability), "%ping%", String.valueOf(ping))
 									+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),
 							"/negativity " + p.getName()).sendToPlayer(pl);
+					hasPermPeople = true;
+				}
+			if(!hasPermPeople)
+				alerts.add(alert);
 		}
 		return true;
 	}

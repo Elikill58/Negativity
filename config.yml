@@ -53,7 +53,7 @@ inventory:
 items:
   #ITEM_NAME:
   # when: WHEN_DISABLE_DETECTION
-  # cheats: CHEATS_DETECTION_DISABLED (it's the ID of the cheats like fly, speedhack)
+  # cheats: CHEATS_DETECTION_DISABLED (it's the ID of the cheats like fly, speed)
   #
   # when available:
   # always : disable when the player get it in their hand
@@ -62,7 +62,7 @@ items:
   #
   COMPASS:
     when: always
-    cheats: speedhack,fly
+    cheats: speed,fly
 
 #
 # Configuration about the permissions (basic and custom)
@@ -104,8 +104,8 @@ Permissions:
     fastplace:
       default: "negativity.bypass.fastplace"
       custom: "ADMIN"
-    speedhack:
-      default: "negativity.bypass.speedhack"
+    speed:
+      default: "negativity.bypass.speed"
       custom: "ADMIN"
     autoclick:
       default: "negativity.bypass.autoclick"
@@ -116,11 +116,11 @@ Permissions:
     antipotion:
       default: "negativity.bypass.antipotion"
       custom: "ADMIN"
-    autoeat:
-      default: "negativity.bypass.autoeat"
+    fasteat:
+      default: "negativity.bypass.fasteat"
       custom: "ADMIN"
-    autoregen:
-      default: "negativity.bypass.autoregen"
+    regen:
+      default: "negativity.bypass.regen"
       custom: "ADMIN"
     antiknockback:
       default: "negativity.bypass.antiknockback"
@@ -149,8 +149,8 @@ Permissions:
     noslowdown:
       default: "negativity.bypass.noslowdown"
       custom: "ADMIN"
-    fastladders:
-      default: "negativity.bypass.fastladders"
+    fastladder:
+      default: "negativity.bypass.fastladder"
       custom: "ADMIN"
     phase:
       default: "negativity.bypass.phase"
@@ -158,8 +158,8 @@ Permissions:
     autosteal:
       default: "negativity.bypass.autosteal"
       custom: "ADMIN"
-    edited_client:
-      default: "negativity.bypass.edited_client"
+    timer:
+      default: "negativity.bypass.timer"
       custom: "ADMIN"
 
 Translation:
@@ -312,10 +312,10 @@ cheats:
     kick: false
     alert_to_kick: 5
 
-  # AutoEat is to eat something instantly
-  autoeat:
+  # FastEat is to eat something instantly
+  fasteat:
     ping: 150
-    exact_name: "AutoEat"
+    exact_name: "FastEat"
     isActive: true
     reliability_alert: 60
     autoVerif: false
@@ -334,10 +334,10 @@ cheats:
     kick: false
     alert_to_kick: 5
 
-  # SpeedHack makes you run faster
-  speedhack:
+  # Speed makes you run faster
+  speed:
     ping: 150
-    exact_name: "SpeedHack"
+    exact_name: "Speed"
     isActive: true
     reliability_alert: 60
     autoVerif: true
@@ -368,10 +368,10 @@ cheats:
     kick: false
     alert_to_kick: 5
 
-  # AutoRegen help you to get your health
-  autoregen:
+  # Regen help you to get your health
+  regen:
     ping: 150
-    exact_name: "AutoRegen"
+    exact_name: "Regen"
     isActive: true
     reliability_alert: 60
     autoVerif: true
@@ -468,9 +468,9 @@ cheats:
     alert_to_kick: 5
 
   # FastLadders is to climb ladders quickler
-  fastladders:
+  fastladder:
     ping: 150
-    exact_name: "FastLadders"
+    exact_name: "FastLadder"
     isActive: true
     reliability_alert: 60
     autoVerif: true
@@ -500,10 +500,10 @@ cheats:
     kick: false
     alert_to_kick: 5
 
-  # Edited Client correspond to strange action from client
-  edited_client:
+  # Timer correspond to strange action from client
+  timer:
     ping: 150
-    exact_name: "Edited Client"
+    exact_name: "Timer"
     isActive: true
     reliability_alert: 60
     autoVerif: true

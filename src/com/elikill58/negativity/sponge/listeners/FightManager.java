@@ -19,7 +19,7 @@ public class FightManager {
 
 	@Listener
 	public void onEntityDamageByEntity(DamageEntityEvent e, @First Player p) {
-		if (!(p instanceof Player) && !(e.getTargetEntity() instanceof Player))
+		if (!(p instanceof Player) || !(e.getTargetEntity() instanceof Player))
 			return;
 		SpongeNegativityPlayer.getNegativityPlayer((Player) e.getTargetEntity()).fight();
 		SpongeNegativityPlayer.getNegativityPlayer(p).fight();

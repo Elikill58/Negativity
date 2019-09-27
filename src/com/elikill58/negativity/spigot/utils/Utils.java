@@ -265,11 +265,10 @@ public class Utils {
 		try {
 			Class<?> mcServer = Class.forName("net.minecraft.server." + VERSION + ".MinecraftServer");
 			Object server = mcServer.getMethod("getServer").invoke(mcServer);
-			Object tps = server.getClass().getField("recentTps").get(server);
-			return (double[]) tps;
+			return (double[]) server.getClass().getField("recentTps").get(server);
 		} catch (Exception e) {
-			e.printStackTrace();
-			return new double[] {};
+			SpigotNegativity.getInstance().getLogger().warning("Cannot get TPS (Work on Spigot but NOT CraftBukkit).");
+			return new double[] {20, 20, 20};
 		}
 	}
 	

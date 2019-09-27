@@ -55,6 +55,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
 	public HashMap<Cheat, Integer> WARNS = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
+	public HashMap<String, Double> jesusLastY = new HashMap<>();
+	public HashMap<Player, Boolean> jesusState = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	private WeakReference<Player> p;
 	private OfflinePlayer op = null;
@@ -70,7 +72,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, LAST_DAMAGE_RECEIVE = 0, TIME_REPORT = 0;
 	public String LAST_OTHER_KEEP_ALIVE;
-	public boolean PACKET_ANALYZE_STARTED = false, isInWater = false, isOnWater = false, FALL = false,
+	public boolean PACKET_ANALYZE_STARTED = false/*, isInWater = false, isOnWater = false*/, FALL = false,
 			KEEP_ALIVE_BEFORE = false, IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false,
 			isInvisible = false, slime_block = false, already_blink = false, isJumpingWithBlock = false,
 			isOnLadders = false, lastClickInv = false, already_jigsaw = false;

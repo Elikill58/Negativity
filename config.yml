@@ -183,8 +183,13 @@ Translation:
 hasBungeecord: false
 
 # The time between 2 /report
-# in millisecondes
+# in milliseconds
 time_between_report: 1000
+
+# The time between 2 alerts
+# in milliseconds
+# -1 to disable
+time_between_alert: 2000
 
 ban:
   active: false

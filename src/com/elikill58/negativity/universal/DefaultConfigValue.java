@@ -51,6 +51,7 @@ public class DefaultConfigValue {
 		BOOLEANS.put("log_alerts", true);
 		BOOLEANS.put("log_alerts_in_console", true);
 		INTS.put("tps_alert_stop", 18);
+		INTS.put("time_between_alert", 2000);
 		BOOLEANS.put("report_command", true);
 		BOOLEANS.put("ban_command", true);
 		BOOLEANS.put("unban_command", true);

@@ -76,6 +76,7 @@ public class SpigotNegativity extends JavaPlugin {
 	public static Material MATERIAL_CLOSE = Material.REDSTONE;
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null;
 	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
+	private static final HashMap<Player, HashMap<Cheat, Long>> TIME_LAST_CHEAT_ALERT = new HashMap<>();
 	
 	@Override
 	public void onEnable() {
@@ -319,7 +320,8 @@ public class SpigotNegativity extends JavaPlugin {
 				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType()).getWhen().equals(WhenBypass.ALWAYS))
 					return false;
 		int ping = Utils.getPing(p);
-		if (np.TIME_INVINCIBILITY > System.currentTimeMillis() || reliability < 30 || ping > c.getMaxAlertPing()
+		long currentTimeMilli = System.currentTimeMillis();
+		if (np.TIME_INVINCIBILITY > currentTimeMilli || reliability < 30 || ping > c.getMaxAlertPing()
 				|| ((double) ((Damageable) p).getHealth()) == 0.0D
 				|| getInstance().getConfig().getInt("tps_alert_stop") > Utils.getLastTPS() || ping < 0 || np.isFreeze)
 			return false;
@@ -347,6 +349,15 @@ public class SpigotNegativity extends JavaPlugin {
 		Ban.manageBan(c, np, reliability);
 		if (Ban.isBanned(np.getAccount()))
 			return false;
+		int timeBetweenTwoAlert = Adapter.getAdapter().getIntegerInConfig("time_between_alert");
+		if(timeBetweenTwoAlert != -1) {
+			HashMap<Cheat, Long> time_alert = (TIME_LAST_CHEAT_ALERT.containsKey(p) ? TIME_LAST_CHEAT_ALERT.get(p) : new HashMap<>());
+			if(time_alert.containsKey(c) && ((currentTimeMilli - time_alert.get(c)) < timeBetweenTwoAlert))
+				return true;
+			time_alert.put(c, currentTimeMilli);
+			TIME_LAST_CHEAT_ALERT.put(p, time_alert);
+		}
+		
 		if (isOnBungeecord)
 			sendMessage(p, c.getName(), String.valueOf(reliability), String.valueOf(ping), hover_proof);
 		else {

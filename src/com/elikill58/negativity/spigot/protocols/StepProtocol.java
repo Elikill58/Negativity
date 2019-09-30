@@ -31,7 +31,7 @@ public class StepProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if ((System.currentTimeMillis() - np.launchFirework) < 1000)
+		if ((System.currentTimeMillis() - np.launchFirework) < 1000 || np.hasElytra())
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double dif = from.getY() - to.getY();

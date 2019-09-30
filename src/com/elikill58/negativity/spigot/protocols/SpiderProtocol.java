@@ -30,7 +30,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		Location loc = p.getLocation();
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
-		if (p.getFallDistance() != 0)
+		if (p.getFallDistance() != 0 || np.hasElytra())
 			return;
 		Material playerLocType = loc.getBlock().getType(),
 				underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),

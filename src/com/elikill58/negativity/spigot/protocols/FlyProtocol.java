@@ -9,7 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -36,11 +35,8 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if(!p.getLocation().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR) || !p.getLocation().subtract(0, 2, 0).getBlock().getType().equals(Material.AIR))
 			return;
-		if(p.isSprinting() && (e.getTo().getY() - e.getFrom().getY()) > 0)
+		if((p.isSprinting() && (e.getTo().getY() - e.getFrom().getY()) > 0) || np.hasElytra())
 			return;
-		for (ItemStack item : p.getInventory().getArmorContents())
-			if (item != null && item.getType().name().contains("ELYTRA"))
-				return;
 
 		if (p.hasPotionEffect(PotionEffectType.SPEED)) {
 			int speed = 0;

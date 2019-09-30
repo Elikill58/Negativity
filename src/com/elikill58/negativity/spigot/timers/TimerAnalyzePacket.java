@@ -88,9 +88,9 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 			}
 			Cheat FORCEFIELD = Cheat.fromString("FORCEFIELD").get();
 			if (np.ACTIVE_CHEAT.contains(FORCEFIELD)) {
-				if (np.ARM > 14 && np.USE_ENTITY > 20) {
+				if (np.ARM > 16 && np.USE_ENTITY > 20) {
 					ReportType type = ReportType.WARNING;
-					if (np.getWarn(FORCEFIELD) > 4)
+					if (np.getWarn(FORCEFIELD) > 5)
 						type = ReportType.VIOLATION;
 					SpigotNegativity.alertMod(type, p, FORCEFIELD,
 							Utils.parseInPorcent(np.ARM + np.USE_ENTITY + np.getWarn(FORCEFIELD)),

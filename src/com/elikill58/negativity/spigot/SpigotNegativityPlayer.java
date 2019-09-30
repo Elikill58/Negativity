@@ -27,6 +27,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
@@ -658,6 +659,13 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if (fightTask != null)
 			fightTask.cancel();
 		fightTask = null;
+	}
+	
+	public boolean hasElytra() {
+		for (ItemStack item : getPlayer().getInventory().getArmorContents())
+			if (item != null && item.getType().name().contains("ELYTRA"))
+				return true;
+		return false;
 	}
 
 	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {

@@ -40,7 +40,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 		EntityType damagerType = e.getDamager().getType();
 		if(damagerType.equals(EntityType.EGG) || damagerType.equals(EntityType.SNOWBALL) || (SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p)) || e.isCancelled())
 			return;
-		if(damagerType.name().contains("TNT"))
+		if(damagerType.name().contains("TNT") || np.isTargetByIronGolem())
 			return;
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 

@@ -5,11 +5,12 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -24,7 +25,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 		super("SPEED", false, Material.BEACON, true, true, "speed", "speedhack");
 	}
 
-	@EventHandler (ignoreCancelled = true)
+	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
@@ -35,16 +36,16 @@ public class SpeedProtocol extends Cheat implements Listener {
 		Location from = e.getFrom().clone(), to = e.getTo().clone();
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)
 				|| p.getEntityId() == 100 || p.getVehicle() != null || p.getAllowFlight() || from.getY() > to.getY()
-				|| p.getWalkSpeed() > 2.0F || p.getFlySpeed() > 3.0F || p.hasPotionEffect(PotionEffectType.SPEED) || p.isInsideVehicle())
+				|| p.getWalkSpeed() > 2.0F || p.getFlySpeed() > 3.0F || p.hasPotionEffect(PotionEffectType.SPEED)
+				|| p.isInsideVehicle() || np.hasElytra() || hasEnderDragonAround(p))
 			return;
-		for(ItemStack item : p.getInventory().getArmorContents())
-			if(item != null && item.getType().name().contains("ELYTRA"))
-				return;
-		if(np.BYPASS_SPEED != 0){
+		if (np.BYPASS_SPEED != 0) {
 			np.BYPASS_SPEED--;
 			return;
 		}
-		if(p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().name().contains("PACKED_ICE") && np.hasOtherThan(p.getLocation().add(0, 1, 0).getBlock().getRelative(BlockFace.UP).getLocation(), "TRAPDOOR"))
+		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().name().contains("PACKED_ICE")
+				&& np.hasOtherThan(p.getLocation().add(0, 1, 0).getBlock().getRelative(BlockFace.UP).getLocation(),
+						"TRAPDOOR"))
 			return;
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		boolean mayCancel = false;
@@ -55,7 +56,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 			mayCancel = SpigotNegativity.alertMod(type, p, this, Utils.parseInPorcent(y * 100 * 2),
 					"Player in ground. WalkSpeed: " + p.getWalkSpeed() + " Distance between from/to location: " + y,
 					"Distance Last/New position: " + y + "\n(With same Y)\nPlayer on ground");
-			
+
 		} else if (!p.isOnGround() && y >= 0.85D) {
 			ReportType type = ReportType.WARNING;
 			if (np.getWarn(this) > 7)
@@ -64,13 +65,20 @@ public class SpeedProtocol extends Cheat implements Listener {
 					"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed() + " Distance between from/to location: " + y,
 					"Distance Last/New position: " + y + "\n(With same Y)\nPlayer jumping");
 		}
-		if(isSetBack() && mayCancel)
+		if (isSetBack() && mayCancel)
 			e.setCancelled(true);
+	}
+	
+	private boolean hasEnderDragonAround(Player p) {
+		for(Entity et : p.getWorld().getEntities())
+			if(et.getType().equals(EntityType.ENDER_DRAGON) && et.getLocation().distance(p.getLocation()) < 15)
+				return true;
+		return false;
 	}
 
 	@EventHandler
 	public void onEntityDamage(EntityDamageByEntityEvent e) {
-		if(e.getEntity() instanceof Player)
+		if (e.getEntity() instanceof Player)
 			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).BYPASS_SPEED = 2;
 	}
 }

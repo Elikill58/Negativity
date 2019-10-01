@@ -26,6 +26,8 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
+import org.bukkit.entity.IronGolem;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -668,6 +670,14 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return false;
 	}
 
+	public boolean isTargetByIronGolem() {
+		for(Entity et : getPlayer().getWorld().getEntities())
+			if(et instanceof IronGolem)
+				if(((IronGolem) et).getTarget().equals((LivingEntity) getPlayer()))
+					return true;
+		return false;
+	}
+	
 	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {
 		if (players.containsKey(p.getUniqueId()))
 			return players.get(p.getUniqueId());

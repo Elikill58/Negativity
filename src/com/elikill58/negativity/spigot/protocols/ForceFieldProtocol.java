@@ -41,7 +41,9 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		double dis = e.getEntity().getLocation().distance(p.getLocation());
+		Location tempLoc = e.getEntity().getLocation().clone();
+		tempLoc.setY(p.getLocation().getY());
+		double dis = tempLoc.distance(p.getLocation());
 		if (dis > (Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach")
 				+ (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0))
 				&& !p.getItemInHand().getType().equals(Material.BOW)) {

@@ -673,7 +673,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean isTargetByIronGolem() {
 		for(Entity et : getPlayer().getWorld().getEntities())
 			if(et instanceof IronGolem)
-				if(((IronGolem) et).getTarget().equals((LivingEntity) getPlayer()))
+				if(((IronGolem) et).getTarget() != null && ((IronGolem) et).getTarget().equals((LivingEntity) getPlayer()))
 					return true;
 		return false;
 	}

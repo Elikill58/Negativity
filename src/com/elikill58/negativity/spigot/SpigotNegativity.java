@@ -101,7 +101,6 @@ public class SpigotNegativity extends JavaPlugin {
 		if (!new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml").exists()) {
 			getLogger().info("------ Negativity Information ------");
 			getLogger().info("");
-			getLogger().info("English:");
 			getLogger().info(" > Thanks for downloading Negativity :)");
 			getLogger().info("I'm trying to make the better anti-cheat has possible.");
 			getLogger().info(
@@ -391,7 +390,7 @@ public class SpigotNegativity extends JavaPlugin {
 	public static void sendReportMessage(Player p, String reportMsg) {
 		try (ByteArrayOutputStream ba = new ByteArrayOutputStream(); DataOutputStream out = new DataOutputStream(ba)) {
 			out.writeUTF(reportMsg);
-			p.sendPluginMessage(SpigotNegativity.getInstance(), "Negativity", ba.toByteArray());
+			p.sendPluginMessage(SpigotNegativity.getInstance(), "negativity", ba.toByteArray());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

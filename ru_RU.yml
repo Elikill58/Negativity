@@ -45,6 +45,7 @@ report:
   report_message: "&a[&2Negativity&a] &c%name% &7получил репорт от &c%report% &7за &c%reason%"
 negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% &7(&2Точность: %reliability%%&7)!"
+  alert_multiple: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% %nb% время &7(&2Точность: %reliability%%&7)!"
   alert_hover: "&6Точность: %reliability%%\nПинг: %ping%"
   verif:
     invalid_cheat: "%arg% не является читом."

@@ -59,7 +59,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public HashMap<Cheat, Integer> WARNS = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	public HashMap<String, Double> jesusLastY = new HashMap<>();
-	public HashMap<Player, Boolean> jesusState = new HashMap<>();
+	public HashMap<Cheat, Integer> ALERT_NOT_SHOWED = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	private WeakReference<Player> p;
 	private OfflinePlayer op = null;
@@ -78,7 +78,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean PACKET_ANALYZE_STARTED = false/*, isInWater = false, isOnWater = false*/, FALL = false,
 			KEEP_ALIVE_BEFORE = false, IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false,
 			isInvisible = false, slime_block = false, already_blink = false, isJumpingWithBlock = false,
-			isOnLadders = false, lastClickInv = false, already_jigsaw = false;
+			isOnLadders = false, lastClickInv = false, already_jigsaw = false, jesusState = true;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;
 	public YamlConfiguration file;

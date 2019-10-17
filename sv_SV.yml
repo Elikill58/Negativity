@@ -45,6 +45,7 @@ report:
   report_message: "&a[&2Negativity&a] &c%name% &7har blivit raporterad av &c%report% &7för &c%reason%"
 negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% &7(&2Reliability: %Pålitlighet%%&7) !"
+  alert_multiple: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% %nb% tid &7(&2Reliability: %Pålitlighet%%&7) !"
   alert_hover: "&6Pålitlighet: %reliability%%\nPing: %ping%"
   verif:
     invalid_cheat: "%arg% är inte ett slags fusk !"

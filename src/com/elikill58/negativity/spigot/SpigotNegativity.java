@@ -47,6 +47,7 @@ import com.elikill58.negativity.spigot.timers.ActualizeClickTimer;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
 import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
+import com.elikill58.negativity.spigot.timers.TimerTimeBetweenAlert;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
@@ -74,7 +75,7 @@ public class SpigotNegativity extends JavaPlugin {
 	public static boolean isOnBungeecord = false, log = false, log_console = false, hasBypass = true, essentialsSupport = false,
 			worldGuardSupport = false;
 	public static Material MATERIAL_CLOSE = Material.REDSTONE;
-	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null;
+	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
 	private static final HashMap<Player, HashMap<Cheat, Long>> TIME_LAST_CHEAT_ALERT = new HashMap<>();
 	
@@ -156,6 +157,7 @@ public class SpigotNegativity extends JavaPlugin {
 		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
 		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 20);
+		(timeTimeBetweenAlert = new TimerTimeBetweenAlert()).runTaskTimer(this, 20, 20);
 
 		for (Cheat c : Cheat.values()) {
 			if (c.isActive() && c.hasListener()) {
@@ -289,6 +291,7 @@ public class SpigotNegativity extends JavaPlugin {
 		clickTimer.cancel();
 		packetTimer.cancel();
 		runSpawnFakePlayer.cancel();
+		timeTimeBetweenAlert.cancel();
 	}
 
 	public static SpigotNegativity getInstance() {
@@ -351,8 +354,13 @@ public class SpigotNegativity extends JavaPlugin {
 		int timeBetweenTwoAlert = Adapter.getAdapter().getIntegerInConfig("time_between_alert");
 		if(timeBetweenTwoAlert != -1) {
 			HashMap<Cheat, Long> time_alert = (TIME_LAST_CHEAT_ALERT.containsKey(p) ? TIME_LAST_CHEAT_ALERT.get(p) : new HashMap<>());
-			if(time_alert.containsKey(c) && ((currentTimeMilli - time_alert.get(c)) < timeBetweenTwoAlert))
-				return true;
+			if(time_alert.containsKey(c)) {
+				if(((currentTimeMilli - time_alert.get(c)) < timeBetweenTwoAlert)) {
+					np.ALERT_NOT_SHOWED.put(c, np.ALERT_NOT_SHOWED.containsKey(c) ? np.ALERT_NOT_SHOWED.get(c) + 1 : 1);
+					return true;
+				}
+			}
+				//else reliability = 100;
 			time_alert.put(c, currentTimeMilli);
 			TIME_LAST_CHEAT_ALERT.put(p, time_alert);
 		}
@@ -368,17 +376,28 @@ public class SpigotNegativity extends JavaPlugin {
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers())
 				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert")) {
-					new ClickableText().addRunnableHoverEvent(
-							Messages.getMessage(pl, "negativity.alert", "%name%", p.getName(), "%cheat%", c.getName(),
-									"%reliability%", String.valueOf(reliability)),
-							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
-									String.valueOf(reliability), "%ping%", String.valueOf(ping))
-									+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),
-							"/negativity " + p.getName()).sendToPlayer(pl);
+					if(np.ALERT_NOT_SHOWED.containsKey(c) && np.ALERT_NOT_SHOWED.get(c) > 0) {
+						new ClickableText().addRunnableHoverEvent(
+								Messages.getMessage(pl, "negativity.alert_multiple", "%name%", p.getName(), "%cheat%", c.getName(),
+										"%reliability%", String.valueOf(100), "%nb%", String.valueOf(np.ALERT_NOT_SHOWED.get(c))),
+								Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
+										String.valueOf(100), "%ping%", String.valueOf(ping))
+										+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),
+								"/negativity " + p.getName()).sendToPlayer(pl);
+					} else {
+						new ClickableText().addRunnableHoverEvent(
+								Messages.getMessage(pl, "negativity.alert", "%name%", p.getName(), "%cheat%", c.getName(),
+										"%reliability%", String.valueOf(reliability)),
+								Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
+										String.valueOf(reliability), "%ping%", String.valueOf(ping))
+										+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),
+								"/negativity " + p.getName()).sendToPlayer(pl);
+					}
 					hasPermPeople = true;
 				}
 			if(!hasPermPeople)
 				alerts.add(alert);
+			np.ALERT_NOT_SHOWED.remove(c);
 		}
 		return true;
 	}

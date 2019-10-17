@@ -28,7 +28,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onDamage(EntityDamageByEntityEvent e) {
+	public void onDamage(final EntityDamageByEntityEvent e) {
 		if (!(e.getEntity() instanceof Player) || e.isCancelled())
 			return;
 		Player p = (Player) e.getEntity();
@@ -46,6 +46,8 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 
 			@Override
 			public void run() {
+				if(e.isCancelled())
+					return;
 				final Location last = p.getLocation();
 				p.damage(0D);
 				p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));

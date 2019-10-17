@@ -91,10 +91,8 @@ public class JesusProtocol extends Cheat implements Listener {
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		double d = e.getTo().getY() - e.getFrom().getY();
-		if(!np.jesusState.containsKey(p))
-			np.jesusState.put(p, true);
 		
-		int i = (np.jesusState.get(p) ? 1 : 2);
+		int i = (np.jesusState ? 1 : 2);
 		if(!np.jesusLastY.containsKey(p.getName() + "-" + i))
 			np.jesusLastY.put(p.getName() + "-" + i, 0.0);
 		
@@ -102,7 +100,7 @@ public class JesusProtocol extends Cheat implements Listener {
 			Location dessous = p.getLocation().clone().subtract(0, 1, 0);
 			if(dessous.getBlock().getType().equals(Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER")) && !np.hasOtherThan(dessous, Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER"))) {
 				if(!(np.has(p.getLocation().clone(), Utils.getMaterialWith1_13_Compatibility("WATER_LILY", "LEGACY_WATER_LILY")) || p.getLocation().getBlock().getType().equals(Utils.getMaterialWith1_13_Compatibility("WATER_LILY", "LEGACY_WATER_LILY")))) {
-					boolean mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, this, Utils.parseInPorcent((d + 5) * 10), "Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: " + d + " (other: " + np.jesusLastY.get(p.getName() + "-" + (np.jesusState.get(p) ? 2 : 1)) + ") and ping: " + Utils.getPing(p));
+					boolean mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, this, Utils.parseInPorcent((d + 5) * 10), "Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: " + d + " (other: " + np.jesusLastY.get(p.getName() + "-" + (np.jesusState ? 2 : 1)) + ") and ping: " + Utils.getPing(p));
 					if(isSetBack() && mayCancel)
 						p.teleport(p.getLocation().subtract(0, 1, 0));
 				}
@@ -110,7 +108,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		}
 		
 		np.jesusLastY.put(p.getName() + "-" + i, d);
-		np.jesusState.put(p, !np.jesusState.get(p));
+		np.jesusState = !np.jesusState;
 	}
 	
 	private boolean hasWaterLily(Location loc) {

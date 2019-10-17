@@ -45,6 +45,7 @@ report:
   report_message: "&a[&2Negativity&a] &c%name% &7is gerapporteerd door &c%report% &7voor &c%reason%"
 negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% &7(&2Kans: %reliability%%&7)!"
+  alert_multiple: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% %nb% tijd &7(&2Kans: %reliability%%&7)!"
   alert_hover: "&6Kans: %reliability%%\nPing: %ping%"
   verif:
     invalid_cheat: "%arg% is geen geldige cheat!"

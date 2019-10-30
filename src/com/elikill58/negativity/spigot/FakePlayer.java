@@ -24,6 +24,7 @@ public class FakePlayer {
 	private Object entityPlayer, gameProfile;
 	private Location loc;
 	private UUID uuid;
+	private int id;
 	
 	public FakePlayer(Location loc, String name) {
 		this(loc, name, UUID.fromString("0-0-0-0-0"));
@@ -37,6 +38,7 @@ public class FakePlayer {
 			Object worldServerObj = Utils.getWorldServer(loc);
 			Object temp = playerInteractManagerConstructor.newInstance(worldServerObj);
 			entityPlayer = entityPlayerConstructor.newInstance(minecraftServer, worldServerObj, gameProfile, temp);
+			id = (int) entityPlayer.getClass().getMethod("getId").invoke(entityPlayer);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -102,6 +104,14 @@ public class FakePlayer {
 		if (SpigotNegativityPlayer.contains(p)) {
 			SpigotNegativityPlayer.getNegativityPlayer(p).removeFakePlayer(this);
 		}
+	}
+	
+	public int getEntityId() {
+		return id;
+	}
+	
+	public Object getEntityPlayer() {
+		return entityPlayer;
 	}
 	
 	public Location getLocation() {

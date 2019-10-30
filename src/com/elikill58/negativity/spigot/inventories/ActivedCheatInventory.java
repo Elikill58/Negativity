@@ -17,18 +17,17 @@ import com.elikill58.negativity.universal.Cheat;
 public class ActivedCheatInventory {
 
 	public static void openActivedCheat(Player p, Player cible) {
-		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(Cheat.values().size() + 3, 9, 1), Inv.NAME_ACTIVED_CHEAT_MENU);
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
+		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(np.ACTIVE_CHEAT.size() + 3, 9, 1), Inv.NAME_ACTIVED_CHEAT_MENU);
 		if (np.ACTIVE_CHEAT.size() > 0) {
 			int slot = 0;
 			for (Cheat c : np.ACTIVE_CHEAT) {
 				if (c.equals(Cheat.ALL))
 					continue;
-				inv.setItem(slot, Utils.createItem((Material) c.getMaterial(), ChatColor.RESET + c.getName()));
-				slot++;
+				inv.setItem(slot++, Utils.createItem((Material) c.getMaterial(), ChatColor.RESET + c.getName()));
 			}
 		} else
-			inv.setItem(13, Utils.createItem(Material.REDSTONE_BLOCK, Messages.getMessage(p, "inventory.detection.no_active", "%name%", cible.getName())));
+			inv.setItem(4, Utils.createItem(Material.REDSTONE_BLOCK, Messages.getMessage(p, "inventory.detection.no_active", "%name%", cible.getName())));
 		inv.setItem(inv.getSize() - 2, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.back")));
 		inv.setItem(inv.getSize() - 1,
 				Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));

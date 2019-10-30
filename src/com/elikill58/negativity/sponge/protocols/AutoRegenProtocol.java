@@ -17,6 +17,7 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.FlyingReason;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class AutoRegenProtocol extends Cheat {
@@ -63,5 +64,10 @@ public class AutoRegenProtocol extends Cheat {
 			}
 		}
 		np.LAST_REGEN = actual;
+	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
 	}
 }

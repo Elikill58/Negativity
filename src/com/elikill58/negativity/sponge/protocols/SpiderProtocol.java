@@ -18,6 +18,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.flowpowered.math.vector.Vector3d;
 
@@ -126,5 +127,10 @@ public class SpiderProtocol extends Cheat {
 			return true;
 		
 		return false;
+	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
 	}
 }

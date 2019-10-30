@@ -14,12 +14,8 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.potion.Potion;
 
-import com.elikill58.negativity.spigot.FakePlayer;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.ReportType;
 
 @SuppressWarnings("deprecation")
 public class FightManager implements Listener {
@@ -30,25 +26,7 @@ public class FightManager implements Listener {
 			return;
 		Player damager = (Player) e.getDamager();
 		Player hit = (Player) e.getEntity();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(damager);
-		FakePlayer willRemoved = null;
-		for(FakePlayer tempFp : np.FAKE_PLAYER)
-			if(tempFp.getId().equals(hit.getUniqueId()))
-				willRemoved = tempFp;
-		
-		if(willRemoved != null) {
-			np.FAKE_PLAYER.remove(willRemoved);
-			np.fakePlayerTouched++;
-			long diff = System.currentTimeMillis() - np.timeStartFakePlayer;
-			double diffSec = diff / 1000;
-			if(np.fakePlayerTouched >= 20 && np.fakePlayerTouched >= diffSec) {
-				SpigotNegativity.alertMod(ReportType.VIOLATION, damager, Cheat.fromString("FORCEFIELD").get(), Utils.parseInPorcent(np.fakePlayerTouched * 10 * (1 / diffSec)), np.fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  np.fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
-			} else if(np.fakePlayerTouched >= 5 && np.fakePlayerTouched >= diffSec) {
-				SpigotNegativity.alertMod(ReportType.WARNING, damager, Cheat.fromString("FORCEFIELD").get(), Utils.parseInPorcent(np.fakePlayerTouched * 10 * (1 / diffSec)), np.fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  np.fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
-			}
-		}
-		
-		np.fight();
+		SpigotNegativityPlayer.getNegativityPlayer(damager).fight();
 		SpigotNegativityPlayer.getNegativityPlayer(hit).fight();
 	}
 
@@ -140,7 +118,7 @@ public class FightManager implements Listener {
 			return;
 		for(Player pl : Utils.getOnlinePlayers())
 			if(pl.getLocation().getWorld().equals(p.getLocation().getWorld()))
-				if(pl.getLocation().distance(p.getLocation()) < 8) {
+				if(pl.getLocation().distance(p.getLocation()) < maxDistance) {
 					SpigotNegativityPlayer.getNegativityPlayer(p).fight();
 					SpigotNegativityPlayer.getNegativityPlayer(pl).fight();
 				}

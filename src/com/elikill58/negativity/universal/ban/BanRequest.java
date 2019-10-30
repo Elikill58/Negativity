@@ -14,10 +14,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
+
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.ban.support.BanPluginSupport;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -43,7 +46,7 @@ public class BanRequest {
 		this.ac = ac;
 		this.by = by;
 		this.isUnban = isUnban;
-		if (Ban.banActiveIsFile) {
+		if (Ban.banType.equals(BanType.FILE)) {
 			f = new File(Ban.banDir, uuid + ".txt");
 			if (!f.exists())
 				try {
@@ -91,7 +94,7 @@ public class BanRequest {
 				break;
 			}
 		}
-		if (Ban.banActiveIsFile) {
+		if (Ban.banType.equals(BanType.FILE)) {
 			f = new File(Ban.banDir, uuid + ".txt");
 			if (!f.exists())
 				try {
@@ -143,7 +146,7 @@ public class BanRequest {
 		NegativityPlayer nPlayer = ada.getNegativityPlayer(np.getPlayerId());
 		if (nPlayer != null && Perm.hasPerm(nPlayer, "notBanned"))
 			return;
-		if (Ban.banActiveIsFile) {
+		if (Ban.banType.equals(BanType.FILE)) {
 			try {
 				f = new File(Ban.banDir, uuid + ".txt");
 				if (!f.exists())
@@ -155,8 +158,7 @@ public class BanRequest {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-		if (!Ban.banActiveIsFile) {
+		} else if(Ban.banType.equals(BanType.DATABASE)) {
 			try {
 				String values = ada.getStringInConfig("ban.db.column.uuid") + ","
 						+ ada.getStringInConfig("ban.db.column.time") + "," + ada.getStringInConfig("ban.db.column.def")
@@ -190,6 +192,15 @@ public class BanRequest {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		} else if(Ban.banType.equals(BanType.COMMAND)) {
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getWithReplaceOlder(Adapter.getAdapter().getStringInConfig("ban.command_ban")));
+		} else if(Ban.banType.equals(BanType.PLUGIN)) {
+			for (BanPluginSupport bp : Ban.BAN_SUPPORT) {
+				if (np.getBanRequest().size() >= ada.getIntegerInConfig("ban.def.ban_time"))
+					bp.banDef(np.getNegativityPlayer(), "Cheat (" + reason + ")", "Negativity");
+				else
+					bp.ban(np.getNegativityPlayer(), "Cheat (" + reason + ")", "Negativity", fullTime);
+			}
 		}
 
 		if (nPlayer != null) {
@@ -205,20 +216,21 @@ public class BanRequest {
 			this.isUnban = true;
 			Adapter ada = Adapter.getAdapter();
 			np.removeBanRequest(this);
-			if (ada.getBooleanInConfig("ban.destroy_when_unban")) {
-				if (Ban.banActiveIsFile) {
+			if(Ban.banType.equals(BanType.PLUGIN)) {
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getWithReplaceOlder(Adapter.getAdapter().getStringInConfig("ban.command_unban")));
+			} else if (ada.getBooleanInConfig("ban.destroy_when_unban")) {
+				if (Ban.banType.equals(BanType.FILE)) {
 					Files.write(f.toPath(), "".getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
 					f.delete();
 					f.deleteOnExit();
-				}
-				if (!Ban.banActiveIsFile) {
+				} else {
 					PreparedStatement stm = Database.getConnection()
 							.prepareStatement("DELETE FROM " + Database.table_ban + " WHERE uuid = ?");
 					stm.setString(1, uuid.toString());
 					stm.execute();
 				}
 			} else {
-				if (Ban.banActiveIsFile) {
+				if (Ban.banType.equals(BanType.FILE)) {
 					List<String> lines = Files.readAllLines(f.toPath()), futurLines = new ArrayList<>();
 					for (String l : lines) {
 						if(l.contains("unban=false"))
@@ -233,8 +245,7 @@ public class BanRequest {
 						bw.newLine();
 					}
 					bw.close();
-				}
-				if (!Ban.banActiveIsFile) {
+				} else {
 					String uc = ada.getStringInConfig("ban.db.column.uuid");
 					PreparedStatement stm = Database.getConnection().prepareStatement("UPDATE " + Database.table_ban
 							+ " SET " + ada.getStringInConfig("ban.db.column.time") + " = ? WHERE " + uc + " = ?");
@@ -270,12 +281,12 @@ public class BanRequest {
 			walkSpeed = String.valueOf(nPlayer.getWalkSpeed());
 		}
 
-		return s.replaceAll("%uuid%", uuid.toString()).replaceAll("%name%", "").replaceAll("%reason%", reason)
+		return s.replaceAll("%uuid%", uuid.toString()).replaceAll("%name%", name).replaceAll("%reason%", reason)
 				.replaceAll("%life%", life).replaceAll("%name%", name).replaceAll("%level%", level)
 				.replaceAll("%gm%", gamemode).replaceAll("%walk_speed%", walkSpeed);
 	}
 
 	public static enum BanType {
-		PLUGIN, MOD, CONSOLE, UNKNOW;
+		FILE, DATABASE, COMMAND, PLUGIN, MOD, CONSOLE, UNKNOW;
 	}
 }

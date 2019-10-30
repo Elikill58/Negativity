@@ -13,6 +13,7 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class AutoStealProtocol extends Cheat implements Listener {
@@ -73,5 +74,10 @@ public class AutoStealProtocol extends Cheat implements Listener {
 		int ping = Utils.getPing(p), dif = (int) (System.currentTimeMillis() - np.LAST_CLICK_INV);
 		if((dif + ping) <= TIME_CLICK && dif > 0)
 			SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent((100 + TIME_CLICK) - (dif * 1.5) - ping), "Time between last click and close inv: " + dif + ". Ping: " + ping);
+	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
 	}
 }

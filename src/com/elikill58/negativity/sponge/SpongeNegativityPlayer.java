@@ -423,6 +423,17 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		return false;
 	}
 
+	@Override
+	public String getReason(Cheat c) {
+		String n = "";
+		for(Cheat all : Cheat.values())
+			if(getAllWarn(all) > 5)
+				n = n + (n.equals("") ? "" : ", ") + all.getName();
+		if(!n.contains(c.getName()))
+			n = n + (n.equals("") ? "" : ", ") + c.getName();
+		return n;
+	}
+	
 	public boolean hasOtherThanExtended(Location<World> loc, BlockType m) {
 		Location<World> tempLoc = loc.copy();
 		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))

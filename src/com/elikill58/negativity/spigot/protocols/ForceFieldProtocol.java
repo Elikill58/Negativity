@@ -18,6 +18,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -51,12 +52,26 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 					Utils.parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis
 							+ ". Ping: " + Utils.getPing(p),
-					"Distance with " + e.getEntity().getType().getName() + ": " + nf.format(dis));
+					"Distance with " + e.getEntity().getName() + ": " + nf.format(dis));
 			if (isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
 	}
 
+	/*@EventHandler(priority = EventPriority.LOWEST)
+	public void manageFakePlayer(EntityDamageByEntityEvent e) {
+		if(!(e.getDamager() instanceof Player))
+			return;
+		Player p = (Player) e.getDamager();
+		UUID uuid = e.getEntity().getUniqueId();
+		for (FakePlayer temp : SpigotNegativityPlayer.getNegativityPlayer(p).FAKE_PLAYER) {
+			
+			if(temp.getId() == uuid) {
+				p.sendMessage(ChatColor.GREEN + "hitted fake player");
+			}
+		}
+	}*/
+	
 	@EventHandler
 	public void event(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
@@ -98,5 +113,10 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 				Utils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");
+	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
 	}
 }

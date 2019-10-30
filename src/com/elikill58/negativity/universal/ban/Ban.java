@@ -18,9 +18,10 @@ import com.elikill58.negativity.universal.ban.support.BanPluginSupport;
 public class Ban {
 
 	public static File banDir;
-	public static boolean banActive, banActiveIsFile;
+	public static boolean banActive;
+	public static BanType banType = BanType.UNKNOW;
 	public static final HashMap<String, String> DB_CONTENT = new HashMap<>();
-	private static List<BanPluginSupport> BAN_SUPPORT = new ArrayList<>();
+	public static List<BanPluginSupport> BAN_SUPPORT = new ArrayList<>();
 
 	public static boolean isBanned(NegativityAccount np) {
 		if (!banActive)
@@ -48,12 +49,12 @@ public class Ban {
 		if (!cheat.isActive() || !ada.getBooleanInConfig("ban.active"))
 			return;
 		if (!(ada.getIntegerInConfig("ban.reliability_need") <= relia
-				&& ada.getIntegerInConfig("ban.alert_need") <= np.getWarn(cheat)))
+				&& ada.getIntegerInConfig("ban.alert_need") <= np.getAllWarn(cheat)))
 			return;
 		String tempCmd = ada.getStringInConfig("ban.other_plugin.command_to_run");
 		if (!tempCmd.equalsIgnoreCase("")) {
 			ada.runConsoleCommand(tempCmd.replaceAll("%uuid%", np.getUUID().toString()).replaceAll("%ip%", np.getIP())
-					.replaceAll("%name%", np.getName()).replaceAll("%reason%", cheat.getName())
+					.replaceAll("%name%", np.getName()).replaceAll("%reason%", np.getReason(cheat))
 					.replaceAll("%alert%", "" + np.getWarn(cheat))
 					.replaceAll("%all_alert%", "" + np.getAllWarn(cheat)));
 		} else {
@@ -63,22 +64,20 @@ public class Ban {
 			try {
 				i = Integer.parseInt(engine.eval(
 						ada.getStringInConfig("ban.time.calculator").replaceAll("%reliability%", String.valueOf(relia))
-								.replaceAll("%alert%", String.valueOf(np.getWarn(cheat))))
+								.replaceAll("%alert%", String.valueOf(np.getWarn(cheat))
+									.replaceAll("%all_alert%", "" + np.getAllWarn(cheat))))
 						.toString());
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 			if (BAN_SUPPORT.size() > 0) {
-				for (BanPluginSupport bp : BAN_SUPPORT) {
-					if (np.getAccount().getBanRequest().size() >= ada.getIntegerInConfig("ban.def.ban_time"))
-						bp.banDef(np, "Cheat (" + cheat.getName() + ")", "Negativity");
-					else
-						bp.ban(np, "Cheat (" + cheat.getName() + ")", "Negativity", i);
-				}
-			} else
-				new BanRequest(np.getAccount(), "Cheat (" + cheat.getName() + ")", i,
+				new BanRequest(np.getAccount(), "Cheat (" + np.getReason(cheat) + ")", i,
 						np.getAccount().getBanRequest().size() >= ada.getIntegerInConfig("ban.def.ban_time"),
-						BanType.PLUGIN, cheat.getName(), "Negativity", false).execute();
+						BanType.PLUGIN, np.getReason(cheat), "Negativity", false).execute();
+			} else
+				new BanRequest(np.getAccount(), "Cheat (" + np.getReason(cheat) + ")", i,
+						np.getAccount().getBanRequest().size() >= ada.getIntegerInConfig("ban.def.ban_time"),
+						banType, np.getReason(cheat), "Negativity", false).execute();
 		}
 	}
 
@@ -87,23 +86,27 @@ public class Ban {
 		banDir = new File(adapter.getDataFolder(), adapter.getStringInConfig("ban.file.dir"));
 		if (!(banActive = adapter.getBooleanInConfig("ban.active")))
 			return;
-		String storage = adapter.getStringInConfig("ban.storage");
+		String storage = adapter.getStringInConfig("ban.type");
 		if (storage == null) {
 			adapter.log(
 					"Some line is missing in the configuration file. Please, remove it then restart your server to get all configuration line.");
 			return;
 		}
 		if (storage.equalsIgnoreCase("file")) {
-			banActiveIsFile = true;
+			banType = BanType.FILE;
 		} else if (storage.equalsIgnoreCase("db") || storage.equalsIgnoreCase("database")) {
-			banActiveIsFile = false;
+			banType = BanType.DATABASE;
+		} else if (storage.equalsIgnoreCase("command") || storage.equalsIgnoreCase("cmd")) {
+			banType = BanType.COMMAND;
+		} else if (storage.equalsIgnoreCase("other") || storage.equalsIgnoreCase("other_pl") || storage.equalsIgnoreCase("pl")) {
+			banType = BanType.PLUGIN;
 		} else {
 			adapter.error("Error while loading ban system. " + storage + " is an undefined storage type.");
 			adapter.error("Please, write a good storage type in the configuration, then restart you server.");
 			banActive = false;
 			return;
 		}
-		if (banActiveIsFile)
+		if (banType.equals(BanType.FILE))
 			if (!banDir.exists())
 				banDir.mkdirs();
 		DB_CONTENT.putAll(adapter.getKeysListInConfig("ban.db.other"));

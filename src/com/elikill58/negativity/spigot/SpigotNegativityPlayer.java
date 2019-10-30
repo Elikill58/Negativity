@@ -46,6 +46,7 @@ import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -105,6 +106,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			file = YamlConfiguration.loadConfiguration(
 					configFile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath()
 							+ File.separator + "user" + File.separator + uuid + ".yml"));
+			file.set("playername", p.getName());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -271,6 +273,17 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		for (Cheat c : Cheat.values())
 			startAnalyze(c);
 	}
+	
+	@Override
+	public String getReason(Cheat c) {
+		String n = "";
+		for(Cheat all : Cheat.values())
+			if(getAllWarn(all) > 5)
+				n = n + (n.equals("") ? "" : ", ") + all.getName();
+		if(!n.contains(c.getName()))
+			n = n + (n.equals("") ? "" : ", ") + c.getName();
+		return n;
+	}
 
 	public void makeAppearEntities() {
 		if (!ACTIVE_CHEAT.contains(Cheat.fromString("FORCEFIELD").get())
@@ -355,11 +368,23 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return online.get(new Random().nextInt(online.size())).getName();
 	}
 
+	public List<FakePlayer> getFakePlayers() {
+		return new ArrayList<>(FAKE_PLAYER);
+	}
+
 	public void removeFakePlayer(FakePlayer fp) {
 		if (!FAKE_PLAYER.contains(fp))
 			return;
 
 		FAKE_PLAYER.remove(fp);
+		fakePlayerTouched++;
+		long diff = System.currentTimeMillis() - timeStartFakePlayer;
+		double diffSec = diff / 1000;
+		if(fakePlayerTouched >= 20 && fakePlayerTouched >= diffSec) {
+			SpigotNegativity.alertMod(ReportType.VIOLATION, getPlayer(), Cheat.fromString("FORCEFIELD").get(), Utils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
+		} else if(fakePlayerTouched >= 5 && fakePlayerTouched >= diffSec) {
+			SpigotNegativity.alertMod(ReportType.WARNING, getPlayer(), Cheat.fromString("FORCEFIELD").get(), Utils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
+		}
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);
 		if (l >= 3000) {
 			if (FAKE_PLAYER.size() == 0) {
@@ -651,9 +676,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		fightTask = Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 			@Override
 			public void run() {
-				isInFight = false;
+				unfight();
 			}
-		}, 40);
+		}, 80);
 	}
 
 	public void unfight() {

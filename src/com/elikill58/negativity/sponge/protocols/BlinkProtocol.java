@@ -9,6 +9,7 @@ import org.spongepowered.api.item.ItemTypes;
 
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.NegativityPlayer;
 
 public class BlinkProtocol extends Cheat {
 
@@ -24,5 +25,10 @@ public class BlinkProtocol extends Cheat {
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p){
 		SpongeNegativityPlayer.getNegativityPlayer(p).bypassBlink = false;
+	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
 	}
 }

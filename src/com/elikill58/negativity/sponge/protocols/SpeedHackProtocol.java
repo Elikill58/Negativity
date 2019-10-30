@@ -63,4 +63,9 @@ public class SpeedHackProtocol extends Cheat {
 	public void onEntityDamage(DamageEntityEvent e, @First Player p) {
 		SpongeNegativityPlayer.getNegativityPlayer(p).BYPASS_SPEED = 2;
 	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
+	}
 }

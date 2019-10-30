@@ -1,12 +1,15 @@
 package com.elikill58.negativity.spigot.packets;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.utils.Utils;
 
 public abstract class PacketHandler {
 
@@ -64,6 +67,17 @@ public abstract class PacketHandler {
 					break;
 				case "PacketPlayInUseEntity":
 					np.USE_ENTITY++;
+					try {
+						Object pa = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayInUseEntity").cast(packet.getPacket());
+						Field f = pa.getClass().getDeclaredField("a");
+						f.setAccessible(true);
+						int id = f.getInt(pa);
+						for(FakePlayer fp : np.getFakePlayers())
+							if(fp.getEntityId() != id)
+								np.removeFakePlayer(fp);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 					break;
 				case "PacketPlayInEntityAction":
 					np.ENTITY_ACTION++;

@@ -193,24 +193,30 @@ time_between_alert: 2000
 
 ban:
   active: false
+  # Which type of ban is used.
+  # Type available :
+  # file : Save directly in /ban/
+  # database : Save in database (check behind). For database, don't forget to edit the login information
+  # command : Run command to ban
+  # other : Use other plugin
+  #
+  type: "file"
   # To use other plugin
   other_plugin:
     # You must to active ban just above
     active: false
     # Available plugin : Essentials, MaxBans & AdvancedBan
-    # Write nothing to don't use it
     plugin_used: "APlugin"
-    # If you write nothing, Negativity will not do anything
-    # Available place holders:
-    # %uuid% : uuid of banned player
-    # %name% : name of banned player
-    # %ip% : ip of the banned player
-    # %reason% : detected cheat
-    # %alert% : number of alert for detected cheat
-    # %all_alert% : all alert for the detected cheat since you add Negativity on your server
-    command_to_run: "" # example : "/ban %uuid% %reason%"
-  # Where he save ban (file or database). For database, don't forget to edit the login information
-  storage: "file"
+  # If you write nothing, Negativity will not do anything
+  # Available place holders:
+  # %uuid% : uuid of banned player
+  # %name% : name of banned player
+  # %ip% : ip of the banned player
+  # %reason% : detected cheat
+  # %alert% : number of alert for detected cheat
+  # %all_alert% : all alert for the detected cheat since you add Negativity on your server
+  command_ban: "" # example : "/ban %uuid% %reason%"
+  command_unban: "" # example : "/unban %uuid% %reason%"
   # If you want to destroy BDD line / File line
   destroy_when_unban: false
   # Need to be banned

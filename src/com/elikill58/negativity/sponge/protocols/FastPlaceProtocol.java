@@ -37,4 +37,9 @@ public class FastPlaceProtocol extends Cheat {
 		}
 
 	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
+	}
 }

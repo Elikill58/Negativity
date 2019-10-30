@@ -37,4 +37,5 @@ public abstract class NegativityPlayer {
 	public abstract boolean isOp();
 	public abstract void setLang(String newLang);
 	public abstract String getIP();
+	public abstract String getReason(Cheat c);
 }

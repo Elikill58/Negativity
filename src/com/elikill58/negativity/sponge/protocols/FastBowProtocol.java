@@ -15,6 +15,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class FastBowProtocol extends Cheat {
@@ -52,5 +53,10 @@ public class FastBowProtocol extends Cheat {
 			}
 			np.LAST_SHOT_BOW = actual;
 		}
+	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
 	}
 }

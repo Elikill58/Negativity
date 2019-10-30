@@ -41,6 +41,8 @@ public abstract class Cheat {
 	public String getName() {
 		return name;
 	}
+	
+	public abstract String getHoverFor(NegativityPlayer np);
 
 	public boolean isActive() {
 		return Adapter.getAdapter().getBooleanInConfig("cheats." + key + ".isActive");

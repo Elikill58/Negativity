@@ -13,6 +13,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 @SuppressWarnings("deprecation")
@@ -60,5 +61,10 @@ public class FastBowProtocol extends Cheat implements Listener {
 	public void onShot(EntityShootBowEvent e){
 		if(e.getEntity() instanceof Player)
 			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).flyingReason = FlyingReason.BOW;
+	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
 	}
 }

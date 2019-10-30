@@ -51,4 +51,9 @@ public class NoSlowDownProtocol extends Cheat {
 				e.setToTransform(new Transform<>(new Location<World>(from.getExtent(), fl.getX() / 2, fl.getY() / 2, fl.getZ()).add(0, 0.5, 0)));
 		}
 	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
+	}
 }

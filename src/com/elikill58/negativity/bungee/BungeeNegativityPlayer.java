@@ -105,4 +105,10 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	public int getAllWarn(Cheat c) {
 		return 0;
 	}
+
+	@Override
+	public String getReason(Cheat c) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

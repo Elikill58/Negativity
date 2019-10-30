@@ -103,6 +103,9 @@ public class DefaultConfigValue {
 		INTS.put("time_between_report", 1000);
 
 		BOOLEANS.put("ban.active", false);
+		STRINGS.put("ban.type", "file");
+		STRINGS.put("ban.command_ban", "");
+		STRINGS.put("ban.command_unban", "");
 		BOOLEANS.put("ban.destroy_when_unban", false);
 		INTS.put("ban.reliability_need", 90);
 		INTS.put("ban.alert_need", 5);

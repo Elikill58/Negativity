@@ -14,6 +14,7 @@ import java.util.UUID;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanRequest;
+import com.elikill58.negativity.universal.ban.BanRequest.BanType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 /**
@@ -93,7 +94,7 @@ public class NegativityAccount {
 			return;
 		gettedBan = true;
 		banRequest.clear();
-		if (Ban.banActiveIsFile) {
+		if (Ban.banType.equals(BanType.FILE)) {
 			File banFile = new File(Ban.banDir.getAbsolutePath(), getUUID() + ".txt");
 			if (!banFile.exists())
 				return;
@@ -103,8 +104,7 @@ public class NegativityAccount {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-		}
-		if (!Ban.banActiveIsFile) {
+		} else if (Ban.banType.equals(BanType.DATABASE)) {
 			Adapter ada = Adapter.getAdapter();
 			try (PreparedStatement stm = Database.getConnection()
 						.prepareStatement("SELECT * FROM " + Database.table_ban + " WHERE " + ada.getStringInConfig("ban.db.column.uuid") + " = ?")) {
@@ -122,7 +122,7 @@ public class NegativityAccount {
 					} catch (SQLException sqlexce) {}
 					addBanRequest(new BanRequest(this, rs.getString(ada.getStringInConfig("ban.db.column.reason")),
 							rs.getInt(ada.getStringInConfig("ban.db.column.time")),
-							rs.getBoolean(ada.getStringInConfig("ban.db.column.def")), BanRequest.BanType.UNKNOW,
+							rs.getBoolean(ada.getStringInConfig("ban.db.column.def")), BanRequest.BanType.DATABASE,
 							hasCheatDetect ? rs.getString(ada.getStringInConfig("ban.db.column.cheat_detect")) : "Unknow",
 							hasBy ? rs.getString(ada.getStringInConfig("ban.db.column.by")) : "console", false));
 				}

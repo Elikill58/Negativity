@@ -10,6 +10,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
@@ -49,6 +50,10 @@ public class ProtocollibSupport {
 							np.ARM++;
 						} else if (e.getPacketType().equals(PacketType.Play.Client.USE_ENTITY)) {
 							np.USE_ENTITY++;
+							int id = e.getPacket().getIntegers().getValues().get(0);
+							for(FakePlayer fp : np.getFakePlayers())
+								if(fp.getEntityId() != id)
+									np.removeFakePlayer(fp);
 						} else if (e.getPacketType().equals(PacketType.Play.Client.ENTITY_ACTION)) {
 							np.ENTITY_ACTION++;
 						} else if (e.getPacketType().equals(PacketType.Play.Client.CUSTOM_PAYLOAD) && !Version.getVersion().isNewerOrEquals(Version.V1_9)) {

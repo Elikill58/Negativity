@@ -52,4 +52,9 @@ public class PhaseProtocol extends Cheat {
 							+ "). Warn: " + np.getWarn(this));
 		}
 	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
+	}
 }

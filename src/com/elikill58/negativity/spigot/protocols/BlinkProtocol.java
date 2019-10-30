@@ -8,6 +8,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.NegativityPlayer;
 
 public class BlinkProtocol extends Cheat implements Listener {
 	
@@ -23,5 +24,10 @@ public class BlinkProtocol extends Cheat implements Listener {
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e){
 		SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer()).bypassBlink = false;
+	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
 	}
 }

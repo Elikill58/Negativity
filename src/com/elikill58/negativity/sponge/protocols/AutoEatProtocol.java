@@ -10,6 +10,7 @@ import org.spongepowered.api.item.ItemTypes;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.FlyingReason;
+import com.elikill58.negativity.universal.NegativityPlayer;
 
 public class AutoEatProtocol extends Cheat {
 
@@ -22,5 +23,10 @@ public class AutoEatProtocol extends Cheat {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		np.flyingReason = FlyingReason.EAT;
 		np.eatMaterial = p.getItemInHand(HandTypes.MAIN_HAND).get().getType();
+	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
 	}
 }

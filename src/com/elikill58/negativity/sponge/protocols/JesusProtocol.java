@@ -112,4 +112,9 @@ public class JesusProtocol extends Cheat {
 		}
 		return false;
 	}
+	
+	@Override
+	public String getHoverFor(NegativityPlayer p) {
+		return "";
+	}
 }

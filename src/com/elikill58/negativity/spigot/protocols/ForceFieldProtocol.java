@@ -9,11 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 
-import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -58,52 +55,6 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		}
 	}
 
-	/*@EventHandler(priority = EventPriority.LOWEST)
-	public void manageFakePlayer(EntityDamageByEntityEvent e) {
-		if(!(e.getDamager() instanceof Player))
-			return;
-		Player p = (Player) e.getDamager();
-		UUID uuid = e.getEntity().getUniqueId();
-		for (FakePlayer temp : SpigotNegativityPlayer.getNegativityPlayer(p).FAKE_PLAYER) {
-			
-			if(temp.getId() == uuid) {
-				p.sendMessage(ChatColor.GREEN + "hitted fake player");
-			}
-		}
-	}*/
-	
-	@EventHandler
-	public void event(PlayerInteractEvent e) {
-		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(this))
-			return;
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
-			return;
-		if (!e.getAction().equals(Action.LEFT_CLICK_AIR))
-			return;
-		Location ploc = p.getLocation(), eyeloc = p.getEyeLocation();
-		FakePlayer c = null;
-		double distanceWithPlayer = 500, distanceWithEye = 500;
-		for (FakePlayer temp : np.FAKE_PLAYER) {
-			Location cloc = temp.getLocation();
-			double nextDistanceWithPlayer = ploc.distance(cloc), nextDistanceWithEye = eyeloc.distance(cloc);
-			if (nextDistanceWithPlayer < distanceWithPlayer && nextDistanceWithPlayer < 10) {
-				distanceWithPlayer = nextDistanceWithPlayer;
-				c = temp;
-			} else if (nextDistanceWithEye < distanceWithEye && nextDistanceWithEye < 10) {
-				distanceWithEye = nextDistanceWithEye;
-				c = temp;
-			}
-		}
-		if (c == null)
-			return;
-
-		np.fakePlayerTouched++;
-		c.hide(p);
-		manageForcefieldForFakeplayer(p, np);
-	}
-
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {
 		if (np.fakePlayerTouched < 5)
 			return;
@@ -117,6 +68,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
-		return "";
+		SpigotNegativityPlayer np = (SpigotNegativityPlayer) p;
+		return np.fakePlayerTouched + " fake players touched in " + (System.currentTimeMillis() - np.timeStartFakePlayer) + " ms";
 	}
 }

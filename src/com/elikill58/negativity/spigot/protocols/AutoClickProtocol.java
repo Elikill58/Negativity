@@ -68,6 +68,6 @@ public class AutoClickProtocol extends Cheat implements Listener {
 	
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
-		return "";
+		return ((SpigotNegativityPlayer) p).ACTUAL_CLICK + " clicks";
 	}
 }

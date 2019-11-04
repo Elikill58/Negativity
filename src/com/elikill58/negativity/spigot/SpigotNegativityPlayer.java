@@ -392,9 +392,13 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
 				fakePlayerTouched = 0;
 			}
+		} else if(fakePlayerTouched < 100) {
+			spawnRandom();
+			spawnRandom();
 		} else {
-			spawnRandom();
-			spawnRandom();
+			timeStartFakePlayer = 0;
+			ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
+			fakePlayerTouched = 0;
 		}
 	}
 

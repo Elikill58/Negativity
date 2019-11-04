@@ -7,6 +7,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 public abstract class NegativityPlayer {
 
 	private final UUID playerId;
+	private boolean isBanned = false;
 
 	public NegativityPlayer(UUID playerId) {
 		this.playerId = playerId;
@@ -18,6 +19,14 @@ public abstract class NegativityPlayer {
 	
 	public UUID getUUID() {
 		return playerId;
+	}
+	
+	public boolean isBanned() {
+		return isBanned;
+	}
+	
+	public void setBanned(boolean b) {
+		isBanned = b;
 	}
 
 	public abstract Object getPlayer();

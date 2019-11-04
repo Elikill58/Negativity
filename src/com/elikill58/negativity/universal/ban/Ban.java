@@ -51,6 +51,7 @@ public class Ban {
 		if (!(ada.getIntegerInConfig("ban.reliability_need") <= relia
 				&& ada.getIntegerInConfig("ban.alert_need") <= np.getAllWarn(cheat)))
 			return;
+		np.setBanned(true);
 		String tempCmd = ada.getStringInConfig("ban.other_plugin.command_to_run");
 		if (!tempCmd.equalsIgnoreCase("")) {
 			ada.runConsoleCommand(tempCmd.replaceAll("%uuid%", np.getUUID().toString()).replaceAll("%ip%", np.getIP())

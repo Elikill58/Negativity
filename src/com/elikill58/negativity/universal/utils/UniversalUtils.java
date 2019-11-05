@@ -152,6 +152,7 @@ public class UniversalUtils {
 			url.openConnection();
 			return true;
 		} catch (Exception e) {
+			Stats.STATS_IN_MAINTENANCE = true;
 			return false;
 		}
 	}

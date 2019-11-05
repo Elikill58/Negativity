@@ -85,7 +85,7 @@ public class FakePlayer {
 			public void run() {
 				hide(p);
 			}
-		}, 40);
+		}, 5);
 		return this;
 	}
 	
@@ -102,7 +102,7 @@ public class FakePlayer {
 		}
 
 		if (SpigotNegativityPlayer.contains(p)) {
-			SpigotNegativityPlayer.getNegativityPlayer(p).removeFakePlayer(this);
+			SpigotNegativityPlayer.getNegativityPlayer(p).removeFakePlayer(this, false);
 		}
 	}
 	

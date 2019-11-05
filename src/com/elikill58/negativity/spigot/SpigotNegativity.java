@@ -180,8 +180,8 @@ public class SpigotNegativity extends JavaPlugin {
 			@Override
 			public void run() {
 				Stats.loadStats();
-				Stats.updateStats(StatsType.ONLINE, 1);
-				Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort());
+				Stats.updateStats(StatsType.ONLINE, 1 + "");
+				Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort() + "");
 			}
 		});
 		ada.loadLang();
@@ -286,7 +286,7 @@ public class SpigotNegativity extends JavaPlugin {
 			PacketListenerAPI.removePlayer(p);
 		}
 		Database.close();
-		Stats.updateStats(StatsType.ONLINE, 0);
+		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		invTimer.cancel();
 		clickTimer.cancel();
 		packetTimer.cancel();
@@ -297,13 +297,13 @@ public class SpigotNegativity extends JavaPlugin {
 	public static SpigotNegativity getInstance() {
 		return INSTANCE;
 	}
-
+	
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, "");
+		return alertMod(type, p, c, reliability, proof, "", "");
 	}
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
-			String hover_proof) {
+			String hover_proof, String stats_send) {
 		if(!c.isActive())
 			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
@@ -342,6 +342,7 @@ public class SpigotNegativity extends JavaPlugin {
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
+		Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			Bukkit.getPluginManager().callEvent(kick);

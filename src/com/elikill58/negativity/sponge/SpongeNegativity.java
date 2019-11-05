@@ -138,8 +138,8 @@ public class SpongeNegativity implements RawDataListener {
 				public void run() {
 					try {
 						Stats.loadStats();
-						Stats.updateStats(StatsType.ONLINE, 1);
-						Stats.updateStats(StatsType.PORT, Sponge.getServer().getBoundAddress().get().getPort());
+						Stats.updateStats(StatsType.ONLINE, 1 + "");
+						Stats.updateStats(StatsType.PORT, Sponge.getServer().getBoundAddress().get().getPort() + "");
 					} catch (Exception e) {
 
 					}
@@ -154,7 +154,7 @@ public class SpongeNegativity implements RawDataListener {
 			Task.builder().async().delayTicks(1).execute(new Runnable() {
 				@Override
 				public void run() {
-					Stats.updateStats(StatsType.ONLINE, 0);
+					Stats.updateStats(StatsType.ONLINE, 0 + "");
 				}
 			}).submit(this);
 		Database.close();
@@ -408,15 +408,19 @@ public class SpongeNegativity implements RawDataListener {
 			if (!kick.isCancelled())
 				p.kick(Messages.getMessage(p, "kick", "%cheat%", c.getName()));
 		}
-		if (log)
-			INSTANCE.getLogger()
-					.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
-							+ ")  (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
-							+ reliability);
+		if(np.isBanned())
+			return false;
 		Ban.manageBan(c, np, reliability);
+		if (Ban.isBanned(np.getAccount()))
+			return false;
 		if (isOnBungeecord)
 			sendMessage(p, c.getName(), reliability, ping, hover_proof);
 		else {
+			if (log)
+				INSTANCE.getLogger()
+						.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
+								+ ")  (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
+								+ reliability);
 			for (Player pl : Utils.getOnlinePlayers())
 				if (Perm.hasPerm(np, "showAlert")) {
 					pl.sendMessage(Text

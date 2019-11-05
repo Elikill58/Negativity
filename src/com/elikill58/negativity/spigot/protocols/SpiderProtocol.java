@@ -22,6 +22,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 				"wall");
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
@@ -40,7 +41,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		if (!underPlayer.equals(Material.AIR) || !underUnder.equals(Material.AIR) || playerLocType.equals(Material.VINE)
 				|| playerLocType.equals(Material.LADDER) || underPlayer.equals(Material.VINE)
 				|| underPlayer.equals(Material.LADDER) || m3.equals(Material.VINE) || m3.equals(Material.LADDER)
-				|| !playerLocType.equals(Material.AIR))
+				|| !playerLocType.equals(Material.AIR) || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
 		double y = e.getTo().getY() - e.getFrom().getY(), last = np.lastY;
 		np.lastY = y;

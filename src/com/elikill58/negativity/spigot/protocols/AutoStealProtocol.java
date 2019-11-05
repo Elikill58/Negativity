@@ -54,7 +54,7 @@ public class AutoStealProtocol extends Cheat implements Listener {
 			return;
 		if((ping + TIME_CLICK) >= dif && tempSlot != e.getRawSlot()){
 			if(np.lastClickInv){
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent((100 + TIME_CLICK) - dif - ping), "Time between 2 click: " + dif + ". Ping: " + ping, "Time between 2 clicks: " + dif + "ms");
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent((100 + TIME_CLICK) - dif - ping), "Time between 2 click: " + dif + ". Ping: " + ping, "Time between 2 clicks: " + dif + "ms", "Time between 2 clicks: " + dif + "ms");
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}
@@ -73,7 +73,7 @@ public class AutoStealProtocol extends Cheat implements Listener {
 			return;
 		int ping = Utils.getPing(p), dif = (int) (System.currentTimeMillis() - np.LAST_CLICK_INV);
 		if((dif + ping) <= TIME_CLICK && dif > 0)
-			SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent((100 + TIME_CLICK) - (dif * 1.5) - ping), "Time between last click and close inv: " + dif + ". Ping: " + ping);
+			SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent((100 + TIME_CLICK) - (dif * 1.5) - ping), "Time between last click and close inv: " + dif + ". Ping: " + ping, "", "");
 	}
 	
 	@Override

@@ -24,6 +24,7 @@ public class StepProtocol extends Cheat implements Listener {
 		super("STEP", false, Material.BRICK_STAIRS, true, true);
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
@@ -32,7 +33,7 @@ public class StepProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if ((System.currentTimeMillis() - np.launchFirework) < 1000 || np.hasElytra())
+		if ((System.currentTimeMillis() - np.launchFirework) < 1000 || np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double dif = from.getY() - to.getY();

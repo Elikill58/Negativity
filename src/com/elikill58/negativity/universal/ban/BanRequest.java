@@ -19,6 +19,8 @@ import org.bukkit.Bukkit;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.Stats;
+import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.support.BanPluginSupport;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -142,6 +144,7 @@ public class BanRequest {
 	}
 
 	public void execute() {
+		Stats.updateStats(StatsType.BAN, "");
 		Adapter ada = Adapter.getAdapter();
 		NegativityPlayer nPlayer = ada.getNegativityPlayer(np.getPlayerId());
 		if (nPlayer != null && Perm.hasPerm(nPlayer, "notBanned"))

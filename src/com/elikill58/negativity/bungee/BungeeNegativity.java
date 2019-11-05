@@ -33,11 +33,10 @@ public class BungeeNegativity extends Plugin {
 		UniversalUtils.init();
 		BungeeMessages.load(this);
 		Stats.loadStats();
-		Stats.updateStats(StatsType.ONLINE, 1);
+		Stats.updateStats(StatsType.ONLINE, 1 + "");
 		try {
-			Stats.updateStats(StatsType.PORT,
-					((LinkedHashMap<?, ?>) ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(getDataFolder().getParentFile().getParentFile(), "config.yml"))
-							.getList("listeners").get(0)).get("query_port"));
+			Stats.updateStats(StatsType.PORT, ((LinkedHashMap<?, ?>) ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(getDataFolder().getParentFile().getParentFile(), "config.yml"))
+							.getList("listeners").get(0)).get("query_port") + "");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -46,7 +45,7 @@ public class BungeeNegativity extends Plugin {
 	@Override
 	public void onDisable() {
 		Database.close();
-		Stats.updateStats(StatsType.ONLINE, 0);
+		Stats.updateStats(StatsType.ONLINE, 0 + "");
 	}
 
 	protected boolean enableConfig() {

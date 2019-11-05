@@ -26,6 +26,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 		super("SPEED", false, Material.BEACON, true, true, "speed", "speedhack");
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
@@ -38,7 +39,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)
 				|| p.getEntityId() == 100 || p.getVehicle() != null || p.getAllowFlight() || from.getY() > to.getY()
 				|| p.getWalkSpeed() > 2.0F || p.getFlySpeed() > 3.0F || p.hasPotionEffect(PotionEffectType.SPEED)
-				|| p.isInsideVehicle() || np.hasElytra() || hasEnderDragonAround(p))
+				|| p.isInsideVehicle() || np.hasElytra() || hasEnderDragonAround(p) || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
 		if (np.BYPASS_SPEED != 0) {
 			np.BYPASS_SPEED--;
@@ -56,7 +57,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 				type = ReportType.VIOLATION;
 			mayCancel = SpigotNegativity.alertMod(type, p, this, Utils.parseInPorcent(y * 100 * 2),
 					"Player in ground. WalkSpeed: " + p.getWalkSpeed() + " Distance between from/to location: " + y,
-					"Distance Last/New position: " + y + "\n(With same Y)\nPlayer on ground");
+					"Distance Last/New position: " + y + "\n(With same Y)\nPlayer on ground", "Distance Last-New position: " + y);
 
 		} else if (!p.isOnGround() && y >= 0.85D) {
 			ReportType type = ReportType.WARNING;
@@ -64,7 +65,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 				type = ReportType.VIOLATION;
 			mayCancel = SpigotNegativity.alertMod(type, p, this, Utils.parseInPorcent(y * 100 * 2),
 					"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed() + " Distance between from/to location: " + y,
-					"Distance Last/New position: " + y + "\n(With same Y)\nPlayer jumping");
+					"Distance Last/New position: " + y + "\n(With same Y)\nPlayer jumping", "Distance Last-New position: " + y);
 		}
 		if (isSetBack() && mayCancel)
 			e.setCancelled(true);

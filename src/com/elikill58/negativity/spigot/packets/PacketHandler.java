@@ -74,7 +74,7 @@ public abstract class PacketHandler {
 						int id = f.getInt(pa);
 						for(FakePlayer fp : np.getFakePlayers())
 							if(fp.getEntityId() != id)
-								np.removeFakePlayer(fp);
+								np.removeFakePlayer(fp, true);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

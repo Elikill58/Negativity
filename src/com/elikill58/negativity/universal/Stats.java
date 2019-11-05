@@ -17,12 +17,31 @@ public class Stats {
 
     public static final String SITE = "https://eliapp.fr/", SITE_UPDATE = "https://api.eliapp.fr/";
     static final String SITE_FILE = SITE_UPDATE + "negativity.php";
-    static boolean STATS_IN_MAINTENANCE = false;
+    public static boolean STATS_IN_MAINTENANCE = false;
 
-	public static void updateStats(StatsType type, Object value) {
+    public static void updateStats(StatsType type, String... value) {
+    	String post = "&";
+    	switch (type) {
+		case BAN:
+			post = "&value=" + value[0];
+			break;
+		case CHEAT:
+			post = "&hack=" + value[0] + "&reliability=" + value[1] + "&comment=" + value[2];
+			break;
+		case ONLINE:
+			post = "&value=" + value[0];
+			break;
+		case PORT:
+			post = "&value=" + value[0];
+			break;
+		}
+    	sendUpdateStats(type, "platform=" + Adapter.getAdapter().getName() + "&type=" + type.getKey() + post);
+    }
+    
+	private static void sendUpdateStats(StatsType type, String post) {
 		if(STATS_IN_MAINTENANCE)
 			return;
-		if (!UniversalUtils.hasInternet() || !UniversalUtils.statsServerOnline())
+		if (!UniversalUtils.statsServerOnline())
 			return;
 		new Thread() {
 			public void run() {
@@ -31,7 +50,7 @@ public class Stats {
 		            UniversalUtils.doTrustToCertificates();
 					conn.setDoOutput(true);
 					OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-					writer.write("from=negativity&type=" + type.getKey() + "&" + type.getKey() + "=" + value);
+					writer.write(post);//"platform=" + Adapter.getAdapter().getName() + "&type=" + type.getKey() + "&value=" + value + more);
 					writer.flush();
 					writer.close();
 					BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -39,9 +58,9 @@ public class Stats {
 					while ((respons = br.readLine()) != null)
 						end += respons;
 					if (!end.equalsIgnoreCase("")) {
-						System.out.println(
-								"[Negativity] Error while updating stats. Please, report this to Elikill58 (Mail: arpetzouille@gmail.com | Discord: @Elikill58#0743 | Twitter: @Elikill58 / @elinegativity");
-						System.out.println(end);
+						Adapter.getAdapter().log(
+								"Error while updating stats. Please, report this to Elikill58 (Mail: arpetzouille@gmail.com | Discord: @Elikill58#0743 | Twitter: @Elikill58 / @elinegativity");
+						Adapter.getAdapter().log(end);
 					}
 					br.close();
 				} catch (Exception e) {
@@ -53,7 +72,7 @@ public class Stats {
 
 	public static void loadStats() {
 		if(!UniversalUtils.hasInternet())
-			STATS_IN_MAINTENANCE = false;
+			STATS_IN_MAINTENANCE = true;
 		new Thread() {
 			public void run() {
 				try {
@@ -81,7 +100,7 @@ public class Stats {
 	}
 	
 	public static enum StatsType {
-		ONLINE("online"), PORT("port");
+		ONLINE("online"), PORT("port"), CHEAT("cheat"), BAN("ban");
 
 		private String key;
 

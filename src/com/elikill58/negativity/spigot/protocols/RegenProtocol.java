@@ -55,17 +55,10 @@ public class RegenProtocol extends Cheat implements Listener {
 		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && np.ACTIVE_CHEAT.contains(this) && (np.LAST_REGEN != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))) {
 			int ping = Utils.getPing(p);
 			if (dif < (Version.getVersion().getTimeBetweenTwoRegenFromVersion() + ping)) {
-				boolean mayCancel = false;
-				if (dif < (50 + ping))
-					mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
+				boolean mayCancel = SpigotNegativity.alertMod(dif < (50 + ping) ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 							Utils.parseInPorcent(200 - dif - ping), "Player regen, last regen: " + np.LAST_REGEN
 									+ " Actual time: " + actual + " Difference: " + dif + "ms",
-							"Time between two regen: " + dif + " (in milliseconds)");
-				else
-					mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
-							Utils.parseInPorcent(100 - dif - ping), "Player regen, last regen: " + np.LAST_REGEN
-									+ " Actual time: " + actual + " Difference: " + dif + "ms",
-							"Time between two regen: " + dif + " (in milliseconds)");
+							"Time between two regen: " + dif + " (in milliseconds)", "");
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}

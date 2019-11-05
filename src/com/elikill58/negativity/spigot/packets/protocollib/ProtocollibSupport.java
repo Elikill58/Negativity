@@ -53,7 +53,7 @@ public class ProtocollibSupport {
 							int id = e.getPacket().getIntegers().getValues().get(0);
 							for(FakePlayer fp : np.getFakePlayers())
 								if(fp.getEntityId() != id)
-									np.removeFakePlayer(fp);
+									np.removeFakePlayer(fp, true);
 						} else if (e.getPacketType().equals(PacketType.Play.Client.ENTITY_ACTION)) {
 							np.ENTITY_ACTION++;
 						} else if (e.getPacketType().equals(PacketType.Play.Client.CUSTOM_PAYLOAD) && !Version.getVersion().isNewerOrEquals(Version.V1_9)) {
@@ -75,7 +75,7 @@ public class ProtocollibSupport {
 				if(channelCheckAntiJigsaw.contains(channel)) {
 					e.setCancelled(true);
 					SpigotNegativity.alertMod(np.already_jigsaw ? ReportType.VIOLATION : ReportType.WARNING, np.getPlayer(),
-							Cheat.forKey("EDITED_CLIENT").get(), np.already_jigsaw ? 100 : 80, "Trying to crash the server with " + capacity + " requests. Channel used: " + channel + ", ", "Trying to crash the server with " + capacity + " requests");
+							Cheat.forKey("EDITED_CLIENT").get(), np.already_jigsaw ? 100 : 80, "Trying to crash the server with " + capacity + " requests. Channel used: " + channel + ", ", "Trying to crash the server with " + capacity + " requests", "");
 					if (!np.already_jigsaw)
 						np.already_jigsaw = true;
 				}

@@ -21,19 +21,22 @@ public class TimerTimeBetweenAlert extends BukkitRunnable {
 					np.ALERT_NOT_SHOWED.forEach((c, i) -> {
 						if(i == 0)
 							return;
+						String hover = c.getHoverFor(np);
+						if(hover != "")
+							hover = "\n" + hover;
 						if(i == 1) {
 							new ClickableText().addRunnableHoverEvent(
 									Messages.getMessage(pl, "negativity.alert", "%name%", p.getName(), "%cheat%", c.getName(),
 											"%reliability%", String.valueOf(100)),
 									Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
-											String.valueOf(100), "%ping%", String.valueOf(ping)) + c.getHoverFor(np),
+											String.valueOf(100), "%ping%", String.valueOf(ping)) + hover,
 									"/negativity " + p.getName()).sendToPlayer(pl);
 						} else {
 							new ClickableText().addRunnableHoverEvent(
 									Messages.getMessage(pl, "negativity.alert_multiple", "%name%", p.getName(), "%cheat%", c.getName(),
 											"%reliability%", String.valueOf(100), "%nb%", String.valueOf(i)),
 									Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
-											String.valueOf(100), "%ping%", String.valueOf(ping)) + c.getHoverFor(np),
+											String.valueOf(100), "%ping%", String.valueOf(ping)) + hover,
 									"/negativity " + p.getName()).sendToPlayer(pl);
 						}
 					});

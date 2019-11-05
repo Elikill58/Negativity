@@ -242,7 +242,7 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {
-		SpigotNegativity.alertMod(type, (Player) p, c, reliability, proof, hover_proof);
+		SpigotNegativity.alertMod(type, (Player) p, c, reliability, proof, hover_proof, "");
 	}
 
 	@Override

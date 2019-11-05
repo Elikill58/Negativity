@@ -372,18 +372,20 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return new ArrayList<>(FAKE_PLAYER);
 	}
 
-	public void removeFakePlayer(FakePlayer fp) {
+	public void removeFakePlayer(FakePlayer fp, boolean detected) {
 		if (!FAKE_PLAYER.contains(fp))
 			return;
-
 		FAKE_PLAYER.remove(fp);
+		if(!detected)
+			return;
 		fakePlayerTouched++;
+		System.out.println("[Negativity - SpigotNegativityPlayer] Removing FP " + fp.getEntityId() + " > " + fakePlayerTouched);
 		long diff = System.currentTimeMillis() - timeStartFakePlayer;
 		double diffSec = diff / 1000;
 		if(fakePlayerTouched >= 20 && fakePlayerTouched >= diffSec) {
-			SpigotNegativity.alertMod(ReportType.VIOLATION, getPlayer(), Cheat.fromString("FORCEFIELD").get(), Utils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
+			SpigotNegativity.alertMod(ReportType.VIOLATION, getPlayer(), Cheat.fromString("FORCEFIELD").get(), Utils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
 		} else if(fakePlayerTouched >= 5 && fakePlayerTouched >= diffSec) {
-			SpigotNegativity.alertMod(ReportType.WARNING, getPlayer(), Cheat.fromString("FORCEFIELD").get(), Utils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)",  fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
+			SpigotNegativity.alertMod(ReportType.WARNING, getPlayer(), Cheat.fromString("FORCEFIELD").get(), Utils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
 		}
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);
 		if (l >= 3000) {
@@ -393,7 +395,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 				fakePlayerTouched = 0;
 			}
 		} else if(fakePlayerTouched < 100) {
-			spawnRandom();
 			spawnRandom();
 		} else {
 			timeStartFakePlayer = 0;

@@ -31,21 +31,20 @@ public class TranslatedMessages {
 						.prepareStatement("SELECT * FROM " + Database.table_lang + " WHERE uuid = ?")) {
 					stm.setString(1, np.getUUID());
 					ResultSet result = stm.executeQuery();
-					if (result.next())
-						value = result.getString(column);
+					if (result.next()) {
+						String gettedLang = result.getString(column);
+						for(String tempLang : LANGS)
+							if(gettedLang.equalsIgnoreCase(tempLang) || gettedLang.contains(tempLang))
+								return gettedLang;
+						Adapter.getAdapter().warn("Unknow lang for player " + np.getNegativityPlayer().getName() + ": " + gettedLang);
+					}
 				}
 			}
 
-			if (value.isEmpty()) {
-				value = Adapter.getAdapter().getStringInOtherConfig(File.separator + "user" + File.separator, "lang", np.getUUID() + ".yml");
-			}
+			if (value == "")
+				return Adapter.getAdapter().getStringInOtherConfig(File.separator + "user" + File.separator, "lang", np.getUUID() + ".yml");
 
-			if (value.isEmpty()) {
-				value = DEFAULT_LANG;
-			}
-
-			np.setLang(value);
-			return value;
+			return DEFAULT_LANG;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return DEFAULT_LANG;
@@ -59,13 +58,14 @@ public class TranslatedMessages {
 	public static String getLang(NegativityAccount np) {
 		if (!activeTranslation)
 			return DEFAULT_LANG;
-
 		String playerLang = np.getLang();
 		if (!playerLang.isEmpty()) {
 			return playerLang;
 		}
 
-		return loadLang(np);
+		String temp = loadLang(np);
+		np.setLang(temp);
+		return temp;
 	}
 
 	public static List<String> getStringListFromLang(String lang, String key) {

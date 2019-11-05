@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
@@ -21,8 +20,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.reflection.cache.CacheManager;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
@@ -36,7 +33,7 @@ public class SpigotAdapter extends Adapter {
 	private FileConfiguration config;
 	private JavaPlugin pl;
 	private final HashMap<String, YamlConfiguration> LANGS = new HashMap<>();
-	private final CacheManager accountCache;
+	private HashMap<UUID, NegativityAccount> account = new HashMap<>();
 	/*private LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(10, TimeUnit.MINUTES)
 			.build(new NegativityAccountLoader());*/
@@ -44,7 +41,6 @@ public class SpigotAdapter extends Adapter {
 	public SpigotAdapter(JavaPlugin pl, FileConfiguration config) {
 		this.pl = pl;
 		this.config = config;
-		this.accountCache = CacheManager.getCacheManagerFor(Utils.VERSION);
 	}
 
 	@Override
@@ -222,22 +218,11 @@ public class SpigotAdapter extends Adapter {
 		SpigotNegativity.getInstance().reloadConfig();
 	}
 
-	@Nonnull
-	@Override
-	public NegativityAccount getNegativityAccount(UUID playerId) {
-		return accountCache.get(playerId);
-	}
-
 	@Nullable
 	@Override
 	public NegativityPlayer getNegativityPlayer(UUID playerId) {
 		Player player = Bukkit.getPlayer(playerId);
 		return player != null ? SpigotNegativityPlayer.getNegativityPlayer(player) : null;
-	}
-
-	@Override
-	public void invalidateAccount(UUID playerId) {
-		accountCache.invalidate(playerId);
 	}
 
 	@Override
@@ -248,5 +233,21 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public void runConsoleCommand(String cmd) {
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+	}
+
+	@Override
+	public NegativityAccount getNegativityAccount(UUID playerId) {
+		if(account.containsKey(playerId))
+			return account.get(playerId);
+		else {
+			NegativityAccount na = new NegativityAccount(playerId);
+			account.put(playerId, na);
+			return na;
+		}
+	}
+
+	@Override
+	public void invalidateAccount(UUID playerId) {
+		account.remove(playerId);
 	}
 }

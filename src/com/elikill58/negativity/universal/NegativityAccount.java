@@ -34,7 +34,7 @@ public class NegativityAccount {
 
 	public NegativityAccount(UUID playerId, String lang, boolean gettedBan, List<BanRequest> banRequest) {
 		this.playerId = playerId;
-		this.lang = lang;
+		this.lang = (lang == TranslatedMessages.DEFAULT_LANG ? TranslatedMessages.loadLang(this) : lang);
 		this.gettedBan = gettedBan;
 		this.banRequest = banRequest;
 		this.np = Adapter.getAdapter().getNegativityPlayer(playerId);
@@ -62,8 +62,6 @@ public class NegativityAccount {
 
 	public void setLang(String lang) {
 		this.lang = lang;
-		if(np != null)
-			np.setLang(lang);
 	}
 
 	public boolean hasGettedBan() {

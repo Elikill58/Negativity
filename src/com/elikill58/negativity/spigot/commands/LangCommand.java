@@ -25,14 +25,13 @@ public class LangCommand implements CommandExecutor {
 		} else {
 			if (arg[0].equalsIgnoreCase("help")) {
 				Messages.sendMessage(p, "lang.help");
-			} else if (arg.length == 2) {
-				Messages.sendMessage(p, "lang.help");
+			} else if (arg.length == 1) {
 				String lang = "";
 				for(String tempLang : TranslatedMessages.LANGS)
-					if(tempLang.equalsIgnoreCase(arg[1]))
+					if(tempLang.equalsIgnoreCase(arg[0]) || tempLang.contains(arg[0]))
 						lang = tempLang;
 				if(lang.equalsIgnoreCase("")) {
-					Messages.sendMessage(p, "lang.invalid_lang", "%arg%", arg[1]);
+					Messages.sendMessage(p, "lang.invalid_lang", "%arg%", arg[0]);
 					return false;
 				}
 				if (TranslatedMessages.activeTranslation) {

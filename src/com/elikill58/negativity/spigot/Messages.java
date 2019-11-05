@@ -17,7 +17,7 @@ public class Messages {
 					+ TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
-			System.out.println(TranslatedMessages.getDefaultLang() + " unknow. default: " + Adapter.getAdapter().getStringInConfig("Translation.default") + " Get: " + TranslatedMessages.getDefaultLang());
+			System.out.println(TranslatedMessages.getDefaultLang() + " unknow. default: " + TranslatedMessages.DEFAULT_LANG + " Get: " + TranslatedMessages.getDefaultLang());
 		}
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
 			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
@@ -37,9 +37,13 @@ public class Messages {
 
 	public static void sendMessage(CommandSender p, String dir, String... placeholders) {
 		try {
-			String msg = getMessage(dir, placeholders);
-			if(!msg.equalsIgnoreCase(dir))
-				p.sendMessage(msg);
+			if(p instanceof Player) {
+				sendMessage((Player) p, dir, placeholders);
+			} else {
+				String msg = getMessage(dir, placeholders);
+				if(!msg.equalsIgnoreCase(dir))
+					p.sendMessage(msg);
+			}
 		} catch (Exception e) {
 			p.sendMessage(ChatColor.RED + dir + " not found. (Code error: " + e.getCause() + ")");
 		}

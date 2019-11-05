@@ -379,7 +379,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if(!detected)
 			return;
 		fakePlayerTouched++;
-		System.out.println("[Negativity - SpigotNegativityPlayer] Removing FP " + fp.getEntityId() + " > " + fakePlayerTouched);
 		long diff = System.currentTimeMillis() - timeStartFakePlayer;
 		double diffSec = diff / 1000;
 		if(fakePlayerTouched >= 20 && fakePlayerTouched >= diffSec) {
@@ -390,14 +389,12 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);
 		if (l >= 3000) {
 			if (FAKE_PLAYER.size() == 0) {
-				timeStartFakePlayer = 0;
 				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
 				fakePlayerTouched = 0;
 			}
 		} else if(fakePlayerTouched < 100) {
 			spawnRandom();
 		} else {
-			timeStartFakePlayer = 0;
 			ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
 			fakePlayerTouched = 0;
 		}

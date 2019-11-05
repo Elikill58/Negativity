@@ -75,11 +75,6 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	public int getWarn(Cheat c) {
 		return 0;
 	}
-
-	@Override
-	public void setLang(String s) {
-		
-	}
 	
 	@Override
 	public void startAnalyze(Cheat c) {

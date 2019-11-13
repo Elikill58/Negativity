@@ -28,6 +28,8 @@ public class BungeeNegativity extends Plugin {
 		new Metrics(this);
 		enableConfig();
 		getProxy().registerChannel("custom:negativity");
+		getProxy().registerChannel("Negativity");
+		getProxy().registerChannel("negativity");
 		getProxy().getPluginManager().registerListener(this, new NegativityListener());
 		Adapter.setAdapter(new BungeeAdapter(this, CONFIG));
 		UniversalUtils.init();

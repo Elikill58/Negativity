@@ -21,7 +21,7 @@ public class Ban {
 	public static boolean banActive;
 	public static BanType banType = BanType.UNKNOW;
 	public static final HashMap<String, String> DB_CONTENT = new HashMap<>();
-	public static List<BanPluginSupport> BAN_SUPPORT = new ArrayList<>();
+	public static final List<BanPluginSupport> BAN_SUPPORT = new ArrayList<>();
 
 	public static boolean isBanned(NegativityAccount np) {
 		if (!banActive)
@@ -83,6 +83,7 @@ public class Ban {
 	}
 
 	public static void init() {
+		DB_CONTENT.clear();
 		Adapter adapter = Adapter.getAdapter();
 		banDir = new File(adapter.getDataFolder(), adapter.getStringInConfig("ban.file.dir"));
 		if (!(banActive = adapter.getBooleanInConfig("ban.active")))
@@ -90,11 +91,13 @@ public class Ban {
 		String storage = adapter.getStringInConfig("ban.type");
 		if (storage == null) {
 			adapter.log(
-					"Some line is missing in the configuration file. Please, remove it then restart your server to get all configuration line.");
+					"Some line is missing in the configuration file. Please, remove config.yml then restart your server to get all configuration line.");
 			return;
 		}
 		if (storage.equalsIgnoreCase("file")) {
 			banType = BanType.FILE;
+			if (!banDir.exists())
+				banDir.mkdirs();
 		} else if (storage.equalsIgnoreCase("db") || storage.equalsIgnoreCase("database")) {
 			banType = BanType.DATABASE;
 		} else if (storage.equalsIgnoreCase("command") || storage.equalsIgnoreCase("cmd")) {
@@ -107,9 +110,6 @@ public class Ban {
 			banActive = false;
 			return;
 		}
-		if (banType.equals(BanType.FILE))
-			if (!banDir.exists())
-				banDir.mkdirs();
 		DB_CONTENT.putAll(adapter.getKeysListInConfig("ban.db.other"));
 	}
 

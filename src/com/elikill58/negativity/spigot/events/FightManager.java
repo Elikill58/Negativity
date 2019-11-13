@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -24,10 +25,15 @@ public class FightManager implements Listener {
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
 		if (!(e.getDamager() instanceof Player) || !(e.getEntity() instanceof Player))
 			return;
-		Player damager = (Player) e.getDamager();
-		Player hit = (Player) e.getEntity();
-		SpigotNegativityPlayer.getNegativityPlayer(damager).fight();
-		SpigotNegativityPlayer.getNegativityPlayer(hit).fight();
+		SpigotNegativityPlayer.getNegativityPlayer((Player) e.getDamager()).fight();
+		SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).fight();
+	}
+	
+	@EventHandler
+	public void onEntityDamageByEntity(EntityDamageEvent e) {
+		if (!(e.getEntity() instanceof Player))
+			return;
+		SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).fight();
 	}
 
 	@EventHandler
@@ -47,30 +53,9 @@ public class FightManager implements Listener {
 	
 	@EventHandler
 	public void onPlayerItemHeld(PlayerItemHeldEvent e) {
-		Player p = e.getPlayer();
-		switch(p.getItemInHand().getType().name()) {
-		case "DIAMOND_SWORD":
-		case "IRON_SWORD":
-		case "STONE_SWORD":
-		case "GOLDEN_SWORD":
-		case "GOLD_SWORD":
-		case "WOODEN_SWORD":
-		case "WOOD_SWORD":
-		case "DIAMOND_AXE":
-		case "IRON_AXE":
-		case "STONE_AXE":
-		case "GOLDEN_AXE":
-		case "GOLD_AXE":
-		case "WOODEN_AXE":
-		case "WOOD_AXE":
-		case "BOW":
-		case "POTION":
-		case "GOLDEN_APPLE":
-			manageFightBetweenTwoPlayers(p, 20);
-			break;
-		default:
-			break;
-		}
+		String name = e.getPlayer().getItemInHand().getType().name();
+		if(name.contains("SWORD") || name.contains("AXE") || name.contains("APPLE") || name.contains("BOW") || name.contains("POTION"))
+			manageFightBetweenTwoPlayers(e.getPlayer(), 20);
 	}
 	
 	@EventHandler

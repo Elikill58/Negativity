@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -35,13 +34,6 @@ public class AutoClickProtocol extends Cheat implements Listener {
 				return;
 		if(e.getAction().name().contains("LEFT"))
 			manageClick(e.getPlayer(), e);
-	}
-	
-	@EventHandler
-	public void onPlayerAttack(EntityDamageByEntityEvent e) {
-		if(!(e.getDamager() instanceof Player))
-			return;
-		manageClick((Player) e.getDamager(), e);
 	}
 	
 	private void manageClick(Player p, Cancellable e) {

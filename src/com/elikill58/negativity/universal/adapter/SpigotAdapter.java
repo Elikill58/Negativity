@@ -26,6 +26,7 @@ import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.io.ByteStreams;
 
 public class SpigotAdapter extends Adapter {
@@ -195,9 +196,16 @@ public class SpigotAdapter extends Adapter {
 	public void reload() {
 		SpigotNegativity sn = SpigotNegativity.getInstance();
 		sn.reloadConfig();
+		UniversalUtils.init();
+		Cheat.loadCheat();
+		loadLang();
+		SpigotNegativity.isOnBungeecord = getBooleanInConfig("hasBungeecord");
+		SpigotNegativity.log = getBooleanInConfig("log_alerts");
+		SpigotNegativity.log_console = getBooleanInConfig("log_alerts_in_console");
+		SpigotNegativity.hasBypass = getBooleanInConfig("Permissions.bypass.active");
 		//Bukkit.getScheduler().cancelAllTasks();
-        Bukkit.getPluginManager().disablePlugin(sn);
-        Bukkit.getPluginManager().enablePlugin(sn);
+        /*Bukkit.getPluginManager().disablePlugin(sn);
+        Bukkit.getPluginManager().enablePlugin(sn);*/
 	}
 
 	@Override

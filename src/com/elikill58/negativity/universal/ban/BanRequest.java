@@ -144,6 +144,7 @@ public class BanRequest {
 	}
 
 	public void execute() {
+		boolean kickCmd = true;
 		Stats.updateStats(StatsType.BAN, "");
 		Adapter ada = Adapter.getAdapter();
 		NegativityPlayer nPlayer = ada.getNegativityPlayer(np.getPlayerId());
@@ -197,6 +198,7 @@ public class BanRequest {
 			}
 		} else if(Ban.banType.equals(BanType.COMMAND)) {
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getWithReplaceOlder(Adapter.getAdapter().getStringInConfig("ban.command_ban")));
+			kickCmd = false;
 		} else if(Ban.banType.equals(BanType.PLUGIN)) {
 			for (BanPluginSupport bp : Ban.BAN_SUPPORT) {
 				if (np.getBanRequest().size() >= ada.getIntegerInConfig("ban.def.ban_time"))
@@ -208,7 +210,8 @@ public class BanRequest {
 
 		if (nPlayer != null) {
 			nPlayer.banEffect();
-			nPlayer.kickPlayer(reason, new Timestamp(fullTime).toString().split("\\.", 2)[0], by, def);
+			if(kickCmd)
+				nPlayer.kickPlayer(reason, new Timestamp(fullTime).toString().split("\\.", 2)[0], by, def);
 		}
 	}
 

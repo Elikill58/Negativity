@@ -48,6 +48,11 @@ public class DefaultConfigValue {
 	}
 
 	public static void init() {
+		BOOLEANS.clear();
+		INTS.clear();
+		DOUBLES.clear();
+		STRINGS.clear();
+		
 		BOOLEANS.put("log_alerts", true);
 		BOOLEANS.put("log_alerts_in_console", true);
 		INTS.put("tps_alert_stop", 18);
@@ -87,7 +92,7 @@ public class DefaultConfigValue {
 		STRINGS.put("Permissions.notBanned.custom", "ADMIN");
 		BOOLEANS.put("Permissions.bypass.active", false);
 
-		String[] cheats = new String[] {"all", "forcefield", "fastplace", "speedhack", "autoclick", "fly", "antipotion", "autoeat", "autoregen", "antiknockback", "jesus", "nofall", "blink", "spider", "fastbow", "scaffold", "step", "noslowdown", "fastladders", "phase", "autosteal", "edited_client"};
+		String[] cheats = new String[] {"all", "forcefield", "fastplace", "speedhack", "autoclick", "fly", "antipotion", "autoeat", "autoregen", "antiknockback", "jesus", "nofall", "blink", "spider", "fastbow", "scaffold", "step", "noslowdown", "fastladders", "phase", "autosteal", "timer"};
 		for(String localCheat : cheats) {
 			//STRINGS.put("Permissions.bypass." + localCheat, "negativity.bypass." + localCheat);
 			STRINGS.put("Permissions.bypass." + localCheat + ".default", "negativity.bypass." + localCheat);

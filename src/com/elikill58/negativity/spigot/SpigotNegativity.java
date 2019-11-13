@@ -78,6 +78,7 @@ public class SpigotNegativity extends JavaPlugin {
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
 	private static final HashMap<Player, HashMap<Cheat, Long>> TIME_LAST_CHEAT_ALERT = new HashMap<>();
+	private static String channelNameNegativity = "negativity", channelNameFml = "";
 	
 	@Override
 	public void onEnable() {
@@ -131,12 +132,9 @@ public class SpigotNegativity extends JavaPlugin {
 
 		Messenger messenger = getServer().getMessenger();
 		ChannelEvents channelEvents = new ChannelEvents();
-		String channelNameNegativity = "", channelNameFml = "";
 		if (Version.getVersion().isNewerOrEquals(Version.V1_13)) {
-			channelNameNegativity = "custom:negativity";
 			channelNameFml = "test:fml";
 		} else {
-			channelNameNegativity = "negativity";
 			channelNameFml = "FML|HS";
 		}
 		if (!messenger.getOutgoingChannels().contains(channelNameNegativity))
@@ -306,6 +304,8 @@ public class SpigotNegativity extends JavaPlugin {
 			String hover_proof, String stats_send) {
 		if(!c.isActive())
 			return false;
+		if(reliability < 55)
+			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.already_blink && c.equals(Cheat.fromString("BLINK").get())) {
 			np.already_blink = true;
@@ -322,6 +322,8 @@ public class SpigotNegativity extends JavaPlugin {
 				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType()).getWhen().equals(WhenBypass.ALWAYS))
 					return false;
 		int ping = Utils.getPing(p);
+		if(ping == 0)
+			return false;
 		long currentTimeMilli = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > currentTimeMilli || reliability < 30 || ping > c.getMaxAlertPing()
 				|| ((double) ((Damageable) p).getHealth()) == 0.0D
@@ -335,13 +337,13 @@ public class SpigotNegativity extends JavaPlugin {
 			if (!bypassEvent.isCancelled())
 				return false;
 		}
-		np.addWarn(c, reliability);
-		logProof(np, type, p, c, reliability, proof, ping);
 		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(p, c, reliability,
 				c.getReliabilityAlert() < reliability, ping, proof, hover_proof);
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
+		np.addWarn(c, reliability);
+		logProof(np, type, p, c, reliability, proof, ping);
 		Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
@@ -379,7 +381,7 @@ public class SpigotNegativity extends JavaPlugin {
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers())
 				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert")) {
-					if(np.ALERT_NOT_SHOWED.containsKey(c) && np.ALERT_NOT_SHOWED.get(c) > 0) {
+					if(np.ALERT_NOT_SHOWED.containsKey(c) && np.ALERT_NOT_SHOWED.get(c) > 2) {
 						new ClickableText().addRunnableHoverEvent(
 								Messages.getMessage(pl, "negativity.alert_multiple", "%name%", p.getName(), "%cheat%", c.getName(),
 										"%reliability%", String.valueOf(100), "%nb%", String.valueOf(np.ALERT_NOT_SHOWED.get(c))),
@@ -412,7 +414,7 @@ public class SpigotNegativity extends JavaPlugin {
 	public static void sendReportMessage(Player p, String reportMsg) {
 		try (ByteArrayOutputStream ba = new ByteArrayOutputStream(); DataOutputStream out = new DataOutputStream(ba)) {
 			out.writeUTF(reportMsg);
-			p.sendPluginMessage(SpigotNegativity.getInstance(), "negativity", ba.toByteArray());
+			p.sendPluginMessage(SpigotNegativity.getInstance(), channelNameNegativity, ba.toByteArray());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

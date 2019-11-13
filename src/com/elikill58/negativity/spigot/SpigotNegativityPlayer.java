@@ -278,7 +278,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public String getReason(Cheat c) {
 		String n = "";
 		for(Cheat all : Cheat.values())
-			if(getAllWarn(all) > 5)
+			if(getAllWarn(all) > 5 && all.isActive())
 				n = n + (n.equals("") ? "" : ", ") + all.getName();
 		if(!n.contains(c.getName()))
 			n = n + (n.equals("") ? "" : ", ") + c.getName();
@@ -393,6 +393,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 				fakePlayerTouched = 0;
 			}
 		} else if(fakePlayerTouched < 100) {
+			spawnRandom();
 			spawnRandom();
 		} else {
 			ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);

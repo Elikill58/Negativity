@@ -149,6 +149,8 @@ public abstract class Cheat {
 	}
 	
 	public static void loadCheat() {
+		CHEATS.clear();
+		CHEATS_BY_KEY.clear();
 		try {
 			String dir = Cheat.class.getProtectionDomain().getCodeSource().getLocation().getFile().replaceAll("%20", " ");
 			if (dir.endsWith(".class"))

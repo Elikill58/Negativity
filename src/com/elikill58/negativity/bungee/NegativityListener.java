@@ -33,7 +33,7 @@ public class NegativityListener implements Listener {
 
 	@EventHandler
 	public void onMessageReceived(PluginMessageEvent event) {
-		if (!event.getTag().equals("Negativity"))
+		if (!event.getTag().equals("negativity"))
 			return;
 
 		try (ByteArrayInputStream ba = new ByteArrayInputStream(event.getData());
@@ -44,6 +44,7 @@ public class NegativityListener implements Listener {
 			if (p == null)
 				System.err.println("Error in BungeeNegativity ! Sender and receiver not proxied (Sender: "
 						+ event.getSender() + " Receiver: " + event.getReceiver() + ")");
+			System.out.println("[Negativity - Listener] line: " + line);
 			String[] parts = line.split("/\\*\\*/");
 			if (parts.length > 3) {
 				String[] place = new String[] { "%name%", parts[0], "%cheat%", parts[1], "%reliability%", parts[2],

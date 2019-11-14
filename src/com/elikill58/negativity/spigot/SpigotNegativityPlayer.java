@@ -112,6 +112,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		}
 		for (Cheat c : Cheat.values())
 			WARNS.put(c, file.getInt("cheats." + c.getKey().toLowerCase()));
+		if(file.contains("better-click"))
+			BETTER_CLICK = file.getInt("better-click");
 		initMods(p);
 	}
 
@@ -176,6 +178,16 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 				if (Utils.getInventoryTitle(p.getOpenInventory()).equals(Inv.NAME_CHECK_MENU))
 					CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
 			}
+		}
+	}
+	
+	public void setBetterClick(int click) {
+		this.BETTER_CLICK = click;
+		try {
+			file.set("better-click", BETTER_CLICK);
+			file.save(configFile);
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
 

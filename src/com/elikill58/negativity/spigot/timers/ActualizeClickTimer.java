@@ -13,7 +13,7 @@ public class ActualizeClickTimer extends BukkitRunnable {
 		for (Player p : Utils.getOnlinePlayers()) {
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 			if(np.BETTER_CLICK < np.ACTUAL_CLICK)
-				np.BETTER_CLICK = np.ACTUAL_CLICK;
+				np.setBetterClick(np.ACTUAL_CLICK);
 			np.LAST_CLICK = np.ACTUAL_CLICK;
 			np.ACTUAL_CLICK = 0;
 			if (np.SEC_ACTIVE < 2) {

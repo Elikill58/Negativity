@@ -38,6 +38,7 @@ import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.inventories.CheckMenuInventory;
+import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -60,7 +61,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public HashMap<Cheat, Integer> WARNS = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	public HashMap<String, Double> jesusLastY = new HashMap<>();
-	public HashMap<Cheat, Integer> ALERT_NOT_SHOWED = new HashMap<>();
+	public HashMap<Cheat, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	private WeakReference<Player> p;
 	private OfflinePlayer op = null;
@@ -79,7 +80,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean PACKET_ANALYZE_STARTED = false/*, isInWater = false, isOnWater = false*/, FALL = false,
 			KEEP_ALIVE_BEFORE = false, IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false,
 			isInvisible = false, slime_block = false, already_blink = false, isJumpingWithBlock = false,
-			isOnLadders = false, lastClickInv = false, already_jigsaw = false, jesusState = true;
+			isOnLadders = false, lastClickInv = false, already_jigsaw = false, jesusState = true, last_is_same_spider = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;
 	public YamlConfiguration file;
@@ -145,10 +146,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void initMods(Player p) {
 		Plugin pl = SpigotNegativity.getInstance();
-		String channelName = Version.getVersion().isNewerOrEquals(Version.V1_13) ? "test:fml" : "FML|HS";
-		p.sendPluginMessage(pl, channelName, new byte[] { -2, 0 });
-		p.sendPluginMessage(pl, channelName, new byte[] { 0, 2, 0, 0, 0, 0 });
-		p.sendPluginMessage(pl, channelName, new byte[] { 2, 0, 0, 0, 0 });
+		p.sendPluginMessage(pl, SpigotNegativity.channelNameFml, new byte[] { -2, 0 });
+		p.sendPluginMessage(pl, SpigotNegativity.channelNameFml, new byte[] { 0, 2, 0, 0, 0, 0 });
+		p.sendPluginMessage(pl, SpigotNegativity.channelNameFml, new byte[] { 2, 0, 0, 0, 0 });
 	}
 
 	@Override

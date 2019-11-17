@@ -1,6 +1,5 @@
 package com.elikill58.negativity.spigot.timers;
 
-import java.sql.Timestamp;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -69,7 +68,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					}
 				}
 			}
-			Cheat FLY = Cheat.fromString("FLY").get();
+			/*Cheat FLY = Cheat.fromString("FLY").get();
 			if (np.ACTIVE_CHEAT.contains(FLY)) {
 				if (np.FLYING > 4 && (np.POSITION + np.POSITION_LOOK + np.FLYING) < 9) {
 					np.NO_PACKET++;
@@ -85,7 +84,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 										+ "ms)");
 					}
 				}
-			}
+			}*/
 			Cheat FORCEFIELD = Cheat.fromString("FORCEFIELD").get();
 			if (np.ACTIVE_CHEAT.contains(FORCEFIELD)) {
 				if (np.ARM > 16 && np.USE_ENTITY > 20) {

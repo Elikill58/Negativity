@@ -1,6 +1,5 @@
 package com.elikill58.negativity.sponge.timers;
 
-import java.sql.Timestamp;
 import java.util.function.Consumer;
 
 import org.spongepowered.api.data.manipulator.mutable.PotionEffectData;
@@ -76,7 +75,7 @@ public class PacketsTimers implements Consumer<Task> {
 					}
 				}
 			}
-			Cheat FLY = Cheat.fromString("FLY").get();
+			/*Cheat FLY = Cheat.fromString("FLY").get();
 			if (np.hasDetectionActive(FLY)) {
 				if (np.FLYING > 4 && (np.POSITION + np.POSITION_LOOK + np.FLYING) < 9) {
 					np.NO_PACKET++;
@@ -92,7 +91,7 @@ public class PacketsTimers implements Consumer<Task> {
 										+ "ms)");
 					}
 				}
-			}
+			}*/
 			Cheat FORCEFIELD = Cheat.fromString("FORCEFIELD").get();
 			if (np.hasDetectionActive(FORCEFIELD)) {
 				if (np.ARM > 14 && np.USE_ENTITY > 20) {

@@ -56,7 +56,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 					@Override
 					public void run() {
 						Location actual = p.getLocation();
-						if(last.getWorld() != actual.getWorld())
+						if(last.getWorld() != actual.getWorld() || p.isDead())
 							return;
 						double d = last.distance(actual);
 						int ping = Utils.getPing(p), relia = Utils.parseInPorcent(100 - d);

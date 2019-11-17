@@ -22,14 +22,22 @@ import net.md_5.bungee.config.YamlConfiguration;
 public class BungeeNegativity extends Plugin {
 
 	public static Configuration CONFIG;
+	private static BungeeNegativity instance;
+	public static BungeeNegativity getInstance() {
+		return instance;
+	}
 
 	@Override
 	public void onEnable() {
+		instance = this;
+		
 		new Metrics(this);
 		enableConfig();
 		getProxy().registerChannel("custom:negativity");
-		getProxy().registerChannel("Negativity");
 		getProxy().registerChannel("negativity");
+		getProxy().registerChannel(UniversalUtils.CHANNEL_NEGATIVITY);
+		getProxy().registerChannel(UniversalUtils.CHANNEL_NEGATIVITY_BUNGEECORD);
+		getProxy().registerChannel(UniversalUtils.CHANNEL_NEGATIVITY_MOD);
 		getProxy().getPluginManager().registerListener(this, new NegativityListener());
 		Adapter.setAdapter(new BungeeAdapter(this, CONFIG));
 		UniversalUtils.init();

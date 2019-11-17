@@ -78,7 +78,7 @@ public class SpigotNegativity extends JavaPlugin {
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
 	private static final HashMap<Player, HashMap<Cheat, Long>> TIME_LAST_CHEAT_ALERT = new HashMap<>();
-	private static String channelNameNegativity = "negativity", channelNameFml = "";
+	public static String channelNameFml = "";
 	
 	@Override
 	public void onEnable() {
@@ -132,19 +132,15 @@ public class SpigotNegativity extends JavaPlugin {
 
 		Messenger messenger = getServer().getMessenger();
 		ChannelEvents channelEvents = new ChannelEvents();
-		if (Version.getVersion().isNewerOrEquals(Version.V1_13)) {
-			channelNameFml = "test:fml";
+		if (v.isNewerOrEquals(Version.V1_13)) {
+			channelNameFml = "negativity:fml";
 		} else {
 			channelNameFml = "FML|HS";
 		}
-		if (!messenger.getOutgoingChannels().contains(channelNameNegativity))
-			messenger.registerOutgoingPluginChannel(this, channelNameNegativity);
-		if (!messenger.getIncomingChannels().contains(channelNameNegativity))
-			messenger.registerIncomingPluginChannel(this, channelNameNegativity, channelEvents);
-		if (!messenger.getOutgoingChannels().contains(channelNameFml))
-			messenger.registerOutgoingPluginChannel(this, channelNameFml);
-		if (!messenger.getIncomingChannels().contains(channelNameFml))
-			messenger.registerIncomingPluginChannel(this, channelNameFml, channelEvents);
+		loadChannelInOut(messenger, UniversalUtils.CHANNEL_NEGATIVITY, channelEvents);
+		loadChannelInOut(messenger, UniversalUtils.CHANNEL_NEGATIVITY_BUNGEECORD, channelEvents);
+		loadChannelInOut(messenger, UniversalUtils.CHANNEL_NEGATIVITY_MOD, channelEvents);
+		loadChannelInOut(messenger, channelNameFml, channelEvents);
 		
 		for (Player p : Utils.getOnlinePlayers()) {
 			PacketListenerAPI.addPlayer(p);
@@ -157,12 +153,10 @@ public class SpigotNegativity extends JavaPlugin {
 		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 10);
 		(timeTimeBetweenAlert = new TimerTimeBetweenAlert()).runTaskTimer(this, 20, 20);
 
-		for (Cheat c : Cheat.values()) {
-			if (c.isActive() && c.hasListener()) {
+		for (Cheat c : Cheat.values())
+			if (c.isActive() && c.hasListener())
 				pm.registerEvents((Listener) c, this);
-			}
-		}
-
+		
 		loadCommand();
 
 		if (getConfig().get("items") != null) {
@@ -211,6 +205,13 @@ public class SpigotNegativity extends JavaPlugin {
 			Ban.addBanPlugin(new AdvancedBanSupport());
 			getLogger().info("Ban plugin AdvancedBan found ! Loading support ...");
 		}
+	}
+	
+	private void loadChannelInOut(Messenger messenger, String channel, ChannelEvents event) {
+		if (!messenger.getOutgoingChannels().contains(channel))
+			messenger.registerOutgoingPluginChannel(this, channel);
+		if (!messenger.getIncomingChannels().contains(channel))
+			messenger.registerIncomingPluginChannel(this, channel, event);
 	}
 
 	private void loadCommand() {
@@ -337,7 +338,7 @@ public class SpigotNegativity extends JavaPlugin {
 			if (!bypassEvent.isCancelled())
 				return false;
 		}
-		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(p, c, reliability,
+		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(type, p, c, reliability,
 				c.getReliabilityAlert() < reliability, ping, proof, hover_proof);
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
@@ -361,7 +362,9 @@ public class SpigotNegativity extends JavaPlugin {
 			HashMap<Cheat, Long> time_alert = (TIME_LAST_CHEAT_ALERT.containsKey(p) ? TIME_LAST_CHEAT_ALERT.get(p) : new HashMap<>());
 			if(time_alert.containsKey(c)) {
 				if(((currentTimeMilli - time_alert.get(c)) < timeBetweenTwoAlert)) {
-					np.ALERT_NOT_SHOWED.put(c, np.ALERT_NOT_SHOWED.containsKey(c) ? np.ALERT_NOT_SHOWED.get(c) + 1 : 1);
+					List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c) ? np.ALERT_NOT_SHOWED.get(c) : new ArrayList<>();
+					tempList.add(alert);
+					np.ALERT_NOT_SHOWED.put(c, tempList);
 					return true;
 				}
 			}
@@ -369,9 +372,13 @@ public class SpigotNegativity extends JavaPlugin {
 			time_alert.put(c, currentTimeMilli);
 			TIME_LAST_CHEAT_ALERT.put(p, time_alert);
 		}
-		
+		return sendAlertMessage(type, np, p, c, ping, reliability, hover_proof, alert, false);
+	}
+	
+	public static boolean sendAlertMessage(ReportType type, SpigotNegativityPlayer np, Player p, Cheat c, int ping, int reliability,
+			String hover_proof, PlayerCheatAlertEvent alert, boolean isMultiple) {
 		if (isOnBungeecord)
-			sendMessage(p, c.getName(), String.valueOf(reliability), String.valueOf(ping), hover_proof);
+			sendMessage(p, c.getName(), String.valueOf(reliability), String.valueOf(ping), hover_proof, isMultiple);
 		else {
 			if (log_console)
 				INSTANCE.getLogger()
@@ -381,7 +388,7 @@ public class SpigotNegativity extends JavaPlugin {
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers())
 				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert")) {
-					if(np.ALERT_NOT_SHOWED.containsKey(c) && np.ALERT_NOT_SHOWED.get(c) > 2) {
+					if(np.ALERT_NOT_SHOWED.containsKey(c) && np.ALERT_NOT_SHOWED.get(c).size() > 1) {
 						new ClickableText().addRunnableHoverEvent(
 								Messages.getMessage(pl, "negativity.alert_multiple", "%name%", p.getName(), "%cheat%", c.getName(),
 										"%reliability%", String.valueOf(100), "%nb%", String.valueOf(np.ALERT_NOT_SHOWED.get(c))),
@@ -407,14 +414,18 @@ public class SpigotNegativity extends JavaPlugin {
 		return true;
 	}
 
-	private static void sendMessage(Player p, String cheatName, String reliability, String ping, String hover) {
-		sendReportMessage(p, p.getName() + "/**/" + cheatName + "/**/" + reliability + "/**/" + ping + "/**/" + hover);
+	private static void sendMessage(Player p, String cheatName, String reliability, String ping, String hover, boolean isMultiple) {
+		sendReportMessage(p, p.getName() + "/**/" + cheatName + "/**/" + reliability + "/**/" + ping + "/**/" + hover + "/**/" + (isMultiple ? "alert_multiple" : "alert"));
 	}
 
 	public static void sendReportMessage(Player p, String reportMsg) {
+		sendReportMessage(p, reportMsg, UniversalUtils.CHANNEL_NEGATIVITY);
+	}
+
+	public static void sendReportMessage(Player p, String reportMsg, String channel) {
 		try (ByteArrayOutputStream ba = new ByteArrayOutputStream(); DataOutputStream out = new DataOutputStream(ba)) {
 			out.writeUTF(reportMsg);
-			p.sendPluginMessage(SpigotNegativity.getInstance(), channelNameNegativity, ba.toByteArray());
+			p.sendPluginMessage(SpigotNegativity.getInstance(), channel, ba.toByteArray());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

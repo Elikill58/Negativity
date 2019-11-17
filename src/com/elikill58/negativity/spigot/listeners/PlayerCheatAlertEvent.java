@@ -6,6 +6,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.ReportType;
 
 public class PlayerCheatAlertEvent extends Event implements Cancellable {
 
@@ -14,8 +15,10 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	private Cheat c;
 	private int relia, ping;
 	private String proof, hover_proof;
+	private ReportType type;
 	
-	public PlayerCheatAlertEvent(Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof) {
+	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof) {
+		this.type = type;
 		this.p = p;
 		this.c = c;
 		this.relia = reliability;
@@ -34,6 +37,10 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	@Override
 	public void setCancelled(boolean cancel) {
 		this.cancel = cancel;
+	}
+	
+	public ReportType getReportType() {
+		return type;
 	}
 	
 	public Player getPlayer() {

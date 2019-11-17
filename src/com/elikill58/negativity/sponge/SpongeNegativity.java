@@ -212,7 +212,7 @@ public class SpongeNegativity implements RawDataListener {
 			cmd.register(this, SuspectCommand.create(), "suspect");
 		}
 
-		channel = Sponge.getChannelRegistrar().createRawChannel(this, "Negativity");
+		channel = Sponge.getChannelRegistrar().createRawChannel(this, UniversalUtils.CHANNEL_NEGATIVITY);
 		if (Sponge.getChannelRegistrar().isChannelAvailable("FML|HS")) {
 			fmlChannel = Sponge.getChannelRegistrar().getOrCreateRaw(this, "FML|HS");
 			fmlChannel.addListener(this);

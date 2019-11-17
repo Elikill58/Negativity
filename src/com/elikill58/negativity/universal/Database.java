@@ -27,6 +27,8 @@ public class Database {
 	}
 
 	public static Connection getConnection() throws SQLException {
+		if(!TranslatedMessages.useDb)
+			return null;
 		if(!hasCustom) {
 			Adapter.getAdapter().error("You are trying to use database without active it.");
 			return null;

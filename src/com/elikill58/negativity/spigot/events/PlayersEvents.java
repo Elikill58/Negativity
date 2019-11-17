@@ -54,11 +54,22 @@ public class PlayersEvents implements Listener {
 		}
 	}
 
+	private boolean hasSentBungeecordMessage = false;
+	
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 		if(UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
+		if(!hasSentBungeecordMessage && !SpigotNegativity.isOnBungeecord) {
+			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
+				@Override
+				public void run() {
+					SpigotNegativity.sendReportMessage(p, "bungeecord", UniversalUtils.CHANNEL_NEGATIVITY_BUNGEECORD);
+				}
+			}, 1);
+			hasSentBungeecordMessage = true;
+		}
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());
 		np.TIME_INVINCIBILITY = System.currentTimeMillis() + 8000;
 		if (Perm.hasPerm(np, "showAlert")) {

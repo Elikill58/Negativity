@@ -32,7 +32,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		Location loc = p.getLocation();
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
-		if (p.getFallDistance() != 0 || np.hasElytra())
+		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying())
 			return;
 		Material playerLocType = loc.getBlock().getType(),
 				underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),
@@ -68,10 +68,9 @@ public class SpiderProtocol extends Cheat implements Listener {
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		Location loc = p.getLocation();
-		if (!np.ACTIVE_CHEAT.contains(this))
+		if (!np.ACTIVE_CHEAT.contains(this) || p.isFlying())
 			return;
 		double y = e.getTo().getY() - e.getFrom().getY();
-		boolean isAris = ((float) y) == p.getWalkSpeed();
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
 			if(hasBypassBlockAround(loc)) {
 				np.lastSpiderLoc = loc;
@@ -81,15 +80,18 @@ public class SpiderProtocol extends Cheat implements Listener {
 			loc.setZ(np.lastSpiderLoc.getZ());
 			double tempDis = loc.distance(np.lastSpiderLoc);
 			if (np.lastSpiderDistance == tempDis && tempDis != 0) {
-				int porcent = Utils.parseInPorcent(tempDis * 450);
-				if (SpigotNegativity.alertMod(ReportType.WARNING, p, this, porcent, "Nothing around him. To > From: "
-						+ y + " isAris: " + isAris + ". Walk on wall with always same y.") && isSetBack()) {
-					Location locc = p.getLocation();
-					while (locc.getBlock().getType().equals(Material.AIR))
-						locc.subtract(0, 1, 0);
-					p.teleport(locc.add(0, 1, 0));
-				}
+				if(np.last_is_same_spider) {
+					int porcent = Utils.parseInPorcent(tempDis * 450);
+					if (SpigotNegativity.alertMod(ReportType.WARNING, p, this, porcent, "Nothing around him. To > From: "
+							+ y + ". Walk on wall with always same y.") && isSetBack()) {
+						Location locc = p.getLocation();
+						while (locc.getBlock().getType().equals(Material.AIR))
+							locc.subtract(0, 1, 0);
+						p.teleport(locc.add(0, 1, 0));
+					}
+				} else np.last_is_same_spider = true;
 			}
+			np.last_is_same_spider = false;
 			np.lastSpiderDistance = tempDis;
 		}
 		np.lastSpiderLoc = loc;

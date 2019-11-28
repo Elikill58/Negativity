@@ -1,6 +1,9 @@
 package com.elikill58.negativity.sponge;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Optional;
 
@@ -17,7 +20,11 @@ public class SpongeUpdateChecker {
 			return false;
 
 		ConfigurationNode projectNode = GsonConfigurationLoader.builder()
-				.setURL(new URL("https://ore.spongepowered.org/api/v1/projects/negativity"))
+				.setSource(() -> {
+					HttpURLConnection conn = (HttpURLConnection) new URL("https://ore.spongepowered.org/api/v1/projects/negativity").openConnection();
+					conn.setRequestProperty("User-Agent", "Negativity");
+					return new BufferedReader(new InputStreamReader(conn.getInputStream()));
+				})
 				.build().load();
 
 		recommendedNode = projectNode.getNode("recommended");

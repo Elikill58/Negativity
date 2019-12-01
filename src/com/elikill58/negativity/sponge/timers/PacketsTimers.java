@@ -133,7 +133,7 @@ public class PacketsTimers implements Consumer<Task> {
 			if (np.hasDetectionActive(FASTPLACE) && ping < 200 && np.BLOCK_PLACE > 10) {
 				SpongeNegativity.alertMod(ReportType.WARNING, p, FASTPLACE, Utils.parseInPorcent(np.BLOCK_PLACE * 5), "BLockPlace: " + np.BLOCK_PLACE + " Ping: " + ping + " Warn for BlockPlace: " + np.getWarn(FASTPLACE));
 			}
-			Cheat EDITED_CLIENT = Cheat.fromString("EDITED_CLIENT").get();
+			Cheat EDITED_CLIENT = Cheat.fromString("TIMER").get();
 			if (np.hasDetectionActive(EDITED_CLIENT) && ping < EDITED_CLIENT.getMaxAlertPing()) {
 				int allPos = np.POSITION_LOOK + np.POSITION;
 				if (allPos > 60) {

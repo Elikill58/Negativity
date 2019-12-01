@@ -22,10 +22,10 @@ import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
-public class AutoRegenProtocol extends Cheat {
+public class RegenProtocol extends Cheat {
 
-	public AutoRegenProtocol() {
-		super("AUTOREGEN", true, ItemTypes.GOLDEN_APPLE, false, true, "regen", "autoregen");
+	public RegenProtocol() {
+		super("REGEN", true, ItemTypes.GOLDEN_APPLE, false, true, "regen", "autoregen");
 	}
 
 	@Listener

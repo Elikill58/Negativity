@@ -4,6 +4,7 @@ import java.io.File;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
+import java.util.UUID;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -23,28 +24,25 @@ public class TranslatedMessages {
 		useDb = Adapter.getAdapter().getBooleanInConfig("Translation.use_db");
 	}
 
-	public static String loadLang(NegativityAccount np) {
+	public static String loadLang(UUID playerId) {
 		try {
-			String value = "";
+			String idString = playerId.toString();
 			if (useDb) {
 				try (PreparedStatement stm = Database.getConnection()
 						.prepareStatement("SELECT * FROM " + Database.table_lang + " WHERE uuid = ?")) {
-					stm.setString(1, np.getUUID());
+					stm.setString(1, idString);
 					ResultSet result = stm.executeQuery();
 					if (result.next()) {
 						String gettedLang = result.getString(column);
 						for(String tempLang : LANGS)
 							if(gettedLang.equalsIgnoreCase(tempLang) || gettedLang.contains(tempLang))
 								return gettedLang;
-						Adapter.getAdapter().warn("Unknow lang for player " + np.getNegativityPlayer().getName() + ": " + gettedLang);
+						Adapter.getAdapter().warn("Unknow lang for player with UUID " + idString + ": " + gettedLang);
 					}
 				}
 			}
 
-			if (value == "")
-				return Adapter.getAdapter().getStringInOtherConfig(File.separator + "user" + File.separator, "lang", np.getUUID() + ".yml");
-
-			return DEFAULT_LANG;
+			return Adapter.getAdapter().getStringInOtherConfig(File.separator + "user" + File.separator, "lang", idString + ".yml");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return DEFAULT_LANG;
@@ -55,17 +53,11 @@ public class TranslatedMessages {
 		return DEFAULT_LANG;
 	}
 
-	public static String getLang(NegativityAccount np) {
-		if (!activeTranslation)
-			return DEFAULT_LANG;
-		String playerLang = np.getLang();
-		if (!playerLang.isEmpty()) {
-			return playerLang;
+	public static String getLang(UUID playerId) {
+		if (activeTranslation) {
+			return loadLang(playerId);
 		}
-
-		String temp = loadLang(np);
-		np.setLang(temp);
-		return temp;
+		return DEFAULT_LANG;
 	}
 
 	public static List<String> getStringListFromLang(String lang, String key) {

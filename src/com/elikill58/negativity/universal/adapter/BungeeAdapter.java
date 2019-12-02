@@ -205,7 +205,7 @@ public class BungeeAdapter extends Adapter {
 	@Nonnull
 	@Override
 	public NegativityAccount getNegativityAccount(UUID playerId) {
-		return new NegativityAccount(playerId);
+		return new NegativityAccount(playerId, TranslatedMessages.getLang(playerId), false, new ArrayList<>());
 	}
 
 	@Nullable

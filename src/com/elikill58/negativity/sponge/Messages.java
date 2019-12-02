@@ -65,7 +65,7 @@ public class Messages {
 	}
 
 	private static String getLang(MessageReceiver receiver) {
-		return receiver instanceof Player ? TranslatedMessages.getLang(SpongeNegativityPlayer.getNegativityPlayer((Player) receiver).getAccount()) : TranslatedMessages.getDefaultLang();
+		return receiver instanceof Player ? TranslatedMessages.getLang(((Player) receiver).getUniqueId()) : TranslatedMessages.getDefaultLang();
 	}
 
 	public static void broadcastMessageList(String dir, String... placeholders) {

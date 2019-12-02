@@ -21,7 +21,7 @@ public class LangCommand implements CommandExecutor {
 		Player p = (Player) sender;
 		if (arg.length == 0) {
 			Messages.sendMessage(p, "lang.current", "%lang%",
-					TranslatedMessages.getLang(SpigotNegativityPlayer.getNegativityPlayer(p).getAccount()));
+					TranslatedMessages.getLang(p.getUniqueId()));
 		} else {
 			if (arg[0].equalsIgnoreCase("help")) {
 				Messages.sendMessage(p, "lang.help");
@@ -35,7 +35,7 @@ public class LangCommand implements CommandExecutor {
 					return false;
 				}
 				if (TranslatedMessages.activeTranslation) {
-					SpigotNegativityPlayer.getNegativityPlayer(p).getAccount().setLang(lang);
+					SpigotNegativityPlayer.getNegativityPlayer(p).setLang(lang);
 				} else {
 					TranslatedMessages.DEFAULT_LANG = lang;
 					SpigotNegativity.getInstance().getConfig().set("Translation.default", lang);

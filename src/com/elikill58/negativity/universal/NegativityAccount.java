@@ -20,24 +20,18 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 /**
  * Contains player-related data that can be accessed when the player is offline.
  */
-public class NegativityAccount {
+public final class NegativityAccount {
 
-	private UUID playerId;
+	private final UUID playerId;
 	private String lang;
 	private boolean gettedBan;
 	private List<BanRequest> banRequest;
-	private NegativityPlayer np;
-
-	public NegativityAccount(UUID playerId) {
-		this(playerId, TranslatedMessages.DEFAULT_LANG, false, new ArrayList<>());
-	}
 
 	public NegativityAccount(UUID playerId, String lang, boolean gettedBan, List<BanRequest> banRequest) {
 		this.playerId = playerId;
-		this.lang = (lang == TranslatedMessages.DEFAULT_LANG ? TranslatedMessages.loadLang(this) : lang);
+		this.lang = lang;
 		this.gettedBan = gettedBan;
 		this.banRequest = banRequest;
-		this.np = Adapter.getAdapter().getNegativityPlayer(playerId);
 	}
 
 	public String getUUID() {
@@ -52,28 +46,12 @@ public class NegativityAccount {
 		return playerId;
 	}
 
-	public void setNegativityPlayer(NegativityPlayer np) {
-		this.np = np;
-	}
-	
-	public NegativityPlayer getNegativityPlayer() {
-		return np;
-	}
-
 	public void setLang(String lang) {
 		this.lang = lang;
 	}
 
-	public boolean hasGettedBan() {
-		return gettedBan;
-	}
-
-	public void setGettedBan(boolean b) {
-		this.gettedBan = b;
-	}
-
 	public List<BanRequest> getBanRequest() {
-		if (!hasGettedBan())
+		if (!gettedBan)
 			loadBanRequest();
 		List<BanRequest> br = new ArrayList<>();
 		br.addAll(banRequest);

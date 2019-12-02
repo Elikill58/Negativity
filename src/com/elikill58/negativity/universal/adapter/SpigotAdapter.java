@@ -4,10 +4,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
@@ -126,10 +128,10 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public String getStringInOtherConfig(String fileDir, String valueDir, String fileName) {
-		File f = new File(pl.getDataFolder().getAbsolutePath() + fileDir);
+		File f = new File(pl.getDataFolder(), fileDir + File.separatorChar + fileName);
 		if (!f.exists())
 			copy(fileName, f);
-		return YamlConfiguration.loadConfiguration(f).getString(valueDir);
+		return YamlConfiguration.loadConfiguration(f).getString(valueDir, TranslatedMessages.DEFAULT_LANG);
 	}
 
 	@Override
@@ -243,15 +245,17 @@ public class SpigotAdapter extends Adapter {
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
 	}
 
+	@Nonnull
 	@Override
 	public NegativityAccount getNegativityAccount(UUID playerId) {
-		if(account.containsKey(playerId))
-			return account.get(playerId);
-		else {
-			NegativityAccount na = new NegativityAccount(playerId);
-			account.put(playerId, na);
-			return na;
+		NegativityAccount existingAccount = account.get(playerId);
+		if (existingAccount != null) {
+			return existingAccount;
 		}
+
+		NegativityAccount na = new NegativityAccount(playerId, TranslatedMessages.getLang(playerId), false, new ArrayList<>());
+		account.put(playerId, na);
+		return na;
 	}
 
 	@Override

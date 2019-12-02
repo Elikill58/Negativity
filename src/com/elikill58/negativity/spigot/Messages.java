@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.TranslatedMessages;
-import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class Messages {
 
@@ -25,9 +24,9 @@ public class Messages {
 			return dir;
 		return Utils.coloredMessage(message);
 	}
-	
+
 	public static String getMessage(Player p, String dir, String... placeholders) {
-		String message = ChatColor.RESET + TranslatedMessages.getStringFromLang(TranslatedMessages.getLang(Adapter.getAdapter().getNegativityAccount(p.getUniqueId())), dir);
+		String message = ChatColor.RESET + TranslatedMessages.getStringFromLang(TranslatedMessages.getLang(p.getUniqueId()), dir);
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
 			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
 		if (message.equalsIgnoreCase("§rnull"))
@@ -69,7 +68,7 @@ public class Messages {
 	}
 
 	public static void sendMessageList(Player p, String dir, String... placeholders) {
-		for (String s : TranslatedMessages.getStringListFromLang(TranslatedMessages.getLang(Adapter.getAdapter().getNegativityAccount(p.getUniqueId())), dir)) {
+		for (String s : TranslatedMessages.getStringListFromLang(TranslatedMessages.getLang(p.getUniqueId()), dir)) {
 			for (int index = 0; index <= placeholders.length - 1; index += 2)
 				s = s.replaceAll(placeholders[index], placeholders[index + 1]);
 			if(!s.equalsIgnoreCase(dir))

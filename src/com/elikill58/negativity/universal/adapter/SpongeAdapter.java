@@ -344,7 +344,7 @@ public class SpongeAdapter extends Adapter {
 
 		@Override
 		public NegativityAccount load(UUID playerId) throws Exception {
-			NegativityAccount account = new NegativityAccount(playerId);
+			NegativityAccount account = new NegativityAccount(playerId, TranslatedMessages.getLang(playerId), false, new ArrayList<>());
 
 			Path userFilePath = SpongeNegativity.getInstance().getDataFolder().resolve("user").resolve(playerId.toString() + ".yml");
 			ConfigurationNode userData = HoconConfigurationLoader.builder().setPath(userFilePath).build().load();

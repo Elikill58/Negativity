@@ -202,9 +202,9 @@ public class BanRequest {
 		} else if(Ban.banType.equals(BanType.PLUGIN)) {
 			for (BanPluginSupport bp : Ban.BAN_SUPPORT) {
 				if (np.getBanRequest().size() >= ada.getIntegerInConfig("ban.def.ban_time"))
-					bp.banDef(np.getNegativityPlayer(), "Cheat (" + reason + ")", "Negativity");
+					bp.banDef(nPlayer, "Cheat (" + reason + ")", "Negativity");
 				else
-					bp.ban(np.getNegativityPlayer(), "Cheat (" + reason + ")", "Negativity", fullTime);
+					bp.ban(nPlayer, "Cheat (" + reason + ")", "Negativity", fullTime);
 			}
 		}
 

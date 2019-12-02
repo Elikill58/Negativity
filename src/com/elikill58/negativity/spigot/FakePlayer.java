@@ -49,9 +49,16 @@ public class FakePlayer {
 			entityPlayer.getClass().getMethod("setLocation", double.class, double.class, double.class, float.class, float.class).invoke(entityPlayer, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
 			Object dw = entityPlayer.getClass().getMethod("getDataWatcher").invoke(entityPlayer);
 			if(Version.getVersion().isNewerThan(Version.V1_8)) {
-				Method setDwMethod = dw.getClass().getMethod("set", Class.forName("net.minecraft.server." + Utils.VERSION + ".DataWatcherObject"), Object.class);
-				Object dataWatcherRegistry = Class.forName("net.minecraft.server." + Utils.VERSION + ".DataWatcherRegistry").getDeclaredField("a").get(Class.forName("net.minecraft.server." + Utils.VERSION + ".DataWatcherRegistry"));
-				setDwMethod.invoke(dw, dataWatcherRegistry.getClass().getMethod("a", int.class).invoke(dataWatcherRegistry, 0), (Byte) (byte) 0x20);
+				Class<?> dwRegistryClass = Class.forName("net.minecraft.server." + Utils.VERSION + ".DataWatcherRegistry");
+				Object dwByteSerializer = dwRegistryClass.getDeclaredField("a").get(dwRegistryClass);
+
+				Method dwByteSerializerCreate = dwByteSerializer.getClass().getMethod("a", int.class);
+				dwByteSerializerCreate.setAccessible(true);
+				Object dwObject = dwByteSerializerCreate.invoke(dwByteSerializer, 0);
+
+				Class<?> dataWatcherObjectClass = Class.forName("net.minecraft.server." + Utils.VERSION + ".DataWatcherObject");
+				Method setDwMethod = dw.getClass().getMethod("set", dataWatcherObjectClass, Object.class);
+				setDwMethod.invoke(dw, dwObject, (byte) 0x20);
 			} else {
 				dw.getClass().getMethod("watch", int.class, Object.class).invoke(dw, 0, (Byte) (byte) 0x20);
 			}

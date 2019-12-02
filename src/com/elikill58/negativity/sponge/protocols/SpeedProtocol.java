@@ -24,10 +24,10 @@ import com.elikill58.negativity.universal.ReportType;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
-public class SpeedHackProtocol extends Cheat {
+public class SpeedProtocol extends Cheat {
 
-	public SpeedHackProtocol() {
-		super("SPEEDHACK", false, ItemTypes.BEACON, true, true, "speed", "speedhack");
+	public SpeedProtocol() {
+		super("SPEED", false, ItemTypes.BEACON, true, true, "speed", "speedhack");
 	}
 
 	@Listener

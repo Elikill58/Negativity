@@ -24,7 +24,7 @@ import com.flowpowered.math.vector.Vector3d;
 public class FastLadderProtocol extends Cheat {
 
 	public FastLadderProtocol() {
-		super("FASTLADDERS", false, ItemTypes.LADDER, false, true, "ladder", "ladders");
+		super("FASTLADDER", false, ItemTypes.LADDER, false, true, "ladder", "ladders");
 	}
 
 	@Listener

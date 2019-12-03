@@ -48,6 +48,7 @@ report {
 }
 negativity {
   alert: "&a[&2Negativity&a] &c%name%&7 semble utiliser &c%cheat% &7(&2Fiabilité: %reliability%&7) !"
+  alert_multiple: "&a[&2Negativity&a] &c%name%&7 semble utiliser &c%cheat% %nb% fois &7(&2Fiabilité: %reliability%%&7) !"
   alert_hover: "&6Fiabilité: %reliability%\nPing: %ping%"
   verif {
     invalid_cheat: "%arg% n'est pas un cheat !"

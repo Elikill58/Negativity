@@ -48,13 +48,14 @@ report {
 }
 negativity {
   alert: "&a[&2Negativity&a] &c%name%&7 scheint folgenden Cheat zu benutzen: &c%cheat% &7(&2Wahrscheinlichkeit: %reliability%&7)!"
+  alert_multiple: "&a[&2Negativity&a] &c%name%&7 scheint folgenden Cheat zu benutzen: &c%cheat% %nb% zeit &7(&2Wahrscheinlichkeit: %reliability%%&7)!"
   alert_hover: "&6Wahrscheinlichkeit: %reliability%\nPing: %ping%"
   verif {
     invalid_cheat: "%arg% ist kein gültiger Cheat!"
     start: "&a[&2Negativity&a] &7Überprüft nun %name% auf folgenden Cheat: %cheat%"
     start_all: "&a[&2Negativity&a] Überprüft nun %name% auf alle bekannten Cheats."
     help = [
-     "/negativity verif <player> [cheats...]: Startet Verifizierung (für alle, wenn nichts angegeben wird)" 
+     "/negativity verif <player> [cheats...]: Startet Verifizierung (für alle, wenn nichts angegeben wird)"
      "/negativity <player>: Um weitere Informationen für einen Spieler anzuzeigen"
     ]
   }

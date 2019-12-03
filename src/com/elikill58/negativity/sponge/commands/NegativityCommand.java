@@ -40,6 +40,7 @@ public class NegativityCommand implements CommandExecutor {
 				.permission("negativity.verif")
 				.arguments(requiringPermission(player(Text.of("target")), "negativity.verif"))
 				.child(NegativityVerifCommand.create(), "verif")
+				.child(AlertCommand.create(), "alert")
 				.build());
 		return new NegativityCmdWrapper(command, true, null);
 	}

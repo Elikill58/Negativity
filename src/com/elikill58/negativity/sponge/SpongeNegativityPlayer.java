@@ -42,6 +42,7 @@ import org.spongepowered.api.util.Color;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.sponge.precogs.NegativityBypassTicket;
 import com.elikill58.negativity.sponge.protocols.ForceFieldProtocol;
@@ -66,6 +67,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public HashMap<String, String> MODS = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
+	public Map<Cheat, List<PlayerCheatEvent.Alert>> pendingAlerts = new HashMap<>();
 	private Player p = null;
 	private UUID uuid = null;
 	// Packets
@@ -162,11 +164,11 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public Player getPlayer() {
 		return p;
 	}
-	
+
 	public String getIP() {
 		return getPlayer().getConnection().getAddress().getAddress().getHostAddress();
 	}
-	
+
 	public boolean hasDetectionActive(Cheat c) {
 		return ACTIVE_CHEAT.contains(c) && !hasBypassTicket(c);
 	}
@@ -202,7 +204,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			SpongeNegativity.getInstance().getLogger().error("Unable to save data of player " + p.getName(), e);
 		}
 	}
-	
+
 	public void updateMinerateInFile() {
 		saveData();
 	}
@@ -240,7 +242,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void setLang(String l) {
 		saveData();
 	}
@@ -306,7 +308,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		spawnLeft();
 		spawnBehind();
 	}
-	
+
 	public void removeFakePlayer(FakePlayer fp) {
 		if (!FAKE_PLAYER.contains(fp))
 			return;
@@ -433,7 +435,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			n = n + (n.equals("") ? "" : ", ") + c.getName();
 		return n;
 	}
-	
+
 	public boolean hasOtherThanExtended(Location<World> loc, BlockType m) {
 		Location<World> tempLoc = loc.copy();
 		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))

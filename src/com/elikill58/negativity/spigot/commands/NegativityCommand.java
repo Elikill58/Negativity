@@ -121,7 +121,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				}
 			} else if (arg[0].startsWith("alert")) {
 				int alertSize = SpigotNegativity.alerts.size();
-				for(int i = alertSize - 1; i < alertSize - 10; i--) {
+				for(int i = alertSize - 1; i >= 0; i--) {
 					PlayerCheatAlertEvent alert = SpigotNegativity.alerts.get(i);
 					new ClickableText().addRunnableHoverEvent(
 							Messages.getMessage(p, "negativity.alert", "%name%", alert.getPlayer().getName(), "%cheat%", alert.getCheat().getName(),

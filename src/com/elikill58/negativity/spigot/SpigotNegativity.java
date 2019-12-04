@@ -372,10 +372,13 @@ public class SpigotNegativity extends JavaPlugin {
 			time_alert.put(c, currentTimeMilli);
 			TIME_LAST_CHEAT_ALERT.put(p, time_alert);
 		}
-		return sendAlertMessage(type, np, p, c, ping, reliability, hover_proof, alert, false);
+
+		sendAlertMessage(type, np, p, c, ping, reliability, hover_proof, alert, false);
+		np.ALERT_NOT_SHOWED.remove(c);
+		return true;
 	}
-	
-	public static boolean sendAlertMessage(ReportType type, SpigotNegativityPlayer np, Player p, Cheat c, int ping, int reliability,
+
+	public static void sendAlertMessage(ReportType type, SpigotNegativityPlayer np, Player p, Cheat c, int ping, int reliability,
 			String hover_proof, PlayerCheatAlertEvent alert, boolean isMultiple) {
 		if (isOnBungeecord)
 			sendMessage(p, c.getName(), String.valueOf(reliability), String.valueOf(ping), hover_proof, isMultiple);
@@ -409,9 +412,7 @@ public class SpigotNegativity extends JavaPlugin {
 				}
 			if(!hasPermPeople)
 				alerts.add(alert);
-			np.ALERT_NOT_SHOWED.remove(c);
 		}
-		return true;
 	}
 
 	private static void sendMessage(Player p, String cheatName, String reliability, String ping, String hover, boolean isMultiple) {

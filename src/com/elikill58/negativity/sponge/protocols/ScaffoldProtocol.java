@@ -1,7 +1,8 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import java.util.Optional;
+
 import org.spongepowered.api.block.BlockType;
-import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
@@ -19,40 +20,50 @@ import com.elikill58.negativity.universal.ReportType;
 
 public class ScaffoldProtocol extends Cheat {
 
-	private ScaffoldProtocol instance;
-	
 	public ScaffoldProtocol() {
 		super("SCAFFOLD", false, ItemTypes.GRASS, false, true);
-		instance = this;
 	}
-	
+
 	@Listener
 	public void onBlockBreak(ChangeBlockEvent.Place e, @First Player p) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this)) {
 			return;
-		int ping = Utils.getPing(p), slot = -1;
-		if (ping > 120)
+		}
+
+		int ping = Utils.getPing(p);
+		if (ping > 120) {
 			return;
+		}
+
+		// TODO get current the selected slot, and replace the 'slot != 0' appearing
+		//  later with a comparison with the hotbar selected slot
+		int slot = -1;
 		Task.builder().delayTicks(0).execute(() -> {
 			ItemType m = np.getItemTypeInHand();
-			BlockType placed = e.getTransactions().get(0).getOriginal().getLocation().get().getBlock().getType();
-			if(!placed.getItem().isPresent())
+			BlockType placed = e.getTransactions().get(0).getOriginal().getState().getType();
+			Optional<ItemType> itemForPlacedBlock = placed.getItem();
+			if (itemForPlacedBlock.isPresent() && !m.equals(itemForPlacedBlock.get())) {
 				return;
-			if ((m == null || (!np.isBlock(m) && !m.equals(placed.getItem().get()))) && slot != 0 && !placed.equals(BlockTypes.AIR)) {
+			}
+
+			if (!np.isBlock(m) && slot != 0) {
 				int localPing = ping;
-				if (localPing == 0)
+				if (localPing == 0) {
 					localPing = 1;
-				boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, instance, Utils.parseInPorcent(120 / localPing),
+				}
+
+				boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(120 / localPing),
 						"Item in hand: " + m.getName() + " Block placed: " + placed.getName() + " Ping: " + ping,
 						"Item in hand: " + m.getName().toLowerCase() + " \nBlock placed: "
 								+ placed.getName().toLowerCase());
-				if (isSetBack() && mayCancel)
+				if (isSetBack() && mayCancel) {
 					e.setCancelled(true);
+				}
 			}
 		}).submit(SpongeNegativity.getInstance());
 	}
-	
+
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";

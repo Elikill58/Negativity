@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
 import org.spongepowered.api.block.BlockType;
@@ -21,64 +22,81 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.flowpowered.math.vector.Vector3d;
+import com.flowpowered.math.vector.Vector3i;
 
 public class SpiderProtocol extends Cheat {
+
+	private static final NumberFormat NUMBER_FORMATTER = new DecimalFormat();
+
+	static {
+		NUMBER_FORMATTER.setMaximumIntegerDigits(4);
+	}
 
 	public SpiderProtocol() {
 		super("SPIDER", false, ItemTypes.WEB, false, true, "wallhack", "wall");
 	}
-	
+
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
-		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
+		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
 			return;
+		}
+
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
+		if (!np.hasDetectionActive(this) || np.getFallDistance() != 0
+				|| p.get(Keys.IS_ELYTRA_FLYING).orElse(false) || p.get(Keys.IS_FLYING).orElse(false)) {
+			return;
+		}
+
 		Location<World> loc = p.getLocation();
-		if (!np.hasDetectionActive(this))
+		if (isClimbableBlock(loc.getBlockType())
+				|| isClimbableBlock(loc.sub(0, 1, 0).getBlockType())
+				|| isClimbableBlock(loc.sub(0, 2, 0).getBlockType())
+				|| isClimbableBlock(loc.add(0, 3, 0).getBlockType())) {
 			return;
-		if (np.getFallDistance() != 0.0F)
-			return;
-		BlockType playerLocType = loc.getBlock().getType(),
-				underPlayer = loc.copy().sub(0, 1, 0).getBlock().getType(),
-				underUnder = loc.copy().sub(0, 2, 0).getBlock().getType(),
-				m3 = loc.copy().add(0, 3, 0).getBlock().getType();
-		if (!underPlayer.equals(BlockTypes.AIR) || !underUnder.equals(BlockTypes.AIR) || playerLocType.equals(BlockTypes.VINE) || playerLocType.equals(BlockTypes.LADDER)
-				|| underPlayer.equals(BlockTypes.VINE) || underPlayer.equals(BlockTypes.LADDER) || m3.equals(BlockTypes.VINE)
-				|| m3.equals(BlockTypes.LADDER) || !playerLocType.equals(BlockTypes.AIR))
-			return;
-		double y = e.getToTransform().getLocation().getY() - e.getFromTransform().getLocation().getY(), last = np.lastY;
+		}
+
+		double y = e.getToTransform().getLocation().getY() - e.getFromTransform().getLocation().getY();
+		double last = np.lastY;
 		np.lastY = y;
-		NumberFormat nf = NumberFormat.getInstance();
-		nf.setMaximumIntegerDigits(4);
-		boolean isAris = ((float) y) == p.get(Keys.WALKING_SPEED).get();
+		boolean isAris = y == p.get(Keys.WALKING_SPEED).get();
 		if (((y > 0.499 && y < 0.7) || isAris || last == y) && hasOtherThan(loc, BlockTypes.AIR)) {
-			if (hasBypassBlockAround(loc))
+			if (hasBypassBlockAround(loc)) {
 				return;
-			int relia = (int) (y * 450);
-			if (isAris)
-				relia = relia + 39;
-			ReportType type =  (np.getWarn(this) > 6) ? ReportType.VIOLATION : ReportType.WARNING;
+			}
+
+			int relia = (int) (y * 200);
+			if (isAris) {
+				relia += 39;
+			}
+
+			ReportType type = (np.getWarn(this) > 6) ? ReportType.WARNING : ReportType.VIOLATION;
 			boolean mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent(relia),
 					"Nothing around him. To > From: " + y + " isAris: " + isAris + " has not stab slairs.");
-			if(isSetBack() && mayCancel){
+			if (isSetBack() && mayCancel) {
 				Location<World> locc = p.getLocation();
-				while(locc.getBlock().getType().equals(BlockTypes.AIR))
-					locc.sub(0, 1, 0);
-				p.setLocation(locc.add(0, 1, 0));
+				while (locc.getBlockType().equals(BlockTypes.AIR)) {
+					locc = locc.sub(Vector3i.UNIT_Y);
+				}
+				p.setLocation(locc.add(Vector3i.UNIT_Y));
 			}
 		}
 	}
 
 	@Listener
 	public void onPlayerMove2(MoveEntityEvent e, @First Player p) {
-		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
+		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
 			return;
+		}
+
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		Location<World> loc = p.getLocation();
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this) || p.get(Keys.IS_FLYING).orElse(false)) {
 			return;
+		}
+
 		double y = e.getToTransform().getPosition().getY() - e.getFromTransform().getPosition().getY();
-		boolean isAris = ((float) y) == p.get(Keys.WALKING_SPEED).get();
+		boolean isAris = y == p.get(Keys.WALKING_SPEED).get();
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getExtent().equals(loc.getExtent()) && y > 0) {
 			if (hasBypassBlockAround(loc)) {
 				np.lastSpiderLoc = loc;
@@ -91,9 +109,10 @@ public class SpiderProtocol extends Cheat {
 				if (SpongeNegativity.alertMod(ReportType.WARNING, p, this, porcent, "Nothing around him. To > From: "
 						+ y + " isAris: " + isAris + ". Walk on wall with always same y.") && isSetBack()) {
 					Location<World> locc = p.getLocation();
-					while (locc.getBlock().getType().equals(BlockTypes.AIR))
-						locc.sub(0, 1, 0);
-					p.setLocation(locc.add(0, 1, 0));
+					while (locc.getBlockType().equals(BlockTypes.AIR)) {
+						locc = locc.sub(Vector3i.UNIT_Y);
+					}
+					p.setLocation(locc.add(Vector3i.UNIT_Y));
 				}
 			}
 			np.lastSpiderDistance = tempDis;
@@ -102,13 +121,13 @@ public class SpiderProtocol extends Cheat {
 	}
 
 	public boolean hasOtherThan(Location<World> loc, BlockType m) {
-		if (!loc.copy().add(0, 0, 1).getBlock().getType().equals(m))
+		if (!loc.add(0, 0, 1).getBlockType().equals(m))
 			return true;
-		if (!loc.copy().add(1, 0, -1).getBlock().getType().equals(m))
+		if (!loc.add(1, 0, -1).getBlockType().equals(m))
 			return true;
-		if (!loc.copy().add(-1, 0, -1).getBlock().getType().equals(m))
+		if (!loc.add(-1, 0, -1).getBlockType().equals(m))
 			return true;
-		if (!loc.copy().add(-1, 0, 1).getBlock().getType().equals(m))
+		if (!loc.add(-1, 0, 1).getBlockType().equals(m))
 			return true;
 		return false;
 	}
@@ -117,18 +136,20 @@ public class SpiderProtocol extends Cheat {
 		for (int u = 0; u < 360; u += 3) {
 			Location<World> flameloc = loc.copy();
 			flameloc.add(Math.sin(u) * 3, 0, Math.cos(u) * 3);
-			String name = flameloc.copy().getBlock().getType().getName(),
-					secondname = flameloc.copy().add(0, 1, 0).getBlock().getType().getName();
+			String name = flameloc.getBlockType().getName();
+			String secondname = flameloc.add(Vector3i.UNIT_Y).getBlockType().getName();
 			if (name.contains("SLAB") || name.contains("STAIRS") || secondname.contains("SLAB")
 					|| secondname.contains("STAIRS"))
 				return true;
 		}
-		if(loc.getBlock().getType().getName().contains("WATER") || loc.copy().sub(0, 1, 0).getBlock().getType().getName().contains("WATER"))
-			return true;
-		
-		return false;
+		return loc.getBlockType().getName().contains("WATER")
+				|| loc.sub(Vector3i.UNIT_Y).getBlockType().getName().contains("WATER");
 	}
-	
+
+	private static boolean isClimbableBlock(BlockType blockType) {
+		return blockType == BlockTypes.VINE || blockType == BlockTypes.LADDER;
+	}
+
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";

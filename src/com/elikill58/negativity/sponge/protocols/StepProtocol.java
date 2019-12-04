@@ -2,10 +2,9 @@ package com.elikill58.negativity.sponge.protocols;
 
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
-import org.spongepowered.api.entity.Entity;
-import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
+import org.spongepowered.api.entity.projectile.Firework;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.entity.SpawnEntityEvent;
@@ -27,39 +26,55 @@ public class StepProtocol extends Cheat {
 	public StepProtocol() {
 		super("STEP", false, ItemTypes.BRICK_STAIRS, true, true);
 	}
-	
+
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this)) {
 			return;
-		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
+		}
+
+		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
 			return;
-		if ((System.currentTimeMillis() - np.launchFirework) < 1000)
+		}
+
+		if ((System.currentTimeMillis() - np.launchFirework) < 1000) {
 			return;
-		Location<World> from = e.getFromTransform().getLocation(), to = e.getToTransform().getLocation();
+		}
+
+		Location<World> from = e.getFromTransform().getLocation();
+		Location<World> to = e.getToTransform().getLocation();
 		double dif = from.getY() - to.getY();
 		if (!np.hasPotionEffect(PotionEffectTypes.JUMP_BOOST)) {
 			if (np.slime_block) {
-				if (dif >= 0)
+				if (dif >= 0) {
 					np.slime_block = false;
+				}
 			} else {
 				Location<World> baseLoc = p.getLocation();
 				boolean hasSlimeBlock = false;
-				for (int u = 0; u < 360; u += 3)
-					if (baseLoc.copy().add(Math.sin(u) * 3, -1, Math.cos(u) * 3).getBlock().getType().equals(BlockTypes.SLIME))
+				for (int u = 0; u < 360; u += 3) {
+					if (baseLoc.add(Math.sin(u) * 3, -1, Math.cos(u) * 3).getBlockType() == BlockTypes.SLIME) {
 						hasSlimeBlock = true;
-				if (hasSlimeBlock)
+						break;
+					}
+				}
+
+				if (hasSlimeBlock) {
 					np.slime_block = true;
-				else {
-					int ping = Utils.getPing(p), relia = Utils.parseInPorcent(dif * -500);
-					if (dif > 0)
+				} else {
+					int ping = Utils.getPing(p);
+					int relia = Utils.parseInPorcent(dif * -500);
+					if (dif > 0) {
 						return;
+					}
+
 					if (dif < -1.499 && ping < 200) {
 						boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
 								+ np.getWarn(this) + ". Move " + dif + "blocks up. ping: " + ping);
-						if (isSetBack() && mayCancel)
+						if (isSetBack() && mayCancel) {
 							e.setCancelled(true);
+						}
 					}
 				}
 			}
@@ -67,15 +82,14 @@ public class StepProtocol extends Cheat {
 	}
 
 	@Listener
-	public void onSpawn(SpawnEntityEvent e, @First Entity et) {
-		if(!et.getType().equals(EntityTypes.FIREWORK))
-			return;
+	public void onSpawn(SpawnEntityEvent e, @First Firework et) {
 		Vector3d loc = et.getLocation().getPosition();
-		for(Player p : Utils.getOnlinePlayers())
-			if(p.getLocation().getPosition().distance(loc) < 2)
+		for (Player p : Utils.getOnlinePlayers()) {
+			if (p.getLocation().getPosition().distance(loc) < 2)
 				SpongeNegativityPlayer.getNegativityPlayer(p).launchFirework = System.currentTimeMillis();
+		}
 	}
-	
+
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";

@@ -28,23 +28,27 @@ public class NoFallProtocol extends Cheat {
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this)) {
 			return;
-		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
+		}
+
+		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
 			return;
-		Location<World> from = e.getFromTransform().getLocation(), to = e.getToTransform().getLocation();
+		}
+
+		Location<World> from = e.getFromTransform().getLocation();
+		Location<World> to = e.getToTransform().getLocation();
 		double distance = to.getPosition().distance(from.getPosition());
 		float fallDistance = np.getFallDistance();
 		if (!(p.getVehicle().isPresent() || distance == 0.0D || from.getY() < to.getY()) && fallDistance == 0.0F
 				&& !np.hasPotionEffect(PotionEffectTypes.SPEED)
-				&& p.getLocation().copy().sub(0, 1, 0).getBlock().getType().equals(BlockTypes.AIR)) {
+				&& p.getLocation().sub(0, 1, 0).getBlockType().equals(BlockTypes.AIR)) {
 			if (p.isOnGround()) {
-				if(distance > 0.79D) {
-				if (SpongeNegativity.alertMod(ReportType.VIOLATION, p, this,
-						Utils.parseInPorcent(distance * 100),
-						"Player in ground. FallDamage: " + fallDistance + ", DistanceBetweenFromAndTo: " + distance
-								+ " (ping: " + Utils.getPing(p) + "). Warn: " + np.getWarn(this)))
-					np.NO_FALL_DAMAGE += 1;
+				if (distance > 0.79D) {
+					if (SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, Utils.parseInPorcent(distance * 100),
+							"Player in ground. FallDamage: " + fallDistance + ", DistanceBetweenFromAndTo: " + distance
+									+ " (ping: " + Utils.getPing(p) + "). Warn: " + np.getWarn(this)))
+						np.NO_FALL_DAMAGE += 1;
 				} else if (np.NO_FALL_DAMAGE != 0) {
 					if (isSetBack())
 						p.damage(np.NO_FALL_DAMAGE, DamageSources.FALLING);
@@ -57,7 +61,7 @@ public class NoFallProtocol extends Cheat {
 							"Player not in ground no fall Damage. FallDistance: " + fallDistance
 									+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + Utils.getPing(p)
 									+ "). Warn: " + np.getWarn(this));
-					if(mayCancel)
+					if (mayCancel)
 						np.NO_FALL_DAMAGE += 1;
 				} else if (np.NO_FALL_DAMAGE != 0) {
 					if (isSetBack())
@@ -67,7 +71,7 @@ public class NoFallProtocol extends Cheat {
 			}
 		}
 	}
-	
+
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";

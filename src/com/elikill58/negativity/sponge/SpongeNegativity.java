@@ -7,6 +7,10 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
@@ -53,6 +57,7 @@ import com.elikill58.negativity.sponge.listeners.InventoryClickManagerEvent;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
 import com.elikill58.negativity.sponge.timers.PacketsTimers;
+import com.elikill58.negativity.sponge.timers.PendingAlertsTimer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
@@ -91,6 +96,9 @@ public class SpongeNegativity implements RawDataListener {
 	private HoconConfigurationLoader configLoader;
 	public static RawDataChannel channel = null, fmlChannel = null;
 
+	public static final List<PlayerCheatEvent.Alert> ALERTS = new ArrayList<>();
+	public static final Map<UUID, Map<Cheat, Long>> LAST_ALERTS_TIME = new HashMap<>();
+
 	public PluginContainer getContainer() {
 		return plugin;
 	}
@@ -119,6 +127,8 @@ public class SpongeNegativity implements RawDataListener {
 				.name("negativity-packets").submit(this);
 		Task.builder().execute(new ActualizerTimer()).interval(1, TimeUnit.SECONDS)
 				.name("negativity-actualizer").submit(this);
+		Task.builder().execute(new PendingAlertsTimer()).interval(1, TimeUnit.SECONDS)
+				.name("negativity-pending-alerts").submit(this);
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
 		if(SpongeUpdateChecker.ifUpdateAvailable()) {
@@ -263,7 +273,7 @@ public class SpongeNegativity implements RawDataListener {
 					e1.printStackTrace();
 				}
 			}
-			
+
 
 			if(SpongeUpdateChecker.ifUpdateAvailable()) {
 				URL downloadUrl;
@@ -382,28 +392,29 @@ public class SpongeNegativity implements RawDataListener {
 						.equals(WhenBypass.ALWAYS))
 					return false;
 		int ping = Utils.getPing(p);
-		if (np.TIME_INVINCIBILITY > System.currentTimeMillis() || reliability < 30 || ping > c.getMaxAlertPing()
+		long timeMillis = System.currentTimeMillis();
+		if (np.TIME_INVINCIBILITY > timeMillis || reliability < 30 || ping > c.getMaxAlertPing()
 				|| p.getHealthData().get(Keys.HEALTH).get() == 0.0D
 				|| getInstance().config.getNode("tps_alert_stop").getInt() > Utils.getLastTPS() || ping < 0
 				|| np.isFreeze)
 			return false;
-		Sponge.getEventManager().post(new PlayerCheatEvent(p, c, reliability));
+		Sponge.getEventManager().post(new PlayerCheatEvent(type, p, c, reliability, hover_proof, ping));
 		if (hasBypass && Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p),
 				"Permissions.bypass." + c.getKey().toLowerCase())) {
-			PlayerCheatEvent.Bypass bypassEvent = new PlayerCheatEvent.Bypass(p, c, reliability);
+			PlayerCheatEvent.Bypass bypassEvent = new PlayerCheatEvent.Bypass(type, p, c, reliability, hover_proof, ping);
 			Sponge.getEventManager().post(bypassEvent);
 			if (!bypassEvent.isCancelled())
 				return false;
 		}
 		logProof(type, p, c, reliability, proof, ping);
-		PlayerCheatEvent.Alert alert = new PlayerCheatEvent.Alert(p, c, reliability,
-				c.getReliabilityAlert() < reliability);
+		PlayerCheatEvent.Alert alert = new PlayerCheatEvent.Alert(type, p, c, reliability,
+				c.getReliabilityAlert() < reliability, hover_proof, ping);
 		Sponge.getEventManager().post(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
 		np.addWarn(c);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
-			PlayerCheatEvent.Kick kick = new PlayerCheatEvent.Kick(p, c, reliability);
+			PlayerCheatEvent.Kick kick = new PlayerCheatEvent.Kick(type, p, c, reliability, hover_proof, ping);
 			Sponge.getEventManager().post(kick);
 			if (!kick.isCancelled())
 				p.kick(Messages.getMessage(p, "kick", "%cheat%", c.getName()));
@@ -413,28 +424,76 @@ public class SpongeNegativity implements RawDataListener {
 		Ban.manageBan(c, np, reliability);
 		if (Ban.isBanned(np.getAccount()))
 			return false;
-		if (isOnBungeecord)
-			sendMessage(p, c.getName(), reliability, ping, hover_proof);
-		else {
-			if (log)
-				INSTANCE.getLogger()
-						.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
-								+ ")  (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
-								+ reliability);
-			for (Player pl : Utils.getOnlinePlayers())
-				if (Perm.hasPerm(np, "showAlert")) {
-					pl.sendMessage(Text
-							.builder(Messages.getStringMessage(pl, "negativity.alert", "%name%", p.getName(), "%cheat%",
-									c.getName(), "%reliability%", String.valueOf(reliability)))
-							.onClick(TextActions.runCommand("/negativity " + p.getName()))
-							.onHover(TextActions.showText(
-									Text.of(Messages.getStringMessage(pl, "negativity.alert_hover", "%reliability%",
-											String.valueOf(reliability), "%ping%", String.valueOf(ping))
-											+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof))))
-							.build());
-				}
+
+		int timeBetweenTwoAlerts = Adapter.getAdapter().getIntegerInConfig("time_between_alert");
+		if (timeBetweenTwoAlerts >= 0) {
+			Map<Cheat, Long> lastAlerts = LAST_ALERTS_TIME.computeIfAbsent(p.getUniqueId(), playerId -> new HashMap<>());
+			Long lastAlert = lastAlerts.put(c, timeMillis);
+			if (lastAlert != null && (timeMillis - lastAlert) < timeBetweenTwoAlerts) {
+				np.pendingAlerts.computeIfAbsent(c, cheat -> new ArrayList<>())
+						.add(alert);
+				return true;
+			}
 		}
+
+		sendAlertMessage(type, p, c, reliability, hover_proof, np, ping, alert, false);
+		np.pendingAlerts.remove(c);
 		return true;
+	}
+
+	public static void sendAlertMessage(ReportType type, Player p, Cheat c, int reliability,
+										String hoverProof, SpongeNegativityPlayer np, int ping, PlayerCheatEvent.Alert alert, boolean isMultiple) {
+		if (isOnBungeecord) {
+			sendMessage(p, c.getName(), reliability, ping, hoverProof, isMultiple);
+			return;
+		}
+
+		if (log) {
+			INSTANCE.getLogger().info("New {} for {} (UUID: {})  (ping: {}) : suspected of cheating ({}) Reliability: {}",
+					type.getName(), p.getName(), p.getUniqueId().toString(), ping, c.getName(), reliability);
+		}
+
+		List<PlayerCheatEvent.Alert> pendingAlerts = np.pendingAlerts.get(c);
+		int pendingAlertsCount = pendingAlerts != null ? pendingAlerts.size() : 0;
+
+		String messageKey = "negativity.alert";
+		int messageReliability = reliability;
+		if (pendingAlertsCount > 1) {
+			messageKey = "negativity.alert_multiple";
+			messageReliability = 100;
+		}
+
+		boolean alertSent = false;
+		for (Player pl : Utils.getOnlinePlayers()) {
+			if (!Perm.hasPerm(np, "showAlert")) {
+				continue;
+			}
+
+			pl.sendMessage(createAlertText(p, c, hoverProof, ping, pendingAlertsCount, messageKey, messageReliability, pl));
+
+			alertSent = true;
+		}
+
+		if (!alertSent) {
+			ALERTS.add(alert);
+		}
+	}
+
+	public static Text createAlertText(Player suspect, Cheat cheat, String hoverProof, int ping, int pendingAlertsCount,
+									   String messageKey, int reliability, Player receiver) {
+		return Text
+				.builder(Messages.getStringMessage(receiver, messageKey,
+						"%name%", suspect.getName(),
+						"%cheat%", cheat.getName(),
+						"%reliability%", String.valueOf(reliability),
+						"%nb%", String.valueOf(pendingAlertsCount)))
+				.onClick(TextActions.runCommand("/negativity " + suspect.getName()))
+				.onHover(TextActions.showText(
+						Text.of(Messages.getStringMessage(receiver, "negativity.alert_hover",
+								"%reliability%", String.valueOf(reliability),
+								"%ping%", String.valueOf(ping))
+								+ (hoverProof.isEmpty() ? "" : "\n" + hoverProof))))
+				.build();
 	}
 
 	private static void logProof(ReportType type, Player p, Cheat c, int reliability, String proof, int ping) {
@@ -453,8 +512,8 @@ public class SpongeNegativity implements RawDataListener {
 		return plugin.getLogger();
 	}
 
-	private static void sendMessage(Player p, String cheatName, int reliability, int ping, String hover) {
-		String msg = p.getName() + "/**/" + cheatName + "/**/" + reliability + "/**/" + ping + "/**/" + hover;
+	private static void sendMessage(Player p, String cheatName, int reliability, int ping, String hover, boolean isMultiple) {
+		String msg = p.getName() + "/**/" + cheatName + "/**/" + reliability + "/**/" + ping + "/**/" + hover + "/**/" + (isMultiple ? "alert_multiple" : "alert");
 		channel.sendTo(p, (payload) -> {
 			payload.writeUTF(msg);
 		});

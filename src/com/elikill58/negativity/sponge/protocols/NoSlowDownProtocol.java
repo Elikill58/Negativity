@@ -1,7 +1,6 @@
 package com.elikill58.negativity.sponge.protocols;
 
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.data.manipulator.mutable.PotionEffectData;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.Transform;
@@ -17,7 +16,10 @@ import org.spongepowered.api.world.World;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
-import com.elikill58.negativity.universal.*;
+import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.ReportType;
+import com.flowpowered.math.vector.Vector3d;
 
 public class NoSlowDownProtocol extends Cheat {
 
@@ -27,31 +29,46 @@ public class NoSlowDownProtocol extends Cheat {
 
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
-		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
+		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
 			return;
+		}
+
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this)) {
 			return;
+		}
+
 		Location<?> loc = p.getLocation();
-		if (!loc.getBlock().getType().equals(BlockTypes.SOUL_SAND))
+		if (!loc.getBlockType().equals(BlockTypes.SOUL_SAND)) {
 			return;
-		for (PotionEffect pe : p.getOrCreate(PotionEffectData.class).get().asList())
-			if (pe.getType().equals(PotionEffectTypes.SPEED) && pe.getAmplifier() > 1)
+		}
+
+		for (PotionEffect pe : np.getActiveEffects()) {
+			if (pe.getType().equals(PotionEffectTypes.SPEED) && pe.getAmplifier() > 1) {
 				return;
-		Transform<World> from = e.getFromTransform(), to = e.getToTransform();
+			}
+		}
+
+		Transform<World> from = e.getFromTransform();
+		Transform<World> to = e.getToTransform();
 		double distance = to.getPosition().distance(from.getPosition());
 		if (distance > 0.2) {
-			Location<World> fl = from.getLocation().copy().sub(to.getLocation().getX(), to.getLocation().getY(), to.getLocation().getZ());
-			int ping = Utils.getPing(p), relia = Utils.parseInPorcent(distance * 400);
-			if((from.getYaw() - to.getYaw()) < -0.001)
+			int ping = Utils.getPing(p);
+			int relia = Utils.parseInPorcent(distance * 400);
+			if ((from.getYaw() - to.getYaw()) < -0.001) {
 				return;
+			}
+
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, relia,
 					"Soul sand under player. Distance from/to : " + distance + ". Ping: " + ping);
-			if (isSetBack() && mayCancel)
-				e.setToTransform(new Transform<>(new Location<World>(from.getExtent(), fl.getX() / 2, fl.getY() / 2, fl.getZ()).add(0, 0.5, 0)));
+			if (isSetBack() && mayCancel) {
+				Vector3d delta = from.getPosition().sub(to.getPosition());
+				Vector3d setBackPosition = new Vector3d(delta.getX() / 2, delta.getY() / 2 + 0.5, delta.getZ());
+				e.setToTransform(from.setPosition(setBackPosition));
+			}
 		}
 	}
-	
+
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";

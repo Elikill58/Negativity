@@ -11,7 +11,6 @@ import org.spongepowered.api.event.entity.HealEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
@@ -29,7 +28,7 @@ public class AntiPotionProtocol extends Cheat {
 	public void onRegen(HealEntityEvent e, @First Player p) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		boolean hasPotion = false;
-		for (PotionEffect pe : p.getOrCreate(PotionEffectData.class).get().effects())
+		for (PotionEffect pe : p.getOrCreate(PotionEffectData.class).get().effects()) {
 			if (pe.getType().equals(PotionEffectTypes.POISON) || pe.getType().equals(PotionEffectTypes.BLINDNESS)
 					|| pe.getType().equals(PotionEffectTypes.WITHER)
 					|| pe.getType().equals(PotionEffectTypes.MINING_FATIGUE)
@@ -38,10 +37,9 @@ public class AntiPotionProtocol extends Cheat {
 				hasPotion = true;
 				np.POTION_EFFECTS.add(pe);
 			}
-		if (hasPotion)
-			np.flyingReason = FlyingReason.POTION;
-		else
-			np.flyingReason = FlyingReason.REGEN;
+		}
+
+		np.flyingReason = hasPotion ? FlyingReason.POTION : FlyingReason.REGEN;
 	}
 
 	@Listener
@@ -50,12 +48,12 @@ public class AntiPotionProtocol extends Cheat {
 			return;
 		Location<?> loc = e.getTargetEntity().getLocation();
 		for (Player p : Utils.getOnlinePlayers()) {
-			if(((World) loc.getExtent()).equals(p.getLocation().getExtent()))
+			if (loc.getExtent().equals(p.getLocation().getExtent()))
 				if (loc.getPosition().distance(p.getLocation().getPosition()) < 8)
 					SpongeNegativityPlayer.getNegativityPlayer(p).flyingReason = FlyingReason.POTION;
 		}
 	}
-	
+
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";

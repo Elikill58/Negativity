@@ -1,15 +1,18 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Optional;
 
-import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.InteractEvent;
+import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -25,65 +28,59 @@ import com.flowpowered.math.vector.Vector3d;
 
 public class ForceFieldProtocol extends Cheat {
 
-	//private Task task;
-	
+	private final NumberFormat distanceFormatter = new DecimalFormat();
+
 	public ForceFieldProtocol() {
 		super("FORCEFIELD", true, ItemTypes.DIAMOND_SWORD, true, true, "ff", "killaura");
-		/*if(isActive()) {
-			task = Task.builder().delay(250, TimeUnit.MILLISECONDS).execute(new Runnable() {
-				@Override
-				public void run() {
-					if(!isActive()) {
-						task.cancel();
-						return;
-					}
-					for(Player p : Sponge.getServer().getOnlinePlayers()) {
-						SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-						if(!Perm.hasPerm(np, "bypass.forcefield"))
-							np.spawnRandom();
-					}
-				}
-			}).submit(SpongeNegativity.getInstance());
-		}*/
+		distanceFormatter.setMaximumIntegerDigits(2);
 	}
-	
+
 	@Listener
 	public void onEntityDamageByEntity(DamageEntityEvent e, @First Player p) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this)) {
 			return;
-		double dis = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());
-		if(p.getItemInHand(HandTypes.MAIN_HAND).isPresent()) {
-			if(p.getItemInHand(HandTypes.MAIN_HAND).get().getType().equals(ItemTypes.BOW))
-				return;
 		}
-		if (dis > (Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0))) {
-			NumberFormat nf = NumberFormat.getInstance();
-			nf.setMaximumIntegerDigits(2);
+
+		Optional<ItemStackSnapshot> usedItem = e.getContext().get(EventContextKeys.USED_ITEM);
+		if (usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW) {
+			return;
+		}
+
+		double distance = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());
+		double allowedReach = Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0);
+		if (distance > allowedReach) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this,
-					Utils.parseInPorcent(dis * 2 * 10),
+					Utils.parseInPorcent(distance * 2 * 10),
 					"Big distance with: " + e.getTargetEntity().getType().getName().toLowerCase() + ". Exact distance: "
-							+ dis + ". Ping: " + Utils.getPing(p),
-					"Distance with " + e.getTargetEntity().getType().getName() + ": " + nf.format(dis));
-			if (isSetBack() && mayCancel)
+							+ distance + ". Ping: " + Utils.getPing(p),
+					"Distance with " + e.getTargetEntity().getType().getName() + ": " + distanceFormatter.format(distance));
+			if (isSetBack() && mayCancel) {
 				e.setCancelled(true);
+			}
 		}
 	}
 
 	@Listener
-	public void onPlayerInteract(InteractEvent e, @First Player p){
+	public void onPlayerInteract(InteractEvent e, @First Player p) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this)) {
 			return;
-		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
+		}
+
+		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
 			return;
+		}
+
 		Location<World> ploc = p.getLocation();
-		Vector3d eyeloc = p.getHeadRotation();
+		Vector3d eyeloc = p.getLocation().getPosition().add(0, 1.8, 0);
 		FakePlayer c = null;
-		double distanceWithPlayer = 500, distanceWithEye = 500;
+		double distanceWithPlayer = 500;
+		double distanceWithEye = 500;
 		for (FakePlayer temp : np.FAKE_PLAYER) {
 			Location<World> cloc = temp.getLocation();
-			double nextDistanceWithPlayer = ploc.getPosition().distance(cloc.getPosition()), nextDistanceWithEye = eyeloc.distance(cloc.getPosition());
+			double nextDistanceWithPlayer = ploc.getPosition().distance(cloc.getPosition());
+			double nextDistanceWithEye = eyeloc.distance(cloc.getPosition());
 			if (nextDistanceWithPlayer < distanceWithPlayer && nextDistanceWithPlayer < 10) {
 				distanceWithPlayer = nextDistanceWithPlayer;
 				c = temp;
@@ -92,8 +89,10 @@ public class ForceFieldProtocol extends Cheat {
 				c = temp;
 			}
 		}
-		if (c == null)
+
+		if (c == null) {
 			return;
+		}
 
 		np.fakePlayerTouched++;
 		c.hide(p);
@@ -101,8 +100,10 @@ public class ForceFieldProtocol extends Cheat {
 	}
 
 	public static void manageForcefieldForFakeplayer(Player p, SpongeNegativityPlayer np) {
-		if (np.fakePlayerTouched < 5)
+		if (np.fakePlayerTouched < 5) {
 			return;
+		}
+
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
 		double rapport = np.fakePlayerTouched / (timeBehindStart / 1000);
 		SpongeNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.fromString("FORCEFIELD").get(),
@@ -110,7 +111,7 @@ public class ForceFieldProtocol extends Cheat {
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");
 	}
-	
+
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";

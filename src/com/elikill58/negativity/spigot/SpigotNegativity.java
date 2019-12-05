@@ -393,7 +393,7 @@ public class SpigotNegativity extends JavaPlugin {
 					if(np.ALERT_NOT_SHOWED.containsKey(c) && np.ALERT_NOT_SHOWED.get(c).size() > 1) {
 						new ClickableText().addRunnableHoverEvent(
 								Messages.getMessage(pl, "negativity.alert_multiple", "%name%", p.getName(), "%cheat%", c.getName(),
-										"%reliability%", String.valueOf(100), "%nb%", String.valueOf(np.ALERT_NOT_SHOWED.get(c))),
+										"%reliability%", String.valueOf(100), "%nb%", String.valueOf(np.ALERT_NOT_SHOWED.get(c).size())),
 								Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
 										String.valueOf(100), "%ping%", String.valueOf(ping))
 										+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),

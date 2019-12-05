@@ -33,7 +33,7 @@ import com.elikill58.negativity.universal.permissions.Perm;
 
 public class UniversalUtils {
 
-	public static String CHANNEL_NEGATIVITY = "negativity:message", CHANNEL_NEGATIVITY_BUNGEECORD = "negativity:bungee", CHANNEL_NEGATIVITY_MOD = "negativity:mod";
+	public static String CHANNEL_NEGATIVITY = "negativity:msg", CHANNEL_NEGATIVITY_BUNGEECORD = "negativity:bunge", CHANNEL_NEGATIVITY_MOD = "negativity:mod";
 	
 	public static List<String> getClasseNamesInPackage(String jarName, String packageName) {
 		ArrayList<String> classes = new ArrayList<>();

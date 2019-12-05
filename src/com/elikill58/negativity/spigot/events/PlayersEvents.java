@@ -78,7 +78,7 @@ public class PlayersEvents implements Listener {
 				p.sendMessage(msg);
 				ReportCommand.REPORT_LAST.clear();
 			}
-			Utils.sendUpdateMessageIfNeed(p);
+			Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), () -> Utils.sendUpdateMessageIfNeed(p));
 		}
 		SpigotNegativity.manageAutoVerif(p);
 	}

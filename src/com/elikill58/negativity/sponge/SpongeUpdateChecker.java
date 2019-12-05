@@ -35,7 +35,7 @@ public class SpongeUpdateChecker {
 		//String downloadUrlHref = recommendedNode.getNode("href").getString("/Elikill58/Negativity/versions");
 		//boolean isNewerVersion = !recommendedVersion.equals(currentPluginVersion.get());
 		//String downloadUrl = "https://ore.spongepowered.org" + downloadUrlHref;
-		return recommendedVersion.equals(currentPluginVersion.get());
+		return !recommendedVersion.equals(currentPluginVersion.get());
 	}
 
 	public static boolean ifUpdateAvailable() {

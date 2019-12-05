@@ -1,8 +1,11 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import java.util.List;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -32,24 +35,15 @@ public class JesusProtocol extends Cheat implements Listener {
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		Location loc = p.getLocation();
-		/*Material m = loc.getBlock().getType(), under = loc.clone().add(0, -1, 0).getBlock().getType();
-		if (m.equals(Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER")))
-			np.isInWater = true;
-		else
-			np.isInWater = false;
-		if (under.equals(Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER")))
-			np.isOnWater = true;
-		else
-			np.isOnWater = false;*/
-		Entity vehicle = p.getVehicle();
-		if(vehicle != null)
-			if(vehicle instanceof Boat)
-				return;
-		if (/*!np.isInWater && np.isOnWater &&*/ !hasBoatAroundHim(loc)) {
+		Material m = loc.getBlock().getType(), under = loc.clone().add(0, -1, 0).getBlock().getType();
+		boolean isInWater = m.equals(Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER"));
+		boolean isOnWater = under.equals(Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER"));
+		if (p.getVehicle() instanceof Boat)
+			return;
+		if (!isInWater && isOnWater && !hasBoatAroundHim(loc)) {
 			if (!np.hasOtherThan(loc.clone().subtract(0, 1, 0), Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER"))
 					&& !p.getLocation().getBlock().getType().equals(Utils.getMaterialWith1_13_Compatibility("WATER_LILY", "LEGACY_WATER_LILY"))) {
-				boolean has = hasWaterLily(loc.clone().subtract(0, 1, 0));
-				if(has)
+				if(hasWaterLily(loc.clone().subtract(0, 1, 0)))
 					return;
 				for (int u = 0; u < 360; u += 3) {
 					Location flameloc = loc.clone().subtract(0, 1, 0);
@@ -118,17 +112,22 @@ public class JesusProtocol extends Cheat implements Listener {
 		for (int y = (fY - 1); y != (fY + 2); y++)
 			for (int x = (fX - 2); x != (fX + 3); x++)
 				for (int z = (fZ - 2); z != (fZ + 3); z++)
-					if(loc.getWorld().getBlockAt(x, y, z).getType().equals(Utils.getMaterialWith1_13_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER")))
+					if(loc.getWorld().getBlockAt(x, y, z).getType().equals(Utils.getMaterialWith1_13_Compatibility("WATER_LILY", "LEGACY_WATER_LILY")))
 						hasWaterLily = true;
 		return hasWaterLily;
 	}
 	
 	public boolean hasBoatAroundHim(Location loc) {
-		for(Player p : Utils.getOnlinePlayers()) {
-			Location l = p .getLocation();
-			if(l.getWorld().equals(loc.getWorld()))
-				if(l.distance(loc) < 2)
-					return true;
+		World world = loc.getWorld();
+		if (world == null) {
+			return false;
+		}
+
+		List<Entity> entities = world.getEntities();
+		for(Entity entity : entities) {
+			Location l = entity.getLocation();
+			if (entity instanceof Boat && l.distance(loc) < 2)
+				return true;
 		}
 		return false;
 	}

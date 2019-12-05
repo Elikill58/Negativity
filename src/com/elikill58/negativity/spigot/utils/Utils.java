@@ -32,7 +32,6 @@ public class Utils {
 
 	public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
 			.split(",")[3];
-	public static final ClickableText MESSAGE_UPDATE = new ClickableText().addOpenURLHoverEvent(ChatColor.YELLOW + "New version of Negativity available (" + UniversalUtils.getLatestVersion().orElse("unknow") +  "). " + ChatColor.BOLD + "Download it here.", "Click here", "https://www.spigotmc.org/resources/48399/");
 
 	public static int getMultipleOf(int i, int multiple, int more) {
 		while (i % multiple != 0)
@@ -253,7 +252,11 @@ public class Utils {
 			return;
 		if(UniversalUtils.isLatestVersion(SpigotNegativity.getInstance().getDescription().getVersion()))
 			return;
-		MESSAGE_UPDATE.sendToPlayer(p);
+		String newerVersion = UniversalUtils.getLatestVersion().orElse("unknow");
+		new ClickableText().addOpenURLHoverEvent(
+				ChatColor.YELLOW + "New version of Negativity available (" + newerVersion +  "). " + ChatColor.BOLD + "Download it here.",
+				"Click here", "https://www.spigotmc.org/resources/48399/")
+				.sendToPlayer(p);
 	}
 
 	public static double getLastTPS() {

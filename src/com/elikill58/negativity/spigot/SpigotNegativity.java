@@ -145,7 +145,6 @@ public class SpigotNegativity extends JavaPlugin {
 		for (Player p : Utils.getOnlinePlayers()) {
 			PacketListenerAPI.addPlayer(p);
 			manageAutoVerif(p);
-			Utils.sendUpdateMessageIfNeed(p);
 		}
 		(clickTimer = new ActualizeClickTimer()).runTaskTimer(this, 20, 20);
 		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
@@ -164,7 +163,7 @@ public class SpigotNegativity extends JavaPlugin {
 			for (String s : cs.getKeys(false))
 				new ItemUseBypass(s, cs.getString(s + ".cheats"), cs.getString(s + ".when"));
 		}
-		if (UniversalUtils.hasInternet() && !UniversalUtils.isLatestVersion(getDescription().getVersion())) {
+		if (!UniversalUtils.isLatestVersion(getDescription().getVersion())) {
 			getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
 					+ "). Download it here: https://www.spigotmc.org/resources/48399/");
 		}

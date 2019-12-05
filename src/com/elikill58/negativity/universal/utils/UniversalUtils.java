@@ -26,7 +26,6 @@ import javax.net.ssl.X509TrustManager;
 
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.DefaultConfigValue;
-import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -87,16 +86,6 @@ public class UniversalUtils {
 		}
 	}
 
-	public static boolean hasInternet() {
-		try {
-			URL url = new URL("http://www.google.com");
-			url.openConnection();
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
-	}
-
 	public static boolean isLatestVersion(String version) {
 		if (version == null)
 			return false;
@@ -145,17 +134,6 @@ public class UniversalUtils {
 			return Optional.of(content);
 		} catch (Exception e) {
 			return Optional.empty();
-		}
-	}
-
-	public static boolean statsServerOnline() {
-		try {
-			URL url = new URL(Stats.SITE);
-			url.openConnection();
-			return true;
-		} catch (Exception e) {
-			Stats.STATS_IN_MAINTENANCE = true;
-			return false;
 		}
 	}
 

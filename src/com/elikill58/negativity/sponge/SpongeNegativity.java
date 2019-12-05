@@ -274,8 +274,10 @@ public class SpongeNegativity implements RawDataListener {
 				}
 			}
 
-
-			if(SpongeUpdateChecker.ifUpdateAvailable()) {
+			Task.builder().async().name("negativity-update-checker-" + p.getName()).execute(() -> {
+				if (!SpongeUpdateChecker.ifUpdateAvailable()) {
+					return;
+				}
 				URL downloadUrl;
 				try {
 					downloadUrl = new URL(SpongeUpdateChecker.getDownloadUrl());
@@ -289,7 +291,7 @@ public class SpongeNegativity implements RawDataListener {
 						.onHover(TextActions.showText(Text.of("Click here")))
 						.onClick(TextActions.openUrl(downloadUrl))
 						.build());
-			}
+			}).submit(this);
 		}
 		manageAutoVerif(p);
 	}

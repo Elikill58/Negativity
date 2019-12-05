@@ -98,6 +98,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public long timeStartFakePlayer = 0, launchFirework = 0;
 	public Location<World> lastSpiderLoc = null;
 
+	public boolean justDismounted = false;
+
 	public SpongeNegativityPlayer(Player p) {
 		super(p.getUniqueId());
 		this.p = p;

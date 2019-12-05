@@ -10,8 +10,10 @@ import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
+import org.spongepowered.api.event.entity.RideEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -38,6 +40,11 @@ public class SpeedProtocol extends Cheat {
 
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this)) {
+			return;
+		}
+
+		if (np.justDismounted) {
+			// Dismounting a boat teleports the player, triggering a false positive
 			return;
 		}
 
@@ -73,6 +80,19 @@ public class SpeedProtocol extends Cheat {
 		if (mayCancel && isSetBack()) {
 			e.setCancelled(true);
 		}
+	}
+
+	@Listener
+	public void onEntityMount(RideEntityEvent.Mount event, @First Player player) {
+		SpongeNegativityPlayer.getNegativityPlayer(player).justDismounted = true;
+	}
+
+	@Listener
+	public void onEntityDismount(RideEntityEvent.Dismount event, @First Player player) {
+		Task.builder()
+				.delayTicks(3)
+				.execute(() -> SpongeNegativityPlayer.getNegativityPlayer(player).justDismounted = false)
+				.submit(SpongeNegativity.getInstance());
 	}
 
 	private boolean canBoostWithPackedIce(Location<World> feetLocation) {

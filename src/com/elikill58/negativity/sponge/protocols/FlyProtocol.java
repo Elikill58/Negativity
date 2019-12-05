@@ -41,6 +41,12 @@ public class FlyProtocol extends Cheat {
 			return;
 		}
 
+		if (p.getVehicle().isPresent() || np.justDismounted) {
+			// Some cases like jumping with a horse may trigger false positives,
+			// dismounting while it is jumping also triggers false positives
+			return;
+		}
+
 		if (p.get(Keys.CAN_FLY).orElse(false)) {
 			return;
 		}

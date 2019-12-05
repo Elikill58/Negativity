@@ -38,6 +38,11 @@ public class StepProtocol extends Cheat {
 			return;
 		}
 
+		if (np.justDismounted) {
+			// Dismounting horses triggers a false positive
+			return;
+		}
+
 		if ((System.currentTimeMillis() - np.launchFirework) < 1000) {
 			return;
 		}

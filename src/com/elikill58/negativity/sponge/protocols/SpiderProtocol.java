@@ -42,6 +42,11 @@ public class SpiderProtocol extends Cheat {
 			return;
 		}
 
+		if (p.getVehicle().isPresent()) {
+			// Mounting horses triggers false positives constantly
+			return;
+		}
+
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this) || np.getFallDistance() != 0
 				|| p.get(Keys.IS_ELYTRA_FLYING).orElse(false) || p.get(Keys.IS_FLYING).orElse(false)) {
@@ -86,6 +91,11 @@ public class SpiderProtocol extends Cheat {
 	@Listener
 	public void onPlayerMove2(MoveEntityEvent e, @First Player p) {
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
+			return;
+		}
+
+		if (p.getVehicle().isPresent()) {
+			// Mounting horses triggers false positives constantly
 			return;
 		}
 

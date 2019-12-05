@@ -33,6 +33,12 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 		if (!(e.getEntity() instanceof Player) || e.isCancelled())
 			return;
 		Player p = (Player) e.getEntity();
+
+		if (p.isInsideVehicle()) {
+			// Knockback is not applied to entities riding other entities
+			return;
+		}
+
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;

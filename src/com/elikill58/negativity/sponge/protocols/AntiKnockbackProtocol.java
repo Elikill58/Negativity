@@ -9,6 +9,7 @@ import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
+import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSources;
 import org.spongepowered.api.event.cause.entity.damage.source.EntityDamageSource;
@@ -44,6 +45,16 @@ public class AntiKnockbackProtocol extends Cheat {
 		}
 
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
+			return;
+		}
+
+		if (p.getVehicle().isPresent()) {
+			// Knockback is not applied to entities riding other entities
+			return;
+		}
+
+		if (damageSource.getType() == DamageTypes.FALL) {
+			// Falling deals damage but does not necessarily moves the player
 			return;
 		}
 

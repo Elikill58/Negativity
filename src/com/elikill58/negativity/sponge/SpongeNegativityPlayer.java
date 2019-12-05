@@ -75,13 +75,14 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
 	// warns & other
 	public int ONLY_KEEP_ALIVE = 0, NO_PACKET = 0, BETTER_CLICK = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0;
+	public int movementsOnWater;
 	// setBack
 	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, LAST_SLOT_CLICK = -1;
 	public double lastY = -3.142654, lastSpiderDistance;
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
 	public String LAST_OTHER_KEEP_ALIVE;
-	public boolean isInWater = false, isOnWater = false, IS_LAST_SEC_SNEAK = false, bypassBlink = false,
+	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false,
 			isFreeze = false, slime_block = false, already_blink = false,
 			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false, haveClick = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;

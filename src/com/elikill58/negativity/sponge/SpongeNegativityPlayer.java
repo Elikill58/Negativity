@@ -1,11 +1,10 @@
 package com.elikill58.negativity.sponge;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -69,7 +68,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
 	public Map<Cheat, List<PlayerCheatEvent.Alert>> pendingAlerts = new HashMap<>();
 	private Player p = null;
-	private UUID uuid = null;
 	// Packets
 	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,
 			BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
@@ -87,10 +85,10 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false, haveClick = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public ItemType eatMaterial = ItemTypes.AIR;
-	public File file, directory, proofFile;
+	public Path proofFile;
 	private ConfigurationNode config;
 	private HoconConfigurationLoader configLoader;
-	public List<String> proof = new ArrayList<>();
+	private final List<String> proofs = new ArrayList<>();
 	public Minerate mineRate;
 	public boolean isInFight = false;
 	public Task fightTask = null;
@@ -103,20 +101,16 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public SpongeNegativityPlayer(Player p) {
 		super(p.getUniqueId());
 		this.p = p;
-		this.uuid = p.getUniqueId();
 		this.mineRate = new Minerate(this);
 
+		String uuidString = p.getUniqueId().toString();
 		try {
-			directory = new File(SpongeNegativity.getInstance().getDataFolder().toAbsolutePath() + File.separator
-					+ "user" + File.separator + "proof" + File.separator);
-			file = new File(SpongeNegativity.getInstance().getDataFolder().toAbsolutePath() + File.separator + "user"
-					+ File.separator + uuid + ".yml");
-			proofFile = new File(SpongeNegativity.getInstance().getDataFolder().toAbsolutePath() + File.separator
-					+ "user" + File.separator + "proof" + File.separator + uuid + ".txt");
-			directory.mkdirs();
-			if (!proofFile.exists())
-				proofFile.createNewFile();
-			config = (configLoader = HoconConfigurationLoader.builder().setFile(file).build()).load();
+			Path userDir = SpongeNegativity.getInstance().getDataFolder().resolve("user");
+			Path proofDir = userDir.resolve("proof");
+			proofFile = proofDir.resolve(uuidString + ".txt");
+			Files.createDirectories(proofDir);
+			Path userFile = userDir.resolve(uuidString + ".yml");
+			config = (configLoader = HoconConfigurationLoader.builder().setPath(userFile).build()).load();
 			ConfigurationNode cheatsNode = config.getNode("cheats");
 			for (Cheat cheat : Cheat.values()) {
 				String cheatId = cheat.getKey().toLowerCase();
@@ -180,13 +174,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		return ACTIVE_CHEAT;
 	}
 
-	public void logProof(Timestamp stamp, String msg) {
-		proof.add(msg);
-		try {
-			Files.write(proofFile.toPath(), ("\n" + msg).getBytes(), StandardOpenOption.APPEND);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+	public void logProof(String msg) {
+		proofs.add(msg);
 	}
 
 	public void saveData() {
@@ -205,6 +194,15 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			configLoader.save(config);
 		} catch (IOException e) {
 			SpongeNegativity.getInstance().getLogger().error("Unable to save data of player " + p.getName(), e);
+		}
+
+		if (!proofs.isEmpty()) {
+			try {
+				Files.createDirectories(proofFile.getParent());
+				Files.write(proofFile, proofs, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+			} catch (IOException e) {
+				SpongeNegativity.getInstance().getLogger().error("Unable to save proofs of player " + p.getName(), e);
+			}
 		}
 	}
 
@@ -244,10 +242,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-
-	public void setLang(String l) {
-		saveData();
 	}
 
 	public void clearPackets() {

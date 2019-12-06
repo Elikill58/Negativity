@@ -502,7 +502,7 @@ public class SpongeNegativity implements RawDataListener {
 		if (!log)
 			return;
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		SpongeNegativityPlayer.getNegativityPlayer(p).logProof(stamp,
+		SpongeNegativityPlayer.getNegativityPlayer(p).logProof(
 				stamp + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " > " + proof);
 	}
 

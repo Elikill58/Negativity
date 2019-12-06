@@ -344,11 +344,15 @@ public class SpongeAdapter extends Adapter {
 
 		@Override
 		public NegativityAccount load(UUID playerId) throws Exception {
-			NegativityAccount account = new NegativityAccount(playerId, TranslatedMessages.getLang(playerId), false, new ArrayList<>());
-
+			// Workaround to avoid copying the default language file content
+			// A proper fix will probably require a refactoring of the translation loading system
 			Path userFilePath = SpongeNegativity.getInstance().getDataFolder().resolve("user").resolve(playerId.toString() + ".yml");
-			ConfigurationNode userData = HoconConfigurationLoader.builder().setPath(userFilePath).build().load();
-			account.setLang(userData.getNode("lang").getString(TranslatedMessages.DEFAULT_LANG));
+			Files.createDirectories(userFilePath.getParent());
+			if (Files.notExists(userFilePath)) {
+				Files.createFile(userFilePath);
+			}
+
+			NegativityAccount account = new NegativityAccount(playerId, TranslatedMessages.getLang(playerId), false, new ArrayList<>());
 
 			account.loadBanRequest();
 			return account;

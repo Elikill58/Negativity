@@ -160,6 +160,10 @@ public class SpongeNegativity implements RawDataListener {
 
 	@Listener
 	public void onGameStop(GameStoppingServerEvent e) {
+		for (Player player : Sponge.getServer().getOnlinePlayers()) {
+			SpongeNegativityPlayer nPlayer = SpongeNegativityPlayer.getNegativityPlayer(player);
+			nPlayer.saveData();
+		}
 		if (!isOnBungeecord)
 			Task.builder().async().delayTicks(1).execute(new Runnable() {
 				@Override

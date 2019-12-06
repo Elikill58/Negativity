@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -127,11 +129,11 @@ public class SpigotAdapter extends Adapter {
 	}
 
 	@Override
-	public String getStringInOtherConfig(String fileDir, String valueDir, String fileName) {
-		File f = new File(pl.getDataFolder(), fileDir + File.separatorChar + fileName);
-		if (!f.exists())
-			copy(fileName, f);
-		return YamlConfiguration.loadConfiguration(f).getString(valueDir, TranslatedMessages.DEFAULT_LANG);
+	public String getStringInOtherConfig(Path relativeFile, String key, String defaultValue) {
+		Path configFile = pl.getDataFolder().toPath().resolve(relativeFile);
+		if (Files.notExists(configFile))
+			return defaultValue;
+		return YamlConfiguration.loadConfiguration(configFile.toFile()).getString(key, defaultValue);
 	}
 
 	@Override

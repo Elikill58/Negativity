@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal;
 
-import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.List;
@@ -42,7 +43,8 @@ public class TranslatedMessages {
 				}
 			}
 
-			return Adapter.getAdapter().getStringInOtherConfig(File.separator + "user" + File.separator, "lang", idString + ".yml");
+			Path file = Paths .get("user" , idString + ".yml");
+			return Adapter.getAdapter().getStringInOtherConfig(file, "lang", DEFAULT_LANG);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return DEFAULT_LANG;

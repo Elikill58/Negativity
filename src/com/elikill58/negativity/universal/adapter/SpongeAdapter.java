@@ -165,28 +165,23 @@ public class SpongeAdapter extends Adapter {
 	}
 
 	@Override
-	public String getStringInOtherConfig(String fileDir, String valuePath, String fileName) {
-		// Guard for usages that cannot be changed because other Adapter implementations are not updated.
-		// If fileDir starts with File.separatorChar it is considered an absolute path by Path#resolve, definitely not what we want.
-		if (fileDir.charAt(0) == File.separatorChar)
-			fileDir = fileDir.substring(1);
-
-		Path filePath = pl.getDataFolder().resolve(fileDir).resolve(fileName);
+	public String getStringInOtherConfig(Path relativeFile, String key, String defaultValue) {
+		Path filePath = pl.getDataFolder().resolve(relativeFile);
 		if (Files.notExists(filePath))
-			copy(fileName, filePath);
+			return defaultValue;
 
 		try {
 			ConfigurationNode node = loadHoconFile(filePath);
-			String[] parts = valuePath.split("\\.");
+			String[] parts = key.split("\\.");
 			for (String s : parts)
 				node = node.getNode(s);
 
-			return node.getString();
+			return node.getString(defaultValue);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
-		return null;
+		return defaultValue;
 	}
 
 	@Override
@@ -253,10 +248,10 @@ public class SpongeAdapter extends Adapter {
 	public String getStringFromLang(String lang, String key) {
 		try {
 			String node = getFinalNode(key, LANGS.get(lang)).getString();
-			return node == null ? DefaultConfigValue.STRINGS.get(key) : node;
+			return node == null ? DefaultConfigValue.STRINGS.getOrDefault(key, key) : node;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
+			return key;
 		}
 	}
 
@@ -343,15 +338,7 @@ public class SpongeAdapter extends Adapter {
 	private static class NegativityAccountLoader extends CacheLoader<UUID, NegativityAccount> {
 
 		@Override
-		public NegativityAccount load(UUID playerId) throws Exception {
-			// Workaround to avoid copying the default language file content
-			// A proper fix will probably require a refactoring of the translation loading system
-			Path userFilePath = SpongeNegativity.getInstance().getDataFolder().resolve("user").resolve(playerId.toString() + ".yml");
-			Files.createDirectories(userFilePath.getParent());
-			if (Files.notExists(userFilePath)) {
-				Files.createFile(userFilePath);
-			}
-
+		public NegativityAccount load(UUID playerId) {
 			NegativityAccount account = new NegativityAccount(playerId, TranslatedMessages.getLang(playerId), false, new ArrayList<>());
 
 			account.loadBanRequest();

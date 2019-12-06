@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,15 +110,15 @@ public class BungeeAdapter extends Adapter {
 	}
 
 	@Override
-	public String getStringInOtherConfig(String fileDir, String valueDir, String fileName) {
-		File f = new File(pl.getDataFolder().getAbsolutePath() + fileDir);
-		if (!f.exists())
-			copy(fileName, f);
+	public String getStringInOtherConfig(Path relativeFile, String key, String defaultValue) {
+		Path configFile = pl.getDataFolder().toPath().resolve(relativeFile);
+		if (Files.notExists(configFile))
+			return defaultValue;
 		try {
-			return ConfigurationProvider.getProvider(YamlConfiguration.class).load(f).getString(valueDir);
+			return ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile.toFile()).getString(key, defaultValue);
 		} catch (IOException e) {
 			e.printStackTrace();
-			return null;
+			return defaultValue;
 		}
 	}
 

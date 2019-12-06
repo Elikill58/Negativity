@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal.adapter;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -42,7 +43,7 @@ public abstract class Adapter {
 	public abstract double getDoubleInConfig(String dir);
 	public abstract List<String> getStringListInConfig(String dir);
 	public abstract HashMap<String, String> getKeysListInConfig(String dir);
-	public abstract String getStringInOtherConfig(String fileDir, String valueDir, String fileName);
+	public abstract String getStringInOtherConfig(Path relativeFile, String key, String defaultValue);
 	public abstract File copy(String lang, File f);
 	public abstract void log(String msg);
 	public abstract void warn(String msg);

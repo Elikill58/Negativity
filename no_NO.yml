@@ -42,6 +42,7 @@ negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 ser ut til å bruke &c%cheat% &7(&2Pålitelighet: %reliability%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 ser ut til å bruke &c%cheat% %nb% tid &7(&2Pålitelighet: %reliability%%&7) !"
   alert_hover: "&6Pålitelighet: %reliability%%\nPing: %ping%"
+  no_alerts: "&a[&2Negativity&a] No alerts to display."
   verif:
     invalid_cheat: "%arg% er ikke en gyldig juks!"
     start: "&a[&2Negativity&a] &7begynte å analysere %name% for %cheat%"

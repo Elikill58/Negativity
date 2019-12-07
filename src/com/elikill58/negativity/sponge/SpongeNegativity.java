@@ -43,6 +43,7 @@ import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
+import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.elikill58.negativity.sponge.commands.BanCommand;
@@ -486,7 +487,7 @@ public class SpongeNegativity implements RawDataListener {
 	}
 
 	public static Text createAlertText(Player suspect, Cheat cheat, String hoverProof, int ping, int pendingAlertsCount,
-									   String messageKey, int reliability, Player receiver) {
+									   String messageKey, int reliability, MessageReceiver receiver) {
 		return Text
 				.builder(Messages.getStringMessage(receiver, messageKey,
 						"%name%", suspect.getName(),

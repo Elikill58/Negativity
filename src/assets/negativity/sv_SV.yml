@@ -50,6 +50,7 @@ negativity {
   alert: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% &7(&2Reliability: %Pålitlighet%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% %nb% tid &7(&2Reliability: %Pålitlighet%%&7) !"
   alert_hover: "&6Pålitlighet: %reliability%%\nPing: %ping%"
+  no_alerts: "&a[&2Negativity&a] No alerts to display."
   verif {
     invalid_cheat: "%arg% är inte ett slags fusk !"
     start: "&a[&2Negativity&a] &7Började analysera %name% för %cheat%"

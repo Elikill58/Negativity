@@ -1,107 +1,30 @@
 package com.elikill58.negativity.bungee;
 
-import java.io.File;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.HashMap;
-import java.util.List;
-
-import com.elikill58.negativity.universal.Database;
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.TranslatedMessages;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 
 public class BungeeMessages {
-
-	public static final HashMap<ProxiedPlayer, String> PLAYER_LANG = new HashMap<>();
-	public static final List<String> LANG = BungeeNegativity.CONFIG.getStringList("Translation.lang_available");
-	public static final HashMap<String, Configuration> LANG_VALUES = new HashMap<>();
-	public static final String column = BungeeNegativity.CONFIG.getString("Permissions.localDatabase.column_lang"),
-			defaulttrans = BungeeNegativity.CONFIG.getString("Translation.default");
-	public static boolean activeTranslation = BungeeNegativity.CONFIG.getBoolean("Translation.active"),
-			useDb = BungeeNegativity.CONFIG.getBoolean("Translation.use_db");
-
-	public static void load(Plugin pl) {
-		try {
-			File langDir = new File(pl.getDataFolder().getAbsolutePath() + "/lang/");
-			if (!langDir.exists()) {
-				langDir.mkdirs();
-				for (String l : LANG)
-					LANG_VALUES.put(l, ConfigurationProvider.getProvider(YamlConfiguration.class)
-							.load(Adapter.getAdapter().copy(l, new File(langDir.getAbsolutePath() + "/" + l + ".yml"))));
-			} else {
-				for (String l : LANG) {
-					File langFile = new File(langDir.getAbsolutePath() + "/" + l + ".yml");
-					if (!langFile.exists())
-						Adapter.getAdapter().copy(l, langFile);
-					LANG_VALUES.put(l, ConfigurationProvider.getProvider(YamlConfiguration.class).load(langFile));
-				}
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	public static String getLang(ProxiedPlayer p) {
-		if (!activeTranslation)
-			return getLang();
-
-		if (p == null) {
-			System.out.println("[Negativity] player null (get lang)");
-			return defaulttrans;
-		}
-
-		if (PLAYER_LANG.containsKey(p))
-			return PLAYER_LANG.get(p);
-		try {
-			String value = "";
-			if (useDb) {
-				PreparedStatement stm = Database.getConnection()
-						.prepareStatement("SELECT * FROM " + BungeeNegativity.CONFIG.getString("Permissions.localDatabase.table_lang") + " WHERE uuid = ?");
-				stm.setString(1, p.getUniqueId().toString());
-				ResultSet result = stm.executeQuery();
-				if (result.next())
-					value = (String) result.getObject(column);
-				if (Database.saveInCache)
-					PLAYER_LANG.put(p, value);
-			}
-			if (value.equalsIgnoreCase("")) {
-				// FILES SYSTEM
-				System.out.println("file system SOON");
-			}
-			return value;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return defaulttrans;
-		}
-	}
-
-	public static String getLang() {
-		return "en_US";
-	}
 
 	public static String getMessage(String dir, String... placeholders) {
 		String message = "";
 		try {
-			message = ChatColor.RESET + LANG_VALUES.get(getLang()).getString(dir);
+			message = ChatColor.RESET
+					+ TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir);
 		} catch (NullPointerException e) {
-			System.out.println("[BungeeNegativity] Unknow ! default: "
-					+ BungeeNegativity.CONFIG.getString("Translation.default") + " Get: " + getLang());
+			e.printStackTrace();
+			System.out.println(TranslatedMessages.getDefaultLang() + " unknow. default: " + TranslatedMessages.DEFAULT_LANG + " Get: " + TranslatedMessages.getDefaultLang());
 		}
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
 			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
-		if (message.equalsIgnoreCase("�rnull"))
+		if (message.equalsIgnoreCase("§rnull"))
 			return dir;
 		return coloredBungeeMessage(message);
 	}
 
 	public static String getMessage(ProxiedPlayer p, String dir, String... placeholders) {
-		String message = ChatColor.RESET + LANG_VALUES.get((p != null ? getLang(p) : getLang())).getString(dir);
+		String message = ChatColor.RESET + TranslatedMessages.getStringFromLang(TranslatedMessages.getLang(p.getUniqueId()), dir);
 		for (int index = 0; index <= placeholders.length - 1; index += 2)
 			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
 		if (message.equalsIgnoreCase("§rnull"))

@@ -35,7 +35,7 @@ public class NegativityListener implements Listener {
 	public void onMessageReceived(PluginMessageEvent event) {
 		if (!event.getTag().toLowerCase().contains("negativity"))
 			return;
-		if(event.getTag().equalsIgnoreCase(UniversalUtils.CHANNEL_NEGATIVITY_BUNGEECORD)) {
+		if(event.getTag().equalsIgnoreCase(UniversalUtils.CHANNEL_NEGATIVITY_BUNGEECORD) || event.getTag().startsWith(UniversalUtils.CHANNEL_NEGATIVITY_BUNGEECORD)) {
 			ByteArrayDataOutput out = ByteStreams.newDataOutput();
 		    out.writeUTF("no");
 		    ProxiedPlayer player = (ProxiedPlayer) (event.getSender() instanceof ProxiedPlayer ? event.getSender() : (event.getReceiver() instanceof ProxiedPlayer ? event.getReceiver() : null));
@@ -56,12 +56,12 @@ public class NegativityListener implements Listener {
 				if (parts.length > 3) {
 					String[] place = new String[] { "%name%", parts[0], "%cheat%", parts[1], "%reliability%", parts[2],
 							"%ping%", parts[3] };
-					String alertMessage = parts.length == 4 ? "alert" : parts[4];
+					String alertMessage = parts.length > 5 ? "alert" : parts[5];
 					String cmd = "/server " + p.getServer().getInfo().getName();
 					for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers())
 						if (Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer(pp), "showAlert")) {
 							TextComponent msg = new TextComponent(BungeeMessages.getMessage(pp, alertMessage, place));
-							String hover = BungeeMessages.getMessage(pp, "alert_hover", place);
+							String hover = BungeeMessages.coloredBungeeMessage(BungeeMessages.getMessage(pp, "alert_hover", place) + (parts.length > 4 && !parts[4].equalsIgnoreCase("") ? "\n" + parts[4] : ""));
 							if (hover.contains("\n")) {
 								ArrayList<TextComponent> components = new ArrayList<>();
 								TextComponent hoverMessage = new TextComponent(

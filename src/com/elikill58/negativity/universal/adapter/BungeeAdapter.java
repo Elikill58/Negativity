@@ -153,16 +153,21 @@ public class BungeeAdapter extends Adapter {
 
 	@Override
 	public void loadLang() {
-		if(!TranslatedMessages.activeTranslation)
-			return;
+		File langDir = new File(pl.getDataFolder().getAbsolutePath() + File.separator + "lang" + File.separator);
+		if (!langDir.exists())
+			langDir.mkdirs();
+
 		try {
-			File langDir = new File(pl.getDataFolder().getAbsolutePath() + File.separator + "lang" + File.separator);
-			if (!langDir.exists())
-				langDir.mkdirs();
-			for (String l : config.getStringList("Translation.lang_available")) {
+			if (!TranslatedMessages.activeTranslation) {
+				String defaultLang = TranslatedMessages.DEFAULT_LANG;
+				LANGS.put(defaultLang, ConfigurationProvider.getProvider(YamlConfiguration.class)
+						.load(copy(defaultLang, new File(langDir.getAbsolutePath() + "/" + defaultLang + ".yml"))));
+				return;
+			}
+
+			for (String l : TranslatedMessages.LANGS)
 				LANGS.put(l, ConfigurationProvider.getProvider(YamlConfiguration.class)
 						.load(copy(l, new File(langDir.getAbsolutePath() + "/" + l + ".yml"))));
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -170,12 +175,12 @@ public class BungeeAdapter extends Adapter {
 
 	@Override
 	public String getStringFromLang(String lang, String key) {
-		return null;
+		return LANGS.get(lang).getString(key);
 	}
 
 	@Override
 	public List<String> getStringListFromLang(String lang, String key) {
-		return new ArrayList<>();
+		return LANGS.get(lang).getStringList(key);
 	}
 
 	@Override

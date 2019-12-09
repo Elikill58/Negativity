@@ -41,7 +41,6 @@ public class BungeeNegativity extends Plugin {
 		getProxy().getPluginManager().registerListener(this, new NegativityListener());
 		Adapter.setAdapter(new BungeeAdapter(this, CONFIG));
 		UniversalUtils.init();
-		BungeeMessages.load(this);
 		Stats.loadStats();
 		Stats.updateStats(StatsType.ONLINE, 1 + "");
 		try {

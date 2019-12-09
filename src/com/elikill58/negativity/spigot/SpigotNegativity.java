@@ -379,14 +379,14 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public static void sendAlertMessage(ReportType type, SpigotNegativityPlayer np, Player p, Cheat c, int ping, int reliability,
 			String hover_proof, PlayerCheatAlertEvent alert, boolean isMultiple) {
+		if (log_console)
+			INSTANCE.getLogger()
+					.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
+							+ ") (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
+							+ reliability);
 		if (isOnBungeecord)
 			sendMessage(p, c.getName(), String.valueOf(reliability), String.valueOf(ping), hover_proof, isMultiple);
 		else {
-			if (log_console)
-				INSTANCE.getLogger()
-						.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
-								+ ") (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
-								+ reliability);
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers())
 				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert")) {

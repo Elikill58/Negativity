@@ -111,7 +111,7 @@ public class Utils {
 	}
 
 	public static ItemStack createSkull(String name, int amount, String owner, String... lore) {
-		ItemStack skull = new ItemStack(getMaterialWith1_13_Compatibility("SKULL_ITEM", "LEGACY_SKULL_ITEM"), 1, (byte) 3);
+		ItemStack skull = new ItemStack(getMaterialWith1_15_Compatibility("PLAYER_HEAD", "SKULL_ITEM", "LEGACY_SKULL_ITEM"), 1, (byte) 3);
 		SkullMeta skullmeta = (SkullMeta) skull.getItemMeta();
 		skullmeta.setDisplayName(ChatColor.RESET + name);
 		skullmeta.setOwner(owner);
@@ -219,6 +219,23 @@ public class Utils {
 			}
 		}
 		return m;
+	}
+
+	public static Material getMaterialWith1_15_Compatibility(String... tempMat) {
+		for(String s : tempMat) {
+			try {
+				Material m = (Material) Material.class.getField(s).get(Material.class);
+				if(m != null)
+					return m;
+			} catch (IllegalArgumentException | IllegalAccessException | SecurityException e2) {
+				e2.printStackTrace();
+			} catch (NoSuchFieldException e) {}
+		}
+		String temp = "";
+		for(String s : tempMat)
+			temp = temp + (temp.equalsIgnoreCase("") ? "" : ", ") + s;
+		Adapter.getAdapter().error("Failed to find Material " + temp);
+		return null;
 	}
 
 	public static Effect getEffect(String effect) {

@@ -6,7 +6,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.meta.SkullMeta;
 
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
@@ -30,7 +29,7 @@ public class CheckMenuInventory {
 		inv.setItem(9, Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
 		inv.setItem(10, Utils.createItem(Material.DIAMOND_PICKAXE, "Minerate", np.mineRate.getInventoryLoreString()));
 		inv.setItem(11, Utils.createItem(Material.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
-		inv.setItem(12, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("SKULL_ITEM", "LEGACY_SKULL_ITEM"), "Fake entities"));
+		inv.setItem(12, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("SKELETON_SKULL", "SKULL_ITEM", "LEGACY_SKULL_ITEM"), Messages.getMessage(p, "fake_entities")));
 		//inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE"), "Kick"));
 		//inv.setItem(17, Utils.createItem(Material.ANVIL, "Ban"));
 		
@@ -82,12 +81,11 @@ public class CheckMenuInventory {
 			p.teleport(cible);
 			p.closeInventory();
 			Inv.CHECKING.remove(p);
-		} else if (m == Utils.getMaterialWith1_13_Compatibility("SKULL_ITEM", "LEGACY_SKULL_ITEM")) {
-			SkullMeta skullmeta = (SkullMeta) e.getCurrentItem().getItemMeta();
-			if(skullmeta.hasOwner())
-				return;
-			p.closeInventory();
-			SpigotNegativityPlayer.getNegativityPlayer(cible).makeAppearEntities();
+		} else if (m == Utils.getMaterialWith1_15_Compatibility("SKELETON_SKULL", "SKULL_ITEM", "LEGACY_SKULL_ITEM")) {
+			if(e.getRawSlot() == 12) {
+				p.closeInventory();
+				SpigotNegativityPlayer.getNegativityPlayer(cible).makeAppearEntities();
+			}
 		} else if(m == Utils.getMaterialWith1_13_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE")) {
 			// kick
 		} else {

@@ -102,6 +102,7 @@ public class DefaultConfigValue {
 		BOOLEANS.put("Translation.active", false);
 		BOOLEANS.put("Translation.use_db", false);
 		STRINGS.put("Translation.default", "en_US");
+		STRINGS.put("Translation.provider", TranslatedMessages.PLATFORM_PROVIDER_ID);
 
 		BOOLEANS.put("hasBungeecord", false);
 

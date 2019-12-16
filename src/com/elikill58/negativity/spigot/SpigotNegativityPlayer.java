@@ -436,7 +436,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		}
 	}
 
-	public void sendMessage(String msg, String... arg) {
+	public void sendMessage(String msg, Object... arg) {
 		String message = Messages.getMessage(getPlayer(), msg, arg);
 		if (!message.equalsIgnoreCase(msg))
 			getPlayer().sendMessage(message);

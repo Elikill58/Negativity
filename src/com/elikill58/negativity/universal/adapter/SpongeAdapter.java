@@ -29,6 +29,11 @@ import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
+import com.elikill58.negativity.universal.translation.ConfigurateTranslationProvider;
+import com.elikill58.negativity.universal.translation.TranslationProvider;
+import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.cache.CacheBuilder;
 import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
@@ -36,20 +41,19 @@ import com.google.common.cache.LoadingCache;
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
-public class SpongeAdapter extends Adapter {
+public class SpongeAdapter extends Adapter implements TranslationProviderFactory {
 
-	private ConfigurationNode config;
 	private Logger logger;
 	private SpongeNegativity pl;
-	private final HashMap<String, ConfigurationNode> LANGS = new HashMap<>();
 	private LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(10, TimeUnit.MINUTES)
 			.build(new NegativityAccountLoader());
+	private Path messagesDir;
 
 	public SpongeAdapter(SpongeNegativity sn) {
 		this.pl = sn;
 		this.logger = sn.getLogger();
-		this.config = SpongeNegativity.getConfig();
+		this.messagesDir = sn.getDataFolder().resolve("messages");
 	}
 
 	@Override
@@ -59,7 +63,7 @@ public class SpongeAdapter extends Adapter {
 
 	@Override
 	public Object getConfig() {
-		return config;
+		return SpongeNegativity.getConfig();
 	}
 
 	@Override
@@ -86,15 +90,7 @@ public class SpongeAdapter extends Adapter {
 	}
 
 	private ConfigurationNode getFinalNode(String dir) throws Exception {
-		ConfigurationNode node = config;
-		String[] parts = dir.split("\\.");
-		for (String s : parts)
-			node = node.getNode(s);
-		return node;
-	}
-
-	private ConfigurationNode getFinalNode(String dir, ConfigurationNode localConf) throws Exception {
-		ConfigurationNode node = localConf;
+		ConfigurationNode node = SpongeNegativity.getConfig();
 		String[] parts = dir.split("\\.");
 		for (String s : parts)
 			node = node.getNode(s);
@@ -232,67 +228,29 @@ public class SpongeAdapter extends Adapter {
 	}
 
 	@Override
-	public void loadLang() {
-		Path messagesDir = pl.getDataFolder().resolve("messages");
+	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
+		return this;
+	}
 
+	@Nullable
+	@Override
+	public TranslationProvider createTranslationProvider(String language) {
+		String translationFile = language + ".yml";
+		Path languageFile = messagesDir.resolve(translationFile);
 		try {
-			for (String lang : TranslatedMessages.LANGS) {
-				LANGS.put(lang, loadHoconFile(copy(lang, messagesDir.resolve(lang + ".yml"))));
-			}
+			ConfigurationNode messagesNode = loadHoconFile(copy(language, languageFile));
+			return new CachingTranslationProvider(new ConfigurateTranslationProvider(messagesNode));
 		} catch (IOException e) {
-			logger.error("Failed to copy default language files", e);
+			logger.error("Failed to load translation file {}.", translationFile, e);
+			return null;
 		}
 	}
-
-	@Override
-	public String getStringFromLang(String lang, String key) {
-		try {
-			String node = getFinalNode(key, LANGS.get(lang)).getString();
-			return node == null ? DefaultConfigValue.STRINGS.getOrDefault(key, key) : node;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return key;
-		}
-	}
-
-	@Override
-	public List<String> getStringListFromLang(String lang, String key) {
-		try {
-			return getFinalNode(key, LANGS.get(lang)).getList(TypeTokens.STRING_TOKEN);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return new ArrayList<>();
-		}
-	}
-
-	/*private void load(String l, ConfigurationNode config) {
-		config.getChildrenMap().forEach((objKey, cn) -> {
-			String key = objKey.toString();
-			Object obj = cn.getValue();
-			if (obj instanceof ConfigurationNode) {
-				load(l, cn.getNode());
-			} else if (obj instanceof String) {
-				HashMap<String, String> msg = LANG_MSG.containsKey(cn.getString()) ? LANG_MSG.get(cn.getString())
-						: new HashMap<>();
-				msg.put(key, config.getString(key));
-				LANG_MSG.put(l, msg);
-			} else if (obj instanceof List) {
-				HashMap<String, List<String>> msg = LANG_MSG_LIST.containsKey(key) ? LANG_MSG_LIST.get(key)
-						: new HashMap<>();
-				try {
-					msg.put(key, config.getList(TypeToken.of(String.class)));
-				} catch (ObjectMappingException e) {
-					e.printStackTrace();
-				}
-				LANG_MSG_LIST.put(l, msg);
-			} else {
-				System.out.println("[Negativity] Unknow type for " + obj.getClass() + " Lang: " + l);
-			}
-		});
-	}*/
 
 	@Override
 	public void reload() {
+		reloadConfig();
+		UniversalUtils.init();
+		Cheat.loadCheat();
 	}
 
 	@Override
@@ -311,6 +269,7 @@ public class SpongeAdapter extends Adapter {
 
 	@Override
 	public void reloadConfig() {
+		pl.loadConfig();
 	}
 
 	@Nonnull

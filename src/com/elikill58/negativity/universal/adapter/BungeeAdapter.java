@@ -11,16 +11,21 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.bungee.BungeeNegativityPlayer;
+import com.elikill58.negativity.bungee.BungeeTranslationProvider;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
+import com.elikill58.negativity.universal.translation.TranslationProvider;
+import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.google.common.io.ByteStreams;
 
 import net.md_5.bungee.api.ProxyServer;
@@ -30,7 +35,7 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-public class BungeeAdapter extends Adapter {
+public class BungeeAdapter extends Adapter implements TranslationProviderFactory {
 
 	private Configuration config;
 	private Plugin pl;
@@ -126,6 +131,11 @@ public class BungeeAdapter extends Adapter {
 	public File copy(String lang, File f) {
 		if (f.exists())
 			return f;
+
+		File parentDir = f.getParentFile();
+		if (!parentDir.exists())
+			parentDir.mkdirs();
+
 		String fileName = "bungee_en_US.yml";
 		if (lang.toLowerCase().contains("fr") || lang.toLowerCase().contains("be"))
 			fileName = "bungee_fr_FR.yml";
@@ -152,35 +162,22 @@ public class BungeeAdapter extends Adapter {
 	}
 
 	@Override
-	public void loadLang() {
-		File langDir = new File(pl.getDataFolder().getAbsolutePath() + File.separator + "lang" + File.separator);
-		if (!langDir.exists())
-			langDir.mkdirs();
+	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
+		return this;
+	}
 
+	@Nullable
+	@Override
+	public TranslationProvider createTranslationProvider(String language) {
+		String languageFileName = language + ".yml";
 		try {
-			if (!TranslatedMessages.activeTranslation) {
-				String defaultLang = TranslatedMessages.DEFAULT_LANG;
-				LANGS.put(defaultLang, ConfigurationProvider.getProvider(YamlConfiguration.class)
-						.load(copy(defaultLang, new File(langDir.getAbsolutePath() + "/" + defaultLang + ".yml"))));
-				return;
-			}
-
-			for (String l : TranslatedMessages.LANGS)
-				LANGS.put(l, ConfigurationProvider.getProvider(YamlConfiguration.class)
-						.load(copy(l, new File(langDir.getAbsolutePath() + "/" + l + ".yml"))));
+			File translationFile = new File(pl.getDataFolder(), "lang" + File.separator + languageFileName);
+			Configuration msgConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(copy(language, translationFile));
+			return new CachingTranslationProvider(new BungeeTranslationProvider(msgConfig));
 		} catch (Exception e) {
-			e.printStackTrace();
+			pl.getLogger().log(Level.SEVERE, "Could not load translation file " + languageFileName, e);
+			return null;
 		}
-	}
-
-	@Override
-	public String getStringFromLang(String lang, String key) {
-		return LANGS.get(lang).getString(key);
-	}
-
-	@Override
-	public List<String> getStringListFromLang(String lang, String key) {
-		return LANGS.get(lang).getStringList(key);
 	}
 
 	@Override

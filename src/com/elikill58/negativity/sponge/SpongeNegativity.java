@@ -156,7 +156,6 @@ public class SpongeNegativity implements RawDataListener {
 					}
 				}
 			}).submit(this);
-		Adapter.getAdapter().loadLang();
 	}
 
 	@Listener
@@ -322,7 +321,7 @@ public class SpongeNegativity implements RawDataListener {
 				e.getTransactions().get(0).getOriginal().getLocation().get().getBlock().getType().getId()));
 	}
 
-	private void loadConfig() {
+	public void loadConfig() {
 		try {
 			File configFile = new File(configDir.toFile(), "config.conf");
 			if (!configFile.exists()) {

@@ -175,7 +175,6 @@ public class SpigotNegativity extends JavaPlugin {
 				Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort() + "");
 			}
 		});
-		ada.loadLang();
 
 		if (Bukkit.getPluginManager().getPlugin("Essentials") != null) {
 			essentialsSupport = true;

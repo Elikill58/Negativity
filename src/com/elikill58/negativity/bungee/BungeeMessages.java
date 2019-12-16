@@ -7,26 +7,22 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BungeeMessages {
 
-	public static String getMessage(String dir, String... placeholders) {
+	public static String getMessage(String dir, Object... placeholders) {
 		String message = "";
 		try {
 			message = ChatColor.RESET
-					+ TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir);
+					+ TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir, placeholders);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 			System.out.println(TranslatedMessages.getDefaultLang() + " unknow. default: " + TranslatedMessages.DEFAULT_LANG + " Get: " + TranslatedMessages.getDefaultLang());
 		}
-		for (int index = 0; index <= placeholders.length - 1; index += 2)
-			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
 		if (message.equalsIgnoreCase("§rnull"))
 			return dir;
 		return coloredBungeeMessage(message);
 	}
 
-	public static String getMessage(ProxiedPlayer p, String dir, String... placeholders) {
-		String message = ChatColor.RESET + TranslatedMessages.getStringFromLang(TranslatedMessages.getLang(p.getUniqueId()), dir);
-		for (int index = 0; index <= placeholders.length - 1; index += 2)
-			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
+	public static String getMessage(ProxiedPlayer p, String dir, Object... placeholders) {
+		String message = ChatColor.RESET + TranslatedMessages.getStringFromLang(TranslatedMessages.getLang(p.getUniqueId()), dir, placeholders);
 		if (message.equalsIgnoreCase("§rnull"))
 			return dir;
 		return coloredBungeeMessage(message);

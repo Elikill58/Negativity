@@ -194,6 +194,14 @@ public class UniversalUtils {
 		HttpsURLConnection.setDefaultHostnameVerifier(hv);
 	}
 
+	public static String replacePlaceholders(String rawMessage, Object... placeholders) {
+		String message = rawMessage;
+		for (int index = 0; index <= placeholders.length - 1; index += 2) {
+			message = message.replace(String.valueOf(placeholders[index]), String.valueOf(placeholders[index + 1]));
+		}
+		return message;
+	}
+
 	public static void init() {
 		DefaultConfigValue.init();
 		Database.init();

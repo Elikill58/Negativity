@@ -8,29 +8,25 @@ import net.kyori.text.serializer.legacy.LegacyComponentSerializer;
 
 public class VelocityMessages {
 
-	public static TextComponent getMessage(String dir, String... placeholders) {
+	public static TextComponent getMessage(String dir, Object... placeholders) {
 		String message = "";
 		try {
-			message = TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir);
+			message = TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir, placeholders);
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 			System.out.println(TranslatedMessages.getDefaultLang() + " unknow. default: " + TranslatedMessages.DEFAULT_LANG + " Get: " + TranslatedMessages.getDefaultLang());
 		}
-		for (int index = 0; index <= placeholders.length - 1; index += 2)
-			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
 		if (message.equalsIgnoreCase("§rnull"))
 			return coloredBungeeMessage(dir);
 		return coloredBungeeMessage(message);
 	}
 
-	public static TextComponent getMessage(Player p, String dir, String... placeholders) {
+	public static TextComponent getMessage(Player p, String dir, Object... placeholders) {
 		return coloredBungeeMessage(getStringMessage(p, dir, placeholders));
 	}
 
-	public static String getStringMessage(Player p, String dir, String... placeholders) {
-		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getLang(p.getUniqueId()), dir);
-		for (int index = 0; index <= placeholders.length - 1; index += 2)
-			message = message.replaceAll(placeholders[index], placeholders[index + 1]);
+	public static String getStringMessage(Player p, String dir, Object... placeholders) {
+		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getLang(p.getUniqueId()), dir, placeholders);
 		if (message.equalsIgnoreCase("§rnull"))
 			return dir;
 		return message;

@@ -52,7 +52,7 @@ public class NegativityListener {
 							+ event.getSource() + " Receiver: " + event.getTarget() + ")");
 				String[] parts = line.split("/\\*\\*/");
 				if (parts.length > 3) {
-					String[] place = new String[] { "%name%", parts[0], "%cheat%", parts[1], "%reliability%", parts[2],
+					Object[] place = new Object[] { "%name%", parts[0], "%cheat%", parts[1], "%reliability%", parts[2],
 							"%ping%", parts[3] };
 					String alertMessage = parts.length > 5 ? "alert" : parts[5];
 					for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers())
@@ -71,7 +71,7 @@ public class NegativityListener {
 							pp.sendMessage(msg.build());
 						}
 				} else {
-					String[] place = new String[] { "%name%", parts[0], "%reason%", parts[1], "%report%", parts[2] };
+					Object[] place = new Object[] { "%name%", parts[0], "%reason%", parts[1], "%report%", parts[2] };
 					boolean hasPermitted = false;
 					for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers())
 						if (Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer(pp), "showReport")) {
@@ -132,11 +132,11 @@ public class NegativityListener {
 
 	public static class Report {
 
-		private String[] place;
+		private Object[] place;
 		private String cmd;
 
-		public Report(String cmd, String... parts) {
-			place = new String[] { "%name%", parts[0], "%cheat%", parts[1], "%reliability%", parts[2], "%ping%",
+		public Report(String cmd, Object... parts) {
+			place = new Object[] { "%name%", parts[0], "%cheat%", parts[1], "%reliability%", parts[2], "%ping%",
 					parts[3] };
 			this.cmd = cmd;
 		}

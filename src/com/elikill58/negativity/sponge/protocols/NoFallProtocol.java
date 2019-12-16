@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge.protocols;
 
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
@@ -28,14 +29,15 @@ public class NoFallProtocol extends Cheat {
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this)) {
+		if (!np.hasDetectionActive(this))
 			return;
-		}
 
-		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
+		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
 			return;
-		}
-
+		
+		if(p.get(Keys.CAN_FLY).orElse(false) || p.get(Keys.IS_ELYTRA_FLYING).orElse(false))
+			return;
+		
 		Location<World> from = e.getFromTransform().getLocation();
 		Location<World> to = e.getToTransform().getLocation();
 		double distance = to.getPosition().distance(from.getPosition());

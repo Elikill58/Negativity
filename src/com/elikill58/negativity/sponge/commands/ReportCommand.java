@@ -42,7 +42,7 @@ public class ReportCommand implements CommandExecutor {
 		String message = Messages.getStringMessage(playerSource, "report.report_message",
 				"%name%", targetPlayer.getName(), "%report%", playerSource.getName(), "%reason%", reason);
 		if (SpongeNegativity.isOnBungeecord) {
-			SpongeNegativity.sendReportMessage(playerSource, message, targetPlayer.getName());
+			SpongeNegativity.sendReportMessage(playerSource, reason, targetPlayer.getName());
 		} else {
 			Text spongeMsg = Text.of(message);
 			boolean hasOp = false;

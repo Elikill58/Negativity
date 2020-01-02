@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.ConnectException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.concurrent.ExecutorService;
@@ -24,7 +25,7 @@ public class Stats {
     public static boolean STATS_IN_MAINTENANCE = false;
 
     public static void updateStats(StatsType type, String... value) {
-    	String post = "&";
+    	String post = "";
     	switch (type) {
 		case BAN:
 			post = "&value=" + value[0];
@@ -51,7 +52,7 @@ public class Stats {
 				UniversalUtils.doTrustToCertificates();
 				conn.setDoOutput(true);
 				OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-				writer.write(post);//"platform=" + Adapter.getAdapter().getName() + "&type=" + type.getKey() + "&value=" + value + more);
+				writer.write(post);
 				writer.flush();
 				writer.close();
 				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
@@ -64,6 +65,9 @@ public class Stats {
 					Adapter.getAdapter().log(end);
 				}
 				br.close();
+			} catch (ConnectException e) {
+				Adapter.getAdapter().log("Error while updating stats, it seems to be a firewall that blocking the stats");
+				STATS_IN_MAINTENANCE = true;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

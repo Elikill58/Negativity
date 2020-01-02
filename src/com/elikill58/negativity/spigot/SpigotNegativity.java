@@ -78,7 +78,7 @@ public class SpigotNegativity extends JavaPlugin {
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
 	private static final HashMap<Player, HashMap<Cheat, Long>> TIME_LAST_CHEAT_ALERT = new HashMap<>();
-	public static String channelNameFml = "";
+	public static String CHANNEL_NAME_FML = "";
 	
 	@Override
 	public void onEnable() {
@@ -133,14 +133,14 @@ public class SpigotNegativity extends JavaPlugin {
 		Messenger messenger = getServer().getMessenger();
 		ChannelEvents channelEvents = new ChannelEvents();
 		if (v.isNewerOrEquals(Version.V1_13)) {
-			channelNameFml = "negativity:fml";
+			CHANNEL_NAME_FML = "negativity:fml";
 		} else {
-			channelNameFml = "FML|HS";
+			CHANNEL_NAME_FML = "FML|HS";
 		}
 		loadChannelInOut(messenger, UniversalUtils.CHANNEL_NEGATIVITY, channelEvents);
 		loadChannelInOut(messenger, UniversalUtils.CHANNEL_NEGATIVITY_BUNGEECORD, channelEvents);
 		loadChannelInOut(messenger, UniversalUtils.CHANNEL_NEGATIVITY_MOD, channelEvents);
-		loadChannelInOut(messenger, channelNameFml, channelEvents);
+		loadChannelInOut(messenger, CHANNEL_NAME_FML, channelEvents);
 		
 		for (Player p : Utils.getOnlinePlayers()) {
 			PacketListenerAPI.addPlayer(p);
@@ -322,8 +322,6 @@ public class SpigotNegativity extends JavaPlugin {
 				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType()).getWhen().equals(WhenBypass.ALWAYS))
 					return false;
 		int ping = Utils.getPing(p);
-		if(ping == 0)
-			return false;
 		long currentTimeMilli = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > currentTimeMilli || reliability < 30 || ping > c.getMaxAlertPing()
 				|| ((double) ((Damageable) p).getHealth()) == 0.0D
@@ -338,24 +336,27 @@ public class SpigotNegativity extends JavaPlugin {
 				return false;
 		}
 		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(type, p, c, reliability,
-				c.getReliabilityAlert() < reliability, ping, proof, hover_proof);
+				c.getReliabilityAlert() < reliability, ping, proof, hover_proof, stats_send);
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
 		np.addWarn(c, reliability);
 		logProof(np, type, p, c, reliability, proof, ping);
-		Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			Bukkit.getPluginManager().callEvent(kick);
 			if (!kick.isCancelled())
 				p.kickPlayer(Messages.getMessage(p, "kick.kicked", "%cheat%", c.getName(), "%reason%", c.getName(), "%playername%", p.getName(), "%cheat%", c.getName()));
 		}
-		if(np.isBanned())
+		if(np.isBanned()) {
+			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
+		}
 		Ban.manageBan(c, np, reliability);
-		if (Ban.isBanned(np.getAccount()))
+		if (Ban.isBanned(np.getAccount())) {
+			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
+		}
 		int timeBetweenTwoAlert = Adapter.getAdapter().getIntegerInConfig("time_between_alert");
 		if(timeBetweenTwoAlert != -1) {
 			HashMap<Cheat, Long> time_alert = (TIME_LAST_CHEAT_ALERT.containsKey(p) ? TIME_LAST_CHEAT_ALERT.get(p) : new HashMap<>());
@@ -367,18 +368,18 @@ public class SpigotNegativity extends JavaPlugin {
 					return true;
 				}
 			}
-				//else reliability = 100;
 			time_alert.put(c, currentTimeMilli);
 			TIME_LAST_CHEAT_ALERT.put(p, time_alert);
 		}
 
-		sendAlertMessage(type, np, p, c, ping, reliability, hover_proof, alert, false);
+		sendAlertMessage(type, np, p, c, ping, reliability, hover_proof, alert, false, stats_send);
 		np.ALERT_NOT_SHOWED.remove(c);
 		return true;
 	}
 
 	public static void sendAlertMessage(ReportType type, SpigotNegativityPlayer np, Player p, Cheat c, int ping, int reliability,
-			String hover_proof, PlayerCheatAlertEvent alert, boolean isMultiple) {
+			String hover_proof, PlayerCheatAlertEvent alert, boolean isMultiple, String stats_send) {
+		Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 		if (log_console)
 			INSTANCE.getLogger()
 					.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
@@ -439,16 +440,12 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public static void manageAutoVerif(Player p) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (Cheat.ALL.isActive()) {
-			np.startAllAnalyze();
-			return;
-		}
 		boolean needPacket = false;
 		for (Cheat c : Cheat.values())
-			if (c.isActive() || Cheat.ALL.isActive()) {
-				if (c.isAutoVerif() || Cheat.ALL.isAutoVerif()) {
+			if (c.isActive()) {
+				if (c.isAutoVerif()) {
 					np.startAnalyze(c);
-					if (c.needPacket() || Cheat.ALL.needPacket())
+					if (c.needPacket())
 						needPacket = true;
 				}
 			}

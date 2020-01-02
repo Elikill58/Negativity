@@ -34,7 +34,7 @@ public class FastPlaceProtocol extends Cheat {
 		np.LAST_BLOCK_PLACE = System.currentTimeMillis();
 		if (lastPing < 50) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this,
-					Utils.parseInPorcent(last * 1.5), "Blockplaced too quickly. Last time: " + last + ", Last with ping: "
+					Utils.parseInPorcent(50 + lastPing), "Blockplaced too quickly. Last time: " + last + ", Last with ping: "
 							+ lastPing + ". Ping: " + Utils.getPing(p),
 					"2 blocks placed in: " + last + " ms\nReal player do it in 150/200ms");
 			if (isSetBack() && mayCancel) {

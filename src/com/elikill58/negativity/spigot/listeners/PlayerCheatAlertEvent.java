@@ -12,12 +12,12 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 
 	private boolean cancel = false, hasRelia, alert;
 	private Player p;
-	private Cheat c;
-	private int relia, ping;
-	private String proof, hover_proof;
-	private ReportType type;
+	private final Cheat c;
+	private final int relia, ping;
+	private final String proof, hover_proof, stats_send;
+	private final ReportType type;
 	
-	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof) {
+	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof, String stats_send) {
 		this.type = type;
 		this.p = p;
 		this.c = c;
@@ -27,6 +27,7 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 		this.ping = ping;
 		this.proof = proof;
 		this.hover_proof = hover_proof;
+		this.stats_send = stats_send;
 	}
 	
 	@Override
@@ -77,6 +78,10 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	
 	public String getHoverProof() {
 		return hover_proof;
+	}
+	
+	public String getStatsSend() {
+		return stats_send;
 	}
 	
 	@Override

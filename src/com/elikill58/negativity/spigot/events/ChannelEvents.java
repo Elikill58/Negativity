@@ -49,7 +49,7 @@ public class ChannelEvents implements PluginMessageListener {
 				String[] temp = l.split(":");
 				np.MODS.put(temp[0], temp[1]);
 			}
-		} else if (channel.equalsIgnoreCase(SpigotNegativity.channelNameFml)) {
+		} else if (channel.equalsIgnoreCase(SpigotNegativity.CHANNEL_NAME_FML)) {
 			if (data[0] == 2) {
 				SpigotNegativityPlayer.getNegativityPlayer(p).MODS.putAll(getModData(data));
 			}

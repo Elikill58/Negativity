@@ -18,6 +18,11 @@ public class Database {
 		Database.username = username;
 		Database.password = password;
 		try {
+			try {
+				Class.forName("com.mysql.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				Adapter.getAdapter().warn("Cannot find driver for MySQL.");
+			}
 			connection = DriverManager.getConnection("jdbc:mysql://" + url, username, password);
 			Database.hasCustom = true;
 		} catch (SQLException e) {

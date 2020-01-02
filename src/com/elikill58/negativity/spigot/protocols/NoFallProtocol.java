@@ -16,6 +16,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class NoFallProtocol extends Cheat implements Listener {
 	
@@ -38,10 +39,10 @@ public class NoFallProtocol extends Cheat implements Listener {
 		if (!(p.getVehicle() != null || distance == 0.0D || from.getY() < to.getY()))
 			if (p.getFallDistance() == 0.0F && !p.hasPotionEffect(PotionEffectType.SPEED)
 					&& p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
+				int relia = Utils.parseInPorcent(distance * 100);
 				if (p.isOnGround()) {
 					if (distance > 0.79D) {
-						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
-								Utils.parseInPorcent(distance * 100),
+						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
 								"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceBetweenFromAndTo: "
 										+ distance + " (ping: " + Utils.getPing(p) + "). Warn: "
 										+ np.getWarn(this));
@@ -49,13 +50,12 @@ public class NoFallProtocol extends Cheat implements Listener {
 							np.NO_FALL_DAMAGE += 1;
 					} else if (np.NO_FALL_DAMAGE != 0) {
 						if (isSetBack())
-							p.damage(np.NO_FALL_DAMAGE);
+							manageDamage(p, np.NO_FALL_DAMAGE, relia);
 						np.NO_FALL_DAMAGE = 0;
 					}
 				} else {
 					if (distance > 2D) {
-						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
-								Utils.parseInPorcent(distance * 100),
+						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
 								"Player not in ground no fall Damage. FallDistance: " + p.getFallDistance()
 										+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + Utils.getPing(p)
 										+ "). Warn: " + np.getWarn(this));
@@ -63,11 +63,16 @@ public class NoFallProtocol extends Cheat implements Listener {
 							np.NO_FALL_DAMAGE += 1;
 					} else if (np.NO_FALL_DAMAGE != 0) {
 						if (isSetBack())
-							p.damage(np.NO_FALL_DAMAGE);
+							manageDamage(p, np.NO_FALL_DAMAGE, relia);
 						np.NO_FALL_DAMAGE = 0;
 					}
 				}
 			}
+	}
+	
+	private void manageDamage(Player p, int damage, int relia) {
+		Adapter ada = Adapter.getAdapter();
+		p.damage(damage >= p.getHealth() ? (ada.getBooleanInConfig("kill") && ada.getDoubleInConfig("kill-reliability") >= relia ? damage : p.getHealth() - 0.5) : p.getHealth());
 	}
 	
 	@Override

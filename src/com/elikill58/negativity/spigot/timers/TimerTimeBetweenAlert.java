@@ -26,13 +26,7 @@ public class TimerTimeBetweenAlert extends BukkitRunnable {
 						if(hover != "")
 							hover = "\n" + hover;
 						if(i.size() == 1) {
-							SpigotNegativity.sendAlertMessage(i.get(0).getReportType(), np, p, c, ping, i.get(0).getReliability(), hover, i.get(0), false);
-							/*new ClickableText().addRunnableHoverEvent(
-									Messages.getMessage(pl, "negativity.alert", "%name%", p.getName(), "%cheat%", c.getName(),
-											"%reliability%", String.valueOf(100)),
-									Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
-											String.valueOf(100), "%ping%", String.valueOf(ping)) + hover,
-									"/negativity " + p.getName()).sendToPlayer(pl);*/
+							SpigotNegativity.sendAlertMessage(i.get(0).getReportType(), np, p, c, ping, i.get(0).getReliability(), hover, i.get(0), false, i.get(0).getStatsSend());
 						} else {
 							PlayerCheatAlertEvent alert = null;
 							int nb = 0;
@@ -43,13 +37,7 @@ public class TimerTimeBetweenAlert extends BukkitRunnable {
 							}
 							if(alert == null)
 								alert = i.get(0);
-							SpigotNegativity.sendAlertMessage(alert.getReportType(), np, p, c, ping, nb / i.size(), hover, alert, true);
-							/*new ClickableText().addRunnableHoverEvent(
-									Messages.getMessage(pl, "negativity.alert_multiple", "%name%", p.getName(), "%cheat%", c.getName(),
-											"%reliability%", String.valueOf(100), "%nb%", String.valueOf(i)),
-									Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
-											String.valueOf(100), "%ping%", String.valueOf(ping)) + hover,
-									"/negativity " + p.getName()).sendToPlayer(pl);*/
+							SpigotNegativity.sendAlertMessage(alert.getReportType(), np, p, c, ping, nb / i.size(), hover, alert, true, i.get(i.size() - 1).getStatsSend());
 						}
 					});
 				}

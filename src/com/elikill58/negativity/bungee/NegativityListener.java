@@ -57,7 +57,6 @@ public class NegativityListener implements Listener {
 					String[] place = new String[] { "%name%", parts[0], "%cheat%", parts[1], "%reliability%", parts[2],
 							"%ping%", parts[3] };
 					String alertMessage = parts.length > 5 ? "alert" : parts[5];
-					String cmd = "/server " + p.getServer().getInfo().getName();
 					for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers())
 						if (Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer(pp), "showAlert")) {
 							TextComponent msg = new TextComponent(BungeeMessages.getMessage(pp, alertMessage, place));
@@ -76,24 +75,21 @@ public class NegativityListener implements Listener {
 							} else
 								msg.setHoverEvent(
 										new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
-							msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, cmd));
+							msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, (pp.getServer().equals(p.getServer()) ? "/tp " : "/server ") + p.getServer().getInfo().getName()));
 							pp.sendMessage(msg);
 						}
 				} else {
-					String cmd = "/server " + p.getServer().getInfo().getName();
 					String[] place = new String[] { "%name%", parts[0], "%reason%", parts[1], "%report%", parts[2] };
 					boolean hasPermitted = false;
 					for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers())
 						if (Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer(pp), "showReport")) {
-							if(pp.getServer().equals(p.getServer()))
-								cmd = "/tp " + parts[0];
 							hasPermitted = true;
 							TextComponent msg = new TextComponent(BungeeMessages.getMessage(pp, "report", place));
-							msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, cmd));
+							msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, (pp.getServer().equals(p.getServer()) ? "/tp " : "/server ") + p.getServer().getInfo().getName()));
 							pp.sendMessage(msg);
 						}
 					if (!hasPermitted)
-						report.add(new Report(cmd, place));
+						report.add(new Report("/server " + p.getServer().getInfo().getName(), place));
 				}
 			} catch (Exception e) {
 				e.printStackTrace();

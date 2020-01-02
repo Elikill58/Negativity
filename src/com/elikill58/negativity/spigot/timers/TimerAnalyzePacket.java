@@ -103,12 +103,12 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				if (ping < 140) {
 					int total = np.ALL - np.KEEP_ALIVE;
 					if (total == 0) {
-						if(Utils.parseInPorcent(150 - ping) >= BLINK.getReliabilityAlert()) {
+						if(Utils.parseInPorcent(100 - ping) >= BLINK.getReliabilityAlert()) {
 							boolean last = np.IS_LAST_SEC_BLINK == 2;
 							np.IS_LAST_SEC_BLINK++;
 							long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
 							if (last) {
-								SpigotNegativity.alertMod(ReportType.WARNING, p, BLINK, Utils.parseInPorcent(150 - ping),
+								SpigotNegativity.alertMod(ReportType.WARNING, p, BLINK, Utils.parseInPorcent(100 - ping),
 										"No packet. Last other than KeepAlive: " + np.LAST_OTHER_KEEP_ALIVE + " there is: "
 												+ time_last + "ms . Ping: " + ping + ". Warn: " + np.getWarn(BLINK));
 							}
@@ -136,10 +136,14 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				if(ping < EDITED_CLIENT.getMaxAlertPing()){
 					int allPos = np.POSITION_LOOK + np.POSITION;
 					if(allPos > 60) {
-						SpigotNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, EDITED_CLIENT, Utils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + " Ping: " + ping + " Warn for EditedClient: " + np.getWarn(EDITED_CLIENT));
+						SpigotNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, EDITED_CLIENT, Utils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + ") Ping: " + ping + " Warn for Timer: " + np.getWarn(EDITED_CLIENT));
 					}
 				}
 			}
+			Cheat NUKER = Cheat.fromString("NUKER").get();
+			if(np.ACTIVE_CHEAT.contains(NUKER))
+				if(ping < NUKER.getMaxAlertPing() && (np.BLOCK_DIG - (ping / 10)) > 20)
+					SpigotNegativity.alertMod(np.BLOCK_DIG > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, Utils.parseInPorcent(20 + np.BLOCK_DIG), "BlockDig packet: " + np.BLOCK_DIG + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
 			np.clearPackets();
 		}
 	}

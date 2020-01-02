@@ -322,6 +322,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    kill: false
+    kill-reliability: 90 # reliability to authorize to kill player
 
   # FastEat is to eat something instantly
   fasteat:
@@ -500,7 +502,7 @@ cheats:
     kick: false
     alert_to_kick: 5
 
-  # AntoSteal help with inventory (Take verything ...)
+  # AutoSteal help with inventory (Take verything ...)
   autosteal:
     ping: 150
     exact_name: "AutoSteal"
@@ -532,15 +534,15 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
-
-  # For all cheats
-  all:
-    ping: 150
-    exact_name: "All"
+  
+  # Nuker/BedBreaker automatically break block without looking her
+  nuker:
+    ping: 200
+    exact_name: "Nuker"
     isActive: true
     reliability_alert: 60
     autoVerif: true
-    setBack: false
+    setBack: true
     kick: false
     alert_to_kick: 5
 

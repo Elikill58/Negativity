@@ -52,7 +52,7 @@ public class ProtocollibSupport {
 							np.USE_ENTITY++;
 							int id = e.getPacket().getIntegers().getValues().get(0);
 							for(FakePlayer fp : np.getFakePlayers())
-								if(fp.getEntityId() != id)
+								if(fp.getEntityId() == id)
 									np.removeFakePlayer(fp, true);
 						} else if (e.getPacketType().equals(PacketType.Play.Client.ENTITY_ACTION)) {
 							np.ENTITY_ACTION++;

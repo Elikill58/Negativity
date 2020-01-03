@@ -1,4 +1,4 @@
-alert: "&a[&2Negativity&a] &c%name%&7 semble utiliser &c%cheat% &7(&2Fiabilité: %reliability%&7) !"
+alert: "&a[&2Negativity&a] &c%name%&7 semble utiliser &c%cheat% &7(&2Fiabilité: %reliability%%&7) !"
 alert_multiple: "&a[&2Negativity&a] &c%name%&7 semble utiliser &c%cheat% %nb% fois &7(&2Fiabilité: %reliability%%&7) !"
 alert_hover: "&6Fiabilité: %reliability%\nPing: %ping%"
 report: "&a[&2Negativity&a] &c%name% &7a été report par &c%report% &7pour &c%reason%"

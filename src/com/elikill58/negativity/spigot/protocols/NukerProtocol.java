@@ -32,7 +32,9 @@ public class NukerProtocol extends Cheat implements Listener {
 		Block target = p.getTargetBlock(null, 5);
 		if ((target.getType() != e.getBlock().getType())) {
 			//e.setCancelled(true);
-			SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(100), "BlockDig ");				
+			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(100), "BlockDig " + e.getBlock().getType().name() + ", player see " + target.getType().name() + ". Ping: " + Utils.getPing(p) + ". Warn: " + np.getWarn(this));				
+			if(isSetBack() && mayCancel)
+				e.setCancelled(true);
 		}
 		long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
 		if(dis < 50) {

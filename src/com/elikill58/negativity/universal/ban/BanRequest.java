@@ -14,8 +14,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
-import org.bukkit.Bukkit;
-
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
@@ -197,7 +195,7 @@ public class BanRequest {
 				e.printStackTrace();
 			}
 		} else if(Ban.banType.equals(BanType.COMMAND)) {
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getWithReplaceOlder(Adapter.getAdapter().getStringInConfig("ban.command_ban")));
+			Adapter.getAdapter().runConsoleCommand(getWithReplaceOlder(Adapter.getAdapter().getStringInConfig("ban.command_ban")));
 			kickCmd = false;
 		} else if(Ban.banType.equals(BanType.PLUGIN)) {
 			for (BanPluginSupport bp : Ban.BAN_SUPPORT) {
@@ -223,7 +221,7 @@ public class BanRequest {
 			Adapter ada = Adapter.getAdapter();
 			np.removeBanRequest(this);
 			if(Ban.banType.equals(BanType.PLUGIN)) {
-				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), getWithReplaceOlder(Adapter.getAdapter().getStringInConfig("ban.command_unban")));
+				Adapter.getAdapter().runConsoleCommand(getWithReplaceOlder(Adapter.getAdapter().getStringInConfig("ban.command_unban")));
 			} else if (ada.getBooleanInConfig("ban.destroy_when_unban")) {
 				if (Ban.banType.equals(BanType.FILE)) {
 					Files.write(f.toPath(), "".getBytes(), StandardOpenOption.TRUNCATE_EXISTING);

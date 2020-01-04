@@ -172,7 +172,7 @@ public class BanRequest {
 				for (String keys : hash.keySet()) {
 					values += "," + keys;
 					parentheses += ",?";
-					content.add(getWithReplaceOlder(hash.get(keys)));
+					content.add(applyPlaceholders(hash.get(keys)));
 				}
 				PreparedStatement stm = Database.getConnection().prepareStatement(
 						"INSERT INTO " + Database.table_ban + "(" + values + ") VALUES (?,?,?,?,?,?" + parentheses + ")");
@@ -184,7 +184,7 @@ public class BanRequest {
 				stm.setString(6, by);
 				int i = 7;
 				for (String cc : content) {
-					String s = getWithReplaceOlder(cc);
+					String s = applyPlaceholders(cc);
 					if (UniversalUtils.isInteger(s))
 						stm.setInt(i++, Integer.parseInt(s));
 					else
@@ -195,7 +195,9 @@ public class BanRequest {
 				e.printStackTrace();
 			}
 		} else if(Ban.banType.equals(BanType.COMMAND)) {
-			Adapter.getAdapter().runConsoleCommand(getWithReplaceOlder(Adapter.getAdapter().getStringInConfig("ban.command_ban")));
+			Adapter adapter = Adapter.getAdapter();
+			adapter.getStringListInConfig("ban.command.ban")
+					.forEach(command -> adapter.runConsoleCommand(applyPlaceholders(command)));
 			kickCmd = false;
 		} else if(Ban.banType.equals(BanType.PLUGIN)) {
 			for (BanPluginSupport bp : Ban.BAN_SUPPORT) {
@@ -221,7 +223,9 @@ public class BanRequest {
 			Adapter ada = Adapter.getAdapter();
 			np.removeBanRequest(this);
 			if(Ban.banType.equals(BanType.PLUGIN)) {
-				Adapter.getAdapter().runConsoleCommand(getWithReplaceOlder(Adapter.getAdapter().getStringInConfig("ban.command_unban")));
+				Adapter adapter = Adapter.getAdapter();
+				adapter.getStringListInConfig("ban.command.unban")
+						.forEach(command -> adapter.runConsoleCommand(applyPlaceholders(command)));
 			} else if (ada.getBooleanInConfig("ban.destroy_when_unban")) {
 				if (Ban.banType.equals(BanType.FILE)) {
 					Files.write(f.toPath(), "".getBytes(), StandardOpenOption.TRUNCATE_EXISTING);
@@ -270,7 +274,7 @@ public class BanRequest {
 		}
 	}
 
-	private String getWithReplaceOlder(String s) {
+	private String applyPlaceholders(String s) {
 		String life = "?";
 		String name = "???";
 		String level = "?";

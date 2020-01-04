@@ -16,6 +16,7 @@ lang:
   help: "/lang <new lang> : Change the default language"
   current: "The current language is %lang%"
   language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in english"
+  translation_disabled: "&a[&2Negativity&a] &cPer-player translations are disabled"
 ban:
   kick_time: "&cBan for %reason% until %time% by %by%."
   kick_def: "&cBan definitly for %reason% by %by%."
@@ -55,7 +56,7 @@ negativity:
     start_all: "&a[&2Negativity&a] Started full analysis for player %name%"
     start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
     help:
-      - "/negativity verif <player> [cheats...] : Starts verifications (all if none is given)" 
+      - "/negativity verif <player> [cheats...] : Starts verifications (all if none is given)"
       - "/negativity <player> : To see some informations about this player"
 inventory:
   close: "Close"

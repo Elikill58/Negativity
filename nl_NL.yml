@@ -34,7 +34,7 @@ unban:
   well_unban: "&a[&2Negativity&a]&c %name% is succesvol unbanned."
   not_banned: "&c%name% is niet verbannen."
   not_exact: "%arg% is geen geldige naam van een verbannen speler."
-  help: "/nunban <speler> : Unban een verbannen speler." 
+  help: "/nunban <speler> : Unban een verbannen speler."
 kick:
   help: "/nkick <speler> <reden> : Kick de opgegeven speler."
   well_kick: "&a[&2Negativity&a]&c %name% is succesvol gekicked voor %reason%."
@@ -54,7 +54,7 @@ negativity:
     start: "&a[&2Negativity&a] &7Bezig met het analyseren van %name% voor %cheat%"
     start_all: "&a[&2Negativity&a] Bezig met het volledige analyseren van %name%"
     help:
-      - "/negativity verif <speler> [cheats...] : Start verificaties (alles indien er geen zijn opgegeven)" 
+      - "/negativity verif <speler> [cheats...] : Start verificaties (alles indien er geen zijn opgegeven)"
       - "/negativity <speler> : Om wat informatie over deze speler te zien"
 inventory:
   close: "Sluiten"

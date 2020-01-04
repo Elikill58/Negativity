@@ -57,7 +57,6 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.SuspectManager;
-import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpigotAdapter;
@@ -261,10 +260,9 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 
 		PluginCommand langCmd = getCommand("lang");
-		if (!TranslatedMessages.activeTranslation)
-			unRegisterBukkitCommand(langCmd);
-		else
-			langCmd.setExecutor(new LangCommand());
+		LangCommand langExecutor = new LangCommand();
+		langCmd.setExecutor(langExecutor);
+		langCmd.setTabCompleter(langExecutor);
 
 		PluginCommand suspectCmd = getCommand("suspect");
 		if (!SuspectManager.ENABLED)

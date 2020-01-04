@@ -10,11 +10,11 @@ lang:
   invalid_lang: "%arg% isn't a valid lang !"
   help: "/lang <new lang> : Change the default language"
   current: "The current language is %lang%"
-  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in portugese"
+  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in norwegian"
 ban:
   kick_time: "&cForbud grunn %reason% før %time% av %by%."
   kick_def: "&cForbud definitivt for %reason% av %by%."
-  help: 
+  help:
   # For the time, there is:
   # y : years
   # mo : months
@@ -49,7 +49,7 @@ negativity:
     start: "&a[&2Negativity&a] &7begynte å analysere %name% for %cheat%"
     start_all: "&a[&2Negativity&a] startet full analyse for spilleren %name%"
     help:
-      - "/negativity verif <spiller> [juks...] : Starter verifikasjoner (alt hvis ingen er gitt)" 
+      - "/negativity verif <spiller> [juks...] : Starter verifikasjoner (alt hvis ingen er gitt)"
       - "/negativity <spiller> : For å se noen opplysninger om denne spiller"
 inventory:
   close: "lukke"

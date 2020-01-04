@@ -15,7 +15,7 @@ lang:
   invalid_lang: "%arg% isn't a valid lang !"
   help: "/lang <new lang> : Change the default language"
   current: "The current language is %lang%"
-  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in portugese"
+  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in brazilian portuguese"
 ban:
   kick_time: "&cProibido por %reason% para cimau %time% por %by%."
   kick_def: "&cPermanentemente proibido por %reason% por %by%."
@@ -54,7 +54,7 @@ negativity:
     start: "&a[&2Negativity&a] &7Começou a analisar %name% por %cheat%"
     start_all: "&a[&2Negativity&a] Iniciou análise completa para o jogador %name%"
     help:
-      - "/negativity verif <jogador> [cheats...] : Inicia verificações (tudo se nenhum for dado)" 
+      - "/negativity verif <jogador> [cheats...] : Inicia verificações (tudo se nenhum for dado)"
       - "/negativity <jogador> : Para ver algumas informações sobre este jogador"
 inventory:
   close: "Fechar"

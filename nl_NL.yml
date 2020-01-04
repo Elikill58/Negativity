@@ -38,7 +38,7 @@ unban:
 kick:
   help: "/nkick <speler> <reden> : Kick de opgegeven speler."
   well_kick: "&a[&2Negativity&a]&c %name% is succesvol gekicked voor %reason%."
-  kicked: "Je bent gekicked door %playername% voor %reason%."
+  kicked: "Je bent gekicked door %name% voor %reason%."
 report:
   report_usage: "/report <naam> <reden>"
   well_report: "&a%name% is succesvol gerapporteerd!"

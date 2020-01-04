@@ -33,7 +33,7 @@ unban:
 kick:
   help: "/nkick <player> <reason> : Spark den angitte spilleren"
   well_kick: "&a[&2Negativity&a]&c %name% Ble kicket for %reason%."
-  kicked: "Du har blitt kicket av %playername% for %reason%"
+  kicked: "Du har blitt kicket av %name% for %reason%"
 report:
   report_usage: "/report <navn> <grunn>"
   well_report: "&a%name% rapport vellykket !"

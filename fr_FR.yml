@@ -39,7 +39,7 @@ unban:
 kick:
   help: "/kick <joueur> <raison> : Exclure le joueur spécifié"
   well_kick: "&a[&2Negativity&a]&c %name% a bien été exclu pour %reason%."
-  kicked: "Vous avez été exclu par %playername% pour %reason%"
+  kicked: "Vous avez été exclu par %name% pour %reason%"
 report:
   report_usage: "/report <joueur> <raison>"
   well_report: "&a%name% a bien été report !"

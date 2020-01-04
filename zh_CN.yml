@@ -38,7 +38,7 @@ unban:
 kick:
   help: "/nkick <玩家名> <原因> : 踢出指定的玩家"
   well_kick: "&a[&2弊绝风清&a]&c 因为 %reason% %name% 被踢出"
-  kicked: "你被 %playername% 踢出，因为 %reason%"
+  kicked: "你被 %name% 踢出，因为 %reason%"
 report:
   report_usage: "/report <名称> <理由>"
   well_report: "&a已成功举报 %name%！"

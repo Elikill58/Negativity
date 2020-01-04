@@ -38,7 +38,7 @@ unban:
 kick:
   help: "/nkick <jogador> <razão> : Kick um jogador especifico."
   well_kick: "&a[&2Negativity&a]&c %name% foi kickado por %reason%."
-  kicked: "Você foi kickado por %playername% motivo %reason%"
+  kicked: "Você foi kickado por %name% motivo %reason%"
 report:
   report_usage: "/report <nome> <razão>"
   well_report: "&a%name% Reportado com sucesso!"

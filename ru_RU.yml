@@ -38,7 +38,7 @@ unban:
 kick:
   help: "/nkick <игрок> <причина> : Кикнуть указанного игрока."
   well_kick: "&a[&2Negativity&a]&c %name% был кикнут за %reason%."
-  kicked: "Вы кикнуты игроком %playername% за %reason%"
+  kicked: "Вы кикнуты игроком %name% за %reason%"
 report:
   report_usage: "/report <игрок> <причина>"
   well_report: "&aИгрок %name% получил репорт!"

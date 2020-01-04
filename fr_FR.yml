@@ -48,10 +48,12 @@ negativity:
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 semble utiliser &c%cheat% %nb% fois &7(&2Fiabilité: %reliability%%&7) !"
   alert_hover: "&6Fiabilité: %reliability%%\nPing: %ping%"
   no_alerts: "&a[&2Negativity&a] Aucune alerte à afficher."
+  reload_done: "&a[&2Negativity&a] Le plugin a été rechargé."
   verif:
     invalid_cheat: "%arg% n'est pas un cheat !"
     start: "&a[&2Negativity&a] &7Démarrage de l'analyse de %cheat% pour %name%"
     start_all: "&a[&2Negativity&a] Démarrage de toutes les analyses pour %name%"
+    start_none: "&a[&2Negativity&a] &cL'analyse ne peut pas être démarrée puisqu'aucun cheat valide n'a été précisé"
     help:
       - "/negativity verif <joueur> [cheats...] : Démarrer les vérifications (Toutes si aucune n'est précisé)" 
       - "/negativity <joueur> : Pour voir les informations a propos de ce joueur"

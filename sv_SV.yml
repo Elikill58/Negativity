@@ -48,6 +48,7 @@ negativity:
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% %nb% tid &7(&2Reliability: %reliability%%&7) !"
   alert_hover: "&6Pålitlighet: %reliability%%\nPing: %ping%"
   no_alerts: "&a[&2Negativity&a] No alerts to display."
+  reload_done: "&a[&2Negativity&a] Plugin reloaded."
   verif:
     invalid_cheat: "%arg% är inte ett slags fusk !"
     start: "&a[&2Negativity&a] &7Började analysera %name% för %cheat%"

@@ -48,10 +48,12 @@ negativity:
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 seem to use &c%cheat% %nb% times &7(&2Reliability: %reliability%%&7) !"
   alert_hover: "&6Reliability: %reliability%%\nPing: %ping%"
   no_alerts: "&a[&2Negativity&a] No alerts to display."
+  reload_done: "&a[&2Negativity&a] Plugin reloaded."
   verif:
     invalid_cheat: "%arg% is not a valid cheat !"
     start: "&a[&2Negativity&a] &7Started analyzing %name% for %cheat%"
     start_all: "&a[&2Negativity&a] Started full analysis for player %name%"
+    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
     help:
       - "/negativity verif <player> [cheats...] : Starts verifications (all if none is given)" 
       - "/negativity <player> : To see some informations about this player"

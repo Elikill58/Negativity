@@ -48,6 +48,7 @@ negativity:
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% %nb% tijd &7(&2Kans: %reliability%%&7)!"
   alert_hover: "&6Kans: %reliability%%\nPing: %ping%"
   no_alerts: "&a[&2Negativity&a] No alerts to display."
+  reload_done: "&a[&2Negativity&a] Plugin reloaded."
   verif:
     invalid_cheat: "%arg% is geen geldige cheat!"
     start: "&a[&2Negativity&a] &7Bezig met het analyseren van %name% voor %cheat%"

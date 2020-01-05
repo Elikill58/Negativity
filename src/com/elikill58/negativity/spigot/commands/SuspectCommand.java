@@ -59,7 +59,7 @@ public class SuspectCommand implements CommandExecutor, TabCompleter {
 		}
 		if (players.equalsIgnoreCase(""))
 			players = Messages.getMessage((Player) sender, "none");
-		SpigotNegativityPlayer.getNegativityPlayer((Player) sender).sendMessage("well_suspect", "%players%", players);
+		Messages.sendMessage(sender, "well_suspect", "%players%", players);
 		return false;
 	}
 

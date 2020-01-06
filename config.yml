@@ -177,8 +177,8 @@ Translation:
   default: en_US
 
 # 
-# You can put this plugin on your Bungeecord/Waterfall !
-# Why ? You can know when a player hack even if you're not on the same spigot's server !
+# You can put this plugin on your Bungeecord/Waterfall/Velocity !
+# Why ? You can know when a player hack even if you're not on the same spigot/sponge server !
 # 
 hasBungeecord: false
 
@@ -546,3 +546,7 @@ cheats:
     kick: false
     alert_to_kick: 5
 
+  # There is some special features
+  special:
+    mcleaks:
+      kick: true

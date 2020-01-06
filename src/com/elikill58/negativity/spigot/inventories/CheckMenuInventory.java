@@ -1,11 +1,15 @@
 package com.elikill58.negativity.spigot.inventories;
 
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
@@ -29,7 +33,8 @@ public class CheckMenuInventory {
 		inv.setItem(9, Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
 		inv.setItem(10, Utils.createItem(Material.DIAMOND_PICKAXE, "Minerate", np.mineRate.getInventoryLoreString()));
 		inv.setItem(11, Utils.createItem(Material.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
-		inv.setItem(12, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("SKELETON_SKULL", "SKULL_ITEM", "LEGACY_SKULL_ITEM"), Messages.getMessage(p, "fake_entities")));
+		inv.setItem(12, getWoolItem(np.isMcLeaks()));
+		inv.setItem(13, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("SKELETON_SKULL", "SKULL_ITEM", "LEGACY_SKULL_ITEM"), Messages.getMessage(p, "fake_entities")));
 		//inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE"), "Kick"));
 		//inv.setItem(17, Utils.createItem(Material.ANVIL, "Ban"));
 		
@@ -68,6 +73,18 @@ public class CheckMenuInventory {
 			return 4;
 		else
 			return 5;
+	}
+	
+	@SuppressWarnings("deprecation")
+	private static ItemStack getWoolItem(boolean b) {
+		ItemStack item = new ItemStack(Utils.getMaterialWith1_15_Compatibility((b ? "RED_WOOL" : "LIME_WOOL"), "WOOL"));
+		if(item.getType().name().equals("WOOL"))
+			item.setDurability((short) (b ? 14 : 5));
+		ItemMeta meta = item.getItemMeta();
+		meta.setDisplayName(ChatColor.RESET + "McLeaks: " + (b ? ChatColor.RED + "Yes" : ChatColor.GREEN + "No"));
+		meta.setLore(Arrays.asList(ChatColor.GRAY + "McLeak is a", ChatColor.GRAY + "Generator of account"));
+		item.setItemMeta(meta);
+		return item;
 	}
 	
 	public static void manageCheckMenu(InventoryClickEvent e, Material m, Player p) {

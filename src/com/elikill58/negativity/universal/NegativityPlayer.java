@@ -3,14 +3,16 @@ package com.elikill58.negativity.universal;
 import java.util.UUID;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public abstract class NegativityPlayer {
 
 	private final UUID playerId;
-	private boolean isBanned = false;
+	private boolean isBanned = false, isMcLeaks = false;
 
 	public NegativityPlayer(UUID playerId) {
 		this.playerId = playerId;
+		this.isMcLeaks = UniversalUtils.isMcleaks(playerId.toString());
 	}
 
 	public NegativityAccount getAccount() {
@@ -19,6 +21,10 @@ public abstract class NegativityPlayer {
 	
 	public UUID getUUID() {
 		return playerId;
+	}
+	
+	public boolean isMcLeaks() {
+		return isMcLeaks;
 	}
 	
 	public boolean isBanned() {

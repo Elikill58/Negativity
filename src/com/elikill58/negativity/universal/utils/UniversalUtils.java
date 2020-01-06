@@ -24,6 +24,9 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.SuspectManager;
@@ -135,6 +138,35 @@ public class UniversalUtils {
 		} catch (Exception e) {
 			return Optional.empty();
 		}
+	}
+	
+	public static boolean isMcleaks(String uuid) {
+		try {
+			URL url = new URL("https://mcleaks.themrgong.xyz/api/v3/isuuidmcleaks/" + uuid);
+			doTrustToCertificates();
+			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+			/*
+			 * connection.setConnectTimeout(5); connection.setReadTimeout(5);
+			 */
+			connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+			connection.setUseCaches(true);
+			connection.setDoOutput(true);
+			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String content = "";
+			String input;
+			while ((input = br.readLine()) != null)
+				content = content + input;
+			br.close();
+			Object data = new JSONParser().parse(content);
+			if(data instanceof JSONObject) {
+				JSONObject json = (JSONObject) data;
+				if(json.containsKey("isMcleaks"))
+					return Boolean.getBoolean(json.get("isMcleaks").toString());
+			}
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+        return false;
 	}
 
 	public static boolean isValidIP(String ip) {

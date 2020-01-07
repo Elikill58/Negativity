@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot;
 
-import java.io.ByteArrayOutputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -66,6 +64,9 @@ import com.elikill58.negativity.universal.ban.support.AdvancedBanSupport;
 import com.elikill58.negativity.universal.ban.support.EssentialsBanSupport;
 import com.elikill58.negativity.universal.ban.support.MaxBansSupport;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 @SuppressWarnings("deprecation")
@@ -137,9 +138,7 @@ public class SpigotNegativity extends JavaPlugin {
 		} else {
 			CHANNEL_NAME_FML = "FML|HS";
 		}
-		loadChannelInOut(messenger, UniversalUtils.CHANNEL_NEGATIVITY, channelEvents);
-		loadChannelInOut(messenger, UniversalUtils.CHANNEL_NEGATIVITY_BUNGEECORD, channelEvents);
-		loadChannelInOut(messenger, UniversalUtils.CHANNEL_NEGATIVITY_MOD, channelEvents);
+		loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID, channelEvents);
 		loadChannelInOut(messenger, CHANNEL_NAME_FML, channelEvents);
 		
 		for (Player p : Utils.getOnlinePlayers()) {
@@ -384,9 +383,9 @@ public class SpigotNegativity extends JavaPlugin {
 					.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
 							+ ") (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
 							+ reliability);
-		if (isOnBungeecord)
-			sendMessage(p, c.getName(), String.valueOf(reliability), String.valueOf(ping), hover_proof, isMultiple);
-		else {
+		if (isOnBungeecord) {
+			sendAlertMessage(p, c.getName(), reliability, ping, hover_proof, isMultiple);
+		} else {
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers())
 				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert")) {
@@ -414,19 +413,22 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 	}
 
-	private static void sendMessage(Player p, String cheatName, String reliability, String ping, String hover, boolean isMultiple) {
-		sendReportMessage(p, p.getName() + "/**/" + cheatName + "/**/" + reliability + "/**/" + ping + "/**/" + hover + "/**/" + (isMultiple ? "alert_multiple" : "alert"));
-	}
-
-	public static void sendReportMessage(Player p, String reportMsg) {
-		sendReportMessage(p, reportMsg, UniversalUtils.CHANNEL_NEGATIVITY);
-	}
-
-	public static void sendReportMessage(Player p, String reportMsg, String channel) {
-		try (ByteArrayOutputStream ba = new ByteArrayOutputStream(); DataOutputStream out = new DataOutputStream(ba)) {
-			out.writeUTF(reportMsg);
-			p.sendPluginMessage(SpigotNegativity.getInstance(), channel, ba.toByteArray());
+	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, String hover, boolean isMultiple) {
+		try {
+			AlertMessage alertMessage = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, isMultiple);
+			p.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(alertMessage));
 		} catch (IOException e) {
+			SpigotNegativity.getInstance().getLogger().severe("Could not send alert message to the proxy.");
+			e.printStackTrace();
+		}
+	}
+
+	public static void sendReportMessage(Player reporter, String reason, String reported) {
+		try {
+			ReportMessage reportMessage = new ReportMessage(reported, reason, reporter.getName());
+			reporter.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(reportMessage));
+		} catch (IOException e) {
+			SpigotNegativity.getInstance().getLogger().severe("Could not send report message to the proxy.");
 			e.printStackTrace();
 		}
 	}

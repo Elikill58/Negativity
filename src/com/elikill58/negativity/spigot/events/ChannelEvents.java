@@ -1,11 +1,10 @@
 package com.elikill58.negativity.spigot.events;
 
-import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Locale;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bukkit.entity.Player;
@@ -14,45 +13,51 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 
 public class ChannelEvents implements PluginMessageListener {
 
 	@Override
 	public void onPluginMessageReceived(String channel, Player p, byte[] data) {
-		//DataInputStream in = new DataInputStream(new ByteArrayInputStream(data));
-		if(channel.equalsIgnoreCase(UniversalUtils.CHANNEL_NEGATIVITY_BUNGEECORD)) {
-			if(!SpigotNegativity.isOnBungeecord){
-				//SpigotNegativity.getInstance().getLogger().warning("BungeeNegativity has been found but its support isn't enabled on your server. Is it intended? If so you can ignore this message, otherwise please edit the configuration.");
-				Logger log = SpigotNegativity.getInstance().getLogger();
-				log.warning("A bungeecord system have been detected, nut not written in configuration. Editing config ...");
-				SpigotNegativity.isOnBungeecord = true;
-				Adapter.getAdapter().set("hasBungeecord", true);
-				log.warning("Configuration well edited !");
-			}
-		} else if (channel.equalsIgnoreCase(UniversalUtils.CHANNEL_NEGATIVITY_MOD)) {
-			List<String> lines = new ArrayList<>();
-			try (ByteArrayInputStream ba = new ByteArrayInputStream(data);
-					DataInputStream in = new DataInputStream(ba)) {
-				lines.add(in.readUTF());
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			if(lines.size() == 0)
+		if (channel.equalsIgnoreCase(SpigotNegativity.CHANNEL_NAME_FML) && data[0] == 2) {
+			SpigotNegativityPlayer.getNegativityPlayer(p).MODS.putAll(getModData(data));
+			return;
+		}
+
+		if (!channel.toLowerCase(Locale.ROOT).contains("negativity")) {
+			return;
+		}
+
+		NegativityMessage message;
+		try {
+			message = NegativityMessagesManager.readMessage(data);
+			if (message == null) {
+				String warnMessage = String.format("Received unknown plugin message. Channel %s send to %s.", channel, p);
+				SpigotNegativity.getInstance().getLogger().warning(warnMessage);
 				return;
-			if(!lines.get(0).contains("mod"))
-				return;
+			}
+		} catch (IOException e) {
+			SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not read plugin message.", e);
+			return;
+		}
+
+		if (message instanceof ProxyPingMessage && !SpigotNegativity.isOnBungeecord) {
+			//SpigotNegativity.getInstance().getLogger().warning("BungeeNegativity has been found but its support isn't enabled on your server. Is it intended? If so you can ignore this message, otherwise please edit the configuration.");
+			Logger log = SpigotNegativity.getInstance().getLogger();
+			log.warning("A bungeecord system have been detected, nut not written in configuration. Editing config ...");
+			SpigotNegativity.isOnBungeecord = true;
+			Adapter.getAdapter().set("hasBungeecord", true);
+			log.warning("Configuration well edited !");
+		} else if (message instanceof ClientModsListMessage) {
+			ClientModsListMessage modsMessage = (ClientModsListMessage) message;
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-			for(String l : lines) {
-				if(l == lines.get(0))
-					continue;
-				String[] temp = l.split(":");
-				np.MODS.put(temp[0], temp[1]);
-			}
-		} else if (channel.equalsIgnoreCase(SpigotNegativity.CHANNEL_NAME_FML)) {
-			if (data[0] == 2) {
-				SpigotNegativityPlayer.getNegativityPlayer(p).MODS.putAll(getModData(data));
-			}
+			np.MODS.clear();
+			np.MODS.putAll(modsMessage.getMods());
+		} else {
+			SpigotNegativity.getInstance().getLogger().warning("Received unexpected plugin message " + message.getClass().getName());
 		}
 	}
 

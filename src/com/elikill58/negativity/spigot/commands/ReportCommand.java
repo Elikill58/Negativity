@@ -52,7 +52,7 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 			String msg = Messages.getMessage(p, "report.report_message", "%name%", cible.getName(), "%report%",
 					p.getName(), "%reason%", reason);
 			if (SpigotNegativity.isOnBungeecord)
-				SpigotNegativity.sendReportMessage(p, cible.getName() + "/**/" + reason + "/**/" + p.getName());
+				SpigotNegativity.sendReportMessage(p, reason, cible.getName());
 			else {
 				boolean hasOp = false;
 				for (Player pl : Utils.getOnlinePlayers())

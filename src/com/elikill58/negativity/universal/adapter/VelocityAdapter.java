@@ -1,10 +1,13 @@
 package com.elikill58.negativity.universal.adapter;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -169,9 +172,9 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 	@Override
 	public TranslationProvider createTranslationProvider(String language) {
 		String languageFileName = language + ".yml";
-		try {
-			File translationFile = new File(pl.getDataFolder(), "lang" + File.separator + languageFileName);
-			Configuration msgConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(copy(language, translationFile));
+		File translationFile = new File(pl.getDataFolder(), "lang" + File.separator + languageFileName);
+		try (InputStreamReader reader = new InputStreamReader(new FileInputStream(copy(language, translationFile)), StandardCharsets.UTF_8)) {
+			Configuration msgConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(reader);
 			return new CachingTranslationProvider(new BungeeTranslationProvider(msgConfig));
 		} catch (Exception e) {
 			pl.getLogger().error("Could not load translation file {}", languageFileName, e);

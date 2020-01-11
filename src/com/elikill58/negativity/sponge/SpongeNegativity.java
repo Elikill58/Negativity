@@ -28,6 +28,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
@@ -234,6 +235,11 @@ public class SpongeNegativity {
 			fmlChannel = Sponge.getChannelRegistrar().getOrCreateRaw(this, "FML|HS");
 			fmlChannel.addListener(new FmlRawDataListener());
 		}
+	}
+
+	@Listener
+	public void onGameReload(GameReloadEvent event) {
+		Adapter.getAdapter().reload();
 	}
 
 	@Listener

@@ -82,6 +82,8 @@ public class DefaultConfigValue {
 
 		STRINGS.put("Permissions.showAlert.default", "negativity.alert");
 		STRINGS.put("Permissions.showAlert.custom", "MOD,ADMIN");
+		STRINGS.put("Permissions.reload.default", "negativity.reload");
+		STRINGS.put("Permissions.reload.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.verif.default", "negativity.verif");
 		STRINGS.put("Permissions.verif.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.manageCheat.default", "negativity.managecheat");

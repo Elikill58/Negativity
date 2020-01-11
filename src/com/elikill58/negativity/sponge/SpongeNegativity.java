@@ -13,12 +13,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandManager;
+import org.spongepowered.api.command.CommandMapping;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
@@ -103,6 +106,7 @@ public class SpongeNegativity {
 
 	public static final List<PlayerCheatEvent.Alert> ALERTS = new ArrayList<>();
 	public static final Map<UUID, Map<Cheat, Long>> LAST_ALERTS_TIME = new HashMap<>();
+	private final Map<String, CommandMapping> reloadableCommands = new HashMap<>();
 
 	public PluginContainer getContainer() {
 		return plugin;
@@ -208,32 +212,49 @@ public class SpongeNegativity {
 		} catch (ClassNotFoundException e1) {
 			SpongeForgeSupport.isOnSpongeForge = false;
 		}
-		CommandManager cmd = Sponge.getCommandManager();
 
-		cmd.register(this, NegativityCommand.create(), "negativity");
-		cmd.register(this, ModCommand.create(), "mod");
-		cmd.register(this, LangCommand.create(), "nlang");
-
-		if (config.getNode("report_command").getBoolean()) {
-			cmd.register(this, ReportCommand.create(), "report");
-		}
-
-		if (config.getNode("ban_command").getBoolean()) {
-			cmd.register(this, BanCommand.create(), "nban", "negban");
-		}
-
-		if (config.getNode("unban_command").getBoolean()) {
-			cmd.register(this, UnbanCommand.create(), "nunban", "negunban");
-		}
-
-		if (SuspectManager.ENABLED_CMD) {
-			cmd.register(this, SuspectCommand.create(), "suspect");
-		}
+		loadCommands(false);
 
 		channel = Sponge.getChannelRegistrar().createRawChannel(this, NegativityMessagesManager.CHANNEL_ID);
 		if (Sponge.getChannelRegistrar().isChannelAvailable("FML|HS")) {
 			fmlChannel = Sponge.getChannelRegistrar().getOrCreateRaw(this, "FML|HS");
 			fmlChannel.addListener(new FmlRawDataListener());
+		}
+	}
+
+	public void reloadCommands() {
+		loadCommands(true);
+	}
+
+	private void loadCommands(boolean reload) {
+		CommandManager cmd = Sponge.getCommandManager();
+
+		if (!reload) {
+			cmd.register(this, NegativityCommand.create(), "negativity");
+			cmd.register(this, ModCommand.create(), "mod");
+			cmd.register(this, LangCommand.create(), "nlang");
+		}
+
+		reloadCommand("report_command", cmd, ReportCommand::create, "report", "repot");
+		reloadCommand("ban_command", cmd, BanCommand::create, "nban", "negban");
+		reloadCommand("unban_command", cmd, UnbanCommand::create, "nunban", "negunban");
+		reloadCommand("suspect_command", SuspectManager.ENABLED_CMD, cmd, SuspectCommand::create, "suspect");
+	}
+
+	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {
+		reloadCommand(configKey, config.getNode(configKey).getBoolean(), manager, command, aliases);
+	}
+
+	private void reloadCommand(String mappingKey, boolean enabled, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {
+		if (enabled) {
+			if (!reloadableCommands.containsKey(mappingKey)) {
+				manager.register(this, command.get(), aliases).ifPresent(mapping -> reloadableCommands.put(mappingKey, mapping));
+			}
+		} else {
+			CommandMapping mapping = reloadableCommands.remove(mappingKey);
+			if (mapping != null) {
+				manager.removeMapping(mapping);
+			}
 		}
 	}
 

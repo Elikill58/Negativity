@@ -63,7 +63,7 @@ public class NegativityListener {
 		if (message instanceof AlertMessage) {
 			AlertMessage alert = (AlertMessage) message;
 			Object[] place = new Object[]{"%name%", alert.getPlayername(), "%cheat%", alert.getCheat(),
-					"%reliability%", alert.getReliability(), "%ping%", alert.getPing()};
+					"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers())
 				if (Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer(pp), "showAlert")) {

@@ -445,15 +445,15 @@ public class SpongeNegativity {
 			}
 		}
 
-		sendAlertMessage(type, p, c, reliability, hover_proof, np, ping, alert, false);
+		sendAlertMessage(type, p, c, reliability, hover_proof, np, ping, alert, 1);
 		np.pendingAlerts.remove(c);
 		return true;
 	}
 
 	public static void sendAlertMessage(ReportType type, Player p, Cheat c, int reliability,
-										String hoverProof, SpongeNegativityPlayer np, int ping, PlayerCheatEvent.Alert alert, boolean isMultiple) {
+										String hoverProof, SpongeNegativityPlayer np, int ping, PlayerCheatEvent.Alert alert, int alertsCount) {
 		if (isOnBungeecord) {
-			sendAlertMessage(p, c.getName(), reliability, ping, hoverProof, isMultiple);
+			sendAlertMessage(p, c.getName(), reliability, ping, hoverProof, alertsCount);
 			return;
 		}
 
@@ -521,10 +521,10 @@ public class SpongeNegativity {
 		return plugin.getLogger();
 	}
 
-	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, String hover, boolean isMultiple) {
+	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, String hover, int alertsCount) {
 		channel.sendTo(p, (payload) -> {
 			try {
-				AlertMessage message = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, isMultiple);
+				AlertMessage message = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);
 				payload.writeBytes(NegativityMessagesManager.writeMessage(message));
 			} catch (IOException e) {
 				SpongeNegativity.getInstance().getLogger().error("Could not send alert message to the proxy.", e);

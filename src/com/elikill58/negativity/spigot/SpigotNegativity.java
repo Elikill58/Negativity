@@ -370,13 +370,13 @@ public class SpigotNegativity extends JavaPlugin {
 			TIME_LAST_CHEAT_ALERT.put(p, time_alert);
 		}
 
-		sendAlertMessage(type, np, p, c, ping, reliability, hover_proof, alert, false, stats_send);
+		sendAlertMessage(type, np, p, c, ping, reliability, hover_proof, alert, 1, stats_send);
 		np.ALERT_NOT_SHOWED.remove(c);
 		return true;
 	}
 
 	public static void sendAlertMessage(ReportType type, SpigotNegativityPlayer np, Player p, Cheat c, int ping, int reliability,
-			String hover_proof, PlayerCheatAlertEvent alert, boolean isMultiple, String stats_send) {
+										String hover_proof, PlayerCheatAlertEvent alert, int alertsCount, String stats_send) {
 		Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 		if (log_console)
 			INSTANCE.getLogger()
@@ -384,7 +384,7 @@ public class SpigotNegativity extends JavaPlugin {
 							+ ") (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
 							+ reliability);
 		if (isOnBungeecord) {
-			sendAlertMessage(p, c.getName(), reliability, ping, hover_proof, isMultiple);
+			sendAlertMessage(p, c.getName(), reliability, ping, hover_proof, alertsCount);
 		} else {
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers())
@@ -413,9 +413,9 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 	}
 
-	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, String hover, boolean isMultiple) {
+	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, String hover, int alertsCount) {
 		try {
-			AlertMessage alertMessage = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, isMultiple);
+			AlertMessage alertMessage = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);
 			p.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(alertMessage));
 		} catch (IOException e) {
 			SpigotNegativity.getInstance().getLogger().severe("Could not send alert message to the proxy.");

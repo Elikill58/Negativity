@@ -13,19 +13,19 @@ public class AlertMessage implements NegativityMessage {
 	private int reliability;
 	private int ping;
 	private String hoverInfo;
-	private boolean isMultiple;
+	private int alertsCount;
 
 	public AlertMessage() {
-		this("", "", -1, -1, "", false);
+		this("", "", -1, -1, "", 0);
 	}
 
-	public AlertMessage(String playername, String cheat, int reliability, int ping, String hoverInfo, boolean isMultiple) {
+	public AlertMessage(String playername, String cheat, int reliability, int ping, String hoverInfo, int alertsCount) {
 		this.playername = playername;
 		this.cheat = cheat;
 		this.reliability = reliability;
 		this.ping = ping;
 		this.hoverInfo = hoverInfo;
-		this.isMultiple = isMultiple;
+		this.alertsCount = alertsCount;
 	}
 
 	@Override
@@ -40,7 +40,7 @@ public class AlertMessage implements NegativityMessage {
 		reliability = input.readInt();
 		ping = input.readInt();
 		hoverInfo = input.readUTF();
-		isMultiple = input.readBoolean();
+		alertsCount = input.readInt();
 	}
 
 	@Override
@@ -50,7 +50,7 @@ public class AlertMessage implements NegativityMessage {
 		output.writeInt(reliability);
 		output.writeInt(ping);
 		output.writeUTF(hoverInfo);
-		output.writeBoolean(isMultiple);
+		output.writeInt(alertsCount);
 	}
 
 	public String getPlayername() {
@@ -73,7 +73,11 @@ public class AlertMessage implements NegativityMessage {
 		return hoverInfo;
 	}
 
+	public int getAlertsCount() {
+		return alertsCount;
+	}
+
 	public boolean isMultiple() {
-		return isMultiple;
+		return alertsCount > 1;
 	}
 }

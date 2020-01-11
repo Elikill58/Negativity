@@ -290,6 +290,7 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public void reloadConfig() {
 		plugin.loadConfig();
+		plugin.loadItemBypasses();
 	}
 
 	@Nonnull

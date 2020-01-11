@@ -184,6 +184,7 @@ public class SpongeNegativity {
 
 	@Listener
 	public void onGameStart(GameStartingServerEvent e) {
+		loadItemBypasses();
 		try {
 			Class.forName("eu.crushedpixel.sponge.packetgate.api.registry.PacketGate");
 			hasPacketGate = true;
@@ -367,12 +368,16 @@ public class SpongeNegativity {
 			log = config.getNode("log_alerts").getBoolean();
 			isOnBungeecord = config.getNode("hasBungeecord").getBoolean();
 			hasBypass = config.getNode("Permissions").getNode("bypass").getNode("active").getBoolean();
-			for (Map.Entry<Object, ? extends ConfigurationNode> cn : config.getNode("items").getChildrenMap().entrySet()) {
-				ConfigurationNode itemNode = cn.getValue();
-				new ItemUseBypass(cn.getKey().toString(), itemNode.getNode("cheats").getString(""), itemNode.getNode("when").getString(""));
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void loadItemBypasses() {
+		ItemUseBypass.ITEM_BYPASS.clear();
+		for (Map.Entry<Object, ? extends ConfigurationNode> cn : config.getNode("items").getChildrenMap().entrySet()) {
+			ConfigurationNode itemNode = cn.getValue();
+			new ItemUseBypass(cn.getKey().toString(), itemNode.getNode("cheats").getString(""), itemNode.getNode("when").getString(""));
 		}
 	}
 

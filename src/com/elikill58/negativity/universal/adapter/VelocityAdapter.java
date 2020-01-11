@@ -182,6 +182,22 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 		}
 	}
 
+	@Nullable
+	@Override
+	public TranslationProvider createFallbackTranslationProvider() {
+		try (InputStream inputStream = VelocityNegativity.getInstance().getResourceAsStream("bungee_en_US.yml")) {
+			if (inputStream == null) {
+				VelocityNegativity.getInstance().getLogger().warn("Could not find the fallback messages resource.");
+				return null;
+			}
+			Configuration msgConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(inputStream);
+			return new CachingTranslationProvider(new BungeeTranslationProvider(msgConfig));
+		} catch (Exception e) {
+			pl.getLogger().error("Could not load the fallback translation resource ", e);
+			return null;
+		}
+	}
+
 	@Override
 	public List<Cheat> getAbstractCheats() {
 		return new ArrayList<>();

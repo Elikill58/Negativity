@@ -16,6 +16,7 @@ import java.util.logging.Level;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.elikill58.negativity.bungee.BungeeNegativity;
 import com.elikill58.negativity.bungee.BungeeNegativityPlayer;
 import com.elikill58.negativity.bungee.BungeeTranslationProvider;
 import com.elikill58.negativity.universal.Cheat;
@@ -176,6 +177,22 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 			return new CachingTranslationProvider(new BungeeTranslationProvider(msgConfig));
 		} catch (Exception e) {
 			pl.getLogger().log(Level.SEVERE, "Could not load translation file " + languageFileName, e);
+			return null;
+		}
+	}
+
+	@Nullable
+	@Override
+	public TranslationProvider createFallbackTranslationProvider() {
+		try (InputStream inputStream = BungeeNegativity.getInstance().getResourceAsStream("bungee_en_US.yml")) {
+			if (inputStream == null) {
+				BungeeNegativity.getInstance().getLogger().warning("Could not find the fallback messages resource.");
+				return null;
+			}
+			Configuration msgConfig = ConfigurationProvider.getProvider(YamlConfiguration.class).load(inputStream);
+			return new CachingTranslationProvider(new BungeeTranslationProvider(msgConfig));
+		} catch (Exception e) {
+			pl.getLogger().log(Level.SEVERE, "Could not load the fallback translation resource ", e);
 			return null;
 		}
 	}

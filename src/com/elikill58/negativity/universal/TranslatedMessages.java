@@ -30,6 +30,8 @@ public class TranslatedMessages {
 	private static final Map<String, TranslationProviderFactory> registeredFactories = new HashMap<>();
 
 	private static final Map<String, TranslationProvider> translationProviders = new HashMap<>();
+	@Nullable
+	private static TranslationProvider fallbackTranslationProvider = null;
 
 	public static void init() {
 		DEFAULT_LANG = Adapter.getAdapter().getStringInConfig("Translation.default");
@@ -63,6 +65,8 @@ public class TranslatedMessages {
 			}
 			translationProviders.put(DEFAULT_LANG, provider);
 		}
+
+		fallbackTranslationProvider = factory.createFallbackTranslationProvider();
 	}
 
 	public static void registerTranslationProviderFactory(String id, TranslationProviderFactory factory) {
@@ -118,6 +122,18 @@ public class TranslatedMessages {
 				return messageList;
 			}
 		}
+
+		if (!lang.equals(DEFAULT_LANG)) {
+			return getStringListFromLang(DEFAULT_LANG, key, placeholders);
+		}
+
+		if (fallbackTranslationProvider != null) {
+			List<String> fallbackMessageList = fallbackTranslationProvider.getList(key, placeholders);
+			if (fallbackMessageList != null && !fallbackMessageList.isEmpty()) {
+				return fallbackMessageList;
+			}
+		}
+
 		return Collections.singletonList(key);
 	}
 
@@ -129,6 +145,18 @@ public class TranslatedMessages {
 				return message;
 			}
 		}
+
+		if (!lang.equals(DEFAULT_LANG)) {
+			return getStringFromLang(DEFAULT_LANG, key, placeholders);
+		}
+
+		if (fallbackTranslationProvider != null) {
+			String fallbackMessage = fallbackTranslationProvider.get(key, placeholders);
+			if (fallbackMessage != null) {
+				return fallbackMessage;
+			}
+		}
+
 		return key;
 	}
 

@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal.adapter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -189,6 +190,23 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 			return new CachingTranslationProvider(new SpigotTranslationProvider(msgConfig));
 		} catch (Exception e) {
 			pl.getLogger().log(Level.SEVERE, "Could not load translation file " + languageFileName, e);
+			return null;
+		}
+	}
+
+	@Nullable
+	@Override
+	public TranslationProvider createFallbackTranslationProvider() {
+		InputStream fallbackResource = SpigotNegativity.getInstance().getResource("en_US.yml");
+		if (fallbackResource == null) {
+			SpigotNegativity.getInstance().getLogger().warning("Could not find the fallback messages resource.");
+			return null;
+		}
+		try (InputStreamReader fallbackResourceReader = new InputStreamReader(fallbackResource)) {
+			YamlConfiguration msgConfig = YamlConfiguration.loadConfiguration(fallbackResourceReader);
+			return new CachingTranslationProvider(new SpigotTranslationProvider(msgConfig));
+		} catch (Exception e) {
+			pl.getLogger().log(Level.SEVERE, "Could not load the fallback translation resource ", e);
 			return null;
 		}
 	}

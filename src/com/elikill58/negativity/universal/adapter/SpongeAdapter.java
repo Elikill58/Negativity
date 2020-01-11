@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.util.TypeTokens;
@@ -39,6 +40,7 @@ import com.google.common.cache.CacheLoader;
 import com.google.common.cache.LoadingCache;
 
 import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
 public class SpongeAdapter extends Adapter implements TranslationProviderFactory {
@@ -242,6 +244,23 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 			return new CachingTranslationProvider(new ConfigurateTranslationProvider(messagesNode));
 		} catch (IOException e) {
 			logger.error("Failed to load translation file {}.", translationFile, e);
+			return null;
+		}
+	}
+
+	@Nullable
+	@Override
+	public TranslationProvider createFallbackTranslationProvider() {
+		Asset fallbackAsset = Sponge.getAssetManager().getAsset(SpongeNegativity.getInstance(), "en_US.yml").orElse(null);
+		if (fallbackAsset == null) {
+			SpongeNegativity.getInstance().getLogger().warn("Could not find the fallback messages resource.");
+			return null;
+		}
+		try {
+			CommentedConfigurationNode messagesNode = HoconConfigurationLoader.builder().setURL(fallbackAsset.getUrl()).build().load();
+			return new CachingTranslationProvider(new ConfigurateTranslationProvider(messagesNode));
+		} catch (IOException e) {
+			logger.error("Failed to load fallback translation resource.", e);
 			return null;
 		}
 	}

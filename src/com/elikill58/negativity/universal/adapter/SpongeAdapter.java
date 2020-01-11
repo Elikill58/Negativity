@@ -5,12 +5,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -45,15 +46,15 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
 public class SpongeAdapter extends Adapter implements TranslationProviderFactory {
 
-	private Logger logger;
-	private SpongeNegativity pl;
-	private LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
+	private final Logger logger;
+	private final SpongeNegativity plugin;
+	private final LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(10, TimeUnit.MINUTES)
 			.build(new NegativityAccountLoader());
-	private Path messagesDir;
+	private final Path messagesDir;
 
 	public SpongeAdapter(SpongeNegativity sn) {
-		this.pl = sn;
+		this.plugin = sn;
 		this.logger = sn.getLogger();
 		this.messagesDir = sn.getDataFolder().resolve("messages");
 	}
@@ -70,14 +71,15 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 
 	@Override
 	public File getDataFolder() {
-		return pl.getDataFolder().toFile();
+		return plugin.getDataFolder().toFile();
 	}
 
 	@Override
 	public String getStringInConfig(String dir) {
 		try {
-			return getFinalNode(dir).getString();
+			return getFinalNode(dir).getValue(TypeTokens.STRING_TOKEN, (Supplier<String>) () -> DefaultConfigValue.getDefaultValueString(dir));
 		} catch (Exception e) {
+			logger.error("Could not get String from the configuration", e);
 			return DefaultConfigValue.getDefaultValueString(dir);
 		}
 	}
@@ -85,18 +87,16 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public boolean getBooleanInConfig(String dir) {
 		try {
-			return getFinalNode(dir).getBoolean();
+			return getFinalNode(dir).getValue(TypeTokens.BOOLEAN_TOKEN, (Supplier<Boolean>) () -> DefaultConfigValue.getDefaultValueBoolean(dir));
 		} catch (Exception e) {
+			logger.error("Could not get boolean from the configuration", e);
 			return DefaultConfigValue.getDefaultValueBoolean(dir);
 		}
 	}
 
-	private ConfigurationNode getFinalNode(String dir) throws Exception {
-		ConfigurationNode node = SpongeNegativity.getConfig();
-		String[] parts = dir.split("\\.");
-		for (String s : parts)
-			node = node.getNode(s);
-		return node;
+	private ConfigurationNode getFinalNode(String dir) {
+		Object[] path = dir.split("\\.");
+		return SpongeNegativity.getConfig().getNode(path);
 	}
 
 	@Override
@@ -122,6 +122,7 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 				hash.put(obj.toString(), cn.getString());
 			});
 		} catch (Exception e) {
+			logger.error("Could not collect key-values from the configuration", e);
 		}
 		return hash;
 	}
@@ -129,8 +130,9 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public int getIntegerInConfig(String dir) {
 		try {
-			return getFinalNode(dir).getInt();
+			return getFinalNode(dir).getValue(TypeTokens.INTEGER_TOKEN, (Supplier<Integer>) () -> DefaultConfigValue.getDefaultValueInt(dir));
 		} catch (Exception e) {
+			logger.error("Could not get int from the configuration", e);
 			return DefaultConfigValue.getDefaultValueInt(dir);
 		}
 	}
@@ -140,14 +142,16 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 		try {
 			getFinalNode(dir).setValue(value);
 		} catch (Exception e) {
+			logger.error("Could not set a value of the configuration", e);
 		}
 	}
 
 	@Override
 	public double getDoubleInConfig(String dir) {
 		try {
-			return getFinalNode(dir).getDouble();
+			return getFinalNode(dir).getValue(TypeTokens.DOUBLE_TOKEN, (Supplier<Double>) () -> DefaultConfigValue.getDefaultValueDouble(dir));
 		} catch (Exception e) {
+			logger.error("Could not get double from the configuration", e);
 			return DefaultConfigValue.getDefaultValueDouble(dir);
 		}
 	}
@@ -157,26 +161,23 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 		try {
 			return getFinalNode(dir).getList(TypeTokens.STRING_TOKEN);
 		} catch (Exception e) {
-			e.printStackTrace();
-			return new ArrayList<>();
+			logger.error("Could not get String list from the configuration", e);
+			return Collections.emptyList();
 		}
 	}
 
 	@Override
 	public String getStringInOtherConfig(Path relativeFile, String key, String defaultValue) {
-		Path filePath = pl.getDataFolder().resolve(relativeFile);
+		Path filePath = plugin.getDataFolder().resolve(relativeFile);
 		if (Files.notExists(filePath))
 			return defaultValue;
 
 		try {
 			ConfigurationNode node = loadHoconFile(filePath);
-			String[] parts = key.split("\\.");
-			for (String s : parts)
-				node = node.getNode(s);
-
-			return node.getString(defaultValue);
+			Object[] path = key.split("\\.");
+			return node.getNode(path).getString(defaultValue);
 		} catch (IOException e) {
-			e.printStackTrace();
+			logger.error("Could not get String from an external file", e);
 		}
 
 		return defaultValue;
@@ -208,7 +209,7 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 			fileName = "sv_SV.yml";
 
 		if (Files.notExists(filePath)) {
-			pl.getContainer().getAsset(fileName).ifPresent(asset -> {
+			plugin.getContainer().getAsset(fileName).ifPresent(asset -> {
 				try {
 					Path parentDir = filePath.normalize().getParent();
 					if (parentDir != null) {
@@ -251,9 +252,9 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	@Nullable
 	@Override
 	public TranslationProvider createFallbackTranslationProvider() {
-		Asset fallbackAsset = Sponge.getAssetManager().getAsset(SpongeNegativity.getInstance(), "en_US.yml").orElse(null);
+		Asset fallbackAsset = Sponge.getAssetManager().getAsset(plugin, "en_US.yml").orElse(null);
 		if (fallbackAsset == null) {
-			SpongeNegativity.getInstance().getLogger().warn("Could not find the fallback messages resource.");
+			logger.warn("Could not find the fallback messages resource.");
 			return null;
 		}
 		try {
@@ -277,11 +278,7 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 
 	@Override
 	public Object getItem(String itemName) {
-		Collection<ItemType> list = Sponge.getRegistry().getAllOf(ItemType.class);
-		for(ItemType it : list)
-			if(it.getName().equalsIgnoreCase(itemName))
-				return it;
-		return null;
+		return Sponge.getRegistry().getType(ItemType.class, itemName);
 	}
 
 	@Override
@@ -291,7 +288,7 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 
 	@Override
 	public void reloadConfig() {
-		pl.loadConfig();
+		plugin.loadConfig();
 	}
 
 	@Nonnull

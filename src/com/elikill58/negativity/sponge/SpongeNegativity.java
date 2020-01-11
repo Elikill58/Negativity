@@ -346,9 +346,10 @@ public class SpongeNegativity {
 			log = config.getNode("log_alerts").getBoolean();
 			isOnBungeecord = config.getNode("hasBungeecord").getBoolean();
 			hasBypass = config.getNode("Permissions").getNode("bypass").getNode("active").getBoolean();
-			for (ConfigurationNode cn : config.getNode("items").getChildrenList())
-				new ItemUseBypass(cn.getKey().toString(), cn.getNode("cheats").getString(),
-						cn.getNode("when").getString());
+			for (Map.Entry<Object, ? extends ConfigurationNode> cn : config.getNode("items").getChildrenMap().entrySet()) {
+				ConfigurationNode itemNode = cn.getValue();
+				new ItemUseBypass(cn.getKey().toString(), itemNode.getNode("cheats").getString(""), itemNode.getNode("when").getString(""));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

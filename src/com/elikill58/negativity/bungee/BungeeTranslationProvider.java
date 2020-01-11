@@ -19,7 +19,7 @@ public class BungeeTranslationProvider extends BaseNegativityTranslationProvider
 	@Nullable
 	@Override
 	public String get(String key) {
-		return msgConfig.getString(key);
+		return msgConfig.getString(key, null);
 	}
 
 	@Nullable

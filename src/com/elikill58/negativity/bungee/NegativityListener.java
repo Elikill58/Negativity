@@ -67,27 +67,18 @@ public class NegativityListener implements Listener {
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers())
 				if (Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer(pp), "showAlert")) {
-					TextComponent msg = new TextComponent(BungeeMessages.getMessage(pp, alertMessageKey, place));
-					String hover = BungeeMessages.getMessage(pp, "alert_hover", place);
+					TextComponent alertMessage = new TextComponent(BungeeMessages.getMessage(pp, alertMessageKey, place));
+
+					ComponentBuilder hoverComponent = new ComponentBuilder(BungeeMessages.getMessage(pp, "alert_hover", place));
 					if (!alert.getHoverInfo().isEmpty()) {
-						hover += '\n' + BungeeMessages.coloredBungeeMessage(alert.getHoverInfo());
+						hoverComponent.append("\n\n" + BungeeMessages.coloredBungeeMessage(alert.getHoverInfo()), ComponentBuilder.FormatRetention.NONE);
 					}
-					if (hover.contains("\n")) {
-						ArrayList<TextComponent> components = new ArrayList<>();
-						TextComponent hoverMessage = new TextComponent(
-								new ComponentBuilder(hover.split("\n")[hover.split("\n").length - 2])
-										.color(ChatColor.GOLD).create());
-						hoverMessage.addExtra(new TextComponent(ComponentSerializer.parse("{text: \"\n\"}")));
-						hoverMessage.addExtra(new TextComponent(
-								new ComponentBuilder(hover.split("\n")[hover.split("\n").length - 1]).create()));
-						components.add(hoverMessage);
-						msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-								(BaseComponent[]) components.toArray(new BaseComponent[components.size()])));
-					} else
-						msg.setHoverEvent(
-								new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
-					msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, (pp.getServer().equals(player.getServer()) ? "/tp " : "/server ") + player.getServer().getInfo().getName()));
-					pp.sendMessage(msg);
+					hoverComponent.append("\n\n" + BungeeMessages.getMessage(pp, "alert_tp_info", "%playername%", alert.getPlayername()), ComponentBuilder.FormatRetention.NONE);
+					alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent.create()));
+
+					String tpCommand = pp.getServer().equals(player.getServer()) ? "/tp " + alert.getPlayername() : "/server " + player.getServer().getInfo().getName();
+					alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, tpCommand));
+					pp.sendMessage(alertMessage);
 				}
 		} else if (message instanceof ProxyPingMessage) {
 			try {

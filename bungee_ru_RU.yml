@@ -1,6 +1,7 @@
 alert: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% &7(&2Точность: %reliability%%&7)!"
 alert_multiple: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% %nb% время &7(&2Точность: %reliability%%&7)!"
 alert_hover: "&6Точность: %reliability%\nПинг: %ping%"
+alert_tp_info: "&7Click to teleport to &o%playername%"
 report: "&a[&2Negativity&a] &c%name% &7получил репорт от &c%report% &7за &c%reason%"
 ban:
   kick_time: "&cБан за %reason% на %time% от %by%."

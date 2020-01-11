@@ -21,6 +21,7 @@ import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.proxy.Player;
+import com.velocitypowered.api.proxy.server.ServerInfo;
 import com.velocitypowered.api.util.ModInfo;
 
 import net.kyori.text.TextComponent;
@@ -68,12 +69,20 @@ public class NegativityListener {
 				if (Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer(pp), "showAlert")) {
 					Builder msg = TextComponent.builder();
 					msg.append(VelocityMessages.getMessage(pp, alertMessageKey, place));
-					TextComponent hoverMessage = VelocityMessages.getMessage(pp, "alert_hover", place).color(TextColor.GOLD);
+
+					Builder hoverMessage = VelocityMessages.getMessage(pp, "alert_hover", place).color(TextColor.GOLD).toBuilder();
 					if (!alert.getHoverInfo().isEmpty()) {
-						hoverMessage = hoverMessage.append(TextComponent.newline())
+						hoverMessage.append(TextComponent.newline())
+								.append(TextComponent.newline())
+								.resetStyle()
 								.append(VelocityMessages.coloredBungeeMessage(alert.getHoverInfo()));
 					}
-					msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, hoverMessage));
+
+					hoverMessage.append(TextComponent.newline())
+							.append(TextComponent.newline())
+							.append(VelocityMessages.getMessage(pp, "alert_tp_info", "%playername%", alert.getPlayername()));
+
+					msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, hoverMessage.build()));
 					msg.clickEvent(ClickEvent.of(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
 					pp.sendMessage(msg.build());
 				}
@@ -106,8 +115,13 @@ public class NegativityListener {
 		}
 	}
 
-	private String getCommand(Player p, Player pp) {
-		return (pp.getCurrentServer().get().getServerInfo().equals(p.getCurrentServer().get().getServerInfo()) ? "/tp " : "/server ") + p.getCurrentServer().get().getServerInfo().getName();
+	private String getCommand(Player targetPlayer, Player notifiedPlayer) {
+		ServerInfo targetPlayerServer = targetPlayer.getCurrentServer().get().getServerInfo();
+		ServerInfo notifiedPlayerServer = notifiedPlayer.getCurrentServer().get().getServerInfo();
+		if (targetPlayerServer.equals(notifiedPlayerServer)) {
+			return "/tp " + targetPlayer.getUsername();
+		}
+		return "/server " + notifiedPlayerServer.getName();
 	}
 
 	@Subscribe

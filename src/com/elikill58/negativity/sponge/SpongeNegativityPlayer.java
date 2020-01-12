@@ -55,6 +55,7 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
@@ -200,12 +201,12 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			minerateNode.getNode(mt.getName().toLowerCase()).setValue(mineRate.getMinerateType(mt));
 		}
 
-		config.getNode("lang").setValue(getAccount().getLang());
 		try {
 			configLoader.save(config);
 		} catch (IOException e) {
 			SpongeNegativity.getInstance().getLogger().error("Unable to save data of player " + p.getName(), e);
 		}
+		NegativityAccountStorage.getStorage().saveAccount(getAccount());
 
 		if (!proofs.isEmpty()) {
 			try {

@@ -1,7 +1,6 @@
 package com.elikill58.negativity.universal.adapter;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -10,10 +9,10 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 
 public abstract class Adapter {
@@ -87,7 +86,6 @@ public abstract class Adapter {
 		getConfig().set(key, value);
 	}
 
-	public abstract String getStringInOtherConfig(Path relativeFile, String key, String defaultValue);
 	public abstract File copy(String lang, File f);
 	public abstract void log(String msg);
 	public abstract void warn(String msg);

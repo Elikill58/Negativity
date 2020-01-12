@@ -1,9 +1,5 @@
 package com.elikill58.negativity.universal;
 
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -77,39 +73,13 @@ public class TranslatedMessages {
 		registeredFactories.put(id, factory);
 	}
 
-	public static String loadLang(UUID playerId) {
-		try {
-			String idString = playerId.toString();
-			if (useDb) {
-				try (PreparedStatement stm = Database.getConnection()
-						.prepareStatement("SELECT * FROM " + Database.table_lang + " WHERE uuid = ?")) {
-					stm.setString(1, idString);
-					ResultSet result = stm.executeQuery();
-					if (result.next()) {
-						String gettedLang = result.getString(column);
-						for(String tempLang : LANGS)
-							if(gettedLang.equalsIgnoreCase(tempLang) || gettedLang.contains(tempLang))
-								return gettedLang;
-						Adapter.getAdapter().warn("Unknow lang for player with UUID " + idString + ": " + gettedLang);
-					}
-				}
-			}
-
-			Path file = Paths .get("user" , idString + ".yml");
-			return Adapter.getAdapter().getStringInOtherConfig(file, "lang", DEFAULT_LANG);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return DEFAULT_LANG;
-		}
-	}
-
 	public static String getDefaultLang() {
 		return DEFAULT_LANG;
 	}
 
 	public static String getLang(UUID playerId) {
 		if (activeTranslation) {
-			return loadLang(playerId);
+			return Adapter.getAdapter().getNegativityAccount(playerId).getLang();
 		}
 		return DEFAULT_LANG;
 	}

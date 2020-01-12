@@ -9,8 +9,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -38,7 +36,8 @@ import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
-import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
+import com.elikill58.negativity.universal.dataStorage.file.SpigotFileNegativityAccountStorage;
 import com.elikill58.negativity.universal.config.BukkitConfigAdapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
@@ -59,6 +58,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	public SpigotAdapter(JavaPlugin pl) {
 		this.pl = pl;
 		this.config = new BukkitConfigAdapter.PluginConfig(pl);
+		NegativityAccountStorage.setStorage(new SpigotFileNegativityAccountStorage(new File(pl.getDataFolder(), "user")));
 	}
 
 	@Override
@@ -89,14 +89,6 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public void error(String msg) {
 		pl.getLogger().severe(msg);
-	}
-
-	@Override
-	public String getStringInOtherConfig(Path relativeFile, String key, String defaultValue) {
-		Path configFile = pl.getDataFolder().toPath().resolve(relativeFile);
-		if (Files.notExists(configFile))
-			return defaultValue;
-		return YamlConfiguration.loadConfiguration(configFile.toFile()).getString(key, defaultValue);
 	}
 
 	@Override
@@ -227,7 +219,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 			return existingAccount;
 		}
 
-		NegativityAccount na = new NegativityAccount(playerId, TranslatedMessages.getLang(playerId));
+		NegativityAccount na = NegativityAccountStorage.getStorage().getOrCreateAccount(playerId);
 		account.put(playerId, na);
 		return na;
 	}

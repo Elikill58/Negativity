@@ -44,10 +44,12 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {
@@ -189,8 +191,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			file.set("cheats." + c.getKey().toLowerCase(), cheats);
 			// Temporary workaround to save language until we refactor player data
 			// loading/saving
-			file.set("lang", getAccount().getLang());
 			file.save(configFile);
+			NegativityAccountStorage.getStorage().saveAccount(getAccount());
 			WARNS.put(c, cheats);
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -199,8 +201,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	
 	public void setLang(String newLang) {
 		try {
-			getAccount().setLang(newLang);
-			file.set("lang", newLang);
+			NegativityAccount account = getAccount();
+			account.setLang(newLang);
+			NegativityAccountStorage.getStorage().saveAccount(account);
 			file.save(configFile);
 		} catch (IOException e) {
 			e.printStackTrace();

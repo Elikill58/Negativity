@@ -3,26 +3,17 @@ package com.elikill58.negativity.sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageReceiver;
-import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.TranslatedMessages;
-import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class Messages {
 
 	public static String getMessage(String dir, Object... placeholders) {
-		String message = "";
-		try {
-			message = TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir, placeholders);
-			if (message.equalsIgnoreCase(""))
-				return dir;
-		} catch (NullPointerException e) {
-			System.out.println("Unknow ! default: " + Adapter.getAdapter().getStringInConfig("Translation.default") + " Get: " + TranslatedMessages.getDefaultLang());
-		}
-		return Utils.coloredMessage("&r" + message);
+		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir, placeholders);
+		return Utils.coloredMessage(message);
 	}
 
 	public static Text getMessage(MessageReceiver receiver, String dir, Object... placeholders) {
@@ -39,15 +30,11 @@ public class Messages {
 
 	private static String getStringMessage(String lang, String dir, Object... placeholders) {
 		String message = TranslatedMessages.getStringFromLang(lang, dir, placeholders);
-		return Utils.coloredMessage("&r" + message);
+		return Utils.coloredMessage(message);
 	}
 
 	public static void sendMessage(MessageReceiver receiver, String dir, Object... placeholders) {
-		try {
-			receiver.sendMessage(getMessage(receiver, dir, placeholders));
-		} catch (Exception e) {
-			receiver.sendMessage(Text.builder("[Negativity] " + dir + " not found. (Code error: " + e.getMessage() + ")").color(TextColors.RED).build());
-		}
+		receiver.sendMessage(getMessage(receiver, dir, placeholders));
 	}
 
 	public static void sendMessageList(MessageReceiver receiver, String dir, Object... placeholders) {

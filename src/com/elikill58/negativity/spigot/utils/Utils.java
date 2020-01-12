@@ -40,22 +40,7 @@ public class Utils {
 	}
 
 	public static String coloredMessage(String msg) {
-		return msg.replaceAll("&0", String.valueOf(ChatColor.BLACK))
-				.replaceAll("&1", String.valueOf(ChatColor.DARK_BLUE))
-				.replaceAll("&2", String.valueOf(ChatColor.DARK_GREEN))
-				.replaceAll("&3", String.valueOf(ChatColor.DARK_AQUA))
-				.replaceAll("&4", String.valueOf(ChatColor.DARK_RED))
-				.replaceAll("&5", String.valueOf(ChatColor.DARK_PURPLE))
-				.replaceAll("&6", String.valueOf(ChatColor.GOLD)).replaceAll("&7", String.valueOf(ChatColor.GRAY))
-				.replaceAll("&8", String.valueOf(ChatColor.DARK_GRAY)).replaceAll("&9", String.valueOf(ChatColor.BLUE))
-				.replaceAll("&a", String.valueOf(ChatColor.GREEN)).replaceAll("&b", String.valueOf(ChatColor.AQUA))
-				.replaceAll("&c", String.valueOf(ChatColor.RED))
-				.replaceAll("&d", String.valueOf(ChatColor.LIGHT_PURPLE))
-				.replaceAll("&e", String.valueOf(ChatColor.YELLOW)).replaceAll("&f", String.valueOf(ChatColor.WHITE))
-				.replaceAll("&k", String.valueOf(ChatColor.MAGIC)).replaceAll("&l", String.valueOf(ChatColor.BOLD))
-				.replaceAll("&m", String.valueOf(ChatColor.STRIKETHROUGH))
-				.replaceAll("&n", String.valueOf(ChatColor.UNDERLINE))
-				.replaceAll("&o", String.valueOf(ChatColor.ITALIC)).replaceAll("&r", String.valueOf(ChatColor.RESET));
+		return ChatColor.translateAlternateColorCodes('&', msg);
 	}
 
 	public static List<String> coloredMessage(String... messages) {

@@ -40,6 +40,8 @@ public class NegativityListener {
 			return;
 		}
 
+		event.setResult(PluginMessageEvent.ForwardResult.handled());
+
 		NegativityMessage message;
 		try {
 			message = NegativityMessagesManager.readMessage(event.getData());

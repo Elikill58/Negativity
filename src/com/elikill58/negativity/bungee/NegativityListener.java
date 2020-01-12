@@ -39,6 +39,8 @@ public class NegativityListener implements Listener {
 		if (!event.getTag().toLowerCase().contains("negativity"))
 			return;
 
+		event.setCancelled(true);
+
 		NegativityMessage message;
 		try {
 			message = NegativityMessagesManager.readMessage(event.getData());

@@ -1,10 +1,12 @@
 package com.elikill58.negativity.universal.adapter;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -184,9 +186,9 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public TranslationProvider createTranslationProvider(String language) {
 		String languageFileName = language + ".yml";
-		try {
-			File translationFile = new File(pl.getDataFolder(), "lang" + File.separator + languageFileName);
-			YamlConfiguration msgConfig = YamlConfiguration.loadConfiguration(copy(language, translationFile));
+		File translationFile = new File(pl.getDataFolder(), "lang" + File.separator + languageFileName);
+		try (InputStreamReader reader = new InputStreamReader(new FileInputStream(copy(language, translationFile)), StandardCharsets.UTF_8)) {
+			YamlConfiguration msgConfig = YamlConfiguration.loadConfiguration(reader);
 			return new CachingTranslationProvider(new SpigotTranslationProvider(msgConfig));
 		} catch (Exception e) {
 			pl.getLogger().log(Level.SEVERE, "Could not load translation file " + languageFileName, e);

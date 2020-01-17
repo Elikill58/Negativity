@@ -15,10 +15,8 @@ import org.bukkit.entity.Player;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.NegativityAccount;
-import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.BanRequest;
-import com.elikill58.negativity.universal.ban.BanRequest.BanType;
+import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class BanCommand implements CommandExecutor, TabCompleter {
@@ -81,29 +79,17 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 			time = time * 1000;
 		}
 
-		String cheatReason = null;
+		String reason = null;
 		StringJoiner reasonJoiner = new StringJoiner(" ");
 		for (int i = 2; i < arg.length; i++) {
 			String element = arg[i];
 			reasonJoiner.add(element);
-			if (cheatReason == null && Cheat.fromString(element) != null) {
-				cheatReason = element;
+			if (reason == null && Cheat.fromString(element) != null) {
+				reason = element;
 			}
 		}
-		if (cheatReason == null) {
-			cheatReason = "mod";
-		}
-
-		String reason = reasonJoiner.toString();
-		NegativityAccount targetAccount = Adapter.getAdapter().getNegativityAccount(target.getUniqueId());
-		if (sender instanceof Player) {
-			new BanRequest(targetAccount, reason, time, def, BanType.MOD, cheatReason, sender.getName(), false).execute();
-			if (!sender.equals(target))
-				Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
-		} else {
-			new BanRequest(targetAccount, reason, time, def, BanType.CONSOLE, cheatReason, "admin", false).execute();
-			Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
-		}
+		BanManager.banPlayer(target.getUniqueId(), reason, sender.getName(), def, BanType.CONSOLE, time, reason);
+		Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
 		return true;
 	}
 

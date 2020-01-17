@@ -20,8 +20,8 @@ import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.ban.BanRequest;
-import com.elikill58.negativity.universal.ban.BanRequest.BanType;
+import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.ban.BanType;
 
 public class BanCommand implements CommandExecutor {
 
@@ -32,15 +32,14 @@ public class BanCommand implements CommandExecutor {
 			throw new CommandException(Messages.getMessage(src, "only_player"));
 
 		boolean isBanDefinitive = args.<Boolean>getOne("definitive").orElse(false);
-		long banDuration = 0;
+		long expiration = -1;
 		if (!isBanDefinitive)
-			banDuration = args.<Long>getOne("duration").orElse(0L);
+			expiration = System.currentTimeMillis() + args.<Long>getOne("duration").orElse(0L);
 
-		SpongeNegativityPlayer targetNPlayer = SpongeNegativityPlayer.getNegativityPlayer(targetPlayer);
 		String reason = args.requireOne("reason");
 
-		BanRequest banRequest = new BanRequest(targetNPlayer.getAccount(), reason, banDuration, isBanDefinitive, src instanceof Player ? BanType.MOD : BanType.CONSOLE, getFromReason(reason), src.getName(), false);
-		banRequest.execute();
+		com.elikill58.negativity.universal.ban.BanType banType = src instanceof Player ? com.elikill58.negativity.universal.ban.BanType.MOD : BanType.CONSOLE;
+		BanManager.banPlayer(targetPlayer.getUniqueId(), reason, src.getName(), isBanDefinitive, banType, expiration, getFromReason(reason));
 
 		Messages.sendMessage(src, "ban.well_ban", "%name%", targetPlayer.getName(), "%reason%", reason);
 		return CommandResult.success();

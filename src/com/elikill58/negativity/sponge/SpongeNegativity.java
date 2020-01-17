@@ -7,6 +7,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -81,7 +82,9 @@ import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpongeAdapter;
-import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.ActiveBan;
+import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -274,13 +277,13 @@ public class SpongeNegativity {
 		UUID playerId = e.getTargetUser().getUniqueId();
 		SpongeNegativityPlayer.removeFromCache(playerId);
 
-		NegativityAccount userAccount = Adapter.getAdapter().getNegativityAccount(playerId);
-		if (Ban.isBanned(userAccount)) {
-			if (Ban.canConnect(userAccount))
-				return;
+		ActiveBan activeBan = BanManager.getActiveBan(playerId);
+		if (activeBan != null) {
+			NegativityAccount account = Adapter.getAdapter().getNegativityAccount(playerId);
+			String kickMsgKey = activeBan.isDefinitive() ? "ban.kick_def" : "ban.kick_time";
+			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(Instant.ofEpochMilli(activeBan.getExpirationTime()));
 			e.setCancelled(true);
-			e.setMessage(Messages.getMessage(userAccount, "ban.kick_" + (userAccount.isBanDef() ? "def" : "time"), "%reason%",
-					userAccount.getBanReason(), "%time%", (userAccount.getBanTime()), "%by%", userAccount.getBanBy()));
+			e.setMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%" , formattedExpiration, "%by%", activeBan.getBannedBy()));
 		}
 	}
 
@@ -482,8 +485,8 @@ public class SpongeNegativity {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
 		}
-		Ban.manageBan(c, np, reliability);
-		if (Ban.isBanned(np.getAccount())) {
+
+		if (BanUtils.banIfNeeded(np, c, reliability) == null) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
 		}

@@ -9,7 +9,6 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -262,7 +261,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 			return existingAccount;
 		}
 
-		NegativityAccount na = new NegativityAccount(playerId, TranslatedMessages.getLang(playerId), false, new ArrayList<>());
+		NegativityAccount na = new NegativityAccount(playerId, TranslatedMessages.getLang(playerId));
 		account.put(playerId, na);
 		return na;
 	}

@@ -65,6 +65,8 @@ import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpigotAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.support.AdvancedBanSupport;
 import com.elikill58.negativity.universal.ban.support.EssentialsBanSupport;
 import com.elikill58.negativity.universal.ban.support.MaxBansSupport;
@@ -363,12 +365,12 @@ public class SpigotNegativity extends JavaPlugin {
 			if (!kick.isCancelled())
 				p.kickPlayer(Messages.getMessage(p, "kick.kicked", "%cheat%", c.getName(), "%reason%", c.getName(), "%playername%", p.getName(), "%cheat%", c.getName()));
 		}
-		if(np.isBanned()) {
+		if(BanManager.isBanned(np.getUUID())) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
 		}
-		Ban.manageBan(c, np, reliability);
-		if (Ban.isBanned(np.getAccount())) {
+
+		if (BanUtils.banIfNeeded(np, c, reliability) != null) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
 		}

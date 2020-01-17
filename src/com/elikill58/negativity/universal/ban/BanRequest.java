@@ -142,6 +142,10 @@ public class BanRequest {
 	}
 
 	public void execute() {
+		if (true) {
+			// Shouldn't be called anymore
+			throw new UnsupportedOperationException();
+		}
 		boolean kickCmd = true;
 		Stats.updateStats(StatsType.BAN, "");
 		Adapter ada = Adapter.getAdapter();
@@ -199,9 +203,10 @@ public class BanRequest {
 			adapter.getStringListInConfig("ban.command.ban")
 					.forEach(command -> adapter.runConsoleCommand(applyPlaceholders(command)));
 			kickCmd = false;
-		} else if(Ban.banType.equals(BanType.PLUGIN)) {
+		} else if(Ban.banType.equals(BanType.PLUGIN) && false) {
 			for (BanPluginSupport bp : Ban.BAN_SUPPORT) {
-				if (np.getBanRequest().size() >= ada.getIntegerInConfig("ban.def.ban_time"))
+				// TODO use for PluginSupportBanProcessors
+				if (BanManager.getLoggedBans(uuid).size() >= ada.getIntegerInConfig("ban.def.ban_time"))
 					bp.banDef(nPlayer, "Cheat (" + reason + ")", "Negativity");
 				else
 					bp.ban(nPlayer, "Cheat (" + reason + ")", "Negativity", fullTime);
@@ -216,12 +221,13 @@ public class BanRequest {
 	}
 
 	public void unban() {
-		if(this.isUnban)
-			return;
+		if (true) {
+			// Shouldn't be called anymore
+			throw new UnsupportedOperationException();
+		}
 		try {
 			this.isUnban = true;
 			Adapter ada = Adapter.getAdapter();
-			np.removeBanRequest(this);
 			if(Ban.banType.equals(BanType.PLUGIN)) {
 				Adapter adapter = Adapter.getAdapter();
 				adapter.getStringListInConfig("ban.command.unban")

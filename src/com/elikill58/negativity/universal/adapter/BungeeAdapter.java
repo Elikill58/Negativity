@@ -237,7 +237,7 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 	@Nonnull
 	@Override
 	public NegativityAccount getNegativityAccount(UUID playerId) {
-		return new NegativityAccount(playerId, TranslatedMessages.getLang(playerId), false, new ArrayList<>());
+		return new NegativityAccount(playerId, TranslatedMessages.getLang(playerId));
 	}
 
 	@Nullable

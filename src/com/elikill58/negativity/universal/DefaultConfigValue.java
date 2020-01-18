@@ -81,7 +81,7 @@ public class DefaultConfigValue {
 
 		STRINGS.put("items.COMPASS.when", "always");
 		STRINGS.put("items.COMPASS.cheats", "speed,fly");
-		
+
 		BOOLEANS.put("Permissions.defaultActive", true);
 		BOOLEANS.put("Permissions.canBeHigher", false);
 
@@ -126,27 +126,16 @@ public class DefaultConfigValue {
 		INTS.put("time_between_alert", 2000);
 
 		BOOLEANS.put("ban.active", false);
-		STRINGS.put("ban.type", "file");
-		BOOLEANS.put("ban.other_plugin.active", false);
-		STRINGS.put("ban.other_plugin.plugin_used", "APlugin");
-		BOOLEANS.put("ban.destroy_when_unban", false);
+		STRINGS.put("ban.processor", "file");
 		INTS.put("ban.reliability_need", 95);
 		INTS.put("ban.alert_need", 10);
 		STRINGS.put("ban.time.calculator", "360000000 + (%reliability% * 20 * %alert%)");
 		INTS.put("ban.def.ban_time", 2);
-		STRINGS.put("ban.file.dir", "ban");
-		STRINGS.put("ban.db.column.uuid", "uuid");
-		STRINGS.put("ban.db.column.time", "time");
-		STRINGS.put("ban.db.column.def", "def");
-		STRINGS.put("ban.db.column.reason", "reason");
-		STRINGS.put("ban.db.column.cheat_detect", "cheat");
-		STRINGS.put("ban.db.column.by", "by");
-		STRINGS.put("ban.db.column.other.name", "%name%");
 
 		BOOLEANS.put("suspect.enabled", true);
 		BOOLEANS.put("suspect.chat", true);
 		BOOLEANS.put("suspect.with_report_cmd", true);
-		
+
 		for(String lc : cheats) {
 			INTS.put("cheats." + lc + ".ping", 150);
 			STRINGS.put("cheats." + lc + ".exact_name", lc);

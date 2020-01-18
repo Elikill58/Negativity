@@ -237,21 +237,19 @@ time_between_alert: 2000
 
 ban:
   active: false
-  # Which type of ban is used.
-  # Type available :
-  # file : Save directly in /ban/
-  # database : Save in database (check behind). For database, don't forget to edit the login information
-  # command : Run command to ban
-  # other : Use other plugin
-  #
-  type: "file"
+  # Processors manages bans. Only one processor can be used at the time.
+  # Available processors :
+  # - file : Saves bans under the ban/ directory of the configuration directory
+  # - database : Saves bans in a database. Needs a configured database (see the Database category)
+  # - command : Runs commands to ban an unban
+  # - external_plugins : Uses supported ban plugins installed on the server
+  # Defaults to "file"
+  processor: "file"
   # To use other plugin
-  other_plugin:
-    # You must to active ban just above
-    active: false
+  external_plugins:
     # Available plugin : Essentials, MaxBans & AdvancedBan
     plugin_used: "APlugin"
-  # Commands to execute if ban.type is set to 'command'.
+  # Commands to execute when using the "command" processor
   # You can execute as many commands as you want. Order is respected.
   #
   # Available placeholders:
@@ -263,11 +261,9 @@ ban:
   # %all_alert% : all alerts for the detected cheat since you added Negativity on your server
   command:
     ban:
-    - "" # example : "/ban %uuid% %reason%"
+    - "/ban %uuid% %reason%"
     unban:
-    - "" # example : "/unban %uuid% %reason%"
-  # If you want to destroy BDD line / File line
-  destroy_when_unban: false
+    - "/unban %uuid% %reason%"
   # Need to be banned
   reliability_need: 95
   alert_need: 10
@@ -280,36 +276,6 @@ ban:
   def:
     # Number that you need to be ban definitly
     ban_time: 2
-  # To save banned player on config file (/plugins/Negativity/dir)
-  #
-  file:
-    dir: "ban"
-  db:
-    column:
-      # For the UUID
-      uuid: "uuid"
-      # To know when the player is unbanned
-      time: "time"
-      # If the ban is def
-      def: "def"
-      # reason of ban
-      reason: "reason"
-      # the name of the cheat that ban the player
-      cheat_detect: "cheat"
-      # Who ban the player
-      by: "by"
-      # All other column that it must be filled
-      other:
-        # Replace olders:
-        # %uuid% : player's uuid
-        # %name% : player's name
-        # %reason% : ban reason
-        # %gm% : player's gamemode
-        # %walk_speed% : player's walk speed
-        # %level% : player's level
-        # %life% : player's life
-        # 
-        name: "%name%"
 
 suspect:
   # Start cheat detection when people suspect a player

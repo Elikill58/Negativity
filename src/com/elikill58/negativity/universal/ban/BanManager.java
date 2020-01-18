@@ -100,13 +100,13 @@ public class BanManager {
 		if (!banActive)
 			return;
 
-		processorId = adapter.getStringInConfig("ban.type");
+		processorId = adapter.getStringInConfig("ban.processor");
 
 		boolean logBans = adapter.getBooleanInConfig("ban.log_bans");
 
 		Path dataDir = adapter.getDataFolder().toPath();
-		Path banDir = dataDir.resolve(adapter.getStringInConfig("ban.file.dir"));
-		Path banLogsDir = dataDir.resolve(adapter.getStringInConfig("ban.file.logs_dir"));
+		Path banDir = dataDir.resolve("bans");
+		Path banLogsDir = banDir.resolve("logs");
 		registerProcessor("file", new NegativityBanProcessor(new FileActiveBanStorage(banDir), logBans ? new FileBanLogsStorage(banLogsDir) : null));
 
 		registerProcessor("database", new NegativityBanProcessor(new DatabaseActiveBanStorage(), logBans ? new DatabaseBanLogsStorage() : null));

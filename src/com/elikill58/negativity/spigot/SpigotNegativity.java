@@ -213,7 +213,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if(supportedPluginName.length() > 0) {
 			getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
 		}
-		BanManager.registerProcessor("other_plugin", new CompoundBanProcessor(pluginProcessors));
+		BanManager.registerProcessor("external_plugins", new CompoundBanProcessor(pluginProcessors));
 	}
 	
 	private void loadChannelInOut(Messenger messenger, String channel, ChannelEvents event) {

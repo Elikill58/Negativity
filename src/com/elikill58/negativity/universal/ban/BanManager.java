@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
+import com.elikill58.negativity.universal.ban.processor.CommandBanProcessor;
 import com.elikill58.negativity.universal.ban.processor.NegativityBanProcessor;
 import com.elikill58.negativity.universal.ban.storage.DatabaseActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.DatabaseBanLogsStorage;
@@ -85,10 +86,6 @@ public class BanManager {
 		return processorId;
 	}
 
-	public static void setProcessorId(String processorId) {
-		BanManager.processorId = processorId;
-	}
-
 	public static BanProcessor getProcessor() {
 		return processors.get(processorId);
 	}
@@ -103,6 +100,7 @@ public class BanManager {
 		if (!banActive)
 			return;
 
+		processorId = adapter.getStringInConfig("ban.type");
 
 		boolean logBans = adapter.getBooleanInConfig("ban.log_bans");
 
@@ -112,6 +110,10 @@ public class BanManager {
 		registerProcessor("file", new NegativityBanProcessor(new FileActiveBanStorage(banDir), logBans ? new FileBanLogsStorage(banLogsDir) : null));
 
 		registerProcessor("database", new NegativityBanProcessor(new DatabaseActiveBanStorage(), logBans ? new DatabaseBanLogsStorage() : null));
+
+		List<String> banCommands = adapter.getStringListInConfig("ban.command.ban");
+		List<String> unbanCommands = adapter.getStringListInConfig("ban.command.unban");
+		registerProcessor("commands", new CommandBanProcessor(banCommands, unbanCommands));
 
 		BansMigration.migrateBans(banDir, banLogsDir);
 	}

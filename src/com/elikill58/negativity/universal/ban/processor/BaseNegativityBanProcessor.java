@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.ban.processor;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -9,7 +10,6 @@ import com.elikill58.negativity.universal.ban.ActiveBan;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.LoggedBan;
 import com.elikill58.negativity.universal.ban.storage.ActiveBanStorage;
-import com.elikill58.negativity.universal.ban.storage.BanStorageManager;
 import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
 
 /**
@@ -21,9 +21,14 @@ import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
  */
 public class BaseNegativityBanProcessor implements BanProcessor {
 
-	private static String banStorageId = "file";
+	protected final ActiveBanStorage activeBanStorage;
+	@Nullable
+	protected final BanLogsStorage banLogsStorage;
 
-	private static boolean logBans = true;
+	public BaseNegativityBanProcessor(ActiveBanStorage activeBanStorage, @Nullable BanLogsStorage banLogsStorage) {
+		this.activeBanStorage = activeBanStorage;
+		this.banLogsStorage = banLogsStorage;
+	}
 
 	@Nullable
 	@Override
@@ -33,22 +38,22 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 		}
 
 		ActiveBan ban = new ActiveBan(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
-		getBanStorage().save(ban);
+		activeBanStorage.save(ban);
 		return ban;
 	}
 
 	@Nullable
 	@Override
 	public LoggedBan revokeBan(UUID playerId) {
-		ActiveBan activeBan = getBanStorage().load(playerId);
+		ActiveBan activeBan = activeBanStorage.load(playerId);
 		if (activeBan == null)
 			return null;
 
-		getBanStorage().remove(playerId);
+		activeBanStorage.remove(playerId);
 		LoggedBan revokedLoggedBan = LoggedBan.from(activeBan, true);
 
-		if (logBans) {
-			getLogStorage().save(revokedLoggedBan);
+		if (banLogsStorage != null) {
+			banLogsStorage.save(revokedLoggedBan);
 		}
 
 		return revokedLoggedBan;
@@ -57,7 +62,7 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 	@Nullable
 	@Override
 	public ActiveBan getActiveBan(UUID playerId) {
-		ActiveBan activeBan = getBanStorage().load(playerId);
+		ActiveBan activeBan = activeBanStorage.load(playerId);
 		if (activeBan == null) {
 			return null;
 		}
@@ -67,9 +72,9 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 			return activeBan;
 		}
 
-		getBanStorage().remove(playerId);
-		if (logBans) {
-			getLogStorage().save(LoggedBan.from(activeBan, false));
+		activeBanStorage.remove(playerId);
+		if (banLogsStorage != null) {
+			banLogsStorage.save(LoggedBan.from(activeBan, false));
 		}
 
 		return null;
@@ -77,30 +82,9 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 
 	@Override
 	public List<LoggedBan> getLoggedBans(UUID playerId) {
-		return getLogStorage().load(playerId);
-	}
-
-	public static String getBanStorageId() {
-		return banStorageId;
-	}
-
-	public static void setBanStorageId(String banStorage) {
-		banStorageId = banStorage;
-	}
-
-	public static ActiveBanStorage getBanStorage() {
-		return BanStorageManager.getActiveBanStorage(banStorageId);
-	}
-
-	public static BanLogsStorage getLogStorage() {
-		return BanStorageManager.getBanLogsStorage(banStorageId);
-	}
-
-	public static boolean isLogBans() {
-		return logBans;
-	}
-
-	public static void setLogBans(boolean logBans) {
-		BaseNegativityBanProcessor.logBans = logBans;
+		if (banLogsStorage == null) {
+			return Collections.emptyList();
+		}
+		return banLogsStorage.load(playerId);
 	}
 }

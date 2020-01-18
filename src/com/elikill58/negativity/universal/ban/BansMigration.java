@@ -20,24 +20,28 @@ import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
 public class BansMigration {
 
 	public static void migrateBans(Path activeBanStorageDir, Path loggedBanStorageDir) {
-		if (Files.notExists(activeBanStorageDir))
+		Adapter adapter = Adapter.getAdapter();
+		Path oldBanDir = adapter.getDataFolder().toPath().resolve(adapter.getStringInConfig("ban.file.dir"));
+		if (Files.notExists(oldBanDir))
 			return;
 
-		Path oldBansDir = activeBanStorageDir.resolveSibling(activeBanStorageDir.getFileName() + "_old");
-		if (Files.exists(oldBansDir))
+		Path bansBackupDir = oldBanDir.resolveSibling(oldBanDir.getFileName() + "_old");
+		if (Files.exists(bansBackupDir))
 			return;
+
+		adapter.log("Started migration of bans saved as files");
 
 		boolean didMigration = false;
 		boolean migrationFailed = false;
-		BanLogsStorage banLogsStorage = new MigrationFileBanLogsStorage(oldBansDir, loggedBanStorageDir);
+		BanLogsStorage banLogsStorage = new MigrationFileBanLogsStorage(oldBanDir, loggedBanStorageDir);
 		ActiveBanStorage activeBanStorage = new FileActiveBanStorage(activeBanStorageDir);
-		try (Stream<Path> dirStream = Files.list(activeBanStorageDir)) {
+		try (Stream<Path> dirStream = Files.list(oldBanDir)) {
 			List<Path> files = dirStream.filter(Files::isRegularFile).collect(Collectors.toList());
 			if (files.isEmpty()) {
 				return;
 			}
 
-			Files.createDirectories(oldBansDir);
+			Files.createDirectories(bansBackupDir);
 
 			for (Path file : files) {
 				String filename = file.getFileName().toString();
@@ -62,23 +66,23 @@ public class BansMigration {
 						activeBanStorage.save(activeBan);
 					}
 
+					Files.move(file, bansBackupDir.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
 					loggedBansToSave.forEach(banLogsStorage::save);
-					Files.move(file, oldBansDir.resolve(filename), StandardCopyOption.REPLACE_EXISTING);
 
 					didMigration = true;
 				} catch (Exception e) {
-					Adapter.getAdapter().error("Could not migrate ban file " + filename + ". Another migration attempt for this file will be made the next startup or reload.");
+					adapter.error("Could not migrate ban file " + filename + ". Another migration attempt for this file will be made the next startup or reload.");
 					e.printStackTrace();
 					migrationFailed = true;
 				}
 			}
 		} catch (IOException e) {
-			Adapter.getAdapter().error("Unable to migrate bans.");
+			adapter.error("Unable to migrate bans.");
 			e.printStackTrace();
 		}
 
 		if (didMigration && !migrationFailed) {
-			Adapter.getAdapter().log("Bans migration ended successfully");
+			adapter.log("Bans migration ended successfully");
 		}
 	}
 

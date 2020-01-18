@@ -276,6 +276,12 @@ ban:
   def:
     # Number that you need to be ban definitly
     ban_time: 2
+  file:
+    # Log expired or revoked bans when using the "file" processor
+    log_bans: true
+  database:
+    # Log expired or revoked bans when using the "database" processor
+    log_bans: true
 
 suspect:
   # Start cheat detection when people suspect a player

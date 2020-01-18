@@ -102,14 +102,14 @@ public class BanManager {
 
 		processorId = adapter.getStringInConfig("ban.processor");
 
-		boolean logBans = adapter.getBooleanInConfig("ban.log_bans");
-
 		Path dataDir = adapter.getDataFolder().toPath();
 		Path banDir = dataDir.resolve("bans");
 		Path banLogsDir = banDir.resolve("logs");
-		registerProcessor("file", new NegativityBanProcessor(new FileActiveBanStorage(banDir), logBans ? new FileBanLogsStorage(banLogsDir) : null));
+		boolean fileLogBans = adapter.getBooleanInConfig("ban.file.log_bans");
+		registerProcessor("file", new NegativityBanProcessor(new FileActiveBanStorage(banDir), fileLogBans ? new FileBanLogsStorage(banLogsDir) : null));
 
-		registerProcessor("database", new NegativityBanProcessor(new DatabaseActiveBanStorage(), logBans ? new DatabaseBanLogsStorage() : null));
+		boolean dbLogBans = adapter.getBooleanInConfig("ban.database.log_bans");
+		registerProcessor("database", new NegativityBanProcessor(new DatabaseActiveBanStorage(), dbLogBans ? new DatabaseBanLogsStorage() : null));
 
 		List<String> banCommands = adapter.getStringListInConfig("ban.command.ban");
 		List<String> unbanCommands = adapter.getStringListInConfig("ban.command.unban");

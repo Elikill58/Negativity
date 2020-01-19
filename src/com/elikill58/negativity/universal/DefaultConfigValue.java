@@ -69,7 +69,6 @@ public class DefaultConfigValue {
 		STRINGS.put("Database.password", "myPassword");
 		STRINGS.put("Database.table_perm", "myTable");
 		STRINGS.put("Database.table_lang", "myTable");
-		STRINGS.put("Database.table_ban", "ban");
 		STRINGS.put("Database.column_find_row", "uuid");
 		STRINGS.put("Database.column_perm", "rank");
 		STRINGS.put("Database.column_lang", "lang");

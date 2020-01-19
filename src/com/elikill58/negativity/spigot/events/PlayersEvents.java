@@ -2,6 +2,8 @@ package com.elikill58.negativity.spigot.events;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -48,9 +50,16 @@ public class PlayersEvents implements Listener {
 		NegativityAccount account = Adapter.getAdapter().getNegativityAccount(playerId);
 		ActiveBan activeBan = BanManager.getActiveBan(playerId);
 		if (activeBan != null) {
-			String kickMsgKey = activeBan.isDefinitive() ? "ban.kick_def" : "ban.kick_time";
-			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(Instant.ofEpochMilli(activeBan.getExpirationTime()));
-			e.setResult(Result.KICK_BANNED);
+			String kickMsgKey;
+			String formattedExpiration;
+			if (activeBan.isDefinitive()) {
+				kickMsgKey = "ban.kick_def";
+				formattedExpiration = "definitively";
+			} else {
+				kickMsgKey = "ban.kick_time";
+				LocalDateTime expirationDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
+				formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
+			}			e.setResult(Result.KICK_BANNED);
 			e.setKickMessage(Messages.getMessage(e.getPlayer(), kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));
 			Adapter.getAdapter().invalidateAccount(account.getPlayerId());
 		}

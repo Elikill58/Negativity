@@ -8,6 +8,8 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.Timestamp;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -280,8 +282,16 @@ public class SpongeNegativity {
 		ActiveBan activeBan = BanManager.getActiveBan(playerId);
 		if (activeBan != null) {
 			NegativityAccount account = Adapter.getAdapter().getNegativityAccount(playerId);
-			String kickMsgKey = activeBan.isDefinitive() ? "ban.kick_def" : "ban.kick_time";
-			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(Instant.ofEpochMilli(activeBan.getExpirationTime()));
+			String kickMsgKey;
+			String formattedExpiration;
+			if (activeBan.isDefinitive()) {
+				kickMsgKey = "ban.kick_def";
+				formattedExpiration = "definitively";
+			} else {
+				kickMsgKey = "ban.kick_time";
+				LocalDateTime expirationDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
+				formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
+			}
 			e.setCancelled(true);
 			e.setMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%" , formattedExpiration, "%by%", activeBan.getBannedBy()));
 		}

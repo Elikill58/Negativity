@@ -32,7 +32,7 @@ public interface ActiveBanStorage {
 	void save(ActiveBan ban);
 
 	/**
-	 * Removes the ban associated to the player identifier by the given UUID.
+	 * Removes the ban associated to the player identified by the given UUID.
 	 *
 	 * @param playerId the UUID of the player
 	 */

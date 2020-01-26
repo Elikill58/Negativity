@@ -26,25 +26,28 @@ public class BanManager {
 	private static Map<String, BanProcessor> processors = new HashMap<>();
 
 	public static List<LoggedBan> getLoggedBans(UUID playerId) {
-		if (!banActive)
+		BanProcessor processor = getProcessor();
+		if (processor == null)
 			return Collections.emptyList();
 
-		return getProcessor().getLoggedBans(playerId);
+		return processor.getLoggedBans(playerId);
 	}
 
 	public static boolean isBanned(UUID playerId) {
-		if (!banActive)
+		BanProcessor processor = getProcessor();
+		if (processor == null)
 			return false;
 
-		return getProcessor().isBanned(playerId);
+		return processor.isBanned(playerId);
 	}
 
 	@Nullable
 	public static ActiveBan getActiveBan(UUID playerId) {
-		if (!banActive)
+		BanProcessor processor = getProcessor();
+		if (processor == null)
 			return null;
 
-		return getProcessor().getActiveBan(playerId);
+		return processor.getActiveBan(playerId);
 	}
 
 	/**
@@ -57,10 +60,11 @@ public class BanManager {
 	 */
 	@Nullable
 	public static ActiveBan banPlayer(UUID playerId, String reason, String bannedBy, boolean isDefinitive, BanType banType, long expirationTime, @Nullable String cheatName) {
-		if (!banActive)
+		BanProcessor processor = getProcessor();
+		if (processor == null)
 			return null;
 
-		return getProcessor().banPlayer(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
+		return processor.banPlayer(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
 	}
 
 	/**
@@ -76,17 +80,22 @@ public class BanManager {
 	 */
 	@Nullable
 	public static LoggedBan revokeBan(UUID playerId) {
-		if (!banActive)
+		BanProcessor processor = getProcessor();
+		if (processor == null)
 			return null;
 
-		return getProcessor().revokeBan(playerId);
+		return processor.revokeBan(playerId);
 	}
 
 	public static String getProcessorId() {
 		return processorId;
 	}
 
+	@Nullable
 	public static BanProcessor getProcessor() {
+		if (!banActive)
+			return null;
+
 		return processors.get(processorId);
 	}
 

@@ -122,7 +122,7 @@ public class BanManager {
 
 		List<String> banCommands = adapter.getStringListInConfig("ban.command.ban");
 		List<String> unbanCommands = adapter.getStringListInConfig("ban.command.unban");
-		registerProcessor("commands", new CommandBanProcessor(banCommands, unbanCommands));
+		registerProcessor("command", new CommandBanProcessor(banCommands, unbanCommands));
 
 		BansMigration.migrateBans(banDir, banLogsDir);
 	}

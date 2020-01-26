@@ -6,13 +6,15 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import org.bukkit.Bukkit;
+
+import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.ActiveBan;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.LoggedBan;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import me.leoko.advancedban.manager.PunishmentManager;
 import me.leoko.advancedban.utils.Punishment;
@@ -28,19 +30,12 @@ public class AdvancedBanProcessor implements BanProcessor {
 			return null;
 		}
 
-		String name;
-		PunishmentType punishmentType;
-		if (UniversalUtils.isValidIP(player.getIP())) {
-			name = player.getIP();
-			punishmentType = isDefinitive ? PunishmentType.IP_BAN : PunishmentType.TEMP_IP_BAN;
-		} else {
-			name = player.getName();
-			punishmentType = isDefinitive ? PunishmentType.BAN : PunishmentType.TEMP_BAN;
-		}
-
 		long endTime = isDefinitive ? 0 : expirationTime;
-		new Punishment(name, playerId.toString(), reason, bannedBy, punishmentType, System.currentTimeMillis(), endTime, "", -1)
-				.create();
+		PunishmentType type = isDefinitive ? PunishmentType.BAN : PunishmentType.TEMP_BAN;
+		Punishment punishment = new Punishment(player.getName(), playerId.toString(), reason, bannedBy, type, System.currentTimeMillis(), endTime, "", -1);
+		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
+		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), (Runnable) punishment::create);
+
 		return new ActiveBan(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
 	}
 
@@ -48,7 +43,12 @@ public class AdvancedBanProcessor implements BanProcessor {
 	@Override
 	public LoggedBan revokeBan(UUID playerId) {
 		Punishment punishment = PunishmentManager.get().getBan(playerId.toString());
-		punishment.delete();
+		if (punishment == null) {
+			return null;
+		}
+
+		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
+		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), punishment::delete);
 		return loggedBanFrom(playerId, punishment, true);
 	}
 
@@ -61,6 +61,10 @@ public class AdvancedBanProcessor implements BanProcessor {
 	@Override
 	public ActiveBan getActiveBan(UUID playerId) {
 		Punishment punishment = PunishmentManager.get().getBan(playerId.toString());
+		if (punishment == null) {
+			return null;
+		}
+
 		return new ActiveBan(playerId,
 				punishment.getReason(),
 				punishment.getOperator(),

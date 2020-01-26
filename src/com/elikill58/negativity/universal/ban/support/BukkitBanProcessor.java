@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.ban.support;
 
+import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -18,7 +19,6 @@ import com.elikill58.negativity.universal.ban.ActiveBan;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.LoggedBan;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class BukkitBanProcessor implements BanProcessor {
 
@@ -30,22 +30,16 @@ public class BukkitBanProcessor implements BanProcessor {
 			return null;
 		}
 
-		String target;
-		BanList.Type bukkitBanType;
-		if (UniversalUtils.isValidIP(player.getIP())) {
-			target = player.getIP();
-			bukkitBanType = BanList.Type.IP;
-		} else {
-			target = playerId.toString();
-			bukkitBanType = BanList.Type.NAME;
-		}
-
 		Date expirationDate = isDefinitive ? null : Date.from(Instant.ofEpochMilli(expirationTime));
-		BanEntry banEntry = Bukkit.getServer().getBanList(bukkitBanType)
-				.addBan(target, reason, expirationDate, bannedBy);
+		BanEntry banEntry = Bukkit.getServer().getBanList(BanList.Type.NAME)
+				.addBan(playerId.toString(), reason, expirationDate, bannedBy);
 		if (banEntry == null) {
 			return null;
 		}
+
+		player.banEffect();
+		String formattedExpTime = new Timestamp(expirationTime).toString().split("\\.", 2)[0];
+		player.kickPlayer(reason, formattedExpTime, bannedBy, isDefinitive);
 
 		return new ActiveBan(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
 	}
@@ -72,6 +66,9 @@ public class BukkitBanProcessor implements BanProcessor {
 	@Override
 	public ActiveBan getActiveBan(UUID playerId) {
 		BanEntry banEntry = Bukkit.getServer().getBanList(BanList.Type.NAME).getBanEntry(playerId.toString());
+		if (banEntry == null) {
+			return null;
+		}
 
 		boolean isDefinitive = false;
 		long expirationTime = 0;

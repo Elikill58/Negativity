@@ -236,18 +236,17 @@ time_between_alert: 2000
 
 ban:
   active: false
-  # Processors manages bans. Only one processor can be used at the time.
+  # Processors manage bans. Only one processor can be used at the time.
   # Available processors :
   # - file : Saves bans under the ban/ directory of the configuration directory
   # - database : Saves bans in a database. Needs a configured database (see the Database category)
-  # - command : Runs commands to ban an unban
-  # - external_plugins : Uses supported ban plugins installed on the server
+  # - command : Runs commands to ban or unban
+  # - bukkit : Uses Bukkit's ban system
+  # The following plugins are also supported :
+  # - maxbans
+  # - advancedban
   # Defaults to "file"
   processor: "file"
-  # To use other plugin
-  external_plugins:
-    # Available plugin : Essentials, MaxBans & AdvancedBan
-    plugin_used: "APlugin"
   # Commands to execute when using the "command" processor
   # You can execute as many commands as you want. Order is respected.
   #

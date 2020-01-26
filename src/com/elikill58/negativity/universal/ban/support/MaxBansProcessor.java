@@ -18,7 +18,6 @@ import com.elikill58.negativity.universal.ban.ActiveBan;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.LoggedBan;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class MaxBansProcessor implements BanProcessor {
 
@@ -30,18 +29,10 @@ public class MaxBansProcessor implements BanProcessor {
 			return null;
 		}
 
-		if (UniversalUtils.isValidIP(player.getIP())) {
-			if (isDefinitive) {
-				MaxBans.instance.getBanManager().ipban(player.getIP(), reason, bannedBy);
-			} else {
-				MaxBans.instance.getBanManager().tempipban(player.getIP(), reason, bannedBy, expirationTime);
-			}
+		if (isDefinitive) {
+			MaxBans.instance.getBanManager().ban(player.getName(), reason, bannedBy);
 		} else {
-			if (isDefinitive) {
-				MaxBans.instance.getBanManager().ban(player.getName(), reason, bannedBy);
-			} else {
-				MaxBans.instance.getBanManager().tempban(player.getName(), reason, bannedBy, expirationTime);
-			}
+			MaxBans.instance.getBanManager().tempban(player.getName(), reason, bannedBy, expirationTime);
 		}
 		return new ActiveBan(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
 	}
@@ -54,20 +45,11 @@ public class MaxBansProcessor implements BanProcessor {
 			return null;
 		}
 
-		Ban revokedBan;
-		if (UniversalUtils.isValidIP(player.getIP())) {
-			revokedBan = MaxBans.instance.getBanManager().getIPBan(player.getIP());
-			if (revokedBan == null) {
-				return null;
-			}
-			MaxBans.instance.getBanManager().unbanip(player.getIP());
-		} else {
-			revokedBan = MaxBans.instance.getBanManager().getBan(player.getName());
-			if (revokedBan == null) {
-				return null;
-			}
-			MaxBans.instance.getBanManager().unban(player.getName());
+		Ban revokedBan = MaxBans.instance.getBanManager().getBan(player.getName());
+		if (revokedBan == null) {
+			return null;
 		}
+		MaxBans.instance.getBanManager().unban(player.getName());
 
 		boolean isDefinitive = false;
 		long expirationTime = 0;
@@ -87,12 +69,7 @@ public class MaxBansProcessor implements BanProcessor {
 			return null;
 		}
 
-		Ban ban;
-		if (UniversalUtils.isValidIP(player.getIP())) {
-			ban = MaxBans.instance.getBanManager().getIPBan(player.getIP());
-		} else {
-			ban = MaxBans.instance.getBanManager().getBan(player.getName());
-		}
+		Ban ban = MaxBans.instance.getBanManager().getBan(player.getName());
 
 		boolean isDefinitive = false;
 		long expirationTime = 0;

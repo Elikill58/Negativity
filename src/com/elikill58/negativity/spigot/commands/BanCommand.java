@@ -88,9 +88,10 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 				reason = element;
 			}
 		}
-		BanManager.banPlayer(target.getUniqueId(), reason, sender.getName(), def, BanType.CONSOLE, time, reason);
-		Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
-		return true;
+		BanManager.banPlayer(target.getUniqueId(), reason, sender.getName(), def, BanType.MOD, System.currentTimeMillis() + time, reason);
+		if (!sender.equals(target))
+			Messages.sendMessage(sender, "ban.well_ban", "%name%", sender.getName(), "%reason%", reason);
+		return false;
 	}
 
 	@Override

@@ -87,6 +87,7 @@ import com.elikill58.negativity.universal.adapter.SpongeAdapter;
 import com.elikill58.negativity.universal.ban.ActiveBan;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
+import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -149,6 +150,8 @@ public class SpongeNegativity {
 		Task.builder().execute(new PendingAlertsTimer()).interval(1, TimeUnit.SECONDS)
 				.name("negativity-pending-alerts").submit(this);
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
+
+		BanManager.registerProcessor("sponge", new SpongeBanProcessor());
 
 		if(SpongeUpdateChecker.ifUpdateAvailable()) {
 			getLogger().info("New version available (" + SpongeUpdateChecker.getVersionString() + ") : " + SpongeUpdateChecker.getDownloadUrl());

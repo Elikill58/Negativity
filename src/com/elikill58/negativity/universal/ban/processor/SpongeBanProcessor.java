@@ -26,30 +26,30 @@ public class SpongeBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan banPlayer(UUID playerId, String reason, String bannedBy, boolean isDefinitive, BanType banType, long expirationTime, @Nullable String cheatName) {
+	public ActiveBan executeBan(ActiveBan ban) {
 		BanService banService = Sponge.getServiceManager().provide(BanService.class).orElse(null);
 		if (banService == null) {
 			return null;
 		}
 
-		Instant expirationDate = isDefinitive ? null : Instant.ofEpochMilli(expirationTime);
-		Ban ban = Ban.builder()
+		Instant expirationDate = ban.isDefinitive() ? null : Instant.ofEpochMilli(ban.getExpirationTime());
+		Ban spongeBan = Ban.builder()
 				.type(BanTypes.PROFILE)
-				.profile(GameProfile.of(playerId))
-				.reason(TextSerializers.FORMATTING_CODE.deserialize(reason))
+				.profile(GameProfile.of(ban.getPlayerId()))
+				.reason(TextSerializers.FORMATTING_CODE.deserialize(ban.getReason()))
 				.expirationDate(expirationDate)
-				.source(TextSerializers.FORMATTING_CODE.deserialize(bannedBy))
+				.source(TextSerializers.FORMATTING_CODE.deserialize(ban.getBannedBy()))
 				.build();
-		banService.addBan(ban);
+		banService.addBan(spongeBan);
 
-		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(playerId);
+		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
 		if (player != null) {
 			player.banEffect();
-			String formattedExpTime = new Timestamp(expirationTime).toString().split("\\.", 2)[0];
-			player.kickPlayer(reason, formattedExpTime, bannedBy, isDefinitive);
+			String formattedExpTime = new Timestamp(ban.getExpirationTime()).toString().split("\\.", 2)[0];
+			player.kickPlayer(ban.getReason(), formattedExpTime, ban.getBannedBy(), ban.isDefinitive());
 		}
 
-		return new ActiveBan(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
+		return ban;
 	}
 
 	@Nullable

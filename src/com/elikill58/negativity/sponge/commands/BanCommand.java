@@ -17,9 +17,9 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.Messages;
-import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.ban.ActiveBan;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanType;
 
@@ -39,7 +39,7 @@ public class BanCommand implements CommandExecutor {
 		String reason = args.requireOne("reason");
 
 		com.elikill58.negativity.universal.ban.BanType banType = src instanceof Player ? com.elikill58.negativity.universal.ban.BanType.MOD : BanType.CONSOLE;
-		BanManager.banPlayer(targetPlayer.getUniqueId(), reason, src.getName(), isBanDefinitive, banType, expiration, getFromReason(reason));
+		BanManager.executeBan(new ActiveBan(targetPlayer.getUniqueId(), reason, src.getName(), isBanDefinitive, banType, expiration, getFromReason(reason)));
 
 		Messages.sendMessage(src, "ban.well_ban", "%name%", targetPlayer.getName(), "%reason%", reason);
 		return CommandResult.success();

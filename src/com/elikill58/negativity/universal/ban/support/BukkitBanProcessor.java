@@ -24,24 +24,24 @@ public class BukkitBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan banPlayer(UUID playerId, String reason, String bannedBy, boolean isDefinitive, BanType banType, long expirationTime, @Nullable String cheatName) {
-		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(playerId);
+	public ActiveBan executeBan(ActiveBan ban) {
+		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
 		if (player == null) {
 			return null;
 		}
 
-		Date expirationDate = isDefinitive ? null : Date.from(Instant.ofEpochMilli(expirationTime));
+		Date expirationDate = ban.isDefinitive() ? null : Date.from(Instant.ofEpochMilli(ban.getExpirationTime()));
 		BanEntry banEntry = Bukkit.getServer().getBanList(BanList.Type.NAME)
-				.addBan(playerId.toString(), reason, expirationDate, bannedBy);
+				.addBan(ban.getPlayerId().toString(), ban.getReason(), expirationDate, ban.getBannedBy());
 		if (banEntry == null) {
 			return null;
 		}
 
 		player.banEffect();
-		String formattedExpTime = new Timestamp(expirationTime).toString().split("\\.", 2)[0];
-		player.kickPlayer(reason, formattedExpTime, bannedBy, isDefinitive);
+		String formattedExpTime = new Timestamp(ban.getExpirationTime()).toString().split("\\.", 2)[0];
+		player.kickPlayer(ban.getReason(), formattedExpTime, ban.getBannedBy(), ban.isDefinitive());
 
-		return new ActiveBan(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
+		return ban;
 	}
 
 	@Nullable

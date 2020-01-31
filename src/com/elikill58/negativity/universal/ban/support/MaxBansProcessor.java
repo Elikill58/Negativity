@@ -23,18 +23,18 @@ public class MaxBansProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan banPlayer(UUID playerId, String reason, String bannedBy, boolean isDefinitive, BanType banType, long expirationTime, @Nullable String cheatName) {
-		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(playerId);
+	public ActiveBan executeBan(ActiveBan ban) {
+		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
 		if (player == null) {
 			return null;
 		}
 
-		if (isDefinitive) {
-			MaxBans.instance.getBanManager().ban(player.getName(), reason, bannedBy);
+		if (ban.isDefinitive()) {
+			MaxBans.instance.getBanManager().ban(player.getName(), ban.getReason(), ban.getBannedBy());
 		} else {
-			MaxBans.instance.getBanManager().tempban(player.getName(), reason, bannedBy, expirationTime);
+			MaxBans.instance.getBanManager().tempban(player.getName(), ban.getReason(), ban.getBannedBy(), ban.getExpirationTime());
 		}
-		return new ActiveBan(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
+		return ban;
 	}
 
 	@Nullable

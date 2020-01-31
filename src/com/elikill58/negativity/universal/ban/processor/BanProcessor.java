@@ -7,7 +7,6 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.ban.ActiveBan;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.LoggedBan;
 
 /**
@@ -25,7 +24,7 @@ public interface BanProcessor {
 	 * @return the ban that has been executed, or {@code null} if the ban has not been executed.
 	 */
 	@Nullable
-	ActiveBan banPlayer(UUID playerId, String reason, String bannedBy, boolean isDefinitive, BanType banType, long expirationTime, @Nullable String cheatName);
+	ActiveBan executeBan(ActiveBan ban);
 
 	/**
 	 * Revokes the active ban of the player identified by the given UUID.

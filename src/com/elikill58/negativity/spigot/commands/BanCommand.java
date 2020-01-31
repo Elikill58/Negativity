@@ -15,6 +15,7 @@ import org.bukkit.entity.Player;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.ban.ActiveBan;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -88,9 +89,8 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 				reason = element;
 			}
 		}
-		BanManager.banPlayer(target.getUniqueId(), reason, sender.getName(), def, BanType.MOD, System.currentTimeMillis() + time, reason);
-		if (!sender.equals(target))
-			Messages.sendMessage(sender, "ban.well_ban", "%name%", sender.getName(), "%reason%", reason);
+		BanManager.executeBan(new ActiveBan(target.getUniqueId(), reason, "admin", def, BanType.CONSOLE, System.currentTimeMillis() + time, reason));
+		Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
 		return false;
 	}
 

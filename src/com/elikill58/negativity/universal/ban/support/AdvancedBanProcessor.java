@@ -24,19 +24,19 @@ public class AdvancedBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan banPlayer(UUID playerId, String reason, String bannedBy, boolean isDefinitive, BanType banType, long expirationTime, @Nullable String cheatName) {
-		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(playerId);
+	public ActiveBan executeBan(ActiveBan ban) {
+		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
 		if (player == null) {
 			return null;
 		}
 
-		long endTime = isDefinitive ? 0 : expirationTime;
-		PunishmentType type = isDefinitive ? PunishmentType.BAN : PunishmentType.TEMP_BAN;
-		Punishment punishment = new Punishment(player.getName(), playerId.toString(), reason, bannedBy, type, System.currentTimeMillis(), endTime, "", -1);
+		long endTime = ban.isDefinitive() ? 0 : ban.getExpirationTime();
+		PunishmentType type = ban.isDefinitive() ? PunishmentType.BAN : PunishmentType.TEMP_BAN;
+		Punishment punishment = new Punishment(player.getName(), ban.getPlayerId().toString(), ban.getReason(), ban.getBannedBy(), type, System.currentTimeMillis(), endTime, "", -1);
 		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
 		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), (Runnable) punishment::create);
 
-		return new ActiveBan(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
+		return ban;
 	}
 
 	@Nullable

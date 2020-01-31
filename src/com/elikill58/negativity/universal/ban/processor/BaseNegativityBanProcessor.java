@@ -7,7 +7,6 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.ban.ActiveBan;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.LoggedBan;
 import com.elikill58.negativity.universal.ban.storage.ActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
@@ -16,7 +15,7 @@ import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
  * This ban processor simply saves bans (active and logged) in a configurable storage ({@link ActiveBanStorage} and {@link BanLogsStorage} respectively).
  * <p>
  * It is important to know its sole purpose is to manage bans, and will not do anything on the game server,
- * like kicking the player when {@link #banPlayer(UUID, String, String, boolean, BanType, long, String) executing a ban}.
+ * like kicking the player when {@link BanProcessor#executeBan(ActiveBan) executing a ban}.
  * If you want direct actions on the game server use {@link NegativityBanProcessor} instead.
  */
 public class BaseNegativityBanProcessor implements BanProcessor {
@@ -32,12 +31,11 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan banPlayer(UUID playerId, String reason, String bannedBy, boolean isDefinitive, BanType banType, long expirationTime, @Nullable String cheatName) {
-		if (isBanned(playerId)) {
+	public ActiveBan executeBan(ActiveBan ban) {
+		if (isBanned(ban.getPlayerId())) {
 			return null;
 		}
 
-		ActiveBan ban = new ActiveBan(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
 		activeBanStorage.save(ban);
 		return ban;
 	}

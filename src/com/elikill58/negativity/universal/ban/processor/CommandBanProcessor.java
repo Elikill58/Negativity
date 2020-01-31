@@ -24,10 +24,10 @@ public class CommandBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan banPlayer(UUID playerId, String reason, String bannedBy, boolean isDefinitive, BanType banType, long expirationTime, @Nullable String cheatName) {
+	public ActiveBan executeBan(ActiveBan ban) {
 		Adapter adapter = Adapter.getAdapter();
-		banCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, playerId, reason)));
-		return new ActiveBan(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
+		banCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, ban.getPlayerId(), ban.getReason())));
+		return ban;
 	}
 
 	@Nullable

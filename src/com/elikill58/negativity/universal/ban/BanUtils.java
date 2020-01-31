@@ -37,7 +37,7 @@ public class BanUtils {
 
 	/**
 	 * Basically common code for {@link SpigotNegativity#alertMod} and {@link SpongeNegativity#alertMod}.
-	 * @return see {@link BanManager#banPlayer}, null if banning was not needed
+	 * @return see {@link BanManager#executeBan}, null if banning was not needed
 	 */
 	@Nullable
 	public static ActiveBan banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability) {
@@ -48,6 +48,6 @@ public class BanUtils {
 		int banDuration = BanUtils.computeBanDuration(player, reliability, cheat);
 		int banDefThreshold = Adapter.getAdapter().getIntegerInConfig("ban.def.ban_time");
 		boolean isDefinitive = BanManager.getLoggedBans(player.getUUID()).size() >= banDefThreshold;
-		return BanManager.banPlayer(player.getUUID(), "Cheat (" + reason + ")", "Negativity", isDefinitive, BanType.MOD, banDuration, reason);
+		return BanManager.executeBan(new ActiveBan(player.getUUID(), "Cheat (" + reason + ")", "Negativity", isDefinitive, BanType.MOD, banDuration, reason));
 	}
 }

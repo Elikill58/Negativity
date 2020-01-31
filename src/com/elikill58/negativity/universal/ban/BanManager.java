@@ -59,12 +59,12 @@ public class BanManager {
 	 * @return the ban that has been executed, or {@code null} if the ban has not been executed.
 	 */
 	@Nullable
-	public static ActiveBan banPlayer(UUID playerId, String reason, String bannedBy, boolean isDefinitive, BanType banType, long expirationTime, @Nullable String cheatName) {
+	public static ActiveBan executeBan(ActiveBan ban) {
 		BanProcessor processor = getProcessor();
 		if (processor == null)
 			return null;
 
-		return processor.banPlayer(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
+		return processor.executeBan(ban);
 	}
 
 	/**

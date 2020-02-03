@@ -12,6 +12,7 @@ import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.VelocityAdapter;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.io.ByteStreams;
 import com.google.inject.Inject;
@@ -29,6 +30,8 @@ import net.md_5.bungee.config.YamlConfiguration;
 @Plugin(id = "negativity", name = "Negativity", version = "1.4.1",
         description = "It's an Advanced AntiCheat Detection", authors = {"Elikill58"})
 public class VelocityNegativity {
+
+	public static final LegacyChannelIdentifier NEGATIVITY_CHANNEL_ID = new LegacyChannelIdentifier(NegativityMessagesManager.CHANNEL_ID);
 
 	public static Configuration CONFIG;
 	private static VelocityNegativity instance;
@@ -59,12 +62,8 @@ public class VelocityNegativity {
     public void onProxyInitialization(ProxyInitializeEvent event) {
 		enableConfig();
 	    server.getEventManager().register(this, new NegativityListener());
-		server.getChannelRegistrar().register();
-		
-		getServer().getChannelRegistrar().register(new LegacyChannelIdentifier("custom:negativity"), new LegacyChannelIdentifier("negativity"),
-					new LegacyChannelIdentifier(UniversalUtils.CHANNEL_NEGATIVITY), new LegacyChannelIdentifier(UniversalUtils.CHANNEL_NEGATIVITY_BUNGEECORD),
-					new LegacyChannelIdentifier(UniversalUtils.CHANNEL_NEGATIVITY_MOD));
-		
+		server.getChannelRegistrar().register(NEGATIVITY_CHANNEL_ID);
+
 		Adapter.setAdapter(new VelocityAdapter(this, CONFIG));
 		UniversalUtils.init();
 		Stats.loadStats();

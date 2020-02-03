@@ -13,6 +13,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 
 public abstract class Adapter {
 
@@ -27,7 +28,6 @@ public abstract class Adapter {
 			}
 		}
 		Adapter.adapter = adapter;
-		adapter.loadLang();
 	}
 
 	public static Adapter getAdapter() {
@@ -49,9 +49,7 @@ public abstract class Adapter {
 	public abstract void warn(String msg);
 	public abstract void error(String msg);
 	public abstract void set(String dir, Object value);
-	public abstract void loadLang();
-	public abstract String getStringFromLang(String lang, String key);
-	public abstract List<String> getStringListFromLang(String lang, String key);
+	public abstract TranslationProviderFactory getPlatformTranslationProviderFactory();
 	public List<Cheat> getAbstractCheats() {
 		return Cheat.CHEATS;
 	}

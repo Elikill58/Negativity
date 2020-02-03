@@ -53,7 +53,7 @@ public class Ban {
 			return;
 		np.setBanned(true);
 		String tempCmd = ada.getStringInConfig("ban.other_plugin.command_to_run");
-		if (!tempCmd.equalsIgnoreCase("")) {
+		if (tempCmd != null && !tempCmd.isEmpty() && !tempCmd.equals("ban.other_plugin.command_to_run")) {
 			ada.runConsoleCommand(tempCmd.replaceAll("%uuid%", np.getUUID().toString()).replaceAll("%ip%", np.getIP())
 					.replaceAll("%name%", np.getName()).replaceAll("%reason%", np.getReason(cheat))
 					.replaceAll("%alert%", "" + np.getWarn(cheat))

@@ -2,6 +2,7 @@ report_message: "&a[&2Negativity&a] &c%name% &7har blitt rapportert av &c%report
 alert: "&a[&2Negativity&a] &c%name%&7 ser ut til å bruke &c%cheat% &7(&2Pålitelighet: %reliability%%&7) !"
 alert_multiple: "&a[&2Negativity&a] &c%name%&7 ser ut til å bruke &c%cheat% %nb% tid &7(&2Pålitelighet: %reliability%%&7) !"
 alert_hover: "&6Pålitelighet: %reliability%\nPing: %ping%"
+alert_tp_info: "&7Click to teleport to &o%playername%"
 ban:
   kick_time: "&cForbud grunn %reason% før %time% av %by%."
   kick_def: "&cForbud definitivt for %reason% av %by%."

@@ -23,7 +23,7 @@ public class TimerTimeBetweenAlert extends BukkitRunnable {
 				if(hover != "")
 					hover = "\n" + hover;
 				if(i.size() == 1) {
-					SpigotNegativity.sendAlertMessage(i.get(0).getReportType(), np, p, c, ping, i.get(0).getReliability(), hover, i.get(0), false, i.get(0).getStatsSend());
+					SpigotNegativity.sendAlertMessage(i.get(0).getReportType(), np, p, c, ping, i.get(0).getReliability(), hover, i.get(0), 1, i.get(0).getStatsSend());
 				} else {
 					PlayerCheatAlertEvent alert = null;
 					int nb = 0;
@@ -34,7 +34,7 @@ public class TimerTimeBetweenAlert extends BukkitRunnable {
 					}
 					if(alert == null)
 						alert = i.get(0);
-					SpigotNegativity.sendAlertMessage(alert.getReportType(), np, p, c, ping, nb / i.size(), hover, alert, true, i.get(i.size() - 1).getStatsSend());
+					SpigotNegativity.sendAlertMessage(alert.getReportType(), np, p, c, ping, nb / i.size(), hover, alert, i.size(), i.get(i.size() - 1).getStatsSend());
 				}
 			});
 			np.ALERT_NOT_SHOWED.clear();

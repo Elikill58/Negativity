@@ -1,8 +1,10 @@
 package com.elikill58.negativity.spigot.events;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,6 +33,8 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanRequest;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class PlayersEvents implements Listener {
@@ -62,12 +66,14 @@ public class PlayersEvents implements Listener {
 		if(UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
 		if(!hasSentBungeecordMessage && !SpigotNegativity.isOnBungeecord) {
-			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
-				@Override
-				public void run() {
-					SpigotNegativity.sendReportMessage(p, "bungeecord", UniversalUtils.CHANNEL_NEGATIVITY_BUNGEECORD);
+			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
+				try {
+					byte[] pingMessage = NegativityMessagesManager.writeMessage(new ProxyPingMessage());
+					p.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, pingMessage);
+				} catch (IOException ex) {
+					SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not write ProxyPingMessage.", ex);
 				}
-			}, 1);
+			}, 20);
 			hasSentBungeecordMessage = true;
 		}
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());

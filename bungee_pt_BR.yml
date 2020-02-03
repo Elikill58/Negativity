@@ -1,6 +1,7 @@
 alert: "&a[&2Negativity&a] &c%name%&7 pode estar usando &c%cheat% &7(&2Confiabilidade: %reliability%%&7)!"
 alert_multiple: "&a[&2Negativity&a] &c%name%&7 pode estar usando &c%cheat% %nb% tempo &7(&2Confiabilidade: %reliability%%&7)!"
 alert_hover: "&6Confiabilidade: %reliability%\nPing: %ping%"
+alert_tp_info: "&7Click to teleport to &o%playername%"
 report: "&a[&2Negativity&a] &c%name% &7foi reportado por: &c%report% &7razão: &c%reason%"
 ban:
   kick_time: "&cProibido por %reason% para cimau %time% por %by%."

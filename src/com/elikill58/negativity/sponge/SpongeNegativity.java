@@ -13,12 +13,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandManager;
+import org.spongepowered.api.command.CommandMapping;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
@@ -28,6 +31,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
@@ -74,6 +78,9 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpongeAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
 
@@ -82,7 +89,7 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
 @Plugin(id = "negativity", name = "Negativity", version = "1.4.1", description = "It's an Advanced AntiCheat Detection", authors = "Elikill58", dependencies = {
 		@Dependency(id = "packetgate") })
-public class SpongeNegativity implements RawDataListener {
+public class SpongeNegativity {
 
 	public static SpongeNegativity INSTANCE;
 
@@ -99,6 +106,7 @@ public class SpongeNegativity implements RawDataListener {
 
 	public static final List<PlayerCheatEvent.Alert> ALERTS = new ArrayList<>();
 	public static final Map<UUID, Map<Cheat, Long>> LAST_ALERTS_TIME = new HashMap<>();
+	private final Map<String, CommandMapping> reloadableCommands = new HashMap<>();
 
 	public PluginContainer getContainer() {
 		return plugin;
@@ -156,7 +164,6 @@ public class SpongeNegativity implements RawDataListener {
 					}
 				}
 			}).submit(this);
-		Adapter.getAdapter().loadLang();
 	}
 
 	@Listener
@@ -177,6 +184,7 @@ public class SpongeNegativity implements RawDataListener {
 
 	@Listener
 	public void onGameStart(GameStartingServerEvent e) {
+		loadItemBypasses();
 		try {
 			Class.forName("eu.crushedpixel.sponge.packetgate.api.registry.PacketGate");
 			hasPacketGate = true;
@@ -205,33 +213,55 @@ public class SpongeNegativity implements RawDataListener {
 		} catch (ClassNotFoundException e1) {
 			SpongeForgeSupport.isOnSpongeForge = false;
 		}
-		CommandManager cmd = Sponge.getCommandManager();
 
-		cmd.register(this, NegativityCommand.create(), "negativity");
-		cmd.register(this, ModCommand.create(), "mod");
-		cmd.register(this, LangCommand.create(), "nlang");
+		loadCommands(false);
 
-		if (config.getNode("report_command").getBoolean()) {
-			cmd.register(this, ReportCommand.create(), "report");
-		}
-
-		if (config.getNode("ban_command").getBoolean()) {
-			cmd.register(this, BanCommand.create(), "nban", "negban");
-		}
-
-		if (config.getNode("unban_command").getBoolean()) {
-			cmd.register(this, UnbanCommand.create(), "nunban", "negunban");
-		}
-
-		if (SuspectManager.ENABLED_CMD) {
-			cmd.register(this, SuspectCommand.create(), "suspect");
-		}
-
-		channel = Sponge.getChannelRegistrar().createRawChannel(this, UniversalUtils.CHANNEL_NEGATIVITY);
+		channel = Sponge.getChannelRegistrar().createRawChannel(this, NegativityMessagesManager.CHANNEL_ID);
 		if (Sponge.getChannelRegistrar().isChannelAvailable("FML|HS")) {
 			fmlChannel = Sponge.getChannelRegistrar().getOrCreateRaw(this, "FML|HS");
-			fmlChannel.addListener(this);
+			fmlChannel.addListener(new FmlRawDataListener());
 		}
+	}
+
+	public void reloadCommands() {
+		loadCommands(true);
+	}
+
+	private void loadCommands(boolean reload) {
+		CommandManager cmd = Sponge.getCommandManager();
+
+		if (!reload) {
+			cmd.register(this, NegativityCommand.create(), "negativity");
+			cmd.register(this, ModCommand.create(), "mod");
+			cmd.register(this, LangCommand.create(), "nlang");
+		}
+
+		reloadCommand("report_command", cmd, ReportCommand::create, "report", "repot");
+		reloadCommand("ban_command", cmd, BanCommand::create, "nban", "negban");
+		reloadCommand("unban_command", cmd, UnbanCommand::create, "nunban", "negunban");
+		reloadCommand("suspect_command", SuspectManager.ENABLED_CMD, cmd, SuspectCommand::create, "suspect");
+	}
+
+	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {
+		reloadCommand(configKey, config.getNode(configKey).getBoolean(), manager, command, aliases);
+	}
+
+	private void reloadCommand(String mappingKey, boolean enabled, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {
+		if (enabled) {
+			if (!reloadableCommands.containsKey(mappingKey)) {
+				manager.register(this, command.get(), aliases).ifPresent(mapping -> reloadableCommands.put(mappingKey, mapping));
+			}
+		} else {
+			CommandMapping mapping = reloadableCommands.remove(mappingKey);
+			if (mapping != null) {
+				manager.removeMapping(mapping);
+			}
+		}
+	}
+
+	@Listener
+	public void onGameReload(GameReloadEvent event) {
+		Adapter.getAdapter().reload();
 	}
 
 	@Listener
@@ -322,7 +352,7 @@ public class SpongeNegativity implements RawDataListener {
 				e.getTransactions().get(0).getOriginal().getLocation().get().getBlock().getType().getId()));
 	}
 
-	private void loadConfig() {
+	public void loadConfig() {
 		try {
 			File configFile = new File(configDir.toFile(), "config.conf");
 			if (!configFile.exists()) {
@@ -338,11 +368,16 @@ public class SpongeNegativity implements RawDataListener {
 			log = config.getNode("log_alerts").getBoolean();
 			isOnBungeecord = config.getNode("hasBungeecord").getBoolean();
 			hasBypass = config.getNode("Permissions").getNode("bypass").getNode("active").getBoolean();
-			for (ConfigurationNode cn : config.getNode("items").getChildrenList())
-				new ItemUseBypass(cn.getKey().toString(), cn.getNode("cheats").getString(),
-						cn.getNode("when").getString());
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void loadItemBypasses() {
+		ItemUseBypass.ITEM_BYPASS.clear();
+		for (Map.Entry<Object, ? extends ConfigurationNode> cn : config.getNode("items").getChildrenMap().entrySet()) {
+			ConfigurationNode itemNode = cn.getValue();
+			new ItemUseBypass(cn.getKey().toString(), itemNode.getNode("cheats").getString(""), itemNode.getNode("when").getString(""));
 		}
 	}
 
@@ -443,15 +478,15 @@ public class SpongeNegativity implements RawDataListener {
 			}
 		}
 
-		sendAlertMessage(type, p, c, reliability, hover_proof, np, ping, alert, false);
+		sendAlertMessage(type, p, c, reliability, hover_proof, np, ping, alert, 1);
 		np.pendingAlerts.remove(c);
 		return true;
 	}
 
 	public static void sendAlertMessage(ReportType type, Player p, Cheat c, int reliability,
-										String hoverProof, SpongeNegativityPlayer np, int ping, PlayerCheatEvent.Alert alert, boolean isMultiple) {
+										String hoverProof, SpongeNegativityPlayer np, int ping, PlayerCheatEvent.Alert alert, int alertsCount) {
 		if (isOnBungeecord) {
-			sendMessage(p, c.getName(), reliability, ping, hoverProof, isMultiple);
+			sendAlertMessage(p, c.getName(), reliability, ping, hoverProof, alertsCount);
 			return;
 		}
 
@@ -519,29 +554,41 @@ public class SpongeNegativity implements RawDataListener {
 		return plugin.getLogger();
 	}
 
-	private static void sendMessage(Player p, String cheatName, int reliability, int ping, String hover, boolean isMultiple) {
-		String msg = p.getName() + "/**/" + cheatName + "/**/" + reliability + "/**/" + ping + "/**/" + hover + "/**/" + (isMultiple ? "alert_multiple" : "alert");
+	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, String hover, int alertsCount) {
 		channel.sendTo(p, (payload) -> {
-			payload.writeUTF(msg);
+			try {
+				AlertMessage message = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);
+				payload.writeBytes(NegativityMessagesManager.writeMessage(message));
+			} catch (IOException e) {
+				SpongeNegativity.getInstance().getLogger().error("Could not send alert message to the proxy.", e);
+			}
 		});
 	}
 
 	public static void sendReportMessage(Player p, String reportMsg, String nameReported) {
 		channel.sendTo(p, (payload) -> {
-			payload.writeUTF(nameReported + "/**/" + reportMsg + "/**/" + p.getName());
+			try {
+				ReportMessage message = new ReportMessage(nameReported, reportMsg, p.getName());
+				payload.writeBytes(NegativityMessagesManager.writeMessage(message));
+			} catch (IOException e) {
+				SpongeNegativity.getInstance().getLogger().error("Could not send report message to the proxy.", e);
+			}
 		});
 	}
 
-	@Override
-	public void handlePayload(ChannelBuf channelBuf, RemoteConnection connection, Type side) {
-		try {
-			if (!(connection instanceof PlayerConnection))
+	private static class FmlRawDataListener implements RawDataListener {
+
+		@Override
+		public void handlePayload(ChannelBuf channelBuf, RemoteConnection connection, Type side) {
+			if (!(connection instanceof PlayerConnection)) {
 				return;
-			SpongeNegativityPlayer.getNegativityPlayer(((PlayerConnection) connection).getPlayer()).MODS
-					.putAll(Utils.getModsNameVersionFromMessage(
-							new String(channelBuf.readBytes(channelBuf.available()), StandardCharsets.UTF_8)));
-		} catch (Exception e) {
-			e.printStackTrace();
+			}
+
+			Player player = ((PlayerConnection) connection).getPlayer();
+			byte[] rawData = channelBuf.readBytes(channelBuf.available());
+			HashMap<String, String> playerMods = SpongeNegativityPlayer.getNegativityPlayer(player).MODS;
+			playerMods.clear();
+			playerMods.putAll(Utils.getModsNameVersionFromMessage(new String(rawData, StandardCharsets.UTF_8)));
 		}
 	}
 }

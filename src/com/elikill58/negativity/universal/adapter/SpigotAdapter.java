@@ -1,15 +1,19 @@
 package com.elikill58.negativity.universal.adapter;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -24,20 +28,23 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.SpigotTranslationProvider;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
+import com.elikill58.negativity.universal.translation.TranslationProvider;
+import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.io.ByteStreams;
 
-public class SpigotAdapter extends Adapter {
+public class SpigotAdapter extends Adapter implements TranslationProviderFactory {
 
 	private FileConfiguration config;
 	private JavaPlugin pl;
-	private final HashMap<String, YamlConfiguration> LANGS = new HashMap<>();
 	private HashMap<UUID, NegativityAccount> account = new HashMap<>();
 	/*private LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(10, TimeUnit.MINUTES)
@@ -140,6 +147,11 @@ public class SpigotAdapter extends Adapter {
 	public File copy(String lang, File f) {
 		if (f.exists())
 			return f;
+
+		File parentDir = f.getParentFile();
+		if (!parentDir.exists())
+			parentDir.mkdirs();
+
 		String fileName = "en_US.yml";
 		if (lang.toLowerCase().contains("fr") || lang.toLowerCase().contains("be"))
 			fileName = "fr_FR.yml";
@@ -166,43 +178,46 @@ public class SpigotAdapter extends Adapter {
 	}
 
 	@Override
-	public void loadLang() {
-		File langDir = new File(pl.getDataFolder().getAbsolutePath() + File.separator + "lang" + File.separator);
-		if (!langDir.exists())
-			langDir.mkdirs();
+	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
+		return this;
+	}
 
-		if (!TranslatedMessages.activeTranslation) {
-			String defaultLang = TranslatedMessages.DEFAULT_LANG;
-			LANGS.put(defaultLang, YamlConfiguration.loadConfiguration(copy(defaultLang, new File(langDir.getAbsolutePath() + "/" + defaultLang + ".yml"))));
-			return;
-		}
-
-		try {
-			for (String l : TranslatedMessages.LANGS)
-				LANGS.put(l, YamlConfiguration
-						.loadConfiguration(copy(l, new File(langDir.getAbsolutePath() + "/" + l + ".yml"))));
+	@Nullable
+	@Override
+	public TranslationProvider createTranslationProvider(String language) {
+		String languageFileName = language + ".yml";
+		File translationFile = new File(pl.getDataFolder(), "lang" + File.separator + languageFileName);
+		try (InputStreamReader reader = new InputStreamReader(new FileInputStream(copy(language, translationFile)), StandardCharsets.UTF_8)) {
+			YamlConfiguration msgConfig = YamlConfiguration.loadConfiguration(reader);
+			return new CachingTranslationProvider(new SpigotTranslationProvider(msgConfig));
 		} catch (Exception e) {
-			e.printStackTrace();
+			pl.getLogger().log(Level.SEVERE, "Could not load translation file " + languageFileName, e);
+			return null;
 		}
 	}
 
+	@Nullable
 	@Override
-	public String getStringFromLang(String lang, String key) {
-		return LANGS.get(lang).getString(key);
-	}
-
-	@Override
-	public List<String> getStringListFromLang(String lang, String key) {
-		return LANGS.get(lang).getStringList(key);
+	public TranslationProvider createFallbackTranslationProvider() {
+		InputStream fallbackResource = SpigotNegativity.getInstance().getResource("en_US.yml");
+		if (fallbackResource == null) {
+			SpigotNegativity.getInstance().getLogger().warning("Could not find the fallback messages resource.");
+			return null;
+		}
+		try (InputStreamReader fallbackResourceReader = new InputStreamReader(fallbackResource)) {
+			YamlConfiguration msgConfig = YamlConfiguration.loadConfiguration(fallbackResourceReader);
+			return new CachingTranslationProvider(new SpigotTranslationProvider(msgConfig));
+		} catch (Exception e) {
+			pl.getLogger().log(Level.SEVERE, "Could not load the fallback translation resource ", e);
+			return null;
+		}
 	}
 
 	@Override
 	public void reload() {
-		SpigotNegativity sn = SpigotNegativity.getInstance();
-		sn.reloadConfig();
+		reloadConfig();
 		UniversalUtils.init();
 		Cheat.loadCheat();
-		loadLang();
 		SpigotNegativity.isOnBungeecord = getBooleanInConfig("hasBungeecord");
 		SpigotNegativity.log = getBooleanInConfig("log_alerts");
 		SpigotNegativity.log_console = getBooleanInConfig("log_alerts_in_console");

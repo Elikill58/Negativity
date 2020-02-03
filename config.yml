@@ -175,6 +175,9 @@ Translation:
   - zh_CN
   use_db: false # to get the lang
   default: en_US
+  # The provider used to get translated messages, useful if you want to customize the way Negativity gets its messages.
+  # The only one available out-of-the-box is "platform".
+  provider: platform
 
 # 
 # You can put this plugin on your Bungeecord/Waterfall/Velocity !
@@ -207,16 +210,21 @@ ban:
     active: false
     # Available plugin : Essentials, MaxBans & AdvancedBan
     plugin_used: "APlugin"
-  # If you write nothing, Negativity will not do anything
-  # Available place holders:
+  # Commands to execute if ban.type is set to 'command'.
+  # You can execute as many commands as you want. Order is respected.
+  #
+  # Available placeholders:
   # %uuid% : uuid of banned player
   # %name% : name of banned player
   # %ip% : ip of the banned player
   # %reason% : detected cheat
-  # %alert% : number of alert for detected cheat
-  # %all_alert% : all alert for the detected cheat since you add Negativity on your server
-  command_ban: "" # example : "/ban %uuid% %reason%"
-  command_unban: "" # example : "/unban %uuid% %reason%"
+  # %alert% : number of alerts for the detected cheat that triggered the ban
+  # %all_alert% : all alerts for the detected cheat since you added Negativity on your server
+  command:
+    ban:
+    - "" # example : "/ban %uuid% %reason%"
+    unban:
+    - "" # example : "/unban %uuid% %reason%"
   # If you want to destroy BDD line / File line
   destroy_when_unban: false
   # Need to be banned

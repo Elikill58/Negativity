@@ -52,7 +52,7 @@ public class DefaultConfigValue {
 		INTS.clear();
 		DOUBLES.clear();
 		STRINGS.clear();
-		
+
 		BOOLEANS.put("log_alerts", true);
 		BOOLEANS.put("log_alerts_in_console", true);
 		INTS.put("tps_alert_stop", 18);
@@ -82,6 +82,8 @@ public class DefaultConfigValue {
 
 		STRINGS.put("Permissions.showAlert.default", "negativity.alert");
 		STRINGS.put("Permissions.showAlert.custom", "MOD,ADMIN");
+		STRINGS.put("Permissions.reload.default", "negativity.reload");
+		STRINGS.put("Permissions.reload.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.verif.default", "negativity.verif");
 		STRINGS.put("Permissions.verif.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.manageCheat.default", "negativity.managecheat");
@@ -102,6 +104,7 @@ public class DefaultConfigValue {
 		BOOLEANS.put("Translation.active", false);
 		BOOLEANS.put("Translation.use_db", false);
 		STRINGS.put("Translation.default", "en_US");
+		STRINGS.put("Translation.provider", TranslatedMessages.PLATFORM_PROVIDER_ID);
 
 		BOOLEANS.put("hasBungeecord", false);
 
@@ -109,8 +112,6 @@ public class DefaultConfigValue {
 
 		BOOLEANS.put("ban.active", false);
 		STRINGS.put("ban.type", "file");
-		STRINGS.put("ban.command_ban", "");
-		STRINGS.put("ban.command_unban", "");
 		BOOLEANS.put("ban.destroy_when_unban", false);
 		INTS.put("ban.reliability_need", 90);
 		INTS.put("ban.alert_need", 5);

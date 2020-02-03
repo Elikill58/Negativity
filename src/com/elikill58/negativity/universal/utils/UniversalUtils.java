@@ -36,8 +36,6 @@ import com.elikill58.negativity.universal.permissions.Perm;
 
 public class UniversalUtils {
 
-	public static String CHANNEL_NEGATIVITY = "negativity:msg", CHANNEL_NEGATIVITY_BUNGEECORD = "negativity:bunge", CHANNEL_NEGATIVITY_MOD = "negativity:mod";
-	
 	public static List<String> getClasseNamesInPackage(String jarName, String packageName) {
 		ArrayList<String> classes = new ArrayList<>();
 
@@ -224,6 +222,14 @@ public class UniversalUtils {
 			}
 		};
 		HttpsURLConnection.setDefaultHostnameVerifier(hv);
+	}
+
+	public static String replacePlaceholders(String rawMessage, Object... placeholders) {
+		String message = rawMessage;
+		for (int index = 0; index <= placeholders.length - 1; index += 2) {
+			message = message.replace(String.valueOf(placeholders[index]), String.valueOf(placeholders[index + 1]));
+		}
+		return message;
 	}
 
 	public static void init() {

@@ -10,17 +10,15 @@ public class BaseBan {
 	private final UUID playerId;
 	private final String reason;
 	private final String bannedBy;
-	private final boolean isDefinitive;
 	private final BanType banType;
 	private final long expirationTime;
 	@Nullable
 	private final String cheatName;
 
-	public BaseBan(UUID playerId, String reason, String bannedBy, boolean isDefinitive, BanType banType, long expirationTime, @Nullable String cheatName) {
+	public BaseBan(UUID playerId, String reason, String bannedBy, BanType banType, long expirationTime, @Nullable String cheatName) {
 		this.playerId = playerId;
 		this.reason = reason;
 		this.bannedBy = bannedBy;
-		this.isDefinitive = isDefinitive;
 		this.banType = banType;
 		this.expirationTime = expirationTime;
 		this.cheatName = cheatName;
@@ -39,7 +37,7 @@ public class BaseBan {
 	}
 
 	public boolean isDefinitive() {
-		return isDefinitive;
+		return expirationTime <= 0;
 	}
 
 	public BanType getBanType() {
@@ -60,8 +58,7 @@ public class BaseBan {
 		if (this == o) return true;
 		if (!(o instanceof BaseBan)) return false;
 		BaseBan baseBan = (BaseBan) o;
-		return isDefinitive == baseBan.isDefinitive &&
-				expirationTime == baseBan.expirationTime &&
+		return expirationTime == baseBan.expirationTime &&
 				playerId.equals(baseBan.playerId) &&
 				reason.equals(baseBan.reason) &&
 				bannedBy.equals(baseBan.bannedBy) &&
@@ -71,6 +68,6 @@ public class BaseBan {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
+		return Objects.hash(playerId, reason, bannedBy, banType, expirationTime, cheatName);
 	}
 }

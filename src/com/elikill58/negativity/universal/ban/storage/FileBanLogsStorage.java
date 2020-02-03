@@ -65,7 +65,6 @@ public class FileBanLogsStorage implements BanLogsStorage {
 	private static String toString(LoggedBan ban) {
 		return ban.getExpirationTime()
 				+ ":reason=" + ban.getReason().replaceAll(":", "")
-				+ ":def=" + ban.isDefinitive()
 				+ ":bantype=" + ban.getBanType().name()
 				+ (ban.getCheatName() != null ? ":ac=" + ban.getCheatName() : "")
 				+ ":by=" + ban.getBannedBy()
@@ -88,7 +87,6 @@ public class FileBanLogsStorage implements BanLogsStorage {
 
 		String reason = "";
 		String by = "Negativity";
-		boolean def = false;
 		boolean isRevoked = false;
 		BanType banType = BanType.UNKNOW;
 		String ac = null;
@@ -102,7 +100,9 @@ public class FileBanLogsStorage implements BanLogsStorage {
 					banType = BanType.valueOf(value.toUpperCase());
 					break;
 				case "def":
-					def = Boolean.parseBoolean(value);
+					// Here for compatibility with files generated from an older version
+					// of the plugin, where the expiration value may not be negative
+					expirationTime = -1;
 					break;
 				case "reason":
 					reason = value;
@@ -123,6 +123,6 @@ public class FileBanLogsStorage implements BanLogsStorage {
 			}
 		}
 
-		return new LoggedBan(playerId, reason, by, def, banType, expirationTime, ac, isRevoked);
+		return new LoggedBan(playerId, reason, by, banType, expirationTime, ac, isRevoked);
 	}
 }

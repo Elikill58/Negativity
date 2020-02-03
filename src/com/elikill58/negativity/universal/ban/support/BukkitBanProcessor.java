@@ -70,12 +70,9 @@ public class BukkitBanProcessor implements BanProcessor {
 			return null;
 		}
 
-		boolean isDefinitive = false;
-		long expirationTime = 0;
+		long expirationTime = -1;
 		Date expiration = banEntry.getExpiration();
-		if (expiration == null) {
-			isDefinitive = true;
-		} else {
+		if (expiration != null) {
 			expirationTime = expiration.getTime();
 		}
 
@@ -84,7 +81,7 @@ public class BukkitBanProcessor implements BanProcessor {
 			reason = "";
 		}
 
-		return new ActiveBan(playerId, reason, banEntry.getSource(), isDefinitive, BanType.UNKNOW, expirationTime, reason);
+		return new ActiveBan(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason);
 	}
 
 	@Override
@@ -96,12 +93,9 @@ public class BukkitBanProcessor implements BanProcessor {
 	}
 
 	private LoggedBan loggedBanFrom(BanEntry banEntry, UUID playerId, boolean revoked) {
-		boolean isDefinitive = false;
-		long expirationTime = 0;
+		long expirationTime = -1;
 		Date expiration = banEntry.getExpiration();
-		if (expiration == null) {
-			isDefinitive = true;
-		} else {
+		if (expiration != null) {
 			expirationTime = expiration.getTime();
 		}
 
@@ -110,6 +104,6 @@ public class BukkitBanProcessor implements BanProcessor {
 			reason = "";
 		}
 
-		return new LoggedBan(playerId, reason, banEntry.getSource(), isDefinitive, BanType.UNKNOW, expirationTime, reason, revoked);
+		return new LoggedBan(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason, revoked);
 	}
 }

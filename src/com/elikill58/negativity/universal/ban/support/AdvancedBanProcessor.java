@@ -68,7 +68,6 @@ public class AdvancedBanProcessor implements BanProcessor {
 		return new ActiveBan(playerId,
 				punishment.getReason(),
 				punishment.getOperator(),
-				punishment.getEnd() > 0,
 				BanType.UNKNOW,
 				punishment.getEnd(),
 				punishment.getReason());
@@ -86,7 +85,6 @@ public class AdvancedBanProcessor implements BanProcessor {
 		return new LoggedBan(playerId,
 				punishment.getReason(),
 				punishment.getOperator(),
-				punishment.getEnd() > 0,
 				BanType.UNKNOW,
 				punishment.getEnd(),
 				punishment.getReason(),

@@ -69,9 +69,8 @@ public class SpongeBanProcessor implements BanProcessor {
 		Ban.Profile revokedBan = existingBan.get();
 		String reason = revokedBan.getReason().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
 		String bannedBy = revokedBan.getBanSource().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
-		boolean isDefinitive = revokedBan.isIndefinite();
-		long expirationTime = revokedBan.getExpirationDate().map(Instant::toEpochMilli).orElse(0L);
-		return new LoggedBan(playerId, reason, bannedBy, isDefinitive, BanType.UNKNOW, expirationTime, null, true);
+		long expirationTime = revokedBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
+		return new LoggedBan(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, true);
 	}
 
 	@Override
@@ -100,9 +99,8 @@ public class SpongeBanProcessor implements BanProcessor {
 		Ban.Profile activeBan = existingBan.get();
 		String reason = activeBan.getReason().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
 		String bannedBy = activeBan.getBanSource().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
-		boolean isDefinitive = activeBan.isIndefinite();
-		long expirationTime = activeBan.getExpirationDate().map(Instant::toEpochMilli).orElse(0L);
-		return new ActiveBan(playerId, reason, bannedBy, isDefinitive, BanType.UNKNOW, expirationTime, null);
+		long expirationTime = activeBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
+		return new ActiveBan(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null);
 	}
 
 	@Override

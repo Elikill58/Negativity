@@ -51,14 +51,11 @@ public class MaxBansProcessor implements BanProcessor {
 		}
 		MaxBans.instance.getBanManager().unban(player.getName());
 
-		boolean isDefinitive = false;
-		long expirationTime = 0;
+		long expirationTime = -1;
 		if (revokedBan instanceof Temporary) {
 			expirationTime = ((Temporary) revokedBan).getExpires();
-		} else {
-			isDefinitive = true;
 		}
-		return new LoggedBan(playerId, revokedBan.getReason(), revokedBan.getBanner(), isDefinitive, BanType.UNKNOW, expirationTime, revokedBan.getReason(), true);
+		return new LoggedBan(playerId, revokedBan.getReason(), revokedBan.getBanner(), BanType.UNKNOW, expirationTime, revokedBan.getReason(), true);
 	}
 
 	@Nullable
@@ -71,15 +68,12 @@ public class MaxBansProcessor implements BanProcessor {
 
 		Ban ban = MaxBans.instance.getBanManager().getBan(player.getName());
 
-		boolean isDefinitive = false;
-		long expirationTime = 0;
+		long expirationTime = -1;
 		if (ban instanceof Temporary) {
 			expirationTime = ((Temporary) ban).getExpires();
-		} else {
-			isDefinitive = true;
 		}
 
-		return new ActiveBan(playerId, ban.getReason(), ban.getBanner(), isDefinitive, BanType.UNKNOW, expirationTime, ban.getReason());
+		return new ActiveBan(playerId, ban.getReason(), ban.getBanner(), BanType.UNKNOW, expirationTime, ban.getReason());
 	}
 
 	@Override
@@ -91,7 +85,7 @@ public class MaxBansProcessor implements BanProcessor {
 
 		List<LoggedBan> loggedBans = new ArrayList<>();
 		for (HistoryRecord record : MaxBans.instance.getBanManager().getHistory(player.getName())) {
-			loggedBans.add(new LoggedBan(playerId, record.getMessage(), record.getBanner(), false, BanType.UNKNOW, 0, record.getMessage(), false));
+			loggedBans.add(new LoggedBan(playerId, record.getMessage(), record.getBanner(), BanType.UNKNOW, 0, record.getMessage(), false));
 		}
 		return loggedBans;
 	}

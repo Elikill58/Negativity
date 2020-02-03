@@ -35,7 +35,7 @@ public class CommandBanProcessor implements BanProcessor {
 	public LoggedBan revokeBan(UUID playerId) {
 		Adapter adapter = Adapter.getAdapter();
 		unbanCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, playerId, "Unknown")));
-		return new LoggedBan(playerId, "Unknown", "Unknown", false, BanType.UNKNOW, 0, null, true);
+		return new LoggedBan(playerId, "Unknown", "Unknown", BanType.UNKNOW, 0, null, true);
 	}
 
 	@Nullable

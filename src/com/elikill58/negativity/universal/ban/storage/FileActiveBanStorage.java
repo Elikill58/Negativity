@@ -104,7 +104,6 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 		return ban.getPlayerId()
 				+ ":expiration=" + ban.getExpirationTime()
 				+ ":reason=" + ban.getReason().replaceAll(":", "")
-				+ ":def=" + ban.isDefinitive()
 				+ ":bantype=" + ban.getBanType().name()
 				+ (ban.getCheatName() != null ? ":ac=" + ban.getCheatName() : "")
 				+ ":by=" + ban.getBannedBy();
@@ -143,6 +142,8 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 					banType = BanType.valueOf(value.toUpperCase());
 					break;
 				case "def":
+					// Here for compatibility with files generated from an older version
+					// of the plugin, where the expiration value may not be negative
 					def = Boolean.parseBoolean(value);
 					break;
 				case "reason":
@@ -160,6 +161,10 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 			}
 		}
 
-		return new ActiveBan(playerId, reason, by, def, banType, expirationTime, ac);
+		if (def) {
+			expirationTime = -1;
+		}
+
+		return new ActiveBan(playerId, reason, by, banType, expirationTime, ac);
 	}
 }

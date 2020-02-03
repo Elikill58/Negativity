@@ -34,12 +34,12 @@ public class BanCommand implements CommandExecutor {
 		boolean isBanDefinitive = args.<Boolean>getOne("definitive").orElse(false);
 		long expiration = -1;
 		if (!isBanDefinitive)
-			expiration = System.currentTimeMillis() + args.<Long>getOne("duration").orElse(0L);
+			expiration = System.currentTimeMillis() + args.<Long>getOne("duration").orElse(-1L);
 
 		String reason = args.requireOne("reason");
 
 		com.elikill58.negativity.universal.ban.BanType banType = src instanceof Player ? com.elikill58.negativity.universal.ban.BanType.MOD : BanType.CONSOLE;
-		BanManager.executeBan(new ActiveBan(targetPlayer.getUniqueId(), reason, src.getName(), isBanDefinitive, banType, expiration, getFromReason(reason)));
+		BanManager.executeBan(new ActiveBan(targetPlayer.getUniqueId(), reason, src.getName(), banType, expiration, getFromReason(reason)));
 
 		Messages.sendMessage(src, "ban.well_ban", "%name%", targetPlayer.getName(), "%reason%", reason);
 		return CommandResult.success();

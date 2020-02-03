@@ -45,9 +45,12 @@ public class BanUtils {
 			return null;
 		}
 		String reason = player.getReason(cheat);
-		int banDuration = BanUtils.computeBanDuration(player, reliability, cheat);
+		int banDuration = -1;
 		int banDefThreshold = Adapter.getAdapter().getIntegerInConfig("ban.def.ban_time");
 		boolean isDefinitive = BanManager.getLoggedBans(player.getUUID()).size() >= banDefThreshold;
-		return BanManager.executeBan(new ActiveBan(player.getUUID(), "Cheat (" + reason + ")", "Negativity", isDefinitive, BanType.MOD, banDuration, reason));
+		if (!isDefinitive) {
+			banDuration = BanUtils.computeBanDuration(player, reliability, cheat);
+		}
+		return BanManager.executeBan(new ActiveBan(player.getUUID(), "Cheat (" + reason + ")", "Negativity", BanType.MOD, banDuration, reason));
 	}
 }

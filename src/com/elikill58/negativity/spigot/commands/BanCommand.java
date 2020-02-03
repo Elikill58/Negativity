@@ -40,11 +40,8 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 			return false;
 		}
 
-		boolean def = false;
-		long time = 0;
-		if (arg[1].equalsIgnoreCase("def")) {
-			def = true;
-		} else {
+		long time = -1;
+		if (!arg[1].equalsIgnoreCase("def")) {
 			String stringTime = "";
 			for (String c : arg[1].split("")) {
 				if (UniversalUtils.isInteger(c)) {
@@ -89,7 +86,7 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 				reason = element;
 			}
 		}
-		BanManager.executeBan(new ActiveBan(target.getUniqueId(), reason, "admin", def, BanType.CONSOLE, System.currentTimeMillis() + time, reason));
+		BanManager.executeBan(new ActiveBan(target.getUniqueId(), reason, "admin", BanType.CONSOLE, System.currentTimeMillis() + time, reason));
 		Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
 		return false;
 	}

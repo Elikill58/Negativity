@@ -9,8 +9,8 @@ public class LoggedBan extends BaseBan {
 
 	private final boolean isRevoked;
 
-	public LoggedBan(UUID playerId, String reason, String bannedBy, boolean isDefinitive, BanType banType, long expirationTime, @Nullable String cheatName, boolean isRevoked) {
-		super(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
+	public LoggedBan(UUID playerId, String reason, String bannedBy, BanType banType, long expirationTime, @Nullable String cheatName, boolean isRevoked) {
+		super(playerId, reason, bannedBy, banType, expirationTime, cheatName);
 		this.isRevoked = isRevoked;
 	}
 
@@ -33,6 +33,6 @@ public class LoggedBan extends BaseBan {
 	}
 
 	public static LoggedBan from(BaseBan from, boolean isRevoked) {
-		return new LoggedBan(from.getPlayerId(), from.getReason(), from.getBannedBy(), from.isDefinitive(), from.getBanType(), from.getExpirationTime(), from.getCheatName(), isRevoked);
+		return new LoggedBan(from.getPlayerId(), from.getReason(), from.getBannedBy(), from.getBanType(), from.getExpirationTime(), from.getCheatName(), isRevoked);
 	}
 }

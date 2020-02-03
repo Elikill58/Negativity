@@ -6,11 +6,11 @@ import javax.annotation.Nullable;
 
 public class ActiveBan extends BaseBan {
 
-	public ActiveBan(UUID playerId, String reason, String bannedBy, boolean isDefinitive, BanType banType, long expirationTime, @Nullable String cheatName) {
-		super(playerId, reason, bannedBy, isDefinitive, banType, expirationTime, cheatName);
+	public ActiveBan(UUID playerId, String reason, String bannedBy, BanType banType, long expirationTime, @Nullable String cheatName) {
+		super(playerId, reason, bannedBy, banType, expirationTime, cheatName);
 	}
 
 	public static ActiveBan from(BaseBan from) {
-		return new ActiveBan(from.getPlayerId(), from.getReason(), from.getBannedBy(), from.isDefinitive(), from.getBanType(), from.getExpirationTime(), from.getCheatName());
+		return new ActiveBan(from.getPlayerId(), from.getReason(), from.getBannedBy(), from.getBanType(), from.getExpirationTime(), from.getCheatName());
 	}
 }

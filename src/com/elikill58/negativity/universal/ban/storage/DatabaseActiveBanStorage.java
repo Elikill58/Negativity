@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.ban.storage;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,13 +12,26 @@ import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.ActiveBan;
 import com.elikill58.negativity.universal.ban.BanType;
+import com.elikill58.negativity.universal.dataStorage.database.DatabaseMigrator;
 
 public class DatabaseActiveBanStorage implements ActiveBanStorage {
+
+	public DatabaseActiveBanStorage() {
+		try {
+			Connection connection = Database.getConnection();
+			if (connection != null) {
+				DatabaseMigrator.executeRemainingMigrations(connection, "bans/active");
+			}
+		} catch (Exception e) {
+			Adapter.getAdapter().error("Failed to execute active bans database migration: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
 
 	@Nullable
 	@Override
 	public ActiveBan load(UUID playerId) {
-		try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_active_bans WHERE id = ?")) {
+		try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_bans_active WHERE id = ?")) {
 			stm.setString(1, playerId.toString());
 
 			ResultSet rs = stm.executeQuery();
@@ -41,7 +55,7 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 	public void save(ActiveBan ban) {
 		remove(ban.getPlayerId());
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
-				"INSERT INTO negativity_active_bans (id, reason, banned_by, expiration_time, cheat_name) VALUES (?,?,?,?,?)")) {
+				"INSERT INTO negativity_bans_active (id, reason, banned_by, expiration_time, cheat_name) VALUES (?,?,?,?,?)")) {
 			stm.setString(1, ban.getPlayerId().toString());
 			stm.setString(2, ban.getReason());
 			stm.setString(3, ban.getBannedBy());
@@ -57,7 +71,7 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 	@Override
 	public void remove(UUID playerId) {
 		Adapter ada = Adapter.getAdapter();
-		try (PreparedStatement stm = Database.getConnection().prepareStatement("DELETE FROM negativity_active_bans WHERE id = ?")) {
+		try (PreparedStatement stm = Database.getConnection().prepareStatement("DELETE FROM negativity_bans_active WHERE id = ?")) {
 			stm.setString(1, playerId.toString());
 			stm.executeUpdate();
 		} catch (SQLException e) {

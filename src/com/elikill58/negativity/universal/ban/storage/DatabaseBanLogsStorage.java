@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.ban.storage;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.util.ArrayList;
@@ -10,9 +11,22 @@ import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.LoggedBan;
+import com.elikill58.negativity.universal.dataStorage.database.DatabaseMigrator;
 
 public class DatabaseBanLogsStorage implements BanLogsStorage {
-
+	
+	public DatabaseBanLogsStorage() {
+		try {
+			Connection connection = Database.getConnection();
+			if (connection != null) {
+				DatabaseMigrator.executeRemainingMigrations(connection, "bans/logs");
+			}
+		} catch (Exception e) {
+			Adapter.getAdapter().error("Failed to execute ban logs database migration: " + e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
 	@Override
 	public List<LoggedBan> load(UUID playerId) {
 		List<LoggedBan> loadedBans = new ArrayList<>();

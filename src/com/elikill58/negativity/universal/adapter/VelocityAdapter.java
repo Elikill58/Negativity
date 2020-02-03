@@ -41,7 +41,6 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 
 	private Configuration config;
 	private VelocityNegativity pl;
-	private final HashMap<String, Configuration> LANGS = new HashMap<>();
 
 	public VelocityAdapter(VelocityNegativity pl, Configuration config) {
 		this.pl = pl;

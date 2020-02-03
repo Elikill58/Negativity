@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -21,6 +22,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Version;
 
 public class AntiKnockbackProtocol extends Cheat implements Listener {
 	
@@ -28,6 +30,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 		super("ANTIKNOCKBACK", false, Material.STICK, false, true, "antikb", "anti-kb", "no-kb", "nokb");
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onDamage(final EntityDamageByEntityEvent e) {
 		if (!(e.getEntity() instanceof Player) || e.isCancelled())
@@ -44,6 +47,19 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9)) {
+			if(p.getItemInHand() != null && p.getItemInHand().getType().name().contains("SHIELD"))
+				return;
+			try {
+				Object itemInOffHand = p.getInventory().getClass().getMethod("getItemInOffHand").invoke(p.getInventory());
+				if(itemInOffHand != null && itemInOffHand instanceof ItemStack) {
+					if(((ItemStack) itemInOffHand).getType().name().contains("SHIELD"))
+						return;
+				}
+			} catch (Exception exc) {
+				exc.printStackTrace();
+			}
+		}
 		EntityType damagerType = e.getDamager().getType();
 		if(damagerType.equals(EntityType.EGG) || damagerType.equals(EntityType.SNOWBALL) || (SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p)) || e.isCancelled())
 			return;

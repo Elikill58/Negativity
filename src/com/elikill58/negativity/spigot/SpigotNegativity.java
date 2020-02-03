@@ -434,7 +434,7 @@ public class SpigotNegativity extends JavaPlugin {
 	private static void logProof(SpigotNegativityPlayer np, ReportType type, Player p, Cheat c, int reliability,
 			String proof, int ping) {
 		np.logProof(new Timestamp(System.currentTimeMillis()) + ": (" + ping + "ms) " + reliability + "% " + c.getKey()
-				+ " > " + proof);
+				+ " > " + proof + ". TPS: " + Utils.getTPS());
 	}
 
 	public static void manageAutoVerif(Player p) {

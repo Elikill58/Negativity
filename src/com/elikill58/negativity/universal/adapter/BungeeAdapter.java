@@ -40,7 +40,6 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 
 	private Configuration config;
 	private Plugin pl;
-	private final HashMap<String, Configuration> LANGS = new HashMap<>();
 
 	public BungeeAdapter(Plugin pl, Configuration config) {
 		this.pl = pl;

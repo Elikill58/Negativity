@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -26,13 +27,13 @@ public class AutoClickProtocol extends Cheat implements Listener {
 
 	public static final int CLICK_ALERT = Adapter.getAdapter().getIntegerInConfig("cheats.autoclick.click_alert");
 
-	@EventHandler
+	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		ItemStack item = e.getItem();
 		if (item != null)
 			if (item.getType() == Material.SUGAR_CANE)
 				return;
-		if(e.getAction().name().contains("LEFT"))
+		if(e.getAction().name().contains("LEFT") && !e.isCancelled())
 			manageClick(e.getPlayer(), e);
 	}
 	

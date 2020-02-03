@@ -366,10 +366,10 @@ public class SpongeNegativity implements RawDataListener {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		boolean needPacket = false;
 		for (Cheat c : Cheat.values())
-			if (c.isActive() || Cheat.ALL.isActive()) {
-				if (c.isAutoVerif() || Cheat.ALL.isAutoVerif()) {
+			if (c.isActive()) {
+				if (c.isAutoVerif()) {
 					np.startAnalyze(c);
-					if (c.needPacket() || Cheat.ALL.needPacket())
+					if (c.needPacket())
 						needPacket = true;
 				}
 			}

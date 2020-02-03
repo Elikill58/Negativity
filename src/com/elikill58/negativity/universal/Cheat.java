@@ -12,7 +12,6 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public abstract class Cheat {
 
-	public static Cheat ALL;
 	public static final List<Cheat> CHEATS = new ArrayList<>();
 	public static final Map<String, Cheat> CHEATS_BY_KEY = new HashMap<>();
 	private boolean needPacket, blockedInFight, hasListener;
@@ -26,8 +25,6 @@ public abstract class Cheat {
 		this.blockedInFight = blockedInFight;
 		this.hasListener = hasListener;
 		this.key = key.toLowerCase();
-		if(key.equalsIgnoreCase("ALL"))
-			ALL = this;
 		this.name = Adapter.getAdapter().getStringInConfig("cheats." + key.toLowerCase() + ".exact_name");
 		if (this.name == null)
 			this.name = key;
@@ -129,8 +126,6 @@ public abstract class Cheat {
 				e.printStackTrace();
 			}
 		}
-		if(name.equalsIgnoreCase("all"))
-			return Optional.of(ALL);
 		return Optional.empty();
 	}
 	
@@ -143,8 +138,6 @@ public abstract class Cheat {
 				e.printStackTrace();
 			}
 		}
-		if(key.equalsIgnoreCase("all"))
-			return Optional.of(ALL);
 		return Optional.empty();
 	}
 	

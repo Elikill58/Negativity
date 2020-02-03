@@ -34,7 +34,7 @@ public class NegativityVerifCommand implements CommandExecutor {
 
 		Set<Cheat> cheats = new LinkedHashSet<>(args.getAll("cheats"));
 		SpongeNegativityPlayer targetNPlayer = SpongeNegativityPlayer.getNegativityPlayer(targetPlayer);
-		if (cheats.isEmpty() || cheats.contains(Cheat.ALL)) {
+		if (cheats.isEmpty()) {
 			targetNPlayer.startAllAnalyze();
 			Messages.sendMessage(src, "negativity.verif.start_all", "%name%", targetPlayer.getName());
 		} else {

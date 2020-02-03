@@ -31,7 +31,7 @@ public class SuspectCommand implements CommandExecutor {
 
 		boolean canReceiveMessage = !(src instanceof Player) || Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer((Player) src), "mod");
 		String suspectsList = suspects.stream().map(Player::getName).collect(Collectors.joining(", "));
-		if (cheats.isEmpty() || cheats.contains(Cheat.ALL)) {
+		if (cheats.isEmpty()) {
 			for (Player suspect : suspects) {
 				SpongeNegativityPlayer.getNegativityPlayer(suspect).startAllAnalyze();
 			}

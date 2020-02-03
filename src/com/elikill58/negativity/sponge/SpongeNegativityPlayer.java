@@ -270,8 +270,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void startAllAnalyze() {
-		if (!Cheat.ALL.isActive())
-			return;
 		for (Cheat c : Cheat.values())
 			startAnalyze(c);
 	}

@@ -190,8 +190,6 @@ public class Inv {
 		int x = 0, y = 0;
 		if (np.getActiveCheat().size() > 0) {
 			for (Cheat c : np.getActiveCheat()) {
-				if (c.equals(Cheat.ALL))
-					continue;
 				invGrid.set(x, y, Utils.createItem((ItemType) c.getMaterial(), "&r" + c.getName()));
 				x++;
 				if (x > 8) {
@@ -254,8 +252,6 @@ public class Inv {
         Iterator<Cheat> cheats = Cheat.values().iterator();
         while (slots.hasNext() && cheats.hasNext()) {
             Cheat cheat = cheats.next();
-            if(cheat.equals(Cheat.ALL))
-            	continue;
             slots.next().set(Utils.createItem((ItemType) cheat.getMaterial(), cheat.getName()));
         }
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));

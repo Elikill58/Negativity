@@ -1,6 +1,5 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -27,11 +26,8 @@ public class NukerProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
-		if(e.isCancelled())
-			p.sendMessage(ChatColor.GREEN + "Cancelled");
 		Block target = p.getTargetBlock(null, 5);
-		if ((target.getType() != e.getBlock().getType())) {
-			//e.setCancelled(true);
+		if ((target.getType() != e.getBlock().getType()) && target.getLocation().distance(e.getBlock().getLocation()) > 3) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(100), "BlockDig " + e.getBlock().getType().name() + ", player see " + target.getType().name() + ". Ping: " + Utils.getPing(p) + ". Warn: " + np.getWarn(this));				
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);

@@ -45,12 +45,10 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 								if (!(s.equalsIgnoreCase(arg[0]) || s.equalsIgnoreCase(arg[1]))
 										&& Cheat.fromString(s).isPresent())
 									actived.add(Cheat.fromString(s).get());
-						if (actived.size() == 0)
-							actived.add(Cheat.ALL);
 						SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 						for (Cheat c : actived)
 							np.startAnalyze(c);
-						if (actived.contains(Cheat.ALL)) {
+						if (actived.size() == Cheat.CHEATS.size()) {
 							np.startAllAnalyze();
 							Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", cible.getName());
 						} else {
@@ -99,12 +97,10 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 							if (!(s.equalsIgnoreCase(arg[0]) || s.equalsIgnoreCase(arg[1]))
 									&& Cheat.fromString(s).isPresent())
 								actived.add(Cheat.fromString(s).get());
-					if (actived.size() == 0)
-						actived.add(Cheat.ALL);
 					SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 					for (Cheat c : actived)
 						np.startAnalyze(c);
-					if (actived.contains(Cheat.ALL)) {
+					if (actived.size() == Cheat.CHEATS.size()) {
 						np.startAllAnalyze();
 						Messages.sendMessage(p, "negativity.verif.start_all", "%name%", cible.getName());
 					} else {

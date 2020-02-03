@@ -72,7 +72,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean isOnBungeecord = false, log = false, log_console = false, hasBypass = true, essentialsSupport = false,
+	public static boolean isOnBungeecord = false, log = false, log_console = false, hasBypass = false, essentialsSupport = false,
 			worldGuardSupport = false;
 	public static Material MATERIAL_CLOSE = Material.REDSTONE;
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
@@ -313,9 +313,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		if (np.isInFight && c.isBlockedInFight())
 			return false;
-		if (c.equals(Cheat.forKey("FLY").get()) && p.hasPermission("essentials.fly"))
-			return false;
-		if (essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
+		if (c.equals(Cheat.forKey("FLY").get()) && p.hasPermission("essentials.fly") && essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
 			return false;
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType()))

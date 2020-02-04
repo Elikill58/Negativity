@@ -113,7 +113,7 @@ public class SpongeNegativity {
 	}
 
 	public static boolean log = true, isOnBungeecord = false, hasPacketGate = false, hasPrecogs = false,
-			hasBypass = true;
+			hasBypass = false;
 
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
@@ -433,6 +433,7 @@ public class SpongeNegativity {
 				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand(HandTypes.MAIN_HAND).get().getType()).getWhen()
 						.equals(WhenBypass.ALWAYS))
 					return false;
+		
 		int ping = Utils.getPing(p);
 		long timeMillis = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > timeMillis || reliability < 30 || ping > c.getMaxAlertPing()
@@ -543,7 +544,7 @@ public class SpongeNegativity {
 			return;
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
 		SpongeNegativityPlayer.getNegativityPlayer(p).logProof(
-				stamp + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " > " + proof);
+				stamp + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " > " + proof + ". TPS: " + Utils.getLastTPS());
 	}
 
 	public Path getDataFolder() {

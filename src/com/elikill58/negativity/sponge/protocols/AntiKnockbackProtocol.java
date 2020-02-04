@@ -4,10 +4,13 @@ import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
+import org.spongepowered.api.entity.projectile.arrow.Arrow;
+import org.spongepowered.api.entity.projectile.source.ProjectileSource;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
@@ -66,9 +69,19 @@ public class AntiKnockbackProtocol extends Cheat {
 					|| damagingEntityType == EntityTypes.IRON_GOLEM
 					|| damagingEntityType.getName().contains("TNT")) {
 				return;
+			} else if(damagingEntityType.getId().contains("ARROW")) {
+				ProjectileSource source = ((Arrow) entityDamageSource.getSource()).getShooter();
+				if(source instanceof Player && ((Player) source).equals(p))
+					return;
 			}
 		}
 
+		if(p.getItemInHand(HandTypes.MAIN_HAND).isPresent() && p.getItemInHand(HandTypes.MAIN_HAND).get().getType().getId().toUpperCase().contains("SHIELD"))
+			return;
+		
+		if(p.getItemInHand(HandTypes.OFF_HAND).isPresent() && p.getItemInHand(HandTypes.OFF_HAND).get().getType().getId().toUpperCase().contains("SHIELD"))
+			return;
+		
 		Task.builder().delay(20, TimeUnit.MILLISECONDS).execute(() -> {
 			final Location<World> last = p.getLocation();
 			p.damage(0D, DamageSources.MAGIC);

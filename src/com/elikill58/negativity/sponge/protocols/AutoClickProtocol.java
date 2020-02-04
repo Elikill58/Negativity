@@ -34,7 +34,7 @@ public class AutoClickProtocol extends Cheat {
 	@Listener
 	public void onPlayerInteract(InteractEvent e, @First Player p) {
 		ItemStackSnapshot usedItem = e.getContext().get(EventContextKeys.USED_ITEM).orElse(ItemStackSnapshot.NONE);
-		if (usedItem.getType() == ItemTypes.REEDS) {
+		if (usedItem.getType() == ItemTypes.REEDS || e.isCancelled()) {
 			return;
 		}
 

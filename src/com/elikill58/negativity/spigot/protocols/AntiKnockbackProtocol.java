@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -65,6 +66,10 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 			return;
 		if(damagerType.name().contains("TNT") || np.isTargetByIronGolem())
 			return;
+		if(e.getDamager() instanceof Arrow && ((Arrow) e.getDamager()).getShooter() instanceof Player)
+			if(((Player) ((Arrow) e.getDamager()).getShooter()).equals(p))
+				return;
+		
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 
 			@Override

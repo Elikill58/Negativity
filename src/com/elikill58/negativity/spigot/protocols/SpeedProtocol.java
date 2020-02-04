@@ -38,7 +38,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 		Location from = e.getFrom().clone(), to = e.getTo().clone();
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)
 				|| p.getEntityId() == 100 || p.getVehicle() != null || p.getAllowFlight() || from.getY() > to.getY()
-				|| p.getWalkSpeed() > 2.0F || p.getFlySpeed() > 3.0F || p.hasPotionEffect(PotionEffectType.SPEED)
+				|| p.getWalkSpeed() > 2.0F || p.getFlySpeed() > 3.0F || p.hasPotionEffect(PotionEffectType.SPEED) || np.hasPotionEffect("DOLPHINS_GRACE")
 				|| p.isInsideVehicle() || np.hasElytra() || hasEnderDragonAround(p) || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
 		if (np.BYPASS_SPEED != 0) {

@@ -713,6 +713,17 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return false;
 	}
 	
+	public boolean hasPotionEffect(String effectName) {
+		try {
+			PotionEffectType potionEffect = PotionEffectType.getByName(effectName);
+			if(potionEffect != null) // If optionEffect is null, it doesn't exist in this version
+				return getPlayer().hasPotionEffect(potionEffect);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {
 		if (players.containsKey(p.getUniqueId()))
 			return players.get(p.getUniqueId());

@@ -486,8 +486,12 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public boolean hasPotionEffect(PotionEffectType type) {
+		return hasPotionEffect(type.getId());
+	}
+
+	public boolean hasPotionEffect(String typeName) {
 		for (PotionEffect pe : getActiveEffects())
-			if (pe.getType().equals(type))
+			if (pe.getType().getId().equals(typeName))
 				return true;
 		return false;
 	}

@@ -52,7 +52,7 @@ public class SpeedProtocol extends Cheat {
 		Vector3d toVect = e.getToTransform().getPosition();
 		if (p.getLocation().sub(Vector3i.UNIT_Y).getBlockType().equals(BlockTypes.SPONGE)
 				|| np.isFlying() || fromVect.getY() > toVect.getY() || p.get(Keys.WALKING_SPEED).get() > 2.0F
-				|| np.hasPotionEffect(PotionEffectTypes.SPEED) || p.getVehicle().isPresent()) {
+				|| np.hasPotionEffect(PotionEffectTypes.SPEED) || np.hasPotionEffect("DOLPHINS_GRACE") || p.getVehicle().isPresent()) {
 			return;
 		}
 

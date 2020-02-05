@@ -188,24 +188,6 @@ public class Utils {
 		}
 	}
 
-	public static Material getMaterialWith1_13_Compatibility(String before1_13, String after1_13) {
-		Material m = null;
-		try {
-			m = (Material) Material.class.getField(before1_13).get(Material.class);
-		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e1) {
-			try {
-				m = (Material) Material.class.getField(after1_13).get(Material.class);
-			} catch (IllegalArgumentException | IllegalAccessException | SecurityException e2) {
-				e2.printStackTrace();
-			} catch (NoSuchFieldException e) {
-				Adapter.getAdapter().error("Failed to find Material: " + before1_13 + " (1.12 & -) and " + after1_13 + " (1.13 & +)");
-			}
-		}
-		return m;
-	}
-
 	public static Material getMaterialWith1_15_Compatibility(String... tempMat) {
 		for(String s : tempMat) {
 			try {
@@ -307,5 +289,15 @@ public class Utils {
 			exc.printStackTrace();
 			return null;
 		}
+	}
+	
+	public static void teleportPlayerOnGround(Player p) {
+		int i = 20;
+		Location loc = p.getLocation();
+		while (loc.getBlock().getType().equals(Material.AIR) && i > 0) {
+			loc.subtract(0, 1, 0);
+			i--;
+		}
+		p.teleport(loc.add(0, 1, 0));
 	}
 }

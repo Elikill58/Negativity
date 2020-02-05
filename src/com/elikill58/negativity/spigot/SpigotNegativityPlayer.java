@@ -73,7 +73,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public int ONLY_KEEP_ALIVE = 0, NO_PACKET = 0, BETTER_CLICK = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0;
 	// setBack
 	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, LAST_SLOT_CLICK = -1;
-	public double lastY = -3.141592654;
+	public double lastYDiff = -3.141592654;
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, LAST_DAMAGE_RECEIVE = 0, TIME_REPORT = 0, LAST_BLOCK_BREAK = 0;
 	public String LAST_OTHER_KEEP_ALIVE;
@@ -504,6 +504,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	public boolean hasOtherThan(Location loc, String name) {
+		loc = loc.clone();
 		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(name))
 			return true;
 		if (!loc.add(1, 0, 0).getBlock().getType().name().contains(name))

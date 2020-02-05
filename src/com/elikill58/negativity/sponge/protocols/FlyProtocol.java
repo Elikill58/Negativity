@@ -106,19 +106,9 @@ public class FlyProtocol extends Cheat {
 					np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
 					"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ". Warn for fly: " + np.getWarn(this));
 			if (isSetBack() && mayCancel) {
-				setBack(p);
+				Utils.teleportPlayerOnGround(p);
 			}
 		}
-	}
-
-	private void setBack(Player p) {
-		int i = 20;
-		Location<World> loc = p.getLocation();
-		while (loc.getBlockType() == BlockTypes.AIR && i > 0) {
-			loc = loc.sub(Vector3i.UNIT_Y);
-			i--;
-		}
-		p.setLocation(loc.add(Vector3i.UNIT_Y));
 	}
 
 	private int getNbAirBlockDown(SpongeNegativityPlayer np) {

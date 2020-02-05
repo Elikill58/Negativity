@@ -18,7 +18,7 @@ public class Inv {
 			NAME_ACTIVED_CHEAT_MENU = Messages.getMessage("inventory.detection.name_inv"), NAME_FREEZE_MENU = "Freeze",
 			NAME_MOD_MENU = "Mod", NAME_ALERT_MENU = "Alerts", CHEAT_MANAGER = "Cheat Manager", NAME_FORGE_MOD_MENU = "Mods";
 	public static final HashMap<Player, Player> CHECKING = new HashMap<>();
-	public static final ItemStack EMPTY = (Version.isNewerOrEquals(Version.getVersion(), Version.V1_13) ? new ItemStack(Utils.getMaterialWith1_13_Compatibility("STAINED_GLASS_PANE", "GRAY_STAINED_GLASS_PANE"), 1, (byte) 7) : new ItemStack(Utils.getMaterialWith1_13_Compatibility("STAINED_GLASS_PANE", "GRAY_STAINED_GLASS_PANE")));
+	public static final ItemStack EMPTY = (Version.isNewerOrEquals(Version.getVersion(), Version.V1_13) ? new ItemStack(Utils.getMaterialWith1_15_Compatibility("STAINED_GLASS_PANE", "GRAY_STAINED_GLASS_PANE"), 1, (byte) 7) : new ItemStack(Utils.getMaterialWith1_15_Compatibility("STAINED_GLASS_PANE", "GRAY_STAINED_GLASS_PANE")));
 
 	public static void openFreezeMenu(Player p) {
 		Inventory inv = Bukkit.createInventory(null, 27, NAME_FREEZE_MENU);

@@ -62,8 +62,8 @@ public class SpiderProtocol extends Cheat {
 		}
 
 		double y = e.getToTransform().getLocation().getY() - e.getFromTransform().getLocation().getY();
-		double last = np.lastY;
-		np.lastY = y;
+		double last = np.lastYDiff;
+		np.lastYDiff = y;
 		boolean isAris = y == p.get(Keys.WALKING_SPEED).get();
 		if (((y > 0.499 && y < 0.7) || isAris || last == y) && hasOtherThan(loc, BlockTypes.AIR)) {
 			if (hasBypassBlockAround(loc)) {

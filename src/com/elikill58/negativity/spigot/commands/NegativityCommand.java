@@ -39,27 +39,23 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 							Messages.sendMessage(sender, "invalid_player", "%arg%", arg[1]);
 							return false;
 						}
-						ArrayList<Cheat> actived = new ArrayList<>();
-						if (arg.length > 2)
-							for (String s : arg)
-								if (!(s.equalsIgnoreCase(arg[0]) || s.equalsIgnoreCase(arg[1]))
-										&& Cheat.fromString(s).isPresent())
-									actived.add(Cheat.fromString(s).get());
 						SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
-						for (Cheat c : actived)
-							np.startAnalyze(c);
-						if (actived.size() == Cheat.CHEATS.size()) {
+						if(arg.length == 2) {
 							np.startAllAnalyze();
 							Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", cible.getName());
 						} else {
 							String cheat = "";
-							boolean isStart = true;
-							for (Cheat c : actived)
-								if (isStart) {
-									cheat = c.getName();
-									isStart = false;
-								} else
-									cheat = cheat + ", " + c.getName();
+							for (String s : arg) {
+								if (!(s.equalsIgnoreCase(arg[0]) || s.equalsIgnoreCase(arg[1]))
+										&& Cheat.fromString(s).isPresent()) {
+									Cheat c = Cheat.fromString(s).get();
+									np.startAnalyze(c);
+									if (cheat.equalsIgnoreCase("")) {
+										cheat = c.getName();
+									} else
+										cheat = cheat + ", " + c.getName();
+								}
+							}
 							Messages.sendMessage(sender, "negativity.verif.start", "%name%", cible.getName(), "%cheat%", cheat);
 						}
 					}

@@ -25,8 +25,8 @@ public class ModInventory {
 		inv.setItem(12, Utils.createItem(Material.FEATHER, "Fly: " + Messages.getMessage(p, "inventory.manager." + (p.isFlying() ? "enabled" : "disabled"))));
 		if(Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "manageCheat"))
 			inv.setItem(14, Utils.createItem(Material.TNT, Messages.getMessage(p, "inventory.mod.cheat_manage")));
-		inv.setItem(15, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("LEASH", "LEGACY_LEASH"), Messages.getMessage(p, "inventory.mod.random_tp")));
-		inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("IRON_SPADE", "LEGACY_IRON_SPADE"), Messages.getMessage(p, "inventory.mod.clear_inv")));
+		inv.setItem(15, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("LEASH", "LEGACY_LEASH"), Messages.getMessage(p, "inventory.mod.random_tp")));
+		inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("IRON_SPADE", "LEGACY_IRON_SPADE"), Messages.getMessage(p, "inventory.mod.clear_inv")));
 		
 		inv.setItem(inv.getSize() - 1, Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
 
@@ -49,12 +49,12 @@ public class ModInventory {
 				p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 10000, 0));
 				Messages.sendMessage(p, "inventory.mod.vision_added");
 			}
-		} else if (m.equals(Utils.getMaterialWith1_13_Compatibility("IRON_SPADE", "LEGACY_IRON_SPADE"))) {
+		} else if (m.equals(Utils.getMaterialWith1_15_Compatibility("IRON_SPADE", "LEGACY_IRON_SPADE"))) {
 			p.closeInventory();
 			p.getInventory().clear();
 			p.getInventory().setArmorContents(null);
 			Messages.sendMessage(p, "inventory.mod.inv_cleared");
-		} else if (m.equals(Utils.getMaterialWith1_13_Compatibility("LEASH", "LEGACY_LEASH"))) {
+		} else if (m.equals(Utils.getMaterialWith1_15_Compatibility("LEASH", "LEGACY_LEASH"))) {
 			p.closeInventory();
 			Player randomPlayer = (Player) Utils.getOnlinePlayers().toArray()[Utils.getOnlinePlayers().size() - 1];
 			p.teleport(randomPlayer);

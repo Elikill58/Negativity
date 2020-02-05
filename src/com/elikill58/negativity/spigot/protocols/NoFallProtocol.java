@@ -21,7 +21,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 public class NoFallProtocol extends Cheat implements Listener {
 	
 	public NoFallProtocol() {
-		super("NOFALL", false, Utils.getMaterialWith1_13_Compatibility("WOOL", "RED_WOOL"), false, true, "fall");
+		super("NOFALL", false, Utils.getMaterialWith1_15_Compatibility("WOOL", "RED_WOOL"), false, true, "fall");
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

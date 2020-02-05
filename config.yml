@@ -158,8 +158,11 @@ Permissions:
     autosteal:
       default: "negativity.bypass.autosteal"
       custom: "ADMIN"
-    timer:
-      default: "negativity.bypass.timer"
+    nuker:
+      default: "negativity.bypass.nuker"
+      custom: "ADMIN"
+    airjump:
+      default: "negativity.bypass.airjump"
       custom: "ADMIN"
 
 Translation:
@@ -520,17 +523,6 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
-
-  # Timer correspond to strange action from client
-  timer:
-    ping: 150
-    exact_name: "Timer"
-    isActive: true
-    reliability_alert: 60
-    autoVerif: true
-    setBack: false
-    kick: false
-    alert_to_kick: 5
   
   # XRay cannot be detected directly, it's about Minerate
   xray:
@@ -545,12 +537,23 @@ cheats:
   
   # Nuker/BedBreaker automatically break block without looking her
   nuker:
-    ping: 200
+    ping: 150
     exact_name: "Nuker"
     isActive: true
     reliability_alert: 60
     autoVerif: true
-    setBack: true
+    setBack: false
+    kick: false
+    alert_to_kick: 5
+  
+  # AirJump make you jump on air
+  airjump:
+    ping: 150
+    exact_name: "Air Jump"
+    isActive: true
+    reliability_alert: 60
+    autoVerif: true
+    setBack: false
     kick: false
     alert_to_kick: 5
 

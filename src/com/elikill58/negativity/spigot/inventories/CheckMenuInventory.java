@@ -23,9 +23,9 @@ public class CheckMenuInventory {
 	public static void openCheckMenu(Player p, Player cible) {
 		Inventory inv = Bukkit.createInventory(null, 27, Inv.NAME_CHECK_MENU);
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
-		inv.setItem(0, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
-		inv.setItem(1, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)), 1, getByteFromClick(np.BETTER_CLICK)));
-		inv.setItem(2, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
+		inv.setItem(0, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
+		inv.setItem(1, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)), 1, getByteFromClick(np.BETTER_CLICK)));
+		inv.setItem(2, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
 		
 		inv.setItem(7, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
 		inv.setItem(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId()));
@@ -39,7 +39,7 @@ public class CheckMenuInventory {
 		//inv.setItem(17, Utils.createItem(Material.ANVIL, "Ban"));
 		
 		inv.setItem(18, Utils.createItem(Material.SPIDER_EYE, Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
-		inv.setItem(19, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER"), Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
+		inv.setItem(19, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER"), Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
 		inv.setItem(20, Utils.createItem(Material.PACKED_ICE, Messages.getMessage(p, "inventory.main.freezing", "%name%", cible.getName())));
 		inv.setItem(21, Utils.createItem(Material.PAPER, Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())));
 		inv.setItem(22, Utils.createItem(Material.TNT, Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())));
@@ -54,9 +54,9 @@ public class CheckMenuInventory {
 		Inventory inv = p.getOpenInventory().getTopInventory();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		try {
-			inv.setItem(0, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
-			inv.setItem(1, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)), 1, getByteFromClick(np.BETTER_CLICK)));
-			inv.setItem(2, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
+			inv.setItem(0, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
+			inv.setItem(1, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)), 1, getByteFromClick(np.BETTER_CLICK)));
+			inv.setItem(2, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
 			
 			inv.setItem(7, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
 			inv.setItem(9, Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
@@ -94,7 +94,7 @@ public class CheckMenuInventory {
 			return;
 		}
 		Player cible = Inv.CHECKING.get(p);
-		if (m == Utils.getMaterialWith1_13_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER")) {
+		if (m == Utils.getMaterialWith1_15_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER")) {
 			p.teleport(cible);
 			p.closeInventory();
 			Inv.CHECKING.remove(p);
@@ -103,7 +103,7 @@ public class CheckMenuInventory {
 				p.closeInventory();
 				SpigotNegativityPlayer.getNegativityPlayer(cible).makeAppearEntities();
 			}
-		} else if(m == Utils.getMaterialWith1_13_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE")) {
+		} else if(m == Utils.getMaterialWith1_15_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE")) {
 			// kick
 		} else {
 			switch (m) {

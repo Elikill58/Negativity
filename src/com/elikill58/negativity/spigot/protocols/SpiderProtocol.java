@@ -18,7 +18,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class SpiderProtocol extends Cheat implements Listener {
 
 	public SpiderProtocol() {
-		super("SPIDER", false, Utils.getMaterialWith1_13_Compatibility("WEB", "COBWEB"), false, true, "wallhack",
+		super("SPIDER", false, Utils.getMaterialWith1_15_Compatibility("WEB", "COBWEB"), false, true, "wallhack",
 				"wall");
 	}
 
@@ -43,8 +43,8 @@ public class SpiderProtocol extends Cheat implements Listener {
 				|| underPlayer.equals(Material.LADDER) || m3.equals(Material.VINE) || m3.equals(Material.LADDER)
 				|| !playerLocType.equals(Material.AIR) || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
-		double y = e.getTo().getY() - e.getFrom().getY(), last = np.lastY;
-		np.lastY = y;
+		double y = e.getTo().getY() - e.getFrom().getY(), last = np.lastYDiff;
+		np.lastYDiff = y;
 		boolean isAris = ((float) y) == p.getWalkSpeed();
 		if (((y > 0.499 && y < 0.7) || isAris || last == y) && hasOtherThan(loc, Material.AIR)) {
 			if(hasBypassBlockAround(loc))

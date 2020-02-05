@@ -18,7 +18,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class PhaseProtocol extends Cheat implements Listener {
 
 	public PhaseProtocol() {
-		super("PHASE", false, Utils.getMaterialWith1_13_Compatibility("STAINED_GLASS", "WHITE_STAINED_GLASS"), false, true);
+		super("PHASE", false, Utils.getMaterialWith1_15_Compatibility("STAINED_GLASS", "WHITE_STAINED_GLASS"), false, true);
 	}
 
 	@EventHandler(ignoreCancelled = true)

@@ -118,6 +118,13 @@ public class PacketsTimers implements Consumer<Task> {
 				} else {
 					np.IS_LAST_SEC_BLINK = 0;
 				}
+				
+				if(ping < BLINK.getMaxAlertPing()){
+					int allPos = np.POSITION_LOOK + np.POSITION;
+					if(allPos > 60) {
+						SpongeNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, BLINK, Utils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + ") Ping: " + ping + " Warn for Timer: " + np.getWarn(BLINK));
+					}
+				}
 			}
 			Cheat SNEAK = Cheat.fromString("SNEAK").get();
 			if (np.hasDetectionActive(SNEAK) && ping < 140) {
@@ -132,14 +139,6 @@ public class PacketsTimers implements Consumer<Task> {
 			Cheat FASTPLACE = Cheat.fromString("FASTPLACE").get();
 			if (np.hasDetectionActive(FASTPLACE) && ping < 200 && np.BLOCK_PLACE > 10) {
 				SpongeNegativity.alertMod(ReportType.WARNING, p, FASTPLACE, Utils.parseInPorcent(np.BLOCK_PLACE * 5), "BLockPlace: " + np.BLOCK_PLACE + " Ping: " + ping + " Warn for BlockPlace: " + np.getWarn(FASTPLACE));
-			}
-			Cheat EDITED_CLIENT = Cheat.fromString("TIMER").get();
-			if (np.hasDetectionActive(EDITED_CLIENT) && ping < EDITED_CLIENT.getMaxAlertPing()) {
-				int allPos = np.POSITION_LOOK + np.POSITION;
-				if (allPos > 60) {
-					np.addWarn(EDITED_CLIENT);
-					SpongeNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, EDITED_CLIENT, Utils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION + " (=" + allPos + " Ping: " + ping + " Warn for EditedClient: " + np.getWarn(EDITED_CLIENT));
-				}
 			}
 			np.clearPackets();
 		}

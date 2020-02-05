@@ -11,6 +11,7 @@ import java.util.concurrent.ThreadLocalRandom;
 import javax.annotation.Nullable;
 
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.PotionEffectData;
 import org.spongepowered.api.data.type.DyeColor;
@@ -24,9 +25,12 @@ import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
+import org.spongepowered.api.world.Location;
+import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.flowpowered.math.vector.Vector3i;
 
 public class Utils {
 
@@ -183,5 +187,15 @@ public class Utils {
 				effects.remove(effect);
 			}
 		}
+	}
+	
+	public static void teleportPlayerOnGround(Player p) {
+		int i = 20;
+		Location<World> loc = p.getLocation();
+		while (loc.getBlockType() == BlockTypes.AIR && i > 0) {
+			loc = loc.sub(Vector3i.UNIT_Y);
+			i--;
+		}
+		p.setLocation(loc.add(Vector3i.UNIT_Y));
 	}
 }

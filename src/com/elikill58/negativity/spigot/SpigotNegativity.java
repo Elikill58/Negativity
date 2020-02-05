@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -434,21 +435,19 @@ public class SpigotNegativity extends JavaPlugin {
 	private static void logProof(SpigotNegativityPlayer np, ReportType type, Player p, Cheat c, int reliability,
 			String proof, int ping) {
 		np.logProof(new Timestamp(System.currentTimeMillis()) + ": (" + ping + "ms) " + reliability + "% " + c.getKey()
-				+ " > " + proof + ". TPS: " + Utils.getTPS());
+				+ " > " + proof + ". TPS: " + Arrays.toString(Utils.getTPS()));
 	}
 
 	public static void manageAutoVerif(Player p) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		boolean needPacket = false;
 		for (Cheat c : Cheat.values())
-			if (c.isActive()) {
-				if (c.isAutoVerif()) {
-					np.startAnalyze(c);
-					if (c.needPacket())
-						needPacket = true;
-				}
+			if (c.isActive() && c.isAutoVerif()) {
+				np.startAnalyze(c);
+				if (c.needPacket())
+					needPacket = true;
 			}
-		if (needPacket)
+		if (needPacket && !SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId()))
 			SpigotNegativityPlayer.INJECTED.add(p.getUniqueId());
 	}
 

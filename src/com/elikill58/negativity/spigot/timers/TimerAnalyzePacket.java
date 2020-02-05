@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.timers;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
@@ -15,7 +16,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ReportType;
 
-@SuppressWarnings({"deprecation", "unchecked"})
+@SuppressWarnings({"deprecation"})
 public class TimerAnalyzePacket extends BukkitRunnable {
 
 	@Override
@@ -51,7 +52,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 							p.getInventory().addItem(new ItemStack(np.eatMaterial));
 							break;
 						case POTION:
-							List<PotionEffect> po = (List<PotionEffect>) np.POTION_EFFECTS.clone();
+							List<PotionEffect> po = new ArrayList<>(np.POTION_EFFECTS);
 							for(PotionEffect pe : po)
 								if(!p.hasPotionEffect(pe.getType())){
 									p.addPotionEffect(pe);
@@ -118,6 +119,13 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 						np.IS_LAST_SEC_BLINK = 0;
 				} else 
 					np.IS_LAST_SEC_BLINK = 0;
+				
+				if(ping < BLINK.getMaxAlertPing()){
+					int allPos = np.POSITION_LOOK + np.POSITION;
+					if(allPos > 60) {
+						SpigotNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, BLINK, Utils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + ") Ping: " + ping + " Warn for Timer: " + np.getWarn(BLINK));
+					}
+				}
 			}
 			Cheat SNEAK = Cheat.fromString("SNEAK").get();
 			if(np.ACTIVE_CHEAT.contains(SNEAK)){
@@ -130,15 +138,6 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 						}
 						np.IS_LAST_SEC_SNEAK = true;
 					} else np.IS_LAST_SEC_SNEAK = false;
-				}
-			}
-			Cheat EDITED_CLIENT = Cheat.fromString("TIMER").get();
-			if(np.ACTIVE_CHEAT.contains(EDITED_CLIENT)) {
-				if(ping < EDITED_CLIENT.getMaxAlertPing()){
-					int allPos = np.POSITION_LOOK + np.POSITION;
-					if(allPos > 60) {
-						SpigotNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, EDITED_CLIENT, Utils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + ") Ping: " + ping + " Warn for Timer: " + np.getWarn(EDITED_CLIENT));
-					}
 				}
 			}
 			Cheat NUKER = Cheat.fromString("NUKER").get();

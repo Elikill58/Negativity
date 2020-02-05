@@ -22,7 +22,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class FlyProtocol extends Cheat implements Listener {
 
 	public FlyProtocol() {
-		super("FLY", true, Utils.getMaterialWith1_13_Compatibility("FIREWORK", "LEGACY_FIREWORK"), true, true,
+		super("FLY", true, Utils.getMaterialWith1_15_Compatibility("FIREWORK", "LEGACY_FIREWORK"), true, true,
 				"flyhack");
 	}
 
@@ -64,7 +64,7 @@ public class FlyProtocol extends Cheat implements Listener {
 							Utils.parseInPorcent((int) i * 50),
 							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this));
 				if (isSetBack() && mayCancel) {
-					setBack(p);
+					Utils.teleportPlayerOnGround(p);
 				}
 			}
 		}
@@ -81,19 +81,9 @@ public class FlyProtocol extends Cheat implements Listener {
 					np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
 					"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ". Warn for fly: " + np.getWarn(this));
 			if (isSetBack() && mayCancel) {
-				setBack(p);
+				Utils.teleportPlayerOnGround(p);
 			}
 		}
-	}
-
-	private void setBack(Player p) {
-		int i = 20;
-		Location loc = p.getLocation();
-		while (loc.getBlock().getType().equals(Material.AIR) && i > 0) {
-			loc.subtract(0, 1, 0);
-			i--;
-		}
-		p.teleport(loc.add(0, 1, 0));
 	}
 	
 	private int getNbAirBlockDown(SpigotNegativityPlayer np) {

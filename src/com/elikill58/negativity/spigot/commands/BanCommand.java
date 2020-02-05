@@ -86,7 +86,7 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 				reason = element;
 			}
 		}
-		BanManager.executeBan(new ActiveBan(target.getUniqueId(), reason, "admin", BanType.CONSOLE, System.currentTimeMillis() + time, reason));
+		BanManager.executeBan(new ActiveBan(target.getUniqueId(), reason, sender.getName(), BanType.MOD, System.currentTimeMillis() + time, reason));
 		Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
 		return false;
 	}

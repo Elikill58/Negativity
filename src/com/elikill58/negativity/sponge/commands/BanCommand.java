@@ -38,7 +38,7 @@ public class BanCommand implements CommandExecutor {
 
 		String reason = args.requireOne("reason");
 
-		com.elikill58.negativity.universal.ban.BanType banType = src instanceof Player ? com.elikill58.negativity.universal.ban.BanType.MOD : BanType.CONSOLE;
+		BanType banType = src instanceof Player ? BanType.MOD : BanType.CONSOLE;
 		BanManager.executeBan(new ActiveBan(targetPlayer.getUniqueId(), reason, src.getName(), banType, expiration, getFromReason(reason)));
 
 		Messages.sendMessage(src, "ban.well_ban", "%name%", targetPlayer.getName(), "%reason%", reason);

@@ -24,6 +24,8 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -275,5 +277,23 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public void invalidateAccount(UUID playerId) {
 		account.remove(playerId);
+	}
+
+	@Override
+	public boolean isUsingMcLeaks(UUID playerId) {
+		try {
+			String response = UniversalUtils.requestMcleaksData(playerId.toString());
+			Object data = new JSONParser().parse(response);
+			if (data instanceof JSONObject) {
+				JSONObject json = (JSONObject) data;
+				Object isMcleaks = json.get("isMcleaks");
+				if (isMcleaks != null) {
+					return Boolean.getBoolean(isMcleaks.toString());
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

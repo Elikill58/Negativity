@@ -1,7 +1,9 @@
 package com.elikill58.negativity.universal.adapter;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -42,6 +44,7 @@ import com.google.common.cache.LoadingCache;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
+import ninja.leaping.configurate.gson.GsonConfigurationLoader;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
 public class SpongeAdapter extends Adapter implements TranslationProviderFactory {
@@ -334,5 +337,20 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public void runConsoleCommand(String cmd) {
 		Sponge.getCommandManager().process(Sponge.getServer().getConsole(), cmd);
+	}
+
+	@Override
+	public boolean isUsingMcLeaks(UUID playerId) {
+		try {
+			String response = UniversalUtils.requestMcleaksData(playerId.toString());
+			ConfigurationNode rootNode = GsonConfigurationLoader.builder()
+					.setSource(() -> new BufferedReader(new StringReader(response)))
+					.build()
+					.load();
+			return rootNode.getNode("isMcleaks").getBoolean(false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

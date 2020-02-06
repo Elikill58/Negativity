@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -28,9 +29,11 @@ import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.velocity.VelocityNegativity;
 import com.elikill58.negativity.velocity.VelocityNegativityPlayer;
 import com.google.common.io.ByteStreams;
+import com.google.gson.Gson;
 import com.velocitypowered.api.proxy.Player;
 
 import net.md_5.bungee.config.Configuration;
@@ -244,5 +247,21 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 	@Override
 	public void runConsoleCommand(String cmd) {
 		pl.getServer().getCommandManager().execute(pl.getServer().getConsoleCommandSource(), cmd);
+	}
+
+	@Override
+	public boolean isUsingMcLeaks(UUID playerId) {
+		try {
+			String response = UniversalUtils.requestMcleaksData(playerId.toString());
+			Gson gson = new Gson();
+			Map<?, ?> data = gson.fromJson(response, Map.class);
+			Object isMcleaks = data.get("isMcleaks");
+			if (isMcleaks != null) {
+				return Boolean.parseBoolean(isMcleaks.toString());
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
 	}
 }

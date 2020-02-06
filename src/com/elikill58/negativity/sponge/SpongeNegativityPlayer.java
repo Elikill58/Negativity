@@ -433,6 +433,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 
 	public boolean hasOtherThanExtended(Location<World> loc, BlockType m) {
 		Location<World> tempLoc = loc.copy();
+		if (!loc.getBlock().getType().equals(m))
+			return true;
 		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
 			return true;
 		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))

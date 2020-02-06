@@ -460,6 +460,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public boolean hasOtherThanExtended(Location loc, Material m) {
 		Location tempLoc = loc.clone();
+		if (!loc.getBlock().getType().equals(m))
+			return true;
 		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
 			return true;
 		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))

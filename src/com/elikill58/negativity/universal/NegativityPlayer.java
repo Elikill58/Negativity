@@ -11,7 +11,9 @@ public abstract class NegativityPlayer {
 
 	public NegativityPlayer(UUID playerId) {
 		this.playerId = playerId;
-		this.isMcLeaks = Adapter.getAdapter().isUsingMcLeaks(playerId);
+		Adapter.getAdapter().isUsingMcLeaks(playerId).thenAccept(isUsingMcLeaks -> {
+			this.isMcLeaks = isUsingMcLeaks;
+		});
 	}
 
 	public NegativityAccount getAccount() {

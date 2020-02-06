@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -340,17 +341,21 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	}
 
 	@Override
-	public boolean isUsingMcLeaks(UUID playerId) {
-		try {
-			String response = UniversalUtils.requestMcleaksData(playerId.toString());
-			ConfigurationNode rootNode = GsonConfigurationLoader.builder()
-					.setSource(() -> new BufferedReader(new StringReader(response)))
-					.build()
-					.load();
-			return rootNode.getNode("isMcleaks").getBoolean(false);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
+		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {
+			if (response == null) {
+				return false;
+			}
+			try {
+				ConfigurationNode rootNode = GsonConfigurationLoader.builder()
+						.setSource(() -> new BufferedReader(new StringReader(response)))
+						.build()
+						.load();
+				return rootNode.getNode("isMcleaks").getBoolean(false);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return false;
+		});
 	}
 }

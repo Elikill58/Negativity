@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 import javax.annotation.Nonnull;
@@ -26,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -280,20 +282,24 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	}
 
 	@Override
-	public boolean isUsingMcLeaks(UUID playerId) {
-		try {
-			String response = UniversalUtils.requestMcleaksData(playerId.toString());
-			Object data = new JSONParser().parse(response);
-			if (data instanceof JSONObject) {
-				JSONObject json = (JSONObject) data;
-				Object isMcleaks = json.get("isMcleaks");
-				if (isMcleaks != null) {
-					return Boolean.getBoolean(isMcleaks.toString());
-				}
+	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
+		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {
+			if (response == null) {
+				return false;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+			try {
+				Object data = new JSONParser().parse(response);
+				if (data instanceof JSONObject) {
+					JSONObject json = (JSONObject) data;
+					Object isMcleaks = json.get("isMcleaks");
+					if (isMcleaks != null) {
+						return Boolean.getBoolean(isMcleaks.toString());
+					}
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			return false;
+		});
 	}
 }

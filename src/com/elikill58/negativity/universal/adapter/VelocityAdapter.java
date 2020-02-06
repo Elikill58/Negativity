@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -248,20 +249,24 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 	public void runConsoleCommand(String cmd) {
 		pl.getServer().getCommandManager().execute(pl.getServer().getConsoleCommandSource(), cmd);
 	}
-
+	
 	@Override
-	public boolean isUsingMcLeaks(UUID playerId) {
-		try {
-			String response = UniversalUtils.requestMcleaksData(playerId.toString());
-			Gson gson = new Gson();
-			Map<?, ?> data = gson.fromJson(response, Map.class);
-			Object isMcleaks = data.get("isMcleaks");
-			if (isMcleaks != null) {
-				return Boolean.parseBoolean(isMcleaks.toString());
+	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
+		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {
+			if (response == null) {
+				return false;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return false;
+			try {
+				Gson gson = new Gson();
+				Map<?, ?> data = gson.fromJson(response, Map.class);
+				Object isMcleaks = data.get("isMcleaks");
+				if (isMcleaks != null) {
+					return Boolean.parseBoolean(isMcleaks.toString());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return false;
+		});
 	}
 }

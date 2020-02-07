@@ -44,12 +44,5 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 			SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not save account to file.", e);
 		}
 	}
-
-	@Override
-	public void init() {
-	}
-
-	@Override
-	public void close() {
-	}
+	
 }

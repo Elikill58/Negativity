@@ -47,7 +47,7 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 	public BungeeAdapter(Plugin pl, ConfigAdapter config) {
 		this.pl = pl;
 		this.config = config;
-		NegativityAccountStorage.setStorage(new ProxyFileNegativityAccountStorage());
+		NegativityAccountStorage.register("file", new ProxyFileNegativityAccountStorage());
 	}
 
 	@Override

@@ -1,15 +1,21 @@
 package com.elikill58.negativity.universal.dataStorage;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.dataStorage.database.DatabaseNegativityAccountStorage;
 
 public abstract class NegativityAccountStorage {
 
-	private static NegativityAccountStorage storage;
+	private static final Map<String, NegativityAccountStorage> storages = new HashMap<>();
+	private static String storageId;
 
 	@Nullable
 	public abstract NegativityAccount loadAccount(UUID playerId);
@@ -27,15 +33,27 @@ public abstract class NegativityAccountStorage {
 		return createdAccount;
 	}
 
-	public abstract void init();
-
-	public abstract void close();
-
 	public static NegativityAccountStorage getStorage() {
-		return storage;
+		return storages.get(storageId);
 	}
 
-	public static void setStorage(NegativityAccountStorage storage) {
-		NegativityAccountStorage.storage = storage;
+	public static void register(String id, NegativityAccountStorage storage) {
+		storages.put(id, storage);
+	}
+
+	public static String getStorageId() {
+		return storageId;
+	}
+
+	public static void setStorageId(String storageId) {
+		NegativityAccountStorage.storageId = storageId;
+	}
+
+	public static void init() {
+		Adapter adapter = Adapter.getAdapter();
+		storageId = adapter.getConfig().getString("accounts.storage.id");
+		if (Database.hasCustom) {
+			NegativityAccountStorage.register("database", new DatabaseNegativityAccountStorage());
+		}
 	}
 }

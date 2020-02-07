@@ -34,8 +34,10 @@ import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 
 public class UniversalUtils {
@@ -58,7 +60,7 @@ public class UniversalUtils {
 	public static int getPorcentFromBoolean(boolean b, int max, int min) {
 		return b ? max : min;
 	}
-	
+
 	public static int parseInPorcent(int i) {
 		if (i > 100)
 			return 100;
@@ -90,7 +92,7 @@ public class UniversalUtils {
 				return Optional.of(c);
 		return Optional.empty();
 	}
-	
+
 	public static int sum(HashMap<Integer, Integer> relia) {
 		if(relia.isEmpty())
 			return 0;
@@ -307,6 +309,7 @@ public class UniversalUtils {
 		BanManager.init();
 		SuspectManager.init();
 		TranslatedMessages.init();
+		NegativityAccountStorage.init();
 	}
 
 	public static OS os = null;

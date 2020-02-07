@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.dataStorage.database;
 
+import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,6 +13,17 @@ import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 
 public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
+
+	public DatabaseNegativityAccountStorage() {
+		try {
+			Connection connection = Database.getConnection();
+			if (connection != null) {
+				DatabaseMigrator.executeRemainingMigrations(connection, "accounts");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 
 	@Nullable
 	@Override
@@ -41,18 +53,5 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void init() {
-		try {
-			DatabaseMigrator.executeRemainingMigrations(Database.getConnection(), "accounts");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	@Override
-	public void close() {
 	}
 }

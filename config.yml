@@ -263,6 +263,19 @@ suspect:
   - "cheat"
   - "hack"
 
+# Accounts hold player-specific data of the plugin, like their language and alerts count.
+accounts:
+  storage:
+    # The ID of the storage to use.
+    # Note that when using a proxy (hasBungeecord is set to true) this option is ignored
+    # and the proxy will keep the game server accounts up-to-date.
+    #
+    # The following are available out-of-the-box:
+    # - file : stored in files under ./plugins/Negativity/user/
+    # - database : uses a database
+    # Defaults to "file"
+    id: "file"
+
 # Per-cheat configuration. For more information about specific cheats
 # and their detections see https://github.com/Elikill58/Negativity/wiki/Cheat
 cheats:

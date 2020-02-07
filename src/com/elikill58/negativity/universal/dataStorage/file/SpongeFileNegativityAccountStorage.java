@@ -54,12 +54,5 @@ public class SpongeFileNegativityAccountStorage extends NegativityAccountStorage
 			SpongeNegativity.getInstance().getLogger().error("Could not save account {} to file", account.getPlayerId(), e);
 		}
 	}
-
-	@Override
-	public void init() {
-	}
-
-	@Override
-	public void close() {
-	}
+	
 }

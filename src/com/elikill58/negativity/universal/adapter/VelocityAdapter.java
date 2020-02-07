@@ -47,7 +47,7 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 	public VelocityAdapter(VelocityNegativity pl, ConfigAdapter config) {
 		this.pl = pl;
 		this.config = config;
-		NegativityAccountStorage.setStorage(new ProxyFileNegativityAccountStorage());
+		NegativityAccountStorage.register("file", new ProxyFileNegativityAccountStorage());
 	}
 
 	@Override

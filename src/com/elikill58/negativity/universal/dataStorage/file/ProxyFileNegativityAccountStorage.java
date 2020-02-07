@@ -19,12 +19,5 @@ public class ProxyFileNegativityAccountStorage extends NegativityAccountStorage 
 	@Override
 	public void saveAccount(NegativityAccount account) {
 	}
-
-	@Override
-	public void init() {
-	}
-
-	@Override
-	public void close() {
-	}
+	
 }

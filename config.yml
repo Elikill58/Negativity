@@ -164,6 +164,9 @@ Permissions:
     airjump:
       default: "negativity.bypass.airjump"
       custom: "ADMIN"
+    chat:
+      default: "negativity.bypass.chat"
+      custom: "ADMIN"
 
 Translation:
   active: false # enable or disable the translation
@@ -556,6 +559,21 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+  
+  # Chat represent all chat hack (spam/insult)
+  chat:
+    ping: 300
+    exact_name: "Chat"
+    isActive: true
+    reliability_alert: 60
+    autoVerif: true
+    setBack: false
+    kick: false
+    alert_to_kick: 5
+    insults:
+    - "bitch"
+    - "asshole"
+    - "dickhead"
 
   # There is some special features
   special:

@@ -90,11 +90,6 @@ public class VelocityNegativityPlayer extends NegativityPlayer {
 	}
 
 	@Override
-	public void updateMinerateInFile() {
-		
-	}
-
-	@Override
 	public boolean isOp() {
 		return false;
 	}

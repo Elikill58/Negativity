@@ -8,7 +8,6 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.NegativityAccount;
-import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.dataStorage.database.DatabaseNegativityAccountStorage;
 
@@ -28,7 +27,7 @@ public abstract class NegativityAccountStorage {
 			return existingAccount;
 		}
 
-		NegativityAccount createdAccount = new NegativityAccount(playerId, TranslatedMessages.getDefaultLang());
+		NegativityAccount createdAccount = new NegativityAccount(playerId);
 		saveAccount(createdAccount);
 		return createdAccount;
 	}

@@ -46,10 +46,16 @@ public abstract class NegativityPlayer {
 		isInBanning = b;
 	}
 
+	public int getWarn(Cheat c) {
+		return getAccount().getWarn(c);
+	}
+
+	public int getAllWarn(Cheat c) {
+		return getAccount().getWarn(c);
+	}
+
 	public abstract Object getPlayer();
 	public abstract boolean hasDefaultPermission(String s);
-	public abstract int getWarn(Cheat c);
-	public abstract int getAllWarn(Cheat c);
 	public abstract double getLife();
 	public abstract String getName();
 	public abstract String getGameMode();
@@ -60,7 +66,6 @@ public abstract class NegativityPlayer {
 	public abstract void startAnalyze(Cheat c);
 	public abstract void startAllAnalyze();
 	public abstract void stopAnalyze(Cheat c);
-	public abstract void updateMinerateInFile();
 	public abstract boolean isOp();
 	public abstract String getIP();
 	public abstract String getReason(Cheat c);

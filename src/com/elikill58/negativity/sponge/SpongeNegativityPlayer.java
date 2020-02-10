@@ -1,7 +1,6 @@
 package com.elikill58.negativity.sponge;
 
 import java.io.IOException;
-import java.nio.file.AccessDeniedException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
@@ -49,8 +48,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
-import com.elikill58.negativity.universal.Minerate;
-import com.elikill58.negativity.universal.Minerate.MinerateType;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
@@ -60,16 +58,12 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
-
 public class SpongeNegativityPlayer extends NegativityPlayer {
 
 	private static final Map<UUID, SpongeNegativityPlayer> PLAYERS_CACHE = new HashMap<>();
 
 	public static ArrayList<Player> INJECTED = new ArrayList<>();
 	private ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
-	public HashMap<Cheat, Integer> WARNS = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
@@ -92,11 +86,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false, flyNotMovingY = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public ItemType eatMaterial = ItemTypes.AIR;
-	public Path proofFile;
-	private ConfigurationNode config;
-	private HoconConfigurationLoader configLoader;
 	private final List<String> proofs = new ArrayList<>();
-	public Minerate mineRate;
 	public boolean isInFight = false;
 	public Task fightTask = null;
 	public int fakePlayerTouched = 0;
@@ -108,43 +98,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public SpongeNegativityPlayer(Player p) {
 		super(p.getUniqueId());
 		this.p = p;
-		this.mineRate = new Minerate(this);
-
-		String uuidString = p.getUniqueId().toString();
-		try {
-			Path userDir = SpongeNegativity.getInstance().getDataFolder().resolve("user");
-			Path proofDir = userDir.resolve("proof");
-			proofFile = proofDir.resolve(uuidString + ".txt");
-			Files.createDirectories(proofDir);
-			Path userFile = userDir.resolve(uuidString + ".yml");
-			config = (configLoader = HoconConfigurationLoader.builder().setPath(userFile).build()).load();
-			ConfigurationNode cheatsNode = config.getNode("cheats");
-			for (Cheat cheat : Cheat.values()) {
-				String cheatId = cheat.getKey().toLowerCase();
-				ConfigurationNode cheatNode = cheatsNode.getNode(cheatId);
-				if (cheatNode.isVirtual()) {
-					cheatNode.setValue(0);
-					WARNS.put(cheat, 0);
-				} else {
-					WARNS.put(cheat, cheatNode.getInt());
-				}
-			}
-			ConfigurationNode minerateNode = config.getNode("minerate");
-			for(MinerateType mt : MinerateType.values()) {
-				ConfigurationNode tempNode = minerateNode.getNode(mt.getName().toLowerCase());
-				if (tempNode.isVirtual()) {
-					tempNode.setValue(0);
-					mineRate.setMine(mt, 0);
-				} else {
-					mineRate.setMine(mt, tempNode.getInt());
-				}
-			}
-			configLoader.save(config);
-		} catch (AccessDeniedException e) {
-			System.out.println("[Negativity - SpongeNegativityPlayer] The access is denied for file: " + e.getFile() + " (specific reason: " + e.getReason() + ")");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 		playerVersion = SpongeNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : Version.getVersion();
 	}
 
@@ -191,35 +144,19 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void saveData() {
-		ConfigurationNode cheatsNode = config.getNode("cheats");
-		for (Map.Entry<Cheat, Integer> warn : WARNS.entrySet()) {
-			String cheatId = warn.getKey().getKey().toLowerCase();
-			cheatsNode.getNode(cheatId).setValue(warn.getValue());
-		}
-		ConfigurationNode minerateNode = config.getNode("minerate");
-		for (MinerateType mt : MinerateType.values()) {
-			minerateNode.getNode(mt.getName().toLowerCase()).setValue(mineRate.getMinerateType(mt));
-		}
-
-		try {
-			configLoader.save(config);
-		} catch (IOException e) {
-			SpongeNegativity.getInstance().getLogger().error("Unable to save data of player " + p.getName(), e);
-		}
 		NegativityAccountStorage.getStorage().saveAccount(getAccount());
 
 		if (!proofs.isEmpty()) {
 			try {
-				Files.createDirectories(proofFile.getParent());
+				Path userDir = SpongeNegativity.getInstance().getDataFolder().resolve("user");
+				Path proofDir = userDir.resolve("proof");
+				Files.createDirectories(proofDir);
+				Path proofFile = proofDir.resolve(p.getUniqueId() + ".txt");
 				Files.write(proofFile, proofs, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 			} catch (IOException e) {
 				SpongeNegativity.getInstance().getLogger().error("Unable to save proofs of player " + p.getName(), e);
 			}
 		}
-	}
-
-	public void updateMinerateInFile() {
-		saveData();
 	}
 
 	public boolean hasBypassTicket(Cheat c) {
@@ -229,31 +166,22 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public int getWarn(Cheat c) {
-		return WARNS.containsKey(c) ? WARNS.get(c) : 0;
+		return getAccount().getWarn(c);
 	}
 
 	public int getAllWarn(Cheat c) {
-		return config.getNode("cheats").getNode(c.getKey().toLowerCase()).getInt() + getWarn(c);
+		return getAccount().getWarn(c);
 	}
 
 	public void addWarn(Cheat c) {
 		if (System.currentTimeMillis() < TIME_INVINCIBILITY)
 			return;
-		if (WARNS.containsKey(c))
-			WARNS.put(c, WARNS.get(c) + 1);
-		else
-			WARNS.put(c, 1);
-		setWarn(c, WARNS.get(c));
+		NegativityAccount account = getAccount();
+		account.setWarnCount(c, getWarn(c) + 1);
 	}
 
 	public void setWarn(Cheat c, int cheats) {
-		try {
-			config.getNode("cheats").getNode(c.getKey().toLowerCase()).setValue(cheats);
-			configLoader.save(config);
-			WARNS.put(c, cheats);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		getAccount().setWarnCount(c, cheats);
 	}
 
 	public void clearPackets() {

@@ -33,6 +33,7 @@ import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -99,7 +100,7 @@ public class PlayersEvents implements Listener {
 		if(np.isFreeze && !p.getLocation().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR))
 			e.setCancelled(true);
 	}
-	
+
 	@EventHandler
 	public void slimeManager(PlayerMoveEvent e){
 		Player p = e.getPlayer();
@@ -144,6 +145,8 @@ public class PlayersEvents implements Listener {
 
 	@EventHandler
 	public void onBlockBreakEvent(BlockBreakEvent e) {
-		SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer()).mineRate.addMine(MinerateType.getMinerateType(e.getBlock().getType().name()));
+		NegativityAccount account = Adapter.getAdapter().getNegativityAccount(e.getPlayer().getUniqueId());
+		account.getMinerate().addMine(MinerateType.getMinerateType(e.getBlock().getType().name()), e.getPlayer());
+		NegativityAccountStorage.getStorage().saveAccount(account);
 	}
 }

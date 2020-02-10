@@ -298,6 +298,10 @@ public class SpigotNegativity extends JavaPlugin {
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
 		return alertMod(type, p, c, reliability, proof, "", "");
 	}
+	
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
+		return alertMod(type, p, c, reliability, proof, hover_proof, "");
+	}
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 			String hover_proof, String stats_send) {
@@ -434,7 +438,8 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private static void logProof(SpigotNegativityPlayer np, ReportType type, Player p, Cheat c, int reliability,
 			String proof, int ping) {
-		np.logProof(new Timestamp(System.currentTimeMillis()) + ": (" + ping + "ms) " + reliability + "% " + c.getKey()
+		if(log)
+			np.logProof(new Timestamp(System.currentTimeMillis()) + ": (" + ping + "ms) " + reliability + "% " + c.getKey()
 				+ " > " + proof + ". TPS: " + Arrays.toString(Utils.getTPS()));
 	}
 

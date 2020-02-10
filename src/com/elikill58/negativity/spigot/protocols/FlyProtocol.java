@@ -58,11 +58,11 @@ public class FlyProtocol extends Cheat implements Listener {
 				if (np.getWarn(this) > 5)
 					mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
 							Utils.parseInPorcent((int) i * 50),
-							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this));
+							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this), "");
 				else
 					mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 							Utils.parseInPorcent((int) i * 50),
-							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this));
+							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this), "");
 				if (isSetBack() && mayCancel) {
 					Utils.teleportPlayerOnGround(p);
 				}
@@ -79,7 +79,7 @@ public class FlyProtocol extends Cheat implements Listener {
 				porcent = Utils.parseInPorcent(porcent - 15);
 			boolean mayCancel = SpigotNegativity.alertMod(
 					np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
-					"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ". Warn for fly: " + np.getWarn(this));
+					"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ". Warn for fly: " + np.getWarn(this), "");
 			if (isSetBack() && mayCancel) {
 				Utils.teleportPlayerOnGround(p);
 			}

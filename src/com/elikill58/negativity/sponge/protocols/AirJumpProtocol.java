@@ -21,7 +21,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class AirJumpProtocol extends Cheat {
 
 	public AirJumpProtocol() {
-		super("AIRJUMP", true, ItemTypes.FEATHER, false, true, "air jump", "air", "jump");
+		super("AIRJUMP", false, ItemTypes.FEATHER, false, true, "air jump", "air", "jump");
 	}
 
 	@Listener

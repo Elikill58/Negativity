@@ -18,7 +18,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class AirJumpProtocol extends Cheat implements Listener {
 
 	public AirJumpProtocol() {
-		super("AIRJUMP", true, Material.FEATHER, false, true, "air jump", "air", "jump");
+		super("AIRJUMP", false, Material.FEATHER, false, true, "air jump", "air", "jump");
 	}
 
 	@EventHandler
@@ -40,7 +40,7 @@ public class AirJumpProtocol extends Cheat implements Listener {
 					temp > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 					Utils.parseInPorcent((int) (temp * 210) - Utils.getPing(p)),
 					"Actual diff Y: " + np.lastYDiff + ", last diff Y: " + temp + ", ping: " + Utils.getPing(p)
-							+ ". Warn for AirJump: " + np.getWarn(this));
+							+ ". Warn for AirJump: " + np.getWarn(this), "");
 			if (isSetBack() && mayCancel)
 				Utils.teleportPlayerOnGround(p);
 		}

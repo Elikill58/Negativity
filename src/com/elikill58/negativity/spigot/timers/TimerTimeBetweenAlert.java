@@ -38,6 +38,7 @@ public class TimerTimeBetweenAlert extends BukkitRunnable {
 				}
 			});
 			np.ALERT_NOT_SHOWED.clear();
+			np.saveProof();
 		}
 	}
 

@@ -75,7 +75,7 @@ public class ProtocollibSupport {
 				if(channelCheckAntiJigsaw.contains(channel)) {
 					e.setCancelled(true);
 					SpigotNegativity.alertMod(np.already_jigsaw ? ReportType.VIOLATION : ReportType.WARNING, np.getPlayer(),
-							Cheat.forKey("TIMER").get(), np.already_jigsaw ? 100 : 80, "Trying to crash the server with " + capacity + " requests. Channel used: " + channel + ", ", "Trying to crash the server with " + capacity + " requests", "");
+							Cheat.forKey("BLINK").get(), np.already_jigsaw ? 100 : 80, "Trying to crash the server with " + capacity + " requests. Channel used: " + channel + ", ", "Trying to crash the server with " + capacity + " requests", "");
 					if (!np.already_jigsaw)
 						np.already_jigsaw = true;
 				}

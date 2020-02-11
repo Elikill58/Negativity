@@ -9,7 +9,6 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.filter.type.Exclude;
 import org.spongepowered.api.event.item.inventory.ClickInventoryEvent;
-import org.spongepowered.api.event.item.inventory.InteractInventoryEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 
@@ -62,26 +61,6 @@ public class AutoStealProtocol extends Cheat {
 			np.lastClickInv = false;
 		}
 		np.LAST_CLICK_INV = actual;
-	}
-
-	@Listener
-	public void onClose(InteractInventoryEvent.Close e, @First Player p) {
-		if (!(p.gameMode().get().equals(GameModes.SURVIVAL) || p.gameMode().get().equals(GameModes.ADVENTURE))) {
-			return;
-		}
-		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this)) {
-			return;
-		}
-		boolean last = np.haveClick;
-		np.haveClick = false;
-		if (!last) {
-			return;
-		}
-		int ping = Utils.getPing(p), dif = (int) (System.currentTimeMillis() - np.LAST_CLICK_INV);
-		if ((dif + ping) < (TIME_CLICK / 2)) {
-			SpongeNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent((100 + TIME_CLICK) - (dif * 1.5) - ping), "Time between last click and close inv: " + dif + ". Ping: " + ping);
-		}
 	}
 
 	@Override

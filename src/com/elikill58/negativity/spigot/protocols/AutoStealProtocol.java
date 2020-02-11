@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -61,19 +60,6 @@ public class AutoStealProtocol extends Cheat implements Listener {
 			np.lastClickInv = true;
 		} else np.lastClickInv = false;
 		np.LAST_CLICK_INV = actual;
-	}
-
-	@EventHandler(ignoreCancelled = true)
-	public void onClose(InventoryCloseEvent e){
-		Player p = (Player) e.getPlayer();
-		if(!(p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)))
-			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if(!np.ACTIVE_CHEAT.contains(this))
-			return;
-		int ping = Utils.getPing(p), dif = (int) (System.currentTimeMillis() - np.LAST_CLICK_INV);
-		if((dif + ping) <= TIME_CLICK && dif > 0)
-			SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent((100 + TIME_CLICK) - (dif * 1.5) - ping), "Time between last click and close inv: " + dif + ". Ping: " + ping, "", "");
 	}
 	
 	@Override

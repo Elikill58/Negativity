@@ -27,8 +27,8 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-@Plugin(id = "negativity", name = "Negativity", version = "1.4.1",
-        description = "It's an Advanced AntiCheat Detection", authors = {"Elikill58"})
+@Plugin(id = "negativity", name = "Negativity", version = "1.5",
+        description = "It's an Advanced AntiCheat Detection", authors = {"Elikill58", "RedNesto"})
 public class VelocityNegativity {
 
 	public static final LegacyChannelIdentifier NEGATIVITY_CHANNEL_ID = new LegacyChannelIdentifier(NegativityMessagesManager.CHANNEL_ID);
@@ -60,6 +60,7 @@ public class VelocityNegativity {
     
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
+    	getLogger().info("Loading Negativity");
 		enableConfig();
 	    server.getEventManager().register(this, new NegativityListener());
 		server.getChannelRegistrar().register(NEGATIVITY_CHANNEL_ID);
@@ -73,6 +74,7 @@ public class VelocityNegativity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+    	getLogger().info("Negativity enabled");
 	}
 
     @Subscribe
@@ -94,6 +96,7 @@ public class VelocityNegativity {
 				}
 			}
 			CONFIG = ConfigurationProvider.getProvider(YamlConfiguration.class).load(resourceFile);
+	    	getLogger().info("Configuration loaded");
 			return true;
 		} catch (Exception e) {
 			e.printStackTrace();

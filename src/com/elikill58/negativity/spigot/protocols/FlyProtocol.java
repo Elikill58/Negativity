@@ -47,10 +47,10 @@ public class FlyProtocol extends Cheat implements Listener {
 			if (speed > 40)
 				return;
 		}
+		if (p.getVehicle() != null || p.getAllowFlight() || p.getEntityId() == 100)
+			return;
 		double i = e.getTo().toVector().distance(e.getFrom().toVector());
 		if (!p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)) {
-			if (p.getVehicle() != null || p.getAllowFlight() || p.getEntityId() == 100)
-				return;
 			if ((p.getFallDistance() == 0.0F)
 					&& (p.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR))
 					&& i > 1.25D && !p.isOnGround()) {

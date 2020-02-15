@@ -10,7 +10,6 @@ public class SneakProtocol extends Cheat {
 	public SneakProtocol() {
 		super("SNEAK", true, Material.BLAZE_POWDER, false, false, "sneack");
 	}
-
 	
 	@Override
 	public String getHoverFor(NegativityPlayer p) {

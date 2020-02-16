@@ -11,7 +11,7 @@ public class Database {
 	private static Connection connection;
 	private static String url, username, password;
 	public static boolean hasCustom = false, canBeHigher = false, defaultActive = false, saveInCache = false;
-	public static String column_perm, column_lang, table_perm, table_lang, table_ban;
+	public static String column_perm, column_lang, column_uuid, table_perm, table_lang, table_ban;
 
 	public static void connect(String url, String username, String password) {
 		Database.url = url;
@@ -32,8 +32,6 @@ public class Database {
 	}
 
 	public static Connection getConnection() throws SQLException {
-		if(!TranslatedMessages.useDb)
-			return null;
 		if(!hasCustom) {
 			Adapter.getAdapter().error("You are trying to use database without active it.");
 			return null;
@@ -61,8 +59,9 @@ public class Database {
 
 		if (hasCustom = store.getBooleanInConfig("Database.isActive")) {
 			column_perm = store.getStringInConfig("Database.column_perm");
-			table_perm = store.getStringInConfig("Database.table_perm");
 			column_lang = store.getStringInConfig("Database.column_lang");
+			column_uuid = store.getStringInConfig("Database.column_find_row");
+			table_perm = store.getStringInConfig("Database.table_perm");
 			table_lang = store.getStringInConfig("Database.table_lang");
 			table_ban = store.getStringInConfig("Database.table_ban");
 			Database.connect(store.getStringInConfig("Database.url"),

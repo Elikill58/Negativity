@@ -28,8 +28,9 @@ public class Perm {
 			if (CACHE.containsKey(np.getPlayer()))
 				return hasPermLocal(np, perm, CACHE.get(np.getPlayer()));
 			Object value = null;
-			try (Connection con = Database.getConnection();
-					PreparedStatement stm = con.prepareStatement("SELECT * FROM " + Database.table_perm + " WHERE uuid = ?")) {
+			try {
+				Connection con = Database.getConnection();
+				PreparedStatement stm = con.prepareStatement("SELECT * FROM " + Database.table_perm + " WHERE " + Database.column_uuid + " = ?");
 				stm.setString(1, np.getAccount().getUUID());
 
 				ResultSet result = stm.executeQuery();

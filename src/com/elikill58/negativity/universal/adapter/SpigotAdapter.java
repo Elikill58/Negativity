@@ -21,7 +21,6 @@ import javax.annotation.Nullable;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,16 +42,14 @@ import com.google.common.io.ByteStreams;
 
 public class SpigotAdapter extends Adapter implements TranslationProviderFactory {
 
-	private FileConfiguration config;
 	private JavaPlugin pl;
 	private HashMap<UUID, NegativityAccount> account = new HashMap<>();
 	/*private LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(10, TimeUnit.MINUTES)
 			.build(new NegativityAccountLoader());*/
 
-	public SpigotAdapter(JavaPlugin pl, FileConfiguration config) {
+	public SpigotAdapter(JavaPlugin pl) {
 		this.pl = pl;
-		this.config = config;
 	}
 
 	@Override
@@ -62,7 +59,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 
 	@Override
 	public Object getConfig() {
-		return config;
+		return pl.getConfig();
 	}
 
 	@Override
@@ -72,8 +69,8 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 
 	@Override
 	public String getStringInConfig(String dir) {
-		if (config.contains(dir))
-			return config.getString(dir);
+		if (pl.getConfig().contains(dir))
+			return pl.getConfig().getString(dir);
 		return DefaultConfigValue.getDefaultValueString(dir);
 	}
 
@@ -95,44 +92,44 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public HashMap<String, String> getKeysListInConfig(String dir) {
 		HashMap<String, String> list = new HashMap<>();
-		ConfigurationSection cs = config.getConfigurationSection(dir);
+		ConfigurationSection cs = pl.getConfig().getConfigurationSection(dir);
 		if (cs == null)
 			return list;
 		for (String s : cs.getKeys(false))
-			list.put(s, config.getString(dir + "." + s));
+			list.put(s, pl.getConfig().getString(dir + "." + s));
 		return list;
 	}
 
 	@Override
 	public boolean getBooleanInConfig(String dir) {
-		if (config.contains(dir))
-			return config.getBoolean(dir);
+		if (pl.getConfig().contains(dir))
+			return pl.getConfig().getBoolean(dir);
 		return DefaultConfigValue.getDefaultValueBoolean(dir);
 	}
 
 	@Override
 	public int getIntegerInConfig(String dir) {
-		if (config.contains(dir))
-			return config.getInt(dir);
+		if (pl.getConfig().contains(dir))
+			return pl.getConfig().getInt(dir);
 		return DefaultConfigValue.getDefaultValueInt(dir);
 	}
 
 	@Override
 	public void set(String dir, Object value) {
-		config.set(dir, value);
+		pl.getConfig().set(dir, value);
 		SpigotNegativity.getInstance().saveConfig();
 	}
 
 	@Override
 	public double getDoubleInConfig(String dir) {
-		if (config.contains(dir))
-			return config.getDouble(dir);
+		if (pl.getConfig().contains(dir))
+			return pl.getConfig().getDouble(dir);
 		return DefaultConfigValue.getDefaultValueDouble(dir);
 	}
 
 	@Override
 	public List<String> getStringListInConfig(String dir) {
-		return config.getStringList(dir);
+		return pl.getConfig().getStringList(dir);
 	}
 
 	@Override

@@ -18,7 +18,6 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -64,7 +63,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public HashMap<Cheat, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	private WeakReference<Player> p;
-	private OfflinePlayer op = null;
 	// Packets
 	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,
 			BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
@@ -116,31 +114,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		initMods(p);
 	}
 
-	public SpigotNegativityPlayer(OfflinePlayer op) {
-		super(op.getUniqueId());
-		this.op = op;
-		this.mineRate = new Minerate(this);
-		players.put(getUUID(), this);
-		File tempfile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
-				+ "user" + File.separator + getUUID() + ".txt");
-		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
-				+ "user" + File.separator + "proof" + File.separator);
-		directory.mkdirs();
-		try {
-			if (!tempfile.exists())
-				tempfile.createNewFile();
-			file = YamlConfiguration.loadConfiguration(
-					configFile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath()
-							+ File.separator + "user" + File.separator + getUUID() + ".yml"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		for (Cheat c : Cheat.values())
-			WARNS.put(c, file.getInt("cheats." + c.getKey().toLowerCase()));
-		for (MinerateType mt : MinerateType.values())
-			mineRate.setMine(mt, file.getInt("minerate." + mt.getName().toLowerCase(), 0));
-	}
-
 	public void initMods(Player p) {
 		Plugin pl = SpigotNegativity.getInstance();
 		p.sendPluginMessage(pl, SpigotNegativity.CHANNEL_NAME_FML, new byte[] { -2, 0 });
@@ -159,10 +132,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			p = new WeakReference<>(cached);
 		}
 		return cached;
-	}
-
-	public OfflinePlayer getOfflinePlayer() {
-		return op;
 	}
 
 	public String getIP() {
@@ -725,13 +694,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {
-		if (players.containsKey(p.getUniqueId()))
-			return players.get(p.getUniqueId());
-		else
-			return new SpigotNegativityPlayer(p);
-	}
-
-	public static SpigotNegativityPlayer getNegativityPlayer(OfflinePlayer p) {
 		if (players.containsKey(p.getUniqueId()))
 			return players.get(p.getUniqueId());
 		else

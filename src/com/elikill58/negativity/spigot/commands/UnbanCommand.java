@@ -12,8 +12,9 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanRequest;
 
@@ -37,10 +38,10 @@ public class UnbanCommand implements CommandExecutor, TabCompleter {
 				Messages.sendMessage(sender, "invalid_player", "%arg%", arg[0]);
 				return false;
 			}
-			SpigotNegativityPlayer npCible = SpigotNegativityPlayer.getNegativityPlayer(cible);
-			List<BanRequest> brList =  npCible.getAccount().getBanRequest();
+			NegativityAccount targetAccount = Adapter.getAdapter().getNegativityAccount(cible.getUniqueId());
+			List<BanRequest> brList =  targetAccount.getBanRequest();
 			if(brList.size() == 0) {
-				if(cible.isOnline() || Ban.canConnect(npCible.getAccount()))
+				if(cible.isOnline() || Ban.canConnect(targetAccount))
 					Messages.sendMessage(sender, "unban.not_banned", "%name%", cible.getName());
 				else
 					Messages.sendMessage(sender, "unban.not_exact", "%arg%", arg[0]);
@@ -66,10 +67,10 @@ public class UnbanCommand implements CommandExecutor, TabCompleter {
 			Messages.sendMessage(p, "invalid_player", "%arg%", arg[0]);
 			return false;
 		}
-		SpigotNegativityPlayer npCible = SpigotNegativityPlayer.getNegativityPlayer(cible);
-		List<BanRequest> brList =  npCible.getAccount().getBanRequest();
+		NegativityAccount targetAccount = Adapter.getAdapter().getNegativityAccount(cible.getUniqueId());
+		List<BanRequest> brList =  targetAccount.getBanRequest();
 		if(brList.size() == 0) {
-			if(cible.isOnline() || Ban.canConnect(npCible.getAccount()))
+			if(cible.isOnline() || Ban.canConnect(targetAccount))
 				Messages.sendMessage(p, "unban.not_banned", "%name%", cible.getName());
 			else
 				Messages.sendMessage(p, "unban.not_exact", "%arg%", arg[0]);

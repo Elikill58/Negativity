@@ -86,7 +86,7 @@ public class SpigotNegativity extends JavaPlugin {
 	public void onEnable() {
 		INSTANCE = this;
 		if (Adapter.getAdapter() == null)
-			Adapter.setAdapter(new SpigotAdapter(this, getConfig()));
+			Adapter.setAdapter(new SpigotAdapter(this));
 		Adapter ada = Adapter.getAdapter();
 		Version v = Version.getVersion();
 		if (v.equals(Version.HIGHER))

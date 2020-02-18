@@ -46,6 +46,7 @@ import com.elikill58.negativity.sponge.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.sponge.precogs.NegativityBypassTicket;
 import com.elikill58.negativity.sponge.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
@@ -294,7 +295,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void makeAppearEntities() {
-		if (!ACTIVE_CHEAT.contains(Cheat.fromString("FORCEFIELD").get())
+		if (!ACTIVE_CHEAT.contains(Cheat.forKey(CheatKeys.FORCEFIELD))
 				|| SpongeNegativity.getConfig().getNode("cheats").getNode("forcefield").getNode("ghost_disabled").getBoolean())
 			return;
 		timeStartFakePlayer = System.currentTimeMillis();

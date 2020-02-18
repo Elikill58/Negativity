@@ -9,12 +9,13 @@ import org.spongepowered.api.item.ItemTypes;
 
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 
 public class BlinkProtocol extends Cheat {
 
 	public BlinkProtocol() {
-		super("BLINK", true, ItemTypes.COAL_BLOCK, false, true);
+		super(CheatKeys.BLINK, true, ItemTypes.COAL_BLOCK, false, true);
 	}
 	
 	@Listener

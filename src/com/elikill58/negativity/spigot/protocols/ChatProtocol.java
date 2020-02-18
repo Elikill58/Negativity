@@ -11,6 +11,7 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatBypassEvent;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -19,7 +20,7 @@ import com.elikill58.negativity.universal.permissions.Perm;
 public class ChatProtocol extends Cheat implements Listener {
 
 	public ChatProtocol() {
-		super("CHAT", false, Utils.getMaterialWith1_15_Compatibility("BOOK_AND_QUILL", "LEGACY_BOOK_AND_QUILL"), false, true);
+		super(CheatKeys.CHAT, false, Utils.getMaterialWith1_15_Compatibility("BOOK_AND_QUILL", "LEGACY_BOOK_AND_QUILL"), false, true);
 	}
 
 	@EventHandler

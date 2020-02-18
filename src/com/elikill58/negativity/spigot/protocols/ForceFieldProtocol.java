@@ -15,6 +15,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -25,7 +26,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	private NumberFormat nf = NumberFormat.getInstance();
 	
 	public ForceFieldProtocol() {
-		super("FORCEFIELD", true, Material.DIAMOND_SWORD, true, true, "ff", "killaura");
+		super(CheatKeys.FORCEFIELD, true, Material.DIAMOND_SWORD, true, true, "ff", "killaura");
 		nf.setMaximumIntegerDigits(2);
 	}
 
@@ -59,7 +60,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			return;
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
 		double rapport = np.fakePlayerTouched / (timeBehindStart / 1000);
-		SpigotNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.fromString("FORCEFIELD").get(),
+		SpigotNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD),
 				Utils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms", np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");

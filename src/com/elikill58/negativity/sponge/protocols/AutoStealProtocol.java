@@ -16,6 +16,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
@@ -23,7 +24,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class AutoStealProtocol extends Cheat {
 
 	public AutoStealProtocol() {
-		super("AUTOSTEAL", false, ItemTypes.CHEST, false, true, "steal");
+		super(CheatKeys.AUTO_STEAL, false, ItemTypes.CHEST, false, true, "steal");
 	}
 
 	public static final int TIME_CLICK = 50;

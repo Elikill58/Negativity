@@ -13,6 +13,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
@@ -22,7 +23,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 public class AutoClickProtocol extends Cheat implements Listener {
 
 	public AutoClickProtocol() {
-		super("AUTOCLICK", false, Material.FISHING_ROD, false, true, "auto-click", "autoclic");
+		super(CheatKeys.AUTO_CLICK, false, Material.FISHING_ROD, false, true, "auto-click", "autoclic");
 	}
 
 	public static final int CLICK_ALERT = Adapter.getAdapter().getIntegerInConfig("cheats.autoclick.click_alert");

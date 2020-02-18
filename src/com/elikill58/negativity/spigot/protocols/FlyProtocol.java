@@ -16,13 +16,14 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class FlyProtocol extends Cheat implements Listener {
 
 	public FlyProtocol() {
-		super("FLY", true, Utils.getMaterialWith1_15_Compatibility("FIREWORK", "LEGACY_FIREWORK"), true, true,
+		super(CheatKeys.FLY, true, Utils.getMaterialWith1_15_Compatibility("FIREWORK", "LEGACY_FIREWORK"), true, true,
 				"flyhack");
 	}
 

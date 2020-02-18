@@ -14,6 +14,7 @@ import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 
@@ -75,7 +76,7 @@ public class ProtocollibSupport {
 				if(channelCheckAntiJigsaw.contains(channel)) {
 					e.setCancelled(true);
 					SpigotNegativity.alertMod(np.already_jigsaw ? ReportType.VIOLATION : ReportType.WARNING, np.getPlayer(),
-							Cheat.forKey("BLINK").get(), np.already_jigsaw ? 100 : 80, "Trying to crash the server with " + capacity + " requests. Channel used: " + channel + ", ", "Trying to crash the server with " + capacity + " requests", "");
+							Cheat.forKey(CheatKeys.BLINK), np.already_jigsaw ? 100 : 80, "Trying to crash the server with " + capacity + " requests. Channel used: " + channel + ", ", "Trying to crash the server with " + capacity + " requests", "");
 					if (!np.already_jigsaw)
 						np.already_jigsaw = true;
 				}

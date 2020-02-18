@@ -12,13 +12,14 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class AirJumpProtocol extends Cheat implements Listener {
 
 	public AirJumpProtocol() {
-		super("AIRJUMP", false, Material.FEATHER, false, true, "air jump", "air", "jump");
+		super(CheatKeys.AIR_JUMP, false, Material.FEATHER, false, true, "air jump", "air", "jump");
 	}
 
 	@SuppressWarnings("deprecation")

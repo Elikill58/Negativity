@@ -11,6 +11,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.NegativityPlayer;
@@ -20,7 +21,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class FastBowProtocol extends Cheat implements Listener {
 	
 	public FastBowProtocol() {
-		super("FASTBOW", true, Material.BOW, false, true, "bow");
+		super(CheatKeys.FAST_BOW, true, Material.BOW, false, true, "bow");
 	}
 	
 	@EventHandler (ignoreCancelled = true)

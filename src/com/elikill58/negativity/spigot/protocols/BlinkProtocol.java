@@ -8,12 +8,13 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 
 public class BlinkProtocol extends Cheat implements Listener {
 	
 	public BlinkProtocol() {
-		super("BLINK", true, Material.COAL_BLOCK, false, true);
+		super(CheatKeys.BLINK, true, Material.COAL_BLOCK, false, true);
 	}
 
 	@EventHandler(ignoreCancelled = true)

@@ -14,13 +14,14 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class NukerProtocol extends Cheat {
 
 	public NukerProtocol() {
-		super("NUKER", true, ItemTypes.BEDROCK, false, true, "breaker", "bed breaker", "bedbreaker");
+		super(CheatKeys.NUKER, true, ItemTypes.BEDROCK, false, true, "breaker", "bed breaker", "bedbreaker");
 	}
 	
 	@Listener

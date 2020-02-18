@@ -14,6 +14,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ReportType;
 
@@ -87,7 +88,7 @@ public class PacketsTimers implements Consumer<Task> {
 					}
 				}
 			}*/
-			Cheat FORCEFIELD = Cheat.fromString("FORCEFIELD").get();
+			Cheat FORCEFIELD = Cheat.forKey(CheatKeys.FORCEFIELD);
 			if (np.hasDetectionActive(FORCEFIELD)) {
 				if (np.ARM > 16 && np.USE_ENTITY > 20) {
 					ReportType type = ReportType.WARNING;
@@ -100,7 +101,7 @@ public class PacketsTimers implements Consumer<Task> {
 									+ np.getWarn(FORCEFIELD) + ". Ping: " + ping);
 				}
 			}
-			Cheat BLINK = Cheat.fromString("BLINK").get();
+			Cheat BLINK = Cheat.forKey(CheatKeys.BLINK);
 			if (np.hasDetectionActive(BLINK) && !np.bypassBlink && ping < 140) {
 				int total = np.ALL - np.KEEP_ALIVE;
 				if (total == 0) {
@@ -126,7 +127,7 @@ public class PacketsTimers implements Consumer<Task> {
 					}
 				}
 			}
-			Cheat SNEAK = Cheat.fromString("SNEAK").get();
+			Cheat SNEAK = Cheat.forKey(CheatKeys.SNEAK);
 			if (np.hasDetectionActive(SNEAK) && ping < 140) {
 				if (np.ENTITY_ACTION > 35) {
 					if (np.IS_LAST_SEC_SNEAK)
@@ -136,7 +137,7 @@ public class PacketsTimers implements Consumer<Task> {
 					np.IS_LAST_SEC_SNEAK = false;
 				}
 			}
-			Cheat FASTPLACE = Cheat.fromString("FASTPLACE").get();
+			Cheat FASTPLACE = Cheat.forKey(CheatKeys.FAST_PLACE);
 			if (np.hasDetectionActive(FASTPLACE) && ping < 200 && np.BLOCK_PLACE > 10) {
 				SpongeNegativity.alertMod(ReportType.WARNING, p, FASTPLACE, Utils.parseInPorcent(np.BLOCK_PLACE * 5), "BLockPlace: " + np.BLOCK_PLACE + " Ping: " + ping + " Warn for BlockPlace: " + np.getWarn(FASTPLACE));
 			}

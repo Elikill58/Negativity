@@ -28,7 +28,7 @@ import com.flowpowered.math.vector.Vector3i;
 public class JesusProtocol extends Cheat {
 
 	public JesusProtocol() {
-		super("JESUS", false, ItemTypes.WATER_BUCKET, false, true, "waterwalk", "water");
+		super(CheatKeys.JESUS, false, ItemTypes.WATER_BUCKET, false, true, "waterwalk", "water");
 	}
 
 	@Listener

@@ -15,13 +15,14 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class AirJumpProtocol extends Cheat {
 
 	public AirJumpProtocol() {
-		super("AIRJUMP", false, ItemTypes.FEATHER, false, true, "air jump", "air", "jump");
+		super(CheatKeys.AIR_JUMP, false, ItemTypes.FEATHER, false, true, "air jump", "air", "jump");
 	}
 
 	@Listener

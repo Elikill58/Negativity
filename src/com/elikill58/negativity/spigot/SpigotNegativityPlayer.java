@@ -65,7 +65,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	private WeakReference<Player> p;
 	private OfflinePlayer op = null;
-	private UUID uuid = null;
 	// Packets
 	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,
 			BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
@@ -97,16 +96,15 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public SpigotNegativityPlayer(Player p) {
 		super(p.getUniqueId());
 		this.p = new WeakReference<>(p);
-		this.uuid = p.getUniqueId();
 		this.mineRate = new Minerate(this);
-		players.put(p.getUniqueId(), this);
+		players.put(getUUID(), this);
 		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
 				+ "user" + File.separator + "proof" + File.separator);
 		directory.mkdirs();
 		try {
 			file = YamlConfiguration.loadConfiguration(
 					configFile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath()
-							+ File.separator + "user" + File.separator + uuid + ".yml"));
+							+ File.separator + "user" + File.separator + getUUID()+ ".yml"));
 			file.set("playername", p.getName());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -121,11 +119,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public SpigotNegativityPlayer(OfflinePlayer op) {
 		super(op.getUniqueId());
 		this.op = op;
-		this.uuid = op.getUniqueId();
 		this.mineRate = new Minerate(this);
-		players.put(this.uuid, this);
+		players.put(getUUID(), this);
 		File tempfile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
-				+ "user" + File.separator + uuid + ".txt");
+				+ "user" + File.separator + getUUID() + ".txt");
 		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
 				+ "user" + File.separator + "proof" + File.separator);
 		directory.mkdirs();
@@ -134,7 +131,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 				tempfile.createNewFile();
 			file = YamlConfiguration.loadConfiguration(
 					configFile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath()
-							+ File.separator + "user" + File.separator + uuid + ".yml"));
+							+ File.separator + "user" + File.separator + getUUID() + ".yml"));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -155,7 +152,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public Player getPlayer() {
 		Player cached = p != null ? p.get() : null;
 		if (cached == null) {
-			cached = Bukkit.getPlayer(uuid);
+			cached = Bukkit.getPlayer(getUUID());
 			if (p != null)
 				p.clear();
 
@@ -423,7 +420,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return;
 		try {
 			File temp = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
-					+ "user" + File.separator + "proof" + File.separator + uuid + ".txt");
+					+ "user" + File.separator + "proof" + File.separator + getUUID() + ".txt");
 			if (!temp.exists())
 				temp.createNewFile();
 			String msg = "";
@@ -437,7 +434,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void destroy(boolean isBan) {
-		players.remove(uuid);
+		players.remove(getUUID());
 		saveProof();
 		Adapter.getAdapter().invalidateAccount(getUUID());
 		if (isBan) {

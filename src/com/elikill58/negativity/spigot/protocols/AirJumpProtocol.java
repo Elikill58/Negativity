@@ -21,6 +21,7 @@ public class AirJumpProtocol extends Cheat implements Listener {
 		super("AIRJUMP", false, Material.FEATHER, false, true, "air jump", "air", "jump");
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
@@ -29,7 +30,7 @@ public class AirJumpProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
-		if (p.isFlying() || p.getVehicle() != null)
+		if (p.isFlying() || p.getVehicle() != null || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
 		double temp = e.getTo().getY() - e.getFrom().getY();
 		Location loc = p.getLocation().clone();

@@ -80,8 +80,8 @@ public class PlayersEvents implements Listener {
 		np.TIME_INVINCIBILITY = System.currentTimeMillis() + 8000;
 		if (Perm.hasPerm(np, "showAlert")) {
 			if(ReportCommand.REPORT_LAST.size() > 0) {
-			for (String msg : ReportCommand.REPORT_LAST)
-				p.sendMessage(msg);
+				for (String msg : ReportCommand.REPORT_LAST)
+					p.sendMessage(msg);
 				ReportCommand.REPORT_LAST.clear();
 			}
 			Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), () -> Utils.sendUpdateMessageIfNeed(p));

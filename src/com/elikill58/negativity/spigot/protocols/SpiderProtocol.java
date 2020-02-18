@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -32,7 +33,9 @@ public class SpiderProtocol extends Cheat implements Listener {
 		Location loc = p.getLocation();
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
-		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying())
+		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP))
+			return;
+		if(e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ())
 			return;
 		Material playerLocType = loc.getBlock().getType(),
 				underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),

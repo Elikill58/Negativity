@@ -44,8 +44,8 @@ report:
   well_report: "&a%name% blev raporterad !"
   report_message: "&a[&2Negativity&a] &c%name% &7har blivit raporterad av &c%report% &7för &c%reason%"
 negativity:
-  alert: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% &7(&2Reliability: %Pålitlighet%%&7) !"
-  alert_multiple: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% %nb% tid &7(&2Reliability: %Pålitlighet%%&7) !"
+  alert: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% &7(&2Reliability: %reliability%%&7) !"
+  alert_multiple: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% %nb% tid &7(&2Reliability: %reliability%%&7) !"
   alert_hover: "&6Pålitlighet: %reliability%%\nPing: %ping%"
   no_alerts: "&a[&2Negativity&a] No alerts to display."
   verif:

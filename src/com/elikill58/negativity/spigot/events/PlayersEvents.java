@@ -42,7 +42,7 @@ public class PlayersEvents implements Listener {
 	@EventHandler
 	public void onLogin(PlayerLoginEvent e) {
 		UUID playerId = e.getPlayer().getUniqueId();
-		SpigotNegativityPlayer.removeFromCache(playerId, false);
+		SpigotNegativityPlayer.removeFromCache(playerId);
 
 		NegativityAccount account = Adapter.getAdapter().getNegativityAccount(playerId);
 		if(Ban.isBanned(account)) {
@@ -94,7 +94,7 @@ public class PlayersEvents implements Listener {
 		Player p = e.getPlayer();
 
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(),
-				() -> SpigotNegativityPlayer.removeFromCache(p.getUniqueId(), false), 2);
+				() -> SpigotNegativityPlayer.removeFromCache(p.getUniqueId()), 2);
 	}
 
 	@EventHandler

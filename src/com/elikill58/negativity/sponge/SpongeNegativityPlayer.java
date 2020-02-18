@@ -18,7 +18,6 @@ import java.util.UUID;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.data.manipulator.mutable.FireworkEffectData;
 import org.spongepowered.api.data.manipulator.mutable.PotionEffectData;
 import org.spongepowered.api.data.manipulator.mutable.entity.FallDistanceData;
 import org.spongepowered.api.data.manipulator.mutable.entity.FlyingData;
@@ -28,16 +27,11 @@ import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectType;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
-import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.entity.projectile.Firework;
-import org.spongepowered.api.item.FireworkEffect;
-import org.spongepowered.api.item.FireworkShapes;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.util.Color;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -274,23 +268,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			startAnalyze(c);
 	}
 
-	private void destroy(boolean isBan) {
+	private void destroy() {
 		saveData();
-		if (isBan) {
-			FireworkEffect fireEffect = FireworkEffect.builder().shape(FireworkShapes.CREEPER).color(Color.GREEN)
-					.build();
-			Location<?> loc = p.getLocation().copy();
-			loc.add(0, 1, 0);
-			double more = 0.1, max = 1.5;
-			for (double d = 0; d < max; d += more) {
-				spawnCircle(1, loc, p);
-				loc.sub(0, more, 0);
-				Firework fire = (Firework) p.getWorld().createEntity(EntityTypes.FIREWORK, loc.getPosition());
-				fire.getOrCreate(FireworkEffectData.class).get().addElement(fireEffect);
-				p.getWorld().spawnEntity(fire);
-				fire.detonate();
-			}
-		}
 	}
 
 	public void makeAppearEntities() {
@@ -622,13 +601,13 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public static void removeFromCache(Player player) {
-		removeFromCache(player.getUniqueId(), false);
+		removeFromCache(player.getUniqueId());
 	}
 
-	public static void removeFromCache(UUID playerId, boolean isBan) {
+	public static void removeFromCache(UUID playerId) {
 		SpongeNegativityPlayer nPlayer = PLAYERS_CACHE.remove(playerId);
 		if (nPlayer != null) {
-			nPlayer.destroy(isBan);
+			nPlayer.destroy();
 			Adapter.getAdapter().getNegativityAccount(playerId).loadBanRequest(true);
 		}
 	}

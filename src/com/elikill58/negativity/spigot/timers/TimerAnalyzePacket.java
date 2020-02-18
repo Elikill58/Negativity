@@ -23,7 +23,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 	public void run() {
 		for (Player p : Utils.getOnlinePlayers()) {
 			if(!p.isOnline()){
-				SpigotNegativityPlayer.removeFromCache(p.getUniqueId(), false);
+				SpigotNegativityPlayer.removeFromCache(p.getUniqueId());
 				continue;
 			}
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);

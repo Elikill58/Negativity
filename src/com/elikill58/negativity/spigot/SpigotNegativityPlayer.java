@@ -14,8 +14,6 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -24,12 +22,10 @@ import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -401,25 +397,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		}
 	}
 
-	private void destroy(boolean isBan) {
+	private void destroy() {
 		saveProof();
 		Adapter.getAdapter().invalidateAccount(getUUID());
-		if (isBan) {
-			Entity et = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
-			Firework fire = (Firework) et;
-			FireworkMeta fireMeta = fire.getFireworkMeta();
-			fireMeta.addEffect(FireworkEffect.builder().with(Type.CREEPER).withColor(Color.GREEN).build());
-			fireMeta.setPower(2);
-			fire.setFireworkMeta(fireMeta);
-			fire.detonate();
-			Location loc = getPlayer().getLocation();
-			loc.add(0, 1, 0);
-			double more = 0.1, max = 1.5;
-			for (double d = 0; d < max; d += more) {
-				spawnCircle(1, loc);
-				loc.subtract(0, more, 0);
-			}
-		}
 	}
 
 	public boolean hasOtherThanExtended(Location loc, Material m) {
@@ -706,10 +686,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return players.get(playerId);
 	}
 
-	public static void removeFromCache(UUID playerId, boolean isBan) {
+	public static void removeFromCache(UUID playerId) {
 		SpigotNegativityPlayer cached = players.remove(playerId);
 		if (cached != null) {
-			cached.destroy(isBan);
+			cached.destroy();
 		}
 	}
 }

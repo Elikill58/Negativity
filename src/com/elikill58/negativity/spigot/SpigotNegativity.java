@@ -279,7 +279,7 @@ public class SpigotNegativity extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		for (Player p : Utils.getOnlinePlayers()) {
-			SpigotNegativityPlayer.removeFromCache(p.getUniqueId(), false);
+			SpigotNegativityPlayer.removeFromCache(p.getUniqueId());
 			PacketListenerAPI.removePlayer(p);
 		}
 		Database.close();

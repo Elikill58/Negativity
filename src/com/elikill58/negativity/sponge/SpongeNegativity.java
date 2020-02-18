@@ -267,7 +267,7 @@ public class SpongeNegativity {
 	@Listener
 	public void onLogin(ClientConnectionEvent.Login e) {
 		UUID playerId = e.getTargetUser().getUniqueId();
-		SpongeNegativityPlayer.removeFromCache(playerId, false);
+		SpongeNegativityPlayer.removeFromCache(playerId);
 
 		NegativityAccount userAccount = Adapter.getAdapter().getNegativityAccount(playerId);
 		if (Ban.isBanned(userAccount)) {

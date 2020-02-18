@@ -95,7 +95,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		super(p.getUniqueId());
 		this.p = new WeakReference<>(p);
 		this.mineRate = new Minerate(this);
-		players.put(getUUID(), this);
 		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
 				+ "user" + File.separator + "proof" + File.separator);
 		directory.mkdirs();
@@ -402,8 +401,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		}
 	}
 
-	public void destroy(boolean isBan) {
-		players.remove(getUUID());
+	private void destroy(boolean isBan) {
 		saveProof();
 		Adapter.getAdapter().invalidateAccount(getUUID());
 		if (isBan) {
@@ -694,18 +692,22 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {
-		if (players.containsKey(p.getUniqueId()))
-			return players.get(p.getUniqueId());
-		else
-			return new SpigotNegativityPlayer(p);
+		SpigotNegativityPlayer cached = players.get(p.getUniqueId());
+		if (cached != null) {
+			return cached;
+		} else {
+			SpigotNegativityPlayer created = new SpigotNegativityPlayer(p);
+			players.put(p.getUniqueId(), created);
+			return created;
+		}
 	}
 
-	public static boolean contains(Player p) {
-		return players.containsKey(p.getUniqueId());
+	public static SpigotNegativityPlayer getCached(UUID playerId) {
+		return players.get(playerId);
 	}
 
 	public static void removeFromCache(UUID playerId, boolean isBan) {
-		SpigotNegativityPlayer cached = players.get(playerId);
+		SpigotNegativityPlayer cached = players.remove(playerId);
 		if (cached != null) {
 			cached.destroy(isBan);
 		}

@@ -108,8 +108,9 @@ public class FakePlayer {
 			e.printStackTrace();
 		}
 
-		if (SpigotNegativityPlayer.contains(p)) {
-			SpigotNegativityPlayer.getNegativityPlayer(p).removeFakePlayer(this, false);
+		SpigotNegativityPlayer nPlayer = SpigotNegativityPlayer.getCached(p.getUniqueId());
+		if (nPlayer != null) {
+			nPlayer.removeFakePlayer(this, false);
 		}
 	}
 	

@@ -49,6 +49,7 @@ import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
 import com.elikill58.negativity.spigot.timers.TimerTimeBetweenAlert;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
@@ -310,13 +311,13 @@ public class SpigotNegativity extends JavaPlugin {
 		if(reliability < 55)
 			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.already_blink && c.equals(Cheat.fromString("BLINK").get())) {
+		if (!np.already_blink && c.equals(Cheat.fromString(CheatKeys.BLINK).get())) {
 			np.already_blink = true;
 			return false;
 		}
 		if (np.isInFight && c.isBlockedInFight())
 			return false;
-		if (c.equals(Cheat.forKey("FLY").get()) && p.hasPermission("essentials.fly") && essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
+		if (c.equals(Cheat.forKey(CheatKeys.FLY).get()) && p.hasPermission("essentials.fly") && essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
 			return false;
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType()))

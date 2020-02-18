@@ -65,6 +65,7 @@ import com.elikill58.negativity.sponge.timers.PacketsTimers;
 import com.elikill58.negativity.sponge.timers.PendingAlertsTimer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
@@ -421,7 +422,7 @@ public class SpongeNegativity {
 		if(!c.isActive())
 			return false;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (c.equals(Cheat.fromString("BLINK").get()))
+		if (c.equals(Cheat.fromString(CheatKeys.BLINK).get()))
 			if (!np.already_blink) {
 				np.already_blink = true;
 				return false;

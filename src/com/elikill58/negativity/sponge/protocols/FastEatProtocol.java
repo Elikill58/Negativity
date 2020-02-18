@@ -8,13 +8,14 @@ import org.spongepowered.api.item.ItemTypes;
 
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityPlayer;
 
 public class FastEatProtocol extends Cheat {
 
 	public FastEatProtocol() {
-		super("FASTEAT", true, ItemTypes.COOKED_BEEF, false, true, "fasteat", "autoeat");
+		super(CheatKeys.FAST_EAT, true, ItemTypes.COOKED_BEEF, false, true, "fasteat", "autoeat");
 	}
 
 	@Listener

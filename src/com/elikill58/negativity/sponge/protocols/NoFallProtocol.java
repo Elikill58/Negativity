@@ -17,13 +17,14 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class NoFallProtocol extends Cheat {
 
 	public NoFallProtocol() {
-		super("NOFALL", false, ItemTypes.WOOL, false, true, "fall");
+		super(CheatKeys.NO_FALL, false, ItemTypes.WOOL, false, true, "fall");
 	}
 
 	@Listener

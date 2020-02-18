@@ -13,13 +13,14 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class NoSlowDownProtocol extends Cheat implements Listener {
 
 	public NoSlowDownProtocol() {
-		super("NOSLOWDOWN", false, Material.SOUL_SAND, false, true, "slowdown");
+		super(CheatKeys.NO_SLOW_DOWN, false, Material.SOUL_SAND, false, true, "slowdown");
 	}
 
 	@EventHandler(ignoreCancelled = true)

@@ -13,6 +13,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ReportType;
 
@@ -87,7 +88,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					}
 				}
 			}*/
-			Cheat FORCEFIELD = Cheat.fromString("FORCEFIELD").get();
+			Cheat FORCEFIELD = Cheat.fromString(CheatKeys.FORCEFIELD).get();
 			if (np.ACTIVE_CHEAT.contains(FORCEFIELD)) {
 				if (np.ARM > 16 && np.USE_ENTITY > 20) {
 					ReportType type = ReportType.WARNING;
@@ -100,7 +101,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 									+ np.getWarn(FORCEFIELD) + ". Ping: " + ping);
 				}
 			}
-			Cheat BLINK = Cheat.fromString("BLINK").get();
+			Cheat BLINK = Cheat.fromString(CheatKeys.BLINK).get();
 			if (np.ACTIVE_CHEAT.contains(BLINK) && !np.bypassBlink) {
 				if (ping < 140) {
 					int total = np.ALL - np.KEEP_ALIVE;
@@ -127,7 +128,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					}
 				}
 			}
-			Cheat SNEAK = Cheat.fromString("SNEAK").get();
+			Cheat SNEAK = Cheat.fromString(CheatKeys.SNEAK).get();
 			if(np.ACTIVE_CHEAT.contains(SNEAK)){
 				if(ping < 140){
 					if(np.ENTITY_ACTION > 35){
@@ -140,7 +141,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					} else np.IS_LAST_SEC_SNEAK = false;
 				}
 			}
-			Cheat NUKER = Cheat.fromString("NUKER").get();
+			Cheat NUKER = Cheat.fromString(CheatKeys.NUKER).get();
 			if(np.ACTIVE_CHEAT.contains(NUKER))
 				if(ping < NUKER.getMaxAlertPing() && (np.BLOCK_DIG - (ping / 10)) > 20)
 					SpigotNegativity.alertMod(np.BLOCK_DIG > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, Utils.parseInPorcent(20 + np.BLOCK_DIG), "BlockDig packet: " + np.BLOCK_DIG + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));

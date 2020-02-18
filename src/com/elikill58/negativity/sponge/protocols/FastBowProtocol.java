@@ -13,6 +13,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.NegativityPlayer;
@@ -21,7 +22,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class FastBowProtocol extends Cheat {
 
 	public FastBowProtocol() {
-		super("FASTBOW", true, ItemTypes.BOW, false, true, "bow");
+		super(CheatKeys.FAST_BOW, true, ItemTypes.BOW, false, true, "bow");
 	}
 
 	@Listener

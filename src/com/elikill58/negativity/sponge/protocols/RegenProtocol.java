@@ -18,6 +18,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
@@ -25,7 +26,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class RegenProtocol extends Cheat {
 
 	public RegenProtocol() {
-		super("REGEN", true, ItemTypes.GOLDEN_APPLE, false, true, "regen", "autoregen");
+		super(CheatKeys.REGEN, true, ItemTypes.GOLDEN_APPLE, false, true, "regen", "autoregen");
 	}
 
 	@Listener

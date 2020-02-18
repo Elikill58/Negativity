@@ -21,6 +21,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -31,7 +32,7 @@ public class ForceFieldProtocol extends Cheat {
 	private final NumberFormat distanceFormatter = new DecimalFormat();
 
 	public ForceFieldProtocol() {
-		super("FORCEFIELD", true, ItemTypes.DIAMOND_SWORD, true, true, "ff", "killaura");
+		super(CheatKeys.FORCEFIELD, true, ItemTypes.DIAMOND_SWORD, true, true, "ff", "killaura");
 		distanceFormatter.setMaximumIntegerDigits(2);
 	}
 
@@ -106,7 +107,7 @@ public class ForceFieldProtocol extends Cheat {
 
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
 		double rapport = np.fakePlayerTouched / (timeBehindStart / 1000);
-		SpongeNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.fromString("FORCEFIELD").get(),
+		SpongeNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.fromString(CheatKeys.FORCEFIELD).get(),
 				Utils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");

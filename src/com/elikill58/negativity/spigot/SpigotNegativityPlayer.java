@@ -43,6 +43,7 @@ import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
@@ -272,7 +273,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		ACTIVE_CHEAT.add(c);
 		if (c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
 			INJECTED.add(getPlayer().getUniqueId());
-		if (c.getKey().equalsIgnoreCase("FORCEFIELD")) {
+		if (c.getKey().equalsIgnoreCase(CheatKeys.FORCEFIELD)) {
 			if (timeStartFakePlayer == 0)
 				timeStartFakePlayer = 1; // not on the player connection
 			else
@@ -299,7 +300,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void makeAppearEntities() {
-		if (!ACTIVE_CHEAT.contains(Cheat.fromString("FORCEFIELD").get())
+		if (!ACTIVE_CHEAT.contains(Cheat.fromString(CheatKeys.FORCEFIELD).get())
 				|| SpigotNegativity.getInstance().getConfig().getBoolean("cheats.forcefield.ghost_disabled"))
 			return;
 		timeStartFakePlayer = System.currentTimeMillis();
@@ -395,9 +396,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		long diff = System.currentTimeMillis() - timeStartFakePlayer;
 		double diffSec = diff / 1000;
 		if(fakePlayerTouched >= 20 && fakePlayerTouched >= diffSec) {
-			SpigotNegativity.alertMod(ReportType.VIOLATION, getPlayer(), Cheat.fromString("FORCEFIELD").get(), Utils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
+			SpigotNegativity.alertMod(ReportType.VIOLATION, getPlayer(), Cheat.fromString(CheatKeys.FORCEFIELD).get(), Utils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
 		} else if(fakePlayerTouched >= 5 && fakePlayerTouched >= diffSec) {
-			SpigotNegativity.alertMod(ReportType.WARNING, getPlayer(), Cheat.fromString("FORCEFIELD").get(), Utils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
+			SpigotNegativity.alertMod(ReportType.WARNING, getPlayer(), Cheat.fromString(CheatKeys.FORCEFIELD).get(), Utils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
 		}
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);
 		if (l >= 3000) {

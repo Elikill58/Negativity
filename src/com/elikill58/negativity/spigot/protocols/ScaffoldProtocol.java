@@ -12,6 +12,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
@@ -20,7 +21,7 @@ public class ScaffoldProtocol extends Cheat implements Listener {
 	private ScaffoldProtocol instance;
 	
 	public ScaffoldProtocol() {
-		super("SCAFFOLD", false, Material.GRASS, false, true);
+		super(CheatKeys.SCAFFOLD, false, Material.GRASS, false, true);
 		instance = this;
 	}
 

@@ -11,6 +11,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -18,7 +19,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 public class ChatProtocol extends Cheat {
 
 	public ChatProtocol() {
-		super("CHAT", false, ItemTypes.WRITABLE_BOOK, false, true);
+		super(CheatKeys.CHAT, false, ItemTypes.WRITABLE_BOOK, false, true);
 	}
 
 	@Listener

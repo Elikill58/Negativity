@@ -21,6 +21,7 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.support.WorldGuardSupport;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
@@ -28,7 +29,7 @@ import com.elikill58.negativity.universal.Version;
 public class AntiKnockbackProtocol extends Cheat implements Listener {
 	
 	public AntiKnockbackProtocol() {
-		super("ANTIKNOCKBACK", false, Material.STICK, false, true, "antikb", "anti-kb", "no-kb", "nokb");
+		super(CheatKeys.ANTI_KNOCKBACK, false, Material.STICK, false, true, "antikb", "anti-kb", "no-kb", "nokb");
 	}
 
 	@SuppressWarnings("deprecation")
@@ -88,7 +89,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 						double d = last.distance(actual);
 						int ping = Utils.getPing(p), relia = Utils.parseInPorcent(100 - d);
 						if (d < 0.1 && !actual.getBlock().getType().equals(Utils.getMaterialWith1_15_Compatibility("WEB", "COBWEB")) && !p.isSneaking()){
-							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.fromString("ANTIKNOCKBACK").get(), relia,
+							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.fromString(CheatKeys.ANTI_KNOCKBACK).get(), relia,
 									"Distance after damage: " + d + "; Damager: " + e.getDamager().getType().name().toLowerCase() + " Ping: " + ping, "Distance after damage: " + d, "");
 							if(isSetBack() && mayCancel)
 								p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));

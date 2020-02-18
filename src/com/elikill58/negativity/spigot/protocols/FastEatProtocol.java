@@ -8,13 +8,14 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityPlayer;
 
 public class FastEatProtocol extends Cheat implements Listener {
 	
 	public FastEatProtocol() {
-		super("FASTEAT", true, Material.COOKED_BEEF, false, true, "fasteat", "autoeat");
+		super(CheatKeys.FAST_EAT, true, Material.COOKED_BEEF, false, true, "fasteat", "autoeat");
 	}
 
 	@SuppressWarnings("deprecation")

@@ -15,13 +15,14 @@ import org.spongepowered.api.world.Location;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityPlayer;
 
 public class AntiPotionProtocol extends Cheat {
 
 	public AntiPotionProtocol() {
-		super("ANTIPOTION", true, ItemTypes.POTION, false, true, "antipopo", "nopotion", "anti-potion");
+		super(CheatKeys.ANTI_POTION, true, ItemTypes.POTION, false, true, "antipopo", "nopotion", "anti-potion");
 	}
 
 	@Listener

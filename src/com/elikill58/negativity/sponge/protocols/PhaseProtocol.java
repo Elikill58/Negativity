@@ -15,6 +15,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.flowpowered.math.vector.Vector3d;
@@ -23,7 +24,7 @@ import com.flowpowered.math.vector.Vector3i;
 public class PhaseProtocol extends Cheat {
 
 	public PhaseProtocol() {
-		super("PHASE", false, ItemTypes.STAINED_GLASS, false, true);
+		super(CheatKeys.PHASE, false, ItemTypes.STAINED_GLASS, false, true);
 	}
 
 	@Listener

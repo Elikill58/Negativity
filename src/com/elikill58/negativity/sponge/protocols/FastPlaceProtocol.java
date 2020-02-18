@@ -15,7 +15,7 @@ import com.elikill58.negativity.universal.*;
 public class FastPlaceProtocol extends Cheat {
 
 	public FastPlaceProtocol() {
-		super("FASTPLACE", false, ItemTypes.DIRT, false, true, "fp");
+		super(CheatKeys.FAST_PLACE, false, ItemTypes.DIRT, false, true, "fp");
 	}
 
 	@Listener

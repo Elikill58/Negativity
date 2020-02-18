@@ -88,7 +88,7 @@ public class PacketsTimers implements Consumer<Task> {
 					}
 				}
 			}*/
-			Cheat FORCEFIELD = Cheat.fromString(CheatKeys.FORCEFIELD);
+			Cheat FORCEFIELD = Cheat.forKey(CheatKeys.FORCEFIELD);
 			if (np.hasDetectionActive(FORCEFIELD)) {
 				if (np.ARM > 16 && np.USE_ENTITY > 20) {
 					ReportType type = ReportType.WARNING;
@@ -101,7 +101,7 @@ public class PacketsTimers implements Consumer<Task> {
 									+ np.getWarn(FORCEFIELD) + ". Ping: " + ping);
 				}
 			}
-			Cheat BLINK = Cheat.fromString(CheatKeys.BLINK);
+			Cheat BLINK = Cheat.forKey(CheatKeys.BLINK);
 			if (np.hasDetectionActive(BLINK) && !np.bypassBlink && ping < 140) {
 				int total = np.ALL - np.KEEP_ALIVE;
 				if (total == 0) {
@@ -127,7 +127,7 @@ public class PacketsTimers implements Consumer<Task> {
 					}
 				}
 			}
-			Cheat SNEAK = Cheat.fromString(CheatKeys.SNEAK);
+			Cheat SNEAK = Cheat.forKey(CheatKeys.SNEAK);
 			if (np.hasDetectionActive(SNEAK) && ping < 140) {
 				if (np.ENTITY_ACTION > 35) {
 					if (np.IS_LAST_SEC_SNEAK)
@@ -137,7 +137,7 @@ public class PacketsTimers implements Consumer<Task> {
 					np.IS_LAST_SEC_SNEAK = false;
 				}
 			}
-			Cheat FASTPLACE = Cheat.fromString(CheatKeys.FAST_PLACE);
+			Cheat FASTPLACE = Cheat.forKey(CheatKeys.FAST_PLACE);
 			if (np.hasDetectionActive(FASTPLACE) && ping < 200 && np.BLOCK_PLACE > 10) {
 				SpongeNegativity.alertMod(ReportType.WARNING, p, FASTPLACE, Utils.parseInPorcent(np.BLOCK_PLACE * 5), "BLockPlace: " + np.BLOCK_PLACE + " Ping: " + ping + " Warn for BlockPlace: " + np.getWarn(FASTPLACE));
 			}

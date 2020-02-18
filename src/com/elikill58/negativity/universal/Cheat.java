@@ -129,15 +129,7 @@ public abstract class Cheat {
 	}
 	
 	public static Cheat forKey(String key) {
-		for (Cheat c : Cheat.values()) {
-			try {
-				if (c.getKey().equalsIgnoreCase(key))
-					return c;
-			} catch (NullPointerException e) {
-				e.printStackTrace();
-			}
-		}
-		return null;
+		return CHEATS_BY_KEY.get(key.toLowerCase());
 	}
 	
 	public static void loadCheat() {

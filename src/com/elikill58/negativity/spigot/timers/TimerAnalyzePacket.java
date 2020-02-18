@@ -88,7 +88,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					}
 				}
 			}*/
-			Cheat FORCEFIELD = Cheat.fromString(CheatKeys.FORCEFIELD);
+			Cheat FORCEFIELD = Cheat.forKey(CheatKeys.FORCEFIELD);
 			if (np.ACTIVE_CHEAT.contains(FORCEFIELD)) {
 				if (np.ARM > 16 && np.USE_ENTITY > 20) {
 					ReportType type = ReportType.WARNING;
@@ -101,7 +101,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 									+ np.getWarn(FORCEFIELD) + ". Ping: " + ping);
 				}
 			}
-			Cheat BLINK = Cheat.fromString(CheatKeys.BLINK);
+			Cheat BLINK = Cheat.forKey(CheatKeys.BLINK);
 			if (np.ACTIVE_CHEAT.contains(BLINK) && !np.bypassBlink) {
 				if (ping < 140) {
 					int total = np.ALL - np.KEEP_ALIVE;
@@ -128,7 +128,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					}
 				}
 			}
-			Cheat SNEAK = Cheat.fromString(CheatKeys.SNEAK);
+			Cheat SNEAK = Cheat.forKey(CheatKeys.SNEAK);
 			if(np.ACTIVE_CHEAT.contains(SNEAK)){
 				if(ping < 140){
 					if(np.ENTITY_ACTION > 35){
@@ -141,7 +141,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					} else np.IS_LAST_SEC_SNEAK = false;
 				}
 			}
-			Cheat NUKER = Cheat.fromString(CheatKeys.NUKER);
+			Cheat NUKER = Cheat.forKey(CheatKeys.NUKER);
 			if(np.ACTIVE_CHEAT.contains(NUKER))
 				if(ping < NUKER.getMaxAlertPing() && (np.BLOCK_DIG - (ping / 10)) > 20)
 					SpigotNegativity.alertMod(np.BLOCK_DIG > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, Utils.parseInPorcent(20 + np.BLOCK_DIG), "BlockDig packet: " + np.BLOCK_DIG + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));

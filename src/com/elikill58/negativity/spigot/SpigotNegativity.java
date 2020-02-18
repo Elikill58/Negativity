@@ -311,7 +311,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if(reliability < 55)
 			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.already_blink && c.equals(Cheat.fromString(CheatKeys.BLINK))) {
+		if (!np.already_blink && c.equals(Cheat.forKey(CheatKeys.BLINK))) {
 			np.already_blink = true;
 			return false;
 		}

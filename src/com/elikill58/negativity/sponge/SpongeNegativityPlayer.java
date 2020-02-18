@@ -295,7 +295,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void makeAppearEntities() {
-		if (!ACTIVE_CHEAT.contains(Cheat.fromString(CheatKeys.FORCEFIELD))
+		if (!ACTIVE_CHEAT.contains(Cheat.forKey(CheatKeys.FORCEFIELD))
 				|| SpongeNegativity.getConfig().getNode("cheats").getNode("forcefield").getNode("ghost_disabled").getBoolean())
 			return;
 		timeStartFakePlayer = System.currentTimeMillis();

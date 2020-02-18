@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
@@ -48,7 +49,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {
 
-	private static HashMap<UUID, SpigotNegativityPlayer> players = new HashMap<>();
+	private static final Map<UUID, SpigotNegativityPlayer> players = new HashMap<>();
 
 	public static ArrayList<UUID> INJECTED = new ArrayList<>();
 	public ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
@@ -672,14 +673,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {
-		SpigotNegativityPlayer cached = players.get(p.getUniqueId());
-		if (cached != null) {
-			return cached;
-		} else {
-			SpigotNegativityPlayer created = new SpigotNegativityPlayer(p);
-			players.put(p.getUniqueId(), created);
-			return created;
-		}
+		return players.computeIfAbsent(p.getUniqueId(), id -> new SpigotNegativityPlayer(p));
 	}
 
 	public static SpigotNegativityPlayer getCached(UUID playerId) {

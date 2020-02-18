@@ -1,6 +1,8 @@
 package com.elikill58.negativity.bungee;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
@@ -10,17 +12,20 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BungeeNegativityPlayer extends NegativityPlayer {
 
-	private static HashMap<ProxiedPlayer, BungeeNegativityPlayer> players = new HashMap<>();
+	private static final Map<UUID, BungeeNegativityPlayer> players = new HashMap<>();
 	private ProxiedPlayer p;
 
 	public BungeeNegativityPlayer(ProxiedPlayer p) {
 		super(p.getUniqueId());
 		this.p = p;
-		players.put(p, this);
 	}
 
 	public static BungeeNegativityPlayer getNegativityPlayer(ProxiedPlayer p) {
-		return players.containsKey(p) ? players.get(p) : new BungeeNegativityPlayer(p);
+		return players.computeIfAbsent(p.getUniqueId(), id -> new BungeeNegativityPlayer(p));
+	}
+	
+	public static void removeFromCache(UUID playerId) {
+		players.remove(playerId);
 	}
 
 	@Override

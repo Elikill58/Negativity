@@ -1,6 +1,8 @@
 package com.elikill58.negativity.velocity;
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
@@ -8,17 +10,20 @@ import com.velocitypowered.api.proxy.Player;
 
 public class VelocityNegativityPlayer extends NegativityPlayer {
 
-	private static HashMap<Player, VelocityNegativityPlayer> players = new HashMap<>();
+	private static final Map<UUID, VelocityNegativityPlayer> players = new HashMap<>();
 	private Player p;
 
 	public VelocityNegativityPlayer(Player p) {
 		super(p.getUniqueId());
 		this.p = p;
-		players.put(p, this);
 	}
 
 	public static VelocityNegativityPlayer getNegativityPlayer(Player p) {
-		return players.containsKey(p) ? players.get(p) : new VelocityNegativityPlayer(p);
+		return players.computeIfAbsent(p.getUniqueId(), id -> new VelocityNegativityPlayer(p));
+	}
+
+	public static void removeFromCache(UUID playerId) {
+		players.remove(playerId);
 	}
 
 	@Override

@@ -591,13 +591,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public static SpongeNegativityPlayer getNegativityPlayer(Player player) {
-		SpongeNegativityPlayer nPlayer = PLAYERS_CACHE.get(player.getUniqueId());
-		if (nPlayer == null) {
-			nPlayer = new SpongeNegativityPlayer(player);
-			PLAYERS_CACHE.put(player.getUniqueId(), nPlayer);
-		}
-
-		return nPlayer;
+		return PLAYERS_CACHE.computeIfAbsent(player.getUniqueId(), id -> new SpongeNegativityPlayer(player));
 	}
 
 	public static void removeFromCache(Player player) {

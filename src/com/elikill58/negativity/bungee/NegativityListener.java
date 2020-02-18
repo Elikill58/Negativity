@@ -3,6 +3,7 @@ package com.elikill58.negativity.bungee;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import com.elikill58.negativity.universal.ban.Ban;
@@ -23,6 +24,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
@@ -126,6 +128,13 @@ public class NegativityListener implements Listener {
 				p.sendMessage(msg.toMessage(p));
 				report.remove(msg);
 			}
+	}
+
+	@EventHandler
+	public void onPlayerDisconnect(PlayerDisconnectEvent event) {
+		ProxyServer.getInstance().getScheduler().schedule(BungeeNegativity.getInstance(), 
+				() -> BungeeNegativityPlayer.removeFromCache(event.getPlayer().getUniqueId()), 
+				1, TimeUnit.SECONDS);
 	}
 
 	@EventHandler

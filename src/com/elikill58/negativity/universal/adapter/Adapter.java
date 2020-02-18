@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -64,4 +65,5 @@ public abstract class Adapter {
 	public abstract void invalidateAccount(UUID playerId);
 	public abstract void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof);
 	public abstract void runConsoleCommand(String cmd);
+	public abstract CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId);
 }

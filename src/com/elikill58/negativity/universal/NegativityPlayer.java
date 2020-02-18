@@ -3,7 +3,6 @@ package com.elikill58.negativity.universal;
 import java.util.UUID;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public abstract class NegativityPlayer {
 
@@ -12,7 +11,9 @@ public abstract class NegativityPlayer {
 
 	public NegativityPlayer(UUID playerId) {
 		this.playerId = playerId;
-		this.isMcLeaks = UniversalUtils.isMcleaks(playerId.toString());
+		Adapter.getAdapter().isUsingMcLeaks(playerId).thenAccept(isUsingMcLeaks -> {
+			this.isMcLeaks = isUsingMcLeaks;
+		});
 	}
 
 	public NegativityAccount getAccount() {

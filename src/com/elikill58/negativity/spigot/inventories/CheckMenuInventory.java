@@ -1,6 +1,6 @@
 package com.elikill58.negativity.spigot.inventories;
 
-import java.util.Arrays;
+import java.util.Collections;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -33,7 +33,7 @@ public class CheckMenuInventory {
 		inv.setItem(9, Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
 		inv.setItem(10, Utils.createItem(Material.DIAMOND_PICKAXE, "Minerate", np.mineRate.getInventoryLoreString()));
 		inv.setItem(11, Utils.createItem(Material.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
-		inv.setItem(12, getWoolItem(np.isMcLeaks()));
+		inv.setItem(12, getWoolItem(p, np.isMcLeaks()));
 		inv.setItem(13, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("SKELETON_SKULL", "SKULL_ITEM", "LEGACY_SKULL_ITEM"), Messages.getMessage(p, "fake_entities")));
 		//inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE"), "Kick"));
 		//inv.setItem(17, Utils.createItem(Material.ANVIL, "Ban"));
@@ -62,7 +62,7 @@ public class CheckMenuInventory {
 			inv.setItem(9, Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
 			p.updateInventory();
 		} catch (ArrayIndexOutOfBoundsException e) {
-			
+		
 		}
 	}
 	
@@ -76,13 +76,13 @@ public class CheckMenuInventory {
 	}
 	
 	@SuppressWarnings("deprecation")
-	private static ItemStack getWoolItem(boolean b) {
+	private static ItemStack getWoolItem(Player player, boolean b) {
 		ItemStack item = new ItemStack(Utils.getMaterialWith1_15_Compatibility((b ? "RED_WOOL" : "LIME_WOOL"), "WOOL"));
 		if(item.getType().name().equals("WOOL"))
 			item.setDurability((short) (b ? 14 : 5));
 		ItemMeta meta = item.getItemMeta();
-		meta.setDisplayName(ChatColor.RESET + "McLeaks: " + (b ? ChatColor.RED + "Yes" : ChatColor.GREEN + "No"));
-		meta.setLore(Arrays.asList(ChatColor.GRAY + "McLeak is a", ChatColor.GRAY + "Generator of account"));
+		meta.setDisplayName(Messages.getMessage(player, "inventory.main.mcleaks_indicator." + (b ? "positive" : "negative")));
+		meta.setLore(Collections.singletonList(Messages.getMessage(player, "inventory.main.mcleaks_indicator.description")));
 		item.setItemMeta(meta);
 		return item;
 	}
@@ -137,6 +137,6 @@ public class CheckMenuInventory {
 			default:
 				break;
 			}
-		}		
+		}
 	}
 }

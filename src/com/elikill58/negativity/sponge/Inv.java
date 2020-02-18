@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -24,6 +25,7 @@ import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -75,6 +77,7 @@ public class Inv {
 		invGrid.set(1, 1, Utils.createItem(ItemTypes.DIAMOND_PICKAXE, "&rMinerate", np.mineRate.getInventoryLoreString()));
 		invGrid.set(2, 1, Utils.createItem(ItemTypes.GRASS, "&rMods", "&7Forge: "
 				+ Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
+		invGrid.set(3, 1, getMcLeaksIndicator(p, np));
 		/*if(Cheat.forKey("FORCEFIELD").get().isActive() && !SpongeNegativity.getConfig().getNode("cheats").getNode("forcefield").getNode("ghost_disabled").getBoolean())
 			invGrid.set(3, 1, Utils.createItem(ItemTypes.SKULL, "&rFake entities"));*/
 
@@ -91,6 +94,15 @@ public class Inv {
 		invGrid.set(8, 2, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 		CHECKING.put(p, cible);
+	}
+	
+	private static ItemStack getMcLeaksIndicator(Player player, NegativityPlayer nPlayer) {
+		ItemStack indicator = ItemStack.of(ItemTypes.WOOL);
+		boolean usesMcLeaks = nPlayer.isMcLeaks();
+		indicator.offer(Keys.DYE_COLOR, usesMcLeaks ? DyeColors.RED : DyeColors.LIME);
+		indicator.offer(Keys.DISPLAY_NAME, Messages.getMessage(player, "inventory.main.mcleaks_indicator." + (usesMcLeaks ? "positive" : "negative")));
+		indicator.offer(Keys.ITEM_LORE, Collections.singletonList(Messages.getMessage(player, "inventory.main.mcleaks_indicator.description")));
+		return indicator;
 	}
 
 	public static void actualizeCheckMenu(Player p, Player cible) {

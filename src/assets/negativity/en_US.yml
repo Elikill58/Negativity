@@ -78,6 +78,11 @@ inventory {
     freezing: "Freezing %name%"
     active_detection: "See active detection for %name%"
     see_alerts: "See all alerts for %name%"
+    mcleaks_indicator {
+      positive: "&cIs using MCLeaks"
+      negative: "&aIs not using MCLeaks"
+      description: "&7MCLeaks provides premium accounts for free"
+    }
   }
   detection {
     name_inv: "Active detection"

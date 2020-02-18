@@ -78,6 +78,11 @@ inventory {
     freezing: "Geler %name%"
     active_detection: "Voir les détéctions active pour %name%"
     see_alerts: "Voir les alertes de %name%"
+    mcleaks_indicator {
+      positive: "&cUtilise MCLeaks"
+      negative: "&aN'utilise pas MCLeaks"
+      description: "&7MCLeaks fournit des comptes premiums gratuitement"
+    }
   }
   detection {
     name_inv: "Detection active"

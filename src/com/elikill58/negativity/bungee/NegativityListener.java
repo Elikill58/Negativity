@@ -96,7 +96,7 @@ public class NegativityListener implements Listener {
 				if (Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer(pp), "showReport")) {
 					hasPermitted = true;
 					TextComponent msg = new TextComponent(BungeeMessages.getMessage(pp, "report", place));
-					msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, (pp.getServer().equals(player.getServer()) ? "/tp " : "/server ") + player.getServer().getInfo().getName()));
+					msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, pp.getServer().equals(player.getServer()) ? "/tp " + pp.getName() : "/server " + player.getServer().getInfo().getName()));
 					pp.sendMessage(msg);
 				}
 			if (!hasPermitted) {

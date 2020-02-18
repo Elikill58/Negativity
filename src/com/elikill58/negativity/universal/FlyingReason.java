@@ -1,8 +1,8 @@
 package com.elikill58.negativity.universal;
 
 public enum FlyingReason {
-	POTION(Cheat.fromString(CheatKeys.ANTI_POTION).get()), REGEN(Cheat.fromString(CheatKeys.REGEN).get()), EAT(
-			Cheat.fromString(CheatKeys.FAST_EAT).get()), BOW(Cheat.fromString(CheatKeys.FAST_BOW).get());
+	POTION(Cheat.fromString(CheatKeys.ANTI_POTION)), REGEN(Cheat.fromString(CheatKeys.REGEN)), EAT(
+			Cheat.fromString(CheatKeys.FAST_EAT)), BOW(Cheat.fromString(CheatKeys.FAST_BOW));
 
 	private Cheat c;
 

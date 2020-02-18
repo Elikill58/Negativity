@@ -422,7 +422,7 @@ public class SpongeNegativity {
 		if(!c.isActive())
 			return false;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (c.equals(Cheat.fromString(CheatKeys.BLINK).get()))
+		if (c.equals(Cheat.fromString(CheatKeys.BLINK)))
 			if (!np.already_blink) {
 				np.already_blink = true;
 				return false;

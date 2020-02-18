@@ -311,13 +311,13 @@ public class SpigotNegativity extends JavaPlugin {
 		if(reliability < 55)
 			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.already_blink && c.equals(Cheat.fromString(CheatKeys.BLINK).get())) {
+		if (!np.already_blink && c.equals(Cheat.fromString(CheatKeys.BLINK))) {
 			np.already_blink = true;
 			return false;
 		}
 		if (np.isInFight && c.isBlockedInFight())
 			return false;
-		if (c.equals(Cheat.forKey(CheatKeys.FLY).get()) && p.hasPermission("essentials.fly") && essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
+		if (c.equals(Cheat.forKey(CheatKeys.FLY)) && p.hasPermission("essentials.fly") && essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
 			return false;
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType()))

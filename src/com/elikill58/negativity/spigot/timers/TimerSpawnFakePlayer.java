@@ -12,7 +12,7 @@ public class TimerSpawnFakePlayer extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		if(Cheat.forKey(CheatKeys.FORCEFIELD).get().isActive())
+		if(Cheat.forKey(CheatKeys.FORCEFIELD).isActive())
 			return;
 		for (Player p : Utils.getOnlinePlayers()) {
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);

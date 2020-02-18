@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -117,28 +116,28 @@ public abstract class Cheat {
 		return aliases;
 	}
 
-	public static Optional<Cheat> fromString(String name) {
+	public static Cheat fromString(String name) {
 		for (Cheat c : Cheat.values()) {
 			try {
 				if (c.getKey().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name) || Arrays.asList(c.getAliases()).contains(name))
-					return Optional.of(c);
+					return c;
 			} catch (NullPointerException e) {
 				e.printStackTrace();
 			}
 		}
-		return Optional.empty();
+		return null;
 	}
 	
-	public static Optional<Cheat> forKey(String key) {
+	public static Cheat forKey(String key) {
 		for (Cheat c : Cheat.values()) {
 			try {
 				if (c.getKey().equalsIgnoreCase(key))
-					return Optional.of(c);
+					return c;
 			} catch (NullPointerException e) {
 				e.printStackTrace();
 			}
 		}
-		return Optional.empty();
+		return null;
 	}
 	
 	public static void loadCheat() {

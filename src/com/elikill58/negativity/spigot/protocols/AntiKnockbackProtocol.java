@@ -89,7 +89,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 						double d = last.distance(actual);
 						int ping = Utils.getPing(p), relia = Utils.parseInPorcent(100 - d);
 						if (d < 0.1 && !actual.getBlock().getType().equals(Utils.getMaterialWith1_15_Compatibility("WEB", "COBWEB")) && !p.isSneaking()){
-							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.fromString(CheatKeys.ANTI_KNOCKBACK).get(), relia,
+							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.fromString(CheatKeys.ANTI_KNOCKBACK), relia,
 									"Distance after damage: " + d + "; Damager: " + e.getDamager().getType().name().toLowerCase() + " Ping: " + ping, "Distance after damage: " + d, "");
 							if(isSetBack() && mayCancel)
 								p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));

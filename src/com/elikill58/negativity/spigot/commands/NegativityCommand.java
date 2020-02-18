@@ -47,8 +47,8 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 							String cheat = "";
 							for (String s : arg) {
 								if (!(s.equalsIgnoreCase(arg[0]) || s.equalsIgnoreCase(arg[1]))
-										&& Cheat.fromString(s).isPresent()) {
-									Cheat c = Cheat.fromString(s).get();
+										&& Cheat.fromString(s) != null) {
+									Cheat c = Cheat.fromString(s);
 									np.startAnalyze(c);
 									if (cheat.equalsIgnoreCase("")) {
 										cheat = c.getName();
@@ -91,8 +91,8 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 					if (arg.length > 2)
 						for (String s : arg)
 							if (!(s.equalsIgnoreCase(arg[0]) || s.equalsIgnoreCase(arg[1]))
-									&& Cheat.fromString(s).isPresent())
-								actived.add(Cheat.fromString(s).get());
+									&& Cheat.fromString(s) != null)
+								actived.add(Cheat.fromString(s));
 					SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 					for (Cheat c : actived)
 						np.startAnalyze(c);

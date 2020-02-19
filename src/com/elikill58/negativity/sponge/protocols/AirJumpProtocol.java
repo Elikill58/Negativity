@@ -33,7 +33,7 @@ public class AirJumpProtocol extends Cheat {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
-		if (p.get(Keys.IS_FLYING).orElse(false) || p.getVehicle() != null)
+		if (p.get(Keys.IS_FLYING).orElse(false) || p.getVehicle().isPresent())
 			return;
 		Location<World> loc = p.getLocation();
 		double temp = e.getToTransform().getLocation().getY() - e.getFromTransform().getLocation().getY();

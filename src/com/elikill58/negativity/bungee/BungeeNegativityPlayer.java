@@ -75,11 +75,6 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	@Override
 	public void startAllAnalyze() {
 	}
-
-	@Override
-	public int getWarn(Cheat c) {
-		return 0;
-	}
 	
 	@Override
 	public void startAnalyze(Cheat c) {
@@ -99,11 +94,6 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	@Override
 	public String getIP() {
 		return p.getAddress().getHostName();
-	}
-
-	@Override
-	public int getAllWarn(Cheat c) {
-		return 0;
 	}
 
 	@Override

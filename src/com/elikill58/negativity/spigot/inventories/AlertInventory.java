@@ -18,6 +18,7 @@ import com.elikill58.negativity.spigot.inventories.holders.AlertHolder;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class AlertInventory extends AbstractInventory {
@@ -79,8 +80,11 @@ public class AlertInventory extends AbstractInventory {
 		if (m.equals(Material.ARROW))
 			AbstractInventory.open(InventoryType.CHECK_MENU, p, Inv.CHECKING.get(p));
 		else if (m.equals(Material.BONE)) {
-			for (Cheat c : Cheat.values())
-				SpigotNegativityPlayer.getNegativityPlayer(Inv.CHECKING.get(p)).setWarn(c, 0);
+			Player target = Inv.CHECKING.get(p);
+			NegativityAccount account = Adapter.getAdapter().getNegativityAccount(target.getUniqueId());
+			for (Cheat c : Cheat.values()) {
+				account.setWarnCount(c, 0);
+			}
 			actualizeInventory(p, Inv.CHECKING.get(p));
 		}
 	}

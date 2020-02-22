@@ -51,8 +51,8 @@ public class CheckMenuInventory extends AbstractInventory {
 								"%clicks%", String.valueOf(np.ACTUAL_CLICK)),
 						1, Utils.getByteFromClick(np.ACTUAL_CLICK)));
 		invGrid.set(1, 0, Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY,
-				Messages.getStringMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)),
-				1, Utils.getByteFromClick(np.BETTER_CLICK)));
+				Messages.getStringMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(account.getMostClicksPerSecond())),
+				1, Utils.getByteFromClick(account.getMostClicksPerSecond())));
 		invGrid.set(2, 0, Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY,
 				Messages.getStringMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1,
 				Utils.getByteFromClick(np.LAST_CLICK)));
@@ -123,6 +123,7 @@ public class CheckMenuInventory extends AbstractInventory {
 		Inventory inv = p.getOpenInventory().get();
 		GridInventory invGrid = inv.first().query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
+		NegativityAccount account = np.getAccount();
 
 		invGrid.set(0, 0, Utils
 				.createItem(
@@ -130,8 +131,8 @@ public class CheckMenuInventory extends AbstractInventory {
 								"inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)),
 						1, Utils.getByteFromClick(np.ACTUAL_CLICK)));
 		invGrid.set(1, 0, Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY,
-				Messages.getStringMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)),
-				1, Utils.getByteFromClick(np.BETTER_CLICK)));
+				Messages.getStringMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(account.getMostClicksPerSecond())),
+				1, Utils.getByteFromClick(account.getMostClicksPerSecond())));
 		invGrid.set(2, 0, Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY,
 				Messages.getStringMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1,
 				Utils.getByteFromClick(np.LAST_CLICK)));

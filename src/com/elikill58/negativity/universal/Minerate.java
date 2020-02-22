@@ -57,14 +57,20 @@ public class Minerate {
 		return s;
 	}
 
-	public static enum MinerateType {
-		DIAMOND("Diamond", "DIAMOND_ORE"), GOLD("Gold", "GOLD_ORE"), IRON("Iron", "IRON_ORE"), COAL("Coal", "COAL_ORE");
+	public enum MinerateType {
+		DIAMOND("Diamond", "DIAMOND_ORE", "minecraft:diamond_ore"),
+		GOLD("Gold", "GOLD_ORE", "minecraft:gold_ore"),
+		IRON("Iron", "IRON_ORE", "minecraft:iron_ore"),
+		COAL("Coal", "COAL_ORE", "minecraft:coal_ore");
 
-		private String name, oreName;
+		private final String name;
+		private final String oreName;
+		private final String mcId;
 
-		private MinerateType(String name, String oreName) {
+		MinerateType(String name, String oreName, String mcId) {
 			this.name = name;
 			this.oreName = oreName;
+			this.mcId = mcId;
 		}
 
 		public String getName() {
@@ -75,10 +81,23 @@ public class Minerate {
 			return oreName;
 		}
 
+		public String getMcId() {
+			return mcId;
+		}
+
 		public static MinerateType getMinerateType(String s) {
 			for(MinerateType type : MinerateType.values())
-				if(type.name().equalsIgnoreCase(s) || type.getOreName().equalsIgnoreCase(s))
+				if(type.name().equalsIgnoreCase(s) || type.getOreName().equalsIgnoreCase(s) || type.getMcId().equalsIgnoreCase(s))
 					return type;
+			return null;
+		}
+
+		public static MinerateType fromId(String id) {
+			for (MinerateType type : MinerateType.values()) {
+				if (type.getMcId().equalsIgnoreCase(id)) {
+					return type;
+				}
+			}
 			return null;
 		}
 	}

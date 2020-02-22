@@ -229,16 +229,23 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 		return player != null ? SpongeNegativityPlayer.getNegativityPlayer(player) : null;
 	}
 
+	@Nullable
 	@Override
-	public void invalidateAccount(UUID playerId) {
+	public NegativityAccount invalidateAccount(UUID playerId) {
+		NegativityAccount account = accountCache.getIfPresent(playerId);
 		accountCache.invalidate(playerId);
+		return account;
 	}
 
 	private static class NegativityAccountLoader extends CacheLoader<UUID, NegativityAccount> {
 
 		@Override
-		public NegativityAccount load(UUID playerId) {
-			return NegativityAccountStorage.getStorage().getOrCreateAccount(playerId);
+		public NegativityAccount load(@Nonnull UUID playerId) {
+			NegativityAccountStorage storage = NegativityAccountStorage.getStorage();
+			if (storage != null) {
+				return storage.getOrCreateAccount(playerId);
+			}
+			return new NegativityAccount(playerId);
 		}
 	}
 

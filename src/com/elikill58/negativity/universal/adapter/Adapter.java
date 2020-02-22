@@ -100,8 +100,9 @@ public abstract class Adapter {
 	@Nonnull
 	public abstract NegativityAccount getNegativityAccount(UUID playerId);
 	@Nullable
+	public abstract NegativityAccount invalidateAccount(UUID playerId);
+	@Nullable
 	public abstract NegativityPlayer getNegativityPlayer(UUID playerId);
-	public abstract void invalidateAccount(UUID playerId);
 	public abstract void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof);
 	public abstract void runConsoleCommand(String cmd);
 	public abstract CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId);

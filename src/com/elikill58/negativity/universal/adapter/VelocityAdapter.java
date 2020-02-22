@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -22,9 +23,9 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.dataStorage.file.ProxyFileNegativityAccountStorage;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
@@ -43,6 +44,7 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 
 	private ConfigAdapter config;
 	private VelocityNegativity pl;
+	private Map<UUID, NegativityAccount> accountsCache = new HashMap<>();
 
 	public VelocityAdapter(VelocityNegativity pl, ConfigAdapter config) {
 		this.pl = pl;
@@ -179,7 +181,11 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 	@Nonnull
 	@Override
 	public NegativityAccount getNegativityAccount(UUID playerId) {
-		return NegativityAccountStorage.getStorage().getOrCreateAccount(playerId);
+		NegativityAccountStorage storage = NegativityAccountStorage.getStorage();
+		if (storage != null) {
+			return accountsCache.computeIfAbsent(playerId, storage::getOrCreateAccount);
+		}
+		return new NegativityAccount(playerId);
 	}
 
 	@Nullable
@@ -189,8 +195,11 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 		return player.isPresent() ? VelocityNegativityPlayer.getNegativityPlayer(player.get()) : null;
 	}
 
+	@Nullable
 	@Override
-	public void invalidateAccount(UUID playerId) {}
+	public NegativityAccount invalidateAccount(UUID playerId) {
+		return accountsCache.remove(playerId);
+	}
 
 	@Override
 	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {}

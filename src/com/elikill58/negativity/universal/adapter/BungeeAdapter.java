@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -43,6 +44,7 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 
 	private final ConfigAdapter config;
 	private final Plugin pl;
+	private Map<UUID, NegativityAccount> accountsCache = new HashMap<>();
 
 	public BungeeAdapter(Plugin pl, ConfigAdapter config) {
 		this.pl = pl;
@@ -180,7 +182,11 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 	@Nonnull
 	@Override
 	public NegativityAccount getNegativityAccount(UUID playerId) {
-		return NegativityAccountStorage.getStorage().getOrCreateAccount(playerId);
+		NegativityAccountStorage storage = NegativityAccountStorage.getStorage();
+		if (storage != null) {
+			return accountsCache.computeIfAbsent(playerId, storage::getOrCreateAccount);
+		}
+		return new NegativityAccount(playerId);
 	}
 
 	@Nullable
@@ -190,8 +196,11 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 		return player != null ? BungeeNegativityPlayer.getNegativityPlayer(player) : null;
 	}
 
+	@Nullable
 	@Override
-	public void invalidateAccount(UUID playerId) {}
+	public NegativityAccount invalidateAccount(UUID playerId) {
+		return accountsCache.remove(playerId);
+	}
 
 	@Override
 	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {}

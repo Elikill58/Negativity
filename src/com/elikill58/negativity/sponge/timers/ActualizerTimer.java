@@ -12,6 +12,7 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.inventories.AbstractInventory;
 import com.elikill58.negativity.sponge.inventories.AbstractInventory.InventoryType;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class ActualizerTimer implements Consumer<Task> {
@@ -38,8 +39,10 @@ public class ActualizerTimer implements Consumer<Task> {
                 }
             }
 
-            if(np.BETTER_CLICK < np.ACTUAL_CLICK)
-                np.BETTER_CLICK = np.ACTUAL_CLICK;
+            NegativityAccount account = np.getAccount();
+            if (account.getMostClicksPerSecond() < np.ACTUAL_CLICK) {
+                account.setMostClicksPerSecond(np.ACTUAL_CLICK);
+			}
 
             np.LAST_CLICK = np.ACTUAL_CLICK;
             np.ACTUAL_CLICK = 0;

@@ -20,6 +20,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -58,9 +59,10 @@ public class AutoClickProtocol extends Cheat {
 		int ping = Utils.getPing(p);
 		int click = np.ACTUAL_CLICK - (ping / 9);
 		if (click > CLICK_ALERT) {
+			NegativityAccount account = np.getAccount();
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(np.ACTUAL_CLICK * 2 - efficiency * 2),
 					"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
-							+ "; Better click in one second: " + np.BETTER_CLICK + " Ping: " + ping, np.ACTUAL_CLICK + " clicks");
+							+ "; Better click in one second: " + account.getMostClicksPerSecond() + " Ping: " + ping, np.ACTUAL_CLICK + " clicks");
 			if (isSetBack() && mayCancel) {
 				e.setCancelled(true);
 			}

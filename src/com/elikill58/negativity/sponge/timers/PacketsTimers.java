@@ -16,6 +16,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -25,8 +26,9 @@ public class PacketsTimers implements Consumer<Task> {
 	public void accept(Task task) {
 		for (Player p : Utils.getOnlinePlayers()) {
 			SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-			if (np.BETTER_CLICK < np.ACTUAL_CLICK)
-				np.BETTER_CLICK = np.ACTUAL_CLICK;
+			NegativityAccount account = np.getAccount();
+			if (account.getMostClicksPerSecond() < np.ACTUAL_CLICK)
+				account.setMostClicksPerSecond(np.ACTUAL_CLICK);
 			np.LAST_CLICK = np.ACTUAL_CLICK;
 			np.ACTUAL_CLICK = 0;
 			if (np.SEC_ACTIVE < 2) {
@@ -120,7 +122,7 @@ public class PacketsTimers implements Consumer<Task> {
 				} else {
 					np.IS_LAST_SEC_BLINK = 0;
 				}
-				
+
 				if(ping < BLINK.getMaxAlertPing()){
 					int allPos = np.POSITION_LOOK + np.POSITION;
 					if(allPos > 60) {

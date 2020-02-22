@@ -23,6 +23,7 @@ import com.elikill58.negativity.sponge.inventories.holders.AlertHolder;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 
@@ -103,9 +104,9 @@ public class AlertInventory extends AbstractInventory {
 		if (m.equals(ItemTypes.ARROW))
 			delayed(() -> AbstractInventory.open(InventoryType.CHECK_MENU, p, Inv.CHECKING.get(p)));
 		else if (m.equals(ItemTypes.BONE)) {
-			SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(Inv.CHECKING.get(p));
+			NegativityAccount account = Adapter.getAdapter().getNegativityAccount(Inv.CHECKING.get(p).getUniqueId());
 			for (Cheat c : Cheat.values())
-				np.setWarn(c, 0);
+				account.setWarnCount(c, 0);
 		}
 	}
 

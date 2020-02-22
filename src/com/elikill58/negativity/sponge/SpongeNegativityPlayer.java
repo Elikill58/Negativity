@@ -53,7 +53,6 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
@@ -73,7 +72,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,
 			BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
 	// warns & other
-	public int BETTER_CLICK = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0, MOVE_TIME = 0;
+	public int ONLY_KEEP_ALIVE = 0, NO_PACKET = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0, MOVE_TIME = 0;
 	public int movementsOnWater;
 	// setBack
 	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0;
@@ -144,8 +143,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void saveData() {
-		NegativityAccountStorage.getStorage().saveAccount(getAccount());
-
 		if (!proofs.isEmpty()) {
 			try {
 				Path userDir = SpongeNegativity.getInstance().getDataFolder().resolve("user");
@@ -165,23 +162,11 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		return NegativityBypassTicket.hasBypassTicket(c, p);
 	}
 
-	public int getWarn(Cheat c) {
-		return getAccount().getWarn(c);
-	}
-
-	public int getAllWarn(Cheat c) {
-		return getAccount().getWarn(c);
-	}
-
 	public void addWarn(Cheat c) {
 		if (System.currentTimeMillis() < TIME_INVINCIBILITY)
 			return;
 		NegativityAccount account = getAccount();
 		account.setWarnCount(c, getWarn(c) + 1);
-	}
-
-	public void setWarn(Cheat c, int cheats) {
-		getAccount().setWarnCount(c, cheats);
 	}
 
 	public void clearPackets() {

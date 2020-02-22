@@ -13,9 +13,11 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.Messages;
-import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 
 public class LangCommand implements CommandExecutor {
@@ -27,9 +29,9 @@ public class LangCommand implements CommandExecutor {
 		}
 
 		String language = args.requireOne("language");
-		SpongeNegativityPlayer nPlayer = SpongeNegativityPlayer.getNegativityPlayer((Player) src);
-		nPlayer.getAccount().setLang(language);
-		nPlayer.saveData();
+		NegativityAccount account = Adapter.getAdapter().getNegativityAccount(((Player) src).getUniqueId());
+		account.setLang(language);
+		NegativityAccountStorage.getStorage().saveAccount(account);
 
 		Messages.sendMessage(src, "lang.language_set");
 

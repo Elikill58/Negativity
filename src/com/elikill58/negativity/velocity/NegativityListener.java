@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanRequest;
@@ -17,6 +18,7 @@ import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManag
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
@@ -147,6 +149,15 @@ public class NegativityListener {
 				report.remove(msg);
 			}
 		}
+	}
+
+	@Subscribe
+	public void onPlayerQuit(DisconnectEvent event) {
+		VelocityNegativity plugin = VelocityNegativity.getInstance();
+		plugin.getServer().getScheduler()
+				.buildTask(plugin, () -> VelocityNegativityPlayer.removeFromCache(event.getPlayer().getUniqueId()))
+				.delay(1, TimeUnit.SECONDS)
+				.schedule();
 	}
 
 	@Subscribe

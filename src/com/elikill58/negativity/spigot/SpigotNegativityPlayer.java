@@ -9,28 +9,24 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -54,7 +50,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {
 
-	private static HashMap<UUID, SpigotNegativityPlayer> players = new HashMap<>();
+	private static final Map<UUID, SpigotNegativityPlayer> players = new HashMap<>();
 
 	public static ArrayList<UUID> INJECTED = new ArrayList<>();
 	public ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
@@ -65,8 +61,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public HashMap<Cheat, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	private WeakReference<Player> p;
-	private OfflinePlayer op = null;
-	private UUID uuid = null;
 	// Packets
 	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,
 			BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
@@ -98,16 +92,14 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public SpigotNegativityPlayer(Player p) {
 		super(p.getUniqueId());
 		this.p = new WeakReference<>(p);
-		this.uuid = p.getUniqueId();
 		this.mineRate = new Minerate(this);
-		players.put(p.getUniqueId(), this);
 		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
 				+ "user" + File.separator + "proof" + File.separator);
 		directory.mkdirs();
 		try {
 			file = YamlConfiguration.loadConfiguration(
 					configFile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath()
-							+ File.separator + "user" + File.separator + uuid + ".yml"));
+							+ File.separator + "user" + File.separator + getUUID()+ ".yml"));
 			file.set("playername", p.getName());
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -117,32 +109,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if(file.contains("better-click"))
 			BETTER_CLICK = file.getInt("better-click");
 		initMods(p);
-	}
-
-	public SpigotNegativityPlayer(OfflinePlayer op) {
-		super(op.getUniqueId());
-		this.op = op;
-		this.uuid = op.getUniqueId();
-		this.mineRate = new Minerate(this);
-		players.put(this.uuid, this);
-		File tempfile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
-				+ "user" + File.separator + uuid + ".txt");
-		File directory = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
-				+ "user" + File.separator + "proof" + File.separator);
-		directory.mkdirs();
-		try {
-			if (!tempfile.exists())
-				tempfile.createNewFile();
-			file = YamlConfiguration.loadConfiguration(
-					configFile = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath()
-							+ File.separator + "user" + File.separator + uuid + ".yml"));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		for (Cheat c : Cheat.values())
-			WARNS.put(c, file.getInt("cheats." + c.getKey().toLowerCase()));
-		for (MinerateType mt : MinerateType.values())
-			mineRate.setMine(mt, file.getInt("minerate." + mt.getName().toLowerCase(), 0));
 	}
 
 	public void initMods(Player p) {
@@ -156,17 +122,13 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public Player getPlayer() {
 		Player cached = p != null ? p.get() : null;
 		if (cached == null) {
-			cached = Bukkit.getPlayer(uuid);
+			cached = Bukkit.getPlayer(getUUID());
 			if (p != null)
 				p.clear();
 
 			p = new WeakReference<>(cached);
 		}
 		return cached;
-	}
-
-	public OfflinePlayer getOfflinePlayer() {
-		return op;
 	}
 
 	public String getIP() {
@@ -424,7 +386,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return;
 		try {
 			File temp = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
-					+ "user" + File.separator + "proof" + File.separator + uuid + ".txt");
+					+ "user" + File.separator + "proof" + File.separator + getUUID() + ".txt");
 			if (!temp.exists())
 				temp.createNewFile();
 			String msg = "";
@@ -437,26 +399,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		}
 	}
 
-	public void destroy(boolean isBan) {
-		players.remove(uuid);
+	private void destroy() {
 		saveProof();
 		Adapter.getAdapter().invalidateAccount(getUUID());
-		if (isBan) {
-			Entity et = getPlayer().getWorld().spawnEntity(getPlayer().getLocation(), EntityType.FIREWORK);
-			Firework fire = (Firework) et;
-			FireworkMeta fireMeta = fire.getFireworkMeta();
-			fireMeta.addEffect(FireworkEffect.builder().with(Type.CREEPER).withColor(Color.GREEN).build());
-			fireMeta.setPower(2);
-			fire.setFireworkMeta(fireMeta);
-			fire.detonate();
-			Location loc = getPlayer().getLocation();
-			loc.add(0, 1, 0);
-			double more = 0.1, max = 1.5;
-			for (double d = 0; d < max; d += more) {
-				spawnCircle(1, loc);
-				loc.subtract(0, more, 0);
-			}
-		}
 	}
 
 	public boolean hasOtherThanExtended(Location loc, Material m) {
@@ -729,27 +674,17 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {
-		if (players.containsKey(p.getUniqueId()))
-			return players.get(p.getUniqueId());
-		else
-			return new SpigotNegativityPlayer(p);
+		return players.computeIfAbsent(p.getUniqueId(), id -> new SpigotNegativityPlayer(p));
 	}
 
-	public static SpigotNegativityPlayer getNegativityPlayer(OfflinePlayer p) {
-		if (players.containsKey(p.getUniqueId()))
-			return players.get(p.getUniqueId());
-		else
-			return new SpigotNegativityPlayer(p);
+	public static SpigotNegativityPlayer getCached(UUID playerId) {
+		return players.get(playerId);
 	}
 
-	public static boolean contains(Player p) {
-		return players.containsKey(p.getUniqueId());
-	}
-
-	public static void removeFromCache(UUID playerId, boolean isBan) {
-		SpigotNegativityPlayer cached = players.get(playerId);
+	public static void removeFromCache(UUID playerId) {
+		SpigotNegativityPlayer cached = players.remove(playerId);
 		if (cached != null) {
-			cached.destroy(isBan);
+			cached.destroy();
 		}
 	}
 }

@@ -74,7 +74,7 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 					stringTime = "";
 				}
 			}
-			time = time * 1000;
+			time = System.currentTimeMillis() + time * 1000;
 		}
 
 		String reason = null;
@@ -86,8 +86,9 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 				reason = element;
 			}
 		}
-		BanManager.executeBan(new ActiveBan(target.getUniqueId(), reason, sender.getName(), BanType.MOD, System.currentTimeMillis() + time, reason));
-		Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
+		BanManager.executeBan(new ActiveBan(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, reason));
+		if (!sender.equals(target))
+			Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
 		return false;
 	}
 

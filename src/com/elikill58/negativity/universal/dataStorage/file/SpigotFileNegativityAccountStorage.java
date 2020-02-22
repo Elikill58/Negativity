@@ -14,7 +14,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.TranslatedMessages;
@@ -39,7 +38,7 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 		String language = config.getString("lang", TranslatedMessages.getDefaultLang());
 		Minerate minerate = deserializeMinerate(config.getConfigurationSection("minerate"));
 		int mostClicksPerSecond = config.getInt("better-click");
-		Map<Cheat, Integer> warns = deserializeViolations(config.getConfigurationSection("cheats"));
+		Map<String, Integer> warns = deserializeViolations(config.getConfigurationSection("cheats"));
 		return new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns);
 	}
 
@@ -83,23 +82,20 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 	}
 
 	private void serializeViolations(NegativityAccount account, ConfigurationSection cheatsSection) {
-		for (Cheat cheat : Cheat.values()) {
-			String key = cheat.getName().toLowerCase(Locale.ROOT);
-			cheatsSection.set(key, account.getWarn(cheat));
+		for (Map.Entry<String, Integer> entry : account.getAllWarns().entrySet()) {
+			String cheatKey = entry.getKey().toLowerCase(Locale.ROOT);
+			cheatsSection.set(cheatKey, entry.getValue());
 		}
 	}
 
-	private Map<Cheat, Integer> deserializeViolations(@Nullable ConfigurationSection cheatsSection) {
-		Map<Cheat, Integer> violations = new HashMap<>();
+	private Map<String, Integer> deserializeViolations(@Nullable ConfigurationSection cheatsSection) {
+		Map<String, Integer> violations = new HashMap<>();
 		if (cheatsSection == null) {
 			return violations;
 		}
 
 		for (String cheatKey : cheatsSection.getKeys(false)) {
-			Cheat cheat = Cheat.forKey(cheatKey);
-			if (cheat != null) {
-				violations.put(cheat, cheatsSection.getInt(cheatKey));
-			}
+			violations.put(cheatKey, cheatsSection.getInt(cheatKey));
 		}
 		return violations;
 	}

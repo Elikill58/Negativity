@@ -11,7 +11,6 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
@@ -41,7 +40,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 				String language = result.getString("language");
 				Minerate minerate = deserializeMinerate(result.getString("minerate"));
 				int mostClicksPerSecond = result.getInt("most_clicks_per_second");
-				Map<Cheat, Integer> warns = deserializeViolations(result.getString("violations_by_cheat"));
+				Map<String, Integer> warns = deserializeViolations(result.getString("violations_by_cheat"));
 				return new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns);
 			}
 		} catch (SQLException e) {
@@ -101,14 +100,14 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 
 	private static String serializeViolations(NegativityAccount account) {
 		StringJoiner joiner = new StringJoiner(";");
-		for (Cheat cheat : Cheat.values()) {
-			joiner.add(cheat.getKey() + '=' + account.getWarn(cheat));
+		for (Map.Entry<String, Integer> entry : account.getAllWarns().entrySet()) {
+			joiner.add(entry.getKey() + '=' + entry.getValue());
 		}
 		return joiner.toString();
 	}
 
-	private static Map<Cheat, Integer> deserializeViolations(String serialized) {
-		Map<Cheat, Integer> violations = new HashMap<>();
+	private static Map<String, Integer> deserializeViolations(String serialized) {
+		Map<String, Integer> violations = new HashMap<>();
 		String[] fullEntries = serialized.split(";");
 		for (String fullEntry : fullEntries) {
 			String[] entry = fullEntry.split("=");
@@ -118,10 +117,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 
 			try {
 				int value = Integer.parseInt(entry[1]);
-				Cheat cheat = Cheat.forKey(entry[0]);
-				if (cheat != null) {
-					violations.put(cheat, value);
-				}
+				violations.put(entry[0], value);
 			} catch (NumberFormatException e) {
 				Adapter.getAdapter().warn("Malformed minerate value in entry " + fullEntry);
 			}

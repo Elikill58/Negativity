@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -13,13 +14,13 @@ public final class NegativityAccount {
 	private String lang;
 	private final Minerate minerate;
 	private int mostClicksPerSecond;
-	private final Map<Cheat, Integer> warns;
+	private final Map<String, Integer> warns;
 
 	public NegativityAccount(UUID playerId) {
 		this(playerId, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>());
 	}
 
-	public NegativityAccount(UUID playerId, String lang, Minerate minerate, int mostClicksPerSecond, Map<Cheat, Integer> warns) {
+	public NegativityAccount(UUID playerId, String lang, Minerate minerate, int mostClicksPerSecond, Map<String, Integer> warns) {
 		this.playerId = playerId;
 		this.lang = lang;
 		this.minerate = minerate;
@@ -51,11 +52,23 @@ public final class NegativityAccount {
 		this.mostClicksPerSecond = mostClicksPerSecond;
 	}
 
+	public int getWarn(String cheatKey) {
+		return warns.getOrDefault(cheatKey, 0);
+	}
+
 	public int getWarn(Cheat cheat) {
-		return warns.getOrDefault(cheat, 0);
+		return getWarn(cheat.getKey());
 	}
 
 	public void setWarnCount(Cheat cheat, int count) {
-		warns.put(cheat, count);
+		setWarnCount(cheat.getKey(), count);
+	}
+
+	public void setWarnCount(String cheatKey, int count) {
+		warns.put(cheatKey, count);
+	}
+
+	public Map<String, Integer> getAllWarns() {
+		return Collections.unmodifiableMap(warns);
 	}
 }

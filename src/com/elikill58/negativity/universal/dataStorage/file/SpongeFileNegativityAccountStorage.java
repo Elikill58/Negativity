@@ -11,7 +11,6 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.TranslatedMessages;
@@ -42,7 +41,7 @@ public class SpongeFileNegativityAccountStorage extends NegativityAccountStorage
 			String language = node.getNode("lang").getString(TranslatedMessages.getDefaultLang());
 			Minerate minerate = deserializeMinerate(node.getNode("minerate"));
 			int mostClicksPerSecond = node.getNode("better-click").getInt();
-			Map<Cheat, Integer> warns = deserializeViolations(node.getNode("cheats"));
+			Map<String, Integer> warns = deserializeViolations(node.getNode("cheats"));
 			return new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns);
 		} catch (IOException e) {
 			SpongeNegativity.getInstance().getLogger().error("Could not load account {} to file", playerId, e);
@@ -89,20 +88,18 @@ public class SpongeFileNegativityAccountStorage extends NegativityAccountStorage
 	}
 
 	private void serializeViolations(NegativityAccount account, CommentedConfigurationNode cheatsNode) {
-		for (Cheat cheat : Cheat.values()) {
-			String key = cheat.getKey().toLowerCase(Locale.ROOT);
-			cheatsNode.getNode(key).setValue(account.getWarn(cheat));
+		for (Map.Entry<String, Integer> entry : account.getAllWarns().entrySet()) {
+			String key = entry.getKey().toLowerCase(Locale.ROOT);
+			cheatsNode.getNode(key).setValue(entry.getValue());
 		}
 	}
 
-	private Map<Cheat, Integer> deserializeViolations(ConfigurationNode cheatsNode) {
-		Map<Cheat, Integer> violations = new HashMap<>();
+	private Map<String, Integer> deserializeViolations(ConfigurationNode cheatsNode) {
+		Map<String, Integer> violations = new HashMap<>();
 		for (Map.Entry<Object, ? extends ConfigurationNode> entry : cheatsNode.getChildrenMap().entrySet()) {
-			Cheat cheat = Cheat.forKey(entry.getKey().toString());
-			if (cheat != null) {
-				int value = entry.getValue().getInt();
-				violations.put(cheat, value);
-			};
+			String cheatkey = entry.getKey().toString();
+			int value = entry.getValue().getInt();
+			violations.put(cheatkey, value);
 		}
 		return violations;
 	}

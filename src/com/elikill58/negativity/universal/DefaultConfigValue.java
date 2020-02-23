@@ -55,35 +55,38 @@ public class DefaultConfigValue {
 
 		BOOLEANS.put("log_alerts", true);
 		BOOLEANS.put("log_alerts_in_console", true);
-		INTS.put("tps_alert_stop", 18);
+		INTS.put("tps_alert_stop", 19);
 		INTS.put("time_between_alert", 2000);
 		BOOLEANS.put("report_command", true);
 		BOOLEANS.put("ban_command", true);
 		BOOLEANS.put("unban_command", true);
 		BOOLEANS.put("kick_command", true);
+		BOOLEANS.put("suspect_command", true);
+		
 		BOOLEANS.put("Database.isActive", true);
-
 		STRINGS.put("Database.url", "127.0.0.1/myDb");
 		STRINGS.put("Database.user", "root");
 		STRINGS.put("Database.password", "myPassword");
 		STRINGS.put("Database.table_perm", "myTable");
 		STRINGS.put("Database.table_lang", "myTable");
 		STRINGS.put("Database.table_ban", "ban");
+		STRINGS.put("Database.column_find_row", "uuid");
+		STRINGS.put("Database.column_perm", "rank");
+		STRINGS.put("Database.column_lang", "lang");
 		BOOLEANS.put("Database.saveInCache", true);
 
-		BOOLEANS.put("inventory.alerts.see.no_started_verif_cheat", false);
 		BOOLEANS.put("inventory.alerts.no_started_verif_cheat", false);
-		BOOLEANS.put("inventory.alerts.see.only_cheat_active", true);
 		BOOLEANS.put("inventory.alerts.only_cheat_active", true);
 		BOOLEANS.put("inventory.inv_freeze_active", true);
 
+		STRINGS.put("items.COMPASS.when", "always");
+		STRINGS.put("items.COMPASS.cheats", "speed,fly");
+		
 		BOOLEANS.put("Permissions.defaultActive", true);
 		BOOLEANS.put("Permissions.canBeHigher", false);
 
 		STRINGS.put("Permissions.showAlert.default", "negativity.alert");
 		STRINGS.put("Permissions.showAlert.custom", "MOD,ADMIN");
-		STRINGS.put("Permissions.reload.default", "negativity.reload");
-		STRINGS.put("Permissions.reload.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.verif.default", "negativity.verif");
 		STRINGS.put("Permissions.verif.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.manageCheat.default", "negativity.managecheat");
@@ -94,7 +97,9 @@ public class DefaultConfigValue {
 		STRINGS.put("Permissions.notBanned.custom", "ADMIN");
 		BOOLEANS.put("Permissions.bypass.active", false);
 
-		String[] cheats = new String[] {"all", "forcefield", "fastplace", "speedhack", "autoclick", "fly", "antipotion", "autoeat", "autoregen", "antiknockback", "jesus", "nofall", "blink", "spider", "fastbow", "scaffold", "step", "noslowdown", "fastladders", "phase", "autosteal", "timer"};
+		String[] cheats = new String[] {"airjump", "antipotion", "autoeat", "autoregen", "antiknockback", "autoclick", "autosteal",
+				"blink", "forcefield", "fastplace", "fastladders", "fastbow", "jesus", "fly",
+				"nofall", "noslowdown", "phase", "scaffold", "speedhack", "spider", "step", "xray"};
 		for(String localCheat : cheats) {
 			//STRINGS.put("Permissions.bypass." + localCheat, "negativity.bypass." + localCheat);
 			STRINGS.put("Permissions.bypass." + localCheat + ".default", "negativity.bypass." + localCheat);
@@ -112,14 +117,17 @@ public class DefaultConfigValue {
 
 		BOOLEANS.put("ban.active", false);
 		STRINGS.put("ban.type", "file");
+		BOOLEANS.put("ban.other_plugin.active", false);
+		STRINGS.put("ban.other_plugin.plugin_used", "APlugin");
+		STRINGS.put("ban.command.ban", "");
+		STRINGS.put("ban.command.unban", "");
 		BOOLEANS.put("ban.destroy_when_unban", false);
-		INTS.put("ban.reliability_need", 90);
-		INTS.put("ban.alert_need", 5);
+		INTS.put("ban.reliability_need", 95);
+		INTS.put("ban.alert_need", 10);
 		STRINGS.put("ban.time.calculator", "360000000 + (%reliability% * 10 * %alert%)");
-		INTS.put("ban.def.ban_time", 4);
+		INTS.put("ban.def.ban_time", 2);
 		BOOLEANS.put("ban.file.isActive", false);
 		STRINGS.put("ban.file.dir", "ban");
-		BOOLEANS.put("ban.db.isActive", false);
 		STRINGS.put("ban.db.column.uuid", "uuid");
 		STRINGS.put("ban.db.column.time", "time");
 		STRINGS.put("ban.db.column.def", "def");
@@ -128,6 +136,10 @@ public class DefaultConfigValue {
 		STRINGS.put("ban.db.column.by", "by");
 		STRINGS.put("ban.db.column.other.name", "%name%");
 
+		BOOLEANS.put("suspect.enabled", true);
+		BOOLEANS.put("suspect.chat", true);
+		BOOLEANS.put("suspect.with_report_cmd", true);
+		
 		for(String lc : cheats) {
 			INTS.put("cheats." + lc + ".ping", 150);
 			STRINGS.put("cheats." + lc + ".exact_name", lc);
@@ -142,5 +154,7 @@ public class DefaultConfigValue {
 		DOUBLES.put("cheats.forcefield.reach", 3.9);
 		BOOLEANS.put("cheats.forcefield.ghost_disabled", false);
 		INTS.put("cheats.autoclick.click_alert", 20);
+		STRINGS.put("cheats.chat.insults", "bitch");
+		BOOLEANS.put("cheats.special.mcleaks.kick", true);
 	}
 }

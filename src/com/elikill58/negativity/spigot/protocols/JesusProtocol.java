@@ -116,7 +116,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		for (int y = (fY - 1); y != (fY + 2); y++)
 			for (int x = (fX - 2); x != (fX + 3); x++)
 				for (int z = (fZ - 2); z != (fZ + 3); z++)
-					if(loc.getWorld().getBlockAt(x, y, z).getType().equals(WATER))
+					if(loc.getWorld().getBlockAt(x, y, z).getType().equals(LILY))
 						hasWaterLily = true;
 		return hasWaterLily;
 	}

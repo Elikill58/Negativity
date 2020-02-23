@@ -10,11 +10,11 @@ lang:
   invalid_lang: "%arg% isn't a valid lang !"
   help: "/lang <new lang> : Change the default language"
   current: "The current language is %lang%"
-  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in portugese"
+  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in norwegian"
 ban:
   kick_time: "&cForbud grunn %reason% før %time% av %by%."
   kick_def: "&cForbud definitivt for %reason% av %by%."
-  help: 
+  help:
   # For the time, there is:
   # y : years
   # mo : months
@@ -33,7 +33,7 @@ unban:
 kick:
   help: "/nkick <player> <reason> : Spark den angitte spilleren"
   well_kick: "&a[&2Negativity&a]&c %name% Ble kicket for %reason%."
-  kicked: "Du har blitt kicket av %playername% for %reason%"
+  kicked: "Du har blitt kicket av %name% for %reason%"
 report:
   report_usage: "/report <navn> <grunn>"
   well_report: "&a%name% rapport vellykket !"
@@ -43,12 +43,13 @@ negativity:
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 ser ut til å bruke &c%cheat% %nb% tid &7(&2Pålitelighet: %reliability%%&7) !"
   alert_hover: "&6Pålitelighet: %reliability%%\nPing: %ping%"
   no_alerts: "&a[&2Negativity&a] No alerts to display."
+  reload_done: "&a[&2Negativity&a] Plugin reloaded."
   verif:
     invalid_cheat: "%arg% er ikke en gyldig juks!"
     start: "&a[&2Negativity&a] &7begynte å analysere %name% for %cheat%"
     start_all: "&a[&2Negativity&a] startet full analyse for spilleren %name%"
     help:
-      - "/negativity verif <spiller> [juks...] : Starter verifikasjoner (alt hvis ingen er gitt)" 
+      - "/negativity verif <spiller> [juks...] : Starter verifikasjoner (alt hvis ingen er gitt)"
       - "/negativity <spiller> : For å se noen opplysninger om denne spiller"
 inventory:
   close: "lukke"

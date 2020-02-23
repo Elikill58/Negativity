@@ -2,6 +2,8 @@ package com.elikill58.negativity.spigot.commands;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.StringJoiner;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -26,159 +28,140 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
-		if (!(sender instanceof Player)) {
-			if (arg.length == 0)
-				Messages.sendMessageList(sender, "negativity.verif.help");
-			else {
-				if (arg[0].startsWith("verif")) {
-					if (arg.length == 1)
-						Messages.sendMessage(sender, "not_forget_player");
-					else {
-						Player cible = Bukkit.getPlayer(arg[1]);
-						if (cible == null) {
-							Messages.sendMessage(sender, "invalid_player", "%arg%", arg[1]);
-							return false;
-						}
-						SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
-						if(arg.length == 2) {
-							np.startAllAnalyze();
-							Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", cible.getName());
-						} else {
-							String cheat = "";
-							for (String s : arg) {
-								if (!(s.equalsIgnoreCase(arg[0]) || s.equalsIgnoreCase(arg[1]))
-										&& Cheat.fromString(s) != null) {
-									Cheat c = Cheat.fromString(s);
-									np.startAnalyze(c);
-									if (cheat.equalsIgnoreCase("")) {
-										cheat = c.getName();
-									} else
-										cheat = cheat + ", " + c.getName();
-								}
-							}
-							Messages.sendMessage(sender, "negativity.verif.start", "%name%", cible.getName(), "%cheat%", cheat);
-						}
-					}
-				} else if (arg[0].startsWith("alert")) {
-					Messages.sendMessage(sender, "only_player");
-				} else if (arg[0].equalsIgnoreCase("reload")) {
-					Adapter.getAdapter().reload();
-				} else if (Bukkit.getPlayer(arg[0]) != null) {
-					Messages.sendMessage(sender, "only_player");
-				} else
-					Messages.sendMessageList(sender, "negativity.verif.help");
-			}
-			return false;
+		if (arg.length == 0 || arg[0].equalsIgnoreCase("help")) {
+			Messages.sendMessageList(sender, "negativity.verif.help");
+			return true;
 		}
-		Player p = (Player) sender;
-		if (arg.length == 0)
-			Messages.sendMessageList(p, "negativity.verif.help");
-		else {
-			if (arg[0].startsWith("verif")) {
-				if (!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "verif")) {
-					Messages.sendMessage(p, "not_permission");
-					return false;
-				}
-				if (arg.length == 1)
-					Messages.sendMessage(p, "not_forget_player");
-				else {
-					Player cible = Bukkit.getPlayer(arg[1]);
-					if (cible == null) {
-						Messages.sendMessage(p, "invalid_player", "%arg%", arg[1]);
-						return false;
+
+		if (arg[0].equalsIgnoreCase("verif")) {
+			if (sender instanceof Player && !Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), "verif")) {
+				Messages.sendMessage(sender, "not_permission");
+				return false;
+			}
+
+			if (arg.length < 2) {
+				Messages.sendMessage(sender, "not_forget_player");
+				return true;
+			}
+
+			Player target = Bukkit.getPlayer(arg[1]);
+			if (target == null) {
+				Messages.sendMessage(sender, "invalid_player", "%arg%", arg[1]);
+				return false;
+			}
+
+			SpigotNegativityPlayer nTarget = SpigotNegativityPlayer.getNegativityPlayer(target);
+			if (arg.length == 2) {
+				nTarget.startAllAnalyze();
+				Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", target.getName());
+			} else {
+				StringJoiner cheatNamesJoiner = new StringJoiner(", ");
+				for (int i = 2; i < arg.length; i++) {
+					Cheat cheat = Cheat.fromString(arg[i]);
+					if (cheat != null) {
+						nTarget.startAnalyze(cheat);
+						cheatNamesJoiner.add(cheat.getName());
 					}
-					ArrayList<Cheat> actived = new ArrayList<>();
-					if (arg.length > 2)
-						for (String s : arg)
-							if (!(s.equalsIgnoreCase(arg[0]) || s.equalsIgnoreCase(arg[1]))
-									&& Cheat.fromString(s) != null)
-								actived.add(Cheat.fromString(s));
-					SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
-					for (Cheat c : actived)
-						np.startAnalyze(c);
-					if (actived.size() == Cheat.CHEATS.size()) {
-						np.startAllAnalyze();
-						Messages.sendMessage(p, "negativity.verif.start_all", "%name%", cible.getName());
-					} else {
-						String cheat = "";
-						boolean isStart = true;
-						for (Cheat c : actived)
-							if (isStart) {
-								cheat = c.getName();
-								isStart = false;
-							} else
-								cheat = cheat + ", " + c.getName();
-						Messages.sendMessage(p, "negativity.verif.start", "%name%", cible.getName(), "%cheat%", cheat);
-					}
-				}
-			} else if (arg[0].startsWith("alert")) {
-				int alertSize = SpigotNegativity.alerts.size();
-				if (alertSize == 0) {
-					Messages.sendMessage(p, "negativity.no_alerts");
-					return true;
 				}
 
-				for(int i = alertSize - 1; i >= 0; i--) {
-					PlayerCheatAlertEvent alert = SpigotNegativity.alerts.get(i);
-					new ClickableText().addRunnableHoverEvent(
-							Messages.getMessage(p, "negativity.alert", "%name%", alert.getPlayer().getName(), "%cheat%", alert.getCheat().getName(),
-									"%reliability%", String.valueOf(alert.getReliability())),
-							Messages.getMessage(p, "negativity.alert_hover", "%reliability%",
-									String.valueOf(alert.getReliability()), "%ping%", String.valueOf(alert.getPing()))
-									+ (alert.getHoverProof().equalsIgnoreCase("") ? "" : "\n" + alert.getHoverProof()),
-							"/negativity " + alert.getPlayer().getName()).sendToPlayer(p);
+				String cheatsList = cheatNamesJoiner.toString();
+				if (cheatsList.isEmpty()) {
+					Messages.sendMessage(sender, "negativity.verif.start_none");
+				} else {
+					Messages.sendMessage(sender, "negativity.verif.start", "%name%", target.getName(), "%cheat%", cheatsList);
 				}
-			} else if (arg[0].equalsIgnoreCase("reload")) {
-				Adapter.getAdapter().reload();
-			} else if (Bukkit.getPlayer(arg[0]) != null) {
-				Player cible = Bukkit.getPlayer(arg[0]);
-				if (!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "verif")) {
-					Messages.sendMessage(p, "not_permission");
-					return false;
-				}
-				Inv.CHECKING.put(p, cible);
-				CheckMenuInventory.openCheckMenu(p, cible);
-			} else
-				Messages.sendMessageList(p, "negativity.verif.help");
+			}
+			return true;
+		} else if (arg[0].equalsIgnoreCase("alert")) {
+			if (!(sender instanceof Player)) {
+				Messages.sendMessage(sender, "only_player");
+				return true;
+			}
+
+			if (SpigotNegativity.alerts.isEmpty()) {
+				Messages.sendMessage(sender, "negativity.no_alerts");
+				return true;
+			}
+
+			for (int i = SpigotNegativity.alerts.size() - 1; i >= 0; i--) {
+				PlayerCheatAlertEvent alert = SpigotNegativity.alerts.get(i);
+				Player playerSender = (Player) sender;
+				new ClickableText().addRunnableHoverEvent(
+						Messages.getMessage(playerSender, "negativity.alert",
+								"%name%", alert.getPlayer().getName(),
+								"%cheat%", alert.getCheat().getName(),
+								"%reliability%", String.valueOf(alert.getReliability())),
+						Messages.getMessage(playerSender, "negativity.alert_hover",
+								"%reliability%", String.valueOf(alert.getReliability()),
+								"%ping%", String.valueOf(alert.getPing())) + (alert.getHoverProof().isEmpty() ? "" : "\n" + alert.getHoverProof()),
+						"/negativity " + alert.getPlayer().getName())
+						.sendToPlayer(playerSender);
+			}
+			return true;
+		} else if (arg[0].equalsIgnoreCase("reload")) {
+			Adapter.getAdapter().reload();
+			Messages.sendMessage(sender, "negativity.reload_done");
+			return true;
 		}
+
+		Player targetPlayer = Bukkit.getPlayer(arg[0]);
+		if (targetPlayer != null) {
+			if (!(sender instanceof Player)) {
+				Messages.sendMessage(sender, "only_player");
+				return false;
+			}
+
+			Player playerSender = (Player) sender;
+			if (!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(playerSender), "verif")) {
+				Messages.sendMessage(sender, "not_permission");
+				return false;
+			}
+
+			Inv.CHECKING.put(playerSender, targetPlayer);
+			CheckMenuInventory.openCheckMenu(playerSender, targetPlayer);
+			return true;
+		}
+
+		Messages.sendMessageList(sender, "negativity.verif.help");
 		return true;
 	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] arg) {
-		List<String> tab = new ArrayList<>();
-		String prefix = arg.length == 0 ? " " : arg[arg.length - 1].toLowerCase();
-		if (arg.length == 0) {
-			for (Player p : Utils.getOnlinePlayers())
-				if (p.getName().toLowerCase().startsWith(prefix.toLowerCase()) || prefix.isEmpty())
-					tab.add(p.getName());
-			if ("verif".startsWith(prefix) || prefix.isEmpty())
-				tab.add("verif");
-			if ("reload".startsWith(prefix) || prefix.isEmpty())
-				tab.add("reload");
-			if ("alert".startsWith(prefix) || prefix.isEmpty())
-				tab.add("alert");
-		} else if(arg.length == 1 && arg[0].equalsIgnoreCase(prefix)){
-			for (Player p : Utils.getOnlinePlayers())
-				if (p.getName().toLowerCase().startsWith(prefix.toLowerCase()) || prefix.isEmpty())
-					tab.add(p.getName());
-			if ("verif".startsWith(prefix.toLowerCase()) || prefix.isEmpty())
-				tab.add("verif");
-			if ("reload".startsWith(prefix) || prefix.isEmpty())
-				tab.add("reload");
-			if ("alert".startsWith(prefix) || prefix.isEmpty())
-				tab.add("alert");
+		List<String> suggestions = new ArrayList<>();
+		String prefix = arg[arg.length - 1].toLowerCase(Locale.ROOT);
+		if (arg.length == 1) {
+			// /negativity |
+			for (Player p : Utils.getOnlinePlayers()) {
+				if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
+					suggestions.add(p.getName());
+				}
+			}
+			if ("verif".startsWith(prefix))
+				suggestions.add("verif");
+			if ("reload".startsWith(prefix))
+				suggestions.add("reload");
+			if ("alert".startsWith(prefix))
+				suggestions.add("alert");
 		} else {
-			if (arg[0].equalsIgnoreCase("verif") && arg.length > 2) {
-				if (Bukkit.getPlayer(arg[1]) != null)
-					for (Cheat c : Cheat.values())
-						if (c.getName().toLowerCase().startsWith(prefix.toLowerCase()) || prefix.isEmpty())
-							tab.add(c.getName());
-			} else
-				for (Player p : Utils.getOnlinePlayers())
-					if (p.getName().startsWith(prefix) || prefix.isEmpty())
-						tab.add(p.getName());
+			if (arg[0].equalsIgnoreCase("verif")) {
+				if (arg.length == 2) {
+					// /negativity verif |
+					for (Player p : Utils.getOnlinePlayers()) {
+						if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
+							suggestions.add(p.getName());
+						}
+					}
+				} else if (Bukkit.getPlayer(arg[1]) != null) {
+					// /negativity verif <target> |
+					for (Cheat c : Cheat.values()) {
+						if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
+							suggestions.add(c.getName());
+						}
+					}
+				}
+			}
 		}
-		return tab;
+		return suggestions;
 	}
 }

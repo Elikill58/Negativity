@@ -1,7 +1,11 @@
 package com.elikill58.negativity.spigot.commands;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
+import java.util.Set;
+import java.util.StringJoiner;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,57 +28,55 @@ public class SuspectCommand implements CommandExecutor, TabCompleter {
 			sender.sendMessage(TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, "only_player"));
 			return false;
 		}
-		// Player p = (Player) sender;
-		String msg = "";
-		for (String s : arg)
-			if (msg.equalsIgnoreCase(""))
-				msg = s;
-			else
-				msg += s;
-		String[] content = msg.split(" ");
-		List<Player> suspected = new ArrayList<>();
-		List<Cheat> cheats = new ArrayList<>();
-		for (String s : content) {
-			for (Cheat c : Cheat.values())
-				for (String alias : c.getAliases())
-					if (alias.equalsIgnoreCase(s) || alias.contains(s) || alias.startsWith(s))
-						cheats.add(c);
-			for (Player tempP : Utils.getOnlinePlayers()) {
-				if (tempP.getName().equalsIgnoreCase(s) || tempP.getName().toLowerCase().startsWith(s)
-						|| tempP.getName().contains(s))
-					suspected.add(tempP);
-				else if (tempP.getDisplayName() != null)
-					if (tempP.getDisplayName().equalsIgnoreCase(s) || tempP.getDisplayName().toLowerCase().startsWith(s)
-							|| tempP.getDisplayName().contains(s))
-						suspected.add(tempP);
+
+		Set<Player> suspected = new HashSet<>();
+		Set<Cheat> cheats = new HashSet<>();
+		for (String segment : arg) {
+			Cheat cheat = Cheat.fromString(segment);
+			if (cheat != null) {
+				cheats.add(cheat);
+				continue;
+			}
+
+			String loweredSegment = segment.toLowerCase(Locale.ROOT);
+			for (Player onlinePlayer : Utils.getOnlinePlayers()) {
+				if (onlinePlayer.getName().toLowerCase(Locale.ROOT).contains(loweredSegment)
+						|| (!onlinePlayer.getDisplayName().equals(onlinePlayer.getName())
+						&& onlinePlayer.getDisplayName().toLowerCase(Locale.ROOT).contains(loweredSegment))) {
+					// Either the name or the displayname matches
+					suspected.add(onlinePlayer);
+				}
 			}
 		}
-		String players = "";
+
+		StringJoiner suspectsJoiner = new StringJoiner(", ");
 		for (Player suspect : suspected) {
-			if (players.equalsIgnoreCase(""))
-				players = suspect.getName();
-			else
-				players += ", " + suspect.getName();
+			suspectsJoiner.add(suspect.getName());
 			SuspectManager.analyzeText(SpigotNegativityPlayer.getNegativityPlayer(suspect), cheats);
 		}
-		if (players.equalsIgnoreCase(""))
-			players = Messages.getMessage((Player) sender, "none");
-		Messages.sendMessage(sender, "well_suspect", "%players%", players);
-		return false;
+
+		String suspectsList = suspectsJoiner.toString();
+		if (suspectsList.isEmpty()) {
+			suspectsList = Messages.getMessage((Player) sender, "none");
+		}
+		Messages.sendMessage(sender, "well_suspect", "%players%", suspectsList);
+		return true;
 	}
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] arg) {
-
-		List<String> list = new ArrayList<String>();
-
-		String prefix = arg.length == 0 ? " " : arg[arg.length - 1].toLowerCase();
-		for (Player p : Utils.getOnlinePlayers())
-			if (prefix.isEmpty() || p.getName().startsWith(prefix))
-				list.add(p.getName());
-		for (Cheat c : Cheat.values())
-			if (prefix.isEmpty() || c.getName().startsWith(prefix))
-				list.add(c.getName());
-		return list;
+		List<String> suggestions = new ArrayList<>();
+		String prefix = arg[arg.length - 1].toLowerCase(Locale.ROOT);
+		for (Player p : Utils.getOnlinePlayers()) {
+			if (prefix.isEmpty() || p.getName().toLowerCase(Locale.ROOT).startsWith(prefix)) {
+				suggestions.add(p.getName());
+			}
+		}
+		for (Cheat c : Cheat.values()) {
+			if (prefix.isEmpty() || c.getName().toLowerCase(Locale.ROOT).startsWith(prefix)) {
+				suggestions.add(c.getName());
+			}
+		}
+		return suggestions;
 	}
 }

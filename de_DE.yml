@@ -15,7 +15,7 @@ lang:
   invalid_lang: "%arg% isn't a valid lang !"
   help: "/lang <new lang> : Change the default language"
   current: "The current language is %lang%"
-  language_set: "&a[&2Negativity&a] &7Les messages de Negativity seront désormais en français"
+  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in german"
 ban:
   kick_time: "&cDu wurdest von %by% bis %time% gebannt. Grund: %reason%"
   kick_def: "&cDu wurdest von %by% gebannt! Grund: %reason%"
@@ -38,7 +38,7 @@ unban:
 kick:
   help: "/kick <player> <reason> : Kick the specified player"
   well_kick: "&a[&2Negativity&a]&c %name% well kicked for %reason%."
-  kicked: "You have been kick by %playername% for %reason%"
+  kicked: "You have been kick by %name% for %reason%"
 report:
   report_usage: "/report <name> <reason>"
   well_report: "&a%name% wurde erfolgreich reportet!"
@@ -48,12 +48,13 @@ negativity:
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 scheint folgenden Cheat zu benutzen: &c%cheat% %nb% zeit &7(&2Wahrscheinlichkeit: %reliability%%&7)!"
   alert_hover: "&6Wahrscheinlichkeit: %reliability%%\nPing: %ping%"
   no_alerts: "&a[&2Negativity&a] No alerts to display."
+  reload_done: "&a[&2Negativity&a] Plugin reloaded."
   verif:
     invalid_cheat: "%arg% ist kein gültiger Cheat!"
     start: "&a[&2Negativity&a] &7Überprüft nun %name% auf folgenden Cheat: %cheat%"
     start_all: "&a[&2Negativity&a] Überprüft nun %name% auf alle bekannten Cheats."
     help:
-      - "/negativity verif <player> [cheats...]: Startet Verifizierung (für alle, wenn nichts angegeben wird)" 
+      - "/negativity verif <player> [cheats...]: Startet Verifizierung (für alle, wenn nichts angegeben wird)"
       - "/negativity <player>: Um weitere Informationen für einen Spieler anzuzeigen"
 inventory:
   close: "Schließen"

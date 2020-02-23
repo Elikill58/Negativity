@@ -40,7 +40,7 @@ public class AutoClickProtocol extends Cheat {
 		}
 
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		ItemUseBypass usedItemBypass = ItemUseBypass.ITEM_BYPASS.get(usedItem.getType());
+		ItemUseBypass usedItemBypass = ItemUseBypass.ITEM_BYPASS.get(usedItem.getType().getId());
 		if (usedItemBypass != null && usedItemBypass.getWhen().isClick() && usedItemBypass.isForThisCheat(this)) {
 			return;
 		}

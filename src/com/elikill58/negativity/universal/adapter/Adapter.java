@@ -55,7 +55,6 @@ public abstract class Adapter {
 		return Cheat.CHEATS;
 	}
 	public abstract void reload();
-	public abstract Object getItem(String itemName);
 	public abstract String getVersion();
 	public abstract void reloadConfig();
 	@Nonnull

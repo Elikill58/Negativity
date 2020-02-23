@@ -225,11 +225,6 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 	}
 
 	@Override
-	public Object getItem(String itemName) {
-		return null;
-	}
-
-	@Override
 	public String getVersion() {
 		return pl.getServer().getVersion().getVersion();
 	}

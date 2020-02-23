@@ -20,7 +20,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
@@ -226,14 +225,6 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 		//Bukkit.getScheduler().cancelAllTasks();
         /*Bukkit.getPluginManager().disablePlugin(sn);
         Bukkit.getPluginManager().enablePlugin(sn);*/
-	}
-
-	@Override
-	public Object getItem(String itemName) {
-		for(Material m : Material.values())
-			if(m.name().equalsIgnoreCase(itemName))
-				return m;
-		return null;
 	}
 
 	@Override

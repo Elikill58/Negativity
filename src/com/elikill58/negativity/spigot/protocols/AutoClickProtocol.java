@@ -41,8 +41,8 @@ public class AutoClickProtocol extends Cheat implements Listener {
 	private void manageClick(Player p, Cancellable e) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (p.getItemInHand() != null)
-			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType())) {
-				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType());
+			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name())) {
+				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().name());
 				if (ib.getWhen().isClick() && ib.isForThisCheat(this))
 					return;
 			}

@@ -8,14 +8,14 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class ItemUseBypass {
 
-	public static final HashMap<Object, ItemUseBypass> ITEM_BYPASS = new HashMap<>();
+	public static final HashMap<String, ItemUseBypass> ITEM_BYPASS = new HashMap<>();
 	
-	private Object item;
+	private String item;
 	private List<Cheat> cheats = new ArrayList<>();
 	private WhenBypass when;
 	
 	public ItemUseBypass(String itemName, String cheats, String when) {
-		this.item = Adapter.getAdapter().getItem(itemName);
+		this.item = itemName.toLowerCase();
 		this.when = WhenBypass.getWhenBypass(when);
 		this.cheats = updateCheats(cheats);
 		if(this.item == null)
@@ -45,7 +45,7 @@ public class ItemUseBypass {
 		return cheats.contains(c);
 	}
 	
-	public Object getItem() {
+	public String getItem() {
 		return item;
 	}
 	
@@ -54,7 +54,7 @@ public class ItemUseBypass {
 	}
 	
 	public static enum WhenBypass {
-		ALWAYS, RIGHT_CLICK(true), LEFT_CLICK(true), UNKNOW;
+		ALWAYS, RIGHT_CLICK(true), LEFT_CLICK(true), LOOKING, UNKNOW;
 		
 		private boolean isClick = false;
 		

@@ -23,7 +23,6 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.util.TypeTokens;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
@@ -279,11 +278,6 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 		SpongeNegativity.isOnBungeecord = getBooleanInConfig("hasBungeecord");
 		SpongeNegativity.log = getBooleanInConfig("log_alerts");
 		SpongeNegativity.hasBypass = getBooleanInConfig("Permissions.bypass.active");
-	}
-
-	@Override
-	public Object getItem(String itemName) {
-		return Sponge.getRegistry().getType(ItemType.class, itemName);
 	}
 
 	@Override

@@ -103,7 +103,7 @@ public class FightManager implements Listener {
 	public void blowUp(EntityExplodeEvent e) {
 		if(!e.getEntityType().equals(EntityType.PRIMED_TNT))
 			return;
-		Bukkit.getOnlinePlayers().stream().filter((p) -> e.getLocation().distance(p.getLocation()) > 5)
+		Bukkit.getOnlinePlayers().stream().filter((p) -> e.getLocation().distance(p.getLocation()) < 5)
 				.forEach((p) -> SpigotNegativityPlayer.getNegativityPlayer(p).fight());
 	}
 	

@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
@@ -318,9 +319,15 @@ public class SpigotNegativity extends JavaPlugin {
 		if (c.equals(Cheat.forKey(CheatKeys.FLY)) && p.hasPermission("essentials.fly") && essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
 			return false;
 		if (p.getItemInHand() != null)
-			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType()))
-				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType()).getWhen().equals(WhenBypass.ALWAYS))
+			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name()))
+				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().name()).getWhen().equals(WhenBypass.ALWAYS))
 					return false;
+		Block target = p.getTargetBlock(null, 5);
+		if(target != null && !target.getType().equals(Material.AIR))
+			if (ItemUseBypass.ITEM_BYPASS.containsKey(target.getType().name()))
+				if (ItemUseBypass.ITEM_BYPASS.get(target.getType().name()).getWhen().equals(WhenBypass.LOOKING))
+					return false;
+		
 		int ping = Utils.getPing(p);
 		long currentTimeMilli = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > currentTimeMilli || reliability < 30 || ping > c.getMaxAlertPing()

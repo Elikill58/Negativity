@@ -223,11 +223,6 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 
 	}
 
-	@Override
-	public Object getItem(String itemName) {
-		return null;
-	}
-
 	@SuppressWarnings("deprecation")
 	@Override
 	public String getVersion() {

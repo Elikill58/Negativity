@@ -34,7 +34,7 @@ public class FastBowProtocol extends Cheat {
 		}
 
 		ItemType usedItemType = e.getItemStack().getType();
-		ItemUseBypass usedItemBypass = ItemUseBypass.ITEM_BYPASS.get(usedItemType);
+		ItemUseBypass usedItemBypass = ItemUseBypass.ITEM_BYPASS.get(usedItemType.getId());
 		if (usedItemBypass != null && usedItemBypass.getWhen().isClick()
 				&& usedItemBypass.isForThisCheat(this)) {
 			return;

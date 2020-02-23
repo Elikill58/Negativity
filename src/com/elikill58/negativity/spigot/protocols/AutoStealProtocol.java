@@ -34,8 +34,8 @@ public class AutoStealProtocol extends Cheat implements Listener {
 		if(!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if(p.getItemInHand() != null)
-			if(ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType())) {
-				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType());
+			if(ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name())) {
+				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().name());
 				if(ib.getWhen().isClick() && ib.isForThisCheat(this))
 					if(e.getAction().name().toLowerCase().contains(ib.getWhen().name().toLowerCase()))
 						return;

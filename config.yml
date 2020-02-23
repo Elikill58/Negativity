@@ -41,7 +41,7 @@ Database:
   column_find_row: "uuid" # the column which contains the uuid of the searched player
   column_perm: "rank"
   column_lang: "lang"
-  saveInCache: false # To do less request to your database
+  saveInCache: true # To do less request to your database
 
 inventory:
   alerts:
@@ -60,6 +60,7 @@ items:
   # always : disable when the player get it in their hand
   # right_click : disable when the player right click 
   # left_click : disable when the player left click 
+  # looking : disable when the player is looking a specific type
   #
   COMPASS:
     when: always

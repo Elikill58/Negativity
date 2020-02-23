@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.listeners;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectType;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
@@ -9,6 +10,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.event.world.ExplosionEvent;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -45,5 +47,11 @@ public class FightManager {
 	@Listener
 	public void onPlayerDeath(DestructEntityEvent.Death e, @First Player p) {
 		SpongeNegativityPlayer.getNegativityPlayer(p).unfight();
+	}
+	
+	@Listener
+	public void onEntityExplode(ExplosionEvent e) {
+		Sponge.getServer().getOnlinePlayers().stream().filter((p) -> p.getPosition().distance(e.getExplosion().getLocation().getPosition()) < 5)
+				.forEach((p) -> SpongeNegativityPlayer.getNegativityPlayer(p).fight());
 	}
 }

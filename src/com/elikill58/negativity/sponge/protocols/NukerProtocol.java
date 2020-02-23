@@ -2,6 +2,7 @@ package com.elikill58.negativity.sponge.protocols;
 
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.filter.cause.First;
@@ -26,19 +27,24 @@ public class NukerProtocol extends Cheat {
 	
 	@Listener
 	public void onBlockBreak(ChangeBlockEvent.Break e, @First Player p) {
+		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
+			return;
+		}
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
 		if(e.getTransactions().size() == 0)
 			return;
 		BlockSnapshot breakedBlock = e.getTransactions().get(0).getOriginal();
-		BlockRay<World> blockRay = BlockRay.from(p).skipFilter(BlockRay.onlyAirFilter()).stopFilter(BlockRay.allFilter()).build();
+		BlockRay<World> blockRay = BlockRay.from(p).skipFilter(BlockRay.onlyAirFilter()).stopFilter(BlockRay.onlyAirFilter()).build();
 		BlockRayHit<World> target = blockRay.end().orElse(null);
-		double distance = target.getLocation().getPosition().distance(breakedBlock.getLocation().get().getPosition());
-		if (e.getTransactions().stream().filter(tr -> !tr.getOriginal().getState().getType().equals(breakedBlock.getState().getType())).count() > 0 && distance > 3.5) {
-			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(distance * 15 - Utils.getPing(p)), "BlockDig " + breakedBlock.getState().getType().getName() + ", player see " + target.getLocation().getBlock().getType().getName() + ". Distance between blocks " + distance + " block. Ping: " + Utils.getPing(p) + ". Warn: " + np.getWarn(this));				
-			if(isSetBack() && mayCancel)
-				e.setCancelled(true);
+		if(target != null) {
+			double distance = target.getLocation().getPosition().distance(breakedBlock.getLocation().get().getPosition());
+			if (e.getTransactions().stream().filter(tr -> !tr.getOriginal().getState().getType().equals(breakedBlock.getState().getType())).count() > 0 && distance > 3.5) {
+				boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(distance * 15 - Utils.getPing(p)), "BlockDig " + breakedBlock.getState().getType().getName() + ", player see " + target.getLocation().getBlock().getType().getName() + ". Distance between blocks " + distance + " block. Ping: " + Utils.getPing(p) + ". Warn: " + np.getWarn(this));				
+				if(isSetBack() && mayCancel)
+					e.setCancelled(true);
+			}
 		}
 		long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
 		if(dis < 50) {

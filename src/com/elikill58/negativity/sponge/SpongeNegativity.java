@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
@@ -49,6 +50,9 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.format.TextColors;
+import org.spongepowered.api.util.blockray.BlockRay;
+import org.spongepowered.api.util.blockray.BlockRayHit;
+import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.commands.BanCommand;
 import com.elikill58.negativity.sponge.commands.LangCommand;
@@ -430,9 +434,14 @@ public class SpongeNegativity {
 		if (np.isInFight && c.isBlockedInFight())
 			return false;
 		if (p.getItemInHand(HandTypes.MAIN_HAND).isPresent())
-			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand(HandTypes.MAIN_HAND).get().getType()))
-				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand(HandTypes.MAIN_HAND).get().getType()).getWhen()
+			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand(HandTypes.MAIN_HAND).get().getType().getId()))
+				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand(HandTypes.MAIN_HAND).get().getType().getId()).getWhen()
 						.equals(WhenBypass.ALWAYS))
+					return false;
+		Optional<BlockRayHit<World>> target = BlockRay.from(p).skipFilter(BlockRay.onlyAirFilter()).stopFilter(BlockRay.onlyAirFilter()).build().end();
+		if(target.isPresent() && !target.get().getLocation().getBlock().getType().equals(BlockTypes.AIR))
+			if (ItemUseBypass.ITEM_BYPASS.containsKey(target.get().getLocation().getBlock().getType().getId()))
+				if (ItemUseBypass.ITEM_BYPASS.get(target.get().getLocation().getBlock().getType().getId()).getWhen().equals(WhenBypass.LOOKING))
 					return false;
 		
 		int ping = Utils.getPing(p);

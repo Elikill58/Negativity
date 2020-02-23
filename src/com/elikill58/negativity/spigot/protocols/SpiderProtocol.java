@@ -114,19 +114,25 @@ public class SpiderProtocol extends Cheat implements Listener {
 	}
 	
 	private boolean hasBypassBlockAround(Location loc) {
-		for (int u = 0; u < 360; u += 3) {
-			Location flameloc = loc.clone();
-			flameloc.setZ(flameloc.getZ() + Math.cos(u) * 3);
-			flameloc.setX(flameloc.getX() + Math.sin(u) * 3);
-			String name = flameloc.clone().getBlock().getType().name(),
-					secondname = flameloc.clone().add(0, 1, 0).getBlock().getType().name();
-			if (name.contains("SLAB") || name.contains("STAIRS") || secondname.contains("SLAB")
-					|| secondname.contains("STAIRS"))
-				return true;
-		}
+		if(hasOtherThan(loc, "SLAB") || hasOtherThan(loc, "STAIRS"))
+			return true;
+		loc = loc.clone().subtract(0, 1, 0);
+		if(hasOtherThan(loc, "SLAB") || hasOtherThan(loc, "STAIRS"))
+			return true;
 		if(loc.getBlock().getType().name().contains("WATER") || loc.clone().subtract(0, 1, 0).getBlock().getType().name().contains("WATER"))
 			return true;
-		
+		return false;
+	}
+
+	public boolean hasOtherThan(Location loc, String m) {
+		if (!loc.clone().add(0, 0, 1).getBlock().getType().name().contains(m))
+			return true;
+		if (!loc.clone().add(1, 0, -1).getBlock().getType().name().contains(m))
+			return true;
+		if (!loc.clone().add(-1, 0, -1).getBlock().getType().name().contains(m))
+			return true;
+		if (!loc.clone().add(-1, 0, 1).getBlock().getType().name().contains(m))
+			return true;
 		return false;
 	}
 	

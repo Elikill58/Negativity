@@ -144,17 +144,25 @@ public class SpiderProtocol extends Cheat {
 	}
 
 	private boolean hasBypassBlockAround(Location<World> loc) {
-		for (int u = 0; u < 360; u += 3) {
-			Location<World> flameloc = loc.copy();
-			flameloc.add(Math.sin(u) * 3, 0, Math.cos(u) * 3);
-			String name = flameloc.getBlockType().getName();
-			String secondname = flameloc.add(Vector3i.UNIT_Y).getBlockType().getName();
-			if (name.contains("SLAB") || name.contains("STAIRS") || secondname.contains("SLAB")
-					|| secondname.contains("STAIRS"))
-				return true;
-		}
+		if(hasOtherThan(loc, "SLAB") || hasOtherThan(loc, "STAIRS"))
+			return true;
+		loc = loc.copy().sub(0, 1, 0);
+		if(hasOtherThan(loc, "SLAB") || hasOtherThan(loc, "STAIRS"))
+			return true;
 		return loc.getBlockType().getName().contains("WATER")
 				|| loc.sub(Vector3i.UNIT_Y).getBlockType().getName().contains("WATER");
+	}
+
+	public boolean hasOtherThan(Location<World> loc, String m) {
+		if (!loc.add(0, 0, 1).getBlockType().getId().contains(m))
+			return true;
+		if (!loc.add(1, 0, -1).getBlockType().getId().contains(m))
+			return true;
+		if (!loc.add(-1, 0, -1).getBlockType().getId().contains(m))
+			return true;
+		if (!loc.add(-1, 0, 1).getBlockType().getId().contains(m))
+			return true;
+		return false;
 	}
 
 	private static boolean isClimbableBlock(BlockType blockType) {

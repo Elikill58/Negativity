@@ -23,6 +23,7 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.bungee.BungeeTranslationProvider;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
@@ -68,12 +69,18 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 
 	@Override
 	public String getStringInConfig(String dir) {
-		return config.getString(dir);
+		if (config.contains(dir)) {
+			return config.getString(dir);
+		}
+		return DefaultConfigValue.getDefaultValueString(dir);
 	}
 
 	@Override
 	public boolean getBooleanInConfig(String dir) {
-		return config.getBoolean(dir);
+		if (config.contains(dir)) {
+			return config.getBoolean(dir);
+		}
+		return DefaultConfigValue.getDefaultValueBoolean(dir);
 	}
 
 	@Override
@@ -101,7 +108,10 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 
 	@Override
 	public int getIntegerInConfig(String dir) {
-		return config.getInt(dir);
+		if (config.contains(dir)) {
+			return config.getInt(dir);
+		}
+		return DefaultConfigValue.getDefaultValueInt(dir);
 	}
 
 	@Override
@@ -111,7 +121,10 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 
 	@Override
 	public double getDoubleInConfig(String dir) {
-		return config.getDouble(dir);
+		if (config.contains(dir)) {
+			return config.getDouble(dir);
+		}
+		return DefaultConfigValue.getDefaultValueDouble(dir);
 	}
 
 	@Override

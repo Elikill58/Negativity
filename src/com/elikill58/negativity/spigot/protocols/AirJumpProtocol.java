@@ -19,7 +19,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class AirJumpProtocol extends Cheat implements Listener {
 
 	public AirJumpProtocol() {
-		super(CheatKeys.AIR_JUMP, false, Material.FEATHER, false, true, "air jump", "air", "jump");
+		super(CheatKeys.AIR_JUMP, false, Material.FEATHER, false, true, "airjump", "air jump", "air", "jump");
 	}
 
 	@SuppressWarnings("deprecation")
@@ -31,7 +31,7 @@ public class AirJumpProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
-		if (p.isFlying() || p.getVehicle() != null || p.getItemInHand().getType().name().contains("TRIDENT") || np.hasElytra())
+		if (p.isFlying() || p.getVehicle() != null || p.getItemInHand().getType().name().contains("TRIDENT") || np.hasElytra() || np.isInFight)
 			return;
 		double temp = e.getTo().getY() - e.getFrom().getY();
 		Location loc = p.getLocation().clone();

@@ -36,7 +36,7 @@ public class NukerProtocol extends Cheat implements Listener {
 				e.setCancelled(true);
 		}
 		long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
-		if(dis < 50) {
+		if(dis < 50 && e.getBlock().getType().isSolid()) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis),
 					"Type: " + e.getBlock().getType().name() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis + " (ping: " + Utils.getPing(p) + "). Warn: " + np.getWarn(this), "2 blocks breaked in " + dis + " ms");
 			if(isSetBack() && mayCancel)

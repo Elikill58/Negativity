@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.events;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -7,6 +8,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
@@ -23,17 +25,16 @@ public class FightManager implements Listener {
 
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
-		if (!(e.getDamager() instanceof Player) || !(e.getEntity() instanceof Player))
-			return;
-		SpigotNegativityPlayer.getNegativityPlayer((Player) e.getDamager()).fight();
-		SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).fight();
+		if(e.getDamager() instanceof Player)
+			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getDamager()).fight();
+		if(e.getEntity() instanceof Player)
+			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).fight();
 	}
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageEvent e) {
-		if (!(e.getEntity() instanceof Player))
-			return;
-		SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).fight();
+		if (e.getEntity() instanceof Player)
+			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).fight();
 	}
 
 	@EventHandler
@@ -55,7 +56,7 @@ public class FightManager implements Listener {
 	public void onPlayerItemHeld(PlayerItemHeldEvent e) {
 		String name = e.getPlayer().getItemInHand().getType().name();
 		if(name.contains("SWORD") || name.contains("AXE") || name.contains("APPLE") || name.contains("BOW") || name.contains("POTION"))
-			manageFightBetweenTwoPlayers(e.getPlayer(), 20);
+			manageFightBetweenTwoPlayers(e.getPlayer(), 15);
 	}
 	
 	@EventHandler
@@ -98,15 +99,29 @@ public class FightManager implements Listener {
 		SpigotNegativityPlayer.getNegativityPlayer(e.getEntity()).unfight();
 	}
 	
+	@EventHandler
+	public void blowUp(EntityExplodeEvent e) {
+		if(!e.getEntityType().equals(EntityType.PRIMED_TNT))
+			return;
+		Bukkit.getOnlinePlayers().stream().filter((p) -> e.getLocation().distance(p.getLocation()) > 5)
+				.forEach((p) -> SpigotNegativityPlayer.getNegativityPlayer(p).fight());
+	}
+	
 	private void manageFightBetweenTwoPlayers(Player p, int maxDistance) {
 		if(!p.getWorld().getPVP())
 			return;
-		for(Player pl : Utils.getOnlinePlayers())
-			if(pl.getLocation().getWorld().equals(p.getLocation().getWorld()))
+		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		for(Player pl : Utils.getOnlinePlayers()) {
+			SpigotNegativityPlayer npOther = SpigotNegativityPlayer.getNegativityPlayer(p);
+			if(npOther.isInFight && np.isInFight)
+				continue;
+			if(pl.getLocation().getWorld().equals(p.getLocation().getWorld())) {
 				if(pl.getLocation().distance(p.getLocation()) < maxDistance) {
-					SpigotNegativityPlayer.getNegativityPlayer(p).fight();
-					SpigotNegativityPlayer.getNegativityPlayer(pl).fight();
+					if(!np.isInFight)
+						np.fight();
+					npOther.fight();
 				}
-		
+			}
+		}
 	}
 }

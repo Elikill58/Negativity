@@ -30,7 +30,7 @@ import com.flowpowered.math.vector.Vector3i;
 public class SpeedProtocol extends Cheat {
 
 	public SpeedProtocol() {
-		super(CheatKeys.SPEED, false, ItemTypes.BEACON, true, true, "speed", "speedhack");
+		super(CheatKeys.SPEED, false, ItemTypes.BEACON, CheatCategory.MOVEMENT, true, "speed", "speedhack");
 	}
 
 	@Listener
@@ -116,5 +116,10 @@ public class SpeedProtocol extends Cheat {
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";
+	}
+	
+	@Override
+	public boolean isBlockedInFight() {
+		return true;
 	}
 }

@@ -4,9 +4,9 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -25,7 +25,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class SpeedProtocol extends Cheat implements Listener {
 
 	public SpeedProtocol() {
-		super(CheatKeys.SPEED, false, Material.BEACON, true, true, "speed", "speedhack");
+		super(CheatKeys.SPEED, false, Material.BEACON, CheatCategory.MOVEMENT, true, "speed", "speedhack");
 	}
 
 	@SuppressWarnings("deprecation")
@@ -92,5 +92,10 @@ public class SpeedProtocol extends Cheat implements Listener {
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";
+	}
+	
+	@Override
+	public boolean isBlockedInFight() {
+		return true;
 	}
 }

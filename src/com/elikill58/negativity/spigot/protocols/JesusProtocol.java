@@ -27,7 +27,7 @@ public class JesusProtocol extends Cheat implements Listener {
 			LILY = Utils.getMaterialWith1_15_Compatibility("WATER_LILY", "LEGACY_WATER_LILY");
 	
 	public JesusProtocol() {
-		super(CheatKeys.JESUS, false, Material.WATER_BUCKET, false, true, "waterwalk", "water", "water walk");
+		super(CheatKeys.JESUS, false, Material.WATER_BUCKET, CheatCategory.MOVEMENT, true, "waterwalk", "water", "water walk");
 	}
 
 	@EventHandler

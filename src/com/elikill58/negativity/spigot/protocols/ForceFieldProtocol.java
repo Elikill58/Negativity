@@ -26,7 +26,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	private NumberFormat nf = NumberFormat.getInstance();
 	
 	public ForceFieldProtocol() {
-		super(CheatKeys.FORCEFIELD, true, Material.DIAMOND_SWORD, true, true, "ff", "killaura");
+		super(CheatKeys.FORCEFIELD, true, Material.DIAMOND_SWORD, CheatCategory.COMBAT, true, "ff", "killaura");
 		nf.setMaximumIntegerDigits(2);
 	}
 

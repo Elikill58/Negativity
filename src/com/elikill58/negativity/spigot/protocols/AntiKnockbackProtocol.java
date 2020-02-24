@@ -29,7 +29,7 @@ import com.elikill58.negativity.universal.Version;
 public class AntiKnockbackProtocol extends Cheat implements Listener {
 	
 	public AntiKnockbackProtocol() {
-		super(CheatKeys.ANTI_KNOCKBACK, false, Material.STICK, false, true, "antikb", "anti-kb", "no-kb", "nokb");
+		super(CheatKeys.ANTI_KNOCKBACK, false, Material.STICK, CheatCategory.COMBAT, true, "antikb", "anti-kb", "no-kb", "nokb");
 	}
 
 	@SuppressWarnings("deprecation")

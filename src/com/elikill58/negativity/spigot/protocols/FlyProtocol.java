@@ -23,8 +23,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class FlyProtocol extends Cheat implements Listener {
 
 	public FlyProtocol() {
-		super(CheatKeys.FLY, true, Utils.getMaterialWith1_15_Compatibility("FIREWORK", "LEGACY_FIREWORK"), true, true,
-				"flyhack");
+		super(CheatKeys.FLY, true, Utils.getMaterialWith1_15_Compatibility("FIREWORK", "LEGACY_FIREWORK"), CheatCategory.MOVEMENT, true, "flyhack");
 	}
 
 	@SuppressWarnings("deprecation")
@@ -101,5 +100,10 @@ public class FlyProtocol extends Cheat implements Listener {
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";
+	}
+	
+	@Override
+	public boolean isBlockedInFight() {
+		return true;
 	}
 }

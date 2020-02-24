@@ -21,7 +21,7 @@ public class ScaffoldProtocol extends Cheat implements Listener {
 	private ScaffoldProtocol instance;
 	
 	public ScaffoldProtocol() {
-		super(CheatKeys.SCAFFOLD, false, Material.GRASS, false, true);
+		super(CheatKeys.SCAFFOLD, false, Material.GRASS, CheatCategory.WORLD, true);
 		instance = this;
 	}
 

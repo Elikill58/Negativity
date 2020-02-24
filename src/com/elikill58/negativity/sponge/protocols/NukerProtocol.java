@@ -22,7 +22,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class NukerProtocol extends Cheat {
 
 	public NukerProtocol() {
-		super(CheatKeys.NUKER, true, ItemTypes.BEDROCK, false, true, "breaker", "bed breaker", "bedbreaker");
+		super(CheatKeys.NUKER, true, ItemTypes.BEDROCK, CheatCategory.WORLD, true, "breaker", "bed breaker", "bedbreaker");
 	}
 	
 	@Listener

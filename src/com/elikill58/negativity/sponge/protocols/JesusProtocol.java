@@ -22,13 +22,16 @@ import org.spongepowered.api.world.World;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
-import com.elikill58.negativity.universal.*;
+import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.ReportType;
 import com.flowpowered.math.vector.Vector3i;
 
 public class JesusProtocol extends Cheat {
 
 	public JesusProtocol() {
-		super(CheatKeys.JESUS, false, ItemTypes.WATER_BUCKET, false, true, "waterwalk", "water");
+		super(CheatKeys.JESUS, false, ItemTypes.WATER_BUCKET, CheatCategory.MOVEMENT, true, "waterwalk", "water");
 	}
 
 	@Listener

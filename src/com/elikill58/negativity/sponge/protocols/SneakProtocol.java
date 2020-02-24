@@ -9,7 +9,7 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 public class SneakProtocol extends Cheat {
 
 	public SneakProtocol() {
-		super(CheatKeys.SNEAK, true, ItemTypes.BLAZE_POWDER, false, false, "sneack");
+		super(CheatKeys.SNEAK, true, ItemTypes.BLAZE_POWDER, CheatCategory.MOVEMENT, false, "sneack");
 	}
 
 	

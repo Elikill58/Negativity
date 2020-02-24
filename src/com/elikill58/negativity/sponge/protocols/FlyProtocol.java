@@ -28,7 +28,7 @@ import com.flowpowered.math.vector.Vector3i;
 public class FlyProtocol extends Cheat {
 
 	public FlyProtocol() {
-		super(CheatKeys.FLY, true, ItemTypes.FIREWORKS, true, true, "flyhack");
+		super(CheatKeys.FLY, true, ItemTypes.FIREWORKS, CheatCategory.MOVEMENT, true, "flyhack");
 	}
 
 	@Listener
@@ -125,5 +125,10 @@ public class FlyProtocol extends Cheat {
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";
+	}
+	
+	@Override
+	public boolean isBlockedInFight() {
+		return true;
 	}
 }

@@ -24,7 +24,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class AutoStealProtocol extends Cheat {
 
 	public AutoStealProtocol() {
-		super(CheatKeys.AUTO_STEAL, false, ItemTypes.CHEST, false, true, "steal");
+		super(CheatKeys.AUTO_STEAL, false, ItemTypes.CHEST, CheatCategory.PLAYER, true, "steal");
 	}
 
 	public static final int TIME_CLICK = 50;

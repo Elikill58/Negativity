@@ -21,7 +21,7 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 public class AntiPotionProtocol extends Cheat implements Listener {
 
 	public AntiPotionProtocol() {
-		super(CheatKeys.ANTI_POTION, true, Material.POTION, false, true, "antipopo", "nopotion", "anti-potion");
+		super(CheatKeys.ANTI_POTION, true, Material.POTION, CheatCategory.COMBAT, true, "antipopo", "nopotion", "anti-potion");
 	}
 
 	@EventHandler (ignoreCancelled = true)

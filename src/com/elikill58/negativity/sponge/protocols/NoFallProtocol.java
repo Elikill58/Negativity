@@ -24,7 +24,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class NoFallProtocol extends Cheat {
 
 	public NoFallProtocol() {
-		super(CheatKeys.NO_FALL, false, ItemTypes.WOOL, false, true, "fall");
+		super(CheatKeys.NO_FALL, false, ItemTypes.WOOL, CheatCategory.MOVEMENT, true, "fall");
 	}
 
 	@Listener

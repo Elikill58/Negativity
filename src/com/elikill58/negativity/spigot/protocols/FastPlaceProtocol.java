@@ -18,7 +18,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class FastPlaceProtocol extends Cheat implements Listener {
 
 	public FastPlaceProtocol() {
-		super(CheatKeys.FAST_PLACE, false, Material.DIRT, false, true, "fp");
+		super(CheatKeys.FAST_PLACE, false, Material.DIRT, CheatCategory.WORLD, true, "fp");
 	}
 
 	@EventHandler (ignoreCancelled = true)

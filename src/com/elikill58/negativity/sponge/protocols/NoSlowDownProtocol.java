@@ -25,7 +25,7 @@ import com.flowpowered.math.vector.Vector3d;
 public class NoSlowDownProtocol extends Cheat {
 
 	public NoSlowDownProtocol() {
-		super(CheatKeys.NO_SLOW_DOWN, false, ItemTypes.SOUL_SAND, false, true, "slowdown");
+		super(CheatKeys.NO_SLOW_DOWN, false, ItemTypes.SOUL_SAND, CheatCategory.MOVEMENT, true, "slowdown");
 	}
 
 	@Listener

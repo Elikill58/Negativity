@@ -13,15 +13,16 @@ public abstract class Cheat {
 
 	public static final List<Cheat> CHEATS = new ArrayList<>();
 	public static final Map<String, Cheat> CHEATS_BY_KEY = new HashMap<>();
-	private boolean needPacket, blockedInFight, hasListener;
+	private boolean needPacket, hasListener;
+	private CheatCategory cheatCategory;
 	private String key, name;
 	private Object m;
 	private String[] aliases;
 
-	public Cheat(String key, boolean needPacket, Object m, boolean blockedInFight, boolean hasListener, String... alias) {
+	public Cheat(String key, boolean needPacket, Object m, CheatCategory type, boolean hasListener, String... alias) {
 		this.needPacket = needPacket;
 		this.m = m;
-		this.blockedInFight = blockedInFight;
+		this.cheatCategory = type;
 		this.hasListener = hasListener;
 		this.key = key.toLowerCase();
 		this.name = Adapter.getAdapter().getStringInConfig("cheats." + key.toLowerCase() + ".exact_name");
@@ -45,7 +46,11 @@ public abstract class Cheat {
 	}
 	
 	public boolean isBlockedInFight() {
-		return blockedInFight;
+		return false;
+	}
+	
+	public CheatCategory getCheatCategory() {
+		return cheatCategory;
 	}
 
 	public boolean needPacket() {
@@ -61,9 +66,6 @@ public abstract class Cheat {
 	}
 
 	public boolean isAutoVerif() {
-		/*if (this.equals(ALL))
-			return false;
-		else*/
 		return Adapter.getAdapter().getBooleanInConfig("cheats." + key + ".autoVerif");
 	}
 
@@ -159,5 +161,9 @@ public abstract class Cheat {
 
 	public static List<Cheat> values() {
 		return CHEATS;
+	}
+	
+	public static enum CheatCategory {
+		COMBAT, MOVEMENT, WORLD, PLAYER;
 	}
 }

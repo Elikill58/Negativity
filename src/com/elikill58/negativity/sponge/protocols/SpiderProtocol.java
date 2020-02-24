@@ -34,7 +34,7 @@ public class SpiderProtocol extends Cheat {
 	}
 
 	public SpiderProtocol() {
-		super(CheatKeys.SPIDER, false, ItemTypes.WEB, false, true, "wallhack", "wall");
+		super(CheatKeys.SPIDER, false, ItemTypes.WEB, CheatCategory.MOVEMENT, true, "wallhack", "wall");
 	}
 
 	@Listener

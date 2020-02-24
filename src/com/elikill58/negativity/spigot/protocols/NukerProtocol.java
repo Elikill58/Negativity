@@ -18,7 +18,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class NukerProtocol extends Cheat implements Listener {
 
 	public NukerProtocol() {
-		super(CheatKeys.NUKER, true, Material.BEDROCK, false, true, "breaker", "bed breaker", "bedbreaker");
+		super(CheatKeys.NUKER, true, Material.BEDROCK, CheatCategory.WORLD, true, "breaker", "bed breaker", "bedbreaker");
 	}
 	
 	@EventHandler

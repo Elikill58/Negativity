@@ -22,7 +22,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class ScaffoldProtocol extends Cheat {
 
 	public ScaffoldProtocol() {
-		super(CheatKeys.SCAFFOLD, false, ItemTypes.GRASS, false, true);
+		super(CheatKeys.SCAFFOLD, false, ItemTypes.GRASS, CheatCategory.WORLD, true);
 	}
 
 	@Listener

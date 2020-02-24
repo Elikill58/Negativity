@@ -21,7 +21,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class FastBowProtocol extends Cheat implements Listener {
 	
 	public FastBowProtocol() {
-		super(CheatKeys.FAST_BOW, true, Material.BOW, false, true, "bow");
+		super(CheatKeys.FAST_BOW, true, Material.BOW, CheatCategory.COMBAT, true, "bow");
 	}
 	
 	@EventHandler (ignoreCancelled = true)

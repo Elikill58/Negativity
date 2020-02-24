@@ -22,7 +22,7 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 public class AntiPotionProtocol extends Cheat {
 
 	public AntiPotionProtocol() {
-		super(CheatKeys.ANTI_POTION, true, ItemTypes.POTION, false, true, "antipopo", "nopotion", "anti-potion");
+		super(CheatKeys.ANTI_POTION, true, ItemTypes.POTION, CheatCategory.COMBAT, true, "antipopo", "nopotion", "anti-potion");
 	}
 
 	@Listener

@@ -36,7 +36,7 @@ import com.flowpowered.math.vector.Vector3d;
 public class AntiKnockbackProtocol extends Cheat {
 
 	public AntiKnockbackProtocol() {
-		super(CheatKeys.ANTI_KNOCKBACK, false, ItemTypes.STICK, false, true, "antikb", "anti-kb", "no-kb");
+		super(CheatKeys.ANTI_KNOCKBACK, false, ItemTypes.STICK, CheatCategory.COMBAT, true, "antikb", "anti-kb", "no-kb");
 	}
 
 	@Listener

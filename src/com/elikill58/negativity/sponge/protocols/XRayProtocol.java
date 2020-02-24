@@ -9,7 +9,7 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 public class XRayProtocol extends Cheat {
 	
 	public XRayProtocol() {
-		super(CheatKeys.XRAY, false, ItemTypes.EMERALD_ORE, false, false);
+		super(CheatKeys.XRAY, false, ItemTypes.EMERALD_ORE, CheatCategory.WORLD, false);
 	}
 	
 	@Override

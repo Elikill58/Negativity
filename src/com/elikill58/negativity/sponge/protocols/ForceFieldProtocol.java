@@ -32,7 +32,7 @@ public class ForceFieldProtocol extends Cheat {
 	private final NumberFormat distanceFormatter = new DecimalFormat();
 
 	public ForceFieldProtocol() {
-		super(CheatKeys.FORCEFIELD, true, ItemTypes.DIAMOND_SWORD, true, true, "ff", "killaura");
+		super(CheatKeys.FORCEFIELD, true, ItemTypes.DIAMOND_SWORD, CheatCategory.COMBAT, true, "ff", "killaura");
 		distanceFormatter.setMaximumIntegerDigits(2);
 	}
 

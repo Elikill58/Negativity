@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.StringJoiner;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -42,6 +43,7 @@ import com.elikill58.negativity.spigot.listeners.PlayerCheatKickEvent;
 import com.elikill58.negativity.spigot.packets.PacketListenerAPI;
 import com.elikill58.negativity.spigot.packets.PacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
+import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
 import com.elikill58.negativity.spigot.support.WorldGuardAPI;
 import com.elikill58.negativity.spigot.timers.ActualizeClickTimer;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
@@ -50,6 +52,7 @@ import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
 import com.elikill58.negativity.spigot.timers.TimerTimeBetweenAlert;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
@@ -76,7 +79,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
 	public static boolean isOnBungeecord = false, log = false, log_console = false, hasBypass = false, essentialsSupport = false,
-			worldGuardSupport = false;
+			worldGuardSupport = false, gadgetMenuSupport = false;
 	public static Material MATERIAL_CLOSE = Material.REDSTONE;
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
@@ -177,32 +180,36 @@ public class SpigotNegativity extends JavaPlugin {
 			}
 		});
 
+		StringJoiner supportedPluginName = new StringJoiner(", ");
+		
 		if (Bukkit.getPluginManager().getPlugin("Essentials") != null) {
 			essentialsSupport = true;
 			if(ada.getStringInConfig("ban.other_plugin.plugin_used").equalsIgnoreCase("essentials"))
 				Ban.addBanPlugin(new EssentialsBanSupport());
+			supportedPluginName.add("Essentials");
 		}
 		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
 			worldGuardSupport = true;
 			WorldGuardAPI.init();
+			supportedPluginName.add("WorldGuard");
 		}
-
-		if (essentialsSupport || worldGuardSupport) {
-			String s = (essentialsSupport
-					? (worldGuardSupport ? "Essentials and WorldGuard plugins are detected."
-							: "Essentials plugin detected.")
-					: "WorldGuard plugin detected.");
-			getLogger().info(s + " Loading support ..." + (ada.getStringInConfig("ban.other_plugin.plugin_used").equalsIgnoreCase("essentials") && essentialsSupport ? " (Essentials also used as Ban plugin)" : ""));
+		if (Bukkit.getPluginManager().getPlugin("GadgetsMenu") != null) {
+			gadgetMenuSupport = true;
+			supportedPluginName.add("GadgetsMenu");
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("MaxBans") != null && ada.getStringInConfig("ban.other_plugin.plugin_used").equalsIgnoreCase("MaxBans")) {
 			Ban.addBanPlugin(new MaxBansSupport());
-			getLogger().info("Ban plugin MaxBans found ! Loading support ...");
+			supportedPluginName.add("MaxBans");
 		}
 
 		if (Bukkit.getPluginManager().getPlugin("AdvancedBan") != null && ada.getStringInConfig("ban.other_plugin.plugin_used").equalsIgnoreCase("AdvancedBan")) {
 			Ban.addBanPlugin(new AdvancedBanSupport());
-			getLogger().info("Ban plugin AdvancedBan found ! Loading support ...");
+			supportedPluginName.add("AdvancedBan");
+		}
+		
+		if(supportedPluginName.length() > 0) {
+			getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
 		}
 	}
 	
@@ -317,6 +324,8 @@ public class SpigotNegativity extends JavaPlugin {
 		if (np.isInFight && c.isBlockedInFight())
 			return false;
 		if (c.equals(Cheat.forKey(CheatKeys.FLY)) && p.hasPermission("essentials.fly") && essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
+			return false;
+		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT) && gadgetMenuSupport &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
 			return false;
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name()))

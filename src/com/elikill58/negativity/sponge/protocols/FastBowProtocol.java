@@ -22,7 +22,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class FastBowProtocol extends Cheat {
 
 	public FastBowProtocol() {
-		super(CheatKeys.FAST_BOW, true, ItemTypes.BOW, false, true, "bow");
+		super(CheatKeys.FAST_BOW, true, ItemTypes.BOW, CheatCategory.COMBAT, true, "bow");
 	}
 
 	@Listener

@@ -27,7 +27,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 public class AutoClickProtocol extends Cheat {
 
 	public AutoClickProtocol() {
-		super(CheatKeys.AUTO_CLICK, false, ItemTypes.FISHING_ROD, false, true, "auto-click", "autoclic");
+		super(CheatKeys.AUTO_CLICK, false, ItemTypes.FISHING_ROD, CheatCategory.COMBAT, true, "auto-click", "autoclic");
 	}
 
 	public static final int CLICK_ALERT = Adapter.getAdapter().getIntegerInConfig("cheats.autoclick.click_alert");

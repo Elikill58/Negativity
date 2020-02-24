@@ -26,7 +26,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class RegenProtocol extends Cheat {
 
 	public RegenProtocol() {
-		super(CheatKeys.REGEN, true, ItemTypes.GOLDEN_APPLE, false, true, "regen", "autoregen");
+		super(CheatKeys.REGEN, true, ItemTypes.GOLDEN_APPLE, CheatCategory.PLAYER, true, "regen", "autoregen");
 	}
 
 	@Listener

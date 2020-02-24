@@ -25,7 +25,7 @@ import com.flowpowered.math.vector.Vector3d;
 public class StepProtocol extends Cheat {
 
 	public StepProtocol() {
-		super(CheatKeys.STEP, false, ItemTypes.BRICK_STAIRS, true, true);
+		super(CheatKeys.STEP, false, ItemTypes.BRICK_STAIRS, CheatCategory.MOVEMENT, true);
 	}
 
 	@Listener
@@ -99,5 +99,10 @@ public class StepProtocol extends Cheat {
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";
+	}
+	
+	@Override
+	public boolean isBlockedInFight() {
+		return true;
 	}
 }

@@ -19,7 +19,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 public class ChatProtocol extends Cheat {
 
 	public ChatProtocol() {
-		super(CheatKeys.CHAT, false, ItemTypes.WRITABLE_BOOK, false, true);
+		super(CheatKeys.CHAT, false, ItemTypes.WRITABLE_BOOK, CheatCategory.PLAYER, true);
 	}
 
 	@Listener

@@ -15,7 +15,7 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 public class BlinkProtocol extends Cheat {
 
 	public BlinkProtocol() {
-		super(CheatKeys.BLINK, true, ItemTypes.COAL_BLOCK, false, true);
+		super(CheatKeys.BLINK, true, ItemTypes.COAL_BLOCK, CheatCategory.MOVEMENT, true);
 	}
 	
 	@Listener

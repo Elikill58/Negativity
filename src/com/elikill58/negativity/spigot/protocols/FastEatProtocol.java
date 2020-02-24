@@ -15,7 +15,7 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 public class FastEatProtocol extends Cheat implements Listener {
 	
 	public FastEatProtocol() {
-		super(CheatKeys.FAST_EAT, true, Material.COOKED_BEEF, false, true, "fasteat", "autoeat");
+		super(CheatKeys.FAST_EAT, true, Material.COOKED_BEEF, CheatCategory.PLAYER, true, "fasteat", "autoeat");
 	}
 
 	@SuppressWarnings("deprecation")

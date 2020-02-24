@@ -22,7 +22,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class StepProtocol extends Cheat implements Listener {
 
 	public StepProtocol() {
-		super(CheatKeys.STEP, false, Material.BRICK_STAIRS, true, true);
+		super(CheatKeys.STEP, false, Material.BRICK_STAIRS, CheatCategory.MOVEMENT, true);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -82,5 +82,10 @@ public class StepProtocol extends Cheat implements Listener {
 	@Override
 	public String getHoverFor(NegativityPlayer p) {
 		return "";
+	}
+	
+	@Override
+	public boolean isBlockedInFight() {
+		return true;
 	}
 }

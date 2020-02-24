@@ -24,7 +24,7 @@ import com.flowpowered.math.vector.Vector3i;
 public class PhaseProtocol extends Cheat {
 
 	public PhaseProtocol() {
-		super(CheatKeys.PHASE, false, ItemTypes.STAINED_GLASS, false, true);
+		super(CheatKeys.PHASE, false, ItemTypes.STAINED_GLASS, CheatCategory.MOVEMENT, true);
 	}
 
 	@Listener

@@ -46,9 +46,16 @@ public class NoFallProtocol extends Cheat {
 		if (!(p.getVehicle().isPresent() || distance == 0.0D || from.getY() < to.getY()) && fallDistance == 0.0F
 				&& !np.hasPotionEffect(PotionEffectTypes.SPEED)
 				&& p.getLocation().sub(0, 1, 0).getBlockType().equals(BlockTypes.AIR)) {
+			int reliability = Utils.parseInPorcent(distance * 100);
+			if (np.justDismounted) {
+				// If the player dismounted a vehicule a few ticks ago, we may be wrong
+				// For example, flying with pixelmons and dismounting may cause false positives
+				reliability *= 0.75;
+			}
+
 			if (p.isOnGround()) {
 				if (distance > 0.79D) {
-					if (SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, Utils.parseInPorcent(distance * 100),
+					if (SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, reliability,
 							"Player in ground. FallDamage: " + fallDistance + ", DistanceBetweenFromAndTo: " + distance
 									+ " (ping: " + Utils.getPing(p) + "). Warn: " + np.getWarn(this)))
 						np.NO_FALL_DAMAGE += 1;
@@ -60,7 +67,7 @@ public class NoFallProtocol extends Cheat {
 			} else {
 				if (distance > 2D) {
 					boolean mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this,
-							Utils.parseInPorcent(distance * 100),
+							reliability,
 							"Player not in ground no fall Damage. FallDistance: " + fallDistance
 									+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + Utils.getPing(p)
 									+ "). Warn: " + np.getWarn(this));

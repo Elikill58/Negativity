@@ -44,7 +44,6 @@ import com.elikill58.negativity.spigot.packets.PacketListenerAPI;
 import com.elikill58.negativity.spigot.packets.PacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
-import com.elikill58.negativity.spigot.support.WorldGuardAPI;
 import com.elikill58.negativity.spigot.timers.ActualizeClickTimer;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
@@ -190,7 +189,6 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
 			worldGuardSupport = true;
-			WorldGuardAPI.init();
 			supportedPluginName.add("WorldGuard");
 		}
 		if (Bukkit.getPluginManager().getPlugin("GadgetsMenu") != null) {

@@ -15,6 +15,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -53,6 +54,9 @@ public class SpeedProtocol extends Cheat implements Listener {
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		boolean mayCancel = false;
 		if (p.isOnGround() && y >= 0.75D) {
+			if(p.getWalkSpeed() > 0.5F && SpigotNegativity.essentialsSupport && EssentialsSupport.checkEssentialsSpeedPrecondition(p))
+					return;
+			
 			ReportType type = ReportType.WARNING;
 			if (np.getWarn(this) > 7)
 				type = ReportType.VIOLATION;

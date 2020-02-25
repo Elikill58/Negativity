@@ -483,8 +483,9 @@ public class SpongeNegativity {
 			Map<Cheat, Long> lastAlerts = LAST_ALERTS_TIME.computeIfAbsent(p.getUniqueId(), playerId -> new HashMap<>());
 			Long lastAlert = lastAlerts.put(c, timeMillis);
 			if (lastAlert != null && (timeMillis - lastAlert) < timeBetweenTwoAlerts) {
-				np.pendingAlerts.computeIfAbsent(c, cheat -> new ArrayList<>())
-						.add(alert);
+				List<PlayerCheatEvent.Alert> tempList = np.pendingAlerts.containsKey(c) ? np.pendingAlerts.get(c) : new ArrayList<>();
+				tempList.add(alert);
+				np.pendingAlerts.put(c, tempList);
 				return true;
 			}
 		}

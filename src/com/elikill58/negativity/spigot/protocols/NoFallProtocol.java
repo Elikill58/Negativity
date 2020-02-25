@@ -33,13 +33,12 @@ public class NoFallProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if(p.getAllowFlight() || np.hasElytra())
+		if(p.getAllowFlight() || np.hasElytra() || p.getVehicle() != null || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double distance = to.toVector().distance(from.toVector());
-		if (!(p.getVehicle() != null || distance == 0.0D || from.getY() < to.getY()))
-			if (p.getFallDistance() == 0.0F && !p.hasPotionEffect(PotionEffectType.SPEED)
-					&& p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
+		if (!(distance == 0.0D || from.getY() < to.getY())) {
+			if (p.getFallDistance() == 0.0F && p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
 				int relia = Utils.parseInPorcent(distance * 100);
 				if (p.isOnGround()) {
 					if (distance > 0.79D) {
@@ -68,7 +67,19 @@ public class NoFallProtocol extends Cheat implements Listener {
 						np.NO_FALL_DAMAGE = 0;
 					}
 				}
+			} else if(!p.isOnGround()) {
+				Material justUnder = p.getLocation().clone().subtract(0, 0.1, 0).getBlock().getType();
+				if(justUnder.isSolid() && p.getFallDistance() > 3.0) {
+					int ping = Utils.getPing(p), relia = Utils.parseInPorcent(100 - (ping / 5) + p.getFallDistance());
+					boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
+							"Player not ground with fall damage (FallDistance: " + p.getFallDistance() + "). Block 0.1 below: " + justUnder.name()
+									+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + ping
+									+ "). Warn: " + np.getWarn(this), "");
+					if(mayCancel && isSetBack())
+						manageDamage(p, (int) p.getFallDistance(), relia);
+				}
 			}
+		}
 	}
 	
 	private void manageDamage(Player p, int damage, int relia) {

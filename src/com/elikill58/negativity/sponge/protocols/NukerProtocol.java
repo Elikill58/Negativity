@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge.protocols;
 
 import org.spongepowered.api.block.BlockSnapshot;
+import org.spongepowered.api.data.property.block.SolidCubeProperty;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
@@ -47,7 +48,7 @@ public class NukerProtocol extends Cheat {
 			}
 		}
 		long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
-		if(dis < 50) {
+		if(dis < 50 && breakedBlock.getProperty(SolidCubeProperty.class).get().getValue()) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis),
 					"Type: " + breakedBlock.getState().getType().getName() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis + " (ping: " + Utils.getPing(p) + "). Warn: " + np.getWarn(this));
 			if(isSetBack() && mayCancel)

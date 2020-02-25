@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -26,6 +27,8 @@ public class NukerProtocol extends Cheat implements Listener {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.ACTIVE_CHEAT.contains(this))
+			return;
+		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		Block target = p.getTargetBlock(null, 5);
 		double distance = target.getLocation().distance(e.getBlock().getLocation());

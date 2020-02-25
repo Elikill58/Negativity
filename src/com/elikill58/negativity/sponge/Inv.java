@@ -167,10 +167,10 @@ public class Inv {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
 		for (Cheat c : Cheat.values())
-			if ((c.isActive() && Adapter.getAdapter().getBooleanInConfig("inventory.alerts.see.only_cheat_active")
+			if ((c.isActive() && Adapter.getAdapter().getBooleanInConfig("inventory.alerts.only_cheat_active")
 					&& np.hasDetectionActive(c))
 					|| (!np.hasDetectionActive(c)
-							&& Adapter.getAdapter().getBooleanInConfig("inventory.alerts.see.no_started_verif_cheat")))
+							&& Adapter.getAdapter().getBooleanInConfig("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
 		for (Cheat c : TO_SEE)
 			if (c.getMaterial() != null)

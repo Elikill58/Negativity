@@ -20,7 +20,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class SpiderProtocol extends Cheat implements Listener {
 
 	public SpiderProtocol() {
-		super(CheatKeys.SPIDER, false, Utils.getMaterialWith1_15_Compatibility("WEB", "COBWEB"), CheatCategory.MOVEMENT, true, "wallhack",
+		super(CheatKeys.SPIDER, false, Material.SPIDER_EYE, CheatCategory.MOVEMENT, true, "wallhack",
 				"wall");
 	}
 

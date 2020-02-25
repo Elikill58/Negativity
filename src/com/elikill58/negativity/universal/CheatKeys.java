@@ -18,6 +18,7 @@ public class CheatKeys {
 	public static final String JESUS = "JESUS";
 	public static final String NO_FALL = "NOFALL";
 	public static final String NO_SLOW_DOWN = "NOSLOWDOWN";
+	public static final String NO_WEB = "NOWEB";
 	public static final String NUKER = "NUKER";
 	public static final String PHASE = "PHASE";
 	public static final String REGEN = "REGEN";

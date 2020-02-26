@@ -418,11 +418,16 @@ public class SpongeNegativity {
 	}
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, "");
+		return alertMod(type, p, c, reliability, proof, "", "");
 	}
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
-			String hover_proof) {
+							   String hover_proof) {
+		return alertMod(type, p, c, reliability, proof, hover_proof, "");
+	}
+
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
+								   String hover_proof, String stats_send) {
 		if(!c.isActive())
 			return false;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
@@ -461,7 +466,7 @@ public class SpongeNegativity {
 		}
 		logProof(type, p, c, reliability, proof, ping);
 		PlayerCheatEvent.Alert alert = new PlayerCheatEvent.Alert(type, p, c, reliability,
-				c.getReliabilityAlert() < reliability, hover_proof, ping);
+				c.getReliabilityAlert() < reliability, hover_proof, ping, stats_send);
 		Sponge.getEventManager().post(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
@@ -472,11 +477,15 @@ public class SpongeNegativity {
 			if (!kick.isCancelled())
 				p.kick(Messages.getMessage(p, "kick", "%cheat%", c.getName()));
 		}
-		if(np.isBanned())
+		if(np.isBanned()) {
+			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
+		}
 		Ban.manageBan(c, np, reliability);
-		if (Ban.isBanned(np.getAccount()))
+		if (Ban.isBanned(np.getAccount())) {
+			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
+		}
 
 		int timeBetweenTwoAlerts = Adapter.getAdapter().getIntegerInConfig("time_between_alert");
 		if (timeBetweenTwoAlerts >= 0) {
@@ -490,13 +499,14 @@ public class SpongeNegativity {
 			}
 		}
 
-		sendAlertMessage(type, p, c, reliability, hover_proof, np, ping, alert, 1);
+		sendAlertMessage(type, p, c, reliability, hover_proof, np, ping, alert, 1, stats_send);
 		np.pendingAlerts.remove(c);
 		return true;
 	}
 
 	public static void sendAlertMessage(ReportType type, Player p, Cheat c, int reliability,
-										String hoverProof, SpongeNegativityPlayer np, int ping, PlayerCheatEvent.Alert alert, int alertsCount) {
+										String hoverProof, SpongeNegativityPlayer np, int ping, PlayerCheatEvent.Alert alert, int alertsCount, String stats_send) {
+		Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 		if (isOnBungeecord) {
 			sendAlertMessage(p, c.getName(), reliability, ping, hoverProof, alertsCount);
 			return;

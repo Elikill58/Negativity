@@ -62,11 +62,13 @@ public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent
     public static class Alert extends PlayerCheatEvent implements Cancellable {
 
         private boolean hasRelia, alert;
+        private final String stats_send;
 
-        public Alert(ReportType reportType, Player p, Cheat c, int reliability, boolean hasRelia, String hoverProof, int ping) {
+        public Alert(ReportType reportType, Player p, Cheat c, int reliability, boolean hasRelia, String hoverProof, int ping, String stats_send) {
             super(reportType, p, c, reliability, hoverProof, ping);
             this.hasRelia = hasRelia;
             this.alert = hasRelia;
+            this.stats_send = stats_send;
         }
 
         private boolean cancelled = false;
@@ -90,6 +92,10 @@ public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent
 
         public boolean isAlert() {
             return alert;
+        }
+
+        public String getStatsSend() {
+            return stats_send;
         }
     }
 

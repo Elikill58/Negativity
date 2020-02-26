@@ -72,10 +72,10 @@ public class SpeedProtocol extends Cheat {
 		String proof = "In ground: " + p.isOnGround() + "WalkSpeed: " + p.get(Keys.WALKING_SPEED).get() + "  Distance between from/to location: " + distance;
 		if (p.isOnGround() && distance >= 0.75D) {
 			mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent(distance * 100 * 2), proof,
-					"Distance Last/New position: " + distance + "\n(With same Y)\nPlayer on ground");
+					"Distance Last/New position: " + distance + "\n(With same Y)\nPlayer on ground", "Distance Last-New position: " + distance);
 		} else if (!p.isOnGround() && distance >= 0.85D) {
 			mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent(distance * 100 * 2), proof,
-					"Distance Last/New position: " + distance + "\n(With same Y)\nPlayer jumping");
+					"Distance Last/New position: " + distance + "\n(With same Y)\nPlayer jumping", "Distance Last-New position: " + distance);
 		}
 
 		if (mayCancel && isSetBack()) {

@@ -19,7 +19,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class AirJumpProtocol extends Cheat implements Listener {
 
 	public AirJumpProtocol() {
-		super(CheatKeys.AIR_JUMP, false, Material.FEATHER, CheatCategory.MOVEMENT, true, "airjump", "air jump", "air", "jump");
+		super(CheatKeys.AIR_JUMP, false, Material.FEATHER, CheatCategory.MOVEMENT, true, "airjump", "air", "jump");
 	}
 
 	@SuppressWarnings("deprecation")

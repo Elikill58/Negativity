@@ -557,7 +557,7 @@ cheats:
   # AirJump make you jump on air
   airjump:
     ping: 150
-    exact_name: "Air Jump"
+    exact_name: "AirJump"
     isActive: true
     reliability_alert: 60
     autoVerif: true

@@ -9,6 +9,7 @@ public class CheatKeys {
 	public static final String AUTO_STEAL = "AUTOSTEAL";
 	public static final String BLINK = "BLINK";
 	public static final String CHAT = "CHAT";
+	public static final String CRITICAL = "CRITICAL";
 	public static final String FAST_BOW = "FASTBOW";
 	public static final String FAST_EAT = "FASTEAT";
 	public static final String FAST_LADDER = "FASTLADDER";

@@ -172,6 +172,9 @@ Permissions:
     noweb:
       default: "negativity.bypass.noweb"
       custom: "ADMIN"
+    critical:
+      default: "negativity.bypass.critical"
+      custom: "ADMIN"
 
 Translation:
   active: false # enable or disable the translation
@@ -584,6 +587,17 @@ cheats:
   noweb:
     ping: 150
     exact_name: "NoWeb"
+    isActive: true
+    reliability_alert: 60
+    autoVerif: true
+    setBack: false
+    kick: false
+    alert_to_kick: 5
+
+  # Critical make you walking on web like if you walk on ground
+  critical:
+    ping: 150
+    exact_name: "Critical"
     isActive: true
     reliability_alert: 60
     autoVerif: true

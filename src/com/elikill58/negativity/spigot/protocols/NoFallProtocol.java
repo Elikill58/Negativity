@@ -45,7 +45,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
 								"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceBetweenFromAndTo: "
 										+ distance + " (ping: " + Utils.getPing(p) + "). Warn: "
-										+ np.getWarn(this), "");
+										+ np.getWarn(this));
 						if(mayCancel)
 							np.NO_FALL_DAMAGE += 1;
 					} else if (np.NO_FALL_DAMAGE != 0) {
@@ -58,7 +58,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
 								"Player not in ground no fall Damage. FallDistance: " + p.getFallDistance()
 										+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + Utils.getPing(p)
-										+ "). Warn: " + np.getWarn(this), "");
+										+ "). Warn: " + np.getWarn(this));
 						if(mayCancel)
 							np.NO_FALL_DAMAGE += 1;
 					} else if (np.NO_FALL_DAMAGE != 0) {
@@ -74,7 +74,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 					boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
 							"Player not ground with fall damage (FallDistance: " + p.getFallDistance() + "). Block 0.1 below: " + justUnder.name()
 									+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + ping
-									+ "). Warn: " + np.getWarn(this), "");
+									+ "). Warn: " + np.getWarn(this));
 					if(mayCancel && isSetBack())
 						manageDamage(p, (int) p.getFallDistance(), relia);
 				}

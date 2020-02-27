@@ -35,7 +35,7 @@ public class FastPlaceProtocol extends Cheat implements Listener {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					Utils.parseInPorcent(50 + lastPing), "Blockplaced too quickly. Last time: " + last + ", Last with ping: "
 							+ lastPing + ". Ping: " + Utils.getPing(p),
-					"2 blocks placed in: " + last + " ms\nReal player do it in 150ms", "");
+					"2 blocks placed in: " + last + " ms\nReal player do it in 150ms");
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}

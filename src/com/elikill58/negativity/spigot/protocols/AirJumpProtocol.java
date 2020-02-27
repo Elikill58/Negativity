@@ -42,7 +42,7 @@ public class AirJumpProtocol extends Cheat implements Listener {
 					temp > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 					Utils.parseInPorcent((int) (temp * 210) - Utils.getPing(p)),
 					"Actual diff Y: " + np.lastYDiff + ", last diff Y: " + temp + ", ping: " + Utils.getPing(p)
-							+ ". Warn for AirJump: " + np.getWarn(this), "");
+							+ ". Warn for AirJump: " + np.getWarn(this));
 			if (isSetBack() && mayCancel)
 				Utils.teleportPlayerOnGround(p);
 		}

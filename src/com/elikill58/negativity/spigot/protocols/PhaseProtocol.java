@@ -50,7 +50,7 @@ public class PhaseProtocol extends Cheat implements Listener {
 		if (!np.isJumpingWithBlock) {
 			SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, Utils.parseInPorcent((y * 200) + 20),
 					"Player on air. No jumping. DistanceBetweenFromAndTo: " + y + " (ping: " + Utils.getPing(p)
-							+ "). Warn: " + np.getWarn(this), "");
+							+ "). Warn: " + np.getWarn(this));
 		}
 	}
 	

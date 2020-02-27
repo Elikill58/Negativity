@@ -39,7 +39,7 @@ public class CriticalProtocol extends Cheat implements Listener {
 		if (!p.isOnGround() && !p.isFlying()) {
 			if (p.getLocation().getY() % 1.0D == 0.0D) {
 				if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().isSolid()) {
-					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, np.getAllWarn(this) > 5 ? 100 : 95, "", "", "");
+					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, np.getAllWarn(this) > 5 ? 100 : 95, "");
 					if(mayCancel && isSetBack())
 						e.setCancelled(true);
 				}

@@ -15,7 +15,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 
@@ -65,10 +64,5 @@ public class RegenProtocol extends Cheat implements Listener {
 			}
 		}
 		np.LAST_REGEN = actual;
-	}
-	
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
 	}
 }

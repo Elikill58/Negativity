@@ -12,7 +12,6 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class FastPlaceProtocol extends Cheat implements Listener {
@@ -39,10 +38,5 @@ public class FastPlaceProtocol extends Cheat implements Listener {
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
-	}
-	
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "2 blocks placed in " + (System.currentTimeMillis() - ((SpigotNegativityPlayer) p).LAST_BLOCK_PLACE);
 	}
 }

@@ -20,7 +20,6 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
@@ -122,11 +121,6 @@ public class FlyProtocol extends Cheat {
 		return i;
 	}
 
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
-	}
-	
 	@Override
 	public boolean isBlockedInFight() {
 		return true;

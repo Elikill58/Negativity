@@ -10,7 +10,6 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
-import com.elikill58.negativity.universal.NegativityPlayer;
 
 public class FastEatProtocol extends Cheat implements Listener {
 	
@@ -25,10 +24,5 @@ public class FastEatProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		np.flyingReason = FlyingReason.EAT;
 		np.eatMaterial = p.getItemInHand().getType();
-	}
-	
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
 	}
 }

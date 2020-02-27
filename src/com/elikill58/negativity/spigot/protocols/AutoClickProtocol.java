@@ -15,7 +15,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ItemUseBypass;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -58,10 +57,5 @@ public class AutoClickProtocol extends Cheat implements Listener {
 			if (isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
-	}
-	
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return ((SpigotNegativityPlayer) p).ACTUAL_CLICK + " clicks";
 	}
 }

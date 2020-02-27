@@ -10,7 +10,6 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
-import com.elikill58.negativity.universal.NegativityPlayer;
 
 public class FastEatProtocol extends Cheat {
 
@@ -23,10 +22,5 @@ public class FastEatProtocol extends Cheat {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		np.flyingReason = FlyingReason.EAT;
 		np.eatMaterial = e.getItemStackInUse().getType();
-	}
-
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
 	}
 }

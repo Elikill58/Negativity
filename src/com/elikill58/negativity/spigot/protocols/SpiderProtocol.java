@@ -14,7 +14,6 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class SpiderProtocol extends Cheat implements Listener {
@@ -134,10 +133,5 @@ public class SpiderProtocol extends Cheat implements Listener {
 		if (!loc.clone().add(-1, 0, 1).getBlock().getType().name().contains(m))
 			return true;
 		return false;
-	}
-	
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
 	}
 }

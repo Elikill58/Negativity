@@ -22,7 +22,6 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.flowpowered.math.vector.Vector3d;
@@ -111,10 +110,5 @@ public class ForceFieldProtocol extends Cheat {
 				Utils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms", np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");
-	}
-
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
 	}
 }

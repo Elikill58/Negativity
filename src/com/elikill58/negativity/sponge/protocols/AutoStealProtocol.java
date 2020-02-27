@@ -18,7 +18,6 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ItemUseBypass;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class AutoStealProtocol extends Cheat {
@@ -62,10 +61,5 @@ public class AutoStealProtocol extends Cheat {
 			np.lastClickInv = false;
 		}
 		np.LAST_CLICK_INV = actual;
-	}
-
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
 	}
 }

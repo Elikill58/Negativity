@@ -16,7 +16,6 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -64,11 +63,5 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 				Utils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms", np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");
-	}
-	
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		SpigotNegativityPlayer np = (SpigotNegativityPlayer) p;
-		return np.fakePlayerTouched + " fake players touched in " + (System.currentTimeMillis() - np.timeStartFakePlayer) + " ms";
 	}
 }

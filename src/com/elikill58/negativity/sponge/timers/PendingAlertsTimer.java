@@ -23,15 +23,10 @@ public class PendingAlertsTimer implements Runnable {
 				}
 
 				int ping = Utils.getPing(player);
-				String hover = cheat.getHoverFor(nPlayer);
-				if (!hover.isEmpty()) {
-					hover = "\n" + hover;
-				}
-
 				if (alerts.size() == 1) {
 					PlayerCheatEvent.Alert alert = alerts.get(0);
 					SpongeNegativity.sendAlertMessage(alert.getReportType(), player, cheat,
-							alert.getReliability(), hover, nPlayer, ping, alert, 1, alert.getStatsSend());
+							alert.getReliability(), alert.getHoverProof(), nPlayer, ping, alert, 1, alert.getStatsSend());
 				} else {
 					PlayerCheatEvent.Alert referenceAlert = null;
 					int reliabilitySum = 0;
@@ -47,7 +42,7 @@ public class PendingAlertsTimer implements Runnable {
 					}
 
 					SpongeNegativity.sendAlertMessage(referenceAlert.getReportType(), player, cheat,
-							reliabilitySum / alerts.size(), hover, nPlayer, ping, referenceAlert, alerts.size(), referenceAlert.getStatsSend());
+							reliabilitySum / alerts.size(), referenceAlert.getHoverProof(), nPlayer, ping, referenceAlert, alerts.size(), referenceAlert.getStatsSend());
 				}
 				alerts.clear();
 			});

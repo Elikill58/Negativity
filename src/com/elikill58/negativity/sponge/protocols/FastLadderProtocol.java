@@ -18,7 +18,6 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.flowpowered.math.vector.Vector3d;
 
@@ -80,10 +79,5 @@ public class FastLadderProtocol extends Cheat {
 				e.setToTransform(e.getFromTransform().setPosition(setBackPosition));
 			}
 		}
-	}
-
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
 	}
 }

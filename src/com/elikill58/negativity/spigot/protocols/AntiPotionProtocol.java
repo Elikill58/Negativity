@@ -16,7 +16,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
-import com.elikill58.negativity.universal.NegativityPlayer;
 
 public class AntiPotionProtocol extends Cheat implements Listener {
 
@@ -57,10 +56,5 @@ public class AntiPotionProtocol extends Cheat implements Listener {
 				if(loc.distance(p.getLocation()) < 9)
 					SpigotNegativityPlayer.getNegativityPlayer(p).flyingReason = FlyingReason.POTION;
 		}
-	}
-	
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
 	}
 }

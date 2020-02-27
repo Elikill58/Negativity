@@ -17,7 +17,6 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
-import com.elikill58.negativity.universal.NegativityPlayer;
 
 public class AntiPotionProtocol extends Cheat {
 
@@ -53,10 +52,5 @@ public class AntiPotionProtocol extends Cheat {
 				if (loc.getPosition().distance(p.getLocation().getPosition()) < 8)
 					SpongeNegativityPlayer.getNegativityPlayer(p).flyingReason = FlyingReason.POTION;
 		}
-	}
-
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
 	}
 }

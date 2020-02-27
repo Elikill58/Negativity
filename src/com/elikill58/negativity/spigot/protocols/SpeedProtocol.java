@@ -19,7 +19,6 @@ import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 
 public class SpeedProtocol extends Cheat implements Listener {
@@ -87,11 +86,6 @@ public class SpeedProtocol extends Cheat implements Listener {
 	public void onEntityDamage(EntityDamageByEntityEvent e) {
 		if (e.getEntity() instanceof Player)
 			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).BYPASS_SPEED = 3;
-	}
-	
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
 	}
 	
 	@Override

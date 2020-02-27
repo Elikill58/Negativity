@@ -15,7 +15,6 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -85,10 +84,5 @@ public class NoFallProtocol extends Cheat implements Listener {
 	private void manageDamage(Player p, int damage, int relia) {
 		Adapter ada = Adapter.getAdapter();
 		p.damage(damage >= p.getHealth() ? (ada.getBooleanInConfig("cheats.nofall.kill") && ada.getDoubleInConfig("cheats.nofall.kill-reliability") >= relia ? damage : p.getHealth() - 0.5) : p.getHealth());
-	}
-	
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
 	}
 }

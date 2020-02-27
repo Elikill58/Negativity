@@ -22,7 +22,6 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -100,10 +99,5 @@ public class NoFallProtocol extends Cheat {
 	private void manageDamage(Player p, int damage, int relia) {
 		Adapter ada = Adapter.getAdapter();
 		p.damage(damage >= p.health().get() ? (ada.getBooleanInConfig("cheats.nofall.kill") && ada.getDoubleInConfig("cheats.nofall.kill-reliability") >= relia ? damage : p.health().get() - 0.5) : p.health().get(), DamageSource.builder().type(DamageTypes.FALL).build());
-	}
-
-	@Override
-	public String getHoverFor(NegativityPlayer p) {
-		return "";
 	}
 }

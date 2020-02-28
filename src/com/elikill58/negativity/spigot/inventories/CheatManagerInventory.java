@@ -19,7 +19,7 @@ public class CheatManagerInventory {
 		int slot = 0;
 		for(Cheat c : Cheat.values())
 			if(c.getMaterial() != null)
-				inv.setItem(slot++, Utils.createItem((Material) c.getMaterial(), c.getName()));
+				inv.setItem(slot++, Utils.hideAttributes(Utils.createItem((Material) c.getMaterial(), c.getName())));
 
 		inv.setItem(inv.getSize() - 2, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.back")));
 		inv.setItem(inv.getSize() - 1, Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));

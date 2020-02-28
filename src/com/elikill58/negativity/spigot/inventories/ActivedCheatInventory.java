@@ -22,7 +22,7 @@ public class ActivedCheatInventory {
 		if (np.ACTIVE_CHEAT.size() > 0) {
 			int slot = 0;
 			for (Cheat c : np.ACTIVE_CHEAT)
-				inv.setItem(slot++, Utils.createItem((Material) c.getMaterial(), ChatColor.RESET + c.getName()));
+				inv.setItem(slot++, Utils.hideAttributes(Utils.createItem((Material) c.getMaterial(), ChatColor.RESET + c.getName())));
 		} else
 			inv.setItem(4, Utils.createItem(Material.REDSTONE_BLOCK, Messages.getMessage(p, "inventory.detection.no_active", "%name%", cible.getName())));
 		inv.setItem(inv.getSize() - 2, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.back")));

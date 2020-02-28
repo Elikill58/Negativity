@@ -19,6 +19,7 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.property.Identifiable;
 import org.spongepowered.api.item.inventory.property.InventoryDimension;
 import org.spongepowered.api.item.inventory.property.InventoryTitle;
+import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 import org.spongepowered.api.item.inventory.type.GridInventory;
 import org.spongepowered.api.text.Text;
@@ -72,9 +73,9 @@ public class Inv {
 				"inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
 		invGrid.set(8, 0, Utils.createSkull(cible.getName(), 1, cible, "&6UUID: " + cible.getUniqueId()));
 
-		invGrid.set(0, 1, Utils.createItem(ItemTypes.DIAMOND_SWORD, "&rFight: "
-				+ Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
-		invGrid.set(1, 1, Utils.createItem(ItemTypes.DIAMOND_PICKAXE, "&rMinerate", np.mineRate.getInventoryLoreString()));
+		invGrid.set(0, 1, Utils.hideAttributes(Utils.createItem(ItemTypes.DIAMOND_SWORD, "&rFight: "
+				+ Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled")))));
+		invGrid.set(1, 1, Utils.hideAttributes(Utils.createItem(ItemTypes.DIAMOND_PICKAXE, "&rMinerate", np.mineRate.getInventoryLoreString())));
 		invGrid.set(2, 1, Utils.createItem(ItemTypes.GRASS, "&rMods", "&7Forge: "
 				+ Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
 		invGrid.set(3, 1, getMcLeaksIndicator(p, np));
@@ -123,8 +124,8 @@ public class Inv {
 				getByteFromClick(np.LAST_CLICK)));
 		invGrid.set(7, 0, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p,
 				"inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
-		invGrid.set(0, 1, Utils.createItem(ItemTypes.DIAMOND_SWORD, "&rFight: "
-				+ Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
+		invGrid.set(0, 1, Utils.hideAttributes(Utils.createItem(ItemTypes.DIAMOND_SWORD, "&rFight: "
+				+ Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled")))));
 	}
 
 	public static void openAlertMenu(Player p, Player cible) {
@@ -144,21 +145,20 @@ public class Inv {
 				.build(SpongeNegativity.INSTANCE);
 		Utils.fillInventoryWith(VIDE_ITEM, inv);
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		int x = 0, y = 0;
+		int i = 0;
 		for (Cheat c : TO_SEE) {
-			invGrid.set(x, y, Utils.createItem((ItemType)
+			int alertCount = Math.min(Math.max(np.getWarn(c), 1), 64); // This restrains the quantity between 1 and 64
+			invGrid.set(SlotIndex.of(i), Utils.hideAttributes(Utils.createItem((ItemType)
 							c.getMaterial(), Messages.getStringMessage(p, "inventory.alerts.item_name", "%exact_name%",
 					c.getName(), "%warn%", String.valueOf(np.getWarn(c))),
-					np.getWarn(c) < 1 ? 1 : np.getWarn(c)));
-			x++;
-			if (x > 8) {
-				x = 0;
-				y++;
-			}
+					alertCount)));
+			i++;
 		}
-		invGrid.set(6, y, Utils.createItem(ItemTypes.BONE, "&7Clear"));
-		invGrid.set(7, y, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
-		invGrid.set(8, y, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
+
+		int lastRow = invGrid.getRows() - 1;
+		invGrid.set(6, lastRow, Utils.createItem(ItemTypes.BONE, "&7Clear"));
+		invGrid.set(7, lastRow, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
+		invGrid.set(8, lastRow, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 
@@ -172,12 +172,18 @@ public class Inv {
 					|| (!np.hasDetectionActive(c)
 							&& Adapter.getAdapter().getBooleanInConfig("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
-		for (Cheat c : TO_SEE)
-			if (c.getMaterial() != null)
-				inv.offer(Utils.createItem(
+		int i = 0;
+		for (Cheat c : TO_SEE) {
+			if (c.getMaterial() != null) {
+				Inventory slot = inv.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(i)));
+				int alertCount = Math.min(Math.max(np.getWarn(c), 1), 64); // This restrains the quantity between 1 and 64
+				slot.set(Utils.hideAttributes(Utils.createItem(
 						(ItemType) c.getMaterial(), Messages.getStringMessage(p, "inventory.alerts.item_name",
 								"%exact_name%", c.getName(), "%warn%", String.valueOf(np.getWarn(c))),
-						np.getWarn(c) == 0 ? 1 : np.getWarn(c)));
+						alertCount)));
+			}
+			i++;
+		}
 	}
 
 	private static DyeColor getByteFromClick(int click) {
@@ -199,21 +205,18 @@ public class Inv {
 		Utils.fillInventoryWith(VIDE_ITEM, inv);
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
-		int x = 0, y = 0;
+		int i = 0;
 		if (np.getActiveCheat().size() > 0) {
 			for (Cheat c : np.getActiveCheat()) {
-				invGrid.set(x, y, Utils.createItem((ItemType) c.getMaterial(), "&r" + c.getName()));
-				x++;
-				if (x > 8) {
-					x = 0;
-					y++;
-				}
+				invGrid.set(SlotIndex.of(i), Utils.hideAttributes(Utils.createItem((ItemType) c.getMaterial(), "&r" + c.getName())));
+				i++;
 			}
 		} else
 			invGrid.set(5, 1, Utils.createItem(ItemTypes.REDSTONE_BLOCK,
 					Messages.getStringMessage(p, "inventory.detection.no_active", "%name%", cible.getName())));
-		invGrid.set(7, y, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
-		invGrid.set(8, y, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
+		int lastRow = invGrid.getRows() - 1;
+		invGrid.set(7, lastRow, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
+		invGrid.set(8, lastRow, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 
@@ -244,7 +247,7 @@ public class Inv {
 		if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "manageCheat"))
 			invGrid.set(4, 1, Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p, "inventory.mod.cheat_manage")));
 		invGrid.set(6, 1, Utils.createItem(ItemTypes.LEAD, Messages.getStringMessage(p, "inventory.mod.random_tp")));
-		invGrid.set(7, 1, Utils.createItem(ItemTypes.IRON_SHOVEL, Messages.getStringMessage(p, "inventory.mod.clear_inv")));
+		invGrid.set(7, 1, Utils.hideAttributes(Utils.createItem(ItemTypes.IRON_SHOVEL, Messages.getStringMessage(p, "inventory.mod.clear_inv"))));
 		invGrid.set(8, 2, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
@@ -259,12 +262,12 @@ public class Inv {
 		Utils.fillInventoryWith(VIDE_ITEM, inv);
 		for (Cheat c : Cheat.values())
 			if (c.getMaterial() != null)
-				inv.offer(Utils.createItem((ItemType) c.getMaterial(), c.getName()));
+				inv.offer(Utils.hideAttributes(Utils.createItem((ItemType) c.getMaterial(), c.getName())));
 		Iterator<Inventory> slots = inv.slots().iterator();
         Iterator<Cheat> cheats = Cheat.values().iterator();
         while (slots.hasNext() && cheats.hasNext()) {
             Cheat cheat = cheats.next();
-            slots.next().set(Utils.createItem((ItemType) cheat.getMaterial(), cheat.getName()));
+            slots.next().set(Utils.hideAttributes(Utils.createItem((ItemType) cheat.getMaterial(), cheat.getName())));
         }
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
 		invGrid.set(7, nbLine - 1, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));

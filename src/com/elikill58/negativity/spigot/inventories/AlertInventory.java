@@ -34,8 +34,8 @@ public class AlertInventory {
 		int slot = 0;
 		for (Cheat c : TO_SEE) {
 			if (c.getMaterial() != null){
-				inv.setItem(slot++, Utils.createItem((Material) c.getMaterial(), Messages.getMessage(p, "inventory.alerts.item_name",
-						"%exact_name%", c.getName(), "%warn%", String.valueOf(np.getWarn(c))), np.getWarn(c) == 0 ? 1 : np.getWarn(c)));
+				inv.setItem(slot++, Utils.hideAttributes(Utils.createItem((Material) c.getMaterial(), Messages.getMessage(p, "inventory.alerts.item_name",
+						"%exact_name%", c.getName(), "%warn%", String.valueOf(np.getWarn(c))), np.getWarn(c) == 0 ? 1 : np.getWarn(c))));
 			}
 		}
 		inv.setItem(inv.getSize() - 3, Utils.createItem(Material.BONE, ChatColor.RESET + "" + ChatColor.GRAY + "Clear"));
@@ -57,8 +57,8 @@ public class AlertInventory {
 		int slot = 0;
 		for (Cheat c : TO_SEE)
 			if (c.getMaterial() != null)
-				inv.setItem(slot++, Utils.createItem((Material) c.getMaterial(), Messages.getMessage(p, "inventory.alerts.item_name",
-						"%exact_name%", c.getName(), "%warn%", String.valueOf(np.getWarn(c))), np.getWarn(c) == 0 ? 1 : np.getWarn(c)));
+				inv.setItem(slot++, Utils.hideAttributes(Utils.createItem((Material) c.getMaterial(), Messages.getMessage(p, "inventory.alerts.item_name",
+						"%exact_name%", c.getName(), "%warn%", String.valueOf(np.getWarn(c))), np.getWarn(c) == 0 ? 1 : np.getWarn(c))));
 		//p.updateInventory();
 	}
 	

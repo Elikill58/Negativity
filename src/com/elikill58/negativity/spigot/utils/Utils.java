@@ -14,6 +14,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryView;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -72,6 +73,16 @@ public class Utils {
 		meta.setLore(Arrays.asList(lore));
 		item.setItemMeta(meta);
 		return item;
+	}
+	
+	public static ItemStack hideAttributes(ItemStack stack) {
+		if (Version.getVersion().isNewerThan(Version.V1_7)) {
+			ItemMeta meta = stack.getItemMeta();
+			// All ItemFlags are used to hide attributes, their javadoc says so too.
+			meta.addItemFlags(ItemFlag.values());
+			stack.setItemMeta(meta);
+		}
+		return stack;
 	}
 
 	public static List<Player> getOnlinePlayers() {

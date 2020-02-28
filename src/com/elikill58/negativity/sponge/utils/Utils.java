@@ -142,6 +142,16 @@ public class Utils {
 		inv.forEach(inventory -> inventory.slots().forEach(slot -> slot.set(item)));
 		return inv;
 	}
+	
+	public static ItemStack hideAttributes(ItemStack stack) {
+		stack.offer(Keys.HIDE_ATTRIBUTES, true);
+		stack.offer(Keys.HIDE_CAN_DESTROY, true);
+		stack.offer(Keys.HIDE_CAN_PLACE, true);
+		stack.offer(Keys.HIDE_ENCHANTMENTS, true);
+		stack.offer(Keys.HIDE_UNBREAKABLE, true);
+		stack.offer(Keys.HIDE_MISCELLANEOUS, true);
+		return stack;
+	}
 
 	public static HashMap<String, String> getModsNameVersionFromMessage(String modName) {
 		HashMap<String, String> mods = new HashMap<String, String>();

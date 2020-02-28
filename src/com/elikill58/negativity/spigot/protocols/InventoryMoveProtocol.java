@@ -1,6 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,6 +47,8 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 	}
 
 	private void checkInvMove(Player p, boolean check, String from) {
+		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
+			return;
 		if (p.isSprinting() || p.isSneaking()) {
 			SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					SpigotNegativityPlayer.getNegativityPlayer(p).getAllWarn(this) > 5 ? 100 : 95,

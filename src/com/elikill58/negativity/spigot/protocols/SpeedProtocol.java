@@ -63,13 +63,23 @@ public class SpeedProtocol extends Cheat implements Listener {
 					"Player in ground. WalkSpeed: " + p.getWalkSpeed() + " Distance between from/to location: " + y,
 					"Distance Last/New position: " + y + "\n(With same Y)\nPlayer on ground", "Distance Last-New position: " + y);
 
-		} else if (!p.isOnGround() && y >= 0.85D) {
-			ReportType type = ReportType.WARNING;
-			if (np.getWarn(this) > 7)
-				type = ReportType.VIOLATION;
-			mayCancel = SpigotNegativity.alertMod(type, p, this, Utils.parseInPorcent(y * 100 * 2),
-					"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed() + " Distance between from/to location: " + y,
-					"Distance Last/New position: " + y + "\n(With same Y)\nPlayer jumping", "Distance Last-New position: " + y);
+		} else if (!p.isOnGround()) {
+			if(y >= 0.85D) {
+				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this, Utils.parseInPorcent(y * 100 * 2),
+						"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed() + " Distance between from/to location: " + y,
+						"Distance Last/New position: " + y + "\n(With same Y)\nPlayer jumping", "Distance Last-New position: " + y);
+			} else {
+				Material under = e.getTo().clone().subtract(0, 1, 0).getBlock().getType();
+				if (under.name().contains("STEP")) {
+					double distance = e.getFrom().distance(e.getTo());
+					if (distance > 0.4) {
+						np.SPEED_NB++;
+						if (np.SPEED_NB > 4)
+							mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.SPEED), 86 + np.SPEED_NB, "HighSpeed - Block under: " + under.name() + ", Speed: " + distance + ", nb: " + np.SPEED_NB);
+					} else
+						np.SPEED_NB = 0;
+				}
+			}
 		}
 		if (isSetBack() && mayCancel)
 			e.setCancelled(true);

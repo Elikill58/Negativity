@@ -4,6 +4,7 @@ import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.filter.type.Exclude;
@@ -44,6 +45,9 @@ public class InventoryMoveProtocol extends Cheat {
 	}
 
 	private void checkInvMove(Player p, boolean check, String from) {
+		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
+			return;
+		}
 		if (p.get(Keys.IS_SPRINTING).orElse(false) || p.get(Keys.IS_SNEAKING).orElse(false)) {
 			SpongeNegativity.alertMod(ReportType.WARNING, p, this,
 					SpongeNegativityPlayer.getNegativityPlayer(p).getAllWarn(this) > 5 ? 100 : 95,

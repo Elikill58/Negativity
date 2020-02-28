@@ -72,11 +72,23 @@ public class SpeedProtocol extends Cheat {
 		if (p.isOnGround() && distance >= 0.75D) {
 			mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent(distance * 100 * 2), proof,
 					"Distance Last/New position: " + distance + "\n(With same Y)\nPlayer on ground", "Distance Last-New position: " + distance);
-		} else if (!p.isOnGround() && distance >= 0.85D) {
-			mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent(distance * 100 * 2), proof,
-					"Distance Last/New position: " + distance + "\n(With same Y)\nPlayer jumping", "Distance Last-New position: " + distance);
+		} else if (!p.isOnGround()) {
+			if(distance >= 0.85D) {
+				mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent(distance * 100 * 2), proof,
+						"Distance Last/New position: " + distance + "\n(With same Y)\nPlayer jumping", "Distance Last-New position: " + distance);
+			} else {
+				BlockType under = e.getToTransform().getLocation().copy().sub(0, 1, 0).getBlockType();
+				if (under.getId().contains("STEP")) {
+					double distanceWithY = e.getFromTransform().getPosition().distance(e.getToTransform().getPosition());
+					if (distanceWithY > 0.4) {
+						np.SPEED_NB++;
+						if (np.SPEED_NB > 4)
+							mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.SPEED), 86 + np.SPEED_NB, "HighSpeed - Block under: " + under.getId() + ", Speed: " + distanceWithY + ", nb: " + np.SPEED_NB);
+					} else
+						np.SPEED_NB = 0;
+				}
+			}
 		}
-
 		if (mayCancel && isSetBack()) {
 			e.setCancelled(true);
 		}

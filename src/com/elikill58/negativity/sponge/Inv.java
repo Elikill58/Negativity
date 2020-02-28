@@ -147,9 +147,10 @@ public class Inv {
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
 		int i = 0;
 		for (Cheat c : TO_SEE) {
-			int alertCount = Math.min(Math.max(np.getWarn(c), 1), 64); // This restrains the quantity between 1 and 64
-			invGrid.set(SlotIndex.of(i), Utils.hideAttributes(Utils.createItem((ItemType)
-							c.getMaterial(), Messages.getStringMessage(p, "inventory.alerts.item_name", "%exact_name%",
+			ItemType itemType = (ItemType) c.getMaterial();
+			int alertCount = Math.min(Math.max(np.getWarn(c), 1), itemType.getMaxStackQuantity()); // Avoid quantity overflow
+			invGrid.set(SlotIndex.of(i), Utils.hideAttributes(Utils.createItem(itemType,
+					Messages.getStringMessage(p, "inventory.alerts.item_name", "%exact_name%",
 					c.getName(), "%warn%", String.valueOf(np.getWarn(c))),
 					alertCount)));
 			i++;
@@ -176,9 +177,10 @@ public class Inv {
 		for (Cheat c : TO_SEE) {
 			if (c.getMaterial() != null) {
 				Inventory slot = inv.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(i)));
-				int alertCount = Math.min(Math.max(np.getWarn(c), 1), 64); // This restrains the quantity between 1 and 64
+				ItemType itemType = (ItemType) c.getMaterial();
+				int alertCount = Math.min(Math.max(np.getWarn(c), 1), itemType.getMaxStackQuantity()); // Avoid quantity overflow
 				slot.set(Utils.hideAttributes(Utils.createItem(
-						(ItemType) c.getMaterial(), Messages.getStringMessage(p, "inventory.alerts.item_name",
+						itemType, Messages.getStringMessage(p, "inventory.alerts.item_name",
 								"%exact_name%", c.getName(), "%warn%", String.valueOf(np.getWarn(c))),
 						alertCount)));
 			}

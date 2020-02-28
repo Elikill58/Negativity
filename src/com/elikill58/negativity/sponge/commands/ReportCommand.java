@@ -71,6 +71,6 @@ public class ReportCommand implements CommandExecutor {
 				.arguments(player(Text.of("target")),
 						remainingJoinedStrings(Text.of("reason")))
 				.build();
-		return new NegativityCmdWrapper(command, true, null);
+		return new NegativityCmdWrapper(command, true, "report");
 	}
 }

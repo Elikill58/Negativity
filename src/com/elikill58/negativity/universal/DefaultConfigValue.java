@@ -62,8 +62,8 @@ public class DefaultConfigValue {
 		BOOLEANS.put("unban_command", true);
 		BOOLEANS.put("kick_command", true);
 		BOOLEANS.put("suspect_command", true);
-		
-		BOOLEANS.put("Database.isActive", true);
+
+		BOOLEANS.put("Database.isActive", false);
 		STRINGS.put("Database.url", "127.0.0.1/myDb");
 		STRINGS.put("Database.user", "root");
 		STRINGS.put("Database.password", "myPassword");
@@ -87,20 +87,29 @@ public class DefaultConfigValue {
 
 		STRINGS.put("Permissions.showAlert.default", "negativity.alert");
 		STRINGS.put("Permissions.showAlert.custom", "MOD,ADMIN");
+		STRINGS.put("Permissions.showReport.default", "negativity.seereport");
+		STRINGS.put("Permissions.showReport.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.verif.default", "negativity.verif");
 		STRINGS.put("Permissions.verif.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.manageCheat.default", "negativity.managecheat");
 		STRINGS.put("Permissions.manageCheat.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.report_wait.default", "negativity.reportwait");
-		STRINGS.put("Permissions.report_wait.custom", "negativity.reportwait");
+		STRINGS.put("Permissions.report.default", "negativity.report");
+		STRINGS.put("Permissions.ban.default", "negativity.ban");
+		STRINGS.put("Permissions.ban.custom", "MOD,ADMIN");
+		STRINGS.put("Permissions.unban.default", "negativity.unban");
+		STRINGS.put("Permissions.unban.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.notBanned.default", "negativity.notbanned");
 		STRINGS.put("Permissions.notBanned.custom", "ADMIN");
+		STRINGS.put("Permissions.mod.default", "negativity.mod");
+		STRINGS.put("Permissions.mod.custom", "MOD,ADMIN");
+		STRINGS.put("Permissions.lang.default", "negativity.lang");
 		BOOLEANS.put("Permissions.bypass.active", false);
 
-		String[] cheats = new String[] {"airjump", "antipotion", "autoeat", "autoregen", "antiknockback", "autoclick", "autosteal",
+		String[] cheats = new String[]{"airjump", "antipotion", "autoeat", "autoregen", "antiknockback", "autoclick", "autosteal",
 				"blink", "chat", "critical", "forcefield", "fastplace", "fastladders", "fastbow", "jesus", "fly",
 				"nofall", "noslowdown", "noweb", "phase", "scaffold", "speedhack", "spider", "step", "xray"};
-		for(String localCheat : cheats) {
+		for (String localCheat : cheats) {
 			//STRINGS.put("Permissions.bypass." + localCheat, "negativity.bypass." + localCheat);
 			STRINGS.put("Permissions.bypass." + localCheat + ".default", "negativity.bypass." + localCheat);
 			STRINGS.put("Permissions.bypass." + localCheat + ".custom", "ADMIN");
@@ -114,19 +123,17 @@ public class DefaultConfigValue {
 		BOOLEANS.put("hasBungeecord", false);
 
 		INTS.put("time_between_report", 1000);
+		INTS.put("time_between_alert", 2000);
 
 		BOOLEANS.put("ban.active", false);
 		STRINGS.put("ban.type", "file");
 		BOOLEANS.put("ban.other_plugin.active", false);
 		STRINGS.put("ban.other_plugin.plugin_used", "APlugin");
-		STRINGS.put("ban.command.ban", "");
-		STRINGS.put("ban.command.unban", "");
 		BOOLEANS.put("ban.destroy_when_unban", false);
 		INTS.put("ban.reliability_need", 95);
 		INTS.put("ban.alert_need", 10);
-		STRINGS.put("ban.time.calculator", "360000000 + (%reliability% * 10 * %alert%)");
+		STRINGS.put("ban.time.calculator", "360000000 + (%reliability% * 20 * %alert%)");
 		INTS.put("ban.def.ban_time", 2);
-		BOOLEANS.put("ban.file.isActive", false);
 		STRINGS.put("ban.file.dir", "ban");
 		STRINGS.put("ban.db.column.uuid", "uuid");
 		STRINGS.put("ban.db.column.time", "time");
@@ -148,13 +155,25 @@ public class DefaultConfigValue {
 			BOOLEANS.put("cheats." + lc + ".autoVerif", true);
 			BOOLEANS.put("cheats." + lc + ".setBack", false);
 			BOOLEANS.put("cheats." + lc + ".kick", false);
-			INTS.put("cheats." + lc + ".alert_kick", 5);
+			INTS.put("cheats." + lc + ".alert_to_kick", 5);
 		}
 
 		DOUBLES.put("cheats.forcefield.reach", 3.9);
 		BOOLEANS.put("cheats.forcefield.ghost_disabled", false);
+
+		BOOLEANS.put("cheats.nofall.kill", false);
+		INTS.put("cheats.nofall.kill-reliability", 90);
+
+		BOOLEANS.put("cheats.fasteat.autoVerif", false);
+
 		INTS.put("cheats.autoclick.click_alert", 20);
-		STRINGS.put("cheats.chat.insults", "bitch");
+
+		BOOLEANS.put("cheats.fastbow.autoVerif", false);
+
+		INTS.put("cheats.xray.ping", 300);
+
+		INTS.put("cheats.chat.ping", 300);
+
 		BOOLEANS.put("cheats.special.mcleaks.kick", true);
 	}
 }

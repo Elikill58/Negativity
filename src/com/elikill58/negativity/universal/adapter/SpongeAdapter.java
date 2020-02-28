@@ -277,6 +277,7 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 		plugin.reloadCommands();
 		SpongeNegativity.isOnBungeecord = getBooleanInConfig("hasBungeecord");
 		SpongeNegativity.log = getBooleanInConfig("log_alerts");
+		SpongeNegativity.log_console = getBooleanInConfig("log_alerts_in_console");
 		SpongeNegativity.hasBypass = getBooleanInConfig("Permissions.bypass.active");
 	}
 

@@ -175,6 +175,9 @@ Permissions:
     critical:
       default: "negativity.bypass.critical"
       custom: "ADMIN"
+    inventorymove:
+      default: "negativity.bypass.inventorymove"
+      custom: "ADMIN"
 
 Translation:
   active: false # enable or disable the translation
@@ -598,6 +601,17 @@ cheats:
   critical:
     ping: 150
     exact_name: "Critical"
+    isActive: true
+    reliability_alert: 60
+    autoVerif: true
+    setBack: false
+    kick: false
+    alert_to_kick: 5
+
+  # InventoryMove make you walking while editing your inventory
+  inventorymove:
+    ping: 150
+    exact_name: "InventoryMove"
     isActive: true
     reliability_alert: 60
     autoVerif: true

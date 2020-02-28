@@ -106,17 +106,10 @@ public class DefaultConfigValue {
 		STRINGS.put("Permissions.lang.default", "negativity.lang");
 		BOOLEANS.put("Permissions.bypass.active", false);
 
-<<<<<<< HEAD
-		String[] cheats = new String[] {"airjump", "antipotion", "autoeat", "autoregen", "antiknockback", "autoclick", "autosteal",
-				"blink", "chat", "critical", "forcefield", "fastplace", "fastladders", "fastbow", "inventorymove", "jesus", "fly",
-				"nofall", "noslowdown", "noweb", "phase", "scaffold", "speedhack", "spider", "step", "xray"};
-		for(String localCheat : cheats) {
-=======
 		String[] cheats = new String[]{"airjump", "antipotion", "autoeat", "autoregen", "antiknockback", "autoclick", "autosteal",
-				"blink", "chat", "critical", "forcefield", "fastplace", "fastladder", "fastbow", "jesus", "fly",
+				"blink", "chat", "critical", "forcefield", "fastplace", "fastladder", "fastbow", "jesus", "inventorymove", "fly",
 				"nofall", "noslowdown", "noweb", "nuker", "phase", "scaffold", "speedhack", "spider", "step", "xray"};
 		for (String localCheat : cheats) {
->>>>>>> f2b7902423962cac6f62dde228ecfd4cc4ef8057
 			//STRINGS.put("Permissions.bypass." + localCheat, "negativity.bypass." + localCheat);
 			STRINGS.put("Permissions.bypass." + localCheat + ".default", "negativity.bypass." + localCheat);
 			STRINGS.put("Permissions.bypass." + localCheat + ".custom", "ADMIN");

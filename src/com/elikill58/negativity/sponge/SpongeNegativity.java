@@ -117,7 +117,7 @@ public class SpongeNegativity {
 		return plugin;
 	}
 
-	public static boolean log = true, isOnBungeecord = false, hasPacketGate = false, hasPrecogs = false,
+	public static boolean log = true, log_console = true, isOnBungeecord = false, hasPacketGate = false, hasPrecogs = false,
 			hasBypass = false;
 
 	@Listener
@@ -370,7 +370,8 @@ public class SpongeNegativity {
 				});
 			}
 			config = (configLoader = HoconConfigurationLoader.builder().setFile(configFile).build()).load();
-			log = config.getNode("log_alerts").getBoolean();
+			log = config.getNode("log_alerts").getBoolean(true);
+			log_console = config.getNode("log_alerts_in_console").getBoolean(true);
 			isOnBungeecord = config.getNode("hasBungeecord").getBoolean();
 			hasBypass = config.getNode("Permissions").getNode("bypass").getNode("active").getBoolean();
 		} catch (Exception e) {
@@ -512,7 +513,7 @@ public class SpongeNegativity {
 			return;
 		}
 
-		if (log) {
+		if (log_console) {
 			INSTANCE.getLogger().info("New {} for {} (UUID: {})  (ping: {}) : suspected of cheating ({}) Reliability: {}",
 					type.getName(), p.getName(), p.getUniqueId().toString(), ping, c.getName(), reliability);
 		}

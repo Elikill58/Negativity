@@ -82,6 +82,9 @@ Permissions:
   showAlert:
     default: "negativity.alert"
     custom: "MOD,ADMIN"
+  showReport:
+    default: "negativity.seereport"
+    custom: "MOD,ADMIN"
   verif:
     default: "negativity.verif"
     custom: "MOD,ADMIN"
@@ -91,10 +94,25 @@ Permissions:
   report_wait:
     default: "negativity.reportwait"
     custom: ""
+  report:
+    default: "negativity.report"
+    custom: ""
+  ban:
+    default: "negativity.ban"
+    custom: "MOD,ADMIN"
+  unban:
+    default: "negativity.unban"
+    custom: "MOD,ADMIN"
   # To bypass ban system
   notBanned:
     default: "negativity.notbanned"
     custom: "ADMIN"
+  mod:
+    default: "negativity.mod"
+    custom: "MOD,ADMIN"
+  lang:
+    default: "negativity.lang"
+    custom: ""
   bypass:
     active: false
     all:
@@ -304,7 +322,7 @@ cheats:
 
   # Forcefield is to hit more entity than real people in the same time and further
   forcefield:
-    reach: 3.97 # In blocks !
+    reach: 3.9 # In blocks !
     ghost_disabled: false
     ping: 150
     exact_name: "ForceField"
@@ -339,6 +357,8 @@ cheats:
 
   # NoFall remove fall damage
   nofall:
+    kill: false
+    kill-reliability: 90 # reliability to authorize to kill player
     ping: 150
     exact_name: "NoFall"
     isActive: true
@@ -347,8 +367,6 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
-    kill: false
-    kill-reliability: 90 # reliability to authorize to kill player
 
   # FastEat is to eat something instantly
   fasteat:

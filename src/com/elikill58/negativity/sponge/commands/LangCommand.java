@@ -40,6 +40,6 @@ public class LangCommand implements CommandExecutor {
 				.executor(new LangCommand())
 				.arguments(GenericArguments.choices(Text.of("language"), () -> TranslatedMessages.LANGS, Function.identity()))
 				.build();
-		return new NegativityCmdWrapper(command, true, null);
+		return new NegativityCmdWrapper(command, true, "lang");
 	}
 }

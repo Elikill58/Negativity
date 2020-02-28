@@ -26,7 +26,7 @@ public class ModInventory {
 		if(Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "manageCheat"))
 			inv.setItem(14, Utils.createItem(Material.TNT, Messages.getMessage(p, "inventory.mod.cheat_manage")));
 		inv.setItem(15, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("LEASH", "LEGACY_LEASH"), Messages.getMessage(p, "inventory.mod.random_tp")));
-		inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("IRON_SPADE", "LEGACY_IRON_SPADE"), Messages.getMessage(p, "inventory.mod.clear_inv")));
+		inv.setItem(16, Utils.hideAttributes(Utils.createItem(Utils.getMaterialWith1_15_Compatibility("IRON_SPADE", "LEGACY_IRON_SPADE"), Messages.getMessage(p, "inventory.mod.clear_inv"))));
 		
 		inv.setItem(inv.getSize() - 1, Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
 

@@ -18,6 +18,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NukerProtocol extends Cheat {
 
@@ -41,7 +42,7 @@ public class NukerProtocol extends Cheat {
 		if(target != null) {
 			double distance = target.getLocation().getPosition().distance(breakedBlock.getLocation().get().getPosition());
 			if (e.getTransactions().stream().filter(tr -> !tr.getOriginal().getState().getType().equals(breakedBlock.getState().getType())).count() > 0 && distance > 3.5) {
-				boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(distance * 15 - Utils.getPing(p)), "BlockDig " + breakedBlock.getState().getType().getName() + ", player see " + target.getLocation().getBlock().getType().getName() + ". Distance between blocks " + distance + " block. Ping: " + Utils.getPing(p) + ". Warn: " + np.getWarn(this));				
+				boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - Utils.getPing(p)), "BlockDig " + breakedBlock.getState().getType().getName() + ", player see " + target.getLocation().getBlock().getType().getName() + ". Distance between blocks " + distance + " block. Ping: " + Utils.getPing(p) + ". Warn: " + np.getWarn(this));				
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}

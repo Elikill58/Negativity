@@ -16,10 +16,10 @@ import org.bukkit.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class SpeedProtocol extends Cheat implements Listener {
 
@@ -59,13 +59,13 @@ public class SpeedProtocol extends Cheat implements Listener {
 			ReportType type = ReportType.WARNING;
 			if (np.getWarn(this) > 7)
 				type = ReportType.VIOLATION;
-			mayCancel = SpigotNegativity.alertMod(type, p, this, Utils.parseInPorcent(y * 100 * 2),
+			mayCancel = SpigotNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(y * 100 * 2),
 					"Player in ground. WalkSpeed: " + p.getWalkSpeed() + " Distance between from/to location: " + y,
 					"Distance Last/New position: " + y + "\n(With same Y)\nPlayer on ground", "Distance Last-New position: " + y);
 
 		} else if (!p.isOnGround()) {
 			if(y >= 0.85D) {
-				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this, Utils.parseInPorcent(y * 100 * 2),
+				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(y * 100 * 2),
 						"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed() + " Distance between from/to location: " + y,
 						"Distance Last/New position: " + y + "\n(With same Y)\nPlayer jumping", "Distance Last-New position: " + y);
 			} else {

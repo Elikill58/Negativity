@@ -15,6 +15,7 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 @SuppressWarnings("deprecation")
 public class FastBowProtocol extends Cheat implements Listener {
@@ -43,11 +44,11 @@ public class FastBowProtocol extends Cheat implements Listener {
 					boolean mayCancel = false;
 					if (dif < (50 + ping))
 						mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
-								Utils.parseInPorcent(200 - dif - ping), "Player use Bow, last shot: " + np.LAST_SHOT_BOW
+								UniversalUtils.parseInPorcent(200 - dif - ping), "Player use Bow, last shot: " + np.LAST_SHOT_BOW
 										+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), "Time between last shot: " + dif + " (in milliseconds).");
 					else
 						mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
-								Utils.parseInPorcent(100 - dif - ping), "Player use Bow, last shot: " + np.LAST_SHOT_BOW
+								UniversalUtils.parseInPorcent(100 - dif - ping), "Player use Bow, last shot: " + np.LAST_SHOT_BOW
 								+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), "Time between last shot: " + dif + " (in milliseconds)");
 					if(isSetBack() && mayCancel)
 						e.setCancelled(true);

@@ -15,6 +15,7 @@ import com.elikill58.negativity.spigot.inventories.ForgeModsInventory;
 import com.elikill58.negativity.spigot.inventories.ModInventory;
 import com.elikill58.negativity.spigot.inventories.OneCheatInventory;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class InventoryEvents implements Listener {
 
@@ -39,7 +40,7 @@ public class InventoryEvents implements Listener {
 			CheatManagerInventory.manageCheatManagerMenu(e, m, p);
 		} else if (invName.equals(Inv.NAME_FORGE_MOD_MENU)) {
 			ForgeModsInventory.manageForgeModsMenu(e, m, p);
-		} else if (Utils.getCheatFromName(invName).isPresent()) {
+		} else if (UniversalUtils.getCheatFromName(invName).isPresent()) {
 			OneCheatInventory.manageOneCheatMenu(e, m, p);
 		}
 	}

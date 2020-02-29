@@ -27,6 +27,7 @@ import javax.net.ssl.X509TrustManager;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.SuspectManager;
@@ -35,7 +36,39 @@ import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.permissions.Perm;
 
 public class UniversalUtils {
+	
+	public static int parseInPorcent(int i) {
+		if (i > 100)
+			return 100;
+		else if (i < 0)
+			return 0;
+		else
+			return i;
+	}
 
+	public static int parseInPorcent(double i) {
+		if (i > 100)
+			return 100;
+		else if (i < 0)
+			return 0;
+		else
+			return (int) i;
+	}
+
+	public static Optional<Cheat> getCheatFromName(String s) {
+		for (Cheat c : Cheat.values())
+			if (c.getName().equalsIgnoreCase(s))
+				return Optional.of(c);
+		return Optional.empty();
+	}
+
+	public static Optional<Cheat> getCheatFromItem(Object m) {
+		for (Cheat c : Cheat.values())
+			if (c.getMaterial().equals(m))
+				return Optional.of(c);
+		return Optional.empty();
+	}
+	
 	public static List<String> getClasseNamesInPackage(String jarName, String packageName) {
 		ArrayList<String> classes = new ArrayList<>();
 

@@ -17,6 +17,7 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 @SuppressWarnings("deprecation")
 public class RegenProtocol extends Cheat implements Listener {
@@ -56,7 +57,7 @@ public class RegenProtocol extends Cheat implements Listener {
 			int ping = Utils.getPing(p);
 			if (dif < (Version.getVersion().getTimeBetweenTwoRegenFromVersion() + ping)) {
 				boolean mayCancel = SpigotNegativity.alertMod(dif < (50 + ping) ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-							Utils.parseInPorcent(200 - dif - ping), "Player regen, last regen: " + np.LAST_REGEN
+						UniversalUtils.parseInPorcent(200 - dif - ping), "Player regen, last regen: " + np.LAST_REGEN
 									+ " Actual time: " + actual + " Difference: " + dif + "ms",
 							"Time between two regen: " + dif + " (in milliseconds)");
 				if(isSetBack() && mayCancel)

@@ -19,6 +19,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 
 public class FastLadderProtocol extends Cheat {
@@ -71,7 +72,7 @@ public class FastLadderProtocol extends Cheat {
 
 		if (distance > 0.23 && distance < 3.8 && nbLadder > 2) {
 			int ping = Utils.getPing(p);
-			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(distance * 350),
+			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 350),
 					"On ladders. Distance from/to : " + distance + ". Ping: " + ping + "ms. Number of Ladder: " + nbLadder);
 			if (isSetBack() && mayCancel) {
 				Vector3d movementDelta = from.getPosition().sub(to.getPosition());

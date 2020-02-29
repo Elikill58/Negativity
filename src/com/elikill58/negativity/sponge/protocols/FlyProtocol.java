@@ -21,6 +21,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
@@ -82,7 +83,7 @@ public class FlyProtocol extends Cheat {
 				&& p.getLocation().getBlockRelative(Direction.UP).getBlockType() == BlockTypes.AIR
 				&& distance > 1.25D && !p.isOnGround()) {
 			ReportType type = np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING;
-			boolean mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent((int) distance * 50),
+			boolean mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent((int) distance * 50),
 					"Player not in ground, distance: " + distance + ". Warn for fly: " + np.getWarn(this));
 			if (isSetBack() && mayCancel) {
 				Location<World> loc = p.getLocation();
@@ -99,9 +100,9 @@ public class FlyProtocol extends Cheat {
 				&& fromPosition.getY() <= toPosition.getY()) {
 			double d = toPosition.getY() - fromPosition.getY();
 			int nb = getNbAirBlockDown(np);
-			int porcent = Utils.parseInPorcent(nb * 15 + d);
+			int porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
 			if (np.hasOtherThan(p.getLocation().add(0, -3, 0), BlockTypes.AIR))
-				porcent = Utils.parseInPorcent(porcent - 15);
+				porcent = UniversalUtils.parseInPorcent(porcent - 15);
 			boolean mayCancel = SpongeNegativity.alertMod(
 					np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
 					"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ". Warn for fly: " + np.getWarn(this));

@@ -19,6 +19,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 
 public class StepProtocol extends Cheat {
@@ -69,7 +70,7 @@ public class StepProtocol extends Cheat {
 					np.slime_block = true;
 				} else {
 					int ping = Utils.getPing(p);
-					int relia = Utils.parseInPorcent(dif * -500);
+					int relia = UniversalUtils.parseInPorcent(dif * -500);
 					if (dif > 0) {
 						return;
 					}

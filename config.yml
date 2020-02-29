@@ -196,6 +196,9 @@ Permissions:
     inventorymove:
       default: "negativity.bypass.inventorymove"
       custom: "ADMIN"
+    faststairs:
+      default: "negativity.bypass.faststairs"
+      custom: "ADMIN"
 
 Translation:
   active: false # enable or disable the translation
@@ -630,6 +633,17 @@ cheats:
   inventorymove:
     ping: 150
     exact_name: "InventoryMove"
+    isActive: true
+    reliability_alert: 60
+    autoVerif: true
+    setBack: false
+    kick: false
+    alert_to_kick: 5
+
+  # FastStairs make you walking faster on Stairs
+  faststairs:
+    ping: 150
+    exact_name: "FastStairs"
     isActive: true
     reliability_alert: 60
     autoVerif: true

@@ -11,6 +11,7 @@ import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class CheatManagerInventory {
 
@@ -33,7 +34,7 @@ public class CheatManagerInventory {
 		else if (m.equals(Material.ARROW))
 			ModInventory.openModMenu(p);
 		else {
-			Utils.getCheatFromItem(m).ifPresent((c) -> {OneCheatInventory.openOneCheatMenu(p, c);});
+			UniversalUtils.getCheatFromItem(m).ifPresent((c) -> {OneCheatInventory.openOneCheatMenu(p, c);});
 		}
 	}
 }

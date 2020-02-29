@@ -18,6 +18,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class FlyProtocol extends Cheat implements Listener {
 
@@ -57,11 +58,11 @@ public class FlyProtocol extends Cheat implements Listener {
 				boolean mayCancel = false;
 				if (np.getWarn(this) > 5)
 					mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
-							Utils.parseInPorcent((int) i * 50),
+							UniversalUtils.parseInPorcent((int) i * 50),
 							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this));
 				else
 					mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
-							Utils.parseInPorcent((int) i * 50),
+							UniversalUtils.parseInPorcent((int) i * 50),
 							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this));
 				if (isSetBack() && mayCancel) {
 					Utils.teleportPlayerOnGround(p);
@@ -74,9 +75,9 @@ public class FlyProtocol extends Cheat implements Listener {
 				&& !np.hasOtherThanExtended(p.getLocation().add(0, -2, 0), Material.AIR)
 				&& e.getFrom().getY() <= e.getTo().getY()) {
 			double d = e.getTo().getY() - e.getFrom().getY();
-			int  nb = getNbAirBlockDown(np), porcent = Utils.parseInPorcent(nb * 15 + d);
+			int  nb = getNbAirBlockDown(np), porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
 			if(np.hasOtherThan(p.getLocation().add(0, -3, 0), Material.AIR))
-				porcent = Utils.parseInPorcent(porcent - 15);
+				porcent = UniversalUtils.parseInPorcent(porcent - 15);
 			boolean mayCancel = SpigotNegativity.alertMod(
 					np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
 					"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ". Warn for fly: " + np.getWarn(this));

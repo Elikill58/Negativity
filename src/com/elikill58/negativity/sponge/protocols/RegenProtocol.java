@@ -21,6 +21,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class RegenProtocol extends Cheat {
 
@@ -63,7 +64,7 @@ public class RegenProtocol extends Cheat {
 			int ping = Utils.getPing(p);
 			if (dif < (300 + ping)) {
 				boolean mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this,
-						Utils.parseInPorcent((dif < (50 + ping) ? 200 : 100) - dif - ping), "Player regen, last regen: "
+						UniversalUtils.parseInPorcent((dif < (50 + ping) ? 200 : 100) - dif - ping), "Player regen, last regen: "
 								+ np.LAST_REGEN + " Actual time: " + actual + " Difference: " + dif,
 						"Time between two regen: " + dif + " (in milliseconds)");
 				if (isSetBack() && mayCancel) {

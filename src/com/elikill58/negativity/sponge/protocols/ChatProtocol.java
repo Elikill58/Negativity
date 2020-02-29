@@ -9,11 +9,11 @@ import org.spongepowered.api.item.ItemTypes;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ChatProtocol extends Cheat {
 
@@ -38,7 +38,7 @@ public class ChatProtocol extends Cheat {
 		}
 		if(!foundedInsults.equalsIgnoreCase("")) {
 			boolean mayCancel = SpongeNegativity.alertMod(foundedInsults.contains(", ") ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-					Utils.parseInPorcent(80 + (foundedInsults.split(", ").length - 1) * 10), "Insults: " + foundedInsults, "Insults: " + foundedInsults);
+					UniversalUtils.parseInPorcent(80 + (foundedInsults.split(", ").length - 1) * 10), "Insults: " + foundedInsults, "Insults: " + foundedInsults);
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);
 		}

@@ -18,6 +18,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 @SuppressWarnings("deprecation")
 public class ForceFieldProtocol extends Cheat implements Listener {
@@ -45,7 +46,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if (dis > Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach")
 				&& !p.getItemInHand().getType().equals(Material.BOW)) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
-					Utils.parseInPorcent(dis * 2 * 10),
+					UniversalUtils.parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis
 							+ ". Ping: " + Utils.getPing(p),
 					"Distance with " + e.getEntity().getName() + ": " + nf.format(dis), "Distance with " + e.getEntity().getName() + ": " + nf.format(dis));
@@ -60,7 +61,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
 		double rapport = np.fakePlayerTouched / (timeBehindStart / 1000);
 		SpigotNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD),
-				Utils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
+				UniversalUtils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms", np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");
 	}

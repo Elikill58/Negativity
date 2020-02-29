@@ -17,6 +17,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class StepProtocol extends Cheat implements Listener {
 
@@ -54,7 +55,7 @@ public class StepProtocol extends Cheat implements Listener {
 				if (hasSlimeBlock)
 					np.slime_block = true;
 				else {
-					int ping = Utils.getPing(p), relia = Utils.parseInPorcent(dif * -500);
+					int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(dif * -500);
 					if ((from.getY() - to.getY()) > 0)
 						return;
 					if (dif < -1.499 && ping < 200) {

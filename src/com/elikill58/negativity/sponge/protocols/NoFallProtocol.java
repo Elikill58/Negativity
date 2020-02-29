@@ -24,6 +24,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NoFallProtocol extends Cheat {
 
@@ -50,7 +51,7 @@ public class NoFallProtocol extends Cheat {
 		float fallDistance = np.getFallDistance();
 		if (!(distance == 0.0D || from.getY() < to.getY())) {
 			if (fallDistance == 0.0F && p.getLocation().sub(0, 1, 0).getBlockType().equals(BlockTypes.AIR)) {
-				int reliability = Utils.parseInPorcent(distance * 100);
+				int reliability = UniversalUtils.parseInPorcent(distance * 100);
 				if (np.justDismounted) {
 					// If the player dismounted a vehicule a few ticks ago, we may be wrong
 					// For example, flying with pixelmons and dismounting may cause false positives
@@ -84,7 +85,7 @@ public class NoFallProtocol extends Cheat {
 			} else if(!p.isOnGround()) {
 				BlockType justUnder = p.getLocation().copy().sub(0, 0.1, 0).getBlock().getType();
 				if(justUnder.getProperty(SolidCubeProperty.class).get().getValue() && fallDistance > 3.0) {
-					int ping = Utils.getPing(p), relia = Utils.parseInPorcent(100 - (ping / 5) + fallDistance);
+					int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - (ping / 5) + fallDistance);
 					boolean mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
 							"Player not ground with fall damage (FallDistance: " + fallDistance + "). Block 0.1 below: " + justUnder.getId()
 									+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + ping

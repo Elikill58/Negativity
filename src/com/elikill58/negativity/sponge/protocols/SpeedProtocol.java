@@ -19,10 +19,10 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
@@ -70,11 +70,11 @@ public class SpeedProtocol extends Cheat {
 		double distance = toVect.sub(0, toVect.getY(), 0).distance(fromVect.sub(0, fromVect.getY(), 0));
 		String proof = "In ground: " + p.isOnGround() + "WalkSpeed: " + p.get(Keys.WALKING_SPEED).get() + "  Distance between from/to location: " + distance;
 		if (p.isOnGround() && distance >= 0.75D) {
-			mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent(distance * 100 * 2), proof,
+			mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(distance * 100 * 2), proof,
 					"Distance Last/New position: " + distance + "\n(With same Y)\nPlayer on ground", "Distance Last-New position: " + distance);
 		} else if (!p.isOnGround()) {
 			if(distance >= 0.85D) {
-				mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent(distance * 100 * 2), proof,
+				mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(distance * 100 * 2), proof,
 						"Distance Last/New position: " + distance + "\n(With same Y)\nPlayer jumping", "Distance Last-New position: " + distance);
 			} else {
 				BlockType under = e.getToTransform().getLocation().copy().sub(0, 1, 0).getBlockType();

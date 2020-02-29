@@ -16,6 +16,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NoWebProtocol extends Cheat implements Listener {
 
@@ -41,7 +42,7 @@ public class NoWebProtocol extends Cheat implements Listener {
 		if (!(distance > MAX)) {
 			Block under = new Location(p.getWorld(), l.getX(), l.getY(), l.getZ()).getBlock();
 			if (under.getType() == WEB && distance > 0.13716039608514914) {
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(distance * 500), "Distance: " + distance + ", fallDistance: " + p.getFallDistance(), "", "Distance: " + distance);
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500), "Distance: " + distance + ", fallDistance: " + p.getFallDistance(), "", "Distance: " + distance);
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			}

@@ -17,6 +17,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class PacketsTimers implements Consumer<Task> {
 
@@ -44,7 +45,7 @@ public class PacketsTimers implements Consumer<Task> {
 					if (np.getItemTypeInHand().getType().equals(ItemTypes.BOW))
 						np.flyingReason = FlyingReason.BOW;
 					ReportType type = flying > 30 ? ReportType.WARNING : ReportType.VIOLATION;
-					if (np.flyingReason.getCheat().isSetBack() && SpongeNegativity.alertMod(type, p, np.flyingReason.getCheat(), Utils.parseInPorcent(flying - (ping / 9)),
+					if (np.flyingReason.getCheat().isSetBack() && SpongeNegativity.alertMod(type, p, np.flyingReason.getCheat(), UniversalUtils.parseInPorcent(flying - (ping / 9)),
 							"Flying in one second: " + np.FLYING + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
 							"Too many packet: " + flying + "\n(Valid packets with low ping: 20)")) {
 						switch (np.flyingReason) {
@@ -95,7 +96,7 @@ public class PacketsTimers implements Consumer<Task> {
 					if (np.getWarn(FORCEFIELD) > 5)
 						type = ReportType.VIOLATION;
 					SpongeNegativity.alertMod(type, p, FORCEFIELD,
-							Utils.parseInPorcent(np.ARM + np.USE_ENTITY + np.getWarn(FORCEFIELD)),
+							UniversalUtils.parseInPorcent(np.ARM + np.USE_ENTITY + np.getWarn(FORCEFIELD)),
 							"ArmAnimation (Attack in one second): " + np.ARM
 									+ ", UseEntity (interaction with other entity): " + np.USE_ENTITY + " And warn: "
 									+ np.getWarn(FORCEFIELD) + ". Ping: " + ping);
@@ -105,7 +106,7 @@ public class PacketsTimers implements Consumer<Task> {
 			if (np.hasDetectionActive(BLINK) && !np.bypassBlink && ping < 140) {
 				int total = np.ALL - np.KEEP_ALIVE;
 				if (total == 0) {
-					int reliability = Utils.parseInPorcent(150 - ping);
+					int reliability = UniversalUtils.parseInPorcent(150 - ping);
 					if (reliability >= BLINK.getReliabilityAlert()) {
 						boolean last = np.IS_LAST_SEC_BLINK == 2;
 						np.IS_LAST_SEC_BLINK++;
@@ -123,7 +124,7 @@ public class PacketsTimers implements Consumer<Task> {
 				if(ping < BLINK.getMaxAlertPing()){
 					int allPos = np.POSITION_LOOK + np.POSITION;
 					if(allPos > 60) {
-						SpongeNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, BLINK, Utils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + ") Ping: " + ping + " Warn for Timer: " + np.getWarn(BLINK));
+						SpongeNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, BLINK, UniversalUtils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + ") Ping: " + ping + " Warn for Timer: " + np.getWarn(BLINK));
 					}
 				}
 			}
@@ -131,7 +132,7 @@ public class PacketsTimers implements Consumer<Task> {
 			if (np.hasDetectionActive(SNEAK) && ping < 140) {
 				if (np.ENTITY_ACTION > 35) {
 					if (np.IS_LAST_SEC_SNEAK)
-						SpongeNegativity.alertMod(ReportType.WARNING, p, SNEAK, Utils.parseInPorcent(55 + np.ENTITY_ACTION), "EntityAction packet: " + np.ENTITY_ACTION + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
+						SpongeNegativity.alertMod(ReportType.WARNING, p, SNEAK, UniversalUtils.parseInPorcent(55 + np.ENTITY_ACTION), "EntityAction packet: " + np.ENTITY_ACTION + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
 					np.IS_LAST_SEC_SNEAK = true;
 				} else {
 					np.IS_LAST_SEC_SNEAK = false;
@@ -139,7 +140,7 @@ public class PacketsTimers implements Consumer<Task> {
 			}
 			Cheat FASTPLACE = Cheat.forKey(CheatKeys.FAST_PLACE);
 			if (np.hasDetectionActive(FASTPLACE) && ping < 200 && np.BLOCK_PLACE > 10) {
-				SpongeNegativity.alertMod(ReportType.WARNING, p, FASTPLACE, Utils.parseInPorcent(np.BLOCK_PLACE * 5), "BLockPlace: " + np.BLOCK_PLACE + " Ping: " + ping + " Warn for BlockPlace: " + np.getWarn(FASTPLACE));
+				SpongeNegativity.alertMod(ReportType.WARNING, p, FASTPLACE, UniversalUtils.parseInPorcent(np.BLOCK_PLACE * 5), "BLockPlace: " + np.BLOCK_PLACE + " Ping: " + ping + " Warn for BlockPlace: " + np.getWarn(FASTPLACE));
 			}
 			np.clearPackets();
 		}

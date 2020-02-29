@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,7 +21,6 @@ import org.bukkit.inventory.meta.SkullMeta;
 import com.elikill58.negativity.spigot.ClickableText;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -140,19 +138,6 @@ public class Utils {
 		}
 	}
 
-	public static int parseInPorcent(int i) {
-		if (i > 100)
-			return 100;
-		else if (i < 0)
-			return 0;
-		else
-			return i;
-	}
-
-	public static int parseInPorcent(double i) {
-		return parseInPorcent((int) i);
-	}
-
 	public static void sendPacket(Player p, String packetdir, Class<?> type, Object send) {
 		try {
 			sendPacket(p, Class.forName(packetdir.replaceAll("<version>", VERSION).replaceAll("%version%", VERSION)).getConstructor(type).newInstance(send));
@@ -226,20 +211,6 @@ public class Utils {
 			m = null;
 		}
 		return m;
-	}
-
-	public static Optional<Cheat> getCheatFromName(String s) {
-		for (Cheat c : Cheat.values())
-			if (c.getName().equalsIgnoreCase(s))
-				return Optional.of(c);
-		return Optional.empty();
-	}
-
-	public static Optional<Cheat> getCheatFromItem(Material m) {
-		for (Cheat c : Cheat.values())
-			if (c.getMaterial().equals(m))
-				return Optional.of(c);
-		return Optional.empty();
 	}
 
 	public static void sendUpdateMessageIfNeed(Player p) {

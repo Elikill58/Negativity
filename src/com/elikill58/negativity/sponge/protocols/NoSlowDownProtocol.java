@@ -19,6 +19,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 
 public class NoSlowDownProtocol extends Cheat {
@@ -54,7 +55,7 @@ public class NoSlowDownProtocol extends Cheat {
 		double distance = to.getPosition().distance(from.getPosition());
 		if (distance > 0.2) {
 			int ping = Utils.getPing(p);
-			int relia = Utils.parseInPorcent(distance * 400);
+			int relia = UniversalUtils.parseInPorcent(distance * 400);
 			if ((from.getYaw() - to.getYaw()) < -0.001) {
 				return;
 			}

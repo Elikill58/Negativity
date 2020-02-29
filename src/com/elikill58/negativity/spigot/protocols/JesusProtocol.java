@@ -19,6 +19,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class JesusProtocol extends Cheat implements Listener {
 
@@ -72,7 +73,7 @@ public class JesusProtocol extends Cheat implements Listener {
 				else if(dif == 0.0)
 					reliability = 95;
 				else return;
-				boolean mayCancel = SpigotNegativity.alertMod(type, p, this, Utils.parseInPorcent(reliability), "Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif + " and ping: "
+				boolean mayCancel = SpigotNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(reliability), "Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif + " and ping: "
 									+ Utils.getPing(p));
 				if(isSetBack() && mayCancel)
 					p.teleport(p.getLocation().subtract(0, 1, 0));
@@ -98,7 +99,7 @@ public class JesusProtocol extends Cheat implements Listener {
 			Location dessous = p.getLocation().clone().subtract(0, 1, 0);
 			if(dessous.getBlock().getType().equals(WATER) && !np.hasOtherThan(dessous, WATER)) {
 				if(!(np.has(p.getLocation().clone(), LILY) || p.getLocation().getBlock().getType().equals(LILY))) {
-					boolean mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, this, Utils.parseInPorcent((d + 5) * 10), "Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: " + d + " (other: " + np.jesusLastY.get(p.getName() + "-" + (np.jesusState ? 2 : 1)) + ") and ping: " + Utils.getPing(p));
+					boolean mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((d + 5) * 10), "Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: " + d + " (other: " + np.jesusLastY.get(p.getName() + "-" + (np.jesusState ? 2 : 1)) + ") and ping: " + Utils.getPing(p));
 					if(isSetBack() && mayCancel)
 						p.teleport(p.getLocation().subtract(0, 1, 0));
 				}

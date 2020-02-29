@@ -5,7 +5,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nullable;
@@ -28,7 +27,6 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3i;
 
@@ -68,38 +66,6 @@ public class Utils {
 
 	public static int getPing(Player p) {
 		return p.getConnection().getLatency();
-	}
-
-	public static int parseInPorcent(int i) {
-		if (i > 100)
-			return 100;
-		else if (i < 0)
-			return 0;
-		else
-			return i;
-	}
-
-	public static int parseInPorcent(double i) {
-		if (i > 100)
-			return 100;
-		else if (i < 0)
-			return 0;
-		else
-			return (int) i;
-	}
-
-	public static Optional<Cheat> getCheatFromName(String s) {
-		for (Cheat c : Cheat.values())
-			if (c.getName().equalsIgnoreCase(s))
-				return Optional.of(c);
-		return Optional.empty();
-	}
-
-	public static Optional<Cheat> getCheatFromItem(ItemType m) {
-		for (Cheat c : Cheat.values())
-			if (c.getMaterial().equals(m))
-				return Optional.of(c);
-		return Optional.empty();
 	}
 
 	public static ItemStack createItem(ItemType m, String name, String... lore) {

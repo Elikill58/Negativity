@@ -16,6 +16,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class FastLadderProtocol extends Cheat implements Listener {
 
@@ -56,7 +57,7 @@ public class FastLadderProtocol extends Cheat implements Listener {
 		}
 		if (distance > 0.23 && distance < 3.8 && nbLadder > 2) {
 			int ping = Utils.getPing(p);
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(distance * 350),
+			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 350),
 					"On ladders. Distance from/to : " + distance + ". Ping: " + ping + "ms. Number Ladder: " + nbLadder);
 			if (isSetBack() && mayCancel)
 				e.setTo(e.getFrom().clone().add(new Location(fl.getWorld(), fl.getX() / 2, fl.getY() / 2, fl.getZ()))

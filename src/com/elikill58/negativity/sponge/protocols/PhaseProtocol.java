@@ -17,6 +17,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
@@ -62,7 +63,7 @@ public class PhaseProtocol extends Cheat {
 		}
 
 		if (!np.isJumpingWithBlock) {
-			SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, Utils.parseInPorcent((yDiff * 200) + 20),
+			SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent((yDiff * 200) + 20),
 					"Player on air. No jumping. DistanceBetweenFromAndTo: " + yDiff + " (ping: " + Utils.getPing(p)
 							+ "). Warn: " + np.getWarn(this));
 		}

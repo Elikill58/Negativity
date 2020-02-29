@@ -15,6 +15,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NoSlowDownProtocol extends Cheat implements Listener {
 
@@ -37,7 +38,7 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 		Location fl = from.clone().subtract(to.clone());
 		double distance = to.toVector().distance(from.toVector());
 		if (distance > 0.2) {
-			int ping = Utils.getPing(p), relia = Utils.parseInPorcent(distance * 400);
+			int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(distance * 400);
 			if((from.getY() - to.getY()) < -0.001)
 				return;
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia,

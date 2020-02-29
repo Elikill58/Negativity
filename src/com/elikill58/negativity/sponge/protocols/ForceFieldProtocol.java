@@ -24,6 +24,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 
 public class ForceFieldProtocol extends Cheat {
@@ -51,7 +52,7 @@ public class ForceFieldProtocol extends Cheat {
 		double allowedReach = Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0);
 		if (distance > allowedReach) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this,
-					Utils.parseInPorcent(distance * 2 * 10),
+					UniversalUtils.parseInPorcent(distance * 2 * 10),
 					"Big distance with: " + e.getTargetEntity().getType().getName().toLowerCase() + ". Exact distance: "
 							+ distance + ". Ping: " + Utils.getPing(p),
 					"Distance with " + e.getTargetEntity().getType().getName() + ": " + distanceFormatter.format(distance), "Distance with " + e.getTargetEntity().getType().getName() + ": " + distanceFormatter.format(distance));
@@ -107,7 +108,7 @@ public class ForceFieldProtocol extends Cheat {
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
 		double rapport = np.fakePlayerTouched / (timeBehindStart / 1000);
 		SpongeNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD),
-				Utils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
+				UniversalUtils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms", np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");
 	}

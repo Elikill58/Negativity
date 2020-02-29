@@ -17,6 +17,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ScaffoldProtocol extends Cheat {
 
@@ -53,7 +54,7 @@ public class ScaffoldProtocol extends Cheat {
 					localPing = 1;
 				}
 
-				boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(120 / localPing),
+				boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(120 / localPing),
 						"Item in hand: " + m.getName() + " Block placed: " + placed.getName() + " Ping: " + ping,
 						"Item in hand: " + m.getName().toLowerCase() + " \nBlock placed: "
 								+ placed.getName().toLowerCase());

@@ -25,6 +25,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3i;
 
 public class JesusProtocol extends Cheat {
@@ -99,7 +100,7 @@ public class JesusProtocol extends Cheat {
 			else if (dif == p.get(Keys.WALKING_SPEED).get())
 				reliability = 90;
 			else return;
-			boolean mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent(reliability),
+			boolean mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(reliability),
 					"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) WalkSpeed: " + p.get(Keys.WALKING_SPEED).get() + ". Diff: " + dif + " and ping: " + Utils.getPing(p));
 			if (isSetBack() && mayCancel) {
 				p.setLocation(p.getLocation().sub(Vector3i.UNIT_Y));

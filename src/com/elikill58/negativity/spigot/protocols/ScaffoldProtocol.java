@@ -14,6 +14,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ScaffoldProtocol extends Cheat implements Listener {
 
@@ -42,7 +43,7 @@ public class ScaffoldProtocol extends Cheat implements Listener {
 					int localPing = ping;
 					if(localPing == 0)
 						localPing = 1;
-					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, instance, Utils.parseInPorcent(120 / localPing),
+					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, instance, UniversalUtils.parseInPorcent(120 / localPing),
 							"Item in hand: " + m.name() + " Block placed: " + placed.name() + " Ping: " + ping,
 							"Item in hand: " + m.name().toLowerCase() + " \nBlock placed: " + placed.name().toLowerCase());
 					if(isSetBack() && mayCancel) {

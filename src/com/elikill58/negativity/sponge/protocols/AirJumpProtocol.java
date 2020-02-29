@@ -17,6 +17,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class AirJumpProtocol extends Cheat {
 
@@ -41,7 +42,7 @@ public class AirJumpProtocol extends Cheat {
 				&& !np.hasOtherThanExtended(loc.copy().sub(0, 2, 0), BlockTypes.AIR)) {
 			boolean mayCancel = SpongeNegativity.alertMod(
 					temp > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-					Utils.parseInPorcent((int) (temp * 210) - Utils.getPing(p)),
+					UniversalUtils.parseInPorcent((int) (temp * 210) - Utils.getPing(p)),
 					"Actual diff Y: " + np.lastYDiff + ", last diff Y: " + temp + ", ping: " + Utils.getPing(p)
 							+ ". Warn for AirJump: " + np.getWarn(this));
 			if (isSetBack() && mayCancel)

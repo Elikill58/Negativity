@@ -15,10 +15,10 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NoWebProtocol extends Cheat {
 
@@ -55,7 +55,7 @@ public class NoWebProtocol extends Cheat {
 			BlockState under = new Location<World>(p.getWorld(), l.getX(), l.getY(), l.getZ()).getBlock();
 			if (under.getType() == ItemTypes.WEB) {
 				if (distance > 0.14) {
-					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(distance * 500), "Distance: " + distance + ", fallDistance: " + np.getFallDistance(), "Distance: " + distance);
+					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500), "Distance: " + distance + ", fallDistance: " + np.getFallDistance(), "Distance: " + distance);
 					if(mayCancel && isSetBack())
 						e.setCancelled(true);
 				}

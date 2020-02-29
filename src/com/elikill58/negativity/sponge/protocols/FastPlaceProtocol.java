@@ -13,6 +13,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class FastPlaceProtocol extends Cheat {
 
@@ -36,7 +37,7 @@ public class FastPlaceProtocol extends Cheat {
 		np.LAST_BLOCK_PLACE = System.currentTimeMillis();
 		if (lastPing < 50) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this,
-					Utils.parseInPorcent(50 + lastPing), "Blockplaced too quickly. Last time: " + last + ", Last with ping: "
+					UniversalUtils.parseInPorcent(50 + lastPing), "Blockplaced too quickly. Last time: " + last + ", Last with ping: "
 							+ lastPing + ". Ping: " + Utils.getPing(p),
 					"2 blocks placed in: " + last + " ms\nReal player do it in 150/200ms");
 			if (isSetBack() && mayCancel) {

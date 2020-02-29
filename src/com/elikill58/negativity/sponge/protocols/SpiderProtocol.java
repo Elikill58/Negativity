@@ -17,10 +17,10 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
@@ -76,7 +76,7 @@ public class SpiderProtocol extends Cheat {
 			}
 
 			ReportType type = (np.getWarn(this) > 6) ? ReportType.WARNING : ReportType.VIOLATION;
-			boolean mayCancel = SpongeNegativity.alertMod(type, p, this, Utils.parseInPorcent(relia),
+			boolean mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(relia),
 					"Nothing around him. To > From: " + y + " isAris: " + isAris + " has not stab slairs.");
 			if (isSetBack() && mayCancel) {
 				Location<World> locc = p.getLocation();
@@ -115,7 +115,7 @@ public class SpiderProtocol extends Cheat {
 			loc.setPosition(new Vector3d(np.lastSpiderLoc.getX(), loc.getY(), np.lastSpiderLoc.getZ()));
 			double tempDis = loc.getPosition().distance(np.lastSpiderLoc.getPosition());
 			if (np.lastSpiderDistance == tempDis && tempDis != 0) {
-				int porcent = Utils.parseInPorcent(tempDis * 450);
+				int porcent = UniversalUtils.parseInPorcent(tempDis * 450);
 				if (SpongeNegativity.alertMod(ReportType.WARNING, p, this, porcent, "Nothing around him. To > From: "
 						+ y + " isAris: " + isAris + ". Walk on wall with always same y.") && isSetBack()) {
 					Location<World> locc = p.getLocation();

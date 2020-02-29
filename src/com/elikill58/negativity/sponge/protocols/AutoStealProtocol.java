@@ -19,6 +19,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class AutoStealProtocol extends Cheat {
 
@@ -53,7 +54,7 @@ public class AutoStealProtocol extends Cheat {
 		long diff = actual - np.LAST_CLICK_INV;
 		int ping = Utils.getPing(p);
 		if ((ping + TIME_CLICK) >= diff) {
-			if (np.lastClickInv && isSetBack() && SpongeNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent((100 + TIME_CLICK) - diff - ping), "Time between 2 click: " + diff + ". Ping: " + ping, "Time between 2 clicks: " + diff, "Time between 2 clicks: " + diff + "ms")) {
+			if (np.lastClickInv && isSetBack() && SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((100 + TIME_CLICK) - diff - ping), "Time between 2 click: " + diff + ". Ping: " + ping, "Time between 2 clicks: " + diff, "Time between 2 clicks: " + diff + "ms")) {
 				e.setCancelled(true);
 			}
 			np.lastClickInv = true;

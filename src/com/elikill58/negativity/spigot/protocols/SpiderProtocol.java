@@ -11,10 +11,10 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class SpiderProtocol extends Cheat implements Listener {
 
@@ -52,7 +52,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		if (((y > 0.499 && y < 0.7) || isAris || last == y) && hasOtherThan(loc, Material.AIR)) {
 			if(hasBypassBlockAround(loc))
 				return;
-			int relia = Utils.parseInPorcent((e.getTo().getY() - e.getFrom().getY()) * 200 + (isAris ? 39 : 0));
+			int relia = UniversalUtils.parseInPorcent((e.getTo().getY() - e.getFrom().getY()) * 200 + (isAris ? 39 : 0));
 			if (SpigotNegativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this,
 					relia, "Nothing around him. To > From: " + y + " isAris: " + isAris + " has not stab slairs.")
 					&& isSetBack()) {
@@ -84,7 +84,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 			double tempDis = loc.distance(np.lastSpiderLoc);
 			if (np.lastSpiderDistance == tempDis && tempDis != 0) {
 				if(np.last_is_same_spider) {
-					int porcent = Utils.parseInPorcent(tempDis * 450);
+					int porcent = UniversalUtils.parseInPorcent(tempDis * 450);
 					if (SpigotNegativity.alertMod(ReportType.WARNING, p, this, porcent, "Nothing around him. To > From: "
 							+ y + ". Walk on wall with always same y.") && isSetBack()) {
 						Location locc = p.getLocation();

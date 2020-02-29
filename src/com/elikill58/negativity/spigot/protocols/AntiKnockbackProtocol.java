@@ -24,6 +24,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class AntiKnockbackProtocol extends Cheat implements Listener {
 	
@@ -86,7 +87,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 						if(last.getWorld() != actual.getWorld() || p.isDead())
 							return;
 						double d = last.distance(actual);
-						int ping = Utils.getPing(p), relia = Utils.parseInPorcent(100 - d);
+						int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - d);
 						if (d < 0.1 && !actual.getBlock().getType().equals(Utils.getMaterialWith1_15_Compatibility("WEB", "COBWEB")) && !p.isSneaking()){
 							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.ANTI_KNOCKBACK), relia,
 									"Distance after damage: " + d + "; Damager: " + e.getDamager().getType().name().toLowerCase() + " Ping: " + ping, "Distance after damage: " + d);

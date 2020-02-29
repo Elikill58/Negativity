@@ -15,6 +15,7 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ChatProtocol extends Cheat implements Listener {
 
@@ -37,7 +38,7 @@ public class ChatProtocol extends Cheat implements Listener {
 				if (bypassEvent.isCancelled()) {
 					Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
 						boolean mayCancel = SpigotNegativity.alertMod(np.LAST_CHAT_MESSAGE_NB > 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-								Utils.parseInPorcent(100), "Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times",
+								UniversalUtils.parseInPorcent(100), "Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times",
 								"Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times");
 						if(mayCancel && isSetBack())
 							e.setCancelled(true);
@@ -58,7 +59,7 @@ public class ChatProtocol extends Cheat implements Listener {
 			final String finalString = foundedInsults;
 			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
 				boolean mayCancel = SpigotNegativity.alertMod(finalString.contains(", ") ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-						Utils.parseInPorcent(80 + (finalString.split(", ").length - 1) * 10), "Insults: " + finalString, "Insults: " + finalString);
+						UniversalUtils.parseInPorcent(80 + (finalString.split(", ").length - 1) * 10), "Insults: " + finalString, "Insults: " + finalString);
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			});

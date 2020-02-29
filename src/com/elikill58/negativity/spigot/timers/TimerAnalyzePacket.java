@@ -16,6 +16,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 @SuppressWarnings({"deprecation"})
 public class TimerAnalyzePacket extends BukkitRunnable {
@@ -41,7 +42,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					if(p.getItemInHand().getType().equals(Material.BOW))
 						np.flyingReason = FlyingReason.BOW;
 					double[] allTps = Utils.getTPS();
-					int porcent = Utils.parseInPorcent(flying - (ping / (allTps[1] - allTps[0] > 0.5 ? 9 : 8)));
+					int porcent = UniversalUtils.parseInPorcent(flying - (ping / (allTps[1] - allTps[0] > 0.5 ? 9 : 8)));
 					SpigotNegativity.alertMod(flying > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, np.flyingReason.getCheat(), porcent,
 							"Flying in one second: " + np.FLYING + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
 							"Too many packet: " + flying + "\n(Valid packets with low ping: 20)", flying + " flying packets");
@@ -95,7 +96,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					if (np.getWarn(FORCEFIELD) > 5)
 						type = ReportType.VIOLATION;
 					SpigotNegativity.alertMod(type, p, FORCEFIELD,
-							Utils.parseInPorcent(np.ARM + np.USE_ENTITY + np.getWarn(FORCEFIELD)),
+							UniversalUtils.parseInPorcent(np.ARM + np.USE_ENTITY + np.getWarn(FORCEFIELD)),
 							"ArmAnimation (Attack in one second): " + np.ARM
 									+ ", UseEntity (interaction with other entity): " + np.USE_ENTITY + " And warn: "
 									+ np.getWarn(FORCEFIELD) + ". Ping: " + ping);
@@ -106,12 +107,12 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				if (ping < 140) {
 					int total = np.ALL - np.KEEP_ALIVE;
 					if (total == 0) {
-						if(Utils.parseInPorcent(100 - ping) >= BLINK.getReliabilityAlert()) {
+						if(UniversalUtils.parseInPorcent(100 - ping) >= BLINK.getReliabilityAlert()) {
 							boolean last = np.IS_LAST_SEC_BLINK == 2;
 							np.IS_LAST_SEC_BLINK++;
 							long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
 							if (last) {
-								SpigotNegativity.alertMod(ReportType.WARNING, p, BLINK, Utils.parseInPorcent(100 - ping),
+								SpigotNegativity.alertMod(ReportType.WARNING, p, BLINK, UniversalUtils.parseInPorcent(100 - ping),
 										"No packet. Last other than KeepAlive: " + np.LAST_OTHER_KEEP_ALIVE + " there is: "
 												+ time_last + "ms . Ping: " + ping + ". Warn: " + np.getWarn(BLINK));
 							}
@@ -124,7 +125,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				if(ping < BLINK.getMaxAlertPing()){
 					int allPos = np.POSITION_LOOK + np.POSITION;
 					if(allPos > 60) {
-						SpigotNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, BLINK, Utils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + ") Ping: " + ping + " Warn for Timer: " + np.getWarn(BLINK));
+						SpigotNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, BLINK, UniversalUtils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + ") Ping: " + ping + " Warn for Timer: " + np.getWarn(BLINK));
 					}
 				}
 			}
@@ -133,7 +134,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				if(ping < 140){
 					if(np.ENTITY_ACTION > 35){
 						if(np.IS_LAST_SEC_SNEAK){
-							SpigotNegativity.alertMod(ReportType.WARNING, p, SNEAK, Utils.parseInPorcent(55 + np.ENTITY_ACTION), "EntityAction packet: " + np.ENTITY_ACTION + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
+							SpigotNegativity.alertMod(ReportType.WARNING, p, SNEAK, UniversalUtils.parseInPorcent(55 + np.ENTITY_ACTION), "EntityAction packet: " + np.ENTITY_ACTION + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
 							if(SNEAK.isSetBack())
 								p.setSneaking(false);
 						}
@@ -144,7 +145,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 			Cheat NUKER = Cheat.forKey(CheatKeys.NUKER);
 			if(np.ACTIVE_CHEAT.contains(NUKER))
 				if(ping < NUKER.getMaxAlertPing() && (np.BLOCK_DIG - (ping / 10)) > 20)
-					SpigotNegativity.alertMod(np.BLOCK_DIG > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, Utils.parseInPorcent(20 + np.BLOCK_DIG), "BlockDig packet: " + np.BLOCK_DIG + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
+					SpigotNegativity.alertMod(np.BLOCK_DIG > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, UniversalUtils.parseInPorcent(20 + np.BLOCK_DIG), "BlockDig packet: " + np.BLOCK_DIG + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
 			np.clearPackets();
 		}
 	}

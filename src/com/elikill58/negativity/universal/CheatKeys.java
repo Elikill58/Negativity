@@ -14,6 +14,7 @@ public class CheatKeys {
 	public static final String FAST_EAT = "FASTEAT";
 	public static final String FAST_LADDER = "FASTLADDER";
 	public static final String FAST_PLACE = "FASTPLACE";
+	public static final String FAST_STAIRS = "FASTSTAIRS";
 	public static final String FLY = "FLY";
 	public static final String FORCEFIELD = "FORCEFIELD";
 	public static final String INVENTORY_MOVE = "INVENTORYMOVE";

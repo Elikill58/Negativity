@@ -14,6 +14,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NukerProtocol extends Cheat implements Listener {
 
@@ -32,7 +33,7 @@ public class NukerProtocol extends Cheat implements Listener {
 		Block target = p.getTargetBlock(null, 5);
 		double distance = target.getLocation().distance(e.getBlock().getLocation());
 		if ((target.getType() != e.getBlock().getType()) && distance > 3.5) {
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent(distance * 15 - Utils.getPing(p)),
+			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - Utils.getPing(p)),
 					"BlockDig " + e.getBlock().getType().name() + ", player see " + target.getType().name() + ". Distance between blocks " + distance + " block. Ping: " + Utils.getPing(p) + ". Warn: " + np.getWarn(this));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);

@@ -11,6 +11,7 @@ import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class OneCheatInventory {
 
@@ -42,7 +43,7 @@ public class OneCheatInventory {
 			return;
 		}
 		Inventory inv = e.getClickedInventory();
-		Cheat c = Utils.getCheatFromName(Utils.getInventoryName(e)).get();
+		Cheat c = UniversalUtils.getCheatFromName(Utils.getInventoryName(e)).get();
 		if (m.equals(c.getMaterial()))
 			return;
 		int slot = e.getRawSlot();

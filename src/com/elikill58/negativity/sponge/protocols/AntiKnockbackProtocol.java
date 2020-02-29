@@ -30,6 +30,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 
 public class AntiKnockbackProtocol extends Cheat {
@@ -88,7 +89,7 @@ public class AntiKnockbackProtocol extends Cheat {
 			Task.builder().delay(250, TimeUnit.MILLISECONDS).execute(() -> {
 				Location<World> actual = p.getLocation();
 				double d = last.getPosition().distance(actual.getPosition());
-				int ping = Utils.getPing(p), relia = Utils.parseInPorcent(100 - d);
+				int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - d);
 				if (d < 0.1 && actual.getBlockType() != BlockTypes.WEB && !p.get(Keys.IS_SNEAKING).orElse(false)) {
 					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, relia,
 							"Distance after damage: " + d + "; Ping: " + ping, "Distance after damage: " + d);

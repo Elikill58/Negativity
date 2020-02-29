@@ -17,6 +17,7 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class FastBowProtocol extends Cheat {
 
@@ -50,10 +51,10 @@ public class FastBowProtocol extends Cheat {
 					int reliability;
 					if (dif < (50 + ping)) {
 						violation = ReportType.VIOLATION;
-						reliability = Utils.parseInPorcent(200 - dif - ping);
+						reliability = UniversalUtils.parseInPorcent(200 - dif - ping);
 					} else {
 						violation = ReportType.WARNING;
-						reliability = Utils.parseInPorcent(100 - dif - ping);
+						reliability = UniversalUtils.parseInPorcent(100 - dif - ping);
 					}
 					boolean mayCancel = SpongeNegativity.alertMod(violation, p, this, reliability,
 							"Player use Bow, last shot: " + np.LAST_SHOT_BOW + " Actual time: " + actual

@@ -14,6 +14,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class AutoStealProtocol extends Cheat implements Listener {
 
@@ -53,7 +54,7 @@ public class AutoStealProtocol extends Cheat implements Listener {
 			return;
 		if((ping + TIME_CLICK) >= dif && tempSlot != e.getRawSlot()){
 			if(np.lastClickInv){
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, Utils.parseInPorcent((100 + TIME_CLICK) - dif - ping), "Time between 2 click: " + dif + ". Ping: " + ping, "Time between 2 clicks: " + dif + "ms", "Time between 2 clicks: " + dif + "ms");
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((100 + TIME_CLICK) - dif - ping), "Time between 2 click: " + dif + ". Ping: " + ping, "Time between 2 clicks: " + dif + "ms", "Time between 2 clicks: " + dif + "ms");
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}

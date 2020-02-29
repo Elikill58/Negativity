@@ -28,6 +28,7 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class InventoryClickManagerEvent {
 
@@ -165,11 +166,11 @@ public class InventoryClickManagerEvent {
 			else if (m.equals(ItemTypes.ARROW))
 				delayed(() -> Inv.openModMenu(p));
 			else {
-				Optional<Cheat> c = Utils.getCheatFromItem(m);
+				Optional<Cheat> c = UniversalUtils.getCheatFromItem(m);
 				c.ifPresent(cheat -> delayed(() -> Inv.openOneCheatMenu(p, cheat)));
 			}
 		} else {
-			Optional<Cheat> cheat = Utils.getCheatFromName(invName);
+			Optional<Cheat> cheat = UniversalUtils.getCheatFromName(invName);
 			if (cheat.isPresent()) {
 				if (m.equals(ItemTypes.BARRIER)) {
 					e.setCancelled(true);

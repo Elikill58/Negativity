@@ -40,6 +40,7 @@ import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatBypassEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatKickEvent;
+import com.elikill58.negativity.spigot.listeners.ShowAlertPermissionEvent;
 import com.elikill58.negativity.spigot.packets.PacketListenerAPI;
 import com.elikill58.negativity.spigot.packets.PacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
@@ -403,8 +404,13 @@ public class SpigotNegativity extends JavaPlugin {
 			sendAlertMessage(p, c.getName(), reliability, ping, hover_proof, alertsCount);
 		} else {
 			boolean hasPermPeople = false;
-			for (Player pl : Utils.getOnlinePlayers())
-				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert")) {
+			for (Player pl : Utils.getOnlinePlayers()) {
+				boolean basicPerm = Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert");
+				ShowAlertPermissionEvent permissionEvent = new ShowAlertPermissionEvent(p, np, basicPerm);
+				Bukkit.getPluginManager().callEvent(permissionEvent);
+				if (permissionEvent.isCancelled())
+					continue;
+				if (permissionEvent.hasBasicPerm()) {
 					if(np.ALERT_NOT_SHOWED.containsKey(c) && np.ALERT_NOT_SHOWED.get(c).size() > 1) {
 						new ClickableText().addRunnableHoverEvent(
 								Messages.getMessage(pl, "negativity.alert_multiple", "%name%", p.getName(), "%cheat%", c.getName(),
@@ -424,6 +430,7 @@ public class SpigotNegativity extends JavaPlugin {
 					}
 					hasPermPeople = true;
 				}
+			}
 			if(!hasPermPeople)
 				alerts.add(alert);
 		}

@@ -69,7 +69,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 				}
 			} else if(!p.isOnGround()) {
 				Material justUnder = p.getLocation().clone().subtract(0, 0.1, 0).getBlock().getType();
-				if(justUnder.isSolid() && p.getFallDistance() > 3.0) {
+				if(justUnder.isSolid() && p.getFallDistance() > 3.0 && !np.isInFight) {
 					int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - (ping / 5) + p.getFallDistance());
 					boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
 							"Player not ground with fall damage (FallDistance: " + p.getFallDistance() + "). Block 0.1 below: " + justUnder.name()

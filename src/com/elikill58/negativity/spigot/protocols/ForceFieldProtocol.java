@@ -49,7 +49,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 					UniversalUtils.parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis
 							+ ". Ping: " + Utils.getPing(p),
-					"Distance with " + e.getEntity().getName() + ": " + nf.format(dis), "Distance with " + e.getEntity().getName() + ": " + nf.format(dis));
+					"Distance with " + e.getEntity().getName() + ": " + nf.format(dis) + " blocks", "Distance with " + e.getEntity().getName() + ": " + nf.format(dis));
 			if (isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}

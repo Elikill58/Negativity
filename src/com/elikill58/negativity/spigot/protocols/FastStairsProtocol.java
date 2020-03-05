@@ -23,20 +23,22 @@ public class FastStairsProtocol extends Cheat implements Listener {
 	@EventHandler
 	public void onMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
-		if(!SpigotNegativityPlayer.getNegativityPlayer(p).ACTIVE_CHEAT.contains(this))
+		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		if(!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		if(p.getFallDistance() != 0)
 			return;
-		String blockName = e.getTo().clone().subtract(0, 0.3, 0).getBlock().getType().name();
+		String blockName = e.getTo().clone().subtract(0, 0.1, 0).getBlock().getType().name();
 		if(!blockName.contains("STAIRS"))
 			return;
 		double distance = e.getFrom().distance(e.getTo());
-		if(distance > 0.6) {
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 145), "Player without fall damage. Block: " + blockName + ", distance: " + distance);
+		if(distance > 0.6 && (distance < (np.lastDistanceFastStairs * 2))) {
+			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 145), "No fall damage. Block: " + blockName + ", distance: " + distance + ", lastDistance: " + np.lastDistanceFastStairs);
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);
 		}
+		np.lastDistanceFastStairs = distance;
 	}
 }

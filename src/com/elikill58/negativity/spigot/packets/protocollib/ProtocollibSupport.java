@@ -75,10 +75,9 @@ public class ProtocollibSupport {
 			if (capacity > 25000) {
 				if(channelCheckAntiJigsaw.contains(channel)) {
 					e.setCancelled(true);
-					SpigotNegativity.alertMod(np.already_jigsaw ? ReportType.VIOLATION : ReportType.WARNING, np.getPlayer(),
-							Cheat.forKey(CheatKeys.BLINK), np.already_jigsaw ? 100 : 80, "Trying to crash the server with " + capacity + " requests. Channel used: " + channel + ", ", "Trying to crash the server with " + capacity + " requests");
-					if (!np.already_jigsaw)
-						np.already_jigsaw = true;
+					Cheat c = Cheat.forKey(CheatKeys.BLINK);
+					SpigotNegativity.alertMod(np.getAllWarn(c) > 3 ? ReportType.VIOLATION : ReportType.WARNING, np.getPlayer(),
+							c, np.getAllWarn(c) > 3 ? 100 : 80, "Trying to crash the server with " + capacity + " requests. Channel used: " + channel + ", ", "Trying to crash the server with " + capacity + " requests");
 				}
 			}
 		} catch (ArrayIndexOutOfBoundsException exc) {

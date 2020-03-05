@@ -24,7 +24,6 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.IronGolem;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -69,14 +68,13 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public int ONLY_KEEP_ALIVE = 0, NO_PACKET = 0, BETTER_CLICK = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0;
 	// setBack
 	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, LAST_SLOT_CLICK = -1, LAST_CHAT_MESSAGE_NB = 0, SPEED_NB = 0;
-	public double lastYDiff = -3.141592654;
+	public double lastYDiff = -3.141592654, lastDistanceFastStairs = 0;
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, LAST_DAMAGE_RECEIVE = 0, TIME_REPORT = 0, LAST_BLOCK_BREAK = 0;
 	public String LAST_OTHER_KEEP_ALIVE, LAST_CHAT_MESSAGE = "";
-	public boolean PACKET_ANALYZE_STARTED = false/*, isInWater = false, isOnWater = false*/, FALL = false,
-			KEEP_ALIVE_BEFORE = false, IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false,
+	public boolean FALL = false, KEEP_ALIVE_BEFORE = false, IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false,
 			isInvisible = false, slime_block = false, already_blink = false, isJumpingWithBlock = false,
-			isOnLadders = false, lastClickInv = false, already_jigsaw = false, jesusState = true, last_is_same_spider = false;
+			isOnLadders = false, lastClickInv = false, jesusState = true, last_is_same_spider = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;
 	public YamlConfiguration file;
@@ -88,7 +86,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean isInFight = false;
 	public BukkitTask fightTask = null;
 	public int fakePlayerTouched = 0;
-	public long timeStartFakePlayer = 0, launchFirework = 0;
+	public long timeStartFakePlayer = 0;
 
 	public SpigotNegativityPlayer(Player p) {
 		super(p.getUniqueId());
@@ -341,8 +339,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		List<Player> online = Utils.getOnlinePlayers();
 		if (online.size() <= 1) {
 			return new Random().nextBoolean() ? "Elikill58" : "RedNesto";
-		} else
-			return online.get(new Random().nextInt(online.size())).getName();
+		}
+		return online.get(new Random().nextInt(online.size())).getName();
 	}
 
 	public List<FakePlayer> getFakePlayers() {
@@ -658,7 +656,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean isTargetByIronGolem() {
 		for(Entity et : getPlayer().getWorld().getEntities())
 			if(et instanceof IronGolem)
-				if(((IronGolem) et).getTarget() != null && ((IronGolem) et).getTarget().equals((LivingEntity) getPlayer()))
+				if(((IronGolem) et).getTarget() != null && ((IronGolem) et).getTarget().equals(getPlayer()))
 					return true;
 		return false;
 	}

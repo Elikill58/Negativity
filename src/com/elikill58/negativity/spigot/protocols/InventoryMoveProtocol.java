@@ -50,9 +50,15 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		if (p.isSprinting() || p.isSneaking()) {
-			SpigotNegativity.alertMod(ReportType.WARNING, p, this,
-					SpigotNegativityPlayer.getNegativityPlayer(p).getAllWarn(this) > 5 ? 100 : 95,
-						"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking());
+			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
+				@Override
+				public void run() {
+					if (p.isSprinting() || p.isSneaking())
+						SpigotNegativity.alertMod(ReportType.WARNING, p, instance,
+								SpigotNegativityPlayer.getNegativityPlayer(p).getAllWarn(instance) > 5 ? 100 : 95,
+									"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking(), "When " + from, "When " + from);
+				}
+			}, 3);
 		} else if (check) {
 			final Location lastLoc = p.getLocation().clone();
 			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
@@ -63,7 +69,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 							&& p.getOpenInventory() != null) {
 						SpigotNegativity.alertMod(ReportType.WARNING, p, instance,
 								SpigotNegativityPlayer.getNegativityPlayer(p).getAllWarn(instance) > 5 ? 100 : 95,
-									"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()));
+									"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()), "When " + from, "When " + from);
 					}
 				}
 			}, 5);

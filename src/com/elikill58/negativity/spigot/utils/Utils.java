@@ -3,13 +3,16 @@ package com.elikill58.negativity.spigot.utils;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.InventoryView;
@@ -25,6 +28,7 @@ import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.google.common.collect.Sets;
 
 @SuppressWarnings("deprecation")
 public class Utils {
@@ -281,5 +285,27 @@ public class Utils {
 			i--;
 		}
 		p.teleport(loc.add(0, 1, 0));
+	}
+	
+	public static Block getTargetBlock(Player p, int distance) {
+		Material[] transparentItem = new Material[] {};
+		try {
+			if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+				return (Block) p.getClass().getMethod("getTargetBlockExact", int.class).invoke(p, distance);
+			} else {
+				try {
+					return (Block) p.getClass().getMethod("getTargetBlock", Set.class, int.class).invoke(p, (Set<Material>) Sets.newHashSet(transparentItem), distance);
+				} catch (NoSuchMethodException e) {}
+				try {
+					HashSet<Byte> hashSet = new HashSet<>();
+					for(Material m : transparentItem)
+						hashSet.add((byte) m.getId());
+					return (Block) p.getClass().getMethod("getTargetBlock", HashSet.class, int.class).invoke(p, hashSet, distance);
+				} catch (NoSuchMethodException e) {}
+			}
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+		return null;
 	}
 }

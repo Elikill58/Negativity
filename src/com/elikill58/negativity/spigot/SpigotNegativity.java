@@ -330,7 +330,7 @@ public class SpigotNegativity extends JavaPlugin {
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name()))
 				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().name()).getWhen().equals(WhenBypass.ALWAYS))
 					return false;
-		Block target = p.getTargetBlock(null, 5);
+		Block target = Utils.getTargetBlock(p, 5);
 		if(target != null && !target.getType().equals(Material.AIR))
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(target.getType().name()))
 				if (ItemUseBypass.ITEM_BYPASS.get(target.getType().name()).getWhen().equals(WhenBypass.LOOKING))

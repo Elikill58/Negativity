@@ -43,6 +43,20 @@ public class WorldGuardSupport {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		try {
+			Class<?> vectorClass = Class.forName("com.sk89q.worldedit.Vector");
+			vectorConstructor = vectorClass.getConstructor(Double.TYPE, Double.TYPE, Double.TYPE);
+			regionManagerGetMethod = RegionManager.class.getMethod("getApplicableRegions", vectorClass);
+		} catch (Exception ex) {
+			try {
+				Class<?> vectorClass = Class.forName("com.sk89q.worldedit.math.BlockVector3");
+				vectorConstructorAsAMethodBecauseWhyNot = vectorClass.getMethod("at", Double.TYPE, Double.TYPE,
+						Double.TYPE);
+				regionManagerGetMethod = RegionManager.class.getMethod("getApplicableRegions", vectorClass);
+			} catch (Exception sodonewiththis) {
+
+			}
+		}
 	}
 	
 	public static boolean isInRegionProtected(Player p) {

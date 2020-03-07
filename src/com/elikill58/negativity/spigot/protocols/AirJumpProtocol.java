@@ -35,7 +35,7 @@ public class AirJumpProtocol extends Cheat implements Listener {
 			return;
 		double temp = e.getTo().getY() - e.getFrom().getY();
 		Location loc = p.getLocation().clone();
-		if (temp > 0.35 && np.lastYDiff < temp && !np.hasOtherThanExtended(loc.clone(), Material.AIR)
+		if (temp > 0.35 && np.lastYDiff < temp && np.lastYDiff > 0 && !np.hasOtherThanExtended(loc.clone(), Material.AIR)
 				&& !np.hasOtherThanExtended(loc.clone().subtract(0, 1, 0), Material.AIR)
 				&& !np.hasOtherThanExtended(loc.clone().subtract(0, 2, 0), Material.AIR)) {
 			boolean mayCancel = SpigotNegativity.alertMod(

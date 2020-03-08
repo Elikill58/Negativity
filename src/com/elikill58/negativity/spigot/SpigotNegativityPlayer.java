@@ -496,6 +496,29 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return false;
 	}
 
+	public boolean has(Location loc, String... ms) {
+		List<String> m = Arrays.asList(ms);
+		if (m.contains(loc.add(0, 0, 1).getBlock().getType().name()))
+			return true;
+		if (m.contains(loc.add(1, 0, 0).getBlock().getType().name()))
+			return true;
+		if (m.contains(loc.add(0, 0, -1).getBlock().getType().name()))
+			return true;
+		if (m.contains(loc.add(0, 0, -1).getBlock().getType().name()))
+			return true;
+		if (m.contains(loc.add(0, 0, -1).getBlock().getType().name()))
+			return true;
+		if (m.contains(loc.add(-1, 0, 0).getBlock().getType().name()))
+			return true;
+		if (m.contains(loc.add(-1, 0, 0).getBlock().getType().name()))
+			return true;
+		if (m.contains(loc.add(0, 0, 1).getBlock().getType().name()))
+			return true;
+		if (m.contains(loc.add(0, 0, 1).getBlock().getType().name()))
+			return true;
+		return false;
+	}
+
 	public void spawnCircle(double d, Location loc) {
 		for (double u = 0; u < 360; u += d) {
 			double z = Math.cos(u) * d, x = Math.sin(u) * d;

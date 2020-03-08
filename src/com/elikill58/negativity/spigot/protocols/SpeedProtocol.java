@@ -46,9 +46,8 @@ public class SpeedProtocol extends Cheat implements Listener {
 			np.BYPASS_SPEED--;
 			return;
 		}
-		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().name().contains("PACKED_ICE")
-				&& np.hasOtherThan(p.getLocation().add(0, 1, 0).getBlock().getRelative(BlockFace.UP).getLocation(),
-						"TRAPDOOR"))
+		if (np.hasOtherThan(p.getLocation().getBlock().getRelative(BlockFace.UP).getLocation(), "ICE")
+				|| np.hasOtherThan(p.getLocation().add(0, 1, 0).getBlock().getRelative(BlockFace.UP).getLocation(), "TRAPDOOR"))
 			return;
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		boolean mayCancel = false;

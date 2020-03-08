@@ -1,13 +1,12 @@
 package com.elikill58.negativity.sponge.protocols;
 
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
-import org.spongepowered.api.entity.projectile.Firework;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
-import org.spongepowered.api.event.entity.SpawnEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.world.Location;
@@ -20,7 +19,6 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
-import com.flowpowered.math.vector.Vector3d;
 
 public class StepProtocol extends Cheat {
 
@@ -43,10 +41,9 @@ public class StepProtocol extends Cheat {
 			// Dismounting horses triggers a false positive
 			return;
 		}
-
-		if ((System.currentTimeMillis() - np.launchFirework) < 1000) {
+		
+		if(p.get(Keys.IS_ELYTRA_FLYING).orElse(false))
 			return;
-		}
 
 		Location<World> from = e.getFromTransform().getLocation();
 		Location<World> to = e.getToTransform().getLocation();
@@ -84,15 +81,6 @@ public class StepProtocol extends Cheat {
 					}
 				}
 			}
-		}
-	}
-
-	@Listener
-	public void onSpawn(SpawnEntityEvent e, @First Firework et) {
-		Vector3d loc = et.getLocation().getPosition();
-		for (Player p : Utils.getOnlinePlayers()) {
-			if (p.getLocation().getPosition().distance(loc) < 2)
-				SpongeNegativityPlayer.getNegativityPlayer(p).launchFirework = System.currentTimeMillis();
 		}
 	}
 

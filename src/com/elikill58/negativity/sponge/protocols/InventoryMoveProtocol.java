@@ -49,9 +49,12 @@ public class InventoryMoveProtocol extends Cheat {
 			return;
 		}
 		if (p.get(Keys.IS_SPRINTING).orElse(false) || p.get(Keys.IS_SNEAKING).orElse(false)) {
-			SpongeNegativity.alertMod(ReportType.WARNING, p, this,
-					SpongeNegativityPlayer.getNegativityPlayer(p).getAllWarn(this) > 5 ? 100 : 95,
-						"Detected when " + from + ". Sprint: " + p.get(Keys.IS_SPRINTING).orElse(false) + ", Sneak:" + p.get(Keys.IS_SNEAKING).orElse(false));
+			Task.builder().delay(150, TimeUnit.MILLISECONDS).execute(() -> {
+				if(p.get(Keys.IS_SPRINTING).orElse(false) || p.get(Keys.IS_SNEAKING).orElse(false))
+					SpongeNegativity.alertMod(ReportType.WARNING, p, this,
+							SpongeNegativityPlayer.getNegativityPlayer(p).getAllWarn(this) > 5 ? 100 : 95,
+								"Detected when " + from + ". Sprint: " + p.get(Keys.IS_SPRINTING).orElse(false) + ", Sneak:" + p.get(Keys.IS_SNEAKING).orElse(false));
+			});
 		} else if (check) {
 			final Location<World> lastLoc = p.getLocation().copy();
 			Task.builder().delay(250, TimeUnit.MILLISECONDS).execute(() -> {

@@ -20,6 +20,7 @@ public class CheatKeys {
 	public static final String INVENTORY_MOVE = "INVENTORYMOVE";
 	public static final String JESUS = "JESUS";
 	public static final String NO_FALL = "NOFALL";
+	public static final String NO_PITCH_LIMIT = "NOPITCHLIMIT";
 	public static final String NO_SLOW_DOWN = "NOSLOWDOWN";
 	public static final String NO_WEB = "NOWEB";
 	public static final String NUKER = "NUKER";

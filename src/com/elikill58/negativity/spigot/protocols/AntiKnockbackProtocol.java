@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -48,6 +49,8 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
+			return;
+		if(p.hasPotionEffect(PotionEffectType.POISON))
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9)) {
 			if(p.getItemInHand() != null && p.getItemInHand().getType().name().contains("SHIELD"))

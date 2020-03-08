@@ -199,6 +199,9 @@ Permissions:
     faststairs:
       default: "negativity.bypass.faststairs"
       custom: "ADMIN"
+    nopitchlimit:
+      default: "negativity.bypass.nopitchlimit"
+      custom: "ADMIN"
 
 Translation:
   active: false # enable or disable the translation
@@ -644,6 +647,17 @@ cheats:
   faststairs:
     ping: 150
     exact_name: "FastStairs"
+    isActive: true
+    reliability_alert: 60
+    autoVerif: true
+    setBack: false
+    kick: false
+    alert_to_kick: 5
+
+  # NoPitchLimit enable player to see behind
+  nopitchlimit:
+    ping: 150
+    exact_name: "NoPitchLimit"
     isActive: true
     reliability_alert: 60
     autoVerif: true

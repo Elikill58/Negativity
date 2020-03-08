@@ -33,14 +33,15 @@ public class FastStairsProtocol extends Cheat {
 		
 		if(np.getFallDistance() != 0)
 			return;
-		String blockName = e.getToTransform().getLocation().copy().sub(0, 0.3, 0).getBlock().getType().getId();
+		String blockName = e.getToTransform().getLocation().copy().sub(0, 0.1, 0).getBlock().getType().getId();
 		if(!blockName.contains("STAIRS"))
 			return;
 		double distance = e.getFromTransform().getPosition().distance(e.getToTransform().getPosition());
-		if(distance > 0.6) {
+		if(distance > 0.6 && (distance < (np.lastDistanceFastStairs * 2))) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 145), "Player without fall damage. Block: " + blockName + ", distance: " + distance);
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);
 		}
+		np.lastDistanceFastStairs = distance;
 	}
 }

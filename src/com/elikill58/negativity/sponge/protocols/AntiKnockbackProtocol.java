@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
+import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
@@ -61,6 +62,8 @@ public class AntiKnockbackProtocol extends Cheat {
 			// Falling deals damage but does not necessarily moves the player
 			return;
 		}
+		if(np.hasPotionEffect(PotionEffectTypes.POISON))
+			return;
 
 		if (damageSource instanceof EntityDamageSource) {
 			EntityDamageSource entityDamageSource = (EntityDamageSource) damageSource;

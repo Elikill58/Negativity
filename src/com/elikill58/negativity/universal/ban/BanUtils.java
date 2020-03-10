@@ -1,5 +1,7 @@
 package com.elikill58.negativity.universal.ban;
 
+import java.sql.Timestamp;
+
 import javax.annotation.Nullable;
 import javax.script.ScriptEngine;
 import javax.script.ScriptEngineManager;
@@ -52,5 +54,11 @@ public class BanUtils {
 			banDuration = BanUtils.computeBanDuration(player, reliability, cheat);
 		}
 		return BanManager.executeBan(new ActiveBan(player.getUUID(), "Cheat (" + reason + ")", "Negativity", BanType.MOD, banDuration, reason));
+	}
+
+	public static void kickForBan(NegativityPlayer player, ActiveBan ban) {
+		player.banEffect();
+		String formattedExpTime = new Timestamp(ban.getExpirationTime()).toString().split("\\.", 2)[0];
+		player.kickPlayer(ban.getReason(), formattedExpTime, ban.getBannedBy(), ban.isDefinitive());
 	}
 }

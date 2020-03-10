@@ -1,6 +1,5 @@
 package com.elikill58.negativity.universal.ban.support;
 
-import java.sql.Timestamp;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,6 +16,7 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.ActiveBan;
 import com.elikill58.negativity.universal.ban.BanType;
+import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.LoggedBan;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 
@@ -37,9 +37,7 @@ public class BukkitBanProcessor implements BanProcessor {
 			return null;
 		}
 
-		player.banEffect();
-		String formattedExpTime = new Timestamp(ban.getExpirationTime()).toString().split("\\.", 2)[0];
-		player.kickPlayer(ban.getReason(), formattedExpTime, ban.getBannedBy(), ban.isDefinitive());
+		BanUtils.kickForBan(player, ban);
 
 		return ban;
 	}

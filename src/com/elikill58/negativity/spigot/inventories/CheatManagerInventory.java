@@ -16,7 +16,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class CheatManagerInventory {
 
 	public static void openCheatManagerMenu(Player p){
-		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(Cheat.values().size() + 3, 9, 1), Inv.CHEAT_MANAGER);
+		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(Cheat.values().size() + 3, 9, 1, 54), Inv.CHEAT_MANAGER);
 		int slot = 0;
 		for(Cheat c : Cheat.values())
 			if(c.getMaterial() != null)

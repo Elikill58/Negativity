@@ -30,7 +30,7 @@ public class AlertInventory {
 					|| (!np.ACTIVE_CHEAT.contains(c) && Adapter.getAdapter().getBooleanInConfig("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
 		}
-		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(TO_SEE.size() + 3, 9, 1), Inv.NAME_ALERT_MENU);
+		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(TO_SEE.size() + 3, 9, 1, 54), Inv.NAME_ALERT_MENU);
 		int slot = 0;
 		for (Cheat c : TO_SEE) {
 			if (c.getMaterial() != null){

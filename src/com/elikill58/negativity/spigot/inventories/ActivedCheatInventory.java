@@ -18,7 +18,7 @@ public class ActivedCheatInventory {
 
 	public static void openActivedCheat(Player p, Player cible) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
-		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(np.ACTIVE_CHEAT.size() + 3, 9, 1), Inv.NAME_ACTIVED_CHEAT_MENU);
+		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(np.ACTIVE_CHEAT.size() + 3, 9, 1, 54), Inv.NAME_ACTIVED_CHEAT_MENU);
 		if (np.ACTIVE_CHEAT.size() > 0) {
 			int slot = 0;
 			for (Cheat c : np.ACTIVE_CHEAT)

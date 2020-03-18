@@ -28,14 +28,15 @@ public class FastPlaceProtocol extends Cheat {
 		}
 
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this)) {
+		if (!np.hasDetectionActive(this))
 			return;
-		}
+		if(Utils.getLastTPS() < 19.1)
+			return;
 
 		long last = System.currentTimeMillis() - np.LAST_BLOCK_PLACE;
 		long lastPing = last - (Utils.getPing(p) / 9);
-		np.LAST_BLOCK_PLACE = System.currentTimeMillis();
-		if (lastPing < 50) {
+		np.LAST_BLOCK_PLACE = System.currentTimeMillis();//cheats.fastplace.time_2_place
+		if (lastPing < SpongeNegativity.getConfig().getNode("cheats").getNode("fastplace").getNode("time_2_place").getInt(50)) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(50 + lastPing), "Blockplaced too quickly. Last time: " + last + ", Last with ping: "
 							+ lastPing + ". Ping: " + Utils.getPing(p),

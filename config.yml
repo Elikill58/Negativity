@@ -390,6 +390,9 @@ cheats:
     ping: 150
     exact_name: "FastPlace"
     isActive: true
+    # Max time between 2 blocks placed
+    # In milliseconds
+    time_2_place: 50
     reliability_alert: 60
     autoVerif: true
     setBack: false

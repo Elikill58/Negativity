@@ -28,7 +28,7 @@ ban:
   # m : minutes
   # s : seconds
   #
-  - "/ban <player> <def | time (ex: 2h5d)> <reason>: Banne Spieler"
+  - "/nban <player> <def | time (ex: 2h5d)> <reason>: Banne Spieler"
   well_ban: "&a[&2Negativity&a] &c%name% wurde gebannt. Grund: %reason%"
 unban:
   well_unban: "&a[&2Negativity&a] &c%name% wurde entbannt."

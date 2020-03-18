@@ -10,6 +10,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.ClickableText;
@@ -30,6 +31,18 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
 		if (arg.length == 0 || arg[0].equalsIgnoreCase("help")) {
 			Messages.sendMessageList(sender, "negativity.verif.help");
+			FileConfiguration conf = SpigotNegativity.getInstance().getConfig();
+			if(conf.getBoolean("report_command"))
+				Messages.sendMessage(sender, "report.report_usage");
+			if(conf.getBoolean("ban_command"))
+				Messages.sendMessageList(sender, "ban.help");
+			if(conf.getBoolean("unban_command"))
+				Messages.sendMessage(sender, "unban.help");
+			if(conf.getBoolean("kick_command"))
+				Messages.sendMessage(sender, "kick.help");
+			if(conf.getBoolean("report_command"))
+				Messages.sendMessage(sender, "report.report_usage");
+			Messages.sendMessage(sender, "lang.help");
 			return true;
 		}
 

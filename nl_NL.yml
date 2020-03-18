@@ -28,7 +28,7 @@ ban:
   # m : minutes
   # s : seconds
   #
-  - "/ban <speler> <def | tijd (bv: 2h5d)> <reden> : Verban een speler"
+  - "/nban <speler> <def | tijd (bv: 2h5d)> <reden> : Verban een speler"
   well_ban: "&a[&2Negativity&a]&c %name% is succesvol verbannen voor %reason%."
 unban:
   well_unban: "&a[&2Negativity&a]&c %name% is succesvol unbanned."

@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -29,6 +30,8 @@ public class NukerProtocol extends Cheat implements Listener {
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
+			return;
+		if(p.hasPotionEffect(PotionEffectType.FAST_DIGGING))
 			return;
 		Block target = p.getTargetBlock(null, 5);
 		double distance = target.getLocation().distance(e.getBlock().getLocation());

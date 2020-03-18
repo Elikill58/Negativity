@@ -2,6 +2,7 @@ package com.elikill58.negativity.sponge.protocols;
 
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.property.block.SolidCubeProperty;
+import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
@@ -35,6 +36,8 @@ public class NukerProtocol extends Cheat {
 		if (!np.hasDetectionActive(this))
 			return;
 		if(e.getTransactions().size() == 0)
+			return;
+		if(np.hasPotionEffect(PotionEffectTypes.HASTE))
 			return;
 		BlockSnapshot breakedBlock = e.getTransactions().get(0).getOriginal();
 		BlockRay<World> blockRay = BlockRay.from(p).skipFilter(BlockRay.onlyAirFilter()).stopFilter(BlockRay.onlyAirFilter()).build();

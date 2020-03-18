@@ -318,6 +318,9 @@ suspect:
   enabled: true
   chat: true
   with_report_cmd: true
+  alias:
+  - "cheat"
+  - "hack"
 
 
 

@@ -125,6 +125,13 @@ public class PlayersEvents implements Listener {
 					if(p.getDisplayName().equalsIgnoreCase(s) || p.getDisplayName().toLowerCase().startsWith(s) || p.getDisplayName().contains(s))
 						suspected.add(p);
 			}
+			for(String alias : SpigotNegativity.getInstance().getConfig().getStringList("suspect.alias")) {
+				if(alias.equalsIgnoreCase(s) || alias.contains(s) || alias.startsWith(s)){
+					cheats.clear();
+					cheats.addAll(Cheat.values());
+					break;
+				}
+			}
 		}
 		for(Player suspect : suspected)
 			SuspectManager.analyzeText(SpigotNegativityPlayer.getNegativityPlayer(suspect), cheats);

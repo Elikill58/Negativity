@@ -70,7 +70,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		Location loc = p.getLocation();
+		Location loc = p.getLocation().clone();
 		if (!np.ACTIVE_CHEAT.contains(this) || p.isFlying())
 			return;
 		double y = e.getTo().getY() - e.getFrom().getY();
@@ -79,12 +79,11 @@ public class SpiderProtocol extends Cheat implements Listener {
 				np.lastSpiderLoc = loc;
 				return;
 			}
-			loc.setX(np.lastSpiderLoc.getX());
-			loc.setZ(np.lastSpiderLoc.getZ());
-			double tempDis = loc.distance(np.lastSpiderLoc);
+			double tempDis = loc.getY() - np.lastSpiderLoc.getY();
 			if (np.lastSpiderDistance == tempDis && tempDis != 0) {
-				if(np.last_is_same_spider) {
-					int porcent = UniversalUtils.parseInPorcent(tempDis * 450);
+				np.SPIDER_SAME_DIST++;
+				if(np.SPIDER_SAME_DIST > 1) {
+					int porcent = UniversalUtils.parseInPorcent(tempDis * 400 + np.SPIDER_SAME_DIST);
 					if (SpigotNegativity.alertMod(ReportType.WARNING, p, this, porcent, "Nothing around him. To > From: "
 							+ y + ". Walk on wall with always same y.") && isSetBack()) {
 						Location locc = p.getLocation();
@@ -92,9 +91,9 @@ public class SpiderProtocol extends Cheat implements Listener {
 							locc.subtract(0, 1, 0);
 						p.teleport(locc.add(0, 1, 0));
 					}
-				} else np.last_is_same_spider = true;
-			}
-			np.last_is_same_spider = false;
+				}
+			} else
+				np.SPIDER_SAME_DIST = 0;
 			np.lastSpiderDistance = tempDis;
 		}
 		np.lastSpiderLoc = loc;
@@ -113,24 +112,24 @@ public class SpiderProtocol extends Cheat implements Listener {
 	}
 	
 	private boolean hasBypassBlockAround(Location loc) {
-		if(hasOtherThan(loc, "SLAB") || hasOtherThan(loc, "STAIRS"))
+		if(has(loc, "SLAB") || has(loc, "STAIRS"))
 			return true;
 		loc = loc.clone().subtract(0, 1, 0);
-		if(hasOtherThan(loc, "SLAB") || hasOtherThan(loc, "STAIRS"))
+		if(has(loc, "SLAB") || has(loc, "STAIRS"))
 			return true;
 		if(loc.getBlock().getType().name().contains("WATER") || loc.clone().subtract(0, 1, 0).getBlock().getType().name().contains("WATER"))
 			return true;
 		return false;
 	}
 
-	public boolean hasOtherThan(Location loc, String m) {
-		if (!loc.clone().add(0, 0, 1).getBlock().getType().name().contains(m))
+	public boolean has(Location loc, String m) {
+		if (loc.clone().add(0, 0, 1).getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.clone().add(1, 0, -1).getBlock().getType().name().contains(m))
+		if (loc.clone().add(1, 0, -1).getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.clone().add(-1, 0, -1).getBlock().getType().name().contains(m))
+		if (loc.clone().add(-1, 0, -1).getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.clone().add(-1, 0, 1).getBlock().getType().name().contains(m))
+		if (loc.clone().add(-1, 0, 1).getBlock().getType().name().contains(m))
 			return true;
 		return false;
 	}

@@ -65,7 +65,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,
 			BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
 	// warns & other
-	public int ONLY_KEEP_ALIVE = 0, NO_PACKET = 0, BETTER_CLICK = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0;
+	public int ONLY_KEEP_ALIVE = 0, NO_PACKET = 0, BETTER_CLICK = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0, SPIDER_SAME_DIST = 0;
 	// setBack
 	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, LAST_SLOT_CLICK = -1, LAST_CHAT_MESSAGE_NB = 0, SPEED_NB = 0;
 	public double lastYDiff = -3.141592654, lastDistanceFastStairs = 0;
@@ -74,7 +74,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public String LAST_OTHER_KEEP_ALIVE, LAST_CHAT_MESSAGE = "";
 	public boolean FALL = false, KEEP_ALIVE_BEFORE = false, IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false,
 			isInvisible = false, slime_block = false, already_blink = false, isJumpingWithBlock = false,
-			isOnLadders = false, lastClickInv = false, jesusState = true, last_is_same_spider = false, wasSneaking = false;
+			isOnLadders = false, lastClickInv = false, jesusState = true, wasSneaking = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;
 	public YamlConfiguration file;
@@ -472,7 +472,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return true;
 		return false;
 	}
-
+	
 	public boolean has(Location loc, Material... ms) {
 		List<Material> m = Arrays.asList(ms);
 		if (m.contains(loc.add(0, 0, 1).getBlock().getType()))

@@ -35,33 +35,30 @@ public class StepProtocol extends Cheat implements Listener {
 		if (np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
-		double dif = from.getY() - to.getY();
 		if (!p.hasPotionEffect(PotionEffectType.JUMP)) {
+			double dif = to.getY() - from.getY();
 			if (np.slime_block) {
-				if (dif >= 0)
+				if (dif <= 0)
 					np.slime_block = false;
 			} else {
-				Location baseLoc = p.getLocation();
-				boolean hasSlimeBlock = false;
+				Location baseLoc = p.getLocation().clone();
 				for (int u = 0; u < 360; u += 3) {
 					Location flameloc = baseLoc.clone().subtract(0, 1, 0);
 					flameloc.setZ(flameloc.getZ() + Math.cos(u) * 3);
 					flameloc.setX(flameloc.getX() + Math.sin(u) * 3);
-					if (flameloc.getBlock().getType().name().equalsIgnoreCase("SLIME_BLOCK"))
-						hasSlimeBlock = true;
-				}
-				if (hasSlimeBlock)
-					np.slime_block = true;
-				else {
-					int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(dif * -500);
-					if ((from.getY() - to.getY()) > 0)
+					if (flameloc.getBlock().getType().name().equalsIgnoreCase("SLIME_BLOCK")) {
+						np.slime_block = true;
 						return;
-					if (dif < -1.499 && ping < 200) {
-						boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
-								+ np.getWarn(this) + ". Move " + dif + "blocks up. ping: " + ping);
-						if (isSetBack() && mayCancel)
-							e.setCancelled(true);
 					}
+				}
+				if(dif < 0)
+					return;
+				int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(dif * 50);
+				if (dif > 1.499 && ping < 200) {
+					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
+							+ np.getWarn(this) + ". Move " + dif + " blocks up. ping: " + ping);
+					if (isSetBack() && mayCancel)
+						e.setCancelled(true);
 				}
 			}
 		}

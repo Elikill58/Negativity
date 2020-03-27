@@ -11,9 +11,8 @@ public class PacketManager {
 	
 	public static void run(Plugin pl) {
 		Plugin localPlugin = Bukkit.getPluginManager().getPlugin("ProtocolLib");
-	    if (localPlugin != null)
+	    if (localPlugin != null) {
 	    	hasProtocollib = true;
-	    if(hasProtocollib) {
 	    	pl.getLogger().info("The plugin ProtocolLib has been detected. Loading Protocollib support ...");
 	    	ProtocollibSupport.run(pl);
 	    } else

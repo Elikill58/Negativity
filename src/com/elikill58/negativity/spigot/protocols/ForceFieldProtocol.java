@@ -5,11 +5,13 @@ import java.text.NumberFormat;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -44,7 +46,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		tempLoc.setY(p.getLocation().getY());
 		double dis = tempLoc.distance(p.getLocation());
 		if (dis > Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach")
-				&& !p.getItemInHand().getType().equals(Material.BOW)) {
+				&& !p.getItemInHand().getType().equals(Material.BOW) && !hasThorns(p)) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis
@@ -55,6 +57,16 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		}
 	}
 
+	private boolean hasThorns(Player p) {
+		ItemStack[] armor = p.getInventory().getArmorContents();
+		if(armor == null)
+			return false;
+		for(ItemStack item : armor)
+			if(item.containsEnchantment(Enchantment.THORNS))
+				return true;
+		return false;
+	}
+	
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {
 		if (np.fakePlayerTouched < 5)
 			return;

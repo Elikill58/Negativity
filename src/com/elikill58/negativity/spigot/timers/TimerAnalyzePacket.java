@@ -146,6 +146,12 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 			if(np.ACTIVE_CHEAT.contains(NUKER))
 				if(ping < NUKER.getMaxAlertPing() && (np.BLOCK_DIG - (ping / 10)) > 20)
 					SpigotNegativity.alertMod(np.BLOCK_DIG > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, UniversalUtils.parseInPorcent(20 + np.BLOCK_DIG), "BlockDig packet: " + np.BLOCK_DIG + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
+
+			Cheat SPEED = Cheat.forKey(CheatKeys.SPEED);
+			if(np.ACTIVE_CHEAT.contains(SPEED))
+				if(np.MOVE_TIME > 30)
+					SpigotNegativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p, SPEED, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Ping: " + ping + " Warn for Speed: " + np.getWarn(SPEED));
+			np.MOVE_TIME = 0;
 			np.clearPackets();
 		}
 	}

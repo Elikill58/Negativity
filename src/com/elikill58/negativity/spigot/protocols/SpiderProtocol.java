@@ -33,7 +33,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		Location loc = p.getLocation();
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
-		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP))
+		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP) || !np.hasOtherThan(loc, Material.AIR))
 			return;
 		if(e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ())
 			return;
@@ -49,15 +49,15 @@ public class SpiderProtocol extends Cheat implements Listener {
 		double y = e.getTo().getY() - e.getFrom().getY(), last = np.lastYDiff;
 		np.lastYDiff = y;
 		boolean isAris = ((float) y) == p.getWalkSpeed();
-		if (((y > 0.499 && y < 0.7) || isAris || last == y) && hasOtherThan(loc, Material.AIR)) {
+		if (((y > 0.499 && y < 0.7) || isAris || last == y)) {
 			if(hasBypassBlockAround(loc))
 				return;
 			int relia = UniversalUtils.parseInPorcent((e.getTo().getY() - e.getFrom().getY()) * 200 + (isAris ? 39 : 0));
 			if (SpigotNegativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this,
-					relia, "Nothing around him. To > From: " + y + " isAris: " + isAris + " has not stab slairs.")
+					relia, "Nothing around him. To > From: " + y + " isAris: " + isAris + ", has not stab slairs")
 					&& isSetBack()) {
 				Location locc = p.getLocation();
-				while (locc.getBlock().getType().equals(Material.AIR))
+				while (locc.getBlock().getType().equals(Material.AIR) && locc.getY() > 0)
 					locc.subtract(0, 1, 0);
 				p.teleport(locc.add(0, 1, 0));
 			}
@@ -75,10 +75,6 @@ public class SpiderProtocol extends Cheat implements Listener {
 			return;
 		double y = e.getTo().getY() - e.getFrom().getY();
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
-			if(hasBypassBlockAround(loc)) {
-				np.lastSpiderLoc = loc;
-				return;
-			}
 			double tempDis = loc.getY() - np.lastSpiderLoc.getY();
 			if (np.lastSpiderDistance == tempDis && tempDis != 0) {
 				np.SPIDER_SAME_DIST++;
@@ -98,38 +94,26 @@ public class SpiderProtocol extends Cheat implements Listener {
 		}
 		np.lastSpiderLoc = loc;
 	}
-
-	public boolean hasOtherThan(Location loc, Material m) {
-		if (!loc.clone().add(0, 0, 1).getBlock().getType().equals(m))
-			return true;
-		if (!loc.clone().add(1, 0, -1).getBlock().getType().equals(m))
-			return true;
-		if (!loc.clone().add(-1, 0, -1).getBlock().getType().equals(m))
-			return true;
-		if (!loc.clone().add(-1, 0, 1).getBlock().getType().equals(m))
-			return true;
-		return false;
-	}
 	
 	private boolean hasBypassBlockAround(Location loc) {
-		if(has(loc, "SLAB") || has(loc, "STAIRS"))
+		if(hasOtherThan(loc, "SLAB") || hasOtherThan(loc, "STAIRS"))
 			return true;
 		loc = loc.clone().subtract(0, 1, 0);
-		if(has(loc, "SLAB") || has(loc, "STAIRS"))
+		if(hasOtherThan(loc, "SLAB") || hasOtherThan(loc, "STAIRS"))
 			return true;
 		if(loc.getBlock().getType().name().contains("WATER") || loc.clone().subtract(0, 1, 0).getBlock().getType().name().contains("WATER"))
 			return true;
 		return false;
 	}
 
-	public boolean has(Location loc, String m) {
-		if (loc.clone().add(0, 0, 1).getBlock().getType().name().contains(m))
+	public boolean hasOtherThan(Location loc, String m) {
+		if (!loc.clone().add(0, 0, 1).getBlock().getType().name().contains(m))
 			return true;
-		if (loc.clone().add(1, 0, -1).getBlock().getType().name().contains(m))
+		if (!loc.clone().add(1, 0, -1).getBlock().getType().name().contains(m))
 			return true;
-		if (loc.clone().add(-1, 0, -1).getBlock().getType().name().contains(m))
+		if (!loc.clone().add(-1, 0, -1).getBlock().getType().name().contains(m))
 			return true;
-		if (loc.clone().add(-1, 0, 1).getBlock().getType().name().contains(m))
+		if (!loc.clone().add(-1, 0, 1).getBlock().getType().name().contains(m))
 			return true;
 		return false;
 	}

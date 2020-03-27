@@ -3,10 +3,12 @@ package com.elikill58.negativity.spigot.protocols;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -23,6 +25,7 @@ public class NukerProtocol extends Cheat implements Listener {
 		super(CheatKeys.NUKER, true, Material.BEDROCK, CheatCategory.WORLD, true, "breaker", "bed breaker", "bedbreaker");
 	}
 	
+	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
 		Player p = e.getPlayer();
@@ -33,7 +36,7 @@ public class NukerProtocol extends Cheat implements Listener {
 			return;
 		if(p.hasPotionEffect(PotionEffectType.FAST_DIGGING))
 			return;
-		Block target = p.getTargetBlock(null, 5);
+		Block target = Utils.getTargetBlock(p, 5);
 		double distance = target.getLocation().distance(e.getBlock().getLocation());
 		if ((target.getType() != e.getBlock().getType()) && distance > 3.5) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - Utils.getPing(p)),
@@ -42,12 +45,16 @@ public class NukerProtocol extends Cheat implements Listener {
 				e.setCancelled(true);
 		}
 		long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
-		if(dis < 50 && e.getBlock().getType().isSolid()) {
+		if(dis < 50 && e.getBlock().getType().isSolid() && !hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.FAST_DIGGING)) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis),
 					"Type: " + e.getBlock().getType().name() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis + " (ping: " + Utils.getPing(p) + "). Warn: " + np.getWarn(this), "2 blocks breaked in " + dis + " ms");
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
 		np.LAST_BLOCK_BREAK = temp;
+	}
+	
+	private boolean hasDigSpeedEnchant(ItemStack item) {
+		return item != null && item.containsEnchantment(Enchantment.DIG_SPEED) && item.getEnchantmentLevel(Enchantment.DIG_SPEED) > 2;
 	}
 }

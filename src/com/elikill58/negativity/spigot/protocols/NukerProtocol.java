@@ -38,7 +38,7 @@ public class NukerProtocol extends Cheat implements Listener {
 			return;
 		Block target = Utils.getTargetBlock(p, 5);
 		double distance = target.getLocation().distance(e.getBlock().getLocation());
-		if ((target.getType() != e.getBlock().getType()) && distance > 3.5) {
+		if ((target.getType() != e.getBlock().getType()) && distance > 3.5 && target.getType() != Material.AIR) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - Utils.getPing(p)),
 					"BlockDig " + e.getBlock().getType().name() + ", player see " + target.getType().name() + ". Distance between blocks " + distance + " block. Ping: " + Utils.getPing(p) + ". Warn: " + np.getWarn(this));
 			if(isSetBack() && mayCancel)
@@ -54,7 +54,7 @@ public class NukerProtocol extends Cheat implements Listener {
 		np.LAST_BLOCK_BREAK = temp;
 	}
 	
-	private boolean hasDigSpeedEnchant(ItemStack item) {
+	public static boolean hasDigSpeedEnchant(ItemStack item) {
 		return item != null && item.containsEnchantment(Enchantment.DIG_SPEED) && item.getEnchantmentLevel(Enchantment.DIG_SPEED) > 2;
 	}
 }

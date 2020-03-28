@@ -125,40 +125,6 @@ public class SpeedProtocol extends Cheat implements Listener {
 			e.setCancelled(true);
 	}
 
-	/*
-	 * @EventHandler public void onMove(PlayerMoveEvent e) { Player p =
-	 * e.getPlayer(); if (!p.getGameMode().equals(GameMode.SURVIVAL) &&
-	 * !p.getGameMode().equals(GameMode.ADVENTURE)) return; SpigotNegativityPlayer
-	 * np = SpigotNegativityPlayer.getNegativityPlayer(p); if
-	 * (!np.ACTIVE_CHEAT.contains(this)) return; Location to = e.getTo(), from =
-	 * e.getFrom(), loc = e.getPlayer().getLocation().subtract(0, 1, 0); if
-	 * (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() ==
-	 * Material.SPONGE ||
-	 * p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType() ==
-	 * Material.SLIME_BLOCK) return;
-	 * 
-	 * if (p.getEntityId() == 100 || p.getVehicle() != null || p.getAllowFlight() ||
-	 * from.getY() < to.getY() || p.isOnGround() || p.getFallDistance() > 0.0F ||
-	 * np.hasElytra() || p.getFoodLevel() < 6 ||
-	 * p.hasPotionEffect(PotionEffectType.SPEED) ||
-	 * p.hasPotionEffect(PotionEffectType.JUMP)) return;
-	 * 
-	 * if (loc.getBlock().getType().name().contains("STEP") ||
-	 * loc.getBlock().getType().name().contains("SLAB") || loc.getBlock().getType()
-	 * == Material.ICE || loc.getBlock().getType() == Material.PACKED_ICE) { return;
-	 * } for (Entity entity : p.getNearbyEntities(5.0D, 5.0D, 5.0D)) if (((entity
-	 * instanceof Creeper)) || (entity.getType().equals(EntityType.CREEPER)))
-	 * return; double f = (e.getFrom().getY() - e.getTo().getY()) / 2.0D; if
-	 * (!(F_LIST.contains(f) || (f < 0.47D && f > 0.46D) || (f < 0.02D && f >
-	 * 0.01D))) { boolean mayCancel = SpigotNegativity.alertMod( np.getWarn(this) >
-	 * 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-	 * UniversalUtils.parseInPorcent(99), "Player NOT in ground. WalkSpeed: " +
-	 * p.getWalkSpeed() + " Distance shorted: " + f, "Distance: " + f, "Distance: "
-	 * + f); if (mayCancel && isSetBack()) e.setCancelled(true); }
-	 * 
-	 * }
-	 */
-
 	private final List<Double> F_LIST = Arrays.asList(0.03920000076293961D, 0.03920000076293917D, 0.0D,
 			0.03276131020250217D, 0.028767927000034277D, 0.07632600455671046D, 0.013803173459940865D,
 			0.018122953979760492D, 0.018122953979760492D, 0.03918750000000015D, 0.032761310202502614D,

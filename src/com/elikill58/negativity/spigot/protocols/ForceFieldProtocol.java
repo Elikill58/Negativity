@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.protocols;
 
 import java.text.NumberFormat;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -42,19 +43,37 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
+		boolean mayCancel = false, hasThorns = hasThorns(p);
+		if(!p.hasLineOfSight(e.getEntity())) {
+			mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getEntity().getType().name()
+					+ " but cannot see it, hasThorns: " + hasThorns + ", ping: " + Utils.getPing(p),
+					"Hit " + e.getEntity().getType().name().toLowerCase() + " without line of sight");
+		}
+		if(hasThorns)
+			return;
 		Location tempLoc = e.getEntity().getLocation().clone();
 		tempLoc.setY(p.getLocation().getY());
 		double dis = tempLoc.distance(p.getLocation());
 		if (dis > Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach")
-				&& !p.getItemInHand().getType().equals(Material.BOW) && !hasThorns(p)) {
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
+				&& !p.getItemInHand().getType().equals(Material.BOW)) {
+			mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(dis * 2 * 10),
-					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis
+					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns."
 							+ ". Ping: " + Utils.getPing(p),
 					"Distance with " + e.getEntity().getName() + ": " + nf.format(dis) + " blocks", "Distance with " + e.getEntity().getName() + ": " + nf.format(dis));
-			if (isSetBack() && mayCancel)
-				e.setCancelled(true);
 		}
+		final Location loc = p.getLocation().clone();
+		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
+			public void run() {
+				Location loc1 = p.getLocation();
+				int gradeRounded = Math.round(Math.abs(loc.getYaw() - loc1.getYaw()));
+				if (gradeRounded > 76.0) {
+					SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded), "Player rotate too much (" + gradeRounded + "°) without thorns.", "Rotate " + gradeRounded + "°");
+				}
+			}
+		}, 3L);
+		if (isSetBack() && mayCancel)
+			e.setCancelled(true);
 	}
 
 	private boolean hasThorns(Player p) {

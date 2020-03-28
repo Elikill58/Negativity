@@ -75,4 +75,9 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 			}, 5);
 		}
 	}
+	
+	@Override
+	public boolean isBlockedInFight() {
+		return true;
+	}
 }

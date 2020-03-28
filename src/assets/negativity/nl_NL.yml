@@ -2,7 +2,7 @@ report_wait: "Rustig aan! Wacht 1 seconde tussen een report."
 
 invalid_player: "%arg% is geen speler!"
 not_forget_player: "Vergeet de speler niet!"
-not_permission: "&cYou don't have permission to do that."
+not_permission: "&cJe hebt daar geen permissie voor."
 only_player: "Alleen spelers kunnen dat doen!"
 well_suspect: "%players% zijn verdacht!"
 none: "geen"
@@ -50,7 +50,7 @@ negativity {
   alert: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% &7(&2Kans: %reliability%&7)!"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% %nb% tijd &7(&2Kans: %reliability%%&7)!"
   alert_hover: "&6Kans: %reliability%\nPing: %ping%"
-  no_alerts: "&a[&2Negativity&a] No alerts to display."
+  no_alerts: "&a[&2Negativity&a] Geen meldingen om weer te geven."
   verif {
     invalid_cheat: "%arg% is geen geldige cheat!"
     start: "&a[&2Negativity&a] &7Bezig met het analyseren van %name% voor %cheat%"

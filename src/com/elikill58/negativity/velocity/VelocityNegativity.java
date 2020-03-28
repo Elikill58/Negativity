@@ -27,7 +27,7 @@ import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-@Plugin(id = "negativity", name = "Negativity", version = "1.5.1",
+@Plugin(id = "negativity", name = "Negativity", version = "1.5.2",
         description = "It's an Advanced AntiCheat Detection", authors = {"Elikill58", "RedNesto"})
 public class VelocityNegativity {
 

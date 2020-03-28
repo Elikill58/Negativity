@@ -16,6 +16,7 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
+@SuppressWarnings("deprecation")
 public class SpiderProtocol extends Cheat implements Listener {
 
 	public SpiderProtocol() {
@@ -23,7 +24,6 @@ public class SpiderProtocol extends Cheat implements Listener {
 				"wall");
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler(ignoreCancelled = true)
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
@@ -72,6 +72,16 @@ public class SpiderProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		Location loc = p.getLocation().clone();
 		if (!np.ACTIVE_CHEAT.contains(this) || p.isFlying())
+			return;
+
+		Material playerLocType = loc.getBlock().getType(),
+				underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),
+				underUnder = loc.clone().subtract(0, 2, 0).getBlock().getType(),
+				m3 = loc.clone().add(0, 1, 0).getBlock().getType();
+		if (!underPlayer.equals(Material.AIR) || !underUnder.equals(Material.AIR) || playerLocType.equals(Material.VINE)
+				|| playerLocType.equals(Material.LADDER) || underPlayer.equals(Material.VINE)
+				|| underPlayer.equals(Material.LADDER) || m3.equals(Material.VINE) || m3.equals(Material.LADDER)
+				|| !playerLocType.equals(Material.AIR) || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
 		double y = e.getTo().getY() - e.getFrom().getY();
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {

@@ -88,7 +88,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 					|| downName.contains("SLAB") || downName.contains("STEP") || downName.contains("SPONGE")
 					|| downName.contains("SLIME_BLOCK") || downName.contains("ICE"))) {
 				double f = (e.getFrom().getY() - e.getTo().getY()) / 2.0D;
-				if (!(F_LIST.contains(f) || (f < 0.47D && f > 0.46D) || (f < 0.02D && f > 0.01D))) {
+				if (!(F_LIST.contains(f) || (f < 0.47D && f > 0.46D) || (f < 0.02D && f > 0.01D)) && !p.getLocation().getBlock().getType().name().contains("WATER") && !downName.contains("WATER")) {
 					mayCancel = SpigotNegativity.alertMod(
 							np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 							UniversalUtils.parseInPorcent(99),

@@ -4,7 +4,7 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.ActiveBan;
+import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.storage.ActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
@@ -21,12 +21,12 @@ public class NegativityBanProcessor extends BaseNegativityBanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan executeBan(ActiveBan ban) {
+	public Ban executeBan(Ban ban) {
 		NegativityPlayer nPlayer = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
 		if (nPlayer != null && Perm.hasPerm(nPlayer, "notBanned"))
 			return null;
 
-		ActiveBan executedBan = super.executeBan(ban);
+		Ban executedBan = super.executeBan(ban);
 
 		if (executedBan != null && nPlayer != null) {
 			BanUtils.kickForBan(nPlayer, executedBan);

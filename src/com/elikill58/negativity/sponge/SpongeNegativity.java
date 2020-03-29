@@ -84,7 +84,7 @@ import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpongeAdapter;
-import com.elikill58.negativity.universal.ban.ActiveBan;
+import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
@@ -282,7 +282,7 @@ public class SpongeNegativity {
 		UUID playerId = e.getTargetUser().getUniqueId();
 		SpongeNegativityPlayer.removeFromCache(playerId);
 
-		ActiveBan activeBan = BanManager.getActiveBan(playerId);
+		Ban activeBan = BanManager.getActiveBan(playerId);
 		if (activeBan != null) {
 			NegativityAccount account = Adapter.getAdapter().getNegativityAccount(playerId);
 			String kickMsgKey;
@@ -465,7 +465,7 @@ public class SpongeNegativity {
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(target.get().getLocation().getBlock().getType().getId()))
 				if (ItemUseBypass.ITEM_BYPASS.get(target.get().getLocation().getBlock().getType().getId()).getWhen().equals(WhenBypass.LOOKING))
 					return false;
-		
+
 		int ping = Utils.getPing(p);
 		long timeMillis = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > timeMillis || reliability < 30 || ping > c.getMaxAlertPing()

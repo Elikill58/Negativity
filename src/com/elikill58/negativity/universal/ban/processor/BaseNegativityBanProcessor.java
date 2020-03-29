@@ -6,8 +6,8 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.elikill58.negativity.universal.ban.ActiveBan;
-import com.elikill58.negativity.universal.ban.LoggedBan;
+import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.storage.ActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
 
@@ -15,7 +15,7 @@ import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
  * This ban processor simply saves bans (active and logged) in a configurable storage ({@link ActiveBanStorage} and {@link BanLogsStorage} respectively).
  * <p>
  * It is important to know its sole purpose is to manage bans, and will not do anything on the game server,
- * like kicking the player when {@link BanProcessor#executeBan(ActiveBan) executing a ban}.
+ * like kicking the player when {@link BanProcessor#executeBan(Ban) executing a ban}.
  * If you want direct actions on the game server use {@link NegativityBanProcessor} instead.
  */
 public class BaseNegativityBanProcessor implements BanProcessor {
@@ -31,7 +31,7 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan executeBan(ActiveBan ban) {
+	public Ban executeBan(Ban ban) {
 		if (isBanned(ban.getPlayerId())) {
 			return null;
 		}
@@ -42,13 +42,13 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public LoggedBan revokeBan(UUID playerId) {
-		ActiveBan activeBan = activeBanStorage.load(playerId);
+	public Ban revokeBan(UUID playerId) {
+		Ban activeBan = activeBanStorage.load(playerId);
 		if (activeBan == null)
 			return null;
 
 		activeBanStorage.remove(playerId);
-		LoggedBan revokedLoggedBan = LoggedBan.from(activeBan, true);
+		Ban revokedLoggedBan = Ban.from(activeBan, BanStatus.REVOKED);
 
 		if (banLogsStorage != null) {
 			banLogsStorage.save(revokedLoggedBan);
@@ -59,8 +59,8 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan getActiveBan(UUID playerId) {
-		ActiveBan activeBan = activeBanStorage.load(playerId);
+	public Ban getActiveBan(UUID playerId) {
+		Ban activeBan = activeBanStorage.load(playerId);
 		if (activeBan == null) {
 			return null;
 		}
@@ -72,14 +72,14 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 
 		activeBanStorage.remove(playerId);
 		if (banLogsStorage != null) {
-			banLogsStorage.save(LoggedBan.from(activeBan, false));
+			banLogsStorage.save(Ban.from(activeBan, BanStatus.EXPIRED));
 		}
 
 		return null;
 	}
 
 	@Override
-	public List<LoggedBan> getLoggedBans(UUID playerId) {
+	public List<Ban> getLoggedBans(UUID playerId) {
 		if (banLogsStorage == null) {
 			return Collections.emptyList();
 		}

@@ -33,7 +33,7 @@ import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.ActiveBan;
+import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -48,7 +48,7 @@ public class PlayersEvents implements Listener {
 		SpigotNegativityPlayer.removeFromCache(playerId);
 
 		NegativityAccount account = Adapter.getAdapter().getNegativityAccount(playerId);
-		ActiveBan activeBan = BanManager.getActiveBan(playerId);
+		Ban activeBan = BanManager.getActiveBan(playerId);
 		if (activeBan != null) {
 			String kickMsgKey;
 			String formattedExpiration;
@@ -66,7 +66,7 @@ public class PlayersEvents implements Listener {
 	}
 
 	private boolean hasSentBungeecordMessage = false;
-	
+
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();

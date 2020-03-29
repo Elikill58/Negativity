@@ -3,7 +3,7 @@ package com.elikill58.negativity.universal.ban.storage;
 import java.util.List;
 import java.util.UUID;
 
-import com.elikill58.negativity.universal.ban.LoggedBan;
+import com.elikill58.negativity.universal.ban.Ban;
 
 /**
  * A class responsible for loading and saving logged bans.
@@ -19,12 +19,12 @@ public interface BanLogsStorage {
 	 * @param playerId the UUID of a player.
 	 * @return a <b>mutable</b> list containing bans of the player identified by the given UUID
 	 */
-	List<LoggedBan> load(UUID playerId);
+	List<Ban> load(UUID playerId);
 
 	/**
 	 * Adds a new entry in the bans log.
 	 *
 	 * @param ban the new entry ot add
 	 */
-	void save(LoggedBan ban);
+	void save(Ban ban);
 }

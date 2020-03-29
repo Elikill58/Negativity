@@ -5,9 +5,8 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.elikill58.negativity.universal.ban.ActiveBan;
+import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.ban.LoggedBan;
 
 /**
  * Decides what to do with ban and unban requests as well as active and logged bans queries.
@@ -22,9 +21,10 @@ public interface BanProcessor {
 	 * The ban may not be executed for any processor-specific reason.
 	 *
 	 * @return the ban that has been executed, or {@code null} if the ban has not been executed.
+	 * @param ban
 	 */
 	@Nullable
-	ActiveBan executeBan(ActiveBan ban);
+	Ban executeBan(Ban ban);
 
 	/**
 	 * Revokes the active ban of the player identified by the given UUID.
@@ -38,14 +38,14 @@ public interface BanProcessor {
 	 * @return the logged revoked ban or {@code null} if the revocation failed.
 	 */
 	@Nullable
-	LoggedBan revokeBan(UUID playerId);
+	Ban revokeBan(UUID playerId);
 
 	default boolean isBanned(UUID playerId) {
 		return getActiveBan(playerId) != null;
 	}
 
 	@Nullable
-	ActiveBan getActiveBan(UUID playerId);
+	Ban getActiveBan(UUID playerId);
 
-	List<LoggedBan> getLoggedBans(UUID playerId);
+	List<Ban> getLoggedBans(UUID playerId);
 }

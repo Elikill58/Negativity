@@ -11,9 +11,9 @@ import org.bukkit.Bukkit;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.ActiveBan;
+import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
-import com.elikill58.negativity.universal.ban.LoggedBan;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 
 import me.leoko.advancedban.manager.PunishmentManager;
@@ -24,7 +24,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan executeBan(ActiveBan ban) {
+	public Ban executeBan(Ban ban) {
 		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
 		if (player == null) {
 			return null;
@@ -41,7 +41,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public LoggedBan revokeBan(UUID playerId) {
+	public Ban revokeBan(UUID playerId) {
 		Punishment punishment = PunishmentManager.get().getBan(playerId.toString());
 		if (punishment == null) {
 			return null;
@@ -49,7 +49,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 
 		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
 		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), punishment::delete);
-		return loggedBanFrom(playerId, punishment, true);
+		return loggedBanFrom(playerId, punishment, BanStatus.REVOKED);
 	}
 
 	@Override
@@ -59,35 +59,36 @@ public class AdvancedBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan getActiveBan(UUID playerId) {
+	public Ban getActiveBan(UUID playerId) {
 		Punishment punishment = PunishmentManager.get().getBan(playerId.toString());
 		if (punishment == null) {
 			return null;
 		}
 
-		return new ActiveBan(playerId,
+		return new Ban(playerId,
 				punishment.getReason(),
 				punishment.getOperator(),
 				BanType.UNKNOW,
 				punishment.getEnd(),
-				punishment.getReason());
+				punishment.getReason(),
+				BanStatus.ACTIVE);
 	}
 
 	@Override
-	public List<LoggedBan> getLoggedBans(UUID playerId) {
+	public List<Ban> getLoggedBans(UUID playerId) {
 		List<Punishment> punishments = PunishmentManager.get().getPunishments(playerId.toString(), PunishmentType.BAN, false);
-		List<LoggedBan> loggedBans = new ArrayList<>();
-		punishments.forEach(punishment -> loggedBans.add(loggedBanFrom(playerId, punishment, false)));
+		List<Ban> loggedBans = new ArrayList<>();
+		punishments.forEach(punishment -> loggedBans.add(loggedBanFrom(playerId, punishment, BanStatus.EXPIRED)));
 		return loggedBans;
 	}
 
-	private LoggedBan loggedBanFrom(UUID playerId, Punishment punishment, boolean revoked) {
-		return new LoggedBan(playerId,
+	private Ban loggedBanFrom(UUID playerId, Punishment punishment, BanStatus status) {
+		return new Ban(playerId,
 				punishment.getReason(),
 				punishment.getOperator(),
 				BanType.UNKNOW,
 				punishment.getEnd(),
 				punishment.getReason(),
-				revoked);
+				status);
 	}
 }

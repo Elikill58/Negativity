@@ -11,8 +11,9 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
-import com.elikill58.negativity.universal.ban.LoggedBan;
 
 public class FileBanLogsStorage implements BanLogsStorage {
 
@@ -23,8 +24,8 @@ public class FileBanLogsStorage implements BanLogsStorage {
 	}
 
 	@Override
-	public List<LoggedBan> load(UUID playerId) {
-		List<LoggedBan> loadedBans = new ArrayList<>();
+	public List<Ban> load(UUID playerId) {
+		List<Ban> loadedBans = new ArrayList<>();
 
 		Path banFile = getLoadBanDir().resolve(playerId + ".txt");
 		if (Files.notExists(banFile)) {
@@ -33,7 +34,7 @@ public class FileBanLogsStorage implements BanLogsStorage {
 
 		try {
 			for (String line : Files.readAllLines(banFile)) {
-				LoggedBan ban = fromString(playerId, line);
+				Ban ban = fromString(playerId, line);
 				if (ban != null) {
 					loadedBans.add(ban);
 				}
@@ -46,7 +47,7 @@ public class FileBanLogsStorage implements BanLogsStorage {
 	}
 
 	@Override
-	public void save(LoggedBan ban) {
+	public void save(Ban ban) {
 		try {
 			Path file = storageDir.resolve(ban.getPlayerId() + ".txt");
 			Files.createDirectories(file.getParent());
@@ -62,17 +63,17 @@ public class FileBanLogsStorage implements BanLogsStorage {
 		return storageDir;
 	}
 
-	private static String toString(LoggedBan ban) {
+	private static String toString(Ban ban) {
 		return ban.getExpirationTime()
 				+ ":reason=" + ban.getReason().replaceAll(":", "")
 				+ ":bantype=" + ban.getBanType().name()
 				+ (ban.getCheatName() != null ? ":ac=" + ban.getCheatName() : "")
 				+ ":by=" + ban.getBannedBy()
-				+ ":revoked=" + ban.isRevoked();
+				+ ":revoked=" + ban.getStatus().equals(BanStatus.REVOKED);
 	}
 
 	@Nullable
-	private static LoggedBan fromString(UUID playerId, String line) {
+	private static Ban fromString(UUID playerId, String line) {
 		String[] content = line.split(":");
 		if (content.length == 1)
 			return null;
@@ -87,7 +88,7 @@ public class FileBanLogsStorage implements BanLogsStorage {
 
 		String reason = "";
 		String by = "Negativity";
-		boolean isRevoked = false;
+		BanStatus isRevoked = BanStatus.EXPIRED;
 		BanType banType = BanType.UNKNOW;
 		String ac = null;
 		for (String s : content) {
@@ -115,7 +116,7 @@ public class FileBanLogsStorage implements BanLogsStorage {
 					break;
 				case "unban":
 				case "revoked":
-					isRevoked = Boolean.parseBoolean(value);
+					isRevoked = BanStatus.REVOKED;
 					break;
 				default:
 					Adapter.getAdapter().warn("Type " + type + " unknow. Value: " + value);
@@ -123,6 +124,6 @@ public class FileBanLogsStorage implements BanLogsStorage {
 			}
 		}
 
-		return new LoggedBan(playerId, reason, by, banType, expirationTime, ac, isRevoked);
+		return new Ban(playerId, reason, by, banType, expirationTime, ac, isRevoked);
 	}
 }

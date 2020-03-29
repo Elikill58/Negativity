@@ -4,7 +4,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.elikill58.negativity.universal.ban.ActiveBan;
+import com.elikill58.negativity.universal.ban.Ban;
 
 /**
  * A class responsible for loading and saving active bans.
@@ -22,14 +22,14 @@ public interface ActiveBanStorage {
 	 * @return the active ban of the player, or {@code null} if the player is not banned
 	 */
 	@Nullable
-	ActiveBan load(UUID playerId);
+	Ban load(UUID playerId);
 
 	/**
 	 * Saves the given active ban.
 	 *
 	 * @param ban the active ban to save.
 	 */
-	void save(ActiveBan ban);
+	void save(Ban ban);
 
 	/**
 	 * Removes the ban associated to the player identified by the given UUID.

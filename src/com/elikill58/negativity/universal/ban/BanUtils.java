@@ -42,7 +42,7 @@ public class BanUtils {
 	 * @return see {@link BanManager#executeBan}, null if banning was not needed
 	 */
 	@Nullable
-	public static ActiveBan banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability) {
+	public static Ban banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability) {
 		if (!shouldBan(cheat, player, reliability)) {
 			return null;
 		}
@@ -53,10 +53,10 @@ public class BanUtils {
 		if (!isDefinitive) {
 			banDuration = BanUtils.computeBanDuration(player, reliability, cheat);
 		}
-		return BanManager.executeBan(new ActiveBan(player.getUUID(), "Cheat (" + reason + ")", "Negativity", BanType.MOD, banDuration, reason));
+		return BanManager.executeBan(new Ban(player.getUUID(), "Cheat (" + reason + ")", "Negativity", BanType.MOD, banDuration, reason, BanStatus.ACTIVE));
 	}
 
-	public static void kickForBan(NegativityPlayer player, ActiveBan ban) {
+	public static void kickForBan(NegativityPlayer player, Ban ban) {
 		player.banEffect();
 		String formattedExpTime = new Timestamp(ban.getExpirationTime()).toString().split("\\.", 2)[0];
 		player.kickPlayer(ban.getReason(), formattedExpTime, ban.getBannedBy(), ban.isDefinitive());

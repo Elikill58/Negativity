@@ -25,7 +25,7 @@ public class BanManager {
 	private static String processorId;
 	private static Map<String, BanProcessor> processors = new HashMap<>();
 
-	public static List<LoggedBan> getLoggedBans(UUID playerId) {
+	public static List<Ban> getLoggedBans(UUID playerId) {
 		BanProcessor processor = getProcessor();
 		if (processor == null)
 			return Collections.emptyList();
@@ -42,7 +42,7 @@ public class BanManager {
 	}
 
 	@Nullable
-	public static ActiveBan getActiveBan(UUID playerId) {
+	public static Ban getActiveBan(UUID playerId) {
 		BanProcessor processor = getProcessor();
 		if (processor == null)
 			return null;
@@ -59,7 +59,7 @@ public class BanManager {
 	 * @return the ban that has been executed, or {@code null} if the ban has not been executed.
 	 */
 	@Nullable
-	public static ActiveBan executeBan(ActiveBan ban) {
+	public static Ban executeBan(Ban ban) {
 		BanProcessor processor = getProcessor();
 		if (processor == null)
 			return null;
@@ -79,7 +79,7 @@ public class BanManager {
 	 * @return the logged revoked ban or {@code null} if the revocation failed.
 	 */
 	@Nullable
-	public static LoggedBan revokeBan(UUID playerId) {
+	public static Ban revokeBan(UUID playerId) {
 		BanProcessor processor = getProcessor();
 		if (processor == null)
 			return null;

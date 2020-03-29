@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import com.elikill58.negativity.universal.ban.ActiveBan;
+import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
@@ -133,7 +133,7 @@ public class NegativityListener {
 	@Subscribe
 	public void onPostLogin(PostLoginEvent e) {
 		Player p = e.getPlayer();
-		ActiveBan activeBan = BanManager.getActiveBan(p.getUniqueId());
+		Ban activeBan = BanManager.getActiveBan(p.getUniqueId());
 		if (activeBan != null) {
 			String kickMsgKey = activeBan.isDefinitive() ? "ban.kick_def" : "ban.kick_time";
 			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(Instant.ofEpochMilli(activeBan.getExpirationTime()));

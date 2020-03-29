@@ -14,17 +14,17 @@ import org.bukkit.Bukkit;
 
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.ActiveBan;
+import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.BanUtils;
-import com.elikill58.negativity.universal.ban.LoggedBan;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 
 public class BukkitBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan executeBan(ActiveBan ban) {
+	public Ban executeBan(Ban ban) {
 		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
 		if (player == null) {
 			return null;
@@ -44,7 +44,7 @@ public class BukkitBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public LoggedBan revokeBan(UUID playerId) {
+	public Ban revokeBan(UUID playerId) {
 		BanList banList = Bukkit.getServer().getBanList(BanList.Type.NAME);
 		BanEntry banEntry = banList.getBanEntry(playerId.toString());
 		if (banEntry == null) {
@@ -62,7 +62,7 @@ public class BukkitBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan getActiveBan(UUID playerId) {
+	public Ban getActiveBan(UUID playerId) {
 		BanEntry banEntry = Bukkit.getServer().getBanList(BanList.Type.NAME).getBanEntry(playerId.toString());
 		if (banEntry == null) {
 			return null;
@@ -79,18 +79,18 @@ public class BukkitBanProcessor implements BanProcessor {
 			reason = "";
 		}
 
-		return new ActiveBan(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason);
+		return new Ban(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason, BanStatus.ACTIVE);
 	}
 
 	@Override
-	public List<LoggedBan> getLoggedBans(UUID playerId) {
-		List<LoggedBan> loggedBans = new ArrayList<>();
+	public List<Ban> getLoggedBans(UUID playerId) {
+		List<Ban> loggedBans = new ArrayList<>();
 		Bukkit.getServer().getBanList(BanList.Type.NAME).getBanEntries()
 				.forEach(entry -> loggedBans.add(loggedBanFrom(entry, playerId, false)));
 		return loggedBans;
 	}
 
-	private LoggedBan loggedBanFrom(BanEntry banEntry, UUID playerId, boolean revoked) {
+	private Ban loggedBanFrom(BanEntry banEntry, UUID playerId, boolean revoked) {
 		long expirationTime = -1;
 		Date expiration = banEntry.getExpiration();
 		if (expiration != null) {
@@ -102,6 +102,6 @@ public class BukkitBanProcessor implements BanProcessor {
 			reason = "";
 		}
 
-		return new LoggedBan(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason, revoked);
+		return new Ban(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason, revoked ? BanStatus.REVOKED : BanStatus.EXPIRED);
 	}
 }

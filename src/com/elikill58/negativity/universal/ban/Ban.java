@@ -5,7 +5,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-public class BaseBan {
+public final class Ban {
 
 	private final UUID playerId;
 	private final String reason;
@@ -14,14 +14,16 @@ public class BaseBan {
 	private final long expirationTime;
 	@Nullable
 	private final String cheatName;
+	private final BanStatus status;
 
-	public BaseBan(UUID playerId, String reason, String bannedBy, BanType banType, long expirationTime, @Nullable String cheatName) {
+	public Ban(UUID playerId, String reason, String bannedBy, BanType banType, long expirationTime, @Nullable String cheatName, BanStatus status) {
 		this.playerId = playerId;
 		this.reason = reason;
 		this.bannedBy = bannedBy;
 		this.banType = banType;
 		this.expirationTime = expirationTime;
 		this.cheatName = cheatName;
+		this.status = status;
 	}
 
 	public UUID getPlayerId() {
@@ -53,21 +55,30 @@ public class BaseBan {
 		return cheatName;
 	}
 
+	public BanStatus getStatus() {
+		return status;
+	}
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
-		if (!(o instanceof BaseBan)) return false;
-		BaseBan baseBan = (BaseBan) o;
-		return expirationTime == baseBan.expirationTime &&
-				playerId.equals(baseBan.playerId) &&
-				reason.equals(baseBan.reason) &&
-				bannedBy.equals(baseBan.bannedBy) &&
-				banType == baseBan.banType &&
-				Objects.equals(cheatName, baseBan.cheatName);
+		if (o == null || getClass() != o.getClass()) return false;
+		Ban ban = (Ban) o;
+		return expirationTime == ban.expirationTime &&
+				playerId.equals(ban.playerId) &&
+				reason.equals(ban.reason) &&
+				bannedBy.equals(ban.bannedBy) &&
+				banType == ban.banType &&
+				Objects.equals(cheatName, ban.cheatName) &&
+				status == ban.status;
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(playerId, reason, bannedBy, banType, expirationTime, cheatName);
+		return Objects.hash(playerId, reason, bannedBy, banType, expirationTime, cheatName, status);
+	}
+
+	public static Ban from(Ban from, BanStatus status) {
+		return new Ban(from.getPlayerId(), from.getReason(), from.getBannedBy(), from.getBanType(), from.getExpirationTime(), from.getCheatName(), status);
 	}
 }

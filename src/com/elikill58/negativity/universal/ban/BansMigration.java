@@ -54,15 +54,15 @@ public class BansMigration {
 				}
 
 				try {
-					List<LoggedBan> loadedBans = banLogsStorage.load(uuid);
-					LoggedBan extractedActiveBan = getActiveBanFromLoggedBans(loadedBans);
+					List<Ban> loadedBans = banLogsStorage.load(uuid);
+					Ban extractedActiveBan = getActiveBanFromLoggedBans(loadedBans);
 
-					List<LoggedBan> loggedBansToSave = loadedBans;
+					List<Ban> loggedBansToSave = loadedBans;
 					if (extractedActiveBan != null) {
 						// We remove the active ban and all the following ones from the list of bans to keep in logs
 						loggedBansToSave = loadedBans.subList(0, loadedBans.indexOf(extractedActiveBan));
 
-						ActiveBan activeBan = ActiveBan.from(extractedActiveBan);
+						Ban activeBan = Ban.from(extractedActiveBan, BanStatus.ACTIVE);
 						activeBanStorage.save(activeBan);
 					}
 
@@ -87,13 +87,13 @@ public class BansMigration {
 	}
 
 	@Nullable
-	private static LoggedBan getActiveBanFromLoggedBans(List<LoggedBan> loggedBans) {
+	private static Ban getActiveBanFromLoggedBans(List<Ban> loggedBans) {
 		if (loggedBans.isEmpty())
 			return null;
 
 		final long now = System.currentTimeMillis();
-		for (LoggedBan loggedBan : loggedBans) {
-			if (!loggedBan.isRevoked() && (loggedBan.isDefinitive() || loggedBan.getExpirationTime() > now)) {
+		for (Ban loggedBan : loggedBans) {
+			if (loggedBan.getStatus() != BanStatus.REVOKED && (loggedBan.isDefinitive() || loggedBan.getExpirationTime() > now)) {
 				return loggedBan;
 			}
 		}

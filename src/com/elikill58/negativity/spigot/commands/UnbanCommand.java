@@ -17,7 +17,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.ban.LoggedBan;
+import com.elikill58.negativity.universal.ban.Ban;
 
 public class UnbanCommand implements CommandExecutor, TabCompleter {
 
@@ -47,7 +47,7 @@ public class UnbanCommand implements CommandExecutor, TabCompleter {
 			return false;
 		}
 
-		LoggedBan revokedBan = BanManager.revokeBan(cible.getUniqueId());
+		Ban revokedBan = BanManager.revokeBan(cible.getUniqueId());
 		if (revokedBan != null) {
 			Messages.sendMessage(sender, "unban.well_unban", "%name%", cible.getName());
 			return true;

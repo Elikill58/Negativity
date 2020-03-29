@@ -10,7 +10,8 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.ActiveBan;
+import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.dataStorage.database.DatabaseMigrator;
 
@@ -30,7 +31,7 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 
 	@Nullable
 	@Override
-	public ActiveBan load(UUID playerId) {
+	public Ban load(UUID playerId) {
 		try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_bans_active WHERE id = ?")) {
 			stm.setString(1, playerId.toString());
 
@@ -43,7 +44,7 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 			long expirationTime = rs.getLong("expiration_time");
 			String cheatName = rs.getString("cheat_name");
 			String bannedBy = rs.getString("banned_by");
-			return new ActiveBan(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, cheatName);
+			return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, cheatName, BanStatus.ACTIVE);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -52,7 +53,7 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 	}
 
 	@Override
-	public void save(ActiveBan ban) {
+	public void save(Ban ban) {
 		remove(ban.getPlayerId());
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
 				"INSERT INTO negativity_bans_active (id, reason, banned_by, expiration_time, cheat_name) VALUES (?,?,?,?,?)")) {

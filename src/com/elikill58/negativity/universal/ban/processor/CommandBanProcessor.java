@@ -8,9 +8,9 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.ActiveBan;
+import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
-import com.elikill58.negativity.universal.ban.LoggedBan;
 
 public class CommandBanProcessor implements BanProcessor {
 
@@ -24,7 +24,7 @@ public class CommandBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public ActiveBan executeBan(ActiveBan ban) {
+	public Ban executeBan(Ban ban) {
 		Adapter adapter = Adapter.getAdapter();
 		banCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, ban.getPlayerId(), ban.getReason())));
 		return ban;
@@ -32,20 +32,20 @@ public class CommandBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public LoggedBan revokeBan(UUID playerId) {
+	public Ban revokeBan(UUID playerId) {
 		Adapter adapter = Adapter.getAdapter();
 		unbanCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, playerId, "Unknown")));
-		return new LoggedBan(playerId, "Unknown", "Unknown", BanType.UNKNOW, 0, null, true);
+		return new Ban(playerId, "Unknown", "Unknown", BanType.UNKNOW, 0, null, BanStatus.REVOKED);
 	}
 
 	@Nullable
 	@Override
-	public ActiveBan getActiveBan(UUID playerId) {
+	public Ban getActiveBan(UUID playerId) {
 		return null;
 	}
 
 	@Override
-	public List<LoggedBan> getLoggedBans(UUID playerId) {
+	public List<Ban> getLoggedBans(UUID playerId) {
 		return Collections.emptyList();
 	}
 

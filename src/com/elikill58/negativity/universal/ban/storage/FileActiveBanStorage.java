@@ -12,7 +12,8 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.ActiveBan;
+import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 
 public class FileActiveBanStorage implements ActiveBanStorage {
@@ -24,7 +25,7 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 
 	@Nullable
 	@Override
-	public ActiveBan load(UUID playerId) {
+	public Ban load(UUID playerId) {
 		Path banFile = banDir.resolve("active.txt");
 		if (Files.notExists(banFile))
 			return null;
@@ -44,7 +45,7 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 	}
 
 	@Override
-	public void save(ActiveBan ban) {
+	public void save(Ban ban) {
 		try {
 			replaceBan(ban.getPlayerId(), ban);
 		} catch (IOException e) {
@@ -64,9 +65,9 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 	/**
 	 * Replaces the active ban for the given UUID with the second parameter one.
 	 * <p>
-	 * This method exists to avoid implementing the (almost) same logic twice in {@link #load(UUID)} and {@link #save(ActiveBan)}.
+	 * This method exists to avoid implementing the (almost) same logic twice in {@link #load(UUID)} and {@link ActiveBanStorage#save(Ban)}.
 	 */
-	private void replaceBan(UUID playerId, @Nullable ActiveBan ban) throws IOException {
+	private void replaceBan(UUID playerId, @Nullable Ban ban) throws IOException {
 		Path banFile = banDir.resolve("active.txt");
 		// If ban is null we only have to remove the ban, but if the storage file does not exist there is nothing to remove,
 		// thus we don't need to do anything.
@@ -100,7 +101,7 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 		}
 	}
 
-	private static String toString(ActiveBan ban) {
+	private static String toString(Ban ban) {
 		return ban.getPlayerId()
 				+ ":expiration=" + ban.getExpirationTime()
 				+ ":reason=" + ban.getReason().replaceAll(":", "")
@@ -110,7 +111,7 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 	}
 
 	@Nullable
-	private static ActiveBan fromString(String line) {
+	private static Ban fromString(String line) {
 		String[] content = line.split(":");
 		if (content.length == 1)
 			return null;
@@ -165,6 +166,6 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 			expirationTime = -1;
 		}
 
-		return new ActiveBan(playerId, reason, by, banType, expirationTime, ac);
+		return new Ban(playerId, reason, by, banType, expirationTime, ac, BanStatus.ACTIVE);
 	}
 }

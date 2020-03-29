@@ -81,7 +81,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if(armor == null)
 			return false;
 		for(ItemStack item : armor)
-			if(item.containsEnchantment(Enchantment.THORNS))
+			if(item != null && item.containsEnchantment(Enchantment.THORNS))
 				return true;
 		return false;
 	}

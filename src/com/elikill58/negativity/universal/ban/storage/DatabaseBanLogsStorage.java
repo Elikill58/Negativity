@@ -13,6 +13,7 @@ import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.dataStorage.database.DatabaseMigrator;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class DatabaseBanLogsStorage implements BanLogsStorage {
 
@@ -58,7 +59,7 @@ public class DatabaseBanLogsStorage implements BanLogsStorage {
 			stm.setString(2, ban.getReason());
 			stm.setString(3, ban.getBannedBy());
 			stm.setLong(4, ban.getExpirationTime());
-			stm.setString(5, ban.getCheatName());
+			stm.setString(5, UniversalUtils.trimExcess(ban.getCheatName(), 32));
 			stm.setBoolean(6, ban.getStatus() == BanStatus.REVOKED);
 			stm.executeUpdate();
 		} catch (Exception e) {

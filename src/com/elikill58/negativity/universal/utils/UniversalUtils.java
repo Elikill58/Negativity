@@ -263,6 +263,14 @@ public class UniversalUtils {
 		return message;
 	}
 
+	@Nullable
+	public static String trimExcess(@Nullable String string, int maxLength) {
+		if (string == null || maxLength >= string.length()) {
+			return string;
+		}
+		return string.substring(0, maxLength - 1);
+	}
+
 	public static void init() {
 		DefaultConfigValue.init();
 		Database.init();

@@ -34,7 +34,7 @@ public class BanUtils {
 			return false;
 		}
 		Adapter ada = Adapter.getAdapter();
-		return ada.getIntegerInConfig("ban.reliability_need") >= relia && ada.getIntegerInConfig("ban.alert_need") >= np.getAllWarn(cheat);
+		return ada.getIntegerInConfig("ban.reliability_need") <= relia && ada.getIntegerInConfig("ban.alert_need") <= np.getAllWarn(cheat);
 	}
 
 	/**
@@ -47,11 +47,11 @@ public class BanUtils {
 			return null;
 		}
 		String reason = player.getReason(cheat);
-		int banDuration = -1;
+		long banDuration = -1;
 		int banDefThreshold = Adapter.getAdapter().getIntegerInConfig("ban.def.ban_time");
 		boolean isDefinitive = BanManager.getLoggedBans(player.getUUID()).size() >= banDefThreshold;
 		if (!isDefinitive) {
-			banDuration = BanUtils.computeBanDuration(player, reliability, cheat);
+			banDuration = System.currentTimeMillis() + BanUtils.computeBanDuration(player, reliability, cheat);
 		}
 		return BanManager.executeBan(new Ban(player.getUUID(), "Cheat (" + reason + ")", "Negativity", BanType.MOD, banDuration, reason, BanStatus.ACTIVE));
 	}

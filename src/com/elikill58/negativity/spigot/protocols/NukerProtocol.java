@@ -34,15 +34,17 @@ public class NukerProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if(p.hasPotionEffect(PotionEffectType.FAST_DIGGING))
+		if(p.hasPotionEffect(PotionEffectType.FAST_DIGGING) || e.getBlock() == null)
 			return;
 		Block target = Utils.getTargetBlock(p, 5);
-		double distance = target.getLocation().distance(e.getBlock().getLocation());
-		if ((target.getType() != e.getBlock().getType()) && distance > 3.5 && target.getType() != Material.AIR) {
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - Utils.getPing(p)),
-					"BlockDig " + e.getBlock().getType().name() + ", player see " + target.getType().name() + ". Distance between blocks " + distance + " block. Ping: " + Utils.getPing(p) + ". Warn: " + np.getWarn(this));
-			if(isSetBack() && mayCancel)
-				e.setCancelled(true);
+		if(target != null) {
+			double distance = target.getLocation().distance(e.getBlock().getLocation());
+			if ((target.getType() != e.getBlock().getType()) && distance > 3.5 && target.getType() != Material.AIR) {
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - Utils.getPing(p)),
+						"BlockDig " + e.getBlock().getType().name() + ", player see " + target.getType().name() + ". Distance between blocks " + distance + " block. Ping: " + Utils.getPing(p) + ". Warn: " + np.getWarn(this));
+				if(isSetBack() && mayCancel)
+					e.setCancelled(true);
+			}
 		}
 		long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
 		if(dis < 50 && e.getBlock().getType().isSolid() && !hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.FAST_DIGGING)) {

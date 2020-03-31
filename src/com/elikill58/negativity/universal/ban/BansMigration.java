@@ -13,9 +13,9 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.storage.ActiveBanStorage;
+import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
 import com.elikill58.negativity.universal.ban.storage.FileActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.FileBanLogsStorage;
-import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
 
 public class BansMigration {
 

@@ -15,8 +15,8 @@ import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
-import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanManager;
 
 public class UnbanCommand implements CommandExecutor {
 

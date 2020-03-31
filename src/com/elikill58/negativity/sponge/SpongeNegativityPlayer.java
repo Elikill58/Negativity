@@ -45,7 +45,6 @@ import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.flowpowered.math.vector.Vector3d;
 
 import ninja.leaping.configurate.ConfigurationNode;

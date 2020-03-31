@@ -160,7 +160,7 @@ public abstract class Cheat {
 	public static List<Cheat> values() {
 		return CHEATS;
 	}
-	
+
 	public static enum CheatCategory {
 		COMBAT, MOVEMENT, WORLD, PLAYER;
 	}

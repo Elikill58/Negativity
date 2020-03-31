@@ -14,10 +14,8 @@ import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.NegativityAccount;
-import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanManager;
 
 public class UnbanCommand implements CommandExecutor, TabCompleter {
 

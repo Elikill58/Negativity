@@ -45,7 +45,6 @@ import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.flowpowered.math.vector.Vector3d;
 
 import ninja.leaping.configurate.ConfigurationNode;
@@ -603,7 +602,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		SpongeNegativityPlayer nPlayer = PLAYERS_CACHE.remove(playerId);
 		if (nPlayer != null) {
 			nPlayer.destroy();
-			Adapter.getAdapter().getNegativityAccount(playerId).loadBanRequest(true);
 		}
 	}
 

@@ -14,10 +14,8 @@ import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.NegativityAccount;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
-import com.elikill58.negativity.universal.ban.BanRequest;
+import com.elikill58.negativity.universal.ban.BanManager;
 
 public class UnbanCommand implements CommandExecutor, TabCompleter {
 
@@ -42,20 +40,19 @@ public class UnbanCommand implements CommandExecutor, TabCompleter {
 			return false;
 		}
 
-		NegativityAccount targetAccount = Adapter.getAdapter().getNegativityAccount(cible.getUniqueId());
-		List<BanRequest> targetBanRequests = targetAccount.getBanRequest();
-		if (targetBanRequests.isEmpty()) {
-			if (cible.isOnline() || Ban.canConnect(targetAccount)) {
-				Messages.sendMessage(sender, "unban.not_banned", "%name%", cible.getName());
-			} else {
-				Messages.sendMessage(sender, "unban.not_exact", "%arg%", arg[0]);
-			}
+		if (!BanManager.isBanned(cible.getUniqueId())) {
+			Messages.sendMessage(sender, "unban.not_banned", "%name%", cible.getName());
 			return false;
 		}
 
-		targetBanRequests.forEach(BanRequest::unban);
-		Messages.sendMessage(sender, "unban.well_unban", "%name%", cible.getName());
-		return true;
+		Ban revokedBan = BanManager.revokeBan(cible.getUniqueId());
+		if (revokedBan != null) {
+			Messages.sendMessage(sender, "unban.well_unban", "%name%", cible.getName());
+			return true;
+		} else {
+			// Tell the sender the revocation failed
+			return false;
+		}
 	}
 
 	@Override

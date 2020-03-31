@@ -7,6 +7,9 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.sql.Timestamp;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -82,6 +85,9 @@ import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpongeAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.ban.BanUtils;
+import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -144,6 +150,8 @@ public class SpongeNegativity {
 		Task.builder().execute(new PendingAlertsTimer()).interval(1, TimeUnit.SECONDS)
 				.name("negativity-pending-alerts").submit(this);
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
+
+		BanManager.registerProcessor("sponge", new SpongeBanProcessor());
 
 		if(SpongeUpdateChecker.ifUpdateAvailable()) {
 			getLogger().info("New version available (" + SpongeUpdateChecker.getVersionString() + ") : " + SpongeUpdateChecker.getDownloadUrl());
@@ -274,13 +282,21 @@ public class SpongeNegativity {
 		UUID playerId = e.getTargetUser().getUniqueId();
 		SpongeNegativityPlayer.removeFromCache(playerId);
 
-		NegativityAccount userAccount = Adapter.getAdapter().getNegativityAccount(playerId);
-		if (Ban.isBanned(userAccount)) {
-			if (Ban.canConnect(userAccount))
-				return;
+		Ban activeBan = BanManager.getActiveBan(playerId);
+		if (activeBan != null) {
+			NegativityAccount account = Adapter.getAdapter().getNegativityAccount(playerId);
+			String kickMsgKey;
+			String formattedExpiration;
+			if (activeBan.isDefinitive()) {
+				kickMsgKey = "ban.kick_def";
+				formattedExpiration = "definitively";
+			} else {
+				kickMsgKey = "ban.kick_time";
+				LocalDateTime expirationDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
+				formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
+			}
 			e.setCancelled(true);
-			e.setMessage(Messages.getMessage(userAccount, "ban.kick_" + (userAccount.isBanDef() ? "def" : "time"), "%reason%",
-					userAccount.getBanReason(), "%time%", (userAccount.getBanTime()), "%by%", userAccount.getBanBy()));
+			e.setMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%" , formattedExpiration, "%by%", activeBan.getBannedBy()));
 		}
 	}
 
@@ -449,7 +465,7 @@ public class SpongeNegativity {
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(target.get().getLocation().getBlock().getType().getId()))
 				if (ItemUseBypass.ITEM_BYPASS.get(target.get().getLocation().getBlock().getType().getId()).getWhen().equals(WhenBypass.LOOKING))
 					return false;
-		
+
 		int ping = Utils.getPing(p);
 		long timeMillis = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > timeMillis || reliability < 30 || ping > c.getMaxAlertPing()
@@ -482,8 +498,8 @@ public class SpongeNegativity {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
 		}
-		Ban.manageBan(c, np, reliability);
-		if (Ban.isBanned(np.getAccount())) {
+
+		if (BanUtils.banIfNeeded(np, c, reliability) == null) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
 		}

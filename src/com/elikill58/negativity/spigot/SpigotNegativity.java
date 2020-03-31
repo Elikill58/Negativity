@@ -64,10 +64,11 @@ import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpigotAdapter;
-import com.elikill58.negativity.universal.ban.Ban;
-import com.elikill58.negativity.universal.ban.support.AdvancedBanSupport;
-import com.elikill58.negativity.universal.ban.support.EssentialsBanSupport;
-import com.elikill58.negativity.universal.ban.support.MaxBansSupport;
+import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.ban.BanUtils;
+import com.elikill58.negativity.universal.ban.support.AdvancedBanProcessor;
+import com.elikill58.negativity.universal.ban.support.BukkitBanProcessor;
+import com.elikill58.negativity.universal.ban.support.MaxBansProcessor;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -181,12 +182,9 @@ public class SpigotNegativity extends JavaPlugin {
 		});
 
 		StringJoiner supportedPluginName = new StringJoiner(", ");
-		
+		BanManager.registerProcessor("bukkit", new BukkitBanProcessor());
 		if (Bukkit.getPluginManager().getPlugin("Essentials") != null) {
 			essentialsSupport = true;
-			if(ada.getStringInConfig("ban.other_plugin.plugin_used").equalsIgnoreCase("essentials"))
-				Ban.addBanPlugin(new EssentialsBanSupport());
-			supportedPluginName.add("Essentials");
 		}
 		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
 			worldGuardSupport = true;
@@ -197,17 +195,17 @@ public class SpigotNegativity extends JavaPlugin {
 			supportedPluginName.add("GadgetsMenu");
 		}
 
-		if (Bukkit.getPluginManager().getPlugin("MaxBans") != null && ada.getStringInConfig("ban.other_plugin.plugin_used").equalsIgnoreCase("MaxBans")) {
-			Ban.addBanPlugin(new MaxBansSupport());
+		if (Bukkit.getPluginManager().getPlugin("MaxBans") != null) {
+			BanManager.registerProcessor("maxbans", new MaxBansProcessor());
 			supportedPluginName.add("MaxBans");
 		}
 
-		if (Bukkit.getPluginManager().getPlugin("AdvancedBan") != null && ada.getStringInConfig("ban.other_plugin.plugin_used").equalsIgnoreCase("AdvancedBan")) {
-			Ban.addBanPlugin(new AdvancedBanSupport());
+		if (Bukkit.getPluginManager().getPlugin("AdvancedBan") != null) {
+			BanManager.registerProcessor("advancedban", new AdvancedBanProcessor());
 			supportedPluginName.add("AdvancedBan");
 		}
 		
-		if(supportedPluginName.length() > 0) {
+		if (supportedPluginName.length() > 0) {
 			getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
 		}
 	}
@@ -363,12 +361,12 @@ public class SpigotNegativity extends JavaPlugin {
 			if (!kick.isCancelled())
 				p.kickPlayer(Messages.getMessage(p, "kick.kicked", "%cheat%", c.getName(), "%reason%", c.getName(), "%playername%", p.getName(), "%cheat%", c.getName()));
 		}
-		if(np.isBanned()) {
+		if(BanManager.isBanned(np.getUUID())) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
 		}
-		Ban.manageBan(c, np, reliability);
-		if (Ban.isBanned(np.getAccount())) {
+
+		if (BanUtils.banIfNeeded(np, c, reliability) != null) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
 		}

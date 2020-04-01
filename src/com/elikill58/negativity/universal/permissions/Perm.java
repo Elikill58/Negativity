@@ -21,8 +21,9 @@ public class Perm {
 	public static boolean hasPerm(NegativityPlayer np, String perm) {
 		try {
 			String defaultPerm = Adapter.getAdapter().getStringInConfig("Permissions." + perm + ".default");
-			if (!(defaultPerm.equalsIgnoreCase("")) && defaultActive && (np.hasDefaultPermission(defaultPerm) || np.isOp()))
-				return true;
+			if(defaultActive) {
+				return !(defaultPerm.equalsIgnoreCase("")) && (np.hasDefaultPermission(defaultPerm) || np.isOp());
+			}
 			if (!Database.hasCustom)
 				return false;
 			if (CACHE.containsKey(np.getPlayer()))

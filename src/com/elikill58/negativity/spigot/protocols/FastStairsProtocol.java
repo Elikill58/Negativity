@@ -30,7 +30,7 @@ public class FastStairsProtocol extends Cheat implements Listener {
 			return;
 		if(p.getFallDistance() != 0)
 			return;
-		String blockName = e.getTo().clone().subtract(0, 0.1, 0).getBlock().getType().name();
+		String blockName = e.getTo().clone().subtract(0, 0.0001, 0).getBlock().getType().name();
 		if(!blockName.contains("STAIRS"))
 			return;
 		double distance = e.getFrom().distance(e.getTo());

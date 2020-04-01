@@ -35,8 +35,6 @@ public class SpiderProtocol extends Cheat implements Listener {
 			return;
 		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP) || !np.hasOtherThan(loc, Material.AIR))
 			return;
-		if(e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ())
-			return;
 		Material playerLocType = loc.getBlock().getType(),
 				underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),
 				underUnder = loc.clone().subtract(0, 2, 0).getBlock().getType(),
@@ -46,11 +44,13 @@ public class SpiderProtocol extends Cheat implements Listener {
 				|| underPlayer.equals(Material.LADDER) || m3.equals(Material.VINE) || m3.equals(Material.LADDER)
 				|| !playerLocType.equals(Material.AIR) || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
+		if(hasBypassBlockAround(loc))
+			return;
 		double y = e.getTo().getY() - e.getFrom().getY(), last = np.lastYDiff;
 		np.lastYDiff = y;
 		boolean isAris = ((float) y) == p.getWalkSpeed();
 		if (((y > 0.499 && y < 0.7) || isAris || last == y)) {
-			if(hasBypassBlockAround(loc))
+			if(e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ())
 				return;
 			int relia = UniversalUtils.parseInPorcent((e.getTo().getY() - e.getFrom().getY()) * 200 + (isAris ? 39 : 0));
 			if (SpigotNegativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this,
@@ -62,36 +62,13 @@ public class SpiderProtocol extends Cheat implements Listener {
 				p.teleport(locc.add(0, 1, 0));
 			}
 		}
-	}
-
-	@EventHandler(ignoreCancelled = true)
-	public void onPlayerMove2(PlayerMoveEvent e) {
-		Player p = e.getPlayer();
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
-			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		Location loc = p.getLocation().clone();
-		if (!np.ACTIVE_CHEAT.contains(this) || p.isFlying())
-			return;
-
-		Material playerLocType = loc.getBlock().getType(),
-				underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),
-				underUnder = loc.clone().subtract(0, 2, 0).getBlock().getType(),
-				m3 = loc.clone().add(0, 1, 0).getBlock().getType();
-		if (!underPlayer.equals(Material.AIR) || !underUnder.equals(Material.AIR) || playerLocType.equals(Material.VINE)
-				|| playerLocType.equals(Material.LADDER) || underPlayer.equals(Material.VINE)
-				|| underPlayer.equals(Material.LADDER) || m3.equals(Material.VINE) || m3.equals(Material.LADDER)
-				|| !playerLocType.equals(Material.AIR) || p.getItemInHand().getType().name().contains("TRIDENT"))
-			return;
-		double y = e.getTo().getY() - e.getFrom().getY();
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
 			double tempDis = loc.getY() - np.lastSpiderLoc.getY();
 			if (np.lastSpiderDistance == tempDis && tempDis != 0) {
 				np.SPIDER_SAME_DIST++;
 				if(np.SPIDER_SAME_DIST > 1) {
-					int porcent = UniversalUtils.parseInPorcent(tempDis * 400 + np.SPIDER_SAME_DIST);
-					if (SpigotNegativity.alertMod(ReportType.WARNING, p, this, porcent, "Nothing around him. To > From: "
-							+ y + ". Walk on wall with always same y.") && isSetBack()) {
+					if (SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(tempDis * 400 + np.SPIDER_SAME_DIST),
+							"Nothing around him. To > From: " + y + ". Walk on wall with always same y") && isSetBack()) {
 						Location locc = p.getLocation();
 						while (locc.getBlock().getType().equals(Material.AIR))
 							locc.subtract(0, 1, 0);

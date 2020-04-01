@@ -21,6 +21,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -41,7 +42,7 @@ public class ReportCommand implements CommandExecutor {
 
 		String message = Messages.getStringMessage(playerSource, "report.report_message",
 				"%name%", targetPlayer.getName(), "%report%", playerSource.getName(), "%reason%", reason);
-		if (SpongeNegativity.isOnBungeecord) {
+		if (ProxyCompanionManager.isIntegrationEnabled()) {
 			SpongeNegativity.sendReportMessage(playerSource, reason, targetPlayer.getName());
 		} else {
 			Text spongeMsg = Text.of(message);

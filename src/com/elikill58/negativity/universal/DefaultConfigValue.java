@@ -119,7 +119,7 @@ public class DefaultConfigValue {
 		STRINGS.put("Translation.default", "en_US");
 		STRINGS.put("Translation.provider", TranslatedMessages.PLATFORM_PROVIDER_ID);
 
-		BOOLEANS.put("hasBungeecord", false);
+		BOOLEANS.put("disableProxyIntegration", false);
 
 		INTS.put("time_between_report", 1000);
 		INTS.put("time_between_alert", 2000);

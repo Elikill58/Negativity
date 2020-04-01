@@ -11,6 +11,7 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -42,8 +43,8 @@ public class ChannelEvents implements PluginMessageListener {
 			return;
 		}
 
-		if (message instanceof ProxyPingMessage && !SpigotNegativity.isOnBungeecord) {
-			SpigotNegativity.getInstance().getLogger().warning("BungeeNegativity has been found but its support isn't enabled on your server. Is it intended? If so you can ignore this message, otherwise please edit the configuration.");
+		if (message instanceof ProxyPingMessage) {
+			ProxyCompanionManager.foundCompanion();
 		} else if (message instanceof ClientModsListMessage) {
 			ClientModsListMessage modsMessage = (ClientModsListMessage) message;
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);

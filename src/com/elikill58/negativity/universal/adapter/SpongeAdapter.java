@@ -30,6 +30,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
@@ -276,7 +277,8 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 		UniversalUtils.init();
 		Cheat.loadCheat();
 		plugin.reloadCommands();
-		SpongeNegativity.isOnBungeecord = getBooleanInConfig("hasBungeecord");
+		ProxyCompanionManager.updateForceDisabled(getBooleanInConfig("disableProxyIntegration"));
+		SpongeNegativity.trySendProxyPing();
 		SpongeNegativity.log = getBooleanInConfig("log_alerts");
 		SpongeNegativity.log_console = getBooleanInConfig("log_alerts_in_console");
 		SpongeNegativity.hasBypass = getBooleanInConfig("Permissions.bypass.active");

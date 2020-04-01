@@ -34,6 +34,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
@@ -219,7 +220,8 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 		reloadConfig();
 		UniversalUtils.init();
 		Cheat.loadCheat();
-		SpigotNegativity.isOnBungeecord = getBooleanInConfig("hasBungeecord");
+		ProxyCompanionManager.updateForceDisabled(getBooleanInConfig("disableProxyIntegration"));
+		SpigotNegativity.trySendProxyPing();
 		SpigotNegativity.log = getBooleanInConfig("log_alerts");
 		SpigotNegativity.log_console = getBooleanInConfig("log_alerts_in_console");
 		SpigotNegativity.hasBypass = getBooleanInConfig("Permissions.bypass.active");

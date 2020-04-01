@@ -1,13 +1,11 @@
 package com.elikill58.negativity.spigot.events;
 
-import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -31,13 +29,12 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
-import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
-import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class PlayersEvents implements Listener {
@@ -65,23 +62,14 @@ public class PlayersEvents implements Listener {
 		}
 	}
 
-	private boolean hasSentBungeecordMessage = false;
-
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
 		if(UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
-		if(!hasSentBungeecordMessage && !SpigotNegativity.isOnBungeecord) {
-			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
-				try {
-					byte[] pingMessage = NegativityMessagesManager.writeMessage(new ProxyPingMessage());
-					p.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, pingMessage);
-				} catch (IOException ex) {
-					SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not write ProxyPingMessage.", ex);
-				}
-			}, 20);
-			hasSentBungeecordMessage = true;
+		if(!ProxyCompanionManager.searchedCompanion) {
+			ProxyCompanionManager.searchedCompanion = true;
+			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> SpigotNegativity.sendProxyPing(p), 20);
 		}
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());
 		np.TIME_INVINCIBILITY = System.currentTimeMillis() + 8000;

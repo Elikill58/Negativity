@@ -7,8 +7,10 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -58,6 +60,7 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
+import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -73,6 +76,7 @@ import com.elikill58.negativity.universal.ban.support.MaxBansProcessor;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -80,7 +84,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean isOnBungeecord = false, log = false, log_console = false, hasBypass = false, essentialsSupport = false,
+	public static boolean log = false, log_console = false, hasBypass = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false;
 	public static Material MATERIAL_CLOSE = Material.REDSTONE;
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
@@ -125,7 +129,7 @@ public class SpigotNegativity extends JavaPlugin {
 		UniversalUtils.init();
 		Cheat.loadCheat();
 		FakePlayer.loadClass();
-		isOnBungeecord = ada.getBooleanInConfig("hasBungeecord");
+		ProxyCompanionManager.updateForceDisabled(ada.getBooleanInConfig("disableProxyIntegration"));
 		log = ada.getBooleanInConfig("log_alerts");
 		log_console = ada.getBooleanInConfig("log_alerts_in_console");
 		hasBypass = ada.getBooleanInConfig("Permissions.bypass.active");
@@ -411,7 +415,7 @@ public class SpigotNegativity extends JavaPlugin {
 					.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
 							+ ") (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
 							+ reliability);
-		if (isOnBungeecord) {
+		if (ProxyCompanionManager.isIntegrationEnabled()) {
 			sendAlertMessage(p, c.getName(), reliability, ping, hover_proof, alertsCount);
 		} else {
 			boolean hasPermPeople = false;
@@ -464,6 +468,23 @@ public class SpigotNegativity extends JavaPlugin {
 		} catch (IOException e) {
 			SpigotNegativity.getInstance().getLogger().severe("Could not send report message to the proxy.");
 			e.printStackTrace();
+		}
+	}
+
+	public static void sendProxyPing(Player player) {
+		ProxyCompanionManager.searchedCompanion = true;
+		try {
+			byte[] pingMessage = NegativityMessagesManager.writeMessage(new ProxyPingMessage());
+			player.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, pingMessage);
+		} catch (IOException ex) {
+			SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not write ProxyPingMessage.", ex);
+		}
+	}
+
+	public static void trySendProxyPing() {
+		Iterator<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers().iterator();
+		if (onlinePlayers.hasNext()) {
+			sendProxyPing(onlinePlayers.next());
 		}
 	}
 

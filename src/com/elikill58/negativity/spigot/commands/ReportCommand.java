@@ -18,6 +18,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -59,7 +60,7 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 		String reason = reasonJoiner.toString();
 		String msg = Messages.getMessage("report.report_message", "%name%", target.getName(),
 				"%report%", p.getName(), "%reason%", reason);
-		if (SpigotNegativity.isOnBungeecord) {
+		if (ProxyCompanionManager.isIntegrationEnabled()) {
 			SpigotNegativity.sendReportMessage(p, reason, target.getName());
 		} else {
 			boolean alertSent = false;

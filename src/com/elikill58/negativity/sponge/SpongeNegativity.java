@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -78,6 +79,7 @@ import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -90,7 +92,9 @@ import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
@@ -123,8 +127,7 @@ public class SpongeNegativity {
 		return plugin;
 	}
 
-	public static boolean log = true, log_console = true, isOnBungeecord = false, hasPacketGate = false, hasPrecogs = false,
-			hasBypass = false;
+	public static boolean log = true, log_console = true, hasPacketGate = false, hasPrecogs = false, hasBypass = false;
 
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
@@ -164,7 +167,7 @@ public class SpongeNegativity {
 								result.getVersionString(), result.getDownloadUrl()))
 				).submit(this);*/
 
-		if (!isOnBungeecord)
+		if (!ProxyCompanionManager.isIntegrationEnabled())
 			Task.builder().async().delayTicks(1).execute(new Runnable() {
 				@Override
 				public void run() {
@@ -185,7 +188,7 @@ public class SpongeNegativity {
 			SpongeNegativityPlayer nPlayer = SpongeNegativityPlayer.getNegativityPlayer(player);
 			nPlayer.saveData();
 		}
-		if (!isOnBungeecord)
+		if (!ProxyCompanionManager.isIntegrationEnabled())
 			Task.builder().async().delayTicks(1).execute(new Runnable() {
 				@Override
 				public void run() {
@@ -230,6 +233,7 @@ public class SpongeNegativity {
 		loadCommands(false);
 
 		channel = Sponge.getChannelRegistrar().createRawChannel(this, NegativityMessagesManager.CHANNEL_ID);
+		channel.addListener(new ProxyCompanionListener());
 		if (Sponge.getChannelRegistrar().isChannelAvailable("FML|HS")) {
 			fmlChannel = Sponge.getChannelRegistrar().getOrCreateRaw(this, "FML|HS");
 			fmlChannel.addListener(new FmlRawDataListener());
@@ -312,6 +316,12 @@ public class SpongeNegativity {
 				np.initFmlMods();
 			}
 		}).submit(this);
+
+		if (!ProxyCompanionManager.searchedCompanion) {
+			ProxyCompanionManager.searchedCompanion = true;
+			Task.builder().delayTicks(20).execute(() -> sendProxyPing(p)).submit(this);
+		}
+
 		if (Perm.hasPerm(np, "showAlert")) {
 			if (ReportCommand.REPORT_LAST.size() > 0) {
 				for (Text msg : ReportCommand.REPORT_LAST)
@@ -388,7 +398,7 @@ public class SpongeNegativity {
 			config = (configLoader = HoconConfigurationLoader.builder().setFile(configFile).build()).load();
 			log = config.getNode("log_alerts").getBoolean(true);
 			log_console = config.getNode("log_alerts_in_console").getBoolean(true);
-			isOnBungeecord = config.getNode("hasBungeecord").getBoolean();
+			ProxyCompanionManager.updateForceDisabled(config.getNode("disableProxyIntegration").getBoolean());
 			hasBypass = config.getNode("Permissions").getNode("bypass").getNode("active").getBoolean();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -524,7 +534,7 @@ public class SpongeNegativity {
 	public static void sendAlertMessage(ReportType type, Player p, Cheat c, int reliability,
 										String hoverProof, SpongeNegativityPlayer np, int ping, PlayerCheatEvent.Alert alert, int alertsCount, String stats_send) {
 		Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
-		if (isOnBungeecord) {
+		if (ProxyCompanionManager.isIntegrationEnabled()) {
 			sendAlertMessage(p, c.getName(), reliability, ping, hoverProof, alertsCount);
 			return;
 		}
@@ -615,6 +625,24 @@ public class SpongeNegativity {
 		});
 	}
 
+	public static void sendProxyPing(Player player) {
+		ProxyCompanionManager.searchedCompanion = true;
+		channel.sendTo(player, (buffer) -> {
+			try {
+				buffer.writeBytes(NegativityMessagesManager.writeMessage(new ProxyPingMessage()));
+			} catch (IOException ex) {
+				SpongeNegativity.getInstance().getLogger().error("Could not write ProxyPingMessage.", ex);
+			}
+		});
+	}
+
+	public static void trySendProxyPing() {
+		Iterator<Player> onlinePlayers = Sponge.getServer().getOnlinePlayers().iterator();
+		if (onlinePlayers.hasNext()) {
+			sendProxyPing(onlinePlayers.next());
+		}
+	}
+
 	private static class FmlRawDataListener implements RawDataListener {
 
 		@Override
@@ -628,6 +656,25 @@ public class SpongeNegativity {
 			HashMap<String, String> playerMods = SpongeNegativityPlayer.getNegativityPlayer(player).MODS;
 			playerMods.clear();
 			playerMods.putAll(Utils.getModsNameVersionFromMessage(new String(rawData, StandardCharsets.UTF_8)));
+		}
+	}
+
+	private static class ProxyCompanionListener implements RawDataListener {
+
+		@Override
+		public void handlePayload(ChannelBuf data, RemoteConnection connection, Type side) {
+			byte[] rawData = data.readBytes(data.available());
+			NegativityMessage message;
+			try {
+				message = NegativityMessagesManager.readMessage(rawData);
+			} catch (IOException e) {
+				SpongeNegativity.getInstance().getLogger().error("Failed to read proxy companion message.", e);
+				return;
+			}
+
+			if (message instanceof ProxyPingMessage) {
+				ProxyCompanionManager.foundCompanion();
+			}
 		}
 	}
 }

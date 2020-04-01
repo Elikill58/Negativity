@@ -33,16 +33,15 @@ public class SpiderProtocol extends Cheat implements Listener {
 		Location loc = p.getLocation();
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
-		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP) || !np.hasOtherThan(loc, Material.AIR))
+		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP)
+				|| !np.hasOtherThan(loc, Material.AIR) || e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ())
+				return;
+		Material underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),
+				underUnder = loc.clone().subtract(0, 2, 0).getBlock().getType();
+		if (!underPlayer.equals(Material.AIR) || !underUnder.equals(Material.AIR)
+				|| !loc.getBlock().getType().equals(Material.AIR) || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
-		Material playerLocType = loc.getBlock().getType(),
-				underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),
-				underUnder = loc.clone().subtract(0, 2, 0).getBlock().getType(),
-				m3 = loc.clone().add(0, 1, 0).getBlock().getType();
-		if (!underPlayer.equals(Material.AIR) || !underUnder.equals(Material.AIR) || playerLocType.equals(Material.VINE)
-				|| playerLocType.equals(Material.LADDER) || underPlayer.equals(Material.VINE)
-				|| underPlayer.equals(Material.LADDER) || m3.equals(Material.VINE) || m3.equals(Material.LADDER)
-				|| !playerLocType.equals(Material.AIR) || p.getItemInHand().getType().name().contains("TRIDENT"))
+		if (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
 		if(hasBypassBlockAround(loc))
 			return;
@@ -62,11 +61,26 @@ public class SpiderProtocol extends Cheat implements Listener {
 				p.teleport(locc.add(0, 1, 0));
 			}
 		}
+	}
+	
+	@EventHandler(ignoreCancelled = true)
+	public void onPlayerContinueMove(PlayerMoveEvent e) {
+		Player p = e.getPlayer();
+		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
+			return;
+		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		if (!np.ACTIVE_CHEAT.contains(this) || p.isFlying())
+			return;
+		Location loc = p.getLocation().clone();
+		if(hasBypassBlockAround(loc) || (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT")))
+			return;
+		
+		double y = e.getTo().getY() - e.getFrom().getY();
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
 			double tempDis = loc.getY() - np.lastSpiderLoc.getY();
 			if (np.lastSpiderDistance == tempDis && tempDis != 0) {
 				np.SPIDER_SAME_DIST++;
-				if(np.SPIDER_SAME_DIST > 1) {
+				if(np.SPIDER_SAME_DIST > 2) {
 					if (SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(tempDis * 400 + np.SPIDER_SAME_DIST),
 							"Nothing around him. To > From: " + y + ". Walk on wall with always same y") && isSetBack()) {
 						Location locc = p.getLocation();
@@ -81,27 +95,31 @@ public class SpiderProtocol extends Cheat implements Listener {
 		}
 		np.lastSpiderLoc = loc;
 	}
-	
+		
 	private boolean hasBypassBlockAround(Location loc) {
-		if(hasOtherThan(loc, "SLAB") || hasOtherThan(loc, "STAIRS"))
+		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER"))
 			return true;
 		loc = loc.clone().subtract(0, 1, 0);
-		if(hasOtherThan(loc, "SLAB") || hasOtherThan(loc, "STAIRS"))
-			return true;
-		if(loc.getBlock().getType().name().contains("WATER") || loc.clone().subtract(0, 1, 0).getBlock().getType().name().contains("WATER"))
+		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER"))
 			return true;
 		return false;
 	}
 
-	public boolean hasOtherThan(Location loc, String m) {
-		if (!loc.clone().add(0, 0, 1).getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.clone().add(1, 0, -1).getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.clone().add(-1, 0, -1).getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.clone().add(-1, 0, 1).getBlock().getType().name().contains(m))
-			return true;
+	public boolean has(Location loc, String... m) {
+		String b1 = loc.clone().add(0, 0, 1).getBlock().getType().name(),
+				b2 = loc.clone().add(1, 0, -1).getBlock().getType().name(),
+				b3 = loc.clone().add(-1, 0, -1).getBlock().getType().name(),
+				b4 = loc.clone().add(-1, 0, 1).getBlock().getType().name();
+		for(String temp : m) {
+			if(b1.contains(temp))
+				return true;
+			if(b2.contains(temp))
+				return true;
+			if(b3.contains(temp))
+				return true;
+			if(b4.contains(temp))
+				return true;
+		}
 		return false;
 	}
 }

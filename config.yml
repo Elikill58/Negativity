@@ -229,12 +229,29 @@ hasBungeecord: false
 
 # The time between 2 /report
 # in milliseconds
+# -1 to disable
 time_between_report: 1000
 
 # The time between 2 alerts
 # in milliseconds
 # -1 to disable
 time_between_alert: 2000
+
+alert:
+  # To run command when someone get alert
+  command:
+    active: false
+    # Reliability need to run command
+    reliability_need: 80
+    # Available arguments:
+    # %name% : Name of player who cheat
+    # %uuid% : UUID of player who cheat
+    # %report_type% : Type of detected cheat (Know if Negativity consider it as Warning or Violation)
+    # %cheat_key% : Cheat key (like "nofall") : You cannot edit it
+    # %cheat_name% : Cheat name (like "NoFall") : You can edit it just below
+    # %reliability% : Reliability of the alert
+    run:
+    - "mycommand %name% %cheat_key% %reliability%"
 
 ban:
   active: false

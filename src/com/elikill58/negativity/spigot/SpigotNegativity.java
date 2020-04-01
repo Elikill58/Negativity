@@ -16,6 +16,7 @@ import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
@@ -370,6 +371,7 @@ public class SpigotNegativity extends JavaPlugin {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
 			return false;
 		}
+		manageAlertCommand(type, p, c, reliability);
 		int timeBetweenTwoAlert = Adapter.getAdapter().getIntegerInConfig("time_between_alert");
 		if(timeBetweenTwoAlert != -1) {
 			HashMap<Cheat, Long> time_alert = (TIME_LAST_CHEAT_ALERT.containsKey(p) ? TIME_LAST_CHEAT_ALERT.get(p) : new HashMap<>());
@@ -388,6 +390,17 @@ public class SpigotNegativity extends JavaPlugin {
 		sendAlertMessage(type, np, p, c, ping, reliability, hover_proof, alert, 1, stats_send);
 		np.ALERT_NOT_SHOWED.remove(c);
 		return true;
+	}
+
+	private static void manageAlertCommand(ReportType type, Player p, Cheat c, int reliability) {
+		FileConfiguration conf = getInstance().getConfig();
+		if(!conf.getBoolean("alert.command.active") || conf.getInt("alert.command.reliability_need") > reliability)
+			return;
+		for(String s : conf.getStringList("alert.command.run")) {
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), UniversalUtils.replacePlaceholders(s, "%name%",
+					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey(), "%cheat_name%",
+					c.getName(), "%reliability%", reliability, "%report_type%", type.name()));
+		}
 	}
 
 	public static void sendAlertMessage(ReportType type, SpigotNegativityPlayer np, Player p, Cheat c, int ping, int reliability,

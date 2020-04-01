@@ -22,6 +22,7 @@ import java.util.jar.JarInputStream;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -33,6 +34,7 @@ import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -174,6 +176,9 @@ public class UniversalUtils {
 					}
 					return content.toString();
 				}
+			} catch (SSLHandshakeException e) {
+				Adapter.getAdapter().warn("McLeaks API seem to be down. So, we cannot know if the player is using it.");
+				return null;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

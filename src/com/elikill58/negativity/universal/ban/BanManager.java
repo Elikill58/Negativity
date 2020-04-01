@@ -9,6 +9,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.CommandBanProcessor;
@@ -117,8 +118,10 @@ public class BanManager {
 		boolean fileLogBans = adapter.getBooleanInConfig("ban.file.log_bans");
 		registerProcessor("file", new NegativityBanProcessor(new FileActiveBanStorage(banDir), fileLogBans ? new FileBanLogsStorage(banLogsDir) : null));
 
-		boolean dbLogBans = adapter.getBooleanInConfig("ban.database.log_bans");
-		registerProcessor("database", new NegativityBanProcessor(new DatabaseActiveBanStorage(), dbLogBans ? new DatabaseBanLogsStorage() : null));
+		if (Database.hasCustom) {
+			boolean dbLogBans = adapter.getBooleanInConfig("ban.database.log_bans");
+			registerProcessor("database", new NegativityBanProcessor(new DatabaseActiveBanStorage(), dbLogBans ? new DatabaseBanLogsStorage() : null));
+		}
 
 		List<String> banCommands = adapter.getStringListInConfig("ban.command.ban");
 		List<String> unbanCommands = adapter.getStringListInConfig("ban.command.unban");

@@ -1,0 +1,119 @@
+report_wait: "Por favor, espere un segundo entre 2 informes"
+
+invalid_player: "%arg% no es un jugador !"
+not_forget_player: "No olvides al jugador !"
+not_permission: "&cNo tienes permiso para hacer eso."
+only_player: "Solo un jugador puede hacer eso."
+well_suspect: "%players% ha sospechado bien !"
+none: "none"
+console: "Administrador"
+fake_entities: "Jugadores falsos"
+
+kick: "&a[&2Negativity&a]&c Has sido echado del servidor por usar trampas (%cheat%)"
+
+lang {
+  invalid_lang: "%arg% no es un idioma válido !"
+  help: "/lang <new lang> : Cambia el idioma por defecto"
+  current: "El idioma actual es: %lang%"
+  language_set: "&a[&2Negativity&a] &7Los mensajes de Negativity ahora están en inglés"
+  translation_disabled: "&a[&2Negativity&a] &cTraducciones por-jugador desactivadas"
+}
+ban {
+  kick_time: "&cCastigado por %reason%, hasta %time%, por %by%."
+  kick_def: "&cCastigado definitivamente por %reason%, por %by%."
+  # Para el tiempo, aquí está:
+  # y : años
+  # mo : meses
+  # d : días
+  # h : horas
+  # m : minutos
+  # s : segundos
+  #
+  help = [
+    "/nban <player> <def | tiempo (ex: 2h5d)> <razón> : Castiga el jugador especificado" ]
+  well_ban: "&a[&2Negativity&a]&c %name% ha sido castigado por %reason%."
+}
+unban:
+  well_unban: "&a[&2Negativity&a]&c %name% ha sido perdonado."
+  not_banned: "&c%name% no está castigado."
+  not_exact: "%arg% no es un nombre válido exacto del jugador castigado."
+  help: "/nunban <jugador> : Perdona a un jugador castigado."
+}
+kick {
+  help: "/kick <jugador> <razón> : Expulsa a un jugador en especifico"
+  well_kick: "&a[&2Negativity&a]&c %name% ha sido expulsado por %reason%."
+  kicked: "Has expulsado a %name% por %reason%"
+}
+report {
+  report_usage: "/report <usuario> <razón>"
+  well_report: "&a%name% reportado correctamente !"
+  report_message: "&a[&2Negativity&a] &c%name% &7ha sido reportado por &c%report%, &7por &c%reason%"
+}
+negativity {
+  alert: "&a[&2Negativity&a] &c%name%&7 parece que usa &c%cheat% &7(&2Fiabilidad: %reliability%%&7) !"
+  alert_multiple: "&a[&2Negativity&a] &c%name%&7 parece que usa &c%cheat% %nb% veces &7(&2Fiabilidad: %reliability%%&7) !"
+  alert_hover: "&6Fiabilidad: %reliability%%\nPing: %ping%"
+  no_alerts: "&a[&2Negativity&a] Sin alertas para mostrar."
+  reload_done: "&a[&2Negativity&a] Plugin recargado."
+  verif {
+    invalid_cheat: "%arg% no es una trampa válida !"
+    start: "&a[&2Negativity&a] &7Se ha empezando a analizar %name% por %cheat%"
+    start_all: "&a[&2Negativity&a] Se ha empezado el analisis completo de %name%"
+    start_none: "&a[&2Negativity&a] &cNo se pudo empezar el analisis porque no se indicaron trampas válidas"
+    help = [
+       "/negativity verif <jugador> [trampas...] : Empiezan las verificaciones (all if none is given)"
+       "/negativity <jugador> : Para ver la información del jugador" ]
+  }
+}
+inventory {
+  close: "Cerrar"
+  back: "Atrás"
+  reset_alert: "Borrar alertas"
+  main {
+    freeze: "&a[&2Negativity&a] Has sido temporalmente congelado por %name%"
+    unfreeze: "&a[&2Negativity&a] Has sido descongelado por %name%"
+    actual_click: "Clicks actuales : %clicks%"
+    max_click: "Máximo de clicks : %clicks%"
+    last_click: "Último segundo : %clicks%"
+    ping: "Ping de %name%: %ping%"
+    see_inv: "Ver el inventario de %name%"
+    teleportation_to: "Teletransportarse a %name%"
+    freezing: "Congelando a %name%"
+    active_detection: "Ver detección activa para %name%"
+    see_alerts: "Ver todas las alertas para %name%"
+    mcleaks_indicator {
+      positive: "&cEstá usando MCLeaks"
+      negative: "&aNo está usando MCLeaks"
+      description: "&7MCLeaks proporciona cuentas premium de forma gratuita"
+    }
+  }
+  detection {
+    name_inv: "Detección activa"
+    no_active: "Sin detección activa para %name%"
+  }
+  alerts {
+    item_name: "Alertas para %exact_name% : %warn%"
+    inv_name: "Alertas"
+  }
+  mod {
+    night_vision: "Visión nocturna"
+    invisible: "Conviertete invisible"
+    random_tp: "Teletransporte aleatorio"
+    clear_inv: "Limpia tu inventario"
+    inv_cleared: "Inventario limpiado !"
+    vision_removed: "Visión nocturna desactivada"
+    vision_added: "Visión nocturna activada"
+    now_invisible: "Ahora, eres invisible"
+    no_longer_invisible: "Ahora, todos te pueden ver"
+    you_are_freeze: "Estás congelado. No puedes salir de este inventario"
+    cheat_manage: "Controlador de trampas"
+  }
+  manager {
+    enabled: "&aEncendido"
+    disabled: "&cApagado"
+    setBack: "Cancela la última acción de la trampa cuando se detecte una: &l%back%"
+    autoVerif: "Verificación automática: &l%auto%"
+    allowKick: "Expulsa a jugadores tramposos: &l%allow%"
+    setActive: "Trampas avtivas: &l%active%"
+  }
+}

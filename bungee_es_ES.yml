@@ -1,0 +1,8 @@
+alert: "&a[&2Negativity&a] &c%name%&7 parece que usa &c%cheat% &7(&2Fiabilidad: %reliability%%&7) !"
+alert_multiple: "&a[&2Negativity&a] &c%name%&7 parece que usa &c%cheat% %nb% veces &7(&2Fiabilidad: %reliability%%&7) !"
+alert_hover: "&6Fiabilidad: %reliability%%\nPing: %ping%"
+report: "&a[&2Negativity&a] &c%name% &7ha sido reportado por &c%report%, &7por &c%reason%"
+alert_tp_info: "&7Haz click para teletransportarte hasta %playername%"
+ban:
+  kick_time: "&cCastigado por %reason%, hasta %time%, por %by%."
+  kick_def: "&cCastigado definitivamente por %reason%, por %by%."

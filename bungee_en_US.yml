@@ -6,14 +6,3 @@ report: "&a[&2Negativity&a] &c%name% &7have been reported by &c%report% &7for &c
 ban:
   kick_time: "&cBan for %reason% until %time% by %by%."
   kick_def: "&cBan definitly for %reason% by %by%."
-  help:
-  # For the time, there is:
-  # y : years
-  # mo : months
-  # d : days
-  # h : hours
-  # m : minutes
-  # s : seconds
-  #
-  - "/ban <player> <def(true/false) | time (ex: 2h)> <reason> : Ban the specified player"
-  well_ban: "&a[&2Negativity&a]&c %name% well banned for %reason%."

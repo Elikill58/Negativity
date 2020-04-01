@@ -8,5 +8,4 @@ public class PrecogsManager {
 	public static DetectionType toDetectionType(Cheat c) {
 		return new DetectionType(c.getKey().toLowerCase(), c.getName());
 	}
-	
 }

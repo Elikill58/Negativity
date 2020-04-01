@@ -6,10 +6,10 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class DefaultConfigValue {
 
-	public static final HashMap<String, Integer> INTS = new HashMap<>();
-	public static final HashMap<String, String> STRINGS = new HashMap<>();
-	public static final HashMap<String, Boolean> BOOLEANS = new HashMap<>();
-	public static final HashMap<String, Double> DOUBLES = new HashMap<>();
+	private static final HashMap<String, Integer> INTS = new HashMap<>();
+	private static final HashMap<String, String> STRINGS = new HashMap<>();
+	private static final HashMap<String, Boolean> BOOLEANS = new HashMap<>();
+	private static final HashMap<String, Double> DOUBLES = new HashMap<>();
 
 	public static int getDefaultValueInt(String dir) {
 		if(INTS.containsKey(dir))

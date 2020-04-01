@@ -20,8 +20,7 @@ public class Stats {
 
 	private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
 
-    public static final String SITE = "https://eliapp.fr/", SITE_UPDATE = "https://api.eliapp.fr/";
-    static final String SITE_FILE = SITE_UPDATE + "negativity.php";
+    private static final String SITE_FILE = "https://api.eliapp.fr/negativity.php";
     public static boolean STATS_IN_MAINTENANCE = false;
 
     public static void updateStats(StatsType type, String... value) {
@@ -83,7 +82,7 @@ public class Stats {
 		Runnable task = () -> {
 			try {
 				StringBuilder result = new StringBuilder();
-				URL url = new URL(SITE_UPDATE + "status.php?plateforme=negativity");
+				URL url = new URL("https://api.eliapp.fr/status.php?plateforme=negativity");
 				UniversalUtils.doTrustToCertificates();
 				HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 				conn.setRequestMethod("GET");

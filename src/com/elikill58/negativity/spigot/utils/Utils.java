@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.utils;
 
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,10 +36,6 @@ public class Utils {
 
 	public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
 			.split(",")[3];
-
-	public static int getMultipleOf(int i, int multiple, int more) {
-		return getMultipleOf(i, multiple, more, -1);
-	}
 
 	public static int getMultipleOf(int i, int multiple, int more, int limit) {
 		while (i % multiple != 0 && ((i < limit && limit != -1) || limit == -1))
@@ -309,6 +306,19 @@ public class Utils {
 			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
+		}
+		return null;
+	}
+	
+	public static Field resolveByFirstType(Class<?> clazz, Class<?> type) throws ReflectiveOperationException {
+		try {
+			for (Field field : clazz.getDeclaredFields())
+				if (field.getType().equals(type)) {
+					field.setAccessible(true);
+					return field;
+				}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}

@@ -2,14 +2,12 @@ package com.elikill58.negativity.spigot.packets;
 
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.spigot.packets.ChannelInjector.ChannelWrapper;
 import com.elikill58.negativity.spigot.packets.PacketAbstract.IPacketListener;
 import com.elikill58.negativity.spigot.utils.Utils;
 
 import io.netty.channel.ChannelDuplexHandler;
 import io.netty.channel.ChannelHandlerContext;
 
-@SuppressWarnings("rawtypes")
 public class INCChannel extends ChannelAbstract {
 
 	public INCChannel(IPacketListener iPacketListener) {
@@ -74,10 +72,6 @@ public class INCChannel extends ChannelAbstract {
 			this.owner = player;
 		}
 
-		public ChannelHandler(ChannelWrapper channelWrapper) {
-			this.owner = channelWrapper;
-		}
-
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 			Object pckt = msg;
@@ -86,13 +80,4 @@ public class INCChannel extends ChannelAbstract {
 			super.channelRead(ctx, pckt);
 		}
 	}
-
-	class INCChannelWrapper extends ChannelWrapper<io.netty.channel.Channel> {
-
-		public INCChannelWrapper(io.netty.channel.Channel channel) {
-			super(channel);
-		}
-
-	}
-
 }

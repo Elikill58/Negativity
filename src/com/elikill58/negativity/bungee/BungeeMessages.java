@@ -7,11 +7,6 @@ import net.md_5.bungee.api.connection.ProxiedPlayer;
 
 public class BungeeMessages {
 
-	public static String getMessage(String dir, Object... placeholders) {
-		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir, placeholders);
-		return coloredBungeeMessage(message);
-	}
-
 	public static String getMessage(ProxiedPlayer p, String dir, Object... placeholders) {
 		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getLang(p.getUniqueId()), dir, placeholders);
 		return coloredBungeeMessage(message);

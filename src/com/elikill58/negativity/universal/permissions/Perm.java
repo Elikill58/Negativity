@@ -14,9 +14,8 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Perm {
 
-	public static final HashMap<Object, Object> CACHE = new HashMap<>();
+	private static final HashMap<Object, Object> CACHE = new HashMap<>();
 	public static boolean canBeHigher = false, defaultActive = false;
-	public static Object config;
 
 	public static boolean hasPerm(NegativityPlayer np, String perm) {
 		try {
@@ -85,7 +84,6 @@ public class Perm {
 
 	public static void init() {
 		Adapter store = Adapter.getAdapter();
-		config = store.getConfig();
 		try {
 			defaultActive = store.getBooleanInConfig("Permissions.defaultActive");
 			canBeHigher = store.getBooleanInConfig("Permissions.canBeHigher");

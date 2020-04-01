@@ -134,23 +134,6 @@ public class UniversalUtils {
 			return false;
 	}
 
-	public static boolean getFromBoolean(String s) {
-		if (s.toLowerCase().contains("true") || s.equalsIgnoreCase("true") || s.toLowerCase().contains("vrai")
-				|| s.equalsIgnoreCase("vrai"))
-			return true;
-		else
-			return false;
-	}
-
-	public static boolean isBoolean(String s) {
-		if (s.toLowerCase().contains("true") || s.equalsIgnoreCase("true") || s.toLowerCase().contains("vrai")
-				|| s.equalsIgnoreCase("vrai") || s.toLowerCase().contains("false") || s.equalsIgnoreCase("false")
-				|| s.toLowerCase().contains("faux") || s.equalsIgnoreCase("faux"))
-			return true;
-		else
-			return false;
-	}
-
 	public static Optional<String> getLatestVersion() {
 		try {
 			URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=48399");
@@ -196,33 +179,6 @@ public class UniversalUtils {
 			}
 			return null;
 		});
-	}
-
-	public static boolean isValidIP(String ip) {
-		try {
-			if (ip == null || ip.isEmpty()) {
-				return false;
-			}
-
-			String[] parts = ip.split("\\.");
-			if (parts.length != 4) {
-				return false;
-			}
-
-			for (String s : parts) {
-				int i = Integer.parseInt(s);
-				if ((i < 0) || (i > 255)) {
-					return false;
-				}
-			}
-			if (ip.endsWith(".")) {
-				return false;
-			}
-
-			return true;
-		} catch (NumberFormatException nfe) {
-			return false;
-		}
 	}
 
 	public static void doTrustToCertificates() throws Exception {

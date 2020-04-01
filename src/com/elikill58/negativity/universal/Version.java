@@ -25,19 +25,8 @@ public enum Version {
 		return power;
 	}
 
-	public static boolean isNewer(Version v1, Version v2) {
-		return v1.isNewerThan(v2);
-	}
-
 	public static boolean isNewerOrEquals(Version v1, Version v2) {
 		return v1.isNewerOrEquals(v2);
-	}
-
-	public static Version getVersion(String version) {
-		for (Version v : Version.values())
-			if (version.toLowerCase().startsWith(v.name().toLowerCase()))
-				return v;
-		return HIGHER;
 	}
 	
 	public static Version getVersion() {

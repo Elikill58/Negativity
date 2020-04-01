@@ -8,11 +8,6 @@ import net.kyori.text.serializer.legacy.LegacyComponentSerializer;
 
 public class VelocityMessages {
 
-	public static TextComponent getMessage(String dir, Object... placeholders) {
-		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir, placeholders);
-		return coloredBungeeMessage(message);
-	}
-
 	public static TextComponent getMessage(Player p, String dir, Object... placeholders) {
 		return coloredBungeeMessage(getStringMessage(p, dir, placeholders));
 	}

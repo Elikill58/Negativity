@@ -13,11 +13,10 @@ import com.elikill58.negativity.spigot.packets.PacketAbstract.IPacketListener;
 public class PacketListenerAPI implements IPacketListener, Listener {
 
 	private static ChannelInjector channelInjector;
-	protected boolean injected = false;
 
 	public PacketListenerAPI(Plugin pl) {
 		channelInjector = new ChannelInjector();
-		injected = channelInjector.inject(this);
+		channelInjector.inject(this);
 		pl.getServer().getPluginManager().registerEvents(this, pl);
 	}
 

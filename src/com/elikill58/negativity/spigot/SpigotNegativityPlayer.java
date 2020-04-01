@@ -65,14 +65,14 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,
 			BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
 	// warns & other
-	public int ONLY_KEEP_ALIVE = 0, NO_PACKET = 0, BETTER_CLICK = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0, SPIDER_SAME_DIST = 0;
+	public int BETTER_CLICK = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0, SPIDER_SAME_DIST = 0;
 	// setBack
 	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, LAST_SLOT_CLICK = -1, LAST_CHAT_MESSAGE_NB = 0, SPEED_NB = 0, MOVE_TIME = 0;
 	public double lastYDiff = -3.141592654, lastDistanceFastStairs = 0;
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0,
-			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, LAST_DAMAGE_RECEIVE = 0, TIME_REPORT = 0, LAST_BLOCK_BREAK = 0;
+			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0, LAST_BLOCK_BREAK = 0;
 	public String LAST_OTHER_KEEP_ALIVE, LAST_CHAT_MESSAGE = "";
-	public boolean FALL = false, KEEP_ALIVE_BEFORE = false, IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false,
+	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false,
 			isInvisible = false, slime_block = false, already_blink = false, isJumpingWithBlock = false,
 			isOnLadders = false, lastClickInv = false, jesusState = true, wasSneaking = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
@@ -80,7 +80,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public YamlConfiguration file;
 	public Location lastSpiderLoc;
 	public double lastSpiderDistance;
-	public File directory, configFile;
+	public File configFile;
 	public List<String> proof = new ArrayList<>();
 	public Minerate mineRate;
 	public boolean isInFight = false;
@@ -527,13 +527,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			// p.getWorld().playEffect(loc, Effect.TILE_DUST, 1);
 			loc.subtract(x, 1, z);
 		}
-	}
-
-	public boolean hasAntiKnockbackByPass() {
-		if ((getPlayer().hasPotionEffect(PotionEffectType.SLOW) && getPlayer().getWalkSpeed() < 3.0F)
-				|| (getPlayer().hasPotionEffect(PotionEffectType.SLOW_DIGGING) && getPlayer().getWalkSpeed() < 3.0F))
-			return true;
-		return false;
 	}
 
 	public boolean isBlock(Material m) {

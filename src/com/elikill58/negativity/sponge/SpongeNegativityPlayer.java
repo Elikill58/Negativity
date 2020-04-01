@@ -26,7 +26,6 @@ import org.spongepowered.api.data.manipulator.mutable.entity.VelocityData;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectType;
-import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
@@ -66,17 +65,17 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,
 			BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
 	// warns & other
-	public int ONLY_KEEP_ALIVE = 0, NO_PACKET = 0, BETTER_CLICK = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0;
+	public int BETTER_CLICK = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0;
 	public int movementsOnWater;
 	// setBack
-	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, LAST_SLOT_CLICK = -1, SPEED_NB = 0;
+	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, SPEED_NB = 0;
 	public double lastYDiff = -3.142654, lastSpiderDistance, lastDistanceFastStairs = 0;
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0, LAST_BLOCK_BREAK = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
 	public String LAST_OTHER_KEEP_ALIVE;
 	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false,
 			isFreeze = false, slime_block = false, already_blink = false, wasSneaking = false,
-			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false, haveClick = false;
+			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public ItemType eatMaterial = ItemTypes.AIR;
 	public Path proofFile;
@@ -516,14 +515,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			// p.getWorld().playEffect(loc, Effect.TILE_DUST, 1);
 			loc.sub(x, 1, z);
 		}
-	}
-
-	public boolean hasAntiKnockbackByPass() {
-		PotionEffectData potionData = p.getOrCreate(PotionEffectData.class).get();
-		if (potionData.contains(PotionEffect.of(PotionEffectTypes.SLOWNESS, 1, 1))
-				|| potionData.contains(PotionEffect.of(PotionEffectTypes.MINING_FATIGUE, 1, 1)))
-			return true;
-		return false;
 	}
 
 	public boolean isBlock(ItemType m) {

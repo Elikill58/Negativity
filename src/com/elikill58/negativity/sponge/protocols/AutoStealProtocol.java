@@ -40,8 +40,7 @@ public class AutoStealProtocol extends Cheat {
 		if (!np.hasDetectionActive(this)) {
 			return;
 		}
-
-		np.haveClick = true;
+		
 		Optional<ItemStack> itemInHand = p.getItemInHand(HandTypes.MAIN_HAND);
 		if (itemInHand.isPresent()) {
 			ItemUseBypass bypass = ItemUseBypass.ITEM_BYPASS.get(itemInHand.get().getType().getId());

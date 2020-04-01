@@ -34,10 +34,6 @@ public abstract class PacketAbstract {
 		return this.channelWrapper;
 	}
 
-	public boolean hasChannel() {
-		return this.channelWrapper != null;
-	}
-
 	public String getPlayername() {
 		return hasPlayer() ? null : player.getName();
 	}

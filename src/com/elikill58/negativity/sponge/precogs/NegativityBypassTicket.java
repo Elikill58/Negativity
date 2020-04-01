@@ -12,7 +12,7 @@ import com.me4502.precogs.service.BypassTicket;
 
 public class NegativityBypassTicket implements BypassTicket {
 	
-	public static final HashMap<UUID, NegativityBypassTicket> BYPASS_TICKET = new HashMap<>();
+	private static final HashMap<UUID, NegativityBypassTicket> BYPASS_TICKET = new HashMap<>();
 	
 	private Player p;
 	private Object owner;

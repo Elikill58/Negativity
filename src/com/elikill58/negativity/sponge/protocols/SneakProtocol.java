@@ -31,7 +31,7 @@ public class SneakProtocol extends Cheat {
 		if (!np.hasDetectionActive(this))
 			return;
 		if (p.get(Keys.IS_SNEAKING).orElse(false) && p.get(Keys.IS_SPRINTING).orElse(false) && !p.get(Keys.IS_FLYING).orElse(false) && np.wasSneaking) {
-			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - Utils.getPing(p)), "Sneaking, sprinting and not flying.", "", "");
+			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (Utils.getPing(p) / 10)), "Sneaking, sprinting and not flying.", "", "");
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);
 		}

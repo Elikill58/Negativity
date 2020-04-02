@@ -3,6 +3,7 @@ package com.elikill58.negativity.sponge.protocols;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Optional;
+import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
@@ -13,6 +14,7 @@ import org.spongepowered.api.event.entity.DamageEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -42,24 +44,36 @@ public class ForceFieldProtocol extends Cheat {
 		if (!np.hasDetectionActive(this)) {
 			return;
 		}
-
-		Optional<ItemStackSnapshot> usedItem = e.getContext().get(EventContextKeys.USED_ITEM);
-		if (usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW) {
+		
+		boolean mayCancel = false, hasThorns = np.hasThorns(p);
+		/*if(!p.hasLineOfSight(e.getEntity())) {
+			mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getEntity().getType().name()
+					+ " but cannot see it, hasThorns: " + hasThorns + ", ping: " + Utils.getPing(p),
+					"Hit " + e.getEntity().getType().name().toLowerCase() + " without line of sight");
+		}*/
+		if(hasThorns)
 			return;
-		}
+		Optional<ItemStackSnapshot> usedItem = e.getContext().get(EventContextKeys.USED_ITEM);
 
 		double distance = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());
 		double allowedReach = Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0);
-		if (distance > allowedReach) {
-			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this,
+		if (distance > allowedReach && !(usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW)) {
+			SpongeNegativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(distance * 2 * 10),
 					"Big distance with: " + e.getTargetEntity().getType().getName().toLowerCase() + ". Exact distance: "
 							+ distance + ". Ping: " + Utils.getPing(p),
 					"Distance with " + e.getTargetEntity().getType().getName() + ": " + distanceFormatter.format(distance), "Distance with " + e.getTargetEntity().getType().getName() + ": " + distanceFormatter.format(distance));
-			if (isSetBack() && mayCancel) {
-				e.setCancelled(true);
-			}
 		}
+		final Vector3d loc = p.getRotation().clone();
+		Task.builder().delay(60, TimeUnit.MILLISECONDS).execute(() -> {
+			Vector3d loc1 = p.getRotation();
+			int gradeRounded = (int) Math.round(Math.abs(loc.getY() - loc1.getY()));
+			if (gradeRounded > 76.0) {
+				SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded), "Player rotate too much (" + gradeRounded + "°) without thorns.", "Rotate " + gradeRounded + "°");
+			}
+		}).submit(SpongeNegativity.getInstance());
+		if (isSetBack() && mayCancel)
+			e.setCancelled(true);
 	}
 
 	@Listener

@@ -23,12 +23,15 @@ import org.spongepowered.api.data.manipulator.mutable.entity.FallDistanceData;
 import org.spongepowered.api.data.manipulator.mutable.entity.FlyingData;
 import org.spongepowered.api.data.manipulator.mutable.entity.HealthData;
 import org.spongepowered.api.data.manipulator.mutable.entity.VelocityData;
+import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.enchantment.Enchantment;
+import org.spongepowered.api.item.enchantment.EnchantmentTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.Location;
@@ -68,7 +71,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public int BETTER_CLICK = 0, LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0;
 	public int movementsOnWater;
 	// setBack
-	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, SPEED_NB = 0;
+	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0;
 	public double lastYDiff = -3.142654, lastSpiderDistance, lastDistanceFastStairs = 0;
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0, LAST_BLOCK_BREAK = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
@@ -579,6 +582,28 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		if (fightTask != null)
 			fightTask.cancel();
 		fightTask = null;
+	}
+	
+	public boolean hasThorns(Player p) {
+		if(hasThornsForItem(p.getHelmet().orElse(null)))
+			return true;
+		if(hasThornsForItem(p.getChestplate().orElse(null)))
+			return true;
+		if(hasThornsForItem(p.getLeggings().orElse(null)))
+			return true;
+		if(hasThornsForItem(p.getBoots().orElse(null)))
+			return true;
+		return false;
+	}
+	
+	private boolean hasThornsForItem(ItemStack item) {
+		if(item == null)
+			return false;
+		Optional<EnchantmentData> opt = item.get(EnchantmentData.class);
+		if(opt.isPresent())
+			if(opt.get().contains(Enchantment.of(EnchantmentTypes.THORNS, 1)))
+				return true;
+		return false;
 	}
 
 	public static SpongeNegativityPlayer getNegativityPlayer(Player player) {

@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -34,12 +35,12 @@ public class SpiderProtocol extends Cheat implements Listener {
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP)
-				|| !np.hasOtherThan(loc, Material.AIR) || e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ())
+				|| !np.hasOtherThan(loc, Material.AIR) || (e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ()))
 				return;
 		Material underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),
 				underUnder = loc.clone().subtract(0, 2, 0).getBlock().getType();
 		if (!underPlayer.equals(Material.AIR) || !underUnder.equals(Material.AIR)
-				|| !loc.getBlock().getType().equals(Material.AIR) || p.getItemInHand().getType().name().contains("TRIDENT"))
+				|| !loc.getBlock().getType().equals(Material.AIR))
 			return;
 		if (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
@@ -49,16 +50,11 @@ public class SpiderProtocol extends Cheat implements Listener {
 		np.lastYDiff = y;
 		boolean isAris = ((float) y) == p.getWalkSpeed();
 		if (((y > 0.499 && y < 0.7) || isAris || last == y)) {
-			if(e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ())
-				return;
 			int relia = UniversalUtils.parseInPorcent((e.getTo().getY() - e.getFrom().getY()) * 200 + (isAris ? 39 : 0));
 			if (SpigotNegativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this,
 					relia, "Nothing around him. To > From: " + y + " isAris: " + isAris + ", has not stab slairs")
 					&& isSetBack()) {
-				Location locc = p.getLocation();
-				while (locc.getBlock().getType().equals(Material.AIR) && locc.getY() > 0)
-					locc.subtract(0, 1, 0);
-				p.teleport(locc.add(0, 1, 0));
+				Utils.teleportPlayerOnGround(p);
 			}
 		}
 	}
@@ -82,11 +78,8 @@ public class SpiderProtocol extends Cheat implements Listener {
 				np.SPIDER_SAME_DIST++;
 				if(np.SPIDER_SAME_DIST > 2) {
 					if (SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(tempDis * 400 + np.SPIDER_SAME_DIST),
-							"Nothing around him. To > From: " + y + ". Walk on wall with always same y") && isSetBack()) {
-						Location locc = p.getLocation();
-						while (locc.getBlock().getType().equals(Material.AIR))
-							locc.subtract(0, 1, 0);
-						p.teleport(locc.add(0, 1, 0));
+							"Nothing strange around him. To > From: " + y + ". Walk on wall with always same y " + np.SPIDER_SAME_DIST + " times") && isSetBack()) {
+						Utils.teleportPlayerOnGround(p);
 					}
 				}
 			} else

@@ -84,7 +84,7 @@ public class NoFallProtocol extends Cheat {
 				}
 			} else if(!p.isOnGround()) {
 				BlockType justUnder = p.getLocation().copy().sub(0, 0.1, 0).getBlock().getType();
-				if(justUnder.getProperty(SolidCubeProperty.class).get().getValue() && fallDistance > 3.0) {
+				if(justUnder.getProperty(SolidCubeProperty.class).get().getValue() && fallDistance > 3.0 && !np.isInFight) {
 					int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - (ping / 5) + fallDistance);
 					boolean mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
 							"Player not ground with fall damage (FallDistance: " + fallDistance + "). Block 0.1 below: " + justUnder.getId()

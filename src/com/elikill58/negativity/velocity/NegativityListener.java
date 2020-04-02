@@ -95,7 +95,7 @@ public class NegativityListener {
 		} else if (message instanceof ProxyPingMessage) {
 			p.getCurrentServer().ifPresent(server -> {
 				try {
-					server.sendPluginMessage(VelocityNegativity.NEGATIVITY_CHANNEL_ID, NegativityMessagesManager.writeMessage(new ProxyPingMessage()));
+					server.sendPluginMessage(VelocityNegativity.NEGATIVITY_CHANNEL_ID, NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION)));
 				} catch (IOException e) {
 					VelocityNegativity.getInstance().getLogger().error("Could not write PingProxyMessage.", e);
 				}

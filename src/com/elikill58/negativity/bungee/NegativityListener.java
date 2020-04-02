@@ -88,7 +88,7 @@ public class NegativityListener implements Listener {
 				}
 		} else if (message instanceof ProxyPingMessage) {
 			try {
-				player.getServer().sendData(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(new ProxyPingMessage()));
+				player.getServer().sendData(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION)));
 			} catch (IOException e) {
 				BungeeNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not write PingProxyMessage.", e);
 			}

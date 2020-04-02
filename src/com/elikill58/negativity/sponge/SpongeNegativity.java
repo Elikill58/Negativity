@@ -629,7 +629,7 @@ public class SpongeNegativity {
 		ProxyCompanionManager.searchedCompanion = true;
 		channel.sendTo(player, (buffer) -> {
 			try {
-				buffer.writeBytes(NegativityMessagesManager.writeMessage(new ProxyPingMessage()));
+				buffer.writeBytes(NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION)));
 			} catch (IOException ex) {
 				SpongeNegativity.getInstance().getLogger().error("Could not write ProxyPingMessage.", ex);
 			}
@@ -673,7 +673,8 @@ public class SpongeNegativity {
 			}
 
 			if (message instanceof ProxyPingMessage) {
-				ProxyCompanionManager.foundCompanion();
+				ProxyPingMessage pingMessage = (ProxyPingMessage) message;
+				ProxyCompanionManager.foundCompanion(pingMessage.getProtocol());
 			}
 		}
 	}

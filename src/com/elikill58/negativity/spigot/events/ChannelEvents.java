@@ -44,7 +44,8 @@ public class ChannelEvents implements PluginMessageListener {
 		}
 
 		if (message instanceof ProxyPingMessage) {
-			ProxyCompanionManager.foundCompanion();
+			ProxyPingMessage pingMessage = (ProxyPingMessage) message;
+			ProxyCompanionManager.foundCompanion(pingMessage.getProtocol());
 		} else if (message instanceof ClientModsListMessage) {
 			ClientModsListMessage modsMessage = (ClientModsListMessage) message;
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);

@@ -474,7 +474,7 @@ public class SpigotNegativity extends JavaPlugin {
 	public static void sendProxyPing(Player player) {
 		ProxyCompanionManager.searchedCompanion = true;
 		try {
-			byte[] pingMessage = NegativityMessagesManager.writeMessage(new ProxyPingMessage());
+			byte[] pingMessage = NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION));
 			player.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, pingMessage);
 		} catch (IOException ex) {
 			SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not write ProxyPingMessage.", ex);

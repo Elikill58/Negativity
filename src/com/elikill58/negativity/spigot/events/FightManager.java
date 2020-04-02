@@ -1,6 +1,5 @@
 package com.elikill58.negativity.spigot.events;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -103,7 +102,7 @@ public class FightManager implements Listener {
 	public void blowUp(EntityExplodeEvent e) {
 		if(!e.getEntityType().equals(EntityType.PRIMED_TNT))
 			return;
-		Bukkit.getOnlinePlayers().stream().filter((p) -> e.getLocation().distance(p.getLocation()) < 5)
+		Utils.getOnlinePlayers().stream().filter((p) -> e.getLocation().distance(p.getLocation()) < 5)
 				.forEach((p) -> SpigotNegativityPlayer.getNegativityPlayer(p).fight());
 	}
 	

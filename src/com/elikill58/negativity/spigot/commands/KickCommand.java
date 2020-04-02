@@ -26,7 +26,7 @@ public class KickCommand implements CommandExecutor, TabCompleter {
 
 		Player target = Bukkit.getPlayer(arg[0]);
 		if (target == null) {
-			for (Player onlinePlayer : Bukkit.getOnlinePlayers()) {
+			for (Player onlinePlayer : Utils.getOnlinePlayers()) {
 				if (arg[0].equalsIgnoreCase(onlinePlayer.getName())) {
 					target = onlinePlayer;
 					break;

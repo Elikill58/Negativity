@@ -482,7 +482,7 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 
 	public static void trySendProxyPing() {
-		Iterator<? extends Player> onlinePlayers = Bukkit.getOnlinePlayers().iterator();
+		Iterator<? extends Player> onlinePlayers = Utils.getOnlinePlayers().iterator();
 		if (onlinePlayers.hasNext()) {
 			sendProxyPing(onlinePlayers.next());
 		}

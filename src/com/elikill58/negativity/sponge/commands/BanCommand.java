@@ -2,9 +2,9 @@ package com.elikill58.negativity.sponge.commands;
 
 import static org.spongepowered.api.command.args.GenericArguments.bool;
 import static org.spongepowered.api.command.args.GenericArguments.firstParsing;
-import static org.spongepowered.api.command.args.GenericArguments.longNum;
 import static org.spongepowered.api.command.args.GenericArguments.player;
 import static org.spongepowered.api.command.args.GenericArguments.remainingJoinedStrings;
+import static org.spongepowered.api.command.args.GenericArguments.string;
 
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandException;
@@ -23,19 +23,26 @@ import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class BanCommand implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
-		Player targetPlayer = args.<Player>getOne("target").orElse(null);
-		if (targetPlayer == null)
-			throw new CommandException(Messages.getMessage(src, "only_player"));
+		Player targetPlayer = args.<Player>getOne("target")
+				.orElseThrow(() -> new CommandException(Messages.getMessage(src, "only_player")));
 
 		boolean isBanDefinitive = args.<Boolean>getOne("definitive").orElse(false);
 		long expiration = -1;
-		if (!isBanDefinitive)
-			expiration = System.currentTimeMillis() + args.<Long>getOne("duration").orElse(-1L);
+		if (!isBanDefinitive) {
+			String duration = args.<String>getOne("duration")
+					.orElseThrow(() -> new CommandException(Messages.getMessage(src, "ban.help"), true));
+			try {
+				expiration = System.currentTimeMillis() + UniversalUtils.parseDuration(duration) * 1000;
+			} catch (IllegalArgumentException e) {
+				throw new CommandException(Text.of(e.getMessage()), e, true);
+			}
+		}
 
 		String reason = args.requireOne("reason");
 
@@ -59,7 +66,7 @@ public class BanCommand implements CommandExecutor {
 		CommandSpec command = CommandSpec.builder()
 				.executor(new BanCommand())
 				.arguments(player(Text.of("target")),
-						firstParsing(bool(Text.of("definitive")), longNum(Text.of("duration"))),
+						firstParsing(bool(Text.of("definitive")), string(Text.of("duration"))),
 						remainingJoinedStrings(Text.of("reason")))
 				.build();
 		return new NegativityCmdWrapper(command, false, "ban");

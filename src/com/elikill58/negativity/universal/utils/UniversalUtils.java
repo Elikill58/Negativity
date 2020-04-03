@@ -232,6 +232,47 @@ public class UniversalUtils {
 		return string.substring(0, maxLength - 1);
 	}
 
+	public static long parseDuration(String duration) {
+		long time = 0;
+		String stringTime = "";
+		for (String c : duration.split("")) {
+			if (isInteger(c)) {
+				stringTime += c;
+			} else {
+				switch (c) {
+					case "s":
+						time += Integer.parseInt(stringTime);
+						break;
+					case "m":
+						time += Integer.parseInt(stringTime) * 60;
+						break;
+					case "h":
+						time += Integer.parseInt(stringTime) * 3600;
+						break;
+					case "j":
+					case "d":
+						time += Integer.parseInt(stringTime) * 3600 * 24;
+						break;
+					case "mo":
+						time += Integer.parseInt(stringTime) * 3600 * 24 * 30;
+						break;
+					case "y":
+						time += Integer.parseInt(stringTime) * 3600 * 24 * 30 * 12;
+						break;
+					default:
+						throw new IllegalArgumentException("Unknown time marker '" + c + "'");
+				}
+				stringTime = "";
+			}
+		}
+
+		if (!stringTime.isEmpty()) {
+			time += Integer.parseInt(stringTime);
+		}
+
+		return time;
+	}
+
 	public static void init() {
 		DefaultConfigValue.init();
 		Database.init();

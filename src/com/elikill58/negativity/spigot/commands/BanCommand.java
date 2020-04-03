@@ -43,39 +43,16 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 
 		long time = -1;
 		if (!arg[1].equalsIgnoreCase("def")) {
-			String stringTime = "";
-			for (String c : arg[1].split("")) {
-				if (UniversalUtils.isInteger(c)) {
-					stringTime += c;
-				} else {
-					switch (c) {
-					case "s":
-						time += Integer.parseInt(stringTime);
-						break;
-					case "m":
-						time += Integer.parseInt(stringTime) * 60;
-						break;
-					case "h":
-						time += Integer.parseInt(stringTime) * 3600;
-						break;
-					case "j":
-					case "d":
-						time += Integer.parseInt(stringTime) * 3600 * 24;
-						break;
-					case "mo":
-						time += Integer.parseInt(stringTime) * 3600 * 24 * 30;
-						break;
-					case "y":
-						time += Integer.parseInt(stringTime) * 3600 * 24 * 30 * 12;
-						break;
-					default:
-						Messages.sendMessageList(sender, "ban.help");
-						return false;
-					}
-					stringTime = "";
+			try {
+				time = System.currentTimeMillis() + UniversalUtils.parseDuration(arg[1]) * 1000;
+			} catch (IllegalArgumentException e) {
+				String exMessage = e.getMessage();
+				if (exMessage != null) {
+					sender.sendMessage(exMessage);
 				}
+				Messages.sendMessageList(sender, "ban.help");
+				return false;
 			}
-			time = System.currentTimeMillis() + time * 1000;
 		}
 
 		String reason = null;

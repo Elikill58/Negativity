@@ -1,7 +1,7 @@
 package com.elikill58.negativity.sponge.commands;
 
-import static org.spongepowered.api.command.args.GenericArguments.bool;
 import static org.spongepowered.api.command.args.GenericArguments.firstParsing;
+import static org.spongepowered.api.command.args.GenericArguments.literal;
 import static org.spongepowered.api.command.args.GenericArguments.player;
 import static org.spongepowered.api.command.args.GenericArguments.remainingJoinedStrings;
 import static org.spongepowered.api.command.args.GenericArguments.string;
@@ -32,7 +32,7 @@ public class BanCommand implements CommandExecutor {
 		Player targetPlayer = args.<Player>getOne("target")
 				.orElseThrow(() -> new CommandException(Messages.getMessage(src, "only_player")));
 
-		boolean isBanDefinitive = args.<Boolean>getOne("definitive").orElse(false);
+		boolean isBanDefinitive = args.hasAny("definitive");
 		long expiration = -1;
 		if (!isBanDefinitive) {
 			String duration = args.<String>getOne("duration")
@@ -66,7 +66,7 @@ public class BanCommand implements CommandExecutor {
 		CommandSpec command = CommandSpec.builder()
 				.executor(new BanCommand())
 				.arguments(player(Text.of("target")),
-						firstParsing(bool(Text.of("definitive")), string(Text.of("duration"))),
+						firstParsing(literal(Text.of("definitive"), "definitive"), string(Text.of("duration"))),
 						remainingJoinedStrings(Text.of("reason")))
 				.build();
 		return new NegativityCmdWrapper(command, false, "ban");

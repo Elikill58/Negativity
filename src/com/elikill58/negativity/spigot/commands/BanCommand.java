@@ -55,16 +55,18 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 			}
 		}
 
-		String reason = null;
+		String cheatName = null;
 		StringJoiner reasonJoiner = new StringJoiner(" ");
 		for (int i = 2; i < arg.length; i++) {
 			String element = arg[i];
 			reasonJoiner.add(element);
-			if (reason == null && Cheat.fromString(element) != null) {
-				reason = element;
+			if (cheatName == null && Cheat.fromString(element) != null) {
+				cheatName = element;
 			}
 		}
-		BanManager.executeBan(new Ban(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, reason, BanStatus.ACTIVE));
+
+		String reason = reasonJoiner.toString();
+		BanManager.executeBan(new Ban(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, cheatName, BanStatus.ACTIVE));
 		if (!sender.equals(target))
 			Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
 		return false;

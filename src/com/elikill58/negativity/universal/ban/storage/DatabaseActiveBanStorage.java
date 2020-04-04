@@ -62,7 +62,7 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 			stm.setString(2, ban.getReason());
 			stm.setString(3, ban.getBannedBy());
 			stm.setLong(4, ban.getExpirationTime());
-			stm.setString(5, UniversalUtils.trimExcess(ban.getCheatName(), 32));
+			stm.setString(5, UniversalUtils.trimExcess(ban.getCheatName(), 64));
 			stm.executeUpdate();
 		} catch (Exception e) {
 			Adapter.getAdapter().error("An error occurred while saving the active ban of player with ID " + ban.getPlayerId());

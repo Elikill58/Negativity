@@ -47,7 +47,8 @@ public class NukerProtocol extends Cheat implements Listener {
 			}
 		}
 		long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
-		if(dis < 50 && e.getBlock().getType().isSolid() && !hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.FAST_DIGGING)) {
+		Material m = e.getBlock().getType();
+		if(dis < 50 && m.isSolid() && !isInstantBlock(m.name()) && !hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.FAST_DIGGING)) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis),
 					"Type: " + e.getBlock().getType().name() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis + " (ping: " + Utils.getPing(p) + "). Warn: " + np.getWarn(this), "2 blocks breaked in " + dis + " ms");
 			if(isSetBack() && mayCancel)
@@ -56,6 +57,12 @@ public class NukerProtocol extends Cheat implements Listener {
 		np.LAST_BLOCK_BREAK = temp;
 	}
 	
+	private boolean isInstantBlock(String m) {
+		if(m.contains("SLIME") || m.contains("TNT"))
+			return true;
+		return false;
+	}
+
 	public static boolean hasDigSpeedEnchant(ItemStack item) {
 		return item != null && item.containsEnchantment(Enchantment.DIG_SPEED) && item.getEnchantmentLevel(Enchantment.DIG_SPEED) > 2;
 	}

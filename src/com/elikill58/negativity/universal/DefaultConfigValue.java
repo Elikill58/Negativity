@@ -106,7 +106,7 @@ public class DefaultConfigValue {
 		BOOLEANS.put("Permissions.bypass.active", false);
 
 		String[] cheats = new String[]{"airjump", "antipotion", "autoeat", "autoregen", "antiknockback", "autoclick", "autosteal",
-				"blink", "chat", "critical", "forcefield", "fastplace", "fastladder", "fastbow", "faststairs", "jesus", "fly",
+				"blink", "chat", "critical", "forcefield", "fastplace", "fastladder", "fastbow", "faststairs", "inventorymove", "jesus", "fly",
 				"nofall", "nopitchlimit", "noslowdown", "noweb", "nuker", "phase", "scaffold", "speedhack", "spider", "step", "xray"};
 		for (String localCheat : cheats) {
 			//STRINGS.put("Permissions.bypass." + localCheat, "negativity.bypass." + localCheat);

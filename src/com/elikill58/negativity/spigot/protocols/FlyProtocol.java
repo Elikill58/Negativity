@@ -25,7 +25,9 @@ public class FlyProtocol extends Cheat implements Listener {
 	public FlyProtocol() {
 		super(CheatKeys.FLY, true, Utils.getMaterialWith1_15_Compatibility("FIREWORK", "LEGACY_FIREWORK"), CheatCategory.MOVEMENT, true, "flyhack");
 	}
-
+	
+	private int VL;
+	
 	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerMove(PlayerMoveEvent e) {
@@ -84,6 +86,40 @@ public class FlyProtocol extends Cheat implements Listener {
 			if (isSetBack() && mayCancel) {
 				Utils.teleportPlayerOnGround(p);
 			}
+		}
+		
+		
+		double a = e.getFrom().getY() - e.getTo().getY();
+		double b = Math.abs(Math.sin(a));
+		boolean waterLava = p.getLocation().getBlock().getType() == Material.WATER || 
+				p.getLocation().getBlock().getType() == Material.STATIONARY_WATER ||
+				p.getLocation().getBlock().getType() == Material.LAVA ||
+				p.getLocation().getBlock().getType() == Material.STATIONARY_LAVA;
+		
+		String B = b + "";
+		if(B.contains("E") && !waterLava){
+			SpigotNegativity.alertMod(ReportType.WARNING, e.getPlayer()
+					, Cheat.forKey(CheatKeys.FLY), 100, 
+					"Suspicious Y-Pos - " + b, 
+					"Suspicious Y-Pos - " + b, "0");
+			if(isSetBack()){
+				Utils.teleportPlayerOnGround(e.getPlayer());
+			}
+			return;
+		}
+		if(b == 0.0 && !e.getPlayer().isOnGround() && !waterLava){
+			if(++VL > 5){
+				com.elikill58.negativity.spigot.SpigotNegativity.alertMod(ReportType.WARNING, e.getPlayer()
+						, Cheat.forKey(CheatKeys.FLY), 100, 
+						"Y-Pos - " + b + " in air, but " + VL + " times", 
+						"Y-Pos - " + b + " in air, but " + VL + " times", "0");
+				if(isSetBack()){
+					Utils.teleportPlayerOnGround(e.getPlayer());
+				}
+				return;
+			}
+		} else {
+			VL = 0;
 		}
 	}
 	

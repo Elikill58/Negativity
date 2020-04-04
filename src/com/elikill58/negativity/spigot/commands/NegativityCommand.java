@@ -9,6 +9,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -23,6 +24,7 @@ import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.permissions.Perm;
 
 public class NegativityCommand implements CommandExecutor, TabCompleter {
@@ -114,6 +116,14 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 		} else if (arg[0].equalsIgnoreCase("reload")) {
 			Adapter.getAdapter().reload();
 			Messages.sendMessage(sender, "negativity.reload_done");
+			return true;
+		} else if (arg[0].equalsIgnoreCase("migrateoldbans") && sender instanceof ConsoleCommandSender) {
+			try {
+				OldBansDbMigrator.performMigration();
+			} catch (Exception e) {
+				sender.sendMessage("An error occurred when performing migration: " + e.getMessage());
+				e.printStackTrace();
+			}
 			return true;
 		}
 

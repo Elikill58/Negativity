@@ -60,6 +60,7 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.commands.BanCommand;
 import com.elikill58.negativity.sponge.commands.LangCommand;
+import com.elikill58.negativity.sponge.commands.MigrateOldBansCommand;
 import com.elikill58.negativity.sponge.commands.ModCommand;
 import com.elikill58.negativity.sponge.commands.NegativityCommand;
 import com.elikill58.negativity.sponge.commands.ReportCommand;
@@ -249,6 +250,7 @@ public class SpongeNegativity {
 
 		if (!reload) {
 			cmd.register(this, NegativityCommand.create(), "negativity");
+			cmd.register(this, MigrateOldBansCommand.create(), "negativitymigrateoldbans");
 			cmd.register(this, ModCommand.create(), "mod");
 			cmd.register(this, LangCommand.create(), "nlang");
 		}

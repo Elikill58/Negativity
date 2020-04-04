@@ -42,6 +42,11 @@ public class UniversalUtils {
 
 	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 
+	public static int floor(double d) {
+		int i = (int) d;
+		return d < i ? i - 1 : i;
+	}
+	
 	public static int parseInPorcent(int i) {
 		if (i > 100)
 			return 100;

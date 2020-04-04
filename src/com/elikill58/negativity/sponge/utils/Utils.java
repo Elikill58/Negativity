@@ -17,6 +17,7 @@ import org.spongepowered.api.data.type.DyeColor;
 import org.spongepowered.api.data.type.SkullTypes;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectType;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
@@ -28,6 +29,7 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
 public class Utils {
@@ -173,5 +175,30 @@ public class Utils {
 			i--;
 		}
 		p.setLocation(loc.add(Vector3i.UNIT_Y));
+	}
+
+	public static float getPlayerHeadHeight(Player p) {
+		float f = 1.62F;
+		if (p.get(Keys.IS_SLEEPING).orElse(false)) {
+			f = 0.2F;
+		}
+		if (p.get(Keys.IS_SNEAKING).orElse(false)) {
+			f -= 0.08F;
+		}
+		return f;
+	}
+
+	public static float getEntityHeadHeight(Entity et) {
+		return 1.74F;
+	}
+
+	public static Vector3d getEntityVec(Entity et) {
+		Location<World> loc = et.getLocation();
+		return new Vector3d(loc.getX(), loc.getY() + getEntityHeadHeight(et), loc.getZ());
+	}
+
+	public static Vector3d getPlayerVec(Player p) {
+		Location<World> loc = p.getLocation();
+		return new Vector3d(loc.getX(), loc.getY() + getPlayerHeadHeight(p), loc.getZ());
 	}
 }

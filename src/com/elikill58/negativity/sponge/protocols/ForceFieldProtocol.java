@@ -44,15 +44,15 @@ public class ForceFieldProtocol extends Cheat {
 		if (!np.hasDetectionActive(this)) {
 			return;
 		}
-		
-		boolean mayCancel = false, hasThorns = np.hasThorns(p);
-		/*if(!p.hasLineOfSight(e.getEntity())) {
-			mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getEntity().getType().name()
-					+ " but cannot see it, hasThorns: " + hasThorns + ", ping: " + Utils.getPing(p),
-					"Hit " + e.getEntity().getType().name().toLowerCase() + " without line of sight");
-		}*/
-		if(hasThorns)
+		if(np.hasThorns(p))
 			return;
+		
+		boolean mayCancel = false;
+		if(!np.hasLineOfSight(e.getTargetEntity())) {
+			mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getTargetEntity().getType().getId()
+					+ " but cannot see it, ping: " + Utils.getPing(p),
+					"Hit " + e.getTargetEntity().getType().getName() + " without line of sight");
+		}
 		Optional<ItemStackSnapshot> usedItem = e.getContext().get(EventContextKeys.USED_ITEM);
 
 		double distance = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());

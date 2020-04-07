@@ -1,6 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -33,8 +34,10 @@ public class FastStairsProtocol extends Cheat implements Listener {
 		String blockName = e.getTo().clone().subtract(0, 0.0001, 0).getBlock().getType().name();
 		if(!blockName.contains("STAIRS"))
 			return;
-		double distance = e.getFrom().distance(e.getTo());
-		if(distance > 0.6 && (distance < (np.lastDistanceFastStairs * 2))) {
+		Location from = e.getFrom().clone();
+		from.setY(e.getTo().getY());
+		double distance = from.distance(e.getTo());
+		if(distance > 0.4 && np.lastDistanceFastStairs > distance) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 145), "No fall damage. Block: " + blockName + ", distance: " + distance + ", lastDistance: " + np.lastDistanceFastStairs);
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);

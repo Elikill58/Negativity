@@ -99,6 +99,16 @@ public class PlayersEvents implements Listener {
 		if(np.isFreeze && !p.getLocation().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR))
 			e.setCancelled(true);
 	}
+	
+	@EventHandler
+	public void slimeManager(PlayerMoveEvent e){
+		Player p = e.getPlayer();
+		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		if(p.getLocation().subtract(0, 1, 0).getBlock().getType().name().contains("SLIME")) {
+			np.isUsingSlimeBlock = true;
+		} else if(np.isUsingSlimeBlock && p.isOnGround())
+			np.isUsingSlimeBlock = false;
+	}
 
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e){

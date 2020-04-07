@@ -73,7 +73,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0, LAST_BLOCK_BREAK = 0;
 	public String LAST_OTHER_KEEP_ALIVE, LAST_CHAT_MESSAGE = "";
 	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false,
-			isInvisible = false, slime_block = false, already_blink = false, isJumpingWithBlock = false,
+			isInvisible = false, isUsingSlimeBlock = false, already_blink = false, isJumpingWithBlock = false,
 			isOnLadders = false, lastClickInv = false, jesusState = true, wasSneaking = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;

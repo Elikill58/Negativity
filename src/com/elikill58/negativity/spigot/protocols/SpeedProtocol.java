@@ -24,6 +24,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 @SuppressWarnings("deprecation")
@@ -108,8 +109,10 @@ public class SpeedProtocol extends Cheat implements Listener {
 				} else {
 					Material under = e.getTo().clone().subtract(0, 1, 0).getBlock().getType();
 					if (!under.name().contains("STEP")) {
-						double distance = e.getFrom().distance(e.getTo());
-						if (distance > 0.4) {
+						double distance = from.distance(to);
+						to.setY(from.getY());
+						double yy = to.distance(from);
+						if (distance > (Version.getVersion().isNewerOrEquals(Version.V1_15) ? 0.6 : 0.4) && (distance > (yy * 2))) {
 							np.SPEED_NB++;
 							if (np.SPEED_NB > 4)
 								mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p,

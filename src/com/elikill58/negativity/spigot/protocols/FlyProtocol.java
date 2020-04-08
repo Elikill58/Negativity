@@ -35,9 +35,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if(!p.getLocation().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR) || !p.getLocation().subtract(0, 2, 0).getBlock().getType().equals(Material.AIR))
-			return;
-		if((p.isSprinting() && (e.getTo().getY() - e.getFrom().getY()) > 0) || np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT"))
+		if(np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
 
 		if (p.hasPotionEffect(PotionEffectType.SPEED)) {
@@ -50,40 +48,52 @@ public class FlyProtocol extends Cheat implements Listener {
 		}
 		if (p.getVehicle() != null || p.getAllowFlight() || p.getEntityId() == 100)
 			return;
+		boolean mayCancel = false;
 		double i = e.getTo().toVector().distance(e.getFrom().toVector());
-		if (!p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)) {
-			if ((p.getFallDistance() == 0.0F)
-					&& (p.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR))
-					&& i > 1.25D && !p.isOnGround()) {
-				boolean mayCancel = false;
-				if (np.getWarn(this) > 5)
-					mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
-							UniversalUtils.parseInPorcent((int) i * 50),
-							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this));
-				else
-					mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
-							UniversalUtils.parseInPorcent((int) i * 50),
-							"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this));
-				if (isSetBack() && mayCancel) {
-					Utils.teleportPlayerOnGround(p);
+		if(!(p.isSprinting() && (e.getTo().getY() - e.getFrom().getY()) > 0)
+				&& p.getLocation().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)
+				&& p.getLocation().subtract(0, 2, 0).getBlock().getType().equals(Material.AIR)) {
+			if (!p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)) {
+				if ((p.getFallDistance() == 0.0F)
+						&& (p.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR))
+						&& i > 1.25D && !p.isOnGround()) {
+					if (np.getWarn(this) > 5)
+						mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
+								UniversalUtils.parseInPorcent((int) i * 50),
+								"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this));
+					else
+						mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
+								UniversalUtils.parseInPorcent((int) i * 50),
+								"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this));
+					if (isSetBack() && mayCancel) {
+						Utils.teleportPlayerOnGround(p);
+					}
 				}
 			}
-		}
-
-		if (!np.hasOtherThanExtended(p.getLocation(), Material.AIR)
-				&& !np.hasOtherThanExtended(p.getLocation().add(0, -1, 0), Material.AIR)
-				&& !np.hasOtherThanExtended(p.getLocation().add(0, -2, 0), Material.AIR)
-				&& e.getFrom().getY() <= e.getTo().getY()) {
-			double d = e.getTo().getY() - e.getFrom().getY();
-			int  nb = getNbAirBlockDown(np), porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
-			if(np.hasOtherThan(p.getLocation().add(0, -3, 0), Material.AIR))
-				porcent = UniversalUtils.parseInPorcent(porcent - 15);
-			boolean mayCancel = SpigotNegativity.alertMod(
-					np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
-					"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ". Warn for fly: " + np.getWarn(this));
-			if (isSetBack() && mayCancel) {
-				Utils.teleportPlayerOnGround(p);
+	
+			if (!np.hasOtherThanExtended(p.getLocation(), Material.AIR)
+					&& !np.hasOtherThanExtended(p.getLocation().add(0, -1, 0), Material.AIR)
+					&& !np.hasOtherThanExtended(p.getLocation().add(0, -2, 0), Material.AIR)
+					&& e.getFrom().getY() <= e.getTo().getY()) {
+				double d = e.getTo().getY() - e.getFrom().getY();
+				int  nb = getNbAirBlockDown(np), porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
+				if(np.hasOtherThan(p.getLocation().add(0, -3, 0), Material.AIR))
+					porcent = UniversalUtils.parseInPorcent(porcent - 15);
+				mayCancel = SpigotNegativity.alertMod(
+						np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
+						"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ". Warn for fly: " + np.getWarn(this));
 			}
+		}
+		Location to = e.getTo().clone();
+		to.setY(e.getFrom().getY());
+		double distanceWithoutY = to.distance(e.getFrom());
+		if(distanceWithoutY == i && !p.isOnGround() && i != 0) {
+			mayCancel = SpigotNegativity.alertMod(
+					np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, 98,
+					"Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY);
+		}
+		if (isSetBack() && mayCancel) {
+			Utils.teleportPlayerOnGround(p);
 		}
 	}
 	

@@ -11,12 +11,10 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.listeners.PlayerCheatBypassEvent;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
-import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ChatProtocol extends Cheat implements Listener {
@@ -33,21 +31,14 @@ public class ChatProtocol extends Cheat implements Listener {
 			return;
 		String msg = e.getMessage();
 		if(msg.equalsIgnoreCase(np.LAST_CHAT_MESSAGE)) {
-			if (!(SpigotNegativity.hasBypass && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p),
-					"bypass.chat"))) {
-				PlayerCheatBypassEvent bypassEvent = new PlayerCheatBypassEvent(p, this, 100);
-				Bukkit.getPluginManager().callEvent(bypassEvent);
-				if (!bypassEvent.isCancelled()) {
-					Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
-						boolean mayCancel = SpigotNegativity.alertMod(np.LAST_CHAT_MESSAGE_NB > 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-								UniversalUtils.parseInPorcent(95 + np.LAST_CHAT_MESSAGE_NB), "Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times",
-								"Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times");
-						if(mayCancel && isSetBack())
-							e.setCancelled(true);
-					});
-				}
-			}
 			np.LAST_CHAT_MESSAGE_NB++;
+			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
+				boolean mayCancel = SpigotNegativity.alertMod(np.LAST_CHAT_MESSAGE_NB > 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+						UniversalUtils.parseInPorcent(95 + np.LAST_CHAT_MESSAGE_NB), "Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times",
+						"Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times");
+				if(mayCancel && isSetBack())
+					e.setCancelled(true);
+			});
 		} else
 			np.LAST_CHAT_MESSAGE_NB = 0;
 		np.LAST_CHAT_MESSAGE = msg;

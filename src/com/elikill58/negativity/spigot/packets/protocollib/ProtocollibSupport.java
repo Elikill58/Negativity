@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.packets.protocollib;
 import java.util.Arrays;
 import java.util.List;
 
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.comphenix.protocol.PacketType;
@@ -10,6 +11,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
+import com.comphenix.protocol.injector.server.TemporaryPlayer;
 import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -30,10 +32,14 @@ public class ProtocollibSupport {
 					public void onPacketSending(PacketEvent e) {}
 
 					public void onPacketReceiving(PacketEvent e) {
-						if (!SpigotNegativityPlayer.INJECTED.contains(e.getPlayer().getUniqueId())) {
+						Player p = e.getPlayer();
+				        if (p == null || p instanceof TemporaryPlayer) {
+				            return;
+				        }
+						if (!SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId())) {
 							return;
 						}
-						SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());
+						SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 						np.ALL++;
 						if (e.getPacketType().equals(PacketType.Play.Client.FLYING)) {
 							np.FLYING++;

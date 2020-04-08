@@ -19,7 +19,9 @@ import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.inventories.CheatManagerInventory;
 import com.elikill58.negativity.spigot.inventories.CheckMenuInventory;
+import com.elikill58.negativity.spigot.inventories.ModInventory;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -116,6 +118,26 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 		} else if (arg[0].equalsIgnoreCase("reload")) {
 			Adapter.getAdapter().reload();
 			Messages.sendMessage(sender, "negativity.reload_done");
+			return true;
+		} else if (arg[0].equalsIgnoreCase("mod")) {
+			if (!(sender instanceof Player)) {
+				Messages.sendMessage(sender, "only_player");
+				return true;
+			}
+			ModInventory.openModMenu((Player) sender);
+			return true;
+		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase().contains("manage")) {
+			if (!(sender instanceof Player)) {
+				Messages.sendMessage(sender, "only_player");
+				return true;
+			}
+			Player p = (Player) sender;
+			if(!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "manageCheat")) {
+				Messages.sendMessage(sender, "not_permission");
+				return true;
+			}
+			
+			CheatManagerInventory.openCheatManagerMenu(p);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("migrateoldbans") && sender instanceof ConsoleCommandSender) {
 			try {

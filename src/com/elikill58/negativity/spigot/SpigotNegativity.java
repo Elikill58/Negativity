@@ -346,8 +346,8 @@ public class SpigotNegativity extends JavaPlugin {
 				|| getInstance().getConfig().getInt("tps_alert_stop") > Utils.getLastTPS() || ping < 0 || np.isFreeze)
 			return false;
 		Bukkit.getPluginManager().callEvent(new PlayerCheatEvent(p, c, reliability));
-		if (hasBypass && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p),
-				"bypass." + c.getKey().toLowerCase())) {
+		if (hasBypass && (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase())
+				|| Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "bypass.all"))) {
 			PlayerCheatBypassEvent bypassEvent = new PlayerCheatBypassEvent(p, c, reliability);
 			Bukkit.getPluginManager().callEvent(bypassEvent);
 			if (!bypassEvent.isCancelled())

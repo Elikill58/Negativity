@@ -83,7 +83,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
 	public String LAST_OTHER_KEEP_ALIVE;
 	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false,
-			isFreeze = false, slime_block = false, already_blink = false, wasSneaking = false,
+			isFreeze = false, isUsingSlimeBlock = false, already_blink = false, wasSneaking = false,
 			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public ItemType eatMaterial = ItemTypes.AIR;
@@ -512,6 +512,29 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		if (m.contains(loc.add(0, 0, 1).getBlock().getType().getItem().get()))
 			return true;
 		if (m.contains(loc.add(0, 0, 1).getBlock().getType().getItem().get()))
+			return true;
+		return false;
+	}
+
+	public boolean has(Location<?> loc, String... ms) {
+		List<String> m = Arrays.asList(ms);
+		if (m.contains(loc.add(0, 0, 1).getBlock().getType().getId()))
+			return true;
+		if (m.contains(loc.add(1, 0, 0).getBlock().getType().getId()))
+			return true;
+		if (m.contains(loc.add(0, 0, -1).getBlock().getType().getId()))
+			return true;
+		if (m.contains(loc.add(0, 0, -1).getBlock().getType().getId()))
+			return true;
+		if (m.contains(loc.add(0, 0, -1).getBlock().getType().getId()))
+			return true;
+		if (m.contains(loc.add(-1, 0, 0).getBlock().getType().getId()))
+			return true;
+		if (m.contains(loc.add(-1, 0, 0).getBlock().getType().getId()))
+			return true;
+		if (m.contains(loc.add(0, 0, 1).getBlock().getType().getId()))
+			return true;
+		if (m.contains(loc.add(0, 0, 1).getBlock().getType().getId()))
 			return true;
 		return false;
 	}

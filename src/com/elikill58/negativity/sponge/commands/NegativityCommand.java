@@ -14,6 +14,11 @@ import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.Inv;
 import com.elikill58.negativity.sponge.Messages;
+import com.elikill58.negativity.sponge.commands.child.ModCommand;
+import com.elikill58.negativity.sponge.commands.child.AdminCommand;
+import com.elikill58.negativity.sponge.commands.child.AlertCommand;
+import com.elikill58.negativity.sponge.commands.child.ReloadCommand;
+import com.elikill58.negativity.sponge.commands.child.VerifCommand;
 import com.elikill58.negativity.sponge.utils.NegativityCmdSuggestionsEnhancer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 
@@ -39,8 +44,10 @@ public class NegativityCommand implements CommandExecutor {
 				.executor(new NegativityCommand())
 				.permission("negativity.verif")
 				.arguments(requiringPermission(player(Text.of("target")), "negativity.verif"))
-				.child(NegativityVerifCommand.create(), "verif")
+				.child(VerifCommand.create(), "verif")
 				.child(AlertCommand.create(), "alert")
+				.child(ModCommand.create(), "mod")
+				.child(AdminCommand.create(), "admin")
 				.child(ReloadCommand.create(), "reload")
 				.build());
 		return new NegativityCmdWrapper(command, true, null);

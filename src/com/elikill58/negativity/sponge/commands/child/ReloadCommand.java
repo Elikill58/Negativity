@@ -1,4 +1,4 @@
-package com.elikill58.negativity.sponge.commands;
+package com.elikill58.negativity.sponge.commands.child;
 
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandResult;

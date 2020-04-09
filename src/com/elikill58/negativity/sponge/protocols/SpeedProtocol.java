@@ -66,17 +66,17 @@ public class SpeedProtocol extends Cheat {
 			return;
 		}
 
-		if (canBoostWithPackedIce(p.getLocation())) {
+		if (canBoostWithPackedIce(p.getLocation()) || np.has(p.getLocation(), "SLAB", "STAIRS")) {
 			return;
 		}
 
 		ReportType type = (np.getWarn(this) > 7) ? ReportType.VIOLATION : ReportType.WARNING;
 		boolean mayCancel = false;
-		double distance = toVect.sub(0, toVect.getY(), 0).distance(fromVect.sub(0, fromVect.getY(), 0));
-		String proof = "In ground: " + p.isOnGround() + "WalkSpeed: " + p.get(Keys.WALKING_SPEED).get() + "  Distance between from/to location: " + distance;
-		if (p.isOnGround() && distance >= 0.75D) {
-			mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(distance * 100 * 2), proof,
-					"Distance Last/New position: " + distance + "\n(With same Y)\nPlayer on ground", "Distance Last-New position: " + distance);
+		double moveY = toVect.sub(0, toVect.getY(), 0).distance(fromVect.sub(0, fromVect.getY(), 0));
+		String proof = "In ground: " + p.isOnGround() + "WalkSpeed: " + p.get(Keys.WALKING_SPEED).get() + "  Distance between from/to location: " + moveY;
+		if (p.isOnGround() && moveY >= 0.75D) {
+			mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(moveY * 100 * 2), proof,
+					"Distance Last/New position: " + moveY + "\n(With same Y)\nPlayer on ground", "Distance Last-New position: " + moveY);
 		} else if (!p.isOnGround()) {
 			for(Entity et : p.getNearbyEntities(5))
 				if(et.getType().equals(EntityTypes.CREEPER))
@@ -88,7 +88,8 @@ public class SpeedProtocol extends Cheat {
 					|| downName.contains("SLAB") || downName.contains("STEP") || downName.contains("SPONGE")
 					|| downName.contains("SLIME_BLOCK") || downName.contains("ICE"))) {
 				double f = (from.getY() - to.getY()) / 2.0D;
-				if (!(F_LIST.contains(f) || (f < 0.47D && f > 0.46D) || (f < 0.02D && f > 0.01D)) && !p.getLocation().getBlock().getType().getId().contains("WATER") && !downName.contains("WATER") && !downName.contains("WEB")) {
+				if (!(F_LIST.contains(f) || (f < 0.47D && f > 0.46D) || (f < 0.02D && f > 0.01D)) && !p.getLocation().getBlock().getType().getId().contains("WATER")
+						&& !downName.contains("WATER") && !downName.contains("WEB") && !np.isUsingSlimeBlock) {
 					mayCancel = SpongeNegativity.alertMod(
 							np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 							UniversalUtils.parseInPorcent(99),
@@ -97,17 +98,22 @@ public class SpeedProtocol extends Cheat {
 				}
 			}
 			if(!mayCancel) {
-				if(distance >= 0.85D) {
-					mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(distance * 100 * 2), proof,
-							"Distance Last/New position: " + distance + "\n(With same Y)\nPlayer jumping", "Distance Last-New position: " + distance);
+				if(moveY >= 0.85D) {
+					mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(moveY * 100 * 2), proof,
+							"Distance Last/New position: " + moveY + "\n(With same Y)\nPlayer jumping", "Distance Last-New position: " + moveY);
 				} else {
 					BlockType under = e.getToTransform().getLocation().copy().sub(0, 1, 0).getBlockType();
-					if (under.getId().contains("STEP")) {
-						double distanceWithY = e.getFromTransform().getPosition().distance(e.getToTransform().getPosition());
-						if (distanceWithY > 0.4) {
+					if (!under.getId().contains("STEP")) {
+						double distance = e.getFromTransform().getPosition().distance(e.getToTransform().getPosition());
+
+						Vector3d fromPosition = e.getFromTransform().getPosition();
+						Vector3d toPosition = e.getToTransform().getPosition();
+						Vector3d toVec = new Vector3d(toPosition.getX(), fromPosition.getX(), toPosition.getZ());
+						double distanceWithoutY = toVec.distance(fromPosition);
+						if (distance > 0.4 && (distance > (distanceWithoutY * 2))) {
 							np.SPEED_NB++;
 							if (np.SPEED_NB > 4)
-								mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.SPEED), 86 + np.SPEED_NB, "HighSpeed - Block under: " + under.getId() + ", Speed: " + distanceWithY + ", nb: " + np.SPEED_NB);
+								mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.SPEED), UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "HighSpeed - Block under: " + under.getId() + ", Speed: " + distance + ", nb: " + np.SPEED_NB);
 						} else
 							np.SPEED_NB = 0;
 					}

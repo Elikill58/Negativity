@@ -34,13 +34,11 @@ public class FlyProtocol extends Cheat {
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this)) {
+		if (!np.hasDetectionActive(this))
 			return;
-		}
 
-		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
+		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
 			return;
-		}
 
 		if (p.getVehicle().isPresent() || np.justDismounted) {
 			// Some cases like jumping with a horse may trigger false positives,
@@ -48,67 +46,72 @@ public class FlyProtocol extends Cheat {
 			return;
 		}
 
-		if (p.get(Keys.CAN_FLY).orElse(false)) {
+		if (p.get(Keys.CAN_FLY).orElse(false) || p.get(Keys.IS_ELYTRA_FLYING).orElse(false))
 			return;
-		}
 
 		BlockType blockTypeBelow = p.getLocation().sub(Vector3i.UNIT_Y).getBlockType();
 		if (blockTypeBelow != BlockTypes.AIR || p.getLocation().sub(0, 2, 0).getBlockType() != BlockTypes.AIR) {
 			return;
 		}
 
-		Vector3d fromPosition = e.getFromTransform().getPosition();
-		Vector3d toPosition = e.getToTransform().getPosition();
-		if (p.get(Keys.IS_SPRINTING).orElse(false) && (toPosition.getY() - fromPosition.getY()) > 0
-				|| p.get(Keys.IS_ELYTRA_FLYING).orElse(false)) {
-			return;
-		}
 
 		if (np.hasPotionEffect(PotionEffectTypes.SPEED)) {
 			int speed = 0;
-			for (PotionEffect pe : np.getActiveEffects()) {
-				if (pe.getType().equals(PotionEffectTypes.SPEED)) {
+			for (PotionEffect pe : np.getActiveEffects())
+				if (pe.getType().equals(PotionEffectTypes.SPEED))
 					speed += pe.getAmplifier() + 1;
-				}
-			}
-			if (speed > 40) {
+			if (speed > 40)
 				return;
-			}
 		}
-
+		boolean mayCancel = false;
+		Vector3d fromPosition = e.getFromTransform().getPosition();
+		Vector3d toPosition = e.getToTransform().getPosition();
 		double distance = toPosition.distance(fromPosition);
-		if (blockTypeBelow != BlockTypes.SPONGE
-				&& (p.getVehicle().isPresent() || p.get(Keys.CAN_FLY).orElse(false))
-				&& np.getFallDistance() == 0.0F
-				&& p.getLocation().getBlockRelative(Direction.UP).getBlockType() == BlockTypes.AIR
-				&& distance > 1.25D && !p.isOnGround()) {
-			ReportType type = np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING;
-			boolean mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent((int) distance * 50),
-					"Player not in ground, distance: " + distance + ". Warn for fly: " + np.getWarn(this));
-			if (isSetBack() && mayCancel) {
-				Location<World> loc = p.getLocation();
-				while (loc.getBlockType().equals(BlockTypes.AIR)) {
-					loc = loc.sub(Vector3i.UNIT_Y);
+		if (!(p.get(Keys.IS_SPRINTING).orElse(false) && (toPosition.getY() - fromPosition.getY()) > 0)) {
+			if (blockTypeBelow != BlockTypes.SPONGE
+					&& (p.getVehicle().isPresent() || p.get(Keys.CAN_FLY).orElse(false))
+					&& np.getFallDistance() == 0.0F
+					&& p.getLocation().getBlockRelative(Direction.UP).getBlockType() == BlockTypes.AIR
+					&& distance > 1.25D && !p.isOnGround()) {
+				ReportType type = np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING;
+				mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent((int) distance * 50),
+						"Player not in ground, distance: " + distance + ". Warn for fly: " + np.getWarn(this));
+				if (isSetBack() && mayCancel) {
+					Location<World> loc = p.getLocation();
+					while (loc.getBlockType().equals(BlockTypes.AIR)) {
+						loc = loc.sub(Vector3i.UNIT_Y);
+					}
+					p.setLocation(loc.add(Vector3i.UNIT_Y));
 				}
-				p.setLocation(loc.add(Vector3i.UNIT_Y));
+			}
+	
+			if (!np.hasOtherThanExtended(p.getLocation(), BlockTypes.AIR)
+					&& !np.hasOtherThanExtended(p.getLocation().add(0, -1, 0), BlockTypes.AIR)
+					&& !np.hasOtherThanExtended(p.getLocation().add(0, -2, 0), BlockTypes.AIR)
+					&& fromPosition.getY() <= toPosition.getY()) {
+				double d = toPosition.getY() - fromPosition.getY();
+				int nb = getNbAirBlockDown(np);
+				int porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
+				if (np.hasOtherThan(p.getLocation().add(0, -3, 0), BlockTypes.AIR))
+					porcent = UniversalUtils.parseInPorcent(porcent - 15);
+				mayCancel = SpongeNegativity.alertMod(
+						np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
+						"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ". Warn for fly: " + np.getWarn(this));
+				if (isSetBack() && mayCancel) {
+					Utils.teleportPlayerOnGround(p);
+				}
 			}
 		}
-
-		if (!np.hasOtherThanExtended(p.getLocation(), BlockTypes.AIR)
-				&& !np.hasOtherThanExtended(p.getLocation().add(0, -1, 0), BlockTypes.AIR)
-				&& !np.hasOtherThanExtended(p.getLocation().add(0, -2, 0), BlockTypes.AIR)
-				&& fromPosition.getY() <= toPosition.getY()) {
-			double d = toPosition.getY() - fromPosition.getY();
-			int nb = getNbAirBlockDown(np);
-			int porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
-			if (np.hasOtherThan(p.getLocation().add(0, -3, 0), BlockTypes.AIR))
-				porcent = UniversalUtils.parseInPorcent(porcent - 15);
-			boolean mayCancel = SpongeNegativity.alertMod(
-					np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
-					"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ". Warn for fly: " + np.getWarn(this));
-			if (isSetBack() && mayCancel) {
-				Utils.teleportPlayerOnGround(p);
-			}
+		
+		Vector3d to = new Vector3d(toPosition.getX(), fromPosition.getX(), toPosition.getZ());
+		double distanceWithoutY = to.distance(fromPosition);
+		if(distanceWithoutY == distance && !p.isOnGround() && distance != 0 && p.getLocation().add(Vector3i.UNIT_Y).getBlockType().equals(BlockTypes.AIR)) {
+			mayCancel = SpongeNegativity.alertMod(
+					np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, 98,
+					"Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY);
+		}
+		if (isSetBack() && mayCancel) {
+			Utils.teleportPlayerOnGround(p);
 		}
 	}
 

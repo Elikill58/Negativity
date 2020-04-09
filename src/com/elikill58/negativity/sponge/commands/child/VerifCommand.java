@@ -1,4 +1,4 @@
-package com.elikill58.negativity.sponge.commands;
+package com.elikill58.negativity.sponge.commands.child;
 
 import static org.spongepowered.api.command.args.GenericArguments.allOf;
 import static org.spongepowered.api.command.args.GenericArguments.choices;
@@ -23,7 +23,7 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.Cheat;
 
-public class NegativityVerifCommand implements CommandExecutor {
+public class VerifCommand implements CommandExecutor {
 
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
@@ -48,7 +48,7 @@ public class NegativityVerifCommand implements CommandExecutor {
 
 	public static CommandCallable create() {
 		CommandSpec command = CommandSpec.builder()
-				.executor(new NegativityVerifCommand())
+				.executor(new VerifCommand())
 				.arguments(player(Text.of("target")),
 						allOf(choices(Text.of("cheats"), Cheat.CHEATS_BY_KEY, true, false)))
 				.build();

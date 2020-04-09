@@ -37,7 +37,7 @@ public class StepProtocol extends Cheat implements Listener {
 		Location from = e.getFrom(), to = e.getTo();
 		if (!p.hasPotionEffect(PotionEffectType.JUMP)) {
 			double dif = to.getY() - from.getY();
-			if (!np.isUsingSlimeBlock || dif <= 0) {
+			if (!np.isUsingSlimeBlock) {
 				if(dif < 0)
 					return;
 				int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(dif * 50);

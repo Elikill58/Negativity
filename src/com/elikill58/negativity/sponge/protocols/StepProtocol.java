@@ -1,6 +1,5 @@
 package com.elikill58.negativity.sponge.protocols;
 
-import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
@@ -48,37 +47,19 @@ public class StepProtocol extends Cheat {
 
 		Location<World> from = e.getFromTransform().getLocation();
 		Location<World> to = e.getToTransform().getLocation();
-		double dif = to.getY() - from.getY();
 		if (!np.hasPotionEffect(PotionEffectTypes.JUMP_BOOST)) {
-			if (np.slime_block) {
-				if (dif <= 0) {
-					np.slime_block = false;
-				}
-			} else {
-				Location<World> baseLoc = p.getLocation();
-				boolean hasSlimeBlock = false;
-				for (int u = 0; u < 360; u += 3) {
-					if (baseLoc.add(Math.sin(u) * 3, -1, Math.cos(u) * 3).getBlockType() == BlockTypes.SLIME) {
-						hasSlimeBlock = true;
-						break;
-					}
-				}
+			double dif = to.getY() - from.getY();
+			if (!np.isUsingSlimeBlock) {
+				if (dif < 0)
+					return;
+				int ping = Utils.getPing(p);
+				int relia = UniversalUtils.parseInPorcent(dif * 50);
 
-				if (hasSlimeBlock) {
-					np.slime_block = true;
-				} else {
-					int ping = Utils.getPing(p);
-					int relia = UniversalUtils.parseInPorcent(dif * 50);
-					if (dif < 0) {
-						return;
-					}
-
-					if (dif > 1.499 && ping < 200) {
-						boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
-								+ np.getWarn(this) + ". Move " + dif + "blocks up. ping: " + ping);
-						if (isSetBack() && mayCancel) {
-							e.setCancelled(true);
-						}
+				if (dif > 1.499 && ping < 200) {
+					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
+							+ np.getWarn(this) + ". Move " + dif + "blocks up. ping: " + ping);
+					if (isSetBack() && mayCancel) {
+						e.setCancelled(true);
 					}
 				}
 			}

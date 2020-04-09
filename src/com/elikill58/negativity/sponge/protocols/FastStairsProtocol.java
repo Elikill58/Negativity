@@ -13,6 +13,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.flowpowered.math.vector.Vector3d;
 
 public class FastStairsProtocol extends Cheat {
 
@@ -36,8 +37,10 @@ public class FastStairsProtocol extends Cheat {
 		String blockName = e.getToTransform().getLocation().copy().sub(0, 0.0001, 0).getBlock().getType().getId();
 		if(!blockName.contains("STAIRS"))
 			return;
-		double distance = e.getFromTransform().getPosition().distance(e.getToTransform().getPosition());
-		if(distance > 0.6 && (distance < (np.lastDistanceFastStairs * 2))) {
+		Vector3d to = e.getToTransform().getPosition();
+		Vector3d from = new Vector3d(e.getFromTransform().getPosition().getX(), to.getY(), e.getFromTransform().getPosition().getZ());
+		double distance = from.distance(to);
+		if(distance > 0.4 && np.lastDistanceFastStairs > distance) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 145), "Player without fall damage. Block: " + blockName + ", distance: " + distance);
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);

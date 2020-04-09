@@ -69,7 +69,7 @@ public class SpiderProtocol extends Cheat {
 		double last = np.lastYDiff;
 		np.lastYDiff = y;
 		boolean isAris = y == p.get(Keys.WALKING_SPEED).get();
-		if (((y > 0.499 && y < 0.7) || isAris || last == y)) {
+		if (((y > 0.499 && y < 0.7) || isAris || last == y) && !np.isUsingSlimeBlock) {
 			int relia = (int) (y * 200);
 			if (isAris) {
 				relia += 39;
@@ -123,10 +123,10 @@ public class SpiderProtocol extends Cheat {
 	}
 
 	private boolean hasBypassBlockAround(Location<World> loc) {
-		if (has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER"))
+		if (has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD"))
 			return true;
 		loc = loc.copy().sub(0, 1, 0);
-		if (has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER"))
+		if (has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD"))
 			return true;
 		return false;
 	}

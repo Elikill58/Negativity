@@ -45,6 +45,7 @@ report {
   report_usage: "/report <namn> <anledning>"
   well_report: "&a%name% blev raporterad !"
   report_message: "&a[&2Negativity&a] &c%name% &7har blivit raporterad av &c%report% &7för &c%reason%"
+  report_message_hover: "&7Open &c%name%&7's check menu"
 }
 negativity {
   alert: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% &7(&2Reliability: %reliability%%&7) !"

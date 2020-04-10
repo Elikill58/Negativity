@@ -1,9 +1,9 @@
-report: "&a[&2Negativity&a] &c%name% &7har blivit raporterad av &c%report% &7för &c%reason%"
 alert: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% &7(&2Reliability: %reliability%%&7) !"
 alert_multiple: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% %nb% tid &7(&2Reliability: %reliability%%&7) !"
 alert_hover: "&6Pålitlighet: %reliability%%\nPing: %ping%"
 alert_tp_info: "&7Click to teleport to &o%playername%"
-
+report: "&a[&2Negativity&a] &c%name% &7har blivit raporterad av &c%report% &7för &c%reason%"
+report_hover: "&7Click to teleport to &c%playername%"
 ban:
   kick_time: "&cBannad för %reason% tills %time% bannad av: %by%."
   kick_def: "&cBannad definitivt för %reason% bannad av: %by%."

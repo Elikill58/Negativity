@@ -44,6 +44,7 @@ report:
   report_usage: "/report <usuario> <razón>"
   well_report: "&a%name% reportado correctamente !"
   report_message: "&a[&2Negativity&a] &c%name% &7ha sido reportado por &c%report%, &7por &c%reason%"
+  report_message_hover: "&7Open &c%name%&7's check menu"
 negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 parece que usa &c%cheat% &7(&2Fiabilidad: %reliability%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 parece que usa &c%cheat% %nb% veces &7(&2Fiabilidad: %reliability%%&7) !"

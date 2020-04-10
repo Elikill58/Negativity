@@ -15,6 +15,7 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
 
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativity;
@@ -45,7 +46,10 @@ public class ReportCommand implements CommandExecutor {
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
 			SpongeNegativity.sendReportMessage(playerSource, reason, targetPlayer.getName());
 		} else {
-			Text spongeMsg = Text.of(message);
+			Text spongeMsg = Text.builder(message)
+					.onHover(TextActions.showText(Messages.getMessage(playerSource, "report.report_message_hover", "%name%", targetPlayer.getName())))
+					.onClick(TextActions.runCommand("/negativity " + targetPlayer.getName()))
+					.build();
 			boolean hasOp = false;
 			for (Player onlinePlayer : Utils.getOnlinePlayers()) {
 				if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(onlinePlayer), "showAlert")) {

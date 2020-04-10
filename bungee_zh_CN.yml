@@ -1,8 +1,9 @@
 alert: "&a[&2弊绝风清&a]&c%name%&7 看似正使用 &c%cheat% &7（&2可信度： %reliability%%&7）！"
 alert_multiple: "&a[&2弊绝风清&a]&c%name%&7 看似正使用 &c%cheat% %nb% 时间 &7&2可信度： %reliability%%&7）！"
 alert_hover: "&6可信度：%reliability%\n延迟：%ping%"
-report: "&a[&2弊绝风清&a]&c%report% &7由于 &c%reason% &7举报了 &c%name%"
 alert_tp_info: "&7Click to teleport to &o%playername%"
+report: "&a[&2弊绝风清&a]&c%report% &7由于 &c%reason% &7举报了 &c%name%"
+report_hover: "&7Click to teleport to &c%playername%"
 ban:
   kick_time: "&c被 %by% 以 %reason% 封禁至 %time%。"
   kick_def: "&c被 %by% 以 %reason% 永远封禁。"

@@ -3,6 +3,7 @@ alert_multiple: "&a[&2Negativity&a] &c%name%&7 похоже использует
 alert_hover: "&6Точность: %reliability%\nПинг: %ping%"
 alert_tp_info: "&7Click to teleport to &o%playername%"
 report: "&a[&2Negativity&a] &c%name% &7получил репорт от &c%report% &7за &c%reason%"
+report_hover: "&7Click to teleport to &c%playername%"
 ban:
   kick_time: "&cБан за %reason% на %time% от %by%."
   kick_def: "&cБан за %reason% от %by%."

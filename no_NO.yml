@@ -38,6 +38,7 @@ report:
   report_usage: "/report <navn> <grunn>"
   well_report: "&a%name% rapport vellykket !"
   report_message: "&a[&2Negativity&a] &c%name% &7har blitt rapportert av &c%report% &7for &c%reason%"
+  report_message_hover: "&7Open &c%name%&7's check menu"
 negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 ser ut til å bruke &c%cheat% &7(&2Pålitelighet: %reliability%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 ser ut til å bruke &c%cheat% %nb% tid &7(&2Pålitelighet: %reliability%%&7) !"

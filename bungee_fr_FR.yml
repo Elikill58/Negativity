@@ -3,6 +3,7 @@ alert_multiple: "&a[&2Negativity&a] &c%name%&7 semble utiliser &c%cheat% %nb% fo
 alert_hover: "&6Fiabilité: %reliability%\nPing: %ping%"
 alert_tp_info: "&7Cliquez pour vous téléporter à &o%playername%"
 report: "&a[&2Negativity&a] &c%name% &7a été report par &c%report% &7pour &c%reason%"
+report_hover: "&7Cliquez pour vous téléporter à &c%playername%"
 ban:
   kick_time: "&cBanni pour %reason% jusqu'au %time% par %by%."
   kick_def: "&cBanni definitivement pour %reason% par %by%."

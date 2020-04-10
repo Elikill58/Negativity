@@ -3,6 +3,7 @@ alert_multiple: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% %nb% 
 alert_hover: "&6Kans: %reliability%\nPing: %ping%"
 alert_tp_info: "&7Klik om te teleporteren naar &o%playername%"
 report: "&a[&2Negativity&a] &c%name% &7is gerapporteerd door &c%report% &7voor &c%reason%"
+report_hover: "&7Click to teleport to &c%playername%"
 ban:
   kick_time: "&cBan voor %reason% tot %time% door %by%."
   kick_def: "&cDefinitief verbannen voor %reason% door %by%."

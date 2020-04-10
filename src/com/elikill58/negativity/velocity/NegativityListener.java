@@ -108,7 +108,8 @@ public class NegativityListener {
 				if (Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer(pp), "showReport")) {
 					hasPermitted = true;
 					Builder msg = TextComponent.builder();
-					msg.append(VelocityMessages.getMessage(pp, "report", place));
+					msg.append(VelocityMessages.getMessage(pp, "report"));
+					msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, VelocityMessages.getMessage(pp, "report_hover", "%playername%", report.getReported())));
 					msg.clickEvent(ClickEvent.of(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
 					pp.sendMessage(msg.build());
 				}

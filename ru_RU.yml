@@ -43,6 +43,7 @@ report:
   report_usage: "/report <игрок> <причина>"
   well_report: "&aИгрок %name% получил репорт!"
   report_message: "&a[&2Negativity&a] &c%name% &7получил репорт от &c%report% &7за &c%reason%"
+  report_message_hover: "&7Open &c%name%&7's check menu"
 negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% &7(&2Точность: %reliability%%&7)!"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% %nb% время &7(&2Точность: %reliability%%&7)!"

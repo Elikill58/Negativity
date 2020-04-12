@@ -24,7 +24,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
-import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 @SuppressWarnings("deprecation")
@@ -112,12 +111,12 @@ public class SpeedProtocol extends Cheat implements Listener {
 						double distance = from.distance(to);
 						to.setY(from.getY());
 						double yy = to.distance(from);
-						if (distance > (Version.getVersion().isNewerOrEquals(Version.V1_15) ? 0.6 : 0.4) && (distance > (yy * 2))) {
+						if (distance > 0.4 && (distance > (yy * 2)) && p.getFallDistance() < 1) {
 							np.SPEED_NB++;
 							if (np.SPEED_NB > 4)
 								mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p,
 										Cheat.forKey(CheatKeys.SPEED), UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "HighSpeed - Block under: "
-												+ under.name() + ", Speed: " + distance + ", nb: " + np.SPEED_NB);
+												+ under.name() + ", Speed: " + distance + ", nb: " + np.SPEED_NB + ", fallDistance: " + p.getFallDistance());
 						} else
 							np.SPEED_NB = 0;
 					}

@@ -472,7 +472,7 @@ public class SpongeNegativity {
 				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand(HandTypes.MAIN_HAND).get().getType().getId()).getWhen()
 						.equals(WhenBypass.ALWAYS))
 					return false;
-		Optional<BlockRayHit<World>> target = BlockRay.from(p).skipFilter(BlockRay.onlyAirFilter()).stopFilter(BlockRay.onlyAirFilter()).build().end();
+		Optional<BlockRayHit<World>> target = BlockRay.from(p).skipFilter(BlockRay.onlyAirFilter()).stopFilter(BlockRay.onlyAirFilter()).distanceLimit(7).build().end();
 		if(target.isPresent() && !target.get().getLocation().getBlock().getType().equals(BlockTypes.AIR))
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(target.get().getLocation().getBlock().getType().getId()))
 				if (ItemUseBypass.ITEM_BYPASS.get(target.get().getLocation().getBlock().getType().getId()).getWhen().equals(WhenBypass.LOOKING))

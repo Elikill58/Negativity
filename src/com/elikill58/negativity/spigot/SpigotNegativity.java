@@ -85,7 +85,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, essentialsSupport = false,
-			worldGuardSupport = false, gadgetMenuSupport = false;
+			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false;
 	public static Material MATERIAL_CLOSE = Material.REDSTONE;
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
@@ -190,6 +190,7 @@ public class SpigotNegativity extends JavaPlugin {
 		BanManager.registerProcessor("bukkit", new BukkitBanProcessor());
 		if (Bukkit.getPluginManager().getPlugin("Essentials") != null) {
 			essentialsSupport = true;
+			supportedPluginName.add("Essentials");
 		}
 		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
 			worldGuardSupport = true;
@@ -208,6 +209,11 @@ public class SpigotNegativity extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("AdvancedBan") != null) {
 			BanManager.registerProcessor("advancedban", new AdvancedBanProcessor());
 			supportedPluginName.add("AdvancedBan");
+		}
+		
+		if (Bukkit.getPluginManager().getPlugin("ViaVersion") != null) {
+			viaVersionSupport = true;
+			supportedPluginName.add("ViaVersion");
 		}
 		
 		if (supportedPluginName.length() > 0) {

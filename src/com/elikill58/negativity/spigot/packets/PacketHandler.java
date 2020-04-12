@@ -4,11 +4,13 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.listeners.NegativityPacketEvent;
 import com.elikill58.negativity.spigot.utils.Utils;
 
 public abstract class PacketHandler {
@@ -42,6 +44,7 @@ public abstract class PacketHandler {
 				if (!SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId()))
 					return;
 				SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+				Bukkit.getPluginManager().callEvent(new NegativityPacketEvent(np, packet));
 				np.ALL++;
 				switch (packet.getPacketName()) {
 				case "PacketPlayInFlying":

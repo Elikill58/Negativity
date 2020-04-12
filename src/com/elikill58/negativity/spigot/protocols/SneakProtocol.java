@@ -32,7 +32,7 @@ public class SneakProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		if (p.isSneaking() && p.isSprinting() && !p.isFlying() && np.wasSneaking) {
-			if(Version.getVersion().isNewerOrEquals(Version.V1_15)) {
+			if(np.getPlayerVersion().isNewerOrEquals(Version.V1_14)) {
 				Location from = e.getFrom().clone(), to = e.getTo().clone();
 				from.setY(to.getY());
 				if(from.distance(to) > 0.15) {

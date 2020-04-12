@@ -36,6 +36,7 @@ import com.elikill58.negativity.spigot.inventories.CheckMenuInventory;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
+import com.elikill58.negativity.spigot.support.ViaVersionSupport;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -87,6 +88,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public BukkitTask fightTask = null;
 	public int fakePlayerTouched = 0;
 	public long timeStartFakePlayer = 0;
+	private final Version playerVersion;
 
 	public SpigotNegativityPlayer(Player p) {
 		super(p.getUniqueId());
@@ -108,6 +110,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if(file.contains("better-click"))
 			BETTER_CLICK = file.getInt("better-click");
 		initMods(p);
+		playerVersion = SpigotNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : Version.getVersion();
 	}
 
 	public void initMods(Player p) {
@@ -132,6 +135,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public String getIP() {
 		return p.get().getAddress().getAddress().getHostAddress();
+	}
+	
+	public Version getPlayerVersion() {
+		return playerVersion;
 	}
 	
 	public void updateCheckMenu() {

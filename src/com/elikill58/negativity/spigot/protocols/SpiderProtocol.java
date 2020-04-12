@@ -49,7 +49,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		double y = e.getTo().getY() - e.getFrom().getY(), last = np.lastYDiff;
 		np.lastYDiff = y;
 		boolean isAris = ((float) y) == p.getWalkSpeed();
-		if (((y > 0.499 && y < 0.7) || isAris || last == y) && !np.isUsingSlimeBlock) {
+		if (((y > 0.499 && y < 0.7) || isAris || last == y) && !np.isUsingSlimeBlock &&!p.isSprinting()) {
 			int relia = UniversalUtils.parseInPorcent((e.getTo().getY() - e.getFrom().getY()) * 200 + (isAris ? 39 : 0));
 			if (SpigotNegativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this,
 					relia, "Nothing around him. To > From: " + y + " isAris: " + isAris + ", has not stab slairs")

@@ -65,6 +65,7 @@ Translation:
   - sv_SV
   - zh_CN
   - es_ES
+  - vi_VN
   use_db: false # to get the lang
   default: en_US
   # The provider used to get translated messages, useful if you want to customize the way Negativity gets its messages.

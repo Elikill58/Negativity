@@ -1,0 +1,9 @@
+alert: "&a[&2Negativity&a] &c%name%&7 nghi ngờ dùng &c%cheat% &7(&2độ tin cậy: %reliability%%&7) !"
+alert_multiple: "&a[&2Negativity&a] &c%name%&7 nghi ngờ dùng &c%cheat% %nb% times &7(&2độ tin cậy: %reliability%%&7) !"
+alert_hover: "&6Độ tin cậy: %reliability%%\nPing: %ping%"
+alert_tp_info: "&7Bấm để dịch chuyển đến &o%playername%"
+report: "&a[&2Negativity&a] &c%name% &7đã được báo cáo bởi &c%report% &7vì &c%reason%"
+report_hover: "&7Bấm để dịch chuyển đến &o%playername%"
+ban:
+  kick_time: "&cCấm vì %reason% đến %time% bởi %by%."
+  kick_def: "&cCấm dứt khoát vì %reason% bởi %by%."

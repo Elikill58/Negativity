@@ -110,10 +110,10 @@ public class SpeedProtocol extends Cheat {
 						Vector3d toPosition = e.getToTransform().getPosition();
 						Vector3d toVec = new Vector3d(toPosition.getX(), fromPosition.getX(), toPosition.getZ());
 						double distanceWithoutY = toVec.distance(fromPosition);
-						if (distance > 0.4 && (distance > (distanceWithoutY * 2))) {
+						if (distance > 0.4 && (distance > (distanceWithoutY * 2)) && np.getFallDistance() < 1) {
 							np.SPEED_NB++;
 							if (np.SPEED_NB > 4)
-								mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.SPEED), UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "HighSpeed - Block under: " + under.getId() + ", Speed: " + distance + ", nb: " + np.SPEED_NB);
+								mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.SPEED), UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "HighSpeed - Block under: " + under.getId() + ", Speed: " + distance + ", nb: " + np.SPEED_NB, ", fallDistance: " + np.getFallDistance());
 						} else
 							np.SPEED_NB = 0;
 					}

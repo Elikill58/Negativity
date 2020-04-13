@@ -486,8 +486,8 @@ public class SpongeNegativity {
 				|| np.isFreeze)
 			return false;
 		Sponge.getEventManager().post(new PlayerCheatEvent(type, p, c, reliability, hover_proof, ping));
-		if (hasBypass && Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p),
-				"Permissions.bypass." + c.getKey().toLowerCase())) {
+		if (hasBypass && Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "bypass.all") ||
+				Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase())) {
 			PlayerCheatEvent.Bypass bypassEvent = new PlayerCheatEvent.Bypass(type, p, c, reliability, hover_proof, ping);
 			Sponge.getEventManager().post(bypassEvent);
 			if (!bypassEvent.isCancelled())

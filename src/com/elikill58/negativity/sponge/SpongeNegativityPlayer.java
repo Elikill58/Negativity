@@ -84,7 +84,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public String LAST_OTHER_KEEP_ALIVE;
 	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false,
 			isFreeze = false, isUsingSlimeBlock = false, already_blink = false, wasSneaking = false,
-			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false;
+			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false, flyNotMovingY = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public ItemType eatMaterial = ItemTypes.AIR;
 	public Path proofFile;

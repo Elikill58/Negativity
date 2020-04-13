@@ -86,7 +86,7 @@ public class SpeedProtocol extends Cheat {
 			Location<World> from = e.getFromTransform().getLocation(), to = e.getToTransform().getLocation();
 			if (!(from.getY() < to.getY() || p.isOnGround() || fallDistance > 0.0F || p.get(FoodData.class).get().foodLevel().get() < 6
 					|| downName.contains("SLAB") || downName.contains("STEP") || downName.contains("SPONGE")
-					|| downName.contains("SLIME_BLOCK") || downName.contains("ICE") || downName.contains("ICE"))) {
+					|| downName.contains("SLIME_BLOCK") || downName.contains("ICE") || downName.contains("SCAFFOLD"))) {
 				double f = (from.getY() - to.getY()) / 2.0D;
 				if (!(F_LIST.contains(f) || (f < 0.47D && f > 0.46D) || (f < 0.02D && f > 0.01D)) && !p.getLocation().getBlock().getType().getId().contains("WATER")
 						&& !downName.contains("WATER") && !downName.contains("WEB") && !np.isUsingSlimeBlock) {

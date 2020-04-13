@@ -44,7 +44,12 @@ public abstract class PacketHandler {
 				if (!SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId()))
 					return;
 				SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-				Bukkit.getPluginManager().callEvent(new NegativityPacketEvent(np, packet));
+				Bukkit.getScheduler().runTask(pl, new Runnable() {
+					@Override
+					public void run() {
+						Bukkit.getPluginManager().callEvent(new NegativityPacketEvent(np, packet));
+					}
+				});
 				np.ALL++;
 				switch (packet.getPacketName()) {
 				case "PacketPlayInFlying":

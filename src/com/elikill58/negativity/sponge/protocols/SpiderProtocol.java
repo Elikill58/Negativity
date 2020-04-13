@@ -70,7 +70,7 @@ public class SpiderProtocol extends Cheat {
 		np.lastYDiff = y;
 		boolean isAris = y == p.get(Keys.WALKING_SPEED).get();
 		if (((y > 0.499 && y < 0.7) || isAris || last == y) && !np.isUsingSlimeBlock) {
-			int relia = (int) (y * 160) + np.getWarn(this);
+			int relia = (int) (y * 160);
 			if (isAris) {
 				relia += 39;
 			}

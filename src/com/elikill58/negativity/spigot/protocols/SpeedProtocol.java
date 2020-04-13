@@ -86,7 +86,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 			String downName = down.getBlock().getType().name();
 			if (!(from.getY() < to.getY() || p.isOnGround() || p.getFallDistance() > 0.0F || p.getFoodLevel() < 6
 					|| downName.contains("SLAB") || downName.contains("STEP") || downName.contains("SPONGE")
-					|| downName.contains("SLIME_BLOCK") || downName.contains("ICE"))) {
+					|| downName.contains("SLIME_BLOCK") || downName.contains("ICE") || downName.contains("SCAFFOLD"))) {
 				double f = (e.getFrom().getY() - e.getTo().getY()) / 2.0D;
 				if (!(F_LIST.contains(f) || (f < 0.47D && f > 0.46D) || (f < 0.02D && f > 0.01D)) && !p.getLocation().getBlock().getType().name().contains("WATER") && !downName.contains("WATER") && !downName.contains("WEB") &&!np.isUsingSlimeBlock) {
 					mayCancel = SpigotNegativity.alertMod(

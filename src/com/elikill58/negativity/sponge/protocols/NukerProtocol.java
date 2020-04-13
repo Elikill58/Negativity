@@ -1,19 +1,22 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.spongepowered.api.block.BlockSnapshot;
-import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.property.block.SolidCubeProperty;
-import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
+import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentTypes;
-import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.util.blockray.BlockRay;
 import org.spongepowered.api.util.blockray.BlockRayHit;
 import org.spongepowered.api.world.World;
@@ -56,7 +59,7 @@ public class NukerProtocol extends Cheat {
 			}
 		}
 		long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
-		if(dis < 50 && breakedBlock.getProperty(SolidCubeProperty.class).get().getValue() && !hasDigSpeedEnchant(p.getItemInHand(HandTypes.MAIN_HAND).orElse(null)) && !hasDigSpeedEnchant(p.getItemInHand(HandTypes.OFF_HAND).orElse(null))) {
+		if(dis < 50 && breakedBlock.getProperty(SolidCubeProperty.class).get().getValue() && !hasDigSpeedEnchant(e.getContext().get(EventContextKeys.USED_ITEM).orElse(null))) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis),
 					"Type: " + breakedBlock.getState().getType().getName() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis + " (ping: " + Utils.getPing(p) + "). Warn: " + np.getWarn(this));
 			if(isSetBack() && mayCancel)
@@ -64,8 +67,20 @@ public class NukerProtocol extends Cheat {
 		}
 		np.LAST_BLOCK_BREAK = temp;
 	}
-	
-	public static boolean hasDigSpeedEnchant(ItemStack item) {
-		return item != null && item.get(EnchantmentData.class).get().contains(Enchantment.of(EnchantmentTypes.EFFICIENCY, 1));
+
+	public static boolean hasDigSpeedEnchant(ItemStackSnapshot item) {
+		if (item == null) {
+			return false;
+		}
+
+		Optional<List<Enchantment>> enchantments = item.get(Keys.ITEM_ENCHANTMENTS);
+		if (enchantments.isPresent()) {
+			for (Enchantment enchantment : enchantments.get()) {
+				if (enchantment.getType().equals(EnchantmentTypes.EFFICIENCY)) {
+					return enchantment.getLevel() > 2;
+				}
+			}
+		}
+		return false;
 	}
 }

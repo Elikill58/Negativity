@@ -59,6 +59,10 @@ negativity:
     help:
       - "/negativity verif <joueur> [cheats...] : Démarrer les vérifications (Toutes si aucune n'est précisé)"
       - "/negativity <joueur> : Pour voir les informations a propos de ce joueur"
+messages_update:
+  dir_creation_failed: "&cImpossible de créer le dossier '%dir%' ou son backup: %message%"
+  file_update_failed: "&cImpossible de mettre à jour les messages de %language%: %message%"
+  update_done: "&eLes messages ont été mis à jour et rechargés"
 inventory:
   close: "Fermer"
   back: "Retour"

@@ -1,3 +1,5 @@
+not_permission: "&cYou don't have permission to do that."
+
 alert: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% &7(&2Точность: %reliability%%&7)!"
 alert_multiple: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% %nb% время &7(&2Точность: %reliability%%&7)!"
 alert_hover: "&6Точность: %reliability%\nПинг: %ping%"
@@ -7,3 +9,8 @@ report_hover: "&7Click to teleport to &c%playername%"
 ban:
   kick_time: "&cБан за %reason% на %time% от %by%."
   kick_def: "&cБан за %reason% от %by%."
+
+messages_update:
+  dir_creation_failed: "&cFailed to create '%dir%' or its backup directory: %message%"
+  file_update_failed: "&cFailed to update messages for %language%: %message%"
+  update_done: "&eMessages have been updated and reloaded"

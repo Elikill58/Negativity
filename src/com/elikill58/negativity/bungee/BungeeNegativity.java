@@ -16,6 +16,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.io.ByteStreams;
 
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.plugin.PluginManager;
 import net.md_5.bungee.config.Configuration;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
@@ -31,11 +32,16 @@ public class BungeeNegativity extends Plugin {
 	@Override
 	public void onEnable() {
 		instance = this;
-		
+
 		new Metrics(this);
 		enableConfig();
+
 		getProxy().registerChannel(NegativityMessagesManager.CHANNEL_ID);
-		getProxy().getPluginManager().registerListener(this, new NegativityListener());
+		PluginManager pluginManager = getProxy().getPluginManager();
+		pluginManager.registerListener(this, new NegativityListener());
+		pluginManager.registerCommand(this, new BNegativityCommand());
+		pluginManager.registerListener(this, new BNegativityCommand.TabCompleter());
+
 		Adapter.setAdapter(new BungeeAdapter(this, CONFIG));
 		UniversalUtils.init();
 		Stats.loadStats();

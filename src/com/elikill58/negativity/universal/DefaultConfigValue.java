@@ -84,6 +84,8 @@ public class DefaultConfigValue {
 		BOOLEANS.put("Permissions.defaultActive", true);
 		BOOLEANS.put("Permissions.canBeHigher", false);
 
+		STRINGS.put("Permissions.admin.default", "negativity.admin");
+		STRINGS.put("Permissions.admin.custom", "ADMIN");
 		STRINGS.put("Permissions.showAlert.default", "negativity.alert");
 		STRINGS.put("Permissions.showAlert.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.showReport.default", "negativity.seereport");

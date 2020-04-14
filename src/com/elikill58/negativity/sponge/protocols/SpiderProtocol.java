@@ -98,7 +98,7 @@ public class SpiderProtocol extends Cheat {
 		Location<World> loc = p.getLocation();
 		if (!np.hasDetectionActive(this) || p.get(Keys.IS_FLYING).orElse(false))
 			return;
-		if (hasBypassBlockAround(loc))
+		if (hasBypassBlockAround(loc) || np.hasExtended(loc, "STAIRS"))
 			return;
 
 		double y = e.getToTransform().getPosition().getY() - e.getFromTransform().getPosition().getY();

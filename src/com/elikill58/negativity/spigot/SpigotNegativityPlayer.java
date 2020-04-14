@@ -453,6 +453,49 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return false;
 	}
 
+	public boolean hasExtended(Location loc, String m) {
+		Location tempLoc = loc.clone();
+		if (loc.getBlock().getType().name().contains(m))
+			return true;
+		if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
+			return true;
+		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
+			return true;
+		if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
+			return true;
+		if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
+			return true;
+		if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
+			return true;
+		if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
+			return true;
+		if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
+			return true;
+		if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
+			return true;
+		if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
+			return true;
+		loc = tempLoc;
+		if (loc.add(0, 0, 2).getBlock().getType().name().contains(m))
+			return true;
+		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
+			return true;
+		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
+			return true;
+		for (int i = 0; i < 4; i++)
+			if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
+				return true;
+		for (int i = 0; i < 4; i++)
+			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
+				return true;
+		for (int i = 0; i < 4; i++)
+			if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
+				return true;
+		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
+			return true;
+		return false;
+	}
+
 	public boolean hasOtherThan(Location loc, Material m) {
 		return hasOtherThan(loc, m.name());
 	}

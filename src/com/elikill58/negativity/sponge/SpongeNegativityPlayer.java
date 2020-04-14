@@ -461,6 +461,49 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		return false;
 	}
 
+	public boolean hasExtended(Location<World> loc, String m) {
+		Location<World> tempLoc = loc.copy();
+		if (loc.getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(0, 0, 1).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(0, 0, -1).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(0, 0, -1).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(0, 0, -1).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(-1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(-1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(0, 0, 1).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(0, 0, 1).getBlock().getType().getId().contains(m))
+			return true;
+		loc = tempLoc;
+		if (loc.add(0, 0, 2).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		for (int i = 0; i < 4; i++)
+			if (loc.add(0, 0, -1).getBlock().getType().getId().contains(m))
+				return true;
+		for (int i = 0; i < 4; i++)
+			if (loc.add(-1, 0, 0).getBlock().getType().getId().contains(m))
+				return true;
+		for (int i = 0; i < 4; i++)
+			if (loc.add(0, 0, 1).getBlock().getType().getId().contains(m))
+				return true;
+		if (loc.add(1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		return false;
+	}
+
 	public float getFallDistance() {
 		return p.getOrCreate(FallDistanceData.class).get().fallDistance().get();
 	}

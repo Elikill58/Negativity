@@ -62,10 +62,9 @@ public class SpeedProtocol extends Cheat implements Listener {
 			np.BYPASS_SPEED--;
 			return;
 		}
-		if (np.has(p.getLocation().getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS")
-				|| np.has(p.getLocation().add(0, 1, 0).getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS"))
+		if (np.has(p.getLocation().getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| np.has(p.getLocation().add(0, 1, 0).getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
-		Location down = p.getLocation().clone().subtract(0, 1, 0);
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		boolean mayCancel = false;
 		if (p.isOnGround()) {
@@ -83,10 +82,11 @@ public class SpeedProtocol extends Cheat implements Listener {
 			for (Entity entity : p.getNearbyEntities(5, 5, 5))
 				if (entity instanceof Creeper || entity.getType().equals(EntityType.CREEPER))
 					return;
+			/*Location down = p.getLocation().clone().subtract(0, 1, 0);
 			String downName = down.getBlock().getType().name();
 			if (!(from.getY() < to.getY() || p.isOnGround() || p.getFallDistance() > 0.0F || p.getFoodLevel() < 6
 					|| downName.contains("SLAB") || downName.contains("STEP") || downName.contains("SPONGE")
-					|| downName.contains("SLIME_BLOCK") || downName.contains("ICE") || downName.contains("SCAFFOLD"))) {
+					|| downName.contains("SLIME_BLOCK") || downName.contains("ICE") || downName.contains("SCAFFOLD") || downName.contains("CARPET"))) {
 				double f = (e.getFrom().getY() - e.getTo().getY()) / 2.0D;
 				if (!(F_LIST.contains(f) || (f < 0.47D && f > 0.46D) || (f < 0.02D && f > 0.01D)) && !p.getLocation().getBlock().getType().name().contains("WATER") &&!np.isUsingSlimeBlock) {
 					mayCancel = SpigotNegativity.alertMod(
@@ -95,7 +95,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 							"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed() + " Distance shorted: " + f,
 							"Distance: " + f, "Distance: " + f);
 				}
-			}
+			}*/
 			if (!mayCancel) {
 				if (y >= 0.85D) {
 					mayCancel = SpigotNegativity.alertMod(
@@ -127,7 +127,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 			e.setCancelled(true);
 	}
 
-	private final List<Double> F_LIST = Arrays.asList(0.03920000076293961D, 0.03920000076293917D, 0.0D,
+	public final List<Double> F_LIST = Arrays.asList(0.03920000076293961D, 0.03920000076293917D, 0.0D,
 			0.03276131020250217D, 0.028767927000034277D, 0.07632600455671046D, 0.013803173459940865D,
 			0.018122953979760492D, 0.018122953979760492D, 0.03918750000000015D, 0.032761310202502614D,
 			0.02619121792176493D, 0.040443614330228694D, 0.013746000988483775D, 0.017507033767796276D,

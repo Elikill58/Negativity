@@ -105,7 +105,8 @@ public class FlyProtocol extends Cheat {
 		
 		Vector3d to = new Vector3d(toPosition.getX(), fromPosition.getX(), toPosition.getZ());
 		double distanceWithoutY = to.distance(fromPosition);
-		if(distanceWithoutY == distance && !p.isOnGround() && distance != 0 && p.getLocation().add(Vector3i.UNIT_Y).getBlockType().equals(BlockTypes.AIR)) {
+		if(distanceWithoutY == distance && !p.isOnGround() && distance != 0 && p.getLocation().add(Vector3i.UNIT_Y).getBlockType().equals(BlockTypes.AIR)
+				&& p.getLocation().getBlockType().getId().contains("WATER")) {
 			if(np.flyNotMovingY)
 				mayCancel = SpongeNegativity.alertMod(
 						np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, 98,

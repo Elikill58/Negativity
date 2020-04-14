@@ -93,7 +93,7 @@ inventory {
   }
   detection {
     name_inv: "Phát hiện hoạt động:"
-    no_active: "Ko có phát hiện hoạt động napf cho %name%"
+    no_active: "Ko có phát hiện hoạt động nào cho %name%"
   }
   alerts {
     item_name: "Cảnh báo cho %exact_name% : %warn%"

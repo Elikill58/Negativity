@@ -5,6 +5,7 @@ import java.text.NumberFormat;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
@@ -57,7 +58,7 @@ public class ForceFieldProtocol extends Cheat {
 
 		double distance = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());
 		double allowedReach = Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0);
-		if (distance > allowedReach && !(usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW)) {
+		if (distance > allowedReach && !(usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW) && e.getTargetEntity().getType().equals(EntityTypes.ENDER_DRAGON)) {
 			SpongeNegativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(distance * 2 * 10),
 					"Big distance with: " + e.getTargetEntity().getType().getName().toLowerCase() + ". Exact distance: "

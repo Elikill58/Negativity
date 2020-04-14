@@ -7,6 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -55,7 +56,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		tempLoc.setY(p.getLocation().getY());
 		double dis = tempLoc.distance(p.getLocation());
 		if (dis > Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach")
-				&& !p.getItemInHand().getType().equals(Material.BOW)) {
+				&& !p.getItemInHand().getType().equals(Material.BOW) &&!e.getEntityType().equals(EntityType.ENDER_DRAGON)) {
 			mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns."

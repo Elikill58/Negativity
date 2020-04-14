@@ -41,7 +41,9 @@ public class SpeedProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
-
+		if(p.hasPotionEffect(PotionEffectType.SPEED))
+			return;
+		
 		np.MOVE_TIME++;
 		if (np.MOVE_TIME > 60) {
 			boolean b = SpigotNegativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
@@ -53,8 +55,8 @@ public class SpeedProtocol extends Cheat implements Listener {
 
 		Location from = e.getFrom().clone(), to = e.getTo().clone();
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)
-				|| p.getEntityId() == 100 || p.getVehicle() != null || p.getAllowFlight() || p.getWalkSpeed() > 2.0F
-				|| p.getFlySpeed() > 3.0F || p.hasPotionEffect(PotionEffectType.SPEED)
+				|| p.getEntityId() == 100 || p.getVehicle() != null || p.getAllowFlight()
+				|| p.getFlySpeed() > 3.0F || p.getWalkSpeed() > 2.0F
 				|| np.hasPotionEffect("DOLPHINS_GRACE") || p.isInsideVehicle() || np.hasElytra()
 				|| hasEnderDragonAround(p) || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;

@@ -1,7 +1,6 @@
 package com.elikill58.negativity.spigot.protocols;
 
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -33,7 +32,7 @@ public class SneakProtocol extends Cheat implements Listener {
 			return;
 		if (p.isSneaking() && p.isSprinting() && !p.isFlying() && np.wasSneaking) {
 			if(np.getPlayerVersion().isNewerOrEquals(Version.V1_14)) {
-				Location from = e.getFrom().clone(), to = e.getTo().clone();
+				/*Location from = e.getFrom().clone(), to = e.getTo().clone();
 				from.setY(to.getY());
 				if(from.distance(to) > 0.15) {
 					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (Utils.getPing(p) / 10)), "Sneaking, sprinting and not flying 1.15");
@@ -41,7 +40,7 @@ public class SneakProtocol extends Cheat implements Listener {
 						e.setCancelled(true);
 						p.setSprinting(false);
 					}
-				}
+				}*/
 			} else {
 				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (Utils.getPing(p) / 10)), "Sneaking, sprinting and not flying");
 				if(mayCancel && isSetBack()) {

@@ -6,7 +6,6 @@ import java.util.List;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.data.manipulator.mutable.entity.FoodData;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
@@ -81,7 +80,7 @@ public class SpeedProtocol extends Cheat {
 			for(Entity et : p.getNearbyEntities(5))
 				if(et.getType().equals(EntityTypes.CREEPER))
 					return;
-			float fallDistance = np.getFallDistance();
+			/*float fallDistance = np.getFallDistance();
 			String downName = p.getLocation().sub(0, 1, 0).getBlock().getType().getId();
 			Location<World> from = e.getFromTransform().getLocation(), to = e.getToTransform().getLocation();
 			if (!(from.getY() < to.getY() || p.isOnGround() || fallDistance > 0.0F || p.get(FoodData.class).get().foodLevel().get() < 6
@@ -96,7 +95,7 @@ public class SpeedProtocol extends Cheat {
 							"Player NOT in ground. WalkSpeed: " + walkSpeed + " Distance shorted: " + f,
 							"Distance: " + f, "Distance: " + f);
 				}
-			}
+			}*/
 			if(!mayCancel) {
 				if(moveY >= 0.85D) {
 					mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(moveY * 100 * 2), proof,
@@ -166,7 +165,7 @@ public class SpeedProtocol extends Cheat {
 		return true;
 	}
 
-	private final List<Double> F_LIST = Arrays.asList(0.03920000076293961D, 0.03920000076293917D, 0.0D,
+	public final List<Double> F_LIST = Arrays.asList(0.03920000076293961D, 0.03920000076293917D, 0.0D,
 			0.03276131020250217D, 0.028767927000034277D, 0.07632600455671046D, 0.013803173459940865D,
 			0.018122953979760492D, 0.018122953979760492D, 0.03918750000000015D, 0.032761310202502614D,
 			0.02619121792176493D, 0.040443614330228694D, 0.013746000988483775D, 0.017507033767796276D,

@@ -154,6 +154,7 @@ public class SpongeNegativity {
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
 		BanManager.registerProcessor("sponge", new SpongeBanProcessor());
+		Perm.registerChecker(Perm.PLATFORM_CHECKER, new SpongePermissionChecker());
 
 		if(SpongeUpdateChecker.ifUpdateAvailable()) {
 			getLogger().info("New version available (" + SpongeUpdateChecker.getVersionString() + ") : " + SpongeUpdateChecker.getDownloadUrl());

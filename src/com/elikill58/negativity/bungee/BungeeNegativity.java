@@ -11,6 +11,7 @@ import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.BungeeAdapter;
+import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.io.ByteStreams;
@@ -44,6 +45,9 @@ public class BungeeNegativity extends Plugin {
 
 		Adapter.setAdapter(new BungeeAdapter(this, CONFIG));
 		UniversalUtils.init();
+
+		Perm.registerChecker(Perm.PLATFORM_CHECKER, new BungeePermissionChecker());
+
 		Stats.loadStats();
 		Stats.updateStats(StatsType.ONLINE, 1 + "");
 		try {

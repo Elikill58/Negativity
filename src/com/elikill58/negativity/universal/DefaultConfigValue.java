@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal;
 import java.util.HashMap;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class DefaultConfigValue {
 
@@ -80,8 +81,7 @@ public class DefaultConfigValue {
 		STRINGS.put("items.COMPASS.when", "always");
 		STRINGS.put("items.COMPASS.cheats", "speed,fly");
 
-		BOOLEANS.put("Permissions.defaultActive", true);
-		BOOLEANS.put("Permissions.canBeHigher", false);
+		STRINGS.put("Permissions.checker", Perm.PLATFORM_CHECKER);
 
 		STRINGS.put("Permissions.admin.default", "negativity.admin");
 		STRINGS.put("Permissions.admin.custom", "ADMIN");

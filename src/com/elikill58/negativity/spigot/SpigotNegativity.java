@@ -214,7 +214,9 @@ public class SpigotNegativity extends JavaPlugin {
 			viaVersionSupport = true;
 			supportedPluginName.add("ViaVersion");
 		}
-		
+
+		Perm.registerChecker(Perm.PLATFORM_CHECKER, new BukkitPermissionChecker());
+
 		if (supportedPluginName.length() > 0) {
 			getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
 		}

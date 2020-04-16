@@ -1,94 +1,36 @@
 package com.elikill58.negativity.universal.permissions;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map;
 
-import com.elikill58.negativity.universal.Database;
+import javax.annotation.Nullable;
+
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Perm {
 
-	private static final HashMap<Object, Object> CACHE = new HashMap<>();
-	public static boolean canBeHigher = false, defaultActive = false;
+	public static final String PLATFORM_CHECKER = "platform";
+
+	private static String checkerId = PLATFORM_CHECKER;
+	private static final Map<String, PermissionChecker> checkers = new HashMap<>();
 
 	public static boolean hasPerm(NegativityPlayer np, String perm) {
-		try {
-			String defaultPerm = Adapter.getAdapter().getStringInConfig("Permissions." + perm + ".default");
-			if(defaultActive) {
-				return !(defaultPerm.equalsIgnoreCase("")) && (np.hasDefaultPermission(defaultPerm) || np.isOp());
-			}
-			if (!Database.hasCustom)
-				return false;
-			if (CACHE.containsKey(np.getPlayer()))
-				return hasPermLocal(np, perm, CACHE.get(np.getPlayer()));
-			Object value = null;
-			try {
-				Connection con = Database.getConnection();
-				PreparedStatement stm = con.prepareStatement("SELECT * FROM " + Database.table_perm + " WHERE " + Database.column_uuid + " = ?");
-				stm.setString(1, np.getAccount().getUUID());
-
-				ResultSet result = stm.executeQuery();
-				if (result.next()) {
-					value = result.getObject(Database.column_perm);
-					if (Database.saveInCache)
-						CACHE.put(np.getPlayer(), value);
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			if(value == null)
-				return false;
-			return hasPermLocal(np, perm, value);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return false;
-		}
+		PermissionChecker checker = getActiveChecker();
+		return checker != null && checker.hasPermission(np, perm);
 	}
 
-	private static boolean hasPermLocal(NegativityPlayer np, String perm, Object value) throws Exception {
-		String custom = Adapter.getAdapter().getStringInConfig("Permissions." + perm + ".custom");
-		if (value instanceof Integer || value instanceof Long) {
-			int l = (int) value;
-			if (canBeHigher) {
-				if (UniversalUtils.isLong(custom)) {
-					if (l > Long.parseLong(custom))
-						return true;
-					else
-						return false;
-				} else {
-					System.out.println("[Negativity] Error while getting permission. " + custom
-							+ " isn't a valid number. Please, check the configuration.");
-				}
-			} else {
-				List<Integer> i = new ArrayList<>();
-				for (String s : custom.split(","))
-					if (UniversalUtils.isInteger(s))
-						i.add(Integer.parseInt(s));
-				if (i.contains(l))
-					return true;
-				else
-					return false;
-			}
-		} else
-			for (String s : custom.split(","))
-				if (s.equalsIgnoreCase((String) value))
-					return true;
-		return false;
+	@Nullable
+	public static PermissionChecker getActiveChecker() {
+		return checkers.get(checkerId);
+	}
+
+	public static void registerChecker(String checkerId, PermissionChecker checker) {
+		checkers.put(checkerId, checker);
 	}
 
 	public static void init() {
 		Adapter store = Adapter.getAdapter();
-		try {
-			defaultActive = store.getBooleanInConfig("Permissions.defaultActive");
-			canBeHigher = store.getBooleanInConfig("Permissions.canBeHigher");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		checkerId = store.getStringInConfig("Permissions.checker");
 	}
 }

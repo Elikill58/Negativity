@@ -330,6 +330,7 @@ public class SpongeNegativity {
 			}
 			e.setCancelled(true);
 			e.setMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%" , formattedExpiration, "%by%", activeBan.getBannedBy()));
+			Adapter.getAdapter().invalidateAccount(account.getPlayerId());
 		}
 	}
 

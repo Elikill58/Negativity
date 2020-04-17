@@ -536,29 +536,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		return p.getOrCreate(FlyingData.class).get().flying().get();
 	}
 
-	public boolean has(Location<?> loc, ItemType... ms) {
-		List<ItemType> m = Arrays.asList(ms);
-		if (m.contains(loc.add(0, 0, 1).getBlock().getType().getItem().get()))
-			return true;
-		if (m.contains(loc.add(1, 0, 0).getBlock().getType().getItem().get()))
-			return true;
-		if (m.contains(loc.add(0, 0, -1).getBlock().getType().getItem().get()))
-			return true;
-		if (m.contains(loc.add(0, 0, -1).getBlock().getType().getItem().get()))
-			return true;
-		if (m.contains(loc.add(0, 0, -1).getBlock().getType().getItem().get()))
-			return true;
-		if (m.contains(loc.add(-1, 0, 0).getBlock().getType().getItem().get()))
-			return true;
-		if (m.contains(loc.add(-1, 0, 0).getBlock().getType().getItem().get()))
-			return true;
-		if (m.contains(loc.add(0, 0, 1).getBlock().getType().getItem().get()))
-			return true;
-		if (m.contains(loc.add(0, 0, 1).getBlock().getType().getItem().get()))
-			return true;
-		return false;
-	}
-
 	public boolean has(Location<?> loc, String... ms) {
 		List<String> m = Arrays.asList(ms);
 		if (m.contains(loc.add(0, 0, 1).getBlock().getType().getId()))
@@ -580,16 +557,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		if (m.contains(loc.add(0, 0, 1).getBlock().getType().getId()))
 			return true;
 		return false;
-	}
-
-	public void spawnCircle(double d, Location<?> loc, Player p) {
-		for (double u = 0; u < 360; u += d) {
-			double z = Math.cos(u) * d, x = Math.sin(u) * d;
-			loc.add(x, 1, z);
-			// EFFECT
-			// p.getWorld().playEffect(loc, Effect.TILE_DUST, 1);
-			loc.sub(x, 1, z);
-		}
 	}
 
 	public boolean isBlock(ItemType m) {

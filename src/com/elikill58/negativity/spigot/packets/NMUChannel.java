@@ -2,7 +2,6 @@ package com.elikill58.negativity.spigot.packets;
 
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.spigot.packets.ChannelInjector.ChannelWrapper;
 import com.elikill58.negativity.spigot.packets.PacketAbstract.IPacketListener;
 import com.elikill58.negativity.spigot.utils.Utils;
 
@@ -75,23 +74,12 @@ public class NMUChannel extends ChannelAbstract {
 			this.owner = player;
 		}
 
-		public ChannelHandler(ChannelWrapper<?> channelWrapper) {
-			this.owner = channelWrapper;
-		}
-
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
 			Object pckt = msg;
 			if (Class.forName("net.minecraft.server." + Utils.VERSION + ".Packet").isAssignableFrom(msg.getClass()))
 				pckt = onPacketReceive(this.owner, msg);
 			super.channelRead(ctx, pckt);
-		}
-	}
-
-	class NMUChannelWrapper extends ChannelWrapper<net.minecraft.util.io.netty.channel.Channel> {
-
-		public NMUChannelWrapper(net.minecraft.util.io.netty.channel.Channel channel) {
-			super(channel);
 		}
 	}
 }

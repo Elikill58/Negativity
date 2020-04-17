@@ -33,7 +33,7 @@ public abstract class NegativityAccountStorage {
 	}
 
 	public static NegativityAccountStorage getStorage() {
-		return storages.get(storageId);
+		return storages.getOrDefault(storageId, VoidAccountStorage.INSTANCE);
 	}
 
 	public static void register(String id, NegativityAccountStorage storage) {

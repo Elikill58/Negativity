@@ -181,11 +181,7 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 	@Nonnull
 	@Override
 	public NegativityAccount getNegativityAccount(UUID playerId) {
-		NegativityAccountStorage storage = NegativityAccountStorage.getStorage();
-		if (storage != null) {
-			return accountsCache.computeIfAbsent(playerId, storage::getOrCreateAccount);
-		}
-		return new NegativityAccount(playerId);
+		return accountsCache.computeIfAbsent(playerId, NegativityAccountStorage.getStorage()::getOrCreateAccount);
 	}
 
 	@Nullable

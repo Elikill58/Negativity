@@ -241,11 +241,7 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 
 		@Override
 		public NegativityAccount load(@Nonnull UUID playerId) {
-			NegativityAccountStorage storage = NegativityAccountStorage.getStorage();
-			if (storage != null) {
-				return storage.getOrCreateAccount(playerId);
-			}
-			return new NegativityAccount(playerId);
+			return NegativityAccountStorage.getStorage().getOrCreateAccount(playerId);
 		}
 	}
 

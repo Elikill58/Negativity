@@ -9,7 +9,7 @@
 #       - my Discord server: https://discord.gg/KHRVTX2           #
 #               - Mail: arpetzouille@gmail.com                    #
 #                   - SpigotMC: Elikill58                         #
-#                  - Minecraft.fr: Elikill                        # 
+#                  - Minecraft.fr: Elikill                        #
 #                                                                 #
 ###################################################################
 
@@ -44,6 +44,9 @@ Permissions:
   showAlert:
     default: "negativity.alert"
     custom: "MOD,ADMIN"
+  admin:
+    default: "negativity.admin"
+    custom: "ADMIN"
   showReport:
     default: "negativity.seereport"
     custom: "MOD,ADMIN"
@@ -51,7 +54,7 @@ Permissions:
   notBanned:
     default: "negativity.notbanned"
     custom: "ADMIN"
-    
+
 Translation:
   active: false # enable or disable the translation
   lang_available:

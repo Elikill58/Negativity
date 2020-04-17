@@ -1,3 +1,5 @@
+not_permission: "&cYou don't have permission to do that."
+
 alert: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% &7(&2Kans: %reliability%%&7) !"
 alert_multiple: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% %nb% tijd &7(&2Kans: %reliability%%&7)!"
 alert_hover: "&6Kans: %reliability%\nPing: %ping%"
@@ -18,3 +20,8 @@ ban:
   #
   - "/ban <speler> <def(true/false) | tijd (bv: 2h)> <reden> : Verban een speler"
   well_ban: "&a[&2Negativity&a]&c %name% is succesvol verbannen voor %reason%."
+
+messages_update:
+  dir_creation_failed: "&cFailed to create '%dir%' or its backup directory: %message%"
+  file_update_failed: "&cFailed to update messages for %language%: %message%"
+  update_done: "&eMessages have been updated and reloaded"

@@ -1,3 +1,5 @@
+not_permission: "&cVous n'avez pas la permission de faire ceci."
+
 alert: "&a[&2Negativity&a] &c%name%&7 semble utiliser &c%cheat% &7(&2Fiabilité: %reliability%%&7) !"
 alert_multiple: "&a[&2Negativity&a] &c%name%&7 semble utiliser &c%cheat% %nb% fois &7(&2Fiabilité: %reliability%%&7) !"
 alert_hover: "&6Fiabilité: %reliability%\nPing: %ping%"
@@ -7,3 +9,8 @@ report_hover: "&7Cliquez pour vous téléporter à &c%playername%"
 ban:
   kick_time: "&cBanni pour %reason% jusqu'au %time% par %by%."
   kick_def: "&cBanni definitivement pour %reason% par %by%."
+
+messages_update:
+  dir_creation_failed: "&cImpossible de créer le dossier '%dir%' ou son backup: %message%"
+  file_update_failed: "&cImpossible de mettre à jour les messages de %language%: %message%"
+  update_done: "&eLes messages ont été mis à jour et rechargés"

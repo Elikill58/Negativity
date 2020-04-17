@@ -45,25 +45,26 @@ public class VelocityNegativity {
     @Inject
     public VelocityNegativity(ProxyServer server, Logger logger) {
 		instance = this;
-		
+
         this.server = server;
         this.logger = logger;
     }
-    
+
     public ProxyServer getServer() {
     	return server;
     }
-    
+
     public Logger getLogger() {
     	return logger;
     }
-    
+
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
     	getLogger().info("Loading Negativity");
 		enableConfig();
 	    server.getEventManager().register(this, new NegativityListener());
-		server.getChannelRegistrar().register(NEGATIVITY_CHANNEL_ID);
+	    server.getChannelRegistrar().register(NEGATIVITY_CHANNEL_ID);
+	    server.getCommandManager().register(new VNegativityCommand(), "vnegativity");
 
 		Adapter.setAdapter(new VelocityAdapter(this, CONFIG));
 		UniversalUtils.init();
@@ -82,7 +83,7 @@ public class VelocityNegativity {
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
 	}
-    
+
 	protected boolean enableConfig() {
 		File folder = getDataFolder();
 		folder.mkdir();
@@ -103,11 +104,11 @@ public class VelocityNegativity {
 			return false;
 		}
 	}
-    
+
     public final InputStream getResourceAsStream(final String name) {
         return this.getClass().getClassLoader().getResourceAsStream(name);
     }
-    
+
     public final File getDataFolder() {
         return new File("./plugins/Negativity");
     }

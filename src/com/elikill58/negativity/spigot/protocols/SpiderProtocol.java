@@ -104,11 +104,14 @@ public class SpiderProtocol extends Cheat implements Listener {
 	}
 
 	public boolean has(Location loc, String... m) {
-		String b1 = loc.clone().add(0, 0, 1).getBlock().getType().name(),
+		String b = loc.getBlock().getType().name(),
+				b1 = loc.clone().add(0, 0, 1).getBlock().getType().name(),
 				b2 = loc.clone().add(1, 0, -1).getBlock().getType().name(),
 				b3 = loc.clone().add(-1, 0, -1).getBlock().getType().name(),
 				b4 = loc.clone().add(-1, 0, 1).getBlock().getType().name();
 		for(String temp : m) {
+			if(b.contains(temp))
+				return true;
 			if(b1.contains(temp))
 				return true;
 			if(b2.contains(temp))

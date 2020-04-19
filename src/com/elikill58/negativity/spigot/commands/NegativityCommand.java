@@ -19,9 +19,8 @@ import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.inventories.CheatManagerInventory;
-import com.elikill58.negativity.spigot.inventories.CheckMenuInventory;
-import com.elikill58.negativity.spigot.inventories.ModInventory;
+import com.elikill58.negativity.spigot.inventories.AbstractInventory;
+import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -125,7 +124,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				Messages.sendMessage(sender, "only_player");
 				return true;
 			}
-			ModInventory.openModMenu((Player) sender);
+			AbstractInventory.getInventory(InventoryType.MOD).ifPresent((inv) -> inv.openInventory((Player) sender));
 			return true;
 		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase().contains("manage")) {
 			if (arg.length >= 2 && arg[1].equalsIgnoreCase("updateMessages")) {
@@ -148,7 +147,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				return true;
 			}
 
-			CheatManagerInventory.openCheatManagerMenu(p);
+			AbstractInventory.open(InventoryType.ADMIN, p);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("migrateoldbans") && sender instanceof ConsoleCommandSender) {
 			try {
@@ -174,7 +173,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 
 			Inv.CHECKING.put(playerSender, targetPlayer);
-			CheckMenuInventory.openCheckMenu(playerSender, targetPlayer);
+			AbstractInventory.open(InventoryType.CHECK_MENU, playerSender, targetPlayer);
 			return true;
 		}
 
@@ -199,7 +198,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				suggestions.add("reload");
 			if ("alert".startsWith(prefix))
 				suggestions.add("alert");
-			if ("admin".startsWith(prefix) && !(sender instanceof Player) || Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), "manageCheat"))
+			if ("admin".startsWith(prefix) && !(sender instanceof Player) && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), "manageCheat"))
 				suggestions.add("admin");
 		} else {
 			if (arg[0].equalsIgnoreCase("verif")) {

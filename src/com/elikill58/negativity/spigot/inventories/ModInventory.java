@@ -12,13 +12,20 @@ import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.inventories.holders.ModHolder;
+import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.permissions.Perm;
 
-public class ModInventory {
+public class ModInventory extends AbstractInventory {
 
-	public static void openModMenu(Player p) {
-		Inventory inv = Bukkit.createInventory(null, 27, Inv.NAME_MOD_MENU);
+	public ModInventory() {
+		super(InventoryType.MOD);
+	}
+
+	@Override
+	public void openInventory(Player p, Object... obj) {
+		Inventory inv = Bukkit.createInventory(new ModHolder(), 27, Inv.NAME_MOD_MENU);
 
 		inv.setItem(10, Utils.createItem(Material.GHAST_TEAR, Messages.getMessage(p, "inventory.mod.night_vision")));
 		inv.setItem(11, Utils.createItem(Material.PUMPKIN_PIE, Messages.getMessage(p, "inventory.mod.invisible")));
@@ -30,18 +37,14 @@ public class ModInventory {
 		
 		inv.setItem(inv.getSize() - 1, Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
 
-		for (int i = 0; i < inv.getSize(); i++)
-			if (inv.getItem(i) == null)
-				inv.setItem(i, Inv.EMPTY);
+		Utils.fillInventory(inv, Inv.EMPTY);
 		p.openInventory(inv);
 	}
 
 	@SuppressWarnings("deprecation")
-	public static void manageModMenu(InventoryClickEvent e, Material m, Player p) {
-		e.setCancelled(true);
-		if (m.equals(SpigotNegativity.MATERIAL_CLOSE)) {
-			p.closeInventory();
-		} else if (m.equals(Material.GHAST_TEAR)) {
+	@Override
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+		if (m.equals(Material.GHAST_TEAR)) {
 			if (p.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
 				p.removePotionEffect(PotionEffectType.NIGHT_VISION);
 				Messages.sendMessage(p, "inventory.mod.vision_removed");
@@ -49,12 +52,12 @@ public class ModInventory {
 				p.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 10000, 0));
 				Messages.sendMessage(p, "inventory.mod.vision_added");
 			}
-		} else if (m.equals(Utils.getMaterialWith1_15_Compatibility("IRON_SPADE", "LEGACY_IRON_SPADE"))) {
+		} else if (m.name().contains("IRON_SPADE")) {
 			p.closeInventory();
 			p.getInventory().clear();
 			p.getInventory().setArmorContents(null);
 			Messages.sendMessage(p, "inventory.mod.inv_cleared");
-		} else if (m.equals(Utils.getMaterialWith1_15_Compatibility("LEASH", "LEGACY_LEASH"))) {
+		} else if (m.name().contains("LEASH")) {
 			p.closeInventory();
 			Player randomPlayer = (Player) Utils.getOnlinePlayers().toArray()[Utils.getOnlinePlayers().size() - 1];
 			p.teleport(randomPlayer);
@@ -72,13 +75,19 @@ public class ModInventory {
 				Messages.sendMessage(p, "inventory.mod.no_longer_invisible");
 			}
 		} else if (m.equals(Material.TNT)) {
-			p.closeInventory();
-			CheatManagerInventory.openCheatManagerMenu(p);
-		} else if (m.equals(Material.FEATHER)) {
+			AbstractInventory.open(InventoryType.CHEAT_MANAGER, p, false);
+			/*p.closeInventory();
+			CheatManagerInventory.openCheatManagerMenu(p);*/
+		} else if (m.name().contains("FEATHER")) {
 			p.closeInventory();
 			p.setAllowFlight(!p.getAllowFlight());
 			p.sendMessage("Flying: "
 					+ Messages.getMessage(p, "inventory.manager." + (p.getAllowFlight() ? "enabled" : "disabled")));
 		}
+	}
+
+	@Override
+	public boolean isInstance(NegativityHolder nh) {
+		return nh instanceof ModHolder;
 	}
 }

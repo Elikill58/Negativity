@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.packets;
 
+import java.lang.reflect.Field;
+
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.packets.PacketAbstract.IPacketListener;
@@ -59,7 +61,13 @@ public class NMUChannel extends ChannelAbstract {
 					new Object[0]);
 			Object playerConnection = entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
 			Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
-			return (net.minecraft.util.io.netty.channel.Channel) Utils.resolveByFirstType(networkManager.getClass(), net.minecraft.util.io.netty.channel.Channel.class).get(networkManager);
+			
+			for (Field field : networkManager.getClass().getDeclaredFields())
+				if (field.getType().equals(net.minecraft.util.io.netty.channel.Channel.class)) {
+					field.setAccessible(true);
+					return (net.minecraft.util.io.netty.channel.Channel) field.get(networkManager);
+				}
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

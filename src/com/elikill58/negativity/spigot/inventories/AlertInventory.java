@@ -14,13 +14,21 @@ import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.inventories.holders.AlertHolder;
+import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
-public class AlertInventory {
+public class AlertInventory extends AbstractInventory {
 
-	public static void openAlertMenu(Player p, Player cible) {
+	public AlertInventory() {
+		super(InventoryType.ALERT);
+	}
+	
+	@Override
+	public void openInventory(Player p, Object... args) {
+		Player cible = (Player) args[0];
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
 		for (Cheat c : Cheat.values()) {
@@ -30,7 +38,8 @@ public class AlertInventory {
 					|| (!np.ACTIVE_CHEAT.contains(c) && Adapter.getAdapter().getBooleanInConfig("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
 		}
-		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(TO_SEE.size() + 3, 9, 1, 54), Inv.NAME_ALERT_MENU);
+		Inventory inv = Bukkit.createInventory(new AlertHolder(), Utils.getMultipleOf(TO_SEE.size() + 3, 9, 1, 54),
+				Messages.getMessage(p, "inventory.detection.name_inv"));
 		int slot = 0;
 		for (Cheat c : TO_SEE) {
 			if (c.getMaterial() != null){
@@ -44,8 +53,10 @@ public class AlertInventory {
 				Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
-
-	public static void actualizeAlertMenu(Player p, Player cible) {
+	
+	@Override
+	public void actualizeInventory(Player p, Object... args) {
+		Player cible = (Player) args[0];
 		Inventory inv = p.getOpenInventory().getTopInventory();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
@@ -59,19 +70,23 @@ public class AlertInventory {
 			if (c.getMaterial() != null)
 				inv.setItem(slot++, Utils.hideAttributes(Utils.createItem((Material) c.getMaterial(), Messages.getMessage(p, "inventory.alerts.item_name",
 						"%exact_name%", c.getName(), "%warn%", String.valueOf(np.getWarn(c))), np.getWarn(c) == 0 ? 1 : np.getWarn(c))));
-		//p.updateInventory();
+		p.updateInventory();
 	}
 	
-	public static void manageAlertMenu(InventoryClickEvent e, Material m, Player p) {
-		e.setCancelled(true);
-		if (m.equals(SpigotNegativity.MATERIAL_CLOSE))
-			p.closeInventory();
-		else if (m.equals(Material.ARROW))
-			CheckMenuInventory.openCheckMenu(p, Inv.CHECKING.get(p));
+
+	@Override
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+		if (m.equals(Material.ARROW))
+			AbstractInventory.open(InventoryType.CHECK_MENU, p, Inv.CHECKING.get(p));
 		else if (m.equals(Material.BONE)) {
 			for (Cheat c : Cheat.values())
 				SpigotNegativityPlayer.getNegativityPlayer(Inv.CHECKING.get(p)).setWarn(c, 0);
-			actualizeAlertMenu(p, Inv.CHECKING.get(p));
+			actualizeInventory(p, Inv.CHECKING.get(p));
 		}
+	}
+
+	@Override
+	public boolean isInstance(NegativityHolder nh) {
+		return nh instanceof AlertHolder;
 	}
 }

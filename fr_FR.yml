@@ -15,6 +15,7 @@ lang:
   invalid_lang: "%arg% n'est pas une langue valide !"
   help: "/lang <new lang> : Modifier la langue par défaut/la votre"
   current: "La langue actuelle est %lang%"
+  edit: "Modifier la langue par défaut"
   language_set: "&a[&2Negativity&a] &7Les messages de Negativity seront désormais en français"
   translation_disabled: "&a[&2Negativity&a] &cLes traductions par joueurs sont désactivées"
 ban:

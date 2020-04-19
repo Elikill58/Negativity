@@ -19,6 +19,8 @@ lang:
   invalid_lang: "%arg% Không phải là một ngôn ngữ!"
   help: "/lang <ngôn ngữ mới> : Thay đổi ngôn ngữ"
   current: "Ngôn ngữ hiện tại là: %lang%"
+  edit: "Edit the default lang"
+  translation_disabled: "&a[&2Negativity&a] &cPer-player translations are disabled"
   language_set: "&a[&2Negativity&a] &7Ngôn ngữ hiện tại là Tiếng Anh(English)"
   translation_disabled: "&a[&2Negativity&a] &cBản dịch cho mỗi người chơi bị vô hiệu hóa"
 ban:

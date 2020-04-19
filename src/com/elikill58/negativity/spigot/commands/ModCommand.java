@@ -6,7 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.inventories.ModInventory;
+import com.elikill58.negativity.spigot.inventories.AbstractInventory;
+import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
 
 public class ModCommand implements CommandExecutor {
 
@@ -16,7 +17,8 @@ public class ModCommand implements CommandExecutor {
 			Messages.sendMessage(sender, "only_player");
 			return false;
 		}
-		ModInventory.openModMenu((Player) sender);
+		AbstractInventory.getInventory(InventoryType.MOD).ifPresent((inv) -> inv.openInventory((Player) sender));
+		//ModInventory.openModMenu((Player) sender);
 		return false;
 	}
 }

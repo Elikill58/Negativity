@@ -15,13 +15,21 @@ import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.inventories.holders.CheckMenuHolder;
+import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
-public class CheckMenuInventory {
+public class CheckMenuInventory extends AbstractInventory {
+	
+	public CheckMenuInventory() {
+		super(InventoryType.CHECK_MENU);
+	}
 
-	public static void openCheckMenu(Player p, Player cible) {
-		Inventory inv = Bukkit.createInventory(null, 27, Inv.NAME_CHECK_MENU);
+	@Override
+	public void openInventory(Player p, Object... args) {
+		Player cible = (Player) args[0];
+		Inventory inv = Bukkit.createInventory(new CheckMenuHolder(), 27, Inv.NAME_CHECK_MENU);
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		inv.setItem(0, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
 		inv.setItem(1, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(np.BETTER_CLICK)), 1, getByteFromClick(np.BETTER_CLICK)));
@@ -86,13 +94,9 @@ public class CheckMenuInventory {
 		item.setItemMeta(meta);
 		return item;
 	}
-	
-	public static void manageCheckMenu(InventoryClickEvent e, Material m, Player p) {
-		e.setCancelled(true);
-		if (m.equals(SpigotNegativity.MATERIAL_CLOSE)) {
-			p.closeInventory();
-			return;
-		}
+
+	@Override
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
 		Player cible = Inv.CHECKING.get(p);
 		if (m == Utils.getMaterialWith1_15_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER")) {
 			p.teleport(cible);
@@ -112,7 +116,7 @@ public class CheckMenuInventory {
 				Inv.CHECKING.remove(p);
 				break;
 			case TNT:
-				ActivedCheatInventory.openActivedCheat(p, cible);
+				AbstractInventory.open(InventoryType.ACTIVED_CHEAT, p, cible);
 				break;
 			case PACKED_ICE:
 				p.closeInventory();
@@ -126,10 +130,12 @@ public class CheckMenuInventory {
 					Messages.sendMessage(cible, "inventory.main.unfreeze", "%name%", p.getName());
 				break;
 			case PAPER:
-				AlertInventory.openAlertMenu(p, cible);
+				AbstractInventory.open(InventoryType.ALERT, p, cible);
+				//AlertInventory.openAlertMenu(p, cible);
 				break;
 			case GRASS:
-				ForgeModsInventory.openForgeModsMenu(p, cible);
+				AbstractInventory.open(InventoryType.FORGE_MODS, p);
+				//ForgeModsInventory.openForgeModsMenu(p, cible);
 				break;
 			case ANVIL:
 				// ban
@@ -138,5 +144,10 @@ public class CheckMenuInventory {
 				break;
 			}
 		}
+	}
+	
+	@Override
+	public boolean isInstance(NegativityHolder nh) {
+		return nh instanceof CheckMenuHolder;
 	}
 }

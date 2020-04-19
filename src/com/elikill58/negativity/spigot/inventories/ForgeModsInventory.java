@@ -10,16 +10,24 @@ import org.bukkit.inventory.Inventory;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.inventories.holders.ForgeModsHolder;
+import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.Utils;
 
-public class ForgeModsInventory {
+public class ForgeModsInventory extends AbstractInventory {
 
-	public static int slot = 0;
+	public ForgeModsInventory() {
+		super(InventoryType.FORGE_MODS);
+	}
 	
-	public static void openForgeModsMenu(Player mod, Player p) {
+	public int slot = 0;
+	
+	@Override
+	public void openInventory(Player mod, Object... args) {
+		Player p = (Player) args[0];
 		slot = 0;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		Inventory inv = Bukkit.createInventory(null, Utils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), Inv.NAME_FORGE_MOD_MENU);
+		Inventory inv = Bukkit.createInventory(new ForgeModsHolder(), Utils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), Inv.NAME_FORGE_MOD_MENU);
 		if(np.MODS.size() == 0) {
 			inv.setItem(4, Utils.createItem(Material.DIAMOND, "No mods"));
 			inv.setItem(inv.getSize() - 1, Utils.createItem(Material.ARROW, Messages.getMessage(mod, "inventory.back")));
@@ -28,15 +36,18 @@ public class ForgeModsInventory {
 				inv.setItem(slot++, Utils.createItem(Material.GRASS, name, ChatColor.GRAY + "Version: " + version));
 			});
 		}
-		for (int i = 0; i < inv.getSize(); i++)
-			if (inv.getItem(i) == null)
-				inv.setItem(i, Inv.EMPTY);
+		Utils.fillInventory(inv, Inv.EMPTY);
 		mod.openInventory(inv);
 	}
-	
-	public static void manageForgeModsMenu(InventoryClickEvent e, Material m, Player p) {
-		e.setCancelled(true);
+
+	@Override
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
 		if(m.equals(Material.ARROW))
-			CheckMenuInventory.openCheckMenu(p, Inv.CHECKING.get(p));
+			AbstractInventory.open(InventoryType.CHECK_MENU, p, Inv.CHECKING.get(p));
+	}
+
+	@Override
+	public boolean isInstance(NegativityHolder nh) {
+		return nh instanceof ForgeModsHolder;
 	}
 }

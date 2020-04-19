@@ -1,6 +1,5 @@
 package com.elikill58.negativity.spigot.utils;
 
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -16,6 +15,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -310,16 +310,9 @@ public class Utils {
 		return null;
 	}
 	
-	public static Field resolveByFirstType(Class<?> clazz, Class<?> type) throws ReflectiveOperationException {
-		try {
-			for (Field field : clazz.getDeclaredFields())
-				if (field.getType().equals(type)) {
-					field.setAccessible(true);
-					return field;
-				}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
+	public static void fillInventory(Inventory inv, ItemStack item) {
+		for (int i = 0; i < inv.getSize(); i++)
+			if (inv.getItem(i) == null)
+				inv.setItem(i, item);
 	}
 }

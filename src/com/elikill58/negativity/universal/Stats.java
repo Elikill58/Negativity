@@ -65,7 +65,7 @@ public class Stats {
 				}
 				br.close();
 			} catch (ConnectException e) {
-				Adapter.getAdapter().log("Error while updating stats, it seems to be a firewall that blocking the stats");
+				Adapter.getAdapter().log("Error while updating stats, it seems to be a firewall that blocking the stats. Error: " + e.getMessage());
 				STATS_IN_MAINTENANCE = true;
 			} catch (Exception e) {
 				e.printStackTrace();

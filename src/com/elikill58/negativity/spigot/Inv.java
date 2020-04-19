@@ -16,7 +16,7 @@ import com.elikill58.negativity.universal.Version;
 @SuppressWarnings("deprecation")
 public class Inv {
 
-	public static final String NAME_CHECK_MENU = "Check",
+	public static final String NAME_CHECK_MENU = "Check", ADMIN_MENU = "Admin",
 			NAME_ACTIVED_CHEAT_MENU = Messages.getMessage("inventory.detection.name_inv"), NAME_FREEZE_MENU = "Freeze",
 			NAME_MOD_MENU = "Mod", NAME_ALERT_MENU = "Alerts", CHEAT_MANAGER = "Cheat Manager", NAME_FORGE_MOD_MENU = "Mods";
 	public static final HashMap<Player, Player> CHECKING = new HashMap<>();

@@ -39,6 +39,7 @@ import com.elikill58.negativity.spigot.events.ChannelEvents;
 import com.elikill58.negativity.spigot.events.FightManager;
 import com.elikill58.negativity.spigot.events.InventoryEvents;
 import com.elikill58.negativity.spigot.events.PlayersEvents;
+import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatBypassEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatEvent;
@@ -86,7 +87,7 @@ public class SpigotNegativity extends JavaPlugin {
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false;
-	public static Material MATERIAL_CLOSE = Material.REDSTONE;
+	public static final Material MATERIAL_CLOSE = Utils.getMaterialWith1_15_Compatibility("BARRIER", "REDSTONE");
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
 	private static final HashMap<Player, HashMap<Cheat, Long>> TIME_LAST_CHEAT_ALERT = new HashMap<>();
@@ -103,13 +104,13 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().warning("Unknow server version ! Some problems can appears.");
 		else
 			getLogger().info("Detected server version: " + v.name().toLowerCase());
-		try {
+		/*try {
 			MATERIAL_CLOSE = (Material) Material.class.getField("BARRIER").get(Material.class);
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
 			e.printStackTrace();
 		} catch (NoSuchFieldException e) {
 			MATERIAL_CLOSE = Material.REDSTONE;
-		}
+		}*/
 		PacketManager.run(this);
 		new File(getDataFolder().getAbsolutePath() + File.separator + "user").mkdirs();
 		if (!new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml").exists()) {
@@ -185,6 +186,7 @@ public class SpigotNegativity extends JavaPlugin {
 				Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort() + "");
 			}
 		});
+		AbstractInventory.init(this);
 
 		StringJoiner supportedPluginName = new StringJoiner(", ");
 		BanManager.registerProcessor("bukkit", new BukkitBanProcessor());

@@ -174,6 +174,8 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 			fileName = "bungee_es_ES.yml";
 		else if (lang.toLowerCase().contains("vi") || lang.toLowerCase().contains("vn"))
 			fileName = "bungee_vi_VN.yml";
+		else if (lang.toLowerCase().contains("pl"))
+			fileName = "bungee_pl_PL.yml";
 		
 		try (InputStream in = pl.getResourceAsStream(fileName); OutputStream out = new FileOutputStream(f)) {
 			ByteStreams.copy(in, out);

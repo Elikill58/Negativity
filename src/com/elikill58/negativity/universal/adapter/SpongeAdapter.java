@@ -214,6 +214,8 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 			fileName = "es_ES.yml";
 		else if (lang.toLowerCase().contains("vi") || lang.toLowerCase().contains("vn"))
 			fileName = "vi_VN.yml";
+		else if (lang.toLowerCase().contains("pl"))
+			fileName = "pl_PL.yml";
 
 		if (Files.notExists(filePath)) {
 			plugin.getContainer().getAsset(fileName).ifPresent(asset -> {

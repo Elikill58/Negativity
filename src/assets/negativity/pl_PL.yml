@@ -1,0 +1,120 @@
+report_wait: "Poczekaj sekunde miedzy 2 raportem"
+
+invalid_player: "%arg% nie jest graczem !"
+not_forget_player: "Don't zapomnij o graczu !"
+not_permission: "&cNie masz na to pozwolenia."
+only_player: "Tylko gracz moze to zrobic."
+well_suspect: "%players% dobrze podejrzewal !"
+none: "zaden"
+console: "Administrator"
+fake_entities: "Falszywi gracze"
+
+kick: "&a[&2Negativity&a]&c Zostales wyrzucony z tego serwera za Oszukiwanie (%cheat%)"
+
+lang {
+  invalid_lang: "%arg% nie jest prawidlowym jezykiem !"
+  help: "/lang <nowy jezyk> : Zmien domyslny jezyk"
+  current: "Obecny jezyk to %lang%"
+  language_set: "&a[&2Negativity&a] &7Wiadomosci o negatywnosci sa teraz w jezyku angielskim"
+  translation_disabled: "&a[&2Negativity&a] &cTlumaczenia dla poszczegolnych graczy sa wylaczone"
+}
+ban {
+  kick_time: "&cBan dla %reason% az do %time% przez %by%."
+  kick_def: "&cBan zdecydowanie dla %reason% przez %by%."
+  # Na razie jest:
+  # y : lat
+  # mo : miesiac 
+  # d : dzien
+  # h : godzin
+  # m : minut
+  # s : sekund
+  #
+  help =
+    [ "/ban <gracz> <def | czas (ex: 2h5d)> <powod> : Zbanuj okreslonego gracza" ]
+  well_ban: "&a[&2Negativity&a]&c %name% dobrze zbanowany za %reason%."
+}
+unban {
+  well_unban: "&a[&2Negativity&a]&c %name% dobrze zbanowany."
+  not_banned: "&c%name% nie jest zbanowany."
+  not_exact: "%arg% nie jest dokladną prawidlowa nazwa zablokowanego gracza."
+  help: "/nunban <player> : Odbanuj zbanowanego gracza."
+}
+kick {
+  help: "/kick <gracz> <powod> : wyrzuc okreslonego gracza"
+  well_kick: "&a[&2Negativity&a]&c %name% dobrze wyrzucony %reason%."
+  kicked: "Zostales wyrzucony %name% za %reason%"
+}
+report {
+  report_usage: "/report <nazwa> <powod>"
+  well_report: "&a%name% zgloszono pomyslnie !"
+  report_message: "&a[&2Negativity&a] &c%name% &7zostaly zgloszone przez &c%report% &7za &c%reason%"
+  report_message_hover: "&7Open &c%name%&7's check menu"
+}
+negativity {
+  alert: "&a[&2Negativity&a] &c%name%&7 wydaje sie uzywac &c%cheat% &7(&2Reliability: %reliability%%&7) !"
+  alert_multiple: "&a[&2Negativity&a] &c%name%&7 wydaje sie uzywac &c%cheat% %nb% czasy &7(&2Reliability: %reliability%%&7) !"
+  alert_hover: "&6Reliability: %reliability%%\nPing: %ping%"
+  no_alerts: "&a[&2Negativity&a] Brak alertow do wyswietlenia."
+  reload_done: "&a[&2Negativity&a] Wtyczka przeladowana."
+  verif {
+    invalid_cheat: "%arg% nie jest waznym oszustwem !"
+    start: "&a[&2Negativity&a] &7Rozpoczalem analize %name% za %cheat%"
+    start_all: "&a[&2Negativity&a] Rozpoczeto pelna analize gracza %name%"
+    start_none: "&a[&2Negativity&a] &cNie mozna rozpoczac analizy, poniewaz nie podano zadnych waznych kodow"
+    help= [
+       "/negativity verif <gracz> [cheats...] : Rozpoczyna weryfikacje (wszystko, jesli nie podano zadnej)"
+       "/negativity <gracz> : Aby zobaczyc informacje o tym graczu" ]
+  }
+}
+inventory {
+  close: "Close"
+  back: "Back"
+  reset_alert: "Delete alerts"
+  main {
+    freeze: "&a[&2Negativity&a] Jestes obecnie zamrozony przez %name%"
+    unfreeze: "&a[&2Negativity&a] Nie jestes juz zamrozony przez %name%"
+    actual_click: "Rzeczywiste klikniecia : %clicks%"
+    max_click: "Maksymalna liczba klikniec : %clicks%"
+    last_click: "Ostatnia sekunda : %clicks%"
+    ping: "Ping z %name%: %ping%"
+    see_inv: "Zobacz %name%'s ekwipunek"
+    teleportation_to: "Teleportacja do %name%"
+    freezing: "Zamrazanie %name%"
+    active_detection: "Zobacz aktywne wykrywanie dla %name%"
+    see_alerts: "Zobacz wszystkie alerty dla %name%"
+    mcleaks_indicator {
+      positive: "&cUzywa MCLeaks"
+      negative: "&aNie uzywa MCLeaks"
+      description: "&7MCLeaks zapewnia konta premium za darmo"
+    }
+  }
+  detection {
+    name_inv: "Aktywne wykrywanie"
+    no_active: "Brak aktywnego wykrywania dla %name%"
+  }
+  alerts {
+    item_name: "Alerty dla %exact_name% : %warn%"
+    inv_name: "Alerty"
+  }
+  mod {
+    night_vision: "Nocna wizja"
+    invisible: "Stal sie niewidzialny"
+    random_tp: "Losowa teleportacja"
+    clear_inv: "Wyczysc swoj ekwipunek"
+    inv_cleared: "ekwipunek został wyczyszczony !"
+    vision_removed: "Noktowizor wylaczony"
+    vision_added: "Właczono noktowizor"
+    now_invisible: "Teraz jestes niewidzialny"
+    no_longer_invisible: "Teraz wszyscy moga cie zobaczyc"
+    you_are_freeze: "Jestes zamrozony. Nie mozesz opuscic tego ekwipunku."
+    cheat_manage: "Menedzer kodow"
+  }
+  manager {
+    enabled: "&aWlaczony"
+    disabled: "&cWylaczony"
+    setBack: "Anuluje ostatnia akcje oszukiwania, gdy zostanie wykryta: &l%back%"
+    autoVerif: "Automatyczna weryfikacja: &l%auto%"
+    allowKick: "Wyrzuc oszukujacych graczy: &l%allow%"
+    setActive: "Aktywne kody: &l%active%"
+  }
+}

@@ -173,6 +173,8 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 			fileName = "es_ES.yml";
 		else if (lang.toLowerCase().contains("vi") || lang.toLowerCase().contains("vn"))
 			fileName = "vi_VN.yml";
+		else if (lang.toLowerCase().contains("pl"))
+			fileName = "pl_PL.yml";
 		
 		try (InputStream in = pl.getResource(fileName); OutputStream out = new FileOutputStream(f)) {
 			ByteStreams.copy(in, out);

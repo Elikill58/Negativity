@@ -64,7 +64,6 @@ import com.elikill58.negativity.sponge.commands.MigrateOldBansCommand;
 import com.elikill58.negativity.sponge.commands.ModCommand;
 import com.elikill58.negativity.sponge.commands.NegativityCommand;
 import com.elikill58.negativity.sponge.commands.ReportCommand;
-import com.elikill58.negativity.sponge.commands.SuspectCommand;
 import com.elikill58.negativity.sponge.commands.UnbanCommand;
 import com.elikill58.negativity.sponge.listeners.FightManager;
 import com.elikill58.negativity.sponge.listeners.InventoryClickManagerEvent;
@@ -84,7 +83,6 @@ import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
-import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpongeAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -258,7 +256,6 @@ public class SpongeNegativity {
 		reloadCommand("report_command", cmd, ReportCommand::create, "report", "repot");
 		reloadCommand("ban_command", cmd, BanCommand::create, "nban", "negban");
 		reloadCommand("unban_command", cmd, UnbanCommand::create, "nunban", "negunban");
-		reloadCommand("suspect_command", SuspectManager.ENABLED_CMD, cmd, SuspectCommand::create, "suspect");
 	}
 
 	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {

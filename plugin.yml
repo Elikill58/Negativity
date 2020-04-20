@@ -27,9 +27,6 @@ commands:
   lang:
     description: Language management
     permission: negativity.lang
-  suspect:
-    description: Suspect a player that is cheating
-    permission: negativity.suspect
 
 permissions:
   negativity.*:
@@ -41,7 +38,6 @@ permissions:
       negativity.unban: true
       negativity.kick: true
       negativity.mod: true
-      negativity.suspect: true
       negativity.verif: true
       negativity.alert: true
       negativity.mod: true
@@ -64,7 +60,4 @@ permissions:
     default: op
   negativity.mod:
     description: Option for mod
-    default: op
-  negativity.suspect:
-    description: Suspect a player
     default: op

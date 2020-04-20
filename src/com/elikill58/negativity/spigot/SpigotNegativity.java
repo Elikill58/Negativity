@@ -33,7 +33,6 @@ import com.elikill58.negativity.spigot.commands.LangCommand;
 import com.elikill58.negativity.spigot.commands.ModCommand;
 import com.elikill58.negativity.spigot.commands.NegativityCommand;
 import com.elikill58.negativity.spigot.commands.ReportCommand;
-import com.elikill58.negativity.spigot.commands.SuspectCommand;
 import com.elikill58.negativity.spigot.commands.UnbanCommand;
 import com.elikill58.negativity.spigot.events.ChannelEvents;
 import com.elikill58.negativity.spigot.events.FightManager;
@@ -65,7 +64,6 @@ import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
-import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpigotAdapter;
@@ -281,14 +279,6 @@ public class SpigotNegativity extends JavaPlugin {
 		LangCommand langExecutor = new LangCommand();
 		langCmd.setExecutor(langExecutor);
 		langCmd.setTabCompleter(langExecutor);
-
-		PluginCommand suspectCmd = getCommand("suspect");
-		if (!SuspectManager.ENABLED)
-			unRegisterBukkitCommand(suspectCmd);
-		else {
-			suspectCmd.setExecutor(new SuspectCommand());
-			suspectCmd.setTabCompleter(new SuspectCommand());
-		}
 
 		getCommand("mod").setExecutor(new ModCommand());
 	}

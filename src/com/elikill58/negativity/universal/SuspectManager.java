@@ -9,13 +9,11 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 public class SuspectManager {
 
 	public static boolean ENABLED = Adapter.getAdapter().getBooleanInConfig("suspect.enabled"),
-			ENABLED_CMD = Adapter.getAdapter().getBooleanInConfig("suspect_command"),
 			CHAT = Adapter.getAdapter().getBooleanInConfig("suspect.chat"),
 			WITH_REPORT = Adapter.getAdapter().getBooleanInConfig("suspect.with_report_cmd");
 
 	public static void init() {
 		ENABLED = Adapter.getAdapter().getBooleanInConfig("suspect.enabled");
-		ENABLED_CMD = Adapter.getAdapter().getBooleanInConfig("suspect_command");
 		CHAT = Adapter.getAdapter().getBooleanInConfig("suspect.chat");
 		WITH_REPORT = Adapter.getAdapter().getBooleanInConfig("suspect.with_report_cmd");
 	}

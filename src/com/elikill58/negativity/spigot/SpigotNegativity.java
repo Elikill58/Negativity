@@ -87,7 +87,6 @@ public class SpigotNegativity extends JavaPlugin {
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false;
 	public static final Material MATERIAL_CLOSE = Utils.getMaterialWith1_15_Compatibility("BARRIER", "REDSTONE");
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
-	public static List<PlayerCheatAlertEvent> alerts = new ArrayList<>();
 	private static final HashMap<Player, HashMap<Cheat, Long>> TIME_LAST_CHEAT_ALERT = new HashMap<>();
 	public static String CHANNEL_NAME_FML = "";
 	
@@ -389,8 +388,7 @@ public class SpigotNegativity extends JavaPlugin {
 			TIME_LAST_CHEAT_ALERT.put(p, time_alert);
 		}
 
-		sendAlertMessage(type, np, p, c, ping, reliability, hover_proof, alert, 1, stats_send);
-		np.ALERT_NOT_SHOWED.remove(c);
+		sendAlertMessage(np, alert, true);
 		return true;
 	}
 
@@ -405,17 +403,24 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 	}
 
-	public static void sendAlertMessage(ReportType type, SpigotNegativityPlayer np, Player p, Cheat c, int ping, int reliability,
-										String hover_proof, PlayerCheatAlertEvent alert, int alertsCount, String stats_send) {
-		Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
-		if (log_console)
-			INSTANCE.getLogger()
-					.info("New " + type.getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
-							+ ") (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
-							+ reliability);
+	public static void sendAlertMessage(SpigotNegativityPlayer np, PlayerCheatAlertEvent alert, boolean isFirstSend) {
+		Cheat c = alert.getCheat();
+		int reliability = alert.getReliability();
+		Player p = alert.getPlayer();
+		int ping = alert.getPing();
+		if(isFirstSend) {
+			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", alert.getStatsSend());
+			if (log_console)
+				INSTANCE.getLogger()
+						.info("New " + alert.getReportType().getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
+								+ ") (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
+								+ reliability);
+		}
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, hover_proof, alertsCount);
+			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHoverProof(), alert.getNbAlert());
+			np.ALERT_NOT_SHOWED.remove(c);
 		} else {
+			String hover_proof = alert.getHoverProof();
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers()) {
 				boolean basicPerm = Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert");
@@ -424,28 +429,24 @@ public class SpigotNegativity extends JavaPlugin {
 				if (permissionEvent.isCancelled())
 					continue;
 				if (permissionEvent.hasBasicPerm()) {
-					if(np.ALERT_NOT_SHOWED.containsKey(c) && np.ALERT_NOT_SHOWED.get(c).size() > 1) {
-						new ClickableText().addRunnableHoverEvent(
-								Messages.getMessage(pl, "negativity.alert_multiple", "%name%", p.getName(), "%cheat%", c.getName(),
-										"%reliability%", String.valueOf(100), "%nb%", String.valueOf(np.ALERT_NOT_SHOWED.get(c).size())),
-								Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
-										String.valueOf(100), "%ping%", String.valueOf(ping))
-										+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),
-								"/negativity " + p.getName()).sendToPlayer(pl);
-					} else {
-						new ClickableText().addRunnableHoverEvent(
-								Messages.getMessage(pl, "negativity.alert", "%name%", p.getName(), "%cheat%", c.getName(),
-										"%reliability%", String.valueOf(reliability)),
-								Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
-										String.valueOf(reliability), "%ping%", String.valueOf(ping))
-										+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),
-								"/negativity " + p.getName()).sendToPlayer(pl);
-					}
+					new ClickableText().addRunnableHoverEvent(
+							Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
+									"%reliability%", String.valueOf(reliability), "%nb%", String.valueOf(np.ALERT_NOT_SHOWED.get(c).size())),
+							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
+									String.valueOf(reliability), "%ping%", String.valueOf(ping))
+									+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),
+							"/negativity " + p.getName()).sendToPlayer(pl);
 					hasPermPeople = true;
 				}
 			}
-			if(!hasPermPeople)
-				alerts.add(alert);
+			if(!hasPermPeople) {
+				if(isFirstSend) {
+					List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.getOrDefault(c, new ArrayList<PlayerCheatAlertEvent>());
+					tempList.add(alert);
+					np.ALERT_NOT_SHOWED.put(c, tempList);
+				}
+			} else
+				np.ALERT_NOT_SHOWED.remove(c);
 		}
 	}
 
@@ -505,7 +506,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (needPacket && !SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId()))
 			SpigotNegativityPlayer.INJECTED.add(p.getUniqueId());
 	}
-
+	
 	private Object getPrivateField(Object object, String field)
 			throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
 		Field objectField = object.getClass().getDeclaredField(field);

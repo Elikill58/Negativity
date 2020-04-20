@@ -12,6 +12,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -77,6 +78,15 @@ public class UniversalUtils {
 			if (c.getMaterial().equals(m))
 				return Optional.of(c);
 		return Optional.empty();
+	}
+	
+	public static int sum(HashMap<Integer, Integer> relia) {
+		if(relia.isEmpty())
+			return 0;
+		int all = 0;
+		for(Integer temp : relia.keySet())
+			all += (temp * relia.get(temp));
+		return all / relia.size();
 	}
 
 	public static List<String> getClasseNamesInPackage(String jarName, String packageName) {

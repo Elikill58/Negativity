@@ -7,7 +7,6 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.ReportType;
 
 public class TimerTimeBetweenAlert extends BukkitRunnable {
 
@@ -15,8 +14,9 @@ public class TimerTimeBetweenAlert extends BukkitRunnable {
 	public void run() {
 		for(Player p : Utils.getOnlinePlayers()) {
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-			int ping = Utils.getPing(p);
-			np.ALERT_NOT_SHOWED.forEach((c, i) -> {
+			for(PlayerCheatAlertEvent alert : np.getAlertForAllCheat())
+				SpigotNegativity.sendAlertMessage(np, alert, false);
+			/*new HashMap<>(np.ALERT_NOT_SHOWED).forEach((c, i) -> {
 				if(i.size() == 0)
 					return;
 				if(i.size() == 1) {
@@ -34,8 +34,7 @@ public class TimerTimeBetweenAlert extends BukkitRunnable {
 						alert = i.get(0);
 					SpigotNegativity.sendAlertMessage(alert.getReportType(), np, p, c, ping, nb / i.size(), alert.getHoverProof(), alert, i.size(), i.get(i.size() - 1).getStatsSend());
 				}
-			});
-			np.ALERT_NOT_SHOWED.clear();
+			});*/
 			np.saveProof();
 		}
 	}

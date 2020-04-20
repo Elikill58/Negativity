@@ -61,7 +61,6 @@ public class DefaultConfigValue {
 		BOOLEANS.put("ban_command", true);
 		BOOLEANS.put("unban_command", true);
 		BOOLEANS.put("kick_command", true);
-		BOOLEANS.put("suspect_command", true);
 
 		BOOLEANS.put("Database.isActive", false);
 		STRINGS.put("Database.url", "127.0.0.1/myDb");

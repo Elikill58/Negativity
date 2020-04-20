@@ -266,6 +266,44 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			n = n + (n.equals("") ? "" : ", ") + c.getName();
 		return n;
 	}
+	
+	public List<PlayerCheatAlertEvent> getAlertForAllCheat(){
+		final List<PlayerCheatAlertEvent> list = new ArrayList<>();
+		ALERT_NOT_SHOWED.forEach((c, listAlerts) -> {
+			if(!listAlerts.isEmpty())
+				list.add(getAlertForCheat(c, list));
+		});
+		return list;
+	}
+	
+	public PlayerCheatAlertEvent getAlertForCheat(Cheat c, List<PlayerCheatAlertEvent> list) {
+		int nb = 0;
+		HashMap<Integer, Integer> relia = new HashMap<>();
+		HashMap<Integer, Integer> ping = new HashMap<>();
+		ReportType type = ReportType.NONE;
+		boolean hasRelia = false;
+		String hoverProof = "";
+		for(PlayerCheatAlertEvent e : list) {
+			nb++;
+			
+			relia.put(e.getReliability(), relia.getOrDefault(e.getReliability(), 0) + 1);
+
+			ping.put(e.getPing(), ping.getOrDefault(e.getPing(), 0) + 1);
+
+			if(type == ReportType.NONE || (type == ReportType.WARNING && e.getReportType() == ReportType.VIOLATION))
+				type = e.getReportType();
+
+			hasRelia = e.hasManyReliability() ? true : hasRelia;
+			
+			if(hoverProof.length() < e.getHoverProof().length())
+				hoverProof = e.getHoverProof();
+		}
+		
+		int newRelia = UniversalUtils.sum(relia);
+		int newPing = UniversalUtils.sum(ping);
+		// we can ignore "proof" and "stats_send" because they have been already saved and they are NOT showed to player
+		return new PlayerCheatAlertEvent(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, "", nb);
+	}
 
 	public void makeAppearEntities() {
 		if (!ACTIVE_CHEAT.contains(Cheat.forKey(CheatKeys.FORCEFIELD))

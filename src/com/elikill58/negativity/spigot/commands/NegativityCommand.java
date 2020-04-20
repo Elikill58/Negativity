@@ -94,25 +94,31 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				Messages.sendMessage(sender, "only_player");
 				return true;
 			}
-
-			if (SpigotNegativity.alerts.isEmpty()) {
+			Player playerSender = (Player) sender;
+			boolean empty = true;
+			for(Player cible : Utils.getOnlinePlayers()) {
+				SpigotNegativityPlayer npCible = SpigotNegativityPlayer.getNegativityPlayer(cible);
+				for(PlayerCheatAlertEvent alert : npCible.getAlertForAllCheat()) {
+					empty = false;
+				/*for (int i = npCible.ALERT_NOT_SHOWED.size() - 1; i >= 0; i--) {
+					PlayerCheatAlertEvent alert = SpigotNegativity.alerts.get(i);*/
+					new ClickableText().addRunnableHoverEvent(
+							Messages.getMessage(playerSender, alert.getAlertMessageKey(),
+									"%name%", alert.getPlayer().getName(),
+									"%cheat%", alert.getCheat().getName(),
+									"%reliability%", String.valueOf(alert.getReliability()),
+									"%nb%", String.valueOf(alert.getNbAlert())),
+							Messages.getMessage(playerSender, "negativity.alert_hover",
+									"%reliability%", String.valueOf(alert.getReliability()),
+									"%ping%", String.valueOf(alert.getPing())) + (alert.getHoverProof().isEmpty() ? "" : "\n" + alert.getHoverProof()),
+							"/negativity " + alert.getPlayer().getName())
+							.sendToPlayer(playerSender);
+				}
+			}
+			
+			if (empty) {
 				Messages.sendMessage(sender, "negativity.no_alerts");
 				return true;
-			}
-
-			for (int i = SpigotNegativity.alerts.size() - 1; i >= 0; i--) {
-				PlayerCheatAlertEvent alert = SpigotNegativity.alerts.get(i);
-				Player playerSender = (Player) sender;
-				new ClickableText().addRunnableHoverEvent(
-						Messages.getMessage(playerSender, "negativity.alert",
-								"%name%", alert.getPlayer().getName(),
-								"%cheat%", alert.getCheat().getName(),
-								"%reliability%", String.valueOf(alert.getReliability())),
-						Messages.getMessage(playerSender, "negativity.alert_hover",
-								"%reliability%", String.valueOf(alert.getReliability()),
-								"%ping%", String.valueOf(alert.getPing())) + (alert.getHoverProof().isEmpty() ? "" : "\n" + alert.getHoverProof()),
-						"/negativity " + alert.getPlayer().getName())
-						.sendToPlayer(playerSender);
 			}
 			return true;
 		} else if (arg[0].equalsIgnoreCase("reload")) {

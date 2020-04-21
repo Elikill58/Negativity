@@ -83,10 +83,12 @@ public class UniversalUtils {
 	public static int sum(HashMap<Integer, Integer> relia) {
 		if(relia.isEmpty())
 			return 0;
-		int all = 0;
-		for(Integer temp : relia.keySet())
+		int all = 0, divide = 0;
+		for(Integer temp : relia.keySet()) {
 			all += (temp * relia.get(temp));
-		return all / relia.size();
+			divide += relia.get(temp);
+		}
+		return parseInPorcent(all / divide);
 	}
 
 	public static List<String> getClasseNamesInPackage(String jarName, String packageName) {

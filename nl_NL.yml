@@ -50,7 +50,8 @@ negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% &7(&2Kans: %reliability%%&7)!"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% %nb% tijd &7(&2Kans: %reliability%%&7)!"
   alert_hover: "&6Kans: %reliability%%\nPing: %ping%"
-  no_alerts: "&a[&2Negativity&a] No alerts to display."
+  see_alert: "&a[&2Negativity&a] You see the alerts again."
+  see_no_longer_alert: "&a[&2Negativity&a] You no longer see alerts."
   reload_done: "&a[&2Negativity&a] Plugin reloaded."
   verif:
     invalid_cheat: "%arg% is geen geldige cheat!"

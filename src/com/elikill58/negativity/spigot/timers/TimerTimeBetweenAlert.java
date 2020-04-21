@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.timers;
 
+import java.util.ArrayList;
+
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -14,7 +16,7 @@ public class TimerTimeBetweenAlert extends BukkitRunnable {
 	public void run() {
 		for(Player p : Utils.getOnlinePlayers()) {
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-			for(PlayerCheatAlertEvent alert : np.getAlertForAllCheat())
+			for(PlayerCheatAlertEvent alert : new ArrayList<>(np.getAlertForAllCheat()))
 				SpigotNegativity.sendAlertMessage(np, alert, false);
 			/*new HashMap<>(np.ALERT_NOT_SHOWED).forEach((c, i) -> {
 				if(i.size() == 0)

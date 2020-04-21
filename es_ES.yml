@@ -51,7 +51,8 @@ negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 parece que usa &c%cheat% &7(&2Fiabilidad: %reliability%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 parece que usa &c%cheat% %nb% veces &7(&2Fiabilidad: %reliability%%&7) !"
   alert_hover: "&6Fiabilidad: %reliability%%\nPing: %ping%"
-  no_alerts: "&a[&2Negativity&a] Sin alertas para mostrar."
+  see_alert: "&a[&2Negativity&a] You see the alerts again."
+  see_no_longer_alert: "&a[&2Negativity&a] You no longer see alerts."
   reload_done: "&a[&2Negativity&a] Plugin recargado."
   verif:
     invalid_cheat: "%arg% no es una trampa válida !"

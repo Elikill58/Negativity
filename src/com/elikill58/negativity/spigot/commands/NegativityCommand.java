@@ -14,14 +14,12 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.spigot.ClickableText;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
-import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -95,31 +93,9 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				return true;
 			}
 			Player playerSender = (Player) sender;
-			boolean empty = true;
-			for(Player cible : Utils.getOnlinePlayers()) {
-				SpigotNegativityPlayer npCible = SpigotNegativityPlayer.getNegativityPlayer(cible);
-				for(PlayerCheatAlertEvent alert : npCible.getAlertForAllCheat()) {
-					empty = false;
-				/*for (int i = npCible.ALERT_NOT_SHOWED.size() - 1; i >= 0; i--) {
-					PlayerCheatAlertEvent alert = SpigotNegativity.alerts.get(i);*/
-					new ClickableText().addRunnableHoverEvent(
-							Messages.getMessage(playerSender, alert.getAlertMessageKey(),
-									"%name%", alert.getPlayer().getName(),
-									"%cheat%", alert.getCheat().getName(),
-									"%reliability%", String.valueOf(alert.getReliability()),
-									"%nb%", String.valueOf(alert.getNbAlert())),
-							Messages.getMessage(playerSender, "negativity.alert_hover",
-									"%reliability%", String.valueOf(alert.getReliability()),
-									"%ping%", String.valueOf(alert.getPing())) + (alert.getHoverProof().isEmpty() ? "" : "\n" + alert.getHoverProof()),
-							"/negativity " + alert.getPlayer().getName())
-							.sendToPlayer(playerSender);
-				}
-			}
-			
-			if (empty) {
-				Messages.sendMessage(sender, "negativity.no_alerts");
-				return true;
-			}
+			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(playerSender);
+			np.disableShowingAlert = !np.disableShowingAlert;
+			Messages.sendMessage(playerSender, np.disableShowingAlert ? "negativity.see_no_longer_alert" : "negativity.see_alert");
 			return true;
 		} else if (arg[0].equalsIgnoreCase("reload")) {
 			Adapter.getAdapter().reload();

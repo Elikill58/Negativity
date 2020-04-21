@@ -50,7 +50,8 @@ negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% &7(&2Точность: %reliability%%&7)!"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% %nb% время &7(&2Точность: %reliability%%&7)!"
   alert_hover: "&6Точность: %reliability%%\nПинг: %ping%"
-  no_alerts: "&a[&2Negativity&a] No alerts to display."
+  see_alert: "&a[&2Negativity&a] You see the alerts again."
+  see_no_longer_alert: "&a[&2Negativity&a] You no longer see alerts."
   reload_done: "&a[&2Negativity&a] Plugin reloaded."
   verif:
     invalid_cheat: "%arg% не является читом."

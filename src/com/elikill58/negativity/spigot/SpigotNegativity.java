@@ -351,7 +351,7 @@ public class SpigotNegativity extends JavaPlugin {
 				return false;
 		}
 		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(type, p, c, reliability,
-				c.getReliabilityAlert() < reliability, ping, proof, hover_proof, stats_send);
+				c.getReliabilityAlert() < reliability, ping, proof, hover_proof, stats_send, 1);
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
@@ -406,6 +406,10 @@ public class SpigotNegativity extends JavaPlugin {
 	public static void sendAlertMessage(SpigotNegativityPlayer np, PlayerCheatAlertEvent alert, boolean isFirstSend) {
 		Cheat c = alert.getCheat();
 		int reliability = alert.getReliability();
+		if(reliability == 0) {// alert already sent
+			np.ALERT_NOT_SHOWED.remove(c);
+			return;
+		}
 		Player p = alert.getPlayer();
 		int ping = alert.getPing();
 		if(isFirstSend) {
@@ -423,15 +427,16 @@ public class SpigotNegativity extends JavaPlugin {
 			String hover_proof = alert.getHoverProof();
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers()) {
-				boolean basicPerm = Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert");
+				SpigotNegativityPlayer npMod = SpigotNegativityPlayer.getNegativityPlayer(pl);
+				boolean basicPerm = Perm.hasPerm(npMod, "showAlert");
 				ShowAlertPermissionEvent permissionEvent = new ShowAlertPermissionEvent(p, np, basicPerm);
 				Bukkit.getPluginManager().callEvent(permissionEvent);
-				if (permissionEvent.isCancelled())
+				if (permissionEvent.isCancelled() || npMod.disableShowingAlert)
 					continue;
 				if (permissionEvent.hasBasicPerm()) {
 					new ClickableText().addRunnableHoverEvent(
 							Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
-									"%reliability%", String.valueOf(reliability), "%nb%", String.valueOf(np.ALERT_NOT_SHOWED.get(c).size())),
+									"%reliability%", String.valueOf(reliability), "%nb%", String.valueOf(alert.getNbAlert())),
 							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
 									String.valueOf(reliability), "%ping%", String.valueOf(ping))
 									+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),
@@ -441,7 +446,7 @@ public class SpigotNegativity extends JavaPlugin {
 			}
 			if(!hasPermPeople) {
 				if(isFirstSend) {
-					List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.getOrDefault(c, new ArrayList<PlayerCheatAlertEvent>());
+					List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c) ? np.ALERT_NOT_SHOWED.get(c) : new ArrayList<>();
 					tempList.add(alert);
 					np.ALERT_NOT_SHOWED.put(c, tempList);
 				}

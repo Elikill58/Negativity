@@ -54,7 +54,8 @@ negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 nghi ngờ dùng &c%cheat% &7(&2độ tin cậy: %reliability%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 nghi ngờ dùng &c%cheat% %nb% times &7(&2độ tin cậy: %reliability%%&7) !"
   alert_hover: "&6Độ tin cậy: %reliability%%\nPing: %ping%"
-  no_alerts: "&a[&2Negativity&a] Không có cảnh báo để hiển thị."
+  see_alert: "&a[&2Negativity&a] You see the alerts again."
+  see_no_longer_alert: "&a[&2Negativity&a] You no longer see alerts."
   reload_done: "&a[&2Negativity&a] Đã tải lại plugin."
   verif:
     invalid_cheat: "%arg% không phải tên của cheat !"

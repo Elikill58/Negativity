@@ -73,7 +73,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0, LAST_BLOCK_BREAK = 0;
 	public String LAST_OTHER_KEEP_ALIVE, LAST_CHAT_MESSAGE = "";
-	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false,
+	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false, disableShowingAlert = false,
 			isInvisible = false, isUsingSlimeBlock = false, already_blink = false, isJumpingWithBlock = false,
 			isOnLadders = false, lastClickInv = false, jesusState = true, wasSneaking = false, flyNotMovingY = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
@@ -271,7 +271,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		final List<PlayerCheatAlertEvent> list = new ArrayList<>();
 		ALERT_NOT_SHOWED.forEach((c, listAlerts) -> {
 			if(!listAlerts.isEmpty())
-				list.add(getAlertForCheat(c, list));
+				list.add(getAlertForCheat(c, listAlerts));
 		});
 		return list;
 	}

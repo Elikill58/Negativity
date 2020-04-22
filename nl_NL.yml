@@ -57,6 +57,7 @@ negativity:
     invalid_cheat: "%arg% is geen geldige cheat!"
     start: "&a[&2Negativity&a] &7Bezig met het analyseren van %name% voor %cheat%"
     start_all: "&a[&2Negativity&a] Bezig met het volledige analyseren van %name%"
+    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
     help:
       - "/negativity verif <speler> [cheats...] : Start verificaties (alles indien er geen zijn opgegeven)"
       - "/negativity <speler> : Om wat informatie over deze speler te zien"
@@ -80,6 +81,10 @@ inventory:
     freezing: "Bevries %name%"
     active_detection: "Zie actieve detectie van %name%"
     see_alerts: "Zie alle alerts van %name%"
+    mcleaks_indicator:
+      positive: "&cIs using MCLeaks"
+      negative: "&aIs not using MCLeaks"
+      description: "&7MCLeaks provides premium accounts for free"
   detection:
     name_inv: "Actieve detectie"
     no_active: "Geen actieve detectie voor %name%"

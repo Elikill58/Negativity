@@ -57,6 +57,7 @@ negativity:
     invalid_cheat: "%arg% är inte ett slags fusk !"
     start: "&a[&2Negativity&a] &7Började analysera %name% för %cheat%"
     start_all: "&a[&2Negativity&a] Började fullständig analys för spelare %name%"
+    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
     help:
       - "/negativity verif <spelare> [fusk...] : Börjar kontroller (alla om inget fusk är givet)"
       - "/negativity <spelare> : För att se lite information av denna spelare"
@@ -80,6 +81,10 @@ inventory:
     freezing: "Fryser %name%"
     active_detection: "Se aktiva upptäckt för %name%"
     see_alerts: "Se alla varningar för %name%"
+    mcleaks_indicator:
+      positive: "&cIs using MCLeaks"
+      negative: "&aIs not using MCLeaks"
+      description: "&7MCLeaks provides premium accounts for free"
   detection:
     name_inv: "Aktiv upptäckt"
     no_active: "Inga akitva upptäckter för %name%"

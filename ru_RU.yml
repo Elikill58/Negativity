@@ -57,6 +57,7 @@ negativity:
     invalid_cheat: "%arg% не является читом."
     start: "&a[&2Negativity&a] &7Анализ начался для %name% на чит %cheat%"
     start_all: "&a[&2Negativity&a] Начался полный анализ игрока %name%"
+    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
     help:
       - "/negativity verif <игрок> [читы...] : Начинает проверку (проверка на все читы, если ни один не указан)"
       - "/negativity <игрок> : Увидеть информацию о игроке"
@@ -80,6 +81,10 @@ inventory:
     freezing: "Заморозка игрока %name%"
     active_detection: "Просмотреть активные предупреждения для %name%"
     see_alerts: "Просмотреть все предупреждения для %name%"
+    mcleaks_indicator:
+      positive: "&cIs using MCLeaks"
+      negative: "&aIs not using MCLeaks"
+      description: "&7MCLeaks provides premium accounts for free"
   detection:
     name_inv: "Активные предупреждения"
     no_active: "Нет активных предупреждений для %name%"

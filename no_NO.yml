@@ -3,6 +3,11 @@ report_wait: "Vennligst vent 1 sekkund mellom vær rapport "
 invalid_player: "%arg% er ikke en spiller !"
 not_forget_player: "ikke glem spillerens navn !"
 not_permission: "&cdu har ikke tilgang til dette."
+only_player: "Only player can do that."
+well_suspect: "%players% has well suspected !"
+none: "none"
+console: "Administrator"
+fake_entities: "Fake players"
 
 kick: "&a[&2Negativity&a]&c du har blitt sparket fra denne serveren for juksing (%cheat%)"
 
@@ -52,6 +57,7 @@ negativity:
     invalid_cheat: "%arg% er ikke en gyldig juks!"
     start: "&a[&2Negativity&a] &7begynte å analysere %name% for %cheat%"
     start_all: "&a[&2Negativity&a] startet full analyse for spilleren %name%"
+    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
     help:
       - "/negativity verif <spiller> [juks...] : Starter verifikasjoner (alt hvis ingen er gitt)"
       - "/negativity <spiller> : For å se noen opplysninger om denne spiller"
@@ -75,6 +81,10 @@ inventory:
     freezing: "frys %name%"
     active_detection: "se aktiv gjennkjenning for %name%"
     see_alerts: "se alle varslene for %name%"
+    mcleaks_indicator:
+      positive: "&cIs using MCLeaks"
+      negative: "&aIs not using MCLeaks"
+      description: "&7MCLeaks provides premium accounts for free"
   detection:
     name_inv: "aktive gjennkjenning"
     no_active: "ingen aktive gjennkjenning %name%"

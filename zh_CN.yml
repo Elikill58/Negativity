@@ -57,6 +57,7 @@ negativity:
     invalid_cheat: "%arg% 非有效作弊软件！"
     start: "&a[&2弊绝风清&a]&7已开始分析&c %name%&7 的&c %cheat%&7 行为"
     start_all: "&a[&2弊绝风清&a]&7已开始完整分析玩家&c %name%&7 的行为"
+    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
     help:
     - "/negativity verif <玩家> [作弊软件] : 开始分析（若未指定作弊软件则将进行完整分析）"
     - "/negativity <玩家> : 查看玩家信息"
@@ -80,6 +81,10 @@ inventory:
     freezing: "正在冻结 %name%"
     active_detection: "查看 %name% 的活跃检测"
     see_alerts: "查看 %name% 的警告"
+    mcleaks_indicator:
+      positive: "&cIs using MCLeaks"
+      negative: "&aIs not using MCLeaks"
+      description: "&7MCLeaks provides premium accounts for free"
   detection:
     name_inv: "活跃检测"
     no_active: "%name% 无活跃检测"

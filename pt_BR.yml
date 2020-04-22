@@ -57,6 +57,7 @@ negativity:
     invalid_cheat: "%arg% não é um cheat válido."
     start: "&a[&2Negativity&a] &7Começou a analisar %name% por %cheat%"
     start_all: "&a[&2Negativity&a] Iniciou análise completa para o jogador %name%"
+    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
     help:
       - "/negativity verif <jogador> [cheats...] : Inicia verificações (tudo se nenhum for dado)"
       - "/negativity <jogador> : Para ver algumas informações sobre este jogador"
@@ -80,6 +81,10 @@ inventory:
     freezing: "Congelando %name%"
     active_detection: "Veja a detecção ativa para %name%"
     see_alerts: "Veja todos os alertas de %name%"
+    mcleaks_indicator:
+      positive: "&cIs using MCLeaks"
+      negative: "&aIs not using MCLeaks"
+      description: "&7MCLeaks provides premium accounts for free"
   detection:
     name_inv: "Detecção ativa"
     no_active: "Nenhuma detecção ativa para %name%"

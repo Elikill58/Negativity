@@ -50,6 +50,7 @@ report:
   report_usage: "/report <tên> <lý do>"
   well_report: "&a%name% báo cáo thành công !"
   report_message: "&a[&2Negativity&a] &c%name% &7đã được báo cáo bởi &c%report% &7vì &c%reason%"
+  report_message_hover: "&7Open &c%name%&7's check menu"
 negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 nghi ngờ dùng &c%cheat% &7(&2độ tin cậy: %reliability%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 nghi ngờ dùng &c%cheat% %nb% times &7(&2độ tin cậy: %reliability%%&7) !"

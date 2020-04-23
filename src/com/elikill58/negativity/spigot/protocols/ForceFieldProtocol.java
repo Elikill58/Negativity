@@ -44,13 +44,16 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if(hasThorns(p))
-			return;
 		boolean mayCancel = false;
 		if(!p.hasLineOfSight(e.getEntity())) {
 			mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getEntity().getType().name()
 					+ " but cannot see it, ping: " + Utils.getPing(p),
 					"Hit " + e.getEntity().getType().name().toLowerCase() + " without line of sight");
+		}
+		if(hasThorns(p)) {
+			if (isSetBack() && mayCancel)
+				e.setCancelled(true);
+			return;
 		}
 		Location tempLoc = e.getEntity().getLocation().clone();
 		tempLoc.setY(p.getLocation().getY());
@@ -59,7 +62,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 				&& !p.getItemInHand().getType().equals(Material.BOW) &&!e.getEntityType().equals(EntityType.ENDER_DRAGON)) {
 			mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(dis * 2 * 10),
-					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns."
+					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
 							+ ". Ping: " + Utils.getPing(p),
 					"Distance with " + e.getEntity().getName() + ": " + nf.format(dis) + " blocks", "Distance with " + e.getEntity().getName() + ": " + nf.format(dis));
 		}
@@ -68,8 +71,8 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			public void run() {
 				Location loc1 = p.getLocation();
 				int gradeRounded = Math.round(Math.abs(loc.getYaw() - loc1.getYaw()));
-				if (gradeRounded > 76.0) {
-					SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded), "Player rotate too much (" + gradeRounded + "°) without thorns.", "Rotate " + gradeRounded + "°");
+				if (gradeRounded > 140.0) {
+					SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded), "Player rotate too much (" + gradeRounded + "°) without thorns", "Rotate " + gradeRounded + "°");
 				}
 			}
 		}, 3L);

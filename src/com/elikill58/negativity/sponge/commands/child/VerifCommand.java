@@ -22,6 +22,7 @@ import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class VerifCommand implements CommandExecutor {
 
@@ -52,6 +53,6 @@ public class VerifCommand implements CommandExecutor {
 				.arguments(player(Text.of("target")),
 						allOf(choices(Text.of("cheats"), Cheat.CHEATS_BY_KEY, true, false)))
 				.build();
-		return new NegativityCmdWrapper(command, false, "verif");
+		return new NegativityCmdWrapper(command, false, Perm.VERIF);
 	}
 }

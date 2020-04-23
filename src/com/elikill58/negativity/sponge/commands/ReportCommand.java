@@ -35,7 +35,7 @@ public class ReportCommand implements CommandExecutor {
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		Player playerSource = (Player) src;
 		SpongeNegativityPlayer nPlayerSource = SpongeNegativityPlayer.getNegativityPlayer(playerSource);
-		if (nPlayerSource.TIME_REPORT > System.currentTimeMillis() && !Perm.hasPerm(nPlayerSource, "report_wait"))
+		if (nPlayerSource.TIME_REPORT > System.currentTimeMillis() && !Perm.hasPerm(nPlayerSource, Perm.REPORT_WAIT))
 			throw new CommandException(Messages.getMessage(playerSource, "report_wait"));
 
 		Player targetPlayer = args.requireOne("target");
@@ -52,7 +52,7 @@ public class ReportCommand implements CommandExecutor {
 					.build();
 			boolean hasOp = false;
 			for (Player onlinePlayer : Utils.getOnlinePlayers()) {
-				if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(onlinePlayer), "showAlert")) {
+				if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(onlinePlayer), Perm.SHOW_ALERT)) {
 					hasOp = true;
 					onlinePlayer.sendMessage(spongeMsg);
 				}
@@ -76,6 +76,6 @@ public class ReportCommand implements CommandExecutor {
 				.arguments(player(Text.of("target")),
 						remainingJoinedStrings(Text.of("reason")))
 				.build();
-		return new NegativityCmdWrapper(command, true, "report");
+		return new NegativityCmdWrapper(command, true, Perm.REPORT);
 	}
 }

@@ -430,7 +430,7 @@ public class SpigotNegativity extends JavaPlugin {
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers()) {
 				SpigotNegativityPlayer npMod = SpigotNegativityPlayer.getNegativityPlayer(pl);
-				boolean basicPerm = Perm.hasPerm(npMod, "showAlert");
+				boolean basicPerm = Perm.hasPerm(npMod, Perm.SHOW_ALERT);
 				ShowAlertPermissionEvent permissionEvent = new ShowAlertPermissionEvent(p, np, basicPerm);
 				Bukkit.getPluginManager().callEvent(permissionEvent);
 				if (permissionEvent.isCancelled() || npMod.disableShowingAlert)

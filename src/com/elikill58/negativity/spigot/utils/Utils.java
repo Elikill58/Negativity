@@ -219,7 +219,7 @@ public class Utils {
 	}
 
 	public static void sendUpdateMessageIfNeed(Player p) {
-		if(!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "showAlert"))
+		if(!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), Perm.SHOW_ALERT))
 			return;
 		if(UniversalUtils.isLatestVersion(SpigotNegativity.getInstance().getDescription().getVersion()))
 			return;

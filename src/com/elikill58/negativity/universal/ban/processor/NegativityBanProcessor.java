@@ -23,7 +23,7 @@ public class NegativityBanProcessor extends BaseNegativityBanProcessor {
 	@Override
 	public Ban executeBan(Ban ban) {
 		NegativityPlayer nPlayer = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
-		if (nPlayer != null && Perm.hasPerm(nPlayer, "notBanned"))
+		if (nPlayer != null && Perm.hasPerm(nPlayer, Perm.NOT_BANNED))
 			return null;
 
 		Ban executedBan = super.executeBan(ban);

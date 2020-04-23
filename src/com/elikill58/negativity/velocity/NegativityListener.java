@@ -72,7 +72,7 @@ public class NegativityListener {
 					"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers())
-				if (Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer(pp), "showAlert")) {
+				if (Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer(pp), Perm.SHOW_ALERT)) {
 					Builder msg = TextComponent.builder();
 					msg.append(VelocityMessages.getMessage(pp, alertMessageKey, place));
 
@@ -105,7 +105,7 @@ public class NegativityListener {
 			Object[] place = new Object[] { "%name%", report.getReported(), "%reason%", report.getReason(), "%report%", report.getReporter() };
 			boolean hasPermitted = false;
 			for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers()) {
-				if (Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer(pp), "showReport")) {
+				if (Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer(pp), Perm.SHOW_REPORT)) {
 					hasPermitted = true;
 					Builder msg = TextComponent.builder();
 					msg.append(VelocityMessages.getMessage(pp, "report"));
@@ -143,7 +143,7 @@ public class NegativityListener {
 		}
 
 		VelocityNegativityPlayer np = VelocityNegativityPlayer.getNegativityPlayer(p);
-		if (Perm.hasPerm(np, "showAlert")) {
+		if (Perm.hasPerm(np, Perm.SHOW_ALERT)) {
 			for (Report msg : report) {
 				p.sendMessage(msg.toMessage(p));
 				report.remove(msg);

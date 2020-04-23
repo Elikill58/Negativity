@@ -72,7 +72,7 @@ public class NegativityListener implements Listener {
 					"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers())
-				if (Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer(pp), "showAlert")) {
+				if (Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer(pp), Perm.SHOW_ALERT)) {
 					TextComponent alertMessage = new TextComponent(BungeeMessages.getMessage(pp, alertMessageKey, place));
 
 					ComponentBuilder hoverComponent = new ComponentBuilder(BungeeMessages.getMessage(pp, "alert_hover", place));
@@ -97,7 +97,7 @@ public class NegativityListener implements Listener {
 			Object[] place = new Object[]{"%name%", report.getReported(), "%reason%", report.getReason(), "%report%", report.getReporter()};
 			boolean hasPermitted = false;
 			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers())
-				if (Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer(pp), "showReport")) {
+				if (Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer(pp), Perm.SHOW_REPORT)) {
 					hasPermitted = true;
 					TextComponent msg = new TextComponent(BungeeMessages.getMessage(pp, "report", place));
 					msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent(BungeeMessages.getMessage(pp, "report_hover", "%playername%", report.getReported()))}));
@@ -124,7 +124,7 @@ public class NegativityListener implements Listener {
 		}
 
 		BungeeNegativityPlayer np = BungeeNegativityPlayer.getNegativityPlayer(p);
-		if (Perm.hasPerm(np, "showAlert"))
+		if (Perm.hasPerm(np, Perm.SHOW_ALERT))
 			for (Report msg : report) {
 				p.sendMessage(msg.toMessage(p));
 				report.remove(msg);

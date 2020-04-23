@@ -10,6 +10,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class Perm {
 
+	public static final String ADMIN = "admin";
 	public static final String SHOW_ALERT = "showAlert";
 	public static final String SHOW_REPORT = "showReport";
 	public static final String VERIF = "verif";

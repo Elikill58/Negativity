@@ -20,7 +20,7 @@ public class BNegativityCommand extends Command {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if (sender instanceof ProxiedPlayer && !Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer((ProxiedPlayer) sender), "admin")) {
+		if (sender instanceof ProxiedPlayer && !Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer((ProxiedPlayer) sender), Perm.ADMIN)) {
 			sender.sendMessage(new TextComponent(BungeeMessages.getMessage((ProxiedPlayer) sender, "not_permission")));
 			return;
 		}
@@ -71,7 +71,7 @@ public class BNegativityCommand extends Command {
 		}
 
 		private static boolean hasAdminPermission(Connection sender) {
-			return !(sender instanceof ProxiedPlayer) || Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer((ProxiedPlayer) sender), "admin");
+			return !(sender instanceof ProxiedPlayer) || Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer((ProxiedPlayer) sender), Perm.ADMIN);
 		}
 	}
 }

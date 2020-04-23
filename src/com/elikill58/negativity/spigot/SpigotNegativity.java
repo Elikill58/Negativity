@@ -311,9 +311,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 			String hover_proof, String stats_send) {
-		if(!c.isActive())
-			return false;
-		if(reliability < 55)
+		if(!c.isActive() || reliability < 55)
 			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.already_blink && c.equals(Cheat.forKey(CheatKeys.BLINK))) {
@@ -326,6 +324,14 @@ public class SpigotNegativity extends JavaPlugin {
 			return false;
 		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT) && gadgetMenuSupport &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
 			return false;
+		
+		int ping = Utils.getPing(p);
+		long currentTimeMilli = System.currentTimeMillis();
+		if (np.TIME_INVINCIBILITY > currentTimeMilli || ping > c.getMaxAlertPing()
+				|| ((double) ((Damageable) p).getHealth()) == 0.0D
+				|| getInstance().getConfig().getInt("tps_alert_stop") > Utils.getLastTPS() || ping < 0 || np.isFreeze)
+			return false;
+		
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name()))
 				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().name()).getWhen().equals(WhenBypass.ALWAYS))
@@ -336,12 +342,6 @@ public class SpigotNegativity extends JavaPlugin {
 				if (ItemUseBypass.ITEM_BYPASS.get(target.getType().name()).getWhen().equals(WhenBypass.LOOKING))
 					return false;
 		
-		int ping = Utils.getPing(p);
-		long currentTimeMilli = System.currentTimeMillis();
-		if (np.TIME_INVINCIBILITY > currentTimeMilli || reliability < 30 || ping > c.getMaxAlertPing()
-				|| ((double) ((Damageable) p).getHealth()) == 0.0D
-				|| getInstance().getConfig().getInt("tps_alert_stop") > Utils.getLastTPS() || ping < 0 || np.isFreeze)
-			return false;
 		Bukkit.getPluginManager().callEvent(new PlayerCheatEvent(p, c, reliability));
 		if (hasBypass && (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase())
 				|| Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "bypass.all"))) {

@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.timers;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -104,7 +105,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				}
 			}
 			Cheat BLINK = Cheat.forKey(CheatKeys.BLINK);
-			if (np.ACTIVE_CHEAT.contains(BLINK) && !np.bypassBlink) {
+			if (np.ACTIVE_CHEAT.contains(BLINK) && !np.bypassBlink && (p.getGameMode().equals(GameMode.ADVENTURE) || p.getGameMode().equals(GameMode.SURVIVAL))) {
 				if (ping < 140) {
 					int total = np.ALL - np.KEEP_ALIVE;
 					if (total == 0) {

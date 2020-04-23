@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffectType;
 
@@ -32,9 +33,15 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		Location loc = p.getLocation();
+		Location from = e.getFrom(), to = e.getTo();
+		double xSpeed = Math.abs(from.getX() - to.getX());
+	    double zSpeed = Math.abs(from.getZ() - to.getZ());
+	    double xzSpeed = Math.sqrt(xSpeed * xSpeed + zSpeed * zSpeed);
+	    np.eatingMoveDistance =  (xSpeed >= zSpeed ? xSpeed : zSpeed);
+	    if (np.eatingMoveDistance < xzSpeed)
+	    	np.eatingMoveDistance = xzSpeed;
 		if (!loc.getBlock().getType().equals(Material.SOUL_SAND) || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
-		Location from = e.getFrom(), to = e.getTo();
 		Location fl = from.clone().subtract(to.clone());
 		double distance = to.toVector().distance(from.toVector());
 		if (distance > 0.2) {
@@ -45,6 +52,20 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 					"Soul sand under player. Distance from/to : " + distance + ". Ping: " + ping);
 			if (isSetBack() && mayCancel)
 				e.setTo(from.clone().add(new Location(fl.getWorld(), fl.getX() / 2, fl.getY() / 2, fl.getZ())).add(0, 0.5, 0));
+		}
+	}
+
+	@EventHandler
+	public void FoodCheck(PlayerItemConsumeEvent e) {
+		Player p = e.getPlayer();
+		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		if (!np.ACTIVE_CHEAT.contains(this))
+			return;
+		if (np.eatingMoveDistance > p.getWalkSpeed() || p.isSprinting()) {
+			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.NO_SLOW_DOWN), UniversalUtils.parseInPorcent(np.eatingMoveDistance * 200),
+					"Distance while eating: " + np.eatingMoveDistance + ", WalkSpeed: " + p.getWalkSpeed(), "Distance: " + np.eatingMoveDistance);
+			if(isSetBack() && mayCancel)
+				e.setCancelled(true);
 		}
 	}
 }

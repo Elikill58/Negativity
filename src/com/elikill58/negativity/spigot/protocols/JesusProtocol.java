@@ -6,12 +6,14 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -110,15 +112,43 @@ public class JesusProtocol extends Cheat implements Listener {
 		np.jesusState = !np.jesusState;
 	}
 	
+	@EventHandler
+	public void onPlayerMoveNew(PlayerMoveEvent e) {
+		Player p = e.getPlayer();
+		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
+			return;
+		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		if (!np.ACTIVE_CHEAT.contains(this))
+			return;
+		if (p.getVehicle() != null || p.isFlying())
+			return;
+		if(p.hasPotionEffect(PotionEffectType.SPEED))
+			return;
+
+		Location from = e.getFrom(), to = e.getTo();
+		double distance = to.distance(from) - Math.abs(from.getY() - to.getY());
+		Block block = p.getLocation().getBlock();
+		Location loc = p.getLocation();
+		Location upperLoc = new Location(loc.getWorld(), loc.getX(), loc.getY() + 1, loc.getZ());
+		Location underLoc = new Location(loc.getWorld(), loc.getX(), loc.getY() - 1, loc.getZ());
+		float distanceFall = p.getFallDistance();
+		if (block.isLiquid() && underLoc.getBlock().isLiquid() && distanceFall < 1 && !upperLoc.getBlock().isLiquid() && !np.hasOtherThan(underLoc, "WATER")) {
+			if (distance > p.getWalkSpeed() && !hasWaterLily(loc) && !hasWaterLily(upperLoc)) {
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.JESUS), 98, "In water, distance: " + distance, "New Jesus detection: " + distance);
+				if(isSetBack() && mayCancel)
+					p.teleport(p.getLocation().subtract(0, 1, 0));
+			}
+		}
+	}
+	
 	private boolean hasWaterLily(Location loc) {
-		boolean hasWaterLily = false;
 		int fX = loc.getBlockX(), fY = loc.getBlockY(), fZ = loc.getBlockZ();
 		for (int y = (fY - 1); y != (fY + 2); y++)
 			for (int x = (fX - 2); x != (fX + 3); x++)
 				for (int z = (fZ - 2); z != (fZ + 3); z++)
 					if(loc.getWorld().getBlockAt(x, y, z).getType().equals(LILY))
-						hasWaterLily = true;
-		return hasWaterLily;
+						return true;
+		return false;
 	}
 	
 	public boolean hasBoatAroundHim(Location loc) {

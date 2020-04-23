@@ -1,20 +1,14 @@
 package com.elikill58.negativity.bungee;
 
 import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.permissions.PermissionChecker;
-import com.elikill58.negativity.universal.permissions.Perms;
+import com.elikill58.negativity.universal.permissions.BasePlatformPermissionChecker;
 
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 
-public class BungeePermissionChecker implements PermissionChecker {
+public class BungeePermissionChecker extends BasePlatformPermissionChecker {
 
 	@Override
-	public boolean hasPermission(NegativityPlayer player, String permission) {
-		String platformPerm = Perms.PLATFORM_PERMS.get(permission);
-		if (platformPerm == null) {
-			return false;
-		}
-
+	protected boolean doPlatformCheck(NegativityPlayer player, String platformPerm) {
 		return ((ProxiedPlayer) player.getPlayer()).hasPermission(platformPerm);
 	}
 }

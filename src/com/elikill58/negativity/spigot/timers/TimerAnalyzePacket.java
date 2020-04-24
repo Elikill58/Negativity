@@ -151,7 +151,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 
 			Cheat SPEED = Cheat.forKey(CheatKeys.SPEED);
 			if(np.ACTIVE_CHEAT.contains(SPEED))
-				if(np.MOVE_TIME > 30)
+				if(np.MOVE_TIME > 60)
 					SpigotNegativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p, SPEED, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Ping: " + ping + " Warn for Speed: " + np.getWarn(SPEED));
 			np.MOVE_TIME = 0;
 			np.clearPackets();

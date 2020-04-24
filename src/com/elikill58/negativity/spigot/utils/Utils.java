@@ -292,7 +292,7 @@ public class Utils {
 	public static Block getTargetBlock(Player p, int distance) {
 		Material[] transparentItem = new Material[] {};
 		try {
-			if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+			if(Version.getVersion().isNewerOrEquals(Version.V1_14)) {
 				return (Block) p.getClass().getMethod("getTargetBlockExact", int.class).invoke(p, distance);
 			} else {
 				try {

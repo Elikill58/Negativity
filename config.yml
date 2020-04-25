@@ -234,7 +234,7 @@ time_between_report: 1000
 # The time between 2 alerts
 # in milliseconds
 # -1 to disable
-time_between_alert: 2000
+time_between_alert: 1000
 
 alert:
   # To run command when someone get alert

@@ -229,9 +229,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 		Cheat.loadCheat();
 		ProxyCompanionManager.updateForceDisabled(getBooleanInConfig("disableProxyIntegration"));
 		SpigotNegativity.trySendProxyPing();
-		SpigotNegativity.log = getBooleanInConfig("log_alerts");
-		SpigotNegativity.log_console = getBooleanInConfig("log_alerts_in_console");
-		SpigotNegativity.hasBypass = getBooleanInConfig("Permissions.bypass.active");
+		SpigotNegativity.setupValue();
 		//Bukkit.getScheduler().cancelAllTasks();
         /*Bukkit.getPluginManager().disablePlugin(sn);
         Bukkit.getPluginManager().enablePlugin(sn);*/

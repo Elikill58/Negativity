@@ -17,26 +17,7 @@ public class TimerTimeBetweenAlert extends BukkitRunnable {
 		for(Player p : Utils.getOnlinePlayers()) {
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 			for(PlayerCheatAlertEvent alert : new ArrayList<>(np.getAlertForAllCheat()))
-				SpigotNegativity.sendAlertMessage(np, alert, false);
-			/*new HashMap<>(np.ALERT_NOT_SHOWED).forEach((c, i) -> {
-				if(i.size() == 0)
-					return;
-				if(i.size() == 1) {
-					PlayerCheatAlertEvent alert = i.get(0);
-					SpigotNegativity.sendAlertMessage(alert.getReportType(), np, p, c, ping, alert.getReliability(), alert.getHoverProof(), alert, 1, alert.getStatsSend());
-				} else {
-					PlayerCheatAlertEvent alert = null;
-					int nb = 0;
-					for(PlayerCheatAlertEvent pca : i) {
-						if(pca.getReportType().equals(ReportType.VIOLATION))
-							alert = pca;
-						nb += pca.getReliability();
-					}
-					if(alert == null)
-						alert = i.get(0);
-					SpigotNegativity.sendAlertMessage(alert.getReportType(), np, p, c, ping, nb / i.size(), alert.getHoverProof(), alert, i.size(), i.get(i.size() - 1).getStatsSend());
-				}
-			});*/
+				SpigotNegativity.sendAlertMessage(np, alert);
 			np.saveProof();
 		}
 	}

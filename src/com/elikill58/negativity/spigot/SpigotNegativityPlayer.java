@@ -282,7 +282,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	public PlayerCheatAlertEvent getAlertForCheat(Cheat c, List<PlayerCheatAlertEvent> list) {
-		int nb = 0;
+		int nb = 0, nbConsole = 0;
 		HashMap<Integer, Integer> relia = new HashMap<>();
 		HashMap<Integer, Integer> ping = new HashMap<>();
 		ReportType type = ReportType.NONE;
@@ -302,12 +302,15 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			
 			if(hoverProof.length() < e.getHoverProof().length())
 				hoverProof = e.getHoverProof();
+			
+			nbConsole += e.getNbAlertConsole();
+			e.clearNbAlertConsole();
 		}
-		
-		int newRelia = UniversalUtils.sum(relia);
+		// Don't to 100% each times that there is more than 2 alerts, we made a summary, and a the nb of alert to upgrade it
+		int newRelia = UniversalUtils.parseInPorcent(UniversalUtils.sum(relia) + nb);
 		int newPing = UniversalUtils.sum(ping);
 		// we can ignore "proof" and "stats_send" because they have been already saved and they are NOT showed to player
-		return new PlayerCheatAlertEvent(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, "", nb);
+		return new PlayerCheatAlertEvent(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, "", nb, nbConsole);
 	}
 
 	public void makeAppearEntities() {

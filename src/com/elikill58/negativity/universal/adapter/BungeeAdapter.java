@@ -34,6 +34,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.io.ByteStreams;
 import com.google.gson.Gson;
 
+import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -283,5 +284,13 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 			}
 			return false;
 		});
+	}
+
+	@Override
+	public List<UUID> getOnlinePlayers() {
+		List<UUID> list = new ArrayList<>();
+		for(ProxiedPlayer temp : BungeeCord.getInstance().getPlayers())
+			list.add(temp.getUniqueId());
+		return list;
 	}
 }

@@ -276,6 +276,11 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			startAnalyze(c);
 	}
 
+	@Override
+	public void stopAnalyze(Cheat c) {
+		ACTIVE_CHEAT.remove(c);
+	}
+
 	private void destroy() {
 		saveData();
 	}

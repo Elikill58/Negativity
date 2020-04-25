@@ -14,7 +14,6 @@ import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.inventories.holders.OneCheatHolder;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class OneCheatInventory extends AbstractInventory {
 
@@ -25,7 +24,7 @@ public class OneCheatInventory extends AbstractInventory {
 	@Override
 	public void openInventory(Player p, Object... args){
 		Cheat c = (Cheat) args[0];
-		Inventory inv = Bukkit.createInventory(new OneCheatHolder(), 9, c.getName());
+		Inventory inv = Bukkit.createInventory(new OneCheatHolder(c), 9, c.getName());
 		inv.setItem(0, Utils.hideAttributes(Utils.createItem((Material) c.getMaterial(), c.getName())));
 		actualizeInventory(p, c, inv);
 		
@@ -39,22 +38,31 @@ public class OneCheatInventory extends AbstractInventory {
 	public void actualizeInventory(Player p, Object... args) {
 		Cheat c = (Cheat) args[0];
 		Inventory inv = (Inventory) args[1];
-		inv.setItem(2, Utils.createItem(Material.TNT, Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))));
+		inv.setItem(2, Utils.createItem(Material.DIAMOND, Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))));
 		inv.setItem(3, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER"), Messages.getMessage(p, "inventory.manager.autoVerif", "%auto%", Messages.getMessage(p, "inventory.manager." + (c.isAutoVerif() ? "enabled" : "disabled")))));
-		inv.setItem(4, Utils.createItem(Material.BLAZE_ROD, Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))));
-		inv.setItem(5, Utils.createItem(Material.DIAMOND, Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))));
+		inv.setItem(4, Utils.createItem(Material.TNT, Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))));
+		inv.setItem(5, Utils.createItem(Material.BLAZE_ROD, Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))));
 	}
 
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
 		if (m.equals(Material.ARROW)) {
-			AbstractInventory.open(InventoryType.CHEAT_MANAGER, p);
+			AbstractInventory.open(InventoryType.CHEAT_MANAGER, p, false);
 			return;
 		}
 		Inventory inv = e.getClickedInventory();
-		Cheat c = UniversalUtils.getCheatFromName(Utils.getInventoryName(e)).get();
+		Cheat c = ((OneCheatHolder) nh).getCheat();
 		if (m.equals(c.getMaterial()))
 			return;
+		if(m.equals(Material.TNT))
+			c.setBack(!c.isSetBack());
+		else if(m.name().contains("EYE_OF_ENDER"))
+			c.setAutoVerif(!c.isAutoVerif());
+		else if(m.equals(Material.BLAZE_ROD))
+			c.setAllowKick(!c.allowKick());
+		else if(m.equals(Material.DIAMOND))
+			c.setActive(!c.isActive());
+		
 		actualizeInventory(p, c, inv);
 		p.updateInventory();
 	}

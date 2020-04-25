@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -356,5 +357,13 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 			}
 			return false;
 		});
+	}
+
+	@Override
+	public List<UUID> getOnlinePlayers() {
+		List<UUID> list = new ArrayList<>();
+		for(Player temp : Sponge.getServer().getOnlinePlayers())
+			list.add(temp.getUniqueId());
+		return list;
 	}
 }

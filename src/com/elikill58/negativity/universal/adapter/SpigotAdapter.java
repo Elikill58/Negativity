@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +31,7 @@ import org.json.simple.parser.ParseException;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotTranslationProvider;
+import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
@@ -242,6 +244,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 
 	@Override
 	public void reloadConfig() {
+		SpigotNegativity.getInstance().saveConfig();
 		SpigotNegativity.getInstance().reloadConfig();
 	}
 
@@ -300,5 +303,13 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 			}
 			return false;
 		});
+	}
+
+	@Override
+	public List<UUID> getOnlinePlayers() {
+		List<UUID> list = new ArrayList<>();
+		for(Player temp : Utils.getOnlinePlayers())
+			list.add(temp.getUniqueId());
+		return list;
 	}
 }

@@ -19,4 +19,14 @@ public class EssentialsSupport {
 		else
 			return false;
 	}
+	
+	public static float getEssentialsRealMoveSpeed(Player p) {
+        final float defaultSpeed = p.isFlying() ? 0.1f : 0.2f;
+        float maxSpeed = 1f;
+        if (p.getWalkSpeed() < 1f)
+            return defaultSpeed * p.getWalkSpeed();
+        else
+            return ((p.getWalkSpeed() - 1) / 9) * (maxSpeed - defaultSpeed) + defaultSpeed;
+        
+    }
 }

@@ -47,6 +47,18 @@ public class UniversalUtils {
 		int i = (int) d;
 		return d < i ? i - 1 : i;
 	}
+
+	public static int getPorcentFromBoolean(boolean b) {
+		return getPorcentFromBoolean(b, 20);
+	}
+	
+	public static int getPorcentFromBoolean(boolean b, int max) {
+		return getPorcentFromBoolean(b, max, 0);
+	}
+	
+	public static int getPorcentFromBoolean(boolean b, int max, int min) {
+		return b ? max : min;
+	}
 	
 	public static int parseInPorcent(int i) {
 		if (i > 100)

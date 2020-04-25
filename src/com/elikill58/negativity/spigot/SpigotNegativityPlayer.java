@@ -255,6 +255,11 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		for (Cheat c : Cheat.values())
 			startAnalyze(c);
 	}
+
+	@Override
+	public void stopAnalyze(Cheat c) {
+		ACTIVE_CHEAT.remove(c);
+	}
 	
 	@Override
 	public String getReason(Cheat c) {

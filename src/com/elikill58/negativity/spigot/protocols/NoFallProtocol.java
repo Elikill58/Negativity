@@ -12,6 +12,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -41,7 +42,8 @@ public class NoFallProtocol extends Cheat implements Listener {
 			if (p.getFallDistance() == 0.0F && p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
 				int relia = UniversalUtils.parseInPorcent(distance * 100);
 				if (p.isOnGround()) {
-					if (distance > 0.79D) {
+					if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && SpigotNegativity.essentialsSupport
+							&& EssentialsSupport.checkEssentialsSpeedPrecondition(p))) {
 						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
 								"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceBetweenFromAndTo: "
 										+ distance + " (ping: " + Utils.getPing(p) + "). Warn: "

@@ -180,7 +180,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				suggestions.add("reload");
 			if ("alert".startsWith(prefix))
 				suggestions.add("alert");
-			if ("admin".startsWith(prefix) && !(sender instanceof Player) && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), "manageCheat"))
+			if ("admin".startsWith(prefix) && (sender instanceof Player) && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), "manageCheat"))
 				suggestions.add("admin");
 		} else {
 			if (arg[0].equalsIgnoreCase("verif")) {

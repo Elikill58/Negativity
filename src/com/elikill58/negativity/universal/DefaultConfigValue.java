@@ -111,7 +111,7 @@ public class DefaultConfigValue {
 		BOOLEANS.put("disableProxyIntegration", false);
 
 		INTS.put("time_between_report", 1000);
-		INTS.put("time_between_alert", 2000);
+		INTS.put("time_between_alert", 1000);
 
 		BOOLEANS.put("ban.active", false);
 		STRINGS.put("ban.processor", "file");

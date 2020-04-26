@@ -284,4 +284,12 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 			return false;
 		});
 	}
+
+	@Override
+	public List<UUID> getOnlinePlayers() {
+		List<UUID> list = new ArrayList<>();
+		for(Player temp : VelocityNegativity.getInstance().getServer().getAllPlayers())
+			list.add(temp.getUniqueId());
+		return list;
+	}
 }

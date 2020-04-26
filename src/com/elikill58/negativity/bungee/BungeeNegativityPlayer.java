@@ -87,6 +87,11 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	}
 
 	@Override
+	public void stopAnalyze(Cheat c) {
+		
+	}
+
+	@Override
 	public void updateMinerateInFile() {
 		
 	}
@@ -108,7 +113,6 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 
 	@Override
 	public String getReason(Cheat c) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

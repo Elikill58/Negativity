@@ -85,6 +85,11 @@ public class VelocityNegativityPlayer extends NegativityPlayer {
 	}
 
 	@Override
+	public void stopAnalyze(Cheat c) {
+		
+	}
+
+	@Override
 	public void updateMinerateInFile() {
 		
 	}

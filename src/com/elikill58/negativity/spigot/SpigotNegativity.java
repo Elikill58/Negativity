@@ -77,6 +77,7 @@ import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
+import com.elikill58.negativity.universal.utils.ReflectionUtils;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 @SuppressWarnings("deprecation")
@@ -87,27 +88,21 @@ public class SpigotNegativity extends JavaPlugin {
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false;
 	public static final Material MATERIAL_CLOSE = Utils.getMaterialWith1_15_Compatibility("BARRIER", "REDSTONE");
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
-	private static final HashMap<Player, HashMap<Cheat, Long>> TIME_LAST_CHEAT_ALERT = new HashMap<>();
+	public static final HashMap<Player, HashMap<Cheat, Long>> TIME_LAST_CHEAT_ALERT = new HashMap<>();
 	public static String CHANNEL_NAME_FML = "";
+	private static int timeBetweenAlert = -1;
 	
 	@Override
 	public void onEnable() {
 		INSTANCE = this;
 		if (Adapter.getAdapter() == null)
 			Adapter.setAdapter(new SpigotAdapter(this));
-		Adapter ada = Adapter.getAdapter();
 		Version v = Version.getVersion();
 		if (v.equals(Version.HIGHER))
 			getLogger().warning("Unknow server version ! Some problems can appears.");
 		else
 			getLogger().info("Detected server version: " + v.name().toLowerCase());
-		/*try {
-			MATERIAL_CLOSE = (Material) Material.class.getField("BARRIER").get(Material.class);
-		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e) {
-			MATERIAL_CLOSE = Material.REDSTONE;
-		}*/
+		
 		PacketManager.run(this);
 		new File(getDataFolder().getAbsolutePath() + File.separator + "user").mkdirs();
 		if (!new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml").exists()) {
@@ -127,10 +122,8 @@ public class SpigotNegativity extends JavaPlugin {
 		UniversalUtils.init();
 		Cheat.loadCheat();
 		FakePlayer.loadClass();
-		ProxyCompanionManager.updateForceDisabled(ada.getBooleanInConfig("disableProxyIntegration"));
-		log = ada.getBooleanInConfig("log_alerts");
-		log_console = ada.getBooleanInConfig("log_alerts_in_console");
-		hasBypass = ada.getBooleanInConfig("Permissions.bypass.active");
+		ProxyCompanionManager.updateForceDisabled(getConfig().getBoolean("disableProxyIntegration"));
+		setupValue();
 
 		new Metrics(this)
 				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
@@ -158,7 +151,6 @@ public class SpigotNegativity extends JavaPlugin {
 		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
 		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 10);
-		(timeTimeBetweenAlert = new TimerTimeBetweenAlert()).runTaskTimer(this, 20, 20);
 
 		for (Cheat c : Cheat.values())
 			if (c.isActive() && c.hasListener())
@@ -375,22 +367,14 @@ public class SpigotNegativity extends JavaPlugin {
 			return false;
 		}
 		manageAlertCommand(type, p, c, reliability);
-		int timeBetweenTwoAlert = Adapter.getAdapter().getIntegerInConfig("time_between_alert");
-		if(timeBetweenTwoAlert != -1) {
-			HashMap<Cheat, Long> time_alert = (TIME_LAST_CHEAT_ALERT.containsKey(p) ? TIME_LAST_CHEAT_ALERT.get(p) : new HashMap<>());
-			if(time_alert.containsKey(c)) {
-				if(((currentTimeMilli - time_alert.get(c)) < timeBetweenTwoAlert)) {
-					List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c) ? np.ALERT_NOT_SHOWED.get(c) : new ArrayList<>();
-					tempList.add(alert);
-					np.ALERT_NOT_SHOWED.put(c, tempList);
-					return true;
-				}
-			}
-			time_alert.put(c, currentTimeMilli);
-			TIME_LAST_CHEAT_ALERT.put(p, time_alert);
+		if(timeBetweenAlert != -1) {
+			List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c) ? np.ALERT_NOT_SHOWED.get(c) : new ArrayList<>();
+			tempList.add(alert);
+			np.ALERT_NOT_SHOWED.put(c, tempList);
+			return true;
 		}
 
-		sendAlertMessage(np, alert, true);
+		sendAlertMessage(np, alert);
 		return true;
 	}
 
@@ -405,7 +389,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 	}
 
-	public static void sendAlertMessage(SpigotNegativityPlayer np, PlayerCheatAlertEvent alert, boolean isFirstSend) {
+	public static void sendAlertMessage(SpigotNegativityPlayer np, PlayerCheatAlertEvent alert) {
 		Cheat c = alert.getCheat();
 		int reliability = alert.getReliability();
 		if(reliability == 0) {// alert already sent
@@ -414,13 +398,10 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		Player p = alert.getPlayer();
 		int ping = alert.getPing();
-		if(isFirstSend) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", alert.getStatsSend());
-			if (log_console)
-				INSTANCE.getLogger()
-						.info("New " + alert.getReportType().getName() + " for " + p.getName() + " (UUID: " + p.getUniqueId().toString()
-								+ ") (ping: " + ping + ") : suspected of cheating (" + c.getName() + ") Reliability: "
-								+ reliability);
+		if(alert.getNbAlertConsole() > 0 && log_console) {
+				INSTANCE.getLogger().info("New " + alert.getReportType().getName() + " for " + p.getName()
+						+ " (UUID: " + p.getUniqueId().toString() + ") (ping: " + ping + ") : suspected of cheating ("
+						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + " Reliability: " + reliability);
 		}
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
 			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHoverProof(), alert.getNbAlert());
@@ -446,14 +427,10 @@ public class SpigotNegativity extends JavaPlugin {
 					hasPermPeople = true;
 				}
 			}
-			if(!hasPermPeople) {
-				if(isFirstSend) {
-					List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c) ? np.ALERT_NOT_SHOWED.get(c) : new ArrayList<>();
-					tempList.add(alert);
-					np.ALERT_NOT_SHOWED.put(c, tempList);
-				}
-			} else
+			if(hasPermPeople) {
 				np.ALERT_NOT_SHOWED.remove(c);
+				Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", alert.getStatsSend());
+			}
 		}
 	}
 
@@ -513,13 +490,6 @@ public class SpigotNegativity extends JavaPlugin {
 		if (needPacket && !SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId()))
 			SpigotNegativityPlayer.INJECTED.add(p.getUniqueId());
 	}
-	
-	private Object getPrivateField(Object object, String field)
-			throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
-		Field objectField = object.getClass().getDeclaredField(field);
-		objectField.setAccessible(true);
-		return objectField.get(object);
-	}
 
 	private Object getKnownCommands(Object object) {
 		try {
@@ -542,7 +512,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public void unRegisterBukkitCommand(PluginCommand cmd) {
 		try {
-			Object result = getPrivateField(this.getServer().getPluginManager(), "commandMap");
+			Object result = ReflectionUtils.getPrivateField(this.getServer().getPluginManager(), "commandMap");
 			HashMap<?, ?> knownCommands = (HashMap<?, ?>) getKnownCommands((SimpleCommandMap) result);
 			if (knownCommands.containsKey(cmd.getName()))
 				knownCommands.remove(cmd.getName());
@@ -551,6 +521,22 @@ public class SpigotNegativity extends JavaPlugin {
 					knownCommands.remove(alias);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	public static void setupValue() {
+		SpigotNegativity pl = getInstance();
+		FileConfiguration config = pl.getConfig();
+		log = config.getBoolean("log_alerts");
+		log_console = config.getBoolean("log_alerts_in_console");
+		hasBypass = config.getBoolean("Permissions.bypass.active");
+		
+		timeBetweenAlert = config.getInt("time_between_alert");
+		if(timeBetweenAlert != -1) {
+			int timeTick = (timeBetweenAlert / 1000) * 20;
+			if(pl.timeTimeBetweenAlert != null)
+				pl.timeTimeBetweenAlert.cancel();
+			(pl.timeTimeBetweenAlert = new TimerTimeBetweenAlert()).runTaskTimer(pl, timeTick, timeTick);
 		}
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -92,7 +93,6 @@ public abstract class Cheat {
 	public boolean setBack(boolean b) {
 		Adapter.getAdapter().set("cheats." + key + ".setBack", b);
 		Adapter.getAdapter().reloadConfig();
-		//SpigotNegativity.getInstance().reloadConfig();
 		return b;
 	}
 
@@ -103,8 +103,15 @@ public abstract class Cheat {
 	}
 
 	public boolean setActive(boolean active) {
-		Adapter.getAdapter().set("cheats." + key + ".isActive", active);
-		Adapter.getAdapter().reloadConfig();
+		Adapter ada = Adapter.getAdapter();
+		ada.set("cheats." + key + ".isActive", active);
+		ada.reloadConfig();
+		for(UUID playerUUID : Adapter.getAdapter().getOnlinePlayers()) {
+			if(active)
+				ada.getNegativityPlayer(playerUUID).startAnalyze(this);
+			else
+				ada.getNegativityPlayer(playerUUID).stopAnalyze(this);
+		}
 		return active;
 	}
 

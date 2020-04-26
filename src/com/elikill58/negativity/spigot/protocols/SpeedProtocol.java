@@ -49,7 +49,6 @@ public class SpeedProtocol extends Cheat implements Listener {
 			if (b && isSetBack())
 				e.setCancelled(true);
 		}
-
 		Location from = e.getFrom().clone(), to = e.getTo().clone();
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)
 				|| p.getEntityId() == 100 || p.getVehicle() != null || p.getAllowFlight()
@@ -61,20 +60,23 @@ public class SpeedProtocol extends Cheat implements Listener {
 			np.BYPASS_SPEED--;
 			return;
 		}
-		if (np.has(p.getLocation().getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| np.has(p.getLocation().add(0, 1, 0).getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
+		if (np.has(p.getLocation().clone().getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| np.has(p.getLocation().clone().add(0, 1, 0).getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| np.has(p.getLocation().clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		boolean mayCancel = false;
 		if (p.isOnGround()) {
-			if (y >= 0.75D && !(p.getWalkSpeed() > 0.5F && SpigotNegativity.essentialsSupport
-					&& EssentialsSupport.checkEssentialsSpeedPrecondition(p))) {
-				ReportType type = ReportType.WARNING;
-				if (np.getWarn(this) > 7)
-					type = ReportType.VIOLATION;
-				mayCancel = SpigotNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(y * 100 * 2),
-						"Player in ground. WalkSpeed: " + p.getWalkSpeed() + " Distance between from/to location: " + y,
-						"Distance Last/New position: " + y + "\n(With same Y)\nPlayer on ground",
+			double walkSpeed = SpigotNegativity.essentialsSupport ? (p.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : p.getWalkSpeed();
+			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
+			if((SpigotNegativity.essentialsSupport ? (walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D)) : y >= 0.75D) || walkTest){
+				int porcent = UniversalUtils.parseInPorcent(y * 50 + UniversalUtils.getPorcentFromBoolean(walkTest, 20)
+						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
+						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
+				ReportType type = np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING;
+				mayCancel = SpigotNegativity.alertMod(type, p, this, porcent,
+						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: " + walkTest +
+						", walkWithEssentialsTest: " + walkWithEssTest, "Distance Last/New position: " + y + "\n(With same Y)\nPlayer on ground",
 						"Distance Last-New position: " + y);
 			}
 		} else if (!p.isOnGround()) {

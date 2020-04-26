@@ -13,6 +13,7 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -291,7 +292,7 @@ public class Utils {
 	public static Block getTargetBlock(Player p, int distance) {
 		Material[] transparentItem = new Material[] {};
 		try {
-			if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+			if(Version.getVersion().isNewerOrEquals(Version.V1_14)) {
 				return (Block) p.getClass().getMethod("getTargetBlockExact", int.class).invoke(p, distance);
 			} else {
 				try {
@@ -314,5 +315,9 @@ public class Utils {
 		for (int i = 0; i < inv.getSize(); i++)
 			if (inv.getItem(i) == null)
 				inv.setItem(i, item);
+	}
+	
+	public static boolean isInBoat(Player p) {
+		return p.isInsideVehicle() && p.getVehicle().getType().equals(EntityType.BOAT);
 	}
 }

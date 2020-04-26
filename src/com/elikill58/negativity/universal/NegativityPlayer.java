@@ -49,9 +49,11 @@ public abstract class NegativityPlayer {
 	public abstract void banEffect();
 	public abstract void startAnalyze(Cheat c);
 	public abstract void startAllAnalyze();
+	public abstract void stopAnalyze(Cheat c);
 	public abstract void updateMinerateInFile();
 	public abstract boolean isOp();
 	//public abstract void setLang(String newLang);
 	public abstract String getIP();
 	public abstract String getReason(Cheat c);
+
 }

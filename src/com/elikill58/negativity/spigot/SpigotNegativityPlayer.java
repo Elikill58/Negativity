@@ -255,6 +255,11 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		for (Cheat c : Cheat.values())
 			startAnalyze(c);
 	}
+
+	@Override
+	public void stopAnalyze(Cheat c) {
+		ACTIVE_CHEAT.remove(c);
+	}
 	
 	@Override
 	public String getReason(Cheat c) {
@@ -277,7 +282,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	public PlayerCheatAlertEvent getAlertForCheat(Cheat c, List<PlayerCheatAlertEvent> list) {
-		int nb = 0;
+		int nb = 0, nbConsole = 0;
 		HashMap<Integer, Integer> relia = new HashMap<>();
 		HashMap<Integer, Integer> ping = new HashMap<>();
 		ReportType type = ReportType.NONE;
@@ -297,12 +302,15 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			
 			if(hoverProof.length() < e.getHoverProof().length())
 				hoverProof = e.getHoverProof();
+			
+			nbConsole += e.getNbAlertConsole();
+			e.clearNbAlertConsole();
 		}
-		
-		int newRelia = UniversalUtils.sum(relia);
+		// Don't to 100% each times that there is more than 2 alerts, we made a summary, and a the nb of alert to upgrade it
+		int newRelia = UniversalUtils.parseInPorcent(UniversalUtils.sum(relia) + nb);
 		int newPing = UniversalUtils.sum(ping);
 		// we can ignore "proof" and "stats_send" because they have been already saved and they are NOT showed to player
-		return new PlayerCheatAlertEvent(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, "", nb);
+		return new PlayerCheatAlertEvent(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, "", nb, nbConsole);
 	}
 
 	public void makeAppearEntities() {
@@ -447,59 +455,62 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		saveProof();
 		Adapter.getAdapter().invalidateAccount(getUUID());
 	}
-
+	
+	@Deprecated
 	public boolean hasOtherThanExtended(Location loc, Material m) {
+		return hasOtherThanExtended(loc, m.name());
+	}
+
+	public boolean hasOtherThanExtended(Location loc, String m) {
 		Location tempLoc = loc.clone();
-		if (!loc.getBlock().getType().equals(m))
+		loc = loc.clone();
+		if (!loc.getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+		if (!loc.add(1, 0, 0).getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+		if (!loc.add(0, 0, -1).getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+		if (!loc.add(0, 0, -1).getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+		if (!loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.add(-1, 0, 0).getBlock().getType().equals(m))
+		if (!loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.add(-1, 0, 0).getBlock().getType().equals(m))
+		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
-			return true;
-		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(m))
 			return true;
 		loc = tempLoc;
-		if (!loc.add(0, 0, 2).getBlock().getType().equals(m))
+		if (!loc.add(0, 0, 2).getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+		if (!loc.add(1, 0, 0).getBlock().getType().name().contains(m))
 			return true;
-		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+		if (!loc.add(1, 0, 0).getBlock().getType().name().contains(m))
 			return true;
 		for (int i = 0; i < 4; i++)
-			if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+			if (!loc.add(0, 0, -1).getBlock().getType().name().contains(m))
 				return true;
 		for (int i = 0; i < 4; i++)
-			if (!loc.add(-1, 0, 0).getBlock().getType().equals(m))
+			if (!loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
 				return true;
 		for (int i = 0; i < 4; i++)
-			if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+			if (!loc.add(0, 0, 1).getBlock().getType().name().contains(m))
 				return true;
-		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+		if (!loc.add(1, 0, 0).getBlock().getType().name().contains(m))
 			return true;
 		return false;
 	}
 
 	public boolean hasExtended(Location loc, String m) {
 		Location tempLoc = loc.clone();
+		loc = loc.clone();
 		if (loc.getBlock().getType().name().contains(m))
 			return true;
 		if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
 			return true;
 		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
 			return true;
 		if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
 			return true;
@@ -548,8 +559,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return true;
 		if (!loc.add(0, 0, -1).getBlock().getType().name().contains(name))
 			return true;
-		if (!loc.add(0, 0, -1).getBlock().getType().name().contains(name))
-			return true;
 		if (!loc.add(-1, 0, 0).getBlock().getType().name().contains(name))
 			return true;
 		if (!loc.add(-1, 0, 0).getBlock().getType().name().contains(name))
@@ -571,8 +580,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return true;
 		if (m.contains(loc.add(0, 0, -1).getBlock().getType()))
 			return true;
-		if (m.contains(loc.add(0, 0, -1).getBlock().getType()))
-			return true;
 		if (m.contains(loc.add(-1, 0, 0).getBlock().getType()))
 			return true;
 		if (m.contains(loc.add(-1, 0, 0).getBlock().getType()))
@@ -585,25 +592,24 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public boolean has(Location loc, String... ms) {
-		List<String> m = Arrays.asList(ms);
-		if (m.contains(loc.add(0, 0, 1).getBlock().getType().name()))
-			return true;
-		if (m.contains(loc.add(1, 0, 0).getBlock().getType().name()))
-			return true;
-		if (m.contains(loc.add(0, 0, -1).getBlock().getType().name()))
-			return true;
-		if (m.contains(loc.add(0, 0, -1).getBlock().getType().name()))
-			return true;
-		if (m.contains(loc.add(0, 0, -1).getBlock().getType().name()))
-			return true;
-		if (m.contains(loc.add(-1, 0, 0).getBlock().getType().name()))
-			return true;
-		if (m.contains(loc.add(-1, 0, 0).getBlock().getType().name()))
-			return true;
-		if (m.contains(loc.add(0, 0, 1).getBlock().getType().name()))
-			return true;
-		if (m.contains(loc.add(0, 0, 1).getBlock().getType().name()))
-			return true;
+		for(String s : ms) {
+			if (loc.add(0, 0, 1).getBlock().getType().name().contains(s))
+				return true;
+			if (loc.add(1, 0, 0).getBlock().getType().name().contains(s))
+				return true;
+			if (loc.add(0, 0, -1).getBlock().getType().name().contains(s))
+				return true;
+			if (loc.add(0, 0, -1).getBlock().getType().name().contains(s))
+				return true;
+			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(s))
+				return true;
+			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(s))
+				return true;
+			if (loc.add(0, 0, 1).getBlock().getType().name().contains(s))
+				return true;
+			if (loc.add(0, 0, 1).getBlock().getType().name().contains(s))
+				return true;
+		}
 		return false;
 	}
 

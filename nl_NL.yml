@@ -12,10 +12,10 @@ fake_entities: "Neppe spelers"
 kick: "&a[&2Negativity&a]&c Je bent van de server geschopt voor Cheaten (%cheat%)"
 
 lang:
-  invalid_lang: "%arg% isn't a valid lang !"
-  help: "/lang <new lang> : Change the default language"
-  current: "The current language is %lang%"
-  edit: "Edit the default lang"
+  invalid_lang: "%arg% is geen geldige taal!"
+  help: "/lang <nieuwe taal> : Verander de standaard taal"
+  current: "De huidige taal is %lang%"
+  edit: "Pas de standaard taal aan"
   translation_disabled: "&a[&2Negativity&a] &cPer-player translations are disabled"
   language_set: "&a[&2Negativity&a] &7De berichten van Negativity zijn nu in het Nederlands"
 ban:
@@ -45,26 +45,26 @@ report:
   report_usage: "/report <naam> <reden>"
   well_report: "&a%name% is succesvol gerapporteerd!"
   report_message: "&a[&2Negativity&a] &c%name% &7is gerapporteerd door &c%report% &7voor &c%reason%"
-  report_message_hover: "&7Open &c%name%&7's check menu"
+  report_message_hover: "&7Open &c%name%&7's controle menu"
 negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% &7(&2Kans: %reliability%%&7)!"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 gebruikt mogelijk &c%cheat% %nb% tijd &7(&2Kans: %reliability%%&7)!"
   alert_hover: "&6Kans: %reliability%%\nPing: %ping%"
-  see_alert: "&a[&2Negativity&a] You see the alerts again."
-  see_no_longer_alert: "&a[&2Negativity&a] You no longer see alerts."
-  reload_done: "&a[&2Negativity&a] Plugin reloaded."
+  see_alert: "&a[&2Negativity&a] Je ziet de meldingen weer."
+  see_no_longer_alert: "&a[&2Negativity&a] Je ziet geen meldingen meer."
+  reload_done: "&a[&2Negativity&a] Plugin herladen."
   verif:
     invalid_cheat: "%arg% is geen geldige cheat!"
     start: "&a[&2Negativity&a] &7Bezig met het analyseren van %name% voor %cheat%"
     start_all: "&a[&2Negativity&a] Bezig met het volledige analyseren van %name%"
-    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
+    start_none: "&a[&2Negativity&a] &cKon de analyse niet starten, omdat er geen geldige cheats zijn opgegeven"
     help:
       - "/negativity verif <speler> [cheats...] : Start verificaties (alles indien er geen zijn opgegeven)"
       - "/negativity <speler> : Om wat informatie over deze speler te zien"
 messages_update:
-  dir_creation_failed: "&cFailed to create '%dir%' or its backup directory: %message%"
-  file_update_failed: "&cFailed to update messages for %language%: %message%"
-  update_done: "&eMessages have been updated and reloaded"
+  dir_creation_failed: "&cKon '%dir%' of zijn backup map niet maken: %message%"
+  file_update_failed: "&cKon de berichten voor %language% niet bijwerken: %message%"
+  update_done: "&eBerichten zijn geüpdatet en herladen"
 inventory:
   close: "Sluiten"
   back: "Terug"
@@ -82,9 +82,9 @@ inventory:
     active_detection: "Zie actieve detectie van %name%"
     see_alerts: "Zie alle alerts van %name%"
     mcleaks_indicator:
-      positive: "&cIs using MCLeaks"
-      negative: "&aIs not using MCLeaks"
-      description: "&7MCLeaks provides premium accounts for free"
+      positive: "&cGebruikt MCLeaks"
+      negative: "&aGebruikt geen MCLeaks"
+      description: "&7MCLeaks biedt gratis premium accounts aan"
   detection:
     name_inv: "Actieve detectie"
     no_active: "Geen actieve detectie voor %name%"

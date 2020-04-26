@@ -65,4 +65,5 @@ public abstract class Adapter {
 	public abstract void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof);
 	public abstract void runConsoleCommand(String cmd);
 	public abstract CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId);
+	public abstract List<UUID> getOnlinePlayers();
 }

@@ -154,6 +154,7 @@ public class SpongeNegativity {
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
 		BanManager.registerProcessor("sponge", new SpongeBanProcessor());
+		Perm.registerChecker(Perm.PLATFORM_CHECKER, new SpongePermissionChecker());
 
 		if(SpongeUpdateChecker.ifUpdateAvailable()) {
 			getLogger().info("New version available (" + SpongeUpdateChecker.getVersionString() + ") : " + SpongeUpdateChecker.getDownloadUrl());
@@ -321,7 +322,7 @@ public class SpongeNegativity {
 			Task.builder().delayTicks(20).execute(() -> sendProxyPing(p)).submit(this);
 		}
 
-		if (Perm.hasPerm(np, "showAlert")) {
+		if (Perm.hasPerm(np, Perm.SHOW_ALERT)) {
 			if (ReportCommand.REPORT_LAST.size() > 0) {
 				for (Text msg : ReportCommand.REPORT_LAST)
 					p.sendMessage(msg);
@@ -555,7 +556,7 @@ public class SpongeNegativity {
 
 		boolean alertSent = false;
 		for (Player pl : Utils.getOnlinePlayers()) {
-			if (!Perm.hasPerm(np, "showAlert")) {
+			if (!Perm.hasPerm(np, Perm.SHOW_ALERT)) {
 				continue;
 			}
 

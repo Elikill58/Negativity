@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal;
 import java.util.HashMap;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class DefaultConfigValue {
 
@@ -66,10 +67,8 @@ public class DefaultConfigValue {
 		STRINGS.put("Database.url", "127.0.0.1/myDb");
 		STRINGS.put("Database.user", "root");
 		STRINGS.put("Database.password", "myPassword");
-		STRINGS.put("Database.table_perm", "myTable");
 		STRINGS.put("Database.table_lang", "myTable");
 		STRINGS.put("Database.column_find_row", "uuid");
-		STRINGS.put("Database.column_perm", "rank");
 		STRINGS.put("Database.column_lang", "lang");
 		BOOLEANS.put("Database.saveInCache", true);
 
@@ -80,29 +79,19 @@ public class DefaultConfigValue {
 		STRINGS.put("items.COMPASS.when", "always");
 		STRINGS.put("items.COMPASS.cheats", "speed,fly");
 
-		BOOLEANS.put("Permissions.defaultActive", true);
-		BOOLEANS.put("Permissions.canBeHigher", false);
+		STRINGS.put("Permissions.checker", Perm.PLATFORM_CHECKER);
 
 		STRINGS.put("Permissions.admin.default", "negativity.admin");
-		STRINGS.put("Permissions.admin.custom", "ADMIN");
 		STRINGS.put("Permissions.showAlert.default", "negativity.alert");
-		STRINGS.put("Permissions.showAlert.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.showReport.default", "negativity.seereport");
-		STRINGS.put("Permissions.showReport.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.verif.default", "negativity.verif");
-		STRINGS.put("Permissions.verif.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.manageCheat.default", "negativity.managecheat");
-		STRINGS.put("Permissions.manageCheat.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.report_wait.default", "negativity.reportwait");
 		STRINGS.put("Permissions.report.default", "negativity.report");
 		STRINGS.put("Permissions.ban.default", "negativity.ban");
-		STRINGS.put("Permissions.ban.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.unban.default", "negativity.unban");
-		STRINGS.put("Permissions.unban.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.notBanned.default", "negativity.notbanned");
-		STRINGS.put("Permissions.notBanned.custom", "ADMIN");
 		STRINGS.put("Permissions.mod.default", "negativity.mod");
-		STRINGS.put("Permissions.mod.custom", "MOD,ADMIN");
 		STRINGS.put("Permissions.lang.default", "negativity.lang");
 		BOOLEANS.put("Permissions.bypass.active", false);
 
@@ -112,7 +101,6 @@ public class DefaultConfigValue {
 		for (String localCheat : cheats) {
 			//STRINGS.put("Permissions.bypass." + localCheat, "negativity.bypass." + localCheat);
 			STRINGS.put("Permissions.bypass." + localCheat + ".default", "negativity.bypass." + localCheat);
-			STRINGS.put("Permissions.bypass." + localCheat + ".custom", "ADMIN");
 		}
 
 		BOOLEANS.put("Translation.active", false);

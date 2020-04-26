@@ -17,6 +17,7 @@ import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class UnbanCommand implements CommandExecutor {
 
@@ -40,6 +41,6 @@ public class UnbanCommand implements CommandExecutor {
 				.executor(new UnbanCommand())
 				.arguments(onlyOne(user(Text.of("target"))))
 				.build();
-		return new NegativityCmdWrapper(command, false, "unban");
+		return new NegativityCmdWrapper(command, false, Perm.UNBAN);
 	}
 }

@@ -17,7 +17,7 @@ public class VNegativityCommand implements Command {
 
 	@Override
 	public void execute(CommandSource source, @NonNull String[] args) {
-		if (source instanceof Player && !Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer((Player) source), "admin")) {
+		if (source instanceof Player && !Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer((Player) source), Perm.ADMIN)) {
 			source.sendMessage(VelocityMessages.getMessage((Player) source, "not_permission"));
 			return;
 		}
@@ -54,6 +54,6 @@ public class VNegativityCommand implements Command {
 	}
 
 	private static boolean hasAdminPermission(CommandSource source) {
-		return !(source instanceof Player) || Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer((Player) source), "admin");
+		return !(source instanceof Player) || Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer((Player) source), Perm.ADMIN);
 	}
 }

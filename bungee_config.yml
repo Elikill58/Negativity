@@ -21,39 +21,24 @@ Database:
   url: "127.0.0.1/myDb"
   user: root
   password: "myPassword"
-  table_perm: "myTable"
   table_lang: "myTable"
   table_ban: "ban"
-  column_perm: "rank"
   column_lang: "lang"
   saveInCache: false # To do less request to your database
 
-#
-# Configuration about the permissions (basic and custom)
-#
 Permissions:
-  defaultActive: true
-  #
-  # Only if it's an integer.
-  # It's if your rank system work with power.
-  # For example: If a player have 50, and you write 40, he would can use it
-  #
-  canBeHigher: false
-
-  # Use "," to split all possibilites of custom permission
+  # The checker indicates if a player has a specific permission.
+  # By default only 'platform' is available
+  checker: platform
   showAlert:
     default: "negativity.alert"
-    custom: "MOD,ADMIN"
   admin:
     default: "negativity.admin"
-    custom: "ADMIN"
   showReport:
     default: "negativity.seereport"
-    custom: "MOD,ADMIN"
   # To bypass ban system
   notBanned:
     default: "negativity.notbanned"
-    custom: "ADMIN"
 
 Translation:
   active: false # enable or disable the translation

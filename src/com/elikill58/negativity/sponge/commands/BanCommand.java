@@ -23,6 +23,7 @@ import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
+import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class BanCommand implements CommandExecutor {
@@ -69,6 +70,6 @@ public class BanCommand implements CommandExecutor {
 						firstParsing(literal(Text.of("definitive"), "definitive"), string(Text.of("duration"))),
 						remainingJoinedStrings(Text.of("reason")))
 				.build();
-		return new NegativityCmdWrapper(command, false, "ban");
+		return new NegativityCmdWrapper(command, false, Perm.BAN);
 	}
 }

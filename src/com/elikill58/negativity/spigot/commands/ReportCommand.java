@@ -36,7 +36,7 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 
 		Player p = (Player) sender;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (np.TIME_REPORT > System.currentTimeMillis() && !Perm.hasPerm(np, "report_wait")) {
+		if (np.TIME_REPORT > System.currentTimeMillis() && !Perm.hasPerm(np, Perm.REPORT_WAIT)) {
 			Messages.sendMessage(p, "report_wait");
 			return false;
 		}
@@ -65,7 +65,7 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 		} else {
 			boolean alertSent = false;
 			for (Player pl : Utils.getOnlinePlayers())
-				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), "showAlert")) {
+				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), Perm.SHOW_ALERT)) {
 					alertSent = true;
 					new ClickableText().addRunnableHoverEvent(
 							Messages.getMessage(pl, "report.report_message",

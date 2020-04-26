@@ -73,7 +73,7 @@ public class PlayersEvents implements Listener {
 		}
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());
 		np.TIME_INVINCIBILITY = System.currentTimeMillis() + 8000;
-		if (Perm.hasPerm(np, "showAlert")) {
+		if (Perm.hasPerm(np, Perm.SHOW_ALERT)) {
 			if(ReportCommand.REPORT_LAST.size() > 0) {
 				for (String msg : ReportCommand.REPORT_LAST)
 					p.sendMessage(msg);

@@ -246,7 +246,7 @@ public class Inv {
 		invGrid.set(2, 1, Utils.createItem(ItemTypes.PUMPKIN_PIE, Messages.getStringMessage(p, "inventory.mod.invisible")));
 		invGrid.set(3, 1, Utils.createItem(ItemTypes.FEATHER, "&rFly: " + Messages.getStringMessage(p,
 				"inventory.manager." + (p.get(Keys.CAN_FLY).get() ? "enabled" : "disabled"))));
-		if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "manageCheat"))
+		if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), Perm.MANAGE_CHEAT))
 			invGrid.set(4, 1, Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p, "inventory.mod.cheat_manage")));
 		invGrid.set(6, 1, Utils.createItem(ItemTypes.LEAD, Messages.getStringMessage(p, "inventory.mod.random_tp")));
 		invGrid.set(7, 1, Utils.hideAttributes(Utils.createItem(ItemTypes.IRON_SHOVEL, Messages.getStringMessage(p, "inventory.mod.clear_inv"))));

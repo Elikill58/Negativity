@@ -16,6 +16,7 @@ import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class LangCommand implements CommandExecutor {
 
@@ -40,6 +41,6 @@ public class LangCommand implements CommandExecutor {
 				.executor(new LangCommand())
 				.arguments(GenericArguments.choices(Text.of("language"), () -> TranslatedMessages.LANGS, Function.identity()))
 				.build();
-		return new NegativityCmdWrapper(command, true, "lang");
+		return new NegativityCmdWrapper(command, true, Perm.LANG);
 	}
 }

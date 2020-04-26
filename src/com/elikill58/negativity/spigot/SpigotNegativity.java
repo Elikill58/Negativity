@@ -206,7 +206,9 @@ public class SpigotNegativity extends JavaPlugin {
 			viaVersionSupport = true;
 			supportedPluginName.add("ViaVersion");
 		}
-		
+
+		Perm.registerChecker(Perm.PLATFORM_CHECKER, new BukkitPermissionChecker());
+
 		if (supportedPluginName.length() > 0) {
 			getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
 		}
@@ -409,7 +411,7 @@ public class SpigotNegativity extends JavaPlugin {
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers()) {
 				SpigotNegativityPlayer npMod = SpigotNegativityPlayer.getNegativityPlayer(pl);
-				boolean basicPerm = Perm.hasPerm(npMod, "showAlert");
+				boolean basicPerm = Perm.hasPerm(npMod, Perm.SHOW_ALERT);
 				ShowAlertPermissionEvent permissionEvent = new ShowAlertPermissionEvent(p, np, basicPerm);
 				Bukkit.getPluginManager().callEvent(permissionEvent);
 				if (permissionEvent.isCancelled() || npMod.disableShowingAlert)

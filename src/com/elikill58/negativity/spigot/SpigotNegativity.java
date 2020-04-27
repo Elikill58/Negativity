@@ -296,15 +296,20 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 	
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, "", "");
+		return alertMod(type, p, c, reliability, proof, "", 1);
 	}
 	
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
-		return alertMod(type, p, c, reliability, proof, hover_proof, "");
+		return alertMod(type, p, c, reliability, proof, hover_proof, 1);
+	}
+	
+	@Deprecated // old method, please never use it
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof, String stats_send) {
+		return alertMod(type, p, c, reliability, proof, hover_proof, 1);
 	}
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
-			String hover_proof, String stats_send) {
+			String hover_proof, int amount) {
 		if(!c.isActive() || reliability < 55)
 			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
@@ -345,7 +350,7 @@ public class SpigotNegativity extends JavaPlugin {
 				return false;
 		}
 		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(type, p, c, reliability,
-				c.getReliabilityAlert() < reliability, ping, proof, hover_proof, stats_send, 1);
+				c.getReliabilityAlert() < reliability, ping, proof, hover_proof, amount);
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
@@ -358,12 +363,12 @@ public class SpigotNegativity extends JavaPlugin {
 				p.kickPlayer(Messages.getMessage(p, "kick.kicked", "%cheat%", c.getName(), "%reason%", c.getName(), "%playername%", p.getName(), "%cheat%", c.getName()));
 		}
 		if(BanManager.isBanned(np.getUUID())) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
+			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			return false;
 		}
 
 		if (BanUtils.banIfNeeded(np, c, reliability) != null) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
+			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			return false;
 		}
 		manageAlertCommand(type, p, c, reliability);
@@ -429,7 +434,7 @@ public class SpigotNegativity extends JavaPlugin {
 			}
 			if(hasPermPeople) {
 				np.ALERT_NOT_SHOWED.remove(c);
-				Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", alert.getStatsSend());
+				Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			}
 		}
 	}

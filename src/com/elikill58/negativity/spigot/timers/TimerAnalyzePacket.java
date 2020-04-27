@@ -47,7 +47,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					int porcent = UniversalUtils.parseInPorcent(flying - (ping / (allTps[1] - allTps[0] > 0.5 ? 9 : 8)));
 					SpigotNegativity.alertMod(flying > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, np.flyingReason.getCheat(), porcent,
 							"Flying in one second: " + np.FLYING + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
-							"Too many packet: " + flying + "\n(Valid packets with low ping: 20)", flying + " flying packets");
+							"Too many packet: " + flying + "\n(Valid packets with low ping: 20)", (int) flying / 30);
 					if(np.flyingReason.getCheat().isSetBack()){
 						switch(np.flyingReason){
 						case BOW:

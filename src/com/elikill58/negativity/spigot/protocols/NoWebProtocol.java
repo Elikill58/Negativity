@@ -42,7 +42,7 @@ public class NoWebProtocol extends Cheat implements Listener {
 		if (!(distance > MAX)) {
 			Block under = new Location(p.getWorld(), l.getX(), l.getY(), l.getZ()).getBlock();
 			if (under.getType() == WEB && distance > 0.13716039608514914) {
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500), "Distance: " + distance + ", fallDistance: " + p.getFallDistance(), "", "Distance: " + distance);
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500), "Distance: " + distance + ", fallDistance: " + p.getFallDistance());
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			}

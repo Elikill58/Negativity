@@ -64,7 +64,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 					UniversalUtils.parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
 							+ ". Ping: " + Utils.getPing(p),
-					"Distance with " + e.getEntity().getName() + ": " + nf.format(dis) + " blocks", "Distance with " + e.getEntity().getName() + ": " + nf.format(dis));
+					"Distance with " + e.getEntity().getName() + ": " + nf.format(dis) + " blocks");
 		}
 		final Location loc = p.getLocation().clone();
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
@@ -98,6 +98,6 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		SpigotNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD),
 				UniversalUtils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
-				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms", np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");
+				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");
 	}
 }

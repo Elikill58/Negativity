@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import java.text.NumberFormat;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,8 +28,11 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 @SuppressWarnings("deprecation")
 public class SpeedProtocol extends Cheat implements Listener {
 
+	private NumberFormat numberFormat = NumberFormat.getInstance();
+	
 	public SpeedProtocol() {
 		super(CheatKeys.SPEED, false, Material.BEACON, CheatCategory.MOVEMENT, true, "speed", "speedhack");
+		numberFormat.setMaximumFractionDigits(4);
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -76,8 +81,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 				ReportType type = np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING;
 				mayCancel = SpigotNegativity.alertMod(type, p, this, porcent,
 						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: " + walkTest +
-						", walkWithEssentialsTest: " + walkWithEssTest, "Distance Last/New position: " + y + "\n(With same Y)\nPlayer on ground",
-						"Distance Last-New position: " + y);
+						", walkWithEssentialsTest: " + walkWithEssTest, "Distance Last/New position: " + numberFormat.format(y) + "\n(With same Y and player on ground)");
 			}
 		} else if (!p.isOnGround()) {
 			for (Entity entity : p.getNearbyEntities(5, 5, 5))
@@ -90,15 +94,14 @@ public class SpeedProtocol extends Cheat implements Listener {
 							UniversalUtils.parseInPorcent(y * 100 * 2),
 							"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed()
 									+ " Distance between from/to location: " + y,
-							"Distance Last/New position: " + y + "\n(With same Y)\nPlayer jumping",
-							"Distance Last-New position: " + y);
+							"Distance Last/New position: " + numberFormat.format(y) + "\n(With same Y and player jumping)");
 				} else {
 					Material under = e.getTo().clone().subtract(0, 1, 0).getBlock().getType();
 					if (!under.name().contains("STEP")) {
 						double distance = from.distance(to);
 						to.setY(from.getY());
 						double yy = to.distance(from);
-						if (distance > 0.4 && (distance > (yy * 2)) && p.getFallDistance() < 1) {
+						if (distance > 0.45 && (distance > (yy * 2)) && p.getFallDistance() < 1) {
 							np.SPEED_NB++;
 							if (np.SPEED_NB > 4)
 								mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p,

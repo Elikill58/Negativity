@@ -289,7 +289,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		boolean hasRelia = false;
 		String hoverProof = "";
 		for(PlayerCheatAlertEvent e : list) {
-			nb++;
+			nb += e.getNbAlert();
 			
 			relia.put(e.getReliability(), relia.getOrDefault(e.getReliability(), 0) + 1);
 
@@ -310,7 +310,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		int newRelia = UniversalUtils.parseInPorcent(UniversalUtils.sum(relia) + nb);
 		int newPing = UniversalUtils.sum(ping);
 		// we can ignore "proof" and "stats_send" because they have been already saved and they are NOT showed to player
-		return new PlayerCheatAlertEvent(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, "", nb, nbConsole);
+		return new PlayerCheatAlertEvent(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, nb, nbConsole);
 	}
 
 	public void makeAppearEntities() {
@@ -410,9 +410,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		long diff = System.currentTimeMillis() - timeStartFakePlayer;
 		double diffSec = diff / 1000;
 		if(fakePlayerTouched >= 20 && fakePlayerTouched >= diffSec) {
-			SpigotNegativity.alertMod(ReportType.VIOLATION, getPlayer(), Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
+			SpigotNegativity.alertMod(ReportType.VIOLATION, getPlayer(), Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
 		} else if(fakePlayerTouched >= 5 && fakePlayerTouched >= diffSec) {
-			SpigotNegativity.alertMod(ReportType.WARNING, getPlayer(), Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
+			SpigotNegativity.alertMod(ReportType.WARNING, getPlayer(), Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)), fakePlayerTouched + " touched in " + diffSec + " seconde(s)", fakePlayerTouched + " hit in " + (int) (diffSec) + " seconde(s)");
 		}
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);
 		if (l >= 3000) {

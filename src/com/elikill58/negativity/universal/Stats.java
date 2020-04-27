@@ -30,7 +30,7 @@ public class Stats {
 			post = "&value=" + value[0];
 			break;
 		case CHEAT:
-			post = "&hack=" + value[0] + "&reliability=" + value[1] + "&comment=" + value[2] + "&amount=" + (value.length > 3 ? value[3] : "1");
+			post = "&hack=" + value[0] + "&reliability=" + value[1] + "&amount=" + (value.length > 2 ? value[2] : "1");
 			break;
 		case ONLINE:
 			post = "&value=" + value[0];

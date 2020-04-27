@@ -9,7 +9,7 @@
 #       - my Discord server: https://discord.gg/KHRVTX2           #
 #               - Mail: arpetzouille@gmail.com                    #
 #                   - SpigotMC: Elikill58                         #
-#                  - Minecraft.fr: Elikill                        # 
+#                  - Minecraft.fr: Elikill                        #
 #                                                                 #
 ###################################################################
 
@@ -44,7 +44,7 @@ inventory:
   inv_freeze_active: true
 
 # Bypass when you add effects
-# 
+#
 items:
   #ITEM_NAME:
   # when: WHEN_DISABLE_DETECTION
@@ -52,8 +52,8 @@ items:
   #
   # when available:
   # always : disable when the player get it in their hand
-  # right_click : disable when the player right click 
-  # left_click : disable when the player left click 
+  # right_click : disable when the player right click
+  # left_click : disable when the player left click
   # looking : disable when the player is looking a specific type
   #
   COMPASS:
@@ -155,26 +155,26 @@ Translation:
   lang_available:
   - de_DE
   - en_US
+  - es_ES
   - fr_FR
   - nl_NL
   - no_NO
+  - pl_PL
   - pt_BR
   - ru_RU
-  - zh_CN
   - sv_SV
-  - es_ES
   - vi_VN
-  - pl_PL
+  - zh_CN
   use_db: false # to get the lang
   default: en_US
   # The provider used to get translated messages, useful if you want to customize the way Negativity gets its messages.
   # The only one available out-of-the-box is "platform".
   provider: platform
 
-# 
+#
 # You can put this plugin on your Bungeecord/Waterfall/Velocity !
 # Why ? You can know when a player hack even if you're not on the same spigot/sponge server !
-# 
+#
 hasBungeecord: false
 
 # The time between 2 /report
@@ -255,7 +255,7 @@ ban:
 suspect:
   # Start cheat detection when people suspect a player
   #  Suspecting detected with the chat and with /report
-  # 
+  #
   enabled: true
   chat: true
   with_report_cmd: true
@@ -508,7 +508,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
-  
+
   # XRay cannot be detected directly, it's about Minerate
   xray:
     ping: 300
@@ -519,7 +519,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
-  
+
   # Nuker/BedBreaker automatically break block without looking her
   nuker:
     ping: 150
@@ -530,7 +530,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
-  
+
   # AirJump make you jump on air
   airjump:
     ping: 150
@@ -541,7 +541,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
-  
+
   # Chat represent all chat hack (spam/insult)
   chat:
     ping: 300
@@ -556,7 +556,7 @@ cheats:
     - "bitch"
     - "asshole"
     - "dickhead"
-  
+
   # NoWeb make you walking on web like if you walk on ground
   noweb:
     ping: 150

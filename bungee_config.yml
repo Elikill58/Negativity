@@ -47,16 +47,16 @@ Translation:
   lang_available:
   - de_DE
   - en_US
+  - es_ES
   - fr_FR
   - nl_NL
   - no_NO
+  - pl_PL
   - pt_BR
   - ru_RU
   - sv_SV
-  - zh_CN
-  - es_ES
   - vi_VN
-  - pl_PL
+  - zh_CN
   use_db: false # to get the lang
   default: en_US
   # The provider used to get translated messages, useful if you want to customize the way Negativity gets its messages.

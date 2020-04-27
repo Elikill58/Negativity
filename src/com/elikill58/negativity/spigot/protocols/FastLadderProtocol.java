@@ -32,7 +32,7 @@ public class FastLadderProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
-		Location loc = p.getLocation();
+		Location loc = p.getLocation().clone();
 		if (!loc.getBlock().getType().equals(Material.LADDER)){
 			np.isOnLadders = false;
 			return;
@@ -55,7 +55,7 @@ public class FastLadderProtocol extends Cheat implements Listener {
 			nbLadder++;
 			tempLoc.add(0, -1, 0);
 		}
-		if (distance > 0.23 && distance < 3.8 && nbLadder > 2) {
+		if (distance > 0.23 && distance < 3.8 && nbLadder > 2 && loc.add(0, 1, 0).getBlock().getType().name().contains("LADDER")) {
 			int ping = Utils.getPing(p);
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 350),
 					"On ladders. Distance from/to : " + distance + ". Ping: " + ping + "ms. Number Ladder: " + nbLadder);

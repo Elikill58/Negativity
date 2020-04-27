@@ -406,7 +406,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if(alert.getNbAlertConsole() > 0 && log_console) {
 				INSTANCE.getLogger().info("New " + alert.getReportType().getName() + " for " + p.getName()
 						+ " (UUID: " + p.getUniqueId().toString() + ") (ping: " + ping + ") : suspected of cheating ("
-						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + " Reliability: " + reliability);
+						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
 		}
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
 			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHoverProof(), alert.getNbAlert());

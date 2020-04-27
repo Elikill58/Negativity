@@ -65,7 +65,7 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 		} else {
 			boolean alertSent = false;
 			for (Player pl : Utils.getOnlinePlayers())
-				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), Perm.SHOW_ALERT)) {
+				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), Perm.SHOW_REPORT)) {
 					alertSent = true;
 					new ClickableText().addRunnableHoverEvent(
 							Messages.getMessage(pl, "report.report_message",

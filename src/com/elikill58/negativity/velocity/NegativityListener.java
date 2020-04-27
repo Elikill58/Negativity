@@ -143,7 +143,7 @@ public class NegativityListener {
 		}
 
 		VelocityNegativityPlayer np = VelocityNegativityPlayer.getNegativityPlayer(p);
-		if (Perm.hasPerm(np, Perm.SHOW_ALERT)) {
+		if (Perm.hasPerm(np, Perm.SHOW_REPORT)) {
 			for (Report msg : report) {
 				p.sendMessage(msg.toMessage(p));
 				report.remove(msg);

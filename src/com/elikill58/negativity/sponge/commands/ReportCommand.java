@@ -52,7 +52,7 @@ public class ReportCommand implements CommandExecutor {
 					.build();
 			boolean hasOp = false;
 			for (Player onlinePlayer : Utils.getOnlinePlayers()) {
-				if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(onlinePlayer), Perm.SHOW_ALERT)) {
+				if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(onlinePlayer), Perm.SHOW_REPORT)) {
 					hasOp = true;
 					onlinePlayer.sendMessage(spongeMsg);
 				}

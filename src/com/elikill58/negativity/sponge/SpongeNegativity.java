@@ -322,7 +322,7 @@ public class SpongeNegativity {
 			Task.builder().delayTicks(20).execute(() -> sendProxyPing(p)).submit(this);
 		}
 
-		if (Perm.hasPerm(np, Perm.SHOW_ALERT)) {
+		if (Perm.hasPerm(np, Perm.SHOW_REPORT)) {
 			if (ReportCommand.REPORT_LAST.size() > 0) {
 				for (Text msg : ReportCommand.REPORT_LAST)
 					p.sendMessage(msg);

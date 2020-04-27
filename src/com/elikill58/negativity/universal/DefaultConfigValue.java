@@ -68,9 +68,7 @@ public class DefaultConfigValue {
 		STRINGS.put("Database.user", "root");
 		STRINGS.put("Database.password", "myPassword");
 		STRINGS.put("Database.table_lang", "myTable");
-		STRINGS.put("Database.column_find_row", "uuid");
 		STRINGS.put("Database.column_lang", "lang");
-		BOOLEANS.put("Database.saveInCache", true);
 
 		BOOLEANS.put("inventory.alerts.no_started_verif_cheat", false);
 		BOOLEANS.put("inventory.alerts.only_cheat_active", true);

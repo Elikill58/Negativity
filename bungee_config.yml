@@ -22,9 +22,7 @@ Database:
   user: root
   password: "myPassword"
   table_lang: "myTable"
-  table_ban: "ban"
   column_lang: "lang"
-  saveInCache: false # To do less request to your database
 
 # Configuration of the permissions subsystem. For more information
 # see https://github.com/Elikill58/Negativity/wiki/Permissions

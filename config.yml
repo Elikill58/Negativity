@@ -33,9 +33,7 @@ Database:
   user: root
   password: "myPassword"
   table_lang: "myTable"
-  column_find_row: "uuid" # the column which contains the uuid of the searched player
   column_lang: "lang"
-  saveInCache: true # To do less request to your database
 
 inventory:
   alerts:

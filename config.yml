@@ -60,6 +60,8 @@ items:
     when: always
     cheats: speed,fly
 
+# Configuration of the permissions subsystem. For more information
+# see https://github.com/Elikill58/Negativity/wiki/Permissions
 Permissions:
   # The checker indicates if a player has a specific permission.
   # By default only 'platform' is available
@@ -201,6 +203,8 @@ alert:
     run:
     - "mycommand %name% %cheat_key% %reliability%"
 
+# Configuration of the bans subsystem. For more information
+# see https://github.com/Elikill58/Negativity/wiki/Bans
 ban:
   active: false
   # Processors manage bans. Only one processor can be used at the time.
@@ -259,6 +263,8 @@ suspect:
   - "cheat"
   - "hack"
 
+# Per-cheat configuration. For more information about specific cheats
+# and their detections see https://github.com/Elikill58/Negativity/wiki/Cheat
 cheats:
   #
   # WARNING: An auto verification of all cheat can be create some lag on your server.

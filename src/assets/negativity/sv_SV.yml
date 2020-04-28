@@ -12,6 +12,11 @@ fake_entities: "Fake players"
 kick: "&a[&2Negativity&a]&c Du har blivit kickad för att du fuska. (%cheat%)"
 
 lang {
+  invalid_lang: "%arg% isn't a valid lang !"
+  help: "/lang <new lang> : Byta originella språket"
+  current: "Det nuvarande språket är %lang%"
+  edit: "Edit the default lang"
+  translation_disabled: "&a[&2Negativity&a] &cPer-player translations are disabled"
   language_set: "&a[&2Negativity&a] &7Meddelandena av Negativity är nu på Svenska"
 }
 ban {
@@ -51,11 +56,14 @@ negativity {
   alert: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% &7(&2Reliability: %reliability%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 kanske använder &c%cheat% %nb% tid &7(&2Reliability: %reliability%%&7) !"
   alert_hover: "&6Pålitlighet: %reliability%%\nPing: %ping%"
-  no_alerts: "&a[&2Negativity&a] No alerts to display."
+  see_alert: "&a[&2Negativity&a] You see the alerts again."
+  see_no_longer_alert: "&a[&2Negativity&a] You no longer see alerts."
+  reload_done: "&a[&2Negativity&a] Plugin reloaded."
   verif {
     invalid_cheat: "%arg% är inte ett slags fusk !"
     start: "&a[&2Negativity&a] &7Började analysera %name% för %cheat%"
     start_all: "&a[&2Negativity&a] Började fullständig analys för spelare %name%"
+    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
     help = [
       "/negativity verif <spelare> [fusk...] : Börjar kontroller (alla om inget fusk är givet)"
       "/negativity <spelare> : För att se lite information av denna spelare" ]
@@ -82,6 +90,11 @@ inventory {
     freezing: "Fryser %name%"
     active_detection: "Se aktiva upptäckt för %name%"
     see_alerts: "Se alla varningar för %name%"
+    mcleaks_indicator {
+      positive: "&cIs using MCLeaks"
+      negative: "&aIs not using MCLeaks"
+      description: "&7MCLeaks provides premium accounts for free"
+    }
   }
   detection {
     name_inv: "Aktiv upptäckt"

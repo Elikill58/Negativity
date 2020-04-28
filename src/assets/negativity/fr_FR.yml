@@ -27,7 +27,12 @@ ban {
   well_ban: "&a[&2Negativity&a]&c %name% banni pour %reason%."
 }
 lang {
-  language_set: "&a[&2Negativity&a] &7La langue a été changé en français"
+  invalid_lang: "%arg% n'est pas une langue valide !"
+  help: "/lang <new lang> : Modifier la langue par défaut/la votre"
+  current: "La langue actuelle est %lang%"
+  edit: "Modifier la langue par défaut"
+  language_set: "&a[&2Negativity&a] &7Les messages de Negativity seront désormais en français"
+  translation_disabled: "&a[&2Negativity&a] &cLes traductions par joueurs sont désactivées"
 }
 unban {
   well_unban: "&a[&2Negativity&a]&c %name% a bien été débanni."
@@ -48,15 +53,17 @@ report {
   report_message_hover: "&7Ouvrir le menu check de &c%name%"
 }
 negativity {
-  alert: "&a[&2Negativity&a] &c%name%&7 semble utiliser &c%cheat% &7(&2Fiabilité: %reliability%&7) !"
+  alert: "&a[&2Negativity&a] &c%name%&7 semble utiliser &c%cheat% &7(&2Fiabilité: %reliability%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 semble utiliser &c%cheat% %nb% fois &7(&2Fiabilité: %reliability%%&7) !"
-  alert_hover: "&6Fiabilité: %reliability%\nPing: %ping%"
-  no_alerts: "&a[&2Negativity&a] Aucune alerte à afficher."
+  alert_hover: "&6Fiabilité: %reliability%%\nPing: %ping%"
+  see_alert: "&a[&2Negativity&a] Vous voyez de nouveau les alertes."
+  see_no_longer_alert: "&a[&2Negativity&a] Vous ne voyez plus les alertes."
   reload_done: "&a[&2Negativity&a] Le plugin a été rechargé."
   verif {
     invalid_cheat: "%arg% n'est pas un cheat !"
     start: "&a[&2Negativity&a] &7Démarrage de l'analyse de %cheat% pour %name%"
     start_all: "&a[&2Negativity&a] Démarrage de toutes les analyses pour %name%"
+    start_none: "&a[&2Negativity&a] &cL'analyse ne peut pas être démarrée puisqu'aucun cheat valide n'a été précisé"
     help = [
       "/negativity verif <joueur> [cheats...] : Démarrer les vérifications (Toutes si aucune n'est précisé)"
       "/negativity <joueur> : Pour voir les informations a propos de ce joueur"

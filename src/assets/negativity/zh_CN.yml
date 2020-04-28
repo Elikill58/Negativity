@@ -27,7 +27,12 @@ ban {
   well_ban: "&a[&2弊绝风清&a]&c%name% 由于 %reason% 被合理封禁。"
 }
 lang {
+  invalid_lang: "%arg% isn't a valid lang !"
+  help: "/lang <new lang> : Change the default language"
+  current: "The current language is %lang%"
+  edit: "Edit the default lang"
   language_set: "&a[&2弊绝风清&a] &7语言文件已成功切换至中文"
+  translation_disabled: "&a[&2Negativity&a] &cPer-player translations are disabled"
 }
 unban {
   well_unban: "&a[&2弊绝风清&a]&c%name% 被合理解封。"
@@ -48,14 +53,17 @@ report {
   report_message_hover: "&7Open &c%name%&7's check menu"
 }
 negativity {
-  alert: "&a[&2弊绝风清&a]&c%name%&7 看似正使用 &c%cheat% &7（&2可信度： %reliability%&7）！"
+  alert: "&a[&2弊绝风清&a]&c%name%&7 看似正使用 &c%cheat% &7&2可信度： %reliability%%&7）！"
   alert_multiple: "&a[&2弊绝风清&a]&c%name%&7 看似正使用 &c%cheat% %nb% 时间 &7&2可信度： %reliability%%&7）！"
-  alert_hover: "&6可信度：%reliability%\n延迟：%ping%"
-  no_alerts: "&a[&2Negativity&a] No alerts to display."
+  alert_hover: "&6可信度：%reliability%%\n延迟：%ping%"
+  see_alert: "&a[&2Negativity&a] You see the alerts again."
+  see_no_longer_alert: "&a[&2Negativity&a] You no longer see alerts."
+  reload_done: "&a[&2Negativity&a] Plugin reloaded."
   verif {
     invalid_cheat: "%arg% 非有效作弊软件！"
     start: "&a[&2弊绝风清&a]&7已开始分析&c %name%&7 的&c %cheat%&7 行为"
     start_all: "&a[&2弊绝风清&a]&7已开始完整分析玩家&c %name%&7 的行为"
+    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
     help = [
      "/negativity verif <玩家> [作弊软件] : 开始分析（若未指定作弊软件则将进行完整分析）"
      "/negativity <玩家> : 查看玩家信息"
@@ -83,6 +91,11 @@ inventory {
     freezing: "正在冻结 %name%"
     active_detection: "查看 %name% 的活跃检测"
     see_alerts: "查看 %name% 的警告"
+    mcleaks_indicator {
+      positive: "&cIs using MCLeaks"
+      negative: "&aIs not using MCLeaks"
+      description: "&7MCLeaks provides premium accounts for free"
+    }
   }
   detection {
     name_inv: "活跃检测"

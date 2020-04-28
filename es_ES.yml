@@ -18,7 +18,6 @@ lang:
   edit: "Edita el idioma por defecto"
   translation_disabled: "&a[&2Negativity&a] &cLas traducciones personales se han desactivado"
   language_set: "&a[&2Negativity&a] &7Los mensajes de Negativity ahora están en inglés"
-  translation_disabled: "&a[&2Negativity&a] &cTraducciones por-jugador desactivadas"
 ban:
   kick_time: "&cCastigado por %reason%, hasta %time%, por %by%."
   kick_def: "&cCastigado definitivamente por %reason%, por %by%."

@@ -27,7 +27,12 @@ ban {
   well_ban: "&a[&2Negativity&a]&c %name% godt forbudt for %reason%."
 }
 lang {
-  language_set: "&a[&2Negativity&a] &7Negativity messages will now be in norwegian"
+  invalid_lang: "%arg% isn't a valid lang !"
+  help: "/lang <new lang> : Change the default language"
+  current: "The current language is %lang%"
+  edit: "Edit the default lang"
+  translation_disabled: "&a[&2Negativity&a] &cPer-player translations are disabled"
+  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in norwegian"
 }
 unban {
   well_unban: "&a[&2Negativity&a]&c %name% godt unforbudt."
@@ -48,14 +53,17 @@ report {
   report_message_hover: "&7Open &c%name%&7's check menu"
 }
 negativity {
-  alert: "&a[&2Negativity&a] &c%name%&7 ser ut til å bruke &c%cheat% &7(&2Pålitelighet: %reliability%&7) !"
+  alert: "&a[&2Negativity&a] &c%name%&7 ser ut til å bruke &c%cheat% &7(&2Pålitelighet: %reliability%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 ser ut til å bruke &c%cheat% %nb% tid &7(&2Pålitelighet: %reliability%%&7) !"
-  alert_hover: "&6Pålitelighet: %reliability%\nPing: %ping%"
-  no_alerts: "&a[&2Negativity&a] No alerts to display."
+  alert_hover: "&6Pålitelighet: %reliability%%\nPing: %ping%"
+  see_alert: "&a[&2Negativity&a] You see the alerts again."
+  see_no_longer_alert: "&a[&2Negativity&a] You no longer see alerts."
+  reload_done: "&a[&2Negativity&a] Plugin reloaded."
   verif {
     invalid_cheat: "%arg% er ikke en gyldig juks!"
     start: "&a[&2Negativity&a] &7begynte å analysere %name% for %cheat%"
     start_all: "&a[&2Negativity&a] startet full analyse for spilleren %name%"
+    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
     help = [
       "/negativity verif <spiller> [juks...] : Starter verifikasjoner (alt hvis ingen er gitt)"
       "/negativity <spiller> : For å se noen opplysninger om denne spiller"
@@ -83,6 +91,11 @@ inventory {
     freezing: "frys %name%"
     active_detection: "se aktiv gjennkjenning for %name%"
     see_alerts: "se alle varslene for %name%"
+    mcleaks_indicator {
+      positive: "&cIs using MCLeaks"
+      negative: "&aIs not using MCLeaks"
+      description: "&7MCLeaks provides premium accounts for free"
+    }
   }
   detection {
     name_inv: "aktive gjennkjenning"

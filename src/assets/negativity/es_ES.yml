@@ -15,8 +15,9 @@ lang {
   invalid_lang: "%arg% no es un idioma válido !"
   help: "/lang <new lang> : Cambia el idioma por defecto"
   current: "El idioma actual es: %lang%"
+  edit: "Edita el idioma por defecto"
+  translation_disabled: "&a[&2Negativity&a] &cLas traducciones personales se han desactivado"
   language_set: "&a[&2Negativity&a] &7Los mensajes de Negativity ahora están en inglés"
-  translation_disabled: "&a[&2Negativity&a] &cTraducciones por-jugador desactivadas"
 }
 ban {
   kick_time: "&cCastigado por %reason%, hasta %time%, por %by%."
@@ -54,7 +55,8 @@ negativity {
   alert: "&a[&2Negativity&a] &c%name%&7 parece que usa &c%cheat% &7(&2Fiabilidad: %reliability%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 parece que usa &c%cheat% %nb% veces &7(&2Fiabilidad: %reliability%%&7) !"
   alert_hover: "&6Fiabilidad: %reliability%%\nPing: %ping%"
-  no_alerts: "&a[&2Negativity&a] Sin alertas para mostrar."
+  see_alert: "&a[&2Negativity&a] Ves las alertas de nuevo."
+  see_no_longer_alert: "&a[&2Negativity&a] Ya no ves las alertas."
   reload_done: "&a[&2Negativity&a] Plugin recargado."
   verif {
     invalid_cheat: "%arg% no es una trampa válida !"
@@ -67,9 +69,9 @@ negativity {
   }
 }
 messages_update {
-  dir_creation_failed: "&cFailed to create '%dir%' or its backup directory: %message%"
-  file_update_failed: "&cFailed to update messages for %language%: %message%"
-  update_done: "&eMessages have been updated and reloaded"
+  dir_creation_failed: "&cFallo al crear '%dir%' o es su directorio de respaldo: %message%"
+  file_update_failed: "&cFallo al actualizar los mensajes de %language%: %message%"
+  update_done: "&eLos mensajes han sido actualizados y recargados"
 }
 inventory {
   close: "Cerrar"

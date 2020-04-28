@@ -27,7 +27,12 @@ ban {
   well_ban: "&a[&2Negativity&a]&c %name% well banned for %reason%."
 }
 lang {
-  language_set: "&a[&2Negativity&a] &7The language was changed to English"
+  invalid_lang: "%arg% isn't a valid lang !"
+  help: "/lang <new lang> : Change the default language"
+  current: "The current language is %lang%"
+  edit: "Edit the default lang"
+  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in english"
+  translation_disabled: "&a[&2Negativity&a] &cPer-player translations are disabled"
 }
 unban {
   well_unban: "&a[&2Negativity&a]&c %name% well unbanned."
@@ -48,15 +53,17 @@ report {
   report_message_hover: "&7Open &c%name%&7's check menu"
 }
 negativity {
-  alert: "&a[&2Negativity&a] &c%name%&7 seem to use &c%cheat% &7(&2Reliability: %reliability%&7) !"
+  alert: "&a[&2Negativity&a] &c%name%&7 seem to use &c%cheat% &7(&2Reliability: %reliability%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 seem to use &c%cheat% %nb% times &7(&2Reliability: %reliability%%&7) !"
-  alert_hover: "&6Reliability: %reliability%\nPing: %ping%"
-  no_alerts: "&a[&2Negativity&a] No alerts to display."
+  alert_hover: "&6Reliability: %reliability%%\nPing: %ping%"
+  see_alert: "&a[&2Negativity&a] You see the alerts again."
+  see_no_longer_alert: "&a[&2Negativity&a] You no longer see alerts."
   reload_done: "&a[&2Negativity&a] Plugin reloaded."
   verif {
     invalid_cheat: "%arg% is not a valid cheat !"
     start: "&a[&2Negativity&a] &7Started analyzing %name% for %cheat%"
     start_all: "&a[&2Negativity&a] Started full analysis for player %name%"
+    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
     help = [
      "/negativity verif <player> [cheats...] : Starts verifications (all if none is given)"
      "/negativity <player> : To see some informations about this player"

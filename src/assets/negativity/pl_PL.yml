@@ -15,6 +15,7 @@ lang {
   invalid_lang: "%arg% nie jest prawidlowym jezykiem !"
   help: "/lang <nowy jezyk> : Zmien domyslny jezyk"
   current: "Obecny jezyk to %lang%"
+  edit: "Edit the default lang"
   language_set: "&a[&2Negativity&a] &7Wiadomosci o negatywnosci sa teraz w jezyku angielskim"
   translation_disabled: "&a[&2Negativity&a] &cTlumaczenia dla poszczegolnych graczy sa wylaczone"
 }
@@ -54,7 +55,8 @@ negativity {
   alert: "&a[&2Negativity&a] &c%name%&7 wydaje sie uzywac &c%cheat% &7(&2Reliability: %reliability%%&7) !"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 wydaje sie uzywac &c%cheat% %nb% czasy &7(&2Reliability: %reliability%%&7) !"
   alert_hover: "&6Reliability: %reliability%%\nPing: %ping%"
-  no_alerts: "&a[&2Negativity&a] Brak alertow do wyswietlenia."
+  see_alert: "&a[&2Negativity&a] You see the alerts again."
+  see_no_longer_alert: "&a[&2Negativity&a] You no longer see alerts."
   reload_done: "&a[&2Negativity&a] Wtyczka przeladowana."
   verif {
     invalid_cheat: "%arg% nie jest waznym oszustwem !"

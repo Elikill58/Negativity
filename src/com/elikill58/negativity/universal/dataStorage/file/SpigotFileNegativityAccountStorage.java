@@ -6,12 +6,13 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
-import javax.annotation.Nullable;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Minerate;
@@ -27,23 +28,22 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 		this.userDir = userDir;
 	}
 
-	@Nullable
 	@Override
-	public NegativityAccount loadAccount(UUID playerId) {
+	public CompletableFuture<@Nullable NegativityAccount> loadAccount(UUID playerId) {
 		File file = new File(userDir, playerId + ".yml");
 		if (!file.exists()) {
-			return new NegativityAccount(playerId);
+			return CompletableFuture.completedFuture(new NegativityAccount(playerId));
 		}
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 		String language = config.getString("lang", TranslatedMessages.getDefaultLang());
 		Minerate minerate = deserializeMinerate(config.getConfigurationSection("minerate"));
 		int mostClicksPerSecond = config.getInt("better-click");
 		Map<String, Integer> warns = deserializeViolations(config.getConfigurationSection("cheats"));
-		return new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns);
+		return CompletableFuture.completedFuture(new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns));
 	}
 
 	@Override
-	public void saveAccount(NegativityAccount account) {
+	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
 		File file = new File(userDir, account.getPlayerId() + ".yml");
 		YamlConfiguration accountConfig = YamlConfiguration.loadConfiguration(file);
 		accountConfig.set("lang", account.getLang());
@@ -55,6 +55,7 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 		} catch (IOException e) {
 			SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not save account to file.", e);
 		}
+		return CompletableFuture.completedFuture(null);
 	}
 
 	private void serializeMinerate(Minerate minerate, ConfigurationSection minerateSection) {

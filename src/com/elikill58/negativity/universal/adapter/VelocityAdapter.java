@@ -8,21 +8,20 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.bungee.BungeeTranslationProvider;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.dataStorage.file.ProxyFileNegativityAccountStorage;
@@ -44,7 +43,7 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 
 	private ConfigAdapter config;
 	private VelocityNegativity pl;
-	private Map<UUID, NegativityAccount> accountsCache = new HashMap<>();
+	private final NegativityAccountManager accountManager = new SimpleAccountManager(false);
 
 	public VelocityAdapter(VelocityNegativity pl, ConfigAdapter config) {
 		this.pl = pl;
@@ -178,12 +177,6 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 
 	}
 
-	@Nonnull
-	@Override
-	public NegativityAccount getNegativityAccount(UUID playerId) {
-		return accountsCache.computeIfAbsent(playerId, NegativityAccountStorage.getStorage()::getOrCreateAccount);
-	}
-
 	@Nullable
 	@Override
 	public NegativityPlayer getNegativityPlayer(UUID playerId) {
@@ -191,10 +184,9 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 		return player.isPresent() ? VelocityNegativityPlayer.getNegativityPlayer(player.get()) : null;
 	}
 
-	@Nullable
 	@Override
-	public NegativityAccount invalidateAccount(UUID playerId) {
-		return accountsCache.remove(playerId);
+	public NegativityAccountManager getAccountManager() {
+		return accountManager;
 	}
 
 	@Override
@@ -204,7 +196,7 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 	public void runConsoleCommand(String cmd) {
 		pl.getServer().getCommandManager().execute(pl.getServer().getConsoleCommandSource(), cmd);
 	}
-	
+
 	@Override
 	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
 		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {

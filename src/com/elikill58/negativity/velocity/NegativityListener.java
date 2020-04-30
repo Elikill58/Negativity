@@ -178,7 +178,7 @@ public class NegativityListener {
 				.buildTask(plugin, () -> {
 					UUID playerId = event.getPlayer().getUniqueId();
 					VelocityNegativityPlayer.removeFromCache(playerId);
-					Adapter.getAdapter().invalidateAccount(playerId);
+					Adapter.getAdapter().getAccountManager().dispose(playerId);
 				})
 				.delay(1, TimeUnit.SECONDS)
 				.schedule();

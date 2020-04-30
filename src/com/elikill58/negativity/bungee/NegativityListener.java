@@ -157,7 +157,7 @@ public class NegativityListener implements Listener {
 				() -> {
 					UUID playerId = event.getPlayer().getUniqueId();
 					BungeeNegativityPlayer.removeFromCache(playerId);
-					Adapter.getAdapter().invalidateAccount(playerId);
+					Adapter.getAdapter().getAccountManager().dispose(playerId);
 				},
 				1, TimeUnit.SECONDS);
 	}

@@ -5,23 +5,22 @@ import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.bungee.BungeeNegativity;
 import com.elikill58.negativity.bungee.BungeeNegativityPlayer;
 import com.elikill58.negativity.bungee.BungeeTranslationProvider;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.dataStorage.file.ProxyFileNegativityAccountStorage;
@@ -44,7 +43,7 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 
 	private final ConfigAdapter config;
 	private final Plugin pl;
-	private Map<UUID, NegativityAccount> accountsCache = new HashMap<>();
+	private final NegativityAccountManager accountManager = new SimpleAccountManager(false);
 
 	public BungeeAdapter(Plugin pl, ConfigAdapter config) {
 		this.pl = pl;
@@ -179,12 +178,6 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 
 	}
 
-	@Nonnull
-	@Override
-	public NegativityAccount getNegativityAccount(UUID playerId) {
-		return accountsCache.computeIfAbsent(playerId, NegativityAccountStorage.getStorage()::getOrCreateAccount);
-	}
-
 	@Nullable
 	@Override
 	public NegativityPlayer getNegativityPlayer(UUID playerId) {
@@ -192,10 +185,9 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 		return player != null ? BungeeNegativityPlayer.getNegativityPlayer(player) : null;
 	}
 
-	@Nullable
 	@Override
-	public NegativityAccount invalidateAccount(UUID playerId) {
-		return accountsCache.remove(playerId);
+	public NegativityAccountManager getAccountManager() {
+		return accountManager;
 	}
 
 	@Override

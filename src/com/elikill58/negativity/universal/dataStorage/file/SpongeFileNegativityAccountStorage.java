@@ -7,8 +7,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.universal.Minerate;
@@ -28,12 +29,11 @@ public class SpongeFileNegativityAccountStorage extends NegativityAccountStorage
 		this.userDir = userDir;
 	}
 
-	@Nullable
 	@Override
-	public NegativityAccount loadAccount(UUID playerId) {
+	public CompletableFuture<@Nullable NegativityAccount> loadAccount(UUID playerId) {
 		Path filePath = userDir.resolve(playerId + ".yml");
 		if (Files.notExists(filePath)) {
-			return new NegativityAccount(playerId);
+			return CompletableFuture.completedFuture(new NegativityAccount(playerId));
 		}
 
 		try {
@@ -42,15 +42,15 @@ public class SpongeFileNegativityAccountStorage extends NegativityAccountStorage
 			Minerate minerate = deserializeMinerate(node.getNode("minerate"));
 			int mostClicksPerSecond = node.getNode("better-click").getInt();
 			Map<String, Integer> warns = deserializeViolations(node.getNode("cheats"));
-			return new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns);
+			return CompletableFuture.completedFuture(new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns));
 		} catch (IOException e) {
 			SpongeNegativity.getInstance().getLogger().error("Could not load account {} to file", playerId, e);
 		}
-		return new NegativityAccount(playerId);
+		return CompletableFuture.completedFuture(new NegativityAccount(playerId));
 	}
 
 	@Override
-	public void saveAccount(NegativityAccount account) {
+	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
 		Path filePath = userDir.resolve(account.getPlayerId() + ".yml");
 		HoconConfigurationLoader loader = HoconConfigurationLoader.builder().setPath(filePath).build();
 		try {
@@ -64,6 +64,7 @@ public class SpongeFileNegativityAccountStorage extends NegativityAccountStorage
 		} catch (IOException e) {
 			SpongeNegativity.getInstance().getLogger().error("Could not save account {} to file", account.getPlayerId(), e);
 		}
+		return CompletableFuture.completedFuture(null);
 	}
 
 	private static void serializeMinerate(Minerate minerate, ConfigurationNode minerateNode) {

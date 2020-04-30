@@ -10,6 +10,7 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
@@ -97,10 +98,20 @@ public abstract class Adapter {
 	public abstract void reload();
 	public abstract String getVersion();
 	public abstract void reloadConfig();
+
+	@Deprecated
 	@Nonnull
-	public abstract NegativityAccount getNegativityAccount(UUID playerId);
+	public NegativityAccount getNegativityAccount(UUID playerId) {
+		return getAccountManager().getNow(playerId);
+	}
+
+	@Deprecated
 	@Nullable
-	public abstract NegativityAccount invalidateAccount(UUID playerId);
+	public NegativityAccount invalidateAccount(UUID playerId) {
+		return getAccountManager().dispose(playerId);
+	}
+
+	public abstract NegativityAccountManager getAccountManager();
 	@Nullable
 	public abstract NegativityPlayer getNegativityPlayer(UUID playerId);
 	public abstract void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof);

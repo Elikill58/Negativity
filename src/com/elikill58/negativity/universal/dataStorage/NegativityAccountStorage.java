@@ -3,8 +3,9 @@ package com.elikill58.negativity.universal.dataStorage;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.NegativityAccount;
@@ -16,20 +17,12 @@ public abstract class NegativityAccountStorage {
 	private static final Map<String, NegativityAccountStorage> storages = new HashMap<>();
 	private static String storageId;
 
-	@Nullable
-	public abstract NegativityAccount loadAccount(UUID playerId);
+	public abstract CompletableFuture<@Nullable NegativityAccount> loadAccount(UUID playerId);
 
-	public abstract void saveAccount(NegativityAccount account);
+	public abstract CompletableFuture<Void> saveAccount(NegativityAccount account);
 
-	public NegativityAccount getOrCreateAccount(UUID playerId) {
-		NegativityAccount existingAccount = loadAccount(playerId);
-		if (existingAccount != null) {
-			return existingAccount;
-		}
-
-		NegativityAccount createdAccount = new NegativityAccount(playerId);
-		saveAccount(createdAccount);
-		return createdAccount;
+	public CompletableFuture<NegativityAccount> getOrCreateAccount(UUID playerId) {
+		return loadAccount(playerId).thenApply(existingAccount -> existingAccount == null ? new NegativityAccount(playerId) : existingAccount);
 	}
 
 	public static NegativityAccountStorage getStorage() {

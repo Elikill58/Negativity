@@ -8,8 +8,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringJoiner;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Minerate;
@@ -30,9 +31,8 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 		}
 	}
 
-	@Nullable
 	@Override
-	public NegativityAccount loadAccount(UUID playerId) {
+	public CompletableFuture<@Nullable NegativityAccount> loadAccount(UUID playerId) {
 		try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_accounts WHERE id = ?")) {
 			stm.setString(1, playerId.toString());
 			ResultSet result = stm.executeQuery();
@@ -41,16 +41,16 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 				Minerate minerate = deserializeMinerate(result.getString("minerate"));
 				int mostClicksPerSecond = result.getInt("most_clicks_per_second");
 				Map<String, Integer> warns = deserializeViolations(result.getString("violations_by_cheat"));
-				return new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns);
+				return CompletableFuture.completedFuture(new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return null;
+		return CompletableFuture.completedFuture(null);
 	}
 
 	@Override
-	public void saveAccount(NegativityAccount account) {
+	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
 				"REPLACE INTO negativity_accounts (id, playername, language, minerate, most_clicks_per_second, violations_by_cheat) VALUES (?, ?, ?, ?, ?, ?)")) {
 			stm.setString(1, account.getPlayerId().toString());
@@ -63,6 +63,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return CompletableFuture.completedFuture(null);
 	}
 
 	private static String serializeMinerate(Minerate minerate) {

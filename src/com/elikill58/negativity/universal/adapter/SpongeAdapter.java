@@ -11,10 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeUnit;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
@@ -25,10 +22,11 @@ import org.spongepowered.api.entity.living.player.Player;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.dataStorage.file.SpongeFileNegativityAccountStorage;
@@ -37,9 +35,6 @@ import com.elikill58.negativity.universal.translation.ConfigurateTranslationProv
 import com.elikill58.negativity.universal.translation.TranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.commented.CommentedConfigurationNode;
@@ -51,10 +46,8 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	private final Logger logger;
 	private final SpongeNegativity plugin;
 	private ConfigAdapter config;
-	private final LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
-			.expireAfterAccess(10, TimeUnit.MINUTES)
-			.build(new NegativityAccountLoader());
 	private final Path messagesDir;
+	private final NegativityAccountManager accountManager = new SimpleAccountManager(true);
 
 	public SpongeAdapter(SpongeNegativity sn, ConfigAdapter config) {
 		this.plugin = sn;
@@ -212,16 +205,6 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 		plugin.loadItemBypasses();
 	}
 
-	@Nonnull
-	@Override
-	public NegativityAccount getNegativityAccount(UUID playerId) {
-		try {
-			return accountCache.get(playerId);
-		} catch (ExecutionException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
 	@Nullable
 	@Override
 	public NegativityPlayer getNegativityPlayer(UUID playerId) {
@@ -229,20 +212,9 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 		return player != null ? SpongeNegativityPlayer.getNegativityPlayer(player) : null;
 	}
 
-	@Nullable
 	@Override
-	public NegativityAccount invalidateAccount(UUID playerId) {
-		NegativityAccount account = accountCache.getIfPresent(playerId);
-		accountCache.invalidate(playerId);
-		return account;
-	}
-
-	private static class NegativityAccountLoader extends CacheLoader<UUID, NegativityAccount> {
-
-		@Override
-		public NegativityAccount load(@Nonnull UUID playerId) {
-			return NegativityAccountStorage.getStorage().getOrCreateAccount(playerId);
-		}
+	public NegativityAccountManager getAccountManager() {
+		return accountManager;
 	}
 
 	@Override

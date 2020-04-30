@@ -10,13 +10,11 @@ import java.io.OutputStream;
 import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
-import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
@@ -32,14 +30,15 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotTranslationProvider;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
-import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
-import com.elikill58.negativity.universal.dataStorage.file.SpigotFileNegativityAccountStorage;
+import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.BukkitConfigAdapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
+import com.elikill58.negativity.universal.dataStorage.file.SpigotFileNegativityAccountStorage;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
@@ -50,10 +49,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 
 	private JavaPlugin pl;
 	private ConfigAdapter config;
-	private HashMap<UUID, NegativityAccount> account = new HashMap<>();
-	/*private LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
-			.expireAfterAccess(10, TimeUnit.MINUTES)
-			.build(new NegativityAccountLoader());*/
+	private NegativityAccountManager accountManager = new SimpleAccountManager(true);
 
 	public SpigotAdapter(JavaPlugin pl) {
 		this.pl = pl;
@@ -194,6 +190,11 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 		}
 	}
 
+	@Override
+	public NegativityAccountManager getAccountManager() {
+		return accountManager;
+	}
+
 	@Nullable
 	@Override
 	public NegativityPlayer getNegativityPlayer(UUID playerId) {
@@ -209,18 +210,6 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public void runConsoleCommand(String cmd) {
 		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
-	}
-
-	@Nonnull
-	@Override
-	public NegativityAccount getNegativityAccount(UUID playerId) {
-		return account.computeIfAbsent(playerId, NegativityAccountStorage.getStorage()::getOrCreateAccount);
-	}
-
-	@Nullable
-	@Override
-	public NegativityAccount invalidateAccount(UUID playerId) {
-		return account.remove(playerId);
 	}
 
 	@Override

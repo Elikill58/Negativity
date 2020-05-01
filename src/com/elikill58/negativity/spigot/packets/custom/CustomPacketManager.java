@@ -26,7 +26,7 @@ public class CustomPacketManager implements IPacketManager, Listener {
 
 	public CustomPacketManager(Plugin pl) {
 		this.pl = pl;
-		if (Version.getVersion().equals(Version.V1_7))
+		if (Version.getVersion(Utils.VERSION).equals(Version.V1_7))
 			channel = new NMUChannel(this);
 		else
 			channel = new INCChannel(this);

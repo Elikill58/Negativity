@@ -32,6 +32,8 @@ public interface IPacketManager {
 	}
 	
 	public default void notifyHandlersReceive(PacketSourceType source, AbstractPacket packet) {
+		if(!SpigotNegativity.getInstance().isEnabled()) // cannot go on main thread is plugin doesn't enabled
+			return;
 		// Go on main Thread
 		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), new Runnable() {
 			@Override
@@ -45,6 +47,8 @@ public interface IPacketManager {
 	}
 
 	public default void notifyHandlersSent(PacketSourceType source, AbstractPacket packet) {
+		if(!SpigotNegativity.getInstance().isEnabled()) // cannot go on main thread is plugin doesn't enabled
+			return;
 		// Go on main Thread
 		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), new Runnable() {
 			@Override

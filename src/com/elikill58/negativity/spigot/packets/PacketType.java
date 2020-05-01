@@ -7,8 +7,6 @@ public class PacketType {
 	private static boolean logUnknowPacket = false;
 	
 	public static AbstractPacketType getType(String packetName) {
-		if(packetName.contains("$"))
-			packetName = packetName.split("$")[0];
 		if(packetName.startsWith("PacketPlayIn")) {
 			for(Client client : Client.values())
 				if(client.getFullName().equalsIgnoreCase(packetName))
@@ -38,7 +36,8 @@ public class PacketType {
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow status packet " + packetName);
 			return Status.UNSET;
 		} else {
-			SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow packet " + packetName);
+			if(logUnknowPacket)
+				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow packet " + packetName);
 			return null;
 		}
 	}

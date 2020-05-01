@@ -1,24 +1,29 @@
-package com.elikill58.negativity.spigot.packets;
+package com.elikill58.orebfuscator.packets.custom.channel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.spigot.packets.PacketAbstract.IPacketListener;
-import com.elikill58.negativity.universal.Version;
+import com.elikill58.orebfuscator.packets.custom.CustomPacketManager;
+import com.elikill58.orebfuscator.utils.Utils;
 
 public class ChannelInjector {
 
 	private ChannelAbstract channel;
+	private CustomPacketManager customPacketManager;
 	private List<Player> players = new ArrayList<>();
 
-	public boolean inject(IPacketListener iPacketListener) {
+	public ChannelInjector(CustomPacketManager customPacketManager) {
+		this.customPacketManager = customPacketManager;
+	}
+	
+	public boolean inject() {
 		try {
-			if (Version.getVersion().equals(Version.V1_7))
-				channel = new NMUChannel(iPacketListener);
+			if (Utils.VERSION.contains("v1_7"))
+				channel = new NMUChannel(customPacketManager);
 			else
-				channel = new INCChannel(iPacketListener);
+				channel = new INCChannel(customPacketManager);
 			return true;
 		} catch (Exception e1) {
 			e1.printStackTrace();
@@ -30,14 +35,18 @@ public class ChannelInjector {
 		if(players.contains(p))
 			return;
 		players.add(p);
-		this.channel.addChannel(p);
+		channel.addChannel(p);
 	}
 
 	public void removeChannel(Player p) {
 		if(players.contains(p)) {
 			players.remove(p);
-			this.channel.removeChannel(p);
+			channel.removeChannel(p);
 		}
+	}
+	
+	public List<Player> getPlayers(){
+		return players;
 	}
 	
 	public ChannelAbstract getChannel() {
@@ -46,18 +55,5 @@ public class ChannelInjector {
 	
 	public boolean contains(Player p) {
 		return players.contains(p);
-	}
-	
-	public static class ChannelWrapper<T> {
-
-		private T channel;
-
-		public ChannelWrapper(T channel) {
-			this.channel = channel;
-		}
-
-		public T channel() {
-			return this.channel;
-		}
 	}
 }

@@ -5,14 +5,15 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.packets.ReceivedPacket;
+import com.elikill58.negativity.spigot.packets.AbstractPacket;
 
+@Deprecated
 public class NegativityPacketEvent extends Event {
 
 	private final SpigotNegativityPlayer np;
-	private final ReceivedPacket packet;
+	private final AbstractPacket packet;
 	
-	public NegativityPacketEvent(SpigotNegativityPlayer np, ReceivedPacket packet) {
+	public NegativityPacketEvent(SpigotNegativityPlayer np, AbstractPacket packet) {
 		this.np = np;
 		this.packet = packet;
 	}
@@ -25,7 +26,7 @@ public class NegativityPacketEvent extends Event {
 		return np.getPlayer();
 	}
 	
-	public ReceivedPacket getPacket() {
+	public AbstractPacket getPacket() {
 		return packet;
 	}
 	

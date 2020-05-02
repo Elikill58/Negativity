@@ -47,7 +47,7 @@ public interface PacketType {
 		}
 	}
 	
-	public static enum Client implements PacketType {
+	enum Client implements PacketType {
 		ABILITIES("Abilities"),
 		ADVANCEMENTS("Advancements"),
 		ARM_ANIMATION("ArmAnimation"),

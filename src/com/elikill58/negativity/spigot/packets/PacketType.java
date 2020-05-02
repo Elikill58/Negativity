@@ -98,7 +98,7 @@ public interface PacketType {
 		
 		private final String packetName, fullName;
 		
-		private Client(String packetName) {
+		Client(String packetName) {
 			this.packetName = packetName;
 			this.fullName = CLIENT_PREFIX + packetName;
 		}

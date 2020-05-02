@@ -485,6 +485,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public static void manageAutoVerif(Player p) {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		np.ACTIVE_CHEAT.clear();
 		boolean needPacket = false;
 		for (Cheat c : Cheat.values())
 			if (c.isActive() && c.isAutoVerif()) {

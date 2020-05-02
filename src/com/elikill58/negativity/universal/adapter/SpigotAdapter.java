@@ -230,9 +230,8 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 		ProxyCompanionManager.updateForceDisabled(getBooleanInConfig("disableProxyIntegration"));
 		SpigotNegativity.trySendProxyPing();
 		SpigotNegativity.setupValue();
-		//Bukkit.getScheduler().cancelAllTasks();
-        /*Bukkit.getPluginManager().disablePlugin(sn);
-        Bukkit.getPluginManager().enablePlugin(sn);*/
+		for(Player p : Utils.getOnlinePlayers())
+			SpigotNegativity.manageAutoVerif(p);
 	}
 
 	@Override

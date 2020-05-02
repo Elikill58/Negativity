@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import org.bukkit.Difficulty;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -53,7 +54,9 @@ public class RegenProtocol extends Cheat implements Listener {
 		else
 			np.flyingReason = FlyingReason.REGEN;
 		long actual = System.currentTimeMillis(), dif = actual - np.LAST_REGEN;
-		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && np.ACTIVE_CHEAT.contains(this) && (np.LAST_REGEN != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))) {
+		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && np.ACTIVE_CHEAT.contains(this)
+				&& (np.LAST_REGEN != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))
+				&& !p.getWorld().getDifficulty().equals(Difficulty.PEACEFUL)) {
 			int ping = Utils.getPing(p);
 			if (dif < (Version.getVersion().getTimeBetweenTwoRegenFromVersion() + ping)) {
 				boolean mayCancel = SpigotNegativity.alertMod(dif < (50 + ping) ? ReportType.VIOLATION : ReportType.WARNING, p, this,

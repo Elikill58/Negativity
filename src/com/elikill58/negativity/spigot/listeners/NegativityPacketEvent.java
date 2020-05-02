@@ -7,6 +7,11 @@ import org.bukkit.event.HandlerList;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 
+/**
+* @deprecated From 1.8 release, it have been replaced by
+*  @link com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent : Called when the server received a packet from Player
+*  @link com.elikill58.negativity.spigot.packets.event.PacketSentEvent : Called before the player sent the packet
+*/
 @Deprecated
 public class NegativityPacketEvent extends Event {
 

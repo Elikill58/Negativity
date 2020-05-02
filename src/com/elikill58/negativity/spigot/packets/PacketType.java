@@ -4,9 +4,9 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 
 public interface PacketType {
 
-	public String name();
-	public String getPacketName();
-	public String getFullName();
+	String name();
+	String getPacketName();
+	String getFullName();
 	
 	static boolean LOG_UNKNOW_PACKET = false;
 	static final String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus";

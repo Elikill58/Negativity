@@ -69,7 +69,7 @@ public class INCChannel extends ChannelAbstract {
 		}
 	}
 
-	Channel getChannel(Player p) throws ReflectiveOperationException {
+	private Channel getChannel(Player p) throws ReflectiveOperationException {
 		try {
 			Object craftPlayer = craftPlayerClass.cast(p);
 			Object entityPlayer = craftPlayer.getClass().getMethod("getHandle").invoke(craftPlayer);

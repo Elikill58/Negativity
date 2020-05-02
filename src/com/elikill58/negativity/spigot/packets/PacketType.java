@@ -9,7 +9,7 @@ public interface PacketType {
 	public String getFullName();
 	
 	static boolean LOG_UNKNOW_PACKET = false;
-	static String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus";
+	static final String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus";
 	
 	public static PacketType getType(String packetName) {
 		if(packetName.startsWith(CLIENT_PREFIX)) {

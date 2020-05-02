@@ -8,6 +8,8 @@ public abstract class NegativityPlayer {
 
 	private final UUID playerId;
 	private boolean isBanned = false, isMcLeaks = false;
+	// To remove multiple ban at follow
+	private boolean isInBanning = false;
 
 	public NegativityPlayer(UUID playerId) {
 		this.playerId = playerId;
@@ -35,6 +37,14 @@ public abstract class NegativityPlayer {
 	public void setBanned(boolean b) {
 		isBanned = b;
 	}
+	
+	public boolean isInBanning() {
+		return isInBanning;
+	}
+	
+	public void setInBanning(boolean b) {
+		isInBanning = b;
+	}
 
 	public abstract Object getPlayer();
 	public abstract boolean hasDefaultPermission(String s);
@@ -52,7 +62,6 @@ public abstract class NegativityPlayer {
 	public abstract void stopAnalyze(Cheat c);
 	public abstract void updateMinerateInFile();
 	public abstract boolean isOp();
-	//public abstract void setLang(String newLang);
 	public abstract String getIP();
 	public abstract String getReason(Cheat c);
 

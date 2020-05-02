@@ -1,18 +1,15 @@
 package com.elikill58.negativity.spigot.packets;
 
-import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.listeners.NegativityPacketEvent;
 import com.elikill58.negativity.spigot.packets.PacketType.Client;
 
-@SuppressWarnings("deprecation")
 public class NegativityPacketManager {
 
-	private IPacketManager packetManager;
+	private PacketManager packetManager;
 	private SpigotNegativity plugin;
 	
 	public NegativityPacketManager(SpigotNegativity pl) {
@@ -30,19 +27,12 @@ public class NegativityPacketManager {
 					return;
 				if(!plugin.isEnabled())
 					return;
-				SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-				Bukkit.getScheduler().runTask(plugin, new Runnable() {
-					@Override
-					public void run() {
-						Bukkit.getPluginManager().callEvent(new NegativityPacketEvent(np, packet));
-					}
-				});
 				manageReceive(packet);
 			}
 		});
 	}
 	
-	public IPacketManager getPacketManager() {
+	public PacketManager getPacketManager() {
 		return packetManager;
 	}
 	
@@ -76,10 +66,6 @@ public class NegativityPacketManager {
 			case USE_ENTITY:
 				np.USE_ENTITY++;
 				try {
-					/*Object pa = Class.forName("net.minecraft.server." + Utils.VERSION + ".PacketPlayInUseEntity").cast(packet.getPacket());
-					Field f = pa.getClass().getDeclaredField("a");
-					f.setAccessible(true);
-					f.getInt(pa);*/
 					int id = packet.getContent().getIntegers().read(0);
 					for(FakePlayer fp : np.getFakePlayers())
 						if(fp.getEntityId() == id)

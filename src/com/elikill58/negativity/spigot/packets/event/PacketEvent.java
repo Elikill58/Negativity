@@ -2,11 +2,10 @@ package com.elikill58.negativity.spigot.packets.event;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
 
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 
-public class PacketEvent extends Event {
+public abstract class PacketEvent extends Event {
 	
 	private final Player p;
 	private final AbstractPacket packet;
@@ -29,15 +28,6 @@ public class PacketEvent extends Event {
 	public PacketSourceType getPacketSourceType() {
 		return source;
 	}
-	
-    private static final HandlerList handlers = new HandlerList();
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-    public static HandlerList getHandlerList() {
-        return handlers;
-    }
     
     public enum PacketSourceType {
     	PROTOCOLLIB, CUSTOM;

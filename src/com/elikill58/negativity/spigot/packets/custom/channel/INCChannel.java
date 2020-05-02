@@ -30,27 +30,24 @@ public class INCChannel extends ChannelAbstract {
 
 	@Override
 	public void addChannel(final Player player, String endChannelName) {
-		getOrCreateAddChannelExecutor().execute(new Runnable() {
-			@Override
-			public void run() {
-				if(!player.isOnline())
-					return;
-				try {
-					Channel channel = getChannel(player);
-					// Managing incoming packet (from player)
-					channel.pipeline().addBefore(KEY_HANDLER_PLAYER, KEY_PLAYER + endChannelName, new ChannelHandlerReceive(player));
-					
-					// Managing outgoing packet (to the player)
-					channel.pipeline().addAfter(KEY_HANDLER_SERVER, KEY_SERVER + endChannelName, new ChannelHandlerSent(player));
-				} catch (NoSuchElementException e) {
-					// appear when the player's channel isn't accessible because of reload.
-					// TODO support of reload
-					getPacketManager().getPlugin().getLogger().warning("Please, don't use reload, this can produce some problem. Currently, " + player.getName() + " isn't fully checked because of that. More details: " + e.getMessage() + " (NoSuchElementException)");
-				} catch (IllegalArgumentException e) {
-					getPacketManager().getPlugin().getLogger().severe("Error while loading Packet channel. " + e.getMessage() + ". Please, prefer restart than reload.");
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+		getOrCreateAddChannelExecutor().execute(() -> {
+			if(!player.isOnline())
+				return;
+			try {
+				Channel channel = getChannel(player);
+				// Managing incoming packet (from player)
+				channel.pipeline().addBefore(KEY_HANDLER_PLAYER, KEY_PLAYER + endChannelName, new ChannelHandlerReceive(player));
+				
+				// Managing outgoing packet (to the player)
+				channel.pipeline().addAfter(KEY_HANDLER_SERVER, KEY_SERVER + endChannelName, new ChannelHandlerSent(player));
+			} catch (NoSuchElementException e) {
+				// appear when the player's channel isn't accessible because of reload.
+				// TODO support of reload
+				getPacketManager().getPlugin().getLogger().warning("Please, don't use reload, this can produce some problem. Currently, " + player.getName() + " isn't fully checked because of that. More details: " + e.getMessage() + " (NoSuchElementException)");
+			} catch (IllegalArgumentException e) {
+				getPacketManager().getPlugin().getLogger().severe("Error while loading Packet channel. " + e.getMessage() + ". Please, prefer restart than reload.");
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		});
 	}
@@ -59,18 +56,14 @@ public class INCChannel extends ChannelAbstract {
 	public void removeChannel(Player player, String endChannelName) {
 		try {
 			final Channel channel = getChannel(player);
-			getOrCreateRemoveChannelExecutor().execute(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						if(channel.pipeline().get(KEY_HANDLER_PLAYER) != null)
-							channel.pipeline().remove(KEY_HANDLER_PLAYER);
-						
-						if(channel.pipeline().get(KEY_HANDLER_SERVER) != null)
-							channel.pipeline().remove(KEY_HANDLER_SERVER);
-					} catch (Exception e) {
-					}
-				}
+			getOrCreateRemoveChannelExecutor().execute(() -> {
+				try {
+					if(channel.pipeline().get(KEY_HANDLER_PLAYER) != null)
+						channel.pipeline().remove(KEY_HANDLER_PLAYER);
+					
+					if(channel.pipeline().get(KEY_HANDLER_SERVER) != null)
+						channel.pipeline().remove(KEY_HANDLER_SERVER);
+				} catch (Exception e) {}
 			});
 		} catch (Exception e) {
 		}

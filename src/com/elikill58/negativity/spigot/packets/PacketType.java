@@ -2,54 +2,52 @@ package com.elikill58.negativity.spigot.packets;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 
-public class PacketType {
+public interface PacketType {
+
+	public String name();
+	public String getPacketName();
+	public String getFullName();
 	
-	private static boolean logUnknowPacket = false;
+	static boolean LOG_UNKNOW_PACKET = false;
+	static String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus";
 	
-	public static AbstractPacketType getType(String packetName) {
-		if(packetName.startsWith("PacketPlayIn")) {
+	public static PacketType getType(String packetName) {
+		if(packetName.startsWith(CLIENT_PREFIX)) {
 			for(Client client : Client.values())
 				if(client.getFullName().equalsIgnoreCase(packetName))
 					return client;
-			if(logUnknowPacket)
+			if(LOG_UNKNOW_PACKET)
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow client packet " + packetName);
 			return Client.UNSET;
-		} else if(packetName.startsWith("PacketPlayOut")) {
+		} else if(packetName.startsWith(SERVER_PREFIX)) {
 			for(Server srv : Server.values())
 				if(srv.getFullName().equalsIgnoreCase(packetName))
 					return srv;
-			if(logUnknowPacket)
+			if(LOG_UNKNOW_PACKET)
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow server packet " + packetName);
 			return Server.UNSET;
-		} else if(packetName.startsWith("PacketLogin")) {
+		} else if(packetName.startsWith(LOGIN_PREFIX)) {
 			for(Login login : Login.values())
 				if(login.getFullName().equalsIgnoreCase(packetName))
 					return login;
-			if(logUnknowPacket)
+			if(LOG_UNKNOW_PACKET)
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow login packet " + packetName);
 			return Login.UNSET;
-		} else if(packetName.startsWith("PacketStatus")) {
+		} else if(packetName.startsWith(STATUS_PREFIX)) {
 			for(Status status : Status.values())
 				if(status.getFullName().equalsIgnoreCase(packetName))
 					return status;
-			if(logUnknowPacket)
+			if(LOG_UNKNOW_PACKET)
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow status packet " + packetName);
 			return Status.UNSET;
 		} else {
-			if(logUnknowPacket)
+			if(LOG_UNKNOW_PACKET)
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow packet " + packetName);
 			return null;
 		}
 	}
 	
-	public interface AbstractPacketType {
-
-		public String name();
-		public String getPacketName();
-		public String getFullName();
-	}
-	
-	public static enum Client implements AbstractPacketType {
+	public static enum Client implements PacketType {
 		ABILITIES("Abilities"),
 		ADVANCEMENTS("Advancements"),
 		ARM_ANIMATION("ArmAnimation"),
@@ -102,7 +100,7 @@ public class PacketType {
 		
 		private Client(String packetName) {
 			this.packetName = packetName;
-			this.fullName = "PacketPlayIn" + packetName;
+			this.fullName = CLIENT_PREFIX + packetName;
 		}
 		
 		@Override
@@ -116,7 +114,7 @@ public class PacketType {
 		}
 	}
 	
-	public static enum Server implements AbstractPacketType {
+	public static enum Server implements PacketType {
 		
 		ABILITIES("Abilities"),
 		ADVANCEMENTS("Advancements"),
@@ -221,7 +219,7 @@ public class PacketType {
 		
 		private Server(String packetName) {
 			this.packetName = packetName;
-			this.fullName = "PacketPlayOut" + packetName;
+			this.fullName = SERVER_PREFIX + packetName;
 		}
 
 		@Override
@@ -235,7 +233,7 @@ public class PacketType {
 		}
 	}
 	
-	public static enum Login implements AbstractPacketType {
+	public static enum Login implements PacketType {
 		
 		CUSTOM_PAYLOAD_OUT("OutCustomPayload"),
 		CUSTOM_PAYLOAD_IN("InCustomPayload"),
@@ -253,7 +251,7 @@ public class PacketType {
 		
 		private Login(String packetName) {
 			this.packetName = packetName;
-			this.fullName = "PacketLogin" + packetName;
+			this.fullName = LOGIN_PREFIX + packetName;
 		}
 
 		@Override
@@ -267,7 +265,7 @@ public class PacketType {
 		}
 	}
 	
-	public static enum Status implements AbstractPacketType {
+	public static enum Status implements PacketType {
 
 		LISTENER("Listener"),
 		LISTENER_IN("InListener"),
@@ -282,7 +280,7 @@ public class PacketType {
 		
 		private Status(String packetName) {
 			this.packetName = packetName;
-			this.fullName = "PacketStatus" + packetName;
+			this.fullName = STATUS_PREFIX + packetName;
 		}
 
 		@Override

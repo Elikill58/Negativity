@@ -3,7 +3,6 @@ package com.elikill58.negativity.spigot.packets;
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
-@SuppressWarnings("unchecked")
 public class PacketContent {
 
 	private AbstractPacket packet;
@@ -48,7 +47,8 @@ public class PacketContent {
 		
 		private Object obj;
 		private HashMap<String, T> content = new HashMap<>();
-		
+
+		@SuppressWarnings("unchecked")
 		public ContentModifier(Object obj, Class<?> clazz) {
 			this.obj = obj;
 			
@@ -63,7 +63,8 @@ public class PacketContent {
 				}
 			}
 		}
-		
+
+		@SuppressWarnings("unchecked")
 		public T read(int i) {
 			return (T) content.values().toArray()[i];
 		}
@@ -71,11 +72,7 @@ public class PacketContent {
 		public void write(int i, T value) {
 			String key = content.keySet().toArray(new String[] {})[i];
 			if(key == null) {
-				try {
-					throw new NoSuchFieldException("Not enough value in " + obj.getClass() + ".");
-				} catch (NoSuchFieldException e) {
-					e.printStackTrace();
-				}
+				new NoSuchFieldException("Not enough value in " + obj.getClass() + ".").printStackTrace();
 			} else {
 				content.put(key, value);
 				try {

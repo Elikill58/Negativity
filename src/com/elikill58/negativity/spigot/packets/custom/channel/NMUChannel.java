@@ -25,24 +25,21 @@ public class NMUChannel extends ChannelAbstract {
 	public void addChannel(final Player player, String endChannelName) {
 		try {
 			final Channel channel = getChannel(player);
-			getOrCreateAddChannelExecutor().execute(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						// Managing incoming packet (from player)
-						if(channel.pipeline().get(KEY_HANDLER_PLAYER) == null)
-							channel.pipeline().addBefore(KEY_HANDLER_PLAYER, KEY_PLAYER + endChannelName, new ChannelHandlerReceive(player));
-						else
-							getPacketManager().getPlugin().getLogger().warning("The Incoming Packet channel " + KEY_HANDLER_PLAYER + "for " + player.getName() + " is already started.");
-						
-						// Managing outgoing packet (to the player)
-						if(channel.pipeline().get(KEY_HANDLER_SERVER) == null)
-							channel.pipeline().addAfter(KEY_HANDLER_SERVER, KEY_SERVER + endChannelName, new ChannelHandlerSent(player));
-						else
-							getPacketManager().getPlugin().getLogger().warning("The Outgoing Packet channel " + KEY_HANDLER_PLAYER + "for " + player.getName() + " is already started.");
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+			getOrCreateAddChannelExecutor().execute(() -> {
+				try {
+					// Managing incoming packet (from player)
+					if(channel.pipeline().get(KEY_HANDLER_PLAYER) == null)
+						channel.pipeline().addBefore(KEY_HANDLER_PLAYER, KEY_PLAYER + endChannelName, new ChannelHandlerReceive(player));
+					else
+						getPacketManager().getPlugin().getLogger().warning("The Incoming Packet channel " + KEY_HANDLER_PLAYER + "for " + player.getName() + " is already started.");
+					
+					// Managing outgoing packet (to the player)
+					if(channel.pipeline().get(KEY_HANDLER_SERVER) == null)
+						channel.pipeline().addAfter(KEY_HANDLER_SERVER, KEY_SERVER + endChannelName, new ChannelHandlerSent(player));
+					else
+						getPacketManager().getPlugin().getLogger().warning("The Outgoing Packet channel " + KEY_HANDLER_PLAYER + "for " + player.getName() + " is already started.");
+				} catch (Exception e) {
+					e.printStackTrace();
 				}
 			});
 		} catch (Exception e) {
@@ -54,17 +51,14 @@ public class NMUChannel extends ChannelAbstract {
 	public void removeChannel(Player player, String endChannelName) {
 		try {
 			final Channel channel = getChannel(player);
-			getOrCreateRemoveChannelExecutor().execute(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						if (channel.pipeline().get(KEY_HANDLER_PLAYER) != null)
-							channel.pipeline().remove(KEY_HANDLER_PLAYER);
-						
-						if (channel.pipeline().get(KEY_HANDLER_SERVER) != null)
-							channel.pipeline().remove(KEY_HANDLER_SERVER);
-					} catch (Exception e) {
-					}
+			getOrCreateRemoveChannelExecutor().execute(() -> {
+				try {
+					if (channel.pipeline().get(KEY_HANDLER_PLAYER) != null)
+						channel.pipeline().remove(KEY_HANDLER_PLAYER);
+					
+					if (channel.pipeline().get(KEY_HANDLER_SERVER) != null)
+						channel.pipeline().remove(KEY_HANDLER_SERVER);
+				} catch (Exception e) {
 				}
 			});
 		} catch (Exception e) {

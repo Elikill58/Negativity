@@ -2,16 +2,14 @@ package com.elikill58.negativity.spigot.packets;
 
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.spigot.packets.PacketType.AbstractPacketType;
-
 public abstract class AbstractPacket {
 
 	protected Player player;
 	protected Object packet;
-	protected AbstractPacketType type;
+	protected PacketType type;
 	protected boolean cancel = false;
 	
-	public AbstractPacket(AbstractPacketType type, Object packet, Player player) {
+	public AbstractPacket(PacketType type, Object packet, Player player) {
 		this.player = player;
 		this.packet = packet;
 		this.type = type;
@@ -37,7 +35,7 @@ public abstract class AbstractPacket {
 		return packet.getClass().getSimpleName();
 	}
 	
-	public AbstractPacketType getPacketType() {
+	public PacketType getPacketType() {
 		return type;
 	}
 	

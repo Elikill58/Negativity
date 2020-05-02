@@ -11,7 +11,7 @@ import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 
 public abstract class ChannelAbstract {
 
-	private ExecutorService addChannelExecutor = Executors.newSingleThreadExecutor(), removeChannelExecutor = Executors.newSingleThreadExecutor();
+	private ExecutorService addChannelExecutor, removeChannelExecutor;
 	static final String KEY_HANDLER_PLAYER = "packet_handler", KEY_PLAYER = "packet_listener_player_negativity",
 			KEY_HANDLER_SERVER = "packet_handler", KEY_SERVER = "packet_listener_server_negativity";
 
@@ -65,7 +65,7 @@ public abstract class ChannelAbstract {
 
 	public abstract void removeChannel(Player player, String endChannelName);
 
-	public String getPlayerNewChannelName(Player player) {
+	private String getPlayerNewChannelName(Player player) {
 		while(players.containsValue("-" + i))
 			i++;
 		return "-" + i;

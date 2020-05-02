@@ -9,8 +9,8 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
-import com.elikill58.negativity.spigot.packets.IPacketManager;
-import com.elikill58.negativity.spigot.packets.PacketType.AbstractPacketType;
+import com.elikill58.negativity.spigot.packets.PacketManager;
+import com.elikill58.negativity.spigot.packets.PacketType;
 import com.elikill58.negativity.spigot.packets.custom.channel.ChannelAbstract;
 import com.elikill58.negativity.spigot.packets.custom.channel.INCChannel;
 import com.elikill58.negativity.spigot.packets.custom.channel.NMUChannel;
@@ -18,7 +18,7 @@ import com.elikill58.negativity.spigot.packets.event.PacketEvent.PacketSourceTyp
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Version;
 
-public class CustomPacketManager implements IPacketManager, Listener {
+public class CustomPacketManager implements PacketManager, Listener {
 	
 	private ChannelAbstract channel;
 	private Plugin pl;
@@ -70,21 +70,21 @@ public class CustomPacketManager implements IPacketManager, Listener {
 
 	@Override
 	public void clear() {
-		for(Player temp : Utils.getOnlinePlayers())
-			removePlayer(temp);
+		for(Player player : Utils.getOnlinePlayers())
+			removePlayer(player);
 		if(channel.getAddChannelExecutor() != null)
 			channel.getAddChannelExecutor().shutdownNow();
 		if(channel.getRemoveChannelExecutor() != null)
 			channel.getRemoveChannelExecutor().shutdownNow();
 	}
 
-	public AbstractPacket onPacketSent(AbstractPacketType type, Player sender, Object packet) {
+	public AbstractPacket onPacketSent(PacketType type, Player sender, Object packet) {
 		CustomPacket customPacket = new CustomPacket(type, packet, sender);
 		notifyHandlersSent(PacketSourceType.CUSTOM, customPacket);
 		return customPacket;
 	}
 
-	public AbstractPacket onPacketReceive(AbstractPacketType type, Player sender, Object packet) {
+	public AbstractPacket onPacketReceive(PacketType type, Player sender, Object packet) {
 		CustomPacket customPacket = new CustomPacket(type, packet, sender);
 		notifyHandlersReceive(PacketSourceType.CUSTOM, customPacket);
 		return customPacket;

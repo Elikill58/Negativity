@@ -40,6 +40,7 @@ import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.elikill58.negativity.sponge.support.ViaVersionSupport;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.sponge.precogs.NegativityBypassTicket;
@@ -51,6 +52,7 @@ import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
@@ -97,8 +99,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public int fakePlayerTouched = 0;
 	public long timeStartFakePlayer = 0;
 	public Location<World> lastSpiderLoc = null;
-
 	public boolean justDismounted = false;
+	private final Version playerVersion;
 
 	public SpongeNegativityPlayer(Player p) {
 		super(p.getUniqueId());
@@ -140,6 +142,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		playerVersion = SpongeNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : Version.getVersion();
 	}
 
 	public void initFmlMods() {
@@ -166,6 +169,10 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 
 	public String getIP() {
 		return getPlayer().getConnection().getAddress().getAddress().getHostAddress();
+	}
+	
+	public Version getPlayerVersion() {
+		return playerVersion;
 	}
 
 	public boolean hasDetectionActive(Cheat c) {

@@ -126,7 +126,7 @@ public class SpongeNegativity {
 		return plugin;
 	}
 
-	public static boolean log = true, log_console = true, hasPacketGate = false, hasPrecogs = false, hasBypass = false;
+	public static boolean log = true, log_console = true, hasPacketGate = false, hasPrecogs = false, hasBypass = false, viaVersionSupport = false;
 
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
@@ -229,6 +229,8 @@ public class SpongeNegativity {
 		} catch (ClassNotFoundException e1) {
 			SpongeForgeSupport.isOnSpongeForge = false;
 		}
+		
+		viaVersionSupport = Sponge.getPluginManager().isLoaded("viaversion");
 
 		loadCommands(false);
 
@@ -591,8 +593,8 @@ public class SpongeNegativity {
 		if (!log)
 			return;
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		SpongeNegativityPlayer.getNegativityPlayer(p).logProof(
-				stamp + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " > " + proof + ". TPS: " + Utils.getLastTPS());
+		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
+		np.logProof(stamp + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " > " + proof + ". " + (viaVersionSupport ? "Player version: " + np.getPlayerVersion().name() + " " : "") + ". TPS: " + Utils.getLastTPS());
 	}
 
 	public Path getDataFolder() {

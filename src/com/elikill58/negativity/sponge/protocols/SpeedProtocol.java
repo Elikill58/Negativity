@@ -80,22 +80,6 @@ public class SpeedProtocol extends Cheat {
 			for(Entity et : p.getNearbyEntities(5))
 				if(et.getType().equals(EntityTypes.CREEPER))
 					return;
-			/*float fallDistance = np.getFallDistance();
-			String downName = p.getLocation().sub(0, 1, 0).getBlock().getType().getId();
-			Location<World> from = e.getFromTransform().getLocation(), to = e.getToTransform().getLocation();
-			if (!(from.getY() < to.getY() || p.isOnGround() || fallDistance > 0.0F || p.get(FoodData.class).get().foodLevel().get() < 6
-					|| downName.contains("SLAB") || downName.contains("STEP") || downName.contains("SPONGE")
-					|| downName.contains("SLIME_BLOCK") || downName.contains("ICE") || downName.contains("SCAFFOLD"))) {
-				double f = (from.getY() - to.getY()) / 2.0D;
-				if (!(F_LIST.contains(f) || (f < 0.47D && f > 0.46D) || (f < 0.02D && f > 0.01D)) && !p.getLocation().getBlock().getType().getId().contains("WATER")
-						&& !downName.contains("WATER") && !downName.contains("WEB") && !np.isUsingSlimeBlock) {
-					mayCancel = SpongeNegativity.alertMod(
-							np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-							UniversalUtils.parseInPorcent(99),
-							"Player NOT in ground. WalkSpeed: " + walkSpeed + " Distance shorted: " + f,
-							"Distance: " + f, "Distance: " + f);
-				}
-			}*/
 			if(!mayCancel) {
 				if(moveY >= 0.85D) {
 					mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(moveY * 100 * 2), proof,

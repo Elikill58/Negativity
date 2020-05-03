@@ -35,13 +35,10 @@ public interface PacketManager {
 		if(!SpigotNegativity.getInstance().isEnabled()) // cannot go on main thread is plugin doesn't enabled
 			return;
 		// Go on main Thread
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), new Runnable() {
-			@Override
-			public void run() {
-				PacketReceiveEvent event = new PacketReceiveEvent(source, packet, packet.getPlayer());
-				Bukkit.getPluginManager().callEvent(event);
-				handlers.forEach((handler) -> handler.onReceive(packet));
-			}
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
+			PacketReceiveEvent event = new PacketReceiveEvent(source, packet, packet.getPlayer());
+			Bukkit.getPluginManager().callEvent(event);
+			handlers.forEach((handler) -> handler.onReceive(packet));
 		});
 	}
 
@@ -49,13 +46,10 @@ public interface PacketManager {
 		if(!SpigotNegativity.getInstance().isEnabled()) // cannot go on main thread is plugin doesn't enabled
 			return;
 		// Go on main Thread
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), new Runnable() {
-			@Override
-			public void run() {
-				PacketSendEvent event = new PacketSendEvent(source, packet, packet.getPlayer());
-				Bukkit.getPluginManager().callEvent(event);
-				handlers.forEach((handler) -> handler.onSend(packet));
-			}
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
+			PacketSendEvent event = new PacketSendEvent(source, packet, packet.getPlayer());
+			Bukkit.getPluginManager().callEvent(event);
+			handlers.forEach((handler) -> handler.onSend(packet));
 		});
 	}
 }

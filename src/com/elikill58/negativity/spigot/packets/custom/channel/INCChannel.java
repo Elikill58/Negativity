@@ -42,7 +42,6 @@ public class INCChannel extends ChannelAbstract {
 				channel.pipeline().addAfter(KEY_HANDLER_SERVER, KEY_SERVER + endChannelName, new ChannelHandlerSent(player));
 			} catch (NoSuchElementException e) {
 				// appear when the player's channel isn't accessible because of reload.
-				// TODO support of reload
 				getPacketManager().getPlugin().getLogger().warning("Please, don't use reload, this can produce some problem. Currently, " + player.getName() + " isn't fully checked because of that. More details: " + e.getMessage() + " (NoSuchElementException)");
 			} catch (IllegalArgumentException e) {
 				getPacketManager().getPlugin().getLogger().severe("Error while loading Packet channel. " + e.getMessage() + ". Please, prefer restart than reload.");
@@ -54,19 +53,17 @@ public class INCChannel extends ChannelAbstract {
 
 	@Override
 	public void removeChannel(Player player, String endChannelName) {
-		try {
-			final Channel channel = getChannel(player);
-			getOrCreateRemoveChannelExecutor().execute(() -> {
-				try {
-					if(channel.pipeline().get(KEY_HANDLER_PLAYER) != null)
-						channel.pipeline().remove(KEY_HANDLER_PLAYER);
-					
-					if(channel.pipeline().get(KEY_HANDLER_SERVER) != null)
-						channel.pipeline().remove(KEY_HANDLER_SERVER);
-				} catch (Exception e) {}
-			});
-		} catch (Exception e) {
-		}
+		getOrCreateRemoveChannelExecutor().execute(() -> {
+			try {
+				final Channel channel = getChannel(player);
+				
+				if(channel.pipeline().get(KEY_PLAYER + endChannelName) != null)
+					channel.pipeline().remove(KEY_PLAYER + endChannelName);
+				
+				if(channel.pipeline().get(KEY_SERVER + endChannelName) != null)
+					channel.pipeline().remove(KEY_SERVER + endChannelName);
+			} catch (Exception e) {}
+		});
 	}
 
 	private Channel getChannel(Player p) throws ReflectiveOperationException {

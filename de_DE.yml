@@ -45,7 +45,7 @@ report:
   report_usage: "/report <name> <reason>"
   well_report: "&a%name% wurde erfolgreich reportet!"
   report_message: "&a[&2Negativity&a] &c%name% &7wurde von &c%report% &7für &c%reason% &7reportet."
-  report_message_hover: "&7Open &c%name%&7's check menu"
+  report_message_hover: "&7Öffne &c%name%&7's Prüfungsmenü"
 negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 scheint folgenden Cheat zu benutzen: &c%cheat% &7(&2Wahrscheinlichkeit: %reliability%%&7)!"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 scheint folgenden Cheat zu benutzen: &c%cheat% %nb% zeit &7(&2Wahrscheinlichkeit: %reliability%%&7)!"
@@ -57,7 +57,7 @@ negativity:
     invalid_cheat: "%arg% ist kein gültiger Cheat!"
     start: "&a[&2Negativity&a] &7Überprüft nun %name% auf folgenden Cheat: %cheat%"
     start_all: "&a[&2Negativity&a] Überprüft nun %name% auf alle bekannten Cheats."
-    start_none: "&a[&2Negativity&a] &cCould not start analysis because no valid cheats are given"
+    start_none: "&a[&2Negativity&a] &cKeine Überprüfung gestartet, da Cheat nicht gefunden."
     help:
       - "/negativity verif <player> [cheats...]: Startet Verifizierung (für alle, wenn nichts angegeben wird)"
       - "/negativity <player>: Um weitere Informationen für einen Spieler anzuzeigen"

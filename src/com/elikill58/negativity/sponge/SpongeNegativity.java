@@ -149,7 +149,7 @@ public class SpongeNegativity {
 				.name("negativity-packets").submit(this);
 		Task.builder().execute(new ActualizerTimer()).interval(1, TimeUnit.SECONDS)
 				.name("negativity-actualizer").submit(this);
-		Task.builder().execute(new PendingAlertsTimer()).interval(1, TimeUnit.SECONDS)
+		Task.builder().execute(new PendingAlertsTimer()).interval(timeBetweenAlert, TimeUnit.MILLISECONDS)
 				.name("negativity-pending-alerts").submit(this);
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
@@ -402,7 +402,7 @@ public class SpongeNegativity {
 			log_console = config.getNode("log_alerts_in_console").getBoolean(true);
 			ProxyCompanionManager.updateForceDisabled(config.getNode("disableProxyIntegration").getBoolean());
 			hasBypass = config.getNode("Permissions").getNode("bypass").getNode("active").getBoolean();
-			timeBetweenAlert = config.getNode("time_between_alert").getInt();
+			timeBetweenAlert = config.getNode("time_between_alert").getInt(1000);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -494,8 +494,8 @@ public class SpongeNegativity {
 				|| np.isFreeze)
 			return false;
 		Sponge.getEventManager().post(new PlayerCheatEvent(type, p, c, reliability, hover_proof, ping));
-		if (hasBypass && Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "bypass.all") ||
-				Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase())) {
+		if (hasBypass && (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "bypass.all") ||
+				Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase()))) {
 			PlayerCheatEvent.Bypass bypassEvent = new PlayerCheatEvent.Bypass(type, p, c, reliability, hover_proof, ping);
 			Sponge.getEventManager().post(bypassEvent);
 			if (!bypassEvent.isCancelled())
@@ -519,11 +519,10 @@ public class SpongeNegativity {
 			return false;
 		}
 
-		if (BanUtils.banIfNeeded(np, c, reliability) == null) {
+		if (BanUtils.banIfNeeded(np, c, reliability) != null) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			return false;
 		}
-		
 		if(timeBetweenAlert != -1) {
 			List<PlayerCheatEvent.Alert> tempList = np.pendingAlerts.containsKey(c) ? np.pendingAlerts.get(c) : new ArrayList<>();
 			tempList.add(alert);
@@ -548,7 +547,6 @@ public class SpongeNegativity {
 	}
 
 	public static void sendAlertMessage(SpongeNegativityPlayer np, PlayerCheatEvent.Alert alert) {
-
 		Cheat c = alert.getCheat();
 		int reliability = alert.getReliability();
 		if(reliability == 0) {// alert already sent
@@ -581,7 +579,8 @@ public class SpongeNegativity {
 			if(hasPermPeople) {
 				np.pendingAlerts.remove(c);
 				Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
-			}
+			} else
+				p.sendMessage(Text.of("no people"));
 		}
 	}
 

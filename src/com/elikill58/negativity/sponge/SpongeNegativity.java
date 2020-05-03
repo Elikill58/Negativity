@@ -118,9 +118,9 @@ public class SpongeNegativity {
 	private HoconConfigurationLoader configLoader;
 	public static RawDataChannel channel = null, fmlChannel = null;
 
-	public static final List<PlayerCheatEvent.Alert> ALERTS = new ArrayList<>();
 	public static final Map<UUID, Map<Cheat, Long>> LAST_ALERTS_TIME = new HashMap<>();
 	private final Map<String, CommandMapping> reloadableCommands = new HashMap<>();
+	private static int timeBetweenAlert = -1;
 
 	public PluginContainer getContainer() {
 		return plugin;
@@ -402,6 +402,7 @@ public class SpongeNegativity {
 			log_console = config.getNode("log_alerts_in_console").getBoolean(true);
 			ProxyCompanionManager.updateForceDisabled(config.getNode("disableProxyIntegration").getBoolean());
 			hasBypass = config.getNode("Permissions").getNode("bypass").getNode("active").getBoolean();
+			timeBetweenAlert = config.getNode("time_between_alert").getInt();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -447,16 +448,23 @@ public class SpongeNegativity {
 	}
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, "", "");
+		return alertMod(type, p, c, reliability, proof, "", 1);
 	}
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 							   String hover_proof) {
-		return alertMod(type, p, c, reliability, proof, hover_proof, "");
+		return alertMod(type, p, c, reliability, proof, hover_proof, 1);
 	}
 
+	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 								   String hover_proof, String stats_send) {
+		return alertMod(type, p, c, reliability, proof, hover_proof, 1);
+	}
+	
+
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
+								   String hover_proof, int alertCounts) {
 		if(!c.isActive())
 			return false;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
@@ -493,13 +501,13 @@ public class SpongeNegativity {
 			if (!bypassEvent.isCancelled())
 				return false;
 		}
-		logProof(type, p, c, reliability, proof, ping);
-		PlayerCheatEvent.Alert alert = new PlayerCheatEvent.Alert(type, p, c, reliability,
-				c.getReliabilityAlert() < reliability, hover_proof, ping, stats_send);
+		PlayerCheatEvent.Alert alert = new PlayerCheatEvent.Alert(type, p, c, reliability, c.getReliabilityAlert() < reliability,
+						ping, proof, hover_proof, alertCounts);
 		Sponge.getEventManager().post(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
 		np.addWarn(c);
+		logProof(type, p, c, reliability, proof, ping);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatEvent.Kick kick = new PlayerCheatEvent.Kick(type, p, c, reliability, hover_proof, ping);
 			Sponge.getEventManager().post(kick);
@@ -507,68 +515,73 @@ public class SpongeNegativity {
 				p.kick(Messages.getMessage(p, "kick", "%cheat%", c.getName()));
 		}
 		if(np.isBanned()) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
+			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			return false;
 		}
 
 		if (BanUtils.banIfNeeded(np, c, reliability) == null) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
+			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			return false;
 		}
-
-		int timeBetweenTwoAlerts = Adapter.getAdapter().getIntegerInConfig("time_between_alert");
-		if (timeBetweenTwoAlerts >= 0) {
-			Map<Cheat, Long> lastAlerts = LAST_ALERTS_TIME.computeIfAbsent(p.getUniqueId(), playerId -> new HashMap<>());
-			Long lastAlert = lastAlerts.put(c, timeMillis);
-			if (lastAlert != null && (timeMillis - lastAlert) < timeBetweenTwoAlerts) {
-				List<PlayerCheatEvent.Alert> tempList = np.pendingAlerts.containsKey(c) ? np.pendingAlerts.get(c) : new ArrayList<>();
-				tempList.add(alert);
-				np.pendingAlerts.put(c, tempList);
-				return true;
-			}
+		
+		if(timeBetweenAlert != -1) {
+			List<PlayerCheatEvent.Alert> tempList = np.pendingAlerts.containsKey(c) ? np.pendingAlerts.get(c) : new ArrayList<>();
+			tempList.add(alert);
+			np.pendingAlerts.put(c, tempList);
+			return true;
 		}
 
-		sendAlertMessage(type, p, c, reliability, hover_proof, np, ping, alert, 1, stats_send);
-		np.pendingAlerts.remove(c);
+		sendAlertMessage(np, alert);
 		return true;
 	}
 
+	@Deprecated
 	public static void sendAlertMessage(ReportType type, Player p, Cheat c, int reliability,
 										String hoverProof, SpongeNegativityPlayer np, int ping, PlayerCheatEvent.Alert alert, int alertsCount, String stats_send) {
-		Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "", stats_send);
-		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, hoverProof, alertsCount);
+		sendAlertMessage(type, p, c, reliability, hoverProof, np, ping, alert, alertsCount);
+	}
+
+	@Deprecated
+	public static void sendAlertMessage(ReportType type, Player p, Cheat c, int reliability,
+										String hoverProof, SpongeNegativityPlayer np, int ping, PlayerCheatEvent.Alert alert, int alertsCount) {
+		sendAlertMessage(np, alert);
+	}
+
+	public static void sendAlertMessage(SpongeNegativityPlayer np, PlayerCheatEvent.Alert alert) {
+
+		Cheat c = alert.getCheat();
+		int reliability = alert.getReliability();
+		if(reliability == 0) {// alert already sent
+			np.pendingAlerts.remove(c);
 			return;
 		}
-
-		if (log_console) {
-			INSTANCE.getLogger().info("New {} for {} (UUID: {})  (ping: {}) : suspected of cheating ({}) Reliability: {}",
-					type.getName(), p.getName(), p.getUniqueId().toString(), ping, c.getName(), reliability);
+		Player p = alert.getTargetEntity();
+		int ping = alert.getPing();
+		if(alert.getNbAlertConsole() > 0 && log_console) {
+				INSTANCE.getLogger().info("New " + alert.getReportType().getName() + " for " + p.getName()
+						+ " (UUID: " + p.getUniqueId().toString() + ") (ping: " + ping + ") : suspected of cheating ("
+						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
 		}
+		if (ProxyCompanionManager.isIntegrationEnabled()) {
+			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHoverProof(), alert.getNbAlert());
+			np.pendingAlerts.remove(c);
+		} else {
+			String hover_proof = alert.getHoverProof();
+			boolean hasPermPeople = false;
+			for (Player pl : Utils.getOnlinePlayers()) {
+				SpongeNegativityPlayer npMod = SpongeNegativityPlayer.getNegativityPlayer(pl);
+				if (!Perm.hasPerm(npMod, Perm.SHOW_ALERT) || npMod.disableShowingAlert) {
+					continue;
+				}
 
-		List<PlayerCheatEvent.Alert> pendingAlerts = np.pendingAlerts.get(c);
-		int pendingAlertsCount = pendingAlerts != null ? pendingAlerts.size() : 0;
+				pl.sendMessage(createAlertText(p, c, hover_proof, ping, alert.getNbAlert(), alert.getAlertMessageKey(), reliability, pl));
 
-		String messageKey = "negativity.alert";
-		int messageReliability = reliability;
-		if (pendingAlertsCount > 1) {
-			messageKey = "negativity.alert_multiple";
-			messageReliability = 100;
-		}
-
-		boolean alertSent = false;
-		for (Player pl : Utils.getOnlinePlayers()) {
-			if (!Perm.hasPerm(np, Perm.SHOW_ALERT)) {
-				continue;
+				hasPermPeople = true;
 			}
-
-			pl.sendMessage(createAlertText(p, c, hoverProof, ping, pendingAlertsCount, messageKey, messageReliability, pl));
-
-			alertSent = true;
-		}
-
-		if (!alertSent) {
-			ALERTS.add(alert);
+			if(hasPermPeople) {
+				np.pendingAlerts.remove(c);
+				Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
+			}
 		}
 	}
 

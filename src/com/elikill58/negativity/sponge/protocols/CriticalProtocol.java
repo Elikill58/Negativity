@@ -53,7 +53,7 @@ public class CriticalProtocol extends Cheat {
 		if(!damager.isOnGround() && !damager.get(Keys.IS_FLYING).orElse(false)) {
 			Location<World> loc = damager.getLocation();
 			if (loc.getY() % 1.0D == 0.0D && loc.getBlockRelative(Direction.DOWN).getBlock().getType().getProperty(SolidCubeProperty.class).get().getValue()) {
-				boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, damager, this, np.getAllWarn(this) > 5 ? 100 : 95, "", "", "");
+				boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, damager, this, np.getAllWarn(this) > 5 ? 100 : 95, "", "");
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			}

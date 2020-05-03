@@ -75,7 +75,7 @@ public class SpeedProtocol extends Cheat {
 		String proof = "In ground: " + p.isOnGround() + "WalkSpeed: " + p.get(Keys.WALKING_SPEED).get() + "  Distance between from/to location: " + moveY;
 		if (p.isOnGround() && moveY >= 0.75D) {
 			mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(moveY * 100 * 2), proof,
-					"Distance Last/New position: " + moveY + "\n(With same Y)\nPlayer on ground", "Distance Last-New position: " + moveY);
+					"Distance Last/New position: " + moveY + "\n(With same Y)\nPlayer on ground");
 		} else if (!p.isOnGround()) {
 			for(Entity et : p.getNearbyEntities(5))
 				if(et.getType().equals(EntityTypes.CREEPER))
@@ -83,7 +83,7 @@ public class SpeedProtocol extends Cheat {
 			if(!mayCancel) {
 				if(moveY >= 0.85D) {
 					mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(moveY * 100 * 2), proof,
-							"Distance Last/New position: " + moveY + "\n(With same Y)\nPlayer jumping", "Distance Last-New position: " + moveY);
+							"Distance Last/New position: " + moveY + "\n(With same Y)\nPlayer jumping");
 				} else {
 					BlockType under = e.getToTransform().getLocation().copy().sub(0, 1, 0).getBlockType();
 					if (!under.getId().contains("STEP")) {

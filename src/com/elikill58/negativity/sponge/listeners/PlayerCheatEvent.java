@@ -62,13 +62,29 @@ public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent
     public static class Alert extends PlayerCheatEvent implements Cancellable {
 
         private boolean hasRelia, alert;
-        private final String stats_send;
+    	private final int nbAlert;
+    	private int nbConsole;
+        private final String proof;
 
+        @Deprecated
         public Alert(ReportType reportType, Player p, Cheat c, int reliability, boolean hasRelia, String hoverProof, int ping, String stats_send) {
+        	this(reportType, p, c, reliability, hasRelia, ping, "", hoverProof);	
+    	}
+    	
+    	public Alert(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof) {
+    		this(type, p, c, reliability, hasRelia, ping, proof, hover_proof, 1);
+    	}
+    	
+    	public Alert(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof, int nbAlert) {
+    		this(type, p, c, reliability, hasRelia, ping, proof, hover_proof, nbAlert, 1);
+    	}
+        
+        public Alert(ReportType reportType, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hoverProof, int nbAlert, int nbAlertConsole) {
             super(reportType, p, c, reliability, hoverProof, ping);
             this.hasRelia = hasRelia;
             this.alert = hasRelia;
-            this.stats_send = stats_send;
+            this.proof = proof;
+            this.nbAlert = nbAlert;
         }
 
         private boolean cancelled = false;
@@ -93,10 +109,31 @@ public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent
         public boolean isAlert() {
             return alert;
         }
+    	
+    	public String getProof() {
+    		return proof;
+    	}
 
+        @Deprecated
         public String getStatsSend() {
-            return stats_send;
+            return "";
         }
+    	
+    	public int getNbAlert() {
+    		return nbAlert;
+    	}
+    	
+    	public String getAlertMessageKey() {
+    		return (nbAlert > 1 ? "negativity.alert_multiple" : "negativity.alert");
+    	}
+    	
+    	public int getNbAlertConsole() {
+    		return nbConsole;
+    	}
+    	
+    	public void clearNbAlertConsole() {
+    		this.nbConsole = 0;
+    	}
     }
 
     public static class Kick extends PlayerCheatEvent implements Cancellable {

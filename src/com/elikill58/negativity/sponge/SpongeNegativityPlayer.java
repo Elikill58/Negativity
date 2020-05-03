@@ -40,11 +40,11 @@ import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.sponge.support.ViaVersionSupport;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.sponge.precogs.NegativityBypassTicket;
 import com.elikill58.negativity.sponge.protocols.ForceFieldProtocol;
+import com.elikill58.negativity.sponge.support.ViaVersionSupport;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -52,6 +52,7 @@ import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
@@ -84,7 +85,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0, LAST_BLOCK_BREAK = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
 	public String LAST_OTHER_KEEP_ALIVE;
-	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false,
+	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, disableShowingAlert = false,
 			isFreeze = false, isUsingSlimeBlock = false, already_blink = false, wasSneaking = false,
 			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false, flyNotMovingY = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
@@ -614,6 +615,47 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	@Override
 	public void banEffect() {
 		System.out.println("[SpongeNegativityPlayer] SOOOON");
+	}
+	
+	public List<PlayerCheatEvent.Alert> getAlertForAllCheat(){
+		final List<PlayerCheatEvent.Alert> list = new ArrayList<>();
+		pendingAlerts.forEach((c, listAlerts) -> {
+			if(!listAlerts.isEmpty())
+				list.add(getAlertForCheat(c, listAlerts));
+		});
+		return list;
+	}
+	
+	public PlayerCheatEvent.Alert getAlertForCheat(Cheat c, List<PlayerCheatEvent.Alert> list) {
+		int nb = 0, nbConsole = 0;
+		HashMap<Integer, Integer> relia = new HashMap<>();
+		HashMap<Integer, Integer> ping = new HashMap<>();
+		ReportType type = ReportType.NONE;
+		boolean hasRelia = false;
+		String hoverProof = "";
+		for(PlayerCheatEvent.Alert e : list) {
+			nb += e.getNbAlert();
+			
+			relia.put(e.getReliability(), relia.getOrDefault(e.getReliability(), 0) + 1);
+
+			ping.put(e.getPing(), ping.getOrDefault(e.getPing(), 0) + 1);
+
+			if(type == ReportType.NONE || (type == ReportType.WARNING && e.getReportType() == ReportType.VIOLATION))
+				type = e.getReportType();
+
+			hasRelia = e.hasManyReliability() ? true : hasRelia;
+			
+			if(hoverProof.length() < e.getHoverProof().length())
+				hoverProof = e.getHoverProof();
+			
+			nbConsole += e.getNbAlertConsole();
+			e.clearNbAlertConsole();
+		}
+		// Don't to 100% each times that there is more than 2 alerts, we made a summary, and a the nb of alert to upgrade it
+		int newRelia = UniversalUtils.parseInPorcent(UniversalUtils.sum(relia) + nb);
+		int newPing = UniversalUtils.sum(ping);
+		// we can ignore "proof" and "stats_send" because they have been already saved and they are NOT showed to player
+		return new PlayerCheatEvent.Alert(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, nb, nbConsole);
 	}
 
 	public void fight() {

@@ -63,7 +63,7 @@ public class ForceFieldProtocol extends Cheat {
 					UniversalUtils.parseInPorcent(distance * 2 * 10),
 					"Big distance with: " + e.getTargetEntity().getType().getName().toLowerCase() + ". Exact distance: "
 							+ distance + ". Ping: " + Utils.getPing(p),
-					"Distance with " + e.getTargetEntity().getType().getName() + ": " + distanceFormatter.format(distance), "Distance with " + e.getTargetEntity().getType().getName() + ": " + distanceFormatter.format(distance));
+					"Distance with " + e.getTargetEntity().getType().getName() + ": " + distanceFormatter.format(distance));
 		}
 		final Vector3d loc = p.getRotation().clone();
 		Task.builder().delay(60, TimeUnit.MILLISECONDS).execute(() -> {
@@ -125,6 +125,6 @@ public class ForceFieldProtocol extends Cheat {
 		SpongeNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD),
 				UniversalUtils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
-				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms", np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");
+				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");
 	}
 }

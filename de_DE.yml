@@ -57,7 +57,7 @@ negativity:
     invalid_cheat: "%arg% ist kein gültiger Cheat!"
     start: "&a[&2Negativity&a] &7Überprüft nun %name% auf folgenden Cheat: %cheat%"
     start_all: "&a[&2Negativity&a] Überprüft nun %name% auf alle bekannten Cheats."
-    start_none: "&a[&2Negativity&a] &cKeine Überprüfung gestartet, da keine Cheats gefunden wurden."
+    start_none: "&a[&2Negativity&a] &cKeine Überprüfung gestartet, da Cheat nicht gefunden."
     help:
       - "/negativity verif <player> [cheats...]: Startet Verifizierung (für alle, wenn nichts angegeben wird)"
       - "/negativity <player>: Um weitere Informationen für einen Spieler anzuzeigen"

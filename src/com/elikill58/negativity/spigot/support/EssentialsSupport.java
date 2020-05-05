@@ -27,6 +27,5 @@ public class EssentialsSupport {
             return defaultSpeed * p.getWalkSpeed();
         else
             return ((p.getWalkSpeed() - 1) / 9) * (maxSpeed - defaultSpeed) + defaultSpeed;
-        
     }
 }

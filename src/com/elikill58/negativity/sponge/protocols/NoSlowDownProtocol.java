@@ -1,14 +1,15 @@
 package com.elikill58.negativity.sponge.protocols;
 
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
-import org.spongepowered.api.entity.Transform;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
+import org.spongepowered.api.event.item.inventory.UseItemStackEvent;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
@@ -20,7 +21,6 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
-import com.flowpowered.math.vector.Vector3d;
 
 public class NoSlowDownProtocol extends Cheat {
 
@@ -40,6 +40,14 @@ public class NoSlowDownProtocol extends Cheat {
 		}
 
 		Location<?> loc = p.getLocation();
+		Location<World> from = e.getFromTransform().getLocation();
+		Location<World> to = e.getToTransform().getLocation();
+		double xSpeed = Math.abs(from.getX() - to.getX());
+	    double zSpeed = Math.abs(from.getZ() - to.getZ());
+	    double xzSpeed = Math.sqrt(xSpeed * xSpeed + zSpeed * zSpeed);
+	    np.eatingMoveDistance =  (xSpeed >= zSpeed ? xSpeed : zSpeed);
+	    if (np.eatingMoveDistance < xzSpeed)
+	    	np.eatingMoveDistance = xzSpeed;
 		if (!loc.getBlockType().equals(BlockTypes.SOUL_SAND)) {
 			return;
 		}
@@ -50,23 +58,32 @@ public class NoSlowDownProtocol extends Cheat {
 			}
 		}
 
-		Transform<World> from = e.getFromTransform();
-		Transform<World> to = e.getToTransform();
 		double distance = to.getPosition().distance(from.getPosition());
 		if (distance > 0.2) {
 			int ping = Utils.getPing(p);
 			int relia = UniversalUtils.parseInPorcent(distance * 400);
-			if ((from.getYaw() - to.getYaw()) < -0.001) {
+			if ((e.getFromTransform().getYaw() - e.getToTransform().getYaw()) < -0.001) {
 				return;
 			}
 
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, relia,
 					"Soul sand under player. Distance from/to : " + distance + ". Ping: " + ping);
 			if (isSetBack() && mayCancel) {
-				Vector3d delta = from.getPosition().sub(to.getPosition());
-				Vector3d setBackPosition = new Vector3d(delta.getX() / 2, delta.getY() / 2 + 0.5, delta.getZ());
-				e.setToTransform(from.setPosition(setBackPosition));
+				e.setCancelled(true);
 			}
+		}
+	}
+	
+	@Listener
+	public void onItemConsume(UseItemStackEvent.Finish e, @First Player p) {
+		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
+		if (!np.hasDetectionActive(this))
+			return;
+		if (np.eatingMoveDistance > np.getWalkSpeed() || p.get(Keys.IS_SPRINTING).orElse(false)) {
+			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(np.eatingMoveDistance * 200),
+					"Distance while eating: " + np.eatingMoveDistance + ", WalkSpeed: " + np.getWalkSpeed(), "Distance: " + np.eatingMoveDistance);
+			if(isSetBack() && mayCancel)
+				e.setCancelled(true);
 		}
 	}
 }

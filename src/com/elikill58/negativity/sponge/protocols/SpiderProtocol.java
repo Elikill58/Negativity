@@ -66,10 +66,8 @@ public class SpiderProtocol extends Cheat {
 			return;
 
 		double y = e.getToTransform().getLocation().getY() - e.getFromTransform().getLocation().getY();
-		double last = np.lastYDiff;
-		np.lastYDiff = y;
 		boolean isAris = y == p.get(Keys.WALKING_SPEED).get();
-		if (((y > 0.499 && y < 0.7) || isAris || last == y) && !np.isUsingSlimeBlock) {
+		if (((y > 0.499 && y < 0.7) || isAris) && !np.isUsingSlimeBlock) {
 			int relia = (int) (y * 160);
 			if (isAris) {
 				relia += 39;

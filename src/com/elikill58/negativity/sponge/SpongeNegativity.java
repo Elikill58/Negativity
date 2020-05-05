@@ -126,7 +126,8 @@ public class SpongeNegativity {
 		return plugin;
 	}
 
-	public static boolean log = true, log_console = true, hasPacketGate = false, hasPrecogs = false, hasBypass = false, viaVersionSupport = false;
+	public static boolean log = true, log_console = true, hasPacketGate = false, hasPrecogs = false, hasBypass = false, viaVersionSupport = false,
+			essentialsSupport = false;
 
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {

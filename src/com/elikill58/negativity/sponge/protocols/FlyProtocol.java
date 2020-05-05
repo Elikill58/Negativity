@@ -5,13 +5,13 @@ import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
+import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
-import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
@@ -40,7 +40,7 @@ public class FlyProtocol extends Cheat {
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
 			return;
 
-		if (p.getVehicle().isPresent() || np.justDismounted) {
+		if (np.justDismounted || (p.getVehicle().isPresent() && !p.getVehicle().get().getType().equals(EntityTypes.BOAT))) {
 			// Some cases like jumping with a horse may trigger false positives,
 			// dismounting while it is jumping also triggers false positives
 			return;
@@ -67,40 +67,35 @@ public class FlyProtocol extends Cheat {
 		Vector3d fromPosition = e.getFromTransform().getPosition();
 		Vector3d toPosition = e.getToTransform().getPosition();
 		double distance = toPosition.distance(fromPosition);
-		if (!(p.get(Keys.IS_SPRINTING).orElse(false) && (toPosition.getY() - fromPosition.getY()) > 0)) {
-			if (blockTypeBelow != BlockTypes.SPONGE
-					&& (p.getVehicle().isPresent() || p.get(Keys.CAN_FLY).orElse(false))
-					&& np.getFallDistance() == 0.0F
-					&& p.getLocation().getBlockRelative(Direction.UP).getBlockType() == BlockTypes.AIR
-					&& distance > 1.25D && !p.isOnGround()) {
-				ReportType type = np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING;
-				mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent((int) distance * 50),
-						"Player not in ground, distance: " + distance + ". Warn for fly: " + np.getWarn(this));
-				if (isSetBack() && mayCancel) {
-					Location<World> loc = p.getLocation();
-					while (loc.getBlockType().equals(BlockTypes.AIR)) {
-						loc = loc.sub(Vector3i.UNIT_Y);
-					}
-					p.setLocation(loc.add(Vector3i.UNIT_Y));
-				}
-			}
-	
-			if (!np.hasOtherThanExtended(p.getLocation(), BlockTypes.AIR)
-					&& !np.hasOtherThanExtended(p.getLocation().add(0, -1, 0), BlockTypes.AIR)
-					&& !np.hasOtherThanExtended(p.getLocation().add(0, -2, 0), BlockTypes.AIR)
-					&& fromPosition.getY() <= toPosition.getY()) {
-				double d = toPosition.getY() - fromPosition.getY();
-				int nb = getNbAirBlockDown(np);
-				int porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
-				if (np.hasOtherThan(p.getLocation().add(0, -3, 0), BlockTypes.AIR))
-					porcent = UniversalUtils.parseInPorcent(porcent - 15);
-				mayCancel = SpongeNegativity.alertMod(
-						np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
-						"Player not in ground (" + nb + " air blocks down), distance Y: " + d + ". Warn for fly: " + np.getWarn(this));
-				if (isSetBack() && mayCancel) {
-					Utils.teleportPlayerOnGround(p);
-				}
-			}
+		boolean isInBoat = p.getVehicle().isPresent() && p.getVehicle().get().getType().equals(EntityTypes.BOAT);
+		
+		Location<?> locUnder = p.getLocation().copy().sub(0, 1, 0),
+				locUnderUnder = p.getLocation().copy().sub(0, 2, 0);
+		
+		if (!(p.get(Keys.IS_SPRINTING).orElse(false) && (toPosition.getY() - fromPosition.getY()) > 0)
+				&& locUnder.getBlock().getType().equals(BlockTypes.AIR)
+				&& locUnderUnder.getBlock().getType().equals(BlockTypes.AIR)
+				&& (np.getFallDistance() == 0.0F || isInBoat)
+				&& (p.getLocation().copy().add(0, 1, 0).getBlock().getType().equals(BlockTypes.AIR)) && distance > 0.8
+				&& !p.isOnGround()) {
+			mayCancel = SpongeNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
+					this, UniversalUtils.parseInPorcent((int) distance * 50),
+					"Player not in ground, distance: " + distance + (isInBoat ? " On boat" : "")
+					+ ". Warn for fly: " + np.getWarn(this), (isInBoat ? "On boat" : ""));
+		}
+
+		if (!np.hasOtherThanExtended(p.getLocation(), BlockTypes.AIR)
+				&& !np.hasOtherThanExtended(p.getLocation().copy().sub(0, 1, 0), BlockTypes.AIR)
+				&& !np.hasOtherThanExtended(p.getLocation().copy().sub(0, 2, 0), BlockTypes.AIR)
+				&& (fromPosition.getY() <= toPosition.getY() || isInBoat)) {
+			double d = toPosition.getY() - fromPosition.getY();
+			int nb = getNbAirBlockDown(np), porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
+			if (np.hasOtherThan(p.getLocation().add(0, -3, 0), BlockTypes.AIR))
+				porcent = UniversalUtils.parseInPorcent(porcent - 15);
+			mayCancel = SpongeNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
+					this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d + (isInBoat ? " On boat" : "")
+							+ ". Warn for fly: " + np.getWarn(this),
+					(isInBoat ? "On boat, " : "") + nb + " air blocks below");
 		}
 		
 		Vector3d to = new Vector3d(toPosition.getX(), fromPosition.getX(), toPosition.getZ());

@@ -140,8 +140,13 @@ public class PacketsTimers implements Consumer<Task> {
 			}
 			Cheat FASTPLACE = Cheat.forKey(CheatKeys.FAST_PLACE);
 			if (np.hasDetectionActive(FASTPLACE) && ping < 200 && np.BLOCK_PLACE > 10) {
-				SpongeNegativity.alertMod(ReportType.WARNING, p, FASTPLACE, UniversalUtils.parseInPorcent(np.BLOCK_PLACE * 5), "BLockPlace: " + np.BLOCK_PLACE + " Ping: " + ping + " Warn for BlockPlace: " + np.getWarn(FASTPLACE));
+				SpongeNegativity.alertMod(ReportType.WARNING, p, FASTPLACE, UniversalUtils.parseInPorcent(np.BLOCK_PLACE * 5), "BlockPlace: " + np.BLOCK_PLACE + " Ping: " + ping + " Warn for BlockPlace: " + np.getWarn(FASTPLACE));
 			}
+			Cheat SPEED = Cheat.forKey(CheatKeys.SPEED);
+			if(np.hasDetectionActive(SPEED))
+				if(np.MOVE_TIME > 60)
+					SpongeNegativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p, SPEED, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Ping: " + ping + " Warn for Speed: " + np.getWarn(SPEED));
+			np.MOVE_TIME = 0;
 			np.clearPackets();
 		}
 	}

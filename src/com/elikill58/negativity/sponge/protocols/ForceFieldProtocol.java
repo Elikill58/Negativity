@@ -45,8 +45,6 @@ public class ForceFieldProtocol extends Cheat {
 		if (!np.hasDetectionActive(this)) {
 			return;
 		}
-		if(np.hasThorns(p))
-			return;
 		
 		boolean mayCancel = false;
 		if(!np.hasLineOfSight(e.getTargetEntity())) {
@@ -54,6 +52,12 @@ public class ForceFieldProtocol extends Cheat {
 					+ " but cannot see it, ping: " + Utils.getPing(p),
 					"Hit " + e.getTargetEntity().getType().getName() + " without line of sight");
 		}
+		if(np.hasThorns(p)) {
+			if(mayCancel && isSetBack())
+				e.setCancelled(true);
+			return;
+		}
+		
 		Optional<ItemStackSnapshot> usedItem = e.getContext().get(EventContextKeys.USED_ITEM);
 
 		double distance = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());
@@ -66,10 +70,10 @@ public class ForceFieldProtocol extends Cheat {
 					"Distance with " + e.getTargetEntity().getType().getName() + ": " + distanceFormatter.format(distance));
 		}
 		final Vector3d loc = p.getRotation().clone();
-		Task.builder().delay(60, TimeUnit.MILLISECONDS).execute(() -> {
+		Task.builder().delay(20, TimeUnit.MILLISECONDS).execute(() -> {
 			Vector3d loc1 = p.getRotation();
 			int gradeRounded = (int) Math.round(Math.abs(loc.getY() - loc1.getY()));
-			if (gradeRounded > 76.0) {
+			if (gradeRounded > 180.0) {
 				SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded), "Player rotate too much (" + gradeRounded + "°) without thorns.", "Rotate " + gradeRounded + "°");
 			}
 		}).submit(SpongeNegativity.getInstance());

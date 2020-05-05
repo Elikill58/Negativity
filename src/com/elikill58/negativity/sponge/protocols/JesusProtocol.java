@@ -3,6 +3,7 @@ package com.elikill58.negativity.sponge.protocols;
 import java.util.Collection;
 import java.util.Optional;
 
+import org.spongepowered.api.block.BlockState;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
@@ -26,6 +27,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
 
 public class JesusProtocol extends Cheat {
@@ -40,24 +42,21 @@ public class JesusProtocol extends Cheat {
 			return;
 		}
 
-		if (p.get(Keys.IS_FLYING).orElse(false) || p.get(Keys.IS_ELYTRA_FLYING).orElse(false)) {
+		if (p.get(Keys.IS_FLYING).orElse(false) || p.get(Keys.IS_ELYTRA_FLYING).orElse(false))
 			return;
-		}
 
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this)) {
+		if (!np.hasDetectionActive(this))
 			return;
-		}
 
+		Optional<EntitySnapshot> vehicle = p.get(Keys.VEHICLE);
+		if (vehicle.isPresent() && vehicle.get().getType() == EntityTypes.BOAT)
+			return;
 		Location<World> loc = p.getLocation();
 		BlockType m = loc.getBlockType();
 		BlockType under = loc.sub(Vector3i.UNIT_Y).getBlockType();
 		boolean isInWater = m.equals(BlockTypes.WATER);
 		boolean isOnWater = under.equals(BlockTypes.WATER);
-		Optional<EntitySnapshot> vehicle = p.get(Keys.VEHICLE);
-		if (vehicle.isPresent() && vehicle.get().getType() == EntityTypes.BOAT) {
-			return;
-		}
 
 		if (isOnWater) {
 			// We count how many events the player in on top of water because
@@ -73,6 +72,7 @@ public class JesusProtocol extends Cheat {
 		} else {
 			np.movementsOnWater = 0;
 		}
+		Vector3d from = e.getFromTransform().getPosition(), to = e.getToTransform().getPosition();
 
 		if (!isInWater && isOnWater && !hasBoatAroundHim(loc) && !np.hasOtherThan(loc.sub(0, 1, 0), BlockTypes.WATER)
 				&& !p.getLocation().getBlockType().equals(BlockTypes.WATERLILY)) {
@@ -82,7 +82,7 @@ public class JesusProtocol extends Cheat {
 
 			double reliability = 0;
 
-			double dif = e.getFromTransform().getPosition().getY() - e.getToTransform().getPosition().getY();
+			double dif = from.getY() - to.getY();
 			ReportType type = ReportType.VIOLATION;
 			if (dif < 0.0005 && dif > 0.00000005)
 				reliability = dif * 10000000 - 1;
@@ -104,6 +104,20 @@ public class JesusProtocol extends Cheat {
 					"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) WalkSpeed: " + p.get(Keys.WALKING_SPEED).get() + ". Diff: " + dif + " and ping: " + Utils.getPing(p));
 			if (isSetBack() && mayCancel) {
 				p.setLocation(p.getLocation().sub(Vector3i.UNIT_Y));
+			}
+		} else {
+			double distance = to.distance(from) - Math.abs(from.getY() - to.getY());
+			BlockState block = p.getLocation().getBlock();
+			Location<?> upperLoc = new Location<World>(loc.getExtent(), loc.getX(), loc.getY() + 1, loc.getZ());
+			Location<?> underLoc = new Location<World>(loc.getExtent(), loc.getX(), loc.getY() - 1, loc.getZ());
+			float distanceFall = np.getFallDistance();
+			if (block.get(Keys.IS_WET).orElse(false) && underLoc.getBlock().get(Keys.IS_WET).orElse(false) && distanceFall < 1
+					&& !upperLoc.getBlock().get(Keys.IS_WET).orElse(false) && !np.hasOtherThan(underLoc, BlockTypes.WATER)) {
+				if (distance > p.get(Keys.WALKING_SPEED).orElse(Double.MAX_VALUE) && !hasWaterLily(loc) && !hasWaterLily(upperLoc)) {
+					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.JESUS), 98, "In water, distance: " + distance, "New Jesus detection: " + distance);
+					if(isSetBack() && mayCancel)
+						to.sub(0, 1, 0);
+				}
 			}
 		}
 	}
@@ -130,4 +144,5 @@ public class JesusProtocol extends Cheat {
 		}
 		return false;
 	}
+	
 }

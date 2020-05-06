@@ -12,12 +12,12 @@ fake_entities: "Фейковые игроки"
 kick: "&a[&2Negativity&a]&c Вы были кикнуты с этого сервера за Читы (%cheat%)"
 
 lang:
-  invalid_lang: "%arg% isn't a valid lang !"
-  help: "/lang <new lang> : Change the default language"
-  current: "The current language is %lang%"
-  edit: "Edit the default lang"
-  translation_disabled: "&a[&2Negativity&a] &cPer-player translations are disabled"
-  language_set: "&a[&2Negativity&a] &7The messages of Negativity are now in russian"
+  invalid_lang: "%arg% не является языком!"
+  help: "/lang <новый язык> : Изменить язык"
+  current: "Текущий язык: %lang%"
+  edit: "Изменить текущий язык"
+  translation_disabled: "&a[&2Negativity&a] &cПереводы персонально для каждого игрока отключены"
+  language_set: "&a[&2Negativity&a] &7Сообщения Negativity теперь на русском"
 ban:
   kick_time: "&cБан за %reason% на %time% от %by%."
   kick_def: "&cБан за %reason% от %by%."
@@ -45,14 +45,14 @@ report:
   report_usage: "/report <игрок> <причина>"
   well_report: "&aИгрок %name% получил репорт!"
   report_message: "&a[&2Negativity&a] &c%name% &7получил репорт от &c%report% &7за &c%reason%"
-  report_message_hover: "&7Open &c%name%&7's check menu"
+  report_message_hover: "&7Открыть меню проверки &c%name%"
 negativity:
   alert: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% &7(&2Точность: %reliability%%&7)!"
   alert_multiple: "&a[&2Negativity&a] &c%name%&7 похоже использует &c%cheat% %nb% время &7(&2Точность: %reliability%%&7)!"
   alert_hover: "&6Точность: %reliability%%\nПинг: %ping%"
-  see_alert: "&a[&2Negativity&a] You see the alerts again."
-  see_no_longer_alert: "&a[&2Negativity&a] You no longer see alerts."
-  reload_done: "&a[&2Negativity&a] Plugin reloaded."
+  see_alert: "&a[&2Negativity&a] Вы снова видите уведомления."
+  see_no_longer_alert: "&a[&2Negativity&a] Вы больше не видите уведомления."
+  reload_done: "&a[&2Negativity&a] Плагин перезагружен."
   verif:
     invalid_cheat: "%arg% не является читом."
     start: "&a[&2Negativity&a] &7Анализ начался для %name% на чит %cheat%"
@@ -62,9 +62,9 @@ negativity:
       - "/negativity verif <игрок> [читы...] : Начинает проверку (проверка на все читы, если ни один не указан)"
       - "/negativity <игрок> : Увидеть информацию о игроке"
 messages_update:
-  dir_creation_failed: "&cFailed to create '%dir%' or its backup directory: %message%"
-  file_update_failed: "&cFailed to update messages for %language%: %message%"
-  update_done: "&eMessages have been updated and reloaded"
+  dir_creation_failed: "&cОшибка создания '%dir%' или её резервной копии: %message%"
+  file_update_failed: "&cОшибка обновления сообщений языка %language%: %message%"
+  update_done: "&eСообщения обновлены и перезагружены"
 inventory:
   close: "Закрыть"
   back: "Назад"
@@ -82,9 +82,9 @@ inventory:
     active_detection: "Просмотреть активные предупреждения для %name%"
     see_alerts: "Просмотреть все предупреждения для %name%"
     mcleaks_indicator:
-      positive: "&cIs using MCLeaks"
-      negative: "&aIs not using MCLeaks"
-      description: "&7MCLeaks provides premium accounts for free"
+      positive: "&cИспользует MCLeaks"
+      negative: "&aНе использует MCLeaks"
+      description: "&7MCLeaks предоставляет премиум аккаунты бесплатно"
   detection:
     name_inv: "Активные предупреждения"
     no_active: "Нет активных предупреждений для %name%"

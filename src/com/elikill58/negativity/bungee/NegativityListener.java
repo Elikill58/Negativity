@@ -2,11 +2,15 @@ package com.elikill58.negativity.bungee;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -26,6 +30,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -113,16 +118,23 @@ public class NegativityListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPostLogin(PostLoginEvent e) {
-		ProxiedPlayer p = e.getPlayer();
-		Ban activeBan = BanManager.getActiveBan(p.getUniqueId());
+	public void onPreLogin(LoginEvent event) {
+		UUID playerId = event.getConnection().getUniqueId();
+		Ban activeBan = BanManager.getActiveBan(playerId);
 		if (activeBan != null) {
 			String kickMsgKey = activeBan.isDefinitive() ? "ban.kick_def" : "ban.kick_time";
-			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(Instant.ofEpochMilli(activeBan.getExpirationTime()));
-			p.disconnect(new ComponentBuilder(BungeeMessages.getMessage(e.getPlayer(), kickMsgKey, "%reason%", activeBan.getReason(), "%time%" , formattedExpiration, "%by%", activeBan.getBannedBy())).create());
-			return;
+			LocalDateTime expirationDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
+			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
+			String banMessage = BungeeMessages.getMessage(playerId, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy());
+			event.setCancelReason(new TextComponent(banMessage));
+			event.setCancelled(true);
+			Adapter.getAdapter().invalidateAccount(playerId);
 		}
+	}
 
+	@EventHandler
+	public void onPostLogin(PostLoginEvent e) {
+		ProxiedPlayer p = e.getPlayer();
 		BungeeNegativityPlayer np = BungeeNegativityPlayer.getNegativityPlayer(p);
 		if (Perm.hasPerm(np, Perm.SHOW_REPORT))
 			for (Report msg : report) {
@@ -134,7 +146,11 @@ public class NegativityListener implements Listener {
 	@EventHandler
 	public void onPlayerDisconnect(PlayerDisconnectEvent event) {
 		ProxyServer.getInstance().getScheduler().schedule(BungeeNegativity.getInstance(),
-				() -> BungeeNegativityPlayer.removeFromCache(event.getPlayer().getUniqueId()),
+				() -> {
+					UUID playerId = event.getPlayer().getUniqueId();
+					BungeeNegativityPlayer.removeFromCache(playerId);
+					Adapter.getAdapter().invalidateAccount(playerId);
+				},
 				1, TimeUnit.SECONDS);
 	}
 

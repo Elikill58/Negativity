@@ -15,9 +15,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
-import org.bukkit.event.player.PlayerLoginEvent.Result;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
@@ -40,9 +39,8 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class PlayersEvents implements Listener {
 
 	@EventHandler
-	public void onLogin(PlayerLoginEvent e) {
-		UUID playerId = e.getPlayer().getUniqueId();
-		SpigotNegativityPlayer.removeFromCache(playerId);
+	public void onPreLogin(AsyncPlayerPreLoginEvent e) {
+		UUID playerId = e.getUniqueId();
 
 		NegativityAccount account = Adapter.getAdapter().getNegativityAccount(playerId);
 		Ban activeBan = BanManager.getActiveBan(playerId);
@@ -56,8 +54,9 @@ public class PlayersEvents implements Listener {
 				kickMsgKey = "ban.kick_time";
 				LocalDateTime expirationDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
 				formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
-			}			e.setResult(Result.KICK_BANNED);
-			e.setKickMessage(Messages.getMessage(e.getPlayer(), kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));
+			}
+			e.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
+			e.setKickMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));
 			Adapter.getAdapter().invalidateAccount(account.getPlayerId());
 		}
 	}
@@ -65,6 +64,7 @@ public class PlayersEvents implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
+		SpigotNegativityPlayer.removeFromCache(p.getUniqueId());
 		if(UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
 		if(!ProxyCompanionManager.searchedCompanion) {

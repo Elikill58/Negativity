@@ -79,7 +79,7 @@ public class NMUChannel extends ChannelAbstract {
 
 	private class ChannelHandlerReceive extends ChannelInboundHandlerAdapter {
 
-		private Player owner;
+		private final Player owner;
 
 		public ChannelHandlerReceive(Player player) {
 			this.owner = player;
@@ -93,9 +93,9 @@ public class NMUChannel extends ChannelAbstract {
 		}
 	}
 
-	class ChannelHandlerSent extends ChannelOutboundHandlerAdapter {
+	private class ChannelHandlerSent extends ChannelOutboundHandlerAdapter {
 
-		private Player owner;
+		private final Player owner;
 
 		public ChannelHandlerSent(Player player) {
 			this.owner = player;

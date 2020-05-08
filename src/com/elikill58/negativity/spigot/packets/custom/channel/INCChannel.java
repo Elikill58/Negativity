@@ -81,7 +81,7 @@ public class INCChannel extends ChannelAbstract {
 
 	private class ChannelHandlerReceive extends ChannelInboundHandlerAdapter {
 
-		private Player owner;
+		private final Player owner;
 
 		public ChannelHandlerReceive(Player player) {
 			this.owner = player;
@@ -95,16 +95,12 @@ public class INCChannel extends ChannelAbstract {
 		}
 	}
 
-	class ChannelHandlerSent extends ChannelOutboundHandlerAdapter {
+	private class ChannelHandlerSent extends ChannelOutboundHandlerAdapter {
 
-		private Player owner;
+		private final Player owner;
 
 		public ChannelHandlerSent(Player player) {
 			this.owner = player;
-		}
-		
-		public Player getOwner() {
-			return owner;
 		}
 
 		@Override

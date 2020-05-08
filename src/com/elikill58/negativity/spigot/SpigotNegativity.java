@@ -85,7 +85,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, essentialsSupport = false,
-			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false;
+			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
 	public static final Material MATERIAL_CLOSE = Utils.getMaterialWith1_15_Compatibility("BARRIER", "REDSTONE");
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static final HashMap<Player, HashMap<Cheat, Long>> TIME_LAST_CHEAT_ALERT = new HashMap<>();
@@ -206,7 +206,12 @@ public class SpigotNegativity extends JavaPlugin {
 			viaVersionSupport = true;
 			supportedPluginName.add("ViaVersion");
 		}
-
+		
+		if (Bukkit.getPluginManager().getPlugin("ProtocolSupport") != null) {
+			protocolSupportSupport = true;
+			supportedPluginName.add("ProtocolSupport");
+		}
+		
 		Perm.registerChecker(Perm.PLATFORM_CHECKER, new BukkitPermissionChecker());
 
 		if (supportedPluginName.length() > 0) {

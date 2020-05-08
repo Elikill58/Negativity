@@ -75,8 +75,12 @@ public enum Version {
 	}
 	
 	public static Version getVersion() {
+		return getVersion(Adapter.getAdapter().getVersion());
+	}
+	
+	public static Version getVersion(String version) {
 		for (Version v : Version.values())
-			if (Adapter.getAdapter().getVersion().toLowerCase().startsWith(v.name().toLowerCase()))
+			if (version.toLowerCase().startsWith(v.name().toLowerCase()))
 				return v;
 		return HIGHER;
 	}

@@ -44,8 +44,7 @@ import com.elikill58.negativity.spigot.listeners.PlayerCheatBypassEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatKickEvent;
 import com.elikill58.negativity.spigot.listeners.ShowAlertPermissionEvent;
-import com.elikill58.negativity.spigot.packets.PacketListenerAPI;
-import com.elikill58.negativity.spigot.packets.PacketManager;
+import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
 import com.elikill58.negativity.spigot.timers.ActualizeClickTimer;
@@ -91,19 +90,20 @@ public class SpigotNegativity extends JavaPlugin {
 	public static final HashMap<Player, HashMap<Cheat, Long>> TIME_LAST_CHEAT_ALERT = new HashMap<>();
 	public static String CHANNEL_NAME_FML = "";
 	private static int timeBetweenAlert = -1;
+	private NegativityPacketManager packetManager;
 	
 	@Override
 	public void onEnable() {
 		INSTANCE = this;
 		if (Adapter.getAdapter() == null)
 			Adapter.setAdapter(new SpigotAdapter(this));
-		Version v = Version.getVersion();
+		Version v = Version.getVersion(Utils.VERSION);
 		if (v.equals(Version.HIGHER))
 			getLogger().warning("Unknow server version ! Some problems can appears.");
 		else
 			getLogger().info("Detected server version: " + v.name().toLowerCase());
 		
-		PacketManager.run(this);
+		packetManager = new NegativityPacketManager(this);
 		new File(getDataFolder().getAbsolutePath() + File.separator + "user").mkdirs();
 		if (!new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml").exists()) {
 			getLogger().info("------ Negativity Information ------");
@@ -143,10 +143,9 @@ public class SpigotNegativity extends JavaPlugin {
 		loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID, channelEvents);
 		loadChannelInOut(messenger, CHANNEL_NAME_FML, channelEvents);
 		
-		for (Player p : Utils.getOnlinePlayers()) {
-			PacketListenerAPI.addPlayer(p);
+		for (Player p : Utils.getOnlinePlayers())
 			manageAutoVerif(p);
-		}
+		
 		(clickTimer = new ActualizeClickTimer()).runTaskTimer(this, 20, 20);
 		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
@@ -285,7 +284,6 @@ public class SpigotNegativity extends JavaPlugin {
 	public void onDisable() {
 		for (Player p : Utils.getOnlinePlayers()) {
 			SpigotNegativityPlayer.removeFromCache(p.getUniqueId());
-			PacketListenerAPI.removePlayer(p);
 		}
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
@@ -294,6 +292,11 @@ public class SpigotNegativity extends JavaPlugin {
 		packetTimer.cancel();
 		runSpawnFakePlayer.cancel();
 		timeTimeBetweenAlert.cancel();
+		packetManager.getPacketManager().clear();
+	}
+	
+	public NegativityPacketManager getPacketManager() {
+		return packetManager;
 	}
 
 	public static SpigotNegativity getInstance() {

@@ -19,7 +19,7 @@ public abstract class NegativityPlayer {
 	}
 
 	public NegativityAccount getAccount() {
-		return Adapter.getAdapter().getNegativityAccount(playerId);
+		return NegativityAccount.get(playerId);
 	}
 	
 	public UUID getUUID() {

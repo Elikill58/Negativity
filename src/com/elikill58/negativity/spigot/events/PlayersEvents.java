@@ -43,7 +43,7 @@ public class PlayersEvents implements Listener {
 	public void onPreLogin(AsyncPlayerPreLoginEvent e) {
 		UUID playerId = e.getUniqueId();
 
-		NegativityAccount account = Adapter.getAdapter().getNegativityAccount(playerId);
+		NegativityAccount account = NegativityAccount.get(playerId);
 		Ban activeBan = BanManager.getActiveBan(playerId);
 		if (activeBan != null) {
 			String kickMsgKey;
@@ -58,7 +58,7 @@ public class PlayersEvents implements Listener {
 			}
 			e.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
 			e.setKickMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));
-			Adapter.getAdapter().invalidateAccount(account.getPlayerId());
+			Adapter.getAdapter().getAccountManager().dispose(playerId);
 		}
 	}
 
@@ -145,7 +145,7 @@ public class PlayersEvents implements Listener {
 
 	@EventHandler
 	public void onBlockBreakEvent(BlockBreakEvent e) {
-		NegativityAccount account = Adapter.getAdapter().getNegativityAccount(e.getPlayer().getUniqueId());
+		NegativityAccount account = NegativityAccount.get(e.getPlayer().getUniqueId());
 		account.getMinerate().addMine(MinerateType.getMinerateType(e.getBlock().getType().name()), e.getPlayer());
 		NegativityAccountStorage.getStorage().saveAccount(account);
 	}

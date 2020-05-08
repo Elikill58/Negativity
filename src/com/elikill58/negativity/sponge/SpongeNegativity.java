@@ -317,7 +317,7 @@ public class SpongeNegativity {
 		UUID playerId = e.getProfile().getUniqueId();
 		Ban activeBan = BanManager.getActiveBan(playerId);
 		if (activeBan != null) {
-			NegativityAccount account = Adapter.getAdapter().getNegativityAccount(playerId);
+			NegativityAccount account = NegativityAccount.get(playerId);
 			String kickMsgKey;
 			String formattedExpiration;
 			if (activeBan.isDefinitive()) {
@@ -330,7 +330,7 @@ public class SpongeNegativity {
 			}
 			e.setCancelled(true);
 			e.setMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%" , formattedExpiration, "%by%", activeBan.getBannedBy()));
-			Adapter.getAdapter().invalidateAccount(account.getPlayerId());
+			Adapter.getAdapter().getAccountManager().dispose(account.getPlayerId());
 		}
 	}
 
@@ -397,7 +397,7 @@ public class SpongeNegativity {
 	public void onLeave(ClientConnectionEvent.Disconnect e, @First Player p) {
 		Task.builder().delayTicks(5).execute(() -> {
 			SpongeNegativityPlayer.removeFromCache(p);
-			Adapter.getAdapter().invalidateAccount(p.getUniqueId());
+			Adapter.getAdapter().getAccountManager().dispose(p.getUniqueId());
 		}).submit(this);
 	}
 
@@ -411,7 +411,7 @@ public class SpongeNegativity {
 	@Listener
 	public void onBlockBreak(ChangeBlockEvent.Break e, @First Player p) {
 		String blockId = e.getTransactions().get(0).getOriginal().getState().getType().getId();
-		Adapter.getAdapter().getNegativityAccount(p.getUniqueId()).getMinerate().addMine(MinerateType.fromId(blockId), p);
+		NegativityAccount.get(p.getUniqueId()).getMinerate().addMine(MinerateType.fromId(blockId), p);
 	}
 
 	public void loadConfig() {

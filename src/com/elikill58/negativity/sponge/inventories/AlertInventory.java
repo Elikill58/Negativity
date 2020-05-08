@@ -104,7 +104,7 @@ public class AlertInventory extends AbstractInventory {
 		if (m.equals(ItemTypes.ARROW))
 			delayed(() -> AbstractInventory.open(InventoryType.CHECK_MENU, p, Inv.CHECKING.get(p)));
 		else if (m.equals(ItemTypes.BONE)) {
-			NegativityAccount account = Adapter.getAdapter().getNegativityAccount(Inv.CHECKING.get(p).getUniqueId());
+			NegativityAccount account = NegativityAccount.get(Inv.CHECKING.get(p).getUniqueId());
 			for (Cheat c : Cheat.values())
 				account.setWarnCount(c, 0);
 		}

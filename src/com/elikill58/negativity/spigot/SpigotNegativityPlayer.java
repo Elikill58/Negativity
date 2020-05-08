@@ -403,7 +403,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	private void destroy() {
 		saveProof();
-		Adapter.getAdapter().invalidateAccount(getUUID());
+		Adapter.getAdapter().getAccountManager().dispose(getUUID());
 	}
 	
 	@Deprecated

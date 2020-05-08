@@ -18,7 +18,7 @@ import com.elikill58.negativity.spigot.packets.event.PacketEvent.PacketSourceTyp
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Version;
 
-public class CustomPacketManager implements PacketManager, Listener {
+public class CustomPacketManager extends PacketManager implements Listener {
 	
 	private ChannelAbstract channel;
 	private Plugin pl;

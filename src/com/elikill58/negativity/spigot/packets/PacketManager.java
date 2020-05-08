@@ -11,27 +11,24 @@ import com.elikill58.negativity.spigot.packets.event.PacketEvent.PacketSourceTyp
 import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
 import com.elikill58.negativity.spigot.packets.event.PacketSendEvent;
 
-public interface PacketManager {
+public abstract class PacketManager {
 
-	void addPlayer(Player p);
-
-	void removePlayer(Player p);
-	
-	void clear();
+	public abstract void addPlayer(Player p);
+	public abstract void removePlayer(Player p);
+	public abstract void clear();
 
 	final List<PacketHandler> handlers = new ArrayList<>();
-
-	default boolean addHandler(PacketHandler handler) {
+	public boolean addHandler(PacketHandler handler) {
 		boolean b = handlers.contains(handler);
 		handlers.add(handler);
 		return !b;
 	}
 
-	default boolean removeHandler(PacketHandler handler) {
+	public boolean removeHandler(PacketHandler handler) {
 		return handlers.remove(handler);
 	}
 	
-	default void notifyHandlersReceive(PacketSourceType source, AbstractPacket packet) {
+	public void notifyHandlersReceive(PacketSourceType source, AbstractPacket packet) {
 		if(!SpigotNegativity.getInstance().isEnabled()) // cannot go on main thread is plugin doesn't enabled
 			return;
 		// Go on main Thread
@@ -42,7 +39,7 @@ public interface PacketManager {
 		});
 	}
 
-	default void notifyHandlersSent(PacketSourceType source, AbstractPacket packet) {
+	public void notifyHandlersSent(PacketSourceType source, AbstractPacket packet) {
 		if(!SpigotNegativity.getInstance().isEnabled()) // cannot go on main thread is plugin doesn't enabled
 			return;
 		// Go on main Thread

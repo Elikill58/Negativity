@@ -15,7 +15,7 @@ import com.elikill58.negativity.spigot.packets.PacketManager;
 import com.elikill58.negativity.spigot.packets.PacketType;
 import com.elikill58.negativity.spigot.packets.event.PacketEvent.PacketSourceType;
 
-public class ProtocollibPacketManager implements PacketManager {
+public class ProtocollibPacketManager extends PacketManager {
 
 	private final ProtocolManager protocolManager;
 	

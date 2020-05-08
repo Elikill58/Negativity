@@ -39,6 +39,8 @@ public class Utils {
 			.split(",")[3];
 
 	public static int getMultipleOf(int i, int multiple, int more, int limit) {
+		if(i > limit)
+			return i;
 		while (i % multiple != 0 && ((i < limit && limit != -1) || limit == -1))
 			i += more;
 		return i;

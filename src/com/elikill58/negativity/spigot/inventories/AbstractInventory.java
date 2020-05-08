@@ -35,7 +35,7 @@ public abstract class AbstractInventory implements Listener {
 	}
 	
 	@EventHandler
-	public void eventInventoryClick(InventoryClickEvent e) {
+	public void onInventoryClick(InventoryClickEvent e) {
 		if (e.getCurrentItem() == null || e.getClickedInventory() == null || !(e.getWhoClicked() instanceof Player))
 			return;
 		InventoryHolder holder = e.getClickedInventory().getHolder();

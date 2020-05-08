@@ -155,7 +155,7 @@ public class NegativityListener {
 			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
 			TextComponent banMessage = VelocityMessages.getMessage(p, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy());
 			event.setResult(ResultedEvent.ComponentResult.denied(banMessage));
-			Adapter.getAdapter().invalidateAccount(p.getUniqueId());
+			Adapter.getAdapter().getAccountManager().dispose(p.getUniqueId());
 		}
 	}
 

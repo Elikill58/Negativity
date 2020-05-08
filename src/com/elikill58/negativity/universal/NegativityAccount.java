@@ -5,6 +5,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import com.elikill58.negativity.universal.adapter.Adapter;
+
 /**
  * Contains player-related data that can be accessed when the player is offline.
  */
@@ -70,5 +74,10 @@ public final class NegativityAccount {
 
 	public Map<String, Integer> getAllWarns() {
 		return Collections.unmodifiableMap(warns);
+	}
+
+	@NonNull
+	public static NegativityAccount get(UUID accountId) {
+		return Adapter.getAdapter().getAccountManager().getNow(accountId);
 	}
 }

@@ -99,12 +99,18 @@ public abstract class Adapter {
 	public abstract String getVersion();
 	public abstract void reloadConfig();
 
+	/**
+	 * @deprecated Use {@link NegativityAccount#get(UUID)} instead
+	 */
 	@Deprecated
 	@Nonnull
 	public NegativityAccount getNegativityAccount(UUID playerId) {
 		return getAccountManager().getNow(playerId);
 	}
 
+	/**
+	 * @deprecated Use {@code getAccountManager().dispose(playerId)} instead
+	 */
 	@Deprecated
 	@Nullable
 	public NegativityAccount invalidateAccount(UUID playerId) {

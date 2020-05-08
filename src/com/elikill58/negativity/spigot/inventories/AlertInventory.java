@@ -81,7 +81,7 @@ public class AlertInventory extends AbstractInventory {
 			AbstractInventory.open(InventoryType.CHECK_MENU, p, Inv.CHECKING.get(p));
 		else if (m.equals(Material.BONE)) {
 			Player target = Inv.CHECKING.get(p);
-			NegativityAccount account = Adapter.getAdapter().getNegativityAccount(target.getUniqueId());
+			NegativityAccount account = NegativityAccount.get(target.getUniqueId());
 			for (Cheat c : Cheat.values()) {
 				account.setWarnCount(c, 0);
 			}

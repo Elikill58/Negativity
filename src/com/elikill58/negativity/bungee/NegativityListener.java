@@ -136,7 +136,7 @@ public class NegativityListener implements Listener {
 			String banMessage = BungeeMessages.getMessage(playerId, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy());
 			event.setCancelReason(new TextComponent(banMessage));
 			event.setCancelled(true);
-			Adapter.getAdapter().invalidateAccount(playerId);
+			Adapter.getAdapter().getAccountManager().dispose(playerId);
 		}
 	}
 

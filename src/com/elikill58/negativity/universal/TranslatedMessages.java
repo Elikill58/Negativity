@@ -79,7 +79,7 @@ public class TranslatedMessages {
 
 	public static String getLang(UUID playerId) {
 		if (activeTranslation) {
-			return Adapter.getAdapter().getNegativityAccount(playerId).getLang();
+			return NegativityAccount.get(playerId).getLang();
 		}
 		return DEFAULT_LANG;
 	}

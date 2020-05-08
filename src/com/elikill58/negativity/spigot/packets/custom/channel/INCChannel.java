@@ -79,7 +79,7 @@ public class INCChannel extends ChannelAbstract {
 		}
 	}
 
-	class ChannelHandlerReceive extends ChannelInboundHandlerAdapter {
+	private class ChannelHandlerReceive extends ChannelInboundHandlerAdapter {
 
 		private Player owner;
 
@@ -92,10 +92,6 @@ public class INCChannel extends ChannelAbstract {
 			AbstractPacket nextPacket = getPacketManager().onPacketReceive(PacketType.getType(packet.getClass().getSimpleName()), this.owner, packet);
 			if(!nextPacket.isCancelled())
 				super.channelRead(ctx, nextPacket.getPacket());
-		}
-		
-		public Player getOwner() {
-			return owner;
 		}
 	}
 

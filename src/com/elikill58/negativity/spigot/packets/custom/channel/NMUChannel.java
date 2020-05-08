@@ -77,7 +77,7 @@ public class NMUChannel extends ChannelAbstract {
 		}
 	}
 
-	class ChannelHandlerReceive extends ChannelInboundHandlerAdapter {
+	private class ChannelHandlerReceive extends ChannelInboundHandlerAdapter {
 
 		private Player owner;
 

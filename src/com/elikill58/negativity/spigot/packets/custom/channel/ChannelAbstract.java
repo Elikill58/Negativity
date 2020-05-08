@@ -47,10 +47,8 @@ public abstract class ChannelAbstract {
 	}
 
 	public void addPlayer(Player p) {
-		if(players.contains(p.getUniqueId()))
-			return;
-		players.add(p.getUniqueId());
-		addChannel(p, p.getUniqueId().toString());
+		if(players.add(p.getUniqueId()))
+			addChannel(p, p.getUniqueId().toString());
 	}
 
 	public void removePlayer(Player p) {

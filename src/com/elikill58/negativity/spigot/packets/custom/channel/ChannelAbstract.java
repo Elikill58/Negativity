@@ -1,6 +1,6 @@
 package com.elikill58.negativity.spigot.packets.custom.channel;
 
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.UUID;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -12,12 +12,11 @@ import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 public abstract class ChannelAbstract {
 
 	private ExecutorService addChannelExecutor, removeChannelExecutor;
-	static final String KEY_HANDLER_PLAYER = "packet_handler", KEY_PLAYER = "packet_listener_player_negativity",
-			KEY_HANDLER_SERVER = "packet_handler", KEY_SERVER = "packet_listener_server_negativity";
+	static final String KEY_HANDLER_PLAYER = "packet_handler", KEY_PLAYER = "packet_player_negativity",
+			KEY_HANDLER_SERVER = "packet_handler", KEY_SERVER = "packet_server_negativity";
 
 	private CustomPacketManager customPacketManager;
-	private int i = 0;
-	private HashMap<UUID, String> players = new HashMap<>();
+	private HashSet<UUID> players = new HashSet<>();
 	
 	protected ChannelAbstract(CustomPacketManager customPacketManager) {
 		this.customPacketManager = customPacketManager;
@@ -48,26 +47,19 @@ public abstract class ChannelAbstract {
 	}
 
 	public void addPlayer(Player p) {
-		if(players.containsKey(p.getUniqueId()))
+		if(players.contains(p.getUniqueId()))
 			return;
-		String channelName = getPlayerNewChannelName(p);
-		players.put(p.getUniqueId(), channelName);
-		addChannel(p, channelName);
+		players.add(p.getUniqueId());
+		addChannel(p, p.getUniqueId().toString());
 	}
 
 	public void removePlayer(Player p) {
-		String channelName = players.remove(p.getUniqueId());
-		if(channelName != null)
-			removeChannel(p, channelName);
+		if(players.remove(p.getUniqueId()))
+			removeChannel(p, p.getUniqueId().toString());
 	}
 	
 	public abstract void addChannel(Player player, String endChannelName);
 
 	public abstract void removeChannel(Player player, String endChannelName);
 
-	private String getPlayerNewChannelName(Player player) {
-		while(players.containsValue("-" + i))
-			i++;
-		return "-" + i;
-	}
 }

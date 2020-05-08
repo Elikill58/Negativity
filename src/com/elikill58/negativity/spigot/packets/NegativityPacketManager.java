@@ -1,11 +1,15 @@
 package com.elikill58.negativity.spigot.packets;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.packets.PacketType.Client;
+import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
+import com.elikill58.negativity.spigot.packets.protocollib.ProtocollibPacketManager;
 
 public class NegativityPacketManager {
 
@@ -14,7 +18,12 @@ public class NegativityPacketManager {
 	
 	public NegativityPacketManager(SpigotNegativity pl) {
 		this.plugin = pl;
-		packetManager = PacketHandler.run(pl);
+		Plugin protocolLibPlugin = Bukkit.getPluginManager().getPlugin("ProtocolLib");
+		if (protocolLibPlugin != null) {
+			pl.getLogger().info("The plugin ProtocolLib has been detected. Loading Protocollib support ...");
+			packetManager = new ProtocollibPacketManager(pl);
+		} else
+			packetManager = new CustomPacketManager(pl);
 		packetManager.addHandler(new PacketHandler() {
 			
 			@Override

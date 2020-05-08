@@ -285,10 +285,8 @@ public class SpongeNegativity {
 	}
 
 	@Listener
-	public void onLogin(ClientConnectionEvent.Login e) {
-		UUID playerId = e.getTargetUser().getUniqueId();
-		SpongeNegativityPlayer.removeFromCache(playerId);
-
+	public void onAuth(ClientConnectionEvent.Auth e) {
+		UUID playerId = e.getProfile().getUniqueId();
 		Ban activeBan = BanManager.getActiveBan(playerId);
 		if (activeBan != null) {
 			NegativityAccount account = Adapter.getAdapter().getNegativityAccount(playerId);
@@ -311,6 +309,7 @@ public class SpongeNegativity {
 	public void onJoin(ClientConnectionEvent.Join e, @First Player p) {
 		if (UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(Text.builder("Ce serveur utilise Negativity ! Waw :')").color(TextColors.GREEN).build());
+		SpongeNegativityPlayer.removeFromCache(p.getUniqueId());
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		np.TIME_INVINCIBILITY = System.currentTimeMillis() + 8000;
 		Task.builder().delayTicks(20).execute(new Runnable() {

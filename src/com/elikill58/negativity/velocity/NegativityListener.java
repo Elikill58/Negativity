@@ -2,13 +2,17 @@ package com.elikill58.negativity.velocity;
 
 import java.io.IOException;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -19,8 +23,10 @@ import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManag
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.velocitypowered.api.event.ResultedEvent;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
+import com.velocitypowered.api.event.connection.LoginEvent;
 import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
@@ -132,16 +138,22 @@ public class NegativityListener {
 	}
 
 	@Subscribe
-	public void onPostLogin(PostLoginEvent e) {
-		Player p = e.getPlayer();
+	public void onLogin(LoginEvent event) {
+		Player p = event.getPlayer();
 		Ban activeBan = BanManager.getActiveBan(p.getUniqueId());
 		if (activeBan != null) {
 			String kickMsgKey = activeBan.isDefinitive() ? "ban.kick_def" : "ban.kick_time";
-			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(Instant.ofEpochMilli(activeBan.getExpirationTime()));
-			p.disconnect(VelocityMessages.getMessage(e.getPlayer(), kickMsgKey, "%reason%", activeBan.getReason(), "%time%" , formattedExpiration, "%by%", activeBan.getBannedBy()));
-			return;
+			LocalDateTime expirationDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
+			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
+			TextComponent banMessage = VelocityMessages.getMessage(p, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy());
+			event.setResult(ResultedEvent.ComponentResult.denied(banMessage));
+			Adapter.getAdapter().invalidateAccount(p.getUniqueId());
 		}
+	}
 
+	@Subscribe
+	public void onPostLogin(PostLoginEvent e) {
+		Player p = e.getPlayer();
 		VelocityNegativityPlayer np = VelocityNegativityPlayer.getNegativityPlayer(p);
 		if (Perm.hasPerm(np, Perm.SHOW_REPORT)) {
 			for (Report msg : report) {
@@ -155,7 +167,11 @@ public class NegativityListener {
 	public void onPlayerQuit(DisconnectEvent event) {
 		VelocityNegativity plugin = VelocityNegativity.getInstance();
 		plugin.getServer().getScheduler()
-				.buildTask(plugin, () -> VelocityNegativityPlayer.removeFromCache(event.getPlayer().getUniqueId()))
+				.buildTask(plugin, () -> {
+					UUID playerId = event.getPlayer().getUniqueId();
+					VelocityNegativityPlayer.removeFromCache(playerId);
+					Adapter.getAdapter().invalidateAccount(playerId);
+				})
 				.delay(1, TimeUnit.SECONDS)
 				.schedule();
 	}

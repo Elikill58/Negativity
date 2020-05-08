@@ -4,6 +4,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.TranslatedMessages;
 
 public class Messages {
@@ -15,6 +16,11 @@ public class Messages {
 
 	public static String getMessage(Player p, String dir, Object... placeholders) {
 		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getLang(p.getUniqueId()), dir, placeholders);
+		return Utils.coloredMessage(message);
+	}
+
+	public static String getMessage(NegativityAccount account, String dir, Object... placeholders) {
+		String message = TranslatedMessages.getStringFromLang(account.getLang(), dir, placeholders);
 		return Utils.coloredMessage(message);
 	}
 

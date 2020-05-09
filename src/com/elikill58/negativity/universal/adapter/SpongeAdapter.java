@@ -7,14 +7,11 @@ import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Supplier;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -23,17 +20,17 @@ import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.util.TypeTokens;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.config.SpongeConfigAdapter;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
 import com.elikill58.negativity.universal.translation.ConfigurateTranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
@@ -52,6 +49,7 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 
 	private final Logger logger;
 	private final SpongeNegativity plugin;
+	private ConfigAdapter config;
 	private final LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(10, TimeUnit.MINUTES)
 			.build(new NegativityAccountLoader());
@@ -60,6 +58,7 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	public SpongeAdapter(SpongeNegativity sn) {
 		this.plugin = sn;
 		this.logger = sn.getLogger();
+		this.config = new SpongeConfigAdapter(SpongeNegativity.getConfig(), sn.logger);
 		this.messagesDir = sn.getDataFolder().resolve("messages");
 	}
 
@@ -69,33 +68,13 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	}
 
 	@Override
+	public ConfigAdapter getConfig() {
+		return config;
+	}
+
+	@Override
 	public File getDataFolder() {
 		return plugin.getDataFolder().toFile();
-	}
-
-	@Override
-	public String getStringInConfig(String dir) {
-		try {
-			return getFinalNode(dir).getValue(TypeTokens.STRING_TOKEN, (Supplier<String>) () -> DefaultConfigValue.getDefaultValueString(dir));
-		} catch (Exception e) {
-			logger.error("Could not get String from the configuration", e);
-			return DefaultConfigValue.getDefaultValueString(dir);
-		}
-	}
-
-	@Override
-	public boolean getBooleanInConfig(String dir) {
-		try {
-			return getFinalNode(dir).getValue(TypeTokens.BOOLEAN_TOKEN, (Supplier<Boolean>) () -> DefaultConfigValue.getDefaultValueBoolean(dir));
-		} catch (Exception e) {
-			logger.error("Could not get boolean from the configuration", e);
-			return DefaultConfigValue.getDefaultValueBoolean(dir);
-		}
-	}
-
-	private ConfigurationNode getFinalNode(String dir) {
-		Object[] path = dir.split("\\.");
-		return SpongeNegativity.getConfig().getNode(path);
 	}
 
 	@Override
@@ -111,58 +90,6 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public void error(String msg) {
 		logger.error(msg);
-	}
-
-	@Override
-	public HashMap<String, String> getKeysListInConfig(String dir) {
-		final HashMap<String, String> hash = new HashMap<>();
-		try {
-			getFinalNode(dir).getChildrenMap().forEach((obj, cn) -> {
-				hash.put(obj.toString(), cn.getString());
-			});
-		} catch (Exception e) {
-			logger.error("Could not collect key-values from the configuration", e);
-		}
-		return hash;
-	}
-
-	@Override
-	public int getIntegerInConfig(String dir) {
-		try {
-			return getFinalNode(dir).getValue(TypeTokens.INTEGER_TOKEN, (Supplier<Integer>) () -> DefaultConfigValue.getDefaultValueInt(dir));
-		} catch (Exception e) {
-			logger.error("Could not get int from the configuration", e);
-			return DefaultConfigValue.getDefaultValueInt(dir);
-		}
-	}
-
-	@Override
-	public void set(String dir, Object value) {
-		try {
-			getFinalNode(dir).setValue(value);
-		} catch (Exception e) {
-			logger.error("Could not set a value of the configuration", e);
-		}
-	}
-
-	@Override
-	public double getDoubleInConfig(String dir) {
-		try {
-			return getFinalNode(dir).getValue(TypeTokens.DOUBLE_TOKEN, (Supplier<Double>) () -> DefaultConfigValue.getDefaultValueDouble(dir));
-		} catch (Exception e) {
-			logger.error("Could not get double from the configuration", e);
-			return DefaultConfigValue.getDefaultValueDouble(dir);
-		}
-	}
-
-	@Override
-	public List<String> getStringListInConfig(String dir) {
-		try {
-			return getFinalNode(dir).getList(TypeTokens.STRING_TOKEN);
-		} catch (Exception e) {
-			logger.error("Could not get String list from the configuration", e);
-			return Collections.emptyList();
-		}
 	}
 
 	@Override
@@ -277,11 +204,11 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 		UniversalUtils.init();
 		Cheat.loadCheat();
 		plugin.reloadCommands();
-		ProxyCompanionManager.updateForceDisabled(getBooleanInConfig("disableProxyIntegration"));
+		ProxyCompanionManager.updateForceDisabled(config.getBoolean("disableProxyIntegration"));
 		SpongeNegativity.trySendProxyPing();
-		SpongeNegativity.log = getBooleanInConfig("log_alerts");
-		SpongeNegativity.log_console = getBooleanInConfig("log_alerts_in_console");
-		SpongeNegativity.hasBypass = getBooleanInConfig("Permissions.bypass.active");
+		SpongeNegativity.log = config.getBoolean("log_alerts");
+		SpongeNegativity.log_console = config.getBoolean("log_alerts_in_console");
+		SpongeNegativity.hasBypass = config.getBoolean("Permissions.bypass.active");
 	}
 
 	@Override
@@ -292,6 +219,7 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public void reloadConfig() {
 		plugin.loadConfig();
+		this.config = new SpongeConfigAdapter(SpongeNegativity.getConfig(), this.logger);
 		plugin.loadItemBypasses();
 	}
 

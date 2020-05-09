@@ -20,7 +20,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,12 +32,13 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotTranslationProvider;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.config.BukkitConfigAdapter;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
@@ -48,6 +48,7 @@ import com.google.common.io.ByteStreams;
 public class SpigotAdapter extends Adapter implements TranslationProviderFactory {
 
 	private JavaPlugin pl;
+	private ConfigAdapter config;
 	private HashMap<UUID, NegativityAccount> account = new HashMap<>();
 	/*private LoadingCache<UUID, NegativityAccount> accountCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(10, TimeUnit.MINUTES)
@@ -55,6 +56,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 
 	public SpigotAdapter(JavaPlugin pl) {
 		this.pl = pl;
+		this.config = new BukkitConfigAdapter(pl, pl.getConfig());
 	}
 
 	@Override
@@ -63,15 +65,13 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	}
 
 	@Override
-	public File getDataFolder() {
-		return pl.getDataFolder();
+	public ConfigAdapter getConfig() {
+		return config;
 	}
 
 	@Override
-	public String getStringInConfig(String dir) {
-		if (pl.getConfig().contains(dir))
-			return pl.getConfig().getString(dir);
-		return DefaultConfigValue.getDefaultValueString(dir);
+	public File getDataFolder() {
+		return pl.getDataFolder();
 	}
 
 	@Override
@@ -87,49 +87,6 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public void error(String msg) {
 		pl.getLogger().severe(msg);
-	}
-
-	@Override
-	public HashMap<String, String> getKeysListInConfig(String dir) {
-		HashMap<String, String> list = new HashMap<>();
-		ConfigurationSection cs = pl.getConfig().getConfigurationSection(dir);
-		if (cs == null)
-			return list;
-		for (String s : cs.getKeys(false))
-			list.put(s, pl.getConfig().getString(dir + "." + s));
-		return list;
-	}
-
-	@Override
-	public boolean getBooleanInConfig(String dir) {
-		if (pl.getConfig().contains(dir))
-			return pl.getConfig().getBoolean(dir);
-		return DefaultConfigValue.getDefaultValueBoolean(dir);
-	}
-
-	@Override
-	public int getIntegerInConfig(String dir) {
-		if (pl.getConfig().contains(dir))
-			return pl.getConfig().getInt(dir);
-		return DefaultConfigValue.getDefaultValueInt(dir);
-	}
-
-	@Override
-	public void set(String dir, Object value) {
-		pl.getConfig().set(dir, value);
-		SpigotNegativity.getInstance().saveConfig();
-	}
-
-	@Override
-	public double getDoubleInConfig(String dir) {
-		if (pl.getConfig().contains(dir))
-			return pl.getConfig().getDouble(dir);
-		return DefaultConfigValue.getDefaultValueDouble(dir);
-	}
-
-	@Override
-	public List<String> getStringListInConfig(String dir) {
-		return pl.getConfig().getStringList(dir);
 	}
 
 	@Override
@@ -238,6 +195,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	public void reloadConfig() {
 		SpigotNegativity.getInstance().saveConfig();
 		SpigotNegativity.getInstance().reloadConfig();
+		config = new BukkitConfigAdapter(pl, pl.getConfig());
 	}
 
 	@Nullable

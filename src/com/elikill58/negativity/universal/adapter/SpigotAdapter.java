@@ -63,11 +63,6 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	}
 
 	@Override
-	public Object getConfig() {
-		return pl.getConfig();
-	}
-
-	@Override
 	public File getDataFolder() {
 		return pl.getDataFolder();
 	}

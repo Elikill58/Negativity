@@ -58,11 +58,6 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 	}
 
 	@Override
-	public Object getConfig() {
-		return config;
-	}
-
-	@Override
 	public File getDataFolder() {
 		return pl.getDataFolder();
 	}

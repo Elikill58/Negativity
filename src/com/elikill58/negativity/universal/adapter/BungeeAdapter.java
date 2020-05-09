@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -22,11 +21,12 @@ import com.elikill58.negativity.bungee.BungeeNegativity;
 import com.elikill58.negativity.bungee.BungeeNegativityPlayer;
 import com.elikill58.negativity.bungee.BungeeTranslationProvider;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.config.MD5ConfigAdapter;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
@@ -44,12 +44,12 @@ import net.md_5.bungee.config.YamlConfiguration;
 
 public class BungeeAdapter extends Adapter implements TranslationProviderFactory {
 
-	private Configuration config;
+	private ConfigAdapter config;
 	private Plugin pl;
 
 	public BungeeAdapter(Plugin pl, Configuration config) {
 		this.pl = pl;
-		this.config = config;
+		this.config = new MD5ConfigAdapter(config);
 	}
 
 	@Override
@@ -58,24 +58,13 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 	}
 
 	@Override
+	public ConfigAdapter getConfig() {
+		return config;
+	}
+
+	@Override
 	public File getDataFolder() {
 		return pl.getDataFolder();
-	}
-
-	@Override
-	public String getStringInConfig(String dir) {
-		if (config.contains(dir)) {
-			return config.getString(dir);
-		}
-		return DefaultConfigValue.getDefaultValueString(dir);
-	}
-
-	@Override
-	public boolean getBooleanInConfig(String dir) {
-		if (config.contains(dir)) {
-			return config.getBoolean(dir);
-		}
-		return DefaultConfigValue.getDefaultValueBoolean(dir);
 	}
 
 	@Override
@@ -91,40 +80,6 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 	@Override
 	public void error(String msg) {
 		pl.getLogger().severe(msg);
-	}
-
-	@Override
-	public HashMap<String, String> getKeysListInConfig(String dir) {
-		HashMap<String, String> list = new HashMap<>();
-		for (String s : config.getSection(dir).getKeys())
-			list.put(s, config.getString(dir + "." + s));
-		return list;
-	}
-
-	@Override
-	public int getIntegerInConfig(String dir) {
-		if (config.contains(dir)) {
-			return config.getInt(dir);
-		}
-		return DefaultConfigValue.getDefaultValueInt(dir);
-	}
-
-	@Override
-	public void set(String dir, Object value) {
-		config.set(dir, value);
-	}
-
-	@Override
-	public double getDoubleInConfig(String dir) {
-		if (config.contains(dir)) {
-			return config.getDouble(dir);
-		}
-		return DefaultConfigValue.getDefaultValueDouble(dir);
-	}
-
-	@Override
-	public List<String> getStringListInConfig(String dir) {
-		return config.getStringList(dir);
 	}
 
 	@Override

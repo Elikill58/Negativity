@@ -2,7 +2,6 @@ package com.elikill58.negativity.universal.adapter;
 
 import java.io.File;
 import java.nio.file.Path;
-import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -11,6 +10,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
@@ -36,19 +36,62 @@ public abstract class Adapter {
 	}
 
 	public abstract String getName();
+	public abstract ConfigAdapter getConfig();
 	public abstract File getDataFolder();
-	public abstract String getStringInConfig(String dir);
-	public abstract boolean getBooleanInConfig(String dir);
-	public abstract int getIntegerInConfig(String dir);
-	public abstract double getDoubleInConfig(String dir);
-	public abstract List<String> getStringListInConfig(String dir);
-	public abstract HashMap<String, String> getKeysListInConfig(String dir);
+
+	/**
+	 * @deprecated Use {@code getConfig().getString(key)} instead
+	 */
+	@Deprecated
+	public String getStringInConfig(String key) {
+		return getConfig().getString(key);
+	}
+
+	/**
+	 * @deprecated Use {@code getConfig().getBoolean(key)} instead
+	 */
+	@Deprecated
+	public boolean getBooleanInConfig(String key) {
+		return getConfig().getBoolean(key);
+	}
+
+	/**
+	 * @deprecated Use {@code getConfig().getInteger(key)} instead
+	 */
+	@Deprecated
+	public int getIntegerInConfig(String key) {
+		return getConfig().getInt(key);
+	}
+
+	/**
+	 * @deprecated Use {@code getConfig().getDouble(key)} instead
+	 */
+	@Deprecated
+	public double getDoubleInConfig(String key) {
+		return getConfig().getDouble(key);
+	}
+
+	/**
+	 * @deprecated Use {@code getConfig().getStringList(key)} instead
+	 */
+	@Deprecated
+	public List<String> getStringListInConfig(String key) {
+		return getConfig().getStringList(key);
+	}
+
+	/**
+	 * @deprecated Use {@code getConfig().set(key, value)} instead
+	 */
+	@Deprecated
+	public void set(String key, Object value) {
+		getConfig().set(key, value);
+	}
+
 	public abstract String getStringInOtherConfig(Path relativeFile, String key, String defaultValue);
 	public abstract File copy(String lang, File f);
 	public abstract void log(String msg);
 	public abstract void warn(String msg);
 	public abstract void error(String msg);
-	public abstract void set(String dir, Object value);
 	public abstract TranslationProviderFactory getPlatformTranslationProviderFactory();
 	public List<Cheat> getAbstractCheats() {
 		return Cheat.CHEATS;

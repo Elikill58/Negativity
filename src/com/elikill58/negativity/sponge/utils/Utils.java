@@ -49,6 +49,12 @@ public class Utils {
 	}
 
 	@Nullable
+	public static Player getFirstOnlinePlayer() {
+		Collection<Player> onlinePlayers = Sponge.getServer().getOnlinePlayers();
+		return onlinePlayers.isEmpty() ? null : onlinePlayers.iterator().next();
+	}
+
+	@Nullable
 	public static Player getRandomPlayer() {
 		Collection<Player> onlinePlayers = Sponge.getServer().getOnlinePlayers();
 		if (onlinePlayers.isEmpty())

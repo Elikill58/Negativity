@@ -22,6 +22,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.spigot.ClickableText;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -110,6 +111,12 @@ public class Utils {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	@Nullable
+	public static Player getFirstOnlinePlayer() {
+		List<Player> onlinePlayers = getOnlinePlayers();
+		return onlinePlayers.isEmpty() ? null : onlinePlayers.iterator().next();
 	}
 
 	public static ItemStack createSkull(String name, int amount, String owner, String... lore) {

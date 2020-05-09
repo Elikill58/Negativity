@@ -36,7 +36,6 @@ public abstract class Adapter {
 	}
 
 	public abstract String getName();
-	public abstract Object getConfig();
 	public abstract File getDataFolder();
 	public abstract String getStringInConfig(String dir);
 	public abstract boolean getBooleanInConfig(String dir);

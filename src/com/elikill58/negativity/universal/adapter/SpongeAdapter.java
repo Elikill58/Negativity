@@ -69,11 +69,6 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	}
 
 	@Override
-	public Object getConfig() {
-		return SpongeNegativity.getConfig();
-	}
-
-	@Override
 	public File getDataFolder() {
 		return plugin.getDataFolder().toFile();
 	}

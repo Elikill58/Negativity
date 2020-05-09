@@ -58,11 +58,6 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 	}
 
 	@Override
-	public Object getConfig() {
-		return config;
-	}
-
-	@Override
 	public File getDataFolder() {
 		return pl.getDataFolder();
 	}

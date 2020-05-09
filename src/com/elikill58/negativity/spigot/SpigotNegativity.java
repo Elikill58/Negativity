@@ -68,6 +68,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpigotAdapter;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
+import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
 import com.elikill58.negativity.universal.ban.support.AdvancedBanProcessor;
 import com.elikill58.negativity.universal.ban.support.BukkitBanProcessor;
 import com.elikill58.negativity.universal.ban.support.MaxBansProcessor;
@@ -178,6 +179,14 @@ public class SpigotNegativity extends JavaPlugin {
 
 		StringJoiner supportedPluginName = new StringJoiner(", ");
 		BanManager.registerProcessor("bukkit", new BukkitBanProcessor());
+		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(rawMessage -> {
+			Player player = Utils.getFirstOnlinePlayer();
+			if (player != null) {
+				player.sendPluginMessage(this, NegativityMessagesManager.CHANNEL_ID, rawMessage);
+			} else {
+				getLogger().severe("Could not send ban revocation request to proxy because there are no player online.");
+			}
+		}));
 		if (Bukkit.getPluginManager().getPlugin("Essentials") != null) {
 			essentialsSupport = true;
 			supportedPluginName.add("Essentials");

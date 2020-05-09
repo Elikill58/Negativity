@@ -88,6 +88,7 @@ import com.elikill58.negativity.universal.adapter.SpongeAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
+import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
 import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
@@ -155,6 +156,14 @@ public class SpongeNegativity {
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
 		BanManager.registerProcessor("sponge", new SpongeBanProcessor());
+		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(rawMessage -> {
+			Player player = Utils.getFirstOnlinePlayer();
+			if (player != null) {
+				channel.sendTo(player, payload -> payload.writeBytes(rawMessage));
+			} else {
+				logger.error("Could not send ban revocation request to proxy because there are no player online.");
+			}
+		}));
 		Perm.registerChecker(Perm.PLATFORM_CHECKER, new SpongePermissionChecker());
 
 		if(SpongeUpdateChecker.ifUpdateAvailable()) {

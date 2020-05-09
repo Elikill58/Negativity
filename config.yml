@@ -211,6 +211,8 @@ ban:
   # - database : Saves bans in a database. Needs a configured database (see the Database category)
   # - command : Runs commands to ban or unban
   # - bukkit : Uses Bukkit's ban system
+  # - proxy : Forwards ban execution and revocations to the proxy companion plugin.
+  #   You must enable bans on the proxy plugin's configuration for it to work
   # The following plugins are also supported :
   # - maxbans
   # - advancedban

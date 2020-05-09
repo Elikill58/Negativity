@@ -20,7 +20,9 @@ import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
+import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.velocitypowered.api.event.ResultedEvent;
@@ -123,6 +125,12 @@ public class NegativityListener {
 			if (!hasPermitted) {
 				NegativityListener.report.add(new Report("/server " + p.getCurrentServer().get().getServerInfo().getName(), place));
 			}
+		} else if (message instanceof ProxyExecuteBanMessage) {
+			ProxyExecuteBanMessage banMessage = (ProxyExecuteBanMessage) message;
+			BanManager.executeBan(banMessage.getBan());
+		} else if (message instanceof ProxyRevokeBanMessage) {
+			ProxyRevokeBanMessage revocationMessage = (ProxyRevokeBanMessage) message;
+			BanManager.revokeBan(revocationMessage.getPlayerId());
 		} else {
 			VelocityNegativity.getInstance().getLogger().warn("Unhandled plugin message: {}.", message.getClass().getName());
 		}

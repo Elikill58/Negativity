@@ -588,8 +588,7 @@ public class SpongeNegativity {
 			if(hasPermPeople) {
 				np.pendingAlerts.remove(c);
 				Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
-			} else
-				p.sendMessage(Text.of("no people"));
+			}
 		}
 	}
 

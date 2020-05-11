@@ -34,8 +34,8 @@ public class AlertInventory extends AbstractInventory {
 		for (Cheat c : Cheat.values()) {
 			if (!c.isActive())
 				continue;
-			if((Adapter.getAdapter().getBooleanInConfig("inventory.alerts.only_cheat_active") && np.ACTIVE_CHEAT.contains(c))
-					|| (!np.ACTIVE_CHEAT.contains(c) && Adapter.getAdapter().getBooleanInConfig("inventory.alerts.no_started_verif_cheat")))
+			if((Adapter.getAdapter().getConfig().getBoolean("inventory.alerts.only_cheat_active") && np.ACTIVE_CHEAT.contains(c))
+					|| (!np.ACTIVE_CHEAT.contains(c) && Adapter.getAdapter().getConfig().getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
 		}
 		Inventory inv = Bukkit.createInventory(new AlertHolder(), Utils.getMultipleOf(TO_SEE.size() + 3, 9, 1, 54),
@@ -62,8 +62,8 @@ public class AlertInventory extends AbstractInventory {
 		List<Cheat> TO_SEE = new ArrayList<>();
 		for (Cheat c : Cheat.values())
 			if ((c.isActive()
-					&& Adapter.getAdapter().getBooleanInConfig("inventory.alerts.only_cheat_active") && np.ACTIVE_CHEAT.contains(c))
-					|| (!np.ACTIVE_CHEAT.contains(c) && Adapter.getAdapter().getBooleanInConfig("inventory.alerts.no_started_verif_cheat")))
+					&& Adapter.getAdapter().getConfig().getBoolean("inventory.alerts.only_cheat_active") && np.ACTIVE_CHEAT.contains(c))
+					|| (!np.ACTIVE_CHEAT.contains(c) && Adapter.getAdapter().getConfig().getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
 		int slot = 0;
 		for (Cheat c : TO_SEE)

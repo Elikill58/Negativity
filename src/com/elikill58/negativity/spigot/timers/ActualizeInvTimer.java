@@ -13,7 +13,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class ActualizeInvTimer extends BukkitRunnable {
 
-	private static final boolean INV_FREEZE_ACTIVE = Adapter.getAdapter().getBooleanInConfig("inventory.inv_freeze_active");
+	private static final boolean INV_FREEZE_ACTIVE = Adapter.getAdapter().getConfig().getBoolean("inventory.inv_freeze_active");
 
 	@Override
 	public void run() {

@@ -16,9 +16,9 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class ActualizerTimer implements Consumer<Task> {
 
-    public static final boolean INV_FREEZE_ACTIVE = Adapter.getAdapter().getBooleanInConfig("inventory.inv_freeze_active");
+    public static final boolean INV_FREEZE_ACTIVE = Adapter.getAdapter().getConfig().getBoolean("inventory.inv_freeze_active");
 
-    @Override
+	@Override
     public void accept(Task task) {
         for (Player p : Inv.CHECKING.keySet()) {
             if (p.getOpenInventory().get().getName().get().equals(Inv.NAME_ACTIVED_CHEAT_MENU)) {

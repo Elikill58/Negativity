@@ -68,7 +68,7 @@ public class OldBansDbMigrator {
 	}
 
 	private static String getConfigString(Adapter adapter, String key) {
-		String value = adapter.getStringInConfig(key);
+		String value = adapter.getConfig().getString(key);
 		checkState(!value.equals(key), () -> "Missing required configuration value '" + key + "'");
 		return value;
 	}

@@ -24,6 +24,7 @@ import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
 
 public class AlertInventory extends AbstractInventory {
 
@@ -36,11 +37,12 @@ public class AlertInventory extends AbstractInventory {
 		Player cible = (Player) args[0];
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
+		ConfigAdapter config = Adapter.getAdapter().getConfig();
 		for (Cheat c : Cheat.values())
-			if ((Adapter.getAdapter().getBooleanInConfig("inventory.alerts.only_cheat_active")
+			if ((config.getBoolean("inventory.alerts.only_cheat_active")
 					&& np.hasDetectionActive(c))
 					|| (!np.hasDetectionActive(c)
-							&& Adapter.getAdapter().getBooleanInConfig("inventory.alerts.no_started_verif_cheat")))
+							&& config.getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
 		int size = Utils.getMultipleOf(TO_SEE.size() + 4, 9, 1), nbLine = size / 9;
 		Inventory inv = Inventory.builder().withCarrier(new AlertHolder())
@@ -74,11 +76,12 @@ public class AlertInventory extends AbstractInventory {
 		Inventory inv = p.getOpenInventory().get();
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
+		ConfigAdapter config = Adapter.getAdapter().getConfig();
 		for (Cheat c : Cheat.values())
-			if ((c.isActive() && Adapter.getAdapter().getBooleanInConfig("inventory.alerts.only_cheat_active")
+			if ((c.isActive() && config.getBoolean("inventory.alerts.only_cheat_active")
 					&& np.hasDetectionActive(c))
 					|| (!np.hasDetectionActive(c)
-							&& Adapter.getAdapter().getBooleanInConfig("inventory.alerts.no_started_verif_cheat")))
+							&& config.getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
 		int i = 0;
 		for (Cheat c : TO_SEE) {

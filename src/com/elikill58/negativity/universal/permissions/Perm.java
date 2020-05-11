@@ -44,6 +44,6 @@ public class Perm {
 
 	public static void init() {
 		Adapter store = Adapter.getAdapter();
-		checkerId = store.getStringInConfig("Permissions.checker");
+		checkerId = store.getConfig().getString("Permissions.checker");
 	}
 }

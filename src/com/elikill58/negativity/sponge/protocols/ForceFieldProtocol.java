@@ -61,7 +61,7 @@ public class ForceFieldProtocol extends Cheat {
 		Optional<ItemStackSnapshot> usedItem = e.getContext().get(EventContextKeys.USED_ITEM);
 
 		double distance = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());
-		double allowedReach = Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0);
+		double allowedReach = Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0);
 		if (distance > allowedReach && !(usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW) && e.getTargetEntity().getType().equals(EntityTypes.ENDER_DRAGON)) {
 			SpongeNegativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(distance * 2 * 10),

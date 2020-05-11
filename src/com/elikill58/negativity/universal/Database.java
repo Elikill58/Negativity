@@ -55,11 +55,11 @@ public class Database {
 
 	public static void init() {
 		Adapter store = Adapter.getAdapter();
-		if (hasCustom = store.getBooleanInConfig("Database.isActive")) {
-			table_lang = store.getStringInConfig("Database.table_lang");
-			Database.connect(store.getStringInConfig("Database.url"),
-					store.getStringInConfig("Database.user"),
-					store.getStringInConfig("Database.password"));
+		if (hasCustom = store.getConfig().getBoolean("Database.isActive")) {
+			table_lang = store.getConfig().getString("Database.table_lang");
+			Database.connect(store.getConfig().getString("Database.url"),
+					store.getConfig().getString("Database.user"),
+					store.getConfig().getString("Database.password"));
 		}
 	}
 }

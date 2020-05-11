@@ -7,7 +7,7 @@ public abstract class BasePlatformPermissionChecker implements PermissionChecker
 
 	@Override
 	public final boolean hasPermission(NegativityPlayer player, String permission) {
-		String platformPerm = Adapter.getAdapter().getStringInConfig("Permissions." + permission + ".default");
+		String platformPerm = Adapter.getAdapter().getConfig().getString("Permissions." + permission + ".default");
 		if (platformPerm == null) {
 			return false;
 		}

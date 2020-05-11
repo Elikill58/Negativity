@@ -18,7 +18,7 @@ public class BanUtils {
 		try {
 			ScriptEngineManager factory = new ScriptEngineManager();
 			ScriptEngine engine = factory.getEngineByName("JavaScript");
-			String script = Adapter.getAdapter().getStringInConfig("ban.time.calculator")
+			String script = Adapter.getAdapter().getConfig().getString("ban.time.calculator")
 					.replaceAll("%reliability%", String.valueOf(reliability))
 					.replaceAll("%alert%", String.valueOf(player.getWarn(cheat)))
 					.replaceAll("%all_alert%", String.valueOf(player.getAllWarn(cheat)));
@@ -34,7 +34,7 @@ public class BanUtils {
 			return false;
 		}
 		Adapter ada = Adapter.getAdapter();
-		return ada.getIntegerInConfig("ban.reliability_need") <= relia && ada.getIntegerInConfig("ban.alert_need") <= np.getAllWarn(cheat);
+		return ada.getConfig().getInt("ban.reliability_need") <= relia && ada.getConfig().getInt("ban.alert_need") <= np.getAllWarn(cheat);
 	}
 
 	/**
@@ -49,7 +49,7 @@ public class BanUtils {
 		player.setInBanning(true);
 		String reason = player.getReason(cheat);
 		long banDuration = -1;
-		int banDefThreshold = Adapter.getAdapter().getIntegerInConfig("ban.def.ban_time");
+		int banDefThreshold = Adapter.getAdapter().getConfig().getInt("ban.def.ban_time");
 		boolean isDefinitive = BanManager.getLoggedBans(player.getUUID()).size() >= banDefThreshold;
 		if (!isDefinitive) {
 			banDuration = System.currentTimeMillis() + BanUtils.computeBanDuration(player, reliability, cheat);

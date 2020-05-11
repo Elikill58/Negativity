@@ -8,14 +8,14 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class SuspectManager {
 
-	public static boolean ENABLED = Adapter.getAdapter().getBooleanInConfig("suspect.enabled"),
-			CHAT = Adapter.getAdapter().getBooleanInConfig("suspect.chat"),
-			WITH_REPORT = Adapter.getAdapter().getBooleanInConfig("suspect.with_report_cmd");
+	public static boolean ENABLED = Adapter.getAdapter().getConfig().getBoolean("suspect.enabled");
+	public static boolean CHAT = Adapter.getAdapter().getConfig().getBoolean("suspect.chat");
+	public static boolean WITH_REPORT = Adapter.getAdapter().getConfig().getBoolean("suspect.with_report_cmd");
 
 	public static void init() {
-		ENABLED = Adapter.getAdapter().getBooleanInConfig("suspect.enabled");
-		CHAT = Adapter.getAdapter().getBooleanInConfig("suspect.chat");
-		WITH_REPORT = Adapter.getAdapter().getBooleanInConfig("suspect.with_report_cmd");
+		ENABLED = Adapter.getAdapter().getConfig().getBoolean("suspect.enabled");
+		CHAT = Adapter.getAdapter().getConfig().getBoolean("suspect.chat");
+		WITH_REPORT = Adapter.getAdapter().getConfig().getBoolean("suspect.with_report_cmd");
 	}
 
 	public static void analyzeText(NegativityPlayer np, String text) {

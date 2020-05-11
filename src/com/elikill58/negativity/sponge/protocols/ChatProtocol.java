@@ -32,7 +32,7 @@ public class ChatProtocol extends Cheat {
 		String msg = e.getMessage().toPlain();
 		String withoutEvading = msg.replaceAll(" ", "").toLowerCase();
 		String foundedInsults = "";
-		for(String insults : Adapter.getAdapter().getStringListInConfig("cheats.chat.insults")) {
+		for(String insults : Adapter.getAdapter().getConfig().getStringList("cheats.chat.insults")) {
 			if(withoutEvading.contains(insults.toLowerCase()))
 				foundedInsults = (foundedInsults.equalsIgnoreCase("") ? "" : foundedInsults + ", ") + insults;
 		}

@@ -21,7 +21,7 @@ public class BansMigration {
 
 	public static void migrateBans(Path activeBanStorageDir, Path loggedBanStorageDir) {
 		Adapter adapter = Adapter.getAdapter();
-		Path oldBanDir = adapter.getDataFolder().toPath().resolve(adapter.getStringInConfig("ban.file.dir"));
+		Path oldBanDir = adapter.getDataFolder().toPath().resolve(adapter.getConfig().getString("ban.file.dir"));
 		if (Files.notExists(oldBanDir))
 			return;
 

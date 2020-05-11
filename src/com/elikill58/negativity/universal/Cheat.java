@@ -26,7 +26,7 @@ public abstract class Cheat {
 		this.cheatCategory = type;
 		this.hasListener = hasListener;
 		this.key = key.toLowerCase();
-		this.name = Adapter.getAdapter().getStringInConfig("cheats." + key.toLowerCase() + ".exact_name");
+		this.name = Adapter.getAdapter().getConfig().getString("cheats." + key.toLowerCase() + ".exact_name");
 		if (this.name == null)
 			this.name = key;
 		this.aliases = alias;
@@ -41,7 +41,7 @@ public abstract class Cheat {
 	}
 
 	public boolean isActive() {
-		return Adapter.getAdapter().getBooleanInConfig("cheats." + key + ".isActive");
+		return Adapter.getAdapter().getConfig().getBoolean("cheats." + key + ".isActive");
 	}
 	
 	public boolean isBlockedInFight() {
@@ -65,43 +65,43 @@ public abstract class Cheat {
 	}
 
 	public boolean isAutoVerif() {
-		return Adapter.getAdapter().getBooleanInConfig("cheats." + key + ".autoVerif");
+		return Adapter.getAdapter().getConfig().getBoolean("cheats." + key + ".autoVerif");
 	}
 
 	public int getReliabilityAlert() {
-		return Adapter.getAdapter().getIntegerInConfig("cheats." + key + ".reliability_alert");
+		return Adapter.getAdapter().getConfig().getInt("cheats." + key + ".reliability_alert");
 	}
 
 	public boolean isSetBack() {
-		return Adapter.getAdapter().getBooleanInConfig("cheats." + key + ".setBack");
+		return Adapter.getAdapter().getConfig().getBoolean("cheats." + key + ".setBack");
 	}
 
 	public int getAlertToKick() {
-		return Adapter.getAdapter().getIntegerInConfig("cheats." + key + ".alert_to_kick");
+		return Adapter.getAdapter().getConfig().getInt("cheats." + key + ".alert_to_kick");
 	}
 
 	public boolean allowKick() {
-		return Adapter.getAdapter().getBooleanInConfig("cheats." + key + ".kick");
+		return Adapter.getAdapter().getConfig().getBoolean("cheats." + key + ".kick");
 	}
 
 	public boolean setAllowKick(boolean b) {
-		Adapter.getAdapter().set("cheats." + key + ".kick", b);
+		Adapter.getAdapter().getConfig().set("cheats." + key + ".kick", b);
 		return b;
 	}
 
 	public boolean setBack(boolean b) {
-		Adapter.getAdapter().set("cheats." + key + ".setBack", b);
+		Adapter.getAdapter().getConfig().set("cheats." + key + ".setBack", b);
 		return b;
 	}
 
 	public boolean setAutoVerif(boolean b) {
-		Adapter.getAdapter().set("cheats." + key + ".autoVerif", b);
+		Adapter.getAdapter().getConfig().set("cheats." + key + ".autoVerif", b);
 		return b;
 	}
 
 	public boolean setActive(boolean active) {
 		Adapter ada = Adapter.getAdapter();
-		ada.set("cheats." + key + ".isActive", active);
+		ada.getConfig().set("cheats." + key + ".isActive", active);
 		for(UUID playerUUID : Adapter.getAdapter().getOnlinePlayers()) {
 			if(active)
 				ada.getNegativityPlayer(playerUUID).startAnalyze(this);
@@ -112,7 +112,7 @@ public abstract class Cheat {
 	}
 
 	public int getMaxAlertPing() {
-		return Adapter.getAdapter().getIntegerInConfig("cheats." + key + ".ping");
+		return Adapter.getAdapter().getConfig().getInt("cheats." + key + ".ping");
 	}
 	
 	public String[] getAliases() {

@@ -181,7 +181,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 		reloadConfig();
 		UniversalUtils.init();
 		Cheat.loadCheat();
-		ProxyCompanionManager.updateForceDisabled(getBooleanInConfig("disableProxyIntegration"));
+		ProxyCompanionManager.updateForceDisabled(getConfig().getBoolean("disableProxyIntegration"));
 		SpigotNegativity.trySendProxyPing();
 		SpigotNegativity.setupValue();
 		for(Player p : Utils.getOnlinePlayers())

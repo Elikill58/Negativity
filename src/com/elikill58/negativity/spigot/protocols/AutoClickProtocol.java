@@ -26,7 +26,7 @@ public class AutoClickProtocol extends Cheat implements Listener {
 		super(CheatKeys.AUTO_CLICK, false, Material.FISHING_ROD, CheatCategory.COMBAT, true, "auto-click", "autoclic");
 	}
 
-	public static final int CLICK_ALERT = Adapter.getAdapter().getIntegerInConfig("cheats.autoclick.click_alert");
+	public static final int CLICK_ALERT = Adapter.getAdapter().getConfig().getInt("cheats.autoclick.click_alert");
 
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onPlayerInteract(PlayerInteractEvent e) {

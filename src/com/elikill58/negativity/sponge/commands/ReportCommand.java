@@ -63,7 +63,7 @@ public class ReportCommand implements CommandExecutor {
 		}
 
 		Messages.sendMessage(playerSource, "report.well_report", "%name%", targetPlayer.getName());
-		nPlayerSource.TIME_REPORT = System.currentTimeMillis() + Adapter.getAdapter().getIntegerInConfig("time_between_report");
+		nPlayerSource.TIME_REPORT = System.currentTimeMillis() + Adapter.getAdapter().getConfig().getInt("time_between_report");
 		if (SuspectManager.WITH_REPORT && SuspectManager.ENABLED)
 			SuspectManager.analyzeText(nPlayerSource, message);
 

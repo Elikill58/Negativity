@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.inventories.admin;
 
+import java.io.IOException;
 import java.util.Optional;
 
 import org.spongepowered.api.data.key.Keys;
@@ -23,6 +24,10 @@ import com.elikill58.negativity.sponge.inventories.holders.LangHolder;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
+
+import net.kyori.text.format.TextColor;
 
 public class LangInventory extends AbstractInventory {
 
@@ -107,8 +112,15 @@ public class LangInventory extends AbstractInventory {
 					lang = s;
 			}
 			if(lang != "") {
-				SpongeNegativity.getConfig().getNode("Translation").getNode("default").setValue(lang);
-				SpongeNegativity.saveConfig();
+				ConfigAdapter config = Adapter.getAdapter().getConfig();
+				config.set("Translation.default", lang);
+				try {
+					config.save();
+				} catch (IOException ex) {
+					p.sendMessage(Text.of(TextColor.RED, "Failed to save configuration after changing the default language ", lang));
+					SpongeNegativity.getInstance().getLogger().error("Failed to save configuration after {} changed the default language to {}", p.getName(), lang, ex);
+				}
+
 				TranslatedMessages.DEFAULT_LANG = lang;
 				TranslatedMessages.loadMessages();
 				update(e.getTargetInventory().query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class)),

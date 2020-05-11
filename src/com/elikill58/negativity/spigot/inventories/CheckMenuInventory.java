@@ -123,7 +123,7 @@ public class CheckMenuInventory extends AbstractInventory {
 				SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 				np.isFreeze = !np.isFreeze;
 				if (np.isFreeze) {
-					if (Adapter.getAdapter().getBooleanInConfig("inventory.inv_freeze_active"))
+					if (Adapter.getAdapter().getConfig().getBoolean("inventory.inv_freeze_active"))
 						AbstractInventory.open(InventoryType.FREEZE, cible);
 					Messages.sendMessage(cible, "inventory.main.freeze", "%name%", p.getName());
 				} else

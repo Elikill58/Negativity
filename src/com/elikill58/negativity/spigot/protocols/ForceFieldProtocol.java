@@ -58,7 +58,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		Location tempLoc = e.getEntity().getLocation().clone();
 		tempLoc.setY(p.getLocation().getY());
 		double dis = tempLoc.distance(p.getLocation());
-		if (dis > Adapter.getAdapter().getDoubleInConfig("cheats.forcefield.reach")
+		if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach")
 				&& !p.getItemInHand().getType().equals(Material.BOW) &&!e.getEntityType().equals(EntityType.ENDER_DRAGON)) {
 			mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(dis * 2 * 10),

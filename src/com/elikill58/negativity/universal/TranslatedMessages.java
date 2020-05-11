@@ -20,11 +20,11 @@ public class TranslatedMessages {
 
 	public static final String PLATFORM_PROVIDER_ID = "platform";
 
-	public static String DEFAULT_LANG = Adapter.getAdapter().getStringInConfig("Translation.default");
-	public static List<String> LANGS = Adapter.getAdapter().getStringListInConfig("Translation.lang_available");
-	public static String column = Adapter.getAdapter().getStringInConfig("Database.column_lang");
-	public static boolean activeTranslation = Adapter.getAdapter().getBooleanInConfig("Translation.active"),
-			useDb = Adapter.getAdapter().getBooleanInConfig("Translation.use_db");
+	public static String DEFAULT_LANG = Adapter.getAdapter().getConfig().getString("Translation.default");
+	public static List<String> LANGS = Adapter.getAdapter().getConfig().getStringList("Translation.lang_available");
+	public static String column = Adapter.getAdapter().getConfig().getString("Database.column_lang");
+	public static boolean activeTranslation = Adapter.getAdapter().getConfig().getBoolean("Translation.active");
+	public static boolean useDb = Adapter.getAdapter().getConfig().getBoolean("Translation.use_db");
 	private static String providerFactoryId = PLATFORM_PROVIDER_ID;
 	private static TranslationProviderFactory platformFactory = null;
 	private static final Map<String, TranslationProviderFactory> registeredFactories = new HashMap<>();
@@ -34,16 +34,16 @@ public class TranslatedMessages {
 	private static TranslationProvider fallbackTranslationProvider = null;
 
 	public static void init() {
-		DEFAULT_LANG = Adapter.getAdapter().getStringInConfig("Translation.default");
-		LANGS = Adapter.getAdapter().getStringListInConfig("Translation.lang_available");
-		column = Adapter.getAdapter().getStringInConfig("Database.column_lang");
-		activeTranslation = Adapter.getAdapter().getBooleanInConfig("Translation.active");
-		useDb = Adapter.getAdapter().getBooleanInConfig("Translation.use_db");
+		DEFAULT_LANG = Adapter.getAdapter().getConfig().getString("Translation.default");
+		LANGS = Adapter.getAdapter().getConfig().getStringList("Translation.lang_available");
+		column = Adapter.getAdapter().getConfig().getString("Database.column_lang");
+		activeTranslation = Adapter.getAdapter().getConfig().getBoolean("Translation.active");
+		useDb = Adapter.getAdapter().getConfig().getBoolean("Translation.use_db");
 
 		platformFactory = Adapter.getAdapter().getPlatformTranslationProviderFactory();
 		registerTranslationProviderFactory(PLATFORM_PROVIDER_ID, platformFactory);
 
-		providerFactoryId = Adapter.getAdapter().getStringInConfig("Translation.provider");
+		providerFactoryId = Adapter.getAdapter().getConfig().getString("Translation.provider");
 		loadMessages();
 	}
 

@@ -82,7 +82,7 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 
 		Messages.sendMessage(p, "report.well_report", "%name%", target.getName());
 		np.TIME_REPORT = System.currentTimeMillis()
-				+ Adapter.getAdapter().getIntegerInConfig("time_between_report");
+				+ Adapter.getAdapter().getConfig().getInt("time_between_report");
 		if (SuspectManager.WITH_REPORT && SuspectManager.ENABLED) {
 			SuspectManager.analyzeText(np, msg);
 		}

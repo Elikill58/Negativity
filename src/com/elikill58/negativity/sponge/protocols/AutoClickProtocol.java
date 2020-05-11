@@ -30,7 +30,7 @@ public class AutoClickProtocol extends Cheat {
 		super(CheatKeys.AUTO_CLICK, false, ItemTypes.FISHING_ROD, CheatCategory.COMBAT, true, "auto-click", "autoclic");
 	}
 
-	public static final int CLICK_ALERT = Adapter.getAdapter().getIntegerInConfig("cheats.autoclick.click_alert");
+	public static final int CLICK_ALERT = Adapter.getAdapter().getConfig().getInt("cheats.autoclick.click_alert");
 
 	@Listener
 	public void onPlayerInteract(InteractEvent e, @First Player p) {

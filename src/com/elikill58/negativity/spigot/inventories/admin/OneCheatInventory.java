@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.inventories.admin;
 
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,6 +16,7 @@ import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.inventories.holders.OneCheatHolder;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class OneCheatInventory extends AbstractInventory {
 
@@ -62,7 +65,12 @@ public class OneCheatInventory extends AbstractInventory {
 			c.setAllowKick(!c.allowKick());
 		else if(m.equals(Material.DIAMOND))
 			c.setActive(!c.isActive());
-		
+
+		try {
+			Adapter.getAdapter().getConfig().save();
+		} catch (IOException ioException) {
+			ioException.printStackTrace();
+		}
 		actualizeInventory(p, c, inv);
 		p.updateInventory();
 	}

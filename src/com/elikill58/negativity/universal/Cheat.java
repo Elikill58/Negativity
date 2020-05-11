@@ -86,26 +86,22 @@ public abstract class Cheat {
 
 	public boolean setAllowKick(boolean b) {
 		Adapter.getAdapter().set("cheats." + key + ".kick", b);
-		Adapter.getAdapter().reloadConfig();
 		return b;
 	}
 
 	public boolean setBack(boolean b) {
 		Adapter.getAdapter().set("cheats." + key + ".setBack", b);
-		Adapter.getAdapter().reloadConfig();
 		return b;
 	}
 
 	public boolean setAutoVerif(boolean b) {
 		Adapter.getAdapter().set("cheats." + key + ".autoVerif", b);
-		Adapter.getAdapter().reloadConfig();
 		return b;
 	}
 
 	public boolean setActive(boolean active) {
 		Adapter ada = Adapter.getAdapter();
 		ada.set("cheats." + key + ".isActive", active);
-		ada.reloadConfig();
 		for(UUID playerUUID : Adapter.getAdapter().getOnlinePlayers()) {
 			if(active)
 				ada.getNegativityPlayer(playerUUID).startAnalyze(this);

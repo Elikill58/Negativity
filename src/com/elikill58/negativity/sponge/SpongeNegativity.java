@@ -1,6 +1,5 @@
 package com.elikill58.negativity.sponge;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -93,6 +92,8 @@ import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
 import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.config.SpongeConfigAdapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
@@ -102,7 +103,7 @@ import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
 
-import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
 @Plugin(id = "negativity", name = "Negativity", version = "1.7", description = "It's an Advanced AntiCheat Detection", authors = { "Elikill58", "RedNesto" }, dependencies = {
@@ -118,8 +119,8 @@ public class SpongeNegativity {
 	@Inject
 	@ConfigDir(sharedRoot = false)
 	private Path configDir;
-	private ConfigurationNode config;
-	private HoconConfigurationLoader configLoader;
+	private Path configFile;
+	private ConfigAdapter config;
 	public static RawDataChannel channel = null, fmlChannel = null;
 
 	private final Map<String, CommandMapping> reloadableCommands = new HashMap<>();
@@ -135,10 +136,23 @@ public class SpongeNegativity {
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
 		INSTANCE = this;
+		configFile = configDir.resolve("config.conf");
 
-		loadConfig();
-		Adapter.setAdapter(new SpongeAdapter(this));
+		HoconConfigurationLoader configLoader = HoconConfigurationLoader.builder().setPath(configFile).build();
+		CommentedConfigurationNode rootConfigNode;
+		try {
+			rootConfigNode = configLoader.load();
+		} catch (IOException e) {
+			logger.error("Failed to load configuration", e);
+			rootConfigNode = configLoader.createEmptyNode();
+		}
+		this.config = new SpongeConfigAdapter.ByLoader(rootConfigNode, logger, configLoader, configFile,
+				() -> Sponge.getAssetManager().getAsset(this, "config.conf")
+						.orElseThrow(() -> new IllegalStateException("Could not get default configuration file"))
+						.getUrl().openStream());
+		Adapter.setAdapter(new SpongeAdapter(this, config));
 		UniversalUtils.init();
+		loadConfig();
 		Cheat.loadCheat();
 		EventManager eventManager = Sponge.getEventManager();
 		for (Cheat c : Cheat.values()) {
@@ -277,7 +291,7 @@ public class SpongeNegativity {
 	}
 
 	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {
-		reloadCommand(configKey, config.getNode(configKey).getBoolean(), manager, command, aliases);
+		reloadCommand(configKey, config.getBoolean(configKey), manager, command, aliases);
 	}
 
 	private void reloadCommand(String mappingKey, boolean enabled, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {
@@ -400,45 +414,19 @@ public class SpongeNegativity {
 	}
 
 	public void loadConfig() {
-		try {
-			File configFile = new File(configDir.toFile(), "config.conf");
-			if (!configFile.exists()) {
-				Sponge.getAssetManager().getAsset(this, "config.conf").ifPresent((configAsset) -> {
-					try {
-						configAsset.copyToDirectory(INSTANCE.configDir);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				});
-			}
-			config = (configLoader = HoconConfigurationLoader.builder().setFile(configFile).build()).load();
-			log = config.getNode("log_alerts").getBoolean(true);
-			log_console = config.getNode("log_alerts_in_console").getBoolean(true);
-			ProxyCompanionManager.updateForceDisabled(config.getNode("disableProxyIntegration").getBoolean());
-			hasBypass = config.getNode("Permissions").getNode("bypass").getNode("active").getBoolean();
-			timeBetweenAlert = config.getNode("time_between_alert").getInt(1000);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		log = config.getBoolean("log_alerts");
+		log_console = config.getBoolean("log_alerts_in_console");
+		ProxyCompanionManager.updateForceDisabled(config.getBoolean("disableProxyIntegration"));
+		hasBypass = config.getBoolean("Permissions.bypass.active");
+		timeBetweenAlert = config.getInt("time_between_alert");
 	}
 
 	public void loadItemBypasses() {
 		ItemUseBypass.ITEM_BYPASS.clear();
-		for (Map.Entry<Object, ? extends ConfigurationNode> cn : config.getNode("items").getChildrenMap().entrySet()) {
-			ConfigurationNode itemNode = cn.getValue();
-			new ItemUseBypass(cn.getKey().toString(), itemNode.getNode("cheats").getString(""), itemNode.getNode("when").getString(""));
-		}
-	}
-
-	public static ConfigurationNode getConfig() {
-		return INSTANCE.config;
-	}
-
-	public static void saveConfig() {
-		try {
-			INSTANCE.configLoader.save(INSTANCE.config);
-		} catch (IOException e) {
-			e.printStackTrace();
+		ConfigAdapter allItemsConfig = config.getChild("items");
+		for (String key : allItemsConfig.getKeys()) {
+			ConfigAdapter itemConfig = allItemsConfig.getChild(key);
+			new ItemUseBypass(key, itemConfig.getString("cheats"), itemConfig.getString("when"));
 		}
 	}
 
@@ -504,7 +492,7 @@ public class SpongeNegativity {
 		long timeMillis = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > timeMillis || reliability < 30 || ping > c.getMaxAlertPing()
 				|| p.getHealthData().get(Keys.HEALTH).get() == 0.0D
-				|| getInstance().config.getNode("tps_alert_stop").getInt() > Utils.getLastTPS() || ping < 0
+				|| Adapter.getAdapter().getConfig().getInt("tps_alert_stop") > Utils.getLastTPS() || ping < 0
 				|| np.isFreeze)
 			return false;
 		Sponge.getEventManager().post(new PlayerCheatEvent(type, p, c, reliability, hover_proof, ping));

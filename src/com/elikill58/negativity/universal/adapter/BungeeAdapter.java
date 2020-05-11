@@ -26,7 +26,6 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
-import com.elikill58.negativity.universal.config.MD5ConfigAdapter;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
@@ -44,12 +43,12 @@ import net.md_5.bungee.config.YamlConfiguration;
 
 public class BungeeAdapter extends Adapter implements TranslationProviderFactory {
 
-	private ConfigAdapter config;
-	private Plugin pl;
+	private final ConfigAdapter config;
+	private final Plugin pl;
 
-	public BungeeAdapter(Plugin pl, Configuration config) {
+	public BungeeAdapter(Plugin pl, ConfigAdapter config) {
 		this.pl = pl;
-		this.config = new MD5ConfigAdapter(config);
+		this.config = config;
 	}
 
 	@Override

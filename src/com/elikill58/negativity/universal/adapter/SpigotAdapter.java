@@ -3,9 +3,11 @@ package com.elikill58.negativity.universal.adapter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.UncheckedIOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -56,7 +58,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 
 	public SpigotAdapter(JavaPlugin pl) {
 		this.pl = pl;
-		this.config = new BukkitConfigAdapter(pl, pl.getConfig());
+		this.config = new BukkitConfigAdapter.PluginConfig(pl);
 	}
 
 	@Override
@@ -193,9 +195,11 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 
 	@Override
 	public void reloadConfig() {
-		SpigotNegativity.getInstance().saveConfig();
-		SpigotNegativity.getInstance().reloadConfig();
-		config = new BukkitConfigAdapter(pl, pl.getConfig());
+		try {
+			getConfig().load();
+		} catch (IOException e) {
+			throw new UncheckedIOException("Failed to reload configuration", e);
+		}
 	}
 
 	@Nullable

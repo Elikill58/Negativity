@@ -27,7 +27,6 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
-import com.elikill58.negativity.universal.config.MD5ConfigAdapter;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
@@ -47,9 +46,9 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 	private ConfigAdapter config;
 	private VelocityNegativity pl;
 
-	public VelocityAdapter(VelocityNegativity pl, Configuration config) {
+	public VelocityAdapter(VelocityNegativity pl, ConfigAdapter config) {
 		this.pl = pl;
-		this.config = new MD5ConfigAdapter(config);
+		this.config = config;
 	}
 
 	@Override

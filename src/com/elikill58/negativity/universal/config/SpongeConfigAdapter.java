@@ -1,20 +1,30 @@
 package com.elikill58.negativity.universal.config;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Supplier;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.util.TypeTokens;
 
 import com.elikill58.negativity.universal.DefaultConfigValue;
+import com.elikill58.negativity.universal.utils.IOSupplier;
 
 import ninja.leaping.configurate.ConfigurationNode;
+import ninja.leaping.configurate.loader.ConfigurationLoader;
 
-public class SpongeConfigAdapter implements ConfigAdapter {
+public abstract class SpongeConfigAdapter implements ConfigAdapter {
 
-	private final ConfigurationNode root;
-	private final Logger logger;
+	protected ConfigurationNode root;
+	protected final Logger logger;
 
 	public SpongeConfigAdapter(ConfigurationNode root, Logger logger) {
 		this.root = root;
@@ -72,6 +82,21 @@ public class SpongeConfigAdapter implements ConfigAdapter {
 	}
 
 	@Override
+	public ConfigAdapter getChild(String key) {
+		return new Volatile(getFinalNode(key), logger);
+	}
+
+	@Override
+	public Collection<String> getKeys() {
+		Set<Object> originalKeys = root.getChildrenMap().keySet();
+		Set<String> keys = new HashSet<>();
+		for (Object originalKey : originalKeys) {
+			keys.add(originalKey.toString());
+		}
+		return keys;
+	}
+
+	@Override
 	public void set(String key, Object value) {
 		try {
 			getFinalNode(key).setValue(value);
@@ -83,5 +108,51 @@ public class SpongeConfigAdapter implements ConfigAdapter {
 	private ConfigurationNode getFinalNode(String dir) {
 		Object[] path = dir.split("\\.");
 		return this.root.getNode(path);
+	}
+
+	public static class Volatile extends SpongeConfigAdapter {
+
+		public Volatile(ConfigurationNode root, Logger logger) {
+			super(root, logger);
+		}
+
+		@Override
+		public void save() {
+		}
+
+		@Override
+		public void load() {
+		}
+	}
+
+	public static class ByLoader extends SpongeConfigAdapter {
+
+		private final ConfigurationLoader<?> loader;
+		private final Path file;
+		private final IOSupplier<InputStream> defaultConfigSupplier;
+
+		public ByLoader(ConfigurationNode root, Logger logger, ConfigurationLoader<?> loader, Path file, IOSupplier<InputStream> defaultConfigSupplier) {
+			super(root, logger);
+			this.loader = loader;
+			this.file = file;
+			this.defaultConfigSupplier = defaultConfigSupplier;
+		}
+
+		@Override
+		public void save() throws IOException {
+			Files.createDirectories(file);
+			loader.save(root);
+		}
+
+		@Override
+		public void load() throws IOException {
+			if (Files.notExists(file)) {
+				Files.createDirectories(file.getParent());
+				try (InputStream defaultConfigIn = defaultConfigSupplier.get()) {
+					Files.copy(defaultConfigIn, file, StandardCopyOption.REPLACE_EXISTING);
+				}
+			}
+			root = loader.load();
+		}
 	}
 }

@@ -1,19 +1,18 @@
 package com.elikill58.negativity.universal.config;
 
+import java.util.Collection;
 import java.util.List;
 
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.plugin.Plugin;
 
 import com.elikill58.negativity.universal.DefaultConfigValue;
 
-public class BukkitConfigAdapter implements ConfigAdapter {
+public abstract class BukkitConfigAdapter implements ConfigAdapter {
 
-	private final Plugin plugin;
-	private final FileConfiguration config;
+	protected ConfigurationSection config;
 
-	public BukkitConfigAdapter(Plugin plugin, FileConfiguration config) {
-		this.plugin = plugin;
+	public BukkitConfigAdapter(ConfigurationSection config) {
 		this.config = config;
 	}
 
@@ -55,8 +54,57 @@ public class BukkitConfigAdapter implements ConfigAdapter {
 	}
 
 	@Override
+	public ConfigAdapter getChild(String key) {
+		ConfigurationSection section = config.getConfigurationSection(key);
+		if (section == null) {
+			section = config.createSection(key);
+		}
+		return new BukkitConfigAdapter.Volatile(section);
+	}
+
+	@Override
+	public Collection<String> getKeys() {
+		return config.getKeys(false);
+	}
+
+	@Override
 	public void set(String key, Object value) {
 		config.set(key, value);
-		plugin.saveConfig();
+	}
+
+	public static class Volatile extends BukkitConfigAdapter {
+
+		public Volatile(ConfigurationSection config) {
+			super(config);
+		}
+
+		@Override
+		public void save() {
+		}
+
+		@Override
+		public void load() {
+		}
+	}
+
+	public static class PluginConfig extends BukkitConfigAdapter {
+
+		private final Plugin plugin;
+
+		public PluginConfig(Plugin plugin) {
+			super(plugin.getConfig());
+			this.plugin = plugin;
+		}
+
+		@Override
+		public void save() {
+			this.plugin.saveConfig();
+		}
+
+		@Override
+		public void load() {
+			this.plugin.reloadConfig();
+			this.config = this.plugin.getConfig();
+		}
 	}
 }

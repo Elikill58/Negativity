@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
+import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
@@ -30,7 +31,6 @@ import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
-import com.elikill58.negativity.universal.config.SpongeConfigAdapter;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
 import com.elikill58.negativity.universal.translation.ConfigurateTranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
@@ -55,10 +55,10 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 			.build(new NegativityAccountLoader());
 	private final Path messagesDir;
 
-	public SpongeAdapter(SpongeNegativity sn) {
+	public SpongeAdapter(SpongeNegativity sn, ConfigAdapter config) {
 		this.plugin = sn;
 		this.logger = sn.getLogger();
-		this.config = new SpongeConfigAdapter(SpongeNegativity.getConfig(), sn.logger);
+		this.config = config;
 		this.messagesDir = sn.getDataFolder().resolve("messages");
 	}
 
@@ -218,8 +218,12 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 
 	@Override
 	public void reloadConfig() {
+		try {
+			this.config.load();
+		} catch (IOException e) {
+			throw new UncheckedIOException("Failed to reload configuration", e);
+		}
 		plugin.loadConfig();
-		this.config = new SpongeConfigAdapter(SpongeNegativity.getConfig(), this.logger);
 		plugin.loadItemBypasses();
 	}
 

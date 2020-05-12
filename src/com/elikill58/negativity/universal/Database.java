@@ -11,7 +11,6 @@ public class Database {
 	private static Connection connection;
 	private static String url, username, password;
 	public static boolean hasCustom = false;
-	public static String table_lang;
 
 	public static void connect(String url, String username, String password) {
 		Database.url = url;
@@ -56,7 +55,6 @@ public class Database {
 	public static void init() {
 		Adapter store = Adapter.getAdapter();
 		if (hasCustom = store.getConfig().getBoolean("Database.isActive")) {
-			table_lang = store.getConfig().getString("Database.table_lang");
 			Database.connect(store.getConfig().getString("Database.url"),
 					store.getConfig().getString("Database.user"),
 					store.getConfig().getString("Database.password"));

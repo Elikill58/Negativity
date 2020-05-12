@@ -18,9 +18,7 @@ public class TranslatedMessages {
 
 	public static String DEFAULT_LANG = Adapter.getAdapter().getConfig().getString("Translation.default");
 	public static List<String> LANGS = Adapter.getAdapter().getConfig().getStringList("Translation.lang_available");
-	public static String column = Adapter.getAdapter().getConfig().getString("Database.column_lang");
 	public static boolean activeTranslation = Adapter.getAdapter().getConfig().getBoolean("Translation.active");
-	public static boolean useDb = Adapter.getAdapter().getConfig().getBoolean("Translation.use_db");
 	private static String providerFactoryId = PLATFORM_PROVIDER_ID;
 	private static TranslationProviderFactory platformFactory = null;
 	private static final Map<String, TranslationProviderFactory> registeredFactories = new HashMap<>();
@@ -32,9 +30,7 @@ public class TranslatedMessages {
 	public static void init() {
 		DEFAULT_LANG = Adapter.getAdapter().getConfig().getString("Translation.default");
 		LANGS = Adapter.getAdapter().getConfig().getStringList("Translation.lang_available");
-		column = Adapter.getAdapter().getConfig().getString("Database.column_lang");
 		activeTranslation = Adapter.getAdapter().getConfig().getBoolean("Translation.active");
-		useDb = Adapter.getAdapter().getConfig().getBoolean("Translation.use_db");
 
 		platformFactory = Adapter.getAdapter().getPlatformTranslationProviderFactory();
 		registerTranslationProviderFactory(PLATFORM_PROVIDER_ID, platformFactory);

@@ -67,8 +67,6 @@ public class DefaultConfigValue {
 		STRINGS.put("Database.url", "127.0.0.1/myDb");
 		STRINGS.put("Database.user", "root");
 		STRINGS.put("Database.password", "myPassword");
-		STRINGS.put("Database.table_lang", "myTable");
-		STRINGS.put("Database.column_lang", "lang");
 
 		BOOLEANS.put("inventory.alerts.no_started_verif_cheat", false);
 		BOOLEANS.put("inventory.alerts.only_cheat_active", true);
@@ -102,7 +100,6 @@ public class DefaultConfigValue {
 		}
 
 		BOOLEANS.put("Translation.active", false);
-		BOOLEANS.put("Translation.use_db", false);
 		STRINGS.put("Translation.default", "en_US");
 		STRINGS.put("Translation.provider", TranslatedMessages.PLATFORM_PROVIDER_ID);
 

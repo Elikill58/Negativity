@@ -9,8 +9,6 @@ none: "нет"
 console: "Администратор"
 fake_entities: "Фейковые игроки"
 
-kick: "&a[&2Negativity&a]&c Вы были кикнуты с этого сервера за Читы (%cheat%)"
-
 lang:
   invalid_lang: "%arg% не является языком!"
   help: "/lang <новый язык> : Изменить язык"
@@ -41,6 +39,7 @@ kick:
   help: "/nkick <игрок> <причина> : Кикнуть указанного игрока."
   well_kick: "&a[&2Negativity&a]&c %name% был кикнут за %reason%."
   kicked: "Вы кикнуты игроком %name% за %reason%"
+  neg_kick: "&a[&2Negativity&a]&c Вы были кикнуты с этого сервера за Читы (%cheat%)"
 report:
   report_usage: "/report <игрок> <причина>"
   well_report: "&aИгрок %name% получил репорт!"

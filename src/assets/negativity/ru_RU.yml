@@ -41,6 +41,12 @@ unban {
   help = [
     "/nunban <игрок> : Разбанить забаненного игрока." ]
 }
+kick {
+  help: "/nkick <игрок> <причина> : Кикнуть указанного игрока."
+  well_kick: "&a[&2Negativity&a]&c %name% был кикнут за %reason%."
+  kicked: "Вы кикнуты игроком %name% за %reason%"
+  neg_kick: "&a[&2Negativity&a]&c Вы были кикнуты с этого сервера за Читы (%cheat%)"
+}
 suspect {
   no_suspects_set: "&cNo suspects specified"
   starting_full_analysis: "&a[&2Negativity&a] &7Starting full analysis of &o%suspects%"

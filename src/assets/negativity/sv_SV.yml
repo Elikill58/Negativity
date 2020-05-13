@@ -9,8 +9,6 @@ none: "none"
 console: "Administrator"
 fake_entities: "Fake players"
 
-kick: "&a[&2Negativity&a]&c Du har blivit kickad för att du fuska. (%cheat%)"
-
 lang {
   invalid_lang: "%arg% isn't a valid lang !"
   help: "/lang <new lang> : Byta originella språket"
@@ -45,6 +43,7 @@ kick {
   help: "/kick <spelare> <anledning> : Kicka den specificerade spelaren"
   well_kick: "&a[&2Negativity&a]&c %name% blev kickad för %reason%."
   kicked: "Du blev kickad av %playername% för %reason%"
+  neg_kick: "&a[&2Negativity&a]&c Du har blivit kickad för att du fuska. (%cheat%)"
 }
 report {
   report_usage: "/report <namn> <anledning>"

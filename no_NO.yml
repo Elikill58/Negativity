@@ -9,8 +9,6 @@ none: "none"
 console: "Administrator"
 fake_entities: "Fake players"
 
-kick: "&a[&2Negativity&a]&c du har blitt sparket fra denne serveren for juksing (%cheat%)"
-
 lang:
   invalid_lang: "%arg% isn't a valid lang !"
   help: "/lang <new lang> : Change the default language"
@@ -41,6 +39,7 @@ kick:
   help: "/nkick <player> <reason> : Spark den angitte spilleren"
   well_kick: "&a[&2Negativity&a]&c %name% Ble kicket for %reason%."
   kicked: "Du har blitt kicket av %name% for %reason%"
+  neg_kick: "&a[&2Negativity&a]&c du har blitt sparket fra denne serveren for juksing (%cheat%)"
 report:
   report_usage: "/report <navn> <grunn>"
   well_report: "&a%name% rapport vellykket !"

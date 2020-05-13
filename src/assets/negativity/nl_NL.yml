@@ -9,8 +9,6 @@ none: "geen"
 console: "Administrator"
 fake_entities: "Neppe spelers"
 
-kick: "&a[&2Negativity&a]&c Je bent van de server geschopt voor Cheaten (%cheat%)"
-
 ban {
   kick_time: "&cBan voor %reason% tot %time% door %by%."
   kick_def: "&cDefinitief verbannen voor %reason% door %by%."
@@ -40,6 +38,12 @@ unban {
   not_exact: "%arg% is geen geldige naam van een verbannen speler."
   help = [
     "/unban <speler> : Unban een speler" ]
+}
+kick {
+  help: "/nkick <speler> <reden> : Kick de opgegeven speler."
+  well_kick: "&a[&2Negativity&a]&c %name% is succesvol gekicked voor %reason%."
+  kicked: "Je bent gekicked door %name% voor %reason%."
+  neg_kick: "&a[&2Negativity&a]&c Je bent van de server geschopt voor Cheaten (%cheat%)"
 }
 suspect {
   no_suspects_set: "&cGeen verdachten opgegeven"

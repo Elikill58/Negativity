@@ -14,8 +14,6 @@ none: "không"
 console: "Quản trị viên"
 fake_entities: "Người chơi giả"
 
-kick: "&a[&2Chú Cảnh Sát&a]&c Bạn đã bị kick vì nghi vấn hack (%cheat%)."
-
 lang:
   invalid_lang: "%arg% Không phải là một ngôn ngữ!"
   help: "/lang <ngôn ngữ mới> : Thay đổi ngôn ngữ"
@@ -47,6 +45,7 @@ kick:
   help: "/kick <ng. chơi> <lý do> : Đá người chơi được chỉ định"
   well_kick: "&a[&2Negativity&a]&c %name% đã bị đá vì %reason%."
   kicked: "Bạn bị đá bởi %name% vì %reason%"
+  neg_kick: "&a[&2Chú Cảnh Sát&a]&c Bạn đã bị kick vì nghi vấn hack (%cheat%)."
 report:
   report_usage: "/report <tên> <lý do>"
   well_report: "&a%name% báo cáo thành công !"

@@ -9,8 +9,6 @@ none: "none"
 console: "Administrador"
 fake_entities: "Jugadores falsos"
 
-kick: "&a[&2Negativity&a]&c Has sido echado del servidor por usar trampas (%cheat%)"
-
 lang:
   invalid_lang: "%arg% no es un idioma válido !"
   help: "/lang <new lang> : Cambia el idioma por defecto"
@@ -41,6 +39,7 @@ kick:
   help: "/kick <jugador> <razón> : Expulsa a un jugador en especifico"
   well_kick: "&a[&2Negativity&a]&c %name% ha sido expulsado por %reason%."
   kicked: "Has expulsado a %name% por %reason%"
+  neg_kick: "&a[&2Negativity&a]&c Has sido echado del servidor por usar trampas (%cheat%)"
 report:
   report_usage: "/report <usuario> <razón>"
   well_report: "&a%name% reportado correctamente !"

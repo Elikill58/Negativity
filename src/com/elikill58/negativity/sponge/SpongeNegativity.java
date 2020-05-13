@@ -59,6 +59,7 @@ import org.spongepowered.api.util.blockray.BlockRayHit;
 import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.commands.BanCommand;
+import com.elikill58.negativity.sponge.commands.KickCommand;
 import com.elikill58.negativity.sponge.commands.LangCommand;
 import com.elikill58.negativity.sponge.commands.MigrateOldBansCommand;
 import com.elikill58.negativity.sponge.commands.ModCommand;
@@ -67,8 +68,8 @@ import com.elikill58.negativity.sponge.commands.ReportCommand;
 import com.elikill58.negativity.sponge.commands.UnbanCommand;
 import com.elikill58.negativity.sponge.inventories.AbstractInventory;
 import com.elikill58.negativity.sponge.listeners.FightManager;
-import com.elikill58.negativity.sponge.listeners.InventoryClickManagerEvent;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
+import com.elikill58.negativity.sponge.listeners.PlayersEventsManager;
 import com.elikill58.negativity.sponge.packets.PacketGateManager;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
 import com.elikill58.negativity.sponge.timers.PacketsTimers;
@@ -121,7 +122,6 @@ public class SpongeNegativity {
 	private HoconConfigurationLoader configLoader;
 	public static RawDataChannel channel = null, fmlChannel = null;
 
-	public static final Map<UUID, Map<Cheat, Long>> LAST_ALERTS_TIME = new HashMap<>();
 	private final Map<String, CommandMapping> reloadableCommands = new HashMap<>();
 	private static int timeBetweenAlert = -1;
 
@@ -147,8 +147,9 @@ public class SpongeNegativity {
 			if(c.hasListener())
 				eventManager.registerListeners(this, c);
 		}
-		eventManager.registerListeners(this, new InventoryClickManagerEvent());
 		eventManager.registerListeners(this, new FightManager());
+		eventManager.registerListeners(this, new PlayersEventsManager());
+		
 		Task.builder().execute(new PacketsTimers()).delayTicks(0).interval(1, TimeUnit.SECONDS)
 				.name("negativity-packets").submit(this);
 		Task.builder().execute(new ActualizerTimer()).interval(1, TimeUnit.SECONDS)
@@ -266,6 +267,7 @@ public class SpongeNegativity {
 			cmd.register(this, NegativityCommand.create(), "negativity");
 			cmd.register(this, MigrateOldBansCommand.create(), "negativitymigrateoldbans");
 			cmd.register(this, ModCommand.create(), "mod");
+			cmd.register(this, KickCommand.create(), "nkick");
 			cmd.register(this, LangCommand.create(), "nlang");
 		}
 
@@ -524,7 +526,7 @@ public class SpongeNegativity {
 			PlayerCheatEvent.Kick kick = new PlayerCheatEvent.Kick(type, p, c, reliability, hover_proof, ping);
 			Sponge.getEventManager().post(kick);
 			if (!kick.isCancelled())
-				p.kick(Messages.getMessage(p, "kick", "%cheat%", c.getName()));
+				p.kick(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName()));
 		}
 		if(np.isBanned()) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");

@@ -9,8 +9,6 @@ none: "无"
 console: "管理员"
 fake_entities: "假的玩家"
 
-kick: "&a[&2弊绝风清&a]&c您由于使用作弊程序 (%cheat%) 而被踢出了此服务器"
-
 lang:
   invalid_lang: "%arg% isn't a valid lang !"
   help: "/lang <new lang> : Change the default language"
@@ -41,6 +39,7 @@ kick:
   help: "/nkick <玩家名> <原因> : 踢出指定的玩家"
   well_kick: "&a[&2弊绝风清&a]&c 因为 %reason% %name% 被踢出"
   kicked: "你被 %name% 踢出，因为 %reason%"
+  neg_kick: "&a[&2弊绝风清&a]&c您由于使用作弊程序 (%cheat%) 而被踢出了此服务器"
 report:
   report_usage: "/report <名称> <理由>"
   well_report: "&a已成功举报 %name%！"

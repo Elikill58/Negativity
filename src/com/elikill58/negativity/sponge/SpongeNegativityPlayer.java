@@ -868,6 +868,10 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public static SpongeNegativityPlayer getNegativityPlayer(Player player) {
 		return PLAYERS_CACHE.computeIfAbsent(player.getUniqueId(), id -> new SpongeNegativityPlayer(player));
 	}
+	
+	public static Map<UUID, SpongeNegativityPlayer> getAllPlayers(){
+		return PLAYERS_CACHE;
+	}
 
 	public static void removeFromCache(Player player) {
 		removeFromCache(player.getUniqueId());

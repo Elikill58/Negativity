@@ -9,8 +9,6 @@ none: "none"
 console: "Administrator"
 fake_entities: "Fake players"
 
-kick: "&a[&2Negativity&a]&c You have been kicked from this server for Cheating (%cheat%)"
-
 lang:
   invalid_lang: "%arg% isn't a valid lang !"
   help: "/lang <new lang> : Change the default language"
@@ -41,6 +39,7 @@ kick:
   help: "/kick <player> <reason> : Kick the specified player"
   well_kick: "&a[&2Negativity&a]&c %name% well kicked for %reason%."
   kicked: "You have been kick by %name% for %reason%"
+  neg_kick: "&a[&2Negativity&a]&c You have been kicked from this server for Cheating (%cheat%)"
 report:
   report_usage: "/report <name> <reason>"
   well_report: "&a%name% reported successfully !"

@@ -4,9 +4,6 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
 
 public class EssentialsSupport {
-
-	
-
 	
 	public static float getEssentialsRealMoveSpeed(Player p) {
         final float defaultSpeed = p.get(Keys.IS_FLYING).orElse(false) ? 0.1f : 0.2f;

@@ -81,6 +81,7 @@ public abstract class AbstractInventory implements Listener {
 		pm.registerEvents(new OneCheatInventory(), pl);
 		pm.registerEvents(new AdminInventory(), pl);
 		pm.registerEvents(new LangInventory(), pl);
+		pm.registerEvents(new FreezeInventory(), pl);
 	}
 	
 	public static enum InventoryType {

@@ -9,8 +9,6 @@ none: "zaden"
 console: "Administrator"
 fake_entities: "Falszywi gracze"
 
-kick: "&a[&2Negativity&a]&c Zostales wyrzucony z tego serwera za Oszukiwanie (%cheat%)"
-
 lang {
   invalid_lang: "%arg% nie jest prawidlowym jezykiem !"
   help: "/lang <nowy jezyk> : Zmien domyslny jezyk"
@@ -44,6 +42,7 @@ kick {
   help: "/kick <gracz> <powod> : wyrzuc okreslonego gracza"
   well_kick: "&a[&2Negativity&a]&c %name% dobrze wyrzucony %reason%."
   kicked: "Zostales wyrzucony %name% za %reason%"
+  neg_kick: "&a[&2Negativity&a]&c Zostales wyrzucony z tego serwera za Oszukiwanie (%cheat%)"
 }
 report {
   report_usage: "/report <nazwa> <powod>"

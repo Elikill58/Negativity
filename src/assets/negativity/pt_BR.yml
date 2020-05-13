@@ -9,8 +9,6 @@ none: "Nenhum"
 console: "Administrador"
 fake_entities: "Jogadores falsos"
 
-kick: "&a[&2Negativity&a]&c Você foi kickado deste servidor por Cheat (%cheat%)"
-
 ban {
   kick_time: "&cProibido por %reason% para cimau %time% por %by%."
   kick_def: "&cPermanentemente proibido por %reason% por %by%."
@@ -40,6 +38,12 @@ unban {
   not_exact: "%arg% isn't the exact name of a banned player."
   help = [
     "/unban <player> : Jogador especificado Unban" ]
+}
+kick {
+  help: "/nkick <jogador> <razão> : Kick um jogador especifico."
+  well_kick: "&a[&2Negativity&a]&c %name% foi kickado por %reason%."
+  kicked: "Você foi kickado por %name% motivo %reason%"
+  neg_kick: "&a[&2Negativity&a]&c Você foi kickado deste servidor por Cheat (%cheat%)"
 }
 suspect {
   no_suspects_set: "&cNo suspects specified"

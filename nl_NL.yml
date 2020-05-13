@@ -9,8 +9,6 @@ none: "geen"
 console: "Administrator"
 fake_entities: "Neppe spelers"
 
-kick: "&a[&2Negativity&a]&c Je bent van de server geschopt voor Cheaten (%cheat%)"
-
 lang:
   invalid_lang: "%arg% is geen geldige taal!"
   help: "/lang <nieuwe taal> : Verander de standaard taal"
@@ -41,6 +39,7 @@ kick:
   help: "/nkick <speler> <reden> : Kick de opgegeven speler."
   well_kick: "&a[&2Negativity&a]&c %name% is succesvol gekicked voor %reason%."
   kicked: "Je bent gekicked door %name% voor %reason%."
+  neg_kick: "&a[&2Negativity&a]&c Je bent van de server geschopt voor Cheaten (%cheat%)"
 report:
   report_usage: "/report <naam> <reden>"
   well_report: "&a%name% is succesvol gerapporteerd!"

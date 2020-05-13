@@ -39,7 +39,7 @@ public class NegativityCmdWrapper implements CommandCallable {
 	@Override
 	public CommandResult process(CommandSource source, String arguments) throws CommandException {
 		if (requiresPlayerSender && !(source instanceof Player)) {
-			throw new CommandException(Messages.getMessage(source, "sender_not_a_player"));
+			throw new CommandException(Messages.getMessage(source, "only_player"));
 		}
 
 		if (negativityPermission != null && source instanceof Player) {

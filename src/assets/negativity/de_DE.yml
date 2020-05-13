@@ -9,8 +9,6 @@ none: "nicht gesetzt"
 console: "Admin"
 fake_entities: "Fake Spieler"
 
-kick: "&a[&2Negativity&a] &cDu wurdest aufgrund von Cheating vom Server geworfen (%cheat%)!"
-
 ban {
   kick_time: "&cDu wurdest von %by% bis %time% gebannt. Grund: %reason%"
   kick_def: "&cDu wurdest von %by% gebannt! Grund: %reason%"
@@ -40,6 +38,12 @@ unban {
   not_exact: "%arg% ist kein Name der gebannten Spieler."
   help = [
     "/unban <Spieler>: Entbanne Spieler" ]
+}
+kick {
+  help: "/kick <player> <reason> : Schmeiße einen Spieler raus"
+  well_kick: "&a[&2Negativity&a]&c %name% wurde gekickt. Grund: %reason%."
+  kicked: "Du wurdest von %name% gekickt. Grund: %reason%"
+  neg_kick: "&a[&2Negativity&a] &cDu wurdest aufgrund von Cheating vom Server geworfen (%cheat%)!"
 }
 suspect {
   no_suspects_set: "&cKeinen Spieler angegeben."

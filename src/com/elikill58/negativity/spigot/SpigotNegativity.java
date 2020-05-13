@@ -36,7 +36,6 @@ import com.elikill58.negativity.spigot.commands.ReportCommand;
 import com.elikill58.negativity.spigot.commands.UnbanCommand;
 import com.elikill58.negativity.spigot.events.ChannelEvents;
 import com.elikill58.negativity.spigot.events.FightManager;
-import com.elikill58.negativity.spigot.events.InventoryEvents;
 import com.elikill58.negativity.spigot.events.PlayersEvents;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
@@ -88,7 +87,6 @@ public class SpigotNegativity extends JavaPlugin {
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
 	public static final Material MATERIAL_CLOSE = Utils.getMaterialWith1_15_Compatibility("BARRIER", "REDSTONE");
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
-	public static final HashMap<Player, HashMap<Cheat, Long>> TIME_LAST_CHEAT_ALERT = new HashMap<>();
 	public static String CHANNEL_NAME_FML = "";
 	private static int timeBetweenAlert = -1;
 	private NegativityPacketManager packetManager;
@@ -131,7 +129,6 @@ public class SpigotNegativity extends JavaPlugin {
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersEvents(), this);
-		pm.registerEvents(new InventoryEvents(), this);
 		pm.registerEvents(new FightManager(), this);
 
 		Messenger messenger = getServer().getMessenger();
@@ -377,7 +374,7 @@ public class SpigotNegativity extends JavaPlugin {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			Bukkit.getPluginManager().callEvent(kick);
 			if (!kick.isCancelled())
-				p.kickPlayer(Messages.getMessage(p, "kick.kicked", "%cheat%", c.getName(), "%reason%", c.getName(), "%playername%", p.getName(), "%cheat%", c.getName()));
+				p.kickPlayer(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName(), "%reason%", np.getReason(c), "%playername%", p.getName()));
 		}
 		if(BanManager.isBanned(np.getUUID())) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");

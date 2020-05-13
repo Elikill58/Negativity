@@ -9,8 +9,6 @@ none: "none"
 console: "Administrator"
 fake_entities: "Fake players"
 
-kick: "&a[&2Negativity&a]&c du har blitt sparket fra denne serveren for juksing (%cheat%)"
-
 ban {
   kick_time: "&cForbud grunn %reason% før %time% av %by%."
   kick_def: "&cForbud definitivt for %reason% av %by%."
@@ -40,6 +38,12 @@ unban {
   not_exact: "%arg% isn't the exact name of a banned player."
   help = [
     "/unban <player> : unforbudt den angitte spilleren" ]
+}
+kick {
+  help: "/nkick <player> <reason> : Spark den angitte spilleren"
+  well_kick: "&a[&2Negativity&a]&c %name% Ble kicket for %reason%."
+  kicked: "Du har blitt kicket av %name% for %reason%"
+  neg_kick: "&a[&2Negativity&a]&c du har blitt sparket fra denne serveren for juksing (%cheat%)"
 }
 suspect {
   no_suspects_set: "&cNo suspects specified"

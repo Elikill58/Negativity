@@ -84,6 +84,7 @@ public abstract class AbstractInventory {
 		pm.registerListeners(np, new OneCheatInventory());
 		pm.registerListeners(np, new AdminInventory());
 		pm.registerListeners(np, new LangInventory());
+		pm.registerListeners(np, new FreezeInventory());
 	}
 
 	protected static void delayedInvClose(Player player) {

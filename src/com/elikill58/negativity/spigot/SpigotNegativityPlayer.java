@@ -792,6 +792,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public static SpigotNegativityPlayer getCached(UUID playerId) {
 		return players.get(playerId);
 	}
+	
+	public static Map<UUID, SpigotNegativityPlayer> getAllPlayers(){
+		return players;
+	}
 
 	public static void removeFromCache(UUID playerId) {
 		SpigotNegativityPlayer cached = players.remove(playerId);

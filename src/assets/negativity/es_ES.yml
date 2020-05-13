@@ -34,7 +34,7 @@ ban {
     "/nban <player> <def | tiempo (ex: 2h5d)> <razón> : Castiga el jugador especificado" ]
   well_ban: "&a[&2Negativity&a]&c %name% ha sido castigado por %reason%."
 }
-unban:
+unban {
   well_unban: "&a[&2Negativity&a]&c %name% ha sido perdonado."
   not_banned: "&c%name% no está castigado."
   not_exact: "%arg% no es un nombre válido exacto del jugador castigado."
@@ -44,6 +44,7 @@ kick {
   help: "/kick <jugador> <razón> : Expulsa a un jugador en especifico"
   well_kick: "&a[&2Negativity&a]&c %name% ha sido expulsado por %reason%."
   kicked: "Has expulsado a %name% por %reason%"
+  neg_kick: "&a[&2Negativity&a]&c Has sido echado del servidor por usar trampas (%cheat%)"
 }
 report {
   report_usage: "/report <usuario> <razón>"

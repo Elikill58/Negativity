@@ -1,4 +1,4 @@
-package com.elikill58.negativity.sponge;
+package com.elikill58.negativity.sponge.packets;
 
 import org.spongepowered.api.Sponge;
 

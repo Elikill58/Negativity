@@ -9,6 +9,8 @@ import org.spongepowered.api.scheduler.Task;
 
 import com.elikill58.negativity.sponge.Inv;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.inventories.AbstractInventory;
+import com.elikill58.negativity.sponge.inventories.AbstractInventory.InventoryType;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -21,9 +23,9 @@ public class ActualizerTimer implements Consumer<Task> {
         for (Player p : Inv.CHECKING.keySet()) {
             if (p.getOpenInventory().get().getName().get().equals(Inv.NAME_ACTIVED_CHEAT_MENU)) {
             } else if (p.getOpenInventory().get().getName().get().equals(Inv.NAME_CHECK_MENU))
-                Inv.actualizeCheckMenu(p, Inv.CHECKING.get(p));
+                AbstractInventory.getInventory(InventoryType.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
             else if (p.getOpenInventory().get().getName().get().equals(Inv.NAME_ALERT_MENU))
-                Inv.actualizeAlertMenu(p, Inv.CHECKING.get(p));
+                AbstractInventory.getInventory(InventoryType.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
             else
                 Inv.CHECKING.remove(p);
         }

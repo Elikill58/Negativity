@@ -3,6 +3,7 @@ package com.elikill58.negativity.sponge.utils;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -14,6 +15,7 @@ import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.PotionEffectData;
 import org.spongepowered.api.data.type.DyeColor;
+import org.spongepowered.api.data.type.DyeColors;
 import org.spongepowered.api.data.type.SkullTypes;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectType;
@@ -28,6 +30,8 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.elikill58.negativity.sponge.Messages;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
@@ -206,5 +210,23 @@ public class Utils {
 	public static Vector3d getPlayerVec(Player p) {
 		Location<World> loc = p.getLocation();
 		return new Vector3d(loc.getX(), loc.getY() + getPlayerHeadHeight(p), loc.getZ());
+	}
+
+	public static DyeColor getByteFromClick(int click) {
+		if (click > 25)
+			return DyeColors.RED;
+		else if (click < 25 && click > 15)
+			return DyeColors.GRAY;
+		else
+			return DyeColors.LIME;
+	}
+	
+	public static ItemStack getMcLeaksIndicator(Player player, NegativityPlayer nPlayer) {
+		ItemStack indicator = ItemStack.of(ItemTypes.WOOL);
+		boolean usesMcLeaks = nPlayer.isMcLeaks();
+		indicator.offer(Keys.DYE_COLOR, usesMcLeaks ? DyeColors.RED : DyeColors.LIME);
+		indicator.offer(Keys.DISPLAY_NAME, Messages.getMessage(player, "inventory.main.mcleaks_indicator." + (usesMcLeaks ? "positive" : "negative")));
+		indicator.offer(Keys.ITEM_LORE, Collections.singletonList(Messages.getMessage(player, "inventory.main.mcleaks_indicator.description")));
+		return indicator;
 	}
 }

@@ -8,7 +8,8 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 
-import com.elikill58.negativity.sponge.Inv;
+import com.elikill58.negativity.sponge.inventories.AbstractInventory;
+import com.elikill58.negativity.sponge.inventories.AbstractInventory.InventoryType;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -17,7 +18,7 @@ public class ModCommand implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) {
 		if (src instanceof Player) {
-			Inv.openModMenu((Player) src);
+			AbstractInventory.open(InventoryType.MOD, (Player) src);
 		}
 
 		return CommandResult.success();

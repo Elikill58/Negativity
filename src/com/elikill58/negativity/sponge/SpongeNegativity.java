@@ -65,9 +65,11 @@ import com.elikill58.negativity.sponge.commands.ModCommand;
 import com.elikill58.negativity.sponge.commands.NegativityCommand;
 import com.elikill58.negativity.sponge.commands.ReportCommand;
 import com.elikill58.negativity.sponge.commands.UnbanCommand;
+import com.elikill58.negativity.sponge.inventories.AbstractInventory;
 import com.elikill58.negativity.sponge.listeners.FightManager;
 import com.elikill58.negativity.sponge.listeners.InventoryClickManagerEvent;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
+import com.elikill58.negativity.sponge.packets.PacketGateManager;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
 import com.elikill58.negativity.sponge.timers.PacketsTimers;
 import com.elikill58.negativity.sponge.timers.PendingAlertsTimer;
@@ -250,6 +252,7 @@ public class SpongeNegativity {
 			fmlChannel = Sponge.getChannelRegistrar().getOrCreateRaw(this, "FML|HS");
 			fmlChannel.addListener(new FmlRawDataListener());
 		}
+		AbstractInventory.init(this);
 	}
 
 	public void reloadCommands() {

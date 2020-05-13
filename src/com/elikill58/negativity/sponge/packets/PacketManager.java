@@ -1,9 +1,11 @@
-package com.elikill58.negativity.sponge;
+package com.elikill58.negativity.sponge.packets;
 
 import java.util.Optional;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+
+import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 
 import eu.crushedpixel.sponge.packetgate.api.event.PacketEvent;
 import eu.crushedpixel.sponge.packetgate.api.listener.PacketListenerAdapter;

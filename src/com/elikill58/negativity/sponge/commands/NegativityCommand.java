@@ -12,13 +12,14 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
-import com.elikill58.negativity.sponge.Inv;
 import com.elikill58.negativity.sponge.Messages;
-import com.elikill58.negativity.sponge.commands.child.ModCommand;
 import com.elikill58.negativity.sponge.commands.child.AdminCommand;
 import com.elikill58.negativity.sponge.commands.child.AlertCommand;
+import com.elikill58.negativity.sponge.commands.child.ModCommand;
 import com.elikill58.negativity.sponge.commands.child.ReloadCommand;
 import com.elikill58.negativity.sponge.commands.child.VerifCommand;
+import com.elikill58.negativity.sponge.inventories.AbstractInventory;
+import com.elikill58.negativity.sponge.inventories.AbstractInventory.InventoryType;
 import com.elikill58.negativity.sponge.utils.NegativityCmdSuggestionsEnhancer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 
@@ -32,7 +33,7 @@ public class NegativityCommand implements CommandExecutor {
 			Messages.sendMessageList(playerSource, "negativity.verif.help");
 			return CommandResult.empty();
 		}
-		Inv.openCheckMenu(playerSource, targetPlayer);
+		AbstractInventory.open(InventoryType.CHECK_MENU, playerSource, targetPlayer);
 		return CommandResult.success();
 	}
 

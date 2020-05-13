@@ -34,7 +34,7 @@ public class ActualizerTimer implements Consumer<Task> {
             if (np.isFreeze && INV_FREEZE_ACTIVE) {
                 Container openInventory = p.getOpenInventory().orElse(null);
                 if (openInventory == null || !Inv.FREEZE_INV_ID.equals(openInventory.getProperty(Identifiable.class, Inv.INV_ID_KEY).orElse(null))) {
-                    Inv.openFreezeMenu(p);
+                    AbstractInventory.open(InventoryType.FREEZE, p);
                 }
             }
 

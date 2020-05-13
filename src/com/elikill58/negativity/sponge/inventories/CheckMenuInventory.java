@@ -99,7 +99,7 @@ public class CheckMenuInventory extends AbstractInventory {
 			npCible.isFreeze = !npCible.isFreeze;
 			if (npCible.isFreeze) {
 				if (ActualizerTimer.INV_FREEZE_ACTIVE)
-					delayed(() -> Inv.openFreezeMenu(cible));
+					delayed(() -> AbstractInventory.open(InventoryType.FREEZE, cible));
 				Messages.sendMessage(p, "inventory.main.freeze", "%name%", cible.getName());
 			} else {
 				delayedInvClose(p);

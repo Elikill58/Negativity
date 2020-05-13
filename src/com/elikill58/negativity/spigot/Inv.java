@@ -2,11 +2,9 @@ package com.elikill58.negativity.spigot;
 
 import java.util.HashMap;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -32,11 +30,5 @@ public class Inv {
 		ItemMeta emptyItemMeta = EMPTY.getItemMeta();
 		emptyItemMeta.setDisplayName(ChatColor.RESET.toString());
 		EMPTY.setItemMeta(emptyItemMeta);
-	}
-
-	public static void openFreezeMenu(Player p) {
-		Inventory inv = Bukkit.createInventory(null, 27, NAME_FREEZE_MENU);
-		inv.setItem(13, Utils.createItem(Material.PAPER, Messages.getMessage(p, "inventory.mod.you_are_freeze")));
-		p.openInventory(inv);
 	}
 }

@@ -124,14 +124,13 @@ public class CheckMenuInventory extends AbstractInventory {
 				np.isFreeze = !np.isFreeze;
 				if (np.isFreeze) {
 					if (Adapter.getAdapter().getBooleanInConfig("inventory.inv_freeze_active"))
-						Inv.openFreezeMenu(cible);
+						AbstractInventory.open(InventoryType.FREEZE, cible);
 					Messages.sendMessage(cible, "inventory.main.freeze", "%name%", p.getName());
 				} else
 					Messages.sendMessage(cible, "inventory.main.unfreeze", "%name%", p.getName());
 				break;
 			case PAPER:
 				AbstractInventory.open(InventoryType.ALERT, p, cible);
-				//AlertInventory.openAlertMenu(p, cible);
 				break;
 			case GRASS:
 				AbstractInventory.open(InventoryType.FORGE_MODS, p);

@@ -33,7 +33,7 @@ public class ActualizeInvTimer extends BukkitRunnable {
 		}
 		for (Player p : Utils.getOnlinePlayers()) {
 			if (SpigotNegativityPlayer.getNegativityPlayer(p).isFreeze && INV_FREEZE_ACTIVE) {
-				Inv.openFreezeMenu(p);
+				AbstractInventory.open(InventoryType.FREEZE, p);
 			}
 		}
 	}

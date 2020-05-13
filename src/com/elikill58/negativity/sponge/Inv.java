@@ -6,14 +6,8 @@ import java.util.UUID;
 import org.spongepowered.api.data.type.DyeColors;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemTypes;
-import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.property.Identifiable;
-import org.spongepowered.api.item.inventory.property.InventoryDimension;
-import org.spongepowered.api.item.inventory.property.InventoryTitle;
-import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
-import org.spongepowered.api.item.inventory.type.GridInventory;
-import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.utils.Utils;
 
@@ -36,15 +30,4 @@ public class Inv {
 	public static final Identifiable FORGE_MODS_INV_ID = new Identifiable(UUID.fromString("258670f4-d66c-4ad4-8fc6-4f3914026d54"));
 	public static final Identifiable ADMIN_INV_ID = new Identifiable(UUID.fromString("1f4bd048-2e4f-4143-8703-2ce8d46f19d0"));
 	public static final Identifiable LANG_INV_ID = new Identifiable(UUID.fromString("68f4d048-43cb-a15e-8a1b-2ce8d4a1baf5"));
-
-	public static void openFreezeMenu(Player p) {
-		Inventory inv = Inventory.builder()
-				.property(InventoryTitle.PROPERTY_NAME, new InventoryTitle(Text.of(NAME_FREEZE_MENU)))
-				.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, 3))
-				.property(INV_ID_KEY, FREEZE_INV_ID)
-				.build(SpongeNegativity.getInstance());
-		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		invGrid.set(4, 1, Utils.createItem(ItemTypes.PAPER, Messages.getStringMessage(p, "inventory.mod.you_are_freeze")));
-		p.openInventory(inv);
-	}
 }

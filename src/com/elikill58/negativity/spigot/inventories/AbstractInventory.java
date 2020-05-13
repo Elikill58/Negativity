@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
@@ -54,6 +55,7 @@ public abstract class AbstractInventory implements Listener {
 
 	public abstract boolean isInstance(NegativityHolder nh);
 	public abstract void openInventory(Player p, Object... args);
+	public void closeInventory(Player p, InventoryCloseEvent e) {}
 	public abstract void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh);
 	public void actualizeInventory(Player p, Object... args) {}
 	
@@ -87,6 +89,7 @@ public abstract class AbstractInventory implements Listener {
 		ALERT,
 		CHECK_MENU,
 		CHEAT_MANAGER,
+		FREEZE,
 		MOD,
 		ONE_CHEAT,
 		FORGE_MODS,

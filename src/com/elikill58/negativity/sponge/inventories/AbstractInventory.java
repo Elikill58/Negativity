@@ -10,14 +10,18 @@ import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.item.inventory.ClickInventoryEvent;
+import org.spongepowered.api.event.item.inventory.InteractInventoryEvent;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import org.spongepowered.api.scheduler.Task;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
-import com.elikill58.negativity.sponge.inventories.admin.*;
-import com.elikill58.negativity.sponge.inventories.holders.*;
+import com.elikill58.negativity.sponge.inventories.admin.AdminInventory;
+import com.elikill58.negativity.sponge.inventories.admin.CheatManagerInventory;
+import com.elikill58.negativity.sponge.inventories.admin.LangInventory;
+import com.elikill58.negativity.sponge.inventories.admin.OneCheatInventory;
+import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
 
 public abstract class AbstractInventory {
 
@@ -54,6 +58,7 @@ public abstract class AbstractInventory {
 
 	public abstract boolean isInstance(NegativityHolder nh);
 	public abstract void openInventory(Player p, Object... args);
+	public void closeInventory(Player p, InteractInventoryEvent.Close e) {}
 	public abstract void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh);
 	public void actualizeInventory(Player p, Object... args) {}
 	
@@ -97,6 +102,7 @@ public abstract class AbstractInventory {
 		ALERT,
 		CHECK_MENU,
 		CHEAT_MANAGER,
+		FREEZE,
 		MOD,
 		ONE_CHEAT,
 		FORGE_MODS,

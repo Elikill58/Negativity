@@ -1,20 +1,24 @@
 package com.elikill58.negativity.universal;
 
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.Consumer;
 
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
+import com.elikill58.negativity.universal.pluginMessages.AccountUpdateMessage;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 
 public class SimpleAccountManager extends NegativityAccountManager {
 
-	private final Map<UUID, NegativityAccount> accounts = Collections.synchronizedMap(new HashMap<>());
+	protected final Map<UUID, NegativityAccount> accounts = Collections.synchronizedMap(new HashMap<>());
 	private final Map<UUID, CompletableFuture<NegativityAccount>> pendingRequests = Collections.synchronizedMap(new HashMap<>());
 	private final boolean persistent;
 
@@ -61,9 +65,43 @@ public class SimpleAccountManager extends NegativityAccountManager {
 		return CompletableFuture.completedFuture(null);
 	}
 
+	@Override
+	public void update(NegativityAccount account) {
+		accounts.put(account.getPlayerId(), account);
+	}
+
 	@Nullable
 	@Override
 	public NegativityAccount dispose(UUID accountId) {
 		return accounts.remove(accountId);
+	}
+
+	public static class Proxy extends SimpleAccountManager {
+
+		public Proxy() {
+			super(false);
+		}
+	}
+
+	public static class Server extends SimpleAccountManager {
+
+		private final Consumer<byte[]> updateMessageSender;
+
+		public Server(Consumer<byte[]> updateMessageSender) {
+			super(true);
+			this.updateMessageSender = updateMessageSender;
+		}
+
+		public void sendAccountToProxy(UUID accountId) throws IOException {
+			NegativityAccount account = accounts.get(accountId);
+			if (account != null) {
+				sendAccountToProxy(account);
+			}
+		}
+
+		public void sendAccountToProxy(NegativityAccount account) throws IOException {
+			byte[] rawMessage = NegativityMessagesManager.writeMessage(new AccountUpdateMessage(account));
+			updateMessageSender.accept(rawMessage);
+		}
 	}
 }

@@ -43,7 +43,7 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 
 	private final ConfigAdapter config;
 	private final Plugin pl;
-	private final NegativityAccountManager accountManager = new SimpleAccountManager(false);
+	private final NegativityAccountManager accountManager = new SimpleAccountManager.Proxy();
 
 	public BungeeAdapter(Plugin pl, ConfigAdapter config) {
 		this.pl = pl;

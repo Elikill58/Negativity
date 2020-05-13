@@ -43,7 +43,7 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 
 	private ConfigAdapter config;
 	private VelocityNegativity pl;
-	private final NegativityAccountManager accountManager = new SimpleAccountManager(false);
+	private final NegativityAccountManager accountManager = new SimpleAccountManager.Proxy();
 
 	public VelocityAdapter(VelocityNegativity pl, ConfigAdapter config) {
 		this.pl = pl;

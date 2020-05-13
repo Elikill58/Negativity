@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.commands;
 
+import java.io.IOException;
 import java.util.function.Function;
 
 import org.spongepowered.api.command.CommandCallable;
@@ -13,9 +14,13 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.Messages;
+import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityAccountManager;
+import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -31,6 +36,14 @@ public class LangCommand implements CommandExecutor {
 		NegativityAccount account = NegativityAccount.get(((Player) src).getUniqueId());
 		account.setLang(language);
 		NegativityAccountStorage.getStorage().saveAccount(account);
+		NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
+		if (accountManager instanceof SimpleAccountManager.Server) {
+			try {
+				((SimpleAccountManager.Server) accountManager).sendAccountToProxy(account);
+			} catch (IOException e) {
+				SpongeNegativity.getInstance().getLogger().error("Could not send account update to proxy", e);
+			}
+		}
 
 		Messages.sendMessage(src, "lang.language_set");
 

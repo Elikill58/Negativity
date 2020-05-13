@@ -54,6 +54,13 @@ public abstract class NegativityAccountManager {
 	public abstract CompletableFuture<Void> save(UUID accountId);
 
 	/**
+	 * Makes this manager use the the given account's data instead of what it may have already.
+	 *
+	 * @param account the account to use
+	 */
+	public abstract void update(NegativityAccount account);
+
+	/**
 	 * Indicates that the account for the given UUID can be forgotten by this manager.
 	 * <p>
 	 * What this method does is completely up to the implementing class, it may do nothing,

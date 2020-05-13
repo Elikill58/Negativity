@@ -47,7 +47,7 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	private final SpongeNegativity plugin;
 	private ConfigAdapter config;
 	private final Path messagesDir;
-	private final NegativityAccountManager accountManager = new SimpleAccountManager(true);
+	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpongeNegativity::sendPluginMessage);
 
 	public SpongeAdapter(SpongeNegativity sn, ConfigAdapter config) {
 		this.plugin = sn;

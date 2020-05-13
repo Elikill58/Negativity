@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -42,8 +43,10 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
@@ -162,6 +165,14 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		NegativityAccount account = getAccount();
 		account.setLang(newLang);
 		NegativityAccountStorage.getStorage().saveAccount(account);
+		NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
+		if (accountManager instanceof SimpleAccountManager.Server) {
+			try {
+				((SimpleAccountManager.Server) accountManager).sendAccountToProxy(account);
+			} catch (IOException e) {
+				SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not send account update to proxy", e);
+			}
+		}
 	}
 
 	public void clearPackets() {

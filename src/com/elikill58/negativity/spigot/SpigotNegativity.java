@@ -176,14 +176,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 		StringJoiner supportedPluginName = new StringJoiner(", ");
 		BanManager.registerProcessor("bukkit", new BukkitBanProcessor());
-		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(rawMessage -> {
-			Player player = Utils.getFirstOnlinePlayer();
-			if (player != null) {
-				player.sendPluginMessage(this, NegativityMessagesManager.CHANNEL_ID, rawMessage);
-			} else {
-				getLogger().severe("Could not send ban revocation request to proxy because there are no player online.");
-			}
-		}));
+		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(SpigotNegativity::sendPluginMessage));
 		if (Bukkit.getPluginManager().getPlugin("Essentials") != null) {
 			essentialsSupport = true;
 			supportedPluginName.add("Essentials");
@@ -557,6 +550,15 @@ public class SpigotNegativity extends JavaPlugin {
 			if(pl.timeTimeBetweenAlert != null)
 				pl.timeTimeBetweenAlert.cancel();
 			(pl.timeTimeBetweenAlert = new TimerTimeBetweenAlert()).runTaskTimer(pl, timeTick, timeTick);
+		}
+	}
+
+	public static void sendPluginMessage(byte[] rawMessage) {
+		Player player = Utils.getFirstOnlinePlayer();
+		if (player != null) {
+			player.sendPluginMessage(getInstance(), NegativityMessagesManager.CHANNEL_ID, rawMessage);
+		} else {
+			getInstance().getLogger().severe("Could not send plugin message to proxy because there are no player online.");
 		}
 	}
 }

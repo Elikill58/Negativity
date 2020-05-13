@@ -13,7 +13,12 @@ public class Minerate {
 		for(MinerateType type : MinerateType.values())
 			mined.put(type, 0);
 	}
-	
+
+	public Minerate(HashMap<MinerateType, Integer> mined, int fullMined) {
+		this.mined = mined;
+		this.fullMined = fullMined;
+	}
+
 	public void setMine(MinerateType type, int value) {
 		mined.put(type, value);
 	}
@@ -32,6 +37,10 @@ public class Minerate {
 
 	public Integer getMinerateType(MinerateType type) {
 		return mined.get(type);
+	}
+
+	public int getFullMined() {
+		return fullMined;
 	}
 
 	public String[] getInventoryLoreString() {

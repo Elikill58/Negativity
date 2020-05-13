@@ -173,14 +173,7 @@ public class SpongeNegativity {
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
 		BanManager.registerProcessor("sponge", new SpongeBanProcessor());
-		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(rawMessage -> {
-			Player player = Utils.getFirstOnlinePlayer();
-			if (player != null) {
-				channel.sendTo(player, payload -> payload.writeBytes(rawMessage));
-			} else {
-				logger.error("Could not send ban revocation request to proxy because there are no player online.");
-			}
-		}));
+		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(SpongeNegativity::sendPluginMessage));
 		Perm.registerChecker(Perm.PLATFORM_CHECKER, new SpongePermissionChecker());
 
 		if(SpongeUpdateChecker.ifUpdateAvailable()) {
@@ -650,6 +643,15 @@ public class SpongeNegativity {
 				SpongeNegativity.getInstance().getLogger().error("Could not write ProxyPingMessage.", ex);
 			}
 		});
+	}
+
+	public static void sendPluginMessage(byte[] rawMessage) {
+		Player player = Utils.getFirstOnlinePlayer();
+		if (player != null) {
+			channel.sendTo(player, payload -> payload.writeBytes(rawMessage));
+		} else {
+			getInstance().getLogger().error("Could not send plugin message to proxy because there are no player online.");
+		}
 	}
 
 	public static void trySendProxyPing() {

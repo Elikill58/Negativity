@@ -10,10 +10,12 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.pluginMessages.AccountUpdateMessage;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
@@ -120,6 +122,10 @@ public class NegativityListener implements Listener {
 		} else if (message instanceof ProxyRevokeBanMessage) {
 			ProxyRevokeBanMessage revocationMessage = (ProxyRevokeBanMessage) message;
 			BanManager.revokeBan(revocationMessage.getPlayerId());
+		} else if (message instanceof AccountUpdateMessage) {
+			AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) message;
+			NegativityAccount account = accountUpdateMessage.getAccount();
+			Adapter.getAdapter().getAccountManager().update(account);
 		} else {
 			BungeeNegativity.getInstance().getLogger().log(Level.WARNING, "Unhandled plugin message %s.", message.getClass());
 		}

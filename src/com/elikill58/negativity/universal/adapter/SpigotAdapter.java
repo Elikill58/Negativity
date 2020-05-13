@@ -49,7 +49,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 
 	private JavaPlugin pl;
 	private ConfigAdapter config;
-	private NegativityAccountManager accountManager = new SimpleAccountManager(true);
+	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpigotNegativity::sendPluginMessage);
 
 	public SpigotAdapter(JavaPlugin pl) {
 		this.pl = pl;

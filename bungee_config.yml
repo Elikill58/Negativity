@@ -107,11 +107,9 @@ ban:
 accounts:
   storage:
     # The ID of the storage to use.
-    # Note that when using a proxy (hasBungeecord is set to true) this option is ignored
-    # and the proxy will keep the game server accounts up-to-date.
+    # For proxies it is only used for loading account's data, saving must be handled by the game server
     #
     # The following are available out-of-the-box:
-    # - file : stored in files under ./plugins/Negativity/user/
     # - database : uses a database
-    # Defaults to "file"
-    id: "file"
+    # Defaults to "database"
+    id: "database"

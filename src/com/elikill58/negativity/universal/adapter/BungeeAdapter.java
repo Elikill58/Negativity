@@ -22,8 +22,6 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
-import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
-import com.elikill58.negativity.universal.dataStorage.file.ProxyFileNegativityAccountStorage;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
@@ -48,7 +46,6 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 	public BungeeAdapter(Plugin pl, ConfigAdapter config) {
 		this.pl = pl;
 		this.config = config;
-		NegativityAccountStorage.register("file", new ProxyFileNegativityAccountStorage());
 	}
 
 	@Override

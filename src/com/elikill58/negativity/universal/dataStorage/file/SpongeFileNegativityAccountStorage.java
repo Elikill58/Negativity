@@ -39,7 +39,7 @@ public class SpongeFileNegativityAccountStorage extends NegativityAccountStorage
 		try {
 			ConfigurationNode node = HoconConfigurationLoader.builder().setPath(filePath).build().load();
 			String language = node.getNode("lang").getString(TranslatedMessages.getDefaultLang());
-			Minerate minerate = deserializeMinerate(node.getNode("minerate"));
+			Minerate minerate = deserializeMinerate(node.getNode("minerate-full-mined").getInt(), node.getNode("minerate"));
 			int mostClicksPerSecond = node.getNode("better-click").getInt();
 			Map<String, Integer> warns = deserializeViolations(node.getNode("cheats"));
 			return CompletableFuture.completedFuture(new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns));
@@ -57,6 +57,7 @@ public class SpongeFileNegativityAccountStorage extends NegativityAccountStorage
 			Files.createDirectories(userDir);
 			CommentedConfigurationNode accountNode = Files.exists(filePath) ? loader.load() : loader.createEmptyNode();
 			accountNode.getNode("lang").setValue(account.getLang());
+			accountNode.getNode("minerate-full-mined").setValue(account.getMinerate().getFullMined());
 			serializeMinerate(account.getMinerate(), accountNode.getNode("minerate"));
 			accountNode.getNode("better-click").setValue(account.getMostClicksPerSecond());
 			serializeViolations(account, accountNode.getNode("cheats"));
@@ -75,17 +76,17 @@ public class SpongeFileNegativityAccountStorage extends NegativityAccountStorage
 		}
 	}
 
-	private static Minerate deserializeMinerate(ConfigurationNode minerateNode) {
-		Minerate minerate = new Minerate();
+	private static Minerate deserializeMinerate(int fullMined, ConfigurationNode minerateNode) {
+		HashMap<Minerate.MinerateType, Integer> mined = new HashMap<>();
 		for (Map.Entry<Object, ? extends ConfigurationNode> minerateEntry : minerateNode.getChildrenMap().entrySet()) {
 			Minerate.MinerateType minerateType = Minerate.MinerateType.getMinerateType(minerateEntry.getKey().toString());
 			if (minerateType == null) {
 				continue;
 			}
 			int value = minerateEntry.getValue().getInt();
-			minerate.setMine(minerateType, value);
+			mined.put(minerateType, value);
 		}
-		return minerate;
+		return new Minerate(mined, fullMined);
 	}
 
 	private void serializeViolations(NegativityAccount account, CommentedConfigurationNode cheatsNode) {

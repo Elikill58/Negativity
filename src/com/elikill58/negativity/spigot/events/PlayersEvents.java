@@ -33,7 +33,6 @@ import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -147,6 +146,6 @@ public class PlayersEvents implements Listener {
 	public void onBlockBreakEvent(BlockBreakEvent e) {
 		NegativityAccount account = NegativityAccount.get(e.getPlayer().getUniqueId());
 		account.getMinerate().addMine(MinerateType.getMinerateType(e.getBlock().getType().name()), e.getPlayer());
-		NegativityAccountStorage.getStorage().saveAccount(account);
+		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
 	}
 }

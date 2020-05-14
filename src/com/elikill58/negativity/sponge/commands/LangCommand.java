@@ -21,7 +21,6 @@ import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 
 public class LangCommand implements CommandExecutor {
@@ -35,8 +34,8 @@ public class LangCommand implements CommandExecutor {
 		String language = args.requireOne("language");
 		NegativityAccount account = NegativityAccount.get(((Player) src).getUniqueId());
 		account.setLang(language);
-		NegativityAccountStorage.getStorage().saveAccount(account);
 		NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
+		accountManager.save(account.getPlayerId());
 		if (accountManager instanceof SimpleAccountManager.Server) {
 			try {
 				((SimpleAccountManager.Server) accountManager).sendAccountToProxy(account);

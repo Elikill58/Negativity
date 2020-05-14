@@ -49,7 +49,6 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {
@@ -139,7 +138,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public void setBetterClick(int click) {
 		NegativityAccount account = getAccount();
 		account.setMostClicksPerSecond(click);
-		NegativityAccountStorage.getStorage().saveAccount(account);
+		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
 	}
 
 	@Deprecated
@@ -152,20 +151,20 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return;
 		NegativityAccount account = getAccount();
 		account.setWarnCount(c, account.getWarn(c) + 1);
-		NegativityAccountStorage.getStorage().saveAccount(account);
+		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
 	}
 
 	public void setWarn(Cheat c, int cheats) {
 		NegativityAccount account = getAccount();
 		account.setWarnCount(c, cheats);
-		NegativityAccountStorage.getStorage().saveAccount(account);
+		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
 	}
 	
 	public void setLang(String newLang) {
 		NegativityAccount account = getAccount();
 		account.setLang(newLang);
-		NegativityAccountStorage.getStorage().saveAccount(account);
 		NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
+		accountManager.save(account.getPlayerId());
 		if (accountManager instanceof SimpleAccountManager.Server) {
 			try {
 				((SimpleAccountManager.Server) accountManager).sendAccountToProxy(account);

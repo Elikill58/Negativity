@@ -38,7 +38,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 			ResultSet result = stm.executeQuery();
 			if (result.next()) {
 				String language = result.getString("language");
-				Minerate minerate = deserializeMinerate(result.getString("minerate"));
+				Minerate minerate = deserializeMinerate(result.getInt("minerate_full_mined"), result.getString("minerate"));
 				int mostClicksPerSecond = result.getInt("most_clicks_per_second");
 				Map<String, Integer> warns = deserializeViolations(result.getString("violations_by_cheat"));
 				return CompletableFuture.completedFuture(new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns));
@@ -52,13 +52,14 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 	@Override
 	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
-				"REPLACE INTO negativity_accounts (id, playername, language, minerate, most_clicks_per_second, violations_by_cheat) VALUES (?, ?, ?, ?, ?, ?)")) {
+				"REPLACE INTO negativity_accounts (id, playername, language, minerate_full_mined, minerate, most_clicks_per_second, violations_by_cheat) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
 			stm.setString(1, account.getPlayerId().toString());
 			stm.setString(2, null);
 			stm.setString(3, account.getLang());
-			stm.setString(4, serializeMinerate(account.getMinerate()));
-			stm.setInt(5, account.getMostClicksPerSecond());
-			stm.setString(6, serializeViolations(account));
+			stm.setInt(4, account.getMinerate().getFullMined());
+			stm.setString(5, serializeMinerate(account.getMinerate()));
+			stm.setInt(6, account.getMostClicksPerSecond());
+			stm.setString(7, serializeViolations(account));
 			stm.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -75,8 +76,8 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 		return joiner.toString();
 	}
 
-	private static Minerate deserializeMinerate(String serialized) {
-		Minerate minerate = new Minerate();
+	private static Minerate deserializeMinerate(int minerateFullMined, String serialized) {
+		HashMap<Minerate.MinerateType, Integer> mined = new HashMap<>();
 		String[] rateEntries = serialized.split(";");
 		for (String fullRateEntry : rateEntries) {
 			String[] entry = fullRateEntry.split("=");
@@ -91,12 +92,12 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 
 			try {
 				int value = Integer.parseInt(entry[1]);
-				minerate.setMine(minerateType, value);
+				mined.put(minerateType, value);
 			} catch (NumberFormatException e) {
 				Adapter.getAdapter().warn("Malformed minerate value in entry " + fullRateEntry);
 			}
 		}
-		return minerate;
+		return new Minerate(mined, minerateFullMined);
 	}
 
 	private static String serializeViolations(NegativityAccount account) {

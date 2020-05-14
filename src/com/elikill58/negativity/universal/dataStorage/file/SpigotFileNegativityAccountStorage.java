@@ -36,7 +36,7 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 		}
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
 		String language = config.getString("lang", TranslatedMessages.getDefaultLang());
-		Minerate minerate = deserializeMinerate(config.getConfigurationSection("minerate"));
+		Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getConfigurationSection("minerate"));
 		int mostClicksPerSecond = config.getInt("better-click");
 		Map<String, Integer> warns = deserializeViolations(config.getConfigurationSection("cheats"));
 		return CompletableFuture.completedFuture(new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns));
@@ -47,6 +47,7 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 		File file = new File(userDir, account.getPlayerId() + ".yml");
 		YamlConfiguration accountConfig = YamlConfiguration.loadConfiguration(file);
 		accountConfig.set("lang", account.getLang());
+		accountConfig.set("minerate-full-mined", account.getMinerate().getFullMined());
 		serializeMinerate(account.getMinerate(), accountConfig.createSection("minerate"));
 		accountConfig.set("better-click", account.getMostClicksPerSecond());
 		serializeViolations(account, accountConfig.createSection("cheats"));
@@ -65,10 +66,10 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 		}
 	}
 
-	private Minerate deserializeMinerate(@Nullable ConfigurationSection minerateSection) {
-		Minerate minerate = new Minerate();
+	private Minerate deserializeMinerate(int fullMined, @Nullable ConfigurationSection minerateSection) {
+		HashMap<Minerate.MinerateType, Integer> mined = new HashMap<>();
 		if (minerateSection == null) {
-			return minerate;
+			return new Minerate(mined, fullMined);
 		}
 
 		for (String minerateKey : minerateSection.getKeys(false)) {
@@ -76,10 +77,10 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 			if (type == null) {
 				continue;
 			}
-			minerate.setMine(type, minerateSection.getInt(minerateKey));
+			mined.put(type, minerateSection.getInt(minerateKey));
 		}
 
-		return minerate;
+		return new Minerate(mined, fullMined);
 	}
 
 	private void serializeViolations(NegativityAccount account, ConfigurationSection cheatsSection) {

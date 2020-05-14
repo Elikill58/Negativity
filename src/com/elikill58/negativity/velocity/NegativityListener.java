@@ -13,6 +13,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -184,7 +185,9 @@ public class NegativityListener {
 				.buildTask(plugin, () -> {
 					UUID playerId = event.getPlayer().getUniqueId();
 					VelocityNegativityPlayer.removeFromCache(playerId);
-					Adapter.getAdapter().getAccountManager().dispose(playerId);
+					NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
+					accountManager.save(playerId);
+					accountManager.dispose(playerId);
 				})
 				.delay(1, TimeUnit.SECONDS)
 				.schedule();

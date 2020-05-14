@@ -414,7 +414,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	private void destroy() {
 		saveProof();
-		Adapter.getAdapter().getAccountManager().dispose(getUUID());
+		UUID playerId = getUUID();
+		NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
+		accountManager.save(playerId);
+		accountManager.dispose(playerId);
 	}
 	
 	@Deprecated

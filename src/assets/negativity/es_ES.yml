@@ -22,14 +22,6 @@ lang {
 ban {
   kick_time: "&cCastigado por %reason%, hasta %time%, por %by%."
   kick_def: "&cCastigado definitivamente por %reason%, por %by%."
-  # Para el tiempo, aquí está:
-  # y : años
-  # mo : meses
-  # d : días
-  # h : horas
-  # m : minutos
-  # s : segundos
-  #
   help = [
     "/nban <player> <def | tiempo (ex: 2h5d)> <razón> : Castiga el jugador especificado" ]
   well_ban: "&a[&2Negativity&a]&c %name% ha sido castigado por %reason%."

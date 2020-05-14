@@ -26,14 +26,6 @@ ban:
   kick_time: "&cCấm vì %reason% đến %time% bởi %by%."
   kick_def: "&cCấm dứt khoát vì %reason% bởi %by%."
   help:
-  # Định dạng thời gian:
-  # y : năm
-  # mo : tháng
-  # d : ngày
-  # h : giờ
-  # m : phút
-  # s : giây
-  #
   - "/nban <ng. chơi> <def | thời gian (vd: 2h5d)> <lý do> : Cấm người chơi được chỉ định"
   well_ban: "&a[&2Negativity&a]&c %name% cũng bị cấm %reason%."
 unban:

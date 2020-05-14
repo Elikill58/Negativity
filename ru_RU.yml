@@ -20,14 +20,6 @@ ban:
   kick_time: "&cБан за %reason% на %time% от %by%."
   kick_def: "&cБан за %reason% от %by%."
   help:
-  # Время:
-  # y : годы
-  # mo : месяцы
-  # d : дни
-  # h : часы
-  # m : минуты
-  # s : секунды
-  #
   - "/nban <игрок> <def | время (пример: 2h5d)> <причина> : Забанить указанного игрока"
   well_ban: "&a[&2Negativity&a]&c %name% был забанен за %reason%."
 unban:

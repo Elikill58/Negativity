@@ -20,14 +20,6 @@ lang {
 ban {
   kick_time: "&cBannad för %reason% tills %time% bannad av: %by%."
   kick_def: "&cBannad definitivt för %reason% bannad av: %by%."
-  # För tid finns det:
-  # y : år
-  # mo : månader
-  # d : dagar
-  # h : timmar
-  # m : minuter
-  # s : sekunder
-  #
   help = [
     "/ban <spelare> <def | time (ex: 2h5d)> <anledning> : Banna den specificerade spelaren" ]
   well_ban: "&a[&2Negativity&a]&c %name% blev bannad för %reason%."

@@ -20,14 +20,6 @@ ban:
   kick_time: "&cProibido por %reason% para cimau %time% por %by%."
   kick_def: "&cPermanentemente proibido por %reason% por %by%."
   help:
-  # For the time, there is:
-  # y : years
-  # mo : months
-  # d : days
-  # h : hours
-  # m : minutes
-  # s : seconds
-  #
   - "/nban <player> <def | time (ex: 2h5d)> <reason> : Proibir o jogador especificado"
   well_ban: "&a[&2Negativity&a]&c %name% bem proibido por %reason%."
 unban:

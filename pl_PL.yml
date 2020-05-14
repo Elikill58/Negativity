@@ -20,14 +20,6 @@ ban:
   kick_time: "&cBan dla %reason% az do %time% przez %by%."
   kick_def: "&cBan zdecydowanie dla %reason% przez %by%."
   help:
-  # Na razie jest:
-  # y : lat
-  # mo : miesiac 
-  # d : dzien
-  # h : godzin
-  # m : minut
-  # s : sekund
-  #
   - "/ban <gracz> <def | czas (ex: 2h5d)> <powod> : Zbanuj okreslonego gracza"
   well_ban: "&a[&2Negativity&a]&c %name% dobrze zbanowany za %reason%."
 unban:

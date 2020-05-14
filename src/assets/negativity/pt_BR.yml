@@ -12,14 +12,6 @@ fake_entities: "Jogadores falsos"
 ban {
   kick_time: "&cProibido por %reason% para cimau %time% por %by%."
   kick_def: "&cPermanentemente proibido por %reason% por %by%."
-  # For the time, there is:
-  # y : years
-  # mo : months
-  # d : days
-  # h : hours
-  # m : minutes
-  # s : seconds
-  #
   help = [
    "/ban <jogador> <def | tempo (ex: 2h5d)> <razão> : proibido um jogador" ]
   well_ban: "&a[&2Negativity&a]&c %name% proibido por %reason%."

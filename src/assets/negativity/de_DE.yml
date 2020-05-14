@@ -12,14 +12,6 @@ fake_entities: "Fake Spieler"
 ban {
   kick_time: "&cDu wurdest von %by% bis %time% gebannt. Grund: %reason%"
   kick_def: "&cDu wurdest von %by% gebannt! Grund: %reason%"
-  # For the time, there is:
-  # y : years
-  # mo : months
-  # d : days
-  # h : hours
-  # m : minutes
-  # s : seconds
-  #
   help = [
    "/ban <player> <def | time (ex: 2h5d)> <reason>: Banne Spieler" ]
   well_ban: "&a[&2Negativity&a] &c%name% wurfe gebannt. Grund: %reason%"

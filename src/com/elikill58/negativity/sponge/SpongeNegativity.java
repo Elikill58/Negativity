@@ -81,6 +81,7 @@ import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Stats;
@@ -390,7 +391,10 @@ public class SpongeNegativity {
 	public void onLeave(ClientConnectionEvent.Disconnect e, @First Player p) {
 		Task.builder().delayTicks(5).execute(() -> {
 			SpongeNegativityPlayer.removeFromCache(p);
-			Adapter.getAdapter().getAccountManager().dispose(p.getUniqueId());
+			NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
+			UUID playerId = p.getUniqueId();
+			accountManager.save(playerId);
+			accountManager.dispose(playerId);
 		}).submit(this);
 	}
 

@@ -11,6 +11,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -163,7 +164,9 @@ public class NegativityListener implements Listener {
 				() -> {
 					UUID playerId = event.getPlayer().getUniqueId();
 					BungeeNegativityPlayer.removeFromCache(playerId);
-					Adapter.getAdapter().getAccountManager().dispose(playerId);
+					NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
+					accountManager.save(playerId);
+					accountManager.dispose(playerId);
 				},
 				1, TimeUnit.SECONDS);
 	}

@@ -4,6 +4,7 @@ import static org.spongepowered.api.command.args.GenericArguments.player;
 import static org.spongepowered.api.command.args.GenericArguments.requiringPermission;
 
 import org.spongepowered.api.command.CommandCallable;
+import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
@@ -26,7 +27,11 @@ import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 public class NegativityCommand implements CommandExecutor {
 
 	@Override
-	public CommandResult execute(CommandSource src, CommandContext args) {
+	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
+		if (!(src instanceof Player)) {
+			throw new CommandException(Messages.getMessage(src, "only_player"));
+		}
+
 		Player playerSource = ((Player) src);
 		Player targetPlayer = args.<Player>getOne("target").orElse(null);
 		if (targetPlayer == null) {
@@ -43,7 +48,6 @@ public class NegativityCommand implements CommandExecutor {
 		// in addition to the default suggestion results.
 		NegativityCmdSuggestionsEnhancer command = new NegativityCmdSuggestionsEnhancer(CommandSpec.builder()
 				.executor(new NegativityCommand())
-				.permission("negativity.verif")
 				.arguments(requiringPermission(player(Text.of("target")), "negativity.verif"))
 				.child(VerifCommand.create(), "verif")
 				.child(AlertCommand.create(), "alert")
@@ -51,6 +55,6 @@ public class NegativityCommand implements CommandExecutor {
 				.child(AdminCommand.create(), "admin")
 				.child(ReloadCommand.create(), "reload")
 				.build());
-		return new NegativityCmdWrapper(command, true, null);
+		return new NegativityCmdWrapper(command, false, null);
 	}
 }

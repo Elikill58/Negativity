@@ -95,7 +95,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	private final Version playerVersion;
 
 	public SpongeNegativityPlayer(Player p) {
-		super(p.getUniqueId());
+		super(p.getUniqueId(), p.getName());
 		this.p = p;
 		playerVersion = SpongeNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : Version.getVersion();
 	}

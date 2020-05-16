@@ -54,7 +54,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
 				"REPLACE INTO negativity_accounts (id, playername, language, minerate_full_mined, minerate, most_clicks_per_second, violations_by_cheat) VALUES (?, ?, ?, ?, ?, ?, ?)")) {
 			stm.setString(1, account.getPlayerId().toString());
-			stm.setString(2, null);
+			stm.setString(2, account.getPlayerName());
 			stm.setString(3, account.getLang());
 			stm.setInt(4, account.getMinerate().getFullMined());
 			stm.setString(5, serializeMinerate(account.getMinerate()));

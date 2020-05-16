@@ -90,7 +90,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	private final Version playerVersion;
 
 	public SpigotNegativityPlayer(Player p) {
-		super(p.getUniqueId());
+		super(p.getUniqueId(), p.getName());
 		this.p = new WeakReference<>(p);
 		initMods(p);
 		playerVersion = SpigotNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : (SpigotNegativity.protocolSupportSupport ? ProtocolSupportSupport.getPlayerVersion(p) : Version.getVersion());

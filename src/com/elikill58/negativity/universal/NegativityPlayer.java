@@ -11,12 +11,13 @@ public abstract class NegativityPlayer {
 	// To remove multiple ban at follow
 	private boolean isInBanning = false;
 
-	public NegativityPlayer(UUID playerId) {
+	public NegativityPlayer(UUID playerId, String playerName) {
 		this.playerId = playerId;
 		Adapter ada = Adapter.getAdapter();
 		ada.isUsingMcLeaks(playerId).thenAccept(isUsingMcLeaks -> {
 			this.isMcLeaks = isUsingMcLeaks;
 		});
+		getAccount().setPlayerName(playerName);
 		ada.getAccountManager().save(playerId);
 	}
 

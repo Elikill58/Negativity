@@ -16,7 +16,7 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	private ProxiedPlayer p;
 
 	public BungeeNegativityPlayer(ProxiedPlayer p) {
-		super(p.getUniqueId());
+		super(p.getUniqueId(), p.getName());
 		this.p = p;
 	}
 

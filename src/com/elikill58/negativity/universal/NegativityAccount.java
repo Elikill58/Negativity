@@ -15,7 +15,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 public final class NegativityAccount {
 
 	private final UUID playerId;
-	private String lang;
+	private String lang, playerName;
 	private final Minerate minerate;
 	private int mostClicksPerSecond;
 	private final Map<String, Integer> warns;
@@ -35,7 +35,15 @@ public final class NegativityAccount {
 	public UUID getPlayerId() {
 		return playerId;
 	}
-
+	
+	public String getPlayerName() {
+		return playerName;
+	}
+	
+	public void setPlayerName(String playerName) {
+		this.playerName = playerName;
+	}
+	
 	public String getLang() {
 		return lang;
 	}

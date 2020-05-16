@@ -14,7 +14,7 @@ public class VelocityNegativityPlayer extends NegativityPlayer {
 	private Player p;
 
 	public VelocityNegativityPlayer(Player p) {
-		super(p.getUniqueId());
+		super(p.getUniqueId(), p.getUsername());
 		this.p = p;
 	}
 

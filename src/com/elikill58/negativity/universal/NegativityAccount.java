@@ -21,11 +21,12 @@ public final class NegativityAccount {
 	private final Map<String, Integer> warns;
 
 	public NegativityAccount(UUID playerId) {
-		this(playerId, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>());
+		this(playerId, null, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>());
 	}
 
-	public NegativityAccount(UUID playerId, String lang, Minerate minerate, int mostClicksPerSecond, Map<String, Integer> warns) {
+	public NegativityAccount(UUID playerId, String playerName, String lang, Minerate minerate, int mostClicksPerSecond, Map<String, Integer> warns) {
 		this.playerId = playerId;
+		this.playerName = playerName;
 		this.lang = lang;
 		this.minerate = minerate;
 		this.mostClicksPerSecond = mostClicksPerSecond;

@@ -38,11 +38,12 @@ public class SpongeFileNegativityAccountStorage extends NegativityAccountStorage
 
 		try {
 			ConfigurationNode node = HoconConfigurationLoader.builder().setPath(filePath).build().load();
+			String playerName = node.getNode("playername").getString();
 			String language = node.getNode("lang").getString(TranslatedMessages.getDefaultLang());
 			Minerate minerate = deserializeMinerate(node.getNode("minerate-full-mined").getInt(), node.getNode("minerate"));
 			int mostClicksPerSecond = node.getNode("better-click").getInt();
 			Map<String, Integer> warns = deserializeViolations(node.getNode("cheats"));
-			return CompletableFuture.completedFuture(new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns));
+			return CompletableFuture.completedFuture(new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns));
 		} catch (IOException e) {
 			SpongeNegativity.getInstance().getLogger().error("Could not load account {} to file", playerId, e);
 		}
@@ -56,6 +57,7 @@ public class SpongeFileNegativityAccountStorage extends NegativityAccountStorage
 		try {
 			Files.createDirectories(userDir);
 			CommentedConfigurationNode accountNode = Files.exists(filePath) ? loader.load() : loader.createEmptyNode();
+			accountNode.getNode("playername").setValue(account.getPlayerName());
 			accountNode.getNode("lang").setValue(account.getLang());
 			accountNode.getNode("minerate-full-mined").setValue(account.getMinerate().getFullMined());
 			serializeMinerate(account.getMinerate(), accountNode.getNode("minerate"));

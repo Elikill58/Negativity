@@ -35,17 +35,19 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 			return CompletableFuture.completedFuture(new NegativityAccount(playerId));
 		}
 		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+		String playerName = config.getString("playername");
 		String language = config.getString("lang", TranslatedMessages.getDefaultLang());
 		Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getConfigurationSection("minerate"));
 		int mostClicksPerSecond = config.getInt("better-click");
 		Map<String, Integer> warns = deserializeViolations(config.getConfigurationSection("cheats"));
-		return CompletableFuture.completedFuture(new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns));
+		return CompletableFuture.completedFuture(new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns));
 	}
 
 	@Override
 	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
 		File file = new File(userDir, account.getPlayerId() + ".yml");
 		YamlConfiguration accountConfig = YamlConfiguration.loadConfiguration(file);
+		accountConfig.set("playername", account.getPlayerName());
 		accountConfig.set("lang", account.getLang());
 		accountConfig.set("minerate-full-mined", account.getMinerate().getFullMined());
 		serializeMinerate(account.getMinerate(), accountConfig.createSection("minerate"));

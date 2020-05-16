@@ -37,11 +37,12 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 			stm.setString(1, playerId.toString());
 			ResultSet result = stm.executeQuery();
 			if (result.next()) {
+				String playerName = result.getString("playername");
 				String language = result.getString("language");
 				Minerate minerate = deserializeMinerate(result.getInt("minerate_full_mined"), result.getString("minerate"));
 				int mostClicksPerSecond = result.getInt("most_clicks_per_second");
 				Map<String, Integer> warns = deserializeViolations(result.getString("violations_by_cheat"));
-				return CompletableFuture.completedFuture(new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns));
+				return CompletableFuture.completedFuture(new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

@@ -27,6 +27,7 @@ public class AccountUpdateMessage implements NegativityMessage {
 	@Override
 	public void readFrom(DataInputStream input) throws IOException {
 		UUID playerId = new UUID(input.readLong(), input.readLong());
+		String playerName = input.readUTF();
 		String language = input.readUTF();
 
 		HashMap<Minerate.MinerateType, Integer> minerateMined = new HashMap<>();
@@ -47,7 +48,7 @@ public class AccountUpdateMessage implements NegativityMessage {
 			warns.put(input.readUTF(), input.readInt());
 		}
 
-		account = new NegativityAccount(playerId, language, minerate, mostClicksPerSecond, warns);
+		account = new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns);
 	}
 
 	@Override
@@ -56,6 +57,7 @@ public class AccountUpdateMessage implements NegativityMessage {
 		output.writeLong(playerId.getMostSignificantBits());
 		output.writeLong(playerId.getLeastSignificantBits());
 
+		output.writeUTF(account.getPlayerName());
 		output.writeUTF(account.getLang());
 
 		Minerate minerate = account.getMinerate();

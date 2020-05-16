@@ -28,8 +28,6 @@ import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
-import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
-import com.elikill58.negativity.universal.dataStorage.file.SpongeFileNegativityAccountStorage;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
 import com.elikill58.negativity.universal.translation.ConfigurateTranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
@@ -54,7 +52,6 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 		this.logger = sn.getLogger();
 		this.config = config;
 		this.messagesDir = sn.getDataFolder().resolve("messages");
-		NegativityAccountStorage.register("file", new SpongeFileNegativityAccountStorage(sn.getDataFolder().resolve("user")));
 	}
 
 	@Override

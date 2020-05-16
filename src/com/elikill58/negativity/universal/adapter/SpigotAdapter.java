@@ -54,7 +54,6 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	public SpigotAdapter(JavaPlugin pl) {
 		this.pl = pl;
 		this.config = new BukkitConfigAdapter.PluginConfig(pl);
-		NegativityAccountStorage.register("file", new SpigotFileNegativityAccountStorage(new File(pl.getDataFolder(), "user")));
 	}
 
 	@Override

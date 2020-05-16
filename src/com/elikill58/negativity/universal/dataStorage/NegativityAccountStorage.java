@@ -41,6 +41,13 @@ public abstract class NegativityAccountStorage {
 		NegativityAccountStorage.storageId = storageId;
 	}
 
+	public static void setDefaultStorage(String storageId) {
+		NegativityAccountStorage storage = storages.get(storageId);
+		if (storage != null) {
+			register("default", storage);
+		}
+	}
+
 	public static void init() {
 		Adapter adapter = Adapter.getAdapter();
 		storageId = adapter.getConfig().getString("accounts.storage.id");

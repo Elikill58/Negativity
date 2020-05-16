@@ -121,7 +121,7 @@ public class DefaultConfigValue {
 		BOOLEANS.put("suspect.chat", true);
 		BOOLEANS.put("suspect.with_report_cmd", true);
 
-		STRINGS.put("accounts.storage.id", "file");
+		STRINGS.put("accounts.storage.id", "default");
 
 		for(String lc : cheats) {
 			INTS.put("cheats." + lc + ".ping", 150);

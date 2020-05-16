@@ -1,22 +1,30 @@
 package com.elikill58.negativity.universal;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class Minerate {
 
+	private final NumberFormat nf;
 	private HashMap<MinerateType, Integer> mined = new HashMap<>();
 	private int fullMined = 0;
 
 	public Minerate() {
 		for(MinerateType type : MinerateType.values())
 			mined.put(type, 0);
+		nf = NumberFormat.getInstance();
+		nf.setMaximumFractionDigits(2);
+		nf.setMinimumFractionDigits(2);
 	}
 
 	public Minerate(HashMap<MinerateType, Integer> mined, int fullMined) {
 		this.mined = mined;
 		this.fullMined = fullMined;
+		nf = NumberFormat.getInstance();
+		nf.setMaximumFractionDigits(2);
+		nf.setMinimumFractionDigits(2);
 	}
 
 	public void setMine(MinerateType type, int value) {
@@ -48,7 +56,7 @@ public class Minerate {
 		s[0] = "&r&7" + "Full Mined: " + fullMined;
 		int i = 1;
 		for(MinerateType type : MinerateType.values())
-			s[i++] = "&r&7" + type.getName() + ": " + (mined.get(type) / (fullMined == 0 ? 1 : fullMined)) * 100 + "% (" + mined.get(type) + ")";
+			s[i++] = "&r&7" + type.getName() + ": " + nf.format((mined.get(type) * 100) / (double) (fullMined == 0 ? 1 : fullMined)) + "% (" + mined.get(type) + ")";
 		return s;
 	}
 	

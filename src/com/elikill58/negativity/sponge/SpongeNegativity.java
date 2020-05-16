@@ -95,6 +95,8 @@ import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcess
 import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.config.SpongeConfigAdapter;
+import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
+import com.elikill58.negativity.universal.dataStorage.file.SpongeFileNegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
@@ -172,6 +174,9 @@ public class SpongeNegativity {
 		Task.builder().execute(new PendingAlertsTimer()).interval(timeBetweenAlert, TimeUnit.MILLISECONDS)
 				.name("negativity-pending-alerts").submit(this);
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
+
+		NegativityAccountStorage.register("file", new SpongeFileNegativityAccountStorage(configDir.resolve("user")));
+		NegativityAccountStorage.setDefaultStorage("file");
 
 		BanManager.registerProcessor("sponge", new SpongeBanProcessor());
 		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(SpongeNegativity::sendPluginMessage));

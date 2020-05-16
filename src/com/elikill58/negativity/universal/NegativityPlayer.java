@@ -13,9 +13,11 @@ public abstract class NegativityPlayer {
 
 	public NegativityPlayer(UUID playerId) {
 		this.playerId = playerId;
-		Adapter.getAdapter().isUsingMcLeaks(playerId).thenAccept(isUsingMcLeaks -> {
+		Adapter ada = Adapter.getAdapter();
+		ada.isUsingMcLeaks(playerId).thenAccept(isUsingMcLeaks -> {
 			this.isMcLeaks = isUsingMcLeaks;
 		});
+		ada.getAccountManager().save(playerId);
 	}
 
 	public NegativityAccount getAccount() {

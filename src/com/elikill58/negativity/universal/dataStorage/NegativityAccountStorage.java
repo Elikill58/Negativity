@@ -43,7 +43,7 @@ public abstract class NegativityAccountStorage {
 
 	public static void setDefaultStorage(String storageId) {
 		NegativityAccountStorage storage = storages.get(storageId);
-		if (storage != null) {
+		if (storage == null) {
 			register("default", storage);
 		}
 	}

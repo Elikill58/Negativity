@@ -23,6 +23,7 @@ public class Database {
 				Adapter.getAdapter().warn("Cannot find driver for MySQL.");
 			}
 			connection = DriverManager.getConnection("jdbc:mysql://" + url, username, password);
+			Adapter.getAdapter().log("Connection to database " + url + " done !");
 			Database.hasCustom = true;
 		} catch (SQLException e) {
 			Adapter.getAdapter().error("[Negativity] Error while connection to the database.");

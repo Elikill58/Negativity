@@ -106,7 +106,6 @@ import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
 
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
 @Plugin(id = "negativity", name = "Negativity", version = "1.7", description = "It's an Advanced AntiCheat Detection", authors = { "Elikill58", "RedNesto" }, dependencies = {
@@ -142,17 +141,15 @@ public class SpongeNegativity {
 		configFile = configDir.resolve("config.conf");
 
 		HoconConfigurationLoader configLoader = HoconConfigurationLoader.builder().setPath(configFile).build();
-		CommentedConfigurationNode rootConfigNode;
-		try {
-			rootConfigNode = configLoader.load();
-		} catch (IOException e) {
-			logger.error("Failed to load configuration", e);
-			rootConfigNode = configLoader.createEmptyNode();
-		}
-		this.config = new SpongeConfigAdapter.ByLoader(rootConfigNode, logger, configLoader, configFile,
+		this.config = new SpongeConfigAdapter.ByLoader(logger, configLoader, configFile,
 				() -> Sponge.getAssetManager().getAsset(this, "config.conf")
 						.orElseThrow(() -> new IllegalStateException("Could not get default configuration file"))
 						.getUrl().openStream());
+		try {
+			this.config.load();
+		} catch (IOException e) {
+			logger.error("Failed to load configuration", e);
+		}
 		Adapter.setAdapter(new SpongeAdapter(this, config));
 		UniversalUtils.init();
 		loadConfig();

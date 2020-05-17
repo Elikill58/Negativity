@@ -131,8 +131,8 @@ public abstract class SpongeConfigAdapter implements ConfigAdapter {
 		private final Path file;
 		private final IOSupplier<InputStream> defaultConfigSupplier;
 
-		public ByLoader(ConfigurationNode root, Logger logger, ConfigurationLoader<?> loader, Path file, IOSupplier<InputStream> defaultConfigSupplier) {
-			super(root, logger);
+		public ByLoader(Logger logger, ConfigurationLoader<?> loader, Path file, IOSupplier<InputStream> defaultConfigSupplier) {
+			super(loader.createEmptyNode(), logger);
 			this.loader = loader;
 			this.file = file;
 			this.defaultConfigSupplier = defaultConfigSupplier;

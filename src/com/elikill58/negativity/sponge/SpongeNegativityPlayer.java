@@ -162,11 +162,17 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		return NegativityBypassTicket.hasBypassTicket(c, p);
 	}
 
+	@Deprecated
 	public void addWarn(Cheat c) {
-		if (System.currentTimeMillis() < TIME_INVINCIBILITY)
+		addWarn(c, 100);
+	}
+
+	public void addWarn(Cheat c, int reliability) {
+		if (System.currentTimeMillis() < TIME_INVINCIBILITY || c.getReliabilityAlert() > reliability)
 			return;
 		NegativityAccount account = getAccount();
-		account.setWarnCount(c, getWarn(c) + 1);
+		account.setWarnCount(c, account.getWarn(c) + 1);
+		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
 	}
 
 	public void clearPackets() {

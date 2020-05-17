@@ -103,6 +103,7 @@ public abstract class BukkitConfigAdapter implements ConfigAdapter {
 
 		@Override
 		public void load() {
+			this.plugin.saveDefaultConfig();
 			this.plugin.reloadConfig();
 			this.config = this.plugin.getConfig();
 		}

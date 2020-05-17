@@ -105,7 +105,7 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().info("Detected server version: " + v.name().toLowerCase());
 		
 		packetManager = new NegativityPacketManager(this);
-		new File(getDataFolder().getAbsolutePath() + File.separator + "user").mkdirs();
+		new File(getDataFolder().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
 		if (!new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml").exists()) {
 			getLogger().info("------ Negativity Information ------");
 			getLogger().info("");

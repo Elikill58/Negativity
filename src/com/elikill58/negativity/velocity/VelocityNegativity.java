@@ -65,11 +65,11 @@ public class VelocityNegativity {
 	    server.getChannelRegistrar().register(NEGATIVITY_CHANNEL_ID);
 	    server.getCommandManager().register(new VNegativityCommand(), "vnegativity");
 
-	    MD5ConfigAdapter.ByProvider config;
+		MD5ConfigAdapter.ByProvider config = new MD5ConfigAdapter.ByProvider(ConfigurationProvider.getProvider(YamlConfiguration.class),
+				getDataFolder().toPath().resolve("config.yml"),
+				() -> getResourceAsStream("bungee_config.yml"));
 		try {
-			config = new MD5ConfigAdapter.ByProvider(ConfigurationProvider.getProvider(YamlConfiguration.class),
-					getDataFolder().toPath().resolve("config.yml"),
-					() -> getResourceAsStream("bungee_config.yml"));
+			config.load();
 		} catch (IOException e) {
 			throw new UncheckedIOException("Could not load configuration", e);
 		}

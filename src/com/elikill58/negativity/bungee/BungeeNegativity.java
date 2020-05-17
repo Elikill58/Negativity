@@ -40,11 +40,11 @@ public class BungeeNegativity extends Plugin {
 		pluginManager.registerCommand(this, new BNegativityCommand());
 		pluginManager.registerListener(this, new BNegativityCommand.TabCompleter());
 
-		MD5ConfigAdapter.ByProvider config;
+		MD5ConfigAdapter.ByProvider config = new MD5ConfigAdapter.ByProvider(ConfigurationProvider.getProvider(YamlConfiguration.class),
+				getDataFolder().toPath().resolve("config.yml"),
+				() -> getResourceAsStream("bungee_config.yml"));
 		try {
-			config = new MD5ConfigAdapter.ByProvider(ConfigurationProvider.getProvider(YamlConfiguration.class),
-					getDataFolder().toPath().resolve("config.yml"),
-					() -> getResourceAsStream("bungee_config.yml"));
+			config.load();
 		} catch (IOException e) {
 			throw new UncheckedIOException("Could not load configuration", e);
 		}

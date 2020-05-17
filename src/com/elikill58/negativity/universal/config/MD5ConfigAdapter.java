@@ -107,8 +107,8 @@ public abstract class MD5ConfigAdapter implements ConfigAdapter {
 			this.defaultConfigSupplier = defaultConfigSupplier;
 		}
 
-		public ByProvider(ConfigurationProvider provider, Path file, IOSupplier<InputStream> defaultConfigSupplier) throws IOException {
-			this(provider.load(Files.newBufferedReader(file)), provider, file, defaultConfigSupplier);
+		public ByProvider(ConfigurationProvider provider, Path file, IOSupplier<InputStream> defaultConfigSupplier) {
+			this(new Configuration(), provider, file, defaultConfigSupplier);
 		}
 
 		@Override

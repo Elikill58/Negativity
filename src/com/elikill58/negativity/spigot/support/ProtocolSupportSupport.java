@@ -9,6 +9,6 @@ import protocolsupport.api.ProtocolSupportAPI;
 public class ProtocolSupportSupport {
 
 	public static Version getPlayerVersion(Player p) {
-		return Version.getVersionByName(ProtocolSupportAPI.getProtocolVersion(p).getName());
+		return Version.getVersionByProtocolID(ProtocolSupportAPI.getProtocolVersion(p).getId());
 	}
 }

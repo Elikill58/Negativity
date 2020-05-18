@@ -41,7 +41,7 @@ public class CheckMenuInventory extends AbstractInventory {
 		inv.setItem(2, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
 
 		inv.setItem(7, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
-		inv.setItem(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId()));
+		inv.setItem(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId(), ChatColor.GREEN + "Version: " + np.getPlayerVersion().getName()));
 
 		inv.setItem(9, Utils.hideAttributes(Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled")))));
 		inv.setItem(10, Utils.hideAttributes(Utils.createItem(Material.DIAMOND_PICKAXE, "Minerate", minerate.getInventoryLoreString())));

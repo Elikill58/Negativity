@@ -110,7 +110,7 @@ public class ModInventory extends AbstractInventory {
 				p.offer(vanish);
 			}
 		} else if (m.equals(ItemTypes.TNT)) {
-			delayed(() -> AbstractInventory.open(InventoryType.CHEAT_MANAGER, p));
+			delayed(() -> AbstractInventory.open(InventoryType.CHEAT_MANAGER, p, false));
 		} else if (m.equals(ItemTypes.FEATHER)) {
 			delayedInvClose(p);
 			boolean b = !p.get(Keys.CAN_FLY).get();

@@ -118,6 +118,13 @@ public abstract class Cheat {
 	public String[] getAliases() {
 		return aliases;
 	}
+	
+	public String getHover(String msg, Object... placeholder) {
+		String hover = Adapter.getAdapter().getConfig().getString("cheats." + key + ".hover." + msg);
+		if(hover == null)
+			return "cheats." + key + ".hover." + msg;
+		return UniversalUtils.replacePlaceholders(hover, placeholder);
+	}
 
 	public static Cheat fromString(String name) {
 		for (Cheat c : Cheat.values()) {

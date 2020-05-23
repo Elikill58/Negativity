@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.protocols;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -47,16 +48,16 @@ public class ChatProtocol extends Cheat implements Listener {
 		SpigotNegativity.getInstance().getConfig().getStringList("cheats.chat.insults").forEach((s) -> {
 			insults.add(s.toLowerCase());
 		});
-		String foundedInsults = "";
+		final StringJoiner foundedInsults = new StringJoiner(", ");
 		for(String s : msg.toLowerCase().split(" ")) {
 			if(insults.contains(s))
-				foundedInsults = (foundedInsults.equalsIgnoreCase("") ? "" : foundedInsults + ", ") + s;
+				foundedInsults.add(s);
 		}
-		if(!foundedInsults.equalsIgnoreCase("")) {
-			final String finalString = foundedInsults;
+		if(foundedInsults.length() == 0) {
 			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
-				boolean mayCancel = SpigotNegativity.alertMod(finalString.contains(", ") ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(90 + (finalString.split(", ").length - 1) * 5), "Insults: " + finalString, "Insults: " + finalString);
+				boolean mayCancel = SpigotNegativity.alertMod(foundedInsults.length() > 1 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+						UniversalUtils.parseInPorcent(90 + (foundedInsults.length() - 1) * 5), "Insults: " + foundedInsults.toString(),
+						getHover("main", "%msg%", foundedInsults.toString()));
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			});

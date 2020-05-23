@@ -40,15 +40,16 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				ping = 1;
 			int flying = np.FLYING - (ping / 6);
 			if (flying > 28) {
-				if (np.ACTIVE_CHEAT.contains(np.flyingReason.getCheat())) {
+				Cheat c = np.flyingReason.getCheat();
+				if (np.ACTIVE_CHEAT.contains(c)) {
 					if(p.getItemInHand().getType().equals(Material.BOW))
 						np.flyingReason = FlyingReason.BOW;
 					double[] allTps = Utils.getTPS();
 					int porcent = UniversalUtils.parseInPorcent(flying - (ping / (allTps[1] - allTps[0] > 0.5 ? 9 : 8)));
-					SpigotNegativity.alertMod(flying > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, np.flyingReason.getCheat(), porcent,
+					SpigotNegativity.alertMod(flying > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, c, porcent,
 							"Flying in one second: " + np.FLYING + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
-							"Too many packet: " + flying + "\n(Valid packets with low ping: 20)", (int) flying / 30);
-					if(np.flyingReason.getCheat().isSetBack()){
+							c.getHover("packet", "%flying%", flying), (int) flying / 30);
+					if(c.isSetBack()){
 						switch(np.flyingReason){
 						case BOW:
 							break;

@@ -292,6 +292,11 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      line_sight: "Hit %name% without line of sight"
+      distance: "Distance with %name%: %distance% blocks"
+      rotate: "Rotate %degres%°"
+      fake_players: "%nb% fake players touched in %time% ms"
 
   # Jesus is to walk on the water
   jesus:
@@ -303,6 +308,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "Move %distance% block under water"
 
   # AntiPotion remove bad potion effect
   antipotion:
@@ -314,6 +321,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      packet: "Too many packet: %flying%\n(Valid packets with low ping: 20)"
 
   # NoFall remove fall damage
   nofall:
@@ -338,6 +347,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      packet: "Too many packet: %flying%\n(Valid packets with low ping: 20)"
 
   # FastPlace place a lot of block for you
   fastplace:
@@ -352,6 +363,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "2 blocks placed in: %time% ms\nReal player do it in 150ms"
 
   # Speed makes you run faster
   speed:
@@ -363,6 +376,9 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      distance_ground: "Distance Last/New position: %distance%\n(With same Y and player on ground)"
+      distance_jumping: "Distance Last/New position: %distance%\n(With same Y and player jumping)"
 
   # AutoClick is to get more click than real people
   autoclick:
@@ -375,6 +391,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "%click% clicks"
 
   # Fly enable you to fly
   fly:
@@ -386,6 +404,10 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      boat: "On boat"
+      air_below: "%nb% air blocks below"
+      boat_air_below: "On boat, %nb% air blocks below"
 
   # Regen help you to get your health
   regen:
@@ -397,6 +419,9 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "Time between two regen: %time%ms"
+      packet: "Too many packet: %flying%\n(Valid packets with low ping: 20)"
 
   # AntiKnockback remove knockback effect
   antiknockback:
@@ -408,6 +433,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "Distance after damage: %distance%"
 
   # Blink enable you to teleport by simulating lag
   blink:
@@ -430,6 +457,9 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "Time between last shot: %time%ms"
+      packet: "Too many packet: %flying%\n(Valid packets with low ping: 20)"
 
   # Spider make you walk on the wall
   spider:
@@ -463,6 +493,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "Item in hand: %item% \nBlock placed: %block%"
 
   # Step make you jump 2 blocks
   step:
@@ -474,6 +506,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "Move %block% blocks up"
 
   # NoSlowDown remove slow down effects (like with soul sand)
   noslowdown:
@@ -485,6 +519,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "Distance: %distance%"
 
   # FastLadders is to climb ladders quickler
   fastladder:
@@ -496,6 +532,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "%nb% ladders below him"
 
   # Phase is to glitch on block
   phase:
@@ -518,6 +556,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "Time between 2 clicks: %time%ms"
 
   # XRay cannot be detected directly, it's about Minerate
   xray:
@@ -540,6 +580,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      breaked_in: "2 blocks breaked in %time% ms"
 
   # AirJump make you jump on air
   airjump:
@@ -562,6 +604,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "Insults: %msg%"
     insults:
     - "bitch"
     - "asshole"
@@ -599,6 +643,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "When %name%"
 
   # FastStairs make you walking faster on Stairs
   faststairs:
@@ -610,6 +656,8 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    hover:
+      main: "Move %distance% blocks on stairs"
 
   # NoPitchLimit enable player to see behind
   nopitchlimit:

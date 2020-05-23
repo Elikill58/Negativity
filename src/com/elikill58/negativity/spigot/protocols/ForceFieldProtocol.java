@@ -48,7 +48,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if(!p.hasLineOfSight(e.getEntity())) {
 			mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getEntity().getType().name()
 					+ " but cannot see it, ping: " + Utils.getPing(p),
-					"Hit " + e.getEntity().getType().name().toLowerCase() + " without line of sight");
+					getHover("line_sight", "%name%", e.getEntity().getType().name().toLowerCase()));
 		}
 		if(hasThorns(p)) {
 			if (isSetBack() && mayCancel)
@@ -64,7 +64,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 					UniversalUtils.parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
 							+ ". Ping: " + Utils.getPing(p),
-					"Distance with " + e.getEntity().getName() + ": " + nf.format(dis) + " blocks");
+					getHover("distance", "%name%", e.getEntity().getName(), "%distance%", nf.format(dis)));
 		}
 		final Location loc = p.getLocation().clone();
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
@@ -72,7 +72,8 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 				Location loc1 = p.getLocation();
 				int gradeRounded = Math.round(Math.abs(loc.getYaw() - loc1.getYaw()));
 				if (gradeRounded > 180.0) {
-					SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded), "Player rotate too much (" + gradeRounded + "°) without thorns", "Rotate " + gradeRounded + "°");
+					SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded),
+							"Player rotate too much (" + gradeRounded + "°) without thorns", getHover("rotate", "%degres%", gradeRounded));
 				}
 			}
 		}, 1);
@@ -93,11 +94,12 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {
 		if (np.fakePlayerTouched < 5)
 			return;
+		Cheat c = Cheat.forKey(CheatKeys.FORCEFIELD);
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
 		double rapport = np.fakePlayerTouched / (timeBehindStart / 1000);
-		SpigotNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD),
+		SpigotNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, c,
 				UniversalUtils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
-				np.fakePlayerTouched + " fake players touched in " + timeBehindStart + " ms");
+				c.getHover("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
 	}
 }

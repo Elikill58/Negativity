@@ -45,11 +45,11 @@ public class FastBowProtocol extends Cheat implements Listener {
 					if (dif < (50 + ping))
 						mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this,
 								UniversalUtils.parseInPorcent(200 - dif - ping), "Player use Bow, last shot: " + np.LAST_SHOT_BOW
-										+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), "Time between last shot: " + dif + " (in milliseconds).");
+										+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), getHover("main", "%time%", dif));
 					else
 						mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 								UniversalUtils.parseInPorcent(100 - dif - ping), "Player use Bow, last shot: " + np.LAST_SHOT_BOW
-								+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), "Time between last shot: " + dif + " (in milliseconds)");
+								+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), getHover("main", "%time%", dif));
 					if(isSetBack() && mayCancel)
 						e.setCancelled(true);
 				}

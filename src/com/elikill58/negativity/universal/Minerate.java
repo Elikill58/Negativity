@@ -35,7 +35,7 @@ public class Minerate {
 		fullMined++;
 		if(type == null)
 			return;
-		mined.put(type, mined.get(type) + 1);
+		mined.put(type, mined.getOrDefault(type, 0) + 1);
 		int minedType = 0;
 		for(int i : mined.values())
 			minedType += i;

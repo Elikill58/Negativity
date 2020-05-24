@@ -66,7 +66,7 @@ public class RegenProtocol extends Cheat {
 				boolean mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this,
 						UniversalUtils.parseInPorcent((dif < (50 + ping) ? 200 : 100) - dif - ping), "Player regen, last regen: "
 								+ np.LAST_REGEN + " Actual time: " + actual + " Difference: " + dif,
-						"Time between two regen: " + dif + " (in milliseconds)");
+						getHover("main", "%time%", dif));
 				if (isSetBack() && mayCancel) {
 					e.setCancelled(true);
 				}

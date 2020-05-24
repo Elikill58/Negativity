@@ -95,7 +95,7 @@ public class AntiKnockbackProtocol extends Cheat {
 				int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - d);
 				if (d < 0.1 && actual.getBlockType() != BlockTypes.WEB && !p.get(Keys.IS_SNEAKING).orElse(false)) {
 					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, relia,
-							"Distance after damage: " + d + "; Ping: " + ping, "Distance after damage: " + d);
+							"Distance after damage: " + d + "; Ping: " + ping, getHover("main", "%distance%", d));
 					if (isSetBack() && mayCancel) {
 						p.setVelocity(p.getVelocity().add(Vector3d.UP));
 					}

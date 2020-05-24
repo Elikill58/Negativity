@@ -62,7 +62,7 @@ public class AutoClickProtocol extends Cheat {
 			NegativityAccount account = np.getAccount();
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(np.ACTUAL_CLICK * 2 - efficiency * 2),
 					"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
-							+ "; Better click in one second: " + account.getMostClicksPerSecond() + " Ping: " + ping, np.ACTUAL_CLICK + " clicks");
+							+ "; Better click in one second: " + account.getMostClicksPerSecond() + " Ping: " + ping, getHover("main", "%click%", np.ACTUAL_CLICK));
 			if (isSetBack() && mayCancel) {
 				e.setCancelled(true);
 			}

@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
 
@@ -33,8 +34,11 @@ import com.flowpowered.math.vector.Vector3i;
 
 public class SpeedProtocol extends Cheat {
 
+	private NumberFormat numberFormat = NumberFormat.getInstance();
+	
 	public SpeedProtocol() {
 		super(CheatKeys.SPEED, false, ItemTypes.BEACON, CheatCategory.MOVEMENT, true, "speed", "speedhack");
+		numberFormat.setMaximumFractionDigits(4);
 	}
 
 	@Listener
@@ -85,7 +89,7 @@ public class SpeedProtocol extends Cheat {
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
 				mayCancel = SpongeNegativity.alertMod(type, p, this, porcent,
 						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + moveY + ", walkTest: " + walkTest +
-						", walkWithEssentialsTest: " + walkWithEssTest, "Distance Last/New position: " + moveY + "\n(With same Y)\nPlayer on ground");
+						", walkWithEssentialsTest: " + walkWithEssTest, getHover("distance_ground", "%distance%", numberFormat.format(moveY)));
 			}
 		} else if (!p.isOnGround()) {
 			for(Entity et : p.getNearbyEntities(5))
@@ -94,7 +98,7 @@ public class SpeedProtocol extends Cheat {
 			if(!mayCancel) {
 				if(moveY >= 0.85D) {
 					mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(moveY * 100 * 2), proof,
-							"Distance Last/New position: " + moveY + "\n(With same Y)\nPlayer jumping");
+							getHover("distance_jumping", "%distance%", numberFormat.format(moveY)));
 				} else {
 					BlockType under = e.getToTransform().getLocation().copy().sub(0, 1, 0).getBlockType();
 					if (!under.getId().contains("STEP")) {
@@ -107,7 +111,7 @@ public class SpeedProtocol extends Cheat {
 						if (distance > 0.4 && (distance > (distanceWithoutY * 2)) && np.getFallDistance() < 1) {
 							np.SPEED_NB++;
 							if (np.SPEED_NB > 4)
-								mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.SPEED), UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "HighSpeed - Block under: " + under.getId() + ", Speed: " + distance + ", nb: " + np.SPEED_NB, ", fallDistance: " + np.getFallDistance());
+								mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "HighSpeed - Block under: " + under.getId() + ", Speed: " + distance + ", nb: " + np.SPEED_NB, ", fallDistance: " + np.getFallDistance());
 						} else
 							np.SPEED_NB = 0;
 					}

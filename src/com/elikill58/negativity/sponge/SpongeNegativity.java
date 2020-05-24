@@ -467,6 +467,7 @@ public class SpongeNegativity {
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 								   String hover_proof, int alertCounts) {
+		hover_proof = Utils.coloredMessage(hover_proof);
 		if(!c.isActive())
 			return false;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);

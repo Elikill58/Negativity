@@ -322,6 +322,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 			String hover_proof, int amount) {
+		hover_proof = Utils.coloredMessage(hover_proof);
 		if(!c.isActive() || reliability < 55)
 			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);

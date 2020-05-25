@@ -95,7 +95,7 @@ public class FlyProtocol extends Cheat {
 			mayCancel = SpongeNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d + (isInBoat ? " On boat" : "")
 							+ ". Warn for fly: " + np.getWarn(this),
-							new CheatHover((isInBoat ? "boat_" : "") + "air_below", "%nb%", nb));
+							new CheatHover(isInBoat ? "boat_air_below" : "air_below", "%nb%", nb));
 		}
 		
 		Vector3d to = new Vector3d(toPosition.getX(), fromPosition.getX(), toPosition.getZ());

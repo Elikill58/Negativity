@@ -9,6 +9,7 @@ import org.spongepowered.api.event.impl.AbstractEvent;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.ReportType;
 
 public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent {
@@ -17,15 +18,15 @@ public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent
     private Player p;
     private Cheat c;
     private int relia;
-    private final String hoverProof;
+    private final CheatHover hover;
     private final int ping;
 
-    public PlayerCheatEvent(ReportType reportType, Player p, Cheat c, int reliability, String hoverProof, int ping) {
+    public PlayerCheatEvent(ReportType reportType, Player p, Cheat c, int reliability, CheatHover hover, int ping) {
         this.reportType = reportType;
         this.p = p;
         this.c = c;
         this.relia = reliability;
-        this.hoverProof = hoverProof;
+        this.hover = hover;
         this.ping = ping;
     }
 
@@ -51,8 +52,13 @@ public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent
         return relia;
     }
 
+    @Deprecated
     public String getHoverProof() {
-        return hoverProof;
+        return hover.getKey();
+    }
+
+    public CheatHover getHover() {
+        return hover;
     }
 
     public int getPing() {
@@ -70,17 +76,28 @@ public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent
         public Alert(ReportType reportType, Player p, Cheat c, int reliability, boolean hasRelia, String hoverProof, int ping, String stats_send) {
         	this(reportType, p, c, reliability, hasRelia, ping, "", hoverProof);	
     	}
-    	
+
+        @Deprecated
     	public Alert(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof) {
     		this(type, p, c, reliability, hasRelia, ping, proof, hover_proof, 1);
     	}
-    	
+
+        @Deprecated
     	public Alert(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof, int nbAlert) {
     		this(type, p, c, reliability, hasRelia, ping, proof, hover_proof, nbAlert, 1);
     	}
-        
+
+        @Deprecated
         public Alert(ReportType reportType, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hoverProof, int nbAlert, int nbAlertConsole) {
-            super(reportType, p, c, reliability, hoverProof, ping);
+        	this(reportType, p, c, reliability, hasRelia, ping, proof, new CheatHover(hoverProof), nbAlert, nbAlertConsole);
+        }
+        
+    	public Alert(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert) {
+    		this(type, p, c, reliability, hasRelia, ping, proof, hover, nbAlert, 1);
+    	}
+        
+        public Alert(ReportType reportType, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert, int nbAlertConsole) {
+            super(reportType, p, c, reliability, hover, ping);
             this.hasRelia = hasRelia;
             this.alert = hasRelia;
             this.proof = proof;
@@ -138,8 +155,13 @@ public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent
 
     public static class Kick extends PlayerCheatEvent implements Cancellable {
 
+    	@Deprecated
         public Kick(ReportType reportType, Player p, Cheat c, int reliability, String hoverProof, int ping) {
-            super(reportType, p, c, reliability, hoverProof, ping);
+            super(reportType, p, c, reliability, new CheatHover(hoverProof), ping);
+        }
+
+        public Kick(ReportType reportType, Player p, Cheat c, int reliability, CheatHover hover, int ping) {
+            super(reportType, p, c, reliability, hover, ping);
         }
 
         private boolean cancelled = false;
@@ -156,8 +178,13 @@ public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent
 
     public static class Bypass extends PlayerCheatEvent implements Cancellable {
 
+    	@Deprecated
         public Bypass(ReportType reportType, Player p, Cheat c, int reliability, String hoverProof, int ping) {
-            super(reportType, p, c, reliability, hoverProof, ping);
+            super(reportType, p, c, reliability, new CheatHover(hoverProof), ping);
+        }
+    	
+        public Bypass(ReportType reportType, Player p, Cheat c, int reliability, CheatHover hover, int ping) {
+            super(reportType, p, c, reliability, hover, ping);
         }
 
         private boolean cancelled = false;

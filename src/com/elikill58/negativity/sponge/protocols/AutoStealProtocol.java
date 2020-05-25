@@ -54,7 +54,7 @@ public class AutoStealProtocol extends Cheat {
 		int ping = Utils.getPing(p);
 		if ((ping + TIME_CLICK) >= diff) {
 			if (np.lastClickInv && isSetBack() && SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((100 + TIME_CLICK) - diff - ping),
-					"Time between 2 click: " + diff + ". Ping: " + ping, getHover("main", "%time%", diff))) {
+					"Time between 2 click: " + diff + ". Ping: " + ping, new CheatHover("main", "%time%", diff))) {
 				e.setCancelled(true);
 			}
 			np.lastClickInv = true;

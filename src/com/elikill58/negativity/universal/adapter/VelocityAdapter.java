@@ -22,6 +22,7 @@ import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
@@ -188,6 +189,9 @@ public class VelocityAdapter extends Adapter implements TranslationProviderFacto
 
 	@Override
 	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {}
+
+	@Override
+	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, CheatHover hover) {}
 
 	@Override
 	public void runConsoleCommand(String cmd) {

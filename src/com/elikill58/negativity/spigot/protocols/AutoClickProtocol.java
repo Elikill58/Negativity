@@ -54,7 +54,7 @@ public class AutoClickProtocol extends Cheat implements Listener {
 					UniversalUtils.parseInPorcent(np.ACTUAL_CLICK * 2.5),
 					"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
 							+ "; Better click in one second: " + np.getAccount().getMostClicksPerSecond() + " Ping: " + ping,
-					getHover("main", "%click%", np.ACTUAL_CLICK));
+							new CheatHover("main", "%click%", np.ACTUAL_CLICK));
 			if (isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}

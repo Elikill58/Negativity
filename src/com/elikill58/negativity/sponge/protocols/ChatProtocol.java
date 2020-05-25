@@ -40,7 +40,7 @@ public class ChatProtocol extends Cheat {
 		}
 		if(foundedInsults.length() > 0) {
 			boolean mayCancel = SpongeNegativity.alertMod(foundedInsults.length() > 1 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(80 + (foundedInsults.length() - 1) * 10), "Insults: " + foundedInsults, getHover("main", "%msg%", foundedInsults));
+					UniversalUtils.parseInPorcent(80 + (foundedInsults.length() - 1) * 10), "Insults: " + foundedInsults, new CheatHover("main", "%msg%", foundedInsults));
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);
 		}

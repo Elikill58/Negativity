@@ -81,7 +81,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 				ReportType type = np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING;
 				mayCancel = SpigotNegativity.alertMod(type, p, this, porcent,
 						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: " + walkTest +
-						", walkWithEssentialsTest: " + walkWithEssTest, getHover("distance_ground", "%distance%", numberFormat.format(y)));
+						", walkWithEssentialsTest: " + walkWithEssTest, new CheatHover("distance_ground", "%distance%", numberFormat.format(y)));
 			}
 		} else if (!p.isOnGround()) {
 			for (Entity entity : p.getNearbyEntities(5, 5, 5))
@@ -94,7 +94,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 							UniversalUtils.parseInPorcent(y * 100 * 2),
 							"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed()
 									+ " Distance between from/to location: " + y,
-									getHover("distance_jumping", "%distance%", numberFormat.format(y)));
+									new CheatHover("distance_jumping", "%distance%", numberFormat.format(y)));
 				} else {
 					Material under = e.getTo().clone().subtract(0, 1, 0).getBlock().getType();
 					if (!under.name().contains("STEP")) {

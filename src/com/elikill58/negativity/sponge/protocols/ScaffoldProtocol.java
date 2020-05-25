@@ -56,7 +56,7 @@ public class ScaffoldProtocol extends Cheat {
 
 				boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(120 / localPing),
 						"Item in hand: " + m.getName() + " Block placed: " + placed.getName() + " Ping: " + ping,
-						getHover("main", "%item%", m.getName().toLowerCase(), "%block%", placed.getName().toLowerCase()));
+						new CheatHover("main", "%item%", m.getName().toLowerCase(), "%block%", placed.getName().toLowerCase()));
 				if (isSetBack() && mayCancel) {
 					e.setCancelled(true);
 				}

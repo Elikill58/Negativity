@@ -54,7 +54,7 @@ public class InventoryMoveProtocol extends Cheat {
 					SpongeNegativity.alertMod(ReportType.WARNING, p, this,
 							SpongeNegativityPlayer.getNegativityPlayer(p).getAllWarn(this) > 5 ? 100 : 95,
 								"Detected when " + from + ". Sprint: " + p.get(Keys.IS_SPRINTING).orElse(false) + ", Sneak:" +
-							p.get(Keys.IS_SNEAKING).orElse(false), getHover("main", "%name%", from));
+							p.get(Keys.IS_SNEAKING).orElse(false), new CheatHover("main", "%name%", from));
 			});
 		} else if (check) {
 			final Location<World> lastLoc = p.getLocation().copy();
@@ -64,7 +64,7 @@ public class InventoryMoveProtocol extends Cheat {
 						&& p.getOpenInventory() != null) {
 					SpongeNegativity.alertMod(ReportType.WARNING, p, this,
 							SpongeNegativityPlayer.getNegativityPlayer(p).getAllWarn(this) > 5 ? 100 : 95,
-								"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()), getHover("main", "%name%", from));
+								"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()), new CheatHover("main", "%name%", from));
 				}
 			});
 		}

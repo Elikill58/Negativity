@@ -118,13 +118,6 @@ public abstract class Cheat {
 	public String[] getAliases() {
 		return aliases;
 	}
-	
-	public String getHover(String msg, Object... placeholder) {
-		String hover = Adapter.getAdapter().getConfig().getString("cheats." + key + ".hover." + msg);
-		if(hover == null)
-			return "cheats." + key + ".hover." + msg;
-		return UniversalUtils.replacePlaceholders(hover, placeholder);
-	}
 
 	public static Cheat fromString(String name) {
 		for (Cheat c : Cheat.values()) {
@@ -173,5 +166,31 @@ public abstract class Cheat {
 
 	public static enum CheatCategory {
 		COMBAT, MOVEMENT, WORLD, PLAYER;
+	}
+	
+	public static class CheatHover {
+		private final String key;
+		private final Object[] placeholders;
+		
+		public CheatHover(String key, Object... placeholders) {
+			this.key = key;
+			this.placeholders = placeholders;
+		}
+
+		public String getKey() {
+			return key;
+		}
+
+		public Object[] getPlaceholders() {
+			return placeholders;
+		}
+		
+		public String compileDefault(Cheat c) {
+			return key == "" ? key : "\n" + TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, "hover." + c.getKey() + "." + getKey(), getPlaceholders());
+		}
+		
+		public String compile(Cheat c, NegativityPlayer np) {
+			return key == "" ? key : "\n" + TranslatedMessages.getStringFromLang(np.getAccount().getLang(), "hover." + c.getKey() + "." + getKey(), getPlaceholders());
+		}
 	}
 }

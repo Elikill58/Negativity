@@ -30,6 +30,7 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotTranslationProvider;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
@@ -201,7 +202,12 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 
 	@Override
 	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {
-		SpigotNegativity.alertMod(type, (Player) p, c, reliability, proof, hover_proof);
+		alertMod(type, proof, c, reliability, proof, new CheatHover(hover_proof));
+	}
+
+	@Override
+	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, CheatHover hover) {
+		SpigotNegativity.alertMod(type, (Player) p, c, reliability, proof, hover);
 	}
 
 	@Override

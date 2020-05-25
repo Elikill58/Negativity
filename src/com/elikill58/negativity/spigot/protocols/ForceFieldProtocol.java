@@ -48,7 +48,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if(!p.hasLineOfSight(e.getEntity())) {
 			mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getEntity().getType().name()
 					+ " but cannot see it, ping: " + Utils.getPing(p),
-					getHover("line_sight", "%name%", e.getEntity().getType().name().toLowerCase()));
+					new CheatHover("line_sight", "%name%", e.getEntity().getType().name().toLowerCase()));
 		}
 		if(hasThorns(p)) {
 			if (isSetBack() && mayCancel)
@@ -64,7 +64,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 					UniversalUtils.parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
 							+ ". Ping: " + Utils.getPing(p),
-					getHover("distance", "%name%", e.getEntity().getName(), "%distance%", nf.format(dis)));
+							new CheatHover("distance", "%name%", e.getEntity().getName(), "%distance%", nf.format(dis)));
 		}
 		final Location loc = p.getLocation().clone();
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
@@ -73,7 +73,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 				int gradeRounded = Math.round(Math.abs(loc.getYaw() - loc1.getYaw()));
 				if (gradeRounded > 180.0) {
 					SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded),
-							"Player rotate too much (" + gradeRounded + "°) without thorns", getHover("rotate", "%degres%", gradeRounded));
+							"Player rotate too much (" + gradeRounded + "°) without thorns", new CheatHover("rotate", "%degres%", gradeRounded));
 				}
 			}
 		}, 1);
@@ -100,6 +100,6 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		SpigotNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, c,
 				UniversalUtils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
-				c.getHover("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
+						new CheatHover("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
 	}
 }

@@ -7,6 +7,7 @@ import org.bukkit.event.HandlerList;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 
 public class PlayerCheatAlertEvent extends Event implements Cancellable {
 
@@ -15,18 +16,40 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	private final Cheat c;
 	private final int relia, ping, nbAlert;
 	private int nbConsole;
-	private final String proof, hover_proof;
+	private final String proof;
+	private final CheatHover hover;
 	private final ReportType type;
-	
+
+	/**
+	 * 
+	 * @deprecated Use constructor with "CheatHover" and not string.
+	 */
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof) {
-		this(type, p, c, reliability, hasRelia, ping, proof, hover_proof, 1);
+		this(type, p, c, reliability, hasRelia, ping, proof, new CheatHover(hover_proof), 1, 1);
 	}
-	
+
+	/**
+	 * 
+	 * @deprecated Use constructor with "CheatHover" and not string.
+	 */
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof, int nbAlert) {
-		this(type, p, c, reliability, hasRelia, ping, proof, hover_proof, nbAlert, 1);
+		this(type, p, c, reliability, hasRelia, ping, proof, new CheatHover(hover_proof), nbAlert, 1);
 	}
 	
+	/**
+	 * 
+	 * @deprecated Use constructor with "CheatHover" and not string.
+	 */
+	@Deprecated
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof, int nbAlert, int nbAlertConsole) {
+		this(type, p, c, reliability, hasRelia, ping, proof, new CheatHover(hover_proof), nbAlert, nbAlertConsole);
+	}
+	
+	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert) {
+		this(type, p, c, reliability, hasRelia, ping, proof, hover, nbAlert, 1);
+	}
+	
+	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert, int nbAlertConsole) {
 		this.type = type;
 		this.p = p;
 		this.c = c;
@@ -35,7 +58,7 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 		this.alert = hasRelia;
 		this.ping = ping;
 		this.proof = proof;
-		this.hover_proof = hover_proof;
+		this.hover = hover;
 		this.nbAlert = nbAlert;
 		this.nbConsole = nbAlertConsole;
 	}
@@ -86,8 +109,13 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 		return proof;
 	}
 	
+	@Deprecated
 	public String getHoverProof() {
-		return hover_proof;
+		return hover.getKey();
+	}
+	
+	public CheatHover getHover() {
+		return hover;
 	}
 	
 	public int getNbAlert() {

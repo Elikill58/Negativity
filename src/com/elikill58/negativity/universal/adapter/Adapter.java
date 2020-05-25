@@ -9,6 +9,7 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.NegativityPlayer;
@@ -120,7 +121,9 @@ public abstract class Adapter {
 	public abstract NegativityAccountManager getAccountManager();
 	@Nullable
 	public abstract NegativityPlayer getNegativityPlayer(UUID playerId);
+	@Deprecated
 	public abstract void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof);
+	public abstract void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, CheatHover hover);
 	public abstract void runConsoleCommand(String cmd);
 	public abstract CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId);
 	public abstract List<UUID> getOnlinePlayers();

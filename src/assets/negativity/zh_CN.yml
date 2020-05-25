@@ -125,3 +125,78 @@ inventory {
     setActive: "活跃作弊：&l%active%"
   }
 }
+
+hover {
+  forcefield {
+    line_sight: "Hit %name% without line of sight"
+    distance: "Distance with %name%: %distance% blocks"
+    rotate: "Rotate %degres%°"
+    fake_players: "%nb% fake players touched in %time% ms"
+  }
+  jesus {
+    main: "Move %distance% block under water"
+  }
+  antipotion {
+    packet: "Too many packet: %flying%\n(Valid packets with low ping: 20)"
+  }
+  fasteat {
+    packet: "Too many packet: %flying%\n(Valid packets with low ping: 20)"
+  }
+  fastplace {
+    main: "2 blocks placed in: %time% ms\nReal player do it in 150ms"
+  }
+  speed {
+    distance_ground: "Distance Last/New position: %distance%\n(With same Y and player on ground)"
+    distance_jumping: "Distance Last/New position: %distance%\n(With same Y and player jumping)"
+  }
+  autoclick {
+    main: "%click% clicks"
+  }
+  fly {
+    boat: "On boat"
+    air_below: "%nb% air blocks below"
+    boat_air_below: "On boat, %nb% air blocks below"
+  }
+  regen {
+    main: "Time between two regen: %time%ms"
+    packet: "Too many packet: %flying%\n(Valid packets with low ping: 20)"
+  }
+  antiknockback {
+    main: "Distance after damage: %distance%"
+  }
+  fastbow {
+    main: "Time between last shot: %time%ms"
+    packet: "Too many packet: %flying%\n(Valid packets with low ping: 20)"
+  }
+  scaffold {
+    main: "Item in hand: %item% \nBlock placed: %block%"
+  }
+  step {
+    main: "Move %block% blocks up"
+  }
+  noslowdown {
+    main: "Distance: %distance%"
+  }
+  fastladder {
+    main: "%nb% ladders below him"
+  }
+  autosteal {
+    main: "Time between 2 clicks: %time%ms"
+  }
+  nuker {
+    breaked_in: "2 blocks breaked in %time% ms"
+  }
+  chat {
+    main: "Insults: %msg%"
+    spam: "Spam %msg%, %nb% times"
+  }
+  inventory {
+    main: "When %name%"
+  }
+  faststairs {
+    main: "Move %distance% blocks on stairs"
+  }
+  xray {
+    main: "%name% mined %nb% times"
+  }
+}

@@ -36,7 +36,7 @@ public class ChatProtocol extends Cheat implements Listener {
 			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
 				boolean mayCancel = SpigotNegativity.alertMod(np.LAST_CHAT_MESSAGE_NB > 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(95 + np.LAST_CHAT_MESSAGE_NB), "Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times",
-						"Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times");
+						new CheatHover(msg, "%msg%", np.LAST_CHAT_MESSAGE, "%nb%", np.LAST_CHAT_MESSAGE_NB));
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			});
@@ -57,7 +57,7 @@ public class ChatProtocol extends Cheat implements Listener {
 			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
 				boolean mayCancel = SpigotNegativity.alertMod(foundedInsults.length() > 1 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(90 + (foundedInsults.length() - 1) * 5), "Insults: " + foundedInsults.toString(),
-						getHover("main", "%msg%", foundedInsults.toString()));
+						new CheatHover("main", "%msg%", foundedInsults.toString()));
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			});

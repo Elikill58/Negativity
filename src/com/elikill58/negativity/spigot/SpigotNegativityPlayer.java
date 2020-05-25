@@ -40,6 +40,7 @@ import com.elikill58.negativity.spigot.support.ProtocolSupportSupport;
 import com.elikill58.negativity.spigot.support.ViaVersionSupport;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityAccount;
@@ -247,7 +248,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		HashMap<Integer, Integer> ping = new HashMap<>();
 		ReportType type = ReportType.NONE;
 		boolean hasRelia = false;
-		String hoverProof = "";
+		CheatHover hoverProof = null;
 		for(PlayerCheatAlertEvent e : list) {
 			nb += e.getNbAlert();
 			
@@ -260,8 +261,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 			hasRelia = e.hasManyReliability() ? true : hasRelia;
 			
-			if(hoverProof.length() < e.getHoverProof().length())
-				hoverProof = e.getHoverProof();
+			if(hoverProof == null)
+				hoverProof = e.getHover();
 			
 			nbConsole += e.getNbAlertConsole();
 			e.clearNbAlertConsole();
@@ -372,10 +373,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		Cheat c = Cheat.forKey(CheatKeys.FORCEFIELD);
 		if(fakePlayerTouched >= 20 && fakePlayerTouched >= diffSec) {
 			SpigotNegativity.alertMod(ReportType.VIOLATION, getPlayer(), c, UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)),
-					fakePlayerTouched + " touched in " + diffSec + " seconde(s)", c.getHover("fake_players", "%nb%", fakePlayerTouched, "%time%", diff));
+					fakePlayerTouched + " touched in " + diffSec + " seconde(s)", new CheatHover("fake_players", "%nb%", fakePlayerTouched, "%time%", diff));
 		} else if(fakePlayerTouched >= 5 && fakePlayerTouched >= diffSec) {
 			SpigotNegativity.alertMod(ReportType.WARNING, getPlayer(), c, UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)),
-					fakePlayerTouched + " touched in " + diffSec + " seconde(s)", c.getHover("fake_players", "%nb%", fakePlayerTouched, "%time%", diff));
+					fakePlayerTouched + " touched in " + diffSec + " seconde(s)", new CheatHover("fake_players", "%nb%", fakePlayerTouched, "%time%", diff));
 		}
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);
 		if (l >= 3000) {

@@ -18,6 +18,7 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class PacketsTimers implements Consumer<Task> {
@@ -50,7 +51,7 @@ public class PacketsTimers implements Consumer<Task> {
 					ReportType type = flying > 30 ? ReportType.WARNING : ReportType.VIOLATION;
 					if (SpongeNegativity.alertMod(type, p, c, UniversalUtils.parseInPorcent(flying - (ping / 9)),
 							"Flying in one second: " + np.FLYING + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
-							c.getHover("packet", "%flying%", flying)) && c.isSetBack()) {
+							new CheatHover("packet", "%flying%", flying)) && c.isSetBack()) {
 						switch (np.flyingReason) {
 							case EAT:
 								p.getInventory().offer(ItemStack.of(np.eatMaterial, 1));

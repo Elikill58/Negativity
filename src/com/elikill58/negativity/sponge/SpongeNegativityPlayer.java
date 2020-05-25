@@ -46,6 +46,7 @@ import com.elikill58.negativity.sponge.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.sponge.support.ViaVersionSupport;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityAccount;
@@ -547,7 +548,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		HashMap<Integer, Integer> ping = new HashMap<>();
 		ReportType type = ReportType.NONE;
 		boolean hasRelia = false;
-		String hoverProof = "";
+		CheatHover hoverProof = null;
 		for(PlayerCheatEvent.Alert e : list) {
 			nb += e.getNbAlert();
 			
@@ -560,8 +561,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 
 			hasRelia = e.hasManyReliability() ? true : hasRelia;
 			
-			if(hoverProof.length() < e.getHoverProof().length())
-				hoverProof = e.getHoverProof();
+			if(hoverProof == null)
+				hoverProof = e.getHover();
 			
 			nbConsole += e.getNbAlertConsole();
 			e.clearNbAlertConsole();

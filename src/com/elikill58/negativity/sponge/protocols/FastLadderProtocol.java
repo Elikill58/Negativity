@@ -73,7 +73,7 @@ public class FastLadderProtocol extends Cheat {
 		if (distance > 0.23 && distance < 3.8 && nbLadder > 2 && loc.add(0, 1, 0).getBlock().getType().getId().contains("LADDER")) {
 			int ping = Utils.getPing(p);
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 350),
-					"On ladders. Distance from/to : " + distance + ". Ping: " + ping + "ms. Number of Ladder: " + nbLadder, getHover("main", "%nb%", nbLadder));
+					"On ladders. Distance from/to : " + distance + ". Ping: " + ping + "ms. Number of Ladder: " + nbLadder, new CheatHover("main", "%nb%", nbLadder));
 			if (isSetBack() && mayCancel) {
 				Vector3d movementDelta = from.getPosition().sub(to.getPosition());
 				Vector3d setBackPosition = new Vector3d(movementDelta.getX() / 2, (movementDelta.getY() / 2) + 0.5, movementDelta.getZ());

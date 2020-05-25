@@ -18,6 +18,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 @SuppressWarnings({"deprecation"})
@@ -48,7 +49,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					int porcent = UniversalUtils.parseInPorcent(flying - (ping / (allTps[1] - allTps[0] > 0.5 ? 9 : 8)));
 					SpigotNegativity.alertMod(flying > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, c, porcent,
 							"Flying in one second: " + np.FLYING + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
-							c.getHover("packet", "%flying%", flying), (int) flying / 30);
+							new CheatHover("packet", "%flying%", flying), (int) flying / 30);
 					if(c.isSetBack()){
 						switch(np.flyingReason){
 						case BOW:

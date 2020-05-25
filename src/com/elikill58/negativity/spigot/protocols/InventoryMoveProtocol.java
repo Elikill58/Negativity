@@ -56,7 +56,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 					if (p.isSprinting() || p.isSneaking())
 						SpigotNegativity.alertMod(ReportType.WARNING, p, instance,
 								SpigotNegativityPlayer.getNegativityPlayer(p).getAllWarn(instance) > 5 ? 100 : 95,
-									"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking(), getHover("main", "%name%", from));
+									"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking(), new CheatHover("main", "%name%", from));
 				}
 			}, 3);
 		} else if (check) {
@@ -69,7 +69,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 							&& p.getOpenInventory() != null) {
 						SpigotNegativity.alertMod(ReportType.WARNING, p, instance,
 								SpigotNegativityPlayer.getNegativityPlayer(p).getAllWarn(instance) > 5 ? 100 : 95,
-									"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()), getHover("main", "%name%", from));
+									"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()), new CheatHover("main", "%name%", from));
 					}
 				}
 			}, 5);

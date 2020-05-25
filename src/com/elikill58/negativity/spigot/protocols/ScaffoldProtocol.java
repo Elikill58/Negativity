@@ -45,7 +45,7 @@ public class ScaffoldProtocol extends Cheat implements Listener {
 						localPing = 1;
 					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, instance, UniversalUtils.parseInPorcent(120 / localPing),
 							"Item in hand: " + m.name() + " Block placed: " + placed.name() + " Ping: " + ping,
-							getHover("main", "%item%", m.name().toLowerCase(), "%block%", placed.name().toLowerCase()));
+							new CheatHover("main", "%item%", m.name().toLowerCase(), "%block%", placed.name().toLowerCase()));
 					if(isSetBack() && mayCancel) {
 						p.getInventory().addItem(new ItemStack(placed));
 						e.getBlockPlaced().setType(Material.AIR);

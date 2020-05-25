@@ -54,6 +54,7 @@ import com.elikill58.negativity.spigot.timers.TimerTimeBetweenAlert;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatCategory;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
@@ -308,21 +309,40 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 	
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, "", 1);
+		return alertMod(type, p, c, reliability, proof, new CheatHover(""), 1);
 	}
-	
+
+	/**
+	 * 
+	 * @deprecated Use {@code alertMod(type, p, c, reliability, proof, hover)} instead
+	 */
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
-		return alertMod(type, p, c, reliability, proof, hover_proof, 1);
+		return alertMod(type, p, c, reliability, proof, new CheatHover(hover_proof), 1);
 	}
 	
 	@Deprecated // old method, please never use it
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof, String stats_send) {
-		return alertMod(type, p, c, reliability, proof, hover_proof, 1);
+		return alertMod(type, p, c, reliability, proof, new CheatHover(hover_proof), 1);
 	}
 
+	/**
+	 * 
+	 * @deprecated Use {@code alertMod(type, p, c, reliability, proof, hover, amount)} instead
+	 */
+	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 			String hover_proof, int amount) {
 		hover_proof = Utils.coloredMessage(hover_proof);
+		return alertMod(type, p, c, reliability, proof, new CheatHover(hover_proof), amount);
+	}
+
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
+			CheatHover hover) {
+		return alertMod(type, p, c, reliability, proof, hover, 1);
+	}
+
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
+			CheatHover hover, int amount) {
 		if(!c.isActive() || reliability < 55)
 			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
@@ -363,7 +383,7 @@ public class SpigotNegativity extends JavaPlugin {
 				return false;
 		}
 		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(type, p, c, reliability,
-				c.getReliabilityAlert() < reliability, ping, proof, hover_proof, amount);
+				c.getReliabilityAlert() < reliability, ping, proof, hover, amount);
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
@@ -422,10 +442,9 @@ public class SpigotNegativity extends JavaPlugin {
 						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
 		}
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHoverProof(), alert.getNbAlert());
+			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHover().compileDefault(c), alert.getNbAlert());
 			np.ALERT_NOT_SHOWED.remove(c);
 		} else {
-			String hover_proof = alert.getHoverProof();
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers()) {
 				SpigotNegativityPlayer npMod = SpigotNegativityPlayer.getNegativityPlayer(pl);
@@ -440,7 +459,7 @@ public class SpigotNegativity extends JavaPlugin {
 									"%reliability%", String.valueOf(reliability), "%nb%", String.valueOf(alert.getNbAlert())),
 							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
 									String.valueOf(reliability), "%ping%", String.valueOf(ping))
-									+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),
+									+ alert.getHover().compile(c, npMod),
 							"/negativity " + p.getName()).sendToPlayer(pl);
 					hasPermPeople = true;
 				}

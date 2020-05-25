@@ -451,7 +451,7 @@ public class SpongeNegativity {
 	}
 	
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, new CheatHover(""), 1);
+		return alertMod(type, p, c, reliability, proof, new CheatHover(null), 1);
 	}
 
 	/**

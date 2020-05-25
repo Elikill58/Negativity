@@ -309,13 +309,14 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 	
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, new CheatHover(""), 1);
+		return alertMod(type, p, c, reliability, proof, new CheatHover(null), 1);
 	}
 
 	/**
 	 * 
 	 * @deprecated Use {@code alertMod(type, p, c, reliability, proof, hover)} instead
 	 */
+	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
 		return alertMod(type, p, c, reliability, proof, new CheatHover(hover_proof), 1);
 	}
@@ -442,7 +443,7 @@ public class SpigotNegativity extends JavaPlugin {
 						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
 		}
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHover().compileDefault(c), alert.getNbAlert());
+			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHover().compile(c), alert.getNbAlert());
 			np.ALERT_NOT_SHOWED.remove(c);
 		} else {
 			boolean hasPermPeople = false;

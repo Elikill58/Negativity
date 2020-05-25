@@ -185,12 +185,12 @@ public abstract class Cheat {
 			return placeholders;
 		}
 		
-		public String compileDefault(Cheat c) {
-			return key == "" ? key : "\n" + TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, "hover." + c.getKey() + "." + getKey(), getPlaceholders());
+		public String compile(Cheat c) {
+			return key == null ? "" : "\n" + TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, "hover." + c.getKey() + "." + getKey(), getPlaceholders());
 		}
 		
 		public String compile(Cheat c, NegativityPlayer np) {
-			return key == "" ? key : "\n" + TranslatedMessages.getStringFromLang(np.getAccount().getLang(), "hover." + c.getKey() + "." + getKey(), getPlaceholders());
+			return key == null ? "" : "\n" + TranslatedMessages.getStringFromLang(np.getAccount().getLang(), "hover." + c.getKey() + "." + getKey(), getPlaceholders());
 		}
 	}
 }

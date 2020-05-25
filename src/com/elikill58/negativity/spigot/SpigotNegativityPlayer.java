@@ -370,12 +370,12 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		fakePlayerTouched++;
 		long diff = System.currentTimeMillis() - timeStartFakePlayer;
 		double diffSec = diff / 1000;
-		Cheat c = Cheat.forKey(CheatKeys.FORCEFIELD);
+		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
 		if(fakePlayerTouched >= 20 && fakePlayerTouched >= diffSec) {
-			SpigotNegativity.alertMod(ReportType.VIOLATION, getPlayer(), c, UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)),
+			SpigotNegativity.alertMod(ReportType.VIOLATION, getPlayer(), forcefield, UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)),
 					fakePlayerTouched + " touched in " + diffSec + " seconde(s)", new CheatHover("fake_players", "%nb%", fakePlayerTouched, "%time%", diff));
 		} else if(fakePlayerTouched >= 5 && fakePlayerTouched >= diffSec) {
-			SpigotNegativity.alertMod(ReportType.WARNING, getPlayer(), c, UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)),
+			SpigotNegativity.alertMod(ReportType.WARNING, getPlayer(), forcefield, UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)),
 					fakePlayerTouched + " touched in " + diffSec + " seconde(s)", new CheatHover("fake_players", "%nb%", fakePlayerTouched, "%time%", diff));
 		}
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);

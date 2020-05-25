@@ -24,6 +24,7 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	 * 
 	 * @deprecated Use constructor with "CheatHover" and not string.
 	 */
+	@Deprecated
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof) {
 		this(type, p, c, reliability, hasRelia, ping, proof, new CheatHover(hover_proof), 1, 1);
 	}
@@ -32,6 +33,7 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	 * 
 	 * @deprecated Use constructor with "CheatHover" and not string.
 	 */
+	@Deprecated
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof, int nbAlert) {
 		this(type, p, c, reliability, hasRelia, ping, proof, new CheatHover(hover_proof), nbAlert, 1);
 	}

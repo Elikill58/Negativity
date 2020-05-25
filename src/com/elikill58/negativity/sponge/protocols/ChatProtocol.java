@@ -33,14 +33,14 @@ public class ChatProtocol extends Cheat {
 			return;
 		String msg = e.getMessage().toPlain();
 		String withoutEvading = msg.replaceAll(" ", "").toLowerCase();
-		StringJoiner foundedInsults = new StringJoiner(", ");
+		StringJoiner foundInsults = new StringJoiner(", ");
 		for(String insults : Adapter.getAdapter().getConfig().getStringList("cheats.chat.insults")) {
 			if(withoutEvading.contains(insults.toLowerCase()))
-				foundedInsults.add(insults);
+				foundInsults.add(insults);
 		}
-		if(foundedInsults.length() > 0) {
-			boolean mayCancel = SpongeNegativity.alertMod(foundedInsults.length() > 1 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(80 + (foundedInsults.length() - 1) * 10), "Insults: " + foundedInsults, new CheatHover("main", "%msg%", foundedInsults));
+		if(foundInsults.length() > 0) {
+			boolean mayCancel = SpongeNegativity.alertMod(foundInsults.length() > 1 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+					UniversalUtils.parseInPorcent(80 + (foundInsults.length() - 1) * 10), "Insults: " + foundInsults, new CheatHover("main", "%msg%", foundInsults));
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);
 		}

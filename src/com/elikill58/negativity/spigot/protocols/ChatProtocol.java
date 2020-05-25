@@ -36,7 +36,7 @@ public class ChatProtocol extends Cheat implements Listener {
 			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
 				boolean mayCancel = SpigotNegativity.alertMod(np.LAST_CHAT_MESSAGE_NB > 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(95 + np.LAST_CHAT_MESSAGE_NB), "Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times",
-						new CheatHover(msg, "%msg%", np.LAST_CHAT_MESSAGE, "%nb%", np.LAST_CHAT_MESSAGE_NB));
+						new CheatHover("spam", "%msg%", np.LAST_CHAT_MESSAGE, "%nb%", np.LAST_CHAT_MESSAGE_NB));
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			});
@@ -48,16 +48,16 @@ public class ChatProtocol extends Cheat implements Listener {
 		SpigotNegativity.getInstance().getConfig().getStringList("cheats.chat.insults").forEach((s) -> {
 			insults.add(s.toLowerCase());
 		});
-		final StringJoiner foundedInsults = new StringJoiner(", ");
+		final StringJoiner foundInsults = new StringJoiner(", ");
 		for(String s : msg.toLowerCase().split(" ")) {
 			if(insults.contains(s))
-				foundedInsults.add(s);
+				foundInsults.add(s);
 		}
-		if(foundedInsults.length() == 0) {
+		if(foundInsults.length() > 0) {
 			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
-				boolean mayCancel = SpigotNegativity.alertMod(foundedInsults.length() > 1 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(90 + (foundedInsults.length() - 1) * 5), "Insults: " + foundedInsults.toString(),
-						new CheatHover("main", "%msg%", foundedInsults.toString()));
+				boolean mayCancel = SpigotNegativity.alertMod(foundInsults.length() > 1 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+						UniversalUtils.parseInPorcent(90 + (foundInsults.length() - 1) * 5), "Insults: " + foundInsults.toString(),
+						new CheatHover("main", "%msg%", foundInsults.toString()));
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			});

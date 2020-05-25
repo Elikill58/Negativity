@@ -71,8 +71,8 @@ public class ForceFieldProtocol extends Cheat {
 			Vector3d loc1 = p.getRotation();
 			int gradeRounded = (int) Math.round(Math.abs(loc.getY() - loc1.getY()));
 			if (gradeRounded > 180.0) {
-				Cheat c = Cheat.forKey(CheatKeys.FORCEFIELD);
-				SpongeNegativity.alertMod(ReportType.WARNING, p, c, UniversalUtils.parseInPorcent(gradeRounded), "Player rotate too much (" + gradeRounded + "°) without thorns.",
+				SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded),
+						"Player rotate too much (" + gradeRounded + "°) without thorns.",
 						new CheatHover("rotate", "%degres%", gradeRounded));
 			}
 		}).submit(SpongeNegativity.getInstance());

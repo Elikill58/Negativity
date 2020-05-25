@@ -94,10 +94,9 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {
 		if (np.fakePlayerTouched < 5)
 			return;
-		Cheat c = Cheat.forKey(CheatKeys.FORCEFIELD);
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
 		double rapport = np.fakePlayerTouched / (timeBehindStart / 1000);
-		SpigotNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, c,
+		SpigotNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD),
 				UniversalUtils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 						new CheatHover("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));

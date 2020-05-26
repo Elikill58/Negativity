@@ -59,7 +59,7 @@ public class FastBowProtocol extends Cheat {
 					boolean mayCancel = SpongeNegativity.alertMod(violation, p, this, reliability,
 							"Player use Bow, last shot: " + np.LAST_SHOT_BOW + " Actual time: " + actual
 									+ " Difference: " + dif + ", Warn: " + np.getWarn(this),
-									new CheatHover("main", "%time%", dif));
+									hoverMsg("main", "%time%", dif));
 					if (isSetBack() && mayCancel) {
 						e.setCancelled(true);
 					}

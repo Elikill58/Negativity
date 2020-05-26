@@ -113,7 +113,7 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	
 	@Deprecated
 	public String getHoverProof() {
-		return hover.getKey();
+		return hover == null ? null : hover.getKey();
 	}
 	
 	public CheatHover getHover() {

@@ -57,7 +57,7 @@ public class StepProtocol extends Cheat {
 
 				if (dif > 1.499 && ping < 200) {
 					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
-							+ np.getWarn(this) + ". Move " + dif + "blocks up. ping: " + ping, new CheatHover("main", "%block%", String.format("%.2f", dif)));
+							+ np.getWarn(this) + ". Move " + dif + "blocks up. ping: " + ping, hoverMsg("main", "%block%", String.format("%.2f", dif)));
 					if (isSetBack() && mayCancel) {
 						e.setCancelled(true);
 					}

@@ -451,7 +451,7 @@ public class SpongeNegativity {
 	}
 	
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, new CheatHover(""), 1);
+		return alertMod(type, p, c, reliability, proof, new CheatHover(null), 1);
 	}
 
 	/**
@@ -582,7 +582,7 @@ public class SpongeNegativity {
 						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
 		}
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHover().compile(c), alert.getNbAlert());
+			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHover() == null ? null : alert.getHover().compile(), alert.getNbAlert());
 			np.pendingAlerts.remove(c);
 		} else {
 			boolean hasPermPeople = false;
@@ -592,7 +592,8 @@ public class SpongeNegativity {
 					continue;
 				}
 
-				pl.sendMessage(createAlertText(p, c, alert.getHover().compile(c, npMod), ping, alert.getNbAlert(), alert.getAlertMessageKey(), reliability, pl));
+				pl.sendMessage(createAlertText(p, c, alert.getHover() == null ? null : alert.getHover().compile(npMod),
+							ping, alert.getNbAlert(), alert.getAlertMessageKey(), reliability, pl));
 
 				hasPermPeople = true;
 			}

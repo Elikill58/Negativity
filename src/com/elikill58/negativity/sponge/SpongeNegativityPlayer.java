@@ -560,8 +560,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 				type = e.getReportType();
 
 			hasRelia = e.hasManyReliability() ? true : hasRelia;
-			
-			if(hoverProof == null)
+
+			if(hoverProof == null && e.getHover() != null)
 				hoverProof = e.getHover();
 			
 			nbConsole += e.getNbAlertConsole();

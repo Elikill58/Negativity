@@ -261,7 +261,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 			hasRelia = e.hasManyReliability() ? true : hasRelia;
 			
-			if(hoverProof == null)
+			if(hoverProof == null && e.getHover() != null)
 				hoverProof = e.getHover();
 			
 			nbConsole += e.getNbAlertConsole();
@@ -373,10 +373,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
 		if(fakePlayerTouched >= 20 && fakePlayerTouched >= diffSec) {
 			SpigotNegativity.alertMod(ReportType.VIOLATION, getPlayer(), forcefield, UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)),
-					fakePlayerTouched + " touched in " + diffSec + " seconde(s)", new CheatHover("fake_players", "%nb%", fakePlayerTouched, "%time%", diff));
+					fakePlayerTouched + " touched in " + diffSec + " seconde(s)", forcefield.hoverMsg("fake_players", "%nb%", fakePlayerTouched, "%time%", diff));
 		} else if(fakePlayerTouched >= 5 && fakePlayerTouched >= diffSec) {
 			SpigotNegativity.alertMod(ReportType.WARNING, getPlayer(), forcefield, UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)),
-					fakePlayerTouched + " touched in " + diffSec + " seconde(s)", new CheatHover("fake_players", "%nb%", fakePlayerTouched, "%time%", diff));
+					fakePlayerTouched + " touched in " + diffSec + " seconde(s)", forcefield.hoverMsg("fake_players", "%nb%", fakePlayerTouched, "%time%", diff));
 		}
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);
 		if (l >= 3000) {

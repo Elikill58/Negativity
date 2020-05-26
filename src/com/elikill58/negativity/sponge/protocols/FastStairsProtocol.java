@@ -42,7 +42,7 @@ public class FastStairsProtocol extends Cheat {
 		double distance = from.distance(to);
 		if(distance > 0.45 && np.lastDistanceFastStairs > distance) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 140),
-					"Player without fall damage. Block: " + blockName + ", distance: " + distance, new CheatHover("main", "%distance%", distance));
+					"Player without fall damage. Block: " + blockName + ", distance: " + distance, hoverMsg("main", "%distance%", distance));
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);
 		}

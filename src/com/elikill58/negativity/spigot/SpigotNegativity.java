@@ -443,7 +443,7 @@ public class SpigotNegativity extends JavaPlugin {
 						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
 		}
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHover().compile(c), alert.getNbAlert());
+			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHover() == null ? null : alert.getHover().compile(), alert.getNbAlert());
 			np.ALERT_NOT_SHOWED.remove(c);
 		} else {
 			boolean hasPermPeople = false;
@@ -458,10 +458,9 @@ public class SpigotNegativity extends JavaPlugin {
 					new ClickableText().addRunnableHoverEvent(
 							Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
 									"%reliability%", String.valueOf(reliability), "%nb%", String.valueOf(alert.getNbAlert())),
-							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
-									String.valueOf(reliability), "%ping%", String.valueOf(ping))
-									+ alert.getHover().compile(c, npMod),
-							"/negativity " + p.getName()).sendToPlayer(pl);
+							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%", reliability, "%ping%", ping)
+								+ alert.getHover().compile(npMod),
+								"/negativity " + p.getName()).sendToPlayer(pl);
 					hasPermPeople = true;
 				}
 			}

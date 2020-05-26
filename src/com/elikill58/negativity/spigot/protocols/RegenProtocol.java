@@ -62,7 +62,7 @@ public class RegenProtocol extends Cheat implements Listener {
 				boolean mayCancel = SpigotNegativity.alertMod(dif < (50 + ping) ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(200 - dif - ping), "Player regen, last regen: " + np.LAST_REGEN
 									+ " Actual time: " + actual + " Difference: " + dif + "ms",
-									new CheatHover("main", "%time%", dif));
+									hoverMsg("main", "%time%", dif));
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}

@@ -49,7 +49,7 @@ public class ForceFieldProtocol extends Cheat {
 		boolean mayCancel = false;
 		if(!np.hasLineOfSight(e.getTargetEntity())) {
 			mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getTargetEntity().getType().getId()
-					+ " but cannot see it, ping: " + Utils.getPing(p), new CheatHover("line_sight", "%name%", e.getTargetEntity().getType().getName()));
+					+ " but cannot see it, ping: " + Utils.getPing(p), hoverMsg("line_sight", "%name%", e.getTargetEntity().getType().getName()));
 		}
 		if(np.hasThorns(p)) {
 			if(mayCancel && isSetBack())
@@ -64,7 +64,7 @@ public class ForceFieldProtocol extends Cheat {
 		if (distance > allowedReach && !(usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW) && e.getTargetEntity().getType().equals(EntityTypes.ENDER_DRAGON)) {
 			SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 2 * 10), "Big distance with: "
 						+ e.getTargetEntity().getType().getName().toLowerCase() + ". Exact distance: " + distance + ". Ping: " + Utils.getPing(p),
-						new CheatHover("distance", "%name%", e.getTargetEntity().getType().getName(), "%distance%", distanceFormatter.format(distance)));
+						hoverMsg("distance", "%name%", e.getTargetEntity().getType().getName(), "%distance%", distanceFormatter.format(distance)));
 		}
 		final Vector3d loc = p.getRotation().clone();
 		Task.builder().delay(20, TimeUnit.MILLISECONDS).execute(() -> {
@@ -73,7 +73,7 @@ public class ForceFieldProtocol extends Cheat {
 			if (gradeRounded > 180.0) {
 				SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded),
 						"Player rotate too much (" + gradeRounded + "°) without thorns.",
-						new CheatHover("rotate", "%degres%", gradeRounded));
+						hoverMsg("rotate", "%degres%", gradeRounded));
 			}
 		}).submit(SpongeNegativity.getInstance());
 		if (isSetBack() && mayCancel)
@@ -123,12 +123,12 @@ public class ForceFieldProtocol extends Cheat {
 			return;
 		}
 
-		Cheat c = Cheat.forKey(CheatKeys.FORCEFIELD);
+		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
 		double rapport = np.fakePlayerTouched / (timeBehindStart / 1000);
-		SpongeNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, c,
+		SpongeNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, forcefield,
 				UniversalUtils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
-						new CheatHover("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
+						forcefield.hoverMsg("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
 	}
 }

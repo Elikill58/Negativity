@@ -65,7 +65,7 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 			return;
 		if (np.eatingMoveDistance > p.getWalkSpeed() || p.isSprinting()) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.NO_SLOW_DOWN), UniversalUtils.parseInPorcent(np.eatingMoveDistance * 200),
-					"Distance while eating: " + np.eatingMoveDistance + ", WalkSpeed: " + p.getWalkSpeed(), new CheatHover("main", "%distance%", np.eatingMoveDistance));
+					"Distance while eating: " + np.eatingMoveDistance + ", WalkSpeed: " + p.getWalkSpeed(), hoverMsg("main", "%distance%", np.eatingMoveDistance));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}

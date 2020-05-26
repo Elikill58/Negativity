@@ -40,7 +40,7 @@ public class FastStairsProtocol extends Cheat implements Listener {
 		if(distance > 0.45 && np.lastDistanceFastStairs > distance) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 140),
 					"No fall damage. Block: " + blockName + ", distance: " + distance + ", lastDistance: " + np.lastDistanceFastStairs,
-					new CheatHover("main", "%distance%", String.format("%.2f", distance)));
+					hoverMsg("main", "%distance%", String.format("%.2f", distance)));
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);
 		}

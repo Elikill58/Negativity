@@ -89,7 +89,7 @@ public class SpeedProtocol extends Cheat {
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
 				mayCancel = SpongeNegativity.alertMod(type, p, this, porcent,
 						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + moveY + ", walkTest: " + walkTest +
-						", walkWithEssentialsTest: " + walkWithEssTest, new CheatHover("distance_ground", "%distance%", numberFormat.format(moveY)));
+						", walkWithEssentialsTest: " + walkWithEssTest, hoverMsg("distance_ground", "%distance%", numberFormat.format(moveY)));
 			}
 		} else if (!p.isOnGround()) {
 			for(Entity et : p.getNearbyEntities(5))
@@ -98,7 +98,7 @@ public class SpeedProtocol extends Cheat {
 			if(!mayCancel) {
 				if(moveY >= 0.85D) {
 					mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(moveY * 100 * 2), proof,
-							new CheatHover("distance_jumping", "%distance%", numberFormat.format(moveY)));
+							hoverMsg("distance_jumping", "%distance%", numberFormat.format(moveY)));
 				} else {
 					BlockType under = e.getToTransform().getLocation().copy().sub(0, 1, 0).getBlockType();
 					if (!under.getId().contains("STEP")) {

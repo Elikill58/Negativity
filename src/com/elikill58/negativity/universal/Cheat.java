@@ -119,6 +119,10 @@ public abstract class Cheat {
 		return aliases;
 	}
 
+	public CheatHover hoverMsg(String key, Object... placeholders) {
+		return new CheatHover("hover." + getKey() + "." + key, placeholders);
+	}
+	
 	public static Cheat fromString(String name) {
 		for (Cheat c : Cheat.values()) {
 			try {
@@ -185,12 +189,12 @@ public abstract class Cheat {
 			return placeholders;
 		}
 		
-		public String compile(Cheat c) {
-			return key == null ? "" : "\n" + TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, "hover." + c.getKey() + "." + getKey(), getPlaceholders());
+		public String compile() {
+			return key == null ? "" : "\n" + TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, getKey(), getPlaceholders());
 		}
 		
-		public String compile(Cheat c, NegativityPlayer np) {
-			return key == null ? "" : "\n" + TranslatedMessages.getStringFromLang(np.getAccount().getLang(), "hover." + c.getKey() + "." + getKey(), getPlaceholders());
+		public String compile(NegativityPlayer np) {
+			return key == null ? "" : "\n" + TranslatedMessages.getStringFromLang(np.getAccount().getLang(), getKey(), getPlaceholders());
 		}
 	}
 }

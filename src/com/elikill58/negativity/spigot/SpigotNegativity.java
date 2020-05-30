@@ -443,9 +443,9 @@ public class SpigotNegativity extends JavaPlugin {
 						+ " (UUID: " + p.getUniqueId().toString() + ") (ping: " + ping + ") : suspected of cheating ("
 						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
 		}
-		String alertHoverMessage = alert.getHover() == null ? "" : alert.getHover().compile();
+		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, alertHoverMessage, alert.getNbAlert());
+			sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg == null ? "" : hoverMsg.compile(), alert.getNbAlert());
 			np.ALERT_NOT_SHOWED.remove(c);
 		} else {
 			boolean hasPermPeople = false;
@@ -460,7 +460,8 @@ public class SpigotNegativity extends JavaPlugin {
 					new ClickableText().addRunnableHoverEvent(
 							Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
 									"%reliability%", String.valueOf(reliability), "%nb%", String.valueOf(alert.getNbAlert())),
-							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%", reliability, "%ping%", ping) + alertHoverMessage,
+							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%", reliability, "%ping%", ping)
+									+ (hoverMsg == null ? "" : "\n\n" + hoverMsg.compile(npMod)),
 								"/negativity " + p.getName()).sendToPlayer(pl);
 					hasPermPeople = true;
 				}

@@ -582,8 +582,9 @@ public class SpongeNegativity {
 						+ " (UUID: " + p.getUniqueId().toString() + ") (ping: " + ping + ") : suspected of cheating ("
 						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
 		}
+		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHover() == null ? "" : alert.getHover().compile(), alert.getNbAlert());
+			sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg == null ? "" : hoverMsg.compile(), alert.getNbAlert());
 			np.pendingAlerts.remove(c);
 		} else {
 			boolean hasPermPeople = false;
@@ -593,7 +594,7 @@ public class SpongeNegativity {
 					continue;
 				}
 
-				pl.sendMessage(createAlertText(p, c, alert.getHover() == null ? "" : alert.getHover().compile(npMod),
+				pl.sendMessage(createAlertText(p, c, hoverMsg == null ? "" : hoverMsg.compile(npMod),
 							ping, alert.getNbAlert(), alert.getAlertMessageKey(), reliability, pl));
 
 				hasPermPeople = true;
@@ -618,7 +619,7 @@ public class SpongeNegativity {
 						Text.of(Messages.getStringMessage(receiver, "negativity.alert_hover",
 								"%reliability%", String.valueOf(reliability),
 								"%ping%", String.valueOf(ping))
-								+ (hoverProof.isEmpty() ? "" : "\n" + hoverProof))))
+								+ (hoverProof.isEmpty() ? "" : "\n\n" + hoverProof))))
 				.build();
 	}
 

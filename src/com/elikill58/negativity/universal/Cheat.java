@@ -191,11 +191,11 @@ public abstract class Cheat {
 		}
 		
 		public String compile() {
-			return "\n" + TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, getKey(), getPlaceholders());
+			return TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, getKey(), getPlaceholders());
 		}
 		
 		public String compile(NegativityPlayer np) {
-			return "\n" + TranslatedMessages.getStringFromLang(np.getAccount().getLang(), getKey(), getPlaceholders());
+			return TranslatedMessages.getStringFromLang(np.getAccount().getLang(), getKey(), getPlaceholders());
 		}
 	}
 }

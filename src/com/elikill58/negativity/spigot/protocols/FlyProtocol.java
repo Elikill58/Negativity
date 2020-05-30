@@ -63,7 +63,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, UniversalUtils.parseInPorcent((int) i * 50),
 					"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this),
-					hoverMsg(Utils.isInBoat(p) ? "boat" : null));
+					Utils.isInBoat(p) ? hoverMsg("boat") : null);
 		}
 
 		if (np.isUsingSlimeBlock && !np.hasOtherThanExtended(p.getLocation(), "AIR")

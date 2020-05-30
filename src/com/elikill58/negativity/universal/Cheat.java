@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -177,7 +178,7 @@ public abstract class Cheat {
 		private final Object[] placeholders;
 		
 		public CheatHover(String key, Object... placeholders) {
-			this.key = key;
+			this.key = Objects.requireNonNull(key);
 			this.placeholders = placeholders;
 		}
 
@@ -190,11 +191,11 @@ public abstract class Cheat {
 		}
 		
 		public String compile() {
-			return key == null ? "" : "\n" + TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, getKey(), getPlaceholders());
+			return "\n" + TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, getKey(), getPlaceholders());
 		}
 		
 		public String compile(NegativityPlayer np) {
-			return key == null ? "" : "\n" + TranslatedMessages.getStringFromLang(np.getAccount().getLang(), getKey(), getPlaceholders());
+			return "\n" + TranslatedMessages.getStringFromLang(np.getAccount().getLang(), getKey(), getPlaceholders());
 		}
 	}
 }

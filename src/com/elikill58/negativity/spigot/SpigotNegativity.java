@@ -309,26 +309,27 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 	
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, new CheatHover(null), 1);
+		return alertMod(type, p, c, reliability, proof, (CheatHover) null, 1);
 	}
 
 	/**
-	 * 
-	 * @deprecated Use {@code alertMod(type, p, c, reliability, proof, hover)} instead
+	 * @deprecated Use {@link #alertMod(ReportType, Player, Cheat, int, String, CheatHover)} instead
 	 */
 	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
 		return alertMod(type, p, c, reliability, proof, new CheatHover(hover_proof), 1);
 	}
 	
-	@Deprecated // old method, please never use it
+	/**
+	 * @deprecated Use {@link #alertMod(ReportType, Player, Cheat, int, String, CheatHover, int)} instead
+	 */
+	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof, String stats_send) {
 		return alertMod(type, p, c, reliability, proof, new CheatHover(hover_proof), 1);
 	}
 
 	/**
-	 * 
-	 * @deprecated Use {@code alertMod(type, p, c, reliability, proof, hover, amount)} instead
+	 * @deprecated Use {@link #alertMod(ReportType, Player, Cheat, int, String, CheatHover, int)} instead
 	 */
 	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
@@ -442,8 +443,9 @@ public class SpigotNegativity extends JavaPlugin {
 						+ " (UUID: " + p.getUniqueId().toString() + ") (ping: " + ping + ") : suspected of cheating ("
 						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
 		}
+		String alertHoverMessage = alert.getHover() == null ? "" : alert.getHover().compile();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHover() == null ? null : alert.getHover().compile(), alert.getNbAlert());
+			sendAlertMessage(p, c.getName(), reliability, ping, alertHoverMessage, alert.getNbAlert());
 			np.ALERT_NOT_SHOWED.remove(c);
 		} else {
 			boolean hasPermPeople = false;
@@ -458,8 +460,7 @@ public class SpigotNegativity extends JavaPlugin {
 					new ClickableText().addRunnableHoverEvent(
 							Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
 									"%reliability%", String.valueOf(reliability), "%nb%", String.valueOf(alert.getNbAlert())),
-							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%", reliability, "%ping%", ping)
-								+ alert.getHover().compile(npMod),
+							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%", reliability, "%ping%", ping) + alertHoverMessage,
 								"/negativity " + p.getName()).sendToPlayer(pl);
 					hasPermPeople = true;
 				}

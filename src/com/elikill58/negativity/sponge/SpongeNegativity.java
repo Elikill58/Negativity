@@ -75,6 +75,7 @@ import com.elikill58.negativity.sponge.timers.PacketsTimers;
 import com.elikill58.negativity.sponge.timers.PendingAlertsTimer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
@@ -85,7 +86,6 @@ import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpongeAdapter;
@@ -451,26 +451,27 @@ public class SpongeNegativity {
 	}
 	
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, new CheatHover(null), 1);
+		return alertMod(type, p, c, reliability, proof, (CheatHover) null, 1);
 	}
 
 	/**
-	 * 
-	 * @deprecated Use {@code alertMod(type, p, c, reliability, proof, hover)} instead
+	 * @deprecated Use {@link #alertMod(ReportType, Player, Cheat, int, String, CheatHover)} instead
 	 */
 	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
 		return alertMod(type, p, c, reliability, proof, new CheatHover(hover_proof), 1);
 	}
 	
-	@Deprecated // old method, please never use it
+	/**
+	 * @deprecated Use {@link #alertMod(ReportType, Player, Cheat, int, String, CheatHover, int)} instead
+	 */
+	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof, String stats_send) {
 		return alertMod(type, p, c, reliability, proof, new CheatHover(hover_proof), 1);
 	}
 
 	/**
-	 * 
-	 * @deprecated Use {@code alertMod(type, p, c, reliability, proof, hover, amount)} instead
+	 * @deprecated Use {@link #alertMod(ReportType, Player, Cheat, int, String, CheatHover, int)} instead
 	 */
 	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
@@ -582,7 +583,7 @@ public class SpongeNegativity {
 						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
 		}
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHover() == null ? null : alert.getHover().compile(), alert.getNbAlert());
+			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHover() == null ? "" : alert.getHover().compile(), alert.getNbAlert());
 			np.pendingAlerts.remove(c);
 		} else {
 			boolean hasPermPeople = false;
@@ -592,7 +593,7 @@ public class SpongeNegativity {
 					continue;
 				}
 
-				pl.sendMessage(createAlertText(p, c, alert.getHover() == null ? null : alert.getHover().compile(npMod),
+				pl.sendMessage(createAlertText(p, c, alert.getHover() == null ? "" : alert.getHover().compile(npMod),
 							ping, alert.getNbAlert(), alert.getAlertMessageKey(), reliability, pl));
 
 				hasPermPeople = true;

@@ -461,7 +461,7 @@ public class SpigotNegativity extends JavaPlugin {
 							Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
 									"%reliability%", String.valueOf(reliability), "%nb%", String.valueOf(alert.getNbAlert())),
 							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%", reliability, "%ping%", ping)
-									+ (hoverMsg == null ? "" : "\n\n" + hoverMsg.compile(npMod)),
+									+ ChatColor.RESET + (hoverMsg == null ? "" : "\n\n" + hoverMsg.compile(npMod)),
 								"/negativity " + p.getName()).sendToPlayer(pl);
 					hasPermPeople = true;
 				}

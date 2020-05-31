@@ -618,8 +618,8 @@ public class SpongeNegativity {
 				.onHover(TextActions.showText(
 						Text.of(Messages.getStringMessage(receiver, "negativity.alert_hover",
 								"%reliability%", String.valueOf(reliability),
-								"%ping%", String.valueOf(ping))
-								+ (hoverProof.isEmpty() ? "" : "\n\n" + hoverProof))))
+								"%ping%", String.valueOf(ping)),
+								TextColors.RESET, (hoverProof.isEmpty() ? "" : "\n\n" + hoverProof))))
 				.build();
 	}
 

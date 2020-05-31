@@ -10,6 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -81,13 +82,15 @@ public class NegativityListener implements Listener {
 			Object[] place = new Object[]{"%name%", alert.getPlayername(), "%cheat%", alert.getCheat(),
 					"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
-			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers())
-				if (Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer(pp), Perm.SHOW_ALERT)) {
+			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers()) {
+				BungeeNegativityPlayer nPlayer = BungeeNegativityPlayer.getNegativityPlayer(pp);
+				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT)) {
 					TextComponent alertMessage = new TextComponent(BungeeMessages.getMessage(pp, alertMessageKey, place));
 
 					ComponentBuilder hoverComponent = new ComponentBuilder(BungeeMessages.getMessage(pp, "alert_hover", place));
-					if (!alert.getHoverInfo().isEmpty()) {
-						hoverComponent.append("\n\n" + BungeeMessages.coloredBungeeMessage(alert.getHoverInfo()), ComponentBuilder.FormatRetention.NONE);
+					Cheat.CheatHover hoverInfo = alert.getHoverInfo();
+					if (hoverInfo != null) {
+						hoverComponent.append("\n\n" + BungeeMessages.coloredBungeeMessage(hoverInfo.compile(nPlayer)), ComponentBuilder.FormatRetention.NONE);
 					}
 					hoverComponent.append("\n\n" + BungeeMessages.getMessage(pp, "alert_tp_info", "%playername%", alert.getPlayername()), ComponentBuilder.FormatRetention.NONE);
 					alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent.create()));
@@ -96,6 +99,7 @@ public class NegativityListener implements Listener {
 					alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, tpCommand));
 					pp.sendMessage(alertMessage);
 				}
+			}
 		} else if (message instanceof ProxyPingMessage) {
 			try {
 				player.getServer().sendData(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION)));

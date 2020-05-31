@@ -26,6 +26,8 @@ import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandManager;
 import org.spongepowered.api.command.CommandMapping;
+import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
@@ -584,7 +586,7 @@ public class SpongeNegativity {
 		}
 		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg == null ? "" : hoverMsg.compile(), alert.getNbAlert());
+			sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg, alert.getNbAlert());
 			np.pendingAlerts.remove(c);
 		} else {
 			boolean hasPermPeople = false;
@@ -639,7 +641,7 @@ public class SpongeNegativity {
 		return plugin.getLogger();
 	}
 
-	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, String hover, int alertsCount) {
+	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover, int alertsCount) {
 		channel.sendTo(p, (payload) -> {
 			try {
 				AlertMessage message = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);

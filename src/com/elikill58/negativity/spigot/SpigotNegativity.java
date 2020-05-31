@@ -13,6 +13,7 @@ import java.util.StringJoiner;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
@@ -445,7 +446,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg == null ? "" : hoverMsg.compile(), alert.getNbAlert());
+			sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg, alert.getNbAlert());
 			np.ALERT_NOT_SHOWED.remove(c);
 		} else {
 			boolean hasPermPeople = false;
@@ -473,7 +474,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 	}
 
-	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, String hover, int alertsCount) {
+	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover, int alertsCount) {
 		try {
 			AlertMessage alertMessage = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);
 			p.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(alertMessage));

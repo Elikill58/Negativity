@@ -73,7 +73,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 				int gradeRounded = Math.round(Math.abs(loc.getYaw() - loc1.getYaw()));
 				if (gradeRounded > 180.0) {
 					SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded),
-							"Player rotate too much (" + gradeRounded + "°) without thorns", hoverMsg("rotate", "%degres%", gradeRounded));
+							"Player rotate too much (" + gradeRounded + "°) without thorns", hoverMsg("rotate", "%degrees%", gradeRounded));
 				}
 			}
 		}, 1);

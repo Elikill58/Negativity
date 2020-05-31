@@ -73,7 +73,7 @@ public class ForceFieldProtocol extends Cheat {
 			if (gradeRounded > 180.0) {
 				SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded),
 						"Player rotate too much (" + gradeRounded + "°) without thorns.",
-						hoverMsg("rotate", "%degres%", gradeRounded));
+						hoverMsg("rotate", "%degrees%", gradeRounded));
 			}
 		}).submit(SpongeNegativity.getInstance());
 		if (isSetBack() && mayCancel)

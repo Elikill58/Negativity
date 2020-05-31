@@ -130,20 +130,20 @@ hover {
   forcefield {
     line_sight: "Hit %name% without line of sight"
     distance: "Distance with %name%: %distance% blocks"
-    rotate: "Rotate %degres%°"
-    fake_players: "%nb% fake players touched in %time% ms"
+    rotate: "Rotate %degrees%°"
+    fake_players: "%nb% fake players touched in %time%ms"
   }
   jesus {
-    main: "Move %distance% block under water"
+    main: "Moved by %distance% blocks in water"
   }
   antipotion {
-    packet: "Too many packet: %flying%\n(Valid packets with low ping: 20)"
+    packet: "Too many packets: %flying%\n(Normal maximum with low ping: 20)"
   }
   fasteat {
-    packet: "Too many packet: %flying%\n(Valid packets with low ping: 20)"
+    packet: "Too many packets: %flying%\n(Normal maximum with low ping: 20)"
   }
   fastplace {
-    main: "2 blocks placed in: %time% ms\nReal player do it in 150ms"
+    main: "2 blocks placed in: %time%ms\nReal players do it in 150ms"
   }
   speed {
     distance_ground: "Distance Last/New position: %distance%\n(With same Y and player on ground)"
@@ -159,42 +159,42 @@ hover {
   }
   regen {
     main: "Time between two regen: %time%ms"
-    packet: "Too many packet: %flying%\n(Valid packets with low ping: 20)"
+    packet: "Too many packets: %flying%\n(Normal maximum with low ping: 20)"
   }
   antiknockback {
     main: "Distance after damage: %distance%"
   }
   fastbow {
     main: "Time between last shot: %time%ms"
-    packet: "Too many packet: %flying%\n(Valid packets with low ping: 20)"
+    packet: "Too many packets: %flying%\n(Normal maximum with low ping: 20)"
   }
   scaffold {
-    main: "Item in hand: %item% \nBlock placed: %block%"
+    main: "Item in hand: %item%\n%block% blocks placed"
   }
   step {
-    main: "Move %block% blocks up"
+    main: "Moved %block% blocks up"
   }
   noslowdown {
     main: "Distance: %distance%"
   }
   fastladder {
-    main: "%nb% ladders below him"
+    main: "%nb% ladders below them"
   }
   autosteal {
     main: "Time between 2 clicks: %time%ms"
   }
   nuker {
-    breaked_in: "2 blocks breaked in %time% ms"
+    breaked_in: "2 blocks broken in %time%ms"
   }
   chat {
     main: "Insults: %msg%"
-    spam: "Spam %msg%, %nb% times"
+    spam: "Spamed %msg% %nb% times"
   }
   inventory {
-    main: "When %name%"
+    main: "On %name%"
   }
   faststairs {
-    main: "Move %distance% blocks on stairs"
+    main: "Moved by %distance% blocks on stairs"
   }
   xray {
     main: "%name% mined %nb% times"

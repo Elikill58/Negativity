@@ -217,7 +217,7 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 
 	@Override
 	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {
-		alertMod(type, (Player) p, c, reliability, proof, new CheatHover(hover_proof));
+		alertMod(type, (Player) p, c, reliability, proof, new CheatHover.Literal(hover_proof));
 	}
 
 	@Override

@@ -197,5 +197,21 @@ public abstract class Cheat {
 		public String compile(NegativityPlayer np) {
 			return TranslatedMessages.getStringFromLang(np.getAccount().getLang(), getKey(), getPlaceholders());
 		}
+
+		public static class Literal extends CheatHover {
+			public Literal(String text) {
+				super(text);
+			}
+
+			@Override
+			public String compile() {
+				return getKey();
+			}
+
+			@Override
+			public String compile(NegativityPlayer np) {
+				return getKey();
+			}
+		}
 	}
 }

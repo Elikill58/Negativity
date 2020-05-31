@@ -26,7 +26,7 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	 */
 	@Deprecated
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof) {
-		this(type, p, c, reliability, hasRelia, ping, proof, new CheatHover(hover_proof), 1, 1);
+		this(type, p, c, reliability, hasRelia, ping, proof, new CheatHover.Literal(hover_proof), 1, 1);
 	}
 
 	/**
@@ -35,7 +35,7 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	 */
 	@Deprecated
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof, int nbAlert) {
-		this(type, p, c, reliability, hasRelia, ping, proof, new CheatHover(hover_proof), nbAlert, 1);
+		this(type, p, c, reliability, hasRelia, ping, proof, new CheatHover.Literal(hover_proof), nbAlert, 1);
 	}
 	
 	/**
@@ -44,7 +44,7 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	 */
 	@Deprecated
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hover_proof, int nbAlert, int nbAlertConsole) {
-		this(type, p, c, reliability, hasRelia, ping, proof, new CheatHover(hover_proof), nbAlert, nbAlertConsole);
+		this(type, p, c, reliability, hasRelia, ping, proof, new CheatHover.Literal(hover_proof), nbAlert, nbAlertConsole);
 	}
 	
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert) {

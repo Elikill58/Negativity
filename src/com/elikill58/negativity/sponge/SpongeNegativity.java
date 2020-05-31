@@ -461,7 +461,7 @@ public class SpongeNegativity {
 	 */
 	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
-		return alertMod(type, p, c, reliability, proof, new CheatHover(hover_proof), 1);
+		return alertMod(type, p, c, reliability, proof, new CheatHover.Literal(hover_proof), 1);
 	}
 	
 	/**
@@ -469,7 +469,7 @@ public class SpongeNegativity {
 	 */
 	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof, String stats_send) {
-		return alertMod(type, p, c, reliability, proof, new CheatHover(hover_proof), 1);
+		return alertMod(type, p, c, reliability, proof, new CheatHover.Literal(hover_proof), 1);
 	}
 
 	/**
@@ -479,7 +479,7 @@ public class SpongeNegativity {
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 			String hover_proof, int amount) {
 		hover_proof = Utils.coloredMessage(hover_proof);
-		return alertMod(type, p, c, reliability, proof, new CheatHover(hover_proof), amount);
+		return alertMod(type, p, c, reliability, proof, new CheatHover.Literal(hover_proof), amount);
 	}
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,

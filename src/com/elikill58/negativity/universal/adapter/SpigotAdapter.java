@@ -202,7 +202,7 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 
 	@Override
 	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {
-		alertMod(type, proof, c, reliability, proof, new CheatHover(hover_proof));
+		alertMod(type, proof, c, reliability, proof, new CheatHover.Literal(hover_proof));
 	}
 
 	@Override

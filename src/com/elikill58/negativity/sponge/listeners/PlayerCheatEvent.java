@@ -89,7 +89,7 @@ public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent
 
         @Deprecated
         public Alert(ReportType reportType, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, String hoverProof, int nbAlert, int nbAlertConsole) {
-        	this(reportType, p, c, reliability, hasRelia, ping, proof, new CheatHover(hoverProof), nbAlert, nbAlertConsole);
+        	this(reportType, p, c, reliability, hasRelia, ping, proof, new CheatHover.Literal(hoverProof), nbAlert, nbAlertConsole);
         }
         
     	public Alert(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert) {
@@ -157,7 +157,7 @@ public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent
 
     	@Deprecated
         public Kick(ReportType reportType, Player p, Cheat c, int reliability, String hoverProof, int ping) {
-            super(reportType, p, c, reliability, new CheatHover(hoverProof), ping);
+            super(reportType, p, c, reliability, new CheatHover.Literal(hoverProof), ping);
         }
 
         public Kick(ReportType reportType, Player p, Cheat c, int reliability, CheatHover hover, int ping) {
@@ -180,7 +180,7 @@ public class PlayerCheatEvent extends AbstractEvent implements TargetPlayerEvent
 
     	@Deprecated
         public Bypass(ReportType reportType, Player p, Cheat c, int reliability, String hoverProof, int ping) {
-            super(reportType, p, c, reliability, new CheatHover(hoverProof), ping);
+            super(reportType, p, c, reliability, new CheatHover.Literal(hoverProof), ping);
         }
     	
         public Bypass(ReportType reportType, Player p, Cheat c, int reliability, CheatHover hover, int ping) {

@@ -9,7 +9,6 @@ import com.comphenix.protocol.events.ListenerPriority;
 import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.injector.packet.PacketRegistry;
-import com.comphenix.protocol.injector.server.TemporaryPlayer;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.PacketManager;
 import com.elikill58.negativity.spigot.packets.PacketType;
@@ -33,8 +32,10 @@ public class ProtocollibPacketManager extends PacketManager {
 			@Override
 			public void onPacketReceiving(PacketEvent e) {
 				Player p = e.getPlayer();
-		        if (p == null || p instanceof TemporaryPlayer)
+		        if (p == null)
 		            return;
+		        if(e.isPlayerTemporary())
+		        	return;
 		        AbstractPacket packet = onPacketReceive(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),
 		        		e.getPlayer(), e.getPacket().getHandle(), e);
 		        if(!e.isCancelled())
@@ -53,8 +54,10 @@ public class ProtocollibPacketManager extends PacketManager {
 			@Override
 			public void onPacketReceiving(PacketEvent e) {
 				Player p = e.getPlayer();
-		        if (p == null || p instanceof TemporaryPlayer)
+		        if (p == null)
 		            return;
+		        if(e.isPlayerTemporary())
+		        	return;
 		        AbstractPacket packet = onPacketReceive(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),
 		        		e.getPlayer(), e.getPacket().getHandle(), e);
 		        if(!e.isCancelled())

@@ -20,8 +20,14 @@ public class NegativityPacketManager {
 		this.plugin = pl;
 		Plugin protocolLibPlugin = Bukkit.getPluginManager().getPlugin("ProtocolLib");
 		if (protocolLibPlugin != null) {
-			pl.getLogger().info("The plugin ProtocolLib has been detected. Loading Protocollib support ...");
-			packetManager = new ProtocollibPacketManager(pl);
+			if(checkProtocollibConditions()) {
+				pl.getLogger().info("The plugin ProtocolLib has been detected. Loading Protocollib support ...");
+				packetManager = new ProtocollibPacketManager(pl);
+			} else {
+				pl.getLogger().warning("The plugin ProtocolLib has been detected but you have an OLD version, so we cannot use it.");
+				pl.getLogger().warning("Fallback to default Packet system ...");
+				packetManager = new CustomPacketManager(pl);
+			}
 		} else
 			packetManager = new CustomPacketManager(pl);
 		packetManager.addHandler(new PacketHandler() {
@@ -41,8 +47,23 @@ public class NegativityPacketManager {
 		});
 	}
 	
+	public void forceUseDefaultPacketManager() {
+		if(packetManager != null)
+			packetManager.clear();
+		packetManager = new CustomPacketManager(plugin);
+	}
+	
 	public PacketManager getPacketManager() {
 		return packetManager;
+	}
+	
+	private boolean checkProtocollibConditions() {
+		try {
+			Class.forName("com.comphenix.protocol.injector.server.TemporaryPlayer");
+			return true;
+		} catch (ClassNotFoundException e) {
+			return false;
+		}
 	}
 	
 	private void manageReceive(AbstractPacket packet) {

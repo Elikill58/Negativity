@@ -43,13 +43,14 @@ public class PacketsTimers implements Consumer<Task> {
 				ping = 1;
 			int flying = np.FLYING - (ping / 6);
 			if (flying > 28) {
-				if (np.hasDetectionActive(np.flyingReason.getCheat())) {
+				Cheat c = np.flyingReason.getCheat();
+				if (np.hasDetectionActive(c)) {
 					if (np.getItemTypeInHand().getType().equals(ItemTypes.BOW))
 						np.flyingReason = FlyingReason.BOW;
 					ReportType type = flying > 30 ? ReportType.WARNING : ReportType.VIOLATION;
-					if (np.flyingReason.getCheat().isSetBack() && SpongeNegativity.alertMod(type, p, np.flyingReason.getCheat(), UniversalUtils.parseInPorcent(flying - (ping / 9)),
+					if (SpongeNegativity.alertMod(type, p, c, UniversalUtils.parseInPorcent(flying - (ping / 9)),
 							"Flying in one second: " + np.FLYING + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
-							"Too many packet: " + flying + "\n(Valid packets with low ping: 20)")) {
+							c.hoverMsg("packet", "%flying%", flying)) && c.isSetBack()) {
 						switch (np.flyingReason) {
 							case EAT:
 								p.getInventory().offer(ItemStack.of(np.eatMaterial, 1));

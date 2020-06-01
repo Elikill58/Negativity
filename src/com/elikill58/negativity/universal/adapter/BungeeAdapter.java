@@ -17,6 +17,7 @@ import com.elikill58.negativity.bungee.BungeeNegativity;
 import com.elikill58.negativity.bungee.BungeeNegativityPlayer;
 import com.elikill58.negativity.bungee.BungeeTranslationProvider;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
@@ -189,6 +190,9 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 
 	@Override
 	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {}
+
+	@Override
+	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, CheatHover hover) {}
 
 	@Override
 	public void runConsoleCommand(String cmd) {

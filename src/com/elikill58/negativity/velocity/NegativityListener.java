@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -82,17 +83,19 @@ public class NegativityListener {
 			Object[] place = new Object[]{"%name%", alert.getPlayername(), "%cheat%", alert.getCheat(),
 					"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
-			for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers())
-				if (Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer(pp), Perm.SHOW_ALERT)) {
+			for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers()) {
+				VelocityNegativityPlayer nPlayer = VelocityNegativityPlayer.getNegativityPlayer(pp);
+				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT)) {
 					Builder msg = TextComponent.builder();
 					msg.append(VelocityMessages.getMessage(pp, alertMessageKey, place));
 
 					Builder hoverMessage = VelocityMessages.getMessage(pp, "alert_hover", place).color(TextColor.GOLD).toBuilder();
-					if (!alert.getHoverInfo().isEmpty()) {
+					Cheat.CheatHover hoverInfo = alert.getHoverInfo();
+					if (hoverInfo != null) {
 						hoverMessage.append(TextComponent.newline())
 								.append(TextComponent.newline())
 								.resetStyle()
-								.append(VelocityMessages.coloredBungeeMessage(alert.getHoverInfo()));
+								.append(VelocityMessages.coloredBungeeMessage(hoverInfo.compile(nPlayer)));
 					}
 
 					hoverMessage.append(TextComponent.newline())
@@ -103,6 +106,7 @@ public class NegativityListener {
 					msg.clickEvent(ClickEvent.of(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
 					pp.sendMessage(msg.build());
 				}
+			}
 		} else if (message instanceof ProxyPingMessage) {
 			p.getCurrentServer().ifPresent(server -> {
 				try {

@@ -13,6 +13,7 @@ import java.util.StringJoiner;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
@@ -54,6 +55,7 @@ import com.elikill58.negativity.spigot.timers.TimerTimeBetweenAlert;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatCategory;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
@@ -308,20 +310,42 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 	
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, "", 1);
+		return alertMod(type, p, c, reliability, proof, (CheatHover) null, 1);
 	}
-	
+
+	/**
+	 * @deprecated Use {@link #alertMod(ReportType, Player, Cheat, int, String, CheatHover)} instead
+	 */
+	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
-		return alertMod(type, p, c, reliability, proof, hover_proof, 1);
+		return alertMod(type, p, c, reliability, proof, new CheatHover.Literal(hover_proof), 1);
 	}
 	
-	@Deprecated // old method, please never use it
+	/**
+	 * @deprecated Use {@link #alertMod(ReportType, Player, Cheat, int, String, CheatHover, int)} instead
+	 */
+	@Deprecated
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof, String stats_send) {
-		return alertMod(type, p, c, reliability, proof, hover_proof, 1);
+		return alertMod(type, p, c, reliability, proof, new CheatHover.Literal(hover_proof), 1);
+	}
+
+	/**
+	 * @deprecated Use {@link #alertMod(ReportType, Player, Cheat, int, String, CheatHover, int)} instead
+	 */
+	@Deprecated
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
+			String hover_proof, int amount) {
+		hover_proof = Utils.coloredMessage(hover_proof);
+		return alertMod(type, p, c, reliability, proof, new CheatHover.Literal(hover_proof), amount);
 	}
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
-			String hover_proof, int amount) {
+			CheatHover hover) {
+		return alertMod(type, p, c, reliability, proof, hover, 1);
+	}
+
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
+			CheatHover hover, int amount) {
 		if(!c.isActive() || reliability < 55)
 			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
@@ -362,7 +386,7 @@ public class SpigotNegativity extends JavaPlugin {
 				return false;
 		}
 		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(type, p, c, reliability,
-				c.getReliabilityAlert() < reliability, ping, proof, hover_proof, amount);
+				c.getReliabilityAlert() < reliability, ping, proof, hover, amount);
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
@@ -420,11 +444,11 @@ public class SpigotNegativity extends JavaPlugin {
 						+ " (UUID: " + p.getUniqueId().toString() + ") (ping: " + ping + ") : suspected of cheating ("
 						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
 		}
+		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHoverProof(), alert.getNbAlert());
+			sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg, alert.getNbAlert());
 			np.ALERT_NOT_SHOWED.remove(c);
 		} else {
-			String hover_proof = alert.getHoverProof();
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers()) {
 				SpigotNegativityPlayer npMod = SpigotNegativityPlayer.getNegativityPlayer(pl);
@@ -437,10 +461,9 @@ public class SpigotNegativity extends JavaPlugin {
 					new ClickableText().addRunnableHoverEvent(
 							Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
 									"%reliability%", String.valueOf(reliability), "%nb%", String.valueOf(alert.getNbAlert())),
-							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%",
-									String.valueOf(reliability), "%ping%", String.valueOf(ping))
-									+ (hover_proof.equalsIgnoreCase("") ? "" : "\n" + hover_proof),
-							"/negativity " + p.getName()).sendToPlayer(pl);
+							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%", reliability, "%ping%", ping)
+									+ ChatColor.RESET + (hoverMsg == null ? "" : "\n\n" + hoverMsg.compile(npMod)),
+								"/negativity " + p.getName()).sendToPlayer(pl);
 					hasPermPeople = true;
 				}
 			}
@@ -451,7 +474,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 	}
 
-	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, String hover, int alertsCount) {
+	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover, int alertsCount) {
 		try {
 			AlertMessage alertMessage = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);
 			p.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(alertMessage));

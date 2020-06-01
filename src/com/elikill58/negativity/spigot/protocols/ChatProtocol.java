@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.protocols;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.StringJoiner;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -35,7 +36,7 @@ public class ChatProtocol extends Cheat implements Listener {
 			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
 				boolean mayCancel = SpigotNegativity.alertMod(np.LAST_CHAT_MESSAGE_NB > 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(95 + np.LAST_CHAT_MESSAGE_NB), "Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times",
-						"Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times");
+						hoverMsg("spam", "%msg%", np.LAST_CHAT_MESSAGE, "%nb%", np.LAST_CHAT_MESSAGE_NB));
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			});
@@ -47,16 +48,16 @@ public class ChatProtocol extends Cheat implements Listener {
 		SpigotNegativity.getInstance().getConfig().getStringList("cheats.chat.insults").forEach((s) -> {
 			insults.add(s.toLowerCase());
 		});
-		String foundedInsults = "";
+		final StringJoiner foundInsults = new StringJoiner(", ");
 		for(String s : msg.toLowerCase().split(" ")) {
 			if(insults.contains(s))
-				foundedInsults = (foundedInsults.equalsIgnoreCase("") ? "" : foundedInsults + ", ") + s;
+				foundInsults.add(s);
 		}
-		if(!foundedInsults.equalsIgnoreCase("")) {
-			final String finalString = foundedInsults;
+		if(foundInsults.length() > 0) {
 			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
-				boolean mayCancel = SpigotNegativity.alertMod(finalString.contains(", ") ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(90 + (finalString.split(", ").length - 1) * 5), "Insults: " + finalString, "Insults: " + finalString);
+				boolean mayCancel = SpigotNegativity.alertMod(foundInsults.length() > 1 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+						UniversalUtils.parseInPorcent(90 + (foundInsults.length() - 1) * 5), "Insults: " + foundInsults.toString(),
+						hoverMsg("main", "%msg%", foundInsults.toString()));
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			});

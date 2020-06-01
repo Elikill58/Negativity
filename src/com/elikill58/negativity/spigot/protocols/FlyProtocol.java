@@ -63,7 +63,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, UniversalUtils.parseInPorcent((int) i * 50),
 					"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this),
-					(Utils.isInBoat(p) ? "On boat" : ""));
+					Utils.isInBoat(p) ? hoverMsg("boat") : null);
 		}
 
 		if (np.isUsingSlimeBlock && !np.hasOtherThanExtended(p.getLocation(), "AIR")
@@ -77,7 +77,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d
 							+ ". Warn for fly: " + np.getWarn(this),
-					(Utils.isInBoat(p) ? "On boat, " : "") + nb + " air blocks below");
+							hoverMsg(Utils.isInBoat(p) ? "boat_air_below" : "air_below", "%nb%", nb));
 		}
 		Location to = e.getTo().clone();
 		to.setY(e.getFrom().getY());

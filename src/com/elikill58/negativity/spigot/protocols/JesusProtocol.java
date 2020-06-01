@@ -138,7 +138,8 @@ public class JesusProtocol extends Cheat implements Listener {
 		float distanceFall = p.getFallDistance();
 		if (block.isLiquid() && underLoc.getBlock().isLiquid() && distanceFall < 1 && !upperLoc.getBlock().isLiquid() && !np.hasOtherThan(underLoc, "WATER")) {
 			if (distance > p.getWalkSpeed() && !hasWaterLily(loc) && !hasWaterLily(upperLoc)) {
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.JESUS), 98, "In water, distance: " + distance, "New Jesus detection: " + distance);
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.JESUS), 98, "In water, distance: " + distance,
+						hoverMsg("main", "%distance%", distance));
 				if(isSetBack() && mayCancel)
 					p.teleport(p.getLocation().subtract(0, 1, 0));
 			}

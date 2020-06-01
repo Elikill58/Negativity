@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -119,6 +120,10 @@ public abstract class Cheat {
 		return aliases;
 	}
 
+	public CheatHover hoverMsg(String key, Object... placeholders) {
+		return new CheatHover("hover." + getKey() + "." + key, placeholders);
+	}
+	
 	public static Cheat fromString(String name) {
 		for (Cheat c : Cheat.values()) {
 			try {
@@ -166,5 +171,47 @@ public abstract class Cheat {
 
 	public static enum CheatCategory {
 		COMBAT, MOVEMENT, WORLD, PLAYER;
+	}
+	
+	public static class CheatHover {
+		private final String key;
+		private final Object[] placeholders;
+		
+		public CheatHover(String key, Object... placeholders) {
+			this.key = Objects.requireNonNull(key);
+			this.placeholders = placeholders;
+		}
+
+		public String getKey() {
+			return key;
+		}
+
+		public Object[] getPlaceholders() {
+			return placeholders;
+		}
+		
+		public String compile() {
+			return TranslatedMessages.getStringFromLang(TranslatedMessages.DEFAULT_LANG, getKey(), getPlaceholders());
+		}
+		
+		public String compile(NegativityPlayer np) {
+			return TranslatedMessages.getStringFromLang(np.getAccount().getLang(), getKey(), getPlaceholders());
+		}
+
+		public static class Literal extends CheatHover {
+			public Literal(String text) {
+				super(text);
+			}
+
+			@Override
+			public String compile() {
+				return getKey();
+			}
+
+			@Override
+			public String compile(NegativityPlayer np) {
+				return getKey();
+			}
+		}
 	}
 }

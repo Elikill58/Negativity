@@ -55,7 +55,8 @@ public class NoWebProtocol extends Cheat {
 			BlockState under = new Location<World>(p.getWorld(), l.getX(), l.getY(), l.getZ()).getBlock();
 			if (under.getType() == ItemTypes.WEB) {
 				if (distance > 0.14) {
-					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500), "Distance: " + distance + ", fallDistance: " + np.getFallDistance(), "Distance: " + distance);
+					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500),
+							"Distance: " + distance + ", fallDistance: " + np.getFallDistance());
 					if(mayCancel && isSetBack())
 						e.setCancelled(true);
 				}

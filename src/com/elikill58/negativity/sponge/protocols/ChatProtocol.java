@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import java.util.StringJoiner;
+
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
@@ -31,14 +33,14 @@ public class ChatProtocol extends Cheat {
 			return;
 		String msg = e.getMessage().toPlain();
 		String withoutEvading = msg.replaceAll(" ", "").toLowerCase();
-		String foundedInsults = "";
+		StringJoiner foundInsults = new StringJoiner(", ");
 		for(String insults : Adapter.getAdapter().getConfig().getStringList("cheats.chat.insults")) {
 			if(withoutEvading.contains(insults.toLowerCase()))
-				foundedInsults = (foundedInsults.equalsIgnoreCase("") ? "" : foundedInsults + ", ") + insults;
+				foundInsults.add(insults);
 		}
-		if(!foundedInsults.equalsIgnoreCase("")) {
-			boolean mayCancel = SpongeNegativity.alertMod(foundedInsults.contains(", ") ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(80 + (foundedInsults.split(", ").length - 1) * 10), "Insults: " + foundedInsults, "Insults: " + foundedInsults);
+		if(foundInsults.length() > 0) {
+			boolean mayCancel = SpongeNegativity.alertMod(foundInsults.length() > 1 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+					UniversalUtils.parseInPorcent(80 + (foundInsults.length() - 1) * 10), "Insults: " + foundInsults, hoverMsg("main", "%msg%", foundInsults));
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);
 		}

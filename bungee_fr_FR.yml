@@ -14,3 +14,56 @@ messages_update:
   dir_creation_failed: "&cImpossible de créer le dossier '%dir%' ou son backup: %message%"
   file_update_failed: "&cImpossible de mettre à jour les messages de %language%: %message%"
   update_done: "&eLes messages ont été mis à jour et rechargés"
+
+hover:
+  forcefield:
+    line_sight: "%name% touché sans ligne de mire"
+    distance: "Distance avec %name%: %distance% blocs"
+    rotate: "Rotation de %degrees%°"
+    fake_players: "%nb% faux joueurs touchés en %time%ms"
+  jesus:
+    main: "Déplacement de %distance% blocs dans l'eau"
+  antipotion:
+    packet: "Trop de paquets: %flying%\n(Normalement, avec un ping bas: 20)"
+  fasteat:
+    packet: "Trop de paquets: %flying%\n(Normalement, avec un ping bas: 20)"
+  fastplace:
+    main: "2 blocs posés en: %time%ms\nLes vrais joueurs le font en 150ms"
+  speed:
+    distance_ground: "Distance Avant/Après: %distance%\n(Avec le même Y, joueur au sol)"
+    distance_jumping: "Distance Avant/Après: %distance%\n(Avec le même Y, joueur sautant)"
+  autoclick:
+    main: "%click% clics"
+  fly:
+    boat: "Sur un bateau"
+    air_below: "%nb% blocs d'air en dessous"
+    boat_air_below: "Sur un bateau\n%nb% blocs d'air en dessous"
+  regen:
+    main: "Temps entre 2 régénerations: %time%ms"
+    packet: "Trop de paquets: %flying%\n(Normalement, avec un ping bas: 20)"
+  antiknockback:
+    main: "Distance après l'attaque: %distance%"
+  fastbow:
+    main: "Temps entre 2 tirs: %time%ms"
+    packet: "Trop de paquets: %flying%\n(Normalement, avec un ping bas: 20)"
+  scaffold:
+    main: "Item dans la main: %item%\nBloc posé: %block%"
+  step:
+    main: "Déplacement de %block% blocs plus haut"
+  noslowdown:
+    main: "Distance: %distance%"
+  fastladder:
+    main: "%nb% échelles en dessous"
+  autosteal:
+    main: "Temps entre 2 clics: %time%ms"
+  nuker:
+    breaked_in: "2 blocs cassés en %time%ms"
+  chat:
+    main: "Insultes: %msg%"
+    spam: "A spammé %msg% %nb% fois"
+  inventory:
+    main: "Pendant %name%"
+  faststairs:
+    main: "%distance% blocs sur des escaliers"
+  xray:
+    main: "%nb% %name% minés"

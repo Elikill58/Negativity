@@ -58,7 +58,7 @@ public class FastLadderProtocol extends Cheat implements Listener {
 		if (distance > 0.23 && distance < 3.8 && nbLadder > 2 && loc.add(0, 1, 0).getBlock().getType().name().contains("LADDER")) {
 			int ping = Utils.getPing(p);
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 350),
-					"On ladders. Distance from/to : " + distance + ". Ping: " + ping + "ms. Number Ladder: " + nbLadder);
+					"On ladders. Distance from/to : " + distance + ". Ping: " + ping + "ms. Number Ladder: " + nbLadder, hoverMsg("main", "%nb%", nbLadder));
 			if (isSetBack() && mayCancel)
 				e.setTo(e.getFrom().clone().add(new Location(fl.getWorld(), fl.getX() / 2, fl.getY() / 2, fl.getZ()))
 						.add(0, 0.5, 0));

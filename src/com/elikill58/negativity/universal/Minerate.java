@@ -40,7 +40,10 @@ public class Minerate {
 		for(int i : mined.values())
 			minedType += i;
 		int relia = minedType / fullMined;
-		Adapter.getAdapter().alertMod(relia > 80 ? ReportType.VIOLATION : ReportType.WARNING, player, Cheat.forKey(CheatKeys.XRAY), relia, type.getOreName() + " mined. Full mined: " + fullMined + ". Mined by type: " + toString(), type.getName() + " mined: " + mined.get(type));
+		Cheat xray = Cheat.forKey(CheatKeys.XRAY);
+		Adapter.getAdapter().alertMod(relia > 80 ? ReportType.VIOLATION : ReportType.WARNING, player, xray,
+				relia, type.getOreName() + " mined. Full mined: " + fullMined + ". Mined by type: " + toString(),
+				xray.hoverMsg("main", "%name%", type.getName(), "%nb%", mined.get(type)));
 	}
 
 	public Integer getMinerateType(MinerateType type) {

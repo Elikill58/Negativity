@@ -89,7 +89,7 @@ public class NoFallProtocol extends Cheat {
 					boolean mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
 							"Player not ground with fall damage (FallDistance: " + fallDistance + "). Block 0.1 below: " + justUnder.getId()
 									+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + ping
-									+ "). Warn: " + np.getWarn(this), "");
+									+ "). Warn: " + np.getWarn(this));
 					if(mayCancel && isSetBack())
 						manageDamage(p, (int) fallDistance, relia);
 				}

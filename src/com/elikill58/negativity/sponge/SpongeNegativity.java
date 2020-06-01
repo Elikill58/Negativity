@@ -26,6 +26,8 @@ import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandManager;
 import org.spongepowered.api.command.CommandMapping;
+import org.spongepowered.api.command.CommandResult;
+import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
@@ -75,6 +77,7 @@ import com.elikill58.negativity.sponge.timers.PacketsTimers;
 import com.elikill58.negativity.sponge.timers.PendingAlertsTimer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
@@ -448,25 +451,44 @@ public class SpongeNegativity {
 		if (needPacket)
 			SpongeNegativityPlayer.INJECTED.add(p);
 	}
-
+	
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, "", 1);
+		return alertMod(type, p, c, reliability, proof, (CheatHover) null, 1);
 	}
 
-	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
-							   String hover_proof) {
-		return alertMod(type, p, c, reliability, proof, hover_proof, 1);
-	}
-
+	/**
+	 * @deprecated Use {@link #alertMod(ReportType, Player, Cheat, int, String, CheatHover)} instead
+	 */
 	@Deprecated
-	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
-								   String hover_proof, String stats_send) {
-		return alertMod(type, p, c, reliability, proof, hover_proof, 1);
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof) {
+		return alertMod(type, p, c, reliability, proof, new CheatHover.Literal(hover_proof), 1);
 	}
 	
+	/**
+	 * @deprecated Use {@link #alertMod(ReportType, Player, Cheat, int, String, CheatHover, int)} instead
+	 */
+	@Deprecated
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, String hover_proof, String stats_send) {
+		return alertMod(type, p, c, reliability, proof, new CheatHover.Literal(hover_proof), 1);
+	}
+
+	/**
+	 * @deprecated Use {@link #alertMod(ReportType, Player, Cheat, int, String, CheatHover, int)} instead
+	 */
+	@Deprecated
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
+			String hover_proof, int amount) {
+		hover_proof = Utils.coloredMessage(hover_proof);
+		return alertMod(type, p, c, reliability, proof, new CheatHover.Literal(hover_proof), amount);
+	}
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
-								   String hover_proof, int alertCounts) {
+			CheatHover hover) {
+		return alertMod(type, p, c, reliability, proof, hover, 1);
+	}
+
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
+			CheatHover hover, int alertCounts) {
 		if(!c.isActive())
 			return false;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
@@ -495,23 +517,23 @@ public class SpongeNegativity {
 				|| Adapter.getAdapter().getConfig().getInt("tps_alert_stop") > Utils.getLastTPS() || ping < 0
 				|| np.isFreeze)
 			return false;
-		Sponge.getEventManager().post(new PlayerCheatEvent(type, p, c, reliability, hover_proof, ping));
+		Sponge.getEventManager().post(new PlayerCheatEvent(type, p, c, reliability, hover, ping));
 		if (hasBypass && (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "bypass.all") ||
 				Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase()))) {
-			PlayerCheatEvent.Bypass bypassEvent = new PlayerCheatEvent.Bypass(type, p, c, reliability, hover_proof, ping);
+			PlayerCheatEvent.Bypass bypassEvent = new PlayerCheatEvent.Bypass(type, p, c, reliability, hover, ping);
 			Sponge.getEventManager().post(bypassEvent);
 			if (!bypassEvent.isCancelled())
 				return false;
 		}
 		PlayerCheatEvent.Alert alert = new PlayerCheatEvent.Alert(type, p, c, reliability, c.getReliabilityAlert() < reliability,
-						ping, proof, hover_proof, alertCounts);
+						ping, proof, hover, alertCounts);
 		Sponge.getEventManager().post(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
 		np.addWarn(c, reliability);
 		logProof(type, p, c, reliability, proof, ping);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
-			PlayerCheatEvent.Kick kick = new PlayerCheatEvent.Kick(type, p, c, reliability, hover_proof, ping);
+			PlayerCheatEvent.Kick kick = new PlayerCheatEvent.Kick(type, p, c, reliability, hover, ping);
 			Sponge.getEventManager().post(kick);
 			if (!kick.isCancelled())
 				p.kick(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName()));
@@ -562,11 +584,11 @@ public class SpongeNegativity {
 						+ " (UUID: " + p.getUniqueId().toString() + ") (ping: " + ping + ") : suspected of cheating ("
 						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
 		}
+		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, alert.getHoverProof(), alert.getNbAlert());
+			sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg, alert.getNbAlert());
 			np.pendingAlerts.remove(c);
 		} else {
-			String hover_proof = alert.getHoverProof();
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers()) {
 				SpongeNegativityPlayer npMod = SpongeNegativityPlayer.getNegativityPlayer(pl);
@@ -574,7 +596,8 @@ public class SpongeNegativity {
 					continue;
 				}
 
-				pl.sendMessage(createAlertText(p, c, hover_proof, ping, alert.getNbAlert(), alert.getAlertMessageKey(), reliability, pl));
+				pl.sendMessage(createAlertText(p, c, hoverMsg == null ? "" : hoverMsg.compile(npMod),
+							ping, alert.getNbAlert(), alert.getAlertMessageKey(), reliability, pl));
 
 				hasPermPeople = true;
 			}
@@ -597,8 +620,8 @@ public class SpongeNegativity {
 				.onHover(TextActions.showText(
 						Text.of(Messages.getStringMessage(receiver, "negativity.alert_hover",
 								"%reliability%", String.valueOf(reliability),
-								"%ping%", String.valueOf(ping))
-								+ (hoverProof.isEmpty() ? "" : "\n" + hoverProof))))
+								"%ping%", String.valueOf(ping)),
+								TextColors.RESET, (hoverProof.isEmpty() ? "" : "\n\n" + hoverProof))))
 				.build();
 	}
 
@@ -618,7 +641,7 @@ public class SpongeNegativity {
 		return plugin.getLogger();
 	}
 
-	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, String hover, int alertsCount) {
+	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover, int alertsCount) {
 		channel.sendTo(p, (payload) -> {
 			try {
 				AlertMessage message = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);

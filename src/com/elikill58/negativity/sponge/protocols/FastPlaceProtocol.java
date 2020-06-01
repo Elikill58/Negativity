@@ -40,8 +40,7 @@ public class FastPlaceProtocol extends Cheat {
 		if (lastPing < Adapter.getAdapter().getConfig().getInt("cheats.fastplace.time_2_place")) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(50 + lastPing), "Blockplaced too quickly. Last time: " + last + ", Last with ping: "
-							+ lastPing + ". Ping: " + Utils.getPing(p),
-					"2 blocks placed in: " + last + " ms\nReal player do it in 150/200ms");
+							+ lastPing + ". Ping: " + Utils.getPing(p), hoverMsg("main", "%time%", last));
 			if (isSetBack() && mayCancel) {
 				e.setCancelled(true);
 			}

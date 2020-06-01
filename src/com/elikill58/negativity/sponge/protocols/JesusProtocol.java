@@ -114,7 +114,8 @@ public class JesusProtocol extends Cheat {
 			if (block.get(Keys.IS_WET).orElse(false) && underLoc.getBlock().get(Keys.IS_WET).orElse(false) && distanceFall < 1
 					&& !upperLoc.getBlock().get(Keys.IS_WET).orElse(false) && !np.hasOtherThan(underLoc, BlockTypes.WATER)) {
 				if (distance > p.get(Keys.WALKING_SPEED).orElse(Double.MAX_VALUE) && !hasWaterLily(loc) && !hasWaterLily(upperLoc)) {
-					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.JESUS), 98, "In water, distance: " + distance, "New Jesus detection: " + distance);
+					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.JESUS), 98, "In water, distance: " + distance,
+							hoverMsg("main", "%distance%", distance));
 					if(isSetBack() && mayCancel)
 						to.sub(0, 1, 0);
 				}

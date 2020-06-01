@@ -100,7 +100,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 					if(p.hasPotionEffect(PotionEffectType.JUMP) && p.getPotionEffect(PotionEffectType.JUMP).getAmplifier() > 3)
 						return;
 					Material under = e.getTo().clone().subtract(0, 1, 0).getBlock().getType();
-					if (!under.name().contains("STEP")) {
+					if (!under.name().contains("STEP") && !np.isUsingSlimeBlock) {
 						double distance = from.distance(to);
 						to.setY(from.getY());
 						double yy = to.distance(from);

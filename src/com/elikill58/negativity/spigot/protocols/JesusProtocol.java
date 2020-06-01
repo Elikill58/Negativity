@@ -40,6 +40,8 @@ public class JesusProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
+		if(np.hasElytra())
+			return;
 		Location loc = p.getLocation();
 		Material m = loc.getBlock().getType(), under = loc.clone().add(0, -1, 0).getBlock().getType();
 		boolean isInWater = m.equals(WATER);
@@ -90,6 +92,8 @@ public class JesusProtocol extends Cheat implements Listener {
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.ACTIVE_CHEAT.contains(this))
+			return;
+		if(np.hasElytra())
 			return;
 		double d = e.getTo().getY() - e.getFrom().getY();
 		

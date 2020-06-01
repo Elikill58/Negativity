@@ -17,17 +17,17 @@ ban {
   well_ban: "&a[&2弊绝风清&a]&c%name% 由于 %reason% 被合理封禁。"
 }
 lang {
-  invalid_lang: "%arg% isn't a valid lang !"
-  help: "/lang <new lang> : Change the default language"
-  current: "The current language is %lang%"
-  edit: "Edit the default lang"
+  invalid_lang: "%arg% 不是一个有效的语言!"
+  help: "/lang <新语言> : 更改默认语言"
+  current: "当前语言是 %lang%"
+  edit: "更改默认语言"
   language_set: "&a[&2弊绝风清&a] &7语言文件已成功切换至中文"
-  translation_disabled: "&a[&2Negativity&a] &cPer-player translations are disabled"
+  translation_disabled: "&a[&2弊绝风清&a] &c已禁用单个玩家指定翻译"
 }
 unban {
   well_unban: "&a[&2弊绝风清&a]&c%name% 被合理解封。"
-  not_banned: "&c%name% n'est pas banni."
-  not_exact: "%arg% n'est pas le nom exacte d'un joueur banni."
+  not_banned: "&c%name% 没有被封禁。"
+  not_exact: "&c%arg% 不是被禁玩家的确切名称。"
   help = [
     "/unban <玩家> : 解封指定玩家。" ]
 }
@@ -38,23 +38,23 @@ kick {
   neg_kick: "&a[&2弊绝风清&a]&c您由于使用作弊程序 (%cheat%) 而被踢出了此服务器"
 }
 suspect {
-  no_suspects_set: "&cNo suspects specified"
-  starting_full_analysis: "&a[&2Negativity&a] &7Starting full analysis of &o%suspects%"
-  starting_analysis: "&a[&2Negativity&a] &7Starting analysis of &o%suspects% &7for &o%cheats%"
+  no_suspects_set: "&c未指定玩家"
+  starting_full_analysis: "&a[&2弊绝风清&a] &7开始对 &o%suspects% &7进行全面分析"
+  starting_analysis: "&a[&2弊绝风清&a] &7开始对 &o%suspects% &7的 &o%cheats% &7作弊行为进行分析"
 }
 report {
   report_usage: "/report <名称> <理由>"
   well_report: "&a已成功举报 %name%！"
   report_message: "&a[&2弊绝风清&a]&c%report% &7由于 &c%reason% &7举报了 &c%name%"
-  report_message_hover: "&7Open &c%name%&7's check menu"
+  report_message_hover: "&7打开 &c%name%&7 的检查菜单"
 }
 negativity {
   alert: "&a[&2弊绝风清&a]&c%name%&7 看似正使用 &c%cheat% &7&2可信度： %reliability%%&7）！"
   alert_multiple: "&a[&2弊绝风清&a]&c%name%&7 看似正使用 &c%cheat% %nb% 时间 &7&2可信度： %reliability%%&7）！"
   alert_hover: "&6可信度：%reliability%%\n延迟：%ping%"
-  see_alert: "&a[&2Negativity&a] You see the alerts again."
-  see_no_longer_alert: "&a[&2Negativity&a] You no longer see alerts."
-  reload_done: "&a[&2Negativity&a] Plugin reloaded."
+  see_alert: "&a[&2弊绝风清&a] 已开启作弊提醒"
+  see_no_longer_alert: "&a[&2弊绝风清&a] 已关闭作弊提醒"
+  reload_done: "&a[&2弊绝风清&a] 插件已重载"
   verif {
     invalid_cheat: "%arg% 非有效作弊软件！"
     start: "&a[&2弊绝风清&a]&7已开始分析&c %name%&7 的&c %cheat%&7 行为"
@@ -67,9 +67,9 @@ negativity {
   }
 }
 messages_update {
-  dir_creation_failed: "&cFailed to create '%dir%' or its backup directory: %message%"
-  file_update_failed: "&cFailed to update messages for %language%: %message%"
-  update_done: "&eMessages have been updated and reloaded"
+  dir_creation_failed: "&c创建目录 '%dir%' 或它的备份目录失败: %message%"
+  file_update_failed: "&c无法更新语言 %language%: %message%"
+  update_done: "&e语言已重载并更新"
 }
 inventory {
   close: "关闭"
@@ -88,9 +88,9 @@ inventory {
     active_detection: "查看 %name% 的活跃检测"
     see_alerts: "查看 %name% 的警告"
     mcleaks_indicator {
-      positive: "&cIs using MCLeaks"
-      negative: "&aIs not using MCLeaks"
-      description: "&7MCLeaks provides premium accounts for free"
+      positive: "&c在使用MCLeaks"
+      negative: "&a未在使用MCLeaks"
+      description: "&7MCLeaks提供免费的正版账户"
     }
   }
   detection {
@@ -105,8 +105,8 @@ inventory {
     night_vision: "夜视"
     invisible: "隐私"
     random_tp: "随机传送"
-    random_tp_no_target: "You are the only player online."
-    random_tp_failed: "Random teleportation failed. Another plugin may have cancelled it."
+    random_tp_no_target: "只有自己在线，无法传送到随机玩家"
+    random_tp_failed: "无法传送到随机玩家，该操作可能被其它插件阻止了"
     clear_inv: "清除背包"
     inv_cleared: "已清除背包！"
     vision_removed: "已禁用夜视"

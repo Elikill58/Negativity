@@ -47,12 +47,6 @@ public class NegativityPacketManager {
 		});
 	}
 	
-	public void forceUseDefaultPacketManager() {
-		if(packetManager != null)
-			packetManager.clear();
-		packetManager = new CustomPacketManager(plugin);
-	}
-	
 	public PacketManager getPacketManager() {
 		return packetManager;
 	}

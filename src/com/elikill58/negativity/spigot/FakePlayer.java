@@ -26,10 +26,23 @@ public class FakePlayer {
 	private UUID uuid;
 	private int id;
 	
+	/**
+	 * Create a new fake player
+	 * 
+	 * @param loc the fake player's location
+	 * @param name the fake player name
+	 */
 	public FakePlayer(Location loc, String name) {
 		this(loc, name, UUID.fromString("0-0-0-0-0"));
 	}
 	
+	/**
+	 * Create a new fake player
+	 * 
+	 * @param loc the fake player's location
+	 * @param name the fake player name
+	 * @param uuid the fake player's uuid
+	 */
 	public FakePlayer(Location loc, String name, UUID uuid) {
 		this.uuid = uuid;
 		this.loc = loc;
@@ -44,7 +57,16 @@ public class FakePlayer {
 		}
 	}
 	
+	/**
+	 * Show the fake player to the specified online player
+	 * 
+	 * @param p THe player who will see the entity
+	 * @return this
+	 */
 	public FakePlayer show(Player p) {
+		// We don't load chunk, but we cannot spawn entity on no-loaded area
+		if(!loc.getChunk().isLoaded())
+			return this;
 		try {
 			entityPlayer.getClass().getMethod("setLocation", double.class, double.class, double.class, float.class, float.class).invoke(entityPlayer, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
 			Object dw = entityPlayer.getClass().getMethod("getDataWatcher").invoke(entityPlayer);
@@ -96,6 +118,11 @@ public class FakePlayer {
 		return this;
 	}
 	
+	/**
+	 * Hide the fake player to the specified online player
+	 * 
+	 * @param p The player that will not see it
+	 */
 	public void hide(Player p) {
 		try {
 			if(Version.getVersion().equals(Version.V1_7)) {
@@ -114,30 +141,66 @@ public class FakePlayer {
 		}
 	}
 	
+	/**
+	 *  Get the entity ID of the fake player.
+	 *  Alone method to check entity
+	 * 
+	 * @return the entity ID
+	 */
 	public int getEntityId() {
 		return id;
 	}
 	
+	/**
+	 * Get the NMS entity player, but as object for compatibility
+	 * 
+	 * @return NMS entity player
+	 */
 	public Object getEntityPlayer() {
 		return entityPlayer;
 	}
 	
+	/**
+	 * Spawn location of fake player
+	 * 
+	 * @return the fake player location
+	 */
 	public Location getLocation() {
 		return loc;
 	}
 
+	/**
+	 * Get the NMS game profile as object for compatibility
+	 * 
+	 * @return the NMS game profile
+	 */
 	public Object getProfile() {
 		return getGameProfile();
 	}
-	
+
+	/**
+	 * Get the NMS game profile as object for compatibility
+	 * 
+	 * @return the NMS game profile
+	 */
 	public Object getGameProfile() {
 		return gameProfile;
 	}
 	
-	public UUID getId() {
+	/**
+	 * Get Unique ID of the fake player
+	 * 
+	 * @return the player's uuid
+	 */
+	public UUID getUUID() {
 		return uuid;
 	}
 	
+	/**
+	 * Called at startup.
+	 * 
+	 * Load all reflection class for optimization
+	 */
 	public static void loadClass() {
 		try {
 			gameProfileClass = Class.forName(Version.getVersion().equals(Version.V1_7) ? "net.minecraft.util.com.mojang.authlib.GameProfile" : "com.mojang.authlib.GameProfile");

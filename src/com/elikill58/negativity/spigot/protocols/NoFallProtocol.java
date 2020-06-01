@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import java.lang.reflect.Field;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -12,6 +14,9 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.packets.AbstractPacket;
+import com.elikill58.negativity.spigot.packets.PacketType;
+import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -88,5 +93,36 @@ public class NoFallProtocol extends Cheat implements Listener {
 	private void manageDamage(Player p, int damage, int relia) {
 		Adapter ada = Adapter.getAdapter();
 		p.damage(damage >= p.getHealth() ? (ada.getConfig().getBoolean("cheats.nofall.kill") && ada.getConfig().getDouble("cheats.nofall.kill-reliability") >= relia ? damage : p.getHealth() - 0.5) : p.getHealth());
+	}
+
+	
+	@EventHandler
+	public void onNegPacket(PacketReceiveEvent e) {
+		AbstractPacket pa = e.getPacket();
+		PacketType type = pa.getPacketType();
+		Player p = e.getPlayer();
+		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		if (type.equals(PacketType.Client.FLYING)) {
+			if (pa.getContent().getBooleans().read(0) && np.isGoingDown && np.lastPacketType != type && p.getFallDistance() != 0) {
+				SpigotNegativity.alertMod(ReportType.WARNING, p, this, 99, "Player going down, last packetype: " + np.lastPacketType.getFullName()
+						+ ", fallDistance: " + p.getFallDistance());
+			}
+		} else if (type.equals(PacketType.Client.POSITION) || type.equals(PacketType.Client.POSITION_LOOK)) {
+			double newY = getY(pa.getPacket());
+			np.isGoingDown = np.yPacketDiff > newY;
+			np.yPacketDiff = newY;
+		}
+		np.lastPacketType = type;
+	}
+	
+	public double getY(Object obj) {
+		try {
+			Field f = obj.getClass().getSuperclass().getDeclaredField("y");
+			f.setAccessible(true);
+			return f.getDouble(obj);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 }

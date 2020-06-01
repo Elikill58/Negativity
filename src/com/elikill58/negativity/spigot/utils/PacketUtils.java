@@ -11,13 +11,12 @@ public class PacketUtils {
 	public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
 			.split(",")[3];
 
-	public static Class<?> CRAFT_PLAYER_CLASS, CHAT_SERIALIZER_CLASS;
+	public static Class<?> CRAFT_PLAYER_CLASS;
 	public static Class<?> ENUM_PLAYER_INFO = getEnumPlayerInfoAction();
 	
 	static {
 		try {
 			CRAFT_PLAYER_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer");
-			CHAT_SERIALIZER_CLASS = Class.forName("net.minecraft.server." + VERSION + ".IChatBaseComponent$ChatSerializer");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

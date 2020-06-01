@@ -166,12 +166,6 @@ Translation:
   # The only one available out-of-the-box is "platform".
   provider: platform
 
-#
-# You can put this plugin on your Bungeecord/Waterfall/Velocity !
-# Why ? You can know when a player hack even if you're not on the same spigot/sponge server !
-#
-hasBungeecord: false
-
 # The time between 2 /report
 # in milliseconds
 # -1 to disable
@@ -227,9 +221,9 @@ ban:
   # %all_alert% : all alerts for the detected cheat since you added Negativity on your server
   command:
     ban:
-    - "/ban %uuid% %reason%"
+    - "ban %uuid% %reason%"
     unban:
-    - "/unban %uuid% %reason%"
+    - "unban %uuid% %reason%"
   # Need to be banned
   reliability_need: 95
   alert_need: 10
@@ -264,8 +258,6 @@ suspect:
 accounts:
   storage:
     # The ID of the storage to use.
-    # Note that when using a proxy (hasBungeecord is set to true) this option is ignored
-    # and the proxy will keep the game server accounts up-to-date.
     #
     # The following are available out-of-the-box:
     # - file : stored in files under ./plugins/Negativity/user/

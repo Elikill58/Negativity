@@ -7,6 +7,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -32,22 +33,28 @@ public class StepProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT"))
+		if (np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT") || np.isUsingSlimeBlock)
 			return;
 		Location from = e.getFrom(), to = e.getTo();
-		if (!p.hasPotionEffect(PotionEffectType.JUMP)) {
-			double dif = to.getY() - from.getY();
-			if (!np.isUsingSlimeBlock) {
-				if(dif < 0)
-					return;
-				int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(dif * 50);
-				if (dif > 1.499 && ping < 200) {
-					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
-							+ np.getWarn(this) + ". Move " + dif + " blocks up. ping: " + ping, hoverMsg("main", "%block%", String.format("%.2f", dif)));
-					if (isSetBack() && mayCancel)
-						e.setCancelled(true);
-				}
+		double dif = to.getY() - from.getY();
+		if (!p.hasPotionEffect(PotionEffectType.JUMP) && dif > 0) {
+			int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(dif * 50);
+			if (dif > 1.499 && ping < 200) {
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
+						+ np.getWarn(this) + ". Move " + dif + " blocks up. ping: " + ping, hoverMsg("main", "%block%", String.format("%.2f", dif)));
+				if (isSetBack() && mayCancel)
+					e.setCancelled(true);
 			}
+		}
+		double amplifier = 0;
+		for(PotionEffect pe : p.getActivePotionEffects())
+			if(pe.getType().equals(PotionEffectType.JUMP))
+				amplifier = pe.getAmplifier();
+		double diffBoost = dif - (amplifier / 10);
+		if(diffBoost > 0.6) {
+			SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
+					"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
+					hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
 		}
 	}
 	

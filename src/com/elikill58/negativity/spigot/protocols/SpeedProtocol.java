@@ -97,7 +97,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 									+ " Distance between from/to location: " + y,
 									hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
 				} else {
-					if(p.hasPotionEffect(PotionEffectType.JUMP) && p.getPotionEffect(PotionEffectType.SPEED).getAmplifier() > 3)
+					if(p.hasPotionEffect(PotionEffectType.JUMP) && p.getPotionEffect(PotionEffectType.JUMP).getAmplifier() > 3)
 						return;
 					Material under = e.getTo().clone().subtract(0, 1, 0).getBlock().getType();
 					if (!under.name().contains("STEP")) {

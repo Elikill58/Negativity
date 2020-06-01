@@ -10,4 +10,14 @@ public class ReflectionUtils {
 		objectField.setAccessible(true);
 		return objectField.get(object);
 	}
+	
+	public static void setField(Object src, String fieldName, Object value) {
+		try {
+			Field field = src.getClass().getDeclaredField(fieldName);
+			field.setAccessible(true);
+			field.set(src, value);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

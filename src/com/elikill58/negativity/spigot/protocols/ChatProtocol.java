@@ -12,7 +12,7 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -21,7 +21,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class ChatProtocol extends Cheat implements Listener {
 
 	public ChatProtocol() {
-		super(CheatKeys.CHAT, false, Utils.getMaterialWith1_15_Compatibility("BOOK_AND_QUILL", "LEGACY_BOOK_AND_QUILL"), CheatCategory.PLAYER, true);
+		super(CheatKeys.CHAT, false, ItemUtils.BOOK_AND_QUILL, CheatCategory.PLAYER, true);
 	}
 
 	@EventHandler

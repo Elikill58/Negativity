@@ -89,7 +89,6 @@ public class SpigotNegativity extends JavaPlugin {
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
-	public static final Material MATERIAL_CLOSE = Utils.getMaterialWith1_15_Compatibility("BARRIER", "REDSTONE");
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
 	private static int timeBetweenAlert = -1;

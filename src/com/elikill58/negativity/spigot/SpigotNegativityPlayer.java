@@ -6,7 +6,6 @@ import java.lang.ref.WeakReference;
 import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -38,6 +37,7 @@ import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.spigot.support.ProtocolSupportSupport;
 import com.elikill58.negativity.spigot.support.ViaVersionSupport;
+import com.elikill58.negativity.spigot.utils.InventoryUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
@@ -130,7 +130,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public void updateCheckMenu() {
 		for (Player p : Inv.CHECKING.keySet()) {
 			if (p.getOpenInventory() != null) {
-				if (Utils.getInventoryTitle(p.getOpenInventory()).equals(Inv.NAME_CHECK_MENU))
+				if (InventoryUtils.getInventoryTitle(p.getOpenInventory()).equals(Inv.NAME_CHECK_MENU))
 					CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
 			}
 		}
@@ -422,163 +422,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		accountManager.save(playerId);
 		accountManager.dispose(playerId);
 	}
-	
-	@Deprecated
-	public boolean hasOtherThanExtended(Location loc, Material m) {
-		return hasOtherThanExtended(loc, m.name());
-	}
-
-	public boolean hasOtherThanExtended(Location loc, String m) {
-		Location tempLoc = loc.clone();
-		loc = loc.clone();
-		if (!loc.getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.add(0, 0, -1).getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.add(0, 0, -1).getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-			return true;
-		loc = tempLoc;
-		if (!loc.add(0, 0, 2).getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (!loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		for (int i = 0; i < 4; i++)
-			if (!loc.add(0, 0, -1).getBlock().getType().name().contains(m))
-				return true;
-		for (int i = 0; i < 4; i++)
-			if (!loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
-				return true;
-		for (int i = 0; i < 4; i++)
-			if (!loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-				return true;
-		if (!loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		return false;
-	}
-
-	public boolean hasExtended(Location loc, String m) {
-		Location tempLoc = loc.clone();
-		loc = loc.clone();
-		if (loc.getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-			return true;
-		loc = tempLoc;
-		if (loc.add(0, 0, 2).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		for (int i = 0; i < 4; i++)
-			if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
-				return true;
-		for (int i = 0; i < 4; i++)
-			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
-				return true;
-		for (int i = 0; i < 4; i++)
-			if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-				return true;
-		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		return false;
-	}
-
-	public boolean hasOtherThan(Location loc, Material m) {
-		return hasOtherThan(loc, m.name());
-	}
-	
-	public boolean hasOtherThan(Location loc, String name) {
-		loc = loc.clone();
-		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(name))
-			return true;
-		if (!loc.add(1, 0, 0).getBlock().getType().name().contains(name))
-			return true;
-		if (!loc.add(0, 0, -1).getBlock().getType().name().contains(name))
-			return true;
-		if (!loc.add(0, 0, -1).getBlock().getType().name().contains(name))
-			return true;
-		if (!loc.add(-1, 0, 0).getBlock().getType().name().contains(name))
-			return true;
-		if (!loc.add(-1, 0, 0).getBlock().getType().name().contains(name))
-			return true;
-		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(name))
-			return true;
-		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(name))
-			return true;
-		return false;
-	}
-	
-	public boolean has(Location loc, Material... ms) {
-		List<Material> m = Arrays.asList(ms);
-		if (m.contains(loc.add(0, 0, 1).getBlock().getType()))
-			return true;
-		if (m.contains(loc.add(1, 0, 0).getBlock().getType()))
-			return true;
-		if (m.contains(loc.add(0, 0, -1).getBlock().getType()))
-			return true;
-		if (m.contains(loc.add(0, 0, -1).getBlock().getType()))
-			return true;
-		if (m.contains(loc.add(-1, 0, 0).getBlock().getType()))
-			return true;
-		if (m.contains(loc.add(-1, 0, 0).getBlock().getType()))
-			return true;
-		if (m.contains(loc.add(0, 0, 1).getBlock().getType()))
-			return true;
-		if (m.contains(loc.add(0, 0, 1).getBlock().getType()))
-			return true;
-		return false;
-	}
-
-	public boolean has(Location loc, String... ms) {
-		for(String s : ms) {
-			if (loc.add(0, 0, 1).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(1, 0, 0).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(0, 0, -1).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(0, 0, -1).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(0, 0, 1).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(0, 0, 1).getBlock().getType().name().contains(s))
-				return true;
-		}
-		return false;
-	}
 
 	public void spawnCircle(double d, Location loc) {
 		for (double u = 0; u < 360; u += d) {
@@ -588,58 +431,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			// p.getWorld().playEffect(loc, Effect.TILE_DUST, 1);
 			loc.subtract(x, 1, z);
 		}
-	}
-
-	public boolean isBlock(Material m) {
-		// for Last version blocks
-		String mn = m.name();
-		if (mn.equals("PRISMARINE") || mn.contains("_SHULKER_BOX") || mn.contains("BLOCK") || mn.contains("WOOD")
-				|| mn.contains("LOG") || mn.contains("WOOL") || mn.equals("PURPUR_BLOCK") || mn.equals("END_BRICKS")
-				|| mn.equals("BEETROOT_BLOCK") || mn.equals("BONE_BLOCK") || mn.contains("STAINED")
-				|| mn.contains("CLAY"))
-			return true;
-		switch (m) {
-		case ANVIL:
-		case APPLE:
-		case ARROW:
-		case BEACON:
-		case BRICK:
-		case COAL_BLOCK:
-		case COBBLESTONE:
-		case DIRT:
-		case EMERALD_BLOCK:
-		case FURNACE:
-		case GOLD_BLOCK:
-		case GRASS:
-		case HAY_BLOCK:
-		case HOPPER:
-		case IRON_AXE:
-		case IRON_BLOCK:
-		case IRON_ORE:
-		case JACK_O_LANTERN:
-		case JUKEBOX:
-		case LADDER:
-		case LAPIS_BLOCK:
-		case MOSSY_COBBLESTONE:
-		case NETHER_BRICK:
-		case NOTE_BLOCK:
-		case OBSIDIAN:
-		case QUARTZ_BLOCK:
-		case REDSTONE:
-		case REDSTONE_BLOCK:
-		case REDSTONE_ORE:
-		case RED_MUSHROOM:
-		case SADDLE:
-		case SAND:
-		case SANDSTONE:
-		case SPONGE:
-		case STONE:
-		case TNT:
-			break;
-		default:
-			return false;
-		}
-		return true;
 	}
 
 	@Override

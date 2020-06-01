@@ -3,12 +3,11 @@ package com.elikill58.negativity.spigot;
 import java.util.HashMap;
 
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Version;
 
 @SuppressWarnings("deprecation")
@@ -21,11 +20,10 @@ public class Inv {
 	public static final ItemStack EMPTY;
 
 	static {
-		Material paneMaterial = Utils.getMaterialWith1_15_Compatibility("STAINED_GLASS_PANE", "GRAY_STAINED_GLASS_PANE");
 		if (Version.isNewerOrEquals(Version.getVersion(), Version.V1_13)) {
-			EMPTY = new ItemStack(paneMaterial);
+			EMPTY = new ItemStack(ItemUtils.GRAY_STAINED_GLASS_PANE);
 		} else {
-			EMPTY = new ItemStack(paneMaterial, 1, (byte) 7);
+			EMPTY = new ItemStack(ItemUtils.GRAY_STAINED_GLASS_PANE, 1, (byte) 7);
 		}
 		ItemMeta emptyItemMeta = EMPTY.getItemMeta();
 		emptyItemMeta.setDisplayName(ChatColor.RESET.toString());

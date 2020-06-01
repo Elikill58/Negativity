@@ -11,6 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -35,7 +36,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP)
-				|| !np.hasOtherThan(loc, Material.AIR) || (e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ()))
+				|| !LocationUtils.hasOtherThan(loc, Material.AIR) || (e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ()))
 				return;
 		Material underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),
 				underUnder = loc.clone().subtract(0, 2, 0).getBlock().getType();
@@ -69,7 +70,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		Location loc = p.getLocation().clone();
 		if(hasBypassBlockAround(loc) || (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT")))
 			return;
-		if(np.hasExtended(loc, "STAIRS"))
+		if(LocationUtils.hasExtended(loc, "STAIRS"))
 			return;
 		String blockName = p.getLocation().getBlock().getType().name();
 		if(blockName.contains("LADDER") || blockName.contains("VINE"))

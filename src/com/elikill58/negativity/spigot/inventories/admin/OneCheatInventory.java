@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.inventories.admin;
 
+import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
+
 import java.io.IOException;
 
 import org.bukkit.Bukkit;
@@ -10,11 +12,11 @@ import org.bukkit.inventory.Inventory;
 
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.inventories.holders.OneCheatHolder;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.utils.InventoryUtils;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -28,12 +30,12 @@ public class OneCheatInventory extends AbstractInventory {
 	public void openInventory(Player p, Object... args){
 		Cheat c = (Cheat) args[0];
 		Inventory inv = Bukkit.createInventory(new OneCheatHolder(c), 9, c.getName());
-		inv.setItem(0, Utils.hideAttributes(Utils.createItem((Material) c.getMaterial(), c.getName())));
+		inv.setItem(0, ItemUtils.hideAttributes(createItem((Material) c.getMaterial(), c.getName())));
 		actualizeInventory(p, c, inv);
 		
-		inv.setItem(7, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.back")));
-		inv.setItem(8, Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
-		Utils.fillInventory(inv, Inv.EMPTY);
+		inv.setItem(7, createItem(Material.ARROW, Messages.getMessage(p, "inventory.back")));
+		inv.setItem(8, createItem(ItemUtils.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
+		InventoryUtils.fillInventory(inv, Inv.EMPTY);
 		p.openInventory(inv);
 	}
 	
@@ -41,10 +43,10 @@ public class OneCheatInventory extends AbstractInventory {
 	public void actualizeInventory(Player p, Object... args) {
 		Cheat c = (Cheat) args[0];
 		Inventory inv = (Inventory) args[1];
-		inv.setItem(2, Utils.createItem(Material.DIAMOND, Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))));
-		inv.setItem(3, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER"), Messages.getMessage(p, "inventory.manager.autoVerif", "%auto%", Messages.getMessage(p, "inventory.manager." + (c.isAutoVerif() ? "enabled" : "disabled")))));
-		inv.setItem(4, Utils.createItem(Material.TNT, Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))));
-		inv.setItem(5, Utils.createItem(Material.BLAZE_ROD, Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))));
+		inv.setItem(2, createItem(Material.DIAMOND, Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))));
+		inv.setItem(3, createItem(ItemUtils.EYE_OF_ENDER, Messages.getMessage(p, "inventory.manager.autoVerif", "%auto%", Messages.getMessage(p, "inventory.manager." + (c.isAutoVerif() ? "enabled" : "disabled")))));
+		inv.setItem(4, createItem(Material.TNT, Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))));
+		inv.setItem(5, createItem(Material.BLAZE_ROD, Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))));
 	}
 
 	@Override

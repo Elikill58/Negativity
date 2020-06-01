@@ -1,8 +1,9 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import static com.elikill58.negativity.spigot.utils.ItemUtils.WEB;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,7 +13,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -20,7 +20,6 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NoWebProtocol extends Cheat implements Listener {
 
-	public static final Material WEB = Utils.getMaterialWith1_15_Compatibility("WEB", "COBWEB");
 	private static final double MAX = 0.7421028493192875;
 	
 	public NoWebProtocol() {

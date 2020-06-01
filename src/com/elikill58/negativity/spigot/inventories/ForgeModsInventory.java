@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.inventories;
 
+import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -12,7 +14,8 @@ import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.holders.ForgeModsHolder;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.utils.InventoryUtils;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ForgeModsInventory extends AbstractInventory {
 
@@ -27,16 +30,16 @@ public class ForgeModsInventory extends AbstractInventory {
 		Player p = (Player) args[0];
 		slot = 0;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		Inventory inv = Bukkit.createInventory(new ForgeModsHolder(), Utils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), Inv.NAME_FORGE_MOD_MENU);
+		Inventory inv = Bukkit.createInventory(new ForgeModsHolder(), UniversalUtils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), Inv.NAME_FORGE_MOD_MENU);
 		if(np.MODS.size() == 0) {
-			inv.setItem(4, Utils.createItem(Material.DIAMOND, "No mods"));
-			inv.setItem(inv.getSize() - 1, Utils.createItem(Material.ARROW, Messages.getMessage(mod, "inventory.back")));
+			inv.setItem(4, createItem(Material.DIAMOND, "No mods"));
+			inv.setItem(inv.getSize() - 1, createItem(Material.ARROW, Messages.getMessage(mod, "inventory.back")));
 		} else {
 			np.MODS.forEach((name, version) -> {
-				inv.setItem(slot++, Utils.createItem(Material.GRASS, name, ChatColor.GRAY + "Version: " + version));
+				inv.setItem(slot++, createItem(Material.GRASS, name, ChatColor.GRAY + "Version: " + version));
 			});
 		}
-		Utils.fillInventory(inv, Inv.EMPTY);
+		InventoryUtils.fillInventory(inv, Inv.EMPTY);
 		mod.openInventory(inv);
 	}
 

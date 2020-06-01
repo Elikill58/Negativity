@@ -10,6 +10,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -35,9 +36,9 @@ public class AirJumpProtocol extends Cheat implements Listener {
 			return;
 		double temp = e.getTo().getY() - e.getFrom().getY();
 		Location loc = p.getLocation().clone();
-		if (temp > 0.35 && np.lastYDiff < temp && np.lastYDiff > 0 && !np.hasOtherThanExtended(loc.clone(), "AIR")
-				&& !np.hasOtherThanExtended(loc.clone().subtract(0, 1, 0), "AIR")
-				&& !np.hasOtherThanExtended(loc.clone().subtract(0, 2, 0), "AIR")) {
+		if (temp > 0.35 && np.lastYDiff < temp && np.lastYDiff > 0 && !LocationUtils.hasOtherThanExtended(loc.clone(), "AIR")
+				&& !LocationUtils.hasOtherThanExtended(loc.clone().subtract(0, 1, 0), "AIR")
+				&& !LocationUtils.hasOtherThanExtended(loc.clone().subtract(0, 2, 0), "AIR")) {
 			boolean mayCancel = SpigotNegativity.alertMod(
 					temp > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 							UniversalUtils.parseInPorcent((int) (temp * 210) - Utils.getPing(p)),

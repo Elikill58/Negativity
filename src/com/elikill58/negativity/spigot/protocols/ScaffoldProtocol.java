@@ -39,7 +39,7 @@ public class ScaffoldProtocol extends Cheat implements Listener {
 			@Override
 			public void run() {
 				Material m = p.getItemInHand().getType(), placed = e.getBlockPlaced().getType();
-				if ((m == null || (!np.isBlock(m) && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot() && !placed.equals(Material.AIR)) {
+				if ((m == null || (!m.isBlock() && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot() && !placed.equals(Material.AIR)) {
 					int localPing = ping;
 					if(localPing == 0)
 						localPing = 1;

@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.inventories.admin;
 
+import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,11 +10,10 @@ import org.bukkit.inventory.Inventory;
 
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.holders.CheatManagerHolder;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -24,14 +25,14 @@ public class CheatManagerInventory extends AbstractInventory {
 	
 	@Override
 	public void openInventory(Player p, Object... args){
-		Inventory inv = Bukkit.createInventory(new CheatManagerHolder((boolean) args[0]), Utils.getMultipleOf(Cheat.values().size() + 3, 9, 1, 54), Inv.CHEAT_MANAGER);
+		Inventory inv = Bukkit.createInventory(new CheatManagerHolder((boolean) args[0]), UniversalUtils.getMultipleOf(Cheat.values().size() + 3, 9, 1, 54), Inv.CHEAT_MANAGER);
 		int slot = 0;
 		for(Cheat c : Cheat.values())
 			if(c.getMaterial() != null)
-				inv.setItem(slot++, Utils.hideAttributes(Utils.createItem((Material) c.getMaterial(), c.getName())));
+				inv.setItem(slot++, ItemUtils.hideAttributes(createItem((Material) c.getMaterial(), c.getName())));
 
-		inv.setItem(inv.getSize() - 2, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.back")));
-		inv.setItem(inv.getSize() - 1, Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
+		inv.setItem(inv.getSize() - 2, createItem(Material.ARROW, Messages.getMessage(p, "inventory.back")));
+		inv.setItem(inv.getSize() - 1, createItem(ItemUtils.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 

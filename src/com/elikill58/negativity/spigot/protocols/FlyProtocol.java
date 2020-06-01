@@ -14,6 +14,8 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
+import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -23,8 +25,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class FlyProtocol extends Cheat implements Listener {
 
 	public FlyProtocol() {
-		super(CheatKeys.FLY, true, Utils.getMaterialWith1_15_Compatibility("FIREWORK", "LEGACY_FIREWORK"),
-				CheatCategory.MOVEMENT, true, "flyhack");
+		super(CheatKeys.FLY, true, ItemUtils.FIREWORK, CheatCategory.MOVEMENT, true, "flyhack");
 	}
 
 	@SuppressWarnings("deprecation")
@@ -66,13 +67,13 @@ public class FlyProtocol extends Cheat implements Listener {
 					Utils.isInBoat(p) ? hoverMsg("boat") : null);
 		}
 
-		if (np.isUsingSlimeBlock && !np.hasOtherThanExtended(p.getLocation(), "AIR")
-				&& !np.hasOtherThanExtended(p.getLocation().clone().subtract(0, 1, 0), "AIR")
-				&& !np.hasOtherThanExtended(p.getLocation().clone().subtract(0, 2, 0), "AIR")
+		if (np.isUsingSlimeBlock && !LocationUtils.hasOtherThanExtended(p.getLocation(), "AIR")
+				&& !LocationUtils.hasOtherThanExtended(p.getLocation().clone().subtract(0, 1, 0), "AIR")
+				&& !LocationUtils.hasOtherThanExtended(p.getLocation().clone().subtract(0, 2, 0), "AIR")
 				&& (e.getFrom().getY() <= e.getTo().getY() || Utils.isInBoat(p))) {
 			double d = e.getTo().getY() - e.getFrom().getY();
 			int nb = getNbAirBlockDown(np), porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
-			if (np.hasOtherThan(p.getLocation().add(0, -3, 0), Material.AIR))
+			if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Material.AIR))
 				porcent = UniversalUtils.parseInPorcent(porcent - 15);
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d
@@ -99,7 +100,7 @@ public class FlyProtocol extends Cheat implements Listener {
 	private int getNbAirBlockDown(SpigotNegativityPlayer np) {
 		Location loc = np.getPlayer().getLocation().clone();
 		int i = 0;
-		while (!np.hasOtherThanExtended(loc, "AIR") && i < 20) {
+		while (!LocationUtils.hasOtherThanExtended(loc, "AIR") && i < 20) {
 			loc.subtract(0, 1, 0);
 			i++;
 		}

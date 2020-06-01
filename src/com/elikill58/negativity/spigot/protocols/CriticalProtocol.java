@@ -10,7 +10,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -18,7 +18,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class CriticalProtocol extends Cheat implements Listener {
 	
 	public CriticalProtocol() {
-		super(CheatKeys.CRITICAL, false, Utils.getMaterialWith1_15_Compatibility("FIREBALL", "LEGACY_FIREBALL"), CheatCategory.COMBAT, true, "crit", "critic");
+		super(CheatKeys.CRITICAL, false, ItemUtils.FIREBALL, CheatCategory.COMBAT, true, "crit", "critic");
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)

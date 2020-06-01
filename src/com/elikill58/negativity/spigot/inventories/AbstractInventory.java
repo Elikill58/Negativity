@@ -14,12 +14,12 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.inventories.admin.AdminInventory;
 import com.elikill58.negativity.spigot.inventories.admin.CheatManagerInventory;
 import com.elikill58.negativity.spigot.inventories.admin.LangInventory;
 import com.elikill58.negativity.spigot.inventories.admin.OneCheatInventory;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 
 public abstract class AbstractInventory implements Listener {
 
@@ -46,7 +46,7 @@ public abstract class AbstractInventory implements Listener {
 			e.setCancelled(true);
 			Player p = (Player) e.getWhoClicked();
 			Material m = e.getCurrentItem().getType();
-			if (m.equals(SpigotNegativity.MATERIAL_CLOSE))
+			if (m.equals(ItemUtils.MATERIAL_CLOSE))
 				p.closeInventory();
 			else
 				manageInventory(e, m, p, (NegativityHolder) holder);

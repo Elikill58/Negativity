@@ -10,6 +10,8 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
+import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -19,7 +21,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class PhaseProtocol extends Cheat implements Listener {
 
 	public PhaseProtocol() {
-		super(CheatKeys.PHASE, false, Utils.getMaterialWith1_15_Compatibility("STAINED_GLASS", "WHITE_STAINED_GLASS"), CheatCategory.MOVEMENT, true);
+		super(CheatKeys.PHASE, false, ItemUtils.WHITE_STAINED_GLASS, CheatCategory.MOVEMENT, true);
 	}
 
 	@EventHandler(ignoreCancelled = true)
@@ -34,7 +36,7 @@ public class PhaseProtocol extends Cheat implements Listener {
 		Location from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
 		if (y > 0.1 && (!loc.clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)
-				|| !np.hasOtherThan(loc.clone().subtract(0, 1, 0), Material.AIR)))
+				|| !LocationUtils.hasOtherThan(loc.clone().subtract(0, 1, 0), Material.AIR)))
 			np.isJumpingWithBlock = true;
 		if (y < -0.1)
 			np.isJumpingWithBlock = false;
@@ -45,7 +47,7 @@ public class PhaseProtocol extends Cheat implements Listener {
 			return;
 		if (y < 0)
 			return;
-		if (np.hasOtherThan(loc.clone(), Material.AIR) || np.hasOtherThan(loc.clone().subtract(0, 1, 0), Material.AIR))
+		if (LocationUtils.hasOtherThan(loc.clone(), Material.AIR) || LocationUtils.hasOtherThan(loc.clone().subtract(0, 1, 0), Material.AIR))
 			return;
 		if (!np.isJumpingWithBlock) {
 			SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent((y * 200) + 20),

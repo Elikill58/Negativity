@@ -8,6 +8,7 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
 import com.elikill58.negativity.spigot.inventories.CheckMenuInventory;
+import com.elikill58.negativity.spigot.utils.InventoryUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -19,7 +20,7 @@ public class ActualizeInvTimer extends BukkitRunnable {
 	public void run() {
 		for (Player p : Inv.CHECKING.keySet()) {
 			if (p.getOpenInventory() != null) {
-				String title = Utils.getInventoryTitle(p.getOpenInventory());
+				String title = InventoryUtils.getInventoryTitle(p.getOpenInventory());
 				if (title.equals(Inv.NAME_ACTIVED_CHEAT_MENU) || title.equals(Inv.NAME_FORGE_MOD_MENU)) {
 				} else if (title.equals(Inv.NAME_CHECK_MENU))
 					CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));

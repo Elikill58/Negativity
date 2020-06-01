@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.packets.custom.channel;
 
+import static com.elikill58.negativity.spigot.utils.PacketUtils.getPlayerConnection;
+
 import java.util.NoSuchElementException;
 
 import org.bukkit.entity.Player;
@@ -7,7 +9,6 @@ import org.bukkit.entity.Player;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.PacketType;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
-import com.elikill58.negativity.spigot.utils.Utils;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -16,16 +17,9 @@ import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 
 public class INCChannel extends ChannelAbstract {
-
-	private Class<?> craftPlayerClass = null;
 	
 	public INCChannel(CustomPacketManager customPacketManager) {
 		super(customPacketManager);
-		try {
-			craftPlayerClass = Class.forName("org.bukkit.craftbukkit." + Utils.VERSION + ".entity.CraftPlayer");
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-		}
 	}
 
 	@Override
@@ -68,9 +62,7 @@ public class INCChannel extends ChannelAbstract {
 
 	private Channel getChannel(Player p) throws ReflectiveOperationException {
 		try {
-			Object craftPlayer = craftPlayerClass.cast(p);
-			Object entityPlayer = craftPlayer.getClass().getMethod("getHandle").invoke(craftPlayer);
-			Object playerConnection = entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
+			Object playerConnection = getPlayerConnection(p);
 			Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
 			return (Channel) networkManager.getClass().getDeclaredField("channel").get(networkManager);
 		} catch (Exception e) {

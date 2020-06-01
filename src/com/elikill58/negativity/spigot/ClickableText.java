@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Version;
 
@@ -115,8 +116,7 @@ public class ClickableText {
 								.forName("net.minecraft.server." + Utils.VERSION + ".ChatBaseComponent");
 
 						chatBaseComponent.getMethod("a", Iterable.class).invoke(chatBaseComponent, obj);
-						Utils.sendPacket(p, "net.minecraft.server." + Utils.VERSION + ".PacketPlayOutChat",
-								Class.forName("net.minecraft.server." + Utils.VERSION + ".IChatBaseComponent"), obj);
+						PacketUtils.sendPacket(p, "PacketPlayOutChat", PacketUtils.getNmsClass("IChatBaseComponent"), obj);
 					}
 				}
 			} catch (Exception e) {

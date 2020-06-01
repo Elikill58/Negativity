@@ -20,6 +20,7 @@ import org.bukkit.util.Vector;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.support.WorldGuardSupport;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -91,7 +92,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 							return;
 						double d = last.distance(actual);
 						int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - d);
-						if (d < 0.1 && !actual.getBlock().getType().equals(Utils.getMaterialWith1_15_Compatibility("WEB", "COBWEB")) && !p.isSneaking()){
+						if (d < 0.1 && !actual.getBlock().getType().equals(ItemUtils.WEB) && !p.isSneaking()){
 							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.ANTI_KNOCKBACK), relia,
 									"Distance after damage: " + d + "; Damager: " + e.getDamager().getType().name().toLowerCase() + " Ping: " + ping, hoverMsg("main", "%distance%", d));
 							if(isSetBack() && mayCancel)

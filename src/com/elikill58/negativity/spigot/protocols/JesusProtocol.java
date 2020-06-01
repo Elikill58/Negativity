@@ -17,16 +17,17 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class JesusProtocol extends Cheat implements Listener {
+import static com.elikill58.negativity.spigot.utils.ItemUtils.STATIONARY_WATER;
+import static com.elikill58.negativity.spigot.utils.ItemUtils.WATER_LILY;
 
-	private final Material WATER = Utils.getMaterialWith1_15_Compatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER"),
-			LILY = Utils.getMaterialWith1_15_Compatibility("WATER_LILY", "LEGACY_WATER_LILY");
+public class JesusProtocol extends Cheat implements Listener {
 	
 	public JesusProtocol() {
 		super(CheatKeys.JESUS, false, Material.WATER_BUCKET, CheatCategory.MOVEMENT, true, "waterwalk", "water", "water walk");
@@ -44,20 +45,20 @@ public class JesusProtocol extends Cheat implements Listener {
 			return;
 		Location loc = p.getLocation();
 		Material m = loc.getBlock().getType(), under = loc.clone().add(0, -1, 0).getBlock().getType();
-		boolean isInWater = m.equals(WATER);
-		boolean isOnWater = under.equals(WATER);
+		boolean isInWater = m.equals(STATIONARY_WATER);
+		boolean isOnWater = under.equals(STATIONARY_WATER);
 		if (p.getVehicle() instanceof Boat)
 			return;
 		if (!isInWater && isOnWater && !hasBoatAroundHim(loc)) {
-			if (!np.hasOtherThan(loc.clone().subtract(0, 1, 0), WATER)
-					&& !p.getLocation().getBlock().getType().equals(LILY)) {
+			if (!LocationUtils.hasOtherThan(loc.clone().subtract(0, 1, 0), STATIONARY_WATER)
+					&& !p.getLocation().getBlock().getType().equals(WATER_LILY)) {
 				if(hasWaterLily(loc.clone().subtract(0, 1, 0)))
 					return;
 				for (int u = 0; u < 360; u += 3) {
 					Location flameloc = loc.clone().subtract(0, 1, 0);
 					flameloc.setZ(flameloc.getZ() + Math.cos(u) * 3);
 					flameloc.setX(flameloc.getX() + Math.sin(u) * 3);
-					if (!flameloc.getBlock().getType().equals(WATER)) {
+					if (!flameloc.getBlock().getType().equals(STATIONARY_WATER)) {
 						return;
 					}
 				}
@@ -103,8 +104,8 @@ public class JesusProtocol extends Cheat implements Listener {
 		
 		if(d == np.jesusLastY.get(p.getName() + "-" + i) && !p.getLocation().getBlock().getType().name().contains("WATER")) {
 			Location dessous = p.getLocation().clone().subtract(0, 1, 0);
-			if(dessous.getBlock().getType().equals(WATER) && !np.hasOtherThan(dessous, WATER)) {
-				if(!(np.has(p.getLocation().clone(), LILY) || p.getLocation().getBlock().getType().equals(LILY))) {
+			if(dessous.getBlock().getType().equals(STATIONARY_WATER) && !LocationUtils.hasOtherThan(dessous, STATIONARY_WATER)) {
+				if(!(LocationUtils.hasMaterialAround(p.getLocation().clone(), WATER_LILY) || p.getLocation().getBlock().getType().equals(WATER_LILY))) {
 					boolean mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((d + 5) * 10), "Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: " + d + " (other: " + np.jesusLastY.get(p.getName() + "-" + (np.jesusState ? 2 : 1)) + ") and ping: " + Utils.getPing(p));
 					if(isSetBack() && mayCancel)
 						p.teleport(p.getLocation().subtract(0, 1, 0));
@@ -136,7 +137,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		Location upperLoc = new Location(loc.getWorld(), loc.getX(), loc.getY() + 1, loc.getZ());
 		Location underLoc = new Location(loc.getWorld(), loc.getX(), loc.getY() - 1, loc.getZ());
 		float distanceFall = p.getFallDistance();
-		if (block.isLiquid() && underLoc.getBlock().isLiquid() && distanceFall < 1 && !upperLoc.getBlock().isLiquid() && !np.hasOtherThan(underLoc, "WATER")) {
+		if (block.isLiquid() && underLoc.getBlock().isLiquid() && distanceFall < 1 && !upperLoc.getBlock().isLiquid() && !LocationUtils.hasOtherThan(underLoc, "WATER")) {
 			if (distance > p.getWalkSpeed() && !hasWaterLily(loc) && !hasWaterLily(upperLoc)) {
 				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.JESUS), 98, "In water, distance: " + distance,
 						hoverMsg("main", "%distance%", distance));
@@ -151,7 +152,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		for (int y = (fY - 1); y != (fY + 2); y++)
 			for (int x = (fX - 2); x != (fX + 3); x++)
 				for (int z = (fZ - 2); z != (fZ + 3); z++)
-					if(loc.getWorld().getBlockAt(x, y, z).getType().equals(LILY))
+					if(loc.getWorld().getBlockAt(x, y, z).getType().equals(WATER_LILY))
 						return true;
 		return false;
 	}

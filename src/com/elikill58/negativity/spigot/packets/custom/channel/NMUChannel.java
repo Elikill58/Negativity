@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.packets.custom.channel;
 
+import static com.elikill58.negativity.spigot.utils.PacketUtils.getPlayerConnection;
+
 import java.lang.reflect.Field;
 import java.util.NoSuchElementException;
 
@@ -8,7 +10,6 @@ import org.bukkit.entity.Player;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.PacketType;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
-import com.elikill58.negativity.spigot.utils.Utils;
 
 import net.minecraft.util.io.netty.channel.Channel;
 import net.minecraft.util.io.netty.channel.ChannelHandlerContext;
@@ -60,9 +61,7 @@ public class NMUChannel extends ChannelAbstract {
 
 	private Channel getChannel(Player p) {
 		try {
-			Object craftPlayer = Class.forName("org.bukkit.craftbukkit." + Utils.VERSION + ".entity.CraftPlayer").cast(p);
-			Object entityPlayer = craftPlayer.getClass().getMethod("getHandle").invoke(craftPlayer);
-			Object playerConnection = entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
+			Object playerConnection = getPlayerConnection(p);
 			Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
 			
 			for (Field field : networkManager.getClass().getDeclaredFields())

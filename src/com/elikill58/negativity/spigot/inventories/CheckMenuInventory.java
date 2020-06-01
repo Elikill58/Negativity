@@ -13,14 +13,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.holders.CheckMenuHolder;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
+
+import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
 
 public class CheckMenuInventory extends AbstractInventory {
 	
@@ -36,30 +38,30 @@ public class CheckMenuInventory extends AbstractInventory {
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
 		int betterClick = account.getMostClicksPerSecond();
-		inv.setItem(0, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
-		inv.setItem(1, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), 1, getByteFromClick(betterClick)));
-		inv.setItem(2, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
+		inv.setItem(0, createItem(ItemUtils.STAINED_CLAY, Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
+		inv.setItem(1, createItem(ItemUtils.STAINED_CLAY, Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), 1, getByteFromClick(betterClick)));
+		inv.setItem(2, createItem(ItemUtils.STAINED_CLAY, Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
 
-		inv.setItem(7, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
+		inv.setItem(7, createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
 		inv.setItem(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId(), ChatColor.GREEN + "Version: " + np.getPlayerVersion().getName()));
 
-		inv.setItem(9, Utils.hideAttributes(Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled")))));
-		inv.setItem(10, Utils.hideAttributes(Utils.createItem(Material.DIAMOND_PICKAXE, "Minerate", minerate.getInventoryLoreString())));
-		inv.setItem(11, Utils.createItem(Material.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
+		inv.setItem(9, ItemUtils.hideAttributes(createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled")))));
+		inv.setItem(10, ItemUtils.hideAttributes(createItem(Material.DIAMOND_PICKAXE, "Minerate", minerate.getInventoryLoreString())));
+		inv.setItem(11, createItem(Material.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
 		inv.setItem(12, getWoolItem(p, np.isMcLeaks()));
-		inv.setItem(13, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("SKELETON_SKULL", "SKULL_ITEM", "LEGACY_SKULL_ITEM"), Messages.getMessage(p, "fake_entities")));
+		inv.setItem(13, createItem(ItemUtils.SKELETON_SKULL, Messages.getMessage(p, "fake_entities")));
 		//inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE"), "Kick"));
 		//inv.setItem(17, Utils.createItem(Material.ANVIL, "Ban"));
 
-		inv.setItem(18, Utils.createItem(Material.SPIDER_EYE, Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
-		inv.setItem(19, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER"), Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
-		inv.setItem(20, Utils.createItem(Material.PACKED_ICE, Messages.getMessage(p, "inventory.main.freezing", "%name%", cible.getName())));
-		inv.setItem(21, Utils.createItem(Material.PAPER, Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())));
-		inv.setItem(22, Utils.createItem(Material.TNT, Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())));
+		inv.setItem(18, createItem(Material.SPIDER_EYE, Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
+		inv.setItem(19, createItem(ItemUtils.EYE_OF_ENDER, Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
+		inv.setItem(20, createItem(Material.PACKED_ICE, Messages.getMessage(p, "inventory.main.freezing", "%name%", cible.getName())));
+		inv.setItem(21, createItem(Material.PAPER, Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())));
+		inv.setItem(22, createItem(Material.TNT, Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())));
 		for (int i = 0; i < inv.getSize(); i++)
 			if (inv.getItem(i) == null)
 				inv.setItem(i, Inv.EMPTY);
-		inv.setItem(inv.getSize() - 1, Utils.createItem(SpigotNegativity.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
+		inv.setItem(inv.getSize() - 1, createItem(ItemUtils.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 
@@ -68,12 +70,12 @@ public class CheckMenuInventory extends AbstractInventory {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		int betterClick = np.getAccount().getMostClicksPerSecond();
 		try {
-			inv.setItem(0, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
-			inv.setItem(1, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), 1, getByteFromClick(betterClick)));
-			inv.setItem(2, Utils.createItem(Utils.getMaterialWith1_15_Compatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY"), Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
+			inv.setItem(0, createItem(ItemUtils.STAINED_CLAY, Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
+			inv.setItem(1, createItem(ItemUtils.STAINED_CLAY, Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), 1, getByteFromClick(betterClick)));
+			inv.setItem(2, createItem(ItemUtils.STAINED_CLAY, Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
 
-			inv.setItem(7, Utils.createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
-			inv.setItem(9, Utils.hideAttributes(Utils.createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled")))));
+			inv.setItem(7, createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
+			inv.setItem(9, ItemUtils.hideAttributes(createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled")))));
 			p.updateInventory();
 		} catch (ArrayIndexOutOfBoundsException e) {
 
@@ -91,7 +93,7 @@ public class CheckMenuInventory extends AbstractInventory {
 
 	@SuppressWarnings("deprecation")
 	private static ItemStack getWoolItem(Player player, boolean b) {
-		ItemStack item = new ItemStack(Utils.getMaterialWith1_15_Compatibility((b ? "RED_WOOL" : "LIME_WOOL"), "WOOL"));
+		ItemStack item = new ItemStack(b ? ItemUtils.RED_WOOL : ItemUtils.LIME_WOOL);
 		if(item.getType().name().equals("WOOL"))
 			item.setDurability((short) (b ? 14 : 5));
 		ItemMeta meta = item.getItemMeta();
@@ -104,16 +106,16 @@ public class CheckMenuInventory extends AbstractInventory {
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
 		Player cible = Inv.CHECKING.get(p);
-		if (m == Utils.getMaterialWith1_15_Compatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER")) {
+		if (m == ItemUtils.EYE_OF_ENDER) {
 			p.teleport(cible);
 			p.closeInventory();
 			Inv.CHECKING.remove(p);
-		} else if (m == Utils.getMaterialWith1_15_Compatibility("SKELETON_SKULL", "SKULL_ITEM", "LEGACY_SKULL_ITEM")) {
+		} else if (m == ItemUtils.SKELETON_SKULL) {
 			if(e.getRawSlot() == 12) {
 				p.closeInventory();
 				SpigotNegativityPlayer.getNegativityPlayer(cible).makeAppearEntities();
 			}
-		} else if(m == Utils.getMaterialWith1_15_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE")) {
+		} else if(m == ItemUtils.DIAMOND_SPADE) {
 			// kick
 		} else {
 			switch (m) {

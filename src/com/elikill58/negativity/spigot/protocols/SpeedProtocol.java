@@ -19,6 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
+import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -65,9 +66,9 @@ public class SpeedProtocol extends Cheat implements Listener {
 			np.BYPASS_SPEED--;
 			return;
 		}
-		if (np.has(p.getLocation().clone().getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| np.has(p.getLocation().clone().add(0, 1, 0).getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| np.has(p.getLocation().clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
+		if (LocationUtils.hasMaterialsAround(p.getLocation().clone().getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| LocationUtils.hasMaterialsAround(p.getLocation().clone().add(0, 1, 0).getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| LocationUtils.hasMaterialsAround(p.getLocation().clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		boolean mayCancel = false;

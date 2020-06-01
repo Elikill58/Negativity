@@ -11,7 +11,7 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -21,8 +21,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 	private final InventoryMoveProtocol instance;
 
 	public InventoryMoveProtocol() {
-		super(CheatKeys.INVENTORY_MOVE, false, Utils.getMaterialWith1_15_Compatibility("NETHER_STAR", "LEGACY_NETHER_STAR"),
-				CheatCategory.MOVEMENT, true, "invmove");
+		super(CheatKeys.INVENTORY_MOVE, false, ItemUtils.NETHER_STAR, CheatCategory.MOVEMENT, true, "invmove");
 		instance = this;
 	}
 

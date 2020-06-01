@@ -10,10 +10,9 @@ import org.bukkit.inventory.Inventory;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.inventories.AbstractInventory;
-import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.spigot.inventories.holders.FreezeHolder;
+import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 
 public class FreezeInventory extends AbstractInventory {
 
@@ -29,7 +28,7 @@ public class FreezeInventory extends AbstractInventory {
 	@Override
 	public void openInventory(Player p, Object... args) {
 		Inventory inv = Bukkit.createInventory(new FreezeHolder(), 9, Inv.NAME_FREEZE_MENU);
-		inv.setItem(4, Utils.createItem(Material.PAPER, Messages.getMessage(p, "inventory.mod.you_are_freeze")));
+		inv.setItem(4, ItemUtils.createItem(Material.PAPER, Messages.getMessage(p, "inventory.mod.you_are_freeze")));
 		p.openInventory(inv);
 	}
 	

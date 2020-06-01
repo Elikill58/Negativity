@@ -95,28 +95,31 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 			parentDir.mkdirs();
 
 		String fileName = "en_US.yml";
-		if (lang.toLowerCase().contains("fr") || lang.toLowerCase().contains("be"))
+		String lowercaseLang = lang.toLowerCase();
+		if (lowercaseLang.contains("fr") || lowercaseLang.contains("be"))
 			fileName = "fr_FR.yml";
-		else if (lang.toLowerCase().contains("pt") || lang.toLowerCase().contains("br"))
+		else if (lowercaseLang.contains("pt") || lowercaseLang.contains("br"))
 			fileName = "pt_BR.yml";
-		else if (lang.toLowerCase().contains("no"))
+		else if (lowercaseLang.contains("no"))
 			fileName = "no_NO.yml";
-		else if (lang.toLowerCase().contains("ru"))
+		else if (lowercaseLang.contains("ru"))
 			fileName = "ru_RU.yml";
-		else if (lang.toLowerCase().contains("zh") || lang.toLowerCase().contains("cn"))
+		else if (lowercaseLang.contains("zh") || lowercaseLang.contains("cn"))
 			fileName = "zh_CN.yml";
-		else if (lang.toLowerCase().contains("de"))
+		else if (lowercaseLang.contains("de"))
 			fileName = "de_DE.yml";
-		else if (lang.toLowerCase().contains("nl"))
+		else if (lowercaseLang.contains("nl"))
 			fileName = "nl_NL.yml";
-		else if (lang.toLowerCase().contains("sv"))
+		else if (lowercaseLang.contains("sv"))
 			fileName = "sv_SV.yml";
-		else if (lang.toLowerCase().contains("es"))
+		else if (lowercaseLang.contains("es"))
 			fileName = "es_ES.yml";
-		else if (lang.toLowerCase().contains("vi") || lang.toLowerCase().contains("vn"))
+		else if (lowercaseLang.contains("vi") || lowercaseLang.contains("vn"))
 			fileName = "vi_VN.yml";
-		else if (lang.toLowerCase().contains("pl"))
+		else if (lowercaseLang.contains("pl"))
 			fileName = "pl_PL.yml";
+		else if (lowercaseLang.contains("it"))
+			fileName = "it_IT.yml";
 		
 		try (InputStream in = pl.getResource(fileName); OutputStream out = new FileOutputStream(f)) {
 			ByteStreams.copy(in, out);

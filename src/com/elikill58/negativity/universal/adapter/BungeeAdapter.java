@@ -89,28 +89,31 @@ public class BungeeAdapter extends Adapter implements TranslationProviderFactory
 			parentDir.mkdirs();
 
 		String fileName = "bungee_en_US.yml";
-		if (lang.toLowerCase().contains("fr") || lang.toLowerCase().contains("be"))
+		String lowercaseLang = lang.toLowerCase();
+		if (lowercaseLang.contains("fr") || lowercaseLang.contains("be"))
 			fileName = "bungee_fr_FR.yml";
-		if (lang.toLowerCase().contains("pt") || lang.toLowerCase().contains("br"))
+		else if (lowercaseLang.contains("pt") || lowercaseLang.contains("br"))
 			fileName = "bungee_pt_BR.yml";
-		if (lang.toLowerCase().contains("no"))
+		else if (lowercaseLang.contains("no"))
 			fileName = "bungee_no_NO.yml";
-		else if (lang.toLowerCase().contains("ru"))
+		else if (lowercaseLang.contains("ru"))
 			fileName = "bungee_ru_RU.yml";
-		else if (lang.toLowerCase().contains("zh") || lang.toLowerCase().contains("cn"))
+		else if (lowercaseLang.contains("zh") || lowercaseLang.contains("cn"))
 			fileName = "bungee_zh_CN.yml";
-		else if (lang.toLowerCase().contains("de"))
+		else if (lowercaseLang.contains("de"))
 			fileName = "bungee_de_DE.yml";
-		else if (lang.toLowerCase().contains("nl"))
+		else if (lowercaseLang.contains("nl"))
 			fileName = "bungee_nl_NL.yml";
-		else if (lang.toLowerCase().contains("sv"))
+		else if (lowercaseLang.contains("sv"))
 			fileName = "bungee_sv_SV.yml";
-		else if (lang.toLowerCase().contains("es"))
+		else if (lowercaseLang.contains("es"))
 			fileName = "bungee_es_ES.yml";
-		else if (lang.toLowerCase().contains("vi") || lang.toLowerCase().contains("vn"))
+		else if (lowercaseLang.contains("vi") || lowercaseLang.contains("vn"))
 			fileName = "bungee_vi_VN.yml";
-		else if (lang.toLowerCase().contains("pl"))
+		else if (lowercaseLang.contains("pl"))
 			fileName = "bungee_pl_PL.yml";
+		else if (lowercaseLang.contains("it"))
+			fileName = "bungee_it_IT.yml";
 		
 		try (InputStream in = pl.getResourceAsStream(fileName); OutputStream out = new FileOutputStream(f)) {
 			ByteStreams.copy(in, out);

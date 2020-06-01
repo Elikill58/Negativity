@@ -1,0 +1,193 @@
+report_wait: "Perfavore, aspetta un secondo dopo aver effettuato 2 report"
+
+invalid_player: "%arg% non e' un player !"
+not_forget_player: Non dimenticare il player !"
+not_permission: "&cNon hai il permesso per eseguire questa azione."
+only_player: "Solo i player possono eseguire questo comando."
+well_suspect: "%players% ha ben sospettato !"
+none: "niente"
+console: "Amministratore"
+fake_entities: "Entita' finte"
+
+lang {
+  invalid_lang: "%arg% non e' una lingua valida!"
+  help: "/lang <new lang> : Cambia la lingua di default"
+  current: "La lingua attuale e' %lang%"
+  edit: "Cambia la lingua di default"
+  language_set: "&a[&2Negativity&a] &7I messaggi di Negative saranno in inglese."
+  translation_disabled: "&a[&2Negativity&a] &cPer-player translations are disabled"
+}
+ban {
+  kick_time: "&cBannato per %reason% fino al %time% da %by%."
+  kick_def: "&cBannato definivamente per %reason% da %by%."
+  help = [
+   "/nban <player> <def | time (ex: 2h5d)> <reason> : Banna un player specifico" ]
+  well_ban: "&a[&2Negativity&a]&c %name% e' stato bannato per %reason%."
+}
+unban {
+  well_unban: "&a[&2Negativity&a]&c %name% e' stato sbannato."
+  not_banned: "&c%name% non e' bannato."
+  not_exact: "%arg% non e' un nome valido per i player bannati."
+  help: "/nunban <player> : Sbanna un player bannato in precedenza."
+}
+kick {
+  help: "/kick <player> <reason> : Espelli un player specifico"
+  well_kick: "&a[&2Negativity&a]&c %name% e' stato espulso per %reason%."
+  kicked: "You have been kick by %name% for %reason%"
+  neg_kick: "&a[&2Negativity&a]&c Sei stato espulso per cheating (%cheat%)"
+}
+report {
+  report_usage: "/report <name> <reason>"
+  well_report: "&a%name% reportato con successo !"
+  report_message: "&a[&2Negativity&a] &c%name% &7e' stato reportato da &c%report% &7per &c%reason%"
+  report_message_hover: "&7Open &c%name%&7's check menu"
+}
+negativity {
+  alert: "&a[&2Negativity&a] &c%name%&7 sembra che stia usando &c%cheat% &7(&2Precisione: %reliability%%&7) !"
+  alert_multiple: "&a[&2Negativity&a] &c%name%&7 sembra che stia usando &c%cheat% %nb% times &7(&2Precisione: %reliability%%&7) !"
+  alert_hover: "&6Reliability: %reliability%%\nPing: %ping%"
+  see_alert: "&a[&2Negativity&a] Riceverai i nuovi avvisi."
+  see_no_longer_alert: "&a[&2Negativity&a] Non riceverai piu' avvisi."
+  reload_done: "&a[&2Negativity&a] Plugin ricaricato."
+  verif {
+    invalid_cheat: "%arg% non e' un cheat valido!"
+    start: "&a[&2Negativity&a] &7E' stata avviata un'analisi ad %name% per %cheat%"
+    start_all: "&a[&2Negativity&a] Avviata un'analisi completa per %name%"
+    start_none: "&a[&2Negativity&a] &cImpossibile avviare l'analisi: devi inserire il cheat"
+    help = [
+      "/negativity verif <player> [cheats...] : Avvia tutte le verifiche (se nessun argomento e' stato dato)"
+      "/negativity <player> : Per vedere delle informazioni su un player" ]
+  }
+}
+messages_update {
+  dir_creation_failed: "&cImpossibile creare la cartella '%dir%' o la sua cartella di backup: %message%"
+  file_update_failed: "&cFailed to update messages for %language%: %message%"
+  update_done: "&eI messaggi sono stati aggiornati e ricaricati"
+}
+inventory {
+  close: "Chiudi"
+  back: "Indietro"
+  reset_alert: "Elimina avvisi"
+  main {
+    freeze: "&a[&2Negativity&a] Attualmente sei stato bloccato da %name%"
+    unfreeze: "&a[&2Negativity&a] %name% ti ha reso sbloccato."
+    actual_click: "CPS: %clicks%"
+    max_click: "Click massimi: %clicks%"
+    last_click: "Ultimi secondi: %clicks%"
+    ping: "Ping di %name%: %ping%"
+    see_inv: "Guarda l'inventario di %name%"
+    teleportation_to: "Teletrasportati da %name%"
+    freezing: "Blocca %name%"
+    active_detection: "Guarda i controlli attivi per %name%"
+    see_alerts: "Ricevi tutti gli avvisi di %name%"
+    mcleaks_indicator {
+      positive: "&cSta usandoMCLeaks"
+      negative: "&aNon sta usando MCLeaks"
+      description: "&7MCLeaks fornsice degli account premium gratuiti"
+    }
+  }
+  detection {
+    name_inv: "Controllo attivo"
+    no_active: "Nessun controllo attivo per %name%"
+  }
+  alerts {
+    item_name: "Avvisi per %exact_name% : %warn%"
+    inv_name: "Avvisi"
+  }
+  mod {
+    night_vision: "Night vision"
+    invisible: "Became invisible"
+    random_tp: "Random teleportation"
+    clear_inv: "Clear your inventory"
+    inv_cleared: "Inventory cleared !"
+    vision_removed: "Night vision disabled"
+    vision_added: "Night vision enabled"
+    now_invisible: "Now, you're invisible"
+    no_longer_invisible: "Now, everyone can see you"
+    you_are_freeze: "You are freezed. You cannot leave this inventory."
+    cheat_manage: "Cheat manager"
+  }
+  manager {
+    enabled: "&aOn"
+    disabled: "&cOff"
+    setBack: "Cancels the last action of the cheat when one is detected: &l%back%"
+    autoVerif: "Auto verification: &l%auto%"
+    allowKick: "Kick cheating players: &l%allow%"
+    setActive: "Active cheats: &l%active%"
+  }
+}
+
+hover {
+  forcefield {
+    line_sight: "Ha colpito %name% senza osservarlo"
+    distance: "Distanza con %name%: %distance% blocchi"
+    rotate: "Rotazione di  %degres%°"
+    fake_players: "%nb% player falsi colpiti in %time% ms"
+  }
+  jesus {
+    main: "Si muove di %distance% blocco sotto l'acqua"
+  }
+  antipotion {
+    packet: "Troppi pacchetto: %flying%\n(Pacchetti validi con ping basso: 20)"
+  }
+  fasteat {
+    packet: "Troppi pacchetti: %flying%\n(Pacchetti validi con ping basso: 20)"
+  }
+  fastplace {
+    main: "Ha piazzato due blocchi in: %time% ms\nUn player reale esegue cio' in 150ms"
+  }
+  speed {
+    distance_ground: "Distanza tra le due posizioni: %distance%\n(Con uguale Y e player a terra)"
+    distance_jumping: "Distanza tra le due posizioni: %distance%\n(Con uguale Y e player che salta)"
+  }
+  autoclick {
+    main: "%click% click"
+  }
+  fly {
+    boat: "Sulla barca"
+    air_below: "%nb% blocchi di aria sotto"
+    boat_air_below: "sulla barca, %nb% blocchi di aria sotto"
+  }
+  regen {
+    main: "Tempo fra i due eventi di rigenerazione: %time%ms"
+    packet: "Troppi pacchetti: %flying%\n(Pacchetti validi con ping basso: 20)"
+  }
+  antiknockback {
+    main: "Distanza dopo il danno: %distance%"
+  }
+  fastbow {
+    main: "Tempo dopo l'ultima freccia: %time%ms"
+    packet: "Troppi pacchetti: %flying%\n(Pacchetti validi con ping basso: 20)"
+  }
+  scaffold {
+    main: "Item in mano: %item% \nBlocchi piazzati: %block%"
+  }
+  step {
+    main: "Si Muove di %block% blocchi in alto"
+  }
+  noslowdown {
+    main: "Distanza: %distance%"
+  }
+  fastladder {
+    main: "%nb% scale sotto di lui"
+  }
+  autosteal {
+    main: "Tempo fra i due click: %time%ms"
+  }
+  nuker {
+    breaked_in: "2 Blocchi distrutti in  %time% ms"
+  }
+  chat {
+    main: "Insulto: %msg%"
+    spam: "Spamed %msg% %nb% times"
+  }
+  inventory {
+    main: "Quando %name%"
+  }
+  faststairs {
+    main: "Si Muove di %distance% blocchi sulle scale"
+  }
+  xray {
+    main: "%name% mined %nb% times"
+  }
+}

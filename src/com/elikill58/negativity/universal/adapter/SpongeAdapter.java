@@ -16,7 +16,6 @@ import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.entity.living.player.Player;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
@@ -29,30 +28,26 @@ import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
-import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
-import com.elikill58.negativity.universal.translation.ConfigurateTranslationProvider;
-import com.elikill58.negativity.universal.translation.TranslationProvider;
+import com.elikill58.negativity.universal.translation.NegativityTranslationProviderFactory;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.commented.CommentedConfigurationNode;
 import ninja.leaping.configurate.gson.GsonConfigurationLoader;
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
-public class SpongeAdapter extends Adapter implements TranslationProviderFactory {
+public class SpongeAdapter extends Adapter {
 
 	private final Logger logger;
 	private final SpongeNegativity plugin;
 	private ConfigAdapter config;
-	private final Path messagesDir;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpongeNegativity::sendPluginMessage);
+	private final TranslationProviderFactory translationProviderFactory;
 
 	public SpongeAdapter(SpongeNegativity sn, ConfigAdapter config) {
 		this.plugin = sn;
 		this.logger = sn.getLogger();
 		this.config = config;
-		this.messagesDir = sn.getDataFolder().resolve("messages");
+		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("messages"), "Negativity", "CheatHover");
 	}
 
 	@Override
@@ -86,40 +81,9 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	}
 
 	@Override
-	public File copy(String lang, File f) {
-		return copy(lang, f.toPath()).toFile();
-	}
-
-	public Path copy(String lang, Path filePath) {
-		String fileName = "en_US.yml";
-		String lowercaseLang = lang.toLowerCase();
-		if (lowercaseLang.contains("fr") || lowercaseLang.contains("be"))
-			fileName = "fr_FR.yml";
-		else if (lowercaseLang.contains("pt") || lowercaseLang.contains("br"))
-			fileName = "pt_BR.yml";
-		else if (lowercaseLang.contains("no"))
-			fileName = "no_NO.yml";
-		else if (lowercaseLang.contains("ru"))
-			fileName = "ru_RU.yml";
-		else if (lowercaseLang.contains("zh") || lowercaseLang.contains("cn"))
-			fileName = "zh_CN.yml";
-		else if (lowercaseLang.contains("de"))
-			fileName = "de_DE.yml";
-		else if (lowercaseLang.contains("nl"))
-			fileName = "nl_NL.yml";
-		else if (lowercaseLang.contains("sv"))
-			fileName = "sv_SV.yml";
-		else if (lowercaseLang.contains("es"))
-			fileName = "es_ES.yml";
-		else if (lowercaseLang.contains("vi") || lowercaseLang.contains("vn"))
-			fileName = "vi_VN.yml";
-		else if (lowercaseLang.contains("pl"))
-			fileName = "pl_PL.yml";
-		else if (lowercaseLang.contains("it"))
-			fileName = "it_IT.yml";
-
+	public Path copyBundledFile(String lang, Path filePath) {
 		if (Files.notExists(filePath)) {
-			plugin.getContainer().getAsset(fileName).ifPresent(asset -> {
+			plugin.getContainer().getAsset(lang).ifPresent(asset -> {
 				try {
 					Path parentDir = filePath.normalize().getParent();
 					if (parentDir != null) {
@@ -136,44 +100,9 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 		return filePath;
 	}
 
-	private ConfigurationNode loadHoconFile(Path filePath) throws IOException {
-		return HoconConfigurationLoader.builder().setPath(filePath).build().load();
-	}
-
 	@Override
 	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
-		return this;
-	}
-
-	@Nullable
-	@Override
-	public TranslationProvider createTranslationProvider(String language) {
-		String translationFile = language + ".yml";
-		Path languageFile = messagesDir.resolve(translationFile);
-		try {
-			ConfigurationNode messagesNode = loadHoconFile(copy(language, languageFile));
-			return new CachingTranslationProvider(new ConfigurateTranslationProvider(messagesNode));
-		} catch (IOException e) {
-			logger.error("Failed to load translation file {}.", translationFile, e);
-			return null;
-		}
-	}
-
-	@Nullable
-	@Override
-	public TranslationProvider createFallbackTranslationProvider() {
-		Asset fallbackAsset = Sponge.getAssetManager().getAsset(plugin, "en_US.yml").orElse(null);
-		if (fallbackAsset == null) {
-			logger.warn("Could not find the fallback messages resource.");
-			return null;
-		}
-		try {
-			CommentedConfigurationNode messagesNode = HoconConfigurationLoader.builder().setURL(fallbackAsset.getUrl()).build().load();
-			return new CachingTranslationProvider(new ConfigurateTranslationProvider(messagesNode));
-		} catch (IOException e) {
-			logger.error("Failed to load fallback translation resource.", e);
-			return null;
-		}
+		return this.translationProviderFactory;
 	}
 
 	@Override

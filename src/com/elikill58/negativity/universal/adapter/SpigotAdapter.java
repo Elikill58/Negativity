@@ -1,24 +1,19 @@
 package com.elikill58.negativity.universal.adapter;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.UncheckedIOException;
-import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
 
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.json.simple.JSONObject;
@@ -27,7 +22,6 @@ import org.json.simple.parser.ParseException;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.SpigotTranslationProvider;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
@@ -38,21 +32,21 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.BukkitConfigAdapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
-import com.elikill58.negativity.universal.translation.CachingTranslationProvider;
-import com.elikill58.negativity.universal.translation.TranslationProvider;
+import com.elikill58.negativity.universal.translation.NegativityTranslationProviderFactory;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
-import com.google.common.io.ByteStreams;
 
-public class SpigotAdapter extends Adapter implements TranslationProviderFactory {
+public class SpigotAdapter extends Adapter {
 
 	private JavaPlugin pl;
 	private ConfigAdapter config;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpigotNegativity::sendPluginMessage);
+	private final TranslationProviderFactory translationProviderFactory;
 
 	public SpigotAdapter(JavaPlugin pl) {
 		this.pl = pl;
 		this.config = new BukkitConfigAdapter.PluginConfig(pl);
+		this.translationProviderFactory = new NegativityTranslationProviderFactory(pl.getDataFolder().toPath().resolve("lang"), "Negativity", "CheatHover");
 	}
 
 	@Override
@@ -86,83 +80,26 @@ public class SpigotAdapter extends Adapter implements TranslationProviderFactory
 	}
 
 	@Override
-	public File copy(String lang, File f) {
-		if (f.exists())
-			return f;
+	public Path copyBundledFile(String name, Path dest) {
+		if (Files.exists(dest)) {
+			return dest;
+		}
 
-		File parentDir = f.getParentFile();
-		if (!parentDir.exists())
-			parentDir.mkdirs();
-
-		String fileName = "en_US.yml";
-		String lowercaseLang = lang.toLowerCase();
-		if (lowercaseLang.contains("fr") || lowercaseLang.contains("be"))
-			fileName = "fr_FR.yml";
-		else if (lowercaseLang.contains("pt") || lowercaseLang.contains("br"))
-			fileName = "pt_BR.yml";
-		else if (lowercaseLang.contains("no"))
-			fileName = "no_NO.yml";
-		else if (lowercaseLang.contains("ru"))
-			fileName = "ru_RU.yml";
-		else if (lowercaseLang.contains("zh") || lowercaseLang.contains("cn"))
-			fileName = "zh_CN.yml";
-		else if (lowercaseLang.contains("de"))
-			fileName = "de_DE.yml";
-		else if (lowercaseLang.contains("nl"))
-			fileName = "nl_NL.yml";
-		else if (lowercaseLang.contains("sv"))
-			fileName = "sv_SV.yml";
-		else if (lowercaseLang.contains("es"))
-			fileName = "es_ES.yml";
-		else if (lowercaseLang.contains("vi") || lowercaseLang.contains("vn"))
-			fileName = "vi_VN.yml";
-		else if (lowercaseLang.contains("pl"))
-			fileName = "pl_PL.yml";
-		else if (lowercaseLang.contains("it"))
-			fileName = "it_IT.yml";
-		
-		try (InputStream in = pl.getResource(fileName); OutputStream out = new FileOutputStream(f)) {
-			ByteStreams.copy(in, out);
+		try (InputStream in = pl.getResource("assets/negativity/" + name)) {
+			if (in == null) {
+				return dest;
+			}
+			Files.createDirectories(dest.getParent());
+			Files.copy(in, dest);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return f;
+		return dest;
 	}
 
 	@Override
 	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
-		return this;
-	}
-
-	@Nullable
-	@Override
-	public TranslationProvider createTranslationProvider(String language) {
-		String languageFileName = language + ".yml";
-		File translationFile = new File(pl.getDataFolder(), "lang" + File.separator + languageFileName);
-		try (InputStreamReader reader = new InputStreamReader(new FileInputStream(copy(language, translationFile)), StandardCharsets.UTF_8)) {
-			YamlConfiguration msgConfig = YamlConfiguration.loadConfiguration(reader);
-			return new CachingTranslationProvider(new SpigotTranslationProvider(msgConfig));
-		} catch (Exception e) {
-			pl.getLogger().log(Level.SEVERE, "Could not load translation file " + languageFileName, e);
-			return null;
-		}
-	}
-
-	@Nullable
-	@Override
-	public TranslationProvider createFallbackTranslationProvider() {
-		InputStream fallbackResource = SpigotNegativity.getInstance().getResource("en_US.yml");
-		if (fallbackResource == null) {
-			SpigotNegativity.getInstance().getLogger().warning("Could not find the fallback messages resource.");
-			return null;
-		}
-		try (InputStreamReader fallbackResourceReader = new InputStreamReader(fallbackResource)) {
-			YamlConfiguration msgConfig = YamlConfiguration.loadConfiguration(fallbackResourceReader);
-			return new CachingTranslationProvider(new SpigotTranslationProvider(msgConfig));
-		} catch (Exception e) {
-			pl.getLogger().log(Level.SEVERE, "Could not load the fallback translation resource ", e);
-			return null;
-		}
+		return this.translationProviderFactory;
 	}
 
 	@Override

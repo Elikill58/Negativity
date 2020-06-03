@@ -114,6 +114,7 @@ public class DefaultConfigValue {
 		INTS.put("ban.alert_need", 10);
 		STRINGS.put("ban.time.calculator", "360000000 + (%reliability% * 20 * %alert%)");
 		INTS.put("ban.def.ban_time", 2);
+		STRINGS.put("ban.file.dir", "ban"); // for old ban migration
 		BOOLEANS.put("ban.file.log_bans", true);
 		BOOLEANS.put("ban.database.log_bans", true);
 

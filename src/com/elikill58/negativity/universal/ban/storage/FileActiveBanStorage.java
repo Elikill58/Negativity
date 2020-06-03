@@ -21,7 +21,8 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 	private final Path banDir;
 
 	public FileActiveBanStorage(Path banDir) {
-		this.banDir = banDir;}
+		this.banDir = banDir;
+	}
 
 	@Nullable
 	@Override

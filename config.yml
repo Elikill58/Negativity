@@ -161,6 +161,7 @@ Translation:
   - sv_SV
   - vi_VN
   - zh_CN
+  - it_IT
   default: en_US
   # The provider used to get translated messages, useful if you want to customize the way Negativity gets its messages.
   # The only one available out-of-the-box is "platform".

@@ -142,7 +142,7 @@ public class CheckMenuInventory extends AbstractInventory {
 				AbstractInventory.open(InventoryType.ALERT, p, cible);
 				break;
 			case GRASS:
-				AbstractInventory.open(InventoryType.FORGE_MODS, p);
+				AbstractInventory.open(InventoryType.FORGE_MODS, p, cible);
 				//ForgeModsInventory.openForgeModsMenu(p, cible);
 				break;
 			case ANVIL:

@@ -22,6 +22,9 @@ public class Minerate {
 	public Minerate(HashMap<MinerateType, Integer> mined, int fullMined) {
 		this.mined = mined;
 		this.fullMined = fullMined;
+		// For old version, to don't produce NPE
+		for(MinerateType type : MinerateType.values())
+			mined.putIfAbsent(type, 0);
 		nf = NumberFormat.getInstance();
 		nf.setMaximumFractionDigits(2);
 		nf.setMinimumFractionDigits(2);

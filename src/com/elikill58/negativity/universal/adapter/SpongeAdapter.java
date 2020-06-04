@@ -180,7 +180,6 @@ public class SpongeAdapter extends Adapter implements TranslationProviderFactory
 	public void reload() {
 		reloadConfig();
 		UniversalUtils.init();
-		Cheat.loadCheat();
 		plugin.reloadCommands();
 		ProxyCompanionManager.updateForceDisabled(config.getBoolean("disableProxyIntegration"));
 		SpongeNegativity.trySendProxyPing();

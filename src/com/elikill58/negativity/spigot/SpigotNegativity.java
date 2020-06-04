@@ -20,7 +20,6 @@ import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
@@ -362,7 +361,7 @@ public class SpigotNegativity extends JavaPlugin {
 		int ping = Utils.getPing(p);
 		long currentTimeMilli = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > currentTimeMilli || ping > c.getMaxAlertPing()
-				|| ((double) ((Damageable) p).getHealth()) == 0.0D
+				|| np.getLife() == 0.0D
 				|| getInstance().getConfig().getInt("tps_alert_stop") > Utils.getLastTPS() || ping < 0 || np.isFreeze)
 			return false;
 		

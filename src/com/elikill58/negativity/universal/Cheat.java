@@ -17,7 +17,7 @@ public abstract class Cheat {
 	public static final Map<String, Cheat> CHEATS_BY_KEY = new HashMap<>();
 	private boolean needPacket, hasListener;
 	private CheatCategory cheatCategory;
-	private String key, name;
+	private String key;
 	private Object m;
 	private String[] aliases;
 
@@ -27,9 +27,6 @@ public abstract class Cheat {
 		this.cheatCategory = type;
 		this.hasListener = hasListener;
 		this.key = key.toLowerCase();
-		this.name = Adapter.getAdapter().getConfig().getString("cheats." + key.toLowerCase() + ".exact_name");
-		if (this.name == null)
-			this.name = key;
 		this.aliases = alias;
 	}
 	
@@ -38,7 +35,7 @@ public abstract class Cheat {
 	}
 	
 	public String getName() {
-		return name;
+		return Adapter.getAdapter().getConfig().getString("cheats." + key + ".exact_name");
 	}
 
 	public boolean isActive() {

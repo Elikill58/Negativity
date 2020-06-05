@@ -362,7 +362,7 @@ public class SpigotNegativity extends JavaPlugin {
 		long currentTimeMilli = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > currentTimeMilli || ping > c.getMaxAlertPing()
 				|| np.getLife() == 0.0D
-				|| getInstance().getConfig().getInt("tps_alert_stop") > Utils.getLastTPS() || ping < 0 || np.isFreeze)
+				|| getInstance().getConfig().getDouble("tps_alert_stop", 19.0) > Utils.getLastTPS() || ping < 0 || np.isFreeze)
 			return false;
 		
 		if (p.getItemInHand() != null)

@@ -512,7 +512,7 @@ public class SpongeNegativity {
 		long timeMillis = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > timeMillis || reliability < 30 || ping > c.getMaxAlertPing()
 				|| p.getHealthData().get(Keys.HEALTH).get() == 0.0D
-				|| Adapter.getAdapter().getConfig().getInt("tps_alert_stop") > Utils.getLastTPS() || ping < 0
+				|| Adapter.getAdapter().getConfig().getDouble("tps_alert_stop") > Utils.getLastTPS() || ping < 0
 				|| np.isFreeze)
 			return false;
 		Sponge.getEventManager().post(new PlayerCheatEvent(type, p, c, reliability, hover, ping));

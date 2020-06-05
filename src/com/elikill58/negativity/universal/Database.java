@@ -11,6 +11,7 @@ public class Database {
 	private static Connection connection;
 	private static String url, username, password;
 	public static boolean hasCustom = false;
+	private static long lastValidityCheck = 0;
 
 	public static void connect(String url, String username, String password) {
 		Database.url = url;
@@ -36,11 +37,19 @@ public class Database {
 			new IllegalStateException("You are trying to use database without active it.").printStackTrace();
 			return null;
 		}
-		if (connection == null)
-			connect(url, username, password);
-		if(connection.isClosed())
+		if (connection == null || connection.isClosed() || !isConnectionValid())
 			connect(url, username, password);
 		return connection;
+	}
+
+	private static boolean isConnectionValid() throws SQLException {
+		long now = System.currentTimeMillis();
+		// The connection may die if not used for some time, here we check each 15 minutes
+		if (now - lastValidityCheck > 900_000) {
+			lastValidityCheck = now;
+			return connection.isValid(1);
+		}
+		return true;
 	}
 
 	public static void close() {

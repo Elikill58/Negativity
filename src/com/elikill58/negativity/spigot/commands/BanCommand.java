@@ -17,7 +17,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -66,7 +65,7 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 		}
 
 		String reason = reasonJoiner.toString();
-		BanManager.executeBan(new Ban(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, cheatName, BanStatus.ACTIVE));
+		BanManager.executeBan(Ban.active(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, cheatName));
 		if (!sender.equals(target))
 			Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
 		return false;

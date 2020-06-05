@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal.ban.storage;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -42,7 +43,11 @@ public class DatabaseBanLogsStorage implements BanLogsStorage {
 				String cheatName = rs.getString("cheat_name");
 				String bannedBy = rs.getString("banned_by");
 				BanStatus status = rs.getBoolean("revoked") ? BanStatus.REVOKED : BanStatus.EXPIRED;
-				loadedBans.add(new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, cheatName, status));
+				Timestamp executionTimestamp = rs.getTimestamp("execution_time");
+				long executionTime = executionTimestamp == null ? -1 : executionTimestamp.getTime();
+				Timestamp revocationTimestamp = rs.getTimestamp("revocation_time");
+				long revocationTime = revocationTimestamp == null ? -1 : revocationTimestamp.getTime();
+				loadedBans.add(new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, cheatName, status, executionTime, revocationTime));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -54,13 +59,15 @@ public class DatabaseBanLogsStorage implements BanLogsStorage {
 	@Override
 	public void save(Ban ban) {
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
-				"INSERT INTO negativity_bans_log (id, reason, banned_by, expiration_time, cheat_name, revoked) VALUES (?,?,?,?,?,?)")) {
+				"INSERT INTO negativity_bans_log (id, reason, banned_by, expiration_time, cheat_name, revoked, execution_time, revocation_time) VALUES (?,?,?,?,?,?,?,?)")) {
 			stm.setString(1, ban.getPlayerId().toString());
 			stm.setString(2, ban.getReason());
 			stm.setString(3, ban.getBannedBy());
 			stm.setLong(4, ban.getExpirationTime());
 			stm.setString(5, UniversalUtils.trimExcess(ban.getCheatName(), 64));
 			stm.setBoolean(6, ban.getStatus() == BanStatus.REVOKED);
+			stm.setTimestamp(7, ban.getExecutionTime() >= 0 ? new Timestamp(ban.getExecutionTime()) : null);
+			stm.setTimestamp(8, ban.getRevocationTime() >= 0 ? new Timestamp(ban.getRevocationTime()) : null);
 			stm.executeUpdate();
 		} catch (Exception e) {
 			Adapter.getAdapter().error("An error occurred while saving a logged ban of player with ID " + ban.getPlayerId());

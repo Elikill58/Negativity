@@ -48,7 +48,7 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 			return null;
 
 		activeBanStorage.remove(playerId);
-		Ban revokedLoggedBan = Ban.from(activeBan, BanStatus.REVOKED);
+		Ban revokedLoggedBan = Ban.revokedFrom(activeBan, System.currentTimeMillis());
 
 		if (banLogsStorage != null) {
 			banLogsStorage.save(revokedLoggedBan);

@@ -69,7 +69,9 @@ public class FileBanLogsStorage implements BanLogsStorage {
 				+ ":bantype=" + ban.getBanType().name()
 				+ (ban.getCheatName() != null ? ":ac=" + ban.getCheatName() : "")
 				+ ":by=" + ban.getBannedBy()
-				+ ":revoked=" + ban.getStatus().equals(BanStatus.REVOKED);
+				+ ":revoked=" + ban.getStatus().equals(BanStatus.REVOKED)
+				+ ":executiontime=" + ban.getExecutionTime()
+				+ ":revocationtime=" + ban.getRevocationTime();
 	}
 
 	@Nullable
@@ -91,6 +93,8 @@ public class FileBanLogsStorage implements BanLogsStorage {
 		BanStatus isRevoked = BanStatus.EXPIRED;
 		BanType banType = BanType.UNKNOW;
 		String ac = null;
+		long executionTime = -1;
+		long revocationTime = -1;
 		for (String s : content) {
 			String[] part = s.split("=", 2);
 			if (part.length != 2)
@@ -118,12 +122,18 @@ public class FileBanLogsStorage implements BanLogsStorage {
 				case "revoked":
 					isRevoked = BanStatus.REVOKED;
 					break;
+				case "executiontime":
+					executionTime = Long.parseLong(value);
+					break;
+				case "revocationtime":
+					revocationTime = Long.parseLong(value);
+					break;
 				default:
 					Adapter.getAdapter().warn("Type " + type + " unknow. Value: " + value);
 					break;
 			}
 		}
 
-		return new Ban(playerId, reason, by, banType, expirationTime, ac, isRevoked);
+		return new Ban(playerId, reason, by, banType, expirationTime, ac, isRevoked, executionTime, revocationTime);
 	}
 }

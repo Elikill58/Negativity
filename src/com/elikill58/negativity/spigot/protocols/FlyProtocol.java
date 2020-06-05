@@ -67,7 +67,7 @@ public class FlyProtocol extends Cheat implements Listener {
 					Utils.isInBoat(p) ? hoverMsg("boat") : null);
 		}
 
-		if (np.isUsingSlimeBlock && !LocationUtils.hasOtherThanExtended(p.getLocation(), "AIR")
+		if (!np.isUsingSlimeBlock && !LocationUtils.hasOtherThanExtended(p.getLocation(), "AIR")
 				&& !LocationUtils.hasOtherThanExtended(p.getLocation().clone().subtract(0, 1, 0), "AIR")
 				&& !LocationUtils.hasOtherThanExtended(p.getLocation().clone().subtract(0, 2, 0), "AIR")
 				&& (e.getFrom().getY() <= e.getTo().getY() || Utils.isInBoat(p))) {

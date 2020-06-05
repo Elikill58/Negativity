@@ -31,7 +31,9 @@ public class ProxyExecuteBanMessage implements NegativityMessage {
 				BanType.valueOf(input.readUTF()),
 				input.readLong(),
 				input.readBoolean() ? input.readUTF() : null,
-				BanStatus.valueOf(input.readUTF())
+				BanStatus.valueOf(input.readUTF()),
+				input.readLong(),
+				input.readLong()
 		);
 	}
 
@@ -50,6 +52,8 @@ public class ProxyExecuteBanMessage implements NegativityMessage {
 			output.writeBoolean(false);
 		}
 		output.writeUTF(ban.getStatus().name());
+		output.writeLong(ban.getExecutionTime());
+		output.writeLong(ban.getRevocationTime());
 	}
 
 	@Override

@@ -62,7 +62,7 @@ public class BansMigration {
 						// We remove the active ban and all the following ones from the list of bans to keep in logs
 						loggedBansToSave = loadedBans.subList(0, loadedBans.indexOf(extractedActiveBan));
 
-						Ban activeBan = Ban.from(extractedActiveBan, BanStatus.ACTIVE);
+						Ban activeBan = Ban.activeFrom(extractedActiveBan);
 						activeBanStorage.save(activeBan);
 					}
 

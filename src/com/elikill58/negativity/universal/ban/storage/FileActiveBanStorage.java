@@ -108,7 +108,8 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 				+ ":reason=" + ban.getReason().replaceAll(":", "")
 				+ ":bantype=" + ban.getBanType().name()
 				+ (ban.getCheatName() != null ? ":ac=" + ban.getCheatName() : "")
-				+ ":by=" + ban.getBannedBy();
+				+ ":by=" + ban.getBannedBy()
+				+ ":executiontime=" + ban.getExecutionTime();
 	}
 
 	@Nullable
@@ -131,6 +132,7 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 		boolean def = false;
 		BanType banType = BanType.UNKNOW;
 		String ac = null;
+		long executionTime = -1;
 		for (String s : content) {
 			String[] part = s.split("=", 2);
 			if (part.length != 2)
@@ -157,6 +159,9 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 				case "by":
 					by = value;
 					break;
+				case "executiontime":
+					executionTime = Long.parseLong(value);
+					break;
 				default:
 					Adapter.getAdapter().warn("Type " + type + " unknow. Value: " + value);
 					break;
@@ -167,6 +172,6 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 			expirationTime = -1;
 		}
 
-		return new Ban(playerId, reason, by, banType, expirationTime, ac, BanStatus.ACTIVE);
+		return new Ban(playerId, reason, by, banType, expirationTime, ac, BanStatus.ACTIVE, executionTime);
 	}
 }

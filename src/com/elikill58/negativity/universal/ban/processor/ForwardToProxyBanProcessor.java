@@ -49,7 +49,7 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 			Adapter.getAdapter().error("Could not write ProxyBanMessage: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return new Ban(playerId, "", "", BanType.UNKNOW, -1, null, BanStatus.REVOKED);
+		return new Ban(playerId, "", "", BanType.UNKNOW, -1, null, BanStatus.REVOKED, -1, System.currentTimeMillis());
 	}
 
 	@Nullable

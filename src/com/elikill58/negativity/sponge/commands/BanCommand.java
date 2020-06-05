@@ -21,7 +21,6 @@ import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -48,7 +47,7 @@ public class BanCommand implements CommandExecutor {
 		String reason = args.requireOne("reason");
 
 		BanType banType = src instanceof Player ? BanType.MOD : BanType.CONSOLE;
-		BanManager.executeBan(new Ban(targetPlayer.getUniqueId(), reason, src.getName(), banType, expiration, getFromReason(reason), BanStatus.ACTIVE));
+		BanManager.executeBan(Ban.active(targetPlayer.getUniqueId(), reason, src.getName(), banType, expiration, getFromReason(reason)));
 
 		Messages.sendMessage(src, "ban.well_ban", "%name%", targetPlayer.getName(), "%reason%", reason);
 		return CommandResult.success();

@@ -19,18 +19,20 @@ public final class NegativityAccount {
 	private final Minerate minerate;
 	private int mostClicksPerSecond;
 	private final Map<String, Integer> warns;
+	private final long creationTime;
 
 	public NegativityAccount(UUID playerId) {
-		this(playerId, null, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>());
+		this(playerId, null, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>(), System.currentTimeMillis());
 	}
 
-	public NegativityAccount(UUID playerId, String playerName, String lang, Minerate minerate, int mostClicksPerSecond, Map<String, Integer> warns) {
+	public NegativityAccount(UUID playerId, String playerName, String lang, Minerate minerate, int mostClicksPerSecond, Map<String, Integer> warns, long creationTime) {
 		this.playerId = playerId;
 		this.playerName = playerName;
 		this.lang = lang;
 		this.minerate = minerate;
 		this.mostClicksPerSecond = mostClicksPerSecond;
 		this.warns = warns;
+		this.creationTime = creationTime;
 	}
 
 	public UUID getPlayerId() {
@@ -88,5 +90,9 @@ public final class NegativityAccount {
 	@NonNull
 	public static NegativityAccount get(UUID accountId) {
 		return Adapter.getAdapter().getAccountManager().getNow(accountId);
+	}
+
+	public long getCreationTime() {
+		return creationTime;
 	}
 }

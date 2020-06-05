@@ -48,7 +48,8 @@ public class AccountUpdateMessage implements NegativityMessage {
 			warns.put(input.readUTF(), input.readInt());
 		}
 
-		account = new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns);
+		long creationTime = input.readLong();
+		account = new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, creationTime);
 	}
 
 	@Override
@@ -77,6 +78,8 @@ public class AccountUpdateMessage implements NegativityMessage {
 			output.writeUTF(warnEntry.getKey());
 			output.writeInt(warnEntry.getValue());
 		}
+
+		output.writeLong(account.getCreationTime());
 	}
 
 	@Override

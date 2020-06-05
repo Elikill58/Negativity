@@ -9,7 +9,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
-
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -40,7 +39,8 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 		Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getConfigurationSection("minerate"));
 		int mostClicksPerSecond = config.getInt("better-click");
 		Map<String, Integer> warns = deserializeViolations(config.getConfigurationSection("cheats"));
-		return CompletableFuture.completedFuture(new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns));
+		long creationTime = config.getLong("creation-time", System.currentTimeMillis());
+		return CompletableFuture.completedFuture(new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, creationTime));
 	}
 
 	@Override
@@ -53,6 +53,7 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 		serializeMinerate(account.getMinerate(), accountConfig.createSection("minerate"));
 		accountConfig.set("better-click", account.getMostClicksPerSecond());
 		serializeViolations(account, accountConfig.createSection("cheats"));
+		accountConfig.set("creation-time", account.getCreationTime());
 		try {
 			accountConfig.save(file);
 		} catch (IOException e) {

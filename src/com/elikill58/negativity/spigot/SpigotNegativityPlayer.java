@@ -52,6 +52,7 @@ import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.Verificator;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {
 
@@ -64,6 +65,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public HashMap<String, Double> jesusLastY = new HashMap<>();
 	public HashMap<Cheat, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
+	// HashMap to allow multiple verification at the same time
+	// String for the name (to enable server to run command)
+	public HashMap<String, Verificator> verificatorForMod = new HashMap<>();
 	private WeakReference<Player> p;
 	// Packets
 	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,

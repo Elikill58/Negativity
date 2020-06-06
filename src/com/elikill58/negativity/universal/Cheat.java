@@ -10,6 +10,7 @@ import java.util.UUID;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerifData;
 
 public abstract class Cheat {
 
@@ -120,6 +121,8 @@ public abstract class Cheat {
 	public CheatHover hoverMsg(String key, Object... placeholders) {
 		return new CheatHover("hover." + getKey() + "." + key, placeholders);
 	}
+	
+	public String compile(VerifData data) { return null; }
 	
 	public static Cheat fromString(String name) {
 		for (Cheat c : Cheat.values()) {

@@ -26,6 +26,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
+import com.elikill58.negativity.universal.verif.Verificator;
 
 public class NegativityCommand implements CommandExecutor, TabCompleter {
 
@@ -66,9 +67,11 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 
 			SpigotNegativityPlayer nTarget = SpigotNegativityPlayer.getNegativityPlayer(target);
+			List<Cheat> listCheat = new ArrayList<>();
 			if (arg.length == 2) {
 				nTarget.startAllAnalyze();
 				Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", target.getName());
+				listCheat.addAll(Cheat.CHEATS);
 			} else {
 				StringJoiner cheatNamesJoiner = new StringJoiner(", ");
 				for (int i = 2; i < arg.length; i++) {
@@ -76,6 +79,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 					if (cheat != null) {
 						nTarget.startAnalyze(cheat);
 						cheatNamesJoiner.add(cheat.getName());
+						listCheat.add(cheat);
 					}
 				}
 
@@ -86,6 +90,12 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 					Messages.sendMessage(sender, "negativity.verif.start", "%name%", target.getName(), "%cheat%", cheatsList);
 				}
 			}
+			nTarget.verificatorForMod.put(sender.getName(), new Verificator(nTarget, listCheat));
+			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
+				Verificator verif = nTarget.verificatorForMod.get(sender.getName());
+				verif.generateMessage(sender.getName());
+				verif.getMessages().forEach((s) -> sender.sendMessage("[Verif] " + s));
+			}, 3 * 20);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("alert")) {
 			if (!(sender instanceof Player)) {

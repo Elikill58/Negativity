@@ -17,6 +17,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerifData;
 
 public class StepProtocol extends Cheat implements Listener {
 
@@ -61,5 +62,10 @@ public class StepProtocol extends Cheat implements Listener {
 	@Override
 	public boolean isBlockedInFight() {
 		return true;
+	}
+	
+	@Override
+	public String compile(VerifData data) {
+		return "Unknow " + this.getName();
 	}
 }

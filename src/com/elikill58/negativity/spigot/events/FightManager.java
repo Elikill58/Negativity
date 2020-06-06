@@ -24,6 +24,9 @@ public class FightManager implements Listener {
 
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
+		// Ignoring Citizen NPC
+		if(e.getDamager().hasMetadata("NPC") || e.getEntity().hasMetadata("NPC"))
+			return;
 		if(e.getDamager() instanceof Player)
 			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getDamager()).fight();
 		if(e.getEntity() instanceof Player)
@@ -32,7 +35,7 @@ public class FightManager implements Listener {
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageEvent e) {
-		if (e.getEntity() instanceof Player)
+		if (e.getEntity() instanceof Player || !e.getEntity().hasMetadata("NPC"))
 			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).fight();
 	}
 

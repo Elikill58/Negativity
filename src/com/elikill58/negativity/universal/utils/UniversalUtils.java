@@ -38,6 +38,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 
 public class UniversalUtils {
 
@@ -317,6 +318,7 @@ public class UniversalUtils {
 		SuspectManager.init();
 		TranslatedMessages.init();
 		NegativityAccountStorage.init();
+		VerificationStorage.init();
 	}
 
 	public static OS os = null;

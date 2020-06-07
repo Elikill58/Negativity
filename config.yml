@@ -266,6 +266,17 @@ accounts:
     # Defaults to "file"
     id: "file"
 
+# Verif is a full analyze of a player, asked by a mod
+verif:
+  storage:
+    # The ID of the storage to use.
+    #
+    # The following are available out-of-the-box:
+    # - file : stored in files under ./plugins/Negativity/verif/
+    # - database : uses a database
+    # Defaults to "file"
+    id: "file"
+
 # Per-cheat configuration. For more information about specific cheats
 # and their detections see https://github.com/Elikill58/Negativity/wiki/Cheat
 cheats:

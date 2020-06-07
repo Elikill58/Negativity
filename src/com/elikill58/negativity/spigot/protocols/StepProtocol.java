@@ -18,6 +18,7 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
+import com.elikill58.negativity.universal.verif.VerifData.DataType;
 
 public class StepProtocol extends Cheat implements Listener {
 
@@ -52,10 +53,17 @@ public class StepProtocol extends Cheat implements Listener {
 			if(pe.getType().equals(PotionEffectType.JUMP))
 				amplifier = pe.getAmplifier();
 		double diffBoost = dif - (amplifier / 10);
-		if(diffBoost > 0.6) {
-			SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
-					"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
-					hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
+		if(diffBoost > 0.2) {
+			np.verificatorForMod.forEach((s, verif) -> {
+				VerifData data = verif.getVerifData(this);
+				if(data != null)
+					data.getData(DataType.DOUBLE).add(diffBoost);
+			});
+			if(diffBoost > 0.6) {
+				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
+						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
+						hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
+			}
 		}
 	}
 	
@@ -66,6 +74,6 @@ public class StepProtocol extends Cheat implements Listener {
 	
 	@Override
 	public String compile(VerifData data) {
-		return "Unknow " + this.getName();
+		return "Average of block up : " + data.getData(DataType.DOUBLE).getAverage();
 	}
 }

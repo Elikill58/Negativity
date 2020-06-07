@@ -27,6 +27,7 @@ import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
 import com.elikill58.negativity.universal.verif.Verificator;
+import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 
 public class NegativityCommand implements CommandExecutor, TabCompleter {
 
@@ -73,6 +74,14 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", target.getName());
 				listCheat.addAll(Cheat.CHEATS);
 			} else {
+				if(arg[2].equalsIgnoreCase("check")) {
+					List<Verificator> list = VerificationStorage.getStorage().loadAllVerifications(target.getUniqueId()).getNow(new ArrayList<>());
+					sender.sendMessage("Nb: " + list.size());
+					for(Verificator verif : list) {
+						sender.sendMessage("> " + verif.getAsker());
+					}
+					return false;
+				}
 				StringJoiner cheatNamesJoiner = new StringJoiner(", ");
 				for (int i = 2; i < arg.length; i++) {
 					Cheat cheat = Cheat.fromString(arg[i]);
@@ -90,11 +99,13 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 					Messages.sendMessage(sender, "negativity.verif.start", "%name%", target.getName(), "%cheat%", cheatsList);
 				}
 			}
-			nTarget.verificatorForMod.put(sender.getName(), new Verificator(nTarget, listCheat));
+			nTarget.verificatorForMod.put(sender.getName(), new Verificator(nTarget, sender.getName(), listCheat));
 			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
 				Verificator verif = nTarget.verificatorForMod.get(sender.getName());
-				verif.generateMessage(sender.getName());
+				verif.generateMessage();
 				verif.getMessages().forEach((s) -> sender.sendMessage("[Verif] " + s));
+				verif.save();
+				nTarget.verificatorForMod.remove(sender.getName());
 			}, 3 * 20);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("alert")) {

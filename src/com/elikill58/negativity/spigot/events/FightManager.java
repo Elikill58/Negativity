@@ -35,7 +35,7 @@ public class FightManager implements Listener {
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageEvent e) {
-		if (e.getEntity() instanceof Player || !e.getEntity().hasMetadata("NPC"))
+		if (e.getEntity() instanceof Player && !e.getEntity().hasMetadata("NPC"))
 			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).fight();
 	}
 

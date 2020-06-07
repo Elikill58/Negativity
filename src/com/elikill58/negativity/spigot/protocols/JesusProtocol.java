@@ -102,7 +102,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		if(!np.jesusLastY.containsKey(p.getName() + "-" + i))
 			np.jesusLastY.put(p.getName() + "-" + i, 0.0);
 		
-		if(d == np.jesusLastY.get(p.getName() + "-" + i) && !p.getLocation().getBlock().getType().name().contains("WATER")) {
+		if(d == np.jesusLastY.get(p.getName() + "-" + i) && !p.getLocation().getBlock().getType().name().contains("WATER") && !np.isInFight) {
 			Location dessous = p.getLocation().clone().subtract(0, 1, 0);
 			if(dessous.getBlock().getType().equals(STATIONARY_WATER) && !LocationUtils.hasOtherThan(dessous, STATIONARY_WATER)) {
 				if(!(LocationUtils.hasMaterialAround(p.getLocation().clone(), WATER_LILY) || p.getLocation().getBlock().getType().equals(WATER_LILY))) {

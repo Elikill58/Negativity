@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal.adapter;
 
 import java.io.File;
+import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -88,7 +89,7 @@ public abstract class Adapter {
 		getConfig().set(key, value);
 	}
 
-	public abstract File copy(String lang, File f);
+	public abstract Path copyBundledFile(String name, Path dest);
 	public abstract void log(String msg);
 	public abstract void warn(String msg);
 	public abstract void error(String msg);

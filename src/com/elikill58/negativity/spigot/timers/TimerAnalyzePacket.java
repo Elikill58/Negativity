@@ -11,6 +11,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.packets.PacketType;
 import com.elikill58.negativity.spigot.protocols.NukerProtocol;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -37,17 +38,24 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 			int ping = Utils.getPing(p);
 			if (ping == 0)
 				ping = 1;
-			int flying = np.FLYING - (ping / 6);
-			if (flying > 28) {
+			
+			int flying = np.PACKETS.getOrDefault(PacketType.Client.FLYING, 0);
+			int arm = np.PACKETS.getOrDefault(PacketType.Client.ARM_ANIMATION, 0);
+			int useEntity = np.PACKETS.getOrDefault(PacketType.Client.USE_ENTITY, 0);
+			int entityAction = np.PACKETS.getOrDefault(PacketType.Client.ENTITY_ACTION, 0);
+			int blockDig = np.PACKETS.getOrDefault(PacketType.Client.BLOCK_DIG, 0);
+			
+			int flyingWithPing = flying - (ping / 6);
+			if (flyingWithPing > 28) {
 				Cheat c = np.flyingReason.getCheat();
 				if (np.ACTIVE_CHEAT.contains(c)) {
 					if(p.getItemInHand().getType().equals(Material.BOW))
 						np.flyingReason = FlyingReason.BOW;
 					double[] allTps = Utils.getTPS();
-					int porcent = UniversalUtils.parseInPorcent(flying - (ping / (allTps[1] - allTps[0] > 0.5 ? 9 : 8)));
-					SpigotNegativity.alertMod(flying > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, c, porcent,
-							"Flying in one second: " + np.FLYING + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
-							c.hoverMsg("packet", "%flying%", flying), (int) flying / 30);
+					int porcent = UniversalUtils.parseInPorcent(flyingWithPing - (ping / (allTps[1] - allTps[0] > 0.5 ? 9 : 8)));
+					SpigotNegativity.alertMod(flyingWithPing > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, c, porcent,
+							"Flying in one second: " + flying + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
+							c.hoverMsg("packet", "%flying%", flyingWithPing), (int) flyingWithPing / 30);
 					if(c.isSetBack()){
 						switch(np.flyingReason){
 						case BOW:
@@ -64,7 +72,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 								}
 							break;
 						case REGEN:
-							for(int i = 20; i < flying; i++) {
+							for(int i = 20; i < flyingWithPing; i++) {
 								p.damage(0.5);
 							}
 							break;
@@ -76,23 +84,23 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 			}
 			Cheat FORCEFIELD = Cheat.forKey(CheatKeys.FORCEFIELD);
 			if (np.ACTIVE_CHEAT.contains(FORCEFIELD)) {
-				if (np.ARM > 16 && np.USE_ENTITY > 20) {
+				if (arm > 16 && useEntity > 20) {
 					ReportType type = ReportType.WARNING;
 					if (np.getWarn(FORCEFIELD) > 5)
 						type = ReportType.VIOLATION;
 					SpigotNegativity.alertMod(type, p, FORCEFIELD,
-							UniversalUtils.parseInPorcent(np.ARM + np.USE_ENTITY + np.getWarn(FORCEFIELD)),
-							"ArmAnimation (Attack in one second): " + np.ARM
-									+ ", UseEntity (interaction with other entity): " + np.USE_ENTITY + " And warn: "
+							UniversalUtils.parseInPorcent(arm + useEntity + np.getWarn(FORCEFIELD)),
+							"ArmAnimation (Attack in one second): " + arm
+									+ ", UseEntity (interaction with other entity): " + useEntity + " And warn: "
 									+ np.getWarn(FORCEFIELD) + ". Ping: " + ping);
 				}
 			}
 			Cheat SNEAK = Cheat.forKey(CheatKeys.SNEAK);
 			if(np.ACTIVE_CHEAT.contains(SNEAK)){
 				if(ping < 140){
-					if(np.ENTITY_ACTION > 35){
+					if(entityAction > 35){
 						if(np.IS_LAST_SEC_SNEAK){
-							SpigotNegativity.alertMod(ReportType.WARNING, p, SNEAK, UniversalUtils.parseInPorcent(55 + np.ENTITY_ACTION), "EntityAction packet: " + np.ENTITY_ACTION + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
+							SpigotNegativity.alertMod(ReportType.WARNING, p, SNEAK, UniversalUtils.parseInPorcent(55 + entityAction), "EntityAction packet: " + entityAction + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
 							if(SNEAK.isSetBack())
 								p.setSneaking(false);
 						}
@@ -102,8 +110,8 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 			}
 			Cheat NUKER = Cheat.forKey(CheatKeys.NUKER);
 			if(np.ACTIVE_CHEAT.contains(NUKER))
-				if(ping < NUKER.getMaxAlertPing() && (np.BLOCK_DIG - (ping / 10)) > 20 && !NukerProtocol.hasDigSpeedEnchant(p.getItemInHand()))
-					SpigotNegativity.alertMod(np.BLOCK_DIG > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, UniversalUtils.parseInPorcent(20 + np.BLOCK_DIG), "BlockDig packet: " + np.BLOCK_DIG + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
+				if(ping < NUKER.getMaxAlertPing() && (blockDig - (ping / 10)) > 20 && !NukerProtocol.hasDigSpeedEnchant(p.getItemInHand()))
+					SpigotNegativity.alertMod(blockDig > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, UniversalUtils.parseInPorcent(20 + blockDig), "BlockDig packet: " + blockDig + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
 
 			Cheat SPEED = Cheat.forKey(CheatKeys.SPEED);
 			if(np.ACTIVE_CHEAT.contains(SPEED))

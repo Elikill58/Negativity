@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
+import com.elikill58.negativity.spigot.packets.PacketType;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -43,7 +44,7 @@ public class BlinkProtocol extends Cheat implements Listener {
 			return;
 		int ping = Utils.getPing(p);
 		if (ping < 140) {
-			int total = np.ALL - np.KEEP_ALIVE;
+			int total = np.ALL - np.PACKETS.getOrDefault(PacketType.Client.KEEP_ALIVE, 0);
 			if (total == 0) {
 				if(UniversalUtils.parseInPorcent(100 - ping) >= getReliabilityAlert()) {
 					boolean last = np.IS_LAST_SEC_BLINK == 2;
@@ -61,9 +62,10 @@ public class BlinkProtocol extends Cheat implements Listener {
 			np.IS_LAST_SEC_BLINK = 0;
 		
 		if(ping < getMaxAlertPing()){
-			int allPos = np.POSITION_LOOK + np.POSITION;
+			int posLook = np.PACKETS.getOrDefault(PacketType.Client.POSITION_LOOK, 0), pos = np.PACKETS.getOrDefault(PacketType.Client.POSITION, 0);
+			int allPos = posLook + pos;
 			if(allPos > 60) {
-				SpigotNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(20 + allPos), "PositionLook packet: " + np.POSITION_LOOK + " Position Packet: " + np.POSITION +  " (=" + allPos + ") Ping: " + ping + " Warn for Timer: " + np.getWarn(this));
+				SpigotNegativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(20 + allPos), "PositionLook packet: " + posLook + " Position Packet: " + pos +  " (=" + allPos + ") Ping: " + ping + " Warn for Timer: " + np.getWarn(this));
 			}
 		}
 	}

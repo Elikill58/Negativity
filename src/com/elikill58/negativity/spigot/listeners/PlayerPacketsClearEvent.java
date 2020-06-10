@@ -7,15 +7,18 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.packets.PacketType;
 
 public class PlayerPacketsClearEvent extends Event {
 	
-	private Player p;
-	private SpigotNegativityPlayer np;
+	private final Player p;
+	private final SpigotNegativityPlayer np;
+	private final HashMap<PacketType, Integer> packets;
 	
 	public PlayerPacketsClearEvent(Player p, SpigotNegativityPlayer np) {
 		this.p = p;
 		this.np = np;
+		this.packets = new HashMap<>(np.PACKETS);
 	}
 	
 	public Player getPlayer() {
@@ -26,19 +29,8 @@ public class PlayerPacketsClearEvent extends Event {
 		return np;
 	}
 	
-	public HashMap<String, Integer> getPackets(){
-		HashMap<String, Integer> hash = new HashMap<>();
-		hash.put("FLYING", np.FLYING);
-		hash.put("POSITION", np.POSITION);
-		hash.put("POSITION_LOOK", np.POSITION_LOOK);
-		hash.put("KEEP_ALIVE", np.KEEP_ALIVE);
-		hash.put("BLOCK_PLACE", np.BLOCK_PLACE);
-		hash.put("BLOCK_DIG", np.BLOCK_DIG);
-		hash.put("ARM", np.ARM);
-		hash.put("USE_ENTITY", np.USE_ENTITY);
-		hash.put("ENTITY_ACTION", np.ENTITY_ACTION);
-		hash.put("ALL", np.ALL);
-		return hash;
+	public HashMap<PacketType, Integer> getPackets(){
+		return packets;
 	}
 	
 	@Override

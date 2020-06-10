@@ -60,14 +60,14 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public static ArrayList<UUID> INJECTED = new ArrayList<>();
 	public ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
 	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
+	public HashMap<PacketType, Integer> PACKETS = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	public HashMap<String, Double> jesusLastY = new HashMap<>();
 	public HashMap<Cheat, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	private WeakReference<Player> p;
 	// Packets
-	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,
-			BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
+	public int ALL = 0, MAX_FLYING;
 	// warns & other
 	public int LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0, SPIDER_SAME_DIST = 0;
 	// setBack
@@ -181,18 +181,11 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public void clearPackets() {
 		PlayerPacketsClearEvent event = new PlayerPacketsClearEvent(getPlayer(), this);
 		Bukkit.getPluginManager().callEvent(event);
-		if (FLYING > MAX_FLYING)
-			MAX_FLYING = FLYING;
-		FLYING = 0;
-		POSITION_LOOK = 0;
-		KEEP_ALIVE = 0;
-		POSITION = 0;
-		BLOCK_PLACE = 0;
-		BLOCK_DIG = 0;
-		ARM = 0;
-		USE_ENTITY = 0;
-		ENTITY_ACTION = 0;
+		int flying = PACKETS.getOrDefault(PacketType.Client.FLYING, 0);
+		if (flying > MAX_FLYING)
+			MAX_FLYING = flying;
 		ALL = 0;
+		PACKETS.clear();
 	}
 	
 	@Override

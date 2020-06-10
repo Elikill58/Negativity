@@ -64,44 +64,16 @@ public class NegativityPacketManager {
 		Player p = packet.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		np.ALL++;
-		if(packet.getPacketType() instanceof PacketType.Client) {
-			switch (((Client) packet.getPacketType())) {
-			case FLYING:
-				np.FLYING++;
-				break;
-			case KEEP_ALIVE:
-				np.KEEP_ALIVE++;
-				break;
-			case POSITION_LOOK:
-				np.POSITION_LOOK++;
-				break;
-			case BLOCK_PLACE:
-				np.BLOCK_PLACE++;
-				break;
-			case BLOCK_DIG:
-				np.BLOCK_DIG++;
-				break;
-			case POSITION:
-				np.POSITION++;
-				break;
-			case ARM_ANIMATION:
-				np.ARM++;
-				break;
-			case USE_ENTITY:
-				np.USE_ENTITY++;
-				try {
-					int id = packet.getContent().getIntegers().read(0);
-					for(FakePlayer fp : np.getFakePlayers())
-						if(fp.getEntityId() == id)
-							np.removeFakePlayer(fp, true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				break;
-			case ENTITY_ACTION:
-				np.ENTITY_ACTION++;
-				break;
-			default:
+		PacketType type = packet.getPacketType();
+		np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
+		if(type == PacketType.Client.USE_ENTITY) {
+			try {
+				int id = packet.getContent().getIntegers().read(0);
+				for(FakePlayer fp : np.getFakePlayers())
+					if(fp.getEntityId() == id)
+						np.removeFakePlayer(fp, true);
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		if (packet.getPacketType() != Client.KEEP_ALIVE) {

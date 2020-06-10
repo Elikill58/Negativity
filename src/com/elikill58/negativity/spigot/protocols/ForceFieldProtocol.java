@@ -17,6 +17,9 @@ import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
+import com.elikill58.negativity.spigot.packets.PacketType;
+import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -89,6 +92,31 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			if(item != null && item.containsEnchantment(Enchantment.THORNS))
 				return true;
 		return false;
+	}
+	
+	@EventHandler
+	public void onNegPacket(PacketReceiveEvent e) {
+		Player p = e.getPlayer();
+		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		PacketType type = e.getPacket().getPacketType();
+		if (type == PacketType.Client.USE_ENTITY) {
+			int ping = Utils.getPing(p);
+			long time = System.currentTimeMillis() - np.LAST_USE_ENTITY;
+			if (time <= (100 - (ping / 10)))
+				SpigotNegativity.alertMod(ReportType.WARNING, p, this, 100, "Time between 2 attacks: " + time + "ms, ping: " + ping, (CheatHover) null);
+			np.LAST_USE_ENTITY = System.currentTimeMillis();
+		}
+	}
+
+	@EventHandler
+	public void onPacketClear(PlayerPacketsClearEvent e) {
+		int use = e.getPackets().getOrDefault(PacketType.Client.USE_ENTITY, 0);
+		if(use > 7) {
+			Player p = e.getPlayer();
+			int ping = Utils.getPing(p);
+			SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(use * 15 - ping),
+					use + " USE_ENTITY packets sent. Ping: " + ping, (CheatHover) null, use - 7);
+		}
 	}
 	
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {

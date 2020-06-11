@@ -37,6 +37,7 @@ import com.elikill58.negativity.spigot.commands.UnbanCommand;
 import com.elikill58.negativity.spigot.events.ChannelEvents;
 import com.elikill58.negativity.spigot.events.FightManager;
 import com.elikill58.negativity.spigot.events.PlayersEvents;
+import com.elikill58.negativity.spigot.events.ServerCrasherEvents;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatBypassEvent;
@@ -132,6 +133,7 @@ public class SpigotNegativity extends JavaPlugin {
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersEvents(), this);
 		pm.registerEvents(new FightManager(), this);
+		pm.registerEvents(new ServerCrasherEvents(this), this);
 
 		Messenger messenger = getServer().getMessenger();
 		ChannelEvents channelEvents = new ChannelEvents();

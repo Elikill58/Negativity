@@ -167,10 +167,14 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void addWarn(Cheat c, int reliability) {
+		addWarn(c, 100, 1);
+	}
+
+	public void addWarn(Cheat c, int reliability, int amount) {
 		if (System.currentTimeMillis() < TIME_INVINCIBILITY || c.getReliabilityAlert() > reliability)
 			return;
 		NegativityAccount account = getAccount();
-		account.setWarnCount(c, account.getWarn(c) + 1);
+		account.setWarnCount(c, account.getWarn(c) + amount);
 		mustToBeSaved = true;
 	}
 

@@ -390,7 +390,7 @@ public class SpigotNegativity extends JavaPlugin {
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
-		np.addWarn(c, reliability);
+		np.addWarn(c, reliability, amount);
 		logProof(np, type, p, c, reliability, proof, ping);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);

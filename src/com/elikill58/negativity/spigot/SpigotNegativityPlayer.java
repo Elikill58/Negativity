@@ -80,6 +80,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			isInvisible = false, isUsingSlimeBlock = false, already_blink = false, isJumpingWithBlock = false,
 			isOnLadders = false, lastClickInv = false, jesusState = true, wasSneaking = false, flyNotMovingY = false,
 			isGoingDown = false;
+	private boolean mustToBeSaved = false;
 	public PacketType lastPacketType = null;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;
@@ -155,7 +156,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return;
 		NegativityAccount account = getAccount();
 		account.setWarnCount(c, account.getWarn(c) + 1);
-		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
+		mustToBeSaved = true;
 	}
 
 	public void setWarn(Cheat c, int cheats) {
@@ -394,6 +395,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void saveProof() {
+		if(mustToBeSaved) {
+			mustToBeSaved = false;
+			Adapter.getAdapter().getAccountManager().save(getUUID());
+		}
 		if (proof.size() == 0)
 			return;
 		try {

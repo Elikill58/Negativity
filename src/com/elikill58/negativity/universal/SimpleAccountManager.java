@@ -37,7 +37,6 @@ public class SimpleAccountManager extends NegativityAccountManager {
 		if (existingAccount != null) {
 			return CompletableFuture.completedFuture(existingAccount);
 		}
-
 		CompletableFuture<NegativityAccount> loadFuture = NegativityAccountStorage.getStorage().getOrCreateAccount(accountId);
 		pendingRequests.put(accountId, loadFuture);
 		loadFuture.whenComplete((account, throwable) -> {

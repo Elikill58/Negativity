@@ -84,6 +84,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, disableShowingAlert = false,
 			isFreeze = false, isUsingSlimeBlock = false, already_blink = false, wasSneaking = false,
 			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false, flyNotMovingY = false;
+	private boolean mustToBeSaved = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public ItemType eatMaterial = ItemTypes.AIR;
 	private final List<String> proofs = new ArrayList<>();
@@ -144,6 +145,10 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void saveData() {
+		if(mustToBeSaved) {
+			mustToBeSaved = false;
+			Adapter.getAdapter().getAccountManager().save(getUUID());
+		}
 		if (!proofs.isEmpty()) {
 			try {
 				Path userDir = SpongeNegativity.getInstance().getDataFolder().resolve("user");
@@ -173,7 +178,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			return;
 		NegativityAccount account = getAccount();
 		account.setWarnCount(c, account.getWarn(c) + 1);
-		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
+		mustToBeSaved = true;
 	}
 
 	public void clearPackets() {

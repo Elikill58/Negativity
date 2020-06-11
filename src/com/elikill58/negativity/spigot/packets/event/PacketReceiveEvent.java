@@ -11,6 +11,14 @@ public class PacketReceiveEvent extends PacketEvent {
 		super(source, packet, p);
 	}
 
+	public boolean isCancelled() {
+		return getPacket().isCancelled();
+	}
+
+	public void setCancelled(boolean cancel) {
+		getPacket().setCancelled(cancel);
+	}
+
 	private static final HandlerList handlers = new HandlerList();
 
 	@Override

@@ -619,3 +619,10 @@ cheats:
   special:
     mcleaks:
       kick: true
+    server_crash:
+      name: "Server Crasher"
+      kick: true
+      ban: false
+      # The time os the ban, in milliseconds.
+      # Default: 2629800000 (1 month)
+      ban_time: 2629800000

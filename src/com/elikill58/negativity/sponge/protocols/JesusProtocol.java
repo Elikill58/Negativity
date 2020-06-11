@@ -22,6 +22,7 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -74,7 +75,7 @@ public class JesusProtocol extends Cheat {
 		}
 		Vector3d from = e.getFromTransform().getPosition(), to = e.getToTransform().getPosition();
 
-		if (!isInWater && isOnWater && !hasBoatAroundHim(loc) && !np.hasOtherThan(loc.sub(0, 1, 0), BlockTypes.WATER)
+		if (!isInWater && isOnWater && !hasBoatAroundHim(loc) && !LocationUtils.hasOtherThan(loc.sub(0, 1, 0), BlockTypes.WATER)
 				&& !p.getLocation().getBlockType().equals(BlockTypes.WATERLILY)) {
 			if (hasWaterLily(loc.sub(0, 1, 0))) {
 				return;
@@ -112,7 +113,7 @@ public class JesusProtocol extends Cheat {
 			Location<?> underLoc = new Location<World>(loc.getExtent(), loc.getX(), loc.getY() - 1, loc.getZ());
 			float distanceFall = np.getFallDistance();
 			if (block.get(Keys.IS_WET).orElse(false) && underLoc.getBlock().get(Keys.IS_WET).orElse(false) && distanceFall < 1
-					&& !upperLoc.getBlock().get(Keys.IS_WET).orElse(false) && !np.hasOtherThan(underLoc, BlockTypes.WATER)) {
+					&& !upperLoc.getBlock().get(Keys.IS_WET).orElse(false) && !LocationUtils.hasOtherThan(underLoc, BlockTypes.WATER)) {
 				if (distance > p.get(Keys.WALKING_SPEED).orElse(Double.MAX_VALUE) && !hasWaterLily(loc) && !hasWaterLily(upperLoc)) {
 					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.JESUS), 98, "In water, distance: " + distance,
 							hoverMsg("main", "%distance%", distance));

@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.inventories;
 
+import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
+
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.PotionEffectData;
 import org.spongepowered.api.data.manipulator.mutable.entity.InvisibilityData;
@@ -23,6 +25,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.inventories.holders.ModHolder;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
+import com.elikill58.negativity.sponge.utils.ItemUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -49,15 +52,15 @@ public class ModInventory extends AbstractInventory {
 
 
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		invGrid.set(1, 1, Utils.createItem(ItemTypes.GHAST_TEAR, Messages.getStringMessage(p, "inventory.mod.night_vision")));
-		invGrid.set(2, 1, Utils.createItem(ItemTypes.PUMPKIN_PIE, Messages.getStringMessage(p, "inventory.mod.invisible")));
-		invGrid.set(3, 1, Utils.createItem(ItemTypes.FEATHER, "&rFly: " + Messages.getStringMessage(p,
+		invGrid.set(1, 1, createItem(ItemTypes.GHAST_TEAR, Messages.getStringMessage(p, "inventory.mod.night_vision")));
+		invGrid.set(2, 1, createItem(ItemTypes.PUMPKIN_PIE, Messages.getStringMessage(p, "inventory.mod.invisible")));
+		invGrid.set(3, 1, createItem(ItemTypes.FEATHER, "&rFly: " + Messages.getStringMessage(p,
 				"inventory.manager." + (p.get(Keys.CAN_FLY).get() ? "enabled" : "disabled"))));
 		if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), Perm.MANAGE_CHEAT))
-			invGrid.set(4, 1, Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p, "inventory.mod.cheat_manage")));
-		invGrid.set(6, 1, Utils.createItem(ItemTypes.LEAD, Messages.getStringMessage(p, "inventory.mod.random_tp")));
-		invGrid.set(7, 1, Utils.hideAttributes(Utils.createItem(ItemTypes.IRON_SHOVEL, Messages.getStringMessage(p, "inventory.mod.clear_inv"))));
-		invGrid.set(8, 2, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
+			invGrid.set(4, 1, createItem(ItemTypes.TNT, Messages.getStringMessage(p, "inventory.mod.cheat_manage")));
+		invGrid.set(6, 1, createItem(ItemTypes.LEAD, Messages.getStringMessage(p, "inventory.mod.random_tp")));
+		invGrid.set(7, 1, ItemUtils.hideAttributes(createItem(ItemTypes.IRON_SHOVEL, Messages.getStringMessage(p, "inventory.mod.clear_inv"))));
+		invGrid.set(8, 2, createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 

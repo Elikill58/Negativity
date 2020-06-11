@@ -19,6 +19,8 @@ import com.elikill58.negativity.sponge.inventories.holders.AdminHolder;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.sponge.utils.Utils;
 
+import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
+
 public class AdminInventory extends AbstractInventory {
 
 	public AdminInventory() {
@@ -36,9 +38,9 @@ public class AdminInventory extends AbstractInventory {
 		Utils.fillInventoryWith(Inv.EMPTY, inv);
 
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		invGrid.set(0, 0, Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p, "inventory.mod.cheat_manage")));
-		invGrid.set(1, 0, Utils.createItem(ItemTypes.PAPER, Messages.getStringMessage(p, "lang.edit")));
-		invGrid.set(8, 0, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
+		invGrid.set(0, 0, createItem(ItemTypes.TNT, Messages.getStringMessage(p, "inventory.mod.cheat_manage")));
+		invGrid.set(1, 0, createItem(ItemTypes.PAPER, Messages.getStringMessage(p, "lang.edit")));
+		invGrid.set(8, 0, createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 

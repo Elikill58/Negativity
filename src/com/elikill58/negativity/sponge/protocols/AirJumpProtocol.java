@@ -13,6 +13,7 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -37,9 +38,9 @@ public class AirJumpProtocol extends Cheat {
 			return;
 		Location<World> loc = p.getLocation();
 		double temp = e.getToTransform().getLocation().getY() - e.getFromTransform().getLocation().getY();
-		if (temp > 0.35 && np.lastYDiff < temp && !np.hasOtherThanExtended(loc.copy(), BlockTypes.AIR)
-				&& !np.hasOtherThanExtended(loc.copy().sub(0, 1, 0), BlockTypes.AIR)
-				&& !np.hasOtherThanExtended(loc.copy().sub(0, 2, 0), BlockTypes.AIR)) {
+		if (temp > 0.35 && np.lastYDiff < temp && !LocationUtils.hasOtherThanExtended(loc.copy(), BlockTypes.AIR)
+				&& !LocationUtils.hasOtherThanExtended(loc.copy().sub(0, 1, 0), BlockTypes.AIR)
+				&& !LocationUtils.hasOtherThanExtended(loc.copy().sub(0, 2, 0), BlockTypes.AIR)) {
 			boolean mayCancel = SpongeNegativity.alertMod(
 					temp > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent((int) (temp * 210) - Utils.getPing(p)),

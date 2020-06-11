@@ -18,6 +18,7 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -96,7 +97,7 @@ public class SpiderProtocol extends Cheat {
 		Location<World> loc = p.getLocation();
 		if (!np.hasDetectionActive(this) || p.get(Keys.IS_FLYING).orElse(false))
 			return;
-		if (hasBypassBlockAround(loc) || np.hasExtended(loc, "STAIRS"))
+		if (hasBypassBlockAround(loc) || LocationUtils.hasExtended(loc, "STAIRS"))
 			return;
 
 		double y = e.getToTransform().getPosition().getY() - e.getFromTransform().getPosition().getY();

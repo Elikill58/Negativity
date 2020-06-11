@@ -44,7 +44,7 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 	}
 
 	@Override
-	public CompletableFuture<Void> saveAccount(NegativityAccount account) {;
+	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
 		File file = new File(userDir, account.getPlayerId() + ".yml");
 		YamlConfiguration accountConfig = YamlConfiguration.loadConfiguration(file);
 		accountConfig.set("playername", account.getPlayerName());

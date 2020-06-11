@@ -17,6 +17,7 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -84,13 +85,13 @@ public class FlyProtocol extends Cheat {
 					+ ". Warn for fly: " + np.getWarn(this), isInBoat ? hoverMsg("boat") : null);
 		}
 
-		if (!np.hasOtherThanExtended(p.getLocation(), BlockTypes.AIR)
-				&& !np.hasOtherThanExtended(p.getLocation().copy().sub(0, 1, 0), BlockTypes.AIR)
-				&& !np.hasOtherThanExtended(p.getLocation().copy().sub(0, 2, 0), BlockTypes.AIR)
+		if (!LocationUtils.hasOtherThanExtended(p.getLocation(), BlockTypes.AIR)
+				&& !LocationUtils.hasOtherThanExtended(p.getLocation().copy().sub(0, 1, 0), BlockTypes.AIR)
+				&& !LocationUtils.hasOtherThanExtended(p.getLocation().copy().sub(0, 2, 0), BlockTypes.AIR)
 				&& (fromPosition.getY() <= toPosition.getY() || isInBoat)) {
 			double d = toPosition.getY() - fromPosition.getY();
 			int nb = getNbAirBlockDown(np), porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
-			if (np.hasOtherThan(p.getLocation().add(0, -3, 0), BlockTypes.AIR))
+			if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), BlockTypes.AIR))
 				porcent = UniversalUtils.parseInPorcent(porcent - 15);
 			mayCancel = SpongeNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d + (isInBoat ? " On boat" : "")
@@ -117,7 +118,7 @@ public class FlyProtocol extends Cheat {
 	private int getNbAirBlockDown(SpongeNegativityPlayer np) {
 		Location<World> loc = np.getPlayer().getLocation();
 		int i = 0;
-		while (!np.hasOtherThanExtended(loc, BlockTypes.AIR) && i < 20) {
+		while (!LocationUtils.hasOtherThanExtended(loc, BlockTypes.AIR) && i < 20) {
 			loc = loc.sub(Vector3i.UNIT_Y);
 			i++;
 		}

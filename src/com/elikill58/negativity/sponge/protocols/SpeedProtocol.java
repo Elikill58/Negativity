@@ -25,6 +25,7 @@ import org.spongepowered.api.world.World;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.support.EssentialsSupport;
+import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -69,11 +70,11 @@ public class SpeedProtocol extends Cheat {
 			return;
 		}
 
-		if (canBoostWithPackedIce(p.getLocation()) || np.has(p.getLocation(), "SLAB", "STAIRS"))
+		if (canBoostWithPackedIce(p.getLocation()) || LocationUtils.has(p.getLocation(), "SLAB", "STAIRS"))
 			return;
-		if (np.has(p.getLocation().copy().add(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| np.has(p.getLocation().copy().add(0, 2, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| np.has(p.getLocation().copy().sub(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
+		if (LocationUtils.has(p.getLocation().copy().add(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| LocationUtils.has(p.getLocation().copy().add(0, 2, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| LocationUtils.has(p.getLocation().copy().sub(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
 
 		ReportType type = (np.getWarn(this) > 7) ? ReportType.VIOLATION : ReportType.WARNING;

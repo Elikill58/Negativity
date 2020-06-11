@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.inventories.admin;
 
+import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
+
 import java.io.IOException;
 import java.util.Optional;
 
@@ -22,10 +24,10 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.inventories.AbstractInventory;
 import com.elikill58.negativity.sponge.inventories.holders.LangHolder;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
-import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import net.kyori.text.format.TextColor;
 
@@ -38,7 +40,7 @@ public class LangInventory extends AbstractInventory {
 	@Override
 	public void openInventory(Player p, Object... args) {
 
-		int size = Utils.getMultipleOf((int) (TranslatedMessages.LANGS.size() * 1.5), 9, 1), nbLine = size / 9;
+		int size = UniversalUtils.getMultipleOf((int) (TranslatedMessages.LANGS.size() * 1.5), 9, 1, 54), nbLine = size / 9;
 		Inventory inv = Inventory.builder().withCarrier(new LangHolder())
 				.property(InventoryTitle.PROPERTY_NAME, new InventoryTitle(Text.of(Inv.NAME_LANG_MENU)))
 				.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, nbLine))
@@ -59,7 +61,7 @@ public class LangInventory extends AbstractInventory {
 					if(slot > 6)
 						invGrid.set(slot, line, Inv.EMPTY);
 					else {
-						invGrid.set(slot, line, Utils.createItem(ItemTypes.PAPER, s));
+						invGrid.set(slot, line, createItem(ItemTypes.PAPER, s));
 						searchSlot = false;
 					}
 				}
@@ -95,9 +97,9 @@ public class LangInventory extends AbstractInventory {
 	}
 	
 	private void update(GridInventory inv, Player p, int nbLine) {
-		inv.set(8, 1, Utils.createItem(ItemTypes.MAP, Messages.getStringMessage(p, "lang.current", "%lang%", TranslatedMessages.getDefaultLang())));
-		inv.set(8, nbLine - 2, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
-		inv.set(8, nbLine - 1, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));	
+		inv.set(8, 1, createItem(ItemTypes.MAP, Messages.getStringMessage(p, "lang.current", "%lang%", TranslatedMessages.getDefaultLang())));
+		inv.set(8, nbLine - 2, createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
+		inv.set(8, nbLine - 1, createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));	
 	}
 
 	@Override
@@ -124,7 +126,7 @@ public class LangInventory extends AbstractInventory {
 				TranslatedMessages.DEFAULT_LANG = lang;
 				TranslatedMessages.loadMessages();
 				update(e.getTargetInventory().query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class)),
-						p, (int) Utils.getMultipleOf((int) (TranslatedMessages.LANGS.size() * 1.5), 9, 1) / 9);
+						p, (int) UniversalUtils.getMultipleOf((int) (TranslatedMessages.LANGS.size() * 1.5), 9, 1, 54) / 9);
 			}
 		}
 	}

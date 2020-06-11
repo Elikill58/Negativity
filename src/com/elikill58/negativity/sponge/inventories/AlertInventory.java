@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.inventories;
 
+import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +23,13 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.inventories.holders.AlertHolder;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
+import com.elikill58.negativity.sponge.utils.ItemUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class AlertInventory extends AbstractInventory {
 
@@ -45,7 +49,7 @@ public class AlertInventory extends AbstractInventory {
 					|| (!np.hasDetectionActive(c)
 							&& config.getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
-		int size = Utils.getMultipleOf(TO_SEE.size() + 4, 9, 1), nbLine = size / 9;
+		int size = UniversalUtils.getMultipleOf(TO_SEE.size() + 4, 9, 1, 54), nbLine = size / 9;
 		Inventory inv = Inventory.builder().withCarrier(new AlertHolder())
 				.property(InventoryTitle.PROPERTY_NAME, new InventoryTitle(Text.of(Inv.NAME_ALERT_MENU)))
 				.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, nbLine))
@@ -57,7 +61,7 @@ public class AlertInventory extends AbstractInventory {
 		for (Cheat c : TO_SEE) {
 			ItemType itemType = (ItemType) c.getMaterial();
 			int alertCount = Math.min(Math.max(np.getWarn(c), 1), itemType.getMaxStackQuantity()); // Avoid quantity overflow
-			invGrid.set(SlotIndex.of(i), Utils.hideAttributes(Utils.createItem(itemType,
+			invGrid.set(SlotIndex.of(i), ItemUtils.hideAttributes(createItem(itemType,
 					Messages.getStringMessage(p, "inventory.alerts.item_name", "%exact_name%",
 					c.getName(), "%warn%", String.valueOf(np.getWarn(c))),
 					alertCount)));
@@ -65,9 +69,9 @@ public class AlertInventory extends AbstractInventory {
 		}
 
 		int lastRow = invGrid.getRows() - 1;
-		invGrid.set(6, lastRow, Utils.createItem(ItemTypes.BONE, "&7Clear"));
-		invGrid.set(7, lastRow, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
-		invGrid.set(8, lastRow, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
+		invGrid.set(6, lastRow, createItem(ItemTypes.BONE, "&7Clear"));
+		invGrid.set(7, lastRow, createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
+		invGrid.set(8, lastRow, createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 	
@@ -90,8 +94,7 @@ public class AlertInventory extends AbstractInventory {
 				Inventory slot = inv.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(i)));
 				ItemType itemType = (ItemType) c.getMaterial();
 				int alertCount = Math.min(Math.max(np.getWarn(c), 1), itemType.getMaxStackQuantity()); // Avoid quantity overflow
-				slot.set(Utils.hideAttributes(Utils.createItem(
-						itemType, Messages.getStringMessage(p, "inventory.alerts.item_name",
+				slot.set(ItemUtils.hideAttributes(createItem(itemType, Messages.getStringMessage(p, "inventory.alerts.item_name",
 								"%exact_name%", c.getName(), "%warn%", String.valueOf(np.getWarn(c))),
 						alertCount)));
 			}

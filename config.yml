@@ -571,7 +571,7 @@ cheats:
     kick: false
     alert_to_kick: 5
 
-  # Critical make you walking on web like if you walk on ground
+  # Critical set all of your attack as critical attack (even while sneaking)
   critical:
     ping: 150
     exact_name: "Critical"

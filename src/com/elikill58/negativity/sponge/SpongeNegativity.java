@@ -528,7 +528,7 @@ public class SpongeNegativity {
 		Sponge.getEventManager().post(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
-		np.addWarn(c, reliability);
+		np.addWarn(c, reliability, alertCounts);
 		logProof(type, p, c, reliability, proof, ping);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatEvent.Kick kick = new PlayerCheatEvent.Kick(type, p, c, reliability, hover, ping);

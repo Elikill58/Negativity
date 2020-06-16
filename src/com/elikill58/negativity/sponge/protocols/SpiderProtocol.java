@@ -68,7 +68,7 @@ public class SpiderProtocol extends Cheat {
 
 		double y = e.getToTransform().getLocation().getY() - e.getFromTransform().getLocation().getY();
 		boolean isAris = y == p.get(Keys.WALKING_SPEED).get();
-		if (((y > 0.499 && y < 0.7) || isAris) && !np.isUsingSlimeBlock) {
+		if (((y > 0.499 && y < 0.7) || isAris) && !np.isUsingSlimeBlock && !p.get(Keys.IS_SPRINTING).orElse(false)) {
 			int relia = (int) (y * 160);
 			if (isAris) {
 				relia += 39;
@@ -76,7 +76,7 @@ public class SpiderProtocol extends Cheat {
 
 			ReportType type = (np.getWarn(this) > 6) ? ReportType.WARNING : ReportType.VIOLATION;
 			boolean mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(relia),
-					"Nothing around him. To > From: " + y + " isAris: " + isAris + " has not stab slairs.");
+					"Nothing around him. To > From: " + y + " isAris: " + isAris + " has not stab slairs");
 			if (isSetBack() && mayCancel) {
 				Utils.teleportPlayerOnGround(p);
 			}

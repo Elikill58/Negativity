@@ -7,6 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -102,8 +103,9 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if (type == PacketType.Client.USE_ENTITY) {
 			int ping = Utils.getPing(p);
 			long time = System.currentTimeMillis() - np.LAST_USE_ENTITY;
-			if (time <= (100 - (ping / 10)))
-				SpigotNegativity.alertMod(ReportType.WARNING, p, this, 100, "Time between 2 attacks: " + time + "ms, ping: " + ping, (CheatHover) null);
+			Entity et = Utils.getEntityByID(e.getPacket().getContent().getIntegers().read(0));
+			if (time <= (100 - (ping / 10)) && (et != null && et.getType() != EntityType.BOAT))
+				SpigotNegativity.alertMod(ReportType.WARNING, p, this, 100, "Time between 2 attacks: " + time + "ms. Current entity: " + et + ", ping: " + ping, (CheatHover) null);
 			np.LAST_USE_ENTITY = System.currentTimeMillis();
 		}
 	}

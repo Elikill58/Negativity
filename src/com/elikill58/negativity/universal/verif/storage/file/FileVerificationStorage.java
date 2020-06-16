@@ -18,6 +18,7 @@ import org.json.simple.parser.ParseException;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.Verificator;
@@ -31,6 +32,7 @@ public class FileVerificationStorage extends VerificationStorage {
 
 	public FileVerificationStorage(File userDir) {
 		this.userDir = userDir;
+		this.userDir.mkdirs();
 	}
 
 	@Override
@@ -59,7 +61,9 @@ public class FileVerificationStorage extends VerificationStorage {
 				});
 				String startedBy = json.get("startedBy").toString();
 				List<String> result = (List<String>) json.get("result");
-				list.add(new Verificator(np, startedBy, cheats, result));
+				int version = (int) json.get("version");
+				Version playerVersion = Version.getVersionByName(json.get("player_version").toString());
+				list.add(new Verificator(np, startedBy, cheats, result, version, playerVersion));
 			} catch (ParseException | IOException e) {
 				ada.log("Could not load verification of file " + verification.getAbsolutePath());
 				e.printStackTrace();
@@ -70,7 +74,9 @@ public class FileVerificationStorage extends VerificationStorage {
 
 	@Override
 	public CompletableFuture<Void> saveVerification(Verificator verif) {
-		File file = new File(userDir.getAbsolutePath() + File.separator + verif.getPlayerId().toString() + File.separator + getNewFileName());
+		File folder = new File(userDir.getAbsolutePath(), verif.getPlayerId().toString());
+		folder.mkdirs();
+		File file = new File(folder, getNewFileName());
 
 		JSONObject json = new JSONObject();
 		json.put("startedBy", verif.getAsker());
@@ -83,6 +89,8 @@ public class FileVerificationStorage extends VerificationStorage {
 				jsonCheat.put(cheat.getKey(), null);
 		});
 		json.put("cheats", jsonCheat);
+		json.put("player_version", verif.getPlayerVersion().name());
+		json.put("version", verif.getVersion());
 		try {
 			if(!file.exists())
 				file.createNewFile();

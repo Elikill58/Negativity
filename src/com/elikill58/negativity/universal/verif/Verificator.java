@@ -12,10 +12,12 @@ import java.util.stream.Collectors;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 
 public class Verificator {
 	
+	public static final int VERIFICATION_VERSION = 0;
 	private static final Collector<Cheat, ?, Map<Cheat, VerifData>> COLLECTOR = Collectors.toMap(new Function<Cheat, Cheat>() {
 					@Override
 					public Cheat apply(Cheat t) {
@@ -32,20 +34,24 @@ public class Verificator {
 	private final NegativityPlayer np;
 	private final String asker;
 	private final List<String> messages;
+	private final int version;
+	private final Version playerVersion;
 	
 	public Verificator(NegativityPlayer np, String asker) {
 		this(np, asker, Cheat.CHEATS);
 	}
 	
 	public Verificator(NegativityPlayer np, String asker, List<Cheat> list) {
-		this(np, asker, list.stream().collect(COLLECTOR), new ArrayList<>());
+		this(np, asker, list.stream().collect(COLLECTOR), new ArrayList<>(), VERIFICATION_VERSION, np.getPlayerVersion());
 	}
 	
-	public Verificator(NegativityPlayer np, String asker, Map<Cheat, VerifData> cheats, List<String> messages) {
+	public Verificator(NegativityPlayer np, String asker, Map<Cheat, VerifData> cheats, List<String> messages, int version, Version playerVersion) {
 		this.np = np;
 		this.asker = asker;
 		this.cheats = cheats;
 		this.messages = messages;
+		this.version = version;
+		this.playerVersion = playerVersion;
 	}
 
 	public NegativityPlayer getNegativityPlayer() {
@@ -70,6 +76,14 @@ public class Verificator {
 	
 	public List<String> getMessages(){
 		return messages;
+	}
+
+	public int getVersion() {
+		return version;
+	}
+
+	public Version getPlayerVersion() {
+		return playerVersion;
 	}
 
 	public void generateMessage() {

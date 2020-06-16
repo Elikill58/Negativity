@@ -20,6 +20,7 @@ import org.json.simple.parser.ParseException;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.dataStorage.database.DatabaseMigrator;
 import com.elikill58.negativity.universal.verif.VerifData;
@@ -64,7 +65,9 @@ public class DatabaseVerificationStorage extends VerificationStorage {
 				});
 				List<String> result = Arrays.asList(resultQuery.getString("result").split("\n"));
 				String startedBy = resultQuery.getString("startedBy");
-				list.add(new Verificator(np, startedBy, cheats, result));
+				int version = resultQuery.getInt("version");
+				Version playerVersion = Version.getVersionByName(resultQuery.getString("player_version"));
+				list.add(new Verificator(np, startedBy, cheats, result, version, playerVersion));
 			}
 		} catch (SQLException | ParseException e) {
 			e.printStackTrace();
@@ -76,7 +79,7 @@ public class DatabaseVerificationStorage extends VerificationStorage {
 	@Override
 	public CompletableFuture<Void> saveVerification(Verificator verif) {
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
-				"INSERT INTO negativity_verifications (uuid, startedBy, result, cheats) VALUES (?, ?, ?, ?)")) {
+				"INSERT INTO negativity_verifications (uuid, startedBy, result, cheats, player_version, version) VALUES (?, ?, ?, ?, ?, ?)")) {
 			stm.setString(1, verif.getPlayerId().toString());
 			stm.setString(2, verif.getAsker());
 			stm.setString(3, verif.getMessages().stream().collect(Collectors.joining("\n")));
@@ -88,6 +91,8 @@ public class DatabaseVerificationStorage extends VerificationStorage {
 					jsonCheat.put(cheat.getKey(), null);
 			});
 			stm.setString(4, jsonCheat.toJSONString());
+			stm.setString(5, verif.getPlayerVersion().name());
+			stm.setInt(6, verif.getVersion());
 			stm.executeUpdate();
 		} catch (SQLException e) {
 			e.printStackTrace();

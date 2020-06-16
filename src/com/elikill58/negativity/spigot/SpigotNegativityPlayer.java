@@ -130,6 +130,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return p.get().getAddress().getAddress().getHostAddress();
 	}
 	
+	@Override
 	public Version getPlayerVersion() {
 		return playerVersion;
 	}

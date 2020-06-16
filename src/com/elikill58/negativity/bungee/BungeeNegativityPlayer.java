@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.Version;
 
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
@@ -31,6 +32,11 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	@Override
 	public Object getPlayer() {
 		return p;
+	}
+
+	@Override
+	public Version getPlayerVersion() {
+		return null;
 	}
 
 	@Override

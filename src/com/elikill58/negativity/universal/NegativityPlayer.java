@@ -72,5 +72,6 @@ public abstract class NegativityPlayer {
 	public abstract boolean isOp();
 	public abstract String getIP();
 	public abstract String getReason(Cheat c);
+	public abstract Version getPlayerVersion();
 
 }

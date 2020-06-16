@@ -19,6 +19,7 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -147,5 +148,10 @@ public class PlayersEvents implements Listener {
 		NegativityAccount account = NegativityAccount.get(e.getPlayer().getUniqueId());
 		account.getMinerate().addMine(MinerateType.getMinerateType(e.getBlock().getType().name()), e.getPlayer());
 		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
+	}
+	
+	@EventHandler
+	public void onTeleport(PlayerTeleportEvent e) {
+		SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer()).TIME_INVINCIBILITY = System.currentTimeMillis() + 2000;
 	}
 }

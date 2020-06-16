@@ -7,13 +7,12 @@ import org.json.simple.JSONObject;
 
 public abstract class DataCounter<T> {
 
-	protected final List<T> list;
-	protected final String name;
+	protected final List<T> list = new ArrayList<>();
+	protected final String name, displayName;
 	
-	@SuppressWarnings("unchecked")
-	public DataCounter(JSONObject json, String name) {
-		this.list = json == null ? new ArrayList<>() : (List<T>) json.getOrDefault("data", new ArrayList<>());
+	public DataCounter(String name, String displayName) {
 		this.name = name;
+		this.displayName = displayName;
 	}
 	
 	public abstract void add(T value);
@@ -26,6 +25,7 @@ public abstract class DataCounter<T> {
 	public JSONObject print() {
 		JSONObject json = new JSONObject();
 		json.put("type", this.name);
+		json.put("display", this.displayName);
 		json.put("data", this.list);
 		return json;
 	}

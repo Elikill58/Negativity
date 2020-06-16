@@ -19,9 +19,12 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
+import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 
 public class StepProtocol extends Cheat implements Listener {
 
+	public static final DataType<Double> BLOCKS_UP = new DataType<Double>(() -> new DoubleDataCounter("blocks_up", "Blocks UP"));
+	
 	public StepProtocol() {
 		super(CheatKeys.STEP, false, Material.BRICK_STAIRS, CheatCategory.MOVEMENT, true);
 	}
@@ -57,7 +60,7 @@ public class StepProtocol extends Cheat implements Listener {
 			np.verificatorForMod.forEach((s, verif) -> {
 				VerifData data = verif.getVerifData(this);
 				if(data != null)
-					data.getData(DataType.DOUBLE).add(diffBoost);
+					data.getData(BLOCKS_UP).add(diffBoost);
 			});
 			if(diffBoost > 0.6) {
 				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
@@ -74,6 +77,6 @@ public class StepProtocol extends Cheat implements Listener {
 	
 	@Override
 	public String compile(VerifData data) {
-		return "Average of block up : " + data.getData(DataType.DOUBLE).getAverage();
+		return "Average of block up : " + data.getData(BLOCKS_UP).getAverage();
 	}
 }

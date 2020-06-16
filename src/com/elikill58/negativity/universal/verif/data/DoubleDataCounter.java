@@ -1,11 +1,9 @@
 package com.elikill58.negativity.universal.verif.data;
 
-import org.json.simple.JSONObject;
-
 public class DoubleDataCounter extends DataCounter<Double> {
 
-	public DoubleDataCounter(JSONObject json, String name) {
-		super(json, name);
+	public DoubleDataCounter(String name, String display) {
+		super(name, display);
 	}
 	
 	@Override

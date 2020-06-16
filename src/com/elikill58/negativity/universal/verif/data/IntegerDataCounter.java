@@ -1,11 +1,9 @@
 package com.elikill58.negativity.universal.verif.data;
 
-import org.json.simple.JSONObject;
-
 public class IntegerDataCounter extends DataCounter<Integer> {
 
-	public IntegerDataCounter(JSONObject json, String name) {
-		super(json, name);
+	public IntegerDataCounter(String name, String display) {
+		super(name, display);
 	}
 	
 	@Override

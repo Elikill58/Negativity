@@ -1,47 +1,19 @@
 package com.elikill58.negativity.universal.verif;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
-
-import org.json.simple.JSONObject;
 
 import com.elikill58.negativity.universal.verif.data.DataCounter;
-import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
-import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
-import com.elikill58.negativity.universal.verif.data.LongDataCounter;
 
 public class VerifData {
 
-	@SuppressWarnings("rawtypes")
-	private final HashMap<DataType, DataCounter> hash = new HashMap<>();
-	
-	public VerifData() {
-		for(DataType<?> data : DataType.DATA_TYPES)
-			hash.put(data, data.create(null));
-	}
-	
-	public DataType<?> getType(String name){
-		for(DataType<?> data : DataType.DATA_TYPES)
-			if(data.getKey().equalsIgnoreCase(name))
-				return data;
-		return null;
-	}
-	
-	public void addObj(JSONObject json) {
-		String name = json.get("type").toString();
-		for(DataType<?> data : DataType.DATA_TYPES)
-			if(data.getKey().equalsIgnoreCase(name))
-				hash.put(data, data.create(json));
-	}
+	private final HashMap<DataType<?>, DataCounter<?>> hash = new HashMap<>();
 	
 	@SuppressWarnings("unchecked")
 	public <T> DataCounter<T> getData(DataType<T> type){
-		return hash.get(type);
+		return (DataCounter<T>) hash.computeIfAbsent(type, (t) -> type.create());
 	}
 
-	@SuppressWarnings("rawtypes")
-	public HashMap<DataType, DataCounter> getAllData() {
+	public HashMap<DataType<?>, DataCounter<?>> getAllData() {
 		return hash;
 	}
 	
@@ -54,32 +26,22 @@ public class VerifData {
 
 	public static class DataType<T> {
 		
-		private String key;
+		private final DataTypeCallable<T> create;
 		
-		public DataType(String key) {
-			this.key = key;
+		public DataType(DataTypeCallable<T> create) {
+			this.create = create;
 		}
 
-		public String getKey() {
-			return key;
+		public DataCounter<T> create() {
+			return create.call();
 		}
 		
-		public DataCounter<T> create(JSONObject json) {
-			return null;
+		public interface DataTypeCallable<T> {
+			public DataCounter<T> call();
 		}
-		
-		public static final DataType<Integer> INTEGER = new DataType<Integer>("integer") {
-			@Override public DataCounter<Integer> create(JSONObject json) { return new IntegerDataCounter(json, getKey()); }
-		};
-		
-		public static final DataType<Double> DOUBLE = new DataType<Double>("double") {
-			@Override public DataCounter<Double> create(JSONObject json) { return new DoubleDataCounter(json, getKey()); }
-		};
-		
-		public static final DataType<Long> LONG = new DataType<Long>("long") {
-			@Override public DataCounter<Long> create(JSONObject json) { return new LongDataCounter(json, getKey()); }
-		};
 
-		private static final List<DataType<?>> DATA_TYPES = Arrays.asList(INTEGER, DOUBLE, LONG);
+		//public static final DataType<Integer> INTEGER = new DataType<Integer>(() -> new IntegerDataCounter("integer", "Integer"));
+		//public static final DataType<Double> DOUBLE = new DataType<Double>(() -> new DoubleDataCounter("double", "Double"));
+		//public static final DataType<Long> LONG = new DataType<Long>(() -> new LongDataCounter("long", "Long"));
 	}
 }

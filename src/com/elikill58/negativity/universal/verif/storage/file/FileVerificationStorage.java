@@ -47,18 +47,7 @@ public class FileVerificationStorage extends VerificationStorage {
 			try {
 				String content = Files.readAllLines(verification.toPath()).stream().collect(Collectors.joining(""));
 				JSONObject json = (JSONObject) new JSONParser().parse(content);
-				Map<Cheat, VerifData> cheats = new HashMap<>();
-				((JSONObject) json.get("cheats")).forEach((key, value) -> {
-					Cheat c = Cheat.forKey(key.toString());
-					if(c == null)
-						ada.log("Cannot find cheat " + key.toString() + " for verification of " + playerId.toString());
-					else {
-						VerifData data = new VerifData();
-						for(JSONObject dataCounterObj : (List<JSONObject>) value)
-							data.addObj(dataCounterObj);
-						cheats.put(c, data);
-					}
-				});
+				Map<Cheat, VerifData> cheats = new HashMap<>(); // don't need to load it
 				String startedBy = json.get("startedBy").toString();
 				List<String> result = (List<String>) json.get("result");
 				int version = (int) json.get("version");

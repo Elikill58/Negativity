@@ -14,8 +14,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
 import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
@@ -41,7 +39,6 @@ public class DatabaseVerificationStorage extends VerificationStorage {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public CompletableFuture<List<Verificator>> loadAllVerifications(UUID playerId) {
 		Adapter ada = Adapter.getAdapter();
@@ -51,25 +48,14 @@ public class DatabaseVerificationStorage extends VerificationStorage {
 			stm.setString(1, playerId.toString());
 			ResultSet resultQuery = stm.executeQuery();
 			if (resultQuery.next()) {
-				Map<Cheat, VerifData> cheats = new HashMap<>();
-				((JSONObject) new JSONParser().parse(resultQuery.getString("cheats"))).forEach((key, value) -> {
-					Cheat c = Cheat.forKey(key.toString());
-					if(c == null)
-						ada.log("Cannot find cheat " + key.toString() + " for verification of " + playerId.toString());
-					else {
-						VerifData data = new VerifData();
-						for(JSONObject dataCounterObj : (List<JSONObject>) value)
-							data.addObj(dataCounterObj);
-						cheats.put(c, data);
-					}
-				});
+				Map<Cheat, VerifData> cheats = new HashMap<>(); // don't need to load it
 				List<String> result = Arrays.asList(resultQuery.getString("result").split("\n"));
 				String startedBy = resultQuery.getString("startedBy");
 				int version = resultQuery.getInt("version");
 				Version playerVersion = Version.getVersionByName(resultQuery.getString("player_version"));
 				list.add(new Verificator(np, startedBy, cheats, result, version, playerVersion));
 			}
-		} catch (SQLException | ParseException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return CompletableFuture.completedFuture(list);

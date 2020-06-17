@@ -2,8 +2,6 @@ package com.elikill58.negativity.universal.adapter;
 
 import java.io.File;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -71,22 +69,10 @@ public class VelocityAdapter extends Adapter {
 		pl.getLogger().error(msg);
 	}
 
+	@Nullable
 	@Override
-	public Path copyBundledFile(String name, Path dest) {
-		if (Files.exists(dest)) {
-			return dest;
-		}
-
-		try (InputStream in = pl.getResourceAsStream("assets/negativity/" + name)) {
-			if (in == null) {
-				return dest;
-			}
-			Files.createDirectories(dest.getParent());
-			Files.copy(in, dest);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return dest;
+	public InputStream openBundledFile(String name) {
+		return pl.getResourceAsStream("assets/negativity/" + name);
 	}
 
 	@Override

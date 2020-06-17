@@ -2,10 +2,17 @@ package com.elikill58.negativity.universal.utils;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -22,7 +29,6 @@ import java.util.jar.JarInputStream;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLHandshakeException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -42,6 +48,7 @@ import com.elikill58.negativity.universal.permissions.Perm;
 public class UniversalUtils {
 
 	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	public static boolean HAVE_INTERNET = true;
 
 	public static int getMultipleOf(int i, int multiple, int more, int limit) {
 		if(i > limit)
@@ -170,19 +177,29 @@ public class UniversalUtils {
 		if (optVer.isPresent())
 			return version.equalsIgnoreCase(optVer.get());
 		else
-			return false;
+			return true;
 	}
-
-	public static Optional<String> getLatestVersion() {
+	
+	public static Optional<String> getContentFromURL(String url){
+		return getContentFromURL(url, "");
+	}
+	
+	public static Optional<String> getContentFromURL(String urlName, String post){
+		if(!HAVE_INTERNET)
+			return Optional.empty();
 		try {
-			URL url = new URL("https://api.spigotmc.org/legacy/update.php?resource=48399");
-			doTrustToCertificates();
-			HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-			/*
-			 * connection.setConnectTimeout(5); connection.setReadTimeout(5);
-			 */
-			connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
+			Adapter ada = Adapter.getAdapter();
+			URL url = new URL(urlName);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			if(!post.equalsIgnoreCase("")) {
+				connection.setRequestMethod("POST");
+				OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+				writer.write(post);
+				writer.flush();
+				writer.close();
+			} else connection.setRequestMethod("GET");
 			connection.setUseCaches(true);
+			connection.setRequestProperty("User-Agent", "Negativity " + ada.getName() + " - " + ada.getVersion());
 			connection.setDoOutput(true);
 			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String content = "";
@@ -191,39 +208,33 @@ public class UniversalUtils {
 				content = content + input;
 			br.close();
 			return Optional.of(content);
-		} catch (Exception e) {
+        } catch (UnknownHostException | MalformedURLException e) {
+        	HAVE_INTERNET = false;
+        	Adapter.getAdapter().log("Could not use the internet connection to check for update or send stats");
+			return Optional.empty();
+        } catch (IOException e) {
 			return Optional.empty();
 		}
 	}
 
+	public static Optional<String> getLatestVersion() {
+		return getContentFromURL("https://api.spigotmc.org/legacy/update.php?resource=48399");
+	}
+
 	public static CompletableFuture<@Nullable String> requestMcleaksData(String uuid) {
 		return CompletableFuture.supplyAsync(() -> {
-			try {
-				URL url = new URL("https://mcleaks.themrgong.xyz/api/v3/isuuidmcleaks/" + uuid);
-				doTrustToCertificates();
-				HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
-				connection.setRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10.4; en-US; rv:1.9.2.2) Gecko/20100316 Firefox/3.6.2");
-				connection.setUseCaches(true);
-				connection.setDoOutput(true);
-				try (BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
-					StringBuilder content = new StringBuilder();
-					String input;
-					while ((input = br.readLine()) != null) {
-						content.append(input);
-					}
-					return content.toString();
-				}
-			} catch (SSLHandshakeException e) {
-				Adapter.getAdapter().warn("McLeaks API seem to be down. So, we cannot know if the player is using it.");
-				return null;
-			} catch (Exception e) {
-				e.printStackTrace();
+			Optional<String> optContent = getContentFromURL("https://mcleaks.themrgong.xyz/api/v3/isuuidmcleaks/" + uuid);
+			if(optContent.isPresent()) {
+				String content = optContent.get();
+				if(content == null)
+					Adapter.getAdapter().warn("McLeaks API seem to be down. So, we cannot know if the player is using it.");
+				return content;
 			}
 			return null;
 		});
 	}
 
-	public static void doTrustToCertificates() throws Exception {
+	public static void doTrustToCertificates() throws KeyManagementException, NoSuchAlgorithmException {
 		TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
 			public X509Certificate[] getAcceptedIssuers() {
 				return null;
@@ -310,6 +321,7 @@ public class UniversalUtils {
 	}
 
 	public static void init() {
+		getContentFromURL("https://google.fr");
 		DefaultConfigValue.init();
 		Database.init();
 		Perm.init();

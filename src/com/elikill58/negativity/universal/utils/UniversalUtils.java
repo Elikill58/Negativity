@@ -191,6 +191,9 @@ public class UniversalUtils {
 			Adapter ada = Adapter.getAdapter();
 			URL url = new URL(urlName);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setUseCaches(true);
+			connection.setRequestProperty("User-Agent", "Negativity " + ada.getName() + " - " + ada.getVersion());
+			connection.setDoOutput(true);
 			if(!post.equalsIgnoreCase("")) {
 				connection.setRequestMethod("POST");
 				OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
@@ -198,9 +201,6 @@ public class UniversalUtils {
 				writer.flush();
 				writer.close();
 			} else connection.setRequestMethod("GET");
-			connection.setUseCaches(true);
-			connection.setRequestProperty("User-Agent", "Negativity " + ada.getName() + " - " + ada.getVersion());
-			connection.setDoOutput(true);
 			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
 			String content = "";
 			String input;
@@ -213,6 +213,7 @@ public class UniversalUtils {
         	Adapter.getAdapter().log("Could not use the internet connection to check for update or send stats");
 			return Optional.empty();
         } catch (IOException e) {
+        	e.printStackTrace();
 			return Optional.empty();
 		}
 	}

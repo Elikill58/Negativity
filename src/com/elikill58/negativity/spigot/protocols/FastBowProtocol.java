@@ -39,7 +39,7 @@ public class FastBowProtocol extends Cheat implements Listener {
 				if(e.getAction().name().toLowerCase().contains(ib.getWhen().name().toLowerCase()))
 					return;
 		}
-		if (item.getType().equals(Material.BOW)) {
+		if (item.getType().equals(Material.BOW) && e.getAction().name().contains("RIGHT_CLICK")) {
 			np.flyingReason = FlyingReason.BOW;
 			long actual = System.currentTimeMillis(), dif = actual - np.LAST_SHOT_BOW;
 			if (np.LAST_SHOT_BOW != 0) {

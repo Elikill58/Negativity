@@ -237,7 +237,7 @@ public class SpigotNegativity extends JavaPlugin {
 		negativity.setExecutor(negativityCmd);
 		negativity.setTabCompleter(negativityCmd);
 
-		PluginCommand reportCmd = getCommand("report");
+		PluginCommand reportCmd = getCommand("nreport");
 		if (!getConfig().getBoolean("report_command"))
 			unRegisterBukkitCommand(reportCmd);
 		else {
@@ -278,12 +278,20 @@ public class SpigotNegativity extends JavaPlugin {
 			kickCmd.setTabCompleter(new KickCommand());
 		}
 
-		PluginCommand langCmd = getCommand("lang");
-		LangCommand langExecutor = new LangCommand();
-		langCmd.setExecutor(langExecutor);
-		langCmd.setTabCompleter(langExecutor);
+		PluginCommand langCmd = getCommand("nlang");
+		if (!getConfig().getBoolean("lang_command"))
+			unRegisterBukkitCommand(langCmd);
+		else {
+			LangCommand langExecutor = new LangCommand();
+			langCmd.setExecutor(langExecutor);
+			langCmd.setTabCompleter(langExecutor);
+		}
 
-		getCommand("mod").setExecutor(new ModCommand());
+		PluginCommand modCmd = getCommand("nmod");
+		if (!getConfig().getBoolean("mod_command"))
+			unRegisterBukkitCommand(modCmd);
+		else
+			modCmd.setExecutor(new ModCommand());
 	}
 
 	@Override

@@ -45,10 +45,12 @@ public class JesusProtocol extends Cheat implements Listener {
 			return;
 		Location loc = p.getLocation();
 		Material m = loc.getBlock().getType(), under = loc.clone().add(0, -1, 0).getBlock().getType();
-		boolean isInWater = m.equals(STATIONARY_WATER);
-		boolean isOnWater = under.equals(STATIONARY_WATER);
+		boolean isInWater = m.name().contains("WATER");
+		boolean isOnWater = under.name().contains("WATER");
 		if (p.getVehicle() instanceof Boat)
 			return;
+		boolean mayCancel = false;
+		double dif = e.getFrom().getY() - e.getTo().getY();
 		if (!isInWater && isOnWater && !hasBoatAroundHim(loc)) {
 			if (!LocationUtils.hasOtherThan(loc.clone().subtract(0, 1, 0), STATIONARY_WATER)
 					&& !p.getLocation().getBlock().getType().equals(WATER_LILY)) {
@@ -62,7 +64,6 @@ public class JesusProtocol extends Cheat implements Listener {
 						return;
 					}
 				}
-				double dif = e.getFrom().getY() - e.getTo().getY();
 				double reliability = 0;
 				ReportType type = ReportType.WARNING;
 				if(dif < 0.0005 && dif > 0.00000005)
@@ -78,12 +79,15 @@ public class JesusProtocol extends Cheat implements Listener {
 				else if(dif == 0.0)
 					reliability = 95;
 				else return;
-				boolean mayCancel = SpigotNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(reliability), "Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif + " and ping: "
+				mayCancel = SpigotNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(reliability), "Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif + " and ping: "
 									+ Utils.getPing(p));
-				if(isSetBack() && mayCancel)
-					p.teleport(p.getLocation().subtract(0, 1, 0));
 			}
 		}
+		if(dif == -0.5 && (isInWater || isOnWater)) {
+			mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(98), "Warn for Jesus: " + np.getWarn(this) + ", dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + " " + Utils.getPing(p));
+		}
+		if(isSetBack() && mayCancel)
+			p.teleport(p.getLocation().subtract(0, 1, 0));
 	}
 
 	@EventHandler

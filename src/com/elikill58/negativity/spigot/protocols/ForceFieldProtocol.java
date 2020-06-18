@@ -7,7 +7,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -20,7 +19,6 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.packets.PacketType;
-import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -95,21 +93,6 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		return false;
 	}
 	
-	@EventHandler
-	public void onNegPacket(PacketReceiveEvent e) {
-		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		PacketType type = e.getPacket().getPacketType();
-		if (type == PacketType.Client.USE_ENTITY) {
-			int ping = Utils.getPing(p);
-			long time = System.currentTimeMillis() - np.LAST_USE_ENTITY;
-			Entity et = Utils.getEntityByID(e.getPacket().getContent().getIntegers().read(0));
-			if (time <= (100 - (ping / 10)) && (et == null || et.getType() != EntityType.BOAT))
-				SpigotNegativity.alertMod(ReportType.WARNING, p, this, 100, "Time between 2 attacks: " + time + "ms. Current entity: " + et + ", ping: " + ping, (CheatHover) null);
-			np.LAST_USE_ENTITY = System.currentTimeMillis();
-		}
-	}
-
 	@EventHandler
 	public void onPacketClear(PlayerPacketsClearEvent e) {
 		int use = e.getPackets().getOrDefault(PacketType.Client.USE_ENTITY, 0);

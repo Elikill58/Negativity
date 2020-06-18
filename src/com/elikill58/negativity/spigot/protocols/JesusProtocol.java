@@ -8,7 +8,6 @@ import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPor
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.entity.Boat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -37,7 +36,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
-		if (np.hasElytra())
+		if (np.hasElytra() || p.isInsideVehicle())
 			return;
 		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom();
 		Location under = loc.clone().subtract(0, 1, 0);
@@ -46,7 +45,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		boolean mayCancel = false;
 		int ping = Utils.getPing(p);
 		double dif = e.getFrom().getY() - e.getTo().getY();
-		if (!isInWater && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !(p.getVehicle() instanceof Boat) && !p.isFlying()) {
+		if (!isInWater && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
 			if (!hasOtherThan(under, STATIONARY_WATER) && !hasMaterialsAround(under, "WATER_LILY")) {
 				double reliability = 0;
 				if (dif < 0.0005 && dif > 0.00000005)

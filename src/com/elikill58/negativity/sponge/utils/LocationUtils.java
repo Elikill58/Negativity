@@ -323,4 +323,20 @@ public class LocationUtils {
 		}
 		return false;
 	}
+
+	/**
+	 * Get the number of air below the specified player
+	 * 
+	 * @param p the player to know how many air blocks he has below
+	 * @return the number of air block below
+	 */
+	public static int getNbAirBlockDown(Player p) {
+		Location<World> loc = p.getLocation();
+		int i = 0;
+		while (!LocationUtils.hasOtherThanExtended(loc, BlockTypes.AIR) && i < 20) {
+			loc = loc.sub(Vector3i.UNIT_Y);
+			i++;
+		}
+		return i;
+	}
 }

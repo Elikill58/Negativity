@@ -63,6 +63,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public HashMap<PacketType, Integer> PACKETS = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	public HashMap<String, Double> jesusLastY = new HashMap<>();
+	public HashMap<String, Boolean> contentBoolean = new HashMap<>();
 	public HashMap<Cheat, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	private WeakReference<Player> p;

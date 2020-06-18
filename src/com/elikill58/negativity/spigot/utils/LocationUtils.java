@@ -8,6 +8,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Player;
 
 public class LocationUtils {
 
@@ -244,5 +245,21 @@ public class LocationUtils {
 				return true;
 		}
 		return false;
+	}
+
+	/**
+	 * Get the number of air below the specified player
+	 * 
+	 * @param p the player to know how many air blocks he has below
+	 * @return the number of air block below
+	 */
+	public static int getNbAirBlockDown(Player p) {
+		Location loc = p.getLocation().clone();
+		int i = 0;
+		while (!LocationUtils.hasOtherThanExtended(loc, "AIR") && i < 20) {
+			loc.subtract(0, 1, 0);
+			i++;
+		}
+		return i;
 	}
 }

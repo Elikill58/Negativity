@@ -61,6 +61,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
 	public Map<Cheat, List<PlayerCheatEvent.Alert>> pendingAlerts = new HashMap<>();
+	public HashMap<String, Boolean> contentBoolean = new HashMap<>();
 	public HashMap<String, Double> jesusLastY = new HashMap<>();
 	private Player p = null;
 	// Packets

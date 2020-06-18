@@ -5,13 +5,9 @@ import static com.elikill58.negativity.sponge.utils.LocationUtils.hasBoatAroundH
 import static com.elikill58.negativity.sponge.utils.LocationUtils.hasOtherThan;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
-import java.util.Optional;
-
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.entity.EntitySnapshot;
-import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
@@ -41,11 +37,11 @@ public class JesusProtocol extends Cheat {
 			return;
 		}
 
-		if (p.get(Keys.IS_ELYTRA_FLYING).orElse(false))
-			return;
-
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
+			return;
+
+		if (p.get(Keys.IS_ELYTRA_FLYING).orElse(false) || p.getVehicle().isPresent())
 			return;
 
 		Location<World> loc = p.getLocation();
@@ -54,13 +50,11 @@ public class JesusProtocol extends Cheat {
 		BlockType type = loc.getBlockType();
 		BlockType underType = under.getBlockType();
 		boolean isInWater = type.getId().contains("WATER"), isOnWater = underType.getId().contains("WATER");
-		Optional<EntitySnapshot> vehicle = p.get(Keys.VEHICLE);
-		boolean isInBoat = vehicle.isPresent() && vehicle.get().getType() == EntityTypes.BOAT;
 		int ping = Utils.getPing(p);
 		double dif = from.getY() - to.getY();
 		boolean mayCancel = false;
 
-		if (!isInWater && isOnWater && !hasBoatAroundHim(loc) && !hasOtherThan(under, BlockTypes.WATER) && !isInBoat
+		if (!isInWater && isOnWater && !hasBoatAroundHim(loc) && !hasOtherThan(under, BlockTypes.WATER)
 				&& !has(loc.sub(0, 1, 0), "WATER_LILY") && !p.get(Keys.IS_FLYING).orElse(false)) {
 
 			double reliability = 0;

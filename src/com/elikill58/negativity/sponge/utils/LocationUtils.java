@@ -1,12 +1,14 @@
 package com.elikill58.negativity.sponge.utils;
 
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.vehicle.Boat;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
@@ -127,7 +129,10 @@ public class LocationUtils {
 	}
 
 	public static boolean has(Location<?> loc, String... ms) {
+		loc = loc.copy();
 		List<String> m = Arrays.asList(ms);
+		if (m.contains(loc.getBlock().getType().getId()))
+			return true;
 		if (m.contains(loc.add(0, 0, 1).getBlock().getType().getId()))
 			return true;
 		if (m.contains(loc.add(1, 0, 0).getBlock().getType().getId()))
@@ -301,5 +306,21 @@ public class LocationUtils {
 			return null;
 		}
 		return new Vector3d(main.getX() + d1 * d4, main.getY() + d2 * d4, main.getZ() + d3 * d4);
+	}
+
+	/**
+	 * Check is there is a boat around the location (Distance of 3)
+	 * 
+	 * @param loc The location to check
+	 * @return true if there is a boat
+	 */
+	public static boolean hasBoatAroundHim(Location<World> loc) {
+		Collection<Entity> nearbyEntities = loc.getExtent().getNearbyEntities(loc.getPosition(), 3);
+		for (Entity entity : nearbyEntities) {
+			if (entity instanceof Boat) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

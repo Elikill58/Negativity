@@ -5,6 +5,9 @@ import java.util.List;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.entity.Boat;
+import org.bukkit.entity.Entity;
 
 public class LocationUtils {
 
@@ -46,7 +49,10 @@ public class LocationUtils {
 	 * @return true if one of specified material if around
 	 */
 	public static boolean hasMaterialsAround(Location loc, String... ms) {
+		loc = loc.clone();
 		for(String s : ms) {
+			if (loc.getBlock().getType().name().contains(s))
+				return true;
 			if (loc.add(0, 0, 1).getBlock().getType().name().contains(s))
 				return true;
 			if (loc.add(1, 0, 0).getBlock().getType().name().contains(s))
@@ -217,6 +223,26 @@ public class LocationUtils {
 			return true;
 		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(name))
 			return true;
+		return false;
+	}
+	
+	/**
+	 * Check is there is a boat around the location (Distance of 3)
+	 * 
+	 * @param loc The location to check
+	 * @return true if there is a boat
+	 */
+	public static boolean hasBoatAroundHim(Location loc) {
+		World world = loc.getWorld();
+		if (world == null) {
+			return false;
+		}
+		
+		for(Entity entity : world.getEntities()) {
+			Location l = entity.getLocation();
+			if (entity instanceof Boat && l.distance(loc) < 3)
+				return true;
+		}
 		return false;
 	}
 }

@@ -275,6 +275,19 @@ accounts:
     # Defaults to "file"
     id: "file"
 
+region-bypass:
+  enabled: false
+  1:
+    # You need WorldGuard for the region
+    regions:
+    - "spawn"
+    # Default worlds names (or Multiverse names)
+    worlds:
+    - "world_the_end"
+    # the cheats keys
+    cheats:
+    - "fly"
+
 # Per-cheat configuration. For more information about specific cheats
 # and their detections see https://github.com/Elikill58/Negativity/wiki/Cheat
 cheats:

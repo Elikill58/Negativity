@@ -381,6 +381,9 @@ public class SpigotNegativity extends JavaPlugin {
 				|| getInstance().getConfig().getDouble("tps_alert_stop", 19.0) > Utils.getLastTPS() || ping < 0 || np.isFreeze)
 			return false;
 		
+		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
+			return false;
+		
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name()))
 				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().name()).getWhen().equals(WhenBypass.ALWAYS))

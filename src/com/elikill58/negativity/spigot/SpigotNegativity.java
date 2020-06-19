@@ -112,15 +112,14 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().info("");
 			getLogger().info(" > Thanks for downloading Negativity :)");
 			getLogger().info("I'm trying to make the better anti-cheat has possible.");
-			getLogger().info(
-					"If there is any false positive, problem or if you have a suggestion you can contact me via:");
-			getLogger().info(
-					"Discord: @Elikill58#0743, mail: arpetzouille@gmail.com, and Elikill58 in all other web site like Twitter, Spigotmc ...");
+			getLogger().info("If you get error/false positive, or just have suggestion, you can contact me via:");
+			getLogger().info("Discord: @Elikill58#0743, @Elikill58 on twitter or in all other web site like Spigotmc ...");
 			getLogger().info("");
 			getLogger().info("------ Negativity Information ------");
 			getConfig().options().copyDefaults();
 			saveDefaultConfig();
 		}
+		getLogger().info("This plugin is free, but you can support me : https://www.patreon.com/elikill58 <3");
 		UniversalUtils.init();
 		Cheat.loadCheat();
 		FakePlayer.loadClass();

@@ -16,8 +16,7 @@ public class WorldRegionBypass {
 	private static final boolean IS_ENABLED;
 	
 	static {
-		SpigotNegativity pl = SpigotNegativity.getInstance();
-		ConfigurationSection section = pl.getConfig().getConfigurationSection("region-bypass");
+		ConfigurationSection section = SpigotNegativity.getInstance().getConfig().getConfigurationSection("region-bypass");
 		if(section != null) {
 			IS_ENABLED = section.getBoolean("enabled", false);
 			for(String keys : section.getKeys(false)) {
@@ -25,7 +24,6 @@ public class WorldRegionBypass {
 					continue;
 				new WorldRegionBypass(section.getConfigurationSection(keys));
 			}
-			pl.getLogger().info("Enabled " + REGIONS_BYPASS.size() + " bypass");
 		} else
 			IS_ENABLED = false;
 	}

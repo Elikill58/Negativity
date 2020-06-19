@@ -37,9 +37,9 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 		double xSpeed = Math.abs(from.getX() - to.getX());
 	    double zSpeed = Math.abs(from.getZ() - to.getZ());
 	    double xzSpeed = Math.sqrt(xSpeed * xSpeed + zSpeed * zSpeed);
-	    np.eatingMoveDistance =  (xSpeed >= zSpeed ? xSpeed : zSpeed);
-	    if (np.eatingMoveDistance < xzSpeed)
-	    	np.eatingMoveDistance = xzSpeed;
+	    np.contentDouble.put("slowdown-eating-distance", xSpeed >= zSpeed ? xSpeed : zSpeed);
+	    if (np.contentDouble.get("slowdown-eating-distance") < xzSpeed)
+	    	np.contentDouble.put("slowdown-eating-distance", xzSpeed);
 		if (!loc.getBlock().getType().equals(Material.SOUL_SAND) || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
 		Location fl = from.clone().subtract(to.clone());
@@ -63,9 +63,10 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 			return;
 		if(p.isInsideVehicle())
 			return;
-		if (np.eatingMoveDistance > p.getWalkSpeed() || p.isSprinting()) {
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.NO_SLOW_DOWN), UniversalUtils.parseInPorcent(np.eatingMoveDistance * 200),
-					"Distance while eating: " + np.eatingMoveDistance + ", WalkSpeed: " + p.getWalkSpeed(), hoverMsg("main", "%distance%", np.eatingMoveDistance));
+		double dis = np.contentDouble.getOrDefault("slowdown-eating-distance", 0.0);
+		if (dis > p.getWalkSpeed() || p.isSprinting()) {
+			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.NO_SLOW_DOWN), UniversalUtils.parseInPorcent(dis * 200),
+					"Distance while eating: " + dis + ", WalkSpeed: " + p.getWalkSpeed(), hoverMsg("main", "%distance%", dis));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}

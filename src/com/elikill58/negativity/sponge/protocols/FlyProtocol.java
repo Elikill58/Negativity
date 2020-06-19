@@ -111,13 +111,13 @@ public class FlyProtocol extends Cheat {
 		double distanceWithoutY = to.distance(fromPosition);
 		if(distanceWithoutY == distance && !p.isOnGround() && distance != 0 && p.getLocation().add(Vector3i.UNIT_Y).getBlockType().equals(BlockTypes.AIR)
 				&& p.getLocation().getBlockType().getId().contains("WATER")) {
-			if(np.flyNotMovingY)
+			if (np.contentBoolean.getOrDefault("fly-not-moving-y", false))
 				mayCancel = SpongeNegativity.alertMod(
 						np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, 98,
 						"Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY);
-			np.flyNotMovingY = true;
+			np.contentBoolean.put("fly-not-moving-y", true);
 		} else
-			np.flyNotMovingY = false;
+			np.contentBoolean.put("fly-not-moving-y", false);
 		if (isSetBack() && mayCancel) {
 			Utils.teleportPlayerOnGround(p);
 		}

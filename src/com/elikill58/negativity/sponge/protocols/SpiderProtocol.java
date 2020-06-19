@@ -102,13 +102,13 @@ public class SpiderProtocol extends Cheat {
 
 		double y = e.getToTransform().getPosition().getY() - e.getFromTransform().getPosition().getY();
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getExtent().equals(loc.getExtent()) && y > 0) {
-			double tempDis = loc.getY() - np.lastSpiderLoc.getY();
-			if (np.lastSpiderDistance == tempDis && tempDis != 0) {
+			double tempDis = loc.getY() - np.lastSpiderLoc.getY(), lastSpiderDistance = np.contentDouble.getOrDefault("spider-last-distance", 0.0);
+			if (lastSpiderDistance == tempDis && tempDis != 0) {
 				np.SPIDER_SAME_DIST++;
 				if (np.SPIDER_SAME_DIST > 2) {
 					if (SpongeNegativity.alertMod(ReportType.WARNING, p, this,
 							UniversalUtils.parseInPorcent(tempDis * 400 + np.SPIDER_SAME_DIST),
-							"Nothing strange around him. To > From: " + y + ". Walk on wall with always same y "
+							"Nothing strange around him. To > From: " + y + ", distance: " + lastSpiderDistance + ". Walk with same y "
 									+ np.SPIDER_SAME_DIST + " times")
 							&& isSetBack()) {
 						Utils.teleportPlayerOnGround(p);
@@ -116,7 +116,7 @@ public class SpiderProtocol extends Cheat {
 				} else
 					np.SPIDER_SAME_DIST = 0;
 			}
-			np.lastSpiderDistance = tempDis;
+			np.contentDouble.put("spider-last-distance", tempDis);
 		}
 		np.lastSpiderLoc = loc;
 	}

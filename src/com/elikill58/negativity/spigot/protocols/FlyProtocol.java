@@ -91,12 +91,12 @@ public class FlyProtocol extends Cheat implements Listener {
 		if (distanceWithoutY == i && !p.isOnGround() && i != 0
 				&& p.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR)
 				&& !p.getLocation().getBlock().getType().name().contains("WATER") && distanceWithoutY > 0.1) {
-			if (np.flyNotMovingY)
+			if (np.contentBoolean.getOrDefault("fly-not-moving-y", false))
 				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, 98, "Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY);
-			np.flyNotMovingY = true;
+			np.contentBoolean.put("fly-not-moving-y", true);
 		} else
-			np.flyNotMovingY = false;
+			np.contentBoolean.put("fly-not-moving-y", false);
 		if (isSetBack() && mayCancel) {
 			Utils.teleportPlayerOnGround(p);
 		}

@@ -61,8 +61,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
 	public Map<Cheat, List<PlayerCheatEvent.Alert>> pendingAlerts = new HashMap<>();
+	public HashMap<String, Double> contentDouble = new HashMap<>();
 	public HashMap<String, Boolean> contentBoolean = new HashMap<>();
-	public HashMap<String, Double> jesusLastY = new HashMap<>();
 	private Player p = null;
 	// Packets
 	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,
@@ -71,13 +71,13 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public int LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0, MOVE_TIME = 0;
 	// setBack
 	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0;
-	public double lastYDiff = -3.142654, lastSpiderDistance, lastDistanceFastStairs = 0, eatingMoveDistance = 0;
+	public double lastYDiff = -3.142654;
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0, LAST_BLOCK_BREAK = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
 	public String LAST_OTHER_KEEP_ALIVE;
-	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, disableShowingAlert = false, jesusState = true,
-			isFreeze = false, isUsingSlimeBlock = false, already_blink = false, wasSneaking = false,
-			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false, flyNotMovingY = false;
+	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, disableShowingAlert = false,
+			isFreeze = false, isUsingSlimeBlock = false, already_blink = false,
+			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false;
 	private boolean mustToBeSaved = false;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public ItemType eatMaterial = ItemTypes.AIR;

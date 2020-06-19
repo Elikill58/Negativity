@@ -92,19 +92,19 @@ public class JesusProtocol extends Cheat {
 					+ np.getWarn(this) + ", dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + " " + ping);
 		}
 
-		int i = (np.jesusState ? 1 : 2);
-		if (dif == np.jesusLastY.getOrDefault(p.getName() + "-" + i, 0.0) && isInWater && !np.isInFight) {
+		boolean jesusState = np.contentBoolean.getOrDefault("jesus-state", false);
+		if (dif == np.contentDouble.getOrDefault("jesus-last-y-" + jesusState, 0.0) && isInWater && !np.isInFight) {
 			if (!hasOtherThan(under, BlockTypes.WATER) && !has(loc, "WATER_LILY")) {
 				mayCancel = SpongeNegativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, parseInPorcent((dif + 5) * 10),
 						"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: "
 								+ dif + " (other: "
-								+ np.jesusLastY.getOrDefault(p.getName() + "-" + (np.jesusState ? 2 : 1), 0.0)
+								+ np.contentDouble.getOrDefault("jesus-last-y-" + (!jesusState), 0.0)
 								+ ") and ping: " + ping);
 			}
 		}
-		np.jesusLastY.put(p.getName() + "-" + i, dif);
-		np.jesusState = !np.jesusState;
+		np.contentDouble.put("jesus-last-y-" + jesusState, dif);
+		np.contentBoolean.put("jesus-state", !jesusState);
 
 		if (isSetBack() && mayCancel)
 			to.sub(0, 1, 0);

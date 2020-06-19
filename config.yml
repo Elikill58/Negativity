@@ -244,17 +244,6 @@ ban:
     # Log expired or revoked bans when using the "database" processor
     log_bans: true
 
-suspect:
-  # Start cheat detection when people suspect a player
-  #  Suspecting detected with the chat and with /report
-  #
-  enabled: true
-  chat: true
-  with_report_cmd: true
-  alias:
-  - "cheat"
-  - "hack"
-
 # Accounts hold player-specific data of the plugin, like their language and alerts count.
 accounts:
   storage:
@@ -292,7 +281,6 @@ cheats:
     exact_name: "ForceField"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -303,7 +291,6 @@ cheats:
     exact_name: "Jesus"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -314,7 +301,6 @@ cheats:
     exact_name: "AntiPotion"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -327,7 +313,6 @@ cheats:
     exact_name: "NoFall"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -338,7 +323,6 @@ cheats:
     exact_name: "FastEat"
     isActive: true
     reliability_alert: 60
-    autoVerif: false
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -352,7 +336,6 @@ cheats:
     # In milliseconds
     time_2_place: 50
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -363,7 +346,6 @@ cheats:
     exact_name: "Speed"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -375,7 +357,6 @@ cheats:
     exact_name: "AutoClick"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -386,7 +367,6 @@ cheats:
     exact_name: "Fly"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -397,7 +377,6 @@ cheats:
     exact_name: "Regen"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -408,7 +387,6 @@ cheats:
     exact_name: "AntiKnockback"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -419,7 +397,6 @@ cheats:
     exact_name: "Blink"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -430,7 +407,6 @@ cheats:
     exact_name: "FastBow"
     isActive: true
     reliability_alert: 60
-    autoVerif: false
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -441,7 +417,6 @@ cheats:
     exact_name: "Spider"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -452,7 +427,6 @@ cheats:
     exact_name: "Sneak"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -463,7 +437,6 @@ cheats:
     exact_name: "Scaffold"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -474,7 +447,6 @@ cheats:
     exact_name: "Step"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -485,7 +457,6 @@ cheats:
     exact_name: "NoSlowDown"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -496,7 +467,6 @@ cheats:
     exact_name: "FastLadder"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -507,7 +477,6 @@ cheats:
     exact_name: "Phase"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -518,7 +487,6 @@ cheats:
     exact_name: "AutoSteal"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -529,7 +497,6 @@ cheats:
     exact_name: "XRay"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -540,7 +507,6 @@ cheats:
     exact_name: "Nuker"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -551,7 +517,6 @@ cheats:
     exact_name: "AirJump"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -562,7 +527,6 @@ cheats:
     exact_name: "Chat"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -577,7 +541,6 @@ cheats:
     exact_name: "NoWeb"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -588,7 +551,6 @@ cheats:
     exact_name: "Critical"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -599,7 +561,6 @@ cheats:
     exact_name: "InventoryMove"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -610,7 +571,6 @@ cheats:
     exact_name: "FastStairs"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
@@ -621,7 +581,6 @@ cheats:
     exact_name: "NoPitchLimit"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5

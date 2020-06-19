@@ -23,7 +23,6 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
-import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -64,9 +63,6 @@ public class ReportCommand implements CommandExecutor {
 
 		Messages.sendMessage(playerSource, "report.well_report", "%name%", targetPlayer.getName());
 		nPlayerSource.TIME_REPORT = System.currentTimeMillis() + Adapter.getAdapter().getConfig().getInt("time_between_report");
-		if (SuspectManager.WITH_REPORT && SuspectManager.ENABLED)
-			SuspectManager.analyzeText(nPlayerSource, message);
-
 		return CommandResult.success();
 	}
 

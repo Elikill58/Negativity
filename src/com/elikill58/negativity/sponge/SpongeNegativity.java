@@ -440,11 +440,9 @@ public class SpongeNegativity {
 		boolean needPacket = false;
 		for (Cheat c : Cheat.values())
 			if (c.isActive()) {
-				if (c.isAutoVerif()) {
-					np.startAnalyze(c);
-					if (c.needPacket())
-						needPacket = true;
-				}
+				np.startAnalyze(c);
+				if (c.needPacket())
+					needPacket = true;
 			}
 		if (needPacket)
 			SpongeNegativityPlayer.INJECTED.add(p);

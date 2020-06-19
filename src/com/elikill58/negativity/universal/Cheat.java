@@ -63,10 +63,6 @@ public abstract class Cheat {
 		return hasListener;
 	}
 
-	public boolean isAutoVerif() {
-		return Adapter.getAdapter().getConfig().getBoolean("cheats." + key + ".autoVerif");
-	}
-
 	public int getReliabilityAlert() {
 		return Adapter.getAdapter().getConfig().getInt("cheats." + key + ".reliability_alert");
 	}
@@ -90,11 +86,6 @@ public abstract class Cheat {
 
 	public boolean setBack(boolean b) {
 		Adapter.getAdapter().getConfig().set("cheats." + key + ".setBack", b);
-		return b;
-	}
-
-	public boolean setAutoVerif(boolean b) {
-		Adapter.getAdapter().getConfig().set("cheats." + key + ".autoVerif", b);
 		return b;
 	}
 

@@ -32,7 +32,6 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.DefaultConfigValue;
-import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -315,7 +314,6 @@ public class UniversalUtils {
 		Database.init();
 		Perm.init();
 		BanManager.init();
-		SuspectManager.init();
 		TranslatedMessages.init();
 		NegativityAccountStorage.init();
 		VerificationStorage.init();

@@ -521,7 +521,7 @@ public class SpigotNegativity extends JavaPlugin {
 		np.ACTIVE_CHEAT.clear();
 		boolean needPacket = false;
 		for (Cheat c : Cheat.values())
-			if (c.isActive() && c.isAutoVerif()) {
+			if (c.isActive()) {
 				np.startAnalyze(c);
 				if (c.needPacket())
 					needPacket = true;

@@ -41,10 +41,8 @@ public class OneCheatInventory extends AbstractInventory {
 		Utils.fillInventoryWith(Inv.EMPTY, inv);
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
 		invGrid.set(0, 0, Utils.createItem((ItemType) c.getMaterial(), c.getName()));
-		invGrid.set(2, 0, Utils.createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
+		invGrid.set(3, 0, Utils.createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
 				"inventory.manager.setActive", "%active%", getMessage(p, c.isActive()))));
-		invGrid.set(3, 0, Utils.createItem(ItemTypes.ENDER_EYE, Messages.getStringMessage(p,
-				"inventory.manager.autoVerif", "%auto%", getMessage(p, c.isAutoVerif()))));
 		invGrid.set(4, 0, Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p,
 				"inventory.manager.setBack", "%back%", getMessage(p, c.isSetBack()))));
 		invGrid.set(5, 0, Utils.createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
@@ -60,10 +58,8 @@ public class OneCheatInventory extends AbstractInventory {
 		Cheat c = (Cheat) args[0];
 		Inventory inv = (Inventory) args[1];
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		invGrid.set(2, 0, Utils.createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
+		invGrid.set(3, 0, Utils.createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
 				"inventory.manager.setActive", "%active%", getMessage(p, c.isActive()))));
-		invGrid.set(3, 0, Utils.createItem(ItemTypes.ENDER_EYE, Messages.getStringMessage(p,
-				"inventory.manager.autoVerif", "%auto%", getMessage(p, c.isAutoVerif()))));
 		invGrid.set(4, 0, Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p,
 				"inventory.manager.setBack", "%back%", getMessage(p, c.isSetBack()))));
 		invGrid.set(5, 0, Utils.createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
@@ -81,8 +77,6 @@ public class OneCheatInventory extends AbstractInventory {
 			return;
 		if(m.equals(ItemTypes.TNT))
 			c.setBack(!c.isSetBack());
-		else if(m.equals(ItemTypes.ENDER_EYE))
-			c.setAutoVerif(!c.isAutoVerif());
 		else if(m.equals(ItemTypes.BLAZE_ROD))
 			c.setAllowKick(!c.allowKick());
 		else if(m.equals(ItemTypes.DIAMOND))

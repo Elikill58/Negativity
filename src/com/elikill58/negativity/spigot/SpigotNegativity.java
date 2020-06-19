@@ -232,13 +232,19 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 
 	private void loadCommand() {
+		ConfigurationSection commandSection = getConfig().getConfigurationSection("commands");
+		if(commandSection == null) {
+			getLogger().severe("Cannot find 'commands' section in config. Please, see default config here:");
+			getLogger().severe("https://github.com/Elikill58/Negativity/blob/master/config.yml");
+			getLogger().severe("Or reset your own config.");
+		}
 		PluginCommand negativity = getCommand("negativity");
 		NegativityCommand negativityCmd = new NegativityCommand();
 		negativity.setExecutor(negativityCmd);
 		negativity.setTabCompleter(negativityCmd);
 
 		PluginCommand reportCmd = getCommand("nreport");
-		if (!getConfig().getBoolean("report_command"))
+		if (commandSection != null && !commandSection.getBoolean("report", true))
 			unRegisterBukkitCommand(reportCmd);
 		else {
 			reportCmd.setExecutor(new ReportCommand());
@@ -246,7 +252,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 
 		PluginCommand banCmd = getCommand("nban");
-		if (!getConfig().getBoolean("ban_command"))
+		if (commandSection != null && !commandSection.getBoolean("ban", true))
 			unRegisterBukkitCommand(banCmd);
 		else {
 			List<String> banAlias = new ArrayList<String>();
@@ -257,7 +263,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 
 		PluginCommand unbanCmd = getCommand("nunban");
-		if (!getConfig().getBoolean("unban_command"))
+		if (commandSection != null && !commandSection.getBoolean("unban", true))
 			unRegisterBukkitCommand(unbanCmd);
 		else {
 			List<String> unbanAlias = new ArrayList<String>();
@@ -268,7 +274,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 
 		PluginCommand kickCmd = getCommand("nkick");
-		if (!getConfig().getBoolean("kick_command"))
+		if (commandSection != null && !commandSection.getBoolean("kick", true))
 			unRegisterBukkitCommand(kickCmd);
 		else {
 			List<String> kickAlias = new ArrayList<String>();
@@ -279,7 +285,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 
 		PluginCommand langCmd = getCommand("nlang");
-		if (!getConfig().getBoolean("lang_command"))
+		if (commandSection != null && !commandSection.getBoolean("lang", true))
 			unRegisterBukkitCommand(langCmd);
 		else {
 			LangCommand langExecutor = new LangCommand();
@@ -288,7 +294,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 
 		PluginCommand modCmd = getCommand("nmod");
-		if (!getConfig().getBoolean("mod_command"))
+		if (commandSection != null && !commandSection.getBoolean("mod", true))
 			unRegisterBukkitCommand(modCmd);
 		else
 			modCmd.setExecutor(new ModCommand());

@@ -3,17 +3,16 @@ package com.elikill58.negativity.spigot.protocols;
 import java.text.NumberFormat;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -23,9 +22,14 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerifData;
+import com.elikill58.negativity.universal.verif.VerifData.DataType;
+import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 
 @SuppressWarnings("deprecation")
 public class ForceFieldProtocol extends Cheat implements Listener {
+
+	public static final DataType<Double> HIT_DISTANCE = new DataType<Double>(() -> new DoubleDataCounter("hit_distance", "Hit Distance"));
 
 	private NumberFormat nf = NumberFormat.getInstance();
 	
@@ -50,7 +54,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 					+ " but cannot see it, ping: " + Utils.getPing(p),
 					hoverMsg("line_sight", "%name%", e.getEntity().getType().name().toLowerCase()));
 		}
-		if(hasThorns(p)) {
+		if(Utils.hasThorns(p)) {
 			if (isSetBack() && mayCancel)
 				e.setCancelled(true);
 			return;
@@ -58,13 +62,17 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		Location tempLoc = e.getEntity().getLocation().clone();
 		tempLoc.setY(p.getLocation().getY());
 		double dis = tempLoc.distance(p.getLocation());
-		if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach")
-				&& !p.getItemInHand().getType().equals(Material.BOW) &&!e.getEntityType().equals(EntityType.ENDER_DRAGON)) {
-			mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(dis * 2 * 10),
-					"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
-							+ ". Ping: " + Utils.getPing(p),
-							hoverMsg("distance", "%name%", e.getEntity().getName(), "%distance%", nf.format(dis)));
+		if((p.getItemInHand() != null && !p.getItemInHand().getType().equals(Material.BOW)) || p.getItemInHand() == null) {
+			np.verificatorForMod.forEach((s, verif) -> {
+				verif.getVerifData(this).ifPresent((data) -> data.getData(HIT_DISTANCE).add(dis));
+			});
+			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !e.getEntityType().equals(EntityType.ENDER_DRAGON)) {
+				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
+						UniversalUtils.parseInPorcent(dis * 2 * 10),
+						"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
+								+ ". Ping: " + Utils.getPing(p),
+								hoverMsg("distance", "%name%", e.getEntity().getName(), "%distance%", nf.format(dis)));
+			}
 		}
 		final Location loc = p.getLocation().clone();
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
@@ -80,15 +88,12 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if (isSetBack() && mayCancel)
 			e.setCancelled(true);
 	}
-
-	private boolean hasThorns(Player p) {
-		ItemStack[] armor = p.getInventory().getArmorContents();
-		if(armor == null)
-			return false;
-		for(ItemStack item : armor)
-			if(item != null && item.containsEnchantment(Enchantment.THORNS))
-				return true;
-		return false;
+	
+	@Override
+	public String compile(VerifData data) {
+		double av = data.getData(HIT_DISTANCE).getAverage();
+		ChatColor color = (av > 3 ? (av > 4 ? ChatColor.RED : ChatColor.YELLOW) : ChatColor.GREEN);
+		return "Average of distance : " + color + av;
 	}
 	
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {

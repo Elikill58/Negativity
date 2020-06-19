@@ -58,9 +58,7 @@ public class StepProtocol extends Cheat implements Listener {
 		double diffBoost = dif - (amplifier / 10);
 		if(diffBoost > 0.2) {
 			np.verificatorForMod.forEach((s, verif) -> {
-				VerifData data = verif.getVerifData(this);
-				if(data != null)
-					data.getData(BLOCKS_UP).add(diffBoost);
+				verif.getVerifData(this).ifPresent((data) -> data.getData(BLOCKS_UP).add(diffBoost));
 			});
 			if(diffBoost > 0.6) {
 				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),

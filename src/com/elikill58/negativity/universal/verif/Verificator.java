@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.function.Function;
@@ -70,8 +71,11 @@ public class Verificator {
 		return cheats;
 	}
 	
-	public VerifData getVerifData(Cheat c) {
-		return cheats.get(c);
+	public Optional<VerifData> getVerifData(Cheat c) {
+		VerifData data = cheats.get(c);
+		if(data != null)
+			return Optional.of(data);
+		return Optional.empty();
 	}
 	
 	public List<String> getMessages(){

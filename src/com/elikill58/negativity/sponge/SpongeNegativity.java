@@ -279,16 +279,16 @@ public class SpongeNegativity {
 			cmd.register(this, MigrateOldBansCommand.create(), "negativitymigrateoldbans");
 		}
 
-		reloadCommand("mod_command", cmd, ModCommand::create, "nmod", "mod");
-		reloadCommand("kick_command", cmd, KickCommand::create, "nkick", "kick");
-		reloadCommand("lang_command", cmd, LangCommand::create, "nlang", "lang");
-		reloadCommand("report_command", cmd, ReportCommand::create, "nreport", "report", "repot");
-		reloadCommand("ban_command", cmd, BanCommand::create, "nban", "negban", "ban");
-		reloadCommand("unban_command", cmd, UnbanCommand::create, "nunban", "negunban", "unban");
+		reloadCommand("mod", cmd, ModCommand::create, "nmod", "mod");
+		reloadCommand("kick", cmd, KickCommand::create, "nkick", "kick");
+		reloadCommand("lang", cmd, LangCommand::create, "nlang", "lang");
+		reloadCommand("report", cmd, ReportCommand::create, "nreport", "report", "repot");
+		reloadCommand("ban", cmd, BanCommand::create, "nban", "negban", "ban");
+		reloadCommand("unban", cmd, UnbanCommand::create, "nunban", "negunban", "unban");
 	}
 
 	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {
-		reloadCommand(configKey, config.getBoolean(configKey), manager, command, aliases);
+		reloadCommand(configKey, config.getChild("commands").getBoolean(configKey), manager, command, aliases);
 	}
 
 	private void reloadCommand(String mappingKey, boolean enabled, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {

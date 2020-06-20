@@ -86,6 +86,8 @@ public class AutoClickProtocol extends Cheat implements Listener {
 		int currentClick = ((SpigotNegativityPlayer) np).ACTUAL_CLICK;
 		DataCounter<Integer> counter = data.getData(CLICKS);
 		counter.add(currentClick);
+		if(counter.getMax() == 0)
+			return null;
 		return Utils.coloredMessage("&aCurrent&7/&cMaximum&7/&6Average&7: &a" + currentClick + "&7/&c" + counter.getMax() + "&7/&6" + counter.getAverage() + " &7clicks");
 	}
 }

@@ -35,7 +35,7 @@ import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 
 public class AntiKnockbackProtocol extends Cheat implements Listener {
 	
-	public static final DataType<Double> DISTANCE_DAMAGE = new DataType<>(() -> new DoubleDataCounter("distance_damage", "Distance after Damage"));
+	public static final DataType<Double> DISTANCE_DAMAGE = new DataType<Double>(() -> new DoubleDataCounter("distance_damage", "Distance after Damage"));
 	
 	public AntiKnockbackProtocol() {
 		super(CheatKeys.ANTI_KNOCKBACK, false, Material.STICK, CheatCategory.COMBAT, true, "antikb", "anti-kb", "no-kb", "nokb");

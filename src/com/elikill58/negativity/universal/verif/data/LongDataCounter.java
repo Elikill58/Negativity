@@ -1,14 +1,19 @@
 package com.elikill58.negativity.universal.verif.data;
 
+import java.util.Comparator;
+
 public class LongDataCounter extends DataCounter<Long> {
 
 	public LongDataCounter(String name, String display) {
 		super(name, display);
 	}
-	
+
 	@Override
-	public void add(Long d) {
-		list.add(d);
+	public Long getMax() {
+		if(list.isEmpty())
+			return null;
+		list.sort(Comparator.reverseOrder());
+		return list.get(0);
 	}
 
 	@Override

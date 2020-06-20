@@ -19,8 +19,12 @@ public abstract class DataCounter<T> {
 		return list.size();
 	}
 	
-	public abstract void add(T value);
+	public void add(T value) {
+		list.add(value);
+	}
 
+	public abstract T getMax();
+	
 	public abstract T getAverage();
 
 	public boolean has() {

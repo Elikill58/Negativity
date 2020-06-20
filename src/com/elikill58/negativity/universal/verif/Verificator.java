@@ -98,7 +98,7 @@ public class Verificator {
 			Cheat c = currentCheat.getKey();
 			VerifData data = currentCheat.getValue();
 			if(data.hasSomething()) {
-				String name = c.compile(data);
+				String name = c.compile(data, np);
 				if(name != null) {
 					messages.add(ChatColor.GOLD + c.getName() + ChatColor.DARK_GRAY + ": " + ChatColor.GRAY + name);
 					continue;

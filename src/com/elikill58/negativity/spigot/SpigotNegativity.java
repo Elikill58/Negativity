@@ -46,7 +46,6 @@ import com.elikill58.negativity.spigot.listeners.ShowAlertPermissionEvent;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
-import com.elikill58.negativity.spigot.timers.ActualizeClickTimer;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
 import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
@@ -88,7 +87,7 @@ public class SpigotNegativity extends JavaPlugin {
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, disableAlertOnVerif = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
-	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
+	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
 	private static int timeBetweenAlert = -1;
 	private NegativityPacketManager packetManager;
@@ -146,7 +145,6 @@ public class SpigotNegativity extends JavaPlugin {
 		for (Player p : Utils.getOnlinePlayers())
 			manageAutoVerif(p);
 		
-		(clickTimer = new ActualizeClickTimer()).runTaskTimer(this, 20, 20);
 		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
 		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 10);
@@ -292,7 +290,6 @@ public class SpigotNegativity extends JavaPlugin {
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		invTimer.cancel();
-		clickTimer.cancel();
 		packetTimer.cancel();
 		runSpawnFakePlayer.cancel();
 		timeTimeBetweenAlert.cancel();

@@ -16,6 +16,7 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
@@ -75,7 +76,7 @@ public class StepProtocol extends Cheat implements Listener {
 	}
 	
 	@Override
-	public String compile(VerifData data) {
+	public String compile(VerifData data, NegativityPlayer np) {
 		return "Average of block up : " + ChatColor.GREEN + data.getData(BLOCKS_UP).getAverage();
 	}
 }

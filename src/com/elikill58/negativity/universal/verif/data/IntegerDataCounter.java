@@ -1,14 +1,19 @@
 package com.elikill58.negativity.universal.verif.data;
 
+import java.util.Comparator;
+
 public class IntegerDataCounter extends DataCounter<Integer> {
 
 	public IntegerDataCounter(String name, String display) {
 		super(name, display);
 	}
-	
+
 	@Override
-	public void add(Integer d) {
-		list.add(d);
+	public Integer getMax() {
+		if(list.isEmpty())
+			return null;
+		list.sort(Comparator.reverseOrder());
+		return list.get(0);
 	}
 
 	@Override

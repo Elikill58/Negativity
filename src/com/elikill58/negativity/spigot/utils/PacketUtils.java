@@ -175,10 +175,11 @@ public class PacketUtils {
 	}
 	
 	/**
+	 * Get the specified field name in the object source
 	 * 
-	 * @param source
-	 * @param field
-	 * @return
+	 * @param source where we will find the field
+	 * @param field the name of the field
+	 * @return the requested field
 	 */
 	public static Object getField(Object source, String field) {
 		try {
@@ -191,6 +192,13 @@ public class PacketUtils {
 		}
 	}
 	
+	/**
+	 * Call method. Return the method return.
+	 * 
+	 * @param source the object where we want to run the method
+	 * @param method the name of the method to call
+	 * @return the return of the method called
+	 */
 	public static Object callMethod(Object source, String method) {
 		try {
 			return source.getClass().getDeclaredMethod(method).invoke(source);

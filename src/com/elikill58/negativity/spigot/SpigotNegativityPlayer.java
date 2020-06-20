@@ -377,9 +377,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return;
 		FAKE_PLAYER.remove(fp);
 		if(!detected) {
+			if(fakePlayerTouched > 0)
+				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
 			if(FAKE_PLAYER.size() == 0)
 				fakePlayerTouched = 0;
-			ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
 			return;
 		}
 		fakePlayerTouched++;

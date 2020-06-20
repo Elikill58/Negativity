@@ -20,9 +20,4 @@ public class IntegerDataCounter extends DataCounter<Integer> {
 			d += temp;
 		return (int) (d / list.size());
 	}
-
-	@Override
-	public boolean has() {
-		return !list.isEmpty();
-	}
 }

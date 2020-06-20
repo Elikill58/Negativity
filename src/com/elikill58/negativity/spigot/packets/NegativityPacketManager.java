@@ -89,14 +89,10 @@ public class NegativityPacketManager {
 				break;
 			case USE_ENTITY:
 				np.USE_ENTITY++;
-				try {
-					int id = packet.getContent().getIntegers().read(0);
-					for(FakePlayer fp : np.getFakePlayers())
-						if(fp.getEntityId() == id)
-							np.removeFakePlayer(fp, true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				int id = packet.getContent().getIntegers().read(0);
+				for(FakePlayer fp : np.getFakePlayers())
+					if(fp.getEntityId() == id)
+						np.removeFakePlayer(fp, true);
 				break;
 			case ENTITY_ACTION:
 				np.ENTITY_ACTION++;

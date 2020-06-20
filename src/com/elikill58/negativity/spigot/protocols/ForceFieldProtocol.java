@@ -3,7 +3,6 @@ package com.elikill58.negativity.spigot.protocols;
 import java.text.NumberFormat;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -26,10 +25,12 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
+import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 
 public class ForceFieldProtocol extends Cheat implements Listener {
 
 	public static final DataType<Double> HIT_DISTANCE = new DataType<Double>(() -> new DoubleDataCounter("hit_distance", "Hit Distance"));
+	public static final DataType<Integer> FAKE_PLAYERS = new DataType<Integer>(() -> new IntegerDataCounter("fake_players", "Fake Players"));
 
 	private NumberFormat nf = NumberFormat.getInstance();
 	
@@ -93,18 +94,17 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	@Override
 	public String compile(VerifData data) {
 		double av = data.getData(HIT_DISTANCE).getAverage();
-		ChatColor color = (av > 3 ? (av > 4 ? ChatColor.RED : ChatColor.YELLOW) : ChatColor.GREEN);
-		return "Average of distance : " + color + String.format("%.3f", av);
+		int nb = data.getData(FAKE_PLAYERS).getSize();
+		String color = (av > 3 ? (av > 4 ? "&c" : "&6") : "&a");
+		return Utils.coloredMessage("Hit distance : " + color + String.format("%.3f", av) + (nb > 0 ? " &7and &c" + nb + " &7fake players touched." : ""));
 	}
 	
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {
-		if (np.fakePlayerTouched < 5)
-			return;
 		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
+		np.verificatorForMod.forEach((s, verif) -> verif.getVerifData(forcefield).ifPresent((data) -> data.getData(FAKE_PLAYERS).add(1)));
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
-		double rapport = np.fakePlayerTouched / (timeBehindStart / 1000);
-		SpigotNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, forcefield,
-				UniversalUtils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
+		SpigotNegativity.alertMod(np.fakePlayerTouched > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, forcefield,
+				UniversalUtils.parseInPorcent(np.fakePlayerTouched * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 						forcefield.hoverMsg("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
 	}

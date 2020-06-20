@@ -357,7 +357,7 @@ public class SpigotNegativity extends JavaPlugin {
 			return false;
 		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT) && gadgetMenuSupport &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
 			return false;
-		if(!disableAlertOnVerif && !np.verificatorForMod.isEmpty())
+		if(disableAlertOnVerif && !np.verificatorForMod.isEmpty())
 			return false;
 		
 		int ping = Utils.getPing(p);

@@ -20,9 +20,4 @@ public class LongDataCounter extends DataCounter<Long> {
 			d += temp;
 		return (long) (d / list.size());
 	}
-
-	@Override
-	public boolean has() {
-		return !list.isEmpty();
-	}
 }

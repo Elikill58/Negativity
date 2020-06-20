@@ -15,11 +15,17 @@ public abstract class DataCounter<T> {
 		this.displayName = displayName;
 	}
 	
+	public int getSize() {
+		return list.size();
+	}
+	
 	public abstract void add(T value);
 
 	public abstract T getAverage();
 
-	public abstract boolean has();
+	public boolean has() {
+		return !list.isEmpty();
+	}
 
 	@SuppressWarnings("unchecked")
 	public JSONObject print() {

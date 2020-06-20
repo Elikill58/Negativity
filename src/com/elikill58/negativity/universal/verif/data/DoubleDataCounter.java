@@ -20,9 +20,4 @@ public class DoubleDataCounter extends DataCounter<Double> {
 			d += temp;
 		return d / list.size();
 	}
-
-	@Override
-	public boolean has() {
-		return !list.isEmpty();
-	}
 }

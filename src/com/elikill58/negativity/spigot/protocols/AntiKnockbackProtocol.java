@@ -24,17 +24,23 @@ import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerifData;
+import com.elikill58.negativity.universal.verif.VerifData.DataType;
+import com.elikill58.negativity.universal.verif.data.DataCounter;
+import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 
 public class AntiKnockbackProtocol extends Cheat implements Listener {
+	
+	public static final DataType<Double> DISTANCE_DAMAGE = new DataType<>(() -> new DoubleDataCounter("distance_damage", "Distance after Damage"));
 	
 	public AntiKnockbackProtocol() {
 		super(CheatKeys.ANTI_KNOCKBACK, false, Material.STICK, CheatCategory.COMBAT, true, "antikb", "anti-kb", "no-kb", "nokb");
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler(priority = EventPriority.LOWEST)
 	public void onDamage(final EntityDamageByEntityEvent e) {
 		if (!(e.getEntity() instanceof Player) || e.isCancelled())
@@ -54,17 +60,12 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 		if(p.hasPotionEffect(PotionEffectType.POISON))
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9)) {
-			if(p.getItemInHand() != null && p.getItemInHand().getType().name().contains("SHIELD"))
+			ItemStack inHand = Utils.getItemInHand(p);
+			if(inHand != null && inHand.getType().name().contains("SHIELD"))
 				return;
-			try {
-				Object itemInOffHand = p.getInventory().getClass().getMethod("getItemInOffHand").invoke(p.getInventory());
-				if(itemInOffHand != null && itemInOffHand instanceof ItemStack) {
-					if(((ItemStack) itemInOffHand).getType().name().contains("SHIELD"))
-						return;
-				}
-			} catch (Exception exc) {
-				exc.printStackTrace();
-			}
+			ItemStack inOffHand = Utils.getItemInHand(p);
+			if(inOffHand != null && inOffHand.getType().name().contains("SHIELD"))
+				return;
 		}
 		EntityType damagerType = e.getDamager().getType();
 		if(damagerType.equals(EntityType.EGG) || damagerType.equals(EntityType.SNOWBALL) || (SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p)) || e.isCancelled())
@@ -90,10 +91,12 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 						Location actual = p.getLocation();
 						if(last.getWorld() != actual.getWorld() || p.isDead())
 							return;
+						Cheat antiKb = Cheat.forKey(CheatKeys.ANTI_KNOCKBACK);
 						double d = last.distance(actual);
+						np.verificatorForMod.forEach((s, verif) -> verif.getVerifData(antiKb).ifPresent((data) -> data.getData(DISTANCE_DAMAGE).add(d)));
 						int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - d);
 						if (d < 0.1 && !actual.getBlock().getType().equals(ItemUtils.WEB) && !p.isSneaking()){
-							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.ANTI_KNOCKBACK), relia,
+							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, antiKb, relia,
 									"Distance after damage: " + d + "; Damager: " + e.getDamager().getType().name().toLowerCase() + " Ping: " + ping, hoverMsg("main", "%distance%", d));
 							if(isSetBack() && mayCancel)
 								p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));
@@ -102,5 +105,14 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 				}, 5);
 			}
 		}, 0);
+	}
+	
+	@Override
+	public String compile(VerifData data, NegativityPlayer np) {
+		DataCounter<Double> counter = data.getData(DISTANCE_DAMAGE);
+		double av = counter.getAverage(), low = counter.getMin();
+		String colorAverage = (av < 1 ? (av < 0.5 ? "&c" : "&6") : "&a");
+		String colorLow = (low < 1 ? (low < 0.5 ? "&c" : "&6") : "&a");
+		return Utils.coloredMessage("&6Distance after damage: &7Average: " + colorAverage + String.format("%.2f", av) + "&7, Lower: " + colorLow + String.format("%.2f", low) + " &7(In " + counter.getSize() + " hits)");
 	}
 }

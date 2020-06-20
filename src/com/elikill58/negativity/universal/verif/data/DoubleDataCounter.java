@@ -9,6 +9,14 @@ public class DoubleDataCounter extends DataCounter<Double> {
 	}
 
 	@Override
+	public Double getMin() {
+		if(list.isEmpty())
+			return null;
+		list.sort(Comparator.naturalOrder());
+		return list.get(0);
+	}
+
+	@Override
 	public Double getMax() {
 		if(list.isEmpty())
 			return null;

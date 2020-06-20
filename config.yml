@@ -259,10 +259,11 @@ accounts:
 verif:
   # Time of the verification
   # in ticks (20 ticks = 1 second)
-  time: 60
+  time: 200
   # If true, all alert will be disabled when the player
   # is currently verified
   disable_alert_on_verif: false
+
   storage:
     # The ID of the storage to use.
     #

@@ -23,6 +23,7 @@ public abstract class DataCounter<T> {
 		list.add(value);
 	}
 
+	public abstract T getMin();
 	public abstract T getMax();
 	
 	public abstract T getAverage();

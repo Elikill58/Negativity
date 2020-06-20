@@ -189,4 +189,13 @@ public class Utils {
 	public static ItemStack getItemInHand(Player p) {
 		return p.getItemInHand();
 	}
+	
+	public static ItemStack getItemInOffHand(Player p) {
+		try {
+			return (ItemStack) PacketUtils.callMethod(p.getInventory(), "getItemInOffHand");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

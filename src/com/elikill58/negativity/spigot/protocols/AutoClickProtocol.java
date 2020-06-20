@@ -33,7 +33,7 @@ public class AutoClickProtocol extends Cheat implements Listener {
 	public static final int CLICK_ALERT = Adapter.getAdapter().getConfig().getInt("cheats.autoclick.click_alert");
 	
 	public AutoClickProtocol() {
-		super(CheatKeys.AUTO_CLICK, false, Material.FISHING_ROD, CheatCategory.COMBAT, true, "auto-click", "autoclic");
+		super(CheatKeys.AUTO_CLICK, true, Material.FISHING_ROD, CheatCategory.COMBAT, true, "auto-click", "autoclic");
 		Bukkit.getScheduler().runTaskTimer(SpigotNegativity.getInstance(), () -> {
 			for (Player p : Utils.getOnlinePlayers()) {
 				SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);

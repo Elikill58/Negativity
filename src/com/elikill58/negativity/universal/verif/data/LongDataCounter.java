@@ -9,6 +9,14 @@ public class LongDataCounter extends DataCounter<Long> {
 	}
 
 	@Override
+	public Long getMin() {
+		if(list.isEmpty())
+			return null;
+		list.sort(Comparator.naturalOrder());
+		return list.get(0);
+	}
+
+	@Override
 	public Long getMax() {
 		if(list.isEmpty())
 			return null;

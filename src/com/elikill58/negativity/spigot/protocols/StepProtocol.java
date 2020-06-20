@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -75,6 +76,6 @@ public class StepProtocol extends Cheat implements Listener {
 	
 	@Override
 	public String compile(VerifData data) {
-		return "Average of block up : " + data.getData(BLOCKS_UP).getAverage();
+		return "Average of block up : " + ChatColor.GREEN + data.getData(BLOCKS_UP).getAverage();
 	}
 }

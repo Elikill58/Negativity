@@ -11,6 +11,8 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
+import org.bukkit.ChatColor;
+
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.Version;
@@ -98,7 +100,7 @@ public class Verificator {
 			if(name == null)
 				messageCheatNothing.add(c.getName());
 			else
-				messages.add(c.getName() + ": " + name);
+				messages.add(ChatColor.GOLD + c.getName() + ChatColor.DARK_GRAY + ": " + ChatColor.GRAY + name);
 		}
 		if(messageCheatNothing.length() > 0)
 			messages.add("Nothing detected: " + messageCheatNothing.toString());

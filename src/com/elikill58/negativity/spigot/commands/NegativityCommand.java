@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.StringJoiner;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -103,7 +104,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
 				Verificator verif = nTarget.verificatorForMod.get(sender.getName());
 				verif.generateMessage();
-				verif.getMessages().forEach((s) -> sender.sendMessage("[Verif] " + s));
+				verif.getMessages().forEach((s) -> sender.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_GREEN + "Verif" + ChatColor.GREEN + "] " + s));
 				verif.save();
 				nTarget.verificatorForMod.remove(sender.getName());
 			}, 3 * 20);

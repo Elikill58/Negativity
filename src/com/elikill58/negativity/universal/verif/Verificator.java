@@ -96,11 +96,15 @@ public class Verificator {
 		StringJoiner messageCheatNothing = new StringJoiner(", ");
 		for(Entry<Cheat, VerifData> currentCheat : cheats.entrySet()) {
 			Cheat c = currentCheat.getKey();
-			String name = c.compile(currentCheat.getValue());
-			if(name == null)
-				messageCheatNothing.add(c.getName());
-			else
-				messages.add(ChatColor.GOLD + c.getName() + ChatColor.DARK_GRAY + ": " + ChatColor.GRAY + name);
+			VerifData data = currentCheat.getValue();
+			if(data.hasSomething()) {
+				String name = c.compile(data);
+				if(name != null) {
+					messages.add(ChatColor.GOLD + c.getName() + ChatColor.DARK_GRAY + ": " + ChatColor.GRAY + name);
+					continue;
+				}
+			}
+			messageCheatNothing.add(c.getName());
 		}
 		if(messageCheatNothing.length() > 0)
 			messages.add("Nothing detected: " + messageCheatNothing.toString());

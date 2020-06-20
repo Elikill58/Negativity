@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -26,7 +27,6 @@ import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 
-@SuppressWarnings("deprecation")
 public class ForceFieldProtocol extends Cheat implements Listener {
 
 	public static final DataType<Double> HIT_DISTANCE = new DataType<Double>(() -> new DoubleDataCounter("hit_distance", "Hit Distance"));
@@ -62,7 +62,8 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		Location tempLoc = e.getEntity().getLocation().clone();
 		tempLoc.setY(p.getLocation().getY());
 		double dis = tempLoc.distance(p.getLocation());
-		if((p.getItemInHand() != null && !p.getItemInHand().getType().equals(Material.BOW)) || p.getItemInHand() == null) {
+		ItemStack inHand = Utils.getItemInHand(p);
+		if(inHand == null || !inHand.getType().equals(Material.BOW)) {
 			np.verificatorForMod.forEach((s, verif) -> {
 				verif.getVerifData(this).ifPresent((data) -> data.getData(HIT_DISTANCE).add(dis));
 			});

@@ -185,4 +185,8 @@ public class Utils {
 				return true;
 		return false;
 	}
+	
+	public static ItemStack getItemInHand(Player p) {
+		return p.getItemInHand();
+	}
 }

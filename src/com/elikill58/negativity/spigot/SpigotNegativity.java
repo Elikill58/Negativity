@@ -86,7 +86,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean log = false, log_console = false, hasBypass = false, essentialsSupport = false,
+	public static boolean log = false, log_console = false, hasBypass = false, disableAlertOnVerif = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
 	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
@@ -357,6 +357,8 @@ public class SpigotNegativity extends JavaPlugin {
 			return false;
 		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT) && gadgetMenuSupport &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
 			return false;
+		if(!disableAlertOnVerif && !np.verificatorForMod.isEmpty())
+			return false;
 		
 		int ping = Utils.getPing(p);
 		long currentTimeMilli = System.currentTimeMillis();
@@ -569,6 +571,7 @@ public class SpigotNegativity extends JavaPlugin {
 		log = config.getBoolean("log_alerts");
 		log_console = config.getBoolean("log_alerts_in_console");
 		hasBypass = config.getBoolean("Permissions.bypass.active");
+		disableAlertOnVerif = config.getBoolean("verif.disable_alert_on_verif", false);
 		
 		timeBetweenAlert = config.getInt("time_between_alert");
 		if(timeBetweenAlert != -1) {

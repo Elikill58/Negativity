@@ -101,13 +101,14 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				}
 			}
 			nTarget.verificatorForMod.put(sender.getName(), new Verificator(nTarget, sender.getName(), listCheat));
-			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
+			SpigotNegativity pl = SpigotNegativity.getInstance();
+			Bukkit.getScheduler().runTaskLater(pl, () -> {
 				Verificator verif = nTarget.verificatorForMod.get(sender.getName());
 				verif.generateMessage();
 				verif.getMessages().forEach((s) -> sender.sendMessage(ChatColor.GREEN + "[" + ChatColor.DARK_GREEN + "Verif" + ChatColor.GREEN + "] " + s));
 				verif.save();
 				nTarget.verificatorForMod.remove(sender.getName());
-			}, 3 * 20);
+			}, pl.getConfig().getInt("verif.time", 60));
 			return true;
 		} else if (arg[0].equalsIgnoreCase("alert")) {
 			if (!(sender instanceof Player)) {

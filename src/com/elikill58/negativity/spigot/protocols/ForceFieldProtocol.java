@@ -94,7 +94,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	public String compile(VerifData data) {
 		double av = data.getData(HIT_DISTANCE).getAverage();
 		ChatColor color = (av > 3 ? (av > 4 ? ChatColor.RED : ChatColor.YELLOW) : ChatColor.GREEN);
-		return "Average of distance : " + color + av;
+		return "Average of distance : " + color + String.format("%.3f", av);
 	}
 	
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {

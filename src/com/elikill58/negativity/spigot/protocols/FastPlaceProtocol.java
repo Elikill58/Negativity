@@ -12,11 +12,18 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerifData;
+import com.elikill58.negativity.universal.verif.VerifData.DataType;
+import com.elikill58.negativity.universal.verif.data.DataCounter;
+import com.elikill58.negativity.universal.verif.data.LongDataCounter;
 
 public class FastPlaceProtocol extends Cheat implements Listener {
+	
+	public static final DataType<Long> TIME_PLACE = new DataType<Long>(() -> new LongDataCounter("time_player", "Time between places"));
 
 	public FastPlaceProtocol() {
 		super(CheatKeys.FAST_PLACE, false, Material.DIRT, CheatCategory.WORLD, true, "fp");
@@ -34,6 +41,8 @@ public class FastPlaceProtocol extends Cheat implements Listener {
 			return;
 		
 		long last = System.currentTimeMillis() - np.LAST_BLOCK_PLACE, lastPing = last - (Utils.getPing(p) / 9);
+		if(last < 10000) // last block is too old
+			np.verificatorForMod.forEach((s, verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(TIME_PLACE).add(last)));
 		np.LAST_BLOCK_PLACE = System.currentTimeMillis();
 		if (lastPing < Adapter.getAdapter().getConfig().getInt("cheats.fastplace.time_2_place")) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
@@ -42,5 +51,14 @@ public class FastPlaceProtocol extends Cheat implements Listener {
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
+	}
+	
+	@Override
+	public String compile(VerifData data, NegativityPlayer np) {
+		DataCounter<Long> counter = data.getData(TIME_PLACE);
+		long av = counter.getAverage(), low = counter.getMin();
+		String colorAverage = (av < 100 ? (av < 20 ? "&c" : "&6") : "&a");
+		String colorLow = (low < 100 ? (low < 20 ? "&c" : "&6") : "&a");
+		return Utils.coloredMessage("&6Time between place: &7Average: " + colorAverage + av + "&7, Lower: " + colorLow + low + " &7(For " + counter.getSize() + " blocks)");
 	}
 }

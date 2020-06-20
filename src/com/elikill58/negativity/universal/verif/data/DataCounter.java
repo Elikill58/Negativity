@@ -15,6 +15,14 @@ public abstract class DataCounter<T> {
 		this.displayName = displayName;
 	}
 	
+	public String getName() {
+		return name;
+	}
+	
+	public String getDisplay() {
+		return displayName;
+	}
+	
 	public int getSize() {
 		return list.size();
 	}

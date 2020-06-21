@@ -14,7 +14,6 @@ import java.util.stream.Collectors;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
@@ -53,7 +52,7 @@ public class FileVerificationStorage extends VerificationStorage {
 				int version = (int) json.get("version");
 				Version playerVersion = Version.getVersionByName(json.get("player_version").toString());
 				list.add(new Verificator(np, startedBy, cheats, result, version, playerVersion));
-			} catch (ParseException | IOException e) {
+			} catch (Exception e) {
 				ada.log("Could not load verification of file " + verification.getAbsolutePath());
 				e.printStackTrace();
 			}
@@ -66,7 +65,7 @@ public class FileVerificationStorage extends VerificationStorage {
 		File folder = new File(userDir.getAbsolutePath(), verif.getPlayerId().toString());
 		folder.mkdirs();
 		File file = new File(folder, getNewFileName());
-
+		
 		JSONObject json = new JSONObject();
 		json.put("startedBy", verif.getAsker());
 		json.put("result", verif.getMessages());

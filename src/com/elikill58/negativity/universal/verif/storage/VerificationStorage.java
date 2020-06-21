@@ -55,6 +55,7 @@ public abstract class VerificationStorage {
 		Adapter adapter = Adapter.getAdapter();
 		storageId = adapter.getConfig().getString("verif.storage.id");
 		register("file", new FileVerificationStorage(new File(adapter.getDataFolder(), "verif")));
+		
 		if (Database.hasCustom) {
 			register("database", new DatabaseVerificationStorage());
 		}

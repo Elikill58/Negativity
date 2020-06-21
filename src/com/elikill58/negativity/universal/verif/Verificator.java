@@ -11,8 +11,6 @@ import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import org.bukkit.ChatColor;
-
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.Version;
@@ -100,7 +98,7 @@ public class Verificator {
 			if(data.hasSomething()) {
 				String name = c.compile(data, np);
 				if(name != null) {
-					messages.add(ChatColor.GOLD + c.getName() + ChatColor.DARK_GRAY + ": " + ChatColor.GRAY + name);
+					messages.add("&6" + c.getName() + "&8: &7" + name);
 					continue;
 				}
 			}

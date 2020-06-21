@@ -39,9 +39,5 @@ public class VerifData {
 		public interface DataTypeCallable<T> {
 			public DataCounter<T> call();
 		}
-
-		//public static final DataType<Integer> INTEGER = new DataType<Integer>(() -> new IntegerDataCounter("integer", "Integer"));
-		//public static final DataType<Double> DOUBLE = new DataType<Double>(() -> new DoubleDataCounter("double", "Double"));
-		//public static final DataType<Long> LONG = new DataType<Long>(() -> new LongDataCounter("long", "Long"));
 	}
 }

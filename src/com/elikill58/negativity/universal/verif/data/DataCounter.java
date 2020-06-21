@@ -3,8 +3,6 @@ package com.elikill58.negativity.universal.verif.data;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.json.simple.JSONObject;
-
 public abstract class DataCounter<T> {
 
 	protected final List<T> list = new ArrayList<>();
@@ -39,13 +37,8 @@ public abstract class DataCounter<T> {
 	public boolean has() {
 		return !list.isEmpty();
 	}
-
-	@SuppressWarnings("unchecked")
-	public JSONObject print() {
-		JSONObject json = new JSONObject();
-		json.put("type", this.name);
-		json.put("display", this.displayName);
-		json.put("data", this.list);
-		return json;
+	
+	public String print() {
+		return "[{\"data\":" + this.list.toString() + ",\"display\":\"" + this.displayName + "\",\"type\":\"" + this.name + "\"}]";
 	}
 }

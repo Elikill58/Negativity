@@ -7,9 +7,10 @@ import org.bukkit.plugin.Plugin;
 import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.packets.PacketType.Client;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 import com.elikill58.negativity.spigot.packets.protocollib.ProtocollibPacketManager;
+import com.elikill58.negativity.universal.PacketType;
+import com.elikill58.negativity.universal.PacketType.Client;
 
 public class NegativityPacketManager {
 

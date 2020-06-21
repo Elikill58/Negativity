@@ -69,7 +69,7 @@ import com.elikill58.negativity.sponge.inventories.AbstractInventory;
 import com.elikill58.negativity.sponge.listeners.FightManager;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.listeners.PlayersEventsManager;
-import com.elikill58.negativity.sponge.packets.PacketGateManager;
+import com.elikill58.negativity.sponge.packets.NegativityPacketManager;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
 import com.elikill58.negativity.sponge.timers.PacketsTimers;
 import com.elikill58.negativity.sponge.timers.PendingAlertsTimer;
@@ -124,6 +124,7 @@ public class SpongeNegativity {
 	private Path configDir;
 	private Path configFile;
 	private ConfigAdapter config;
+	private NegativityPacketManager packetManager;
 	public static RawDataChannel channel = null, fmlChannel = null;
 
 	private final Map<String, CommandMapping> reloadableCommands = new HashMap<>();
@@ -225,22 +226,7 @@ public class SpongeNegativity {
 	@Listener
 	public void onGameStart(GameStartingServerEvent e) {
 		loadItemBypasses();
-		try {
-			Class.forName("eu.crushedpixel.sponge.packetgate.api.registry.PacketGate");
-			hasPacketGate = true;
-			PacketGateManager.check();
-		} catch (ClassNotFoundException e1) {
-			hasPacketGate = false;
-			Logger log = getLogger();
-			log.warn("----- Negativity Problem -----");
-			log.warn("");
-			log.warn("Error while loading PacketGate. Plugin not found.");
-			log.warn("Please download it available here: https://github.com/CrushedPixel/PacketGate/releases");
-			log.warn("Then, put it in the mods folder.");
-			log.warn("Restart your server and now, it will be working");
-			log.warn("");
-			log.warn("----- Negativity Problem -----");
-		}
+		packetManager = new NegativityPacketManager(this);
 		try {
 			Class.forName("com.me4502.precogs.Precogs");
 			hasPrecogs = true;
@@ -631,6 +617,10 @@ public class SpongeNegativity {
 
 	public Path getDataFolder() {
 		return configDir;
+	}
+
+	public NegativityPacketManager getPacketManager() {
+		return packetManager;
 	}
 
 	public Logger getLogger() {

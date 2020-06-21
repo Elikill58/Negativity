@@ -1,6 +1,6 @@
-package com.elikill58.negativity.spigot.packets;
+package com.elikill58.negativity.sponge.packets;
 
-import org.bukkit.entity.Player;
+import org.spongepowered.api.entity.living.player.Player;
 
 import com.elikill58.negativity.universal.PacketType;
 

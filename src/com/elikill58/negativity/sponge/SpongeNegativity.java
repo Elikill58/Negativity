@@ -261,20 +261,20 @@ public class SpongeNegativity {
 		CommandManager cmd = Sponge.getCommandManager();
 
 		if (!reload) {
-			cmd.register(this, NegativityCommand.create(), "negativity");
+			cmd.register(this, NegativityCommand.create(), "negativity", "neg", "n");
 			cmd.register(this, MigrateOldBansCommand.create(), "negativitymigrateoldbans");
-			cmd.register(this, ModCommand.create(), "mod");
-			cmd.register(this, KickCommand.create(), "nkick");
-			cmd.register(this, LangCommand.create(), "nlang");
 		}
 
-		reloadCommand("report_command", cmd, ReportCommand::create, "report", "repot");
-		reloadCommand("ban_command", cmd, BanCommand::create, "nban", "negban");
-		reloadCommand("unban_command", cmd, UnbanCommand::create, "nunban", "negunban");
+		reloadCommand("mod", cmd, ModCommand::create, "nmod", "mod");
+		reloadCommand("kick", cmd, KickCommand::create, "nkick", "kick");
+		reloadCommand("lang", cmd, LangCommand::create, "nlang", "lang");
+		reloadCommand("report", cmd, ReportCommand::create, "nreport", "report", "repot");
+		reloadCommand("ban", cmd, BanCommand::create, "nban", "negban", "ban");
+		reloadCommand("unban", cmd, UnbanCommand::create, "nunban", "negunban", "unban");
 	}
 
 	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {
-		reloadCommand(configKey, config.getBoolean(configKey), manager, command, aliases);
+		reloadCommand(configKey, config.getChild("commands").getBoolean(configKey), manager, command, aliases);
 	}
 
 	private void reloadCommand(String mappingKey, boolean enabled, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {
@@ -512,7 +512,7 @@ public class SpongeNegativity {
 		Sponge.getEventManager().post(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
-		np.addWarn(c, reliability);
+		np.addWarn(c, reliability, alertCounts);
 		logProof(type, p, c, reliability, proof, ping);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatEvent.Kick kick = new PlayerCheatEvent.Kick(type, p, c, reliability, hover, ping);

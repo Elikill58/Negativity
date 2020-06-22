@@ -39,13 +39,13 @@ public class FastStairsProtocol extends Cheat {
 			return;
 		Vector3d to = e.getToTransform().getPosition();
 		Vector3d from = new Vector3d(e.getFromTransform().getPosition().getX(), to.getY(), e.getFromTransform().getPosition().getZ());
-		double distance = from.distance(to);
-		if(distance > 0.45 && np.lastDistanceFastStairs > distance) {
+		double distance = from.distance(to), lastDistance = np.contentDouble.getOrDefault("stairs-distance", 0.0);
+		if(distance > 0.45 && lastDistance > distance) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 140),
-					"Player without fall damage. Block: " + blockName + ", distance: " + distance, hoverMsg("main", "%distance%", distance));
+					"Player without fall damage. Block: " + blockName + ", distance: " + distance + ", last: " + lastDistance, hoverMsg("main", "%distance%", distance));
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);
 		}
-		np.lastDistanceFastStairs = distance;
+		np.contentDouble.put("stairs-distance", distance);
 	}
 }

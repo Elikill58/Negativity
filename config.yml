@@ -17,12 +17,31 @@ log_alerts: true
 log_alerts_in_console: true
 tps_alert_stop: 19 # if you get less TPS then this value, all alert will be disabled
 
-# To enable or disable /report
-report_command: true
-# To enable or disable /nban /nunban
-ban_command: true
-unban_command: true
-kick_command: true
+commands:
+  # Options to enable or disable commands
+  # Manage /nreport (Alias: /report)
+  report: true
+  # Manage Mod command :
+  # Manage /nban (Alias: /ban)
+  ban: true
+  # Manage /nunban (Alias: /unban)
+  unban: true
+  # Manage /nkick (Alias: /kick)
+  kick: true
+  # Manage /nmod (Alias: /mod)
+  mod: true
+  # Manage /nlang (Alias: /lang)
+  lang: true
+
+# The time between 2 /report
+# in milliseconds
+# -1 to disable
+time_between_report: 1000
+
+# The time between 2 alerts
+# in milliseconds
+# -1 to disable
+time_between_alert: 1000
 
 Database:
   isActive: false
@@ -167,16 +186,6 @@ Translation:
   # The only one available out-of-the-box is "platform".
   provider: platform
 
-# The time between 2 /report
-# in milliseconds
-# -1 to disable
-time_between_report: 1000
-
-# The time between 2 alerts
-# in milliseconds
-# -1 to disable
-time_between_alert: 1000
-
 alert:
   # To run command when someone get alert
   command:
@@ -273,6 +282,19 @@ verif:
     # Defaults to "file"
     id: "file"
 
+region-bypass:
+  enabled: false
+  1:
+    # You need WorldGuard for the region
+    regions:
+    - "spawn"
+    # Default worlds names (or Multiverse names)
+    worlds:
+    - "world_the_end"
+    # the cheats keys
+    cheats:
+    - "fly"
+
 # Per-cheat configuration. For more information about specific cheats
 # and their detections see https://github.com/Elikill58/Negativity/wiki/Cheat
 cheats:
@@ -283,7 +305,8 @@ cheats:
   # Forcefield is to hit more entity than real people in the same time and further
   forcefield:
     reach: 3.9 # In blocks !
-    ghost_disabled: false
+    # Disabled by default because they can be viewable for someone
+    ghost_disabled: true
     ping: 150
     exact_name: "ForceField"
     isActive: true
@@ -578,7 +601,7 @@ cheats:
     alert_to_kick: 5
     check_in_verif: true
 
-  # Critical make you walking on web like if you walk on ground
+  # Critical set all of your attack as critical attack (even while sneaking)
   critical:
     ping: 150
     exact_name: "Critical"
@@ -626,3 +649,10 @@ cheats:
   special:
     mcleaks:
       kick: true
+    server_crash:
+      name: "Server Crasher"
+      kick: true
+      ban: false
+      # The time of the ban, in milliseconds.
+      # Default: 2629800000 (1 month)
+      ban_time: 2629800000

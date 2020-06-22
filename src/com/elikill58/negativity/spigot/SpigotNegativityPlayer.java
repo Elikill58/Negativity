@@ -61,8 +61,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public static ArrayList<UUID> INJECTED = new ArrayList<>();
 	public ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
 	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
+	public HashMap<PacketType, Integer> PACKETS = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
-	public HashMap<String, Double> jesusLastY = new HashMap<>();
+	public HashMap<String, Double> contentDouble = new HashMap<>();
+	public HashMap<String, Boolean> contentBoolean = new HashMap<>();
 	public HashMap<Cheat, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	// HashMap to allow multiple verification at the same time
@@ -70,26 +72,23 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public HashMap<String, Verificator> verificatorForMod = new HashMap<>();
 	private WeakReference<Player> p;
 	// Packets
-	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,
-			BLOCK_DIG = 0, ARM = 0, USE_ENTITY = 0, ENTITY_ACTION = 0, ALL = 0;
+	public int ALL = 0, MAX_FLYING;
 	// warns & other
 	public int LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0, SPIDER_SAME_DIST = 0;
 	// setBack
 	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, LAST_SLOT_CLICK = -1, LAST_CHAT_MESSAGE_NB = 0, SPEED_NB = 0, MOVE_TIME = 0;
-	public double lastYDiff = -3.141592654, lastDistanceFastStairs = 0, eatingMoveDistance = 0, yPacketDiff = 0;
+	public double lastYDiff = -3.141592654;
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0,
-			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0, LAST_BLOCK_BREAK = 0;
+			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0, LAST_BLOCK_BREAK = 0, LAST_USE_ENTITY = 0;
 	public String LAST_OTHER_KEEP_ALIVE, LAST_CHAT_MESSAGE = "";
 	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false, disableShowingAlert = false,
 			isInvisible = false, isUsingSlimeBlock = false, already_blink = false, isJumpingWithBlock = false,
-			isOnLadders = false, lastClickInv = false, jesusState = true, wasSneaking = false, flyNotMovingY = false,
-			isGoingDown = false;
+			isOnLadders = false, lastClickInv = false;
+	private boolean mustToBeSaved = false;
 	public PacketType lastPacketType = null;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;
 	public Location lastSpiderLoc;
-	public double lastSpiderDistance;
-	public File configFile;
 	public List<String> proof = new ArrayList<>();
 	public boolean isInFight = false;
 	public BukkitTask fightTask = null;
@@ -156,11 +155,15 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void addWarn(Cheat c, int reliability) {
+		addWarn(c, reliability, 1);
+	}
+
+	public void addWarn(Cheat c, int reliability, int amount) {
 		if (System.currentTimeMillis() < TIME_INVINCIBILITY || c.getReliabilityAlert() > reliability)
 			return;
 		NegativityAccount account = getAccount();
-		account.setWarnCount(c, account.getWarn(c) + 1);
-		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
+		account.setWarnCount(c, account.getWarn(c) + amount);
+		mustToBeSaved = true;
 	}
 
 	public void setWarn(Cheat c, int cheats) {
@@ -186,18 +189,11 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public void clearPackets() {
 		PlayerPacketsClearEvent event = new PlayerPacketsClearEvent(getPlayer(), this);
 		Bukkit.getPluginManager().callEvent(event);
-		if (FLYING > MAX_FLYING)
-			MAX_FLYING = FLYING;
-		FLYING = 0;
-		POSITION_LOOK = 0;
-		KEEP_ALIVE = 0;
-		POSITION = 0;
-		BLOCK_PLACE = 0;
-		BLOCK_DIG = 0;
-		ARM = 0;
-		USE_ENTITY = 0;
-		ENTITY_ACTION = 0;
+		int flying = PACKETS.getOrDefault(PacketType.Client.FLYING, 0);
+		if (flying > MAX_FLYING)
+			MAX_FLYING = flying;
 		ALL = 0;
+		PACKETS.clear();
 	}
 	
 	@Override
@@ -404,6 +400,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void saveProof() {
+		if(mustToBeSaved) {
+			mustToBeSaved = false;
+			Adapter.getAdapter().getAccountManager().save(getUUID());
+		}
 		if (proof.size() == 0)
 			return;
 		try {

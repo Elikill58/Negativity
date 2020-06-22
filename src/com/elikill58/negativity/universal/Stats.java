@@ -1,17 +1,8 @@
 package com.elikill58.negativity.universal;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.ConnectException;
-import java.net.URL;
-import java.net.URLConnection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionException;
-
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLHandshakeException;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -43,30 +34,20 @@ public class Stats {
     }
     
 	private static void sendUpdateStats(StatsType type, String post) {
-		if(STATS_IN_MAINTENANCE)
+		if(STATS_IN_MAINTENANCE || !UniversalUtils.HAVE_INTERNET)
 			return;
 		Runnable task = () -> {
 			try {
-				URLConnection conn = (HttpsURLConnection) new URL(SITE_FILE).openConnection();
-				UniversalUtils.doTrustToCertificates();
-				conn.setDoOutput(true);
-				OutputStreamWriter writer = new OutputStreamWriter(conn.getOutputStream());
-				writer.write(post);
-				writer.flush();
-				writer.close();
-				BufferedReader br = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-				String respons = "", end = "";
-				while ((respons = br.readLine()) != null)
-					end += respons;
-				if (!end.equalsIgnoreCase("")) {
+				String end = UniversalUtils.getContentFromURL(SITE_FILE, post).orElse(null);
+				if(end == null) {
+					Adapter.getAdapter().log("Error while updating stats, it seems to be a firewall that blocking the stats.");
+					STATS_IN_MAINTENANCE = true;
+				}
+				else if (!end.equalsIgnoreCase("")) {
 					Adapter.getAdapter().log(
 							"Error while updating stats. Please, report this to Elikill58 (Mail: arpetzouille@gmail.com | Discord: @Elikill58#0743 | Twitter: @Elikill58 / @elinegativity");
 					Adapter.getAdapter().log(end);
 				}
-				br.close();
-			} catch (ConnectException e) {
-				Adapter.getAdapter().log("Error while updating stats, it seems to be a firewall that blocking the stats. Error: " + e.getMessage());
-				STATS_IN_MAINTENANCE = true;
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -81,22 +62,14 @@ public class Stats {
 	public static void loadStats() {
 		Runnable task = () -> {
 			try {
-				StringBuilder result = new StringBuilder();
-				URL url = new URL("https://api.eliapp.fr/status.php?plateforme=negativity");
-				UniversalUtils.doTrustToCertificates();
-				HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
-				conn.setRequestMethod("GET");
-				BufferedReader rd = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-				String line;
-				while ((line = rd.readLine()) != null)
-					result.append(line);
-				rd.close();
-				STATS_IN_MAINTENANCE = result.toString().equalsIgnoreCase("on") ? false : true;
-				if (STATS_IN_MAINTENANCE)
-					Adapter.getAdapter().log("Website is in maintenance mode.");
-			} catch (SSLHandshakeException e) {
-				STATS_IN_MAINTENANCE = true;
-				Adapter.getAdapter().warn("Error while loading Stats for Negativity.");
+				if(!UniversalUtils.HAVE_INTERNET)
+					STATS_IN_MAINTENANCE = true;
+				else {
+					String result = UniversalUtils.getContentFromURL("https://api.eliapp.fr/status.php?plateforme=negativity").orElse("off");
+					STATS_IN_MAINTENANCE = result.toString().equalsIgnoreCase("on") ? false : true;
+					if (STATS_IN_MAINTENANCE)
+						Adapter.getAdapter().log("Website is in maintenance mode.");
+				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -37,6 +37,7 @@ import com.elikill58.negativity.spigot.commands.UnbanCommand;
 import com.elikill58.negativity.spigot.events.ChannelEvents;
 import com.elikill58.negativity.spigot.events.FightManager;
 import com.elikill58.negativity.spigot.events.PlayersEvents;
+import com.elikill58.negativity.spigot.events.ServerCrasherEvents;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatBypassEvent;
@@ -110,15 +111,14 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().info("");
 			getLogger().info(" > Thanks for downloading Negativity :)");
 			getLogger().info("I'm trying to make the better anti-cheat has possible.");
-			getLogger().info(
-					"If there is any false positive, problem or if you have a suggestion you can contact me via:");
-			getLogger().info(
-					"Discord: @Elikill58#0743, mail: arpetzouille@gmail.com, and Elikill58 in all other web site like Twitter, Spigotmc ...");
+			getLogger().info("If you get error/false positive, or just have suggestion, you can contact me via:");
+			getLogger().info("Discord: @Elikill58#0743, @Elikill58 on twitter or in all other web site like Spigotmc ...");
 			getLogger().info("");
 			getLogger().info("------ Negativity Information ------");
 			getConfig().options().copyDefaults();
 			saveDefaultConfig();
 		}
+		getLogger().info("This plugin is free, but you can support me : https://www.patreon.com/elikill58 <3");
 		UniversalUtils.init();
 		Cheat.loadCheat();
 		FakePlayer.loadClass();
@@ -131,6 +131,7 @@ public class SpigotNegativity extends JavaPlugin {
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersEvents(), this);
 		pm.registerEvents(new FightManager(), this);
+		pm.registerEvents(new ServerCrasherEvents(this), this);
 
 		Messenger messenger = getServer().getMessenger();
 		ChannelEvents channelEvents = new ChannelEvents();
@@ -228,13 +229,19 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 
 	private void loadCommand() {
+		ConfigurationSection commandSection = getConfig().getConfigurationSection("commands");
+		if(commandSection == null) {
+			getLogger().severe("Cannot find 'commands' section in config. Please, see default config here:");
+			getLogger().severe("https://github.com/Elikill58/Negativity/blob/master/config.yml");
+			getLogger().severe("Or reset your own config.");
+		}
 		PluginCommand negativity = getCommand("negativity");
 		NegativityCommand negativityCmd = new NegativityCommand();
 		negativity.setExecutor(negativityCmd);
 		negativity.setTabCompleter(negativityCmd);
 
-		PluginCommand reportCmd = getCommand("report");
-		if (!getConfig().getBoolean("report_command"))
+		PluginCommand reportCmd = getCommand("nreport");
+		if (commandSection != null && !commandSection.getBoolean("report", true))
 			unRegisterBukkitCommand(reportCmd);
 		else {
 			reportCmd.setExecutor(new ReportCommand());
@@ -242,7 +249,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 
 		PluginCommand banCmd = getCommand("nban");
-		if (!getConfig().getBoolean("ban_command"))
+		if (commandSection != null && !commandSection.getBoolean("ban", true))
 			unRegisterBukkitCommand(banCmd);
 		else {
 			List<String> banAlias = new ArrayList<String>();
@@ -253,7 +260,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 
 		PluginCommand unbanCmd = getCommand("nunban");
-		if (!getConfig().getBoolean("unban_command"))
+		if (commandSection != null && !commandSection.getBoolean("unban", true))
 			unRegisterBukkitCommand(unbanCmd);
 		else {
 			List<String> unbanAlias = new ArrayList<String>();
@@ -264,7 +271,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 
 		PluginCommand kickCmd = getCommand("nkick");
-		if (!getConfig().getBoolean("kick_command"))
+		if (commandSection != null && !commandSection.getBoolean("kick", true))
 			unRegisterBukkitCommand(kickCmd);
 		else {
 			List<String> kickAlias = new ArrayList<String>();
@@ -274,12 +281,20 @@ public class SpigotNegativity extends JavaPlugin {
 			kickCmd.setTabCompleter(new KickCommand());
 		}
 
-		PluginCommand langCmd = getCommand("lang");
-		LangCommand langExecutor = new LangCommand();
-		langCmd.setExecutor(langExecutor);
-		langCmd.setTabCompleter(langExecutor);
+		PluginCommand langCmd = getCommand("nlang");
+		if (commandSection != null && !commandSection.getBoolean("lang", true))
+			unRegisterBukkitCommand(langCmd);
+		else {
+			LangCommand langExecutor = new LangCommand();
+			langCmd.setExecutor(langExecutor);
+			langCmd.setTabCompleter(langExecutor);
+		}
 
-		getCommand("mod").setExecutor(new ModCommand());
+		PluginCommand modCmd = getCommand("nmod");
+		if (commandSection != null && !commandSection.getBoolean("mod", true))
+			unRegisterBukkitCommand(modCmd);
+		else
+			modCmd.setExecutor(new ModCommand());
 	}
 
 	@Override
@@ -364,6 +379,9 @@ public class SpigotNegativity extends JavaPlugin {
 				|| getInstance().getConfig().getDouble("tps_alert_stop", 19.0) > Utils.getLastTPS() || ping < 0 || np.isFreeze)
 			return false;
 		
+		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
+			return false;
+		
 		if (p.getItemInHand() != null)
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name()))
 				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().name()).getWhen().equals(WhenBypass.ALWAYS))
@@ -387,7 +405,7 @@ public class SpigotNegativity extends JavaPlugin {
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
-		np.addWarn(c, reliability);
+		np.addWarn(c, reliability, amount);
 		logProof(np, type, p, c, reliability, proof, ping);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);

@@ -142,6 +142,17 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		return Utils.coloredMessage("Hit distance : " + color + String.format("%.3f", av) + (nb > 0 ? " &7and &c" + nb + " &7fake players touched." : ""));
 	}
 	
+	@EventHandler
+	public void onPacketClear(PlayerPacketsClearEvent e) {
+		int use = e.getPackets().getOrDefault(PacketType.Client.USE_ENTITY, 0);
+		if(use > 7) {
+			Player p = e.getPlayer();
+			int ping = Utils.getPing(p);
+			SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(use * 15 - ping),
+					use + " USE_ENTITY packets sent. Ping: " + ping, (CheatHover) null, use - 7);
+		}
+	}
+	
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {
 		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
 		np.verificatorForMod.forEach((s, verif) -> verif.getVerifData(forcefield).ifPresent((data) -> data.getData(FAKE_PLAYERS).add(1)));

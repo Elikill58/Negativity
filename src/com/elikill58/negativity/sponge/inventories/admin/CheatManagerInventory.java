@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.inventories.admin;
 
+import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
+
 import java.util.Iterator;
 
 import org.spongepowered.api.entity.living.player.Player;
@@ -19,6 +21,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.inventories.AbstractInventory;
 import com.elikill58.negativity.sponge.inventories.holders.CheatManagerHolder;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
+import com.elikill58.negativity.sponge.utils.ItemUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -31,7 +34,7 @@ public class CheatManagerInventory extends AbstractInventory {
 	
 	@Override
 	public void openInventory(Player p, Object... args){
-		int size = Utils.getMultipleOf(Cheat.values().size() + 3, 9, 1), nbLine = size / 9;
+		int size = UniversalUtils.getMultipleOf(Cheat.values().size() + 3, 9, 1, 54), nbLine = size / 9;
 		Inventory inv = Inventory.builder().withCarrier(new CheatManagerHolder((boolean) args[0]))
 				.property(InventoryTitle.PROPERTY_NAME, new InventoryTitle(Text.of("Cheat manager")))
 				.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, nbLine))
@@ -40,16 +43,16 @@ public class CheatManagerInventory extends AbstractInventory {
 		Utils.fillInventoryWith(Inv.EMPTY, inv);
 		for (Cheat c : Cheat.values())
 			if (c.getMaterial() != null)
-				inv.offer(Utils.hideAttributes(Utils.createItem((ItemType) c.getMaterial(), c.getName())));
+				inv.offer(ItemUtils.hideAttributes(createItem((ItemType) c.getMaterial(), c.getName())));
 		Iterator<Inventory> slots = inv.slots().iterator();
         Iterator<Cheat> cheats = Cheat.values().iterator();
         while (slots.hasNext() && cheats.hasNext()) {
             Cheat cheat = cheats.next();
-            slots.next().set(Utils.hideAttributes(Utils.createItem((ItemType) cheat.getMaterial(), cheat.getName())));
+            slots.next().set(ItemUtils.hideAttributes(createItem((ItemType) cheat.getMaterial(), cheat.getName())));
         }
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		invGrid.set(7, nbLine - 1, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
-		invGrid.set(8, nbLine - 1, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
+		invGrid.set(7, nbLine - 1, createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
+		invGrid.set(8, nbLine - 1, createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 

@@ -20,6 +20,8 @@ import com.elikill58.negativity.sponge.inventories.holders.OneCheatHolder;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 
+import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
+
 public class OneCheatInventory extends AbstractInventory {
 
 	public OneCheatInventory() {
@@ -45,11 +47,11 @@ public class OneCheatInventory extends AbstractInventory {
 				"inventory.manager.setActive", "%active%", getMessage(p, c.isActive()))));
 		invGrid.set(4, 0, Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p,
 				"inventory.manager.setBack", "%back%", getMessage(p, c.isSetBack()))));
-		invGrid.set(5, 0, Utils.createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
+		invGrid.set(5, 0, createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
 				"inventory.manager.allowKick", "%allow%", getMessage(p, c.allowKick()))));
 
-		invGrid.set(7, 0, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
-		invGrid.set(8, 0, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
+		invGrid.set(7, 0, createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
+		invGrid.set(8, 0, createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 	
@@ -62,7 +64,7 @@ public class OneCheatInventory extends AbstractInventory {
 				"inventory.manager.setActive", "%active%", getMessage(p, c.isActive()))));
 		invGrid.set(4, 0, Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p,
 				"inventory.manager.setBack", "%back%", getMessage(p, c.isSetBack()))));
-		invGrid.set(5, 0, Utils.createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
+		invGrid.set(5, 0, createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
 				"inventory.manager.allowKick", "%allow%", getMessage(p, c.allowKick()))));
 	}
 

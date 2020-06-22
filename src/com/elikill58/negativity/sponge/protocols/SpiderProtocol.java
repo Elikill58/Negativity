@@ -18,6 +18,7 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -67,7 +68,7 @@ public class SpiderProtocol extends Cheat {
 
 		double y = e.getToTransform().getLocation().getY() - e.getFromTransform().getLocation().getY();
 		boolean isAris = y == p.get(Keys.WALKING_SPEED).get();
-		if (((y > 0.499 && y < 0.7) || isAris) && !np.isUsingSlimeBlock) {
+		if (((y > 0.499 && y < 0.7) || isAris) && !np.isUsingSlimeBlock && !p.get(Keys.IS_SPRINTING).orElse(false)) {
 			int relia = (int) (y * 160);
 			if (isAris) {
 				relia += 39;
@@ -75,7 +76,7 @@ public class SpiderProtocol extends Cheat {
 
 			ReportType type = (np.getWarn(this) > 6) ? ReportType.WARNING : ReportType.VIOLATION;
 			boolean mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(relia),
-					"Nothing around him. To > From: " + y + " isAris: " + isAris + " has not stab slairs.");
+					"Nothing around him. To > From: " + y + " isAris: " + isAris + " has not stab slairs");
 			if (isSetBack() && mayCancel) {
 				Utils.teleportPlayerOnGround(p);
 			}
@@ -96,18 +97,18 @@ public class SpiderProtocol extends Cheat {
 		Location<World> loc = p.getLocation();
 		if (!np.hasDetectionActive(this) || p.get(Keys.IS_FLYING).orElse(false))
 			return;
-		if (hasBypassBlockAround(loc) || np.hasExtended(loc, "STAIRS"))
+		if (hasBypassBlockAround(loc) || LocationUtils.hasExtended(loc, "STAIRS"))
 			return;
 
 		double y = e.getToTransform().getPosition().getY() - e.getFromTransform().getPosition().getY();
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getExtent().equals(loc.getExtent()) && y > 0) {
-			double tempDis = loc.getY() - np.lastSpiderLoc.getY();
-			if (np.lastSpiderDistance == tempDis && tempDis != 0) {
+			double tempDis = loc.getY() - np.lastSpiderLoc.getY(), lastSpiderDistance = np.contentDouble.getOrDefault("spider-last-distance", 0.0);
+			if (lastSpiderDistance == tempDis && tempDis != 0) {
 				np.SPIDER_SAME_DIST++;
 				if (np.SPIDER_SAME_DIST > 2) {
 					if (SpongeNegativity.alertMod(ReportType.WARNING, p, this,
 							UniversalUtils.parseInPorcent(tempDis * 400 + np.SPIDER_SAME_DIST),
-							"Nothing strange around him. To > From: " + y + ". Walk on wall with always same y "
+							"Nothing strange around him. To > From: " + y + ", distance: " + lastSpiderDistance + ". Walk with same y "
 									+ np.SPIDER_SAME_DIST + " times")
 							&& isSetBack()) {
 						Utils.teleportPlayerOnGround(p);
@@ -115,7 +116,7 @@ public class SpiderProtocol extends Cheat {
 				} else
 					np.SPIDER_SAME_DIST = 0;
 			}
-			np.lastSpiderDistance = tempDis;
+			np.contentDouble.put("spider-last-distance", tempDis);
 		}
 		np.lastSpiderLoc = loc;
 	}

@@ -105,14 +105,14 @@ public class NoFallProtocol extends Cheat implements Listener {
 		if(!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (type.equals(PacketType.Client.FLYING)) {
-			if (pa.getContent().getBooleans().read(0) && np.isGoingDown && np.lastPacketType != type && p.getFallDistance() > 0.3) {
+			if (pa.getContent().getBooleans().read(0) && np.contentBoolean.getOrDefault("packet-going-down", false) && np.lastPacketType != type && p.getFallDistance() > 0.3) {
 				SpigotNegativity.alertMod(ReportType.WARNING, p, this, 99, "Player going down, last PackeType: " + np.lastPacketType.getFullName()
 						+ ", fallDistance: " + p.getFallDistance());
 			}
 		} else if (type.equals(PacketType.Client.POSITION) || type.equals(PacketType.Client.POSITION_LOOK)) {
 			double newY = getY(pa.getPacket());
-			np.isGoingDown = np.yPacketDiff > newY;
-			np.yPacketDiff = newY;
+			np.contentBoolean.put("packet-going-down", np.contentDouble.getOrDefault("packet-diff-y", 0.0) > newY);
+			np.contentDouble.put("packet-diff-y", newY);
 		}
 		np.lastPacketType = type;
 	}

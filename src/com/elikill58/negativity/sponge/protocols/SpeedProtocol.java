@@ -25,6 +25,7 @@ import org.spongepowered.api.world.World;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.support.EssentialsSupport;
+import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -59,7 +60,7 @@ public class SpeedProtocol extends Cheat {
 		Vector3d fromVect = e.getFromTransform().getPosition();
 		Vector3d toVect = e.getToTransform().getPosition();
 		if (p.getLocation().sub(Vector3i.UNIT_Y).getBlockType().equals(BlockTypes.SPONGE)
-				|| np.isFlying() || np.getWalkSpeed() > 2.0F || hasEnderDragonAround(p)
+				|| np.isFlying() || np.getWalkSpeed() > 2.0F || hasEnderDragonAround(p) || p.get(Keys.FLYING_SPEED).get() > 3.0F
 				|| np.hasPotionEffect(PotionEffectTypes.SPEED) || np.hasPotionEffect("DOLPHINS_GRACE") || p.getVehicle().isPresent()) {
 			return;
 		}
@@ -69,17 +70,16 @@ public class SpeedProtocol extends Cheat {
 			return;
 		}
 
-		if (canBoostWithPackedIce(p.getLocation()) || np.has(p.getLocation(), "SLAB", "STAIRS"))
+		if (canBoostWithPackedIce(p.getLocation()) || LocationUtils.has(p.getLocation(), "SLAB", "STAIRS"))
 			return;
-		if (np.has(p.getLocation().copy().add(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| np.has(p.getLocation().copy().add(0, 2, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| np.has(p.getLocation().copy().sub(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
+		if (LocationUtils.has(p.getLocation().copy().add(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| LocationUtils.has(p.getLocation().copy().add(0, 2, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| LocationUtils.has(p.getLocation().copy().sub(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
 
 		ReportType type = (np.getWarn(this) > 7) ? ReportType.VIOLATION : ReportType.WARNING;
 		boolean mayCancel = false;
 		double moveY = toVect.sub(0, toVect.getY(), 0).distance(fromVect.sub(0, fromVect.getY(), 0));
-		String proof = "In ground: " + p.isOnGround() + "WalkSpeed: " + p.get(Keys.WALKING_SPEED).get() + "  Distance between from/to location: " + moveY;
 		if (p.isOnGround()) {
 			double walkSpeed = SpongeNegativity.essentialsSupport ? (np.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : np.getWalkSpeed();
 			boolean walkTest = moveY > walkSpeed * 3.1 && moveY > 0.65D, walkWithEssTest = (moveY - walkSpeed > (walkSpeed * 2.5));
@@ -97,6 +97,7 @@ public class SpeedProtocol extends Cheat {
 					return;
 			if(!mayCancel) {
 				if(moveY >= 0.85D) {
+					String proof = "In ground: " + p.isOnGround() + " WalkSpeed: " + p.get(Keys.WALKING_SPEED).get() + "  Distance between from/to location: " + moveY;
 					mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(moveY * 100 * 2), proof,
 							hoverMsg("distance_jumping", "%distance%", numberFormat.format(moveY)));
 				} else {

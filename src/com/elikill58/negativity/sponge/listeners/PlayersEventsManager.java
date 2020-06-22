@@ -17,4 +17,9 @@ public class PlayersEventsManager {
 		} else if(np.isUsingSlimeBlock && p.isOnGround())
 			np.isUsingSlimeBlock = false;
 	}
+	
+	@Listener
+	public void onTeleport(MoveEntityEvent.Teleport e, @First Player p) {
+		SpongeNegativityPlayer.getNegativityPlayer(p).TIME_INVINCIBILITY = System.currentTimeMillis() + 2000;
+	}
 }

@@ -3,10 +3,9 @@ package com.elikill58.negativity.universal.adapter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -16,6 +15,7 @@ import javax.annotation.Nullable;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.entity.living.player.Player;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
@@ -80,24 +80,11 @@ public class SpongeAdapter extends Adapter {
 		logger.error(msg);
 	}
 
+	@Nullable
 	@Override
-	public Path copyBundledFile(String lang, Path filePath) {
-		if (Files.notExists(filePath)) {
-			plugin.getContainer().getAsset(lang).ifPresent(asset -> {
-				try {
-					Path parentDir = filePath.normalize().getParent();
-					if (parentDir != null) {
-						Files.createDirectories(parentDir);
-					}
-
-					asset.copyToFile(filePath, false);
-				} catch (IOException e) {
-					logger.error("Failed to copy default language file " + asset.getFileName(), e);
-				}
-			});
-		}
-
-		return filePath;
+	public InputStream openBundledFile(String name) throws IOException {
+		Asset asset = plugin.getContainer().getAsset(name).orElse(null);
+		return asset == null ? null : asset.getUrl().openStream();
 	}
 
 	@Override

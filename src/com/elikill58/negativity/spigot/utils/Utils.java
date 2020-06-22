@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.utils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -10,6 +11,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
@@ -197,5 +199,13 @@ public class Utils {
 			e.printStackTrace();
 			return null;
 		}
+	
+	public static Entity getEntityByID(int i) {
+		for(World w : Bukkit.getWorlds()) {
+			Optional<Entity> opt = w.getEntities().stream().filter((et) -> et.getEntityId() == i).findFirst();
+			if(opt.isPresent())
+				return opt.get();
+ 		}
+		return null;
 	}
 }

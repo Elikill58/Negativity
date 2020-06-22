@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.inventories;
 
+import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
+
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.item.inventory.ClickInventoryEvent;
 import org.spongepowered.api.event.item.inventory.InteractInventoryEvent;
@@ -18,7 +20,6 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.inventories.holders.FreezeHolder;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
-import com.elikill58.negativity.sponge.utils.Utils;
 
 public class FreezeInventory extends AbstractInventory {
 
@@ -39,7 +40,7 @@ public class FreezeInventory extends AbstractInventory {
 				.property(Inv.INV_ID_KEY, Inv.FREEZE_INV_ID)
 				.build(SpongeNegativity.getInstance());
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		invGrid.set(4, 0, Utils.createItem(ItemTypes.PAPER, Messages.getStringMessage(p, "inventory.mod.you_are_freeze")));
+		invGrid.set(4, 0, createItem(ItemTypes.PAPER, Messages.getStringMessage(p, "inventory.mod.you_are_freeze")));
 		p.openInventory(inv);
 	}
 	

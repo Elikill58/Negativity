@@ -4,29 +4,37 @@ version: 1.8.1
 author: [Elikill58, RedNesto]
 description: It's an Advanced AntiCheat Detection, by Elikill58.
 api-version: 1.13
+softdepend: [Essentials, WorldGuard, GadgetsMenu, MaxBans, AdvancedBan, ViaVersion, ProtocolSupport]
 
 commands:
   negativity:
     description: See all informations about a player and start verif
     permission: negativity.negativity
-  report:
+    aliases: [neg, n]
+  nreport:
     description: Report a player
     permission: negativity.report
+    aliases: [report]
   nban:
     description: Ban a player
     permission: negativity.ban
+    aliases: [ban]
   nunban:
     description: Unban a player
     permission: negativity.unban
+    aliases: [unban]
   nkick:
     description: Kick a player
     permission: negativity.kick
-  mod:
+    aliases: [kick]
+  nmod:
     description: Option for mod
     permission: negativity.mod
-  lang:
+    aliases: [mod]
+  nlang:
     description: Language management
     permission: negativity.lang
+    aliases: [lang]
 
 permissions:
   negativity.*:

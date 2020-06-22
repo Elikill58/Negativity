@@ -30,11 +30,12 @@ public class SneakProtocol extends Cheat {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
-		if (p.get(Keys.IS_SNEAKING).orElse(false) && p.get(Keys.IS_SPRINTING).orElse(false) && !p.get(Keys.IS_FLYING).orElse(false) && np.wasSneaking) {
+		boolean isSneaking = p.get(Keys.IS_SNEAKING).orElse(false);
+		if (isSneaking && p.get(Keys.IS_SPRINTING).orElse(false) && !p.get(Keys.IS_FLYING).orElse(false) && np.contentBoolean.getOrDefault("sneak-was-sneaking", false)) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (Utils.getPing(p) / 10)), "Sneaking, sprinting and not flying.");
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);
 		}
-		np.wasSneaking = p.get(Keys.IS_SNEAKING).orElse(false);
+		np.contentBoolean.put("sneak-was-sneaking", isSneaking);
 	}
 }

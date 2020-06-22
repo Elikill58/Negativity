@@ -30,7 +30,7 @@ public class SneakProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (p.isSneaking() && p.isSprinting() && !p.isFlying() && np.wasSneaking) {
+		if (p.isSneaking() && p.isSprinting() && !p.isFlying() && np.contentBoolean.getOrDefault("sneak-was-sneaking", false)) {
 			if(!np.getPlayerVersion().isNewerOrEquals(Version.V1_14)) {
 				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (Utils.getPing(p) / 10)), "Sneaking, sprinting and not flying");
 				if(mayCancel && isSetBack()) {
@@ -39,6 +39,6 @@ public class SneakProtocol extends Cheat implements Listener {
 				}
 			}
 		}
-		np.wasSneaking = p.isSneaking();
+		np.contentBoolean.put("sneak-was-sneaking", p.isSneaking());
 	}
 }

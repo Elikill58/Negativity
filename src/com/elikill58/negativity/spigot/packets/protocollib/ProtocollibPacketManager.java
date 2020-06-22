@@ -1,8 +1,12 @@
 package com.elikill58.negativity.spigot.packets.protocollib;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.comphenix.protocol.PacketType.Play;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -42,7 +46,8 @@ public class ProtocollibPacketManager extends PacketManager {
 		        	e.setCancelled(packet.isCancelled());
 			}
 		});
-		protocolManager.addPacketListener(new PacketAdapter(pl, ListenerPriority.LOWEST, PacketRegistry.getServerPacketTypes()) {
+		List<com.comphenix.protocol.PacketType> packets = Play.Server.getInstance().values().stream().filter(com.comphenix.protocol.PacketType::isSupported).collect(Collectors.toList());
+		protocolManager.addPacketListener(new PacketAdapter(pl, ListenerPriority.LOWEST, packets) {
 			@Override
 			public void onPacketSending(PacketEvent e) {
 				AbstractPacket packet = onPacketSent(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),

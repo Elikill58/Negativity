@@ -3,8 +3,8 @@ package com.elikill58.negativity.universal.ban;
 import java.sql.Timestamp;
 
 import javax.annotation.Nullable;
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
+
+import org.mariuszgromada.math.mxparser.Expression;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativity;
@@ -16,13 +16,11 @@ public class BanUtils {
 
 	public static int computeBanDuration(NegativityPlayer player, int reliability, Cheat cheat) {
 		try {
-			ScriptEngineManager factory = new ScriptEngineManager();
-			ScriptEngine engine = factory.getEngineByName("JavaScript");
-			String script = Adapter.getAdapter().getConfig().getString("ban.time.calculator")
+			Expression expression = new Expression(Adapter.getAdapter().getConfig().getString("ban.time.calculator")
 					.replaceAll("%reliability%", String.valueOf(reliability))
 					.replaceAll("%alert%", String.valueOf(player.getWarn(cheat)))
-					.replaceAll("%all_alert%", String.valueOf(player.getAllWarn(cheat)));
-			return Integer.parseInt(engine.eval(script).toString());
+					.replaceAll("%all_alert%", String.valueOf(player.getAllWarn(cheat))));
+			return (int) expression.calculate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -47,6 +45,7 @@ public class BanUtils {
 			return null;
 		}
 		player.setInBanning(true);
+		Adapter.getAdapter().log("Banning " + player.getName() + " ...");
 		String reason = player.getReason(cheat);
 		long banDuration = -1;
 		int banDefThreshold = Adapter.getAdapter().getConfig().getInt("ban.def.ban_time");

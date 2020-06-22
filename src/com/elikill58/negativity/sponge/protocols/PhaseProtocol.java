@@ -13,6 +13,7 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -43,7 +44,7 @@ public class PhaseProtocol extends Cheat {
 		Transform<World> to = e.getToTransform();
 		double yDiff = to.getPosition().getY() - from.getPosition().getY();
 		if (yDiff > 0.1 && (loc.sub(Vector3i.UNIT_Y).getBlockType() != BlockTypes.AIR
-				|| !np.hasOtherThan(loc.sub(Vector3i.UNIT_Y), BlockTypes.AIR))) {
+				|| !LocationUtils.hasOtherThan(loc.sub(Vector3i.UNIT_Y), BlockTypes.AIR))) {
 			np.isJumpingWithBlock = true;
 		} else if (yDiff < -0.1) {
 			np.isJumpingWithBlock = false;
@@ -57,8 +58,8 @@ public class PhaseProtocol extends Cheat {
 			return;
 		}
 
-		if (np.hasOtherThan(loc, BlockTypes.AIR)
-				|| np.hasOtherThan(loc.sub(Vector3d.UNIT_Y), BlockTypes.AIR)) {
+		if (LocationUtils.hasOtherThan(loc, BlockTypes.AIR)
+				|| LocationUtils.hasOtherThan(loc.sub(Vector3d.UNIT_Y), BlockTypes.AIR)) {
 			return;
 		}
 

@@ -6,6 +6,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -28,14 +29,17 @@ public class FastBowProtocol extends Cheat implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if(p.getItemInHand() != null)
-			if(ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name())) {
-				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().name());
-				if(ib.getWhen().isClick() && ib.isForThisCheat(this))
-					if(e.getAction().name().toLowerCase().contains(ib.getWhen().name().toLowerCase()))
-						return;
-			}
-		if (p.getItemInHand().getType().equals(Material.BOW)) {
+		ItemStack item = p.getItemInHand();
+		if(item == null)
+			return;
+		
+		if(ItemUseBypass.ITEM_BYPASS.containsKey(item.getType().name())) {
+			ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(item.getType().name());
+			if(ib.getWhen().isClick() && ib.isForThisCheat(this))
+				if(e.getAction().name().toLowerCase().contains(ib.getWhen().name().toLowerCase()))
+					return;
+		}
+		if (item.getType().equals(Material.BOW) && e.getAction().name().contains("RIGHT_CLICK")) {
 			np.flyingReason = FlyingReason.BOW;
 			long actual = System.currentTimeMillis(), dif = actual - np.LAST_SHOT_BOW;
 			if (np.LAST_SHOT_BOW != 0) {

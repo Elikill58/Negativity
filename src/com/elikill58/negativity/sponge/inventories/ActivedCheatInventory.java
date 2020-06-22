@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.inventories;
 
+import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
+
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.item.inventory.ClickInventoryEvent;
 import org.spongepowered.api.item.ItemType;
@@ -18,8 +20,10 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.inventories.holders.ActivedCheatHolder;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
+import com.elikill58.negativity.sponge.utils.ItemUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ActivedCheatInventory extends AbstractInventory {
 
@@ -30,7 +34,7 @@ public class ActivedCheatInventory extends AbstractInventory {
 	@Override
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
-		int size = Utils.getMultipleOf(Cheat.values().size() + 3, 9, 1), nbLine = size / 9;
+		int size = UniversalUtils.getMultipleOf(Cheat.values().size() + 3, 9, 1, 54), nbLine = size / 9;
 		Inventory inv = Inventory.builder().withCarrier(new ActivedCheatHolder())
 				.property(InventoryTitle.PROPERTY_NAME, new InventoryTitle(Text.of(Inv.NAME_ACTIVED_CHEAT_MENU)))
 				.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, nbLine))
@@ -42,15 +46,15 @@ public class ActivedCheatInventory extends AbstractInventory {
 		int i = 0;
 		if (np.getActiveCheat().size() > 0) {
 			for (Cheat c : np.getActiveCheat()) {
-				invGrid.set(SlotIndex.of(i), Utils.hideAttributes(Utils.createItem((ItemType) c.getMaterial(), "&r" + c.getName())));
+				invGrid.set(SlotIndex.of(i), ItemUtils.hideAttributes(createItem((ItemType) c.getMaterial(), "&r" + c.getName())));
 				i++;
 			}
 		} else
-			invGrid.set(5, 1, Utils.createItem(ItemTypes.REDSTONE_BLOCK,
+			invGrid.set(5, 1, createItem(ItemTypes.REDSTONE_BLOCK,
 					Messages.getStringMessage(p, "inventory.detection.no_active", "%name%", cible.getName())));
 		int lastRow = invGrid.getRows() - 1;
-		invGrid.set(7, lastRow, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
-		invGrid.set(8, lastRow, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
+		invGrid.set(7, lastRow, createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
+		invGrid.set(8, lastRow, createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 	}
 

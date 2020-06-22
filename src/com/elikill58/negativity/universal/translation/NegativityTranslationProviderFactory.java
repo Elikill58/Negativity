@@ -36,7 +36,7 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 			String fileName = bundle + "_" + language + ".properties";
 			try {
 				Path file = adapter.copyBundledFile(fileName, messagesDir.resolve(fileName));
-				if (Files.notExists(file)) {
+				if (file == null || Files.notExists(file)) {
 					continue;
 				}
 
@@ -68,18 +68,19 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 		StringBuilder concatenatedBundles = new StringBuilder(8000);
 		for (String bundle : this.bundles) {
 			String fileName = bundle + "_" + FALLBACK_LANGUAGE + ".properties";
-			InputStream input = getClass().getResourceAsStream("/assets/negativity/" + fileName);
-			if (input == null) {
-				adapter.error("Fallback language file " + fileName + " does not exist.");
-				continue;
-			}
+			try (InputStream input = Adapter.getAdapter().openBundledFile(fileName)) {
+				if (input == null) {
+					adapter.error("Fallback language file " + fileName + " does not exist.");
+					continue;
+				}
 
-			try (BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
-				String line;
-				while ((line = reader.readLine()) != null) {
-					concatenatedBundles.append(line);
-					// Make sure we have a new line between concatenated files
-					concatenatedBundles.append(System.lineSeparator());
+				try (BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
+					String line;
+					while ((line = reader.readLine()) != null) {
+						concatenatedBundles.append(line);
+						// Make sure we have a new line between concatenated files
+						concatenatedBundles.append(System.lineSeparator());
+					}
 				}
 			} catch (IOException e) {
 				adapter.error("Failed to read fallback message file " + bundle);

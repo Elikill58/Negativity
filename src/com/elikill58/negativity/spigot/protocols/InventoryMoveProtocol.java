@@ -63,6 +63,8 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 				@Override
 				public void run() {
+					if(!lastLoc.getWorld().equals(p.getLocation().getWorld()))
+						return;
 					double dis = lastLoc.distance(p.getLocation());
 					if (dis > 1 && (lastLoc.getY() - p.getLocation().getY()) < 0.1
 							&& p.getOpenInventory() != null) {

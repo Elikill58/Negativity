@@ -18,8 +18,11 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.inventories.holders.CheckMenuHolder;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
+import com.elikill58.negativity.sponge.utils.ItemUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.NegativityAccount;
+
+import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
 
 public class CheckMenuInventory extends AbstractInventory {
 	
@@ -45,42 +48,41 @@ public class CheckMenuInventory extends AbstractInventory {
 
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
 		NegativityAccount account = np.getAccount();
-		invGrid.set(0, 0, Utils
-				.createItem(ItemTypes.STAINED_HARDENED_CLAY,
+		invGrid.set(0, 0, createItem(ItemTypes.STAINED_HARDENED_CLAY,
 						Messages.getStringMessage(p, "inventory.main.actual_click",
 								"%clicks%", String.valueOf(np.ACTUAL_CLICK)),
 						1, Utils.getByteFromClick(np.ACTUAL_CLICK)));
-		invGrid.set(1, 0, Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY,
+		invGrid.set(1, 0, createItem(ItemTypes.STAINED_HARDENED_CLAY,
 				Messages.getStringMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(account.getMostClicksPerSecond())),
 				1, Utils.getByteFromClick(account.getMostClicksPerSecond())));
-		invGrid.set(2, 0, Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY,
+		invGrid.set(2, 0, createItem(ItemTypes.STAINED_HARDENED_CLAY,
 				Messages.getStringMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1,
 				Utils.getByteFromClick(np.LAST_CLICK)));
-		invGrid.set(7, 0, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p,
+		invGrid.set(7, 0, createItem(ItemTypes.ARROW, Messages.getStringMessage(p,
 				"inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
-		invGrid.set(8, 0, Utils.createSkull(cible.getName(), 1, cible, "&6UUID: " + cible.getUniqueId()));
+		invGrid.set(8, 0, ItemUtils.createSkull(cible.getName(), 1, cible, "&6UUID: " + cible.getUniqueId()));
 
-		invGrid.set(0, 1, Utils.hideAttributes(Utils.createItem(ItemTypes.DIAMOND_SWORD, "&rFight: "
+		invGrid.set(0, 1, ItemUtils.hideAttributes(createItem(ItemTypes.DIAMOND_SWORD, "&rFight: "
 				+ Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled")))));
-		invGrid.set(1, 1, Utils.hideAttributes(Utils.createItem(ItemTypes.DIAMOND_PICKAXE, "&rMinerate", account.getMinerate().getInventoryLoreString())));
-		invGrid.set(2, 1, Utils.createItem(ItemTypes.GRASS, "&rMods", "&7Forge: "
+		invGrid.set(1, 1, ItemUtils.hideAttributes(createItem(ItemTypes.DIAMOND_PICKAXE, "&rMinerate", account.getMinerate().getInventoryLoreString())));
+		invGrid.set(2, 1, createItem(ItemTypes.GRASS, "&rMods", "&7Forge: "
 				+ Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
 		invGrid.set(3, 1, Utils.getMcLeaksIndicator(p, np));
 		/*if(Cheat.forKey("FORCEFIELD").get().isActive() && !SpongeNegativity.getConfig().getNode("cheats").getNode("forcefield").getNode("ghost_disabled").getBoolean())
 			invGrid.set(3, 1, Utils.createItem(ItemTypes.SKULL, "&rFake entities"));*/
 
-		invGrid.set(0, 2, Utils.createItem(ItemTypes.SPIDER_EYE,
+		invGrid.set(0, 2, createItem(ItemTypes.SPIDER_EYE,
 				Messages.getStringMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
-		invGrid.set(1, 2, Utils.createItem(ItemTypes.ENDER_EYE,
+		invGrid.set(1, 2, createItem(ItemTypes.ENDER_EYE,
 				Messages.getStringMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
 		if(!p.getUniqueId().equals(cible.getUniqueId()))
-			invGrid.set(2, 2, Utils.createItem(ItemTypes.PACKED_ICE,
+			invGrid.set(2, 2, createItem(ItemTypes.PACKED_ICE,
 					Messages.getStringMessage(p, "inventory.main.freezing", "%name%", cible.getName())));
-		invGrid.set(3, 2, Utils.createItem(ItemTypes.ANVIL,
+		invGrid.set(3, 2, createItem(ItemTypes.ANVIL,
 				Messages.getStringMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())));
-		invGrid.set(4, 2, Utils.createItem(ItemTypes.TNT,
+		invGrid.set(4, 2, createItem(ItemTypes.TNT,
 				Messages.getStringMessage(p, "inventory.main.active_detection", "%name%", cible.getName())));
-		invGrid.set(8, 2, Utils.createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
+		invGrid.set(8, 2, createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
 		Inv.CHECKING.put(p, cible);
 	}
@@ -126,20 +128,18 @@ public class CheckMenuInventory extends AbstractInventory {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
 		NegativityAccount account = np.getAccount();
 
-		invGrid.set(0, 0, Utils
-				.createItem(
-						ItemTypes.STAINED_HARDENED_CLAY, Messages.getStringMessage(p,
+		invGrid.set(0, 0, createItem(ItemTypes.STAINED_HARDENED_CLAY, Messages.getStringMessage(p,
 								"inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)),
 						1, Utils.getByteFromClick(np.ACTUAL_CLICK)));
-		invGrid.set(1, 0, Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY,
+		invGrid.set(1, 0, createItem(ItemTypes.STAINED_HARDENED_CLAY,
 				Messages.getStringMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(account.getMostClicksPerSecond())),
 				1, Utils.getByteFromClick(account.getMostClicksPerSecond())));
-		invGrid.set(2, 0, Utils.createItem(ItemTypes.STAINED_HARDENED_CLAY,
+		invGrid.set(2, 0, createItem(ItemTypes.STAINED_HARDENED_CLAY,
 				Messages.getStringMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1,
 				Utils.getByteFromClick(np.LAST_CLICK)));
-		invGrid.set(7, 0, Utils.createItem(ItemTypes.ARROW, Messages.getStringMessage(p,
+		invGrid.set(7, 0, createItem(ItemTypes.ARROW, Messages.getStringMessage(p,
 				"inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
-		invGrid.set(0, 1, Utils.hideAttributes(Utils.createItem(ItemTypes.DIAMOND_SWORD, "&rFight: "
+		invGrid.set(0, 1, ItemUtils.hideAttributes(createItem(ItemTypes.DIAMOND_SWORD, "&rFight: "
 				+ Messages.getStringMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled")))));
 	}
 }

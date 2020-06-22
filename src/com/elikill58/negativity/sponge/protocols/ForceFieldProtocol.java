@@ -56,7 +56,7 @@ public class ForceFieldProtocol extends Cheat {
 		}
 		
 		boolean mayCancel = false;
-		if(!np.hasLineOfSight(e.getTargetEntity())) {
+		if(!LocationUtils.hasLineOfSight(p, e.getTargetEntity())) {
 			mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getTargetEntity().getType().getId()
 					+ " but cannot see it, ping: " + Utils.getPing(p), hoverMsg("line_sight", "%name%", e.getTargetEntity().getType().getName()));
 		}

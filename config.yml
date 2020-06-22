@@ -291,6 +291,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Jesus is to walk on the water
   jesus:
@@ -301,6 +302,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # AntiPotion remove bad potion effect
   antipotion:
@@ -311,6 +313,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # NoFall remove fall damage
   nofall:
@@ -323,6 +326,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # FastEat is to eat something instantly
   fasteat:
@@ -333,6 +337,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # FastPlace place a lot of block for you
   fastplace:
@@ -346,6 +351,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Speed makes you run faster
   speed:
@@ -356,6 +362,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # AutoClick is to get more click than real people
   autoclick:
@@ -367,6 +374,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Fly enable you to fly
   fly:
@@ -377,6 +385,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Regen help you to get your health
   regen:
@@ -387,6 +396,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # AntiKnockback remove knockback effect
   antiknockback:
@@ -397,6 +407,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Blink enable you to teleport by simulating lag
   blink:
@@ -407,6 +418,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # FastBow shoot bow quicker
   fastbow:
@@ -417,6 +429,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Spider make you walk on the wall
   spider:
@@ -427,6 +440,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Sneak make you sneaking but with basic speed
   sneak:
@@ -437,6 +451,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Scaffold place block under you
   scaffold:
@@ -447,6 +462,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Step make you jump 2 blocks
   step:
@@ -457,6 +473,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # NoSlowDown remove slow down effects (like with soul sand)
   noslowdown:
@@ -467,6 +484,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # FastLadders is to climb ladders quickler
   fastladder:
@@ -477,6 +495,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Phase is to glitch on block
   phase:
@@ -487,6 +506,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # AutoSteal help with inventory (Take verything ...)
   autosteal:
@@ -497,6 +517,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # XRay cannot be detected directly, it's about Minerate
   xray:
@@ -507,6 +528,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Nuker/BedBreaker automatically break block without looking her
   nuker:
@@ -517,6 +539,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # AirJump make you jump on air
   airjump:
@@ -527,6 +550,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Chat represent all chat hack (spam/insult)
   chat:
@@ -537,6 +561,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
     insults:
     - "bitch"
     - "asshole"
@@ -551,6 +576,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Critical make you walking on web like if you walk on ground
   critical:
@@ -561,6 +587,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # InventoryMove make you walking while editing your inventory
   inventorymove:
@@ -571,6 +598,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # FastStairs make you walking faster on Stairs
   faststairs:
@@ -581,6 +609,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # NoPitchLimit enable player to see behind
   nopitchlimit:
@@ -591,6 +620,7 @@ cheats:
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # There is some special features
   special:

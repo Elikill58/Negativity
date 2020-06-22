@@ -43,7 +43,7 @@ public class Verificator {
 	}
 	
 	public Verificator(NegativityPlayer np, String asker, List<Cheat> list) {
-		this(np, asker, list.stream().collect(COLLECTOR), new ArrayList<>(), VERIFICATION_VERSION, np.getPlayerVersion());
+		this(np, asker, list.stream().filter(Cheat::hasVerif).collect(COLLECTOR), new ArrayList<>(), VERIFICATION_VERSION, np.getPlayerVersion());
 	}
 	
 	public Verificator(NegativityPlayer np, String asker, Map<Cheat, VerifData> cheats, List<String> messages, int version, Version playerVersion) {

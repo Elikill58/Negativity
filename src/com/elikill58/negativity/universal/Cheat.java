@@ -109,6 +109,10 @@ public abstract class Cheat {
 		return aliases;
 	}
 
+	public boolean hasVerif() {
+		return Adapter.getAdapter().getConfig().getBoolean("cheats." + key + ".check_in_verif");
+	}
+
 	public CheatHover hoverMsg(String key, Object... placeholders) {
 		return new CheatHover("hover." + getKey() + "." + key, placeholders);
 	}

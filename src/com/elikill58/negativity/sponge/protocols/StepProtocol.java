@@ -94,6 +94,6 @@ public class StepProtocol extends Cheat {
 	
 	@Override
 	public String compile(VerifData data, NegativityPlayer np) {
-		return "Average of block up : &a" + data.getData(BLOCKS_UP).getAverage();
+		return "Average of block up : &a" + String.format("%.3f", data.getData(BLOCKS_UP).getAverage());
 	}
 }

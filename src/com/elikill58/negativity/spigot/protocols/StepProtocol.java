@@ -77,6 +77,6 @@ public class StepProtocol extends Cheat implements Listener {
 	
 	@Override
 	public String compile(VerifData data, NegativityPlayer np) {
-		return "Average of block up : " + ChatColor.GREEN + data.getData(BLOCKS_UP).getAverage();
+		return "Average of block up : " + ChatColor.GREEN + String.format("%.3f", data.getData(BLOCKS_UP).getAverage());
 	}
 }

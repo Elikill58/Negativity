@@ -63,6 +63,10 @@ public class PacketContent {
 				}
 			}
 		}
+		
+		public int size() {
+			return content.size();
+		}
 
 		@SuppressWarnings("unchecked")
 		public T read(int i) {

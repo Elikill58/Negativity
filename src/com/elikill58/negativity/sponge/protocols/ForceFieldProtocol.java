@@ -22,6 +22,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.packets.AbstractPacket;
 import com.elikill58.negativity.sponge.packets.events.PacketReceiveEvent;
+import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;

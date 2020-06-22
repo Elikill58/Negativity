@@ -11,10 +11,10 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
-import com.elikill58.negativity.spigot.packets.PacketType;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 

@@ -1,7 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import static com.elikill58.negativity.spigot.utils.PacketUtils.getField;
 import static com.elikill58.negativity.spigot.utils.PacketUtils.callMethod;
+import static com.elikill58.negativity.spigot.utils.PacketUtils.getField;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import java.text.NumberFormat;
@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
@@ -30,6 +31,7 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;

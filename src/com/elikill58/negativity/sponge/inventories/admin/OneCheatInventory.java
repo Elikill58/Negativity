@@ -42,10 +42,10 @@ public class OneCheatInventory extends AbstractInventory {
 				.build(SpongeNegativity.getInstance());
 		Utils.fillInventoryWith(Inv.EMPTY, inv);
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		invGrid.set(0, 0, Utils.createItem((ItemType) c.getMaterial(), c.getName()));
-		invGrid.set(3, 0, Utils.createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
+		invGrid.set(0, 0, createItem((ItemType) c.getMaterial(), c.getName()));
+		invGrid.set(3, 0, createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
 				"inventory.manager.setActive", "%active%", getMessage(p, c.isActive()))));
-		invGrid.set(4, 0, Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p,
+		invGrid.set(4, 0, createItem(ItemTypes.TNT, Messages.getStringMessage(p,
 				"inventory.manager.setBack", "%back%", getMessage(p, c.isSetBack()))));
 		invGrid.set(5, 0, createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
 				"inventory.manager.allowKick", "%allow%", getMessage(p, c.allowKick()))));
@@ -60,9 +60,9 @@ public class OneCheatInventory extends AbstractInventory {
 		Cheat c = (Cheat) args[0];
 		Inventory inv = (Inventory) args[1];
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		invGrid.set(3, 0, Utils.createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
+		invGrid.set(3, 0, createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
 				"inventory.manager.setActive", "%active%", getMessage(p, c.isActive()))));
-		invGrid.set(4, 0, Utils.createItem(ItemTypes.TNT, Messages.getStringMessage(p,
+		invGrid.set(4, 0, createItem(ItemTypes.TNT, Messages.getStringMessage(p,
 				"inventory.manager.setBack", "%back%", getMessage(p, c.isSetBack()))));
 		invGrid.set(5, 0, createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
 				"inventory.manager.allowKick", "%allow%", getMessage(p, c.allowKick()))));

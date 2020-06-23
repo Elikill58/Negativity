@@ -93,6 +93,13 @@ public class UniversalUtils {
 		else
 			return (int) i;
 	}
+	
+	public static Optional<Integer> getFirstInt(String... args){
+		for(String s : args)
+			if(isInteger(s))
+				return Optional.of(Integer.parseInt(s));
+		return Optional.empty();
+	}
 
 	public static Optional<Cheat> getCheatFromName(String s) {
 		for (Cheat c : Cheat.values())

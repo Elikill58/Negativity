@@ -31,6 +31,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 import com.elikill58.negativity.universal.verif.Verificator;
 
@@ -73,7 +74,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 
 			SpigotNegativityPlayer nTarget = SpigotNegativityPlayer.getNegativityPlayer(target);
-			int time = VerificationManager.TIME_VERIF;
+			int time = UniversalUtils.getFirstInt(arg).orElse(VerificationManager.TIME_VERIF / 20);
 			Set<Cheat> listCheat = new LinkedHashSet<>();
 			if (arg.length == 2) {
 				nTarget.startAllAnalyze();
@@ -107,7 +108,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				verif.getMessages().forEach((s) -> sender.sendMessage(Utils.coloredMessage("&a[&2Verif&a] " + s)));
 				verif.save();
 				VerificationManager.remove(askerUUID, target.getUniqueId());
-			}, time);
+			}, time * 20);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("alert")) {
 			if (!(sender instanceof Player)) {

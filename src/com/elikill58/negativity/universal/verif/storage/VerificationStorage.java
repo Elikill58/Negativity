@@ -2,7 +2,8 @@ package com.elikill58.negativity.universal.verif.storage;
 
 
 import java.io.File;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -37,7 +38,7 @@ public abstract class VerificationStorage {
 	}
 	
 	public static String getNewFileName() {
-		return new Timestamp(System.currentTimeMillis()).toString().split("\\.")[0].replaceAll(" ", "_").replaceAll(":", "_") + ".json";
+		return DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm_ss").format(LocalDateTime.now()) + ".json";
 	}
 
 	public static void setStorageId(String storageId) {

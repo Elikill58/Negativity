@@ -4,10 +4,6 @@ import java.util.Comparator;
 
 public class FloatDataCounter extends DataCounter<Float> {
 
-	public FloatDataCounter(String name, String display) {
-		super(name, display);
-	}
-
 	@Override
 	public Float getMin() {
 		if(list.isEmpty())

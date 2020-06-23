@@ -1,10 +1,12 @@
 package com.elikill58.negativity.universal.verif;
 
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
+import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.function.Function;
@@ -29,10 +31,10 @@ public class Verificator {
 	private final Version playerVersion;
 	
 	public Verificator(NegativityPlayer np, String asker) {
-		this(np, asker, Cheat.CHEATS);
+		this(np, asker, new LinkedHashSet<>(Cheat.CHEATS));
 	}
 	
-	public Verificator(NegativityPlayer np, String asker, List<Cheat> list) {
+	public Verificator(NegativityPlayer np, String asker, Set<Cheat> list) {
 		this(np, asker, list.stream().filter(Cheat::hasVerif).collect(COLLECTOR), new ArrayList<>(), VERIFICATION_VERSION, np.getPlayerVersion());
 	}
 	
@@ -83,7 +85,7 @@ public class Verificator {
 			Cheat c = currentCheat.getKey();
 			VerifData data = currentCheat.getValue();
 			if(data.hasSomething()) {
-				String name = c.compile(data, np);
+				String name = c.makeVerificationSummary(data, np);
 				if(name != null) {
 					messages.add("&6" + c.getName() + "&8: &7" + name);
 					continue;
@@ -91,7 +93,7 @@ public class Verificator {
 			}
 			messageCheatNothing.add(c.getName());
 		}
-		if (!messageCheatNothing.isEmpty())
+		if (messageCheatNothing.length() > 0)
 			messages.add("Nothing detected: " + messageCheatNothing);
 	}
 	
@@ -99,27 +101,5 @@ public class Verificator {
 		if(messages.isEmpty())
 			generateMessage();
 		VerificationStorage.getStorage().saveVerification(this);
-		/*File folder = new File(Adapter.getAdapter().getDataFolder().getAbsolutePath() + File.separator + "verif" + File.separator + np.getUUID());
-		folder.mkdirs();
-		JSONObject json = new JSONObject();
-		json.put("startedBy", asker);
-		json.put("result", messages);
-		List<String> cheatNothing = new ArrayList<>();
-		cheats.forEach((cheat, verif) -> {
-			if(verif.hasSomething()) {
-				json.put(cheat.getKey(), verif.getAllData().values().stream().filter(DataCounter::has).map(DataCounter::print).collect(Collectors.toList()));
-			} else
-				cheatNothing.add(cheat.getName());
-		});
-		json.put("cheat-nothing", cheatNothing);
-		
-		File resultFile = new File(folder, new Timestamp(System.currentTimeMillis()).toString().split("\\.")[0].replaceAll(" ", "_").replaceAll(":", "_") + ".json");
-		try {
-			if(!resultFile.exists())
-				resultFile.createNewFile();
-			Files.write(resultFile.toPath(), json.toJSONString().getBytes(), StandardOpenOption.APPEND);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
 	}
 }

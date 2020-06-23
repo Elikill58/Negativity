@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
+
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -39,8 +41,8 @@ import com.flowpowered.math.vector.Vector3d;
 
 public class ForceFieldProtocol extends Cheat {
 
-	public static final DataType<Double> HIT_DISTANCE = new DataType<Double>(() -> new DoubleDataCounter("hit_distance", "Hit Distance"));
-	public static final DataType<Integer> FAKE_PLAYERS = new DataType<Integer>(() -> new IntegerDataCounter("fake_players", "Fake Players"));
+	public static final DataType<Double> HIT_DISTANCE = new DataType<Double>("hit_distance", "Hit Distance", () -> new DoubleDataCounter());
+	public static final DataType<Integer> FAKE_PLAYERS = new DataType<Integer>("fake_players", "Fake Players", () -> new IntegerDataCounter());
 
 	private final NumberFormat distanceFormatter = new DecimalFormat();
 
@@ -72,7 +74,7 @@ public class ForceFieldProtocol extends Cheat {
 		double distance = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());
 		double allowedReach = Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0);
 		if (!(usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW) && !e.getTargetEntity().getType().equals(EntityTypes.ENDER_DRAGON)) {
-			np.verificatorForMod.forEach((s, verif) -> {
+			getVerifications(p.getUniqueId()).forEach((verif) -> {
 				verif.getVerifData(this).ifPresent((data) -> data.getData(HIT_DISTANCE).add(distance));
 			});
 			if(distance > allowedReach)
@@ -154,7 +156,7 @@ public class ForceFieldProtocol extends Cheat {
 	}
 	
 	@Override
-	public String compile(VerifData data, NegativityPlayer np) {
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		double av = data.getData(HIT_DISTANCE).getAverage();
 		int nb = data.getData(FAKE_PLAYERS).getSize();
 		String color = (av > 3 ? (av > 4 ? "&c" : "&6") : "&a");

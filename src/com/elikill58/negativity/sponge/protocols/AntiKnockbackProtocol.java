@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
+
 import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.block.BlockTypes;
@@ -41,7 +43,7 @@ import com.flowpowered.math.vector.Vector3d;
 
 public class AntiKnockbackProtocol extends Cheat {
 
-	public static final DataType<Double> DISTANCE_DAMAGE = new DataType<Double>(() -> new DoubleDataCounter("distance_damage", "Distance after Damage"));
+	public static final DataType<Double> DISTANCE_DAMAGE = new DataType<Double>("distance_damage", "Distance after Damage", () -> new DoubleDataCounter());
 	
 	public AntiKnockbackProtocol() {
 		super(CheatKeys.ANTI_KNOCKBACK, false, ItemTypes.STICK, CheatCategory.COMBAT, true, "antikb", "anti-kb", "no-kb");
@@ -100,7 +102,7 @@ public class AntiKnockbackProtocol extends Cheat {
 				Location<World> actual = p.getLocation();
 				double d = last.getPosition().distance(actual.getPosition());
 				int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - d);
-				np.verificatorForMod.forEach((s, verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(DISTANCE_DAMAGE).add(d)));
+				getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(DISTANCE_DAMAGE).add(d)));
 				if (d < 0.1 && actual.getBlockType() != BlockTypes.WEB && !p.get(Keys.IS_SNEAKING).orElse(false)) {
 					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, relia,
 							"Distance after damage: " + d + "; Ping: " + ping, hoverMsg("main", "%distance%", d));
@@ -113,7 +115,7 @@ public class AntiKnockbackProtocol extends Cheat {
 	}
 	
 	@Override
-	public String compile(VerifData data, NegativityPlayer np) {
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		DataCounter<Double> counter = data.getData(DISTANCE_DAMAGE);
 		double av = counter.getAverage(), low = counter.getMin();
 		String colorAverage = (av < 1 ? (av < 0.5 ? "&c" : "&6") : "&a");

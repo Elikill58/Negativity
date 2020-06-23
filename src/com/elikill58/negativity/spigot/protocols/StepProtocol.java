@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
+
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -25,7 +27,7 @@ import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 
 public class StepProtocol extends Cheat implements Listener {
 
-	public static final DataType<Double> BLOCKS_UP = new DataType<Double>(() -> new DoubleDataCounter("blocks_up", "Blocks UP"));
+	public static final DataType<Double> BLOCKS_UP = new DataType<Double>("blocks_up", "Blocks UP", () -> new DoubleDataCounter());
 	
 	public StepProtocol() {
 		super(CheatKeys.STEP, false, Material.BRICK_STAIRS, CheatCategory.MOVEMENT, true);
@@ -59,7 +61,7 @@ public class StepProtocol extends Cheat implements Listener {
 				amplifier = pe.getAmplifier();
 		double diffBoost = dif - (amplifier / 10);
 		if(diffBoost > 0.2) {
-			np.verificatorForMod.forEach((s, verif) -> {
+			getVerifications(p.getUniqueId()).forEach((verif) -> {
 				verif.getVerifData(this).ifPresent((data) -> data.getData(BLOCKS_UP).add(diffBoost));
 			});
 			if(diffBoost > 0.6) {
@@ -76,7 +78,7 @@ public class StepProtocol extends Cheat implements Listener {
 	}
 	
 	@Override
-	public String compile(VerifData data, NegativityPlayer np) {
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		return "Average of block up : " + ChatColor.GREEN + String.format("%.3f", data.getData(BLOCKS_UP).getAverage());
 	}
 }

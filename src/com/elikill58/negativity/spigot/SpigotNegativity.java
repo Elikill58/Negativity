@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -81,12 +83,13 @@ import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerificationManager;
 
 @SuppressWarnings("deprecation")
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean log = false, log_console = false, hasBypass = false, disableAlertOnVerif = false, essentialsSupport = false,
+	public static boolean log = false, log_console = false, hasBypass = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
 	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
@@ -369,7 +372,7 @@ public class SpigotNegativity extends JavaPlugin {
 			return false;
 		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT) && gadgetMenuSupport &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
 			return false;
-		if(disableAlertOnVerif && !np.verificatorForMod.isEmpty())
+		if(VerificationManager.DISABLE_ALERT_ON_VERIF && !hasVerifications(p.getUniqueId()))
 			return false;
 		
 		int ping = Utils.getPing(p);
@@ -586,7 +589,6 @@ public class SpigotNegativity extends JavaPlugin {
 		log = config.getBoolean("log_alerts");
 		log_console = config.getBoolean("log_alerts_in_console");
 		hasBypass = config.getBoolean("Permissions.bypass.active");
-		disableAlertOnVerif = config.getBoolean("verif.disable_alert_on_verif", false);
 		
 		timeBetweenAlert = config.getInt("time_between_alert");
 		if(timeBetweenAlert != -1) {

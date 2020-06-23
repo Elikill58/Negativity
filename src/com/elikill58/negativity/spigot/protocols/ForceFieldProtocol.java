@@ -1,8 +1,9 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import static com.elikill58.negativity.spigot.utils.PacketUtils.callMethod;
-import static com.elikill58.negativity.spigot.utils.PacketUtils.getField;
+import static com.elikill58.negativity.universal.utils.ReflectionUtils.callMethod;
+import static com.elikill58.negativity.universal.utils.ReflectionUtils.getField;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
+import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
 
 import java.text.NumberFormat;
 
@@ -39,8 +40,8 @@ import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 
 public class ForceFieldProtocol extends Cheat implements Listener {
 
-	public static final DataType<Double> HIT_DISTANCE = new DataType<Double>(() -> new DoubleDataCounter("hit_distance", "Hit Distance"));
-	public static final DataType<Integer> FAKE_PLAYERS = new DataType<Integer>(() -> new IntegerDataCounter("fake_players", "Fake Players"));
+	public static final DataType<Double> HIT_DISTANCE = new DataType<Double>("hit_distance", "Hit Distance", () -> new DoubleDataCounter());
+	public static final DataType<Integer> FAKE_PLAYERS = new DataType<Integer>("fake_players", "Fake Players", () -> new IntegerDataCounter());
 
 	private NumberFormat nf = NumberFormat.getInstance();
 	
@@ -75,7 +76,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		double dis = tempLoc.distance(p.getLocation());
 		ItemStack inHand = Utils.getItemInHand(p);
 		if(inHand == null || !inHand.getType().equals(Material.BOW)) {
-			np.verificatorForMod.forEach((s, verif) -> {
+			getVerifications(p.getUniqueId()).forEach((verif) -> {
 				verif.getVerifData(this).ifPresent((data) -> data.getData(HIT_DISTANCE).add(dis));
 			});
 			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !e.getEntityType().equals(EntityType.ENDER_DRAGON)) {
@@ -116,7 +117,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			ItemStack inHand = Utils.getItemInHand(p);
 			if(inHand != null && inHand.getType().equals(Material.BOW))
 				return;
-			SpigotNegativityPlayer.getNegativityPlayer(p).verificatorForMod.forEach((s, verif) -> {
+			getVerifications(p.getUniqueId()).forEach((verif) -> {
 				verif.getVerifData(this).ifPresent((data) -> data.getData(HIT_DISTANCE).add(dis));
 			});
 			if (dis < Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach"))
@@ -137,7 +138,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	}
 	
 	@Override
-	public String compile(VerifData data, NegativityPlayer np) {
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		double av = data.getData(HIT_DISTANCE).getAverage();
 		int nb = data.getData(FAKE_PLAYERS).getSize();
 		String color = (av > 3 ? (av > 4 ? "&c" : "&6") : "&a");
@@ -157,7 +158,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {
 		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
-		np.verificatorForMod.forEach((s, verif) -> verif.getVerifData(forcefield).ifPresent((data) -> data.getData(FAKE_PLAYERS).add(1)));
+		getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(forcefield).ifPresent((data) -> data.getData(FAKE_PLAYERS).add(1)));
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
 		SpigotNegativity.alertMod(np.fakePlayerTouched > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, forcefield,
 				parseInPorcent(np.fakePlayerTouched * 10), "Hitting fake entities. " + np.fakePlayerTouched

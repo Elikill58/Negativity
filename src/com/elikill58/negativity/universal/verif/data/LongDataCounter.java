@@ -4,10 +4,6 @@ import java.util.Comparator;
 
 public class LongDataCounter extends DataCounter<Long> {
 
-	public LongDataCounter(String name, String display) {
-		super(name, display);
-	}
-
 	@Override
 	public Long getMin() {
 		if(list.isEmpty())

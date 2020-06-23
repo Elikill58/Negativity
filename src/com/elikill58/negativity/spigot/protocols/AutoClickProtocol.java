@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -28,7 +30,7 @@ import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 
 public class AutoClickProtocol extends Cheat implements Listener {
 
-	public static final DataType<Integer> CLICKS = new DataType<Integer>(() -> new IntegerDataCounter("clicks", "Clicks"));
+	public static final DataType<Integer> CLICKS = new DataType<Integer>("clicks", "Clicks", () -> new IntegerDataCounter());
 
 	public static final int CLICK_ALERT = Adapter.getAdapter().getConfig().getInt("cheats.autoclick.click_alert");
 	
@@ -41,7 +43,7 @@ public class AutoClickProtocol extends Cheat implements Listener {
 				if (account.getMostClicksPerSecond() < np.ACTUAL_CLICK) {
 					account.setMostClicksPerSecond(np.ACTUAL_CLICK);
 				}
-				np.verificatorForMod.forEach((s, verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(CLICKS).add(np.ACTUAL_CLICK)));
+				getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(CLICKS).add(np.ACTUAL_CLICK)));
 				np.LAST_CLICK = np.ACTUAL_CLICK;
 				np.ACTUAL_CLICK = 0;
 				if (np.SEC_ACTIVE < 2) {
@@ -82,7 +84,7 @@ public class AutoClickProtocol extends Cheat implements Listener {
 	}
 	
 	@Override
-	public String compile(VerifData data, NegativityPlayer np) {
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		int currentClick = ((SpigotNegativityPlayer) np).ACTUAL_CLICK;
 		DataCounter<Integer> counter = data.getData(CLICKS);
 		counter.add(currentClick);

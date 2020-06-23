@@ -4,10 +4,6 @@ import java.util.Comparator;
 
 public class IntegerDataCounter extends DataCounter<Integer> {
 
-	public IntegerDataCounter(String name, String display) {
-		super(name, display);
-	}
-
 	@Override
 	public Integer getMin() {
 		if(list.isEmpty())

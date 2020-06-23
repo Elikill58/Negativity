@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.scheduler.Task;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.packets.events.PacketEvent.PacketSourceType;
@@ -30,19 +31,19 @@ public abstract class PacketManager {
 	
 	public void notifyHandlersReceive(PacketSourceType source, AbstractPacket packet) {
 		// Go on main Thread
-		Sponge.getScheduler().createSyncExecutor(SpongeNegativity.getInstance()).execute(() -> {
+		Task.builder().execute(() -> {
 			PacketReceiveEvent event = new PacketReceiveEvent(source, packet, packet.getPlayer());
 			Sponge.getEventManager().post(event);
 			handlers.forEach((handler) -> handler.onReceive(packet));
-		});
+		}).submit(SpongeNegativity.getInstance());
 	}
 
 	public void notifyHandlersSent(PacketSourceType source, AbstractPacket packet) {
 		// Go on main Thread
-		Sponge.getScheduler().createSyncExecutor(SpongeNegativity.getInstance()).execute(() -> {
+		Task.builder().execute(() -> {
 			PacketSendEvent event = new PacketSendEvent(source, packet, packet.getPlayer());
 			Sponge.getEventManager().post(event);
 			handlers.forEach((handler) -> handler.onSend(packet));
-		});
+		}).submit(SpongeNegativity.getInstance());
 	}
 }

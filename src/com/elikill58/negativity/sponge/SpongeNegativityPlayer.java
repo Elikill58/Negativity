@@ -49,7 +49,6 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
-import com.elikill58.negativity.universal.verif.Verificator;
 import com.flowpowered.math.vector.Vector3d;
 
 public class SpongeNegativityPlayer extends NegativityPlayer {
@@ -62,9 +61,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
 	public Map<Cheat, List<PlayerCheatEvent.Alert>> pendingAlerts = new HashMap<>();
-	// HashMap to allow multiple verification at the same time
-	// String for the name (to enable server to run command)
-	public HashMap<String, Verificator> verificatorForMod = new HashMap<>();
 	public HashMap<String, Double> contentDouble = new HashMap<>();
 	public HashMap<String, Boolean> contentBoolean = new HashMap<>();
 	private Player p = null;

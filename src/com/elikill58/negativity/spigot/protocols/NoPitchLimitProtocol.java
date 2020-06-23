@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -21,7 +23,7 @@ import com.elikill58.negativity.universal.verif.data.FloatDataCounter;
 
 public class NoPitchLimitProtocol extends Cheat implements Listener {
 
-	public static final DataType<Float> PITCH = new DataType<Float>(() -> new FloatDataCounter("pitch", "Pitch"));
+	public static final DataType<Float> PITCH = new DataType<Float>("pitch", "Pitch", () -> new FloatDataCounter());
 	
 	public NoPitchLimitProtocol() {
 		super(CheatKeys.NO_PITCH_LIMIT, false, ItemUtils.SKELETON_SKULL, CheatCategory.PLAYER, true, "pitch");
@@ -34,7 +36,7 @@ public class NoPitchLimitProtocol extends Cheat implements Listener {
 		if(!np.ACTIVE_CHEAT.contains(this))
 			return;
 		float pitch = p.getLocation().getPitch();
-		np.verificatorForMod.forEach((s, verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(PITCH).add(pitch)));
+		getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(PITCH).add(pitch)));
 	    if (pitch <= -90.01D || pitch >= 90.01D) {
 	    	boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(pitch < 0 ? pitch * -1 : pitch), "Strange head movements: " + pitch);
 	    	if(mayCancel && isSetBack())
@@ -43,7 +45,7 @@ public class NoPitchLimitProtocol extends Cheat implements Listener {
 	}
 	
 	@Override
-	public String compile(VerifData data, NegativityPlayer np) {
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		DataCounter<Float> counter = data.getData(PITCH);
 		return Utils.coloredMessage("&6Pitch &7Min: " + String.format("%.2f", counter.getMin()) + "&7, Max: " + String.format("%.2f", counter.getMax()) + " &8(Normal when -90 < pitch < 90)");
 	}

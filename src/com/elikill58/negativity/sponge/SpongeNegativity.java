@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
+
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -105,6 +107,7 @@ import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManag
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerificationManager;
 import com.google.inject.Inject;
 
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
@@ -480,6 +483,8 @@ public class SpongeNegativity {
 				return false;
 			}
 		if (np.isInFight && c.isBlockedInFight())
+			return false;
+		if(VerificationManager.DISABLE_ALERT_ON_VERIF && !hasVerifications(p.getUniqueId()))
 			return false;
 		if (p.getItemInHand(HandTypes.MAIN_HAND).isPresent())
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand(HandTypes.MAIN_HAND).get().getType().getId()))

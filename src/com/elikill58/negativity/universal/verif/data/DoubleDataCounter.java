@@ -4,10 +4,6 @@ import java.util.Comparator;
 
 public class DoubleDataCounter extends DataCounter<Double> {
 
-	public DoubleDataCounter(String name, String display) {
-		super(name, display);
-	}
-
 	@Override
 	public Double getMin() {
 		if(list.isEmpty())

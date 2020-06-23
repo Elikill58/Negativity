@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -35,7 +37,7 @@ import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 
 public class AntiKnockbackProtocol extends Cheat implements Listener {
 	
-	public static final DataType<Double> DISTANCE_DAMAGE = new DataType<Double>(() -> new DoubleDataCounter("distance_damage", "Distance after Damage"));
+	public static final DataType<Double> DISTANCE_DAMAGE = new DataType<Double>("distance_damage", "Distance after Damage", () -> new DoubleDataCounter());
 	
 	public AntiKnockbackProtocol() {
 		super(CheatKeys.ANTI_KNOCKBACK, false, Material.STICK, CheatCategory.COMBAT, true, "antikb", "anti-kb", "no-kb", "nokb");
@@ -91,12 +93,11 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 						Location actual = p.getLocation();
 						if(last.getWorld() != actual.getWorld() || p.isDead())
 							return;
-						Cheat antiKb = Cheat.forKey(CheatKeys.ANTI_KNOCKBACK);
 						double d = last.distance(actual);
-						np.verificatorForMod.forEach((s, verif) -> verif.getVerifData(antiKb).ifPresent((data) -> data.getData(DISTANCE_DAMAGE).add(d)));
+						getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(AntiKnockbackProtocol.this).ifPresent((data) -> data.getData(DISTANCE_DAMAGE).add(d)));
 						int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - d);
 						if (d < 0.1 && !actual.getBlock().getType().equals(ItemUtils.WEB) && !p.isSneaking()){
-							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, antiKb, relia,
+							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, AntiKnockbackProtocol.this, relia,
 									"Distance after damage: " + d + "; Damager: " + e.getDamager().getType().name().toLowerCase() + " Ping: " + ping, hoverMsg("main", "%distance%", d));
 							if(isSetBack() && mayCancel)
 								p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));
@@ -108,7 +109,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 	}
 	
 	@Override
-	public String compile(VerifData data, NegativityPlayer np) {
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		DataCounter<Double> counter = data.getData(DISTANCE_DAMAGE);
 		double av = counter.getAverage(), low = counter.getMin();
 		String colorAverage = (av < 1 ? (av < 0.5 ? "&c" : "&6") : "&a");

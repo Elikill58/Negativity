@@ -117,7 +117,7 @@ public abstract class Cheat {
 		return new CheatHover("hover." + getKey() + "." + key, placeholders);
 	}
 	
-	public String compile(VerifData data, NegativityPlayer np) { return null; }
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) { return null; }
 	
 	public static Cheat fromString(String name) {
 		for (Cheat c : Cheat.values()) {

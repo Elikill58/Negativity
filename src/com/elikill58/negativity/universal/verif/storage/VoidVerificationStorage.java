@@ -4,6 +4,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.universal.verif.Verificator;
 
 public final class VoidVerificationStorage extends VerificationStorage {

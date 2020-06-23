@@ -20,11 +20,9 @@ import eu.crushedpixel.sponge.packetgate.api.registry.PacketGate;
 public class PacketGateManager extends PacketManager {
 
 	public PacketGateManager() {
-		new Thread(() -> {
-			Sponge.getServiceManager().provide(PacketGate.class).ifPresent((packetGate) -> {
-				packetGate.registerListener(new PacketGateListener(this), ListenerPriority.DEFAULT);
-			});
-		}).run();
+		Sponge.getServiceManager().provide(PacketGate.class).ifPresent((packetGate) -> {
+			packetGate.registerListener(new PacketGateListener(this), ListenerPriority.DEFAULT);
+		});
 	}
 
 	@Override

@@ -1,9 +1,14 @@
 package com.elikill58.negativity.spigot.commands;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.CONSOLE;
+
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -26,8 +31,8 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
+import com.elikill58.negativity.universal.verif.VerificationManager;
 import com.elikill58.negativity.universal.verif.Verificator;
-import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 
 public class NegativityCommand implements CommandExecutor, TabCompleter {
 
@@ -68,20 +73,12 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 
 			SpigotNegativityPlayer nTarget = SpigotNegativityPlayer.getNegativityPlayer(target);
-			List<Cheat> listCheat = new ArrayList<>();
+			Set<Cheat> listCheat = new LinkedHashSet<>();
 			if (arg.length == 2) {
 				nTarget.startAllAnalyze();
 				Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", target.getName());
 				listCheat.addAll(Cheat.CHEATS);
 			} else {
-				if(arg[2].equalsIgnoreCase("check")) {
-					List<Verificator> list = VerificationStorage.getStorage().loadAllVerifications(target.getUniqueId()).getNow(new ArrayList<>());
-					sender.sendMessage("Nb: " + list.size());
-					for(Verificator verif : list) {
-						sender.sendMessage("> " + verif.getAsker());
-					}
-					return false;
-				}
 				StringJoiner cheatNamesJoiner = new StringJoiner(", ");
 				for (int i = 2; i < arg.length; i++) {
 					Cheat cheat = Cheat.fromString(arg[i]);
@@ -99,15 +96,16 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 					Messages.sendMessage(sender, "negativity.verif.start", "%name%", target.getName(), "%cheat%", cheatsList);
 				}
 			}
-			nTarget.verificatorForMod.put(sender.getName(), new Verificator(nTarget, sender.getName(), listCheat));
+			UUID askerUUID = (sender instanceof Player ? ((Player) sender).getUniqueId() : CONSOLE);
+			VerificationManager.create(askerUUID, target.getUniqueId(), new Verificator(nTarget, sender.getName(), listCheat));
 			SpigotNegativity pl = SpigotNegativity.getInstance();
 			Bukkit.getScheduler().runTaskLater(pl, () -> {
-				Verificator verif = nTarget.verificatorForMod.get(sender.getName());
+				Verificator verif = VerificationManager.getVerificationsFrom(target.getUniqueId(), askerUUID).get();
 				verif.generateMessage();
 				verif.getMessages().forEach((s) -> sender.sendMessage(Utils.coloredMessage("&a[&2Verif&a] " + s)));
 				verif.save();
-				nTarget.verificatorForMod.remove(sender.getName());
-			}, pl.getConfig().getInt("verif.time", 60));
+				VerificationManager.remove(askerUUID, target.getUniqueId());
+			}, VerificationManager.TIME_VERIF);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("alert")) {
 			if (!(sender instanceof Player)) {

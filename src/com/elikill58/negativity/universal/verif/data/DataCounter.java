@@ -6,19 +6,9 @@ import java.util.List;
 public abstract class DataCounter<T> {
 
 	protected final List<T> list = new ArrayList<>();
-	protected final String name, displayName;
 	
-	public DataCounter(String name, String displayName) {
-		this.name = name;
-		this.displayName = displayName;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public String getDisplay() {
-		return displayName;
+	public List<T> getList(){
+		return list;
 	}
 	
 	public int getSize() {
@@ -36,9 +26,5 @@ public abstract class DataCounter<T> {
 
 	public boolean has() {
 		return !list.isEmpty();
-	}
-	
-	public String print() {
-		return "[{\"data\":" + this.list.toString() + ",\"display\":\"" + this.displayName + "\",\"type\":\"" + this.name + "\"}]";
 	}
 }

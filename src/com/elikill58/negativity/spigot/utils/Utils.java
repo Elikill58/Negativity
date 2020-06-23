@@ -26,6 +26,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.utils.ReflectionUtils;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.collect.Sets;
 
@@ -195,7 +196,7 @@ public class Utils {
 	
 	public static ItemStack getItemInOffHand(Player p) {
 		try {
-			return (ItemStack) PacketUtils.callMethod(p.getInventory(), "getItemInOffHand");
+			return (ItemStack) ReflectionUtils.callMethod(p.getInventory(), "getItemInOffHand");
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

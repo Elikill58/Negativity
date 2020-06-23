@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
+
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,7 +25,7 @@ import com.elikill58.negativity.universal.verif.data.LongDataCounter;
 
 public class FastPlaceProtocol extends Cheat implements Listener {
 	
-	public static final DataType<Long> TIME_PLACE = new DataType<Long>(() -> new LongDataCounter("time_player", "Time between places"));
+	public static final DataType<Long> TIME_PLACE = new DataType<Long>("time_player", "Time between places", () -> new LongDataCounter());
 
 	public FastPlaceProtocol() {
 		super(CheatKeys.FAST_PLACE, false, Material.DIRT, CheatCategory.WORLD, true, "fp");
@@ -42,7 +44,7 @@ public class FastPlaceProtocol extends Cheat implements Listener {
 		
 		long last = System.currentTimeMillis() - np.LAST_BLOCK_PLACE, lastPing = last - (Utils.getPing(p) / 9);
 		if(last < 10000) // last block is too old
-			np.verificatorForMod.forEach((s, verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(TIME_PLACE).add(last)));
+			getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(TIME_PLACE).add(last)));
 		np.LAST_BLOCK_PLACE = System.currentTimeMillis();
 		if (lastPing < Adapter.getAdapter().getConfig().getInt("cheats.fastplace.time_2_place")) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
@@ -54,7 +56,7 @@ public class FastPlaceProtocol extends Cheat implements Listener {
 	}
 	
 	@Override
-	public String compile(VerifData data, NegativityPlayer np) {
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		DataCounter<Long> counter = data.getData(TIME_PLACE);
 		long av = counter.getAverage(), low = counter.getMin();
 		String colorAverage = (av < 100 ? (av < 20 ? "&c" : "&6") : "&a");

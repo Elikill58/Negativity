@@ -8,6 +8,7 @@ import static org.spongepowered.api.command.args.GenericArguments.player;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 import org.spongepowered.api.Sponge;
@@ -16,6 +17,7 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
+import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
@@ -42,14 +44,15 @@ public class VerifCommand implements CommandExecutor {
 
 		Set<Cheat> cheats = new LinkedHashSet<>(args.getAll("cheats"));
 		SpongeNegativityPlayer targetNPlayer = SpongeNegativityPlayer.getNegativityPlayer(targetPlayer);
+		int time = args.<Integer>getOne("time").orElse(VerificationManager.TIME_VERIF / 20);
 		if (cheats.isEmpty()) {
 			targetNPlayer.startAllAnalyze();
-			Messages.sendMessage(src, "negativity.verif.start_all", "%name%", targetPlayer.getName());
+			Messages.sendMessage(src, "negativity.verif.start_all", "%name%", targetPlayer.getName(), "%time%", time);
 			cheats.addAll(Cheat.CHEATS);
 		} else {
 			cheats.forEach(targetNPlayer::startAnalyze);
 			String cheatNamesList = cheats.stream().map(Cheat::getName).collect(Collectors.joining(", "));
-			Messages.sendMessage(src, "negativity.verif.start", "%name%", targetPlayer.getName(), "%cheat%", cheatNamesList);
+			Messages.sendMessage(src, "negativity.verif.start", "%name%", targetPlayer.getName(), "%cheat%", cheatNamesList, "%time%", time);
 		}
 		UUID askerUUID = (src instanceof Player ? ((Player) src).getUniqueId() : CONSOLE);
 		VerificationManager.create(askerUUID, targetPlayer.getUniqueId(), new Verificator(targetNPlayer, src.getName(), cheats));
@@ -60,7 +63,7 @@ public class VerifCommand implements CommandExecutor {
 			verif.getMessages().forEach((s) -> src.sendMessage(TextSerializers.FORMATTING_CODE.deserialize("&a[&2Verif&a] " + s)));
 			verif.save();
 			VerificationManager.remove(askerUUID, targetPlayer.getUniqueId());
-		}).delayTicks(VerificationManager.TIME_VERIF).submit(pl);
+		}).delay(time, TimeUnit.SECONDS).submit(pl);
 
 		return CommandResult.success();
 	}
@@ -70,6 +73,7 @@ public class VerifCommand implements CommandExecutor {
 				.executor(new VerifCommand())
 				.arguments(player(Text.of("target")),
 						allOf(choices(Text.of("cheats"), Cheat.CHEATS_BY_KEY, true, false)))
+				.arguments(GenericArguments.integer(Text.of("time")))
 				.build();
 		return new NegativityCmdWrapper(command, false, Perm.VERIF);
 	}

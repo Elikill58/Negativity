@@ -78,33 +78,26 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 			if(((Player) ((Arrow) e.getDamager()).getShooter()).equals(p))
 				return;
 		
-		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
-
-			@Override
-			public void run() {
-				if(e.isCancelled())
+		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
+			if(e.isCancelled())
+				return;
+			final Location last = p.getLocation();
+			p.damage(0D);
+			p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
+			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
+				Location actual = p.getLocation();
+				if(last.getWorld() != actual.getWorld() || p.isDead())
 					return;
-				final Location last = p.getLocation();
-				p.damage(0D);
-				p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
-				Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
-					@Override
-					public void run() {
-						Location actual = p.getLocation();
-						if(last.getWorld() != actual.getWorld() || p.isDead())
-							return;
-						double d = last.distance(actual);
-						getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(AntiKnockbackProtocol.this).ifPresent((data) -> data.getData(DISTANCE_DAMAGE).add(d)));
-						int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - d);
-						if (d < 0.1 && !actual.getBlock().getType().equals(ItemUtils.WEB) && !p.isSneaking()){
-							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, AntiKnockbackProtocol.this, relia,
-									"Distance after damage: " + d + "; Damager: " + e.getDamager().getType().name().toLowerCase() + " Ping: " + ping, hoverMsg("main", "%distance%", d));
-							if(isSetBack() && mayCancel)
-								p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));
-						}
-					}
-				}, 5);
-			}
+				double d = last.distance(actual);
+				getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(DISTANCE_DAMAGE).add(d)));
+				int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - d);
+				if (d < 0.1 && !actual.getBlock().getType().equals(ItemUtils.WEB) && !p.isSneaking()){
+					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia,
+							"Distance after damage: " + d + "; Damager: " + e.getDamager().getType().name().toLowerCase() + " Ping: " + ping, hoverMsg("main", "%distance%", d));
+					if(isSetBack() && mayCancel)
+						p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));
+				}
+			}, 5);
 		}, 0);
 	}
 	

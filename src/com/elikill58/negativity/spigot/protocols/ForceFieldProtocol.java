@@ -86,14 +86,12 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			}
 		}
 		final Location loc = p.getLocation().clone();
-		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
-			public void run() {
-				Location loc1 = p.getLocation();
-				int gradeRounded = Math.round(Math.abs(loc.getYaw() - loc1.getYaw()));
-				if (gradeRounded > 180.0) {
-					SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), parseInPorcent(gradeRounded),
-							"Player rotate too much (" + gradeRounded + "°) without thorns", hoverMsg("rotate", "%degrees%", gradeRounded));
-				}
+		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
+			Location loc1 = p.getLocation();
+			int gradeRounded = Math.round(Math.abs(loc.getYaw() - loc1.getYaw()));
+			if (gradeRounded > 180.0) {
+				SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(gradeRounded),
+						"Player rotate too much (" + gradeRounded + "°) without thorns", hoverMsg("rotate", "%degrees%", gradeRounded));
 			}
 		}, 1);
 		if (isSetBack() && mayCancel)

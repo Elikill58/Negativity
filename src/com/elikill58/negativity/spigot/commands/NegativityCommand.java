@@ -73,10 +73,11 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 
 			SpigotNegativityPlayer nTarget = SpigotNegativityPlayer.getNegativityPlayer(target);
+			int time = VerificationManager.TIME_VERIF;
 			Set<Cheat> listCheat = new LinkedHashSet<>();
 			if (arg.length == 2) {
 				nTarget.startAllAnalyze();
-				Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", target.getName());
+				Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", target.getName(), "%time%", time);
 				listCheat.addAll(Cheat.CHEATS);
 			} else {
 				StringJoiner cheatNamesJoiner = new StringJoiner(", ");
@@ -92,8 +93,9 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				String cheatsList = cheatNamesJoiner.toString();
 				if (cheatsList.isEmpty()) {
 					Messages.sendMessage(sender, "negativity.verif.start_none");
+					return false;
 				} else {
-					Messages.sendMessage(sender, "negativity.verif.start", "%name%", target.getName(), "%cheat%", cheatsList);
+					Messages.sendMessage(sender, "negativity.verif.start", "%name%", target.getName(), "%cheat%", cheatsList, "%time%", time);
 				}
 			}
 			UUID askerUUID = (sender instanceof Player ? ((Player) sender).getUniqueId() : CONSOLE);
@@ -105,7 +107,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				verif.getMessages().forEach((s) -> sender.sendMessage(Utils.coloredMessage("&a[&2Verif&a] " + s)));
 				verif.save();
 				VerificationManager.remove(askerUUID, target.getUniqueId());
-			}, VerificationManager.TIME_VERIF);
+			}, time);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("alert")) {
 			if (!(sender instanceof Player)) {

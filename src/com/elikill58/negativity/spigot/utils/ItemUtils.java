@@ -28,6 +28,7 @@ public class ItemUtils {
 	public static final Material FIREWORK = getMaterialWithCompatibility("FIREWORK", "LEGACY_FIREWORK");
 	public static final Material LEASH = getMaterialWithCompatibility("LEASH", "LEGACY_LEASH");
 	public static final Material NETHER_STAR = getMaterialWithCompatibility("NETHER_STAR", "LEGACY_NETHER_STAR");
+	public static final Material APPLE = getMaterialWithCompatibility("APPLE", "LEGACY_APPLE");
 
 	public static final Material STATIONARY_WATER = getMaterialWithCompatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER");
 	public static final Material WATER_LILY = getMaterialWithCompatibility("WATER_LILY", "LEGACY_WATER_LILY");

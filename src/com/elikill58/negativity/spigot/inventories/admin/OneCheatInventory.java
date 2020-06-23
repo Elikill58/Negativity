@@ -43,9 +43,10 @@ public class OneCheatInventory extends AbstractInventory {
 	public void actualizeInventory(Player p, Object... args) {
 		Cheat c = (Cheat) args[0];
 		Inventory inv = (Inventory) args[1];
-		inv.setItem(3, createItem(Material.DIAMOND, Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))));
-		inv.setItem(4, createItem(Material.TNT, Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))));
-		inv.setItem(5, createItem(Material.BLAZE_ROD, Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))));
+		inv.setItem(2, createItem(Material.DIAMOND, Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))));
+		inv.setItem(3, createItem(Material.TNT, Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))));
+		inv.setItem(4, createItem(Material.BLAZE_ROD, Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))));
+		inv.setItem(5, createItem(ItemUtils.APPLE, Messages.getMessage(p, "inventory.manager.verif", "%verif%", Messages.getMessage(p, "inventory.manager." + (c.hasVerif() ? "enabled" : "disabled")))));
 	}
 
 	@Override
@@ -64,6 +65,8 @@ public class OneCheatInventory extends AbstractInventory {
 			c.setAllowKick(!c.allowKick());
 		else if(m.equals(Material.DIAMOND))
 			c.setActive(!c.isActive());
+		else if(m.equals(ItemUtils.APPLE))
+			c.setVerif(!c.hasVerif());
 
 		try {
 			Adapter.getAdapter().getConfig().save();

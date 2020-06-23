@@ -43,12 +43,7 @@ public class OneCheatInventory extends AbstractInventory {
 		Utils.fillInventoryWith(Inv.EMPTY, inv);
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
 		invGrid.set(0, 0, createItem((ItemType) c.getMaterial(), c.getName()));
-		invGrid.set(3, 0, createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
-				"inventory.manager.setActive", "%active%", getMessage(p, c.isActive()))));
-		invGrid.set(4, 0, createItem(ItemTypes.TNT, Messages.getStringMessage(p,
-				"inventory.manager.setBack", "%back%", getMessage(p, c.isSetBack()))));
-		invGrid.set(5, 0, createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
-				"inventory.manager.allowKick", "%allow%", getMessage(p, c.allowKick()))));
+		actualizeInventory(p, invGrid);
 
 		invGrid.set(7, 0, createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
 		invGrid.set(8, 0, createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
@@ -60,12 +55,14 @@ public class OneCheatInventory extends AbstractInventory {
 		Cheat c = (Cheat) args[0];
 		Inventory inv = (Inventory) args[1];
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		invGrid.set(3, 0, createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
+		invGrid.set(2, 0, createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
 				"inventory.manager.setActive", "%active%", getMessage(p, c.isActive()))));
-		invGrid.set(4, 0, createItem(ItemTypes.TNT, Messages.getStringMessage(p,
+		invGrid.set(3, 0, createItem(ItemTypes.TNT, Messages.getStringMessage(p,
 				"inventory.manager.setBack", "%back%", getMessage(p, c.isSetBack()))));
-		invGrid.set(5, 0, createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
+		invGrid.set(4, 0, createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
 				"inventory.manager.allowKick", "%allow%", getMessage(p, c.allowKick()))));
+		invGrid.set(5, 0, createItem(ItemTypes.APPLE, Messages.getStringMessage(p,
+				"inventory.manager.verif", "%verif%", getMessage(p, c.hasVerif()))));
 	}
 
 	@Override
@@ -83,6 +80,8 @@ public class OneCheatInventory extends AbstractInventory {
 			c.setAllowKick(!c.allowKick());
 		else if(m.equals(ItemTypes.DIAMOND))
 			c.setActive(!c.isActive());
+		else if(m.equals(ItemTypes.APPLE))
+			c.setVerif(!c.hasVerif());
 		
 		actualizeInventory(p, c, e.getTargetInventory());
 	}

@@ -108,6 +108,10 @@ public abstract class Cheat {
 	public String[] getAliases() {
 		return aliases;
 	}
+	
+	public void setVerif(boolean verif) {
+		Adapter.getAdapter().getConfig().set("cheats." + key + ".check_in_verif", verif);
+	}
 
 	public boolean hasVerif() {
 		return Adapter.getAdapter().getConfig().getBoolean("cheats." + key + ".check_in_verif");

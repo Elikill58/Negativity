@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
-
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -89,7 +87,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 				if(last.getWorld() != actual.getWorld() || p.isDead())
 					return;
 				double d = last.distance(actual);
-				getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(DISTANCE_DAMAGE).add(d)));
+				recordData(p.getUniqueId(), DISTANCE_DAMAGE, d);
 				int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - d);
 				if (d < 0.1 && !actual.getBlock().getType().equals(ItemUtils.WEB) && !p.isSneaking()){
 					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia,

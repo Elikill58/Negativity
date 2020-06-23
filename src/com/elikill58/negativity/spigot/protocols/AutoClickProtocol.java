@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -43,7 +41,7 @@ public class AutoClickProtocol extends Cheat implements Listener {
 				if (account.getMostClicksPerSecond() < np.ACTUAL_CLICK) {
 					account.setMostClicksPerSecond(np.ACTUAL_CLICK);
 				}
-				getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(CLICKS).add(np.ACTUAL_CLICK)));
+				recordData(p.getUniqueId(), CLICKS, np.ACTUAL_CLICK);
 				np.LAST_CLICK = np.ACTUAL_CLICK;
 				np.ACTUAL_CLICK = 0;
 				if (np.SEC_ACTIVE < 2) {

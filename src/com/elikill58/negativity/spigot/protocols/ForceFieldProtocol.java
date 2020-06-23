@@ -3,7 +3,6 @@ package com.elikill58.negativity.spigot.protocols;
 import static com.elikill58.negativity.universal.utils.ReflectionUtils.callMethod;
 import static com.elikill58.negativity.universal.utils.ReflectionUtils.getField;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
-import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
 
 import java.text.NumberFormat;
 
@@ -76,9 +75,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		double dis = tempLoc.distance(p.getLocation());
 		ItemStack inHand = Utils.getItemInHand(p);
 		if(inHand == null || !inHand.getType().equals(Material.BOW)) {
-			getVerifications(p.getUniqueId()).forEach((verif) -> {
-				verif.getVerifData(this).ifPresent((data) -> data.getData(HIT_DISTANCE).add(dis));
-			});
+			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !e.getEntityType().equals(EntityType.ENDER_DRAGON)) {
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10),
 						"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
@@ -115,9 +112,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			ItemStack inHand = Utils.getItemInHand(p);
 			if(inHand != null && inHand.getType().equals(Material.BOW))
 				return;
-			getVerifications(p.getUniqueId()).forEach((verif) -> {
-				verif.getVerifData(this).ifPresent((data) -> data.getData(HIT_DISTANCE).add(dis));
-			});
+			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 			if (dis < Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach"))
 				return;
 			Class<?> entityClass = PacketUtils.getNmsClass("Entity");
@@ -156,7 +151,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {
 		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
-		getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(forcefield).ifPresent((data) -> data.getData(FAKE_PLAYERS).add(1)));
+		forcefield.recordData(p.getUniqueId(), FAKE_PLAYERS, 1);
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
 		SpigotNegativity.alertMod(np.fakePlayerTouched > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, forcefield,
 				parseInPorcent(np.fakePlayerTouched * 10), "Hitting fake entities. " + np.fakePlayerTouched

@@ -1,7 +1,5 @@
 package com.elikill58.negativity.sponge.protocols;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
-
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
@@ -35,7 +33,7 @@ public class NoPitchLimitProtocol extends Cheat {
 		if(!np.hasDetectionActive(this))
 			return;
 		double pitch = p.getHeadRotation().getX();
-		getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(PITCH).add(pitch)));
+		recordData(p.getUniqueId(), PITCH, pitch);
 	    if (pitch <= -90.01D || pitch >= 90.01D) {
 	    	boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(pitch < 0 ? pitch * -1 : pitch), "Strange head movements: " + pitch);
 	    	if(mayCancel && isSetBack())

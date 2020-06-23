@@ -1,7 +1,5 @@
 package com.elikill58.negativity.sponge.protocols;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
-
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.effect.potion.PotionEffect;
@@ -79,9 +77,7 @@ public class StepProtocol extends Cheat {
 				amplifier = pe.getAmplifier();
 		double diffBoost = dif - (amplifier / 10);
 		if(diffBoost > 0.2) {
-			getVerifications(p.getUniqueId()).forEach((verif) -> {
-				verif.getVerifData(this).ifPresent((data) -> data.getData(BLOCKS_UP).add(diffBoost));
-			});
+			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
 			if(diffBoost > 0.6)
 				SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
 					"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",

@@ -1,7 +1,5 @@
 package com.elikill58.negativity.sponge.protocols;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
-
 import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.block.BlockTypes;
@@ -102,7 +100,7 @@ public class AntiKnockbackProtocol extends Cheat {
 				Location<World> actual = p.getLocation();
 				double d = last.getPosition().distance(actual.getPosition());
 				int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - d);
-				getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(DISTANCE_DAMAGE).add(d)));
+				recordData(p.getUniqueId(), DISTANCE_DAMAGE, d);
 				if (d < 0.1 && actual.getBlockType() != BlockTypes.WEB && !p.get(Keys.IS_SNEAKING).orElse(false)) {
 					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, relia,
 							"Distance after damage: " + d + "; Ping: " + ping, hoverMsg("main", "%distance%", d));

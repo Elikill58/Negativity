@@ -3,6 +3,7 @@ package com.elikill58.negativity.sponge.commands.child;
 import static com.elikill58.negativity.universal.verif.VerificationManager.CONSOLE;
 import static org.spongepowered.api.command.args.GenericArguments.allOf;
 import static org.spongepowered.api.command.args.GenericArguments.choices;
+import static org.spongepowered.api.command.args.GenericArguments.integer;
 import static org.spongepowered.api.command.args.GenericArguments.player;
 
 import java.util.LinkedHashSet;
@@ -17,7 +18,6 @@ import org.spongepowered.api.command.CommandException;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.command.args.CommandContext;
-import org.spongepowered.api.command.args.GenericArguments;
 import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
@@ -44,7 +44,7 @@ public class VerifCommand implements CommandExecutor {
 
 		Set<Cheat> cheats = new LinkedHashSet<>(args.getAll("cheats"));
 		SpongeNegativityPlayer targetNPlayer = SpongeNegativityPlayer.getNegativityPlayer(targetPlayer);
-		int time = args.<Integer>getOne("time").orElse(VerificationManager.TIME_VERIF / 20);
+		int time = args.<Integer>getOne("time").orElse(VerificationManager.getTimeVerif() / 20);
 		if (cheats.isEmpty()) {
 			targetNPlayer.startAllAnalyze();
 			Messages.sendMessage(src, "negativity.verif.start_all", "%name%", targetPlayer.getName(), "%time%", time);
@@ -73,7 +73,7 @@ public class VerifCommand implements CommandExecutor {
 				.executor(new VerifCommand())
 				.arguments(player(Text.of("target")),
 						allOf(choices(Text.of("cheats"), Cheat.CHEATS_BY_KEY, true, false)))
-				.arguments(GenericArguments.integer(Text.of("time")))
+				.arguments(integer(Text.of("time")))
 				.build();
 		return new NegativityCmdWrapper(command, false, Perm.VERIF);
 	}

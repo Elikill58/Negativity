@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
-
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -36,7 +34,7 @@ public class NoPitchLimitProtocol extends Cheat implements Listener {
 		if(!np.ACTIVE_CHEAT.contains(this))
 			return;
 		float pitch = p.getLocation().getPitch();
-		getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(PITCH).add(pitch)));
+		recordData(p.getUniqueId(), PITCH, pitch);
 	    if (pitch <= -90.01D || pitch >= 90.01D) {
 	    	boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(pitch < 0 ? pitch * -1 : pitch), "Strange head movements: " + pitch);
 	    	if(mayCancel && isSetBack())

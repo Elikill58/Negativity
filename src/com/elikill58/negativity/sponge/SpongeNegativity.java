@@ -484,7 +484,7 @@ public class SpongeNegativity {
 			}
 		if (np.isInFight && c.isBlockedInFight())
 			return false;
-		if(VerificationManager.DISABLE_ALERT_ON_VERIF && !hasVerifications(p.getUniqueId()))
+		if(VerificationManager.isDisablingAlertOnVerif() && !hasVerifications(p.getUniqueId()))
 			return false;
 		if (p.getItemInHand(HandTypes.MAIN_HAND).isPresent())
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand(HandTypes.MAIN_HAND).get().getType().getId()))

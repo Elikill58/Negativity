@@ -74,12 +74,12 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 
 			SpigotNegativityPlayer nTarget = SpigotNegativityPlayer.getNegativityPlayer(target);
-			int time = UniversalUtils.getFirstInt(arg).orElse(VerificationManager.TIME_VERIF / 20);
+			int time = UniversalUtils.getFirstInt(arg).orElse(VerificationManager.getTimeVerif() / 20);
 			Set<Cheat> cheatsToVerify = new LinkedHashSet<>();
 			if (arg.length == 2) {
 				nTarget.startAllAnalyze();
 				Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", target.getName(), "%time%", time);
-				listCheat.addAll(Cheat.CHEATS);
+				cheatsToVerify.addAll(Cheat.CHEATS);
 			} else {
 				StringJoiner cheatNamesJoiner = new StringJoiner(", ");
 				for (int i = 2; i < arg.length; i++) {
@@ -87,7 +87,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 					if (cheat != null) {
 						nTarget.startAnalyze(cheat);
 						cheatNamesJoiner.add(cheat.getName());
-						listCheat.add(cheat);
+						cheatsToVerify.add(cheat);
 					}
 				}
 
@@ -100,7 +100,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				}
 			}
 			UUID askerUUID = (sender instanceof Player ? ((Player) sender).getUniqueId() : CONSOLE);
-			VerificationManager.create(askerUUID, target.getUniqueId(), new Verificator(nTarget, sender.getName(), listCheat));
+			VerificationManager.create(askerUUID, target.getUniqueId(), new Verificator(nTarget, sender.getName(), cheatsToVerify));
 			SpigotNegativity pl = SpigotNegativity.getInstance();
 			Bukkit.getScheduler().runTaskLater(pl, () -> {
 				Verificator verif = VerificationManager.getVerificationsFrom(target.getUniqueId(), askerUUID).get();

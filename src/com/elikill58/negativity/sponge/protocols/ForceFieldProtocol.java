@@ -1,7 +1,5 @@
 package com.elikill58.negativity.sponge.protocols;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
-
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -74,9 +72,7 @@ public class ForceFieldProtocol extends Cheat {
 		double distance = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());
 		double allowedReach = Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0);
 		if (!(usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW) && !e.getTargetEntity().getType().equals(EntityTypes.ENDER_DRAGON)) {
-			getVerifications(p.getUniqueId()).forEach((verif) -> {
-				verif.getVerifData(this).ifPresent((data) -> data.getData(HIT_DISTANCE).add(distance));
-			});
+			recordData(p.getUniqueId(), HIT_DISTANCE, distance);
 			if(distance > allowedReach)
 				SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 2 * 10), "Big distance with: "
 						+ e.getTargetEntity().getType().getName().toLowerCase() + ". Exact distance: " + distance + ". Ping: " + Utils.getPing(p),

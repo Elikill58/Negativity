@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 
 import com.elikill58.negativity.universal.verif.data.DataCounter;
@@ -66,6 +67,11 @@ public class VerifData {
 		
 		public interface DataTypeCallable<T> {
 			DataCounter<T> call();
+		}
+		
+		@Override
+		public int hashCode() {
+			return name.hashCode();
 		}
 	}
 }

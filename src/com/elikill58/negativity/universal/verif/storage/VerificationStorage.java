@@ -19,6 +19,7 @@ import com.elikill58.negativity.universal.verif.storage.file.FileVerificationSto
 public abstract class VerificationStorage {
 
 	private static final Map<String, VerificationStorage> storages = new HashMap<>();
+	private static final DateTimeFormatter PATTERN_FILE_NAME = DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm_ss");
 	private static String storageId;
 
 	public abstract CompletableFuture<List<Verificator>> loadAllVerifications(UUID playerId);
@@ -38,7 +39,7 @@ public abstract class VerificationStorage {
 	}
 	
 	public static String getNewFileName() {
-		return DateTimeFormatter.ofPattern("yyyy-MM-dd_HH_mm_ss").format(LocalDateTime.now()) + ".json";
+		return PATTERN_FILE_NAME.format(LocalDateTime.now()) + ".json";
 	}
 
 	public static void setStorageId(String storageId) {

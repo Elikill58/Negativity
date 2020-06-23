@@ -1,7 +1,7 @@
 package com.elikill58.negativity.universal.verif;
 
 import java.util.ArrayList;
-import java.util.LinkedHashSet;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -31,7 +31,7 @@ public class Verificator {
 	private final Version playerVersion;
 	
 	public Verificator(NegativityPlayer np, String asker) {
-		this(np, asker, new LinkedHashSet<>(Cheat.CHEATS));
+		this(np, asker, new HashSet<>(Cheat.CHEATS));
 	}
 	
 	public Verificator(NegativityPlayer np, String asker, Set<Cheat> list) {

@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
-
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -61,9 +59,7 @@ public class StepProtocol extends Cheat implements Listener {
 				amplifier = pe.getAmplifier();
 		double diffBoost = dif - (amplifier / 10);
 		if(diffBoost > 0.2) {
-			getVerifications(p.getUniqueId()).forEach((verif) -> {
-				verif.getVerifData(this).ifPresent((data) -> data.getData(BLOCKS_UP).add(diffBoost));
-			});
+			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
 			if(diffBoost > 0.6) {
 				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
 						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",

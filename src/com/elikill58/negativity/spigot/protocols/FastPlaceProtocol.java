@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.getVerifications;
-
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -44,7 +42,7 @@ public class FastPlaceProtocol extends Cheat implements Listener {
 		
 		long last = System.currentTimeMillis() - np.LAST_BLOCK_PLACE, lastPing = last - (Utils.getPing(p) / 9);
 		if(last < 10000) // last block is too old
-			getVerifications(p.getUniqueId()).forEach((verif) -> verif.getVerifData(this).ifPresent((data) -> data.getData(TIME_PLACE).add(last)));
+			recordData(p.getUniqueId(), TIME_PLACE, last);
 		np.LAST_BLOCK_PLACE = System.currentTimeMillis();
 		if (lastPing < Adapter.getAdapter().getConfig().getInt("cheats.fastplace.time_2_place")) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,

@@ -75,7 +75,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 
 			SpigotNegativityPlayer nTarget = SpigotNegativityPlayer.getNegativityPlayer(target);
 			int time = UniversalUtils.getFirstInt(arg).orElse(VerificationManager.TIME_VERIF / 20);
-			Set<Cheat> listCheat = new LinkedHashSet<>();
+			Set<Cheat> cheatsToVerify = new LinkedHashSet<>();
 			if (arg.length == 2) {
 				nTarget.startAllAnalyze();
 				Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", target.getName(), "%time%", time);

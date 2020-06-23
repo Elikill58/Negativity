@@ -27,27 +27,32 @@ public class VerificationManager {
 	}
 	
 	public static void create(UUID asker, UUID target, Verificator verificator) {
-		Map<UUID, Verificator> map = VERIFICATIONS_BY_MOD.getOrDefault(target, new HashMap<>());
-		map.put(asker, verificator);
-		VERIFICATIONS_BY_MOD.put(target, map);
+		VERIFICATIONS_BY_MOD.computeIfAbsent(target, id -> new HashMap<>())
+				.put(asker, verificator);
 	}
 	
 	public static void remove(UUID asker, UUID target) {
-		Map<UUID, Verificator> map = VERIFICATIONS_BY_MOD.getOrDefault(target, new HashMap<>());
-		map.remove(asker);
-		VERIFICATIONS_BY_MOD.put(target, map);
+		Map<UUID, Verificator> verifsByMod = VERIFICATIONS_BY_MOD.get(target);
+		if (verifsByMod != null) {
+			verifsByMod.remove(asker);
+		}
 	}
 	
 	public static boolean hasVerifications(UUID target) {
 		Map<UUID, Verificator> map = VERIFICATIONS_BY_MOD.get(target);
-		return !(map == null || map.isEmpty());
+		return map != null && !map.isEmpty();
 	}
 	
 	public static Collection<Verificator> getVerifications(UUID target) {
-		return VERIFICATIONS_BY_MOD.getOrDefault(target, new HashMap<>()).values();
+		Map<UUID, Verificator> verifsByMod = VERIFICATIONS_BY_MOD.get(target);
+		if (verifsByMod != null) {
+			return verifsByMod.values();
+		}
+		return Collections.emptyList();
 	}
 	
 	public static Optional<Verificator> getVerificationsFrom(UUID target, UUID asker) {
-		return Optional.ofNullable(VERIFICATIONS_BY_MOD.getOrDefault(target, new HashMap<>()).get(asker));
+		Map<UUID, Verificator> verifsByMod = VERIFICATIONS_BY_MOD.get(target);
+		return verifsByMod != null ? Optional.ofNullable(verifsByMod.get(asker)) : Optional.empty();
 	}
 }

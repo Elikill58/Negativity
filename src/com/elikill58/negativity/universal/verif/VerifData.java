@@ -35,7 +35,7 @@ public class VerifData {
 			JSONObject jsonCounter = new JSONObject();
 			jsonCounter.put("type", type.getName());
 			jsonCounter.put("display", type.getDisplay());
-			jsonCounter.put("data", counter.getList().toString());
+			jsonCounter.put("data", new JSONArray(counter.getList()));
 			list.add(jsonCounter.toJSONString());
 		});
 		return list;

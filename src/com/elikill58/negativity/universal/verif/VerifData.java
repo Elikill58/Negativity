@@ -10,7 +10,7 @@ public class VerifData {
 	
 	@SuppressWarnings("unchecked")
 	public <T> DataCounter<T> getData(DataType<T> type){
-		return (DataCounter<T>) hash.computeIfAbsent(type, (t) -> type.create());
+		return (DataCounter<T>) hash.computeIfAbsent(type, DataType::create);
 	}
 
 	public HashMap<DataType<?>, DataCounter<?>> getAllData() {
@@ -37,7 +37,7 @@ public class VerifData {
 		}
 		
 		public interface DataTypeCallable<T> {
-			public DataCounter<T> call();
+			DataCounter<T> call();
 		}
 	}
 }

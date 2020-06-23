@@ -19,17 +19,7 @@ import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 public class Verificator {
 	
 	public static final int VERIFICATION_VERSION = 0;
-	private static final Collector<Cheat, ?, Map<Cheat, VerifData>> COLLECTOR = Collectors.toMap(new Function<Cheat, Cheat>() {
-					@Override
-					public Cheat apply(Cheat t) {
-						return t;
-					}
-				}, new Function<Cheat, VerifData>() {
-					@Override
-					public VerifData apply(Cheat t) {
-						return new VerifData();
-					}
-				});
+	private static final Collector<Cheat, ?, Map<Cheat, VerifData>> COLLECTOR = Collectors.toMap(Function.identity(), t -> new VerifData());
 	
 	private final Map<Cheat, VerifData> cheats;
 	private final NegativityPlayer np;
@@ -72,10 +62,7 @@ public class Verificator {
 	}
 	
 	public Optional<VerifData> getVerifData(Cheat c) {
-		VerifData data = cheats.get(c);
-		if(data != null)
-			return Optional.of(data);
-		return Optional.empty();
+		return Optional.ofNullable(cheats.get(c));
 	}
 	
 	public List<String> getMessages(){
@@ -104,8 +91,8 @@ public class Verificator {
 			}
 			messageCheatNothing.add(c.getName());
 		}
-		if(messageCheatNothing.length() > 0)
-			messages.add("Nothing detected: " + messageCheatNothing.toString());
+		if (!messageCheatNothing.isEmpty())
+			messages.add("Nothing detected: " + messageCheatNothing);
 	}
 	
 	public void save() {

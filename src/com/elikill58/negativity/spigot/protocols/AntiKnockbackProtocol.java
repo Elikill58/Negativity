@@ -63,7 +63,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 			ItemStack inHand = Utils.getItemInHand(p);
 			if(inHand != null && inHand.getType().name().contains("SHIELD"))
 				return;
-			ItemStack inOffHand = Utils.getItemInHand(p);
+			ItemStack inOffHand = Utils.getItemInOffHand(p);
 			if(inOffHand != null && inOffHand.getType().name().contains("SHIELD"))
 				return;
 		}

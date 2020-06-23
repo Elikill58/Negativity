@@ -11,7 +11,7 @@ public final class VoidVerificationStorage extends VerificationStorage {
 	public static final VoidVerificationStorage INSTANCE = new VoidVerificationStorage();
 
 	@Override
-	public CompletableFuture<List<Verificator>> loadAllVerifications(UUID playerId) {
+	public CompletableFuture<@Nullable List<Verificator>> loadAllVerifications(UUID playerId) {
 		return CompletableFuture.completedFuture(null);
 	}
 

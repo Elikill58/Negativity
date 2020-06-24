@@ -13,7 +13,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import org.json.simple.JSONObject;
+import org.json.JSONObject;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;

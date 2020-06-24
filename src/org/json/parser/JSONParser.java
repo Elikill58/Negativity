@@ -2,7 +2,7 @@
  * $Id: JSONParser.java,v 1.1 2006/04/15 14:10:48 platform Exp $
  * Created on 2006-4-15
  */
-package org.json.simple.parser;
+package org.json.parser;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -11,8 +11,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.parser.ContainerFactory;
+import org.json.parser.ContentHandler;
+import org.json.parser.ParseException;
+import org.json.parser.Yylex;
+import org.json.parser.Yytoken;
 
 
 /**

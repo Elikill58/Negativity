@@ -1,12 +1,15 @@
-package org.json.simple.parser;
+package org.json.parser;
 
 import java.io.IOException;
+
+import org.json.parser.ContentHandler;
+import org.json.parser.ParseException;
 
 /**
  * A simplified and stoppable SAX-like content handler for stream processing of JSON text. 
  * 
  * @see org.xml.sax.ContentHandler
- * @see org.json.simple.parser.JSONParser#parse(java.io.Reader, ContentHandler, boolean)
+ * @see org.json.parser.JSONParser#parse(java.io.Reader, ContentHandler, boolean)
  * 
  * @author FangYidong<fangyidong@yahoo.com.cn>
  */

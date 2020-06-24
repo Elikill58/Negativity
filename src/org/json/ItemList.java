@@ -2,11 +2,13 @@
  * $Id: ItemList.java,v 1.1 2006/04/15 14:10:48 platform Exp $
  * Created on 2006-3-24
  */
-package org.json.simple;
+package org.json;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringTokenizer;
+
+import org.json.ItemList;
 
 /**
  * |a:b:c| => |a|,|b|,|c| |:| => ||,|| |a:| => |a|,||

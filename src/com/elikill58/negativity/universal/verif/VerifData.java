@@ -1,11 +1,12 @@
 package com.elikill58.negativity.universal.verif;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import com.elikill58.negativity.universal.verif.data.DataCounter;
 
@@ -36,7 +37,7 @@ public class VerifData {
 			JSONObject jsonCounter = new JSONObject();
 			jsonCounter.put("type", type.getName());
 			jsonCounter.put("display", type.getDisplay());
-			jsonCounter.put("data", new JSONArray(counter.getList()));
+			jsonCounter.put("data", new JSONArray((Collection<?>) counter.getList()));
 			list.add(jsonCounter.toJSONString());
 		});
 		return list;

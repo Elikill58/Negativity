@@ -2,7 +2,7 @@
  * $Id: JSONValue.java,v 1.1 2006/04/15 14:37:04 platform Exp $
  * Created on 2006-4-15
  */
-package org.json.simple;
+package org.json;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -10,11 +10,16 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Collection;
+import java.util.List;
 // import java.util.List;
 import java.util.Map;
 
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
+import org.json.parser.JSONParser;
+import org.json.parser.ParseException;
+import org.json.JSONArray;
+import org.json.JSONAware;
+import org.json.JSONObject;
+import org.json.JSONStreamAware;
 
 
 /**
@@ -26,7 +31,7 @@ public class JSONValue {
 	 * Parse JSON text into java object from the input source. 
 	 * Please use parseWithException() if you don't want to ignore the exception.
 	 * 
-	 * @see org.json.simple.parser.JSONParser#parse(Reader)
+	 * @see org.json.parser.JSONParser#parse(Reader)
 	 * @see #parseWithException(Reader)
 	 * 
 	 * @param in
@@ -56,7 +61,7 @@ public class JSONValue {
 	 * Parse JSON text into java object from the given string. 
 	 * Please use parseWithException() if you don't want to ignore the exception.
 	 * 
-	 * @see org.json.simple.parser.JSONParser#parse(Reader)
+	 * @see org.json.parser.JSONParser#parse(Reader)
 	 * @see #parseWithException(Reader)
 	 * 
 	 * @param s
@@ -80,7 +85,7 @@ public class JSONValue {
 	/**
 	 * Parse JSON text into java object from the input source.
 	 * 
-	 * @see org.json.simple.parser.JSONParser
+	 * @see org.json.parser.JSONParser
 	 * 
 	 * @param in
 	 * @return Instance of the following:
@@ -112,8 +117,8 @@ public class JSONValue {
      * DO NOT call this method from writeJSONString(Writer) of a class that implements both JSONStreamAware and (Map or List) with 
      * "this" as the first parameter, use JSONObject.writeJSONString(Map, Writer) or JSONArray.writeJSONString(List, Writer) instead. 
      * 
-     * @see org.json.simple.JSONObject#writeJSONString(Map, Writer)
-     * @see org.json.simple.JSONArray#writeJSONString(List, Writer)
+     * @see org.json.JSONObject#writeJSONString(Map, Writer)
+     * @see org.json.JSONArray#writeJSONString(List, Writer)
      * 
      * @param value
      * @param writer
@@ -233,8 +238,8 @@ public class JSONValue {
 	 * DO NOT call this method from toJSONString() of a class that implements both JSONAware and Map or List with 
 	 * "this" as the parameter, use JSONObject.toJSONString(Map) or JSONArray.toJSONString(List) instead. 
 	 * 
-	 * @see org.json.simple.JSONObject#toJSONString(Map)
-	 * @see org.json.simple.JSONArray#toJSONString(List)
+	 * @see org.json.JSONObject#toJSONString(Map)
+	 * @see org.json.JSONArray#toJSONString(List)
 	 * 
 	 * @param value
 	 * @return JSON text, or "null" if value is null or it's an NaN or an INF number.

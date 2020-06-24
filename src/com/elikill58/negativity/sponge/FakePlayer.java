@@ -16,14 +16,14 @@ public class FakePlayer {
 	public FakePlayer(Location<World> loc, String name) {
 		this.loc = loc;
 		this.name = name;
-		/*fakePlayer = loc.getExtent().createEntity(EntityTypes.PLAYER, loc.getPosition());
+		fakePlayer = loc.getExtent().createEntity(EntityTypes.HUMAN, loc.getPosition());
 		fakePlayer.offer(Keys.DISPLAY_NAME, Text.of(name));
-		fakePlayer.offer(Keys.INVISIBLE, true);*/
-		Adapter.getAdapter().warn("Cannot spawn a fake player now. Sponge doesn't allow us to do it right now.");
+		fakePlayer.offer(Keys.INVISIBLE, true);
+		//Adapter.getAdapter().warn("Cannot spawn a fake player now. Sponge doesn't allow us to do it right now.");
 	}
 
 	public FakePlayer show(Player p) {
-		//p.getWorld().spawnEntity(fakePlayer);
+		p.getWorld().spawnEntity(fakePlayer);
 		return this;
 	}
 

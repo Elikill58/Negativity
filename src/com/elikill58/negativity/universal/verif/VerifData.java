@@ -1,7 +1,6 @@
 package com.elikill58.negativity.universal.verif;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
@@ -31,14 +30,14 @@ public class VerifData {
 	}
 	
 	@SuppressWarnings("unchecked")
-	public List<String> toJson() {
-		List<String> list = new ArrayList<>();
+	public List<JSONObject> toJson() {
+		List<JSONObject> list = new ArrayList<>();
 		data.forEach((type, counter) -> {
 			JSONObject jsonCounter = new JSONObject();
 			jsonCounter.put("type", type.getName());
 			jsonCounter.put("display", type.getDisplay());
-			jsonCounter.put("data", new JSONArray((Collection<?>) counter.getList()));
-			list.add(jsonCounter.toJSONString());
+			jsonCounter.put("data", new JSONArray(counter.getList()));
+			list.add(jsonCounter);
 		});
 		return list;
 	}

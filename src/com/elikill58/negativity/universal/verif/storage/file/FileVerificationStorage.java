@@ -1,18 +1,19 @@
 package com.elikill58.negativity.universal.verif.storage.file;
 
-import java.io.File;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.DirectoryStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Collectors;
+import java.util.concurrent.CompletionException;
 
 import org.json.JSONObject;
 import org.json.parser.JSONParser;
@@ -27,37 +28,42 @@ import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 
 public class FileVerificationStorage extends VerificationStorage {
 
-	private final File userDir;
+	private final Path userDir;
 
-	public FileVerificationStorage(File userDir) {
+	public FileVerificationStorage(Path userDir) {
 		this.userDir = userDir;
-		this.userDir.mkdirs();
 	}
 
 	@Override
 	public CompletableFuture<List<Verificator>> loadAllVerifications(UUID playerId) {
 		return CompletableFuture.supplyAsync(() -> {
+			Path dir = userDir.resolve(playerId.toString());
+			if (!Files.isDirectory(dir)) {
+				return Collections.emptyList();
+			}
+
 			Adapter ada = Adapter.getAdapter();
 			NegativityPlayer np = ada.getNegativityPlayer(playerId);
 			List<Verificator> list = new ArrayList<>();
-			Path file = Paths.get(userDir.getAbsolutePath(), playerId.toString());
-			for(File verification : file.toFile().listFiles()) {
-				if(!(verification.isFile() && verification.getName().endsWith(".json")))
-					continue;
-				try {
-					String content = Files.readAllLines(verification.toPath()).stream().collect(Collectors.joining(""));
-					JSONObject json = (JSONObject) new JSONParser().parse(content);
-					Map<Cheat, VerifData> cheats = new HashMap<>(); // don't need to load it
-					String startedBy = json.get("startedBy").toString();
-					@SuppressWarnings("unchecked")
-					List<String> result = (List<String>) json.get("result");
-					int version = (int) json.get("version");
-					Version playerVersion = Version.getVersionByName(json.get("player_version").toString());
-					list.add(new Verificator(np, startedBy, cheats, result, version, playerVersion));
-				} catch (Exception e) {
-					ada.log("Could not load verification of file " + verification.getAbsolutePath());
-					e.printStackTrace();
+			try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir,
+					path -> Files.isRegularFile(path) && path.getFileName().toString().endsWith(".json"))) {
+				for(Path verification : entries) {
+					try (BufferedReader reader = Files.newBufferedReader(verification)) {
+						JSONObject json = (JSONObject) new JSONParser().parse(reader);
+						Map<Cheat, VerifData> cheats = new HashMap<>(); // don't need to load it
+						String startedBy = json.get("startedBy").toString();
+						@SuppressWarnings("unchecked")
+						List<String> result = (List<String>) json.get("result");
+						int version = (int) (long) json.get("version");
+						Version playerVersion = Version.getVersionByName(json.get("player_version").toString());
+						list.add(new Verificator(np, startedBy, cheats, result, version, playerVersion));
+					} catch (Exception e) {
+						ada.error("Could not load verification of file " + verification.toAbsolutePath());
+						e.printStackTrace();
+					}
 				}
+			} catch (IOException e) {
+				throw new CompletionException(e);
 			}
 			return list;
 		});
@@ -67,10 +73,8 @@ public class FileVerificationStorage extends VerificationStorage {
 	@Override
 	public CompletableFuture<Void> saveVerification(Verificator verif) {
 		return CompletableFuture.runAsync(() -> {
-			File folder = new File(userDir.getAbsolutePath(), verif.getPlayerId().toString());
-			folder.mkdirs();
-			File file = new File(folder, getNewFileName());
-			
+			Path dir = userDir.resolve(verif.getPlayerId().toString());
+			Path file = dir.resolve(getNewFileName());
 			JSONObject json = new JSONObject();
 			json.put("startedBy", verif.getAsker());
 			json.put("result", verif.getMessages());
@@ -85,11 +89,12 @@ public class FileVerificationStorage extends VerificationStorage {
 			json.put("player_version", verif.getPlayerVersion().name());
 			json.put("version", verif.getVersion());
 			try {
-				if(!file.exists())
-					file.createNewFile();
-				Files.write(file.toPath(), json.toJSONString().getBytes(), StandardOpenOption.APPEND);
+				Files.createDirectories(dir);
+				try (BufferedWriter writer = Files.newBufferedWriter(file)) {
+					json.writeJSONString(writer);
+				}
 			} catch (IOException e) {
-				Adapter.getAdapter().log("Could not save verification to file.");
+				Adapter.getAdapter().error("Could not save verification to file.");
 				e.printStackTrace();
 			}
 		});

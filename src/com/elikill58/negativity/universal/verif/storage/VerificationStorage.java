@@ -1,7 +1,6 @@
 package com.elikill58.negativity.universal.verif.storage;
 
 
-import java.io.File;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -56,7 +55,7 @@ public abstract class VerificationStorage {
 	public static void init() {
 		Adapter adapter = Adapter.getAdapter();
 		storageId = adapter.getConfig().getString("verif.storage.id");
-		register("file", new FileVerificationStorage(new File(adapter.getDataFolder(), "verif")));
+		register("file", new FileVerificationStorage(adapter.getDataFolder().toPath().resolve("verif")));
 		
 		if (Database.hasCustom) {
 			register("database", new DatabaseVerificationStorage());

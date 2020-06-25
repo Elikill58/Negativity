@@ -1,6 +1,8 @@
 package com.elikill58.negativity.spigot.timers;
 
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.elikill58.negativity.spigot.Inv;
@@ -8,7 +10,9 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
 import com.elikill58.negativity.spigot.inventories.CheckMenuInventory;
-import com.elikill58.negativity.spigot.utils.InventoryUtils;
+import com.elikill58.negativity.spigot.inventories.holders.AlertHolder;
+import com.elikill58.negativity.spigot.inventories.holders.CheckMenuHolder;
+import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -20,13 +24,19 @@ public class ActualizeInvTimer extends BukkitRunnable {
 	public void run() {
 		for (Player p : Inv.CHECKING.keySet()) {
 			if (p.getOpenInventory() != null) {
-				String title = InventoryUtils.getInventoryTitle(p.getOpenInventory());
-				if (title.equals(Inv.NAME_ACTIVED_CHEAT_MENU) || title.equals(Inv.NAME_FORGE_MOD_MENU)) {
-				} else if (title.equals(Inv.NAME_CHECK_MENU))
+				Inventory topInv = p.getOpenInventory().getTopInventory();
+				if(topInv == null) {
+					continue;
+				}
+				InventoryHolder holder = topInv.getHolder();
+				if(!(holder instanceof NegativityHolder)) {
+					continue;
+				}
+				NegativityHolder nh = (NegativityHolder) holder;
+				if (nh instanceof CheckMenuHolder)
 					CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
-				else if (title.equals(Inv.NAME_ALERT_MENU))
+				else if (nh instanceof AlertHolder)
 					AbstractInventory.getInventory(InventoryType.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
-				//AlertInventory.actualizeAlertMenu(p, Inv.CHECKING.get(p));
 				else
 					Inv.CHECKING.remove(p);
 			} else

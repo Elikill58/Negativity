@@ -64,6 +64,7 @@ public class CheckMenuInventory extends AbstractInventory {
 
 	public static void actualizeCheckMenu(Player p, Player cible) {
 		Inventory inv = p.getOpenInventory().getTopInventory();
+		if(inv == null) return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		int betterClick = np.getAccount().getMostClicksPerSecond();
 		try {

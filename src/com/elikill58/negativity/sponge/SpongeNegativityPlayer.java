@@ -200,9 +200,14 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public void startAnalyze(Cheat c) {
 		if (!c.isActive())
 			return;
-		if (ACTIVE_CHEAT.contains(c))
-			return;
-		ACTIVE_CHEAT.add(c);
+		if (!ACTIVE_CHEAT.contains(c))
+			ACTIVE_CHEAT.add(c);
+		if (c.getKey().equalsIgnoreCase(CheatKeys.FORCEFIELD)) {
+			if (timeStartFakePlayer == 0)
+				timeStartFakePlayer = 1; // not on the player connection
+			else
+				makeAppearEntities();
+		}
 	}
 
 	public void startAllAnalyze() {
@@ -224,27 +229,35 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 				|| Adapter.getAdapter().getConfig().getBoolean("cheats.forcefield.ghost_disabled"))
 			return;
 		timeStartFakePlayer = System.currentTimeMillis();
-
 		spawnRight();
 		spawnLeft();
 		spawnBehind();
 	}
 
-	public void removeFakePlayer(FakePlayer fp) {
+	public void removeFakePlayer(FakePlayer fp, boolean detected) {
 		if (!FAKE_PLAYER.contains(fp))
 			return;
-
 		FAKE_PLAYER.remove(fp);
+		if(!detected) {
+			if(fakePlayerTouched > 0)
+				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
+			if(FAKE_PLAYER.size() == 0)
+				fakePlayerTouched = 0;
+			return;
+		}
+		fakePlayerTouched++;
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);
 		if (l >= 3000) {
 			if (FAKE_PLAYER.size() == 0) {
 				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
-				timeStartFakePlayer = 0;
 				fakePlayerTouched = 0;
 			}
 		} else {
-			spawnRandom();
-			spawnRandom();
+			ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
+			if(fakePlayerTouched < 100) {
+				spawnRandom();
+				spawnRandom();
+			}
 		}
 	}
 
@@ -263,15 +276,14 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		Vector3d dir = getPlayer().getHeadRotation();
 		double x = dir.getX(), z = dir.getZ();
 		if (x >= 0 && z >= 0) {
-			loc.add(-1, 0, 1);
+			loc = loc.add(-1, 1, 1);
 		} else if (x >= 0 && z <= 0) {
-			loc.add(-1, 0, 0);
+			loc = loc.add(-1, 1, 0);
 		} else if (x <= 0 && z >= 0) {
-			loc.add(-1, 0, 0);
+			loc = loc.add(-1, 1, 0);
 		} else if (x <= 0 && z <= 0) {
-			loc.add(-1, 0, 1);
+			loc = loc.add(-1, 1, 1);
 		}
-		loc.add(0, 1, 0);
 		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
 		FAKE_PLAYER.add(fp);
 	}
@@ -281,15 +293,14 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		Vector3d dir = getPlayer().getHeadRotation();
 		double x = dir.getX(), z = dir.getZ();
 		if (x >= 0 && z >= 0) {
-			loc.add(0, 0, -1);
+			loc = loc.add(0, 1, -1);
 		} else if (x >= 0 && z <= 0) {
-			loc.add(-1, 0, 1);
+			loc = loc.add(-1, 1, 1);
 		} else if (x <= 0 && z >= 0) {
-			loc.add(1, 0, -1);
+			loc = loc.add(1, 1, -1);
 		} else if (x <= 0 && z <= 0) {
-			loc.add(1, 0, 1);
+			loc = loc.add(1, 1, 1);
 		}
-		loc.add(0, 1, 0);
 		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
 		FAKE_PLAYER.add(fp);
 	}
@@ -299,15 +310,14 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		Vector3d dir = getPlayer().getHeadRotation();
 		double x = dir.getX(), z = dir.getZ();
 		if (x >= 0 && z >= 0) {
-			loc.add(1, 0, -1);
+			loc = loc.add(1, 1, -1);
 		} else if (x >= 0 && z <= 0) {
-			loc.add(1, 0, 1);
+			loc = loc.add(1, 1, 1);
 		} else if (x <= 0 && z >= 0) {
-			loc.add(1, 0, 1);
+			loc = loc.add(1, 1, 1);
 		} else if (x <= 0 && z <= 0) {
-			loc.add(1, 0, -1);
+			loc = loc.add(1, 1, -1);
 		}
-		loc.add(0, 1, 0);
 		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
 		FAKE_PLAYER.add(fp);
 	}

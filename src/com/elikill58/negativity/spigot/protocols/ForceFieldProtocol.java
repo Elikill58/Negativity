@@ -150,6 +150,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	}
 	
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {
+		if(np.fakePlayerTouched == 0) return;
 		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
 		forcefield.recordData(p.getUniqueId(), FAKE_PLAYERS, 1);
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;

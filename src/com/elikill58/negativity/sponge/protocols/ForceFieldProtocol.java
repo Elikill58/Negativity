@@ -10,14 +10,15 @@ import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
+import org.spongepowered.api.event.entity.InteractEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.scheduler.Task;
 
+import com.elikill58.negativity.sponge.FakePlayer;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.packets.AbstractPacket;
@@ -114,7 +115,7 @@ public class ForceFieldProtocol extends Cheat {
 	}
 
 	@Listener
-	public void onPlayerInteract(InteractEvent e, @First Player p) {
+	public void onPlayerInteract(InteractEntityEvent e, @First Player p) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this)) {
 			return;
@@ -123,32 +124,16 @@ public class ForceFieldProtocol extends Cheat {
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
 			return;
 		}
+		
+		FakePlayer c = np.FAKE_PLAYER.stream().distinct().filter((fp) -> e.getTargetEntity().getUniqueId().equals(fp.getEntity().getUniqueId())).findFirst().orElse(null);
 
-		/*Location<World> ploc = p.getLocation();
-		Vector3d eyeloc = p.getLocation().getPosition().add(0, 1.8, 0);
-		FakePlayer c = null;
-		double distanceWithPlayer = 500;
-		double distanceWithEye = 500;
-		for (FakePlayer temp : np.FAKE_PLAYER) {
-			Location<World> cloc = temp.getLocation();
-			double nextDistanceWithPlayer = ploc.getPosition().distance(cloc.getPosition());
-			double nextDistanceWithEye = eyeloc.distance(cloc.getPosition());
-			if (nextDistanceWithPlayer < distanceWithPlayer && nextDistanceWithPlayer < 10) {
-				distanceWithPlayer = nextDistanceWithPlayer;
-				c = temp;
-			} else if (nextDistanceWithEye < distanceWithEye && nextDistanceWithEye < 10) {
-				distanceWithEye = nextDistanceWithEye;
-				c = temp;
-			}
-		}
-
-		if (c == null) {
+		if (c == null)
 			return;
-		}
+		recordData(p.getUniqueId(), HIT_DISTANCE, e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition()));
 
 		np.fakePlayerTouched++;
-		c.hide(p);
-		manageForcefieldForFakeplayer(p, np);*/
+		c.hide(p, true);
+		manageForcefieldForFakeplayer(p, np);
 	}
 	
 	@Override
@@ -160,15 +145,11 @@ public class ForceFieldProtocol extends Cheat {
 	}
 
 	public static void manageForcefieldForFakeplayer(Player p, SpongeNegativityPlayer np) {
-		if (np.fakePlayerTouched < 5) {
-			return;
-		}
-
 		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
+		forcefield.recordData(p.getUniqueId(), FAKE_PLAYERS, 1);
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
-		double rapport = np.fakePlayerTouched / (timeBehindStart / 1000);
-		SpongeNegativity.alertMod(rapport > 20 ? ReportType.VIOLATION : ReportType.WARNING, p, forcefield,
-				UniversalUtils.parseInPorcent(rapport * 10), "Hitting fake entities. " + np.fakePlayerTouched
+		SpongeNegativity.alertMod(np.fakePlayerTouched > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, forcefield,
+				UniversalUtils.parseInPorcent(np.fakePlayerTouched * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 						forcefield.hoverMsg("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
 	}

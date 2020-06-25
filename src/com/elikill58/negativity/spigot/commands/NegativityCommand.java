@@ -56,7 +56,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		if (arg[0].equalsIgnoreCase(Perm.VERIF)) {
+		if (arg[0].equalsIgnoreCase("verif")) {
 			if (sender instanceof Player && !Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.VERIF)) {
 				Messages.sendMessage(sender, "not_permission");
 				return false;

@@ -2,9 +2,6 @@ package org.json.parser;
 
 import java.io.IOException;
 
-import org.json.parser.ContentHandler;
-import org.json.parser.ParseException;
-
 /**
  * A simplified and stoppable SAX-like content handler for stream processing of JSON text. 
  * 

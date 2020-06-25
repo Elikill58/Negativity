@@ -2,9 +2,6 @@
 
 package org.json.parser;
 
-import org.json.parser.ParseException;
-import org.json.parser.Yytoken;
-
 class Yylex {
 
   /** This character denotes the end of file */

@@ -11,10 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
-import org.json.JSONAware;
-import org.json.JSONStreamAware;
-import org.json.JSONValue;
-
 /**
  * A JSON object. Key value pairs are unordered. JSONObject supports java.util.Map interface.
  * 

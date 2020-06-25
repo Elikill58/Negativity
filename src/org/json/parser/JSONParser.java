@@ -13,12 +13,6 @@ import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.json.parser.ContainerFactory;
-import org.json.parser.ContentHandler;
-import org.json.parser.ParseException;
-import org.json.parser.Yylex;
-import org.json.parser.Yytoken;
-
 
 /**
  * Parser for JSON text. Please note that JSONParser is NOT thread-safe.
@@ -104,8 +98,8 @@ public class JSONParser {
 	 * @param in
      * @param containerFactory - Use this factory to createyour own JSON object and JSON array containers.
 	 * @return Instance of the following:
-	 *  org.json.simple.JSONObject,
-	 * 	org.json.simple.JSONArray,
+	 *  org.json.JSONObject,
+	 * 	org.json.JSONArray,
 	 * 	java.lang.String,
 	 * 	java.lang.Number,
 	 * 	java.lang.Boolean,

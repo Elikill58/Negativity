@@ -16,11 +16,6 @@ import java.util.Map;
 
 import org.json.parser.JSONParser;
 import org.json.parser.ParseException;
-import org.json.JSONArray;
-import org.json.JSONAware;
-import org.json.JSONObject;
-import org.json.JSONStreamAware;
-
 
 /**
  * @author FangYidong<fangyidong@yahoo.com.cn>
@@ -36,8 +31,8 @@ public class JSONValue {
 	 * 
 	 * @param in
 	 * @return Instance of the following:
-	 *	org.json.simple.JSONObject,
-	 * 	org.json.simple.JSONArray,
+	 *	org.json.JSONObject,
+	 * 	org.json.JSONArray,
 	 * 	java.lang.String,
 	 * 	java.lang.Number,
 	 * 	java.lang.Boolean,
@@ -66,8 +61,8 @@ public class JSONValue {
 	 * 
 	 * @param s
 	 * @return Instance of the following:
-	 *	org.json.simple.JSONObject,
-	 * 	org.json.simple.JSONArray,
+	 *	org.json.JSONObject,
+	 * 	org.json.JSONArray,
 	 * 	java.lang.String,
 	 * 	java.lang.Number,
 	 * 	java.lang.Boolean,
@@ -89,8 +84,8 @@ public class JSONValue {
 	 * 
 	 * @param in
 	 * @return Instance of the following:
-	 * 	org.json.simple.JSONObject,
-	 * 	org.json.simple.JSONArray,
+	 * 	org.json.JSONObject,
+	 * 	org.json.JSONArray,
 	 * 	java.lang.String,
 	 * 	java.lang.Number,
 	 * 	java.lang.Boolean,

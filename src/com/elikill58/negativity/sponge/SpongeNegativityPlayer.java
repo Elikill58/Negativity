@@ -121,7 +121,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public String getIP() {
 		return getPlayer().getConnection().getAddress().getAddress().getHostAddress();
 	}
-	
+
+	@Override
 	public Version getPlayerVersion() {
 		return playerVersion;
 	}

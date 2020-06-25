@@ -3,7 +3,7 @@ package com.elikill58.negativity.spigot.packets.custom;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
-import com.elikill58.negativity.spigot.packets.PacketType;
+import com.elikill58.negativity.universal.PacketType;
 
 public class CustomPacket extends AbstractPacket {
 	

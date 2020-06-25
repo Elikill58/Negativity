@@ -2,6 +2,8 @@ package com.elikill58.negativity.universal;
 
 import java.util.UUID;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public abstract class NegativityPlayer {
@@ -72,5 +74,6 @@ public abstract class NegativityPlayer {
 	public abstract boolean isOp();
 	public abstract String getIP();
 	public abstract String getReason(Cheat c);
+	public abstract @Nullable Version getPlayerVersion();
 
 }

@@ -1,20 +1,23 @@
 package com.elikill58.negativity.spigot.packets.event;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 
-public class PacketReceiveEvent extends PacketEvent {
+public class PacketReceiveEvent extends PacketEvent implements Cancellable {
 
 	public PacketReceiveEvent(PacketSourceType source, AbstractPacket packet, Player p) {
 		super(source, packet, p);
 	}
 
+	@Override
 	public boolean isCancelled() {
 		return getPacket().isCancelled();
 	}
 
+	@Override
 	public void setCancelled(boolean cancel) {
 		getPacket().setCancelled(cancel);
 	}

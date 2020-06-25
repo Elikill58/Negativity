@@ -3,8 +3,6 @@ package com.elikill58.negativity.spigot.events;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
@@ -14,7 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -26,11 +23,9 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.commands.ReportCommand;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
-import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -109,38 +104,6 @@ public class PlayersEvents implements Listener {
 			np.isUsingSlimeBlock = true;
 		} else if(np.isUsingSlimeBlock && p.isOnGround())
 			np.isUsingSlimeBlock = false;
-	}
-
-	@EventHandler
-	public void onChat(AsyncPlayerChatEvent e){
-		if(!(SuspectManager.ENABLED && SuspectManager.CHAT))
-			return;
-		String msg = e.getMessage().toLowerCase();
-		String[] content = msg.split(" ");
-		List<Player> suspected = new ArrayList<>();
-		List<Cheat> cheats = new ArrayList<>();
-		for(String s : content) {
-			for(Cheat c : Cheat.values())
-				for(String alias : c.getAliases())
-					if(alias.equalsIgnoreCase(s) || alias.contains(s) || alias.startsWith(s))
-						cheats.add(c);
-			for(Player p : Utils.getOnlinePlayers()) {
-				if(p.getName().equalsIgnoreCase(s) || p.getName().toLowerCase().startsWith(s) || p.getName().contains(s))
-					suspected.add(p);
-				else if(p.getDisplayName() != null)
-					if(p.getDisplayName().equalsIgnoreCase(s) || p.getDisplayName().toLowerCase().startsWith(s) || p.getDisplayName().contains(s))
-						suspected.add(p);
-			}
-			for(String alias : SpigotNegativity.getInstance().getConfig().getStringList("suspect.alias")) {
-				if(alias.equalsIgnoreCase(s) || alias.contains(s) || alias.startsWith(s)){
-					cheats.clear();
-					cheats.addAll(Cheat.values());
-					break;
-				}
-			}
-		}
-		for(Player suspect : suspected)
-			SuspectManager.analyzeText(SpigotNegativityPlayer.getNegativityPlayer(suspect), cheats);
 	}
 
 	@EventHandler

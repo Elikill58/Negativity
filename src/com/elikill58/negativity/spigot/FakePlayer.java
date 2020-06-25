@@ -112,7 +112,7 @@ public class FakePlayer {
 					e.printStackTrace();
 				}
 			}
-		}, 1);
+		}, 3);
 	    Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 			@Override
 			public void run() {

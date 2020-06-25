@@ -18,11 +18,17 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerifData;
+import com.elikill58.negativity.universal.verif.VerifData.DataType;
+import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 
 public class StepProtocol extends Cheat {
 
+	public static final DataType<Double> BLOCKS_UP = new DataType<Double>("blocks_up", "Blocks UP", () -> new DoubleDataCounter());
+	
 	public StepProtocol() {
 		super(CheatKeys.STEP, false, ItemTypes.BRICK_STAIRS, CheatCategory.MOVEMENT, true);
 	}
@@ -70,8 +76,10 @@ public class StepProtocol extends Cheat {
 			if(pe.getType().equals(PotionEffectTypes.JUMP_BOOST))
 				amplifier = pe.getAmplifier();
 		double diffBoost = dif - (amplifier / 10);
-		if(diffBoost > 0.6) {
-			SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
+		if(diffBoost > 0.2) {
+			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
+			if(diffBoost > 0.6)
+				SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
 					"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
 					hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
 		}
@@ -80,5 +88,10 @@ public class StepProtocol extends Cheat {
 	@Override
 	public boolean isBlockedInFight() {
 		return true;
+	}
+	
+	@Override
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
+		return "Average of block up : &a" + String.format("%.3f", data.getData(BLOCKS_UP).getAverage());
 	}
 }

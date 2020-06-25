@@ -44,9 +44,9 @@ public class OneCheatInventory extends AbstractInventory {
 		Cheat c = (Cheat) args[0];
 		Inventory inv = (Inventory) args[1];
 		inv.setItem(2, createItem(Material.DIAMOND, Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))));
-		inv.setItem(3, createItem(ItemUtils.EYE_OF_ENDER, Messages.getMessage(p, "inventory.manager.autoVerif", "%auto%", Messages.getMessage(p, "inventory.manager." + (c.isAutoVerif() ? "enabled" : "disabled")))));
-		inv.setItem(4, createItem(Material.TNT, Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))));
-		inv.setItem(5, createItem(Material.BLAZE_ROD, Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))));
+		inv.setItem(3, createItem(Material.TNT, Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))));
+		inv.setItem(4, createItem(Material.BLAZE_ROD, Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))));
+		inv.setItem(5, createItem(ItemUtils.APPLE, Messages.getMessage(p, "inventory.manager.verif", "%verif%", Messages.getMessage(p, "inventory.manager." + (c.hasVerif() ? "enabled" : "disabled")))));
 	}
 
 	@Override
@@ -61,12 +61,12 @@ public class OneCheatInventory extends AbstractInventory {
 			return;
 		if(m.equals(Material.TNT))
 			c.setBack(!c.isSetBack());
-		else if(m.name().contains("EYE_OF_ENDER"))
-			c.setAutoVerif(!c.isAutoVerif());
 		else if(m.equals(Material.BLAZE_ROD))
 			c.setAllowKick(!c.allowKick());
 		else if(m.equals(Material.DIAMOND))
 			c.setActive(!c.isActive());
+		else if(m.equals(ItemUtils.APPLE))
+			c.setVerif(!c.hasVerif());
 
 		try {
 			Adapter.getAdapter().getConfig().save();

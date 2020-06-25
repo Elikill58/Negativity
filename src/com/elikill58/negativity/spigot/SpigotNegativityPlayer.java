@@ -34,7 +34,6 @@ import org.bukkit.util.Vector;
 import com.elikill58.negativity.spigot.inventories.CheckMenuInventory;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
-import com.elikill58.negativity.spigot.packets.PacketType;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.spigot.support.ProtocolSupportSupport;
 import com.elikill58.negativity.spigot.support.ViaVersionSupport;
@@ -47,6 +46,7 @@ import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.Version;
@@ -125,6 +125,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return p.get().getAddress().getAddress().getHostAddress();
 	}
 	
+	@Override
 	public Version getPlayerVersion() {
 		return playerVersion;
 	}
@@ -278,6 +279,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 				|| SpigotNegativity.getInstance().getConfig().getBoolean("cheats.forcefield.ghost_disabled"))
 			return;
 		timeStartFakePlayer = System.currentTimeMillis();
+		fakePlayerTouched = 0;
 
 		spawnRight();
 		spawnLeft();
@@ -285,6 +287,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void spawnRandom() {
+		if(fakePlayerTouched > 20) // limit to prevent player freeze
+			return;
 		int choice = new Random().nextInt(3);
 		if (choice == 0)
 			spawnRight();
@@ -364,31 +368,26 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if (!FAKE_PLAYER.contains(fp))
 			return;
 		FAKE_PLAYER.remove(fp);
-		if(!detected)
+		if(!detected) {
+			if(fakePlayerTouched > 0)
+				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
+			if(FAKE_PLAYER.size() == 0)
+				fakePlayerTouched = 0;
 			return;
-		fakePlayerTouched++;
-		long diff = System.currentTimeMillis() - timeStartFakePlayer;
-		double diffSec = diff / 1000;
-		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
-		if(fakePlayerTouched >= 20 && fakePlayerTouched >= diffSec) {
-			SpigotNegativity.alertMod(ReportType.VIOLATION, getPlayer(), forcefield, UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)),
-					fakePlayerTouched + " touched in " + diffSec + " seconde(s)", forcefield.hoverMsg("fake_players", "%nb%", fakePlayerTouched, "%time%", diff));
-		} else if(fakePlayerTouched >= 5 && fakePlayerTouched >= diffSec) {
-			SpigotNegativity.alertMod(ReportType.WARNING, getPlayer(), forcefield, UniversalUtils.parseInPorcent(fakePlayerTouched * 10 * (1 / diffSec)),
-					fakePlayerTouched + " touched in " + diffSec + " seconde(s)", forcefield.hoverMsg("fake_players", "%nb%", fakePlayerTouched, "%time%", diff));
 		}
+		fakePlayerTouched++;
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);
 		if (l >= 3000) {
 			if (FAKE_PLAYER.size() == 0) {
 				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
 				fakePlayerTouched = 0;
 			}
-		} else if(fakePlayerTouched < 100) {
-			spawnRandom();
-			spawnRandom();
 		} else {
 			ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
-			fakePlayerTouched = 0;
+			if(fakePlayerTouched < 100) {
+				spawnRandom();
+				spawnRandom();
+			}
 		}
 	}
 

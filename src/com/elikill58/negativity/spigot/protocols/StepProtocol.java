@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,11 +16,17 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerifData;
+import com.elikill58.negativity.universal.verif.VerifData.DataType;
+import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 
 public class StepProtocol extends Cheat implements Listener {
 
+	public static final DataType<Double> BLOCKS_UP = new DataType<Double>("blocks_up", "Blocks UP", () -> new DoubleDataCounter());
+	
 	public StepProtocol() {
 		super(CheatKeys.STEP, false, Material.BRICK_STAIRS, CheatCategory.MOVEMENT, true);
 	}
@@ -51,15 +58,23 @@ public class StepProtocol extends Cheat implements Listener {
 			if(pe.getType().equals(PotionEffectType.JUMP))
 				amplifier = pe.getAmplifier();
 		double diffBoost = dif - (amplifier / 10);
-		if(diffBoost > 0.6) {
-			SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
-					"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
-					hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
+		if(diffBoost > 0.2) {
+			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
+			if(diffBoost > 0.6) {
+				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
+						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
+						hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
+			}
 		}
 	}
 	
 	@Override
 	public boolean isBlockedInFight() {
 		return true;
+	}
+	
+	@Override
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
+		return "Average of block up : " + ChatColor.GREEN + String.format("%.3f", data.getData(BLOCKS_UP).getAverage());
 	}
 }

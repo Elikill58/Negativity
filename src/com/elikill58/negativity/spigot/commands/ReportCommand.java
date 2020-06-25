@@ -19,7 +19,6 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
-import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -83,9 +82,6 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 		Messages.sendMessage(p, "report.well_report", "%name%", target.getName());
 		np.TIME_REPORT = System.currentTimeMillis()
 				+ Adapter.getAdapter().getConfig().getInt("time_between_report");
-		if (SuspectManager.WITH_REPORT && SuspectManager.ENABLED) {
-			SuspectManager.analyzeText(np, msg);
-		}
 		return false;
 	}
 

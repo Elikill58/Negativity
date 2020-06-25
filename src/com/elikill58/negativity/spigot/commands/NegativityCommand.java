@@ -1,9 +1,14 @@
 package com.elikill58.negativity.spigot.commands;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.CONSOLE;
+
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.StringJoiner;
+import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -26,6 +31,9 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerificationManager;
+import com.elikill58.negativity.universal.verif.Verificator;
 
 public class NegativityCommand implements CommandExecutor, TabCompleter {
 
@@ -48,7 +56,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		if (arg[0].equalsIgnoreCase(Perm.VERIF)) {
+		if (arg[0].equalsIgnoreCase("verif")) {
 			if (sender instanceof Player && !Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.VERIF)) {
 				Messages.sendMessage(sender, "not_permission");
 				return false;
@@ -66,9 +74,12 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 
 			SpigotNegativityPlayer nTarget = SpigotNegativityPlayer.getNegativityPlayer(target);
-			if (arg.length == 2) {
+			int time = UniversalUtils.getFirstInt(arg).orElse(VerificationManager.getTimeVerif() / 20);
+			Set<Cheat> cheatsToVerify = new LinkedHashSet<>();
+			if (arg.length == 2 || (arg.length == 3 && UniversalUtils.isInteger(arg[2]))) {
 				nTarget.startAllAnalyze();
-				Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", target.getName());
+				Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", target.getName(), "%time%", time);
+				cheatsToVerify.addAll(Cheat.CHEATS);
 			} else {
 				StringJoiner cheatNamesJoiner = new StringJoiner(", ");
 				for (int i = 2; i < arg.length; i++) {
@@ -76,16 +87,28 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 					if (cheat != null) {
 						nTarget.startAnalyze(cheat);
 						cheatNamesJoiner.add(cheat.getName());
+						cheatsToVerify.add(cheat);
 					}
 				}
 
 				String cheatsList = cheatNamesJoiner.toString();
 				if (cheatsList.isEmpty()) {
 					Messages.sendMessage(sender, "negativity.verif.start_none");
+					return false;
 				} else {
-					Messages.sendMessage(sender, "negativity.verif.start", "%name%", target.getName(), "%cheat%", cheatsList);
+					Messages.sendMessage(sender, "negativity.verif.start", "%name%", target.getName(), "%cheat%", cheatsList, "%time%", time);
 				}
 			}
+			UUID askerUUID = (sender instanceof Player ? ((Player) sender).getUniqueId() : CONSOLE);
+			VerificationManager.create(askerUUID, target.getUniqueId(), new Verificator(nTarget, sender.getName(), cheatsToVerify));
+			SpigotNegativity pl = SpigotNegativity.getInstance();
+			Bukkit.getScheduler().runTaskLater(pl, () -> {
+				Verificator verif = VerificationManager.getVerificationsFrom(target.getUniqueId(), askerUUID).get();
+				verif.generateMessage();
+				verif.getMessages().forEach((s) -> sender.sendMessage(Utils.coloredMessage("&a[&2Verif&a] " + s)));
+				verif.save();
+				VerificationManager.remove(askerUUID, target.getUniqueId());
+			}, time * 20);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("alert")) {
 			if (!(sender instanceof Player)) {

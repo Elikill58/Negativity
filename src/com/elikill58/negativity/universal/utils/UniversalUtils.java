@@ -38,12 +38,13 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.DefaultConfigValue;
-import com.elikill58.negativity.universal.SuspectManager;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.verif.VerificationManager;
+import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 
 public class UniversalUtils {
 
@@ -91,6 +92,13 @@ public class UniversalUtils {
 			return 0;
 		else
 			return (int) i;
+	}
+	
+	public static Optional<Integer> getFirstInt(String... args){
+		for(String s : args)
+			if(isInteger(s))
+				return Optional.of(Integer.parseInt(s));
+		return Optional.empty();
 	}
 
 	public static Optional<Cheat> getCheatFromName(String s) {
@@ -327,9 +335,10 @@ public class UniversalUtils {
 		Database.init();
 		Perm.init();
 		BanManager.init();
-		SuspectManager.init();
 		TranslatedMessages.init();
 		NegativityAccountStorage.init();
+		VerificationStorage.init();
+		VerificationManager.init();
 	}
 
 	public static OS os = null;

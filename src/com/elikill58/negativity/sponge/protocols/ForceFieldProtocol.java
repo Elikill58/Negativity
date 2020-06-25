@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Optional;
@@ -16,22 +17,30 @@ import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.sponge.FakePlayer;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.packets.AbstractPacket;
+import com.elikill58.negativity.sponge.packets.events.PacketReceiveEvent;
 import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerifData;
+import com.elikill58.negativity.universal.verif.VerifData.DataType;
+import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
+import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 import com.flowpowered.math.vector.Vector3d;
 
 public class ForceFieldProtocol extends Cheat {
+
+	public static final DataType<Double> HIT_DISTANCE = new DataType<Double>("hit_distance", "Hit Distance", () -> new DoubleDataCounter());
+	public static final DataType<Integer> FAKE_PLAYERS = new DataType<Integer>("fake_players", "Fake Players", () -> new IntegerDataCounter());
 
 	private final NumberFormat distanceFormatter = new DecimalFormat();
 
@@ -62,8 +71,10 @@ public class ForceFieldProtocol extends Cheat {
 
 		double distance = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());
 		double allowedReach = Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0);
-		if (distance > allowedReach && !(usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW) && e.getTargetEntity().getType().equals(EntityTypes.ENDER_DRAGON)) {
-			SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 2 * 10), "Big distance with: "
+		if (!(usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW) && !e.getTargetEntity().getType().equals(EntityTypes.ENDER_DRAGON)) {
+			recordData(p.getUniqueId(), HIT_DISTANCE, distance);
+			if(distance > allowedReach)
+				SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 2 * 10), "Big distance with: "
 						+ e.getTargetEntity().getType().getName().toLowerCase() + ". Exact distance: " + distance + ". Ping: " + Utils.getPing(p),
 						hoverMsg("distance", "%name%", e.getTargetEntity().getType().getName(), "%distance%", distanceFormatter.format(distance)));
 		}
@@ -72,13 +83,34 @@ public class ForceFieldProtocol extends Cheat {
 			Vector3d loc1 = p.getRotation();
 			int gradeRounded = (int) Math.round(Math.abs(loc.getY() - loc1.getY()));
 			if (gradeRounded > 180.0) {
-				SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FORCEFIELD), UniversalUtils.parseInPorcent(gradeRounded),
+				SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(gradeRounded),
 						"Player rotate too much (" + gradeRounded + "°) without thorns.",
 						hoverMsg("rotate", "%degrees%", gradeRounded));
 			}
 		}).submit(SpongeNegativity.getInstance());
 		if (isSetBack() && mayCancel)
 			e.setCancelled(true);
+	}
+
+	@Listener
+	public void onPacket(PacketReceiveEvent e, @First Player p) {
+		AbstractPacket packet = e.getPacket();
+		if(!packet.getPacketType().equals(PacketType.Client.USE_ENTITY))
+			return;
+		try {
+			Object nmsPacket = packet.getPacket();
+			Method getEntityMethod = null;
+			for(Method m : nmsPacket.getClass().getDeclaredMethods())
+				if(m.getReturnType() != null && m.getReturnType().getName().equalsIgnoreCase("net.minecraft.entity.Entity"))
+					getEntityMethod = m;
+			
+			if(getEntityMethod == null)
+				return;
+			//Object et = getEntityMethod.invoke(nmsPacket, Class.forName("net.minecraft.world.World").cast(p.getWorld()));
+			
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
 	}
 
 	@Listener
@@ -92,7 +124,7 @@ public class ForceFieldProtocol extends Cheat {
 			return;
 		}
 
-		Location<World> ploc = p.getLocation();
+		/*Location<World> ploc = p.getLocation();
 		Vector3d eyeloc = p.getLocation().getPosition().add(0, 1.8, 0);
 		FakePlayer c = null;
 		double distanceWithPlayer = 500;
@@ -116,7 +148,15 @@ public class ForceFieldProtocol extends Cheat {
 
 		np.fakePlayerTouched++;
 		c.hide(p);
-		manageForcefieldForFakeplayer(p, np);
+		manageForcefieldForFakeplayer(p, np);*/
+	}
+	
+	@Override
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
+		double av = data.getData(HIT_DISTANCE).getAverage();
+		int nb = data.getData(FAKE_PLAYERS).getSize();
+		String color = (av > 3 ? (av > 4 ? "&c" : "&6") : "&a");
+		return Utils.coloredMessage("Hit distance : " + color + String.format("%.3f", av) + (nb > 0 ? " &7and &c" + nb + " &7fake players touched." : ""));
 	}
 
 	public static void manageForcefieldForFakeplayer(Player p, SpongeNegativityPlayer np) {

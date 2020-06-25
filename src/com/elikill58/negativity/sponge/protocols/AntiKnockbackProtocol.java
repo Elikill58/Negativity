@@ -30,12 +30,19 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerifData;
+import com.elikill58.negativity.universal.verif.VerifData.DataType;
+import com.elikill58.negativity.universal.verif.data.DataCounter;
+import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 import com.flowpowered.math.vector.Vector3d;
 
 public class AntiKnockbackProtocol extends Cheat {
 
+	public static final DataType<Double> DISTANCE_DAMAGE = new DataType<Double>("distance_damage", "Distance after Damage", () -> new DoubleDataCounter());
+	
 	public AntiKnockbackProtocol() {
 		super(CheatKeys.ANTI_KNOCKBACK, false, ItemTypes.STICK, CheatCategory.COMBAT, true, "antikb", "anti-kb", "no-kb");
 	}
@@ -93,6 +100,7 @@ public class AntiKnockbackProtocol extends Cheat {
 				Location<World> actual = p.getLocation();
 				double d = last.getPosition().distance(actual.getPosition());
 				int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - d);
+				recordData(p.getUniqueId(), DISTANCE_DAMAGE, d);
 				if (d < 0.1 && actual.getBlockType() != BlockTypes.WEB && !p.get(Keys.IS_SNEAKING).orElse(false)) {
 					boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, relia,
 							"Distance after damage: " + d + "; Ping: " + ping, hoverMsg("main", "%distance%", d));
@@ -102,5 +110,14 @@ public class AntiKnockbackProtocol extends Cheat {
 				}
 			}).submit(SpongeNegativity.getInstance());
 		}).submit(SpongeNegativity.getInstance());
+	}
+	
+	@Override
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
+		DataCounter<Double> counter = data.getData(DISTANCE_DAMAGE);
+		double av = counter.getAverage(), low = counter.getMin();
+		String colorAverage = (av < 1 ? (av < 0.5 ? "&c" : "&6") : "&a");
+		String colorLow = (low < 1 ? (low < 0.5 ? "&c" : "&6") : "&a");
+		return Utils.coloredMessage("&6Distance after damage: &7Average: " + colorAverage + String.format("%.2f", av) + "&7, Lower: " + colorLow + String.format("%.2f", low) + " &7(In " + counter.getSize() + " hits)");
 	}
 }

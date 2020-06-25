@@ -253,17 +253,6 @@ ban:
     # Log expired or revoked bans when using the "database" processor
     log_bans: true
 
-suspect:
-  # Start cheat detection when people suspect a player
-  #  Suspecting detected with the chat and with /report
-  #
-  enabled: true
-  chat: true
-  with_report_cmd: true
-  alias:
-  - "cheat"
-  - "hack"
-
 # Accounts hold player-specific data of the plugin, like their language and alerts count.
 accounts:
   storage:
@@ -271,6 +260,23 @@ accounts:
     #
     # The following are available out-of-the-box:
     # - file : stored in files under ./plugins/Negativity/user/
+    # - database : uses a database
+    # Defaults to "file"
+    id: "file"
+
+# A verification is used to monitor a player's activity.
+verif:
+  # The default duration of a verification, in ticks (20 ticks = 1 second)
+  time: 200
+  # If true, mutes alerts a player generates when it is being verified
+  # Alerts for a specific cheat can be forcibly muted by setting cheats.<cheat>.check_in_verif to false
+  disable_alert_on_verif: false
+
+  storage:
+    # The ID of the storage to use.
+    #
+    # The following are available out-of-the-box:
+    # - file : stored in files under ./plugins/Negativity/verif/
     # - database : uses a database
     # Defaults to "file"
     id: "file"
@@ -304,10 +310,10 @@ cheats:
     exact_name: "ForceField"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Jesus is to walk on the water
   jesus:
@@ -315,10 +321,10 @@ cheats:
     exact_name: "Jesus"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # AntiPotion remove bad potion effect
   antipotion:
@@ -326,10 +332,10 @@ cheats:
     exact_name: "AntiPotion"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # NoFall remove fall damage
   nofall:
@@ -339,10 +345,10 @@ cheats:
     exact_name: "NoFall"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # FastEat is to eat something instantly
   fasteat:
@@ -350,10 +356,10 @@ cheats:
     exact_name: "FastEat"
     isActive: true
     reliability_alert: 60
-    autoVerif: false
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # FastPlace place a lot of block for you
   fastplace:
@@ -364,10 +370,10 @@ cheats:
     # In milliseconds
     time_2_place: 50
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Speed makes you run faster
   speed:
@@ -375,10 +381,10 @@ cheats:
     exact_name: "Speed"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # AutoClick is to get more click than real people
   autoclick:
@@ -387,10 +393,10 @@ cheats:
     exact_name: "AutoClick"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Fly enable you to fly
   fly:
@@ -398,10 +404,10 @@ cheats:
     exact_name: "Fly"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Regen help you to get your health
   regen:
@@ -409,10 +415,10 @@ cheats:
     exact_name: "Regen"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # AntiKnockback remove knockback effect
   antiknockback:
@@ -420,10 +426,10 @@ cheats:
     exact_name: "AntiKnockback"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Blink enable you to teleport by simulating lag
   blink:
@@ -431,10 +437,10 @@ cheats:
     exact_name: "Blink"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # FastBow shoot bow quicker
   fastbow:
@@ -442,10 +448,10 @@ cheats:
     exact_name: "FastBow"
     isActive: true
     reliability_alert: 60
-    autoVerif: false
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Spider make you walk on the wall
   spider:
@@ -453,10 +459,10 @@ cheats:
     exact_name: "Spider"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Sneak make you sneaking but with basic speed
   sneak:
@@ -464,10 +470,10 @@ cheats:
     exact_name: "Sneak"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Scaffold place block under you
   scaffold:
@@ -475,10 +481,10 @@ cheats:
     exact_name: "Scaffold"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Step make you jump 2 blocks
   step:
@@ -486,10 +492,10 @@ cheats:
     exact_name: "Step"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # NoSlowDown remove slow down effects (like with soul sand)
   noslowdown:
@@ -497,10 +503,10 @@ cheats:
     exact_name: "NoSlowDown"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # FastLadders is to climb ladders quickler
   fastladder:
@@ -508,10 +514,10 @@ cheats:
     exact_name: "FastLadder"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Phase is to glitch on block
   phase:
@@ -519,10 +525,10 @@ cheats:
     exact_name: "Phase"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # AutoSteal help with inventory (Take verything ...)
   autosteal:
@@ -530,10 +536,10 @@ cheats:
     exact_name: "AutoSteal"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # XRay cannot be detected directly, it's about Minerate
   xray:
@@ -541,10 +547,10 @@ cheats:
     exact_name: "XRay"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Nuker/BedBreaker automatically break block without looking her
   nuker:
@@ -552,10 +558,10 @@ cheats:
     exact_name: "Nuker"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # AirJump make you jump on air
   airjump:
@@ -563,10 +569,10 @@ cheats:
     exact_name: "AirJump"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Chat represent all chat hack (spam/insult)
   chat:
@@ -574,10 +580,10 @@ cheats:
     exact_name: "Chat"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
     insults:
     - "bitch"
     - "asshole"
@@ -589,10 +595,10 @@ cheats:
     exact_name: "NoWeb"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # Critical set all of your attack as critical attack (even while sneaking)
   critical:
@@ -600,10 +606,10 @@ cheats:
     exact_name: "Critical"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # InventoryMove make you walking while editing your inventory
   inventorymove:
@@ -611,10 +617,10 @@ cheats:
     exact_name: "InventoryMove"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # FastStairs make you walking faster on Stairs
   faststairs:
@@ -622,10 +628,10 @@ cheats:
     exact_name: "FastStairs"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # NoPitchLimit enable player to see behind
   nopitchlimit:
@@ -633,10 +639,10 @@ cheats:
     exact_name: "NoPitchLimit"
     isActive: true
     reliability_alert: 60
-    autoVerif: true
     setBack: false
     kick: false
     alert_to_kick: 5
+    check_in_verif: true
 
   # There is some special features
   special:

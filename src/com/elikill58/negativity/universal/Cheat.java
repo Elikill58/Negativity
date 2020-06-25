@@ -8,8 +8,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerifData;
+import com.elikill58.negativity.universal.verif.VerificationManager;
 
 public abstract class Cheat {
 
@@ -62,10 +66,6 @@ public abstract class Cheat {
 		return hasListener;
 	}
 
-	public boolean isAutoVerif() {
-		return Adapter.getAdapter().getConfig().getBoolean("cheats." + key + ".autoVerif");
-	}
-
 	public int getReliabilityAlert() {
 		return Adapter.getAdapter().getConfig().getInt("cheats." + key + ".reliability_alert");
 	}
@@ -92,11 +92,6 @@ public abstract class Cheat {
 		return b;
 	}
 
-	public boolean setAutoVerif(boolean b) {
-		Adapter.getAdapter().getConfig().set("cheats." + key + ".autoVerif", b);
-		return b;
-	}
-
 	public boolean setActive(boolean active) {
 		Adapter ada = Adapter.getAdapter();
 		ada.getConfig().set("cheats." + key + ".isActive", active);
@@ -116,9 +111,23 @@ public abstract class Cheat {
 	public String[] getAliases() {
 		return aliases;
 	}
+	
+	public void setVerif(boolean verif) {
+		Adapter.getAdapter().getConfig().set("cheats." + key + ".check_in_verif", verif);
+	}
+
+	public boolean hasVerif() {
+		return Adapter.getAdapter().getConfig().getBoolean("cheats." + key + ".check_in_verif");
+	}
 
 	public CheatHover hoverMsg(String key, Object... placeholders) {
 		return new CheatHover("hover." + getKey() + "." + key, placeholders);
+	}
+	
+	public @Nullable String makeVerificationSummary(VerifData data, NegativityPlayer np) { return null; }
+	
+	public final <T> void recordData(UUID target, VerifData.DataType<T> type, T value) {
+		VerificationManager.recordData(target, this, type, value);
 	}
 	
 	public static Cheat fromString(String name) {

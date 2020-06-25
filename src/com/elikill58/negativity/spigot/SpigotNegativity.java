@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -47,7 +49,6 @@ import com.elikill58.negativity.spigot.listeners.ShowAlertPermissionEvent;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
-import com.elikill58.negativity.spigot.timers.ActualizeClickTimer;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
 import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
@@ -82,6 +83,7 @@ import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerificationManager;
 
 @SuppressWarnings("deprecation")
 public class SpigotNegativity extends JavaPlugin {
@@ -89,7 +91,7 @@ public class SpigotNegativity extends JavaPlugin {
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
-	private BukkitRunnable clickTimer = null, invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
+	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
 	private static int timeBetweenAlert = -1;
 	private NegativityPacketManager packetManager;
@@ -147,7 +149,6 @@ public class SpigotNegativity extends JavaPlugin {
 		for (Player p : Utils.getOnlinePlayers())
 			manageAutoVerif(p);
 		
-		(clickTimer = new ActualizeClickTimer()).runTaskTimer(this, 20, 20);
 		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
 		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 10);
@@ -307,7 +308,6 @@ public class SpigotNegativity extends JavaPlugin {
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		invTimer.cancel();
-		clickTimer.cancel();
 		packetTimer.cancel();
 		runSpawnFakePlayer.cancel();
 		timeTimeBetweenAlert.cancel();
@@ -371,6 +371,8 @@ public class SpigotNegativity extends JavaPlugin {
 		if (c.equals(Cheat.forKey(CheatKeys.FLY)) && p.hasPermission("essentials.fly") && essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
 			return false;
 		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT) && gadgetMenuSupport &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
+			return false;
+		if(VerificationManager.isDisablingAlertOnVerif() && !hasVerifications(p.getUniqueId()))
 			return false;
 		
 		int ping = Utils.getPing(p);
@@ -539,7 +541,7 @@ public class SpigotNegativity extends JavaPlugin {
 		np.ACTIVE_CHEAT.clear();
 		boolean needPacket = false;
 		for (Cheat c : Cheat.values())
-			if (c.isActive() && c.isAutoVerif()) {
+			if (c.isActive()) {
 				np.startAnalyze(c);
 				if (c.needPacket())
 					needPacket = true;

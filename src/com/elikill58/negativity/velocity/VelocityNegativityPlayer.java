@@ -6,6 +6,7 @@ import java.util.UUID;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.Version;
 import com.velocitypowered.api.proxy.Player;
 
 public class VelocityNegativityPlayer extends NegativityPlayer {
@@ -44,6 +45,11 @@ public class VelocityNegativityPlayer extends NegativityPlayer {
 	@Override
 	public String getName() {
 		return p.getUsername();
+	}
+
+	@Override
+	public Version getPlayerVersion() {
+		return null;
 	}
 
 	@Override

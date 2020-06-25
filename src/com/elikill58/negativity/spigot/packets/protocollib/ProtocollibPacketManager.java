@@ -15,8 +15,8 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.injector.packet.PacketRegistry;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.PacketManager;
-import com.elikill58.negativity.spigot.packets.PacketType;
 import com.elikill58.negativity.spigot.packets.event.PacketEvent.PacketSourceType;
+import com.elikill58.negativity.universal.PacketType;
 
 public class ProtocollibPacketManager extends PacketManager {
 

@@ -56,12 +56,14 @@ public class DefaultConfigValue {
 
 		BOOLEANS.put("log_alerts", true);
 		BOOLEANS.put("log_alerts_in_console", true);
-		INTS.put("tps_alert_stop", 19);
+		DOUBLES.put("tps_alert_stop", 19.0);
 		INTS.put("time_between_alert", 2000);
-		BOOLEANS.put("report_command", true);
-		BOOLEANS.put("ban_command", true);
-		BOOLEANS.put("unban_command", true);
-		BOOLEANS.put("kick_command", true);
+		BOOLEANS.put("commands.report", true);
+		BOOLEANS.put("commands.ban", true);
+		BOOLEANS.put("commands.unban", true);
+		BOOLEANS.put("commands.kick", true);
+		BOOLEANS.put("commands.mod", true);
+		BOOLEANS.put("commands.lang", true);
 
 		BOOLEANS.put("Database.isActive", false);
 		STRINGS.put("Database.url", "127.0.0.1/myDb");
@@ -124,6 +126,10 @@ public class DefaultConfigValue {
 
 		STRINGS.put("accounts.storage.id", "default");
 
+		INTS.put("verif.time", 2);
+		BOOLEANS.put("verif.disable_alert_on_verif", false);
+		STRINGS.put("verif.storage.id", "default");
+
 		for(String lc : cheats) {
 			INTS.put("cheats." + lc + ".ping", 150);
 			STRINGS.put("cheats." + lc + ".exact_name", lc);
@@ -133,6 +139,7 @@ public class DefaultConfigValue {
 			BOOLEANS.put("cheats." + lc + ".setBack", false);
 			BOOLEANS.put("cheats." + lc + ".kick", false);
 			INTS.put("cheats." + lc + ".alert_to_kick", 5);
+			BOOLEANS.put("cheats." + lc + ".check_in_verif", true);
 		}
 
 		DOUBLES.put("cheats.forcefield.reach", 3.9);

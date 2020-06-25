@@ -3,6 +3,7 @@ package com.elikill58.negativity.sponge.protocols;
 import java.util.Collections;
 import java.util.List;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
@@ -13,6 +14,7 @@ import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.enchantment.Enchantment;
 import org.spongepowered.api.item.enchantment.EnchantmentTypes;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
+import org.spongepowered.api.scheduler.Task;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
@@ -21,18 +23,37 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.verif.VerifData;
+import com.elikill58.negativity.universal.verif.VerifData.DataType;
+import com.elikill58.negativity.universal.verif.data.DataCounter;
+import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 
 public class AutoClickProtocol extends Cheat {
 
-	public AutoClickProtocol() {
-		super(CheatKeys.AUTO_CLICK, false, ItemTypes.FISHING_ROD, CheatCategory.COMBAT, true, "auto-click", "autoclic");
-	}
+	public static final DataType<Integer> CLICKS = new DataType<Integer>("clicks", "Clicks", () -> new IntegerDataCounter());
 
 	public static final int CLICK_ALERT = Adapter.getAdapter().getConfig().getInt("cheats.autoclick.click_alert");
 
+	public AutoClickProtocol() {
+		super(CheatKeys.AUTO_CLICK, false, ItemTypes.FISHING_ROD, CheatCategory.COMBAT, true, "auto-click", "autoclic");
+		Task.builder().delayTicks(20).execute(() -> {
+			for(Player p : Sponge.getServer().getOnlinePlayers()) {
+				SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
+	            NegativityAccount account = np.getAccount();
+	            if (account.getMostClicksPerSecond() < np.ACTUAL_CLICK) {
+	                account.setMostClicksPerSecond(np.ACTUAL_CLICK);
+				}
+	            recordData(p.getUniqueId(), CLICKS, np.ACTUAL_CLICK);
+	            np.LAST_CLICK = np.ACTUAL_CLICK;
+	            np.ACTUAL_CLICK = 0;
+			}
+		}).submit(SpongeNegativity.getInstance());
+	}
+	
 	@Listener
 	public void onPlayerInteract(InteractEvent e, @First Player p) {
 		ItemStackSnapshot usedItem = e.getContext().get(EventContextKeys.USED_ITEM).orElse(ItemStackSnapshot.NONE);
@@ -67,5 +88,15 @@ public class AutoClickProtocol extends Cheat {
 				e.setCancelled(true);
 			}
 		}
+	}
+	
+	@Override
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
+		int currentClick = ((SpongeNegativityPlayer) np).ACTUAL_CLICK;
+		DataCounter<Integer> counter = data.getData(CLICKS);
+		counter.add(currentClick);
+		if(counter.getMax() == 0)
+			return null;
+		return Utils.coloredMessage("&aCurrent&7/&cMaximum&7/&6Average&7: &a" + currentClick + "&7/&c" + counter.getMax() + "&7/&6" + counter.getAverage() + " &7clicks");
 	}
 }

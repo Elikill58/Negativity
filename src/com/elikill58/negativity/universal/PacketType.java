@@ -1,4 +1,7 @@
-package com.elikill58.negativity.spigot.packets;
+package com.elikill58.negativity.universal;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 
@@ -7,6 +10,7 @@ public interface PacketType {
 	String name();
 	String getPacketName();
 	String getFullName();
+	List<String> getAlias();
 	
 	static boolean LOG_UNKNOW_PACKET = false;
 	static final String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus";
@@ -14,28 +18,28 @@ public interface PacketType {
 	public static PacketType getType(String packetName) {
 		if(packetName.startsWith(CLIENT_PREFIX)) {
 			for(Client client : Client.values())
-				if(client.getFullName().equalsIgnoreCase(packetName))
+				if(client.getFullName().equalsIgnoreCase(packetName) || client.getPacketName().equalsIgnoreCase(packetName) || client.getAlias().contains(packetName))
 					return client;
 			if(LOG_UNKNOW_PACKET)
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow client packet " + packetName);
 			return Client.UNSET;
 		} else if(packetName.startsWith(SERVER_PREFIX)) {
 			for(Server srv : Server.values())
-				if(srv.getFullName().equalsIgnoreCase(packetName))
+				if(srv.getFullName().equalsIgnoreCase(packetName) || srv.getPacketName().equalsIgnoreCase(packetName)  || srv.getAlias().contains(packetName))
 					return srv;
 			if(LOG_UNKNOW_PACKET)
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow server packet " + packetName);
 			return Server.UNSET;
 		} else if(packetName.startsWith(LOGIN_PREFIX)) {
 			for(Login login : Login.values())
-				if(login.getFullName().equalsIgnoreCase(packetName))
+				if(login.getFullName().equalsIgnoreCase(packetName) || login.getPacketName().equalsIgnoreCase(packetName)  || login.getAlias().contains(packetName))
 					return login;
 			if(LOG_UNKNOW_PACKET)
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow login packet " + packetName);
 			return Login.UNSET;
 		} else if(packetName.startsWith(STATUS_PREFIX)) {
 			for(Status status : Status.values())
-				if(status.getFullName().equalsIgnoreCase(packetName))
+				if(status.getFullName().equalsIgnoreCase(packetName) || status.getPacketName().equalsIgnoreCase(packetName)  || status.getAlias().contains(packetName))
 					return status;
 			if(LOG_UNKNOW_PACKET)
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow status packet " + packetName);
@@ -70,17 +74,17 @@ public interface PacketType {
 		HELD_ITEM_SLOT("HeldItemSlot"),
 		ITEM_NAME("ItemName"),
 		KEEP_ALIVE("KeepAlive"),
-		LOOK("Look"),
+		LOOK("Look", "Rotation"),
 		PICK_ITEM("PickItem"),
 		POSITION("Position"),
-		POSITION_LOOK("PositionLook"),
+		POSITION_LOOK("PositionLook", "PositionRotation"),
 		RECIPE_DISPLAYED("RecipeDisplayed"),
 		RESOURCE_PACK_STATUS("ResourcePackStatus"),
 		SET_COMMAND_BLOCK("SetCommandBlock"),
 		SET_COMMAND_MINECART("SetCommandMinecart"),
 		SET_CREATIVE_SLOT("SetCreativeSlot"),
 		SET_JIGSAW("SetJigsaw"),
-		SETTINGS("Settings"),
+		SETTINGS("Settings", "ClientSettings"),
 		SPECTATE("Spectate"),
 		STEER_VEHICLE("SteerVehicle"),
 		STRUCT("Struct"),
@@ -97,9 +101,12 @@ public interface PacketType {
 		UNSET("Unset");
 		
 		private final String packetName, fullName;
+		private final List<String> alias = new ArrayList<>();
 		
-		Client(String packetName) {
+		Client(String packetName, String... alias) {
 			this.packetName = packetName;
+			for(String al : alias)
+				this.alias.add(CLIENT_PREFIX + al);
 			this.fullName = CLIENT_PREFIX + packetName;
 		}
 		
@@ -111,6 +118,11 @@ public interface PacketType {
 		@Override
 		public String getFullName() {
 			return fullName;
+		}
+		
+		@Override
+		public List<String> getAlias() {
+			return alias;
 		}
 	}
 	
@@ -216,10 +228,13 @@ public interface PacketType {
 		UNSET("Unset");
 		
 		private final String packetName, fullName;
+		private List<String> alias = new ArrayList<>();
 		
-		private Server(String packetName) {
+		private Server(String packetName, String... alias) {
 			this.packetName = packetName;
 			this.fullName = SERVER_PREFIX + packetName;
+			for(String al : alias)
+				this.alias.add(SERVER_PREFIX + al);
 		}
 
 		@Override
@@ -230,6 +245,11 @@ public interface PacketType {
 		@Override
 		public String getFullName() {
 			return fullName;
+		}
+		
+		@Override
+		public List<String> getAlias() {
+			return alias;
 		}
 	}
 	
@@ -248,9 +268,12 @@ public interface PacketType {
 		UNSET("Unset");
 		
 		private final String packetName, fullName;
+		private List<String> alias = new ArrayList<>();
 		
-		private Login(String packetName) {
+		private Login(String packetName, String... alias) {
 			this.packetName = packetName;
+			for(String al : alias)
+				this.alias.add(LOGIN_PREFIX + al);
 			this.fullName = LOGIN_PREFIX + packetName;
 		}
 
@@ -262,6 +285,11 @@ public interface PacketType {
 		@Override
 		public String getFullName() {
 			return fullName;
+		}
+		
+		@Override
+		public List<String> getAlias() {
+			return alias;
 		}
 	}
 	
@@ -277,9 +305,12 @@ public interface PacketType {
 		UNSET("Unset");
 		
 		private final String packetName, fullName;
+		private List<String> alias = new ArrayList<>();
 		
-		private Status(String packetName) {
+		private Status(String packetName, String... alias) {
 			this.packetName = packetName;
+			for(String al : alias)
+				this.alias.add(STATUS_PREFIX + al);
 			this.fullName = STATUS_PREFIX + packetName;
 		}
 
@@ -291,6 +322,11 @@ public interface PacketType {
 		@Override
 		public String getFullName() {
 			return fullName;
+		}
+		
+		@Override
+		public List<String> getAlias() {
+			return alias;
 		}
 	}
 }

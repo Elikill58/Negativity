@@ -7,8 +7,8 @@ import java.util.NoSuchElementException;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
-import com.elikill58.negativity.spigot.packets.PacketType;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
+import com.elikill58.negativity.universal.PacketType;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;

@@ -13,6 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -25,6 +26,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.utils.ReflectionUtils;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.collect.Sets;
 
@@ -176,6 +178,29 @@ public class Utils {
 	
 	public static boolean isInBoat(Player p) {
 		return p.isInsideVehicle() && p.getVehicle().getType().equals(EntityType.BOAT);
+	}
+
+	public static boolean hasThorns(Player p) {
+		ItemStack[] armor = p.getInventory().getArmorContents();
+		if(armor == null)
+			return false;
+		for(ItemStack item : armor)
+			if(item != null && item.containsEnchantment(Enchantment.THORNS))
+				return true;
+		return false;
+	}
+	
+	public static ItemStack getItemInHand(Player p) {
+		return p.getItemInHand();
+	}
+	
+	public static ItemStack getItemInOffHand(Player p) {
+		try {
+			return (ItemStack) ReflectionUtils.callMethod(p.getInventory(), "getItemInOffHand");
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public static Entity getEntityByID(int i) {

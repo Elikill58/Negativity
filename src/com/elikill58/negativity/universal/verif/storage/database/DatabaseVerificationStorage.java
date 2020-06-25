@@ -47,7 +47,7 @@ public class DatabaseVerificationStorage extends VerificationStorage {
 			try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_verifications WHERE uuid = ?")) {
 				stm.setString(1, playerId.toString());
 				ResultSet resultQuery = stm.executeQuery();
-				if (resultQuery.next()) {
+				while (resultQuery.next()) {
 					Map<Cheat, VerifData> cheats = new HashMap<>(); // don't need to load it
 					List<String> result = Arrays.asList(resultQuery.getString("result").split("\n"));
 					String startedBy = resultQuery.getString("startedBy");

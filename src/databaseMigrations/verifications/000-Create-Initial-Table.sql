@@ -1,6 +1,7 @@
 CREATE TABLE IF NOT EXISTS negativity_verifications
 (
-    uuid CHAR(36) NOT NULL PRIMARY KEY,
+    id INT(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    uuid CHAR(36) NOT NULL,
     startedBy VARCHAR(16),
     result LONGTEXT NOT NULL,
     cheats LONGTEXT NOT NULL,

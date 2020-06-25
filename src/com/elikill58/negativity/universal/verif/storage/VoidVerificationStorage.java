@@ -1,10 +1,9 @@
 package com.elikill58.negativity.universal.verif.storage;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.verif.Verificator;
 
@@ -13,8 +12,8 @@ public final class VoidVerificationStorage extends VerificationStorage {
 	public static final VoidVerificationStorage INSTANCE = new VoidVerificationStorage();
 
 	@Override
-	public CompletableFuture<@Nullable List<Verificator>> loadAllVerifications(UUID playerId) {
-		return CompletableFuture.completedFuture(null);
+	public CompletableFuture<List<Verificator>> loadAllVerifications(UUID playerId) {
+		return CompletableFuture.completedFuture(Collections.emptyList());
 	}
 
 	@Override

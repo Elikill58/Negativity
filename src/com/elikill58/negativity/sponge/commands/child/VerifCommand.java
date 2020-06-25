@@ -4,6 +4,7 @@ import static com.elikill58.negativity.universal.verif.VerificationManager.CONSO
 import static org.spongepowered.api.command.args.GenericArguments.allOf;
 import static org.spongepowered.api.command.args.GenericArguments.choices;
 import static org.spongepowered.api.command.args.GenericArguments.integer;
+import static org.spongepowered.api.command.args.GenericArguments.optionalWeak;
 import static org.spongepowered.api.command.args.GenericArguments.player;
 
 import java.util.LinkedHashSet;
@@ -72,8 +73,8 @@ public class VerifCommand implements CommandExecutor {
 		CommandSpec command = CommandSpec.builder()
 				.executor(new VerifCommand())
 				.arguments(player(Text.of("target")),
+						optionalWeak(integer(Text.of("time"))),
 						allOf(choices(Text.of("cheats"), Cheat.CHEATS_BY_KEY, true, false)))
-				.arguments(integer(Text.of("time")))
 				.build();
 		return new NegativityCmdWrapper(command, false, Perm.VERIF);
 	}

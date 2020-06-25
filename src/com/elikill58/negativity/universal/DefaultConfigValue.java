@@ -133,6 +133,7 @@ public class DefaultConfigValue {
 			BOOLEANS.put("cheats." + lc + ".setBack", false);
 			BOOLEANS.put("cheats." + lc + ".kick", false);
 			INTS.put("cheats." + lc + ".alert_to_kick", 5);
+			BOOLEANS.put("cheats." + lc + ".check_in_verif", true);
 		}
 
 		DOUBLES.put("cheats.forcefield.reach", 3.9);

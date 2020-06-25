@@ -91,11 +91,7 @@ public class ModInventory extends AbstractInventory {
 					Messages.sendMessage(p, "inventory.mod.random_tp_no_target");
 					return;
 				}
-
-				boolean tpSuccessful = p.setLocation(randomPlayer.getLocation());
-				if (!tpSuccessful) {
-					Messages.sendMessage(p, "inventory.mod.random_tp_failed");
-				}
+				p.setLocation(randomPlayer.getLocation());
 			}
 		} else if (m.equals(ItemTypes.PUMPKIN_PIE)) {
 			delayedInvClose(p);

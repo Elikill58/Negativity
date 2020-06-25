@@ -3,10 +3,9 @@ package com.elikill58.negativity.sponge.packets;
 import org.slf4j.Logger;
 import org.spongepowered.api.entity.living.player.Player;
 
-import com.elikill58.negativity.sponge.packets.PacketManager;
-import com.elikill58.negativity.sponge.packets.packetgate.PacketGateManager;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.packets.packetgate.PacketGateManager;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.PacketType.Client;
 
@@ -18,6 +17,7 @@ public class NegativityPacketManager {
 
 		try {
 			Class.forName("eu.crushedpixel.sponge.packetgate.api.registry.PacketGate");
+			SpongeNegativity.hasPacketGate = true;
 			packetManager = new PacketGateManager();
 		} catch (ClassNotFoundException e1) {
 			Logger log = pl.getLogger();

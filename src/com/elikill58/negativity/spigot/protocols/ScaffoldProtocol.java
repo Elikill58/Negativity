@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -21,7 +22,7 @@ public class ScaffoldProtocol extends Cheat implements Listener {
 	private ScaffoldProtocol instance;
 	
 	public ScaffoldProtocol() {
-		super(CheatKeys.SCAFFOLD, false, Material.GRASS, CheatCategory.WORLD, true);
+		super(CheatKeys.SCAFFOLD, false, ItemUtils.GRASS, CheatCategory.WORLD, true);
 		instance = this;
 	}
 

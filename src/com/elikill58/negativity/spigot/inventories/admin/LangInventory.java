@@ -40,7 +40,7 @@ public class LangInventory extends AbstractInventory {
 					if((slot + 3) % 9 == 0 || (slot + 2) % 9 == 0 || (slot + 1) % 9 == 0) // 3 last colums of inventory
 						inv.setItem(slot, Inv.EMPTY);
 					else {
-						inv.setItem(slot, createItem(ItemUtils.PAPER, s));
+						inv.setItem(slot, createItem(Material.PAPER, s));
 						searchSlot = false;
 					}
 				}

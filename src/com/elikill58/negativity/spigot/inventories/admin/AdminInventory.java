@@ -27,7 +27,7 @@ public class AdminInventory extends AbstractInventory {
 		Inventory inv = Bukkit.createInventory(new AdminHolder(), 9, Inv.ADMIN_MENU);
 
 		inv.setItem(0, createItem(Material.TNT, Messages.getMessage(p, "inventory.mod.cheat_manage")));
-		inv.setItem(1, createItem(ItemUtils.PAPER, Messages.getMessage(p, "lang.edit")));
+		inv.setItem(1, createItem(Material.PAPER, Messages.getMessage(p, "lang.edit")));
 		inv.setItem(inv.getSize() - 1, createItem(ItemUtils.MATERIAL_CLOSE, Messages.getMessage(p, "inventory.close")));
 		InventoryUtils.fillInventory(inv, Inv.EMPTY);
 		p.openInventory(inv);

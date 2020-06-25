@@ -20,6 +20,7 @@ import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
@@ -37,17 +38,12 @@ public class CheckMenuInventory extends AbstractInventory {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
-		int betterClick = account.getMostClicksPerSecond();
-		inv.setItem(0, createItem(ItemUtils.STAINED_CLAY, Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
-		inv.setItem(1, createItem(ItemUtils.STAINED_CLAY, Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), 1, getByteFromClick(betterClick)));
-		inv.setItem(2, createItem(ItemUtils.STAINED_CLAY, Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
-
-		inv.setItem(7, createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
+		actualizeCheckMenu(p, cible);
+		
 		inv.setItem(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId(), ChatColor.GREEN + "Version: " + np.getPlayerVersion().getName()));
 
-		inv.setItem(9, ItemUtils.hideAttributes(createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled")))));
 		inv.setItem(10, ItemUtils.hideAttributes(createItem(Material.DIAMOND_PICKAXE, "Minerate", minerate.getInventoryLoreString())));
-		inv.setItem(11, createItem(Material.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
+		inv.setItem(11, createItem(ItemUtils.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
 		inv.setItem(12, getWoolItem(p, np.isMcLeaks()));
 		inv.setItem(13, createItem(ItemUtils.SKELETON_SKULL, Messages.getMessage(p, "fake_entities")));
 		//inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE"), "Kick"));
@@ -71,9 +67,9 @@ public class CheckMenuInventory extends AbstractInventory {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		int betterClick = np.getAccount().getMostClicksPerSecond();
 		try {
-			inv.setItem(0, createItem(ItemUtils.STAINED_CLAY, Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), 1, getByteFromClick(np.ACTUAL_CLICK)));
-			inv.setItem(1, createItem(ItemUtils.STAINED_CLAY, Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), 1, getByteFromClick(betterClick)));
-			inv.setItem(2, createItem(ItemUtils.STAINED_CLAY, Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), 1, getByteFromClick(np.LAST_CLICK)));
+			inv.setItem(0, getClickItem(Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), np.ACTUAL_CLICK));
+			inv.setItem(1, getClickItem(Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), betterClick));
+			inv.setItem(2, getClickItem(Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), np.LAST_CLICK));
 
 			inv.setItem(7, createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
 			inv.setItem(9, ItemUtils.hideAttributes(createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled")))));
@@ -81,6 +77,24 @@ public class CheckMenuInventory extends AbstractInventory {
 		} catch (ArrayIndexOutOfBoundsException e) {
 
 		}
+	}
+	
+	private static ItemStack getClickItem(String name, int clicks) {
+		if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+			return createItem(getMaterialFromClick(clicks), name);
+		} else {
+			// we can use all *_STAINED_CLAY because they will be default STAINED_CLAY
+			return createItem(ItemUtils.LIME_STAINED_CLAY, name, 1, getByteFromClick(clicks));
+		}
+	}
+
+	private static Material getMaterialFromClick(int click) {
+		if (click > 25)
+			return ItemUtils.RED_STAINED_CLAY;
+		else if (click < 25 && click > 15)
+			return ItemUtils.ORANGE_STAINED_CLAY;
+		else
+			return ItemUtils.LIME_STAINED_CLAY;
 	}
 
 	private static byte getByteFromClick(int click) {

@@ -26,7 +26,7 @@ public class Inv {
 			EMPTY = new ItemStack(ItemUtils.GRAY_STAINED_GLASS_PANE, 1, (byte) 7);
 		}
 		ItemMeta emptyItemMeta = EMPTY.getItemMeta();
-		emptyItemMeta.setDisplayName(ChatColor.RESET.toString());
+		emptyItemMeta.setDisplayName(ChatColor.RESET.toString() + " - ");
 		EMPTY.setItemMeta(emptyItemMeta);
 	}
 }

@@ -46,7 +46,7 @@ public class OneCheatInventory extends AbstractInventory {
 		inv.setItem(2, createItem(Material.DIAMOND, Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))));
 		inv.setItem(3, createItem(Material.TNT, Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))));
 		inv.setItem(4, createItem(Material.BLAZE_ROD, Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))));
-		inv.setItem(5, createItem(ItemUtils.APPLE, Messages.getMessage(p, "inventory.manager.verif", "%verif%", Messages.getMessage(p, "inventory.manager." + (c.hasVerif() ? "enabled" : "disabled")))));
+		inv.setItem(5, createItem(Material.APPLE, Messages.getMessage(p, "inventory.manager.verif", "%verif%", Messages.getMessage(p, "inventory.manager." + (c.hasVerif() ? "enabled" : "disabled")))));
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class OneCheatInventory extends AbstractInventory {
 			c.setAllowKick(!c.allowKick());
 		else if(m.equals(Material.DIAMOND))
 			c.setActive(!c.isActive());
-		else if(m.equals(ItemUtils.APPLE))
+		else if(m.equals(Material.APPLE))
 			c.setVerif(!c.hasVerif());
 
 		try {

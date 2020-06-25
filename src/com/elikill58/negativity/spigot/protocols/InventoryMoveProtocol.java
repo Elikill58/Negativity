@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.protocols;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,7 +12,6 @@ import org.bukkit.event.inventory.InventoryOpenEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -21,7 +21,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 	private final InventoryMoveProtocol instance;
 
 	public InventoryMoveProtocol() {
-		super(CheatKeys.INVENTORY_MOVE, false, ItemUtils.NETHER_STAR, CheatCategory.MOVEMENT, true, "invmove");
+		super(CheatKeys.INVENTORY_MOVE, false, Material.NETHER_STAR, CheatCategory.MOVEMENT, true, "invmove");
 		instance = this;
 	}
 

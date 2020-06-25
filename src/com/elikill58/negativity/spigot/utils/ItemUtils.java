@@ -15,34 +15,39 @@ public class ItemUtils {
 
 	public static final Material MATERIAL_CLOSE = getMaterialWithCompatibility("BARRIER", "REDSTONE");
 	
-	public static final Material SKELETON_SKULL = getMaterialWithCompatibility("SKELETON_SKULL", "SKULL_ITEM", "LEGACY_SKULL_ITEM");
-	public static final Material PLAYER_HEAD = getMaterialWithCompatibility("PLAYER_HEAD", "SKULL_ITEM", "LEGACY_SKULL_ITEM");
+	public static final Material SKELETON_SKULL = getMaterialWithCompatibility("SKELETON_SKULL", "SKULL_ITEM");
+	public static final Material PLAYER_HEAD = getMaterialWithCompatibility("PLAYER_HEAD", "SKULL_ITEM");
 	
-	public static final Material STAINED_CLAY = getMaterialWithCompatibility("STAINED_CLAY", "LEGACY_STAINED_CLAY");
-	public static final Material EYE_OF_ENDER = getMaterialWithCompatibility("EYE_OF_ENDER", "LEGACY_EYE_OF_ENDER");
-	public static final Material PAPER = getMaterialWithCompatibility("PAPER", "LEGACY_PAPER");
-	public static final Material EMPTY_MAP = getMaterialWithCompatibility("EMPTY_MAP", "LEGACY_EMPTY_MAP");
-	public static final Material BOOK_AND_QUILL = getMaterialWithCompatibility("BOOK_AND_QUILL", "LEGACY_BOOK_AND_QUILL");
+	// items
+	public static final Material EYE_OF_ENDER = getMaterialWithCompatibility("EYE_OF_ENDER", "ENDER_EYE");
+	public static final Material EMPTY_MAP = getMaterialWithCompatibility("EMPTY_MAP", "MAP");
+	public static final Material BOOK_AND_QUILL = getMaterialWithCompatibility("BOOK_AND_QUILL", "WRITTEN_BOOK");
 	public static final Material WEB = getMaterialWithCompatibility("WEB", "COBWEB");
-	public static final Material FIREBALL = getMaterialWithCompatibility("FIREBALL", "LEGACY_FIREBALL");
-	public static final Material FIREWORK = getMaterialWithCompatibility("FIREWORK", "LEGACY_FIREWORK");
-	public static final Material LEASH = getMaterialWithCompatibility("LEASH", "LEGACY_LEASH");
-	public static final Material NETHER_STAR = getMaterialWithCompatibility("NETHER_STAR", "LEGACY_NETHER_STAR");
-	public static final Material APPLE = getMaterialWithCompatibility("APPLE", "LEGACY_APPLE");
+	public static final Material FIREBALL = getMaterialWithCompatibility("FIREBALL", "FIRE_CHARGE");
+	public static final Material FIREWORK = getMaterialWithCompatibility("FIREWORK", "FIREWORK_ROCKET");
+	public static final Material LEASH = getMaterialWithCompatibility("LEASH", "LEAD");
 
-	public static final Material STATIONARY_WATER = getMaterialWithCompatibility("STATIONARY_WATER", "LEGACY_STATIONARY_WATER");
-	public static final Material WATER_LILY = getMaterialWithCompatibility("WATER_LILY", "LEGACY_WATER_LILY");
+	// blocks
+	public static final Material STATIONARY_WATER = getMaterialWithCompatibility("STATIONARY_WATER", "WATER");
+	public static final Material WATER_LILY = getMaterialWithCompatibility("WATER_LILY", "LILY_PAD");
+	public static final Material GRASS = getMaterialWithCompatibility("GRASS_BLOCK", "GRASS");
+
+	public static final Material BIRCH_WOOD_STAIRS = getMaterialWithCompatibility("BIRCH_WOOD_STAIRS", "BIRCH_STAIRS");
 	
+	// colored items
 	public static final Material GRAY_STAINED_GLASS_PANE = getMaterialWithCompatibility("STAINED_GLASS_PANE", "GRAY_STAINED_GLASS_PANE");
 	public static final Material WHITE_STAINED_GLASS = getMaterialWithCompatibility("STAINED_GLASS_PANE", "WHITE_STAINED_GLASS");
 	
-	public static final Material DIAMOND_SPADE = getMaterialWithCompatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE");
-	public static final Material IRON_SPADE = getMaterialWithCompatibility("IRON_SPADE", "LEGACY_IRON_SPADE");
+	public static final Material LIME_STAINED_CLAY = getMaterialWithCompatibility("STAINED_CLAY", "LIME_TERRACOTTA");
+	public static final Material ORANGE_STAINED_CLAY = getMaterialWithCompatibility("STAINED_CLAY", "ORANGE_TERRACOTTA");
+	public static final Material RED_STAINED_CLAY = getMaterialWithCompatibility("STAINED_CLAY", "RED_TERRACOTTA");
 	
 	public static final Material RED_WOOL = getMaterialWithCompatibility("RED_WOOL", "WOOL");
 	public static final Material LIME_WOOL = getMaterialWithCompatibility("LIME_WOOL", "WOOL");
-
-	public static final Material BIRCH_WOOD_STAIRS = getMaterialWithCompatibility("BIRCH_WOOD_STAIRS", "BIRCH_STAIRS");
+	
+	// tools
+	public static final Material DIAMOND_SPADE = getMaterialWithCompatibility("DIAMOND_SPADE", "DIAMOND_SHOVEL");
+	public static final Material IRON_SPADE = getMaterialWithCompatibility("IRON_SPADE", "IRON_SHOVEL");
 	
 	public static Material getMaterialWithCompatibility(String... tempMat) {
 		for(String s : tempMat) {

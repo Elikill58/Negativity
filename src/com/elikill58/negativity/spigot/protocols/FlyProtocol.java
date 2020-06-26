@@ -53,7 +53,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		boolean mayCancel = false;
 		double y = e.getFrom().getY() - e.getTo().getY();
-		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle()){
+		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle() && !np.isInFight){
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, 97, "Suspicious Y: " + y);
 		}
@@ -65,7 +65,7 @@ public class FlyProtocol extends Cheat implements Listener {
 				&& locUnderUnder.getBlock().getType().equals(Material.AIR)
 				&& (p.getFallDistance() == 0.0F || Utils.isInBoat(p))
 				&& (p.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR)) && i > 0.8
-				&& !p.isOnGround()) {
+				&& !np.isOnGround) {
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, parseInPorcent((int) i * 50),
 					"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this),
@@ -88,7 +88,7 @@ public class FlyProtocol extends Cheat implements Listener {
 		Location to = e.getTo().clone();
 		to.setY(e.getFrom().getY());
 		double distanceWithoutY = to.distance(e.getFrom());
-		if (distanceWithoutY == i && !p.isOnGround() && i != 0
+		if (distanceWithoutY == i && !np.isOnGround && i != 0
 				&& p.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR)
 				&& !p.getLocation().getBlock().getType().name().contains("WATER") && distanceWithoutY > 0.1) {
 			if (np.contentBoolean.getOrDefault("fly-not-moving-y", false))

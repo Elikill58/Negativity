@@ -72,7 +72,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 			return;
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		boolean mayCancel = false;
-		if (p.isOnGround()) {
+		if (np.isOnGround) {
 			double walkSpeed = SpigotNegativity.essentialsSupport ? (p.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : p.getWalkSpeed();
 			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
 			if((SpigotNegativity.essentialsSupport ? (walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D)) : y >= 0.75D) || walkTest){
@@ -84,7 +84,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: " + walkTest +
 						", walkWithEssentialsTest: " + walkWithEssTest, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
 			}
-		} else if (!p.isOnGround()) {
+		} else if (!np.isOnGround) {
 			for (Entity entity : p.getNearbyEntities(5, 5, 5))
 				if (entity instanceof Creeper || entity.getType().equals(EntityType.CREEPER))
 					return;

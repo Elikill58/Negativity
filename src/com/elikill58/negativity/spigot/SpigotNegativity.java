@@ -85,7 +85,6 @@ import com.elikill58.negativity.universal.utils.ReflectionUtils;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 
-@SuppressWarnings("deprecation")
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
@@ -385,9 +384,9 @@ public class SpigotNegativity extends JavaPlugin {
 		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
 			return false;
 		
-		if (p.getItemInHand() != null)
-			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name()))
-				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().name()).getWhen().equals(WhenBypass.ALWAYS))
+		if (Utils.getItemInHand(p) != null)
+			if (ItemUseBypass.ITEM_BYPASS.containsKey(Utils.getItemInHand(p).getType().name()))
+				if (ItemUseBypass.ITEM_BYPASS.get(Utils.getItemInHand(p).getType().name()).getWhen().equals(WhenBypass.ALWAYS))
 					return false;
 		Block target = Utils.getTargetBlock(p, 5);
 		if(target != null && !target.getType().equals(Material.AIR))

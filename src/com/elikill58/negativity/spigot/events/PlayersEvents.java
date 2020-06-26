@@ -102,7 +102,7 @@ public class PlayersEvents implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if(p.getLocation().subtract(0, 1, 0).getBlock().getType().name().contains("SLIME")) {
 			np.isUsingSlimeBlock = true;
-		} else if(np.isUsingSlimeBlock && p.isOnGround())
+		} else if(np.isUsingSlimeBlock && np.isOnGround)
 			np.isUsingSlimeBlock = false;
 	}
 

@@ -1,15 +1,17 @@
 package com.elikill58.negativity.spigot.protocols;
 
 import static com.elikill58.negativity.universal.utils.ReflectionUtils.callMethod;
-import static com.elikill58.negativity.universal.utils.ReflectionUtils.getField;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.text.NumberFormat;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -101,33 +103,56 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if(!packet.getPacketType().equals(PacketType.Client.USE_ENTITY))
 			return;
 		Player p = e.getPlayer();
+		ItemStack inHand = Utils.getItemInHand(p);
+		if(inHand != null && inHand.getType().equals(Material.BOW))
+			return;
 		try {
 			Object nmsPacket = packet.getPacket();
 			Location loc = p.getLocation();
-			Object et = nmsPacket.getClass().getDeclaredMethod("a", PacketUtils.getNmsClass("World")).invoke(nmsPacket, PacketUtils.getWorldServer(loc));
-			if(et == null)
+			Object nmsEntity = nmsPacket.getClass().getDeclaredMethod("a", PacketUtils.getNmsClass("World")).invoke(nmsPacket, PacketUtils.getWorldServer(loc));
+			if(nmsEntity == null)
 				return;
-			Location entityLoc = new Location(p.getWorld(), (double) getField(et, "locX"), (double) getField(et, "locY"), (double) getField(et, "locZ"));
+			Location entityLoc = getLocationNMSEntity(nmsEntity, p.getWorld());
 			double dis = loc.distance(entityLoc);
-			ItemStack inHand = Utils.getItemInHand(p);
-			if(inHand != null && inHand.getType().equals(Material.BOW))
-				return;
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 			if (dis < Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach"))
 				return;
 			Class<?> entityClass = PacketUtils.getNmsClass("Entity");
-			EntityType type = (EntityType) callMethod(entityClass.getDeclaredMethod("getBukkitEntity").invoke(et), "getType");
+			EntityType type = (EntityType) callMethod(entityClass.getDeclaredMethod("getBukkitEntity").invoke(nmsEntity), "getType");
 			if(type.equals(EntityType.ENDER_DRAGON))
 				return;
-			String entityName = (String) entityClass.getMethod("getName").invoke(et);
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10),
 					"Big distance with: " + type.name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
-					+ ". Ping: " + Utils.getPing(p), hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
+					+ ". Ping: " + Utils.getPing(p), hoverMsg("distance", "%name%", PacketUtils.getNmsEntityName(nmsEntity), "%distance%", nf.format(dis)));
 			if(mayCancel)
 				packet.setCancelled(true);
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
+	}
+	
+	public Location getLocationNMSEntity(Object src, World baseWorld) {
+		return new Location(baseWorld, getFieldOrMethod(src, "locX"), getFieldOrMethod(src, "locY"), getFieldOrMethod(src, "locZ"));
+	}
+	
+	private double getFieldOrMethod(Object src, String name) {
+		Class<?> entityClass = PacketUtils.getNmsClass("Entity");
+		try {
+			Method m = entityClass.getDeclaredMethod(name);
+			m.setAccessible(true);
+			return (double) m.invoke(src);
+		} catch (NoSuchMethodException e) {
+			try {
+				Field f = entityClass.getDeclaredField(name);
+				f.setAccessible(true);
+				return f.getDouble(src);
+			} catch (Exception exc) {
+				exc.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0.0;
 	}
 	
 	@Override
@@ -141,10 +166,10 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	@EventHandler
 	public void onPacketClear(PlayerPacketsClearEvent e) {
 		int use = e.getPackets().getOrDefault(PacketType.Client.USE_ENTITY, 0);
-		if(use > 7) {
+		if(use > 8) {
 			Player p = e.getPlayer();
 			int ping = Utils.getPing(p);
-			SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(use * 15 - ping),
+			SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(use * 10 - ping),
 					use + " USE_ENTITY packets sent. Ping: " + ping, (CheatHover) null, use - 7);
 		}
 	}

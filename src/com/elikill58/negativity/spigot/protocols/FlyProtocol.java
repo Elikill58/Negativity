@@ -65,7 +65,7 @@ public class FlyProtocol extends Cheat implements Listener {
 				&& locUnderUnder.getBlock().getType().equals(Material.AIR)
 				&& (p.getFallDistance() == 0.0F || Utils.isInBoat(p))
 				&& (p.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR)) && i > 0.8
-				&& !np.isOnGround) {
+				&& !np.isOnGround()) {
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, parseInPorcent((int) i * 50),
 					"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this),
@@ -88,7 +88,7 @@ public class FlyProtocol extends Cheat implements Listener {
 		Location to = e.getTo().clone();
 		to.setY(e.getFrom().getY());
 		double distanceWithoutY = to.distance(e.getFrom());
-		if (distanceWithoutY == i && !np.isOnGround && i != 0
+		if (distanceWithoutY == i && !np.isOnGround() && i != 0
 				&& p.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR)
 				&& !p.getLocation().getBlock().getType().name().contains("WATER") && distanceWithoutY > 0.1) {
 			if (np.contentBoolean.getOrDefault("fly-not-moving-y", false))

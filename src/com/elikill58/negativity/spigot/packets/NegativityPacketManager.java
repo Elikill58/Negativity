@@ -78,7 +78,7 @@ public class NegativityPacketManager {
 			}
 		}
 		if(type == PacketType.Client.POSITION || type == PacketType.Client.FLYING || type == PacketType.Client.LOOK || type == PacketType.Client.POSITION_LOOK) {
-			np.isOnGround = packet.getContent().getBooleans().read(0);
+			np.setOnGround(packet.getContent().getBooleans().read(0));
 		}
 		if (packet.getPacketType() != Client.KEEP_ALIVE) {
 			np.TIME_OTHER_KEEP_ALIVE = System.currentTimeMillis();

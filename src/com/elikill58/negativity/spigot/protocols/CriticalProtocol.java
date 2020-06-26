@@ -1,7 +1,6 @@
 package com.elikill58.negativity.spigot.protocols;
 
 import org.bukkit.GameMode;
-import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -14,6 +13,7 @@ import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Version;
 
 public class CriticalProtocol extends Cheat implements Listener {
 	
@@ -29,19 +29,21 @@ public class CriticalProtocol extends Cheat implements Listener {
 
 		if (p.isInsideVehicle())
 			return;
+		
+		// because of new PvP, this detection but to be remade
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9))
+			return;
 
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.ACTIVE_CHEAT.contains(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (!np.isOnGround && !p.isFlying()) {
+		if (!np.isOnGround() && !p.isFlying()) {
 			if (p.getLocation().getY() % 1.0D == 0.0D) {
-				if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().isSolid()) {
-					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, np.getAllWarn(this) > 5 ? 100 : 95, "");
-					if(mayCancel && isSetBack())
-						e.setCancelled(true);
-				}
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, np.getAllWarn(this) > 5 ? 100 : 95, "");
+				if(mayCancel && isSetBack())
+					e.setCancelled(true);
 			}
 		}
 	}

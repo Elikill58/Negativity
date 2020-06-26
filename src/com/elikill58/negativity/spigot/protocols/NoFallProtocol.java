@@ -47,7 +47,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 		if (!(distance == 0.0D || from.getY() < to.getY())) {
 			if (p.getFallDistance() == 0.0F && p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
 				int relia = UniversalUtils.parseInPorcent(distance * 100);
-				if (np.isOnGround) {
+				if (np.isOnGround()) {
 					if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && SpigotNegativity.essentialsSupport
 							&& EssentialsSupport.checkEssentialsSpeedPrecondition(p))) {
 						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
@@ -75,7 +75,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 						np.NO_FALL_DAMAGE = 0;
 					}
 				}
-			} else if(!np.isOnGround) {
+			} else if(!np.isOnGround()) {
 				Material justUnder = p.getLocation().clone().subtract(0, 0.1, 0).getBlock().getType();
 				if(justUnder.isSolid() && p.getFallDistance() > 3.0 && !np.isInFight) {
 					int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(100 - (ping / 5) + p.getFallDistance());

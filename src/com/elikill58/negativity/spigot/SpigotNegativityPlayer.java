@@ -77,10 +77,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0, LAST_BLOCK_BREAK = 0, LAST_USE_ENTITY = 0;
 	public String LAST_OTHER_KEEP_ALIVE, LAST_CHAT_MESSAGE = "";
-	public boolean isOnGround = true, IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false, disableShowingAlert = false,
+	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false, disableShowingAlert = false,
 			isInvisible = false, isUsingSlimeBlock = false, already_blink = false, isJumpingWithBlock = false,
 			isOnLadders = false, lastClickInv = false;
-	private boolean mustToBeSaved = false;
+	private boolean mustToBeSaved = false, isOnGround = true;
 	public PacketType lastPacketType = null;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;
@@ -471,6 +471,14 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 				reason, "%time%", String.valueOf(time), "%by%", by));
 	}
 
+	public boolean isOnGround() {
+		return Version.getVersion().isNewerOrEquals(Version.V1_16) ? isOnGround : p.get().isOnGround();
+	}
+	
+	public void setOnGround(boolean b) {
+		this.isOnGround = b;
+	}
+	
 	@Override
 	public void banEffect() {
 		int i = 2;

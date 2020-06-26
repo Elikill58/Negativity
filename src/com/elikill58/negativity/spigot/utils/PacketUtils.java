@@ -6,6 +6,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.universal.Version;
+
 public class PacketUtils {
 
 	public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
@@ -167,6 +169,20 @@ public class PacketUtils {
 		try {
 			Object object = Class.forName("org.bukkit.craftbukkit." + VERSION + ".CraftWorld").cast(loc.getWorld());
 			return object.getClass().getMethod("getHandle").invoke(object);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static String getNmsEntityName(Object nmsEntity) {
+		try {
+			if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+				Object chatBaseComponent = getNmsClass("Entity").getDeclaredMethod("getDisplayName").invoke(nmsEntity);
+				return (String) getNmsClass("IChatBaseComponent").getDeclaredMethod("getString").invoke(chatBaseComponent);
+			} else {
+				return (String) getNmsClass("Entity").getDeclaredMethod("getName").invoke(nmsEntity);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

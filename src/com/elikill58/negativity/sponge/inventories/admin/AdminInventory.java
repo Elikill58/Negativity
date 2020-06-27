@@ -52,8 +52,8 @@ public class AdminInventory extends AbstractInventory {
 	@Override
 	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
 		if(m.equals(ItemTypes.PAPER)) {
-			AbstractInventory.open(InventoryType.LANG, p);
+			delayed(() -> AbstractInventory.open(InventoryType.LANG, p));
 		} else if (m.equals(ItemTypes.TNT))
-			AbstractInventory.open(InventoryType.CHEAT_MANAGER, p, true);
+			delayed(() -> AbstractInventory.open(InventoryType.CHEAT_MANAGER, p, true));
 	}
 }

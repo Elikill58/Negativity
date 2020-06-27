@@ -59,9 +59,9 @@ public class CheatManagerInventory extends AbstractInventory {
 	@Override
 	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
 		if (m.equals(ItemTypes.ARROW))
-			AbstractInventory.getInventory(((CheatManagerHolder) nh).isFromAdmin() ? InventoryType.ADMIN : InventoryType.MOD).ifPresent((inv) -> inv.openInventory(p));
+			delayed(() -> AbstractInventory.getInventory(((CheatManagerHolder) nh).isFromAdmin() ? InventoryType.ADMIN : InventoryType.MOD).ifPresent((inv) -> inv.openInventory(p)));
 		else {
-			UniversalUtils.getCheatFromItem(m).ifPresent((c) -> AbstractInventory.open(InventoryType.ONE_CHEAT, p, c));
+			UniversalUtils.getCheatFromItem(m).ifPresent((c) -> delayed(() -> AbstractInventory.open(InventoryType.ONE_CHEAT, p, c)));
 		}
 	}
 

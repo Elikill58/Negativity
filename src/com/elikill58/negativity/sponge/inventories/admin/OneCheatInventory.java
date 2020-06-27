@@ -43,8 +43,16 @@ public class OneCheatInventory extends AbstractInventory {
 		Utils.fillInventoryWith(Inv.EMPTY, inv);
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
 		invGrid.set(0, 0, createItem((ItemType) c.getMaterial(), c.getName()));
-		actualizeInventory(p, invGrid);
-
+		
+		invGrid.set(2, 0, createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
+				"inventory.manager.setActive", "%active%", getMessage(p, c.isActive()))));
+		invGrid.set(3, 0, createItem(ItemTypes.TNT, Messages.getStringMessage(p,
+				"inventory.manager.setBack", "%back%", getMessage(p, c.isSetBack()))));
+		invGrid.set(4, 0, createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
+				"inventory.manager.allowKick", "%allow%", getMessage(p, c.allowKick()))));
+		invGrid.set(5, 0, createItem(ItemTypes.APPLE, Messages.getStringMessage(p,
+				"inventory.manager.verif", "%verif%", getMessage(p, c.hasVerif()))));
+		
 		invGrid.set(7, 0, createItem(ItemTypes.ARROW, Messages.getStringMessage(p, "inventory.back")));
 		invGrid.set(8, 0, createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
@@ -68,7 +76,7 @@ public class OneCheatInventory extends AbstractInventory {
 	@Override
 	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
 		if (m.equals(ItemTypes.ARROW)) {
-			AbstractInventory.open(InventoryType.CHEAT_MANAGER, p, false);
+			delayed(() -> AbstractInventory.open(InventoryType.CHEAT_MANAGER, p, false));
 			return;
 		}
 		Cheat c = ((OneCheatHolder) nh).getCheat();

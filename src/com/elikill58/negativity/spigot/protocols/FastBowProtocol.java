@@ -32,6 +32,8 @@ public class FastBowProtocol extends Cheat implements Listener {
 		ItemStack item = p.getItemInHand();
 		if(item == null)
 			return;
+		if(!np.hasDetectionActive(this))
+			return;
 		
 		if(ItemUseBypass.ITEM_BYPASS.containsKey(item.getType().name())) {
 			ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(item.getType().name());

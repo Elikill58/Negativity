@@ -28,7 +28,7 @@ public class ChatProtocol extends Cheat implements Listener {
 	public void onChat(AsyncPlayerChatEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(this))
+		if (!np.hasDetectionActive(this))
 			return;
 		String msg = e.getMessage();
 		if(msg.equalsIgnoreCase(np.LAST_CHAT_MESSAGE)) {

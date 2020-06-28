@@ -36,7 +36,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(this) || e.isCancelled())
+		if (!np.hasDetectionActive(this) || e.isCancelled())
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
@@ -102,7 +102,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 		PacketType type = pa.getPacketType();
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if(!np.ACTIVE_CHEAT.contains(this))
+		if(!np.hasDetectionActive(this))
 			return;
 		if (type.equals(PacketType.Client.FLYING)) {
 			if (pa.getContent().getBooleans().read(0) && np.contentBoolean.getOrDefault("packet-going-down", false) && np.lastPacketType != type && p.getFallDistance() > 0.3) {

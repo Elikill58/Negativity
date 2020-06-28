@@ -30,7 +30,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 		if (!(e.getWhoClicked() instanceof Player) || e.getClickedInventory() == null)
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer((Player) e.getWhoClicked());
-		if (!np.ACTIVE_CHEAT.contains(this))
+		if (!np.hasDetectionActive(this))
 			return;
 		checkInvMove((Player) e.getWhoClicked(), true, "Click");
 	}
@@ -40,7 +40,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 		if (!(e.getPlayer() instanceof Player) || e.getInventory() == null)
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer((Player) e.getPlayer());
-		if (!np.ACTIVE_CHEAT.contains(this))
+		if (!np.hasDetectionActive(this))
 			return;
 		checkInvMove((Player) e.getPlayer(), false, "Open");
 	}

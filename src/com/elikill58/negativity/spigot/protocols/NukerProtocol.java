@@ -30,7 +30,7 @@ public class NukerProtocol extends Cheat implements Listener {
 	public void onBlockBreak(BlockBreakEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(this))
+		if (!np.hasDetectionActive(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;

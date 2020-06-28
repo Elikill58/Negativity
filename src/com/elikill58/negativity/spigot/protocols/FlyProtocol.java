@@ -34,7 +34,7 @@ public class FlyProtocol extends Cheat implements Listener {
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(this) || e.isCancelled())
+		if (!np.hasDetectionActive(this) || e.isCancelled())
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;

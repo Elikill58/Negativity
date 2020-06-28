@@ -130,6 +130,14 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return playerVersion;
 	}
 	
+	public boolean hasDetectionActive(Cheat c) {
+		if(!c.isActive())
+			return false;
+		if(!ACTIVE_CHEAT.contains(c))
+			return false;
+		return Utils.getPing(getPlayer()) < c.getMaxAlertPing();
+	}
+	
 	public void updateCheckMenu() {
 		for (Player p : Inv.CHECKING.keySet()) {
 			if (p.getOpenInventory() != null) {

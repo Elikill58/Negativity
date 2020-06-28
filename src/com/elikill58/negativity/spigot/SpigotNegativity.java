@@ -377,8 +377,8 @@ public class SpigotNegativity extends JavaPlugin {
 		int ping = Utils.getPing(p);
 		long currentTimeMilli = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > currentTimeMilli || ping > c.getMaxAlertPing()
-				|| np.getLife() == 0.0D
-				|| getInstance().getConfig().getDouble("tps_alert_stop", 19.0) > Utils.getLastTPS() || ping < 0 || np.isFreeze)
+				|| np.getLife() == 0.0D || np.isFreeze
+				|| getInstance().getConfig().getDouble("tps_alert_stop", 19.0) > Utils.getLastTPS() || ping < 0)
 			return false;
 		
 		if(WorldRegionBypass.hasBypass(c, p.getLocation()))

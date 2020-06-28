@@ -21,6 +21,7 @@ import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class AlertInventory extends AbstractInventory {
@@ -37,8 +38,10 @@ public class AlertInventory extends AbstractInventory {
 		for (Cheat c : Cheat.values()) {
 			if (!c.isActive())
 				continue;
-			if((Adapter.getAdapter().getConfig().getBoolean("inventory.alerts.only_cheat_active") && np.ACTIVE_CHEAT.contains(c))
-					|| (!np.ACTIVE_CHEAT.contains(c) && Adapter.getAdapter().getConfig().getBoolean("inventory.alerts.no_started_verif_cheat")))
+			ConfigAdapter config = Adapter.getAdapter().getConfig();
+			boolean isActive = np.hasDetectionActive(c);
+			if((config.getBoolean("inventory.alerts.only_cheat_active") && isActive)
+					|| (!isActive && config.getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
 		}
 		Inventory inv = Bukkit.createInventory(new AlertHolder(), UniversalUtils.getMultipleOf(TO_SEE.size() + 3, 9, 1, 54),
@@ -62,11 +65,13 @@ public class AlertInventory extends AbstractInventory {
 		Inventory inv = p.getOpenInventory().getTopInventory();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
-		for (Cheat c : Cheat.values())
-			if ((c.isActive()
-					&& Adapter.getAdapter().getConfig().getBoolean("inventory.alerts.only_cheat_active") && np.ACTIVE_CHEAT.contains(c))
-					|| (!np.ACTIVE_CHEAT.contains(c) && Adapter.getAdapter().getConfig().getBoolean("inventory.alerts.no_started_verif_cheat")))
+		for (Cheat c : Cheat.values()) {
+			ConfigAdapter config = Adapter.getAdapter().getConfig();
+			boolean isActive = np.hasDetectionActive(c);
+			if((config.getBoolean("inventory.alerts.only_cheat_active") && isActive)
+					|| (!isActive && config.getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
+		}
 		int slot = 0;
 		for (Cheat c : TO_SEE)
 			if (c.getMaterial() != null)

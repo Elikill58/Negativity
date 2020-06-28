@@ -48,7 +48,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 			int flyingWithPing = flying - (ping / 6);
 			if (flyingWithPing > 28) {
 				Cheat c = np.flyingReason.getCheat();
-				if (np.ACTIVE_CHEAT.contains(c)) {
+				if (np.hasDetectionActive(c)) {
 					if(p.getItemInHand().getType().equals(Material.BOW))
 						np.flyingReason = FlyingReason.BOW;
 					double[] allTps = Utils.getTPS();
@@ -83,7 +83,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				}
 			}
 			Cheat FORCEFIELD = Cheat.forKey(CheatKeys.FORCEFIELD);
-			if (np.ACTIVE_CHEAT.contains(FORCEFIELD)) {
+			if (np.hasDetectionActive(FORCEFIELD)) {
 				if (arm > 16 && useEntity > 20) {
 					ReportType type = ReportType.WARNING;
 					if (np.getWarn(FORCEFIELD) > 5)
@@ -96,7 +96,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				}
 			}
 			Cheat SNEAK = Cheat.forKey(CheatKeys.SNEAK);
-			if(np.ACTIVE_CHEAT.contains(SNEAK)){
+			if(np.hasDetectionActive(SNEAK)){
 				if(ping < 140){
 					if(entityAction > 35){
 						if(np.IS_LAST_SEC_SNEAK){
@@ -109,12 +109,12 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				}
 			}
 			Cheat NUKER = Cheat.forKey(CheatKeys.NUKER);
-			if(np.ACTIVE_CHEAT.contains(NUKER))
+			if(np.hasDetectionActive(NUKER))
 				if(ping < NUKER.getMaxAlertPing() && (blockDig - (ping / 10)) > 20 && !NukerProtocol.hasDigSpeedEnchant(p.getItemInHand()))
 					SpigotNegativity.alertMod(blockDig > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, UniversalUtils.parseInPorcent(20 + blockDig), "BlockDig packet: " + blockDig + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
 
 			Cheat SPEED = Cheat.forKey(CheatKeys.SPEED);
-			if(np.ACTIVE_CHEAT.contains(SPEED))
+			if(np.hasDetectionActive(SPEED))
 				if(np.MOVE_TIME > 60)
 					SpigotNegativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p, SPEED, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Ping: " + ping + " Warn for Speed: " + np.getWarn(SPEED));
 			np.MOVE_TIME = 0;

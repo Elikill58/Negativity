@@ -33,7 +33,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		Location loc = p.getLocation();
-		if (!np.ACTIVE_CHEAT.contains(this))
+		if (!np.hasDetectionActive(this))
 			return;
 		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP)
 				|| !LocationUtils.hasOtherThan(loc, Material.AIR) || (e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ()))
@@ -65,7 +65,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null)
+		if (!np.hasDetectionActive(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null)
 			return;
 		Location loc = p.getLocation().clone();
 		if(hasBypassBlockAround(loc) || (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT")))

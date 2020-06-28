@@ -35,7 +35,7 @@ public class FastPlaceProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(this))
+		if (!np.hasDetectionActive(this))
 			return;
 		if(Utils.getLastTPS() < 19.1)
 			return;

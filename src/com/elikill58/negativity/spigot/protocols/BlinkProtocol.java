@@ -38,7 +38,7 @@ public class BlinkProtocol extends Cheat implements Listener {
 	public void onPacketClear(PlayerPacketsClearEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if(!np.ACTIVE_CHEAT.contains(this))
+		if(!np.hasDetectionActive(this))
 			return;
 		if (!(!np.bypassBlink && (p.getGameMode().equals(GameMode.ADVENTURE) || p.getGameMode().equals(GameMode.SURVIVAL))))
 			return;

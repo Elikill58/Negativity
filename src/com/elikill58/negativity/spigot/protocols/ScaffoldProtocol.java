@@ -31,7 +31,7 @@ public class ScaffoldProtocol extends Cheat implements Listener {
 	public void onBlockBreak(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.ACTIVE_CHEAT.contains(this))
+		if (!np.hasDetectionActive(this))
 			return;
 		int ping = Utils.getPing(p), slot = p.getInventory().getHeldItemSlot();
 		if(ping > 120)

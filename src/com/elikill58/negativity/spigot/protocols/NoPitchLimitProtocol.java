@@ -31,7 +31,7 @@ public class NoPitchLimitProtocol extends Cheat implements Listener {
 	public void Check(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if(!np.ACTIVE_CHEAT.contains(this))
+		if(!np.hasDetectionActive(this))
 			return;
 		float pitch = p.getLocation().getPitch();
 		recordData(p.getUniqueId(), PITCH, pitch);

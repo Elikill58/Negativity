@@ -31,7 +31,7 @@ public class AutoStealProtocol extends Cheat implements Listener {
 		if(!(p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)))
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if(!np.ACTIVE_CHEAT.contains(this))
+		if(!np.hasDetectionActive(this))
 			return;
 		if(p.getItemInHand() != null)
 			if(ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name())) {

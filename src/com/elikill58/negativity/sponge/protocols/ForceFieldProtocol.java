@@ -6,6 +6,7 @@ import java.text.NumberFormat;
 import java.util.Optional;
 import java.util.concurrent.TimeUnit;
 
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
@@ -58,7 +59,8 @@ public class ForceFieldProtocol extends Cheat {
 		}
 		
 		boolean mayCancel = false;
-		if(!LocationUtils.hasLineOfSight(p, e.getTargetEntity())) {
+		Entity cible = e.getTargetEntity();
+		if(!(LocationUtils.hasLineOfSight(p, cible.getLocation()) || LocationUtils.hasLineOfSight(p, cible.getLocation().copy().sub(0, 1, 0)))) {
 			mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getTargetEntity().getType().getId()
 					+ " but cannot see it, ping: " + Utils.getPing(p), hoverMsg("line_sight", "%name%", e.getTargetEntity().getType().getName()));
 		}

@@ -152,9 +152,9 @@ public class LocationUtils {
 		return false;
 	}
 	
-	public static boolean hasLineOfSight(Player p, Entity entity) {
+	public static boolean hasLineOfSight(Player p, Location<World> loc) {
 		World w = p.getWorld();
-		Vector3d vec3d = Utils.getPlayerVec(p), vec3d1 = Utils.getEntityVec(entity);
+		Vector3d vec3d = Utils.getPlayerVec(p), vec3d1 = new Vector3d(loc.getX(), loc.getY() + 1.74F, loc.getZ());
 		if (!Double.isNaN(vec3d.getX()) && !Double.isNaN(vec3d.getY()) && !Double.isNaN(vec3d.getZ())) {
 			if (!Double.isNaN(vec3d1.getX()) && !Double.isNaN(vec3d1.getY()) && !Double.isNaN(vec3d1.getZ())) {
 				int posX = UniversalUtils.floor(vec3d.getX());

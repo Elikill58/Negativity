@@ -132,6 +132,7 @@ public abstract class Adapter {
 	public abstract void log(String msg);
 	public abstract void warn(String msg);
 	public abstract void error(String msg);
+	public abstract void debug(String msg);
 	public abstract TranslationProviderFactory getPlatformTranslationProviderFactory();
 	public List<Cheat> getAbstractCheats() {
 		return Cheat.CHEATS;

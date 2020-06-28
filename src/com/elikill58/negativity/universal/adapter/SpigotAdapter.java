@@ -77,6 +77,12 @@ public class SpigotAdapter extends Adapter {
 		pl.getLogger().severe(msg);
 	}
 
+	@Override
+	public void debug(String msg) {
+		if(UniversalUtils.DEBUG)
+			pl.getLogger().info(msg);
+	}
+
 	@Nullable
 	@Override
 	public InputStream openBundledFile(String name) {

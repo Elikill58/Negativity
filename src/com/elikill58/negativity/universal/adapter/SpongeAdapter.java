@@ -80,6 +80,12 @@ public class SpongeAdapter extends Adapter {
 		logger.error(msg);
 	}
 
+	@Override
+	public void debug(String msg) {
+		if(UniversalUtils.DEBUG)
+			logger.info(msg);
+	}
+
 	@Nullable
 	@Override
 	public InputStream openBundledFile(String name) throws IOException {

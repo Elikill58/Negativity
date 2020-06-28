@@ -66,8 +66,8 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 
 		String reason = reasonJoiner.toString();
 		BanManager.executeBan(Ban.active(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, cheatName));
-		if (!sender.equals(target))
-			Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
+		// TODO check the result of execute ban
+		Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
 		return false;
 	}
 

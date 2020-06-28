@@ -69,6 +69,12 @@ public class VelocityAdapter extends Adapter {
 		pl.getLogger().error(msg);
 	}
 
+	@Override
+	public void debug(String msg) {
+		if(UniversalUtils.DEBUG)
+			pl.getLogger().info(msg);
+	}
+
 	@Nullable
 	@Override
 	public InputStream openBundledFile(String name) {

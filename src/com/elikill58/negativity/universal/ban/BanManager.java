@@ -45,8 +45,10 @@ public class BanManager {
 	@Nullable
 	public static Ban getActiveBan(UUID playerId) {
 		BanProcessor processor = getProcessor();
-		if (processor == null)
+		if (processor == null) {
+			Adapter.getAdapter().debug("Cannot find ban processor while trying to get active ban from " + playerId.toString());
 			return null;
+		}
 
 		return processor.getActiveBan(playerId);
 	}
@@ -62,8 +64,10 @@ public class BanManager {
 	@Nullable
 	public static Ban executeBan(Ban ban) {
 		BanProcessor processor = getProcessor();
-		if (processor == null)
+		if (processor == null) {
+			Adapter.getAdapter().debug("Cannot find ban processor while trying to execute ban from " + ban.getPlayerId().toString());
 			return null;
+		}
 
 		return processor.executeBan(ban);
 	}
@@ -82,8 +86,10 @@ public class BanManager {
 	@Nullable
 	public static Ban revokeBan(UUID playerId) {
 		BanProcessor processor = getProcessor();
-		if (processor == null)
+		if (processor == null) {
+			Adapter.getAdapter().debug("Cannot find ban processor while trying to revoke ban from " + playerId.toString());
 			return null;
+		}
 
 		return processor.revokeBan(playerId);
 	}

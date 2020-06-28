@@ -12,6 +12,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -25,6 +26,7 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
+import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -62,10 +64,11 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		boolean mayCancel = false;
-		if(!p.hasLineOfSight(e.getEntity())) {
-			mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getEntity().getType().name()
+		Entity cible = e.getEntity();
+		if(!(LocationUtils.hasLineOfSight(p, cible.getLocation()) && LocationUtils.hasLineOfSight(p, cible.getLocation().clone().subtract(0, 1, 0)))) {
+			mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "Hit " + cible.getType().name()
 					+ " but cannot see it, ping: " + Utils.getPing(p),
-					hoverMsg("line_sight", "%name%", e.getEntity().getType().name().toLowerCase()));
+					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase()));
 		}
 		if(Utils.hasThorns(p)) {
 			if (isSetBack() && mayCancel)

@@ -93,6 +93,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpongeAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
 import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
@@ -301,9 +302,10 @@ public class SpongeNegativity {
 	@Listener
 	public void onAuth(ClientConnectionEvent.Auth e) {
 		UUID playerId = e.getProfile().getUniqueId();
+		NegativityAccount account = NegativityAccount.get(playerId);
 		Ban activeBan = BanManager.getActiveBan(playerId);
+		String name = e.getProfile().getName().orElse("");
 		if (activeBan != null) {
-			NegativityAccount account = NegativityAccount.get(playerId);
 			String kickMsgKey;
 			String formattedExpiration;
 			if (activeBan.isDefinitive()) {
@@ -317,6 +319,25 @@ public class SpongeNegativity {
 			e.setCancelled(true);
 			e.setMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%" , formattedExpiration, "%by%", activeBan.getBannedBy()));
 			Adapter.getAdapter().getAccountManager().dispose(account.getPlayerId());
+		} else if(!UniversalUtils.isValidName(name)) {
+			// check for ban / kick only if the player is not already banned
+			String banReason = config.getString("cheats.special.invalid_name.name");
+			if(config.getBoolean("cheats.special.invalid_name.ban")) {
+				if(!BanManager.banActive) {
+					getLogger().warn("Cannot ban player " + name + " for " + banReason + " because ban is NOT config.");
+					getLogger().warn("Please, enable ban in config and restart your server");
+					if(config.getBoolean("cheats.special.invalid_name.kick")) {
+						e.setMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", banReason));
+						e.setCancelled(true);
+					}
+				} else {
+					BanManager.executeBan(Ban.active(playerId, banReason, "Negativity", BanType.PLUGIN, Long.parseLong(config.getString("cheats.special.invalid_name.ban_time")), banReason));
+					e.setCancelled(true);
+				}
+			} else if(config.getBoolean("cheats.special.invalid_name.kick")) {
+				e.setMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", banReason));
+				e.setCancelled(true);
+			}
 		}
 	}
 

@@ -164,10 +164,11 @@ public class DefaultConfigValue {
 		STRINGS.put("cheats.special.server_crash.name", "Server Crash");
 		BOOLEANS.put("cheats.special.server_crash.kick", true);
 		BOOLEANS.put("cheats.special.server_crash.ban", false);
+		STRINGS.put("cheats.special.server_crash.ban_time", "2629800000");
 		
 		STRINGS.put("cheats.special.invalid_name.name", "Invalid Name");
 		BOOLEANS.put("cheats.special.invalid_name.kick", true);
 		BOOLEANS.put("cheats.special.invalid_name.ban", false);
-		INTS.put("cheats.special.invalid_name.ban_time", -1);
+		STRINGS.put("cheats.special.invalid_name.ban_time", "-1");
 	}
 }

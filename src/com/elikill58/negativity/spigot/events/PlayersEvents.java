@@ -100,9 +100,9 @@ public class PlayersEvents implements Listener {
 	public void slimeManager(PlayerMoveEvent e){
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if(p.getLocation().subtract(0, 1, 0).getBlock().getType().name().contains("SLIME")) {
+		if(p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("SLIME")) {
 			np.isUsingSlimeBlock = true;
-		} else if(np.isUsingSlimeBlock && np.isOnGround())
+		} else if(np.isUsingSlimeBlock && (np.isOnGround() && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("AIR")))
 			np.isUsingSlimeBlock = false;
 	}
 

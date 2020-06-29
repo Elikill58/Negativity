@@ -53,7 +53,8 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		boolean mayCancel = false;
 		double y = e.getFrom().getY() - e.getTo().getY();
-		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle() && !np.isInFight){
+		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle()
+				&& !np.isInFight && !LocationUtils.hasBoatAroundHim(p.getLocation())){
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, 97, "Suspicious Y: " + y);
 		}

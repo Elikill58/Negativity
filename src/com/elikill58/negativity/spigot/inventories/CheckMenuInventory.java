@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -30,6 +31,11 @@ public class CheckMenuInventory extends AbstractInventory {
 	public CheckMenuInventory() {
 		super(InventoryType.CHECK_MENU);
 	}
+	
+	@Override
+	public boolean isInstance(NegativityHolder nh) {
+		return nh instanceof CheckMenuHolder;
+	}
 
 	@Override
 	public void openInventory(Player p, Object... args) {
@@ -38,7 +44,7 @@ public class CheckMenuInventory extends AbstractInventory {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
-		actualizeCheckMenu(p, cible);
+		actualizeInventory(p, cible);
 		
 		inv.setItem(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId(), ChatColor.GREEN + "Version: " + np.getPlayerVersion().getName()));
 
@@ -62,9 +68,11 @@ public class CheckMenuInventory extends AbstractInventory {
 		p.openInventory(inv);
 	}
 
-	public static void actualizeCheckMenu(Player p, Player cible) {
+	@Override
+	public void actualizeInventory(Player p, Object... args) {
+		Player cible = (Player) args[0];
 		Inventory inv = p.getOpenInventory().getTopInventory();
-		if(inv == null) return;
+		if(inv == null || !inv.getType().equals(org.bukkit.event.inventory.InventoryType.CHEST)) return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		int betterClick = np.getAccount().getMostClicksPerSecond();
 		try {
@@ -170,7 +178,7 @@ public class CheckMenuInventory extends AbstractInventory {
 	}
 	
 	@Override
-	public boolean isInstance(NegativityHolder nh) {
-		return nh instanceof CheckMenuHolder;
+	public void closeInventory(Player p, InventoryCloseEvent e) {
+		Inv.CHECKING.remove(p);
 	}
 }

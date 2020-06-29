@@ -9,7 +9,6 @@ import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
-import com.elikill58.negativity.spigot.inventories.CheckMenuInventory;
 import com.elikill58.negativity.spigot.inventories.holders.AlertHolder;
 import com.elikill58.negativity.spigot.inventories.holders.CheckMenuHolder;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
@@ -25,7 +24,7 @@ public class ActualizeInvTimer extends BukkitRunnable {
 		for (Player p : Inv.CHECKING.keySet()) {
 			if (p.getOpenInventory() != null) {
 				Inventory topInv = p.getOpenInventory().getTopInventory();
-				if(topInv == null) {
+				if(topInv == null || !topInv.getType().equals(org.bukkit.event.inventory.InventoryType.CHEST)) {
 					continue;
 				}
 				InventoryHolder holder = topInv.getHolder();
@@ -34,7 +33,8 @@ public class ActualizeInvTimer extends BukkitRunnable {
 				}
 				NegativityHolder nh = (NegativityHolder) holder;
 				if (nh instanceof CheckMenuHolder)
-					CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
+					AbstractInventory.getInventory(InventoryType.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
+					//CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
 				else if (nh instanceof AlertHolder)
 					AbstractInventory.getInventory(InventoryType.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
 				else

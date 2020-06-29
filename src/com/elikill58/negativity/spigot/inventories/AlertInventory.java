@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
 import com.elikill58.negativity.spigot.Inv;
@@ -28,6 +29,11 @@ public class AlertInventory extends AbstractInventory {
 
 	public AlertInventory() {
 		super(InventoryType.ALERT);
+	}
+
+	@Override
+	public boolean isInstance(NegativityHolder nh) {
+		return nh instanceof AlertHolder;
 	}
 	
 	@Override
@@ -94,9 +100,9 @@ public class AlertInventory extends AbstractInventory {
 			actualizeInventory(p, Inv.CHECKING.get(p));
 		}
 	}
-
+	
 	@Override
-	public boolean isInstance(NegativityHolder nh) {
-		return nh instanceof AlertHolder;
+	public void closeInventory(Player p, InventoryCloseEvent e) {
+		Inv.CHECKING.remove(p);
 	}
 }

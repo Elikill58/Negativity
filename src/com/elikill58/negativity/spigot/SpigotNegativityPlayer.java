@@ -31,7 +31,8 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
-import com.elikill58.negativity.spigot.inventories.CheckMenuInventory;
+import com.elikill58.negativity.spigot.inventories.AbstractInventory;
+import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
@@ -141,8 +142,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public void updateCheckMenu() {
 		for (Player p : Inv.CHECKING.keySet()) {
 			if (p.getOpenInventory() != null) {
-				if (InventoryUtils.getInventoryTitle(p.getOpenInventory()).equals(Inv.NAME_CHECK_MENU))
-					CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
+				if (InventoryUtils.getInventoryTitle(p.getOpenInventory()).equals(Inv.NAME_CHECK_MENU)){
+					AbstractInventory.getInventory(InventoryType.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
+					//CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
+				}
 			}
 		}
 	}

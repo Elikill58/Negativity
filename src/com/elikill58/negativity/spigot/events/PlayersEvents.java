@@ -8,11 +8,13 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -29,16 +31,30 @@ import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class PlayersEvents implements Listener {
 
+	private final SpigotNegativity pl;
+	private final ConfigurationSection invalidNameSection;
+	
+	public PlayersEvents(SpigotNegativity pl) {
+		this.pl = pl;
+		ConfigurationSection specialSection = pl.getConfig().getConfigurationSection("cheats").getConfigurationSection("special");
+		ConfigurationSection invalidNameSection = specialSection.getConfigurationSection("invalid_name");
+		if(invalidNameSection == null)
+			invalidNameSection = specialSection.createSection("invalid_name");
+		this.invalidNameSection = invalidNameSection;
+	}
+	
 	@EventHandler
 	public void onPreLogin(AsyncPlayerPreLoginEvent e) {
 		UUID playerId = e.getUniqueId();
 
 		NegativityAccount account = NegativityAccount.get(playerId);
+		
 		Ban activeBan = BanManager.getActiveBan(playerId);
 		if (activeBan != null) {
 			String kickMsgKey;
@@ -54,6 +70,25 @@ public class PlayersEvents implements Listener {
 			e.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
 			e.setKickMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));
 			Adapter.getAdapter().getAccountManager().dispose(playerId);
+		} else if(!UniversalUtils.isValidName(e.getName())) {
+			// check for ban / kick only if the player is not already banned
+			String banReason = invalidNameSection.getString("name", "Invalid Name");
+			if(invalidNameSection.getBoolean("ban", false)) {
+				if(!BanManager.banActive) {
+					SpigotNegativity.getInstance().getLogger().warning("Cannot ban player " + e.getName() + " for " + banReason + " because ban is NOT config.");
+					SpigotNegativity.getInstance().getLogger().warning("Please, enable ban in config and restart your server");
+					if(invalidNameSection.getBoolean("kick", true)) {
+						e.setKickMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", banReason));
+						e.setLoginResult(Result.KICK_OTHER);
+					}
+				} else {
+					BanManager.executeBan(Ban.active(playerId, banReason, "Negativity", BanType.PLUGIN, invalidNameSection.getLong("ban_time", -1), banReason));
+					e.setLoginResult(Result.KICK_BANNED);
+				}
+			} else if(invalidNameSection.getBoolean("kick", true)) {
+				e.setKickMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", banReason));
+				e.setLoginResult(Result.KICK_OTHER);
+			}
 		}
 	}
 
@@ -65,7 +100,7 @@ public class PlayersEvents implements Listener {
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
 		if(!ProxyCompanionManager.searchedCompanion) {
 			ProxyCompanionManager.searchedCompanion = true;
-			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> SpigotNegativity.sendProxyPing(p), 20);
+			Bukkit.getScheduler().runTaskLater(pl, () -> SpigotNegativity.sendProxyPing(p), 20);
 		}
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());
 		np.TIME_INVINCIBILITY = System.currentTimeMillis() + 8000;
@@ -75,7 +110,7 @@ public class PlayersEvents implements Listener {
 					p.sendMessage(msg);
 				ReportCommand.REPORT_LAST.clear();
 			}
-			Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), () -> Utils.sendUpdateMessageIfNeed(p));
+			Bukkit.getScheduler().runTaskAsynchronously(pl, () -> Utils.sendUpdateMessageIfNeed(p));
 		}
 		SpigotNegativity.manageAutoVerif(p);
 	}
@@ -84,8 +119,7 @@ public class PlayersEvents implements Listener {
 	public void onLeave(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
 
-		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(),
-				() -> SpigotNegativityPlayer.removeFromCache(p.getUniqueId()), 2);
+		Bukkit.getScheduler().runTaskLater(pl, () -> SpigotNegativityPlayer.removeFromCache(p.getUniqueId()), 2);
 	}
 
 	@EventHandler

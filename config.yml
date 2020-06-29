@@ -656,3 +656,10 @@ cheats:
       # The time of the ban, in milliseconds.
       # Default: 2629800000 (1 month)
       ban_time: 2629800000
+    invalid_name:
+      name: "Invalid Name"
+      kick: true
+      ban: false
+      # The time of the ban, in milliseconds.
+      # Default: -1 (definitive)
+      ban_time: -1

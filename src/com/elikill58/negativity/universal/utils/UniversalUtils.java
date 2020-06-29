@@ -329,6 +329,10 @@ public class UniversalUtils {
 		return time;
 	}
 
+	public static boolean isValidName(String name) {
+		return name.matches("[0-9A-Za-z]{3," + name.length() + "}");
+	}
+	
 	public static void init() {
 		getContentFromURL("https://google.fr");
 		DefaultConfigValue.init();

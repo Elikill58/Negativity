@@ -131,7 +131,7 @@ public class SpigotNegativity extends JavaPlugin {
 				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
 
 		PluginManager pm = Bukkit.getPluginManager();
-		pm.registerEvents(new PlayersEvents(), this);
+		pm.registerEvents(new PlayersEvents(this), this);
 		pm.registerEvents(new FightManager(), this);
 		pm.registerEvents(new ServerCrasherEvents(this), this);
 

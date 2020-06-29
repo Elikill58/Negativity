@@ -60,10 +60,10 @@ public class ServerCrasherEvents implements Listener {
 					p.kickPlayer(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
 					inDisconnection.add(p.getUniqueId());
 				}
-			} else {p.sendMessage("banning");
-				Ban b=BanManager.executeBan(Ban.active(p.getUniqueId(), getName(), "Negativity", BanType.PLUGIN,
+			} else {
+				BanManager.executeBan(Ban.active(p.getUniqueId(), getName(), "Negativity", BanType.PLUGIN,
 						System.currentTimeMillis() + section.getLong("ban_time", 2629800000l), "server_crash"));
-				inDisconnection.add(p.getUniqueId());p.sendMessage("Ban: " + b);
+				inDisconnection.add(p.getUniqueId());
 			}
 		} else if(section.getBoolean("kick", true)) {
 			p.kickPlayer(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", section.getString("name", "Server Crasher")));

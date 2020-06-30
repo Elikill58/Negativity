@@ -1,5 +1,8 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThan;
+import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThanExtended;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -10,7 +13,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -34,19 +36,31 @@ public class AirJumpProtocol extends Cheat implements Listener {
 			return;
 		if (p.isFlying() || p.getVehicle() != null || p.getItemInHand().getType().name().contains("TRIDENT") || np.hasElytra() || np.isInFight)
 			return;
-		double temp = e.getTo().getY() - e.getFrom().getY();
-		Location loc = p.getLocation().clone();
-		if (temp > 0.35 && np.lastYDiff < temp && np.lastYDiff > 0 && !LocationUtils.hasOtherThanExtended(loc.clone(), "AIR")
-				&& !LocationUtils.hasOtherThanExtended(loc.clone().subtract(0, 1, 0), "AIR")
-				&& !LocationUtils.hasOtherThanExtended(loc.clone().subtract(0, 2, 0), "AIR")) {
-			boolean mayCancel = SpigotNegativity.alertMod(
-					temp > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-							UniversalUtils.parseInPorcent((int) (temp * 210) - Utils.getPing(p)),
-					"Actual diff Y: " + np.lastYDiff + ", last diff Y: " + temp + ", ping: " + Utils.getPing(p)
+		boolean mayCancel = false;
+		
+		double diffYtoFrom = e.getTo().getY() - e.getFrom().getY();
+		Location loc = p.getLocation().clone(), locDown = loc.subtract(0, 1, 0);
+		if (diffYtoFrom > 0.35 && np.lastYDiff < diffYtoFrom && np.lastYDiff > 0 && !hasOtherThanExtended(loc.clone(), "AIR")
+				&& !hasOtherThanExtended(locDown, "AIR")
+				&& !hasOtherThanExtended(loc.clone().subtract(0, 2, 0), "AIR")) {
+			mayCancel = SpigotNegativity.alertMod(
+					diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+							UniversalUtils.parseInPorcent((int) (diffYtoFrom * 210) - Utils.getPing(p)),
+					"Actual diff Y: " + np.lastYDiff + ", last diff Y: " + diffYtoFrom + ", ping: " + Utils.getPing(p)
 							+ ". Warn for AirJump: " + np.getWarn(this));
-			if (isSetBack() && mayCancel)
-				Utils.teleportPlayerOnGround(p);
 		}
-		np.lastYDiff = temp;
+		np.lastYDiff = diffYtoFrom;
+		
+		boolean wasGoingDown = np.contentBoolean.getOrDefault("going-down", false);
+		double d = np.contentDouble.getOrDefault("airjump-diff-y", 0.0);
+		if(diffYtoFrom > d && wasGoingDown) {
+			if(!hasOtherThanExtended(locDown, "AIR") && !hasOtherThan(loc, "AIR")) {
+				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffYtoFrom * 200), "Was going down, last y " + d + ", current: " + diffYtoFrom);
+			}
+		}
+		np.contentDouble.put("airjump-diff-y", diffYtoFrom);
+		np.contentBoolean.put("going-down", diffYtoFrom < 0);
+		if (isSetBack() && mayCancel)
+			Utils.teleportPlayerOnGround(p);
 	}
 }

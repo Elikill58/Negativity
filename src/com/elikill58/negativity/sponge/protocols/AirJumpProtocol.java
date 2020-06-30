@@ -1,5 +1,8 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import static com.elikill58.negativity.sponge.utils.LocationUtils.hasOtherThan;
+import static com.elikill58.negativity.sponge.utils.LocationUtils.hasOtherThanExtended;
+
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.entity.living.player.Player;
@@ -13,7 +16,6 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -36,19 +38,31 @@ public class AirJumpProtocol extends Cheat {
 			return;
 		if (p.get(Keys.IS_FLYING).orElse(false) || p.getVehicle().isPresent() || p.get(Keys.IS_ELYTRA_FLYING).orElse(false) || np.isInFight)
 			return;
-		Location<World> loc = p.getLocation();
-		double temp = e.getToTransform().getLocation().getY() - e.getFromTransform().getLocation().getY();
-		if (temp > 0.35 && np.lastYDiff < temp && !LocationUtils.hasOtherThanExtended(loc.copy(), BlockTypes.AIR)
-				&& !LocationUtils.hasOtherThanExtended(loc.copy().sub(0, 1, 0), BlockTypes.AIR)
-				&& !LocationUtils.hasOtherThanExtended(loc.copy().sub(0, 2, 0), BlockTypes.AIR)) {
-			boolean mayCancel = SpongeNegativity.alertMod(
-					temp > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent((int) (temp * 210) - Utils.getPing(p)),
-					"Actual diff Y: " + np.lastYDiff + ", last diff Y: " + temp + ", ping: " + Utils.getPing(p)
+		boolean mayCancel = false;
+		
+		Location<World> loc = p.getLocation(), locDown = loc.copy().sub(0, 1, 0);
+		double diffYtoFrom = e.getToTransform().getLocation().getY() - e.getFromTransform().getLocation().getY();
+		if (diffYtoFrom > 0.35 && np.lastYDiff < diffYtoFrom && !hasOtherThanExtended(loc.copy(), BlockTypes.AIR)
+				&& !hasOtherThanExtended(locDown, BlockTypes.AIR)
+				&& !hasOtherThanExtended(loc.copy().sub(0, 2, 0), BlockTypes.AIR)) {
+			mayCancel = SpongeNegativity.alertMod(
+					diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+					UniversalUtils.parseInPorcent((int) (diffYtoFrom * 210) - Utils.getPing(p)),
+					"Actual diff Y: " + np.lastYDiff + ", last diff Y: " + diffYtoFrom + ", ping: " + Utils.getPing(p)
 							+ ". Warn for AirJump: " + np.getWarn(this));
-			if (isSetBack() && mayCancel)
-				Utils.teleportPlayerOnGround(p);
 		}
-		np.lastYDiff = temp;
+		np.lastYDiff = diffYtoFrom;
+		
+		boolean wasGoingDown = np.contentBoolean.getOrDefault("going-down", false);
+		double d = np.contentDouble.getOrDefault("airjump-diff-y", 0.0);
+		if(diffYtoFrom > d && wasGoingDown) {
+			if(!hasOtherThanExtended(locDown, BlockTypes.AIR) && !hasOtherThan(loc, BlockTypes.AIR)) {
+				mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffYtoFrom * 200), "Was going down, last y " + d + ", current: " + diffYtoFrom);
+			}
+		}
+		np.contentDouble.put("airjump-diff-y", diffYtoFrom);
+		np.contentBoolean.put("going-down", diffYtoFrom < 0);
+		if (isSetBack() && mayCancel)
+			Utils.teleportPlayerOnGround(p);
 	}
 }

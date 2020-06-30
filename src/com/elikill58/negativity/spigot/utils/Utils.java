@@ -212,6 +212,12 @@ public class Utils {
 		return null;
 	}
 	
+	/**
+	 * Check if a player is swimming. Compatible even before 1.13
+	 * 
+	 * @param p the player to check if he is swimming
+	 * @return true if the player is swimming
+	 */
 	public static boolean isSwimming(Player p) {
 		if(Version.getVersion().isNewerOrEquals(Version.V1_13))
 			return p.isSwimming();

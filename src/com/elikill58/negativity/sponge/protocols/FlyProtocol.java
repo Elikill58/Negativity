@@ -76,7 +76,8 @@ public class FlyProtocol extends Cheat {
 				locUnderUnder = p.getLocation().copy().sub(0, 2, 0);
 		
 		double y = fromPosition.getY() - toPosition.getY();
-		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.getVehicle().isPresent()){
+		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.getVehicle().isPresent()
+				&& !LocationUtils.hasBoatAroundHim(p.getLocation())){
 			mayCancel = SpongeNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, 97, "Suspicious Y: " + y);
 		}

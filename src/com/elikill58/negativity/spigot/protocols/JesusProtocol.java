@@ -72,7 +72,7 @@ public class JesusProtocol extends Cheat implements Listener {
 
 		boolean jesusState = np.contentBoolean.getOrDefault("jesus-state", false);
 		if (dif == np.contentDouble.getOrDefault("jesus-last-y-" + jesusState, 0.0) && isInWater && !np.isInFight) {
-			if (!hasOtherThan(under, STATIONARY_WATER) && !hasMaterialsAround(loc, "WATER_LILY")) {
+			if (!hasOtherThan(under, STATIONARY_WATER) && !hasMaterialsAround(loc, "WATER_LILY") && !Utils.isSwimming(p)) {
 				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, parseInPorcent((dif + 5) * 10),
 						"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: "

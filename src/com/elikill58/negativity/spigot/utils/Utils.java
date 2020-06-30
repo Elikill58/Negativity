@@ -211,4 +211,19 @@ public class Utils {
  		}
 		return null;
 	}
+	
+	public static boolean isSwimming(Player p) {
+		if(Version.getVersion().isNewerOrEquals(Version.V1_13))
+			return p.isSwimming();
+		else {
+			if(!p.isSprinting())
+				return false;
+			Location loc = p.getLocation().clone();
+			if(loc.getBlock().getType().name().contains("WATER"))
+				return true;
+			if(loc.subtract(0, 1, 0).getBlock().getType().name().contains("WATER"))
+				return true;
+			return false;
+		}
+	}
 }

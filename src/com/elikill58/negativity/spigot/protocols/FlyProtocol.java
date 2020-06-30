@@ -49,7 +49,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			if (speed > 5)
 				return;
 		}
-		if (p.getAllowFlight() || p.getEntityId() == 100)
+		if (p.getAllowFlight() || p.getEntityId() == 100 || Utils.isSwimming(p))
 			return;
 		boolean mayCancel = false;
 		double y = e.getFrom().getY() - e.getTo().getY();

@@ -388,11 +388,13 @@ public class SpigotNegativity extends JavaPlugin {
 			if (ItemUseBypass.ITEM_BYPASS.containsKey(Utils.getItemInHand(p).getType().name()))
 				if (ItemUseBypass.ITEM_BYPASS.get(Utils.getItemInHand(p).getType().name()).getWhen().equals(WhenBypass.ALWAYS))
 					return false;
-		Block target = Utils.getTargetBlock(p, 5);
-		if(target != null && !target.getType().equals(Material.AIR))
-			if (ItemUseBypass.ITEM_BYPASS.containsKey(target.getType().name()))
-				if (ItemUseBypass.ITEM_BYPASS.get(target.getType().name()).getWhen().equals(WhenBypass.LOOKING))
-					return false;
+		
+		List<String> itemBypassWhenLooking = ItemUseBypass.getItemBypassWithBypass(WhenBypass.LOOKING);
+		if(!itemBypassWhenLooking.isEmpty()) {
+			Block target = Utils.getTargetBlock(p, 5);
+			if(target != null && !target.getType().equals(Material.AIR) && itemBypassWhenLooking.contains(target.getType().name()))
+				return false;
+		}
 		
 		Bukkit.getPluginManager().callEvent(new PlayerCheatEvent(p, c, reliability));
 		if (hasBypass && (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase())

@@ -10,6 +10,15 @@ public class ItemUseBypass {
 
 	public static final HashMap<String, ItemUseBypass> ITEM_BYPASS = new HashMap<>();
 	
+	public static List<String> getItemBypassWithBypass(WhenBypass when){
+		List<String> list = new ArrayList<>();
+		ITEM_BYPASS.forEach((key, bypass) -> {
+			if(bypass.getWhen().equals(when))
+				list.add(key);
+		});
+		return list;
+	}
+	
 	private String item;
 	private List<Cheat> cheats = new ArrayList<>();
 	private WhenBypass when;

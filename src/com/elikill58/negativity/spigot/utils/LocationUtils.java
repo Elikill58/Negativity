@@ -295,7 +295,8 @@ public class LocationUtils {
 				int vecY = UniversalUtils.floor(vec3d1.getY());
 				int vecZ = UniversalUtils.floor(vec3d1.getZ());
 				Location vector = new Location(w, posX, posY, posZ);
-				if (!w.getBlockAt(vector).getType().equals(Material.AIR) && hasMovingPosition(w, vector, vec3d, vec3d1))
+				Material type = w.getBlockAt(vector).getType();
+				if (!type.equals(Material.AIR) && hasMovingPosition(w, vector, vec3d, vec3d1) && !type.name().contains("WATER"))
 					return false;
 				
 				int i = 200;

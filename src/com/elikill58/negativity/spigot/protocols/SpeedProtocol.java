@@ -84,6 +84,10 @@ public class SpeedProtocol extends Cheat implements Listener {
 						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: " + walkTest +
 						", walkWithEssentialsTest: " + walkWithEssTest, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
 			}
+			double calculatedSpeedWithoutY = Utils.getSpeed(from, to);
+			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() > 0) { // "+0.01" if to prevent lag"
+				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, 90, "Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().getY());
+			}
 		} else if (!np.isOnGround()) {
 			for (Entity entity : p.getNearbyEntities(5, 5, 5))
 				if (entity instanceof Creeper || entity.getType().equals(EntityType.CREEPER))

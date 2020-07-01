@@ -43,11 +43,11 @@ public class TimerProtocol extends Cheat implements Listener {
 			np.TIMER_COUNT.remove((int) 0);
 		else // loading seconds
 			return;
-		int MAX = 20 + variation, MIN = 20 - variation;
-		if(MAX > sum && MIN < sum)// in min/max variations
+		int MAX = 20 + variation;
+		if(MAX > sum)// in min/max variations
 			return;
 		Player p = e.getPlayer();
-		int amount = (int) (sum > MAX ? sum - MAX : MIN - sum);
+		int amount = (int) (sum - MAX);
 		SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (Utils.getPing(p) / 100)),
 				"Flying: " + flying + ", position: " + position + ", look: " + look + ", positionLook: " + positonLook + ", sum: " + sum,
 				(CheatHover) null, amount > 0 ? amount : 1);

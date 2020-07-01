@@ -37,8 +37,6 @@ public class ActualizeInvTimer extends BukkitRunnable {
 					//CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
 				else if (nh instanceof AlertHolder)
 					AbstractInventory.getInventory(InventoryType.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
-				else
-					Inv.CHECKING.remove(p);
 			} else
 				Inv.CHECKING.remove(p);
 		}

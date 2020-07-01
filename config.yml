@@ -645,6 +645,18 @@ cheats:
     alert_to_kick: 5
     check_in_verif: true
 
+  # Timer make the player game going faster
+  timer:
+    ping: 150
+    exact_name: "Timer"
+    isActive: true
+    reliability_alert: 60
+    setBack: false
+    kick: false
+    alert_to_kick: 5
+    check_in_verif: true
+    max_variation: 7
+
   # There is some special features
   special:
     mcleaks:

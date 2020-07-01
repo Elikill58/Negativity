@@ -67,6 +67,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public HashMap<String, Boolean> contentBoolean = new HashMap<>();
 	public HashMap<Cheat, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
+	public ArrayList<Integer> TIMER_COUNT = new ArrayList<>();
 	private WeakReference<Player> p;
 	// Packets
 	public int ALL = 0, MAX_FLYING;

@@ -95,7 +95,7 @@ public class DefaultConfigValue {
 
 		String[] cheats = new String[]{"airjump", "antipotion", "fasteat", "regen", "antiknockback", "autoclick", "autosteal",
 				"blink", "chat", "critical", "forcefield", "fastplace", "fastladder", "fastbow", "faststairs", "inventorymove", "jesus", "fly",
-				"nofall", "nopitchlimit", "noslowdown", "noweb", "nuker", "phase", "scaffold", "sneak", "speed", "spider", "step", "xray"};
+				"nofall", "nopitchlimit", "noslowdown", "noweb", "nuker", "phase", "scaffold", "sneak", "speed", "spider", "step", "timer", "xray"};
 		for (String localCheat : cheats) {
 			//STRINGS.put("Permissions.bypass." + localCheat, "negativity.bypass." + localCheat);
 			STRINGS.put("Permissions.bypass." + localCheat + ".default", "negativity.bypass." + localCheat);
@@ -142,6 +142,8 @@ public class DefaultConfigValue {
 			BOOLEANS.put("cheats." + lc + ".check_in_verif", true);
 		}
 
+		INTS.put("cheats.autoclick.click_alert", 20);
+
 		DOUBLES.put("cheats.forcefield.reach", 3.9);
 		BOOLEANS.put("cheats.forcefield.ghost_disabled", false);
 
@@ -151,13 +153,13 @@ public class DefaultConfigValue {
 		BOOLEANS.put("cheats.fasteat.autoVerif", false);
 		INTS.put("cheats.fastplace.time_2_place", 50);
 
-		INTS.put("cheats.autoclick.click_alert", 20);
-
 		BOOLEANS.put("cheats.fastbow.autoVerif", false);
 
 		INTS.put("cheats.xray.ping", 300);
 
 		INTS.put("cheats.chat.ping", 300);
+		
+		INTS.put("cheats.timer.max_variation", 7);
 
 		BOOLEANS.put("cheats.special.mcleaks.kick", true);
 		

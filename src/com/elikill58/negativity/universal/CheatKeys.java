@@ -31,5 +31,6 @@ public class CheatKeys {
 	public static final String SPEED = "SPEED";
 	public static final String SPIDER = "SPIDER";
 	public static final String STEP = "STEP";
+	public static final String TIMER = "TIMER";
 	public static final String XRAY = "XRAY";
 }

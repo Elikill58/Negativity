@@ -232,4 +232,18 @@ public class Utils {
 			return false;
 		}
 	}
+
+	/**
+	 * Get the X/Z speed.
+	 * 
+	 * @param from Location where the player comes from
+	 * @param to Location where the player go
+	 * @return the speed (without count Y)
+	 */
+	public static double getSpeed(Location from, Location to) {
+		double x = to.getX() - from.getX();
+		double z = to.getZ() - from.getZ();
+
+		return x * x + z * z;
+	}
 }

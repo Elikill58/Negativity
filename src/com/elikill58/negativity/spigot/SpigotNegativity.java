@@ -88,7 +88,7 @@ import com.elikill58.negativity.universal.verif.VerificationManager;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean log = false, log_console = false, hasBypass = false, essentialsSupport = false,
+	public static boolean log = false, log_console = false, hasBypass = false, isBuggedGroundVersion = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
 	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
@@ -119,6 +119,15 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().info("------ Negativity Information ------");
 			getConfig().options().copyDefaults();
 			saveDefaultConfig();
+		}
+		List<String> buggedVersion = Arrays.asList("git-Spigot-758abbe-2b00831", "git-Spigot-6f4ff1b-d424351", "git-Spigot-6f4ff1b-983305b", "git-Spigot-16d7899-4ff609e");
+		if(buggedVersion.contains(Bukkit.getVersion())) {
+			isBuggedGroundVersion = true;
+			getLogger().warning("---- Warn ----");
+			getLogger().warning("Your spigot version is outdated.");
+			getLogger().warning("This first release contains some SEVERAL bugs, please update it.");
+			getLogger().warning("We are not responsible if a false flag/error appear.");
+			getLogger().warning("---- Warn ----");
 		}
 		getLogger().info("This plugin is free, but you can support me : https://www.patreon.com/elikill58 <3");
 		UniversalUtils.init();

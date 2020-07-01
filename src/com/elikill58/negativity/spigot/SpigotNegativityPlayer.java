@@ -483,7 +483,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public boolean isOnGround() {
-		return Version.getVersion().isNewerOrEquals(Version.V1_16) ? isOnGround : p.get().isOnGround();
+		return SpigotNegativity.isBuggedGroundVersion ? isOnGround : p.get().isOnGround();
 	}
 	
 	public void setOnGround(boolean b) {

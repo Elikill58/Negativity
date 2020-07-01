@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.inventories;
 
+import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
+
 import java.util.Collections;
 
 import org.bukkit.Bukkit;
@@ -7,7 +9,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -23,8 +24,6 @@ import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
-
-import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
 
 public class CheckMenuInventory extends AbstractInventory {
 	
@@ -175,10 +174,5 @@ public class CheckMenuInventory extends AbstractInventory {
 				break;
 			}
 		}
-	}
-	
-	@Override
-	public void closeInventory(Player p, InventoryCloseEvent e) {
-		Inv.CHECKING.remove(p);
 	}
 }

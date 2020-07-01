@@ -330,7 +330,7 @@ public class UniversalUtils {
 	}
 
 	public static boolean isValidName(String name) {
-		return name.matches("[0-9A-Za-z]{3," + name.length() + "}");
+		return name.matches("[0-9A-Za-z-_]{3," + name.length() + "}");
 	}
 	
 	public static void init() {

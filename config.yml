@@ -97,9 +97,6 @@ Permissions:
     default: "negativity.ban"
   unban:
     default: "negativity.unban"
-  # To bypass ban system
-  notBanned:
-    default: "negativity.notbanned"
   mod:
     default: "negativity.mod"
   lang:

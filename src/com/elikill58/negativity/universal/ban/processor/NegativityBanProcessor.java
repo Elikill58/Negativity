@@ -8,7 +8,6 @@ import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.storage.ActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
-import com.elikill58.negativity.universal.permissions.Perm;
 
 /**
  * This class, additionally to what {@link BaseNegativityBanProcessor} can do, kicks online players that have been banned.
@@ -23,7 +22,7 @@ public class NegativityBanProcessor extends BaseNegativityBanProcessor {
 	@Override
 	public Ban executeBan(Ban ban) {
 		NegativityPlayer nPlayer = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
-		if (nPlayer != null && Perm.hasPerm(nPlayer, Perm.NOT_BANNED))
+		if (nPlayer == null)
 			return null;
 
 		Ban executedBan = super.executeBan(ban);

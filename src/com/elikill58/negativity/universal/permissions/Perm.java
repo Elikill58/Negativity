@@ -19,7 +19,6 @@ public class Perm {
 	public static final String REPORT = "report";
 	public static final String BAN = "ban";
 	public static final String UNBAN = "unban";
-	public static final String NOT_BANNED = "notBanned";
 	public static final String MOD = "mod";
 	public static final String LANG = "lang";
 

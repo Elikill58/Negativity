@@ -62,7 +62,7 @@ public class JesusProtocol extends Cheat implements Listener {
 				else if (dif < 0.002 && dif > -0.002 && dif != 0.0)
 					reliability = Math.abs(dif * 5000);
 				else if (dif == 0.0)
-					reliability = 95;
+					reliability = 90;
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(reliability),
 						"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif
 								+ " and ping: " + ping);

@@ -53,19 +53,22 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		boolean mayCancel = false;
 		double y = e.getFrom().getY() - e.getTo().getY();
+		Location loc = p.getLocation().clone(),
+				locUnder = p.getLocation().clone().subtract(0, 1, 0),
+				locUnderUnder = p.getLocation().clone().subtract(0, 2, 0);
+		Material type = loc.getBlock().getType(), typeUpper = loc.getBlock().getRelative(BlockFace.UP).getType();
+		boolean isInWater = loc.getBlock().getType().name().contains("WATER"), isOnWater = locUnder.getBlock().getType().name().contains("WATER");
 		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle()
-				&& !np.isInFight && !LocationUtils.hasBoatAroundHim(p.getLocation())){
+				&& !np.isInFight && !LocationUtils.hasBoatAroundHim(p.getLocation()) && !(isInWater || isOnWater)){
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, 97, "Suspicious Y: " + y);
 		}
-		Location locUnder = p.getLocation().clone().subtract(0, 1, 0),
-				locUnderUnder = p.getLocation().clone().subtract(0, 2, 0);
 		double i = e.getTo().toVector().distance(e.getFrom().toVector());
 		if (!(p.isSprinting() && (e.getTo().getY() - e.getFrom().getY()) > 0)
 				&& locUnder.getBlock().getType().equals(Material.AIR)
 				&& locUnderUnder.getBlock().getType().equals(Material.AIR)
 				&& (p.getFallDistance() == 0.0F || Utils.isInBoat(p))
-				&& (p.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR)) && i > 0.8
+				&& typeUpper.equals(Material.AIR) && i > 0.8
 				&& !np.isOnGround()) {
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, parseInPorcent((int) i * 50),
@@ -90,8 +93,8 @@ public class FlyProtocol extends Cheat implements Listener {
 		to.setY(e.getFrom().getY());
 		double distanceWithoutY = to.distance(e.getFrom());
 		if (distanceWithoutY == i && !np.isOnGround() && i != 0
-				&& p.getLocation().getBlock().getRelative(BlockFace.UP).getType().equals(Material.AIR)
-				&& !p.getLocation().getBlock().getType().name().contains("WATER") && distanceWithoutY > 0.1) {
+				&& typeUpper.equals(Material.AIR)
+				&& !type.name().contains("WATER") && distanceWithoutY > 0.1) {
 			if (np.contentBoolean.getOrDefault("fly-not-moving-y", false))
 				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, 98, "Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY);

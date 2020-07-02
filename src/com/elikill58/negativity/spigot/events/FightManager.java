@@ -105,8 +105,8 @@ public class FightManager implements Listener {
 	public void blowUp(EntityExplodeEvent e) {
 		if(!e.getEntityType().equals(EntityType.PRIMED_TNT))
 			return;
-		Utils.getOnlinePlayers().stream().filter((p) -> e.getLocation().distance(p.getLocation()) < 5)
-				.forEach((p) -> SpigotNegativityPlayer.getNegativityPlayer(p).fight());
+		Location loc = e.getLocation();
+		Utils.getOnlinePlayers().stream().filter((p) -> loc.getWorld().equals(p.getWorld()) && loc.distance(p.getLocation()) < 5).forEach((p) -> SpigotNegativityPlayer.getNegativityPlayer(p).fight());
 	}
 	
 	private void manageFightBetweenTwoPlayers(Player p, int maxDistance) {
@@ -119,8 +119,7 @@ public class FightManager implements Listener {
 				continue;
 			if(pl.getLocation().getWorld().equals(p.getLocation().getWorld())) {
 				if(pl.getLocation().distance(p.getLocation()) < maxDistance) {
-					if(!np.isInFight)
-						np.fight();
+					np.fight();
 					npOther.fight();
 				}
 			}

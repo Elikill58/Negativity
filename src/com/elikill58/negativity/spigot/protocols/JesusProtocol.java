@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.protocols;
 
 import static com.elikill58.negativity.spigot.utils.ItemUtils.STATIONARY_WATER;
 import static com.elikill58.negativity.spigot.utils.LocationUtils.hasMaterialsAround;
+import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThan;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
@@ -49,7 +50,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		int ping = Utils.getPing(p);
 		double dif = e.getFrom().getY() - e.getTo().getY();
 		if (!isInWater && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
-			if (!hasOtherThan(under, STATIONARY_WATER)) {
+			if (!hasOtherThanExtended(under, STATIONARY_WATER)) {
 				double reliability = 0;
 				if (dif < 0.0005 && dif > 0.00000005)
 					reliability = dif * 10000000 - 1;

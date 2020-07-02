@@ -72,12 +72,14 @@ public class FlyProtocol extends Cheat {
 		double distance = toPosition.distance(fromPosition);
 		boolean isInBoat = p.getVehicle().isPresent() && p.getVehicle().get().getType().equals(EntityTypes.BOAT);
 		
-		Location<World> locUnder = p.getLocation().copy().sub(0, 1, 0),
+		Location<World> loc = p.getLocation().copy(),
+				locUnder = p.getLocation().copy().sub(0, 1, 0),
 				locUnderUnder = p.getLocation().copy().sub(0, 2, 0);
-		
+		BlockType type = loc.getBlockType(), typeUpper = loc.copy().add(0, 1, 0).getBlockType();
+		boolean isInWater = loc.getBlock().getType().equals(BlockTypes.WATER), isOnWater = locUnder.getBlock().getType().equals(BlockTypes.WATER);
 		double y = fromPosition.getY() - toPosition.getY();
 		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.getVehicle().isPresent()
-				&& !LocationUtils.hasBoatAroundHim(p.getLocation())){
+				&& !LocationUtils.hasBoatAroundHim(loc) && !np.isInFight && !(isInWater || isOnWater)){
 			mayCancel = SpongeNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, 97, "Suspicious Y: " + y);
 		}
@@ -86,7 +88,7 @@ public class FlyProtocol extends Cheat {
 				&& locUnder.getBlock().getType().equals(BlockTypes.AIR)
 				&& locUnderUnder.getBlock().getType().equals(BlockTypes.AIR)
 				&& (np.getFallDistance() == 0.0F || isInBoat)
-				&& (p.getLocation().copy().add(0, 1, 0).getBlock().getType().equals(BlockTypes.AIR)) && distance > 0.8
+				&& (typeUpper.equals(BlockTypes.AIR)) && distance > 0.8
 				&& !p.isOnGround()) {
 			mayCancel = SpongeNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, UniversalUtils.parseInPorcent((int) distance * 50),
@@ -94,7 +96,7 @@ public class FlyProtocol extends Cheat {
 					+ ". Warn for fly: " + np.getWarn(this), isInBoat ? hoverMsg("boat") : null);
 		}
 
-		if (!LocationUtils.hasOtherThanExtended(p.getLocation(), BlockTypes.AIR) && !np.contentBoolean.getOrDefault("boat-falling", false)
+		if (!LocationUtils.hasOtherThanExtended(loc, BlockTypes.AIR) && !np.contentBoolean.getOrDefault("boat-falling", false)
 				&& !LocationUtils.hasOtherThanExtended(locUnder, BlockTypes.AIR)
 				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, BlockTypes.AIR)
 				&& (fromPosition.getY() <= toPosition.getY() || isInBoat)) {
@@ -111,7 +113,7 @@ public class FlyProtocol extends Cheat {
 		Vector3d to = new Vector3d(toPosition.getX(), fromPosition.getX(), toPosition.getZ());
 		double distanceWithoutY = to.distance(fromPosition);
 		if(distanceWithoutY == distance && !p.isOnGround() && distance != 0 && p.getLocation().add(Vector3i.UNIT_Y).getBlockType().equals(BlockTypes.AIR)
-				&& p.getLocation().getBlockType().getId().contains("WATER")) {
+				&& type.getId().contains("WATER")) {
 			if (np.contentBoolean.getOrDefault("fly-not-moving-y", false))
 				mayCancel = SpongeNegativity.alertMod(
 						np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, 98,

@@ -47,6 +47,9 @@ public class JesusProtocol extends Cheat {
 		Location<World> loc = p.getLocation();
 		Vector3d from = e.getFromTransform().getPosition(), to = e.getToTransform().getPosition();
 		Location<World> under = loc.copy().sub(0, 1, 0);
+		if (has(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY")
+				|| has(loc.copy().sub(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY"))
+			return;
 		BlockType type = loc.getBlockType();
 		BlockType underType = under.getBlockType();
 		boolean isInWater = type.getId().contains("WATER"), isOnWater = underType.getId().contains("WATER");
@@ -54,8 +57,7 @@ public class JesusProtocol extends Cheat {
 		double dif = from.getY() - to.getY();
 		boolean mayCancel = false;
 
-		if (!isInWater && isOnWater && !hasBoatAroundHim(loc) && !hasOtherThan(under, BlockTypes.WATER)
-				&& !has(loc.sub(0, 1, 0), "WATER_LILY") && !p.get(Keys.IS_FLYING).orElse(false)) {
+		if (!isInWater && isOnWater && !hasBoatAroundHim(loc) && !hasOtherThan(under, BlockTypes.WATER) && !p.get(Keys.IS_FLYING).orElse(false)) {
 
 			double reliability = 0;
 			if (dif < 0.0005 && dif > 0.00000005)
@@ -69,7 +71,7 @@ public class JesusProtocol extends Cheat {
 			else if (dif < 0.002 && dif > -0.002 && dif != 0.0)
 				reliability = Math.abs(dif * 5000);
 			else if (dif == 0.0)
-				reliability = 95;
+				reliability = 90;
 			mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(reliability),
 					"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif + " and ping: "
 							+ ping);
@@ -80,7 +82,7 @@ public class JesusProtocol extends Cheat {
 		float distanceFall = np.getFallDistance();
 		if (isInWater && isOnWater && distanceFall < 1 && !upper.getBlock().get(Keys.IS_WET).orElse(false)
 				&& !hasOtherThan(under, BlockTypes.WATER)) {
-			if (distanceAbs > p.get(Keys.WALKING_SPEED).orElse(Double.MAX_VALUE) && !has(loc, "WATER_LILY")
+			if (distanceAbs > p.get(Keys.WALKING_SPEED).orElse(Double.MAX_VALUE)
 					&& !has(upper, "WATER_LILY") && !p.get(Keys.IS_FLYING).orElse(false)) {
 				mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.JESUS), 98,
 						"In water, distance: " + distanceAbs, hoverMsg("main", "%distance%", distanceAbs));
@@ -94,7 +96,7 @@ public class JesusProtocol extends Cheat {
 
 		boolean jesusState = np.contentBoolean.getOrDefault("jesus-state", false);
 		if (dif == np.contentDouble.getOrDefault("jesus-last-y-" + jesusState, 0.0) && isInWater && !np.isInFight) {
-			if (!hasOtherThan(under, BlockTypes.WATER) && !has(loc, "WATER_LILY")) {
+			if (!hasOtherThan(under, BlockTypes.WATER)) {
 				mayCancel = SpongeNegativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, parseInPorcent((dif + 5) * 10),
 						"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: "

@@ -161,6 +161,8 @@ Permissions:
       default: "negativity.bypass.faststairs"
     nopitchlimit:
       default: "negativity.bypass.nopitchlimit"
+    timer:
+      default: "negativity.bypass.timer"
 
 Translation:
   active: false # enable or disable the translation

@@ -106,6 +106,8 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if(!packet.getPacketType().equals(PacketType.Client.USE_ENTITY))
 			return;
 		Player p = e.getPlayer();
+		if(p.getGameMode().equals(GameMode.CREATIVE))
+			return;
 		ItemStack inHand = Utils.getItemInHand(p);
 		if(inHand != null && inHand.getType().equals(Material.BOW))
 			return;
@@ -125,7 +127,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			if(type.equals(EntityType.ENDER_DRAGON))
 				return;
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10),
-					"Big distance with: " + type.name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
+					"[Packet] Big distance with: " + type.name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
 					+ ". Ping: " + Utils.getPing(p), hoverMsg("distance", "%name%", PacketUtils.getNmsEntityName(nmsEntity), "%distance%", nf.format(dis)));
 			if(mayCancel)
 				packet.setCancelled(true);

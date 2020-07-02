@@ -165,4 +165,18 @@ public class Utils {
 		indicator.offer(Keys.ITEM_LORE, Collections.singletonList(Messages.getMessage(player, "inventory.main.mcleaks_indicator.description")));
 		return indicator;
 	}
+
+	/**
+	 * Get the X/Z speed.
+	 * 
+	 * @param from Location where the player comes from
+	 * @param to Location where the player go
+	 * @return the speed (without count Y)
+	 */
+	public static double getSpeed(Location<World> from, Location<World> to) {
+		double x = to.getX() - from.getX();
+		double z = to.getZ() - from.getZ();
+
+		return x * x + z * z;
+	}
 }

@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import static com.elikill58.negativity.sponge.utils.LocationUtils.hasOtherThan;
+
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +24,7 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.support.EssentialsSupport;
@@ -57,6 +60,7 @@ public class SpeedProtocol extends Cheat {
 			// Dismounting a boat teleports the player, triggering a false positive
 			return;
 		}
+		Location<World> from = e.getFromTransform().getLocation(), to = e.getToTransform().getLocation();
 		Vector3d fromVect = e.getFromTransform().getPosition();
 		Vector3d toVect = e.getToTransform().getPosition();
 		if (p.getLocation().sub(Vector3i.UNIT_Y).getBlockType().equals(BlockTypes.SPONGE)
@@ -91,6 +95,10 @@ public class SpeedProtocol extends Cheat {
 						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + moveY + ", walkTest: " + walkTest +
 						", walkWithEssentialsTest: " + walkWithEssTest, hoverMsg("distance_ground", "%distance%", numberFormat.format(moveY)));
 			}
+			double calculatedSpeedWithoutY = Utils.getSpeed(from, to);
+			if(calculatedSpeedWithoutY > (np.getWalkSpeed() + 0.01) && p.getVelocity().getY() > 0 && hasOtherThan(from.copy().add(0, 1, 0), BlockTypes.AIR)) { // "+0.01" if to prevent lag"
+				mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, 90, "Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + np.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().getY());
+			}
 		} else if (!p.isOnGround()) {
 			for(Entity et : p.getNearbyEntities(5))
 				if(et.getType().equals(EntityTypes.CREEPER))
@@ -101,9 +109,9 @@ public class SpeedProtocol extends Cheat {
 					mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(moveY * 100 * 2), proof,
 							hoverMsg("distance_jumping", "%distance%", numberFormat.format(moveY)));
 				} else {
-					BlockType under = e.getToTransform().getLocation().copy().sub(0, 1, 0).getBlockType();
+					BlockType under = to.copy().sub(0, 1, 0).getBlockType();
 					if (!under.getId().contains("STEP")) {
-						double distance = e.getFromTransform().getPosition().distance(e.getToTransform().getPosition());
+						double distance = fromVect.distance(toVect);
 
 						Vector3d fromPosition = e.getFromTransform().getPosition();
 						Vector3d toPosition = e.getToTransform().getPosition();

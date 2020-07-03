@@ -163,7 +163,7 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 					executionTime = Long.parseLong(value);
 					break;
 				default:
-					Adapter.getAdapter().warn("Type " + type + " unknow. Value: " + value);
+					Adapter.getAdapter().getLogger().warn("Type " + type + " unknow. Value: " + value);
 					break;
 			}
 		}

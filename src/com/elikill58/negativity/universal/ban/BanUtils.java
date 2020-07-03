@@ -45,7 +45,7 @@ public class BanUtils {
 			return null;
 		}
 		player.setInBanning(true);
-		Adapter.getAdapter().log("Banning " + player.getName() + " ...");
+		Adapter.getAdapter().getLogger().info("Banning " + player.getName() + " ...");
 		String reason = player.getReason(cheat);
 		long banDuration = -1;
 		int banDefThreshold = Adapter.getAdapter().getConfig().getInt("ban.def.ban_time");

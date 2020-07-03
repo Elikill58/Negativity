@@ -58,7 +58,7 @@ public class FileVerificationStorage extends VerificationStorage {
 						Version playerVersion = Version.getVersionByName(json.get("player_version").toString());
 						list.add(new Verificator(np, startedBy, cheats, result, version, playerVersion));
 					} catch (Exception e) {
-						ada.error("Could not load verification of file " + verification.toAbsolutePath());
+						ada.getLogger().error("Could not load verification of file " + verification.toAbsolutePath());
 						e.printStackTrace();
 					}
 				}
@@ -94,7 +94,7 @@ public class FileVerificationStorage extends VerificationStorage {
 					json.writeJSONString(writer);
 				}
 			} catch (IOException e) {
-				Adapter.getAdapter().error("Could not save verification to file.");
+				Adapter.getAdapter().getLogger().error("Could not save verification to file.");
 				e.printStackTrace();
 			}
 		});

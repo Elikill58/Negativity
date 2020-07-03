@@ -102,7 +102,7 @@ public class Verificator {
 		if(messages.isEmpty())
 			generateMessage();
 		VerificationStorage.getStorage().saveVerification(this).exceptionally(t -> {
-		    Adapter.getAdapter().error("Error occurred while saving verification results");
+		    Adapter.getAdapter().getLogger().error("Error occurred while saving verification results");
 		    t.printStackTrace();
 		    return null;
 		});

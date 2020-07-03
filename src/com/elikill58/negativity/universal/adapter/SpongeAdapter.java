@@ -13,7 +13,6 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
-import org.slf4j.Logger;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.entity.living.player.Player;
@@ -28,6 +27,8 @@ import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.logger.LoggerAdapter;
+import com.elikill58.negativity.universal.logger.Slf4jLoggerAdapter;
 import com.elikill58.negativity.universal.translation.NegativityTranslationProviderFactory;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -37,15 +38,15 @@ import ninja.leaping.configurate.gson.GsonConfigurationLoader;
 
 public class SpongeAdapter extends Adapter {
 
-	private final Logger logger;
+	private final LoggerAdapter logger;
 	private final SpongeNegativity plugin;
-	private ConfigAdapter config;
+	private final ConfigAdapter config;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpongeNegativity::sendPluginMessage);
 	private final TranslationProviderFactory translationProviderFactory;
 
 	public SpongeAdapter(SpongeNegativity sn, ConfigAdapter config) {
 		this.plugin = sn;
-		this.logger = sn.getLogger();
+		this.logger = new Slf4jLoggerAdapter(sn.getLogger());
 		this.config = config;
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("messages"), "Negativity", "CheatHover");
 	}
@@ -67,17 +68,17 @@ public class SpongeAdapter extends Adapter {
 
 	@Override
 	public void log(String msg) {
-		logger.info(msg);
+		getLogger().info(msg);
 	}
 
 	@Override
 	public void warn(String msg) {
-		logger.warn(msg);
+		getLogger().warn(msg);
 	}
 
 	@Override
 	public void error(String msg) {
-		logger.error(msg);
+		getLogger().error(msg);
 	}
 
 	@Override
@@ -178,5 +179,10 @@ public class SpongeAdapter extends Adapter {
 		for(Player temp : Sponge.getServer().getOnlinePlayers())
 			list.add(temp.getUniqueId());
 		return list;
+	}
+
+	@Override
+	public LoggerAdapter getLogger() {
+		return logger;
 	}
 }

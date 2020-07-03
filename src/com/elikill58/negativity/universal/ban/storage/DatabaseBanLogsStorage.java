@@ -25,7 +25,7 @@ public class DatabaseBanLogsStorage implements BanLogsStorage {
 				DatabaseMigrator.executeRemainingMigrations(connection, "bans/logs");
 			}
 		} catch (Exception e) {
-			Adapter.getAdapter().error("Failed to execute ban logs database migration: " + e.getMessage());
+			Adapter.getAdapter().getLogger().error("Failed to execute ban logs database migration: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -70,7 +70,7 @@ public class DatabaseBanLogsStorage implements BanLogsStorage {
 			stm.setTimestamp(8, ban.getRevocationTime() >= 0 ? new Timestamp(ban.getRevocationTime()) : null);
 			stm.executeUpdate();
 		} catch (Exception e) {
-			Adapter.getAdapter().error("An error occurred while saving a logged ban of player with ID " + ban.getPlayerId());
+			Adapter.getAdapter().getLogger().error("An error occurred while saving a logged ban of player with ID " + ban.getPlayerId());
 			e.printStackTrace();
 		}
 	}

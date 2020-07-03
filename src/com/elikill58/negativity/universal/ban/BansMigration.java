@@ -29,7 +29,7 @@ public class BansMigration {
 		if (Files.exists(bansBackupDir))
 			return;
 
-		adapter.log("Started migration of bans saved as files");
+		adapter.getLogger().info("Started migration of bans saved as files");
 
 		boolean didMigration = false;
 		boolean migrationFailed = false;
@@ -71,18 +71,18 @@ public class BansMigration {
 
 					didMigration = true;
 				} catch (Exception e) {
-					adapter.error("Could not migrate ban file " + filename + ". Another migration attempt for this file will be made the next startup or reload.");
+					adapter.getLogger().error("Could not migrate ban file " + filename + ". Another migration attempt for this file will be made the next startup or reload.");
 					e.printStackTrace();
 					migrationFailed = true;
 				}
 			}
 		} catch (IOException e) {
-			adapter.error("Unable to migrate bans.");
+			adapter.getLogger().error("Unable to migrate bans.");
 			e.printStackTrace();
 		}
 
 		if (didMigration && !migrationFailed) {
-			adapter.log("Bans migration ended successfully");
+			adapter.getLogger().info("Bans migration ended successfully");
 		}
 	}
 

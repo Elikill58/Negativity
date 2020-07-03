@@ -218,7 +218,7 @@ public class UniversalUtils {
 			return Optional.of(content);
         } catch (UnknownHostException | MalformedURLException e) {
         	HAVE_INTERNET = false;
-        	Adapter.getAdapter().log("Could not use the internet connection to check for update or send stats");
+        	Adapter.getAdapter().getLogger().info("Could not use the internet connection to check for update or send stats");
 			return Optional.empty();
         } catch (IOException e) {
         	e.printStackTrace();
@@ -236,7 +236,7 @@ public class UniversalUtils {
 			if(optContent.isPresent()) {
 				String content = optContent.get();
 				if(content == null)
-					Adapter.getAdapter().warn("McLeaks API seem to be down. So, we cannot know if the player is using it.");
+					Adapter.getAdapter().getLogger().warn("McLeaks API seem to be down. So, we cannot know if the player is using it.");
 				return content;
 			}
 			return null;
@@ -263,7 +263,7 @@ public class UniversalUtils {
 		HostnameVerifier hv = new HostnameVerifier() {
 			public boolean verify(String urlHostName, SSLSession session) {
 				if (!urlHostName.equalsIgnoreCase(session.getPeerHost())) {
-					Adapter.getAdapter().warn("Warning: URL host '" + urlHostName + "' is different to SSLSession host '"
+					Adapter.getAdapter().getLogger().warn("Warning: URL host '" + urlHostName + "' is different to SSLSession host '"
 							+ session.getPeerHost() + "'.");
 				}
 				return true;

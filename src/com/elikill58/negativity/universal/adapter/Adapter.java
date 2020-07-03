@@ -19,6 +19,7 @@ import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 
 public abstract class Adapter {
@@ -129,8 +130,24 @@ public abstract class Adapter {
 		return destFile;
 	}
 
+	public abstract LoggerAdapter getLogger();
+	
+	/**
+	 * @deprecated Use {@code getLogger().info(msg)} instead
+	 */
+	@Deprecated
 	public abstract void log(String msg);
+	
+	/**
+	 * @deprecated Use {@code getLogger().warn(msg)} instead
+	 */
+	@Deprecated
 	public abstract void warn(String msg);
+	
+	/**
+	 * @deprecated Use {@code getLogger().error(msg)} instead
+	 */
+	@Deprecated
 	public abstract void error(String msg);
 	public abstract void debug(String msg);
 	public abstract TranslationProviderFactory getPlatformTranslationProviderFactory();

@@ -40,13 +40,13 @@ public class Stats {
 			try {
 				String end = UniversalUtils.getContentFromURL(SITE_FILE, post).orElse(null);
 				if(end == null) {
-					Adapter.getAdapter().log("Error while updating stats, it seems to be a firewall that blocking the stats.");
+					Adapter.getAdapter().getLogger().info("Error while updating stats, it seems to be a firewall that blocking the stats.");
 					STATS_IN_MAINTENANCE = true;
 				}
 				else if (!end.equalsIgnoreCase("")) {
-					Adapter.getAdapter().log(
+					Adapter.getAdapter().getLogger().info(
 							"Error while updating stats. Please, report this to Elikill58 (Mail: arpetzouille@gmail.com | Discord: @Elikill58#0743 | Twitter: @Elikill58 / @elinegativity");
-					Adapter.getAdapter().log(end);
+					Adapter.getAdapter().getLogger().info(end);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -55,7 +55,7 @@ public class Stats {
 		try {
 			THREAD_POOL.submit(task);
 		} catch (RejectedExecutionException e) {
-			Adapter.getAdapter().error("Could not update stats: " + e.getMessage());
+			Adapter.getAdapter().getLogger().error("Could not update stats: " + e.getMessage());
 		}
 	}
 
@@ -68,7 +68,7 @@ public class Stats {
 					String result = UniversalUtils.getContentFromURL("https://api.eliapp.fr/status.php?plateforme=negativity").orElse("off");
 					STATS_IN_MAINTENANCE = result.toString().equalsIgnoreCase("on") ? false : true;
 					if (STATS_IN_MAINTENANCE)
-						Adapter.getAdapter().log("Website is in maintenance mode.");
+						Adapter.getAdapter().getLogger().info("Website is in maintenance mode.");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -77,7 +77,7 @@ public class Stats {
 		try {
 			THREAD_POOL.submit(task);
 		} catch (RejectedExecutionException e) {
-			Adapter.getAdapter()
+			Adapter.getAdapter().getLogger()
 					.error("Could not load stats: " + e.getMessage());
 			e.printStackTrace();
 		}

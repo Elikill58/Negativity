@@ -15,7 +15,7 @@ public class OldBansDbMigrator {
 
 	public static void performMigration() throws SQLException {
 		Adapter adapter = Adapter.getAdapter();
-		adapter.log("[Bans DB Migration] Performing old bans database migration.");
+		adapter.getLogger().info("[Bans DB Migration] Performing old bans database migration.");
 
 		String banTable = getConfigString(adapter, "Database.table_ban");
 		String uuidColumn = getConfigString(adapter, "ban.db.column.uuid");
@@ -59,11 +59,11 @@ public class OldBansDbMigrator {
 		}
 
 		if (bansProcessed == 0) {
-			adapter.log("[Bans DB Migration] No bans to migrate");
+			adapter.getLogger().info("[Bans DB Migration] No bans to migrate");
 		} else if (bansTransferred == bansProcessed) {
-			adapter.log("[Bans DB Migration] All bans were transferred (" + bansTransferred + ")");
+			adapter.getLogger().info("[Bans DB Migration] All bans were transferred (" + bansTransferred + ")");
 		} else {
-			adapter.log("[Bans DB Migration] Out of " + bansProcessed + " bans processed, " + bansTransferred + " were transferred and " + (bansProcessed - bansTransferred) + " were skipped because they were expired.");
+			adapter.getLogger().info("[Bans DB Migration] Out of " + bansProcessed + " bans processed, " + bansTransferred + " were transferred and " + (bansProcessed - bansTransferred) + " were skipped because they were expired.");
 		}
 	}
 
@@ -76,7 +76,7 @@ public class OldBansDbMigrator {
 	private static void checkState(boolean condition, Supplier<String> message) {
 		if (!condition) {
 			String msg = message.get();
-			Adapter.getAdapter().error("Failed to migrate old bans database: " + msg);
+			Adapter.getAdapter().getLogger().error("Failed to migrate old bans database: " + msg);
 			throw new IllegalStateException("[Bans DB Migration] " + msg);
 		}
 	}

@@ -46,7 +46,7 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 					concatenatedBundles.append(System.lineSeparator());
 				}
 			} catch (IOException e) {
-				adapter.error("Failed to read language file " + fileName);
+				adapter.getLogger().error("Failed to read language file " + fileName);
 				e.printStackTrace();
 			}
 		}
@@ -55,7 +55,7 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 			PropertyResourceBundle bundle = new PropertyResourceBundle(reader);
 			return new CachingTranslationProvider(new ResourceBundleTranslationProvider(bundle));
 		} catch (IOException e) {
-			adapter.error("Failed to load translation file.");
+			adapter.getLogger().error("Failed to load translation file.");
 			e.printStackTrace();
 			return null;
 		}
@@ -70,7 +70,7 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 			String fileName = bundle + "_" + FALLBACK_LANGUAGE + ".properties";
 			try (InputStream input = Adapter.getAdapter().openBundledFile(fileName)) {
 				if (input == null) {
-					adapter.error("Fallback language file " + fileName + " does not exist.");
+					adapter.getLogger().error("Fallback language file " + fileName + " does not exist.");
 					continue;
 				}
 
@@ -83,7 +83,7 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 					}
 				}
 			} catch (IOException e) {
-				adapter.error("Failed to read fallback message file " + bundle);
+				adapter.getLogger().error("Failed to read fallback message file " + bundle);
 				e.printStackTrace();
 			}
 		}
@@ -92,7 +92,7 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 			PropertyResourceBundle bundle = new PropertyResourceBundle(reader);
 			return new CachingTranslationProvider(new ResourceBundleTranslationProvider(bundle));
 		} catch (IOException e) {
-			adapter.error("Failed to load fallback translation resource.");
+			adapter.getLogger().error("Failed to load fallback translation resource.");
 			e.printStackTrace();
 			return null;
 		}

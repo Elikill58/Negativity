@@ -62,7 +62,7 @@ public class ItemUtils {
 		String temp = "";
 		for(String s : tempMat)
 			temp = temp + (temp.equalsIgnoreCase("") ? "" : ", ") + s;
-		Adapter.getAdapter().error("Failed to find Material " + temp);
+		Adapter.getAdapter().getLogger().error("Failed to find Material " + temp);
 		return null;
 	}
 

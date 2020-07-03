@@ -42,7 +42,7 @@ public class SimpleAccountManager extends NegativityAccountManager {
 		loadFuture.whenComplete((account, throwable) -> {
 			pendingRequests.remove(accountId);
 			if (throwable != null && !(throwable instanceof CancellationException)) {
-				Adapter.getAdapter().error("Account loading completed exceptionally: " + throwable.getMessage());
+				Adapter.getAdapter().getLogger().error("Account loading completed exceptionally: " + throwable.getMessage());
 				throwable.printStackTrace();
 				return;
 			}

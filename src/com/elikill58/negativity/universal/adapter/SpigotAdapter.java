@@ -30,6 +30,8 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.BukkitConfigAdapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.logger.JavaLoggerAdapter;
+import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.translation.NegativityTranslationProviderFactory;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -37,14 +39,16 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class SpigotAdapter extends Adapter {
 
 	private JavaPlugin pl;
-	private ConfigAdapter config;
+	private final ConfigAdapter config;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpigotNegativity::sendPluginMessage);
 	private final TranslationProviderFactory translationProviderFactory;
+	private final LoggerAdapter logger;
 
 	public SpigotAdapter(JavaPlugin pl) {
 		this.pl = pl;
 		this.config = new BukkitConfigAdapter.PluginConfig(pl);
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(pl.getDataFolder().toPath().resolve("lang"), "Negativity", "CheatHover");
+		this.logger = new JavaLoggerAdapter(pl.getLogger());
 	}
 
 	@Override
@@ -64,17 +68,17 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public void log(String msg) {
-		pl.getLogger().info(msg);
+		getLogger().info(msg);
 	}
 
 	@Override
 	public void warn(String msg) {
-		pl.getLogger().warning(msg);
+		getLogger().warn(msg);
 	}
 
 	@Override
 	public void error(String msg) {
-		pl.getLogger().severe(msg);
+		getLogger().error(msg);
 	}
 
 	@Override
@@ -174,5 +178,10 @@ public class SpigotAdapter extends Adapter {
 		for(Player temp : Utils.getOnlinePlayers())
 			list.add(temp.getUniqueId());
 		return list;
+	}
+
+	@Override
+	public LoggerAdapter getLogger() {
+		return logger;
 	}
 }

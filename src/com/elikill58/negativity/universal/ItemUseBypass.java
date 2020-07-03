@@ -28,11 +28,11 @@ public class ItemUseBypass {
 		this.when = WhenBypass.getWhenBypass(when);
 		this.cheats = updateCheats(cheats);
 		if(this.item == null)
-			Adapter.getAdapter().error("[Config - Error] Item bypass System - Unknow item : " + itemName);
+			Adapter.getAdapter().getLogger().error("[Config - Error] Item bypass System - Unknow item : " + itemName);
 		else if(this.when == WhenBypass.UNKNOW)
-			Adapter.getAdapter().error("[Config - Error] Item bypass System - Unknow when : " + when);
+			Adapter.getAdapter().getLogger().error("[Config - Error] Item bypass System - Unknow when : " + when);
 		else if(this.cheats.size() == 0)
-			Adapter.getAdapter().error("[Config - Error] Item bypass System - Unknow cheats : " + cheats);
+			Adapter.getAdapter().getLogger().error("[Config - Error] Item bypass System - Unknow cheats : " + cheats);
 		else
 			ITEM_BYPASS.put(item, this);
 	}

@@ -28,12 +28,12 @@ public class ProxyCompanionManager {
 
 		int ourProtocolVersion = NegativityMessagesManager.PROTOCOL_VERSION;
 		if (forceDisabled) {
-			Adapter.getAdapter().log("Proxy companion plugin found, but is forcibly disabled.");
+			Adapter.getAdapter().getLogger().info("Proxy companion plugin found, but is forcibly disabled.");
 		} else if (protocolVersion != ourProtocolVersion) {
 			protocolVersionMismatch = true;
-			Adapter.getAdapter().log("Proxy companion plugin found, but its protocol version (" + protocolVersion + ") is not the same a ours (" + ourProtocolVersion + ") so it won't be used.");
+			Adapter.getAdapter().getLogger().info("Proxy companion plugin found, but its protocol version (" + protocolVersion + ") is not the same a ours (" + ourProtocolVersion + ") so it won't be used.");
 		} else {
-			Adapter.getAdapter().log("Proxy companion plugin found, it will be used.");
+			Adapter.getAdapter().getLogger().info("Proxy companion plugin found, it will be used.");
 		}
 	}
 }

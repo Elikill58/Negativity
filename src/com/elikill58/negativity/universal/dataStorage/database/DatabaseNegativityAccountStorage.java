@@ -98,7 +98,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 				int value = Integer.parseInt(entry[1]);
 				mined.put(minerateType, value);
 			} catch (NumberFormatException e) {
-				Adapter.getAdapter().warn("Malformed minerate value in entry " + fullRateEntry);
+				Adapter.getAdapter().getLogger().warn("Malformed minerate value in entry " + fullRateEntry);
 			}
 		}
 		return new Minerate(mined, minerateFullMined);
@@ -125,7 +125,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 				int value = Integer.parseInt(entry[1]);
 				violations.put(entry[0], value);
 			} catch (NumberFormatException e) {
-				Adapter.getAdapter().warn("Malformed minerate value in entry " + fullEntry);
+				Adapter.getAdapter().getLogger().warn("Malformed minerate value in entry " + fullEntry);
 			}
 		}
 		return violations;

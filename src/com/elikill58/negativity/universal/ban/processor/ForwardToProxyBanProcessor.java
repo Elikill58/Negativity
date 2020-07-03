@@ -33,7 +33,7 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 			byte[] rawMessage = NegativityMessagesManager.writeMessage(new ProxyExecuteBanMessage(ban));
 			pluginMessageSender.accept(rawMessage);
 		} catch (IOException e) {
-			Adapter.getAdapter().error("Could not write ProxyBanMessage: " + e.getMessage());
+			Adapter.getAdapter().getLogger().error("Could not write ProxyBanMessage: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return ban;
@@ -46,7 +46,7 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 			byte[] rawMessage = NegativityMessagesManager.writeMessage(new ProxyRevokeBanMessage(playerId));
 			pluginMessageSender.accept(rawMessage);
 		} catch (IOException e) {
-			Adapter.getAdapter().error("Could not write ProxyBanMessage: " + e.getMessage());
+			Adapter.getAdapter().getLogger().error("Could not write ProxyBanMessage: " + e.getMessage());
 			e.printStackTrace();
 		}
 		return new Ban(playerId, "", "", BanType.UNKNOW, -1, null, BanStatus.REVOKED, -1, System.currentTimeMillis());

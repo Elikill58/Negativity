@@ -140,6 +140,7 @@ public class Utils {
 			return (double[]) server.getClass().getField("recentTps").get(server);
 		} catch (Exception e) {
 			SpigotNegativity.getInstance().getLogger().warning("Cannot get TPS (Work on Spigot but NOT CraftBukkit).");
+			e.printStackTrace();
 			return new double[] {20, 20, 20};
 		}
 	}

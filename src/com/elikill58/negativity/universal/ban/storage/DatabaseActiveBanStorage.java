@@ -26,7 +26,7 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 				DatabaseMigrator.executeRemainingMigrations(connection, "bans/active");
 			}
 		} catch (Exception e) {
-			Adapter.getAdapter().error("Failed to execute active bans database migration: " + e.getMessage());
+			Adapter.getAdapter().getLogger().error("Failed to execute active bans database migration: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -69,7 +69,7 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 			stm.setTimestamp(6, ban.getExecutionTime() >= 0 ? new Timestamp(ban.getExecutionTime()) : null);
 			stm.executeUpdate();
 		} catch (Exception e) {
-			Adapter.getAdapter().error("An error occurred while saving the active ban of player with ID " + ban.getPlayerId());
+			Adapter.getAdapter().getLogger().error("An error occurred while saving the active ban of player with ID " + ban.getPlayerId());
 			e.printStackTrace();
 		}
 	}
@@ -81,7 +81,7 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 			stm.setString(1, playerId.toString());
 			stm.executeUpdate();
 		} catch (SQLException e) {
-			ada.error("An error occurred while removing the active ban for player ID " + playerId);
+			ada.getLogger().error("An error occurred while removing the active ban for player ID " + playerId);
 			e.printStackTrace();
 		}
 	}

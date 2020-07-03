@@ -26,7 +26,7 @@ public class MessagesUpdater {
 			try {
 				FileUtils.moveDirectory(messagesDir, backupDir);
 			} catch (IOException e) {
-				adapter.error("Failed to backup messages directory");
+				adapter.getLogger().error("Failed to backup messages directory");
 				e.printStackTrace();
 				messageSink.accept("messages_update.backup_failed", new String[]{"%error%", e.getMessage()});
 			}

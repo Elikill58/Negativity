@@ -52,7 +52,7 @@ public class TranslatedMessages {
 		} else {
 			TranslationProvider provider = factory.createTranslationProvider(DEFAULT_LANG);
 			if (provider == null) {
-				Adapter.getAdapter().warn("Could not load the default translation provider");
+				Adapter.getAdapter().getLogger().warn("Could not load the default translation provider");
 				return;
 			}
 			translationProviders.put(DEFAULT_LANG, provider);
@@ -63,7 +63,7 @@ public class TranslatedMessages {
 
 	public static void registerTranslationProviderFactory(String id, TranslationProviderFactory factory) {
 		if (id == null || id.isEmpty()) {
-			Adapter.getAdapter().warn("Could not register TranslationProviderFactory " + factory.getClass().getName() + " because of invalid id " + id);
+			Adapter.getAdapter().getLogger().warn("Could not register TranslationProviderFactory " + factory.getClass().getName() + " because of invalid id " + id);
 			return;
 		}
 		registeredFactories.put(id, factory);

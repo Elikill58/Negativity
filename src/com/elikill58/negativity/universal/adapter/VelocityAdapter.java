@@ -18,6 +18,8 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.logger.LoggerAdapter;
+import com.elikill58.negativity.universal.logger.Slf4jLoggerAdapter;
 import com.elikill58.negativity.universal.translation.NegativityTranslationProviderFactory;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -32,11 +34,13 @@ public class VelocityAdapter extends Adapter {
 	private VelocityNegativity pl;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Proxy();
 	private final TranslationProviderFactory translationProviderFactory;
+	private final LoggerAdapter logger;
 
 	public VelocityAdapter(VelocityNegativity pl, ConfigAdapter config) {
 		this.pl = pl;
 		this.config = config;
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(pl.getDataFolder().toPath().resolve("lang"), "NegativityProxy", "CheatHover");
+		this.logger = new Slf4jLoggerAdapter(pl.getLogger());
 	}
 
 	@Override
@@ -56,23 +60,23 @@ public class VelocityAdapter extends Adapter {
 
 	@Override
 	public void log(String msg) {
-		pl.getLogger().info(msg);
+		getLogger().info(msg);
 	}
 
 	@Override
 	public void warn(String msg) {
-		pl.getLogger().warn(msg);
+		getLogger().warn(msg);
 	}
 
 	@Override
 	public void error(String msg) {
-		pl.getLogger().error(msg);
+		getLogger().error(msg);
 	}
 
 	@Override
 	public void debug(String msg) {
 		if(UniversalUtils.DEBUG)
-			pl.getLogger().info(msg);
+			getLogger().info(msg);
 	}
 
 	@Nullable
@@ -155,5 +159,10 @@ public class VelocityAdapter extends Adapter {
 		for(Player temp : VelocityNegativity.getInstance().getServer().getAllPlayers())
 			list.add(temp.getUniqueId());
 		return list;
+	}
+
+	@Override
+	public LoggerAdapter getLogger() {
+		return logger;
 	}
 }

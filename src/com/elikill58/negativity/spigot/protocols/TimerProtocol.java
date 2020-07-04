@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.protocols;
 
 import java.util.HashMap;
 
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -43,11 +44,12 @@ public class TimerProtocol extends Cheat implements Listener {
 			np.TIMER_COUNT.remove((int) 0);
 		else // loading seconds
 			return;
-		int MAX = 20 + variation;
-		if(MAX > sum)// in min/max variations
-			return;
 		Player p = e.getPlayer();
-		int amount = (int) (sum - MAX);
+		int MAX = (p.getGameMode().equals(GameMode.CREATIVE) ? 40 : 20);
+		int MAX_VARIATION = MAX + variation;
+		if(MAX_VARIATION > sum)// in min/max variations
+			return;
+		int amount = (int) (sum - MAX_VARIATION);
 		SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (Utils.getPing(p) / 100)),
 				"Flying: " + flying + ", position: " + position + ", look: " + look + ", positionLook: " + positonLook + ", sum: " + sum,
 				(CheatHover) null, amount > 0 ? amount : 1);

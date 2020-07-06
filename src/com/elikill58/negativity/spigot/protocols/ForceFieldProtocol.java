@@ -65,7 +65,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			return;
 		boolean mayCancel = false;
 		Entity cible = e.getEntity();
-		if(!(LocationUtils.hasLineOfSight(p, cible.getLocation()) || LocationUtils.hasLineOfSight(p, cible.getLocation().clone().subtract(0, 1, 0)))) {
+		if(!LocationUtils.canSeeEntity(p, cible)) {
 			mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "Hit " + cible.getType().name()
 					+ " but cannot see it, ping: " + Utils.getPing(p),
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase()));

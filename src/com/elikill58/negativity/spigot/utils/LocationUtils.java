@@ -9,6 +9,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -265,6 +266,96 @@ public class LocationUtils {
 		}
 		return i;
 	}
+	
+	/**
+	 * Check if the player can see the entity
+	 * 
+	 * @param p the player to check if can see the specified entity
+	 * @param entityToSee the entity to check if it viewable
+	 * @return true if the player can see the entity
+	 */
+	public static boolean canSeeEntity(Player p, Entity entityToSee) {
+		return canSeeEntity(p, entityToSee, 150);
+	}
+
+	/**
+	 * Check if the player can see the entity
+	 * The number of task is multiplied by 10 when we are near the entity, to be sure that we don't pass through it
+	 * 
+	 * @param p the player to check if can see the specified entity
+	 * @param entityToSee the entity to check if it viewable
+	 * @param maxDistance the maximum distance. Limited to 1000
+	 * @return true if the player can see the entity
+	 */
+	public static boolean canSeeEntity(Player p, Entity entityToSee, int maxDistance) {
+		Location loc = p.getLocation().clone().add(0, 1.5, 0);
+		World w = p.getWorld();
+		Vector baseVector = loc.getDirection().normalize();
+		Vector vector = baseVector.clone().multiply(0.5); // *0.5 for multiple point
+		Vector vectorNear = baseVector.clone().multiply(0.1); // *0.1 for a lot of multiple point
+		if(maxDistance > 500)
+			maxDistance = 500;
+		BoundingBox box = entityToSee.getBoundingBox();
+		for(int i = 0; i < maxDistance; i++) {
+			if(loc.distance(entityToSee.getLocation()) < 2)
+				loc.add(vectorNear);
+			else
+				loc.add(vector);
+			Material type = w.getBlockAt(loc).getType();
+			if(type.isSolid()) {
+				if(!w.getBlockAt(loc.clone().add(0, 0.1, 0)).getType().isSolid()) {
+					loc.add(0, 0.1, 0);
+					continue;
+				}
+				if(!w.getBlockAt(loc.clone().subtract(0, 0.1, 0)).getType().isSolid()) {
+					loc.subtract(0, 0.1, 0);
+					continue;
+				}
+			}
+			if(box.getMaxX() > loc.getX() && box.getMaxY() > loc.getY() && box.getMaxZ() > loc.getZ()) { // check max
+				if(box.getMinX() < loc.getX() && box.getMinY() < loc.getY() && box.getMinZ() < loc.getZ()) { // check min
+					return true;
+				}
+			}
+		}
+		return canSeeLocation(p, entityToSee.getLocation(), 100);
+	}
+	
+	/**
+	 * Check if the player can see the location
+	 * 
+	 * @param p the player to check if can see the specified location
+	 * @param locToSee the location to check if it viewable
+	 * @return true if the player can see the location
+	 */
+	public static boolean canSeeLocation(Player p, Location locToSee) {
+		return canSeeLocation(p, locToSee, 100);
+	}
+	
+	/**
+	 * Check if the player can see the location
+	 * 
+	 * @param p the player to check if can see the specified location
+	 * @param locToSee the location to check if it viewable
+	 * @param maxDistance the maximum distance. Limited to 200
+	 * @return true if the player can see the location
+	 */
+	public static boolean canSeeLocation(Player p, Location locToSee, int maxDistance) {
+		Location loc = p.getLocation().clone().add(0, 1.5, 0);
+		World w = p.getWorld();
+		Vector vector = loc.getDirection().normalize().clone();
+		if(maxDistance > 200)
+			maxDistance = 200;
+		for(int i = 0; i < maxDistance; i++) {
+			loc.add(vector);
+			Material type = w.getBlockAt(loc).getType();
+			if(type.isSolid())
+				return false;
+			if(loc.getBlockX() == locToSee.getBlockX() && loc.getBlockY() == locToSee.getBlockY() && loc.getBlockZ() == locToSee.getBlockZ())
+				return true;
+		}
+		return false;
+	}
 
 
 	public static float getPlayerHeadHeight(Player p) {
@@ -283,6 +374,15 @@ public class LocationUtils {
 		return new Vector(loc.getX(), loc.getY() + getPlayerHeadHeight(p), loc.getZ());
 	}
 	
+	/**
+	 * Check if the player see the location.
+	 * Please, use {@link LocationUtils#canSeeEntity(Player, Entity)} or {@link LocationUtils#canSeeEntity(Player, Entity, int)}}
+	 * 
+	 * @param p the player who must to see the location
+	 * @param loc the location that we want to see
+	 * @return true if the player can see the location
+	 */
+	@Deprecated
 	public static boolean hasLineOfSight(Player p, Location loc) {
 		World w = p.getWorld();
 		Vector vec3d = getPlayerVec(p), vec3d1 = new Vector(loc.getX(), loc.getY() + 1.74F, loc.getZ());

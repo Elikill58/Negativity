@@ -93,7 +93,7 @@ public class FlyProtocol extends Cheat implements Listener {
 		to.setY(e.getFrom().getY());
 		double distanceWithoutY = to.distance(e.getFrom());
 		if (distanceWithoutY == i && !np.isOnGround() && i != 0
-				&& typeUpper.equals(Material.AIR)
+				&& typeUpper.equals(Material.AIR) && !p.isInsideVehicle()
 				&& !type.name().contains("WATER") && distanceWithoutY > 0.1) {
 			if (np.contentBoolean.getOrDefault("fly-not-moving-y", false))
 				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,

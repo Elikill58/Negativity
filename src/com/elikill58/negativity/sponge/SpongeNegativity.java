@@ -20,6 +20,7 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Platform.Type;
@@ -336,6 +337,13 @@ public class SpongeNegativity {
 				}
 			} else if(config.getBoolean("cheats.special.invalid_name.kick")) {
 				e.setMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", banReason));
+				e.setCancelled(true);
+			}
+		} else {
+			int maxAllowedIP = Adapter.getAdapter().getConfig().getInt("cheats.special.max-player-by-ip.number");
+			int currentOnIP = SpongeNegativityPlayer.getAllPlayers().values().stream().filter((np) -> np.getIP().equals(e.getConnection().getAddress().getAddress().getHostAddress())).collect(Collectors.toList()).size();
+			if(currentOnIP >= maxAllowedIP) {
+				e.setMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", Adapter.getAdapter().getConfig().getInt("cheats.special.max-player-by-ip.name")));
 				e.setCancelled(true);
 			}
 		}

@@ -4,7 +4,6 @@ import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
@@ -17,7 +16,6 @@ import org.spongepowered.api.event.entity.InteractEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
-import org.spongepowered.api.scheduler.Task;
 
 import com.elikill58.negativity.sponge.FakePlayer;
 import com.elikill58.negativity.sponge.SpongeNegativity;
@@ -37,7 +35,6 @@ import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
-import com.flowpowered.math.vector.Vector3d;
 
 public class ForceFieldProtocol extends Cheat {
 
@@ -81,16 +78,6 @@ public class ForceFieldProtocol extends Cheat {
 						+ e.getTargetEntity().getType().getName().toLowerCase() + ". Exact distance: " + distance + ". Ping: " + Utils.getPing(p),
 						hoverMsg("distance", "%name%", e.getTargetEntity().getType().getName(), "%distance%", distanceFormatter.format(distance)));
 		}
-		final Vector3d loc = p.getRotation().clone();
-		Task.builder().delay(20, TimeUnit.MILLISECONDS).execute(() -> {
-			Vector3d loc1 = p.getRotation();
-			int gradeRounded = (int) Math.round(Math.abs(loc.getY() - loc1.getY()));
-			if (gradeRounded > 180.0) {
-				SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(gradeRounded),
-						"Player rotate too much (" + gradeRounded + "°) without thorns.",
-						hoverMsg("rotate", "%degrees%", gradeRounded));
-			}
-		}).submit(SpongeNegativity.getInstance());
 		if (isSetBack() && mayCancel)
 			e.setCancelled(true);
 	}

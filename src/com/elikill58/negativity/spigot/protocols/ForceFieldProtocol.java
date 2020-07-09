@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.text.NumberFormat;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -87,15 +86,6 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 						+ ". Ping: " + Utils.getPing(p), hoverMsg("distance", "%name%", e.getEntity().getName(), "%distance%", nf.format(dis)));
 			}
 		}
-		final Location loc = p.getLocation().clone();
-		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
-			Location loc1 = p.getLocation();
-			int gradeRounded = Math.round(Math.abs(loc.getYaw() - loc1.getYaw()));
-			if (gradeRounded > 180.0) {
-				SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(gradeRounded),
-						"Player rotate too much (" + gradeRounded + "°) without thorns", hoverMsg("rotate", "%degrees%", gradeRounded));
-			}
-		}, 1);
 		if (isSetBack() && mayCancel)
 			e.setCancelled(true);
 	}

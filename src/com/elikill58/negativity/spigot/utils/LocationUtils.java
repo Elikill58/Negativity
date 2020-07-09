@@ -15,6 +15,7 @@ import org.bukkit.util.Vector;
 import com.elikill58.negativity.spigot.packets.PacketContent;
 import com.elikill58.negativity.spigot.packets.PacketContent.ContentModifier;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class LocationUtils {
@@ -324,8 +325,9 @@ public class LocationUtils {
 			maxY = doubles.read("e");
 			maxZ = doubles.read("f");
 		}
+		Adapter.getAdapter().debug("Min: " + String.format("%.2f", minX) + "/" + String.format("%.2f", minY) + " / " + String.format("%.2f", minZ) + " " + String.format("%.2f", maxX) + "/" + String.format("%.2f", maxY) + "/" + String.format("%.2f", maxZ));
 		for(int i = 0; i < maxDistance; i++) {
-			if(loc.distance(entityToSee.getLocation()) < 2)
+			if(loc.distance(entityToSee.getLocation()) < 1.5)
 				loc.add(vectorNear);
 			else
 				loc.add(vector);
@@ -339,6 +341,8 @@ public class LocationUtils {
 					loc.subtract(0, 0.1, 0);
 					continue;
 				}
+				Adapter.getAdapter().debug("Type " + type.name() + " is solid. " + loc.toString());
+				return false;
 			}
 			if(maxX > loc.getX() && maxY > loc.getY() && maxZ > loc.getZ()) { // check max
 				if(minX < loc.getX() && minY < loc.getY() && minZ < loc.getZ()) { // check min
@@ -346,7 +350,9 @@ public class LocationUtils {
 				}
 			}
 		}
-		return canSeeLocation(p, entityToSee.getLocation(), 100);
+		boolean seeLoc = canSeeLocation(p, entityToSee.getLocation(), 100);
+		Adapter.getAdapter().debug("Checking default see location " + entityToSee.getLocation() + ", result: " + seeLoc);
+		return seeLoc;
 	}
 	
 	/**

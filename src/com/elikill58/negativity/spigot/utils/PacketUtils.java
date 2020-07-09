@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.universal.Version;
@@ -13,12 +14,13 @@ public class PacketUtils {
 	public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
 			.split(",")[3];
 
-	public static Class<?> CRAFT_PLAYER_CLASS;
+	public static Class<?> CRAFT_PLAYER_CLASS, CRAFT_ENTITY_CLASS;
 	public static Class<?> ENUM_PLAYER_INFO = getEnumPlayerInfoAction();
 	
 	static {
 		try {
 			CRAFT_PLAYER_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer");
+			CRAFT_ENTITY_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftEntity");
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -136,6 +138,22 @@ public class PacketUtils {
 		try {
 			Object craftPlayer = CRAFT_PLAYER_CLASS.cast(p);
 			return craftPlayer.getClass().getMethod("getHandle").invoke(craftPlayer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * Get NMS entity player of specified one
+	 * 
+	 * @param p the player that we want the NMS entity player
+	 * @return the entity player
+	 */
+	public static Object getNMSEntity(Entity et) {
+		try {
+			Object craftEntity = CRAFT_ENTITY_CLASS.cast(et);
+			return craftEntity.getClass().getMethod("getHandle").invoke(craftEntity);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

@@ -104,6 +104,33 @@ public class PacketContent {
 		public int size() {
 			return content.size();
 		}
+
+		/**
+		 * Get the value of the field which is named by the given one
+		 * 
+		 * @param fieldName the name of the needed field
+		 * @return the value of the field
+		 */
+		public T read(String fieldName) {
+			for(Field field : content.keySet())
+				if(field.getName().equalsIgnoreCase(fieldName))
+					return content.get(field);
+			return null;
+		}
+		
+		/**
+		 * Get the value of the field which is named by the given one
+		 * 
+		 * @param fieldName the name of the needed field
+		 * @param defaultValue the returned value if there is no value
+		 * @return the value of the field
+		 */
+		public T read(String fieldName, T defaultValue) {
+			for(Field field : content.keySet())
+				if(field.getName().equalsIgnoreCase(fieldName))
+					return content.get(field);
+			return defaultValue;
+		}
 		
 		/**
 		 * Read the specified value.
@@ -156,6 +183,15 @@ public class PacketContent {
 					e.printStackTrace();
 				}
 			}
+		}
+		
+		/**
+		 * Get field which her value
+		 * 
+		 * @return all content
+		 */
+		public HashMap<Field, T> getContent(){
+			return content;
 		}
 	}
 }

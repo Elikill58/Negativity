@@ -12,6 +12,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
+import com.elikill58.negativity.spigot.packets.PacketContent;
+import com.elikill58.negativity.spigot.packets.PacketContent.ContentModifier;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class LocationUtils {
@@ -295,7 +298,32 @@ public class LocationUtils {
 		Vector vectorNear = baseVector.clone().multiply(0.1); // *0.1 for a lot of multiple point
 		if(maxDistance > 500)
 			maxDistance = 500;
-		BoundingBox box = entityToSee.getBoundingBox();
+		double maxX, maxY, maxZ;
+		double minX, minY, minZ;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_14)) {
+			BoundingBox box = entityToSee.getBoundingBox();
+			minX = box.getMinX();
+			minY = box.getMinY();
+			minZ = box.getMinZ();
+			maxX = box.getMaxX();
+			maxY = box.getMaxY();
+			maxZ = box.getMaxZ();
+		} else {
+			PacketContent content = null;
+			try {
+				Object nmsEntity = PacketUtils.getNMSEntity(entityToSee);
+				content = new PacketContent(PacketUtils.getNmsClass("Entity").getDeclaredMethod("getBoundingBox").invoke(nmsEntity));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			ContentModifier<Double> doubles = content.getSpecificModifier(double.class);
+			minX = doubles.read("a");
+			minY = doubles.read("b");
+			minZ = doubles.read("c");
+			maxX = doubles.read("d");
+			maxY = doubles.read("e");
+			maxZ = doubles.read("f");
+		}
 		for(int i = 0; i < maxDistance; i++) {
 			if(loc.distance(entityToSee.getLocation()) < 2)
 				loc.add(vectorNear);
@@ -312,8 +340,8 @@ public class LocationUtils {
 					continue;
 				}
 			}
-			if(box.getMaxX() > loc.getX() && box.getMaxY() > loc.getY() && box.getMaxZ() > loc.getZ()) { // check max
-				if(box.getMinX() < loc.getX() && box.getMinY() < loc.getY() && box.getMinZ() < loc.getZ()) { // check min
+			if(maxX > loc.getX() && maxY > loc.getY() && maxZ > loc.getZ()) { // check max
+				if(minX < loc.getX() && minY < loc.getY() && minZ < loc.getZ()) { // check min
 					return true;
 				}
 			}

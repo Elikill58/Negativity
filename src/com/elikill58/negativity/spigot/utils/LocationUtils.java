@@ -263,7 +263,7 @@ public class LocationUtils {
 	public static int getNbAirBlockDown(Player p) {
 		Location loc = p.getLocation().clone();
 		int i = 0;
-		while (!LocationUtils.hasOtherThanExtended(loc, "AIR") && i < 20) {
+		while (!LocationUtils.hasOtherThan(loc, "AIR") && i < 50) {
 			loc.subtract(0, 1, 0);
 			i++;
 		}

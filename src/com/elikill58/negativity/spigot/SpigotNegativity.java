@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringJoiner;
+import java.util.Map.Entry;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -25,6 +26,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
@@ -399,16 +401,31 @@ public class SpigotNegativity extends JavaPlugin {
 		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
 			return false;
 		
-		if (Utils.getItemInHand(p) != null)
-			if (ItemUseBypass.ITEM_BYPASS.containsKey(Utils.getItemInHand(p).getType().name()))
-				if (ItemUseBypass.ITEM_BYPASS.get(Utils.getItemInHand(p).getType().name()).getWhen().equals(WhenBypass.ALWAYS))
+		ItemStack itemInHand = Utils.getItemInHand(p);
+		Material blockBelow = p.getLocation().clone().subtract(0, 1, 0).getBlock().getType();
+		// Why a boolean to check if the block is loaded ? It's to prevent bug which can appear with getTargetBlock method
+		boolean hasLoadTargetVisual = false;
+		Block targetVisual = null;
+		for(Entry<String, ItemUseBypass> itemUseBypass : ItemUseBypass.ITEM_BYPASS.entrySet()) {
+			String id = itemUseBypass.getKey();
+			ItemUseBypass itemBypass = itemUseBypass.getValue();
+			if(itemBypass.getWhen().equals(WhenBypass.ALWAYS)) {
+				if(itemInHand != null && itemInHand.getType().name().equalsIgnoreCase(id)) {
 					return false;
-		
-		List<String> itemBypassWhenLooking = ItemUseBypass.getItemBypassWithBypass(WhenBypass.LOOKING);
-		if(!itemBypassWhenLooking.isEmpty()) {
-			Block target = Utils.getTargetBlock(p, 5);
-			if(target != null && !target.getType().equals(Material.AIR) && itemBypassWhenLooking.contains(target.getType().name()))
-				return false;
+				}
+			} else if(itemBypass.getWhen().equals(WhenBypass.BELOW)) {
+				if(blockBelow.name().equalsIgnoreCase(id)) {
+					return false;
+				}
+			} else if(itemBypass.getWhen().equals(WhenBypass.LOOKING)) {
+				if(!hasLoadTargetVisual) {
+					targetVisual = Utils.getTargetBlock(p, 7);
+					hasLoadTargetVisual = true;
+				}
+				if(targetVisual != null && targetVisual.getType().name().equalsIgnoreCase(id)) {
+					return false;
+				}
+			}
 		}
 		
 		Bukkit.getPluginManager().callEvent(new PlayerCheatEvent(p, c, reliability));

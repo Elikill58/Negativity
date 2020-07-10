@@ -63,7 +63,7 @@ public class ItemUseBypass {
 	}
 	
 	public static enum WhenBypass {
-		ALWAYS, RIGHT_CLICK(true), LEFT_CLICK(true), LOOKING, UNKNOW;
+		ALWAYS, RIGHT_CLICK(true), LEFT_CLICK(true), LOOKING, BELOW, UNKNOW;
 		
 		private boolean isClick = false;
 		

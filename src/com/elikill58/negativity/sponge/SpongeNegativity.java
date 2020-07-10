@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandManager;
@@ -43,6 +45,7 @@ import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.event.game.state.GameStartingServerEvent;
 import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
 import org.spongepowered.api.network.ChannelBuf;
 import org.spongepowered.api.network.PlayerConnection;
@@ -515,17 +518,26 @@ public class SpongeNegativity {
 			return false;
 		if(VerificationManager.isDisablingAlertOnVerif() && !hasVerifications(p.getUniqueId()))
 			return false;
-		if (p.getItemInHand(HandTypes.MAIN_HAND).isPresent())
-			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand(HandTypes.MAIN_HAND).get().getType().getId()))
-				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand(HandTypes.MAIN_HAND).get().getType().getId()).getWhen()
-						.equals(WhenBypass.ALWAYS))
+		ItemStack itemInHand = p.getItemInHand(HandTypes.MAIN_HAND).orElse(null);
+		BlockType blockBelow = p.getLocation().copy().sub(0, 1, 0).getBlock().getType();
+		Optional<BlockRayHit<World>> target = BlockRay.from(p).skipFilter(BlockRay.onlyAirFilter(), BlockRay.blockTypeFilter(BlockTypes.WATER)).stopFilter(BlockRay.onlyAirFilter()).distanceLimit(7).build().end();
+		for(Entry<String, ItemUseBypass> itemUseBypass : ItemUseBypass.ITEM_BYPASS.entrySet()) {
+			String id = itemUseBypass.getKey();
+			ItemUseBypass itemBypass = itemUseBypass.getValue();
+			if(itemBypass.getWhen().equals(WhenBypass.ALWAYS)) {
+				if(itemInHand != null && itemInHand.getType().getId().equalsIgnoreCase(id)) {
 					return false;
-		Optional<BlockRayHit<World>> target = BlockRay.from(p).skipFilter(BlockRay.onlyAirFilter()).stopFilter(BlockRay.onlyAirFilter()).distanceLimit(7).build().end();
-		if(target.isPresent() && !target.get().getLocation().getBlock().getType().equals(BlockTypes.AIR))
-			if (ItemUseBypass.ITEM_BYPASS.containsKey(target.get().getLocation().getBlock().getType().getId()))
-				if (ItemUseBypass.ITEM_BYPASS.get(target.get().getLocation().getBlock().getType().getId()).getWhen().equals(WhenBypass.LOOKING))
+				}
+			} else if(itemBypass.getWhen().equals(WhenBypass.BELOW)) {
+				if(blockBelow != null && blockBelow.getId().equalsIgnoreCase(id)) {
 					return false;
-
+				}
+			} else if(itemBypass.getWhen().equals(WhenBypass.LOOKING)) {
+				if(target.isPresent() && target.get().getLocation().getBlock().getType().getId().equalsIgnoreCase(id)) {
+					return false;
+				}
+			}
+		}
 		int ping = Utils.getPing(p);
 		long timeMillis = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > timeMillis || reliability < 30 || ping > c.getMaxAlertPing()

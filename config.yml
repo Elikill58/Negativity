@@ -70,6 +70,7 @@ items:
   # right_click : disable when the player right click
   # left_click : disable when the player left click
   # looking : disable when the player is looking a specific type
+  # below : disable according to the block below the player
   #
   COMPASS:
     when: always

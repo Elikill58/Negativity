@@ -79,7 +79,7 @@ public class FlyProtocol extends Cheat implements Listener {
 		if (!np.isUsingSlimeBlock && !LocationUtils.hasOtherThanExtended(p.getLocation(), "AIR")
 				&& !LocationUtils.hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
 				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, "AIR")
-				&& (e.getFrom().getY() <= e.getTo().getY() || Utils.isInBoat(p))) {
+				&& (e.getFrom().getY() < e.getTo().getY() || Utils.isInBoat(p))) {
 			double d = e.getTo().getY() - e.getFrom().getY();
 			int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
 			if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Material.AIR))

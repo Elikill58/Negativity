@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -223,11 +224,16 @@ public class UniversalUtils {
         } catch (UnknownHostException | MalformedURLException e) {
         	HAVE_INTERNET = false;
         	Adapter.getAdapter().getLogger().info("Could not use the internet connection to check for update or send stats");
-			return Optional.empty();
+        } catch (ConnectException e) {
+        	if(containsChineseCharacters(e.getMessage())) {
+            	HAVE_INTERNET = false;
+            	Adapter.getAdapter().getLogger().info("As chinese people, you cannot access to the website " + urlName + ".");
+        	} else
+            	Adapter.getAdapter().getLogger().warn("Cannot connect to " + urlName + " (Reason: " + e.getMessage() + ").");
         } catch (IOException e) {
         	e.printStackTrace();
-			return Optional.empty();
 		}
+		return Optional.empty();
 	}
 
 	public static Optional<String> getLatestVersion() {
@@ -335,6 +341,17 @@ public class UniversalUtils {
 
 	public static boolean isValidName(String name) {
 		return name.matches("[0-9A-Za-z-_]{3," + name.length() + "}");
+	}
+	
+	/**
+	 * Check if the given string contains a chinese characters
+	 * 
+	 * @param The string where we are looking for chinese char
+	 * @return true if there is a chinese char
+	 */
+	public static boolean containsChineseCharacters(String s) {
+	    return s.codePoints().anyMatch(codepoint ->
+	            Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
 	}
 	
 	public static void init() {

@@ -51,9 +51,13 @@ public class UniversalUtils {
 	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	public static boolean HAVE_INTERNET = true, DEBUG = false;
 
+	public static int getMultipleOf(int i, int multiple, int more) {
+		return getMultipleOf(i, multiple, more, -1);
+	}
+
 	public static int getMultipleOf(int i, int multiple, int more, int limit) {
 		if(i > limit)
-			return i;
+			return limit;
 		while (i % multiple != 0 && ((i < limit && limit != -1) || limit == -1))
 			i += more;
 		return i;

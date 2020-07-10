@@ -218,6 +218,7 @@ ban:
   # The following plugins are also supported :
   # - maxbans
   # - advancedban
+  # - litebans
   # Defaults to "file"
   processor: "file"
   # Commands to execute when using the "command" processor

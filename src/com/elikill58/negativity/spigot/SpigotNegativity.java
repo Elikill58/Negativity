@@ -74,6 +74,7 @@ import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
 import com.elikill58.negativity.universal.ban.support.AdvancedBanProcessor;
 import com.elikill58.negativity.universal.ban.support.BukkitBanProcessor;
+import com.elikill58.negativity.universal.ban.support.LiteBansProcessor;
 import com.elikill58.negativity.universal.ban.support.MaxBansProcessor;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.dataStorage.file.SpigotFileNegativityAccountStorage;
@@ -157,7 +158,7 @@ public class SpigotNegativity extends JavaPlugin {
 		
 		for (Player p : Utils.getOnlinePlayers())
 			manageAutoVerif(p);
-		
+
 		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
 		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 10);
@@ -165,7 +166,7 @@ public class SpigotNegativity extends JavaPlugin {
 		for (Cheat c : Cheat.values())
 			if (c.isActive() && c.hasListener())
 				pm.registerEvents((Listener) c, this);
-		
+
 		loadCommand();
 
 		if (getConfig().get("items") != null) {
@@ -189,7 +190,6 @@ public class SpigotNegativity extends JavaPlugin {
 
 		NegativityAccountStorage.register("file", new SpigotFileNegativityAccountStorage(new File(getDataFolder(), "user")));
 		NegativityAccountStorage.setDefaultStorage("file");
-
 		StringJoiner supportedPluginName = new StringJoiner(", ");
 		BanManager.registerProcessor("bukkit", new BukkitBanProcessor());
 		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(SpigotNegativity::sendPluginMessage));
@@ -214,6 +214,11 @@ public class SpigotNegativity extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("AdvancedBan") != null) {
 			BanManager.registerProcessor("advancedban", new AdvancedBanProcessor());
 			supportedPluginName.add("AdvancedBan");
+		}
+
+		if (Bukkit.getPluginManager().getPlugin("LiteBans") != null) {
+			BanManager.registerProcessor("litebans", new LiteBansProcessor());
+			supportedPluginName.add("LiteBans");
 		}
 		
 		if (Bukkit.getPluginManager().getPlugin("ViaVersion") != null) {

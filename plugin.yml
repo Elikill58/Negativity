@@ -4,7 +4,7 @@ version: 1.9.1
 author: [Elikill58, RedNesto]
 description: It's an Advanced AntiCheat Detection, by Elikill58.
 api-version: 1.13
-softdepend: [Essentials, WorldGuard, GadgetsMenu, MaxBans, AdvancedBan, ViaVersion, ProtocolSupport]
+softdepend: [Essentials, WorldGuard, GadgetsMenu, MaxBans, AdvancedBan, LiteBans, ViaVersion, ProtocolSupport]
 
 commands:
   negativity:

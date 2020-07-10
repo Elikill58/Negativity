@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
@@ -50,8 +51,10 @@ public class PlayersEvents implements Listener {
 		this.invalidNameSection = invalidNameSection;
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPreLogin(AsyncPlayerPreLoginEvent e) {
+		if(!e.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) // already kicked
+			return;
 		UUID playerId = e.getUniqueId();
 
 		NegativityAccount account = NegativityAccount.get(playerId);

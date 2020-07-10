@@ -16,6 +16,7 @@ import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.PluginCommand;
@@ -468,9 +469,11 @@ public class SpigotNegativity extends JavaPlugin {
 		Player p = alert.getPlayer();
 		int ping = alert.getPing();
 		if(alert.getNbAlertConsole() > 0 && log_console) {
-				INSTANCE.getLogger().info("New " + alert.getReportType().getName() + " for " + p.getName()
-						+ " (UUID: " + p.getUniqueId().toString() + ") (ping: " + ping + ") : suspected of cheating ("
-						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
+			Location location = p.getLocation();
+			String sLoc = "[" + location.getWorld().getName() + ": " + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ() + "]";
+			INSTANCE.getLogger().info("New " + alert.getReportType().getName() + " for " + p.getName() + " (" + ping + " ms, UUID: "
+						+ p.getUniqueId().toString() + ") seem to use " + c.getName() + " "
+						+ (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability + " " + sLoc);
 		}
 		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {

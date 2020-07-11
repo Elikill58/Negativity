@@ -99,7 +99,7 @@ public class FlyProtocol extends Cheat {
 		if (!LocationUtils.hasOtherThanExtended(loc, BlockTypes.AIR) && !np.contentBoolean.getOrDefault("boat-falling", false)
 				&& !LocationUtils.hasOtherThanExtended(locUnder, BlockTypes.AIR)
 				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, BlockTypes.AIR)
-				&& (fromPosition.getY() <= toPosition.getY() || isInBoat)) {
+				&& (fromPosition.getY() < toPosition.getY() || isInBoat)) {
 			double d = toPosition.getY() - fromPosition.getY();
 			int nb = LocationUtils.getNbAirBlockDown(p), porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
 			if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), BlockTypes.AIR))

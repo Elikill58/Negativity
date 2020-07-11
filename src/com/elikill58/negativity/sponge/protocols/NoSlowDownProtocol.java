@@ -84,7 +84,7 @@ public class NoSlowDownProtocol extends Cheat {
 		double dis = np.contentDouble.getOrDefault("slowdown-eating-distance", 0.0);
 		if (dis > np.getWalkSpeed() || p.get(Keys.IS_SPRINTING).orElse(false)) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(dis * 200),
-					"Distance while eating: " + dis + ", WalkSpeed: " + np.getWalkSpeed(), hoverMsg("main", "%distance%", dis));
+					"Distance while eating: " + dis + ", WalkSpeed: " + np.getWalkSpeed(), hoverMsg("main", "%distance%", String.format("%.2f", dis)));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}

@@ -568,7 +568,7 @@ public class SpigotNegativity extends JavaPlugin {
 			String proof, int ping) {
 		if(log)
 			np.logProof(new Timestamp(System.currentTimeMillis()) + ": (" + ping + "ms) " + reliability + "% " + c.getKey()
-				+ " > " + proof + ". " + (viaVersionSupport ? "Player version: " + np.getPlayerVersion().name() + " " : "") + "TPS: " + Arrays.toString(Utils.getTPS()));
+				+ " > " + proof + ". Player version: " + np.getPlayerVersion().name() + ". TPS: " + Arrays.toString(Utils.getTPS()));
 	}
 
 	public static void manageAutoVerif(Player p) {

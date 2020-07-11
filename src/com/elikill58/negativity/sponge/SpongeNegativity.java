@@ -61,6 +61,7 @@ import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.format.TextColors;
 import org.spongepowered.api.util.blockray.BlockRay;
 import org.spongepowered.api.util.blockray.BlockRayHit;
+import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.commands.BanCommand;
@@ -608,9 +609,11 @@ public class SpongeNegativity {
 		Player p = alert.getTargetEntity();
 		int ping = alert.getPing();
 		if(alert.getNbAlertConsole() > 0 && log_console) {
-				INSTANCE.getLogger().info("New " + alert.getReportType().getName() + " for " + p.getName()
-						+ " (UUID: " + p.getUniqueId().toString() + ") (ping: " + ping + ") : suspected of cheating ("
-						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
+			Location<World> location = p.getLocation();
+			String sLoc = "[" + location.getExtent().getName() + ": " + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ() + "]";
+			INSTANCE.getLogger().info("New " + alert.getReportType().getName() + " for " + p.getName() + " (" + ping + " ms, UUID: "
+				+ p.getUniqueId().toString() + ") seem to use " + c.getName() + " "
+				+ (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability + " " + sLoc);
 		}
 		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
@@ -658,7 +661,7 @@ public class SpongeNegativity {
 			return;
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		np.logProof(stamp + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " > " + proof + ". " + (viaVersionSupport ? "Player version: " + np.getPlayerVersion().name() + " " : "") + ". TPS: " + Utils.getLastTPS());
+		np.logProof(stamp + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " > " + proof + ". " + "Player version: " + np.getPlayerVersion().name() + ". TPS: " + Utils.getLastTPS());
 	}
 
 	public Path getDataFolder() {

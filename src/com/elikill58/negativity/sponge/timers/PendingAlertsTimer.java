@@ -13,6 +13,7 @@ public class PendingAlertsTimer implements Runnable {
 		SpongeNegativityPlayer.getAllPlayers().forEach((uuid, np) -> {
 			for(Alert alert : new ArrayList<>(np.getAlertForAllCheat()))
 				SpongeNegativity.sendAlertMessage(np, alert);
+			np.saveData();
 		});
 	}
 }

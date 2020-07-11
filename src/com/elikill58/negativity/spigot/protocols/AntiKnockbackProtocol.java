@@ -5,7 +5,9 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Arrow;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -68,18 +70,29 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 				return;
 		}
 		EntityType damagerType = e.getDamager().getType();
-		if(damagerType.equals(EntityType.EGG) || damagerType.equals(EntityType.SNOWBALL) || (SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p)) || e.isCancelled())
+		if(damagerType.equals(EntityType.EGG) || damagerType.equals(EntityType.SNOWBALL) || (SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p)))
 			return;
 		if(damagerType.name().contains("TNT") || np.isTargetByIronGolem())
 			return;
-		if(e.getDamager() instanceof Arrow && ((Arrow) e.getDamager()).getShooter() instanceof Player)
-			if(((Player) ((Arrow) e.getDamager()).getShooter()).equals(p))
+		final Entity damager = e.getDamager();
+		if(damager instanceof Arrow && ((Arrow) damager).getShooter() instanceof Player)
+			if(((Player) ((Arrow) damager).getShooter()).equals(p))
 				return;
 		
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
 			if(e.isCancelled())
 				return;
-			final Location last = p.getLocation();
+			final Location last = p.getLocation().clone();
+			if(damager instanceof LivingEntity) { // check if fight living entity
+				if(last.clone().add(0, 2, 0).getBlock().getType().isSolid()) { // check for block upper
+					Vector vector = ((LivingEntity) damager).getEyeLocation().getDirection();
+					Location locBehind = last.clone().add(vector.clone());
+					locBehind.setY(last.getY());
+					Material typeBehind = locBehind.getBlock().getType();
+					if(typeBehind.isSolid())// cannot move
+						return;
+				}
+			}
 			p.damage(0D);
 			p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
 			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {

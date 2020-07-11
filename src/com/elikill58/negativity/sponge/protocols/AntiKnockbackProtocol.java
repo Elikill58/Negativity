@@ -2,10 +2,13 @@ package com.elikill58.negativity.sponge.protocols;
 
 import java.util.concurrent.TimeUnit;
 
+import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.property.block.SolidCubeProperty;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
@@ -94,7 +97,18 @@ public class AntiKnockbackProtocol extends Cheat {
 			return;
 		
 		Task.builder().delay(20, TimeUnit.MILLISECONDS).execute(() -> {
-			final Location<World> last = p.getLocation();
+			final Location<World> last = p.getLocation().copy();
+			if (damageSource instanceof EntityDamageSource) {
+				if(last.copy().add(0, 2, 0).getBlock() == null) { // check for block upper
+					Entity entity = ((EntityDamageSource) damageSource).getSource();
+					Vector3d vector = entity.getRotation();
+					Location<World> locBehind = last.copy().add(vector.clone());
+					locBehind = locBehind.add(0, entity.getLocation().getY() - last.getY(), 0);
+					BlockType typeBehind = locBehind.getBlock().getType();
+					if(typeBehind.getProperty(SolidCubeProperty.class).get().getValue())// cannot move
+						return;
+				}
+			}
 			p.damage(0D, DamageSources.MAGIC);
 			Task.builder().delay(250, TimeUnit.MILLISECONDS).execute(() -> {
 				Location<World> actual = p.getLocation();

@@ -151,6 +151,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 				Files.createDirectories(proofDir);
 				Path proofFile = proofDir.resolve(p.getUniqueId() + ".txt");
 				Files.write(proofFile, proofs, StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+				proofs.clear();
 			} catch (IOException e) {
 				SpongeNegativity.getInstance().getLogger().error("Unable to save proofs of player " + p.getName(), e);
 			}

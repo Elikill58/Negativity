@@ -24,11 +24,11 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.support.EssentialsSupport;
 import com.elikill58.negativity.sponge.utils.LocationUtils;
+import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -56,13 +56,20 @@ public class SpeedProtocol extends Cheat {
 			return;
 		}
 		np.MOVE_TIME++;
+		if (np.MOVE_TIME > 60) {
+			boolean b = SpongeNegativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
+					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Ping: "
+							+ Utils.getPing(p) + " Warn for Speed: " + np.getWarn(this));
+			if (b && isSetBack())
+				e.setCancelled(true);
+		}
 		if (np.justDismounted) {
 			// Dismounting a boat teleports the player, triggering a false positive
 			return;
 		}
 		Location<World> from = e.getFromTransform().getLocation(), to = e.getToTransform().getLocation();
-		Vector3d fromVect = e.getFromTransform().getPosition();
-		Vector3d toVect = e.getToTransform().getPosition();
+		Vector3d fromVect = e.getFromTransform().getPosition().clone();
+		Vector3d toVect = e.getToTransform().getPosition().clone();
 		if (p.getLocation().sub(Vector3i.UNIT_Y).getBlockType().equals(BlockTypes.SPONGE)
 				|| np.isFlying() || np.getWalkSpeed() > 2.0F || hasEnderDragonAround(p) || p.get(Keys.FLYING_SPEED).get() > 3.0F
 				|| np.hasPotionEffect(PotionEffectTypes.SPEED) || np.hasPotionEffect("DOLPHINS_GRACE") || p.getVehicle().isPresent()) {

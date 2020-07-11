@@ -179,8 +179,9 @@ public class SpongeNegativity {
 				.name("negativity-packets").submit(this);
 		Task.builder().execute(new ActualizerTimer()).interval(1, TimeUnit.SECONDS)
 				.name("negativity-actualizer").submit(this);
-		Task.builder().execute(new PendingAlertsTimer()).interval(timeBetweenAlert, TimeUnit.MILLISECONDS)
-				.name("negativity-pending-alerts").submit(this);
+		if(timeBetweenAlert != -1) // is == -1, don't need timer
+			Task.builder().execute(new PendingAlertsTimer()).interval(timeBetweenAlert, TimeUnit.MILLISECONDS)
+					.name("negativity-pending-alerts").submit(this);
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
 		NegativityAccountStorage.register("file", new SpongeFileNegativityAccountStorage(configDir.resolve("user")));

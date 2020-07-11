@@ -1,6 +1,5 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import static com.elikill58.negativity.universal.utils.ReflectionUtils.callMethod;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import java.lang.reflect.Field;
@@ -113,8 +112,9 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			if (dis < Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach"))
 				return;
 			Class<?> entityClass = PacketUtils.getNmsClass("Entity");
-			EntityType type = (EntityType) callMethod(entityClass.getDeclaredMethod("getBukkitEntity").invoke(nmsEntity), "getType");
-			if(type.equals(EntityType.ENDER_DRAGON))
+			Entity cible = (Entity) entityClass.getDeclaredMethod("getBukkitEntity").invoke(nmsEntity);
+			EntityType type = cible.getType();
+			if(type.equals(EntityType.ENDER_DRAGON) || type.equals(EntityType.ENDERMAN))
 				return;
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10),
 					"[Packet] Big distance with: " + type.name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"

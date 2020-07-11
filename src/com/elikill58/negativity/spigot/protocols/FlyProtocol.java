@@ -79,16 +79,22 @@ public class FlyProtocol extends Cheat implements Listener {
 		if (!np.isUsingSlimeBlock && !LocationUtils.hasOtherThanExtended(p.getLocation(), "AIR")
 				&& !LocationUtils.hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
 				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, "AIR")
-				&& (e.getFrom().getY() < e.getTo().getY() || Utils.isInBoat(p))) {
-			double d = e.getTo().getY() - e.getFrom().getY();
-			int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
-			if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Material.AIR))
-				porcent = parseInPorcent(porcent - 15);
-			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
-					this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d
-							+ ". Warn for fly: " + np.getWarn(this),
-							hoverMsg(Utils.isInBoat(p) ? "boat_air_below" : "air_below", "%nb%", nb));
-		}
+				&& (e.getFrom().getY() <= e.getTo().getY() || Utils.isInBoat(p))) {
+			double nbTimeAirBelow = np.contentDouble.getOrDefault("fly-air-below", 0.0);
+			np.contentDouble.put("fly-air-below", nbTimeAirBelow + 1);
+			if(nbTimeAirBelow > 6) { // we don't care when player jump
+				double d = e.getTo().getY() - e.getFrom().getY();
+				int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
+				if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Material.AIR))
+					porcent = parseInPorcent(porcent - 15);
+				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
+						this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d
+								+ ". Warn for fly: " + np.getWarn(this),
+								hoverMsg(Utils.isInBoat(p) ? "boat_air_below" : "air_below", "%nb%", nb));
+			}
+		} else
+			np.contentDouble.remove("fly-air-below");
+		
 		Location to = e.getTo().clone();
 		to.setY(e.getFrom().getY());
 		double distanceWithoutY = to.distance(e.getFrom());

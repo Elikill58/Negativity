@@ -99,16 +99,21 @@ public class FlyProtocol extends Cheat {
 		if (!LocationUtils.hasOtherThanExtended(loc, BlockTypes.AIR) && !np.contentBoolean.getOrDefault("boat-falling", false)
 				&& !LocationUtils.hasOtherThanExtended(locUnder, BlockTypes.AIR)
 				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, BlockTypes.AIR)
-				&& (fromPosition.getY() < toPosition.getY() || isInBoat)) {
-			double d = toPosition.getY() - fromPosition.getY();
-			int nb = LocationUtils.getNbAirBlockDown(p), porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
-			if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), BlockTypes.AIR))
-				porcent = UniversalUtils.parseInPorcent(porcent - 15);
-			mayCancel = SpongeNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
-					this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d + (isInBoat ? " On boat" : "")
-							+ ". Warn for fly: " + np.getWarn(this),
-							hoverMsg(isInBoat ? "boat_air_below" : "air_below", "%nb%", nb));
-		}
+				&& (fromPosition.getY() <= toPosition.getY() || isInBoat)) {
+			double nbTimeAirBelow = np.contentDouble.getOrDefault("fly-air-below", 0.0);
+			np.contentDouble.put("fly-air-below", nbTimeAirBelow + 1);
+			if(nbTimeAirBelow > 6) { // we don't care when player jump
+				double d = toPosition.getY() - fromPosition.getY();
+				int nb = LocationUtils.getNbAirBlockDown(p), porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
+				if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), BlockTypes.AIR))
+					porcent = UniversalUtils.parseInPorcent(porcent - 15);
+				mayCancel = SpongeNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
+						this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d + (isInBoat ? " On boat" : "")
+								+ ". Warn for fly: " + np.getWarn(this),
+								hoverMsg(isInBoat ? "boat_air_below" : "air_below", "%nb%", nb));
+			}
+		} else
+			np.contentDouble.remove("fly-air-below");
 		
 		Vector3d to = new Vector3d(toPosition.getX(), fromPosition.getX(), toPosition.getZ());
 		double distanceWithoutY = to.distance(fromPosition);

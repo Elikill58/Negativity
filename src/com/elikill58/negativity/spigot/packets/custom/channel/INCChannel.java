@@ -38,7 +38,11 @@ public class INCChannel extends ChannelAbstract {
 				// appear when the player's channel isn't accessible because of reload.
 				getPacketManager().getPlugin().getLogger().warning("Please, don't use reload, this can produce some problem. Currently, " + player.getName() + " isn't fully checked because of that. More details: " + e.getMessage() + " (NoSuchElementException)");
 			} catch (IllegalArgumentException e) {
-				getPacketManager().getPlugin().getLogger().severe("Error while loading Packet channel. " + e.getMessage() + ". Please, prefer restart than reload.");
+				if(e.getMessage().contains("Duplicate handler")) {
+					removeChannel(player, endChannelName);
+					addChannel(player, endChannelName);
+				} else
+					getPacketManager().getPlugin().getLogger().severe("Error while loading Packet channel. " + e.getMessage() + ". Please, prefer restart than reload.");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

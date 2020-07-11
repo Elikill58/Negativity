@@ -26,7 +26,6 @@ public class LiteBansProcessor implements BanProcessor {
 	public Ban executeBan(Ban ban) {
 		try {
 			String timeValue = (ban.isDefinitive() ? "" : getTimeFromLong(ban.getExpirationTime() - ban.getExecutionTime()) + " ");
-			Bukkit.broadcastMessage("TIME VALUE " + timeValue);
 			String sender;
 			switch (ban.getBanType()) {
 			case MOD:
@@ -126,24 +125,24 @@ public class LiteBansProcessor implements BanProcessor {
 	private String getTimeFromLong(long l) {
 		long time = l / 1000; // set in seconds from milliseconds
 		if(time > YEARS) {
-			return ((int) (time / YEARS)) + "years ";
+			return (((double) time / YEARS)) + "years ";
 		}
 		if(time > MONTHS) {
-			return ((int) (time / MONTHS)) + "mo ";
+			return (((double) time / MONTHS)) + "mo ";
 		}
 		if(time > WEEKS) {
-			return ((int) (time / WEEKS)) + "w ";
+			return (((double) time / WEEKS)) + "w ";
 		}
 		if(time > DAYS) {
-			return ((int) (time / DAYS)) + "d";
+			return (((double) time / DAYS)) + "d";
 		}
 		if(time > HOURS) {
-			return ((int) (time / HOURS)) + "h ";
+			return (((double) time / HOURS)) + "h ";
 		}
 		if(time > MINUTES) {
-			return ((int) (time / MINUTES)) + "m ";
+			return (((double) time / MINUTES)) + "m ";
 		}
-		return ((int) (time / SECONDS)) + "s";
+		return (((double) time / SECONDS)) + "s";
 	}
 	
 	public String getFullTimeFromLong(long l) {

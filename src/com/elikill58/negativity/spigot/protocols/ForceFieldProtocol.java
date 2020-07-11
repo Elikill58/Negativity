@@ -64,7 +64,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			return;
 		boolean mayCancel = false;
 		Entity cible = e.getEntity();
-		if(!LocationUtils.canSeeEntity(p, cible)) {
+		if(Version.getVersion().isNewerOrEquals(Version.V1_8) && !LocationUtils.canSeeEntity(p, cible)) {
 			mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "Hit " + cible.getType().name()
 					+ " but cannot see it, ping: " + Utils.getPing(p),
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase()));
@@ -81,9 +81,10 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if(inHand == null || !inHand.getType().equals(Material.BOW)) {
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !e.getEntityType().equals(EntityType.ENDER_DRAGON)) {
+				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getEntity().getType().name().toLowerCase() : e.getEntity().getName();
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10),
 						"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
-						+ ". Ping: " + Utils.getPing(p), hoverMsg("distance", "%name%", e.getEntity().getName(), "%distance%", nf.format(dis)));
+						+ ". Ping: " + Utils.getPing(p), hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
 			}
 		}
 		if (isSetBack() && mayCancel)

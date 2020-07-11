@@ -52,7 +52,7 @@ public class NoFallProtocol extends Cheat {
 
 		Location<World> locDown = p.getLocation().copy().sub(0, 1, 0);
 		double motionY = from.getY() - to.getY();
-		if (motionY > 0.1 && ((p.isOnGround() && np.getFallDistance() < 3) || np.getFallDistance() == 0)
+		if (motionY > np.getWalkSpeed() && ((p.isOnGround() && np.getFallDistance() < 3) || np.getFallDistance() == 0)
 				&& locDown.getBlock().getType().equals(BlockTypes.AIR)
 				&& !LocationUtils.has(locDown, "STAIRS")) {
 			int porcent = UniversalUtils.parseInPorcent(900 * motionY);

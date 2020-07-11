@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -18,6 +19,7 @@ import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
+import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -44,8 +46,19 @@ public class NoFallProtocol extends Cheat implements Listener {
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double distance = to.toVector().distance(from.toVector());
+
+		Location locDown = p.getLocation().clone().getBlock().getRelative(BlockFace.DOWN).getLocation();
+		double motionY = from.getY() - to.getY();
+		if (motionY > 0.1 && (np.isOnGround() || p.getFallDistance() == 0)
+				&& locDown.getBlock().getType().equals(Material.AIR)
+				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS")) {
+			int porcent = UniversalUtils.parseInPorcent(900 * motionY);
+			SpigotNegativity.alertMod(ReportType.WARNING, p, this, porcent,
+					"New NoFall - Player on ground. motionY: " + motionY, new Cheat.CheatHover.Literal("MotionY (on ground): " + motionY));
+		}
+		
 		if (!(distance == 0.0D || from.getY() < to.getY())) {
-			if (p.getFallDistance() == 0.0F && p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
+			if (p.getFallDistance() == 0.0F && locDown.getBlock().getType().equals(Material.AIR)) {
 				int relia = UniversalUtils.parseInPorcent(distance * 100);
 				if (np.isOnGround()) {
 					if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && SpigotNegativity.essentialsSupport

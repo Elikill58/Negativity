@@ -19,6 +19,7 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -48,6 +49,16 @@ public class NoFallProtocol extends Cheat {
 		Location<World> from = e.getFromTransform().getLocation();
 		Location<World> to = e.getToTransform().getLocation();
 		double distance = to.getPosition().distance(from.getPosition());
+
+		Location<World> locDown = p.getLocation().copy().sub(0, 1, 0);
+		double motionY = from.getY() - to.getY();
+		if (motionY > 0.1 && (p.isOnGround() || np.getFallDistance() == 0)
+				&& locDown.getBlock().getType().equals(BlockTypes.AIR)
+				&& !LocationUtils.has(locDown, "STAIRS")) {
+			int porcent = UniversalUtils.parseInPorcent(900 * motionY);
+			SpongeNegativity.alertMod(ReportType.WARNING, p, this, porcent,
+					"New NoFall - Player on ground. motionY: " + motionY, new CheatHover.Literal("MotionY (on ground): " + motionY));
+		}
 		float fallDistance = np.getFallDistance();
 		if (!(distance == 0.0D || from.getY() < to.getY())) {
 			if (fallDistance == 0.0F && p.getLocation().sub(0, 1, 0).getBlockType().equals(BlockTypes.AIR)) {

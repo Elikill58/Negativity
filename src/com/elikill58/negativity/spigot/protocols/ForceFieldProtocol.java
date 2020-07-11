@@ -34,7 +34,6 @@ import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
@@ -162,13 +161,13 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	
 	@EventHandler
 	public void onPacketClear(PlayerPacketsClearEvent e) {
-		int use = e.getPackets().getOrDefault(PacketType.Client.USE_ENTITY, 0);
+		/*int use = e.getPackets().getOrDefault(PacketType.Client.USE_ENTITY, 0);
 		if(use > 8 && Version.getVersion().isNewerOrEquals(Version.V1_9)) {
 			Player p = e.getPlayer();
 			int ping = Utils.getPing(p);
 			SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(use * 10 - ping),
 					use + " USE_ENTITY packets sent. Ping: " + ping, (CheatHover) null, use - 8);
-		}
+		}*/
 	}
 	
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {

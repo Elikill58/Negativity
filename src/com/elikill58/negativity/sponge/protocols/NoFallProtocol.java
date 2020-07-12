@@ -50,16 +50,18 @@ public class NoFallProtocol extends Cheat {
 		Location<World> to = e.getToTransform().getLocation();
 		double distance = to.getPosition().distance(from.getPosition());
 
+		float fallDistance = np.getFallDistance(), walkSpeed = np.getWalkSpeed();
 		Location<World> locDown = p.getLocation().copy().sub(0, 1, 0);
 		double motionY = from.getY() - to.getY();
-		if (motionY > np.getWalkSpeed() && ((p.isOnGround() && np.getFallDistance() < 3) || np.getFallDistance() == 0)
-				&& locDown.getBlock().getType().equals(BlockTypes.AIR)
+		if(locDown.getBlock().getType().equals(BlockTypes.AIR)
 				&& !LocationUtils.has(locDown, "STAIRS")) {
-			int porcent = UniversalUtils.parseInPorcent(900 * motionY);
-			SpongeNegativity.alertMod(ReportType.WARNING, p, this, porcent,
-					"New NoFall - Player on ground. motionY: " + motionY, new CheatHover.Literal("MotionY (on ground): " + motionY));
+			if ((motionY > walkSpeed && fallDistance == 0)
+					|| (motionY > (walkSpeed / 2) && p.isOnGround() && walkSpeed > fallDistance)) {
+				int porcent = UniversalUtils.parseInPorcent(900 * motionY);
+				SpongeNegativity.alertMod(ReportType.WARNING, p, this, porcent,
+						"New NoFall - Player on ground. motionY: " + motionY, new CheatHover.Literal("MotionY (on ground): " + motionY));
+			}
 		}
-		float fallDistance = np.getFallDistance();
 		if (!(distance == 0.0D || from.getY() < to.getY())) {
 			if (fallDistance == 0.0F && p.getLocation().sub(0, 1, 0).getBlockType().equals(BlockTypes.AIR)) {
 				int reliability = UniversalUtils.parseInPorcent(distance * 100);

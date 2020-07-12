@@ -292,6 +292,8 @@ public class LocationUtils {
 	 * @return true if the player can see the entity
 	 */
 	public static boolean canSeeEntity(Player p, Entity entityToSee, int maxDistance) {
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9))
+			return p.hasLineOfSight(entityToSee);
 		Location loc = p.getLocation().clone().add(0, 1.5, 0);
 		World w = p.getWorld();
 		Vector baseVector = loc.getDirection().normalize();
@@ -325,7 +327,6 @@ public class LocationUtils {
 			maxY = doubles.read("e");
 			maxZ = doubles.read("f");
 		}
-		Adapter.getAdapter().debug("Min: " + String.format("%.2f", minX) + "/" + String.format("%.2f", minY) + " / " + String.format("%.2f", minZ) + " " + String.format("%.2f", maxX) + "/" + String.format("%.2f", maxY) + "/" + String.format("%.2f", maxZ));
 		for(int i = 0; i < maxDistance; i++) {
 			if(loc.distance(entityToSee.getLocation()) < 1.5)
 				loc.add(vectorNear);

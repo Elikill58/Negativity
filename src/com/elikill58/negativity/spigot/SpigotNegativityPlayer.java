@@ -109,18 +109,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			p.sendPluginMessage(pl, SpigotNegativity.CHANNEL_NAME_FML, new byte[] { 2, 0, 0, 0, 0 });
 		}
 	}
-	
-	public Player getPlayer() {
-		Player cached = p != null ? p.get() : null;
-		if (cached == null) {
-			cached = Bukkit.getPlayer(getUUID());
-			if (p != null)
-				p.clear();
-
-			p = new WeakReference<>(cached);
-		}
-		return cached;
-	}
 
 	public String getIP() {
 		return p.get().getAddress().getAddress().getHostAddress();

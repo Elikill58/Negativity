@@ -49,7 +49,7 @@ public class CheckMenuInventory extends AbstractInventory {
 
 		inv.setItem(10, ItemUtils.hideAttributes(createItem(Material.DIAMOND_PICKAXE, "Minerate", minerate.getInventoryLoreString())));
 		inv.setItem(11, createItem(ItemUtils.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
-		inv.setItem(12, getWoolItem(p, np.isMcLeaks()));
+		inv.setItem(12, getWoolItem(p, np.getAccount().isMcLeaks()));
 		inv.setItem(13, createItem(ItemUtils.SKELETON_SKULL, Messages.getMessage(p, "fake_entities")));
 		//inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE"), "Kick"));
 		//inv.setItem(17, Utils.createItem(Material.ANVIL, "Ban"));

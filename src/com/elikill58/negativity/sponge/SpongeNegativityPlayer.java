@@ -85,13 +85,12 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public long timeStartFakePlayer = 0;
 	public Location<World> lastSpiderLoc = null;
 	public boolean justDismounted = false;
-	private final Version playerVersion;
 
 	public SpongeNegativityPlayer(Player p) {
 		super(null);
 		//super(p.getUniqueId(), p.getName());
 		this.p = p;
-		playerVersion = SpongeNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : Version.getVersion();
+		//playerVersion = SpongeNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : Version.getVersion();
 	}
 
 	public void initFmlMods() {

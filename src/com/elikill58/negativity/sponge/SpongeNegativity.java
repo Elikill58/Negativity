@@ -662,7 +662,7 @@ public class SpongeNegativity {
 			return;
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		np.logProof(stamp + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " > " + proof + ". " + "Player version: " + np.getPlayerVersion().name() + ". TPS: " + Utils.getLastTPS());
+		np.logProof(stamp + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " > " + proof + ". " + "Player version: " + np.getPlayer().getPlayerVersion().name() + ". TPS: " + Utils.getLastTPS());
 	}
 
 	public Path getDataFolder() {

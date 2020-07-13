@@ -10,8 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -29,7 +29,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 	public void onClick(InventoryClickEvent e) {
 		if (!(e.getWhoClicked() instanceof Player) || e.getClickedInventory() == null)
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer((Player) e.getWhoClicked());
+		NegativityPlayer np = NegativityPlayer.getCached(e.getWhoClicked().getUniqueId());
 		if (!np.hasDetectionActive(this))
 			return;
 		checkInvMove((Player) e.getWhoClicked(), true, "Click");
@@ -39,7 +39,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 	public void onOpen(InventoryOpenEvent e) {
 		if (!(e.getPlayer() instanceof Player) || e.getInventory() == null)
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer((Player) e.getPlayer());
+		NegativityPlayer np = NegativityPlayer.getCached(e.getPlayer().getUniqueId());
 		if (!np.hasDetectionActive(this))
 			return;
 		checkInvMove((Player) e.getPlayer(), false, "Open");
@@ -54,7 +54,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 				public void run() {
 					if (p.isSprinting() || p.isSneaking())
 						SpigotNegativity.alertMod(ReportType.WARNING, p, instance,
-								SpigotNegativityPlayer.getNegativityPlayer(p).getAllWarn(instance) > 5 ? 100 : 95,
+								NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95,
 									"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking(), hoverMsg("main", "%name%", from));
 				}
 			}, 3);
@@ -69,7 +69,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 					if (dis > 1 && (lastLoc.getY() - p.getLocation().getY()) < 0.1
 							&& p.getOpenInventory() != null) {
 						SpigotNegativity.alertMod(ReportType.WARNING, p, instance,
-								SpigotNegativityPlayer.getNegativityPlayer(p).getAllWarn(instance) > 5 ? 100 : 95,
+								NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95,
 									"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()), hoverMsg("main", "%name%", from));
 					}
 				}

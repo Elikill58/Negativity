@@ -36,6 +36,8 @@ public class NegativityPlayer {
 	public HashMap<PacketType, Integer> PACKETS = new HashMap<>();
 	public HashMap<Cheat, List<IPlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 
+	public int ACTUAL_CLICK = 0, LAST_CLICK = 0, SEC_ACTIVE = 0;
+	
 	// setBack
 	public int NO_FALL_DAMAGE = 0;
 	
@@ -244,5 +246,15 @@ public class NegativityPlayer {
 		if (cached != null) {
 			cached.destroy();
 		}
+	}
+
+	public void fight() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void unfight() {
+		// TODO Auto-generated method stub
+		
 	}
 }

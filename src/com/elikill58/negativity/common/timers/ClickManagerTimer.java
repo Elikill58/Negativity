@@ -1,18 +1,16 @@
-package com.elikill58.negativity.spigot.timers;
-
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
+package com.elikill58.negativity.common.timers;
 
 import com.elikill58.negativity.common.NegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.adapter.Adapter;
 
-public class ActualizeClickTimer extends BukkitRunnable {
+public class ClickManagerTimer implements Runnable {
 
 	@Override
 	public void run() {
-		for (Player p : Utils.getOnlinePlayers()) {
-			NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
+		for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
+			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 			NegativityAccount account = np.getAccount();
 			if (account.getMostClicksPerSecond() < np.ACTUAL_CLICK) {
 				account.setMostClicksPerSecond(np.ACTUAL_CLICK);
@@ -25,5 +23,4 @@ public class ActualizeClickTimer extends BukkitRunnable {
 			}
 		}
 	}
-
 }

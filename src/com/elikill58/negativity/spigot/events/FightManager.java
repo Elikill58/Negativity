@@ -16,7 +16,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.potion.Potion;
 
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 
 @SuppressWarnings("deprecation")
@@ -28,15 +28,15 @@ public class FightManager implements Listener {
 		if(e.getDamager().hasMetadata("NPC") || e.getEntity().hasMetadata("NPC"))
 			return;
 		if(e.getDamager() instanceof Player)
-			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getDamager()).fight();
+			NegativityPlayer.getCached(e.getDamager().getUniqueId()).fight();
 		if(e.getEntity() instanceof Player)
-			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).fight();
+			NegativityPlayer.getCached(e.getEntity().getUniqueId()).fight();
 	}
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageEvent e) {
 		if (e.getEntity() instanceof Player && !e.getEntity().hasMetadata("NPC"))
-			SpigotNegativityPlayer.getNegativityPlayer((Player) e.getEntity()).fight();
+			NegativityPlayer.getCached(e.getEntity().getUniqueId()).fight();
 	}
 
 	@EventHandler
@@ -80,7 +80,7 @@ public class FightManager implements Listener {
 			for(Player p : Utils.getOnlinePlayers())
 				if(loc.getWorld().equals(p.getLocation().getWorld()))
 					if(loc.distance(p.getLocation()) < 18 && loc.distance(p.getLocation()) > 4)
-						SpigotNegativityPlayer.getNegativityPlayer(p).fight();
+						NegativityPlayer.getCached(p.getUniqueId()).fight();
 			break;
 		case INSTANT_DAMAGE:
 		case POISON:
@@ -89,7 +89,7 @@ public class FightManager implements Listener {
 			for(Player p : Utils.getOnlinePlayers())
 				if(loc.getWorld().equals(p.getLocation().getWorld()))
 					if(loc.distance(p.getLocation()) < 9)
-						SpigotNegativityPlayer.getNegativityPlayer(p).fight();
+						NegativityPlayer.getCached(p.getUniqueId()).fight();
 			break;
 		default:
 			break;
@@ -98,7 +98,7 @@ public class FightManager implements Listener {
 	
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
-		SpigotNegativityPlayer.getNegativityPlayer(e.getEntity()).unfight();
+		NegativityPlayer.getCached(e.getEntity().getUniqueId()).unfight();
 	}
 	
 	@EventHandler
@@ -106,15 +106,15 @@ public class FightManager implements Listener {
 		if(!e.getEntityType().equals(EntityType.PRIMED_TNT))
 			return;
 		Location loc = e.getLocation();
-		Utils.getOnlinePlayers().stream().filter((p) -> loc.getWorld().equals(p.getWorld()) && loc.distance(p.getLocation()) < 5).forEach((p) -> SpigotNegativityPlayer.getNegativityPlayer(p).fight());
+		Utils.getOnlinePlayers().stream().filter((p) -> loc.getWorld().equals(p.getWorld()) && loc.distance(p.getLocation()) < 5).forEach((p) -> NegativityPlayer.getCached(p.getUniqueId()).fight());
 	}
 	
 	private void manageFightBetweenTwoPlayers(Player p, int maxDistance) {
 		if(!p.getWorld().getPVP())
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
 		for(Player pl : Utils.getOnlinePlayers()) {
-			SpigotNegativityPlayer npOther = SpigotNegativityPlayer.getNegativityPlayer(p);
+			NegativityPlayer npOther = NegativityPlayer.getCached(p.getUniqueId());
 			if(npOther.isInFight && np.isInFight)
 				continue;
 			if(pl.getLocation().getWorld().equals(p.getLocation().getWorld())) {

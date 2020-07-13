@@ -56,7 +56,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if (!(e.getDamager() instanceof Player) || e.isCancelled())
 			return;
 		Player p = (Player) e.getDamager();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
 		if (!np.hasDetectionActive(this) || e.getEntity() == null)
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))

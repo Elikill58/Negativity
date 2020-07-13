@@ -10,6 +10,8 @@ import java.util.UUID;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
@@ -95,11 +97,11 @@ public abstract class Cheat {
 	public boolean setActive(boolean active) {
 		Adapter ada = Adapter.getAdapter();
 		ada.getConfig().set("cheats." + key + ".isActive", active);
-		for(UUID playerUUID : Adapter.getAdapter().getOnlinePlayers()) {
+		for(Player players : Adapter.getAdapter().getOnlinePlayers()) {
 			if(active)
-				ada.getNegativityPlayer(playerUUID).startAnalyze(this);
+				NegativityPlayer.getNegativityPlayer(players).startAnalyze(this);
 			else
-				ada.getNegativityPlayer(playerUUID).stopAnalyze(this);
+				NegativityPlayer.getNegativityPlayer(players).stopAnalyze(this);
 		}
 		return active;
 	}

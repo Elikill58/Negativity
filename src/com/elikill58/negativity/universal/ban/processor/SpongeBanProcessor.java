@@ -14,8 +14,7 @@ import org.spongepowered.api.service.ban.BanService;
 import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.ban.BanTypes;
 
-import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
@@ -41,7 +40,7 @@ public class SpongeBanProcessor implements BanProcessor {
 				.build();
 		banService.addBan(spongeBan);
 
-		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
+		NegativityPlayer player = NegativityPlayer.getCached(ban.getPlayerId());
 		if (player != null) {
 			BanUtils.kickForBan(player, ban);
 		}

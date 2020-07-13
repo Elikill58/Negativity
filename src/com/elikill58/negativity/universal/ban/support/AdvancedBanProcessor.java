@@ -8,9 +8,8 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
@@ -25,7 +24,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 	@Nullable
 	@Override
 	public Ban executeBan(Ban ban) {
-		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
+		NegativityPlayer player = NegativityPlayer.getCached(ban.getPlayerId());
 		if (player == null) {
 			return null;
 		}

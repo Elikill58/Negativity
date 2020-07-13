@@ -34,21 +34,18 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.sponge.precogs.NegativityBypassTicket;
 import com.elikill58.negativity.sponge.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.sponge.support.ViaVersionSupport;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityAccount;
-import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 
 public class SpongeNegativityPlayer extends NegativityPlayer {
@@ -91,7 +88,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	private final Version playerVersion;
 
 	public SpongeNegativityPlayer(Player p) {
-		super(p.getUniqueId(), p.getName());
+		super(null);
+		//super(p.getUniqueId(), p.getName());
 		this.p = p;
 		playerVersion = SpongeNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : Version.getVersion();
 	}
@@ -114,18 +112,9 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		});
 	}
 
-	public Player getPlayer() {
-		return p;
-	}
-
-	public String getIP() {
+	/*public String getIP() {
 		return getPlayer().getConnection().getAddress().getAddress().getHostAddress();
-	}
-
-	@Override
-	public Version getPlayerVersion() {
-		return playerVersion;
-	}
+	}*/
 
 	public boolean hasDetectionActive(Cheat c) {
 		return ACTIVE_CHEAT.contains(c) && !hasBypassTicket(c);
@@ -273,8 +262,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	private void spawnRight() {
-		Location<World> loc = getPlayer().getLocation().copy();
-		Vector3d dir = getPlayer().getHeadRotation();
+		Location<World> loc = p.getLocation().copy();
+		Vector3d dir = p.getHeadRotation();
 		double x = dir.getX(), z = dir.getZ();
 		if (x >= 0 && z >= 0) {
 			loc = loc.add(-1, 1, 1);
@@ -290,8 +279,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	private void spawnLeft() {
-		Location<World> loc = getPlayer().getLocation().copy();
-		Vector3d dir = getPlayer().getHeadRotation();
+		Location<World> loc = p.getLocation().copy();
+		Vector3d dir = p.getHeadRotation();
 		double x = dir.getX(), z = dir.getZ();
 		if (x >= 0 && z >= 0) {
 			loc = loc.add(0, 1, -1);
@@ -307,8 +296,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	private void spawnBehind() {
-		Location<World> loc = getPlayer().getLocation().copy();
-		Vector3d dir = getPlayer().getHeadRotation();
+		Location<World> loc = p.getLocation().copy();
+		Vector3d dir = p.getHeadRotation();
 		double x = dir.getX(), z = dir.getZ();
 		if (x >= 0 && z >= 0) {
 			loc = loc.add(1, 1, -1);
@@ -378,12 +367,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		return m.getBlock().isPresent();
 	}
 
-	@Override
-	public boolean hasDefaultPermission(String s) {
-		return p.hasPermission(s);
-	}
-
-	@Override
 	public double getLife() {
 		return p.get(HealthData.class).get().health().get();
 	}
@@ -393,17 +376,14 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		return p.getName();
 	}
 
-	@Override
 	public String getGameMode() {
 		return p.gameMode().get().getName();
 	}
 
-	@Override
 	public float getWalkSpeed() {
 		return (float) (double) p.get(Keys.WALKING_SPEED).get();
 	}
 
-	@Override
 	public int getLevel() {
 		return p.get(Keys.EXPERIENCE_LEVEL).get();
 	}
@@ -414,50 +394,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 				String.valueOf(time), "%by%", by));
 	}
 
-	@Override
 	public void banEffect() {
 		System.out.println("[SpongeNegativityPlayer] SOOOON");
-	}
-	
-	public List<PlayerCheatEvent.Alert> getAlertForAllCheat(){
-		final List<PlayerCheatEvent.Alert> list = new ArrayList<>();
-		pendingAlerts.forEach((c, listAlerts) -> {
-			if(!listAlerts.isEmpty())
-				list.add(getAlertForCheat(c, listAlerts));
-		});
-		return list;
-	}
-	
-	public PlayerCheatEvent.Alert getAlertForCheat(Cheat c, List<PlayerCheatEvent.Alert> list) {
-		int nb = 0, nbConsole = 0;
-		HashMap<Integer, Integer> relia = new HashMap<>();
-		HashMap<Integer, Integer> ping = new HashMap<>();
-		ReportType type = ReportType.NONE;
-		boolean hasRelia = false;
-		CheatHover hoverProof = null;
-		for(PlayerCheatEvent.Alert e : list) {
-			nb += e.getNbAlert();
-			
-			relia.put(e.getReliability(), relia.getOrDefault(e.getReliability(), 0) + 1);
-
-			ping.put(e.getPing(), ping.getOrDefault(e.getPing(), 0) + 1);
-
-			if(type == ReportType.NONE || (type == ReportType.WARNING && e.getReportType() == ReportType.VIOLATION))
-				type = e.getReportType();
-
-			hasRelia = e.hasManyReliability() ? true : hasRelia;
-
-			if(hoverProof == null && e.getHover() != null)
-				hoverProof = e.getHover();
-			
-			nbConsole += e.getNbAlertConsole();
-			e.clearNbAlertConsole();
-		}
-		// Don't to 100% each times that there is more than 2 alerts, we made a summary, and a the nb of alert to upgrade it
-		int newRelia = UniversalUtils.parseInPorcent(UniversalUtils.sum(relia) + nb);
-		int newPing = UniversalUtils.sum(ping);
-		// we can ignore "proof" and "stats_send" because they have been already saved and they are NOT showed to player
-		return new PlayerCheatEvent.Alert(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, nb, nbConsole);
 	}
 
 	public void fight() {
@@ -501,17 +439,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		return false;
 	}
 
-	@Override
-	public boolean isOp() {
-		return false;
-	}
-
 	public static SpongeNegativityPlayer getNegativityPlayer(Player player) {
 		return PLAYERS_CACHE.computeIfAbsent(player.getUniqueId(), id -> new SpongeNegativityPlayer(player));
-	}
-	
-	public static Map<UUID, SpongeNegativityPlayer> getAllPlayers(){
-		return PLAYERS_CACHE;
 	}
 
 	public static void removeFromCache(Player player) {

@@ -4,9 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.Version;
 import com.velocitypowered.api.proxy.Player;
 
 public class VelocityNegativityPlayer extends NegativityPlayer {
@@ -15,7 +14,7 @@ public class VelocityNegativityPlayer extends NegativityPlayer {
 	private Player p;
 
 	public VelocityNegativityPlayer(Player p) {
-		super(p.getUniqueId(), p.getUsername());
+		super(null);
 		this.p = p;
 	}
 
@@ -28,52 +27,13 @@ public class VelocityNegativityPlayer extends NegativityPlayer {
 	}
 
 	@Override
-	public Object getPlayer() {
-		return p;
-	}
-
-	@Override
-	public boolean hasDefaultPermission(String s) {
-		return p.hasPermission(s);
-	}
-
-	@Override
-	public double getLife() {
-		return -1;
-	}
-
-	@Override
 	public String getName() {
 		return p.getUsername();
 	}
 
 	@Override
-	public Version getPlayerVersion() {
-		return null;
-	}
-
-	@Override
-	public String getGameMode() {
-		return "unknow";
-	}
-
-	@Override
-	public float getWalkSpeed() {
-		return -1;
-	}
-
-	@Override
-	public int getLevel() {
-		return -1;
-	}
-
-	@Override
 	public void kickPlayer(String reason, String time, String by, boolean def) {
 		p.disconnect(VelocityMessages.getMessage(p, "ban.kick_" + (def ? "def" : "time"), "%reason%", reason, "%time%", String.valueOf(time), "%by%", by));
-	}
-
-	@Override
-	public void banEffect() {
 	}
 
 	@Override
@@ -88,16 +48,6 @@ public class VelocityNegativityPlayer extends NegativityPlayer {
 	@Override
 	public void stopAnalyze(Cheat c) {
 		
-	}
-
-	@Override
-	public boolean isOp() {
-		return false;
-	}
-	
-	@Override
-	public String getIP() {
-		return p.getRemoteAddress().getHostName();
 	}
 
 	@Override

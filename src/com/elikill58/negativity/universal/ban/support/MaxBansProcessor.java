@@ -11,8 +11,7 @@ import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.HistoryRecord;
 import org.maxgamer.maxbans.banmanager.Temporary;
 
-import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
@@ -23,7 +22,7 @@ public class MaxBansProcessor implements BanProcessor {
 	@Nullable
 	@Override
 	public Ban executeBan(Ban ban) {
-		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
+		NegativityPlayer player = NegativityPlayer.getCached(ban.getPlayerId());
 		if (player == null) {
 			return null;
 		}
@@ -39,7 +38,7 @@ public class MaxBansProcessor implements BanProcessor {
 	@Nullable
 	@Override
 	public Ban revokeBan(UUID playerId) {
-		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(playerId);
+		NegativityPlayer player = NegativityPlayer.getCached(playerId);
 		if (player == null) {
 			return null;
 		}
@@ -61,7 +60,7 @@ public class MaxBansProcessor implements BanProcessor {
 	@Nullable
 	@Override
 	public Ban getActiveBan(UUID playerId) {
-		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(playerId);
+		NegativityPlayer player = NegativityPlayer.getCached(playerId);
 		if (player == null) {
 			return null;
 		}
@@ -78,7 +77,7 @@ public class MaxBansProcessor implements BanProcessor {
 
 	@Override
 	public List<Ban> getLoggedBans(UUID playerId) {
-		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(playerId);
+		NegativityPlayer player = NegativityPlayer.getCached(playerId);
 		if (player == null) {
 			return Collections.emptyList();
 		}

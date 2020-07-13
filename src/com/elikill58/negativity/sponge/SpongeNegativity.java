@@ -346,7 +346,7 @@ public class SpongeNegativity {
 			}
 		} else {
 			int maxAllowedIP = Adapter.getAdapter().getConfig().getInt("cheats.special.max-player-by-ip.number");
-			int currentOnIP = SpongeNegativityPlayer.getAllPlayers().values().stream().filter((np) -> np.getIP().equals(e.getConnection().getAddress().getAddress().getHostAddress())).collect(Collectors.toList()).size();
+			int currentOnIP = SpongeNegativityPlayer.getAllPlayers().values().stream().filter((np) -> np.getPlayer().getIP().equals(e.getConnection().getAddress().getAddress().getHostAddress())).collect(Collectors.toList()).size();
 			if(currentOnIP >= maxAllowedIP) {
 				e.setMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", Adapter.getAdapter().getConfig().getInt("cheats.special.max-player-by-ip.name")));
 				e.setCancelled(true);

@@ -18,8 +18,8 @@ import java.util.concurrent.CompletionException;
 import org.json.JSONObject;
 import org.json.parser.JSONParser;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.verif.VerifData;
@@ -43,7 +43,7 @@ public class FileVerificationStorage extends VerificationStorage {
 			}
 
 			Adapter ada = Adapter.getAdapter();
-			NegativityPlayer np = ada.getNegativityPlayer(playerId);
+			NegativityPlayer np = NegativityPlayer.getCached(playerId);
 			List<Verificator> list = new ArrayList<>();
 			try (DirectoryStream<Path> entries = Files.newDirectoryStream(dir,
 					path -> Files.isRegularFile(path) && path.getFileName().toString().endsWith(".json"))) {

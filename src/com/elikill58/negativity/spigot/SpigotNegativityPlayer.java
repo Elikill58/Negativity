@@ -31,6 +31,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitTask;
 import org.bukkit.util.Vector;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
@@ -46,7 +47,6 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
@@ -95,7 +95,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	private final Version playerVersion;
 
 	public SpigotNegativityPlayer(Player p) {
-		super(p.getUniqueId(), p.getName());
+		super(null);
 		this.p = new WeakReference<>(p);
 		initMods(p);
 		playerVersion = SpigotNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : (SpigotNegativity.protocolSupportSupport ? ProtocolSupportSupport.getPlayerVersion(p) : Version.getVersion());
@@ -109,8 +109,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			p.sendPluginMessage(pl, SpigotNegativity.CHANNEL_NAME_FML, new byte[] { 2, 0, 0, 0, 0 });
 		}
 	}
-
-	@Override
+	
 	public Player getPlayer() {
 		Player cached = p != null ? p.get() : null;
 		if (cached == null) {
@@ -125,11 +124,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public String getIP() {
 		return p.get().getAddress().getAddress().getHostAddress();
-	}
-	
-	@Override
-	public Version getPlayerVersion() {
-		return playerVersion;
 	}
 	
 	public boolean hasDetectionActive(Cheat c) {
@@ -203,12 +197,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		ALL = 0;
 		PACKETS.clear();
 	}
-	
-	@Override
-	public boolean isOp() {
-		return getPlayer().isOp();
-	}
-	
+
 	@Override
 	public void startAnalyze(Cheat c) {
 		ACTIVE_CHEAT.add(c);
@@ -243,47 +232,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if(!n.contains(c.getName()))
 			n = n + (n.equals("") ? "" : ", ") + c.getName();
 		return n;
-	}
-	
-	public List<PlayerCheatAlertEvent> getAlertForAllCheat(){
-		final List<PlayerCheatAlertEvent> list = new ArrayList<>();
-		ALERT_NOT_SHOWED.forEach((c, listAlerts) -> {
-			if(!listAlerts.isEmpty())
-				list.add(getAlertForCheat(c, listAlerts));
-		});
-		return list;
-	}
-	
-	public PlayerCheatAlertEvent getAlertForCheat(Cheat c, List<PlayerCheatAlertEvent> list) {
-		int nb = 0, nbConsole = 0;
-		HashMap<Integer, Integer> relia = new HashMap<>();
-		HashMap<Integer, Integer> ping = new HashMap<>();
-		ReportType type = ReportType.NONE;
-		boolean hasRelia = false;
-		CheatHover hoverProof = null;
-		for(PlayerCheatAlertEvent e : list) {
-			nb += e.getNbAlert();
-			
-			relia.put(e.getReliability(), relia.getOrDefault(e.getReliability(), 0) + 1);
-
-			ping.put(e.getPing(), ping.getOrDefault(e.getPing(), 0) + 1);
-
-			if(type == ReportType.NONE || (type == ReportType.WARNING && e.getReportType() == ReportType.VIOLATION))
-				type = e.getReportType();
-
-			hasRelia = e.hasManyReliability() ? true : hasRelia;
-			
-			if(hoverProof == null && e.getHover() != null)
-				hoverProof = e.getHover();
-			
-			nbConsole += e.getNbAlertConsole();
-			e.clearNbAlertConsole();
-		}
-		// Don't to 100% each times that there is more than 2 alerts, we made a summary, and a the nb of alert to upgrade it
-		int newRelia = UniversalUtils.parseInPorcent(UniversalUtils.sum(relia) + nb);
-		int newPing = UniversalUtils.sum(ping);
-		// we can ignore "proof" and "stats_send" because they have been already saved and they are NOT showed to player
-		return new PlayerCheatAlertEvent(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, nb, nbConsole);
 	}
 
 	public void makeAppearEntities() {
@@ -344,6 +292,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		loc.add(0, 1, 0);
 		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
 		FAKE_PLAYER.add(fp);
+	}
+
+	public Version getPlayerVersion() {
+		return playerVersion;
 	}
 
 	private void spawnBehind() {
@@ -448,33 +400,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	@Override
-	public boolean hasDefaultPermission(String s) {
-		return getPlayer().hasPermission(s);
-	}
-
-	@Override
-	public double getLife() {
-		return ((Damageable) getPlayer()).getHealth();
-	}
-
-	@Override
 	public String getName() {
 		return getPlayer().getName();
-	}
-
-	@Override
-	public String getGameMode() {
-		return getPlayer().getGameMode().name();
-	}
-
-	@Override
-	public float getWalkSpeed() {
-		return getPlayer().getWalkSpeed();
-	}
-
-	@Override
-	public int getLevel() {
-		return getPlayer().getLevel();
 	}
 
 	@Override
@@ -491,7 +418,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		this.isOnGround = b;
 	}
 	
-	@Override
 	public void banEffect() {
 		int i = 2;
 		Location loc = getPlayer().getLocation();
@@ -568,10 +494,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public static SpigotNegativityPlayer getCached(UUID playerId) {
 		return players.get(playerId);
-	}
-	
-	public static Map<UUID, SpigotNegativityPlayer> getAllPlayers(){
-		return players;
 	}
 
 	public static void removeFromCache(UUID playerId) {

@@ -10,11 +10,15 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
-import com.elikill58.negativity.bungee.BungeeNegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.events.Event;
+import com.elikill58.negativity.common.events.EventType;
+import com.elikill58.negativity.common.item.ItemRegistrar;
+import com.elikill58.negativity.common.location.Location;
+import com.elikill58.negativity.common.location.World;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
@@ -25,9 +29,7 @@ import com.elikill58.negativity.universal.translation.TranslationProviderFactory
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.gson.Gson;
 
-import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ProxyServer;
-import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeeAdapter extends Adapter {
@@ -58,21 +60,6 @@ public class BungeeAdapter extends Adapter {
 	@Override
 	public File getDataFolder() {
 		return pl.getDataFolder();
-	}
-
-	@Override
-	public void log(String msg) {
-		getLogger().info(msg);
-	}
-
-	@Override
-	public void warn(String msg) {
-		getLogger().warn(msg);
-	}
-
-	@Override
-	public void error(String msg) {
-		getLogger().error(msg);
 	}
 
 	@Override
@@ -113,23 +100,10 @@ public class BungeeAdapter extends Adapter {
 
 	}
 
-	@Nullable
-	@Override
-	public NegativityPlayer getNegativityPlayer(UUID playerId) {
-		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerId);
-		return player != null ? BungeeNegativityPlayer.getNegativityPlayer(player) : null;
-	}
-
 	@Override
 	public NegativityAccountManager getAccountManager() {
 		return accountManager;
 	}
-
-	@Override
-	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {}
-
-	@Override
-	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, CheatHover hover) {}
 
 	@Override
 	public void runConsoleCommand(String cmd) {
@@ -157,15 +131,61 @@ public class BungeeAdapter extends Adapter {
 	}
 
 	@Override
-	public List<UUID> getOnlinePlayers() {
-		List<UUID> list = new ArrayList<>();
-		for(ProxiedPlayer temp : BungeeCord.getInstance().getPlayers())
-			list.add(temp.getUniqueId());
-		return list;
+	public LoggerAdapter getLogger() {
+		return logger;
 	}
 
 	@Override
-	public LoggerAdapter getLogger() {
-		return logger;
+	public void alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, CheatHover hover) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<UUID> getOnlinePlayersUUID() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double[] getTPS() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double getLastTPS() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public ItemRegistrar getItemRegistrar() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Location createLocation(World w, double x, double y, double z) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Event callEvent(EventType type, Object... args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Player> getOnlinePlayers() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

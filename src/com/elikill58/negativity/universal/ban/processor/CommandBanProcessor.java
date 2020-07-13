@@ -6,7 +6,8 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
@@ -55,12 +56,12 @@ public class CommandBanProcessor implements BanProcessor {
 		String level = "?";
 		String gamemode = "?";
 		String walkSpeed = "?";
-		NegativityPlayer nPlayer = Adapter.getAdapter().getNegativityPlayer(playerId);
+		Player nPlayer = NegativityPlayer.getCached(playerId).getPlayer();
 		if (nPlayer != null) {
-			life = String.valueOf(nPlayer.getLife());
+			life = String.valueOf(nPlayer.getHealth());
 			name = nPlayer.getName();
 			level = String.valueOf(nPlayer.getLevel());
-			gamemode = nPlayer.getGameMode();
+			gamemode = nPlayer.getGameMode().getName();
 			walkSpeed = String.valueOf(nPlayer.getWalkSpeed());
 		}
 		return rawCommand.replace("%uuid%", playerId.toString())

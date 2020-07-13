@@ -15,11 +15,10 @@ import java.util.stream.Collectors;
 
 import org.json.JSONObject;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.dataStorage.database.DatabaseMigrator;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.Verificator;
@@ -41,8 +40,7 @@ public class DatabaseVerificationStorage extends VerificationStorage {
 	@Override
 	public CompletableFuture<List<Verificator>> loadAllVerifications(UUID playerId) {
 		return CompletableFuture.supplyAsync(() -> {
-			Adapter ada = Adapter.getAdapter();
-			NegativityPlayer np = ada.getNegativityPlayer(playerId);
+			NegativityPlayer np = NegativityPlayer.getCached(playerId);
 			List<Verificator> list = new ArrayList<>();
 			try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_verifications WHERE uuid = ?")) {
 				stm.setString(1, playerId.toString());

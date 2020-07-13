@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -15,14 +14,16 @@ import javax.annotation.Nullable;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
-import org.spongepowered.api.entity.living.player.Player;
 
+import com.elikill58.negativity.common.events.Event;
+import com.elikill58.negativity.common.events.EventType;
+import com.elikill58.negativity.common.item.ItemRegistrar;
+import com.elikill58.negativity.common.location.Location;
+import com.elikill58.negativity.common.location.World;
 import com.elikill58.negativity.sponge.SpongeNegativity;
-import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
@@ -64,21 +65,6 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public File getDataFolder() {
 		return plugin.getDataFolder().toFile();
-	}
-
-	@Override
-	public void log(String msg) {
-		getLogger().info(msg);
-	}
-
-	@Override
-	public void warn(String msg) {
-		getLogger().warn(msg);
-	}
-
-	@Override
-	public void error(String msg) {
-		getLogger().error(msg);
 	}
 
 	@Override
@@ -127,26 +113,9 @@ public class SpongeAdapter extends Adapter {
 		plugin.loadItemBypasses();
 	}
 
-	@Nullable
-	@Override
-	public NegativityPlayer getNegativityPlayer(UUID playerId) {
-		Player player = Sponge.getServer().getPlayer(playerId).orElse(null);
-		return player != null ? SpongeNegativityPlayer.getNegativityPlayer(player) : null;
-	}
-
 	@Override
 	public NegativityAccountManager getAccountManager() {
 		return accountManager;
-	}
-
-	@Override
-	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {
-		alertMod(type, (Player) p, c, reliability, proof, new CheatHover.Literal(hover_proof));
-	}
-
-	@Override
-	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, CheatHover hover) {
-		SpongeNegativity.alertMod(type, (Player) p, c, reliability, proof, hover);
 	}
 
 	@Override
@@ -174,15 +143,63 @@ public class SpongeAdapter extends Adapter {
 	}
 
 	@Override
-	public List<UUID> getOnlinePlayers() {
-		List<UUID> list = new ArrayList<>();
-		for(Player temp : Sponge.getServer().getOnlinePlayers())
-			list.add(temp.getUniqueId());
-		return list;
+	public LoggerAdapter getLogger() {
+		return logger;
 	}
 
 	@Override
-	public LoggerAdapter getLogger() {
-		return logger;
+	public void alertMod(ReportType type, com.elikill58.negativity.common.entity.Player p, Cheat c, int reliability,
+			String proof, CheatHover hover) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<UUID> getOnlinePlayersUUID() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double[] getTPS() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public double getLastTPS() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public ItemRegistrar getItemRegistrar() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Location createLocation(World w, double x, double y, double z) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void sendMessageRunnableHover(com.elikill58.negativity.common.entity.Player p, String message, String hover,
+			String command) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Event callEvent(EventType type, Object... args) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<com.elikill58.negativity.common.entity.Player> getOnlinePlayers() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

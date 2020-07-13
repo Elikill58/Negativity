@@ -1,6 +1,6 @@
 package com.elikill58.negativity.universal.permissions;
 
-import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public abstract class BasePlatformPermissionChecker implements PermissionChecker {

@@ -5,7 +5,7 @@ import java.util.Map;
 
 import javax.annotation.Nullable;
 
-import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class Perm {

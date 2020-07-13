@@ -12,7 +12,7 @@ import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 
-import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
@@ -25,7 +25,7 @@ public class BukkitBanProcessor implements BanProcessor {
 	@Nullable
 	@Override
 	public Ban executeBan(Ban ban) {
-		NegativityPlayer player = Adapter.getAdapter().getNegativityPlayer(ban.getPlayerId());
+		NegativityPlayer player = NegativityPlayer.getCached(ban.getPlayerId());
 		if (player == null) {
 			return null;
 		}

@@ -22,6 +22,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Version;
 
 public class FlyProtocol extends Cheat implements Listener {
 
@@ -49,6 +50,8 @@ public class FlyProtocol extends Cheat implements Listener {
 			if (speed > 5)
 				return;
 		}
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
+			return;
 		if (p.getAllowFlight() || p.getEntityId() == 100 || Utils.isSwimming(p))
 			return;
 		boolean mayCancel = false;

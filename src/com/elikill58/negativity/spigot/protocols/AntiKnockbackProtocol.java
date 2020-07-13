@@ -74,6 +74,8 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 			return;
 		if(damagerType.name().contains("TNT") || np.isTargetByIronGolem())
 			return;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
+			return;
 		final Entity damager = e.getDamager();
 		if(damager instanceof Arrow && ((Arrow) damager).getShooter() instanceof Player)
 			if(((Player) ((Arrow) damager).getShooter()).equals(p))

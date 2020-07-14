@@ -1,4 +1,4 @@
-package com.elikill58.negativity.spigot.item;
+package com.elikill58.negativity.spigot.impl.item;
 
 import com.elikill58.negativity.common.item.Material;
 

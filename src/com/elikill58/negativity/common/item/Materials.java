@@ -4,4 +4,5 @@ public class Materials {
 
 	public static final Material AIR = ItemRegistrar.getInstance().get("minecraft:air");
 	public static final Material GRASS = ItemRegistrar.getInstance().get("minecraft:grass");
+	public static final Material BOW = ItemRegistrar.getInstance().get("minecraft:bow");
 }

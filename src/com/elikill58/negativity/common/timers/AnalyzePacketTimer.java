@@ -6,11 +6,9 @@ import java.util.List;
 import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.item.ItemStack;
-import com.elikill58.negativity.common.item.Material;
+import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.common.potion.PotionEffect;
-import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.protocols.NukerProtocol;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.common.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
@@ -50,11 +48,11 @@ public class AnalyzePacketTimer implements Runnable {
 			if (flyingWithPing > 28) {
 				Cheat c = np.flyingReason.getCheat();
 				if (np.hasDetectionActive(c)) {
-					if(p.getItemInHand().getType().equals(Material.BOW))
+					if(p.getItemInHand().getType().equals(Materials.BOW))
 						np.flyingReason = FlyingReason.BOW;
-					double[] allTps = Utils.getTPS();
+					double[] allTps = Adapter.getAdapter().getTPS();
 					int porcent = UniversalUtils.parseInPorcent(flyingWithPing - (ping / (allTps[1] - allTps[0] > 0.5 ? 9 : 8)));
-					SpigotNegativity.alertMod(flyingWithPing > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, c, porcent,
+					Negativity.alertMod(flyingWithPing > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, c, porcent,
 							"Flying in one second: " + flying + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
 							c.hoverMsg("packet", "%flying%", flyingWithPing), (int) flyingWithPing / 30);
 					if(c.isSetBack()){
@@ -111,7 +109,7 @@ public class AnalyzePacketTimer implements Runnable {
 			}
 			Cheat NUKER = Cheat.forKey(CheatKeys.NUKER);
 			if(np.hasDetectionActive(NUKER))
-				if(ping < NUKER.getMaxAlertPing() && (blockDig - (ping / 10)) > 20 && !NukerProtocol.hasDigSpeedEnchant(p.getItemInHand()))
+				if(ping < NUKER.getMaxAlertPing() && (blockDig - (ping / 10)) > 20 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()))
 					Negativity.alertMod(blockDig > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, UniversalUtils.parseInPorcent(20 + blockDig), "BlockDig packet: " + blockDig + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
 
 			Cheat SPEED = Cheat.forKey(CheatKeys.SPEED);

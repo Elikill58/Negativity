@@ -15,9 +15,9 @@ import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.location.World;
 import com.elikill58.negativity.common.potion.PotionEffect;
 import com.elikill58.negativity.common.potion.PotionEffectType;
+import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
-import com.elikill58.negativity.spigot.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Version;
 

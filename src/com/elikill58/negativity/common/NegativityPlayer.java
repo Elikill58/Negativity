@@ -45,11 +45,14 @@ public class NegativityPlayer {
 	public int NO_FALL_DAMAGE = 0;
 	public List<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	
+	// detection and bypass
 	public long TIME_INVINCIBILITY = 0;
+	public int MOVE_TIME = 0, MAX_FLYING = 0;
+	public FlyingReason flyingReason = FlyingReason.REGEN;
 	
+	// general values
 	public boolean isInFight = false, already_blink = false, disableShowingAlert = false, isFreeze = false;
 	private boolean mustToBeSaved = false;
-	public FlyingReason flyingReason = FlyingReason.REGEN;
 
 	public NegativityPlayer(Player p) {
 		this.p = p;

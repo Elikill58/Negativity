@@ -28,7 +28,6 @@ public abstract class Player extends Entity {
 	public abstract boolean hasElytra();
 	public abstract boolean hasPermission(String perm);
 	public abstract boolean getAllowFlight();
-	public abstract boolean hasPotionEffect(PotionEffectType type);
 
 	public abstract int getPing();
 	public abstract int getLevel();
@@ -43,6 +42,8 @@ public abstract class Player extends Entity {
 	public abstract void damage(double amount);
 	public abstract void kick(String reason);
 
+	public abstract void setSneaking(boolean b);
+
 	public abstract World getWorld();
 	
 	public abstract Version getPlayerVersion();
@@ -51,9 +52,13 @@ public abstract class Player extends Entity {
 	
 	public abstract ItemStack getItemInHand();
 	
+	public abstract boolean hasPotionEffect(PotionEffectType type);
 	public abstract List<PotionEffect> getActivePotionEffect();
+	public abstract void addPotionEffect(PotionEffectType type, int duration, int amplifier);
 	
 	public abstract Object getDefaultPlayer();
+
+	public abstract void sendPluginMessage(JavaPlugin instance, String channelId, byte[] writeMessage);
 	
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Player)) {
@@ -61,6 +66,4 @@ public abstract class Player extends Entity {
 		}
 		return this.getUniqueId().equals(((Player) obj).getUniqueId());
 	}
-
-	public abstract void sendPluginMessage(JavaPlugin instance, String channelId, byte[] writeMessage);
 }

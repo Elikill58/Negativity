@@ -12,9 +12,11 @@ import java.util.UUID;
 
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.negativity.IPlayerCheatAlertEvent;
+import com.elikill58.negativity.common.potion.PotionEffect;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
@@ -35,16 +37,19 @@ public class NegativityPlayer {
 	public ArrayList<String> proof = new ArrayList<>();
 	public HashMap<PacketType, Integer> PACKETS = new HashMap<>();
 	public HashMap<Cheat, List<IPlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
+	public HashMap<String, String> MODS = new HashMap<>();
 
 	public int ACTUAL_CLICK = 0, LAST_CLICK = 0, SEC_ACTIVE = 0;
 	
 	// setBack
 	public int NO_FALL_DAMAGE = 0;
+	public List<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	
 	public long TIME_INVINCIBILITY = 0;
 	
 	public boolean isInFight = false, already_blink = false, disableShowingAlert = false, isFreeze = false;
 	private boolean mustToBeSaved = false;
+	public FlyingReason flyingReason = FlyingReason.REGEN;
 
 	public NegativityPlayer(Player p) {
 		this.p = p;
@@ -141,6 +146,10 @@ public class NegativityPlayer {
 		ACTIVE_CHEAT.remove(c);
 	}
 	
+	public void clearPackets() {
+		
+	}
+	
 	public String getReason(Cheat c) {
 		String n = "";
 		for(Cheat all : Cheat.values())
@@ -156,15 +165,12 @@ public class NegativityPlayer {
 	}
 	
 	public void saveProof() {
-		Adapter.getAdapter().getLogger().info("saving ...");
 		if(mustToBeSaved) {
 			mustToBeSaved = false;
 			Adapter.getAdapter().getAccountManager().save(getUUID());
 		}
-		if (proof.isEmpty()) {
-			Adapter.getAdapter().getLogger().info("nothing to save");
+		if (proof.isEmpty())
 			return;
-		}
 		try {
 			File temp = new File(Adapter.getAdapter().getDataFolder().getAbsolutePath() + File.separator
 					+ "user" + File.separator + "proof" + File.separator + getUUID() + ".txt");
@@ -178,7 +184,6 @@ public class NegativityPlayer {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		Adapter.getAdapter().getLogger().info("DONE ...");
 	}
 	
 	public List<IPlayerCheatAlertEvent> getAlertForAllCheat(){
@@ -249,12 +254,15 @@ public class NegativityPlayer {
 	}
 
 	public void fight() {
-		// TODO Auto-generated method stub
-		
+		isInFight = true;
+		// TODO add auto-unfight some seconds after
 	}
 
 	public void unfight() {
-		// TODO Auto-generated method stub
+		isInFight = false;
+	}
+
+	public void makeAppearEntities() {
 		
 	}
 }

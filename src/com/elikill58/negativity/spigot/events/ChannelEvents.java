@@ -9,8 +9,8 @@ import java.util.logging.Level;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.messaging.PluginMessageListener;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
@@ -22,7 +22,7 @@ public class ChannelEvents implements PluginMessageListener {
 	@Override
 	public void onPluginMessageReceived(String channel, Player p, byte[] data) {
 		if (channel.equalsIgnoreCase(SpigotNegativity.CHANNEL_NAME_FML) && data[0] == 2) {
-			SpigotNegativityPlayer.getNegativityPlayer(p).MODS.putAll(getModData(data));
+			NegativityPlayer.getCached(p.getUniqueId()).MODS.putAll(getModData(data));
 			return;
 		}
 
@@ -48,7 +48,7 @@ public class ChannelEvents implements PluginMessageListener {
 			ProxyCompanionManager.foundCompanion(pingMessage.getProtocol());
 		} else if (message instanceof ClientModsListMessage) {
 			ClientModsListMessage modsMessage = (ClientModsListMessage) message;
-			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+			NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
 			np.MODS.clear();
 			np.MODS.putAll(modsMessage.getMods());
 		} else {

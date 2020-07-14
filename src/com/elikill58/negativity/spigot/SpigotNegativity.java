@@ -32,6 +32,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
+import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.spigot.commands.BanCommand;
 import com.elikill58.negativity.spigot.commands.KickCommand;
 import com.elikill58.negativity.spigot.commands.LangCommand;
@@ -53,8 +55,6 @@ import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
-import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
-import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
 import com.elikill58.negativity.spigot.timers.TimerTimeBetweenAlert;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -162,8 +162,8 @@ public class SpigotNegativity extends JavaPlugin {
 			manageAutoVerif(p);
 
 		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
-		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
-		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 10);
+		(packetTimer = new AnalyzePacketTimer()).runTaskTimer(this, 20, 20);
+		(runSpawnFakePlayer = new SpawnFakePlayerTimer()).runTaskTimer(this, 20, 20 * 60 * 10);
 
 		for (Cheat c : Cheat.values())
 			if (c.isActive() && c.hasListener())

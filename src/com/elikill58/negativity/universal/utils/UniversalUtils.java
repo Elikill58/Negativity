@@ -36,9 +36,11 @@ import javax.net.ssl.X509TrustManager;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.common.events.EventManager;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.DefaultConfigValue;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -357,6 +359,9 @@ public class UniversalUtils {
 	public static void init() {
 		getContentFromURL("https://google.fr");
 		DefaultConfigValue.init();
+		Negativity.setupValues();
+		EventManager.load();
+		Cheat.loadCheat();
 		Database.init();
 		Perm.init();
 		BanManager.init();

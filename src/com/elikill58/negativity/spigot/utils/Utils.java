@@ -21,9 +21,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.ClickableText;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
@@ -117,7 +117,7 @@ public class Utils {
 	}
 
 	public static void sendUpdateMessageIfNeed(Player p) {
-		if(!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), Perm.SHOW_ALERT))
+		if(!Perm.hasPerm(NegativityPlayer.getCached(p.getUniqueId()), Perm.SHOW_ALERT))
 			return;
 		if(UniversalUtils.isLatestVersion(SpigotNegativity.getInstance().getDescription().getVersion()))
 			return;

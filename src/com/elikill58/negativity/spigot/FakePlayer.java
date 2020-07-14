@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Version;
 
@@ -140,7 +141,7 @@ public class FakePlayer {
 			e.printStackTrace();
 		}
 
-		SpigotNegativityPlayer nPlayer = SpigotNegativityPlayer.getCached(p.getUniqueId());
+		NegativityPlayer nPlayer = NegativityPlayer.getCached(p.getUniqueId());
 		if (nPlayer != null) {
 			nPlayer.removeFakePlayer(this, false);
 		}

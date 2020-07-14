@@ -189,6 +189,16 @@ public class SpigotPlayer extends Player {
 	public boolean isOnline() {
 		return p.isOnline();
 	}
+
+	@Override
+	public void setSneaking(boolean b) {
+		p.setSneaking(b);
+	}
+
+	@Override
+	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
+		p.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()), duration, amplifier));
+	}
 	
 	
 }

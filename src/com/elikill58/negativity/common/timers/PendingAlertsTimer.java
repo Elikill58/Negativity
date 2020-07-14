@@ -6,7 +6,7 @@ import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.common.events.negativity.IPlayerCheatAlertEvent;
 import com.elikill58.negativity.universal.Negativity;
 
-public class TimerTimeBetweenAlert implements Runnable {
+public class PendingAlertsTimer implements Runnable {
 
 	@Override
 	public void run() {

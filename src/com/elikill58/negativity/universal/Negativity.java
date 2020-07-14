@@ -7,8 +7,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import org.bukkit.ChatColor;
+import java.util.Map.Entry;
 
 import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.common.block.Block;
@@ -16,6 +15,8 @@ import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.EventType;
 import com.elikill58.negativity.common.events.negativity.IPlayerCheatAlertEvent;
 import com.elikill58.negativity.common.events.negativity.IShowAlertPermissionEvent;
+import com.elikill58.negativity.common.item.ItemStack;
+import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -77,19 +78,33 @@ public class Negativity {
 		
 		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
 			return false;
-		
-		if (p.getItemInHand() != null)
-			if (ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().getId()))
-				if (ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().getId()).getWhen().equals(WhenBypass.ALWAYS))
+
+		ItemStack itemInHand = p.getItemInHand();
+		Material blockBelow = p.getLocation().clone().sub(0, 1, 0).getBlock().getType();
+		// Why a boolean to check if the block is loaded ? It's to prevent bug which can appear with getTargetBlock method
+		boolean hasLoadTargetVisual = false;
+		List<Block> targetVisual = null;
+		for(Entry<String, ItemUseBypass> itemUseBypass : ItemUseBypass.ITEM_BYPASS.entrySet()) {
+			String id = itemUseBypass.getKey();
+			ItemUseBypass itemBypass = itemUseBypass.getValue();
+			if(itemBypass.getWhen().equals(WhenBypass.ALWAYS)) {
+				if(itemInHand != null && itemInHand.getType().getId().equalsIgnoreCase(id)) {
 					return false;
-		
-		List<String> itemBypassWhenLooking = ItemUseBypass.getItemBypassWithBypass(WhenBypass.LOOKING);
-		if(!itemBypassWhenLooking.isEmpty()) {
-			List<Block> target = p.getTargetBlock(5);
-			if(!target.isEmpty()) {
-				for(Block b : target)
-					if(!b.getType().equals(Materials.AIR) && itemBypassWhenLooking.contains(b.getType().getId()))
-						return false;
+				}
+			} else if(itemBypass.getWhen().equals(WhenBypass.BELOW)) {
+				if(blockBelow.getId().equalsIgnoreCase(id)) {
+					return false;
+				}
+			} else if(itemBypass.getWhen().equals(WhenBypass.LOOKING)) {
+				if(!hasLoadTargetVisual) {
+					targetVisual = p.getTargetBlock(7);
+					hasLoadTargetVisual = true;
+				}
+				if(!targetVisual.isEmpty()) {
+					for(Block b : targetVisual)
+						if(b.getType().getId().equalsIgnoreCase(id))
+							return false;
+				}
 			}
 		}
 		

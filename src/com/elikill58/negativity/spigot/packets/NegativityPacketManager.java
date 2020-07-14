@@ -4,9 +4,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 import com.elikill58.negativity.spigot.packets.protocollib.ProtocollibPacketManager;
 import com.elikill58.negativity.universal.PacketType;
@@ -39,7 +39,7 @@ public class NegativityPacketManager {
 			@Override
 			public void onReceive(AbstractPacket packet) {
 				Player p = packet.getPlayer();
-				if (!SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId()))
+				if (!NegativityPlayer.INJECTED.contains(p.getUniqueId()))
 					return;
 				if(!plugin.isEnabled())
 					return;
@@ -63,7 +63,7 @@ public class NegativityPacketManager {
 	
 	private void manageReceive(AbstractPacket packet) {
 		Player p = packet.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
 		np.ALL++;
 		PacketType type = packet.getPacketType();
 		np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
@@ -76,9 +76,6 @@ public class NegativityPacketManager {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-		if(type == PacketType.Client.POSITION || type == PacketType.Client.FLYING || type == PacketType.Client.LOOK || type == PacketType.Client.POSITION_LOOK) {
-			np.setOnGround(packet.getContent().getBooleans().read(0));
 		}
 		if (packet.getPacketType() != Client.KEEP_ALIVE) {
 			np.TIME_OTHER_KEEP_ALIVE = System.currentTimeMillis();

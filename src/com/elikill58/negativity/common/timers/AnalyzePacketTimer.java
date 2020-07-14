@@ -1,41 +1,42 @@
-package com.elikill58.negativity.spigot.timers;
+package com.elikill58.negativity.common.timers;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.scheduler.BukkitRunnable;
-
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.item.ItemStack;
+import com.elikill58.negativity.common.item.Material;
+import com.elikill58.negativity.common.potion.PotionEffect;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.protocols.NukerProtocol;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 @SuppressWarnings({"deprecation"})
-public class TimerAnalyzePacket extends BukkitRunnable {
+public class AnalyzePacketTimer implements Runnable {
 
 	@Override
 	public void run() {
-		for (Player p : Utils.getOnlinePlayers()) {
+		// TODO move everything on protocols
+		for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
 			if(!p.isOnline()){
-				SpigotNegativityPlayer.removeFromCache(p.getUniqueId());
+				NegativityPlayer.removeFromCache(p.getUniqueId());
 				continue;
 			}
-			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+			NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
 			if (np.SEC_ACTIVE < 2) {
 				np.SEC_ACTIVE++;
 				return;
 			}
-			int ping = Utils.getPing(p);
+			int ping = p.getPing();
 			if (ping == 0)
 				ping = 1;
 			
@@ -67,7 +68,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 							List<PotionEffect> po = new ArrayList<>(np.POTION_EFFECTS);
 							for(PotionEffect pe : po)
 								if(!p.hasPotionEffect(pe.getType())){
-									p.addPotionEffect(pe);
+									p.addPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier());
 									np.POTION_EFFECTS.remove(pe);
 								}
 							break;
@@ -88,7 +89,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 					ReportType type = ReportType.WARNING;
 					if (np.getWarn(FORCEFIELD) > 5)
 						type = ReportType.VIOLATION;
-					SpigotNegativity.alertMod(type, p, FORCEFIELD,
+					Negativity.alertMod(type, p, FORCEFIELD,
 							UniversalUtils.parseInPorcent(arm + useEntity + np.getWarn(FORCEFIELD)),
 							"ArmAnimation (Attack in one second): " + arm
 									+ ", UseEntity (interaction with other entity): " + useEntity + " And warn: "
@@ -100,7 +101,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				if(ping < 140){
 					if(entityAction > 35){
 						if(np.IS_LAST_SEC_SNEAK){
-							SpigotNegativity.alertMod(ReportType.WARNING, p, SNEAK, UniversalUtils.parseInPorcent(55 + entityAction), "EntityAction packet: " + entityAction + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
+							Negativity.alertMod(ReportType.WARNING, p, SNEAK, UniversalUtils.parseInPorcent(55 + entityAction), "EntityAction packet: " + entityAction + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
 							if(SNEAK.isSetBack())
 								p.setSneaking(false);
 						}
@@ -111,12 +112,12 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 			Cheat NUKER = Cheat.forKey(CheatKeys.NUKER);
 			if(np.hasDetectionActive(NUKER))
 				if(ping < NUKER.getMaxAlertPing() && (blockDig - (ping / 10)) > 20 && !NukerProtocol.hasDigSpeedEnchant(p.getItemInHand()))
-					SpigotNegativity.alertMod(blockDig > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, UniversalUtils.parseInPorcent(20 + blockDig), "BlockDig packet: " + blockDig + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
+					Negativity.alertMod(blockDig > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, UniversalUtils.parseInPorcent(20 + blockDig), "BlockDig packet: " + blockDig + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
 
 			Cheat SPEED = Cheat.forKey(CheatKeys.SPEED);
 			if(np.hasDetectionActive(SPEED))
 				if(np.MOVE_TIME > 60)
-					SpigotNegativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p, SPEED, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Ping: " + ping + " Warn for Speed: " + np.getWarn(SPEED));
+					Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p, SPEED, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Ping: " + ping + " Warn for Speed: " + np.getWarn(SPEED));
 			np.MOVE_TIME = 0;
 			np.clearPackets();
 		}

@@ -6,20 +6,14 @@ import com.elikill58.negativity.common.events.Event;
 public class InventoryOpenEvent implements Event {
 
 	private final Player p;
-	private final InventoryAction action;
 	private boolean cancel = false;
 	
-	public InventoryOpenEvent(Player p, InventoryAction action) {
+	public InventoryOpenEvent(Player p) {
 		this.p = p;
-		this.action = action;
 	}
 	
 	public Player getPlayer() {
 		return p;
-	}
-	
-	public InventoryAction getAction() {
-		return action;
 	}
 
 	public boolean isCancelled() {

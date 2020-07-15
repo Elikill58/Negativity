@@ -14,6 +14,7 @@ import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 
+import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
@@ -26,7 +27,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class RegenProtocol extends Cheat {
 
 	public RegenProtocol() {
-		super(CheatKeys.REGEN, true, ItemTypes.GOLDEN_APPLE, CheatCategory.PLAYER, true, "regen", "autoregen");
+		super(CheatKeys.REGEN, true, Materials.GOLDEN_APPLE, CheatCategory.PLAYER, true, "regen", "autoregen");
 	}
 
 	@Listener

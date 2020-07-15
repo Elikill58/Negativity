@@ -7,18 +7,16 @@ import java.util.Optional;
 
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
+import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
-import org.spongepowered.api.event.entity.InteractEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStackSnapshot;
 
-import com.elikill58.negativity.common.GameMode;
 import com.elikill58.negativity.common.NegativityPlayer;
-import com.elikill58.negativity.common.entity.Player;
-import com.elikill58.negativity.sponge.FakePlayer;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.packets.AbstractPacket;
@@ -27,7 +25,6 @@ import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
-import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -51,16 +48,16 @@ public class ForceFieldProtocol extends Cheat {
 
 	@Listener
 	public void onEntityDamageByEntity(DamageEntityEvent e, @First Player p) {
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this)) {
 			return;
 		}
 		
 		boolean mayCancel = false;
 		Entity cible = e.getTargetEntity();
-		if(!(LocationUtils.hasLineOfSight((org.spongepowered.api.entity.living.player.Player) p.getDefaultPlayer(), cible.getLocation()) || LocationUtils.hasLineOfSight(p, cible.getLocation().copy().sub(0, 1, 0)))) {
-			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getTargetEntity().getType().getId()
-					+ " but cannot see it, ping: " + p.getPing(), hoverMsg("line_sight", "%name%", e.getTargetEntity().getType().getName()));
+		if(!(LocationUtils.hasLineOfSight(p, cible.getLocation()) || LocationUtils.hasLineOfSight(p, cible.getLocation().copy().sub(0, 1, 0)))) {
+			mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getTargetEntity().getType().getId()
+					+ " but cannot see it, ping: " + Utils.getPing(p), hoverMsg("line_sight", "%name%", e.getTargetEntity().getType().getName()));
 		}
 		if(np.hasThorns(p)) {
 			if(mayCancel && isSetBack())
@@ -71,7 +68,7 @@ public class ForceFieldProtocol extends Cheat {
 		Optional<ItemStackSnapshot> usedItem = e.getContext().get(EventContextKeys.USED_ITEM);
 
 		double distance = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());
-		double allowedReach = Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") + (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0);
+		double allowedReach = Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0);
 		if (!(usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW) && !e.getTargetEntity().getType().equals(EntityTypes.ENDER_DRAGON)) {
 			recordData(p.getUniqueId(), HIT_DISTANCE, distance);
 			if(distance > allowedReach)
@@ -104,7 +101,7 @@ public class ForceFieldProtocol extends Cheat {
 		}
 	}
 
-	@Listener
+	/*@Listener
 	public void onPlayerInteract(InteractEntityEvent e, @First Player p) {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this)) {
@@ -124,7 +121,7 @@ public class ForceFieldProtocol extends Cheat {
 		np.fakePlayerTouched++;
 		c.hide((org.spongepowered.api.entity.living.player.Player) p.getDefaultPlayer(), true);
 		manageForcefieldForFakeplayer(p, np);
-	}
+	}*/
 	
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
@@ -138,7 +135,7 @@ public class ForceFieldProtocol extends Cheat {
 		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
 		forcefield.recordData(p.getUniqueId(), FAKE_PLAYERS, 1);
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
-		Negativity.alertMod(np.fakePlayerTouched > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, forcefield,
+		SpongeNegativity.alertMod(np.fakePlayerTouched > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, forcefield,
 				UniversalUtils.parseInPorcent(np.fakePlayerTouched * 10), "Hitting fake entities. " + np.fakePlayerTouched
 						+ " entites touch in " + timeBehindStart + " millisecondes",
 						forcefield.hoverMsg("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));

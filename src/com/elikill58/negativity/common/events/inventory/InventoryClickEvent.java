@@ -4,6 +4,7 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.Event;
+import com.elikill58.negativity.common.inventory.Inventory;
 import com.elikill58.negativity.common.item.ItemStack;
 
 public class InventoryClickEvent implements Event {
@@ -12,13 +13,15 @@ public class InventoryClickEvent implements Event {
 	private final InventoryAction action;
 	private final int slot;
 	private final ItemStack item;
+	private final Inventory inv;
 	private boolean cancel = false;
 	
-	public InventoryClickEvent(Player p, InventoryAction action, int slot, ItemStack item) {
+	public InventoryClickEvent(Player p, InventoryAction action, int slot, ItemStack item, Inventory inv) {
 		this.p = p;
 		this.action = action;
 		this.slot = slot;
 		this.item = item;
+		this.inv = inv;
 	}
 	
 	public Player getPlayer() {
@@ -36,6 +39,10 @@ public class InventoryClickEvent implements Event {
 	@Nullable
 	public ItemStack getCurrentItem() {
 		return item;
+	}
+	
+	public Inventory getClickedInventory() {
+		return inv;
 	}
 
 	public boolean isCancelled() {

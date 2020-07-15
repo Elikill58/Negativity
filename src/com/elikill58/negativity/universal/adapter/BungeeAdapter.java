@@ -13,7 +13,11 @@ import javax.annotation.Nullable;
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.Event;
 import com.elikill58.negativity.common.events.EventType;
+import com.elikill58.negativity.common.inventory.Inventory;
+import com.elikill58.negativity.common.inventory.NegativityHolder;
+import com.elikill58.negativity.common.item.ItemBuilder;
 import com.elikill58.negativity.common.item.ItemRegistrar;
+import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.location.World;
 import com.elikill58.negativity.universal.Cheat;
@@ -185,6 +189,18 @@ public class BungeeAdapter extends Adapter {
 
 	@Override
 	public List<Player> getOnlinePlayers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ItemBuilder createItemBuilder(Material type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
 		// TODO Auto-generated method stub
 		return null;
 	}

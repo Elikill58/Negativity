@@ -1,7 +1,7 @@
 package com.elikill58.negativity.protocols;
 
-import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 import static com.elikill58.negativity.universal.CheatKeys.FLY;
+import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import com.elikill58.negativity.common.GameMode;
 import com.elikill58.negativity.common.NegativityPlayer;
@@ -16,7 +16,6 @@ import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.potion.PotionEffect;
 import com.elikill58.negativity.common.potion.PotionEffectType;
-import com.elikill58.negativity.common.utils.ItemUtils;
 import com.elikill58.negativity.common.utils.LocationUtils;
 import com.elikill58.negativity.common.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;

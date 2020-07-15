@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.elikill58.negativity.common.NegativityPlayer;
-import com.elikill58.negativity.spigot.FakePlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 import com.elikill58.negativity.spigot.packets.protocollib.ProtocollibPacketManager;
@@ -69,10 +68,10 @@ public class NegativityPacketManager {
 		np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
 		if(type == PacketType.Client.USE_ENTITY) {
 			try {
-				int id = packet.getContent().getIntegers().read(0);
+				/*int id = packet.getContent().getIntegers().read(0);
 				for(FakePlayer fp : np.getFakePlayers())
 					if(fp.getEntityId() == id)
-						np.removeFakePlayer(fp, true);
+						np.removeFakePlayer(fp, true);*/
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

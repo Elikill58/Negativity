@@ -6,12 +6,12 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.inventory.NegativityHolder;
+import com.elikill58.negativity.inventories.holders.AlertHolder;
+import com.elikill58.negativity.inventories.holders.CheckMenuHolder;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
-import com.elikill58.negativity.spigot.inventories.holders.AlertHolder;
-import com.elikill58.negativity.spigot.inventories.holders.CheckMenuHolder;
-import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.adapter.Adapter;
 

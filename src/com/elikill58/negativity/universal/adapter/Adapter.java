@@ -14,7 +14,11 @@ import javax.annotation.Nullable;
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.Event;
 import com.elikill58.negativity.common.events.EventType;
+import com.elikill58.negativity.common.inventory.Inventory;
+import com.elikill58.negativity.common.inventory.NegativityHolder;
+import com.elikill58.negativity.common.item.ItemBuilder;
 import com.elikill58.negativity.common.item.ItemRegistrar;
+import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.location.World;
 import com.elikill58.negativity.universal.Cheat;
@@ -106,8 +110,10 @@ public abstract class Adapter {
 	public abstract double getLastTPS();
 	
 	public abstract ItemRegistrar getItemRegistrar();
+	public abstract ItemBuilder createItemBuilder(Material type);
 
 	public abstract Location createLocation(World w, double x, double y, double z);
+	public abstract Inventory createInventory(String inventoryName, int size, NegativityHolder holder);
 	
 	public abstract void sendMessageRunnableHover(Player p, String message, String hover, String command);
 	

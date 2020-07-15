@@ -38,13 +38,10 @@ import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.sponge.precogs.NegativityBypassTicket;
-import com.elikill58.negativity.sponge.protocols.ForceFieldProtocol;
-import com.elikill58.negativity.sponge.support.ViaVersionSupport;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.NegativityAccount;
-import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.flowpowered.math.vector.Vector3d;
 
@@ -228,8 +225,8 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			return;
 		FAKE_PLAYER.remove(fp);
 		if(!detected) {
-			if(fakePlayerTouched > 0)
-				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
+			//if(fakePlayerTouched > 0)
+				//ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
 			if(FAKE_PLAYER.size() == 0)
 				fakePlayerTouched = 0;
 			return;
@@ -238,11 +235,11 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		long l = (System.currentTimeMillis() - timeStartFakePlayer);
 		if (l >= 3000) {
 			if (FAKE_PLAYER.size() == 0) {
-				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
+				//ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
 				fakePlayerTouched = 0;
 			}
 		} else {
-			ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
+			//ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
 			if(fakePlayerTouched < 100) {
 				spawnRandom();
 				spawnRandom();
@@ -273,7 +270,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		} else if (x <= 0 && z <= 0) {
 			loc = loc.add(-1, 1, 1);
 		}
-		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
+		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName());//.show(getPlayer());
 		FAKE_PLAYER.add(fp);
 	}
 
@@ -290,7 +287,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		} else if (x <= 0 && z <= 0) {
 			loc = loc.add(1, 1, 1);
 		}
-		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
+		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName());//.show(getPlayer());
 		FAKE_PLAYER.add(fp);
 	}
 
@@ -307,7 +304,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		} else if (x <= 0 && z <= 0) {
 			loc = loc.add(1, 1, -1);
 		}
-		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName()).show(getPlayer());
+		FakePlayer fp = new FakePlayer(loc, getRandomFakePlayerName());//.show(getPlayer());
 		FAKE_PLAYER.add(fp);
 	}
 

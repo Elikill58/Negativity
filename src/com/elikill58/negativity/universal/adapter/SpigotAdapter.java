@@ -21,7 +21,11 @@ import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.Event;
 import com.elikill58.negativity.common.events.EventType;
+import com.elikill58.negativity.common.inventory.Inventory;
+import com.elikill58.negativity.common.inventory.NegativityHolder;
+import com.elikill58.negativity.common.item.ItemBuilder;
 import com.elikill58.negativity.common.item.ItemRegistrar;
+import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.location.World;
 import com.elikill58.negativity.spigot.ClickableText;
@@ -30,6 +34,9 @@ import com.elikill58.negativity.spigot.impl.events.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.impl.events.PlayerCheatEvent;
 import com.elikill58.negativity.spigot.impl.events.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.impl.events.ShowAlertPermissionEvent;
+import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
+import com.elikill58.negativity.spigot.impl.inventory.SpigotNegativityHolder;
+import com.elikill58.negativity.spigot.impl.item.SpigotItemBuilder;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemRegistrar;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
@@ -211,6 +218,11 @@ public class SpigotAdapter extends Adapter {
 	}
 
 	@Override
+	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
+		return new SpigotInventory(inventoryName, size, (SpigotNegativityHolder) holder);
+	}
+
+	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
 		new ClickableText().addRunnableHoverEvent(message, hover, command).sendToPlayer((org.bukkit.entity.Player) p.getDefaultPlayer());
 	}
@@ -231,5 +243,10 @@ public class SpigotAdapter extends Adapter {
 			break;
 		}
 		return null;
+	}
+
+	@Override
+	public ItemBuilder createItemBuilder(Material type) {
+		return new SpigotItemBuilder(type);
 	}
 }

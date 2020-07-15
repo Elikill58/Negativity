@@ -2,11 +2,13 @@ package com.elikill58.negativity.spigot;
 
 import java.util.HashMap;
 
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.elikill58.negativity.common.ChatColor;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.item.ItemBuilder;
+import com.elikill58.negativity.common.item.ItemStack;
+import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Version;
@@ -21,13 +23,11 @@ public class Inv {
 	public static final ItemStack EMPTY;
 
 	static {
-		if (Version.isNewerOrEquals(Version.getVersion(), Version.V1_13)) {
-			EMPTY = new ItemStack(ItemUtils.GRAY_STAINED_GLASS_PANE);
-		} else {
-			EMPTY = new ItemStack(ItemUtils.GRAY_STAINED_GLASS_PANE, 1, (byte) 7);
+		ItemBuilder builder = ItemBuilder.Builder(Materials.GRAY_STAINED_GLASS_PANE);
+		if (!Version.isNewerOrEquals(Version.getVersion(), Version.V1_13)) {
+			builder.durability((byte) 7);
 		}
-		ItemMeta emptyItemMeta = EMPTY.getItemMeta();
-		emptyItemMeta.setDisplayName(ChatColor.RESET.toString() + " - ");
-		EMPTY.setItemMeta(emptyItemMeta);
+		builder.displayName(ChatColor.RESET.toString() + " - ");
+		EMPTY = builder.build();
 	}
 }

@@ -9,9 +9,11 @@ import java.util.Objects;
 import java.util.UUID;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.api.item.ItemType;
 
 import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
@@ -24,12 +26,22 @@ public abstract class Cheat {
 	private boolean needPacket, hasListener;
 	private CheatCategory cheatCategory;
 	private String key;
-	private Object m;
+	private Material m;
 	private String[] aliases;
 
-	public Cheat(String key, boolean needPacket, Object m, CheatCategory type, boolean hasListener, String... alias) {
+	public Cheat(String key, boolean needPacket, Material m, CheatCategory type, boolean hasListener, String... alias) {
 		this.needPacket = needPacket;
 		this.m = m;
+		this.cheatCategory = type;
+		this.hasListener = hasListener;
+		this.key = key.toLowerCase();
+		this.aliases = alias;
+	}
+
+	// fix degueu to remove error
+	public Cheat(String key, boolean needPacket, ItemType m, CheatCategory type, boolean hasListener, String... alias) {
+		this.needPacket = needPacket;
+		this.m = (Material) m;
 		this.cheatCategory = type;
 		this.hasListener = hasListener;
 		this.key = key.toLowerCase();
@@ -60,7 +72,7 @@ public abstract class Cheat {
 		return needPacket;
 	}
 
-	public Object getMaterial() {
+	public Material getMaterial() {
 		return m;
 	}
 	

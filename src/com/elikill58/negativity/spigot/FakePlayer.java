@@ -143,7 +143,7 @@ public class FakePlayer {
 
 		NegativityPlayer nPlayer = NegativityPlayer.getCached(p.getUniqueId());
 		if (nPlayer != null) {
-			nPlayer.removeFakePlayer(this, false);
+			//nPlayer.removeFakePlayer(this, false);
 		}
 	}
 	

@@ -7,4 +7,6 @@ public interface Material {
 	public boolean isTransparent();
 	
 	public String getId();
+	
+	public Object getDefaultMaterial();
 }

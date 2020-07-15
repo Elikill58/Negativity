@@ -11,12 +11,16 @@ import com.elikill58.negativity.common.GameMode;
 import com.elikill58.negativity.common.entity.Entity;
 import com.elikill58.negativity.common.entity.EntityType;
 import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.inventory.Inventory;
+import com.elikill58.negativity.common.inventory.PlayerInventory;
 import com.elikill58.negativity.common.item.ItemStack;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.location.Vector;
 import com.elikill58.negativity.common.location.World;
 import com.elikill58.negativity.common.potion.PotionEffect;
 import com.elikill58.negativity.common.potion.PotionEffectType;
+import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
+import com.elikill58.negativity.spigot.impl.inventory.SpigotPlayerInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
@@ -26,21 +30,21 @@ import com.elikill58.negativity.universal.Version;
 public class SpigotPlayer extends Player {
 
 	private final org.bukkit.entity.Player p;
-	
+
 	public SpigotPlayer(org.bukkit.entity.Player p) {
 		this.p = p;
 	}
-	
+
 	@Override
 	public Object getDefaultPlayer() {
 		return p;
 	}
-	
+
 	@Override
 	public UUID getUniqueId() {
 		return p.getUniqueId();
 	}
-	
+
 	@Override
 	public void sendMessage(String msg) {
 		p.sendMessage(msg);
@@ -172,20 +176,27 @@ public class SpigotPlayer extends Player {
 	}
 
 	@Override
-	public boolean hasPotionEffect(PotionEffectType type) {
-		return p.getActivePotionEffects().stream().filter((pe) -> pe.getType().getName().equalsIgnoreCase(type.name())).findAny().isPresent();
-	}
-	
-	@Override
 	public double getEyeHeight() {
 		return p.getEyeHeight();
 	}
 
 	@Override
+	public boolean hasPotionEffect(PotionEffectType type) {
+		return p.getActivePotionEffects().stream().filter((pe) -> pe.getType().getName().equalsIgnoreCase(type.name()))
+				.findAny().isPresent();
+	}
+
+	@Override
 	public List<PotionEffect> getActivePotionEffect() {
 		List<PotionEffect> list = new ArrayList<PotionEffect>();
-		p.getActivePotionEffects().forEach((pe) -> list.add(new PotionEffect(PotionEffectType.fromName(pe.getType().getName()))));
+		p.getActivePotionEffects()
+				.forEach((pe) -> list.add(new PotionEffect(PotionEffectType.fromName(pe.getType().getName()))));
 		return list;
+	}
+
+	@Override
+	public void removePotionEffect(PotionEffectType type) {
+		p.removePotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()));
 	}
 
 	@Override
@@ -205,9 +216,10 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
-		p.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()), duration, amplifier));
+		p.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()),
+				duration, amplifier));
 	}
-	
+
 	@Override
 	public EntityType getType() {
 		return EntityType.PLAYER;
@@ -216,6 +228,11 @@ public class SpigotPlayer extends Player {
 	@Override
 	public boolean isSprinting() {
 		return p.isSprinting();
+	}
+
+	@Override
+	public void teleport(Entity et) {
+		teleport(et.getLocation());
 	}
 
 	@Override
@@ -247,15 +264,15 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public boolean isSwimming() {
-		if(Version.getVersion().isNewerOrEquals(Version.V1_13))
+		if (Version.getVersion().isNewerOrEquals(Version.V1_13))
 			return p.isSwimming();
 		else {
-			if(!p.isSprinting())
+			if (!p.isSprinting())
 				return false;
 			Location loc = getLocation().clone();
-			if(loc.getBlock().getType().getId().contains("WATER"))
+			if (loc.getBlock().getType().getId().contains("WATER"))
 				return true;
-			if(loc.sub(0, 1, 0).getBlock().getType().getId().contains("WATER"))
+			if (loc.sub(0, 1, 0).getBlock().getType().getId().contains("WATER"))
 				return true;
 			return false;
 		}
@@ -281,5 +298,48 @@ public class SpigotPlayer extends Player {
 	public int getEntityId() {
 		return p.getEntityId();
 	}
-	
+
+	@Override
+	public PlayerInventory getInventory() {
+		return new SpigotPlayerInventory(p.getInventory());
+	}
+
+	@Override
+	public Inventory getOpenInventory() {
+		return p.getOpenInventory() == null || p.getOpenInventory().getTopInventory() == null ? null
+				: new SpigotInventory(p.getOpenInventory().getTopInventory());
+	}
+
+	@Override
+	public void openInventory(Inventory inv) {
+		p.openInventory((org.bukkit.inventory.Inventory) inv.getDefaultInventory());
+	}
+
+	@Override
+	public void closeInventory() {
+		p.closeInventory();
+	}
+
+	@Override
+	public void updateInventory() {
+		p.updateInventory();
+	}
+
+	@Override
+	public void setAllowFlight(boolean b) {
+		p.setAllowFlight(b);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void showPlayer(Player p) {
+		this.p.showPlayer((org.bukkit.entity.Player) p.getDefaultPlayer());
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public void hidePlayer(Player p) {
+		this.p.hidePlayer((org.bukkit.entity.Player) p.getDefaultPlayer());
+	}
+
 }

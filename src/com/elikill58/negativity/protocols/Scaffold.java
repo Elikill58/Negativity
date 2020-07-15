@@ -7,7 +7,7 @@ import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.EventListener;
 import com.elikill58.negativity.common.events.Listeners;
 import com.elikill58.negativity.common.events.block.BlockPlaceEvent;
-import com.elikill58.negativity.common.item.ItemStack;
+import com.elikill58.negativity.common.item.ItemBuilder;
 import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -50,7 +50,7 @@ public class Scaffold extends Cheat implements Listeners {
 							hoverMsg("main", "%item%", m.getId().toLowerCase(), "%block%",
 									placed.getId().toLowerCase()));
 					if (isSetBack() && mayCancel) {
-						p.getInventory().addItem(new ItemStack(placed));
+						p.getInventory().addItem(ItemBuilder.Builder(placed).build());
 						e.getBlock().setType(Materials.AIR);
 					}
 				}

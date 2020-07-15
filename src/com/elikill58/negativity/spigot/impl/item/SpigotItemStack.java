@@ -51,4 +51,9 @@ public class SpigotItemStack extends ItemStack {
 	public void removeEnchant(Enchantment enchant) {
 		item.removeEnchantment(org.bukkit.enchantments.Enchantment.getByName(enchant.name()));
 	}
+
+	@Override
+	public Object getDefaultItem() {
+		return item;
+	}
 }

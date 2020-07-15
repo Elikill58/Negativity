@@ -12,7 +12,11 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.common.events.Event;
 import com.elikill58.negativity.common.events.EventType;
+import com.elikill58.negativity.common.inventory.Inventory;
+import com.elikill58.negativity.common.inventory.NegativityHolder;
+import com.elikill58.negativity.common.item.ItemBuilder;
 import com.elikill58.negativity.common.item.ItemRegistrar;
+import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.location.World;
 import com.elikill58.negativity.universal.Cheat;
@@ -164,25 +168,32 @@ public class VelocityAdapter extends Adapter {
 
 	@Override
 	public Location createLocation(World w, double x, double y, double z) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void sendMessageRunnableHover(com.elikill58.negativity.common.entity.Player p, String message, String hover,
 			String command) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public Event callEvent(EventType type, Object... args) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public List<com.elikill58.negativity.common.entity.Player> getOnlinePlayers() {
+		return null;
+	}
+
+	@Override
+	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
+		return null;
+	}
+
+	@Override
+	public ItemBuilder createItemBuilder(Material type) {
 		// TODO Auto-generated method stub
 		return null;
 	}

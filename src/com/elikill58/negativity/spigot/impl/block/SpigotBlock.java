@@ -45,4 +45,14 @@ public class SpigotBlock extends Block {
 		return new SpigotLocation(block.getLocation());
 	}
 
+	@Override
+	public boolean isLiquid() {
+		return block.isLiquid();
+	}
+
+	@Override
+	public void setType(Material type) {
+		block.setType((org.bukkit.Material) type.getDefaultMaterial());
+	}
+
 }

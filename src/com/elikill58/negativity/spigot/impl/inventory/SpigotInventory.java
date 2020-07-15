@@ -1,0 +1,85 @@
+package com.elikill58.negativity.spigot.impl.inventory;
+
+import org.bukkit.Bukkit;
+
+import com.elikill58.negativity.common.inventory.Inventory;
+import com.elikill58.negativity.common.inventory.InventoryType;
+import com.elikill58.negativity.common.inventory.NegativityHolder;
+import com.elikill58.negativity.common.item.ItemStack;
+import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
+
+public class SpigotInventory extends Inventory {
+
+	private final String inventoryName;
+	private final int size;
+	private final SpigotNegativityHolder holder;
+	private final org.bukkit.inventory.Inventory inv;
+	
+	public SpigotInventory(org.bukkit.inventory.Inventory inv) {
+		this.inventoryName = "";
+		this.size = inv.getSize();
+		this.holder = null;
+		this.inv = inv;
+	}
+	
+	public SpigotInventory(String inventoryName, int size, NegativityHolder holder) {
+		this.inventoryName = inventoryName;
+		this.size = size;
+		this.holder = new SpigotNegativityHolder(holder);
+		this.inv = Bukkit.createInventory(this.holder, size, inventoryName);
+	}
+	
+	@Override
+	public ItemStack get(int slot) {
+		org.bukkit.inventory.ItemStack item = inv.getItem(slot);
+		if(item == null)
+			return null;
+		return new SpigotItemStack(item);
+	}
+
+	@Override
+	public void set(int slot, ItemStack item) {
+		inv.setItem(slot, (org.bukkit.inventory.ItemStack) item.getDefaultItem());
+	}
+
+	@Override
+	public void remove(int slot) {
+		inv.setItem(slot, null);
+	}
+
+	@Override
+	public int getSize() {
+		return size;
+	}
+
+	@Override
+	public String getInventoryName() {
+		return inventoryName;
+	}
+
+	@Override
+	public NegativityHolder getHolder() {
+		return holder.getBasicHolder();
+	}
+
+	@Override
+	public Object getDefaultInventory() {
+		return inv;
+	}
+
+	@Override
+	public InventoryType getType() {
+		return InventoryType.valueOf(inv.getType().name());
+	}
+
+	@Override
+	public void clear() {
+		inv.clear();
+	}
+
+	@Override
+	public void addItem(ItemStack build) {
+		inv.addItem((org.bukkit.inventory.ItemStack) build.getDefaultItem());
+	}
+
+}

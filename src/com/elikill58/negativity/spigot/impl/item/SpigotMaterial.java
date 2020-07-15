@@ -26,4 +26,9 @@ public class SpigotMaterial implements Material {
 		return type.isTransparent();
 	}
 
+	@Override
+	public Object getDefaultMaterial() {
+		return type;
+	}
+
 }

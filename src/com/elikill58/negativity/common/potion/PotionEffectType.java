@@ -9,6 +9,7 @@ public enum PotionEffectType {
 	HUNGER,
 	JUMP,
 	LEVITATION,
+	NIGHT_VISION,
 	POISON,
 	REGENERATION,
 	SLOW_DIGGING,

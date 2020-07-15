@@ -16,7 +16,7 @@ public class Utils {
 	}
 
 	public static boolean hasThorns(Player p) {
-		ItemStack[] armor = p.getInventory().getArmorContents();
+		ItemStack[] armor = p.getInventory().getArmorContent();
 		if(armor == null)
 			return false;
 		for(ItemStack item : armor)

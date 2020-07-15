@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 
+import com.elikill58.negativity.common.ChatColor;
 import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.common.block.Block;
 import com.elikill58.negativity.common.entity.Player;
@@ -17,7 +18,6 @@ import com.elikill58.negativity.common.events.negativity.IPlayerCheatAlertEvent;
 import com.elikill58.negativity.common.events.negativity.IShowAlertPermissionEvent;
 import com.elikill58.negativity.common.item.ItemStack;
 import com.elikill58.negativity.common.item.Material;
-import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat.CheatCategory;

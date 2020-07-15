@@ -1,53 +1,52 @@
-package com.elikill58.negativity.spigot.protocols;
+package com.elikill58.negativity.protocols;
 
-import static com.elikill58.negativity.spigot.utils.ItemUtils.STATIONARY_WATER;
-import static com.elikill58.negativity.spigot.utils.LocationUtils.hasMaterialsAround;
-import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThanExtended;
-import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThan;
+import static com.elikill58.negativity.common.item.Materials.STATIONARY_WATER;
+import static com.elikill58.negativity.common.utils.LocationUtils.hasMaterialsAround;
+import static com.elikill58.negativity.common.utils.LocationUtils.hasOtherThan;
+import static com.elikill58.negativity.common.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
+import static com.elikill58.negativity.universal.CheatKeys.JESUS;
 
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
-
-import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.LocationUtils;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.common.GameMode;
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.events.EventListener;
+import com.elikill58.negativity.common.events.Listeners;
+import com.elikill58.negativity.common.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.common.item.Material;
+import com.elikill58.negativity.common.item.Materials;
+import com.elikill58.negativity.common.location.Location;
+import com.elikill58.negativity.common.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
 
-public class JesusProtocol extends Cheat implements Listener {
+public class Jesus extends Cheat implements Listeners {
 
-	public JesusProtocol() {
-		super(CheatKeys.JESUS, false, Material.WATER_BUCKET, CheatCategory.MOVEMENT, true, "waterwalk", "water",
+	public Jesus() {
+		super(JESUS, false, Materials.WATER_BUCKET, CheatCategory.MOVEMENT, true, "waterwalk", "water",
 				"water walk");
 	}
 
-	@EventHandler
+	@EventListener
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
-		if (np.hasElytra() || p.isInsideVehicle())
+		if (p.hasElytra() || p.isInsideVehicle())
 			return;
 		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom();
 		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY")
-				|| hasMaterialsAround(loc.clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY"))
+				|| hasMaterialsAround(loc.clone().sub(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY"))
 			return;
-		Location under = loc.clone().subtract(0, 1, 0);
+		Location under = loc.clone().sub(0, 1, 0);
 		Material type = loc.getBlock().getType(), underType = under.getBlock().getType();
-		boolean isInWater = type.name().contains("WATER"), isOnWater = underType.name().contains("WATER");
+		boolean isInWater = type.getId().contains("WATER"), isOnWater = underType.getId().contains("WATER");
 		boolean mayCancel = false;
-		int ping = Utils.getPing(p);
+		int ping = p.getPing();
 		double dif = e.getFrom().getY() - e.getTo().getY();
 		if (!isInWater && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
 			if (!hasOtherThanExtended(under, STATIONARY_WATER)) {
@@ -64,29 +63,29 @@ public class JesusProtocol extends Cheat implements Listener {
 					reliability = Math.abs(dif * 5000);
 				else if (dif == 0.0)
 					reliability = 90;
-				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(reliability),
+				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(reliability),
 						"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif
 								+ " and ping: " + ping);
 			}
 		}
 		if (dif == -0.5 && (isInWater || isOnWater)) {
-			mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "Warn for Jesus: "
+			mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "Warn for Jesus: "
 					+ np.getWarn(this) + ", dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + " " + ping);
 		}
 
-		boolean jesusState = np.contentBoolean.getOrDefault("jesus-state", false);
-		if (dif == np.contentDouble.getOrDefault("jesus-last-y-" + jesusState, 0.0) && isInWater && !np.isInFight) {
-			if (!hasOtherThan(under, STATIONARY_WATER) && !Utils.isSwimming(p)) {
-				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING,
+		boolean jesusState = np.booleans.get(JESUS, "state", false);
+		if (dif == np.doubles.get(JESUS, "last-y-" + jesusState, 0.0) && isInWater && !np.isInFight) {
+			if (!hasOtherThan(under, STATIONARY_WATER) && !p.isSwimming()) {
+				mayCancel = Negativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, parseInPorcent((dif + 5) * 10),
 						"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: "
 								+ dif + " (other: "
-								+ np.contentDouble.getOrDefault("jesus-last-y-" + (!jesusState), 0.0)
+								+ np.doubles.get(JESUS, "last-y-" + (!jesusState), 0.0)
 								+ ") and ping: " + ping);
 			}
 		}
-		np.contentDouble.put("jesus-last-y-" + jesusState, dif);
-		np.contentBoolean.put("jesus-state", !jesusState);
+		np.doubles.set(JESUS, "last-y-" + jesusState, dif);
+		np.booleans.set(JESUS, "state", !jesusState);
 
 		double distanceAbs = to.distance(from) - Math.abs(from.getY() - to.getY());
 		Location upper = loc.clone().add(0, 1, 0);
@@ -95,13 +94,13 @@ public class JesusProtocol extends Cheat implements Listener {
 				&& !upper.getBlock().isLiquid() && !p.isFlying()) {
 			if (!hasMaterialsAround(loc, "WATER_LILY") && !hasMaterialsAround(upper, "WATER_LILY")
 					&& !hasOtherThan(under, "WATER")) {
-				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.JESUS), 98,
+				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98,
 						"In water, distance: " + distanceAbs + ", ping: " + ping,
 						hoverMsg("main", "%distance%", distanceAbs));
 			}
 		}
 
 		if (isSetBack() && mayCancel)
-			p.teleport(p.getLocation().subtract(0, 1, 0));
+			p.teleport(p.getLocation().sub(0, 1, 0));
 	}
 }

@@ -28,7 +28,7 @@ public class BanUtils {
 	}
 
 	public static boolean shouldBan(Cheat cheat, NegativityPlayer np, int relia) {
-		if (!cheat.isActive() || !BanManager.banActive || np.isInBanning()) {
+		if (!cheat.isActive() || !BanManager.banActive || np.getAccount().isInBanning()) {
 			return false;
 		}
 		Adapter ada = Adapter.getAdapter();
@@ -44,7 +44,7 @@ public class BanUtils {
 		if (!shouldBan(cheat, player, reliability)) {
 			return null;
 		}
-		player.setInBanning(true);
+		player.getAccount().setInBanning(true);
 		Adapter.getAdapter().getLogger().info("Banning " + player.getName() + " ...");
 		String reason = player.getReason(cheat);
 		long banDuration = -1;

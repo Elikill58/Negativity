@@ -2,7 +2,19 @@ package com.elikill58.negativity.common.potion;
 
 public enum PotionEffectType {
 	
-	SPEED;
+	BLINDNESS,
+	CONFUSION,
+	DOLPHINS_GRACE,
+	FAST_DIGGING,
+	HUNGER,
+	JUMP,
+	LEVITATION,
+	POISON,
+	REGENERATION,
+	SLOW_DIGGING,
+	SPEED,
+	WEAKNESS,
+	WITHER;
 	
 	public static PotionEffectType fromName(String name) {
 		for(PotionEffectType type : values())

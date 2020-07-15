@@ -1,5 +1,10 @@
 package com.elikill58.negativity.common.utils;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.elikill58.negativity.common.entity.Entity;
+import com.elikill58.negativity.common.entity.EntityType;
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.common.item.Materials;
@@ -11,6 +16,257 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class LocationUtils {
 
+	/**
+	 * Check if there is material around specified location
+	 * (1 block radius)
+	 * 
+	 * @param loc the location where you want to check
+	 * @param ms Material that we are searching
+	 * @return true if one of specified material if around
+	 */
+	public static boolean hasMaterialAround(Location loc, Material... ms) {
+		List<Material> m = Arrays.asList(ms);
+		if (m.contains(loc.add(0, 0, 1).getBlock().getType()))
+			return true;
+		if (m.contains(loc.add(1, 0, 0).getBlock().getType()))
+			return true;
+		if (m.contains(loc.add(0, 0, -1).getBlock().getType()))
+			return true;
+		if (m.contains(loc.add(0, 0, -1).getBlock().getType()))
+			return true;
+		if (m.contains(loc.add(-1, 0, 0).getBlock().getType()))
+			return true;
+		if (m.contains(loc.add(-1, 0, 0).getBlock().getType()))
+			return true;
+		if (m.contains(loc.add(0, 0, 1).getBlock().getType()))
+			return true;
+		if (m.contains(loc.add(0, 0, 1).getBlock().getType()))
+			return true;
+		return false;
+	}
+
+	/**
+	 * Check if there is material around specified location
+	 * (1 block radius)
+	 * 
+	 * @param loc the location where you want to check
+	 * @param ms Material's name that we are searchingWarn: For 'REDSTONE', we will also find 'REDSTONE_BLOCK' and all other block with contains name ...
+	 * @return true if one of specified material if around
+	 */
+	public static boolean hasMaterialsAround(Location loc, String... ms) {
+		loc = loc.clone();
+		for(String s : ms) {
+			if (loc.getBlock().getType().getId().contains(s))
+				return true;
+			if (loc.add(0, 0, 1).getBlock().getType().getId().contains(s))
+				return true;
+			if (loc.add(1, 0, 0).getBlock().getType().getId().contains(s))
+				return true;
+			if (loc.add(0, 0, -1).getBlock().getType().getId().contains(s))
+				return true;
+			if (loc.add(0, 0, -1).getBlock().getType().getId().contains(s))
+				return true;
+			if (loc.add(-1, 0, 0).getBlock().getType().getId().contains(s))
+				return true;
+			if (loc.add(-1, 0, 0).getBlock().getType().getId().contains(s))
+				return true;
+			if (loc.add(0, 0, 1).getBlock().getType().getId().contains(s))
+				return true;
+			if (loc.add(0, 0, 1).getBlock().getType().getId().contains(s))
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Check if there is other than material around specified location.
+	 * (2 block radius)
+	 * 
+	 * @param loc the location where you want to check
+	 * @param m The material that we are searching
+	 * @return true if one of specified material if around
+	 */
+	public static boolean hasOtherThanExtended(Location loc, Material m) {
+		return hasOtherThanExtended(loc, m.getId());
+	}
+
+	/**
+	 * Check if there is other than material around specified location.
+	 * (2 block radius)
+	 * 
+	 * @param loc the location where you want to check
+	 * @param m the name that we are searching in material names
+	 * @return true if one of specified material if around
+	 */
+	public static boolean hasOtherThanExtended(Location loc, String m) {
+		Location tempLoc = loc.clone();
+		loc = loc.clone();
+		if (!loc.getBlock().getType().getId().contains(m))
+			return true;
+		if (!loc.add(0, 0, 1).getBlock().getType().getId().contains(m))
+			return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		if (!loc.add(0, 0, -1).getBlock().getType().getId().contains(m))
+			return true;
+		if (!loc.add(0, 0, -1).getBlock().getType().getId().contains(m))
+			return true;
+		if (!loc.add(-1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		if (!loc.add(-1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		if (!loc.add(0, 0, 1).getBlock().getType().getId().contains(m))
+			return true;
+		if (!loc.add(0, 0, 1).getBlock().getType().getId().contains(m))
+			return true;
+		loc = tempLoc;
+		if (!loc.add(0, 0, 2).getBlock().getType().getId().contains(m))
+			return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		for (int i = 0; i < 4; i++)
+			if (!loc.add(0, 0, -1).getBlock().getType().getId().contains(m))
+				return true;
+		for (int i = 0; i < 4; i++)
+			if (!loc.add(-1, 0, 0).getBlock().getType().getId().contains(m))
+				return true;
+		for (int i = 0; i < 4; i++)
+			if (!loc.add(0, 0, 1).getBlock().getType().getId().contains(m))
+				return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		return false;
+	}
+
+	/**
+	 * Check if there is material around specified location.
+	 * (2 block radius)
+	 * 
+	 * @param loc the location where you want to check
+	 * @param m the name that we are searching in material names
+	 * @return true if one of specified material if around
+	 */
+	public static boolean hasExtended(Location loc, String m) {
+		Location tempLoc = loc.clone();
+		loc = loc.clone();
+		if (loc.getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(0, 0, 1).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(0, 0, -1).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(0, 0, -1).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(-1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(-1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(0, 0, 1).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(0, 0, 1).getBlock().getType().getId().contains(m))
+			return true;
+		loc = tempLoc;
+		if (loc.add(0, 0, 2).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		if (loc.add(1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		for (int i = 0; i < 4; i++)
+			if (loc.add(0, 0, -1).getBlock().getType().getId().contains(m))
+				return true;
+		for (int i = 0; i < 4; i++)
+			if (loc.add(-1, 0, 0).getBlock().getType().getId().contains(m))
+				return true;
+		for (int i = 0; i < 4; i++)
+			if (loc.add(0, 0, 1).getBlock().getType().getId().contains(m))
+				return true;
+		if (loc.add(1, 0, 0).getBlock().getType().getId().contains(m))
+			return true;
+		return false;
+	}
+
+	/**
+	 * Check if there is other than material around specified location.
+	 * (1 block radius)
+	 * 
+	 * @param loc the location where you want to check
+	 * @param m The material that we are searching
+	 * @return true if one of specified material if around
+	 */
+	public static boolean hasOtherThan(Location loc, Material m) {
+		return hasOtherThan(loc, m.getId());
+	}
+
+	/**
+	 * Check if there is other than material around specified location.
+	 * (1 block radius)
+	 * 
+	 * @param loc the location where you want to check
+	 * @param m the name that we are searching in material names
+	 * @return true if one of specified material if around
+	 */
+	public static boolean hasOtherThan(Location loc, String name) {
+		loc = loc.clone();
+		if (!loc.add(0, 0, 1).getBlock().getType().getId().contains(name))
+			return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().getId().contains(name))
+			return true;
+		if (!loc.add(0, 0, -1).getBlock().getType().getId().contains(name))
+			return true;
+		if (!loc.add(0, 0, -1).getBlock().getType().getId().contains(name))
+			return true;
+		if (!loc.add(-1, 0, 0).getBlock().getType().getId().contains(name))
+			return true;
+		if (!loc.add(-1, 0, 0).getBlock().getType().getId().contains(name))
+			return true;
+		if (!loc.add(0, 0, 1).getBlock().getType().getId().contains(name))
+			return true;
+		if (!loc.add(0, 0, 1).getBlock().getType().getId().contains(name))
+			return true;
+		return false;
+	}
+	
+	/**
+	 * Check is there is a boat around the location (Distance of 3)
+	 * 
+	 * @param loc The location to check
+	 * @return true if there is a boat
+	 */
+	public static boolean hasBoatAroundHim(Location loc) {
+		World world = loc.getWorld();
+		if (world == null) {
+			return false;
+		}
+		
+		for(Entity entity : world.getEntities()) {
+			Location l = entity.getLocation();
+			if (entity.getType().equals(EntityType.BOAT) && l.distance(loc) < 3)
+				return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Get the number of air below the specified player
+	 * 
+	 * @param p the player to know how many air blocks he has below
+	 * @return the number of air block below
+	 */
+	public static int getNbAirBlockDown(Player p) {
+		Location loc = p.getLocation().clone();
+		int i = 0;
+		while (!hasOtherThan(loc, "AIR") && i < 50) {
+			loc.sub(0, 1, 0);
+			i++;
+		}
+		return i;
+	}
+	
 	public static float getPlayerHeadHeight(Player p) {
 		float f = 1.62F;
 		if (p.isSleeping()) {
@@ -194,5 +450,9 @@ public class LocationUtils {
 
 	public static enum Direction {
 		NORTH, SOUTH, WEST, EAST, UP, DOWN;
+	}
+
+	public static void teleportPlayerOnGround(Player p) {
+		// TODO implement
 	}
 }

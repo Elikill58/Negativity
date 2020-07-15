@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.elikill58.negativity.common.block.Block;
 import com.elikill58.negativity.common.entity.Entity;
+import com.elikill58.negativity.common.location.Difficulty;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.location.World;
 import com.elikill58.negativity.spigot.impl.block.SpigotBlock;
@@ -38,6 +39,11 @@ public class SpigotWorld extends World {
 		List<Entity> list = new ArrayList<>();
 		w.getEntities().forEach((e) -> list.add(new SpigotEntity(e)));
 		return list;
+	}
+
+	@Override
+	public Difficulty getDifficulty() {
+		return Difficulty.valueOf(w.getDifficulty().name());
 	}
 
 	@Override

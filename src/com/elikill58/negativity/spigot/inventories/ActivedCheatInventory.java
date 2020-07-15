@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.inventories;
 
+import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -7,16 +9,14 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.Inv;
-import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.holders.ActivedCheatHolder;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
-
-import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
 
 public class ActivedCheatInventory extends AbstractInventory {
 
@@ -27,7 +27,7 @@ public class ActivedCheatInventory extends AbstractInventory {
 	@Override
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		Inventory inv = Bukkit.createInventory(new ActivedCheatHolder(), UniversalUtils.getMultipleOf(np.ACTIVE_CHEAT.size() + 3, 9, 1, 54), Inv.NAME_ACTIVED_CHEAT_MENU);
 		if (np.ACTIVE_CHEAT.size() > 0) {
 			int slot = 0;

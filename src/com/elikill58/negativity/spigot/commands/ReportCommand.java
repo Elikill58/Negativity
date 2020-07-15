@@ -12,12 +12,12 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.ClickableText;
-import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -34,7 +34,7 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 		}
 
 		Player p = (Player) sender;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
 		if (np.TIME_REPORT > System.currentTimeMillis() && !Perm.hasPerm(np, Perm.REPORT_WAIT)) {
 			Messages.sendMessage(p, "report_wait");
 			return false;
@@ -64,7 +64,7 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 		} else {
 			boolean alertSent = false;
 			for (Player pl : Utils.getOnlinePlayers())
-				if (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pl), Perm.SHOW_REPORT)) {
+				if (Perm.hasPerm(NegativityPlayer.getCached(pl.getUniqueId()), Perm.SHOW_REPORT)) {
 					alertSent = true;
 					new ClickableText().addRunnableHoverEvent(
 							Messages.getMessage(pl, "report.report_message",

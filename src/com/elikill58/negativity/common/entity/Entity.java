@@ -34,4 +34,8 @@ public abstract class Entity {
 	public abstract Location getLocation();
 	
 	public abstract double getEyeHeight();
+	
+	public abstract EntityType getType();
+	
+	public abstract int getEntityId();
 }

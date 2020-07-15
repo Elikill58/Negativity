@@ -1,21 +1,20 @@
-package com.elikill58.negativity.spigot.protocols;
+package com.elikill58.negativity.protocols;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.events.EventListener;
+import com.elikill58.negativity.common.events.Listeners;
+import com.elikill58.negativity.common.events.player.PlayerInteractEvent;
+import com.elikill58.negativity.common.item.ItemStack;
+import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.common.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -25,17 +24,17 @@ import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DataCounter;
 import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 
-public class AutoClickProtocol extends Cheat implements Listener {
+public class AutoClick extends Cheat implements Listeners {
 
 	public static final DataType<Integer> CLICKS = new DataType<Integer>("clicks", "Clicks", () -> new IntegerDataCounter());
 
 	public static final int CLICK_ALERT = Adapter.getAdapter().getConfig().getInt("cheats.autoclick.click_alert");
 	
-	public AutoClickProtocol() {
-		super(CheatKeys.AUTO_CLICK, true, Material.FISHING_ROD, CheatCategory.COMBAT, true, "auto-click", "autoclic");
+	public AutoClick() {
+		super(CheatKeys.AUTO_CLICK, true, Materials.FISHING_ROD, CheatCategory.COMBAT, true, "auto-click", "autoclic");
 		Bukkit.getScheduler().runTaskTimer(SpigotNegativity.getInstance(), () -> {
-			for (Player p : Utils.getOnlinePlayers()) {
-				SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+			for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
+				NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 				NegativityAccount account = np.getAccount();
 				if (account.getMostClicksPerSecond() < np.ACTUAL_CLICK) {
 					account.setMostClicksPerSecond(np.ACTUAL_CLICK);
@@ -51,7 +50,7 @@ public class AutoClickProtocol extends Cheat implements Listener {
 		}, 20, 20);
 	}
 	
-	@EventHandler
+	@EventListener
 	public void onInteract(PlayerInteractEvent e) {
 		if(e.getAction().name().contains("AIR")) {
 			manageClick(e.getPlayer(), e);
@@ -64,20 +63,20 @@ public class AutoClickProtocol extends Cheat implements Listener {
 			manageClick(e.getPlayer(), e);
 	}*/
 		
-	private void manageClick(Player p, Cancellable e) {
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		ItemStack inHand = Utils.getItemInHand(p);
+	private void manageClick(Player p, PlayerInteractEvent e) {
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		ItemStack inHand = p.getItemInHand();
 		if (inHand != null)
-			if (ItemUseBypass.ITEM_BYPASS.containsKey(inHand.getType().name())) {
-				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(inHand.getType().name());
+			if (ItemUseBypass.ITEM_BYPASS.containsKey(inHand.getType().getId())) {
+				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(inHand.getType().getId());
 				if (ib.getWhen().isClick() && ib.isForThisCheat(this))
 					return;
 			}
 		np.ACTUAL_CLICK++;
 		np.updateCheckMenu();
-		int ping = Utils.getPing(p), click = np.ACTUAL_CLICK - (ping / 9);
+		int ping = p.getPing(), click = np.ACTUAL_CLICK - (ping / 9);
 		if (click > CLICK_ALERT && np.hasDetectionActive(this)) {
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(np.ACTUAL_CLICK * 2.5),
 					"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
 							+ "; Better click in one second: " + np.getAccount().getMostClicksPerSecond() + " Ping: " + ping,
@@ -89,7 +88,7 @@ public class AutoClickProtocol extends Cheat implements Listener {
 	
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
-		int currentClick = ((SpigotNegativityPlayer) np).ACTUAL_CLICK;
+		int currentClick = np.ACTUAL_CLICK;
 		DataCounter<Integer> counter = data.getData(CLICKS);
 		counter.add(currentClick);
 		if(counter.getMax() == 0)

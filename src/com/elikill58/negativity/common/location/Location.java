@@ -91,6 +91,41 @@ public abstract class Location implements Cloneable {
 		return this;
 	}
 
+	public Location sub(Location other) {
+		this.x -= other.getX();
+		this.y -= other.getY();
+		this.z -= other.getZ();
+		return this;
+	}
+
+	public Location sub(Vector other) {
+		this.x -= other.getX();
+		this.y -= other.getY();
+		this.z -= other.getZ();
+		return this;
+	}
+
+	public Location add(double x, double y, double z) {
+		this.x += x;
+		this.y += y;
+		this.z += z;
+		return this;
+	}
+
+	public Location add(Location other) {
+		this.x += other.getX();
+		this.y += other.getY();
+		this.z += other.getZ();
+		return this;
+	}
+
+	public Location add(Vector other) {
+		this.x += other.getX();
+		this.y += other.getY();
+		this.z += other.getZ();
+		return this;
+	}
+
 	public abstract Vector toVector();
 
 	public abstract Block getBlock();
@@ -110,6 +145,10 @@ public abstract class Location implements Cloneable {
 
 		return vector;
 	}
+
+	public abstract double distance(Location location);
+	
+	public abstract Object getDefaultLocation();
 
 	@Override
 	public Location clone() {

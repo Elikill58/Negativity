@@ -98,13 +98,13 @@ public class AnalyzePacketTimer implements Runnable {
 			if(np.hasDetectionActive(SNEAK)){
 				if(ping < 140){
 					if(entityAction > 35){
-						if(np.IS_LAST_SEC_SNEAK){
+						if(np.booleans.get(SNEAK.getKey(), "last-sec", false)){
 							Negativity.alertMod(ReportType.WARNING, p, SNEAK, UniversalUtils.parseInPorcent(55 + entityAction), "EntityAction packet: " + entityAction + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
 							if(SNEAK.isSetBack())
 								p.setSneaking(false);
 						}
-						np.IS_LAST_SEC_SNEAK = true;
-					} else np.IS_LAST_SEC_SNEAK = false;
+						np.booleans.set(SNEAK.getKey(), "last-sec", true);
+					} else np.booleans.set(SNEAK.getKey(), "last-sec", false);
 				}
 			}
 			Cheat NUKER = Cheat.forKey(CheatKeys.NUKER);

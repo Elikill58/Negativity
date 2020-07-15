@@ -1,55 +1,57 @@
-package com.elikill58.negativity.spigot.protocols;
+package com.elikill58.negativity.protocols;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.inventory.ItemStack;
 
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.events.EventListener;
+import com.elikill58.negativity.common.events.Listeners;
+import com.elikill58.negativity.common.events.block.BlockPlaceEvent;
+import com.elikill58.negativity.common.item.ItemStack;
+import com.elikill58.negativity.common.item.Material;
+import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.ItemUtils;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class ScaffoldProtocol extends Cheat implements Listener {
+public class Scaffold extends Cheat implements Listeners {
 
-	private ScaffoldProtocol instance;
-	
-	public ScaffoldProtocol() {
-		super(CheatKeys.SCAFFOLD, false, ItemUtils.GRASS, CheatCategory.WORLD, true);
+	private Scaffold instance;
+
+	public Scaffold() {
+		super(CheatKeys.SCAFFOLD, false, Materials.GRASS, CheatCategory.WORLD, true);
 		instance = this;
 	}
 
-	@SuppressWarnings("deprecation")
-	@EventHandler (ignoreCancelled = true)
+	@EventListener
 	public void onBlockBreak(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
-		int ping = Utils.getPing(p), slot = p.getInventory().getHeldItemSlot();
-		if(ping > 120)
+		int ping = p.getPing(), slot = p.getInventory().getHeldItemSlot();
+		if (ping > 120)
 			return;
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 			@Override
 			public void run() {
-				Material m = p.getItemInHand().getType(), placed = e.getBlockPlaced().getType();
-				if ((m == null || (!m.isBlock() && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot() && !placed.equals(Material.AIR)) {
+				Material m = p.getItemInHand().getType(), placed = e.getBlock().getType();
+				if ((m == null || (!m.isSolid() && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot()
+						&& !placed.equals(Materials.AIR)) {
 					int localPing = ping;
-					if(localPing == 0)
+					if (localPing == 0)
 						localPing = 1;
-					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, instance, UniversalUtils.parseInPorcent(120 / localPing),
-							"Item in hand: " + m.name() + " Block placed: " + placed.name() + " Ping: " + ping,
-							hoverMsg("main", "%item%", m.name().toLowerCase(), "%block%", placed.name().toLowerCase()));
-					if(isSetBack() && mayCancel) {
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, instance,
+							UniversalUtils.parseInPorcent(120 / localPing),
+							"Item in hand: " + m.getId() + " Block placed: " + placed.getId() + " Ping: " + ping,
+							hoverMsg("main", "%item%", m.getId().toLowerCase(), "%block%",
+									placed.getId().toLowerCase()));
+					if (isSetBack() && mayCancel) {
 						p.getInventory().addItem(new ItemStack(placed));
-						e.getBlockPlaced().setType(Material.AIR);
+						e.getBlock().setType(Materials.AIR);
 					}
 				}
 			}

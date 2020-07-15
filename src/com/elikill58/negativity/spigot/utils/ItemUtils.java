@@ -74,7 +74,7 @@ public class ItemUtils {
 		ItemStack item = new ItemStack(m, quantite);
 		ItemMeta meta = (ItemMeta) item.getItemMeta();
 		meta.setDisplayName(ChatColor.RESET + name);
-		meta.setLore(Utils.coloredMessage(lore));
+		meta.setLore(com.elikill58.negativity.common.utils.Utils.coloredMessage(lore));
 		item.setItemMeta(meta);
 		return item;
 	}

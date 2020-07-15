@@ -3,7 +3,6 @@ package com.elikill58.negativity.spigot;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -23,8 +22,11 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scheduler.BukkitTask;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
+import com.elikill58.negativity.common.timers.PendingAlertsTimer;
 import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.spigot.commands.BanCommand;
 import com.elikill58.negativity.spigot.commands.KickCommand;
@@ -40,14 +42,12 @@ import com.elikill58.negativity.spigot.events.ServerCrasherEvents;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
-import com.elikill58.negativity.spigot.timers.TimerTimeBetweenAlert;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
-import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.Version;
@@ -74,7 +74,8 @@ public class SpigotNegativity extends JavaPlugin {
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, isBuggedGroundVersion = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
-	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
+	private BukkitRunnable invTimer = null;
+	private BukkitTask timeTimeBetweenAlert = null, packetTimer = null, runSpawnFakePlayer = null;
 	public static String CHANNEL_NAME_FML = "";
 	private static int timeBetweenAlert = -1;
 	private NegativityPacketManager packetManager;
@@ -142,8 +143,8 @@ public class SpigotNegativity extends JavaPlugin {
 			manageAutoVerif(p);
 
 		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
-		(packetTimer = new AnalyzePacketTimer()).runTaskTimer(this, 20, 20);
-		(runSpawnFakePlayer = new SpawnFakePlayerTimer()).runTaskTimer(this, 20, 20 * 60 * 10);
+		packetTimer = getServer().getScheduler().runTaskTimer(this, new AnalyzePacketTimer(), 20, 20);
+		runSpawnFakePlayer = getServer().getScheduler().runTaskTimer(this, new SpawnFakePlayerTimer(), 20, 20 * 60 * 10);
 
 		for (Cheat c : Cheat.values())
 			if (c.isActive() && c.hasListener())
@@ -355,15 +356,8 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 	}
 
-	private static void logProof(SpigotNegativityPlayer np, ReportType type, Player p, Cheat c, int reliability,
-			String proof, int ping) {
-		if(log)
-			np.logProof(new Timestamp(System.currentTimeMillis()) + ": (" + ping + "ms) " + reliability + "% " + c.getKey()
-				+ " > " + proof + ". Player version: " + np.getPlayerVersion().name() + ". TPS: " + Arrays.toString(Utils.getTPS()));
-	}
-
 	public static void manageAutoVerif(Player p) {
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		np.ACTIVE_CHEAT.clear();
 		boolean needPacket = false;
 		for (Cheat c : Cheat.values())
@@ -372,8 +366,8 @@ public class SpigotNegativity extends JavaPlugin {
 				if (c.needPacket())
 					needPacket = true;
 			}
-		if (needPacket && !SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId()))
-			SpigotNegativityPlayer.INJECTED.add(p.getUniqueId());
+		if (needPacket && !NegativityPlayer.INJECTED.contains(p.getUniqueId()))
+			NegativityPlayer.INJECTED.add(p.getUniqueId());
 	}
 
 	private Object getKnownCommands(Object object) {
@@ -421,7 +415,7 @@ public class SpigotNegativity extends JavaPlugin {
 			int timeTick = (timeBetweenAlert / 1000) * 20;
 			if(pl.timeTimeBetweenAlert != null)
 				pl.timeTimeBetweenAlert.cancel();
-			(pl.timeTimeBetweenAlert = new TimerTimeBetweenAlert()).runTaskTimer(pl, timeTick, timeTick);
+			pl.timeTimeBetweenAlert = Bukkit.getScheduler().runTaskTimer(pl, new PendingAlertsTimer(), timeTick, timeTick);
 		}
 	}
 

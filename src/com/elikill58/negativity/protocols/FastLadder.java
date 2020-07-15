@@ -1,39 +1,37 @@
-package com.elikill58.negativity.spigot.protocols;
+package com.elikill58.negativity.protocols;
 
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-
-import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.common.GameMode;
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.events.EventListener;
+import com.elikill58.negativity.common.events.Listeners;
+import com.elikill58.negativity.common.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.common.item.Materials;
+import com.elikill58.negativity.common.location.Location;
+import com.elikill58.negativity.common.potion.PotionEffect;
+import com.elikill58.negativity.common.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class FastLadderProtocol extends Cheat implements Listener {
+public class FastLadder extends Cheat implements Listeners {
 
-	public FastLadderProtocol() {
-		super(CheatKeys.FAST_LADDER, false, Material.LADDER, CheatCategory.MOVEMENT, true, "ladder", "ladders");
+	public FastLadder() {
+		super(CheatKeys.FAST_LADDER, false, Materials.LADDER, CheatCategory.MOVEMENT, true, "ladder", "ladders");
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@EventListener
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
 		Location loc = p.getLocation().clone();
-		if (!loc.getBlock().getType().equals(Material.LADDER)){
+		if (!loc.getBlock().getType().equals(Materials.LADDER)){
 			np.isOnLadders = false;
 			return;
 		}
@@ -43,25 +41,24 @@ public class FastLadderProtocol extends Cheat implements Listener {
 		}
 		if(p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP))
 			return;
-		for (PotionEffect pe : p.getActivePotionEffects())
+		for (PotionEffect pe : p.getActivePotionEffect())
 			if (pe.getType().equals(PotionEffectType.SPEED) && pe.getAmplifier() > 2)
 				return;
 		Location from = e.getFrom(), to = e.getTo();
-		Location fl = from.clone().subtract(to);
+		Location fl = from.clone().sub(to);
 		double distance = to.toVector().distance(from.toVector());
 		int nbLadder = 0;
 		Location tempLoc = loc.clone();
-		while(tempLoc.getBlock().getType() == Material.LADDER) {
+		while(tempLoc.getBlock().getType() == Materials.LADDER) {
 			nbLadder++;
-			tempLoc.add(0, -1, 0);
+			tempLoc.sub(0, 1, 0);
 		}
-		if (distance > 0.23 && distance < 3.8 && nbLadder > 2 && loc.add(0, 1, 0).getBlock().getType().name().contains("LADDER")) {
-			int ping = Utils.getPing(p);
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 350),
+		if (distance > 0.23 && distance < 3.8 && nbLadder > 2 && loc.add(0, 1, 0).getBlock().getType().getId().contains("LADDER")) {
+			int ping = p.getPing();
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 350),
 					"On ladders. Distance from/to : " + distance + ". Ping: " + ping + "ms. Number Ladder: " + nbLadder, hoverMsg("main", "%nb%", nbLadder));
 			if (isSetBack() && mayCancel)
-				e.setTo(e.getFrom().clone().add(new Location(fl.getWorld(), fl.getX() / 2, fl.getY() / 2, fl.getZ()))
-						.add(0, 0.5, 0));
+				e.setTo(e.getFrom().clone().add(fl.getX() / 2, (fl.getY() / 2) + 0.5, fl.getZ()));
 		}
 	}
 }

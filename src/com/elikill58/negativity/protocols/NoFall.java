@@ -2,6 +2,7 @@ package com.elikill58.negativity.protocols;
 
 import com.elikill58.negativity.common.GameMode;
 import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.block.BlockFace;
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.EventListener;
 import com.elikill58.negativity.common.events.Listeners;
@@ -10,6 +11,7 @@ import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.potion.PotionEffectType;
+import com.elikill58.negativity.common.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -33,10 +35,21 @@ public class NoFall extends Cheat implements Listeners {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if(p.getAllowFlight() || p.hasElytra() || p.getVehicle() != null || p.hasPotionEffect(PotionEffectType.SPEED))
+		if(p.getAllowFlight() || p.hasElytra() || p.isInsideVehicle() || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double distance = to.toVector().distance(from.toVector());
+		Location locDown = p.getLocation().clone().getBlock().getRelative(BlockFace.DOWN).getLocation();
+		double motionY = from.getY() - to.getY();
+		if(locDown.getBlock().getType().equals(Materials.AIR)
+				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS")) {
+			if ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
+					|| (motionY > (p.getWalkSpeed() / 2) && p.isOnGround() && p.getWalkSpeed() > p.getFallDistance())) {
+				int porcent = UniversalUtils.parseInPorcent(900 * motionY);
+				Negativity.alertMod(ReportType.WARNING, p, this, porcent, "New NoFall - Player on ground. motionY: " + motionY
+						+ ", onGround: " + p.isOnGround() + ", fallDistance: " + p.getFallDistance(), new Cheat.CheatHover.Literal("MotionY (on ground): " + motionY));
+			}
+		}
 		if (!(distance == 0.0D || from.getY() < to.getY())) {
 			if (p.getFallDistance() == 0.0F && p.getLocation().clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR)) {
 				int relia = UniversalUtils.parseInPorcent(distance * 100);

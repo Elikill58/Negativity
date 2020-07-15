@@ -9,8 +9,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.TranslatedMessages;
 
 public class LangCommand implements CommandExecutor, TabCompleter {
@@ -47,7 +47,7 @@ public class LangCommand implements CommandExecutor, TabCompleter {
 				return true;
 			}
 
-			SpigotNegativityPlayer.getNegativityPlayer(p).setLang(lang);
+			NegativityPlayer.getCached(p.getUniqueId()).getAccount().setLang(lang);
 			Messages.sendMessage(p, "lang.language_set");
 		} else {
 			Messages.sendMessage(p, "lang.help");

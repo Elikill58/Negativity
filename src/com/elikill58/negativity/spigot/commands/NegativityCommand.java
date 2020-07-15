@@ -19,14 +19,14 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.utils.Utils;
 import com.elikill58.negativity.spigot.Inv;
-import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -57,7 +57,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 		}
 
 		if (arg[0].equalsIgnoreCase("verif")) {
-			if (sender instanceof Player && !Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.VERIF)) {
+			if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getCached(((Player) sender).getUniqueId()), Perm.VERIF)) {
 				Messages.sendMessage(sender, "not_permission");
 				return false;
 			}
@@ -73,7 +73,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				return false;
 			}
 
-			SpigotNegativityPlayer nTarget = SpigotNegativityPlayer.getNegativityPlayer(target);
+			NegativityPlayer nTarget = NegativityPlayer.getCached(target.getUniqueId());
 			int time = UniversalUtils.getFirstInt(arg).orElse(VerificationManager.getTimeVerif() / 20);
 			Set<Cheat> cheatsToVerify = new LinkedHashSet<>();
 			if (arg.length == 2 || (arg.length == 3 && UniversalUtils.isInteger(arg[2]))) {
@@ -116,7 +116,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				return true;
 			}
 			Player playerSender = (Player) sender;
-			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(playerSender);
+			NegativityPlayer np = NegativityPlayer.getCached(playerSender.getUniqueId());
 			np.disableShowingAlert = !np.disableShowingAlert;
 			Messages.sendMessage(playerSender, np.disableShowingAlert ? "negativity.see_no_longer_alert" : "negativity.see_alert");
 			return true;
@@ -133,7 +133,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			return true;
 		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase().contains("manage")) {
 			if (arg.length >= 2 && arg[1].equalsIgnoreCase("updateMessages")) {
-				if (sender instanceof Player && !Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.MANAGE_CHEAT)) {
+				if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getCached(((Player) sender).getUniqueId()), Perm.MANAGE_CHEAT)) {
 					Messages.sendMessage(sender, "not_permission");
 					return true;
 				}
@@ -147,7 +147,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				return true;
 			}
 			Player p = (Player) sender;
-			if (!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), Perm.MANAGE_CHEAT)) {
+			if (!Perm.hasPerm(NegativityPlayer.getCached(p.getUniqueId()), Perm.MANAGE_CHEAT)) {
 				Messages.sendMessage(sender, "not_permission");
 				return true;
 			}
@@ -172,7 +172,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 
 			Player playerSender = (Player) sender;
-			if (!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(playerSender), Perm.VERIF)) {
+			if (!Perm.hasPerm(NegativityPlayer.getCached(playerSender.getUniqueId()), Perm.VERIF)) {
 				Messages.sendMessage(sender, "not_permission");
 				return false;
 			}
@@ -192,7 +192,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 		String prefix = arg[arg.length - 1].toLowerCase(Locale.ROOT);
 		if (arg.length == 1) {
 			// /negativity |
-			for (Player p : Utils.getOnlinePlayers()) {
+			for (com.elikill58.negativity.common.entity.Player p : Adapter.getAdapter().getOnlinePlayers()) {
 				if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
 					suggestions.add(p.getName());
 				}
@@ -203,13 +203,13 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				suggestions.add("reload");
 			if ("alert".startsWith(prefix))
 				suggestions.add("alert");
-			if ("admin".startsWith(prefix) && (sender instanceof Player) && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.MANAGE_CHEAT))
+			if ("admin".startsWith(prefix) && (sender instanceof Player) && Perm.hasPerm(NegativityPlayer.getCached(((Player) sender).getUniqueId()), Perm.MANAGE_CHEAT))
 				suggestions.add("admin");
 		} else {
 			if (arg[0].equalsIgnoreCase("verif")) {
 				if (arg.length == 2) {
 					// /negativity verif |
-					for (Player p : Utils.getOnlinePlayers()) {
+					for (com.elikill58.negativity.common.entity.Player p : Adapter.getAdapter().getOnlinePlayers()) {
 						if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
 							suggestions.add(p.getName());
 						}
@@ -223,7 +223,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 					}
 				}
 			} else if (arg[0].equalsIgnoreCase("admin") && arg.length == 2) {
-				if (sender instanceof Player && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.MANAGE_CHEAT)) {
+				if (sender instanceof Player && Perm.hasPerm(NegativityPlayer.getCached(((Player) sender).getUniqueId()), Perm.MANAGE_CHEAT)) {
 					suggestions.add("updateMessages");
 				}
 			}

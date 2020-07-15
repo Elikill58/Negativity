@@ -20,6 +20,7 @@ public final class NegativityAccount {
 	private int mostClicksPerSecond;
 	private final Map<String, Integer> warns;
 	private final long creationTime;
+	private boolean inBanning = false, isMcLeaks = false;
 
 	public NegativityAccount(UUID playerId) {
 		this(playerId, null, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>(), System.currentTimeMillis());
@@ -33,6 +34,9 @@ public final class NegativityAccount {
 		this.mostClicksPerSecond = mostClicksPerSecond;
 		this.warns = warns;
 		this.creationTime = creationTime;
+		Adapter.getAdapter().isUsingMcLeaks(playerId).thenAccept(isUsingMcLeaks -> {
+			this.isMcLeaks = isUsingMcLeaks;
+		});
 	}
 
 	public UUID getPlayerId() {
@@ -94,5 +98,17 @@ public final class NegativityAccount {
 
 	public long getCreationTime() {
 		return creationTime;
+	}
+	
+	public boolean isMcLeaks() {
+		return isMcLeaks;
+	}
+	
+	public void setInBanning(boolean b) {
+		this.inBanning = b;
+	}
+
+	public boolean isInBanning() {
+		return inBanning;
 	}
 }

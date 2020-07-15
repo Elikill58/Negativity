@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.EntityTypes;
-import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.cause.EventContextKeys;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
@@ -60,8 +59,8 @@ public class ForceFieldProtocol extends Cheat {
 		boolean mayCancel = false;
 		Entity cible = e.getTargetEntity();
 		if(!(LocationUtils.hasLineOfSight((org.spongepowered.api.entity.living.player.Player) p.getDefaultPlayer(), cible.getLocation()) || LocationUtils.hasLineOfSight(p, cible.getLocation().copy().sub(0, 1, 0)))) {
-			mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getTargetEntity().getType().getId()
-					+ " but cannot see it, ping: " + Utils.getPing(p), hoverMsg("line_sight", "%name%", e.getTargetEntity().getType().getName()));
+			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(90 + np.getWarn(this)), "Hit " + e.getTargetEntity().getType().getId()
+					+ " but cannot see it, ping: " + p.getPing(), hoverMsg("line_sight", "%name%", e.getTargetEntity().getType().getName()));
 		}
 		if(np.hasThorns(p)) {
 			if(mayCancel && isSetBack())

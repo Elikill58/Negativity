@@ -1,9 +1,17 @@
 package com.elikill58.negativity.universal;
 
 import com.elikill58.negativity.common.entity.Player;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.common.utils.Utils;
 
 public class Messages {
+
+	public static String getMessage(Object p, String dir, Object... placeholders) {
+		return null;
+	}
+
+	public static String sendMessage(Object p, String dir, Object... placeholders) {
+		return null;
+	}
 
 	public static String getMessage(String dir, Object... placeholders) {
 		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir, placeholders);

@@ -30,4 +30,19 @@ public class SpigotLocation extends Location {
 		return new SpigotBlock(new org.bukkit.Location(loc.getWorld(), getX(), getY(), getZ()).getBlock());
 	}
 
+	@Override
+	public double distance(Location location) {
+		return loc.distance((org.bukkit.Location) location.getDefaultLocation());
+	}
+
+	@Override
+	public Object getDefaultLocation() {
+		loc.setX(getX());
+		loc.setY(getY());
+		loc.setZ(getZ());
+		loc.setYaw(getYaw());
+		loc.setPitch(getPitch());
+		return loc;
+	}
+
 }

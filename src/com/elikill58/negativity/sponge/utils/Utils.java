@@ -159,7 +159,7 @@ public class Utils {
 	
 	public static ItemStack getMcLeaksIndicator(Player player, NegativityPlayer nPlayer) {
 		ItemStack indicator = ItemStack.of(ItemTypes.WOOL);
-		boolean usesMcLeaks = nPlayer.isMcLeaks();
+		boolean usesMcLeaks = nPlayer.getAccount().isMcLeaks();
 		indicator.offer(Keys.DYE_COLOR, usesMcLeaks ? DyeColors.RED : DyeColors.LIME);
 		indicator.offer(Keys.DISPLAY_NAME, Messages.getMessage(player, "inventory.main.mcleaks_indicator." + (usesMcLeaks ? "positive" : "negative")));
 		indicator.offer(Keys.ITEM_LORE, Collections.singletonList(Messages.getMessage(player, "inventory.main.mcleaks_indicator.description")));

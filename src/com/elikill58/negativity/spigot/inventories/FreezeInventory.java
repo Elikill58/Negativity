@@ -7,12 +7,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.Inv;
-import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.holders.FreezeHolder;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
+import com.elikill58.negativity.universal.Messages;
 
 public class FreezeInventory extends AbstractInventory {
 
@@ -34,7 +34,7 @@ public class FreezeInventory extends AbstractInventory {
 	
 	@Override
 	public void closeInventory(Player p, InventoryCloseEvent e) {
-		if(SpigotNegativityPlayer.getNegativityPlayer(p).isFreeze)
+		if(NegativityPlayer.getCached(p.getUniqueId()).isFreeze)
 			openInventory(p);
 	}
 

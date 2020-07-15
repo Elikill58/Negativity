@@ -1,35 +1,34 @@
-package com.elikill58.negativity.spigot.protocols;
+package com.elikill58.negativity.protocols;
 
-import static com.elikill58.negativity.spigot.utils.ItemUtils.WEB;
+import static com.elikill58.negativity.common.item.Materials.WEB;
 
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.potion.PotionEffectType;
-
-import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.common.GameMode;
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.block.Block;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.events.EventListener;
+import com.elikill58.negativity.common.events.Listeners;
+import com.elikill58.negativity.common.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.common.location.Location;
+import com.elikill58.negativity.common.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class NoWebProtocol extends Cheat implements Listener {
+public class NoWeb extends Cheat implements Listeners {
 
 	private static final double MAX = 0.7421028493192875;
 	
-	public NoWebProtocol() {
+	public NoWeb() {
 		super(CheatKeys.NO_WEB, false, WEB, CheatCategory.MOVEMENT, true, "no web");
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@EventListener
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
@@ -39,9 +38,9 @@ public class NoWebProtocol extends Cheat implements Listener {
 		Location l = p.getLocation();
 		double distance = e.getTo().distance(e.getFrom());
 		if (!(distance > MAX)) {
-			Block under = new Location(p.getWorld(), l.getX(), l.getY(), l.getZ()).getBlock();
+			Block under = l.getBlock();
 			if (under.getType() == WEB && distance > 0.13716039608514914) {
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500), "Distance: " + distance + ", fallDistance: " + p.getFallDistance());
+				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500), "Distance: " + distance + ", fallDistance: " + p.getFallDistance());
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			}

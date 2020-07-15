@@ -10,12 +10,12 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
 import com.elikill58.negativity.spigot.Inv;
-import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.holders.LangHolder;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 

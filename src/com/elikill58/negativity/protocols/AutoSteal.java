@@ -1,66 +1,64 @@
-package com.elikill58.negativity.spigot.protocols;
+package com.elikill58.negativity.protocols;
 
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
+import static com.elikill58.negativity.universal.CheatKeys.AUTO_STEAL;
 
-import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.common.GameMode;
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.events.EventListener;
+import com.elikill58.negativity.common.events.Listeners;
+import com.elikill58.negativity.common.events.inventory.InventoryClickEvent;
+import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class AutoStealProtocol extends Cheat implements Listener {
+public class AutoSteal extends Cheat implements Listeners {
 
-	public AutoStealProtocol() {
-		super(CheatKeys.AUTO_STEAL, false, Material.CHEST, CheatCategory.PLAYER, true, "steal");
+	public AutoSteal() {
+		super(AUTO_STEAL, false, Materials.CHEST, CheatCategory.PLAYER, true, "steal");
 	}
 
 	public static final int TIME_CLICK = 55;
 	
-	@SuppressWarnings("deprecation")
-	@EventHandler(ignoreCancelled = true)
+	@EventListener
 	public void onInvClick(InventoryClickEvent e) {
-		Player p = (Player) e.getWhoClicked();
+		Player p = e.getPlayer();
 		if(!(p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)))
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if(!np.hasDetectionActive(this))
 			return;
 		if(p.getItemInHand() != null)
-			if(ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name())) {
-				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().name());
+			if(ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().getId())) {
+				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().getId());
 				if(ib.getWhen().isClick() && ib.isForThisCheat(this))
 					if(e.getAction().name().toLowerCase().contains(ib.getWhen().name().toLowerCase()))
 						return;
 			}
-		long actual = System.currentTimeMillis(), dif = actual - np.LAST_CLICK_INV;
-		int ping = Utils.getPing(p);
-		int tempSlot = np.LAST_SLOT_CLICK;
+		long actual = System.currentTimeMillis(), dif = actual - np.longs.get(AUTO_STEAL, "inv-click", 0l);
+		int ping = p.getPing();
+		int tempSlot = np.ints.get(AUTO_STEAL, "inv-slot", 0);
 		if (e.getCurrentItem() != null) {
 			if (tempSlot == e.getSlot())
 				np.lastClick = e.getCurrentItem().getType();
 			if (np.lastClick == e.getCurrentItem().getType())
 				return;
 		}
-		np.LAST_SLOT_CLICK = e.getSlot();
+		np.ints.set(AUTO_STEAL, "inv-slot", e.getSlot());
 		if(dif < 0)
 			return;
-		if((ping + TIME_CLICK) >= dif && tempSlot != e.getRawSlot()){
-			if(np.lastClickInv){
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((100 + TIME_CLICK) - dif - ping),
+		if((ping + TIME_CLICK) >= dif && tempSlot != e.getSlot()){
+			if(np.booleans.get(AUTO_STEAL, "inv-was", false)){
+				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((100 + TIME_CLICK) - dif - ping),
 						"Time between 2 click: " + dif + ". Ping: " + ping, hoverMsg("main", "%time%", dif));
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}
-			np.lastClickInv = true;
-		} else np.lastClickInv = false;
-		np.LAST_CLICK_INV = actual;
+			np.booleans.set(AUTO_STEAL, "inv-was", true);
+		} else np.booleans.set(AUTO_STEAL, "inv-was", false);
+		np.longs.set(AUTO_STEAL, "inv-click", actual);
 	}
 }

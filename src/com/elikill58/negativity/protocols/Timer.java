@@ -1,33 +1,31 @@
-package com.elikill58.negativity.spigot.protocols;
+package com.elikill58.negativity.protocols;
 
 import java.util.HashMap;
 
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-
-import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.common.GameMode;
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.events.EventListener;
+import com.elikill58.negativity.common.events.Listeners;
+import com.elikill58.negativity.common.events.negativity.IPlayerPacketsClearEvent;
+import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class TimerProtocol extends Cheat implements Listener {
+public class Timer extends Cheat implements Listeners {
 
-	public TimerProtocol() {
-		super(CheatKeys.TIMER, true, Material.PACKED_ICE, CheatCategory.MOVEMENT, true);
+	public Timer() {
+		super(CheatKeys.TIMER, true, Materials.PACKED_ICE, CheatCategory.MOVEMENT, true);
 	}
 	
-	@EventHandler
-	public void onPacketClear(PlayerPacketsClearEvent e) {
-		SpigotNegativityPlayer np = e.getNegativityPlayer();
+	@EventListener
+	public void onPacketClear(IPlayerPacketsClearEvent e) {
+		NegativityPlayer np = e.getNegativityPlayer();
 		if(!np.hasDetectionActive(this))
 			return;
 		HashMap<PacketType, Integer> packets = e.getPackets();
@@ -50,9 +48,9 @@ public class TimerProtocol extends Cheat implements Listener {
 		if(MAX_VARIATION > sum)// in min/max variations
 			return;
 		int amount = (int) (sum - MAX_VARIATION);
-		SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (Utils.getPing(p) / 100)),
+		Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (p.getPing() / 100)),
 				"Flying: " + flying + ", position: " + position + ", look: " + look + ", positionLook: " + positonLook + ", sum: " + sum,
-				(CheatHover) null, amount > 0 ? amount : 1);
+				null, amount > 0 ? amount : 1);
 		// TODO implement setBack option for Timer
 	}
 }

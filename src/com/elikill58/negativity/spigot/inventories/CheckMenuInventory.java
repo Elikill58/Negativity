@@ -13,13 +13,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.Inv;
-import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.holders.CheckMenuHolder;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.Version;
@@ -40,7 +40,7 @@ public class CheckMenuInventory extends AbstractInventory {
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
 		Inventory inv = Bukkit.createInventory(new CheckMenuHolder(), 27, Inv.NAME_CHECK_MENU);
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
+		NegativityPlayer np = NegativityPlayer.getCached(cible.getUniqueId());
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
 		actualizeInventory(p, cible);
@@ -72,7 +72,7 @@ public class CheckMenuInventory extends AbstractInventory {
 		Player cible = (Player) args[0];
 		Inventory inv = p.getOpenInventory().getTopInventory();
 		if(inv == null || !inv.getType().equals(org.bukkit.event.inventory.InventoryType.CHEST)) return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
+		NegativityPlayer np = NegativityPlayer.getCached(cible.getUniqueId());
 		int betterClick = np.getAccount().getMostClicksPerSecond();
 		try {
 			inv.setItem(0, getClickItem(Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), np.ACTUAL_CLICK));
@@ -136,7 +136,7 @@ public class CheckMenuInventory extends AbstractInventory {
 		} else if (m == ItemUtils.SKELETON_SKULL) {
 			if(e.getRawSlot() == 12) {
 				p.closeInventory();
-				SpigotNegativityPlayer.getNegativityPlayer(cible).makeAppearEntities();
+				NegativityPlayer.getCached(cible.getUniqueId()).makeAppearEntities();
 			}
 		} else if(m == ItemUtils.DIAMOND_SPADE) {
 			// kick
@@ -151,7 +151,7 @@ public class CheckMenuInventory extends AbstractInventory {
 				break;
 			case PACKED_ICE:
 				p.closeInventory();
-				SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
+				NegativityPlayer np = NegativityPlayer.getCached(cible.getUniqueId());
 				np.isFreeze = !np.isFreeze;
 				if (np.isFreeze) {
 					if (Adapter.getAdapter().getConfig().getBoolean("inventory.inv_freeze_active"))

@@ -1,18 +1,16 @@
-package com.elikill58.negativity.spigot.protocols;
+package com.elikill58.negativity.protocols;
 
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockPlaceEvent;
-
+import com.elikill58.negativity.common.GameMode;
 import com.elikill58.negativity.common.NegativityPlayer;
-import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.events.EventListener;
+import com.elikill58.negativity.common.events.Listeners;
+import com.elikill58.negativity.common.events.block.BlockPlaceEvent;
+import com.elikill58.negativity.common.item.Materials;
+import com.elikill58.negativity.common.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -21,33 +19,34 @@ import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DataCounter;
 import com.elikill58.negativity.universal.verif.data.LongDataCounter;
 
-public class FastPlaceProtocol extends Cheat implements Listener {
+public class FastPlace extends Cheat implements Listeners {
 	
 	public static final DataType<Long> TIME_PLACE = new DataType<Long>("time_player", "Time between places", () -> new LongDataCounter());
 
-	public FastPlaceProtocol() {
-		super(CheatKeys.FAST_PLACE, false, Material.DIRT, CheatCategory.WORLD, true, "fp");
+	public FastPlace() {
+		super(CheatKeys.FAST_PLACE, false, Materials.DIRT, CheatCategory.WORLD, true, "fp");
 	}
 
-	@EventHandler (ignoreCancelled = true)
+	@EventListener
 	public void onBlockPlace(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
-		if(Utils.getLastTPS() < 19.1)
+		if(Adapter.getAdapter().getLastTPS() < 19.1)
 			return;
 		
-		long last = System.currentTimeMillis() - np.LAST_BLOCK_PLACE, lastPing = last - (Utils.getPing(p) / 9);
+		int ping = p.getPing();
+		long last = System.currentTimeMillis() - np.LAST_BLOCK_PLACE, lastPing = last - (ping / 9);
 		if(last < 10000) // last block is too old
 			recordData(p.getUniqueId(), TIME_PLACE, last);
 		np.LAST_BLOCK_PLACE = System.currentTimeMillis();
 		if (lastPing < Adapter.getAdapter().getConfig().getInt("cheats.fastplace.time_2_place")) {
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(50 + lastPing), "Block placed too quickly. Last time: " + last + ", Last with ping: "
-							+ lastPing + ". Ping: " + Utils.getPing(p), hoverMsg("main", "%time%", last));
+							+ lastPing + ". Ping: " + ping, hoverMsg("main", "%time%", last));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}

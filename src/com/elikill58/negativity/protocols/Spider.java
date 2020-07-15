@@ -1,49 +1,48 @@
-package com.elikill58.negativity.spigot.protocols;
+package com.elikill58.negativity.protocols;
 
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.potion.PotionEffectType;
+import static com.elikill58.negativity.universal.CheatKeys.SPIDER;
 
-import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.LocationUtils;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.common.GameMode;
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.events.EventListener;
+import com.elikill58.negativity.common.events.Listeners;
+import com.elikill58.negativity.common.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.common.item.Material;
+import com.elikill58.negativity.common.item.Materials;
+import com.elikill58.negativity.common.location.Location;
+import com.elikill58.negativity.common.potion.PotionEffectType;
+import com.elikill58.negativity.common.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-@SuppressWarnings("deprecation")
-public class SpiderProtocol extends Cheat implements Listener {
+public class Spider extends Cheat implements Listeners {
 
-	public SpiderProtocol() {
-		super(CheatKeys.SPIDER, false, Material.SPIDER_EYE, CheatCategory.MOVEMENT, true, "wallhack",
+	public Spider() {
+		super(SPIDER, false, Materials.SPIDER_EYE, CheatCategory.MOVEMENT, true, "wallhack",
 				"wall");
 	}
 
-	@EventHandler(ignoreCancelled = true)
+	@EventListener
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		Location loc = p.getLocation();
 		if (!np.hasDetectionActive(this))
 			return;
-		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP)
-				|| !LocationUtils.hasOtherThan(loc, Material.AIR) || (e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ()))
+		if (p.getFallDistance() != 0 || p.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP)
+				|| !LocationUtils.hasOtherThan(loc, Materials.AIR) || (e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ()))
 				return;
-		Material underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),
-				underUnder = loc.clone().subtract(0, 2, 0).getBlock().getType();
-		if (!underPlayer.equals(Material.AIR) || !underUnder.equals(Material.AIR)
-				|| !loc.getBlock().getType().equals(Material.AIR))
+		Material underPlayer = loc.clone().sub(0, 1, 0).getBlock().getType(),
+				underUnder = loc.clone().sub(0, 2, 0).getBlock().getType();
+		if (!underPlayer.equals(Materials.AIR) || !underUnder.equals(Materials.AIR)
+				|| !loc.getBlock().getType().equals(Materials.AIR))
 			return;
-		if (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT"))
+		if (p.getItemInHand() != null && p.getItemInHand().getType().getId().contains("TRIDENT"))
 			return;
 		if(hasBypassBlockAround(loc))
 			return;
@@ -51,45 +50,45 @@ public class SpiderProtocol extends Cheat implements Listener {
 		boolean isAris = ((float) y) == p.getWalkSpeed();
 		if (((y > 0.499 && y < 0.7) || isAris) && !np.isUsingSlimeBlock && !p.isSprinting()) {
 			int relia = UniversalUtils.parseInPorcent(y * 160 + (isAris ? 39 : 0));
-			if (SpigotNegativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this,
+			if (Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this,
 					relia, "Nothing around him. To > From: " + y + " isAris: " + isAris + ", has not stab slairs")
 					&& isSetBack()) {
-				Utils.teleportPlayerOnGround(p);
+				LocationUtils.teleportPlayerOnGround(p);
 			}
 		}
 	}
 	
-	@EventHandler(ignoreCancelled = true)
+	@EventListener
 	public void onPlayerContinueMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null)
 			return;
 		Location loc = p.getLocation().clone();
-		if(hasBypassBlockAround(loc) || (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT")))
+		if(hasBypassBlockAround(loc) || (p.getItemInHand() != null && p.getItemInHand().getType().getId().contains("TRIDENT")))
 			return;
 		if(LocationUtils.hasExtended(loc, "STAIRS"))
 			return;
-		String blockName = p.getLocation().getBlock().getType().name();
+		String blockName = p.getLocation().getBlock().getType().getId();
 		if(blockName.contains("LADDER") || blockName.contains("VINE"))
 			return;
 		
 		double y = e.getTo().getY() - e.getFrom().getY();
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
-			double tempDis = loc.getY() - np.lastSpiderLoc.getY(), lastSpiderDistance = np.contentDouble.getOrDefault("spider-last-distance", 0.0);
+			double tempDis = loc.getY() - np.lastSpiderLoc.getY(), lastSpiderDistance = np.doubles.get(SPIDER, "last-distance", 0.0);
 			if (lastSpiderDistance == tempDis && tempDis != 0) {
 				np.SPIDER_SAME_DIST++;
 				if(np.SPIDER_SAME_DIST > 2) {
-					if (SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(tempDis * 400 + np.SPIDER_SAME_DIST),
+					if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(tempDis * 400 + np.SPIDER_SAME_DIST),
 							"Nothing strange around him. To > From: " + y + ", distance: " + lastSpiderDistance + ". Walk with same y " + np.SPIDER_SAME_DIST + " times") && isSetBack()) {
-						Utils.teleportPlayerOnGround(p);
+						LocationUtils.teleportPlayerOnGround(p);
 					}
 				}
 			} else
 				np.SPIDER_SAME_DIST = 0;
-			np.contentDouble.put("spider-last-distance", tempDis);
+			np.doubles.set(SPIDER, "last-distance", tempDis);
 		}
 		np.lastSpiderLoc = loc;
 	}
@@ -97,18 +96,18 @@ public class SpiderProtocol extends Cheat implements Listener {
 	private boolean hasBypassBlockAround(Location loc) {
 		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD"))
 			return true;
-		loc = loc.clone().subtract(0, 1, 0);
+		loc = loc.clone().sub(0, 1, 0);
 		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD"))
 			return true;
 		return false;
 	}
 
 	public boolean has(Location loc, String... m) {
-		String b = loc.getBlock().getType().name(),
-				b1 = loc.clone().add(0, 0, 1).getBlock().getType().name(),
-				b2 = loc.clone().add(1, 0, -1).getBlock().getType().name(),
-				b3 = loc.clone().add(-1, 0, -1).getBlock().getType().name(),
-				b4 = loc.clone().add(-1, 0, 1).getBlock().getType().name();
+		String b = loc.getBlock().getType().getId(),
+				b1 = loc.clone().add(0, 0, 1).getBlock().getType().getId(),
+				b2 = loc.clone().add(1, 0, -1).getBlock().getType().getId(),
+				b3 = loc.clone().add(-1, 0, -1).getBlock().getType().getId(),
+				b4 = loc.clone().add(-1, 0, 1).getBlock().getType().getId();
 		for(String temp : m) {
 			if(b.contains(temp))
 				return true;

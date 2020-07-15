@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 import com.elikill58.negativity.spigot.utils.ItemUtils;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Version;
 
 @SuppressWarnings("deprecation")

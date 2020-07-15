@@ -1,41 +1,40 @@
-package com.elikill58.negativity.spigot.protocols;
+package com.elikill58.negativity.protocols;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
 
+import com.elikill58.negativity.common.GameMode;
 import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.events.EventListener;
+import com.elikill58.negativity.common.events.Listeners;
+import com.elikill58.negativity.common.events.inventory.InventoryClickEvent;
+import com.elikill58.negativity.common.item.Materials;
+import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
 
-public class InventoryMoveProtocol extends Cheat implements Listener {
+public class InventoryMove extends Cheat implements Listeners {
 
-	private final InventoryMoveProtocol instance;
+	private final InventoryMove instance;
 
-	public InventoryMoveProtocol() {
-		super(CheatKeys.INVENTORY_MOVE, false, Material.NETHER_STAR, CheatCategory.MOVEMENT, true, "invmove");
+	public InventoryMove() {
+		super(CheatKeys.INVENTORY_MOVE, false, Materials.NETHER_STAR, CheatCategory.MOVEMENT, true, "invmove");
 		instance = this;
 	}
 
-	@EventHandler
+	@EventListener
 	public void onClick(InventoryClickEvent e) {
-		if (!(e.getWhoClicked() instanceof Player) || e.getClickedInventory() == null)
-			return;
-		NegativityPlayer np = NegativityPlayer.getCached(e.getWhoClicked().getUniqueId());
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
 		if (!np.hasDetectionActive(this))
 			return;
-		checkInvMove((Player) e.getWhoClicked(), true, "Click");
+		checkInvMove(e.getPlayer(), true, "Click");
 	}
 
-	@EventHandler
+	@EventListener
 	public void onOpen(InventoryOpenEvent e) {
 		if (!(e.getPlayer() instanceof Player) || e.getInventory() == null)
 			return;
@@ -53,7 +52,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 				@Override
 				public void run() {
 					if (p.isSprinting() || p.isSneaking())
-						SpigotNegativity.alertMod(ReportType.WARNING, p, instance,
+						Negativity.alertMod(ReportType.WARNING, p, instance,
 								NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95,
 									"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking(), hoverMsg("main", "%name%", from));
 				}
@@ -68,7 +67,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 					double dis = lastLoc.distance(p.getLocation());
 					if (dis > 1 && (lastLoc.getY() - p.getLocation().getY()) < 0.1
 							&& p.getOpenInventory() != null) {
-						SpigotNegativity.alertMod(ReportType.WARNING, p, instance,
+						Negativity.alertMod(ReportType.WARNING, p, instance,
 								NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95,
 									"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()), hoverMsg("main", "%name%", from));
 					}

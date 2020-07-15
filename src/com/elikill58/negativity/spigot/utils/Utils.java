@@ -36,18 +36,6 @@ public class Utils {
 	public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
 			.split(",")[3];
 
-	public static String coloredMessage(String msg) {
-		return ChatColor.translateAlternateColorCodes('&', msg);
-	}
-
-	public static List<String> coloredMessage(String... messages) {
-		List<String> ret = new ArrayList<>();
-		for (String message : messages) {
-			ret.add(coloredMessage(message));
-		}
-		return ret;
-	}
-
 	public static List<Player> getOnlinePlayers() {
 		List<Player> list = new ArrayList<>();
 		try {
@@ -86,22 +74,6 @@ public class Utils {
 		skullmeta.setLore(lorel);
 		skull.setItemMeta(skullmeta);
 		return skull;
-	}
-	
-	/**
-	 * Get the current player ping
-	 * 
-	 * @param p the player
-	 * @return the player ping
-	 */
-	public static int getPing(Player p) {
-		try {
-			Object entityPlayer = PacketUtils.getEntityPlayer(p);
-			return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return 0;
 	}
 
 	public static Effect getEffect(String effect) {

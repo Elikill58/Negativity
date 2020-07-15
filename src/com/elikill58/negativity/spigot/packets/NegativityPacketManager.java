@@ -64,7 +64,7 @@ public class NegativityPacketManager {
 	private void manageReceive(AbstractPacket packet) {
 		Player p = packet.getPlayer();
 		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
-		np.ALL++;
+		np.ALL_PACKETS++;
 		PacketType type = packet.getPacketType();
 		np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
 		if(type == PacketType.Client.USE_ENTITY) {

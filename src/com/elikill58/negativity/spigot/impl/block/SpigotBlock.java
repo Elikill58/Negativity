@@ -4,6 +4,8 @@ import com.elikill58.negativity.common.block.Block;
 import com.elikill58.negativity.common.block.BlockFace;
 import com.elikill58.negativity.common.item.ItemRegistrar;
 import com.elikill58.negativity.common.item.Material;
+import com.elikill58.negativity.common.location.Location;
+import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 
 public class SpigotBlock extends Block {
 
@@ -36,6 +38,11 @@ public class SpigotBlock extends Block {
 	@Override
 	public Block getRelative(BlockFace blockFace) {
 		return new SpigotBlock(block.getRelative(org.bukkit.block.BlockFace.valueOf(blockFace.name())));
+	}
+
+	@Override
+	public Location getLocation() {
+		return new SpigotLocation(block.getLocation());
 	}
 
 }

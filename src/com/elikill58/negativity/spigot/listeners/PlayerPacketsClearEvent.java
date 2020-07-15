@@ -6,16 +6,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.universal.PacketType;
 
 public class PlayerPacketsClearEvent extends Event {
 	
 	private final Player p;
-	private final SpigotNegativityPlayer np;
+	private final NegativityPlayer np;
 	private final HashMap<PacketType, Integer> packets;
 	
-	public PlayerPacketsClearEvent(Player p, SpigotNegativityPlayer np) {
+	public PlayerPacketsClearEvent(Player p, NegativityPlayer np) {
 		this.p = p;
 		this.np = np;
 		this.packets = new HashMap<>(np.PACKETS);
@@ -25,7 +25,7 @@ public class PlayerPacketsClearEvent extends Event {
 		return p;
 	}
 	
-	public SpigotNegativityPlayer getNegativityPlayer() {
+	public NegativityPlayer getNegativityPlayer() {
 		return np;
 	}
 	

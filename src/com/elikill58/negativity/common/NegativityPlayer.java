@@ -12,6 +12,9 @@ import java.util.UUID;
 
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.negativity.IPlayerCheatAlertEvent;
+import com.elikill58.negativity.common.events.player.PlayerChatEvent;
+import com.elikill58.negativity.common.item.Material;
+import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.potion.PotionEffect;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
@@ -35,23 +38,41 @@ public class NegativityPlayer {
 	
 	public ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
 	public ArrayList<String> proof = new ArrayList<>();
-	public HashMap<PacketType, Integer> PACKETS = new HashMap<>();
 	public HashMap<Cheat, List<IPlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
+	
+	// packets
+	public HashMap<PacketType, Integer> PACKETS = new HashMap<>();
+	public int ALL_PACKETS = 0, MAX_FLYING = 0;
 
 	public int ACTUAL_CLICK = 0, LAST_CLICK = 0, SEC_ACTIVE = 0;
 	
 	// setBack
 	public int NO_FALL_DAMAGE = 0;
+	public Material eatMaterial = null;
 	public List<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	
 	// detection and bypass
-	public long TIME_INVINCIBILITY = 0;
-	public int MOVE_TIME = 0, MAX_FLYING = 0;
+	public long TIME_INVINCIBILITY = 0, TIME_LAST_MESSAGE = 0, timeStartFakePlayer = 0, LAST_BLOCK_BREAK = 0, LAST_BLOCK_PLACE = 0, LAST_REGEN = 0, TIME_REPORT = 0,
+			TIME_OTHER_KEEP_ALIVE = 0;
+	public int MOVE_TIME = 0, LAST_CHAT_MESSAGE_NB = 0, fakePlayerTouched = 0, BYPASS_SPEED = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
+	public boolean bypassBlink = false, isOnLadders = false;
+	public PlayerChatEvent LAST_CHAT_EVENT = null;
+	public List<Integer> TIMER_COUNT = new ArrayList<>();
+	public Location lastSpiderLoc = null;
+	public String LAST_OTHER_KEEP_ALIVE = "";
+	
+	// content
+	public Content<Material> materials = new Content<>();
+	public Content<Boolean> booleans = new Content<>();
+	public Content<Double> doubles = new Content<>();
+	public Content<Integer> ints = new Content<>();
+	public Content<Long> longs = new Content<>();
+	
 	
 	// general values
-	public boolean isInFight = false, already_blink = false, disableShowingAlert = false, isFreeze = false;
+	public boolean isInFight = false, already_blink = false, disableShowingAlert = false, isFreeze = false, isJumpingWithBlock = false, isUsingSlimeBlock = false;
 	private boolean mustToBeSaved = false;
 
 	public NegativityPlayer(Player p) {
@@ -236,6 +257,23 @@ public class NegativityPlayer {
 		accountManager.save(playerId);
 		accountManager.dispose(playerId);
 	}
+
+	public void fight() {
+		isInFight = true;
+		// TODO add auto-unfight some seconds after
+	}
+
+	public void unfight() {
+		isInFight = false;
+	}
+
+	public void makeAppearEntities() {
+		
+	}
+	
+	public void banEffect() {
+		
+	}
 	
 	public static NegativityPlayer getNegativityPlayer(Player p) {
 		return players.computeIfAbsent(p.getUniqueId(), id -> new NegativityPlayer(p));
@@ -254,18 +292,5 @@ public class NegativityPlayer {
 		if (cached != null) {
 			cached.destroy();
 		}
-	}
-
-	public void fight() {
-		isInFight = true;
-		// TODO add auto-unfight some seconds after
-	}
-
-	public void unfight() {
-		isInFight = false;
-	}
-
-	public void makeAppearEntities() {
-		
 	}
 }

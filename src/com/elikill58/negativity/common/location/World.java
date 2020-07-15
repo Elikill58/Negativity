@@ -15,4 +15,6 @@ public abstract class World {
 	public abstract List<Entity> getEntities();
 	
 	public abstract Object getDefaultWorld();
+
+	public abstract Difficulty getDifficulty();
 }

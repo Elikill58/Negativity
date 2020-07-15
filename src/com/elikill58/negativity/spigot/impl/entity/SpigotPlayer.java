@@ -9,16 +9,18 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import com.elikill58.negativity.common.GameMode;
 import com.elikill58.negativity.common.entity.Entity;
+import com.elikill58.negativity.common.entity.EntityType;
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.item.ItemStack;
 import com.elikill58.negativity.common.location.Location;
+import com.elikill58.negativity.common.location.Vector;
 import com.elikill58.negativity.common.location.World;
 import com.elikill58.negativity.common.potion.PotionEffect;
 import com.elikill58.negativity.common.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Version;
 
 public class SpigotPlayer extends Player {
@@ -94,7 +96,13 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public int getPing() {
-		return Utils.getPing(p);
+		try {
+			Object entityPlayer = PacketUtils.getEntityPlayer(p);
+			return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	@Override
@@ -200,5 +208,78 @@ public class SpigotPlayer extends Player {
 		p.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()), duration, amplifier));
 	}
 	
+	@Override
+	public EntityType getType() {
+		return EntityType.PLAYER;
+	}
+
+	@Override
+	public boolean isSprinting() {
+		return p.isSprinting();
+	}
+
+	@Override
+	public void teleport(Location loc) {
+		p.teleport((org.bukkit.Location) loc.getDefaultLocation());
+	}
+
+	@Override
+	public boolean isInsideVehicle() {
+		return p.isInsideVehicle();
+	}
+
+	@Override
+	public float getFlySpeed() {
+		return p.getFlySpeed();
+	}
+
+	@Override
+	public void setSprinting(boolean b) {
+		p.setSprinting(b);
+	}
+
+	@Override
+	public List<Entity> getNearbyEntities(double x, double y, double z) {
+		List<Entity> list = new ArrayList<>();
+		p.getNearbyEntities(x, y, z).forEach((entity) -> list.add(new SpigotEntity(entity)));
+		return list;
+	}
+
+	@Override
+	public boolean isSwimming() {
+		if(Version.getVersion().isNewerOrEquals(Version.V1_13))
+			return p.isSwimming();
+		else {
+			if(!p.isSprinting())
+				return false;
+			Location loc = getLocation().clone();
+			if(loc.getBlock().getType().getId().contains("WATER"))
+				return true;
+			if(loc.sub(0, 1, 0).getBlock().getType().getId().contains("WATER"))
+				return true;
+			return false;
+		}
+	}
+
+	@Override
+	public ItemStack getItemInOffHand() {
+		return null;
+	}
+
+	@Override
+	public boolean isDead() {
+		return false;
+	}
+
+	@Override
+	public Vector getVelocity() {
+		org.bukkit.util.Vector vel = p.getVelocity();
+		return new Vector(vel.getX(), vel.getY(), vel.getZ());
+	}
+
+	@Override
+	public int getEntityId() {
+		return p.getEntityId();
+	}
 	
 }

@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.inventories;
 
+import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -8,17 +10,16 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.Inv;
-import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.holders.ModHolder;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.InventoryUtils;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.permissions.Perm;
-
-import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
 
 public class ModInventory extends AbstractInventory {
 
@@ -33,7 +34,7 @@ public class ModInventory extends AbstractInventory {
 		inv.setItem(10, createItem(Material.GHAST_TEAR, Messages.getMessage(p, "inventory.mod.night_vision")));
 		inv.setItem(11, createItem(Material.PUMPKIN_PIE, Messages.getMessage(p, "inventory.mod.invisible")));
 		inv.setItem(12, createItem(Material.FEATHER, "Fly: " + Messages.getMessage(p, "inventory.manager." + (p.isFlying() ? "enabled" : "disabled"))));
-		if(Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), Perm.MANAGE_CHEAT))
+		if(Perm.hasPerm(NegativityPlayer.getCached(p.getUniqueId()), Perm.MANAGE_CHEAT))
 			inv.setItem(14, createItem(Material.TNT, Messages.getMessage(p, "inventory.mod.cheat_manage")));
 		inv.setItem(15, createItem(ItemUtils.LEASH, Messages.getMessage(p, "inventory.mod.random_tp")));
 		inv.setItem(16, ItemUtils.hideAttributes(createItem(ItemUtils.IRON_SPADE, Messages.getMessage(p, "inventory.mod.clear_inv"))));

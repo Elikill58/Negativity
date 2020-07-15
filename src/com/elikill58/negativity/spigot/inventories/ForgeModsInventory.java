@@ -9,12 +9,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 
+import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.Inv;
-import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.holders.ForgeModsHolder;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.InventoryUtils;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ForgeModsInventory extends AbstractInventory {
@@ -29,7 +29,7 @@ public class ForgeModsInventory extends AbstractInventory {
 	public void openInventory(Player mod, Object... args) {
 		Player p = (Player) args[0];
 		slot = 0;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		Inventory inv = Bukkit.createInventory(new ForgeModsHolder(), UniversalUtils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), Inv.NAME_FORGE_MOD_MENU);
 		if(np.MODS.size() == 0) {
 			inv.setItem(4, createItem(Material.DIAMOND, "No mods"));

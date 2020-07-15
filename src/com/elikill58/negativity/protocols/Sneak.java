@@ -1,44 +1,43 @@
-package com.elikill58.negativity.spigot.protocols;
+package com.elikill58.negativity.protocols;
 
-import org.bukkit.GameMode;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
+import static com.elikill58.negativity.universal.CheatKeys.SNEAK;
 
-import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.common.GameMode;
+import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.events.EventListener;
+import com.elikill58.negativity.common.events.Listeners;
+import com.elikill58.negativity.common.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class SneakProtocol extends Cheat implements Listener {
+public class Sneak extends Cheat implements Listeners {
 
-	public SneakProtocol() {
-		super(CheatKeys.SNEAK, true, Material.BLAZE_POWDER, CheatCategory.MOVEMENT, true, "sneack", "sneac");
+	public Sneak() {
+		super(SNEAK, true, Materials.BLAZE_POWDER, CheatCategory.MOVEMENT, true, "sneack", "sneac");
 	}
 	
-	@EventHandler
+	@EventListener
 	public void onMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (p.isSneaking() && p.isSprinting() && !p.isFlying() && np.contentBoolean.getOrDefault("sneak-was-sneaking", false)) {
-			if(!np.getPlayerVersion().isNewerOrEquals(Version.V1_14)) {
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (Utils.getPing(p) / 10)), "Sneaking, sprinting and not flying");
+		if (p.isSneaking() && p.isSprinting() && !p.isFlying() && np.booleans.get(SNEAK, "was-sneaking", false)) {
+			if(!p.getPlayerVersion().isNewerOrEquals(Version.V1_14)) {
+				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (p.getPing() / 10)), "Sneaking, sprinting and not flying");
 				if(mayCancel && isSetBack()) {
 					e.setCancelled(true);
 					p.setSprinting(false);
 				}
 			}
 		}
-		np.contentBoolean.put("sneak-was-sneaking", p.isSneaking());
+		np.booleans.set(SNEAK, "was-sneaking", p.isSneaking());
 	}
 }

@@ -12,8 +12,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Messages;
 
 public class KickCommand implements CommandExecutor, TabCompleter {
 

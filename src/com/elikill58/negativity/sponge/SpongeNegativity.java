@@ -64,6 +64,8 @@ import org.spongepowered.api.util.blockray.BlockRayHit;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
+import com.elikill58.negativity.common.timers.PendingAlertsTimer;
 import com.elikill58.negativity.sponge.commands.BanCommand;
 import com.elikill58.negativity.sponge.commands.KickCommand;
 import com.elikill58.negativity.sponge.commands.LangCommand;
@@ -78,8 +80,6 @@ import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.listeners.PlayersEventsManager;
 import com.elikill58.negativity.sponge.packets.NegativityPacketManager;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
-import com.elikill58.negativity.sponge.timers.PacketsTimers;
-import com.elikill58.negativity.sponge.timers.PendingAlertsTimer;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
@@ -175,7 +175,7 @@ public class SpongeNegativity {
 		eventManager.registerListeners(this, new FightManager());
 		eventManager.registerListeners(this, new PlayersEventsManager());
 		
-		Task.builder().execute(new PacketsTimers()).delayTicks(0).interval(1, TimeUnit.SECONDS)
+		Task.builder().execute(new AnalyzePacketTimer()).delayTicks(0).interval(1, TimeUnit.SECONDS)
 				.name("negativity-packets").submit(this);
 		Task.builder().execute(new ActualizerTimer()).interval(1, TimeUnit.SECONDS)
 				.name("negativity-actualizer").submit(this);
@@ -568,7 +568,7 @@ public class SpongeNegativity {
 			if (!kick.isCancelled())
 				p.kick(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName()));
 		}
-		if(np.isBanned()) {
+		if(BanManager.isBanned(np.getUUID())) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			return false;
 		}

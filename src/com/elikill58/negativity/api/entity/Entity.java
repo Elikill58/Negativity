@@ -6,10 +6,11 @@ import java.util.List;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockIterator;
+import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 
-public abstract class Entity {
+public abstract class Entity extends CommandSender {
 
 	public abstract boolean isOnGround();
 	public abstract boolean isOp();

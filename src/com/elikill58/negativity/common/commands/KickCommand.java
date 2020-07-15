@@ -1,32 +1,29 @@
-package com.elikill58.negativity.spigot.commands;
+package com.elikill58.negativity.common.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringJoiner;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.api.commands.CommandListeners;
+import com.elikill58.negativity.api.commands.CommandSender;
+import com.elikill58.negativity.api.commands.TabListeners;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.adapter.Adapter;
 
-public class KickCommand implements CommandExecutor, TabCompleter {
+public class KickCommand implements CommandListeners, TabListeners {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
+	public boolean onCommand(CommandSender sender, String[] arg, String prefix) {
 		if (arg.length < 2) {
 			Messages.sendMessage(sender, "kick.help");
 			return false;
 		}
 
-		Player target = Bukkit.getPlayer(arg[0]);
+		Player target = Adapter.getAdapter().getPlayer(arg[0]);
 		if (target == null) {
-			for (Player onlinePlayer : Utils.getOnlinePlayers()) {
+			for (Player onlinePlayer : Adapter.getAdapter().getOnlinePlayers()) {
 				if (arg[0].equalsIgnoreCase(onlinePlayer.getName())) {
 					target = onlinePlayer;
 					break;
@@ -44,16 +41,15 @@ public class KickCommand implements CommandExecutor, TabCompleter {
 		}
 
 		String reason = stringJoiner.toString();
-		target.kickPlayer(Messages.getMessage(target, "kick.kicked", "%name%", target.getName(), "%reason%", reason));
+		target.kick(Messages.getMessage(target, "kick.kicked", "%name%", target.getName(), "%reason%", reason));
 		Messages.sendMessage(sender, "kick.well_kick", "%name%", target.getName(), "%reason%", reason);
 		return false;
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] arg) {
+	public List<String> onTabComplete(CommandSender sender, String[] arg, String prefix) {
 		List<String> suggestions = new ArrayList<>();
-		String prefix = arg[arg.length - 1].toLowerCase(Locale.ROOT);
-		for (Player p : Utils.getOnlinePlayers()) {
+		for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
 			if (prefix.isEmpty() || p.getName().toLowerCase(Locale.ROOT).startsWith(prefix)) {
 				suggestions.add(p.getName());
 			}

@@ -31,6 +31,7 @@ import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.support.EssentialsSupport;
 import com.elikill58.negativity.universal.support.GadgetMenuSupport;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -211,7 +212,7 @@ public class Negativity {
 	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover, int alertsCount) {
 		try {
 			AlertMessage alertMessage = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);
-			p.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(alertMessage));
+			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(alertMessage));
 		} catch (IOException e) {
 			SpigotNegativity.getInstance().getLogger().severe("Could not send alert message to the proxy.");
 			e.printStackTrace();
@@ -230,5 +231,15 @@ public class Negativity {
 		log = config.getBoolean("log_alerts");
 		log_console = config.getBoolean("log_alerts_in_console");
 		hasBypass = config.getBoolean("Permissions.bypass.active");
+	}
+
+	public static void sendReportMessage(Player reporter, String reason, String reported) {
+		try {
+			ReportMessage reportMessage = new ReportMessage(reported, reason, reporter.getName());
+			reporter.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(reportMessage));
+		} catch (IOException e) {
+			SpigotNegativity.getInstance().getLogger().severe("Could not send report message to the proxy.");
+			e.printStackTrace();
+		}
 	}
 }

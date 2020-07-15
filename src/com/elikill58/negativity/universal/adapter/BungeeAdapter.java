@@ -10,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Event;
 import com.elikill58.negativity.api.events.EventType;
@@ -201,6 +202,24 @@ public class BungeeAdapter extends Adapter {
 
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Player getPlayer(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Player getPlayer(UUID uuid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OfflinePlayer getOfflinePlayer(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}

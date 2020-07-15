@@ -1,4 +1,4 @@
-package com.elikill58.negativity.spigot.commands;
+package com.elikill58.negativity.common.commands;
 
 import static com.elikill58.negativity.universal.verif.VerificationManager.CONSOLE;
 
@@ -11,17 +11,14 @@ import java.util.StringJoiner;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.ConsoleCommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.inventory.InventoryManager;
+import com.elikill58.negativity.api.commands.CommandListeners;
+import com.elikill58.negativity.api.commands.CommandSender;
+import com.elikill58.negativity.api.commands.TabListeners;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
+import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -29,28 +26,29 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 import com.elikill58.negativity.universal.verif.Verificator;
 
-public class NegativityCommand implements CommandExecutor, TabCompleter {
+public class NegativityCommand implements CommandListeners, TabListeners {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
+	public boolean onCommand(CommandSender sender, String[] arg, String prefix) {
 		if (arg.length == 0 || arg[0].equalsIgnoreCase("help")) {
 			Messages.sendMessageList(sender, "negativity.verif.help");
-			FileConfiguration conf = SpigotNegativity.getInstance().getConfig();
-			if(conf.getBoolean("report_command"))
+			ConfigAdapter conf = Adapter.getAdapter().getConfig();
+			if(conf.getBoolean("commands.report"))
 				Messages.sendMessage(sender, "report.report_usage");
-			if(conf.getBoolean("ban_command"))
+			if(conf.getBoolean("commands.ban"))
 				Messages.sendMessageList(sender, "ban.help");
-			if(conf.getBoolean("unban_command"))
+			if(conf.getBoolean("commands.unban"))
 				Messages.sendMessage(sender, "unban.help");
-			if(conf.getBoolean("kick_command"))
+			if(conf.getBoolean("commands.kick"))
 				Messages.sendMessage(sender, "kick.help");
-			if(conf.getBoolean("report_command"))
+			if(conf.getBoolean("commands.report"))
 				Messages.sendMessage(sender, "report.report_usage");
 			Messages.sendMessage(sender, "lang.help");
 			return true;
@@ -67,7 +65,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				return true;
 			}
 
-			Player target = Bukkit.getPlayer(arg[1]);
+			Player target = Adapter.getAdapter().getPlayer(arg[1]);
 			if (target == null) {
 				Messages.sendMessage(sender, "invalid_player", "%arg%", arg[1]);
 				return false;
@@ -154,7 +152,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 
 			InventoryManager.open(NegativityInventory.ADMIN, p);
 			return true;
-		} else if (arg[0].equalsIgnoreCase("migrateoldbans") && sender instanceof ConsoleCommandSender) {
+		} else if (arg[0].equalsIgnoreCase("migrateoldbans") && !(sender instanceof Player)) {
 			try {
 				OldBansDbMigrator.performMigration();
 			} catch (Exception e) {
@@ -164,7 +162,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			return true;
 		}
 
-		Player targetPlayer = Bukkit.getPlayer(arg[0]);
+		Player targetPlayer = Adapter.getAdapter().getPlayer(arg[0]);
 		if (targetPlayer != null) {
 			if (!(sender instanceof Player)) {
 				Messages.sendMessage(sender, "only_player");
@@ -187,9 +185,8 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] arg) {
+	public List<String> onTabComplete(CommandSender sender, String[] arg, String prefix) {
 		List<String> suggestions = new ArrayList<>();
-		String prefix = arg[arg.length - 1].toLowerCase(Locale.ROOT);
 		if (arg.length == 1) {
 			// /negativity |
 			for (com.elikill58.negativity.api.entity.Player p : Adapter.getAdapter().getOnlinePlayers()) {

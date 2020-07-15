@@ -11,6 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Event;
 import com.elikill58.negativity.api.events.EventType;
@@ -114,6 +115,9 @@ public abstract class Adapter {
 
 	public abstract Location createLocation(World w, double x, double y, double z);
 	public abstract Inventory createInventory(String inventoryName, int size, NegativityHolder holder);
+	public abstract OfflinePlayer getOfflinePlayer(String name);
+	public abstract Player getPlayer(String name);
+	public abstract Player getPlayer(UUID uuid);
 	
 	public abstract void sendMessageRunnableHover(Player p, String message, String hover, String command);
 	

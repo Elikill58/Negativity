@@ -1,22 +1,20 @@
-package com.elikill58.negativity.spigot.commands;
+package com.elikill58.negativity.common.commands;
 
 import java.util.Collections;
 import java.util.List;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.commands.CommandListeners;
+import com.elikill58.negativity.api.commands.CommandSender;
+import com.elikill58.negativity.api.commands.TabListeners;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.TranslatedMessages;
 
-public class LangCommand implements CommandExecutor, TabCompleter {
+public class LangCommand implements CommandListeners, TabListeners {
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
+	public boolean onCommand(CommandSender sender, String[] arg, String prefix) {
 		if (!(sender instanceof Player)) {
 			Messages.sendMessage(sender, "only_player");
 			return false;
@@ -56,8 +54,8 @@ public class LangCommand implements CommandExecutor, TabCompleter {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-		if (args.length > 1) {
+	public List<String> onTabComplete(CommandSender sender, String[] arg, String prefix) {
+		if (arg.length > 1) {
 			return Collections.emptyList();
 		}
 		return TranslatedMessages.LANGS;

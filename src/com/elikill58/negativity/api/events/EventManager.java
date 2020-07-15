@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.elikill58.negativity.common.commands.CommandManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class EventManager {
@@ -13,8 +14,7 @@ public class EventManager {
 	private static final HashMap<Class<?>, List<CallableEvent>> EVENT_METHOD = new HashMap<>();
 
 	public static void load() {
-		// TODO load protocol
-		//registerEvent(new NoFall());
+		registerEvent(new CommandManager());
 	}
 	
 	public static void registerEvent(Listeners src) {

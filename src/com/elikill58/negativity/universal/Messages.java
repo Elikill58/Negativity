@@ -1,25 +1,19 @@
 package com.elikill58.negativity.universal;
 
+import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.utils.Utils;
 
 public class Messages {
-
-	public static String getMessage(Object p, String dir, Object... placeholders) {
-		return null;
-	}
-
-	public static String sendMessage(Object p, String dir, Object... placeholders) {
-		return null;
-	}
 
 	public static String getMessage(String dir, Object... placeholders) {
 		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir, placeholders);
 		return Utils.coloredMessage(message);
 	}
 
-	public static String getMessage(Player p, String dir, Object... placeholders) {
-		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getLang(p.getUniqueId()), dir, placeholders);
+	public static String getMessage(CommandSender sender, String dir, Object... placeholders) {
+		String lang = (sender instanceof Player ? TranslatedMessages.getLang(((Player) sender).getUniqueId()) : TranslatedMessages.DEFAULT_LANG);
+		String message = TranslatedMessages.getStringFromLang(lang, dir, placeholders);
 		return Utils.coloredMessage(message);
 	}
 
@@ -28,16 +22,17 @@ public class Messages {
 		return Utils.coloredMessage(message);
 	}
 
-	public static void sendMessage(Player p, String dir, Object... placeholders) {
+	public static void sendMessage(CommandSender p, String dir, Object... placeholders) {
 		String msg = getMessage(p, dir, placeholders);
 		if (!msg.equalsIgnoreCase(dir))
 			p.sendMessage(msg);
 	}
 
-	public static void sendMessageList(Player p, String dir, Object... placeholders) {
-		for (String s : TranslatedMessages.getStringListFromLang(TranslatedMessages.getLang(p.getUniqueId()), dir, placeholders)) {
+	public static void sendMessageList(CommandSender sender, String dir, Object... placeholders) {
+		String lang = (sender instanceof Player ? TranslatedMessages.getLang(((Player) sender).getUniqueId()) : TranslatedMessages.DEFAULT_LANG);
+		for (String s : TranslatedMessages.getStringListFromLang(lang, dir, placeholders)) {
 			if (!s.equalsIgnoreCase(dir))
-				p.sendMessage(Utils.coloredMessage(s));
+				sender.sendMessage(Utils.coloredMessage(s));
 		}
 	}
 }

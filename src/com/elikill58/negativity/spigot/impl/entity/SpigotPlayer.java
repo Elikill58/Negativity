@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.entity.Damageable;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.entity.Entity;
@@ -19,6 +18,7 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotPlayerInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
@@ -166,8 +166,8 @@ public class SpigotPlayer extends Player {
 	}
 
 	@Override
-	public void sendPluginMessage(JavaPlugin instance, String channelId, byte[] writeMessage) {
-		p.sendPluginMessage(instance, channelId, writeMessage);
+	public void sendPluginMessage(String channelId, byte[] writeMessage) {
+		p.sendPluginMessage(SpigotNegativity.getInstance(), channelId, writeMessage);
 	}
 
 	@Override

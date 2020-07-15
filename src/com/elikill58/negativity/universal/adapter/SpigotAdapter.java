@@ -18,6 +18,7 @@ import org.json.parser.JSONParser;
 import org.json.parser.ParseException;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Event;
 import com.elikill58.negativity.api.events.EventType;
@@ -30,6 +31,8 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.ClickableText;
 import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.impl.entity.SpigotOfflinePlayer;
+import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.impl.events.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.impl.events.PlayerCheatEvent;
 import com.elikill58.negativity.spigot.impl.events.PlayerPacketsClearEvent;
@@ -247,5 +250,30 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
 		return new SpigotItemBuilder(type);
+	}
+
+	@Override
+	public Player getPlayer(String name) {
+		org.bukkit.entity.Player p = Bukkit.getPlayer(name);
+		if(p == null)
+			return null;
+		return new SpigotPlayer(p);
+	}
+
+	@Override
+	public Player getPlayer(UUID uuid) {
+		org.bukkit.entity.Player p = Bukkit.getPlayer(uuid);
+		if(p == null)
+			return null;
+		return new SpigotPlayer(p);
+	}
+
+	@SuppressWarnings("deprecation")
+	@Override
+	public OfflinePlayer getOfflinePlayer(String name) {
+		org.bukkit.OfflinePlayer p = Bukkit.getOfflinePlayer(name);
+		if(p == null)
+			return null;
+		return new SpigotOfflinePlayer(p);
 	}
 }

@@ -54,4 +54,14 @@ public class SpigotIronGolem extends IronGolem {
 		return golem;
 	}
 
+	@Override
+	public void sendMessage(String msg) {
+		golem.sendMessage(msg);
+	}
+
+	@Override
+	public String getName() {
+		return golem.getName();
+	}
+
 }

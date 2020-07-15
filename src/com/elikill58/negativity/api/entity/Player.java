@@ -1,9 +1,6 @@
 package com.elikill58.negativity.api.entity;
 
 import java.util.List;
-import java.util.UUID;
-
-import org.bukkit.plugin.java.JavaPlugin;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.inventory.Inventory;
@@ -16,16 +13,10 @@ import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Version;
 
-public abstract class Player extends Entity {
-
-	public abstract UUID getUniqueId();
+public abstract class Player extends OfflinePlayer {
 	
-	public abstract String getName();
 	public abstract String getIP();
-	
-	public abstract void sendMessage(String msg);
 
-	public abstract boolean isOnline();
 	public abstract boolean isDead();
 	public abstract boolean isSleeping();
 	public abstract boolean isSwimming();
@@ -76,7 +67,7 @@ public abstract class Player extends Entity {
 	
 	public abstract Object getDefaultPlayer();
 
-	public abstract void sendPluginMessage(JavaPlugin instance, String channelId, byte[] writeMessage);
+	public abstract void sendPluginMessage(String channelId, byte[] writeMessage);
 	
 	public abstract List<Entity> getNearbyEntities(double x, double y, double z);
 
@@ -90,6 +81,11 @@ public abstract class Player extends Entity {
 	public abstract void hidePlayer(Player p);
 	public abstract Vector getVelocity();
 	public abstract void setVelocity(Vector vel);
+	
+	@Override
+	public boolean hasPlayedBefore() {
+		return true;
+	}
 	
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Player)) {

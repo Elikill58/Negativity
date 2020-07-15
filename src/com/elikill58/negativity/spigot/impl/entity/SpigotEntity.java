@@ -49,4 +49,14 @@ public class SpigotEntity extends Entity {
 	public Object getDefaultEntity() {
 		return entity;
 	}
+
+	@Override
+	public void sendMessage(String msg) {
+		entity.sendMessage(msg);
+	}
+
+	@Override
+	public String getName() {
+		return entity.getName();
+	}
 }

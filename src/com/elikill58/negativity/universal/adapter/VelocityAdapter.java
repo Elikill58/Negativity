@@ -10,6 +10,8 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
+import com.elikill58.negativity.api.entity.OfflinePlayer;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Event;
 import com.elikill58.negativity.api.events.EventType;
 import com.elikill58.negativity.api.inventory.Inventory;
@@ -194,6 +196,24 @@ public class VelocityAdapter extends Adapter {
 
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Player getPlayer(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Player getPlayer(UUID uuid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public OfflinePlayer getOfflinePlayer(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}

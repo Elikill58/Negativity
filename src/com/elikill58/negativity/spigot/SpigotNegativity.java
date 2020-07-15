@@ -3,7 +3,6 @@ package com.elikill58.negativity.spigot;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -28,17 +27,11 @@ import com.elikill58.negativity.api.timers.ActualizeInvTimer;
 import com.elikill58.negativity.api.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.api.timers.PendingAlertsTimer;
 import com.elikill58.negativity.api.timers.SpawnFakePlayerTimer;
-import com.elikill58.negativity.spigot.commands.BanCommand;
-import com.elikill58.negativity.spigot.commands.KickCommand;
-import com.elikill58.negativity.spigot.commands.LangCommand;
-import com.elikill58.negativity.spigot.commands.ModCommand;
-import com.elikill58.negativity.spigot.commands.NegativityCommand;
-import com.elikill58.negativity.spigot.commands.ReportCommand;
-import com.elikill58.negativity.spigot.commands.UnbanCommand;
 import com.elikill58.negativity.spigot.events.ChannelEvents;
 import com.elikill58.negativity.spigot.events.FightManager;
 import com.elikill58.negativity.spigot.events.PlayersEvents;
 import com.elikill58.negativity.spigot.events.ServerCrasherEvents;
+import com.elikill58.negativity.spigot.listeners.CommandsListeners;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -225,72 +218,60 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 
 	private void loadCommand() {
+		CommandsListeners command = new CommandsListeners();
 		ConfigurationSection commandSection = getConfig().getConfigurationSection("commands");
-		if(commandSection == null) {
-			getLogger().severe("Cannot find 'commands' section in config. Please, see default config here:");
-			getLogger().severe("https://github.com/Elikill58/Negativity/blob/master/config.yml");
-			getLogger().severe("Or reset your own config.");
-		}
 		PluginCommand negativity = getCommand("negativity");
-		NegativityCommand negativityCmd = new NegativityCommand();
-		negativity.setExecutor(negativityCmd);
-		negativity.setTabCompleter(negativityCmd);
+		negativity.setExecutor(command);
+		negativity.setTabCompleter(command);
 
 		PluginCommand reportCmd = getCommand("nreport");
-		if (commandSection != null && !commandSection.getBoolean("report", true))
+		if (!commandSection.getBoolean("report", true))
 			unRegisterBukkitCommand(reportCmd);
 		else {
-			reportCmd.setExecutor(new ReportCommand());
-			reportCmd.setTabCompleter(new ReportCommand());
+			reportCmd.setExecutor(command);
+			reportCmd.setTabCompleter(command);
 		}
 
 		PluginCommand banCmd = getCommand("nban");
-		if (commandSection != null && !commandSection.getBoolean("ban", true))
+		if (!commandSection.getBoolean("ban", true))
 			unRegisterBukkitCommand(banCmd);
 		else {
-			List<String> banAlias = new ArrayList<String>();
-			banAlias.add("negban");
-			banCmd.setAliases(banAlias);
-			banCmd.setExecutor(new BanCommand());
-			banCmd.setTabCompleter(new BanCommand());
+			banCmd.setAliases(Arrays.asList("negban"));
+			banCmd.setExecutor(command);
+			banCmd.setTabCompleter(command);
 		}
 
 		PluginCommand unbanCmd = getCommand("nunban");
-		if (commandSection != null && !commandSection.getBoolean("unban", true))
+		if (!commandSection.getBoolean("unban", true))
 			unRegisterBukkitCommand(unbanCmd);
 		else {
-			List<String> unbanAlias = new ArrayList<String>();
-			unbanAlias.add("negunban");
-			unbanCmd.setAliases(unbanAlias);
-			unbanCmd.setExecutor(new UnbanCommand());
-			unbanCmd.setTabCompleter(new UnbanCommand());
+			unbanCmd.setAliases(Arrays.asList("negunban"));
+			unbanCmd.setExecutor(command);
+			unbanCmd.setTabCompleter(command);
 		}
 
 		PluginCommand kickCmd = getCommand("nkick");
-		if (commandSection != null && !commandSection.getBoolean("kick", true))
+		if (!commandSection.getBoolean("kick", true))
 			unRegisterBukkitCommand(kickCmd);
 		else {
-			List<String> kickAlias = new ArrayList<String>();
-			kickAlias.add("negkick");
-			kickCmd.setAliases(kickAlias);
-			kickCmd.setExecutor(new KickCommand());
-			kickCmd.setTabCompleter(new KickCommand());
+			kickCmd.setAliases(Arrays.asList("negkick"));
+			kickCmd.setExecutor(command);
+			kickCmd.setTabCompleter(command);
 		}
 
 		PluginCommand langCmd = getCommand("nlang");
-		if (commandSection != null && !commandSection.getBoolean("lang", true))
+		if (!commandSection.getBoolean("lang", true))
 			unRegisterBukkitCommand(langCmd);
 		else {
-			LangCommand langExecutor = new LangCommand();
-			langCmd.setExecutor(langExecutor);
-			langCmd.setTabCompleter(langExecutor);
+			langCmd.setExecutor(command);
+			langCmd.setTabCompleter(command);
 		}
 
 		PluginCommand modCmd = getCommand("nmod");
-		if (commandSection != null && !commandSection.getBoolean("mod", true))
+		if (!commandSection.getBoolean("mod", true))
 			unRegisterBukkitCommand(modCmd);
 		else
-			modCmd.setExecutor(new ModCommand());
+			modCmd.setExecutor(command);
 	}
 
 	@Override

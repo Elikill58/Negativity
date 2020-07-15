@@ -73,6 +73,7 @@ public class OneCheatInventory extends AbstractInventory {
 				"inventory.manager.verif", "%verif%", getMessage(p, c.hasVerif()))));
 	}
 
+	@SuppressWarnings("unlikely-arg-type")
 	@Override
 	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
 		if (m.equals(ItemTypes.ARROW)) {

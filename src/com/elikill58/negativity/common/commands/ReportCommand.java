@@ -1,33 +1,28 @@
-package com.elikill58.negativity.spigot.commands;
+package com.elikill58.negativity.common.commands;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.StringJoiner;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.spigot.ClickableText;
-import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.api.commands.CommandListeners;
+import com.elikill58.negativity.api.commands.CommandSender;
+import com.elikill58.negativity.api.commands.TabListeners;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 
-public class ReportCommand implements CommandExecutor, TabCompleter {
+public class ReportCommand implements CommandListeners, TabListeners {
 
 	public static final List<String> REPORT_LAST = new ArrayList<>();
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
+	public boolean onCommand(CommandSender sender, String[] arg, String prefix) {
 		if (!(sender instanceof Player)) {
 			Messages.sendMessage(sender, "only_player");
 			return false;
@@ -45,7 +40,7 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 			return false;
 		}
 
-		Player target = Bukkit.getPlayer(arg[0]);
+		Player target = Adapter.getAdapter().getPlayer(arg[0]);
 		if (target == null) {
 			Messages.sendMessage(p, "invalid_player", "%arg%", arg[0]);
 			return false;
@@ -60,19 +55,17 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 		String msg = Messages.getMessage("report.report_message", "%name%", target.getName(),
 				"%report%", p.getName(), "%reason%", reason);
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			SpigotNegativity.sendReportMessage(p, reason, target.getName());
+			Negativity.sendReportMessage(p, reason, target.getName());
 		} else {
 			boolean alertSent = false;
-			for (Player pl : Utils.getOnlinePlayers())
+			for (Player pl : Adapter.getAdapter().getOnlinePlayers())
 				if (Perm.hasPerm(NegativityPlayer.getCached(pl.getUniqueId()), Perm.SHOW_REPORT)) {
 					alertSent = true;
-					new ClickableText().addRunnableHoverEvent(
-							Messages.getMessage(pl, "report.report_message",
+					Adapter.getAdapter().sendMessageRunnableHover(pl, Messages.getMessage(pl, "report.report_message",
 									"%name%", target.getName(), "%report%", p.getName(), "%reason%", reason),
 							Messages.getMessage(pl, "report.report_message_hover",
 									"%name%", target.getName()),
-							"/negativity " + target.getName())
-							.sendToPlayer(pl);
+							"/negativity " + target.getName());
 				}
 			if (!alertSent) {
 				REPORT_LAST.add(msg);
@@ -86,9 +79,8 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 	}
 
 	@Override
-	public List<String> onTabComplete(CommandSender sender, Command cmd, String label, String[] arg) {
+	public List<String> onTabComplete(CommandSender sender, String[] arg, String prefix) {
 		List<String> suggestions = new ArrayList<>();
-		String prefix = arg[arg.length - 1].toLowerCase(Locale.ROOT);
 		if (arg.length >= 2) {
 			for (Cheat c : Cheat.values()) {
 				if (prefix.isEmpty() || c.getName().toLowerCase(Locale.ROOT).startsWith(prefix)) {
@@ -97,7 +89,7 @@ public class ReportCommand implements CommandExecutor, TabCompleter {
 			}
 		}
 
-		for (Player p : Utils.getOnlinePlayers()) {
+		for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
 			if (prefix.isEmpty() || p.getName().toLowerCase(Locale.ROOT).startsWith(prefix)) {
 				suggestions.add(p.getName());
 			}

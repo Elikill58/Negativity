@@ -3,9 +3,11 @@ package com.elikill58.negativity.protocols;
 import static com.elikill58.negativity.universal.CheatKeys.FAST_BOW;
 
 import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.EntityType;
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.EventListener;
 import com.elikill58.negativity.common.events.Listeners;
+import com.elikill58.negativity.common.events.entity.EntityShootBowEvent;
 import com.elikill58.negativity.common.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.common.item.ItemStack;
 import com.elikill58.negativity.common.item.Materials;
@@ -64,7 +66,7 @@ public class FastBow extends Cheat implements Listeners {
 	
 	@EventListener
 	public void onShot(EntityShootBowEvent e){
-		if(e.getEntity() instanceof Player)
+		if(e.getEntity().getType().equals(EntityType.PLAYER))
 			NegativityPlayer.getNegativityPlayer((Player) e.getEntity()).flyingReason = FlyingReason.BOW;
 	}
 }

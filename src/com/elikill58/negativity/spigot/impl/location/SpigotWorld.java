@@ -9,7 +9,7 @@ import com.elikill58.negativity.common.location.Difficulty;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.location.World;
 import com.elikill58.negativity.spigot.impl.block.SpigotBlock;
-import com.elikill58.negativity.spigot.impl.entity.SpigotEntity;
+import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 
 public class SpigotWorld extends World {
 
@@ -37,7 +37,7 @@ public class SpigotWorld extends World {
 	@Override
 	public List<Entity> getEntities() {
 		List<Entity> list = new ArrayList<>();
-		w.getEntities().forEach((e) -> list.add(new SpigotEntity(e)));
+		w.getEntities().forEach((e) -> list.add(SpigotEntityManager.getEntity(e)));
 		return list;
 	}
 

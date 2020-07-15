@@ -10,6 +10,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import com.elikill58.negativity.common.entity.Entity;
+import com.elikill58.negativity.common.entity.IronGolem;
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.negativity.IPlayerCheatAlertEvent;
 import com.elikill58.negativity.common.events.player.PlayerChatEvent;
@@ -55,7 +57,7 @@ public class NegativityPlayer {
 	// detection and bypass
 	public long TIME_INVINCIBILITY = 0, TIME_LAST_MESSAGE = 0, timeStartFakePlayer = 0, LAST_BLOCK_BREAK = 0, LAST_BLOCK_PLACE = 0, LAST_REGEN = 0, TIME_REPORT = 0,
 			TIME_OTHER_KEEP_ALIVE = 0;
-	public int MOVE_TIME = 0, LAST_CHAT_MESSAGE_NB = 0, fakePlayerTouched = 0, BYPASS_SPEED = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0;
+	public int MOVE_TIME = 0, LAST_CHAT_MESSAGE_NB = 0, fakePlayerTouched = 0, BYPASS_SPEED = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0, IS_LAST_SEC_BLINK = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public boolean bypassBlink = false, isOnLadders = false;
 	public PlayerChatEvent LAST_CHAT_EVENT = null;
@@ -266,6 +268,14 @@ public class NegativityPlayer {
 
 	public void unfight() {
 		isInFight = false;
+	}
+
+	public boolean isTargetByIronGolem() {
+		for(Entity et : p.getWorld().getEntities())
+			if(et instanceof IronGolem)
+				if(((IronGolem) et).getTarget() != null && ((IronGolem) et).getTarget().equals(getPlayer()))
+					return true;
+		return false;
 	}
 
 	public void makeAppearEntities() {

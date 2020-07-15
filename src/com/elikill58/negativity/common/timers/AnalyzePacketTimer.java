@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.common.entity.Player;
-import com.elikill58.negativity.common.item.ItemStack;
+import com.elikill58.negativity.common.item.ItemBuilder;
 import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.common.potion.PotionEffect;
 import com.elikill58.negativity.common.utils.ItemUtils;
@@ -18,7 +18,6 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-@SuppressWarnings({"deprecation"})
 public class AnalyzePacketTimer implements Runnable {
 
 	@Override
@@ -60,7 +59,7 @@ public class AnalyzePacketTimer implements Runnable {
 						case BOW:
 							break;
 						case EAT:
-							p.getInventory().addItem(new ItemStack(np.eatMaterial));
+							p.getInventory().addItem(ItemBuilder.Builder(np.eatMaterial).build());
 							break;
 						case POTION:
 							List<PotionEffect> po = new ArrayList<>(np.POTION_EFFECTS);

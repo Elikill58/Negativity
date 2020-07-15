@@ -1,21 +1,19 @@
-package com.elikill58.negativity.spigot.timers;
-
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.scheduler.BukkitRunnable;
+package com.elikill58.negativity.common.timers;
 
 import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.common.inventory.AbstractInventory.NegativityInventory;
+import com.elikill58.negativity.common.inventory.Inventory;
+import com.elikill58.negativity.common.inventory.InventoryHolder;
+import com.elikill58.negativity.common.inventory.InventoryManager;
+import com.elikill58.negativity.common.inventory.InventoryType;
 import com.elikill58.negativity.common.inventory.NegativityHolder;
 import com.elikill58.negativity.inventories.holders.AlertHolder;
 import com.elikill58.negativity.inventories.holders.CheckMenuHolder;
 import com.elikill58.negativity.spigot.Inv;
-import com.elikill58.negativity.spigot.inventories.AbstractInventory;
-import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
-public class ActualizeInvTimer extends BukkitRunnable {
+public class ActualizeInvTimer implements Runnable {
 
 	private static final boolean INV_FREEZE_ACTIVE = Adapter.getAdapter().getConfig().getBoolean("inventory.inv_freeze_active");
 
@@ -23,8 +21,8 @@ public class ActualizeInvTimer extends BukkitRunnable {
 	public void run() {
 		for (Player p : Inv.CHECKING.keySet()) {
 			if (p.getOpenInventory() != null) {
-				Inventory topInv = p.getOpenInventory().getTopInventory();
-				if(topInv == null || !topInv.getType().equals(org.bukkit.event.inventory.InventoryType.CHEST)) {
+				Inventory topInv = p.getOpenInventory();
+				if(topInv == null || !topInv.getType().equals(InventoryType.CHEST)) {
 					continue;
 				}
 				InventoryHolder holder = topInv.getHolder();
@@ -33,16 +31,16 @@ public class ActualizeInvTimer extends BukkitRunnable {
 				}
 				NegativityHolder nh = (NegativityHolder) holder;
 				if (nh instanceof CheckMenuHolder)
-					AbstractInventory.getInventory(InventoryType.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
+					InventoryManager.getInventory(NegativityInventory.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
 					//CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
 				else if (nh instanceof AlertHolder)
-					AbstractInventory.getInventory(InventoryType.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
+					InventoryManager.getInventory(NegativityInventory.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
 			} else
 				Inv.CHECKING.remove(p);
 		}
-		for (Player p : Utils.getOnlinePlayers()) {
+		for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
 			if (NegativityPlayer.getCached(p.getUniqueId()).isFreeze && INV_FREEZE_ACTIVE) {
-				AbstractInventory.open(InventoryType.FREEZE, p);
+				InventoryManager.open(NegativityInventory.FREEZE, p);
 			}
 		}
 	}

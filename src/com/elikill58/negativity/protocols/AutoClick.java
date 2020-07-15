@@ -73,7 +73,6 @@ public class AutoClick extends Cheat implements Listeners {
 					return;
 			}
 		np.ACTUAL_CLICK++;
-		np.updateCheckMenu();
 		int ping = p.getPing(), click = np.ACTUAL_CLICK - (ping / 9);
 		if (click > CLICK_ALERT && np.hasDetectionActive(this)) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,

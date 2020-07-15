@@ -2,17 +2,15 @@ package com.elikill58.negativity.common.inventory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-
-import org.bukkit.plugin.Plugin;
-import org.bukkit.plugin.PluginManager;
 
 import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.EventListener;
 import com.elikill58.negativity.common.events.EventManager;
 import com.elikill58.negativity.common.events.Listeners;
-import com.elikill58.negativity.common.events.inventory.*;
+import com.elikill58.negativity.common.events.inventory.InventoryClickEvent;
+import com.elikill58.negativity.common.events.inventory.InventoryCloseEvent;
 import com.elikill58.negativity.common.item.Material;
+import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.inventories.ActivedCheatInventory;
 import com.elikill58.negativity.inventories.AlertInventory;
 import com.elikill58.negativity.inventories.CheckMenuInventory;
@@ -23,7 +21,6 @@ import com.elikill58.negativity.inventories.admin.AdminInventory;
 import com.elikill58.negativity.inventories.admin.CheatManagerInventory;
 import com.elikill58.negativity.inventories.admin.LangInventory;
 import com.elikill58.negativity.inventories.admin.OneCheatInventory;
-import com.elikill58.negativity.spigot.utils.ItemUtils;
 
 public abstract class AbstractInventory implements Listeners {
 
@@ -62,7 +59,7 @@ public abstract class AbstractInventory implements Listeners {
 			e.setCancelled(true);
 			Player p = e.getPlayer();
 			Material m = e.getCurrentItem().getType();
-			if (m.equals(ItemUtils.MATERIAL_CLOSE))
+			if (m.equals(Materials.BARRIER))
 				p.closeInventory();
 			else
 				manageInventory(e, m, p, (NegativityHolder) holder);

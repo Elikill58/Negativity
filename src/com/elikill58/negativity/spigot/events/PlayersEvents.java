@@ -24,7 +24,6 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.elikill58.negativity.common.NegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.commands.ReportCommand;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Messages;
@@ -107,14 +106,14 @@ public class PlayersEvents implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
-		SpigotNegativityPlayer.removeFromCache(p.getUniqueId());
+		NegativityPlayer.removeFromCache(p.getUniqueId());
 		if(UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
 		if(!ProxyCompanionManager.searchedCompanion) {
 			ProxyCompanionManager.searchedCompanion = true;
 			Bukkit.getScheduler().runTaskLater(pl, () -> SpigotNegativity.sendProxyPing(p), 20);
 		}
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());
+		NegativityPlayer np = NegativityPlayer.getCached(e.getPlayer().getUniqueId());
 		np.TIME_INVINCIBILITY = System.currentTimeMillis() + 8000;
 		if (Perm.hasPerm(np, Perm.SHOW_REPORT)) {
 			if(ReportCommand.REPORT_LAST.size() > 0) {
@@ -131,13 +130,13 @@ public class PlayersEvents implements Listener {
 	public void onLeave(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
 
-		Bukkit.getScheduler().runTaskLater(pl, () -> SpigotNegativityPlayer.removeFromCache(p.getUniqueId()), 2);
+		Bukkit.getScheduler().runTaskLater(pl, () -> NegativityPlayer.removeFromCache(p.getUniqueId()), 2);
 	}
 
 	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e){
 		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
 		if(np.isFreeze && !p.getLocation().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR))
 			e.setCancelled(true);
 	}
@@ -145,10 +144,10 @@ public class PlayersEvents implements Listener {
 	@EventHandler
 	public void slimeManager(PlayerMoveEvent e){
 		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
 		if(p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("SLIME")) {
 			np.isUsingSlimeBlock = true;
-		} else if(np.isUsingSlimeBlock && (np.isOnGround() && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("AIR")))
+		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("AIR")))
 			np.isUsingSlimeBlock = false;
 	}
 
@@ -161,6 +160,6 @@ public class PlayersEvents implements Listener {
 	
 	@EventHandler
 	public void onTeleport(PlayerTeleportEvent e) {
-		SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer()).TIME_INVINCIBILITY = System.currentTimeMillis() + 2000;
+		NegativityPlayer.getCached(e.getPlayer().getUniqueId()).TIME_INVINCIBILITY = System.currentTimeMillis() + 2000;
 	}
 }

@@ -2,51 +2,56 @@ package com.elikill58.negativity.spigot.impl.entity;
 
 import com.elikill58.negativity.common.entity.Entity;
 import com.elikill58.negativity.common.entity.EntityType;
+import com.elikill58.negativity.common.entity.IronGolem;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 
-public class SpigotEntity extends Entity {
+public class SpigotIronGolem extends IronGolem {
 
-	private final org.bukkit.entity.Entity entity;
-	private final SpigotLocation loc;
+	private final org.bukkit.entity.IronGolem golem;
 	
-	public SpigotEntity(org.bukkit.entity.Entity entity) {
-		this.entity = entity;
-		this.loc = new SpigotLocation(entity.getLocation());
+	public SpigotIronGolem(org.bukkit.entity.IronGolem golem) {
+		this.golem = golem;
 	}
-
+	
 	@Override
 	public boolean isOnGround() {
-		return entity.isOnGround();
+		return golem.isOnGround();
 	}
 
 	@Override
 	public boolean isOp() {
-		return entity.isOp();
+		return golem.isOp();
 	}
 
 	@Override
 	public Location getLocation() {
-		return loc;
+		return new SpigotLocation(golem.getLocation());
 	}
 
 	@Override
 	public double getEyeHeight() {
-		return entity.getHeight();
+		return golem.getEyeHeight();
 	}
 
 	@Override
 	public EntityType getType() {
-		return EntityType.valueOf(entity.getType().name());
+		return EntityType.IRON_GOLEM;
 	}
 
 	@Override
 	public int getEntityId() {
-		return entity.getEntityId();
+		return golem.getEntityId();
+	}
+
+	@Override
+	public Entity getTarget() {
+		return SpigotEntityManager.getEntity(golem.getTarget());
 	}
 
 	@Override
 	public Object getDefaultEntity() {
-		return entity;
+		return golem;
 	}
+
 }

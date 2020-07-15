@@ -2,9 +2,6 @@ package com.elikill58.negativity.protocols;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 import com.elikill58.negativity.common.GameMode;
 import com.elikill58.negativity.common.NegativityPlayer;
@@ -15,14 +12,12 @@ import com.elikill58.negativity.common.events.EventListener;
 import com.elikill58.negativity.common.events.Listeners;
 import com.elikill58.negativity.common.events.player.PlayerDamageByEntityEvent;
 import com.elikill58.negativity.common.item.ItemStack;
-import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.location.Vector;
 import com.elikill58.negativity.common.potion.PotionEffectType;
 import com.elikill58.negativity.common.utils.Utils;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -88,7 +83,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 			if (e.isCancelled())
 				return;
 			final Location last = p.getLocation().clone();
-			if (damager instanceof LivingEntity) { // check if fight living entity
+			/*if (damager instanceof LivingEntity) { // check if fight living entity
 				if (last.clone().add(0, 2, 0).getBlock().getType().isSolid()) { // check for block upper
 					Vector vector = ((LivingEntity) damager).getEyeLocation().getDirection();
 					Location locBehind = last.clone().add(vector.clone());
@@ -97,9 +92,9 @@ public class AntiKnockback extends Cheat implements Listeners {
 					if (typeBehind.isSolid())// cannot move
 						return;
 				}
-			}
+			}*/
 			p.damage(0D);
-			p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
+			//p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
 			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
 				Location actual = p.getLocation();
 				if (last.getWorld() != actual.getWorld() || p.isDead())
@@ -107,7 +102,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 				double d = last.distance(actual);
 				recordData(p.getUniqueId(), DISTANCE_DAMAGE, d);
 				int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(100 - d);
-				if (d < 0.1 && !actual.getBlock().getType().equals(ItemUtils.WEB) && !p.isSneaking()) {
+				if (d < 0.1 && !actual.getBlock().getType().equals(Materials.WEB) && !p.isSneaking()) {
 					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia,
 							"Distance after damage: " + d + "; Damager: "
 									+ e.getDamager().getType().name().toLowerCase() + " Ping: " + ping,

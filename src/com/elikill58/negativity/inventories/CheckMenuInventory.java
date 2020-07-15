@@ -1,10 +1,6 @@
 package com.elikill58.negativity.inventories;
 
-import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
-
 import java.util.Collections;
-
-import org.bukkit.inventory.meta.ItemMeta;
 
 import com.elikill58.negativity.common.ChatColor;
 import com.elikill58.negativity.common.NegativityPlayer;
@@ -19,8 +15,6 @@ import com.elikill58.negativity.common.item.ItemBuilder;
 import com.elikill58.negativity.common.item.ItemStack;
 import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.common.item.Materials;
-import com.elikill58.negativity.common.utils.ItemUtils;
-import com.elikill58.negativity.common.utils.Utils;
 import com.elikill58.negativity.inventories.holders.CheckMenuHolder;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Messages;
@@ -48,8 +42,8 @@ public class CheckMenuInventory extends AbstractInventory {
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
 		actualizeInventory(p, cible);
-		
-		inv.set(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId(), ChatColor.GREEN + "Version: " + cible.getPlayerVersion().getName()));
+		// TODO implement skull
+		//inv.set(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId(), ChatColor.GREEN + "Version: " + cible.getPlayerVersion().getName()));
 
 		inv.set(10, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());
 		inv.set(11, ItemBuilder.Builder(Materials.GRASS).displayName(ChatColor.RESET + "Mods").lore(ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))).build());
@@ -96,7 +90,7 @@ public class CheckMenuInventory extends AbstractInventory {
 			return ItemBuilder.Builder(getMaterialFromClick(clicks)).displayName(name).build();
 		} else {
 			// we can use all *_STAINED_CLAY because they will be default STAINED_CLAY
-			return createItem(ItemUtils.LIME_STAINED_CLAY, name, 1, getByteFromClick(clicks));
+			return ItemBuilder.Builder(Materials.LIME_STAINED_CLAY).displayName(name).durability(getByteFromClick(clicks)).build();
 		}
 	}
 
@@ -117,8 +111,7 @@ public class CheckMenuInventory extends AbstractInventory {
 		else
 			return 5;
 	}
-
-	@SuppressWarnings("deprecation")
+	
 	private static ItemStack getWoolItem(Player player, boolean b) {
 		Material type = (b ? Materials.RED_WOOL : Materials.LIME_WOOL);
 		ItemBuilder builder = ItemBuilder.Builder(type);

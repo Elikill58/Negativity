@@ -8,6 +8,7 @@ public enum EntityType {
 	EGG,
 	ENDERMAN,
 	ENDER_DRAGON,
+	IRON_GOLEM,
 	PLAYER,
 	VILLAGER,
 	SNOWBALL,

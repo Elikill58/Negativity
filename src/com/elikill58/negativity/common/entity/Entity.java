@@ -38,4 +38,6 @@ public abstract class Entity {
 	public abstract EntityType getType();
 	
 	public abstract int getEntityId();
+	
+	public abstract Object getDefaultEntity();
 }

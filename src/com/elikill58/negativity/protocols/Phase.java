@@ -6,12 +6,9 @@ import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.EventListener;
 import com.elikill58.negativity.common.events.Listeners;
 import com.elikill58.negativity.common.events.player.PlayerMoveEvent;
-import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.common.location.Location;
-import com.elikill58.negativity.common.utils.ItemUtils;
 import com.elikill58.negativity.common.utils.LocationUtils;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -21,7 +18,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Phase extends Cheat implements Listeners {
 
 	public Phase() {
-		super(CheatKeys.PHASE, false, ItemUtils.WHITE_STAINED_GLASS, CheatCategory.MOVEMENT, true);
+		super(CheatKeys.PHASE, false, Materials.WHITE_STAINED_GLASS, CheatCategory.MOVEMENT, true);
 	}
 
 	@EventListener

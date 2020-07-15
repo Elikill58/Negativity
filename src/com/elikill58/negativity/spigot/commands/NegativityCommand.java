@@ -20,11 +20,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.inventory.AbstractInventory.NegativityInventory;
+import com.elikill58.negativity.common.inventory.InventoryManager;
 import com.elikill58.negativity.common.utils.Utils;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.inventories.AbstractInventory;
-import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -129,7 +129,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				Messages.sendMessage(sender, "only_player");
 				return true;
 			}
-			AbstractInventory.getInventory(InventoryType.MOD).ifPresent((inv) -> inv.openInventory((Player) sender));
+			InventoryManager.getInventory(NegativityInventory.MOD).ifPresent((inv) -> inv.openInventory((Player) sender));
 			return true;
 		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase().contains("manage")) {
 			if (arg.length >= 2 && arg[1].equalsIgnoreCase("updateMessages")) {
@@ -152,7 +152,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				return true;
 			}
 
-			AbstractInventory.open(InventoryType.ADMIN, p);
+			InventoryManager.open(NegativityInventory.ADMIN, p);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("migrateoldbans") && sender instanceof ConsoleCommandSender) {
 			try {
@@ -178,7 +178,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 
 			Inv.CHECKING.put(playerSender, targetPlayer);
-			AbstractInventory.open(InventoryType.CHECK_MENU, playerSender, targetPlayer);
+			InventoryManager.open(NegativityInventory.CHECK_MENU, playerSender, targetPlayer);
 			return true;
 		}
 

@@ -67,6 +67,11 @@ public class SpigotPlayer extends Player {
 				return true;
 		return false;
 	}
+	
+	@Override
+	public boolean hasLineOfSight(Entity entity) {
+		return p.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefaultEntity());
+	}
 
 	@Override
 	public float getWalkSpeed() {
@@ -146,7 +151,7 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public Entity getVehicle() {
-		return p.isInsideVehicle() ? new SpigotEntity(p.getVehicle()) : null;
+		return p.isInsideVehicle() ? SpigotEntityManager.getEntity(p.getVehicle()) : null;
 	}
 
 	@SuppressWarnings("deprecation")
@@ -258,7 +263,7 @@ public class SpigotPlayer extends Player {
 	@Override
 	public List<Entity> getNearbyEntities(double x, double y, double z) {
 		List<Entity> list = new ArrayList<>();
-		p.getNearbyEntities(x, y, z).forEach((entity) -> list.add(new SpigotEntity(entity)));
+		p.getNearbyEntities(x, y, z).forEach((entity) -> list.add(SpigotEntityManager.getEntity(entity)));
 		return list;
 	}
 
@@ -342,4 +347,13 @@ public class SpigotPlayer extends Player {
 		this.p.hidePlayer((org.bukkit.entity.Player) p.getDefaultPlayer());
 	}
 
+	@Override
+	public void setVelocity(Vector vel) {
+		p.setVelocity(new org.bukkit.util.Vector(vel.getX(), vel.getY(), vel.getZ()));
+	}
+
+	@Override
+	public Object getDefaultEntity() {
+		return p;
+	}
 }

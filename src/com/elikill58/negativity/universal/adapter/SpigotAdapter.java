@@ -35,7 +35,6 @@ import com.elikill58.negativity.spigot.impl.events.PlayerCheatEvent;
 import com.elikill58.negativity.spigot.impl.events.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.impl.events.ShowAlertPermissionEvent;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
-import com.elikill58.negativity.spigot.impl.inventory.SpigotNegativityHolder;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemBuilder;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemRegistrar;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
@@ -219,7 +218,7 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
-		return new SpigotInventory(inventoryName, size, (SpigotNegativityHolder) holder);
+		return new SpigotInventory(inventoryName, size, holder);
 	}
 
 	@Override

@@ -21,10 +21,10 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.common.timers.PendingAlertsTimer;
 import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
@@ -39,9 +39,7 @@ import com.elikill58.negativity.spigot.events.ChannelEvents;
 import com.elikill58.negativity.spigot.events.FightManager;
 import com.elikill58.negativity.spigot.events.PlayersEvents;
 import com.elikill58.negativity.spigot.events.ServerCrasherEvents;
-import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
-import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
@@ -74,8 +72,7 @@ public class SpigotNegativity extends JavaPlugin {
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, isBuggedGroundVersion = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
-	private BukkitRunnable invTimer = null;
-	private BukkitTask timeTimeBetweenAlert = null, packetTimer = null, runSpawnFakePlayer = null;
+	private BukkitTask invTimer = null, timeTimeBetweenAlert = null, packetTimer = null, runSpawnFakePlayer = null;
 	public static String CHANNEL_NAME_FML = "";
 	private static int timeBetweenAlert = -1;
 	private NegativityPacketManager packetManager;
@@ -142,7 +139,7 @@ public class SpigotNegativity extends JavaPlugin {
 		for (Player p : Utils.getOnlinePlayers())
 			manageAutoVerif(p);
 
-		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
+		invTimer = getServer().getScheduler().runTaskTimer(this, new ActualizeInvTimer(), 5, 5);
 		packetTimer = getServer().getScheduler().runTaskTimer(this, new AnalyzePacketTimer(), 20, 20);
 		runSpawnFakePlayer = getServer().getScheduler().runTaskTimer(this, new SpawnFakePlayerTimer(), 20, 20 * 60 * 10);
 
@@ -169,7 +166,6 @@ public class SpigotNegativity extends JavaPlugin {
 				Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort() + "");
 			}
 		});
-		AbstractInventory.init(this);
 
 		NegativityAccountStorage.register("file", new SpigotFileNegativityAccountStorage(new File(getDataFolder(), "user")));
 		NegativityAccountStorage.setDefaultStorage("file");
@@ -300,7 +296,7 @@ public class SpigotNegativity extends JavaPlugin {
 	@Override
 	public void onDisable() {
 		for (Player p : Utils.getOnlinePlayers()) {
-			SpigotNegativityPlayer.removeFromCache(p.getUniqueId());
+			NegativityPlayer.removeFromCache(p.getUniqueId());
 		}
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
@@ -319,7 +315,7 @@ public class SpigotNegativity extends JavaPlugin {
 		return INSTANCE;
 	}
 
-	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover, int alertsCount) {
+	public static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover, int alertsCount) {
 		try {
 			AlertMessage alertMessage = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);
 			p.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(alertMessage));
@@ -357,7 +353,7 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 
 	public static void manageAutoVerif(Player p) {
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
 		np.ACTIVE_CHEAT.clear();
 		boolean needPacket = false;
 		for (Cheat c : Cheat.values())

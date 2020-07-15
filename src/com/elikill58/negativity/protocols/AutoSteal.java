@@ -8,6 +8,7 @@ import com.elikill58.negativity.common.entity.Player;
 import com.elikill58.negativity.common.events.EventListener;
 import com.elikill58.negativity.common.events.Listeners;
 import com.elikill58.negativity.common.events.inventory.InventoryClickEvent;
+import com.elikill58.negativity.common.item.Material;
 import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ItemUseBypass;
@@ -42,9 +43,12 @@ public class AutoSteal extends Cheat implements Listeners {
 		int ping = p.getPing();
 		int tempSlot = np.ints.get(AUTO_STEAL, "inv-slot", 0);
 		if (e.getCurrentItem() != null) {
-			if (tempSlot == e.getSlot())
-				np.lastClick = e.getCurrentItem().getType();
-			if (np.lastClick == e.getCurrentItem().getType())
+			Material lastType = np.materials.get(AUTO_STEAL, "last-click", null);
+			if (tempSlot == e.getSlot()) {
+				lastType = e.getCurrentItem().getType();
+				np.materials.set(AUTO_STEAL, "last-click", e.getCurrentItem().getType());
+			}
+			if (lastType == e.getCurrentItem().getType())
 				return;
 		}
 		np.ints.set(AUTO_STEAL, "inv-slot", e.getSlot());

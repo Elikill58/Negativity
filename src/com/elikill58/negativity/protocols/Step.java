@@ -11,7 +11,6 @@ import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.potion.PotionEffect;
 import com.elikill58.negativity.common.potion.PotionEffectType;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;

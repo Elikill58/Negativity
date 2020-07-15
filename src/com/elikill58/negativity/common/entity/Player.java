@@ -32,6 +32,7 @@ public abstract class Player extends Entity {
 	public abstract boolean hasElytra();
 	public abstract boolean hasPermission(String perm);
 	public abstract boolean getAllowFlight();
+	public abstract boolean hasLineOfSight(Entity entity);
 	
 	public abstract boolean isFlying();
 	public abstract void setAllowFlight(boolean b);
@@ -87,6 +88,8 @@ public abstract class Player extends Entity {
 
 	public abstract void showPlayer(Player p);
 	public abstract void hidePlayer(Player p);
+	public abstract Vector getVelocity();
+	public abstract void setVelocity(Vector vel);
 	
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Player)) {
@@ -94,7 +97,5 @@ public abstract class Player extends Entity {
 		}
 		return this.getUniqueId().equals(((Player) obj).getUniqueId());
 	}
-
-	public abstract Vector getVelocity();
 
 }

@@ -18,15 +18,11 @@ import com.elikill58.negativity.common.item.ItemStack;
 import com.elikill58.negativity.common.item.Materials;
 import com.elikill58.negativity.common.location.Location;
 import com.elikill58.negativity.common.location.World;
-import com.elikill58.negativity.common.utils.LocationUtils;
 import com.elikill58.negativity.common.utils.Utils;
-import com.elikill58.negativity.spigot.packets.AbstractPacket;
-import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -60,7 +56,7 @@ public class ForceField extends Cheat implements Listeners {
 		boolean mayCancel = false;
 		Entity cible = e.getEntity();
 		int ping = p.getPing();
-		if(Version.getVersion().isNewerOrEquals(Version.V1_8) && !LocationUtils.canSeeEntity(p, cible)) {
+		if(p.hasLineOfSight(cible)) {
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "Hit " + cible.getType().name()
 					+ " but cannot see it, ping: " + ping,
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase()));
@@ -87,7 +83,7 @@ public class ForceField extends Cheat implements Listeners {
 			e.setCancelled(true);
 	}
 	
-	@EventListener
+	/*@EventListener
 	public void onPacket(PacketReceiveEvent e) {
 		AbstractPacket packet = e.getPacket();
 		if(!packet.getPacketType().equals(PacketType.Client.USE_ENTITY))
@@ -122,7 +118,7 @@ public class ForceField extends Cheat implements Listeners {
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
-	}
+	}*/
 	
 	public Location getLocationNMSEntity(Object src, World baseWorld) {
 		return Adapter.getAdapter().createLocation(baseWorld, getFieldOrMethod(src, "locX"), getFieldOrMethod(src, "locY"), getFieldOrMethod(src, "locZ"));

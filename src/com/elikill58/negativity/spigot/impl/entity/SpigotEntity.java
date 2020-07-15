@@ -1,8 +1,8 @@
 package com.elikill58.negativity.spigot.impl.entity;
 
-import com.elikill58.negativity.common.entity.Entity;
-import com.elikill58.negativity.common.entity.EntityType;
-import com.elikill58.negativity.common.location.Location;
+import com.elikill58.negativity.api.entity.Entity;
+import com.elikill58.negativity.api.entity.EntityType;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 
 public class SpigotEntity extends Entity {

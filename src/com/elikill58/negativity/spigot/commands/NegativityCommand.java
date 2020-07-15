@@ -19,10 +19,10 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.common.NegativityPlayer;
-import com.elikill58.negativity.common.inventory.AbstractInventory.NegativityInventory;
-import com.elikill58.negativity.common.inventory.InventoryManager;
-import com.elikill58.negativity.common.utils.Utils;
+import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.inventory.InventoryManager;
+import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
+import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Cheat;
@@ -192,7 +192,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 		String prefix = arg[arg.length - 1].toLowerCase(Locale.ROOT);
 		if (arg.length == 1) {
 			// /negativity |
-			for (com.elikill58.negativity.common.entity.Player p : Adapter.getAdapter().getOnlinePlayers()) {
+			for (com.elikill58.negativity.api.entity.Player p : Adapter.getAdapter().getOnlinePlayers()) {
 				if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
 					suggestions.add(p.getName());
 				}
@@ -209,7 +209,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			if (arg[0].equalsIgnoreCase("verif")) {
 				if (arg.length == 2) {
 					// /negativity verif |
-					for (com.elikill58.negativity.common.entity.Player p : Adapter.getAdapter().getOnlinePlayers()) {
+					for (com.elikill58.negativity.api.entity.Player p : Adapter.getAdapter().getOnlinePlayers()) {
 						if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
 							suggestions.add(p.getName());
 						}

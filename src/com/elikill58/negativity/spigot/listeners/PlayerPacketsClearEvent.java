@@ -6,7 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.PacketType;
 
 public class PlayerPacketsClearEvent extends Event {

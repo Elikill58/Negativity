@@ -10,11 +10,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.elikill58.negativity.common.ChatColor;
-import com.elikill58.negativity.common.item.Enchantment;
-import com.elikill58.negativity.common.item.ItemBuilder;
-import com.elikill58.negativity.common.item.Material;
-import com.elikill58.negativity.common.utils.Utils;
+import com.elikill58.negativity.api.ChatColor;
+import com.elikill58.negativity.api.item.Enchantment;
+import com.elikill58.negativity.api.item.ItemBuilder;
+import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Version;
 
 public class SpigotItemBuilder extends ItemBuilder {
@@ -98,7 +98,7 @@ public class SpigotItemBuilder extends ItemBuilder {
     }
 
     @Override
-    public com.elikill58.negativity.common.item.ItemStack build() {
+    public com.elikill58.negativity.api.item.ItemStack build() {
         this.itemStack.setItemMeta(this.itemMeta);
         return new SpigotItemStack(itemStack);
     }

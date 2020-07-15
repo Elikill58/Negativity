@@ -11,9 +11,9 @@ import java.util.UUID;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.item.ItemType;
 
-import com.elikill58.negativity.common.NegativityPlayer;
-import com.elikill58.negativity.common.entity.Player;
-import com.elikill58.negativity.common.item.Material;
+import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;

@@ -2,11 +2,11 @@ package com.elikill58.negativity.spigot;
 
 import java.util.HashMap;
 
-import com.elikill58.negativity.common.ChatColor;
-import com.elikill58.negativity.common.entity.Player;
-import com.elikill58.negativity.common.item.ItemBuilder;
-import com.elikill58.negativity.common.item.ItemStack;
-import com.elikill58.negativity.common.item.Materials;
+import com.elikill58.negativity.api.ChatColor;
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.item.ItemBuilder;
+import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Version;
 

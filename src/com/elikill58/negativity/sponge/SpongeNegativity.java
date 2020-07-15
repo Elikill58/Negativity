@@ -64,8 +64,8 @@ import org.spongepowered.api.util.blockray.BlockRayHit;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
-import com.elikill58.negativity.common.timers.PendingAlertsTimer;
+import com.elikill58.negativity.api.timers.AnalyzePacketTimer;
+import com.elikill58.negativity.api.timers.PendingAlertsTimer;
 import com.elikill58.negativity.sponge.commands.BanCommand;
 import com.elikill58.negativity.sponge.commands.KickCommand;
 import com.elikill58.negativity.sponge.commands.LangCommand;

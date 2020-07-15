@@ -3,7 +3,7 @@ package com.elikill58.negativity.universal.support;
 import org.bukkit.Bukkit;
 
 import com.earth2me.essentials.Essentials;
-import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.api.entity.Player;
 
 public class EssentialsSupport {
 

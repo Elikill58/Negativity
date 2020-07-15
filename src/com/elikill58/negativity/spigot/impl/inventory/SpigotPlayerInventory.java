@@ -1,9 +1,9 @@
 package com.elikill58.negativity.spigot.impl.inventory;
 
-import com.elikill58.negativity.common.inventory.InventoryType;
-import com.elikill58.negativity.common.inventory.NegativityHolder;
-import com.elikill58.negativity.common.inventory.PlayerInventory;
-import com.elikill58.negativity.common.item.ItemStack;
+import com.elikill58.negativity.api.inventory.InventoryType;
+import com.elikill58.negativity.api.inventory.NegativityHolder;
+import com.elikill58.negativity.api.inventory.PlayerInventory;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 
 public class SpigotPlayerInventory extends PlayerInventory {

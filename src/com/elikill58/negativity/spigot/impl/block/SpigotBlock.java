@@ -1,10 +1,10 @@
 package com.elikill58.negativity.spigot.impl.block;
 
-import com.elikill58.negativity.common.block.Block;
-import com.elikill58.negativity.common.block.BlockFace;
-import com.elikill58.negativity.common.item.ItemRegistrar;
-import com.elikill58.negativity.common.item.Material;
-import com.elikill58.negativity.common.location.Location;
+import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.item.ItemRegistrar;
+import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 
 public class SpigotBlock extends Block {

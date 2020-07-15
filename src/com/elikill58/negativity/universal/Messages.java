@@ -1,7 +1,7 @@
 package com.elikill58.negativity.universal;
 
-import com.elikill58.negativity.common.entity.Player;
-import com.elikill58.negativity.common.utils.Utils;
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.utils.Utils;
 
 public class Messages {
 

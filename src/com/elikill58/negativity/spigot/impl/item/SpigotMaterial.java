@@ -1,6 +1,6 @@
 package com.elikill58.negativity.spigot.impl.item;
 
-import com.elikill58.negativity.common.item.Material;
+import com.elikill58.negativity.api.item.Material;
 
 public class SpigotMaterial implements Material {
 

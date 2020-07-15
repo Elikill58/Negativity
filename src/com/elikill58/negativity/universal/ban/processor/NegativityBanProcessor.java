@@ -2,7 +2,7 @@ package com.elikill58.negativity.universal.ban.processor;
 
 import javax.annotation.Nullable;
 
-import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.storage.ActiveBanStorage;

@@ -23,11 +23,11 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitTask;
 
-import com.elikill58.negativity.common.NegativityPlayer;
-import com.elikill58.negativity.common.timers.ActualizeInvTimer;
-import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
-import com.elikill58.negativity.common.timers.PendingAlertsTimer;
-import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
+import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.timers.ActualizeInvTimer;
+import com.elikill58.negativity.api.timers.AnalyzePacketTimer;
+import com.elikill58.negativity.api.timers.PendingAlertsTimer;
+import com.elikill58.negativity.api.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.spigot.commands.BanCommand;
 import com.elikill58.negativity.spigot.commands.KickCommand;
 import com.elikill58.negativity.spigot.commands.LangCommand;

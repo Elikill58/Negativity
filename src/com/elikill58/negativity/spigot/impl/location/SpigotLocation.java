@@ -1,9 +1,9 @@
 package com.elikill58.negativity.spigot.impl.location;
 
-import com.elikill58.negativity.common.block.Block;
-import com.elikill58.negativity.common.location.Location;
-import com.elikill58.negativity.common.location.Vector;
-import com.elikill58.negativity.common.location.World;
+import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.impl.block.SpigotBlock;
 
 public class SpigotLocation extends Location {

@@ -3,7 +3,7 @@ package com.elikill58.negativity.spigot.impl.entity;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.common.entity.Entity;
+import com.elikill58.negativity.api.entity.Entity;
 
 public class SpigotEntityManager {
 

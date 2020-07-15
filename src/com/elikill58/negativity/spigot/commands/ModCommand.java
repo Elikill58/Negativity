@@ -5,9 +5,9 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.common.NegativityPlayer;
-import com.elikill58.negativity.common.inventory.AbstractInventory.NegativityInventory;
-import com.elikill58.negativity.common.inventory.InventoryManager;
+import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.inventory.InventoryManager;
+import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
 import com.elikill58.negativity.universal.Messages;
 
 public class ModCommand implements CommandExecutor {

@@ -5,9 +5,9 @@ import java.util.HashMap;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.elikill58.negativity.common.NegativityPlayer;
-import com.elikill58.negativity.common.entity.Player;
-import com.elikill58.negativity.common.events.negativity.IPlayerPacketsClearEvent;
+import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.negativity.IPlayerPacketsClearEvent;
 import com.elikill58.negativity.universal.PacketType;
 
 public class PlayerPacketsClearEvent extends Event implements IPlayerPacketsClearEvent {

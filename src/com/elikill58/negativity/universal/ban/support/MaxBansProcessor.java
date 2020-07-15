@@ -11,7 +11,7 @@ import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.HistoryRecord;
 import org.maxgamer.maxbans.banmanager.Temporary;
 
-import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;

@@ -3,8 +3,8 @@ package com.elikill58.negativity.spigot.impl.inventory;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-import com.elikill58.negativity.common.inventory.NegativityHolder;
-import com.elikill58.negativity.common.inventory.PlatformHolder;
+import com.elikill58.negativity.api.inventory.NegativityHolder;
+import com.elikill58.negativity.api.inventory.PlatformHolder;
 
 public class SpigotNegativityHolder extends PlatformHolder implements InventoryHolder {
 

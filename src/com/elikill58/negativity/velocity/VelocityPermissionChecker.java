@@ -1,6 +1,6 @@
 package com.elikill58.negativity.velocity;
 
-import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.permissions.BasePlatformPermissionChecker;
 import com.velocitypowered.api.proxy.Player;
 

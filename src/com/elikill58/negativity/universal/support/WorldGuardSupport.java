@@ -6,9 +6,9 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 
-import com.elikill58.negativity.common.entity.Player;
-import com.elikill58.negativity.common.location.Location;
-import com.elikill58.negativity.common.location.World;
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.World;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.StateFlag;

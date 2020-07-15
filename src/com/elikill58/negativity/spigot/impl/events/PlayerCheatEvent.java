@@ -3,8 +3,8 @@ package com.elikill58.negativity.spigot.impl.events;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.elikill58.negativity.common.entity.Player;
-import com.elikill58.negativity.common.events.negativity.IPlayerCheatEvent;
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.negativity.IPlayerCheatEvent;
 import com.elikill58.negativity.universal.Cheat;
 
 public class PlayerCheatEvent extends Event implements IPlayerCheatEvent {

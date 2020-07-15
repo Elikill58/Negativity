@@ -18,7 +18,7 @@ import java.util.concurrent.CompletionException;
 import org.json.JSONObject;
 import org.json.parser.JSONParser;
 
-import com.elikill58.negativity.common.NegativityPlayer;
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;

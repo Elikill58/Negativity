@@ -7,9 +7,9 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import com.elikill58.negativity.common.NegativityPlayer;
-import com.elikill58.negativity.common.events.EventManager;
-import com.elikill58.negativity.common.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.impl.events.PlayerCheatEvent;

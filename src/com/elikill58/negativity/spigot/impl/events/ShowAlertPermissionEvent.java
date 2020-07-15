@@ -3,9 +3,9 @@ package com.elikill58.negativity.spigot.impl.events;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.elikill58.negativity.common.NegativityPlayer;
-import com.elikill58.negativity.common.entity.Player;
-import com.elikill58.negativity.common.events.negativity.IShowAlertPermissionEvent;
+import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.negativity.IShowAlertPermissionEvent;
 
 public class ShowAlertPermissionEvent extends Event implements IShowAlertPermissionEvent {
 

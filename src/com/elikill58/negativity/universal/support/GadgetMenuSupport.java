@@ -1,6 +1,6 @@
 package com.elikill58.negativity.universal.support;
 
-import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.api.entity.Player;
 import com.yapzhenyie.GadgetsMenu.api.GadgetsMenuAPI;
 import com.yapzhenyie.GadgetsMenu.player.PlayerManager;
 

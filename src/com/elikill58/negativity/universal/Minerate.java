@@ -3,7 +3,7 @@ package com.elikill58.negativity.universal;
 import java.text.NumberFormat;
 import java.util.HashMap;
 
-import com.elikill58.negativity.common.entity.Player;
+import com.elikill58.negativity.api.entity.Player;
 
 public class Minerate {
 

@@ -10,15 +10,15 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
-import com.elikill58.negativity.common.events.Event;
-import com.elikill58.negativity.common.events.EventType;
-import com.elikill58.negativity.common.inventory.Inventory;
-import com.elikill58.negativity.common.inventory.NegativityHolder;
-import com.elikill58.negativity.common.item.ItemBuilder;
-import com.elikill58.negativity.common.item.ItemRegistrar;
-import com.elikill58.negativity.common.item.Material;
-import com.elikill58.negativity.common.location.Location;
-import com.elikill58.negativity.common.location.World;
+import com.elikill58.negativity.api.events.Event;
+import com.elikill58.negativity.api.events.EventType;
+import com.elikill58.negativity.api.inventory.Inventory;
+import com.elikill58.negativity.api.inventory.NegativityHolder;
+import com.elikill58.negativity.api.item.ItemBuilder;
+import com.elikill58.negativity.api.item.ItemRegistrar;
+import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
@@ -136,7 +136,7 @@ public class VelocityAdapter extends Adapter {
 	}
 
 	@Override
-	public void alertMod(ReportType type, com.elikill58.negativity.common.entity.Player p, Cheat c, int reliability,
+	public void alertMod(ReportType type, com.elikill58.negativity.api.entity.Player p, Cheat c, int reliability,
 			String proof, CheatHover hover) {
 		// TODO Auto-generated method stub
 		
@@ -172,7 +172,7 @@ public class VelocityAdapter extends Adapter {
 	}
 
 	@Override
-	public void sendMessageRunnableHover(com.elikill58.negativity.common.entity.Player p, String message, String hover,
+	public void sendMessageRunnableHover(com.elikill58.negativity.api.entity.Player p, String message, String hover,
 			String command) {
 		
 	}
@@ -183,7 +183,7 @@ public class VelocityAdapter extends Adapter {
 	}
 
 	@Override
-	public List<com.elikill58.negativity.common.entity.Player> getOnlinePlayers() {
+	public List<com.elikill58.negativity.api.entity.Player> getOnlinePlayers() {
 		return null;
 	}
 

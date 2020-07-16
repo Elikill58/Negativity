@@ -1,14 +1,13 @@
 package com.elikill58.negativity.common.protocols;
 
 import org.bukkit.Bukkit;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
-import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
+import com.elikill58.negativity.api.events.inventory.*;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -36,8 +35,6 @@ public class InventoryMove extends Cheat implements Listeners {
 
 	@EventListener
 	public void onOpen(InventoryOpenEvent e) {
-		if (!(e.getPlayer() instanceof Player) || e.getInventory() == null)
-			return;
 		NegativityPlayer np = NegativityPlayer.getCached(e.getPlayer().getUniqueId());
 		if (!np.hasDetectionActive(this))
 			return;
@@ -47,6 +44,7 @@ public class InventoryMove extends Cheat implements Listeners {
 	private void checkInvMove(Player p, boolean check, String from) {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
+		// TODO add custom timer system
 		if (p.isSprinting() || p.isSneaking()) {
 			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 				@Override

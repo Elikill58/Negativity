@@ -12,6 +12,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Messages;
@@ -36,7 +37,7 @@ public class ServerCrasherEvents implements Listener {
 		inDisconnection.remove(e.getPlayer().getUniqueId());
 	}
 	
-	@EventHandler
+	@EventListener
 	public void onPacketClear(PacketReceiveEvent e) {
 		Player p = e.getPlayer();
 		if(e.getPacket().getPacketType() == PacketType.Client.POSITION && !inDisconnection.contains(p.getUniqueId())) {

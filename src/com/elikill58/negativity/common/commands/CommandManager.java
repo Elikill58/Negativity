@@ -17,6 +17,10 @@ public class CommandManager implements Listeners {
 	private final HashMap<String, TabListeners> tabs = new HashMap<>();
 	
 	public CommandManager() {
+		NegativityCommand negativity = new NegativityCommand();
+		commands.put("negativity", negativity);
+		tabs.put("negativity", negativity);
+		
 		ConfigAdapter conf = Adapter.getAdapter().getConfig();
 		if(conf.getBoolean("commands.ban")) {
 			BanCommand ban = new BanCommand();
@@ -36,11 +40,6 @@ public class CommandManager implements Listeners {
 		if(conf.getBoolean("commands.mod")) {
 			ModCommand mod = new ModCommand();
 			commands.put("mod", mod);
-		}
-		if(conf.getBoolean("commands.negativity")) {
-			ReportCommand report = new ReportCommand();
-			commands.put("report", report);
-			tabs.put("report", report);
 		}
 		if(conf.getBoolean("commands.report")) {
 			ReportCommand report = new ReportCommand();

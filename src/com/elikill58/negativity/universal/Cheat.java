@@ -13,6 +13,8 @@ import org.spongepowered.api.item.ItemType;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -171,9 +173,11 @@ public abstract class Cheat {
 			if (dir.startsWith("file:/"))
 				dir = dir.substring(UniversalUtils.getOs() == UniversalUtils.OS.LINUX ? 5 : 6);
 
-			for (Object classDir : UniversalUtils.getClasseNamesInPackage(dir, "com.elikill58.negativity." + Adapter.getAdapter().getName() + ".protocols")) {
+			for (Object classDir : UniversalUtils.getClasseNamesInPackage(dir, "com.elikill58.negativity.common.protocols")) {
 				try {
 					Cheat cheat = (Cheat) Class.forName(classDir.toString().replaceAll(".class", "")).newInstance();
+					if(cheat.hasListener())
+						EventManager.registerEvent((Listeners) cheat);
 					CHEATS.add(cheat);
 					CHEATS_BY_KEY.put(cheat.key, cheat);
 				} catch (Exception temp) {
@@ -183,6 +187,7 @@ public abstract class Cheat {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Adapter.getAdapter().getLogger().info("Loaded " + CHEATS.size() + " cheats.");
 	}
 
 	public static List<Cheat> values() {

@@ -14,9 +14,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Listener;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
@@ -25,13 +23,19 @@ import org.bukkit.scheduler.BukkitTask;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.timers.ActualizeInvTimer;
 import com.elikill58.negativity.api.timers.AnalyzePacketTimer;
+import com.elikill58.negativity.api.timers.ClickManagerTimer;
 import com.elikill58.negativity.api.timers.PendingAlertsTimer;
 import com.elikill58.negativity.api.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.spigot.events.ChannelEvents;
 import com.elikill58.negativity.spigot.events.FightManager;
 import com.elikill58.negativity.spigot.events.PlayersEvents;
 import com.elikill58.negativity.spigot.events.ServerCrasherEvents;
-import com.elikill58.negativity.spigot.listeners.*;
+import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
+import com.elikill58.negativity.spigot.listeners.BlockListeners;
+import com.elikill58.negativity.spigot.listeners.CommandsListeners;
+import com.elikill58.negativity.spigot.listeners.EntityListeners;
+import com.elikill58.negativity.spigot.listeners.InventoryListeners;
+import com.elikill58.negativity.spigot.listeners.PlayersListeners;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -106,10 +110,8 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		getLogger().info("This plugin is free, but you can support me : https://www.patreon.com/elikill58 <3");
 		UniversalUtils.init();
-		Cheat.loadCheat();
 		FakePlayer.loadClass();
 		ProxyCompanionManager.updateForceDisabled(getConfig().getBoolean("disableProxyIntegration"));
-		setupValue();
 
 		new Metrics(this)
 				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
@@ -135,14 +137,6 @@ public class SpigotNegativity extends JavaPlugin {
 		
 		for (Player p : Utils.getOnlinePlayers())
 			manageAutoVerif(p);
-
-		invTimer = getServer().getScheduler().runTaskTimer(this, new ActualizeInvTimer(), 5, 5);
-		packetTimer = getServer().getScheduler().runTaskTimer(this, new AnalyzePacketTimer(), 20, 20);
-		runSpawnFakePlayer = getServer().getScheduler().runTaskTimer(this, new SpawnFakePlayerTimer(), 20, 20 * 60 * 10);
-
-		for (Cheat c : Cheat.values())
-			if (c.isActive() && c.hasListener())
-				pm.registerEvents((Listener) c, this);
 
 		loadCommand();
 
@@ -211,6 +205,18 @@ public class SpigotNegativity extends JavaPlugin {
 
 		if (supportedPluginName.length() > 0) {
 			getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
+		}
+
+		getServer().getScheduler().runTaskTimer(this, new ClickManagerTimer(), 20, 20);
+		invTimer = getServer().getScheduler().runTaskTimer(this, new ActualizeInvTimer(), 5, 5);
+		packetTimer = getServer().getScheduler().runTaskTimer(this, new AnalyzePacketTimer(), 20, 20);
+		runSpawnFakePlayer = getServer().getScheduler().runTaskTimer(this, new SpawnFakePlayerTimer(), 20, 20 * 60 * 10);
+		timeBetweenAlert = getConfig().getInt("time_between_alert");
+		if(timeBetweenAlert != -1) {
+			int timeTick = (timeBetweenAlert / 1000) * 20;
+			if(timeTimeBetweenAlert != null)
+				timeTimeBetweenAlert.cancel();
+			timeTimeBetweenAlert = getServer().getScheduler().runTaskTimer(this, new PendingAlertsTimer(), timeTick, timeTick);
 		}
 	}
 	
@@ -338,7 +344,7 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 
 	public static void manageAutoVerif(Player p) {
-		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(new SpigotPlayer(p));
 		np.ACTIVE_CHEAT.clear();
 		boolean needPacket = false;
 		for (Cheat c : Cheat.values())
@@ -381,22 +387,6 @@ public class SpigotNegativity extends JavaPlugin {
 					knownCommands.remove(alias);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-	}
-
-	public static void setupValue() {
-		SpigotNegativity pl = getInstance();
-		FileConfiguration config = pl.getConfig();
-		log = config.getBoolean("log_alerts");
-		log_console = config.getBoolean("log_alerts_in_console");
-		hasBypass = config.getBoolean("Permissions.bypass.active");
-		
-		timeBetweenAlert = config.getInt("time_between_alert");
-		if(timeBetweenAlert != -1) {
-			int timeTick = (timeBetweenAlert / 1000) * 20;
-			if(pl.timeTimeBetweenAlert != null)
-				pl.timeTimeBetweenAlert.cancel();
-			pl.timeTimeBetweenAlert = Bukkit.getScheduler().runTaskTimer(pl, new PendingAlertsTimer(), timeTick, timeTick);
 		}
 	}
 

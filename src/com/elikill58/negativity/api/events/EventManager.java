@@ -40,12 +40,8 @@ public class EventManager {
 					List<CallableEvent> list = EVENT_METHOD.getOrDefault(paramEvent, new ArrayList<>());
 					list.add(new CallableEvent(m, src));
 					EVENT_METHOD.put(paramEvent, list);
-					Adapter.getAdapter().getLogger().info("Add " + m.getName() + " method in " + clazz.getCanonicalName());
 				} else {
-					Adapter.getAdapter().getLogger().error(paramEvent.getCanonicalName() + " isn't an Event !");
-					Adapter.getAdapter().getLogger().error("SuperClass: " + paramEvent.getSuperclass());
-					for(Type type : paramEvent.getGenericInterfaces())
-						Adapter.getAdapter().getLogger().error("Interface: " + type.getTypeName());
+					Adapter.getAdapter().getLogger().error(paramEvent.getCanonicalName() + " isn't an Event ! (Located at " + clazz.getCanonicalName() + ")");
 				}
 			}
 		}

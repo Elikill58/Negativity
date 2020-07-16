@@ -1,12 +1,11 @@
 package com.elikill58.negativity.common.protocols;
 
-import org.bukkit.event.entity.EntityRegainHealthEvent;
-
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
+import com.elikill58.negativity.api.events.player.PlayerRegainHealthEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Difficulty;
@@ -35,10 +34,8 @@ public class Regen extends Cheat implements Listeners {
 	}
 
 	@EventListener
-	public void onRegen(EntityRegainHealthEvent e) {
-		if (!(e.getEntity() instanceof Player))
-			return;
-		Player p = (Player) e.getEntity();
+	public void onRegen(PlayerRegainHealthEvent e) {
+		Player p = e.getPlayer();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		boolean hasPotion = false;
 		for (PotionEffect pe : p.getActivePotionEffect())

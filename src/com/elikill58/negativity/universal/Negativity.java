@@ -147,10 +147,8 @@ public class Negativity {
 			List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c) ? np.ALERT_NOT_SHOWED.get(c) : new ArrayList<>();
 			tempList.add(alert);
 			np.ALERT_NOT_SHOWED.put(c, tempList);
-			return true;
-		}
-
-		sendAlertMessage(np, alert);
+		} else
+			sendAlertMessage(np, alert);
 		return true;
 	}
 

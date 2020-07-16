@@ -106,7 +106,6 @@ public class PlayersEvents implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
-		NegativityPlayer.removeFromCache(p.getUniqueId());
 		if(UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
 		if(!ProxyCompanionManager.searchedCompanion) {

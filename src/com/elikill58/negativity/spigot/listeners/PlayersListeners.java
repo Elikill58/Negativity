@@ -75,7 +75,10 @@ public class PlayersListeners implements Listener {
 	
 	@EventHandler
 	public void onRegainHealth(EntityRegainHealthEvent e) {
-		if(e.getEntity() instanceof Player)
-			EventManager.callEvent(new PlayerRegainHealthEvent(SpigotEntityManager.getPlayer((Player) e.getEntity())));
+		if(e.getEntity() instanceof Player) {
+			PlayerRegainHealthEvent event = new PlayerRegainHealthEvent(SpigotEntityManager.getPlayer((Player) e.getEntity()));
+			EventManager.callEvent(event);
+			e.setCancelled(event.isCancelled());
+		}
 	}
 }

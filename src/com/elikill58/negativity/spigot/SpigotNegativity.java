@@ -31,7 +31,7 @@ import com.elikill58.negativity.spigot.events.ChannelEvents;
 import com.elikill58.negativity.spigot.events.FightManager;
 import com.elikill58.negativity.spigot.events.PlayersEvents;
 import com.elikill58.negativity.spigot.events.ServerCrasherEvents;
-import com.elikill58.negativity.spigot.listeners.CommandsListeners;
+import com.elikill58.negativity.spigot.listeners.*;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -118,6 +118,10 @@ public class SpigotNegativity extends JavaPlugin {
 		pm.registerEvents(new PlayersEvents(this), this);
 		pm.registerEvents(new FightManager(), this);
 		pm.registerEvents(new ServerCrasherEvents(this), this);
+		pm.registerEvents(new PlayersListeners(), this);
+		pm.registerEvents(new InventoryListeners(), this);
+		pm.registerEvents(new BlockListeners(), this);
+		pm.registerEvents(new EntityListeners(), this);
 
 		Messenger messenger = getServer().getMessenger();
 		ChannelEvents channelEvents = new ChannelEvents();

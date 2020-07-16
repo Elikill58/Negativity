@@ -11,7 +11,7 @@ public class TabExecutionEvent implements Event {
 	private final CommandSender sender;
 	private final String[] arg;
 	private final String command, prefix;
-	private final List<String> tabContent;
+	private List<String> tabContent;
 
 	public TabExecutionEvent(String command, CommandSender sender, String[] arg, String prefix) {
 		this.command = command;
@@ -40,5 +40,8 @@ public class TabExecutionEvent implements Event {
 	public List<String> getTabContent() {
 		return tabContent;
 	}
-
+	
+	public void setTabContent(List<String> content) {
+		this.tabContent = content;
+	}
 }

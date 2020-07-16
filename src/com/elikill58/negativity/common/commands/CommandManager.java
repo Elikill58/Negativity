@@ -64,7 +64,7 @@ public class CommandManager implements Listeners {
 	public void onTab(TabExecutionEvent e) {
 		TabListeners cmd = tabs.get(e.getCommand().toLowerCase());
 		if(cmd != null)
-			cmd.onTabComplete(e.getSender(), e.getArgument(), e.getPrefix());
+			e.setTabContent(cmd.onTabComplete(e.getSender(), e.getArgument(), e.getPrefix()));
 	}
 	
 }

@@ -20,7 +20,6 @@ public class SpigotInventory extends Inventory {
 		this.inventoryName = "";
 		this.size = inv.getSize();
 		if(inv.getHolder() instanceof SpigotNegativityHolder) {
-			Bukkit.broadcastMessage("> NegativityHolder " + inv.getHolder());
 			this.holder = (SpigotNegativityHolder) inv.getHolder();
 		} else
 			this.holder = (inv.getHolder() == null ? null : new SpigotNegativityHolder(new SpigotInventoryHolder(inv.getHolder())));

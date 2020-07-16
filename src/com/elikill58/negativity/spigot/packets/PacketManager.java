@@ -6,10 +6,14 @@ import java.util.List;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.packets.PacketSendEvent;
+import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
+import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.PacketHandler;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.packets.event.PacketEvent.PacketSourceType;
-import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
-import com.elikill58.negativity.spigot.packets.event.PacketSendEvent;
+import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 
 public abstract class PacketManager {
 
@@ -33,8 +37,8 @@ public abstract class PacketManager {
 			return;
 		// Go on main Thread
 		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
-			PacketReceiveEvent event = new PacketReceiveEvent(source, packet, packet.getPlayer());
-			Bukkit.getPluginManager().callEvent(event);
+			PacketReceiveEvent event = new PacketReceiveEvent(source, packet, SpigotEntityManager.getPlayer(packet.getPlayer()));
+			EventManager.callEvent(event);
 			handlers.forEach((handler) -> handler.onReceive(packet));
 		});
 	}
@@ -44,8 +48,8 @@ public abstract class PacketManager {
 			return;
 		// Go on main Thread
 		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
-			PacketSendEvent event = new PacketSendEvent(source, packet, packet.getPlayer());
-			Bukkit.getPluginManager().callEvent(event);
+			PacketSendEvent event = new PacketSendEvent(source, packet, SpigotEntityManager.getPlayer(packet.getPlayer()));
+			EventManager.callEvent(event);
 			handlers.forEach((handler) -> handler.onSend(packet));
 		});
 	}

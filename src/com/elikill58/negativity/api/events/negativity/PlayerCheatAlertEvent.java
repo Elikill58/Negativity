@@ -1,15 +1,12 @@
-package com.elikill58.negativity.spigot.impl.events;
-
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+package com.elikill58.negativity.api.events.negativity;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.negativity.IPlayerCheatAlertEvent;
+import com.elikill58.negativity.api.events.Event;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
+import com.elikill58.negativity.universal.ReportType;
 
-public class PlayerCheatAlertEvent extends Event implements IPlayerCheatAlertEvent {
+public class PlayerCheatAlertEvent implements Event {
 
 	private final Player p;
 	private final Cheat c;
@@ -100,29 +97,5 @@ public class PlayerCheatAlertEvent extends Event implements IPlayerCheatAlertEve
 	
 	public void clearNbAlertConsole() {
 		this.nbConsole = 0;
-	}
-
-	@Override
-	public IPlayerCheatAlertEvent update(ReportType type, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert, int nbAlertConsole) {
-		this.type = type;
-		this.relia = reliability;
-		this.hasRelia = hasRelia;
-		this.alert = hasRelia;
-		this.ping = ping;
-		this.proof = proof;
-		this.hover = hover;
-		this.nbAlert = nbAlert;
-		this.nbConsole = nbAlertConsole;
-		return this;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	private static final HandlerList handlers = new HandlerList();
-	public static HandlerList getHandlerList() {
-		return handlers;
 	}
 }

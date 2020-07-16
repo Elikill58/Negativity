@@ -8,12 +8,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
-import com.elikill58.negativity.spigot.packets.AbstractPacket;
+import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
+import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.PacketManager;
 import com.elikill58.negativity.spigot.packets.custom.channel.ChannelAbstract;
 import com.elikill58.negativity.spigot.packets.custom.channel.INCChannel;
 import com.elikill58.negativity.spigot.packets.custom.channel.NMUChannel;
-import com.elikill58.negativity.spigot.packets.event.PacketEvent.PacketSourceType;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.Version;

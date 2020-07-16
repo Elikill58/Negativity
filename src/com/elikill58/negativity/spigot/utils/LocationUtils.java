@@ -12,8 +12,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
-import com.elikill58.negativity.spigot.packets.PacketContent;
-import com.elikill58.negativity.spigot.packets.PacketContent.ContentModifier;
+import com.elikill58.negativity.api.packets.PacketContent;
+import com.elikill58.negativity.api.packets.PacketContent.ContentModifier;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;

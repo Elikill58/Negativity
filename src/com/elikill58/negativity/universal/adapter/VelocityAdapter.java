@@ -12,8 +12,6 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Event;
-import com.elikill58.negativity.api.events.EventType;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
@@ -177,11 +175,6 @@ public class VelocityAdapter extends Adapter {
 	public void sendMessageRunnableHover(com.elikill58.negativity.api.entity.Player p, String message, String hover,
 			String command) {
 		
-	}
-
-	@Override
-	public Event callEvent(EventType type, Object... args) {
-		return null;
 	}
 
 	@Override

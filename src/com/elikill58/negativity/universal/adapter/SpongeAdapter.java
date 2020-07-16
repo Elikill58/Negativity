@@ -17,8 +17,6 @@ import org.spongepowered.api.asset.Asset;
 
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Event;
-import com.elikill58.negativity.api.events.EventType;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
@@ -195,12 +193,6 @@ public class SpongeAdapter extends Adapter {
 			String command) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public Event callEvent(EventType type, Object... args) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

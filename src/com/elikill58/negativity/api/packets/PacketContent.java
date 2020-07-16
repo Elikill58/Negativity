@@ -1,4 +1,4 @@
-package com.elikill58.negativity.spigot.packets;
+package com.elikill58.negativity.api.packets;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

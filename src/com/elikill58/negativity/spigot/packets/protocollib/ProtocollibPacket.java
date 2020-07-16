@@ -3,7 +3,7 @@ package com.elikill58.negativity.spigot.packets.protocollib;
 import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.events.PacketEvent;
-import com.elikill58.negativity.spigot.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.universal.PacketType;
 
 public class ProtocollibPacket extends AbstractPacket {

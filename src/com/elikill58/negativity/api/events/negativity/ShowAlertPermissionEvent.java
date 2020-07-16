@@ -1,13 +1,10 @@
-package com.elikill58.negativity.spigot.impl.events;
-
-import org.bukkit.event.Event;
-import org.bukkit.event.HandlerList;
+package com.elikill58.negativity.api.events.negativity;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.negativity.IShowAlertPermissionEvent;
+import com.elikill58.negativity.api.events.Event;
 
-public class ShowAlertPermissionEvent extends Event implements IShowAlertPermissionEvent {
+public class ShowAlertPermissionEvent implements Event {
 
 	private final boolean basicPerm;
 	private final Player p;
@@ -42,15 +39,5 @@ public class ShowAlertPermissionEvent extends Event implements IShowAlertPermiss
 
 	public void setCancelled(boolean c) {
 		cancel = c;
-	}
-
-	@Override
-	public HandlerList getHandlers() {
-		return handlers;
-	}
-
-	private static final HandlerList handlers = new HandlerList();
-	public static HandlerList getHandlerList() {
-		return handlers;
 	}
 }

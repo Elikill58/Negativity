@@ -5,7 +5,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
-import com.elikill58.negativity.api.events.negativity.IPlayerPacketsClearEvent;
+import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.events.player.PlayerDeathEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
@@ -33,7 +33,7 @@ public class Blink extends Cheat implements Listeners {
 	}
 	
 	@EventListener
-	public void onPacketClear(IPlayerPacketsClearEvent e) {
+	public void onPacketClear(PlayerPacketsClearEvent e) {
 		Player p = e.getPlayer();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if(!np.hasDetectionActive(this))

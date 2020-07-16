@@ -13,9 +13,12 @@ import com.elikill58.negativity.api.ChatColor;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventType;
-import com.elikill58.negativity.api.events.negativity.IPlayerCheatAlertEvent;
-import com.elikill58.negativity.api.events.negativity.IShowAlertPermissionEvent;
+import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.negativity.PlayerCheatAlertEvent;
+import com.elikill58.negativity.api.events.negativity.PlayerCheatBypassEvent;
+import com.elikill58.negativity.api.events.negativity.PlayerCheatEvent;
+import com.elikill58.negativity.api.events.negativity.PlayerCheatKickEvent;
+import com.elikill58.negativity.api.events.negativity.ShowAlertPermissionEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -109,27 +112,27 @@ public class Negativity {
 			}
 		}
 		
-		ada.callEvent(EventType.CHEAT, p, c, reliability);
-		// TODO add all event
-		/*if (hasBypass && (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase())
+		EventManager.callEvent(new PlayerCheatEvent(p, c, reliability));
+		if (hasBypass && (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase())
 				|| Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass.all"))) {
 			PlayerCheatBypassEvent bypassEvent = new PlayerCheatBypassEvent(p, c, reliability);
-			Bukkit.getPluginManager().callEvent(bypassEvent);
+			EventManager.callEvent(bypassEvent);
 			if (!bypassEvent.isCancelled())
 				return false;
-		}*/
-		IPlayerCheatAlertEvent alert = (IPlayerCheatAlertEvent) ada.callEvent(EventType.CHEAT_ALERT, type, p, c, reliability,
+		}
+		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(type, p, c, reliability,
 				c.getReliabilityAlert() < reliability, ping, proof, hover, amount);
+		EventManager.callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
 		np.addWarn(c, reliability, amount);
 		logProof(np, type, p, c, reliability, proof, ping);
-		/*if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
+		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
-			Bukkit.getPluginManager().callEvent(kick);
+			EventManager.callEvent(kick);
 			if (!kick.isCancelled())
 				p.kick(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName(), "%reason%", np.getReason(c), "%playername%", p.getName()));
-		}*/
+		}
 		if(BanManager.isBanned(np.getUUID())) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			return false;
@@ -141,7 +144,7 @@ public class Negativity {
 		}
 		manageAlertCommand(type, p, c, reliability);
 		if(timeBetweenAlert != -1) {
-			List<IPlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c) ? np.ALERT_NOT_SHOWED.get(c) : new ArrayList<>();
+			List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c) ? np.ALERT_NOT_SHOWED.get(c) : new ArrayList<>();
 			tempList.add(alert);
 			np.ALERT_NOT_SHOWED.put(c, tempList);
 			return true;
@@ -162,7 +165,7 @@ public class Negativity {
 		}
 	}
 
-	public static void sendAlertMessage(NegativityPlayer np, IPlayerCheatAlertEvent alert) {
+	public static void sendAlertMessage(NegativityPlayer np, PlayerCheatAlertEvent alert) {
 		Cheat c = alert.getCheat();
 		int reliability = alert.getReliability();
 		if(reliability == 0) {// alert already sent
@@ -185,7 +188,8 @@ public class Negativity {
 			for (Player pl : Adapter.getAdapter().getOnlinePlayers()) {
 				NegativityPlayer npMod = NegativityPlayer.getNegativityPlayer(pl);
 				boolean basicPerm = Perm.hasPerm(npMod, Perm.SHOW_ALERT);
-				IShowAlertPermissionEvent permissionEvent = (IShowAlertPermissionEvent) Adapter.getAdapter().callEvent(EventType.SHOW_PERM, p, np, basicPerm);
+				ShowAlertPermissionEvent permissionEvent = new ShowAlertPermissionEvent(pl, np, basicPerm);
+				EventManager.callEvent(permissionEvent);
 				if (permissionEvent.isCancelled() || npMod.disableShowingAlert)
 					continue;
 				if (permissionEvent.hasBasicPerm()) {

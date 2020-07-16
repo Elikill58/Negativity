@@ -6,14 +6,15 @@ import java.util.UUID;
 
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -56,7 +57,7 @@ public class ServerCrasherEvents implements Listener {
 				SpigotNegativity.getInstance().getLogger().warning("Cannot ban player " + p.getName() + " for " + getName() + " because ban is NOT config.");
 				SpigotNegativity.getInstance().getLogger().warning("Please, enable ban in config and restart your server");
 				if(section.getBoolean("kick", true)) {
-					//p.kickPlayer(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
+					p.kick(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
 					inDisconnection.add(p.getUniqueId());
 				}
 			} else {
@@ -65,7 +66,7 @@ public class ServerCrasherEvents implements Listener {
 				inDisconnection.add(p.getUniqueId());
 			}
 		} else if(section.getBoolean("kick", true)) {
-			//p.kickPlayer(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", section.getString("name", "Server Crasher")));
+			p.kick(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", section.getString("name", "Server Crasher")));
 			inDisconnection.add(p.getUniqueId());
 		}
 		return inDisconnection.contains(p.getUniqueId());

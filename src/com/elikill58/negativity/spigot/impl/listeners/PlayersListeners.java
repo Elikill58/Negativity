@@ -9,10 +9,10 @@ import org.bukkit.event.player.PlayerQuitEvent;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.negativity.PlayerCheatEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
-import com.elikill58.negativity.spigot.impl.events.PlayerCheatEvent;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 
 public class PlayersListeners implements Listener {

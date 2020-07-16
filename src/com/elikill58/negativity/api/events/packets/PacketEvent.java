@@ -1,11 +1,10 @@
-package com.elikill58.negativity.spigot.packets.event;
+package com.elikill58.negativity.api.events.packets;
 
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.Event;
+import com.elikill58.negativity.api.packets.AbstractPacket;
 
-import com.elikill58.negativity.spigot.packets.AbstractPacket;
-
-public abstract class PacketEvent extends Event {
+public abstract class PacketEvent implements Event {
 	
 	private final Player p;
 	private final AbstractPacket packet;

@@ -13,7 +13,7 @@ import java.util.UUID;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.IronGolem;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.negativity.IPlayerCheatAlertEvent;
+import com.elikill58.negativity.api.events.negativity.PlayerCheatAlertEvent;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
@@ -40,7 +40,7 @@ public class NegativityPlayer {
 	
 	public ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
 	public ArrayList<String> proof = new ArrayList<>();
-	public HashMap<Cheat, List<IPlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
+	public HashMap<Cheat, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	
 	// packets
@@ -213,8 +213,8 @@ public class NegativityPlayer {
 		}
 	}
 	
-	public List<IPlayerCheatAlertEvent> getAlertForAllCheat(){
-		final List<IPlayerCheatAlertEvent> list = new ArrayList<>();
+	public List<PlayerCheatAlertEvent> getAlertForAllCheat(){
+		final List<PlayerCheatAlertEvent> list = new ArrayList<>();
 		ALERT_NOT_SHOWED.forEach((c, listAlerts) -> {
 			if(!listAlerts.isEmpty())
 				list.add(getAlertForCheat(c, listAlerts));
@@ -222,14 +222,14 @@ public class NegativityPlayer {
 		return list;
 	}
 	
-	public IPlayerCheatAlertEvent getAlertForCheat(Cheat c, List<IPlayerCheatAlertEvent> list) {
+	public PlayerCheatAlertEvent getAlertForCheat(Cheat c, List<PlayerCheatAlertEvent> list) {
 		int nb = 0, nbConsole = 0;
 		HashMap<Integer, Integer> relia = new HashMap<>();
 		HashMap<Integer, Integer> ping = new HashMap<>();
 		ReportType type = ReportType.NONE;
 		boolean hasRelia = false;
 		CheatHover hoverProof = null;
-		for(IPlayerCheatAlertEvent e : list) {
+		for(PlayerCheatAlertEvent e : list) {
 			nb += e.getNbAlert();
 			
 			relia.put(e.getReliability(), relia.getOrDefault(e.getReliability(), 0) + 1);
@@ -251,7 +251,7 @@ public class NegativityPlayer {
 		int newRelia = UniversalUtils.parseInPorcent(UniversalUtils.sum(relia) + nb);
 		int newPing = UniversalUtils.sum(ping);
 		// we can ignore "proof" and "stats_send" because they have been already saved and they are NOT showed to player
-		return list.get(0).update(type, newRelia, hasRelia, newPing, "", hoverProof, nb, nbConsole);
+		return new PlayerCheatAlertEvent(type, p, c, newRelia, hasRelia, newPing, "", hoverProof, nb, nbConsole);
 	}
 
 	private void destroy() {

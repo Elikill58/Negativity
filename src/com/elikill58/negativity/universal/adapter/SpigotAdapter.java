@@ -20,8 +20,6 @@ import org.json.parser.ParseException;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Event;
-import com.elikill58.negativity.api.events.EventType;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
@@ -33,10 +31,6 @@ import com.elikill58.negativity.spigot.ClickableText;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotOfflinePlayer;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
-import com.elikill58.negativity.spigot.impl.events.PlayerCheatAlertEvent;
-import com.elikill58.negativity.spigot.impl.events.PlayerCheatEvent;
-import com.elikill58.negativity.spigot.impl.events.PlayerPacketsClearEvent;
-import com.elikill58.negativity.spigot.impl.events.ShowAlertPermissionEvent;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemBuilder;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemRegistrar;
@@ -227,24 +221,6 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
 		new ClickableText().addRunnableHoverEvent(message, hover, command).sendToPlayer((org.bukkit.entity.Player) p.getDefaultPlayer());
-	}
-
-	@Override
-	public Event callEvent(EventType type, Object... args) {
-		switch (type) {
-		case CHEAT:
-			return new PlayerCheatEvent((Player) args[0], (Cheat) args[1], (int) args[2]);
-		case CHEAT_ALERT:
-			return new PlayerCheatAlertEvent((ReportType) args[0], (Player) args[1], (Cheat) args[2], (int) args[3],
-					(boolean) args[4], (int) args[5], (String) args[6], (CheatHover) args[7], (int) args[8]);
-		case PACKET_CLEAR:
-			return new PlayerPacketsClearEvent((Player) args[0], (NegativityPlayer) args[1]);
-		case SHOW_PERM:
-			return new ShowAlertPermissionEvent((Player) args[0], (NegativityPlayer) args[1], (boolean) args[2]);
-		case OWN:
-			break;
-		}
-		return null;
 	}
 
 	@Override

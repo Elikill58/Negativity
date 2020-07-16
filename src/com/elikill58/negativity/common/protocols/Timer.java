@@ -7,7 +7,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
-import com.elikill58.negativity.api.events.negativity.IPlayerPacketsClearEvent;
+import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -24,7 +24,7 @@ public class Timer extends Cheat implements Listeners {
 	}
 	
 	@EventListener
-	public void onPacketClear(IPlayerPacketsClearEvent e) {
+	public void onPacketClear(PlayerPacketsClearEvent e) {
 		NegativityPlayer np = e.getNegativityPlayer();
 		if(!np.hasDetectionActive(this))
 			return;

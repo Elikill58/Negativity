@@ -37,6 +37,7 @@ public class SpigotLocation extends Location {
 
 	@Override
 	public Object getDefaultLocation() {
+		org.bukkit.Location loc = this.loc.clone();
 		loc.setX(getX());
 		loc.setY(getY());
 		loc.setZ(getZ());

@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.UUID;
 
 import org.bukkit.entity.Damageable;
+import org.bukkit.event.inventory.InventoryType;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.entity.Entity;
@@ -307,6 +308,11 @@ public class SpigotPlayer extends Player {
 	@Override
 	public PlayerInventory getInventory() {
 		return new SpigotPlayerInventory(p.getInventory());
+	}
+	
+	@Override
+	public boolean hasOpenInventory() {
+		return p.getOpenInventory() != null && p.getOpenInventory().getTopInventory() != null && p.getOpenInventory().getTopInventory().getType().equals(InventoryType.CHEST);
 	}
 
 	@Override

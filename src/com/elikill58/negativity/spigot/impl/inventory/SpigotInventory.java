@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
+import com.elikill58.negativity.api.inventory.PlatformHolder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 
@@ -18,7 +19,11 @@ public class SpigotInventory extends Inventory {
 	public SpigotInventory(org.bukkit.inventory.Inventory inv) {
 		this.inventoryName = "";
 		this.size = inv.getSize();
-		this.holder = null;
+		if(inv.getHolder() instanceof SpigotNegativityHolder) {
+			Bukkit.broadcastMessage("> NegativityHolder " + inv.getHolder());
+			this.holder = (SpigotNegativityHolder) inv.getHolder();
+		} else
+			this.holder = (inv.getHolder() == null ? null : new SpigotNegativityHolder(new SpigotInventoryHolder(inv.getHolder())));
 		this.inv = inv;
 	}
 	
@@ -58,7 +63,7 @@ public class SpigotInventory extends Inventory {
 	}
 
 	@Override
-	public NegativityHolder getHolder() {
+	public PlatformHolder getHolder() {
 		return holder.getBasicHolder();
 	}
 

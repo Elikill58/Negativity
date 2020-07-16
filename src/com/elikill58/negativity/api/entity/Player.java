@@ -73,6 +73,7 @@ public abstract class Player extends OfflinePlayer {
 
 	public abstract PlayerInventory getInventory();
 	public abstract Inventory getOpenInventory();
+	public abstract boolean hasOpenInventory();
 	public abstract void openInventory(Inventory inv);
 	public abstract void closeInventory();
 	public abstract void updateInventory();

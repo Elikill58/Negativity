@@ -5,10 +5,12 @@ public enum EntityType {
 	ARMOR_STAND("ArmorStand"),
 	ARROW("Arrow"),
 	BAT("Bat"),
+	BEE("Bee"),
 	BLAZE("Blaze"),
 	BOAT("Boat"),
 	CAVE_SPIDER("CaveSpider"),
 	CHICKEN("Chicken"),
+	COD("Cod"),
 	COMPLEX_PART(null),
 	COW("Cow"),
 	CREEPER("Creeper"),
@@ -56,6 +58,7 @@ public enum EntityType {
 	PIGLIN("Piglin"),
 	PIG_ZOMBIE("PigZombie"),
 	RABBIT("Rabbit"),
+	SALMON("Salmon"),
 	SHEEP("Sheep"),
 	SILVERFISH("Silverfish"),
 	SKELETON("Skeleton"),
@@ -72,6 +75,7 @@ public enum EntityType {
 	SHULKER("Shulker"),
 	SHULKER_BULLET("ShulkerBullet"),
 	THROWN_EXP_BOTTLE("ThrownExpBottle"),
+	TURTLE("Turtle"),
 	UNKNOWN(null),
 	VEX("Vex"),
 	VINDICATOR("Vindicator"),
@@ -83,7 +87,8 @@ public enum EntityType {
 	WOLF("Wolf"),
 	WEATHER(null),
 	ZOGLIN("Zoglin"),
-	ZOMBIE("Zombie");
+	ZOMBIE("Zombie"),
+	ZOMBIE_VILLAGER("ZombieVillager");
 
 	private final String name;
 	

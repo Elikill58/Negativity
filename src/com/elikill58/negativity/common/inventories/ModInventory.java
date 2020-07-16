@@ -14,7 +14,6 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.ModHolder;
 import com.elikill58.negativity.spigot.Inv;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -60,7 +59,7 @@ public class ModInventory extends AbstractInventory {
 			Messages.sendMessage(p, "inventory.mod.inv_cleared");
 		} else if (m.equals(Materials.LEASH)) {
 			p.closeInventory();
-			Player randomPlayer = (Player) Utils.getOnlinePlayers().toArray()[Utils.getOnlinePlayers().size() - 1];
+			Player randomPlayer = (Player) Adapter.getAdapter().getOnlinePlayers().toArray()[Adapter.getAdapter().getOnlinePlayers().size() - 1];
 			p.teleport(randomPlayer);
 		} else if (m.equals(Materials.PUMPKIN_PIE)) {
 			p.closeInventory();

@@ -1,13 +1,13 @@
 package com.elikill58.negativity.api.timers;
 
+import java.util.HashMap;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.inventory.Inventory;
-import com.elikill58.negativity.api.inventory.InventoryHolder;
-import com.elikill58.negativity.api.inventory.InventoryManager;
-import com.elikill58.negativity.api.inventory.InventoryType;
-import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
+import com.elikill58.negativity.api.inventory.InventoryManager;
+import com.elikill58.negativity.api.inventory.NegativityHolder;
+import com.elikill58.negativity.api.inventory.PlatformHolder;
 import com.elikill58.negativity.common.inventories.holders.AlertHolder;
 import com.elikill58.negativity.common.inventories.holders.CheckMenuHolder;
 import com.elikill58.negativity.spigot.Inv;
@@ -19,13 +19,13 @@ public class ActualizeInvTimer implements Runnable {
 
 	@Override
 	public void run() {
-		for (Player p : Inv.CHECKING.keySet()) {
-			if (p.getOpenInventory() != null) {
-				Inventory topInv = p.getOpenInventory();
-				if(topInv == null || !topInv.getType().equals(InventoryType.CHEST)) {
-					continue;
-				}
-				InventoryHolder holder = topInv.getHolder();
+		for (Player p : new HashMap<>(Inv.CHECKING).keySet()) {
+			if(!p.isOnline()) {
+				Inv.CHECKING.remove(p);
+				continue;
+			}
+			if (p.hasOpenInventory()) {
+				PlatformHolder holder = p.getOpenInventory().getHolder();
 				if(!(holder instanceof NegativityHolder)) {
 					continue;
 				}
@@ -39,7 +39,7 @@ public class ActualizeInvTimer implements Runnable {
 				Inv.CHECKING.remove(p);
 		}
 		for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
-			if (NegativityPlayer.getCached(p.getUniqueId()).isFreeze && INV_FREEZE_ACTIVE) {
+			if (NegativityPlayer.getNegativityPlayer(p).isFreeze && INV_FREEZE_ACTIVE) {
 				InventoryManager.open(NegativityInventory.FREEZE, p);
 			}
 		}

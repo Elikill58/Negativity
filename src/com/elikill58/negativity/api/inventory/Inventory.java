@@ -21,7 +21,7 @@ public abstract class Inventory {
 	
 	public abstract String getInventoryName();
 	
-	public abstract NegativityHolder getHolder();
+	public abstract PlatformHolder getHolder();
 
 	public abstract Object getDefaultInventory();
 	

@@ -136,7 +136,7 @@ public class PlayersEvents implements Listener {
 	public void onPlayerMove(PlayerMoveEvent e){
 		Player p = e.getPlayer();
 		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
-		if(np.isFreeze && !p.getLocation().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR))
+		if(np.isFreeze && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR))
 			e.setCancelled(true);
 	}
 

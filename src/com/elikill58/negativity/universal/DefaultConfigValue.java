@@ -173,7 +173,7 @@ public class DefaultConfigValue {
 		BOOLEANS.put("cheats.special.invalid_name.ban", false);
 		STRINGS.put("cheats.special.invalid_name.ban_time", "-1");
 
-		INTS.put("cheats.special.max-player-by-ip.number", 2);
+		INTS.put("cheats.special.max-player-by-ip.number", 4);
 		STRINGS.put("cheats.special.max-player-by-ip.name", "Max Player/IP");
 	}
 }

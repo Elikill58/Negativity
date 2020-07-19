@@ -55,7 +55,7 @@ public class AirJumpProtocol extends Cheat {
 		
 		boolean wasGoingDown = np.contentBoolean.getOrDefault("going-down", false);
 		double d = np.contentDouble.getOrDefault("airjump-diff-y", 0.0);
-		if(diffYtoFrom > d && wasGoingDown) {
+		if(diffYtoFrom > d && wasGoingDown && diffYtoFrom != 0.5) {
 			if(!hasOtherThanExtended(locDown, BlockTypes.AIR) && !hasOtherThan(loc, BlockTypes.AIR)) {
 				mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffYtoFrom * 200), "Was going down, last y " + d + ", current: " + diffYtoFrom);
 			}

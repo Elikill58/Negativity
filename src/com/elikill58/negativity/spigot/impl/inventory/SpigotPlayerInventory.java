@@ -70,14 +70,13 @@ public class SpigotPlayerInventory extends PlayerInventory {
 	
 	@Override
 	public void setArmorContent(ItemStack[] items) {
-		org.bukkit.inventory.ItemStack[] armor = new org.bukkit.inventory.ItemStack[items.length];
-		int i = 0;
-		for(ItemStack it : items) {
-			if(it == null)
+		int size = inv.getArmorContents().length;
+		org.bukkit.inventory.ItemStack[] armor = new org.bukkit.inventory.ItemStack[size];
+		for(int i = 0; i < size; i++) {
+			if(items == null || items.length < i)
 				armor[i] = null;
 			else
-				armor[i] = (org.bukkit.inventory.ItemStack) it.getDefaultItem();
-			i++;
+				armor[i] = (org.bukkit.inventory.ItemStack) items[i].getDefaultItem();
 		}
 		inv.setArmorContents(armor);
 	}

@@ -37,7 +37,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
-		if (np.hasElytra() || p.isInsideVehicle())
+		if (np.hasElytra() || p.isInsideVehicle() || Utils.isSwimming(p))
 			return;
 		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom();
 		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY")

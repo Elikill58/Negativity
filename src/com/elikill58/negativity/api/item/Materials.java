@@ -12,11 +12,11 @@ public class Materials {
     public static final Material BEACON = ItemRegistrar.getInstance().get("beacon");
     public static final Material BLAZE_POWDER = ItemRegistrar.getInstance().get("blaze_powder");
     public static final Material BLAZE_ROD = ItemRegistrar.getInstance().get("blaze_rod");
-    public static final Material BOOK_AND_QUILL = ItemRegistrar.getInstance().get("book_and_quill");
+    public static final Material BOOK_AND_QUILL = ItemRegistrar.getInstance().get("writable_book", "book_and_quill");
     public static final Material BONE = ItemRegistrar.getInstance().get("bone");
     public static final Material BOW = ItemRegistrar.getInstance().get("bow");
     public static final Material BRICK_STAIRS = ItemRegistrar.getInstance().get("brick_stairs");
-    public static final Material BIRCH_WOOD_STAIRS = ItemRegistrar.getInstance().get("birch_wood_stairs");
+    public static final Material BIRCH_WOOD_STAIRS = ItemRegistrar.getInstance().get("birch_stairs");
     
     public static final Material CHEST = ItemRegistrar.getInstance().get("chest");
     public static final Material COAL_BLOCK = ItemRegistrar.getInstance().get("coal_block");
@@ -36,7 +36,7 @@ public class Materials {
     public static final Material GHAST_TEAR = ItemRegistrar.getInstance().get("ghast_tear");
     public static final Material GOLDEN_APPLE = ItemRegistrar.getInstance().get("golden_apple");
     public static final Material GOLDEN_CARROT = ItemRegistrar.getInstance().get("golden_carrot");
-    public static final Material GRASS = ItemRegistrar.getInstance().get("grass");
+    public static final Material GRASS = ItemRegistrar.getInstance().get("grass_block", "grass");
     
     public static final Material IRON_INGOT = ItemRegistrar.getInstance().get("iron_ingot");
     public static final Material IRON_AXE = ItemRegistrar.getInstance().get("iron_axe");
@@ -45,9 +45,9 @@ public class Materials {
     public static final Material IRON_SWORD = ItemRegistrar.getInstance().get("iron_sword");
     
     public static final Material FEATHER = ItemRegistrar.getInstance().get("feather");
-    public static final Material FIREWORK = ItemRegistrar.getInstance().get("firework");
+    public static final Material FIREWORK = ItemRegistrar.getInstance().get("firework_rocket", "firework");
     public static final Material FISHING_ROD = ItemRegistrar.getInstance().get("fishing_rod");
-    public static final Material FIREBALL = ItemRegistrar.getInstance().get("fireball");
+    public static final Material FIREBALL = ItemRegistrar.getInstance().get("fire_charge", "fireball");
     
     public static final Material LADDER = ItemRegistrar.getInstance().get("ladder");
     public static final Material LEASH = ItemRegistrar.getInstance().get("leash");
@@ -84,7 +84,7 @@ public class Materials {
     public static final Material TNT = ItemRegistrar.getInstance().get("tnt");
     
     public static final Material WATER_BUCKET = ItemRegistrar.getInstance().get("water_bucket");
-    public static final Material WEB = ItemRegistrar.getInstance().get("web");
+    public static final Material WEB = ItemRegistrar.getInstance().get("cobweb", "web");
     
     /* WOOL */
     public static final Material RED_WOOL = ItemRegistrar.getInstance().get("red_wool");

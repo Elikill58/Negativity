@@ -51,20 +51,18 @@ public class AlertInventory extends AbstractInventory {
 				UniversalUtils.getMultipleOf(TO_SEE.size() + 3, 9, 1, 54), new AlertHolder(cible));
 		int slot = 0;
 		for (Cheat c : TO_SEE) {
-			if (c.getMaterial() != null) {
+			if (c.getMaterial().getDefaultMaterial() == null)
+				Adapter.getAdapter().getLogger().error("Cannot find material for cheat " + c.getName());
+			else
 				inv.set(slot++,
 						ItemBuilder.Builder(c.getMaterial())
 								.displayName(Messages.getMessage(p, "inventory.alerts.item_name", "%exact_name%",
-										c.getName(), "%warn%", String.valueOf(np.getWarn(c))))
+										c.getName(), "%warn%", np.getWarn(c)))
 								.amount(np.getWarn(c) == 0 ? 1 : np.getWarn(c)).build());
-			}
 		}
-		inv.set(inv.getSize() - 3, ItemBuilder.Builder(Materials.BONE)
-				.displayName(ChatColor.RESET + "" + ChatColor.GRAY + "Clear").build());
-		inv.set(inv.getSize() - 2,
-				ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
-		inv.set(inv.getSize() - 1,
-				ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
+		inv.set(inv.getSize() - 3, ItemBuilder.Builder(Materials.BONE).displayName(ChatColor.RESET + "" + ChatColor.GRAY + "Clear").build());
+		inv.set(inv.getSize() - 2, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
+		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
 		p.openInventory(inv);
 	}
 
@@ -83,12 +81,11 @@ public class AlertInventory extends AbstractInventory {
 		}
 		int slot = 0;
 		for (Cheat c : TO_SEE)
-			if (c.getMaterial() != null)
-				inv.set(slot++,
-						ItemBuilder.Builder(c.getMaterial())
-								.displayName(Messages.getMessage(p, "inventory.alerts.item_name", "%exact_name%",
-										c.getName(), "%warn%", String.valueOf(np.getWarn(c))))
-								.amount(np.getWarn(c) == 0 ? 1 : np.getWarn(c)).build());
+			inv.set(slot++,
+					ItemBuilder.Builder(c.getMaterial())
+							.displayName(Messages.getMessage(p, "inventory.alerts.item_name", "%exact_name%",
+									c.getName(), "%warn%", np.getWarn(c)))
+							.amount(np.getWarn(c) == 0 ? 1 : np.getWarn(c)).build());
 		p.updateInventory();
 	}
 

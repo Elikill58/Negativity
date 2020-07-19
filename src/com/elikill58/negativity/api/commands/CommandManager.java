@@ -1,13 +1,18 @@
-package com.elikill58.negativity.common.commands;
+package com.elikill58.negativity.api.commands;
 
 import java.util.HashMap;
 
-import com.elikill58.negativity.api.commands.CommandListeners;
-import com.elikill58.negativity.api.commands.TabListeners;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.others.CommandExecutionEvent;
 import com.elikill58.negativity.api.events.others.TabExecutionEvent;
+import com.elikill58.negativity.common.commands.BanCommand;
+import com.elikill58.negativity.common.commands.KickCommand;
+import com.elikill58.negativity.common.commands.LangCommand;
+import com.elikill58.negativity.common.commands.ModCommand;
+import com.elikill58.negativity.common.commands.NegativityCommand;
+import com.elikill58.negativity.common.commands.ReportCommand;
+import com.elikill58.negativity.common.commands.UnbanCommand;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 
@@ -24,32 +29,31 @@ public class CommandManager implements Listeners {
 		ConfigAdapter conf = Adapter.getAdapter().getConfig();
 		if(conf.getBoolean("commands.ban")) {
 			BanCommand ban = new BanCommand();
-			commands.put("ban", ban);
-			tabs.put("ban", ban);
+			commands.put("nban", ban);
+			tabs.put("nban", ban);
 		}
 		if(conf.getBoolean("commands.kick")) {
 			KickCommand kick = new KickCommand();
-			commands.put("kick", kick);
-			tabs.put("kick", kick);
+			commands.put("nkick", kick);
+			tabs.put("nkick", kick);
 		}
 		if(conf.getBoolean("commands.lang")) {
 			LangCommand lang = new LangCommand();
-			commands.put("lang", lang);
-			tabs.put("lang", lang);
+			commands.put("nlang", lang);
+			tabs.put("nlang", lang);
 		}
 		if(conf.getBoolean("commands.mod")) {
-			ModCommand mod = new ModCommand();
-			commands.put("mod", mod);
+			commands.put("nmod", new ModCommand());
 		}
 		if(conf.getBoolean("commands.report")) {
 			ReportCommand report = new ReportCommand();
-			commands.put("report", report);
-			tabs.put("report", report);
+			commands.put("nreport", report);
+			tabs.put("nreport", report);
 		}
 		if(conf.getBoolean("commands.unban")) {
 			UnbanCommand unban = new UnbanCommand();
-			commands.put("unban", unban);
-			tabs.put("unban", unban);
+			commands.put("nunban", unban);
+			tabs.put("nunban", unban);
 		}
 	}
 	

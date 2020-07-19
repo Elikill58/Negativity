@@ -25,7 +25,7 @@ public class Materials {
     public static final Material DIAMOND = ItemRegistrar.getInstance().get("diamond");
     public static final Material DIAMOND_AXE = ItemRegistrar.getInstance().get("diamond_axe");
     public static final Material DIAMOND_PICKAXE = ItemRegistrar.getInstance().get("diamond_pickaxe");
-    public static final Material DIAMOND_SHOVEL = ItemRegistrar.getInstance().get("diamond_shovel");
+    public static final Material DIAMOND_SHOVEL = ItemRegistrar.getInstance().get("diamond_spade", "diamond_shovel");
     public static final Material DIAMOND_SWORD = ItemRegistrar.getInstance().get("diamond_sword");
     public static final Material DIRT = ItemRegistrar.getInstance().get("dirt");
     
@@ -41,7 +41,7 @@ public class Materials {
     public static final Material IRON_INGOT = ItemRegistrar.getInstance().get("iron_ingot");
     public static final Material IRON_AXE = ItemRegistrar.getInstance().get("iron_axe");
     public static final Material IRON_PICKAXE = ItemRegistrar.getInstance().get("iron_pickaxe");
-    public static final Material IRON_SHOVEL = ItemRegistrar.getInstance().get("iron_shovel");
+    public static final Material IRON_SHOVEL = ItemRegistrar.getInstance().get("iron_spade", "iron_shovel");
     public static final Material IRON_SWORD = ItemRegistrar.getInstance().get("iron_sword");
     
     public static final Material FEATHER = ItemRegistrar.getInstance().get("feather");
@@ -50,7 +50,7 @@ public class Materials {
     public static final Material FIREBALL = ItemRegistrar.getInstance().get("fire_charge", "fireball");
     
     public static final Material LADDER = ItemRegistrar.getInstance().get("ladder");
-    public static final Material LEASH = ItemRegistrar.getInstance().get("leash");
+    public static final Material LEASH = ItemRegistrar.getInstance().get("lead", "leash");
     
     public static final Material NETHER_STAR = ItemRegistrar.getInstance().get("nether_star");
     

@@ -1,6 +1,5 @@
 package com.elikill58.negativity.common.commands;
 
-import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.commands.CommandListeners;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.entity.Player;
@@ -16,7 +15,7 @@ public class ModCommand implements CommandListeners {
 			Messages.sendMessage(sender, "only_player");
 			return false;
 		}
-		InventoryManager.open(NegativityInventory.MOD, NegativityPlayer.getCached(((Player) sender).getUniqueId()).getPlayer());
+		InventoryManager.open(NegativityInventory.MOD, (Player) sender);
 		return false;
 	}
 }

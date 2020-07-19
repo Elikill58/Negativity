@@ -72,7 +72,7 @@ public class AntiKnockbackProtocol extends Cheat {
 			// Falling deals damage but does not necessarily moves the player
 			return;
 		}
-		if(np.hasPotionEffect(PotionEffectTypes.POISON))
+		if(np.hasPotionEffect(PotionEffectTypes.POISON) || np.hasPotionEffect(PotionEffectTypes.LEVITATION))
 			return;
 
 		if (damageSource instanceof EntityDamageSource) {

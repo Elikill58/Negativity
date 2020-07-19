@@ -52,6 +52,9 @@ public class FlyProtocol extends Cheat {
 
 		if (p.get(Keys.CAN_FLY).orElse(false) || p.get(Keys.IS_ELYTRA_FLYING).orElse(false))
 			return;
+		
+		if(np.hasPotionEffect(PotionEffectTypes.LEVITATION))
+			return;
 
 		BlockType blockTypeBelow = p.getLocation().sub(Vector3i.UNIT_Y).getBlockType();
 		if (blockTypeBelow != BlockTypes.AIR || p.getLocation().sub(0, 2, 0).getBlockType() != BlockTypes.AIR) {

@@ -38,7 +38,7 @@ public class AdminInventory extends AbstractInventory {
 
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
-		if(m.getId().contains("PAPER")) {
+		if(m.equals(Materials.PAPER)) {
 			InventoryManager.open(NegativityInventory.LANG, p);
 		} else if (m.equals(Materials.TNT))
 			InventoryManager.open(NegativityInventory.CHEAT_MANAGER, p, true);

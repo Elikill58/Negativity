@@ -24,10 +24,15 @@ public class ActivedCheatInventory extends AbstractInventory {
 	}
 	
 	@Override
+	public boolean isInstance(NegativityHolder nh) {
+		return nh instanceof ActivedCheatHolder;
+	}
+	
+	@Override
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
-		Inventory inv = Inventory.createInventory(Inv.NAME_ACTIVED_CHEAT_MENU, UniversalUtils.getMultipleOf(np.ACTIVE_CHEAT.size() + 3, 9, 1, 54), new ActivedCheatHolder());
+		Inventory inv = Inventory.createInventory(Inv.NAME_ACTIVED_CHEAT_MENU, UniversalUtils.getMultipleOf(np.ACTIVE_CHEAT.size() + 3, 9, 1, 54), new ActivedCheatHolder(cible));
 		if (np.ACTIVE_CHEAT.size() > 0) {
 			int slot = 0;
 			for (Cheat c : np.ACTIVE_CHEAT)
@@ -43,11 +48,6 @@ public class ActivedCheatInventory extends AbstractInventory {
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
 		if (m.equals(Materials.ARROW))
-			InventoryManager.open(NegativityInventory.CHECK_MENU, p, Inv.CHECKING.get(p));
-	}
-	
-	@Override
-	public boolean isInstance(NegativityHolder nh) {
-		return nh instanceof ActivedCheatHolder;
+			InventoryManager.open(NegativityInventory.CHECK_MENU, p, ((ActivedCheatHolder) nh).getCible());
 	}
 }

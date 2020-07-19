@@ -15,7 +15,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.common.inventories.holders.AlertHolder;
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.NegativityAccount;
@@ -49,7 +48,7 @@ public class AlertInventory extends AbstractInventory {
 				TO_SEE.add(c);
 		}
 		Inventory inv = Inventory.createInventory(Messages.getMessage(p, "inventory.detection.name_inv"),
-				UniversalUtils.getMultipleOf(TO_SEE.size() + 3, 9, 1, 54), new AlertHolder());
+				UniversalUtils.getMultipleOf(TO_SEE.size() + 3, 9, 1, 54), new AlertHolder(cible));
 		int slot = 0;
 		for (Cheat c : TO_SEE) {
 			if (c.getMaterial() != null) {
@@ -95,15 +94,15 @@ public class AlertInventory extends AbstractInventory {
 
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+		Player cible = ((AlertHolder) nh).getCible();
 		if (m.equals(Materials.ARROW))
-			InventoryManager.open(NegativityInventory.CHECK_MENU, p, Inv.CHECKING.get(p));
+			InventoryManager.open(NegativityInventory.CHECK_MENU, p, cible);
 		else if (m.equals(Materials.BONE)) {
-			Player target = Inv.CHECKING.get(p);
-			NegativityAccount account = NegativityAccount.get(target.getUniqueId());
+			NegativityAccount account = NegativityAccount.get(cible.getUniqueId());
 			for (Cheat c : Cheat.values()) {
 				account.setWarnCount(c, 0);
 			}
-			actualizeInventory(p, Inv.CHECKING.get(p));
+			actualizeInventory(p, cible);
 		}
 	}
 }

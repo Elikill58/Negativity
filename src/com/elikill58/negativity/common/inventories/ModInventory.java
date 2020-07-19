@@ -78,7 +78,7 @@ public class ModInventory extends AbstractInventory {
 			InventoryManager.open(NegativityInventory.CHEAT_MANAGER, p, false);
 			/*p.closeInventory();
 			CheatManagerInventory.openCheatManagerMenu(p);*/
-		} else if (m.getId().contains("FEATHER")) {
+		} else if (m.equals(Materials.FEATHER)) {
 			p.closeInventory();
 			p.setAllowFlight(!p.getAllowFlight());
 			p.sendMessage("Flying: "

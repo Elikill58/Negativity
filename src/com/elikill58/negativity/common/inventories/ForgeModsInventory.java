@@ -27,10 +27,10 @@ public class ForgeModsInventory extends AbstractInventory {
 	
 	@Override
 	public void openInventory(Player mod, Object... args) {
-		Player p = (Player) args[0];
+		Player cible = (Player) args[0];
 		slot = 0;
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		Inventory inv = Inventory.createInventory(Inv.NAME_FORGE_MOD_MENU, UniversalUtils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), new ForgeModsHolder());
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
+		Inventory inv = Inventory.createInventory(Inv.NAME_FORGE_MOD_MENU, UniversalUtils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), new ForgeModsHolder(cible));
 		if(np.MODS.size() == 0) {
 			inv.set(4, ItemBuilder.Builder(Materials.DIAMOND).displayName("No mods").build());
 		} else {
@@ -46,7 +46,7 @@ public class ForgeModsInventory extends AbstractInventory {
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
 		if(m.equals(Materials.ARROW))
-			InventoryManager.open(NegativityInventory.CHECK_MENU, p, Inv.CHECKING.get(p));
+			InventoryManager.open(NegativityInventory.CHECK_MENU, p, ((ForgeModsHolder) nh).getCible());
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package com.elikill58.negativity.api.timers;
 
-import java.util.HashMap;
-
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
@@ -10,7 +8,6 @@ import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.PlatformHolder;
 import com.elikill58.negativity.common.inventories.holders.AlertHolder;
 import com.elikill58.negativity.common.inventories.holders.CheckMenuHolder;
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class ActualizeInvTimer implements Runnable {
@@ -19,11 +16,9 @@ public class ActualizeInvTimer implements Runnable {
 
 	@Override
 	public void run() {
-		for (Player p : new HashMap<>(Inv.CHECKING).keySet()) {
-			if(!p.isOnline()) {
-				Inv.CHECKING.remove(p);
+		for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
+			if(!p.isOnline())
 				continue;
-			}
 			if (p.hasOpenInventory()) {
 				PlatformHolder holder = p.getOpenInventory().getHolder();
 				if(!(holder instanceof NegativityHolder)) {
@@ -31,12 +26,10 @@ public class ActualizeInvTimer implements Runnable {
 				}
 				NegativityHolder nh = (NegativityHolder) holder;
 				if (nh instanceof CheckMenuHolder)
-					InventoryManager.getInventory(NegativityInventory.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
-					//CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
+					InventoryManager.getInventory(NegativityInventory.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, ((CheckMenuHolder) nh).getCible()));
 				else if (nh instanceof AlertHolder)
-					InventoryManager.getInventory(NegativityInventory.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
-			} else
-				Inv.CHECKING.remove(p);
+					InventoryManager.getInventory(NegativityInventory.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, ((AlertHolder) nh).getCible()));
+			}
 		}
 		for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
 			if (NegativityPlayer.getNegativityPlayer(p).isFreeze && INV_FREEZE_ACTIVE) {

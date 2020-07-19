@@ -20,7 +20,6 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.utils.Utils;
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
@@ -174,8 +173,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				Messages.sendMessage(sender, "not_permission");
 				return false;
 			}
-
-			Inv.CHECKING.put(playerSender, targetPlayer);
+			
 			InventoryManager.open(NegativityInventory.CHECK_MENU, playerSender, targetPlayer);
 			return true;
 		}

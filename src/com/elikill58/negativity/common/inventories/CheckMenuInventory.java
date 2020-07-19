@@ -37,7 +37,7 @@ public class CheckMenuInventory extends AbstractInventory {
 	@Override
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
-		Inventory inv = Inventory.createInventory(Inv.NAME_CHECK_MENU, 27, new CheckMenuHolder());
+		Inventory inv = Inventory.createInventory(Inv.NAME_CHECK_MENU, 27, new CheckMenuHolder(cible));
 		NegativityPlayer np = NegativityPlayer.getCached(cible.getUniqueId());
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
@@ -124,22 +124,20 @@ public class CheckMenuInventory extends AbstractInventory {
 
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
-		Player cible = Inv.CHECKING.get(p);
-		if (m == Materials.EYE_OF_ENDER) {
+		Player cible = ((CheckMenuHolder) nh).getCible();
+		if (m.equals(Materials.EYE_OF_ENDER)) {
 			p.teleport(cible.getLocation());
 			p.closeInventory();
-			Inv.CHECKING.remove(p);
-		} else if (m == Materials.SKELETON_SKULL) {
+		} else if (m.equals(Materials.SKELETON_SKULL)) {
 			if(e.getSlot() == 12) {
 				p.closeInventory();
 				NegativityPlayer.getCached(cible.getUniqueId()).makeAppearEntities();
 			}
-		} else if(m == Materials.SPIDER_EYE){
+		} else if(m.equals(Materials.SPIDER_EYE)){
 			p.openInventory(cible.getInventory());
-			Inv.CHECKING.remove(p);
-		} else if(m == Materials.TNT) {
+		} else if(m.equals(Materials.TNT)) {
 			InventoryManager.open(NegativityInventory.ACTIVED_CHEAT, p, cible);
-		} else if(m == Materials.PACKED_ICE) {
+		} else if(m.equals(Materials.PACKED_ICE)) {
 			p.closeInventory();
 			NegativityPlayer np = NegativityPlayer.getCached(cible.getUniqueId());
 			np.isFreeze = !np.isFreeze;
@@ -149,13 +147,13 @@ public class CheckMenuInventory extends AbstractInventory {
 				Messages.sendMessage(cible, "inventory.main.freeze", "%name%", p.getName());
 			} else
 				Messages.sendMessage(cible, "inventory.main.unfreeze", "%name%", p.getName());
-		} else if(m == Materials.PAPER) {
+		} else if(m.equals(Materials.PAPER)) {
 			InventoryManager.open(NegativityInventory.ALERT, p, cible);
-		} else if(m == Materials.GRASS) {
+		} else if(m.equals(Materials.GRASS)) {
 			InventoryManager.open(NegativityInventory.FORGE_MODS, p, cible);
-		} else if(m == Materials.DIAMOND_SHOVEL) {
+		} else if(m.equals(Materials.DIAMOND_SHOVEL)) {
 			// TODO soon implement inv kick
-		} else if(m == Materials.ANVIL) {
+		} else if(m.equals(Materials.ANVIL)) {
 			// TODO soon implement inv ban
 		}
 	}

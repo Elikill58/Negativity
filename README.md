@@ -1,6 +1,6 @@
 # Negativity
 
-A Minecraft AntiCheat for **Spigot** (1.7.10 to 1.15.2) and **Sponge** (API 7.1.0). (*work also with PaperSpigot*)
+A Minecraft AntiCheat for **Spigot** (1.7.10 to 1.16.1) and **Sponge** (API 7.1.0). (*work also with PaperSpigot*)
 It is also compatible with **Bungeecord and Velocity**.
 You need to put the plugin on Spigot/Sponge even if you put it on your proxy.
 
@@ -39,7 +39,7 @@ The default config enable you to directly test the plugin !
 
 ## I want to test it before download !
 
-You can check it on **server.negativity.fr** (server in 1.8.8, you can connect with 1.8.8 to 1.15.2).
+You can check it on **server.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.16.1).
 
 ## What are the detected cheat ?
 
@@ -71,6 +71,8 @@ We support a lot of languages :
 - **Spanish** (*es_ES*) By SolitaSolaa
 - **Vietnamese** (*vi_VN*) By HuyMCYTTM#7592
 - **Italian** (*it_IT*) By Herobrine99dan#1564
+- **Czech Republic** (*cs_CZ*) By Disordeon#1824
+- **Albanian** (*sq_SQ*) By ErzenX#2439
 
 You find a grammar error on your language ? You want to add your own ? Contact me on discord (link below)
 

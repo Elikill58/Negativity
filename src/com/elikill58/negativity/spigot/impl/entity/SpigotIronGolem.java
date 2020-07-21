@@ -46,7 +46,7 @@ public class SpigotIronGolem extends IronGolem {
 
 	@Override
 	public Entity getTarget() {
-		return SpigotEntityManager.getEntity(golem.getTarget());
+		return golem.getTarget() == null ? null : SpigotEntityManager.getEntity(golem.getTarget());
 	}
 
 	@Override

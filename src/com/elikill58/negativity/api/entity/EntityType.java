@@ -99,4 +99,11 @@ public enum EntityType {
 	public String getName() {
 		return name;
 	}
+
+	public static EntityType get(String name) {
+		for(EntityType gm : EntityType.values())
+			if(gm.getName().equalsIgnoreCase(name) || gm.name().equalsIgnoreCase(name))
+				return gm;
+		return EntityType.UNKNOWN;
+	}
 }

@@ -37,7 +37,7 @@ public class SpigotEntity extends Entity {
 
 	@Override
 	public EntityType getType() {
-		return EntityType.valueOf(entity.getType().name());
+		return EntityType.get(entity.getType().name());
 	}
 
 	@Override

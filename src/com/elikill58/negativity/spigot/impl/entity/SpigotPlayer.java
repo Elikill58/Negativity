@@ -89,7 +89,7 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public GameMode getGameMode() {
-		return GameMode.valueOf(p.getGameMode().name());
+		return GameMode.get(p.getGameMode().name());
 	}
 
 	@Override

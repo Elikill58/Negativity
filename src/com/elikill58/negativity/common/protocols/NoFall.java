@@ -46,7 +46,7 @@ public class NoFall extends Cheat implements Listeners {
 			if ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
 					|| (motionY > (p.getWalkSpeed() / 2) && p.isOnGround() && p.getWalkSpeed() > p.getFallDistance())) {
 				int porcent = UniversalUtils.parseInPorcent(900 * motionY);
-				Negativity.alertMod(ReportType.WARNING, p, this, porcent, "New NoFall - Player on ground. motionY: " + motionY
+				Negativity.alertMod(ReportType.WARNING, p, this, porcent, "New NoFall - Player on ground. motionY: " + motionY + ", walkSpeed: " + p.getWalkSpeed()
 						+ ", onGround: " + p.isOnGround() + ", fallDistance: " + p.getFallDistance(), new Cheat.CheatHover.Literal("MotionY (on ground): " + motionY));
 			}
 		}

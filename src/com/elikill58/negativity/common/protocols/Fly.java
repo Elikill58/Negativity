@@ -102,7 +102,7 @@ public class Fly extends Cheat implements Listeners {
 		double distanceWithoutY = to.distance(e.getFrom());
 		if (distanceWithoutY == i && !p.isOnGround() && i != 0
 				&& typeUpper.equals(Materials.AIR) && !p.isInsideVehicle()
-				&& !type.getId().contains("WATER") && distanceWithoutY > 0.1) {
+				&& !type.getId().contains("WATER") && distanceWithoutY > 0.3) {
 			if (np.booleans.get(FLY, "not-moving-y", false))
 				mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, 98, "Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY);

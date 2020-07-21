@@ -60,7 +60,7 @@ public class Nuker extends Cheat implements Listeners {
 	}
 	
 	private boolean isInstantBlock(String m) {
-		if(m.contains("SLIME") || m.contains("TNT"))
+		if(m.contains("SLIME") || m.contains("TNT") || m.contains("LEAVE"))
 			return true;
 		return false;
 	}

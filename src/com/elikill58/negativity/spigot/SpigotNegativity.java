@@ -92,7 +92,7 @@ import com.elikill58.negativity.universal.verif.VerificationManager;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean log = false, log_console = false, hasBypass = false, isBuggedGroundVersion = false, essentialsSupport = false,
+	public static boolean log = false, log_console = false, hasBypass = false, reloading = false, isBuggedGroundVersion = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
 	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
@@ -102,6 +102,7 @@ public class SpigotNegativity extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		INSTANCE = this;
+		reloading = true;
 		if (Adapter.getAdapter() == null)
 			Adapter.setAdapter(new SpigotAdapter(this));
 		Version v = Version.getVersion(Utils.VERSION);
@@ -238,6 +239,10 @@ public class SpigotNegativity extends JavaPlugin {
 		if (supportedPluginName.length() > 0) {
 			getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
 		}
+		
+		 getServer().getScheduler().runTaskLater(this, () -> {
+			 reloading = false;
+		 }, 1);
 	}
 	
 	private void loadChannelInOut(Messenger messenger, String channel, ChannelEvents event) {
@@ -375,7 +380,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
 			CheatHover hover, int amount) {
-		if(!c.isActive() || reliability < 55)
+		if(reloading || !c.isActive() || reliability < 55)
 			return false;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.already_blink && c.equals(Cheat.forKey(CheatKeys.BLINK))) {

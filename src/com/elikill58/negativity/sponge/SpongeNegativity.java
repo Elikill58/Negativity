@@ -635,7 +635,7 @@ public class SpongeNegativity {
 			}
 			if(hasPermPeople) {
 				np.pendingAlerts.remove(c);
-				Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
+				Stats.updateStats(StatsType.CHEAT, c.getKey().toLowerCase(), reliability + "");
 			}
 		}
 	}

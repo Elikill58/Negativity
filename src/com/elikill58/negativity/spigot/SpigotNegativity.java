@@ -481,7 +481,7 @@ public class SpigotNegativity extends JavaPlugin {
 			return;
 		for(String s : conf.getStringList("alert.command.run")) {
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), UniversalUtils.replacePlaceholders(s, "%name%",
-					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey(), "%cheat_name%",
+					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey().toLowerCase(), "%cheat_name%",
 					c.getName(), "%reliability%", reliability, "%report_type%", type.name()));
 		}
 	}
@@ -527,7 +527,7 @@ public class SpigotNegativity extends JavaPlugin {
 			}
 			if(hasPermPeople) {
 				np.ALERT_NOT_SHOWED.remove(c);
-				Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
+				Stats.updateStats(StatsType.CHEAT, c.getKey().toLowerCase(), reliability + "");
 			}
 		}
 	}

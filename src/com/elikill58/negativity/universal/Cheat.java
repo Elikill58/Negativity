@@ -35,7 +35,7 @@ public abstract class Cheat {
 	}
 	
 	public String getKey() {
-		return key;
+		return key.toUpperCase();
 	}
 	
 	public String getName() {

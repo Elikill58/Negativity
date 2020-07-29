@@ -82,7 +82,7 @@ public class FlyProtocol extends Cheat implements Listener {
 		if (!np.isUsingSlimeBlock && !LocationUtils.hasOtherThanExtended(p.getLocation(), "AIR")
 				&& !LocationUtils.hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
 				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, "AIR")
-				&& (e.getFrom().getY() <= e.getTo().getY() || Utils.isInBoat(p))) {
+				&& (e.getFrom().getY() <= e.getTo().getY() || Utils.isInBoat(p)) && p.getVelocity().length() < 1.5) {
 			double nbTimeAirBelow = np.contentDouble.getOrDefault("fly-air-below", 0.0);
 			np.contentDouble.put("fly-air-below", nbTimeAirBelow + 1);
 			if(nbTimeAirBelow > 6) { // we don't care when player jump

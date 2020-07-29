@@ -15,6 +15,8 @@ public class Stats {
     public static boolean STATS_IN_MAINTENANCE = false;
 
     public static void updateStats(StatsType type, String... value) {
+    	if(!Adapter.getAdapter().getConfig().getBoolean("stats"))
+    		return;
     	String post = "";
     	switch (type) {
 		case BAN:

@@ -175,5 +175,7 @@ public class DefaultConfigValue {
 
 		INTS.put("cheats.special.max-player-by-ip.number", 4);
 		STRINGS.put("cheats.special.max-player-by-ip.name", "Max Player/IP");
+		
+		BOOLEANS.put("stats", true);
 	}
 }

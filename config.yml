@@ -682,3 +682,4 @@ cheats:
       # number of maximum allowed player on the same IP
       # default: 4. It means that the third people will be kicked.
       number: 4
+stats: true

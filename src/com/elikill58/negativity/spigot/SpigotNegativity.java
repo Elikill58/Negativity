@@ -242,7 +242,7 @@ public class SpigotNegativity extends JavaPlugin {
 		
 		 getServer().getScheduler().runTaskLater(this, () -> {
 			 reloading = false;
-		 }, 1);
+		 }, 3 * 20);
 	}
 	
 	private void loadChannelInOut(Messenger messenger, String channel, ChannelEvents event) {

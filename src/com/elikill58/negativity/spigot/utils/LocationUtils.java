@@ -292,7 +292,7 @@ public class LocationUtils {
 	 * @return true if the player can see the entity
 	 */
 	public static boolean canSeeEntity(Player p, Entity entityToSee, int maxDistance) {
-		if(Version.getVersion().isNewerOrEquals(Version.V1_9))
+		if(Version.getVersion().isNewerOrEquals(Version.V1_8))
 			return p.hasLineOfSight(entityToSee);
 		Location loc = p.getLocation().clone().add(0, 1.5, 0);
 		World w = p.getWorld();

@@ -40,7 +40,7 @@ public class StepProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT") || np.isUsingSlimeBlock || Utils.isSwimming(p))
+		if (np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT") || np.isUsingSlimeBlock || Utils.isSwimming(p) || p.isFlying())
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double dif = to.getY() - from.getY();

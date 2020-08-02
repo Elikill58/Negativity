@@ -36,11 +36,13 @@ import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryTy
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
+import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
 import com.elikill58.negativity.spigot.support.ProtocolSupportSupport;
 import com.elikill58.negativity.spigot.support.ViaVersionSupport;
 import com.elikill58.negativity.spigot.utils.InventoryUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
@@ -137,7 +139,18 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return false;
 		if(!ACTIVE_CHEAT.contains(c))
 			return false;
-		return Utils.getPing(getPlayer()) < c.getMaxAlertPing();
+		if(TIME_INVINCIBILITY > System.currentTimeMillis())
+			return false;
+		if (isInFight && c.isBlockedInFight())
+			return false;
+		if(SpigotNegativity.tps_alert_stop > Utils.getLastTPS()) // to make TPS go upper
+			return false;
+		Player p = getPlayer();
+		if(SpigotNegativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
+			return false;
+		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
+			return false;
+		return Utils.getPing(p) < c.getMaxAlertPing();
 	}
 	
 	public void updateCheckMenu() {

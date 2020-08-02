@@ -11,8 +11,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.StringJoiner;
 import java.util.Map.Entry;
+import java.util.StringJoiner;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -51,14 +51,12 @@ import com.elikill58.negativity.spigot.listeners.PlayerCheatKickEvent;
 import com.elikill58.negativity.spigot.listeners.ShowAlertPermissionEvent;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
-import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
 import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
 import com.elikill58.negativity.spigot.timers.TimerTimeBetweenAlert;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
@@ -94,6 +92,7 @@ public class SpigotNegativity extends JavaPlugin {
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, reloading = false, isBuggedGroundVersion = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
+	public static double tps_alert_stop = 19.0;
 	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
 	private static int timeBetweenAlert = -1;
@@ -387,11 +386,7 @@ public class SpigotNegativity extends JavaPlugin {
 			np.already_blink = true;
 			return false;
 		}
-		if (np.isInFight && c.isBlockedInFight())
-			return false;
 		if (c.equals(Cheat.forKey(CheatKeys.FLY)) && p.hasPermission("essentials.fly") && essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
-			return false;
-		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT) && gadgetMenuSupport &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
 			return false;
 		if(VerificationManager.isDisablingAlertOnVerif() && !hasVerifications(p.getUniqueId()))
 			return false;
@@ -401,9 +396,6 @@ public class SpigotNegativity extends JavaPlugin {
 		if (np.TIME_INVINCIBILITY > currentTimeMilli || ping > c.getMaxAlertPing()
 				|| np.getLife() == 0.0D || np.isFreeze
 				|| getInstance().getConfig().getDouble("tps_alert_stop", 19.0) > Utils.getLastTPS() || ping < 0)
-			return false;
-		
-		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
 			return false;
 		
 		ItemStack itemInHand = Utils.getItemInHand(p);
@@ -629,6 +621,7 @@ public class SpigotNegativity extends JavaPlugin {
 		log = config.getBoolean("log_alerts");
 		log_console = config.getBoolean("log_alerts_in_console");
 		hasBypass = config.getBoolean("Permissions.bypass.active");
+		tps_alert_stop = config.getDouble("tps_alert_stop", 19);
 		
 		timeBetweenAlert = config.getInt("time_between_alert");
 		if(timeBetweenAlert != -1) {

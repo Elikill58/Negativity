@@ -36,6 +36,7 @@ import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryTy
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
+import com.elikill58.negativity.spigot.support.FloodGateSupport;
 import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
 import com.elikill58.negativity.spigot.support.ProtocolSupportSupport;
 import com.elikill58.negativity.spigot.support.ViaVersionSupport;
@@ -84,7 +85,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false, disableShowingAlert = false,
 			isInvisible = false, isUsingSlimeBlock = false, already_blink = false, isJumpingWithBlock = false,
 			isOnLadders = false, lastClickInv = false;
-	private boolean mustToBeSaved = false, isOnGround = true;
+	private boolean mustToBeSaved = false, isOnGround = true, isBedrockPlayer = false;
 	public PacketType lastPacketType = null;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;
@@ -100,6 +101,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		super(p.getUniqueId(), p.getName());
 		this.p = new WeakReference<>(p);
 		initMods(p);
+		isBedrockPlayer = SpigotNegativity.floodGateSupport ? FloodGateSupport.isBedrockPlayer(p) : false;
 		playerVersion = SpigotNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : (SpigotNegativity.protocolSupportSupport ? ProtocolSupportSupport.getPlayerVersion(p) : Version.getVersion());
 	}
 
@@ -132,6 +134,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	@Override
 	public Version getPlayerVersion() {
 		return playerVersion;
+	}
+	
+	public boolean isBedrockPlayer() {
+		return isBedrockPlayer;
 	}
 	
 	public boolean hasDetectionActive(Cheat c) {

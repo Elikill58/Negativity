@@ -91,7 +91,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, reloading = false, isBuggedGroundVersion = false, essentialsSupport = false,
-			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
+			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false, floodGateSupport = false;
 	public static double tps_alert_stop = 19.0;
 	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
@@ -231,6 +231,11 @@ public class SpigotNegativity extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("ProtocolSupport") != null) {
 			protocolSupportSupport = true;
 			supportedPluginName.add("ProtocolSupport");
+		}
+		
+		if (Bukkit.getPluginManager().getPlugin("floodgate-bukkit") != null) {
+			floodGateSupport = true;
+			supportedPluginName.add("FloodGate");
 		}
 		
 		Perm.registerChecker(Perm.PLATFORM_CHECKER, new BukkitPermissionChecker());

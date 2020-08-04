@@ -45,7 +45,7 @@ public class CheckMenuInventory extends AbstractInventory {
 		Minerate minerate = account.getMinerate();
 		actualizeInventory(p, cible);
 		
-		inv.setItem(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId(), ChatColor.GREEN + "Version: " + np.getPlayerVersion().getName()));
+		inv.setItem(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId(), ChatColor.GREEN + "Version: " + np.getPlayerVersion().getName(), ChatColor.GREEN + "Platform: " + (np.isBedrockPlayer() ? "Bedrock" : "Java")));
 
 		inv.setItem(10, ItemUtils.hideAttributes(createItem(Material.DIAMOND_PICKAXE, "Minerate", minerate.getInventoryLoreString())));
 		inv.setItem(11, createItem(ItemUtils.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));

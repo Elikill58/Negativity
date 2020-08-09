@@ -107,7 +107,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 					if(p.hasPotionEffect(PotionEffectType.JUMP))
 						return;
 					Material under = e.getTo().clone().subtract(0, 1, 0).getBlock().getType();
-					if (!under.name().contains("STEP") && !np.isUsingSlimeBlock) {
+					if (!under.name().contains("STEP") && !np.isUsingSlimeBlock && !(under.name().contains("WATER") || Utils.isSwimming(p))) {
 						double distance = from.distance(to);
 						to.setY(from.getY());
 						double yy = to.distance(from);

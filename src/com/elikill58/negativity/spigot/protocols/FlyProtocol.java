@@ -54,14 +54,14 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if (p.getAllowFlight() || p.getEntityId() == 100 || Utils.isSwimming(p))
 			return;
-		boolean mayCancel = false;
+		boolean mayCancel = false, inBoat = Utils.isInBoat(p);
 		double y = e.getFrom().getY() - e.getTo().getY();
 		Location loc = p.getLocation().clone(),
 				locUnder = p.getLocation().clone().subtract(0, 1, 0),
 				locUnderUnder = p.getLocation().clone().subtract(0, 2, 0);
 		Material type = loc.getBlock().getType(), typeUpper = loc.getBlock().getRelative(BlockFace.UP).getType();
 		boolean isInWater = loc.getBlock().getType().name().contains("WATER"), isOnWater = locUnder.getBlock().getType().name().contains("WATER");
-		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle()
+		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle() && !inBoat
 				&& !np.isInFight && !LocationUtils.hasBoatAroundHim(p.getLocation()) && !(isInWater || isOnWater) && !LocationUtils.hasMaterialsAround(loc, "SCAFFOLD")){
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, 97, "Suspicious Y: " + y);
@@ -70,19 +70,19 @@ public class FlyProtocol extends Cheat implements Listener {
 		if (!(p.isSprinting() && (e.getTo().getY() - e.getFrom().getY()) > 0)
 				&& locUnder.getBlock().getType().equals(Material.AIR)
 				&& locUnderUnder.getBlock().getType().equals(Material.AIR)
-				&& (p.getFallDistance() == 0.0F || Utils.isInBoat(p))
+				&& (p.getFallDistance() == 0.0F || inBoat)
 				&& typeUpper.equals(Material.AIR) && i > 0.8
 				&& !np.isOnGround()) {
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, parseInPorcent((int) i * 50),
 					"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this),
-					Utils.isInBoat(p) ? hoverMsg("boat") : null);
+					inBoat ? hoverMsg("boat") : null);
 		}
 
 		if (!np.isUsingSlimeBlock && !LocationUtils.hasOtherThanExtended(p.getLocation(), "AIR")
 				&& !LocationUtils.hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
 				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, "AIR")
-				&& (e.getFrom().getY() <= e.getTo().getY() || Utils.isInBoat(p)) && p.getVelocity().length() < 1.5) {
+				&& (e.getFrom().getY() <= e.getTo().getY()) && p.getVelocity().length() < 1.5) {
 			double nbTimeAirBelow = np.contentDouble.getOrDefault("fly-air-below", 0.0);
 			np.contentDouble.put("fly-air-below", nbTimeAirBelow + 1);
 			if(nbTimeAirBelow > 6) { // we don't care when player jump
@@ -91,9 +91,9 @@ public class FlyProtocol extends Cheat implements Listener {
 				if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Material.AIR))
 					porcent = parseInPorcent(porcent - 15);
 				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
-						this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d
+						this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d + ", inBoat: " + inBoat
 								+ ". Warn for fly: " + np.getWarn(this),
-								hoverMsg(Utils.isInBoat(p) ? "boat_air_below" : "air_below", "%nb%", nb));
+								hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb));
 			}
 		} else
 			np.contentDouble.remove("fly-air-below");

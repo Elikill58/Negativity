@@ -40,8 +40,8 @@ public class JesusProtocol extends Cheat implements Listener {
 		if (np.hasElytra() || p.isInsideVehicle() || Utils.isSwimming(p))
 			return;
 		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom();
-		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY")
-				|| hasMaterialsAround(loc.clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY"))
+		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY", "LILY")
+				|| hasMaterialsAround(loc.clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY", "LILY"))
 			return;
 		Location under = loc.clone().subtract(0, 1, 0);
 		Material type = loc.getBlock().getType(), underType = under.getBlock().getType();

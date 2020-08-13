@@ -503,7 +503,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public boolean isOnGround() {
-		return SpigotNegativity.isBuggedGroundVersion ? isOnGround : p.get().isOnGround();
+		return isOnGround || p.get().isOnGround();
 	}
 	
 	public void setOnGround(boolean b) {

@@ -12,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
+import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.packets.PacketContent;
 import com.elikill58.negativity.spigot.packets.PacketContent.ContentModifier;
 import com.elikill58.negativity.universal.Version;
@@ -292,6 +293,8 @@ public class LocationUtils {
 	 * @return true if the player can see the entity
 	 */
 	public static boolean canSeeEntity(Player p, Entity entityToSee, int maxDistance) {
+		if(SpigotNegativity.isCraftBukkit)
+			return true; // bugged "hasLineOfSight" for craftbukkit
 		if(Version.getVersion().isNewerOrEquals(Version.V1_8))
 			return p.hasLineOfSight(entityToSee);
 		Location loc = p.getLocation().clone().add(0, 1.5, 0);

@@ -91,7 +91,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, reloading = false, isBuggedGroundVersion = false, essentialsSupport = false,
-			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false, floodGateSupport = false;
+			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false, floodGateSupport = false, isCraftBukkit = false;
 	public static double tps_alert_stop = 19.0;
 	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
@@ -109,6 +109,13 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().warning("Unknow server version ! Some problems can appears.");
 		else
 			getLogger().info("Detected server version: " + v.name().toLowerCase());
+		
+		try {
+			Class.forName("org.spigotmc.SpigotConfig");
+			isCraftBukkit = false;
+		} catch (ClassNotFoundException e) {
+			isCraftBukkit = true;
+		}
 		
 		packetManager = new NegativityPacketManager(this);
 		new File(getDataFolder().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();

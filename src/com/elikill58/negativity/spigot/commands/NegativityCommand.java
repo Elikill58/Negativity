@@ -172,23 +172,15 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 			return true;
 		}
-
-		Player targetPlayer = Bukkit.getPlayer(arg[0]);
-		if (targetPlayer != null) {
-			if (!(sender instanceof Player)) {
-				Messages.sendMessage(sender, "only_player");
-				return false;
+		
+		if(sender instanceof Player && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.CHECK)) {
+			Player targetPlayer = Bukkit.getPlayer(arg[0]);
+			if (targetPlayer != null) {
+				Player playerSender = (Player) sender;
+				Inv.CHECKING.put(playerSender, targetPlayer);
+				AbstractInventory.open(InventoryType.CHECK_MENU, playerSender, targetPlayer);
+				return true;
 			}
-
-			Player playerSender = (Player) sender;
-			if (!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(playerSender), Perm.VERIF)) {
-				Messages.sendMessage(sender, "not_permission");
-				return false;
-			}
-
-			Inv.CHECKING.put(playerSender, targetPlayer);
-			AbstractInventory.open(InventoryType.CHECK_MENU, playerSender, targetPlayer);
-			return true;
 		}
 
 		Messages.sendMessageList(sender, "negativity.verif.help");

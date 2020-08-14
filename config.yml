@@ -90,6 +90,8 @@ Permissions:
     default: "negativity.verif"
   manageCheat:
     default: "negativity.managecheat"
+  reload:
+    default: "negativity.reload"
   report_wait:
     default: "negativity.reportwait"
   report:

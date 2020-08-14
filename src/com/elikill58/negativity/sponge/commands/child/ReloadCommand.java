@@ -8,7 +8,9 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 
 import com.elikill58.negativity.sponge.Messages;
+import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class ReloadCommand implements CommandExecutor {
 
@@ -20,9 +22,8 @@ public class ReloadCommand implements CommandExecutor {
 	}
 
 	public static CommandCallable create() {
-		return CommandSpec.builder()
-				.executor(new ReloadCommand())
-				.permission("negativity.reload")
-				.build();
+		return new NegativityCmdWrapper(
+				CommandSpec.builder().executor(new ReloadCommand()).permission("negativity.reload").build(), false,
+				Perm.RELOAD);
 	}
 }

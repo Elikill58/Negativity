@@ -121,6 +121,10 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			Messages.sendMessage(playerSender, np.disableShowingAlert ? "negativity.see_no_longer_alert" : "negativity.see_alert");
 			return true;
 		} else if (arg[0].equalsIgnoreCase("reload")) {
+			if (sender instanceof Player && !Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.RELOAD)) {
+				Messages.sendMessage(sender, "not_permission");
+				return false;
+			}
 			Adapter.getAdapter().reload();
 			Messages.sendMessage(sender, "negativity.reload_done");
 			return true;

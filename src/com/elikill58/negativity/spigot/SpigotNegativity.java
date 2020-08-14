@@ -106,9 +106,9 @@ public class SpigotNegativity extends JavaPlugin {
 			Adapter.setAdapter(new SpigotAdapter(this));
 		Version v = Version.getVersion(Utils.VERSION);
 		if (v.equals(Version.HIGHER))
-			getLogger().warning("Unknow server version ! Some problems can appears.");
+			getLogger().warning("Unknow server version " + Utils.VERSION + " ! Some problems can appears.");
 		else
-			getLogger().info("Detected server version: " + v.name().toLowerCase());
+			getLogger().info("Detected server version: " + v.name().toLowerCase() + " (" + Utils.VERSION + ")");
 		
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");

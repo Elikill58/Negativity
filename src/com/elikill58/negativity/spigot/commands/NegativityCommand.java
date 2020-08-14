@@ -133,7 +133,12 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				Messages.sendMessage(sender, "only_player");
 				return true;
 			}
-			AbstractInventory.getInventory(InventoryType.MOD).ifPresent((inv) -> inv.openInventory((Player) sender));
+			Player p = (Player) sender;
+			if (!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), Perm.MOD)) {
+				Messages.sendMessage(sender, "not_permission");
+				return true;
+			}
+			AbstractInventory.getInventory(InventoryType.MOD).ifPresent((inv) -> inv.openInventory(p));
 			return true;
 		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase().contains("manage")) {
 			if (arg.length >= 2 && arg[1].equalsIgnoreCase("updateMessages")) {

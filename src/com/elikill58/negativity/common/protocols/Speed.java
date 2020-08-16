@@ -106,7 +106,7 @@ public class Speed extends Cheat implements Listeners {
 					if(p.hasPotionEffect(PotionEffectType.JUMP))
 						return;
 					Material under = e.getTo().clone().sub(0, 1, 0).getBlock().getType();
-					if (!under.getId().contains("STEP") && !np.isUsingSlimeBlock) {
+					if (!under.getId().contains("STEP") && !np.isUsingSlimeBlock && !(under.getId().contains("WATER") || p.isSwimming())) {
 						double distance = from.distance(to);
 						to.setY(from.getY());
 						double yy = to.distance(from);

@@ -54,7 +54,7 @@ public class RegenProtocol extends Cheat implements Listener {
 		else
 			np.flyingReason = FlyingReason.REGEN;
 		long actual = System.currentTimeMillis(), dif = actual - np.LAST_REGEN;
-		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && np.hasDetectionActive(this)
+		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && !p.hasPotionEffect(PotionEffectType.HEAL) && np.hasDetectionActive(this)
 				&& (np.LAST_REGEN != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))
 				&& !p.getWorld().getDifficulty().equals(Difficulty.PEACEFUL)) {
 			int ping = Utils.getPing(p);

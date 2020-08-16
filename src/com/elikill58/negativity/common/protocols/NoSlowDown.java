@@ -29,7 +29,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this) || p.hasElytra())
 			return;
 		Location loc = p.getLocation();
 		Location from = e.getFrom(), to = e.getTo();
@@ -59,7 +59,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 	public void FoodCheck(PlayerItemConsumeEvent e) {
 		Player p = e.getPlayer();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this) || p.hasElytra())
 			return;
 		if(p.isInsideVehicle())
 			return;

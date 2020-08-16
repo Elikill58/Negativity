@@ -5,6 +5,7 @@ public enum PotionEffectType {
 	BLINDNESS,
 	CONFUSION,
 	DOLPHINS_GRACE,
+	INSTANT_HEAL,
 	FAST_DIGGING,
 	HUNGER,
 	JUMP,

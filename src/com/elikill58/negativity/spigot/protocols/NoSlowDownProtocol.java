@@ -30,7 +30,7 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this) || p.isFlying())
+		if (!np.hasDetectionActive(this) || np.hasElytra())
 			return;
 		Location loc = p.getLocation();
 		Location from = e.getFrom(), to = e.getTo();
@@ -61,7 +61,7 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
-		if(p.isInsideVehicle() || p.isFlying())
+		if(p.isInsideVehicle() || np.hasElytra())
 			return;
 		double dis = np.contentDouble.getOrDefault("slowdown-eating-distance", 0.0);
 		if (dis > p.getWalkSpeed() || p.isSprinting()) {

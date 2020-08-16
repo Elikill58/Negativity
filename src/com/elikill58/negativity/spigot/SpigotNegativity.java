@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.StringJoiner;
 import java.util.logging.Level;
 
 import org.bukkit.Bukkit;
@@ -41,7 +40,6 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
-import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -50,10 +48,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpigotAdapter;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
-import com.elikill58.negativity.universal.ban.support.AdvancedBanProcessor;
 import com.elikill58.negativity.universal.ban.support.BukkitBanProcessor;
-import com.elikill58.negativity.universal.ban.support.LiteBansProcessor;
-import com.elikill58.negativity.universal.ban.support.MaxBansProcessor;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.dataStorage.file.SpigotFileNegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -67,8 +62,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean log = false, log_console = false, hasBypass = false, isCraftBukkit = false, essentialsSupport = false,
-			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
+	public static boolean log = false, log_console = false, hasBypass = false, isCraftBukkit = false;
 	private BukkitTask invTimer = null, timeTimeBetweenAlert = null, packetTimer = null, runSpawnFakePlayer = null;
 	public static String CHANNEL_NAME_FML = "";
 	private static int timeBetweenAlert = -1;
@@ -157,57 +151,10 @@ public class SpigotNegativity extends JavaPlugin {
 
 		NegativityAccountStorage.register("file", new SpigotFileNegativityAccountStorage(new File(getDataFolder(), "user")));
 		NegativityAccountStorage.setDefaultStorage("file");
-		StringJoiner supportedPluginName = new StringJoiner(", ");
 		BanManager.registerProcessor("bukkit", new BukkitBanProcessor());
 		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(SpigotNegativity::sendPluginMessage));
-		if (Bukkit.getPluginManager().getPlugin("Essentials") != null) {
-			essentialsSupport = true;
-			supportedPluginName.add("Essentials");
-		}
-		if (Bukkit.getPluginManager().getPlugin("WorldGuard") != null) {
-			worldGuardSupport = true;
-			supportedPluginName.add("WorldGuard");
-		}
-		if (Bukkit.getPluginManager().getPlugin("GadgetsMenu") != null) {
-			gadgetMenuSupport = true;
-			supportedPluginName.add("GadgetsMenu");
-		}
-
-		if (Bukkit.getPluginManager().getPlugin("MaxBans") != null) {
-			BanManager.registerProcessor("maxbans", new MaxBansProcessor());
-			supportedPluginName.add("MaxBans");
-		}
-
-		if (Bukkit.getPluginManager().getPlugin("AdvancedBan") != null) {
-			BanManager.registerProcessor("advancedban", new AdvancedBanProcessor());
-			supportedPluginName.add("AdvancedBan");
-		}
-
-		if (Bukkit.getPluginManager().getPlugin("LiteBans") != null) {
-			BanManager.registerProcessor("litebans", new LiteBansProcessor());
-			supportedPluginName.add("LiteBans");
-		}
-		
-		if (Bukkit.getPluginManager().getPlugin("ViaVersion") != null) {
-			viaVersionSupport = true;
-			supportedPluginName.add("ViaVersion");
-		}
-		
-		if (Bukkit.getPluginManager().getPlugin("ProtocolSupport") != null) {
-			protocolSupportSupport = true;
-			supportedPluginName.add("ProtocolSupport");
-		}
-		
-		if (Bukkit.getPluginManager().getPlugin("floodgate-bukkit") != null) {
-			Negativity.floodGateSupport = true;
-			supportedPluginName.add("FloodGate");
-		}
 		
 		Perm.registerChecker(Perm.PLATFORM_CHECKER, new BukkitPermissionChecker());
-
-		if (supportedPluginName.length() > 0) {
-			getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
-		}
 
 		getServer().getScheduler().runTaskTimer(this, new ClickManagerTimer(), 20, 20);
 		invTimer = getServer().getScheduler().runTaskTimer(this, new ActualizeInvTimer(), 5, 5);

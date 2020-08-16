@@ -19,6 +19,7 @@ import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
+import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
@@ -207,6 +208,18 @@ public class VelocityAdapter extends Adapter {
 
 	@Override
 	public OfflinePlayer getOfflinePlayer(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean hasPlugin(String name) {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ExternalPlugin getPlugin(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -20,6 +20,7 @@ import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
+import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
@@ -118,4 +119,8 @@ public abstract class Adapter {
 	public abstract Player getPlayer(UUID uuid);
 	
 	public abstract void sendMessageRunnableHover(Player p, String message, String hover, String command);
+	
+	// Other plugin management
+	public abstract boolean hasPlugin(String name);
+	public abstract ExternalPlugin getPlugin(String name);
 }

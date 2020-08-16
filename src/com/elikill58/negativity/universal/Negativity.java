@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.StringJoiner;
 
 import com.elikill58.negativity.api.ChatColor;
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -29,6 +30,9 @@ import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
+import com.elikill58.negativity.universal.ban.support.AdvancedBanProcessor;
+import com.elikill58.negativity.universal.ban.support.LiteBansProcessor;
+import com.elikill58.negativity.universal.ban.support.MaxBansProcessor;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
@@ -212,11 +216,60 @@ public class Negativity {
 				+ " > " + proof + ". Player version: " + p.getPlayerVersion().name() + ". TPS: " + Arrays.toString(Utils.getTPS()));
 	}
 	
-	public static void setupValues() {
-		ConfigAdapter config = Adapter.getAdapter().getConfig();
+	public static void setup() {
+		Adapter ada = Adapter.getAdapter();
+		ConfigAdapter config = ada.getConfig();
 		log = config.getBoolean("log_alerts");
 		log_console = config.getBoolean("log_alerts_in_console");
 		hasBypass = config.getBoolean("Permissions.bypass.active");
+		
+		StringJoiner supportedPluginName = new StringJoiner(", ");
+		if (ada.hasPlugin("Essentials")) {
+			essentialsSupport = true;
+			supportedPluginName.add("Essentials");
+		}
+		if (ada.hasPlugin("WorldGuard")) {
+			worldGuardSupport = true;
+			supportedPluginName.add("WorldGuard");
+		}
+		if (ada.hasPlugin("GadgetsMenu")) {
+			gadgetMenuSupport = true;
+			supportedPluginName.add("GadgetsMenu");
+		}
+
+		if (ada.hasPlugin("MaxBans")) {
+			BanManager.registerProcessor("maxbans", new MaxBansProcessor());
+			supportedPluginName.add("MaxBans");
+		}
+
+		if (ada.hasPlugin("AdvancedBan")) {
+			BanManager.registerProcessor("advancedban", new AdvancedBanProcessor());
+			supportedPluginName.add("AdvancedBan");
+		}
+
+		if (ada.hasPlugin("LiteBans")) {
+			BanManager.registerProcessor("litebans", new LiteBansProcessor());
+			supportedPluginName.add("LiteBans");
+		}
+		
+		if (ada.hasPlugin("ViaVersion")) {
+			viaVersionSupport = true;
+			supportedPluginName.add("ViaVersion");
+		}
+		
+		if (ada.hasPlugin("ProtocolSupport")) {
+			protocolSupportSupport = true;
+			supportedPluginName.add("ProtocolSupport");
+		}
+		
+		if (ada.hasPlugin("floodgate-bukkit")) {
+			Negativity.floodGateSupport = true;
+			supportedPluginName.add("FloodGate");
+		}
+		
+		if (supportedPluginName.length() > 0) {
+			ada.getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
+		}
 	}
 
 	public static void sendReportMessage(Player reporter, String reason, String reported) {

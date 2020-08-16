@@ -359,7 +359,7 @@ public class UniversalUtils {
 	public static void init() {
 		getContentFromURL("https://google.fr");
 		DefaultConfigValue.init();
-		Negativity.setupValues();
+		Negativity.setup();
 		EventManager.load();
 		Cheat.loadCheat();
 		Database.init();

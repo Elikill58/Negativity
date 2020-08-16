@@ -68,7 +68,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 		}
 		EntityType damagerType = e.getDamager().getType();
 		if (damagerType.equals(EntityType.EGG) || damagerType.equals(EntityType.SNOWBALL)
-				|| (SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p)))
+				|| (Negativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p)))
 			return;
 		if (damagerType.name().contains("TNT") || np.isTargetByIronGolem())
 			return;

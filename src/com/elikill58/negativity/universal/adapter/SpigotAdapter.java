@@ -27,6 +27,7 @@ import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
+import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.spigot.ClickableText;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotOfflinePlayer;
@@ -35,6 +36,7 @@ import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemBuilder;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemRegistrar;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
+import com.elikill58.negativity.spigot.impl.plugin.SpigotExternalPlugin;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -255,5 +257,15 @@ public class SpigotAdapter extends Adapter {
 		if(p == null)
 			return null;
 		return new SpigotOfflinePlayer(p);
+	}
+	
+	@Override
+	public boolean hasPlugin(String name) {
+		return Bukkit.getPluginManager().getPlugin(name) != null;
+	}
+	
+	@Override
+	public ExternalPlugin getPlugin(String name) {
+		return new SpigotExternalPlugin(Bukkit.getPluginManager().getPlugin(name));
 	}
 }

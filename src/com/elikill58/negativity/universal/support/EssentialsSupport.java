@@ -1,13 +1,12 @@
 package com.elikill58.negativity.universal.support;
 
-import org.bukkit.Bukkit;
-
 import com.earth2me.essentials.Essentials;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class EssentialsSupport {
 
-	private static Essentials essentials = (Essentials) Bukkit.getPluginManager().getPlugin("Essentials");
+	private static Essentials essentials = (Essentials) Adapter.getAdapter().getPlugin("Essentials").getDefault();
 
 	@SuppressWarnings("deprecation")
 	public static boolean checkEssentialsPrecondition(Player p) {

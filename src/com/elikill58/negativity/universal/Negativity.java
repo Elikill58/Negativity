@@ -23,7 +23,6 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -35,8 +34,6 @@ import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
-import com.elikill58.negativity.universal.support.EssentialsSupport;
-import com.elikill58.negativity.universal.support.GadgetMenuSupport;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 
@@ -64,23 +61,10 @@ public class Negativity {
 			np.already_blink = true;
 			return false;
 		}
-		if (np.isInFight && c.isBlockedInFight())
-			return false;
-		if (c.getKey().equals(CheatKeys.FLY) && p.hasPermission("essentials.fly") && essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
-			return false;
-		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT) && gadgetMenuSupport &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
-			return false;
 		if(VerificationManager.isDisablingAlertOnVerif() && !hasVerifications(p.getUniqueId()))
 			return false;
-		Adapter ada = Adapter.getAdapter();
 		int ping = p.getPing();
-		long currentTimeMilli = System.currentTimeMillis();
-		if (np.TIME_INVINCIBILITY > currentTimeMilli || ping > c.getMaxAlertPing()
-				|| p.getHealth() == 0.0D || np.isFreeze
-				|| ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS() || ping < 0)
-			return false;
-		
-		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
+		if (p.getHealth() == 0.0D || ping < 0)
 			return false;
 
 		ItemStack itemInHand = p.getItemInHand();

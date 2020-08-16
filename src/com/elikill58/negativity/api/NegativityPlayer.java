@@ -19,15 +19,20 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.WorldRegionBypass;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.support.EssentialsSupport;
+import com.elikill58.negativity.universal.support.GadgetMenuSupport;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NegativityPlayer {
@@ -109,11 +114,27 @@ public class NegativityPlayer {
 	}
 	
 	public boolean hasDetectionActive(Cheat c) {
-		if(!c.isActive())
+		if (!c.isActive())
 			return false;
-		if(!ACTIVE_CHEAT.contains(c))
+		if (!ACTIVE_CHEAT.contains(c))
 			return false;
-		return getPlayer().getPing() < c.getMaxAlertPing();
+		if (TIME_INVINCIBILITY > System.currentTimeMillis())
+			return false;
+		if (isFreeze)
+			return false;
+		if (isInFight && c.isBlockedInFight())
+			return false;
+		Adapter ada = Adapter.getAdapter();
+		if(ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
+			return false;
+		Player p = getPlayer();
+		if (Negativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
+			return false;
+		if (Negativity.essentialsSupport && c.getKey().equals(CheatKeys.FLY) && p.hasPermission("essentials.fly") && EssentialsSupport.checkEssentialsPrecondition(p))
+			return false;
+		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
+			return false;
+		return p.getPing() < c.getMaxAlertPing();
 	}
 
 	public int getWarn(Cheat c) {

@@ -51,7 +51,7 @@ public abstract class Cheat {
 	}
 	
 	public String getKey() {
-		return key;
+		return key.toUpperCase();
 	}
 	
 	public String getName() {
@@ -137,7 +137,7 @@ public abstract class Cheat {
 	}
 
 	public CheatHover hoverMsg(String key, Object... placeholders) {
-		return new CheatHover("hover." + getKey() + "." + key, placeholders);
+		return new CheatHover("hover." + this.key + "." + key, placeholders);
 	}
 	
 	public @Nullable String makeVerificationSummary(VerifData data, NegativityPlayer np) { return null; }

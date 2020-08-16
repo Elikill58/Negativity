@@ -76,11 +76,11 @@ public final class NegativityAccount {
 	}
 
 	public int getWarn(Cheat cheat) {
-		return getWarn(cheat.getKey());
+		return getWarn(cheat.getKey().toLowerCase());
 	}
 
 	public void setWarnCount(Cheat cheat, int count) {
-		setWarnCount(cheat.getKey(), count);
+		setWarnCount(cheat.getKey().toLowerCase(), count);
 	}
 
 	public void setWarnCount(String cheatKey, int count) {

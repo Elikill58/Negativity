@@ -158,7 +158,7 @@ public class Negativity {
 			return;
 		for(String s : conf.getStringList("alert.command.run")) {
 			Adapter.getAdapter().runConsoleCommand(UniversalUtils.replacePlaceholders(s, "%name%",
-					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey(), "%cheat_name%",
+					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey().toLowerCase(), "%cheat_name%",
 					c.getName(), "%reliability%", reliability, "%report_type%", type.name()));
 		}
 	}

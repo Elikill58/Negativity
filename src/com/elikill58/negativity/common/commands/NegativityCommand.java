@@ -118,12 +118,21 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			Messages.sendMessage(playerSender, np.disableShowingAlert ? "negativity.see_no_longer_alert" : "negativity.see_alert");
 			return true;
 		} else if (arg[0].equalsIgnoreCase("reload")) {
+			if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getNegativityPlayer((Player) sender), Perm.RELOAD)) {
+				Messages.sendMessage(sender, "not_permission");
+				return false;
+			}
 			Adapter.getAdapter().reload();
 			Messages.sendMessage(sender, "negativity.reload_done");
 			return true;
 		} else if (arg[0].equalsIgnoreCase("mod")) {
 			if (!(sender instanceof Player)) {
 				Messages.sendMessage(sender, "only_player");
+				return true;
+			}
+			Player p = (Player) sender;
+			if (!Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.MOD)) {
+				Messages.sendMessage(sender, "not_permission");
 				return true;
 			}
 			InventoryManager.getInventory(NegativityInventory.MOD).ifPresent((inv) -> inv.openInventory((Player) sender));

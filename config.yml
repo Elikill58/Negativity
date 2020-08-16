@@ -82,6 +82,8 @@ Permissions:
   # The checker indicates if a player has a specific permission.
   # By default only 'platform' is available
   checker: platform
+  check:
+    default: "negativity.check"
   showAlert:
     default: "negativity.alert"
   showReport:
@@ -90,6 +92,8 @@ Permissions:
     default: "negativity.verif"
   manageCheat:
     default: "negativity.managecheat"
+  reload:
+    default: "negativity.reload"
   report_wait:
     default: "negativity.reportwait"
   report:

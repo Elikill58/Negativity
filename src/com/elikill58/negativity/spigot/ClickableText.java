@@ -202,7 +202,7 @@ public class ClickableText {
 				}
 			} catch (Exception e) {
 				SpigotNegativity.getInstance().getLogger().severe(
-						"Error while making ClickableText: " + e.getMessage() + ". Please report this to Elikill58.");
+						"Error while making ClickableText: " + e.getMessage() + ", " + e.getLocalizedMessage() + ". Please report this to Elikill58.");
 			}
 			return nmsChat;
 		}

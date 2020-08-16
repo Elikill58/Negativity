@@ -41,8 +41,8 @@ public class Jesus extends Cheat implements Listeners {
 		if (p.hasElytra() || p.isInsideVehicle() || p.isSwimming())
 			return;
 		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom();
-		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY")
-				|| hasMaterialsAround(loc.clone().sub(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY"))
+		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY", "LILY")
+				|| hasMaterialsAround(loc.clone().sub(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY", "LILY"))
 			return;
 		Location under = loc.clone().sub(0, 1, 0);
 		Material type = loc.getBlock().getType(), underType = under.getBlock().getType();

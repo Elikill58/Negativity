@@ -42,9 +42,9 @@ public class NoFall extends Cheat implements Listeners {
 		Location locDown = p.getLocation().clone().getBlock().getRelative(BlockFace.DOWN).getLocation();
 		double motionY = from.getY() - to.getY();
 		if(locDown.getBlock().getType().equals(Materials.AIR)
-				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS")) {
+				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD")) {
 			if ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
-					|| (motionY > (p.getWalkSpeed() / 2) && p.isOnGround() && p.getWalkSpeed() > p.getFallDistance())) {
+					|| (motionY > (p.getWalkSpeed() / 2) && (p.isOnGround() && p.getFallDistance() > 0.1) && p.getWalkSpeed() > p.getFallDistance())) {
 				int porcent = UniversalUtils.parseInPorcent(900 * motionY);
 				Negativity.alertMod(ReportType.WARNING, p, this, porcent, "New NoFall - Player on ground. motionY: " + motionY + ", walkSpeed: " + p.getWalkSpeed()
 						+ ", onGround: " + p.isOnGround() + ", fallDistance: " + p.getFallDistance(), new Cheat.CheatHover.Literal("MotionY (on ground): " + motionY));

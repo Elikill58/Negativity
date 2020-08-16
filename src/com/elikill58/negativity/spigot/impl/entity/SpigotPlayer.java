@@ -69,7 +69,7 @@ public class SpigotPlayer extends Player {
 	
 	@Override
 	public boolean hasLineOfSight(Entity entity) {
-		return p.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefaultEntity());
+		return SpigotNegativity.isCraftBukkit ? true : p.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefaultEntity());
 	}
 
 	@Override

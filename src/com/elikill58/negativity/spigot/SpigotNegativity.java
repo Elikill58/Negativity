@@ -6,7 +6,6 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
 import java.util.StringJoiner;
 import java.util.logging.Level;
 
@@ -67,7 +66,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean log = false, log_console = false, hasBypass = false, isBuggedGroundVersion = false, essentialsSupport = false,
+	public static boolean log = false, log_console = false, hasBypass = false, isCraftBukkit = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
 	private BukkitTask invTimer = null, timeTimeBetweenAlert = null, packetTimer = null, runSpawnFakePlayer = null;
 	public static String CHANNEL_NAME_FML = "";
@@ -81,9 +80,9 @@ public class SpigotNegativity extends JavaPlugin {
 			Adapter.setAdapter(new SpigotAdapter(this));
 		Version v = Version.getVersion(Utils.VERSION);
 		if (v.equals(Version.HIGHER))
-			getLogger().warning("Unknow server version ! Some problems can appears.");
+			getLogger().warning("Unknow server version " + Utils.VERSION + " ! Some problems can appears.");
 		else
-			getLogger().info("Detected server version: " + v.name().toLowerCase());
+			getLogger().info("Detected server version: " + v.name().toLowerCase() + " (" + Utils.VERSION + ")");
 		
 		packetManager = new NegativityPacketManager(this);
 		new File(getDataFolder().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
@@ -99,14 +98,11 @@ public class SpigotNegativity extends JavaPlugin {
 			getConfig().options().copyDefaults();
 			saveDefaultConfig();
 		}
-		List<String> buggedVersion = Arrays.asList("git-Spigot-758abbe-2b00831", "git-Spigot-6f4ff1b-d424351", "git-Spigot-6f4ff1b-983305b", "git-Spigot-16d7899-4ff609e");
-		if(buggedVersion.contains(Bukkit.getVersion())) {
-			isBuggedGroundVersion = true;
-			getLogger().warning("---- Warn ----");
-			getLogger().warning("Your spigot version is outdated.");
-			getLogger().warning("This first release contains some SEVERAL bugs, please update it.");
-			getLogger().warning("We are not responsible if a false flag/error appear.");
-			getLogger().warning("---- Warn ----");
+		try {
+			Class.forName("org.spigotmc.SpigotConfig");
+			isCraftBukkit = false;
+		} catch (ClassNotFoundException e) {
+			isCraftBukkit = true;
 		}
 		getLogger().info("This plugin is free, but you can support me : https://www.patreon.com/elikill58 <3");
 		UniversalUtils.init();

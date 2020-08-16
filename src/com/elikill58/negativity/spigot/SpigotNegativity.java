@@ -41,6 +41,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -195,6 +196,11 @@ public class SpigotNegativity extends JavaPlugin {
 		if (Bukkit.getPluginManager().getPlugin("ProtocolSupport") != null) {
 			protocolSupportSupport = true;
 			supportedPluginName.add("ProtocolSupport");
+		}
+		
+		if (Bukkit.getPluginManager().getPlugin("floodgate-bukkit") != null) {
+			Negativity.floodGateSupport = true;
+			supportedPluginName.add("FloodGate");
 		}
 		
 		Perm.registerChecker(Perm.PLATFORM_CHECKER, new BukkitPermissionChecker());

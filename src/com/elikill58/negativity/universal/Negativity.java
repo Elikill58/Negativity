@@ -39,7 +39,7 @@ import com.elikill58.negativity.universal.verif.VerificationManager;
 
 public class Negativity {
 
-	public static boolean log = false, log_console = false, hasBypass = false, essentialsSupport = false,
+	public static boolean log = false, log_console = false, hasBypass = false, essentialsSupport = false, floodGateSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
 	public static int timeBetweenAlert = -1;
 

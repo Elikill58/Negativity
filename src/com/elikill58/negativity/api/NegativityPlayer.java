@@ -32,6 +32,7 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.WorldRegionBypass;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.support.EssentialsSupport;
+import com.elikill58.negativity.universal.support.FloodGateSupport;
 import com.elikill58.negativity.universal.support.GadgetMenuSupport;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -81,7 +82,7 @@ public class NegativityPlayer {
 	// general values
 	public boolean isInFight = false, already_blink = false, disableShowingAlert = false, isFreeze = false, isJumpingWithBlock = false, isUsingSlimeBlock = false,
 			isInvisible = false;
-	private boolean mustToBeSaved = false;
+	private boolean mustToBeSaved = false, isBedrockPlayer = false;
 
 	public NegativityPlayer(Player p) {
 		this.p = p;
@@ -97,6 +98,7 @@ public class NegativityPlayer {
 				//if (c.needPacket())
 					//needPacket = true;
 			}
+		isBedrockPlayer = Negativity.floodGateSupport ? FloodGateSupport.isBedrockPlayer(p) : false;
 		//if (needPacket && !SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId()))
 		//	SpigotNegativityPlayer.INJECTED.add(p.getUniqueId());
 	}
@@ -111,6 +113,10 @@ public class NegativityPlayer {
 	
 	public String getName() {
 		return getPlayer().getName();
+	}
+	
+	public boolean isBedrockPlayer() {
+		return isBedrockPlayer;
 	}
 	
 	public boolean hasDetectionActive(Cheat c) {

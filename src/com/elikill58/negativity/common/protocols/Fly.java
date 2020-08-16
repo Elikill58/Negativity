@@ -52,7 +52,7 @@ public class Fly extends Cheat implements Listeners {
 			return;
 		if (p.getAllowFlight() || p.getEntityId() == 100 || p.isSwimming())
 			return;
-		boolean mayCancel = false;
+		boolean mayCancel = false, inBoat = Utils.isInBoat(p);
 		double y = e.getFrom().getY() - e.getTo().getY();
 		Location loc = p.getLocation().clone(),
 				locUnder = p.getLocation().clone().sub(0, 1, 0),
@@ -61,7 +61,7 @@ public class Fly extends Cheat implements Listeners {
 		boolean isInWater = loc.getBlock().getType().getId().contains("WATER"), isOnWater = locUnder.getBlock().getType().getId().contains("WATER");
 		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle()
 				&& !np.isInFight && !LocationUtils.hasBoatAroundHim(p.getLocation()) && !(isInWater || isOnWater)
-				&& !LocationUtils.hasMaterialsAround(loc, "SCAFFOLD")){
+				&& !LocationUtils.hasMaterialsAround(loc, "SCAFFOLD") && !inBoat){
 			mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, 97, "Suspicious Y: " + y);
 		}
@@ -69,19 +69,19 @@ public class Fly extends Cheat implements Listeners {
 		if (!(p.isSprinting() && (e.getTo().getY() - e.getFrom().getY()) > 0)
 				&& locUnder.getBlock().getType().equals(Materials.AIR)
 				&& locUnderUnder.getBlock().getType().equals(Materials.AIR)
-				&& (p.getFallDistance() == 0.0F || Utils.isInBoat(p))
+				&& (p.getFallDistance() == 0.0F || inBoat)
 				&& typeUpper.equals(Materials.AIR) && i > 0.8
 				&& !p.isOnGround()) {
 			mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, parseInPorcent((int) i * 50),
 					"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this),
-					Utils.isInBoat(p) ? hoverMsg("boat") : null);
+					inBoat ? hoverMsg("boat") : null);
 		}
 
 		if (!np.isUsingSlimeBlock && !LocationUtils.hasOtherThanExtended(p.getLocation(), "AIR")
 				&& !LocationUtils.hasOtherThanExtended(locUnder, "AIR") && !np.booleans.get(FLY, "boat-falling", false)
 				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, "AIR")
-				&& (e.getFrom().getY() <= e.getTo().getY() || Utils.isInBoat(p))) {
+				&& (e.getFrom().getY() <= e.getTo().getY() || inBoat) && p.getVelocity().length() < 1.5) {
 			double nbTimeAirBelow = np.doubles.get(FLY, "air-below", 0.0);
 			np.doubles.set(FLY, "air-below", nbTimeAirBelow + 1);
 			if(nbTimeAirBelow > 6) { // we don't care when player jump
@@ -92,7 +92,7 @@ public class Fly extends Cheat implements Listeners {
 				mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 						this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d
 								+ ". Warn for fly: " + np.getWarn(this),
-								hoverMsg(Utils.isInBoat(p) ? "boat_air_below" : "air_below", "%nb%", nb));
+								hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb));
 			}
 		} else
 			np.doubles.remove(FLY, "air-below");

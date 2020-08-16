@@ -36,7 +36,7 @@ public class Step extends Cheat implements Listeners {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (p.hasElytra() || p.getItemInHand().getType().getId().contains("TRIDENT") || np.isUsingSlimeBlock || p.isSwimming())
+		if (p.hasElytra() || p.getItemInHand().getType().getId().contains("TRIDENT") || np.isUsingSlimeBlock || p.isSwimming() || p.isFlying())
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double dif = to.getY() - from.getY();

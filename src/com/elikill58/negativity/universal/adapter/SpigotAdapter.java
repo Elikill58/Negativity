@@ -192,14 +192,18 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public double[] getTPS() {
-		try {
-			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer");
-			Object server = mcServer.getMethod("getServer").invoke(mcServer);
-			return (double[]) server.getClass().getField("recentTps").get(server);
-		} catch (Exception e) {
-			SpigotNegativity.getInstance().getLogger().warning("Cannot get TPS (Work on Spigot but NOT CraftBukkit).");
-			e.printStackTrace();
-			return new double[] { 20, 20, 20 };
+		if(SpigotNegativity.isCraftBukkit) {
+			return new double[] {20, 20, 20};
+		} else {
+			try {
+				Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer");
+				Object server = mcServer.getMethod("getServer").invoke(mcServer);
+				return (double[]) server.getClass().getField("recentTps").get(server);
+			} catch (Exception e) {
+				SpigotNegativity.getInstance().getLogger().warning("Cannot get TPS (Work on Spigot but NOT CraftBukkit).");
+				e.printStackTrace();
+				return new double[] {20, 20, 20};
+			}
 		}
 	}
 

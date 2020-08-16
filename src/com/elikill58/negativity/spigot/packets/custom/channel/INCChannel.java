@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 import com.elikill58.negativity.universal.PacketType;
 
@@ -68,7 +69,7 @@ public class INCChannel extends ChannelAbstract {
 		try {
 			Object playerConnection = getPlayerConnection(p);
 			Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
-			return (Channel) networkManager.getClass().getDeclaredField("channel").get(networkManager);
+			return new PacketContent(networkManager).getSpecificModifier(Channel.class).readSafely(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

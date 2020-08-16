@@ -178,7 +178,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			}
 
 			Player playerSender = (Player) sender;
-			if (!Perm.hasPerm(NegativityPlayer.getCached(playerSender.getUniqueId()), Perm.VERIF)) {
+			if (!Perm.hasPerm(NegativityPlayer.getCached(playerSender.getUniqueId()), Perm.CHECK)) {
 				Messages.sendMessage(sender, "not_permission");
 				return false;
 			}

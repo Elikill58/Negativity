@@ -167,10 +167,14 @@ public class PacketUtils {
 	 */
 	private static Class<?> getEnumPlayerInfoAction() {
 		try {
-			for(Class<?> clazz : Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutPlayerInfo").getDeclaredClasses())
-				if(clazz.getName().contains("EnumPlayerInfoAction"))
-					return clazz;
-			return null;
+			try {
+				return Class.forName("net.minecraft.server." + VERSION + ".EnumPlayerInfoAction");
+			} catch (Exception e) {
+				for(Class<?> clazz : Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutPlayerInfo").getDeclaredClasses())
+					if(clazz.getName().contains("EnumPlayerInfoAction"))
+						return clazz;
+				return null;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

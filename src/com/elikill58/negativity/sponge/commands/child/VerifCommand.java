@@ -74,7 +74,7 @@ public class VerifCommand implements CommandExecutor {
 				.executor(new VerifCommand())
 				.arguments(player(Text.of("target")),
 						optionalWeak(integer(Text.of("time"))),
-						allOf(choices(Text.of("cheats"), Cheat.CHEATS_BY_KEY, true, false)))
+						allOf(choices(Text.of("cheats"), Cheat.getCheatByKeys(), true, false)))
 				.build();
 		return new NegativityCmdWrapper(command, false, Perm.VERIF);
 	}

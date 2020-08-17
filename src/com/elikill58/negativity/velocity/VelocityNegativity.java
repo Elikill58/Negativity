@@ -25,9 +25,6 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
-
 @Plugin(id = "negativity", name = "Negativity", version = "1.9.2",
         description = "It's an Advanced AntiCheat Detection", authors = {"Elikill58", "RedNesto"})
 public class VelocityNegativity {
@@ -65,8 +62,7 @@ public class VelocityNegativity {
 	    server.getChannelRegistrar().register(NEGATIVITY_CHANNEL_ID);
 	    server.getCommandManager().register(new VNegativityCommand(), "vnegativity");
 
-		MD5ConfigAdapter.ByProvider config = new MD5ConfigAdapter.ByProvider(ConfigurationProvider.getProvider(YamlConfiguration.class),
-				getDataFolder().toPath().resolve("config.yml"),
+		MD5ConfigAdapter.ByProvider config = new MD5ConfigAdapter.ByProvider(getDataFolder().toPath().resolve("config.yml"),
 				() -> getResourceAsStream("bungee_config.yml"));
 		try {
 			config.load();

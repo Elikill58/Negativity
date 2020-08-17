@@ -65,7 +65,7 @@ public class PlayersAndCheatsArgument extends CommandElement {
 	@Override
 	public List<String> complete(CommandSource src, CommandArgs args, CommandContext context) {
 		Set<String> suggestions = Sponge.getServer().getOnlinePlayers().stream().map(Player::getName).collect(Collectors.toSet());
-		suggestions.addAll(Cheat.CHEATS_BY_KEY.keySet());
+		suggestions.addAll(Cheat.getCheatKeys());
 
 		if (!suggestDuplicates) {
 			for (String arg : args.getRaw().split(" ")) {

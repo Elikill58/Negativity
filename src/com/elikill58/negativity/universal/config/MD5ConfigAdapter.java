@@ -8,11 +8,11 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 import java.util.List;
 
+import org.yaml.snakeyaml.config.Configuration;
+import org.yaml.snakeyaml.config.YamlConfiguration;
+
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.utils.IOSupplier;
-
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
 
 public abstract class MD5ConfigAdapter implements ConfigAdapter {
 
@@ -96,25 +96,23 @@ public abstract class MD5ConfigAdapter implements ConfigAdapter {
 
 	public static class ByProvider extends MD5ConfigAdapter {
 
-		private final ConfigurationProvider provider;
 		private final Path file;
 		private final IOSupplier<InputStream> defaultConfigSupplier;
 
-		public ByProvider(Configuration initialConfig, ConfigurationProvider provider, Path file, IOSupplier<InputStream> defaultConfigSupplier) {
+		public ByProvider(Configuration initialConfig, Path file, IOSupplier<InputStream> defaultConfigSupplier) {
 			super(initialConfig);
-			this.provider = provider;
 			this.file = file;
 			this.defaultConfigSupplier = defaultConfigSupplier;
 		}
 
-		public ByProvider(ConfigurationProvider provider, Path file, IOSupplier<InputStream> defaultConfigSupplier) {
-			this(new Configuration(), provider, file, defaultConfigSupplier);
+		public ByProvider(Path file, IOSupplier<InputStream> defaultConfigSupplier) {
+			this(new Configuration(), file, defaultConfigSupplier);
 		}
 
 		@Override
 		public void save() throws IOException {
 			Files.createDirectories(file.getParent());
-			provider.save(config, Files.newBufferedWriter(file));
+			YamlConfiguration.save(config, Files.newBufferedWriter(file));
 		}
 
 		@Override
@@ -125,7 +123,7 @@ public abstract class MD5ConfigAdapter implements ConfigAdapter {
 					Files.copy(defaultConfigIn, file, StandardCopyOption.REPLACE_EXISTING);
 				}
 			}
-			config = provider.load(Files.newBufferedReader(file));
+			config = YamlConfiguration.load(file.toFile(), Files.newBufferedReader(file));
 		}
 	}
 }

@@ -13,7 +13,9 @@ import java.util.UUID;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.IronGolem;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.negativity.PlayerCheatAlertEvent;
+import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
@@ -201,7 +203,8 @@ public class NegativityPlayer {
 	}
 	
 	public void clearPackets() {
-		
+		EventManager.callEvent(new PlayerPacketsClearEvent(getPlayer(), this));
+		PACKETS.clear();
 	}
 	
 	public String getReason(Cheat c) {

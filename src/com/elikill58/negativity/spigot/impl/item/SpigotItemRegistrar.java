@@ -15,11 +15,11 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 	}
 	
 	private org.bukkit.Material getMaterial(String id, String... alias){
-		org.bukkit.Material type = org.bukkit.Material.getMaterial(id.toUpperCase(), false);
+		org.bukkit.Material type = org.bukkit.Material.getMaterial(id.toUpperCase());
 		if(type != null)
 			return type;
 		for(String s : alias) {
-			type = org.bukkit.Material.getMaterial(s.toUpperCase(), false);
+			type = org.bukkit.Material.getMaterial(s.toUpperCase());
 			if(type != null)
 				return type;
 		}

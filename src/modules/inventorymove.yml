@@ -1,0 +1,28 @@
+# When you walk, you can open and click on your inventory and always move
+
+# The display name of cheat
+exact_name: "InventoryMove"
+
+# enable/disable detection
+active: true
+
+# Maximum of ping to be verified.
+# It's to prevent lagging player
+ping: 150
+
+# The minimum porcent to create reliability
+reliability_alert: 60
+
+# Remove the cheat effect
+set_back:
+  active: false
+
+# Option for /negativity verif
+verif:
+  # Enable/disable the detection when the verification is enabled
+  check_in_verif: true
+
+# Disable one check and not all detections
+checks:
+  # Check Y move only
+  y: true

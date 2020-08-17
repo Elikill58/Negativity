@@ -26,14 +26,14 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import org.yaml.snakeyaml.config.Configuration;
+import org.yaml.snakeyaml.config.YamlConfiguration;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
 
 import net.md_5.bungee.api.plugin.Plugin;
-import net.md_5.bungee.config.Configuration;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 
 /**
  * bStats collects some data for plugin authors.
@@ -291,7 +291,7 @@ public class Metrics {
 					"logSentData: false", "logResponseStatusText: false");
 		}
 
-		Configuration configuration = ConfigurationProvider.getProvider(YamlConfiguration.class).load(configFile);
+		Configuration configuration = YamlConfiguration.load(configFile);
 
 		// Load configuration
 		enabled = configuration.getBoolean("enabled", true);

@@ -108,7 +108,7 @@ public class ClickableText {
 
 		public void send(Player p) {
 			try {
-				if (Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+				if (Version.getVersion().isNewerOrEquals(Version.V1_8)) {
 					ClickableText1_13.send(p, this);
 				} else {
 					for (Object obj : compile()) {

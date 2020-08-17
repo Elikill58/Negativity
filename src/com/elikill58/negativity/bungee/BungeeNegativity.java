@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.LinkedHashMap;
 
+import org.yaml.snakeyaml.config.YamlConfiguration;
+
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -18,8 +20,6 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
-import net.md_5.bungee.config.ConfigurationProvider;
-import net.md_5.bungee.config.YamlConfiguration;
 
 public class BungeeNegativity extends Plugin {
 
@@ -40,8 +40,7 @@ public class BungeeNegativity extends Plugin {
 		pluginManager.registerCommand(this, new BNegativityCommand());
 		pluginManager.registerListener(this, new BNegativityCommand.TabCompleter());
 
-		MD5ConfigAdapter.ByProvider config = new MD5ConfigAdapter.ByProvider(ConfigurationProvider.getProvider(YamlConfiguration.class),
-				getDataFolder().toPath().resolve("config.yml"),
+		MD5ConfigAdapter.ByProvider config = new MD5ConfigAdapter.ByProvider(getDataFolder().toPath().resolve("config.yml"),
 				() -> getResourceAsStream("bungee_config.yml"));
 		try {
 			config.load();
@@ -58,7 +57,7 @@ public class BungeeNegativity extends Plugin {
 		Stats.loadStats();
 		Stats.updateStats(StatsType.ONLINE, 1 + "");
 		try {
-			Stats.updateStats(StatsType.PORT, ((LinkedHashMap<?, ?>) ConfigurationProvider.getProvider(YamlConfiguration.class).load(new File(getDataFolder().getParentFile().getParentFile(), "config.yml"))
+			Stats.updateStats(StatsType.PORT, ((LinkedHashMap<?, ?>) YamlConfiguration.load(new File(getDataFolder().getParentFile().getParentFile(), "config.yml"))
 							.getList("listeners").get(0)).get("query_port") + "");
 		} catch (Exception e) {
 			e.printStackTrace();

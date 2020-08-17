@@ -5,7 +5,6 @@ import static com.elikill58.negativity.universal.verif.VerificationManager.hasVe
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
@@ -114,7 +113,7 @@ public class Negativity {
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
 		np.addWarn(c, reliability, amount);
-		logProof(np, type, p, c, reliability, proof, ping);
+		logProof(np, type, p, c, reliability, checkName, proof, ping);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			EventManager.callEvent(kick);
@@ -210,10 +209,19 @@ public class Negativity {
 	}
 
 	private static void logProof(NegativityPlayer np, ReportType type, Player p, Cheat c, int reliability,
-			String proof, int ping) {
-		if(log)
-			np.logProof(new Timestamp(System.currentTimeMillis()) + ": (" + ping + "ms) " + reliability + "% " + c.getKey()
-				+ " > " + proof + ". Player version: " + p.getPlayerVersion().name() + ". TPS: " + Arrays.toString(Utils.getTPS()));
+			String checkName, String proof, int ping) {
+		if(!log)
+			return;
+		String time = new Timestamp(System.currentTimeMillis()).toString().split("\\.")[0];
+		np.logProof(time + ": (" + ping + "ms) " + reliability + "% " + c.getKey()
+				+ " > " + proof + "| Warn: " + np.getWarn(c) + ", Version: " + p.getPlayerVersion().name() + ". TPS: " + getVisualTPS());
+	}
+	
+	private static String getVisualTPS() {
+		StringJoiner sj = new StringJoiner(", ");
+		for(double d : Utils.getTPS())
+			sj.add(String.format("%.4f", d));
+		return sj.toString();
 	}
 	
 	public static void setup() {

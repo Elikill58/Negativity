@@ -104,4 +104,9 @@ public class JesusProtocol extends Cheat implements Listener {
 		if (isSetBack() && mayCancel)
 			p.teleport(p.getLocation().subtract(0, 1, 0));
 	}
+	
+	@Override
+	public boolean isBlockedInFight() {
+		return true;
+	}
 }

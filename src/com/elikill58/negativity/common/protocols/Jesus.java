@@ -110,4 +110,9 @@ public class Jesus extends Cheat implements Listeners {
 		if (isSetBack() && mayCancel)
 			p.teleport(p.getLocation().sub(0, 1, 0));
 	}
+	
+	@Override
+	public boolean isBlockedInFight() {
+		return true;
+	}
 }

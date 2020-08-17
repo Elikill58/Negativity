@@ -28,18 +28,18 @@ public class Critical extends Cheat implements Listeners {
 		if (p.isInsideVehicle())
 			return;
 		
-		// because of new PvP, this detection but to be remade
+		// because of new PvP, this detection has to be remade
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9))
 			return;
 
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this) || !checkActive("ground"))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		if (!p.isOnGround() && !p.isFlying()) {
 			if (p.getLocation().getY() % 1.0D == 0.0D) {
-				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, np.getAllWarn(this) > 5 ? 100 : 95, "");
+				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, np.getAllWarn(this) > 5 ? 100 : 95, "ground", "");
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			}

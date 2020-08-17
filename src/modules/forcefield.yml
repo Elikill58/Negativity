@@ -24,5 +24,15 @@ verif:
 
 # Disable one check and not all detections
 checks:
-  # Check Y move only
-  y: true
+  # Line of sight
+  line-sight:
+    active: true
+  # Check the reach
+  reach:
+    active: true
+  # Has fake player enabled
+  ghost:
+    active: true
+  # Count packet
+  packet:
+    active: true

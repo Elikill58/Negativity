@@ -19,11 +19,8 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Scaffold extends Cheat implements Listeners {
 
-	private Scaffold instance;
-
 	public Scaffold() {
 		super(CheatKeys.SCAFFOLD, false, Materials.GRASS, CheatCategory.WORLD, true);
-		instance = this;
 	}
 
 	@EventListener
@@ -31,6 +28,8 @@ public class Scaffold extends Cheat implements Listeners {
 		Player p = e.getPlayer();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
+			return;
+		if(!checkActive("below"))
 			return;
 		int ping = p.getPing(), slot = p.getInventory().getHeldItemSlot();
 		if (ping > 120)
@@ -44,8 +43,8 @@ public class Scaffold extends Cheat implements Listeners {
 					int localPing = ping;
 					if (localPing == 0)
 						localPing = 1;
-					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, instance,
-							UniversalUtils.parseInPorcent(120 / localPing),
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, Scaffold.this,
+							UniversalUtils.parseInPorcent(120 / localPing), "below",
 							"Item in hand: " + m.getId() + " Block placed: " + placed.getId() + " Ping: " + ping,
 							hoverMsg("main", "%item%", m.getId().toLowerCase(), "%block%",
 									placed.getId().toLowerCase()));

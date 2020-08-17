@@ -34,6 +34,8 @@ public class Spider extends Cheat implements Listeners {
 		Location loc = p.getLocation();
 		if (!np.hasDetectionActive(this))
 			return;
+		if(!checkActive("nothing-around"))
+			return;
 		if (p.getFallDistance() != 0 || p.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP)
 				|| !LocationUtils.hasOtherThan(loc, Materials.AIR) || (e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ()))
 				return;
@@ -50,8 +52,8 @@ public class Spider extends Cheat implements Listeners {
 		boolean isAris = ((float) y) == p.getWalkSpeed();
 		if (((y > 0.499 && y < 0.7) || isAris) && !np.isUsingSlimeBlock && !p.isSprinting() && p.getVelocity().length() < 1.5) {
 			int relia = UniversalUtils.parseInPorcent(y * 160 + (isAris ? 39 : 0));
-			if (Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this,
-					relia, "Nothing around him. To > From: " + y + " isAris: " + isAris + ", has not stab slairs")
+			if (Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this, relia,
+					"nothing-around", "Nothing around him. To > From: " + y + " isAris: " + isAris + ", has not stab slairs")
 					&& isSetBack()) {
 				LocationUtils.teleportPlayerOnGround(p);
 			}
@@ -65,6 +67,8 @@ public class Spider extends Cheat implements Listeners {
 			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null)
+			return;
+		if(!checkActive("distance"))
 			return;
 		Location loc = p.getLocation().clone();
 		if(hasBypassBlockAround(loc) || (p.getItemInHand() != null && p.getItemInHand().getType().getId().contains("TRIDENT")))
@@ -81,7 +85,7 @@ public class Spider extends Cheat implements Listeners {
 			if (lastSpiderDistance == tempDis && tempDis != 0) {
 				np.SPIDER_SAME_DIST++;
 				if(np.SPIDER_SAME_DIST > 2) {
-					if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(tempDis * 400 + np.SPIDER_SAME_DIST),
+					if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(tempDis * 400 + np.SPIDER_SAME_DIST), "distance",
 							"Nothing strange around him. To > From: " + y + ", distance: " + lastSpiderDistance + ". Walk with same y " + np.SPIDER_SAME_DIST + " times") && isSetBack()) {
 						LocationUtils.teleportPlayerOnGround(p);
 					}

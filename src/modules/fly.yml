@@ -26,5 +26,15 @@ verif:
 
 # Disable one check and not all detections
 checks:
-  # Check Y move only
-  y: true
+  # Suspicious Y
+  suspicious-y:
+    active: true
+  # When not in ground, i
+  no-ground-i:
+    active: true
+  # When not in ground, down
+  no-ground-down:
+    active: true
+  # When not in ground, y
+  no-ground-y:
+    active: true

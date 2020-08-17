@@ -51,7 +51,7 @@ public class InventoryMove extends Cheat implements Listeners {
 				public void run() {
 					if (p.isSprinting() || p.isSneaking())
 						Negativity.alertMod(ReportType.WARNING, p, instance,
-								NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95,
+								NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "sprint",
 									"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking(), hoverMsg("main", "%name%", from));
 				}
 			}, 3);
@@ -66,7 +66,7 @@ public class InventoryMove extends Cheat implements Listeners {
 					if (dis > 1 && (lastLoc.getY() - p.getLocation().getY()) < 0.1
 							&& p.getOpenInventory() != null) {
 						Negativity.alertMod(ReportType.WARNING, p, instance,
-								NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95,
+								NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "distance",
 									"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()), hoverMsg("main", "%name%", from));
 					}
 				}

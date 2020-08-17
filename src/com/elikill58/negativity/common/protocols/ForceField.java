@@ -56,9 +56,9 @@ public class ForceField extends Cheat implements Listeners {
 		boolean mayCancel = false;
 		Entity cible = e.getEntity();
 		int ping = p.getPing();
-		if(p.hasLineOfSight(cible)) {
-			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "Hit " + cible.getType().name()
-					+ " but cannot see it, ping: " + ping,
+		if(checkActive("line-sight") && p.hasLineOfSight(cible)) {
+			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
+					"Hit " + cible.getType().name() + " but cannot see it, ping: " + ping,
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase()));
 		}
 		if(Utils.hasThorns(p)) {
@@ -66,15 +66,15 @@ public class ForceField extends Cheat implements Listeners {
 				e.setCancelled(true);
 			return;
 		}
-		Location tempLoc = e.getEntity().getLocation().clone();
-		tempLoc.setY(p.getLocation().getY());
-		double dis = tempLoc.distance(p.getLocation());
 		ItemStack inHand = p.getItemInHand();
 		if(inHand == null || !inHand.getType().equals(Materials.BOW)) {
+			Location tempLoc = e.getEntity().getLocation().clone();
+			tempLoc.setY(p.getLocation().getY());
+			double dis = tempLoc.distance(p.getLocation());
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !e.getDamager().getType().equals(EntityType.ENDER_DRAGON)) {
+			if (checkActive("reach") && dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !e.getDamager().getType().equals(EntityType.ENDER_DRAGON)) {
 				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getEntity().getType().name().toLowerCase() : e.getEntity().getName();
-				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10),
+				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10), "reach",
 						"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
 						+ ". Ping: " + ping, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
 			}
@@ -158,8 +158,8 @@ public class ForceField extends Cheat implements Listeners {
 		forcefield.recordData(p.getUniqueId(), FAKE_PLAYERS, 1);
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
 		Negativity.alertMod(np.fakePlayerTouched > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, forcefield,
-				parseInPorcent(np.fakePlayerTouched * 10), "Hitting fake entities. " + np.fakePlayerTouched
-						+ " entites touch in " + timeBehindStart + " millisecondes",
-						forcefield.hoverMsg("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
+				parseInPorcent(np.fakePlayerTouched * 10), "ghost", "Hitting fake entities. " + np.fakePlayerTouched
+				+ " entites touch in " + timeBehindStart + " millisecondes",
+				forcefield.hoverMsg("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
 	}
 }

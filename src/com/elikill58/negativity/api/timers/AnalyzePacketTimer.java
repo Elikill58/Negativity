@@ -45,16 +45,16 @@ public class AnalyzePacketTimer implements Runnable {
 			
 			int flyingWithPing = flying - (ping / 6);
 			if (flyingWithPing > 28) {
+				if(p.getItemInHand().getType().equals(Materials.BOW))
+					np.flyingReason = FlyingReason.BOW;
 				Cheat c = np.flyingReason.getCheat();
-				if (np.hasDetectionActive(c)) {
-					if(p.getItemInHand().getType().equals(Materials.BOW))
-						np.flyingReason = FlyingReason.BOW;
+				if (np.hasDetectionActive(c) && c.checkActive("packet")) {
 					double[] allTps = Adapter.getAdapter().getTPS();
 					int porcent = UniversalUtils.parseInPorcent(flyingWithPing - (ping / (allTps[1] - allTps[0] > 0.5 ? 9 : 8)));
-					Negativity.alertMod(flyingWithPing > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, c, porcent,
-							"Flying in one second: " + flying + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
+					boolean back = Negativity.alertMod(flyingWithPing > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, c, porcent,
+							"packet", "Flying in one second: " + flying + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
 							c.hoverMsg("packet", "%flying%", flyingWithPing), (int) flyingWithPing / 30);
-					if(c.isSetBack()){
+					if(c.isSetBack() && back){
 						switch(np.flyingReason){
 						case BOW:
 							break;
@@ -81,40 +81,41 @@ public class AnalyzePacketTimer implements Runnable {
 				}
 			}
 			Cheat FORCEFIELD = Cheat.forKey(CheatKeys.FORCEFIELD);
-			if (np.hasDetectionActive(FORCEFIELD)) {
+			if (np.hasDetectionActive(FORCEFIELD) && FORCEFIELD.checkActive("packet")) {
 				if (arm > 16 && useEntity > 20) {
 					ReportType type = ReportType.WARNING;
 					if (np.getWarn(FORCEFIELD) > 5)
 						type = ReportType.VIOLATION;
-					Negativity.alertMod(type, p, FORCEFIELD,
-							UniversalUtils.parseInPorcent(arm + useEntity + np.getWarn(FORCEFIELD)),
-							"ArmAnimation (Attack in one second): " + arm
-									+ ", UseEntity (interaction with other entity): " + useEntity + " And warn: "
-									+ np.getWarn(FORCEFIELD) + ". Ping: " + ping);
+					Negativity.alertMod(type, p, FORCEFIELD, UniversalUtils.parseInPorcent(arm + useEntity + np.getWarn(FORCEFIELD)),
+							"packet", "ArmAnimation (Attack in one second): " + arm + ", UseEntity (interaction with other entity): "
+							+ useEntity + " And warn: " + np.getWarn(FORCEFIELD) + ". Ping: " + ping);
 				}
 			}
+			
 			Cheat SNEAK = Cheat.forKey(CheatKeys.SNEAK);
-			if(np.hasDetectionActive(SNEAK)){
-				if(ping < 140){
-					if(entityAction > 35){
-						if(np.booleans.get(SNEAK.getKey(), "last-sec", false)){
-							Negativity.alertMod(ReportType.WARNING, p, SNEAK, UniversalUtils.parseInPorcent(55 + entityAction), "EntityAction packet: " + entityAction + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
-							if(SNEAK.isSetBack())
-								p.setSneaking(false);
-						}
-						np.booleans.set(SNEAK.getKey(), "last-sec", true);
-					} else np.booleans.set(SNEAK.getKey(), "last-sec", false);
-				}
+			if(np.hasDetectionActive(SNEAK) && SNEAK.checkActive("packet") && ping < 140){
+				if(entityAction > 35){
+					if(np.booleans.get(SNEAK.getKey(), "last-sec", false)){
+						Negativity.alertMod(ReportType.WARNING, p, SNEAK, UniversalUtils.parseInPorcent(55 + entityAction), "packet",
+								"EntityAction packet: " + entityAction + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
+						if(SNEAK.isSetBack())
+							p.setSneaking(false);
+					}
+					np.booleans.set(SNEAK.getKey(), "last-sec", true);
+				} else np.booleans.set(SNEAK.getKey(), "last-sec", false);
 			}
+			
 			Cheat NUKER = Cheat.forKey(CheatKeys.NUKER);
-			if(np.hasDetectionActive(NUKER))
+			if(np.hasDetectionActive(NUKER) && NUKER.checkActive("packet"))
 				if(ping < NUKER.getMaxAlertPing() && (blockDig - (ping / 10)) > 20 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()))
-					Negativity.alertMod(blockDig > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, UniversalUtils.parseInPorcent(20 + blockDig), "BlockDig packet: " + blockDig + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
+					Negativity.alertMod(blockDig > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, UniversalUtils.parseInPorcent(20 + blockDig),
+							"packet", "BlockDig packet: " + blockDig + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
 
 			Cheat SPEED = Cheat.forKey(CheatKeys.SPEED);
-			if(np.hasDetectionActive(SPEED))
+			if(np.hasDetectionActive(SPEED) && SPEED.checkActive("move-amount"))
 				if(np.MOVE_TIME > 60)
-					Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p, SPEED, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Ping: " + ping + " Warn for Speed: " + np.getWarn(SPEED));
+					Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p, SPEED, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2),
+							"move-amount", "Move " + np.MOVE_TIME + " times. Ping: " + ping + " Warn for Speed: " + np.getWarn(SPEED));
 			np.MOVE_TIME = 0;
 			np.clearPackets();
 		}

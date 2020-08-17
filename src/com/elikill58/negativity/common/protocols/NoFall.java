@@ -40,36 +40,40 @@ public class NoFall extends Cheat implements Listeners {
 		Location from = e.getFrom(), to = e.getTo();
 		double distance = to.toVector().distance(from.toVector());
 		Location locDown = p.getLocation().clone().getBlock().getRelative(BlockFace.DOWN).getLocation();
-		double motionY = from.getY() - to.getY();
-		if(locDown.getBlock().getType().equals(Materials.AIR)
-				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD")) {
-			if ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
-					|| (motionY > (p.getWalkSpeed() / 2) && (p.isOnGround() && p.getFallDistance() > 0.1) && p.getWalkSpeed() > p.getFallDistance())) {
-				int porcent = UniversalUtils.parseInPorcent(900 * motionY);
-				Negativity.alertMod(ReportType.WARNING, p, this, porcent, "New NoFall - Player on ground. motionY: " + motionY + ", walkSpeed: " + p.getWalkSpeed()
-						+ ", onGround: " + p.isOnGround() + ", fallDistance: " + p.getFallDistance(), new Cheat.CheatHover.Literal("MotionY (on ground): " + motionY));
+		if(checkActive("motion-y")) {
+			double motionY = from.getY() - to.getY();
+			if(locDown.getBlock().getType().equals(Materials.AIR)
+					&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD")) {
+				if ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
+						|| (motionY > (p.getWalkSpeed() / 2) && (p.isOnGround() && p.getFallDistance() > 0.1) && p.getWalkSpeed() > p.getFallDistance())) {
+					int porcent = UniversalUtils.parseInPorcent(900 * motionY);
+					Negativity.alertMod(ReportType.WARNING, p, this, porcent, "motion-y", "New NoFall - Player on ground. motionY: " + motionY + ", walkSpeed: " + p.getWalkSpeed()
+							+ ", onGround: " + p.isOnGround() + ", fallDistance: " + p.getFallDistance(), new Cheat.CheatHover.Literal("MotionY (on ground): " + motionY));
+				}
 			}
 		}
 		if (!(distance == 0.0D || from.getY() < to.getY())) {
 			if (p.getFallDistance() == 0.0F && p.getLocation().clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR)) {
 				int relia = UniversalUtils.parseInPorcent(distance * 100);
 				if (p.isOnGround()) {
-					if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && Negativity.essentialsSupport
-							&& EssentialsSupport.checkEssentialsSpeedPrecondition(p))) {
-						boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia,
-								"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceBetweenFromAndTo: "
-										+ distance + " (ping: " + p.getPing() + "). Warn: "
-										+ np.getWarn(this));
-						if(mayCancel)
-							np.NO_FALL_DAMAGE += 1;
-					} else if (np.NO_FALL_DAMAGE != 0) {
-						if (isSetBack())
-							manageDamage(p, np.NO_FALL_DAMAGE, relia);
-						np.NO_FALL_DAMAGE = 0;
+					if(checkActive("distance-ground")) {
+						if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && Negativity.essentialsSupport
+								&& EssentialsSupport.checkEssentialsSpeedPrecondition(p))) {
+							boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "distance-ground",
+									"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceBetweenFromAndTo: "
+											+ distance + " (ping: " + p.getPing() + "). Warn: "
+											+ np.getWarn(this));
+							if(mayCancel)
+								np.NO_FALL_DAMAGE += 1;
+						} else if (np.NO_FALL_DAMAGE != 0) {
+							if (isSetBack())
+								manageDamage(p, np.NO_FALL_DAMAGE, relia);
+							np.NO_FALL_DAMAGE = 0;
+						}
 					}
-				} else {
+				} else if(checkActive("distance-no-ground")){
 					if (distance > 2D) {
-						boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia,
+						boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "distance-no-ground",
 								"Player not in ground no fall Damage. FallDistance: " + p.getFallDistance()
 										+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + p.getPing()
 										+ "). Warn: " + np.getWarn(this));
@@ -81,11 +85,11 @@ public class NoFall extends Cheat implements Listeners {
 						np.NO_FALL_DAMAGE = 0;
 					}
 				}
-			} else if(!p.isOnGround()) {
+			} else if(!p.isOnGround() && checkActive("have-to-ground")) {
 				Material justUnder = p.getLocation().clone().sub(0, 0.1, 0).getBlock().getType();
 				if(justUnder.isSolid() && p.getFallDistance() > 3.0 && !np.isInFight) {
 					int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(100 - (ping / 5) + p.getFallDistance());
-					boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia,
+					boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "have-to-ground",
 							"Player not ground with fall damage (FallDistance: " + p.getFallDistance() + "). Block 0.1 below: " + justUnder.getId()
 									+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + ping
 									+ "). Warn: " + np.getWarn(this));

@@ -24,5 +24,9 @@ verif:
 
 # Disable one check and not all detections
 checks:
-  # Check Y move only
-  y: true
+  # Count when the player don't sent any packet
+  no-packet:
+    active: true
+  # Check when the player sent too many position packet
+  position-packet:
+    active: true

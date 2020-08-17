@@ -29,6 +29,8 @@ public class Phase extends Cheat implements Listeners {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
+		if(!checkActive("no-jump"))
+			return;
 		Location loc = p.getLocation();
 		Location from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
@@ -48,8 +50,8 @@ public class Phase extends Cheat implements Listeners {
 			return;
 		if (!np.isJumpingWithBlock) {
 			Negativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent((y * 200) + 20),
-					"Player on air. No jumping. DistanceBetweenFromAndTo: " + y + " (ping: " + p.getPing()
-							+ "). Warn: " + np.getWarn(this));
+					"no-jump", "Player on air. No jumping. DistanceBetweenFromAndTo: " + y
+					+ " (ping: " + p.getPing() + "). Warn: " + np.getWarn(this));
 		}
 	}
 }

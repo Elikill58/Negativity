@@ -24,5 +24,15 @@ verif:
 
 # Disable one check and not all detections
 checks:
-  # Check Y move only
-  y: true
+  # Check water around
+  water-around:
+    active: true
+  # Little check dif
+  dif:
+    active: true
+  # Dif Y between 2 move
+  dif-y-2-move:
+    active: true
+  # Distance in water
+  distance-in:
+    active: true

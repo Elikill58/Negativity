@@ -24,5 +24,15 @@ verif:
 
 # Disable one check and not all detections
 checks:
-  # Check Y move only
-  y: true
+  # Motion Y when fall
+  motion-y:
+    active: true
+  # Check distance when player is now on ground
+  distance-ground:
+    active: true
+  # Check distance when player is NOT on ground
+  distance-no-ground:
+    active: true
+  # Have to be on ground but spoof and it's not
+  have-to-ground:
+    active: true

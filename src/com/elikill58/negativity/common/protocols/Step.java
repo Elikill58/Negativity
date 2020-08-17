@@ -40,26 +40,30 @@ public class Step extends Cheat implements Listeners {
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double dif = to.getY() - from.getY();
-		if (!p.hasPotionEffect(PotionEffectType.JUMP) && dif > 0) {
-			int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(dif * 50);
-			if (dif > 1.499 && ping < 200) {
-				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
-						+ np.getWarn(this) + ". Move " + dif + " blocks up. ping: " + ping, hoverMsg("main", "%block%", String.format("%.2f", dif)));
-				if (isSetBack() && mayCancel)
-					e.setCancelled(true);
+		if(checkActive("dif")) {
+			if (!p.hasPotionEffect(PotionEffectType.JUMP) && dif > 0) {
+				int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(dif * 50);
+				if (dif > 1.499 && ping < 200) {
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "dif", "Warn for Step: "
+							+ np.getWarn(this) + ". Move " + dif + " blocks up. ping: " + ping, hoverMsg("main", "%block%", String.format("%.2f", dif)));
+					if (isSetBack() && mayCancel)
+						e.setCancelled(true);
+				}
 			}
 		}
-		double amplifier = 0;
-		for(PotionEffect pe : p.getActivePotionEffect())
-			if(pe.getType().equals(PotionEffectType.JUMP))
-				amplifier = pe.getAmplifier();
-		double diffBoost = dif - (amplifier / 10);
-		if(diffBoost > 0.2) {
-			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
-			if(diffBoost > 0.6) {
-				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
-						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
-						hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
+		if(checkActive("dif-boost")) {
+			double amplifier = 0;
+			for(PotionEffect pe : p.getActivePotionEffect())
+				if(pe.getType().equals(PotionEffectType.JUMP))
+					amplifier = pe.getAmplifier();
+			double diffBoost = dif - (amplifier / 10);
+			if(diffBoost > 0.2) {
+				recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
+				if(diffBoost > 0.6) {
+					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125), "dif-boost",
+							"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
+							hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
+				}
 			}
 		}
 	}

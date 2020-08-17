@@ -24,5 +24,12 @@ verif:
 
 # Disable one check and not all detections
 checks:
-  # Check Y move only
-  y: true
+  # Time between 2 break
+  time:
+    active: true
+  # Distance between target and breaked block
+  distance:
+    active: true
+  # Amount of breaking block packet
+  packet:
+    active: true

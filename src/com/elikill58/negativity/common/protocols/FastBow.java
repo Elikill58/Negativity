@@ -31,7 +31,7 @@ public class FastBow extends Cheat implements Listeners {
 		ItemStack item = p.getItemInHand();
 		if(item == null)
 			return;
-		if(!np.hasDetectionActive(this))
+		if(!np.hasDetectionActive(this) || !checkActive("last-shot"))
 			return;
 		
 		if(ItemUseBypass.ITEM_BYPASS.containsKey(item.getType().getId())) {
@@ -49,12 +49,12 @@ public class FastBow extends Cheat implements Listeners {
 				if (dif < (200 + ping)) {
 					boolean mayCancel = false;
 					if (dif < (50 + ping))
-						mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this,
-								UniversalUtils.parseInPorcent(200 - dif - ping), "Player use Bow, last shot: " + lastShotWithBow
-										+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), hoverMsg("main", "%time%", dif));
+						mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(200 - dif - ping),
+								"last-shot", "Player use Bow, last shot: " + lastShotWithBow
+								+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), hoverMsg("main", "%time%", dif));
 					else
-						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
-								UniversalUtils.parseInPorcent(100 - dif - ping), "Player use Bow, last shot: " + lastShotWithBow
+						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - dif - ping),
+								"last-shot", "Player use Bow, last shot: " + lastShotWithBow
 								+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), hoverMsg("main", "%time%", dif));
 					if(isSetBack() && mayCancel)
 						e.setCancelled(true);

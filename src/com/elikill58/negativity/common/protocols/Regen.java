@@ -49,20 +49,22 @@ public class Regen extends Cheat implements Listeners {
 			np.flyingReason = FlyingReason.POTION;
 		else
 			np.flyingReason = FlyingReason.REGEN;
-		long actual = System.currentTimeMillis(), dif = actual - np.LAST_REGEN;
-		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && !p.hasPotionEffect(PotionEffectType.INSTANT_HEAL) && np.hasDetectionActive(this)
-				&& (np.LAST_REGEN != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))
-				&& !p.getWorld().getDifficulty().equals(Difficulty.PEACEFUL)) {
-			int ping = p.getPing();
-			if (dif < (Version.getVersion().getTimeBetweenTwoRegenFromVersion() + ping)) {
-				boolean mayCancel = Negativity.alertMod(dif < (50 + ping) ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(200 - dif - ping), "Player regen, last regen: " + np.LAST_REGEN
-									+ " Actual time: " + actual + " Difference: " + dif + "ms",
-									hoverMsg("main", "%time%", dif));
-				if(isSetBack() && mayCancel)
-					e.setCancelled(true);
+		if(checkActive("time")) {
+			long actual = System.currentTimeMillis(), dif = actual - np.LAST_REGEN;
+			if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && !p.hasPotionEffect(PotionEffectType.INSTANT_HEAL) && np.hasDetectionActive(this)
+					&& (np.LAST_REGEN != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))
+					&& !p.getWorld().getDifficulty().equals(Difficulty.PEACEFUL)) {
+				int ping = p.getPing();
+				if (dif < (Version.getVersion().getTimeBetweenTwoRegenFromVersion() + ping)) {
+					boolean mayCancel = Negativity.alertMod(dif < (50 + ping) ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+							UniversalUtils.parseInPorcent(200 - dif - ping), "time", "Player regen, last regen: "
+							+ np.LAST_REGEN + " Actual time: " + actual + " Difference: " + dif + "ms",
+							hoverMsg("main", "%time%", dif));
+					if(isSetBack() && mayCancel)
+						e.setCancelled(true);
+				}
 			}
+			np.LAST_REGEN = actual;
 		}
-		np.LAST_REGEN = actual;
 	}
 }

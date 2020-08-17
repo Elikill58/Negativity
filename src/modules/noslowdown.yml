@@ -24,5 +24,9 @@ verif:
 
 # Disable one check and not all detections
 checks:
-  # Check Y move only
-  y: true
+  # Check move
+  move:
+    active: true
+  # Check eat
+  eat:
+    active: true

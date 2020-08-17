@@ -50,55 +50,60 @@ public class Jesus extends Cheat implements Listeners {
 		boolean mayCancel = false;
 		int ping = p.getPing();
 		double dif = e.getFrom().getY() - e.getTo().getY();
-		if (!isInWater && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
-			if (!hasOtherThanExtended(under, STATIONARY_WATER)) {
-				double reliability = 0;
-				if (dif < 0.0005 && dif > 0.00000005)
-					reliability = dif * 10000000 - 1;
-				else if (dif < 0.1 && dif > 0.08)
-					reliability = dif * 1000;
-				else if (dif == 0.5)
-					reliability = 75;
-				else if (dif < 0.30001 && dif > 0.3000)
-					reliability = dif * 100 * 2.5;
-				else if (dif < 0.002 && dif > -0.002 && dif != 0.0)
-					reliability = Math.abs(dif * 5000);
-				else if (dif == 0.0)
-					reliability = 90;
-				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(reliability),
-						"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif
-								+ " and ping: " + ping);
+		if(checkActive("water-around")) {
+			if (!isInWater && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
+				if (!hasOtherThanExtended(under, STATIONARY_WATER)) {
+					double reliability = 0;
+					if (dif < 0.0005 && dif > 0.00000005)
+						reliability = dif * 10000000 - 1;
+					else if (dif < 0.1 && dif > 0.08)
+						reliability = dif * 1000;
+					else if (dif == 0.5)
+						reliability = 75;
+					else if (dif < 0.30001 && dif > 0.3000)
+						reliability = dif * 100 * 2.5;
+					else if (dif < 0.002 && dif > -0.002 && dif != 0.0)
+						reliability = Math.abs(dif * 5000);
+					else if (dif == 0.0)
+						reliability = 90;
+					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(reliability), "water-around",
+							"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif
+									+ " and ping: " + ping);
+				}
 			}
 		}
-		if (dif == -0.5 && (isInWater || isOnWater)) {
-			mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "Warn for Jesus: "
+		if (checkActive("dif") && dif == -0.5 && (isInWater || isOnWater)) {
+			mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "dif", "Warn for Jesus: "
 					+ np.getWarn(this) + ", dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + " " + ping);
 		}
-
-		boolean jesusState = np.booleans.get(JESUS, "state", false);
-		if (dif == np.doubles.get(JESUS, "last-y-" + jesusState, 0.0) && isInWater && !np.isInFight) {
-			if (!hasOtherThan(under, STATIONARY_WATER) && !p.isSwimming()) {
-				mayCancel = Negativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING,
-						p, this, parseInPorcent((dif + 5) * 10),
-						"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: "
-								+ dif + " (other: "
-								+ np.doubles.get(JESUS, "last-y-" + (!jesusState), 0.0)
-								+ ") and ping: " + ping);
+		
+		if(checkActive("dif-y-2-move")) {
+			boolean jesusState = np.booleans.get(JESUS, "state", false);
+			if (dif == np.doubles.get(JESUS, "last-y-" + jesusState, 0.0) && isInWater && !np.isInFight) {
+				if (!hasOtherThan(under, STATIONARY_WATER) && !p.isSwimming()) {
+					mayCancel = Negativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING,
+							p, this, parseInPorcent((dif + 5) * 10), "dif-y-2-move",
+							"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: "
+							+ dif + " (other: " + np.doubles.get(JESUS, "last-y-" + (!jesusState), 0.0)
+							+ ") and ping: " + ping);
+				}
 			}
+			np.doubles.set(JESUS, "last-y-" + jesusState, dif);
+			np.booleans.set(JESUS, "state", !jesusState);
 		}
-		np.doubles.set(JESUS, "last-y-" + jesusState, dif);
-		np.booleans.set(JESUS, "state", !jesusState);
-
-		double distanceAbs = to.distance(from) - Math.abs(from.getY() - to.getY());
-		Location upper = loc.clone().add(0, 1, 0);
-		float distanceFall = p.getFallDistance();
-		if (isInWater && isOnWater && distanceFall < 1 && distanceAbs > p.getWalkSpeed()
-				&& !upper.getBlock().isLiquid() && !p.isFlying()) {
-			if (!hasMaterialsAround(loc, "WATER_LILY") && !hasMaterialsAround(upper, "WATER_LILY")
-					&& !hasOtherThan(under, "WATER")) {
-				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98,
-						"In water, distance: " + distanceAbs + ", ping: " + ping,
-						hoverMsg("main", "%distance%", distanceAbs));
+		
+		if(checkActive("distance-in")) {
+			double distanceAbs = to.distance(from) - Math.abs(from.getY() - to.getY());
+			Location upper = loc.clone().add(0, 1, 0);
+			float distanceFall = p.getFallDistance();
+			if (isInWater && isOnWater && distanceFall < 1 && distanceAbs > p.getWalkSpeed()
+					&& !upper.getBlock().isLiquid() && !p.isFlying()) {
+				if (!hasMaterialsAround(loc, "WATER_LILY") && !hasMaterialsAround(upper, "WATER_LILY")
+						&& !hasOtherThan(under, "WATER")) {
+					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98, "distance-in",
+							"In water, distance: " + distanceAbs + ", ping: " + ping,
+							hoverMsg("main", "%distance%", distanceAbs));
+				}
 			}
 		}
 

@@ -29,7 +29,7 @@ public class Timer extends Cheat implements Listeners {
 	@EventListener
 	public void onPacketClear(PlayerPacketsClearEvent e) {
 		NegativityPlayer np = e.getNegativityPlayer();
-		if(!np.hasDetectionActive(this))
+		if(!np.hasDetectionActive(this) || !checkActive("packet"))
 			return;
 		HashMap<PacketType, Integer> packets = e.getPackets();
 		int flying = packets.getOrDefault(PacketType.Client.FLYING, 0);
@@ -56,7 +56,7 @@ public class Timer extends Cheat implements Listeners {
 		int medianValue = (medianList.size() % 2 == 1) ? medianList.get(middle) : (int) ((medianList.get(middle-1) + medianList.get(middle)) / 2.0);
 		boolean medianRespect = MAX_VARIATION > medianValue;
 		int amount = (int) (sum - MAX_VARIATION);
-		Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (p.getPing() / 100) - (medianRespect ? 15 : -10)),
+		Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (p.getPing() / 100) - (medianRespect ? 15 : -10)), "packet",
 				"Flying: " + flying + ", position: " + position + ", look: " + look + ", positionLook: " + positonLook + ", sum: " + sum + ", median: " + medianValue,
 				null, amount > 0 ? amount : 1);
 		// TODO implement setBack option for Timer

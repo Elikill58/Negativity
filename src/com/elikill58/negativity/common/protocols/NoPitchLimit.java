@@ -33,11 +33,14 @@ public class NoPitchLimit extends Cheat implements Listeners {
 			return;
 		float pitch = p.getLocation().getPitch();
 		recordData(p.getUniqueId(), PITCH, pitch);
-	    if (pitch <= -90.01D || pitch >= 90.01D) {
-	    	boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(pitch < 0 ? pitch * -1 : pitch), "Strange head movements: " + pitch);
-	    	if(mayCancel && isSetBack())
-	    		e.setCancelled(true);
-	    }
+		if(checkActive("head-mov")) {
+		    if (pitch <= -90.01D || pitch >= 90.01D) {
+		    	boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(pitch < 0 ? pitch * -1 : pitch),
+		    			"head-mov", "Strange head movements: " + pitch);
+		    	if(mayCancel && isSetBack())
+		    		e.setCancelled(true);
+		    }
+		}
 	}
 	
 	@Override

@@ -52,7 +52,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 		}
 
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this) || !checkActive("ticked"))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
@@ -103,7 +103,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 				recordData(p.getUniqueId(), DISTANCE_DAMAGE, d);
 				int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(100 - d);
 				if (d < 0.1 && !actual.getBlock().getType().equals(Materials.WEB) && !p.isSneaking()) {
-					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia,
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "ticked",
 							"Distance after damage: " + d + "; Damager: "
 									+ e.getDamager().getType().name().toLowerCase() + " Ping: " + ping,
 							hoverMsg("main", "%distance%", d));

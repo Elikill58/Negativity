@@ -43,10 +43,10 @@ public class FastPlace extends Cheat implements Listeners {
 		if(last < 10000) // last block is too old
 			recordData(p.getUniqueId(), TIME_PLACE, last);
 		np.LAST_BLOCK_PLACE = System.currentTimeMillis();
-		if (lastPing < Adapter.getAdapter().getConfig().getInt("cheats.fastplace.time_2_place")) {
-			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(50 + lastPing), "Block placed too quickly. Last time: " + last + ", Last with ping: "
-							+ lastPing + ". Ping: " + ping, hoverMsg("main", "%time%", last));
+		if (checkActive("time") && lastPing < Adapter.getAdapter().getConfig().getInt("cheats.fastplace.time_2_place")) {
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(50 + lastPing),
+					"time", "Block placed too quickly. Last time: " + last + ", Last with ping: "
+					+ lastPing + ". Ping: " + ping, hoverMsg("main", "%time%", last));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}

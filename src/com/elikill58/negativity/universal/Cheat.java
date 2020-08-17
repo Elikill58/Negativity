@@ -103,10 +103,10 @@ public abstract class Cheat {
 	}
 	
 	public boolean checkActive(String checkName) {
-		if(config.contains("checks." + checkName))
-			return config.getBoolean("check." + checkName, true);
-		config.set("checks." + checkName, true);
-		return true;
+		//if(config.contains("checks." + checkName + ".active"))
+			return config.getBoolean("check." + checkName + ".active", true);
+		//config.set("checks." + checkName + ".active", true);
+		//return true;
 	}
 	
 	public boolean isBlockedInFight() {

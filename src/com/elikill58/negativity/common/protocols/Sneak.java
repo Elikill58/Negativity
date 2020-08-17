@@ -29,15 +29,18 @@ public class Sneak extends Cheat implements Listeners {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (p.isSneaking() && p.isSprinting() && !p.isFlying() && np.booleans.get(SNEAK, "was-sneaking", false)) {
-			if(!p.getPlayerVersion().isNewerOrEquals(Version.V1_14)) {
-				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (p.getPing() / 10)), "Sneaking, sprinting and not flying");
-				if(mayCancel && isSetBack()) {
-					e.setCancelled(true);
-					p.setSprinting(false);
+		if(checkActive("sneak-sprint")) {
+			if (p.isSneaking() && p.isSprinting() && !p.isFlying() && np.booleans.get(SNEAK, "was-sneaking", false)) {
+				if(!p.getPlayerVersion().isNewerOrEquals(Version.V1_14)) {
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (p.getPing() / 10)),
+							"sneak-sprint", "Sneaking, sprinting and not flying");
+					if(mayCancel && isSetBack()) {
+						e.setCancelled(true);
+						p.setSprinting(false);
+					}
 				}
 			}
+			np.booleans.set(SNEAK, "was-sneaking", p.isSneaking());
 		}
-		np.booleans.set(SNEAK, "was-sneaking", p.isSneaking());
 	}
 }

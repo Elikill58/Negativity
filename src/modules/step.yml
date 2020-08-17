@@ -24,5 +24,9 @@ verif:
 
 # Disable one check and not all detections
 checks:
-  # Check Y move only
-  y: true
+  # Distance about blocks up
+  dif:
+    active: true
+  # Distance while counting jump
+  dif-boost:
+    active: true

@@ -76,7 +76,7 @@ public class AutoClick extends Cheat implements Listeners {
 		int ping = p.getPing(), click = np.ACTUAL_CLICK - (ping / 9);
 		if (click > CLICK_ALERT && np.hasDetectionActive(this)) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(np.ACTUAL_CLICK * 2.5),
+					UniversalUtils.parseInPorcent(np.ACTUAL_CLICK * 2.5), "count",
 					"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
 							+ "; Better click in one second: " + np.getAccount().getMostClicksPerSecond() + " Ping: " + ping,
 							hoverMsg("main", "%click%", np.ACTUAL_CLICK));

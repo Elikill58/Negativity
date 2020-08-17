@@ -47,16 +47,16 @@ public class Negativity {
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
 	public static int timeBetweenAlert = -1;
 
-	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof) {
-		return alertMod(type, p, c, reliability, proof, null, 1);
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String checkName, String proof) {
+		return alertMod(type, p, c, reliability, checkName, proof, null, 1);
 	}
 
-	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String checkName, String proof,
 			CheatHover hover) {
-		return alertMod(type, p, c, reliability, proof, hover, 1);
+		return alertMod(type, p, c, reliability, checkName, proof, hover, 1);
 	}
 
-	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String proof,
+	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String checkName, String proof,
 			CheatHover hover, int amount) {
 		if(!c.isActive() || reliability < 55)
 			return false;

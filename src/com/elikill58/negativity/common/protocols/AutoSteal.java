@@ -57,7 +57,7 @@ public class AutoSteal extends Cheat implements Listeners {
 		if((ping + TIME_CLICK) >= dif && tempSlot != e.getSlot()){
 			if(np.booleans.get(AUTO_STEAL, "inv-was", false)){
 				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((100 + TIME_CLICK) - dif - ping),
-						"Time between 2 click: " + dif + ". Ping: " + ping, hoverMsg("main", "%time%", dif));
+						"time-click", "Time between 2 click: " + dif + ". Ping: " + ping, hoverMsg("main", "%time%", dif));
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}

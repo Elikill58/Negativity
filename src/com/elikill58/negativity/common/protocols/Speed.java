@@ -47,13 +47,15 @@ public class Speed extends Cheat implements Listeners {
 			return;
 		
 		int ping = p.getPing();
-		np.MOVE_TIME++;
-		if (np.MOVE_TIME > 60) {
-			boolean b = Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
-					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Ping: "
-							+ ping + " Warn for Speed: " + np.getWarn(this));
-			if (b && isSetBack())
-				e.setCancelled(true);
+		if(checkActive("move-amount")) {
+			np.MOVE_TIME++;
+			if (np.MOVE_TIME > 60) {
+				boolean b = Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
+						this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount", "Move " + np.MOVE_TIME
+						+ " times. Ping: " + ping + " Warn for Speed: " + np.getWarn(this));
+				if (b && isSetBack())
+					e.setCancelled(true);
+			}
 		}
 		Location from = e.getFrom().clone(), to = e.getTo().clone();
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Materials.SPONGE)
@@ -74,20 +76,25 @@ public class Speed extends Cheat implements Listeners {
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		boolean mayCancel = false;
 		if (p.isOnGround()) {
-			double walkSpeed = Negativity.essentialsSupport ? (p.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : p.getWalkSpeed();
-			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
-			if((Negativity.essentialsSupport ? (walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D)) : y >= 0.75D) || walkTest){
-				int porcent = UniversalUtils.parseInPorcent(y * 50 + UniversalUtils.getPorcentFromBoolean(walkTest, 20)
-						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
-						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
-				ReportType type = np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING;
-				mayCancel = Negativity.alertMod(type, p, this, porcent,
-						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: " + walkTest +
-						", walkWithEssentialsTest: " + walkWithEssTest, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
+			if(checkActive("distance-ground")) {
+				double walkSpeed = Negativity.essentialsSupport ? (p.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : p.getWalkSpeed();
+				boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
+				if((Negativity.essentialsSupport ? (walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D)) : y >= 0.75D) || walkTest){
+					int porcent = UniversalUtils.parseInPorcent(y * 50 + UniversalUtils.getPorcentFromBoolean(walkTest, 20)
+							+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
+							+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
+					ReportType type = np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING;
+					mayCancel = Negativity.alertMod(type, p, this, porcent, "",
+							"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: " + walkTest +
+							", walkWithEssentialsTest: " + walkWithEssTest, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
+				}
 			}
-			double calculatedSpeedWithoutY = getSpeed(from, to);
-			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() > 0 && hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
-				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().getY());
+			if(checkActive("calculated")) {
+				double calculatedSpeedWithoutY = getSpeed(from, to);
+				if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() > 0 && hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
+					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated",
+							"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().getY());
+				}
 			}
 		} else if (!p.isOnGround()) {
 			for (Entity entity : p.getNearbyEntities(5, 5, 5))
@@ -95,13 +102,14 @@ public class Speed extends Cheat implements Listeners {
 					return;
 			if (!mayCancel) {
 				if (y >= 0.85D) {
-					mayCancel = Negativity.alertMod(
-							np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-							UniversalUtils.parseInPorcent(y * 100 * 2),
-							"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed()
-									+ " Distance between from/to location: " + y,
-									hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
-				} else {
+					if(checkActive("distance-jumping")) {
+						mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+								UniversalUtils.parseInPorcent(y * 100 * 2), "distance-jumping",
+								"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed()
+										+ " Distance between from/to location: " + y,
+										hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
+					}
+				} else if(checkActive("high-speed")) {
 					if(p.hasPotionEffect(PotionEffectType.JUMP))
 						return;
 					Material under = e.getTo().clone().sub(0, 1, 0).getBlock().getType();
@@ -112,9 +120,8 @@ public class Speed extends Cheat implements Listeners {
 						if (distance > 0.45 && (distance > (yy * 2)) && p.getFallDistance() < 1) {
 							np.SPEED_NB++;
 							if (np.SPEED_NB > 4)
-								mayCancel = Negativity.alertMod(ReportType.WARNING, p,
-										Cheat.forKey(CheatKeys.SPEED), UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "HighSpeed - Block under: "
-												+ under.getId() + ", Speed: " + distance + ", nb: " + np.SPEED_NB + ", fallDistance: " + p.getFallDistance());
+								mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "high-speed",
+										"HighSpeed - Block under: " + under.getId() + ", Speed: " + distance + ", nb: " + np.SPEED_NB + ", fallDistance: " + p.getFallDistance());
 						} else
 							np.SPEED_NB = 0;
 					}

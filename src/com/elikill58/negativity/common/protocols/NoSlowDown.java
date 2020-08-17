@@ -40,6 +40,8 @@ public class NoSlowDown extends Cheat implements Listeners {
 	    if(maxSpeed < xzSpeed)
 	    	maxSpeed = xzSpeed;
 	    np.doubles.set(NO_SLOW_DOWN, "eating-distance", maxSpeed);
+	    if(!checkActive("move"))
+	    	return;
 		if (!loc.getBlock().getType().equals(Materials.SOUL_SAND) || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
 		Location fl = from.clone().sub(to.clone());
@@ -48,8 +50,9 @@ public class NoSlowDown extends Cheat implements Listeners {
 			int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(distance * 400);
 			if((from.getY() - to.getY()) < -0.001)
 				return;
-			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia,
-					"Soul sand under player. Distance from/to : " + distance + ". Ping: " + ping);
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "move",
+					"Soul sand under player. Distance from/to : " + distance + ". Ping: " + ping,
+					hoverMsg("main", "%distance%", String.format("%.2f", distance)));
 			if (isSetBack() && mayCancel)
 				e.setTo(from.clone().add(fl.getX() / 2, (fl.getY() / 2) + 0.5, fl.getZ()));
 		}
@@ -61,11 +64,13 @@ public class NoSlowDown extends Cheat implements Listeners {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this) || p.hasElytra())
 			return;
+	    if(!checkActive("eat"))
+	    	return;
 		if(p.isInsideVehicle())
 			return;
 		double dis = np.doubles.get(NO_SLOW_DOWN, "eating-distance", 0.0);
 		if (dis > p.getWalkSpeed() || p.isSprinting()) {
-			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(dis * 200),
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(dis * 200), "",
 					"Distance while eating: " + dis + ", WalkSpeed: " + p.getWalkSpeed(), hoverMsg("main", "%distance%", String.format("%.2f", dis)));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);

@@ -35,12 +35,15 @@ public class NoWeb extends Cheat implements Listeners {
 			return;
 		if(p.isFlying() || p.hasPotionEffect(PotionEffectType.SPEED) || p.getFallDistance() > 1)
 			return;
+		if(!checkActive("speed"))
+			return;
 		Location l = p.getLocation();
 		double distance = e.getTo().distance(e.getFrom());
 		if (!(distance > MAX)) {
 			Block under = l.getBlock();
 			if (under.getType() == WEB && distance > 0.13716039608514914) {
-				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500), "Distance: " + distance + ", fallDistance: " + p.getFallDistance());
+				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500),
+						"speed", "Distance: " + distance + ", fallDistance: " + p.getFallDistance());
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			}

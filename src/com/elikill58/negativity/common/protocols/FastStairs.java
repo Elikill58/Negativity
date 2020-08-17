@@ -39,7 +39,7 @@ public class FastStairs extends Cheat implements Listeners {
 		double distance = from.distance(e.getTo()), lastDistance = np.doubles.get(FAST_STAIRS, "distance", 0.0);
 		if(distance > 0.45 && lastDistance > distance) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 140),
-					"No fall damage. Block: " + blockName + ", distance: " + distance + ", lastDistance: " + lastDistance,
+					"distance", "No fall damage. Block: " + blockName + ", distance: " + distance + ", lastDistance: " + lastDistance,
 					hoverMsg("main", "%distance%", String.format("%.2f", distance)));
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);

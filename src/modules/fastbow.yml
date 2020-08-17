@@ -25,4 +25,8 @@ verif:
 # Disable one check and not all detections
 checks:
   # Check Y move only
-  y: true
+  last-shot:
+    active: true
+  # Check packet number
+  packet:
+    active: true

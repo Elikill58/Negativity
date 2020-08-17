@@ -1,9 +1,7 @@
-// 
-// Decompiled by Procyon v0.5.36
-// 
+package org.yaml.snakeyaml.config;
 
-package net.md_5.bungee.config;
-
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -13,27 +11,29 @@ import java.util.List;
 import java.util.Map;
 
 @SuppressWarnings("unchecked")
-public final class Configuration
-{
+public final class Configuration {
+	
     //private static final char SEPARATOR = '.';
     final Map<String, Object> self;
     private final Configuration defaults;
+    private final File file;
     
     public Configuration() {
         this(null);
     }
     
     public Configuration(final Configuration defaults) {
-        this(new LinkedHashMap<Object, Object>(), defaults);
+        this(null, new LinkedHashMap<Object, Object>(), defaults);
     }
     
-    Configuration(final Map<?, ?> map, final Configuration defaults) {
+    Configuration(final File file, final Map<?, ?> map, final Configuration defaults) {
+    	this.file = file;
         this.self = new LinkedHashMap<String, Object>();
         this.defaults = defaults;
         for (final Map.Entry<?, ?> entry : map.entrySet()) {
             final String key = (entry.getKey() == null) ? "null" : entry.getKey().toString();
             if (entry.getValue() instanceof Map) {
-                this.self.put(key, new Configuration((Map<?, ?>)entry.getValue(), (defaults == null) ? null : defaults.getSection(key)));
+                this.self.put(key, new Configuration(file, (Map<?, ?>) entry.getValue(), (defaults == null) ? null : defaults.getSection(key)));
             }
             else {
                 this.self.put(key, entry.getValue());
@@ -89,7 +89,7 @@ public final class Configuration
     
     public void set(final String path, Object value) {
         if (value instanceof Map) {
-            value = new Configuration((Map<?, ?>)value, (this.defaults == null) ? null : this.defaults.getSection(path));
+            value = new Configuration(file, (Map<?, ?>)value, (this.defaults == null) ? null : this.defaults.getSection(path));
         }
         final Configuration section = this.getSectionFor(path);
         if (section == this) {
@@ -311,5 +311,13 @@ public final class Configuration
     public List<?> getList(final String path, final List<?> def) {
         final Object val = this.get(path, def);
         return (List<?>)((val instanceof List) ? ((List<?>)val) : def);
+    }
+    
+    public void save() {
+    	try {
+			YamlConfiguration.save(this, file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 }

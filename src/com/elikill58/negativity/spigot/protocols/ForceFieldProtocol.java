@@ -22,15 +22,12 @@ import org.bukkit.inventory.ItemStack;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
-import com.elikill58.negativity.spigot.packets.AbstractPacket;
-import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
-import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -90,7 +87,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			e.setCancelled(true);
 	}
 	
-	@EventHandler
+	/*@EventHandler
 	public void onPacket(PacketReceiveEvent e) {
 		AbstractPacket packet = e.getPacket();
 		if(!packet.getPacketType().equals(PacketType.Client.USE_ENTITY))
@@ -125,7 +122,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		} catch (Exception exc) {
 			exc.printStackTrace();
 		}
-	}
+	}*/
 	
 	public Location getLocationNMSEntity(Object src, World baseWorld) {
 		return new Location(baseWorld, getFieldOrMethod(src, "locX"), getFieldOrMethod(src, "locY"), getFieldOrMethod(src, "locZ"));

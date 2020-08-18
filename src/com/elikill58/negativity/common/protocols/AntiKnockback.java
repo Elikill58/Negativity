@@ -2,10 +2,9 @@ package com.elikill58.negativity.common.protocols;
 
 import java.util.TimerTask;
 
-import org.bukkit.entity.Arrow;
-
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.Arrow;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;

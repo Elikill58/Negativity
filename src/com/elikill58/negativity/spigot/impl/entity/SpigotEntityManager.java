@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.impl.entity;
 
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
 
@@ -24,9 +25,21 @@ public class SpigotEntityManager {
 			return getPlayer((Player) bukkitEntity);
 		case IRON_GOLEM:
 			return new SpigotIronGolem((IronGolem) bukkitEntity);
+		case ARROW:
+			return new SpigotArrow((Arrow) bukkitEntity);
 		default:
 			return new SpigotEntity(bukkitEntity);
 		}
+	}
+	
+	public static Entity getProjectile(org.bukkit.projectiles.ProjectileSource bukkitEntity) {
+		if(bukkitEntity == null)
+			return null;
+		if(bukkitEntity instanceof Player)
+			return getPlayer((Player) bukkitEntity);
+		else if(bukkitEntity instanceof org.bukkit.entity.Entity)
+			return new SpigotEntity((org.bukkit.entity.Entity) bukkitEntity);
+		return null;
 	}
 
 	public static CommandSender getExecutor(org.bukkit.command.CommandSender sender) {

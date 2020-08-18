@@ -1,0 +1,10 @@
+# Special detection
+
+# Check mcleaks players
+active: true
+
+# The display name
+name: "McLeaks"
+
+# Kick player if it's mcleaks one
+kick: true

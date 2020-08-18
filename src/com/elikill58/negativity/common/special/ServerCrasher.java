@@ -33,6 +33,8 @@ public class ServerCrasher extends Special implements Listeners {
 	
 	@EventListener
 	public void onPacketClear(PacketReceiveEvent e) {
+		if(!isActive())
+			return;
 		Player p = e.getPlayer();
 		if(e.getPacket().getPacketType() == PacketType.Client.POSITION && !inDisconnection.contains(p.getUniqueId())) {
 			if(NegativityPlayer.getCached(p.getUniqueId()).PACKETS.getOrDefault(PacketType.Client.POSITION, 0) > 1000) {

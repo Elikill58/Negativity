@@ -2,7 +2,6 @@ package com.elikill58.negativity.spigot.impl.location;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.impl.block.SpigotBlock;
 
@@ -21,18 +20,8 @@ public class SpigotLocation extends Location {
 	}
 
 	@Override
-	public Vector toVector() {
-		return new Vector(this);
-	}
-
-	@Override
 	public Block getBlock() {
 		return new SpigotBlock(new org.bukkit.Location(loc.getWorld(), getX(), getY(), getZ()).getBlock());
-	}
-
-	@Override
-	public double distance(Location location) {
-		return loc.distance((org.bukkit.Location) location.getDefaultLocation());
 	}
 
 	@Override

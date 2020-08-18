@@ -126,6 +126,8 @@ public class Fly extends Cheat implements Listeners {
 
 	@EventListener
 	public void boatManager(PlayerMoveEvent e) {
+		if(!checkActive("no-ground-down"))
+			return;
 		Player p = e.getPlayer();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		boolean nextValue = np.booleans.get(FLY, "boat-falling", false);

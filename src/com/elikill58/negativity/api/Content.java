@@ -14,8 +14,7 @@ public class Content<T> {
 	}
 	
 	public void set(String type, String valueName, T value) {
-		mainContent.computeIfAbsent(type, (typee) -> new HashMap<>());
-		mainContent.get(type).put(valueName, value);
+		mainContent.computeIfAbsent(type, (typee) -> new HashMap<>()).put(valueName, value);
 	}
 	
 	public void remove(String type, String valueName) {

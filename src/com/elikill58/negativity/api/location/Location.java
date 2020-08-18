@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api.location;
 
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.universal.utils.Maths;
 
 public abstract class Location implements Cloneable {
 
@@ -126,8 +127,10 @@ public abstract class Location implements Cloneable {
 		return this;
 	}
 
-	public abstract Vector toVector();
-
+	public Vector toVector() {
+		return new Vector(this);
+	}
+	
 	public abstract Block getBlock();
 
 	public Vector getDirection() {
@@ -145,9 +148,25 @@ public abstract class Location implements Cloneable {
 
 		return vector;
 	}
-
-	public abstract double distance(Location location);
 	
+	public double distance(Location o) {
+		return Math.sqrt(distanceSquared(o));
+	}
+
+	public double distanceSquared(Location o) {
+		if (o == null) {
+			throw new IllegalArgumentException("Cannot measure distance to a null location");
+		}
+		if ((o.getWorld() == null) || (getWorld() == null)) {
+			throw new IllegalArgumentException("Cannot measure distance to a null world");
+		}
+		if (o.getWorld().getName() != getWorld().getName()) {
+			throw new IllegalArgumentException(
+					"Cannot measure distance between " + getWorld().getName() + " and " + o.getWorld().getName());
+		}
+		return Maths.square(this.x - o.x) + Maths.square(this.y - o.y) + Maths.square(this.z - o.z);
+	}
+
 	public abstract Object getDefaultLocation();
 
 	@Override

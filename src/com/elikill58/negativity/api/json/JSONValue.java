@@ -2,7 +2,7 @@
  * $Id: JSONValue.java,v 1.1 2006/04/15 14:37:04 platform Exp $
  * Created on 2006-4-15
  */
-package org.json;
+package com.elikill58.negativity.api.json;
 
 import java.io.IOException;
 import java.io.Reader;
@@ -14,8 +14,8 @@ import java.util.List;
 // import java.util.List;
 import java.util.Map;
 
-import org.json.parser.JSONParser;
-import org.json.parser.ParseException;
+import com.elikill58.negativity.api.json.parser.JSONParser;
+import com.elikill58.negativity.api.json.parser.ParseException;
 
 /**
  * @author FangYidong<fangyidong@yahoo.com.cn>
@@ -26,7 +26,7 @@ public class JSONValue {
 	 * Parse JSON text into java object from the input source. 
 	 * Please use parseWithException() if you don't want to ignore the exception.
 	 * 
-	 * @see org.json.parser.JSONParser#parse(Reader)
+	 * @see com.elikill58.negativity.api.json.parser.JSONParser#parse(Reader)
 	 * @see #parseWithException(Reader)
 	 * 
 	 * @param in
@@ -56,7 +56,7 @@ public class JSONValue {
 	 * Parse JSON text into java object from the given string. 
 	 * Please use parseWithException() if you don't want to ignore the exception.
 	 * 
-	 * @see org.json.parser.JSONParser#parse(Reader)
+	 * @see com.elikill58.negativity.api.json.parser.JSONParser#parse(Reader)
 	 * @see #parseWithException(Reader)
 	 * 
 	 * @param s
@@ -80,7 +80,7 @@ public class JSONValue {
 	/**
 	 * Parse JSON text into java object from the input source.
 	 * 
-	 * @see org.json.parser.JSONParser
+	 * @see com.elikill58.negativity.api.json.parser.JSONParser
 	 * 
 	 * @param in
 	 * @return Instance of the following:
@@ -112,8 +112,8 @@ public class JSONValue {
      * DO NOT call this method from writeJSONString(Writer) of a class that implements both JSONStreamAware and (Map or List) with 
      * "this" as the first parameter, use JSONObject.writeJSONString(Map, Writer) or JSONArray.writeJSONString(List, Writer) instead. 
      * 
-     * @see org.json.JSONObject#writeJSONString(Map, Writer)
-     * @see org.json.JSONArray#writeJSONString(List, Writer)
+     * @see com.elikill58.negativity.api.json.JSONObject#writeJSONString(Map, Writer)
+     * @see com.elikill58.negativity.api.json.JSONArray#writeJSONString(List, Writer)
      * 
      * @param value
      * @param writer
@@ -233,8 +233,8 @@ public class JSONValue {
 	 * DO NOT call this method from toJSONString() of a class that implements both JSONAware and Map or List with 
 	 * "this" as the parameter, use JSONObject.toJSONString(Map) or JSONArray.toJSONString(List) instead. 
 	 * 
-	 * @see org.json.JSONObject#toJSONString(Map)
-	 * @see org.json.JSONArray#toJSONString(List)
+	 * @see com.elikill58.negativity.api.json.JSONObject#toJSONString(Map)
+	 * @see com.elikill58.negativity.api.json.JSONArray#toJSONString(List)
 	 * 
 	 * @param value
 	 * @return JSON text, or "null" if value is null or it's an NaN or an INF number.

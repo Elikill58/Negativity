@@ -13,9 +13,6 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.json.JSONObject;
-import org.json.parser.JSONParser;
-import org.json.parser.ParseException;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
@@ -25,6 +22,9 @@ import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.json.JSONObject;
+import com.elikill58.negativity.api.json.parser.JSONParser;
+import com.elikill58.negativity.api.json.parser.ParseException;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;

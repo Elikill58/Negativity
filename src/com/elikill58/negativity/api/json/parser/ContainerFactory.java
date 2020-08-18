@@ -1,4 +1,4 @@
-package org.json.parser;
+package com.elikill58.negativity.api.json.parser;
 
 import java.util.List;
 import java.util.Map;
@@ -6,7 +6,7 @@ import java.util.Map;
 /**
  * Container factory for creating containers for JSON object and JSON array.
  * 
- * @see org.json.parser.JSONParser#parse(java.io.Reader, ContainerFactory)
+ * @see com.elikill58.negativity.api.json.parser.JSONParser#parse(java.io.Reader, ContainerFactory)
  * 
  * @author FangYidong<fangyidong@yahoo.com.cn>
  */

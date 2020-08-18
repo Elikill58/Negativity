@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
+import com.elikill58.negativity.api.json.JSONArray;
+import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.universal.verif.data.DataCounter;
 
 public class VerifData {

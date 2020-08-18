@@ -1,4 +1,4 @@
-package org.json;
+package com.elikill58.negativity.api.json;
 
 import java.io.IOException;
 import java.io.Writer;

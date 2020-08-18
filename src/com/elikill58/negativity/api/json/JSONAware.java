@@ -1,4 +1,4 @@
-package org.json;
+package com.elikill58.negativity.api.json;
 
 /**
  * Beans that support customized output of JSON text shall implement this interface.  

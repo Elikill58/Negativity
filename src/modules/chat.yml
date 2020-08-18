@@ -22,6 +22,12 @@ verif:
   # Enable/disable the detection when the verification is enabled
   check_in_verif: true
 
+# List of insult which create flag
+insults:
+- "bitch"
+- "asshole"
+- "dickhead"
+
 # Disable one check and not all detections
 checks:
   # Spam a message

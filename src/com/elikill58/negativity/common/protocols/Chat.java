@@ -17,7 +17,6 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Chat extends Cheat implements Listeners {
@@ -50,7 +49,7 @@ public class Chat extends Cheat implements Listeners {
 
 		if(checkActive("insult")) {
 			final List<String> insults = new ArrayList<>();
-			Adapter.getAdapter().getConfig().getStringList("cheats.chat.insults").forEach((s) -> {
+			getConfig().getStringList("insults").forEach((s) -> {
 				insults.add(s.toLowerCase());
 			});
 			final StringJoiner foundInsults = new StringJoiner(", ");

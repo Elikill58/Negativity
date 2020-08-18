@@ -21,7 +21,7 @@ public class SpigotPlayerInventory extends PlayerInventory {
 
 	@Override
 	public void set(int slot, ItemStack item) {
-		inv.setItem(slot, (org.bukkit.inventory.ItemStack) item.getDefaultItem());
+		inv.setItem(slot, (org.bukkit.inventory.ItemStack) item.getDefault());
 	}
 
 	@Override
@@ -76,7 +76,7 @@ public class SpigotPlayerInventory extends PlayerInventory {
 			if(items == null || items.length < i)
 				armor[i] = null;
 			else
-				armor[i] = (org.bukkit.inventory.ItemStack) items[i].getDefaultItem();
+				armor[i] = (org.bukkit.inventory.ItemStack) items[i].getDefault();
 		}
 		inv.setArmorContents(armor);
 	}
@@ -88,11 +88,11 @@ public class SpigotPlayerInventory extends PlayerInventory {
 
 	@Override
 	public void addItem(ItemStack build) {
-		inv.addItem((org.bukkit.inventory.ItemStack) build.getDefaultItem());
+		inv.addItem((org.bukkit.inventory.ItemStack) build.getDefault());
 	}
 
 	@Override
-	public Object getDefaultInventory() {
+	public Object getDefault() {
 		return inv;
 	}
 }

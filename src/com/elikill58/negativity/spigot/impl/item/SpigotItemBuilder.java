@@ -23,7 +23,7 @@ public class SpigotItemBuilder extends ItemBuilder {
     private ItemMeta itemMeta;
 
     public SpigotItemBuilder(Material type) {
-    	this.itemStack = new ItemStack((org.bukkit.Material) type.getDefaultMaterial());
+    	this.itemStack = new ItemStack((org.bukkit.Material) type.getDefault());
     	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
     }
 
@@ -54,7 +54,7 @@ public class SpigotItemBuilder extends ItemBuilder {
 
     @Override
     public ItemBuilder type(Material type) {
-        this.itemStack.setType((org.bukkit.Material) type.getDefaultMaterial());
+        this.itemStack.setType((org.bukkit.Material) type.getDefault());
         return this;
     }
 

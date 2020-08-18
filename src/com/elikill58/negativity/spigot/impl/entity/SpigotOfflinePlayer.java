@@ -45,7 +45,7 @@ public class SpigotOfflinePlayer extends OfflinePlayer {
 	}
 
 	@Override
-	public Object getDefaultEntity() {
+	public Object getDefault() {
 		return op;
 	}
 

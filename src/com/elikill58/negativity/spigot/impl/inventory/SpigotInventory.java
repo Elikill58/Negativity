@@ -43,7 +43,7 @@ public class SpigotInventory extends Inventory {
 
 	@Override
 	public void set(int slot, ItemStack item) {
-		inv.setItem(slot, (org.bukkit.inventory.ItemStack) item.getDefaultItem());
+		inv.setItem(slot, (org.bukkit.inventory.ItemStack) item.getDefault());
 	}
 
 	@Override
@@ -67,7 +67,7 @@ public class SpigotInventory extends Inventory {
 	}
 
 	@Override
-	public Object getDefaultInventory() {
+	public Object getDefault() {
 		return inv;
 	}
 
@@ -83,7 +83,7 @@ public class SpigotInventory extends Inventory {
 
 	@Override
 	public void addItem(ItemStack build) {
-		inv.addItem((org.bukkit.inventory.ItemStack) build.getDefaultItem());
+		inv.addItem((org.bukkit.inventory.ItemStack) build.getDefault());
 	}
 
 }

@@ -1,6 +1,8 @@
 package com.elikill58.negativity.api.item;
 
-public abstract class ItemStack {
+import com.elikill58.negativity.api.NegativityObject;
+
+public abstract class ItemStack extends NegativityObject {
 
 	public abstract int getAmount();
 	
@@ -12,6 +14,5 @@ public abstract class ItemStack {
 	public abstract int getEnchantLevel(Enchantment enchant);
 	public abstract void addEnchant(Enchantment enchant, int level);
 	public abstract void removeEnchant(Enchantment enchant);
-	
-	public abstract Object getDefaultItem();
+
 }

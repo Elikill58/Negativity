@@ -1,13 +1,13 @@
 package com.elikill58.negativity.api.item;
 
-public interface Material {
+import com.elikill58.negativity.api.NegativityObject;
+
+public abstract class Material extends NegativityObject {
 	
-	public boolean isSolid();
+	public abstract boolean isSolid();
 	
-	public boolean isTransparent();
+	public abstract boolean isTransparent();
 	
-	public String getId();
-	
-	public Object getDefaultMaterial();
+	public abstract String getId();
 	
 }

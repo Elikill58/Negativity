@@ -2,7 +2,7 @@ package com.elikill58.negativity.spigot.impl.item;
 
 import com.elikill58.negativity.api.item.Material;
 
-public class SpigotMaterial implements Material {
+public class SpigotMaterial extends Material {
 
 	private final org.bukkit.Material type;
 	
@@ -27,7 +27,7 @@ public class SpigotMaterial implements Material {
 	}
 
 	@Override
-	public Object getDefaultMaterial() {
+	public Object getDefault() {
 		return type;
 	}
 

@@ -16,7 +16,7 @@ public class SpigotLocation extends Location {
 	
 	public SpigotLocation(World w, double x, double y, double z) {
 		super(w, x, y, z);
-		this.loc = new org.bukkit.Location((org.bukkit.World) w.getDefaultWorld(), x, y, z);
+		this.loc = new org.bukkit.Location((org.bukkit.World) w.getDefault(), x, y, z);
 	}
 
 	@Override
@@ -25,7 +25,7 @@ public class SpigotLocation extends Location {
 	}
 
 	@Override
-	public Object getDefaultLocation() {
+	public Object getDefault() {
 		org.bukkit.Location loc = this.loc.clone();
 		loc.setX(getX());
 		loc.setY(getY());

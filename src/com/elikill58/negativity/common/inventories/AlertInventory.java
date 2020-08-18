@@ -51,7 +51,7 @@ public class AlertInventory extends AbstractInventory {
 				UniversalUtils.getMultipleOf(TO_SEE.size() + 3, 9, 1, 54), new AlertHolder(cible));
 		int slot = 0;
 		for (Cheat c : TO_SEE) {
-			if (c.getMaterial().getDefaultMaterial() == null)
+			if (c.getMaterial().getDefault() == null)
 				Adapter.getAdapter().getLogger().error("Cannot find material for cheat " + c.getName());
 			else
 				inv.set(slot++,

@@ -50,7 +50,7 @@ public class SpigotIronGolem extends IronGolem {
 	}
 
 	@Override
-	public Object getDefaultEntity() {
+	public Object getDefault() {
 		return golem;
 	}
 

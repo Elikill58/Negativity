@@ -1,9 +1,10 @@
 package com.elikill58.negativity.api.inventory;
 
+import com.elikill58.negativity.api.NegativityObject;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
-public abstract class Inventory {
+public abstract class Inventory extends NegativityObject {
 	
 	public abstract InventoryType getType();
 	
@@ -22,8 +23,6 @@ public abstract class Inventory {
 	public abstract String getInventoryName();
 	
 	public abstract PlatformHolder getHolder();
-
-	public abstract Object getDefaultInventory();
 	
 	public static Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
 		return Adapter.getAdapter().createInventory(inventoryName, size, holder);

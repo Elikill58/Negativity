@@ -47,7 +47,7 @@ public class SpigotWorld extends World {
 	}
 
 	@Override
-	public Object getDefaultWorld() {
+	public Object getDefault() {
 		return w;
 	}
 }

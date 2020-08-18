@@ -39,6 +39,4 @@ public abstract class Entity extends CommandSender {
 	public abstract EntityType getType();
 	
 	public abstract int getEntityId();
-	
-	public abstract Object getDefaultEntity();
 }

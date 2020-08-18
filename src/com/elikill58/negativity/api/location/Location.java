@@ -1,9 +1,10 @@
 package com.elikill58.negativity.api.location;
 
+import com.elikill58.negativity.api.NegativityObject;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.universal.utils.Maths;
 
-public abstract class Location implements Cloneable {
+public abstract class Location extends NegativityObject implements Cloneable {
 
 	private World w;
 	private double x, y, z;
@@ -167,7 +168,7 @@ public abstract class Location implements Cloneable {
 		return Maths.square(this.x - o.x) + Maths.square(this.y - o.y) + Maths.square(this.z - o.z);
 	}
 
-	public abstract Object getDefaultLocation();
+	public abstract Object getDefault();
 
 	@Override
 	public Location clone() {

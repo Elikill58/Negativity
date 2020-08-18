@@ -52,7 +52,11 @@ public class SpigotBlock extends Block {
 
 	@Override
 	public void setType(Material type) {
-		block.setType((org.bukkit.Material) type.getDefaultMaterial());
+		block.setType((org.bukkit.Material) type.getDefault());
 	}
 
+	@Override
+	public Object getDefault() {
+		return block;
+	}
 }

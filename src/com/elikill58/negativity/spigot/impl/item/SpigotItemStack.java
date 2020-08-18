@@ -53,7 +53,7 @@ public class SpigotItemStack extends ItemStack {
 	}
 
 	@Override
-	public Object getDefaultItem() {
+	public Object getDefault() {
 		return item;
 	}
 }

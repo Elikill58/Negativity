@@ -19,5 +19,9 @@ public class SpigotCommandSender extends CommandSender {
 	public String getName() {
 		return sender.getName();
 	}
-
+	
+	@Override
+	public Object getDefault() {
+		return sender;
+	}
 }

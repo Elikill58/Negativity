@@ -69,7 +69,7 @@ public class SpigotPlayer extends Player {
 	
 	@Override
 	public boolean hasLineOfSight(Entity entity) {
-		return SpigotNegativity.isCraftBukkit ? true : p.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefaultEntity());
+		return SpigotNegativity.isCraftBukkit ? true : p.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefault());
 	}
 
 	@Override
@@ -241,7 +241,7 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public void teleport(Location loc) {
-		p.teleport((org.bukkit.Location) loc.getDefaultLocation());
+		p.teleport((org.bukkit.Location) loc.getDefault());
 	}
 
 	@Override
@@ -321,7 +321,7 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public void openInventory(Inventory inv) {
-		p.openInventory((org.bukkit.inventory.Inventory) inv.getDefaultInventory());
+		p.openInventory((org.bukkit.inventory.Inventory) inv.getDefault());
 	}
 
 	@Override
@@ -357,7 +357,7 @@ public class SpigotPlayer extends Player {
 	}
 
 	@Override
-	public Object getDefaultEntity() {
+	public Object getDefault() {
 		return p;
 	}
 }

@@ -16,11 +16,16 @@ reliability_alert: 60
 # Remove the cheat effect
 set_back:
   active: false
+  # Kill option when set back option is enabled
+  kill:
+    # Enable killing people while damaging player
+    active: true
 
 # Option for /negativity verif
 verif:
   # Enable/disable the detection when the verification is enabled
   check_in_verif: true
+
 
 # Disable one check and not all detections
 checks:

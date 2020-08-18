@@ -16,8 +16,6 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
-import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.support.EssentialsSupport;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -101,7 +99,6 @@ public class NoFall extends Cheat implements Listeners {
 	}
 	
 	private void manageDamage(Player p, int damage, int relia) {
-		ConfigAdapter config = Adapter.getAdapter().getConfig();
-		p.damage(damage >= p.getHealth() ? (config.getBoolean("cheats.nofall.kill") && config.getDouble("cheats.nofall.kill-reliability") >= relia ? damage : p.getHealth() - 0.5) : p.getHealth());
+		p.damage(damage >= p.getHealth() ? (getConfig().getBoolean("set_back.kill.active") ? damage : p.getHealth() - 0.5) : damage);
 	}
 }

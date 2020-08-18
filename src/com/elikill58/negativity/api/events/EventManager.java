@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.elikill58.negativity.api.commands.CommandManager;
 import com.elikill58.negativity.api.inventory.InventoryManager;
+import com.elikill58.negativity.common.ConnectionManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class EventManager {
@@ -17,6 +18,7 @@ public class EventManager {
 	public static void load() {
 		registerEvent(new CommandManager());
 		registerEvent(new InventoryManager());
+		registerEvent(new ConnectionManager());
 	}
 	
 	public static void registerEvent(Listeners src) {

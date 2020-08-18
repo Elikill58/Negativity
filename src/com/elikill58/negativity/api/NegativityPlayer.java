@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.Callable;
 
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.IronGolem;
@@ -154,6 +155,19 @@ public class NegativityPlayer {
 
 	public Player getPlayer() {
 		return p;
+	}
+	
+	public void manageAutoVerif() {
+		ACTIVE_CHEAT.clear();
+		boolean needPacket = false;
+		for (Cheat c : Cheat.values())
+			if (c.isActive()) {
+				startAnalyze(c);
+				if (c.needPacket())
+					needPacket = true;
+			}
+		if (needPacket && !NegativityPlayer.INJECTED.contains(p.getUniqueId()))
+			NegativityPlayer.INJECTED.add(p.getUniqueId());
 	}
 	
 	public void kickPlayer(String reason, String time, String by, boolean def) {
@@ -317,6 +331,17 @@ public class NegativityPlayer {
 	
 	public static NegativityPlayer getNegativityPlayer(Player p) {
 		return players.computeIfAbsent(p.getUniqueId(), id -> new NegativityPlayer(p));
+	}
+
+	public static NegativityPlayer getNegativityPlayer(UUID uuid, Callable<Player> call) {
+		return players.computeIfAbsent(uuid, id -> {
+			try {
+				return new NegativityPlayer(call.call());
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		});
 	}
 
 	public static NegativityPlayer getCached(UUID playerId) {

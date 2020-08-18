@@ -36,7 +36,6 @@ import com.elikill58.negativity.spigot.listeners.InventoryListeners;
 import com.elikill58.negativity.spigot.listeners.PlayersListeners;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
@@ -107,7 +106,7 @@ public class SpigotNegativity extends JavaPlugin {
 				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
 
 		PluginManager pm = Bukkit.getPluginManager();
-		pm.registerEvents(new PlayersEvents(this), this);
+		pm.registerEvents(new PlayersEvents(), this);
 		pm.registerEvents(new FightManager(), this);
 		pm.registerEvents(new ServerCrasherEvents(this), this);
 		pm.registerEvents(new PlayersListeners(), this);
@@ -126,7 +125,7 @@ public class SpigotNegativity extends JavaPlugin {
 		loadChannelInOut(messenger, CHANNEL_NAME_FML, channelEvents);
 		
 		for (Player p : Utils.getOnlinePlayers())
-			manageAutoVerif(p);
+			NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p)).manageAutoVerif();
 
 		loadCommand();
 
@@ -287,20 +286,6 @@ public class SpigotNegativity extends JavaPlugin {
 		if (onlinePlayers.hasNext()) {
 			sendProxyPing(onlinePlayers.next());
 		}
-	}
-
-	public static void manageAutoVerif(Player p) {
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(new SpigotPlayer(p));
-		np.ACTIVE_CHEAT.clear();
-		boolean needPacket = false;
-		for (Cheat c : Cheat.values())
-			if (c.isActive()) {
-				np.startAnalyze(c);
-				if (c.needPacket())
-					needPacket = true;
-			}
-		if (needPacket && !NegativityPlayer.INJECTED.contains(p.getUniqueId()))
-			NegativityPlayer.INJECTED.add(p.getUniqueId());
 	}
 
 	private Object getKnownCommands(Object object) {

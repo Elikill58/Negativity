@@ -22,6 +22,9 @@ verif:
   # Enable/disable the detection when the verification is enabled
   check_in_verif: true
 
+# Max variation of packet sent by player
+max_variation: 7
+
 # Disable one check and not all detections
 checks:
   # Check Y move only

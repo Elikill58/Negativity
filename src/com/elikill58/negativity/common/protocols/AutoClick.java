@@ -27,8 +27,6 @@ import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 public class AutoClick extends Cheat implements Listeners {
 
 	public static final DataType<Integer> CLICKS = new DataType<Integer>("clicks", "Clicks", () -> new IntegerDataCounter());
-
-	public static final int CLICK_ALERT = Adapter.getAdapter().getConfig().getInt("cheats.autoclick.click_alert");
 	
 	public AutoClick() {
 		super(CheatKeys.AUTO_CLICK, true, Materials.FISHING_ROD, CheatCategory.COMBAT, true, "auto-click", "autoclic");
@@ -74,7 +72,7 @@ public class AutoClick extends Cheat implements Listeners {
 			}
 		np.ACTUAL_CLICK++;
 		int ping = p.getPing(), click = np.ACTUAL_CLICK - (ping / 9);
-		if (click > CLICK_ALERT && np.hasDetectionActive(this)) {
+		if (click > getConfig().getInt("click_alert", 20) && np.hasDetectionActive(this)) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(np.ACTUAL_CLICK * 2.5), "count",
 					"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK

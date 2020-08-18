@@ -22,6 +22,9 @@ verif:
   # Enable/disable the detection when the verification is enabled
   check_in_verif: true
 
+# Amount of click to create alert
+click_alert: 20
+
 # Disable one check and not all detections
 checks:
   # Count click 1 by 1

@@ -17,6 +17,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
+import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
@@ -52,7 +53,10 @@ public class PlayersEvents implements Listener {
 	@EventHandler
 	public void onLeave(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
-
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p));
+		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, e.getQuitMessage());
+		EventManager.callEvent(event);
+		e.setQuitMessage(event.getQuitMessage());
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> NegativityPlayer.removeFromCache(p.getUniqueId()), 2);
 	}
 

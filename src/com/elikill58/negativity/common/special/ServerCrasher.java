@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.Special;
@@ -25,12 +26,10 @@ public class ServerCrasher extends Special implements Listeners {
 		super("server-crasher", true, true);
 	}
 	
-	/*
-	TODO add PlayerQuitEvent
 	@EventListener
-	public void onQuit(PlayerQuitEvent e) {
+	public void onLeave(PlayerLeaveEvent e) {
 		inDisconnection.remove(e.getPlayer().getUniqueId());
-	}*/
+	}
 	
 	@EventListener
 	public void onPacketClear(PacketReceiveEvent e) {

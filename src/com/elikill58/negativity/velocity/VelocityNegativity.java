@@ -14,7 +14,6 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.VelocityAdapter;
 import com.elikill58.negativity.universal.config.MD5ConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
-import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
@@ -73,8 +72,6 @@ public class VelocityNegativity {
 		UniversalUtils.init();
 
 		NegativityAccountStorage.setDefaultStorage("database");
-
-		Perm.registerChecker(Perm.PLATFORM_CHECKER, new VelocityPermissionChecker());
 
 		Stats.loadStats();
 		Stats.updateStats(StatsType.ONLINE, 1 + "");

@@ -4,11 +4,10 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.List;
 
-import org.bukkit.Bukkit;
-
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.StateFlag;
@@ -17,7 +16,7 @@ import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
 public class WorldGuardSupport {
 	
-	private static final WorldGuardPlugin WORLDGUARD_PLUGIN = (WorldGuardPlugin) Bukkit.getPluginManager().getPlugin("WorldGuard");
+	private static final WorldGuardPlugin WORLDGUARD_PLUGIN = (WorldGuardPlugin) Adapter.getAdapter().getPlugin("WorldGuard").getDefault();
 	private static StateFlag PVP_FLAG;
 	private static Constructor<?> createVectorCons = null;
 	private static Method createVectorMethod = null, regionContainerGetMethod = null,

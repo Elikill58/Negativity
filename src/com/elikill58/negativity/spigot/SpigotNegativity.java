@@ -51,7 +51,6 @@ import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcess
 import com.elikill58.negativity.universal.ban.support.BukkitBanProcessor;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.dataStorage.file.SpigotFileNegativityAccountStorage;
-import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
@@ -153,8 +152,6 @@ public class SpigotNegativity extends JavaPlugin {
 		NegativityAccountStorage.setDefaultStorage("file");
 		BanManager.registerProcessor("bukkit", new BukkitBanProcessor());
 		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(SpigotNegativity::sendPluginMessage));
-		
-		Perm.registerChecker(Perm.PLATFORM_CHECKER, new BukkitPermissionChecker());
 
 		getServer().getScheduler().runTaskTimer(this, new ClickManagerTimer(), 20, 20);
 		invTimer = getServer().getScheduler().runTaskTimer(this, new ActualizeInvTimer(), 5, 5);

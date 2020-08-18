@@ -14,7 +14,6 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.BungeeAdapter;
 import com.elikill58.negativity.universal.config.MD5ConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
-import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -51,8 +50,6 @@ public class BungeeNegativity extends Plugin {
 		UniversalUtils.init();
 
 		NegativityAccountStorage.setDefaultStorage("database");
-
-		Perm.registerChecker(Perm.PLATFORM_CHECKER, new BungeePermissionChecker());
 
 		Stats.loadStats();
 		Stats.updateStats(StatsType.ONLINE, 1 + "");

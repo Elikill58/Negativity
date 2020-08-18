@@ -189,7 +189,6 @@ public class SpongeNegativity {
 
 		BanManager.registerProcessor("sponge", new SpongeBanProcessor());
 		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(SpongeNegativity::sendPluginMessage));
-		Perm.registerChecker(Perm.PLATFORM_CHECKER, new SpongePermissionChecker());
 
 		if(SpongeUpdateChecker.ifUpdateAvailable()) {
 			getLogger().info("New version available (" + SpongeUpdateChecker.getVersionString() + ") : " + SpongeUpdateChecker.getDownloadUrl());

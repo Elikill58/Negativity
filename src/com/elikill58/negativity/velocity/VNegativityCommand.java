@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
 import com.velocitypowered.api.command.Command;
@@ -17,7 +18,7 @@ public class VNegativityCommand implements Command {
 
 	@Override
 	public void execute(CommandSource source, @NonNull String[] args) {
-		if (source instanceof Player && !Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer((Player) source), Perm.ADMIN)) {
+		if (source instanceof Player && !Perm.hasPerm(NegativityPlayer.getCached(((Player) source).getUniqueId()), Perm.ADMIN)) {
 			source.sendMessage(VelocityMessages.getMessage((Player) source, "not_permission"));
 			return;
 		}
@@ -54,6 +55,6 @@ public class VNegativityCommand implements Command {
 	}
 
 	private static boolean hasAdminPermission(CommandSource source) {
-		return !(source instanceof Player) || Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer((Player) source), Perm.ADMIN);
+		return !(source instanceof Player) || Perm.hasPerm(NegativityPlayer.getCached(((Player) source).getUniqueId()), Perm.ADMIN);
 	}
 }

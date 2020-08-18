@@ -226,7 +226,7 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
-		new ClickableText().addRunnableHoverEvent(message, hover, command).sendToPlayer((org.bukkit.entity.Player) p.getDefaultPlayer());
+		new ClickableText().addRunnableHoverEvent(message, hover, command).sendToPlayer((org.bukkit.entity.Player) p.getDefault());
 	}
 
 	@Override

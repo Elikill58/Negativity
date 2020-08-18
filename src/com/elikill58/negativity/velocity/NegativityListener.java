@@ -12,6 +12,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
@@ -29,6 +30,7 @@ import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.velocity.impl.entity.VelocityPlayer;
 import com.velocitypowered.api.event.ResultedEvent;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
@@ -84,7 +86,7 @@ public class NegativityListener {
 					"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers()) {
-				VelocityNegativityPlayer nPlayer = VelocityNegativityPlayer.getNegativityPlayer(pp);
+				NegativityPlayer nPlayer = NegativityPlayer.getCached(pp.getUniqueId());
 				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT)) {
 					Builder msg = TextComponent.builder();
 					msg.append(VelocityMessages.getMessage(pp, alertMessageKey, place));
@@ -120,7 +122,7 @@ public class NegativityListener {
 			Object[] place = new Object[] { "%name%", report.getReported(), "%reason%", report.getReason(), "%report%", report.getReporter() };
 			boolean hasPermitted = false;
 			for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers()) {
-				if (Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer(pp), Perm.SHOW_REPORT)) {
+				if (Perm.hasPerm(NegativityPlayer.getCached(pp.getUniqueId()), Perm.SHOW_REPORT)) {
 					hasPermitted = true;
 					Builder msg = TextComponent.builder();
 					msg.append(VelocityMessages.getMessage(pp, "report", place));
@@ -173,7 +175,7 @@ public class NegativityListener {
 	@Subscribe
 	public void onPostLogin(PostLoginEvent e) {
 		Player p = e.getPlayer();
-		VelocityNegativityPlayer np = VelocityNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(new VelocityPlayer(p));
 		if (Perm.hasPerm(np, Perm.SHOW_REPORT)) {
 			for (Report msg : report) {
 				p.sendMessage(msg.toMessage(p));
@@ -188,7 +190,7 @@ public class NegativityListener {
 		plugin.getServer().getScheduler()
 				.buildTask(plugin, () -> {
 					UUID playerId = event.getPlayer().getUniqueId();
-					VelocityNegativityPlayer.removeFromCache(playerId);
+					NegativityPlayer.removeFromCache(playerId);
 					NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
 					accountManager.save(playerId);
 					accountManager.dispose(playerId);

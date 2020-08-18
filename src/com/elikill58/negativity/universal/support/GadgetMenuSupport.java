@@ -7,7 +7,7 @@ import com.yapzhenyie.GadgetsMenu.player.PlayerManager;
 public class GadgetMenuSupport {
 
 	public static boolean checkGadgetsMenuPreconditions(Player p) {
-		PlayerManager pm = GadgetsMenuAPI.getPlayerManager((org.bukkit.entity.Player) p.getDefaultPlayer());
+		PlayerManager pm = GadgetsMenuAPI.getPlayerManager((org.bukkit.entity.Player) p.getDefault());
 		return pm.isFallDamageDisabled() || pm.isFireDamageDisabled() || pm.isBlockDamageDisabled();
 	}
 	

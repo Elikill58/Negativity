@@ -1,5 +1,6 @@
 package com.elikill58.negativity.bungee;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
 
@@ -20,7 +21,7 @@ public class BNegativityCommand extends Command {
 
 	@Override
 	public void execute(CommandSender sender, String[] args) {
-		if (sender instanceof ProxiedPlayer && !Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer((ProxiedPlayer) sender), Perm.ADMIN)) {
+		if (sender instanceof ProxiedPlayer && !Perm.hasPerm(NegativityPlayer.getCached(((ProxiedPlayer) sender).getUniqueId()), Perm.ADMIN)) {
 			sender.sendMessage(new TextComponent(BungeeMessages.getMessage((ProxiedPlayer) sender, "not_permission")));
 			return;
 		}
@@ -71,7 +72,7 @@ public class BNegativityCommand extends Command {
 		}
 
 		private static boolean hasAdminPermission(Connection sender) {
-			return !(sender instanceof ProxiedPlayer) || Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer((ProxiedPlayer) sender), Perm.ADMIN);
+			return !(sender instanceof ProxiedPlayer) || Perm.hasPerm(NegativityPlayer.getCached(((ProxiedPlayer) sender).getUniqueId()), Perm.ADMIN);
 		}
 	}
 }

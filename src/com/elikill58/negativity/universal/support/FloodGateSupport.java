@@ -1,12 +1,12 @@
 package com.elikill58.negativity.universal.support;
 
-import org.geysermc.floodgate.FloodgateAPI;
+import java.util.UUID;
 
-import com.elikill58.negativity.api.entity.Player;
+import org.geysermc.floodgate.FloodgateAPI;
 
 public class FloodGateSupport {
 	
-	public static boolean isBedrockPlayer(Player p) {
-		return FloodgateAPI.isBedrockPlayer(p.getUniqueId());
+	public static boolean isBedrockPlayer(UUID uuid) {
+		return FloodgateAPI.isBedrockPlayer(uuid);
 	}
 }

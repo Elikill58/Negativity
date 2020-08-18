@@ -64,7 +64,7 @@ public class WorldGuardSupport {
 		if (checkSet == null)
 			return true;
 
-		return checkSet.queryState(WORLDGUARD_PLUGIN.wrapPlayer((org.bukkit.entity.Player) player.getDefaultPlayer()), PVP_FLAG) != StateFlag.State.DENY;
+		return checkSet.queryState(WORLDGUARD_PLUGIN.wrapPlayer((org.bukkit.entity.Player) player.getDefault()), PVP_FLAG) != StateFlag.State.DENY;
 	}
 
 	private static ApplicableRegionSet getRegionSet(Location location) {

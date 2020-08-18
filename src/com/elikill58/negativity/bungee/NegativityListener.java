@@ -10,6 +10,8 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
+import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
@@ -83,7 +85,7 @@ public class NegativityListener implements Listener {
 					"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers()) {
-				BungeeNegativityPlayer nPlayer = BungeeNegativityPlayer.getNegativityPlayer(pp);
+				NegativityPlayer nPlayer = NegativityPlayer.getCached(pp.getUniqueId());
 				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT)) {
 					TextComponent alertMessage = new TextComponent(BungeeMessages.getMessage(pp, alertMessageKey, place));
 
@@ -111,7 +113,7 @@ public class NegativityListener implements Listener {
 			Object[] place = new Object[]{"%name%", report.getReported(), "%reason%", report.getReason(), "%report%", report.getReporter()};
 			boolean hasPermitted = false;
 			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers())
-				if (Perm.hasPerm(BungeeNegativityPlayer.getNegativityPlayer(pp), Perm.SHOW_REPORT)) {
+				if (Perm.hasPerm(NegativityPlayer.getCached(pp.getUniqueId()), Perm.SHOW_REPORT)) {
 					hasPermitted = true;
 					TextComponent msg = new TextComponent(BungeeMessages.getMessage(pp, "report", place));
 					msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent(BungeeMessages.getMessage(pp, "report_hover", "%playername%", report.getReported()))}));
@@ -154,7 +156,7 @@ public class NegativityListener implements Listener {
 	@EventHandler
 	public void onPostLogin(PostLoginEvent e) {
 		ProxiedPlayer p = e.getPlayer();
-		BungeeNegativityPlayer np = BungeeNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(new BungeePlayer(p));
 		if (Perm.hasPerm(np, Perm.SHOW_REPORT))
 			for (Report msg : report) {
 				p.sendMessage(msg.toMessage(p));
@@ -167,7 +169,7 @@ public class NegativityListener implements Listener {
 		ProxyServer.getInstance().getScheduler().schedule(BungeeNegativity.getInstance(),
 				() -> {
 					UUID playerId = event.getPlayer().getUniqueId();
-					BungeeNegativityPlayer.removeFromCache(playerId);
+					NegativityPlayer.removeFromCache(playerId);
 					NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
 					accountManager.save(playerId);
 					accountManager.dispose(playerId);

@@ -37,11 +37,6 @@ public class SpigotPlayer extends Player {
 	}
 
 	@Override
-	public Object getDefaultPlayer() {
-		return p;
-	}
-
-	@Override
 	public UUID getUniqueId() {
 		return p.getUniqueId();
 	}
@@ -342,13 +337,13 @@ public class SpigotPlayer extends Player {
 	@SuppressWarnings("deprecation")
 	@Override
 	public void showPlayer(Player p) {
-		this.p.showPlayer((org.bukkit.entity.Player) p.getDefaultPlayer());
+		this.p.showPlayer((org.bukkit.entity.Player) p.getDefault());
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public void hidePlayer(Player p) {
-		this.p.hidePlayer((org.bukkit.entity.Player) p.getDefaultPlayer());
+		this.p.hidePlayer((org.bukkit.entity.Player) p.getDefault());
 	}
 
 	@Override

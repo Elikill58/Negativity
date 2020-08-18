@@ -80,7 +80,6 @@ public class NegativityPlayer {
 	public Content<Integer> ints = new Content<>();
 	public Content<Long> longs = new Content<>();
 	
-	
 	// general values
 	public boolean isInFight = false, already_blink = false, disableShowingAlert = false, isFreeze = false, isJumpingWithBlock = false, isUsingSlimeBlock = false,
 			isInvisible = false;
@@ -100,7 +99,7 @@ public class NegativityPlayer {
 				//if (c.needPacket())
 					//needPacket = true;
 			}
-		isBedrockPlayer = Negativity.floodGateSupport ? FloodGateSupport.isBedrockPlayer(p) : false;
+		isBedrockPlayer = Negativity.floodGateSupport ? FloodGateSupport.isBedrockPlayer(p.getUniqueId()) : false;
 		//if (needPacket && !SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId()))
 		//	SpigotNegativityPlayer.INJECTED.add(p.getUniqueId());
 	}

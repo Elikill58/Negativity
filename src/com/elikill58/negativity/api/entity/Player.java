@@ -14,9 +14,9 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Version;
 
 public abstract class Player extends OfflinePlayer {
-	
-	public abstract String getIP();
 
+	public abstract String getIP();
+	
 	public abstract boolean isDead();
 	public abstract boolean isSleeping();
 	public abstract boolean isSwimming();
@@ -65,8 +65,6 @@ public abstract class Player extends OfflinePlayer {
 	public abstract void addPotionEffect(PotionEffectType type, int duration, int amplifier);
 	public abstract void removePotionEffect(PotionEffectType type);
 	
-	public abstract Object getDefaultPlayer();
-
 	public abstract void sendPluginMessage(String channelId, byte[] writeMessage);
 	
 	public abstract List<Entity> getNearbyEntities(double x, double y, double z);

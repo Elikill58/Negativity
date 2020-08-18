@@ -85,16 +85,6 @@ public class AntiKnockback extends Cheat implements Listeners {
 				if (e.isCancelled())
 					return;
 				final Location last = p.getLocation().clone();
-				/*if (damager instanceof LivingEntity) { // check if fight living entity
-					if (last.clone().add(0, 2, 0).getBlock().getType().isSolid()) { // check for block upper
-						Vector vector = ((LivingEntity) damager).getEyeLocation().getDirection();
-						Location locBehind = last.clone().add(vector.clone());
-						locBehind.setY(last.getY());
-						Material typeBehind = locBehind.getBlock().getType();
-						if (typeBehind.isSolid())// cannot move
-							return;
-					}
-				}*/
 				p.damage(0D);
 				//p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
 				new java.util.Timer().schedule(new TimerTask() {

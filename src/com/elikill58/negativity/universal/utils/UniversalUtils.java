@@ -41,6 +41,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Special;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -362,6 +363,7 @@ public class UniversalUtils {
 		Negativity.setup();
 		EventManager.load();
 		Cheat.loadCheat();
+		Special.loadSpecial();
 		Database.init();
 		Perm.init();
 		BanManager.init();

@@ -4,7 +4,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.ChatColor;
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -96,13 +95,6 @@ public class ConnectionManager implements Listeners {
 			} else if(invalidNameSection.getBoolean("kick")) {
 				e.setKickMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", banReason));
 				e.setLoginResult(Result.KICK_OTHER);
-			}
-		} else {
-			int maxAllowedIP = ada.getConfig().getInt("cheats.special.max-player-by-ip.number");
-			int currentOnIP = NegativityPlayer.getAllPlayers().values().stream().filter((np) -> np.getPlayer().isOnline() && np.getPlayer().getIP().equals(e.getAddress().getHostAddress())).collect(Collectors.toList()).size();
-			if(currentOnIP >= maxAllowedIP) {
-				e.setKickMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", ada.getConfig().getString("cheats.special.max-player-by-ip.name")));
-				e.setLoginResult(Result.KICK_BANNED);
 			}
 		}
 	}

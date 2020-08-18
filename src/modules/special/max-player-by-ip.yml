@@ -1,0 +1,10 @@
+# Special detection
+
+# Limit player for each IP (dynamically)
+active: true
+
+# The display name
+name: "Max Player/IP"
+
+# Max number of player online at same time with same IP
+number: 4

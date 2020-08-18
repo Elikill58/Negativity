@@ -38,7 +38,7 @@ import net.minecraft.util.com.google.common.collect.Maps;
 
 public abstract class Cheat {
 
-	private static final File MODULE_FOLDER = new File(Adapter.getAdapter().getDataFolder(), "modules");
+	protected static final File MODULE_FOLDER = new File(Adapter.getAdapter().getDataFolder(), "modules");
 	public static final List<Cheat> CHEATS = new ArrayList<>();
 	private final String key;
 	private Configuration config;

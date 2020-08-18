@@ -4,9 +4,8 @@ import java.sql.Timestamp;
 
 import javax.annotation.Nullable;
 
-import org.mariuszgromada.math.mxparser.Expression;
-
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.maths.Expression;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.universal.Cheat;

@@ -19,8 +19,6 @@ import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.ban.BanType;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -76,26 +74,6 @@ public class ConnectionManager implements Listeners {
 			e.setLoginResult(Result.KICK_BANNED);
 			e.setKickMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));
 			ada.getAccountManager().dispose(playerId);
-		} else if(!UniversalUtils.isValidName(e.getName())) {
-			// check for ban / kick only if the player is not already banned
-			ConfigAdapter invalidNameSection = Adapter.getAdapter().getConfig().getChild("cheats.special.invalid_name");
-			String banReason = invalidNameSection.getString("name");
-			if(invalidNameSection.getBoolean("ban")) {
-				if(!BanManager.banActive) {
-					ada.getLogger().warn("Cannot ban player " + e.getName() + " for " + banReason + " because ban is NOT config.");
-					ada.getLogger().warn("Please, enable ban in config and restart your server");
-					if(invalidNameSection.getBoolean("kick")) {
-						e.setKickMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", banReason));
-						e.setLoginResult(Result.KICK_OTHER);
-					}
-				} else {
-					BanManager.executeBan(Ban.active(playerId, banReason, "Negativity", BanType.PLUGIN, invalidNameSection.getInt("ban_time"), banReason));
-					e.setLoginResult(Result.KICK_BANNED);
-				}
-			} else if(invalidNameSection.getBoolean("kick")) {
-				e.setKickMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", banReason));
-				e.setLoginResult(Result.KICK_OTHER);
-			}
 		}
 	}
 }

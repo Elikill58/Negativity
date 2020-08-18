@@ -1,0 +1,18 @@
+# Special detection
+
+# Manage player with invalid names like "§test" ('§' is NOT allowed)
+active: true
+
+# The display name
+name: "Invalid Name"
+
+# Kick player if they have wrong name
+kick: true
+
+# Ban player if they have wrong name
+ban:
+  # Enable or disable it
+  active: false
+  # the time of the ban, in milliseconds
+  # -1 for a definitive ban
+  time: -1

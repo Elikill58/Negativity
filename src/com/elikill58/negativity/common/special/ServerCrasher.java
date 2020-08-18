@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.Special;
+import com.elikill58.negativity.universal.SpecialKeys;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -23,7 +24,7 @@ public class ServerCrasher extends Special implements Listeners {
 	private List<UUID> inDisconnection = new ArrayList<>();
 	
 	public ServerCrasher() {
-		super("server-crasher", true, true);
+		super(SpecialKeys.SERVER_CRASHER, true, true);
 	}
 	
 	@EventListener

@@ -10,11 +10,12 @@ import com.elikill58.negativity.api.events.player.LoginEvent.Result;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.Special;
+import com.elikill58.negativity.universal.SpecialKeys;
 
 public class MaxPlayerPerIP extends Special implements Listeners {
 	
 	public MaxPlayerPerIP() {
-		super("max-player-by-ip", false, true);
+		super(SpecialKeys.MAX_PLAYER_PER_IP, false, true);
 	}
 	
 	@EventListener

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.common.protocols;
 
-import org.bukkit.Bukkit;
+import java.util.TimerTask;
+
 import org.bukkit.entity.Arrow;
 
 import com.elikill58.negativity.api.GameMode;
@@ -17,7 +18,6 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.Utils;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -79,39 +79,47 @@ public class AntiKnockback extends Cheat implements Listeners {
 			if (((Player) ((Arrow) damager).getShooter()).equals(p))
 				return;
 
-		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
-			if (e.isCancelled())
-				return;
-			final Location last = p.getLocation().clone();
-			/*if (damager instanceof LivingEntity) { // check if fight living entity
-				if (last.clone().add(0, 2, 0).getBlock().getType().isSolid()) { // check for block upper
-					Vector vector = ((LivingEntity) damager).getEyeLocation().getDirection();
-					Location locBehind = last.clone().add(vector.clone());
-					locBehind.setY(last.getY());
-					Material typeBehind = locBehind.getBlock().getType();
-					if (typeBehind.isSolid())// cannot move
-						return;
-				}
-			}*/
-			p.damage(0D);
-			//p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
-			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
-				Location actual = p.getLocation();
-				if (last.getWorld() != actual.getWorld() || p.isDead())
+		new java.util.Timer().schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				if (e.isCancelled())
 					return;
-				double d = last.distance(actual);
-				recordData(p.getUniqueId(), DISTANCE_DAMAGE, d);
-				int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(100 - d);
-				if (d < 0.1 && !actual.getBlock().getType().equals(Materials.WEB) && !p.isSneaking()) {
-					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "ticked",
-							"Distance after damage: " + d + "; Damager: "
-									+ e.getDamager().getType().name().toLowerCase() + " Ping: " + ping,
-							hoverMsg("main", "%distance%", d));
-					if (isSetBack() && mayCancel)
-						p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));
-				}
-			}, 5);
-		}, 0);
+				final Location last = p.getLocation().clone();
+				/*if (damager instanceof LivingEntity) { // check if fight living entity
+					if (last.clone().add(0, 2, 0).getBlock().getType().isSolid()) { // check for block upper
+						Vector vector = ((LivingEntity) damager).getEyeLocation().getDirection();
+						Location locBehind = last.clone().add(vector.clone());
+						locBehind.setY(last.getY());
+						Material typeBehind = locBehind.getBlock().getType();
+						if (typeBehind.isSolid())// cannot move
+							return;
+					}
+				}*/
+				p.damage(0D);
+				//p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
+				new java.util.Timer().schedule(new TimerTask() {
+					
+					@Override
+					public void run() {
+						Location actual = p.getLocation();
+						if (last.getWorld() != actual.getWorld() || p.isDead())
+							return;
+						double d = last.distance(actual);
+						recordData(p.getUniqueId(), DISTANCE_DAMAGE, d);
+						int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(100 - d);
+						if (d < 0.1 && !actual.getBlock().getType().equals(Materials.WEB) && !p.isSneaking()) {
+							boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this, relia, "ticked",
+									"Distance after damage: " + d + "; Damager: "
+											+ e.getDamager().getType().name().toLowerCase() + " Ping: " + ping,
+									hoverMsg("main", "%distance%", d));
+							if (isSetBack() && mayCancel)
+								p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));
+						}
+					}
+				}, 250);
+			}
+		}, 50);
 	}
 
 	@Override

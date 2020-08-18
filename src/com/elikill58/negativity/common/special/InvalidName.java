@@ -23,7 +23,7 @@ public class InvalidName extends Special implements Listeners {
 
 	@EventListener
 	public void onLogin(LoginEvent e) {
-		if (!e.getLoginResult().equals(Result.ALLOWED)) // already kicked
+		if (!e.getLoginResult().equals(Result.ALLOWED) || !isActive()) // already kicked
 			return;
 		UUID playerId = e.getUUID();
 		NegativityAccount account = NegativityAccount.get(playerId);

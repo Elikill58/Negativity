@@ -1,0 +1,18 @@
+# Special detection
+
+# Manage player who are trying to crash the server
+active: true
+
+# The display name
+name: "Server Crasher"
+
+# Kick player if they are trying to make crash
+kick: true
+
+# Ban player if they are trying to make crash
+ban:
+  # Enable or disable it
+  active: false
+  # the time of the ban, in milliseconds
+  # Default: 2629800000 (1 month)
+  time: 2629800000

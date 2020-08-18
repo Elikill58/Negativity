@@ -19,7 +19,7 @@ public class MaxPlayerPerIP extends Special implements Listeners {
 	
 	@EventListener
 	public void onConnect(LoginEvent e) {
-		if(!e.getLoginResult().equals(Result.ALLOWED)) // already kicked
+		if(!e.getLoginResult().equals(Result.ALLOWED) || !isActive()) // already kicked
 			return;
 		int currentOnIP = NegativityPlayer.getAllPlayers().values().stream().filter((np) -> np.getPlayer().isOnline() && np.getPlayer().getIP().equals(e.getAddress().getHostAddress()))
 					.collect(Collectors.toList()).size();

@@ -27,7 +27,6 @@ import com.elikill58.negativity.api.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.spigot.events.ChannelEvents;
 import com.elikill58.negativity.spigot.events.FightManager;
 import com.elikill58.negativity.spigot.events.PlayersEvents;
-import com.elikill58.negativity.spigot.events.ServerCrasherEvents;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.listeners.BlockListeners;
 import com.elikill58.negativity.spigot.listeners.CommandsListeners;
@@ -108,7 +107,6 @@ public class SpigotNegativity extends JavaPlugin {
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersEvents(), this);
 		pm.registerEvents(new FightManager(), this);
-		pm.registerEvents(new ServerCrasherEvents(this), this);
 		pm.registerEvents(new PlayersListeners(), this);
 		pm.registerEvents(new InventoryListeners(), this);
 		pm.registerEvents(new BlockListeners(), this);

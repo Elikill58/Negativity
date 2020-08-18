@@ -13,6 +13,7 @@ import java.util.logging.Level;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -87,14 +88,14 @@ public class NegativityListener implements Listener {
 			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers()) {
 				NegativityPlayer nPlayer = NegativityPlayer.getCached(pp.getUniqueId());
 				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT)) {
-					TextComponent alertMessage = new TextComponent(BungeeMessages.getMessage(pp, alertMessageKey, place));
+					TextComponent alertMessage = new TextComponent(Messages.getMessage(pp.getUniqueId(), alertMessageKey, place));
 
-					ComponentBuilder hoverComponent = new ComponentBuilder(BungeeMessages.getMessage(pp, "alert_hover", place));
+					ComponentBuilder hoverComponent = new ComponentBuilder(Messages.getMessage(pp.getUniqueId(), "alert_hover", place));
 					Cheat.CheatHover hoverInfo = alert.getHoverInfo();
 					if (hoverInfo != null) {
-						hoverComponent.append("\n\n" + BungeeMessages.coloredBungeeMessage(hoverInfo.compile(nPlayer)), ComponentBuilder.FormatRetention.NONE);
+						hoverComponent.append("\n\n" + Messages.getMessage(hoverInfo.compile(nPlayer)), ComponentBuilder.FormatRetention.NONE);
 					}
-					hoverComponent.append("\n\n" + BungeeMessages.getMessage(pp, "alert_tp_info", "%playername%", alert.getPlayername()), ComponentBuilder.FormatRetention.NONE);
+					hoverComponent.append("\n\n" + Messages.getMessage(pp.getUniqueId(), "alert_tp_info", "%playername%", alert.getPlayername()), ComponentBuilder.FormatRetention.NONE);
 					alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent.create()));
 
 					String tpCommand = pp.getServer().equals(player.getServer()) ? "/tp " + alert.getPlayername() : "/server " + player.getServer().getInfo().getName();
@@ -115,8 +116,8 @@ public class NegativityListener implements Listener {
 			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers())
 				if (Perm.hasPerm(NegativityPlayer.getCached(pp.getUniqueId()), Perm.SHOW_REPORT)) {
 					hasPermitted = true;
-					TextComponent msg = new TextComponent(BungeeMessages.getMessage(pp, "report", place));
-					msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent(BungeeMessages.getMessage(pp, "report_hover", "%playername%", report.getReported()))}));
+					TextComponent msg = new TextComponent(Messages.getMessage(pp.getUniqueId(), "report", place));
+					msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new TextComponent[]{new TextComponent(Messages.getMessage(pp.getUniqueId(), "report_hover", "%playername%", report.getReported()))}));
 					msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, pp.getServer().equals(player.getServer()) ? "/tp " + pp.getName() : "/server " + player.getServer().getInfo().getName()));
 					pp.sendMessage(msg);
 				}
@@ -146,7 +147,7 @@ public class NegativityListener implements Listener {
 			String kickMsgKey = activeBan.isDefinitive() ? "ban.kick_def" : "ban.kick_time";
 			LocalDateTime expirationDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
 			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
-			String banMessage = BungeeMessages.getMessage(playerId, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy());
+			String banMessage = Messages.getMessage(playerId, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy());
 			event.setCancelReason(new TextComponent(banMessage));
 			event.setCancelled(true);
 			Adapter.getAdapter().getAccountManager().dispose(playerId);
@@ -199,8 +200,8 @@ public class NegativityListener implements Listener {
 		}
 
 		public TextComponent toMessage(ProxiedPlayer p) {
-			TextComponent msg = new TextComponent(BungeeMessages.getMessage(p, "alert", place));
-			String hover = BungeeMessages.getMessage(p, "alert_hover", place);
+			TextComponent msg = new TextComponent(Messages.getMessage(p.getUniqueId(), "alert", place));
+			String hover = Messages.getMessage(p.getUniqueId(), "alert_hover", place);
 			if (hover.contains("\\n")) {
 				ArrayList<TextComponent> components = new ArrayList<>();
 				TextComponent hoverMessage = new TextComponent(

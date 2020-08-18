@@ -1,5 +1,7 @@
 package com.elikill58.negativity.universal;
 
+import java.util.UUID;
+
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.utils.Utils;
@@ -8,6 +10,11 @@ public class Messages {
 
 	public static String getMessage(String dir, Object... placeholders) {
 		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir, placeholders);
+		return Utils.coloredMessage(message);
+	}
+
+	public static String getMessage(UUID uuid, String dir, Object... placeholders) {
+		String message = TranslatedMessages.getStringFromLang(NegativityAccount.get(uuid).getLang(), dir, placeholders);
 		return Utils.coloredMessage(message);
 	}
 

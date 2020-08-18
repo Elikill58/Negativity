@@ -14,6 +14,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -89,20 +90,20 @@ public class NegativityListener {
 				NegativityPlayer nPlayer = NegativityPlayer.getCached(pp.getUniqueId());
 				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT)) {
 					Builder msg = TextComponent.builder();
-					msg.append(VelocityMessages.getMessage(pp, alertMessageKey, place));
+					msg.append(Messages.getMessage(pp.getUniqueId(), alertMessageKey, place));
 
-					Builder hoverMessage = VelocityMessages.getMessage(pp, "alert_hover", place).color(TextColor.GOLD).toBuilder();
+					Builder hoverMessage = TextComponent.builder(Messages.getMessage(pp.getUniqueId(), "alert_hover", place), TextColor.GOLD);
 					Cheat.CheatHover hoverInfo = alert.getHoverInfo();
 					if (hoverInfo != null) {
 						hoverMessage.append(TextComponent.newline())
 								.append(TextComponent.newline())
 								.resetStyle()
-								.append(VelocityMessages.coloredBungeeMessage(hoverInfo.compile(nPlayer)));
+								.append(Messages.getMessage(hoverInfo.compile(nPlayer)));
 					}
 
 					hoverMessage.append(TextComponent.newline())
 							.append(TextComponent.newline())
-							.append(VelocityMessages.getMessage(pp, "alert_tp_info", "%playername%", alert.getPlayername()));
+							.append(Messages.getMessage(pp.getUniqueId(), "alert_tp_info", "%playername%", alert.getPlayername()));
 
 					msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, hoverMessage.build()));
 					msg.clickEvent(ClickEvent.of(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
@@ -125,8 +126,8 @@ public class NegativityListener {
 				if (Perm.hasPerm(NegativityPlayer.getCached(pp.getUniqueId()), Perm.SHOW_REPORT)) {
 					hasPermitted = true;
 					Builder msg = TextComponent.builder();
-					msg.append(VelocityMessages.getMessage(pp, "report", place));
-					msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, VelocityMessages.getMessage(pp, "report_hover", "%playername%", report.getReported())));
+					msg.append(Messages.getMessage(pp.getUniqueId(), "report", place));
+					msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, TextComponent.of(Messages.getMessage(pp.getUniqueId(), "report_hover", "%playername%", report.getReported()))));
 					msg.clickEvent(ClickEvent.of(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
 					pp.sendMessage(msg.build());
 				}
@@ -166,7 +167,7 @@ public class NegativityListener {
 			String kickMsgKey = activeBan.isDefinitive() ? "ban.kick_def" : "ban.kick_time";
 			LocalDateTime expirationDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
 			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
-			TextComponent banMessage = VelocityMessages.getMessage(p, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy());
+			TextComponent banMessage = TextComponent.of(Messages.getMessage(p.getUniqueId(), kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));
 			event.setResult(ResultedEvent.ComponentResult.denied(banMessage));
 			Adapter.getAdapter().getAccountManager().dispose(p.getUniqueId());
 		}
@@ -233,8 +234,8 @@ public class NegativityListener {
 		}
 
 		public TextComponent toMessage(Player p) {
-			Builder msg = TextComponent.builder(VelocityMessages.getStringMessage(p, "alert", place));
-			String hover = VelocityMessages.getStringMessage(p, "alert_hover", place);
+			Builder msg = TextComponent.builder(Messages.getMessage(p.getUniqueId(), "alert", place));
+			String hover = Messages.getMessage(p.getUniqueId(), "alert_hover", place);
 			if (hover.contains("\\n")) {
 				Builder hoverMessage = TextComponent.builder("");
 				hoverMessage.color(TextColor.GOLD);

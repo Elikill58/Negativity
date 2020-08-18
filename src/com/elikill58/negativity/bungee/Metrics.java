@@ -26,9 +26,8 @@ import java.util.zip.GZIPOutputStream;
 
 import javax.net.ssl.HttpsURLConnection;
 
-import org.yaml.snakeyaml.config.Configuration;
-import org.yaml.snakeyaml.config.YamlConfiguration;
-
+import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;

@@ -21,14 +21,14 @@ import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.item.ItemType;
-import org.yaml.snakeyaml.config.Configuration;
-import org.yaml.snakeyaml.config.YamlConfiguration;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;

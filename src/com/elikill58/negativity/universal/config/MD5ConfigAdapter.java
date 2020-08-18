@@ -8,9 +8,8 @@ import java.nio.file.StandardCopyOption;
 import java.util.Collection;
 import java.util.List;
 
-import org.yaml.snakeyaml.config.Configuration;
-import org.yaml.snakeyaml.config.YamlConfiguration;
-
+import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
 import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.utils.IOSupplier;
 

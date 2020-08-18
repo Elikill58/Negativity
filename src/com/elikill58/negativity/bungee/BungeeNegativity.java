@@ -5,8 +5,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.LinkedHashMap;
 
-import org.yaml.snakeyaml.config.YamlConfiguration;
-
+import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;

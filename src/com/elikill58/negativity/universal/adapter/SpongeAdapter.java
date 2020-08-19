@@ -194,7 +194,7 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover,
 			String command) {
-		((org.spongepowered.api.entity.living.player.Player) p).sendMessage(Text.builder(message).onHover(TextActions.showText(Text.of(hover))).build());
+		((org.spongepowered.api.entity.living.player.Player) p.getDefault()).sendMessage(Text.builder(message).onHover(TextActions.showText(Text.of(hover))).build());
 	}
 
 	@Override

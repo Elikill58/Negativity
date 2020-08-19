@@ -24,7 +24,7 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 
 	@Override
 	public Material getType() {
-		return null;
+		return SpongeItemRegistrar.getInstance().get(item.getType().getId(), item.getType().getName());
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public class SpongeLocation extends Location {
 
 	@Override
 	public Block getBlock() {
-		return new SpongeBlock(new org.spongepowered.api.world.Location<Extent>(loc.getExtent(), getX(), getY(), getZ()).getBlock());
+		return new SpongeBlock(new org.spongepowered.api.world.Location<Extent>(loc.getExtent(), getX(), getY(), getZ()).getBlock().snapshotFor(loc));
 	}
 
 	@Override

@@ -15,14 +15,14 @@ public class BlockListeners {
 
 	@Listener
 	public void onBlockBreak(ChangeBlockEvent.Break e, @First Player p) {
-		BlockBreakEvent event = new BlockBreakEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(e.getTransactions().get(0).getOriginal().getState()));
+		BlockBreakEvent event = new BlockBreakEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(e.getTransactions().get(0).getOriginal()));
 		EventManager.callEvent(event);
 		e.setCancelled(event.isCancelled());
 	}
 
 	@Listener
 	public void onBlockPlace(ChangeBlockEvent.Place e, @First Player p) {
-		BlockPlaceEvent event = new BlockPlaceEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(e.getTransactions().get(0).getOriginal().getState()));
+		BlockPlaceEvent event = new BlockPlaceEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(e.getTransactions().get(0).getOriginal()));
 		EventManager.callEvent(event);
 		e.setCancelled(event.isCancelled());
 	}

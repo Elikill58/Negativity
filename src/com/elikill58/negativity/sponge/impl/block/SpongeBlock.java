@@ -1,60 +1,62 @@
 package com.elikill58.negativity.sponge.impl.block;
 
-import org.spongepowered.api.block.BlockState;
+import org.spongepowered.api.block.BlockSnapshot;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
 
 public class SpongeBlock extends Block {
 
-	private final BlockState block;
-
-	// TODO FIX SPONGE BLOCKs
-	public SpongeBlock(BlockState block) {
+	private final BlockSnapshot block;
+	
+	public SpongeBlock(BlockSnapshot block) {
 		this.block = block;
 	}
 
 	@Override
 	public Material getType() {
-		return ItemRegistrar.getInstance().get(block.getType().getId());
+		return ItemRegistrar.getInstance().get(block.getState().getId());
 	}
 
 	@Override
 	public int getX() {
-		return 0;//block.getX();
+		return block.getPosition().getX();
 	}
 
 	@Override
 	public int getY() {
-		return 0;//block.getY();
+		return block.getPosition().getY();
 	}
 
 	@Override
 	public int getZ() {
-		return 0;//block.getZ();
+		return block.getPosition().getZ();
 	}
 
 	@Override
 	public Block getRelative(BlockFace blockFace) {
+		// TODO implement getRelative
 		return null;//new SpongeBlock(block.getRelative(org.bukkit.block.BlockFace.valueOf(blockFace.name())));
 	}
 
 	@Override
 	public Location getLocation() {
-		return null;//new SpongeLocation(block.getLocation());
+		return new SpongeLocation(block.getLocation().orElse(null));
 	}
 
 	@Override
 	public boolean isLiquid() {
-		return false;//block.isLiquid();
+		// TODO implement isLiquid
+		return false;
 	}
 
 	@Override
 	public void setType(Material type) {
-		//block.setType(type.getDefault());
+		// TODO implement setType
 	}
 
 	@Override

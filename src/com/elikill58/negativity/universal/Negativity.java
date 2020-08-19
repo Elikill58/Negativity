@@ -22,7 +22,6 @@ import com.elikill58.negativity.api.events.negativity.ShowAlertPermissionEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -222,7 +221,7 @@ public class Negativity {
 	
 	private static String getVisualTPS() {
 		StringJoiner sj = new StringJoiner("/");
-		for(double d : Utils.getTPS())
+		for(double d : Adapter.getAdapter().getTPS())
 			sj.add(String.format("%.4f", d));
 		return sj.toString();
 	}

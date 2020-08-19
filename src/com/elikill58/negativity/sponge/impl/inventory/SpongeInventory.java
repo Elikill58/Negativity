@@ -19,23 +19,21 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 
 public class SpongeInventory extends Inventory {
 
-	private final Container inv;
-	private final GridInventory invGrid;
+	private final org.spongepowered.api.item.inventory.Inventory inv;
+	private GridInventory invGrid;
 	
 	public SpongeInventory(Container container) {
 		this.inv = container;
-		this.invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
 	}
 	
 	public SpongeInventory(String inventoryName, int size, NegativityHolder holder) {
 		int nbLine = size / 9;
-		org.spongepowered.api.item.inventory.Inventory tempInv = org.spongepowered.api.item.inventory.Inventory.builder().withCarrier(new SpongeNegativityHolder(holder))
+		this.inv = org.spongepowered.api.item.inventory.Inventory.builder().withCarrier(new SpongeNegativityHolder(holder))
 			.property(InventoryTitle.PROPERTY_NAME, new InventoryTitle(Text.of(inventoryName)))
 			.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, nbLine))
 			.property(Inv.INV_ID_KEY, Inv.NEGATIVITY_INV_ID)
 			.build(SpongeNegativity.INSTANCE);
-		this.invGrid = tempInv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		this.inv = (Container) tempInv;
+		this.invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
 	}
 	
 	@Override

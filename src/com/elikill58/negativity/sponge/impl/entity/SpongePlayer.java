@@ -99,7 +99,7 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public GameMode getGameMode() {
-		return GameMode.get(p.gameMode().get().getId());
+		return GameMode.get(p.gameMode().get().getName());
 	}
 
 	@Override

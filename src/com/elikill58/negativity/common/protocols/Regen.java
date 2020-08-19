@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.events.player.PlayerRegainHealthEvent;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Difficulty;
@@ -28,7 +29,10 @@ public class Regen extends Cheat implements Listeners {
 	@EventListener
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
-		Material m = p.getItemInHand().getType();
+		ItemStack item = p.getItemInHand();
+		if(item == null)
+			return;
+		Material m = item.getType();
 		if (m.equals(Materials.GOLDEN_APPLE) || m.equals(Materials.GOLDEN_CARROT))
 			NegativityPlayer.getNegativityPlayer(p).flyingReason = FlyingReason.REGEN;
 	}

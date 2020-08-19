@@ -1,11 +1,14 @@
 package com.elikill58.negativity.api;
 
+import com.elikill58.negativity.universal.adapter.Adapter;
+
 public enum GameMode {
 	
 	SURVIVAL("Survival"),
 	ADVENTURE("Adventure"),
 	CREATIVE("Creative"),
-	SPECTATOR("Spectator");
+	SPECTATOR("Spectator"),
+	CUSTOM("Custom");
 	
 	private final String name;
 	
@@ -21,6 +24,7 @@ public enum GameMode {
 		for(GameMode gm : GameMode.values())
 			if(gm.getName().equalsIgnoreCase(name) || gm.name().equalsIgnoreCase(name))
 				return gm;
-		return null;
+		Adapter.getAdapter().getLogger().info("[GameMode] Unknow gamemode " + name);
+		return CUSTOM;
 	}
 }

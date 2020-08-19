@@ -29,7 +29,7 @@ public class Materials {
     public static final Material DIAMOND_SWORD = ItemRegistrar.getInstance().get("diamond_sword");
     public static final Material DIRT = ItemRegistrar.getInstance().get("dirt");
     
-    public static final Material EMPTY_MAP = ItemRegistrar.getInstance().get("empty_map");
+    public static final Material EMPTY_MAP = ItemRegistrar.getInstance().get("empty_map", "map");
     public static final Material EMERALD_ORE = ItemRegistrar.getInstance().get("emerald_ore");
     public static final Material EYE_OF_ENDER = ItemRegistrar.getInstance().get("eye_of_ender", "ender_eye");
     
@@ -45,7 +45,7 @@ public class Materials {
     public static final Material IRON_SWORD = ItemRegistrar.getInstance().get("iron_sword");
     
     public static final Material FEATHER = ItemRegistrar.getInstance().get("feather");
-    public static final Material FIREWORK = ItemRegistrar.getInstance().get("firework_rocket", "firework");
+    public static final Material FIREWORK = ItemRegistrar.getInstance().get("firework_rocket", "firework", "fireworks");
     public static final Material FISHING_ROD = ItemRegistrar.getInstance().get("fishing_rod");
     public static final Material FIREBALL = ItemRegistrar.getInstance().get("fire_charge", "fireball");
     
@@ -71,9 +71,9 @@ public class Materials {
     /* STAINED MATERIALS */
     
     // GLASS
-    public static final Material WHITE_STAINED_GLASS = ItemRegistrar.getInstance().get("white_stained_glass");
+    public static final Material WHITE_STAINED_GLASS = ItemRegistrar.getInstance().get("white_stained_glass", "stained_glass");
     // GLASS_PANE
-    public static final Material GRAY_STAINED_GLASS_PANE = ItemRegistrar.getInstance().get("gray_stained_glass_pane");
+    public static final Material GRAY_STAINED_GLASS_PANE = ItemRegistrar.getInstance().get("gray_stained_glass_pane", "stained_glass_pane");
     // CLAY
     public static final Material LIME_STAINED_CLAY = ItemRegistrar.getInstance().get("lime_stained_clay", "lime_terracotta", "stained_clay");
     public static final Material ORANGE_STAINED_CLAY = ItemRegistrar.getInstance().get("orange_stained_clay", "orange_terracotta", "stained_clay");
@@ -87,6 +87,6 @@ public class Materials {
     public static final Material WEB = ItemRegistrar.getInstance().get("cobweb", "web");
     
     /* WOOL */
-    public static final Material RED_WOOL = ItemRegistrar.getInstance().get("red_wool");
-    public static final Material LIME_WOOL = ItemRegistrar.getInstance().get("lime_wool");
+    public static final Material RED_WOOL = ItemRegistrar.getInstance().get("red_wool", "wool");
+    public static final Material LIME_WOOL = ItemRegistrar.getInstance().get("lime_wool", "wool");
 }

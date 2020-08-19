@@ -54,7 +54,7 @@ public class JesusProtocol extends Cheat implements Listener {
 				double reliability = 0;
 				if (dif < 0.0005 && dif > 0.00000005)
 					reliability = dif * 10000000 - 1;
-				else if (dif < 0.1 && dif > 0.08)
+				else if (dif < 0.1 && dif > 0.089)
 					reliability = dif * 1000;
 				else if (dif == 0.5)
 					reliability = 75;

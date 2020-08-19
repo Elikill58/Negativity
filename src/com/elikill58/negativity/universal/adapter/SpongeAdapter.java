@@ -108,8 +108,6 @@ public class SpongeAdapter extends Adapter {
 		plugin.reloadCommands();
 		ProxyCompanionManager.updateForceDisabled(config.getBoolean("disableProxyIntegration"));
 		SpongeNegativity.trySendProxyPing();
-		SpongeNegativity.log = config.getBoolean("log_alerts");
-		SpongeNegativity.log_console = config.getBoolean("log_alerts_in_console");
 		SpongeNegativity.hasBypass = config.getBoolean("Permissions.bypass.active");
 	}
 

@@ -297,7 +297,7 @@ public class NegativityPlayer {
 		return new PlayerCheatAlertEvent(type, p, c, newRelia, hasRelia, newPing, "", hoverProof, nb, nbConsole);
 	}
 
-	private void destroy() {
+	public void destroy() {
 		saveProof();
 		NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
 		accountManager.save(playerId);

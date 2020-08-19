@@ -12,6 +12,7 @@ import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.item.inventory.UseItemStackEvent;
 import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
@@ -58,7 +59,7 @@ public class PlayersListeners {
 		
 		if(!ProxyCompanionManager.searchedCompanion) {
 			ProxyCompanionManager.searchedCompanion = true;
-			SpongeNegativity.sendProxyPing(p);
+			Task.builder().delayTicks(20).execute(() -> SpongeNegativity.sendProxyPing(p)).submit(SpongeNegativity.getInstance());
 		}
 	}
 

@@ -14,12 +14,10 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandManager;
 import org.spongepowered.api.command.CommandMapping;
@@ -27,8 +25,6 @@ import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.block.ChangeBlockEvent;
-import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.game.GameReloadEvent;
 import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
@@ -73,7 +69,6 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
-import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
@@ -83,7 +78,6 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.SpongeAdapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
 import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
@@ -126,7 +120,7 @@ public class SpongeNegativity {
 		return plugin;
 	}
 
-	public static boolean log = true, log_console = true, hasPacketGate = false, hasPrecogs = false, hasBypass = false;
+	public static boolean hasPacketGate = false, hasPrecogs = false, hasBypass = false;
 
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
@@ -148,12 +142,6 @@ public class SpongeNegativity {
 		loadConfig();
 		Cheat.loadCheat();
 		EventManager eventManager = Sponge.getEventManager();
-		for (Cheat c : Cheat.values()) {
-			if (!c.isActive())
-				continue;
-			if(c.hasListener())
-				eventManager.registerListeners(this, c);
-		}
 		eventManager.registerListeners(this, new FightManager());
 		eventManager.registerListeners(this, new PlayersEventsManager());
 		eventManager.registerListeners(this, new BlockListeners());
@@ -179,13 +167,6 @@ public class SpongeNegativity {
 		if(SpongeUpdateChecker.ifUpdateAvailable()) {
 			getLogger().info("New version available (" + SpongeUpdateChecker.getVersionString() + ") : " + SpongeUpdateChecker.getDownloadUrl());
 		}
-		/*Task.builder()
-				.async()
-				.name("Negativity Startup Updater Checker")
-				.execute(() -> SpongeUpdateChecker.ifUpdateAvailable(result ->
-						getLogger().info("New version available ({}): {}",
-								result.getVersionString(), result.getDownloadUrl()))
-				).submit(this);*/
 
 		if (!ProxyCompanionManager.isIntegrationEnabled())
 			Task.builder().async().delayTicks(1).execute(new Runnable() {
@@ -205,16 +186,16 @@ public class SpongeNegativity {
 	@Listener
 	public void onGameStop(GameStoppingServerEvent e) {
 		for (Player player : Sponge.getServer().getOnlinePlayers()) {
-			NegativityPlayer nPlayer = NegativityPlayer.getCached(player.getUniqueId());
-			nPlayer.saveProof();
+			NegativityPlayer.getCached(player.getUniqueId()).destroy();
 		}
-		if (!ProxyCompanionManager.isIntegrationEnabled())
+		if (!ProxyCompanionManager.isIntegrationEnabled()) {
 			Task.builder().async().delayTicks(1).execute(new Runnable() {
 				@Override
 				public void run() {
 					Stats.updateStats(StatsType.ONLINE, 0 + "");
 				}
 			}).submit(this);
+		}
 		Database.close();
 	}
 
@@ -292,7 +273,6 @@ public class SpongeNegativity {
 		UUID playerId = e.getProfile().getUniqueId();
 		NegativityAccount account = NegativityAccount.get(playerId);
 		Ban activeBan = BanManager.getActiveBan(playerId);
-		String name = e.getProfile().getName().orElse("");
 		if (activeBan != null) {
 			String kickMsgKey;
 			String formattedExpiration;
@@ -307,54 +287,13 @@ public class SpongeNegativity {
 			e.setCancelled(true);
 			e.setMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%" , formattedExpiration, "%by%", activeBan.getBannedBy()));
 			Adapter.getAdapter().getAccountManager().dispose(account.getPlayerId());
-		} else if(!UniversalUtils.isValidName(name)) {
-			// check for ban / kick only if the player is not already banned
-			String banReason = config.getString("cheats.special.invalid_name.name");
-			if(config.getBoolean("cheats.special.invalid_name.ban")) {
-				if(!BanManager.banActive) {
-					getLogger().warn("Cannot ban player " + name + " for " + banReason + " because ban is NOT config.");
-					getLogger().warn("Please, enable ban in config and restart your server");
-					if(config.getBoolean("cheats.special.invalid_name.kick")) {
-						e.setMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", banReason));
-						e.setCancelled(true);
-					}
-				} else {
-					BanManager.executeBan(Ban.active(playerId, banReason, "Negativity", BanType.PLUGIN, Long.parseLong(config.getString("cheats.special.invalid_name.ban_time")), banReason));
-					e.setCancelled(true);
-				}
-			} else if(config.getBoolean("cheats.special.invalid_name.kick")) {
-				e.setMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", banReason));
-				e.setCancelled(true);
-			}
-		} else {
-			int maxAllowedIP = Adapter.getAdapter().getConfig().getInt("cheats.special.max-player-by-ip.number");
-			int currentOnIP = NegativityPlayer.getAllPlayers().values().stream().filter((np) -> np.getPlayer().getIP().equals(e.getConnection().getAddress().getAddress().getHostAddress())).collect(Collectors.toList()).size();
-			if(currentOnIP >= maxAllowedIP) {
-				e.setMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", Adapter.getAdapter().getConfig().getInt("cheats.special.max-player-by-ip.name")));
-				e.setCancelled(true);
-			}
 		}
 	}
 
 	@Listener
 	public void onJoin(ClientConnectionEvent.Join e, @First Player p) {
-		if (UniversalUtils.isMe(p.getUniqueId()))
-			p.sendMessage(Text.builder("Ce serveur utilise Negativity ! Waw :')").color(TextColors.GREEN).build());
-		NegativityPlayer.removeFromCache(p.getUniqueId());
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpongePlayer(p));
-		np.TIME_INVINCIBILITY = System.currentTimeMillis() + 8000;
-
-		if (!ProxyCompanionManager.searchedCompanion) {
-			ProxyCompanionManager.searchedCompanion = true;
-			Task.builder().delayTicks(20).execute(() -> sendProxyPing(p)).submit(this);
-		}
-
 		if (Perm.hasPerm(np, Perm.SHOW_REPORT)) {
-			if (ReportCommand.REPORT_LAST.size() > 0) {
-				for (Text msg : ReportCommand.REPORT_LAST)
-					p.sendMessage(msg);
-				ReportCommand.REPORT_LAST.clear();
-			}
 			if (!hasPacketGate) {
 				try {
 					p.sendMessage(Text.builder("[Negativity] Dependency not found. Please, download it here.")
@@ -366,27 +305,7 @@ public class SpongeNegativity {
 					e1.printStackTrace();
 				}
 			}
-
-			Task.builder().async().name("negativity-update-checker-" + p.getName()).execute(() -> {
-				if (!SpongeUpdateChecker.ifUpdateAvailable()) {
-					return;
-				}
-				URL downloadUrl;
-				try {
-					downloadUrl = new URL(SpongeUpdateChecker.getDownloadUrl());
-				} catch (MalformedURLException ex) {
-					getLogger().error("Unable to create update download URL", ex);
-					return;
-				}
-				p.sendMessage(Text
-						.builder("New version available (" + SpongeUpdateChecker.getVersionString() + "). Download it here.")
-						.color(TextColors.YELLOW)
-						.onHover(TextActions.showText(Text.of("Click here")))
-						.onClick(TextActions.openUrl(downloadUrl))
-						.build());
-			}).submit(this);
 		}
-		np.manageAutoVerif();
 	}
 
 	@Listener
@@ -400,22 +319,7 @@ public class SpongeNegativity {
 		}).submit(this);
 	}
 
-	@Listener
-	public void onMove(MoveEntityEvent e, @First Player p) {
-		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
-		if (np.isFreeze && !p.getLocation().sub(0, 1, 0).getBlock().getType().equals(BlockTypes.AIR))
-			e.setCancelled(true);
-	}
-
-	@Listener
-	public void onBlockBreak(ChangeBlockEvent.Break e, @First Player p) {
-		String blockId = e.getTransactions().get(0).getOriginal().getState().getType().getId();
-		NegativityAccount.get(p.getUniqueId()).getMinerate().addMine(MinerateType.fromId(blockId), p);
-	}
-
 	public void loadConfig() {
-		log = config.getBoolean("log_alerts");
-		log_console = config.getBoolean("log_alerts_in_console");
 		ProxyCompanionManager.updateForceDisabled(config.getBoolean("disableProxyIntegration"));
 		hasBypass = config.getBoolean("Permissions.bypass.active");
 		timeBetweenAlert = config.getInt("time_between_alert");

@@ -6,7 +6,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -16,15 +15,12 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.player.LoginEvent;
+import com.elikill58.negativity.api.events.player.LoginEvent.Result;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
-import com.elikill58.negativity.api.events.player.LoginEvent.Result;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
-import com.elikill58.negativity.universal.Minerate.MinerateType;
-import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
-import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class PlayersEvents implements Listener {
 	
@@ -76,13 +72,6 @@ public class PlayersEvents implements Listener {
 			np.isUsingSlimeBlock = true;
 		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("AIR")))
 			np.isUsingSlimeBlock = false;
-	}
-
-	@EventHandler
-	public void onBlockBreakEvent(BlockBreakEvent e) {
-		NegativityAccount account = NegativityAccount.get(e.getPlayer().getUniqueId());
-		account.getMinerate().addMine(MinerateType.getMinerateType(e.getBlock().getType().name()), e.getPlayer());
-		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
 	}
 	
 	@EventHandler

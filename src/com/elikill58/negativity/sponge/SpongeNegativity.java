@@ -75,9 +75,13 @@ import com.elikill58.negativity.sponge.commands.NegativityCommand;
 import com.elikill58.negativity.sponge.commands.ReportCommand;
 import com.elikill58.negativity.sponge.commands.UnbanCommand;
 import com.elikill58.negativity.sponge.inventories.AbstractInventory;
+import com.elikill58.negativity.sponge.listeners.BlockListeners;
+import com.elikill58.negativity.sponge.listeners.EntityListeners;
 import com.elikill58.negativity.sponge.listeners.FightManager;
+import com.elikill58.negativity.sponge.listeners.InventoryListeners;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.listeners.PlayersEventsManager;
+import com.elikill58.negativity.sponge.listeners.PlayersListeners;
 import com.elikill58.negativity.sponge.packets.NegativityPacketManager;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
 import com.elikill58.negativity.sponge.utils.Utils;
@@ -174,6 +178,12 @@ public class SpongeNegativity {
 		}
 		eventManager.registerListeners(this, new FightManager());
 		eventManager.registerListeners(this, new PlayersEventsManager());
+		eventManager.registerListeners(this, new BlockListeners());
+		// TODO add Commands listeners
+		//eventManager.registerListeners(this, new CommandsListeners());
+		eventManager.registerListeners(this, new EntityListeners());
+		eventManager.registerListeners(this, new InventoryListeners());
+		eventManager.registerListeners(this, new PlayersListeners());
 		
 		Task.builder().execute(new AnalyzePacketTimer()).delayTicks(0).interval(1, TimeUnit.SECONDS)
 				.name("negativity-packets").submit(this);

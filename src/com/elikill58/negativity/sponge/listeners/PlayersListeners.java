@@ -80,8 +80,10 @@ public class PlayersListeners {
 		PlayerMoveEvent event = new PlayerMoveEvent(SpongeEntityManager.getPlayer(p),
 				new SpongeLocation(e.getFromTransform().getLocation()), new SpongeLocation(to.getLocation()));
 		EventManager.callEvent(event);
-		to.setLocation((Location<World>) event.getTo().getDefault());
-		e.setToTransform(to);
+		if(event.hasToSet()) {
+			to.setLocation((Location<World>) event.getTo().getDefault());
+			e.setToTransform(to);
+		}
 		if(np.isFreeze && !p.getLocation().copy().sub(0, 1, 0).getBlock().getType().equals(BlockTypes.AIR))
 			e.setCancelled(true);
 		

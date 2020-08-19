@@ -8,7 +8,7 @@ public class PlayerMoveEvent implements Event {
 
 	private final Player p;
 	private Location from, to;
-	private boolean cancel;
+	private boolean cancel, hasToSet = false;
 	
 	public PlayerMoveEvent(Player p, Location from, Location to) {
 		this.p = p;
@@ -26,6 +26,7 @@ public class PlayerMoveEvent implements Event {
 	
 	public void setTo(Location loc) {
 		this.to = loc;
+		hasToSet = true;
 	}
 	
 	public Location getFrom() {
@@ -34,6 +35,7 @@ public class PlayerMoveEvent implements Event {
 	
 	public void setFrom(Location loc) {
 		this.from = loc;
+		hasToSet = true;
 	}
 
 	public boolean isCancelled() {
@@ -42,5 +44,9 @@ public class PlayerMoveEvent implements Event {
 
 	public void setCancelled(boolean cancel) {
 		this.cancel = cancel;
+	}
+	
+	public boolean hasToSet() {
+		return hasToSet;
 	}
 }

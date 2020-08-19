@@ -44,8 +44,10 @@ public class PlayersListeners implements Listener {
 	public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
 		PlayerMoveEvent event = new PlayerMoveEvent(SpigotEntityManager.getPlayer(e.getPlayer()), new SpigotLocation(e.getFrom()), new SpigotLocation(e.getTo()));
 		EventManager.callEvent(event);
-		e.setTo((Location) event.getTo().getDefault());
-		e.setFrom((Location) event.getFrom().getDefault());
+		if(event.hasToSet()) {
+			e.setTo((Location) event.getTo().getDefault());
+			e.setFrom((Location) event.getFrom().getDefault());
+		}
 	}
 	
 	@EventHandler

@@ -1,5 +1,10 @@
 package com.elikill58.negativity.api.potion;
 
+import java.util.Arrays;
+import java.util.List;
+
+import com.elikill58.negativity.universal.adapter.Adapter;
+
 public enum PotionEffectType {
 	
 	BLINDNESS,
@@ -12,16 +17,28 @@ public enum PotionEffectType {
 	LEVITATION,
 	NIGHT_VISION,
 	POISON,
-	REGENERATION,
+	REGENERATION("HEALTH_BOOST"),
 	SLOW_DIGGING,
 	SPEED,
 	WEAKNESS,
-	WITHER;
+	WITHER,
+	UNKNOW;
+	
+	private final List<String> alias;
+	
+	private PotionEffectType(String... alias) {
+		this.alias = Arrays.asList(alias);
+	}
+	
+	public List<String> getAlias() {
+		return alias;
+	}
 	
 	public static PotionEffectType fromName(String name) {
 		for(PotionEffectType type : values())
-			if(type.name().equalsIgnoreCase(name))
+			if(type.name().equalsIgnoreCase(name) || type.getAlias().contains(name.toUpperCase()))
 				return type;
-		return null;
+		Adapter.getAdapter().getLogger().warn("[PotionEffectType] Cannot found effect " + name + " !");
+		return UNKNOW;
 	}
 }

@@ -34,7 +34,7 @@ public class BungeeNegativity extends Plugin {
 
 		getProxy().registerChannel(NegativityMessagesManager.CHANNEL_ID);
 		PluginManager pluginManager = getProxy().getPluginManager();
-		pluginManager.registerListener(this, new NegativityListener());
+		pluginManager.registerListener(this, new BungeeListeners());
 		pluginManager.registerCommand(this, new BNegativityCommand());
 		pluginManager.registerListener(this, new BNegativityCommand.TabCompleter());
 

@@ -57,7 +57,7 @@ public class VelocityNegativity {
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {
     	getLogger().info("Loading Negativity");
-	    server.getEventManager().register(this, new NegativityListener());
+	    server.getEventManager().register(this, new VelocityListeners());
 	    server.getChannelRegistrar().register(NEGATIVITY_CHANNEL_ID);
 	    server.getCommandManager().register(new VNegativityCommand(), "vnegativity");
 

@@ -1,23 +1,21 @@
 package com.elikill58.negativity.bungee;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.player.LoginEvent;
+import com.elikill58.negativity.api.events.player.LoginEvent.Result;
+import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
+import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.NegativityAccount;
-import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AccountUpdateMessage;
@@ -29,7 +27,6 @@ import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.ProxyServer;
@@ -38,8 +35,8 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
-import net.md_5.bungee.api.event.LoginEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -48,7 +45,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.event.EventHandler;
 
-public class NegativityListener implements Listener {
+public class BungeeListeners implements Listener {
 
 	public static List<Report> report = new ArrayList<>();
 
@@ -122,7 +119,7 @@ public class NegativityListener implements Listener {
 					pp.sendMessage(msg);
 				}
 			if (!hasPermitted) {
-				NegativityListener.report.add(new Report("/server " + player.getServer().getInfo().getName(), place));
+				BungeeListeners.report.add(new Report("/server " + player.getServer().getInfo().getName(), place));
 			}
 		} else if (message instanceof ProxyExecuteBanMessage) {
 			ProxyExecuteBanMessage banMessage = (ProxyExecuteBanMessage) message;
@@ -139,43 +136,32 @@ public class NegativityListener implements Listener {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void onPreLogin(LoginEvent event) {
-		UUID playerId = event.getConnection().getUniqueId();
-		Ban activeBan = BanManager.getActiveBan(playerId);
-		if (activeBan != null) {
-			String kickMsgKey = activeBan.isDefinitive() ? "ban.kick_def" : "ban.kick_time";
-			LocalDateTime expirationDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
-			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
-			String banMessage = Messages.getMessage(playerId, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy());
-			event.setCancelReason(new TextComponent(banMessage));
-			event.setCancelled(true);
-			Adapter.getAdapter().getAccountManager().dispose(playerId);
+	public void onPreLogin(net.md_5.bungee.api.event.LoginEvent e) {
+		PendingConnection co = e.getConnection();
+		LoginEvent event = new LoginEvent(co.getUniqueId(), co.getName(), e.isCancelled() ? Result.KICK_BANNED : Result.ALLOWED, co.getAddress().getAddress(), e.getCancelReason());
+		EventManager.callEvent(event);
+		if(!event.getLoginResult().equals(Result.ALLOWED)) {
+			e.setCancelled(true);
+			e.setCancelReason(new ComponentBuilder(event.getKickMessage()).create());
 		}
 	}
 
 	@EventHandler
 	public void onPostLogin(PostLoginEvent e) {
 		ProxiedPlayer p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(new BungeePlayer(p));
-		if (Perm.hasPerm(np, Perm.SHOW_REPORT))
-			for (Report msg : report) {
-				p.sendMessage(msg.toMessage(p));
-				report.remove(msg);
-			}
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new BungeePlayer(p));
+		PlayerConnectEvent event = new PlayerConnectEvent(np.getPlayer(), np, "");
+		EventManager.callEvent(event);
 	}
 
 	@EventHandler
-	public void onPlayerDisconnect(PlayerDisconnectEvent event) {
-		ProxyServer.getInstance().getScheduler().schedule(BungeeNegativity.getInstance(),
-				() -> {
-					UUID playerId = event.getPlayer().getUniqueId();
-					NegativityPlayer.removeFromCache(playerId);
-					NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
-					accountManager.save(playerId);
-					accountManager.dispose(playerId);
-				},
-				1, TimeUnit.SECONDS);
+	public void onPlayerDisconnect(PlayerDisconnectEvent e) {
+		ProxiedPlayer p = e.getPlayer();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new BungeePlayer(p));
+		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, "");
+		EventManager.callEvent(event);
 	}
 
 	@EventHandler

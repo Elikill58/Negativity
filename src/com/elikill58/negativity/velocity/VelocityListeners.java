@@ -1,24 +1,22 @@
 package com.elikill58.negativity.velocity;
 
 import java.io.IOException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.player.LoginEvent;
+import com.elikill58.negativity.api.events.player.LoginEvent.Result;
+import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
+import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.NegativityAccount;
-import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AccountUpdateMessage;
@@ -30,12 +28,10 @@ import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.velocity.impl.entity.VelocityPlayer;
 import com.velocitypowered.api.event.ResultedEvent;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
-import com.velocitypowered.api.event.connection.LoginEvent;
 import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
@@ -49,7 +45,7 @@ import net.kyori.text.event.ClickEvent;
 import net.kyori.text.event.HoverEvent;
 import net.kyori.text.format.TextColor;
 
-public class NegativityListener {
+public class VelocityListeners {
 
 	public static List<Report> report = new ArrayList<>();
 
@@ -133,7 +129,7 @@ public class NegativityListener {
 				}
 			}
 			if (!hasPermitted) {
-				NegativityListener.report.add(new Report("/server " + p.getCurrentServer().get().getServerInfo().getName(), place));
+				VelocityListeners.report.add(new Report("/server " + p.getCurrentServer().get().getServerInfo().getName(), place));
 			}
 		} else if (message instanceof ProxyExecuteBanMessage) {
 			ProxyExecuteBanMessage banMessage = (ProxyExecuteBanMessage) message;
@@ -160,44 +156,28 @@ public class NegativityListener {
 	}
 
 	@Subscribe
-	public void onLogin(LoginEvent event) {
-		Player p = event.getPlayer();
-		Ban activeBan = BanManager.getActiveBan(p.getUniqueId());
-		if (activeBan != null) {
-			String kickMsgKey = activeBan.isDefinitive() ? "ban.kick_def" : "ban.kick_time";
-			LocalDateTime expirationDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
-			String formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
-			TextComponent banMessage = TextComponent.of(Messages.getMessage(p.getUniqueId(), kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));
-			event.setResult(ResultedEvent.ComponentResult.denied(banMessage));
-			Adapter.getAdapter().getAccountManager().dispose(p.getUniqueId());
-		}
+	public void onLogin(com.velocitypowered.api.event.connection.LoginEvent e) {
+		Player p = e.getPlayer();
+		LoginEvent event = new LoginEvent(p.getUniqueId(), p.getUsername(), e.getResult().isAllowed() ? Result.ALLOWED : Result.KICK_BANNED, p.getRemoteAddress().getAddress(), "");
+		EventManager.callEvent(event);
+		if(!event.getLoginResult().equals(Result.ALLOWED))
+			e.setResult(ResultedEvent.ComponentResult.denied(TextComponent.of(event.getKickMessage())));
 	}
 
 	@Subscribe
 	public void onPostLogin(PostLoginEvent e) {
 		Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(new VelocityPlayer(p));
-		if (Perm.hasPerm(np, Perm.SHOW_REPORT)) {
-			for (Report msg : report) {
-				p.sendMessage(msg.toMessage(p));
-				report.remove(msg);
-			}
-		}
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p));
+		PlayerConnectEvent event = new PlayerConnectEvent(np.getPlayer(), np, "");
+		EventManager.callEvent(event);
 	}
 
 	@Subscribe
-	public void onPlayerQuit(DisconnectEvent event) {
-		VelocityNegativity plugin = VelocityNegativity.getInstance();
-		plugin.getServer().getScheduler()
-				.buildTask(plugin, () -> {
-					UUID playerId = event.getPlayer().getUniqueId();
-					NegativityPlayer.removeFromCache(playerId);
-					NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
-					accountManager.save(playerId);
-					accountManager.dispose(playerId);
-				})
-				.delay(1, TimeUnit.SECONDS)
-				.schedule();
+	public void onPlayerQuit(DisconnectEvent e) {
+		Player p = e.getPlayer();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p));
+		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, "");
+		EventManager.callEvent(event);
 	}
 
 	@Subscribe

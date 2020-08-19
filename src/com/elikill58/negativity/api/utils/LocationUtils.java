@@ -453,6 +453,9 @@ public class LocationUtils {
 	}
 
 	public static void teleportPlayerOnGround(Player p) {
-		// TODO implement
+		Location loc = p.getLocation().clone();
+		while(loc.getBlock().getType().equals(Materials.AIR))
+			loc.sub(0, 1, 0);
+		p.teleport(loc);
 	}
 }

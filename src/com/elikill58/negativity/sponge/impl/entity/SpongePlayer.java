@@ -302,7 +302,7 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public PlayerInventory getInventory() {
-		return new SpongePlayerInventory(p.getInventory());
+		return new SpongePlayerInventory(p, p.getInventory());
 	}
 	
 	@Override

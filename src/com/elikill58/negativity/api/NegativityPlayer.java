@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
@@ -85,6 +87,7 @@ public class NegativityPlayer {
 	public boolean isInFight = false, already_blink = false, disableShowingAlert = false, isFreeze = false, isJumpingWithBlock = false, isUsingSlimeBlock = false,
 			isInvisible = false;
 	private boolean mustToBeSaved = false, isBedrockPlayer = false;
+	private Timer fightTimer;
 
 	public NegativityPlayer(Player p) {
 		this.p = p;
@@ -306,7 +309,15 @@ public class NegativityPlayer {
 
 	public void fight() {
 		isInFight = true;
-		// TODO add auto-unfight some seconds after
+		if(fightTimer != null)
+			fightTimer.cancel();
+		fightTimer = new Timer();
+		fightTimer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				unfight();
+			}
+		}, 5000);
 	}
 
 	public void unfight() {

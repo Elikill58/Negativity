@@ -19,7 +19,7 @@ public class SpongeBlock extends Block {
 
 	@Override
 	public Material getType() {
-		return ItemRegistrar.getInstance().get(block.getState().getId());
+		return ItemRegistrar.getInstance().get(block.getState().getId(), block.getState().getName());
 	}
 
 	@Override

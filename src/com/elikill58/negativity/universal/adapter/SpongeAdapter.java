@@ -34,6 +34,7 @@ import com.elikill58.negativity.sponge.impl.inventory.SpongeInventory;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemBuilder;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemRegistrar;
 import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
+import com.elikill58.negativity.sponge.impl.plugin.SpongeExternalPlugin;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
@@ -238,13 +239,11 @@ public class SpongeAdapter extends Adapter {
 
 	@Override
 	public boolean hasPlugin(String name) {
-		// TODO Auto-generated method stub
-		return false;
+		return Sponge.getPluginManager().isLoaded(name);
 	}
 
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SpongeExternalPlugin(Sponge.getPluginManager().getPlugin(name).orElse(null));
 	}
 }

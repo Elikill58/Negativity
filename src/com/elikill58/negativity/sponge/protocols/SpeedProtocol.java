@@ -26,12 +26,13 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
-import com.elikill58.negativity.sponge.support.EssentialsSupport;
 import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.support.EssentialsSupport;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 import com.flowpowered.math.vector.Vector3i;
@@ -92,9 +93,9 @@ public class SpeedProtocol extends Cheat {
 		boolean mayCancel = false;
 		double moveY = toVect.sub(0, toVect.getY(), 0).distance(fromVect.sub(0, fromVect.getY(), 0));
 		if (p.isOnGround()) {
-			double walkSpeed = SpongeNegativity.essentialsSupport ? (np.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : np.getWalkSpeed();
+			double walkSpeed = Negativity.essentialsSupport ? (np.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed((com.elikill58.negativity.api.entity.Player) p)) : np.getWalkSpeed();
 			boolean walkTest = moveY > walkSpeed * 3.1 && moveY > 0.65D, walkWithEssTest = (moveY - walkSpeed > (walkSpeed * 2.5));
-			if((SpongeNegativity.essentialsSupport ? (walkWithEssTest || (np.getWalkSpeed() < 0.35 && moveY >= 0.75D)) : moveY >= 0.75D) || walkTest){
+			if((Negativity.essentialsSupport ? (walkWithEssTest || (np.getWalkSpeed() < 0.35 && moveY >= 0.75D)) : moveY >= 0.75D) || walkTest){
 				int porcent = UniversalUtils.parseInPorcent(moveY * 50 + UniversalUtils.getPorcentFromBoolean(walkTest, 20)
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));

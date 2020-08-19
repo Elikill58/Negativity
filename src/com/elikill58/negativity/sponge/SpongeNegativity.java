@@ -147,8 +147,7 @@ public class SpongeNegativity {
 		return plugin;
 	}
 
-	public static boolean log = true, log_console = true, hasPacketGate = false, hasPrecogs = false, hasBypass = false, viaVersionSupport = false,
-			essentialsSupport = false;
+	public static boolean log = true, log_console = true, hasPacketGate = false, hasPrecogs = false, hasBypass = false;
 
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
@@ -258,8 +257,6 @@ public class SpongeNegativity {
 		} catch (ClassNotFoundException e1) {
 			SpongeForgeSupport.isOnSpongeForge = false;
 		}
-		
-		viaVersionSupport = Sponge.getPluginManager().isLoaded("viaversion");
 
 		loadCommands(false);
 

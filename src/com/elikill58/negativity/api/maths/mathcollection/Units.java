@@ -505,7 +505,7 @@ public final class Units {
 	/**
 	 * Degree (angle)
 	 */
-	public static final double DEGREE_ARC = (MathConstants.PI / 180.0) * RADIAN_ARC;
+	public static final double DEGREE_ARC = (3.14 / 180.0) * RADIAN_ARC;
 	/**
 	 * Minute (angle)
 	 */

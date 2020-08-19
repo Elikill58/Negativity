@@ -1,8 +1,7 @@
 package com.elikill58.negativity.api.yaml.external.com.google.gdata.util.common.base;
 
 public class PercentEscaper extends UnicodeEscaper {
-	public static final String SAFECHARS_URLENCODER = "-_.*";
-	public static final String SAFEPATHCHARS_URLENCODER = "-_.!~*'()@:$&,;=";
+	
 	public static final String SAFEQUERYSTRINGCHARS_URLENCODER = "-_.!~*'()@:$,;/?:";
 	private static final char[] URI_ESCAPED_SPACE;
 	private static final char[] UPPER_HEX_DIGITS;

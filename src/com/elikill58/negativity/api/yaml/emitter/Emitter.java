@@ -34,8 +34,6 @@ import com.elikill58.negativity.api.yaml.util.ArrayStack;
 
 public final class Emitter implements Emitable {
 	private static final Map<Character, String> ESCAPE_REPLACEMENTS;
-	public static final int MIN_INDENT = 1;
-	public static final int MAX_INDENT = 10;
 	private static final char[] SPACE;
 	private static final Map<String, String> DEFAULT_TAG_PREFIXES;
 	private final Writer stream;

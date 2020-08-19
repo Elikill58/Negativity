@@ -418,21 +418,6 @@ public final class MathFunctions {
 	}
 
 	/**
-	 * Exponential function.
-	 *
-	 * @param a
-	 *            the a function parameter
-	 *
-	 * @return if a &lt;&gt; Double.NaN returns Math.exp(a), otherwise returns
-	 *         Double.NaN.
-	 */
-	public static final double exp(double a) {
-		if (Double.isNaN(a))
-			return Double.NaN;
-		return Math.exp(a);
-	}
-
-	/**
 	 * Square root.
 	 *
 	 * @param a
@@ -1195,29 +1180,5 @@ public final class MathFunctions {
 			return true;
 		else
 			return false;
-	}
-
-	/**
-	 * Check whether two double values are almost equal.
-	 * 
-	 * @param a
-	 *            First number
-	 * @param b
-	 *            Second number
-	 * @return True if double values are almost equal, otherwise false.
-	 *         {@link BinaryRelations#DEFAULT_COMPARISON_EPSILON}
-	 *
-	 * @see BinaryRelations#DEFAULT_COMPARISON_EPSILON
-	 */
-	public static final boolean almostEqual(double a, double b) {
-		if (Double.isNaN(a))
-			return false;
-		if (Double.isNaN(b))
-			return false;
-		if (a == b)
-			return true;
-		if (Math.abs(a - b) <= BinaryRelations.DEFAULT_COMPARISON_EPSILON)
-			return true;
-		return false;
 	}
 }

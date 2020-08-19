@@ -29,10 +29,6 @@ public class TypeDescription {
 	protected String[] includes;
 	protected BeanAccess beanAccess;
 
-	public TypeDescription(final Class<?> clazz, final Tag tag) {
-		this(clazz, tag, null);
-	}
-
 	public TypeDescription(final Class<?> clazz, final Tag tag, final Class<?> impl) {
 		this.properties = Collections.emptyMap();
 		this.excludes = Collections.emptySet();
@@ -43,16 +39,8 @@ public class TypeDescription {
 		this.beanAccess = null;
 	}
 
-	public TypeDescription(final Class<?> clazz, final String tag) {
-		this(clazz, new Tag(tag), null);
-	}
-
 	public TypeDescription(final Class<?> clazz) {
 		this(clazz, null, null);
-	}
-
-	public TypeDescription(final Class<?> clazz, final Class<?> impl) {
-		this(clazz, null, impl);
 	}
 
 	public Tag getTag() {

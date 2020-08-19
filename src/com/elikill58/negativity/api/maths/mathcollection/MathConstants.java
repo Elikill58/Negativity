@@ -95,47 +95,9 @@ package com.elikill58.negativity.api.maths.mathcollection;
  */
 public final class MathConstants {
 	/**
-	 * Pi, Archimedes' constant or Ludolph's number
-	 */
-	public static final double PI = 3.14159265358979323846264338327950288;
-	/**
-	 * Pi/2
-	 */
-	static final double PIBY2 = PI / 2.0;
-	/**
 	 * Napier's constant, or Euler's number, base of Natural logarithm
 	 */
 	public static final double E = 2.71828182845904523536028747135266249;
-	/**
-	 * Catalan's constant
-	 */
-	public static final double CATALAN = 0.91596559417721901505460351493238411;
-	/**
-	 * Landau-Ramanujan constant
-	 */
-	public static final double LANDAU_RAMANUJAN = 0.76422365358922066299069873125009232;
-	/**
-	 * Viswanath's constant
-	 */
-	public static final double VISWANATH = 1.13198824;
-	/**
-	 * Legendre's constant
-	 */
-	public static final double LEGENDRE = 1.0;
-	/**
-	 * Omega constant
-	 */
-	static final double OMEGA = 0.56714329040978387299996866221035555;
-
-	/**
-	 * Square root of 2
-	 */
-	static final double SQRT2 = Math.sqrt(2.0);
-
-	/**
-	 * Natural logarithm of pi
-	 */
-	static final double LNPI = MathFunctions.ln(PI);
 	/**
 	 * Tetration left convergence limit
 	 */
@@ -148,28 +110,4 @@ public final class MathConstants {
 	 * 1 over e
 	 */
 	static final double EXP_MINUS_1 = 1.0 / Math.E;
-	/**
-	 * Natural logarithm of sqrt(2)
-	 */
-	static final double LN_SQRT2 = MathFunctions.ln(SQRT2);
-	/**
-	 * SQRT2BY2
-	 */
-	static final double SQRT2BY2 = SQRT2 / 2.0;
-	/**
-	 * SQRT3
-	 */
-	static final double SQRT3 = Math.sqrt(3.0);
-	/**
-	 * SQRT3BY2
-	 */
-	static final double SQRT3BY2 = SQRT3 / 2.0;
-	/**
-	 * D2BYSQRT3
-	 */
-	static final double D2BYSQRT3 = 2.0 / SQRT3;
-	/**
-	 * SQRT3BY3
-	 */
-	static final double SQRT3BY3 = SQRT3 / 3.0;
 }

@@ -1,21 +1,19 @@
 package com.elikill58.negativity.api.yaml.nodes;
 
+import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.math.BigInteger;
-import java.math.BigDecimal;
-import java.util.HashSet;
 import java.util.HashMap;
-import java.net.URI;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 import com.elikill58.negativity.api.yaml.error.YAMLException;
 import com.elikill58.negativity.api.yaml.util.UriEncoder;
 
-import java.util.Map;
-
 public final class Tag implements Comparable<Tag> {
-	public static final String PREFIX = "tag:yaml.org,2002:";
+	
 	public static final Tag YAML;
 	public static final Tag MERGE;
 	public static final Tag SET;
@@ -55,14 +53,6 @@ public final class Tag implements Comparable<Tag> {
 			throw new NullPointerException("Class for tag must be provided.");
 		}
 		this.value = "tag:yaml.org,2002:" + UriEncoder.encode(clazz.getName());
-	}
-
-	public Tag(final URI uri) {
-		this.secondary = false;
-		if (uri == null) {
-			throw new NullPointerException("URI for tag must be provided.");
-		}
-		this.value = uri.toASCIIString();
 	}
 
 	public boolean isSecondary() {

@@ -95,10 +95,6 @@ public final class PhysicalConstants {
 	 */
 	public static final double PLANCK_CONSTANT = 6.626070040E-34 * Units.METRE2 * Units.KILOGRAM / Units.SECOND;
 	/**
-	 * Reduced Planck constant
-	 */
-	public static final double PLANCK_CONSTANT_REDUCED = PLANCK_CONSTANT / (2 * MathConstants.PI);
-	/**
 	 * Planck length
 	 */
 	public static final double PLANCK_LENGTH = 1.616229E-35 * Units.METRE;

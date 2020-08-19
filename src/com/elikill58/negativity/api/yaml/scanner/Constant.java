@@ -16,7 +16,6 @@ public final class Constant {
 	 * "abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ-_-;/?:@&=+$,_.!~*'()[]%";
 	 */
 	public static final Constant LINEBR;
-	public static final Constant FULL_LINEBR;
 	public static final Constant NULL_OR_LINEBR;
 	public static final Constant NULL_BL_LINEBR;
 	public static final Constant NULL_BL_T_LINEBR;
@@ -64,7 +63,6 @@ public final class Constant {
 
 	static {
 		LINEBR = new Constant("\n\u0085\u2028\u2029");
-		FULL_LINEBR = new Constant("\r\n\u0085\u2028\u2029");
 		NULL_OR_LINEBR = new Constant("\u0000\r\n\u0085\u2028\u2029");
 		NULL_BL_LINEBR = new Constant(" \u0000\r\n\u0085\u2028\u2029");
 		NULL_BL_T_LINEBR = new Constant("\t \u0000\r\n\u0085\u2028\u2029");

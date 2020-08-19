@@ -10,15 +10,14 @@ import com.elikill58.negativity.api.yaml.nodes.NodeId;
 import com.elikill58.negativity.api.yaml.nodes.Tag;
 
 public class Resolver {
-	public static final Pattern BOOL;
-	public static final Pattern FLOAT;
-	public static final Pattern INT;
-	public static final Pattern MERGE;
-	public static final Pattern NULL;
-	public static final Pattern EMPTY;
-	public static final Pattern TIMESTAMP;
-	public static final Pattern VALUE;
-	public static final Pattern YAML;
+	private static final Pattern BOOL;
+	private static final Pattern FLOAT;
+	private static final Pattern INT;
+	private static final Pattern MERGE;
+	private static final Pattern NULL;
+	private static final Pattern EMPTY;
+	private static final Pattern TIMESTAMP;
+	private static final Pattern YAML;
 	protected Map<Character, List<ResolverTuple>> yamlImplicitResolvers;
 
 	protected void addImplicitResolvers() {
@@ -113,7 +112,7 @@ public class Resolver {
 		EMPTY = Pattern.compile("^$");
 		TIMESTAMP = Pattern.compile(
 				"^(?:[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]|[0-9][0-9][0-9][0-9]-[0-9][0-9]?-[0-9][0-9]?(?:[Tt]|[ \t]+)[0-9][0-9]?:[0-9][0-9]:[0-9][0-9](?:\\.[0-9]*)?(?:[ \t]*(?:Z|[-+][0-9][0-9]?(?::[0-9][0-9])?))?)$");
-		VALUE = Pattern.compile("^(?:=)$");
+		Pattern.compile("^(?:=)$");
 		YAML = Pattern.compile("^(?:!|&|\\*)$");
 	}
 }

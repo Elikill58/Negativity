@@ -1,6 +1,13 @@
 package com.elikill58.negativity.api.yaml;
 
-import java.util.regex.Pattern;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import com.elikill58.negativity.api.yaml.composer.Composer;
 import com.elikill58.negativity.api.yaml.constructor.BaseConstructor;
@@ -20,16 +27,6 @@ import com.elikill58.negativity.api.yaml.representer.Representer;
 import com.elikill58.negativity.api.yaml.resolver.Resolver;
 import com.elikill58.negativity.api.yaml.serializer.Serializer;
 
-import java.io.StringReader;
-import java.io.Reader;
-import java.io.InputStream;
-import java.io.IOException;
-import java.io.Writer;
-import java.io.StringWriter;
-import java.util.List;
-import java.util.Iterator;
-import java.util.ArrayList;
-
 @SuppressWarnings("unchecked")
 public class Yaml {
 	protected final Resolver resolver;
@@ -37,26 +34,9 @@ public class Yaml {
 	protected BaseConstructor constructor;
 	protected Representer representer;
 	protected DumperOptions dumperOptions;
-	protected LoaderOptions loadingConfig;
 
 	public Yaml() {
 		this(new Constructor(), new Representer(), new DumperOptions(), new LoaderOptions(), new Resolver());
-	}
-
-	public Yaml(final DumperOptions dumperOptions) {
-		this(new Constructor(), new Representer(), dumperOptions);
-	}
-
-	public Yaml(final LoaderOptions loadingConfig) {
-		this(new Constructor(), new Representer(), new DumperOptions(), loadingConfig);
-	}
-
-	public Yaml(final Representer representer) {
-		this(new Constructor(), representer);
-	}
-
-	public Yaml(final BaseConstructor constructor) {
-		this(constructor, new Representer());
 	}
 
 	public Yaml(final BaseConstructor constructor, final Representer representer) {
@@ -107,19 +87,8 @@ public class Yaml {
 		representer.setTimeZone(dumperOptions.getTimeZone());
 		this.representer = representer;
 		this.dumperOptions = dumperOptions;
-		this.loadingConfig = loadingConfig;
 		this.resolver = resolver;
 		this.name = "Yaml:" + System.identityHashCode(this);
-	}
-
-	public String dump(final Object data) {
-		final List<Object> list = new ArrayList<Object>(1);
-		list.add(data);
-		return this.dumpAll(list.iterator());
-	}
-
-	public Node represent(final Object data) {
-		return this.representer.represent(data);
 	}
 
 	public String dumpAll(final Iterator<?> data) {
@@ -132,10 +101,6 @@ public class Yaml {
 		final List<Object> list = new ArrayList<Object>(1);
 		list.add(data);
 		this.dumpAll(list.iterator(), output, null);
-	}
-
-	public void dumpAll(final Iterator<?> data, final Writer output) {
-		this.dumpAll(data, output, null);
 	}
 
 	private void dumpAll(final Iterator<?> data, final Writer output, final Tag rootTag) {
@@ -166,10 +131,6 @@ public class Yaml {
 		return buffer.toString();
 	}
 
-	public String dumpAsMap(final Object data) {
-		return this.dumpAs(data, Tag.MAP, DumperOptions.FlowStyle.BLOCK);
-	}
-
 	public List<Event> serialize(final Node data) {
 		final SilentEmitter emitter = new SilentEmitter();
 		final Serializer serializer = new Serializer(emitter, this.resolver, this.dumperOptions, null);
@@ -191,20 +152,8 @@ public class Yaml {
 		return (T) this.loadFromReader(new StreamReader(new UnicodeReader(io)), Object.class);
 	}
 
-	public <T> T load(final Reader io) {
-		return (T) this.loadFromReader(new StreamReader(io), Object.class);
-	}
-
 	public <T> T loadAs(final Reader io, final Class<T> type) {
 		return (T) this.loadFromReader(new StreamReader(io), type);
-	}
-
-	public <T> T loadAs(final String yaml, final Class<T> type) {
-		return (T) this.loadFromReader(new StreamReader(yaml), type);
-	}
-
-	public <T> T loadAs(final InputStream input, final Class<T> type) {
-		return (T) this.loadFromReader(new StreamReader(new UnicodeReader(input)), type);
 	}
 
 	private Object loadFromReader(final StreamReader sreader, final Class<?> type) {
@@ -234,21 +183,7 @@ public class Yaml {
 		};
 		return new YamlIterable(result);
 	}
-
-	public Iterable<Object> loadAll(final String yaml) {
-		return this.loadAll(new StringReader(yaml));
-	}
-
-	public Iterable<Object> loadAll(final InputStream yaml) {
-		return this.loadAll(new UnicodeReader(yaml));
-	}
-
-	public Node compose(final Reader yaml) {
-		final Composer composer = new Composer(new ParserImpl(new StreamReader(yaml)), this.resolver);
-		this.constructor.setComposer(composer);
-		return composer.getSingleNode();
-	}
-
+	
 	public Iterable<Node> composeAll(final Reader yaml) {
 		final Composer composer = new Composer(new ParserImpl(new StreamReader(yaml)), this.resolver);
 		this.constructor.setComposer(composer);
@@ -269,10 +204,6 @@ public class Yaml {
 			}
 		};
 		return new NodeIterable(result);
-	}
-
-	public void addImplicitResolver(final Tag tag, final Pattern regexp, final String first) {
-		this.resolver.addImplicitResolver(tag, regexp, first);
 	}
 
 	@Override

@@ -34,7 +34,7 @@ public class Chat extends Cheat implements Listeners {
 		String msg = e.getMessage();
 		if(checkActive("spam")) {
 			PlayerChatEvent lastChat = np.LAST_CHAT_EVENT;
-			if(lastChat != null && msg.equalsIgnoreCase(lastChat.getMessage()) && (System.currentTimeMillis() - np.LAST_CHAT_MESSAGE_NB < 5000)) {
+			if(lastChat != null && msg.equalsIgnoreCase(lastChat.getMessage()) && (System.currentTimeMillis() - np.TIME_LAST_MESSAGE < 5000)) {
 				np.LAST_CHAT_MESSAGE_NB++;
 				boolean mayCancel = Negativity.alertMod(np.LAST_CHAT_MESSAGE_NB > 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(95 + np.LAST_CHAT_MESSAGE_NB), "spam", "Spam " + lastChat.getMessage() + " " + np.LAST_CHAT_MESSAGE_NB + " times",

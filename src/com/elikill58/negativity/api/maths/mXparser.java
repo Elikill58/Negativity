@@ -134,7 +134,7 @@ public final class mXparser {
 	 * Prime numbers cache
 	 */
 	public volatile static PrimesCache primesCache;
-	
+
 	/**
 	 * Double floating-point precision arithmetic causes
 	 *
@@ -175,13 +175,7 @@ public final class mXparser {
 	 * List of built-in tokens to modify
 	 */
 	static volatile List<TokenModification> tokensToModify = new ArrayList<TokenModification>();
-	/**
-	 * Indicator whether mXparser operates in radians / degrees mode true - degrees
-	 * mode false - radians mode
-	 *
-	 * Default false (radians mode)
-	 */
-	static volatile boolean degreesMode = false;
+
 	/**
 	 * Options changeset
 	 */
@@ -190,14 +184,6 @@ public final class mXparser {
 	 * Indicator whether to call cancel current calculation
 	 */
 	private static volatile boolean cancelCurrentCalculationFlag = false;
-
-	
-
-	
-
-	
-
-	
 
 	/**
 	 * Double floating-point precision arithmetic causes rounding problems, i.e. 0.1
@@ -213,25 +199,6 @@ public final class mXparser {
 	public static final boolean checkIfCanonicalRounding() {
 		return canonicalRounding;
 	}
-
-	
-
-	
-
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
-
-	
 
 	/**
 	 * Prints object.toString to the Console

@@ -8,9 +8,9 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.StringJoiner;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.UUID;
-
-import org.bukkit.Bukkit;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.commands.CommandListeners;
@@ -20,7 +20,6 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.utils.Utils;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -98,14 +97,16 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			}
 			UUID askerUUID = (sender instanceof Player ? ((Player) sender).getUniqueId() : CONSOLE);
 			VerificationManager.create(askerUUID, target.getUniqueId(), new Verificator(nTarget, sender.getName(), cheatsToVerify));
-			SpigotNegativity pl = SpigotNegativity.getInstance();
-			Bukkit.getScheduler().runTaskLater(pl, () -> {
-				Verificator verif = VerificationManager.getVerificationsFrom(target.getUniqueId(), askerUUID).get();
-				verif.generateMessage();
-				verif.getMessages().forEach((s) -> sender.sendMessage(Utils.coloredMessage("&a[&2Verif&a] " + s)));
-				verif.save();
-				VerificationManager.remove(askerUUID, target.getUniqueId());
-			}, time * 20);
+			new Timer("verif-wait-" + sender.getName()).schedule(new TimerTask() {
+				@Override
+				public void run() {
+					Verificator verif = VerificationManager.getVerificationsFrom(target.getUniqueId(), askerUUID).get();
+					verif.generateMessage();
+					verif.getMessages().forEach((s) -> sender.sendMessage(Utils.coloredMessage("&a[&2Verif&a] " + s)));
+					verif.save();
+					VerificationManager.remove(askerUUID, target.getUniqueId());
+				}
+			}, time * 1000);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("alert")) {
 			if (!(sender instanceof Player)) {
@@ -218,7 +219,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 							suggestions.add(p.getName());
 						}
 					}
-				} else if (Bukkit.getPlayer(arg[1]) != null) {
+				} else if (Adapter.getAdapter().getPlayer(arg[1]) != null) {
 					// /negativity verif <target> |
 					for (Cheat c : Cheat.values()) {
 						if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {

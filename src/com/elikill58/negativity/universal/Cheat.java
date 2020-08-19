@@ -33,8 +33,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerificationManager;
-
-import net.minecraft.util.com.google.common.collect.Maps;
+import com.google.common.collect.Maps;
 
 public abstract class Cheat {
 

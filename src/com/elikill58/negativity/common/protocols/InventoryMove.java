@@ -1,16 +1,16 @@
 package com.elikill58.negativity.common.protocols;
 
-import org.bukkit.Bukkit;
+import java.util.TimerTask;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
-import com.elikill58.negativity.api.events.inventory.*;
+import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
+import com.elikill58.negativity.api.events.inventory.InventoryOpenEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -46,7 +46,7 @@ public class InventoryMove extends Cheat implements Listeners {
 			return;
 		// TODO add custom timer system
 		if (p.isSprinting() || p.isSneaking()) {
-			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
+			new java.util.Timer().schedule(new TimerTask() {
 				@Override
 				public void run() {
 					if (p.isSprinting() || p.isSneaking())
@@ -54,10 +54,10 @@ public class InventoryMove extends Cheat implements Listeners {
 								NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "sprint",
 									"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking(), hoverMsg("main", "%name%", from));
 				}
-			}, 3);
+			}, 150);
 		} else if (check) {
 			final Location lastLoc = p.getLocation().clone();
-			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
+			new java.util.Timer().schedule(new TimerTask() {
 				@Override
 				public void run() {
 					if(!lastLoc.getWorld().equals(p.getLocation().getWorld()))
@@ -70,7 +70,7 @@ public class InventoryMove extends Cheat implements Listeners {
 									"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()), hoverMsg("main", "%name%", from));
 					}
 				}
-			}, 5);
+			}, 250);
 		}
 	}
 	

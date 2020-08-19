@@ -1,6 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
-import org.bukkit.Bukkit;
+import java.util.TimerTask;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -10,7 +10,6 @@ import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.Utils;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -30,22 +29,25 @@ public class AutoClick extends Cheat implements Listeners {
 	
 	public AutoClick() {
 		super(CheatKeys.AUTO_CLICK, true, Materials.FISHING_ROD, CheatCategory.COMBAT, true, "auto-click", "autoclic");
-		Bukkit.getScheduler().runTaskTimer(SpigotNegativity.getInstance(), () -> {
-			for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
-				NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-				NegativityAccount account = np.getAccount();
-				if (account.getMostClicksPerSecond() < np.ACTUAL_CLICK) {
-					account.setMostClicksPerSecond(np.ACTUAL_CLICK);
-				}
-				recordData(p.getUniqueId(), CLICKS, np.ACTUAL_CLICK);
-				np.LAST_CLICK = np.ACTUAL_CLICK;
-				np.ACTUAL_CLICK = 0;
-				if (np.SEC_ACTIVE < 2) {
-					np.SEC_ACTIVE++;
-					return;
+		new java.util.Timer().scheduleAtFixedRate(new TimerTask() {
+			@Override
+			public void run() {
+				for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
+					NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+					NegativityAccount account = np.getAccount();
+					if (account.getMostClicksPerSecond() < np.ACTUAL_CLICK) {
+						account.setMostClicksPerSecond(np.ACTUAL_CLICK);
+					}
+					recordData(p.getUniqueId(), CLICKS, np.ACTUAL_CLICK);
+					np.LAST_CLICK = np.ACTUAL_CLICK;
+					np.ACTUAL_CLICK = 0;
+					if (np.SEC_ACTIVE < 2) {
+						np.SEC_ACTIVE++;
+						return;
+					}
 				}
 			}
-		}, 20, 20);
+		}, 1000, 1000);
 	}
 	
 	@EventListener

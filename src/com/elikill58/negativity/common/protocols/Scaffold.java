@@ -1,6 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
-import org.bukkit.Bukkit;
+import java.util.TimerTask;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -10,7 +10,6 @@ import com.elikill58.negativity.api.events.block.BlockPlaceEvent;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -34,7 +33,8 @@ public class Scaffold extends Cheat implements Listeners {
 		int ping = p.getPing(), slot = p.getInventory().getHeldItemSlot();
 		if (ping > 120)
 			return;
-		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
+		new java.util.Timer().schedule(new TimerTask() {
+			
 			@Override
 			public void run() {
 				Material m = p.getItemInHand().getType(), placed = e.getBlock().getType();
@@ -54,6 +54,6 @@ public class Scaffold extends Cheat implements Listeners {
 					}
 				}
 			}
-		}, 0);
+		}, 50);
 	}
 }

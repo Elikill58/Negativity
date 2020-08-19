@@ -61,6 +61,8 @@ public class EventManager {
 				else if(isAssignableFrom(Class.forName(type.getTypeName())))
 					return true;
 			}
+			if(!clazz.getSuperclass().equals(Object.class))
+				return isAssignableFrom(clazz.getSuperclass());
 			return false;
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -40,6 +40,7 @@ import com.elikill58.negativity.spigot.impl.plugin.SpigotExternalPlugin;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.ReportType;
@@ -105,7 +106,7 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public void reload() {
 		reloadConfig();
-		UniversalUtils.init();
+		Negativity.loadNegativity();
 	}
 
 	@Override

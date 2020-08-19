@@ -37,7 +37,7 @@ import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Database;
-import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -96,8 +96,7 @@ public class SpigotNegativity extends JavaPlugin {
 		} catch (ClassNotFoundException e) {
 			isCraftBukkit = true;
 		}
-		getLogger().info("This plugin is free, but you can support me : https://www.patreon.com/elikill58 <3");
-		UniversalUtils.init();
+		Negativity.loadNegativity();
 		FakePlayer.loadClass();
 
 		new Metrics(this)
@@ -125,12 +124,7 @@ public class SpigotNegativity extends JavaPlugin {
 			NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p)).manageAutoVerif();
 
 		loadCommand();
-
-		if (getConfig().get("items") != null) {
-			ConfigurationSection cs = getConfig().getConfigurationSection("items");
-			for (String s : cs.getKeys(false))
-				new ItemUseBypass(s, cs.getString(s + ".cheats"), cs.getString(s + ".when"));
-		}
+		
 		if (!UniversalUtils.isLatestVersion(getDescription().getVersion())) {
 			getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
 					+ "). Download it here: https://www.spigotmc.org/resources/48399/");

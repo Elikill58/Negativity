@@ -68,7 +68,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Database;
-import com.elikill58.negativity.universal.ItemUseBypass;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
@@ -80,6 +80,7 @@ import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
 import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
+import com.elikill58.negativity.universal.bypass.ItemUseBypass;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.config.SpongeConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
@@ -138,9 +139,8 @@ public class SpongeNegativity {
 			logger.error("Failed to load configuration", e);
 		}
 		Adapter.setAdapter(new SpongeAdapter(this, config));
-		UniversalUtils.init();
+		Negativity.loadNegativity();
 		loadConfig();
-		Cheat.loadCheat();
 		EventManager eventManager = Sponge.getEventManager();
 		eventManager.registerListeners(this, new FightManager());
 		eventManager.registerListeners(this, new PlayersEventsManager());

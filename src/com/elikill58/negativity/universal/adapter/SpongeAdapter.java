@@ -103,7 +103,6 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public void reload() {
 		reloadConfig();
-		UniversalUtils.init();
 		plugin.reloadCommands();
 		SpongeNegativity.trySendProxyPing();
 	}

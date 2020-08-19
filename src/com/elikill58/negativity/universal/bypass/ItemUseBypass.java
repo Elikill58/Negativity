@@ -1,9 +1,10 @@
-package com.elikill58.negativity.universal;
+package com.elikill58.negativity.universal.bypass;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class ItemUseBypass {

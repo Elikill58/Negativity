@@ -11,9 +11,9 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.bypass.ItemUseBypass;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class AutoSteal extends Cheat implements Listeners {

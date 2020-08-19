@@ -1,10 +1,12 @@
-package com.elikill58.negativity.universal;
+package com.elikill58.negativity.universal.bypass;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.support.WorldGuardSupport;

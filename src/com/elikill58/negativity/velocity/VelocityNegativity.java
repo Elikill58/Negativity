@@ -8,6 +8,7 @@ import java.io.UncheckedIOException;
 import org.slf4j.Logger;
 
 import com.elikill58.negativity.universal.Database;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -15,7 +16,6 @@ import com.elikill58.negativity.universal.adapter.VelocityAdapter;
 import com.elikill58.negativity.universal.config.MD5ConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -69,7 +69,7 @@ public class VelocityNegativity {
 			throw new UncheckedIOException("Could not load configuration", e);
 		}
 		Adapter.setAdapter(new VelocityAdapter(this, config));
-		UniversalUtils.init();
+		Negativity.loadNegativity();
 
 		NegativityAccountStorage.setDefaultStorage("database");
 

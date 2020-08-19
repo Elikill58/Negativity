@@ -24,7 +24,6 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
-import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -32,7 +31,11 @@ import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.support.AdvancedBanProcessor;
 import com.elikill58.negativity.universal.ban.support.LiteBansProcessor;
 import com.elikill58.negativity.universal.ban.support.MaxBansProcessor;
+import com.elikill58.negativity.universal.bypass.BypassManager;
+import com.elikill58.negativity.universal.bypass.ItemUseBypass;
+import com.elikill58.negativity.universal.bypass.ItemUseBypass.WhenBypass;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -224,8 +227,23 @@ public class Negativity {
 		return sj.toString();
 	}
 	
-	public static void setup() {
+	public static void loadNegativity() {
 		Adapter ada = Adapter.getAdapter();
+		ada.getLogger().info("Thanks for buying Negativity <3");
+		
+		EventManager.load();
+		DefaultConfigValue.init();
+		Cheat.loadCheat();
+		Special.loadSpecial();
+		Database.init();
+		Perm.init();
+		BanManager.init();
+		TranslatedMessages.init();
+		NegativityAccountStorage.init();
+		VerificationManager.init();
+		BypassManager.loadBypass();
+		UniversalUtils.init();
+		
 		ConfigAdapter config = ada.getConfig();
 		log = config.getBoolean("log_alerts");
 		log_console = config.getBoolean("log_alerts_in_console");

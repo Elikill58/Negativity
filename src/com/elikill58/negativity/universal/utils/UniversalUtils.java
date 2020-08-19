@@ -36,19 +36,9 @@ import javax.net.ssl.X509TrustManager;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Database;
-import com.elikill58.negativity.universal.DefaultConfigValue;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.Special;
-import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
-import com.elikill58.negativity.universal.permissions.Perm;
-import com.elikill58.negativity.universal.verif.VerificationManager;
-import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 
 public class UniversalUtils {
 
@@ -359,18 +349,7 @@ public class UniversalUtils {
 	
 	public static void init() {
 		getContentFromURL("https://google.fr");
-		DefaultConfigValue.init();
-		Negativity.setup();
-		EventManager.load();
-		Cheat.loadCheat();
-		Special.loadSpecial();
-		Database.init();
-		Perm.init();
-		BanManager.init();
-		TranslatedMessages.init();
-		NegativityAccountStorage.init();
-		VerificationStorage.init();
-		VerificationManager.init();
+		Negativity.loadNegativity();
 	}
 
 	public static OS os = null;

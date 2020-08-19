@@ -10,6 +10,7 @@ import java.util.UUID;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 
 public class VerificationManager {
 	
@@ -26,6 +27,7 @@ public class VerificationManager {
 		ConfigAdapter config = Adapter.getAdapter().getConfig();
 		timeVerif = config.getInt("verif.time");
 		disableAlertOnVerif = config.getBoolean("verif.disable_alert_on_verif");
+		VerificationStorage.init();
 	}
 	
 	public static int getTimeVerif() {

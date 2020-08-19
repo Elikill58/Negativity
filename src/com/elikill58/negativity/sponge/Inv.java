@@ -30,4 +30,5 @@ public class Inv {
 	public static final Identifiable FORGE_MODS_INV_ID = new Identifiable(UUID.fromString("258670f4-d66c-4ad4-8fc6-4f3914026d54"));
 	public static final Identifiable ADMIN_INV_ID = new Identifiable(UUID.fromString("1f4bd048-2e4f-4143-8703-2ce8d46f19d0"));
 	public static final Identifiable LANG_INV_ID = new Identifiable(UUID.fromString("68f4d048-43cb-a15e-8a1b-2ce8d4a1baf5"));
+	public static final Identifiable NEGATIVITY_INV_ID = new Identifiable(UUID.fromString("68f4d048-43cb-a15e-8a1b-2ce8d4a1baf5"));
 }

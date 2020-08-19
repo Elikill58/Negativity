@@ -294,11 +294,6 @@ public class SpigotPlayer extends Player {
 	}
 
 	@Override
-	public int getEntityId() {
-		return p.getEntityId();
-	}
-
-	@Override
 	public PlayerInventory getInventory() {
 		return new SpigotPlayerInventory(p.getInventory());
 	}

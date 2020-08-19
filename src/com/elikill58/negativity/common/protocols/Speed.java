@@ -59,7 +59,7 @@ public class Speed extends Cheat implements Listeners {
 		}
 		Location from = e.getFrom().clone(), to = e.getTo().clone();
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Materials.SPONGE)
-				|| p.getEntityId() == 100 || p.getVehicle() != null || p.getAllowFlight()
+				|| p.getVehicle() != null || p.getAllowFlight()
 				|| p.getFlySpeed() > 3.0F || p.getWalkSpeed() > 2.0F
 				|| p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE) || p.isInsideVehicle()
 				|| hasEnderDragonAround(p) || p.getItemInHand().getType().getId().contains("TRIDENT"))

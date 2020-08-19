@@ -41,11 +41,6 @@ public class SpigotEntity extends Entity {
 	}
 
 	@Override
-	public int getEntityId() {
-		return entity.getEntityId();
-	}
-
-	@Override
 	public Object getDefault() {
 		return entity;
 	}

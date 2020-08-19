@@ -1,6 +1,7 @@
 package com.elikill58.negativity.spigot.listeners;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -9,7 +10,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -18,6 +18,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
+import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent.Action;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.events.player.PlayerRegainHealthEvent;
@@ -41,7 +42,10 @@ public class PlayersListeners implements Listener {
 	
 	@EventHandler
 	public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
-		EventManager.callEvent(new PlayerMoveEvent(SpigotEntityManager.getPlayer(e.getPlayer()), new SpigotLocation(e.getFrom()), new SpigotLocation(e.getTo())));
+		PlayerMoveEvent event = new PlayerMoveEvent(SpigotEntityManager.getPlayer(e.getPlayer()), new SpigotLocation(e.getFrom()), new SpigotLocation(e.getTo()));
+		EventManager.callEvent(event);
+		e.setTo((Location) event.getTo().getDefault());
+		e.setFrom((Location) event.getFrom().getDefault());
 	}
 	
 	@EventHandler
@@ -63,8 +67,10 @@ public class PlayersListeners implements Listener {
 	}
 	
 	@EventHandler
-	public void onInteract(PlayerInteractEvent e) {
-		EventManager.callEvent(new com.elikill58.negativity.api.events.player.PlayerInteractEvent(SpigotEntityManager.getPlayer(e.getPlayer()), Action.valueOf(e.getAction().name())));
+	public void onInteract(org.bukkit.event.player.PlayerInteractEvent e) {
+		PlayerInteractEvent event = new PlayerInteractEvent(SpigotEntityManager.getPlayer(e.getPlayer()), Action.valueOf(e.getAction().name()));
+		EventManager.callEvent(event);
+		e.setCancelled(event.isCancelled());
 	}
 	
 	@EventHandler

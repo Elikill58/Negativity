@@ -271,10 +271,4 @@ public class BungeePlayer extends Player {
 	public double getEyeHeight() {
 		return 0;
 	}
-
-	@Override
-	public int getEntityId() {
-		return 0;
-	}
-	
 }

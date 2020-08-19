@@ -1,4 +1,4 @@
-package com.elikill58.negativity.spigot.impl.entity;
+package com.elikill58.negativity.sponge.impl.entity;
 
 import java.util.UUID;
 
@@ -6,11 +6,11 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.location.Location;
 
-public class SpigotOfflinePlayer extends OfflinePlayer {
+public class SpongeOfflinePlayer extends OfflinePlayer {
 
 	private final org.bukkit.OfflinePlayer op;
 	
-	public SpigotOfflinePlayer(org.bukkit.OfflinePlayer op) {
+	public SpongeOfflinePlayer(org.bukkit.OfflinePlayer op) {
 		this.op = op;
 	}
 	

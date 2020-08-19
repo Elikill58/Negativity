@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.UncheckedIOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -14,6 +15,8 @@ import javax.annotation.Nullable;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
+import org.spongepowered.api.text.Text;
+import org.spongepowered.api.text.action.TextActions;
 
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -26,6 +29,11 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.sponge.SpongeNegativity;
+import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
+import com.elikill58.negativity.sponge.impl.inventory.SpongeInventory;
+import com.elikill58.negativity.sponge.impl.item.SpongeItemBuilder;
+import com.elikill58.negativity.sponge.impl.item.SpongeItemRegistrar;
+import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
@@ -49,12 +57,14 @@ public class SpongeAdapter extends Adapter {
 	private final ConfigAdapter config;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpongeNegativity::sendPluginMessage);
 	private final TranslationProviderFactory translationProviderFactory;
+	private final SpongeItemRegistrar itemRegistrar;
 
 	public SpongeAdapter(SpongeNegativity sn, ConfigAdapter config) {
 		this.plugin = sn;
 		this.logger = new Slf4jLoggerAdapter(sn.getLogger());
 		this.config = config;
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("messages"), "Negativity", "CheatHover");
+		this.itemRegistrar = new SpongeItemRegistrar();
 	}
 
 	@Override
@@ -155,75 +165,69 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public void alertMod(ReportType type, com.elikill58.negativity.api.entity.Player p, Cheat c, int reliability,
 			String proof, CheatHover hover) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public List<UUID> getOnlinePlayersUUID() {
-		// TODO Auto-generated method stub
-		return null;
+		List<UUID> list = new ArrayList<>();
+		for (org.spongepowered.api.entity.living.player.Player temp : Sponge.getServer().getOnlinePlayers())
+			list.add(temp.getUniqueId());
+		return list;
 	}
 
 	@Override
 	public double[] getTPS() {
-		// TODO Auto-generated method stub
-		return null;
+		return new double[] {getLastTPS()};
 	}
 
 	@Override
 	public double getLastTPS() {
-		// TODO Auto-generated method stub
-		return 0;
+		return Sponge.getServer().getTicksPerSecond();
 	}
 
 	@Override
 	public ItemRegistrar getItemRegistrar() {
-		// TODO Auto-generated method stub
-		return null;
+		return itemRegistrar;
 	}
 
 	@Override
 	public Location createLocation(World w, double x, double y, double z) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SpongeLocation(w, x, y, z);
 	}
 
 	@Override
-	public void sendMessageRunnableHover(com.elikill58.negativity.api.entity.Player p, String message, String hover,
+	public void sendMessageRunnableHover(Player p, String message, String hover,
 			String command) {
-		// TODO Auto-generated method stub
-		
+		((org.spongepowered.api.entity.living.player.Player) p).sendMessage(Text.builder(message).onHover(TextActions.showText(Text.of(hover))).build());
 	}
 
 	@Override
-	public List<com.elikill58.negativity.api.entity.Player> getOnlinePlayers() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Player> getOnlinePlayers() {
+		List<Player> list = new ArrayList<>();
+		for (org.spongepowered.api.entity.living.player.Player temp : Sponge.getServer().getOnlinePlayers())
+			list.add(SpongeEntityManager.getPlayer(temp));
+		return list;
 	}
 
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SpongeItemBuilder(type);
 	}
 
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
-		// TODO Auto-generated method stub
-		return null;
+		return new SpongeInventory(inventoryName, size, holder);
 	}
 
 	@Override
 	public Player getPlayer(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		return SpongeEntityManager.getPlayer(Sponge.getServer().getPlayer(name).orElse(null));
 	}
 
 	@Override
 	public Player getPlayer(UUID uuid) {
-		// TODO Auto-generated method stub
-		return null;
+		return SpongeEntityManager.getPlayer(Sponge.getServer().getPlayer(uuid).orElse(null));
 	}
 
 	@Override

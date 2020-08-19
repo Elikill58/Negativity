@@ -1,16 +1,20 @@
-package com.elikill58.negativity.spigot.impl.entity;
+package com.elikill58.negativity.sponge.impl.entity;
+
+import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.IronGolem;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
+import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
+import com.elikill58.negativity.sponge.utils.Utils;
 
-public class SpigotIronGolem extends IronGolem {
+public class SpongeIronGolem extends IronGolem {
 
-	private final org.bukkit.entity.IronGolem golem;
+	private final org.spongepowered.api.entity.living.golem.IronGolem golem;
 	
-	public SpigotIronGolem(org.bukkit.entity.IronGolem golem) {
+	public SpongeIronGolem(org.spongepowered.api.entity.living.golem.IronGolem golem) {
 		this.golem = golem;
 	}
 	
@@ -21,17 +25,17 @@ public class SpigotIronGolem extends IronGolem {
 
 	@Override
 	public boolean isOp() {
-		return golem.isOp();
+		return true;
 	}
 
 	@Override
 	public Location getLocation() {
-		return new SpigotLocation(golem.getLocation());
+		return new SpongeLocation(golem.getLocation());
 	}
 
 	@Override
 	public double getEyeHeight() {
-		return golem.getEyeHeight();
+		return Utils.getEntityHeadHeight(golem);
 	}
 
 	@Override
@@ -41,7 +45,7 @@ public class SpigotIronGolem extends IronGolem {
 
 	@Override
 	public Entity getTarget() {
-		return golem.getTarget() == null ? null : SpigotEntityManager.getEntity((org.bukkit.entity.Entity) golem.getTarget());
+		return SpongeEntityManager.getEntity(golem.getTarget().orElse(null));
 	}
 
 	@Override
@@ -51,12 +55,12 @@ public class SpigotIronGolem extends IronGolem {
 
 	@Override
 	public void sendMessage(String msg) {
-		golem.sendMessage(msg);
+		
 	}
 
 	@Override
 	public String getName() {
-		return golem.getName();
+		return golem.get(Keys.DISPLAY_NAME).orElse(Text.of("Golem")).toPlain();
 	}
 
 }

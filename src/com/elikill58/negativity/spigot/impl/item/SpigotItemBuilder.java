@@ -53,12 +53,6 @@ public class SpigotItemBuilder extends ItemBuilder {
     }
 
     @Override
-    public ItemBuilder type(Material type) {
-        this.itemStack.setType((org.bukkit.Material) type.getDefault());
-        return this;
-    }
-
-    @Override
     public ItemBuilder amount(int amount) {
         this.itemStack.setAmount(amount);
         return this;

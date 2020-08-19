@@ -50,7 +50,7 @@ public class Fly extends Cheat implements Listeners {
 		}
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		if (p.getAllowFlight() || p.getEntityId() == 100 || p.isSwimming())
+		if (p.getAllowFlight() || p.isSwimming())
 			return;
 		boolean mayCancel = false, inBoat = Utils.isInBoat(p);
 		double y = e.getFrom().getY() - e.getTo().getY();

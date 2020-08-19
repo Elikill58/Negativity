@@ -16,8 +16,6 @@ public abstract class ItemBuilder {
 	
     public abstract ItemBuilder unsafeEnchant(Enchantment enchantment, int level);
 
-    public abstract ItemBuilder type(Material type);
-
     public abstract ItemBuilder amount(int amount);
     
 	public abstract ItemBuilder durability(short durability);

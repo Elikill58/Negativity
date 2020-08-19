@@ -43,7 +43,7 @@ public class BlinkProtocol extends Cheat implements Listener {
 		if (!(!np.bypassBlink && (p.getGameMode().equals(GameMode.ADVENTURE) || p.getGameMode().equals(GameMode.SURVIVAL))))
 			return;
 		int ping = Utils.getPing(p);
-		if (ping < 140 || np.isBedrockPlayer()) {
+		if (ping < 140 && !np.isBedrockPlayer()) {
 			int total = np.ALL - np.PACKETS.getOrDefault(PacketType.Client.KEEP_ALIVE, 0);
 			if (total == 0) {
 				if(UniversalUtils.parseInPorcent(100 - ping) >= getReliabilityAlert()) {

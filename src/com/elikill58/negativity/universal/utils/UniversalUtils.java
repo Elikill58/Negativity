@@ -37,7 +37,6 @@ import javax.net.ssl.X509TrustManager;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class UniversalUtils {
@@ -349,7 +348,6 @@ public class UniversalUtils {
 	
 	public static void init() {
 		getContentFromURL("https://google.fr");
-		Negativity.loadNegativity();
 	}
 
 	public static OS os = null;

@@ -42,7 +42,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
-import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.BukkitConfigAdapter;
@@ -107,11 +106,6 @@ public class SpigotAdapter extends Adapter {
 	public void reload() {
 		reloadConfig();
 		UniversalUtils.init();
-		ProxyCompanionManager.updateForceDisabled(getConfig().getBoolean("disableProxyIntegration"));
-		// SpigotNegativity.trySendProxyPing();
-		// SpigotNegativity.setupValue();
-		// for(Player p : Utils.getOnlinePlayers())
-		// SpigotNegativity.manageAutoVerif(p);
 	}
 
 	@Override

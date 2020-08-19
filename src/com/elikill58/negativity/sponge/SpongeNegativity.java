@@ -120,7 +120,7 @@ public class SpongeNegativity {
 		return plugin;
 	}
 
-	public static boolean hasPacketGate = false, hasPrecogs = false, hasBypass = false;
+	public static boolean hasPacketGate = false, hasPrecogs = false;
 
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
@@ -320,8 +320,6 @@ public class SpongeNegativity {
 	}
 
 	public void loadConfig() {
-		ProxyCompanionManager.updateForceDisabled(config.getBoolean("disableProxyIntegration"));
-		hasBypass = config.getBoolean("Permissions.bypass.active");
 		timeBetweenAlert = config.getInt("time_between_alert");
 	}
 

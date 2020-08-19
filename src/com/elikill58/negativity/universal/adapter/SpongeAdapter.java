@@ -38,7 +38,6 @@ import com.elikill58.negativity.sponge.impl.plugin.SpongeExternalPlugin;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
-import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
@@ -106,9 +105,7 @@ public class SpongeAdapter extends Adapter {
 		reloadConfig();
 		UniversalUtils.init();
 		plugin.reloadCommands();
-		ProxyCompanionManager.updateForceDisabled(config.getBoolean("disableProxyIntegration"));
 		SpongeNegativity.trySendProxyPing();
-		SpongeNegativity.hasBypass = config.getBoolean("Permissions.bypass.active");
 	}
 
 	@Override

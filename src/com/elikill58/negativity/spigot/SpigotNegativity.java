@@ -59,7 +59,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean log = false, log_console = false, hasBypass = false, isCraftBukkit = false;
+	public static boolean hasBypass = false, isCraftBukkit = false;
 	private BukkitTask invTimer = null, timeTimeBetweenAlert = null, packetTimer = null, runSpawnFakePlayer = null;
 	public static String CHANNEL_NAME_FML = "";
 	private static int timeBetweenAlert = -1;
@@ -99,7 +99,6 @@ public class SpigotNegativity extends JavaPlugin {
 		getLogger().info("This plugin is free, but you can support me : https://www.patreon.com/elikill58 <3");
 		UniversalUtils.init();
 		FakePlayer.loadClass();
-		ProxyCompanionManager.updateForceDisabled(getConfig().getBoolean("disableProxyIntegration"));
 
 		new Metrics(this)
 				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));

@@ -16,8 +16,8 @@ import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.sponge.Messages;
-import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.universal.permissions.Perm;
 
 /**
@@ -43,7 +43,7 @@ public class NegativityCmdWrapper implements CommandCallable {
 		}
 
 		if (negativityPermission != null && source instanceof Player) {
-			SpongeNegativityPlayer negativityPlayer = SpongeNegativityPlayer.getNegativityPlayer((Player) source);
+			NegativityPlayer negativityPlayer = NegativityPlayer.getCached(((Player) source).getUniqueId());
 			if (!Perm.hasPerm(negativityPlayer, negativityPermission)) {
 				throw new CommandPermissionException(Messages.getMessage(source, "not_permission"));
 			}

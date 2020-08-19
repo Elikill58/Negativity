@@ -6,20 +6,20 @@ import org.spongepowered.api.event.cause.EventContext;
 import org.spongepowered.api.event.entity.living.humanoid.player.TargetPlayerEvent;
 import org.spongepowered.api.event.impl.AbstractEvent;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.sponge.SpongeNegativity;
-import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 
 public class PlayerPacketsClearEvent extends AbstractEvent implements TargetPlayerEvent {
 	
 	private Player p;
-	private SpongeNegativityPlayer np;
+	private NegativityPlayer np;
 	
-	public PlayerPacketsClearEvent(Player p, SpongeNegativityPlayer np) {
+	public PlayerPacketsClearEvent(Player p, NegativityPlayer np) {
 		this.p = p;
 		this.np = np;
 	}
 	
-	public SpongeNegativityPlayer getNegativityPlayer() {
+	public NegativityPlayer getNegativityPlayer() {
 		return np;
 	}
 	

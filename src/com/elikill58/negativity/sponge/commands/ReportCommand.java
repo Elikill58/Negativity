@@ -17,9 +17,9 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativity;
-import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
@@ -33,7 +33,7 @@ public class ReportCommand implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		Player playerSource = (Player) src;
-		SpongeNegativityPlayer nPlayerSource = SpongeNegativityPlayer.getNegativityPlayer(playerSource);
+		NegativityPlayer nPlayerSource = NegativityPlayer.getCached(playerSource.getUniqueId());
 		if (nPlayerSource.TIME_REPORT > System.currentTimeMillis() && !Perm.hasPerm(nPlayerSource, Perm.REPORT_WAIT))
 			throw new CommandException(Messages.getMessage(playerSource, "report_wait"));
 
@@ -51,7 +51,7 @@ public class ReportCommand implements CommandExecutor {
 					.build();
 			boolean hasOp = false;
 			for (Player onlinePlayer : Utils.getOnlinePlayers()) {
-				if (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(onlinePlayer), Perm.SHOW_REPORT)) {
+				if (Perm.hasPerm(NegativityPlayer.getCached(onlinePlayer.getUniqueId()), Perm.SHOW_REPORT)) {
 					hasOp = true;
 					onlinePlayer.sendMessage(spongeMsg);
 				}

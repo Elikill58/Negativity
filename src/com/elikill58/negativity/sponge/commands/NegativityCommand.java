@@ -13,14 +13,15 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 
+import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
+import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.commands.child.AdminCommand;
 import com.elikill58.negativity.sponge.commands.child.AlertCommand;
 import com.elikill58.negativity.sponge.commands.child.ModCommand;
 import com.elikill58.negativity.sponge.commands.child.ReloadCommand;
 import com.elikill58.negativity.sponge.commands.child.VerifCommand;
-import com.elikill58.negativity.sponge.inventories.AbstractInventory;
-import com.elikill58.negativity.sponge.inventories.AbstractInventory.InventoryType;
+import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge.utils.NegativityCmdSuggestionsEnhancer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 
@@ -38,7 +39,7 @@ public class NegativityCommand implements CommandExecutor {
 			Messages.sendMessageList(playerSource, "negativity.verif.help");
 			return CommandResult.empty();
 		}
-		AbstractInventory.open(InventoryType.CHECK_MENU, playerSource, targetPlayer);
+		InventoryManager.open(NegativityInventory.CHECK_MENU, SpongeEntityManager.getPlayer(playerSource), SpongeEntityManager.getEntity(targetPlayer));
 		return CommandResult.success();
 	}
 

@@ -14,7 +14,7 @@ import org.spongepowered.api.event.world.ExplosionEvent;
 import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
-import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.sponge.utils.Utils;
 
 public class FightManager {
@@ -23,8 +23,8 @@ public class FightManager {
 	public void onEntityDamageByEntity(DamageEntityEvent e, @First Player p) {
 		if (!(e.getTargetEntity() instanceof Player))
 			return;
-		SpongeNegativityPlayer.getNegativityPlayer((Player) e.getTargetEntity()).fight();
-		SpongeNegativityPlayer.getNegativityPlayer(p).fight();
+		NegativityPlayer.getCached(e.getTargetEntity().getUniqueId()).fight();
+		NegativityPlayer.getCached(p.getUniqueId()).fight();
 	}
 
 	@Listener
@@ -41,17 +41,17 @@ public class FightManager {
 			for (Player p : Utils.getOnlinePlayers())
 				if (((World) loc.getExtent()).equals(p.getLocation().getExtent()))
 					if (p.getPosition().distance(loc.getPosition()) < 9)
-						SpongeNegativityPlayer.getNegativityPlayer(p).fight();
+						NegativityPlayer.getCached(p.getUniqueId()).fight();
 	}
 
 	@Listener
 	public void onPlayerDeath(DestructEntityEvent.Death e, @First Player p) {
-		SpongeNegativityPlayer.getNegativityPlayer(p).unfight();
+		NegativityPlayer.getCached(p.getUniqueId()).unfight();
 	}
 	
 	@Listener
 	public void onEntityExplode(ExplosionEvent e) {
 		Sponge.getServer().getOnlinePlayers().stream().filter((p) -> p.getPosition().distance(e.getExplosion().getLocation().getPosition()) < 5)
-				.forEach((p) -> SpongeNegativityPlayer.getNegativityPlayer(p).fight());
+				.forEach((p) -> NegativityPlayer.getCached(p.getUniqueId()).fight());
 	}
 }

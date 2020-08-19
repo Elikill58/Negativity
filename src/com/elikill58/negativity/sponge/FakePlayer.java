@@ -41,7 +41,7 @@ public class FakePlayer {
 	public void hide(Player p, boolean detected) {
 		if(!fakePlayer.isRemoved())
 			fakePlayer.remove();
-		SpongeNegativityPlayer.getNegativityPlayer(p).removeFakePlayer(this, detected);
+		//NegativityPlayer.getCached(p.getUniqueId()).removeFakePlayer(this, detected);
 	}
 
 	public Location<World> getLocation() {

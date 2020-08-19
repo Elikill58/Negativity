@@ -8,8 +8,9 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.sponge.Messages;
-import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 
 public class AlertCommand implements CommandExecutor {
 
@@ -19,7 +20,7 @@ public class AlertCommand implements CommandExecutor {
 			return CommandResult.empty();
 		}
 		Player p = (Player) src;
-		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpongePlayer(p));
 		np.disableShowingAlert = !np.disableShowingAlert;
 		Messages.sendMessage(p, np.disableShowingAlert ? "negativity.see_no_longer_alert" : "negativity.see_alert");
 		return CommandResult.success();

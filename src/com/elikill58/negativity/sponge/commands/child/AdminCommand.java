@@ -8,8 +8,9 @@ import org.spongepowered.api.command.spec.CommandExecutor;
 import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 
-import com.elikill58.negativity.sponge.inventories.AbstractInventory;
-import com.elikill58.negativity.sponge.inventories.AbstractInventory.InventoryType;
+import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
+import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
+import com.elikill58.negativity.api.inventory.InventoryManager;
 
 public class AdminCommand implements CommandExecutor {
 
@@ -19,7 +20,7 @@ public class AdminCommand implements CommandExecutor {
 			return CommandResult.empty();
 		}
 		
-		AbstractInventory.open(InventoryType.ADMIN, (Player) src);
+		InventoryManager.open(NegativityInventory.ADMIN, SpongeEntityManager.getPlayer((Player) src));
 		return CommandResult.success();
 	}
 

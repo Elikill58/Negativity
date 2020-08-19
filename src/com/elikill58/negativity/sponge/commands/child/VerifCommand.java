@@ -25,9 +25,10 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativity;
-import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge.utils.NegativityCmdWrapper;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -44,7 +45,7 @@ public class VerifCommand implements CommandExecutor {
 		}
 
 		Set<Cheat> cheats = new LinkedHashSet<>(args.getAll("cheats"));
-		SpongeNegativityPlayer targetNPlayer = SpongeNegativityPlayer.getNegativityPlayer(targetPlayer);
+		NegativityPlayer targetNPlayer = NegativityPlayer.getNegativityPlayer(targetPlayer.getUniqueId(), () -> new SpongePlayer(targetPlayer));
 		int time = args.<Integer>getOne("time").orElse(VerificationManager.getTimeVerif() / 20);
 		if (cheats.isEmpty()) {
 			targetNPlayer.startAllAnalyze();

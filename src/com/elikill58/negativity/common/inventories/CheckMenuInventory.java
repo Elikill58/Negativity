@@ -41,7 +41,7 @@ public class CheckMenuInventory extends AbstractInventory {
 		NegativityPlayer np = NegativityPlayer.getCached(cible.getUniqueId());
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
-		actualizeInventory(p, cible);
+		actualizeInventory(p, cible, inv);
 		// TODO implement skull
 		//inv.set(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId(), ChatColor.GREEN + "Version: " + cible.getPlayerVersion().getName(), ChatColor.GREEN + "Platform: " + (np.isBedrockPlayer() ? "Bedrock" : "Java")));
 
@@ -68,8 +68,11 @@ public class CheckMenuInventory extends AbstractInventory {
 	@Override
 	public void actualizeInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
-		Inventory inv = p.getOpenInventory();
-		if(inv == null || !inv.getType().equals(InventoryType.CHEST)) return;
+		Inventory inv = args.length > 1 ? (Inventory) args[1] : p.getOpenInventory();
+		if(inv == null || !inv.getType().equals(InventoryType.CHEST)) {
+			p.sendMessage("Actualize: " + inv + (inv != null ? " Type: " + inv.getType().name() : ""));
+			return;
+		}
 		NegativityPlayer np = NegativityPlayer.getCached(cible.getUniqueId());
 		int betterClick = np.getAccount().getMostClicksPerSecond();
 		try {

@@ -1,6 +1,10 @@
 package com.elikill58.negativity.sponge.impl.block;
 
+import java.util.Optional;
+
 import org.spongepowered.api.block.BlockSnapshot;
+import org.spongepowered.api.util.Direction;
+import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
@@ -39,8 +43,53 @@ public class SpongeBlock extends Block {
 
 	@Override
 	public Block getRelative(BlockFace blockFace) {
-		// TODO implement getRelative
-		return null;//new SpongeBlock(block.getRelative(org.bukkit.block.BlockFace.valueOf(blockFace.name())));
+		Optional<org.spongepowered.api.world.Location<World>> opt = block.getLocation();
+		return opt.isPresent() ? new SpongeBlock(opt.get().getBlockRelative(getDirection(blockFace)).createSnapshot()) : this;
+	}
+	
+	private Direction getDirection(BlockFace bf) {
+		switch (bf) {
+		case DOWN:
+			return Direction.DOWN;
+		case EAST:
+			return Direction.EAST;
+		case EAST_NORTH_EAST:
+			return Direction.EAST_NORTHEAST;
+		case EAST_SOUTH_EAST:
+			return Direction.EAST_SOUTHEAST;
+		case NORTH:
+			return Direction.NORTH;
+		case NORTH_EAST:
+			return Direction.NORTHEAST;
+		case NORTH_NORTH_EAST:
+			return Direction.NORTH_NORTHEAST;
+		case NORTH_NORTH_WEST:
+			return Direction.NORTH_NORTHWEST;
+		case NORTH_WEST:
+			return Direction.NORTHWEST;
+		case SELF:
+			return Direction.NONE;
+		case SOUTH:
+			return Direction.SOUTH;
+		case SOUTH_EAST:
+			return Direction.SOUTHEAST;
+		case SOUTH_SOUTH_EAST:
+			return Direction.SOUTH_SOUTHEAST;
+		case SOUTH_SOUTH_WEST:
+			return Direction.SOUTH_SOUTHWEST;
+		case SOUTH_WEST:
+			return Direction.SOUTHWEST;
+		case UP:
+			return Direction.UP;
+		case WEST:
+			return Direction.WEST;
+		case WEST_NORTH_WEST:
+			return Direction.WEST_NORTHWEST;
+		case WEST_SOUTH_WEST:
+			return Direction.WEST_SOUTHWEST;
+		default:
+			return Direction.NONE;
+		}
 	}
 
 	@Override

@@ -1,9 +1,12 @@
 package com.elikill58.negativity.sponge.impl.inventory;
 
+import java.util.Optional;
+
 import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.Container;
 import org.spongepowered.api.item.inventory.property.InventoryDimension;
 import org.spongepowered.api.item.inventory.property.InventoryTitle;
+import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import org.spongepowered.api.item.inventory.type.GridInventory;
@@ -16,6 +19,7 @@ import com.elikill58.negativity.api.inventory.PlatformHolder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.sponge.Inv;
 import com.elikill58.negativity.sponge.SpongeNegativity;
+import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
 
 public class SpongeInventory extends Inventory {
 
@@ -43,7 +47,8 @@ public class SpongeInventory extends Inventory {
 
 	@Override
 	public ItemStack get(int slot) {
-		return null;
+		Optional<org.spongepowered.api.item.inventory.ItemStack> opt = this.inv.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(slot))).peek();
+		return opt.isPresent() ? new SpongeItemStack(opt.get()) : null;
 	}
 
 	@Override

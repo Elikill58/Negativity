@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.Carrier;
+import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import org.spongepowered.api.item.inventory.type.GridInventory;
@@ -60,8 +61,8 @@ public class SpongePlayerInventory extends PlayerInventory {
 
 	@Override
 	public ItemStack get(int slot) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<org.spongepowered.api.item.inventory.ItemStack> opt = this.inv.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(slot))).peek();
+		return opt.isPresent() ? new SpongeItemStack(opt.get()) : null;
 	}
 
 	@Override

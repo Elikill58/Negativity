@@ -56,7 +56,7 @@ public class SpongePlayerInventory extends PlayerInventory {
 
 	@Override
 	public InventoryType getType() {
-		return InventoryType.valueOf(inv.getArchetype().getId().toUpperCase());
+		return InventoryType.get(inv.getArchetype().getId());
 	}
 
 	@Override

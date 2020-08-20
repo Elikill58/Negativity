@@ -26,6 +26,16 @@ public enum InventoryType {
 	SMOKER,
 	SHULKER_BOX,
 	STONECUTTER,
-	WORKBENCH;
-
+	WORKBENCH,
+	UNKNOW;
+	
+	public static InventoryType get(String name) {
+		if(name == null)
+			return UNKNOW;
+		name = name.toUpperCase();
+		for(InventoryType type : values())
+			if(type.name().equalsIgnoreCase(name) || name.contains(type.name()))
+				return type;
+		return UNKNOW;
+	}
 }

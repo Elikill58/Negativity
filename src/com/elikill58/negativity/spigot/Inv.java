@@ -1,6 +1,7 @@
 package com.elikill58.negativity.spigot;
 
-import com.elikill58.negativity.api.ChatColor;
+import com.elikill58.negativity.api.colors.ChatColor;
+import com.elikill58.negativity.api.colors.DyeColor;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
@@ -17,7 +18,7 @@ public class Inv {
 	static {
 		ItemBuilder builder = ItemBuilder.Builder(Materials.GRAY_STAINED_GLASS_PANE);
 		if (!Version.isNewerOrEquals(Version.getVersion(), Version.V1_13)) {
-			builder.durability((byte) 7);
+			builder.color(DyeColor.GRAY);
 		}
 		builder.displayName(ChatColor.RESET.toString() + " - ");
 		EMPTY = builder.build();

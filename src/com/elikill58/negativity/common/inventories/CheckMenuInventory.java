@@ -2,8 +2,9 @@ package com.elikill58.negativity.common.inventories;
 
 import java.util.Collections;
 
-import com.elikill58.negativity.api.ChatColor;
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
+import com.elikill58.negativity.api.colors.DyeColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
@@ -20,7 +21,6 @@ import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
-import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class CheckMenuInventory extends AbstractInventory {
@@ -69,10 +69,7 @@ public class CheckMenuInventory extends AbstractInventory {
 	public void actualizeInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
 		Inventory inv = args.length > 1 ? (Inventory) args[1] : p.getOpenInventory();
-		if(inv == null || !inv.getType().equals(InventoryType.CHEST)) {
-			p.sendMessage("Actualize: " + inv + (inv != null ? " Type: " + inv.getType().name() : ""));
-			return;
-		}
+		if(inv == null || !inv.getType().equals(InventoryType.CHEST)) return;
 		NegativityPlayer np = NegativityPlayer.getCached(cible.getUniqueId());
 		int betterClick = np.getAccount().getMostClicksPerSecond();
 		try {
@@ -89,11 +86,11 @@ public class CheckMenuInventory extends AbstractInventory {
 	}
 	
 	private static ItemStack getClickItem(String name, int clicks) {
-		if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+		if(Materials.LIME_STAINED_CLAY.getId().contains("lime")) {
 			return ItemBuilder.Builder(getMaterialFromClick(clicks)).displayName(name).build();
 		} else {
 			// we can use all *_STAINED_CLAY because they will be default STAINED_CLAY
-			return ItemBuilder.Builder(Materials.LIME_STAINED_CLAY).displayName(name).durability(getByteFromClick(clicks)).build();
+			return ItemBuilder.Builder(Materials.LIME_STAINED_CLAY).displayName(name).color(getColorFromClick(clicks)).build();
 		}
 	}
 
@@ -106,20 +103,20 @@ public class CheckMenuInventory extends AbstractInventory {
 			return Materials.LIME_STAINED_CLAY;
 	}
 
-	private static byte getByteFromClick(int click) {
+	private static DyeColor getColorFromClick(int click) {
 		if (click > 25)
-			return 14;
+			return DyeColor.RED;
 		else if (click < 25 && click > 15)
-			return 4;
+			return DyeColor.YELLOW;
 		else
-			return 5;
+			return DyeColor.LIME;
 	}
 	
 	private static ItemStack getWoolItem(Player player, boolean b) {
 		Material type = (b ? Materials.RED_WOOL : Materials.LIME_WOOL);
 		ItemBuilder builder = ItemBuilder.Builder(type);
-		if(type.getId().equals("WOOL"))
-			builder.durability((short) (b ? 14 : 5));
+		if(!type.getId().contains("_"))
+			builder.color(b ? DyeColor.RED : DyeColor.LIME);
 		builder.displayName(Messages.getMessage(player, "inventory.main.mcleaks_indicator." + (b ? "positive" : "negative")));
 		builder.lore(Collections.singletonList(Messages.getMessage(player, "inventory.main.mcleaks_indicator.description")));
 		return builder.build();

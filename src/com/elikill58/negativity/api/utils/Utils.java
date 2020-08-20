@@ -3,7 +3,7 @@ package com.elikill58.negativity.api.utils;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.elikill58.negativity.api.ChatColor;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.item.Enchantment;

@@ -1,4 +1,4 @@
-package com.elikill58.negativity.api;
+package com.elikill58.negativity.api.colors;
 
 public enum ChatColor {
 

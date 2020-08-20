@@ -10,7 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import com.elikill58.negativity.api.ChatColor;
+import com.elikill58.negativity.api.colors.ChatColor;
+import com.elikill58.negativity.api.colors.DyeColor;
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
@@ -60,11 +61,11 @@ public class SpigotItemBuilder extends ItemBuilder {
     
 	@SuppressWarnings("deprecation")
     @Override
-	public ItemBuilder durability(short durability) {
-		itemStack.setDurability(durability);
+	public ItemBuilder color(DyeColor color) {
+		itemStack.setDurability(color.getWool());
 		if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
 			ItemMeta meta = itemStack.getItemMeta();
-			((Damageable) meta).setDamage(durability);
+			((Damageable) meta).setDamage(color.getWool());
 			itemStack.setItemMeta(meta);
 		}
         return this;

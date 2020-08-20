@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
 
-import com.elikill58.negativity.api.ChatColor;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.negativity.PlayerCheatAlertEvent;

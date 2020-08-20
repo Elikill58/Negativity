@@ -1,8 +1,8 @@
 package com.elikill58.negativity.common.protocols;
 
-import com.elikill58.negativity.api.ChatColor;
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;

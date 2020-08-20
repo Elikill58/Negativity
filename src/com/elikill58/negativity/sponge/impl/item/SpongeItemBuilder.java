@@ -6,12 +6,14 @@ import java.util.List;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.type.DyeColor;
+import org.spongepowered.api.data.type.DyeColors;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
-import com.elikill58.negativity.api.ChatColor;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
@@ -56,9 +58,25 @@ public class SpongeItemBuilder extends ItemBuilder {
 	}
 
 	@Override
-	public ItemBuilder durability(short durability) {
-		// TODO implement durability
+	public ItemBuilder color(com.elikill58.negativity.api.colors.DyeColor color) {
+		item.offer(Keys.DYE_COLOR, getColor(color));
 		return this;
+	}
+	
+	private DyeColor getColor(com.elikill58.negativity.api.colors.DyeColor color) {
+		switch (color) {
+		case GRAY:
+			return DyeColors.GRAY;
+		case LIME:
+			return DyeColors.LIME;
+		case RED:
+			return DyeColors.RED;
+		case WHITE:
+			return DyeColors.WHITE;
+		case YELLOW:
+			return DyeColors.YELLOW;
+		}
+		return DyeColors.BROWN;
 	}
 
 	@Override

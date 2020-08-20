@@ -19,10 +19,10 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 	@Override
 	public Material get(String id, String... alias) {
 		return cache.computeIfAbsent(id, key -> {
-			Optional<ItemType> optId = Sponge.getRegistry().getType(ItemType.class, id);
+			Optional<ItemType> optId = Sponge.getRegistry().getType(ItemType.class, parse(id));
 			if(optId.isPresent())
 				return new SpongeMaterial(optId.get());
-			Optional<BlockType> optBlock = Sponge.getRegistry().getType(BlockType.class, id);
+			Optional<BlockType> optBlock = Sponge.getRegistry().getType(BlockType.class, parse(id));
 			if(optBlock.isPresent() && optBlock.get().getItem().isPresent())
 				return new SpongeMaterial(optBlock.get().getItem().get());
 			for(String tempID : alias) {
@@ -41,10 +41,10 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 		StringJoiner sj = new StringJoiner("");
 		for(String ch : base.split("")) {
 			if(ch.equals("["))
-				return sj.toString().replaceAll("minecraft:", "");
+				return sj.toString();
 			else
 				sj.add(ch);
 		}
-		return sj.toString().replaceAll("minecraft:", "");
+		return sj.toString();
 	}
 }

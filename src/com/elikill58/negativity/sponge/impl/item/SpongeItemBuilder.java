@@ -11,6 +11,7 @@ import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
+import com.elikill58.negativity.api.ChatColor;
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
@@ -26,7 +27,7 @@ public class SpongeItemBuilder extends ItemBuilder {
 
 	@Override
 	public ItemBuilder displayName(String displayName) {
-		item.offer(Keys.DISPLAY_NAME, TextSerializers.FORMATTING_CODE.deserialize(displayName));
+		item.offer(Keys.DISPLAY_NAME, Text.of(ChatColor.RESET + displayName));
 		return this;
 	}
 

@@ -95,7 +95,13 @@ public class PlayersEvents implements Listener {
 			}
 		} else {
 			int maxAllowedIP = Adapter.getAdapter().getConfig().getInt("cheats.special.max-player-by-ip.number");
-			int currentOnIP = SpigotNegativityPlayer.getAllPlayers().values().stream().filter((np) -> np.getPlayer().isOnline() && np.getIP().equals(e.getAddress().getHostAddress())).collect(Collectors.toList()).size();
+			int currentOnIP = SpigotNegativityPlayer.getAllPlayers().values().stream().filter((np) -> {
+				try {
+					return np.getPlayer().isOnline() && np.getIP().equals(e.getAddress().getHostAddress());
+				} catch (NullPointerException exc) {
+					return false;
+				}
+			}).collect(Collectors.toList()).size();
 			if(currentOnIP >= maxAllowedIP) {
 				e.setKickMessage(Messages.getMessage(account, "kick.kicked", "%name%", "Negativity", "%reason%", Adapter.getAdapter().getConfig().getString("cheats.special.max-player-by-ip.name")));
 				e.setLoginResult(Result.KICK_BANNED);

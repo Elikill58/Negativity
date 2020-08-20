@@ -27,7 +27,7 @@ public class InventoryListeners {
 	
 	@Listener
 	public void onInvClick(ClickInventoryEvent e, @First Player p) {
-		if(e.getTargetInventory() == null)
+		if(e.getTargetInventory() == null || e.getTransactions().size() == 0)
 			return;
 		InventoryAction action = getAction(e);
 		ItemStack item = new SpongeItemStack(e.getTransactions().get(0).getOriginal().createStack());

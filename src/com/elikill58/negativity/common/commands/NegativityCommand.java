@@ -20,11 +20,11 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.utils.Utils;
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -37,7 +37,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 	public boolean onCommand(CommandSender sender, String[] arg, String prefix) {
 		if (arg.length == 0 || arg[0].equalsIgnoreCase("help")) {
 			Messages.sendMessageList(sender, "negativity.verif.help");
-			ConfigAdapter conf = Adapter.getAdapter().getConfig();
+			Configuration conf = Adapter.getAdapter().getConfig();
 			if(conf.getBoolean("commands.report"))
 				Messages.sendMessage(sender, "report.report_usage");
 			if(conf.getBoolean("commands.ban"))

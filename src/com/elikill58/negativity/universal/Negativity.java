@@ -21,6 +21,7 @@ import com.elikill58.negativity.api.events.negativity.PlayerCheatKickEvent;
 import com.elikill58.negativity.api.events.negativity.ShowAlertPermissionEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -33,7 +34,6 @@ import com.elikill58.negativity.universal.ban.support.MaxBansProcessor;
 import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.bypass.ItemUseBypass;
 import com.elikill58.negativity.universal.bypass.ItemUseBypass.WhenBypass;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
@@ -142,7 +142,7 @@ public class Negativity {
 	}
 
 	private static void manageAlertCommand(ReportType type, Player p, Cheat c, int reliability) {
-		ConfigAdapter conf = Adapter.getAdapter().getConfig();
+		Configuration conf = Adapter.getAdapter().getConfig();
 		if(!conf.getBoolean("alert.command.active") || conf.getInt("alert.command.reliability_need") > reliability)
 			return;
 		for(String s : conf.getStringList("alert.command.run")) {
@@ -243,7 +243,7 @@ public class Negativity {
 		BypassManager.loadBypass();
 		UniversalUtils.init();
 		
-		ConfigAdapter config = ada.getConfig();
+		Configuration config = ada.getConfig();
 		log = config.getBoolean("log_alerts");
 		log_console = config.getBoolean("log_alerts_in_console");
 		hasBypass = config.getBoolean("Permissions.bypass.active");

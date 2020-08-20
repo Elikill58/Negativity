@@ -5,10 +5,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.support.WorldGuardSupport;
 
 public class WorldRegionBypass {
@@ -17,13 +17,13 @@ public class WorldRegionBypass {
 	private static final boolean IS_ENABLED;
 	
 	static {
-		ConfigAdapter section = Adapter.getAdapter().getConfig().getChild("region-bypass");//.getConfigurationSection("region-bypass");
+		Configuration section = Adapter.getAdapter().getConfig().getSection("region-bypass");//.getConfigurationSection("region-bypass");
 		if(section != null) {
 			IS_ENABLED = section.getBoolean("enabled");
 			for(String keys : section.getKeys()) {
 				if(keys.equalsIgnoreCase("enabled"))
 					continue;
-				new WorldRegionBypass(section.getChild(keys));
+				new WorldRegionBypass(section.getSection(keys));
 			}
 		} else
 			IS_ENABLED = false;
@@ -47,7 +47,7 @@ public class WorldRegionBypass {
 	private final List<Cheat> cheats = new ArrayList<>();
 	private final List<String> regions, worlds;
 	
-	public WorldRegionBypass(ConfigAdapter section) {
+	public WorldRegionBypass(Configuration section) {
 		for(String possibleCheats : section.getStringList("cheats")) {
 			Cheat cheat = Cheat.fromString(possibleCheats);
 			if(cheat == null)

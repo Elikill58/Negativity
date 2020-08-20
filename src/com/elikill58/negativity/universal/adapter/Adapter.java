@@ -21,11 +21,11 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.ReportType;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 
@@ -49,7 +49,7 @@ public abstract class Adapter {
 	}
 
 	public abstract String getName();
-	public abstract ConfigAdapter getConfig();
+	public abstract Configuration getConfig();
 	public abstract File getDataFolder();
 
 	/**

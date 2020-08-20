@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal.utils;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -8,10 +9,17 @@ import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.FileSystem;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
@@ -19,6 +27,7 @@ import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
@@ -36,6 +45,8 @@ import javax.net.ssl.X509TrustManager;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -348,6 +359,28 @@ public class UniversalUtils {
 	
 	public static void init() {
 		getContentFromURL("https://google.fr");
+	}
+	
+	public static Configuration loadConfig(File configFile, String configName) {
+		if(!configFile.exists()) {
+			try {
+				URI migrationsDirUri = UniversalUtils.class.getResource("/").toURI();
+				if (migrationsDirUri.getScheme().equals("jar")) {
+					try (FileSystem jarFs = FileSystems.newFileSystem(migrationsDirUri, Collections.emptyMap())) {
+						Path cheatPath = jarFs.getPath("/" + configName);
+						if(Files.isRegularFile(cheatPath)) {
+							Files.copy(cheatPath, Paths.get(configFile.toURI()));
+						} else {
+							Adapter.getAdapter().getLogger().error("Cannot load config.");
+							return null;
+						}
+					}
+				}
+			} catch (URISyntaxException | IOException e) {
+				e.printStackTrace();
+			}
+		}
+		return YamlConfiguration.load(configFile);
 	}
 
 	public static OS os = null;

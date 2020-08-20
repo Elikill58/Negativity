@@ -7,9 +7,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 
 public class VerificationManager {
@@ -24,7 +24,7 @@ public class VerificationManager {
 	public static boolean disableAlertOnVerif = false;
 
 	public static void init() {
-		ConfigAdapter config = Adapter.getAdapter().getConfig();
+		Configuration config = Adapter.getAdapter().getConfig();
 		timeVerif = config.getInt("verif.time");
 		disableAlertOnVerif = config.getBoolean("verif.disable_alert_on_verif");
 		VerificationStorage.init();

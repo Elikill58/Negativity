@@ -1,9 +1,7 @@
 package com.elikill58.negativity.velocity;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
 
 import org.slf4j.Logger;
 
@@ -13,7 +11,6 @@ import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.VelocityAdapter;
-import com.elikill58.negativity.universal.config.MD5ConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.google.inject.Inject;
@@ -60,15 +57,8 @@ public class VelocityNegativity {
 	    server.getEventManager().register(this, new VelocityListeners());
 	    server.getChannelRegistrar().register(NEGATIVITY_CHANNEL_ID);
 	    server.getCommandManager().register(new VNegativityCommand(), "vnegativity");
-
-		MD5ConfigAdapter.ByProvider config = new MD5ConfigAdapter.ByProvider(getDataFolder().toPath().resolve("config.yml"),
-				() -> getResourceAsStream("bungee_config.yml"));
-		try {
-			config.load();
-		} catch (IOException e) {
-			throw new UncheckedIOException("Could not load configuration", e);
-		}
-		Adapter.setAdapter(new VelocityAdapter(this, config));
+	    
+		Adapter.setAdapter(new VelocityAdapter(this));
 		Negativity.loadNegativity();
 
 		NegativityAccountStorage.setDefaultStorage("database");

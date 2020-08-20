@@ -1,8 +1,6 @@
 package com.elikill58.negativity.bungee;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.UncheckedIOException;
 import java.util.LinkedHashMap;
 
 import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
@@ -12,7 +10,6 @@ import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.BungeeAdapter;
-import com.elikill58.negativity.universal.config.MD5ConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 
@@ -37,15 +34,8 @@ public class BungeeNegativity extends Plugin {
 		pluginManager.registerListener(this, new BungeeListeners());
 		pluginManager.registerCommand(this, new BNegativityCommand());
 		pluginManager.registerListener(this, new BNegativityCommand.TabCompleter());
-
-		MD5ConfigAdapter.ByProvider config = new MD5ConfigAdapter.ByProvider(getDataFolder().toPath().resolve("config.yml"),
-				() -> getResourceAsStream("bungee_config.yml"));
-		try {
-			config.load();
-		} catch (IOException e) {
-			throw new UncheckedIOException("Could not load configuration", e);
-		}
-		Adapter.setAdapter(new BungeeAdapter(this, config));
+		
+		Adapter.setAdapter(new BungeeAdapter(this));
 		Negativity.loadNegativity();
 
 		NegativityAccountStorage.setDefaultStorage("database");

@@ -14,12 +14,12 @@ import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.common.inventories.holders.AlertHolder;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class AlertInventory extends AbstractInventory {
@@ -41,7 +41,7 @@ public class AlertInventory extends AbstractInventory {
 		for (Cheat c : Cheat.values()) {
 			if (!c.isActive())
 				continue;
-			ConfigAdapter config = Adapter.getAdapter().getConfig();
+			Configuration config = Adapter.getAdapter().getConfig();
 			boolean isActive = np.hasDetectionActive(c);
 			if ((config.getBoolean("inventory.alerts.only_cheat_active") && isActive)
 					|| (!isActive && config.getBoolean("inventory.alerts.no_started_verif_cheat")))
@@ -73,7 +73,7 @@ public class AlertInventory extends AbstractInventory {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
 		for (Cheat c : Cheat.values()) {
-			ConfigAdapter config = Adapter.getAdapter().getConfig();
+			Configuration config = Adapter.getAdapter().getConfig();
 			boolean isActive = np.hasDetectionActive(c);
 			if ((config.getBoolean("inventory.alerts.only_cheat_active") && isActive)
 					|| (!isActive && config.getBoolean("inventory.alerts.no_started_verif_cheat")))

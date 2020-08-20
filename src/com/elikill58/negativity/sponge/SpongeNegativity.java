@@ -46,8 +46,12 @@ import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.timers.ActualizeInvTimer;
 import com.elikill58.negativity.api.timers.AnalyzePacketTimer;
+import com.elikill58.negativity.api.timers.ClickManagerTimer;
 import com.elikill58.negativity.api.timers.PendingAlertsTimer;
+import com.elikill58.negativity.api.timers.SpawnFakePlayerTimer;
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.sponge.commands.BanCommand;
 import com.elikill58.negativity.sponge.commands.KickCommand;
 import com.elikill58.negativity.sponge.commands.LangCommand;
@@ -81,8 +85,6 @@ import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
 import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
 import com.elikill58.negativity.universal.bypass.ItemUseBypass;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
-import com.elikill58.negativity.universal.config.SpongeConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.dataStorage.file.SpongeFileNegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -93,8 +95,6 @@ import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
-
-import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
 @Plugin(id = "negativity", name = "Negativity", version = "1.9.2", description = "It's an Advanced AntiCheat Detection", authors = { "Elikill58", "RedNesto" }, dependencies = {
 		@Dependency(id = "packetgate") })
@@ -109,8 +109,6 @@ public class SpongeNegativity {
 	@Inject
 	@ConfigDir(sharedRoot = false)
 	private Path configDir;
-	private Path configFile;
-	private ConfigAdapter config;
 	private NegativityPacketManager packetManager;
 	public static RawDataChannel channel = null, fmlChannel = null;
 
@@ -126,19 +124,7 @@ public class SpongeNegativity {
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
 		INSTANCE = this;
-		configFile = configDir.resolve("config.conf");
-
-		HoconConfigurationLoader configLoader = HoconConfigurationLoader.builder().setPath(configFile).build();
-		this.config = new SpongeConfigAdapter.ByLoader(logger, configLoader, configFile,
-				() -> Sponge.getAssetManager().getAsset(this, "config.conf")
-						.orElseThrow(() -> new IllegalStateException("Could not get default configuration file"))
-						.getUrl().openStream());
-		try {
-			this.config.load();
-		} catch (IOException e) {
-			logger.error("Failed to load configuration", e);
-		}
-		Adapter.setAdapter(new SpongeAdapter(this, config));
+		Adapter.setAdapter(new SpongeAdapter(this));
 		Negativity.loadNegativity();
 		loadConfig();
 		EventManager eventManager = Sponge.getEventManager();
@@ -150,13 +136,15 @@ public class SpongeNegativity {
 		eventManager.registerListeners(this, new EntityListeners());
 		eventManager.registerListeners(this, new InventoryListeners());
 		eventManager.registerListeners(this, new PlayersListeners());
-		
+
+		Task.builder().execute(new ClickManagerTimer()).delayTicks(20).interval(1, TimeUnit.SECONDS);
+		Task.builder().execute(new ActualizeInvTimer()).delayTicks(5).interval(0, TimeUnit.MILLISECONDS);
+		Task.builder().execute(new SpawnFakePlayerTimer()).delayTicks(20).interval(60 * 10, TimeUnit.SECONDS);
 		Task.builder().execute(new AnalyzePacketTimer()).delayTicks(0).interval(1, TimeUnit.SECONDS)
 				.name("negativity-packets").submit(this);
 		if(timeBetweenAlert != -1) // is == -1, don't need timer
 			Task.builder().execute(new PendingAlertsTimer()).interval(timeBetweenAlert, TimeUnit.MILLISECONDS)
 					.name("negativity-pending-alerts").submit(this);
-		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 
 		NegativityAccountStorage.register("file", new SpongeFileNegativityAccountStorage(configDir.resolve("user")));
 		NegativityAccountStorage.setDefaultStorage("file");
@@ -181,6 +169,8 @@ public class SpongeNegativity {
 					}
 				}
 			}).submit(this);
+		
+		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 	}
 
 	@Listener
@@ -247,7 +237,7 @@ public class SpongeNegativity {
 	}
 
 	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {
-		reloadCommand(configKey, config.getChild("commands").getBoolean(configKey), manager, command, aliases);
+		reloadCommand(configKey, Adapter.getAdapter().getConfig().getBoolean("commands." + configKey), manager, command, aliases);
 	}
 
 	private void reloadCommand(String mappingKey, boolean enabled, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {
@@ -320,14 +310,14 @@ public class SpongeNegativity {
 	}
 
 	public void loadConfig() {
-		timeBetweenAlert = config.getInt("time_between_alert");
+		timeBetweenAlert = Adapter.getAdapter().getConfig().getInt("time_between_alert");
 	}
 
 	public void loadItemBypasses() {
 		ItemUseBypass.ITEM_BYPASS.clear();
-		ConfigAdapter allItemsConfig = config.getChild("items");
+		Configuration allItemsConfig = Adapter.getAdapter().getConfig().getSection("items");
 		for (String key : allItemsConfig.getKeys()) {
-			ConfigAdapter itemConfig = allItemsConfig.getChild(key);
+			Configuration itemConfig = allItemsConfig.getSection(key);
 			new ItemUseBypass(key, itemConfig.getString("cheats"), itemConfig.getString("when"));
 		}
 	}

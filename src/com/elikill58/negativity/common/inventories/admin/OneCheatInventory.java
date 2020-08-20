@@ -1,7 +1,5 @@
 package com.elikill58.negativity.common.inventories.admin;
 
-import java.io.IOException;
-
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
@@ -66,12 +64,8 @@ public class OneCheatInventory extends AbstractInventory {
 			c.setActive(!c.isActive());
 		else if(m.equals(Materials.APPLE))
 			c.setVerif(!c.hasVerif());
-
-		try {
-			Adapter.getAdapter().getConfig().save();
-		} catch (IOException ioException) {
-			ioException.printStackTrace();
-		}
+		
+		Adapter.getAdapter().getConfig().save();
 		actualizeInventory(p, c, inv);
 		p.updateInventory();
 	}

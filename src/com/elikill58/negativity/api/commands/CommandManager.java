@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.others.CommandExecutionEvent;
 import com.elikill58.negativity.api.events.others.TabExecutionEvent;
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.common.commands.BanCommand;
 import com.elikill58.negativity.common.commands.KickCommand;
 import com.elikill58.negativity.common.commands.LangCommand;
@@ -14,7 +15,6 @@ import com.elikill58.negativity.common.commands.NegativityCommand;
 import com.elikill58.negativity.common.commands.ReportCommand;
 import com.elikill58.negativity.common.commands.UnbanCommand;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 
 public class CommandManager implements Listeners {
 
@@ -26,7 +26,7 @@ public class CommandManager implements Listeners {
 		commands.put("negativity", negativity);
 		tabs.put("negativity", negativity);
 		
-		ConfigAdapter conf = Adapter.getAdapter().getConfig();
+		Configuration conf = Adapter.getAdapter().getConfig();
 		if(conf.getBoolean("commands.ban")) {
 			BanCommand ban = new BanCommand();
 			commands.put("nban", ban);

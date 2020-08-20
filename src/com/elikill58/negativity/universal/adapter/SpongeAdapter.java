@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
-import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +27,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge.impl.inventory.SpongeInventory;
@@ -40,7 +40,6 @@ import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.logger.Slf4jLoggerAdapter;
 import com.elikill58.negativity.universal.translation.NegativityTranslationProviderFactory;
@@ -54,15 +53,15 @@ public class SpongeAdapter extends Adapter {
 
 	private final LoggerAdapter logger;
 	private final SpongeNegativity plugin;
-	private final ConfigAdapter config;
+	private final Configuration config;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpongeNegativity::sendPluginMessage);
 	private final TranslationProviderFactory translationProviderFactory;
 	private final SpongeItemRegistrar itemRegistrar;
 
-	public SpongeAdapter(SpongeNegativity sn, ConfigAdapter config) {
+	public SpongeAdapter(SpongeNegativity sn) {
 		this.plugin = sn;
 		this.logger = new Slf4jLoggerAdapter(sn.getLogger());
-		this.config = config;
+		this.config = UniversalUtils.loadConfig(new File(getDataFolder(), "config.yml"), "config.yml");
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("messages"), "Negativity", "CheatHover");
 		this.itemRegistrar = new SpongeItemRegistrar();
 	}
@@ -73,7 +72,7 @@ public class SpongeAdapter extends Adapter {
 	}
 
 	@Override
-	public ConfigAdapter getConfig() {
+	public Configuration getConfig() {
 		return config;
 	}
 
@@ -114,12 +113,6 @@ public class SpongeAdapter extends Adapter {
 
 	@Override
 	public void reloadConfig() {
-		try {
-			this.config.load();
-		} catch (IOException e) {
-			throw new UncheckedIOException("Failed to reload configuration", e);
-		}
-		plugin.loadConfig();
 		plugin.loadItemBypasses();
 	}
 

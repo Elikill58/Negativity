@@ -1,9 +1,7 @@
 package com.elikill58.negativity.universal.adapter;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.UncheckedIOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -28,6 +26,7 @@ import com.elikill58.negativity.api.json.parser.ParseException;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.spigot.ClickableText;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotOfflinePlayer;
@@ -40,13 +39,11 @@ import com.elikill58.negativity.spigot.impl.plugin.SpigotExternalPlugin;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.NegativityAccountManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
-import com.elikill58.negativity.universal.config.BukkitConfigAdapter;
-import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.logger.JavaLoggerAdapter;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.translation.NegativityTranslationProviderFactory;
@@ -56,7 +53,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class SpigotAdapter extends Adapter {
 
 	private JavaPlugin pl;
-	private final ConfigAdapter config;
+	private final Configuration config;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpigotNegativity::sendPluginMessage);
 	private final TranslationProviderFactory translationProviderFactory;
 	private final LoggerAdapter logger;
@@ -64,7 +61,7 @@ public class SpigotAdapter extends Adapter {
 
 	public SpigotAdapter(JavaPlugin pl) {
 		this.pl = pl;
-		this.config = new BukkitConfigAdapter.PluginConfig(pl);
+		this.config = UniversalUtils.loadConfig(new File(pl.getDataFolder(), "config.yml"), "config.yml");
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(
 				pl.getDataFolder().toPath().resolve("lang"), "Negativity", "CheatHover");
 		this.logger = new JavaLoggerAdapter(pl.getLogger());
@@ -77,7 +74,7 @@ public class SpigotAdapter extends Adapter {
 	}
 
 	@Override
-	public ConfigAdapter getConfig() {
+	public Configuration getConfig() {
 		return config;
 	}
 
@@ -116,11 +113,7 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public void reloadConfig() {
-		try {
-			getConfig().load();
-		} catch (IOException e) {
-			throw new UncheckedIOException("Failed to reload configuration", e);
-		}
+		
 	}
 
 	@Override

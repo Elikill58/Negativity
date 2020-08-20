@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.api.colors.DyeColor;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public abstract class ItemBuilder {
@@ -31,5 +32,9 @@ public abstract class ItemBuilder {
 	
 	public static ItemBuilder Builder(Material type) {
 		return Adapter.getAdapter().createItemBuilder(type);
+	}
+	
+	public static ItemBuilder Builder(Player owner) {
+		return Adapter.getAdapter().createSkullItemBuilder(owner);
 	}
 }

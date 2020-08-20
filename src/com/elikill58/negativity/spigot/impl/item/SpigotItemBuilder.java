@@ -9,12 +9,15 @@ import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.colors.DyeColor;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Version;
 
@@ -28,7 +31,15 @@ public class SpigotItemBuilder extends ItemBuilder {
     	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
     }
 
-    @Override
+    @SuppressWarnings("deprecation")
+	public SpigotItemBuilder(Player owner) {
+    	this.itemStack = new ItemStack((org.bukkit.Material) Materials.PLAYER_HEAD.getDefault());
+    	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
+    	SkullMeta skullmeta = (SkullMeta) itemMeta;
+		skullmeta.setOwner(owner.getName());
+	}
+
+	@Override
     public ItemBuilder displayName(@Nullable String displayName) {
         this.itemMeta.setDisplayName(ChatColor.RESET + Utils.coloredMessage(displayName));
         return this;

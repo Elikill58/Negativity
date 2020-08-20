@@ -193,6 +193,12 @@ public class VelocityAdapter extends Adapter {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public ItemBuilder createSkullItemBuilder(Player owner) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public Player getPlayer(String name) {

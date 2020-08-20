@@ -6,7 +6,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.Version;
 
 public class Inv {
 
@@ -17,7 +16,7 @@ public class Inv {
 
 	static {
 		ItemBuilder builder = ItemBuilder.Builder(Materials.GRAY_STAINED_GLASS_PANE);
-		if (!Version.isNewerOrEquals(Version.getVersion(), Version.V1_13)) {
+		if (Materials.GRAY_STAINED_GLASS_PANE.getId().contains("gray")) {
 			builder.color(DyeColor.GRAY);
 		}
 		builder.displayName(ChatColor.RESET.toString() + " - ");

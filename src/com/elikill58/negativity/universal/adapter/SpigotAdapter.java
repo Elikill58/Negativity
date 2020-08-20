@@ -165,7 +165,7 @@ public class SpigotAdapter extends Adapter {
 	public List<Player> getOnlinePlayers() {
 		List<Player> list = new ArrayList<>();
 		for (org.bukkit.entity.Player temp : Utils.getOnlinePlayers())
-			list.add(NegativityPlayer.getCached(temp.getUniqueId()).getPlayer());
+			list.add(NegativityPlayer.getNegativityPlayer(temp.getUniqueId(), () -> new SpigotPlayer(temp)).getPlayer());
 		return list;
 	}
 
@@ -220,6 +220,11 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
 		return new SpigotItemBuilder(type);
+	}
+	
+	@Override
+	public ItemBuilder createSkullItemBuilder(Player owner) {
+		return new SpigotItemBuilder(owner);
 	}
 
 	@Override

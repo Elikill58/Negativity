@@ -1,8 +1,6 @@
 package com.elikill58.negativity.api.inventory;
 
 import java.util.Optional;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
@@ -49,9 +47,9 @@ public class InventoryManager implements Listeners {
 				Player p = e.getPlayer();
 				Material m = e.getCurrentItem().getType();
 				if (m.equals(Materials.BARRIER)) {
-					delayedInvClose(p);
+					p.closeInventory();
 				} else {
-					delayed(() -> inv.manageInventory(e, m, p, (NegativityHolder) nh));
+					inv.manageInventory(e, m, p, (NegativityHolder) nh);
 				}
 				return;
 			}
@@ -67,18 +65,5 @@ public class InventoryManager implements Listeners {
 	
 	public static void open(NegativityInventory type, Player p, Object... args) {
 		getInventory(type).ifPresent((inv) -> inv.openInventory(p, args));
-	}
-
-	protected static void delayedInvClose(Player player) {
-		delayed(player::closeInventory);
-	}
-
-	protected static void delayed(Runnable action) {
-		new Timer().schedule(new TimerTask() {
-			@Override
-			public void run() {
-				action.run();
-			}
-		}, 1);
 	}
 }

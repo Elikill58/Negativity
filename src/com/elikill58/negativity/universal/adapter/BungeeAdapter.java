@@ -192,6 +192,12 @@ public class BungeeAdapter extends Adapter {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	
+	@Override
+	public ItemBuilder createSkullItemBuilder(Player owner) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {

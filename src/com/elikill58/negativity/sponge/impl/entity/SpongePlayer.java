@@ -17,6 +17,7 @@ import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.item.inventory.InventoryArchetypes;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.api.GameMode;
@@ -322,7 +323,7 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public void closeInventory() {
-		p.closeInventory();
+		Task.builder().execute(() -> p.closeInventory()).submit(SpongeNegativity.getInstance());
 	}
 
 	@Override

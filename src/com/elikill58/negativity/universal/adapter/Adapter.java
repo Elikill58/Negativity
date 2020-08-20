@@ -111,6 +111,7 @@ public abstract class Adapter {
 	
 	public abstract ItemRegistrar getItemRegistrar();
 	public abstract ItemBuilder createItemBuilder(Material type);
+	public abstract ItemBuilder createSkullItemBuilder(Player owner);
 
 	public abstract Location createLocation(World w, double x, double y, double z);
 	public abstract Inventory createInventory(String inventoryName, int size, NegativityHolder holder);

@@ -202,6 +202,11 @@ public class SpongeAdapter extends Adapter {
 	public ItemBuilder createItemBuilder(Material type) {
 		return new SpongeItemBuilder(type);
 	}
+	
+	@Override
+	public ItemBuilder createSkullItemBuilder(Player owner) {
+		return new SpongeItemBuilder(owner);
+	}
 
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {

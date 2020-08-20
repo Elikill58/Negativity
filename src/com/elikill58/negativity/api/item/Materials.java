@@ -57,6 +57,7 @@ public class Materials {
     public static final Material PAPER = ItemRegistrar.getInstance().get("paper");
     public static final Material PACKED_ICE = ItemRegistrar.getInstance().get("packed_ice");
     public static final Material POTION = ItemRegistrar.getInstance().get("potion");
+    public static final Material PLAYER_HEAD = ItemRegistrar.getInstance().get("player_head", "skull_item", "skull");
     public static final Material PUMPKIN_PIE = ItemRegistrar.getInstance().get("pumpkin_pie");
     
     public static final Material REDSTONE = ItemRegistrar.getInstance().get("redstone");

@@ -46,7 +46,7 @@ public class BungeeAdapter extends Adapter {
 
 	public BungeeAdapter(Plugin pl) {
 		this.pl = pl;
-		this.config = UniversalUtils.loadConfig(new File(pl.getDataFolder(), "config.yml"), "bungee_config.yml");
+		this.config = UniversalUtils.loadConfig(new File(pl.getDataFolder(), "config.yml"), "config_bungee.yml");
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(pl.getDataFolder().toPath().resolve("lang"), "NegativityProxy", "CheatHover");
 		this.logger = new JavaLoggerAdapter(pl.getLogger());
 	}

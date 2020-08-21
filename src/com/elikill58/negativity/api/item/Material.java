@@ -9,5 +9,14 @@ public abstract class Material extends NegativityObject {
 	public abstract boolean isTransparent();
 	
 	public abstract String getId();
-	
+
+	@Override
+	public boolean equals(Object obj) {
+		if(obj == null || !(obj instanceof Material))
+			return false;
+		Material to = (Material) obj;
+		if(this.getId().equals(to.getId()) && this.isSolid() == to.isSolid() && this.isTransparent() == to.isTransparent())
+			return true;
+		return false;
+	}
 }

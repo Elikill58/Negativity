@@ -33,7 +33,7 @@ public class SpigotItemBuilder extends ItemBuilder {
 
     @SuppressWarnings("deprecation")
 	public SpigotItemBuilder(Player owner) {
-    	this.itemStack = new ItemStack((org.bukkit.Material) Materials.PLAYER_HEAD.getDefault());
+    	this.itemStack = new ItemStack((org.bukkit.Material) Materials.PLAYER_HEAD.getDefault(), 1, (byte) 3);
     	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
     	SkullMeta skullmeta = (SkullMeta) itemMeta;
 		skullmeta.setOwner(owner.getName());

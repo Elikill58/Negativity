@@ -16,7 +16,7 @@ public class Materials {
     public static final Material BONE = ItemRegistrar.getInstance().get("bone");
     public static final Material BOW = ItemRegistrar.getInstance().get("bow");
     public static final Material BRICK_STAIRS = ItemRegistrar.getInstance().get("brick_stairs");
-    public static final Material BIRCH_WOOD_STAIRS = ItemRegistrar.getInstance().get("birch_stairs");
+    public static final Material BIRCH_WOOD_STAIRS = ItemRegistrar.getInstance().get("birch_stairs", "stairs");
     
     public static final Material CHEST = ItemRegistrar.getInstance().get("chest");
     public static final Material COAL_BLOCK = ItemRegistrar.getInstance().get("coal_block");
@@ -76,9 +76,9 @@ public class Materials {
     // GLASS_PANE
     public static final Material GRAY_STAINED_GLASS_PANE = ItemRegistrar.getInstance().get("gray_stained_glass_pane", "stained_glass_pane");
     // CLAY
-    public static final Material LIME_STAINED_CLAY = ItemRegistrar.getInstance().get("lime_stained_clay", "lime_terracotta", "stained_hardened_clay");
-    public static final Material ORANGE_STAINED_CLAY = ItemRegistrar.getInstance().get("orange_stained_clay", "orange_terracotta", "stained_hardened_clay");
-    public static final Material RED_STAINED_CLAY = ItemRegistrar.getInstance().get("red_stained_clay", "red_terracotta", "stained_hardened_clay");
+    public static final Material LIME_STAINED_CLAY = ItemRegistrar.getInstance().get("lime_stained_clay", "lime_terracotta", "stained_hardened_clay", "stained_clay");
+    public static final Material ORANGE_STAINED_CLAY = ItemRegistrar.getInstance().get("orange_stained_clay", "orange_terracotta", "stained_hardened_clay", "stained_clay");
+    public static final Material RED_STAINED_CLAY = ItemRegistrar.getInstance().get("red_stained_clay", "red_terracotta", "stained_hardened_clay", "stained_clay");
     
     /* END OF STAINED MATERIALS */
     

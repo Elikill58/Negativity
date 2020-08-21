@@ -30,14 +30,4 @@ public class SpigotMaterial extends Material {
 	public Object getDefault() {
 		return type;
 	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if(!(obj instanceof Material))
-			return false;
-		Material to = (Material) obj;
-		if(this.getId().equals(to.getId()) && this.isSolid() == to.isSolid() && this.isTransparent() == to.isTransparent())
-			return true;
-		return false;
-	}
 }

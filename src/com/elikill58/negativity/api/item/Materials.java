@@ -7,7 +7,7 @@ public class Materials {
     public static final Material APPLE = ItemRegistrar.getInstance().get("apple");
     public static final Material ARROW = ItemRegistrar.getInstance().get("arrow");
     
-    public static final Material BARRIER = ItemRegistrar.getInstance().get("barrier", "redstone");
+    public static final Material BARRIER = ItemRegistrar.getInstance().get("barrier", "redstone"); // redstone for 1.7
     public static final Material BEDROCK = ItemRegistrar.getInstance().get("bedrock");
     public static final Material BEACON = ItemRegistrar.getInstance().get("beacon");
     public static final Material BLAZE_POWDER = ItemRegistrar.getInstance().get("blaze_powder");
@@ -16,7 +16,6 @@ public class Materials {
     public static final Material BONE = ItemRegistrar.getInstance().get("bone");
     public static final Material BOW = ItemRegistrar.getInstance().get("bow");
     public static final Material BRICK_STAIRS = ItemRegistrar.getInstance().get("brick_stairs");
-    public static final Material BIRCH_WOOD_STAIRS = ItemRegistrar.getInstance().get("birch_stairs", "stairs");
     
     public static final Material CHEST = ItemRegistrar.getInstance().get("chest");
     public static final Material COAL_BLOCK = ItemRegistrar.getInstance().get("coal_block");
@@ -64,10 +63,11 @@ public class Materials {
     public static final Material REDSTONE_BLOCK = ItemRegistrar.getInstance().get("redstone_block");
     
     public static final Material SOUL_SAND = ItemRegistrar.getInstance().get("soul_sand");
-    public static final Material STATIONARY_WATER = ItemRegistrar.getInstance().get("stationary_water");
-    public static final Material SPONGE = ItemRegistrar.getInstance().get("sponge");
-    public static final Material SKELETON_SKULL = ItemRegistrar.getInstance().get("skeleton_skull", "skull");
+    public static final Material SKELETON_SKULL = ItemRegistrar.getInstance().get("skeleton_skull", "skull_item", "skull");
+    public static final Material SLIME_BLOCK = ItemRegistrar.getInstance().get("slime_block", "emerald_block"); // emerald for 1.7 support
     public static final Material SPIDER_EYE = ItemRegistrar.getInstance().get("spider_eye");
+    public static final Material SPONGE = ItemRegistrar.getInstance().get("sponge");
+    public static final Material STATIONARY_WATER = ItemRegistrar.getInstance().get("stationary_water");
     public static final Material STICK = ItemRegistrar.getInstance().get("stick");
     /* STAINED MATERIALS */
     
@@ -88,6 +88,7 @@ public class Materials {
     public static final Material WEB = ItemRegistrar.getInstance().get("cobweb", "web");
     
     /* WOOL */
-    public static final Material RED_WOOL = ItemRegistrar.getInstance().get("red_wool", "wool");
     public static final Material LIME_WOOL = ItemRegistrar.getInstance().get("lime_wool", "wool");
+    public static final Material RED_WOOL = ItemRegistrar.getInstance().get("red_wool", "wool");;
+    public static final Material YELLOW_WOOL = ItemRegistrar.getInstance().get("yellow_wool", "wool");
 }

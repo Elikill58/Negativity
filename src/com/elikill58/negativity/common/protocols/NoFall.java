@@ -22,7 +22,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class NoFall extends Cheat implements Listeners {
 
 	public NoFall() {
-		super(CheatKeys.NO_FALL, true, Materials.GRASS, CheatCategory.MOVEMENT, true);
+		super(CheatKeys.NO_FALL, true, Materials.YELLOW_WOOL, CheatCategory.MOVEMENT, true);
 	}
 
 	@EventListener

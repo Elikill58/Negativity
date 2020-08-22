@@ -12,6 +12,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -240,6 +241,12 @@ public abstract class Cheat {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		Collections.sort(CHEATS, new Comparator<Cheat>() {
+			@Override
+			public int compare(Cheat c1, Cheat c2) {
+				return c1.getKey().compareTo(c2.getKey());
+			}
+		});
 		ada.getLogger().info("Loaded " + CHEATS.size() + " cheats.");
 	}
 

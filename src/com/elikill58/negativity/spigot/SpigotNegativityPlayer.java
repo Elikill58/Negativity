@@ -24,7 +24,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -556,10 +555,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	public boolean hasElytra() {
-		for (ItemStack item : getPlayer().getInventory().getArmorContents())
-			if (item != null && item.getType().name().contains("ELYTRA"))
-				return true;
-		return false;
+		return Version.getVersion().isNewerOrEquals(Version.V1_9) && getPlayer().isGliding();
 	}
 
 	public boolean isTargetByIronGolem() {

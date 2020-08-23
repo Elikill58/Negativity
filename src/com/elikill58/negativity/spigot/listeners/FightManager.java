@@ -1,4 +1,4 @@
-package com.elikill58.negativity.spigot.events;
+package com.elikill58.negativity.spigot.listeners;
 
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;

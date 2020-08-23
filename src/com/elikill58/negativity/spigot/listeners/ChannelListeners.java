@@ -1,4 +1,4 @@
-package com.elikill58.negativity.spigot.events;
+package com.elikill58.negativity.spigot.listeners;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -17,7 +17,7 @@ import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 
-public class ChannelEvents implements PluginMessageListener {
+public class ChannelListeners implements PluginMessageListener {
 
 	@Override
 	public void onPluginMessageReceived(String channel, Player p, byte[] data) {

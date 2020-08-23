@@ -24,14 +24,13 @@ import com.elikill58.negativity.api.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.api.timers.ClickManagerTimer;
 import com.elikill58.negativity.api.timers.PendingAlertsTimer;
 import com.elikill58.negativity.api.timers.SpawnFakePlayerTimer;
-import com.elikill58.negativity.spigot.events.ChannelEvents;
-import com.elikill58.negativity.spigot.events.FightManager;
-import com.elikill58.negativity.spigot.events.PlayersEvents;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.listeners.BlockListeners;
+import com.elikill58.negativity.spigot.listeners.ChannelListeners;
 import com.elikill58.negativity.spigot.listeners.CommandsListeners;
 import com.elikill58.negativity.spigot.listeners.ElytraListeners;
 import com.elikill58.negativity.spigot.listeners.EntityListeners;
+import com.elikill58.negativity.spigot.listeners.FightManager;
 import com.elikill58.negativity.spigot.listeners.InventoryListeners;
 import com.elikill58.negativity.spigot.listeners.PlayersListeners;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
@@ -104,7 +103,7 @@ public class SpigotNegativity extends JavaPlugin {
 				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
 
 		PluginManager pm = Bukkit.getPluginManager();
-		pm.registerEvents(new PlayersEvents(), this);
+		pm.registerEvents(new PlayersListeners(), this);
 		pm.registerEvents(new FightManager(), this);
 		pm.registerEvents(new PlayersListeners(), this);
 		pm.registerEvents(new InventoryListeners(), this);
@@ -114,14 +113,14 @@ public class SpigotNegativity extends JavaPlugin {
 			pm.registerEvents(new ElytraListeners(), this);
 
 		Messenger messenger = getServer().getMessenger();
-		ChannelEvents channelEvents = new ChannelEvents();
+		ChannelListeners channelListeners = new ChannelListeners();
 		if (v.isNewerOrEquals(Version.V1_13)) {
 			CHANNEL_NAME_FML = "negativity:fml";
 		} else {
 			CHANNEL_NAME_FML = "FML|HS";
 		}
-		loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID, channelEvents);
-		loadChannelInOut(messenger, CHANNEL_NAME_FML, channelEvents);
+		loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID, channelListeners);
+		loadChannelInOut(messenger, CHANNEL_NAME_FML, channelListeners);
 		
 		for (Player p : Utils.getOnlinePlayers())
 			NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p)).manageAutoVerif();
@@ -159,7 +158,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 	}
 	
-	private void loadChannelInOut(Messenger messenger, String channel, ChannelEvents event) {
+	private void loadChannelInOut(Messenger messenger, String channel, ChannelListeners event) {
 		if (!messenger.getOutgoingChannels().contains(channel))
 			messenger.registerOutgoingPluginChannel(this, channel);
 		if (!messenger.getIncomingChannels().contains(channel))

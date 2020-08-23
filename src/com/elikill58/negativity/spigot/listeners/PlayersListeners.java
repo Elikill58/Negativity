@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -10,16 +11,23 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityRegainHealthEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.player.LoginEvent;
+import com.elikill58.negativity.api.events.player.LoginEvent.Result;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
+import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent.Action;
+import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.events.player.PlayerRegainHealthEvent;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -27,6 +35,7 @@ import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
+import com.elikill58.negativity.universal.ProxyCompanionManager;
 
 public class PlayersListeners implements Listener {
 
@@ -35,19 +44,34 @@ public class PlayersListeners implements Listener {
 		NegativityPlayer.getNegativityPlayer(new SpigotPlayer(e.getPlayer()));
 	}
 	
-	@EventHandler(priority = EventPriority.LOWEST)
+	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
-		NegativityPlayer.removeFromCache(e.getPlayer().getUniqueId());
+		Player p = e.getPlayer();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p));
+		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, e.getQuitMessage());
+		EventManager.callEvent(event);
+		e.setQuitMessage(event.getQuitMessage());
+		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> NegativityPlayer.removeFromCache(p.getUniqueId()), 2);
 	}
 	
 	@EventHandler
 	public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
-		PlayerMoveEvent event = new PlayerMoveEvent(SpigotEntityManager.getPlayer(e.getPlayer()), new SpigotLocation(e.getFrom()), new SpigotLocation(e.getTo()));
+		Player p = e.getPlayer();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p));
+		if(np.isFreeze && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR))
+			e.setCancelled(true);
+		PlayerMoveEvent event = new PlayerMoveEvent(SpigotEntityManager.getPlayer(p), new SpigotLocation(e.getFrom()), new SpigotLocation(e.getTo()));
 		EventManager.callEvent(event);
 		if(event.hasToSet()) {
 			e.setTo((Location) event.getTo().getDefault());
 			e.setFrom((Location) event.getFrom().getDefault());
 		}
+		if(e.isCancelled())
+			return;
+		if(p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("SLIME")) {
+			np.isUsingSlimeBlock = true;
+		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("AIR")))
+			np.isUsingSlimeBlock = false;
 	}
 	
 	@EventHandler
@@ -88,6 +112,33 @@ public class PlayersListeners implements Listener {
 			PlayerRegainHealthEvent event = new PlayerRegainHealthEvent(SpigotEntityManager.getPlayer((Player) e.getEntity()));
 			EventManager.callEvent(event);
 			e.setCancelled(event.isCancelled());
+		}
+	}
+	
+	@EventHandler(priority = EventPriority.HIGHEST)
+	public void onPreLogin(AsyncPlayerPreLoginEvent e) {
+		LoginEvent event = new LoginEvent(e.getUniqueId(), e.getName(), Result.valueOf(e.getLoginResult().name()), e.getAddress(), e.getKickMessage());
+		EventManager.callEvent(event);
+		e.setKickMessage(event.getKickMessage());
+		e.setLoginResult(AsyncPlayerPreLoginEvent.Result.valueOf(event.getLoginResult().name()));
+	}
+	
+	@EventHandler
+	public void onTeleport(PlayerTeleportEvent e) {
+		NegativityPlayer.getCached(e.getPlayer().getUniqueId()).TIME_INVINCIBILITY = System.currentTimeMillis() + 1000;
+	}
+	
+	@EventHandler
+	public void onPlayerJoin(PlayerJoinEvent e) {
+		Player p = e.getPlayer();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p));
+		PlayerConnectEvent event = new PlayerConnectEvent(np.getPlayer(), np, e.getJoinMessage());
+		EventManager.callEvent(event);
+		e.setJoinMessage(event.getJoinMessage());
+		
+		if(!ProxyCompanionManager.searchedCompanion) {
+			ProxyCompanionManager.searchedCompanion = true;
+			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> SpigotNegativity.sendProxyPing(p), 20);
 		}
 	}
 }

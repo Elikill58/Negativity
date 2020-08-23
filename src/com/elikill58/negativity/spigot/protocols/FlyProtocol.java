@@ -67,7 +67,8 @@ public class FlyProtocol extends Cheat implements Listener {
 						p, this, 97, "Suspicious Y: " + y);
 		}
 		double i = e.getTo().toVector().distance(e.getFrom().toVector());
-		if (!(p.isSprinting() && (e.getTo().getY() - e.getFrom().getY()) > 0)
+		double d = e.getTo().getY() - e.getFrom().getY();
+		if (!(p.isSprinting() && d > 0)
 				&& locUnder.getBlock().getType().equals(Material.AIR)
 				&& locUnderUnder.getBlock().getType().equals(Material.AIR)
 				&& (p.getFallDistance() == 0.0F || inBoat)
@@ -81,12 +82,11 @@ public class FlyProtocol extends Cheat implements Listener {
 
 		if (!np.isUsingSlimeBlock && !LocationUtils.hasOtherThanExtended(p.getLocation(), "AIR")
 				&& !LocationUtils.hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
-				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, "AIR")
+				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
 				&& (e.getFrom().getY() <= e.getTo().getY()) && p.getVelocity().length() < 1.5) {
 			double nbTimeAirBelow = np.contentDouble.getOrDefault("fly-air-below", 0.0);
 			np.contentDouble.put("fly-air-below", nbTimeAirBelow + 1);
 			if(nbTimeAirBelow > 6) { // we don't care when player jump
-				double d = e.getTo().getY() - e.getFrom().getY();
 				int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
 				if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Material.AIR))
 					porcent = parseInPorcent(porcent - 15);

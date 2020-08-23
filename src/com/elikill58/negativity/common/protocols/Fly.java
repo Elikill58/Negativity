@@ -70,8 +70,9 @@ public class Fly extends Cheat implements Listeners {
 		}
 		
 		double i = e.getTo().toVector().distance(e.getFrom().toVector());
+		double d = e.getTo().getY() - e.getFrom().getY();
 		if(checkActive("no-ground-i")) {
-			if (!(p.isSprinting() && (e.getTo().getY() - e.getFrom().getY()) > 0)
+			if (!(p.isSprinting() && d > 0)
 					&& locUnder.getBlock().getType().equals(Materials.AIR)
 					&& locUnderUnder.getBlock().getType().equals(Materials.AIR)
 					&& (p.getFallDistance() == 0.0F || inBoat)
@@ -87,12 +88,11 @@ public class Fly extends Cheat implements Listeners {
 		if(checkActive("no-ground-down")) {
 			if (!np.isUsingSlimeBlock && !LocationUtils.hasOtherThanExtended(p.getLocation(), "AIR")
 					&& !LocationUtils.hasOtherThanExtended(locUnder, "AIR") && !np.booleans.get(FLY, "boat-falling", false)
-					&& !LocationUtils.hasOtherThanExtended(locUnderUnder, "AIR")
+					&& !LocationUtils.hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
 					&& (e.getFrom().getY() <= e.getTo().getY() || inBoat) && p.getVelocity().length() < 1.5) {
 				double nbTimeAirBelow = np.doubles.get(FLY, "air-below", 0.0);
 				np.doubles.set(FLY, "air-below", nbTimeAirBelow + 1);
 				if(nbTimeAirBelow > 6) { // we don't care when player jump
-					double d = e.getTo().getY() - e.getFrom().getY();
 					int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
 					if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Materials.AIR))
 						porcent = parseInPorcent(porcent - 15);

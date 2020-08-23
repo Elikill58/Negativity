@@ -58,8 +58,7 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public boolean hasElytra() {
-		org.bukkit.inventory.ItemStack helmet = p.getInventory().getHelmet();
-		return helmet != null && helmet.getType().name().contains("ELYTRA");
+		return Version.getVersion().isNewerOrEquals(Version.V1_9) && p.isGliding();
 	}
 	
 	@Override

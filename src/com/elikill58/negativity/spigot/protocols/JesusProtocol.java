@@ -69,9 +69,9 @@ public class JesusProtocol extends Cheat implements Listener {
 								+ " and ping: " + ping);
 			}
 		}
-		if (dif == -0.5 && (isInWater || isOnWater)) {
+		if (dif == -0.5 && (isInWater || isOnWater) && !LocationUtils.hasMaterialsAround(under, "FENCE")) {
 			mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "Warn for Jesus: "
-					+ np.getWarn(this) + ", dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + " " + ping);
+					+ np.getWarn(this) + ", dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + " " + ping + ", type: " + type.name() + ", type Under: " + underType.name());
 		}
 
 		boolean jesusState = np.contentBoolean.getOrDefault("jesus-state", false);

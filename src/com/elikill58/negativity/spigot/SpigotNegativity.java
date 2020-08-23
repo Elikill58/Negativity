@@ -40,6 +40,7 @@ import com.elikill58.negativity.spigot.commands.NegativityCommand;
 import com.elikill58.negativity.spigot.commands.ReportCommand;
 import com.elikill58.negativity.spigot.commands.UnbanCommand;
 import com.elikill58.negativity.spigot.events.ChannelEvents;
+import com.elikill58.negativity.spigot.events.ElytraEvents;
 import com.elikill58.negativity.spigot.events.FightManager;
 import com.elikill58.negativity.spigot.events.PlayersEvents;
 import com.elikill58.negativity.spigot.events.ServerCrasherEvents;
@@ -145,6 +146,8 @@ public class SpigotNegativity extends JavaPlugin {
 		pm.registerEvents(new PlayersEvents(this), this);
 		pm.registerEvents(new FightManager(), this);
 		pm.registerEvents(new ServerCrasherEvents(this), this);
+		if(v.isNewerOrEquals(Version.V1_9))
+			pm.registerEvents(new ElytraEvents(), this);
 
 		Messenger messenger = getServer().getMessenger();
 		ChannelEvents channelEvents = new ChannelEvents();

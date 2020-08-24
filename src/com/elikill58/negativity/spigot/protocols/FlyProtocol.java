@@ -84,16 +84,18 @@ public class FlyProtocol extends Cheat implements Listener {
 				&& !LocationUtils.hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
 				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
 				&& (e.getFrom().getY() <= e.getTo().getY()) && p.getVelocity().length() < 1.5) {
-			double nbTimeAirBelow = np.contentDouble.getOrDefault("fly-air-below", 0.0);
-			np.contentDouble.put("fly-air-below", nbTimeAirBelow + 1);
-			if(nbTimeAirBelow > 6) { // we don't care when player jump
-				int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
-				if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Material.AIR))
-					porcent = parseInPorcent(porcent - 15);
-				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
-						this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d + ", inBoat: " + inBoat
-								+ ". Warn for fly: " + np.getWarn(this),
-								hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb));
+			if(!(p.hasPotionEffect(PotionEffectType.JUMP) && p.getPotionEffect(PotionEffectType.JUMP).getAmplifier() > 2)) {
+				double nbTimeAirBelow = np.contentDouble.getOrDefault("fly-air-below", 0.0);
+				np.contentDouble.put("fly-air-below", nbTimeAirBelow + 1);
+				if(nbTimeAirBelow > 6) { // we don't care when player jump
+					int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
+					if (nb < 5)
+						porcent = parseInPorcent(porcent - 15);
+					mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
+							this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d + ", inBoat: " + inBoat
+									+ ". Warn for fly: " + np.getWarn(this),
+									hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb));
+				}
 			}
 		} else
 			np.contentDouble.remove("fly-air-below");

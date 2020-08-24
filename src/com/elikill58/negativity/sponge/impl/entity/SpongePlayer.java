@@ -201,6 +201,15 @@ public class SpongePlayer extends Player {
 		p.getOrCreate(PotionEffectData.class).get().asList().forEach((pe) -> list.add(new PotionEffect(PotionEffectType.fromName(pe.getType().getName()))));
 		return list;
 	}
+	
+	@Override
+	public Optional<PotionEffect> getPotionEffect(PotionEffectType type) {
+		org.spongepowered.api.effect.potion.PotionEffect effect = null;
+		for(org.spongepowered.api.effect.potion.PotionEffect pe : p.getOrCreate(PotionEffectData.class).get().asList())
+			if(PotionEffectType.fromName(pe.getType().getName()) == type)
+				effect = pe;
+		return effect == null ? Optional.empty() : Optional.of(new PotionEffect(type, effect.getDuration(), effect.getAmplifier()));
+	}
 
 	@Override
 	public void removePotionEffect(PotionEffectType type) {

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.bungee.impl.entity;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import com.elikill58.negativity.api.GameMode;
@@ -218,6 +219,11 @@ public class BungeePlayer extends Player {
 	@Override
 	public List<PotionEffect> getActivePotionEffect() {
 		return null;
+	}
+	
+	@Override
+	public Optional<PotionEffect> getPotionEffect(PotionEffectType type) {
+		return Optional.empty();
 	}
 
 	@Override

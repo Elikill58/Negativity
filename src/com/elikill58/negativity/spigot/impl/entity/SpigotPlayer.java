@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.impl.entity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.bukkit.entity.Damageable;
@@ -190,6 +191,12 @@ public class SpigotPlayer extends Player {
 		p.getActivePotionEffects()
 				.forEach((pe) -> list.add(new PotionEffect(PotionEffectType.fromName(pe.getType().getName()))));
 		return list;
+	}
+	
+	@Override
+	public Optional<PotionEffect> getPotionEffect(PotionEffectType type) {
+		org.bukkit.potion.PotionEffect pe = p.getPotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()));
+		return pe == null ? Optional.empty() : Optional.of(new PotionEffect(type, pe.getDuration(), pe.getAmplifier()));
 	}
 
 	@Override

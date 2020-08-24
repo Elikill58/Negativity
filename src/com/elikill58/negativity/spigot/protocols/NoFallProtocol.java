@@ -107,7 +107,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 	
 	private void manageDamage(Player p, int damage, int relia) {
 		Adapter ada = Adapter.getAdapter();
-		p.damage(damage >= p.getHealth() ? (ada.getConfig().getBoolean("cheats.nofall.kill") && ada.getConfig().getDouble("cheats.nofall.kill-reliability") >= relia ? damage : p.getHealth() - 0.5) : p.getHealth());
+		p.damage(damage >= p.getHealth() ? (ada.getConfig().getBoolean("cheats.nofall.kill") && ada.getConfig().getDouble("cheats.nofall.kill-reliability") >= relia ? damage : p.getHealth() - 0.5) : damage);
 	}
 
 	

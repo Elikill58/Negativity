@@ -9,10 +9,20 @@ import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.Version;
 
 public class ClickableText {
 
+	private static boolean hasBungeeApi = false;
+	
+	static {
+		try {
+			Class.forName("net.md_5.bungee.api.chat.TextComponent");
+			hasBungeeApi = true;
+		} catch (Exception e) {
+			hasBungeeApi = false;
+		}
+	}
+	
 	private List<MessageComponent> component = new ArrayList<>();
 
 	public ClickableText addMessage(MessageComponent... comp) {
@@ -108,8 +118,8 @@ public class ClickableText {
 
 		public void send(Player p) {
 			try {
-				if (Version.getVersion().isNewerOrEquals(Version.V1_13)) {
-					ClickableText1_13.send(p, this);
+				if (hasBungeeApi) {
+					ClickableTextBungeeAPI.send(p, this);
 				} else {
 					for (Object obj : compile()) {
 						Class<?> chatBaseComponent = PacketUtils.getNmsClass("ChatBaseComponent");

@@ -10,7 +10,7 @@ import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class ClickableText1_13 {
+public class ClickableTextBungeeAPI {
 
 	public static void send(Player p, MessageComponent mc) {
 		TextComponent text = new TextComponent(mc.text);

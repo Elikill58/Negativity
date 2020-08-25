@@ -11,6 +11,8 @@ public class PlayerChatEvent implements Event {
 	
 	public PlayerChatEvent(Player p, String message, String format) {
 		this.p = p;
+		this.message = message;
+		this.format = format;
 	}
 
 	public Player getPlayer() {

@@ -105,7 +105,6 @@ public class SpigotNegativity extends JavaPlugin {
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersListeners(), this);
 		pm.registerEvents(new FightManager(), this);
-		pm.registerEvents(new PlayersListeners(), this);
 		pm.registerEvents(new InventoryListeners(), this);
 		pm.registerEvents(new BlockListeners(), this);
 		pm.registerEvents(new EntityListeners(), this);

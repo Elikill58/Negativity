@@ -14,7 +14,6 @@ import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerLoginEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
@@ -38,11 +37,6 @@ import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 
 public class PlayersListeners implements Listener {
-
-	@EventHandler
-	public void onLogin(PlayerLoginEvent e) {
-		NegativityPlayer.getNegativityPlayer(new SpigotPlayer(e.getPlayer()));
-	}
 	
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {

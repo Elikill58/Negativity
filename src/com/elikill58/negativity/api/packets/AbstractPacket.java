@@ -1,7 +1,6 @@
 package com.elikill58.negativity.api.packets;
 
-import org.bukkit.entity.Player;
-
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.PacketType;
 
 public abstract class AbstractPacket {

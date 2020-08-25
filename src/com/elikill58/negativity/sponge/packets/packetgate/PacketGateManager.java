@@ -5,10 +5,10 @@ import java.util.Optional;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 
+import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
+import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.sponge.SpongeNegativity;
-import com.elikill58.negativity.sponge.packets.AbstractPacket;
-import com.elikill58.negativity.sponge.packets.PacketManager;
-import com.elikill58.negativity.sponge.packets.events.PacketEvent.PacketSourceType;
+import com.elikill58.negativity.sponge.impl.packet.SpongePacketManager;
 import com.elikill58.negativity.universal.PacketType;
 
 import eu.crushedpixel.sponge.packetgate.api.event.PacketEvent;
@@ -17,24 +17,23 @@ import eu.crushedpixel.sponge.packetgate.api.listener.PacketListenerAdapter;
 import eu.crushedpixel.sponge.packetgate.api.registry.PacketConnection;
 import eu.crushedpixel.sponge.packetgate.api.registry.PacketGate;
 
-public class PacketGateManager extends PacketManager {
+public class PacketGateManager extends SpongePacketManager {
 
+	private final PacketGate packetGate;
+	
 	public PacketGateManager() {
-		PacketGate packetGate = Sponge.getServiceManager().provideUnchecked(PacketGate.class);
+		packetGate = Sponge.getServiceManager().provideUnchecked(PacketGate.class);
 		packetGate.registerListener(new PacketGateListener(this), ListenerPriority.DEFAULT);
 	}
+	
+	@Override
+	public void addPlayer(com.elikill58.negativity.api.entity.Player p) {}
+	
+	@Override
+	public void removePlayer(com.elikill58.negativity.api.entity.Player p) {}
 
 	@Override
-	public void addPlayer(Player p) {
-	}
-
-	@Override
-	public void removePlayer(Player p) {
-	}
-
-	@Override
-	public void clear() {
-	}
+	public void clear() {}
 
 	public AbstractPacket onPacketSent(PacketType type, Player sender, Object packet, PacketEvent event) {
 		PacketGatePacket customPacket = new PacketGatePacket(type, packet, sender, event);

@@ -8,6 +8,7 @@ import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketContent;
+import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 import com.elikill58.negativity.universal.PacketType;
 
@@ -86,7 +87,7 @@ public class INCChannel extends ChannelAbstract {
 
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
-			AbstractPacket nextPacket = getPacketManager().onPacketReceive(PacketType.getType(packet.getClass().getSimpleName()), this.owner, packet);
+			AbstractPacket nextPacket = getPacketManager().onPacketReceive(PacketType.getType(packet.getClass().getSimpleName()), SpigotEntityManager.getPlayer(this.owner), packet);
 			if(!nextPacket.isCancelled())
 				super.channelRead(ctx, nextPacket.getPacket());
 		}
@@ -102,7 +103,7 @@ public class INCChannel extends ChannelAbstract {
 
 		@Override
 		public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
-			AbstractPacket nextPacket = getPacketManager().onPacketSent(PacketType.getType(packet.getClass().getSimpleName()), owner, packet);
+			AbstractPacket nextPacket = getPacketManager().onPacketSent(PacketType.getType(packet.getClass().getSimpleName()), SpigotEntityManager.getPlayer(this.owner), packet);
 			if(!nextPacket.isCancelled())
 				super.write(ctx, packet, promise);
 		}

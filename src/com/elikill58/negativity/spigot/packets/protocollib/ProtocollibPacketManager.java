@@ -15,10 +15,10 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.injector.packet.PacketRegistry;
 import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
 import com.elikill58.negativity.api.packets.AbstractPacket;
-import com.elikill58.negativity.spigot.packets.PacketManager;
+import com.elikill58.negativity.spigot.impl.packet.SpigotPacketManager;
 import com.elikill58.negativity.universal.PacketType;
 
-public class ProtocollibPacketManager extends PacketManager {
+public class ProtocollibPacketManager extends SpigotPacketManager {
 
 	private final ProtocolManager protocolManager;
 	
@@ -70,12 +70,12 @@ public class ProtocollibPacketManager extends PacketManager {
 			}
 		});
 	}
-
+	
 	@Override
-	public void addPlayer(Player p) {}
-
+	public void addPlayer(com.elikill58.negativity.api.entity.Player p) {}
+	
 	@Override
-	public void removePlayer(Player p) {}
+	public void removePlayer(com.elikill58.negativity.api.entity.Player p) {}
 
 	@Override
 	public void clear() {}

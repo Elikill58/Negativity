@@ -1,23 +1,25 @@
 package com.elikill58.negativity.sponge.packets;
 
 import org.slf4j.Logger;
-import org.spongepowered.api.entity.living.player.Player;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.PacketHandler;
 import com.elikill58.negativity.sponge.SpongeNegativity;
+import com.elikill58.negativity.sponge.impl.packet.SpongePacketManager;
 import com.elikill58.negativity.sponge.packets.packetgate.PacketGateManager;
-import com.elikill58.negativity.universal.PacketType.Client;
 
 public class NegativityPacketManager {
 
-	private PacketManager packetManager;
+	private SpongePacketManager spongePacketManager;
 	
 	public NegativityPacketManager(SpongeNegativity pl) {
 
 		try {
 			Class.forName("eu.crushedpixel.sponge.packetgate.api.registry.PacketGate");
 			SpongeNegativity.hasPacketGate = true;
-			packetManager = new PacketGateManager();
+			spongePacketManager = new PacketGateManager();
 		} catch (ClassNotFoundException e1) {
 			Logger log = pl.getLogger();
 			log.warn("----- Negativity Problem -----");
@@ -30,7 +32,7 @@ public class NegativityPacketManager {
 			log.warn("----- Negativity Problem -----");
 		}
 		
-		packetManager.addHandler(new PacketHandler() {
+		spongePacketManager.addHandler(new PacketHandler() {
 			
 			@Override
 			public void onSend(AbstractPacket packet) {}
@@ -49,9 +51,5 @@ public class NegativityPacketManager {
 		Player p = packet.getPlayer();
 		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
 		np.PACKETS.put(packet.getPacketType(), np.PACKETS.getOrDefault(packet.getPacketType(), 0) + 1);
-		if (packet.getPacketType() != Client.KEEP_ALIVE) {
-			np.TIME_OTHER_KEEP_ALIVE = System.currentTimeMillis();
-			np.LAST_OTHER_KEEP_ALIVE = packet.getPacketName();
-		}
 	}
 }

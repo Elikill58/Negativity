@@ -1,24 +1,26 @@
 package com.elikill58.negativity.spigot.packets.custom;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.plugin.Plugin;
 
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
 import com.elikill58.negativity.api.packets.AbstractPacket;
-import com.elikill58.negativity.spigot.packets.PacketManager;
+import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
+import com.elikill58.negativity.spigot.impl.packet.SpigotPacketManager;
 import com.elikill58.negativity.spigot.packets.custom.channel.ChannelAbstract;
 import com.elikill58.negativity.spigot.packets.custom.channel.INCChannel;
 import com.elikill58.negativity.spigot.packets.custom.channel.NMUChannel;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.adapter.Adapter;
 
-public class CustomPacketManager extends PacketManager implements Listener {
+public class CustomPacketManager extends SpigotPacketManager implements Listener {
 	
 	private ChannelAbstract channel;
 	private Plugin pl;
@@ -37,7 +39,7 @@ public class CustomPacketManager extends PacketManager implements Listener {
 			@Override
 			public void run() {
 				isStarted = true;
-				for(Player p : Utils.getOnlinePlayers())
+				for(Player p : Adapter.getAdapter().getOnlinePlayers())
 					addPlayer(p);
 			}
 		}, 40);
@@ -49,28 +51,28 @@ public class CustomPacketManager extends PacketManager implements Listener {
 
 	@EventHandler
 	public void onJoin(PlayerJoinEvent e) {
-		addPlayer(e.getPlayer());
+		addPlayer(SpigotEntityManager.getPlayer(e.getPlayer()));
 	}
 
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
-		removePlayer(e.getPlayer());
+		removePlayer(SpigotEntityManager.getPlayer(e.getPlayer()));
 	}
 
 	@Override
 	public void addPlayer(Player p) {
 		if(isStarted)
-			channel.addPlayer(p);
+			channel.addPlayer((org.bukkit.entity.Player) p.getDefault());
 	}
 
 	@Override
 	public void removePlayer(Player p) {
-		channel.removePlayer(p);
+		channel.removePlayer((org.bukkit.entity.Player) p.getDefault());
 	}
 
 	@Override
 	public void clear() {
-		for(Player player : Utils.getOnlinePlayers())
+		for(Player player : Adapter.getAdapter().getOnlinePlayers())
 			removePlayer(player);
 		if(channel.getAddChannelExecutor() != null)
 			channel.getAddChannelExecutor().shutdownNow();

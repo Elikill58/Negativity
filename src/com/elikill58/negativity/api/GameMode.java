@@ -8,6 +8,9 @@ public enum GameMode {
 	ADVENTURE("Adventure"),
 	CREATIVE("Creative"),
 	SPECTATOR("Spectator"),
+	/**
+	 * Use specifically for modded server
+	 */
 	CUSTOM("Custom");
 	
 	private final String name;

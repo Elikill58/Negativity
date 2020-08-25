@@ -119,7 +119,8 @@ public class PlayersListeners implements Listener {
 	
 	@EventHandler
 	public void onTeleport(PlayerTeleportEvent e) {
-		NegativityPlayer.getCached(e.getPlayer().getUniqueId()).TIME_INVINCIBILITY = System.currentTimeMillis() + 1000;
+		Player p = e.getPlayer();
+		NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p)).TIME_INVINCIBILITY = System.currentTimeMillis() + 1000;
 	}
 	
 	@EventHandler

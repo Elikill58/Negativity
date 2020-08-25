@@ -19,6 +19,7 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -62,7 +63,7 @@ public class JesusProtocol extends Cheat {
 			double reliability = 0;
 			if (dif < 0.0005 && dif > 0.00000005)
 				reliability = dif * 10000000 - 1;
-			else if (dif < 0.1 && dif > 0.08)
+			else if (dif < 0.1 && dif > 0.089)
 				reliability = dif * 1000;
 			else if (dif == 0.5)
 				reliability = 75;
@@ -89,7 +90,7 @@ public class JesusProtocol extends Cheat {
 			}
 		}
 
-		if (dif == -0.5 && (isInWater || isOnWater)) {
+		if (dif == -0.5 && (isInWater || isOnWater) && !LocationUtils.has(under, "FENCE")) {
 			mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "Warn for Jesus: "
 					+ np.getWarn(this) + ", dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + " " + ping);
 		}
@@ -110,5 +111,10 @@ public class JesusProtocol extends Cheat {
 
 		if (isSetBack() && mayCancel)
 			to.sub(0, 1, 0);
+	}
+
+	@Override
+	public boolean isBlockedInFight() {
+		return true;
 	}
 }

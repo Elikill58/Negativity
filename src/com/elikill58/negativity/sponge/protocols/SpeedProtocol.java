@@ -103,7 +103,7 @@ public class SpeedProtocol extends Cheat {
 						", walkWithEssentialsTest: " + walkWithEssTest, hoverMsg("distance_ground", "%distance%", numberFormat.format(moveY)));
 			}
 			double calculatedSpeedWithoutY = Utils.getSpeed(from, to);
-			if(calculatedSpeedWithoutY > (np.getWalkSpeed() + 0.01) && p.getVelocity().getY() > 0 && hasOtherThan(from.copy().add(0, 1, 0), BlockTypes.AIR)) { // "+0.01" if to prevent lag"
+			if(calculatedSpeedWithoutY > (np.getWalkSpeed() + 0.01) && p.getVelocity().getY() < calculatedSpeedWithoutY && hasOtherThan(from.copy().add(0, 1, 0), BlockTypes.AIR)) { // "+0.01" if to prevent lag"
 				mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, 90, "Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + np.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().getY());
 			}
 		} else if (!p.isOnGround()) {

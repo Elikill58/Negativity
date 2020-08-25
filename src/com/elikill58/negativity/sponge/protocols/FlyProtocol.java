@@ -66,7 +66,15 @@ public class FlyProtocol extends Cheat {
 			for (PotionEffect pe : np.getActiveEffects())
 				if (pe.getType().equals(PotionEffectTypes.SPEED))
 					speed += pe.getAmplifier() + 1;
-			if (speed > 40)
+			if (speed > 20)
+				return;
+		}
+		if (np.hasPotionEffect(PotionEffectTypes.JUMP_BOOST)) {
+			int speed = 0;
+			for (PotionEffect pe : np.getActiveEffects())
+				if (pe.getType().equals(PotionEffectTypes.JUMP_BOOST))
+					speed += pe.getAmplifier() + 1;
+			if (speed > 3)
 				return;
 		}
 		boolean mayCancel = false;
@@ -98,15 +106,15 @@ public class FlyProtocol extends Cheat {
 					"Player not in ground, distance: " + distance + (isInBoat ? " On boat" : "")
 					+ ". Warn for fly: " + np.getWarn(this), isInBoat ? hoverMsg("boat") : null);
 		}
+		double d = toPosition.getY() - fromPosition.getY();
 
-		if (!LocationUtils.hasOtherThanExtended(loc, BlockTypes.AIR) && !np.contentBoolean.getOrDefault("boat-falling", false)
+		if (!np.isUsingSlimeBlock && !LocationUtils.hasOtherThanExtended(loc, BlockTypes.AIR) && !np.contentBoolean.getOrDefault("boat-falling", false)
 				&& !LocationUtils.hasOtherThanExtended(locUnder, BlockTypes.AIR)
 				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, BlockTypes.AIR)
-				&& (fromPosition.getY() <= toPosition.getY() || isInBoat)) {
+				&& (fromPosition.getY() <= toPosition.getY() || isInBoat) && d != 0.5 && d != 0) {
 			double nbTimeAirBelow = np.contentDouble.getOrDefault("fly-air-below", 0.0);
 			np.contentDouble.put("fly-air-below", nbTimeAirBelow + 1);
 			if(nbTimeAirBelow > 6) { // we don't care when player jump
-				double d = toPosition.getY() - fromPosition.getY();
 				int nb = LocationUtils.getNbAirBlockDown(p), porcent = UniversalUtils.parseInPorcent(nb * 15 + d);
 				if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), BlockTypes.AIR))
 					porcent = UniversalUtils.parseInPorcent(porcent - 15);

@@ -56,7 +56,7 @@ public class NoFallProtocol extends Cheat {
 		if(locDown.getBlock().getType().equals(BlockTypes.AIR)
 				&& !LocationUtils.has(locDown, "STAIRS")) {
 			if ((motionY > walkSpeed && fallDistance == 0)
-					|| (motionY > (walkSpeed / 2) && p.isOnGround() && walkSpeed > fallDistance)) {
+					|| (motionY > (walkSpeed / 2) && p.isOnGround() && np.getFallDistance() > 0.2 && walkSpeed > fallDistance)) {
 				int porcent = UniversalUtils.parseInPorcent(900 * motionY);
 				SpongeNegativity.alertMod(ReportType.WARNING, p, this, porcent,
 						"New NoFall - Player on ground. motionY: " + motionY, new CheatHover.Literal("MotionY (on ground): " + motionY));
@@ -112,6 +112,6 @@ public class NoFallProtocol extends Cheat {
 	
 	private void manageDamage(Player p, int damage, int relia) {
 		Adapter ada = Adapter.getAdapter();
-		p.damage(damage >= p.health().get() ? (ada.getConfig().getBoolean("cheats.nofall.kill") && ada.getConfig().getDouble("cheats.nofall.kill-reliability") >= relia ? damage : p.health().get() - 0.5) : p.health().get(), DamageSource.builder().type(DamageTypes.FALL).build());
+		p.damage(damage >= p.health().get() ? (ada.getConfig().getBoolean("cheats.nofall.kill") && ada.getConfig().getDouble("cheats.nofall.kill-reliability") >= relia ? damage : p.health().get() - 0.5) : damage, DamageSource.builder().type(DamageTypes.FALL).build());
 	}
 }

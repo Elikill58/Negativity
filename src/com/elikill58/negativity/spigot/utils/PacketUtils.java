@@ -11,7 +11,7 @@ import com.elikill58.negativity.universal.Version;
 
 public class PacketUtils {
 
-	public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
+	private static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
 			.split(",")[3];
 
 	public static Class<?> CRAFT_PLAYER_CLASS, CRAFT_ENTITY_CLASS;
@@ -38,16 +38,16 @@ public class PacketUtils {
 	 * @return clazz
 	 */
 	public static Class<?> getNmsClass(String name){
-		if(ALL_CLASS.containsKey(name))
-			return ALL_CLASS.get(name);
-		try {
-			Class<?> clazz = Class.forName("net.minecraft.server." + VERSION + "." + name);
-			ALL_CLASS.put(name, clazz);
-			return clazz;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		return ALL_CLASS.computeIfAbsent(name, (s) -> {
+			try {
+				Class<?> clazz = Class.forName("net.minecraft.server." + VERSION + "." + name);
+				ALL_CLASS.put(name, clazz);
+				return clazz;
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		});
 	}
 	
 	/**

@@ -3,31 +3,16 @@ package com.elikill58.negativity.spigot.utils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Effect;
-import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.SkullMeta;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.spigot.ClickableText;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.permissions.Perm;
-import com.elikill58.negativity.universal.utils.ReflectionUtils;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.collect.Sets;
 
 @SuppressWarnings("deprecation")
@@ -63,19 +48,6 @@ public class Utils {
 		return onlinePlayers.isEmpty() ? null : onlinePlayers.iterator().next();
 	}
 
-	public static ItemStack createSkull(String name, int amount, String owner, String... lore) {
-		ItemStack skull = new ItemStack(ItemUtils.PLAYER_HEAD, 1, (byte) 3);
-		SkullMeta skullmeta = (SkullMeta) skull.getItemMeta();
-		skullmeta.setDisplayName(ChatColor.RESET + name);
-		skullmeta.setOwner(owner);
-		List<String> lorel = new ArrayList<>();
-		for (String s : lore)
-			lorel.add(s);
-		skullmeta.setLore(lorel);
-		skull.setItemMeta(skullmeta);
-		return skull;
-	}
-
 	public static Effect getEffect(String effect) {
 		Effect m = null;
 		try {
@@ -86,45 +58,6 @@ public class Utils {
 			m = null;
 		}
 		return m;
-	}
-
-	public static void sendUpdateMessageIfNeed(Player p) {
-		if(!Perm.hasPerm(NegativityPlayer.getCached(p.getUniqueId()), Perm.SHOW_ALERT))
-			return;
-		if(UniversalUtils.isLatestVersion(SpigotNegativity.getInstance().getDescription().getVersion()))
-			return;
-		String newerVersion = UniversalUtils.getLatestVersion().orElse("unknow");
-		new ClickableText().addOpenURLHoverEvent(
-				ChatColor.YELLOW + "New version of Negativity available (" + newerVersion +  "). " + ChatColor.BOLD + "Download it here.",
-				"Click here", "https://www.spigotmc.org/resources/48399/")
-				.sendToPlayer(p);
-	}
-
-	public static double getLastTPS() {
-		double[] tps = getTPS();
-		return tps[tps.length - 1];
-	}
-
-	public static double[] getTPS() {
-		try {
-			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer");
-			Object server = mcServer.getMethod("getServer").invoke(mcServer);
-			return (double[]) server.getClass().getField("recentTps").get(server);
-		} catch (Exception e) {
-			SpigotNegativity.getInstance().getLogger().warning("Cannot get TPS (Work on Spigot but NOT CraftBukkit).");
-			e.printStackTrace();
-			return new double[] {20, 20, 20};
-		}
-	}
-	
-	public static void teleportPlayerOnGround(Player p) {
-		int i = 20;
-		Location loc = p.getLocation();
-		while (loc.getBlock().getType().equals(Material.AIR) && i > 0) {
-			loc.subtract(0, 1, 0);
-			i--;
-		}
-		p.teleport(loc.add(0, 1, 0));
 	}
 	
 	public static Block getTargetBlock(Player p, int distance) {
@@ -147,76 +80,5 @@ public class Utils {
 			exc.printStackTrace();
 		}
 		return null;
-	}
-	
-	public static boolean isInBoat(Player p) {
-		return p.isInsideVehicle() && p.getVehicle().getType().equals(EntityType.BOAT);
-	}
-
-	public static boolean hasThorns(Player p) {
-		ItemStack[] armor = p.getInventory().getArmorContents();
-		if(armor == null)
-			return false;
-		for(ItemStack item : armor)
-			if(item != null && item.containsEnchantment(Enchantment.THORNS))
-				return true;
-		return false;
-	}
-	
-	public static ItemStack getItemInHand(Player p) {
-		return p.getItemInHand();
-	}
-	
-	public static ItemStack getItemInOffHand(Player p) {
-		try {
-			return (ItemStack) ReflectionUtils.callMethod(p.getInventory(), "getItemInOffHand");
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public static Entity getEntityByID(int i) {
-		for(World w : Bukkit.getWorlds()) {
-			Optional<Entity> opt = w.getEntities().stream().filter((et) -> et.getEntityId() == i).findFirst();
-			if(opt.isPresent())
-				return opt.get();
- 		}
-		return null;
-	}
-	
-	/**
-	 * Check if a player is swimming. Compatible even before 1.13
-	 * 
-	 * @param p the player to check if he is swimming
-	 * @return true if the player is swimming
-	 */
-	public static boolean isSwimming(Player p) {
-		if(Version.getVersion().isNewerOrEquals(Version.V1_13))
-			return p.isSwimming();
-		else {
-			if(!p.isSprinting())
-				return false;
-			Location loc = p.getLocation().clone();
-			if(loc.getBlock().getType().name().contains("WATER"))
-				return true;
-			if(loc.subtract(0, 1, 0).getBlock().getType().name().contains("WATER"))
-				return true;
-			return false;
-		}
-	}
-
-	/**
-	 * Get the X/Z speed.
-	 * 
-	 * @param from Location where the player comes from
-	 * @param to Location where the player go
-	 * @return the speed (without count Y)
-	 */
-	public static double getSpeed(Location from, Location to) {
-		double x = to.getX() - from.getX();
-		double z = to.getZ() - from.getZ();
-
-		return x * x + z * z;
 	}
 }

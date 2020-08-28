@@ -371,4 +371,10 @@ public class SpongePlayer extends Player {
 		Vector3d vec = p.getProperty(EyeLocationProperty.class).map(EyeLocationProperty::getValue).orElse(p.getRotation());
 		return new SpongeLocation(new SpongeWorld(p.getWorld()), vec.getX(), vec.getY(), vec.getZ());
 	}
+	
+	@Override
+	public Vector getRotation() {
+		Vector3d vec = p.getRotation();
+		return new Vector(vec.getX(), vec.getY(), vec.getZ());
+	}
 }

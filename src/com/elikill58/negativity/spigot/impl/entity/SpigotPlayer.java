@@ -369,4 +369,10 @@ public class SpigotPlayer extends Player {
 		org.bukkit.Location eye = p.getEyeLocation();
 		return new SpigotLocation(new SpigotWorld(eye.getWorld()), eye.getX(), eye.getY(), eye.getZ());
 	}
+	
+	@Override
+	public Vector getRotation() {
+		org.bukkit.util.Vector vec = p.getLocation().getDirection();
+		return new Vector(vec.getX(), vec.getY(), vec.getZ());
+	}
 }

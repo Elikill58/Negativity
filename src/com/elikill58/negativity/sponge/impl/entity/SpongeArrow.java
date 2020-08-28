@@ -8,6 +8,7 @@ import com.elikill58.negativity.api.entity.Arrow;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
 import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge.utils.Utils;
@@ -70,5 +71,11 @@ public class SpongeArrow extends Arrow {
 	public Location getEyeLocation() {
 		Vector3d vec = arrow.getProperty(EyeLocationProperty.class).map(EyeLocationProperty::getValue).orElse(arrow.getRotation());
 		return new SpongeLocation(new SpongeWorld(arrow.getWorld()), vec.getX(), vec.getY(), vec.getZ());
+	}
+	
+	@Override
+	public Vector getRotation() {
+		Vector3d vec = arrow.getRotation();
+		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
 }

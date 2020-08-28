@@ -4,6 +4,7 @@ import com.elikill58.negativity.api.entity.Arrow;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 
 public class SpigotArrow extends Arrow {
@@ -62,5 +63,11 @@ public class SpigotArrow extends Arrow {
 	@Override
 	public Location getEyeLocation() {
 		return null;
+	}
+	
+	@Override
+	public Vector getRotation() {
+		org.bukkit.util.Vector vec = arrow.getLocation().getDirection();
+		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
 }

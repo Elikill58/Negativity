@@ -5,6 +5,7 @@ import java.util.UUID;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 
 public class SpigotOfflinePlayer extends OfflinePlayer {
 
@@ -71,6 +72,11 @@ public class SpigotOfflinePlayer extends OfflinePlayer {
 	
 	@Override
 	public Location getEyeLocation() {
+		return null;
+	}
+	
+	@Override
+	public Vector getRotation() {
 		return null;
 	}
 }

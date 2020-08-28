@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.block.BlockIterator;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 
 public abstract class Entity extends CommandSender {
 
@@ -37,6 +38,8 @@ public abstract class Entity extends CommandSender {
 	public abstract double getEyeHeight();
 	
 	public abstract Location getEyeLocation();
+	
+	public abstract Vector getRotation();
 	
 	public abstract EntityType getType();
 }

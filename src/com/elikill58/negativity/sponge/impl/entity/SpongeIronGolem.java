@@ -8,6 +8,7 @@ import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.IronGolem;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
 import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge.utils.Utils;
@@ -70,5 +71,11 @@ public class SpongeIronGolem extends IronGolem {
 	public Location getEyeLocation() {
 		Vector3d vec = golem.getProperty(EyeLocationProperty.class).map(EyeLocationProperty::getValue).orElse(golem.getRotation());
 		return new SpongeLocation(new SpongeWorld(golem.getWorld()), vec.getX(), vec.getY(), vec.getZ());
+	}
+	
+	@Override
+	public Vector getRotation() {
+		Vector3d vec = golem.getRotation();
+		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
 }

@@ -5,6 +5,7 @@ import org.bukkit.entity.LivingEntity;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 
@@ -65,5 +66,11 @@ public class SpigotEntity extends Entity {
 			return new SpigotLocation(new SpigotWorld(eye.getWorld()), eye.getX(), eye.getY(), eye.getZ());
 		}
 		return null;
+	}
+	
+	@Override
+	public Vector getRotation() {
+		org.bukkit.util.Vector vec = entity.getLocation().getDirection();
+		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
 }

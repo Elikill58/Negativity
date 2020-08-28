@@ -282,4 +282,9 @@ public class BungeePlayer extends Player {
 	public Location getEyeLocation() {
 		return null;
 	}
+	
+	@Override
+	public Vector getRotation() {
+		return null;
+	}
 }

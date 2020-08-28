@@ -59,4 +59,8 @@ public class SpigotArrow extends Arrow {
 		return arrow;
 	}
 	
+	@Override
+	public Location getEyeLocation() {
+		return null;
+	}
 }

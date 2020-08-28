@@ -1,9 +1,12 @@
 package com.elikill58.negativity.spigot.impl.entity;
 
+import org.bukkit.entity.LivingEntity;
+
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
+import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 
 public class SpigotEntity extends Entity {
 
@@ -53,5 +56,14 @@ public class SpigotEntity extends Entity {
 	@Override
 	public String getName() {
 		return entity.getName();
+	}
+	
+	@Override
+	public Location getEyeLocation() {
+		if(entity instanceof LivingEntity) {
+			org.bukkit.Location eye = ((LivingEntity) entity).getEyeLocation();
+			return new SpigotLocation(new SpigotWorld(eye.getWorld()), eye.getX(), eye.getY(), eye.getZ());
+		}
+		return null;
 	}
 }

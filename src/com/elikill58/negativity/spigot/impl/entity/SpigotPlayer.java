@@ -363,4 +363,10 @@ public class SpigotPlayer extends Player {
 	public Object getDefault() {
 		return p;
 	}
+	
+	@Override
+	public Location getEyeLocation() {
+		org.bukkit.Location eye = p.getEyeLocation();
+		return new SpigotLocation(new SpigotWorld(eye.getWorld()), eye.getX(), eye.getY(), eye.getZ());
+	}
 }

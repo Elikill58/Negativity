@@ -13,6 +13,7 @@ import org.spongepowered.api.data.manipulator.mutable.entity.HealthData;
 import org.spongepowered.api.data.manipulator.mutable.entity.SleepingData;
 import org.spongepowered.api.data.manipulator.mutable.entity.SneakingData;
 import org.spongepowered.api.data.manipulator.mutable.entity.SprintData;
+import org.spongepowered.api.data.property.entity.EyeLocationProperty;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
@@ -363,5 +364,11 @@ public class SpongePlayer extends Player {
 	@Override
 	public Object getDefault() {
 		return p;
+	}
+	
+	@Override
+	public Location getEyeLocation() {
+		Vector3d vec = p.getProperty(EyeLocationProperty.class).map(EyeLocationProperty::getValue).orElse(p.getRotation());
+		return new SpongeLocation(new SpongeWorld(p.getWorld()), vec.getX(), vec.getY(), vec.getZ());
 	}
 }

@@ -5,6 +5,7 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.IronGolem;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
+import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 
 public class SpigotIronGolem extends IronGolem {
 
@@ -58,5 +59,10 @@ public class SpigotIronGolem extends IronGolem {
 	public String getName() {
 		return golem.getName();
 	}
-
+	
+	@Override
+	public Location getEyeLocation() {
+		org.bukkit.Location eye = golem.getEyeLocation();
+		return new SpigotLocation(new SpigotWorld(eye.getWorld()), eye.getX(), eye.getY(), eye.getZ());
+	}
 }

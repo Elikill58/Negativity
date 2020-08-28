@@ -36,5 +36,7 @@ public abstract class Entity extends CommandSender {
 	
 	public abstract double getEyeHeight();
 	
+	public abstract Location getEyeLocation();
+	
 	public abstract EntityType getType();
 }

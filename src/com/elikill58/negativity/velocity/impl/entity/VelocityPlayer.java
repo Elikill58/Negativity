@@ -278,4 +278,9 @@ public class VelocityPlayer extends Player {
 	public double getEyeHeight() {
 		return 0;
 	}
+	
+	@Override
+	public Location getEyeLocation() {
+		return null;
+	}
 }

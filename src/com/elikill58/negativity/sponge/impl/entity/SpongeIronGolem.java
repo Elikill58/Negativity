@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge.impl.entity;
 
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.property.entity.EyeLocationProperty;
 import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.api.entity.Entity;
@@ -8,7 +9,9 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.IronGolem;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
+import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.flowpowered.math.vector.Vector3d;
 
 public class SpongeIronGolem extends IronGolem {
 
@@ -62,5 +65,10 @@ public class SpongeIronGolem extends IronGolem {
 	public String getName() {
 		return golem.get(Keys.DISPLAY_NAME).orElse(Text.of("Golem")).toPlain();
 	}
-
+	
+	@Override
+	public Location getEyeLocation() {
+		Vector3d vec = golem.getProperty(EyeLocationProperty.class).map(EyeLocationProperty::getValue).orElse(golem.getRotation());
+		return new SpongeLocation(new SpongeWorld(golem.getWorld()), vec.getX(), vec.getY(), vec.getZ());
+	}
 }

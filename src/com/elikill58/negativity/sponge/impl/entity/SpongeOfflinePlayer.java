@@ -68,5 +68,9 @@ public class SpongeOfflinePlayer extends OfflinePlayer {
 	public boolean hasPlayedBefore() {
 		return op.hasPlayedBefore();
 	}
-
+	
+	@Override
+	public Location getEyeLocation() {
+		return null;
+	}
 }

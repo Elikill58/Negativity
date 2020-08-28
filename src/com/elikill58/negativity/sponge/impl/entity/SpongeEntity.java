@@ -1,12 +1,15 @@
 package com.elikill58.negativity.sponge.impl.entity;
 
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.property.entity.EyeLocationProperty;
 import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
+import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
+import com.flowpowered.math.vector.Vector3d;
 
 public class SpongeEntity extends Entity {
 
@@ -57,5 +60,11 @@ public class SpongeEntity extends Entity {
 	@Override
 	public String getName() {
 		return entity.get(Keys.DISPLAY_NAME).orElse(Text.of(entity.getType().getName())).toPlain();
+	}
+	
+	@Override
+	public Location getEyeLocation() {
+		Vector3d vec = entity.getProperty(EyeLocationProperty.class).map(EyeLocationProperty::getValue).orElse(entity.getRotation());
+		return new SpongeLocation(new SpongeWorld(entity.getWorld()), vec.getX(), vec.getY(), vec.getZ());
 	}
 }

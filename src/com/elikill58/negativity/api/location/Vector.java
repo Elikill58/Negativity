@@ -4,7 +4,7 @@ import static com.elikill58.negativity.universal.utils.Maths.square;
 import static com.elikill58.negativity.universal.utils.Maths.floor;
 
 public class Vector implements Cloneable {
-	
+
 	public static final Vector ZERO = new Vector(0, 0, 0);
 	public static final Vector UNIT_X = new Vector(1, 0, 0);
 	public static final Vector UNIT_Y = new Vector(0, 1, 0);
@@ -12,21 +12,21 @@ public class Vector implements Cloneable {
 	public static final Vector ONE = new Vector(1, 1, 1);
 	public static final Vector RIGHT = UNIT_X;
 	public static final Vector UP = UNIT_Y;
-	
+
 	protected double x;
 	protected double y;
 	protected double z;
 
 	public Vector() {
-		
+
 	}
-	
+
 	public Vector(Location loc) {
 		this.x = loc.getX();
 		this.y = loc.getY();
 		this.z = loc.getZ();
 	}
-	
+
 	public Vector(int x, int y, int z) {
 		this.x = x;
 		this.y = y;
@@ -81,8 +81,7 @@ public class Vector implements Cloneable {
 	}
 
 	public double length() {
-		return Math.sqrt(
-				square(this.x) + square(this.y) + square(this.z));
+		return Math.sqrt(square(this.x) + square(this.y) + square(this.z));
 	}
 
 	public double lengthSquared() {
@@ -90,13 +89,11 @@ public class Vector implements Cloneable {
 	}
 
 	public double distance(Vector o) {
-		return Math.sqrt(square(this.x - o.x) + square(this.y - o.y)
-				+ square(this.z - o.z));
+		return Math.sqrt(square(this.x - o.x) + square(this.y - o.y) + square(this.z - o.z));
 	}
 
 	public double distanceSquared(Vector o) {
-		return square(this.x - o.x) + square(this.y - o.y)
-				+ square(this.z - o.z);
+		return square(this.x - o.x) + square(this.y - o.y) + square(this.z - o.z);
 	}
 
 	public float angle(Vector other) {
@@ -164,8 +161,7 @@ public class Vector implements Cloneable {
 	}
 
 	public boolean isInSphere(Vector origin, double radius) {
-		return square(origin.x - this.x) + square(origin.y - this.y)
-				+ square(origin.z - this.z) <= square(radius);
+		return square(origin.x - this.x) + square(origin.y - this.y) + square(origin.z - this.z) <= square(radius);
 	}
 
 	public double getX() {
@@ -235,6 +231,10 @@ public class Vector implements Cloneable {
 	public Vector setZ(float z) {
 		this.z = z;
 		return this;
+	}
+
+	public Vector negate() {
+		return new Vector(-this.x, -this.y, -this.z);
 	}
 
 	@Override

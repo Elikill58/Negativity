@@ -27,3 +27,6 @@ checks:
   # Count minerate
   minerate:
     active: true
+  # Check mining direction with ray
+  mining-direction:
+    active: true

@@ -23,6 +23,11 @@ public enum GameMode {
 		return name;
 	}
 	
+	@Override
+	public String toString() {
+		return "GameMode:" + name();
+	}
+	
 	public static GameMode get(String name) {
 		for(GameMode gm : GameMode.values())
 			if(gm.getName().equalsIgnoreCase(name) || gm.name().equalsIgnoreCase(name))

@@ -19,4 +19,9 @@ public abstract class Block extends NegativityObject {
 	public abstract boolean isLiquid();
 
 	public abstract void setType(Material type);
+	
+	@Override
+	public String toString() {
+		return "Block{type=" + getType().getId() + ",x=" + getX() + ",y=" + getY() + ",z=" + getZ() + "}";
+	}
 }

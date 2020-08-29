@@ -19,4 +19,9 @@ public abstract class Material extends NegativityObject {
 			return true;
 		return false;
 	}
+	
+	@Override
+	public String toString() {
+		return "Material{id=" + getId() + "}";
+	}
 }

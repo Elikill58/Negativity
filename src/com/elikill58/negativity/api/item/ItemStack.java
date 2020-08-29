@@ -15,4 +15,8 @@ public abstract class ItemStack extends NegativityObject {
 	public abstract void addEnchant(Enchantment enchant, int level);
 	public abstract void removeEnchant(Enchantment enchant);
 
+	@Override
+	public String toString() {
+		return "ItemStack{type=" + getType().getId() + ",amount=" + getAmount() + ",name=" + getName() + "}";
+	}
 }

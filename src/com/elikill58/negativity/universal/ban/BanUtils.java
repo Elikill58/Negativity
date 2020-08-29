@@ -11,6 +11,7 @@ import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
 
 public class BanUtils {
 
@@ -31,8 +32,10 @@ public class BanUtils {
 		if (!cheat.isActive() || !BanManager.banActive || np.isInBanning()) {
 			return false;
 		}
-		Adapter ada = Adapter.getAdapter();
-		return ada.getConfig().getInt("ban.reliability_need") <= relia && ada.getConfig().getInt("ban.alert_need") <= np.getAllWarn(cheat);
+		ConfigAdapter config = Adapter.getAdapter().getConfig();
+		if(config.getStringList("ban.cheat_disabled").contains(cheat.getKey().toLowerCase()))
+			return false;
+		return config.getInt("ban.reliability_need") <= relia && config.getInt("ban.alert_need") <= np.getAllWarn(cheat);
 	}
 
 	/**

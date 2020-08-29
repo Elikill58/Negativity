@@ -205,6 +205,7 @@ alert:
     # %cheat_key% : Cheat key (like "nofall") : You cannot edit it
     # %cheat_name% : Cheat name (like "NoFall") : You can edit it just below
     # %reliability% : Reliability of the alert
+    # %warn% : Amount of warn for this cheat
     run:
     - "mycommand %name% %cheat_key% %reliability%"
 
@@ -241,6 +242,9 @@ ban:
     - "ban %uuid% %reason%"
     unban:
     - "unban %uuid% %reason%"
+  # All cheat that are not count in ban
+  cheat_disabled:
+  - xray
   # Need to be banned
   reliability_need: 95
   alert_need: 10

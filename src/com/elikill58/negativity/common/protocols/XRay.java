@@ -2,6 +2,7 @@ package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
+import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Cheat;
@@ -9,10 +10,10 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 
-public class XRay extends Cheat {
+public class XRay extends Cheat implements Listeners {
 	
 	public XRay() {
-		super(CheatKeys.XRAY, false, Materials.EMERALD_ORE, CheatCategory.WORLD, false);
+		super(CheatKeys.XRAY, false, Materials.EMERALD_ORE, CheatCategory.WORLD, true);
 	}
 	
 	@EventListener

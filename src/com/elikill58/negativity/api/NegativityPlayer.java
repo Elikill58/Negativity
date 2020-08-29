@@ -77,6 +77,7 @@ public class NegativityPlayer {
 	public String LAST_OTHER_KEEP_ALIVE = "";
 	
 	// content
+	public Content<Location> locations = new Content<>();
 	public Content<Material> materials = new Content<>();
 	public Content<Boolean> booleans = new Content<>();
 	public Content<Double> doubles = new Content<>();

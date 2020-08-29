@@ -19,17 +19,16 @@ public class BlockRay {
 	private final World w;
 	private final Location position;
 	private final Vector vector;
-	private final Material neededType;
-	private final List<Material> filter;
+	private final List<Material> filter, neededType;
 	private int test;
 	private boolean hasOther = false;
 	
-	protected BlockRay(World w, Location position, Vector vector, int maxTest, Material neededType, boolean ignoreAir, Material[] filter) {
+	protected BlockRay(World w, Location position, Vector vector, int maxTest, Material[] neededType, boolean ignoreAir, Material[] filter) {
 		this.w = w;
 		this.position = position.clone();
 		this.test = maxTest;
 		this.vector = new Vector(parseVector(vector.getX()), parseVector(vector.getY()), parseVector(vector.getZ()));
-		this.neededType = neededType;
+		this.neededType = neededType == null ? null : new ArrayList<>(Arrays.asList(neededType));
 		this.filter = new ArrayList<>(Arrays.asList(filter));
 		if(ignoreAir)
 			this.filter.add(Materials.AIR);
@@ -74,7 +73,7 @@ public class BlockRay {
 	 * 
 	 * @return searched type
 	 */
-	public Material getNeededType() {
+	public List<Material> getNeededType() {
 		return neededType;
 	}
 	
@@ -114,9 +113,9 @@ public class BlockRay {
 		if(neededType != null) {
 			if(test == 0)
 				return RayResult.NEEDED_NOT_FOUND;
-			if(neededType.equals(type))
+			if(neededType.contains(type))
 				return RayResult.NEEDED_FOUND;
-			else if(!hasOther && !neededType.equals(Materials.AIR))
+			else if(!hasOther && !type.equals(Materials.AIR))
 				hasOther = true;
 			return RayResult.CONTINUE;
 		} else {
@@ -132,9 +131,8 @@ public class BlockRay {
 		private final Location position;
 		private boolean ignoreAir = true;
 		private Vector vector = Vector.ZERO;
-		private Material neededType = null;
 		private int maxTest = 200;
-		private Material[] filter = new Material[0];
+		private Material[] filter = new Material[0], neededType = null;
 		
 		/**
 		 * Create a new BlockRayBuilder
@@ -162,12 +160,12 @@ public class BlockRay {
 		
 		/**
 		 * Set a searched type.
-		 * Null by default.
+		 * Empty materials
 		 * 
-		 * @param type the searched material
+		 * @param type all searched material
 		 * @return this builder
 		 */
-		public BlockRayBuilder neededType(Material type) {
+		public BlockRayBuilder neededType(Material... type) {
 			this.neededType = type;
 			return this;
 		}

@@ -1,6 +1,6 @@
 # Negativity
 
-A Minecraft AntiCheat for **Spigot** (1.7.10 to 1.16.1) and **Sponge** (API 7.1.0). (*work also with PaperSpigot*)
+A Minecraft AntiCheat for **Spigot** (1.7.10 to 1.16.1) and **Sponge** (API 7.1.0) (*also works with PaperSpigot*).
 It is also compatible with **Bungeecord and Velocity**.
 You need to put the plugin on Spigot/Sponge even if you put it on your proxy.
 
@@ -10,7 +10,7 @@ Need help ? Have a question or something to suggest ?
 
 Contact me via Discord private messages (`Elikill58#0743`) or in my server ([join it here](https://discord.gg/KHRVTX2)).
 
-Suggestions and bug reports can also be filed in [this repository issue tracker](https://github.com/Elikill58/Negativity/issues).
+Suggestions and bug reports can also be filled in [this repository issue tracker](https://github.com/Elikill58/Negativity/issues).
 
 ## How to install ?
 
@@ -21,17 +21,17 @@ You can download the plugin here (it's the same plugin, just not on the same web
 [Spigot/Bungeecord](https://www.spigotmc.org/resources/48399),
 [Sponge](https://ore.spongepowered.org/Elikill58/Negativity)
 
-2) Add to your serveur
+2) Add to your server
 
-On Sponge, you have to put the downloaded file on **/mods folder**.
+On Sponge, you have to place the downloaded file on **/mods folder**.
 
-On Spigot/Bungeecord/Velocity, you have to put it on **/plugins folder**.
+On Spigot/Bungeecord/Velocity, you have to place it on **/plugins folder**.
 
-3) **Restart** your serveur
+3) **Restart** your server
 
-A config file will be automatically generated (at /config/negativity for sponge, /plugins/Negativity for other).
+A config file will be automatically generated (at /config/negativity for Sponge, /plugins/Negativity for other).
 
-A new folder "lang" will appear on Negativty's config folder.
+A new "lang" folder will appear on Negativty's config folder.
 
 4) **Enjoy !**
 

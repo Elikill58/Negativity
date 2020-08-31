@@ -212,9 +212,10 @@ public class FakePlayer {
 			gameProfileClass = Class.forName(Version.getVersion().equals(Version.V1_7) ? "net.minecraft.util.com.mojang.authlib.GameProfile" : "com.mojang.authlib.GameProfile");
 			gameProfileConstructor = gameProfileClass.getConstructor(UUID.class, String.class);
 			
-	    	entityPlayerConstructor = getNmsClass("EntityPlayer").getConstructor(getNmsClass("MinecraftServer"), getNmsClass("WorldServer"), gameProfileClass, getNmsClass("PlayerInteractManager"));
-			playerInteractManagerConstructor = getNmsClass("PlayerInteractManager").getConstructor(getNmsClass("World" + (Version.getVersion().isNewerOrEquals(Version.V1_14) ? "Server" : "")));
-			minecraftServer = getNmsClass("MinecraftServer").getMethod("getServer").invoke(getNmsClass("MinecraftServer"));
+			Class<?> mcSrvClass = getNmsClass("MinecraftServer"), worldSrvClass = getNmsClass("WorldServer");
+	    	entityPlayerConstructor = getNmsClass("EntityPlayer").getConstructor(mcSrvClass, getNmsClass("WorldServer"), gameProfileClass, getNmsClass("PlayerInteractManager"));
+			playerInteractManagerConstructor = getNmsClass("PlayerInteractManager").getConstructor((Version.getVersion().isNewerOrEquals(Version.V1_14) ? worldSrvClass : getNmsClass("World")));
+			minecraftServer = mcSrvClass.getMethod("getServer").invoke(mcSrvClass);
 			
 			packetEntityMetadataConstructor = getNmsClass("PacketPlayOutEntityMetadata").getConstructor(int.class, getNmsClass("DataWatcher"), boolean.class);
 			packetEntitySpawnConstructor = getNmsClass("PacketPlayOutNamedEntitySpawn").getConstructor(getNmsClass("EntityHuman"));

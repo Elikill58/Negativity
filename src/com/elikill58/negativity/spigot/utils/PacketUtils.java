@@ -40,9 +40,7 @@ public class PacketUtils {
 	public static Class<?> getNmsClass(String name){
 		return ALL_CLASS.computeIfAbsent(name, (s) -> {
 			try {
-				Class<?> clazz = Class.forName("net.minecraft.server." + VERSION + "." + name);
-				ALL_CLASS.put(name, clazz);
-				return clazz;
+				return Class.forName("net.minecraft.server." + VERSION + "." + name);
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;

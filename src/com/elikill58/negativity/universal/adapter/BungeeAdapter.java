@@ -10,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.Inventory;
@@ -21,6 +22,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
@@ -34,6 +36,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.gson.Gson;
 
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
 public class BungeeAdapter extends Adapter {
@@ -141,97 +144,91 @@ public class BungeeAdapter extends Adapter {
 
 	@Override
 	public void alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, CheatHover hover) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public List<UUID> getOnlinePlayersUUID() {
-		// TODO Auto-generated method stub
-		return null;
+		List<UUID> list = new ArrayList<>();
+		pl.getProxy().getPlayers().forEach((p) -> list.add(p.getUniqueId()));
+		return list;
 	}
 
 	@Override
 	public double[] getTPS() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public double getLastTPS() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public ItemRegistrar getItemRegistrar() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Location createLocation(World w, double x, double y, double z) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public List<Player> getOnlinePlayers() {
-		// TODO Auto-generated method stub
-		return null;
+		List<Player> list = new ArrayList<>();
+		pl.getProxy().getPlayers().forEach((p) -> list.add(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new BungeePlayer(p)).getPlayer()));
+		return list;
 	}
 
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
 	public ItemBuilder createSkullItemBuilder(Player owner) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Player getPlayer(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(name);
+		if(pp == null)
+			return null;
+		return NegativityPlayer.getNegativityPlayer(pp.getUniqueId(), () -> new BungeePlayer(pp)).getPlayer();
 	}
 
 	@Override
 	public Player getPlayer(UUID uuid) {
-		// TODO Auto-generated method stub
-		return null;
+		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(uuid);
+		if(pp == null)
+			return null;
+		return NegativityPlayer.getNegativityPlayer(uuid, () -> new BungeePlayer(pp)).getPlayer();
 	}
 
 	@Override
 	public OfflinePlayer getOfflinePlayer(String name) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean hasPlugin(String name) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

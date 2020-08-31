@@ -5,11 +5,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.Inventory;
@@ -32,6 +34,7 @@ import com.elikill58.negativity.universal.translation.NegativityTranslationProvi
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.velocity.VelocityNegativity;
+import com.elikill58.negativity.velocity.impl.entity.VelocityPlayer;
 import com.google.gson.Gson;
 
 public class VelocityAdapter extends Adapter {
@@ -139,31 +142,28 @@ public class VelocityAdapter extends Adapter {
 	@Override
 	public void alertMod(ReportType type, com.elikill58.negativity.api.entity.Player p, Cheat c, int reliability,
 			String proof, CheatHover hover) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public List<UUID> getOnlinePlayersUUID() {
-		// TODO Auto-generated method stub
-		return null;
+		List<UUID> list = new ArrayList<>();
+		pl.getServer().getAllPlayers().forEach((p) -> list.add(p.getUniqueId()));
+		return list;
 	}
 
 	@Override
 	public double[] getTPS() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public double getLastTPS() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
 	@Override
 	public ItemRegistrar getItemRegistrar() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -179,8 +179,10 @@ public class VelocityAdapter extends Adapter {
 	}
 
 	@Override
-	public List<com.elikill58.negativity.api.entity.Player> getOnlinePlayers() {
-		return null;
+	public List<Player> getOnlinePlayers() {
+		List<Player> list = new ArrayList<>();
+		pl.getServer().getAllPlayers().forEach((p) -> list.add(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer()));
+		return list;
 	}
 
 	@Override
@@ -190,43 +192,45 @@ public class VelocityAdapter extends Adapter {
 
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 	
 	@Override
 	public ItemBuilder createSkullItemBuilder(Player owner) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public Player getPlayer(String name) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<com.velocitypowered.api.proxy.Player> opt = pl.getServer().getPlayer(name);
+		if(opt.isPresent()) {
+			com.velocitypowered.api.proxy.Player p = opt.get();
+			return NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer();
+		} else
+			return null;
 	}
 
 	@Override
 	public Player getPlayer(UUID uuid) {
-		// TODO Auto-generated method stub
-		return null;
+		Optional<com.velocitypowered.api.proxy.Player> opt = pl.getServer().getPlayer(uuid);
+		if(opt.isPresent()) {
+			return NegativityPlayer.getNegativityPlayer(uuid, () -> new VelocityPlayer(opt.get())).getPlayer();
+		} else
+			return null;
 	}
 
 	@Override
 	public OfflinePlayer getOfflinePlayer(String name) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean hasPlugin(String name) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

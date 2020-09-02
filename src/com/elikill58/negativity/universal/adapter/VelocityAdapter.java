@@ -35,6 +35,7 @@ import com.elikill58.negativity.universal.translation.TranslationProviderFactory
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.velocity.VelocityNegativity;
 import com.elikill58.negativity.velocity.impl.entity.VelocityPlayer;
+import com.elikill58.negativity.velocity.impl.plugin.VelocityExternalPlugin;
 import com.google.gson.Gson;
 
 public class VelocityAdapter extends Adapter {
@@ -226,11 +227,11 @@ public class VelocityAdapter extends Adapter {
 
 	@Override
 	public boolean hasPlugin(String name) {
-		return false;
+		return pl.getServer().getPluginManager().isLoaded(name);
 	}
 
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		return null;
+		return new VelocityExternalPlugin(pl.getServer().getPluginManager().getPlugin(name).orElse(null));
 	}
 }

@@ -131,7 +131,7 @@ public class Negativity {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			return false;
 		}
-		manageAlertCommand(type, p, c, reliability);
+		manageAlertCommand(np, type, p, c, reliability);
 		if(timeBetweenAlert != -1) {
 			List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c) ? np.ALERT_NOT_SHOWED.get(c) : new ArrayList<>();
 			tempList.add(alert);
@@ -141,14 +141,14 @@ public class Negativity {
 		return true;
 	}
 
-	private static void manageAlertCommand(ReportType type, Player p, Cheat c, int reliability) {
+	private static void manageAlertCommand(NegativityPlayer np, ReportType type, Player p, Cheat c, int reliability) {
 		Configuration conf = Adapter.getAdapter().getConfig();
 		if(!conf.getBoolean("alert.command.active") || conf.getInt("alert.command.reliability_need") > reliability)
 			return;
 		for(String s : conf.getStringList("alert.command.run")) {
 			Adapter.getAdapter().runConsoleCommand(UniversalUtils.replacePlaceholders(s, "%name%",
 					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey().toLowerCase(), "%cheat_name%",
-					c.getName(), "%reliability%", reliability, "%report_type%", type.name()));
+					c.getName(), "%reliability%", reliability, "%report_type%", type.name(), "%warn%", np.getWarn(c)));
 		}
 	}
 

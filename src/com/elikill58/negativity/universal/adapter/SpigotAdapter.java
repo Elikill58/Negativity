@@ -38,11 +38,8 @@ import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.plugin.SpigotExternalPlugin;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.NegativityAccountManager;
-import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.JavaLoggerAdapter;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
@@ -119,11 +116,6 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public NegativityAccountManager getAccountManager() {
 		return accountManager;
-	}
-
-	@Override
-	public void alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, CheatHover hover) {
-		// SpigotNegativity.alertMod(type, (Player) p, c, reliability, proof, hover);
 	}
 
 	@Override

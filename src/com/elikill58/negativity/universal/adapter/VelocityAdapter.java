@@ -24,9 +24,7 @@ import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
-import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.logger.Slf4jLoggerAdapter;
@@ -138,12 +136,6 @@ public class VelocityAdapter extends Adapter {
 	@Override
 	public LoggerAdapter getLogger() {
 		return logger;
-	}
-
-	@Override
-	public void alertMod(ReportType type, com.elikill58.negativity.api.entity.Player p, Cheat c, int reliability,
-			String proof, CheatHover hover) {
-		
 	}
 
 	@Override

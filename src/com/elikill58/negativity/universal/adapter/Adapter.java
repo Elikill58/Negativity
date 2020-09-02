@@ -23,9 +23,7 @@ import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
-import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 
@@ -101,7 +99,6 @@ public abstract class Adapter {
 	public abstract void reloadConfig();
 
 	public abstract NegativityAccountManager getAccountManager();
-	public abstract void alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, CheatHover hover);
 	public abstract void runConsoleCommand(String cmd);
 	public abstract CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId);
 	public abstract List<UUID> getOnlinePlayersUUID();

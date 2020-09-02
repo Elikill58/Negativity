@@ -35,10 +35,7 @@ import com.elikill58.negativity.sponge.impl.item.SpongeItemBuilder;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemRegistrar;
 import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
 import com.elikill58.negativity.sponge.impl.plugin.SpongeExternalPlugin;
-import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
-import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.logger.Slf4jLoggerAdapter;
@@ -148,12 +145,6 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public LoggerAdapter getLogger() {
 		return logger;
-	}
-
-	@Override
-	public void alertMod(ReportType type, com.elikill58.negativity.api.entity.Player p, Cheat c, int reliability,
-			String proof, CheatHover hover) {
-		
 	}
 
 	@Override

@@ -25,9 +25,7 @@ import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.bungee.impl.plugin.BungeeExternalPlugin;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
-import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.JavaLoggerAdapter;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
@@ -141,11 +139,6 @@ public class BungeeAdapter extends Adapter {
 	@Override
 	public LoggerAdapter getLogger() {
 		return logger;
-	}
-
-	@Override
-	public void alertMod(ReportType type, Player p, Cheat c, int reliability, String proof, CheatHover hover) {
-		
 	}
 
 	@Override

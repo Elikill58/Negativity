@@ -24,7 +24,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public abstract class Special {
 
 	private static final File MODULE_FOLDER = new File(Cheat.MODULE_FOLDER, "special");
-	public static final List<Special> SPECIALS = new ArrayList<>();
+	private static final List<Special> SPECIALS = new ArrayList<>();
 	private final String key;
 	private Configuration config;
 	private boolean needPacket, hasListener;

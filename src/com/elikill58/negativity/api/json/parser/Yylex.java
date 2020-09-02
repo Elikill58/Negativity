@@ -347,13 +347,6 @@ class Yylex {
 	}
 
 	/**
-	 * Returns the length of the matched text region.
-	 */
-	public final int yylength() {
-		return zzMarkedPos - zzStartRead;
-	}
-
-	/**
 	 * Reports an error that occured while scanning.
 	 *
 	 * In a wellformed scanner (no or only correct usage of yypushback(int) and a

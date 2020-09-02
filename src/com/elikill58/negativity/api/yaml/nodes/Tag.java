@@ -28,7 +28,7 @@ public final class Tag implements Comparable<Tag> {
 	public static final Tag STR;
 	public static final Tag SEQ;
 	public static final Tag MAP;
-	public static final Map<Tag, Set<Class<?>>> COMPATIBILITY_MAP;
+	private static final Map<Tag, Set<Class<?>>> COMPATIBILITY_MAP;
 	private final String value;
 	private boolean secondary;
 

@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nullable;
 
@@ -20,7 +19,6 @@ import org.spongepowered.api.effect.potion.PotionEffectType;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemTypes;
-import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.world.Location;
@@ -46,25 +44,6 @@ public class Utils {
 	public static Player getFirstOnlinePlayer() {
 		Collection<Player> onlinePlayers = Sponge.getServer().getOnlinePlayers();
 		return onlinePlayers.isEmpty() ? null : onlinePlayers.iterator().next();
-	}
-
-	@Nullable
-	public static Player getRandomPlayer() {
-		Collection<Player> onlinePlayers = Sponge.getServer().getOnlinePlayers();
-		if (onlinePlayers.isEmpty())
-			return null;
-
-		int randomIndex = ThreadLocalRandom.current().nextInt(onlinePlayers.size());
-		return onlinePlayers.toArray(new Player[0])[randomIndex];
-	}
-
-	public static int getPing(Player p) {
-		return p.getConnection().getLatency();
-	}
-
-	public static Inventory fillInventoryWith(ItemStack item, Inventory inv) {
-		inv.forEach(inventory -> inventory.slots().forEach(slot -> slot.set(item)));
-		return inv;
 	}
 
 	public static HashMap<String, String> getModsNameVersionFromMessage(String modName) {

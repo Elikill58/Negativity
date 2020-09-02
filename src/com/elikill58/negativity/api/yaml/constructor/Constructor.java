@@ -61,21 +61,7 @@ public class Constructor extends SafeConstructor {
 			}
 		}
 	}
-
-	public Constructor(final String theRoot) throws ClassNotFoundException {
-		this(Class.forName(check(theRoot)));
-	}
-
-	private static final String check(final String s) {
-		if (s == null) {
-			throw new NullPointerException("Root type must be provided.");
-		}
-		if (s.trim().length() == 0) {
-			throw new YAMLException("Root type must be provided.");
-		}
-		return s;
-	}
-
+	
 	protected Class<?> getClassForNode(final Node node) {
 		final Class<?> classForTag = this.typeTags.get(node.getTag());
 		if (classForTag == null) {

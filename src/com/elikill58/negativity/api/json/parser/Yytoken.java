@@ -8,14 +8,14 @@ package com.elikill58.negativity.api.json.parser;
  * @author FangYidong<fangyidong@yahoo.com.cn>
  */
 public class Yytoken {
-	public static final int TYPE_VALUE=0;//JSON primitive value: string,number,boolean,null
-	public static final int TYPE_LEFT_BRACE=1;
-	public static final int TYPE_RIGHT_BRACE=2;
-	public static final int TYPE_LEFT_SQUARE=3;
-	public static final int TYPE_RIGHT_SQUARE=4;
-	public static final int TYPE_COMMA=5;
-	public static final int TYPE_COLON=6;
-	public static final int TYPE_EOF=-1;//end of file
+	static final int TYPE_VALUE=0;//JSON primitive value: string,number,boolean,null
+	static final int TYPE_LEFT_BRACE=1;
+	static final int TYPE_RIGHT_BRACE=2;
+	static final int TYPE_LEFT_SQUARE=3;
+	static final int TYPE_RIGHT_SQUARE=4;
+	static final int TYPE_COMMA=5;
+	static final int TYPE_COLON=6;
+	static final int TYPE_EOF=-1;//end of file
 	
 	public int type=0;
 	public Object value=null;

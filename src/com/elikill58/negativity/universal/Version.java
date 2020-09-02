@@ -70,10 +70,6 @@ public enum Version {
 		return HIGHER;
 	}
 	
-	public static boolean isNewerOrEquals(Version v1, Version v2) {
-		return v1.isNewerOrEquals(v2);
-	}
-	
 	public static Version getVersion() {
 		return getVersion(Adapter.getAdapter().getVersion());
 	}

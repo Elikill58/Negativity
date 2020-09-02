@@ -23,6 +23,7 @@ import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
+import com.elikill58.negativity.bungee.impl.plugin.BungeeExternalPlugin;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.NegativityAccountManager;
@@ -224,11 +225,11 @@ public class BungeeAdapter extends Adapter {
 
 	@Override
 	public boolean hasPlugin(String name) {
-		return false;
+		return pl.getProxy().getPluginManager().getPlugin(name) != null;
 	}
 
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		return null;
+		return new BungeeExternalPlugin(pl.getProxy().getPluginManager().getPlugin(name));
 	}
 }

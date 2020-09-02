@@ -2,6 +2,8 @@ package com.elikill58.negativity.api;
 
 import java.util.HashMap;
 
+import com.elikill58.negativity.universal.CheatKeys;
+
 public class Content<T> {
 	
 	/**
@@ -12,10 +14,10 @@ public class Content<T> {
 	/**
 	 * Obtain the saved value
 	 * 
-	 * @param type where the value is
+	 * @param type where the value is (we suggest you to use {@link CheatKeys}}
 	 * @param valueName the value name
 	 * @param defaultValue returned when type or valueName not saved / don't exist
-	 * @return
+	 * @return the needed value according to the type and the valueName
 	 */
 	public T get(String type, String valueName, T defaultValue) {
 		HashMap<String, T> hashContent = mainContent.get(type);
@@ -28,7 +30,7 @@ public class Content<T> {
 	 * Edit the value :
 	 * type > valueName:value
 	 * 
-	 * @param type where the value will be
+	 * @param type where the value will be (we suggest you to use {@link CheatKeys}}
 	 * @param valueName the value key
 	 * @param value the saved value
 	 */
@@ -39,7 +41,7 @@ public class Content<T> {
 	/**
 	 * Remove value for the specified type
 	 * 
-	 * @param type where the value to remove is
+	 * @param type where the value to remove is (we suggest you to use {@link CheatKeys}}
 	 * @param valueName the value to remove
 	 */
 	public void remove(String type, String valueName) {

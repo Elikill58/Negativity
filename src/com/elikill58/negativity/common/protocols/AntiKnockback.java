@@ -96,11 +96,10 @@ public class AntiKnockback extends Cheat implements Listeners {
 							return;
 						double d = last.distance(actual);
 						recordData(p.getUniqueId(), DISTANCE_DAMAGE, d);
-						int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(100 - d);
+						int relia = UniversalUtils.parseInPorcent(100 - d);
 						if (d < 0.1 && !actual.getBlock().getType().equals(Materials.WEB) && !p.isSneaking()) {
 							boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this, relia, "ticked",
-									"Distance after damage: " + d + "; Damager: "
-											+ e.getDamager().getType().name().toLowerCase() + " Ping: " + ping,
+									"Distance after damage: " + d + "; Damager: " + e.getDamager().getType().name().toLowerCase(),
 									hoverMsg("main", "%distance%", d));
 							if (isSetBack() && mayCancel)
 								p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));

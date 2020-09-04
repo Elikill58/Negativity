@@ -46,7 +46,7 @@ public class FastPlace extends Cheat implements Listeners {
 		if (checkActive("time") && lastPing < getConfig().getInt("time_2_place", 50)) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(50 + lastPing),
 					"time", "Block placed too quickly. Last time: " + last + ", Last with ping: "
-					+ lastPing + ". Ping: " + ping, hoverMsg("main", "%time%", last));
+					+ lastPing + ".", hoverMsg("main", "%time%", last));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}

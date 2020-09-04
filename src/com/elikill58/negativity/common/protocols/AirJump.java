@@ -46,8 +46,7 @@ public class AirJump extends Cheat implements Listeners {
 				mayCancel = Negativity.alertMod(
 						diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 								UniversalUtils.parseInPorcent((int) (diffYtoFrom * 210) - p.getPing()), "diff-y",
-						"Actual diff Y: " + lastDiffY + ", last diff Y: " + diffYtoFrom + ", ping: " + p.getPing()
-								+ ". Warn for AirJump: " + np.getWarn(this));
+						"Actual diff Y: " + lastDiffY + ", last diff Y: " + diffYtoFrom);
 			}
 			lastDiffY = diffYtoFrom;
 		}

@@ -57,7 +57,7 @@ public class Sneak extends Cheat implements Listeners {
 				if(entityAction > 35){
 					if(np.booleans.get(getKey(), "last-sec", false)){
 						Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(55 + entityAction), "packet",
-								"EntityAction packet: " + entityAction + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(this));
+								"EntityAction packet: " + entityAction);
 						if(isSetBack())
 							p.setSneaking(false);
 					}

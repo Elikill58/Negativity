@@ -56,7 +56,7 @@ public class Nuker extends Cheat implements Listeners {
 			long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
 			if(dis < 50 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.FAST_DIGGING)) {
 				boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis), "time",
-						"Type: " + e.getBlock().getType().getId() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis + " (ping: " + ping + "). Warn: " + np.getWarn(this), hoverMsg("breaked_in", "%time%", dis));
+						"Type: " + e.getBlock().getType().getId() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis, hoverMsg("breaked_in", "%time%", dis));
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}
@@ -80,7 +80,7 @@ public class Nuker extends Cheat implements Listeners {
 			int blockDig = e.getPackets().getOrDefault(PacketType.Client.BLOCK_DIG, 0);
 			if(ping < getMaxAlertPing() && (blockDig - (ping / 10)) > 20 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()))
 				Negativity.alertMod(blockDig > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(20 + blockDig),
-						"packet", "BlockDig packet: " + blockDig + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(this));
+						"packet", "BlockDig packet: " + blockDig);
 		}
 	}
 }

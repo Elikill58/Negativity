@@ -74,7 +74,7 @@ public class Fly extends Cheat implements Listeners {
 					&& !p.isOnGround()) {
 				mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 						this, parseInPorcent((int) i * 50), "no-ground-i",
-						"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this),
+						"Player not in ground, i: " + i + ", onBoat: " + inBoat + ", distanceYToFrom: " + d,
 						inBoat ? hoverMsg("boat") : null);
 			}
 		}
@@ -92,8 +92,7 @@ public class Fly extends Cheat implements Listeners {
 						if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Materials.AIR))
 							porcent = parseInPorcent(porcent - 15);
 						mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
-								this, porcent, "no-ground-down", "Player not in ground (" + nb + " air blocks down), distance Y: " + d
-										+ ". Warn for fly: " + np.getWarn(this),
+								this, porcent, "no-ground-down", "Player not in ground (" + nb + " air blocks down), distance Y: " + d,
 										hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb));
 					}
 				}

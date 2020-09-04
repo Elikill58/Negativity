@@ -51,11 +51,11 @@ public class FastBow extends Cheat implements Listeners {
 					if (dif < (50 + ping))
 						mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(200 - dif - ping),
 								"last-shot", "Player use Bow, last shot: " + lastShotWithBow
-								+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), hoverMsg("main", "%time%", dif));
+								+ " Actual time: " + actual + " Difference: " + dif, hoverMsg("main", "%time%", dif));
 					else
 						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - dif - ping),
 								"last-shot", "Player use Bow, last shot: " + lastShotWithBow
-								+ " Actual time: " + actual + " Difference: " + dif + ", Warn: " + np.getWarn(this), hoverMsg("main", "%time%", dif));
+								+ " Actual time: " + actual + " Difference: " + dif, hoverMsg("main", "%time%", dif));
 					if(isSetBack() && mayCancel)
 						e.setCancelled(true);
 				}

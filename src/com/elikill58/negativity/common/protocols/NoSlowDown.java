@@ -47,11 +47,11 @@ public class NoSlowDown extends Cheat implements Listeners {
 		Location fl = from.clone().sub(to.clone());
 		double distance = to.toVector().distance(from.toVector());
 		if (distance > 0.2) {
-			int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(distance * 400);
+			int relia = UniversalUtils.parseInPorcent(distance * 400);
 			if((from.getY() - to.getY()) < -0.001)
 				return;
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "move",
-					"Soul sand under player. Distance from/to : " + distance + ". Ping: " + ping,
+					"Soul sand under player. Distance from/to : " + distance + ".",
 					hoverMsg("main", "%distance%", String.format("%.2f", distance)));
 			if (isSetBack() && mayCancel)
 				e.setTo(from.clone().add(fl.getX() / 2, (fl.getY() / 2) + 0.5, fl.getZ()));

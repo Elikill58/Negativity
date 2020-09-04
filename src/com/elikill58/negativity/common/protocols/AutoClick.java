@@ -78,7 +78,7 @@ public class AutoClick extends Cheat implements Listeners {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(np.ACTUAL_CLICK * 2.5), "count",
 					"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
-							+ "; Better click in one second: " + np.getAccount().getMostClicksPerSecond() + " Ping: " + ping,
+							+ "; Better click in one second: " + np.getAccount().getMostClicksPerSecond(),
 							hoverMsg("main", "%click%", np.ACTUAL_CLICK));
 			if (isSetBack() && mayCancel)
 				e.setCancelled(true);

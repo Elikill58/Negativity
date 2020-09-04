@@ -59,8 +59,7 @@ public class NoFall extends Cheat implements Listeners {
 								&& EssentialsSupport.checkEssentialsSpeedPrecondition(p))) {
 							boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "distance-ground",
 									"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceBetweenFromAndTo: "
-											+ distance + " (ping: " + p.getPing() + "). Warn: "
-											+ np.getWarn(this));
+											+ distance);
 							if(mayCancel)
 								np.NO_FALL_DAMAGE += 1;
 						} else if (np.NO_FALL_DAMAGE != 0) {
@@ -73,8 +72,7 @@ public class NoFall extends Cheat implements Listeners {
 					if (distance > 2D) {
 						boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "distance-no-ground",
 								"Player not in ground no fall Damage. FallDistance: " + p.getFallDistance()
-										+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + p.getPing()
-										+ "). Warn: " + np.getWarn(this));
+										+ ", DistanceBetweenFromAndTo: " + distance);
 						if(mayCancel)
 							np.NO_FALL_DAMAGE += 1;
 					} else if (np.NO_FALL_DAMAGE != 0) {
@@ -89,8 +87,7 @@ public class NoFall extends Cheat implements Listeners {
 					int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(100 - (ping / 5) + p.getFallDistance());
 					boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "have-to-ground",
 							"Player not ground with fall damage (FallDistance: " + p.getFallDistance() + "). Block 0.1 below: " + justUnder.getId()
-									+ ", DistanceBetweenFromAndTo: " + distance + " (ping: " + ping
-									+ "). Warn: " + np.getWarn(this));
+									+ ", DistanceBetweenFromAndTo: " + distance);
 					if(mayCancel && isSetBack())
 						manageDamage(p, (int) p.getFallDistance(), relia);
 				}

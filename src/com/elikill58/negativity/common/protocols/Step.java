@@ -44,8 +44,7 @@ public class Step extends Cheat implements Listeners {
 			if (!p.hasPotionEffect(PotionEffectType.JUMP) && dif > 0) {
 				int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(dif * 50);
 				if (dif > 1.499 && ping < 200) {
-					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "dif", "Warn for Step: "
-							+ np.getWarn(this) + ". Move " + dif + " blocks up. ping: " + ping, hoverMsg("main", "%block%", String.format("%.2f", dif)));
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "dif", "Move " + dif + " blocks up.", hoverMsg("main", "%block%", String.format("%.2f", dif)));
 					if (isSetBack() && mayCancel)
 						e.setCancelled(true);
 				}

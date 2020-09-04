@@ -48,7 +48,6 @@ public class Jesus extends Cheat implements Listeners {
 		Material type = loc.getBlock().getType(), underType = under.getBlock().getType();
 		boolean isInWater = type.getId().contains("WATER"), isOnWater = underType.getId().contains("WATER");
 		boolean mayCancel = false;
-		int ping = p.getPing();
 		double dif = e.getFrom().getY() - e.getTo().getY();
 		if(checkActive("water-around")) {
 			if (!isInWater && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
@@ -67,14 +66,12 @@ public class Jesus extends Cheat implements Listeners {
 					else if (dif == 0.0)
 						reliability = 90;
 					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(reliability), "water-around",
-							"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif
-									+ " and ping: " + ping);
+							"Stationary_water aroud him. Diff: " + dif);
 				}
 			}
 		}
 		if (checkActive("dif") && dif == -0.5 && (isInWater || isOnWater) && !LocationUtils.hasMaterialsAround(under, "FENCE")) {
-			mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "dif", "Warn for Jesus: "
-					+ np.getWarn(this) + ", dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + " " + ping + ", type: " + type.getId() + ", type Under: " + underType.getId());
+			mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "dif", "dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + ", type: " + type.getId() + ", type Under: " + underType.getId());
 		}
 		
 		if(checkActive("dif-y-2-move")) {
@@ -83,9 +80,8 @@ public class Jesus extends Cheat implements Listeners {
 				if (!hasOtherThan(under, STATIONARY_WATER) && !p.isSwimming()) {
 					mayCancel = Negativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING,
 							p, this, parseInPorcent((dif + 5) * 10), "dif-y-2-move",
-							"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: "
-							+ dif + " (other: " + np.doubles.get(JESUS, "last-y-" + (!jesusState), 0.0)
-							+ ") and ping: " + ping);
+							"Stationary_water aroud him. Difference between 2 y: " + dif
+							+ " (other: " + np.doubles.get(JESUS, "last-y-" + (!jesusState), 0.0) + ")");
 				}
 			}
 			np.doubles.set(JESUS, "last-y-" + jesusState, dif);
@@ -101,7 +97,7 @@ public class Jesus extends Cheat implements Listeners {
 				if (!hasMaterialsAround(loc, "WATER_LILY") && !hasMaterialsAround(upper, "WATER_LILY")
 						&& !hasOtherThan(under, "WATER")) {
 					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98, "distance-in",
-							"In water, distance: " + distanceAbs + ", ping: " + ping,
+							"In water, distance: " + distanceAbs,
 							hoverMsg("main", "%distance%", distanceAbs));
 				}
 			}

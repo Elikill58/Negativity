@@ -45,7 +45,7 @@ public class Scaffold extends Cheat implements Listeners {
 						localPing = 1;
 					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, Scaffold.this,
 							UniversalUtils.parseInPorcent(120 / localPing), "below",
-							"Item in hand: " + m.getId() + " Block placed: " + placed.getId() + " Ping: " + ping,
+							"Item in hand: " + m.getId() + " Block placed: " + placed.getId(),
 							hoverMsg("main", "%item%", m.getId().toLowerCase(), "%block%",
 									placed.getId().toLowerCase()));
 					if (isSetBack() && mayCancel) {

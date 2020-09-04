@@ -58,7 +58,7 @@ public class ForceField extends Cheat implements Listeners {
 					type = ReportType.VIOLATION;
 				Negativity.alertMod(type, np.getPlayer(), this, UniversalUtils.parseInPorcent(arm + useEntity + np.getWarn(this)),
 						"packet", "ArmAnimation (Attack in one second): " + arm + ", UseEntity (interaction with other entity): "
-						+ useEntity + " And warn: " + np.getWarn(this) + ". Ping: " + e.getPlayer().getPing());
+						+ useEntity);
 			}
 		}
 	}
@@ -75,10 +75,9 @@ public class ForceField extends Cheat implements Listeners {
 			return;
 		boolean mayCancel = false;
 		Entity cible = e.getEntity();
-		int ping = p.getPing();
 		if(checkActive("line-sight") && p.hasLineOfSight(cible)) {
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
-					"Hit " + cible.getType().name() + " but cannot see it, ping: " + ping,
+					"Hit " + cible.getType().name() + " but cannot see it",
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase()));
 		}
 		if(Utils.hasThorns(p)) {
@@ -95,8 +94,7 @@ public class ForceField extends Cheat implements Listeners {
 			if (checkActive("reach") && dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !e.getDamager().getType().equals(EntityType.ENDER_DRAGON)) {
 				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getEntity().getType().name().toLowerCase() : e.getEntity().getName();
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10), "reach",
-						"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
-						+ ". Ping: " + ping, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
+						"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns", hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
 			}
 		}
 		if (isSetBack() && mayCancel)

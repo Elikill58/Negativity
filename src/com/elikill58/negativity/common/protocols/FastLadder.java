@@ -54,9 +54,8 @@ public class FastLadder extends Cheat implements Listeners {
 			tempLoc.sub(0, 1, 0);
 		}
 		if (distance > 0.23 && distance < 3.8 && nbLadder > 2 && loc.add(0, 1, 0).getBlock().getType().getId().contains("LADDER")) {
-			int ping = p.getPing();
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 350), "distance",
-					"On ladders. Distance from/to : " + distance + ". Ping: " + ping + "ms. Number Ladder: " + nbLadder, hoverMsg("main", "%nb%", nbLadder));
+					"On ladders. Distance from/to : " + distance + ". Number Ladder: " + nbLadder, hoverMsg("main", "%nb%", nbLadder));
 			if (isSetBack() && mayCancel)
 				e.setTo(e.getFrom().clone().add(fl.getX() / 2, (fl.getY() / 2) + 0.5, fl.getZ()));
 		}

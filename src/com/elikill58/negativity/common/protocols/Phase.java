@@ -50,8 +50,7 @@ public class Phase extends Cheat implements Listeners {
 			return;
 		if (!np.isJumpingWithBlock) {
 			Negativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent((y * 200) + 20),
-					"no-jump", "Player on air. No jumping. DistanceBetweenFromAndTo: " + y
-					+ " (ping: " + p.getPing() + "). Warn: " + np.getWarn(this));
+					"no-jump", "Player on air. No jumping. DistanceBetweenFromAndTo: " + y);
 		}
 	}
 }

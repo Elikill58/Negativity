@@ -3,8 +3,6 @@ package com.elikill58.negativity.sponge.impl.block;
 import java.util.Optional;
 
 import org.spongepowered.api.block.BlockSnapshot;
-import org.spongepowered.api.block.BlockState;
-import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.World;

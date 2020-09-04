@@ -42,15 +42,19 @@ import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
 import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.support.ViaVersionSupport;
 import com.flowpowered.math.vector.Vector3d;
 
 public class SpongePlayer extends Player {
 
 	private final org.spongepowered.api.entity.living.player.Player p;
+	private final Version playerVersion;
 
 	public SpongePlayer(org.spongepowered.api.entity.living.player.Player p) {
 		this.p = p;
+		this.playerVersion = Negativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(this) : Version.getVersion();
 	}
 
 	@Override
@@ -136,7 +140,7 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public Version getPlayerVersion() {
-		return Version.getVersion();
+		return playerVersion;
 	}
 
 	@Override

@@ -27,14 +27,19 @@ import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.support.ProtocolSupportSupport;
+import com.elikill58.negativity.universal.support.ViaVersionSupport;
 
 public class SpigotPlayer extends Player {
 
 	private final org.bukkit.entity.Player p;
-
+	private final Version playerVersion;
+	
 	public SpigotPlayer(org.bukkit.entity.Player p) {
 		this.p = p;
+		this.playerVersion = (Negativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(this) : (Negativity.protocolSupportSupport ? ProtocolSupportSupport.getPlayerVersion(this) : Version.getVersion()));
 	}
 
 	@Override
@@ -125,7 +130,7 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public Version getPlayerVersion() {
-		return Version.getVersion();
+		return playerVersion;
 	}
 
 	@Override

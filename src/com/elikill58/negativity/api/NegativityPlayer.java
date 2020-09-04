@@ -104,9 +104,7 @@ public class NegativityPlayer {
 				//if (c.needPacket())
 					//needPacket = true;
 			}
-		isBedrockPlayer = Negativity.floodGateSupport ? FloodGateSupport.isBedrockPlayer(p.getUniqueId()) : false;
-		//if (needPacket && !SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId()))
-		//	SpigotNegativityPlayer.INJECTED.add(p.getUniqueId());
+		this.isBedrockPlayer = Negativity.floodGateSupport ? FloodGateSupport.isBedrockPlayer(p.getUniqueId()) : false;
 	}
 
 	public NegativityAccount getAccount() {

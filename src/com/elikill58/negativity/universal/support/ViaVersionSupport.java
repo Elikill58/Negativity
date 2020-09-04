@@ -1,7 +1,6 @@
 package com.elikill58.negativity.universal.support;
 
-import org.bukkit.entity.Player;
-
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Version;
 
 import us.myles.ViaVersion.api.Via;

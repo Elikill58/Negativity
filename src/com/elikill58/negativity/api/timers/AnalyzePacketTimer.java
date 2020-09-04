@@ -38,7 +38,6 @@ public class AnalyzePacketTimer implements Runnable {
 				ping = 1;
 			
 			int flying = np.PACKETS.getOrDefault(PacketType.Client.FLYING, 0);
-			int entityAction = np.PACKETS.getOrDefault(PacketType.Client.ENTITY_ACTION, 0);
 			int blockDig = np.PACKETS.getOrDefault(PacketType.Client.BLOCK_DIG, 0);
 			
 			int flyingWithPing = flying - (ping / 6);
@@ -77,19 +76,6 @@ public class AnalyzePacketTimer implements Runnable {
 						}
 					}
 				}
-			}
-			
-			Cheat SNEAK = Cheat.forKey(CheatKeys.SNEAK);
-			if(np.hasDetectionActive(SNEAK) && SNEAK.checkActive("packet") && ping < 140){
-				if(entityAction > 35){
-					if(np.booleans.get(SNEAK.getKey(), "last-sec", false)){
-						Negativity.alertMod(ReportType.WARNING, p, SNEAK, UniversalUtils.parseInPorcent(55 + entityAction), "packet",
-								"EntityAction packet: " + entityAction + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(SNEAK));
-						if(SNEAK.isSetBack())
-							p.setSneaking(false);
-					}
-					np.booleans.set(SNEAK.getKey(), "last-sec", true);
-				} else np.booleans.set(SNEAK.getKey(), "last-sec", false);
 			}
 			
 			Cheat NUKER = Cheat.forKey(CheatKeys.NUKER);

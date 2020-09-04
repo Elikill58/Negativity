@@ -7,10 +7,12 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -41,6 +43,27 @@ public class Sneak extends Cheat implements Listeners {
 				}
 			}
 			np.booleans.set(SNEAK, "was-sneaking", p.isSneaking());
+		}
+	}
+	
+	@EventListener
+	public void onPacketClear(PlayerPacketsClearEvent e) {
+		NegativityPlayer np = e.getNegativityPlayer();
+		if(np.hasDetectionActive(this) && checkActive("packet")) {
+			Player p = e.getPlayer();
+			int ping = p.getPing();
+			if(ping < 140) {
+				int entityAction = e.getPackets().getOrDefault(PacketType.Client.ENTITY_ACTION, 0);
+				if(entityAction > 35){
+					if(np.booleans.get(getKey(), "last-sec", false)){
+						Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(55 + entityAction), "packet",
+								"EntityAction packet: " + entityAction + " Ping: " + ping + " Warn for Sneak: " + np.getWarn(this));
+						if(isSetBack())
+							p.setSneaking(false);
+					}
+					np.booleans.set(getKey(), "last-sec", true);
+				} else np.booleans.set(getKey(), "last-sec", false);
+			}
 		}
 	}
 }

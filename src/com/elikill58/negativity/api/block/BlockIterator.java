@@ -118,18 +118,13 @@ public class BlockIterator implements Iterator<Block> {
 
 		scan();
 
-		boolean startBlockFound = false;
 		for (int cnt = this.currentBlock; cnt >= 0; cnt--) {
 			if (blockEquals(this.blockQueue[cnt], startBlock)) {
 				this.currentBlock = cnt;
-				startBlockFound = true;
-				break;
+				throw new IllegalStateException("Start block missed in BlockIterator");
 			}
 		}
-		if (!startBlockFound) {
-			// TODO fix start block missed
-			//throw new IllegalStateException("Start block missed in BlockIterator");
-		}
+		
 		this.maxDistanceInt = round(maxDistance / (Math.sqrt(
 				mainDirection * mainDirection + secondDirection * secondDirection + thirdDirection * thirdDirection)
 				/ mainDirection));

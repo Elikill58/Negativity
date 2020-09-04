@@ -38,8 +38,6 @@ public class AnalyzePacketTimer implements Runnable {
 				ping = 1;
 			
 			int flying = np.PACKETS.getOrDefault(PacketType.Client.FLYING, 0);
-			int arm = np.PACKETS.getOrDefault(PacketType.Client.ARM_ANIMATION, 0);
-			int useEntity = np.PACKETS.getOrDefault(PacketType.Client.USE_ENTITY, 0);
 			int entityAction = np.PACKETS.getOrDefault(PacketType.Client.ENTITY_ACTION, 0);
 			int blockDig = np.PACKETS.getOrDefault(PacketType.Client.BLOCK_DIG, 0);
 			
@@ -78,17 +76,6 @@ public class AnalyzePacketTimer implements Runnable {
 							break;
 						}
 					}
-				}
-			}
-			Cheat FORCEFIELD = Cheat.forKey(CheatKeys.FORCEFIELD);
-			if (np.hasDetectionActive(FORCEFIELD) && FORCEFIELD.checkActive("packet")) {
-				if (arm > 16 && useEntity > 20) {
-					ReportType type = ReportType.WARNING;
-					if (np.getWarn(FORCEFIELD) > 5)
-						type = ReportType.VIOLATION;
-					Negativity.alertMod(type, p, FORCEFIELD, UniversalUtils.parseInPorcent(arm + useEntity + np.getWarn(FORCEFIELD)),
-							"packet", "ArmAnimation (Attack in one second): " + arm + ", UseEntity (interaction with other entity): "
-							+ useEntity + " And warn: " + np.getWarn(FORCEFIELD) + ". Ping: " + ping);
 				}
 			}
 			

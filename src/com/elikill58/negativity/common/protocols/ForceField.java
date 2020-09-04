@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
@@ -23,9 +24,11 @@ import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
@@ -41,6 +44,23 @@ public class ForceField extends Cheat implements Listeners {
 	public ForceField() {
 		super(CheatKeys.FORCEFIELD, true, Materials.DIAMOND_SWORD, CheatCategory.COMBAT, true, "ff", "killaura");
 		nf.setMaximumIntegerDigits(2);
+	}
+	
+	@EventListener
+	public void onPacketClear(PlayerPacketsClearEvent e) {
+		NegativityPlayer np = e.getNegativityPlayer();
+		if (np.hasDetectionActive(this) && checkActive("packet")) {
+			int arm = e.getPackets().getOrDefault(PacketType.Client.ARM_ANIMATION, 0);
+			int useEntity = e.getPackets().getOrDefault(PacketType.Client.USE_ENTITY, 0);
+			if (arm > 16 && useEntity > 20) {
+				ReportType type = ReportType.WARNING;
+				if (np.getWarn(this) > 5)
+					type = ReportType.VIOLATION;
+				Negativity.alertMod(type, np.getPlayer(), this, UniversalUtils.parseInPorcent(arm + useEntity + np.getWarn(this)),
+						"packet", "ArmAnimation (Attack in one second): " + arm + ", UseEntity (interaction with other entity): "
+						+ useEntity + " And warn: " + np.getWarn(this) + ". Ping: " + e.getPlayer().getPing());
+			}
+		}
 	}
 
 	@EventListener

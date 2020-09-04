@@ -8,7 +8,6 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.potion.PotionEffect;
-import com.elikill58.negativity.api.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
@@ -38,7 +37,6 @@ public class AnalyzePacketTimer implements Runnable {
 				ping = 1;
 			
 			int flying = np.PACKETS.getOrDefault(PacketType.Client.FLYING, 0);
-			int blockDig = np.PACKETS.getOrDefault(PacketType.Client.BLOCK_DIG, 0);
 			
 			int flyingWithPing = flying - (ping / 6);
 			if (flyingWithPing > 28) {
@@ -78,12 +76,6 @@ public class AnalyzePacketTimer implements Runnable {
 				}
 			}
 			
-			Cheat NUKER = Cheat.forKey(CheatKeys.NUKER);
-			if(np.hasDetectionActive(NUKER) && NUKER.checkActive("packet"))
-				if(ping < NUKER.getMaxAlertPing() && (blockDig - (ping / 10)) > 20 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()))
-					Negativity.alertMod(blockDig > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, UniversalUtils.parseInPorcent(20 + blockDig),
-							"packet", "BlockDig packet: " + blockDig + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
-
 			Cheat SPEED = Cheat.forKey(CheatKeys.SPEED);
 			if(np.hasDetectionActive(SPEED) && SPEED.checkActive("move-amount"))
 				if(np.MOVE_TIME > 60)

@@ -9,12 +9,14 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
+import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -66,5 +68,19 @@ public class Nuker extends Cheat implements Listeners {
 		if(m.contains("SLIME") || m.contains("TNT") || m.contains("LEAVE"))
 			return true;
 		return false;
+	}
+
+	
+	@EventListener
+	public void onPacketClear(PlayerPacketsClearEvent e) {
+		NegativityPlayer np = e.getNegativityPlayer();
+		if(np.hasDetectionActive(this) && checkActive("packet")) {
+			Player p = e.getPlayer();
+			int ping = p.getPing();
+			int blockDig = e.getPackets().getOrDefault(PacketType.Client.BLOCK_DIG, 0);
+			if(ping < getMaxAlertPing() && (blockDig - (ping / 10)) > 20 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()))
+				Negativity.alertMod(blockDig > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(20 + blockDig),
+						"packet", "BlockDig packet: " + blockDig + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(this));
+		}
 	}
 }

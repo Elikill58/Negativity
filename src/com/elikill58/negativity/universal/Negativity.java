@@ -22,7 +22,6 @@ import com.elikill58.negativity.api.events.negativity.ShowAlertPermissionEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.yaml.config.Configuration;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -205,7 +204,7 @@ public class Negativity {
 			AlertMessage alertMessage = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);
 			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(alertMessage));
 		} catch (IOException e) {
-			SpigotNegativity.getInstance().getLogger().severe("Could not send alert message to the proxy.");
+			Adapter.getAdapter().getLogger().error("Could not send alert message to the proxy.");
 			e.printStackTrace();
 		}
 	}
@@ -302,7 +301,7 @@ public class Negativity {
 			ReportMessage reportMessage = new ReportMessage(reported, reason, reporter.getName());
 			reporter.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(reportMessage));
 		} catch (IOException e) {
-			SpigotNegativity.getInstance().getLogger().severe("Could not send report message to the proxy.");
+			Adapter.getAdapter().getLogger().error("Could not send report message to the proxy.");
 			e.printStackTrace();
 		}
 	}

@@ -20,7 +20,6 @@ public class AnalyzePacketTimer implements Runnable {
 
 	@Override
 	public void run() {
-		// TODO move everything on protocols
 		for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
 			if(!p.isOnline()){
 				NegativityPlayer.removeFromCache(p.getUniqueId());

@@ -1,8 +1,12 @@
 package com.elikill58.negativity.sponge.impl.item;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
+import org.spongepowered.api.item.enchantment.EnchantmentType;
+import org.spongepowered.api.item.enchantment.EnchantmentTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.text.Text;
 
@@ -39,20 +43,33 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 
 	@Override
 	public int getEnchantLevel(Enchantment enchant) {
-		// TODO Auto-generated method stub
-		return 0;
+		EnchantmentData data = item.getOrCreate(EnchantmentData.class).get();
+		List<org.spongepowered.api.item.enchantment.Enchantment> list = data.getListValue().filter((en) -> en.getType().equals(getEnchantType(enchant))).get();
+		return list.isEmpty() ? 0 : list.get(0).getLevel();
 	}
 
 	@Override
 	public void addEnchant(Enchantment enchant, int level) {
-		// TODO Auto-generated method stub
-		
+		item.getOrCreate(EnchantmentData.class).get().addElement(org.spongepowered.api.item.enchantment.Enchantment.builder().type(getEnchantType(enchant)).level(level).build());
+	}
+	
+	private EnchantmentType getEnchantType(Enchantment enchant) {
+		switch (enchant) {
+		case DIG_SPEED:
+			return EnchantmentTypes.BINDING_CURSE;
+		case EFFICIENCY:
+			return EnchantmentTypes.EFFICIENCY;
+		case THORNS:
+			return EnchantmentTypes.THORNS;
+		default:
+			return null;
+		}
 	}
 
 	@Override
 	public void removeEnchant(Enchantment enchant) {
-		// TODO Auto-generated method stub
-		
+		EnchantmentData data = item.getOrCreate(EnchantmentData.class).get();
+		data.getListValue().filter((en) -> en.getType().equals(getEnchantType(enchant))).get().forEach((e) -> data.remove(e));
 	}
 
 	@Override

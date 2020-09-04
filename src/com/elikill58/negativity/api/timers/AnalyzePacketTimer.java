@@ -9,7 +9,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
@@ -76,11 +75,6 @@ public class AnalyzePacketTimer implements Runnable {
 				}
 			}
 			
-			Cheat SPEED = Cheat.forKey(CheatKeys.SPEED);
-			if(np.hasDetectionActive(SPEED) && SPEED.checkActive("move-amount"))
-				if(np.MOVE_TIME > 60)
-					Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p, SPEED, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2),
-							"move-amount", "Move " + np.MOVE_TIME + " times. Ping: " + ping + " Warn for Speed: " + np.getWarn(SPEED));
 			np.MOVE_TIME = 0;
 			np.clearPackets();
 		}

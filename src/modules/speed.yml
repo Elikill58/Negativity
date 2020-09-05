@@ -42,3 +42,6 @@ checks:
   # Same Y move
   same-diff:
     active: true
+  # Check the walk speed
+  walk-speed:
+    active: true

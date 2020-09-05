@@ -76,6 +76,8 @@ public class Speed extends Cheat implements Listeners {
 				|| hasMaterialsAround(loc.sub(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
+		double dif = to.getY() - from.getY();
+		double distance = from.distance(to);
 		boolean mayCancel = false, onGround = p.isOnGround();
 		if(onGround && checkActive("distance-ground")) {
 			double walkSpeed = Negativity.essentialsSupport ? (p.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : p.getWalkSpeed();
@@ -90,10 +92,10 @@ public class Speed extends Cheat implements Listeners {
 			}
 		}
 		if(onGround && checkActive("calculated")) {
-			double calculatedSpeedWithoutY = getSpeed(from, to);
-			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() < calculatedSpeedWithoutY && hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
+			double calculatedSpeedWithoutY = getSpeed(from, to), velocity = p.getVelocity().getY();
+			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && velocity > 0.0 && hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated",
-						"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().getY());
+						"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + velocity);
 			}
 		}
 		if(checkActive("distance-jumping") && !onGround && y >= 0.85D) {
@@ -106,7 +108,6 @@ public class Speed extends Cheat implements Listeners {
 		if(checkActive("high-speed") && !onGround && y < 0.85D) {
 			Material under = e.getTo().clone().sub(0, 1, 0).getBlock().getType();
 			if (!under.getId().contains("STEP") && !np.isUsingSlimeBlock && !(under.getId().contains("WATER") || p.isSwimming())) {
-				double distance = from.distance(to);
 				to.setY(from.getY());
 				double yy = to.distance(from);
 				if (distance > 0.45 && (distance > (yy * 2)) && p.getFallDistance() < 1) {
@@ -119,7 +120,6 @@ public class Speed extends Cheat implements Listeners {
 			}
 		}
 		if(checkActive("same-diff")) {
-			double dif = to.getY() - from.getY();
 			double d = np.doubles.get(SPEED, "dif-y", 0.0);
 			if(dif != 0.0 && d != 0.0) {
 				if (dif == d || dif == -d) {
@@ -127,6 +127,12 @@ public class Speed extends Cheat implements Listeners {
 							this, 95, "same-diff", "Differences : " + dif + " / " + d);
 				}
 				np.doubles.set(SPEED, "dif-y", dif);
+			}
+		}
+		if(checkActive("walk-speed")) {
+			if(dif == 0 && distance >= p.getWalkSpeed() * 2) {
+				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
+						this, 95, "walk-speed", "Differences : " + dif + ", distance: " + distance + ", walkSpeed: " + p.getWalkSpeed() + ", onGround: " + onGround);
 			}
 		}
 		if (mayCancel && isSetBack())

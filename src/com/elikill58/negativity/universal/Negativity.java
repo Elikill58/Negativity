@@ -214,12 +214,12 @@ public class Negativity {
 		if(!log)
 			return;
 		String time = new Timestamp(System.currentTimeMillis()).toString().split("\\.")[0];
-		np.logProof(time + ": (" + ping + "ms) " + reliability + "% " + c.getKey()
+		np.logProof(time + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " - " + checkName
 				+ " > " + proof + " | Warn: " + np.getWarn(c) + ", Version: " + p.getPlayerVersion().name() + ". TPS: " + getVisualTPS());
 	}
 	
 	private static String getVisualTPS() {
-		StringJoiner sj = new StringJoiner("/");
+		StringJoiner sj = new StringJoiner(" / ");
 		for(double d : Adapter.getAdapter().getTPS())
 			sj.add(String.format("%.4f", d));
 		return sj.toString();

@@ -43,7 +43,7 @@ public class Step extends Cheat implements Listeners {
 		if(checkActive("dif")) {
 			if (!p.hasPotionEffect(PotionEffectType.JUMP) && dif > 0) {
 				int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(dif * 50);
-				if (dif > 1.499 && ping < 200) {
+				if ((dif > 1.499) && ping < 200) {
 					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "dif", "Move " + dif + " blocks up.", hoverMsg("main", "%block%", String.format("%.2f", dif)));
 					if (isSetBack() && mayCancel)
 						e.setCancelled(true);
@@ -58,8 +58,8 @@ public class Step extends Cheat implements Listeners {
 			double diffBoost = dif - (amplifier / 10);
 			if(diffBoost > 0.2) {
 				recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
-				if(diffBoost > 0.6) {
-					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125), "dif-boost",
+				if(diffBoost > 0.5 || diffBoost == 0.25) {
+					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost == 0.25 ? 95 : diffBoost * 125), "dif-boost",
 							"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
 							hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
 				}

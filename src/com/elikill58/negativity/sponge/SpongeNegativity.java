@@ -113,7 +113,6 @@ public class SpongeNegativity {
 	public static RawDataChannel channel = null, fmlChannel = null;
 
 	private final Map<String, CommandMapping> reloadableCommands = new HashMap<>();
-	private static int timeBetweenAlert = -1;
 
 	public PluginContainer getContainer() {
 		return plugin;
@@ -126,7 +125,7 @@ public class SpongeNegativity {
 		INSTANCE = this;
 		Adapter.setAdapter(new SpongeAdapter(this));
 		Negativity.loadNegativity();
-		loadConfig();
+		
 		EventManager eventManager = Sponge.getEventManager();
 		eventManager.registerListeners(this, new FightManager());
 		eventManager.registerListeners(this, new PlayersEventsManager());
@@ -142,8 +141,8 @@ public class SpongeNegativity {
 		Task.builder().execute(new SpawnFakePlayerTimer()).delayTicks(20).interval(60 * 10, TimeUnit.SECONDS);
 		Task.builder().execute(new AnalyzePacketTimer()).delayTicks(0).interval(1, TimeUnit.SECONDS)
 				.name("negativity-packets").submit(this);
-		if(timeBetweenAlert != -1) // is == -1, don't need timer
-			Task.builder().execute(new PendingAlertsTimer()).interval(timeBetweenAlert, TimeUnit.MILLISECONDS)
+		if(Negativity.timeBetweenAlert != -1) // is == -1, don't need timer
+			Task.builder().execute(new PendingAlertsTimer()).interval(Negativity.timeBetweenAlert, TimeUnit.MILLISECONDS)
 					.name("negativity-pending-alerts").submit(this);
 
 		NegativityAccountStorage.register("file", new SpongeFileNegativityAccountStorage(configDir.resolve("user")));
@@ -307,10 +306,6 @@ public class SpongeNegativity {
 			accountManager.save(playerId);
 			accountManager.dispose(playerId);
 		}).submit(this);
-	}
-
-	public void loadConfig() {
-		timeBetweenAlert = Adapter.getAdapter().getConfig().getInt("time_between_alert");
 	}
 
 	public void loadItemBypasses() {

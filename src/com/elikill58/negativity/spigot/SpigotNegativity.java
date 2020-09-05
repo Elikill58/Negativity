@@ -62,7 +62,6 @@ public class SpigotNegativity extends JavaPlugin {
 	public static boolean hasBypass = false, isCraftBukkit = false;
 	private BukkitTask invTimer = null, timeTimeBetweenAlert = null, packetTimer = null, runSpawnFakePlayer = null;
 	public static String CHANNEL_NAME_FML = "";
-	private static int timeBetweenAlert = -1;
 	private NegativityPacketManager packetManager;
 	
 	@Override
@@ -148,9 +147,8 @@ public class SpigotNegativity extends JavaPlugin {
 		invTimer = getServer().getScheduler().runTaskTimer(this, new ActualizeInvTimer(), 5, 5);
 		packetTimer = getServer().getScheduler().runTaskTimer(this, new AnalyzePacketTimer(), 20, 20);
 		runSpawnFakePlayer = getServer().getScheduler().runTaskTimer(this, new SpawnFakePlayerTimer(), 20, 20 * 60 * 10);
-		timeBetweenAlert = getConfig().getInt("time_between_alert");
-		if(timeBetweenAlert != -1) {
-			int timeTick = (timeBetweenAlert / 1000) * 20;
+		if(Negativity.timeBetweenAlert != -1) {
+			int timeTick = (Negativity.timeBetweenAlert / 1000) * 20;
 			if(timeTimeBetweenAlert != null)
 				timeTimeBetweenAlert.cancel();
 			timeTimeBetweenAlert = getServer().getScheduler().runTaskTimer(this, new PendingAlertsTimer(), timeTick, timeTick);

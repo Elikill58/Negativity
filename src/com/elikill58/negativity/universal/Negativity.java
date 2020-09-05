@@ -243,9 +243,10 @@ public class Negativity {
 		UniversalUtils.init();
 		
 		Configuration config = ada.getConfig();
-		log = config.getBoolean("log_alerts");
-		log_console = config.getBoolean("log_alerts_in_console");
-		hasBypass = config.getBoolean("Permissions.bypass.active");
+		log = config.getBoolean("log_alerts", true);
+		log_console = config.getBoolean("log_alerts_in_console", true);
+		hasBypass = config.getBoolean("Permissions.bypass.active", false);
+		timeBetweenAlert = config.getInt("time_between_alert", 1000);
 		
 		StringJoiner supportedPluginName = new StringJoiner(", ");
 		if (ada.hasPlugin("Essentials")) {

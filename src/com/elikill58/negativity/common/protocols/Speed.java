@@ -47,13 +47,11 @@ public class Speed extends Cheat implements Listeners {
 		if(p.hasPotionEffect(PotionEffectType.SPEED) || p.hasElytra())
 			return;
 		
-		int ping = p.getPing();
 		if(checkActive("move-amount")) {
 			np.MOVE_TIME++;
 			if (np.MOVE_TIME > 60) {
 				boolean b = Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
-						this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount", "Move " + np.MOVE_TIME
-						+ " times. Ping: " + ping + " Warn for Speed: " + np.getWarn(this));
+						this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount", "Move " + np.MOVE_TIME + " times.");
 				if (b && isSetBack())
 					e.setCancelled(true);
 			}
@@ -65,6 +63,9 @@ public class Speed extends Cheat implements Listeners {
 				|| p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE) || p.isInsideVehicle()
 				|| hasEnderDragonAround(p) || p.getItemInHand().getType().getId().contains("TRIDENT"))
 			return;
+		for (Entity entity : p.getNearbyEntities(5, 5, 5))
+			if (entity.getType().equals(EntityType.CREEPER))
+				return;
 		if (np.BYPASS_SPEED != 0) {
 			np.BYPASS_SPEED--;
 			return;
@@ -84,8 +85,7 @@ public class Speed extends Cheat implements Listeners {
 					int porcent = UniversalUtils.parseInPorcent(y * 50 + UniversalUtils.getPorcentFromBoolean(walkTest, 20)
 							+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
 							+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
-					ReportType type = np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING;
-					mayCancel = Negativity.alertMod(type, p, this, porcent, "",
+					mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent, "",
 							"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: " + walkTest +
 							", walkWithEssentialsTest: " + walkWithEssTest, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
 				}
@@ -98,9 +98,6 @@ public class Speed extends Cheat implements Listeners {
 				}
 			}
 		} else if (!p.isOnGround()) {
-			for (Entity entity : p.getNearbyEntities(5, 5, 5))
-				if (entity.getType().equals(EntityType.CREEPER))
-					return;
 			if (!mayCancel) {
 				if (y >= 0.85D) {
 					if(checkActive("distance-jumping")) {

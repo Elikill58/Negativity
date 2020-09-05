@@ -2,6 +2,7 @@ package com.elikill58.negativity.common.protocols;
 
 import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialsAround;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
+import static com.elikill58.negativity.universal.CheatKeys.SPEED;
 
 import java.text.NumberFormat;
 
@@ -21,7 +22,6 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.support.EssentialsSupport;
@@ -32,7 +32,7 @@ public class Speed extends Cheat implements Listeners {
 	private NumberFormat numberFormat = NumberFormat.getInstance();
 	
 	public Speed() {
-		super(CheatKeys.SPEED, false, Materials.BEACON, CheatCategory.MOVEMENT, true, "speed", "speedhack");
+		super(SPEED, false, Materials.BEACON, CheatCategory.MOVEMENT, true, "speed", "speedhack");
 		numberFormat.setMaximumFractionDigits(4);
 	}
 
@@ -116,6 +116,17 @@ public class Speed extends Cheat implements Listeners {
 								"HighSpeed - Block under: " + under.getId() + ", Speed: " + distance + ", nb: " + np.SPEED_NB + ", fallDistance: " + p.getFallDistance());
 				} else
 					np.SPEED_NB = 0;
+			}
+		}
+		if(checkActive("same-diff")) {
+			double dif = to.getY() - from.getY();
+			double d = np.doubles.get(SPEED, "dif-y", 0.0);
+			if(dif != 0.0 && d != 0.0) {
+				if (dif == d || dif == -d) {
+					mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
+							this, 95, "same-diff", "Differences : " + dif + " / " + d);
+				}
+				np.doubles.set(SPEED, "dif-y", dif);
 			}
 		}
 		if (mayCancel && isSetBack())

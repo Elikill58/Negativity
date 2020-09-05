@@ -39,3 +39,6 @@ checks:
   # Calculated speed
   calculated:
     active: true
+  # Same Y move
+  same-diff:
+    active: true

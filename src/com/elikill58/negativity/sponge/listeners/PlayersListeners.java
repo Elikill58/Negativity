@@ -130,4 +130,13 @@ public class PlayersListeners {
 		EventManager.callEvent(event);
 		e.setCancelled(event.isCancelled());
 	}
+
+	@Listener
+	public void slimeManager(MoveEntityEvent e, @First Player p) {
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpongePlayer(p));
+		if(p.getLocation().sub(0, 1, 0).getBlock().getType().getId().contains("SLIME")) {
+			np.isUsingSlimeBlock = true;
+		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !p.getLocation().copy().sub(0, 1, 0).getBlock().getType().equals(BlockTypes.AIR)))
+			np.isUsingSlimeBlock = false;
+	}
 }

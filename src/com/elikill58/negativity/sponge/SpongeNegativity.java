@@ -65,7 +65,6 @@ import com.elikill58.negativity.sponge.listeners.BlockListeners;
 import com.elikill58.negativity.sponge.listeners.EntityListeners;
 import com.elikill58.negativity.sponge.listeners.FightManager;
 import com.elikill58.negativity.sponge.listeners.InventoryListeners;
-import com.elikill58.negativity.sponge.listeners.PlayersEventsManager;
 import com.elikill58.negativity.sponge.listeners.PlayersListeners;
 import com.elikill58.negativity.sponge.packets.NegativityPacketManager;
 import com.elikill58.negativity.sponge.utils.Utils;
@@ -128,7 +127,6 @@ public class SpongeNegativity {
 		
 		EventManager eventManager = Sponge.getEventManager();
 		eventManager.registerListeners(this, new FightManager());
-		eventManager.registerListeners(this, new PlayersEventsManager());
 		eventManager.registerListeners(this, new BlockListeners());
 		// TODO add Commands listeners
 		//eventManager.registerListeners(this, new CommandsListeners());

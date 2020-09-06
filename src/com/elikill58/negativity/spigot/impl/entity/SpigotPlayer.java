@@ -146,6 +146,11 @@ public class SpigotPlayer extends Player {
 	public int getLevel() {
 		return p.getLevel();
 	}
+	
+	@Override
+	public double getFoodLevel() {
+		return p.getFoodLevel();
+	}
 
 	@Override
 	public boolean getAllowFlight() {

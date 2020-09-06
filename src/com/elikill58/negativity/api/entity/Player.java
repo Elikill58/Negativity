@@ -127,6 +127,13 @@ public abstract class Player extends OfflinePlayer {
 	public abstract double getHealth();
 	
 	/**
+	 * Get the current player food level
+	 * 
+	 * @return the food level
+	 */
+	public abstract double getFoodLevel();
+	
+	/**
 	 * Get player gamemode
 	 * 
 	 * @return the Gamemode

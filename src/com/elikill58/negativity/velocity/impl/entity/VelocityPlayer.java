@@ -136,6 +136,11 @@ public class VelocityPlayer extends Player {
 	public int getLevel() {
 		return 0;
 	}
+	
+	@Override
+	public double getFoodLevel() {
+		return 0;
+	}
 
 	@Override
 	public float getFlySpeed() {

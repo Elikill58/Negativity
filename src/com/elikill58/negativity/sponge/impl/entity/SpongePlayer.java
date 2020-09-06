@@ -152,6 +152,11 @@ public class SpongePlayer extends Player {
 	public int getLevel() {
 		return p.get(Keys.EXPERIENCE_LEVEL).get();
 	}
+	
+	@Override
+	public double getFoodLevel() {
+		return p.get(Keys.FOOD_LEVEL).get();
+	}
 
 	@Override
 	public boolean getAllowFlight() {

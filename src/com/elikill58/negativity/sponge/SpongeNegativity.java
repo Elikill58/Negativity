@@ -115,6 +115,8 @@ public class SpongeNegativity {
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
 		INSTANCE = this;
+		configDir.toFile().mkdirs();
+		
 		Adapter.setAdapter(new SpongeAdapter(this));
 		Negativity.loadNegativity();
 		

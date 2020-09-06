@@ -52,7 +52,6 @@ import com.elikill58.negativity.api.timers.ClickManagerTimer;
 import com.elikill58.negativity.api.timers.PendingAlertsTimer;
 import com.elikill58.negativity.api.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.api.yaml.config.Configuration;
-import com.elikill58.negativity.sponge.commands.MigrateOldBansCommand;
 import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge.listeners.BlockListeners;
 import com.elikill58.negativity.sponge.listeners.CommandsListeners;
@@ -216,7 +215,6 @@ public class SpongeNegativity {
 
 		if (!reload) {
 			cmd.register(this, new CommandsListeners("negativity"), "negativity", "neg", "n");
-			cmd.register(this, MigrateOldBansCommand.create(), "negativitymigrateoldbans");
 		}
 
 		reloadCommand("mod", cmd, () -> new CommandsListeners("nmod"), "nmod", "mod");

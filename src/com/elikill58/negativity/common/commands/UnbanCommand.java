@@ -13,6 +13,7 @@ import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanResult;
+import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 
 public class UnbanCommand implements CommandListeners, TabListeners {
 
@@ -39,7 +40,10 @@ public class UnbanCommand implements CommandListeners, TabListeners {
 			Messages.sendMessage(sender, "unban.well_unban", "%name%", cible.getName());
 			return true;
 		} else {
-			Messages.sendMessage(sender, "unban.fail_unban", "%name%", cible.getName(), "%reason%", revokedBan.getResultType().getName());
+			if(revokedBan.getResultType().equals(BanResultType.ALREADY_UNBANNED))
+				Messages.sendMessage(sender, "unban.not_banned", "%name%", cible.getName());
+			else
+				Messages.sendMessage(sender, "unban.fail_unban", "%name%", cible.getName(), "%reason%", revokedBan.getResultType().getName());
 			return false;
 		}
 	}

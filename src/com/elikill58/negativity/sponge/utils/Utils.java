@@ -9,10 +9,8 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.PotionEffectData;
-import org.spongepowered.api.data.type.DyeColor;
 import org.spongepowered.api.data.type.DyeColors;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectType;
@@ -28,16 +26,11 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
-import com.flowpowered.math.vector.Vector3i;
 
 public class Utils {
 
 	public static String coloredMessage(String msg) {
 		return TextSerializers.FORMATTING_CODE.replaceCodes(msg, '\u00a7');
-	}
-
-	public static Collection<Player> getOnlinePlayers() {
-		return Sponge.getServer().getOnlinePlayers();
 	}
 
 	@Nullable
@@ -80,26 +73,12 @@ public class Utils {
 		return mods;
 	}
 
-	public static double getLastTPS() {
-		return Sponge.getServer().getTicksPerSecond();
-	}
-
 	public static void removePotionEffect(PotionEffectData effects, PotionEffectType effectType) {
 		for (PotionEffect effect : effects.getListValue()) {
 			if (effect.getType().equals(effectType)) {
 				effects.remove(effect);
 			}
 		}
-	}
-	
-	public static void teleportPlayerOnGround(Player p) {
-		int i = 20;
-		Location<World> loc = p.getLocation();
-		while (loc.getBlockType() == BlockTypes.AIR && i > 0) {
-			loc = loc.sub(Vector3i.UNIT_Y);
-			i--;
-		}
-		p.setLocation(loc.add(Vector3i.UNIT_Y));
 	}
 
 	public static float getPlayerHeadHeight(Player p) {
@@ -117,23 +96,9 @@ public class Utils {
 		return 1.74F;
 	}
 
-	public static Vector3d getEntityVec(Entity et) {
-		Location<World> loc = et.getLocation();
-		return new Vector3d(loc.getX(), loc.getY() + getEntityHeadHeight(et), loc.getZ());
-	}
-
 	public static Vector3d getPlayerVec(Player p) {
 		Location<World> loc = p.getLocation();
 		return new Vector3d(loc.getX(), loc.getY() + getPlayerHeadHeight(p), loc.getZ());
-	}
-
-	public static DyeColor getByteFromClick(int click) {
-		if (click > 25)
-			return DyeColors.RED;
-		else if (click < 25 && click > 15)
-			return DyeColors.GRAY;
-		else
-			return DyeColors.LIME;
 	}
 	
 	public static ItemStack getMcLeaksIndicator(Player player, NegativityPlayer nPlayer) {
@@ -143,19 +108,5 @@ public class Utils {
 		indicator.offer(Keys.DISPLAY_NAME, Messages.getMessage(player, "inventory.main.mcleaks_indicator." + (usesMcLeaks ? "positive" : "negative")));
 		indicator.offer(Keys.ITEM_LORE, Collections.singletonList(Messages.getMessage(player, "inventory.main.mcleaks_indicator.description")));
 		return indicator;
-	}
-
-	/**
-	 * Get the X/Z speed.
-	 * 
-	 * @param from Location where the player comes from
-	 * @param to Location where the player go
-	 * @return the speed (without count Y)
-	 */
-	public static double getSpeed(Location<World> from, Location<World> to) {
-		double x = to.getX() - from.getX();
-		double z = to.getZ() - from.getZ();
-
-		return x * x + z * z;
 	}
 }

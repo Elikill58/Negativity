@@ -15,7 +15,6 @@ import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.sponge.utils.Utils;
 
 public class FightManager {
 
@@ -38,7 +37,7 @@ public class FightManager {
 				|| pe == PotionEffectTypes.SLOWNESS || pe == PotionEffectTypes.WEAKNESS || pe == PotionEffectTypes.POISON
 				|| pe == PotionEffectTypes.FIRE_RESISTANCE || pe == PotionEffectTypes.INSTANT_HEALTH || pe == PotionEffectTypes.REGENERATION
 				|| pe == PotionEffectTypes.STRENGTH || pe == PotionEffectTypes.SPEED)
-			for (Player p : Utils.getOnlinePlayers())
+			for (Player p : Sponge.getServer().getOnlinePlayers())
 				if (((World) loc.getExtent()).equals(p.getLocation().getExtent()))
 					if (p.getPosition().distance(loc.getPosition()) < 9)
 						NegativityPlayer.getCached(p.getUniqueId()).fight();

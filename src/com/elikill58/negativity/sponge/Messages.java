@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge;
 
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageReceiver;
@@ -48,7 +49,7 @@ public class Messages {
 	}
 
 	public static void broadcastMessageList(String dir, Object... placeholders) {
-		for (Player p : Utils.getOnlinePlayers())
+		for (Player p : Sponge.getServer().getOnlinePlayers())
 			sendMessageList(p, dir, placeholders);
 	}
 }

@@ -21,6 +21,7 @@ import com.elikill58.negativity.api.events.negativity.PlayerCheatKickEvent;
 import com.elikill58.negativity.api.events.negativity.ShowAlertPermissionEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -158,12 +159,15 @@ public class Negativity {
 			np.ALERT_NOT_SHOWED.remove(c);
 			return;
 		}
+		Adapter ada = Adapter.getAdapter();
 		Player p = alert.getPlayer();
 		int ping = alert.getPing();
 		if(alert.getNbAlertConsole() > 0 && log_console) {
-			Adapter.getAdapter().getLogger().info("New " + alert.getReportType().getName() + " for " + p.getName()
-						+ " (UUID: " + p.getUniqueId().toString() + ") (ping: " + ping + ") : suspected of cheating ("
-						+ c.getName() + ") " + (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability);
+			Location location = p.getLocation();
+			String sLoc = "[" + location.getWorld().getName() + ": " + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ() + "]";
+			ada.getLogger().info("New " + alert.getReportType().getName() + " for " + p.getName() + " (" + ping + " ms, UUID: "
+						+ p.getUniqueId().toString() + ") seem to use " + c.getName() + " "
+						+ (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability + " " + sLoc);
 		}
 		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
@@ -171,16 +175,16 @@ public class Negativity {
 			np.ALERT_NOT_SHOWED.remove(c);
 		} else {
 			boolean hasPermPeople = false;
-			for (Player pl : Adapter.getAdapter().getOnlinePlayers()) {
+			for (Player pl : ada.getOnlinePlayers()) {
 				NegativityPlayer npMod = NegativityPlayer.getNegativityPlayer(pl);
 				boolean basicPerm = Perm.hasPerm(npMod, Perm.SHOW_ALERT);
-				ShowAlertPermissionEvent permissionEvent = new ShowAlertPermissionEvent(pl, np, basicPerm);
+				ShowAlertPermissionEvent permissionEvent = new ShowAlertPermissionEvent(pl, npMod, basicPerm);
 				EventManager.callEvent(permissionEvent);
 				if (permissionEvent.isCancelled() || npMod.disableShowingAlert)
 					continue;
 				if (permissionEvent.hasBasicPerm()) {
-					Adapter.getAdapter().sendMessageRunnableHover(pl, Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
-									"%reliability%", String.valueOf(reliability), "%nb%", String.valueOf(alert.getNbAlert())),
+					ada.sendMessageRunnableHover(pl, Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
+									"%reliability%", reliability, "%nb%", alert.getNbAlert()),
 							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%", reliability, "%ping%", ping)
 							+ ChatColor.RESET + (hoverMsg == null ? "" : "\n\n" + hoverMsg.compile(npMod)), "/negativity " + p.getName());
 					/*new ClickableText().addRunnableHoverEvent(

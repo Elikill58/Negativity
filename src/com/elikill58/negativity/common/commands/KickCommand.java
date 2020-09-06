@@ -11,11 +11,16 @@ import com.elikill58.negativity.api.commands.TabListeners;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class KickCommand implements CommandListeners, TabListeners {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] arg, String prefix) {
+		if(!Perm.hasPerm(sender, Perm.MOD)) {
+			Messages.sendMessage(sender, "not_permission");
+			return false;
+		}
 		if (arg.length < 2) {
 			Messages.sendMessage(sender, "kick.help");
 			return false;

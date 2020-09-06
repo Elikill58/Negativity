@@ -38,17 +38,16 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 		if (arg.length == 0 || arg[0].equalsIgnoreCase("help")) {
 			Messages.sendMessageList(sender, "negativity.verif.help");
 			Configuration conf = Adapter.getAdapter().getConfig();
-			if(conf.getBoolean("commands.report"))
+			if(conf.getBoolean("commands.report") && Perm.hasPerm(sender, Perm.REPORT))
 				Messages.sendMessage(sender, "report.report_usage");
-			if(conf.getBoolean("commands.ban"))
+			if(conf.getBoolean("commands.ban") && Perm.hasPerm(sender, Perm.BAN))
 				Messages.sendMessageList(sender, "ban.help");
-			if(conf.getBoolean("commands.unban"))
+			if(conf.getBoolean("commands.unban") && Perm.hasPerm(sender, Perm.UNBAN))
 				Messages.sendMessage(sender, "unban.help");
-			if(conf.getBoolean("commands.kick"))
+			if(conf.getBoolean("commands.kick") && Perm.hasPerm(sender, Perm.MOD))
 				Messages.sendMessage(sender, "kick.help");
-			if(conf.getBoolean("commands.report"))
-				Messages.sendMessage(sender, "report.report_usage");
-			Messages.sendMessage(sender, "lang.help");
+			if(Perm.hasPerm(sender, Perm.LANG))
+				Messages.sendMessage(sender, "lang.help");
 			return true;
 		}
 

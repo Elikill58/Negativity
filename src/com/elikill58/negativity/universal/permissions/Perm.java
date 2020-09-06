@@ -6,6 +6,8 @@ import java.util.Map;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.commands.CommandSender;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class Perm {
@@ -28,6 +30,14 @@ public class Perm {
 
 	private static String checkerId = PLATFORM_CHECKER;
 	private static final Map<String, PermissionChecker> checkers = new HashMap<>();
+
+	public static boolean hasPerm(CommandSender sender, String perm) {
+		if(sender instanceof Player) {
+			PermissionChecker checker = getActiveChecker();
+			return checker != null && checker.hasPermission(NegativityPlayer.getNegativityPlayer((Player) sender), perm);
+		} else
+			return true;
+	}
 
 	public static boolean hasPerm(NegativityPlayer np, String perm) {
 		PermissionChecker checker = getActiveChecker();

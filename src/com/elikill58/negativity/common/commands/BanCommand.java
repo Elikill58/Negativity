@@ -16,12 +16,17 @@ import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanType;
+import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class BanCommand implements CommandListeners, TabListeners {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] arg, String prefix) {
+		if(!Perm.hasPerm(sender, Perm.BAN)) {
+			Messages.sendMessage(sender, "not_permission");
+			return false;
+		}
 		if (arg.length < 3) {
 			Messages.sendMessageList(sender, "ban.help");
 			return false;
@@ -29,7 +34,7 @@ public class BanCommand implements CommandListeners, TabListeners {
 
 		if (arg[0].equalsIgnoreCase("help")) {
 			Messages.sendMessageList(sender, "ban.help");
-			return false;
+			return true;
 		}
 
 		Player target = Adapter.getAdapter().getPlayer(arg[0]);
@@ -68,7 +73,7 @@ public class BanCommand implements CommandListeners, TabListeners {
 			Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
 		else
 			Messages.sendMessage(sender, "ban.fail_ban", "%name%", target.getName(), "%reason%", ban.getResultType().getName());
-		return false;
+		return true;
 	}
 
 	@Override

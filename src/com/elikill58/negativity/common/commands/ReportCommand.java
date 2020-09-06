@@ -23,6 +23,10 @@ public class ReportCommand implements CommandListeners, TabListeners {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] arg, String prefix) {
+		if(!Perm.hasPerm(sender, Perm.REPORT)) {
+			Messages.sendMessage(sender, "not_permission");
+			return false;
+		}
 		if (!(sender instanceof Player)) {
 			Messages.sendMessage(sender, "only_player");
 			return false;

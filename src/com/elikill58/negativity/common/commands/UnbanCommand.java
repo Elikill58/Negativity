@@ -14,11 +14,16 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class UnbanCommand implements CommandListeners, TabListeners {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] arg, String prefix) {
+		if(!Perm.hasPerm(sender, Perm.UNBAN)) {
+			Messages.sendMessage(sender, "not_permission");
+			return false;
+		}
 		if (arg.length == 0) {
 			Messages.sendMessage(sender, "unban.help");
 			return false;

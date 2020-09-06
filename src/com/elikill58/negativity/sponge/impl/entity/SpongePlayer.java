@@ -50,11 +50,15 @@ import com.flowpowered.math.vector.Vector3d;
 public class SpongePlayer extends Player {
 
 	private final org.spongepowered.api.entity.living.player.Player p;
-	private final Version playerVersion;
+	private Version playerVersion;
 
 	public SpongePlayer(org.spongepowered.api.entity.living.player.Player p) {
 		this.p = p;
-		this.playerVersion = Negativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(this) : Version.getVersion();
+		this.playerVersion = loadVersion();
+	}
+	
+	private Version loadVersion() {
+		return Negativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(this) : Version.getVersion();
 	}
 
 	@Override
@@ -95,7 +99,7 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public double getHealth() {
-		return p.get(HealthData.class).get().health().get();
+		return p.getOrCreate(HealthData.class).get().health().get();
 	}
 
 	@Override
@@ -140,7 +144,7 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public Version getPlayerVersion() {
-		return playerVersion;
+		return playerVersion == Version.HIGHER ? (playerVersion = loadVersion()) : playerVersion;
 	}
 
 	@Override

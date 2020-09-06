@@ -10,6 +10,11 @@ public abstract class Material extends NegativityObject {
 	
 	public abstract String getId();
 
+	public boolean isConsumable() {
+		String id = getId().toLowerCase();
+		return id.contains("cooked") || id.contains("mutton") || id.contains("beef");
+	}
+	
 	@Override
 	public boolean equals(Object obj) {
 		if(obj == null || !(obj instanceof Material))

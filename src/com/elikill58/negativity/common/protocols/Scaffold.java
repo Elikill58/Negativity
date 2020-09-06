@@ -7,12 +7,15 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockPlaceEvent;
+import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -55,5 +58,19 @@ public class Scaffold extends Cheat implements Listeners {
 				}
 			}
 		}, 50);
+	}
+	
+	@EventListener
+	public void onPacket(PacketReceiveEvent e) {
+		AbstractPacket pa = e.getPacket();
+		Player p = e.getPlayer();
+		if(pa.getPacketType().equals(PacketType.Client.BLOCK_PLACE)) {
+			pa.getContent().getSpecificModifier(float.class).getContent().forEach((field, value) -> {
+				if(value > 1.5) {
+					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(value * 10), "packet",
+							"Wrong value " + field.getName() + ": " + value + " for packet BlockPlace");
+				}
+			});
+		}
 	}
 }

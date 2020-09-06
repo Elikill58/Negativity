@@ -63,7 +63,7 @@ public class SpigotInventory extends Inventory {
 
 	@Override
 	public PlatformHolder getHolder() {
-		return holder.getBasicHolder();
+		return holder == null ? null : holder.getBasicHolder();
 	}
 
 	@Override

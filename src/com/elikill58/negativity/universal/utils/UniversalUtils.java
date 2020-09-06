@@ -367,7 +367,7 @@ public class UniversalUtils {
 				URI migrationsDirUri = UniversalUtils.class.getResource("/assets/negativity").toURI();
 				if (migrationsDirUri.getScheme().equals("jar")) {
 					try (FileSystem jarFs = FileSystems.newFileSystem(migrationsDirUri, Collections.emptyMap())) {
-						Path cheatPath = jarFs.getPath("/assets/negativity/" + configName);
+						Path cheatPath = jarFs.getPath("/assets/negativity", configName);
 						if(Files.isRegularFile(cheatPath)) {
 							Files.copy(cheatPath, Paths.get(configFile.toURI()));
 						} else {

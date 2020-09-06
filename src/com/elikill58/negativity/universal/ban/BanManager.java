@@ -11,6 +11,7 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.CommandBanProcessor;
 import com.elikill58.negativity.universal.ban.processor.NegativityBanProcessor;
@@ -59,14 +60,13 @@ public class BanManager {
 	 * <p>
 	 * The ban may not be executed if bans are disabled, or for any {@link BanProcessor}-specific reason, like if the player bypassed the ban.
 	 *
-	 * @return the ban that has been executed, or {@code null} if the ban has not been executed.
+	 * @return the result of the ban with success informations
 	 */
-	@Nullable
-	public static Ban executeBan(Ban ban) {
+	public static BanResult executeBan(Ban ban) {
 		BanProcessor processor = getProcessor();
 		if (processor == null) {
 			Adapter.getAdapter().debug("Cannot find ban processor while trying to execute ban from " + ban.getPlayerId().toString());
-			return null;
+			return new BanResult(BanResultType.UNKNOW_PROCESSOR, null);
 		}
 
 		return processor.executeBan(ban);

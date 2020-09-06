@@ -14,6 +14,8 @@ import org.bukkit.command.CommandException;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanResult;
+import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
@@ -23,7 +25,7 @@ import litebans.api.Database;
 public class LiteBansProcessor implements BanProcessor {
 
 	@Override
-	public Ban executeBan(Ban ban) {
+	public BanResult executeBan(Ban ban) {
 		try {
 			String timeValue = (ban.isDefinitive() ? "" : getTimeFromLong(ban.getExpirationTime() - ban.getExecutionTime()) + " ");
 			String sender;
@@ -42,9 +44,10 @@ public class LiteBansProcessor implements BanProcessor {
 				break;
 			}
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban " + ban.getPlayerId().toString() + " " + timeValue + sender + " " + ban.getReason());
-			return ban;
+			return new BanResult(BanResultType.DONE, ban);
 		} catch (CommandException e) {
-			return null;
+			e.printStackTrace();
+			return new BanResult(BanResultType.EXCEPTION, null);
 		}
 	}
 

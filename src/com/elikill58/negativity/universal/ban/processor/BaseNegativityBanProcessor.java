@@ -7,6 +7,8 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanResult;
+import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.storage.ActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
@@ -29,15 +31,14 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 		this.banLogsStorage = banLogsStorage;
 	}
 
-	@Nullable
 	@Override
-	public Ban executeBan(Ban ban) {
+	public BanResult executeBan(Ban ban) {
 		if (isBanned(ban.getPlayerId())) {
-			return null;
+			return new BanResult(BanResultType.ALREADY_BANNED, null);
 		}
 
 		activeBanStorage.save(ban);
-		return ban;
+		return new BanResult(BanResultType.DONE, ban);
 	}
 
 	@Nullable

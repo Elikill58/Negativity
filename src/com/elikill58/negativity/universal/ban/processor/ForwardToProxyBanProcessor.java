@@ -10,6 +10,8 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanResult;
+import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -26,9 +28,8 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 		this.pluginMessageSender = pluginMessageSender;
 	}
 
-	@Nullable
 	@Override
-	public Ban executeBan(Ban ban) {
+	public BanResult executeBan(Ban ban) {
 		try {
 			byte[] rawMessage = NegativityMessagesManager.writeMessage(new ProxyExecuteBanMessage(ban));
 			pluginMessageSender.accept(rawMessage);
@@ -36,7 +37,7 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 			Adapter.getAdapter().getLogger().error("Could not write ProxyBanMessage: " + e.getMessage());
 			e.printStackTrace();
 		}
-		return ban;
+		return new BanResult(BanResultType.DONE, ban);
 	}
 
 	@Nullable

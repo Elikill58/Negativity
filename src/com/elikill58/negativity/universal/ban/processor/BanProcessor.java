@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.ban.BanResult;
 
 /**
  * Decides what to do with ban and unban requests as well as active and logged bans queries.
@@ -23,8 +24,7 @@ public interface BanProcessor {
 	 * @return the ban that has been executed, or {@code null} if the ban has not been executed.
 	 * @param ban
 	 */
-	@Nullable
-	Ban executeBan(Ban ban);
+	BanResult executeBan(Ban ban);
 
 	/**
 	 * Revokes the active ban of the player identified by the given UUID.

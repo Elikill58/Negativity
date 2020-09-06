@@ -11,6 +11,8 @@ import org.bukkit.Bukkit;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanResult;
+import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
@@ -21,12 +23,11 @@ import me.leoko.advancedban.utils.PunishmentType;
 
 public class AdvancedBanProcessor implements BanProcessor {
 
-	@Nullable
 	@Override
-	public Ban executeBan(Ban ban) {
+	public BanResult executeBan(Ban ban) {
 		NegativityPlayer player = NegativityPlayer.getCached(ban.getPlayerId());
 		if (player == null) {
-			return null;
+			return new BanResult(BanResultType.UNKNOW_PLAYER, null);
 		}
 
 		long endTime = ban.isDefinitive() ? 0 : ban.getExpirationTime();
@@ -35,7 +36,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
 		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), (Runnable) punishment::create);
 
-		return ban;
+		return new BanResult(BanResultType.DONE, ban);
 	}
 
 	@Nullable

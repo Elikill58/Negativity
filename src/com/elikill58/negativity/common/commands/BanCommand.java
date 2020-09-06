@@ -14,6 +14,7 @@ import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -62,11 +63,11 @@ public class BanCommand implements CommandListeners, TabListeners {
 		}
 
 		String reason = reasonJoiner.toString();
-		Ban ban = BanManager.executeBan(Ban.active(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, cheatName));
-		if(ban == null)
-			Messages.sendMessage(sender, "ban.fail_ban", "%name%", target.getName());
-		else
+		BanResult ban = BanManager.executeBan(Ban.active(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, cheatName));
+		if(ban.isSuccess())
 			Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
+		else
+			Messages.sendMessage(sender, "ban.fail_ban", "%name%", target.getName(), "%reason%", ban.getResultType().getName());
 		return false;
 	}
 

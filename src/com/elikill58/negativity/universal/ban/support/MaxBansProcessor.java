@@ -13,18 +13,19 @@ import org.maxgamer.maxbans.banmanager.Temporary;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
+import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 
 public class MaxBansProcessor implements BanProcessor {
-
-	@Nullable
+	
 	@Override
-	public Ban executeBan(Ban ban) {
+	public BanResult executeBan(Ban ban) {
 		NegativityPlayer player = NegativityPlayer.getCached(ban.getPlayerId());
 		if (player == null) {
-			return null;
+			return new BanResult(BanResultType.UNKNOW_PLAYER, null);
 		}
 
 		if (ban.isDefinitive()) {
@@ -32,7 +33,7 @@ public class MaxBansProcessor implements BanProcessor {
 		} else {
 			MaxBans.instance.getBanManager().tempban(player.getName(), ban.getReason(), ban.getBannedBy(), ban.getExpirationTime());
 		}
-		return ban;
+		return new BanResult(BanResultType.DONE, ban);
 	}
 
 	@Nullable

@@ -15,19 +15,20 @@ import org.bukkit.Bukkit;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanResult;
+import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 
 public class BukkitBanProcessor implements BanProcessor {
-
-	@Nullable
+	
 	@Override
-	public Ban executeBan(Ban ban) {
+	public BanResult executeBan(Ban ban) {
 		NegativityPlayer player = NegativityPlayer.getCached(ban.getPlayerId());
 		if (player == null) {
-			return null;
+			return new BanResult(BanResultType.UNKNOW_PLAYER, null);
 		}
 
 		Date expirationDate = ban.isDefinitive() ? null : Date.from(Instant.ofEpochMilli(ban.getExpirationTime()));
@@ -39,7 +40,7 @@ public class BukkitBanProcessor implements BanProcessor {
 		}
 		BanUtils.kickForBan(player, ban);
 
-		return ban;
+		return new BanResult(BanResultType.DONE, ban);
 	}
 
 	@Nullable

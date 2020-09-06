@@ -16,18 +16,19 @@ import org.spongepowered.api.util.ban.BanTypes;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.ban.Ban;
+import com.elikill58.negativity.universal.ban.BanResult;
+import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.BanUtils;
 
 public class SpongeBanProcessor implements BanProcessor {
 
-	@Nullable
 	@Override
-	public Ban executeBan(Ban ban) {
+	public BanResult executeBan(Ban ban) {
 		BanService banService = Sponge.getServiceManager().provide(BanService.class).orElse(null);
 		if (banService == null) {
-			return null;
+			return new BanResult(BanResultType.UNKNOW_SERVICE, null);
 		}
 
 		Instant expirationDate = ban.isDefinitive() ? null : Instant.ofEpochMilli(ban.getExpirationTime());
@@ -45,7 +46,7 @@ public class SpongeBanProcessor implements BanProcessor {
 			BanUtils.kickForBan(player, ban);
 		}
 
-		return ban;
+		return new BanResult(BanResultType.DONE, ban);
 	}
 
 	@Nullable

@@ -2,8 +2,6 @@ package com.elikill58.negativity.universal.ban;
 
 import java.sql.Timestamp;
 
-import javax.annotation.Nullable;
-
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.maths.Expression;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -38,8 +36,7 @@ public class BanUtils {
 	 * Basically common code for {@link SpigotNegativity#alertMod} and {@link SpongeNegativity#alertMod}.
 	 * @return see {@link BanManager#executeBan}, null if banning was not needed
 	 */
-	@Nullable
-	public static Ban banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability) {
+	public static BanResult banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability) {
 		if (!shouldBan(cheat, player, reliability)) {
 			return null;
 		}

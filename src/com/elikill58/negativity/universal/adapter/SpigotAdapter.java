@@ -40,6 +40,7 @@ import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.NegativityAccountManager;
+import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.JavaLoggerAdapter;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
@@ -64,10 +65,10 @@ public class SpigotAdapter extends Adapter {
 		this.logger = new JavaLoggerAdapter(pl.getLogger());
 		this.itemRegistrar = new SpigotItemRegistrar();
 	}
-
+	
 	@Override
-	public String getName() {
-		return "spigot";
+	public Platform getPlatformID() {
+		return Platform.SPIGOT;
 	}
 
 	@Override

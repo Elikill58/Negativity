@@ -36,6 +36,7 @@ import com.elikill58.negativity.sponge.impl.item.SpongeItemRegistrar;
 import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
 import com.elikill58.negativity.sponge.impl.plugin.SpongeExternalPlugin;
 import com.elikill58.negativity.universal.NegativityAccountManager;
+import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.logger.Slf4jLoggerAdapter;
@@ -62,10 +63,10 @@ public class SpongeAdapter extends Adapter {
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("messages"), "Negativity", "CheatHover");
 		this.itemRegistrar = new SpongeItemRegistrar();
 	}
-
+	
 	@Override
-	public String getName() {
-		return "sponge";
+	public Platform getPlatformID() {
+		return Platform.SPONGE;
 	}
 
 	@Override

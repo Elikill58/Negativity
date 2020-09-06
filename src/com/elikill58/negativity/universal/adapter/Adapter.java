@@ -24,6 +24,7 @@ import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccountManager;
+import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 
@@ -45,8 +46,13 @@ public abstract class Adapter {
 	public static Adapter getAdapter() {
 		return adapter;
 	}
+	
+	public abstract Platform getPlatformID();
 
-	public abstract String getName();
+	public String getName() {
+		return getPlatformID().getName();
+	}
+	
 	public abstract Configuration getConfig();
 	public abstract File getDataFolder();
 

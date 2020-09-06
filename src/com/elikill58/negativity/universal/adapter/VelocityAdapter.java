@@ -25,6 +25,7 @@ import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccountManager;
+import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.logger.Slf4jLoggerAdapter;
@@ -50,12 +51,12 @@ public class VelocityAdapter extends Adapter {
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(pl.getDataFolder().toPath().resolve("lang"), "NegativityProxy", "CheatHover");
 		this.logger = new Slf4jLoggerAdapter(pl.getLogger());
 	}
-
+	
 	@Override
-	public String getName() {
-		return "velocity";
+	public Platform getPlatformID() {
+		return Platform.VELOCITY;
 	}
-
+	
 	@Override
 	public Configuration getConfig() {
 		return config;

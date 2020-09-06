@@ -26,6 +26,7 @@ import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.bungee.impl.plugin.BungeeExternalPlugin;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityAccountManager;
+import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.JavaLoggerAdapter;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
@@ -52,10 +53,10 @@ public class BungeeAdapter extends Adapter {
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(pl.getDataFolder().toPath().resolve("lang"), "NegativityProxy", "CheatHover");
 		this.logger = new JavaLoggerAdapter(pl.getLogger());
 	}
-
+	
 	@Override
-	public String getName() {
-		return "bungee";
+	public Platform getPlatformID() {
+		return Platform.BUNGEE;
 	}
 
 	@Override

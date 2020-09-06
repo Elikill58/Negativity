@@ -112,7 +112,7 @@ public class Fly extends Cheat implements Listeners {
 							p, this, 98, "no-ground-y", "Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY);
 				np.booleans.set(FLY, "not-moving-y", true);
 			} else
-				np.booleans.set(FLY, "not-moving-y", false);
+				np.booleans.remove(FLY, "not-moving-y");
 		}
 		if (isSetBack() && mayCancel) {
 			LocationUtils.teleportPlayerOnGround(p);

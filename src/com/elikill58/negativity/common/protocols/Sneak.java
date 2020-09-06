@@ -55,14 +55,14 @@ public class Sneak extends Cheat implements Listeners {
 			if(ping < 140) {
 				int entityAction = e.getPackets().getOrDefault(PacketType.Client.ENTITY_ACTION, 0);
 				if(entityAction > 35){
-					if(np.booleans.get(getKey(), "last-sec", false)){
+					if(np.booleans.get(SNEAK, "last-sec", false)){
 						Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(55 + entityAction), "packet",
 								"EntityAction packet: " + entityAction);
 						if(isSetBack())
 							p.setSneaking(false);
 					}
-					np.booleans.set(getKey(), "last-sec", true);
-				} else np.booleans.set(getKey(), "last-sec", false);
+					np.booleans.set(SNEAK, "last-sec", true);
+				} else np.booleans.remove(SNEAK, "last-sec");
 			}
 		}
 	}

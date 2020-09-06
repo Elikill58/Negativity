@@ -62,7 +62,7 @@ public class AutoSteal extends Cheat implements Listeners {
 					e.setCancelled(true);
 			}
 			np.booleans.set(AUTO_STEAL, "inv-was", true);
-		} else np.booleans.set(AUTO_STEAL, "inv-was", false);
+		} else np.booleans.remove(AUTO_STEAL, "inv-was");
 		np.longs.set(AUTO_STEAL, "inv-click", actual);
 	}
 }

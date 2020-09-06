@@ -6,7 +6,6 @@ import java.util.HashMap;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class PacketContent {
-
 	
 	private final @Nullable AbstractPacket packet;
 	private final Object obj;
@@ -63,18 +62,33 @@ public class PacketContent {
 		return new ContentModifier<byte[]>(obj, byte[].class);
 	}
 	
+	public ContentModifier<Long> getLongs(){
+		return new ContentModifier<Long>(obj, long.class);
+	}
+	
+	public ContentModifier<Float> getFloats(){
+		return new ContentModifier<Float>(obj, float.class);
+	}
+	
+	public ContentModifier<Double> getDoubles(){
+		return new ContentModifier<Double>(obj, double.class);
+	}
+	
+	public ContentModifier<Object> getAllObjects() {
+		return new ContentModifier<Object>(obj, null);
+	}
+	
 	public static class ContentModifier<T> {
 		
 		private Object obj;
 		private HashMap<Field, T> content = new HashMap<>();
 
 		@SuppressWarnings("unchecked")
-		public ContentModifier(Object obj, Class<?> clazz) {
+		public ContentModifier(Object obj, @Nullable Class<?> clazz) {
 			this.obj = obj;
-			
 			for(Field f : obj.getClass().getDeclaredFields()) {
 				try {
-					if(f.getType().isAssignableFrom(clazz)) {
+					if(clazz == null || f.getType().isAssignableFrom(clazz)) {
 						f.setAccessible(true);
 						content.put(f, (T) f.get(obj));
 					}
@@ -85,7 +99,7 @@ public class PacketContent {
 			if(!obj.getClass().getSuperclass().equals(Object.class)) {
 				for(Field f : obj.getClass().getSuperclass().getDeclaredFields()) {
 					try {
-						if(f.getType().isAssignableFrom(clazz)) {
+						if(clazz == null || f.getType().isAssignableFrom(clazz)) {
 							f.setAccessible(true);
 							content.put(f, (T) f.get(obj));
 						}

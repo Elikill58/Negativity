@@ -15,7 +15,6 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
@@ -29,6 +28,7 @@ import com.elikill58.negativity.api.events.player.PlayerInteractEvent.Action;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.events.player.PlayerRegainHealthEvent;
+import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
@@ -118,9 +118,8 @@ public class PlayersListeners implements Listener {
 	}
 	
 	@EventHandler
-	public void onTeleport(PlayerTeleportEvent e) {
-		Player p = e.getPlayer();
-		NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p)).TIME_INVINCIBILITY = System.currentTimeMillis() + 1000;
+	public void onTeleport(org.bukkit.event.player.PlayerTeleportEvent e) {
+		EventManager.callEvent(new PlayerTeleportEvent(SpigotEntityManager.getPlayer(e.getPlayer()), new SpigotLocation(e.getFrom()), new SpigotLocation(e.getTo())));
 	}
 	
 	@EventHandler

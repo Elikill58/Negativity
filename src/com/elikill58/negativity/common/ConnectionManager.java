@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
+import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
 import com.elikill58.negativity.common.commands.ReportCommand;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.NegativityAccount;
@@ -75,5 +76,11 @@ public class ConnectionManager implements Listeners {
 			e.setKickMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));
 			ada.getAccountManager().dispose(playerId);
 		}
+	}
+	
+	@EventListener
+	public void onTeleport(PlayerTeleportEvent e) {
+		Player p = e.getPlayer();
+		NegativityPlayer.getNegativityPlayer(p).TIME_INVINCIBILITY = System.currentTimeMillis() + 1000;
 	}
 }

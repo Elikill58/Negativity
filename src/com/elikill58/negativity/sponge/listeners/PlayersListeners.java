@@ -29,6 +29,7 @@ import com.elikill58.negativity.api.events.player.PlayerInteractEvent.Action;
 import com.elikill58.negativity.api.events.player.PlayerItemConsumeEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
@@ -102,7 +103,8 @@ public class PlayersListeners {
 	
 	@Listener
 	public void onTeleport(MoveEntityEvent.Teleport e, @First Player p) {
-		NegativityPlayer.getCached(p.getUniqueId()).TIME_INVINCIBILITY = System.currentTimeMillis() + 2000;
+		EventManager.callEvent(new PlayerTeleportEvent(SpongeEntityManager.getPlayer(p), new SpongeLocation(e.getFromTransform().getLocation()),
+				new SpongeLocation(e.getToTransform().getLocation())));
 	}
 	
 	@Listener

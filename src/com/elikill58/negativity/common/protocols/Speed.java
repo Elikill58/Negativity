@@ -23,7 +23,9 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.support.EssentialsSupport;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -129,7 +131,7 @@ public class Speed extends Cheat implements Listeners {
 				np.doubles.set(SPEED, "dif-y", dif);
 			}
 		}
-		if(checkActive("walk-speed")) {
+		if(checkActive("walk-speed") && Adapter.getAdapter().getPlatformID().equals(Platform.SPIGOT)) {
 			if(dif == 0 && distance >= p.getWalkSpeed() * 2) {
 				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
 						this, 95, "walk-speed", "Differences : " + dif + ", distance: " + distance + ", walkSpeed: " + p.getWalkSpeed() + ", onGround: " + onGround);

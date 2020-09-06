@@ -48,7 +48,6 @@ import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
 import com.elikill58.negativity.universal.ban.support.BukkitBanProcessor;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
-import com.elikill58.negativity.universal.dataStorage.file.SpigotFileNegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
@@ -137,8 +136,7 @@ public class SpigotNegativity extends JavaPlugin {
 				Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort() + "");
 			}
 		});
-
-		NegativityAccountStorage.register("file", new SpigotFileNegativityAccountStorage(new File(getDataFolder(), "user")));
+		
 		NegativityAccountStorage.setDefaultStorage("file");
 		BanManager.registerProcessor("bukkit", new BukkitBanProcessor());
 		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(SpigotNegativity::sendPluginMessage));

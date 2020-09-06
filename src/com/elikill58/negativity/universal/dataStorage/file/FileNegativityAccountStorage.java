@@ -7,23 +7,21 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.logging.Level;
 
-import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.YamlConfiguration;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 
-public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage {
+public class FileNegativityAccountStorage extends NegativityAccountStorage {
 
 	private final File userDir;
 
-	public SpigotFileNegativityAccountStorage(File userDir) {
+	public FileNegativityAccountStorage(File userDir) {
 		this.userDir = userDir;
 	}
 
@@ -33,12 +31,12 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 		if (!file.exists()) {
 			return CompletableFuture.completedFuture(new NegativityAccount(playerId));
 		}
-		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+		Configuration config = YamlConfiguration.load(file);
 		String playerName = config.getString("playername");
 		String language = config.getString("lang", TranslatedMessages.getDefaultLang());
-		Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getConfigurationSection("minerate"));
+		Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getSection("minerate"));
 		int mostClicksPerSecond = config.getInt("better-click");
-		Map<String, Integer> warns = deserializeViolations(config.getConfigurationSection("cheats"));
+		Map<String, Integer> warns = deserializeViolations(config.getSection("cheats"));
 		long creationTime = config.getLong("creation-time", System.currentTimeMillis());
 		return CompletableFuture.completedFuture(new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, creationTime));
 	}
@@ -46,7 +44,14 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 	@Override
 	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
 		File file = new File(userDir, account.getPlayerId() + ".yml");
-		YamlConfiguration accountConfig = YamlConfiguration.loadConfiguration(file);
+		if(!file.exists()) {
+			try {
+				file.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		Configuration accountConfig = YamlConfiguration.load(file);
 		accountConfig.set("playername", account.getPlayerName());
 		accountConfig.set("lang", account.getLang());
 		accountConfig.set("minerate-full-mined", account.getMinerate().getFullMined());
@@ -54,28 +59,24 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 		accountConfig.set("better-click", account.getMostClicksPerSecond());
 		serializeViolations(account, accountConfig.createSection("cheats"));
 		accountConfig.set("creation-time", account.getCreationTime());
-		try {
-			accountConfig.save(file);
-		} catch (IOException e) {
-			SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not save account to file.", e);
-		}
+		accountConfig.save();
 		return CompletableFuture.completedFuture(null);
 	}
 
-	private void serializeMinerate(Minerate minerate, ConfigurationSection minerateSection) {
+	private void serializeMinerate(Minerate minerate, Configuration minerateSection) {
 		for (Minerate.MinerateType minerateType : Minerate.MinerateType.values()) {
 			String key = minerateType.getName().toLowerCase(Locale.ROOT);
 			minerateSection.set(key, minerate.getMinerateType(minerateType));
 		}
 	}
 
-	private Minerate deserializeMinerate(int fullMined, @Nullable ConfigurationSection minerateSection) {
+	private Minerate deserializeMinerate(int fullMined, @Nullable Configuration minerateSection) {
 		HashMap<Minerate.MinerateType, Integer> mined = new HashMap<>();
 		if (minerateSection == null) {
 			return new Minerate(mined, fullMined);
 		}
 
-		for (String minerateKey : minerateSection.getKeys(false)) {
+		for (String minerateKey : minerateSection.getKeys()) {
 			Minerate.MinerateType type = Minerate.MinerateType.getMinerateType(minerateKey);
 			if (type == null) {
 				continue;
@@ -86,20 +87,20 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 		return new Minerate(mined, fullMined);
 	}
 
-	private void serializeViolations(NegativityAccount account, ConfigurationSection cheatsSection) {
+	private void serializeViolations(NegativityAccount account, Configuration cheatsSection) {
 		for (Map.Entry<String, Integer> entry : account.getAllWarns().entrySet()) {
 			String cheatKey = entry.getKey().toLowerCase(Locale.ROOT);
 			cheatsSection.set(cheatKey, entry.getValue());
 		}
 	}
 
-	private Map<String, Integer> deserializeViolations(@Nullable ConfigurationSection cheatsSection) {
+	private Map<String, Integer> deserializeViolations(@Nullable Configuration cheatsSection) {
 		Map<String, Integer> violations = new HashMap<>();
 		if (cheatsSection == null) {
 			return violations;
 		}
 
-		for (String cheatKey : cheatsSection.getKeys(false)) {
+		for (String cheatKey : cheatsSection.getKeys()) {
 			violations.put(cheatKey, cheatsSection.getInt(cheatKey));
 		}
 		return violations;

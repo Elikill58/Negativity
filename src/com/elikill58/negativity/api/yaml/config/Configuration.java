@@ -99,10 +99,16 @@ public final class Configuration {
             else {
                 this.self.put(path, value);
             }
-        }
-        else {
+        } else {
             section.set(this.getChild(path), value);
         }
+    }
+    
+    public Configuration createSection(final String path) {
+    	Configuration conf = getSection(path);
+    	if(conf == null)
+    		set(path, conf = new Configuration());
+    	return conf;
     }
     
     public Configuration getSection(final String path) {

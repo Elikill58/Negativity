@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.dataStorage;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -11,6 +12,7 @@ import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.dataStorage.database.DatabaseNegativityAccountStorage;
+import com.elikill58.negativity.universal.dataStorage.file.FileNegativityAccountStorage;
 
 public abstract class NegativityAccountStorage {
 
@@ -51,6 +53,8 @@ public abstract class NegativityAccountStorage {
 	public static void init() {
 		Adapter adapter = Adapter.getAdapter();
 		storageId = adapter.getConfig().getString("accounts.storage.id");
+		
+		NegativityAccountStorage.register("file", new FileNegativityAccountStorage(new File(adapter.getDataFolder(), "user")));
 		if (Database.hasCustom) {
 			NegativityAccountStorage.register("database", new DatabaseNegativityAccountStorage());
 		}

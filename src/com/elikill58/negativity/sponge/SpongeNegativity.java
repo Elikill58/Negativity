@@ -79,7 +79,6 @@ import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcess
 import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
 import com.elikill58.negativity.universal.bypass.ItemUseBypass;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
-import com.elikill58.negativity.universal.dataStorage.file.SpongeFileNegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
@@ -140,8 +139,7 @@ public class SpongeNegativity {
 		if(Negativity.timeBetweenAlert != -1) // is == -1, don't need timer
 			Task.builder().execute(new PendingAlertsTimer()).interval(Negativity.timeBetweenAlert, TimeUnit.MILLISECONDS)
 					.name("negativity-pending-alerts").submit(this);
-
-		NegativityAccountStorage.register("file", new SpongeFileNegativityAccountStorage(configDir.resolve("user")));
+		
 		NegativityAccountStorage.setDefaultStorage("file");
 
 		BanManager.registerProcessor("sponge", new SpongeBanProcessor());

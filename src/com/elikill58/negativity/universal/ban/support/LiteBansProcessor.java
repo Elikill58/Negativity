@@ -52,13 +52,14 @@ public class LiteBansProcessor implements BanProcessor {
 	}
 
 	@Override
-	public Ban revokeBan(UUID playerId) {
+	public BanResult revokeBan(UUID playerId) {
 		try {
 			Ban activeBan = getActiveBan(playerId);
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "unban " + playerId);
-			return activeBan;
+			return new BanResult(activeBan);
 		} catch (CommandException e) {
-			return null;
+			e.printStackTrace();
+			return new BanResult(BanResultType.EXCEPTION);
 		}
 	}
 

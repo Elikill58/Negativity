@@ -37,8 +37,7 @@ public interface BanProcessor {
 	 *
 	 * @return the logged revoked ban or {@code null} if the revocation failed.
 	 */
-	@Nullable
-	Ban revokeBan(UUID playerId);
+	BanResult revokeBan(UUID playerId);
 
 	default boolean isBanned(UUID playerId) {
 		return getActiveBan(playerId) != null;

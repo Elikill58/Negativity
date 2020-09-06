@@ -43,17 +43,16 @@ public class BukkitBanProcessor implements BanProcessor {
 		return new BanResult(BanResultType.DONE, ban);
 	}
 
-	@Nullable
 	@Override
-	public Ban revokeBan(UUID playerId) {
+	public BanResult revokeBan(UUID playerId) {
 		BanList banList = Bukkit.getServer().getBanList(BanList.Type.NAME);
 		BanEntry banEntry = banList.getBanEntry(playerId.toString());
 		if (banEntry == null) {
-			return null;
+			return new BanResult(BanResultType.ALREADY_UNBANNED);
 		}
 
 		banList.pardon(playerId.toString());
-		return loggedBanFrom(banEntry, playerId, true);
+		return new BanResult(loggedBanFrom(banEntry, playerId, true));
 	}
 
 	@Override

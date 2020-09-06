@@ -39,17 +39,16 @@ public class AdvancedBanProcessor implements BanProcessor {
 		return new BanResult(BanResultType.DONE, ban);
 	}
 
-	@Nullable
 	@Override
-	public Ban revokeBan(UUID playerId) {
+	public BanResult revokeBan(UUID playerId) {
 		Punishment punishment = PunishmentManager.get().getBan(playerId.toString());
 		if (punishment == null) {
-			return null;
+			return new BanResult(BanResultType.ALREADY_UNBANNED);
 		}
 
 		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
 		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), punishment::delete);
-		return loggedBanFrom(playerId, punishment, BanStatus.REVOKED);
+		return new BanResult(loggedBanFrom(playerId, punishment, BanStatus.REVOKED));
 	}
 
 	@Override

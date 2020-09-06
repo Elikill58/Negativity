@@ -51,10 +51,10 @@ public class SpongeBanProcessor implements BanProcessor {
 
 	@Nullable
 	@Override
-	public Ban revokeBan(UUID playerId) {
+	public BanResult revokeBan(UUID playerId) {
 		BanService banService = Sponge.getServiceManager().provide(BanService.class).orElse(null);
 		if (banService == null) {
-			return null;
+			return new BanResult(BanResultType.UNKNOW_SERVICE);
 		}
 
 		GameProfile profile = GameProfile.of(playerId);
@@ -68,7 +68,7 @@ public class SpongeBanProcessor implements BanProcessor {
 		String bannedBy = revokedBan.getBanSource().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
 		long expirationTime = revokedBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
 		long executionTime = revokedBan.getCreationDate().toEpochMilli();
-		return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, BanStatus.REVOKED, executionTime, System.currentTimeMillis());
+		return new BanResult(new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, BanStatus.REVOKED, executionTime, System.currentTimeMillis()));
 	}
 
 	@Override

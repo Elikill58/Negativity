@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
-import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 
@@ -29,15 +28,14 @@ public class CommandBanProcessor implements BanProcessor {
 	public BanResult executeBan(Ban ban) {
 		Adapter adapter = Adapter.getAdapter();
 		banCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, ban.getPlayerId(), ban.getReason())));
-		return new BanResult(BanResultType.DONE, ban);
+		return new BanResult(ban);
 	}
 
-	@Nullable
 	@Override
-	public Ban revokeBan(UUID playerId) {
+	public BanResult revokeBan(UUID playerId) {
 		Adapter adapter = Adapter.getAdapter();
 		unbanCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, playerId, "Unknown")));
-		return new Ban(playerId, "Unknown", "Unknown", BanType.UNKNOW, 0, null, BanStatus.REVOKED, -1, System.currentTimeMillis());
+		return new BanResult(new Ban(playerId, "Unknown", "Unknown", BanType.UNKNOW, 0, null, BanStatus.REVOKED, -1, System.currentTimeMillis()));
 	}
 
 	@Nullable

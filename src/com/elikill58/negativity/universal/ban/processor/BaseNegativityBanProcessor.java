@@ -41,12 +41,11 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 		return new BanResult(BanResultType.DONE, ban);
 	}
 
-	@Nullable
 	@Override
-	public Ban revokeBan(UUID playerId) {
+	public BanResult revokeBan(UUID playerId) {
 		Ban activeBan = activeBanStorage.load(playerId);
 		if (activeBan == null)
-			return null;
+			return new BanResult(BanResultType.ALREADY_UNBANNED);
 
 		activeBanStorage.remove(playerId);
 		Ban revokedLoggedBan = Ban.revokedFrom(activeBan, System.currentTimeMillis());
@@ -55,7 +54,7 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 			banLogsStorage.save(revokedLoggedBan);
 		}
 
-		return revokedLoggedBan;
+		return new BanResult(revokedLoggedBan);
 	}
 
 	@Nullable

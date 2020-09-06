@@ -83,8 +83,7 @@ public class BanManager {
 	 *
 	 * @return the logged revoked ban or {@code null} if the revocation failed.
 	 */
-	@Nullable
-	public static Ban revokeBan(UUID playerId) {
+	public static BanResult revokeBan(UUID playerId) {
 		BanProcessor processor = getProcessor();
 		if (processor == null) {
 			Adapter.getAdapter().debug("Cannot find ban processor while trying to revoke ban from " + playerId.toString());

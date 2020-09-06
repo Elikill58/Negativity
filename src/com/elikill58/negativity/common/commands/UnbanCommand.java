@@ -11,8 +11,8 @@ import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.ban.BanResult;
 
 public class UnbanCommand implements CommandListeners, TabListeners {
 
@@ -34,12 +34,12 @@ public class UnbanCommand implements CommandListeners, TabListeners {
 			return false;
 		}
 
-		Ban revokedBan = BanManager.revokeBan(cible.getUniqueId());
-		if (revokedBan != null) {
+		BanResult revokedBan = BanManager.revokeBan(cible.getUniqueId());
+		if (revokedBan.isSuccess()) {
 			Messages.sendMessage(sender, "unban.well_unban", "%name%", cible.getName());
 			return true;
 		} else {
-			// Tell the sender the revocation failed
+			Messages.sendMessage(sender, "unban.fail_unban", "%name%", cible.getName(), "%reason%", revokedBan.getResultType().getName());
 			return false;
 		}
 	}

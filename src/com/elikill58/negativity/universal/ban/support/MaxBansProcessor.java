@@ -36,12 +36,11 @@ public class MaxBansProcessor implements BanProcessor {
 		return new BanResult(BanResultType.DONE, ban);
 	}
 
-	@Nullable
 	@Override
-	public Ban revokeBan(UUID playerId) {
+	public BanResult revokeBan(UUID playerId) {
 		NegativityPlayer player = NegativityPlayer.getCached(playerId);
 		if (player == null) {
-			return null;
+			return new BanResult(BanResultType.UNKNOW_PLAYER);
 		}
 
 		org.maxgamer.maxbans.banmanager.Ban revokedBan = MaxBans.instance.getBanManager().getBan(player.getName());
@@ -55,7 +54,7 @@ public class MaxBansProcessor implements BanProcessor {
 			expirationTime = ((Temporary) revokedBan).getExpires();
 		}
 		long revocationTime = System.currentTimeMillis();
-		return new Ban(playerId, revokedBan.getReason(), revokedBan.getBanner(), BanType.UNKNOW, expirationTime, revokedBan.getReason(), BanStatus.REVOKED, revokedBan.getCreated(), revocationTime);
+		return new BanResult(new Ban(playerId, revokedBan.getReason(), revokedBan.getBanner(), BanType.UNKNOW, expirationTime, revokedBan.getReason(), BanStatus.REVOKED, revokedBan.getCreated(), revocationTime));
 	}
 
 	@Nullable

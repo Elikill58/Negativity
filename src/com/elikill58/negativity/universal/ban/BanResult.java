@@ -5,6 +5,16 @@ public class BanResult {
 	private final BanResultType resultType;
 	private final Ban ban;
 	
+	public BanResult(BanResultType resultType) {
+		this.resultType = resultType;
+		this.ban = null;
+	}
+	
+	public BanResult(Ban ban) {
+		this.resultType = BanResultType.DONE;
+		this.ban = ban;
+	}
+	
 	public BanResult(BanResultType resultType, Ban ban) {
 		this.resultType = resultType;
 		this.ban = ban;
@@ -23,8 +33,9 @@ public class BanResult {
 	}
 	
 	public static enum BanResultType {
-		
+
 		ALREADY_BANNED(false, "Already banned"),
+		ALREADY_UNBANNED(false, "Already unbanned"),
 		DONE(true, "Done"),
 		EXCEPTION(false, "Internal error (check console)"),
 		NOT_ENABLED(false, "Check your ban config"),

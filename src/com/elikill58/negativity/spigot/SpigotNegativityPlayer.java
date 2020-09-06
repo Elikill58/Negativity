@@ -54,6 +54,7 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.SimpleAccountManager;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class SpigotNegativityPlayer extends NegativityPlayer {
@@ -154,6 +155,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if(SpigotNegativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
 			return false;
 		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
+			return false;
+		if(SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase()) || Perm.hasPerm(this, "bypass.all")))
 			return false;
 		return Utils.getPing(p) < c.getMaxAlertPing();
 	}

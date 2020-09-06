@@ -19,7 +19,6 @@ public class EntityListeners {
 	public void onDamageByEntity(DamageEntityEvent e,
 			   @First DamageSource damageSource,
 			   @Getter("getTargetEntity") Player p) {
-		// TODO check if it's right about DamageByEntity
 		EventManager.callEvent(new PlayerDamageByEntityEvent(SpongeEntityManager.getPlayer(p), SpongeEntityManager.getEntity(e.getTargetEntity())));
 	}
 

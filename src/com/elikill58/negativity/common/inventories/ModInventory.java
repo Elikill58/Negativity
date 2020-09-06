@@ -1,5 +1,7 @@
 package com.elikill58.negativity.common.inventories;
 
+import java.util.List;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
@@ -59,8 +61,13 @@ public class ModInventory extends AbstractInventory {
 			Messages.sendMessage(p, "inventory.mod.inv_cleared");
 		} else if (m.equals(Materials.LEASH)) {
 			p.closeInventory();
-			Player randomPlayer = (Player) Adapter.getAdapter().getOnlinePlayers().toArray()[Adapter.getAdapter().getOnlinePlayers().size() - 1];
-			p.teleport(randomPlayer);
+			List<Player> list = Adapter.getAdapter().getOnlinePlayers();
+			if(list.size() == 1) {
+				Messages.sendMessage(p, "inventory.mod.random_tp_no_target");
+			} else {
+				Player randomPlayer = (Player) list.toArray()[list.size() - 1];
+				p.teleport(randomPlayer);
+			}
 		} else if (m.equals(Materials.PUMPKIN_PIE)) {
 			p.closeInventory();
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);

@@ -62,9 +62,11 @@ public class BanCommand implements CommandListeners, TabListeners {
 		}
 
 		String reason = reasonJoiner.toString();
-		BanManager.executeBan(Ban.active(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, cheatName));
-		// TODO check the result of execute ban
-		Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
+		Ban ban = BanManager.executeBan(Ban.active(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, cheatName));
+		if(ban == null)
+			Messages.sendMessage(sender, "ban.fail_ban", "%name%", target.getName());
+		else
+			Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
 		return false;
 	}
 

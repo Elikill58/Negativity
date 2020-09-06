@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -116,6 +117,8 @@ public class SpongeNegativity {
 	public void onPreInit(GamePreInitializationEvent event) {
 		INSTANCE = this;
 		configDir.toFile().mkdirs();
+		new File(configDir.toFile().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
+		
 		
 		Adapter.setAdapter(new SpongeAdapter(this));
 		Negativity.loadNegativity();

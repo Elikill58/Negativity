@@ -61,10 +61,10 @@ public class Blink extends Cheat implements Listeners {
 					boolean last = np.IS_LAST_SEC_BLINK == 2;
 					np.IS_LAST_SEC_BLINK++;
 					long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
-					if (last) {
+					if (last && time_last >= 1000) {
 						Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - ping),
 								"no-packet", "No packet. Last other than KeepAlive: " + np.LAST_OTHER_KEEP_ALIVE + " there is: "
-										+ time_last + "ms . Ping: " + ping + ". Warn: " + np.getWarn(this));
+										+ time_last + "ms .");
 					}
 				}
 			} else
@@ -77,7 +77,7 @@ public class Blink extends Cheat implements Listeners {
 			int allPos = posLook + pos;
 			if(allPos > 60) {
 				Negativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(20 + allPos), "position-packet",
-						"PositionLook packet: " + posLook + " Position Packet: " + pos +  " (=" + allPos + ") Ping: " + ping + " Warn for Timer: " + np.getWarn(this));
+						"PositionLook packet: " + posLook + " Position Packet: " + pos +  " (=" + allPos + ")");
 			}
 		}
 	}

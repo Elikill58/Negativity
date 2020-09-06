@@ -116,7 +116,7 @@ public class SpongeNegativity {
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
 		INSTANCE = this;
-		configDir.toFile().mkdirs();
+		
 		new File(configDir.toFile().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
 		
 		

@@ -8,6 +8,7 @@ public class CommandExecutionEvent implements Event {
 	private final CommandSender sender;
 	private final String[] arg;
 	private final String command, prefix;
+	private boolean hasGoodResult = true;
 
 	public CommandExecutionEvent(String command, CommandSender sender, String[] arg, String prefix) {
 		this.command = command;
@@ -32,4 +33,11 @@ public class CommandExecutionEvent implements Event {
 		return prefix;
 	}
 
+	public boolean hasGoodResult() {
+		return hasGoodResult;
+	}
+	
+	public void setGoodResult(boolean hasGoodResult) {
+		this.hasGoodResult = hasGoodResult;
+	}
 }

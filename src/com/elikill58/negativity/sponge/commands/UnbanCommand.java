@@ -24,7 +24,7 @@ public class UnbanCommand implements CommandExecutor {
 	@Override
 	public CommandResult execute(CommandSource src, CommandContext args) throws CommandException {
 		User target = args.requireOne("target");
-
+		
 		BanResult revokedBan = BanManager.revokeBan(target.getUniqueId());
 		if (revokedBan != null) {
 			Messages.sendMessage(src, "unban.well_unban", "%name%", target.getName());

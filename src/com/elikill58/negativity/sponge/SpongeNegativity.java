@@ -52,16 +52,10 @@ import com.elikill58.negativity.api.timers.ClickManagerTimer;
 import com.elikill58.negativity.api.timers.PendingAlertsTimer;
 import com.elikill58.negativity.api.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.api.yaml.config.Configuration;
-import com.elikill58.negativity.sponge.commands.BanCommand;
-import com.elikill58.negativity.sponge.commands.KickCommand;
-import com.elikill58.negativity.sponge.commands.LangCommand;
 import com.elikill58.negativity.sponge.commands.MigrateOldBansCommand;
-import com.elikill58.negativity.sponge.commands.ModCommand;
-import com.elikill58.negativity.sponge.commands.NegativityCommand;
-import com.elikill58.negativity.sponge.commands.ReportCommand;
-import com.elikill58.negativity.sponge.commands.UnbanCommand;
 import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge.listeners.BlockListeners;
+import com.elikill58.negativity.sponge.listeners.CommandsListeners;
 import com.elikill58.negativity.sponge.listeners.EntityListeners;
 import com.elikill58.negativity.sponge.listeners.FightManager;
 import com.elikill58.negativity.sponge.listeners.InventoryListeners;
@@ -221,16 +215,16 @@ public class SpongeNegativity {
 		CommandManager cmd = Sponge.getCommandManager();
 
 		if (!reload) {
-			cmd.register(this, NegativityCommand.create(), "negativity", "neg", "n");
+			cmd.register(this, new CommandsListeners("negativity"), "negativity", "neg", "n");
 			cmd.register(this, MigrateOldBansCommand.create(), "negativitymigrateoldbans");
 		}
 
-		reloadCommand("mod", cmd, ModCommand::create, "nmod", "mod");
-		reloadCommand("kick", cmd, KickCommand::create, "nkick", "kick");
-		reloadCommand("lang", cmd, LangCommand::create, "nlang", "lang");
-		reloadCommand("report", cmd, ReportCommand::create, "nreport", "report", "repot");
-		reloadCommand("ban", cmd, BanCommand::create, "nban", "negban", "ban");
-		reloadCommand("unban", cmd, UnbanCommand::create, "nunban", "negunban", "unban");
+		reloadCommand("mod", cmd, () -> new CommandsListeners("nmod"), "nmod", "mod");
+		reloadCommand("kick", cmd, () -> new CommandsListeners("nkick"), "nkick", "kick");
+		reloadCommand("lang", cmd, () -> new CommandsListeners("nlang"), "nlang", "lang");
+		reloadCommand("report", cmd, () -> new CommandsListeners("nreport"), "nreport", "report", "repot");
+		reloadCommand("ban", cmd, () -> new CommandsListeners("nban"), "nban", "negban", "ban");
+		reloadCommand("unban", cmd, () -> new CommandsListeners("nunban"), "nunban", "negunban", "unban");
 	}
 
 	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {

@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.impl.entity;
 
+import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.golem.IronGolem;
 import org.spongepowered.api.entity.living.player.Player;
@@ -29,12 +30,12 @@ public class SpongeEntityManager {
 			return new SpongeEntity(e);
 	}
 
-	public static CommandSender getExecutor(org.bukkit.command.CommandSender sender) {
-		if(sender == null)
+	public static CommandSender getExecutor(CommandSource src) {
+		if(src == null)
 			return null;
-		if(sender instanceof Player)
-			return new SpongePlayer((Player) sender);
-		return new SpongeCommandSender(sender);
+		if(src instanceof Player)
+			return new SpongePlayer((Player) src);
+		return new SpongeCommandSender(src);
 	}
 
 	public static Entity getProjectile(ProjectileSource shooter) {

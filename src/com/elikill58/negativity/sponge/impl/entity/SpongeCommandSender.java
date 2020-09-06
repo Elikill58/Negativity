@@ -1,18 +1,21 @@
 package com.elikill58.negativity.sponge.impl.entity;
 
+import org.spongepowered.api.command.CommandSource;
+import org.spongepowered.api.text.Text;
+
 import com.elikill58.negativity.api.commands.CommandSender;
 
 public class SpongeCommandSender extends CommandSender {
 
-	private final org.bukkit.command.CommandSender sender;
+	private final CommandSource sender;
 	
-	public SpongeCommandSender(org.bukkit.command.CommandSender sender) {
-		this.sender = sender;
+	public SpongeCommandSender(CommandSource src) {
+		this.sender = src;
 	}
 	
 	@Override
 	public void sendMessage(String msg) {
-		sender.sendMessage(msg);
+		sender.sendMessage(Text.of(msg));
 	}
 
 	@Override

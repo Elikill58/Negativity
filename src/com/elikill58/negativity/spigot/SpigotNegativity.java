@@ -434,7 +434,7 @@ public class SpigotNegativity extends JavaPlugin {
 		
 		Bukkit.getPluginManager().callEvent(new PlayerCheatEvent(p, c, reliability));
 		if (hasBypass && (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase())
-				|| Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "bypass.all"))) {
+				|| Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), Perm.BYPASS_ALL))) {
 			PlayerCheatBypassEvent bypassEvent = new PlayerCheatBypassEvent(p, c, reliability);
 			Bukkit.getPluginManager().callEvent(bypassEvent);
 			if (!bypassEvent.isCancelled())

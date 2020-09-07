@@ -92,6 +92,8 @@ public class DefaultConfigValue {
 		STRINGS.put("Permissions.mod.default", "negativity.mod");
 		STRINGS.put("Permissions.lang.default", "negativity.lang");
 		BOOLEANS.put("Permissions.bypass.active", false);
+		STRINGS.put("Permissions.bypass.all", "negativity.bypass.all");
+		STRINGS.put("Permissions.bypass.ban", "negativity.bypass.ban");
 
 		String[] cheats = new String[]{"airjump", "antipotion", "fasteat", "regen", "antiknockback", "autoclick", "autosteal",
 				"blink", "chat", "critical", "forcefield", "fastplace", "fastladder", "fastbow", "faststairs", "inventorymove", "jesus", "fly",

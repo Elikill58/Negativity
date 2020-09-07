@@ -12,6 +12,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class BanUtils {
 
@@ -29,7 +30,7 @@ public class BanUtils {
 	}
 
 	public static boolean shouldBan(Cheat cheat, NegativityPlayer np, int relia) {
-		if (!cheat.isActive() || !BanManager.banActive || np.isInBanning()) {
+		if (!cheat.isActive() || !BanManager.banActive || np.isInBanning() || Perm.hasPerm(np, Perm.BYPASS_BAN)) {
 			return false;
 		}
 		ConfigAdapter config = Adapter.getAdapter().getConfig();

@@ -103,7 +103,7 @@ public class Negativity {
 		
 		EventManager.callEvent(new PlayerCheatEvent(p, c, reliability));
 		if (hasBypass && (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase())
-				|| Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass.all"))) {
+				|| Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.BYPASS_ALL))) {
 			PlayerCheatBypassEvent bypassEvent = new PlayerCheatBypassEvent(p, c, reliability);
 			EventManager.callEvent(bypassEvent);
 			if (!bypassEvent.isCancelled())

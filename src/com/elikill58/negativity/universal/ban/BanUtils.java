@@ -4,10 +4,13 @@ import java.sql.Timestamp;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.maths.Expression;
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class BanUtils {
 
@@ -24,12 +27,15 @@ public class BanUtils {
 		return -1;
 	}
 
-	public static boolean shouldBan(Cheat cheat, NegativityPlayer np, int relia) {
-		if (!cheat.isActive() || !BanManager.banActive || np.getAccount().isInBanning()) {
-			return false;
-		}
-		Adapter ada = Adapter.getAdapter();
-		return ada.getConfig().getInt("ban.reliability_need") <= relia && ada.getConfig().getInt("ban.alert_need") <= np.getAllWarn(cheat);
+	public static BanResult shouldBan(Cheat cheat, NegativityPlayer np, int relia) {
+		if(!BanManager.banActive)
+			return new BanResult(BanResultType.NOT_ENABLED);
+		if(np.getAccount().isInBanning())
+			return new BanResult(BanResultType.ALREADY_BANNED);
+		if (!cheat.isActive() || Perm.hasPerm(np, Perm.BYPASS_BAN))
+			return new BanResult(BanResultType.BYPASS);
+		Configuration conf = Adapter.getAdapter().getConfig().getSection("ban");
+		return new BanResult(conf.getInt("reliability_need") <= relia && conf.getInt("alert_need") <= np.getAllWarn(cheat) ? BanResultType.DONE : BanResultType.BYPASS);
 	}
 
 	/**
@@ -37,8 +43,9 @@ public class BanUtils {
 	 * @return see {@link BanManager#executeBan}, null if banning was not needed
 	 */
 	public static BanResult banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability) {
-		if (!shouldBan(cheat, player, reliability)) {
-			return null;
+		BanResult result = shouldBan(cheat, player, reliability);
+		if (!result.isSuccess()) {
+			return result;
 		}
 		player.getAccount().setInBanning(true);
 		Adapter.getAdapter().getLogger().info("Banning " + player.getName() + " ...");

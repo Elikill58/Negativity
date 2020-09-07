@@ -36,6 +36,7 @@ public class BanResult {
 
 		ALREADY_BANNED(false, "Already banned"),
 		ALREADY_UNBANNED(false, "Already unbanned"),
+		BYPASS(false, "Bypass"),
 		DONE(true, "Done"),
 		EXCEPTION(false, "Internal error (check console)"),
 		NOT_ENABLED(false, "Check your ban config"),

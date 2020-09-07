@@ -23,8 +23,10 @@ commands:
   report: true
   # Manage Mod command :
   # Manage /nban (Alias: /ban)
+  # DON'T FORGET TO ENABLE BAN BELOW
   ban: true
   # Manage /nunban (Alias: /unban)
+  # DON'T FORGET TO ENABLE BAN BELOW
   unban: true
   # Manage /nkick (Alias: /kick)
   kick: true
@@ -108,6 +110,9 @@ Permissions:
     default: "negativity.lang"
   bypass:
     active: false
+    ban:
+      # Bypass ban (auto and /nban)
+      default: "negativity.bypass.ban"
     all:
       default: "negativity.bypass.all"
     forcefield:

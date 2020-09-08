@@ -21,6 +21,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Platform;
@@ -46,7 +47,7 @@ public class Speed extends Cheat implements Listeners {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
-		if(p.hasPotionEffect(PotionEffectType.SPEED) || p.hasElytra())
+		if(p.hasPotionEffect(PotionEffectType.SPEED) || p.hasElytra() || LocationUtils.isUsingElevator(p))
 			return;
 		
 		if(checkActive("move-amount")) {

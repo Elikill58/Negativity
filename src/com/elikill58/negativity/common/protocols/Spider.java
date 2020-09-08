@@ -46,7 +46,7 @@ public class Spider extends Cheat implements Listeners {
 			return;
 		if (p.getItemInHand() != null && p.getItemInHand().getType().getId().contains("TRIDENT"))
 			return;
-		if(hasBypassBlockAround(loc))
+		if(hasBypassBlockAround(loc) || LocationUtils.isUsingElevator(p))
 			return;
 		double y = e.getTo().getY() - e.getFrom().getY();
 		boolean isAris = ((float) y) == p.getWalkSpeed();

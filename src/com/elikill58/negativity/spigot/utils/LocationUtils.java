@@ -21,6 +21,11 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class LocationUtils {
 
+	public static boolean isUsingElevator(Player p) {
+		Material m = p.getLocation().getBlock().getType();
+		return m.name().contains("WATER");
+	}
+	
 	/**
 	 * Check if there is material around specified location
 	 * (1 block radius)

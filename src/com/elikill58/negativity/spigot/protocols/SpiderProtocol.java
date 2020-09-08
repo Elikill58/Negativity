@@ -41,7 +41,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		Material underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),
 				underUnder = loc.clone().subtract(0, 2, 0).getBlock().getType();
 		if (!underPlayer.equals(Material.AIR) || !underUnder.equals(Material.AIR)
-				|| !loc.getBlock().getType().equals(Material.AIR))
+				|| !loc.getBlock().getType().equals(Material.AIR) || LocationUtils.isUsingElevator(p))
 			return;
 		if (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;

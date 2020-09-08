@@ -22,6 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
+import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -46,7 +47,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
-		if(p.hasPotionEffect(PotionEffectType.SPEED) || np.hasElytra())
+		if(p.hasPotionEffect(PotionEffectType.SPEED) || np.hasElytra() || LocationUtils.isUsingElevator(p))
 			return;
 		
 		np.MOVE_TIME++;

@@ -17,7 +17,6 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Timer extends Cheat implements Listeners {
@@ -44,7 +43,7 @@ public class Timer extends Cheat implements Listeners {
 		else // loading seconds
 			return;
 		double sum = np.TIMER_COUNT.stream().mapToInt(Integer::intValue).sum() / np.TIMER_COUNT.size();
-		int variation = Adapter.getAdapter().getConfig().getInt("cheats.timer.max_variation");
+		int variation = getConfig().getInt("max_variation");
 		Player p = e.getPlayer();
 		int MAX = (p.getGameMode().equals(GameMode.CREATIVE) ? 40 : 20);
 		int MAX_VARIATION = MAX + variation;

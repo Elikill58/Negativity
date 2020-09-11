@@ -139,7 +139,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 	private static String serializeReports(NegativityAccount account) {
 		StringJoiner joiner = new StringJoiner(";");
 		account.getReports().forEach((r) -> {
-			joiner.add(r.getReportedBy().toString() + "=" + r.getReason());
+			joiner.add(r.toJsonString());
 		});
 		return joiner.toString();
 	}
@@ -148,16 +148,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 		List<Report> reports = new ArrayList<Report>();
 		String[] fullEntries = serialized.split(";");
 		for (String fullEntry : fullEntries) {
-			String[] entry = fullEntry.split("=");
-			if (entry.length != 2) {
-				continue;
-			}
-
-			try {
-				reports.add(new Report(fullEntry.replaceFirst(entry[0] + "=", ""), UUID.fromString(entry[0])));
-			} catch (NumberFormatException e) {
-				Adapter.getAdapter().getLogger().warn("Malformed reports in entry " + fullEntry);
-			}
+			reports.add(Report.fromJson(fullEntry));
 		}
 		return reports;
 	}

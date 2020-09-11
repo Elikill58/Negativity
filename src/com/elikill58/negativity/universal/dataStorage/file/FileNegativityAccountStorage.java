@@ -18,7 +18,6 @@ import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.Report;
 import com.elikill58.negativity.universal.TranslatedMessages;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 
 public class FileNegativityAccountStorage extends NegativityAccountStorage {
@@ -115,7 +114,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 	private void serializeReports(NegativityAccount account, Configuration section) {
 		List<String> list = new ArrayList<>();
 		account.getReports().forEach((r) -> {
-			list.add(r.getReportedBy().toString() + "=" + r.getReason());
+			list.add(r.toJsonString());
 		});
 		section.set("reports", list);
 	}
@@ -127,16 +126,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 		}
 
 		for (String fullEntry : cheatsSection.getStringList("reports")) {
-			String[] entry = fullEntry.split("=");
-			if (entry.length != 2) {
-				continue;
-			}
-
-			try {
-				reports.add(new Report(fullEntry.replaceFirst(entry[0] + "=", ""), UUID.fromString(entry[0])));
-			} catch (NumberFormatException e) {
-				Adapter.getAdapter().getLogger().warn("Malformed reports in entry " + fullEntry);
-			}
+			reports.add(Report.fromJson(fullEntry));
 		}
 		return reports;
 	}

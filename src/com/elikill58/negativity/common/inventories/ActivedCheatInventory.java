@@ -7,7 +7,6 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
-import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
@@ -17,15 +16,10 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class ActivedCheatInventory extends AbstractInventory {
+public class ActivedCheatInventory extends AbstractInventory<ActivedCheatHolder> {
 
 	public ActivedCheatInventory() {
-		super(NegativityInventory.ACTIVED_CHEAT);
-	}
-	
-	@Override
-	public boolean isInstance(NegativityHolder nh) {
-		return nh instanceof ActivedCheatHolder;
+		super(NegativityInventory.ACTIVED_CHEAT, ActivedCheatHolder.class);
 	}
 	
 	@Override
@@ -46,7 +40,7 @@ public class ActivedCheatInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, ActivedCheatHolder nh) {
 		if (m.equals(Materials.ARROW))
 			InventoryManager.open(NegativityInventory.CHECK_MENU, p, ((ActivedCheatHolder) nh).getCible());
 	}

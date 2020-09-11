@@ -5,7 +5,6 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
-import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
@@ -14,15 +13,10 @@ import com.elikill58.negativity.common.inventories.holders.admin.AdminHolder;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Messages;
 
-public class AdminInventory extends AbstractInventory {
+public class AdminInventory extends AbstractInventory<AdminHolder> {
 
 	public AdminInventory() {
-		super(NegativityInventory.ADMIN);
-	}
-
-	@Override
-	public boolean isInstance(NegativityHolder nh) {
-		return nh instanceof AdminHolder;
+		super(NegativityInventory.ADMIN, AdminHolder.class);
 	}
 
 	@Override
@@ -37,7 +31,7 @@ public class AdminInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, AdminHolder nh) {
 		if(m.equals(Materials.PAPER)) {
 			InventoryManager.open(NegativityInventory.LANG, p);
 		} else if (m.equals(Materials.TNT))

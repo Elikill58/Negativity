@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.inventory.InventoryType;
-import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
@@ -23,15 +22,10 @@ import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
-public class CheckMenuInventory extends AbstractInventory {
+public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 	
 	public CheckMenuInventory() {
-		super(NegativityInventory.CHECK_MENU);
-	}
-	
-	@Override
-	public boolean isInstance(NegativityHolder nh) {
-		return nh instanceof CheckMenuHolder;
+		super(NegativityInventory.CHECK_MENU, CheckMenuHolder.class);
 	}
 
 	@Override
@@ -126,7 +120,7 @@ public class CheckMenuInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, CheckMenuHolder nh) {
 		Player cible = ((CheckMenuHolder) nh).getCible();
 		if (m.equals(Materials.EYE_OF_ENDER)) {
 			p.teleport(cible.getLocation());

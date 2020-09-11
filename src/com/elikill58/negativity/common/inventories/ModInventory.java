@@ -20,10 +20,10 @@ import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 
-public class ModInventory extends AbstractInventory {
+public class ModInventory extends AbstractInventory<ModHolder> {
 
 	public ModInventory() {
-		super(NegativityInventory.MOD);
+		super(NegativityInventory.MOD, ModHolder.class);
 	}
 
 	@Override
@@ -45,7 +45,7 @@ public class ModInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, ModHolder nh) {
 		if (m.equals(Materials.GHAST_TEAR)) {
 			if (p.hasPotionEffect(PotionEffectType.NIGHT_VISION)) {
 				p.removePotionEffect(PotionEffectType.NIGHT_VISION);

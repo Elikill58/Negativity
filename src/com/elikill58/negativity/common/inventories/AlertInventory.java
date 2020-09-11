@@ -10,7 +10,6 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
-import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
@@ -22,15 +21,10 @@ import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class AlertInventory extends AbstractInventory {
+public class AlertInventory extends AbstractInventory<AlertHolder> {
 
 	public AlertInventory() {
-		super(NegativityInventory.ALERT);
-	}
-
-	@Override
-	public boolean isInstance(NegativityHolder nh) {
-		return nh instanceof AlertHolder;
+		super(NegativityInventory.ALERT, AlertHolder.class);
 	}
 
 	@Override
@@ -90,7 +84,7 @@ public class AlertInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, AlertHolder nh) {
 		Player cible = ((AlertHolder) nh).getCible();
 		if (m.equals(Materials.ARROW))
 			InventoryManager.open(NegativityInventory.CHECK_MENU, p, cible);

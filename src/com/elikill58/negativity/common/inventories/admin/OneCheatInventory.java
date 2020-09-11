@@ -17,10 +17,10 @@ import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 
-public class OneCheatInventory extends AbstractInventory {
+public class OneCheatInventory extends AbstractInventory<OneCheatHolder> {
 
 	public OneCheatInventory() {
-		super(NegativityInventory.ONE_CHEAT);
+		super(NegativityInventory.ONE_CHEAT, OneCheatHolder.class);
 	}
 
 	@Override
@@ -47,7 +47,7 @@ public class OneCheatInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, OneCheatHolder nh) {
 		if (m.equals(Materials.ARROW)) {
 			InventoryManager.open(NegativityInventory.CHEAT_MANAGER, p, false);
 			return;

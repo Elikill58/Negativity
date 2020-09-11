@@ -7,7 +7,6 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
-import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
@@ -18,17 +17,12 @@ import com.elikill58.negativity.universal.Report;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class ReportInventory extends AbstractInventory {
+public class ReportInventory extends AbstractInventory<ReportHolder> {
 	
 	public ReportInventory() {
-		super(NegativityInventory.REPORT);
+		super(NegativityInventory.REPORT, ReportHolder.class);
 	}
-
-	@Override
-	public boolean isInstance(NegativityHolder nh) {
-		return nh instanceof ReportHolder;
-	}
-
+	
 	@Override
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
@@ -58,7 +52,7 @@ public class ReportInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, ReportHolder nh) {
 		ReportHolder rh = (ReportHolder) nh;
 		if(m.equals(Materials.ARROW)) {
 			int slot = e.getSlot();

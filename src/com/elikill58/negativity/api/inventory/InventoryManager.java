@@ -35,6 +35,7 @@ public class InventoryManager implements Listeners {
 		new FreezeInventory();
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@EventListener
 	public void onInventoryClick(InventoryClickEvent e) {
 		PlatformHolder holder = e.getClickedInventory().getHolder();
@@ -49,15 +50,15 @@ public class InventoryManager implements Listeners {
 				if (m.equals(Materials.BARRIER)) {
 					p.closeInventory();
 				} else {
-					inv.manageInventory(e, m, p, (NegativityHolder) nh);
+					inv.manageInventory(e, m, p, nh);
 				}
 				return;
 			}
 		}
 	}
 	
-	public static Optional<AbstractInventory> getInventory(NegativityInventory type) {
-		for(AbstractInventory inv : AbstractInventory.INVENTORIES)
+	public static Optional<AbstractInventory<?>> getInventory(NegativityInventory type) {
+		for(AbstractInventory<?> inv : AbstractInventory.INVENTORIES)
 			if(inv.getType().equals(type))
 				return Optional.of(inv);
 		return Optional.empty();

@@ -5,7 +5,6 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
-import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
@@ -15,10 +14,10 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class CheatManagerInventory extends AbstractInventory {
+public class CheatManagerInventory extends AbstractInventory<CheatManagerHolder> {
 
 	public CheatManagerInventory() {
-		super(NegativityInventory.CHEAT_MANAGER);
+		super(NegativityInventory.CHEAT_MANAGER, CheatManagerHolder.class);
 	}
 	
 	@Override
@@ -35,16 +34,11 @@ public class CheatManagerInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, CheatManagerHolder nh) {
 		if (m.equals(Materials.ARROW))
 			InventoryManager.open(((CheatManagerHolder) nh).isFromAdmin() ? NegativityInventory.ADMIN : NegativityInventory.MOD, p);
 		else {
 			UniversalUtils.getCheatFromItem(m).ifPresent((c) -> InventoryManager.open(NegativityInventory.ONE_CHEAT, p, c));
 		}
-	}
-
-	@Override
-	public boolean isInstance(NegativityHolder nh) {
-		return nh instanceof CheatManagerHolder;
 	}
 }

@@ -14,10 +14,10 @@ import com.elikill58.negativity.common.inventories.holders.FreezeHolder;
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Messages;
 
-public class FreezeInventory extends AbstractInventory {
+public class FreezeInventory extends AbstractInventory<FreezeHolder> {
 
 	public FreezeInventory() {
-		super(NegativityInventory.FREEZE);
+		super(NegativityInventory.FREEZE, FreezeHolder.class);
 	}
 
 	@Override
@@ -39,7 +39,7 @@ public class FreezeInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, FreezeHolder nh) {
 		
 	}
 

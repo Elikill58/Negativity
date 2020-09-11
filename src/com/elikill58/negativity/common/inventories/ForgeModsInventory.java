@@ -7,7 +7,6 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
-import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
@@ -17,10 +16,10 @@ import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class ForgeModsInventory extends AbstractInventory {
+public class ForgeModsInventory extends AbstractInventory<ForgeModsHolder> {
 
 	public ForgeModsInventory() {
-		super(NegativityInventory.FORGE_MODS);
+		super(NegativityInventory.FORGE_MODS, ForgeModsHolder.class);
 	}
 	
 	public int slot = 0;
@@ -44,13 +43,8 @@ public class ForgeModsInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, ForgeModsHolder nh) {
 		if(m.equals(Materials.ARROW))
 			InventoryManager.open(NegativityInventory.CHECK_MENU, p, ((ForgeModsHolder) nh).getCible());
-	}
-
-	@Override
-	public boolean isInstance(NegativityHolder nh) {
-		return nh instanceof ForgeModsHolder;
 	}
 }

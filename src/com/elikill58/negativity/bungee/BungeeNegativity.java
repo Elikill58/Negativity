@@ -26,6 +26,7 @@ public class BungeeNegativity extends Plugin {
 	@Override
 	public void onEnable() {
 		instance = this;
+		Adapter.setAdapter(new BungeeAdapter(this));
 
 		new Metrics(this);
 
@@ -35,7 +36,6 @@ public class BungeeNegativity extends Plugin {
 		pluginManager.registerCommand(this, new BNegativityCommand());
 		pluginManager.registerListener(this, new BNegativityCommand.TabCompleter());
 		
-		Adapter.setAdapter(new BungeeAdapter(this));
 		Negativity.loadNegativity();
 
 		NegativityAccountStorage.setDefaultStorage("database");

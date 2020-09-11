@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal.pluginMessages;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -47,9 +48,10 @@ public class AccountUpdateMessage implements NegativityMessage {
 		for (int i = 0; i < warnsEntriesCount; i++) {
 			warns.put(input.readUTF(), input.readInt());
 		}
+		// TODO write and read report update message
 
 		long creationTime = input.readLong();
-		account = new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, creationTime);
+		account = new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, new ArrayList<>(), creationTime);
 	}
 
 	@Override

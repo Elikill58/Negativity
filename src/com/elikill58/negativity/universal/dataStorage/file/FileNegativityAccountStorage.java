@@ -2,7 +2,9 @@ package com.elikill58.negativity.universal.dataStorage.file;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
@@ -14,7 +16,9 @@ import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.Report;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 
 public class FileNegativityAccountStorage extends NegativityAccountStorage {
@@ -37,8 +41,9 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 		Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getSection("minerate"));
 		int mostClicksPerSecond = config.getInt("better-click");
 		Map<String, Integer> warns = deserializeViolations(config.getSection("cheats"));
+		List<Report> reports = deserializeReports(config);
 		long creationTime = config.getLong("creation-time", System.currentTimeMillis());
-		return CompletableFuture.completedFuture(new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, creationTime));
+		return CompletableFuture.completedFuture(new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, creationTime));
 	}
 
 	@Override
@@ -58,6 +63,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 		serializeMinerate(account.getMinerate(), accountConfig.createSection("minerate"));
 		accountConfig.set("better-click", account.getMostClicksPerSecond());
 		serializeViolations(account, accountConfig.createSection("cheats"));
+		serializeReports(account, accountConfig);
 		accountConfig.set("creation-time", account.getCreationTime());
 		accountConfig.save();
 		return CompletableFuture.completedFuture(null);
@@ -104,5 +110,34 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 			violations.put(cheatKey, cheatsSection.getInt(cheatKey));
 		}
 		return violations;
+	}
+
+	private void serializeReports(NegativityAccount account, Configuration section) {
+		List<String> list = new ArrayList<>();
+		account.getReports().forEach((r) -> {
+			list.add(r.getReportedBy().toString() + "=" + r.getReason());
+		});
+		section.set("reports", list);
+	}
+
+	private List<Report> deserializeReports(@Nullable Configuration cheatsSection) {
+		List<Report> reports = new ArrayList<>();
+		if (cheatsSection == null) {
+			return reports;
+		}
+
+		for (String fullEntry : cheatsSection.getStringList("reports")) {
+			String[] entry = fullEntry.split("=");
+			if (entry.length != 2) {
+				continue;
+			}
+
+			try {
+				reports.add(new Report(fullEntry.replaceFirst(entry[0] + "=", ""), UUID.fromString(entry[0])));
+			} catch (NumberFormatException e) {
+				Adapter.getAdapter().getLogger().warn("Malformed reports in entry " + fullEntry);
+			}
+		}
+		return reports;
 	}
 }

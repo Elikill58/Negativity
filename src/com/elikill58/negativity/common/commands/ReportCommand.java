@@ -13,7 +13,9 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
+import com.elikill58.negativity.universal.Report;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -75,6 +77,7 @@ public class ReportCommand implements CommandListeners, TabListeners {
 				REPORT_LAST.add(msg);
 			}
 		}
+		NegativityAccount.get(target.getUniqueId()).getReports().add(new Report(reason, p.getUniqueId()));
 
 		Messages.sendMessage(p, "report.well_report", "%name%", target.getName());
 		np.TIME_REPORT = System.currentTimeMillis()

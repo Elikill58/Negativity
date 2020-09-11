@@ -1,7 +1,9 @@
 package com.elikill58.negativity.universal;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,21 +20,23 @@ public final class NegativityAccount {
 	private String lang, playerName;
 	private final Minerate minerate;
 	private int mostClicksPerSecond;
+	private final List<Report> reports;
 	private final Map<String, Integer> warns;
 	private final long creationTime;
 	private boolean inBanning = false, isMcLeaks = false;
 
 	public NegativityAccount(UUID playerId) {
-		this(playerId, null, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>(), System.currentTimeMillis());
+		this(playerId, null, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>(), new ArrayList<>(), System.currentTimeMillis());
 	}
 
-	public NegativityAccount(UUID playerId, String playerName, String lang, Minerate minerate, int mostClicksPerSecond, Map<String, Integer> warns, long creationTime) {
+	public NegativityAccount(UUID playerId, String playerName, String lang, Minerate minerate, int mostClicksPerSecond, Map<String, Integer> warns, List<Report> reports, long creationTime) {
 		this.playerId = playerId;
 		this.playerName = playerName;
 		this.lang = lang;
 		this.minerate = minerate;
 		this.mostClicksPerSecond = mostClicksPerSecond;
 		this.warns = warns;
+		this.reports = reports;
 		this.creationTime = creationTime;
 		Adapter.getAdapter().isUsingMcLeaks(playerId).thenAccept(isUsingMcLeaks -> {
 			this.isMcLeaks = isUsingMcLeaks;
@@ -94,6 +98,10 @@ public final class NegativityAccount {
 	@NonNull
 	public static NegativityAccount get(UUID accountId) {
 		return Adapter.getAdapter().getAccountManager().getNow(accountId);
+	}
+	
+	public List<Report> getReports() {
+		return reports;
 	}
 
 	public long getCreationTime() {

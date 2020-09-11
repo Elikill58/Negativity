@@ -246,6 +246,14 @@ public class SpigotAdapter extends Adapter {
 	}
 	
 	@Override
+	public OfflinePlayer getOfflinePlayer(UUID uuid) {
+		org.bukkit.OfflinePlayer p = Bukkit.getOfflinePlayer(uuid);
+		if(p == null)
+			return null;
+		return new SpigotOfflinePlayer(p);
+	}
+	
+	@Override
 	public boolean hasPlugin(String name) {
 		return Bukkit.getPluginManager().getPlugin(name) != null;
 	}

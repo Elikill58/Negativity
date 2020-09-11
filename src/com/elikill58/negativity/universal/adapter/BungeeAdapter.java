@@ -216,6 +216,11 @@ public class BungeeAdapter extends Adapter {
 	public OfflinePlayer getOfflinePlayer(String name) {
 		return null;
 	}
+	
+	@Override
+	public OfflinePlayer getOfflinePlayer(UUID uuid) {
+		return null;
+	}
 
 	@Override
 	public boolean hasPlugin(String name) {

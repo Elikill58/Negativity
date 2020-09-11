@@ -119,6 +119,7 @@ public abstract class Adapter {
 	public abstract Location createLocation(World w, double x, double y, double z);
 	public abstract Inventory createInventory(String inventoryName, int size, NegativityHolder holder);
 	public abstract OfflinePlayer getOfflinePlayer(String name);
+	public abstract OfflinePlayer getOfflinePlayer(UUID uuid);
 	public abstract Player getPlayer(String name);
 	public abstract Player getPlayer(UUID uuid);
 	

@@ -217,7 +217,13 @@ public class SpongeAdapter extends Adapter {
 
 	@Override
 	public OfflinePlayer getOfflinePlayer(String name) {
-		// TODO Auto-generated method stub
+		// TODO Implement offline players for Sponge (with name)
+		return null;
+	}
+	
+	@Override
+	public OfflinePlayer getOfflinePlayer(UUID uuid) {
+		// TODO Implement offline players for Sponge (with uuid)
 		return null;
 	}
 

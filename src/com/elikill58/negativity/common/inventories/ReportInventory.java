@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.common.inventories.holders.ReportHolder;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.Report;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ReportInventory extends AbstractInventory {
@@ -40,7 +41,8 @@ public class ReportInventory extends AbstractInventory {
 		} else {
 			for(int i = 9; i < reports.size(); i++) {
 				Report r = reports.get(i - 9);
-				inv.set(i, ItemBuilder.Builder(Materials.APPLE).displayName("").lore(r.getReason()).build());
+				inv.set(i, ItemBuilder.Builder(Materials.APPLE).displayName(Adapter.getAdapter().getOfflinePlayer(r.getReportedBy()).getName())
+						.lore(r.getReason()).build());
 			}
 		}
 		p.openInventory(inv);

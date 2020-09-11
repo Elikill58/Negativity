@@ -39,6 +39,7 @@ public abstract class AbstractInventory {
 		MOD,
 		ONE_CHEAT,
 		FORGE_MODS,
-		LANG;
+		LANG,
+		REPORT;
 	}
 }

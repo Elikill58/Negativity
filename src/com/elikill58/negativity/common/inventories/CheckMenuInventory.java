@@ -43,8 +43,8 @@ public class CheckMenuInventory extends AbstractInventory {
 		Minerate minerate = account.getMinerate();
 		actualizeInventory(p, cible, inv);
 		
-		inv.set(8, ItemBuilder.Builder(cible).displayName(cible.getName()).lore(ChatColor.GOLD + "UUID: " + cible.getUniqueId(), ChatColor.GREEN + "Version: " + cible.getPlayerVersion().getName(), ChatColor.GREEN + "Platform: " + (np.isBedrockPlayer() ? "Bedrock" : "Java")).build());
-
+		inv.set(8, ItemBuilder.getSkullItem(cible));
+				
 		inv.set(10, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());
 		inv.set(11, ItemBuilder.Builder(Materials.GRASS).displayName(ChatColor.RESET + "Mods").lore(ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))).build());
 		inv.set(12, getWoolItem(p, np.getAccount().isMcLeaks()));
@@ -58,6 +58,7 @@ public class CheckMenuInventory extends AbstractInventory {
 			inv.set(20, ItemBuilder.Builder(Materials.PACKED_ICE).displayName(Messages.getMessage(p, "inventory.main.freezing", "%name%", cible.getName())).build());
 		inv.set(21, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
 		inv.set(22, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())).build());
+		inv.set(23, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.main.active_report")).build());
 		for (int i = 0; i < inv.getSize(); i++) {
 			ItemStack item = inv.get(i);
 			if (item == null || item.getType().equals(Materials.AIR))
@@ -153,6 +154,8 @@ public class CheckMenuInventory extends AbstractInventory {
 			InventoryManager.open(NegativityInventory.ALERT, p, cible);
 		} else if(m.equals(Materials.GRASS)) {
 			InventoryManager.open(NegativityInventory.FORGE_MODS, p, cible);
+		} else if(m.equals(Materials.APPLE)) {
+			InventoryManager.open(NegativityInventory.REPORT, p, cible);
 		} else if(m.equals(Materials.DIAMOND_SHOVEL)) {
 			// TODO soon implement inv kick
 		} else if(m.equals(Materials.ANVIL)) {

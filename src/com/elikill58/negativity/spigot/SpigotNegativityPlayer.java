@@ -85,7 +85,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false, disableShowingAlert = false,
 			isInvisible = false, isUsingSlimeBlock = false, already_blink = false, isJumpingWithBlock = false,
 			isOnLadders = false, lastClickInv = false;
-	private boolean mustToBeSaved = false, isOnGround = true, isBedrockPlayer = false;
+	public boolean mustToBeSaved = false;
+	private boolean isOnGround = true, isBedrockPlayer = false;
 	public PacketType lastPacketType = null;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public Material eatMaterial = Material.AIR, lastClick = Material.AIR;

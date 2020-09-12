@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -35,29 +37,39 @@ public class DatabaseMigrator {
 	private static final Pattern BLANK_PATTERN = Pattern.compile("\\s*");
 
 	public static MigrationResult executeRemainingMigrations(Connection connection, String subsystem) throws SQLException {
-		try (PreparedStatement createMigrationsStm = connection.prepareStatement(
-				"CREATE TABLE IF NOT EXISTS negativity_migrations_history (subsystem VARCHAR(32), version INT, update_time TIMESTAMP DEFAULT NOW())");
-			 // Gets the latest version of this database
-			 PreparedStatement getCurrentVersion = connection.prepareStatement("SELECT version FROM negativity_migrations_history WHERE subsystem = ? ORDER BY version DESC LIMIT 1")) {
-			createMigrationsStm.executeUpdate();
+		try {
+			return CompletableFuture.supplyAsync(() -> {
+				try (PreparedStatement createMigrationsStm = connection.prepareStatement(
+						"CREATE TABLE IF NOT EXISTS negativity_migrations_history (subsystem VARCHAR(32), version INT, update_time TIMESTAMP DEFAULT NOW())");
+					 // Gets the latest version of this database
+					 PreparedStatement getCurrentVersion = connection.prepareStatement("SELECT version FROM negativity_migrations_history WHERE subsystem = ? ORDER BY version DESC LIMIT 1")) {
+					createMigrationsStm.executeUpdate();
 
-			getCurrentVersion.setString(1, subsystem);
-			ResultSet result = getCurrentVersion.executeQuery();
-			int previousVersion = -1;
-			if (result.next()) {
-				previousVersion = result.getInt(1);
-			}
+					getCurrentVersion.setString(1, subsystem);
+					ResultSet result = getCurrentVersion.executeQuery();
+					int previousVersion = -1;
+					if (result.next()) {
+						previousVersion = result.getInt(1);
+					}
 
-			int newVersion = doExecuteRemainingMigrations(connection, previousVersion, subsystem);
-			if (newVersion >= 0) {
-				// At least one migration was executed
-				try (PreparedStatement insertRecordStm = connection.prepareStatement("INSERT INTO negativity_migrations_history (version, subsystem) VALUES (?, ?)")) {
-					insertRecordStm.setInt(1, newVersion);
-					insertRecordStm.setString(2, subsystem);
-					insertRecordStm.executeUpdate();
+					int newVersion = doExecuteRemainingMigrations(connection, previousVersion, subsystem);
+					if (newVersion >= 0) {
+						// At least one migration was executed
+						try (PreparedStatement insertRecordStm = connection.prepareStatement("INSERT INTO negativity_migrations_history (version, subsystem) VALUES (?, ?)")) {
+							insertRecordStm.setInt(1, newVersion);
+							insertRecordStm.setString(2, subsystem);
+							insertRecordStm.executeUpdate();
+						}
+					}
+					return new MigrationResult(previousVersion, newVersion);
+				} catch (SQLException e) {
+					e.printStackTrace();
 				}
-			}
-			return new MigrationResult(previousVersion, newVersion);
+				return null;
+			}).get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+			return null;
 		}
 	}
 

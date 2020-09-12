@@ -30,42 +30,45 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 
 	@Override
 	public CompletableFuture<@Nullable NegativityAccount> loadAccount(UUID playerId) {
-		File file = new File(userDir, playerId + ".yml");
-		if (!file.exists()) {
-			return CompletableFuture.completedFuture(new NegativityAccount(playerId));
-		}
-		Configuration config = YamlConfiguration.load(file);
-		String playerName = config.getString("playername");
-		String language = config.getString("lang", TranslatedMessages.getDefaultLang());
-		Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getSection("minerate"));
-		int mostClicksPerSecond = config.getInt("better-click");
-		Map<String, Integer> warns = deserializeViolations(config.getSection("cheats"));
-		List<Report> reports = deserializeReports(config);
-		long creationTime = config.getLong("creation-time", System.currentTimeMillis());
-		return CompletableFuture.completedFuture(new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, creationTime));
+		return CompletableFuture.supplyAsync(() -> {
+			File file = new File(userDir, playerId + ".yml");
+			if (!file.exists()) {
+				return new NegativityAccount(playerId);
+			}
+			Configuration config = YamlConfiguration.load(file);
+			String playerName = config.getString("playername");
+			String language = config.getString("lang", TranslatedMessages.getDefaultLang());
+			Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getSection("minerate"));
+			int mostClicksPerSecond = config.getInt("better-click");
+			Map<String, Integer> warns = deserializeViolations(config.getSection("cheats"));
+			List<Report> reports = deserializeReports(config);
+			long creationTime = config.getLong("creation-time", System.currentTimeMillis());
+			return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, creationTime);
+		});
 	}
 
 	@Override
 	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
-		File file = new File(userDir, account.getPlayerId() + ".yml");
-		if(!file.exists()) {
-			try {
-				file.createNewFile();
-			} catch (IOException e) {
-				e.printStackTrace();
+		return CompletableFuture.runAsync(() -> {
+			File file = new File(userDir, account.getPlayerId() + ".yml");
+			if(!file.exists()) {
+				try {
+					file.createNewFile();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
-		}
-		Configuration accountConfig = YamlConfiguration.load(file);
-		accountConfig.set("playername", account.getPlayerName());
-		accountConfig.set("lang", account.getLang());
-		accountConfig.set("minerate-full-mined", account.getMinerate().getFullMined());
-		serializeMinerate(account.getMinerate(), accountConfig.createSection("minerate"));
-		accountConfig.set("better-click", account.getMostClicksPerSecond());
-		serializeViolations(account, accountConfig.createSection("cheats"));
-		serializeReports(account, accountConfig);
-		accountConfig.set("creation-time", account.getCreationTime());
-		accountConfig.save();
-		return CompletableFuture.completedFuture(null);
+			Configuration accountConfig = YamlConfiguration.load(file);
+			accountConfig.set("playername", account.getPlayerName());
+			accountConfig.set("lang", account.getLang());
+			accountConfig.set("minerate-full-mined", account.getMinerate().getFullMined());
+			serializeMinerate(account.getMinerate(), accountConfig.createSection("minerate"));
+			accountConfig.set("better-click", account.getMostClicksPerSecond());
+			serializeViolations(account, accountConfig.createSection("cheats"));
+			serializeReports(account, accountConfig);
+			accountConfig.set("creation-time", account.getCreationTime());
+			accountConfig.save();
+		});
 	}
 
 	private void serializeMinerate(Minerate minerate, Configuration minerateSection) {

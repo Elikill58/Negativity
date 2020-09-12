@@ -45,21 +45,22 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 
 	@Override
 	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
-		File file = new File(userDir, account.getPlayerId() + ".yml");
-		YamlConfiguration accountConfig = YamlConfiguration.loadConfiguration(file);
-		accountConfig.set("playername", account.getPlayerName());
-		accountConfig.set("lang", account.getLang());
-		accountConfig.set("minerate-full-mined", account.getMinerate().getFullMined());
-		serializeMinerate(account.getMinerate(), accountConfig.createSection("minerate"));
-		accountConfig.set("better-click", account.getMostClicksPerSecond());
-		serializeViolations(account, accountConfig.createSection("cheats"));
-		accountConfig.set("creation-time", account.getCreationTime());
-		try {
-			accountConfig.save(file);
-		} catch (IOException e) {
-			SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not save account to file.", e);
-		}
-		return CompletableFuture.completedFuture(null);
+		return CompletableFuture.runAsync(() -> {
+			File file = new File(userDir, account.getPlayerId() + ".yml");
+			YamlConfiguration accountConfig = YamlConfiguration.loadConfiguration(file);
+			accountConfig.set("playername", account.getPlayerName());
+			accountConfig.set("lang", account.getLang());
+			accountConfig.set("minerate-full-mined", account.getMinerate().getFullMined());
+			serializeMinerate(account.getMinerate(), accountConfig.createSection("minerate"));
+			accountConfig.set("better-click", account.getMostClicksPerSecond());
+			serializeViolations(account, accountConfig.createSection("cheats"));
+			accountConfig.set("creation-time", account.getCreationTime());
+			try {
+				accountConfig.save(file);
+			} catch (IOException e) {
+				SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not save account to file.", e);
+			}
+		});
 	}
 
 	private void serializeMinerate(Minerate minerate, ConfigurationSection minerateSection) {

@@ -34,41 +34,44 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 
 	@Override
 	public CompletableFuture<@Nullable NegativityAccount> loadAccount(UUID playerId) {
-		try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_accounts WHERE id = ?")) {
-			stm.setString(1, playerId.toString());
-			ResultSet result = stm.executeQuery();
-			if (result.next()) {
-				String playerName = result.getString("playername");
-				String language = result.getString("language");
-				Minerate minerate = deserializeMinerate(result.getInt("minerate_full_mined"), result.getString("minerate"));
-				int mostClicksPerSecond = result.getInt("most_clicks_per_second");
-				Map<String, Integer> warns = deserializeViolations(result.getString("violations_by_cheat"));
-				long creationTime = result.getTimestamp("creation_time").getTime();
-				return CompletableFuture.completedFuture(new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, creationTime));
+		return CompletableFuture.supplyAsync(() -> {
+			try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_accounts WHERE id = ?")) {
+				stm.setString(1, playerId.toString());
+				ResultSet result = stm.executeQuery();
+				if (result.next()) {
+					String playerName = result.getString("playername");
+					String language = result.getString("language");
+					Minerate minerate = deserializeMinerate(result.getInt("minerate_full_mined"), result.getString("minerate"));
+					int mostClicksPerSecond = result.getInt("most_clicks_per_second");
+					Map<String, Integer> warns = deserializeViolations(result.getString("violations_by_cheat"));
+					long creationTime = result.getTimestamp("creation_time").getTime();
+					return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, creationTime);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return CompletableFuture.completedFuture(null);
+			return new NegativityAccount(playerId);
+		});
 	}
 
 	@Override
 	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
-		try (PreparedStatement stm = Database.getConnection().prepareStatement(
-				"REPLACE INTO negativity_accounts (id, playername, language, minerate_full_mined, minerate, most_clicks_per_second, violations_by_cheat, creation_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
-			stm.setString(1, account.getPlayerId().toString());
-			stm.setString(2, account.getPlayerName());
-			stm.setString(3, account.getLang());
-			stm.setInt(4, account.getMinerate().getFullMined());
-			stm.setString(5, serializeMinerate(account.getMinerate()));
-			stm.setInt(6, account.getMostClicksPerSecond());
-			stm.setString(7, serializeViolations(account));
-			stm.setTimestamp(8, new Timestamp(account.getCreationTime()));
-			stm.executeUpdate();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return CompletableFuture.completedFuture(null);
+		return CompletableFuture.runAsync(() -> {
+			try (PreparedStatement stm = Database.getConnection().prepareStatement(
+					"REPLACE INTO negativity_accounts (id, playername, language, minerate_full_mined, minerate, most_clicks_per_second, violations_by_cheat, creation_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?)")) {
+				stm.setString(1, account.getPlayerId().toString());
+				stm.setString(2, account.getPlayerName());
+				stm.setString(3, account.getLang());
+				stm.setInt(4, account.getMinerate().getFullMined());
+				stm.setString(5, serializeMinerate(account.getMinerate()));
+				stm.setInt(6, account.getMostClicksPerSecond());
+				stm.setString(7, serializeViolations(account));
+				stm.setTimestamp(8, new Timestamp(account.getCreationTime()));
+				stm.executeUpdate();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		});
 	}
 
 	private static String serializeMinerate(Minerate minerate) {

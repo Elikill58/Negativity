@@ -29,18 +29,20 @@ public class SpigotFileNegativityAccountStorage extends NegativityAccountStorage
 
 	@Override
 	public CompletableFuture<@Nullable NegativityAccount> loadAccount(UUID playerId) {
-		File file = new File(userDir, playerId + ".yml");
-		if (!file.exists()) {
-			return CompletableFuture.completedFuture(new NegativityAccount(playerId));
-		}
-		YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
-		String playerName = config.getString("playername");
-		String language = config.getString("lang", TranslatedMessages.getDefaultLang());
-		Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getConfigurationSection("minerate"));
-		int mostClicksPerSecond = config.getInt("better-click");
-		Map<String, Integer> warns = deserializeViolations(config.getConfigurationSection("cheats"));
-		long creationTime = config.getLong("creation-time", System.currentTimeMillis());
-		return CompletableFuture.completedFuture(new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, creationTime));
+		return CompletableFuture.supplyAsync(() -> {
+			File file = new File(userDir, playerId + ".yml");
+			if (!file.exists()) {
+				return new NegativityAccount(playerId);
+			}
+			YamlConfiguration config = YamlConfiguration.loadConfiguration(file);
+			String playerName = config.getString("playername");
+			String language = config.getString("lang", TranslatedMessages.getDefaultLang());
+			Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getConfigurationSection("minerate"));
+			int mostClicksPerSecond = config.getInt("better-click");
+			Map<String, Integer> warns = deserializeViolations(config.getConfigurationSection("cheats"));
+			long creationTime = config.getLong("creation-time", System.currentTimeMillis());
+			return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, creationTime);
+		});
 	}
 
 	@Override

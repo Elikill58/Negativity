@@ -26,19 +26,12 @@ import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 public class VelocityNegativity {
 
 	public static final LegacyChannelIdentifier NEGATIVITY_CHANNEL_ID = new LegacyChannelIdentifier(NegativityMessagesManager.CHANNEL_ID);
-
-	private static VelocityNegativity instance;
-	public static VelocityNegativity getInstance() {
-		return instance;
-	}
-
+	
     private final ProxyServer server;
     private final Logger logger;
 
     @Inject
     public VelocityNegativity(ProxyServer server, Logger logger) {
-		instance = this;
-
         this.server = server;
         this.logger = logger;
     }

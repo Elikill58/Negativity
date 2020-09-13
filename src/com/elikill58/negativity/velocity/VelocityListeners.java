@@ -61,19 +61,18 @@ public class VelocityListeners {
 		try {
 			message = NegativityMessagesManager.readMessage(event.getData());
 			if (message == null) {
-				VelocityNegativity.getInstance().getLogger().warn(
-						"Received unknown plugin message from channel {} sent by {} to {}",
-						event.getIdentifier().getId(), event.getSource(), event.getTarget());
+				Adapter.getAdapter().getLogger().warn("Received unknown plugin message from channel "
+						+ event.getIdentifier().getId() + " sent by " + event.getSource() + " to " + event.getTarget());
 				return;
 			}
 		} catch (IOException e) {
-			VelocityNegativity.getInstance().getLogger().error("Could not read plugin message.", e);
+			Adapter.getAdapter().getLogger().error("Could not read plugin message : " + e.getMessage());
 			return;
 		}
 
 		Player p = (Player) (event.getSource() instanceof Player ? event.getSource() : (event.getTarget() instanceof Player ? event.getTarget() : null));
 		if (p == null) {
-			VelocityNegativity.getInstance().getLogger().error("Source and Target not proxied (Source: {} Target: {})", event.getSource(), event.getTarget());
+			Adapter.getAdapter().getLogger().error("Source and Target not proxied (Source: " + event.getSource() + " Target: " + event.getTarget() + ")");
 			return;
 		}
 
@@ -82,9 +81,10 @@ public class VelocityListeners {
 			Object[] place = new Object[]{"%name%", alert.getPlayername(), "%cheat%", alert.getCheat(),
 					"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
-			for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers()) {
-				NegativityPlayer nPlayer = NegativityPlayer.getCached(pp.getUniqueId());
+			for (com.elikill58.negativity.api.entity.Player commonPlayer : Adapter.getAdapter().getOnlinePlayers()) {
+				NegativityPlayer nPlayer = NegativityPlayer.getNegativityPlayer(commonPlayer);
 				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT)) {
+					Player pp = (Player) commonPlayer.getDefault();
 					Builder msg = TextComponent.builder();
 					msg.append(Messages.getMessage(pp.getUniqueId(), alertMessageKey, place));
 
@@ -111,16 +111,17 @@ public class VelocityListeners {
 				try {
 					server.sendPluginMessage(VelocityNegativity.NEGATIVITY_CHANNEL_ID, NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION)));
 				} catch (IOException e) {
-					VelocityNegativity.getInstance().getLogger().error("Could not write PingProxyMessage.", e);
+					Adapter.getAdapter().getLogger().error("Could not write PingProxyMessage: " + e.getMessage());
 				}
 			});
 		} else if (message instanceof ReportMessage) {
 			ReportMessage report = (ReportMessage) message;
 			Object[] place = new Object[] { "%name%", report.getReported(), "%reason%", report.getReason(), "%report%", report.getReporter() };
 			boolean hasPermitted = false;
-			for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers()) {
-				if (Perm.hasPerm(NegativityPlayer.getCached(pp.getUniqueId()), Perm.SHOW_REPORT)) {
+			for (com.elikill58.negativity.api.entity.Player commonPlayer : Adapter.getAdapter().getOnlinePlayers()) {
+				if (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(commonPlayer), Perm.SHOW_REPORT)) {
 					hasPermitted = true;
+					Player pp = (Player) commonPlayer.getDefault();
 					Builder msg = TextComponent.builder();
 					msg.append(Messages.getMessage(pp.getUniqueId(), "report", place));
 					msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, TextComponent.of(Messages.getMessage(pp.getUniqueId(), "report_hover", "%playername%", report.getReported()))));
@@ -142,7 +143,7 @@ public class VelocityListeners {
 			NegativityAccount account = accountUpdateMessage.getAccount();
 			Adapter.getAdapter().getAccountManager().update(account);
 		} else {
-			VelocityNegativity.getInstance().getLogger().warn("Unhandled plugin message: {}.", message.getClass().getName());
+			Adapter.getAdapter().getLogger().warn("Unhandled plugin message: " + message.getClass().getName());
 		}
 	}
 
@@ -198,7 +199,7 @@ public class VelocityListeners {
 			byte[] rawMessage = NegativityMessagesManager.writeMessage(new ClientModsListMessage(mods));
 			event.getServer().sendPluginMessage(VelocityNegativity.NEGATIVITY_CHANNEL_ID, rawMessage);
 		} catch (IOException e) {
-			VelocityNegativity.getInstance().getLogger().error("Could not write ClientModsListMessage.", e);
+			Adapter.getAdapter().getLogger().error("Could not write ClientModsListMessage: " + e.getMessage());
 		}
 	}
 

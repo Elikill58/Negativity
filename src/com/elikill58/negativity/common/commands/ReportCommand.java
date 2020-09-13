@@ -13,9 +13,9 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Report;
+import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 

@@ -16,7 +16,7 @@ import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
 import com.elikill58.negativity.common.commands.ReportCommand;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;

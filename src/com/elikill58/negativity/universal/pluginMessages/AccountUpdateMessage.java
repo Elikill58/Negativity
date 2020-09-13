@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import com.elikill58.negativity.universal.Minerate;
-import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.account.NegativityAccount;
 
 public class AccountUpdateMessage implements NegativityMessage {
 

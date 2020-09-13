@@ -36,7 +36,7 @@ import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
 import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
-import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
 

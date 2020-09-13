@@ -15,9 +15,9 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
 import com.elikill58.negativity.universal.Minerate;
-import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.Report;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 
 public class FileNegativityAccountStorage extends NegativityAccountStorage {
@@ -29,7 +29,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 	}
 
 	@Override
-	public CompletableFuture<@Nullable NegativityAccount> loadAccount(UUID playerId) {
+	public CompletableFuture<NegativityAccount> loadAccount(UUID playerId) {
 		return CompletableFuture.supplyAsync(() -> {
 			File file = new File(userDir, playerId + ".yml");
 			if (!file.exists()) {

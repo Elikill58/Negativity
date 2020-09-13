@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal;
+package com.elikill58.negativity.universal.account;
 
 import java.util.UUID;
 import java.util.concurrent.CancellationException;

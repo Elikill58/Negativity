@@ -7,8 +7,8 @@ import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.serializer.TextSerializers;
 
 import com.elikill58.negativity.sponge.utils.Utils;
-import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.account.NegativityAccount;
 
 public class Messages {
 

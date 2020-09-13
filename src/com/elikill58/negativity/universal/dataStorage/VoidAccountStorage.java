@@ -5,7 +5,7 @@ import java.util.concurrent.CompletableFuture;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.account.NegativityAccount;
 
 public final class VoidAccountStorage extends NegativityAccountStorage {
 

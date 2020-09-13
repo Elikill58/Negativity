@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal;
+package com.elikill58.negativity.universal.account;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,6 +9,10 @@ import java.util.UUID;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Minerate;
+import com.elikill58.negativity.universal.Report;
+import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 /**

@@ -2,7 +2,7 @@ package com.elikill58.negativity.api.timers;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class ClickManagerTimer implements Runnable {

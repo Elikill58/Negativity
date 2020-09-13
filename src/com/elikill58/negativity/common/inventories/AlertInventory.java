@@ -17,7 +17,7 @@ import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.common.inventories.holders.AlertHolder;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.NegativityAccount;
+import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 

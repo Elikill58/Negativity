@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal;
+package com.elikill58.negativity.universal.account;
 
 import java.io.IOException;
 import java.util.Collections;

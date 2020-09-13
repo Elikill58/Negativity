@@ -17,34 +17,62 @@ public class Vector implements Cloneable {
 	protected double y;
 	protected double z;
 
-	public Vector() {
-
-	}
-
+	/**
+	 * Create vector according to the given location
+	 * 
+	 * @param loc the location that must to be vectorised
+	 */
 	public Vector(Location loc) {
 		this.x = loc.getX();
 		this.y = loc.getY();
 		this.z = loc.getZ();
 	}
-
+	
+	/**
+	 * Create vector with rounded values
+	 * 
+	 * @param x the X vector movement
+	 * @param y the Y vector movement
+	 * @param z the Z vector movement
+	 */
 	public Vector(int x, int y, int z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
+	/**
+	 * Create vector with double values
+	 * 
+	 * @param x the X vector movement
+	 * @param y the Y vector movement
+	 * @param z the Z vector movement
+	 */
 	public Vector(double x, double y, double z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
+	/**
+	 * Create vector with float values
+	 * 
+	 * @param x the X vector movement
+	 * @param y the Y vector movement
+	 * @param z the Z vector movement
+	 */
 	public Vector(float x, float y, float z) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
 	}
 
+	/**
+	 * Add vector to another vector
+	 * 
+	 * @param vec the added vector movement
+	 * @return this vector with new movement
+	 */
 	public Vector add(Vector vec) {
 		this.x += vec.x;
 		this.y += vec.y;
@@ -52,6 +80,12 @@ public class Vector implements Cloneable {
 		return this;
 	}
 
+	/**
+	 * Remove vector to another vector
+	 * 
+	 * @param vec the remoevd vector movement
+	 * @return this vector
+	 */
 	public Vector subtract(Vector vec) {
 		this.x -= vec.x;
 		this.y -= vec.y;
@@ -59,6 +93,12 @@ public class Vector implements Cloneable {
 		return this;
 	}
 
+	/**
+	 * Multiply the current vector to the given one
+	 * 
+	 * @param vec the multiplying vector
+	 * @return this vector
+	 */
 	public Vector multiply(Vector vec) {
 		this.x *= vec.x;
 		this.y *= vec.y;
@@ -66,6 +106,12 @@ public class Vector implements Cloneable {
 		return this;
 	}
 
+	/**
+	 * Divide the current vector to the given one
+	 * 
+	 * @param vec the divided vector
+	 * @return this vector
+	 */
 	public Vector divide(Vector vec) {
 		this.x /= vec.x;
 		this.y /= vec.y;
@@ -73,6 +119,12 @@ public class Vector implements Cloneable {
 		return this;
 	}
 
+	/**
+	 * Copy the given vector to the current.
+	 * 
+	 * @param vec the new vector values of this one
+	 * @return the vector with given value
+	 */
 	public Vector copy(Vector vec) {
 		this.x = vec.x;
 		this.y = vec.y;
@@ -88,14 +140,32 @@ public class Vector implements Cloneable {
 		return square(this.x) + square(this.y) + square(this.z);
 	}
 
+	/**
+	 * Get the distance between this vector nd the given one
+	 * 
+	 * @param o the vector which will compare to
+	 * @return the distance
+	 */
 	public double distance(Vector o) {
 		return Math.sqrt(square(this.x - o.x) + square(this.y - o.y) + square(this.z - o.z));
 	}
 
+	/**
+	 * Get the distance squared between this vector nd the given one
+	 * 
+	 * @param o the vector which will compare to
+	 * @return the distance squared
+	 */
 	public double distanceSquared(Vector o) {
 		return square(this.x - o.x) + square(this.y - o.y) + square(this.z - o.z);
 	}
 
+	/**
+	 * Get the angle between 2 vectors.
+	 * 
+	 * @param other the vector to compare with
+	 * @return the angle
+	 */
 	public float angle(Vector other) {
 		double dot = dot(other) / (length() * other.length());
 

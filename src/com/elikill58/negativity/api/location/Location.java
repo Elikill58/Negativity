@@ -135,19 +135,17 @@ public abstract class Location extends NegativityObject implements Cloneable {
 	public abstract Block getBlock();
 
 	public Vector getDirection() {
-		Vector vector = new Vector();
-
 		double rotX = getYaw();
 		double rotY = getPitch();
 
-		vector.setY(-Math.sin(Math.toRadians(rotY)));
+		double y = -Math.sin(Math.toRadians(rotY));
 
 		double xz = Math.cos(Math.toRadians(rotY));
 
-		vector.setX(-xz * Math.sin(Math.toRadians(rotX)));
-		vector.setZ(xz * Math.cos(Math.toRadians(rotX)));
+		double x = -xz * Math.sin(Math.toRadians(rotX));
+		double z = xz * Math.cos(Math.toRadians(rotX));
 
-		return vector;
+		return new Vector(x, y, z);
 	}
 	
 	public double distance(Location o) {

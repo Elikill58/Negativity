@@ -17,7 +17,7 @@ import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.permissions.Perm;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.utils.ChatUtils;
 
 public class BanCommand implements CommandListeners, TabListeners {
 
@@ -46,7 +46,7 @@ public class BanCommand implements CommandListeners, TabListeners {
 		long time = -1;
 		if (!arg[1].equalsIgnoreCase("def")) {
 			try {
-				time = System.currentTimeMillis() + UniversalUtils.parseDuration(arg[1]) * 1000;
+				time = System.currentTimeMillis() + ChatUtils.parseDurationToSeconds(arg[1]) * 1000;
 			} catch (IllegalArgumentException e) {
 				String exMessage = e.getMessage();
 				if (exMessage != null) {

@@ -7,6 +7,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -208,25 +209,28 @@ public class FakePlayer {
 	 * Load all reflection class for optimization
 	 */
 	public static void loadClass() {
-		try {
-			gameProfileClass = Class.forName(Version.getVersion().equals(Version.V1_7) ? "net.minecraft.util.com.mojang.authlib.GameProfile" : "com.mojang.authlib.GameProfile");
-			gameProfileConstructor = gameProfileClass.getConstructor(UUID.class, String.class);
-			
-			Class<?> mcSrvClass = getNmsClass("MinecraftServer"), worldSrvClass = getNmsClass("WorldServer");
-	    	entityPlayerConstructor = getNmsClass("EntityPlayer").getConstructor(mcSrvClass, getNmsClass("WorldServer"), gameProfileClass, getNmsClass("PlayerInteractManager"));
-			playerInteractManagerConstructor = getNmsClass("PlayerInteractManager").getConstructor((Version.getVersion().isNewerOrEquals(Version.V1_14) ? worldSrvClass : getNmsClass("World")));
-			minecraftServer = mcSrvClass.getMethod("getServer").invoke(mcSrvClass);
-			
-			packetEntityMetadataConstructor = getNmsClass("PacketPlayOutEntityMetadata").getConstructor(int.class, getNmsClass("DataWatcher"), boolean.class);
-			packetEntitySpawnConstructor = getNmsClass("PacketPlayOutNamedEntitySpawn").getConstructor(getNmsClass("EntityHuman"));
-			packetEntityDestroyConstructor = getNmsClass("PacketPlayOutEntityDestroy").getConstructor(int[].class);
-			if(!Version.getVersion().equals(Version.V1_7)) {
-				packetPlayerInfoConstructor = getNmsClass("PacketPlayOutPlayerInfo").getConstructor(ENUM_PLAYER_INFO, Iterable.class);
-				playerInfoAddPlayer = ENUM_PLAYER_INFO.getField("ADD_PLAYER").get(ENUM_PLAYER_INFO);
-				playerInfoRemovePlayer = ENUM_PLAYER_INFO.getField("REMOVE_PLAYER").get(ENUM_PLAYER_INFO);
+		// run it async to remove loading time on main thread
+		CompletableFuture.runAsync(() -> {
+			try {
+				gameProfileClass = Class.forName(Version.getVersion().equals(Version.V1_7) ? "net.minecraft.util.com.mojang.authlib.GameProfile" : "com.mojang.authlib.GameProfile");
+				gameProfileConstructor = gameProfileClass.getConstructor(UUID.class, String.class);
+				
+				Class<?> mcSrvClass = getNmsClass("MinecraftServer"), worldSrvClass = getNmsClass("WorldServer");
+		    	entityPlayerConstructor = getNmsClass("EntityPlayer").getConstructor(mcSrvClass, getNmsClass("WorldServer"), gameProfileClass, getNmsClass("PlayerInteractManager"));
+				playerInteractManagerConstructor = getNmsClass("PlayerInteractManager").getConstructor((Version.getVersion().isNewerOrEquals(Version.V1_14) ? worldSrvClass : getNmsClass("World")));
+				minecraftServer = mcSrvClass.getMethod("getServer").invoke(mcSrvClass);
+				
+				packetEntityMetadataConstructor = getNmsClass("PacketPlayOutEntityMetadata").getConstructor(int.class, getNmsClass("DataWatcher"), boolean.class);
+				packetEntitySpawnConstructor = getNmsClass("PacketPlayOutNamedEntitySpawn").getConstructor(getNmsClass("EntityHuman"));
+				packetEntityDestroyConstructor = getNmsClass("PacketPlayOutEntityDestroy").getConstructor(int[].class);
+				if(!Version.getVersion().equals(Version.V1_7)) {
+					packetPlayerInfoConstructor = getNmsClass("PacketPlayOutPlayerInfo").getConstructor(ENUM_PLAYER_INFO, Iterable.class);
+					playerInfoAddPlayer = ENUM_PLAYER_INFO.getField("ADD_PLAYER").get(ENUM_PLAYER_INFO);
+					playerInfoRemovePlayer = ENUM_PLAYER_INFO.getField("REMOVE_PLAYER").get(ENUM_PLAYER_INFO);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		});
 	}
 }

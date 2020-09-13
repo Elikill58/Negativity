@@ -3,13 +3,11 @@ package com.elikill58.negativity.universal.ban.support;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
-import org.bukkit.Bukkit;
-
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
@@ -34,7 +32,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 		PunishmentType type = ban.isDefinitive() ? PunishmentType.BAN : PunishmentType.TEMP_BAN;
 		Punishment punishment = new Punishment(player.getName(), ban.getPlayerId().toString(), ban.getReason(), ban.getBannedBy(), type, System.currentTimeMillis(), endTime, "", -1);
 		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
-		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), (Runnable) punishment::create);
+		CompletableFuture.runAsync(punishment::create);
 
 		return new BanResult(BanResultType.DONE, ban);
 	}
@@ -47,7 +45,8 @@ public class AdvancedBanProcessor implements BanProcessor {
 		}
 
 		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
-		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), punishment::delete);
+		CompletableFuture.runAsync(punishment::delete);
+		
 		return new BanResult(loggedBanFrom(playerId, punishment, BanStatus.REVOKED));
 	}
 

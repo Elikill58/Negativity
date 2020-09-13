@@ -30,50 +30,113 @@ public class PacketContent {
 		this.obj = obj;
 	}
 	
-	public AbstractPacket getPacket() {
+	/**
+	 * Get the packet where the packet content come from.
+	 * Can be null if we are checking an object and not the packet.
+	 * 
+	 * @return the analyzed packet
+	 */
+	public @Nullable AbstractPacket getPacket() {
 		return packet;
 	}
 	
+	/**
+	 * Get content modifier of a custom type
+	 * 
+	 * @param type the searched type
+	 * @return the content modifier of the type
+	 */
 	public <T> ContentModifier<T> getSpecificModifier(T type){
 		return new ContentModifier<T>(obj, type.getClass());
 	}
-	
+
+	/**
+	 * Get content modifier of a custom type
+	 * 
+	 * @param type the searched type
+	 * @return the content modifier of the type
+	 */
 	public <T> ContentModifier<T> getSpecificModifier(Class<T> clazz){
 		return new ContentModifier<T>(obj, clazz);
 	}
 	
+	/**
+	 * Get content modifier of all string
+	 * 
+	 * @return string modifier
+	 */
 	public ContentModifier<String> getStrings(){
 		return new ContentModifier<String>(obj, String.class);
 	}
-	
+
+	/**
+	 * Get content modifier of all bytes
+	 * 
+	 * @return byte modifier
+	 */
 	public ContentModifier<Byte> getBytes(){
 		return new ContentModifier<Byte>(obj, byte.class);
 	}
-	
+
+	/**
+	 * Get content modifier of all booleans
+	 * 
+	 * @return boolean modifier
+	 */
 	public ContentModifier<Boolean> getBooleans(){
 		return new ContentModifier<Boolean>(obj, boolean.class);
 	}
-	
+
+	/**
+	 * Get content modifier of all integers
+	 * 
+	 * @return int modifier
+	 */
 	public ContentModifier<Integer> getIntegers(){
 		return new ContentModifier<Integer>(obj, int.class);
 	}
-	
+
+	/**
+	 * Get content modifier of all byte arrays
+	 * 
+	 * @return byte array modifier
+	 */
 	public ContentModifier<byte[]> getByteArrays(){
 		return new ContentModifier<byte[]>(obj, byte[].class);
 	}
-	
+
+	/**
+	 * Get content modifier of all long
+	 * 
+	 * @return long modifier
+	 */
 	public ContentModifier<Long> getLongs(){
 		return new ContentModifier<Long>(obj, long.class);
 	}
-	
+
+	/**
+	 * Get content modifier of all float
+	 * 
+	 * @return float modifier
+	 */
 	public ContentModifier<Float> getFloats(){
 		return new ContentModifier<Float>(obj, float.class);
 	}
-	
+
+	/**
+	 * Get content modifier of all double
+	 * 
+	 * @return double modifier
+	 */
 	public ContentModifier<Double> getDoubles(){
 		return new ContentModifier<Double>(obj, double.class);
 	}
-	
+
+	/**
+	 * Get content modifier of all object, ignoring type
+	 * 
+	 * @return object modifier
+	 */
 	public ContentModifier<Object> getAllObjects() {
 		return new ContentModifier<Object>(obj, null);
 	}

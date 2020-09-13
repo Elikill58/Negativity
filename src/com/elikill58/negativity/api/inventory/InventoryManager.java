@@ -64,6 +64,14 @@ public class InventoryManager implements Listeners {
 		return Optional.empty();
 	}
 	
+	/**
+	 * Open the negativity inventory of the given type
+	 * Does nothing if the inventory is not found
+	 * 
+	 * @param type the type of the ivnetnory which have to be showed
+	 * @param p the player that have to see the inventory
+	 * @param args the arguments to open the inventory
+	 */
 	public static void open(NegativityInventory type, Player p, Object... args) {
 		getInventory(type).ifPresent((inv) -> inv.openInventory(p, args));
 	}

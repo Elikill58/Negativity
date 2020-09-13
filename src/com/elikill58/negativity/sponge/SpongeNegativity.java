@@ -125,8 +125,6 @@ public class SpongeNegativity {
 		EventManager eventManager = Sponge.getEventManager();
 		eventManager.registerListeners(this, new FightManager());
 		eventManager.registerListeners(this, new BlockListeners());
-		// TODO add Commands listeners
-		//eventManager.registerListeners(this, new CommandsListeners());
 		eventManager.registerListeners(this, new EntityListeners());
 		eventManager.registerListeners(this, new InventoryListeners());
 		eventManager.registerListeners(this, new PlayersListeners());
@@ -168,9 +166,7 @@ public class SpongeNegativity {
 
 	@Listener
 	public void onGameStop(GameStoppingServerEvent e) {
-		for (Player player : Sponge.getServer().getOnlinePlayers()) {
-			NegativityPlayer.getCached(player.getUniqueId()).destroy();
-		}
+		NegativityPlayer.getAllPlayers().values().forEach(NegativityPlayer::destroy);
 		if (!ProxyCompanionManager.isIntegrationEnabled()) {
 			Task.builder().async().delayTicks(1).execute(new Runnable() {
 				@Override

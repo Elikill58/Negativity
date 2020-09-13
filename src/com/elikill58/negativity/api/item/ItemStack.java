@@ -4,10 +4,26 @@ import com.elikill58.negativity.api.NegativityObject;
 
 public abstract class ItemStack extends NegativityObject {
 
+	/**
+	 * Get amount of the item
+	 * 
+	 * @return item amount
+	 */
 	public abstract int getAmount();
 	
+	/**
+	 * Get the item material type
+	 * 
+	 * @return the material
+	 */
 	public abstract Material getType();
 	
+	/**
+	 * Get the display name of item
+	 * null if the item doesn't have any name
+	 * 
+	 * @return the name
+	 */
 	public abstract String getName();
 	
 	public abstract boolean hasEnchant(Enchantment enchant);

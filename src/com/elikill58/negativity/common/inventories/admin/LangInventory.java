@@ -10,10 +10,9 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.common.inventories.holders.admin.LangHolder;
-import com.elikill58.negativity.spigot.Inv;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class LangInventory extends AbstractInventory<LangHolder> {
@@ -24,10 +23,10 @@ public class LangInventory extends AbstractInventory<LangHolder> {
 	
 	@Override
 	public void openInventory(Player p, Object... args) {
-		Inventory inv = Inventory.createInventory(Inv.ADMIN_MENU, UniversalUtils.getMultipleOf((int) (TranslatedMessages.LANGS.size() * 1.5), 9, 1, 54), new LangHolder());
+		Inventory inv = Inventory.createInventory(Inventory.ADMIN_MENU, UniversalUtils.getMultipleOf((int) (TranslatedMessages.LANGS.size() * 1.5), 9, 1, 54), new LangHolder());
 
 		update(inv, p);
-		inv.set(inv.getSize() - 3, Inv.EMPTY);
+		inv.set(inv.getSize() - 3, Inventory.EMPTY);
 		
 		int slot = 0;
 		for(String s : TranslatedMessages.LANGS) {
@@ -35,7 +34,7 @@ public class LangInventory extends AbstractInventory<LangHolder> {
 			while (searchSlot) {
 				if(inv.get(slot) == null || inv.get(slot).getType().equals(Materials.AIR)) {
 					if((slot + 3) % 9 == 0 || (slot + 2) % 9 == 0 || (slot + 1) % 9 == 0) // 3 last colums of inventory
-						inv.set(slot, Inv.EMPTY);
+						inv.set(slot, Inventory.EMPTY);
 					else {
 						inv.set(slot, ItemBuilder.Builder(Materials.PAPER).displayName(s).build());
 						searchSlot = false;
@@ -70,8 +69,8 @@ public class LangInventory extends AbstractInventory<LangHolder> {
 					lang = s;
 			}
 			if(lang != "") {
-				SpigotNegativity.getInstance().getConfig().set("Translation.default", lang);
-				SpigotNegativity.getInstance().saveConfig();
+				Adapter.getAdapter().getConfig().set("Translation.default", lang);
+				Adapter.getAdapter().getConfig().save();
 				TranslatedMessages.DEFAULT_LANG = lang;
 				TranslatedMessages.loadMessages();
 				update(e.getClickedInventory(), p);

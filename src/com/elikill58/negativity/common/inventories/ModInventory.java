@@ -15,7 +15,6 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.ModHolder;
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -28,7 +27,7 @@ public class ModInventory extends AbstractInventory<ModHolder> {
 
 	@Override
 	public void openInventory(Player p, Object... obj) {
-		Inventory inv = Inventory.createInventory(Inv.NAME_MOD_MENU, 27, new ModHolder());
+		Inventory inv = Inventory.createInventory(Inventory.NAME_MOD_MENU, 27, new ModHolder());
 
 		inv.set(10, ItemBuilder.Builder(Materials.GHAST_TEAR).displayName(Messages.getMessage(p, "inventory.mod.night_vision")).build());
 		inv.set(11, ItemBuilder.Builder(Materials.PUMPKIN_PIE).displayName(Messages.getMessage(p, "inventory.mod.invisible")).build());
@@ -40,7 +39,7 @@ public class ModInventory extends AbstractInventory<ModHolder> {
 		
 		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
 
-		InventoryUtils.fillInventory(inv, Inv.EMPTY);
+		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		p.openInventory(inv);
 	}
 

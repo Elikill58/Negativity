@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.common.inventories.holders.ActivedCheatHolder;
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -26,7 +25,7 @@ public class ActivedCheatInventory extends AbstractInventory<ActivedCheatHolder>
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
-		Inventory inv = Inventory.createInventory(Inv.NAME_ACTIVED_CHEAT_MENU, UniversalUtils.getMultipleOf(np.ACTIVE_CHEAT.size() + 3, 9, 1, 54), new ActivedCheatHolder(cible));
+		Inventory inv = Inventory.createInventory(Inventory.NAME_ACTIVED_CHEAT_MENU, UniversalUtils.getMultipleOf(np.ACTIVE_CHEAT.size() + 3, 9, 1, 54), new ActivedCheatHolder(cible));
 		if (np.ACTIVE_CHEAT.size() > 0) {
 			int slot = 0;
 			for (Cheat c : np.ACTIVE_CHEAT)

@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.common.inventories.holders.FreezeHolder;
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Messages;
 
 public class FreezeInventory extends AbstractInventory<FreezeHolder> {
@@ -27,7 +26,7 @@ public class FreezeInventory extends AbstractInventory<FreezeHolder> {
 
 	@Override
 	public void openInventory(Player p, Object... args) {
-		Inventory inv = Inventory.createInventory(Inv.NAME_FREEZE_MENU, 9, new FreezeHolder());
+		Inventory inv = Inventory.createInventory(Inventory.NAME_FREEZE_MENU, 9, new FreezeHolder());
 		inv.set(4, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.mod.you_are_freeze")).build());
 		p.openInventory(inv);
 	}

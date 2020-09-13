@@ -15,8 +15,8 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.CheckMenuHolder;
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.account.NegativityAccount;
@@ -31,7 +31,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 	@Override
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
-		Inventory inv = Inventory.createInventory(Inv.NAME_CHECK_MENU, 27, new CheckMenuHolder(cible));
+		Inventory inv = Inventory.createInventory(Inventory.NAME_CHECK_MENU, 27, new CheckMenuHolder(cible));
 		NegativityPlayer np = NegativityPlayer.getCached(cible.getUniqueId());
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
@@ -53,11 +53,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		inv.set(21, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
 		inv.set(22, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())).build());
 		inv.set(23, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.main.active_report")).build());
-		for (int i = 0; i < inv.getSize(); i++) {
-			ItemStack item = inv.get(i);
-			if (item == null || item.getType().equals(Materials.AIR))
-				inv.set(i, Inv.EMPTY);
-		}
+		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
 		p.openInventory(inv);
 	}

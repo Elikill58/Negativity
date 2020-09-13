@@ -9,7 +9,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.common.inventories.holders.admin.CheatManagerHolder;
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -22,7 +21,7 @@ public class CheatManagerInventory extends AbstractInventory<CheatManagerHolder>
 	
 	@Override
 	public void openInventory(Player p, Object... args){
-		Inventory inv = Inventory.createInventory(Inv.CHEAT_MANAGER, UniversalUtils.getMultipleOf(Cheat.values().size() + 3, 9, 1, 54), new CheatManagerHolder((boolean) args[0]));
+		Inventory inv = Inventory.createInventory(Inventory.CHEAT_MANAGER, UniversalUtils.getMultipleOf(Cheat.values().size() + 3, 9, 1, 54), new CheatManagerHolder((boolean) args[0]));
 		int slot = 0;
 		for(Cheat c : Cheat.values())
 			if(c.getMaterial() != null)

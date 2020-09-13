@@ -10,7 +10,6 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.admin.AdminHolder;
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Messages;
 
 public class AdminInventory extends AbstractInventory<AdminHolder> {
@@ -21,12 +20,12 @@ public class AdminInventory extends AbstractInventory<AdminHolder> {
 
 	@Override
 	public void openInventory(Player p, Object... obj) {
-		Inventory inv = Inventory.createInventory(Inv.ADMIN_MENU, 9, new AdminHolder());
+		Inventory inv = Inventory.createInventory(Inventory.ADMIN_MENU, 9, new AdminHolder());
 
 		inv.set(0, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.mod.cheat_manage")).build());
 		inv.set(1, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "lang.edit")).build());
 		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
-		InventoryUtils.fillInventory(inv, Inv.EMPTY);
+		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		p.openInventory(inv);
 	}
 

@@ -12,7 +12,6 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.ForgeModsHolder;
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -29,7 +28,7 @@ public class ForgeModsInventory extends AbstractInventory<ForgeModsHolder> {
 		Player cible = (Player) args[0];
 		slot = 0;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
-		Inventory inv = Inventory.createInventory(Inv.NAME_FORGE_MOD_MENU, UniversalUtils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), new ForgeModsHolder(cible));
+		Inventory inv = Inventory.createInventory(Inventory.NAME_FORGE_MOD_MENU, UniversalUtils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), new ForgeModsHolder(cible));
 		if(np.MODS.size() == 0) {
 			inv.set(4, ItemBuilder.Builder(Materials.DIAMOND).displayName("No mods").build());
 		} else {
@@ -38,7 +37,7 @@ public class ForgeModsInventory extends AbstractInventory<ForgeModsHolder> {
 			});
 		}
 		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(mod, "inventory.back")).build());
-		InventoryUtils.fillInventory(inv, Inv.EMPTY);
+		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		mod.openInventory(inv);
 	}
 

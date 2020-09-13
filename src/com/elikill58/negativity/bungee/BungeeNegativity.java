@@ -18,14 +18,8 @@ import net.md_5.bungee.api.plugin.PluginManager;
 
 public class BungeeNegativity extends Plugin {
 
-	private static BungeeNegativity instance;
-	public static BungeeNegativity getInstance() {
-		return instance;
-	}
-
 	@Override
 	public void onEnable() {
-		instance = this;
 		Adapter.setAdapter(new BungeeAdapter(this));
 
 		new Metrics(this);

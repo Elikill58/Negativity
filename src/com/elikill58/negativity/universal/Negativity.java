@@ -229,6 +229,10 @@ public class Negativity {
 		return sj.toString();
 	}
 	
+	/**
+	 * Load all Negativity's class and content.
+	 * Must to be run after setting adapter
+	 */
 	public static void loadNegativity() {
 		Adapter ada = Adapter.getAdapter();
 		ada.getLogger().info("Thanks for buying Negativity <3");

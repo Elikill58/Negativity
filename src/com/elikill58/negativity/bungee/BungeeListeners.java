@@ -3,7 +3,6 @@ package com.elikill58.negativity.bungee;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
@@ -62,17 +61,17 @@ public class BungeeListeners implements Listener {
 			if (message == null) {
 				String warnMessage = String.format("Received unknown plugin message. Channel %s send by %s to %s.",
 						event.getTag(), event.getSender(), event.getReceiver());
-				BungeeNegativity.getInstance().getLogger().warning(warnMessage);
+				Adapter.getAdapter().getLogger().warn(warnMessage);
 				return;
 			}
 		} catch (IOException e) {
-			BungeeNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not read plugin message.", e);
+			Adapter.getAdapter().getLogger().error("Could not read plugin message: " + e.getMessage());
 			return;
 		}
 
 		ProxiedPlayer player = (ProxiedPlayer) (event.getSender() instanceof ProxiedPlayer ? event.getSender() : (event.getReceiver() instanceof ProxiedPlayer ? event.getReceiver() : null));
 		if (player == null) {
-			BungeeNegativity.getInstance().getLogger().warning("Error while receiving a plugin message." +
+			Adapter.getAdapter().getLogger().warn("Error while receiving a plugin message." +
 					" Player null (Sender: " + event.getSender() + " Receiver: " + event.getReceiver() + ")");
 			return;
 		}
@@ -104,7 +103,7 @@ public class BungeeListeners implements Listener {
 			try {
 				player.getServer().sendData(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION)));
 			} catch (IOException e) {
-				BungeeNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not write PingProxyMessage.", e);
+				Adapter.getAdapter().getLogger().error("Could not write PingProxyMessage: " + e.getMessage());
 			}
 		} else if (message instanceof ReportMessage) {
 			ReportMessage report = (ReportMessage) message;
@@ -132,7 +131,7 @@ public class BungeeListeners implements Listener {
 			NegativityAccount account = accountUpdateMessage.getAccount();
 			Adapter.getAdapter().getAccountManager().update(account);
 		} else {
-			BungeeNegativity.getInstance().getLogger().log(Level.WARNING, "Unhandled plugin message %s.", message.getClass());
+			Adapter.getAdapter().getLogger().warn("Unhandled plugin message " + message.getClass());
 		}
 	}
 
@@ -170,7 +169,7 @@ public class BungeeListeners implements Listener {
 			ClientModsListMessage message = new ClientModsListMessage(event.getPlayer().getModList());
 			event.getServer().sendData(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(message));
 		} catch (IOException e) {
-			BungeeNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not write ClientModsListMessage.", e);
+			Adapter.getAdapter().getLogger().error("Could not write ClientModsListMessage : " + e.getMessage());
 		}
 	}
 

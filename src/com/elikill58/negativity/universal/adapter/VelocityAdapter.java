@@ -12,6 +12,7 @@ import java.util.concurrent.CompletableFuture;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.Inventory;
@@ -220,6 +221,11 @@ public class VelocityAdapter extends Adapter {
 	
 	@Override
 	public OfflinePlayer getOfflinePlayer(UUID uuid) {
+		return null;
+	}
+	
+	@Override
+	public FakePlayer createFakePlayer(Location loc, String name) {
 		return null;
 	}
 

@@ -1,4 +1,4 @@
-package com.elikill58.negativity.spigot;
+package com.elikill58.negativity.spigot.impl.entity;
 
 import static com.elikill58.negativity.spigot.utils.PacketUtils.ENUM_PLAYER_INFO;
 import static com.elikill58.negativity.spigot.utils.PacketUtils.getNmsClass;
@@ -10,14 +10,18 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.FakePlayer;
+import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
-public class FakePlayer {
+public class SpigotFakePlayer extends FakePlayer {
 
 	// For reflection -- To don't make a lot of time the same request
 	private static Class<?> gameProfileClass;
@@ -26,8 +30,9 @@ public class FakePlayer {
 	private static Object minecraftServer, playerInfoAddPlayer, playerInfoRemovePlayer;
 	
 	private Object entityPlayer, gameProfile;
-	private Location loc;
-	private UUID uuid;
+	private final String name;
+	private final Location loc;
+	private final UUID uuid;
 	private int id;
 	
 	/**
@@ -36,7 +41,7 @@ public class FakePlayer {
 	 * @param loc the fake player's location
 	 * @param name the fake player name
 	 */
-	public FakePlayer(Location loc, String name) {
+	public SpigotFakePlayer(Location loc, String name) {
 		this(loc, name, UUID.fromString("0-0-0-0-0"));
 	}
 	
@@ -47,12 +52,13 @@ public class FakePlayer {
 	 * @param name the fake player name
 	 * @param uuid the fake player's uuid
 	 */
-	public FakePlayer(Location loc, String name, UUID uuid) {
+	public SpigotFakePlayer(Location loc, String name, UUID uuid) {
 		this.uuid = uuid;
 		this.loc = loc;
+		this.name = name;
         try {
     		this.gameProfile = gameProfileConstructor.newInstance(uuid, name);
-			Object worldServerObj = PacketUtils.getWorldServer(loc);
+			Object worldServerObj = PacketUtils.getWorldServer((org.bukkit.Location) loc.getDefault());
 			Object temp = playerInteractManagerConstructor.newInstance(worldServerObj);
 			entityPlayer = entityPlayerConstructor.newInstance(minecraftServer, worldServerObj, gameProfile, temp);
 			id = (int) entityPlayer.getClass().getMethod("getId").invoke(entityPlayer);
@@ -61,16 +67,12 @@ public class FakePlayer {
 		}
 	}
 	
-	/**
-	 * Show the fake player to the specified online player
-	 * 
-	 * @param p THe player who will see the entity
-	 * @return this
-	 */
-	public FakePlayer show(Player p) {
+	@Override
+	public void show(com.elikill58.negativity.api.entity.Player pl) {
+		Player p = (Player) pl.getDefault();
 		// We don't load chunk, but we cannot spawn entity on no-loaded area
-		if(!loc.getChunk().isLoaded())
-			return this;
+		if(!((org.bukkit.Location) loc.getDefault()).getChunk().isLoaded())
+			return;
 		try {
 			entityPlayer.getClass().getMethod("setLocation", double.class, double.class, double.class, float.class, float.class).invoke(entityPlayer, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
 			Object dw = entityPlayer.getClass().getMethod("getDataWatcher").invoke(entityPlayer);
@@ -118,18 +120,14 @@ public class FakePlayer {
 	    Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 			@Override
 			public void run() {
-				hide(p);
+				hide(pl);
 			}
 		}, 5);
-		return this;
 	}
 	
-	/**
-	 * Hide the fake player to the specified online player
-	 * 
-	 * @param p The player that will not see it
-	 */
-	public void hide(Player p) {
+	@Override
+	public void hide(com.elikill58.negativity.api.entity.Player pl) {
+		Player p = (Player) pl.getDefault();
 		try {
 			if(Version.getVersion().equals(Version.V1_7)) {
 				getNmsClass("PacketPlayOutPlayerInfo").getMethod("removePlayer", entityPlayer.getClass())
@@ -147,13 +145,8 @@ public class FakePlayer {
 			//nPlayer.removeFakePlayer(this, false);
 		}
 	}
-	
-	/**
-	 *  Get the entity ID of the fake player.
-	 *  Alone method to check entity
-	 * 
-	 * @return the entity ID
-	 */
+
+	@Override
 	public int getEntityId() {
 		return id;
 	}
@@ -167,22 +160,8 @@ public class FakePlayer {
 		return entityPlayer;
 	}
 	
-	/**
-	 * Spawn location of fake player
-	 * 
-	 * @return the fake player location
-	 */
 	public Location getLocation() {
 		return loc;
-	}
-
-	/**
-	 * Get the NMS game profile as object for compatibility
-	 * 
-	 * @return the NMS game profile
-	 */
-	public Object getProfile() {
-		return getGameProfile();
 	}
 
 	/**
@@ -194,11 +173,7 @@ public class FakePlayer {
 		return gameProfile;
 	}
 	
-	/**
-	 * Get Unique ID of the fake player
-	 * 
-	 * @return the player's uuid
-	 */
+	@Override
 	public UUID getUUID() {
 		return uuid;
 	}
@@ -232,5 +207,40 @@ public class FakePlayer {
 				e.printStackTrace();
 			}
 		});
+	}
+
+	@Override
+	public boolean isOnGround() {
+		return (boolean) ReflectionUtils.getField(entityPlayer, "onGround");
+	}
+
+	@Override
+	public boolean isOp() {
+		return false;
+	}
+
+	@Override
+	public double getEyeHeight() {
+		return (double) (float) ReflectionUtils.callMethod(entityPlayer, "getHeadRotation");
+	}
+
+	@Override
+	public Location getEyeLocation() {
+		return null;
+	}
+
+	@Override
+	public Vector getRotation() {
+		return null;
+	}
+
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public Object getDefault() {
+		return entityPlayer;
 	}
 }

@@ -11,6 +11,7 @@ import java.util.concurrent.CompletableFuture;
 
 import javax.annotation.Nullable;
 
+import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.Inventory;
@@ -122,6 +123,7 @@ public abstract class Adapter {
 	public abstract OfflinePlayer getOfflinePlayer(UUID uuid);
 	public abstract Player getPlayer(String name);
 	public abstract Player getPlayer(UUID uuid);
+	public abstract FakePlayer createFakePlayer(Location loc, String name);
 	
 	public abstract void sendMessageRunnableHover(Player p, String message, String hover, String command);
 	

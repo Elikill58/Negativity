@@ -17,6 +17,7 @@ import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
+import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.Inventory;
@@ -30,6 +31,7 @@ import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
+import com.elikill58.negativity.sponge.impl.entity.SpongeFakePlayer;
 import com.elikill58.negativity.sponge.impl.inventory.SpongeInventory;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemBuilder;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemRegistrar;
@@ -225,6 +227,11 @@ public class SpongeAdapter extends Adapter {
 	public OfflinePlayer getOfflinePlayer(UUID uuid) {
 		// TODO Implement offline players for Sponge (with uuid)
 		return null;
+	}
+	
+	@Override
+	public FakePlayer createFakePlayer(Location loc, String name) {
+		return new SpongeFakePlayer(loc, name);
 	}
 
 	@Override

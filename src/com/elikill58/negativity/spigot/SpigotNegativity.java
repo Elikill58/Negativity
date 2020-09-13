@@ -24,6 +24,7 @@ import com.elikill58.negativity.api.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.api.timers.ClickManagerTimer;
 import com.elikill58.negativity.api.timers.PendingAlertsTimer;
 import com.elikill58.negativity.api.timers.SpawnFakePlayerTimer;
+import com.elikill58.negativity.spigot.impl.entity.SpigotFakePlayer;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.listeners.BlockListeners;
 import com.elikill58.negativity.spigot.listeners.ChannelListeners;
@@ -95,7 +96,7 @@ public class SpigotNegativity extends JavaPlugin {
 			isCraftBukkit = true;
 		}
 		Negativity.loadNegativity();
-		FakePlayer.loadClass();
+		SpigotFakePlayer.loadClass();
 
 		new Metrics(this)
 				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));

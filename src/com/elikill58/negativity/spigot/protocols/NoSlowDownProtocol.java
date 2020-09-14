@@ -3,11 +3,14 @@ package com.elikill58.negativity.spigot.protocols;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -16,6 +19,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NoSlowDownProtocol extends Cheat implements Listener {
@@ -42,6 +46,12 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 	    	np.contentDouble.put("slowdown-eating-distance", xzSpeed);
 		if (!loc.getBlock().getType().equals(Material.SOUL_SAND) || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_16)) {
+			ItemStack boots = p.getInventory().getBoots();
+			if(boots != null && boots.containsEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("SOUL_SPEED"))))
+				return;
+				
+		}
 		Location fl = from.clone().subtract(to.clone());
 		double distance = to.toVector().distance(from.toVector());
 		if (distance > 0.2) {

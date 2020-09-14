@@ -48,7 +48,7 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_16)) {
 			ItemStack boots = p.getInventory().getBoots();
-			if(boots != null && boots.containsEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("SOUL_SPEED"))))
+			if(boots != null && boots.containsEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("soul_speed"))))
 				return;
 				
 		}

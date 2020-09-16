@@ -49,7 +49,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		boolean mayCancel = false;
 		int ping = Utils.getPing(p);
 		double dif = e.getFrom().getY() - e.getTo().getY();
-		if (!isInWater && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
+		if (type.name().equalsIgnoreCase("AIR") && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
 			if (!hasOtherThanExtended(under, STATIONARY_WATER)) {
 				double reliability = 0;
 				if (dif < 0.0005 && dif > 0.00000005)

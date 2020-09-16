@@ -72,7 +72,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 		EntityType damagerType = e.getDamager().getType();
 		if(damagerType.equals(EntityType.EGG) || damagerType.equals(EntityType.SNOWBALL) || (SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p)))
 			return;
-		if(damagerType.name().contains("TNT") || np.isTargetByIronGolem())
+		if(damagerType.name().contains("TNT") || np.isTargetByIronGolem() || Utils.hasThorns(p))
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;

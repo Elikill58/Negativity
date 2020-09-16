@@ -106,7 +106,7 @@ public class LocationUtils {
 	 * 
 	 * @param loc the location where you want to check
 	 * @param m the name that we are searching in material names
-	 * @return true if one of specified material if around
+	 * @return true if one of specified material is around
 	 */
 	public static boolean hasOtherThanExtended(Location loc, String m) {
 		Location tempLoc = loc.clone();
@@ -217,7 +217,7 @@ public class LocationUtils {
 	 * (1 block radius)
 	 * 
 	 * @param loc the location where you want to check
-	 * @param m the name that we are searching in material names
+	 * @param name the name that we are searching in material names
 	 * @return true if one of specified material if around
 	 */
 	public static boolean hasOtherThan(Location loc, String name) {

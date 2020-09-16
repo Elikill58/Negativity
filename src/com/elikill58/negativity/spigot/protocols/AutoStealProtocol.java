@@ -50,7 +50,7 @@ public class AutoStealProtocol extends Cheat implements Listener {
 				return;
 		}
 		np.LAST_SLOT_CLICK = e.getSlot();
-		if(dif < 0)
+		if(dif < 0 || np.LAST_SLOT_CLICK == e.getSlot())
 			return;
 		if((ping + TIME_CLICK) >= dif && tempSlot != e.getRawSlot()){
 			if(np.lastClickInv){

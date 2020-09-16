@@ -1,6 +1,5 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThan;
 import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThanExtended;
 
 import org.bukkit.GameMode;
@@ -36,13 +35,12 @@ public class AirJumpProtocol extends Cheat implements Listener {
 			return;
 		if (p.isFlying() || p.getVehicle() != null || p.getItemInHand().getType().name().contains("TRIDENT") || np.hasElytra() || np.isInFight)
 			return;
-		boolean mayCancel = false;
+		Location loc = p.getLocation().clone(), locDown = loc.clone().subtract(0, 1, 0);
+		boolean mayCancel = false, hasOtherThanAir = hasOtherThanExtended(loc, "AIR"), hasOtherThanAirDown = hasOtherThanExtended(locDown, "AIR");
 		
 		double diffYtoFrom = e.getTo().getY() - e.getFrom().getY();
-		Location loc = p.getLocation().clone(), locDown = loc.subtract(0, 1, 0);
-		if (diffYtoFrom > 0.35 && np.lastYDiff < diffYtoFrom && np.lastYDiff > 0 && !hasOtherThanExtended(loc.clone(), "AIR")
-				&& !hasOtherThanExtended(locDown, "AIR")
-				&& !hasOtherThanExtended(loc.clone().subtract(0, 2, 0), "AIR")) {
+		if (diffYtoFrom > 0.35 && np.lastYDiff < diffYtoFrom && np.lastYDiff > 0 && !hasOtherThanAir
+				&& !hasOtherThanAirDown && !hasOtherThanExtended(loc.clone().subtract(0, 2, 0), "AIR")) {
 			mayCancel = SpigotNegativity.alertMod(
 					diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 							UniversalUtils.parseInPorcent((int) (diffYtoFrom * 210) - Utils.getPing(p)),
@@ -54,7 +52,7 @@ public class AirJumpProtocol extends Cheat implements Listener {
 		boolean wasGoingDown = np.contentBoolean.getOrDefault("going-down", false);
 		double d = np.contentDouble.getOrDefault("airjump-diff-y", 0.0);
 		if(diffYtoFrom > d && wasGoingDown && diffYtoFrom != 0.5) { // 0.5 when use stairs or slab
-			if(!hasOtherThanExtended(locDown, "AIR") && !hasOtherThan(loc, "AIR")) {
+			if(!hasOtherThanAirDown && !hasOtherThanAir) {
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffYtoFrom * 200), "Was going down, last y " + d + ", current: " + diffYtoFrom);
 			}
 		}

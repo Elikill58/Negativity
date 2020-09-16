@@ -52,7 +52,7 @@ public class AutoSteal extends Cheat implements Listeners {
 				return;
 		}
 		np.ints.set(AUTO_STEAL, "inv-slot", e.getSlot());
-		if(dif < 0)
+		if(dif < 0 || tempSlot == e.getSlot())
 			return;
 		if((ping + TIME_CLICK) >= dif && tempSlot != e.getSlot()){
 			if(np.booleans.get(AUTO_STEAL, "inv-was", false)){

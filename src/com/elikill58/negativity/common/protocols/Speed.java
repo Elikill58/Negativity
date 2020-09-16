@@ -96,7 +96,8 @@ public class Speed extends Cheat implements Listeners {
 		}
 		if(onGround && checkActive("calculated")) {
 			double calculatedSpeedWithoutY = getSpeed(from, to), velocity = p.getVelocity().getY();
-			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && velocity > 0.0 && hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
+			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && velocity > 0.0
+					&& hasMaterialsAround(loc, "STAIRS", "SLAB") && hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated",
 						"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + velocity);
 			}

@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerItemConsumeEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
@@ -18,6 +19,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NoSlowDown extends Cheat implements Listeners {
@@ -45,6 +47,11 @@ public class NoSlowDown extends Cheat implements Listeners {
 	    	maxSpeed = xzSpeed;
 	    double distance = to.toVector().distance(from.toVector());
 	    np.doubles.set(NO_SLOW_DOWN, "eating-distance", maxSpeed);
+	    if(Version.getVersion().isNewerOrEquals(Version.V1_16)) {
+		    ItemStack boots = p.getInventory().getArmorContent()[3];
+		    if(boots != null && boots.hasEnchant(Enchantment.SOUL_SPEED))
+		    		return;
+	    }
 	    
 	    boolean mayCancel = false;
 	    if(checkActive("move") && loc.getBlock().getType().equals(Materials.SOUL_SAND) && !p.hasPotionEffect(PotionEffectType.SPEED)) {

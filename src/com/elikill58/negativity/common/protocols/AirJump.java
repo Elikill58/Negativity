@@ -1,6 +1,5 @@
 package com.elikill58.negativity.common.protocols;
 
-import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.universal.CheatKeys.AIR_JUMP;
 
@@ -34,14 +33,14 @@ public class AirJump extends Cheat implements Listeners {
 			return;
 		if (p.isFlying() || p.isInsideVehicle() || p.getItemInHand().getType().getId().contains("TRIDENT") || p.hasElytra() || np.isInFight)
 			return;
-		boolean mayCancel = false;
+		Location loc = p.getLocation().clone(), locDown = loc.clone().sub(0, 1, 0);
+		boolean mayCancel = false, hasOtherThanAir = hasOtherThanExtended(loc, "AIR"), hasOtherThanAirDown = hasOtherThanExtended(locDown, "AIR");;
 
 		double diffYtoFrom = e.getTo().getY() - e.getFrom().getY();
 		double lastDiffY = np.doubles.get(AIR_JUMP, "diff-y", 0.0);
-		Location loc = p.getLocation().clone(), locDown = loc.sub(0, 1, 0);
 		if(checkActive("diff-y")) {
-			if (diffYtoFrom > 0.35 && lastDiffY < diffYtoFrom && lastDiffY > 0 && !hasOtherThanExtended(loc.clone(), "AIR")
-					&& !hasOtherThanExtended(locDown, "AIR")
+			if (diffYtoFrom > 0.35 && lastDiffY < diffYtoFrom && lastDiffY > 0 && !hasOtherThanAir
+					&& !hasOtherThanAirDown
 					&& !hasOtherThanExtended(loc.clone().sub(0, 2, 0), "AIR")) {
 				mayCancel = Negativity.alertMod(
 						diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
@@ -54,7 +53,7 @@ public class AirJump extends Cheat implements Listeners {
 		if(checkActive("going-down")) {
 			boolean wasGoingDown = np.booleans.get(AIR_JUMP, "going-down", false);
 			if(diffYtoFrom > lastDiffY && wasGoingDown && diffYtoFrom != 0.5) { // 0.5 when use stairs or slab
-				if(!hasOtherThanExtended(locDown, "AIR") && !hasOtherThan(loc, "AIR")) {
+				if(!hasOtherThanAirDown && !hasOtherThanAir) {
 					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffYtoFrom * 200), "going-down",  "Was going down, last y " + lastDiffY + ", current: " + diffYtoFrom);
 				}
 			}

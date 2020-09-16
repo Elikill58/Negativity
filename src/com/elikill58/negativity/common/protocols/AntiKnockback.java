@@ -55,7 +55,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (p.hasPotionEffect(PotionEffectType.POISON))
+		if (p.hasPotionEffect(PotionEffectType.POISON) || Utils.hasThorns(p))
 			return;
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9)) {
 			ItemStack inHand = p.getItemInHand();

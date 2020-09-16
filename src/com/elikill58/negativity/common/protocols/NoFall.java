@@ -2,6 +2,7 @@ package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
@@ -37,18 +38,23 @@ public class NoFall extends Cheat implements Listeners {
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double distance = to.toVector().distance(from.toVector());
-		Location locDown = p.getLocation().clone().getBlock().getRelative(BlockFace.DOWN).getLocation();
+		Block b = p.getLocation().getBlock();
+		Location locDown = b.getRelative(BlockFace.DOWN).getLocation();
+		Location locUp = b.getRelative(BlockFace.UP).getLocation();
 		if(checkActive("motion-y")) {
 			double motionY = from.getY() - to.getY();
 			if(locDown.getBlock().getType().equals(Materials.AIR)
-					&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD")) {
-				if ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
+					&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD") && (motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
 						|| (motionY > (p.getWalkSpeed() / 2) && (p.isOnGround() && p.getFallDistance() > 0.2) && p.getWalkSpeed() > p.getFallDistance())) {
+				if (locUp.getBlock().getType().getId().contains("WATER"))
+					np.useAntiNoFallSystem = true;
+				if (!np.useAntiNoFallSystem) {
 					int porcent = UniversalUtils.parseInPorcent(900 * motionY);
 					Negativity.alertMod(ReportType.WARNING, p, this, porcent, "motion-y", "New NoFall - Player on ground. motionY: " + motionY + ", walkSpeed: " + p.getWalkSpeed()
 							+ ", onGround: " + p.isOnGround() + ", fallDistance: " + p.getFallDistance(), new Cheat.CheatHover.Literal("MotionY (on ground): " + motionY));
 				}
-			}
+			} else if(motionY < 0.1)
+				np.useAntiNoFallSystem = false;
 		}
 		if (!(distance == 0.0D || from.getY() < to.getY())) {
 			if (p.getFallDistance() == 0.0F && p.getLocation().clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR)) {

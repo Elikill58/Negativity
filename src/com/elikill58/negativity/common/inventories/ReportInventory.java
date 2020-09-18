@@ -31,10 +31,10 @@ public class ReportInventory extends AbstractInventory<ReportHolder> {
 		int offset = (args.length == 1 ? 0 : (int) args[1]);
 		if(offset < 0)
 			offset = 0;
-		Inventory inv = Inventory.createInventory("Reports", UniversalUtils.getMultipleOf(reports.size(), 9, 1, 54), new ReportHolder(cible, offset));
+		Inventory inv = Inventory.createInventory("Reports", UniversalUtils.getMultipleOf(reports.size() + 9, 9, 1, 54), new ReportHolder(cible, offset));
 		for(int i = 0; i < 9; i++) inv.set(i, ItemBuilder.Builder(Materials.GRAY_STAINED_GLASS_PANE).build());
 		inv.set(0, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
-		inv.set(3, ItemBuilder.getSkullItem(cible));
+		inv.set(4, ItemBuilder.getSkullItem(cible));
 		inv.set(8, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
 		int max = reports.size() > 45 ? 45 : reports.size() + offset;
 		int slot = 9;

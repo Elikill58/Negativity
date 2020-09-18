@@ -86,8 +86,8 @@ public class NegativityPlayer {
 	
 	// general values
 	public boolean isInFight = false, already_blink = false, disableShowingAlert = false, isFreeze = false, isJumpingWithBlock = false, isUsingSlimeBlock = false,
-			isInvisible = false;
-	private boolean mustToBeSaved = false, isBedrockPlayer = false;
+			mustToBeSaved = false, isInvisible = false;
+	private boolean isBedrockPlayer = false;
 	private Timer fightTimer;
 
 	public NegativityPlayer(Player p) {

@@ -35,7 +35,7 @@ public class ReportCommand implements CommandListeners, TabListeners {
 		}
 
 		Player p = (Player) sender;
-		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (np.TIME_REPORT > System.currentTimeMillis() && !Perm.hasPerm(np, Perm.REPORT_WAIT)) {
 			Messages.sendMessage(p, "report_wait");
 			return false;
@@ -65,7 +65,7 @@ public class ReportCommand implements CommandListeners, TabListeners {
 		} else {
 			boolean alertSent = false;
 			for (Player pl : Adapter.getAdapter().getOnlinePlayers())
-				if (Perm.hasPerm(NegativityPlayer.getCached(pl.getUniqueId()), Perm.SHOW_REPORT)) {
+				if (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(pl), Perm.SHOW_REPORT)) {
 					alertSent = true;
 					Adapter.getAdapter().sendMessageRunnableHover(pl, Messages.getMessage(pl, "report.report_message",
 									"%name%", target.getName(), "%report%", p.getName(), "%reason%", reason),
@@ -78,6 +78,7 @@ public class ReportCommand implements CommandListeners, TabListeners {
 			}
 		}
 		NegativityAccount.get(target.getUniqueId()).getReports().add(new Report(reason, p.getUniqueId()));
+		NegativityPlayer.getNegativityPlayer(target).mustToBeSaved = true;
 
 		Messages.sendMessage(p, "report.well_report", "%name%", target.getName());
 		np.TIME_REPORT = System.currentTimeMillis()

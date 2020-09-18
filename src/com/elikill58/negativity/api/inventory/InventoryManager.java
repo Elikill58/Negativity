@@ -15,6 +15,7 @@ import com.elikill58.negativity.common.inventories.CheckMenuInventory;
 import com.elikill58.negativity.common.inventories.ForgeModsInventory;
 import com.elikill58.negativity.common.inventories.FreezeInventory;
 import com.elikill58.negativity.common.inventories.ModInventory;
+import com.elikill58.negativity.common.inventories.ReportInventory;
 import com.elikill58.negativity.common.inventories.admin.AdminInventory;
 import com.elikill58.negativity.common.inventories.admin.CheatManagerInventory;
 import com.elikill58.negativity.common.inventories.admin.LangInventory;
@@ -24,15 +25,16 @@ public class InventoryManager implements Listeners {
 	
 	public InventoryManager() {
 		new ActivedCheatInventory();
+		new AdminInventory();
 		new AlertInventory();
-		new ModInventory();
 		new CheckMenuInventory();
 		new CheatManagerInventory();
 		new ForgeModsInventory();
-		new OneCheatInventory();
-		new AdminInventory();
-		new LangInventory();
 		new FreezeInventory();
+		new LangInventory();
+		new ModInventory();
+		new OneCheatInventory();
+		new ReportInventory();
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

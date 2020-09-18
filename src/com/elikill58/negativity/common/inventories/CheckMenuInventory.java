@@ -32,7 +32,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
 		Inventory inv = Inventory.createInventory(Inventory.NAME_CHECK_MENU, 27, new CheckMenuHolder(cible));
-		NegativityPlayer np = NegativityPlayer.getCached(cible.getUniqueId());
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
 		actualizeInventory(p, cible, inv);
@@ -124,7 +124,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		} else if (m.equals(Materials.SKELETON_SKULL)) {
 			if(e.getSlot() == 12) {
 				p.closeInventory();
-				NegativityPlayer.getCached(cible.getUniqueId()).makeAppearEntities();
+				NegativityPlayer.getNegativityPlayer(cible).makeAppearEntities();
 			}
 		} else if(m.equals(Materials.SPIDER_EYE)){
 			p.openInventory(cible.getInventory());
@@ -132,7 +132,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 			InventoryManager.open(NegativityInventory.ACTIVED_CHEAT, p, cible);
 		} else if(m.equals(Materials.PACKED_ICE)) {
 			p.closeInventory();
-			NegativityPlayer np = NegativityPlayer.getCached(cible.getUniqueId());
+			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 			np.isFreeze = !np.isFreeze;
 			if (np.isFreeze) {
 				if (Adapter.getAdapter().getConfig().getBoolean("inventory.inv_freeze_active"))

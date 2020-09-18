@@ -2,6 +2,7 @@ package com.elikill58.negativity.common.inventories;
 
 import java.util.List;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
@@ -45,13 +46,13 @@ public class ReportInventory extends AbstractInventory<ReportHolder> {
 			if(reports.size() <= i)
 				continue;
 			Report r = reports.get(i);
-			inv.set(slot++, ItemBuilder.Builder(Materials.APPLE).displayName(Adapter.getAdapter().getOfflinePlayer(r.getReportedBy()).getName())
-					.lore(r.getReason()).build());
+			inv.set(slot++, ItemBuilder.Builder(Materials.APPLE).displayName(ChatColor.YELLOW + Adapter.getAdapter().getOfflinePlayer(r.getReportedBy()).getName())
+					.lore(ChatColor.GRAY + r.getReason()).build());
 		}
 		if(page > 0)
-			inv.set(3, ItemBuilder.Builder(Materials.ARROW).displayName("Last").build());
+			inv.set(3, ItemBuilder.Builder(Materials.ARROW).displayName("Page " + (page)).build());
 		if(reports.size() > max)
-			inv.set(5, ItemBuilder.Builder(Materials.ARROW).displayName("Next").build());
+			inv.set(5, ItemBuilder.Builder(Materials.ARROW).displayName("Page " + (page + 2)).build());
 		p.openInventory(inv);
 	}
 

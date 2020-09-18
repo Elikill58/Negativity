@@ -6,18 +6,18 @@ import com.elikill58.negativity.api.inventory.NegativityHolder;
 public class ReportHolder extends NegativityHolder {
 	
 	private final Player cible;
-	private final int offset;
+	private final int page;
 	
-	public ReportHolder(Player cible, int offset) {
+	public ReportHolder(Player cible, int page) {
 		this.cible = cible;
-		this.offset = offset;
+		this.page = page;
 	}
 
 	public Player getCible() {
 		return cible;
 	}
 	
-	public int getOffset() {
-		return offset;
+	public int getPage() {
+		return page;
 	}
 }

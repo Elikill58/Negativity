@@ -28,25 +28,29 @@ public class ReportInventory extends AbstractInventory<ReportHolder> {
 		Player cible = (Player) args[0];
 		NegativityAccount na = NegativityAccount.get(cible.getUniqueId());
 		List<Report> reports = na.getReports();
-		int offset = (args.length == 1 ? 0 : (int) args[1]);
-		if(offset < 0)
-			offset = 0;
-		Inventory inv = Inventory.createInventory("Reports", UniversalUtils.getMultipleOf(reports.size() + 9, 9, 1, 54), new ReportHolder(cible, offset));
+		int page = (args.length == 1 ? 0 : (int) args[1]);
+		if(page < 0)
+			page = 0;
+		Inventory inv = Inventory.createInventory("Reports", UniversalUtils.getMultipleOf(reports.size() + 9, 9, 1, 54), new ReportHolder(cible, page));
 		for(int i = 0; i < 9; i++) inv.set(i, ItemBuilder.Builder(Materials.GRAY_STAINED_GLASS_PANE).build());
 		inv.set(0, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
 		inv.set(4, ItemBuilder.getSkullItem(cible));
 		inv.set(8, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
-		int max = reports.size() > 45 ? 45 : reports.size() + offset;
+		
+		int limit = 45;
+		int offset = limit * page;
+		int max = reports.size() > (offset + limit) ? (offset + limit) : reports.size() + offset;
 		int slot = 9;
-		int i;
-		for(i = offset; i < max; i++) {
+		for(int i = offset; i < max; i++) {
+			if(reports.size() <= i)
+				continue;
 			Report r = reports.get(i);
 			inv.set(slot++, ItemBuilder.Builder(Materials.APPLE).displayName(Adapter.getAdapter().getOfflinePlayer(r.getReportedBy()).getName())
 					.lore(r.getReason()).build());
 		}
-		if(offset > 0)
-			inv.set(2, ItemBuilder.Builder(Materials.ARROW).displayName("Last").build());
-		if(slot == 45)
+		if(page > 0)
+			inv.set(3, ItemBuilder.Builder(Materials.ARROW).displayName("Last").build());
+		if(reports.size() > max)
 			inv.set(5, ItemBuilder.Builder(Materials.ARROW).displayName("Next").build());
 		p.openInventory(inv);
 	}
@@ -57,11 +61,11 @@ public class ReportInventory extends AbstractInventory<ReportHolder> {
 		if(m.equals(Materials.ARROW)) {
 			int slot = e.getSlot();
 			if(slot == 0)
-				InventoryManager.open(NegativityInventory.CHEAT_MANAGER, p, rh.getCible());
-			else if(e.getSlot() == 2)
-				openInventory(p, rh.getCible(), rh.getOffset() - 45);
+				InventoryManager.open(NegativityInventory.CHECK_MENU, p, rh.getCible());
+			else if(e.getSlot() == 3)
+				openInventory(p, rh.getCible(), rh.getPage() - 1);
 			else
-				openInventory(p, rh.getCible(), rh.getOffset() + 45);
+				openInventory(p, rh.getCible(), rh.getPage() + 1);
 		}
 	}
 }

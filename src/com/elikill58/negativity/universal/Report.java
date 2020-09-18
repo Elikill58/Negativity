@@ -54,7 +54,7 @@ public class Report {
 	public static Report fromJson(String json) {
 		try {
 			JSONObject obj = (JSONObject) new JSONParser().parse(json);
-			return new Report(obj.get("reason").toString(), UUID.fromString(obj.get("reportedBy").toString()), Long.parseLong(obj.get(obj).toString()));
+			return new Report(obj.get("reason").toString(), UUID.fromString(obj.get("reportedBy").toString()), Long.parseLong(obj.get("time").toString()));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

@@ -88,7 +88,7 @@ import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
 
-@Plugin(id = "negativity", name = "Negativity", version = "1.9.2", description = "It's an Advanced AntiCheat Detection", authors = { "Elikill58", "RedNesto" }, dependencies = {
+@Plugin(id = "negativity", name = "Negativity", version = UniversalUtils.NEGATIVITY_VERSION, description = "It's an Advanced AntiCheat Detection", authors = { "Elikill58", "RedNesto" }, dependencies = {
 		@Dependency(id = "packetgate") })
 public class SpongeNegativity {
 

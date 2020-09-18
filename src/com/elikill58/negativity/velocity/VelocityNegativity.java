@@ -13,6 +13,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.VelocityAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
@@ -21,7 +22,7 @@ import com.velocitypowered.api.plugin.Plugin;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 
-@Plugin(id = "negativity", name = "Negativity", version = "1.9.2",
+@Plugin(id = "negativity", name = "Negativity", version = UniversalUtils.NEGATIVITY_VERSION,
         description = "It's an Advanced AntiCheat Detection", authors = {"Elikill58", "RedNesto"})
 public class VelocityNegativity {
 

@@ -1,4 +1,4 @@
-package com.elikill58.negativity.api.timers;
+package com.elikill58.negativity.common.timers;
 
 import java.util.ArrayList;
 

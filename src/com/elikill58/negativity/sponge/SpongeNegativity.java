@@ -47,12 +47,12 @@ import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.timers.ActualizeInvTimer;
-import com.elikill58.negativity.api.timers.AnalyzePacketTimer;
-import com.elikill58.negativity.api.timers.ClickManagerTimer;
-import com.elikill58.negativity.api.timers.PendingAlertsTimer;
-import com.elikill58.negativity.api.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.common.timers.ActualizeInvTimer;
+import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
+import com.elikill58.negativity.common.timers.ClickManagerTimer;
+import com.elikill58.negativity.common.timers.PendingAlertsTimer;
+import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge.listeners.BlockListeners;
 import com.elikill58.negativity.sponge.listeners.CommandsListeners;

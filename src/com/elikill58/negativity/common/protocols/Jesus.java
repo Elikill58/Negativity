@@ -40,17 +40,16 @@ public class Jesus extends Cheat implements Listeners {
 			return;
 		if (p.hasElytra() || p.isInsideVehicle() || p.isSwimming())
 			return;
-		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom();
-		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY", "LILY")
-				|| hasMaterialsAround(loc.clone().sub(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY", "LILY"))
+		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom(), under = loc.clone().sub(0, 1, 0);
+		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY")
+				|| hasMaterialsAround(under, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY"))
 			return;
-		Location under = loc.clone().sub(0, 1, 0);
 		Material type = loc.getBlock().getType(), underType = under.getBlock().getType();
 		boolean isInWater = type.getId().contains("WATER"), isOnWater = underType.getId().contains("WATER");
 		boolean mayCancel = false;
 		double dif = e.getFrom().getY() - e.getTo().getY();
 		if(checkActive("water-around")) {
-			if (type.getId().equalsIgnoreCase("AIR") && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
+			if (type.getId().equalsIgnoreCase("AIR") && !isInWater && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
 				if (!hasOtherThanExtended(under, STATIONARY_WATER)) {
 					double reliability = 0;
 					if (dif < 0.0005 && dif > 0.00000005)
@@ -63,15 +62,15 @@ public class Jesus extends Cheat implements Listeners {
 						reliability = dif * 100 * 2.5;
 					else if (dif < 0.002 && dif > -0.002 && dif != 0.0)
 						reliability = Math.abs(dif * 5000);
-					else if (dif == 0.0)
+					else if (dif == 0.0 && loc.clone().sub(0, 0.2, 0).getBlock().getType().getId().contains("WATER"))
 						reliability = 90;
 					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(reliability), "water-around",
-							"Stationary_water aroud him. Diff: " + dif);
+							"Stationary_water aroud him. Diff: " + dif + ", fallDistance: " + p.getFallDistance());
 				}
 			}
 		}
-		if (checkActive("dif") && dif == -0.5 && (isInWater || isOnWater) && !LocationUtils.hasMaterialsAround(under, "FENCE")) {
-			mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "dif", "dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + ", type: " + type.getId() + ", type Under: " + underType.getId());
+		if (checkActive("dif") && dif == -0.5 && (isInWater || isOnWater) && !LocationUtils.hasOtherThan(under, "FENCE")) {
+			mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "dif", "dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + ", type: " + type.getId() + ", type Under: " + underType.getId() + ", fallDistance: " + p.getFallDistance());
 		}
 		
 		if(checkActive("dif-y-2-move")) {

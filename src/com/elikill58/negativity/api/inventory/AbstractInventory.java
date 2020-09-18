@@ -36,7 +36,7 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 	 * @return true if the holder instance of this inventory's holder
 	 */
 	public boolean isInstance(NegativityHolder nh) {
-		return nh.getClass().isInstance(holderExample);
+		return nh.getClass().isAssignableFrom(holderExample);
 	}
 	
 	/**

@@ -36,7 +36,7 @@ public class AlertInventory extends AbstractInventory<AlertHolder> {
 			if (!c.isActive())
 				continue;
 			Configuration config = Adapter.getAdapter().getConfig();
-			boolean isActive = np.hasDetectionActive(c);
+			boolean isActive = np.ACTIVE_CHEAT.contains(c);
 			if ((config.getBoolean("inventory.alerts.only_cheat_active") && isActive)
 					|| (!isActive && config.getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);

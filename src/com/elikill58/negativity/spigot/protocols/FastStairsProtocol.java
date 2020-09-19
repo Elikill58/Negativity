@@ -6,6 +6,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -32,7 +33,7 @@ public class FastStairsProtocol extends Cheat implements Listener {
 		if(p.getFallDistance() != 0)
 			return;
 		String blockName = e.getTo().clone().subtract(0, 0.0001, 0).getBlock().getType().name();
-		if(!blockName.contains("STAIRS"))
+		if(!blockName.contains("STAIRS") || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
 		Location from = e.getFrom().clone();
 		from.setY(e.getTo().getY());

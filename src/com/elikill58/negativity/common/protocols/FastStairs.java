@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
@@ -32,7 +33,7 @@ public class FastStairs extends Cheat implements Listeners {
 		if(p.getFallDistance() != 0)
 			return;
 		String blockName = e.getTo().clone().sub(0, 0.0001, 0).getBlock().getType().getId();
-		if(!blockName.contains("STAIRS"))
+		if(!blockName.contains("STAIRS") || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
 		Location from = e.getFrom().clone();
 		from.setY(e.getTo().getY());

@@ -70,4 +70,9 @@ public class SpigotArrow extends Arrow {
 		org.bukkit.util.Vector vec = arrow.getLocation().getDirection();
 		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
+	
+	@Override
+	public int getEntityId() {
+		return arrow.getEntityId();
+	}
 }

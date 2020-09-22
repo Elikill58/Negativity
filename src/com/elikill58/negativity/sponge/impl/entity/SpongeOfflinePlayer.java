@@ -79,4 +79,9 @@ public class SpongeOfflinePlayer extends OfflinePlayer {
 	public Vector getRotation() {
 		return null;
 	}
+	
+	@Override
+	public int getEntityId() {
+		return 0;
+	}
 }

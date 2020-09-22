@@ -275,6 +275,8 @@ public class NegativityPlayer {
 		boolean hasRelia = false;
 		CheatHover hoverProof = null;
 		for(PlayerCheatAlertEvent e : list) {
+			if(e == null)
+				continue;
 			nb += e.getNbAlert();
 			
 			relia.put(e.getReliability(), relia.getOrDefault(e.getReliability(), 0) + 1);

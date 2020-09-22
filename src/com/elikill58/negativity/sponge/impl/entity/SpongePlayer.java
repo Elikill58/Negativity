@@ -390,4 +390,9 @@ public class SpongePlayer extends Player {
 		Vector3d vec = p.getRotation();
 		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
+	
+	@Override
+	public int getEntityId() {
+		return 0;
+	}
 }

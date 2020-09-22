@@ -73,4 +73,9 @@ public class SpigotEntity extends Entity {
 		org.bukkit.util.Vector vec = entity.getLocation().getDirection();
 		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
+	
+	@Override
+	public int getEntityId() {
+		return entity.getEntityId();
+	}
 }

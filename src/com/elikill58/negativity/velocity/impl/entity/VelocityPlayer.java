@@ -293,4 +293,9 @@ public class VelocityPlayer extends Player {
 	public Vector getRotation() {
 		return null;
 	}
+	
+	@Override
+	public int getEntityId() {
+		return 0;
+	}
 }

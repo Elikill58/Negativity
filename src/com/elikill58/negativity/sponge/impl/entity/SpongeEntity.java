@@ -74,4 +74,9 @@ public class SpongeEntity extends Entity {
 		Vector3d vec = entity.getRotation();
 		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
+	
+	@Override
+	public int getEntityId() {
+		return 0;
+	}
 }

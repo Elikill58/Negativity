@@ -43,6 +43,8 @@ public abstract class Entity extends CommandSender {
 	
 	public abstract EntityType getType();
 	
+	public abstract int getEntityId();
+	
 	@Override
 	public String toString() {
 		return "Entity{type=" + getType().name() + ",x=" + getLocation().getX() + ",y=" + getLocation().getY() + ",z=" + getLocation().getZ() + "}";

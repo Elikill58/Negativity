@@ -78,4 +78,9 @@ public class SpongeArrow extends Arrow {
 		Vector3d vec = arrow.getRotation();
 		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
+	
+	@Override
+	public int getEntityId() {
+		return 0;
+	}
 }

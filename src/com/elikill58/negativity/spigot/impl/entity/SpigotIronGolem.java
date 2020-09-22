@@ -72,4 +72,9 @@ public class SpigotIronGolem extends IronGolem {
 		org.bukkit.util.Vector vec = golem.getLocation().getDirection();
 		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
+	
+	@Override
+	public int getEntityId() {
+		return golem.getEntityId();
+	}
 }

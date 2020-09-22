@@ -78,4 +78,9 @@ public class SpongeIronGolem extends IronGolem {
 		Vector3d vec = golem.getRotation();
 		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
+	
+	@Override
+	public int getEntityId() {
+		return 0;
+	}
 }

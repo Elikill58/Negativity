@@ -38,3 +38,6 @@ checks:
   # When not in ground, y
   no-ground-y:
     active: true
+  # Check for elytra hacks
+  elytra:
+    active: true

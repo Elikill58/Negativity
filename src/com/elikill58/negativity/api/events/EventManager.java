@@ -74,7 +74,6 @@ public class EventManager {
 		List<CallableEvent> methods = EVENT_METHOD.get(ev.getClass());
 		if(methods != null)
 			methods.forEach((m) -> m.call(ev));
-		
 	}
 	
 	public static class CallableEvent {

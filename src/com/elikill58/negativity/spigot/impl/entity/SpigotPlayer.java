@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Damageable;
 import org.bukkit.event.inventory.InventoryType;
 
@@ -263,7 +264,7 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public void teleport(Location loc) {
-		p.teleport((org.bukkit.Location) loc.getDefault());
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> p.teleport((org.bukkit.Location) loc.getDefault()));
 	}
 
 	@Override
@@ -284,7 +285,7 @@ public class SpigotPlayer extends Player {
 	@Override
 	public List<Entity> getNearbyEntities(double x, double y, double z) {
 		List<Entity> list = new ArrayList<>();
-		p.getNearbyEntities(x, y, z).forEach((entity) -> list.add(SpigotEntityManager.getEntity(entity)));
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> p.getNearbyEntities(x, y, z).forEach((entity) -> list.add(SpigotEntityManager.getEntity(entity))));
 		return list;
 	}
 
@@ -311,7 +312,7 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public boolean isDead() {
-		return false;
+		return p.getHealth() <= 0;
 	}
 
 	@Override
@@ -338,17 +339,17 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public void openInventory(Inventory inv) {
-		p.openInventory((org.bukkit.inventory.Inventory) inv.getDefault());
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> p.openInventory((org.bukkit.inventory.Inventory) inv.getDefault()));
 	}
 
 	@Override
 	public void closeInventory() {
-		p.closeInventory();
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> p.closeInventory());
 	}
 
 	@Override
 	public void updateInventory() {
-		p.updateInventory();
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> p.updateInventory());
 	}
 
 	@Override

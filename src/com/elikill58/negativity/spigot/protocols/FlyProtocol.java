@@ -11,7 +11,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -43,11 +42,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 
 		if (p.hasPotionEffect(PotionEffectType.SPEED)) {
-			int speed = 0;
-			for (PotionEffect pe : p.getActivePotionEffects())
-				if (pe.getType().equals(PotionEffectType.SPEED))
-					speed += pe.getAmplifier() + 1;
-			if (speed > 5)
+			if (Utils.getPotionEffect(p, PotionEffectType.SPEED).getAmplifier() > 5)
 				return;
 		}
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
@@ -84,7 +79,7 @@ public class FlyProtocol extends Cheat implements Listener {
 				&& !LocationUtils.hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
 				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
 				&& (e.getFrom().getY() <= e.getTo().getY()) && p.getVelocity().length() < 1.5) {
-			if(!(p.hasPotionEffect(PotionEffectType.JUMP) && p.getPotionEffect(PotionEffectType.JUMP).getAmplifier() > 2)) {
+			if(!(p.hasPotionEffect(PotionEffectType.JUMP) && Utils.getPotionEffect(p, PotionEffectType.JUMP).getAmplifier() > 2)) {
 				double nbTimeAirBelow = np.contentDouble.getOrDefault("fly-air-below", 0.0);
 				np.contentDouble.put("fly-air-below", nbTimeAirBelow + 1);
 				if(nbTimeAirBelow > 6) { // we don't care when player jump

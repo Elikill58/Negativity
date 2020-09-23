@@ -19,6 +19,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.spigot.ClickableText;
@@ -250,5 +252,14 @@ public class Utils {
 		double z = to.getZ() - from.getZ();
 
 		return x * x + z * z;
+	}
+	
+	public static PotionEffect getPotionEffect(Player p, PotionEffectType type) {
+		if(Version.getVersion().isNewerOrEquals(Version.V1_12))
+			return p.getPotionEffect(type);
+		for(PotionEffect pe : p.getActivePotionEffects())
+			if(pe.getType().equals(type))
+				return pe;
+		return null;
 	}
 }

@@ -103,6 +103,7 @@ public class Negativity {
 			np.ALERT_NOT_SHOWED.put(c, tempList);
 		} else
 			sendAlertMessage(np, alert);
+		c.performSetBack(p);
 		return true;
 	}
 

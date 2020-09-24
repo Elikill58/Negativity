@@ -60,45 +60,50 @@ public abstract class Cheat {
 		this.key = key.toLowerCase();
 		this.aliases = alias;
 		
-		File moduleFile = new File(MODULE_FOLDER, this.key + ".yml");
-		if(!moduleFile.exists()) {
-			try {
-				URI migrationsDirUri = Cheat.class.getResource("/modules").toURI();
-				if (migrationsDirUri.getScheme().equals("jar")) {
-					try (FileSystem jarFs = FileSystems.newFileSystem(migrationsDirUri, Collections.emptyMap())) {
-						Path cheatPath = jarFs.getPath("/modules", this.key + ".yml");
-						if(Files.isRegularFile(cheatPath)) {
-							Files.copy(cheatPath, Paths.get(moduleFile.toURI()));
-						} else {
-							Adapter.getAdapter().getLogger().error("Cannot load cheat " + this.key + ": unable to find default config.");
-							return;
+		try {
+			File moduleFile = new File(MODULE_FOLDER, this.key + ".yml");
+			if(!moduleFile.exists()) {
+				try {
+					URI migrationsDirUri = Cheat.class.getResource("/modules").toURI();
+					if (migrationsDirUri.getScheme().equals("jar")) {
+						try (FileSystem jarFs = FileSystems.newFileSystem(migrationsDirUri, Collections.emptyMap())) {
+							Path cheatPath = jarFs.getPath("/modules", this.key + ".yml");
+							if(Files.isRegularFile(cheatPath)) {
+								Files.copy(cheatPath, Paths.get(moduleFile.toURI()));
+							} else {
+								Adapter.getAdapter().getLogger().error("Cannot load cheat " + this.key + ": unable to find default config.");
+								return;
+							}
 						}
 					}
+				} catch (URISyntaxException | IOException e) {
+					e.printStackTrace();
 				}
-			} catch (URISyntaxException | IOException e) {
-				e.printStackTrace();
 			}
-		}
-		this.config = YamlConfiguration.load(moduleFile);
+			this.config = YamlConfiguration.load(moduleFile);
 		
-		this.config.getStringList("set_back.action").forEach((line) -> {
-			JSONObject json = null;
-			try {
-				json = (JSONObject) new JSONParser().parse(line);
-			} catch (Exception e) {}
-			SetBackEntry entry = json == null ? new SetBackEntry(line) : new SetBackEntry(json);
-			switch (entry.getType().toLowerCase()) {
-			case "potion_effect":
-				setBackProcessor.add(new PotionEffectProcessor(entry));
-				break;
-			case "teleport":
-				setBackProcessor.add(new TeleportProcessor(entry));
-				break;
-				
-			default:
-				break;
-			}
-		});
+			this.config.getStringList("set_back.action").forEach((line) -> {
+				JSONObject json = null;
+				try {
+					json = (JSONObject) new JSONParser().parse(line);
+				} catch (Exception e) {}
+				SetBackEntry entry = json == null ? new SetBackEntry(line) : new SetBackEntry(json);
+				switch (entry.getType().toLowerCase()) {
+				case "potion_effect":
+					setBackProcessor.add(new PotionEffectProcessor(entry));
+					break;
+				case "teleport":
+					setBackProcessor.add(new TeleportProcessor(entry));
+					break;
+					
+				default:
+					break;
+				}
+			});
+		} catch (Exception e) {
+			Adapter.getAdapter().getLogger().error("Cannot load cheat " + key + ".");
+			e.printStackTrace();
+		}
 	}
 	
 	public String getKey() {

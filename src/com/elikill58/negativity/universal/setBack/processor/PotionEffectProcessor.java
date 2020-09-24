@@ -12,7 +12,7 @@ public class PotionEffectProcessor implements SetBackProcessor {
 	
 	public PotionEffectProcessor(SetBackEntry entry) {
 		int duration = Integer.MAX_VALUE, amplifier = 255;
-		if(entry.getValue().matches("*:*")) {
+		if(entry.getValue().matches("\\*:\\*")) {
 			String[] split =  entry.getValue().split(":");
 			duration = Integer.parseInt(split[0]);
 			amplifier = Integer.parseInt(split[1]);

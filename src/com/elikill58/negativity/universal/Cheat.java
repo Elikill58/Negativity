@@ -91,7 +91,10 @@ public abstract class Cheat {
 			case "potion_effect":
 				setBackProcessor.add(new PotionEffectProcessor(entry));
 				break;
-
+			case "teleport":
+				setBackProcessor.add(new TeleportProcessor(entry));
+				break;
+				
 			default:
 				break;
 			}

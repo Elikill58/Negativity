@@ -15,7 +15,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
-import com.elikill58.negativity.universal.bypass.ItemUseBypass;
+import com.elikill58.negativity.universal.bypass.checkers.ItemUseBypass;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class FastBow extends Cheat implements Listeners {
@@ -33,13 +33,9 @@ public class FastBow extends Cheat implements Listeners {
 			return;
 		if(!np.hasDetectionActive(this) || !checkActive("last-shot"))
 			return;
-		
-		if(ItemUseBypass.ITEM_BYPASS.containsKey(item.getType().getId())) {
-			ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(item.getType().getId());
-			if(ib.getWhen().isClick() && ib.isForThisCheat(this))
-				if(e.getAction().name().toLowerCase().contains(ib.getWhen().name().toLowerCase()))
-					return;
-		}
+
+		if(ItemUseBypass.hasBypassWithClick(p, this, item, e.getAction().name()))
+			return;
 		if (item.getType().equals(Materials.BOW) && e.getAction().name().contains("RIGHT_CLICK")) {
 			np.flyingReason = FlyingReason.BOW;
 			long lastShotWithBow = np.longs.get(FAST_BOW, "last-shot", 0l);

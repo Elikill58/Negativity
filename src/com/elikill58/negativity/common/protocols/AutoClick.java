@@ -16,7 +16,7 @@ import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.bypass.ItemUseBypass;
+import com.elikill58.negativity.universal.bypass.checkers.ItemUseBypass;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
@@ -66,12 +66,10 @@ public class AutoClick extends Cheat implements Listeners {
 	private void manageClick(Player p, PlayerInteractEvent e) {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		ItemStack inHand = p.getItemInHand();
-		if (inHand != null)
-			if (ItemUseBypass.ITEM_BYPASS.containsKey(inHand.getType().getId())) {
-				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(inHand.getType().getId());
-				if (ib.getWhen().isClick() && ib.isForThisCheat(this))
-					return;
-			}
+		if (inHand != null) {
+			if(ItemUseBypass.hasBypassWithClick(p, this, inHand, e.getAction().name()))
+				return;
+		}
 		np.ACTUAL_CLICK++;
 		int ping = p.getPing(), click = np.ACTUAL_CLICK - (ping / 9);
 		if (click > getConfig().getInt("click_alert", 20) && np.hasDetectionActive(this)) {

@@ -11,33 +11,27 @@ import java.util.StringJoiner;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
-import java.util.Map.Entry;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.commands.CommandListeners;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.commands.TabListeners;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
-import com.elikill58.negativity.api.item.ItemStack;
-import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
-import com.elikill58.negativity.universal.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
-import com.elikill58.negativity.universal.bypass.ItemUseBypass;
-import com.elikill58.negativity.universal.bypass.WorldRegionBypass;
-import com.elikill58.negativity.universal.bypass.ItemUseBypass.WhenBypass;
+import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.support.EssentialsSupport;
 import com.elikill58.negativity.universal.support.GadgetMenuSupport;
@@ -225,40 +219,8 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 						p.sendMessage(ChatColor.RED + "Bypass for blink.");
 						hasBypass = true;
 					}
-					ItemStack itemInHand = p.getItemInHand();
-					Material blockBelow = p.getLocation().clone().sub(0, 1, 0).getBlock().getType();
-					boolean hasLoadTargetVisual = false;
-					List<Block> targetVisual = null;
-					String bypassResult = "";
-					for(Entry<String, ItemUseBypass> itemUseBypass : ItemUseBypass.ITEM_BYPASS.entrySet()) {
-						String id = itemUseBypass.getKey();
-						ItemUseBypass itemBypass = itemUseBypass.getValue();
-						if(itemBypass.getWhen().equals(WhenBypass.ALWAYS)) {
-							if(itemInHand != null && itemInHand.getType().getId().equalsIgnoreCase(id)) {
-								bypassResult = "Always " + id;
-							}
-						} else if(itemBypass.getWhen().equals(WhenBypass.BELOW)) {
-							if(blockBelow.getId().equalsIgnoreCase(id)) {
-								bypassResult = "Below " + id;
-							}
-						} else if(itemBypass.getWhen().equals(WhenBypass.LOOKING)) {
-							if(!hasLoadTargetVisual) {
-								targetVisual = p.getTargetBlock(7);
-								hasLoadTargetVisual = true;
-							}
-							if(!targetVisual.isEmpty()) {
-								for(Block b : targetVisual)
-									if(b.getType().getId().equalsIgnoreCase(id))
-										bypassResult = "Looking " + id;
-							}
-						}
-					}
-					if(!bypassResult.isEmpty()) {
-						p.sendMessage(ChatColor.RED + "Bypass : found " + bypassResult);
-						hasBypass = true;
-					}
-					if(WorldRegionBypass.hasBypass(c, p.getLocation())) {
-						p.sendMessage(ChatColor.RED + "World region bypass with this cheat.");
+					if(BypassManager.hasBypass(p, c)) {
+						p.sendMessage(ChatColor.RED + "You have a bypass actually");
 						hasBypass = true;
 					}
 					if (Negativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) 

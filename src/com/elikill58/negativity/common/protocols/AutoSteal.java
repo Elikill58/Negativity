@@ -8,12 +8,13 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ReportType;
-import com.elikill58.negativity.universal.bypass.ItemUseBypass;
+import com.elikill58.negativity.universal.bypass.checkers.ItemUseBypass;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class AutoSteal extends Cheat implements Listeners {
@@ -32,13 +33,10 @@ public class AutoSteal extends Cheat implements Listeners {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if(!np.hasDetectionActive(this))
 			return;
-		if(p.getItemInHand() != null)
-			if(ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().getId())) {
-				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().getId());
-				if(ib.getWhen().isClick() && ib.isForThisCheat(this))
-					if(e.getAction().name().toLowerCase().contains(ib.getWhen().name().toLowerCase()))
-						return;
-			}
+		ItemStack inHand = p.getItemInHand();
+		if(inHand != null)
+			if(ItemUseBypass.hasBypassWithClick(p, this, inHand, e.getAction().name()))
+				return;
 		long actual = System.currentTimeMillis(), dif = actual - np.longs.get(AUTO_STEAL, "inv-click", 0l);
 		int ping = p.getPing();
 		int tempSlot = np.ints.get(AUTO_STEAL, "inv-slot", 0);

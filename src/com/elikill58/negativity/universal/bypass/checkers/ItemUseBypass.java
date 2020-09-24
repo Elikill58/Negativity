@@ -1,23 +1,22 @@
-package com.elikill58.negativity.universal.bypass;
+package com.elikill58.negativity.universal.bypass.checkers;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
+import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.bypass.BypassChecker;
 
-public class ItemUseBypass {
+public class ItemUseBypass implements BypassChecker {
 
-	public static final HashMap<String, ItemUseBypass> ITEM_BYPASS = new HashMap<>();
+	public static final List<ItemUseBypass> CLICK_BYPASS = new ArrayList<>();
 	
-	public static List<String> getItemBypassWithBypass(WhenBypass when){
-		List<String> list = new ArrayList<>();
-		ITEM_BYPASS.forEach((key, bypass) -> {
-			if(bypass.getWhen().equals(when))
-				list.add(key);
-		});
-		return list;
+	public static boolean hasBypassWithClick(Player p, Cheat c, ItemStack item, String actionName) {
+		return CLICK_BYPASS.stream().filter((ib) -> ib.isForThisCheat(c) && actionName.toLowerCase().contains(ib.getWhen().name().toLowerCase())).findAny().isPresent();
 	}
 	
 	private String item;
@@ -34,8 +33,8 @@ public class ItemUseBypass {
 			Adapter.getAdapter().getLogger().error("[Config - Error] Item bypass System - Unknow when : " + when);
 		else if(this.cheats.size() == 0)
 			Adapter.getAdapter().getLogger().error("[Config - Error] Item bypass System - Unknow cheats : " + cheats);
-		else
-			ITEM_BYPASS.put(item, this);
+		if(this.when.isClick())
+			CLICK_BYPASS.add(this);
 	}
 	
 	private List<Cheat> updateCheats(String cheats){
@@ -61,6 +60,30 @@ public class ItemUseBypass {
 	
 	public WhenBypass getWhen() {
 		return when;
+	}
+	
+	@Override
+	public boolean hasBypass(Player p, Cheat c) {
+
+		ItemStack itemInHand = p.getItemInHand();
+		if(getWhen().equals(WhenBypass.ALWAYS)) {
+			if(itemInHand != null && itemInHand.getType().getId().equalsIgnoreCase(item)) {
+				return false;
+			}
+		} else if(getWhen().equals(WhenBypass.BELOW)) {
+			Material blockBelow = p.getLocation().clone().sub(0, 1, 0).getBlock().getType();
+			if(blockBelow.getId().equalsIgnoreCase(item)) {
+				return false;
+			}
+		} else if(getWhen().equals(WhenBypass.LOOKING)) {
+			List<Block> targetVisual = p.getTargetBlock(7);
+			if(!targetVisual.isEmpty()) {
+				for(Block b : targetVisual)
+					if(b.getType().getId().equalsIgnoreCase(item))
+						return false;
+			}
+		}
+		return false;
 	}
 	
 	public static enum WhenBypass {

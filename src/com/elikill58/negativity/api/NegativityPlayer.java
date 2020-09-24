@@ -26,16 +26,16 @@ import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
-import com.elikill58.negativity.universal.account.NegativityAccount;
-import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.account.NegativityAccount;
+import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.bypass.WorldRegionBypass;
+import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.support.EssentialsSupport;
 import com.elikill58.negativity.universal.support.FloodGateSupport;
 import com.elikill58.negativity.universal.support.GadgetMenuSupport;
@@ -142,7 +142,7 @@ public class NegativityPlayer {
 			return false;
 		if (Negativity.essentialsSupport && c.getKey().equals(CheatKeys.FLY) && p.hasPermission("essentials.fly") && EssentialsSupport.checkEssentialsPrecondition(p))
 			return false;
-		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
+		if(BypassManager.hasBypass(p, c))
 			return false;
 		return p.getPing() < c.getMaxAlertPing();
 	}

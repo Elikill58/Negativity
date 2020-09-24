@@ -47,7 +47,6 @@ import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.common.timers.ClickManagerTimer;
@@ -77,7 +76,6 @@ import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
 import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
-import com.elikill58.negativity.universal.bypass.ItemUseBypass;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
@@ -180,7 +178,6 @@ public class SpongeNegativity {
 
 	@Listener
 	public void onGameStart(GameStartingServerEvent e) {
-		loadItemBypasses();
 		packetManager = new NegativityPacketManager(this);
 		try {
 			Class.forName("com.me4502.precogs.Precogs");
@@ -295,15 +292,6 @@ public class SpongeNegativity {
 			accountManager.save(playerId);
 			accountManager.dispose(playerId);
 		}).submit(this);
-	}
-
-	public void loadItemBypasses() {
-		ItemUseBypass.ITEM_BYPASS.clear();
-		Configuration allItemsConfig = Adapter.getAdapter().getConfig().getSection("items");
-		for (String key : allItemsConfig.getKeys()) {
-			Configuration itemConfig = allItemsConfig.getSection(key);
-			new ItemUseBypass(key, itemConfig.getString("cheats"), itemConfig.getString("when"));
-		}
 	}
 
 	public static SpongeNegativity getInstance() {

@@ -6,11 +6,9 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map.Entry;
 import java.util.StringJoiner;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
@@ -19,8 +17,6 @@ import com.elikill58.negativity.api.events.negativity.PlayerCheatBypassEvent;
 import com.elikill58.negativity.api.events.negativity.PlayerCheatEvent;
 import com.elikill58.negativity.api.events.negativity.PlayerCheatKickEvent;
 import com.elikill58.negativity.api.events.negativity.ShowAlertPermissionEvent;
-import com.elikill58.negativity.api.item.ItemStack;
-import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
@@ -32,8 +28,6 @@ import com.elikill58.negativity.universal.ban.support.AdvancedBanProcessor;
 import com.elikill58.negativity.universal.ban.support.LiteBansProcessor;
 import com.elikill58.negativity.universal.ban.support.MaxBansProcessor;
 import com.elikill58.negativity.universal.bypass.BypassManager;
-import com.elikill58.negativity.universal.bypass.ItemUseBypass;
-import com.elikill58.negativity.universal.bypass.ItemUseBypass.WhenBypass;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
@@ -69,37 +63,8 @@ public class Negativity {
 		if(VerificationManager.isDisablingAlertOnVerif() && !hasVerifications(p.getUniqueId()))
 			return false;
 		int ping = p.getPing();
-		if (p.getHealth() == 0.0D || ping < 0)
+		if (ping < 0)
 			return false;
-
-		ItemStack itemInHand = p.getItemInHand();
-		Material blockBelow = p.getLocation().clone().sub(0, 1, 0).getBlock().getType();
-		// Why a boolean to check if the block is loaded ? It's to prevent bug which can appear with getTargetBlock method
-		boolean hasLoadTargetVisual = false;
-		List<Block> targetVisual = null;
-		for(Entry<String, ItemUseBypass> itemUseBypass : ItemUseBypass.ITEM_BYPASS.entrySet()) {
-			String id = itemUseBypass.getKey();
-			ItemUseBypass itemBypass = itemUseBypass.getValue();
-			if(itemBypass.getWhen().equals(WhenBypass.ALWAYS)) {
-				if(itemInHand != null && itemInHand.getType().getId().equalsIgnoreCase(id)) {
-					return false;
-				}
-			} else if(itemBypass.getWhen().equals(WhenBypass.BELOW)) {
-				if(blockBelow.getId().equalsIgnoreCase(id)) {
-					return false;
-				}
-			} else if(itemBypass.getWhen().equals(WhenBypass.LOOKING)) {
-				if(!hasLoadTargetVisual) {
-					targetVisual = p.getTargetBlock(7);
-					hasLoadTargetVisual = true;
-				}
-				if(!targetVisual.isEmpty()) {
-					for(Block b : targetVisual)
-						if(b.getType().getId().equalsIgnoreCase(id))
-							return false;
-				}
-			}
-		}
 		
 		EventManager.callEvent(new PlayerCheatEvent(p, c, reliability));
 		if (hasBypass && (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase())

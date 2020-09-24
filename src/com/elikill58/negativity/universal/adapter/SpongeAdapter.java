@@ -113,7 +113,7 @@ public class SpongeAdapter extends Adapter {
 
 	@Override
 	public void reloadConfig() {
-		plugin.loadItemBypasses();
+		
 	}
 
 	@Override

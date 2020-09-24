@@ -18,6 +18,9 @@ reliability_alert: 60
 # Remove the cheat effect
 set_back:
   active: false
+  # To know how to configure, check this wiki :
+  # https://github.com/Elikill58/Negativity/wiki/setBack
+  action: []
 
 # Option for /negativity verif
 verif:

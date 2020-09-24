@@ -21,16 +21,20 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.spongepowered.api.item.ItemType;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.json.JSONObject;
+import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.setBack.SetBackEntry;
+import com.elikill58.negativity.universal.setBack.SetBackProcessor;
+import com.elikill58.negativity.universal.setBack.processor.*;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerificationManager;
@@ -46,6 +50,7 @@ public abstract class Cheat {
 	private CheatCategory cheatCategory;
 	private Material m;
 	private String[] aliases;
+	private final List<SetBackProcessor> setBackProcessor = new ArrayList<>();
 
 	public Cheat(String key, boolean needPacket, Material m, CheatCategory type, boolean hasListener, String... alias) {
 		this.needPacket = needPacket;
@@ -75,11 +80,22 @@ public abstract class Cheat {
 			}
 		}
 		this.config = YamlConfiguration.load(moduleFile);
-	}
+		
+		this.config.getStringList("set_back.action").forEach((line) -> {
+			JSONObject json = null;
+			try {
+				json = (JSONObject) new JSONParser().parse(line);
+			} catch (Exception e) {}
+			SetBackEntry entry = json == null ? new SetBackEntry(line) : new SetBackEntry(json);
+			switch (entry.getType().toLowerCase()) {
+			case "potion_effect":
+				setBackProcessor.add(new PotionEffectSetBack(entry));
+				break;
 
-	// fix degueu to remove error
-	public Cheat(String key, boolean needPacket, ItemType m, CheatCategory type, boolean hasListener, String... alias) {
-		this(key, needPacket, (Material) m, type, hasListener, alias);
+			default:
+				break;
+			}
+		});
 	}
 	
 	public String getKey() {
@@ -180,6 +196,10 @@ public abstract class Cheat {
 
 	public boolean hasVerif() {
 		return config.getBoolean("verif.check_in_verif", true);
+	}
+	
+	public void performSetBack(Player p) {
+		setBackProcessor.forEach((st) -> st.perform(p));
 	}
 
 	public CheatHover hoverMsg(String key, Object... placeholders) {

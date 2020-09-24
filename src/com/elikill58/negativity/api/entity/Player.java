@@ -195,6 +195,9 @@ public abstract class Player extends OfflinePlayer {
 	public abstract boolean hasPotionEffect(PotionEffectType type);
 	public abstract List<PotionEffect> getActivePotionEffect();
 	public abstract Optional<PotionEffect> getPotionEffect(PotionEffectType type);
+	public void addPotionEffect(PotionEffect pe) {
+		addPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier());
+	}
 	public abstract void addPotionEffect(PotionEffectType type, int duration, int amplifier);
 	public abstract void removePotionEffect(PotionEffectType type);
 	

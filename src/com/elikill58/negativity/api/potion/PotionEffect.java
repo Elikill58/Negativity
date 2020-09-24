@@ -1,6 +1,6 @@
 package com.elikill58.negativity.api.potion;
 
-public class PotionEffect {
+public class PotionEffect implements Cloneable {
 	
 	private final PotionEffectType type;
 	private final int duration, amplifier;
@@ -26,5 +26,14 @@ public class PotionEffect {
 	public int getAmplifier() {
 		return amplifier;
 	}
-
+	
+	@Override
+	public PotionEffect clone() {
+		try {
+			return (PotionEffect) super.clone();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

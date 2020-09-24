@@ -20,6 +20,9 @@ set_back:
   kill:
     # Enable killing people while damaging player
     active: true
+  # To know how to configure, check this wiki :
+  # https://github.com/Elikill58/Negativity/wiki/setBack
+  action: []
 
 # Option for /negativity verif
 verif:

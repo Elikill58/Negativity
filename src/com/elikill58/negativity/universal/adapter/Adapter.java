@@ -94,6 +94,11 @@ public abstract class Adapter {
 		return destFile;
 	}
 
+	/**
+	 * Get a logger adapter to log informations.
+	 * 
+	 * @return the logger
+	 */
 	public abstract LoggerAdapter getLogger();
 	
 	public abstract void debug(String msg);
@@ -125,11 +130,38 @@ public abstract class Adapter {
 	public abstract Player getPlayer(UUID uuid);
 	public abstract FakePlayer createFakePlayer(Location loc, String name);
 	
+	/**
+	 * Send message to the specified player which can run a command and have a message showed when the mouse is drag hover the message.
+	 * 
+	 * @param p the player that will receive the message
+	 * @param message the message
+	 * @param hover the hover message (show on mouse drag)
+	 * @param command the command run on click
+	 */
 	public abstract void sendMessageRunnableHover(Player p, String message, String hover, String command);
 	
 	// Other plugin management
+	/**
+	 * Check if another plugin is loaded.
+	 * 
+	 * @param name the plugin name (used by the platform)
+	 * @return true if the plugin is loaded.
+	 */
 	public abstract boolean hasPlugin(String name);
+	
+	/**
+	 * Get another plugin
+	 * 
+	 * @param name the plugin name (used by the platform)
+	 * @return
+	 */
 	public abstract ExternalPlugin getPlugin(String name);
 	
+	/**
+	 * Run action sync with the server.
+	 * Specially useful for world/player action
+	 * 
+	 * @param call the action to call
+	 */
 	public abstract void runSync(Runnable call);
 }

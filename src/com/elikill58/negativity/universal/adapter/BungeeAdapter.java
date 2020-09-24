@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
@@ -36,6 +37,7 @@ import com.elikill58.negativity.universal.translation.TranslationProviderFactory
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.gson.Gson;
 
+import net.md_5.bungee.BungeeCord;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -236,5 +238,10 @@ public class BungeeAdapter extends Adapter {
 	@Override
 	public ExternalPlugin getPlugin(String name) {
 		return new BungeeExternalPlugin(pl.getProxy().getPluginManager().getPlugin(name));
+	}
+	
+	@Override
+	public void runSync(Runnable call) {
+		BungeeCord.getInstance().getScheduler().schedule(pl, call, 0, TimeUnit.MILLISECONDS);
 	}
 }

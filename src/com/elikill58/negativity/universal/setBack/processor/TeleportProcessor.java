@@ -32,7 +32,7 @@ public class TeleportProcessor implements SetBackProcessor {
 
 	@Override
 	public void perform(Player p) {
-		p.teleport(p.getLocation().clone().add(direction));
+		Adapter.getAdapter().runSync(() -> p.teleport(p.getLocation().clone().add(direction)));
 	}
 	
 	public static enum TeleportDirection {

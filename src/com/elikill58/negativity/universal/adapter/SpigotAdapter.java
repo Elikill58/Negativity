@@ -268,4 +268,9 @@ public class SpigotAdapter extends Adapter {
 	public ExternalPlugin getPlugin(String name) {
 		return new SpigotExternalPlugin(Bukkit.getPluginManager().getPlugin(name));
 	}
+	
+	@Override
+	public void runSync(Runnable call) {
+		Bukkit.getScheduler().runTask(pl, call);
+	}
 }

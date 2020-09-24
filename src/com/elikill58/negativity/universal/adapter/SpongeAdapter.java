@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
@@ -242,5 +243,10 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public ExternalPlugin getPlugin(String name) {
 		return new SpongeExternalPlugin(Sponge.getPluginManager().getPlugin(name).orElse(null));
+	}
+	
+	@Override
+	public void runSync(Runnable call) {
+		Task.builder().execute(call).submit(plugin);
 	}
 }

@@ -130,4 +130,6 @@ public abstract class Adapter {
 	// Other plugin management
 	public abstract boolean hasPlugin(String name);
 	public abstract ExternalPlugin getPlugin(String name);
+	
+	public abstract void runSync(Runnable call);
 }

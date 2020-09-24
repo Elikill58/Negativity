@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal.setBack.processor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.setBack.SetBackEntry;
 import com.elikill58.negativity.universal.setBack.SetBackProcessor;
 
@@ -27,6 +28,6 @@ public class PotionEffectProcessor implements SetBackProcessor {
 	
 	@Override
 	public void perform(Player p) {
-		p.addPotionEffect(potionEffect.clone());
+		Adapter.getAdapter().runSync(() -> p.addPotionEffect(potionEffect.clone()));
 	}
 }

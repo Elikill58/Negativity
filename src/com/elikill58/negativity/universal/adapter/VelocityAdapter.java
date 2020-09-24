@@ -238,4 +238,9 @@ public class VelocityAdapter extends Adapter {
 	public ExternalPlugin getPlugin(String name) {
 		return new VelocityExternalPlugin(pl.getServer().getPluginManager().getPlugin(name).orElse(null));
 	}
+	
+	@Override
+	public void runSync(Runnable call) {
+		pl.getServer().getScheduler().buildTask(pl, call);
+	}
 }

@@ -6,11 +6,11 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.setBack.SetBackEntry;
 import com.elikill58.negativity.universal.setBack.SetBackProcessor;
 
-public class PotionEffectSetBack implements SetBackProcessor {
+public class PotionEffectProcessor implements SetBackProcessor {
 
 	private final PotionEffect potionEffect;
 	
-	public PotionEffectSetBack(SetBackEntry entry) {
+	public PotionEffectProcessor(SetBackEntry entry) {
 		int duration = Integer.MAX_VALUE, amplifier = 255;
 		if(entry.getValue().matches("*:*")) {
 			String[] split =  entry.getValue().split(":");

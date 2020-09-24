@@ -89,7 +89,7 @@ public abstract class Cheat {
 			SetBackEntry entry = json == null ? new SetBackEntry(line) : new SetBackEntry(json);
 			switch (entry.getType().toLowerCase()) {
 			case "potion_effect":
-				setBackProcessor.add(new PotionEffectSetBack(entry));
+				setBackProcessor.add(new PotionEffectProcessor(entry));
 				break;
 
 			default:

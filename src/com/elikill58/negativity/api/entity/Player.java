@@ -139,6 +139,14 @@ public abstract class Player extends OfflinePlayer {
 	 * @return the Gamemode
 	 */
 	public abstract GameMode getGameMode();
+	
+	/**
+	 * Set the player gamemode
+	 * Warn: support only default gamemode. Not modded server.
+	 * 
+	 * @param gameMode the new player gamemode
+	 */
+	public abstract void setGameMode(GameMode gameMode);
 
 	/**
 	 * Damage player according to damage amount

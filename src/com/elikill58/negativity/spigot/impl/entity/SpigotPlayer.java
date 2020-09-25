@@ -96,6 +96,11 @@ public class SpigotPlayer extends Player {
 	public GameMode getGameMode() {
 		return GameMode.get(p.getGameMode().name());
 	}
+	
+	@Override
+	public void setGameMode(GameMode gameMode) {
+		p.setGameMode(org.bukkit.GameMode.valueOf(gameMode.name()));
+	}
 
 	@Override
 	public void damage(double amount) {

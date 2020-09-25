@@ -166,6 +166,9 @@ public class VelocityPlayer extends Player {
 	public GameMode getGameMode() {
 		return null;
 	}
+	
+	@Override
+	public void setGameMode(GameMode gameMode) {}
 
 	@Override
 	public void damage(double amount) {}

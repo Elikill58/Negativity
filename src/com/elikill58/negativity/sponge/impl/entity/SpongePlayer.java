@@ -15,6 +15,7 @@ import org.spongepowered.api.data.manipulator.mutable.entity.SneakingData;
 import org.spongepowered.api.data.manipulator.mutable.entity.SprintData;
 import org.spongepowered.api.data.property.entity.EyeLocationProperty;
 import org.spongepowered.api.data.type.HandTypes;
+import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.item.inventory.InventoryArchetypes;
@@ -110,6 +111,27 @@ public class SpongePlayer extends Player {
 	@Override
 	public GameMode getGameMode() {
 		return GameMode.get(p.gameMode().get().getName());
+	}
+	
+	@Override
+	public void setGameMode(GameMode gameMode) {
+		switch (gameMode) {
+		case ADVENTURE:
+			p.gameMode().set(GameModes.ADVENTURE);
+			break;
+		case CREATIVE:
+			p.gameMode().set(GameModes.CREATIVE);
+			break;
+		case CUSTOM:
+			p.gameMode().set(GameModes.NOT_SET);
+			break;
+		case SPECTATOR:
+			p.gameMode().set(GameModes.SPECTATOR);
+			break;
+		case SURVIVAL:
+			p.gameMode().set(GameModes.SURVIVAL);
+			break;
+		}
 	}
 
 	@Override

@@ -2,6 +2,7 @@ package com.elikill58.negativity.sponge.impl.inventory;
 
 import java.util.Optional;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
@@ -105,6 +106,46 @@ public class SpongePlayerInventory extends PlayerInventory {
 	@Override
 	public Object getDefault() {
 		return inv;
+	}
+
+	@Override
+	public void setHelmet(@Nullable ItemStack item) {
+		p.setHelmet(item == null ? null : (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
+	}
+
+	@Override
+	public void setChestplate(@Nullable ItemStack item) {
+		p.setChestplate(item == null ? null : (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
+	}
+
+	@Override
+	public void setLegging(@Nullable ItemStack item) {
+		p.setLeggings(item == null ? null : (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
+	}
+
+	@Override
+	public void setBoot(@Nullable ItemStack item) {
+		p.setBoots(item == null ? null : (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
+	}
+
+	@Override
+	public @Nullable ItemStack getHelmet() {
+		return getItem(p.getHelmet());
+	}
+
+	@Override
+	public @Nullable ItemStack getChestplate() {
+		return getItem(p.getChestplate());
+	}
+
+	@Override
+	public @Nullable ItemStack getLegging() {
+		return getItem(p.getLeggings());
+	}
+
+	@Override
+	public @Nullable ItemStack getBoot() {
+		return getItem(p.getBoots());
 	}
 	
 }

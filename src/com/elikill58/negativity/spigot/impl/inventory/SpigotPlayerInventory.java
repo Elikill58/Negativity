@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.impl.inventory;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
@@ -14,9 +16,13 @@ public class SpigotPlayerInventory extends PlayerInventory {
 		this.inv = inv;
 	}
 	
+	private SpigotItemStack getItem(org.bukkit.inventory.ItemStack item) {
+		return item == null ? null : new SpigotItemStack(item);
+	}
+	
 	@Override
 	public ItemStack get(int slot) {
-		return new SpigotItemStack(inv.getItem(slot));
+		return getItem(inv.getItem(slot));
 	}
 
 	@Override
@@ -49,10 +55,7 @@ public class SpigotPlayerInventory extends PlayerInventory {
 		SpigotItemStack[] items = new SpigotItemStack[inv.getArmorContents().length];
 		int i = 0;
 		for(org.bukkit.inventory.ItemStack tempItem : inv.getArmorContents()) {
-			if(tempItem == null)
-				items[i] = null;
-			else
-				items[i] = new SpigotItemStack(tempItem);
+			items[i] = getItem(tempItem);
 			i++;
 		}
 		return items;
@@ -95,4 +98,46 @@ public class SpigotPlayerInventory extends PlayerInventory {
 	public Object getDefault() {
 		return inv;
 	}
+
+	@Override
+	public void setHelmet(@Nullable ItemStack item) {
+		inv.setHelmet(item == null ? null : (org.bukkit.inventory.ItemStack) item.getDefault());
+	}
+
+	@Override
+	public void setChestplate(@Nullable ItemStack item) {
+		inv.setChestplate(item == null ? null : (org.bukkit.inventory.ItemStack) item.getDefault());
+	}
+
+	@Override
+	public void setLegging(@Nullable ItemStack item) {
+		inv.setLeggings(item == null ? null : (org.bukkit.inventory.ItemStack) item.getDefault());
+	}
+
+	@Override
+	public void setBoot(@Nullable ItemStack item) {
+		inv.setBoots(item == null ? null : (org.bukkit.inventory.ItemStack) item.getDefault());
+	}
+
+	@Override
+	public @Nullable ItemStack getHelmet() {
+		return getItem(inv.getHelmet());
+	}
+
+	@Override
+	public @Nullable ItemStack getChestplate() {
+		return getItem(inv.getChestplate());
+	}
+
+	@Override
+	public @Nullable ItemStack getLegging() {
+		return getItem(inv.getLeggings());
+	}
+
+	@Override
+	public @Nullable ItemStack getBoot() {
+		return getItem(inv.getBoots());
+	}
+	
+	
 }

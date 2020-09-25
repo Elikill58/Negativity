@@ -214,7 +214,7 @@ public abstract class Player extends OfflinePlayer {
 	 * bungee > spigot
 	 * OR
 	 * spigot > bungee
-	 * On the sppecified channel
+	 * On the specified channel
 	 * 
 	 * @param channelId the channel ID
 	 * @param writeMessage the message to sent

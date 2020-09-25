@@ -14,6 +14,9 @@ public class ValueEditorProcessor implements SetBackProcessor {
 	public ValueEditorProcessor(SetBackEntry entry) {
 		valueEditor = ValueEditorAction.valueOf(entry.getKey().toUpperCase());
 		switch (valueEditor) {
+		case DAMAGE:
+			obj = Double.parseDouble(entry.getValue());
+			break;
 		case GAMEMODE:
 			obj = GameMode.get(entry.getValue());
 			break;
@@ -32,8 +35,11 @@ public class ValueEditorProcessor implements SetBackProcessor {
 	@Override
 	public void perform(Player p) {
 		switch (valueEditor) {
+		case DAMAGE:
+			p.damage((double) obj);
+			break;
 		case GAMEMODE:
-			// TODO edit gamemode
+			p.setGameMode((GameMode) obj);
 			break;
 		case VELOCITY:
 			p.setVelocity((Vector) obj);
@@ -43,6 +49,7 @@ public class ValueEditorProcessor implements SetBackProcessor {
 	
 	public static enum ValueEditorAction {
 		
+		DAMAGE,
 		GAMEMODE,
 		VELOCITY;
 	

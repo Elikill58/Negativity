@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.ban;
 
+import java.io.File;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.HashMap;
@@ -9,6 +10,7 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
@@ -19,10 +21,12 @@ import com.elikill58.negativity.universal.ban.storage.DatabaseActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.DatabaseBanLogsStorage;
 import com.elikill58.negativity.universal.ban.storage.FileActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.FileBanLogsStorage;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class BanManager {
 
 	public static boolean banActive;
+	private static Configuration banConfig;
 
 	private static String processorId;
 	private static Map<String, BanProcessor> processors = new HashMap<>();
@@ -111,27 +115,34 @@ public class BanManager {
 
 	public static void init() {
 		Adapter adapter = Adapter.getAdapter();
-		banActive = adapter.getConfig().getBoolean("ban.active");
+		
+		banConfig = UniversalUtils.loadConfig(new File(adapter.getDataFolder(), "bans.yml"), "bans.yml");
+		
+		banActive = banConfig.getBoolean("active");
 		if (!banActive)
 			return;
 
-		processorId = adapter.getConfig().getString("ban.processor");
+		processorId = banConfig.getString("processor");
 
 		Path dataDir = adapter.getDataFolder().toPath();
 		Path banDir = dataDir.resolve("bans");
 		Path banLogsDir = banDir.resolve("logs");
-		boolean fileLogBans = adapter.getConfig().getBoolean("ban.file.log_bans");
+		boolean fileLogBans = banConfig.getBoolean("file.log_bans");
 		registerProcessor("file", new NegativityBanProcessor(new FileActiveBanStorage(banDir), fileLogBans ? new FileBanLogsStorage(banLogsDir) : null));
 
 		if (Database.hasCustom) {
-			boolean dbLogBans = adapter.getConfig().getBoolean("ban.database.log_bans");
+			boolean dbLogBans = banConfig.getBoolean("database.log_bans");
 			registerProcessor("database", new NegativityBanProcessor(new DatabaseActiveBanStorage(), dbLogBans ? new DatabaseBanLogsStorage() : null));
 		}
 
-		List<String> banCommands = adapter.getConfig().getStringList("ban.command.ban");
-		List<String> unbanCommands = adapter.getConfig().getStringList("ban.command.unban");
+		List<String> banCommands = banConfig.getStringList("command.ban");
+		List<String> unbanCommands = banConfig.getStringList("command.unban");
 		registerProcessor("command", new CommandBanProcessor(banCommands, unbanCommands));
 
 		BansMigration.migrateBans(banDir, banLogsDir);
+	}
+	
+	public static Configuration getBanConfig() {
+		return banConfig;
 	}
 }

@@ -16,7 +16,7 @@ public class BanUtils {
 
 	public static int computeBanDuration(NegativityPlayer player, int reliability, Cheat cheat) {
 		try {
-			Expression expression = new Expression(Adapter.getAdapter().getConfig().getString("ban.time.calculator")
+			Expression expression = new Expression(BanManager.getBanConfig().getString("time.calculator")
 					.replaceAll("%reliability%", String.valueOf(reliability))
 					.replaceAll("%alert%", String.valueOf(player.getWarn(cheat)))
 					.replaceAll("%all_alert%", String.valueOf(player.getAllWarn(cheat))));
@@ -34,7 +34,7 @@ public class BanUtils {
 			return new BanResult(BanResultType.ALREADY_BANNED);
 		if (!cheat.isActive() || Perm.hasPerm(np, Perm.BYPASS_BAN))
 			return new BanResult(BanResultType.BYPASS);
-		Configuration conf = Adapter.getAdapter().getConfig().getSection("ban");
+		Configuration conf = BanManager.getBanConfig();
 		return new BanResult(conf.getInt("reliability_need") <= relia && conf.getInt("alert_need") <= np.getAllWarn(cheat) ? BanResultType.DONE : BanResultType.BYPASS);
 	}
 
@@ -51,7 +51,7 @@ public class BanUtils {
 		Adapter.getAdapter().getLogger().info("Banning " + player.getName() + " ...");
 		String reason = player.getReason(cheat);
 		long banDuration = -1;
-		int banDefThreshold = Adapter.getAdapter().getConfig().getInt("ban.def.ban_time");
+		int banDefThreshold = BanManager.getBanConfig().getInt("def.ban_time");
 		boolean isDefinitive = BanManager.getLoggedBans(player.getUUID()).size() >= banDefThreshold;
 		if (!isDefinitive) {
 			banDuration = System.currentTimeMillis() + BanUtils.computeBanDuration(player, reliability, cheat);

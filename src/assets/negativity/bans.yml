@@ -1,0 +1,72 @@
+#################################
+#                               #
+#     Negativity AntiCheat      #
+#                               #
+#     Configuration of ban      #
+#                               #
+#################################
+
+# Configuration of the bans subsystem. For more information
+# see https://github.com/Elikill58/Negativity/wiki/Bans
+
+# Enable or disable ALL ban feature
+active: false
+
+# Manage bans commands
+commands:
+  # Manage /nban (Alias: /ban)
+  # DON'T FORGET TO ENABLE BAN BELOW
+  ban: true
+  # Manage /nunban (Alias: /unban)
+  # DON'T FORGET TO ENABLE BAN BELOW
+  unban: true
+
+
+
+# Processors manage bans. Only one processor can be used at the time.
+# Available processors :
+# - file : Saves bans under the ban/ directory of the configuration directory
+# - database : Saves bans in a database. Needs a configured database (see the Database category)
+# - command : Runs commands to ban or unban
+# - bukkit : Uses Bukkit's ban system
+# - proxy : Forwards ban execution and revocations to the proxy companion plugin.
+#   You must enable bans on the proxy plugin's configuration for it to work
+# The following plugins are also supported :
+# - maxbans
+# - advancedban
+# - litebans
+# Defaults to "file"
+processor: "file"
+# Commands to execute when using the "command" processor
+# You can execute as many commands as you want. Order is respected.
+#
+# Available placeholders:
+# %uuid% : uuid of banned player
+# %name% : name of banned player
+# %ip% : ip of the banned player
+# %reason% : detected cheat
+# %alert% : number of alerts for the detected cheat that triggered the ban
+# %all_alert% : all alerts for the detected cheat since you added Negativity on your server
+command:
+  ban:
+  - "ban %uuid% %reason%"
+  unban:
+  - "unban %uuid% %reason%"
+# Need to be banned
+reliability_need: 95
+alert_need: 10
+# How to calculate the time during the player will be banned
+# IN MILLISECONDES
+time:
+  # %reliability% : reliability of last alert
+  # %alert% : number of alert sent
+  calculator: "360000000 + (%reliability% * 20 * %alert%)"
+def:
+  # Number that you need to be ban definitly
+  ban_time: 2
+file:
+  # Log expired or revoked bans when using the "file" processor
+  log_bans: true
+database:
+  # Log expired or revoked bans when using the "database" processor
+  log_bans: true

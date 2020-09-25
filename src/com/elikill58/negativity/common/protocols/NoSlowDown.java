@@ -48,7 +48,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 	    double distance = to.toVector().distance(from.toVector());
 	    np.doubles.set(NO_SLOW_DOWN, "eating-distance", maxSpeed);
 	    if(Version.getVersion().isNewerOrEquals(Version.V1_16)) {
-		    ItemStack boots = p.getInventory().getArmorContent()[3];
+		    ItemStack boots = p.getInventory().getBoots();
 		    if(boots != null && boots.hasEnchant(Enchantment.SOUL_SPEED))
 		    		return;
 	    }

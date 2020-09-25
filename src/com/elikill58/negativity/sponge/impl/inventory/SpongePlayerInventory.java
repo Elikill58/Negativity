@@ -144,7 +144,7 @@ public class SpongePlayerInventory extends PlayerInventory {
 	}
 
 	@Override
-	public @Nullable ItemStack getBoot() {
+	public @Nullable ItemStack getBoots() {
 		return getItem(p.getBoots());
 	}
 	

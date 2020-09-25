@@ -91,7 +91,7 @@ public abstract class PlayerInventory extends Inventory {
 	 * @return the current boot
 	 */
 	@Nullable
-	public abstract ItemStack getBoot();
+	public abstract ItemStack getBoots();
 	
 	/**
 	 * Get slot of the hold item by the player

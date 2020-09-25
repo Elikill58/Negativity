@@ -135,7 +135,7 @@ public class SpigotPlayerInventory extends PlayerInventory {
 	}
 
 	@Override
-	public @Nullable ItemStack getBoot() {
+	public @Nullable ItemStack getBoots() {
 		return getItem(inv.getBoots());
 	}
 	

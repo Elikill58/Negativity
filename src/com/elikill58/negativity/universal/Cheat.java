@@ -83,6 +83,7 @@ public abstract class Cheat {
 			this.config = YamlConfiguration.load(moduleFile);
 		
 			this.config.getStringList("set_back.action").forEach((line) -> {
+				
 				JSONObject json = null;
 				try {
 					json = (JSONObject) new JSONParser().parse(line);
@@ -95,7 +96,9 @@ public abstract class Cheat {
 				case "teleport":
 					setBackProcessor.add(new TeleportProcessor(entry));
 					break;
-					
+				case "value_editor":
+					setBackProcessor.add(new ValueEditorProcessor(entry));
+					break;
 				default:
 					break;
 				}

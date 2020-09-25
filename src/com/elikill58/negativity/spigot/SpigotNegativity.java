@@ -19,6 +19,7 @@ import org.bukkit.plugin.messaging.Messenger;
 import org.bukkit.scheduler.BukkitTask;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.common.timers.ClickManagerTimer;
@@ -176,24 +177,6 @@ public class SpigotNegativity extends JavaPlugin {
 			reportCmd.setTabCompleter(command);
 		}
 
-		PluginCommand banCmd = getCommand("nban");
-		if (!commandSection.getBoolean("ban", true))
-			unRegisterBukkitCommand(banCmd);
-		else {
-			banCmd.setAliases(Arrays.asList("negban"));
-			banCmd.setExecutor(command);
-			banCmd.setTabCompleter(command);
-		}
-
-		PluginCommand unbanCmd = getCommand("nunban");
-		if (!commandSection.getBoolean("unban", true))
-			unRegisterBukkitCommand(unbanCmd);
-		else {
-			unbanCmd.setAliases(Arrays.asList("negunban"));
-			unbanCmd.setExecutor(command);
-			unbanCmd.setTabCompleter(command);
-		}
-
 		PluginCommand kickCmd = getCommand("nkick");
 		if (!commandSection.getBoolean("kick", true))
 			unRegisterBukkitCommand(kickCmd);
@@ -216,6 +199,27 @@ public class SpigotNegativity extends JavaPlugin {
 			unRegisterBukkitCommand(modCmd);
 		else
 			modCmd.setExecutor(command);
+		
+		
+		
+		Configuration banConfig = BanManager.getBanConfig();
+		PluginCommand banCmd = getCommand("nban");
+		if (!banConfig.getBoolean("ban", true))
+			unRegisterBukkitCommand(banCmd);
+		else {
+			banCmd.setAliases(Arrays.asList("negban"));
+			banCmd.setExecutor(command);
+			banCmd.setTabCompleter(command);
+		}
+
+		PluginCommand unbanCmd = getCommand("nunban");
+		if (!banConfig.getBoolean("unban", true))
+			unRegisterBukkitCommand(unbanCmd);
+		else {
+			unbanCmd.setAliases(Arrays.asList("negunban"));
+			unbanCmd.setExecutor(command);
+			unbanCmd.setTabCompleter(command);
+		}
 	}
 
 	@Override

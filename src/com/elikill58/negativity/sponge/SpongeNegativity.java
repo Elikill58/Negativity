@@ -222,7 +222,7 @@ public class SpongeNegativity {
 	}
 
 	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {
-		reloadCommand(configKey, Adapter.getAdapter().getConfig().getBoolean("commands." + configKey), manager, command, aliases);
+		reloadCommand(configKey, (configKey.endsWith("ban") ? BanManager.getBanConfig() : Adapter.getAdapter().getConfig()).getBoolean("commands." + configKey), manager, command, aliases);
 	}
 
 	private void reloadCommand(String mappingKey, boolean enabled, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {

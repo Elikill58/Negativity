@@ -54,7 +54,7 @@ public class SpongeAdapter extends Adapter {
 
 	private final LoggerAdapter logger;
 	private final SpongeNegativity plugin;
-	private final Configuration config;
+	private Configuration config;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpongeNegativity::sendPluginMessage);
 	private final TranslationProviderFactory translationProviderFactory;
 	private final SpongeItemRegistrar itemRegistrar;
@@ -114,7 +114,7 @@ public class SpongeAdapter extends Adapter {
 
 	@Override
 	public void reloadConfig() {
-		
+		this.config = UniversalUtils.loadConfig(new File(getDataFolder(), "config.yml"), "config.yml");
 	}
 
 	@Override

@@ -114,6 +114,8 @@ public class BanManager {
 	}
 
 	public static void init() {
+		processors.clear();
+		
 		Adapter adapter = Adapter.getAdapter();
 		
 		banConfig = UniversalUtils.loadConfig(new File(adapter.getDataFolder(), "bans.yml"), "bans.yml");

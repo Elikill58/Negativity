@@ -56,8 +56,7 @@ public class Perm {
 	}
 
 	public static void init() {
-		Adapter store = Adapter.getAdapter();
-		checkerId = store.getConfig().getString("Permissions.checker");
+		checkerId = Adapter.getAdapter().getConfig().getString("Permissions.checker");
 		
 		registerChecker(PLATFORM_CHECKER, new DefaultPermissionChecker());
 	}

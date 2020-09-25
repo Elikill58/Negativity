@@ -16,6 +16,8 @@ public class EventManager {
 	private static final HashMap<Class<?>, List<CallableEvent>> EVENT_METHOD = new HashMap<>();
 
 	public static void load() {
+		EVENT_METHOD.clear();
+		
 		registerEvent(new CommandManager());
 		registerEvent(new InventoryManager());
 		registerEvent(new ConnectionManager());

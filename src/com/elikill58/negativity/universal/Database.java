@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class Database {
@@ -63,11 +64,11 @@ public class Database {
 	}
 
 	public static void init() {
-		Adapter store = Adapter.getAdapter();
-		if (hasCustom = store.getConfig().getBoolean("Database.isActive")) {
-			Database.connect(store.getConfig().getString("Database.url"),
-					store.getConfig().getString("Database.user"),
-					store.getConfig().getString("Database.password"));
+		Configuration store = Adapter.getAdapter().getConfig();
+		if (hasCustom = store.getBoolean("Database.isActive")) {
+			Database.connect(store.getString("Database.url"),
+					store.getString("Database.user"),
+					store.getString("Database.password"));
 		}
 	}
 }

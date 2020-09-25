@@ -39,7 +39,6 @@ import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.plugin.SpigotExternalPlugin;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.account.SimpleAccountManager;
@@ -51,12 +50,12 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class SpigotAdapter extends Adapter {
 
-	private JavaPlugin pl;
-	private final Configuration config;
+	private final JavaPlugin pl;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpigotNegativity::sendPluginMessage);
 	private final TranslationProviderFactory translationProviderFactory;
 	private final LoggerAdapter logger;
 	private final SpigotItemRegistrar itemRegistrar;
+	private Configuration config;
 
 	public SpigotAdapter(JavaPlugin pl) {
 		this.pl = pl;
@@ -102,7 +101,7 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public void reload() {
 		reloadConfig();
-		Negativity.loadNegativity();
+		SpigotNegativity.trySendProxyPing();
 	}
 
 	@Override
@@ -112,7 +111,7 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public void reloadConfig() {
-		
+		this.config = UniversalUtils.loadConfig(new File(pl.getDataFolder(), "config.yml"), "config.yml");
 	}
 
 	@Override

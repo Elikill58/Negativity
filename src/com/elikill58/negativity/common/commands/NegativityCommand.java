@@ -131,6 +131,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				Messages.sendMessage(sender, "not_permission");
 				return false;
 			}
+			Negativity.loadNegativity();
 			Adapter.getAdapter().reload();
 			Messages.sendMessage(sender, "negativity.reload_done");
 			return true;

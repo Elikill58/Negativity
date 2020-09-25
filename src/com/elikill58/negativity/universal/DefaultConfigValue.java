@@ -59,8 +59,6 @@ public class DefaultConfigValue {
 		DOUBLES.put("tps_alert_stop", 19.0);
 		INTS.put("time_between_alert", 2000);
 		BOOLEANS.put("commands.report", true);
-		BOOLEANS.put("commands.ban", true);
-		BOOLEANS.put("commands.unban", true);
 		BOOLEANS.put("commands.kick", true);
 		BOOLEANS.put("commands.mod", true);
 		BOOLEANS.put("commands.lang", true);
@@ -109,20 +107,6 @@ public class DefaultConfigValue {
 
 		INTS.put("time_between_report", 1000);
 		INTS.put("time_between_alert", 1000);
-
-		BOOLEANS.put("ban.active", false);
-		STRINGS.put("ban.processor", "file");
-		INTS.put("ban.reliability_need", 95);
-		INTS.put("ban.alert_need", 10);
-		STRINGS.put("ban.time.calculator", "360000000 + (%reliability% * 20 * %alert%)");
-		INTS.put("ban.def.ban_time", 2);
-		STRINGS.put("ban.file.dir", "ban"); // for old ban migration
-		BOOLEANS.put("ban.file.log_bans", true);
-		BOOLEANS.put("ban.database.log_bans", true);
-
-		BOOLEANS.put("suspect.enabled", true);
-		BOOLEANS.put("suspect.chat", true);
-		BOOLEANS.put("suspect.with_report_cmd", true);
 
 		STRINGS.put("accounts.storage.id", "default");
 

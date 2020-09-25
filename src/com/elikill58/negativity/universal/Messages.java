@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal;
 
+import java.util.List;
 import java.util.UUID;
 
 import com.elikill58.negativity.api.commands.CommandSender;
@@ -31,16 +32,17 @@ public class Messages {
 	}
 
 	public static void sendMessage(CommandSender p, String dir, Object... placeholders) {
-		String msg = getMessage(p, dir, placeholders);
-		if (!msg.equalsIgnoreCase(dir))
-			p.sendMessage(msg);
+		p.sendMessage(getMessage(p, dir, placeholders));
 	}
 
 	public static void sendMessageList(CommandSender sender, String dir, Object... placeholders) {
 		String lang = (sender instanceof Player ? TranslatedMessages.getLang(((Player) sender).getUniqueId()) : TranslatedMessages.DEFAULT_LANG);
-		for (String s : TranslatedMessages.getStringListFromLang(lang, dir, placeholders)) {
-			if (!s.equalsIgnoreCase(dir))
-				sender.sendMessage(Utils.coloredMessage(s));
+		List<String> lines = TranslatedMessages.getStringListFromLang(lang, dir, placeholders);
+		if(lines.isEmpty()) {
+			lines.add(dir);
+		}
+		for (String s : lines) {
+			sender.sendMessage(Utils.coloredMessage(s));
 		}
 	}
 }

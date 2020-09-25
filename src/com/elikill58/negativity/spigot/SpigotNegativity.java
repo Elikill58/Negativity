@@ -202,7 +202,7 @@ public class SpigotNegativity extends JavaPlugin {
 		
 		
 		
-		Configuration banConfig = BanManager.getBanConfig();
+		Configuration banConfig = BanManager.getBanConfig().getSection("commands");
 		PluginCommand banCmd = getCommand("nban");
 		if (!banConfig.getBoolean("ban", true))
 			unRegisterBukkitCommand(banCmd);

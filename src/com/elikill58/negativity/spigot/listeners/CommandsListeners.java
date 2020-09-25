@@ -18,8 +18,9 @@ public class CommandsListeners implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
 		String prefix = arg.length == 0 ? "" : arg[arg.length - 1].toLowerCase(Locale.ROOT);
-		EventManager.callEvent(new CommandExecutionEvent(cmd.getLabel().toLowerCase(), SpigotEntityManager.getExecutor(sender), arg, prefix));
-		return false;
+		CommandExecutionEvent cmdEvent = new CommandExecutionEvent(cmd.getLabel().toLowerCase(), SpigotEntityManager.getExecutor(sender), arg, prefix);
+		EventManager.callEvent(cmdEvent);
+		return !cmdEvent.hasGoodResult();
 	}
 
 	@Override

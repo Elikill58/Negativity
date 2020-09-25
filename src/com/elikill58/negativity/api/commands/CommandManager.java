@@ -15,6 +15,7 @@ import com.elikill58.negativity.common.commands.NegativityCommand;
 import com.elikill58.negativity.common.commands.ReportCommand;
 import com.elikill58.negativity.common.commands.UnbanCommand;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.ban.BanManager;
 
 public class CommandManager implements Listeners {
 
@@ -27,11 +28,6 @@ public class CommandManager implements Listeners {
 		tabs.put("negativity", negativity);
 		
 		Configuration conf = Adapter.getAdapter().getConfig();
-		if(conf.getBoolean("commands.ban")) {
-			BanCommand ban = new BanCommand();
-			commands.put("nban", ban);
-			tabs.put("nban", ban);
-		}
 		if(conf.getBoolean("commands.kick")) {
 			KickCommand kick = new KickCommand();
 			commands.put("nkick", kick);
@@ -49,6 +45,13 @@ public class CommandManager implements Listeners {
 			ReportCommand report = new ReportCommand();
 			commands.put("nreport", report);
 			tabs.put("nreport", report);
+		}
+		
+		conf = BanManager.getBanConfig();
+		if(conf.getBoolean("commands.ban")) {
+			BanCommand ban = new BanCommand();
+			commands.put("nban", ban);
+			tabs.put("nban", ban);
 		}
 		if(conf.getBoolean("commands.unban")) {
 			UnbanCommand unban = new UnbanCommand();

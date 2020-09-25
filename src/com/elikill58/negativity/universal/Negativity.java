@@ -203,7 +203,6 @@ public class Negativity {
 		Adapter ada = Adapter.getAdapter();
 		ada.getLogger().info("Thanks for buying Negativity <3");
 		
-		EventManager.load();
 		DefaultConfigValue.init();
 		Cheat.loadCheat();
 		Special.loadSpecial();
@@ -214,6 +213,7 @@ public class Negativity {
 		NegativityAccountStorage.init();
 		VerificationManager.init();
 		BypassManager.loadBypass();
+		EventManager.load();
 		UniversalUtils.init();
 		
 		Configuration config = ada.getConfig();

@@ -312,7 +312,7 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public ItemStack getItemInOffHand() {
-		return null;
+		return Version.getVersion().isNewerOrEquals(Version.V1_9) && p.getInventory().getItemInOffHand() != null ? new SpigotItemStack(p.getInventory().getItemInOffHand()) : null;
 	}
 
 	@Override

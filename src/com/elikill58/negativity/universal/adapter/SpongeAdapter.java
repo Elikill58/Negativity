@@ -111,6 +111,11 @@ public class SpongeAdapter extends Adapter {
 	public String getVersion() {
 		return Sponge.getPlatform().getMinecraftVersion().getName();
 	}
+	
+	@Override
+	public String getPluginVersion() {
+		return plugin.getContainer().getVersion().orElse(UniversalUtils.NEGATIVITY_VERSION);
+	}
 
 	@Override
 	public void reloadConfig() {

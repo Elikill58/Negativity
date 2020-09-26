@@ -108,6 +108,7 @@ public abstract class Adapter {
 	}
 	public abstract void reload();
 	public abstract String getVersion();
+	public abstract String getPluginVersion();
 	public abstract void reloadConfig();
 
 	public abstract NegativityAccountManager getAccountManager();

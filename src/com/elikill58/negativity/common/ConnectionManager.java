@@ -42,7 +42,7 @@ public class ConnectionManager implements Listeners {
 				if(!Perm.hasPerm(np, Perm.SHOW_ALERT))
 					return;
 				String newerVersion = UniversalUtils.getLatestVersion().orElse("unknow");
-				if(newerVersion.equalsIgnoreCase(Adapter.getAdapter().getVersion()))
+				if(newerVersion.equalsIgnoreCase(Adapter.getAdapter().getPluginVersion()))
 					return;
 				Adapter.getAdapter().sendMessageRunnableHover(p, ChatColor.YELLOW + "New version of Negativity available (" + newerVersion +  "). "
 					+ ChatColor.BOLD + "Download it here.", "Click here", "https://www.spigotmc.org/resources/48399/");

@@ -104,6 +104,11 @@ public class BungeeAdapter extends Adapter {
 	public String getVersion() {
 		return ProxyServer.getInstance().getGameVersion();
 	}
+	
+	@Override
+	public String getPluginVersion() {
+		return pl.getDescription().getVersion();
+	}
 
 	@Override
 	public void reloadConfig() {

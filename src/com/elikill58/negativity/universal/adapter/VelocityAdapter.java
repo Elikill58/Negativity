@@ -99,6 +99,11 @@ public class VelocityAdapter extends Adapter {
 	public String getVersion() {
 		return pl.getServer().getVersion().getVersion();
 	}
+	
+	@Override
+	public String getPluginVersion() {
+		return UniversalUtils.NEGATIVITY_VERSION;
+	}
 
 	@Override
 	public void reloadConfig() {

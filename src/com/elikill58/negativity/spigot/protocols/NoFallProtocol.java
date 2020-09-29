@@ -56,7 +56,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 				&& ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
 				|| (motionY > (p.getWalkSpeed() / 2)) && (np.isOnGround() && p.getFallDistance() > 0.2)
 						&& p.getWalkSpeed() > p.getFallDistance()) && !np.isInFight) {
-			if (locUp.getBlock().getType().name().contains("WATER"))
+			if (locUp.getBlock().getType().name().contains("WATER") || LocationUtils.isUsingElevator(p))
 				np.useAntiNoFallSystem = true;
 			if (!np.useAntiNoFallSystem) {
 				int porcent = UniversalUtils.parseInPorcent(900 * motionY);

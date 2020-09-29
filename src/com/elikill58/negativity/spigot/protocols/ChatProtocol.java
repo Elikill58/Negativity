@@ -31,15 +31,19 @@ public class ChatProtocol extends Cheat implements Listener {
 		if (!np.hasDetectionActive(this))
 			return;
 		String msg = e.getMessage();
+		long diff = System.currentTimeMillis() - np.TIME_LAST_MESSAGE;
 		if(msg.equalsIgnoreCase(np.LAST_CHAT_MESSAGE)) {
+			np.TIME_LAST_MESSAGE = System.currentTimeMillis();
 			np.LAST_CHAT_MESSAGE_NB++;
-			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
-				boolean mayCancel = SpigotNegativity.alertMod(np.LAST_CHAT_MESSAGE_NB > 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(95 + np.LAST_CHAT_MESSAGE_NB), "Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times",
-						hoverMsg("spam", "%msg%", np.LAST_CHAT_MESSAGE, "%nb%", np.LAST_CHAT_MESSAGE_NB));
-				if(mayCancel && isSetBack())
-					e.setCancelled(true);
-			});
+			if(np.LAST_CHAT_MESSAGE_NB >= 2 && diff <= 3000) {
+				Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
+					boolean mayCancel = SpigotNegativity.alertMod(np.LAST_CHAT_MESSAGE_NB > 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+							UniversalUtils.parseInPorcent(95 + np.LAST_CHAT_MESSAGE_NB), "Spam " + np.LAST_CHAT_MESSAGE + " " + np.LAST_CHAT_MESSAGE_NB + " times",
+							hoverMsg("spam", "%msg%", np.LAST_CHAT_MESSAGE, "%nb%", np.LAST_CHAT_MESSAGE_NB));
+					if(mayCancel && isSetBack())
+						e.setCancelled(true);
+				});
+			}
 		} else
 			np.LAST_CHAT_MESSAGE_NB = 0;
 		np.LAST_CHAT_MESSAGE = msg;

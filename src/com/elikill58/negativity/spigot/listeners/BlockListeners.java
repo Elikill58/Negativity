@@ -15,13 +15,15 @@ public class BlockListeners implements Listener {
 	public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
 		BlockBreakEvent event = new BlockBreakEvent(SpigotEntityManager.getPlayer(e.getPlayer()), new SpigotBlock(e.getBlock()));
 		EventManager.callEvent(event);
-		e.setCancelled(event.isCancelled());
+		if(event.isCancelled())
+			e.setCancelled(event.isCancelled());
 	}
 
 	@EventHandler
 	public void onBlockPlace(org.bukkit.event.block.BlockPlaceEvent e) {
 		BlockPlaceEvent event = new BlockPlaceEvent(SpigotEntityManager.getPlayer(e.getPlayer()), new SpigotBlock(e.getBlock()));
 		EventManager.callEvent(event);
-		e.setCancelled(event.isCancelled());
+		if(event.isCancelled())
+			e.setCancelled(event.isCancelled());
 	}
 }

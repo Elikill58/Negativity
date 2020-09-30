@@ -73,7 +73,8 @@ public class PlayersListeners implements Listener {
 		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
 			PlayerChatEvent event = new PlayerChatEvent(SpigotEntityManager.getPlayer(e.getPlayer()), e.getMessage(), e.getFormat());
 			EventManager.callEvent(event);
-			e.setCancelled(event.isCancelled());
+			if(event.isCancelled())
+				e.setCancelled(event.isCancelled());
 		});
 	}
 	
@@ -92,7 +93,8 @@ public class PlayersListeners implements Listener {
 	public void onInteract(org.bukkit.event.player.PlayerInteractEvent e) {
 		PlayerInteractEvent event = new PlayerInteractEvent(SpigotEntityManager.getPlayer(e.getPlayer()), Action.valueOf(e.getAction().name()));
 		EventManager.callEvent(event);
-		e.setCancelled(event.isCancelled());
+		if(event.isCancelled())
+			e.setCancelled(event.isCancelled());
 	}
 	
 	@EventHandler
@@ -105,7 +107,8 @@ public class PlayersListeners implements Listener {
 		if(e.getEntity() instanceof Player) {
 			PlayerRegainHealthEvent event = new PlayerRegainHealthEvent(SpigotEntityManager.getPlayer((Player) e.getEntity()));
 			EventManager.callEvent(event);
-			e.setCancelled(event.isCancelled());
+			if(event.isCancelled())
+				e.setCancelled(event.isCancelled());
 		}
 	}
 	

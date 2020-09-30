@@ -17,7 +17,9 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class LocationUtils {
 
 	public static boolean isUsingElevator(Player p) {
-		return p.getLocation().getBlock().getType().getId().contains("WATER");
+		Location loc = p.getLocation().clone();
+		Material m = loc.getBlock().getType();
+		return m.getId().contains("WATER") || hasMaterialsAround(loc, "WATER", "BUBBLE");
 	}
 	
 	/**

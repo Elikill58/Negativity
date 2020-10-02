@@ -51,7 +51,7 @@ public class OldBansDbMigrator {
 				bansProcessed++;
 				// only retain active bans
 				if (def || now <= time) {
-					Ban ban = new Ban(uuid, reason, by, BanType.UNKNOW, time, cheat, BanStatus.ACTIVE);
+					Ban ban = new Ban(uuid, reason, by, BanType.UNKNOW, time, cheat, null, BanStatus.ACTIVE);
 					storage.save(ban);
 					bansTransferred++;
 				}

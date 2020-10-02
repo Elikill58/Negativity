@@ -13,7 +13,7 @@ public final class Ban {
 	private final BanType banType;
 	private final long expirationTime;
 	@Nullable
-	private final String cheatName;
+	private final String cheatName, ip;
 	private final BanStatus status;
 	private final long executionTime;
 	private final long revocationTime;
@@ -24,8 +24,9 @@ public final class Ban {
 			   BanType banType,
 			   long expirationTime,
 			   @Nullable String cheatName,
+			   @Nullable String ip,
 			   BanStatus status) {
-		this(playerId, reason, bannedBy, banType, expirationTime, cheatName, status, -1);
+		this(playerId, reason, bannedBy, banType, expirationTime, cheatName, ip, status, -1);
 	}
 
 	public Ban(UUID playerId,
@@ -34,9 +35,10 @@ public final class Ban {
 			   BanType banType,
 			   long expirationTime,
 			   @Nullable String cheatName,
+			   @Nullable String ip,
 			   BanStatus status,
 			   long executionTime) {
-		this(playerId, reason, bannedBy, banType, expirationTime, cheatName, status, executionTime, -1);
+		this(playerId, reason, bannedBy, banType, expirationTime, cheatName, ip, status, executionTime, -1);
 	}
 
 	public Ban(UUID playerId,
@@ -45,6 +47,7 @@ public final class Ban {
 			   BanType banType,
 			   long expirationTime,
 			   @Nullable String cheatName,
+			   @Nullable String ip,
 			   BanStatus status,
 			   long executionTime,
 			   long revocationTime) {
@@ -54,6 +57,7 @@ public final class Ban {
 		this.banType = banType;
 		this.expirationTime = expirationTime;
 		this.cheatName = cheatName;
+		this.ip = ip;
 		this.status = status;
 		this.executionTime = executionTime;
 		this.revocationTime = revocationTime;
@@ -86,6 +90,11 @@ public final class Ban {
 	@Nullable
 	public String getCheatName() {
 		return cheatName;
+	}
+	
+	@Nullable 
+	public String getIp() {
+		return ip;
 	}
 
 	public BanStatus getStatus() {
@@ -128,6 +137,7 @@ public final class Ban {
 				from.getBanType(),
 				from.getExpirationTime(),
 				from.getCheatName(),
+				from.getIp(),
 				status,
 				from.getExecutionTime(),
 				from.getRevocationTime());
@@ -140,6 +150,7 @@ public final class Ban {
 				from.getBanType(),
 				from.getExpirationTime(),
 				from.getCheatName(),
+				from.getIp(),
 				BanStatus.ACTIVE,
 				from.getExecutionTime(),
 				-1);
@@ -152,12 +163,13 @@ public final class Ban {
 				from.getBanType(),
 				from.getExpirationTime(),
 				from.getCheatName(),
+				from.getIp(),
 				BanStatus.REVOKED,
 				from.getExecutionTime(),
 				revocationTime);
 	}
 
-	public static Ban active(UUID playerId, String reason, String bannedBy, BanType banType, long expirationTime, @Nullable String cheatName) {
-		return new Ban(playerId, reason, bannedBy, banType, expirationTime, cheatName, BanStatus.ACTIVE, System.currentTimeMillis());
+	public static Ban active(UUID playerId, String reason, String bannedBy, BanType banType, long expirationTime, @Nullable String cheatName, @Nullable String ip) {
+		return new Ban(playerId, reason, bannedBy, banType, expirationTime, cheatName, ip, BanStatus.ACTIVE, System.currentTimeMillis());
 	}
 }

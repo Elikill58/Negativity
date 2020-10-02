@@ -30,7 +30,7 @@ public final class NegativityAccount {
 	private boolean inBanning = false, isMcLeaks = false;
 
 	public NegativityAccount(UUID playerId) {
-		this(playerId, null, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>(), new ArrayList<>(), null, System.currentTimeMillis());
+		this(playerId, null, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>(), new ArrayList<>(), "0.0.0.0", System.currentTimeMillis());
 	}
 
 	public NegativityAccount(UUID playerId, String playerName, String lang, Minerate minerate, int mostClicksPerSecond, Map<String, Integer> warns, List<Report> reports, String ip, long creationTime) {

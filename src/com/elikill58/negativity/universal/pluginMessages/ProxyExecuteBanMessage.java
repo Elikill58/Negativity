@@ -31,6 +31,7 @@ public class ProxyExecuteBanMessage implements NegativityMessage {
 				BanType.valueOf(input.readUTF()),
 				input.readLong(),
 				input.readBoolean() ? input.readUTF() : null,
+				null,
 				BanStatus.valueOf(input.readUTF()),
 				input.readLong(),
 				input.readLong()

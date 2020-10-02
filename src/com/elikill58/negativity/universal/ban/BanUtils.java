@@ -56,7 +56,7 @@ public class BanUtils {
 		if (!isDefinitive) {
 			banDuration = System.currentTimeMillis() + BanUtils.computeBanDuration(player, reliability, cheat);
 		}
-		return BanManager.executeBan(Ban.active(player.getUUID(), "Cheat (" + reason + ")", "Negativity", BanType.MOD, banDuration, reason));
+		return BanManager.executeBan(Ban.active(player.getUUID(), "Cheat (" + reason + ")", "Negativity", BanType.MOD, banDuration, reason, player.getPlayer().getIP()));
 	}
 
 	public static void kickForBan(NegativityPlayer player, Ban ban) {

@@ -54,7 +54,7 @@ public class MaxBansProcessor implements BanProcessor {
 			expirationTime = ((Temporary) revokedBan).getExpires();
 		}
 		long revocationTime = System.currentTimeMillis();
-		return new BanResult(new Ban(playerId, revokedBan.getReason(), revokedBan.getBanner(), BanType.UNKNOW, expirationTime, revokedBan.getReason(), BanStatus.REVOKED, revokedBan.getCreated(), revocationTime));
+		return new BanResult(new Ban(playerId, revokedBan.getReason(), revokedBan.getBanner(), BanType.UNKNOW, expirationTime, revokedBan.getReason(), null, BanStatus.REVOKED, revokedBan.getCreated(), revocationTime));
 	}
 
 	@Nullable
@@ -72,7 +72,7 @@ public class MaxBansProcessor implements BanProcessor {
 			expirationTime = ((Temporary) ban).getExpires();
 		}
 
-		return new Ban(playerId, ban.getReason(), ban.getBanner(), BanType.UNKNOW, expirationTime, ban.getReason(), BanStatus.ACTIVE, ban.getCreated());
+		return new Ban(playerId, ban.getReason(), ban.getBanner(), BanType.UNKNOW, expirationTime, ban.getReason(), null, BanStatus.ACTIVE, ban.getCreated());
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class MaxBansProcessor implements BanProcessor {
 
 		List<Ban> loggedBans = new ArrayList<>();
 		for (HistoryRecord record : MaxBans.instance.getBanManager().getHistory(player.getName())) {
-			loggedBans.add(new Ban(playerId, record.getMessage(), record.getBanner(), BanType.UNKNOW, 0, record.getMessage(), BanStatus.EXPIRED, record.getCreated()));
+			loggedBans.add(new Ban(playerId, record.getMessage(), record.getBanner(), BanType.UNKNOW, 0, record.getMessage(), null, BanStatus.EXPIRED, record.getCreated()));
 		}
 		return loggedBans;
 	}

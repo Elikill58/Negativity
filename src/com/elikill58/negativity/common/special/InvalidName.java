@@ -41,7 +41,7 @@ public class InvalidName extends Special implements Listeners {
 					}
 				} else {
 					BanManager.executeBan(Ban.active(playerId, getName(), "Negativity", BanType.PLUGIN,
-							getConfig().getInt("ban.time"), getName()));
+							getConfig().getInt("ban.time"), getName(), e.getAddress().getHostAddress()));
 					e.setLoginResult(Result.KICK_BANNED);
 				}
 			} else if (getConfig().getBoolean("kick")) {

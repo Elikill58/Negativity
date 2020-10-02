@@ -68,7 +68,7 @@ public class SpongeBanProcessor implements BanProcessor {
 		String bannedBy = revokedBan.getBanSource().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
 		long expirationTime = revokedBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
 		long executionTime = revokedBan.getCreationDate().toEpochMilli();
-		return new BanResult(new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, BanStatus.REVOKED, executionTime, System.currentTimeMillis()));
+		return new BanResult(new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, BanStatus.REVOKED, executionTime, System.currentTimeMillis()));
 	}
 
 	@Override
@@ -99,7 +99,7 @@ public class SpongeBanProcessor implements BanProcessor {
 		String bannedBy = activeBan.getBanSource().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
 		long expirationTime = activeBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
 		long executionTime = activeBan.getCreationDate().toEpochMilli();
-		return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, BanStatus.ACTIVE, executionTime);
+		return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, BanStatus.ACTIVE, executionTime);
 	}
 
 	@Override

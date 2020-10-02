@@ -75,12 +75,13 @@ public class LiteBansProcessor implements BanProcessor {
 			            String bannedByName = rs.getString("banned_by_name");
 			            BanType banType = getBanType(rs.getString("banned_by_uuid"));
 			            String removedByName = rs.getString("removed_by_name");
+			            String ip = rs.getString("ip");
 			            long revocation = rs.getTimestamp("removed_by_date").getTime();
 			            long time = rs.getLong("time");
 			            long until = rs.getLong("until");
 			            boolean active = rs.getBoolean("active");
 			            BanStatus banState = (active ? BanStatus.ACTIVE : (removedByName.equalsIgnoreCase("#expired") ? BanStatus.EXPIRED : BanStatus.REVOKED));
-			            return new Ban(playerId, reason, bannedByName, banType, until, reason, banState, time, revocation);
+			            return new Ban(playerId, reason, bannedByName, banType, until, reason, ip, banState, time, revocation);
 			        }
 			    }
 			} catch (SQLException e) {
@@ -102,12 +103,13 @@ public class LiteBansProcessor implements BanProcessor {
 			            String bannedByName = rs.getString("banned_by_name");
 			            BanType banType = getBanType(rs.getString("banned_by_uuid"));
 			            String removedByName = rs.getString("removed_by_name");
+			            String ip = rs.getString("ip");
 			            long revocation = rs.getTimestamp("removed_by_date").getTime();
 			            long time = rs.getLong("time");
 			            long until = rs.getLong("until");
 			            boolean active = rs.getBoolean("active");
 			            BanStatus banState = (active ? BanStatus.ACTIVE : (removedByName.equalsIgnoreCase("#expired") ? BanStatus.EXPIRED : BanStatus.REVOKED));
-			            loggedBans.add(new Ban(playerId, reason, bannedByName, banType, until, reason, banState, time, revocation));
+			            loggedBans.add(new Ban(playerId, reason, bannedByName, banType, until, reason, ip, banState, time, revocation));
 			        }
 			    }
 			} catch (SQLException e) {

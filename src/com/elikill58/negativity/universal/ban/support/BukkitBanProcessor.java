@@ -80,7 +80,7 @@ public class BukkitBanProcessor implements BanProcessor {
 		}
 
 		long executionTime = banEntry.getCreated().getTime();
-		return new Ban(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason, BanStatus.ACTIVE, executionTime);
+		return new Ban(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason, null, BanStatus.ACTIVE, executionTime);
 	}
 
 	@Override
@@ -106,6 +106,6 @@ public class BukkitBanProcessor implements BanProcessor {
 		BanStatus status = revoked ? BanStatus.REVOKED : BanStatus.EXPIRED;
 		long executionTime = banEntry.getCreated().getTime();
 		long revocationTime = revoked ? System.currentTimeMillis() : -1;
-		return new Ban(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason, status, executionTime, revocationTime);
+		return new Ban(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason, null, status, executionTime, revocationTime);
 	}
 }

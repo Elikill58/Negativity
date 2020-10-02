@@ -46,9 +46,10 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 			long expirationTime = rs.getLong("expiration_time");
 			String cheatName = rs.getString("cheat_name");
 			String bannedBy = rs.getString("banned_by");
+			String ip = rs.getString("ip");
 			Timestamp executionTimestamp = rs.getTimestamp("execution_time");
 			long executionTime = executionTimestamp == null ? -1 : executionTimestamp.getTime();
-			return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, cheatName, BanStatus.ACTIVE, executionTime);
+			return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, cheatName, ip, BanStatus.ACTIVE, executionTime);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -60,13 +61,14 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 	public void save(Ban ban) {
 		remove(ban.getPlayerId());
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
-				"INSERT INTO negativity_bans_active (id, reason, banned_by, expiration_time, cheat_name, execution_time) VALUES (?,?,?,?,?,?)")) {
+				"INSERT INTO negativity_bans_active (id, reason, banned_by, expiration_time, cheat_name, ip, execution_time) VALUES (?,?,?,?,?,?,?)")) {
 			stm.setString(1, ban.getPlayerId().toString());
 			stm.setString(2, ban.getReason());
 			stm.setString(3, ban.getBannedBy());
 			stm.setLong(4, ban.getExpirationTime());
 			stm.setString(5, UniversalUtils.trimExcess(ban.getCheatName(), 64));
-			stm.setTimestamp(6, ban.getExecutionTime() >= 0 ? new Timestamp(ban.getExecutionTime()) : null);
+			stm.setString(6, ban.getIp());
+			stm.setTimestamp(7, ban.getExecutionTime() >= 0 ? new Timestamp(ban.getExecutionTime()) : null);
 			stm.executeUpdate();
 		} catch (Exception e) {
 			Adapter.getAdapter().getLogger().error("An error occurred while saving the active ban of player with ID " + ban.getPlayerId());

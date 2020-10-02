@@ -69,6 +69,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 				BanType.UNKNOW,
 				punishment.getEnd(),
 				punishment.getReason(),
+				null,
 				BanStatus.ACTIVE,
 				punishment.getStart());
 	}
@@ -88,6 +89,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 				BanType.UNKNOW,
 				punishment.getEnd(),
 				punishment.getReason(),
+				null,
 				status,
 				punishment.getStart(),
 				punishment.isExpired() ? -1 : System.currentTimeMillis());

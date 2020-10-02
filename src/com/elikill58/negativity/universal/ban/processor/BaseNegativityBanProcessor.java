@@ -17,7 +17,7 @@ import com.elikill58.negativity.universal.ban.storage.BanLogsStorage;
  * This ban processor simply saves bans (active and logged) in a configurable storage ({@link ActiveBanStorage} and {@link BanLogsStorage} respectively).
  * <p>
  * It is important to know its sole purpose is to manage bans, and will not do anything on the game server,
- * like kicking the player when {@link BanProcessor#executeBan(Ban) executing a ban}.
+ * like kicking the player when {@link BanProcessor#executeBan(Ban)} executing a ban.
  * If you want direct actions on the game server use {@link NegativityBanProcessor} instead.
  */
 public class BaseNegativityBanProcessor implements BanProcessor {
@@ -84,5 +84,10 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 			return Collections.emptyList();
 		}
 		return banLogsStorage.load(playerId);
+	}
+	
+	@Override
+	public List<Ban> getActiveBanOnSameIP(String ip) {
+		return Collections.emptyList();
 	}
 }

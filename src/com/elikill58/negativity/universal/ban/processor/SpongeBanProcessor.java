@@ -106,4 +106,9 @@ public class SpongeBanProcessor implements BanProcessor {
 	public List<Ban> getLoggedBans(UUID playerId) {
 		return Collections.emptyList();
 	}
+	
+	@Override
+	public List<Ban> getActiveBanOnSameIP(String ip) {
+		return Collections.emptyList();
+	}
 }

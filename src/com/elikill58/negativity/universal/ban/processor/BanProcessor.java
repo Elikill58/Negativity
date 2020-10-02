@@ -46,5 +46,20 @@ public interface BanProcessor {
 	@Nullable
 	Ban getActiveBan(UUID playerId);
 
+	/**
+	 * Get revoked ban of the specified player
+	 * Don't include active one
+	 * 
+	 * @param playerId the UUID of the player to get logged ban
+	 * @return all logged ban
+	 */
 	List<Ban> getLoggedBans(UUID playerId);
+	
+	/**
+	 * Get all active ban on the same IP
+	 * 
+	 * @param ip the IP where we are looking for ban
+	 * @return all ban on IP
+	 */
+	List<Ban> getActiveBanOnSameIP(String ip);
 }

@@ -2,6 +2,7 @@ package com.elikill58.negativity.universal.ban.support;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -89,6 +90,11 @@ public class BukkitBanProcessor implements BanProcessor {
 		Bukkit.getServer().getBanList(BanList.Type.NAME).getBanEntries()
 				.forEach(entry -> loggedBans.add(loggedBanFrom(entry, playerId, false)));
 		return loggedBans;
+	}
+	
+	@Override
+	public List<Ban> getActiveBanOnSameIP(String ip) {
+		return Collections.emptyList();
 	}
 
 	private Ban loggedBanFrom(BanEntry banEntry, UUID playerId, boolean revoked) {

@@ -96,6 +96,24 @@ public class BanManager {
 
 		return processor.revokeBan(playerId);
 	}
+	
+	/**
+	 * Get all active ban on the given IP
+	 * <p>
+	 * Return an empty array if ban feature is disabled
+	 * 
+	 * @param ip the IP where we are looking for ban
+	 * @return the list of active ban on this IP
+	 */
+	public static List<Ban> getActiveBanOnSameIP(String ip){
+		BanProcessor processor = getProcessor();
+		if (processor == null) {
+			Adapter.getAdapter().debug("Cannot find ban processor while trying to revoke ban from " + ip);
+			return null;
+		}
+
+		return processor.getActiveBanOnSameIP(ip);
+	}
 
 	public static String getProcessorId() {
 		return processorId;

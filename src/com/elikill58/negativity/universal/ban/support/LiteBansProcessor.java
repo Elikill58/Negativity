@@ -119,6 +119,34 @@ public class LiteBansProcessor implements BanProcessor {
 		}).join();
 	}
 	
+	@Override
+	public List<Ban> getActiveBanOnSameIP(String ip) {
+		return CompletableFuture.supplyAsync(() -> {
+			List<Ban> loggedBans = new ArrayList<>();
+			try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {bans} WHERE ip = ?")) {
+			    st.setString(1, ip);
+			    try (ResultSet rs = st.executeQuery()) {
+			        while (rs.next()) {
+			        	UUID playerId = UUID.fromString(rs.getString("uuid"));
+			            String reason = rs.getString("reason");
+			            String bannedByName = rs.getString("banned_by_name");
+			            BanType banType = getBanType(rs.getString("banned_by_uuid"));
+			            String removedByName = rs.getString("removed_by_name");
+			            long revocation = rs.getTimestamp("removed_by_date").getTime();
+			            long time = rs.getLong("time");
+			            long until = rs.getLong("until");
+			            boolean active = rs.getBoolean("active");
+			            BanStatus banState = (active ? BanStatus.ACTIVE : (removedByName.equalsIgnoreCase("#expired") ? BanStatus.EXPIRED : BanStatus.REVOKED));
+			            loggedBans.add(new Ban(playerId, reason, bannedByName, banType, until, reason, ip, banState, time, revocation));
+			        }
+			    }
+			} catch (SQLException e) {
+			    e.printStackTrace();
+			}
+			return loggedBans;
+		}).join();
+	}
+	
 	public BanType getBanType(String type) {
 		if(type.equalsIgnoreCase("CONSOLE"))
 			return BanType.CONSOLE;

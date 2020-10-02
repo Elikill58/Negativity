@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal.ban.support;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -80,6 +81,11 @@ public class AdvancedBanProcessor implements BanProcessor {
 		List<Ban> loggedBans = new ArrayList<>();
 		punishments.forEach(punishment -> loggedBans.add(loggedBanFrom(playerId, punishment, BanStatus.EXPIRED)));
 		return loggedBans;
+	}
+	
+	@Override
+	public List<Ban> getActiveBanOnSameIP(String ip) {
+		return Collections.emptyList();
 	}
 
 	private Ban loggedBanFrom(UUID playerId, Punishment punishment, BanStatus status) {

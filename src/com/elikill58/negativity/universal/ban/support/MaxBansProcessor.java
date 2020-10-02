@@ -14,9 +14,9 @@ import org.maxgamer.maxbans.banmanager.Temporary;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
+import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
-import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 
 public class MaxBansProcessor implements BanProcessor {
@@ -87,5 +87,19 @@ public class MaxBansProcessor implements BanProcessor {
 			loggedBans.add(new Ban(playerId, record.getMessage(), record.getBanner(), BanType.UNKNOW, 0, record.getMessage(), null, BanStatus.EXPIRED, record.getCreated()));
 		}
 		return loggedBans;
+	}
+	
+	@Override
+	public List<Ban> getActiveBanOnSameIP(String ip) {
+		List<Ban> list = new ArrayList<>();
+		MaxBans.instance.getBanManager().getUsers(ip).forEach((playerName) -> {
+			org.maxgamer.maxbans.banmanager.Ban ban = MaxBans.instance.getBanManager().getBan(playerName);
+			long expirationTime = -1;
+			if (ban instanceof Temporary) {
+				expirationTime = ((Temporary) ban).getExpires();
+			}
+			list.add(new Ban(UUID.fromString(ban.getId()), ban.getReason(), ban.getBanner(), BanType.UNKNOW, expirationTime, ban.getReason(), null, BanStatus.ACTIVE, ban.getCreated()));
+		});
+		return list;
 	}
 }

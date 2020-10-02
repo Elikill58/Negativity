@@ -42,8 +42,9 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 			int mostClicksPerSecond = config.getInt("better-click");
 			Map<String, Integer> warns = deserializeViolations(config.getSection("cheats"));
 			List<Report> reports = deserializeReports(config);
+			String IP = config.getString("ip", "0.0.0.0");
 			long creationTime = config.getLong("creation-time", System.currentTimeMillis());
-			return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, creationTime);
+			return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, IP, creationTime);
 		});
 	}
 
@@ -66,6 +67,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 			accountConfig.set("better-click", account.getMostClicksPerSecond());
 			serializeViolations(account, accountConfig.createSection("cheats"));
 			serializeReports(account, accountConfig);
+			accountConfig.set("ip", account.getIp());
 			accountConfig.set("creation-time", account.getCreationTime());
 			accountConfig.save();
 		});

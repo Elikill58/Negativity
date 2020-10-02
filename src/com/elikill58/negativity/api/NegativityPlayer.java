@@ -94,7 +94,9 @@ public class NegativityPlayer {
 		this.p = p;
 		this.playerId = p.getUniqueId();
 		Adapter ada = Adapter.getAdapter();
-		getAccount().setPlayerName(p.getName());
+		NegativityAccount account = getAccount();
+		account.setPlayerName(p.getName());
+		account.setIp(p.getIP());
 		ada.getAccountManager().save(playerId);
 		ACTIVE_CHEAT.clear();
 		//boolean needPacket = false;

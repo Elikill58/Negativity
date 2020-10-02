@@ -1,2 +1,3 @@
 ALTER TABLE negativity_accounts
     ADD COLUMN reports VARCHAR(1024) NOT NULL
+    ADD COLUMN ip VARCHAR(39) NOT NULL

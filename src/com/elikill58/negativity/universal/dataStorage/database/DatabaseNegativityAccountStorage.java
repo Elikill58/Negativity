@@ -46,8 +46,9 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 					int mostClicksPerSecond = result.getInt("most_clicks_per_second");
 					Map<String, Integer> warns = deserializeViolations(result.getString("violations_by_cheat"));
 					List<Report> reports = deserializeReports(result.getString("reports"));
+					String IP = result.getString("ip");
 					long creationTime = result.getTimestamp("creation_time").getTime();
-					return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, creationTime);
+					return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, IP, creationTime);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();
@@ -60,7 +61,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
 		return CompletableFuture.runAsync(() -> {
 			try (PreparedStatement stm = Database.getConnection().prepareStatement(
-					"REPLACE INTO negativity_accounts (id, playername, language, minerate_full_mined, minerate, most_clicks_per_second, violations_by_cheat, reports, creation_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
+					"REPLACE INTO negativity_accounts (id, playername, language, minerate_full_mined, minerate, most_clicks_per_second, violations_by_cheat, reports, ip, creation_time) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)")) {
 				stm.setString(1, account.getPlayerId().toString());
 				stm.setString(2, account.getPlayerName());
 				stm.setString(3, account.getLang());
@@ -69,7 +70,8 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 				stm.setInt(6, account.getMostClicksPerSecond());
 				stm.setString(7, serializeViolations(account));
 				stm.setString(8, serializeReports(account));
-				stm.setTimestamp(9, new Timestamp(account.getCreationTime()));
+				stm.setString(9, account.getIp());
+				stm.setTimestamp(10, new Timestamp(account.getCreationTime()));
 				stm.executeUpdate();
 			} catch (SQLException e) {
 				e.printStackTrace();

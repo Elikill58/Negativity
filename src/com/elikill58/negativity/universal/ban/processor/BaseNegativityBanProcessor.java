@@ -88,6 +88,9 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 	
 	@Override
 	public List<Ban> getActiveBanOnSameIP(String ip) {
-		return Collections.emptyList();
+		if (activeBanStorage == null) {
+			return Collections.emptyList();
+		}
+		return activeBanStorage.loadBanOnIP(ip);
 	}
 }

@@ -70,3 +70,38 @@ file:
 database:
   # Log expired or revoked bans when using the "database" processor
   log_bans: true
+
+# Manage alternative account on same IP
+# More information on wiki:
+# https://github.com/Elikill58/Negativity/wiki/Bans
+alt:
+  active: false
+  # the key tell the X th account.
+  # Here, it's for the second account
+  2:
+    action: alert
+    message: "&a[&2Negativity&a]&c &cWarn: you are already ban on another account."
+  3:
+    action: ban
+    message: "Alt unauthorized"
+    # the time of the ban in milliseconds.
+    # set '-1' or "def: true" for definitive ban
+    time: 360000
+    # condition to be banned
+    # Get Warn and Violation from ALL account
+    condition:
+      # Need at least 30 warn (violations are count as warn)
+      warning: 30
+      # Need at least 10 violations
+      violation: 10
+  4:
+    action: ban
+    message: "Alt unauthorized"
+    def: true
+    condition:
+      warning: 40
+      violation: 20
+  5:
+    # the ban_all action ban definitively all account on the IP
+    action: ban_all
+  # Such as there is not any information for 6th, 7th ... account, we will take the last, so the 5th.

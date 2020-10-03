@@ -2,6 +2,7 @@ package com.elikill58.negativity.universal.dataStorage;
 
 import java.io.File;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -24,6 +25,8 @@ public abstract class NegativityAccountStorage {
 	public CompletableFuture<NegativityAccount> getOrCreateAccount(UUID playerId) {
 		return loadAccount(playerId).thenApply(existingAccount -> existingAccount == null ? new NegativityAccount(playerId) : existingAccount);
 	}
+
+	public abstract List<UUID> getPlayersOnIP(String ip);
 
 	public static NegativityAccountStorage getStorage() {
 		return storages.getOrDefault(storageId, VoidAccountStorage.INSTANCE);

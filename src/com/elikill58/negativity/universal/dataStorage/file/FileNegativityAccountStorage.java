@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal.dataStorage.file;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -131,8 +132,16 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 		}
 
 		for (String fullEntry : cheatsSection.getStringList("reports")) {
-			reports.add(Report.fromJson(fullEntry));
+			Report report = Report.fromJson(fullEntry);
+			if(report != null)
+				reports.add(report);
 		}
 		return reports;
+	}
+	
+	@Override
+	public List<UUID> getPlayersOnIP(String ip) {
+		// TODO Implement getting players on IP when using file system
+		return Collections.emptyList();
 	}
 }

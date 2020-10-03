@@ -2,6 +2,7 @@ package com.elikill58.negativity.universal.ban;
 
 import java.io.File;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -30,6 +31,7 @@ public class BanManager {
 
 	private static String processorId;
 	private static Map<String, BanProcessor> processors = new HashMap<>();
+	private static List<AltAccountBan> altAccountBan = new ArrayList<>();
 
 	public static List<Ban> getLoggedBans(UUID playerId) {
 		BanProcessor processor = getProcessor();
@@ -108,13 +110,24 @@ public class BanManager {
 	public static List<Ban> getActiveBanOnSameIP(String ip){
 		BanProcessor processor = getProcessor();
 		if (processor == null) {
-			Adapter.getAdapter().debug("Cannot find ban processor while trying to revoke ban from " + ip);
+			Adapter.getAdapter().debug("Cannot find ban processor while trying to get active ban on IP " + ip);
 			return null;
 		}
 
 		return processor.getActiveBanOnSameIP(ip);
 	}
 
+	public static AltAccountBan getAltBanFor(int nb) {
+		AltAccountBan ban = null;
+		for(AltAccountBan alt : altAccountBan) {
+			if(alt.getAltNb() == nb) // check for exact NB of alt
+				return alt;
+			else if(alt.getAltNb() < nb) // check for nearest nb of alt, but lower than the given number
+				ban = alt;
+		}
+		return ban;
+	}
+	
 	public static String getProcessorId() {
 		return processorId;
 	}
@@ -159,6 +172,13 @@ public class BanManager {
 		List<String> unbanCommands = banConfig.getStringList("command.unban");
 		registerProcessor("command", new CommandBanProcessor(banCommands, unbanCommands));
 
+		Configuration altConfig = banConfig.getSection("alt");
+		if(altConfig.getBoolean("active", false)) {
+			altConfig.getKeys().stream().filter(UniversalUtils::isInteger).forEach((key) -> {
+				altAccountBan.add(new AltAccountBan(Integer.parseInt(key), altConfig.getSection(key)));
+			});
+		}
+		
 		BansMigration.migrateBans(banDir, banLogsDir);
 	}
 	

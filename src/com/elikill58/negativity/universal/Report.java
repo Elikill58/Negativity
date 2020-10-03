@@ -52,6 +52,8 @@ public class Report {
 	}
 	
 	public static Report fromJson(String json) {
+		if(json == null || json.isEmpty())
+			return null;
 		try {
 			JSONObject obj = (JSONObject) new JSONParser().parse(json);
 			return new Report(obj.get("reason").toString(), UUID.fromString(obj.get("reportedBy").toString()), Long.parseLong(obj.get("time").toString()));

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
@@ -43,6 +44,11 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 		}
 
 		return null;
+	}
+	
+	@Override
+	public List<Ban> loadBanOnIP(String ip) {
+		return Collections.emptyList();
 	}
 
 	@Override

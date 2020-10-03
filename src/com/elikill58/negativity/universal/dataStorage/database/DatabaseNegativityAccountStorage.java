@@ -151,8 +151,27 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 		List<Report> reports = new ArrayList<Report>();
 		String[] fullEntries = serialized.split(";");
 		for (String fullEntry : fullEntries) {
-			reports.add(Report.fromJson(fullEntry));
+			Report report = Report.fromJson(fullEntry);
+			if(report != null)
+				reports.add(report);
 		}
 		return reports;
+	}
+	
+	@Override
+	public List<UUID> getPlayersOnIP(String ip) {
+		return CompletableFuture.supplyAsync(() -> {
+			List<UUID> list = new ArrayList<>();
+			try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_accounts WHERE ip = ?")) {
+				stm.setString(1, ip);
+				ResultSet result = stm.executeQuery();
+				while (result.next()) {
+					list.add(UUID.fromString(result.getString("id")));
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			return list;
+		}).join();
 	}
 }

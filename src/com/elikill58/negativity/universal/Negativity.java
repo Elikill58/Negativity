@@ -204,16 +204,16 @@ public class Negativity {
 		ada.getLogger().info("Thanks for buying Negativity <3");
 		
 		DefaultConfigValue.init();
-		Cheat.loadCheat();
 		Special.loadSpecial();
 		Database.init();
 		Perm.init();
 		BanManager.init();
 		TranslatedMessages.init();
 		NegativityAccountStorage.init();
+		EventManager.load();
+		Cheat.loadCheat();
 		VerificationManager.init();
 		BypassManager.loadBypass();
-		EventManager.load();
 		UniversalUtils.init();
 		
 		Configuration config = ada.getConfig();

@@ -75,7 +75,13 @@ public class EventManager {
 	public static void callEvent(Event ev) {
 		List<CallableEvent> methods = EVENT_METHOD.get(ev.getClass());
 		if(methods != null)
-			new ArrayList<>(methods).forEach((m) -> m.call(ev));
+			new ArrayList<>(methods).forEach((m) -> {
+				try {
+					m.call(ev);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			});
 	}
 	
 	public static class CallableEvent {

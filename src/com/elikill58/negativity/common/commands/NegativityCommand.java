@@ -211,7 +211,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			if(arg.length > 1) {
 				Cheat c = Cheat.fromString(arg[1]);
 				if(c != null) {
-					p.sendMessage(ChatColor.GREEN + "Detected cheat " + c.getName() + ".");
+					p.sendMessage(ChatColor.GREEN + "Checking for cheat " + c.getName() + ".");
 					if(!c.isActive()) {
 						p.sendMessage(ChatColor.RED + "Cheat disabled.");
 						hasBypass = true;
@@ -241,6 +241,10 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 					}
 					if(ping > c.getMaxAlertPing()) {
 						p.sendMessage(ChatColor.RED + "To high ping ! " + ChatColor.YELLOW + "(" + ping + " > " + c.getMaxAlertPing() + ")");
+						hasBypass = true;
+					}
+					if(!np.hasDetectionActive(c)) {
+						p.sendMessage(ChatColor.RED + "Detection of " + c.getName() + " not active.");
 						hasBypass = true;
 					}
 					if(!hasBypass)

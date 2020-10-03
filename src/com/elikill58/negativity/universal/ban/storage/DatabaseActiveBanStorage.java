@@ -5,6 +5,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -86,5 +88,28 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 			ada.getLogger().error("An error occurred while removing the active ban for player ID " + playerId);
 			e.printStackTrace();
 		}
+	}
+	
+	@Override
+	public List<Ban> loadBanOnIP(String ip) {
+		List<Ban> list = new ArrayList<>();
+		try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_bans_active WHERE ip = ?")) {
+			stm.setString(1, ip);
+
+			ResultSet rs = stm.executeQuery();
+			while(rs.next()) {
+				UUID playerId = UUID.fromString(rs.getString("id"));
+				String reason = rs.getString("reason");
+				long expirationTime = rs.getLong("expiration_time");
+				String cheatName = rs.getString("cheat_name");
+				String bannedBy = rs.getString("banned_by");
+				Timestamp executionTimestamp = rs.getTimestamp("execution_time");
+				long executionTime = executionTimestamp == null ? -1 : executionTimestamp.getTime();
+				list.add(new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, cheatName, ip, BanStatus.ACTIVE, executionTime));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 }

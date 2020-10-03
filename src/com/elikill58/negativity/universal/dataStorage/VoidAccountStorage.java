@@ -1,5 +1,7 @@
 package com.elikill58.negativity.universal.dataStorage;
 
+import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -19,5 +21,10 @@ public final class VoidAccountStorage extends NegativityAccountStorage {
 	@Override
 	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
 		return CompletableFuture.completedFuture(null);
+	}
+	
+	@Override
+	public List<UUID> getPlayersOnIP(String ip) {
+		return Collections.emptyList();
 	}
 }

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal.ban.support;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -47,7 +48,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
 		CompletableFuture.runAsync(punishment::delete);
 		
-		return new BanResult(loggedBanFrom(punishment, BanStatus.REVOKED, null));
+		return new BanResult(loggedBanFrom(playerId, punishment, BanStatus.REVOKED));
 	}
 
 	@Override
@@ -78,26 +79,23 @@ public class AdvancedBanProcessor implements BanProcessor {
 	public List<Ban> getLoggedBans(UUID playerId) {
 		List<Punishment> punishments = PunishmentManager.get().getPunishments(playerId.toString(), PunishmentType.BAN, false);
 		List<Ban> loggedBans = new ArrayList<>();
-		punishments.forEach(punishment -> loggedBans.add(loggedBanFrom(punishment, BanStatus.EXPIRED, null)));
+		punishments.forEach(punishment -> loggedBans.add(loggedBanFrom(playerId, punishment, BanStatus.EXPIRED)));
 		return loggedBans;
 	}
 	
 	@Override
 	public List<Ban> getActiveBanOnSameIP(String ip) {
-		List<Punishment> punishments = PunishmentManager.get().getPunishments(ip, PunishmentType.BAN, true);
-		List<Ban> loggedBans = new ArrayList<>();
-		punishments.forEach(punishment -> loggedBans.add(loggedBanFrom(punishment, BanStatus.ACTIVE, ip)));
-		return loggedBans;
+		return Collections.emptyList();
 	}
 
-	private Ban loggedBanFrom(Punishment punishment, BanStatus status, String ip) {
-		return new Ban(UUID.fromString(punishment.getUuid()),
+	private Ban loggedBanFrom(UUID uuid, Punishment punishment, BanStatus status) {
+		return new Ban(uuid,
 				punishment.getReason(),
 				punishment.getOperator(),
 				BanType.UNKNOW,
 				punishment.getEnd(),
 				punishment.getReason(),
-				ip,
+				null,
 				status,
 				punishment.getStart(),
 				punishment.isExpired() ? -1 : System.currentTimeMillis());

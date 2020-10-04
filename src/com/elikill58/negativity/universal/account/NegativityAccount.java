@@ -95,6 +95,10 @@ public final class NegativityAccount {
 	public void setWarnCount(String cheatKey, int count) {
 		warns.put(cheatKey, count);
 	}
+	
+	public int countAllWarns() {
+		return warns.values().stream().reduce(0, Integer::sum);
+	}
 
 	public Map<String, Integer> getAllWarns() {
 		return Collections.unmodifiableMap(warns);

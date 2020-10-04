@@ -3,6 +3,7 @@ package com.elikill58.negativity.common;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -39,23 +40,28 @@ public class ConnectionManager implements Listeners {
 		String ip = p.getIP();
 		List<Ban> banOnIP = BanManager.getActiveBanOnSameIP(ip);
 		if(banOnIP != null && !banOnIP.isEmpty()) {
+			List<NegativityAccount> accounts = new ArrayList<>();
+			banOnIP.forEach((ban) -> accounts.add(NegativityAccount.get(ban.getPlayerId())));
+			
+			int warns = accounts.stream().mapToInt(NegativityAccount::countAllWarns).sum();
+			
 			AltAccountBan alt = BanManager.getAltBanFor(banOnIP.size() + 1);
-			if(alt == null)
-				return;
-			String reason = alt.getAlertMessage() == null ? "Alt unauthorized" : alt.getAlertMessage();
-			switch (alt.getAction()) {
-			case ALERT:
-				p.sendMessage(alt.getAlertMessage());
-				break;
-			case BAN:
-				BanManager.executeBan(new Ban(p.getUniqueId(), reason, "Negativity", BanType.PLUGIN, alt.isBanDef() ? -1 : alt.getBanTime(), "Alt", ip, BanStatus.ACTIVE));
-				break;
-			case BAN_ALL:
-				long time = alt.isBanDef() ? -1 : alt.getBanTime();
-				for(UUID allPlayers : NegativityAccountStorage.getStorage().getPlayersOnIP(ip)) {
-					BanManager.executeBan(new Ban(allPlayers, reason, "Negativity", BanType.PLUGIN, time, "Alt", ip, BanStatus.ACTIVE));
+			if(alt != null && alt.hasCondition(warns, warns)) {
+				String reason = alt.getAlertMessage() == null ? "Alt unauthorized" : alt.getAlertMessage();
+				switch (alt.getAction()) {
+				case ALERT:
+					p.sendMessage(alt.getAlertMessage());
+					break;
+				case BAN:
+					BanManager.executeBan(new Ban(p.getUniqueId(), reason, "Negativity", BanType.PLUGIN, alt.isBanDef() ? -1 : alt.getBanTime(), "Alt", ip, BanStatus.ACTIVE));
+					break;
+				case BAN_ALL:
+					long time = alt.isBanDef() ? -1 : alt.getBanTime();
+					for(UUID allPlayers : NegativityAccountStorage.getStorage().getPlayersOnIP(ip)) {
+						BanManager.executeBan(new Ban(allPlayers, reason, "Negativity", BanType.PLUGIN, time, "Alt", ip, BanStatus.ACTIVE));
+					}
+					break;
 				}
-				break;
 			}
 		}
 		

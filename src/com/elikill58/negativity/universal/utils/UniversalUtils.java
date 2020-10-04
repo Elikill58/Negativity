@@ -229,8 +229,8 @@ public class UniversalUtils {
         	HAVE_INTERNET = false;
         	Adapter.getAdapter().getLogger().info("Could not use the internet connection to check for update or send stats");
         } catch (ConnectException e) {
+        	HAVE_INTERNET = false;
         	if(containsChineseCharacters(e.getMessage())) {
-            	HAVE_INTERNET = false;
             	Adapter.getAdapter().getLogger().info("As chinese people, you cannot access to the website " + urlName + ".");
         	} else
             	Adapter.getAdapter().getLogger().warn("Cannot connect to " + urlName + " (Reason: " + e.getMessage() + ").");

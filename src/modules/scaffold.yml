@@ -30,3 +30,6 @@ checks:
   # Block placed below
   below:
     active: true
+  # DIstance between placed and target one
+  distance:
+    active: true

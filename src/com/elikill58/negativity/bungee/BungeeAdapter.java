@@ -1,13 +1,13 @@
-package com.elikill58.negativity.universal.adapter;
+package com.elikill58.negativity.bungee;
 
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Nullable;
 
@@ -24,40 +24,45 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
+import com.elikill58.negativity.bungee.impl.plugin.BungeeExternalPlugin;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.account.SimpleAccountManager;
+import com.elikill58.negativity.universal.logger.JavaLoggerAdapter;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
-import com.elikill58.negativity.universal.logger.Slf4jLoggerAdapter;
 import com.elikill58.negativity.universal.translation.NegativityTranslationProviderFactory;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
-import com.elikill58.negativity.velocity.VelocityNegativity;
-import com.elikill58.negativity.velocity.impl.entity.VelocityPlayer;
-import com.elikill58.negativity.velocity.impl.plugin.VelocityExternalPlugin;
 import com.google.gson.Gson;
 
-public class VelocityAdapter extends Adapter {
+import net.md_5.bungee.BungeeCord;
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.plugin.Plugin;
 
-	private Configuration config;
-	private VelocityNegativity pl;
+public class BungeeAdapter extends Adapter {
+
+	private final Configuration config;
+	private final Plugin pl;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Proxy();
 	private final TranslationProviderFactory translationProviderFactory;
 	private final LoggerAdapter logger;
 
-	public VelocityAdapter(VelocityNegativity pl) {
+	public BungeeAdapter(Plugin pl) {
 		this.pl = pl;
 		this.config = UniversalUtils.loadConfig(new File(pl.getDataFolder(), "config.yml"), "config_bungee.yml");
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(pl.getDataFolder().toPath().resolve("lang"), "NegativityProxy", "CheatHover");
-		this.logger = new Slf4jLoggerAdapter(pl.getLogger());
+		this.logger = new JavaLoggerAdapter(pl.getLogger());
 	}
 	
 	@Override
 	public Platform getPlatformID() {
-		return Platform.VELOCITY;
+		return Platform.BUNGEE;
 	}
-	
+
 	@Override
 	public Configuration getConfig() {
 		return config;
@@ -95,14 +100,15 @@ public class VelocityAdapter extends Adapter {
 
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String getVersion() {
-		return pl.getServer().getVersion().getVersion();
+		return ProxyServer.getInstance().getGameVersion();
 	}
 	
 	@Override
 	public String getPluginVersion() {
-		return UniversalUtils.NEGATIVITY_VERSION;
+		return pl.getDescription().getVersion();
 	}
 
 	@Override
@@ -117,7 +123,7 @@ public class VelocityAdapter extends Adapter {
 
 	@Override
 	public void runConsoleCommand(String cmd) {
-		pl.getServer().getCommandManager().execute(pl.getServer().getConsoleCommandSource(), cmd);
+		pl.getProxy().getPluginManager().dispatchCommand(pl.getProxy().getConsole(), cmd);
 	}
 
 	@Override
@@ -148,7 +154,7 @@ public class VelocityAdapter extends Adapter {
 	@Override
 	public List<UUID> getOnlinePlayersUUID() {
 		List<UUID> list = new ArrayList<>();
-		pl.getServer().getAllPlayers().forEach((p) -> list.add(p.getUniqueId()));
+		pl.getProxy().getPlayers().forEach((p) -> list.add(p.getUniqueId()));
 		return list;
 	}
 
@@ -173,21 +179,15 @@ public class VelocityAdapter extends Adapter {
 	}
 
 	@Override
-	public void sendMessageRunnableHover(com.elikill58.negativity.api.entity.Player p, String message, String hover,
-			String command) {
+	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
 		
 	}
 
 	@Override
 	public List<Player> getOnlinePlayers() {
 		List<Player> list = new ArrayList<>();
-		pl.getServer().getAllPlayers().forEach((p) -> list.add(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer()));
+		pl.getProxy().getPlayers().forEach((p) -> list.add(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new BungeePlayer(p)).getPlayer()));
 		return list;
-	}
-
-	@Override
-	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
-		return null;
 	}
 
 	@Override
@@ -201,22 +201,24 @@ public class VelocityAdapter extends Adapter {
 	}
 
 	@Override
+	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
+		return null;
+	}
+
+	@Override
 	public Player getPlayer(String name) {
-		Optional<com.velocitypowered.api.proxy.Player> opt = pl.getServer().getPlayer(name);
-		if(opt.isPresent()) {
-			com.velocitypowered.api.proxy.Player p = opt.get();
-			return NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer();
-		} else
+		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(name);
+		if(pp == null)
 			return null;
+		return NegativityPlayer.getNegativityPlayer(pp.getUniqueId(), () -> new BungeePlayer(pp)).getPlayer();
 	}
 
 	@Override
 	public Player getPlayer(UUID uuid) {
-		Optional<com.velocitypowered.api.proxy.Player> opt = pl.getServer().getPlayer(uuid);
-		if(opt.isPresent()) {
-			return NegativityPlayer.getNegativityPlayer(uuid, () -> new VelocityPlayer(opt.get())).getPlayer();
-		} else
+		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(uuid);
+		if(pp == null)
 			return null;
+		return NegativityPlayer.getNegativityPlayer(uuid, () -> new BungeePlayer(pp)).getPlayer();
 	}
 
 	@Override
@@ -236,16 +238,16 @@ public class VelocityAdapter extends Adapter {
 
 	@Override
 	public boolean hasPlugin(String name) {
-		return pl.getServer().getPluginManager().isLoaded(name);
+		return pl.getProxy().getPluginManager().getPlugin(name) != null;
 	}
 
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		return new VelocityExternalPlugin(pl.getServer().getPluginManager().getPlugin(name).orElse(null));
+		return new BungeeExternalPlugin(pl.getProxy().getPluginManager().getPlugin(name));
 	}
 	
 	@Override
 	public void runSync(Runnable call) {
-		pl.getServer().getScheduler().buildTask(pl, call);
+		BungeeCord.getInstance().getScheduler().schedule(pl, call, 0, TimeUnit.MILLISECONDS);
 	}
 }

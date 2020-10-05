@@ -47,8 +47,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class UniversalUtils {
 

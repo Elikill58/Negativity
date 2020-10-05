@@ -3,8 +3,6 @@ package com.elikill58.negativity.universal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.elikill58.negativity.universal.adapter.Adapter;
-
 public enum Version {
 	
 	V1_7("1.7", 7, 500, 0, 5),

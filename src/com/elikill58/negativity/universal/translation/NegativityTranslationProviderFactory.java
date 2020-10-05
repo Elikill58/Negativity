@@ -12,7 +12,7 @@ import java.util.PropertyResourceBundle;
 
 import javax.annotation.Nullable;
 
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.Adapter;
 
 public class NegativityTranslationProviderFactory implements TranslationProviderFactory {
 

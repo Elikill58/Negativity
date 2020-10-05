@@ -9,11 +9,11 @@ import java.util.UUID;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Report;
 import com.elikill58.negativity.universal.TranslatedMessages;
-import com.elikill58.negativity.universal.adapter.Adapter;
 
 /**
  * Contains player-related data that can be accessed when the player is offline.

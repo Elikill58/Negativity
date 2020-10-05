@@ -4,12 +4,11 @@ import java.io.File;
 import java.util.LinkedHashMap;
 
 import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
-import com.elikill58.negativity.universal.adapter.Adapter;
-import com.elikill58.negativity.universal.adapter.BungeeAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 

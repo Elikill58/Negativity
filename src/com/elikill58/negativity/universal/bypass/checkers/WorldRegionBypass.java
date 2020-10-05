@@ -7,9 +7,9 @@ import java.util.stream.Collectors;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.bypass.BypassChecker;
 import com.elikill58.negativity.universal.support.WorldGuardSupport;
 

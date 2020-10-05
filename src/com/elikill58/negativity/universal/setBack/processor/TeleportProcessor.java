@@ -2,7 +2,7 @@ package com.elikill58.negativity.universal.setBack.processor;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.setBack.SetBackEntry;
 import com.elikill58.negativity.universal.setBack.SetBackProcessor;
 

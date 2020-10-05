@@ -3,7 +3,7 @@ package com.elikill58.negativity.api.potion;
 import java.util.Arrays;
 import java.util.List;
 
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.Adapter;
 
 public enum PotionEffectType {
 	

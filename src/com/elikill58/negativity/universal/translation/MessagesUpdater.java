@@ -6,8 +6,8 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.function.BiConsumer;
 
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.TranslatedMessages;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.FileUtils;
 
 public class MessagesUpdater {

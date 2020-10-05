@@ -14,7 +14,7 @@ import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;

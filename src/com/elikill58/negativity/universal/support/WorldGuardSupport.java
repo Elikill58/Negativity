@@ -7,7 +7,7 @@ import java.util.List;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.Adapter;
 import com.sk89q.worldguard.bukkit.WorldGuardPlugin;
 import com.sk89q.worldguard.protection.ApplicableRegionSet;
 import com.sk89q.worldguard.protection.flags.StateFlag;

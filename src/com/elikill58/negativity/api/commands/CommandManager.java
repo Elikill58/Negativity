@@ -14,7 +14,7 @@ import com.elikill58.negativity.common.commands.ModCommand;
 import com.elikill58.negativity.common.commands.NegativityCommand;
 import com.elikill58.negativity.common.commands.ReportCommand;
 import com.elikill58.negativity.common.commands.UnbanCommand;
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
 
 public class CommandManager implements Listeners {

@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.adapter;
+package com.elikill58.negativity.universal;
 
 import java.io.File;
 import java.io.IOException;
@@ -23,8 +23,6 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
-import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;

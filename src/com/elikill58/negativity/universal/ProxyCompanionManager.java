@@ -1,6 +1,5 @@
 package com.elikill58.negativity.universal;
 
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 
 public class ProxyCompanionManager {

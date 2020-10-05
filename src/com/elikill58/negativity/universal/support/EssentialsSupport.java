@@ -2,7 +2,7 @@ package com.elikill58.negativity.universal.support;
 
 import com.earth2me.essentials.Essentials;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.Adapter;
 
 public class EssentialsSupport {
 

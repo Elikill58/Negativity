@@ -7,8 +7,8 @@ import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.bypass.BypassChecker;
 
 public class ItemUseBypass implements BypassChecker {

@@ -3,7 +3,7 @@ package com.elikill58.negativity.spigot.impl.item;
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.Adapter;
 
 public class SpigotItemStack extends ItemStack {
 

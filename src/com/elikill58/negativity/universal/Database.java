@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 import com.elikill58.negativity.api.yaml.config.Configuration;
-import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class Database {
 

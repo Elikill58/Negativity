@@ -16,9 +16,9 @@ import com.elikill58.negativity.spigot.packets.custom.channel.ChannelAbstract;
 import com.elikill58.negativity.spigot.packets.custom.channel.INCChannel;
 import com.elikill58.negativity.spigot.packets.custom.channel.NMUChannel;
 import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class CustomPacketManager extends SpigotPacketManager implements Listener {
 	

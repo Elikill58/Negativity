@@ -2,7 +2,6 @@ package com.elikill58.negativity.universal;
 
 import java.util.HashMap;
 
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 
 public class DefaultConfigValue {

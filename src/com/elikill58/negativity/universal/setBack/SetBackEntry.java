@@ -1,7 +1,7 @@
 package com.elikill58.negativity.universal.setBack;
 
 import com.elikill58.negativity.api.json.JSONObject;
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.Adapter;
 
 public class SetBackEntry {
 

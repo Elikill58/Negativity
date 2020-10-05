@@ -9,7 +9,7 @@ import java.util.List;
 import com.elikill58.negativity.api.commands.CommandManager;
 import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.common.ConnectionManager;
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.Adapter;
 
 public class EventManager {
 

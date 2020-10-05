@@ -3,8 +3,6 @@ package com.elikill58.negativity.universal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.elikill58.negativity.universal.adapter.Adapter;
-
 public interface PacketType {
 
 	String name();

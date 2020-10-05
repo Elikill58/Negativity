@@ -8,7 +8,7 @@ import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.PlatformHolder;
 import com.elikill58.negativity.common.inventories.holders.AlertHolder;
 import com.elikill58.negativity.common.inventories.holders.CheckMenuHolder;
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.Adapter;
 
 public class ActualizeInvTimer implements Runnable {
 

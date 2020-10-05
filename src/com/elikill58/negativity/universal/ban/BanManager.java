@@ -12,8 +12,8 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
-import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.CommandBanProcessor;

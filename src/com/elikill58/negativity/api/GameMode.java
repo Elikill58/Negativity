@@ -1,6 +1,6 @@
 package com.elikill58.negativity.api;
 
-import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.Adapter;
 
 public enum GameMode {
 	

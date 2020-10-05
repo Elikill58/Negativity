@@ -77,6 +77,7 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 		ACTIVED_CHEAT,
 		ADMIN,
 		ALERT,
+		BAN,
 		CHECK_MENU,
 		CHEAT_MANAGER,
 		FREEZE,

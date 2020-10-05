@@ -21,6 +21,8 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.account.NegativityAccount;
+import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 	
@@ -44,7 +46,8 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		inv.set(12, getWoolItem(p, np.getAccount().isMcLeaks()));
 		inv.set(13, ItemBuilder.Builder(Materials.SKELETON_SKULL).displayName(Messages.getMessage(p, "fake_entities")).build());
 		//inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE"), "Kick"));
-		//inv.setItem(17, Utils.createItem(Material.ANVIL, "Ban"));
+		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN))
+			inv.set(17, ItemBuilder.Builder(Materials.ANVIL).displayName("Ban").build());
 
 		inv.set(18, ItemBuilder.Builder(Materials.SPIDER_EYE).displayName(Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())).build());
 		inv.set(19, ItemBuilder.Builder(Materials.EYE_OF_ENDER).displayName(Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())).build());
@@ -149,7 +152,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		} else if(m.equals(Materials.DIAMOND_SHOVEL)) {
 			// TODO soon implement inv kick
 		} else if(m.equals(Materials.ANVIL)) {
-			// TODO soon implement inv ban
+			InventoryManager.open(NegativityInventory.BAN, p, cible);
 		}
 	}
 }

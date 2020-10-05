@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.common.inventories.ActivedCheatInventory;
 import com.elikill58.negativity.common.inventories.AlertInventory;
+import com.elikill58.negativity.common.inventories.BanInventory;
 import com.elikill58.negativity.common.inventories.CheckMenuInventory;
 import com.elikill58.negativity.common.inventories.ForgeModsInventory;
 import com.elikill58.negativity.common.inventories.FreezeInventory;
@@ -27,6 +28,7 @@ public class InventoryManager implements Listeners {
 		new ActivedCheatInventory();
 		new AdminInventory();
 		new AlertInventory();
+		new BanInventory();
 		new CheckMenuInventory();
 		new CheatManagerInventory();
 		new ForgeModsInventory();

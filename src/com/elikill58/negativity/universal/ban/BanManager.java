@@ -30,8 +30,9 @@ public class BanManager {
 	private static Configuration banConfig;
 
 	private static String processorId;
-	private static Map<String, BanProcessor> processors = new HashMap<>();
-	private static List<AltAccountBan> altAccountBan = new ArrayList<>();
+	private static final Map<String, BanProcessor> processors = new HashMap<>();
+	private static final List<AltAccountBan> ALT_BAN_ACCOUNTS = new ArrayList<>();
+	private static final List<BanSanction> SANCTIONS = new ArrayList<>();
 
 	public static List<Ban> getLoggedBans(UUID playerId) {
 		BanProcessor processor = getProcessor();
@@ -119,13 +120,17 @@ public class BanManager {
 
 	public static AltAccountBan getAltBanFor(int nb) {
 		AltAccountBan ban = null;
-		for(AltAccountBan alt : altAccountBan) {
+		for(AltAccountBan alt : ALT_BAN_ACCOUNTS) {
 			if(alt.getAltNb() == nb) // check for exact NB of alt
 				return alt;
 			else if(alt.getAltNb() < nb) // check for nearest nb of alt, but lower than the given number
 				ban = alt;
 		}
 		return ban;
+	}
+	
+	public static List<BanSanction> getSanctions() {
+		return SANCTIONS;
 	}
 	
 	public static String getProcessorId() {
@@ -146,6 +151,8 @@ public class BanManager {
 
 	public static void init() {
 		processors.clear();
+		ALT_BAN_ACCOUNTS.clear();
+		SANCTIONS.clear();
 		
 		Adapter adapter = Adapter.getAdapter();
 		
@@ -175,9 +182,12 @@ public class BanManager {
 		Configuration altConfig = banConfig.getSection("alt");
 		if(altConfig.getBoolean("active", false)) {
 			altConfig.getKeys().stream().filter(UniversalUtils::isInteger).forEach((key) -> {
-				altAccountBan.add(new AltAccountBan(Integer.parseInt(key), altConfig.getSection(key)));
+				ALT_BAN_ACCOUNTS.add(new AltAccountBan(Integer.parseInt(key), altConfig.getSection(key)));
 			});
 		}
+		
+		Configuration sanctionConfig = banConfig.getSection("sanctions");
+		sanctionConfig.getKeys().forEach((key) -> SANCTIONS.add(new BanSanction(key, sanctionConfig.getSection(key))));
 		
 		BansMigration.migrateBans(banDir, banLogsDir);
 	}

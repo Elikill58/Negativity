@@ -111,3 +111,10 @@ alt:
 
 
 sanctions:
+  cheat:
+    name: "&4Cheat"
+    material: RED_BANNER
+    slot: 1
+    message: "&6%name% &ahave been banned for %reason%"
+    command: "nban %player% 30d Cheat."
+    permission: "negativity.sanction.cheat"

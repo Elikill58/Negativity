@@ -100,8 +100,8 @@ public class SpongeBlock extends Block {
 
 	@Override
 	public boolean isLiquid() {
-		// TODO implement isLiquid
-		return false;
+		String name = getType().getId().toLowerCase();
+		return name.contains("water") || name.contains("lava");
 	}
 
 	@Override

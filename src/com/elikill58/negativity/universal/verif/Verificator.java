@@ -91,8 +91,8 @@ public class Verificator {
 					messages.add("&6" + c.getName() + "&8: &7" + name);
 					continue;
 				}
-			}
-			messageCheatNothing.add(c.getName());
+			} else if(c.hasVerif())
+				messageCheatNothing.add(c.getName());
 		}
 		if (messageCheatNothing.length() > 0)
 			messages.add("Nothing detected: " + messageCheatNothing);

@@ -20,7 +20,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class AutoSteal extends Cheat implements Listeners {
 
 	public AutoSteal() {
-		super(AUTO_STEAL, false, Materials.CHEST, CheatCategory.PLAYER, true, "steal");
+		super(AUTO_STEAL, CheatCategory.PLAYER, Materials.CHEST, false, false, "steal");
 	}
 
 	public static final int TIME_CLICK = 55;

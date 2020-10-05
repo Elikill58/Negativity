@@ -25,7 +25,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class NoSlowDown extends Cheat implements Listeners {
 
 	public NoSlowDown() {
-		super(NO_SLOW_DOWN, false, Materials.SOUL_SAND, CheatCategory.MOVEMENT, true, "slowdown");
+		super(NO_SLOW_DOWN, CheatCategory.MOVEMENT, Materials.SOUL_SAND, false, false, "slowdown");
 	}
 
 	@EventListener

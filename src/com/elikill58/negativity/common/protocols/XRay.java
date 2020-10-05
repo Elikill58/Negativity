@@ -32,7 +32,7 @@ public class XRay extends Cheat implements Listeners {
 	private static final long TIME_MINING = 10000;
 	
 	public XRay() {
-		super(XRAY, false, Materials.EMERALD_ORE, CheatCategory.WORLD, true);
+		super(XRAY, CheatCategory.WORLD, Materials.EMERALD_ORE, false, false);
 	}
 	
 	@EventListener

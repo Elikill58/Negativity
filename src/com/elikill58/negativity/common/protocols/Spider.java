@@ -21,7 +21,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Spider extends Cheat implements Listeners {
 
 	public Spider() {
-		super(SPIDER, false, Materials.SPIDER_EYE, CheatCategory.MOVEMENT, true, "wallhack",
+		super(SPIDER, CheatCategory.MOVEMENT, Materials.SPIDER_EYE, false, false, "wallhack",
 				"wall");
 	}
 

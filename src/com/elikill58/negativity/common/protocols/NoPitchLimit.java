@@ -22,7 +22,7 @@ public class NoPitchLimit extends Cheat implements Listeners {
 	public static final DataType<Float> PITCH = new DataType<Float>("pitch", "Pitch", () -> new FloatDataCounter());
 	
 	public NoPitchLimit() {
-		super(CheatKeys.NO_PITCH_LIMIT, false, Materials.SKELETON_SKULL, CheatCategory.PLAYER, true, "pitch");
+		super(CheatKeys.NO_PITCH_LIMIT, CheatCategory.PLAYER, Materials.SKELETON_SKULL, false, true, "pitch");
 	}
 	
 	@EventListener

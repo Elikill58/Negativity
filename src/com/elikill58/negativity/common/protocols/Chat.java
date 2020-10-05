@@ -19,7 +19,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Chat extends Cheat implements Listeners {
 
 	public Chat() {
-		super(CheatKeys.CHAT, false, Materials.BOOK_AND_QUILL, CheatCategory.PLAYER, true);
+		super(CheatKeys.CHAT, CheatCategory.PLAYER, Materials.BOOK_AND_QUILL, false, false);
 	}
 
 	@EventListener

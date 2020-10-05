@@ -28,7 +28,7 @@ public class AutoClick extends Cheat implements Listeners {
 	public static final DataType<Integer> CLICKS = new DataType<Integer>("clicks", "Clicks", () -> new IntegerDataCounter());
 	
 	public AutoClick() {
-		super(CheatKeys.AUTO_CLICK, true, Materials.FISHING_ROD, CheatCategory.COMBAT, true, "auto-click", "autoclic");
+		super(CheatKeys.AUTO_CLICK, CheatCategory.COMBAT, Materials.FISHING_ROD, true, true, "auto-click", "autoclic");
 		new java.util.Timer().scheduleAtFixedRate(new TimerTask() {
 			@Override
 			public void run() {

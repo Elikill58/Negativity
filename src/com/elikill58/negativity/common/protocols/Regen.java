@@ -23,7 +23,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Regen extends Cheat implements Listeners {
 	
 	public Regen() {
-		super(CheatKeys.REGEN, true, Materials.GOLDEN_APPLE, CheatCategory.PLAYER, true, "regen", "autoregen");
+		super(CheatKeys.REGEN, CheatCategory.PLAYER, Materials.GOLDEN_APPLE, true, true, "regen", "autoregen");
 	}
 
 	@EventListener

@@ -22,7 +22,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Timer extends Cheat implements Listeners {
 
 	public Timer() {
-		super(CheatKeys.TIMER, true, Materials.PACKED_ICE, CheatCategory.MOVEMENT, true);
+		super(CheatKeys.TIMER, CheatCategory.MOVEMENT, Materials.PACKED_ICE, true, false);
 	}
 	
 	@EventListener

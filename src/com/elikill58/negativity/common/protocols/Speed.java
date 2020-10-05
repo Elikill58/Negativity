@@ -35,7 +35,7 @@ public class Speed extends Cheat implements Listeners {
 	private NumberFormat numberFormat = NumberFormat.getInstance();
 	
 	public Speed() {
-		super(SPEED, false, Materials.BEACON, CheatCategory.MOVEMENT, true, "speed", "speedhack");
+		super(SPEED, CheatCategory.MOVEMENT, Materials.BEACON, true, false, "speed", "speedhack");
 		numberFormat.setMaximumFractionDigits(4);
 	}
 

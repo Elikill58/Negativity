@@ -26,7 +26,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class Jesus extends Cheat implements Listeners {
 
 	public Jesus() {
-		super(JESUS, false, Materials.WATER_BUCKET, CheatCategory.MOVEMENT, true, "waterwalk", "water",
+		super(JESUS, CheatCategory.MOVEMENT, Materials.WATER_BUCKET, false, false, "waterwalk", "water",
 				"water walk");
 	}
 

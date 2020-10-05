@@ -19,7 +19,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class FastLadder extends Cheat implements Listeners {
 
 	public FastLadder() {
-		super(CheatKeys.FAST_LADDER, false, Materials.LADDER, CheatCategory.MOVEMENT, true, "ladder", "ladders");
+		super(CheatKeys.FAST_LADDER, CheatCategory.MOVEMENT, Materials.LADDER, false, false, "ladder", "ladders");
 	}
 
 	@EventListener

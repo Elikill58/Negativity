@@ -24,7 +24,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Scaffold extends Cheat implements Listeners {
 
 	public Scaffold() {
-		super(CheatKeys.SCAFFOLD, false, Materials.GRASS, CheatCategory.WORLD, true);
+		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS, false, false);
 	}
 
 	@EventListener

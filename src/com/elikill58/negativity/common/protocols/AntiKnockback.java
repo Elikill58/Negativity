@@ -35,7 +35,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 			"Distance after Damage", () -> new DoubleDataCounter());
 
 	public AntiKnockback() {
-		super(CheatKeys.ANTI_KNOCKBACK, false, Materials.STICK, CheatCategory.COMBAT, true, "antikb", "anti-kb",
+		super(CheatKeys.ANTI_KNOCKBACK, CheatCategory.COMBAT, Materials.STICK, false, true, "antikb", "anti-kb",
 				"no-kb", "nokb");
 	}
 

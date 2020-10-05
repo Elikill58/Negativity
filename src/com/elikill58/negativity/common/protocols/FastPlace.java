@@ -24,7 +24,7 @@ public class FastPlace extends Cheat implements Listeners {
 	public static final DataType<Long> TIME_PLACE = new DataType<Long>("time_player", "Time between places", () -> new LongDataCounter());
 
 	public FastPlace() {
-		super(CheatKeys.FAST_PLACE, false, Materials.DIRT, CheatCategory.WORLD, true, "fp");
+		super(CheatKeys.FAST_PLACE, CheatCategory.WORLD, Materials.DIRT, false, true, "fp");
 	}
 
 	@EventListener

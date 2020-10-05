@@ -22,7 +22,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Blink extends Cheat implements Listeners {
 	
 	public Blink() {
-		super(CheatKeys.BLINK, true, Materials.COAL_BLOCK, CheatCategory.MOVEMENT, true);
+		super(CheatKeys.BLINK, CheatCategory.MOVEMENT, Materials.COAL_BLOCK, true, false);
 	}
 
 	@EventListener

@@ -20,7 +20,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Sneak extends Cheat implements Listeners {
 
 	public Sneak() {
-		super(SNEAK, true, Materials.BLAZE_POWDER, CheatCategory.MOVEMENT, true, "sneack", "sneac");
+		super(SNEAK, CheatCategory.MOVEMENT, Materials.BLAZE_POWDER, true, false, "sneack", "sneac");
 	}
 	
 	@EventListener

@@ -16,7 +16,7 @@ import com.elikill58.negativity.universal.Version;
 public class Critical extends Cheat implements Listeners {
 	
 	public Critical() {
-		super(CheatKeys.CRITICAL, false, Materials.FIREBALL, CheatCategory.COMBAT, true, "crit", "critic");
+		super(CheatKeys.CRITICAL, CheatCategory.COMBAT, Materials.FIREBALL, false, false, "crit", "critic");
 	}
 
 	@EventListener

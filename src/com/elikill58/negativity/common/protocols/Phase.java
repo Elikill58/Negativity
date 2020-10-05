@@ -18,7 +18,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Phase extends Cheat implements Listeners {
 
 	public Phase() {
-		super(CheatKeys.PHASE, false, Materials.WHITE_STAINED_GLASS, CheatCategory.MOVEMENT, true);
+		super(CheatKeys.PHASE, CheatCategory.MOVEMENT, Materials.WHITE_STAINED_GLASS, false, false);
 	}
 
 	@EventListener

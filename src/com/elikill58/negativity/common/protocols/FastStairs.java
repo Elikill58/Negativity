@@ -19,7 +19,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class FastStairs extends Cheat implements Listeners {
 
 	public FastStairs() {
-		super(FAST_STAIRS, false, Materials.BRICK_STAIRS, CheatCategory.MOVEMENT, true, "stairs");
+		super(FAST_STAIRS, CheatCategory.MOVEMENT, Materials.BRICK_STAIRS, false, false, "stairs");
 	}
 	
 	@EventListener

@@ -23,7 +23,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Nuker extends Cheat implements Listeners {
 
 	public Nuker() {
-		super(CheatKeys.NUKER, true, Materials.BEDROCK, CheatCategory.WORLD, true, "breaker", "bed breaker", "bedbreaker");
+		super(CheatKeys.NUKER, CheatCategory.WORLD, Materials.BEDROCK, true, false, "breaker", "bed breaker", "bedbreaker");
 	}
 	
 	@EventListener

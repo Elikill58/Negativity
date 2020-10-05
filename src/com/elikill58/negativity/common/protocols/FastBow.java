@@ -27,7 +27,7 @@ public class FastBow extends Cheat implements Listeners {
 	public static final DataType<Long> TIME_SHOT = new DataType<Long>("time_shot", "Time between shot", () -> new LongDataCounter());
 	
 	public FastBow() {
-		super(FAST_BOW, true, Materials.BOW, CheatCategory.COMBAT, true, "bow");
+		super(FAST_BOW, CheatCategory.COMBAT, Materials.BOW, true, true, "bow");
 	}
 	
 	@EventListener

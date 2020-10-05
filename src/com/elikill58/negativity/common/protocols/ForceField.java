@@ -42,7 +42,7 @@ public class ForceField extends Cheat implements Listeners {
 	private NumberFormat nf = NumberFormat.getInstance();
 	
 	public ForceField() {
-		super(CheatKeys.FORCEFIELD, true, Materials.DIAMOND_SWORD, CheatCategory.COMBAT, true, "ff", "killaura");
+		super(CheatKeys.FORCEFIELD, CheatCategory.COMBAT, Materials.DIAMOND_SWORD, true, true, "ff", "killaura");
 		nf.setMaximumIntegerDigits(2);
 	}
 	

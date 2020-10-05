@@ -22,7 +22,7 @@ public class NoWeb extends Cheat implements Listeners {
 	private static final double MAX = 0.7421028493192875;
 	
 	public NoWeb() {
-		super(CheatKeys.NO_WEB, false, WEB, CheatCategory.MOVEMENT, true, "no web");
+		super(CheatKeys.NO_WEB, CheatCategory.MOVEMENT, WEB, false, false, "no web");
 	}
 
 	@EventListener

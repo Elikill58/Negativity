@@ -20,7 +20,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class AirJump extends Cheat implements Listeners {
 
 	public AirJump() {
-		super(AIR_JUMP, false, Materials.FEATHER, CheatCategory.MOVEMENT, true, "airjump", "air", "jump");
+		super(AIR_JUMP, CheatCategory.MOVEMENT, Materials.FEATHER, false, false, "airjump", "air", "jump");
 	}
 
 	@EventListener

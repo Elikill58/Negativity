@@ -46,19 +46,19 @@ public abstract class Cheat {
 	public static final List<Cheat> CHEATS = new ArrayList<>();
 	private final String key;
 	private Configuration config;
-	private boolean needPacket, hasListener;
+	private boolean needPacket, hasVerif;
 	private CheatCategory cheatCategory;
 	private Material m;
 	private String[] aliases;
 	private final List<SetBackProcessor> setBackProcessor = new ArrayList<>();
 
-	public Cheat(String key, boolean needPacket, Material m, CheatCategory type, boolean hasListener, String... alias) {
+	public Cheat(String key, CheatCategory type, Material m, boolean needPacket, boolean hasVerif, String... alias) {
 		this.needPacket = needPacket;
 		this.m = m;
 		this.cheatCategory = type;
-		this.hasListener = hasListener;
 		this.key = key.toLowerCase();
 		this.aliases = alias;
+		this.hasVerif = hasVerif;
 		
 		try {
 			File moduleFile = new File(MODULE_FOLDER, this.key + ".yml");
@@ -151,10 +151,6 @@ public abstract class Cheat {
 	public Material getMaterial() {
 		return m;
 	}
-	
-	public boolean hasListener() {
-		return hasListener;
-	}
 
 	public int getReliabilityAlert() {
 		return config.getInt("reliability_alert", 60);
@@ -206,7 +202,7 @@ public abstract class Cheat {
 	}
 
 	public boolean hasVerif() {
-		return config.getBoolean("verif.check_in_verif", true);
+		return hasVerif && config.getBoolean("verif.check_in_verif", true);
 	}
 	
 	public void performSetBack(Player p) {
@@ -262,8 +258,9 @@ public abstract class Cheat {
 			for (Object classDir : UniversalUtils.getClasseNamesInPackage(dir, "com.elikill58.negativity.common.protocols")) {
 				try {
 					Cheat cheat = (Cheat) Class.forName(classDir.toString().replaceAll(".class", "")).newInstance();
-					if(cheat.hasListener())
+					try {
 						EventManager.registerEvent((Listeners) cheat);
+					} catch (Exception e) {}
 					CHEATS.add(cheat);
 				} catch (Exception temp) {
 					// on ignore

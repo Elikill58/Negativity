@@ -52,6 +52,10 @@ public class ConnectionManager implements Listeners {
 				case ALERT:
 					p.sendMessage(alt.getAlertMessage());
 					break;
+				case ALERT_MOD:
+					Adapter.getAdapter().getOnlinePlayers().stream().filter((mod) -> Perm.hasPerm(mod, Perm.SHOW_ALERT))
+							.forEach((mod) -> mod.sendMessage(alt.getAlertMessage().replaceAll("%name%", p.getName())));
+					break;
 				case BAN:
 					BanManager.executeBan(new Ban(p.getUniqueId(), reason, "Negativity", BanType.PLUGIN, alt.isBanDef() ? -1 : alt.getBanTime(), "Alt", ip, BanStatus.ACTIVE));
 					break;

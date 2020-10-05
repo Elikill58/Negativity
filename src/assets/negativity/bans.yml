@@ -82,6 +82,9 @@ alt:
     action: alert
     message: "&a[&2Negativity&a]&c &cWarn: you are already ban on another account."
   3:
+    action: alert_mod
+    message: "&a[&2Negativity&a]&c &cWarn: %name% just logged but he has already 2 banned account on same IP."
+  4:
     action: ban
     message: "Alt unauthorized"
     # the time of the ban in milliseconds.
@@ -94,14 +97,17 @@ alt:
       warning: 30
       # Need at least 10 violations
       violation: 10
-  4:
+  5:
     action: ban
     message: "Alt unauthorized"
     def: true
     condition:
       warning: 40
       violation: 20
-  5:
+  6:
     # the ban_all action ban definitively all account on the IP
     action: ban_all
   # Such as there is not any information for 6th, 7th ... account, we will take the last, so the 5th.
+
+
+sanctions:

@@ -93,7 +93,8 @@ public class AltAccountBan {
 	
 	public static enum BanAltAction {
 		
-		ALERT,
+		ALERT,		
+		ALERT_MOD,
 		BAN,
 		BAN_ALL;
 	

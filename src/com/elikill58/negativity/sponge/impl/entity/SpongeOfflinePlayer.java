@@ -2,86 +2,47 @@ package com.elikill58.negativity.sponge.impl.entity;
 
 import java.util.UUID;
 
-import com.elikill58.negativity.api.entity.EntityType;
+import org.spongepowered.api.entity.living.player.User;
+
 import com.elikill58.negativity.api.entity.OfflinePlayer;
-import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.Vector;
 
 public class SpongeOfflinePlayer extends OfflinePlayer {
 
-	private final org.bukkit.OfflinePlayer op;
+	private final User u;
 	
-	public SpongeOfflinePlayer(org.bukkit.OfflinePlayer op) {
-		this.op = op;
-	}
-	
-	@Override
-	public boolean isOnGround() {
-		return true;
-	}
-
-	@Override
-	public boolean isOp() {
-		return op.isOp();
-	}
-
-	@Override
-	public Location getLocation() {
-		return null;
-	}
-
-	@Override
-	public double getEyeHeight() {
-		return 0;
-	}
-
-	@Override
-	public EntityType getType() {
-		return EntityType.PLAYER;
-	}
-
-	@Override
-	public Object getDefault() {
-		return op;
-	}
-
-	@Override
-	public void sendMessage(String msg) {
-		
-	}
-
-	@Override
-	public String getName() {
-		return op.getName();
-	}
-
-	@Override
-	public boolean isOnline() {
-		return op.isOnline();
+	public SpongeOfflinePlayer(User u) {
+		this.u = u;
 	}
 
 	@Override
 	public UUID getUniqueId() {
-		return op.getUniqueId();
+		return u.getUniqueId();
+	}
+
+	@Override
+	public boolean isOnline() {
+		return u.isOnline();
 	}
 
 	@Override
 	public boolean hasPlayedBefore() {
-		return op.hasPlayedBefore();
+		return false;
+	}
+
+	@Override
+	public boolean isOp() {
+		return u.hasPermission("*");
+	}
+
+	@Override
+	public String getName() {
+		return u.getName();
+	}
+
+	@Override
+	public Object getDefault() {
+		return u;
 	}
 	
-	@Override
-	public Location getEyeLocation() {
-		return null;
-	}
 	
-	@Override
-	public Vector getRotation() {
-		return null;
-	}
-	
-	@Override
-	public int getEntityId() {
-		return 0;
-	}
 }

@@ -7,6 +7,7 @@ import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -14,7 +15,9 @@ import javax.annotation.Nullable;
 
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.asset.Asset;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
@@ -32,6 +35,7 @@ import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge.impl.entity.SpongeFakePlayer;
+import com.elikill58.negativity.sponge.impl.entity.SpongeOfflinePlayer;
 import com.elikill58.negativity.sponge.impl.inventory.SpongeInventory;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemBuilder;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemRegistrar;
@@ -225,14 +229,14 @@ public class SpongeAdapter extends Adapter {
 
 	@Override
 	public OfflinePlayer getOfflinePlayer(String name) {
-		// TODO Implement offline players for Sponge (with name)
-		return null;
+		Optional<User> optUser = Sponge.getServiceManager().provide(UserStorageService.class).get().get(name);
+	    return optUser.isPresent() ? new SpongeOfflinePlayer(optUser.get()) : null;
 	}
 	
 	@Override
 	public OfflinePlayer getOfflinePlayer(UUID uuid) {
-		// TODO Implement offline players for Sponge (with uuid)
-		return null;
+		Optional<User> optUser = Sponge.getServiceManager().provide(UserStorageService.class).get().get(uuid);
+	    return optUser.isPresent() ? new SpongeOfflinePlayer(optUser.get()) : null;
 	}
 	
 	@Override

@@ -2,10 +2,7 @@ package com.elikill58.negativity.spigot.impl.entity;
 
 import java.util.UUID;
 
-import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
-import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.Vector;
 
 public class SpigotOfflinePlayer extends OfflinePlayer {
 
@@ -14,11 +11,6 @@ public class SpigotOfflinePlayer extends OfflinePlayer {
 	public SpigotOfflinePlayer(org.bukkit.OfflinePlayer op) {
 		this.op = op;
 	}
-	
-	@Override
-	public boolean isOnGround() {
-		return true;
-	}
 
 	@Override
 	public boolean isOp() {
@@ -26,28 +18,8 @@ public class SpigotOfflinePlayer extends OfflinePlayer {
 	}
 
 	@Override
-	public Location getLocation() {
-		return null;
-	}
-
-	@Override
-	public double getEyeHeight() {
-		return 0;
-	}
-
-	@Override
-	public EntityType getType() {
-		return EntityType.PLAYER;
-	}
-
-	@Override
 	public Object getDefault() {
 		return op;
-	}
-
-	@Override
-	public void sendMessage(String msg) {
-		
 	}
 
 	@Override
@@ -68,20 +40,5 @@ public class SpigotOfflinePlayer extends OfflinePlayer {
 	@Override
 	public boolean hasPlayedBefore() {
 		return op.hasPlayedBefore();
-	}
-	
-	@Override
-	public Location getEyeLocation() {
-		return null;
-	}
-	
-	@Override
-	public Vector getRotation() {
-		return null;
-	}
-	
-	@Override
-	public int getEntityId() {
-		return 0;
 	}
 }

@@ -60,7 +60,9 @@ public class SpongeInventory extends Inventory {
 
 	@Override
 	public void remove(int slot) {
-		// TODO Auto-generated method stub
+		int y = (int) slot / 9;
+		int x = slot - (y * 9);
+		invGrid.set(x, y, null);
 	}
 
 	@Override

@@ -179,7 +179,7 @@ public class BlockIterator implements Iterator<Block> {
 	}
 
 	public BlockIterator(Location loc, double yOffset) {
-		this(loc.getWorld(), loc.toVector(), loc.getDirection(), yOffset, 0);
+		this(loc.getWorld(), loc.toVector(), loc.getDirection(), yOffset, 10);
 	}
 
 	public BlockIterator(Location loc) {

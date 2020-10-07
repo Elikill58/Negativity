@@ -3,6 +3,7 @@ package com.elikill58.negativity.api.block;
 import com.elikill58.negativity.api.NegativityObject;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.google.common.base.Preconditions;
 
 public abstract class Block extends NegativityObject {
 
@@ -19,6 +20,15 @@ public abstract class Block extends NegativityObject {
 	public abstract boolean isLiquid();
 
 	public abstract void setType(Material type);
+	
+	@Override
+	public boolean equals(Object obj) {
+		Preconditions.checkNotNull(obj);
+		if(!(obj instanceof Block))
+			return false;
+		Block b = (Block) obj;
+		return b.getLocation().equals(getLocation()) && getType().equals(b.getType());
+	}
 	
 	@Override
 	public String toString() {

@@ -3,6 +3,7 @@ package com.elikill58.negativity.api.location;
 import com.elikill58.negativity.api.NegativityObject;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.universal.utils.Maths;
+import com.google.common.base.Preconditions;
 
 public abstract class Location extends NegativityObject implements Cloneable {
 
@@ -168,6 +169,17 @@ public abstract class Location extends NegativityObject implements Cloneable {
 
 	public abstract Object getDefault();
 
+	@Override
+	public boolean equals(Object obj) {
+		Preconditions.checkNotNull(obj);
+		if(!(obj instanceof Location))
+			return false;
+		Location loc = (Location) obj;
+		if(!w.getName().equals(loc.getWorld().getName()))
+			return false;
+		return x == loc.x && y == loc.y && z == loc.z;
+	}
+	
 	@Override
 	public Location clone() {
 		try {

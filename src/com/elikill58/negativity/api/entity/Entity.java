@@ -1,15 +1,15 @@
 package com.elikill58.negativity.api.entity;
 
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
 import java.util.List;
 
 import com.elikill58.negativity.api.block.Block;
-import com.elikill58.negativity.api.block.BlockIterator;
 import com.elikill58.negativity.api.commands.CommandSender;
-import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.ray.BlockRay.BlockRayBuilder;
+import com.elikill58.negativity.api.ray.BlockRayResult;
 
 public abstract class Entity extends CommandSender {
 
@@ -17,20 +17,22 @@ public abstract class Entity extends CommandSender {
 	public abstract boolean isOp();
 
 	public List<Block> getTargetBlock(int maxDistance) {
-		if (maxDistance > 120) {
+		/*if (maxDistance > 120) {
 			maxDistance = 120;
 		}
 		ArrayList<Block> blocks = new ArrayList<>();
 		Iterator<Block> itr = new BlockIterator(this, maxDistance);
-		while (itr.hasNext()) {
+		while (itr.hasNext() && maxDistance > 0 && blocks.size() < 5) {
+			maxDistance--;
 			Block block = (Block) itr.next();
-			blocks.add(block);
 			Material material = block.getType();
-			if (material.isTransparent()) {
-				break;
+			if (!material.isTransparent()) {
+				blocks.add(block);
 			}
-		}
-		return blocks;
+		}*/
+		BlockRayResult result = new BlockRayBuilder(getLocation(), this).maxTest(maxDistance).ignoreAir(true).build().compile();
+		Block b = result.getBlock();
+		return b == null ? new ArrayList<>() : Arrays.asList(b);
 	}
 	
 	public abstract Location getLocation();

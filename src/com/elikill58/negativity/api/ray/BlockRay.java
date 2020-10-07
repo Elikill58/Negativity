@@ -107,20 +107,18 @@ public class BlockRay {
 			return RayResult.REACH_TOP;
 		if(position.getBlockY() < 0)
 			return RayResult.REACH_BOTTOM;
+		test--;
+		if(test == -1)
+			return neededType != null ? RayResult.NEEDED_NOT_FOUND : RayResult.END_TRY;
 		Block b = position.add(vector).getBlock();
 		Material type = b.getType();
-		test--;
 		if(neededType != null) {
-			if(test == 0)
-				return RayResult.NEEDED_NOT_FOUND;
 			if(neededType.contains(type))
 				return RayResult.NEEDED_FOUND;
 			else if(!hasOther && !type.equals(Materials.AIR))
 				hasOther = true;
 			return RayResult.CONTINUE;
 		} else {
-			if(test == 0)
-				return RayResult.END_TRY;
 			return getFilter().contains(type) ? RayResult.CONTINUE : RayResult.END_FIND;
 		}
 	}

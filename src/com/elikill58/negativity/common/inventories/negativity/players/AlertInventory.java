@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories;
+package com.elikill58.negativity.common.inventories.negativity.players;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +14,7 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.yaml.config.Configuration;
-import com.elikill58.negativity.common.inventories.holders.AlertHolder;
+import com.elikill58.negativity.common.inventories.holders.negativity.players.AlertHolder;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;

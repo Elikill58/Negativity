@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories;
+package com.elikill58.negativity.common.inventories.negativity.players;
 
 import java.util.Collections;
 
@@ -16,7 +16,7 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
-import com.elikill58.negativity.common.inventories.holders.CheckMenuHolder;
+import com.elikill58.negativity.common.inventories.holders.negativity.players.CheckMenuHolder;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Minerate;
@@ -148,7 +148,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		} else if(m.equals(Materials.GRASS)) {
 			InventoryManager.open(NegativityInventory.FORGE_MODS, p, cible);
 		} else if(m.equals(Materials.APPLE)) {
-			InventoryManager.open(NegativityInventory.REPORT, p, cible);
+			InventoryManager.open(NegativityInventory.SEE_REPORT, p, cible);
 		} else if(m.equals(Materials.DIAMOND_SHOVEL)) {
 			// TODO soon implement inv kick
 		} else if(m.equals(Materials.ANVIL)) {

@@ -1,18 +1,17 @@
-package com.elikill58.negativity.common.inventories.holders;
+package com.elikill58.negativity.common.inventories.holders.negativity.players;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 
-public class ActivedCheatHolder extends NegativityHolder {
-
+public class CheckMenuHolder extends NegativityHolder {
+	
 	private final Player cible;
 	
-	public ActivedCheatHolder(Player cible) {
+	public CheckMenuHolder(Player cible) {
 		this.cible = cible;
 	}
 
 	public Player getCible() {
 		return cible;
 	}
-	
 }

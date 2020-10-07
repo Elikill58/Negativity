@@ -85,6 +85,6 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 		ONE_CHEAT,
 		FORGE_MODS,
 		LANG,
-		REPORT;
+		SEE_REPORT;
 	}
 }

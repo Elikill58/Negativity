@@ -9,18 +9,18 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.common.inventories.ActivedCheatInventory;
-import com.elikill58.negativity.common.inventories.AlertInventory;
-import com.elikill58.negativity.common.inventories.BanInventory;
-import com.elikill58.negativity.common.inventories.CheckMenuInventory;
-import com.elikill58.negativity.common.inventories.ForgeModsInventory;
 import com.elikill58.negativity.common.inventories.FreezeInventory;
 import com.elikill58.negativity.common.inventories.ModInventory;
-import com.elikill58.negativity.common.inventories.ReportInventory;
 import com.elikill58.negativity.common.inventories.admin.AdminInventory;
 import com.elikill58.negativity.common.inventories.admin.CheatManagerInventory;
 import com.elikill58.negativity.common.inventories.admin.LangInventory;
 import com.elikill58.negativity.common.inventories.admin.OneCheatInventory;
+import com.elikill58.negativity.common.inventories.negativity.players.ActivedCheatInventory;
+import com.elikill58.negativity.common.inventories.negativity.players.AlertInventory;
+import com.elikill58.negativity.common.inventories.negativity.players.BanInventory;
+import com.elikill58.negativity.common.inventories.negativity.players.CheckMenuInventory;
+import com.elikill58.negativity.common.inventories.negativity.players.ForgeModsInventory;
+import com.elikill58.negativity.common.inventories.negativity.players.SeeReportInventory;
 
 public class InventoryManager implements Listeners {
 	
@@ -36,7 +36,7 @@ public class InventoryManager implements Listeners {
 		new LangInventory();
 		new ModInventory();
 		new OneCheatInventory();
-		new ReportInventory();
+		new SeeReportInventory();
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

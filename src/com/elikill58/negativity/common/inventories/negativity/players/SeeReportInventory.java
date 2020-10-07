@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories;
+package com.elikill58.negativity.common.inventories.negativity.players;
 
 import java.util.List;
 
@@ -11,17 +11,17 @@ import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.common.inventories.holders.ReportHolder;
+import com.elikill58.negativity.common.inventories.holders.negativity.players.SeeReportHolder;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Report;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class ReportInventory extends AbstractInventory<ReportHolder> {
+public class SeeReportInventory extends AbstractInventory<SeeReportHolder> {
 	
-	public ReportInventory() {
-		super(NegativityInventory.REPORT, ReportHolder.class);
+	public SeeReportInventory() {
+		super(NegativityInventory.SEE_REPORT, SeeReportHolder.class);
 	}
 	
 	@Override
@@ -32,7 +32,7 @@ public class ReportInventory extends AbstractInventory<ReportHolder> {
 		int page = (args.length == 1 ? 0 : (int) args[1]);
 		if(page < 0)
 			page = 0;
-		Inventory inv = Inventory.createInventory("Reports", UniversalUtils.getMultipleOf(reports.size() + 9, 9, 1, 54), new ReportHolder(cible, page));
+		Inventory inv = Inventory.createInventory("Reports", UniversalUtils.getMultipleOf(reports.size() + 9, 9, 1, 54), new SeeReportHolder(cible, page));
 		for(int i = 0; i < 9; i++) inv.set(i, ItemBuilder.Builder(Materials.GRAY_STAINED_GLASS_PANE).build());
 		inv.set(0, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
 		inv.set(4, ItemBuilder.getSkullItem(cible));
@@ -57,8 +57,8 @@ public class ReportInventory extends AbstractInventory<ReportHolder> {
 	}
 
 	@Override
-	public void manageInventory(InventoryClickEvent e, Material m, Player p, ReportHolder nh) {
-		ReportHolder rh = (ReportHolder) nh;
+	public void manageInventory(InventoryClickEvent e, Material m, Player p, SeeReportHolder nh) {
+		SeeReportHolder rh = (SeeReportHolder) nh;
 		if(m.equals(Materials.ARROW)) {
 			int slot = e.getSlot();
 			if(slot == 0)

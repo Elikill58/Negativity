@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories;
+package com.elikill58.negativity.common.inventories.negativity.players;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
@@ -11,7 +11,7 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
-import com.elikill58.negativity.common.inventories.holders.ForgeModsHolder;
+import com.elikill58.negativity.common.inventories.holders.negativity.players.ForgeModsHolder;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 

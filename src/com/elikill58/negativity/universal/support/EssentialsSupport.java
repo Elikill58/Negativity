@@ -7,10 +7,9 @@ import com.elikill58.negativity.universal.Adapter;
 public class EssentialsSupport {
 
 	private static Essentials essentials = (Essentials) Adapter.getAdapter().getPlugin("Essentials").getDefault();
-
-	@SuppressWarnings("deprecation")
+	
 	public static boolean checkEssentialsPrecondition(Player p) {
-		return essentials.getUser(p).isGodModeEnabled();
+		return essentials.getUser(p.getUniqueId()).isGodModeEnabled();
 	}
 	
 	public static boolean checkEssentialsSpeedPrecondition(Player p) {

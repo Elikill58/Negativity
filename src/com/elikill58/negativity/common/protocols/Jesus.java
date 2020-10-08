@@ -21,7 +21,7 @@ import static com.elikill58.negativity.universal.CheatKeys.JESUS;
 
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.report.ReportType;
 
 public class Jesus extends Cheat implements Listeners {
 

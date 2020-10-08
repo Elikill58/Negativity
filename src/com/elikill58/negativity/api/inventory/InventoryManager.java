@@ -9,12 +9,13 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.common.inventories.FreezeInventory;
-import com.elikill58.negativity.common.inventories.ModInventory;
+import com.elikill58.negativity.common.inventories.ReportInventory;
 import com.elikill58.negativity.common.inventories.admin.AdminInventory;
 import com.elikill58.negativity.common.inventories.admin.CheatManagerInventory;
 import com.elikill58.negativity.common.inventories.admin.LangInventory;
 import com.elikill58.negativity.common.inventories.admin.OneCheatInventory;
+import com.elikill58.negativity.common.inventories.mod.FreezeInventory;
+import com.elikill58.negativity.common.inventories.mod.ModInventory;
 import com.elikill58.negativity.common.inventories.negativity.players.ActivedCheatInventory;
 import com.elikill58.negativity.common.inventories.negativity.players.AlertInventory;
 import com.elikill58.negativity.common.inventories.negativity.players.BanInventory;
@@ -37,6 +38,8 @@ public class InventoryManager implements Listeners {
 		new ModInventory();
 		new OneCheatInventory();
 		new SeeReportInventory();
+		new ReportInventory();
+		AbstractInventory.INVENTORIES.forEach(AbstractInventory::load);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })

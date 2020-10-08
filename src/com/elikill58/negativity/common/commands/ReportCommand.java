@@ -10,14 +10,16 @@ import com.elikill58.negativity.api.commands.CommandListeners;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.commands.TabListeners;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.inventory.InventoryManager;
+import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
-import com.elikill58.negativity.universal.Report;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.report.Report;
 
 public class ReportCommand implements CommandListeners, TabListeners {
 
@@ -41,14 +43,14 @@ public class ReportCommand implements CommandListeners, TabListeners {
 			return false;
 		}
 
-		if (arg.length < 2) {
-			Messages.sendMessage(p, "report.report_usage");
-			return false;
-		}
-
 		Player target = Adapter.getAdapter().getPlayer(arg[0]);
 		if (target == null) {
 			Messages.sendMessage(p, "invalid_player", "%arg%", arg[0]);
+			return false;
+		}
+
+		if (arg.length == 1) {
+			InventoryManager.open(NegativityInventory.REPORT, p, target);
 			return false;
 		}
 

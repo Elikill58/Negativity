@@ -16,9 +16,9 @@ import java.util.concurrent.CompletableFuture;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Minerate;
-import com.elikill58.negativity.universal.Report;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
+import com.elikill58.negativity.universal.report.Report;
 
 public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 

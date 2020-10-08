@@ -191,6 +191,15 @@ Translation:
   # The only one available out-of-the-box is "platform".
   provider: platform
 
+report:
+  cheat:
+    name: "&4Cheat"
+    material: RED_BANNER
+    slot: 1
+    message: "&6%name% &ahave been reported for %reason%"
+    command: "nreport %name% Cheat."
+    permission: "negativity.report.cheat"
+
 alert:
   # To run command when someone get alert
   command:

@@ -4,7 +4,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Event;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
-import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.report.ReportType;
 
 public class PlayerCheatAlertEvent implements Event {
 

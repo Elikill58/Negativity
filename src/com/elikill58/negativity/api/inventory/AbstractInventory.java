@@ -40,6 +40,12 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 	}
 	
 	/**
+	 * Load inventory informations
+	 * To allow reload
+	 */
+	public void load() {}
+	
+	/**
 	 * Open the inventory to the specified player.
 	 * Some arguments can be required for some inventory.
 	 * 
@@ -85,6 +91,7 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 		ONE_CHEAT,
 		FORGE_MODS,
 		LANG,
+		REPORT,
 		SEE_REPORT;
 	}
 }

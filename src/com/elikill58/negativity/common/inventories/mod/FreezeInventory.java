@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories;
+package com.elikill58.negativity.common.inventories.mod;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -10,7 +10,7 @@ import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.common.inventories.holders.FreezeHolder;
+import com.elikill58.negativity.common.inventories.holders.mod.FreezeHolder;
 import com.elikill58.negativity.universal.Messages;
 
 public class FreezeInventory extends AbstractInventory<FreezeHolder> {

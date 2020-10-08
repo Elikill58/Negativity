@@ -14,7 +14,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.report.ReportType;
 
 public class InventoryMove extends Cheat implements Listeners {
 

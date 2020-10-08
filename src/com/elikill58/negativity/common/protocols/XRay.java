@@ -19,8 +19,8 @@ import com.elikill58.negativity.api.ray.BlockRay.RayResult;
 import com.elikill58.negativity.api.ray.BlockRayResult;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
+import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.ReportType;
 
 public class XRay extends Cheat implements Listeners {
 

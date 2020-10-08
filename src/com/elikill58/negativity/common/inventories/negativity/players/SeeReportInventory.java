@@ -14,8 +14,8 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.common.inventories.holders.negativity.players.SeeReportHolder;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.Report;
 import com.elikill58.negativity.universal.account.NegativityAccount;
+import com.elikill58.negativity.universal.report.Report;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class SeeReportInventory extends AbstractInventory<SeeReportHolder> {

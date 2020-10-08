@@ -27,7 +27,7 @@ public class BanInventory extends AbstractInventory<BanHolder> {
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
 		List<Sanction> sanctions = BanManager.getSanctions();
-		Inventory inv = Inventory.createInventory("Ban", UniversalUtils.getMultipleOf(sanctions.size() + 2, 9, 1, 54), new BanHolder(cible));
+		Inventory inv = Inventory.createInventory("Ban", UniversalUtils.getMultipleOf(Sanction.getMaxSlot(sanctions) + 2, 9, 1, 54), new BanHolder(cible));
 		sanctions.stream().filter((b) -> b.hasPermission(p)).forEach((ban) -> {
 			inv.set(ban.getSlot(), ItemBuilder.Builder(ban.getType()).displayName(ban.getName()).build());
 		});

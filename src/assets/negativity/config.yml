@@ -192,12 +192,23 @@ Translation:
   provider: platform
 
 report:
-  cheat:
-    name: "&4Cheat"
+  spam:
+    name: "&cSpam"
+    material: RED_BANNER
+    slot: 0
+    message: "&6%name% &ahave been reported for %reason%"
+    permission: "negativity.report.spam"
+  insult:
+    name: "&4Insult"
     material: RED_BANNER
     slot: 1
     message: "&6%name% &ahave been reported for %reason%"
-    command: "nreport %name% Cheat."
+    permission: "negativity.report.insult"
+  cheat:
+    name: "&4Cheat"
+    material: RED_BANNER
+    slot: 3
+    message: "&6%name% &ahave been reported for %reason%"
     permission: "negativity.report.cheat"
 
 alert:

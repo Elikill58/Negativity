@@ -1,5 +1,7 @@
 package com.elikill58.negativity.universal;
 
+import java.util.List;
+
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
@@ -19,7 +21,7 @@ public class Sanction {
 		this.type = ItemRegistrar.getInstance().get(config.getString("material"));
 		this.slot = config.getInt("slot", 0);
 		this.permission = config.getString("permission");
-		this.command = config.getString("command");
+		this.command = config.getString("command", "");
 		this.message = config.getString("message", name);
 	}
 	
@@ -53,5 +55,9 @@ public class Sanction {
 	
 	public String getCommand() {
 		return command;
+	}
+	
+	public static int getMaxSlot(List<Sanction> list) {
+		return list.stream().sorted((s1, s2) -> s1.getSlot() - s2.getSlot()).findFirst().get().getSlot();
 	}
 }

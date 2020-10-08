@@ -60,17 +60,22 @@ public class ReportCommand implements CommandListeners, TabListeners {
 		}
 
 		String reason = reasonJoiner.toString();
+		report(p, target, reason);
+		return false;
+	}
+	
+	public static void report(Player reporter, Player target, String reason) {
 		String msg = Messages.getMessage("report.report_message", "%name%", target.getName(),
-				"%report%", p.getName(), "%reason%", reason);
+				"%report%", reporter.getName(), "%reason%", reason);
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			Negativity.sendReportMessage(p, reason, target.getName());
+			Negativity.sendReportMessage(reporter, reason, target.getName());
 		} else {
 			boolean alertSent = false;
 			for (Player pl : Adapter.getAdapter().getOnlinePlayers())
 				if (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(pl), Perm.SHOW_REPORT)) {
 					alertSent = true;
 					Adapter.getAdapter().sendMessageRunnableHover(pl, Messages.getMessage(pl, "report.report_message",
-									"%name%", target.getName(), "%report%", p.getName(), "%reason%", reason),
+									"%name%", target.getName(), "%report%", reporter.getName(), "%reason%", reason),
 							Messages.getMessage(pl, "report.report_message_hover",
 									"%name%", target.getName()),
 							"/negativity " + target.getName());
@@ -79,13 +84,12 @@ public class ReportCommand implements CommandListeners, TabListeners {
 				REPORT_LAST.add(msg);
 			}
 		}
-		NegativityAccount.get(target.getUniqueId()).getReports().add(new Report(reason, p.getUniqueId()));
+		NegativityAccount.get(target.getUniqueId()).getReports().add(new Report(reason, reporter.getUniqueId()));
 		NegativityPlayer.getNegativityPlayer(target).mustToBeSaved = true;
 
-		Messages.sendMessage(p, "report.well_report", "%name%", target.getName());
-		np.TIME_REPORT = System.currentTimeMillis()
+		Messages.sendMessage(reporter, "report.well_report", "%name%", target.getName());
+		NegativityPlayer.getNegativityPlayer(reporter).TIME_REPORT = System.currentTimeMillis()
 				+ Adapter.getAdapter().getConfig().getInt("time_between_report");
-		return false;
 	}
 
 	@Override

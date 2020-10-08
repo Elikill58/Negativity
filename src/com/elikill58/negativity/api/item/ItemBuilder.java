@@ -97,7 +97,25 @@ public abstract class ItemBuilder {
      */
     public abstract ItemStack build();
 	
+    /**
+     * Create an ItemBuilder with a material.
+     * NOT compatible with "material:byte" from 1.12
+     * 
+     * @param type the material of the item
+     * @return the item builder
+     */
 	public static ItemBuilder Builder(Material type) {
+		return Adapter.getAdapter().createItemBuilder(type);
+	}
+	
+	/**
+	 * Create an ItemBuilder with a material's name.
+	 * Compatible with "type:byte" for 1.12 and less items
+	 * 
+	 * @param type
+	 * @return the item builder
+	 */
+	public static ItemBuilder Builder(String type) {
 		return Adapter.getAdapter().createItemBuilder(type);
 	}
 	

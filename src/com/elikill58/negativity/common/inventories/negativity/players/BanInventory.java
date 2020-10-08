@@ -29,7 +29,7 @@ public class BanInventory extends AbstractInventory<BanHolder> {
 		List<Sanction> sanctions = BanManager.getSanctions();
 		Inventory inv = Inventory.createInventory("Ban", UniversalUtils.getMultipleOf(Sanction.getMaxSlot(sanctions) + 2, 9, 1, 54), new BanHolder(cible));
 		sanctions.stream().filter((b) -> b.hasPermission(p)).forEach((ban) -> {
-			inv.set(ban.getSlot(), ItemBuilder.Builder(ban.getType()).displayName(ban.getName()).lore(ban.getLore()).build());
+			inv.set(ban.getSlot(), ban.getItem());
 		});
 		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage("inventory.close")).build());
 		p.openInventory(inv);

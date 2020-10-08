@@ -166,6 +166,11 @@ public class VelocityAdapter extends Adapter {
 	public ItemRegistrar getItemRegistrar() {
 		return null;
 	}
+	
+	@Override
+	public ItemBuilder createItemBuilder(String type) {
+		return null;
+	}
 
 	@Override
 	public Location createLocation(World w, double x, double y, double z) {

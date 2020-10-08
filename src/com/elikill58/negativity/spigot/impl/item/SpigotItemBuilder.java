@@ -31,6 +31,11 @@ public class SpigotItemBuilder extends ItemBuilder {
     	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
     }
 
+    public SpigotItemBuilder(String material) {
+    	this.itemStack = com.elikill58.negativity.spigot.utils.Utils.getItemFromString(material);
+    	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
+    }
+
     @SuppressWarnings("deprecation")
 	public SpigotItemBuilder(Player owner) {
     	this.itemStack = new ItemStack((org.bukkit.Material) Materials.PLAYER_HEAD.getDefault(), 1, (byte) 3);

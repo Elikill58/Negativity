@@ -208,6 +208,11 @@ public class SpongeAdapter extends Adapter {
 	}
 	
 	@Override
+	public ItemBuilder createItemBuilder(String type) {
+		return new SpongeItemBuilder(itemRegistrar.get(type.split(":")[0]));
+	}
+	
+	@Override
 	public ItemBuilder createSkullItemBuilder(Player owner) {
 		return new SpongeItemBuilder(owner);
 	}

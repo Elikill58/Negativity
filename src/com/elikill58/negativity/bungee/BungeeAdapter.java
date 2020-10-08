@@ -169,6 +169,11 @@ public class BungeeAdapter extends Adapter {
 	}
 
 	@Override
+	public ItemBuilder createItemBuilder(String type) {
+		return null;
+	}
+	
+	@Override
 	public ItemRegistrar getItemRegistrar() {
 		return null;
 	}

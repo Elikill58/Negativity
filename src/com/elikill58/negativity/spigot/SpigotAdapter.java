@@ -220,6 +220,11 @@ public class SpigotAdapter extends Adapter {
 	}
 	
 	@Override
+	public ItemBuilder createItemBuilder(String type) {
+		return null;
+	}
+	
+	@Override
 	public ItemBuilder createSkullItemBuilder(Player owner) {
 		return new SpigotItemBuilder(owner);
 	}

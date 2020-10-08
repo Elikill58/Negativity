@@ -10,9 +10,13 @@ import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.google.common.base.Preconditions;
 import com.google.common.collect.Sets;
 
 @SuppressWarnings("deprecation")
@@ -78,6 +82,34 @@ public class Utils {
 			}
 		} catch (Exception exc) {
 			exc.printStackTrace();
+		}
+		return null;
+	}
+
+	
+	public static ItemStack getItemFromString(String s) {
+		Preconditions.checkNotNull(s, "Error while creating item. The material is null.");
+		try {
+			String[] splitted = s.toUpperCase().split(":");
+			String key = splitted[0];
+			Material temp = null;
+			try {
+				temp = Material.valueOf(key);
+			} catch (IllegalArgumentException e) {}
+			if(temp == null && UniversalUtils.isInteger(key)) {
+				try {
+					temp = (Material) Material.class.getDeclaredMethod("getMaterial", int.class).invoke(null, Integer.parseInt(key));
+				} catch (Exception e) {
+					// method not found because of too recent version
+				}
+			}
+			if(temp == null) {
+				SpigotNegativity.getInstance().getLogger().warning("Error while creating item. Cannot find item for " + s + ".");
+				return null;
+			}
+			return splitted.length > 1 ? new ItemStack(temp, 1, Byte.parseByte(s.split(":")[1])) : new ItemStack(temp);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		return null;
 	}

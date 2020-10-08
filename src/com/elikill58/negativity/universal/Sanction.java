@@ -3,15 +3,14 @@ package com.elikill58.negativity.universal;
 import java.util.List;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.item.ItemRegistrar;
-import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.item.ItemBuilder;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.permissions.Perm;
 
 public class Sanction {
 
-	private final String key, name;
-	private final Material type;
+	private final String key, name, type;
 	private final int slot;
 	private final String permission, command, message;
 	private final List<String> lore;
@@ -19,7 +18,7 @@ public class Sanction {
 	public Sanction(String key, Configuration config) {
 		this.key = key;
 		this.name = config.getString("name", key);
-		this.type = ItemRegistrar.getInstance().get(config.getString("material"));
+		this.type = config.getString("material");
 		this.slot = config.getInt("slot", 0);
 		this.permission = config.getString("permission");
 		this.command = config.getString("command", "");
@@ -37,10 +36,6 @@ public class Sanction {
 	
 	public String getMessage() {
 		return message;
-	}
-	
-	public Material getType() {
-		return type;
 	}
 	
 	public List<String> getLore() {
@@ -61,6 +56,10 @@ public class Sanction {
 	
 	public String getCommand() {
 		return command;
+	}
+	
+	public ItemStack getItem() {
+		return ItemBuilder.Builder(type).displayName(name).lore(lore).build();
 	}
 	
 	public static int getMaxSlot(List<Sanction> list) {

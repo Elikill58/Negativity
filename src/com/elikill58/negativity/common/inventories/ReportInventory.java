@@ -38,7 +38,7 @@ public class ReportInventory extends AbstractInventory<ReportHolder> {
 		Player cible = (Player) args[0];
 		Inventory inv = Inventory.createInventory("Report " + cible.getName(), UniversalUtils.getMultipleOf(Sanction.getMaxSlot(sanctions), 9, 1, 54), new ReportHolder(cible));
 		sanctions.stream().filter((b) -> b.hasPermission(p)).forEach((r) -> {
-			inv.set(r.getSlot(), ItemBuilder.Builder(r.getType()).displayName(r.getName()).lore(r.getLore()).build());
+			inv.set(r.getSlot(), r.getItem());
 		});
 		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage("inventory.close")).build());
 		p.openInventory(inv);

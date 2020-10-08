@@ -14,6 +14,7 @@ public class Sanction {
 	private final Material type;
 	private final int slot;
 	private final String permission, command, message;
+	private final List<String> lore;
 	
 	public Sanction(String key, Configuration config) {
 		this.key = key;
@@ -23,6 +24,7 @@ public class Sanction {
 		this.permission = config.getString("permission");
 		this.command = config.getString("command", "");
 		this.message = config.getString("message", name);
+		this.lore = config.getStringList("lore");
 	}
 	
 	public String getKey() {
@@ -39,6 +41,10 @@ public class Sanction {
 	
 	public Material getType() {
 		return type;
+	}
+	
+	public List<String> getLore() {
+		return lore;
 	}
 	
 	public int getSlot() {

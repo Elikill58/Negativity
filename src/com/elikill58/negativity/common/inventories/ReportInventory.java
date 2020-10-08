@@ -15,12 +15,12 @@ import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.common.inventories.holders.ReportHolder;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.report.ReportSanction;
+import com.elikill58.negativity.universal.Sanction;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ReportInventory extends AbstractInventory<ReportHolder> {
 	
-	private final List<ReportSanction> sanctions = new ArrayList<>();
+	private final List<Sanction> sanctions = new ArrayList<>();
 	
 	public ReportInventory() {
 		super(NegativityInventory.REPORT, ReportHolder.class);
@@ -29,7 +29,7 @@ public class ReportInventory extends AbstractInventory<ReportHolder> {
 	@Override
 	public void load() {
 		Configuration sanctionConfig = Adapter.getAdapter().getConfig().getSection("report");
-		sanctionConfig.getKeys().forEach((key) -> sanctions.add(new ReportSanction(key, sanctionConfig.getSection(key))));
+		sanctionConfig.getKeys().forEach((key) -> sanctions.add(new Sanction(key, sanctionConfig.getSection(key))));
 	}
 
 	@Override

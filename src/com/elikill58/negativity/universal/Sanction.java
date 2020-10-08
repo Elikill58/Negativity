@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.ban;
+package com.elikill58.negativity.universal;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.item.ItemRegistrar;
@@ -6,14 +6,14 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.permissions.Perm;
 
-public class BanSanction {
-	
+public class Sanction {
+
 	private final String key, name;
 	private final Material type;
 	private final int slot;
 	private final String permission, command, message;
 	
-	public BanSanction(String key, Configuration config) {
+	public Sanction(String key, Configuration config) {
 		this.key = key;
 		this.name = config.getString("name", key);
 		this.type = ItemRegistrar.getInstance().get(config.getString("material"));

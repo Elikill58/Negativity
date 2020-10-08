@@ -13,8 +13,8 @@ import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.common.inventories.holders.negativity.players.BanHolder;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.Sanction;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.ban.BanSanction;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class BanInventory extends AbstractInventory<BanHolder> {
@@ -26,7 +26,7 @@ public class BanInventory extends AbstractInventory<BanHolder> {
 	@Override
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
-		List<BanSanction> sanctions = BanManager.getSanctions();
+		List<Sanction> sanctions = BanManager.getSanctions();
 		Inventory inv = Inventory.createInventory("Ban", UniversalUtils.getMultipleOf(sanctions.size() + 2, 9, 1, 54), new BanHolder(cible));
 		sanctions.stream().filter((b) -> b.hasPermission(p)).forEach((ban) -> {
 			inv.set(ban.getSlot(), ItemBuilder.Builder(ban.getType()).displayName(ban.getName()).build());

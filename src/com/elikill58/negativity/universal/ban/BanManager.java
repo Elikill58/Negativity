@@ -14,6 +14,7 @@ import javax.annotation.Nullable;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
+import com.elikill58.negativity.universal.Sanction;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.CommandBanProcessor;
@@ -32,7 +33,7 @@ public class BanManager {
 	private static String processorId;
 	private static final Map<String, BanProcessor> processors = new HashMap<>();
 	private static final List<AltAccountBan> ALT_BAN_ACCOUNTS = new ArrayList<>();
-	private static final List<BanSanction> SANCTIONS = new ArrayList<>();
+	private static final List<Sanction> SANCTIONS = new ArrayList<>();
 
 	public static List<Ban> getLoggedBans(UUID playerId) {
 		BanProcessor processor = getProcessor();
@@ -129,7 +130,7 @@ public class BanManager {
 		return ban;
 	}
 	
-	public static List<BanSanction> getSanctions() {
+	public static List<Sanction> getSanctions() {
 		return SANCTIONS;
 	}
 	
@@ -187,7 +188,7 @@ public class BanManager {
 		}
 		
 		Configuration sanctionConfig = banConfig.getSection("sanctions");
-		sanctionConfig.getKeys().forEach((key) -> SANCTIONS.add(new BanSanction(key, sanctionConfig.getSection(key))));
+		sanctionConfig.getKeys().forEach((key) -> SANCTIONS.add(new Sanction(key, sanctionConfig.getSection(key))));
 		
 		BansMigration.migrateBans(banDir, banLogsDir);
 	}

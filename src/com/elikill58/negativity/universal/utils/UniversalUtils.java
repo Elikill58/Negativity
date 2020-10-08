@@ -323,6 +323,7 @@ public class UniversalUtils {
 	
 	public static Configuration loadConfig(File configFile, String configName) {
 		if(!configFile.exists()) {
+			configFile.mkdirs();
 			try {
 				URI migrationsDirUri = UniversalUtils.class.getResource("/assets/negativity").toURI();
 				if (migrationsDirUri.getScheme().equals("jar")) {

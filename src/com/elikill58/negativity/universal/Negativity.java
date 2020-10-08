@@ -202,7 +202,7 @@ public class Negativity {
 	public static void loadNegativity() {
 		Adapter ada = Adapter.getAdapter();
 		ada.getLogger().info("Thanks for buying Negativity <3");
-		
+
 		DefaultConfigValue.init();
 		Special.loadSpecial();
 		Database.init();

@@ -207,23 +207,18 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public List<PotionEffect> getActivePotionEffect() {
-		List<PotionEffect> list = new ArrayList<PotionEffect>();
+		List<PotionEffect> list = new ArrayList<>();
 		p.getActivePotionEffects()
-				.forEach((pe) -> list.add(new PotionEffect(PotionEffectType.fromName(pe.getType().getName()))));
+				.forEach((pe) -> list.add(new PotionEffect(PotionEffectType.fromName(pe.getType().getName()), pe.getDuration(), pe.getAmplifier())));
 		return list;
 	}
 	
 	@Override
 	public Optional<PotionEffect> getPotionEffect(PotionEffectType type) {
-		if(Version.getVersion().isNewerOrEquals(Version.V1_11)) {
-			org.bukkit.potion.PotionEffect pe = p.getPotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()));
-			return pe == null ? Optional.empty() : Optional.of(new PotionEffect(type, pe.getDuration(), pe.getAmplifier()));
-		} else {
-			for(PotionEffect pe : getActivePotionEffect())
-				if(pe.getType().equals(type))
-					return Optional.of(pe);
-			return Optional.empty();
-		}
+		for(PotionEffect pe : getActivePotionEffect())
+			if(pe.getType().equals(type))
+				return Optional.of(pe);
+		return Optional.empty();
 	}
 
 	@Override

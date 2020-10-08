@@ -56,7 +56,7 @@ public class Sanction {
 	}
 	
 	public boolean hasPermission(Player p) {
-		return permission != null && Perm.hasPerm(p, permission);
+		return permission == null || Perm.hasPerm(p, permission);
 	}
 	
 	public String getCommand() {

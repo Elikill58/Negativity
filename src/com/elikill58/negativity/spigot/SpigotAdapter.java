@@ -221,7 +221,7 @@ public class SpigotAdapter extends Adapter {
 	
 	@Override
 	public ItemBuilder createItemBuilder(String type) {
-		return null;
+		return new SpigotItemBuilder(type);
 	}
 	
 	@Override

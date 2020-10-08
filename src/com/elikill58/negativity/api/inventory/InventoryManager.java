@@ -21,6 +21,7 @@ import com.elikill58.negativity.common.inventories.negativity.players.AlertInven
 import com.elikill58.negativity.common.inventories.negativity.players.BanInventory;
 import com.elikill58.negativity.common.inventories.negativity.players.CheckMenuInventory;
 import com.elikill58.negativity.common.inventories.negativity.players.ForgeModsInventory;
+import com.elikill58.negativity.common.inventories.negativity.players.KickInventory;
 import com.elikill58.negativity.common.inventories.negativity.players.SeeReportInventory;
 
 public class InventoryManager implements Listeners {
@@ -39,6 +40,7 @@ public class InventoryManager implements Listeners {
 		new OneCheatInventory();
 		new SeeReportInventory();
 		new ReportInventory();
+		new KickInventory();
 		AbstractInventory.INVENTORIES.forEach(AbstractInventory::load);
 	}
 	

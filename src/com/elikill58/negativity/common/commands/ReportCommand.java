@@ -61,6 +61,7 @@ public class ReportCommand implements CommandListeners, TabListeners {
 
 		String reason = reasonJoiner.toString();
 		report(p, target, reason);
+		Messages.sendMessage(p, "report.well_report", "%name%", target.getName());
 		return false;
 	}
 	
@@ -87,7 +88,6 @@ public class ReportCommand implements CommandListeners, TabListeners {
 		NegativityAccount.get(target.getUniqueId()).getReports().add(new Report(reason, reporter.getUniqueId()));
 		NegativityPlayer.getNegativityPlayer(target).mustToBeSaved = true;
 
-		Messages.sendMessage(reporter, "report.well_report", "%name%", target.getName());
 		NegativityPlayer.getNegativityPlayer(reporter).TIME_REPORT = System.currentTimeMillis()
 				+ Adapter.getAdapter().getConfig().getInt("time_between_report");
 	}

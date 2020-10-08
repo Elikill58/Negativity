@@ -46,9 +46,12 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		inv.set(12, getWoolItem(p, np.getAccount().isMcLeaks()));
 		inv.set(13, ItemBuilder.Builder(Materials.SKELETON_SKULL).displayName(Messages.getMessage(p, "fake_entities")).build());
 		
-		inv.set(16, ItemBuilder.Builder(Materials.DIAMOND_SHOVEL).displayName("Kick").build());
-		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN))
+		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN)) {
+			inv.set(16, ItemBuilder.Builder(Materials.DIAMOND_SHOVEL).displayName("Kick").build());
 			inv.set(17, ItemBuilder.Builder(Materials.ANVIL).displayName("Ban").build());
+		} else {
+			inv.set(17, ItemBuilder.Builder(Materials.DIAMOND_SHOVEL).displayName("Kick").build());
+		}
 
 		inv.set(18, ItemBuilder.Builder(Materials.SPIDER_EYE).displayName(Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())).build());
 		inv.set(19, ItemBuilder.Builder(Materials.EYE_OF_ENDER).displayName(Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())).build());

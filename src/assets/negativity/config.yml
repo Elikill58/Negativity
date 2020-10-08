@@ -214,13 +214,13 @@ report:
     slot: 2
     message: "&6%name% &ahave been reported for %reason%"
     permission: "negativity.report.racism"
-  cheat:
+  high_ping:
     name: "&4High ping"
     material: BLACK_BANNER
     slot: 9
     message: "&6%name% &ahave been reported for %reason%"
     permission: "negativity.report.ping"
-  cheat:
+  wrong_name:
     name: "&4Wrong name"
     material: BLACK_BANNER
     slot: 10
@@ -232,6 +232,27 @@ report:
     slot: 11
     message: "&6%name% &ahave been reported for %reason%"
     permission: "negativity.report.cheat"
+
+
+kicks:
+  spam:
+    # Name of report (which is also used as reason)
+    name: "&6Spam/Link"
+    # the material in inventory
+    material: YELLOW_BANNER
+    # the slot of item in inventory
+    slot: 0
+    # the message sent to player when report player
+    message: "&6%name% &ahave been reported for %reason%"
+    command: "nkick %name% Spam"
+    # "permission" is not necessary. If you don't set it, everyone will be able to use it.
+  insult:
+    name: "&cInsult"
+    material: RED_BANNER
+    slot: 1
+    message: "&6%name% &ahave been reported for %reason%"
+    command: "nkick %name% Insult"
+    permission: "negativity.report.insult"
 
 alert:
   # To run command when someone get alert

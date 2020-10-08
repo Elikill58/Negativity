@@ -45,7 +45,8 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		inv.set(11, ItemBuilder.Builder(Materials.GRASS).displayName(ChatColor.RESET + "Mods").lore(ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))).build());
 		inv.set(12, getWoolItem(p, np.getAccount().isMcLeaks()));
 		inv.set(13, ItemBuilder.Builder(Materials.SKELETON_SKULL).displayName(Messages.getMessage(p, "fake_entities")).build());
-		//inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE"), "Kick"));
+		
+		inv.set(16, ItemBuilder.Builder(Materials.DIAMOND_SHOVEL).displayName("Kick").build());
 		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN))
 			inv.set(17, ItemBuilder.Builder(Materials.ANVIL).displayName("Ban").build());
 
@@ -150,7 +151,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		} else if(m.equals(Materials.APPLE)) {
 			InventoryManager.open(NegativityInventory.SEE_REPORT, p, cible);
 		} else if(m.equals(Materials.DIAMOND_SHOVEL)) {
-			// TODO soon implement inv kick
+			InventoryManager.open(NegativityInventory.KICK, p, cible);
 		} else if(m.equals(Materials.ANVIL)) {
 			InventoryManager.open(NegativityInventory.BAN, p, cible);
 		}

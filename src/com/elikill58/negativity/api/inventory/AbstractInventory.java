@@ -87,6 +87,7 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 		CHECK_MENU,
 		CHEAT_MANAGER,
 		FREEZE,
+		KICK,
 		MOD,
 		ONE_CHEAT,
 		FORGE_MODS,

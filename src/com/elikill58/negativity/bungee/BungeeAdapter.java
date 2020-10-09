@@ -12,23 +12,14 @@ import java.util.concurrent.TimeUnit;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.inventory.Inventory;
-import com.elikill58.negativity.api.inventory.NegativityHolder;
-import com.elikill58.negativity.api.item.ItemBuilder;
-import com.elikill58.negativity.api.item.ItemRegistrar;
-import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.bungee.impl.plugin.BungeeExternalPlugin;
-import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Platform;
+import com.elikill58.negativity.universal.ProxyAdapter;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.account.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.JavaLoggerAdapter;
@@ -43,7 +34,7 @@ import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 
-public class BungeeAdapter extends Adapter {
+public class BungeeAdapter extends ProxyAdapter {
 
 	private final Configuration config;
 	private final Plugin pl;
@@ -88,11 +79,6 @@ public class BungeeAdapter extends Adapter {
 	@Override
 	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
 		return this.translationProviderFactory;
-	}
-
-	@Override
-	public List<Cheat> getAbstractCheats() {
-		return new ArrayList<>();
 	}
 
 	@Override
@@ -169,21 +155,6 @@ public class BungeeAdapter extends Adapter {
 	}
 
 	@Override
-	public ItemBuilder createItemBuilder(String type) {
-		return null;
-	}
-	
-	@Override
-	public ItemRegistrar getItemRegistrar() {
-		return null;
-	}
-
-	@Override
-	public Location createLocation(World w, double x, double y, double z) {
-		return null;
-	}
-
-	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
 		
 	}
@@ -193,21 +164,6 @@ public class BungeeAdapter extends Adapter {
 		List<Player> list = new ArrayList<>();
 		pl.getProxy().getPlayers().forEach((p) -> list.add(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new BungeePlayer(p)).getPlayer()));
 		return list;
-	}
-
-	@Override
-	public ItemBuilder createItemBuilder(Material type) {
-		return null;
-	}
-	
-	@Override
-	public ItemBuilder createSkullItemBuilder(Player owner) {
-		return null;
-	}
-
-	@Override
-	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
-		return null;
 	}
 
 	@Override
@@ -236,11 +192,6 @@ public class BungeeAdapter extends Adapter {
 		return null;
 	}
 	
-	@Override
-	public FakePlayer createFakePlayer(Location loc, String name) {
-		return null;
-	}
-
 	@Override
 	public boolean hasPlugin(String name) {
 		return pl.getProxy().getPluginManager().getPlugin(name) != null;

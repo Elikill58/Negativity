@@ -30,6 +30,12 @@ public enum PotionEffectType {
 		this.alias = Arrays.asList(alias);
 	}
 	
+	/**
+	 * Get all other names of the potion effect (for compatibility with multiples versions)
+	 * All of them are hardcoded in upper case.
+	 * 
+	 * @return list of all names
+	 */
 	public List<String> getAlias() {
 		return alias;
 	}

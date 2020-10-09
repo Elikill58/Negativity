@@ -25,10 +25,21 @@ public class ShowAlertPermissionEvent implements Event {
 		return np;
 	}
 	
+	/**
+	 * Know if the player has the basic permission to see alert
+	 * 
+	 * @return true if player have showAlert permission
+	 */
 	public boolean hasBasicPerm() {
 		return basicPerm;
 	}
 	
+	/**
+	 * Check if a player has the permission to see alert.
+	 * Count if it's cancelled and if the player has the needed permission
+	 * 
+	 * @return true if can see alert
+	 */
 	public boolean hasPerm() {
 		return !isCancelled() && basicPerm;
 	}

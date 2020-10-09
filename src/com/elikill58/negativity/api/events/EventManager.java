@@ -23,6 +23,12 @@ public class EventManager {
 		registerEvent(new ConnectionManager());
 	}
 	
+	/**
+	 * Add all event in the given class
+	 * Warn: all registered event are removed when doing /negativity reload.
+	 * 
+	 * @param src the given object which contains event method
+	 */
 	public static void registerEvent(Listeners src) {
 		try {
 			checkClass(src);
@@ -72,6 +78,11 @@ public class EventManager {
 		}
 	}
 	
+	/**
+	 * Call an event
+	 * 
+	 * @param ev the event which have to be called
+	 */
 	public static void callEvent(Event ev) {
 		List<CallableEvent> methods = EVENT_METHOD.get(ev.getClass());
 		if(methods != null)

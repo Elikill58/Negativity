@@ -194,10 +194,36 @@ public abstract class Player extends OfflinePlayer {
 	 */
 	public abstract Version getPlayerVersion();
 
+	/**
+	 * Get the entity which is used as vehicle.
+	 * It can be a wagon or a zombie.
+	 * 
+	 * @return the vehicle entity
+	 */
 	public abstract Entity getVehicle();
+	
+	/**
+	 * Check if player is in a vehicle.
+	 * 
+	 * @return true if it is in vehicle
+	 */
 	public abstract boolean isInsideVehicle();
 
+	/**
+	 * Get the item in main hand
+	 * Return null if there is not any item in hand
+	 * 
+	 * @return the item in hand
+	 */
 	public abstract ItemStack getItemInHand();
+	
+	/**
+	 * Get the item in second hand
+	 * Compatible with 1.8 and lower.
+	 * Return null if there is any item in second hand or if the server is on 1.8 or lower
+	 * 
+	 * @return the item in off hand
+	 */
 	public abstract ItemStack getItemInOffHand();
 	
 	public abstract boolean hasPotionEffect(PotionEffectType type);
@@ -266,6 +292,7 @@ public abstract class Player extends OfflinePlayer {
 		return true;
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Player)) {
 			return false;

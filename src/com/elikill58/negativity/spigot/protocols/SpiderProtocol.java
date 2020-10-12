@@ -33,7 +33,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		Location loc = p.getLocation();
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this) || LocationUtils.isUsingElevator(p))
 			return;
 		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP)
 				|| !LocationUtils.hasOtherThan(loc, Material.AIR) || (e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ()))

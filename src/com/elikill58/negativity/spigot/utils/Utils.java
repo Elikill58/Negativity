@@ -227,7 +227,7 @@ public class Utils {
 	 */
 	public static boolean isSwimming(Player p) {
 		if(Version.getVersion().isNewerOrEquals(Version.V1_13))
-			return p.isSwimming();
+			return p.isSwimming() || p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE);
 		else {
 			if(!p.isSprinting())
 				return false;

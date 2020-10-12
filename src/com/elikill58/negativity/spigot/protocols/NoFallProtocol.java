@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -26,6 +27,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -55,7 +57,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD", "SLAB")
 				&& ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
 				|| (motionY > (p.getWalkSpeed() / 2)) && (np.isOnGround() && p.getFallDistance() > 0.2)
-						&& p.getWalkSpeed() > p.getFallDistance()) && !np.isInFight) {
+						&& p.getWalkSpeed() > p.getFallDistance()) && !np.isInFight && isWaterLogged(locDown.getBlock())) {
 			if (locUp.getBlock().getType().name().contains("WATER") || LocationUtils.isUsingElevator(p))
 				np.useAntiNoFallSystem = true;
 			if (!np.useAntiNoFallSystem) {
@@ -112,6 +114,10 @@ public class NoFallProtocol extends Cheat implements Listener {
 				}
 			}
 		}
+	}
+
+	private boolean isWaterLogged(Block b) {
+		return Version.getVersion().isNewerOrEquals(Version.V1_13) && (b instanceof Waterlogged) && ((Waterlogged) b).isWaterlogged();
 	}
 
 	private void manageDamage(Player p, int damage, int relia) {

@@ -70,7 +70,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		Location loc = p.getLocation().clone();
 		if(hasBypassBlockAround(loc) || (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT")))
 			return;
-		if(LocationUtils.hasExtended(loc, "STAIRS"))
+		if(LocationUtils.hasExtended(loc, "STAIRS") || LocationUtils.isUsingElevator(p))
 			return;
 		String blockName = p.getLocation().getBlock().getType().name();
 		if(blockName.contains("LADDER") || blockName.contains("VINE"))

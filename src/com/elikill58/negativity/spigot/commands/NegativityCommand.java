@@ -11,6 +11,8 @@ import java.util.StringJoiner;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -23,10 +25,16 @@ import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.WorldRegionBypass;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
+import com.elikill58.negativity.spigot.support.EssentialsSupport;
+import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Cheat.CheatCategory;
+import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -170,6 +178,84 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				sender.sendMessage("An error occurred when performing migration: " + e.getMessage());
 				e.printStackTrace();
 			}
+			return true;
+		} else if (arg[0].equalsIgnoreCase("debug")) {
+			if (!(sender instanceof Player)) {
+				Messages.sendMessage(sender, "only_player");
+				return true;
+			}
+			Player p = (Player) sender;
+			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+			p.sendMessage(ChatColor.YELLOW + "--- Checking debug for bypass | no alert ---");
+			Adapter ada = Adapter.getAdapter();
+			p.sendMessage(ChatColor.GOLD + ada.getName() + ": " + ada.getVersion() + ". Negativity " + SpigotNegativity.getInstance().getDescription().getVersion());
+			long time = System.currentTimeMillis();
+			boolean hasBypass = false;
+			if (np.TIME_INVINCIBILITY > time) {
+				p.sendMessage(ChatColor.RED + "Invincibility (stay " + (time - np.TIME_INVINCIBILITY) + "ms)");
+				hasBypass = true;
+			}
+			if (np.isFreeze) {
+				p.sendMessage(ChatColor.RED + "You are currently freezed.");
+				hasBypass = true;
+			}
+			double tps = Utils.getLastTPS();
+			if(ada.getConfig().getDouble("tps_alert_stop") > tps) {
+				p.sendMessage(ChatColor.RED + "Too low TPS : " + tps);
+				hasBypass = true;
+			}
+			if(!(p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE))) {
+				p.sendMessage(ChatColor.RED + "Lot of detection are disabled if you're not on survival/adventure.");
+				hasBypass = true;
+			}
+			int ping = Utils.getPing(p);
+			if(np.isInFight || ping > 150)
+				hasBypass = true;
+			if(arg.length > 1) {
+				Cheat c = Cheat.fromString(arg[1]);
+				if(c != null) {
+					p.sendMessage(ChatColor.GREEN + "Checking for cheat " + c.getName() + ".");
+					if(!c.isActive()) {
+						p.sendMessage(ChatColor.RED + "Cheat disabled.");
+						hasBypass = true;
+					}
+					if(!np.already_blink && c.getKey().equals(CheatKeys.BLINK)) {
+						p.sendMessage(ChatColor.RED + "Bypass for blink.");
+						hasBypass = true;
+					}
+					if(WorldRegionBypass.hasBypass(c, p.getLocation())) {
+						p.sendMessage(ChatColor.RED + "You have a bypass actually");
+						hasBypass = true;
+					}
+					if (SpigotNegativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) 
+							&& GadgetMenuSupport.checkGadgetsMenuPreconditions(p)) {
+						p.sendMessage(ChatColor.RED + "GadgetMenu movement bypass.");
+						hasBypass = true;
+					}
+					if (SpigotNegativity.essentialsSupport && c.getKey().equals(CheatKeys.FLY) && p.hasPermission("essentials.fly")
+							&& EssentialsSupport.checkEssentialsPrecondition(p)) {
+						p.sendMessage(ChatColor.RED + "Essentials fly bypass.");
+						hasBypass = true;
+					}
+					if(np.isInFight && c.isBlockedInFight()) {
+						p.sendMessage(ChatColor.RED + "Bypass because in fight.");
+						hasBypass = true;
+					}
+					if(ping > c.getMaxAlertPing()) {
+						p.sendMessage(ChatColor.RED + "To high ping ! " + ChatColor.YELLOW + "(" + ping + " > " + c.getMaxAlertPing() + ")");
+						hasBypass = true;
+					}
+					if(!np.hasDetectionActive(c)) {
+						p.sendMessage(ChatColor.RED + "Detection of " + c.getName() + " not active.");
+						hasBypass = true;
+					}
+					if(!hasBypass)
+						SpigotNegativity.alertMod(ReportType.INFO, p, c, 100, "");
+				} else
+					p.sendMessage(ChatColor.RED + "Unknow cheat " + arg[1] + ".");
+			} else
+				p.sendMessage(ChatColor.YELLOW + (np.isInFight ? "In fight, " : "") + "Ping: " + ping + "ms (by default, at 150ms you bypass it)");
+			p.sendMessage(hasBypass ? ChatColor.RED + "Warn: You have bypass, so you cannot be detected." : ChatColor.GREEN + "Good news: you can be detected !");
 			return true;
 		}
 		

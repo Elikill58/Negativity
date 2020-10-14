@@ -238,7 +238,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 						hasBypass = true;
 					}
 					if(np.isInFight && c.isBlockedInFight()) {
-						p.sendMessage(ChatColor.RED + "Bypass because in fight.");
+						p.sendMessage(ChatColor.RED + "Bypass because your are in fight.");
 						hasBypass = true;
 					}
 					if(ping > c.getMaxAlertPing()) {
@@ -290,6 +290,8 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				suggestions.add("reload");
 			if ("alert".startsWith(prefix))
 				suggestions.add("alert");
+			if ("debug".startsWith(prefix))
+				suggestions.add("debug");
 			if ("admin".startsWith(prefix) && (sender instanceof Player) && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.MANAGE_CHEAT))
 				suggestions.add("admin");
 		} else {

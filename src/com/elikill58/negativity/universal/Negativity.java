@@ -80,7 +80,7 @@ public class Negativity {
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
 		np.addWarn(c, reliability, amount);
-		logProof(np, type, p, c, reliability, checkName, proof, ping);
+		logProof(np, type, p, c, reliability, checkName, proof, ping, amount);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			EventManager.callEvent(kick);
@@ -180,11 +180,11 @@ public class Negativity {
 	}
 
 	private static void logProof(NegativityPlayer np, ReportType type, Player p, Cheat c, int reliability,
-			String checkName, String proof, int ping) {
+			String checkName, String proof, int ping, int amount) {
 		if(!log)
 			return;
 		String time = new Timestamp(System.currentTimeMillis()).toString().split("\\.")[0];
-		np.logProof(time + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " - " + checkName
+		np.logProof(time + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " " + amount + " - " + checkName
 				+ " > " + proof + " | Warn: " + np.getWarn(c) + ", Version: " + p.getPlayerVersion().name() + ". TPS: " + getVisualTPS());
 	}
 	

@@ -49,16 +49,19 @@ public class Fly extends Cheat implements Listeners {
 		if (p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED)).getAmplifier() > 5)
 			return;
 
+		Location from = e.getFrom(), to = e.getTo();
+		
 		boolean mayCancel = false, inBoat = Utils.isInBoat(p);
-		double y = e.getFrom().getY() - e.getTo().getY();
+		double y = from.getY() - to.getY();
 		Location loc = p.getLocation().clone(),
 				locUnder = p.getLocation().clone().sub(0, 1, 0),
 				locUnderUnder = p.getLocation().clone().sub(0, 2, 0);
 		Material type = loc.getBlock().getType(), typeUpper = loc.getBlock().getRelative(BlockFace.UP).getType();
 		boolean isInWater = loc.getBlock().getType().getId().contains("WATER"), isOnWater = locUnder.getBlock().getType().getId().contains("WATER");
 		
-		double i = e.getTo().toVector().distance(e.getFrom().toVector());
-		double d = e.getTo().getY() - e.getFrom().getY();
+		double i = to.toVector().distance(from.toVector());
+		double d = to.getY() - from.getY();
+		double distance = from.distance(to);
 		
 		if(p.hasElytra()) {
 			if(checkActive("elytra")) {
@@ -70,7 +73,8 @@ public class Fly extends Cheat implements Listeners {
 					if(hand != null && hand.getType().equals(Materials.FIREWORK)) {
 						np.booleans.set(FLY, "fireworks", true);
 					} else {
-						Negativity.alertMod(ReportType.WARNING, p, this, 99, "elytra", "Going UP, with in hand: " + hand + ". Y: " + y, new CheatHover.Literal("Elytra fly"));
+						if(distance > 0.29)
+							Negativity.alertMod(ReportType.WARNING, p, this, 99, "elytra", "Going UP, with in hand: " + hand + ". Y: " + y + ", distance: " + distance, new CheatHover.Literal("Elytra fly"));
 					}
 				}
 			}
@@ -102,7 +106,7 @@ public class Fly extends Cheat implements Listeners {
 				if (!np.isUsingSlimeBlock && !hasOtherThanExtended(p.getLocation(), "AIR")
 						&& !hasOtherThanExtended(locUnder, "AIR") && !np.booleans.get(FLY, "boat-falling", false)
 						&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
-						&& (e.getFrom().getY() <= e.getTo().getY() || inBoat) && p.getVelocity().length() < 1.5) {
+						&& (from.getY() <= to.getY() || inBoat) && p.getVelocity().length() < 1.5) {
 					if (p.getPotionEffect(PotionEffectType.JUMP).orElseGet(() -> new PotionEffect(PotionEffectType.JUMP)).getAmplifier() > 3) {
 						double nbTimeAirBelow = np.doubles.get(FLY, "air-below", 0.0);
 						np.doubles.set(FLY, "air-below", nbTimeAirBelow + 1);
@@ -120,9 +124,9 @@ public class Fly extends Cheat implements Listeners {
 			}
 			
 			if(checkActive("no-ground-y")) {
-				Location to = e.getTo().clone();
-				to.setY(e.getFrom().getY());
-				double distanceWithoutY = to.distance(e.getFrom());
+				to = to.clone();
+				to.setY(from.getY());
+				double distanceWithoutY = to.distance(from);
 				if (distanceWithoutY == i && !p.isOnGround() && i != 0
 						&& typeUpper.equals(Materials.AIR) && !p.isInsideVehicle()
 						&& !type.getId().contains("WATER") && distanceWithoutY > 0.3) {

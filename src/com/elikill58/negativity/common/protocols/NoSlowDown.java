@@ -68,7 +68,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 			double dif = to.getY() - from.getY();
 			if (dif == 0 && distance >= p.getWalkSpeed() && np.booleans.get(NO_SLOW_DOWN, "eating", false)) {
 				mayCancel = Negativity.alertMod(distance >= (p.getWalkSpeed() * 1.5) ? ReportType.VIOLATION : ReportType.WARNING, p,
-						this, UniversalUtils.parseInPorcent(distance * 350), "walk-speed", "");
+						this, UniversalUtils.parseInPorcent(distance * 350), "walk-speed", "Distance: " + distance + ", walkSpeed: " + p.getWalkSpeed());
 			}
 	    }
 		if (isSetBack() && mayCancel)

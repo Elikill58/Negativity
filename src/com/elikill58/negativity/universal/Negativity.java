@@ -184,7 +184,7 @@ public class Negativity {
 		if(!log)
 			return;
 		String time = new Timestamp(System.currentTimeMillis()).toString().split("\\.")[0];
-		np.logProof(time + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " " + amount + " - " + checkName
+		np.logProof(time + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " x" + amount + " - " + checkName
 				+ " > " + proof + " | Warn: " + np.getWarn(c) + ", Version: " + p.getPlayerVersion().name() + ". TPS: " + getVisualTPS());
 	}
 	

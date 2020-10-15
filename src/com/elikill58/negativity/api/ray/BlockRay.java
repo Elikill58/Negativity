@@ -146,6 +146,18 @@ public class BlockRay {
 		}
 		
 		/**
+		 * Create a new BlockRayBuilder
+		 * 
+		 * @param position the started position of ray
+		 * @param vector the direction vector
+		 */
+		public BlockRayBuilder(Location position, Vector vector) {
+			this.position = position;
+			this.w = position.getWorld();
+			this.vector = vector;
+		}
+		
+		/**
 		 * Say if we have to ignore air
 		 * 
 		 * @param air true if the ray ignore air blocks

@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.events.block.BlockBreakEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.ray.BlockRay.BlockRayBuilder;
 import com.elikill58.negativity.api.ray.BlockRay.RayResult;
 import com.elikill58.negativity.api.ray.BlockRayResult;
@@ -49,21 +50,29 @@ public class XRay extends Cheat implements Listeners {
 			long time = System.currentTimeMillis();
 			boolean isMining = (time - np.longs.get(XRAY, "is-mining", 0l)) < TIME_MINING;
 			if(ORES.contains(b.getType())) {
-				np.ints.set(XRAY, "mining-ore", 5);
+				np.ints.set(XRAY, "mining-ore", 3);
 			} else {
 				int timeMiningOre = np.ints.get(XRAY, "mining-ore", 0);
 				if(timeMiningOre > 0) {
 					if(isMining) {
+						// search for ore
 						BlockRayResult blockResult = new BlockRayBuilder(p.getLocation().add(0, 1.5, 0), p)
 									.neededType(IMPORTANT_ORES.toArray(new Material[0])).build().compile();
-						// search for ore
+						
+						Location playerLoc = p.getLocation().clone();
+						playerLoc.setY(b.getY());
+						Vector v = p.getRotation().setY(b.getY());
+						BlockRayResult checkForBuildDir = new BlockRayBuilder(playerLoc, v.multiply(new Vector(-1, 1, -1))).maxTest(10).build().compile();
+						double distanceWithBuild = checkForBuildDir.getBlock() == null ? Double.MAX_VALUE : checkForBuildDir.getBlock().getLocation().distance(p.getLocation());
+						
 						Location loc = b.getLocation();
-						if(blockResult.getRayResult().equals(RayResult.NEEDED_FOUND) && blockResult.hasBlockExceptSearched()
-								&& blockResult.getBlock().getLocation().distance(p.getLocation()) > 2) {
+						double blockDistance = blockResult.getBlock().getLocation().distance(p.getLocation());
+						if(blockResult.getRayResult().equals(RayResult.NEEDED_FOUND) && blockResult.hasBlockExceptSearched() && blockDistance > 2
+								&& distanceWithBuild < 500) {
 							Location lastLoc = np.locations.get(XRAY, "mining-loc", null);
 							if(lastLoc != null && blockIsJustAround(loc, lastLoc)) {
 								Negativity.alertMod(ReportType.WARNING, p, this, 80, "mining-direction", "Found " + blockResult.getType()
-											+ ", timeMining: " + timeMiningOre);
+											+ ", timeMining: " + timeMiningOre + ", blockDistance: " + blockDistance + ", distanceWithBuild: " + distanceWithBuild);
 							}
 							np.locations.set(XRAY, "mining-loc", loc);
 						} else

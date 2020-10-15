@@ -43,6 +43,7 @@ public class BlockRayResult {
 	 * 
 	 * @return the block
 	 */
+	@Nullable
 	public Block getBlock() {
 		return block;
 	}

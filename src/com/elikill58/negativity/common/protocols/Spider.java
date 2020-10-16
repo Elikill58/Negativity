@@ -32,7 +32,7 @@ public class Spider extends Cheat implements Listeners {
 			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		Location loc = p.getLocation();
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this) || LocationUtils.isUsingElevator(p))
 			return;
 		if(!checkActive("nothing-around"))
 			return;
@@ -66,7 +66,7 @@ public class Spider extends Cheat implements Listeners {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null)
+		if (!np.hasDetectionActive(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null || LocationUtils.isUsingElevator(p))
 			return;
 		if(!checkActive("distance"))
 			return;

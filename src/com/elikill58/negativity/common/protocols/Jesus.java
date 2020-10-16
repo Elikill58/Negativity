@@ -69,7 +69,7 @@ public class Jesus extends Cheat implements Listeners {
 				}
 			}
 		}
-		if (checkActive("dif") && dif == -0.5 && (isInWater || isOnWater) && !LocationUtils.hasOtherThan(under, "FENCE")) {
+		if (checkActive("dif") && dif == -0.5 && (isInWater || isOnWater) && !type.getId().contains("SLAB") && !type.getId().contains("FENCE") && !LocationUtils.hasOtherThan(under, "FENCE")) {
 			mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "dif", "dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + ", type: " + type.getId() + ", type Under: " + underType.getId() + ", fallDistance: " + p.getFallDistance());
 		}
 		

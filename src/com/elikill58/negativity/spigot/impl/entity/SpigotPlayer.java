@@ -292,7 +292,7 @@ public class SpigotPlayer extends Player {
 	@Override
 	public boolean isSwimming() {
 		if (Version.getVersion().isNewerOrEquals(Version.V1_13))
-			return p.isSwimming();
+			return p.isSwimming() || p.hasPotionEffect(org.bukkit.potion.PotionEffectType.DOLPHINS_GRACE);
 		else {
 			if (!p.isSprinting())
 				return false;

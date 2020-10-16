@@ -13,7 +13,7 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 	private final HashMap<String, com.elikill58.negativity.api.item.Material> cache = new HashMap<>();
 
 	@Override
-	public com.elikill58.negativity.api.item.Material get(String id, String... alias) {
+	public synchronized com.elikill58.negativity.api.item.Material get(String id, String... alias) {
 		return cache.computeIfAbsent(id, key -> new SpigotMaterial(getMaterial(key, alias)));
 	}
 	

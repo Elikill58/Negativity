@@ -21,6 +21,8 @@ public abstract class Block extends NegativityObject {
 
 	public abstract void setType(Material type);
 	
+	public abstract boolean isWaterLogged();
+	
 	@Override
 	public boolean equals(Object obj) {
 		Preconditions.checkNotNull(obj);

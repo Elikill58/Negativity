@@ -1,11 +1,14 @@
 package com.elikill58.negativity.spigot.impl.block;
 
+import org.bukkit.block.data.Waterlogged;
+
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
+import com.elikill58.negativity.universal.Version;
 
 public class SpigotBlock extends Block {
 
@@ -53,6 +56,11 @@ public class SpigotBlock extends Block {
 	@Override
 	public void setType(Material type) {
 		block.setType((org.bukkit.Material) type.getDefault());
+	}
+	
+	@Override
+	public boolean isWaterLogged() {
+		return Version.getVersion().isNewerOrEquals(Version.V1_13) && (block instanceof Waterlogged) && ((Waterlogged) block).isWaterlogged();
 	}
 
 	@Override

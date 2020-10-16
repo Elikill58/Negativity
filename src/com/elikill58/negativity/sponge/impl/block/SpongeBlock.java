@@ -115,6 +115,11 @@ public class SpongeBlock extends Block {
 	}
 
 	@Override
+	public boolean isWaterLogged() {
+		return false;
+	}
+	
+	@Override
 	public Object getDefault() {
 		return block;
 	}

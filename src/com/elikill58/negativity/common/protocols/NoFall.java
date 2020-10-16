@@ -45,7 +45,8 @@ public class NoFall extends Cheat implements Listeners {
 			double motionY = from.getY() - to.getY();
 			if(locDown.getBlock().getType().equals(Materials.AIR)
 					&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD") && (motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
-						|| (motionY > (p.getWalkSpeed() / 2) && (p.isOnGround() && p.getFallDistance() > 0.2) && p.getWalkSpeed() > p.getFallDistance()) && !np.isInFight) {
+						|| (motionY > (p.getWalkSpeed() / 2) && (p.isOnGround() && p.getFallDistance() > 0.2) && p.getWalkSpeed() > p.getFallDistance())
+						&& !np.isInFight && !b.isWaterLogged()) {
 				if (locUp.getBlock().getType().getId().contains("WATER") || LocationUtils.isUsingElevator(p))
 					np.useAntiNoFallSystem = true;
 				if (!np.useAntiNoFallSystem) {

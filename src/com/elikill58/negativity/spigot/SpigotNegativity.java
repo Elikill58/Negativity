@@ -259,21 +259,24 @@ public class SpigotNegativity extends JavaPlugin {
 	}
 
 	private void loadCommand() {
+		PluginCommand negativity = getCommand("negativity");
+		NegativityCommand negativityCmd = new NegativityCommand();
+		negativity.setExecutor(negativityCmd);
+		negativity.setTabCompleter(negativityCmd);
+		
 		ConfigurationSection commandSection = getConfig().getConfigurationSection("commands");
 		if(commandSection == null) {
 			getLogger().severe("Cannot find 'commands' section in config. Please, see default config here:");
 			getLogger().severe("https://github.com/Elikill58/Negativity/blob/master/config.yml");
 			getLogger().severe("Or reset your own config.");
+			return;
 		}
-		PluginCommand negativity = getCommand("negativity");
-		NegativityCommand negativityCmd = new NegativityCommand();
-		negativity.setExecutor(negativityCmd);
-		negativity.setTabCompleter(negativityCmd);
 
 		PluginCommand reportCmd = getCommand("nreport");
 		if (commandSection != null && !commandSection.getBoolean("report", true))
 			unRegisterBukkitCommand(reportCmd);
 		else {
+			reportCmd.setAliases(Arrays.asList("report", "negreport"));
 			reportCmd.setExecutor(new ReportCommand());
 			reportCmd.setTabCompleter(new ReportCommand());
 		}
@@ -282,9 +285,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (commandSection != null && !commandSection.getBoolean("ban", true))
 			unRegisterBukkitCommand(banCmd);
 		else {
-			List<String> banAlias = new ArrayList<String>();
-			banAlias.add("negban");
-			banCmd.setAliases(banAlias);
+			banCmd.setAliases(Arrays.asList("ban", "negban"));
 			banCmd.setExecutor(new BanCommand());
 			banCmd.setTabCompleter(new BanCommand());
 		}
@@ -293,9 +294,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (commandSection != null && !commandSection.getBoolean("unban", true))
 			unRegisterBukkitCommand(unbanCmd);
 		else {
-			List<String> unbanAlias = new ArrayList<String>();
-			unbanAlias.add("negunban");
-			unbanCmd.setAliases(unbanAlias);
+			unbanCmd.setAliases(Arrays.asList("unban", "negunban"));
 			unbanCmd.setExecutor(new UnbanCommand());
 			unbanCmd.setTabCompleter(new UnbanCommand());
 		}
@@ -304,9 +303,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (commandSection != null && !commandSection.getBoolean("kick", true))
 			unRegisterBukkitCommand(kickCmd);
 		else {
-			List<String> kickAlias = new ArrayList<String>();
-			kickAlias.add("negkick");
-			kickCmd.setAliases(kickAlias);
+			kickCmd.setAliases(Arrays.asList("kick", "negkick"));
 			kickCmd.setExecutor(new KickCommand());
 			kickCmd.setTabCompleter(new KickCommand());
 		}
@@ -316,6 +313,7 @@ public class SpigotNegativity extends JavaPlugin {
 			unRegisterBukkitCommand(langCmd);
 		else {
 			LangCommand langExecutor = new LangCommand();
+			langCmd.setAliases(Arrays.asList("lang", "neglang"));
 			langCmd.setExecutor(langExecutor);
 			langCmd.setTabCompleter(langExecutor);
 		}
@@ -323,8 +321,10 @@ public class SpigotNegativity extends JavaPlugin {
 		PluginCommand modCmd = getCommand("nmod");
 		if (commandSection != null && !commandSection.getBoolean("mod", true))
 			unRegisterBukkitCommand(modCmd);
-		else
+		else {
+			modCmd.setAliases(Arrays.asList("mod"));
 			modCmd.setExecutor(new ModCommand());
+		}
 	}
 
 	@Override

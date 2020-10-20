@@ -61,9 +61,10 @@ public class Step extends Cheat implements Listeners {
 			if(diffBoost > 0.2) {
 				recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
 				if((diffBoost > 0.5 || diffBoost == 0.25) && diffBoost != 0.56) { // 0.56 is to bypass carpet
-					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost == 0.25 ? 95 : diffBoost * 125), "dif-boost",
-							"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
-							hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
+					if(!(amplifier > 0 && diffBoost < 0.55))
+						Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost == 0.25 ? 95 : diffBoost * 125), "dif-boost",
+								"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
+								hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
 				}
 			}
 		}

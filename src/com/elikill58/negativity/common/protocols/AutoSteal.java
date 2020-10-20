@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.inventory.InventoryAction;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
@@ -31,7 +32,7 @@ public class AutoSteal extends Cheat implements Listeners {
 		if(!(p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)))
 			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if(!np.hasDetectionActive(this))
+		if(!np.hasDetectionActive(this) || !checkActive("time-click"))
 			return;
 		ItemStack inHand = p.getItemInHand();
 		if(inHand != null)
@@ -53,9 +54,9 @@ public class AutoSteal extends Cheat implements Listeners {
 		if(dif < 0 || tempSlot == e.getSlot())
 			return;
 		if((ping + TIME_CLICK) >= dif && tempSlot != e.getSlot()){
-			if(np.booleans.get(AUTO_STEAL, "inv-was", false)){
+			if(np.booleans.get(AUTO_STEAL, "inv-was", false) && !e.getAction().equals(InventoryAction.LEFT_SHIFT)){
 				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((100 + TIME_CLICK) - dif - ping),
-						"time-click", "Time between 2 click: " + dif, hoverMsg("main", "%time%", dif));
+						"time-click", "Time between 2 click: " + dif + ", action: " + e.getAction().name(), hoverMsg("main", "%time%", dif));
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}

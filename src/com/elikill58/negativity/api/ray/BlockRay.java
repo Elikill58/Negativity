@@ -22,14 +22,16 @@ public class BlockRay {
 	private final List<Material> filter, neededType;
 	private int test;
 	private boolean hasOther = false;
+	private List<Vector> positions;
 	
-	protected BlockRay(World w, Location position, Vector vector, int maxTest, Material[] neededType, boolean ignoreAir, Material[] filter) {
+	protected BlockRay(World w, Location position, Vector vector, int maxTest, Material[] neededType, boolean ignoreAir, Material[] filter, List<Vector> positions) {
 		this.w = w;
 		this.position = position.clone();
 		this.test = maxTest;
 		this.vector = new Vector(parseVector(vector.getX()), parseVector(vector.getY()), parseVector(vector.getZ()));
 		this.neededType = neededType == null ? null : new ArrayList<>(Arrays.asList(neededType));
 		this.filter = new ArrayList<>(Arrays.asList(filter));
+		this.positions = positions;
 		if(ignoreAir)
 			this.filter.add(Materials.AIR);
 	}
@@ -78,6 +80,15 @@ public class BlockRay {
 	}
 	
 	/**
+	 * Get needed positions
+	 * 
+	 * @return Return an empty array if there is not any needed positions
+	 */
+	public List<Vector> getNeededPositions() {
+		return positions;
+	}
+	
+	/**
 	 * Direction of ray (rotation of entity by default
 	 * 
 	 * @return the direction vector
@@ -112,6 +123,14 @@ public class BlockRay {
 			return neededType != null ? RayResult.NEEDED_NOT_FOUND : RayResult.END_TRY;
 		Block b = position.add(vector).getBlock();
 		Material type = b.getType();
+		if(!positions.isEmpty()) {
+			int baseX = b.getX(), baseY = b.getY(), baseZ = b.getZ();
+			for(Vector vec : getNeededPositions()) {
+				if(vec.getBlockX() == baseX && vec.getBlockY() == baseY && vec.getBlockZ() == baseZ) {
+					return RayResult.NEEDED_FOUND;
+				}
+			}
+		}
 		if(neededType != null) {
 			if(neededType.contains(type))
 				return RayResult.NEEDED_FOUND;
@@ -131,6 +150,7 @@ public class BlockRay {
 		private Vector vector = Vector.ZERO;
 		private int maxTest = 200;
 		private Material[] filter = new Material[0], neededType = null;
+		private List<Vector> positions = new ArrayList<>();
 		
 		/**
 		 * Create a new BlockRayBuilder
@@ -214,12 +234,23 @@ public class BlockRay {
 		}
 		
 		/**
+		 * Add searched position.
+		 * 
+		 * @param vec searched positions
+		 * @return this builder
+		 */
+		public BlockRayBuilder neededPositions(Vector... vec) {
+			this.positions.addAll(Arrays.asList(vec));
+			return this;
+		}
+		
+		/**
 		 * Build BlockRay
 		 * 
 		 * @return the block ray
 		 */
 		public BlockRay build() {
-			return new BlockRay(w, position, vector, maxTest, neededType, ignoreAir, filter);
+			return new BlockRay(w, position, vector, maxTest, neededType, ignoreAir, filter, positions);
 		}
 	}
 

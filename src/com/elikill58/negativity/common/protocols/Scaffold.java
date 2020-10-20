@@ -1,6 +1,5 @@
 package com.elikill58.negativity.common.protocols;
 
-import java.util.List;
 import java.util.TimerTask;
 
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -14,6 +13,8 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.ray.BlockRay.BlockRayBuilder;
+import com.elikill58.negativity.api.ray.BlockRayResult;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -62,13 +63,12 @@ public class Scaffold extends Cheat implements Listeners {
 		}
 		if(checkActive("distance")) {
 			Block place = e.getBlock();
-			List<Block> targetVisual = p.getTargetBlock(8);
-			if(place == null || targetVisual.isEmpty())
-				return;
-			Block nearTargetVisual = targetVisual.stream().sorted((b1, b2) -> (int) b1.getLocation().distance(b2.getLocation())).findFirst().orElse(null);
-			double distance = place.getLocation().distance(nearTargetVisual.getLocation());
-			if(distance > 3) {
-				Negativity.alertMod(distance > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 30), "distance", "Place: " + place + ", targetVisual: " + targetVisual + ". Distance: " + distance);
+			BlockRayResult result = new BlockRayBuilder(p.getLocation().clone().add(0, 1.5, 0), p).ignoreAir(true)
+					.neededPositions(place.getLocation().toVector()).build().compile();
+			Block searched = result.getBlock() == null ? place : result.getBlock();
+			double distance = place.getLocation().distance(searched.getLocation());
+			if(distance > 3 && searched.getY() < p.getLocation().getY()) {
+				Negativity.alertMod(distance > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 30), "distance", "Place: " + place + ", targetVisual: " + searched + ". Distance: " + distance);
 			}
 		}
 	}

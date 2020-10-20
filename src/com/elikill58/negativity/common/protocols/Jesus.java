@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.LocationUtils;
 
 import static com.elikill58.negativity.api.item.Materials.STATIONARY_WATER;
@@ -87,7 +88,7 @@ public class Jesus extends Cheat implements Listeners {
 			np.booleans.set(JESUS, "state", !jesusState);
 		}
 		
-		if(checkActive("distance-in")) {
+		if(checkActive("distance-in") && !p.hasPotionEffect(PotionEffectType.SPEED)) {
 			double distanceAbs = to.distance(from) - Math.abs(from.getY() - to.getY());
 			Location upper = loc.clone().add(0, 1, 0);
 			float distanceFall = p.getFallDistance();

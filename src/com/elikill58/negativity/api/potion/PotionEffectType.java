@@ -8,12 +8,14 @@ import com.elikill58.negativity.universal.Adapter;
 public enum PotionEffectType {
 	
 	BLINDNESS,
+	CONDUIT_POWER,
 	CONFUSION,
 	DAMAGE_RESISTANCE,
 	DOLPHINS_GRACE,
 	INCREASE_DAMAGE,
 	INSTANT_HEAL,
 	FAST_DIGGING,
+	FIRE_RESISTANCE,
 	HUNGER,
 	JUMP,
 	LEVITATION,

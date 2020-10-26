@@ -19,6 +19,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -63,6 +64,8 @@ public class Scaffold extends Cheat implements Listeners {
 		}
 		if(checkActive("distance")) {
 			Block place = e.getBlock();
+			if(Version.getVersion().isNewerOrEquals(Version.V1_14) && place.getType().equals(Materials.SCAFFOLD))
+				return;
 			BlockRayResult result = new BlockRayBuilder(p.getLocation().clone().add(0, 1.5, 0), p).ignoreAir(true)
 					.neededPositions(place.getLocation().toVector()).build().compile();
 			Block searched = result.getBlock() == null ? place : result.getBlock();

@@ -71,6 +71,7 @@ public class Materials {
     public static final Material REDSTONE_BLOCK = ItemRegistrar.getInstance().get("redstone_block");
     public static final Material REDSTONE_ORE = ItemRegistrar.getInstance().get("redstone_ore");
     
+    public static final Material SCAFFOLD = ItemRegistrar.getInstance().get("scaffold", "ladder");
     public static final Material SOUL_SAND = ItemRegistrar.getInstance().get("soul_sand");
     public static final Material SKELETON_SKULL = ItemRegistrar.getInstance().get("skeleton_skull", "skull_item", "skull");
     public static final Material SLIME_BLOCK = ItemRegistrar.getInstance().get("slime_block", "emerald_block"); // emerald for 1.7 support

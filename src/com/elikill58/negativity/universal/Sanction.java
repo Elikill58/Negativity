@@ -63,6 +63,6 @@ public class Sanction {
 	}
 	
 	public static int getMaxSlot(List<Sanction> list) {
-		return list.stream().sorted((s1, s2) -> s2.getSlot() - s1.getSlot()).findFirst().get().getSlot();
+		return list.isEmpty() ? 9 : list.stream().sorted((s1, s2) -> s2.getSlot() - s1.getSlot()).findFirst().get().getSlot();
 	}
 }

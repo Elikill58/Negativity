@@ -7,13 +7,14 @@ import com.elikill58.negativity.universal.Adapter;
 
 public enum PotionEffectType {
 	
+	BAD_OMEN,
 	BLINDNESS,
 	CONDUIT_POWER,
 	CONFUSION,
 	DAMAGE_RESISTANCE,
 	DOLPHINS_GRACE,
 	INCREASE_DAMAGE,
-	INSTANT_HEAL,
+	INSTANT_HEAL("HEAL"),
 	FAST_DIGGING,
 	FIRE_RESISTANCE,
 	HUNGER,
@@ -22,8 +23,10 @@ public enum PotionEffectType {
 	NIGHT_VISION,
 	POISON,
 	REGENERATION("HEALTH_BOOST"),
+	SLOW,
 	SLOW_DIGGING,
 	SPEED,
+	WATER_BREATHING,
 	WEAKNESS,
 	WITHER,
 	UNKNOW;
@@ -48,7 +51,7 @@ public enum PotionEffectType {
 		for(PotionEffectType type : values())
 			if(type.name().equalsIgnoreCase(name) || type.getAlias().contains(name.toUpperCase()))
 				return type;
-		Adapter.getAdapter().getLogger().warn("[PotionEffectType] Cannot found effect " + name + " !");
+		Adapter.getAdapter().debug("[PotionEffectType] Cannot found effect " + name + " !");
 		return UNKNOW;
 	}
 }

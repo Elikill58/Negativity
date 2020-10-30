@@ -71,6 +71,11 @@ We support a lot of languages :
 - **Spanish** (*es_ES*) By SolitaSolaa
 - **Vietnamese** (*vi_VN*) By HuyMCYTTM#7592
 - **Italian** (*it_IT*) By Herobrine99dan#1564
+- **Czech Republic** (*cs_CZ*) By Disordeon#1824
+- **Albanian** (*sq_SQ*) By ErzenX#2439
+- **Polish** (*pl_PL*) By Tytano#5336
+
+To change the lang, just use "/nlang" or change "Translation.default" to the one that you want.
 
 You find a grammar error on your language ? You want to add your own ? Contact me on discord (link below)
 

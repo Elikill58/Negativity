@@ -42,15 +42,69 @@ public class Negativity {
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
 	public static int timeBetweenAlert = -1;
 
+	/**
+	 * Try to alert moderator.
+	 * It will not check everything, but there is some verification which are made such as:
+	 * - if the cheat is active
+	 * - the reliability amount
+	 * - Detection disabled on verification
+	 * - Bypass with permissions
+	 * - ...
+	 * 
+	 * @param type the report type
+	 * @param p the player which have to be reported
+	 * @param c the cheat that just detect the player
+	 * @param reliability the reliability of the cheat
+	 * @param checkName the name of the check
+	 * @param proof the proof which will be on proof file
+	 * @return true if the player have to be set back
+	 */
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String checkName, String proof) {
 		return alertMod(type, p, c, reliability, checkName, proof, null, 1);
 	}
 
+	/**
+	 * Try to alert moderator.
+	 * It will not check everything, but there is some verification which are made such as:
+	 * - if the cheat is active
+	 * - the reliability amount
+	 * - Detection disabled on verification
+	 * - Bypass with permissions
+	 * - ...
+	 * 
+	 * @param type the report type
+	 * @param p the player which have to be reported
+	 * @param c the cheat that just detect the player
+	 * @param reliability the reliability of the cheat
+	 * @param checkName the name of the check
+	 * @param proof the proof which will be on proof file
+	 * @param hover the cheatHover see in alert
+	 * @return true if the player have to be set back
+	 */
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String checkName, String proof,
 			CheatHover hover) {
 		return alertMod(type, p, c, reliability, checkName, proof, hover, 1);
 	}
 
+	/**
+	 * Try to alert moderator.
+	 * It will not check everything, but there is some verification which are made such as:
+	 * - if the cheat is active
+	 * - the reliability amount
+	 * - Detection disabled on verification
+	 * - Bypass with permissions
+	 * - ...
+	 * 
+	 * @param type the report type
+	 * @param p the player which have to be reported
+	 * @param c the cheat that just detect the player
+	 * @param reliability the reliability of the cheat
+	 * @param checkName the name of the check
+	 * @param proof the proof which will be on proof file
+	 * @param hover the cheatHover see in alert
+	 * @param amount the amount of alert
+	 * @return true if the player have to be set back
+	 */
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String checkName, String proof,
 			CheatHover hover, int amount) {
 		if(!c.isActive() || reliability < 55)
@@ -107,6 +161,15 @@ public class Negativity {
 		return true;
 	}
 
+	/**
+	 * Run all command set in config is it's active and the reliability is enough
+	 * 
+	 * @param np the negativity player which create alert
+	 * @param type the type of the alert
+	 * @param p the player which create alert
+	 * @param c the cheat which detect player
+	 * @param reliability the reliability of detection
+	 */
 	private static void manageAlertCommand(NegativityPlayer np, ReportType type, Player p, Cheat c, int reliability) {
 		Configuration conf = Adapter.getAdapter().getConfig();
 		if(!conf.getBoolean("alert.command.active") || conf.getInt("alert.command.reliability_need") > reliability)
@@ -118,6 +181,14 @@ public class Negativity {
 		}
 	}
 
+	/**
+	 * Send alert message to all player which can receive them
+	 * If any, the message will keep in cache and showed when someone can see them
+	 * If a lot of one, all message are compiled into one (and amount or are additionned)
+	 * 
+	 * @param np the negativity player which create alert
+	 * @param alert a compiled alert
+	 */
 	public static void sendAlertMessage(NegativityPlayer np, PlayerCheatAlertEvent alert) {
 		Cheat c = alert.getCheat();
 		int reliability = alert.getReliability();
@@ -169,6 +240,33 @@ public class Negativity {
 		}
 	}
 
+	/**
+	 * If there is a proxy, and we don't are on proxy platform, the message is sent to them.
+	 * 
+	 * @param reporter the player which report the other player
+	 * @param reason the reason of the report
+	 * @param reported the name of the reported player
+	 */
+	public static void sendReportMessage(Player reporter, String reason, String reported) {
+		try {
+			ReportMessage reportMessage = new ReportMessage(reported, reason, reporter.getName());
+			reporter.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(reportMessage));
+		} catch (IOException e) {
+			Adapter.getAdapter().getLogger().error("Could not send report message to the proxy.");
+			e.printStackTrace();
+		}
+	}
+
+	/**
+	 * If there is a proxy, and we are on no-proxy platform, a message is sent to proxy
+	 * 
+	 * @param p the player which just cheat
+	 * @param cheatName the cheatName
+	 * @param reliability the reliability of cheat
+	 * @param ping the ping of the player
+	 * @param hover the cheat hover
+	 * @param alertsCount the number of alert
+	 */
 	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover, int alertsCount) {
 		try {
 			AlertMessage alertMessage = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);
@@ -188,7 +286,12 @@ public class Negativity {
 				+ " > " + proof + " | Warn: " + np.getWarn(c) + ", Version: " + p.getPlayerVersion().name() + ". TPS: " + getVisualTPS());
 	}
 	
-	private static String getVisualTPS() {
+	/**
+	 * Get visual TPS to put them on file
+	 * 
+	 * @return a visual string of tps
+	 */
+	public static String getVisualTPS() {
 		StringJoiner sj = new StringJoiner(" / ");
 		for(double d : Adapter.getAdapter().getTPS())
 			sj.add(String.format("%.4f", d));
@@ -268,16 +371,6 @@ public class Negativity {
 		
 		if (supportedPluginName.length() > 0) {
 			ada.getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
-		}
-	}
-
-	public static void sendReportMessage(Player reporter, String reason, String reported) {
-		try {
-			ReportMessage reportMessage = new ReportMessage(reported, reason, reporter.getName());
-			reporter.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(reportMessage));
-		} catch (IOException e) {
-			Adapter.getAdapter().getLogger().error("Could not send report message to the proxy.");
-			e.printStackTrace();
 		}
 	}
 }

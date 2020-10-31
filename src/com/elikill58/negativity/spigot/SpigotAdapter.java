@@ -264,6 +264,7 @@ public class SpigotAdapter extends Adapter {
 	
 	@Override
 	public FakePlayer createFakePlayer(Location loc, String name) {
+		// TODO implement fake player on adapter
 		return null;
 	}
 	

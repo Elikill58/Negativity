@@ -12,7 +12,7 @@ import com.elikill58.negativity.universal.account.NegativityAccount;
 public class McLeaks extends Special implements Listeners {
 	
 	public McLeaks() {
-		super(SpecialKeys.MC_LEAKS, false, true);
+		super(SpecialKeys.MC_LEAKS, false);
 	}
 	
 	@EventListener

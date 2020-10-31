@@ -31,14 +31,38 @@ public class Verificator {
 	private final int version;
 	private final Version playerVersion;
 	
+	/**
+	 * Create a new verificator for all cheats
+	 * Cheat are filtered after, specially for those which don't have verif feature
+	 * 
+	 * @param np the negativity player of the verified player
+	 * @param asker the name of the player which ask for verif
+	 */
 	public Verificator(NegativityPlayer np, String asker) {
 		this(np, asker, new HashSet<>(Cheat.CHEATS));
 	}
-	
+
+	/**
+	 * Create a new verificator for given cheats
+	 * 
+	 * @param np the negativity player of the verified player
+	 * @param asker the name of the player which ask for verif
+	 * @param list all cheat which have to be verified, filtered if they have verification available
+	 */
 	public Verificator(NegativityPlayer np, String asker, Set<Cheat> list) {
 		this(np, asker, list.stream().filter(Cheat::hasVerif).collect(COLLECTOR), new ArrayList<>(), VERIFICATION_VERSION, np.getPlayer().getPlayerVersion());
 	}
 	
+	/**
+	 * Create a new verificator
+	 * 
+	 * @param np the negativity player of the verified player
+	 * @param asker the name of the player which ask for verif
+	 * @param cheats all detected cheat with a new {@link VerifData} (or empty if it's a saved one)
+	 * @param messages all previous generated message is it's saved (or empty)
+	 * @param version the version of verification
+	 * @param playerVersion the player version
+	 */
 	public Verificator(NegativityPlayer np, String asker, Map<Cheat, VerifData> cheats, List<String> messages, int version, Version playerVersion) {
 		this.np = np;
 		this.asker = asker;
@@ -48,38 +72,84 @@ public class Verificator {
 		this.playerVersion = playerVersion;
 	}
 
+	/**
+	 * Get the NegativityPlayer of the verified player
+	 * 
+	 * @return the verified negativity player
+	 */
 	public NegativityPlayer getNegativityPlayer() {
 		return np;
 	}
 	
+	/**
+	 * Get the UUID of the verified player
+	 * 
+	 * @return the verified player UUID
+	 */
 	public UUID getPlayerId() {
 		return np.getUUID();
 	}
 	
+	/**
+	 * Get asker name
+	 * 
+	 * @return the name of the verif asker
+	 */
 	public String getAsker() {
 		return asker;
 	}
 
+	/**
+	 * Get all cheats with their verif data
+	 * 
+	 * @return cheat and verif data
+	 */
 	public Map<Cheat, VerifData> getCheats() {
 		return cheats;
 	}
 	
+	/**
+	 * Get the verif data of a cheat
+	 * (Can be null)
+	 * 
+	 * @param c the cheat which we are looking for verif data
+	 * @return the optional verif data
+	 */
 	public Optional<VerifData> getVerifData(Cheat c) {
 		return Optional.ofNullable(cheats.get(c));
 	}
 	
+	/**
+	 * Get all generated message
+	 * 
+	 * @return messages summary
+	 */
 	public List<String> getMessages(){
 		return messages;
 	}
 
+	/**
+	 * Get version of the verif
+	 * 
+	 * @return the version ID
+	 */
 	public int getVersion() {
 		return version;
 	}
 
+	/**
+	 * Get player version
+	 * 
+	 * @return the player version
+	 */
 	public Version getPlayerVersion() {
 		return playerVersion;
 	}
 
+	/**
+	 * Generate un-translated message of all cheat which was in detection
+	 * The summary is available thanks to {@link #getMessages()}
+	 */
 	public void generateMessage() {
 		StringJoiner messageCheatNothing = new StringJoiner(", ");
 		for(Entry<Cheat, VerifData> currentCheat : cheats.entrySet()) {
@@ -98,6 +168,10 @@ public class Verificator {
 			messages.add("Nothing detected: " + messageCheatNothing);
 	}
 	
+	/**
+	 * Save the message
+	 * If {@link #getMessages()} is empty, a new summary will be made before saving
+	 */
 	public void save() {
 		if(messages.isEmpty())
 			generateMessage();

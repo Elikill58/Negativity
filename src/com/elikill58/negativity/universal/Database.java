@@ -13,12 +13,19 @@ public class Database {
 	public static boolean hasCustom = false;
 	private static long lastValidityCheck = 0;
 
+	/**
+	 * Create a connection to the database
+	 * 
+	 * @param url the database URL such as 127.0.0.1/mySchema
+	 * @param username the database username
+	 * @param password the user password
+	 */
 	public static void connect(String url, String username, String password) {
 		Database.url = url;
 		Database.username = username;
 		Database.password = password;
 		try {
-			try {
+			try { // load Mysql drivers
 				Class.forName("com.mysql.jdbc.Driver");
 			} catch (ClassNotFoundException e) {
 				Adapter.getAdapter().getLogger().warn("Cannot find driver for MySQL.");
@@ -32,6 +39,15 @@ public class Database {
 		}
 	}
 
+	/**
+	 * Get the database connection
+	 * If null or closed, it will re-connect.
+	 * 
+	 * @return the database connection
+	 * 
+	 * @throws SQLException if the connection cannot be re-open
+	 * @throws IllegalStateException if your are trying to use DB without active it
+	 */
 	public static Connection getConnection() throws SQLException {
 		if(!hasCustom) {
 			new IllegalStateException("You are trying to use database without active it.").printStackTrace();
@@ -52,6 +68,9 @@ public class Database {
 		return true;
 	}
 
+	/**
+	 * Close the connection if not null
+	 */
 	public static void close() {
 		if(connection == null)
 			return;
@@ -62,6 +81,10 @@ public class Database {
 		}
 	}
 
+	/**
+	 * Load database
+	 * Don't try to connect if has custom is on false
+	 */
 	public static void init() {
 		Configuration store = Adapter.getAdapter().getConfig();
 		if (hasCustom = store.getBoolean("Database.isActive")) {

@@ -26,12 +26,18 @@ public abstract class Special {
 	private static final List<Special> SPECIALS = new ArrayList<>();
 	private final String key;
 	private Configuration config;
-	private boolean needPacket, hasListener;
+	private boolean needPacket;
 	private String[] aliases;
 
-	public Special(String key, boolean needPacket, boolean hasListener, String... alias) {
+	/**
+	 * Create a special detection and load his config
+	 * 
+	 * @param key the key of the special detection
+	 * @param needPacket if it need packet to work
+	 * @param alias all alias of the special detection
+	 */
+	public Special(String key, boolean needPacket, String... alias) {
 		this.needPacket = needPacket;
-		this.hasListener = hasListener;
 		this.key = key.toLowerCase();
 		this.aliases = alias;
 		
@@ -57,42 +63,73 @@ public abstract class Special {
 		this.config = YamlConfiguration.load(moduleFile);
 	}
 	
+	/**
+	 * Get the special key
+	 * 
+	 * @return the key in upper case
+	 */
 	public String getKey() {
 		return key.toUpperCase();
 	}
 	
+	/**
+	 * Get the configuration of special detection
+	 * 
+	 * @return the configuration
+	 */
 	public Configuration getConfig() {
 		return config;
 	}
 	
+	/**
+	 * Save the configuration of the special detection
+	 */
 	public void saveConfig() {
 		config.save();
 	}
 	
+	/**
+	 * Get the name of the special detection
+	 * 
+	 * @return the name
+	 */
 	public String getName() {
 		return config.getString("name", key);
 	}
 
+	/**
+	 * Check if the special detection if active
+	 * 
+	 * @return true if is active
+	 */
 	public boolean isActive() {
 		return config.getBoolean("active", true);
 	}
-	
-	public boolean isBlockedInFight() {
-		return false;
-	}
 
+	/**
+	 * Know if the special detection need packet to work
+	 * 
+	 * @return true if it need packet
+	 */
 	public boolean needPacket() {
 		return needPacket;
 	}
 	
-	public boolean hasListener() {
-		return hasListener;
-	}
-	
+	/**
+	 * Get all aliases of the special detection
+	 * 
+	 * @return all aliases
+	 */
 	public String[] getAliases() {
 		return aliases;
 	}
 	
+	/**
+	 * Get special detection from the name
+	 * 
+	 * @param name the special detection name
+	 * @return the special detection or null
+	 */
 	public static Special fromString(String name) {
 		for (Special c : Special.values()) {
 			try {
@@ -109,10 +146,20 @@ public abstract class Special {
 		return SPECIALS;
 	}
 	
+	/**
+	 * Get special detection from the key
+	 * 
+	 * @param key the special key
+	 * @return the special detection or null
+	 */
 	public static Special forKey(String key) {
 		return SPECIALS.stream().filter((c) -> c.getKey().equalsIgnoreCase(key)).findAny().orElse(null);
 	}
 	
+	/**
+	 * Load all special detection
+	 * Support reload
+	 */
 	public static void loadSpecial() {
 		SPECIALS.clear();
 		Adapter ada = Adapter.getAdapter();
@@ -128,8 +175,7 @@ public abstract class Special {
 			for (Object classDir : UniversalUtils.getClasseNamesInPackage(dir, "com.elikill58.negativity.common.special")) {
 				try {
 					Special cheat = (Special) Class.forName(classDir.toString().replaceAll(".class", "")).newInstance();
-					if(cheat.hasListener())
-						EventManager.registerEvent((Listeners) cheat);
+					EventManager.registerEvent((Listeners) cheat);
 					SPECIALS.add(cheat);
 				} catch (Exception temp) {
 					// on ignore

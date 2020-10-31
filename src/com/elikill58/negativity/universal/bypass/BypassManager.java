@@ -17,6 +17,7 @@ public class BypassManager {
 
 	/**
 	 * Load all bypass.
+	 * Support reload
 	 * 
 	 * Warn: it clean all previous Bypass checker.
 	 */

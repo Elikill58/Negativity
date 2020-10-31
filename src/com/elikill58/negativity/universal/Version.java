@@ -1,8 +1,5 @@
 package com.elikill58.negativity.universal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public enum Version {
 	
 	V1_7("1.7", 7, 500, 0, 5),
@@ -18,42 +15,81 @@ public enum Version {
 	V1_17("1.17", 17, 100, 800, 1000),
 	HIGHER("higher", 42, 100, 1000, 1000);
 
-	private final int power, timeBetweenRegen;
-	private final List<Integer> protocolNumber = new ArrayList<>();
+	private final int power, timeBetweenRegen, firstProtocolNumber, lastProtocolNumber;
 	private final String name;
 	
 	Version(String name, int power, int timeBetweenRegen, int firstProtocolNumber, int lastProtocolNumber) {
 		this.name = name;
 		this.power = power;
 		this.timeBetweenRegen = timeBetweenRegen;
-		for(int i = firstProtocolNumber; i <= lastProtocolNumber; i++)
-			this.protocolNumber.add(i);
+		this.firstProtocolNumber = firstProtocolNumber;
+		this.lastProtocolNumber = lastProtocolNumber;
 	}
 	
+	/**
+	 * Get the name of the version
+	 * 
+	 * @return the version name
+	 */
 	public String getName() {
 		return name;
 	}
 
+	/**
+	 * Check if this version is strictly newer than the given one
+	 * 
+	 * @param other the version which will be compared
+	 * @return true is this version is newer than the given
+	 */
 	public boolean isNewerThan(Version other) {
 		return power > other.getPower();
 	}
-	
+
+	/**
+	 * Check if this version is newer or equals than the given one
+	 * 
+	 * @param other the version which will be compared
+	 * @return true is this version is newer or equals than the given
+	 */
 	public boolean isNewerOrEquals(Version other) {
 		return power >= other.getPower();
 	}
 
+	/**
+	 * Get the power of the version
+	 * (used to check newer/older)
+	 * 
+	 * @return the power version
+	 */
 	public int getPower() {
 		return power;
 	}
 
+	/**
+	 * Get the time between 2 regeneration
+	 * This is not official values
+	 * 
+	 * @return the time between regen
+	 */
 	public int getTimeBetweenTwoRegenFromVersion(){
 		return timeBetweenRegen;
 	}
 
-	public List<Integer> getProtocolNumber() {
-		return protocolNumber;
+	/**
+	 * The list of all protocol number in this version
+	 * 
+	 * @return list of all version number
+	 */
+	public boolean hasProtocolNumber(int protocolId) {
+		return protocolId >= firstProtocolNumber && protocolId <= lastProtocolNumber;
 	}
 	
+	/**
+	 * Get the version thanks to it's name
+	 * 
+	 * @param name the name of the version
+	 * @return the founded version or {@link #HIGHER}
+	 */
 	public static Version getVersionByName(String name) {
 		for (Version v : Version.values())
 			if (name.startsWith(v.getName()))
@@ -61,17 +97,34 @@ public enum Version {
 		return HIGHER;
 	}
 	
+	/**
+	 * Get the version thanks to the protocol ID
+	 * 
+	 * @param id the id of the version
+	 * @return the founded version or {@link #HIGHER}
+	 */
 	public static Version getVersionByProtocolID(int id) {
 		for (Version v : Version.values())
-			if (v.getProtocolNumber().contains(id))
+			if (v.hasProtocolNumber(id))
 				return v;
 		return HIGHER;
 	}
 	
+	/**
+	 * Get the version thanks to the adapter version name
+	 * 
+	 * @return the founded version or {@link #HIGHER}
+	 */
 	public static Version getVersion() {
 		return getVersion(Adapter.getAdapter().getVersion());
 	}
 	
+	/**
+	 * Get the version thanks to it's name
+	 * 
+	 * @param name the name of the version
+	 * @return the founded version or {@link #HIGHER}
+	 */
 	public static Version getVersion(String version) {
 		for (Version v : Version.values())
 			if (version.toLowerCase().startsWith(v.name().toLowerCase()))

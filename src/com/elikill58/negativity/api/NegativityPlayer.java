@@ -109,22 +109,49 @@ public class NegativityPlayer {
 		this.isBedrockPlayer = Negativity.floodGateSupport ? FloodGateSupport.isBedrockPlayer(p.getUniqueId()) : false;
 	}
 
+	/**
+	 * Get the Negativity account of the player
+	 * 
+	 * @return the negativity account
+	 */
 	public NegativityAccount getAccount() {
 		return NegativityAccount.get(playerId);
 	}
 	
+	/**
+	 * Get the player UUID
+	 * 
+	 * @return the player UUID
+	 */
 	public UUID getUUID() {
 		return playerId;
 	}
 	
+	/**
+	 * Get the player name
+	 * 
+	 * @return the player name
+	 */
 	public String getName() {
 		return getPlayer().getName();
 	}
 	
+	/**
+	 * Check if it's a bedrock player
+	 * 
+	 * @return true if the player connect from bedrock
+	 */
 	public boolean isBedrockPlayer() {
 		return isBedrockPlayer;
 	}
 	
+	/**
+	 * Check if the player have be detected for the given cheat
+	 * It also cehck for bypass and TPS drop
+	 * 
+	 * @param c the cheat which we are trying to detect
+	 * @return true if the player can be detected
+	 */
 	public boolean hasDetectionActive(Cheat c) {
 		if (!c.isActive())
 			return false;
@@ -149,18 +176,39 @@ public class NegativityPlayer {
 		return p.getPing() < c.getMaxAlertPing();
 	}
 
+	/**
+	 * Get warn of the cheat
+	 * 
+	 * @param c the cheat
+	 * @return the number of warn made by the given cheat
+	 */
 	public int getWarn(Cheat c) {
 		return getAccount().getWarn(c);
 	}
 
+	/**
+	 * Get all warn of the cheat
+	 * 
+	 * @param c the cheat
+	 * @return the number of warn made by the given cheat
+	 */
 	public int getAllWarn(Cheat c) {
-		return getAccount().getWarn(c);
+		return getWarn(c);
 	}
 
+	/**
+	 * Get the player
+	 * 
+	 * @return the player
+	 */
 	public Player getPlayer() {
 		return p;
 	}
 	
+	/**
+	 * Manage autoverif.
+	 * Remove all current cheat detected, and re-add all which have to be verified
+	 */
 	public void manageAutoVerif() {
 		ACTIVE_CHEAT.clear();
 		boolean needPacket = false;
@@ -174,15 +222,36 @@ public class NegativityPlayer {
 			NegativityPlayer.INJECTED.add(p.getUniqueId());
 	}
 	
+	/**
+	 * Kick the player after a ban
+	 * 
+	 * @param reason the reason of kick
+	 * @param time the time of the ban which make the kick
+	 * @param by who kick the player
+	 * @param def if the ban is definitive
+	 */
 	public void kickPlayer(String reason, String time, String by, boolean def) {
 		getPlayer().kick(Messages.getMessage(getPlayer(), "ban.kick_" + (def ? "def" : "time"), "%reason%",
 					reason, "%time%", String.valueOf(time), "%by%", by));
 	}
 
+	/**
+	 * Add one warn to the given cheat
+	 * 
+	 * @param c the cheat which create alert
+	 * @param reliability the reliability of alert
+	 */
 	public void addWarn(Cheat c, int reliability) {
 		addWarn(c, reliability, 1);
 	}
 
+	/**
+	 * Add multiple warn
+	 * 
+	 * @param c the cheat which create alert
+	 * @param reliability the reliability of all warn
+	 * @param amount the amount of alert
+	 */
 	public void addWarn(Cheat c, int reliability, int amount) {
 		if (System.currentTimeMillis() < TIME_INVINCIBILITY || c.getReliabilityAlert() > reliability)
 			return;
@@ -191,12 +260,23 @@ public class NegativityPlayer {
 		mustToBeSaved = true;
 	}
 
-	public void setWarn(Cheat c, int cheats) {
+	/**
+	 * Set a new value for the amount of alert of the given cheat
+	 * 
+	 * @param c the cheat
+	 * @param alerts the new amount of alert
+	 */
+	public void setWarn(Cheat c, int alerts) {
 		NegativityAccount account = getAccount();
-		account.setWarnCount(c, cheats);
+		account.setWarnCount(c, alerts);
 		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
 	}
 	
+	/**
+	 * Start the analyze of the given cheat
+	 * 
+	 * @param c the cheat to analyze
+	 */
 	public void startAnalyze(Cheat c) {
 		ACTIVE_CHEAT.add(c);
 		if (c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
@@ -209,21 +289,38 @@ public class NegativityPlayer {
 		}
 	}
 
+	/**
+	 * Start analyze of all cheat
+	 */
 	public void startAllAnalyze() {
 		INJECTED.add(getPlayer().getUniqueId());
 		for (Cheat c : Cheat.values())
 			startAnalyze(c);
 	}
 
+	/**
+	 * Stop analyze of the given cheat
+	 * 
+	 * @param c the cheat to disable
+	 */
 	public void stopAnalyze(Cheat c) {
 		ACTIVE_CHEAT.remove(c);
 	}
 	
+	/**
+	 * Call {@link PlayerPacketsClearEvent} and then clear all packets
+	 */
 	public void clearPackets() {
 		EventManager.callEvent(new PlayerPacketsClearEvent(getPlayer(), this));
 		PACKETS.clear();
 	}
 	
+	/**
+	 * Get the reason of the given cheat
+	 * 
+	 * @param c the cheat
+	 * @return the reason
+	 */
 	public String getReason(Cheat c) {
 		String n = "";
 		for(Cheat all : Cheat.values())
@@ -234,10 +331,18 @@ public class NegativityPlayer {
 		return n;
 	}
 
+	/**
+	 * Log the given message into proof file
+	 * 
+	 * @param msg the proof message
+	 */
 	public void logProof(String msg) {
 		proof.add(msg);
 	}
 	
+	/**
+	 * Save proof and account manager if need to be saved
+	 */
 	public void saveProof() {
 		if(mustToBeSaved) {
 			mustToBeSaved = false;
@@ -260,6 +365,11 @@ public class NegativityPlayer {
 		}
 	}
 	
+	/**
+	 * Compile and return all cheat alert for each cheat
+	 * 
+	 * @return all cheat alert
+	 */
 	public List<PlayerCheatAlertEvent> getAlertForAllCheat(){
 		final List<PlayerCheatAlertEvent> list = new ArrayList<>();
 		ALERT_NOT_SHOWED.forEach((c, listAlerts) -> {
@@ -269,6 +379,13 @@ public class NegativityPlayer {
 		return list;
 	}
 	
+	/**
+	 * Compile the list of alert into one of the given cheat
+	 * 
+	 * @param c the cheat of all alert
+	 * @param list all last alert of the cheat
+	 * @return a new alert, summary of all others
+	 */
 	public PlayerCheatAlertEvent getAlertForCheat(Cheat c, List<PlayerCheatAlertEvent> list) {
 		int nb = 0, nbConsole = 0;
 		HashMap<Integer, Integer> relia = new HashMap<>();
@@ -303,6 +420,9 @@ public class NegativityPlayer {
 		return new PlayerCheatAlertEvent(type, p, c, newRelia, hasRelia, newPing, "", hoverProof, nb, nbConsole);
 	}
 
+	/**
+	 * Save and destroy Negativity player and account
+	 */
 	public void destroy() {
 		saveProof();
 		NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
@@ -310,6 +430,9 @@ public class NegativityPlayer {
 		accountManager.dispose(playerId);
 	}
 
+	/**
+	 * Make the player currently in fight
+	 */
 	public void fight() {
 		isInFight = true;
 		if(fightTimer != null)
@@ -323,10 +446,18 @@ public class NegativityPlayer {
 		}, 5000);
 	}
 
+	/**
+	 * Make the player no longer in fight
+	 */
 	public void unfight() {
 		isInFight = false;
 	}
 
+	/**
+	 * Check if the player is target by a golem
+	 * 
+	 * @return true if at least one golem target the player
+	 */
 	public boolean isTargetByIronGolem() {
 		for(Entity et : p.getWorld().getEntities())
 			if(et instanceof IronGolem)
@@ -335,18 +466,37 @@ public class NegativityPlayer {
 		return false;
 	}
 
+	/**
+	 * Make fake player appears
+	 */
 	public void makeAppearEntities() {
-		
+		// TODO make appear fake players
 	}
 	
+	/**
+	 * Create ban effect
+	 */
 	public void banEffect() {
 		
 	}
 	
+	/**
+	 * Get the Negativity Player or create a new one
+	 * 
+	 * @param p the player which we are looking for it's NegativityPlayer
+	 * @return the negativity player
+	 */
 	public static NegativityPlayer getNegativityPlayer(Player p) {
 		return players.computeIfAbsent(p.getUniqueId(), id -> new NegativityPlayer(p));
 	}
 
+	/**
+	 * Get the Negativity Player or create a new one
+	 * 
+	 * @param uuid the player UUID
+	 * @param call a creator of a new player
+	 * @return the negativity player
+	 */
 	public static NegativityPlayer getNegativityPlayer(UUID uuid, Callable<Player> call) {
 		return players.computeIfAbsent(uuid, id -> {
 			try {
@@ -358,14 +508,30 @@ public class NegativityPlayer {
 		});
 	}
 
+	/**
+	 * Get the negativity player in cache of the given UUID
+	 * 
+	 * @param playerId the player UUID
+	 * @return the negativity player
+	 */
 	public static NegativityPlayer getCached(UUID playerId) {
 		return players.get(playerId);
 	}
 	
+	/**
+	 * Get all uuid and their negativity players
+	 * 
+	 * @return negativity players
+	 */
 	public static Map<UUID, NegativityPlayer> getAllPlayers(){
 		return players;
 	}
 
+	/**
+	 * Remove the player from cache
+	 * 
+	 * @param playerId the player UUID
+	 */
 	public static void removeFromCache(UUID playerId) {
 		NegativityPlayer cached = players.remove(playerId);
 		if (cached != null) {

@@ -5,14 +5,44 @@ import java.util.List;
 
 public interface PacketType {
 
+	/**
+	 * Get the packet ID from the enum
+	 * 
+	 * @return packet key name
+	 */
 	String name();
+	
+	/**
+	 * Get a showable packet name
+	 * 
+	 * @return the packet name
+	 */
 	String getPacketName();
+	
+	/**
+	 * Get the full packet name with prefix
+	 * 
+	 * @return the full packet name
+	 */
 	String getFullName();
+	
+	/**
+	 * Get all alias of the packet
+	 * 
+	 * @return all aliases
+	 */
 	List<String> getAlias();
 	
 	static boolean LOG_UNKNOW_PACKET = false;
 	static final String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus";
 	
+	/**
+	 * Get packet type of the given name
+	 * If the packet is not found and {@link #LOG_UNKNOW_PACKET} is on true, if will log it as info
+	 * 
+	 * @param packetName the packet name
+	 * @return the packet type, or the UNSET value of the PacketType section or null
+	 */
 	public static PacketType getType(String packetName) {
 		if(packetName.startsWith(CLIENT_PREFIX)) {
 			for(Client client : Client.values())

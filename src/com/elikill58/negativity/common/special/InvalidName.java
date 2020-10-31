@@ -19,7 +19,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class InvalidName extends Special implements Listeners {
 
 	public InvalidName() {
-		super(SpecialKeys.INVALID_NAME, false, true);
+		super(SpecialKeys.INVALID_NAME, false);
 	}
 
 	@EventListener

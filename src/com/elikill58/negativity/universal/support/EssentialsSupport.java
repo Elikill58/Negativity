@@ -13,10 +13,7 @@ public class EssentialsSupport {
 	}
 	
 	public static boolean checkEssentialsSpeedPrecondition(Player p) {
-		if(p.hasPermission("essentials.speed"))
-			return true;
-		else
-			return false;
+		return p.hasPermission("essentials.speed");
 	}
 	
 	public static float getEssentialsRealMoveSpeed(Player p) {

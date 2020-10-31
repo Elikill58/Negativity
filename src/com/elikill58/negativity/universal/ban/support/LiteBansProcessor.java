@@ -8,10 +8,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import org.bukkit.Bukkit;
-import org.bukkit.command.CommandException;
-import org.bukkit.entity.Player;
-
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
@@ -31,7 +29,7 @@ public class LiteBansProcessor implements BanProcessor {
 			String sender;
 			switch (ban.getBanType()) {
 			case MOD:
-				Player mod = Bukkit.getPlayer(ban.getBannedBy());
+				Player mod = Adapter.getAdapter().getPlayer(ban.getBannedBy());
 				if(mod != null) { // get UUID to support when MOD change her name
 					sender = "--sender-uuid=" + mod.getUniqueId().toString();
 					break;
@@ -43,9 +41,9 @@ public class LiteBansProcessor implements BanProcessor {
 				sender = "--sender=" + ban.getBannedBy();
 				break;
 			}
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "ban " + ban.getPlayerId().toString() + " " + timeValue + sender + " " + ban.getReason());
+			Adapter.getAdapter().runConsoleCommand("ban " + ban.getPlayerId().toString() + " " + timeValue + sender + " " + ban.getReason());
 			return new BanResult(BanResultType.DONE, ban);
-		} catch (CommandException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new BanResult(BanResultType.EXCEPTION, null);
 		}
@@ -55,9 +53,9 @@ public class LiteBansProcessor implements BanProcessor {
 	public BanResult revokeBan(UUID playerId) {
 		try {
 			Ban activeBan = getActiveBan(playerId);
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), "unban " + playerId);
+			Adapter.getAdapter().runConsoleCommand("unban " + playerId);
 			return new BanResult(activeBan);
-		} catch (CommandException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return new BanResult(BanResultType.EXCEPTION);
 		}

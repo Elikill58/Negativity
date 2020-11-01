@@ -1,0 +1,18 @@
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+dependencies {
+    // Temporary, should be moved out of common later
+    compileOnly 'com.gitlab.ruany:LiteBansAPI:0.3.4'
+    compileOnly 'net.ess3:EssentialsX:2.17.2'
+    compileOnly 'com.github.ProtocolSupport:ProtocolSupport:f34959c331'
+    compileOnly 'us.myles:viaversion:2.2.3'
+    compileOnly 'com.sk89q:worldguard:6.1'
+    compileOnly 'com.sk89q.worldedit:worldedit-core:6.1.1-SNAPSHOT'
+
+    compileOnly fileTree(file('externalPlugins'))
+}

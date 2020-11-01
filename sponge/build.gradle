@@ -1,0 +1,71 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+buildscript {
+    repositories {
+        maven {
+            name = 'forge'
+            url = 'http://files.minecraftforge.net/maven'
+        }
+    }
+
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+    }
+}
+
+plugins {
+    id 'net.minecrell.vanillagradle.server' version '2.2-6'
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+repositories {
+    maven {
+        name 'spongepowered'
+        url 'https://repo.spongepowered.org/maven/'
+    }
+}
+
+dependencies {
+    api project(':common')
+    compileOnly 'org.spongepowered:spongeapi:7.1.0'
+
+    compileOnly 'com.github.CrushedPixel:PacketGate:0.1.1'
+    compileOnly 'com.github.me4502:Precogs:0ecc1f0b85'
+}
+
+minecraft {
+    version = '1.12.2'
+    mappings = 'snapshot_20180131'
+    makeObfSourceJar = false
+}
+
+shadowJar {
+    archiveBaseName.set('negativity')
+    archiveAppendix.set('sponge')
+    archiveClassifier.set(null)
+
+    exclude('dummyThing')
+}
+
+parent.tasks.named('shadowJar', ShadowJar) {
+    it.from(shadowJar.outputs)
+}
+
+task prepareServer(type: Copy) {
+    from shadowJar.outputs
+    rename { 'negativity.jar' }
+    def pluginDir = System.getProperty('plugins.dir')
+    if (pluginDir == null) {
+        enabled(false)
+    } else {
+        into pluginDir
+    }
+}

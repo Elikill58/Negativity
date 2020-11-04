@@ -24,6 +24,7 @@ import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.permissions.Perm;
 
 public class CheckMenuInventory extends AbstractInventory {
 	
@@ -53,10 +54,10 @@ public class CheckMenuInventory extends AbstractInventory {
 		inv.setItem(13, createItem(ItemUtils.SKELETON_SKULL, Messages.getMessage(p, "fake_entities")));
 		//inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE"), "Kick"));
 		//inv.setItem(17, Utils.createItem(Material.ANVIL, "Ban"));
-
-		inv.setItem(18, createItem(Material.SPIDER_EYE, Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
+		if(!Perm.hasPerm(np, Perm.MOD))
+			inv.setItem(18, createItem(Material.SPIDER_EYE, Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
 		inv.setItem(19, createItem(ItemUtils.EYE_OF_ENDER, Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
-		if(!p.getUniqueId().equals(cible.getUniqueId()))
+		if(!p.getUniqueId().equals(cible.getUniqueId()) && !(Perm.hasPerm(np, Perm.MOD) || Perm.hasPerm(np, Perm.ADMIN)))
 			inv.setItem(20, createItem(Material.PACKED_ICE, Messages.getMessage(p, "inventory.main.freezing", "%name%", cible.getName())));
 		inv.setItem(21, createItem(Material.PAPER, Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())));
 		inv.setItem(22, createItem(Material.TNT, Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())));

@@ -1,11 +1,13 @@
 package com.elikill58.negativity.spigot.timers;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import com.elikill58.negativity.spigot.Inv;
+import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
@@ -42,7 +44,7 @@ public class ActualizeInvTimer extends BukkitRunnable {
 		}
 		for (Player p : Utils.getOnlinePlayers()) {
 			if (SpigotNegativityPlayer.getNegativityPlayer(p).isFreeze && INV_FREEZE_ACTIVE) {
-				AbstractInventory.open(InventoryType.FREEZE, p);
+				Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> AbstractInventory.open(InventoryType.FREEZE, p));
 			}
 		}
 	}

@@ -78,8 +78,9 @@ public class NegativityListener implements Listener {
 		}
 
 		if (message instanceof AlertMessage) {
+			String srvName = player.getServer().getInfo().getName();
 			AlertMessage alert = (AlertMessage) message;
-			Object[] place = new Object[]{"%name%", alert.getPlayername(), "%cheat%", alert.getCheat(),
+			Object[] place = new Object[]{"%name%", alert.getPlayername(), "%cheat%", alert.getCheat(), "%server%", srvName,
 					"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers()) {
@@ -95,7 +96,7 @@ public class NegativityListener implements Listener {
 					hoverComponent.append("\n\n" + BungeeMessages.getMessage(pp, "alert_tp_info", "%playername%", alert.getPlayername()), ComponentBuilder.FormatRetention.NONE);
 					alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent.create()));
 
-					String tpCommand = pp.getServer().equals(player.getServer()) ? "/tp " + alert.getPlayername() : "/server " + player.getServer().getInfo().getName();
+					String tpCommand = pp.getServer().equals(player.getServer()) ? "/tp " + alert.getPlayername() : "/server " + srvName;
 					alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, tpCommand));
 					pp.sendMessage(alertMessage);
 				}

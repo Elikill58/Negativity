@@ -71,8 +71,8 @@ public class SpeedProtocol extends Cheat implements Listener {
 		}
 		Location loc = p.getLocation().clone();
 		if (hasMaterialsAround(loc.getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| hasMaterialsAround(loc.add(0, 1, 0).getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| hasMaterialsAround(loc.subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
+				|| hasMaterialsAround(loc.clone().add(0, 2, 0).getBlock().getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| hasMaterialsAround(loc.clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		boolean mayCancel = false;

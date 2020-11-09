@@ -17,6 +17,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -47,14 +48,19 @@ public class SpeedProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
-		if(p.hasPotionEffect(PotionEffectType.SPEED) || np.hasElytra() || LocationUtils.isUsingElevator(p))
+		if(np.hasElytra() || LocationUtils.isUsingElevator(p) || np.TIME_INVINCIBILITY_SPEED > System.currentTimeMillis())
 			return;
+		if(p.hasPotionEffect(PotionEffectType.SPEED)) {
+			PotionEffect pe = np.getPotionEffect(PotionEffectType.SPEED);
+			if(pe.getAmplifier() > 0)
+				np.TIME_INVINCIBILITY_SPEED = System.currentTimeMillis() + pe.getAmplifier() * 100;
+			return;
+		}
 		
 		np.MOVE_TIME++;
 		if (np.MOVE_TIME > 60) {
 			boolean b = SpigotNegativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
-					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Ping: "
-							+ Utils.getPing(p) + " Warn for Speed: " + np.getWarn(this));
+					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Warn for Speed: " + np.getWarn(this));
 			if (b && isSetBack())
 				e.setCancelled(true);
 		}
@@ -70,7 +76,8 @@ public class SpeedProtocol extends Cheat implements Listener {
 			return;
 		}
 		Location loc = p.getLocation().clone();
-		if (hasMaterialsAround(loc.getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| hasMaterialsAround(loc.getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
 				|| hasMaterialsAround(loc.clone().add(0, 2, 0).getBlock().getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
 				|| hasMaterialsAround(loc.clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
@@ -90,7 +97,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 			}
 			double calculatedSpeedWithoutY = Utils.getSpeed(from, to);
 			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() < calculatedSpeedWithoutY && p.getVelocity().getY() > 0
-					&& hasMaterialsAround(loc, "STAIRS", "SLAB") && hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
+					&& hasMaterialsAround(loc, "STAIRS", "SLAB") && hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" is to prevent lag
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, 90, "Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().getY());
 			}
 		} else if (!np.isOnGround()) {

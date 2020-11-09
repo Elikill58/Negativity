@@ -10,6 +10,7 @@ commands:
   negativity:
     description: See all informations about a player and start verif
     permission: negativity.negativity
+    aliases: [n, neg]
   nreport:
     description: Report a player
     permission: negativity.report

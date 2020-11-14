@@ -17,7 +17,7 @@ import com.elikill58.negativity.universal.report.ReportType;
 public class PingSpoof extends Cheat implements Listeners {
 
 	public PingSpoof() {
-		super(PINGSPOOF, CheatCategory.PLAYER, Materials.CRACKED_STONE_BRICKS, false, false, "ping", "spoofing");
+		super(PINGSPOOF, CheatCategory.PLAYER, Materials.SPONGE, false, false, "ping", "spoofing");
 
 		if (checkActive("reachable")) {
 			new Thread(() -> {

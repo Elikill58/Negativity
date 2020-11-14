@@ -324,7 +324,7 @@ cheats:
     reach: 3.9 # In blocks !
     # Disabled by default because they can be viewable for someone
     ghost_disabled: true
-    ping: 150
+    ping: 200
     exact_name: "ForceField"
     isActive: true
     reliability_alert: 60
@@ -335,7 +335,7 @@ cheats:
 
   # Jesus is to walk on the water
   jesus:
-    ping: 150
+    ping: 200
     exact_name: "Jesus"
     isActive: true
     reliability_alert: 60
@@ -346,7 +346,7 @@ cheats:
 
   # AntiPotion remove bad potion effect
   antipotion:
-    ping: 150
+    ping: 200
     exact_name: "AntiPotion"
     isActive: true
     reliability_alert: 60
@@ -359,7 +359,7 @@ cheats:
   nofall:
     kill: false
     kill-reliability: 90 # reliability to authorize to kill player
-    ping: 150
+    ping: 200
     exact_name: "NoFall"
     isActive: true
     reliability_alert: 60
@@ -370,7 +370,7 @@ cheats:
 
   # FastEat is to eat something instantly
   fasteat:
-    ping: 150
+    ping: 200
     exact_name: "FastEat"
     isActive: true
     reliability_alert: 60
@@ -381,7 +381,7 @@ cheats:
 
   # FastPlace place a lot of block for you
   fastplace:
-    ping: 150
+    ping: 200
     exact_name: "FastPlace"
     isActive: true
     # Max time between 2 blocks placed
@@ -395,7 +395,7 @@ cheats:
 
   # Speed makes you run faster
   speed:
-    ping: 150
+    ping: 200
     exact_name: "Speed"
     isActive: true
     reliability_alert: 60
@@ -407,7 +407,7 @@ cheats:
   # AutoClick is to get more click than real people
   autoclick:
     click_alert: 20
-    ping: 150
+    ping: 200
     exact_name: "AutoClick"
     isActive: true
     reliability_alert: 60
@@ -418,7 +418,7 @@ cheats:
 
   # Fly enable you to fly
   fly:
-    ping: 150
+    ping: 200
     exact_name: "Fly"
     isActive: true
     reliability_alert: 60
@@ -429,7 +429,7 @@ cheats:
 
   # Regen help you to get your health
   regen:
-    ping: 150
+    ping: 200
     exact_name: "Regen"
     isActive: true
     reliability_alert: 60
@@ -440,7 +440,7 @@ cheats:
 
   # AntiKnockback remove knockback effect
   antiknockback:
-    ping: 150
+    ping: 200
     exact_name: "AntiKnockback"
     isActive: true
     reliability_alert: 60
@@ -451,7 +451,7 @@ cheats:
 
   # Blink enable you to teleport by simulating lag
   blink:
-    ping: 150
+    ping: 200
     exact_name: "Blink"
     isActive: true
     reliability_alert: 60
@@ -462,7 +462,7 @@ cheats:
 
   # FastBow shoot bow quicker
   fastbow:
-    ping: 150
+    ping: 200
     exact_name: "FastBow"
     isActive: true
     reliability_alert: 60
@@ -473,7 +473,7 @@ cheats:
 
   # Spider make you walk on the wall
   spider:
-    ping: 150
+    ping: 200
     exact_name: "Spider"
     isActive: true
     reliability_alert: 60
@@ -484,7 +484,7 @@ cheats:
 
   # Sneak make you sneaking but with basic speed
   sneak:
-    ping: 150
+    ping: 200
     exact_name: "Sneak"
     isActive: true
     reliability_alert: 60
@@ -495,7 +495,7 @@ cheats:
 
   # Scaffold place block under you
   scaffold:
-    ping: 150
+    ping: 200
     exact_name: "Scaffold"
     isActive: true
     reliability_alert: 60
@@ -506,7 +506,7 @@ cheats:
 
   # Step make you jump 2 blocks
   step:
-    ping: 150
+    ping: 200
     exact_name: "Step"
     isActive: true
     reliability_alert: 60
@@ -517,7 +517,7 @@ cheats:
 
   # NoSlowDown remove slow down effects (like with soul sand)
   noslowdown:
-    ping: 150
+    ping: 200
     exact_name: "NoSlowDown"
     isActive: true
     reliability_alert: 60
@@ -528,7 +528,7 @@ cheats:
 
   # FastLadders is to climb ladders quickler
   fastladder:
-    ping: 150
+    ping: 200
     exact_name: "FastLadder"
     isActive: true
     reliability_alert: 60
@@ -539,7 +539,7 @@ cheats:
 
   # Phase is to glitch on block
   phase:
-    ping: 150
+    ping: 200
     exact_name: "Phase"
     isActive: true
     reliability_alert: 60
@@ -550,7 +550,7 @@ cheats:
 
   # AutoSteal help with inventory (Take verything ...)
   autosteal:
-    ping: 150
+    ping: 200
     exact_name: "AutoSteal"
     isActive: true
     reliability_alert: 60
@@ -572,7 +572,7 @@ cheats:
 
   # Nuker/BedBreaker automatically break block without looking her
   nuker:
-    ping: 150
+    ping: 200
     exact_name: "Nuker"
     isActive: true
     reliability_alert: 60
@@ -583,7 +583,7 @@ cheats:
 
   # AirJump make you jump on air
   airjump:
-    ping: 150
+    ping: 200
     exact_name: "AirJump"
     isActive: true
     reliability_alert: 60
@@ -609,7 +609,7 @@ cheats:
 
   # NoWeb make you walking on web like if you walk on ground
   noweb:
-    ping: 150
+    ping: 200
     exact_name: "NoWeb"
     isActive: true
     reliability_alert: 60
@@ -620,7 +620,7 @@ cheats:
 
   # Critical set all of your attack as critical attack (even while sneaking)
   critical:
-    ping: 150
+    ping: 200
     exact_name: "Critical"
     isActive: true
     reliability_alert: 60
@@ -631,7 +631,7 @@ cheats:
 
   # InventoryMove make you walking while editing your inventory
   inventorymove:
-    ping: 150
+    ping: 200
     exact_name: "InventoryMove"
     isActive: true
     reliability_alert: 60
@@ -642,7 +642,7 @@ cheats:
 
   # FastStairs make you walking faster on Stairs
   faststairs:
-    ping: 150
+    ping: 200
     exact_name: "FastStairs"
     isActive: true
     reliability_alert: 60
@@ -653,7 +653,7 @@ cheats:
 
   # NoPitchLimit enable player to see behind
   nopitchlimit:
-    ping: 150
+    ping: 200
     exact_name: "NoPitchLimit"
     isActive: true
     reliability_alert: 60
@@ -664,7 +664,7 @@ cheats:
 
   # Timer make the player game going faster
   timer:
-    ping: 150
+    ping: 200
     exact_name: "Timer"
     isActive: true
     reliability_alert: 60
@@ -676,7 +676,7 @@ cheats:
 
   # PingSpoof fake the ping of the player
   pingspoof:
-    ping: 150
+    ping: 200
     exact_name: "PingSpoof"
     isActive: true
     reliability_alert: 60

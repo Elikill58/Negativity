@@ -17,7 +17,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class PingSpoofProtocol extends Cheat implements Listener {
 
 	public PingSpoofProtocol() {
-		super(CheatKeys.PINGSPOOF, false, Material.CRACKED_STONE_BRICKS, CheatCategory.PLAYER, true, "ping",
+		super(CheatKeys.PINGSPOOF, false, Material.SPONGE, CheatCategory.PLAYER, true, "ping",
 				"spoofing");
 
 		Bukkit.getScheduler().runTaskTimer(SpigotNegativity.getInstance(), () -> {

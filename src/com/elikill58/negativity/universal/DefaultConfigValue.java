@@ -97,7 +97,7 @@ public class DefaultConfigValue {
 
 		String[] cheats = new String[]{"airjump", "antipotion", "fasteat", "regen", "antiknockback", "autoclick", "autosteal",
 				"blink", "chat", "critical", "forcefield", "fastplace", "fastladder", "fastbow", "faststairs", "inventorymove", "jesus", "fly",
-				"nofall", "nopitchlimit", "noslowdown", "noweb", "nuker", "phase", "scaffold", "sneak", "speed", "spider", "step", "timer", "xray"};
+				"nofall", "nopitchlimit", "noslowdown", "noweb", "nuker", "pingspoof", "phase", "scaffold", "sneak", "speed", "spider", "step", "timer", "xray"};
 		for (String localCheat : cheats) {
 			//STRINGS.put("Permissions.bypass." + localCheat, "negativity.bypass." + localCheat);
 			STRINGS.put("Permissions.bypass." + localCheat + ".default", "negativity.bypass." + localCheat);

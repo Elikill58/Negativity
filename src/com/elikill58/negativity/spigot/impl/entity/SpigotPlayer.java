@@ -105,7 +105,7 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public void damage(double amount) {
-		p.damage(amount);
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> p.damage(amount));
 	}
 
 	@Override

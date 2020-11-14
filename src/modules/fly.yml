@@ -10,10 +10,16 @@ active: true
 
 # Maximum of ping to be verified.
 # It's to prevent lagging player
-ping: 150
+ping: 200
 
 # The minimum porcent to create reliability
 reliability_alert: 60
+
+# Manage the kick of players
+kick:
+  active: false
+  # Required alert to kick player
+  alert: 5
 
 # Remove the cheat effect
 set_back:

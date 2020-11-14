@@ -98,6 +98,7 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	}
 	
 	@Override
+	@SuppressWarnings("deprecation")
 	public String getIP() {
 		return p.getAddress().getHostName();
 	}

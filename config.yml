@@ -173,6 +173,8 @@ Permissions:
       default: "negativity.bypass.nopitchlimit"
     timer:
       default: "negativity.bypass.timer"
+    pingspoof:
+      default: "negativity.bypass.pingspoof"
 
 Translation:
   active: false # enable or disable the translation
@@ -671,6 +673,17 @@ cheats:
     alert_to_kick: 5
     check_in_verif: true
     max_variation: 7
+
+  # PingSpoof fake the ping of the player
+  pingspoof:
+    ping: 150
+    exact_name: "PingSpoof"
+    isActive: true
+    reliability_alert: 60
+    setBack: false
+    kick: false
+    alert_to_kick: 5
+    check_in_verif: true
 
   # There is some special features
   special:

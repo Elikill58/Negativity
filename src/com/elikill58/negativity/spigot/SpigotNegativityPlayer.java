@@ -75,7 +75,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	// Packets
 	public int ALL = 0, MAX_FLYING;
 	// warns & other
-	public int LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0, SPIDER_SAME_DIST = 0;
+	public int LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0, SPIDER_SAME_DIST = 0, LAST_PING = -1;
 	// setBack
 	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, LAST_SLOT_CLICK = -1, LAST_CHAT_MESSAGE_NB = 0, SPEED_NB = 0, MOVE_TIME = 0;
 	public double lastYDiff = -3.141592654;

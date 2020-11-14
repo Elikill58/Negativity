@@ -25,6 +25,7 @@ public class CheatKeys {
 	public static final String NO_WEB = "NOWEB";
 	public static final String NUKER = "NUKER";
 	public static final String PHASE = "PHASE";
+	public static final String PINGSPOOF = "PINGSPOOF";
 	public static final String REGEN = "REGEN";
 	public static final String SCAFFOLD = "SCAFFOLD";
 	public static final String SNEAK = "SNEAK";

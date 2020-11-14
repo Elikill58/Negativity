@@ -45,6 +45,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.event.EventHandler;
 
+@SuppressWarnings("deprecation")
 public class NegativityListener implements Listener {
 
 	public static List<Report> report = new ArrayList<>();

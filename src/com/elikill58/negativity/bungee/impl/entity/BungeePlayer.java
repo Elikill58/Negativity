@@ -1,5 +1,6 @@
 package com.elikill58.negativity.bungee.impl.entity;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -33,6 +34,7 @@ public class BungeePlayer extends Player {
 		return pp.getUniqueId();
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public String getIP() {
 		return pp.getAddress().getAddress().getHostAddress();
@@ -299,5 +301,10 @@ public class BungeePlayer extends Player {
 	@Override
 	public int getEntityId() {
 		return 0;
+	}
+	
+	@Override
+	public InetSocketAddress getAddress() {
+		return pp.getPendingConnection().getVirtualHost();
 	}
 }

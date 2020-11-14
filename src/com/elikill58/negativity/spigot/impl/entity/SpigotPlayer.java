@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.impl.entity;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -394,5 +395,10 @@ public class SpigotPlayer extends Player {
 	@Override
 	public int getEntityId() {
 		return p.getEntityId();
+	}
+	
+	@Override
+	public InetSocketAddress getAddress() {
+		return p.getAddress();
 	}
 }

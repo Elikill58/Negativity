@@ -44,6 +44,7 @@ import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.event.EventHandler;
 
+@SuppressWarnings("deprecation")
 public class BungeeListeners implements Listener {
 
 	public static List<Report> report = new ArrayList<>();
@@ -134,8 +135,7 @@ public class BungeeListeners implements Listener {
 			Adapter.getAdapter().getLogger().warn("Unhandled plugin message " + message.getClass());
 		}
 	}
-
-	@SuppressWarnings("deprecation")
+	
 	@EventHandler
 	public void onPreLogin(net.md_5.bungee.api.event.LoginEvent e) {
 		PendingConnection co = e.getConnection();

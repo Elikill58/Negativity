@@ -21,6 +21,7 @@ public class Materials {
     public static final Material COAL_BLOCK = ItemRegistrar.getInstance().get("coal_block");
     public static final Material COAL_ORE = ItemRegistrar.getInstance().get("coal_ore");
     public static final Material COOKED_BEEF = ItemRegistrar.getInstance().get("cooked_beef");
+    public static final Material CRACKED_STONE_BRICKS = ItemRegistrar.getInstance().get("cracked_stone_bricks");
     
     public static final Material DIAMOND = ItemRegistrar.getInstance().get("diamond");
     public static final Material DIAMOND_AXE = ItemRegistrar.getInstance().get("diamond_axe");

@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.impl.entity;
 
+import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -416,5 +417,10 @@ public class SpongePlayer extends Player {
 	@Override
 	public int getEntityId() {
 		return 0;
+	}
+	
+	@Override
+	public InetSocketAddress getAddress() {
+		return p.getConnection().getVirtualHost();
 	}
 }

@@ -12,6 +12,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class ClickableText1_13 {
 
+	@SuppressWarnings("deprecation")
 	public static void send(Player p, MessageComponent mc) {
 		TextComponent text = new TextComponent(mc.text);
 		if (mc.a == Action.SHOW_TEXT)

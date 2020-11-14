@@ -1,5 +1,6 @@
 package com.elikill58.negativity.velocity.impl.entity;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -300,5 +301,10 @@ public class VelocityPlayer extends Player {
 	@Override
 	public int getEntityId() {
 		return 0;
+	}
+	
+	@Override
+	public InetSocketAddress getAddress() {
+		return pp.getRemoteAddress();
 	}
 }

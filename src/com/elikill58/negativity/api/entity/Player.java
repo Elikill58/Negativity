@@ -1,5 +1,6 @@
 package com.elikill58.negativity.api.entity;
 
+import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Optional;
 
@@ -281,6 +282,13 @@ public abstract class Player extends OfflinePlayer {
 	 * @param vel the new velocity
 	 */
 	public abstract void setVelocity(Vector vel);
+
+	/**
+	 * Get the player address
+	 * 
+	 * @return the player inet address
+	 */
+	public abstract InetSocketAddress getAddress();
 	
 	/**
 	 * Check if it's a new player

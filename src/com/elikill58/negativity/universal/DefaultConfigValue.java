@@ -145,6 +145,8 @@ public class DefaultConfigValue {
 		}
 
 		INTS.put("cheats.autoclick.click_alert", 20);
+		
+		STRINGS.put("cheats.antiknockback.algo", "(0.00000008 * velY * velY) + (0.0001 * velY) - 0.0219");
 
 		DOUBLES.put("cheats.forcefield.reach", 3.9);
 		BOOLEANS.put("cheats.forcefield.ghost_disabled", false);

@@ -6,6 +6,8 @@ import java.util.List;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -586,5 +588,62 @@ public class LocationUtils {
 	
 	public static enum Direction {
 		NORTH, SOUTH, WEST, EAST, UP, DOWN;
+	}
+
+	public static boolean hasAntiKbBypass(Player p) {
+		return isInWater(p.getLocation()) || isInWeb(p.getLocation()) || hasCeiling(p);
+	}
+
+	public static boolean isInWater(Location loc) {
+		return loc.getBlock().isLiquid()
+				|| loc.clone().add(0, -1, 0).getBlock().isLiquid()
+				|| loc.clone().add(0, 1, 0).getBlock().isLiquid();
+	}
+
+	public static boolean isInWeb(Location loc) {
+		return isInWebForLocation(loc) || isInWebForLocation(loc.clone().add(0, 1, 0));
+	}
+		
+	private static boolean isInWebForLocation(Location loc) {
+		double x = loc.getX() - loc.getBlockX(), z = loc.getZ() - loc.getBlockZ();
+
+		if (isWeb(loc.getBlock()))
+			return true;
+		else if (x < 0.31 && isWeb(loc.getBlock().getRelative(BlockFace.WEST)))
+			return true;
+		else if (x > 0.69 && isWeb(loc.getBlock().getRelative(BlockFace.EAST)))
+			return true;
+		else if (z < 0.31 && isWeb(loc.getBlock().getRelative(BlockFace.NORTH)))
+			return true;
+		else if (z > 0.69 && isWeb(loc.getBlock().getRelative(BlockFace.SOUTH)))
+			return true;
+		else if (x > 0.71 && z < 0.3 && isWeb(loc.getBlock().getRelative(BlockFace.EAST).getRelative(BlockFace.NORTH)))
+			return true;
+		else if (x > 0.71 && z > 0.71 && isWeb(loc.getBlock().getRelative(BlockFace.EAST).getRelative(BlockFace.SOUTH)))
+			return true;
+		else if (x < 0.31 && z > 0.71 && isWeb(loc.getBlock().getRelative(BlockFace.WEST).getRelative(BlockFace.SOUTH)))
+			return true;
+		else if (x < 0.31 && z < 0.31 && isWeb(loc.getBlock().getRelative(BlockFace.WEST).getRelative(BlockFace.NORTH)))
+			return true;
+		return false;
+	}
+	
+	private static boolean isWeb(Block b){
+		return b.getType().equals(ItemUtils.WEB);
+	}
+
+	public static boolean hasCeiling(Player player) {
+		Location loc = player.getLocation().clone().add(0, 2, 0);
+		if (loc.getBlock().getType().isSolid())
+			return true;
+		else if (loc.getX() > 0.66 && loc.getBlock().getRelative(BlockFace.EAST).getType().isSolid())
+			return true;
+		else if (loc.getX() < -0.66 && loc.getBlock().getRelative(BlockFace.WEST).getType().isSolid())
+			return true;
+		else if (loc.getZ() > 0.66 && loc.getBlock().getRelative(BlockFace.SOUTH).getType().isSolid())
+			return true;
+		else if (loc.getZ() < -0.66 && loc.getBlock().getRelative(BlockFace.NORTH).getType().isSolid())
+			return true;
+		return false;
 	}
 }

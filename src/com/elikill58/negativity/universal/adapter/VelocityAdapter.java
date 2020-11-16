@@ -75,7 +75,7 @@ public class VelocityAdapter extends Adapter {
 
 	@Override
 	public void debug(String msg) {
-		if(UniversalUtils.DEBUG)
+		if(UniversalUtils.isDebugMode())
 			getLogger().info(msg);
 	}
 

@@ -50,8 +50,13 @@ import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 public class UniversalUtils {
 
 	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-	public static boolean HAVE_INTERNET = true, DEBUG = false;
+	public static boolean HAVE_INTERNET = true;
+	private static boolean DEBUG = false;
 
+	public static boolean isDebugMode() {
+		return Adapter.getAdapter().getConfig().getBoolean("debug") || DEBUG;
+	}
+	
 	public static int getMultipleOf(int i, int multiple, int more) {
 		return getMultipleOf(i, multiple, more, -1);
 	}

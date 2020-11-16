@@ -83,7 +83,7 @@ public class SpongeAdapter extends Adapter {
 
 	@Override
 	public void debug(String msg) {
-		if(UniversalUtils.DEBUG)
+		if(UniversalUtils.isDebugMode())
 			logger.info(msg);
 	}
 

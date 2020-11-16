@@ -66,7 +66,7 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 	}
 
 	@EventHandler
-	public void FoodCheck(PlayerItemConsumeEvent e) {
+	public void foodCheck(PlayerItemConsumeEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
@@ -80,5 +80,10 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
+	}
+	
+	@Override
+	public boolean isBlockedInFight() {
+		return true;
 	}
 }

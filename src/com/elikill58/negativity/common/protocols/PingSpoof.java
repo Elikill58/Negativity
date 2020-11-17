@@ -42,6 +42,8 @@ public class PingSpoof extends Cheat implements Listeners {
 	 * @param np the negativity player of player
 	 */
 	public static void managePingSpoof(Player p, NegativityPlayer np) {
+		if(np.TIME_INVINCIBILITY + 5000 < System.currentTimeMillis())
+			return;
 		int newPing = p.getPing(), lastPing = np.ints.get(PINGSPOOF, "last-ping", -1);
 		if (newPing == lastPing)
 			return;

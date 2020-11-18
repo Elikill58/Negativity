@@ -104,7 +104,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 			if(item != null && item.getType().isConsumable())
 				np.booleans.set(NO_SLOW_DOWN, "eating", true);
 			
-		} else if(type.equals(PacketType.Client.BLOCK_DIG) || type.equals(PacketType.Client.BLOCK_PLACE)) {
+		} else if(!type.isFlyingPacket()) {
 			np.booleans.remove(NO_SLOW_DOWN, "eating");
 		}
 	}

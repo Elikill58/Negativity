@@ -33,6 +33,13 @@ public interface PacketType {
 	 */
 	List<String> getAlias();
 	
+	/**
+	 * Check if it's flying packet
+	 * 
+	 * @return true if it's flying packet
+	 */
+	boolean isFlyingPacket();
+	
 	static boolean LOG_UNKNOW_PACKET = false;
 	static final String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus";
 	
@@ -151,6 +158,11 @@ public interface PacketType {
 		@Override
 		public List<String> getAlias() {
 			return alias;
+		}
+		
+		@Override
+		public boolean isFlyingPacket() {
+			return this == FLYING || this == POSITION || this == LOOK || this == POSITION_LOOK;
 		}
 	}
 	
@@ -279,6 +291,11 @@ public interface PacketType {
 		public List<String> getAlias() {
 			return alias;
 		}
+		
+		@Override
+		public boolean isFlyingPacket() {
+			return this == LOOK_AT || this == POSITION;
+		}
 	}
 	
 	public static enum Login implements PacketType {
@@ -319,6 +336,11 @@ public interface PacketType {
 		public List<String> getAlias() {
 			return alias;
 		}
+		
+		@Override
+		public boolean isFlyingPacket() {
+			return false;
+		}
 	}
 	
 	public static enum Status implements PacketType {
@@ -355,6 +377,11 @@ public interface PacketType {
 		@Override
 		public List<String> getAlias() {
 			return alias;
+		}
+		
+		@Override
+		public boolean isFlyingPacket() {
+			return false;
 		}
 	}
 }

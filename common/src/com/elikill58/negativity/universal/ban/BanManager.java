@@ -14,9 +14,11 @@ import javax.annotation.Nullable;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Sanction;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
+import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 import com.elikill58.negativity.universal.ban.processor.CommandBanProcessor;
 import com.elikill58.negativity.universal.ban.processor.NegativityBanProcessor;
 import com.elikill58.negativity.universal.ban.storage.DatabaseActiveBanStorage;
@@ -191,6 +193,13 @@ public class BanManager {
 		sanctionConfig.getKeys().forEach((key) -> SANCTIONS.add(new Sanction(key, sanctionConfig.getSection(key))));
 		
 		BansMigration.migrateBans(banDir, banLogsDir);
+		
+		Negativity.loadExtensions(BanProcessorProvider.class, provider -> {
+			BanProcessor processor = provider.create(adapter);
+			if (processor != null) {
+				registerProcessor(provider.getId(), processor);
+			}
+		});
 	}
 	
 	public static Configuration getBanConfig() {

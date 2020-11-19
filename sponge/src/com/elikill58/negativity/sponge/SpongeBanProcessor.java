@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.ban.processor;
+package com.elikill58.negativity.sponge;
 
 import java.time.Instant;
 import java.util.Collections;
@@ -15,12 +15,15 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import org.spongepowered.api.util.ban.BanTypes;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.BanUtils;
+import com.elikill58.negativity.universal.ban.processor.BanProcessor;
+import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 
 public class SpongeBanProcessor implements BanProcessor {
 
@@ -110,5 +113,19 @@ public class SpongeBanProcessor implements BanProcessor {
 	@Override
 	public List<Ban> getActiveBanOnSameIP(String ip) {
 		return Collections.emptyList();
+	}
+	
+	public static class Provider implements BanProcessorProvider {
+		
+		@Override
+		public String getId() {
+			return "sponge";
+		}
+		
+		@Nullable
+		@Override
+		public BanProcessor create(Adapter adapter) {
+			return new SpongeBanProcessor();
+		}
 	}
 }

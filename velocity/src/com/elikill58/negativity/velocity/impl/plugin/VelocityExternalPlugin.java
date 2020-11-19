@@ -10,7 +10,12 @@ public class VelocityExternalPlugin extends ExternalPlugin {
 	public VelocityExternalPlugin(PluginContainer pl) {
 		this.pl = pl;
 	}
-
+	
+	@Override
+	public String getId() {
+		return pl.getDescription().getId();
+	}
+	
 	@Override
 	public boolean isEnabled() {
 		return pl != null;
@@ -18,7 +23,9 @@ public class VelocityExternalPlugin extends ExternalPlugin {
 
 	@Override
 	public Object getDefault() {
-		return pl;
+		// Let's assume the instance exists
+		//noinspection OptionalGetWithoutIsPresent
+		return pl.getInstance().get();
 	}
 
 }

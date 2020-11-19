@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -198,6 +199,14 @@ public class VelocityAdapter extends ProxyAdapter {
 	@Override
 	public ExternalPlugin getPlugin(String name) {
 		return new VelocityExternalPlugin(pl.getServer().getPluginManager().getPlugin(name).orElse(null));
+	}
+	
+	@Override
+	public List<ExternalPlugin> getDependentPlugins() {
+		return pl.getServer().getPluginManager().getPlugins().stream()
+				.filter(plugin -> plugin.getDescription().getDependency("negativity").isPresent())
+				.map(VelocityExternalPlugin::new)
+				.collect(Collectors.toList());
 	}
 	
 	@Override

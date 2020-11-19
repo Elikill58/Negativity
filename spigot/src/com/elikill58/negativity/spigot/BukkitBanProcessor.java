@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.ban.support;
+package com.elikill58.negativity.spigot;
 
 import java.time.Instant;
 import java.util.ArrayList;
@@ -22,6 +22,7 @@ import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
+import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 
 public class BukkitBanProcessor implements BanProcessor {
 	
@@ -113,5 +114,19 @@ public class BukkitBanProcessor implements BanProcessor {
 		long executionTime = banEntry.getCreated().getTime();
 		long revocationTime = revoked ? System.currentTimeMillis() : -1;
 		return new Ban(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason, null, status, executionTime, revocationTime);
+	}
+	
+	public static class Provider implements BanProcessorProvider {
+		
+		@Override
+		public String getId() {
+			return "bukkit";
+		}
+		
+		@Nullable
+		@Override
+		public BanProcessor create(Adapter adapter) {
+			return new BukkitBanProcessor();
+		}
 	}
 }

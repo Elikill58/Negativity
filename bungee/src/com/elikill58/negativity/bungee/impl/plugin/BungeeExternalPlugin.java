@@ -11,7 +11,12 @@ public class BungeeExternalPlugin extends ExternalPlugin {
 	public BungeeExternalPlugin(Plugin pl) {
 		this.pl = pl;
 	}
-
+	
+	@Override
+	public String getId() {
+		return pl.getDescription().getName();
+	}
+	
 	@Override
 	public boolean isEnabled() {
 		return pl != null;

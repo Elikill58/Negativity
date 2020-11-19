@@ -322,6 +322,11 @@ public abstract class Adapter {
 	public abstract ExternalPlugin getPlugin(String name);
 	
 	/**
+	 * @return all plugins depending on Negativity
+	 */
+	public abstract List<ExternalPlugin> getDependentPlugins();
+	
+	/**
 	 * Run action sync with the server.
 	 * Specially useful for world/player action
 	 * 

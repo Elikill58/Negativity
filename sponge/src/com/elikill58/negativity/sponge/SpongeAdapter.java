@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -257,6 +258,14 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public ExternalPlugin getPlugin(String name) {
 		return new SpongeExternalPlugin(Sponge.getPluginManager().getPlugin(name).orElse(null));
+	}
+	
+	@Override
+	public List<ExternalPlugin> getDependentPlugins() {
+		return Sponge.getPluginManager().getPlugins().stream()
+				.filter(plugin -> plugin.getDependency("negativity").isPresent())
+				.map(SpongeExternalPlugin::new)
+				.collect(Collectors.toList());
 	}
 	
 	@Override

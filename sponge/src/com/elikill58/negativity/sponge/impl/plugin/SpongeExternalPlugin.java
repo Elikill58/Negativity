@@ -13,6 +13,11 @@ public class SpongeExternalPlugin extends ExternalPlugin {
 	}
 	
 	@Override
+	public String getId() {
+		return pl.getId();
+	}
+	
+	@Override
 	public boolean isEnabled() {
 		return true;
 	}

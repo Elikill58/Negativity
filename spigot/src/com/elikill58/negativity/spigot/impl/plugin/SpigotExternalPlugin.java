@@ -13,6 +13,11 @@ public class SpigotExternalPlugin extends ExternalPlugin {
 	}
 	
 	@Override
+	public String getId() {
+		return pl.getName();
+	}
+	
+	@Override
 	public boolean isEnabled() {
 		return pl.isEnabled();
 	}

@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
@@ -32,6 +33,7 @@ import com.google.gson.Gson;
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.plugin.PluginDescription;
 
 public class BungeeAdapter extends ProxyAdapter {
 
@@ -199,6 +201,17 @@ public class BungeeAdapter extends ProxyAdapter {
 	@Override
 	public ExternalPlugin getPlugin(String name) {
 		return new BungeeExternalPlugin(pl.getProxy().getPluginManager().getPlugin(name));
+	}
+	
+	@Override
+	public List<ExternalPlugin> getDependentPlugins() {
+		return pl.getProxy().getPluginManager().getPlugins().stream()
+				.filter(plugin -> {
+					PluginDescription description = plugin.getDescription();
+					return description.getDepends().contains("BungeeNegativity") || description.getSoftDepends().contains("BungeeNegativity");
+				})
+				.map(BungeeExternalPlugin::new)
+				.collect(Collectors.toList());
 	}
 	
 	@Override

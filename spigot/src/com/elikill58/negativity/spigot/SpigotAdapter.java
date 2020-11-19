@@ -3,13 +3,16 @@ package com.elikill58.negativity.spigot;
 import java.io.File;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -276,6 +279,17 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public ExternalPlugin getPlugin(String name) {
 		return new SpigotExternalPlugin(Bukkit.getPluginManager().getPlugin(name));
+	}
+	
+	@Override
+	public List<ExternalPlugin> getDependentPlugins() {
+		return Arrays.stream(Bukkit.getPluginManager().getPlugins())
+				.filter(plugin -> {
+					PluginDescriptionFile description = plugin.getDescription();
+					return description.getDepend().contains("Negativity") || description.getSoftDepend().contains("Negativity");
+				})
+				.map(SpigotExternalPlugin::new)
+				.collect(Collectors.toList());
 	}
 	
 	@Override

@@ -6,7 +6,9 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ServiceLoader;
 import java.util.StringJoiner;
+import java.util.function.Consumer;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
@@ -18,6 +20,7 @@ import com.elikill58.negativity.api.events.negativity.PlayerCheatEvent;
 import com.elikill58.negativity.api.events.negativity.PlayerCheatKickEvent;
 import com.elikill58.negativity.api.events.negativity.ShowAlertPermissionEvent;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Stats.StatsType;
@@ -387,6 +390,29 @@ public class Negativity {
 		
 		if (supportedPluginName.length() > 0) {
 			ada.getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
+		}
+	}
+	
+	public static <T> void loadExtensions(Class<T> extensionClass, Consumer<T> extensionConsumer) {
+		Adapter adapter = Adapter.getAdapter();
+		// First load extensions from negativity
+		safelyLoadExtensions(extensionClass, BanManager.class.getClassLoader(), extensionConsumer);
+		// Then those from dependent plugins
+		for (ExternalPlugin plugin : adapter.getDependentPlugins()) {
+			adapter.debug("Searching " + plugin.getId() + " for BanProcessor providers");
+			ClassLoader pluginClassLoader = plugin.getDefault().getClass().getClassLoader();
+			safelyLoadExtensions(extensionClass, pluginClassLoader, extensionConsumer);
+		}
+	}
+	
+	private static <T> void safelyLoadExtensions(Class<T> extensionClass, ClassLoader classLoader, Consumer<T> extensionConsumer) {
+		for (T extension : ServiceLoader.load(extensionClass, classLoader)) {
+			try {
+				extensionConsumer.accept(extension);
+			} catch (Throwable e) {
+				Adapter.getAdapter().getLogger().error("Failed to consume extension " + extension);
+				e.printStackTrace();
+			}
 		}
 	}
 }

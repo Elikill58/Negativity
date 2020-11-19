@@ -73,8 +73,6 @@ import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.ban.processor.ForwardToProxyBanProcessor;
-import com.elikill58.negativity.universal.ban.processor.SpongeBanProcessor;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
@@ -136,9 +134,6 @@ public class SpongeNegativity {
 					.name("negativity-pending-alerts").submit(this);
 		
 		NegativityAccountStorage.setDefaultStorage("file");
-
-		BanManager.registerProcessor("sponge", new SpongeBanProcessor());
-		BanManager.registerProcessor(ForwardToProxyBanProcessor.PROCESSOR_ID, new ForwardToProxyBanProcessor(SpongeNegativity::sendPluginMessage));
 
 		if(SpongeUpdateChecker.ifUpdateAvailable()) {
 			getLogger().info("New version available (" + SpongeUpdateChecker.getVersionString() + ") : " + SpongeUpdateChecker.getDownloadUrl());

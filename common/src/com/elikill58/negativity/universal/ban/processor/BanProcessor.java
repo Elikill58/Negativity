@@ -13,6 +13,9 @@ import com.elikill58.negativity.universal.ban.BanResult;
  * Decides what to do with ban and unban requests as well as active and logged bans queries.
  * <p>
  * {@link BanManager} basically delegates actions to a BanProcessor.
+ *
+ * @see BanProcessorProvider BanProcessorProvider - the preferred way to register BanProcessors
+ * @see BanManager#registerProcessor(String, BanProcessor)
  */
 public interface BanProcessor {
 

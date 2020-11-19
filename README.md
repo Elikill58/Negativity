@@ -100,14 +100,8 @@ In the following instructions you will have to execute Gradle tasks. You **must*
 Examples will be using `./gradlew`, if you are on Windows you need to use `gradlew.bat` instead.
 
 1. Clone this repository: `git clone https://github.com/Elikill58/Negativity.git`
-2. Manually download the following dependencies into `/common/externalPlugins/` (you need to create the directory):
- - [AdvancedBan](https://github.com/DevLeoko/AdvancedBan/releases/tag/v2.1.8)
- - [GadgetsMenu](https://www.spigotmc.org/resources/gadgetsmenu-1-8-1-15-free.10885/download?version=328675)
- - [MaxBans](https://dev.bukkit.org/projects/maxbans/files/2421382)
- - [PacketGate](https://github.com/CrushedPixel/PacketGate/releases/tag/0.1.1)
- - [Floodgate](https://ci.nukkitx.com/job/GeyserMC/job/Floodgate/job/development/) (any platform-specific jar should work)
-3. Get Spigot 1.7.10 and 1.13.2 jars and put them in `/spigot/spigotJars/` (you need to create this directory too)
-4. Setup a Forge workspace for the Sponge plugin: `./gradlew :sponge:setupDecompWorkspace`. This step will take some time to complete
-5. Build the plugin: `./gradlew shadowJar`
+2. Get Spigot 1.7.10 and 1.13.2 jars and put them in `/spigot/spigotJars/` (you need to create this directory too)
+3. Setup a Forge workspace for the Sponge plugin: `./gradlew :sponge:setupDecompWorkspace`. This step will take some time to complete
+4. Build the plugin: `./gradlew build`
  - You can find the all-in-one jar in `/build/libs/`
  - Platform-specific jars are available in their own project subdirectories (`/spigot/build/libs/` for example)

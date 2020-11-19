@@ -8,6 +8,8 @@ shadowJar {
     archiveClassifier.set(null)
 }
 
+build.dependsOn shadowJar
+
 subprojects {
     apply plugin: 'java-library'
 

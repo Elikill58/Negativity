@@ -55,6 +55,8 @@ shadowJar {
     exclude('dummyThing')
 }
 
+build.dependsOn shadowJar
+
 parent.tasks.named('shadowJar', ShadowJar) {
     it.from(shadowJar.outputs)
 }

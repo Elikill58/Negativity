@@ -5,6 +5,12 @@ sourceSets {
     }
 }
 
+repositories {
+    maven {
+        url = 'http://repo.eliapp.fr:8080/repository/internal/'
+    }
+}
+
 dependencies {
     // Temporary, should be moved out of common later
     compileOnly 'com.gitlab.ruany:LiteBansAPI:0.3.4'
@@ -13,6 +19,8 @@ dependencies {
     compileOnly 'us.myles:viaversion:2.2.3'
     compileOnly 'com.sk89q:worldguard:6.1'
     compileOnly 'com.sk89q.worldedit:worldedit-core:6.1.1-SNAPSHOT'
-
-    compileOnly fileTree(file('externalPlugins'))
+    compileOnly 'com.yapzhenyie:GadgetsMenu:4.3.29'
+    compileOnly 'org.geysermc:FloodGate:1.0-SNAPSHOT'
+    compileOnly 'me.leoko:AdvancedBan:2.2.1'
+    compileOnly 'org.maxgamer:MaxBans:2.7'
 }

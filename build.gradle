@@ -6,6 +6,7 @@ plugins {
 shadowJar {
     archiveBaseName.set('negativity')
     archiveClassifier.set(null)
+    mergeServiceFiles()
 }
 
 build.dependsOn shadowJar

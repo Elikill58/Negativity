@@ -311,6 +311,12 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 						}
 					}
 				}
+			} else if (arg[0].equalsIgnoreCase("debug")) {
+				for (Cheat c : Cheat.values()) {
+					if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
+						suggestions.add(c.getName());
+					}
+				}
 			} else if (arg[0].equalsIgnoreCase("admin") && arg.length == 2) {
 				if (sender instanceof Player && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.MANAGE_CHEAT)) {
 					suggestions.add("updateMessages");

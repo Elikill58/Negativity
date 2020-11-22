@@ -9,6 +9,18 @@ shadowJar {
     mergeServiceFiles()
 }
 
+
+task prepareServer(type: Copy) {
+    from shadowJar.outputs
+    rename { 'negativity.jar' }
+    def pluginDir = System.getProperty('plugins.dir')
+    if (pluginDir == null) {
+        enabled(false)
+    } else {
+        into pluginDir
+    }
+}
+
 build.dependsOn shadowJar
 
 subprojects {

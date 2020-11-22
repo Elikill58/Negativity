@@ -36,3 +36,11 @@ checks:
   # Get move after a tick
   ticked:
     active: true
+  # Check if the player vector change
+  vector:
+    active: true
+  # Check the packet velocity
+  packet:
+    active: true
+    # Configuration to prevent anti-KB false flag due to edition of KB. Set to 0 to disable it
+    algo: "(0.00000008 * velY * velY) + (0.0001 * velY) - 0.0219"

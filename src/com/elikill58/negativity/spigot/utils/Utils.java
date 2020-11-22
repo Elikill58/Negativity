@@ -132,7 +132,7 @@ public class Utils {
 
 	public static double getLastTPS() {
 		double[] tps = getTPS();
-		return tps[tps.length - 1];
+		return tps[0];
 	}
 
 	public static double[] getTPS() {

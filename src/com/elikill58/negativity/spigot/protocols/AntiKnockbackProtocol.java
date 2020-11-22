@@ -134,12 +134,13 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 		int entId = ints.read("a", -1);
 		int velY = ints.read("c", -1);
 		
+		Adapter ada = Adapter.getAdapter();
 		if(entId == -1 || velY == -1) {
-			Adapter.getAdapter().debug("The AntiKnockback is disabled because the entity ID is " + entId + " and the velocity is " + velY + " for EntityVelocity.");
+			ada.debug("The AntiKnockback is disabled because the entity ID is " + entId + " and the velocity is " + velY + " for EntityVelocity.");
 			return;
 		}
 		
-		String algo = Adapter.getAdapter().getConfig().getString("cheats.antiknockback.algo");
+		String algo = ada.getConfig().getString("cheats.antiknockback.algo");
 		if(algo.equalsIgnoreCase("0"))
 			return;
 		
@@ -149,41 +150,59 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 			// found player
 			if (p.getEntityId() == entId) {
 				SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-
+				if(!np.hasDetectionActive(this))
+					return;
+				
 				if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 					return;
 				if (!np.isOnGround() || np.isOnLadders || p.isInsideVehicle() || p.getFireTicks() > 0 || p.isFlying()
 						|| p.isDead())
 					return;
-
+				
 				Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
 					// don't check if there is a ceiling or anything that could block from taking kb
-					if (LocationUtils.hasAntiKbBypass(p))
+					if (LocationUtils.hasAntiKbBypass(p)) {
+						ada.debug("AntiKb detection: " + p.getName() + " has bypass.");
 						return;
+					}
 
-					final int ticksToReact = (int) (1.5 * 20);// ticks for the client to get up
+					final int ticksToReact = (int) (1 * 20);// seconds for the client to get up
 
 					if (velY < 5000) {
 						// give client some time to react
 						new BukkitRunnable() {
-							private int iterations = 0;
-							double reachedY = 0;// dif reached
-							double baseY = p.getLocation().getY();
+							public int iterations = 0;
+							public double reachedY = 0 /* diff reached */, baseY = p.getLocation().getY();
+							public Vector baseVector = p.getVelocity().clone();
+							public boolean vectorChanged = false;
 
 							@Override
 							public void run() {
 								iterations++;
 								if (p.getLocation().getY() - baseY > reachedY)
 									reachedY = p.getLocation().getY() - baseY;
+								if(iterations <= 5) {
+									double d = baseVector.distance(p.getVelocity());
+									if(d != 0)
+										vectorChanged = true;
+									ada.debug("KB Distance: " + d);
+								} else {
+									if(!vectorChanged) {
+										SpigotNegativity.alertMod(ReportType.WARNING, p, AntiKnockbackProtocol.this, 90 + iterations, "No changes for the " + iterations
+												+ " times. Vector: " + baseVector.toString(), new CheatHover.Literal("No direction changes during " + (((double) iterations) / 20) + " second"));
+									}
+								}
 								if (iterations > ticksToReact) {
 									// default algo : (0.00000008 * velY * velY) + (0.0001 * velY) - 0.0219
 									double predictedY = new Expression(algo.replaceAll("velY", String.valueOf(velY))).calculate();
 									double percentage = Math.abs(((reachedY - predictedY) / predictedY));
 									if (predictedY > reachedY && percentage > 50) {
 										// hack
-										SpigotNegativity.alertMod(ReportType.WARNING, p, null,
-												UniversalUtils.parseInPorcent(percentage), "");
-									}
+										SpigotNegativity.alertMod(ReportType.WARNING, p, AntiKnockbackProtocol.this,
+												UniversalUtils.parseInPorcent(percentage), "ReachedY: " + reachedY + ", predictedY: " + predictedY + ", percentage: "
+												+ percentage + ", algo: " + algo + ".", new CheatHover.Literal("Reached Y too different from predicted Y"));
+									} else
+										ada.debug("AntiKb detection: prediction: " + predictedY + ", percentage: " + percentage + ", reachedY: " + reachedY);
 									cancel();
 								}
 							}

@@ -139,12 +139,20 @@ public class BungeeListeners implements Listener {
 	@EventHandler
 	public void onPreLogin(net.md_5.bungee.api.event.LoginEvent e) {
 		PendingConnection co = e.getConnection();
-		LoginEvent event = new LoginEvent(co.getUniqueId(), co.getName(), e.isCancelled() ? Result.KICK_BANNED : Result.ALLOWED, co.getAddress().getAddress(), e.getCancelReason());
+		LoginEvent event = new LoginEvent(co.getUniqueId(), co.getName(), e.isCancelled() ? Result.KICK_BANNED : Result.ALLOWED,
+				co.getAddress().getAddress(), getReason(e));
 		EventManager.callEvent(event);
 		if(!event.getLoginResult().equals(Result.ALLOWED)) {
 			e.setCancelled(true);
 			e.setCancelReason(new ComponentBuilder(event.getKickMessage()).create());
 		}
+	}
+	
+	private String getReason(net.md_5.bungee.api.event.LoginEvent e) {
+		BaseComponent[] comp = e.getCancelReasonComponents();
+		if(comp == null || comp.length == 0)
+			return "";
+		return comp[0].toPlainText();
 	}
 
 	@EventHandler

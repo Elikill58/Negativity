@@ -235,6 +235,7 @@ public class SpongeNegativity {
 	@Listener
 	public void onGameReload(GameReloadEvent event) {
 		Adapter.getAdapter().reload();
+		trySendProxyPing();
 	}
 
 	@Listener

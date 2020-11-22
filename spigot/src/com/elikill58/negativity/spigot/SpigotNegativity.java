@@ -148,6 +148,7 @@ public class SpigotNegativity extends JavaPlugin {
 				timeTimeBetweenAlert.cancel();
 			timeTimeBetweenAlert = getServer().getScheduler().runTaskTimer(this, new PendingAlertsTimer(), timeTick, timeTick);
 		}
+		trySendProxyPing();
 	}
 	
 	private void loadChannelInOut(Messenger messenger, String channel, ChannelListeners event) {

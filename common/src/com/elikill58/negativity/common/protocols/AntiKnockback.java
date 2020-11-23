@@ -175,20 +175,22 @@ public class AntiKnockback extends Cheat implements Listeners {
 				public int iterations = 0;
 				public double reachedY = 0 /* diff reached */, baseY = p.getLocation().getY();
 				public Vector baseVector = p.getVelocity().clone();
+				public Location basLoc = p.getLocation().clone();
 				public boolean vectorChanged = false;
 
 				@Override
 				public void run() {
 					iterations++;
-					if (p.getLocation().getY() - baseY > reachedY)
-						reachedY = p.getLocation().getY() - baseY;
+					Location loc = p.getLocation();
+					if (loc.getY() - baseY > reachedY)
+						reachedY = loc.getY() - baseY;
 					if (checkActive("vector")) {
 						if (iterations <= 5) {
 							double d = baseVector.distance(p.getVelocity());
 							if (d != 0)
 								vectorChanged = true;
 							ada.debug("KB Distance: " + d);
-						} else if (!vectorChanged) {
+						} else if (!vectorChanged && loc.distance(basLoc) > 0.3) {
 							Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this, 90 + iterations, "vector",
 									"No changes for the " + iterations + " times. Vector: " + baseVector.toString(),
 									new CheatHover.Literal(

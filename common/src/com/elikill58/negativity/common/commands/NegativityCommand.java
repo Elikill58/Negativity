@@ -45,23 +45,12 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 	@Override
 	public boolean onCommand(CommandSender sender, String[] arg, String prefix) {
 		if (arg.length == 0 || arg[0].equalsIgnoreCase("help")) {
-			Messages.sendMessageList(sender, "negativity.verif.help");
-			Configuration conf = Adapter.getAdapter().getConfig();
-			if(conf.getBoolean("commands.report") && Perm.hasPerm(sender, Perm.REPORT))
-				Messages.sendMessage(sender, "report.report_usage");
-			if(conf.getBoolean("commands.ban") && Perm.hasPerm(sender, Perm.BAN))
-				Messages.sendMessageList(sender, "ban.help");
-			if(conf.getBoolean("commands.unban") && Perm.hasPerm(sender, Perm.UNBAN))
-				Messages.sendMessage(sender, "unban.help");
-			if(conf.getBoolean("commands.kick") && Perm.hasPerm(sender, Perm.MOD))
-				Messages.sendMessage(sender, "kick.help");
-			if(Perm.hasPerm(sender, Perm.LANG))
-				Messages.sendMessage(sender, "lang.help");
+			sendHelp(sender);
 			return true;
 		}
 
 		if (arg[0].equalsIgnoreCase("verif")) {
-			if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getCached(((Player) sender).getUniqueId()), Perm.VERIF)) {
+			if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getNegativityPlayer((Player) sender), Perm.VERIF)) {
 				Messages.sendMessage(sender, "not_permission");
 				return false;
 			}
@@ -77,7 +66,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				return false;
 			}
 
-			NegativityPlayer nTarget = NegativityPlayer.getCached(target.getUniqueId());
+			NegativityPlayer nTarget = NegativityPlayer.getNegativityPlayer(target);
 			int time = UniversalUtils.getFirstInt(arg).orElse(VerificationManager.getTimeVerif() / 20);
 			Set<Cheat> cheatsToVerify = new LinkedHashSet<>();
 			if (arg.length == 2 || (arg.length == 3 && UniversalUtils.isInteger(arg[2]))) {
@@ -163,7 +152,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				return true;
 			}
 			Player p = (Player) sender;
-			if (!Perm.hasPerm(NegativityPlayer.getCached(p.getUniqueId()), Perm.MANAGE_CHEAT)) {
+			if (!Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.MANAGE_CHEAT)) {
 				Messages.sendMessage(sender, "not_permission");
 				return true;
 			}
@@ -274,8 +263,23 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			return true;
 		}
 
-		Messages.sendMessageList(sender, "negativity.verif.help");
+		sendHelp(sender);
 		return true;
+	}
+	
+	private void sendHelp(CommandSender sender) {
+		Messages.sendMessageList(sender, "negativity.verif.help");
+		Configuration conf = Adapter.getAdapter().getConfig();
+		if(conf.getBoolean("commands.report") && Perm.hasPerm(sender, Perm.REPORT))
+			Messages.sendMessage(sender, "report.report_usage");
+		if(conf.getBoolean("commands.ban") && Perm.hasPerm(sender, Perm.BAN))
+			Messages.sendMessageList(sender, "ban.help");
+		if(conf.getBoolean("commands.unban") && Perm.hasPerm(sender, Perm.UNBAN))
+			Messages.sendMessage(sender, "unban.help");
+		if(conf.getBoolean("commands.kick") && Perm.hasPerm(sender, Perm.MOD))
+			Messages.sendMessage(sender, "kick.help");
+		if(Perm.hasPerm(sender, Perm.LANG))
+			Messages.sendMessage(sender, "lang.help");
 	}
 
 	@Override

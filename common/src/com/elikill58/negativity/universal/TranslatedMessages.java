@@ -28,35 +28,34 @@ public class TranslatedMessages {
 	private static TranslationProvider fallbackTranslationProvider = null;
 
 	public static void init() {
-		DEFAULT_LANG = Adapter.getAdapter().getConfig().getString("Translation.default");
-		LANGS = Adapter.getAdapter().getConfig().getStringList("Translation.lang_available");
-		activeTranslation = Adapter.getAdapter().getConfig().getBoolean("Translation.active");
+		Adapter ada = Adapter.getAdapter();
+		DEFAULT_LANG = ada.getConfig().getString("Translation.default");
+		LANGS = ada.getConfig().getStringList("Translation.lang_available");
+		activeTranslation = ada.getConfig().getBoolean("Translation.active");
 
-		platformFactory = Adapter.getAdapter().getPlatformTranslationProviderFactory();
+		platformFactory = ada.getPlatformTranslationProviderFactory();
 		registerTranslationProviderFactory(PLATFORM_PROVIDER_ID, platformFactory);
 
-		providerFactoryId = Adapter.getAdapter().getConfig().getString("Translation.provider");
+		providerFactoryId = ada.getConfig().getString("Translation.provider");
 		loadMessages();
 	}
 
 	public static void loadMessages() {
 		translationProviders.clear();
 		TranslationProviderFactory factory = registeredFactories.getOrDefault(providerFactoryId, platformFactory);
-		if (activeTranslation) {
+		//if (activeTranslation) {
 			for (String lang : LANGS) {
 				TranslationProvider provider = factory.createTranslationProvider(lang);
 				if (provider != null) {
 					translationProviders.put(lang, provider);
 				}
 			}
-		} else {
-			TranslationProvider provider = factory.createTranslationProvider(DEFAULT_LANG);
+		//} else {
+			TranslationProvider provider = translationProviders.get(DEFAULT_LANG);
 			if (provider == null) {
-				Adapter.getAdapter().getLogger().warn("Could not load the default translation provider");
-				return;
+				translationProviders.put(DEFAULT_LANG, factory.createTranslationProvider(DEFAULT_LANG));
 			}
-			translationProviders.put(DEFAULT_LANG, provider);
-		}
+		//}
 
 		fallbackTranslationProvider = factory.createFallbackTranslationProvider();
 	}
@@ -128,12 +127,12 @@ public class TranslatedMessages {
 
 	@Nullable
 	private static TranslationProvider getProviderFor(String lang) {
-		if (activeTranslation) {
+		//if (activeTranslation) { // don't check if there is translation because we want to get message from specific lang
 			TranslationProvider provider = TranslatedMessages.translationProviders.get(lang);
 			if (provider != null) {
 				return provider;
 			}
-		}
+		//}
 		return TranslatedMessages.translationProviders.get(DEFAULT_LANG);
 	}
 }

@@ -23,20 +23,23 @@ public class LangInventory extends AbstractInventory<LangHolder> {
 	
 	@Override
 	public void openInventory(Player p, Object... args) {
-		Inventory inv = Inventory.createInventory(Inventory.ADMIN_MENU, UniversalUtils.getMultipleOf((int) (TranslatedMessages.LANGS.size() * 1.5), 9, 1, 54), new LangHolder());
+		LangHolder holder = new LangHolder();
+		Inventory inv = Inventory.createInventory(Inventory.ADMIN_MENU, UniversalUtils.getMultipleOf((int) (TranslatedMessages.LANGS.size() * 1.5), 9, 1, 54), holder);
 
 		update(inv, p);
 		inv.set(inv.getSize() - 3, Inventory.EMPTY);
 		
 		int slot = 0;
-		for(String s : TranslatedMessages.LANGS) {
+		for(String langKey : TranslatedMessages.LANGS) {
 			boolean searchSlot = true;
 			while (searchSlot) {
 				if(inv.get(slot) == null || inv.get(slot).getType().equals(Materials.AIR)) {
 					if((slot + 3) % 9 == 0 || (slot + 2) % 9 == 0 || (slot + 1) % 9 == 0) // 3 last colums of inventory
 						inv.set(slot, Inventory.EMPTY);
 					else {
-						inv.set(slot, ItemBuilder.Builder(Materials.PAPER).displayName(s).build());
+						holder.addLang(langKey, slot);
+						String name = TranslatedMessages.getStringFromLang(langKey, "lang.name");
+						inv.set(slot, ItemBuilder.Builder(Materials.PAPER).displayName(ChatColor.RESET + name).lore(ChatColor.RESET + "" +ChatColor.GRAY + langKey).build());
 						searchSlot = false;
 					}
 				}
@@ -62,13 +65,8 @@ public class LangInventory extends AbstractInventory<LangHolder> {
 		if(m.equals(Materials.ARROW)) {
 			InventoryManager.open(NegativityInventory.ADMIN, p);
 		} else if(m.getId().contains("PAPER")) {
-			String lang = "";
-			String name = e.getCurrentItem().getName();
-			for(String s : TranslatedMessages.LANGS) {
-				if(name.equalsIgnoreCase(ChatColor.RESET + s))
-					lang = s;
-			}
-			if(lang != "") {
+			String lang = nh.getLangBySlot().get(e.getSlot());
+			if(lang != null) {
 				Adapter.getAdapter().getConfig().set("Translation.default", lang);
 				Adapter.getAdapter().getConfig().save();
 				TranslatedMessages.DEFAULT_LANG = lang;

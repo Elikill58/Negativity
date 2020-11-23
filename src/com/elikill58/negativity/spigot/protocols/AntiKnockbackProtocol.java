@@ -174,20 +174,22 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 							public int iterations = 0;
 							public double reachedY = 0 /* diff reached */, baseY = p.getLocation().getY();
 							public Vector baseVector = p.getVelocity().clone();
+							public Location baseLoc = p.getLocation().clone();
 							public boolean vectorChanged = false;
 
 							@Override
 							public void run() {
 								iterations++;
-								if (p.getLocation().getY() - baseY > reachedY)
-									reachedY = p.getLocation().getY() - baseY;
+								Location loc = p.getLocation();
+								if (loc.getY() - baseY > reachedY)
+									reachedY = loc.getY() - baseY;
 								if(iterations <= 5) {
 									double d = baseVector.distance(p.getVelocity());
 									if(d != 0)
 										vectorChanged = true;
 									ada.debug("KB Distance: " + d);
 								} else {
-									if(!vectorChanged) {
+									if(!vectorChanged && loc.distance(baseLoc) > 0.4) {
 										SpigotNegativity.alertMod(ReportType.WARNING, p, AntiKnockbackProtocol.this, 90 + iterations, "No changes for the " + iterations
 												+ " times. Vector: " + baseVector.toString(), new CheatHover.Literal("No direction changes during " + (((double) iterations) / 20) + " second"));
 									}

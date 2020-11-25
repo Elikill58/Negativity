@@ -1,7 +1,5 @@
 package com.elikill58.negativity.sponge.impl.inventory;
 
-import java.util.Optional;
-
 import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.Container;
 import org.spongepowered.api.item.inventory.property.InventoryDimension;
@@ -9,7 +7,6 @@ import org.spongepowered.api.item.inventory.property.InventoryTitle;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 import org.spongepowered.api.item.inventory.type.CarriedInventory;
-import org.spongepowered.api.item.inventory.type.GridInventory;
 import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.api.inventory.Inventory;
@@ -24,8 +21,7 @@ import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
 public class SpongeInventory extends Inventory {
 
 	private final org.spongepowered.api.item.inventory.Inventory inv;
-	private GridInventory invGrid;
-	
+
 	public SpongeInventory(Container container) {
 		this.inv = container;
 	}
@@ -37,7 +33,10 @@ public class SpongeInventory extends Inventory {
 			.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, nbLine))
 			.property(Inv.INV_ID_KEY, Inv.NEGATIVITY_INV_ID)
 			.build(SpongeNegativity.INSTANCE);
-		this.invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
+	}
+
+	private org.spongepowered.api.item.inventory.Inventory getSlot(int slot) {
+		return this.inv.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(slot)));
 	}
 	
 	@Override
@@ -47,27 +46,22 @@ public class SpongeInventory extends Inventory {
 
 	@Override
 	public ItemStack get(int slot) {
-		Optional<org.spongepowered.api.item.inventory.ItemStack> opt = this.inv.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(slot))).peek();
-		return opt.isPresent() ? new SpongeItemStack(opt.get()) : null;
+		return getSlot(slot).peek().filter(itemStack -> !itemStack.isEmpty()).map(SpongeItemStack::new).orElse(null);
 	}
 
 	@Override
 	public void set(int slot, ItemStack item) {
-		int y = (int) slot / 9;
-		int x = slot - (y * 9);
-		invGrid.set(x, y, (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
+		getSlot(slot).set((org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
 	}
 
 	@Override
 	public void remove(int slot) {
-		int y = (int) slot / 9;
-		int x = slot - (y * 9);
-		invGrid.set(x, y, null);
+		getSlot(slot).clear();
 	}
 
 	@Override
 	public void clear() {
-		inv.forEach((i) -> i.set(null));
+		inv.clear();
 	}
 
 	@Override

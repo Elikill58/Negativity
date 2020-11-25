@@ -4,11 +4,9 @@ import java.util.Optional;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.item.inventory.Carrier;
+import org.spongepowered.api.item.inventory.entity.MainPlayerInventory;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
-import org.spongepowered.api.item.inventory.type.CarriedInventory;
-import org.spongepowered.api.item.inventory.type.GridInventory;
 
 import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
@@ -18,14 +16,12 @@ import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
 
 public class SpongePlayerInventory extends PlayerInventory {
 
-	private final CarriedInventory<? extends Carrier> inv;
-	private final GridInventory invGrid;
+	private final MainPlayerInventory inv;
 	private final Player p;
 	
-	public SpongePlayerInventory(Player p, CarriedInventory<? extends Carrier> inventory) {
+	public SpongePlayerInventory(Player p) {
 		this.p = p;
-		this.inv = inventory;
-		this.invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
+		this.inv = p.getInventory().query(QueryOperationTypes.INVENTORY_TYPE.of(MainPlayerInventory.class));
 	}
 	
 	private ItemStack getItem(Optional<org.spongepowered.api.item.inventory.ItemStack> opt) {
@@ -70,7 +66,7 @@ public class SpongePlayerInventory extends PlayerInventory {
 	public void set(int slot, ItemStack item) {
 		int y = (int) slot / 9;
 		int x = slot - (y * 9);
-		invGrid.set(x, y, (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
+		inv.set(x, y, (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
 	}
 
 	@Override

@@ -1,9 +1,9 @@
 package com.elikill58.negativity.sponge.impl.item;
 
+import java.util.Collections;
 import java.util.List;
 
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.enchantment.EnchantmentTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -51,14 +51,28 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 
 	@Override
 	public int getEnchantLevel(Enchantment enchant) {
-		EnchantmentData data = item.getOrCreate(EnchantmentData.class).get();
-		List<org.spongepowered.api.item.enchantment.Enchantment> list = data.getListValue().filter((en) -> en.getType().equals(getEnchantType(enchant))).get();
-		return list.isEmpty() ? 0 : list.get(0).getLevel();
+		List<org.spongepowered.api.item.enchantment.Enchantment> enchantments = item.getOrNull(Keys.ITEM_ENCHANTMENTS);
+		if (enchantments == null) {
+			return 0;
+		}
+		for (org.spongepowered.api.item.enchantment.Enchantment enchantment : enchantments) {
+			if (enchantment.getType().getId().equalsIgnoreCase(enchant.getId())) {
+				return enchantment.getLevel();
+			}
+		}
+		return 0;
 	}
 
 	@Override
 	public void addEnchant(Enchantment enchant, int level) {
-		item.getOrCreate(EnchantmentData.class).get().addElement(org.spongepowered.api.item.enchantment.Enchantment.builder().type(getEnchantType(enchant)).level(level).build());
+		item.transform(Keys.ITEM_ENCHANTMENTS, original -> {
+			org.spongepowered.api.item.enchantment.Enchantment enchantment = org.spongepowered.api.item.enchantment.Enchantment.of(getEnchantType(enchant), level);
+			if (original == null) {
+				return Collections.singletonList(enchantment);
+			}
+			original.add(enchantment);
+			return original;
+		});
 	}
 	
 	private EnchantmentType getEnchantType(Enchantment enchant) {
@@ -74,8 +88,13 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 
 	@Override
 	public void removeEnchant(Enchantment enchant) {
-		EnchantmentData data = item.getOrCreate(EnchantmentData.class).get();
-		data.getListValue().filter((en) -> en.getType().equals(getEnchantType(enchant))).get().forEach((e) -> data.remove(e));
+		item.transform(Keys.ITEM_ENCHANTMENTS, enchantments -> {
+			if (enchantments == null) {
+				return Collections.emptyList();
+			}
+			enchantments.removeIf(enchantment -> enchantment.getType().getId().equalsIgnoreCase(enchant.getId()));
+			return enchantments;
+		});
 	}
 
 	@Override

@@ -2,12 +2,13 @@ package com.elikill58.negativity.sponge.impl.entity;
 
 import java.net.InetSocketAddress;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.data.manipulator.mutable.PotionEffectData;
 import org.spongepowered.api.data.manipulator.mutable.entity.FallDistanceData;
 import org.spongepowered.api.data.manipulator.mutable.entity.FlyingData;
 import org.spongepowered.api.data.manipulator.mutable.entity.HealthData;
@@ -225,32 +226,70 @@ public class SpongePlayer extends Player {
 	public double getEyeHeight() {
 		return Utils.getPlayerHeadHeight(p);
 	}
-
+	
 	@Override
 	public boolean hasPotionEffect(PotionEffectType type) {
-		return p.getOrCreate(PotionEffectData.class).get().asList().stream().filter((pe) -> pe.getType().getName().equalsIgnoreCase(type.name()))
-				.findAny().isPresent();
+		List<org.spongepowered.api.effect.potion.PotionEffect> potionEffects = p.getOrNull(Keys.POTION_EFFECTS);
+		if (potionEffects == null) {
+			return false;
+		}
+		for (org.spongepowered.api.effect.potion.PotionEffect effect : potionEffects) {
+			if (effect.getType().getId().equalsIgnoreCase(type.getId())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
 	public List<PotionEffect> getActivePotionEffect() {
-		List<PotionEffect> list = new ArrayList<PotionEffect>();
-		p.getOrCreate(PotionEffectData.class).get().asList().forEach((pe) -> list.add(new PotionEffect(PotionEffectType.fromName(pe.getType().getName()))));
-		return list;
+		List<org.spongepowered.api.effect.potion.PotionEffect> effects = p.getOrNull(Keys.POTION_EFFECTS);
+		if (effects == null) {
+			return Collections.emptyList();
+		}
+		return effects.stream()
+			.map(this::createPotionEffect)
+			.collect(Collectors.toList());
 	}
 	
 	@Override
 	public Optional<PotionEffect> getPotionEffect(PotionEffectType type) {
-		org.spongepowered.api.effect.potion.PotionEffect effect = null;
-		for(org.spongepowered.api.effect.potion.PotionEffect pe : p.getOrCreate(PotionEffectData.class).get().asList())
-			if(PotionEffectType.fromName(pe.getType().getName()) == type)
-				effect = pe;
-		return effect == null ? Optional.empty() : Optional.of(new PotionEffect(type, effect.getDuration(), effect.getAmplifier()));
+		return p.get(Keys.POTION_EFFECTS).flatMap(effects -> {
+			for (org.spongepowered.api.effect.potion.PotionEffect effect : effects) {
+				if (effect.getType().getId().equalsIgnoreCase(type.getId())) {
+					return Optional.of(createPotionEffect(effect));
+				}
+			}
+			return Optional.empty();
+		});
 	}
-
+	
+	private PotionEffect createPotionEffect(org.spongepowered.api.effect.potion.PotionEffect effect) {
+		return new PotionEffect(PotionEffectType.forId(effect.getType().getId()), effect.getDuration(), effect.getAmplifier());
+	}
+	
+	@Override
+	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
+		p.transform(Keys.POTION_EFFECTS, effects -> {
+			org.spongepowered.api.effect.potion.PotionEffect effect =
+				org.spongepowered.api.effect.potion.PotionEffect.of(SpongePotionEffectType.getEffect(type), amplifier, duration);
+			if (effects == null) {
+				return Collections.singletonList(effect);
+			}
+			effects.add(effect);
+			return effects;
+		});
+	}
+	
 	@Override
 	public void removePotionEffect(PotionEffectType type) {
-		Utils.removePotionEffect(p.getOrCreate(PotionEffectData.class).get(), SpongePotionEffectType.getEffect(type));
+		p.transform(Keys.POTION_EFFECTS, effects -> {
+			if (effects != null) {
+				effects.removeIf(effect -> effect.getType().getId().equals(type.getId()));
+				return effects;
+			}
+			return Collections.emptyList();
+		});
 	}
 
 	@Override
@@ -266,13 +305,6 @@ public class SpongePlayer extends Player {
 	@Override
 	public void setSneaking(boolean b) {
 		p.getOrCreate(SneakingData.class).get().sneaking().set(b);
-	}
-
-	@Override
-	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
-		PotionEffectData potionEffects = p.getOrCreate(PotionEffectData.class).orElse(null);
-		potionEffects.addElement(org.spongepowered.api.effect.potion.PotionEffect.builder().potionType(SpongePotionEffectType.getEffect(type))
-					.amplifier(amplifier).duration(duration).build());
 	}
 
 	@Override

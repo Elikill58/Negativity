@@ -50,7 +50,7 @@ public class ModInventory extends AbstractInventory<ModHolder> {
 				p.removePotionEffect(PotionEffectType.NIGHT_VISION);
 				Messages.sendMessage(p, "inventory.mod.vision_removed");
 			} else {
-				p.addPotionEffect(PotionEffectType.NIGHT_VISION, 10000, 0);
+				p.addPotionEffect(PotionEffectType.NIGHT_VISION, 20000000, 0);
 				Messages.sendMessage(p, "inventory.mod.vision_added");
 			}
 		} else if (m.equals(Materials.IRON_SHOVEL)) {

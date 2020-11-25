@@ -7,34 +7,40 @@ import com.elikill58.negativity.universal.Adapter;
 
 public enum PotionEffectType {
 	
-	BAD_OMEN,
-	BLINDNESS,
-	CONDUIT_POWER,
-	CONFUSION,
-	DAMAGE_RESISTANCE,
-	DOLPHINS_GRACE,
-	INCREASE_DAMAGE,
-	INSTANT_HEAL("HEAL"),
-	FAST_DIGGING,
-	FIRE_RESISTANCE,
-	HUNGER,
-	JUMP,
-	LEVITATION,
-	NIGHT_VISION,
-	POISON,
-	REGENERATION("HEALTH_BOOST"),
-	SLOW,
-	SLOW_DIGGING,
-	SPEED,
-	WATER_BREATHING,
-	WEAKNESS,
-	WITHER,
-	UNKNOW;
+	BAD_OMEN("minecraft:bad_omen"),
+	BLINDNESS("minecraft:blindness"),
+	CONDUIT_POWER("minecraft:conduit_power"),
+	CONFUSION("minecraft:nausea"),
+	DAMAGE_RESISTANCE("minecraft:resistance"),
+	DOLPHINS_GRACE("minecraft:dolphins_grace"),
+	INCREASE_DAMAGE("minecraft:strength"),
+	INSTANT_HEAL("minecraft:instant_health", "HEAL"),
+	FAST_DIGGING("minecraft:haste"),
+	FIRE_RESISTANCE("minecraft:fire_resistance"),
+	HUNGER("minecraft:hunger"),
+	JUMP("minecraft:jump_boost"),
+	LEVITATION("minecraft:levitation"),
+	NIGHT_VISION("minecraft:night_vision"),
+	POISON("minecraft:poison"),
+	REGENERATION("minecraft:regeneration", "HEALTH_BOOST"),
+	SLOW("minecraft:slowness"),
+	SLOW_DIGGING("minecraft:mining_fatigue"),
+	SPEED("minecraft:speed"),
+	WATER_BREATHING("minecraft:water_breathing"),
+	WEAKNESS("minecraft:weakness"),
+	WITHER("minecraft:wither"),
+	UNKNOW("minecraft:unknown");
 	
+	private final String id;
 	private final List<String> alias;
 	
-	private PotionEffectType(String... alias) {
+	PotionEffectType(String id, String... alias) {
+		this.id = id;
 		this.alias = Arrays.asList(alias);
+	}
+	
+	public String getId() {
+		return id;
 	}
 	
 	/**
@@ -47,9 +53,18 @@ public enum PotionEffectType {
 		return alias;
 	}
 	
+	public static PotionEffectType forId(String id) {
+		for (PotionEffectType type : values()) {
+			if (type.id.equalsIgnoreCase(id)) {
+				return type;
+			}
+		}
+		return UNKNOW;
+	}
+	
 	public static PotionEffectType fromName(String name) {
 		for(PotionEffectType type : values())
-			if(type.name().equalsIgnoreCase(name) || type.getAlias().contains(name.toUpperCase()))
+			if(type.id.equalsIgnoreCase(name) || type.name().equalsIgnoreCase(name) || type.getAlias().contains(name.toUpperCase()))
 				return type;
 		Adapter.getAdapter().debug("[PotionEffectType] Cannot found effect " + name + " !");
 		return UNKNOW;

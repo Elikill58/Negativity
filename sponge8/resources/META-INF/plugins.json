@@ -1,0 +1,20 @@
+{
+  "plugins": [
+    {
+      "loader": "java_plain",
+      "id": "negativity",
+      "version": "${version}",
+      "description": "An Advanced AntiCheat Plugin",
+      "main-class": "com.elikill58.negativity.sponge.SpongeNegativity",
+      "links": {
+        "homepage": "https://ore.spongepowered.org/Elikill58/Negativity",
+        "source": "https://github.com/Elikill58/Negativity",
+        "issues": "https://github.com/Elikill58/Negativity/issues"
+      },
+      "dependencies": [{
+        "id": "spongeapi",
+        "version": "${spongeApiVersion}"
+      }]
+    }
+  ]
+}

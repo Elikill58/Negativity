@@ -15,9 +15,8 @@ buildscript {
 
 plugins {
     id 'net.minecrell.vanillagradle.server' version '2.2-6'
+    id 'com.github.johnrengelman.shadow'
 }
-
-apply plugin: 'com.github.johnrengelman.shadow'
 
 sourceSets {
     main {

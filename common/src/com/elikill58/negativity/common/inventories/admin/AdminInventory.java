@@ -21,11 +21,11 @@ public class AdminInventory extends AbstractInventory<AdminHolder> {
 	@Override
 	public void openInventory(Player p, Object... obj) {
 		Inventory inv = Inventory.createInventory(Inventory.ADMIN_MENU, 9, new AdminHolder());
+		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 
 		inv.set(0, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.mod.cheat_manage")).build());
 		inv.set(1, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "lang.edit")).build());
 		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
-		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		p.openInventory(inv);
 	}
 

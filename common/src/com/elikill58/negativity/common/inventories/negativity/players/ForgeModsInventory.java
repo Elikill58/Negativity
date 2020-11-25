@@ -29,6 +29,7 @@ public class ForgeModsInventory extends AbstractInventory<ForgeModsHolder> {
 		slot = 0;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		Inventory inv = Inventory.createInventory(Inventory.NAME_FORGE_MOD_MENU, UniversalUtils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), new ForgeModsHolder(cible));
+		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		if(np.MODS.size() == 0) {
 			inv.set(4, ItemBuilder.Builder(Materials.DIAMOND).displayName("No mods").build());
 		} else {
@@ -37,7 +38,6 @@ public class ForgeModsInventory extends AbstractInventory<ForgeModsHolder> {
 			});
 		}
 		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(mod, "inventory.back")).build());
-		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		mod.openInventory(inv);
 	}
 

@@ -34,6 +34,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
 		Inventory inv = Inventory.createInventory(Inventory.NAME_CHECK_MENU, 27, new CheckMenuHolder(cible));
+		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
@@ -60,7 +61,6 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		inv.set(21, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
 		inv.set(22, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())).build());
 		inv.set(23, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.main.active_report")).build());
-		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
 		p.openInventory(inv);
 	}

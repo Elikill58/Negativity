@@ -26,12 +26,12 @@ public class OneCheatInventory extends AbstractInventory<OneCheatHolder> {
 	public void openInventory(Player p, Object... args){
 		Cheat c = (Cheat) args[0];
 		Inventory inv = Inventory.createInventory(c.getName(), 9, new OneCheatHolder(c));
+		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		inv.set(0, ItemBuilder.Builder(c.getMaterial()).displayName(c.getName()).build());
 		actualizeInventory(p, c, inv);
 		
 		inv.set(7, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
 		inv.set(8, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
-		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		p.openInventory(inv);
 	}
 	

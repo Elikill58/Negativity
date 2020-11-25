@@ -46,7 +46,7 @@ public class SpigotPlayerInventory extends PlayerInventory {
 	}
 
 	@Override
-	public NegativityHolder getHolder() {
+	public @Nullable NegativityHolder getHolder() {
 		return null;
 	}
 

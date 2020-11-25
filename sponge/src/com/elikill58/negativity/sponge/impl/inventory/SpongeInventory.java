@@ -1,6 +1,6 @@
 package com.elikill58.negativity.sponge.impl.inventory;
 
-import org.spongepowered.api.item.inventory.Carrier;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.item.inventory.Container;
 import org.spongepowered.api.item.inventory.property.InventoryDimension;
 import org.spongepowered.api.item.inventory.property.InventoryTitle;
@@ -21,14 +21,22 @@ import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
 public class SpongeInventory extends Inventory {
 
 	private final org.spongepowered.api.item.inventory.Inventory inv;
-
+	private SpongeNegativityHolder holder;
+	
 	public SpongeInventory(Container container) {
 		this.inv = container;
+		if (container instanceof CarriedInventory) {
+			Object carrier = ((CarriedInventory<?>) container).getCarrier().orElse(null);
+			if (carrier instanceof SpongeNegativityHolder) {
+				this.holder = (SpongeNegativityHolder) carrier;
+			}
+		}
 	}
 	
 	public SpongeInventory(String inventoryName, int size, NegativityHolder holder) {
 		int nbLine = size / 9;
-		this.inv = org.spongepowered.api.item.inventory.Inventory.builder().withCarrier(new SpongeNegativityHolder(holder))
+		this.holder = new SpongeNegativityHolder(holder);
+		this.inv = org.spongepowered.api.item.inventory.Inventory.builder().withCarrier(this.holder)
 			.property(InventoryTitle.PROPERTY_NAME, new InventoryTitle(Text.of(inventoryName)))
 			.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, nbLine))
 			.property(Inv.INV_ID_KEY, Inv.NEGATIVITY_INV_ID)
@@ -79,10 +87,9 @@ public class SpongeInventory extends Inventory {
 		return inv.getName().get();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public PlatformHolder getHolder() {
-		return new SpongeInventoryHolder(inv instanceof CarriedInventory ? ((CarriedInventory<Carrier>) inv).getCarrier().orElse(null) : null);
+	public @Nullable PlatformHolder getHolder() {
+		return holder == null ? null : holder.getBasicHolder();
 	}
 
 	@Override

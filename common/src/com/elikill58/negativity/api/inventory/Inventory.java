@@ -77,7 +77,7 @@ public abstract class Inventory extends NegativityObject {
 	 * 
 	 * @return the inventory holder
 	 */
-	public abstract PlatformHolder getHolder();
+	public abstract @Nullable PlatformHolder getHolder();
 	
 	/**
 	 * Create an inventory according to the specific platform

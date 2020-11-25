@@ -1,6 +1,7 @@
 package com.elikill58.negativity.spigot.impl.inventory;
 
 import org.bukkit.Bukkit;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryType;
@@ -62,7 +63,7 @@ public class SpigotInventory extends Inventory {
 	}
 
 	@Override
-	public PlatformHolder getHolder() {
+	public @Nullable PlatformHolder getHolder() {
 		return holder == null ? null : holder.getBasicHolder();
 	}
 

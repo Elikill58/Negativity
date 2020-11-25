@@ -95,7 +95,7 @@ public class SpongePlayerInventory extends PlayerInventory {
 	}
 
 	@Override
-	public NegativityHolder getHolder() {
+	public @Nullable NegativityHolder getHolder() {
 		return null;
 	}
 

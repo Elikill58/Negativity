@@ -1,7 +1,6 @@
 package com.elikill58.negativity.sponge.impl.item;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.item.EnchantmentData;
@@ -38,7 +37,16 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 
 	@Override
 	public boolean hasEnchant(Enchantment enchant) {
-		return !item.get(Keys.ITEM_ENCHANTMENTS).get().stream().filter((en) -> en.getType().getId().equalsIgnoreCase(enchant.name())).collect(Collectors.toList()).isEmpty();
+		List<org.spongepowered.api.item.enchantment.Enchantment> enchantments = item.getOrNull(Keys.ITEM_ENCHANTMENTS);
+		if (enchantments == null) {
+			return false;
+		}
+		for (org.spongepowered.api.item.enchantment.Enchantment enchantment : enchantments) {
+			if (enchantment.getType().getId().equalsIgnoreCase(enchant.getId())) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	@Override
@@ -56,13 +64,11 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 	private EnchantmentType getEnchantType(Enchantment enchant) {
 		switch (enchant) {
 		case DIG_SPEED:
-			return EnchantmentTypes.BINDING_CURSE;
-		case EFFICIENCY:
 			return EnchantmentTypes.EFFICIENCY;
 		case THORNS:
 			return EnchantmentTypes.THORNS;
 		default:
-			return null;
+			throw new RuntimeException("Unhandled enchantment " + enchant);
 		}
 	}
 

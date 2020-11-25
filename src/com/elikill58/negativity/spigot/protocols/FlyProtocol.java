@@ -1,6 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
+import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThanExtended;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -40,13 +41,13 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if (np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
+			return;
 
 		if (p.hasPotionEffect(PotionEffectType.SPEED)) {
 			if (Utils.getPotionEffect(p, PotionEffectType.SPEED).getAmplifier() > 5)
 				return;
 		}
-		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
-			return;
 		if (p.getAllowFlight() || p.getEntityId() == 100 || Utils.isSwimming(p))
 			return;
 		boolean mayCancel = false, inBoat = Utils.isInBoat(p);
@@ -75,9 +76,9 @@ public class FlyProtocol extends Cheat implements Listener {
 					inBoat ? hoverMsg("boat") : null);
 		}
 
-		if (!np.isUsingSlimeBlock && !LocationUtils.hasOtherThanExtended(p.getLocation(), "AIR")
-				&& !LocationUtils.hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
-				&& !LocationUtils.hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
+		if (!np.isUsingSlimeBlock && !hasOtherThanExtended(p.getLocation(), "AIR")
+				&& !hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
+				&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0 && !np.contentBoolean.getOrDefault("jump-boost-use", false)
 				&& (e.getFrom().getY() <= e.getTo().getY()) && p.getVelocity().length() < 1.5) {
 			if(!(p.hasPotionEffect(PotionEffectType.JUMP) && Utils.getPotionEffect(p, PotionEffectType.JUMP).getAmplifier() > 2)) {
 				double nbTimeAirBelow = np.contentDouble.getOrDefault("fly-air-below", 0.0);

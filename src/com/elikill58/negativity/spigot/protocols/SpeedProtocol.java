@@ -75,31 +75,37 @@ public class SpeedProtocol extends Cheat implements Listener {
 			np.BYPASS_SPEED--;
 			return;
 		}
-		Location loc = p.getLocation().clone();
-		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| hasMaterialsAround(loc.getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| hasMaterialsAround(loc.clone().add(0, 2, 0).getBlock().getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| hasMaterialsAround(loc.clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
+		Location loc = p.getLocation().clone(), locDown = loc.clone().subtract(0, 1, 0);
+		boolean hasIceBelow = locDown.getBlock().getType().name().contains("ICE");
+		if(hasIceBelow)
+			np.contentBoolean.put("speed-has-ice", hasIceBelow);
+		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
+				|| hasMaterialsAround(loc.clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
+				|| hasMaterialsAround(loc.clone().add(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
+				|| hasMaterialsAround(loc.clone().add(0, 2, 0), "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET"))
 			return;
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		boolean mayCancel = false;
 		if (np.isOnGround()) {
 			double walkSpeed = SpigotNegativity.essentialsSupport ? (p.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : p.getWalkSpeed();
 			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
-			if((SpigotNegativity.essentialsSupport ? (walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D)) : y >= 0.75D) || walkTest){
-				int porcent = UniversalUtils.parseInPorcent(y * 50 + UniversalUtils.getPorcentFromBoolean(walkTest, 20)
-						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
-						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
+			if(((SpigotNegativity.essentialsSupport ? (walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D)) : y >= 0.75D) || walkTest)
+					&& !np.contentBoolean.getOrDefault("speed-has-ice", false)){
+				int porcent = UniversalUtils.parseInPorcent(y * 50 + (walkTest ? 20 : 0)
+						+ (walkWithEssTest == walkTest ? 20 : 0) + (walkWithEssTest ? 10 : 0));
 				ReportType type = np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING;
-				mayCancel = SpigotNegativity.alertMod(type, p, this, porcent,
-						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: " + walkTest +
-						", walkWithEssentialsTest: " + walkWithEssTest, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
+				String proof = "Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: "
+							+ walkTest + ", walkWithEssentialsTest: " + walkWithEssTest;
+				mayCancel = SpigotNegativity.alertMod(type, p, this, porcent, proof, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
 			}
 			double calculatedSpeedWithoutY = Utils.getSpeed(from, to);
 			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() < calculatedSpeedWithoutY && p.getVelocity().getY() > 0
-					&& hasMaterialsAround(loc, "STAIRS", "SLAB") && hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" is to prevent lag
+					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR") && !np.contentBoolean.getOrDefault("speed-has-ice", false)) { // "+0.01" is to prevent lag
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, 90, "Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().getY());
 			}
+			double dif = to.getY() - from.getY();
+			if(dif < 0)
+				np.contentBoolean.remove("speed-has-ice");
 		} else if (!np.isOnGround()) {
 			for (Entity entity : p.getNearbyEntities(5, 5, 5))
 				if (entity instanceof Creeper || entity.getType().equals(EntityType.CREEPER))

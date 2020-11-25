@@ -53,7 +53,8 @@ public class NoFallProtocol extends Cheat implements Listener {
 		Location locDown = b.getRelative(BlockFace.DOWN).getLocation();
 		Location locUp = b.getRelative(BlockFace.UP).getLocation();
 		double motionY = from.getY() - to.getY();
-		if (locDown.getBlock().getType().equals(Material.AIR)
+		if (to.clone().add(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).getBlock().getType().equals(Material.AIR)
+				&& locDown.getBlock().getType().equals(Material.AIR)
 				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD", "SLAB")
 				&& ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
 				|| (motionY > (p.getWalkSpeed() / 2)) && (np.isOnGround() && p.getFallDistance() > 0.2)

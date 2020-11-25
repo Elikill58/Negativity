@@ -8,16 +8,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerMoveEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.packets.event.PacketSendEvent;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
+import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
@@ -29,7 +30,14 @@ public class StepProtocol extends Cheat implements Listener {
 	public static final DataType<Double> BLOCKS_UP = new DataType<Double>("blocks_up", "Blocks UP", () -> new DoubleDataCounter());
 	
 	public StepProtocol() {
-		super(CheatKeys.STEP, false, Material.BRICK_STAIRS, CheatCategory.MOVEMENT, true);
+		super(CheatKeys.STEP, true, Material.BRICK_STAIRS, CheatCategory.MOVEMENT, true);
+	}
+	
+	@EventHandler
+	public void onPacket(PacketSendEvent e) {
+		if(!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_EFFECT))
+			return;
+		SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer()).contentBoolean.put("jump-boost-use", true);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -46,7 +54,13 @@ public class StepProtocol extends Cheat implements Listener {
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double dif = to.getY() - from.getY();
-		if (!p.hasPotionEffect(PotionEffectType.JUMP) && dif > 0) {
+		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? Utils.getPotionEffect(p, PotionEffectType.JUMP).getAmplifier() : 0);
+		boolean isUsingJumpBoost = false;
+		if(np.isOnGround() && amplifier == 0) {
+			np.contentBoolean.remove("jump-boost-use");
+		} else
+			isUsingJumpBoost = np.contentBoolean.getOrDefault("jump-boost-use", false);
+		if (!isUsingJumpBoost && dif > 0 && dif != 0.60) {
 			int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(dif * 50);
 			if (dif > 1.499 && ping < 200) {
 				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
@@ -55,14 +69,10 @@ public class StepProtocol extends Cheat implements Listener {
 					e.setCancelled(true);
 			}
 		}
-		double amplifier = 0;
-		for(PotionEffect pe : p.getActivePotionEffects())
-			if(pe.getType().equals(PotionEffectType.JUMP))
-				amplifier = pe.getAmplifier();
 		double diffBoost = dif - (amplifier / 10);
 		if(diffBoost > 0.2) {
 			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
-			if(diffBoost > 0.6) {
+			if(diffBoost > 0.6 && !isUsingJumpBoost) {
 				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
 						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
 						hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));

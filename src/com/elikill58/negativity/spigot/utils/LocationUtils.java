@@ -158,48 +158,50 @@ public class LocationUtils {
 	 * (2 block radius)
 	 * 
 	 * @param loc the location where you want to check
-	 * @param m the name that we are searching in material names
+	 * @param ms all name that we are searching in material names
 	 * @return true if one of specified material if around
 	 */
-	public static boolean hasExtended(Location loc, String m) {
+	public static boolean hasExtended(Location loc, String... ms) {
 		Location tempLoc = loc.clone();
 		loc = loc.clone();
-		if (loc.getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-			return true;
-		loc = tempLoc;
-		if (loc.add(0, 0, 2).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
-		for (int i = 0; i < 4; i++)
-			if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
+		for(String m : ms) {
+			if (loc.getBlock().getType().name().contains(m))
 				return true;
-		for (int i = 0; i < 4; i++)
-			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
-				return true;
-		for (int i = 0; i < 4; i++)
 			if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
 				return true;
-		if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-			return true;
+			if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
+				return true;
+			if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
+				return true;
+			if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
+				return true;
+			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
+				return true;
+			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
+				return true;
+			if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
+				return true;
+			if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
+				return true;
+			loc = tempLoc;
+			if (loc.add(0, 0, 2).getBlock().getType().name().contains(m))
+				return true;
+			if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
+				return true;
+			if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
+				return true;
+			for (int i = 0; i < 4; i++)
+				if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
+					return true;
+			for (int i = 0; i < 4; i++)
+				if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
+					return true;
+			for (int i = 0; i < 4; i++)
+				if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
+					return true;
+			if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
+				return true;
+		}
 		return false;
 	}
 

@@ -5,7 +5,6 @@ import org.spongepowered.api.entity.Transform;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.InteractEvent;
-import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
@@ -35,9 +34,6 @@ import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
 import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
-import com.elikill58.negativity.universal.Minerate.MinerateType;
-import com.elikill58.negativity.universal.account.NegativityAccount;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 
 public class PlayersListeners {
@@ -92,13 +88,6 @@ public class PlayersListeners {
 			np.isUsingSlimeBlock = true;
 		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !p.getLocation().copy().sub(0, 1, 0).getBlock().getType().getId().contains("AIR")))
 			np.isUsingSlimeBlock = false;
-	}
-
-	@Listener
-	public void onBlockBreakEvent(ChangeBlockEvent.Break e, @First Player p) {
-		NegativityAccount account = NegativityAccount.get(p.getUniqueId());
-		account.getMinerate().addMine(MinerateType.getMinerateType(e.getTransactions().get(0).getOriginal().getState().getType().getId()), p);
-		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
 	}
 	
 	@Listener

@@ -35,7 +35,7 @@ public class Minerate {
 		mined.put(type, value);
 	}
 
-	public void addMine(MinerateType type, Object player) {
+	public void addMine(MinerateType type, Player player) {
 		fullMined++;
 		if(type == null)
 			return;
@@ -45,7 +45,7 @@ public class Minerate {
 			minedType += i;
 		int relia = minedType / fullMined;
 		Cheat xray = Cheat.forKey(CheatKeys.XRAY);
-		Negativity.alertMod(relia > 80 ? ReportType.VIOLATION : ReportType.WARNING, (Player) player, xray,
+		Negativity.alertMod(relia > 80 ? ReportType.VIOLATION : ReportType.WARNING, player, xray,
 				relia, "", type.getOreName() + " mined. Full mined: " + fullMined + ". Mined by type: " + toString(),
 				xray.hoverMsg("main", "%name%", type.getName(), "%nb%", mined.get(type)));
 	}

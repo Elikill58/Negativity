@@ -407,13 +407,12 @@ public class SpongePlayer extends Player {
 	}
 
 	@Override
-	public void showPlayer(Player p) {
-		// TODO implement showPlayer
-	}
-	
-	@Override
-	public void hidePlayer(Player p) {
-		// TODO implement hidePlayer
+	public void setVanished(boolean vanished) {
+		p.offer(Keys.VANISH, vanished);
+		if (vanished) {
+			p.offer(Keys.VANISH_IGNORES_COLLISION, true);
+			p.offer(Keys.VANISH_PREVENTS_TARGETING, true);
+		}
 	}
 
 	@Override

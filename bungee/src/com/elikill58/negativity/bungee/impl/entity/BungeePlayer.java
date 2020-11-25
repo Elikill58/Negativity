@@ -272,10 +272,7 @@ public class BungeePlayer extends Player {
 	public void updateInventory() {}
 
 	@Override
-	public void showPlayer(Player p) {}
-
-	@Override
-	public void hidePlayer(Player p) {}
+	public void setVanished(boolean vanished) {}
 
 	@Override
 	public Vector getVelocity() { return null; }

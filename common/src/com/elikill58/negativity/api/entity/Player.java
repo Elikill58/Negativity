@@ -258,17 +258,11 @@ public abstract class Player extends OfflinePlayer {
 	public abstract void updateInventory();
 
 	/**
-	 * Show the specified player to itself
-	 * 
-	 * @param other the player to showed
+	 * Sets whether the play should be visible to other players.
+	 *
+	 * @param vanished true is the player should NOT be visible
 	 */
-	public abstract void showPlayer(Player other);
-	/**
-	 * Hide the specified player to itself
-	 * 
-	 * @param other the player to hide
-	 */
-	public abstract void hidePlayer(Player other);
+	public abstract void setVanished(boolean vanished);
 	
 	/**
 	 * Get current player velocity

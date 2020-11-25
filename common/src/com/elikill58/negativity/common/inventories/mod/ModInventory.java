@@ -71,15 +71,8 @@ public class ModInventory extends AbstractInventory<ModHolder> {
 			p.closeInventory();
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 			np.isInvisible = !np.isInvisible;
-			if (np.isInvisible) {
-				for (Player pls : Adapter.getAdapter().getOnlinePlayers())
-					pls.hidePlayer(p);
-				Messages.sendMessage(p, "inventory.mod.now_invisible");
-			} else {
-				for (Player pls : Adapter.getAdapter().getOnlinePlayers())
-					pls.showPlayer(p);
-				Messages.sendMessage(p, "inventory.mod.no_longer_invisible");
-			}
+			p.setVanished(np.isInvisible);
+			Messages.sendMessage(p, np.isInvisible ? "inventory.mod.now_invisible" : "inventory.mod.no_longer_invisible");
 		} else if (m.equals(Materials.TNT)) {
 			InventoryManager.open(NegativityInventory.CHEAT_MANAGER, p, false);
 			/*p.closeInventory();

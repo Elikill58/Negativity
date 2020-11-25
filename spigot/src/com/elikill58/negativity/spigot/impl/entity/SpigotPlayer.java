@@ -29,6 +29,7 @@ import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.support.ProtocolSupportSupport;
@@ -360,14 +361,16 @@ public class SpigotPlayer extends Player {
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public void showPlayer(Player p) {
-		this.p.showPlayer((org.bukkit.entity.Player) p.getDefault());
-	}
-
-	@SuppressWarnings("deprecation")
-	@Override
-	public void hidePlayer(Player p) {
-		this.p.hidePlayer((org.bukkit.entity.Player) p.getDefault());
+	public void setVanished(boolean vanished) {
+		if (vanished) {
+			for (Player other : Adapter.getAdapter().getOnlinePlayers()) {
+				((org.bukkit.entity.Player) other.getDefault()).hidePlayer(p);
+			}
+		} else {
+			for (Player other : Adapter.getAdapter().getOnlinePlayers()) {
+				((org.bukkit.entity.Player) other.getDefault()).showPlayer(p);
+			}
+		}
 	}
 
 	@Override

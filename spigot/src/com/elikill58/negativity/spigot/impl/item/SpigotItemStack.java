@@ -37,7 +37,7 @@ public class SpigotItemStack extends ItemStack {
 	@SuppressWarnings("deprecation")
 	@Override
 	public int getEnchantLevel(Enchantment enchant) {
-		return item.getEnchantments().get(org.bukkit.enchantments.Enchantment.getByName(enchant.name()));
+		return item.getEnchantments().getOrDefault(org.bukkit.enchantments.Enchantment.getByName(enchant.name()), 0);
 	}
 
 	@SuppressWarnings("deprecation")

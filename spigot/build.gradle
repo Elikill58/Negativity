@@ -24,6 +24,7 @@ repositories {
 
 dependencies {
     api project(':common')
+    implementation 'org.bstats:bstats-bukkit:1.7'
     compileOnly 'com.comphenix.protocol:ProtocolLib:4.5.0'
     compileOnly fileTree(dir: "spigotJars", includes: ['*.jar'])
 }
@@ -39,6 +40,7 @@ shadowJar {
     archiveBaseName.set('negativity')
     archiveAppendix.set('spigot')
     archiveClassifier.set(null)
+    relocate('org.bstats', 'com.elikill58.negativity')
 }
 
 build.dependsOn shadowJar

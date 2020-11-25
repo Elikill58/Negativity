@@ -36,6 +36,8 @@ dependencies {
     api project(':common')
     compileOnly 'org.spongepowered:spongeapi:7.1.0'
 
+    implementation 'org.bstats:bstats-sponge-lite:1.7'
+
     compileOnly 'com.github.CrushedPixel:PacketGate:0.1.1'
     compileOnly 'com.github.me4502:Precogs:0ecc1f0b85'
 }

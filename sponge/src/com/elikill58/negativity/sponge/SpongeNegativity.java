@@ -16,6 +16,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
+import org.bstats.sponge.MetricsLite2;
 import org.slf4j.Logger;
 import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
@@ -102,6 +103,11 @@ public class SpongeNegativity {
 	}
 
 	public static boolean hasPacketGate = false, hasPrecogs = false;
+	
+	@Inject
+	public SpongeNegativity(MetricsLite2.Factory metricsFactory) {
+		metricsFactory.make(7896);
+	}
 
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {

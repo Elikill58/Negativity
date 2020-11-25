@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.logging.Level;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
 import org.bukkit.command.SimpleCommandMap;
@@ -96,7 +97,7 @@ public class SpigotNegativity extends JavaPlugin {
 		Negativity.loadNegativity();
 		SpigotFakePlayer.loadClass();
 
-		new Metrics(this)
+		new Metrics(this, 1743)
 				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
 
 		PluginManager pm = Bukkit.getPluginManager();

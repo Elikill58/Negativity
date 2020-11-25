@@ -20,6 +20,7 @@ repositories {
 
 dependencies {
     api project(':common')
+    implementation 'org.bstats:bstats-bungeecord-lite:1.7'
     compileOnly 'net.md-5:bungeecord-api:1.15-SNAPSHOT'
     compileOnly 'net.md-5:bungeecord-chat:1.15-SNAPSHOT'
 }
@@ -35,6 +36,7 @@ shadowJar {
     archiveBaseName.set('negativity')
     archiveAppendix.set('bungeecord')
     archiveClassifier.set(null)
+    relocate('org.bstats', 'com.elikill58.negativity')
 }
 
 build.dependsOn shadowJar

@@ -27,7 +27,7 @@ public class CommandsListeners implements CommandCallable {
 	
 	@Override
 	public CommandResult process(CommandSource src, String message) throws CommandException {
-		String[] args = message.split(" ");
+		String[] args = message.isEmpty() ? new String[0] : message.split(" ");
 		String prefix = args.length == 0 ? "" : args[args.length - 1].toLowerCase(Locale.ROOT);
 		CommandExecutionEvent event = new CommandExecutionEvent(cmd, SpongeEntityManager.getExecutor(src), args, prefix);
 		EventManager.callEvent(event);

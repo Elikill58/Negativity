@@ -12,29 +12,30 @@ import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
 import com.velocitypowered.api.plugin.Plugin;
+import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.proxy.ProxyServer;
 import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 
-@Plugin(id = "negativity", name = "Negativity", version = UniversalUtils.NEGATIVITY_VERSION,
-        description = "It's an Advanced AntiCheat Detection", authors = {"Elikill58", "RedNesto"})
+@Plugin(id = "negativity")
 public class VelocityNegativity {
 
 	public static final LegacyChannelIdentifier NEGATIVITY_CHANNEL_ID = new LegacyChannelIdentifier(NegativityMessagesManager.CHANNEL_ID);
 	
     private final ProxyServer server;
     private final Logger logger;
+    private final PluginContainer container;
 
     @Inject
-    public VelocityNegativity(ProxyServer server, Logger logger) {
+    public VelocityNegativity(ProxyServer server, Logger logger, PluginContainer container) {
         this.server = server;
         this.logger = logger;
-    }
+		this.container = container;
+	}
 
     public ProxyServer getServer() {
     	return server;
@@ -43,6 +44,10 @@ public class VelocityNegativity {
     public Logger getLogger() {
     	return logger;
     }
+
+	public PluginContainer getContainer() {
+		return container;
+	}
 
     @Subscribe
     public void onProxyInitialization(ProxyInitializeEvent event) {

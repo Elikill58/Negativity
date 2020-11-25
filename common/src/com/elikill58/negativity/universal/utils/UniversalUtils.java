@@ -52,7 +52,6 @@ import com.elikill58.negativity.universal.Cheat;
 
 public class UniversalUtils {
 
-	public static final String NEGATIVITY_VERSION = "2.0";
 	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	public static boolean HAVE_INTERNET = true, DEBUG = false;
 

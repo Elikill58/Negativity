@@ -1,10 +1,13 @@
 [{
     "modid": "negativity",
     "name": "Negativity",
-    "version": "2.0",
+    "version": "${version}",
     "description": "It's an Advanced AntiCheat Detection",
     "authorList": [
         "Elikill58",
         "RedNesto"
+    ],
+    "dependencies": [
+        "packetgate"
     ]
 }]

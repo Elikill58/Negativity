@@ -37,7 +37,6 @@ import org.spongepowered.api.network.ChannelBuf;
 import org.spongepowered.api.network.PlayerConnection;
 import org.spongepowered.api.network.RawDataListener;
 import org.spongepowered.api.network.RemoteConnection;
-import org.spongepowered.api.plugin.Dependency;
 import org.spongepowered.api.plugin.Plugin;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.scheduler.Task;
@@ -83,16 +82,13 @@ import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
 
-@Plugin(id = "negativity", name = "Negativity", version = UniversalUtils.NEGATIVITY_VERSION, description = "It's an Advanced AntiCheat Detection", authors = { "Elikill58", "RedNesto" }, dependencies = {
-		@Dependency(id = "packetgate") })
+@Plugin(id = "negativity")
 public class SpongeNegativity {
 
 	public static SpongeNegativity INSTANCE;
 
 	@Inject
 	private PluginContainer plugin;
-	@Inject
-	public Logger logger;
 	@Inject
 	@ConfigDir(sharedRoot = false)
 	private Path configDir;

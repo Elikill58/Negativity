@@ -176,7 +176,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 			p.sendMessage(ChatColor.YELLOW + "--- Checking debug for bypass | no alert ---");
 			Adapter ada = Adapter.getAdapter();
-			p.sendMessage(ChatColor.GOLD + ada.getName() + ": " + ada.getVersion() + ". Negativity " + UniversalUtils.NEGATIVITY_VERSION);
+			p.sendMessage(ChatColor.GOLD + ada.getName() + ": " + ada.getVersion() + ". Negativity " + ada.getPluginVersion());
 			long time = System.currentTimeMillis();
 			boolean hasBypass = false;
 			if (np.TIME_INVINCIBILITY > time) {

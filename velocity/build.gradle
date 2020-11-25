@@ -23,6 +23,13 @@ dependencies {
     compileOnly 'com.velocitypowered:velocity-api:1.1.0'
 }
 
+processResources {
+    // Do not try to expand service files, they may contain a dollar sign to mark inner classes
+    filesNotMatching('META-INF/services/*') {
+        expand(project.properties)
+    }
+}
+
 shadowJar {
     archiveBaseName.set('negativity')
     archiveAppendix.set('velocity')

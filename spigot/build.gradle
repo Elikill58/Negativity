@@ -28,6 +28,13 @@ dependencies {
     compileOnly fileTree(dir: "spigotJars", includes: ['*.jar'])
 }
 
+processResources {
+    // Do not try to expand service files, they may contain a dollar sign to mark inner classes
+    filesNotMatching('META-INF/services/*') {
+        expand(project.properties)
+    }
+}
+
 shadowJar {
     archiveBaseName.set('negativity')
     archiveAppendix.set('spigot')

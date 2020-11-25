@@ -68,7 +68,7 @@ public class SpongeAdapter extends Adapter {
 		this.plugin = sn;
 		this.logger = new Slf4jLoggerAdapter(sn.getLogger());
 		this.config = UniversalUtils.loadConfig(new File(getDataFolder(), "config.yml"), "config.yml");
-		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("messages"), "Negativity", "CheatHover");
+		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("lang"), "Negativity", "CheatHover");
 		this.itemRegistrar = new SpongeItemRegistrar();
 	}
 	

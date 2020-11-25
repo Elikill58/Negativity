@@ -9,12 +9,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.data.manipulator.mutable.entity.FallDistanceData;
-import org.spongepowered.api.data.manipulator.mutable.entity.FlyingData;
-import org.spongepowered.api.data.manipulator.mutable.entity.HealthData;
-import org.spongepowered.api.data.manipulator.mutable.entity.SleepingData;
-import org.spongepowered.api.data.manipulator.mutable.entity.SneakingData;
-import org.spongepowered.api.data.manipulator.mutable.entity.SprintData;
 import org.spongepowered.api.data.property.entity.EyeLocationProperty;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
@@ -97,17 +91,17 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public float getWalkSpeed() {
-		return (float) (double) p.get(Keys.WALKING_SPEED).get();
+		return p.require(Keys.WALKING_SPEED).floatValue();
 	}
 
 	@Override
 	public double getHealth() {
-		return p.getOrCreate(HealthData.class).get().health().get();
+		return p.require(Keys.HEALTH);
 	}
 
 	@Override
 	public float getFallDistance() {
-		return p.getOrCreate(FallDistanceData.class).get().fallDistance().get();
+		return p.require(Keys.FALL_DISTANCE);
 	}
 
 	@Override
@@ -178,12 +172,12 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public int getLevel() {
-		return p.get(Keys.EXPERIENCE_LEVEL).get();
+		return p.require(Keys.EXPERIENCE_LEVEL);
 	}
 	
 	@Override
 	public double getFoodLevel() {
-		return p.get(Keys.FOOD_LEVEL).get();
+		return p.require(Keys.FOOD_LEVEL);
 	}
 
 	@Override
@@ -198,13 +192,12 @@ public class SpongePlayer extends Player {
 	
 	@Override
 	public ItemStack getItemInHand() {
-		Optional<org.spongepowered.api.item.inventory.ItemStack> opt = p.getItemInHand(HandTypes.MAIN_HAND);
-		return opt.isPresent() ? new SpongeItemStack(opt.get()) : null;
+		return p.getItemInHand(HandTypes.MAIN_HAND).map(SpongeItemStack::new).orElse(null);
 	}
 
 	@Override
 	public boolean isFlying() {
-		return p.getOrCreate(FlyingData.class).get().flying().get();
+		return p.require(Keys.IS_FLYING);
 	}
 
 	@Override
@@ -214,12 +207,12 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public boolean isSleeping() {
-		return p.getOrCreate(SleepingData.class).get().sleeping().get();
+		return p.require(Keys.IS_SLEEPING);
 	}
 
 	@Override
 	public boolean isSneaking() {
-		return p.getOrCreate(SneakingData.class).get().sneaking().get();
+		return p.require(Keys.IS_SNEAKING);
 	}
 
 	@Override
@@ -304,7 +297,7 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public void setSneaking(boolean b) {
-		p.getOrCreate(SneakingData.class).get().sneaking().set(b);
+		p.offer(Keys.IS_SNEAKING, b);
 	}
 
 	@Override
@@ -314,7 +307,7 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public boolean isSprinting() {
-		return p.getOrCreate(SprintData.class).get().sprinting().get();
+		return p.require(Keys.IS_SPRINTING);
 	}
 
 	@Override
@@ -335,12 +328,12 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public float getFlySpeed() {
-		return (float) (double) p.get(Keys.FLYING_SPEED).get();
+		return p.require(Keys.FLYING_SPEED).floatValue();
 	}
 
 	@Override
 	public void setSprinting(boolean b) {
-		p.getOrCreate(SprintData.class).get().sprinting().set(b);
+		p.offer(Keys.IS_SPRINTING, b);
 	}
 
 	@Override
@@ -364,8 +357,7 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public ItemStack getItemInOffHand() {
-		Optional<org.spongepowered.api.item.inventory.ItemStack> opt = p.getItemInHand(HandTypes.OFF_HAND);
-		return opt.isPresent() ? new SpongeItemStack(opt.get()) : null;
+		return p.getItemInHand(HandTypes.OFF_HAND).map(SpongeItemStack::new).orElse(null);
 	}
 
 	@Override
@@ -391,7 +383,7 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public Inventory getOpenInventory() {
-		return p.getOpenInventory().isPresent() ? null : new SpongeInventory(p.getOpenInventory().get());
+		return p.getOpenInventory().map(SpongeInventory::new).orElse(null);
 	}
 
 	@Override
@@ -401,7 +393,7 @@ public class SpongePlayer extends Player {
 
 	@Override
 	public void closeInventory() {
-		Task.builder().execute(() -> p.closeInventory()).submit(SpongeNegativity.getInstance());
+		Task.builder().execute(p::closeInventory).submit(SpongeNegativity.getInstance());
 	}
 
 	@Override

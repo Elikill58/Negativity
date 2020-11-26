@@ -272,4 +272,9 @@ public class SpongeAdapter extends Adapter {
 	public void runSync(Runnable call) {
 		Task.builder().execute(call).submit(plugin);
 	}
+	
+	@Override
+	public boolean canSendStats() {
+		return Sponge.getMetricsConfigManager().areMetricsEnabled(plugin.getContainer());
+	}
 }

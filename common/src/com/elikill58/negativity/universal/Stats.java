@@ -33,7 +33,7 @@ public class Stats {
     }
     
 	private static void sendUpdateStats(StatsType type, String post) {
-		if(STATS_IN_MAINTENANCE || !UniversalUtils.HAVE_INTERNET)
+		if(STATS_IN_MAINTENANCE || !UniversalUtils.HAVE_INTERNET || !Adapter.getAdapter().canSendStats())
 			return;
 		Runnable task = () -> {
 			try {

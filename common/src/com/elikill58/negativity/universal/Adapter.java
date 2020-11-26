@@ -333,4 +333,8 @@ public abstract class Adapter {
 	 * @param call the action to call
 	 */
 	public abstract void runSync(Runnable call);
+	
+	public boolean canSendStats() {
+		return true;
+	}
 }

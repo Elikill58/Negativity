@@ -68,26 +68,32 @@ public class LocationUtils {
 	 */
 	public static boolean hasMaterialsAround(Location loc, String... ms) {
 		loc = loc.clone();
-		for(String s : ms) {
-			if (loc.getBlock().getType().name().contains(s))
+		if (blockIsOneOfThem(loc.getBlock(), ms))
 				return true;
-			if (loc.add(0, 0, 1).getBlock().getType().name().contains(s))
+		if (blockIsOneOfThem(loc.add(0, 0, 1).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(1, 0, 0).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(0, 0, -1).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(0, 0, -1).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(-1, 0, 0).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(-1, 0, 0).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(0, 0, 1).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(0, 0, 1).getBlock(), ms))
+			return true;
+		return false;
+	}
+	
+	private static boolean blockIsOneOfThem(Block b, String... ms) {
+		String type = b.getType().name().toUpperCase();
+		for(String s : ms)
+			if(type.contains(s))
 				return true;
-			if (loc.add(1, 0, 0).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(0, 0, -1).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(0, 0, -1).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(0, 0, 1).getBlock().getType().name().contains(s))
-				return true;
-			if (loc.add(0, 0, 1).getBlock().getType().name().contains(s))
-				return true;
-		}
 		return false;
 	}
 
@@ -164,44 +170,42 @@ public class LocationUtils {
 	public static boolean hasExtended(Location loc, String... ms) {
 		Location tempLoc = loc.clone();
 		loc = loc.clone();
-		for(String m : ms) {
-			if (loc.getBlock().getType().name().contains(m))
+		if (blockIsOneOfThem(loc.getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(0, 0, 1).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(1, 0, 0).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(0, 0, -1).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(0, 0, -1).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(-1, 0, 0).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(-1, 0, 0).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(0, 0, 1).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(0, 0, 1).getBlock(), ms))
+			return true;
+		loc = tempLoc;
+		if (blockIsOneOfThem(loc.add(0, 0, 2).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(1, 0, 0).getBlock(), ms))
+			return true;
+		if (blockIsOneOfThem(loc.add(1, 0, 0).getBlock(), ms))
+			return true;
+		for (int i = 0; i < 4; i++)
+			if (blockIsOneOfThem(loc.add(0, 0, -1).getBlock(), ms))
 				return true;
-			if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
+		for (int i = 0; i < 4; i++)
+			if (blockIsOneOfThem(loc.add(-1, 0, 0).getBlock(), ms))
 				return true;
-			if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
+		for (int i = 0; i < 4; i++)
+			if (blockIsOneOfThem(loc.add(0, 0, 1).getBlock(), ms))
 				return true;
-			if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
-				return true;
-			if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
-				return true;
-			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
-				return true;
-			if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
-				return true;
-			if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-				return true;
-			if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-				return true;
-			loc = tempLoc;
-			if (loc.add(0, 0, 2).getBlock().getType().name().contains(m))
-				return true;
-			if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-				return true;
-			if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-				return true;
-			for (int i = 0; i < 4; i++)
-				if (loc.add(0, 0, -1).getBlock().getType().name().contains(m))
-					return true;
-			for (int i = 0; i < 4; i++)
-				if (loc.add(-1, 0, 0).getBlock().getType().name().contains(m))
-					return true;
-			for (int i = 0; i < 4; i++)
-				if (loc.add(0, 0, 1).getBlock().getType().name().contains(m))
-					return true;
-			if (loc.add(1, 0, 0).getBlock().getType().name().contains(m))
-				return true;
-		}
+		if (blockIsOneOfThem(loc.add(1, 0, 0).getBlock(), ms))
+			return true;
 		return false;
 	}
 

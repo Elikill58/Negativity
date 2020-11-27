@@ -40,10 +40,10 @@ public class JesusProtocol extends Cheat implements Listener {
 		if (np.hasElytra() || p.isInsideVehicle() || Utils.isSwimming(p))
 			return;
 		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom();
-		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY", "LILY")
-				|| hasMaterialsAround(loc.clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "WATER_LILY", "LILY"))
-			return;
 		Location under = loc.clone().subtract(0, 1, 0);
+		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE")
+				|| hasMaterialsAround(under, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE"))
+			return;
 		Material type = loc.getBlock().getType(), underType = under.getBlock().getType();
 		boolean isInWater = type.name().contains("WATER"), isOnWater = underType.name().contains("WATER");
 		boolean mayCancel = false;
@@ -69,7 +69,7 @@ public class JesusProtocol extends Cheat implements Listener {
 								+ " and ping: " + ping);
 			}
 		}
-		if (dif == -0.5 && (isInWater || isOnWater) && !type.name().contains("SLAB") && !type.name().contains("FENCE") && !LocationUtils.hasMaterialsAround(under, "FENCE")) {
+		if (dif == -0.5 && (isInWater || isOnWater) && !type.name().contains("FENCE")) {
 			mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "Warn for Jesus: "
 					+ np.getWarn(this) + ", dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + " " + ping + ", type: " + type.name() + ", type Under: " + underType.name());
 		}

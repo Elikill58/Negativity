@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -72,7 +73,7 @@ public class StepProtocol extends Cheat implements Listener {
 		double diffBoost = dif - (amplifier / 10);
 		if(diffBoost > 0.2) {
 			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
-			if(diffBoost > 0.6 && !isUsingJumpBoost) {
+			if(diffBoost > 0.6 && !isUsingJumpBoost && p.getNearbyEntities(3, 3, 3).stream().filter((et) -> et.getType().equals(EntityType.BOAT)).count() == 0) {
 				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
 						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
 						hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));

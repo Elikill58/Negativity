@@ -173,9 +173,9 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 						new BukkitRunnable() {
 							public int iterations = 0;
 							public double reachedY = 0 /* diff reached */, baseY = p.getLocation().getY();
-							public Vector baseVector = p.getVelocity().clone();
-							public Location baseLoc = p.getLocation().clone();
-							public boolean vectorChanged = false;
+							//public Vector baseVector = p.getVelocity().clone();
+							//public Location baseLoc = p.getLocation().clone();
+							//public boolean vectorChanged = false;
 
 							@Override
 							public void run() {
@@ -183,17 +183,17 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 								Location loc = p.getLocation();
 								if (loc.getY() - baseY > reachedY)
 									reachedY = loc.getY() - baseY;
-								if(iterations <= 5) {
+								/*if(iterations <= 5) {
 									double d = baseVector.distance(p.getVelocity());
 									if(d != 0)
 										vectorChanged = true;
 									ada.debug("KB Distance: " + d);
 								} else {
-									if(!vectorChanged && loc.distance(baseLoc) > 0.4) {
+									if(!vectorChanged && loc.distance(baseLoc) < 0.4) {
 										SpigotNegativity.alertMod(ReportType.WARNING, p, AntiKnockbackProtocol.this, 90 + iterations, "No changes for the " + iterations
-												+ " times. Vector: " + baseVector.toString(), new CheatHover.Literal("No direction changes during " + (((double) iterations) / 20) + " second"));
+												+ " times. Vector: " + baseVector.toString(), new CheatHover.Literal("No direction changes during " + (((double) iterations) / 20) + " second for " + loc.distance(baseLoc)));
 									}
-								}
+								}*/
 								if (iterations > ticksToReact) {
 									// default algo : (0.00000008 * velY * velY) + (0.0001 * velY) - 0.0219
 									double predictedY = new Expression(algo.replaceAll("velY", String.valueOf(velY))).calculate();

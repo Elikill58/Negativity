@@ -16,7 +16,6 @@ public interface SetBackProcessor {
 	 * Don't check if the player can receive it, just do it.
 	 * 
 	 * @param p the player which will have to be setted back
-	 * @param c the cheat which the player have been detected
 	 */
 	public void perform(Player p);
 }

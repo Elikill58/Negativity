@@ -85,7 +85,7 @@ public abstract class ItemBuilder {
 	/**
 	 * Add lore to current item
 	 * 
-	 * @param lore Lore lines which must to be added
+	 * @param loreToAdd Lore lines which must to be added
 	 * @return this builder
 	 */
     public abstract ItemBuilder addToLore(String... loreToAdd);
@@ -112,7 +112,7 @@ public abstract class ItemBuilder {
 	 * Create an ItemBuilder with a material's name.
 	 * Compatible with "type:byte" for 1.12 and less items
 	 * 
-	 * @param type
+	 * @param type the type descriptor for the desired material
 	 * @return the item builder
 	 */
 	public static ItemBuilder Builder(String type) {

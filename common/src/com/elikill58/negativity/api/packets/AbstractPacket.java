@@ -86,8 +86,6 @@ public abstract class AbstractPacket {
 	
 	/**
 	 * Set if the packet is cancelled
-	 * 
-	 * @param cancel 
 	 */
 	public void setCancelled(boolean cancel) {
 		this.cancel = cancel;

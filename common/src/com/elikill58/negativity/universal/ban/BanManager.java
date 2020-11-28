@@ -66,7 +66,7 @@ public class BanManager {
 
 	/**
 	 * Executes the given ban. The executed ban may contain different information than the one you provided.
-	 * Therefore, it is advised to use the returned {@link ActiveBan} data instead of what you gave in this method parameters.
+	 * Therefore, it is advised to use the returned {@link BanResult} data instead of what was passed to this method's parameters.
 	 * <p>
 	 * The ban may not be executed if bans are disabled, or for any {@link BanProcessor}-specific reason, like if the player bypassed the ban.
 	 *

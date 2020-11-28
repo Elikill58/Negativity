@@ -9,7 +9,6 @@ public abstract class FakePlayer extends Entity {
 	 * Show the fake player to the specified online player
 	 * 
 	 * @param p THe player who will see the entity
-	 * @return this
 	 */
 	public abstract void show(Player p);
 

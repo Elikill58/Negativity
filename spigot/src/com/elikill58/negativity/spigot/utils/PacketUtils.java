@@ -145,7 +145,7 @@ public class PacketUtils {
 	/**
 	 * Get NMS entity player of specified one
 	 * 
-	 * @param p the player that we want the NMS entity player
+	 * @param et the player that we want the NMS entity player
 	 * @return the entity player
 	 */
 	public static Object getNMSEntity(Entity et) {

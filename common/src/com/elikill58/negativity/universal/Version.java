@@ -122,7 +122,7 @@ public enum Version {
 	/**
 	 * Get the version thanks to it's name
 	 * 
-	 * @param name the name of the version
+	 * @param version the name of the version
 	 * @return the founded version or {@link #HIGHER}
 	 */
 	public static Version getVersion(String version) {

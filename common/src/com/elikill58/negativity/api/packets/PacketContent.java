@@ -2,6 +2,7 @@ package com.elikill58.negativity.api.packets;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.NoSuchElementException;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -53,7 +54,7 @@ public class PacketContent {
 	/**
 	 * Get content modifier of a custom type
 	 * 
-	 * @param type the searched type
+	 * @param clazz the searched type
 	 * @return the content modifier of the type
 	 */
 	public <T> ContentModifier<T> getSpecificModifier(Class<T> clazz){

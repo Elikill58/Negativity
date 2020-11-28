@@ -317,7 +317,6 @@ public abstract class Adapter {
 	 * Get another plugin
 	 * 
 	 * @param name the plugin name (used by the platform)
-	 * @return
 	 */
 	public abstract ExternalPlugin getPlugin(String name);
 	

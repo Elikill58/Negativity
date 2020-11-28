@@ -282,7 +282,7 @@ public abstract class Cheat {
 	 * Set if the cheat is active
 	 * Warn: this don't save the config
 	 * 
-	 * @param b the new value
+	 * @param active the new value
 	 * @return the given boolean value
 	 */
 	public boolean setActive(boolean active) {
@@ -319,8 +319,7 @@ public abstract class Cheat {
 	 * Set if the cheat is used in verif
 	 * Warn: this don't save the config
 	 * 
-	 * @param b the new value
-	 * @return the given boolean value
+	 * @param verif the new value
 	 */
 	public void setVerif(boolean verif) {
 		config.set("verif.check_in_verif", verif);

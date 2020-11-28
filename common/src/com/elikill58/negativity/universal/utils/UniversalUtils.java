@@ -280,7 +280,7 @@ public class UniversalUtils {
 	/**
 	 * Check if the given string contains a chinese characters
 	 * 
-	 * @param The string where we are looking for chinese char
+	 * @param s The string where we are looking for chinese char
 	 * @return true if there is a chinese char
 	 */
 	public static boolean containsChineseCharacters(String s) {

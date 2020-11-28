@@ -24,8 +24,8 @@ public interface BanProcessor {
 	 * <p>
 	 * The ban may not be executed for any processor-specific reason.
 	 *
-	 * @return the ban that has been executed, or {@code null} if the ban has not been executed.
-	 * @param ban
+	 * @param ban the ban to execute
+	 * @return the result of the execution
 	 */
 	BanResult executeBan(Ban ban);
 

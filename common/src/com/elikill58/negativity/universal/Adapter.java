@@ -1,15 +1,9 @@
 package com.elikill58.negativity.universal;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-
-import javax.annotation.Nullable;
 
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
@@ -75,43 +69,6 @@ public abstract class Adapter {
 	 * @return the data folder
 	 */
 	public abstract File getDataFolder();
-
-	/**
-	 * Opens a bundled file as an InputStream, located under {@code assets/negativity/[name]}
-	 *
-	 * @param name the name of the bundled file
-	 *
-	 * @return the InputStream of the bundled file, or null if it does not exist
-	 *
-	 * @throws IOException if an IO exception occurred
-	 */
-	@Nullable
-	public abstract InputStream openBundledFile(String name) throws IOException;
-
-	/**
-	 * Copies a {@link #openBundledFile} bundled file} to the file denoted by the given Path
-	 *
-	 * @param name the name of the bundled file
-	 * @param destFile the file Path it will be copied to
-	 *
-	 * @return the file Path it is copied to, or null if the bundled file does not exist
-	 *
-	 * @throws IOException if an IO exception occurred
-	 */
-	@Nullable
-	public Path copyBundledFile(String name, Path destFile) throws IOException {
-		if (Files.notExists(destFile)) {
-			Files.createDirectories(destFile.getParent());
-			try (InputStream bundled = openBundledFile(name)) {
-				if (bundled == null) {
-					return null;
-				}
-				Files.copy(bundled, destFile);
-			}
-		}
-
-		return destFile;
-	}
 
 	/**
 	 * Get a logger adapter to log informations.

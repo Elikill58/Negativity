@@ -2,17 +2,13 @@ package com.elikill58.negativity.sponge8;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.exception.CommandException;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
@@ -85,16 +81,6 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public File getDataFolder() {
 		return this.plugin.getConfigDir().toFile();
-	}
-	
-	@Nullable
-	@Override
-	public InputStream openBundledFile(String name) throws IOException {
-		URL assetUrl = SpongeAdapter.class.getResource("/assets/negativity/" + name);
-		if (assetUrl == null) {
-			return null;
-		}
-		return assetUrl.openStream();
 	}
 	
 	@Override

@@ -13,6 +13,7 @@ import java.util.PropertyResourceBundle;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NegativityTranslationProviderFactory implements TranslationProviderFactory {
 
@@ -35,7 +36,7 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 		for (String bundle : this.bundles) {
 			String fileName = bundle + "_" + language + ".properties";
 			try {
-				Path file = adapter.copyBundledFile(fileName, messagesDir.resolve(fileName));
+				Path file = UniversalUtils.copyBundledFile(UniversalUtils.BUNDLED_ASSETS_BASE + fileName, messagesDir.resolve(fileName));
 				if (file == null || Files.notExists(file)) {
 					continue;
 				}
@@ -68,7 +69,7 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 		StringBuilder concatenatedBundles = new StringBuilder(8000);
 		for (String bundle : this.bundles) {
 			String fileName = bundle + "_" + FALLBACK_LANGUAGE + ".properties";
-			try (InputStream input = Adapter.getAdapter().openBundledFile(fileName)) {
+			try (InputStream input = UniversalUtils.openBundledFile(UniversalUtils.BUNDLED_ASSETS_BASE + fileName)) {
 				if (input == null) {
 					adapter.getLogger().error("Fallback language file " + fileName + " does not exist.");
 					continue;

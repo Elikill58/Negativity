@@ -1,7 +1,6 @@
 package com.elikill58.negativity.bungee;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,8 +8,6 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
@@ -69,12 +66,6 @@ public class BungeeAdapter extends ProxyAdapter {
 	public void debug(String msg) {
 		if(UniversalUtils.DEBUG)
 			getLogger().info(msg);
-	}
-
-	@Nullable
-	@Override
-	public InputStream openBundledFile(String name) {
-		return pl.getResourceAsStream("assets/negativity/" + name);
 	}
 
 	@Override

@@ -2,8 +2,6 @@ package com.elikill58.negativity.sponge;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
-import javax.annotation.Nullable;
-
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.asset.Asset;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.user.UserStorageService;
@@ -91,13 +86,6 @@ public class SpongeAdapter extends Adapter {
 	public void debug(String msg) {
 		if(UniversalUtils.DEBUG)
 			logger.info(msg);
-	}
-
-	@Nullable
-	@Override
-	public InputStream openBundledFile(String name) throws IOException {
-		Asset asset = plugin.getContainer().getAsset(name).orElse(null);
-		return asset == null ? null : asset.getUrl().openStream();
 	}
 
 	@Override

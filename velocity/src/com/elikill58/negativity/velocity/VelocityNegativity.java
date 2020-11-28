@@ -1,7 +1,6 @@
 package com.elikill58.negativity.velocity;
 
 import java.io.File;
-import java.io.InputStream;
 
 import org.slf4j.Logger;
 
@@ -76,10 +75,6 @@ public class VelocityNegativity {
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
 	}
-
-    public final InputStream getResourceAsStream(final String name) {
-        return this.getClass().getClassLoader().getResourceAsStream(name);
-    }
 
     public final File getDataFolder() {
         return new File("./plugins/Negativity");

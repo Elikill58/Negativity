@@ -1,15 +1,12 @@
 package com.elikill58.negativity.spigot;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
-
-import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
@@ -87,12 +84,6 @@ public class SpigotAdapter extends Adapter {
 	public void debug(String msg) {
 		if (UniversalUtils.DEBUG)
 			pl.getLogger().info(msg);
-	}
-
-	@Nullable
-	@Override
-	public InputStream openBundledFile(String name) {
-		return pl.getResource("assets/negativity/" + name);
 	}
 
 	@Override

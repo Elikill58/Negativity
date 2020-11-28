@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal.utils;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.ConnectException;
@@ -48,6 +49,7 @@ import com.elikill58.negativity.universal.Cheat;
 public class UniversalUtils {
 
 	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+	public static final String BUNDLED_ASSETS_BASE = "/assets/negativity/";
 	public static boolean HAVE_INTERNET = true, DEBUG = false;
 
 	public static int getMultipleOf(int i, int multiple, int more) {
@@ -290,6 +292,42 @@ public class UniversalUtils {
 	
 	public static void init() {
 		getContentFromURL("https://google.fr");
+	}
+	
+	/**
+	 * Opens a bundled file as an InputStream
+	 *
+	 * @param name the name of the bundled file
+	 *
+	 * @return the InputStream of the bundled file, or null if it does not exist
+	 */
+	@Nullable
+	public static InputStream openBundledFile(String name) {
+		return UniversalUtils.class.getResourceAsStream(name);
+	}
+	
+	/**
+	 * Copies a bundled file to the file denoted by the given Path
+	 *
+	 * @param name the name of the bundled file
+	 * @param destFile the file Path it will be copied to
+	 *
+	 * @return the file Path it is copied to, or null if the bundled file does not exist
+	 *
+	 * @throws IOException if an IO exception occurred
+	 */
+	@Nullable
+	public static Path copyBundledFile(String name, Path destFile) throws IOException {
+		if (Files.notExists(destFile)) {
+			Files.createDirectories(destFile.getParent());
+			try (InputStream bundled = openBundledFile(name)) {
+				if (bundled == null) {
+					return null;
+				}
+				Files.copy(bundled, destFile);
+			}
+		}
+		return destFile;
 	}
 	
 	public static Configuration loadConfig(File configFile, String configName) {

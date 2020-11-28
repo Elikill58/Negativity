@@ -1,17 +1,11 @@
 package com.elikill58.negativity.universal;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -19,10 +13,12 @@ import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public abstract class Special {
 
-	private static final File MODULE_FOLDER = new File(Cheat.MODULE_FOLDER, "special");
+	public static final String BUNDLED_SPECIAL_MODULES_BASE = Cheat.BUNDLED_MODULES_BASE + "special/";
+	private static final Path MODULE_FOLDER = Cheat.MODULE_FOLDER.resolve("special");
 	private static final List<Special> SPECIALS = new ArrayList<>();
 	private final String key;
 	private Configuration config;
@@ -41,26 +37,26 @@ public abstract class Special {
 		this.key = key.toLowerCase();
 		this.aliases = alias;
 		
-		File moduleFile = new File(MODULE_FOLDER, this.key + ".yml");
-		if(!moduleFile.exists()) {
-			try {
-				URI migrationsDirUri = Special.class.getResource("/modules/special").toURI();
-				if (migrationsDirUri.getScheme().equals("jar")) {
-					try (FileSystem jarFs = FileSystems.newFileSystem(migrationsDirUri, Collections.emptyMap())) {
-						Path cheatPath = jarFs.getPath("/modules/special", this.key + ".yml");
-						if(Files.isRegularFile(cheatPath)) {
-							Files.copy(cheatPath, Paths.get(moduleFile.toURI()));
-						} else {
-							Adapter.getAdapter().getLogger().error("Cannot load cheat " + this.key + ": unable to find default config.");
-							return;
-						}
-					}
-				}
-			} catch (URISyntaxException | IOException e) {
-				e.printStackTrace();
+		String fileName = this.key + ".yml";
+		Path moduleFile = MODULE_FOLDER.resolve(fileName);
+		try {
+			moduleFile = UniversalUtils.copyBundledFile(BUNDLED_SPECIAL_MODULES_BASE + fileName, moduleFile);
+			if (moduleFile == null) {
+				Adapter.getAdapter().getLogger().error("Could not find default module file '" + fileName + "'");
+				return;
 			}
+		} catch (IOException e) {
+			Adapter.getAdapter().getLogger().error("Failed to copy default module file '" + fileName + "' to '" + moduleFile + "'");
+			e.printStackTrace();
+			return;
 		}
-		this.config = YamlConfiguration.load(moduleFile);
+		
+		try (BufferedReader reader = Files.newBufferedReader(moduleFile)) {
+			this.config = YamlConfiguration.load(moduleFile.toFile(), reader);
+		} catch (Exception e) {
+			Adapter.getAdapter().getLogger().error("Failed to load special " + this.key);
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -162,7 +158,6 @@ public abstract class Special {
 	 */
 	public static void loadSpecial() {
 		SPECIALS.clear();
-		MODULE_FOLDER.mkdirs();
 		Adapter ada = Adapter.getAdapter();
 		for (Special special : ServiceLoader.load(Special.class, Special.class.getClassLoader())) {
 			try {

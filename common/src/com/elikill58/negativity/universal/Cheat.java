@@ -1,17 +1,11 @@
 package com.elikill58.negativity.universal;
 
-import java.io.File;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.nio.file.FileSystem;
-import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -38,12 +32,14 @@ import com.elikill58.negativity.universal.setBack.SetBackProcessor;
 import com.elikill58.negativity.universal.setBack.processor.PotionEffectProcessor;
 import com.elikill58.negativity.universal.setBack.processor.TeleportProcessor;
 import com.elikill58.negativity.universal.setBack.processor.ValueEditorProcessor;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 
 public abstract class Cheat {
 
-	protected static final File MODULE_FOLDER = new File(Adapter.getAdapter().getDataFolder(), "modules");
+	public static final String BUNDLED_MODULES_BASE = "/modules/";
+	protected static final Path MODULE_FOLDER = Adapter.getAdapter().getDataFolder().toPath().resolve("modules");
 	public static final List<Cheat> CHEATS = new ArrayList<>();
 	private final String key;
 	private Configuration config;
@@ -71,30 +67,23 @@ public abstract class Cheat {
 		this.aliases = alias;
 		this.hasVerif = hasVerif;
 		
+		String fileName = this.key + ".yml";
+		Path moduleFile = MODULE_FOLDER.resolve(fileName);
 		try {
-			File moduleFile = new File(MODULE_FOLDER, this.key + ".yml");
-			if(!moduleFile.exists()) {
-				try {
-					URI migrationsDirUri = Cheat.class.getResource("/modules").toURI();
-					if (migrationsDirUri.getScheme().equals("jar")) {
-						try (FileSystem jarFs = FileSystems.newFileSystem(migrationsDirUri, Collections.emptyMap())) {
-							Path cheatPath = jarFs.getPath("/modules", this.key + ".yml");
-							if(Files.isRegularFile(cheatPath)) {
-								Files.copy(cheatPath, Paths.get(moduleFile.toURI()));
-							} else {
-								Adapter.getAdapter().getLogger().error("Cannot load cheat " + this.key + ": unable to find default config.");
-								return;
-							}
-						}
-					}
-				} catch (URISyntaxException | IOException e) {
-					e.printStackTrace();
-				}
+			moduleFile = UniversalUtils.copyBundledFile(BUNDLED_MODULES_BASE + fileName, moduleFile);
+			if (moduleFile == null) {
+				Adapter.getAdapter().getLogger().error("Could not find default module file '" + fileName + "'");
+				return;
 			}
-			this.config = YamlConfiguration.load(moduleFile);
+		} catch (IOException e) {
+			Adapter.getAdapter().getLogger().error("Failed to copy default module file '" + fileName + "' to '" + moduleFile + "'");
+			e.printStackTrace();
+			return;
+		}
 		
+		try (BufferedReader reader = Files.newBufferedReader(moduleFile)) {
+			this.config = YamlConfiguration.load(moduleFile.toFile(), reader);
 			this.config.getStringList("set_back.action").forEach((line) -> {
-				
 				JSONObject json = null;
 				try {
 					json = (JSONObject) new JSONParser().parse(line);
@@ -115,7 +104,7 @@ public abstract class Cheat {
 				}
 			});
 		} catch (Exception e) {
-			Adapter.getAdapter().getLogger().error("Cannot load cheat " + key + ".");
+			Adapter.getAdapter().getLogger().error("Failed to load cheat " + this.key);
 			e.printStackTrace();
 		}
 	}
@@ -428,7 +417,6 @@ public abstract class Cheat {
 	 */
 	public static void loadCheat() {
 		CHEATS.clear();
-		MODULE_FOLDER.mkdirs();
 		Adapter ada = Adapter.getAdapter();
 		for (Cheat cheat : ServiceLoader.load(Cheat.class, Cheat.class.getClassLoader())) {
 			try {
@@ -440,7 +428,7 @@ public abstract class Cheat {
 			CHEATS.add(cheat);
 		}
 		CHEATS.sort(Comparator.comparing(Cheat::getKey));
-		ada.getLogger().info("Loaded " + CHEATS.size() + " cheats.");
+		ada.getLogger().info("Loaded " + CHEATS.size() + " cheat detections.");
 	}
 
 	public static List<Cheat> values() {

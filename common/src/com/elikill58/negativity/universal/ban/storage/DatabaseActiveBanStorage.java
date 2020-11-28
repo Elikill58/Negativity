@@ -68,7 +68,7 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 			stm.setString(2, ban.getReason());
 			stm.setString(3, ban.getBannedBy());
 			stm.setLong(4, ban.getExpirationTime());
-			stm.setString(5, UniversalUtils.trimExcess(ban.getCheatName(), 64));
+			stm.setString(5, UniversalUtils.truncate(ban.getCheatName(), 64));
 			stm.setString(6, ban.getIp());
 			stm.setTimestamp(7, ban.getExecutionTime() >= 0 ? new Timestamp(ban.getExecutionTime()) : null);
 			stm.executeUpdate();

@@ -65,7 +65,7 @@ public class DatabaseBanLogsStorage implements BanLogsStorage {
 			stm.setString(2, ban.getReason());
 			stm.setString(3, ban.getBannedBy());
 			stm.setLong(4, ban.getExpirationTime());
-			stm.setString(5, UniversalUtils.trimExcess(ban.getCheatName(), 64));
+			stm.setString(5, UniversalUtils.truncate(ban.getCheatName(), 64));
 			stm.setString(6, ban.getIp());
 			stm.setBoolean(7, ban.getStatus() == BanStatus.REVOKED);
 			stm.setTimestamp(8, ban.getExecutionTime() >= 0 ? new Timestamp(ban.getExecutionTime()) : null);

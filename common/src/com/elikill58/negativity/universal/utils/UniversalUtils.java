@@ -266,7 +266,7 @@ public class UniversalUtils {
 	}
 
 	@Nullable
-	public static String trimExcess(@Nullable String string, int maxLength) {
+	public static String truncate(@Nullable String string, int maxLength) {
 		if (string == null || maxLength >= string.length()) {
 			return string;
 		}

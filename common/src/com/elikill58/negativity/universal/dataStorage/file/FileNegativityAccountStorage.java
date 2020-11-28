@@ -55,6 +55,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 			File file = new File(userDir, account.getPlayerId() + ".yml");
 			if(!file.exists()) {
 				try {
+					userDir.mkdirs();
 					file.createNewFile();
 				} catch (IOException e) {
 					e.printStackTrace();

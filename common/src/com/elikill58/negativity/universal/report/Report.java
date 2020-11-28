@@ -82,11 +82,10 @@ public class Report {
 		this.haveBeenShowned = haveBeenShowned;
 	}
 	
-	@SuppressWarnings("unchecked")
 	/**
 	 * Convert this report into a JSON string
-	 * @return
 	 */
+	@SuppressWarnings("unchecked")
 	public String toJsonString() {
 		JSONObject json = new JSONObject();
 		json.put("reportedBy", reportedBy.toString());

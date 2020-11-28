@@ -39,6 +39,7 @@ import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
 import com.elikill58.negativity.sponge.impl.plugin.SpongeExternalPlugin;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.account.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
@@ -58,6 +59,7 @@ public class SpongeAdapter extends Adapter {
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpongeNegativity::sendPluginMessage);
 	private final TranslationProviderFactory translationProviderFactory;
 	private final SpongeItemRegistrar itemRegistrar;
+	private final Version serverVersion;
 
 	public SpongeAdapter(SpongeNegativity sn) {
 		this.plugin = sn;
@@ -65,6 +67,7 @@ public class SpongeAdapter extends Adapter {
 		this.config = UniversalUtils.loadConfig(new File(getDataFolder(), "config.yml"), "config.yml");
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("lang"), "Negativity", "CheatHover");
 		this.itemRegistrar = new SpongeItemRegistrar();
+		this.serverVersion = Version.getVersionByName(getVersion());
 	}
 	
 	@Override
@@ -103,6 +106,11 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public String getVersion() {
 		return Sponge.getPlatform().getMinecraftVersion().getName();
+	}
+	
+	@Override
+	public Version getServerVersion() {
+		return this.serverVersion;
 	}
 	
 	@Override

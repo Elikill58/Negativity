@@ -116,7 +116,7 @@ public enum Version {
 	 * @return the founded version or {@link #HIGHER}
 	 */
 	public static Version getVersion() {
-		return getVersion(Adapter.getAdapter().getVersion());
+		return Adapter.getAdapter().getServerVersion();
 	}
 	
 	/**

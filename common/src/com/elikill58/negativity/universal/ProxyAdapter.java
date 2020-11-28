@@ -13,6 +13,11 @@ import com.elikill58.negativity.api.location.World;
 public abstract class ProxyAdapter extends Adapter {
 
 	@Override
+	public Version getServerVersion() {
+		return Version.HIGHER;
+	}
+
+	@Override
 	public ItemRegistrar getItemRegistrar() {
 		return null;
 	}

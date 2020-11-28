@@ -93,6 +93,11 @@ public abstract class Adapter {
 	public abstract String getVersion();
 	
 	/**
+	 * The Minecraft version the server is running
+	 */
+	public abstract Version getServerVersion();
+	
+	/**
 	 * Get the version of the Negativity plugin
 	 * 
 	 * @return the version of Negativity

@@ -398,10 +398,9 @@ public class Negativity {
 	public static <T> void loadExtensions(Class<T> extensionClass, Consumer<T> extensionConsumer) {
 		Adapter adapter = Adapter.getAdapter();
 		// First load extensions from negativity
-		safelyLoadExtensions(extensionClass, BanManager.class.getClassLoader(), extensionConsumer);
+		safelyLoadExtensions(extensionClass, Negativity.class.getClassLoader(), extensionConsumer);
 		// Then those from dependent plugins
 		for (ExternalPlugin plugin : adapter.getDependentPlugins()) {
-			adapter.debug("Searching " + plugin.getId() + " for BanProcessor providers");
 			ClassLoader pluginClassLoader = plugin.getDefault().getClass().getClassLoader();
 			safelyLoadExtensions(extensionClass, pluginClassLoader, extensionConsumer);
 		}

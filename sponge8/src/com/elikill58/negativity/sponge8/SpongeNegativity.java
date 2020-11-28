@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.api.ResourceKey;
+import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
@@ -13,6 +14,7 @@ import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.ConstructPluginEvent;
 import org.spongepowered.api.event.lifecycle.LoadedGameEvent;
 import org.spongepowered.api.event.lifecycle.RefreshGameEvent;
+import org.spongepowered.api.event.lifecycle.StartingEngineEvent;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.jvm.Plugin;
@@ -47,11 +49,15 @@ public class SpongeNegativity {
 	@Listener
 	public void onConstructPlugin(ConstructPluginEvent event) {
 		Adapter.setAdapter(new SpongeAdapter(this));
-		Negativity.loadNegativity();
 		ResourceKey channelKey = ResourceKey.resolve(NegativityMessagesManager.CHANNEL_ID);
 		this.channel = Sponge.getChannelRegistry().getOfType(channelKey, RawDataChannel.class);
 	}
 	
+	@Listener
+	public void onStartingEngine(StartingEngineEvent<Server> event) {
+		Negativity.loadNegativity();
+	}
+
 	@Listener
 	public void onLoadedGame(LoadedGameEvent event) {
 		logger.info("Hello from Negativity v{}", container.getMetadata().getVersion());

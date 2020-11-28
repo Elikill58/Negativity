@@ -14,6 +14,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.user.UserStorageService;
+import org.spongepowered.api.text.LiteralText;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.action.TextActions;
 
@@ -186,9 +187,12 @@ public class SpongeAdapter extends Adapter {
 	}
 
 	@Override
-	public void sendMessageRunnableHover(Player p, String message, String hover,
-			String command) {
-		((org.spongepowered.api.entity.living.player.Player) p.getDefault()).sendMessage(Text.builder(message).onHover(TextActions.showText(Text.of(hover))).build());
+	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
+		LiteralText text = Text.builder(message)
+			.onHover(TextActions.showText(Text.of(hover)))
+			.onClick(TextActions.runCommand(command))
+			.build();
+		((org.spongepowered.api.entity.living.player.Player) p.getDefault()).sendMessage(text);
 	}
 
 	@Override

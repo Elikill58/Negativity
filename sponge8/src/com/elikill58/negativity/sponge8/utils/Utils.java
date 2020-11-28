@@ -14,6 +14,8 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.plugin.PluginContainer;
+import org.spongepowered.plugin.metadata.PluginDependency;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.sponge8.Messages;
@@ -26,7 +28,7 @@ public class Utils {
 	//}
 
 	@Nullable
-	public static Player getFirstOnlinePlayer() {
+	public static ServerPlayer getFirstOnlinePlayer() {
 		Collection<ServerPlayer> onlinePlayers = Sponge.getServer().getOnlinePlayers();
 		return onlinePlayers.isEmpty() ? null : onlinePlayers.iterator().next();
 	}
@@ -86,5 +88,14 @@ public class Utils {
 		indicator.offer(Keys.DISPLAY_NAME, Messages.getMessage(player, "inventory.main.mcleaks_indicator." + (usesMcLeaks ? "positive" : "negative")));
 		indicator.offerSingle(Keys.LORE, Messages.getMessage(player, "inventory.main.mcleaks_indicator.description"));
 		return indicator;
+	}
+	
+	public static boolean dependsOn(PluginContainer plugin, String dependencyId) {
+		for (PluginDependency dependency : plugin.getMetadata().getDependencies()) {
+			if (dependency.getId().equalsIgnoreCase(dependencyId)) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

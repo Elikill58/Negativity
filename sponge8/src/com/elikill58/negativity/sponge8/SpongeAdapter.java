@@ -1,13 +1,24 @@
 package com.elikill58.negativity.sponge8;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.exception.CommandException;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
@@ -21,182 +32,254 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
+import com.elikill58.negativity.sponge8.impl.entity.SpongeFakePlayer;
+import com.elikill58.negativity.sponge8.impl.entity.SpongeOfflinePlayer;
+import com.elikill58.negativity.sponge8.impl.inventory.SpongeInventory;
+import com.elikill58.negativity.sponge8.impl.item.SpongeItemBuilder;
+import com.elikill58.negativity.sponge8.impl.item.SpongeItemRegistrar;
+import com.elikill58.negativity.sponge8.impl.location.SpongeLocation;
+import com.elikill58.negativity.sponge8.impl.plugin.SpongeExternalPlugin;
+import com.elikill58.negativity.sponge8.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
+import com.elikill58.negativity.universal.account.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
+import com.elikill58.negativity.universal.translation.NegativityTranslationProviderFactory;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
+
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class SpongeAdapter extends Adapter {
 	
+	private final SpongeNegativity plugin;
+	private final Log4jAdapter logger;
+	private Configuration config;
+	
+	private final NegativityTranslationProviderFactory translationProviderFactory;
+	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpongeNegativity::sendPluginMessage);
+	private final SpongeItemRegistrar itemRegistrar = new SpongeItemRegistrar();
+	
+	public SpongeAdapter(SpongeNegativity plugin) {
+		this.plugin = plugin;
+		this.logger = new Log4jAdapter(plugin.getLogger());
+		this.config = UniversalUtils.loadConfig(plugin.getConfigDir().resolve("config.yml").toFile(), "config.yml");
+		
+		this.translationProviderFactory = new NegativityTranslationProviderFactory(plugin.getConfigDir().resolve("lang"), "Negativity", "CheatHover");
+	}
+	
 	@Override
 	public Platform getPlatformID() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Platform.SPONGE;
 	}
 	
 	@Override
 	public Configuration getConfig() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return this.config;
 	}
 	
 	@Override
 	public File getDataFolder() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return this.plugin.getConfigDir().toFile();
 	}
 	
 	@Nullable
 	@Override
 	public InputStream openBundledFile(String name) throws IOException {
-		throw new UnsupportedOperationException("Not implemented yet");
+		URL assetUrl = SpongeAdapter.class.getResource("/assets/negativity/" + name);
+		if (assetUrl == null) {
+			return null;
+		}
+		return assetUrl.openStream();
 	}
 	
 	@Override
 	public LoggerAdapter getLogger() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return this.logger;
 	}
 	
 	@Override
 	public void debug(String msg) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		if (UniversalUtils.DEBUG) {
+			this.logger.info(msg);
+		}
 	}
 	
 	@Override
 	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return this.translationProviderFactory;
 	}
 	
 	@Override
 	public void reload() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		reloadConfig();
+		SpongeNegativity.trySendProxyPing();
 	}
 	
 	@Override
 	public String getVersion() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Sponge.getPlatform().getMinecraftVersion().getName();
 	}
 	
 	@Override
 	public String getPluginVersion() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return this.plugin.getContainer().getMetadata().getVersion();
 	}
 	
 	@Override
 	public void reloadConfig() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		this.config = UniversalUtils.loadConfig(plugin.getConfigDir().resolve("config.yml").toFile(), "config.yml");
 	}
 	
 	@Override
 	public NegativityAccountManager getAccountManager() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return this.accountManager;
 	}
 	
 	@Override
 	public void runConsoleCommand(String cmd) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		try {
+			Sponge.getCommandManager().process(cmd);
+		} catch (CommandException e) {
+			this.plugin.getLogger().error("Failed to run command as console", e);
+		}
 	}
 	
 	@Override
 	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {
+			if (response == null) {
+				return false;
+			}
+			try {
+				ConfigurationNode rootNode = GsonConfigurationLoader.builder()
+					.source(() -> new BufferedReader(new StringReader(response)))
+					.build()
+					.load();
+				return rootNode.node("isMcleaks").getBoolean(false);
+			} catch (Exception e) {
+				this.plugin.getLogger().error("Failed to parse MCLeaks API response", e);
+			}
+			return false;
+		});
 	}
 	
 	@Override
 	public List<UUID> getOnlinePlayersUUID() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		List<UUID> list = new ArrayList<>();
+		for (ServerPlayer player : Sponge.getServer().getOnlinePlayers()) {
+			list.add(player.getUniqueId());
+		}
+		return list;
 	}
 	
 	@Override
 	public List<Player> getOnlinePlayers() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		List<Player> list = new ArrayList<>();
+		for (ServerPlayer player : Sponge.getServer().getOnlinePlayers()) {
+			list.add(SpongeEntityManager.getPlayer(player));
+		}
+		return list;
 	}
 	
 	@Override
 	public double[] getTPS() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return new double[]{getLastTPS()};
 	}
 	
 	@Override
 	public double getLastTPS() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Sponge.getServer().getTicksPerSecond();
 	}
 	
 	@Override
 	public ItemRegistrar getItemRegistrar() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return this.itemRegistrar;
 	}
 	
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return new SpongeItemBuilder(type);
 	}
 	
 	@Override
 	public ItemBuilder createItemBuilder(String type) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return new SpongeItemBuilder(itemRegistrar.get(type.split(":")[0]));
 	}
 	
 	@Override
 	public ItemBuilder createSkullItemBuilder(Player owner) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return new SpongeItemBuilder(owner);
 	}
 	
 	@Override
 	public Location createLocation(World w, double x, double y, double z) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return new SpongeLocation(w, x, y, z);
 	}
 	
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return new SpongeInventory(inventoryName, size, holder);
 	}
 	
 	@Override
 	public OfflinePlayer getOfflinePlayer(String name) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Sponge.getServer().getUserManager().get(name)
+			.map(SpongeOfflinePlayer::new).orElse(null);
 	}
 	
 	@Override
 	public OfflinePlayer getOfflinePlayer(UUID uuid) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Sponge.getServer().getUserManager().get(uuid)
+			.map(SpongeOfflinePlayer::new).orElse(null);
 	}
 	
 	@Override
 	public Player getPlayer(String name) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return SpongeEntityManager.getPlayer(Sponge.getServer().getPlayer(name).orElse(null));
 	}
 	
 	@Override
 	public Player getPlayer(UUID uuid) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return SpongeEntityManager.getPlayer(Sponge.getServer().getPlayer(uuid).orElse(null));
 	}
 	
 	@Override
 	public FakePlayer createFakePlayer(Location loc, String name) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return new SpongeFakePlayer(loc, name);
 	}
 	
 	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		TextComponent mainText = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+		TextComponent hoverText = LegacyComponentSerializer.legacyAmpersand().deserialize(hover);
+		((ServerPlayer) p.getDefault()).sendMessage(mainText.hoverEvent(hoverText).clickEvent(ClickEvent.runCommand(command)));
 	}
 	
 	@Override
 	public boolean hasPlugin(String name) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Sponge.getPluginManager().isLoaded(name);
 	}
 	
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return new SpongeExternalPlugin(Sponge.getPluginManager().getPlugin(name).orElse(null));
 	}
 	
 	@Override
 	public List<ExternalPlugin> getDependentPlugins() {
-		throw new UnsupportedOperationException("Not implemented yet");
+		return Sponge.getPluginManager().getPlugins().stream()
+			.filter(plugin -> Utils.dependsOn(plugin, "negativity"))
+			.map(SpongeExternalPlugin::new)
+			.collect(Collectors.toList());
 	}
 	
 	@Override
 	public void runSync(Runnable call) {
-		throw new UnsupportedOperationException("Not implemented yet");
+		Sponge.getServer().getScheduler().submit(Task.builder().plugin(this.plugin.getContainer()).execute(call).build());
 	}
 }

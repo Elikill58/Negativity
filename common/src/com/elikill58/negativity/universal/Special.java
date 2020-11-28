@@ -13,12 +13,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.ServiceLoader;
 
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public abstract class Special {
 
@@ -162,27 +162,16 @@ public abstract class Special {
 	 */
 	public static void loadSpecial() {
 		SPECIALS.clear();
+		MODULE_FOLDER.mkdirs();
 		Adapter ada = Adapter.getAdapter();
-		try {
-			MODULE_FOLDER.mkdirs();
-			String dir = Special.class.getProtectionDomain().getCodeSource().getLocation().getFile().replaceAll("%20", " ");
-			if (dir.endsWith(".class"))
-				dir = dir.substring(0, dir.lastIndexOf('!'));
-
-			if (dir.startsWith("file:/"))
-				dir = dir.substring(UniversalUtils.getOs() == UniversalUtils.OS.LINUX ? 5 : 6);
-
-			for (Object classDir : UniversalUtils.getClasseNamesInPackage(dir, "com.elikill58.negativity.common.special")) {
-				try {
-					Special cheat = (Special) Class.forName(classDir.toString().replaceAll(".class", "")).newInstance();
-					EventManager.registerEvent((Listeners) cheat);
-					SPECIALS.add(cheat);
-				} catch (Exception temp) {
-					// on ignore
-				}
+		for (Special special : ServiceLoader.load(Special.class, Special.class.getClassLoader())) {
+			try {
+				EventManager.registerEvent((Listeners) special);
+			} catch (Exception temp) {
+				ada.getLogger().error("Failed to load special " + special.getName());
+				temp.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			SPECIALS.add(special);
 		}
 		ada.getLogger().info("Loaded " + SPECIALS.size() + " special detections.");
 	}

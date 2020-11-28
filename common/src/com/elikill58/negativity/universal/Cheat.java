@@ -16,6 +16,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.UUID;
 import java.util.function.Function;
@@ -34,8 +35,9 @@ import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
 import com.elikill58.negativity.universal.setBack.SetBackEntry;
 import com.elikill58.negativity.universal.setBack.SetBackProcessor;
-import com.elikill58.negativity.universal.setBack.processor.*;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.setBack.processor.PotionEffectProcessor;
+import com.elikill58.negativity.universal.setBack.processor.TeleportProcessor;
+import com.elikill58.negativity.universal.setBack.processor.ValueEditorProcessor;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 
@@ -427,36 +429,18 @@ public abstract class Cheat {
 	 */
 	public static void loadCheat() {
 		CHEATS.clear();
+		MODULE_FOLDER.mkdirs();
 		Adapter ada = Adapter.getAdapter();
-		try {
-			MODULE_FOLDER.mkdirs();
-			String dir = Cheat.class.getProtectionDomain().getCodeSource().getLocation().getFile().replaceAll("%20", " ");
-			if (dir.endsWith(".class"))
-				dir = dir.substring(0, dir.lastIndexOf('!'));
-
-			if (dir.startsWith("file:/"))
-				dir = dir.substring(UniversalUtils.getOs() == UniversalUtils.OS.LINUX ? 5 : 6);
-
-			for (Object classDir : UniversalUtils.getClasseNamesInPackage(dir, "com.elikill58.negativity.common.protocols")) {
-				try {
-					Cheat cheat = (Cheat) Class.forName(classDir.toString().replaceAll(".class", "")).newInstance();
-					try {
-						EventManager.registerEvent((Listeners) cheat);
-					} catch (Exception e) {}
-					CHEATS.add(cheat);
-				} catch (Exception temp) {
-					// on ignore
-				}
+		for (Cheat cheat : ServiceLoader.load(Cheat.class, Cheat.class.getClassLoader())) {
+			try {
+				EventManager.registerEvent((Listeners) cheat);
+			} catch (Exception e) {
+				ada.getLogger().error("Failed to register cheat " + cheat.getName() + " as a listener");
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+			CHEATS.add(cheat);
 		}
-		Collections.sort(CHEATS, new Comparator<Cheat>() {
-			@Override
-			public int compare(Cheat c1, Cheat c2) {
-				return c1.getKey().compareTo(c2.getKey());
-			}
-		});
+		CHEATS.sort(Comparator.comparing(Cheat::getKey));
 		ada.getLogger().info("Loaded " + CHEATS.size() + " cheats.");
 	}
 

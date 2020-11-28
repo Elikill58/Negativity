@@ -2,7 +2,6 @@ package com.elikill58.negativity.universal.utils;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -26,15 +25,11 @@ import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
-import java.util.jar.JarEntry;
-import java.util.jar.JarInputStream;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -132,29 +127,6 @@ public class UniversalUtils {
 			divide += relia.get(temp);
 		}
 		return parseInPorcent(all / divide);
-	}
-
-	public static List<String> getClasseNamesInPackage(String jarName, String packageName) {
-		ArrayList<String> classes = new ArrayList<>();
-
-		packageName = packageName.replaceAll("\\.", "/");
-		try {
-			JarInputStream jarFile = new JarInputStream(new FileInputStream(jarName));
-			JarEntry jarEntry;
-			while (true) {
-				jarEntry = jarFile.getNextJarEntry();
-				if (jarEntry == null) {
-					break;
-				}
-				if ((jarEntry.getName().startsWith(packageName)) && (jarEntry.getName().endsWith(".class"))) {
-					classes.add(jarEntry.getName().replaceAll("/", "\\."));
-				}
-			}
-			jarFile.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return classes;
 	}
 
 	public static boolean isMe(String uuid) {

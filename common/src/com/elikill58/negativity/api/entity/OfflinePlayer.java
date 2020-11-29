@@ -5,49 +5,49 @@ import java.util.UUID;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 
-public abstract class OfflinePlayer extends Entity {
+public interface OfflinePlayer extends Entity {
 
-	public abstract UUID getUniqueId();
+	UUID getUniqueId();
 	
-	public abstract boolean isOnline();
+	boolean isOnline();
 	
-	public abstract boolean hasPlayedBefore();
+	boolean hasPlayedBefore();
 	
 	@Override
-	public boolean isOnGround() {
+	default boolean isOnGround() {
 		return true;
 	}
 	
 	@Override
-	public Location getLocation() {
+	default Location getLocation() {
 		return null;
 	}
 	
 	@Override
-	public EntityType getType() {
+	default EntityType getType() {
 		return EntityType.PLAYER;
 	}
 
 	@Override
-	public Location getEyeLocation() {
+	default Location getEyeLocation() {
 		return null;
 	}
 
 	@Override
-	public Vector getRotation() {
+	default Vector getRotation() {
 		return null;
 	}
 
 	@Override
-	public void sendMessage(String msg) {}
+	default void sendMessage(String msg) {}
 	
 	@Override
-	public int getEntityId() {
+	default int getEntityId() {
 		return 0;
 	}
 	
 	@Override
-	public double getEyeHeight() {
+	default double getEyeHeight() {
 		return 0;
 	}
 }

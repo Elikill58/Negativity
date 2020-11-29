@@ -27,7 +27,7 @@ public class SpongeEntityManager {
 		else if(e.getType().getId().contains("ARROW"))
 			return new SpongeArrow((Arrow) e);
 		else
-			return new SpongeEntity(e);
+			return new SpongeEntity<>(e);
 	}
 
 	public static CommandSender getExecutor(CommandSource src) {
@@ -44,7 +44,7 @@ public class SpongeEntityManager {
 		if(shooter instanceof Player)
 			return getPlayer((Player) shooter);
 		else if(shooter instanceof org.spongepowered.api.entity.Entity)
-			return new SpongeEntity((org.spongepowered.api.entity.Entity) shooter);
+			return new SpongeEntity<>((org.spongepowered.api.entity.Entity) shooter);
 		return null;
 	}
 }

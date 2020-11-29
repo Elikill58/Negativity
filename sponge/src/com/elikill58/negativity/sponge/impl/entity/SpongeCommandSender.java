@@ -5,7 +5,7 @@ import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.api.commands.CommandSender;
 
-public class SpongeCommandSender extends CommandSender {
+public class SpongeCommandSender implements CommandSender {
 
 	private final CommandSource sender;
 	

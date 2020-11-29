@@ -1,23 +1,26 @@
 package com.elikill58.negativity.sponge8.impl.entity;
 
 import org.spongepowered.api.data.Keys;
+import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.world.server.ServerWorld;
 import org.spongepowered.math.vector.Vector3d;
 
-import com.elikill58.negativity.api.entity.Entity;
+import com.elikill58.negativity.api.entity.AbstractEntity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.sponge8.impl.location.SpongeLocation;
 
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 
-public class SpongeEntity extends Entity {
+public class SpongeEntity<E extends Entity> extends AbstractEntity {
 
-	private final org.spongepowered.api.entity.Entity entity;
+	protected final E entity;
 	private final SpongeLocation loc;
 	
-	public SpongeEntity(org.spongepowered.api.entity.Entity e) {
+	public SpongeEntity(E e) {
 		this.entity = e;
 		this.loc = new SpongeLocation(e.getServerLocation());
 	}
@@ -29,7 +32,7 @@ public class SpongeEntity extends Entity {
 
 	@Override
 	public boolean isOp() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -49,13 +52,15 @@ public class SpongeEntity extends Entity {
 	}
 
 	@Override
-	public Object getDefault() {
+	public E getDefault() {
 		return entity;
 	}
 
 	@Override
 	public void sendMessage(String msg) {
-		
+		if (entity instanceof Audience) {
+			((Audience) entity).sendMessage(Component.text(msg));
+		}
 	}
 
 	@Override

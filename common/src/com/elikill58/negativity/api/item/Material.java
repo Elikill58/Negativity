@@ -2,7 +2,7 @@ package com.elikill58.negativity.api.item;
 
 import com.elikill58.negativity.api.NegativityObject;
 
-public abstract class Material extends NegativityObject {
+public abstract class Material implements NegativityObject {
 
 	/**
 	 * Check if the material can be solid

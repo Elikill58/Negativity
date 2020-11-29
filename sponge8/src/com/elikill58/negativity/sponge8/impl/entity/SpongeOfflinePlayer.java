@@ -4,9 +4,10 @@ import java.util.UUID;
 
 import org.spongepowered.api.entity.living.player.User;
 
+import com.elikill58.negativity.api.entity.AbstractEntity;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 
-public class SpongeOfflinePlayer extends OfflinePlayer {
+public class SpongeOfflinePlayer extends AbstractEntity implements OfflinePlayer {
 
 	private final User u;
 	

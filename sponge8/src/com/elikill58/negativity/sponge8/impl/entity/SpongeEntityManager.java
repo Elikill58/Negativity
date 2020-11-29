@@ -28,7 +28,7 @@ public class SpongeEntityManager {
 		else if(e instanceof Arrow)
 			return new SpongeArrow((Arrow) e);
 		else
-			return new SpongeEntity(e);
+			return new SpongeEntity<>(e);
 	}
 
 	public static CommandSender getExecutor(Object src) {
@@ -37,6 +37,7 @@ public class SpongeEntityManager {
 		if(src instanceof ServerPlayer)
 			return new SpongePlayer((ServerPlayer) src);
 		if (src instanceof Audience && src instanceof Nameable)
+			//noinspection rawtypes,unchecked
 			return new SpongeCommandSender((Audience) src);
 		throw new RuntimeException("Could not find appropriate CommandSender implementation for " + src);
 	}
@@ -47,7 +48,7 @@ public class SpongeEntityManager {
 		if(shooter instanceof ServerPlayer)
 			return getPlayer((ServerPlayer) shooter);
 		else if(shooter instanceof org.spongepowered.api.entity.Entity)
-			return new SpongeEntity((org.spongepowered.api.entity.Entity) shooter);
+			return new SpongeEntity<>((org.spongepowered.api.entity.Entity) shooter);
 		return null;
 	}
 }

@@ -6,7 +6,7 @@ import com.elikill58.negativity.api.NegativityObject;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 
-public abstract class Block extends NegativityObject {
+public abstract class Block implements NegativityObject {
 
 	public abstract Location getLocation();
 	

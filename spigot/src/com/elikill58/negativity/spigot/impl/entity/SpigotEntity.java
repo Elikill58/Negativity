@@ -1,22 +1,21 @@
 package com.elikill58.negativity.spigot.impl.entity;
 
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 
-import com.elikill58.negativity.api.entity.Entity;
+import com.elikill58.negativity.api.entity.AbstractEntity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 
-public class SpigotEntity extends Entity {
+public class SpigotEntity<E extends Entity> extends AbstractEntity {
 
-	private final org.bukkit.entity.Entity entity;
-	private final SpigotLocation loc;
+	protected final E entity;
 	
-	public SpigotEntity(org.bukkit.entity.Entity entity) {
+	public SpigotEntity(E entity) {
 		this.entity = entity;
-		this.loc = new SpigotLocation(entity.getLocation());
 	}
 
 	@Override
@@ -31,7 +30,7 @@ public class SpigotEntity extends Entity {
 
 	@Override
 	public Location getLocation() {
-		return loc;
+		return new SpigotLocation(entity.getLocation());
 	}
 
 	@Override
@@ -45,7 +44,7 @@ public class SpigotEntity extends Entity {
 	}
 
 	@Override
-	public Object getDefault() {
+	public E getDefault() {
 		return entity;
 	}
 

@@ -6,7 +6,7 @@ import com.elikill58.negativity.api.NegativityObject;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.universal.utils.Maths;
 
-public abstract class Location extends NegativityObject implements Cloneable {
+public abstract class Location implements Cloneable, NegativityObject {
 
 	private World w;
 	private double x, y, z;

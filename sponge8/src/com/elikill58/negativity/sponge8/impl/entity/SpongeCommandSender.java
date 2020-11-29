@@ -7,7 +7,7 @@ import com.elikill58.negativity.api.commands.CommandSender;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 
-public class SpongeCommandSender<T extends Audience & Nameable> extends CommandSender {
+public class SpongeCommandSender<T extends Audience & Nameable> implements CommandSender {
 
 	private final T sender;
 	

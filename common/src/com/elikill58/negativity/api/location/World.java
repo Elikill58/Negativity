@@ -6,7 +6,7 @@ import com.elikill58.negativity.api.NegativityObject;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
 
-public abstract class World extends NegativityObject {
+public abstract class World implements NegativityObject {
 
 	/**
 	 * Get the world name

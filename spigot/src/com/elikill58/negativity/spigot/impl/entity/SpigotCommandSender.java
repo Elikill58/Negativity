@@ -2,7 +2,7 @@ package com.elikill58.negativity.spigot.impl.entity;
 
 import com.elikill58.negativity.api.commands.CommandSender;
 
-public class SpigotCommandSender extends CommandSender {
+public class SpigotCommandSender implements CommandSender {
 
 	private final org.bukkit.command.CommandSender sender;
 	

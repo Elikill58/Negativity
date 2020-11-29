@@ -2,9 +2,10 @@ package com.elikill58.negativity.spigot.impl.entity;
 
 import java.util.UUID;
 
+import com.elikill58.negativity.api.entity.AbstractEntity;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 
-public class SpigotOfflinePlayer extends OfflinePlayer {
+public class SpigotOfflinePlayer extends AbstractEntity implements OfflinePlayer {
 
 	private final org.bukkit.OfflinePlayer op;
 	

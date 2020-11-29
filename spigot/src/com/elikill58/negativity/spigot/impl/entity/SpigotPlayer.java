@@ -7,7 +7,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Damageable;
 import org.bukkit.event.inventory.InventoryType;
 
 import com.elikill58.negativity.api.GameMode;
@@ -35,13 +34,12 @@ import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.support.ProtocolSupportSupport;
 import com.elikill58.negativity.universal.support.ViaVersionSupport;
 
-public class SpigotPlayer extends Player {
+public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> implements Player {
 
-	private final org.bukkit.entity.Player p;
 	private Version playerVersion;
 	
 	public SpigotPlayer(org.bukkit.entity.Player p) {
-		this.p = p;
+		super(p);
 		this.playerVersion = loadVersion();
 	}
 	
@@ -51,73 +49,68 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public UUID getUniqueId() {
-		return p.getUniqueId();
-	}
-
-	@Override
-	public void sendMessage(String msg) {
-		p.sendMessage(msg);
+		return entity.getUniqueId();
 	}
 
 	@Override
 	public boolean isOnGround() {
-		return ((org.bukkit.entity.Player) p).isOnGround();
+		return entity.isOnGround();
 	}
 
 	@Override
 	public boolean isOp() {
-		return p.isOp();
+		return entity.isOp();
 	}
 
 	@Override
 	public boolean hasElytra() {
-		return Version.getVersion().isNewerOrEquals(Version.V1_9) && p.isGliding();
+		return Version.getVersion().isNewerOrEquals(Version.V1_9) && entity.isGliding();
 	}
 	
 	@Override
 	public boolean hasLineOfSight(Entity entity) {
-		return SpigotNegativity.isCraftBukkit ? true : p.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefault());
+		return SpigotNegativity.isCraftBukkit ? true : this.entity.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefault());
 	}
 
 	@Override
 	public float getWalkSpeed() {
-		return p.getWalkSpeed();
+		return entity.getWalkSpeed();
 	}
 
 	@Override
 	public double getHealth() {
-		return ((Damageable) p).getHealth();
+		return entity.getHealth();
 	}
 
 	@Override
 	public float getFallDistance() {
-		return p.getFallDistance();
+		return entity.getFallDistance();
 	}
 
 	@Override
 	public GameMode getGameMode() {
-		return GameMode.get(p.getGameMode().name());
+		return GameMode.get(entity.getGameMode().name());
 	}
 	
 	@Override
 	public void setGameMode(GameMode gameMode) {
-		p.setGameMode(org.bukkit.GameMode.valueOf(gameMode.name()));
+		entity.setGameMode(org.bukkit.GameMode.valueOf(gameMode.name()));
 	}
 
 	@Override
 	public void damage(double amount) {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> p.damage(amount));
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.damage(amount));
 	}
 
 	@Override
 	public Location getLocation() {
-		return new SpigotLocation(p.getLocation());
+		return new SpigotLocation(entity.getLocation());
 	}
 
 	@Override
 	public int getPing() {
 		try {
-			Object entityPlayer = PacketUtils.getEntityPlayer(p);
+			Object entityPlayer = PacketUtils.getEntityPlayer(entity);
 			return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -127,17 +120,12 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public World getWorld() {
-		return new SpigotWorld(p.getWorld());
-	}
-
-	@Override
-	public String getName() {
-		return p.getName();
+		return new SpigotWorld(entity.getWorld());
 	}
 
 	@Override
 	public boolean hasPermission(String perm) {
-		return p.hasPermission(perm);
+		return entity.hasPermission(perm);
 	}
 
 	@Override
@@ -147,70 +135,70 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public void kick(String reason) {
-		p.kickPlayer(reason);
+		entity.kickPlayer(reason);
 	}
 
 	@Override
 	public int getLevel() {
-		return p.getLevel();
+		return entity.getLevel();
 	}
 	
 	@Override
 	public double getFoodLevel() {
-		return p.getFoodLevel();
+		return entity.getFoodLevel();
 	}
 
 	@Override
 	public boolean getAllowFlight() {
-		return p.getAllowFlight();
+		return entity.getAllowFlight();
 	}
 
 	@Override
 	public Entity getVehicle() {
-		return p.isInsideVehicle() ? SpigotEntityManager.getEntity(p.getVehicle()) : null;
+		return entity.isInsideVehicle() ? SpigotEntityManager.getEntity(entity.getVehicle()) : null;
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
 	public ItemStack getItemInHand() {
-		return new SpigotItemStack(p.getItemInHand());
+		return new SpigotItemStack(entity.getItemInHand());
 	}
 
 	@Override
 	public boolean isFlying() {
-		return p.isFlying();
+		return entity.isFlying();
 	}
 
 	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {
-		p.sendPluginMessage(SpigotNegativity.getInstance(), channelId, writeMessage);
+		entity.sendPluginMessage(SpigotNegativity.getInstance(), channelId, writeMessage);
 	}
 
 	@Override
 	public boolean isSleeping() {
-		return p.isSleeping();
+		return entity.isSleeping();
 	}
 
 	@Override
 	public boolean isSneaking() {
-		return p.isSneaking();
+		return entity.isSneaking();
 	}
 
 	@Override
 	public double getEyeHeight() {
-		return p.getEyeHeight();
+		return entity.getEyeHeight();
 	}
 
 	@Override
 	public boolean hasPotionEffect(PotionEffectType type) {
-		return p.getActivePotionEffects().stream().filter((pe) -> pe.getType().getName().equalsIgnoreCase(type.name()))
+		return entity.getActivePotionEffects().stream().filter((pe) -> pe.getType().getName().equalsIgnoreCase(type.name()))
 				.findAny().isPresent();
 	}
 
 	@Override
 	public List<PotionEffect> getActivePotionEffect() {
 		List<PotionEffect> list = new ArrayList<>();
-		p.getActivePotionEffects()
+		entity.getActivePotionEffects()
 				.forEach((pe) -> list.add(new PotionEffect(PotionEffectType.fromName(pe.getType().getName()), pe.getDuration(), pe.getAmplifier())));
 		return list;
 	}
@@ -225,27 +213,27 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public void removePotionEffect(PotionEffectType type) {
-		p.removePotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()));
+		entity.removePotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()));
 	}
 
 	@Override
 	public String getIP() {
-		return p.getAddress().getAddress().getHostAddress();
+		return entity.getAddress().getAddress().getHostAddress();
 	}
 
 	@Override
 	public boolean isOnline() {
-		return p.isOnline();
+		return entity.isOnline();
 	}
 
 	@Override
 	public void setSneaking(boolean b) {
-		p.setSneaking(b);
+		entity.setSneaking(b);
 	}
 
 	@Override
 	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
-		p.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()),
+		entity.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()),
 				duration, amplifier));
 	}
 
@@ -256,7 +244,7 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public boolean isSprinting() {
-		return p.isSprinting();
+		return entity.isSprinting();
 	}
 
 	@Override
@@ -266,37 +254,37 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public void teleport(Location loc) {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> p.teleport((org.bukkit.Location) loc.getDefault()));
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.teleport((org.bukkit.Location) loc.getDefault()));
 	}
 
 	@Override
 	public boolean isInsideVehicle() {
-		return p.isInsideVehicle();
+		return entity.isInsideVehicle();
 	}
 
 	@Override
 	public float getFlySpeed() {
-		return p.getFlySpeed();
+		return entity.getFlySpeed();
 	}
 
 	@Override
 	public void setSprinting(boolean b) {
-		p.setSprinting(b);
+		entity.setSprinting(b);
 	}
 
 	@Override
 	public List<Entity> getNearbyEntities(double x, double y, double z) {
 		List<Entity> list = new ArrayList<>();
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> p.getNearbyEntities(x, y, z).forEach((entity) -> list.add(SpigotEntityManager.getEntity(entity))));
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.getNearbyEntities(x, y, z).forEach((entity) -> list.add(SpigotEntityManager.getEntity(entity))));
 		return list;
 	}
 
 	@Override
 	public boolean isSwimming() {
 		if (Version.getVersion().isNewerOrEquals(Version.V1_13))
-			return p.isSwimming() || p.hasPotionEffect(org.bukkit.potion.PotionEffectType.DOLPHINS_GRACE);
+			return entity.isSwimming() || entity.hasPotionEffect(org.bukkit.potion.PotionEffectType.DOLPHINS_GRACE);
 		else {
-			if (!p.isSprinting())
+			if (!entity.isSprinting())
 				return false;
 			Location loc = getLocation().clone();
 			if (loc.getBlock().getType().getId().contains("WATER"))
@@ -309,54 +297,54 @@ public class SpigotPlayer extends Player {
 
 	@Override
 	public ItemStack getItemInOffHand() {
-		return Version.getVersion().isNewerOrEquals(Version.V1_9) && p.getInventory().getItemInOffHand() != null ? new SpigotItemStack(p.getInventory().getItemInOffHand()) : null;
+		return Version.getVersion().isNewerOrEquals(Version.V1_9) && entity.getInventory().getItemInOffHand() != null ? new SpigotItemStack(entity.getInventory().getItemInOffHand()) : null;
 	}
 
 	@Override
 	public boolean isDead() {
-		return p.getHealth() <= 0;
+		return entity.getHealth() <= 0;
 	}
 
 	@Override
 	public Vector getVelocity() {
-		org.bukkit.util.Vector vel = p.getVelocity();
+		org.bukkit.util.Vector vel = entity.getVelocity();
 		return new Vector(vel.getX(), vel.getY(), vel.getZ());
 	}
 
 	@Override
 	public PlayerInventory getInventory() {
-		return new SpigotPlayerInventory(p.getInventory());
+		return new SpigotPlayerInventory(entity.getInventory());
 	}
 	
 	@Override
 	public boolean hasOpenInventory() {
-		return p.getOpenInventory() != null && p.getOpenInventory().getTopInventory() != null && p.getOpenInventory().getTopInventory().getType().equals(InventoryType.CHEST);
+		return entity.getOpenInventory() != null && entity.getOpenInventory().getTopInventory() != null && entity.getOpenInventory().getTopInventory().getType().equals(InventoryType.CHEST);
 	}
 
 	@Override
 	public Inventory getOpenInventory() {
-		return p.getOpenInventory() == null || p.getOpenInventory().getTopInventory() == null ? null
-				: new SpigotInventory(p.getOpenInventory().getTopInventory());
+		return entity.getOpenInventory() == null || entity.getOpenInventory().getTopInventory() == null ? null
+				: new SpigotInventory(entity.getOpenInventory().getTopInventory());
 	}
 
 	@Override
 	public void openInventory(Inventory inv) {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> p.openInventory((org.bukkit.inventory.Inventory) inv.getDefault()));
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.openInventory((org.bukkit.inventory.Inventory) inv.getDefault()));
 	}
 
 	@Override
 	public void closeInventory() {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> p.closeInventory());
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.closeInventory());
 	}
 
 	@Override
 	public void updateInventory() {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> p.updateInventory());
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.updateInventory());
 	}
 
 	@Override
 	public void setAllowFlight(boolean b) {
-		p.setAllowFlight(b);
+		entity.setAllowFlight(b);
 	}
 
 	@SuppressWarnings("deprecation")
@@ -364,44 +352,30 @@ public class SpigotPlayer extends Player {
 	public void setVanished(boolean vanished) {
 		if (vanished) {
 			for (Player other : Adapter.getAdapter().getOnlinePlayers()) {
-				((org.bukkit.entity.Player) other.getDefault()).hidePlayer(p);
+				((org.bukkit.entity.Player) other.getDefault()).hidePlayer(entity);
 			}
 		} else {
 			for (Player other : Adapter.getAdapter().getOnlinePlayers()) {
-				((org.bukkit.entity.Player) other.getDefault()).showPlayer(p);
+				((org.bukkit.entity.Player) other.getDefault()).showPlayer(entity);
 			}
 		}
 	}
 
 	@Override
 	public void setVelocity(Vector vel) {
-		p.setVelocity(new org.bukkit.util.Vector(vel.getX(), vel.getY(), vel.getZ()));
+		entity.setVelocity(new org.bukkit.util.Vector(vel.getX(), vel.getY(), vel.getZ()));
 	}
 
 	@Override
-	public Object getDefault() {
-		return p;
-	}
-	
-	@Override
-	public Location getEyeLocation() {
-		org.bukkit.Location eye = p.getEyeLocation();
-		return new SpigotLocation(new SpigotWorld(eye.getWorld()), eye.getX(), eye.getY(), eye.getZ());
-	}
-	
-	@Override
-	public Vector getRotation() {
-		org.bukkit.util.Vector vec = p.getLocation().getDirection();
-		return new Vector(vec.getX(), vec.getY(), vec.getZ());
-	}
-	
-	@Override
-	public int getEntityId() {
-		return p.getEntityId();
-	}
-	
-	@Override
 	public InetSocketAddress getAddress() {
-		return p.getAddress();
+		return entity.getAddress();
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Player)) {
+			return false;
+		}
+		return Player.isSamePlayer(this, (Player) obj);
 	}
 }

@@ -2,7 +2,7 @@ package com.elikill58.negativity.api.item;
 
 import com.elikill58.negativity.api.NegativityObject;
 
-public abstract class ItemStack extends NegativityObject {
+public abstract class ItemStack implements NegativityObject {
 
 	/**
 	 * Get amount of the item

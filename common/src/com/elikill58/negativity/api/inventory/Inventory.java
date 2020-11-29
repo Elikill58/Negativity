@@ -11,7 +11,7 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 
-public abstract class Inventory extends NegativityObject {
+public abstract class Inventory implements NegativityObject {
 	
 	/**
 	 * Get the inventory type

@@ -13,6 +13,7 @@ import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.World;
 
+import com.elikill58.negativity.api.entity.AbstractEntity;
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
@@ -22,7 +23,7 @@ import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
 import com.flowpowered.math.vector.Vector3d;
 
 @SuppressWarnings("unchecked")
-public class SpongeFakePlayer extends FakePlayer {
+public class SpongeFakePlayer extends AbstractEntity implements FakePlayer {
 
 	private Entity fakePlayer;
 	private Location loc;

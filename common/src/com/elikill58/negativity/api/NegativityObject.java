@@ -2,7 +2,7 @@ package com.elikill58.negativity.api;
 
 import com.elikill58.negativity.api.location.World;
 
-public abstract class NegativityObject {
+public interface NegativityObject {
 	
 	/**
 	 * Get default object which is abstracted by Negativity structure
@@ -11,5 +11,5 @@ public abstract class NegativityObject {
 	 * 
 	 * @return default object
 	 */
-	public abstract Object getDefault();
+	Object getDefault();
 }

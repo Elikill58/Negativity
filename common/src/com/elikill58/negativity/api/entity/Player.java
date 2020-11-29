@@ -17,7 +17,7 @@ import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Version;
 
-public abstract class Player extends OfflinePlayer {
+public interface Player extends OfflinePlayer {
 
 	/**
 	 * Get the player IP
@@ -25,121 +25,121 @@ public abstract class Player extends OfflinePlayer {
 	 * @return player IP
 	 */
 	@Nullable
-	public abstract String getIP();
+	String getIP();
 	
 	/**
 	 * Know if the player is dead
 	 * 
 	 * @return true if the player is dead
 	 */
-	public abstract boolean isDead();
+	boolean isDead();
 	
 	/**
 	 * Know if the player is sleeping
 	 * 
 	 * @return true is the player is sleeping
 	 */
-	public abstract boolean isSleeping();
+	boolean isSleeping();
 	/**
 	 * Know if the player is swimming
 	 * (compatible with 1.8 and lower)
 	 * 
 	 * @return true if it's swimming
 	 */
-	public abstract boolean isSwimming();
+	boolean isSwimming();
 	/**
 	 * Check if the player is using elytra (flying with it)
 	 * (compatible with 1.8 and lower)
 	 * 
 	 * @return true if is elytra flying
 	 */
-	public abstract boolean hasElytra();
+	boolean hasElytra();
 	/**
 	 * Check if the player has the specified permission
 	 * 
 	 * @param perm the needed permission
 	 * @return true if the player has permission
 	 */
-	public abstract boolean hasPermission(String perm);
+	boolean hasPermission(String perm);
 	/**
 	 * Check if player can see the specified entity
 	 * 
 	 * @param entity the entity to see
 	 * @return true if the player can see it
 	 */
-	public abstract boolean hasLineOfSight(Entity entity);
+	boolean hasLineOfSight(Entity entity);
 	
 	/**
 	 * Check if the player is flying
 	 * 
 	 * @return true is the player fly
 	 */
-	public abstract boolean isFlying();
+	boolean isFlying();
 	/**
 	 * Check if the player is authorized to fly
 	 * 
 	 * @return true if the player can fly
 	 */
-	public abstract boolean getAllowFlight();
+	boolean getAllowFlight();
 	/**
 	 * Edit the authorization to fly
 	 * 
 	 * @param b true if the player is allowed to fly
 	 */
-	public abstract void setAllowFlight(boolean b);
+	void setAllowFlight(boolean b);
 
 	/**
 	 * Get current player latency
 	 * 
 	 * @return the player ping
 	 */
-	public abstract int getPing();
+	int getPing();
 	/**
 	 * Get player XP level
 	 * 
 	 * @return the player level
 	 */
-	public abstract int getLevel();
+	int getLevel();
 	
 	/**
 	 * Get player fly speed
 	 * 
 	 * @return the speed when player fly
 	 */
-	public abstract float getFlySpeed();
+	float getFlySpeed();
 	/**
 	 * Get player walk speed
 	 * 
 	 * @return the speed when player walk
 	 */
-	public abstract float getWalkSpeed();
+	float getWalkSpeed();
 	/**
 	 * Get the player fall distance when player fall
 	 * 
 	 * @return the player fall distance
 	 */
-	public abstract float getFallDistance();
+	float getFallDistance();
 	
 	/**
 	 * Get the player health
 	 * 
 	 * @return the health
 	 */
-	public abstract double getHealth();
+	double getHealth();
 	
 	/**
 	 * Get the current player food level
 	 * 
 	 * @return the food level
 	 */
-	public abstract double getFoodLevel();
+	double getFoodLevel();
 	
 	/**
 	 * Get player gamemode
 	 * 
 	 * @return the Gamemode
 	 */
-	public abstract GameMode getGameMode();
+	GameMode getGameMode();
 	
 	/**
 	 * Set the player gamemode
@@ -147,45 +147,45 @@ public abstract class Player extends OfflinePlayer {
 	 * 
 	 * @param gameMode the new player gamemode
 	 */
-	public abstract void setGameMode(GameMode gameMode);
+	void setGameMode(GameMode gameMode);
 
 	/**
 	 * Damage player according to damage amount
 	 * 
 	 * @param amount the quantity of damage
 	 */
-	public abstract void damage(double amount);
+	void damage(double amount);
 	/**
 	 * Kick player with the specified reason
 	 * 
 	 * @param reason the reason of kick
 	 */
-	public abstract void kick(String reason);
+	void kick(String reason);
 	/**
 	 * Teleport player to specified location
 	 * 
 	 * @param loc location destination
 	 */
-	public abstract void teleport(Location loc);
+	void teleport(Location loc);
 	/**
 	 * Teleport player to specified entity
 	 * 
 	 * @param et entity destination
 	 */
-	public abstract void teleport(Entity et);
+	void teleport(Entity et);
 
-	public abstract boolean isSneaking();
-	public abstract void setSneaking(boolean b);
+	boolean isSneaking();
+	void setSneaking(boolean b);
 	
-	public abstract boolean isSprinting();
-	public abstract void setSprinting(boolean b);
+	boolean isSprinting();
+	void setSprinting(boolean b);
 
 	/**
 	 * Get player world
 	 * 
 	 * @return the world where the player is
 	 */
-	public abstract World getWorld();
+	World getWorld();
 	
 	/**
 	 * Get player version
@@ -193,7 +193,7 @@ public abstract class Player extends OfflinePlayer {
 	 * 
 	 * @return the version which player use on server
 	 */
-	public abstract Version getPlayerVersion();
+	Version getPlayerVersion();
 
 	/**
 	 * Get the entity which is used as vehicle.
@@ -201,14 +201,14 @@ public abstract class Player extends OfflinePlayer {
 	 * 
 	 * @return the vehicle entity
 	 */
-	public abstract Entity getVehicle();
+	Entity getVehicle();
 	
 	/**
 	 * Check if player is in a vehicle.
 	 * 
 	 * @return true if it is in vehicle
 	 */
-	public abstract boolean isInsideVehicle();
+	boolean isInsideVehicle();
 
 	/**
 	 * Get the item in main hand
@@ -216,7 +216,7 @@ public abstract class Player extends OfflinePlayer {
 	 * 
 	 * @return the item in hand
 	 */
-	public abstract ItemStack getItemInHand();
+	ItemStack getItemInHand();
 	
 	/**
 	 * Get the item in second hand
@@ -225,16 +225,16 @@ public abstract class Player extends OfflinePlayer {
 	 * 
 	 * @return the item in off hand
 	 */
-	public abstract ItemStack getItemInOffHand();
+	ItemStack getItemInOffHand();
 	
-	public abstract boolean hasPotionEffect(PotionEffectType type);
-	public abstract List<PotionEffect> getActivePotionEffect();
-	public abstract Optional<PotionEffect> getPotionEffect(PotionEffectType type);
-	public void addPotionEffect(PotionEffect pe) {
+	boolean hasPotionEffect(PotionEffectType type);
+	List<PotionEffect> getActivePotionEffect();
+	Optional<PotionEffect> getPotionEffect(PotionEffectType type);
+	default void addPotionEffect(PotionEffect pe) {
 		addPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier());
 	}
-	public abstract void addPotionEffect(PotionEffectType type, int duration, int amplifier);
-	public abstract void removePotionEffect(PotionEffectType type);
+	void addPotionEffect(PotionEffectType type, int duration, int amplifier);
+	void removePotionEffect(PotionEffectType type);
 	
 	/**
 	 * Send plugin message :
@@ -246,43 +246,43 @@ public abstract class Player extends OfflinePlayer {
 	 * @param channelId the channel ID
 	 * @param writeMessage the message to sent
 	 */
-	public abstract void sendPluginMessage(String channelId, byte[] writeMessage);
+	void sendPluginMessage(String channelId, byte[] writeMessage);
 	
-	public abstract List<Entity> getNearbyEntities(double x, double y, double z);
+	List<Entity> getNearbyEntities(double x, double y, double z);
 
-	public abstract PlayerInventory getInventory();
-	public abstract Inventory getOpenInventory();
-	public abstract boolean hasOpenInventory();
-	public abstract void openInventory(Inventory inv);
-	public abstract void closeInventory();
-	public abstract void updateInventory();
+	PlayerInventory getInventory();
+	Inventory getOpenInventory();
+	boolean hasOpenInventory();
+	void openInventory(Inventory inv);
+	void closeInventory();
+	void updateInventory();
 
 	/**
 	 * Sets whether the play should be visible to other players.
 	 *
 	 * @param vanished true is the player should NOT be visible
 	 */
-	public abstract void setVanished(boolean vanished);
+	void setVanished(boolean vanished);
 	
 	/**
 	 * Get current player velocity
 	 * 
 	 * @return the player velocity
 	 */
-	public abstract Vector getVelocity();
+	Vector getVelocity();
 	/**
 	 * Edit the player velocity
 	 * 
 	 * @param vel the new velocity
 	 */
-	public abstract void setVelocity(Vector vel);
+	void setVelocity(Vector vel);
 
 	/**
 	 * Get the player address
 	 * 
 	 * @return the player inet address
 	 */
-	public abstract InetSocketAddress getAddress();
+	InetSocketAddress getAddress();
 	
 	/**
 	 * Check if it's a new player
@@ -290,16 +290,11 @@ public abstract class Player extends OfflinePlayer {
 	 * @return true if the player has already played
 	 */
 	@Override
-	public boolean hasPlayedBefore() {
+	default boolean hasPlayedBefore() {
 		return true;
 	}
 	
-	@Override
-	public boolean equals(Object obj) {
-		if (!(obj instanceof Player)) {
-			return false;
-		}
-		return this.getUniqueId().equals(((Player) obj).getUniqueId());
+	static boolean isSamePlayer(Player player1, Player player2) {
+		return player1.getUniqueId().equals(player2.getUniqueId());
 	}
-
 }

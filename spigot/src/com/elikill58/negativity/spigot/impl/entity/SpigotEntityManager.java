@@ -25,7 +25,7 @@ public class SpigotEntityManager {
 		case ARROW:
 			return new SpigotArrow((Arrow) bukkitEntity);
 		default:
-			return new SpigotEntity(bukkitEntity);
+			return new SpigotEntity<>(bukkitEntity);
 		}
 	}
 	
@@ -35,7 +35,7 @@ public class SpigotEntityManager {
 		if(bukkitEntity instanceof Player)
 			return getPlayer((Player) bukkitEntity);
 		else if(bukkitEntity instanceof org.bukkit.entity.Entity)
-			return new SpigotEntity((org.bukkit.entity.Entity) bukkitEntity);
+			return new SpigotEntity<>((org.bukkit.entity.Entity) bukkitEntity);
 		return null;
 	}
 

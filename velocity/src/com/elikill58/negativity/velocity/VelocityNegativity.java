@@ -60,13 +60,7 @@ public class VelocityNegativity {
 
 		NegativityAccountStorage.setDefaultStorage("database");
 
-		Stats.loadStats();
-		Stats.updateStats(StatsType.ONLINE, 1 + "");
-		try {
-			Stats.updateStats(StatsType.PORT, getServer().getBoundAddress().getPort() + "");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Stats.sendStartupStats(getServer().getBoundAddress().getPort());
     	getLogger().info("Negativity enabled");
 	}
 

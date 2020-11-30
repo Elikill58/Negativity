@@ -1,11 +1,7 @@
 package com.elikill58.negativity.bungee;
 
-import java.io.File;
-import java.util.LinkedHashMap;
-
 import org.bstats.bungeecord.MetricsLite;
 
-import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Negativity;
@@ -14,6 +10,7 @@ import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
@@ -35,11 +32,9 @@ public class BungeeNegativity extends Plugin {
 
 		NegativityAccountStorage.setDefaultStorage("database");
 
-		Stats.loadStats();
-		Stats.updateStats(StatsType.ONLINE, 1 + "");
 		try {
-			Stats.updateStats(StatsType.PORT, ((LinkedHashMap<?, ?>) YamlConfiguration.load(new File(getDataFolder().getParentFile().getParentFile(), "config.yml"))
-							.getList("listeners").get(0)).get("query_port") + "");
+			int port = ProxyServer.getInstance().getConfig().getListeners().iterator().next().getQueryPort();
+			Stats.sendStartupStats(port);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

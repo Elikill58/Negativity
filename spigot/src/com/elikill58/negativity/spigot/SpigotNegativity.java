@@ -128,14 +128,7 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
 					+ "). Download it here: https://www.spigotmc.org/resources/48399/");
 		}
-		getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
-			@Override
-			public void run() {
-				Stats.loadStats();
-				Stats.updateStats(StatsType.ONLINE, 1 + "");
-				Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort() + "");
-			}
-		});
+		Stats.sendStartupStats(Bukkit.getServer().getPort());
 		
 		NegativityAccountStorage.setDefaultStorage("file");
 

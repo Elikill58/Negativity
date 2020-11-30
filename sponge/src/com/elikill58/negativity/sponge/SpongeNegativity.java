@@ -2,6 +2,7 @@ package com.elikill58.negativity.sponge;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
@@ -140,20 +141,6 @@ public class SpongeNegativity {
 		if(SpongeUpdateChecker.ifUpdateAvailable()) {
 			getLogger().info("New version available (" + SpongeUpdateChecker.getVersionString() + ") : " + SpongeUpdateChecker.getDownloadUrl());
 		}
-
-		if (!ProxyCompanionManager.isIntegrationEnabled())
-			Task.builder().async().delayTicks(1).execute(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						Stats.loadStats();
-						Stats.updateStats(StatsType.ONLINE, 1 + "");
-						Stats.updateStats(StatsType.PORT, Sponge.getServer().getBoundAddress().get().getPort() + "");
-					} catch (Exception e) {
-
-					}
-				}
-			}).submit(this);
 		
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 	}
@@ -161,14 +148,7 @@ public class SpongeNegativity {
 	@Listener
 	public void onGameStop(GameStoppingServerEvent e) {
 		NegativityPlayer.getAllPlayers().values().forEach(NegativityPlayer::destroy);
-		if (!ProxyCompanionManager.isIntegrationEnabled()) {
-			Task.builder().async().delayTicks(1).execute(new Runnable() {
-				@Override
-				public void run() {
-					Stats.updateStats(StatsType.ONLINE, 0 + "");
-				}
-			}).submit(this);
-		}
+		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		Database.close();
 	}
 
@@ -190,6 +170,8 @@ public class SpongeNegativity {
 			fmlChannel = Sponge.getChannelRegistrar().getOrCreateRaw(this, "FML|HS");
 			fmlChannel.addListener(new FmlRawDataListener());
 		}
+		
+		Stats.sendStartupStats(Sponge.getServer().getBoundAddress().map(InetSocketAddress::getPort).orElse(-1));
 	}
 
 	public void reloadCommands() {

@@ -58,16 +58,23 @@ public class Stats {
 		}
 	}
 
-	public static void loadStats() {
+	public static void sendStartupStats(int port) {
+    	if (!Adapter.getAdapter().canSendStats()) {
+    		return;
+		}
 		Runnable task = () -> {
 			try {
-				if(!UniversalUtils.HAVE_INTERNET)
+				if(!UniversalUtils.HAVE_INTERNET) {
 					STATS_IN_MAINTENANCE = true;
-				else {
+				} else {
 					String result = UniversalUtils.getContentFromURL("https://api.eliapp.fr/status.php?plateforme=negativity").orElse("off");
 					STATS_IN_MAINTENANCE = result.toString().equalsIgnoreCase("on") ? false : true;
-					if (STATS_IN_MAINTENANCE)
+					if (STATS_IN_MAINTENANCE) {
 						Adapter.getAdapter().getLogger().info("Website is in maintenance mode.");
+					} else {
+						Stats.updateStats(StatsType.ONLINE, 1 + "");
+						Stats.updateStats(StatsType.PORT, port + "");
+					}
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -76,8 +83,7 @@ public class Stats {
 		try {
 			THREAD_POOL.submit(task);
 		} catch (RejectedExecutionException e) {
-			Adapter.getAdapter().getLogger()
-					.error("Could not load stats: " + e.getMessage());
+			Adapter.getAdapter().getLogger().error("Could not load stats: " + e.getMessage());
 			e.printStackTrace();
 		}
 	}

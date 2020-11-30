@@ -102,7 +102,7 @@ public class SpongeNegativity {
 		return plugin;
 	}
 
-	public static boolean hasPacketGate = false, hasPrecogs = false;
+	public static boolean hasPacketGate = false;
 	
 	@Inject
 	public SpongeNegativity(MetricsLite2.Factory metricsFactory) {
@@ -175,12 +175,6 @@ public class SpongeNegativity {
 	@Listener
 	public void onGameStart(GameStartingServerEvent e) {
 		packetManager = new NegativityPacketManager(this);
-		try {
-			Class.forName("com.me4502.precogs.Precogs");
-			hasPrecogs = true;
-		} catch (ClassNotFoundException e1) {
-			hasPrecogs = false;
-		}
 		try {
 			Class.forName("net.minecraftforge.fml.common.network.handshake.NetworkDispatcher");
 			SpongeForgeSupport.isOnSpongeForge = true;

@@ -1,6 +1,8 @@
-package com.elikill58.negativity.universal.logger;
+package com.elikill58.negativity.sponge;
 
 import org.slf4j.Logger;
+
+import com.elikill58.negativity.universal.logger.LoggerAdapter;
 
 public class Slf4jLoggerAdapter implements LoggerAdapter {
 

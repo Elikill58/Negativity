@@ -44,7 +44,6 @@ import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.account.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
-import com.elikill58.negativity.universal.logger.Slf4jLoggerAdapter;
 import com.elikill58.negativity.universal.translation.NegativityTranslationProviderFactory;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;

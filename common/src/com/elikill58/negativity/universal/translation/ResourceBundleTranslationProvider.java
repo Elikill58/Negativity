@@ -38,6 +38,12 @@ public class ResourceBundleTranslationProvider implements TranslationProvider {
 			}
 		} catch (MissingResourceException ignore) {
 		}
+		if (lines.isEmpty()) {
+			String rootLine = get(key);
+			if (rootLine != null) {
+				lines.add(rootLine);
+			}
+		}
 		return lines;
 	}
 

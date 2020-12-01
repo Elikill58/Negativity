@@ -2,6 +2,7 @@ package com.elikill58.negativity.api.utils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
@@ -22,6 +23,16 @@ public class LocationUtils {
 		return m.getId().contains("WATER") || hasMaterialsAround(loc, "WATER", "BUBBLE");
 	}
 	
+	public static boolean isBlockOfType(Location location, String... materials) {
+		String blockMaterial = location.getBlock().getType().getId().toUpperCase(Locale.ROOT);
+		for (String material : materials) {
+			if (blockMaterial.contains(material)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * Check if there is material around specified location
 	 * (1 block radius)
@@ -61,26 +72,24 @@ public class LocationUtils {
 	 */
 	public static boolean hasMaterialsAround(Location loc, String... ms) {
 		loc = loc.clone();
-		for(String s : ms) {
-			if (loc.getBlock().getType().getId().contains(s))
-				return true;
-			if (loc.add(0, 0, 1).getBlock().getType().getId().contains(s))
-				return true;
-			if (loc.add(1, 0, 0).getBlock().getType().getId().contains(s))
-				return true;
-			if (loc.add(0, 0, -1).getBlock().getType().getId().contains(s))
-				return true;
-			if (loc.add(0, 0, -1).getBlock().getType().getId().contains(s))
-				return true;
-			if (loc.add(-1, 0, 0).getBlock().getType().getId().contains(s))
-				return true;
-			if (loc.add(-1, 0, 0).getBlock().getType().getId().contains(s))
-				return true;
-			if (loc.add(0, 0, 1).getBlock().getType().getId().contains(s))
-				return true;
-			if (loc.add(0, 0, 1).getBlock().getType().getId().contains(s))
-				return true;
-		}
+		if (isBlockOfType(loc))
+			return true;
+		if (isBlockOfType(loc.add(0, 0, 1), ms))
+			return true;
+		if (isBlockOfType(loc.add(1, 0, 0), ms))
+			return true;
+		if (isBlockOfType(loc.add(0, 0, -1), ms))
+			return true;
+		if (isBlockOfType(loc.add(0, 0, -1), ms))
+			return true;
+		if (isBlockOfType(loc.add(-1, 0, 0), ms))
+			return true;
+		if (isBlockOfType(loc.add(-1, 0, 0), ms))
+			return true;
+		if (isBlockOfType(loc.add(0, 0, 1), ms))
+			return true;
+		if (isBlockOfType(loc.add(0, 0, 1), ms))
+			return true;
 		return false;
 	}
 

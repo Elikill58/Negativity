@@ -174,9 +174,9 @@ public class AntiKnockback extends Cheat implements Listeners {
 			new java.util.Timer().schedule(new TimerTask() {
 				public int iterations = 0;
 				public double reachedY = 0 /* diff reached */, baseY = p.getLocation().getY();
-				public Vector baseVector = p.getVelocity().clone();
+				/*public Vector baseVector = p.getVelocity().clone();
 				public Location basLoc = p.getLocation().clone();
-				public boolean vectorChanged = false;
+				public boolean vectorChanged = false;*/
 
 				@Override
 				public void run() {
@@ -184,7 +184,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 					Location loc = p.getLocation();
 					if (loc.getY() - baseY > reachedY)
 						reachedY = loc.getY() - baseY;
-					if (checkActive("vector")) {
+					/*if (checkActive("vector")) {
 						if (iterations <= 5) {
 							double d = baseVector.distance(p.getVelocity());
 							if (d != 0)
@@ -197,7 +197,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 											"No direction changes during " + (((double) iterations) / 20) + " second"));
 
 						}
-					}
+					}*/
 					if (iterations > ticksToReact) {
 						// default algo : (0.00000008 * velY * velY) + (0.0001 * velY) - 0.0219
 						double predictedY = new Expression(algo.replaceAll("velY", String.valueOf(velY)).replaceAll("reachedY", String.valueOf(reachedY))).calculate();

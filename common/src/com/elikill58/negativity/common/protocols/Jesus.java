@@ -1,5 +1,10 @@
 package com.elikill58.negativity.common.protocols;
 
+import static com.elikill58.negativity.api.item.Materials.STATIONARY_WATER;
+import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialsAround;
+import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
+import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
+import static com.elikill58.negativity.universal.CheatKeys.JESUS;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import com.elikill58.negativity.api.GameMode;
@@ -13,13 +18,6 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.LocationUtils;
-
-import static com.elikill58.negativity.api.item.Materials.STATIONARY_WATER;
-import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialsAround;
-import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
-import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
-import static com.elikill58.negativity.universal.CheatKeys.JESUS;
-
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -70,7 +68,7 @@ public class Jesus extends Cheat implements Listeners {
 				}
 			}
 		}
-		if (checkActive("dif") && dif == -0.5 && (isInWater || isOnWater) && !type.getId().contains("SLAB") && !type.getId().contains("FENCE") && !LocationUtils.hasOtherThan(under, "FENCE")) {
+		if (checkActive("dif") && dif == -0.5 && (isInWater || isOnWater) && !type.getId().contains("FENCE")) {
 			mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "dif", "dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + ", type: " + type.getId() + ", type Under: " + underType.getId() + ", fallDistance: " + p.getFallDistance());
 		}
 		

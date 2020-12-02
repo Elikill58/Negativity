@@ -105,7 +105,7 @@ public class Fly extends Cheat implements Listeners {
 			if(checkActive("no-ground-down")) {
 				if (!np.isUsingSlimeBlock && !hasOtherThanExtended(p.getLocation(), "AIR")
 						&& !hasOtherThanExtended(locUnder, "AIR") && !np.booleans.get(FLY, "boat-falling", false)
-						&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
+						&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0 && np.booleans.get("ALL", "jump-boost-use", false)
 						&& (from.getY() <= to.getY() || inBoat) && p.getVelocity().length() < 1.5) {
 					if (p.getPotionEffect(PotionEffectType.JUMP).orElseGet(() -> new PotionEffect(PotionEffectType.JUMP)).getAmplifier() > 3) {
 						double nbTimeAirBelow = np.doubles.get(FLY, "air-below", 0.0);

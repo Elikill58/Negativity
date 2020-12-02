@@ -43,7 +43,8 @@ public class NoFall extends Cheat implements Listeners {
 		Location locUp = b.getRelative(BlockFace.UP).getLocation();
 		if(checkActive("motion-y")) {
 			double motionY = from.getY() - to.getY();
-			if(locDown.getBlock().getType().equals(Materials.AIR) && locUp.getBlock().getType().equals(Materials.AIR)
+			if(to.clone().add(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).getBlock().getType().equals(Materials.AIR)
+					&& locDown.getBlock().getType().equals(Materials.AIR) && locUp.getBlock().getType().equals(Materials.AIR)
 					&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD") && (motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
 						|| (motionY > (p.getWalkSpeed() / 2) && (p.isOnGround() && p.getFallDistance() > 0.2) && p.getWalkSpeed() > p.getFallDistance())
 						&& !np.isInFight && !b.isWaterLogged()) {

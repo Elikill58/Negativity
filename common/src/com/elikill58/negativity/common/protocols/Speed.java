@@ -74,7 +74,12 @@ public class Speed extends Cheat implements Listeners {
 			np.BYPASS_SPEED--;
 			return;
 		}
-		Location loc = p.getLocation().clone();
+		Location loc = p.getLocation().clone(), locDown = loc.clone().sub(0, 1, 0);
+		boolean hasIceBelow = locDown.getBlock().getType().getId().contains("ICE");
+		if(hasIceBelow)
+			np.booleans.set("ALL", "speed-has-ice", hasIceBelow);
+		else
+			hasIceBelow = np.booleans.get("ALL", "speed-has-ice", false);
 		Block under = loc.clone().sub(0, 1, 0).getBlock();
 		if (hasMaterialsAround(loc.getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
 				|| hasMaterialsAround(loc.clone().add(0, 2, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
@@ -88,7 +93,8 @@ public class Speed extends Cheat implements Listeners {
 		if(onGround && checkActive("distance-ground") && amplifierSpeed < 5) {
 			double walkSpeed = Negativity.essentialsSupport ? (p.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : p.getWalkSpeed();
 			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
-			if((Negativity.essentialsSupport ? (walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D)) : y >= 0.75D) || walkTest){
+			if(((Negativity.essentialsSupport ? (walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D)) : y >= 0.75D) || walkTest)
+					&& !hasIceBelow){
 				int porcent = UniversalUtils.parseInPorcent(y * 50 + UniversalUtils.getPorcentFromBoolean(walkTest, 20)
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
@@ -100,7 +106,7 @@ public class Speed extends Cheat implements Listeners {
 		if(onGround && checkActive("calculated")) {
 			double calculatedSpeedWithoutY = getSpeed(from, to), velocity = p.getVelocity().getY();
 			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && velocity > 0.0
-					&& hasMaterialsAround(loc, "STAIRS", "SLAB") && hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
+					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR") && !hasIceBelow) { // "+0.01" if to prevent lag"
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated",
 						"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + velocity);
 			}
@@ -142,6 +148,17 @@ public class Speed extends Cheat implements Listeners {
 						this, 95, "walk-speed", "Differences : " + dif + ", distance: " + String.format("%.4f", distance) + ", withSpeed: "
 						+ String.format("%.4f", distanceWithSpeed) + ", speedAmplifier: " + amplifierSpeed
 						+ ", walkSpeed: " + p.getWalkSpeed() + ", onGround: " + onGround);
+			}
+		}
+		if(onGround) {
+			if(dif < 0 && hasIceBelow) {
+				double firstIce = np.doubles.get("ALL", "speed-has-ice-first", 4d);
+				if(firstIce <= 0) {
+					np.booleans.remove("ALL", "speed-has-ice");
+					np.booleans.remove("ALL", "speed-has-ice-first");
+				} else {
+					np.doubles.set("ALL", "speed-has-ice-first", firstIce - 1);
+				}
 			}
 		}
 		if (mayCancel && isSetBack())

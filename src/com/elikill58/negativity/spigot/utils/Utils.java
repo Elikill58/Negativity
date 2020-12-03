@@ -192,7 +192,7 @@ public class Utils {
 		if(armor == null)
 			return false;
 		for(ItemStack item : armor)
-			if(item != null && item.containsEnchantment(Enchantment.THORNS))
+			if(item != null && (item.containsEnchantment(Enchantment.THORNS) || item.getType().name().startsWith("NETHERITE")))
 				return true;
 		return false;
 	}

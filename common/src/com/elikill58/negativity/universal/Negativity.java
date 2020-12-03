@@ -5,10 +5,13 @@ import static com.elikill58.negativity.universal.verif.VerificationManager.hasVe
 import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ServiceLoader;
+import java.util.Set;
 import java.util.StringJoiner;
-import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
@@ -26,7 +29,6 @@ import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
-import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -299,6 +301,8 @@ public class Negativity {
 		return sj.toString();
 	}
 	
+	private static final Set<String> integratedPlugins = Collections.synchronizedSet(new HashSet<>());
+	
 	/**
 	 * Load all Negativity's class and content.
 	 * Must to be run after setting adapter
@@ -328,88 +332,69 @@ public class Negativity {
 		hasBypass = config.getBoolean("Permissions.bypass.active", false);
 		timeBetweenAlert = config.getInt("time_between_alert", 1000);
 		
-		StringJoiner supportedPluginName = new StringJoiner(", ");
 		if (ada.hasPlugin("Essentials")) {
 			essentialsSupport = true;
-			supportedPluginName.add("Essentials");
+			integratedPlugins.add("Essentials");
 		}
 		if (ada.hasPlugin("WorldGuard")) {
 			worldGuardSupport = true;
-			supportedPluginName.add("WorldGuard");
+			integratedPlugins.add("WorldGuard");
 		}
 		if (ada.hasPlugin("GadgetsMenu")) {
 			gadgetMenuSupport = true;
-			supportedPluginName.add("GadgetsMenu");
-		}
-
-		if (ada.hasPlugin("MaxBans")) {
-			try {
-				BanProcessor processor = (BanProcessor) Class.forName("com.elikill58.negativity.universal.ban.support.MaxBansProcessor").newInstance();
-				BanManager.registerProcessor("maxbans", processor);
-				supportedPluginName.add("MaxBans");
-			} catch (Exception e) {
-				ada.getLogger().error("Could not register MaxBans BanProcessor:");
-				e.printStackTrace();
-			}
-		}
-
-		if (ada.hasPlugin("AdvancedBan")) {
-			try {
-				BanProcessor processor = (BanProcessor) Class.forName("com.elikill58.negativity.universal.ban.support.AdvancedBanProcessor").newInstance();
-				BanManager.registerProcessor("advancedban", processor);
-				supportedPluginName.add("AdvancedBan");
-			} catch (Exception e) {
-				ada.getLogger().error("Could not register AdvancedBan BanProcessor:");
-				e.printStackTrace();
-			}
-		}
-
-		if (ada.hasPlugin("LiteBans")) {
-			try {
-				BanProcessor processor = (BanProcessor) Class.forName("com.elikill58.negativity.universal.ban.support.LiteBansProcessor").newInstance();
-				BanManager.registerProcessor("litebans", processor);
-				supportedPluginName.add("LiteBans");
-			} catch (Exception e) {
-				ada.getLogger().error("Could not register LiteBans BanProcessor:");
-				e.printStackTrace();
-			}
+			integratedPlugins.add("GadgetsMenu");
 		}
 		
 		if (ada.hasPlugin("ViaVersion")) {
 			viaVersionSupport = true;
-			supportedPluginName.add("ViaVersion");
+			integratedPlugins.add("ViaVersion");
 		}
 		
 		if (ada.hasPlugin("ProtocolSupport")) {
 			protocolSupportSupport = true;
-			supportedPluginName.add("ProtocolSupport");
+			integratedPlugins.add("ProtocolSupport");
 		}
 		
 		if (ada.hasPlugin("floodgate-bukkit")) {
 			Negativity.floodGateSupport = true;
-			supportedPluginName.add("FloodGate");
+			integratedPlugins.add("FloodGate");
 		}
 		
-		if (supportedPluginName.length() > 0) {
-			ada.getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
+		if (!integratedPlugins.isEmpty()) {
+			ada.getLogger().info("Loaded support for " + String.join(", ", integratedPlugins) + ".");
 		}
 	}
 	
-	public static <T> void loadExtensions(Class<T> extensionClass, Consumer<T> extensionConsumer) {
+	public static <T> void loadExtensions(Class<T> extensionClass, Predicate<T> extensionConsumer) {
 		Adapter adapter = Adapter.getAdapter();
 		// First load extensions from negativity
-		safelyLoadExtensions(extensionClass, Negativity.class.getClassLoader(), extensionConsumer);
+		safelyLoadExtensions(extensionClass, Negativity.class.getClassLoader(), extensionConsumer, adapter);
 		// Then those from dependent plugins
 		for (ExternalPlugin plugin : adapter.getDependentPlugins()) {
 			ClassLoader pluginClassLoader = plugin.getDefault().getClass().getClassLoader();
-			safelyLoadExtensions(extensionClass, pluginClassLoader, extensionConsumer);
+			safelyLoadExtensions(extensionClass, pluginClassLoader, extensionConsumer, adapter);
 		}
 	}
 	
-	private static <T> void safelyLoadExtensions(Class<T> extensionClass, ClassLoader classLoader, Consumer<T> extensionConsumer) {
+	private static <T> void safelyLoadExtensions(Class<T> extensionClass, ClassLoader classLoader, Predicate<T> extensionConsumer, Adapter adapter) {
 		for (T extension : ServiceLoader.load(extensionClass, classLoader)) {
 			try {
-				extensionConsumer.accept(extension);
+				if (extension instanceof PlatformDependentExtension
+					&& !adapter.getPlatformID().equals(((PlatformDependentExtension) extension).getPlatform())) {
+					continue;
+				}
+				
+				String dependencyPluginId = null;
+				if (extension instanceof PluginDependentExtension) {
+					dependencyPluginId = ((PluginDependentExtension) extension).getPluginId();
+					if (!adapter.hasPlugin(dependencyPluginId)) {
+						continue;
+					}
+				}
+				
+				if (extensionConsumer.test(extension) && dependencyPluginId != null) {
+					integratedPlugins.add(dependencyPluginId);
+				}
 			} catch (Throwable e) {
 				Adapter.getAdapter().getLogger().error("Failed to consume extension " + extension);
 				e.printStackTrace();

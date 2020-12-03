@@ -1,0 +1,20 @@
+evaluationDependsOn(':spigot')
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+repositories {
+    maven {
+        url = 'http://repo.eliapp.fr:8080/repository/internal/'
+    }
+}
+
+dependencies {
+    compileOnly 'org.maxgamer:MaxBans:2.7'
+    compileOnly(project(':spigot'))
+    compileOnly(project(path: ':spigot', configuration: 'spigot'))
+}

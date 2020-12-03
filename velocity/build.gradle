@@ -34,6 +34,9 @@ shadowJar {
     archiveBaseName.set('negativity')
     archiveAppendix.set('velocity')
     archiveClassifier.set(null)
+
+    mergeServiceFiles()
+    from(project(':common').tasks.shadowJar)
 }
 
 build.dependsOn shadowJar

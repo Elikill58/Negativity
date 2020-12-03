@@ -35,6 +35,9 @@ shadowJar {
     archiveBaseName.set('negativity')
     archiveAppendix.set('sponge8')
     archiveClassifier.set(null)
+
+    mergeServiceFiles()
+    from(project(':common').tasks.shadowJar)
 }
 
 build.dependsOn shadowJar

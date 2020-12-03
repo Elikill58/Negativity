@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.ban.support;
+package com.elikill58.negativity.spigot.integration.maxbans;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,12 +12,15 @@ import org.maxgamer.maxbans.banmanager.HistoryRecord;
 import org.maxgamer.maxbans.banmanager.Temporary;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.PluginDependentExtension;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
+import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 
 public class MaxBansProcessor implements BanProcessor {
 	
@@ -101,5 +104,23 @@ public class MaxBansProcessor implements BanProcessor {
 			list.add(new Ban(UUID.fromString(ban.getId()), ban.getReason(), ban.getBanner(), BanType.UNKNOW, expirationTime, ban.getReason(), null, BanStatus.ACTIVE, ban.getCreated()));
 		});
 		return list;
+	}
+	
+	public static class Provider implements BanProcessorProvider, PluginDependentExtension {
+		
+		@Override
+		public String getId() {
+			return "maxbans";
+		}
+		
+		@Override
+		public BanProcessor create(Adapter adapter) {
+			return new MaxBansProcessor();
+		}
+		
+		@Override
+		public String getPluginId() {
+			return "MaxBans";
+		}
 	}
 }

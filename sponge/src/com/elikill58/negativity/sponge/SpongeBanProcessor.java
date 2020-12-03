@@ -16,6 +16,8 @@ import org.spongepowered.api.util.ban.BanTypes;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Platform;
+import com.elikill58.negativity.universal.PlatformDependentExtension;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
@@ -115,7 +117,7 @@ public class SpongeBanProcessor implements BanProcessor {
 		return Collections.emptyList();
 	}
 	
-	public static class Provider implements BanProcessorProvider {
+	public static class Provider implements BanProcessorProvider, PlatformDependentExtension {
 		
 		@Override
 		public String getId() {
@@ -126,6 +128,11 @@ public class SpongeBanProcessor implements BanProcessor {
 		@Override
 		public BanProcessor create(Adapter adapter) {
 			return new SpongeBanProcessor();
+		}
+		
+		@Override
+		public Platform getPlatform() {
+			return Platform.SPONGE;
 		}
 	}
 }

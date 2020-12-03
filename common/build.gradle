@@ -1,3 +1,9 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id 'com.github.johnrengelman.shadow'
+}
+
 sourceSets {
     main {
         java.srcDirs = ['src']
@@ -13,7 +19,6 @@ repositories {
 
 dependencies {
     // Temporary, should be moved out of common later
-    compileOnly 'com.gitlab.ruany:LiteBansAPI:0.3.4'
     compileOnly 'net.ess3:EssentialsX:2.17.2'
     compileOnly 'com.github.ProtocolSupport:ProtocolSupport:f34959c331'
     compileOnly 'us.myles:viaversion:2.2.3'
@@ -21,6 +26,26 @@ dependencies {
     compileOnly 'com.sk89q.worldedit:worldedit-core:6.1.1-SNAPSHOT'
     compileOnly 'com.yapzhenyie:GadgetsMenu:4.3.29'
     compileOnly 'org.geysermc:FloodGate:1.0-SNAPSHOT'
-    compileOnly 'me.leoko:AdvancedBan:2.2.1'
-    compileOnly 'org.maxgamer:MaxBans:2.7'
+}
+
+processResources {
+    // Do not try to expand service files, they may contain a dollar sign to mark inner classes
+    filesNotMatching('META-INF/services/*') {
+        expand(project.properties)
+    }
+}
+
+shadowJar {
+    archiveBaseName.set('negativity')
+    archiveAppendix.set('common')
+    archiveClassifier.set(null)
+
+    mergeServiceFiles()
+    from(project('integrations:advancedban').jar.outputs.files, project('integrations:litebans').jar.outputs.files)
+}
+
+build.dependsOn shadowJar
+
+parent.tasks.named('shadowJar', ShadowJar) {
+    it.from(shadowJar.outputs)
 }

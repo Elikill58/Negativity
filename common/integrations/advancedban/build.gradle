@@ -1,0 +1,17 @@
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+repositories {
+    maven {
+        url = 'http://repo.eliapp.fr:8080/repository/internal/'
+    }
+}
+
+dependencies {
+    compileOnly 'me.leoko:AdvancedBan:2.2.1'
+    compileOnly(project(':common'))
+}

@@ -4,6 +4,8 @@ plugins {
     id 'com.github.johnrengelman.shadow'
 }
 
+evaluationDependsOn(':common') // Projects are evaluated by alphabetical order, but common should be evaluated before bungee
+
 sourceSets {
     main {
         java.srcDirs = ['src']
@@ -36,7 +38,11 @@ shadowJar {
     archiveBaseName.set('negativity')
     archiveAppendix.set('bungeecord')
     archiveClassifier.set(null)
+
     relocate('org.bstats', 'com.elikill58.negativity')
+
+    mergeServiceFiles()
+    from(project(':common').tasks.shadowJar)
 }
 
 build.dependsOn shadowJar

@@ -198,7 +198,9 @@ public class BanManager {
 			BanProcessor processor = provider.create(adapter);
 			if (processor != null) {
 				registerProcessor(provider.getId(), processor);
+				return true;
 			}
+			return false;
 		});
 	}
 	

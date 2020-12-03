@@ -59,6 +59,9 @@ shadowJar {
     archiveAppendix.set('sponge')
     archiveClassifier.set(null)
 
+    mergeServiceFiles()
+    from(project(':common').tasks.shadowJar)
+
     exclude('dummyThing')
 }
 

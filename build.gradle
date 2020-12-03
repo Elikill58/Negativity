@@ -47,10 +47,6 @@ subprojects {
             url 'https://ci.ender.zone/plugin/repository/everything/'
         }
         maven {
-            name 'dmulloy2'
-            url 'https://repo.dmulloy2.net/nexus/repository/public/'
-        }
-        maven {
             name 'viaversion'
             url 'https://repo.viaversion.com/'
         }

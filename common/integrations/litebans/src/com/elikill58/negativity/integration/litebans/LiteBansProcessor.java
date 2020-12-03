@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.ban.support;
+package com.elikill58.negativity.integration.litebans;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,12 +10,14 @@ import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.PluginDependentExtension;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
+import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 import com.elikill58.negativity.universal.utils.ChatUtils;
 
 import litebans.api.Database;
@@ -153,5 +155,23 @@ public class LiteBansProcessor implements BanProcessor {
 		    return BanType.MOD;
 		} catch (IllegalArgumentException exception){ /* not UUID */ }
 		return BanType.PLUGIN;
+	}
+	
+	public static class Provider implements BanProcessorProvider, PluginDependentExtension {
+		
+		@Override
+		public String getId() {
+			return "litebans";
+		}
+		
+		@Override
+		public BanProcessor create(Adapter adapter) {
+			return new LiteBansProcessor();
+		}
+		
+		@Override
+		public String getPluginId() {
+			return "LiteBans";
+		}
 	}
 }

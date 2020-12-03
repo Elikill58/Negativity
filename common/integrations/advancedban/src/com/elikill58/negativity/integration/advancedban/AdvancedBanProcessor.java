@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.ban.support;
+package com.elikill58.negativity.integration.advancedban;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -9,12 +9,15 @@ import java.util.concurrent.CompletableFuture;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.PluginDependentExtension;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
+import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 
 import me.leoko.advancedban.manager.PunishmentManager;
 import me.leoko.advancedban.utils.Punishment;
@@ -99,5 +102,23 @@ public class AdvancedBanProcessor implements BanProcessor {
 				status,
 				punishment.getStart(),
 				punishment.isExpired() ? -1 : System.currentTimeMillis());
+	}
+	
+	public static class Provider implements BanProcessorProvider, PluginDependentExtension {
+		
+		@Override
+		public String getId() {
+			return "advancedban";
+		}
+		
+		@Override
+		public BanProcessor create(Adapter adapter) {
+			return new AdvancedBanProcessor();
+		}
+		
+		@Override
+		public String getPluginId() {
+			return "AdvancedBan";
+		}
 	}
 }

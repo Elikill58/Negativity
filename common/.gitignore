@@ -6,3 +6,9 @@
 
 !/src/
 !/resources/
+
+!/integrations/
+/integrations/*/*
+!/integrations/*/src
+!/integrations/*/resources
+!/integrations/*/build.gradle

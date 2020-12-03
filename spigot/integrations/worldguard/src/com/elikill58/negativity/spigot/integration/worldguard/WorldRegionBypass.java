@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.bypass.checkers;
+package com.elikill58.negativity.spigot.integration.worldguard;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,9 +9,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.bypass.BypassChecker;
-import com.elikill58.negativity.universal.support.WorldGuardSupport;
 
 public class WorldRegionBypass implements BypassChecker {
 
@@ -19,7 +17,7 @@ public class WorldRegionBypass implements BypassChecker {
 		Location loc = p.getLocation();
 		if(getWorlds().contains(loc.getWorld().getName().toLowerCase()))
 			return true;
-		if(Negativity.worldGuardSupport && WorldGuardSupport.isInAreas(loc, getRegions()))
+		if(WorldGuardSupport.isInAreas(loc, getRegions()))
 			return true;
 		return false;
 	}

@@ -29,10 +29,8 @@ import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.support.ProtocolSupportSupport;
-import com.elikill58.negativity.universal.support.ViaVersionSupport;
+import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
 public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> implements Player {
 
@@ -44,7 +42,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	}
 	
 	private Version loadVersion() {
-		return (Negativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(this) : (Negativity.protocolSupportSupport ? ProtocolSupportSupport.getPlayerVersion(this) : Version.getVersion()));
+		return PlayerVersionManager.getPlayerVersion(this);
 	}
 
 	@Override

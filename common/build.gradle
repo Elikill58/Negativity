@@ -11,23 +11,6 @@ sourceSets {
     }
 }
 
-repositories {
-    maven {
-        url = 'http://repo.eliapp.fr:8080/repository/internal/'
-    }
-}
-
-dependencies {
-    // Temporary, should be moved out of common later
-    compileOnly 'net.ess3:EssentialsX:2.17.2'
-    compileOnly 'com.github.ProtocolSupport:ProtocolSupport:f34959c331'
-    compileOnly 'us.myles:viaversion:2.2.3'
-    compileOnly 'com.sk89q:worldguard:6.1'
-    compileOnly 'com.sk89q.worldedit:worldedit-core:6.1.1-SNAPSHOT'
-    compileOnly 'com.yapzhenyie:GadgetsMenu:4.3.29'
-    compileOnly 'org.geysermc:FloodGate:1.0-SNAPSHOT'
-}
-
 processResources {
     // Do not try to expand service files, they may contain a dollar sign to mark inner classes
     filesNotMatching('META-INF/services/*') {
@@ -41,7 +24,11 @@ shadowJar {
     archiveClassifier.set(null)
 
     mergeServiceFiles()
-    from(project('integrations:advancedban').jar.outputs.files, project('integrations:litebans').jar.outputs.files)
+    from(
+            project('integrations:advancedban').jar.outputs.files,
+            project('integrations:litebans').jar.outputs.files,
+            project('integrations:viaversion').jar.outputs.files
+    )
 }
 
 build.dependsOn shadowJar

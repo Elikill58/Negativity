@@ -28,7 +28,6 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.report.ReportType;
-import com.elikill58.negativity.universal.support.EssentialsSupport;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Speed extends Cheat implements Listeners {
@@ -91,9 +90,9 @@ public class Speed extends Cheat implements Listeners {
 		double distance = from.distance(to);
 		boolean mayCancel = false, onGround = p.isOnGround();
 		if(onGround && checkActive("distance-ground") && amplifierSpeed < 5) {
-			double walkSpeed = Negativity.essentialsSupport ? (p.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : p.getWalkSpeed();
+			double walkSpeed = (p.getWalkSpeed() - getEssentialsRealMoveSpeed(p)); // TODO rewrite without converting to essentials values
 			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
-			if(((Negativity.essentialsSupport ? (walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D)) : y >= 0.75D) || walkTest)
+			if((((walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D))) || walkTest)
 					&& !hasIceBelow){
 				int porcent = UniversalUtils.parseInPorcent(y * 50 + UniversalUtils.getPorcentFromBoolean(walkTest, 20)
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
@@ -163,6 +162,15 @@ public class Speed extends Cheat implements Listeners {
 		}
 		if (mayCancel && isSetBack())
 			e.setCancelled(true);
+	}
+
+	private static float getEssentialsRealMoveSpeed(Player p) {
+		final float defaultSpeed = p.isFlying() ? 0.1f : 0.2f;
+		float maxSpeed = 1f;
+		if (p.getWalkSpeed() < 1f)
+			return defaultSpeed * p.getWalkSpeed();
+		else
+			return ((p.getWalkSpeed() - 1) / 9) * (maxSpeed - defaultSpeed) + defaultSpeed;
 	}
 
 	private boolean hasEnderDragonAround(Player p) {

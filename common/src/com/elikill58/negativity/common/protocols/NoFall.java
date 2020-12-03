@@ -16,8 +16,8 @@ import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
-import com.elikill58.negativity.universal.support.EssentialsSupport;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NoFall extends Cheat implements Listeners {
@@ -63,8 +63,7 @@ public class NoFall extends Cheat implements Listeners {
 				int relia = UniversalUtils.parseInPorcent(distance * 100);
 				if (p.isOnGround()) {
 					if(checkActive("distance-ground")) {
-						if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && Negativity.essentialsSupport
-								&& EssentialsSupport.checkEssentialsSpeedPrecondition(p))) {
+						if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && PlayerModificationsManager.isSpeedUnlocked(p))) {
 							boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "distance-ground",
 									"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceBetweenFromAndTo: "
 											+ distance);

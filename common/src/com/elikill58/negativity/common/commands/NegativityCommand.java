@@ -32,9 +32,9 @@ import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.playerModifications.PlayerModifications;
+import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
-import com.elikill58.negativity.universal.support.EssentialsSupport;
-import com.elikill58.negativity.universal.support.GadgetMenuSupport;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
@@ -213,15 +213,21 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 						p.sendMessage(ChatColor.RED + "You have a bypass actually");
 						hasBypass = true;
 					}
-					if (Negativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) 
-							&& GadgetMenuSupport.checkGadgetsMenuPreconditions(p)) {
-						p.sendMessage(ChatColor.RED + "GadgetMenu movement bypass.");
-						hasBypass = true;
+					if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
+						for (PlayerModifications modification : PlayerModificationsManager.getModifications()) {
+							if (modification.shouldIgnoreMovementChecks(p)) {
+								p.sendMessage(ChatColor.RED + modification.getDisplayname() + "movement bypass.");
+								hasBypass = true;
+							}
+						}
 					}
-					if (Negativity.essentialsSupport && c.getKey().equals(CheatKeys.FLY) && p.hasPermission("essentials.fly")
-							&& EssentialsSupport.checkEssentialsPrecondition(p)) {
-						p.sendMessage(ChatColor.RED + "Essentials fly bypass.");
-						hasBypass = true;
+					if (c.getKey().equals(CheatKeys.FLY)) {
+						for (PlayerModifications modification : PlayerModificationsManager.getModifications()) {
+							if (modification.canFly(p)) {
+								p.sendMessage(ChatColor.RED + modification.getDisplayname() + " fly bypass.");
+								hasBypass = true;
+							}
+						}
 					}
 					int ping = p.getPing();
 					if(np.isInFight && c.isBlockedInFight()) {

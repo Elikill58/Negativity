@@ -1,0 +1,25 @@
+evaluationDependsOn(':spigot')
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+repositories {
+    maven {
+        name 'essentials'
+        url 'https://ci.ender.zone/plugin/repository/everything/'
+    }
+    maven {
+        name 'sk89q'
+        url 'http://maven.sk89q.com/repo/'
+    }
+}
+
+dependencies {
+    compileOnly 'net.ess3:EssentialsX:2.17.2'
+    compileOnly(project(':spigot'))
+    compileOnly(project(path: ':spigot', configuration: 'spigot'))
+}

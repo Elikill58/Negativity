@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.support;
+package com.elikill58.negativity.spigot.integration.worldguard;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
@@ -14,6 +14,7 @@ import com.sk89q.worldguard.protection.flags.StateFlag;
 import com.sk89q.worldguard.protection.managers.RegionManager;
 import com.sk89q.worldguard.protection.regions.ProtectedRegion;
 
+// TODO RedNesto: split this class in two (for WG 6 & WG 7) both in separate Gradle projects
 public class WorldGuardSupport {
 	
 	private static final WorldGuardPlugin WORLDGUARD_PLUGIN = (WorldGuardPlugin) Adapter.getAdapter().getPlugin("WorldGuard").getDefault();

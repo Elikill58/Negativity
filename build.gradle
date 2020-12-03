@@ -35,26 +35,6 @@ subprojects {
             url 'https://jitpack.io/'
         }
         maven {
-            name 'sonatype'
-            url 'https://oss.sonatype.org/content/repositories/snapshots/'
-        }
-        maven {
-            name 'spigot'
-            url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
-        }
-        maven {
-            name 'essentials'
-            url 'https://ci.ender.zone/plugin/repository/everything/'
-        }
-        maven {
-            name 'viaversion'
-            url 'https://repo.viaversion.com/'
-        }
-        maven {
-            name 'sk89q'
-            url 'http://maven.sk89q.com/repo/'
-        }
-        maven {
             name 'codemc'
             url 'https://repo.codemc.org/repository/maven-public/'
         }

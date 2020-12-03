@@ -2,4 +2,7 @@ rootProject.name = 'Negativity'
 
 include 'common', 'spigot', 'bungee', 'sponge', 'sponge8', 'velocity'
 
-include 'common:integrations:litebans', 'common:integrations:advancedban', 'spigot:integrations:maxbans'
+include 'common:integrations:litebans', 'common:integrations:advancedban', 'common:integrations:viaversion',
+        'spigot:integrations:essentials', 'spigot:integrations:floodgate', 'spigot:integrations:gadgetsmenu',
+        'spigot:integrations:maxbans', 'spigot:integrations:protocolsupport', 'spigot:integrations:worldguard'
+

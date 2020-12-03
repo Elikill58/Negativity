@@ -30,15 +30,13 @@ import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
+import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.bypass.BypassManager;
+import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
-import com.elikill58.negativity.universal.support.EssentialsSupport;
-import com.elikill58.negativity.universal.support.FloodGateSupport;
-import com.elikill58.negativity.universal.support.GadgetMenuSupport;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NegativityPlayer {
@@ -106,7 +104,7 @@ public class NegativityPlayer {
 				//if (c.needPacket())
 					//needPacket = true;
 			}
-		this.isBedrockPlayer = Negativity.floodGateSupport ? FloodGateSupport.isBedrockPlayer(p.getUniqueId()) : false;
+		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p);
 	}
 
 	/**
@@ -167,9 +165,9 @@ public class NegativityPlayer {
 		if(ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
 			return false;
 		Player p = getPlayer();
-		if (Negativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
+		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT) && PlayerModificationsManager.shouldIgnoreMovementChecks(p))
 			return false;
-		if (Negativity.essentialsSupport && c.getKey().equals(CheatKeys.FLY) && p.hasPermission("essentials.fly") && EssentialsSupport.checkEssentialsPrecondition(p))
+		if (c.getKey().equals(CheatKeys.FLY) && PlayerModificationsManager.canFly(p))
 			return false;
 		if(BypassManager.hasBypass(p, c))
 			return false;

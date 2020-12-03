@@ -1,15 +1,16 @@
 package com.elikill58.negativity.universal.bypass;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.bypass.checkers.AliveBypass;
 import com.elikill58.negativity.universal.bypass.checkers.ItemUseBypass;
-import com.elikill58.negativity.universal.bypass.checkers.WorldRegionBypass;
 
 public class BypassManager {
 	
@@ -34,16 +35,14 @@ public class BypassManager {
 			});
 		}
 
-		Configuration sectionRegionBypass = ada.getConfig().getSection("region-bypass");//.getConfigurationSection("region-bypass");
-		if(sectionRegionBypass != null) {
-			if(sectionRegionBypass.getBoolean("enabled")) {
-				for(String keys : sectionRegionBypass.getKeys()) {
-					if(keys.equalsIgnoreCase("enabled"))
-						continue;
-					addBypassChecker(new WorldRegionBypass(sectionRegionBypass.getSection(keys)));
-				}
+		Negativity.loadExtensions(BypassCheckerProvider.class, provider -> {
+			Collection<BypassChecker> checkers = provider.create(ada);
+			if (!checkers.isEmpty()) {
+				BYPASS_CHECKER.addAll(checkers);
+				return true;
 			}
-		}
+			return false;
+		});
 	}
 	
 	/**

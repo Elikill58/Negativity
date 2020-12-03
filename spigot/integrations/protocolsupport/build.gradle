@@ -1,0 +1,14 @@
+evaluationDependsOn(':spigot')
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+dependencies {
+    compileOnly 'com.github.ProtocolSupport:ProtocolSupport:f34959c331'
+    compileOnly(project(':spigot'))
+    compileOnly(project(path: ':spigot', configuration: 'spigot'))
+}

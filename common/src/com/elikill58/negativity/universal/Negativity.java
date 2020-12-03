@@ -29,20 +29,24 @@ import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
+import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
+import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
+import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 
 public class Negativity {
 
-	public static boolean log = false, log_console = false, hasBypass = false, essentialsSupport = false, floodGateSupport = false,
-			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false;
+	public static boolean log = false;
+	public static boolean log_console = false;
+	public static boolean hasBypass = false;
 	public static int timeBetweenAlert = -1;
 
 	/**
@@ -310,6 +314,8 @@ public class Negativity {
 	public static void loadNegativity() {
 		Adapter ada = Adapter.getAdapter();
 		ada.getLogger().info("Thanks for buying Negativity <3");
+		
+		integratedPlugins.clear();
 
 		DefaultConfigValue.init();
 		Database.init();
@@ -322,6 +328,9 @@ public class Negativity {
 			Special.loadSpecial();
 			Cheat.loadCheat();
 			BypassManager.loadBypass();
+			BedrockPlayerManager.init();
+			PlayerVersionManager.init();
+			PlayerModificationsManager.init();
 			VerificationManager.init();
 		}
 		UniversalUtils.init();
@@ -331,34 +340,6 @@ public class Negativity {
 		log_console = config.getBoolean("log_alerts_in_console", true);
 		hasBypass = config.getBoolean("Permissions.bypass.active", false);
 		timeBetweenAlert = config.getInt("time_between_alert", 1000);
-		
-		if (ada.hasPlugin("Essentials")) {
-			essentialsSupport = true;
-			integratedPlugins.add("Essentials");
-		}
-		if (ada.hasPlugin("WorldGuard")) {
-			worldGuardSupport = true;
-			integratedPlugins.add("WorldGuard");
-		}
-		if (ada.hasPlugin("GadgetsMenu")) {
-			gadgetMenuSupport = true;
-			integratedPlugins.add("GadgetsMenu");
-		}
-		
-		if (ada.hasPlugin("ViaVersion")) {
-			viaVersionSupport = true;
-			integratedPlugins.add("ViaVersion");
-		}
-		
-		if (ada.hasPlugin("ProtocolSupport")) {
-			protocolSupportSupport = true;
-			integratedPlugins.add("ProtocolSupport");
-		}
-		
-		if (ada.hasPlugin("floodgate-bukkit")) {
-			Negativity.floodGateSupport = true;
-			integratedPlugins.add("FloodGate");
-		}
 		
 		if (!integratedPlugins.isEmpty()) {
 			ada.getLogger().info("Loaded support for " + String.join(", ", integratedPlugins) + ".");

@@ -1,0 +1,44 @@
+package com.elikill58.negativity.integration.viaversion;
+
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.PluginDependentExtension;
+import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.multiVersion.PlayerVersionFetcher;
+import com.elikill58.negativity.universal.multiVersion.PlayerVersionFetcherProvider;
+
+import us.myles.ViaVersion.api.Via;
+
+public class ViaVersionPlayerVersionFetcher implements PlayerVersionFetcher {
+
+	@Override
+	public Version getPlayerVersion(Player p) {
+		return Version.getVersionByProtocolID(Via.getAPI().getPlayerVersion(p.getUniqueId()));
+	}
+	
+	public static class SpigotProvider implements PlayerVersionFetcherProvider, PluginDependentExtension {
+		
+		@Override
+		public PlayerVersionFetcher create(Adapter adapter) {
+			return new ViaVersionPlayerVersionFetcher();
+		}
+		
+		@Override
+		public String getPluginId() {
+			return "ViaVersion";
+		}
+	}
+	
+	public static class SpongeProvider implements PlayerVersionFetcherProvider, PluginDependentExtension {
+		
+		@Override
+		public PlayerVersionFetcher create(Adapter adapter) {
+			return new ViaVersionPlayerVersionFetcher();
+		}
+		
+		@Override
+		public String getPluginId() {
+			return "viaversion";
+		}
+	}
+}

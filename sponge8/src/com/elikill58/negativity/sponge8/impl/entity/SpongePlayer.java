@@ -45,9 +45,8 @@ import com.elikill58.negativity.sponge8.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge8.utils.LocationUtils;
 import com.elikill58.negativity.sponge8.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.support.ViaVersionSupport;
+import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
 import net.kyori.adventure.text.Component;
 
@@ -61,7 +60,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	}
 	
 	private Version loadVersion() {
-		return Negativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(this) : Version.getVersion();
+		return PlayerVersionManager.getPlayerVersion(this);
 	}
 	
 	@Override

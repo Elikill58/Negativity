@@ -28,8 +28,8 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
-import com.elikill58.negativity.universal.support.WorldGuardSupport;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
@@ -72,15 +72,16 @@ public class AntiKnockback extends Cheat implements Listeners {
 			if (inOffHand != null && inOffHand.getType().getId().contains("SHIELD"))
 				return;
 		}
-		EntityType damagerType = e.getDamager().getType();
-		if (damagerType.equals(EntityType.EGG) || damagerType.equals(EntityType.SNOWBALL)
-				|| (Negativity.worldGuardSupport && WorldGuardSupport.isInRegionProtected(p)))
+		Entity damager = e.getDamager();
+		EntityType damagerType = damager.getType();
+		if (damagerType.equals(EntityType.EGG) || damagerType.equals(EntityType.SNOWBALL))
+			return;
+		if (PlayerModificationsManager.isProtected(p, damager))
 			return;
 		if (damagerType.name().contains("TNT") || np.isTargetByIronGolem())
 			return;
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		final Entity damager = e.getDamager();
 		if (damager.getType().equals(EntityType.ARROW) && ((Arrow) damager).getShooter() instanceof Player)
 			if (((Player) ((Arrow) damager).getShooter()).equals(p))
 				return;

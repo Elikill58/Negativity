@@ -49,7 +49,14 @@ shadowJar {
     relocate('org.bstats', 'com.elikill58.negativity')
 
     mergeServiceFiles()
-    from(project(':common').tasks.shadowJar, project('integrations:maxbans').jar.outputs.files)
+    from(project(':common').tasks.shadowJar,
+            project('integrations:essentials').jar.outputs.files,
+            project('integrations:floodgate').jar.outputs.files,
+            project('integrations:gadgetsmenu').jar.outputs.files,
+            project('integrations:maxbans').jar.outputs.files,
+            project('integrations:protocolsupport').jar.outputs.files,
+            project('integrations:worldguard').jar.outputs.files
+    )
 }
 
 build.dependsOn shadowJar

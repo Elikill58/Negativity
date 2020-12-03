@@ -17,8 +17,7 @@ import com.elikill58.negativity.universal.ReportType;
 public class PingSpoofProtocol extends Cheat implements Listener {
 
 	public PingSpoofProtocol() {
-		super(CheatKeys.PINGSPOOF, false, Material.SPONGE, CheatCategory.PLAYER, true, "ping",
-				"spoofing");
+		super(CheatKeys.PINGSPOOF, false, Material.SPONGE, CheatCategory.PLAYER, true, "ping", "spoofing");
 
 		Bukkit.getScheduler().runTaskTimer(SpigotNegativity.getInstance(), () -> {
 			for (Player p : Utils.getOnlinePlayers()) {
@@ -37,8 +36,9 @@ public class PingSpoofProtocol extends Cheat implements Listener {
 		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), () -> {
 			try {
 				if (p.getPlayer().getAddress().getAddress().isReachable(newPing - 150)) {
-					SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.PINGSPOOF), 98,
-							"Last ping: " + lastPing + ", new ping: " + newPing + ".");
+					Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(),
+							() -> SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.PINGSPOOF),
+									98, "Last ping: " + lastPing + ", new ping: " + newPing + "."));
 				}
 			} catch (IOException e1) {
 				e1.printStackTrace();

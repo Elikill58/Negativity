@@ -101,7 +101,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 				mayCancel = SpigotNegativity.alertMod(type, p, this, porcent, proof, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
 			}
 			double calculatedSpeedWithoutY = Utils.getSpeed(from, to);
-			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() < calculatedSpeedWithoutY && p.getVelocity().getY() > 0
+			if(p.getWalkSpeed() < 1.0 && calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() < calculatedSpeedWithoutY && p.getVelocity().getY() > 0
 					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR") && !hasIceBelow) { // "+0.01" is to prevent lag
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, 90, "Calculated speed: "
 					+ calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().getY());
@@ -121,7 +121,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 				if (entity instanceof Creeper || entity.getType().equals(EntityType.CREEPER))
 					return;
 			if (!mayCancel) {
-				if (y >= 0.85D) {
+				if (y >= 0.85D && (p.getWalkSpeed() * 1.1) < y) {
 					mayCancel = SpigotNegativity.alertMod(
 							np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 							UniversalUtils.parseInPorcent(y * 100 * 2),

@@ -54,7 +54,7 @@ public class DefaultConfigValue {
 		DOUBLES.clear();
 		STRINGS.clear();
 
-		BOOLEANS.put("debug", true);
+		BOOLEANS.put("debug", false);
 		BOOLEANS.put("log_alerts", true);
 		BOOLEANS.put("log_alerts_in_console", true);
 		DOUBLES.put("tps_alert_stop", 19.0);

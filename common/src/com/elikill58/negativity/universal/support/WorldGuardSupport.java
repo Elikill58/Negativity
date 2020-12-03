@@ -38,7 +38,7 @@ public class WorldGuardSupport {
 				PVP_FLAG = (StateFlag) Class.forName("com.sk89q.worldguard.protection.flags.Flags").getField("PVP").get(null);
 			} else {
 				regionContainer = WORLDGUARD_PLUGIN.getRegionContainer();
-				regionContainerGetMethod = regionContainer.getClass().getMethod("get", World.class);
+				regionContainerGetMethod = regionContainer.getClass().getMethod("get", org.bukkit.World.class);
 				PVP_FLAG = (StateFlag) Class.forName("com.sk89q.worldguard.protection.flags.DefaultFlag").getField("PVP").get(null);
 			}
 			try {
@@ -87,7 +87,7 @@ public class WorldGuardSupport {
 		RegionManager regionManager = null;
 		try {
 			regionManager = (RegionManager) regionContainerGetMethod.invoke(regionContainer,
-					worldAdaptMethod == null ? world : worldAdaptMethod.invoke(null, (org.bukkit.World) world.getDefault()));
+					worldAdaptMethod == null ? world.getDefault() : worldAdaptMethod.invoke(null, world.getDefault()));
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}

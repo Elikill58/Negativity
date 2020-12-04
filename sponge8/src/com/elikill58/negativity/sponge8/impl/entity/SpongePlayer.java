@@ -360,9 +360,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 		Location loc = getLocation().clone();
 		if (loc.getBlock().getType().getId().contains("WATER"))
 			return true;
-		if (loc.sub(0, 1, 0).getBlock().getType().getId().contains("WATER"))
-			return true;
-		return false;
+		return loc.sub(0, 1, 0).getBlock().getType().getId().contains("WATER");
 	}
 	
 	@Override

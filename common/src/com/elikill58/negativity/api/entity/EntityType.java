@@ -92,7 +92,7 @@ public enum EntityType {
 
 	private final String name;
 	
-	private EntityType(String name) {
+	EntityType(String name) {
 		this.name = name;
 	}
 

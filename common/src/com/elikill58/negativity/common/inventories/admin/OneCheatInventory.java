@@ -52,7 +52,7 @@ public class OneCheatInventory extends AbstractInventory<OneCheatHolder> {
 			return;
 		}
 		Inventory inv = e.getClickedInventory();
-		Cheat c = ((OneCheatHolder) nh).getCheat();
+		Cheat c = nh.getCheat();
 		if (m.equals(c.getMaterial()))
 			return;
 		if(m.equals(Materials.TNT))

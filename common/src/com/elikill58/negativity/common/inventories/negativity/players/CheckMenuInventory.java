@@ -124,7 +124,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, CheckMenuHolder nh) {
-		Player cible = ((CheckMenuHolder) nh).getCible();
+		Player cible = nh.getCible();
 		if (m.equals(Materials.EYE_OF_ENDER)) {
 			p.teleport(cible.getLocation());
 			p.closeInventory();

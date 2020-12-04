@@ -64,7 +64,7 @@ public class SpongePlayerInventory extends PlayerInventory {
 
 	@Override
 	public void set(int slot, ItemStack item) {
-		int y = (int) slot / 9;
+		int y = slot / 9;
 		int x = slot - (y * 9);
 		inv.set(x, y, (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
 	}

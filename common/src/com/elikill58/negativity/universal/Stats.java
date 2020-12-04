@@ -68,7 +68,7 @@ public class Stats {
 					STATS_IN_MAINTENANCE = true;
 				} else {
 					String result = UniversalUtils.getContentFromURL("https://api.eliapp.fr/status.php?plateforme=negativity").orElse("off");
-					STATS_IN_MAINTENANCE = result.toString().equalsIgnoreCase("on") ? false : true;
+					STATS_IN_MAINTENANCE = !result.equalsIgnoreCase("on");
 					if (STATS_IN_MAINTENANCE) {
 						Adapter.getAdapter().getLogger().info("Website is in maintenance mode.");
 					} else {
@@ -88,12 +88,12 @@ public class Stats {
 		}
 	}
 	
-	public static enum StatsType {
+	public enum StatsType {
 		ONLINE("online"), PORT("port"), CHEAT("cheat"), BAN("ban");
 
 		private String key;
 
-		private StatsType(String key) {
+		StatsType(String key) {
 			this.key = key;
 		}
 

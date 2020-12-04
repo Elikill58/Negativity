@@ -35,14 +35,14 @@ public class TeleportProcessor implements SetBackProcessor {
 		Adapter.getAdapter().runSync(() -> p.teleport(p.getLocation().clone().add(direction)));
 	}
 	
-	public static enum TeleportDirection {
+	public enum TeleportDirection {
 		BELOW(new Vector(0, -1, 0)),
 		UP(new Vector(0, 1, 0)),
 		CUSTOM(null);
 		
 		private final Vector vector;
 		
-		private TeleportDirection(Vector vector) {
+		TeleportDirection(Vector vector) {
 			this.vector = vector;
 		}
 

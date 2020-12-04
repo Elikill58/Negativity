@@ -29,6 +29,6 @@ public abstract class PacketEvent implements Event {
 	}
     
     public enum PacketSourceType {
-    	PROTOCOLLIB, PACKETGATE, CUSTOM;
-    }
+		PROTOCOLLIB, PACKETGATE, CUSTOM
+	}
 }

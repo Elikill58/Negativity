@@ -2,9 +2,9 @@ package com.elikill58.negativity.universal.logger;
 
 public interface LoggerAdapter {
 
-	public void info(String msg);
+	void info(String msg);
 	
-	public void warn(String msg);
+	void warn(String msg);
 	
-	public void error(String msg);
+	void error(String msg);
 }

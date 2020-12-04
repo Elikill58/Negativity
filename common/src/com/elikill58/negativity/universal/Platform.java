@@ -10,7 +10,7 @@ public enum Platform {
 	private final String name;
 	private final boolean proxy;
 	
-	private Platform(String name, boolean proxy) {
+	Platform(String name, boolean proxy) {
 		this.name = name;
 		this.proxy = proxy;
 	}

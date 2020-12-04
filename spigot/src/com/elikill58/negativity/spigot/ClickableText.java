@@ -207,7 +207,7 @@ public class ClickableText {
 		}
 	}
 
-	public static enum Action {
+	public enum Action {
 
 		SHOW_TEXT(true), SHOW_ENTITY(true), SHOW_ACHIEVEMENT(true), SHOW_ITEM(true),
 

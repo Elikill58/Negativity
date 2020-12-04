@@ -12,7 +12,6 @@ import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.world.ExplosionEvent;
 import org.spongepowered.api.world.Location;
-import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 
@@ -34,11 +33,12 @@ public class FightManager {
 		PotionEffect po = (PotionEffect) e.getTargetEntity();
 		PotionEffectType pe = po.getType();
 		if (pe == PotionEffectTypes.INSTANT_DAMAGE || pe == PotionEffectTypes.POISON
-				|| pe == PotionEffectTypes.SLOWNESS || pe == PotionEffectTypes.WEAKNESS || pe == PotionEffectTypes.POISON
-				|| pe == PotionEffectTypes.FIRE_RESISTANCE || pe == PotionEffectTypes.INSTANT_HEALTH || pe == PotionEffectTypes.REGENERATION
-				|| pe == PotionEffectTypes.STRENGTH || pe == PotionEffectTypes.SPEED)
+				|| pe == PotionEffectTypes.SLOWNESS || pe == PotionEffectTypes.WEAKNESS
+				|| pe == PotionEffectTypes.FIRE_RESISTANCE || pe == PotionEffectTypes.INSTANT_HEALTH
+				|| pe == PotionEffectTypes.REGENERATION || pe == PotionEffectTypes.STRENGTH
+				|| pe == PotionEffectTypes.SPEED)
 			for (Player p : Sponge.getServer().getOnlinePlayers())
-				if (((World) loc.getExtent()).equals(p.getLocation().getExtent()))
+				if (loc.getExtent().equals(p.getLocation().getExtent()))
 					if (p.getPosition().distance(loc.getPosition()) < 9)
 						NegativityPlayer.getCached(p.getUniqueId()).fight();
 	}

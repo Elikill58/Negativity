@@ -83,7 +83,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
 		if (damager.getType().equals(EntityType.ARROW) && ((Arrow) damager).getShooter() instanceof Player)
-			if (((Player) ((Arrow) damager).getShooter()).equals(p))
+			if (((Arrow) damager).getShooter().equals(p))
 				return;
 
 		new java.util.Timer().schedule(new TimerTask() {
@@ -168,7 +168,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 			return;
 		}
 
-		final int ticksToReact = (int) (1 * 20);// seconds for the client to get up
+		final int ticksToReact = 20;// seconds for the client to get up
 
 		if (velY < 5000) {
 			// give client some time to react

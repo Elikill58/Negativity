@@ -12,5 +12,5 @@ public interface BypassChecker {
 	 * @param c the cheat that we are checking
 	 * @return true if the player have bypass
 	 */
-	public boolean hasBypass(Player p, Cheat c);
+	boolean hasBypass(Player p, Cheat c);
 }

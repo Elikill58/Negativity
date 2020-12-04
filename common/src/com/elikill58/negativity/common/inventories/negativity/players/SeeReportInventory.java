@@ -58,7 +58,7 @@ public class SeeReportInventory extends AbstractInventory<SeeReportHolder> {
 
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, SeeReportHolder nh) {
-		SeeReportHolder rh = (SeeReportHolder) nh;
+		SeeReportHolder rh = nh;
 		if(m.equals(Materials.ARROW)) {
 			int slot = e.getSlot();
 			if(slot == 0)

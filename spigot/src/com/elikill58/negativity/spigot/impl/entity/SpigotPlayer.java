@@ -67,7 +67,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	
 	@Override
 	public boolean hasLineOfSight(Entity entity) {
-		return SpigotNegativity.isCraftBukkit ? true : this.entity.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefault());
+		return SpigotNegativity.isCraftBukkit || this.entity.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefault());
 	}
 
 	@Override
@@ -287,9 +287,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 			Location loc = getLocation().clone();
 			if (loc.getBlock().getType().getId().contains("WATER"))
 				return true;
-			if (loc.sub(0, 1, 0).getBlock().getType().getId().contains("WATER"))
-				return true;
-			return false;
+			return loc.sub(0, 1, 0).getBlock().getType().getId().contains("WATER");
 		}
 	}
 

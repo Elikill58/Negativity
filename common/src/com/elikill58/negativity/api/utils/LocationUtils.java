@@ -420,9 +420,7 @@ public class LocationUtils {
 		if ((vec3maxZ != null)
 				&& ((objDirection == null) || (vec3d.distanceSquared(vec3maxZ) < vec3d.distanceSquared(objDirection))))
 			objDirection = vec3maxZ;
-		if (objDirection == null)
-			return false;
-		return true;
+		return objDirection != null;
 	}
 
 	private static Vector getVectorX(Vector main, Vector vec1, double paramDouble) {
@@ -463,8 +461,8 @@ public class LocationUtils {
 		return new Vector(main.getX() + d1 * d4, main.getY() + d2 * d4, main.getZ() + d3 * d4);
 	}
 
-	public static enum Direction {
-		NORTH, SOUTH, WEST, EAST, UP, DOWN;
+	public enum Direction {
+		NORTH, SOUTH, WEST, EAST, UP, DOWN
 	}
 
 	public static void teleportPlayerOnGround(Player p) {

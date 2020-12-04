@@ -83,7 +83,7 @@ public class Minerate {
 		GOLD("Gold", "GOLD_ORE", "minecraft:gold_ore"),
 		IRON("Iron", "IRON_ORE", "minecraft:iron_ore"),
 		COAL("Coal", "COAL_ORE", "minecraft:coal_ore"),
-		ANCIENT_DEBRIS("Ancient Debris", "ANCIENT_DEBRIS", "minecraft:ancient_debris");;
+		ANCIENT_DEBRIS("Ancient Debris", "ANCIENT_DEBRIS", "minecraft:ancient_debris");
 
 		private final String name;
 		private final String oreName;

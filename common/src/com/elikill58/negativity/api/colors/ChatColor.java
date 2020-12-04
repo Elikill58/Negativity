@@ -27,7 +27,7 @@ public enum ChatColor {
 	
 	private final String name;
 
-	private ChatColor(String name) {
+	ChatColor(String name) {
 		this.name = name;
 	}
 

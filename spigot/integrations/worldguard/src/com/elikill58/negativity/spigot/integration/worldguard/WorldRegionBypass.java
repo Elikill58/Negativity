@@ -17,9 +17,7 @@ public class WorldRegionBypass implements BypassChecker {
 		Location loc = p.getLocation();
 		if(getWorlds().contains(loc.getWorld().getName().toLowerCase()))
 			return true;
-		if(WorldGuardSupport.isInAreas(loc, getRegions()))
-			return true;
-		return false;
+		return WorldGuardSupport.isInAreas(loc, getRegions());
 	}
 	
 	private final List<Cheat> cheats = new ArrayList<>();

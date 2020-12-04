@@ -15,7 +15,7 @@ public enum GameMode {
 	
 	private final String name;
 	
-	private GameMode(String name) {
+	GameMode(String name) {
 		this.name = name;
 	}
 	

@@ -435,7 +435,7 @@ public abstract class Cheat {
 		return CHEATS;
 	}
 
-	public static enum CheatCategory {
+	public enum CheatCategory {
 		
 		/**
 		 * Edit combat value such as attack speed of attack distance
@@ -453,7 +453,7 @@ public abstract class Cheat {
 		/**
 		 * Edit player variable/abilities directly
 		 */
-		PLAYER;
+		PLAYER
 	}
 	
 	public static class CheatHover {

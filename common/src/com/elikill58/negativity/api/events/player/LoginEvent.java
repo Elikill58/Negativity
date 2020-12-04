@@ -49,7 +49,7 @@ public class LoginEvent implements Event {
 		this.kickMessage = kickMessage;
 	}
 	
-	public static enum Result {
-		  ALLOWED, KICK_FULL, KICK_BANNED, KICK_WHITELIST, KICK_OTHER;
+	public enum Result {
+		  ALLOWED, KICK_FULL, KICK_BANNED, KICK_WHITELIST, KICK_OTHER
 	}
 }

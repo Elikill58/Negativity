@@ -59,7 +59,7 @@ public class UniversalUtils {
 	public static int getMultipleOf(int i, int multiple, int more, int limit) {
 		if(i > limit)
 			return limit;
-		while (i % multiple != 0 && ((i < limit && limit != -1) || limit == -1))
+		while (i % multiple != 0 && (i < limit || limit == -1))
 			i += more;
 		return i;
 	}
@@ -132,9 +132,7 @@ public class UniversalUtils {
 	}
 
 	public static boolean isMe(String uuid) {
-		if (uuid.equals("195dbcbc-9f2e-389e-82c4-3d017795ca65") || uuid.equals("3437a701-efaf-49d5-95d4-a8814e67760d"))
-			return true;
-		return false;
+		return uuid.equals("195dbcbc-9f2e-389e-82c4-3d017795ca65") || uuid.equals("3437a701-efaf-49d5-95d4-a8814e67760d");
 	}
 
 	public static boolean isMe(UUID uuid) {

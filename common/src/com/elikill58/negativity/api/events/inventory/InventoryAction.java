@@ -11,6 +11,6 @@ public enum InventoryAction {
 	DROP,
 	CREATIVE,
 	NUMBER,
-	UNKNOWN;
+	UNKNOWN
 
 }

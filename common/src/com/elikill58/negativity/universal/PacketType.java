@@ -40,8 +40,8 @@ public interface PacketType {
 	 */
 	boolean isFlyingPacket();
 	
-	static boolean LOG_UNKNOW_PACKET = false;
-	static final String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus";
+	boolean LOG_UNKNOW_PACKET = false;
+	String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus";
 	
 	/**
 	 * Get packet type of the given name
@@ -50,7 +50,7 @@ public interface PacketType {
 	 * @param packetName the packet name
 	 * @return the packet type, or the UNSET value of the PacketType section or null
 	 */
-	public static PacketType getType(String packetName) {
+	static PacketType getType(String packetName) {
 		if(packetName.startsWith(CLIENT_PREFIX)) {
 			for(Client client : Client.values())
 				if(client.getFullName().equalsIgnoreCase(packetName) || client.getPacketName().equalsIgnoreCase(packetName) || client.getAlias().contains(packetName))
@@ -166,7 +166,7 @@ public interface PacketType {
 		}
 	}
 	
-	public static enum Server implements PacketType {
+	enum Server implements PacketType {
 		
 		ABILITIES("Abilities"),
 		ADVANCEMENTS("Advancements"),
@@ -270,7 +270,7 @@ public interface PacketType {
 		private final String packetName, fullName;
 		private List<String> alias = new ArrayList<>();
 		
-		private Server(String packetName, String... alias) {
+		Server(String packetName, String... alias) {
 			this.packetName = packetName;
 			this.fullName = SERVER_PREFIX + packetName;
 			for(String al : alias)
@@ -298,7 +298,7 @@ public interface PacketType {
 		}
 	}
 	
-	public static enum Login implements PacketType {
+	enum Login implements PacketType {
 		
 		CUSTOM_PAYLOAD_OUT("OutCustomPayload"),
 		CUSTOM_PAYLOAD_IN("InCustomPayload"),
@@ -315,7 +315,7 @@ public interface PacketType {
 		private final String packetName, fullName;
 		private List<String> alias = new ArrayList<>();
 		
-		private Login(String packetName, String... alias) {
+		Login(String packetName, String... alias) {
 			this.packetName = packetName;
 			for(String al : alias)
 				this.alias.add(LOGIN_PREFIX + al);
@@ -343,7 +343,7 @@ public interface PacketType {
 		}
 	}
 	
-	public static enum Status implements PacketType {
+	enum Status implements PacketType {
 
 		LISTENER("Listener"),
 		LISTENER_IN("InListener"),
@@ -357,7 +357,7 @@ public interface PacketType {
 		private final String packetName, fullName;
 		private List<String> alias = new ArrayList<>();
 		
-		private Status(String packetName, String... alias) {
+		Status(String packetName, String... alias) {
 			this.packetName = packetName;
 			for(String al : alias)
 				this.alias.add(STATUS_PREFIX + al);

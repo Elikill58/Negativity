@@ -30,11 +30,11 @@ public class PlayerInteractEvent implements Event {
 		this.cancel = b;
 	}
 	
-	public static enum Action {
+	public enum Action {
 		RIGHT_CLICK_AIR,
 		RIGHT_CLICK_BLOCK,
 		LEFT_CLICK_AIR,
 		LEFT_CLICK_BLOCK,
-		PHYSICAL;
+		PHYSICAL
 	}
 }

@@ -101,9 +101,7 @@ public class Spider extends Cheat implements Listeners {
 		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD"))
 			return true;
 		loc = loc.clone().sub(0, 1, 0);
-		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD"))
-			return true;
-		return false;
+		return has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD");
 	}
 
 	public boolean has(Location loc, String... m) {

@@ -205,7 +205,7 @@ public class BungeeListeners implements Listener {
 						new ComponentBuilder(hover.split("\\n")[hover.split("\\n").length - 1]).create()));
 				components.add(hoverMessage);
 				msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-						(BaseComponent[]) components.toArray(new BaseComponent[components.size()])));
+					components.toArray(new BaseComponent[0])));
 			} else
 				msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
 			msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, cmd));

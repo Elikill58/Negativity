@@ -47,11 +47,11 @@ public class ValueEditorProcessor implements SetBackProcessor {
 		}
 	}
 	
-	public static enum ValueEditorAction {
+	public enum ValueEditorAction {
 		
 		DAMAGE,
 		GAMEMODE,
-		VELOCITY;
+		VELOCITY
 	
 	}
 }

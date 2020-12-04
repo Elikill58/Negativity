@@ -9,7 +9,7 @@ public interface SetBackProcessor {
 	 * 
 	 * @return processor name
 	 */
-	public String getName();
+	String getName();
 	
 	/**
 	 * Perform set back to player.
@@ -17,5 +17,5 @@ public interface SetBackProcessor {
 	 * 
 	 * @param p the player which will have to be setted back
 	 */
-	public void perform(Player p);
+	void perform(Player p);
 }

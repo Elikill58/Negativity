@@ -98,7 +98,7 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 				getNmsClass("PacketPlayOutPlayerInfo").getMethod("addPlayer", entityPlayer.getClass())
 						.invoke(getNmsClass("PacketPlayOutPlayerInfo"), entityPlayer);
 			} else {
-				PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoAddPlayer, ((Iterable<?>) Arrays.asList(entityPlayer))));
+				PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoAddPlayer, Arrays.asList(entityPlayer)));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -111,7 +111,7 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 						getNmsClass("PacketPlayOutPlayerInfo").getMethod("removePlayer", entityPlayer.getClass())
 								.invoke(getNmsClass("PacketPlayOutPlayerInfo"), entityPlayer);
 					} else {
-						PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoRemovePlayer, ((Iterable<?>) Arrays.asList(entityPlayer))));
+						PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoRemovePlayer, Arrays.asList(entityPlayer)));
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -134,7 +134,7 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 				getNmsClass("PacketPlayOutPlayerInfo").getMethod("removePlayer", entityPlayer.getClass())
 							.invoke(getNmsClass("PacketPlayOutPlayerInfo"), entityPlayer);
 			} else {
-				PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoRemovePlayer, ((Iterable<?>) Arrays.asList(entityPlayer))));
+				PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoRemovePlayer, Arrays.asList(entityPlayer)));
 			}
 			PacketUtils.sendPacket(p, packetEntityDestroyConstructor.newInstance(new int[] {(int) entityPlayer.getClass().getMethod("getId").invoke(entityPlayer)}));
 		} catch (Exception e) {

@@ -403,7 +403,7 @@ public class NegativityPlayer {
 			if(type == ReportType.NONE || (type == ReportType.WARNING && e.getReportType() == ReportType.VIOLATION))
 				type = e.getReportType();
 
-			hasRelia = e.hasManyReliability() ? true : hasRelia;
+			hasRelia = e.hasManyReliability() || hasRelia;
 			
 			if(hoverProof == null && e.getHover() != null)
 				hoverProof = e.getHover();

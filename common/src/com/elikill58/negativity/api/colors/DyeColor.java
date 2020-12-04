@@ -10,7 +10,7 @@ public enum DyeColor {
 	
 	private final short wool;
 	
-	private DyeColor(short wool) {
+	DyeColor(short wool) {
 		this.wool = wool;
 	}
 	

@@ -34,7 +34,7 @@ public class AirJump extends Cheat implements Listeners {
 		if (p.isFlying() || p.isInsideVehicle() || p.getItemInHand().getType().getId().contains("TRIDENT") || p.hasElytra() || np.isInFight)
 			return;
 		Location loc = p.getLocation().clone(), locDown = loc.clone().sub(0, 1, 0);
-		boolean mayCancel = false, hasOtherThanAir = hasOtherThanExtended(loc, "AIR"), hasOtherThanAirDown = hasOtherThanExtended(locDown, "AIR");;
+		boolean mayCancel = false, hasOtherThanAir = hasOtherThanExtended(loc, "AIR"), hasOtherThanAirDown = hasOtherThanExtended(locDown, "AIR");
 
 		double diffYtoFrom = e.getTo().getY() - e.getFrom().getY();
 		double lastDiffY = np.doubles.get(AIR_JUMP, "diff-y", 0.0);

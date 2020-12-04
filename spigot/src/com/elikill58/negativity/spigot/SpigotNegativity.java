@@ -11,7 +11,6 @@ import java.util.logging.Level;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
@@ -293,9 +292,8 @@ public class SpigotNegativity extends JavaPlugin {
 	public void unRegisterBukkitCommand(PluginCommand cmd) {
 		try {
 			Object result = ReflectionUtils.getPrivateField(this.getServer().getPluginManager(), "commandMap");
-			HashMap<?, ?> knownCommands = (HashMap<?, ?>) getKnownCommands((SimpleCommandMap) result);
-			if (knownCommands.containsKey(cmd.getName()))
-				knownCommands.remove(cmd.getName());
+			HashMap<?, ?> knownCommands = (HashMap<?, ?>) getKnownCommands(result);
+			knownCommands.remove(cmd.getName());
 			for (String alias : cmd.getAliases())
 				if (knownCommands.containsKey(alias) && knownCommands.get(alias).toString().contains(this.getName()))
 					knownCommands.remove(alias);

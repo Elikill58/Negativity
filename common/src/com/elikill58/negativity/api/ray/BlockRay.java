@@ -254,13 +254,13 @@ public class BlockRay {
 		}
 	}
 
-	public static enum RayResult {
+	public enum RayResult {
 		
 		REACH_BOTTOM(true), REACH_TOP(true), NEEDED_FOUND(true), NEEDED_NOT_FOUND(true), END_TRY(true), END_FIND(true), CONTINUE(false);
 		
 		private final boolean canFinish;
 		
-		private RayResult(boolean canFinish) {
+		RayResult(boolean canFinish) {
 			this.canFinish = canFinish;
 		}
 		

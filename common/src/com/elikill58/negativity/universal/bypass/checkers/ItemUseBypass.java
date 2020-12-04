@@ -86,14 +86,14 @@ public class ItemUseBypass implements BypassChecker {
 		return false;
 	}
 	
-	public static enum WhenBypass {
+	public enum WhenBypass {
 		ALWAYS, RIGHT_CLICK(true), LEFT_CLICK(true), LOOKING, BELOW, UNKNOW;
 		
 		private boolean isClick = false;
 		
-		private WhenBypass() {}
+		WhenBypass() {}
 		
-		private WhenBypass(boolean isClick) {
+		WhenBypass(boolean isClick) {
 			this.isClick = isClick;
 		}
 		

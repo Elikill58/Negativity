@@ -78,7 +78,7 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 	 */
 	public void actualizeInventory(Player p, Object... args) {}
 	
-	public static enum NegativityInventory {
+	public enum NegativityInventory {
 		ACTIVED_CHEAT,
 		ADMIN,
 		ALERT,
@@ -92,6 +92,6 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 		FORGE_MODS,
 		LANG,
 		REPORT,
-		SEE_REPORT;
+		SEE_REPORT
 	}
 }

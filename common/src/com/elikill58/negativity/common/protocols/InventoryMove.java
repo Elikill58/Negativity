@@ -38,7 +38,7 @@ public class InventoryMove extends Cheat implements Listeners {
 		NegativityPlayer np = NegativityPlayer.getCached(e.getPlayer().getUniqueId());
 		if (!np.hasDetectionActive(this))
 			return;
-		checkInvMove((Player) e.getPlayer(), false, "Open");
+		checkInvMove(e.getPlayer(), false, "Open");
 	}
 
 	private void checkInvMove(Player p, boolean check, String from) {

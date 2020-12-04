@@ -86,17 +86,15 @@ public class AltAccountBan {
 		int minViolation = conditions.getOrDefault(ReportType.VIOLATION, 0);
 		if(warns < minWarn)
 			return false;
-		if((warns + violations) < minViolation)
-			return false;
-		return true;
+		return (warns + violations) >= minViolation;
 	}
 	
-	public static enum BanAltAction {
+	public enum BanAltAction {
 		
 		ALERT,		
 		ALERT_MOD,
 		BAN,
-		BAN_ALL;
+		BAN_ALL
 	
 	}
 }

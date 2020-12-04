@@ -71,7 +71,7 @@ public class Utils {
 				return (Block) p.getClass().getMethod("getTargetBlockExact", int.class).invoke(p, distance);
 			} else {
 				try {
-					return (Block) p.getClass().getMethod("getTargetBlock", Set.class, int.class).invoke(p, (Set<Material>) Sets.newHashSet(transparentItem), distance);
+					return (Block) p.getClass().getMethod("getTargetBlock", Set.class, int.class).invoke(p, Sets.newHashSet(transparentItem), distance);
 				} catch (NoSuchMethodException e) {}
 				try {
 					HashSet<Byte> hashSet = new HashSet<>();

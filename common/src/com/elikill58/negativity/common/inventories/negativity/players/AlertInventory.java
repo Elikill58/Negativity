@@ -85,7 +85,7 @@ public class AlertInventory extends AbstractInventory<AlertHolder> {
 
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, AlertHolder nh) {
-		Player cible = ((AlertHolder) nh).getCible();
+		Player cible = nh.getCible();
 		if (m.equals(Materials.ARROW))
 			InventoryManager.open(NegativityInventory.CHECK_MENU, p, cible);
 		else if (m.equals(Materials.BONE)) {

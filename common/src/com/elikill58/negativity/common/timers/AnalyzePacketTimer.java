@@ -46,7 +46,7 @@ public class AnalyzePacketTimer implements Runnable {
 					int porcent = UniversalUtils.parseInPorcent(flyingWithPing - (ping / (allTps[1] - allTps[0] > 0.5 ? 9 : 8)));
 					boolean back = Negativity.alertMod(flyingWithPing > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, c, porcent,
 							"packet", "Flying in one second: " + flying + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
-							c.hoverMsg("packet", "%flying%", flyingWithPing), (int) flyingWithPing / 30);
+							c.hoverMsg("packet", "%flying%", flyingWithPing), flyingWithPing / 30);
 					if(c.isSetBack() && back){
 						switch(np.flyingReason){
 						case BOW:

@@ -32,7 +32,7 @@ public class BanResult {
 		return getResultType().isSuccess();
 	}
 	
-	public static enum BanResultType {
+	public enum BanResultType {
 
 		ALREADY_BANNED(false, "Already banned"),
 		ALREADY_UNBANNED(false, "Already unbanned"),
@@ -47,7 +47,7 @@ public class BanResult {
 		private final boolean success;
 		private final String name;
 		
-		private BanResultType(boolean success, String name) {
+		BanResultType(boolean success, String name) {
 			this.success = success;
 			this.name = name;
 		}

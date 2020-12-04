@@ -39,7 +39,7 @@ public class Timer extends Cheat implements Listeners {
 		np.TIMER_COUNT.add(count);
 		
 		if(np.TIMER_COUNT.size() > 5) // now we can remove first value (5 secs later)
-			np.TIMER_COUNT.remove((int) 0);
+			np.TIMER_COUNT.remove(0);
 		else // loading seconds
 			return;
 		double sum = np.TIMER_COUNT.stream().mapToInt(Integer::intValue).sum() / np.TIMER_COUNT.size();

@@ -131,9 +131,7 @@ public class LocationUtils {
 		if ((vec3maxZ != null)
 				&& ((objDirection == null) || (vec3d.distanceSquared(vec3maxZ) < vec3d.distanceSquared(objDirection))))
 			objDirection = vec3maxZ;
-		if (objDirection == null)
-			return false;
-		return true;
+		return objDirection != null;
 	}
 
 	private static Vector3d getVectorX(Vector3d main, Vector3d vec1, double paramDouble) {

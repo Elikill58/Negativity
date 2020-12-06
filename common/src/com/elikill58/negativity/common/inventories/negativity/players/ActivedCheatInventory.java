@@ -28,9 +28,11 @@ public class ActivedCheatInventory extends AbstractInventory<ActivedCheatHolder>
 		Inventory inv = Inventory.createInventory(Inventory.NAME_ACTIVED_CHEAT_MENU, UniversalUtils.getMultipleOf(np.ACTIVE_CHEAT.size() + 3, 9, 1, 54), new ActivedCheatHolder(cible));
 		if (np.ACTIVE_CHEAT.size() > 0) {
 			int slot = 0;
-			for (Cheat c : np.ACTIVE_CHEAT)
-				if(inv.getSize() > slot)
+			for (String cheatKey : np.ACTIVE_CHEAT) {
+				Cheat c = Cheat.forKey(cheatKey);
+				if (inv.getSize() > slot)
 					inv.set(slot++, ItemBuilder.Builder(c.getMaterial()).displayName(ChatColor.RESET + c.getName()).build());
+			}
 		} else
 			inv.set(4, ItemBuilder.Builder(Materials.REDSTONE_BLOCK).displayName(Messages.getMessage(p, "inventory.detection.no_active", "%name%", cible.getName())).build());
 		inv.set(inv.getSize() - 2, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());

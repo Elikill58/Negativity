@@ -9,7 +9,6 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
-import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
@@ -22,9 +21,9 @@ import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 public class Verificator {
 	
 	public static final int VERIFICATION_VERSION = 0;
-	private static final Collector<Cheat, ?, Map<Cheat, VerifData>> COLLECTOR = Collectors.toMap(Function.identity(), t -> new VerifData());
+	private static final Collector<Cheat, ?, Map<String, VerifData>> COLLECTOR = Collectors.toMap(Cheat::getKey, t -> new VerifData());
 	
-	private final Map<Cheat, VerifData> cheats;
+	private final Map<String, VerifData> cheats;
 	private final NegativityPlayer np;
 	private final String asker;
 	private final List<String> messages;
@@ -63,7 +62,7 @@ public class Verificator {
 	 * @param version the version of verification
 	 * @param playerVersion the player version
 	 */
-	public Verificator(NegativityPlayer np, String asker, Map<Cheat, VerifData> cheats, List<String> messages, int version, Version playerVersion) {
+	public Verificator(NegativityPlayer np, String asker, Map<String, VerifData> cheats, List<String> messages, int version, Version playerVersion) {
 		this.np = np;
 		this.asker = asker;
 		this.cheats = cheats;
@@ -104,7 +103,7 @@ public class Verificator {
 	 * 
 	 * @return cheat and verif data
 	 */
-	public Map<Cheat, VerifData> getCheats() {
+	public Map<String, VerifData> getCheats() {
 		return cheats;
 	}
 	
@@ -116,7 +115,7 @@ public class Verificator {
 	 * @return the optional verif data
 	 */
 	public Optional<VerifData> getVerifData(Cheat c) {
-		return Optional.ofNullable(cheats.get(c));
+		return Optional.ofNullable(cheats.get(c.getKey()));
 	}
 	
 	/**
@@ -152,8 +151,8 @@ public class Verificator {
 	 */
 	public void generateMessage() {
 		StringJoiner messageCheatNothing = new StringJoiner(", ");
-		for(Entry<Cheat, VerifData> currentCheat : cheats.entrySet()) {
-			Cheat c = currentCheat.getKey();
+		for(Entry<String, VerifData> currentCheat : cheats.entrySet()) {
+			Cheat c = Cheat.forKey(currentCheat.getKey());
 			VerifData data = currentCheat.getValue();
 			if(data.hasSomething()) {
 				String name = c.makeVerificationSummary(data, np);

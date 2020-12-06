@@ -6,8 +6,10 @@ import java.nio.file.Files;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.UUID;
@@ -47,9 +49,9 @@ public class NegativityPlayer {
 	private final UUID playerId;
 	private final Player p;
 	
-	public ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
+	public Set<String> ACTIVE_CHEAT = new HashSet<>();
 	public ArrayList<String> proof = new ArrayList<>();
-	public HashMap<Cheat, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
+	public HashMap<String, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	
 	// packets
@@ -153,7 +155,7 @@ public class NegativityPlayer {
 	public boolean hasDetectionActive(Cheat c) {
 		if (!c.isActive())
 			return false;
-		if (!ACTIVE_CHEAT.contains(c))
+		if (!ACTIVE_CHEAT.contains(c.getKey()))
 			return false;
 		if (TIME_INVINCIBILITY > System.currentTimeMillis())
 			return false;
@@ -276,7 +278,7 @@ public class NegativityPlayer {
 	 * @param c the cheat to analyze
 	 */
 	public void startAnalyze(Cheat c) {
-		ACTIVE_CHEAT.add(c);
+		ACTIVE_CHEAT.add(c.getKey());
 		if (c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
 			INJECTED.add(getPlayer().getUniqueId());
 		if (c.getKey().equalsIgnoreCase(CheatKeys.FORCEFIELD)) {
@@ -302,7 +304,7 @@ public class NegativityPlayer {
 	 * @param c the cheat to disable
 	 */
 	public void stopAnalyze(Cheat c) {
-		ACTIVE_CHEAT.remove(c);
+		ACTIVE_CHEAT.remove(c.getKey());
 	}
 	
 	/**
@@ -372,7 +374,7 @@ public class NegativityPlayer {
 		final List<PlayerCheatAlertEvent> list = new ArrayList<>();
 		ALERT_NOT_SHOWED.forEach((c, listAlerts) -> {
 			if(!listAlerts.isEmpty())
-				list.add(getAlertForCheat(c, listAlerts));
+				list.add(getAlertForCheat(Cheat.forKey(c), listAlerts));
 		});
 		return list;
 	}

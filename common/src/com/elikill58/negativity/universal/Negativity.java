@@ -159,9 +159,9 @@ public class Negativity {
 		}
 		manageAlertCommand(np, type, p, c, reliability);
 		if(timeBetweenAlert != -1) {
-			List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c) ? np.ALERT_NOT_SHOWED.get(c) : new ArrayList<>();
+			List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c.getKey()) ? np.ALERT_NOT_SHOWED.get(c.getKey()) : new ArrayList<>();
 			tempList.add(alert);
-			np.ALERT_NOT_SHOWED.put(c, tempList);
+			np.ALERT_NOT_SHOWED.put(c.getKey(), tempList);
 		} else
 			sendAlertMessage(np, alert);
 		c.performSetBack(p);
@@ -200,7 +200,7 @@ public class Negativity {
 		Cheat c = alert.getCheat();
 		int reliability = alert.getReliability();
 		if(reliability == 0) {// alert already sent
-			np.ALERT_NOT_SHOWED.remove(c);
+			np.ALERT_NOT_SHOWED.remove(c.getKey());
 			return;
 		}
 		Adapter ada = Adapter.getAdapter();
@@ -216,7 +216,7 @@ public class Negativity {
 		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
 			sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg, alert.getNbAlert());
-			np.ALERT_NOT_SHOWED.remove(c);
+			np.ALERT_NOT_SHOWED.remove(c.getKey());
 		} else {
 			boolean hasPermPeople = false;
 			for (Player pl : ada.getOnlinePlayers()) {
@@ -241,7 +241,7 @@ public class Negativity {
 				}
 			}
 			if(hasPermPeople) {
-				np.ALERT_NOT_SHOWED.remove(c);
+				np.ALERT_NOT_SHOWED.remove(c.getKey());
 				Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			}
 		}

@@ -19,7 +19,6 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.Verificator;
@@ -49,7 +48,7 @@ public class FileVerificationStorage extends VerificationStorage {
 				for(Path verification : entries) {
 					try (BufferedReader reader = Files.newBufferedReader(verification)) {
 						JSONObject json = (JSONObject) new JSONParser().parse(reader);
-						Map<Cheat, VerifData> cheats = new HashMap<>(); // don't need to load it
+						Map<String, VerifData> cheats = new HashMap<>(); // don't need to load it
 						String startedBy = json.get("startedBy").toString();
 						@SuppressWarnings("unchecked")
 						List<String> result = (List<String>) json.get("result");
@@ -80,9 +79,9 @@ public class FileVerificationStorage extends VerificationStorage {
 			JSONObject jsonCheat = new JSONObject();
 			verif.getCheats().forEach((cheat, verifData) -> {
 				if(verifData.hasSomething()) {
-					jsonCheat.put(cheat.getKey(), verifData.toJson());
+					jsonCheat.put(cheat, verifData.toJson());
 				} else
-					jsonCheat.put(cheat.getKey(), null);
+					jsonCheat.put(cheat, null);
 			});
 			json.put("cheats", jsonCheat);
 			json.put("player_version", verif.getPlayerVersion().name());

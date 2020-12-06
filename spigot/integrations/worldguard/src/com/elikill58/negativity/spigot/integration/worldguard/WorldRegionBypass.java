@@ -1,7 +1,8 @@
 package com.elikill58.negativity.spigot.integration.worldguard;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.entity.Player;
@@ -20,7 +21,7 @@ public class WorldRegionBypass implements BypassChecker {
 		return WorldGuardSupport.isInAreas(loc, getRegions());
 	}
 	
-	private final List<Cheat> cheats = new ArrayList<>();
+	private final Set<String> cheats = new HashSet<>();
 	private final List<String> regions, worlds;
 	
 	public WorldRegionBypass(Configuration section) {
@@ -29,17 +30,13 @@ public class WorldRegionBypass implements BypassChecker {
 			if(cheat == null)
 				Adapter.getAdapter().getLogger().info("Cannot find the cheat " + possibleCheats + " in region bypass");
 			else
-				cheats.add(cheat);
+				cheats.add(cheat.getKey());
 		}
 		
 		regions = section.getStringList("regions");
 		worlds = section.getStringList("worlds").stream().map((s) -> s.toLowerCase()).collect(Collectors.toList());
 	}
 	
-	public List<Cheat> getCheats() {
-		return cheats;
-	}
-
 	public List<String> getRegions() {
 		return regions;
 	}

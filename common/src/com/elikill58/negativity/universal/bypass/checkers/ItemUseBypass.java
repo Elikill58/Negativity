@@ -1,7 +1,9 @@
 package com.elikill58.negativity.universal.bypass.checkers;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
@@ -20,7 +22,7 @@ public class ItemUseBypass implements BypassChecker {
 	}
 	
 	private String item;
-	private List<Cheat> cheats = new ArrayList<>();
+	private Set<String> cheats;
 	private WhenBypass when;
 	
 	public ItemUseBypass(String itemName, String cheats, String when) {
@@ -37,21 +39,22 @@ public class ItemUseBypass implements BypassChecker {
 			CLICK_BYPASS.add(this);
 	}
 	
-	private List<Cheat> updateCheats(String cheats){
-		List<Cheat> list = new ArrayList<>();
-		for(Cheat ac : Cheat.CHEATS)
-			for(String s : cheats.split(","))
-				if(ac.getKey().equalsIgnoreCase(s))
-					list.add(ac);
-		return list;
+	private Set<String> updateCheats(String cheats){
+		Set<String> keys = new HashSet<>();
+		Set<String> allCheatKeys = Cheat.getCheatKeys();
+		for(String cheat : cheats.split(","))
+			for (String knownCheat : allCheatKeys)
+				if(knownCheat.equalsIgnoreCase(cheat))
+					keys.add(knownCheat);
+		return keys;
 	}
 	
-	public List<Cheat> getCheats(){
+	public Set<String> getCheats(){
 		return cheats;
 	}
 	
 	public boolean isForThisCheat(Cheat c) {
-		return cheats.contains(c);
+		return cheats.contains(c.getKey());
 	}
 	
 	public String getItem() {

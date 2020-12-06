@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.json.JSONObject;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.dataStorage.database.DatabaseMigrator;
@@ -45,7 +44,7 @@ public class DatabaseVerificationStorage extends VerificationStorage {
 				stm.setString(1, playerId.toString());
 				ResultSet resultQuery = stm.executeQuery();
 				while (resultQuery.next()) {
-					Map<Cheat, VerifData> cheats = new HashMap<>(); // don't need to load it
+					Map<String, VerifData> cheats = new HashMap<>(); // don't need to load it
 					List<String> result = Arrays.asList(resultQuery.getString("result").split("\n"));
 					String startedBy = resultQuery.getString("startedBy");
 					int version = resultQuery.getInt("version");
@@ -71,9 +70,9 @@ public class DatabaseVerificationStorage extends VerificationStorage {
 				JSONObject jsonCheat = new JSONObject();
 				verif.getCheats().forEach((cheat, verifData) -> {
 					if(verifData.hasSomething()) {
-						jsonCheat.put(cheat.getKey(), verifData.toJson());
+						jsonCheat.put(cheat, verifData.toJson());
 					} else
-						jsonCheat.put(cheat.getKey(), null);
+						jsonCheat.put(cheat, null);
 				});
 				stm.setString(4, jsonCheat.toJSONString());
 				stm.setString(5, verif.getPlayerVersion().name());

@@ -14,10 +14,10 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
 import java.util.function.Supplier;
 
 import org.bstats.sponge.MetricsLite2;
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
@@ -127,14 +127,13 @@ public class SpongeNegativity {
 		eventManager.registerListeners(this, new InventoryListeners());
 		eventManager.registerListeners(this, new PlayersListeners());
 
-		Task.builder().execute(new ClickManagerTimer()).delayTicks(20).interval(1, TimeUnit.SECONDS);
-		Task.builder().execute(new ActualizeInvTimer()).delayTicks(5).interval(0, TimeUnit.MILLISECONDS);
-		Task.builder().execute(new SpawnFakePlayerTimer()).delayTicks(20).interval(60 * 10, TimeUnit.SECONDS);
-		Task.builder().execute(new AnalyzePacketTimer()).delayTicks(0).interval(1, TimeUnit.SECONDS)
-				.name("negativity-packets").submit(this);
-		if(Negativity.timeBetweenAlert != -1) // is == -1, don't need timer
-			Task.builder().execute(new PendingAlertsTimer()).interval(Negativity.timeBetweenAlert, TimeUnit.MILLISECONDS)
-					.name("negativity-pending-alerts").submit(this);
+		schedule(new ClickManagerTimer(), 20, null);
+		schedule(new ActualizeInvTimer(), 5, null);
+		schedule(new AnalyzePacketTimer(), 20, "negativity-packets");
+		schedule(new SpawnFakePlayerTimer(), 20 * 60 * 10, null);
+		if (Negativity.timeBetweenAlert != -1) {
+			schedule(new PendingAlertsTimer(), Negativity.timeBetweenAlert / 50, "negativity-pending-alerts");
+		}
 		
 		NegativityAccountStorage.setDefaultStorage("file");
 
@@ -172,6 +171,14 @@ public class SpongeNegativity {
 		}
 		
 		Stats.sendStartupStats(Sponge.getServer().getBoundAddress().map(InetSocketAddress::getPort).orElse(-1));
+	}
+	
+	private void schedule(Runnable task, int intervalTicks, @Nullable String name) {
+		Task.Builder taskBuilder = Task.builder().execute(task).intervalTicks(intervalTicks);
+		if (name != null) {
+			taskBuilder.name(name);
+		}
+		taskBuilder.submit(this);
 	}
 
 	public void reloadCommands() {

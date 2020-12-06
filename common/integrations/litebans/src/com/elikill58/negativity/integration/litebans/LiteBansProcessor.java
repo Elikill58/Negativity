@@ -33,7 +33,7 @@ public class LiteBansProcessor implements BanProcessor {
 			case MOD:
 				Player mod = Adapter.getAdapter().getPlayer(ban.getBannedBy());
 				if(mod != null) { // get UUID to support when MOD change her name
-					sender = "--sender-uuid=" + mod.getUniqueId().toString();
+					sender = "--sender-uuid=" + mod.getUniqueId();
 					break;
 				}
 			case CONSOLE:
@@ -43,7 +43,7 @@ public class LiteBansProcessor implements BanProcessor {
 				sender = "--sender=" + ban.getBannedBy();
 				break;
 			}
-			Adapter.getAdapter().runConsoleCommand("ban " + ban.getPlayerId().toString() + " " + timeValue + sender + " " + ban.getReason());
+			Adapter.getAdapter().runConsoleCommand("ban " + ban.getPlayerId() + " " + timeValue + sender + " " + ban.getReason());
 			return new BanResult(BanResultType.DONE, ban);
 		} catch (Exception e) {
 			e.printStackTrace();

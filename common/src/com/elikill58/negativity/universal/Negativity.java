@@ -211,7 +211,7 @@ public class Negativity {
 			Location location = p.getLocation();
 			String sLoc = "[" + location.getWorld().getName() + ": " + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ() + "]";
 			ada.getLogger().info("New " + alert.getReportType().getName() + " for " + p.getName() + " (" + ping + " ms, UUID: "
-						+ p.getUniqueId().toString() + ") seem to use " + c.getName() + " "
+						+ p.getUniqueId() + ") seem to use " + c.getName() + " "
 						+ (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability + " " + sLoc);
 		}
 		CheatHover hoverMsg = alert.getHover();

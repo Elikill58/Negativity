@@ -57,7 +57,7 @@ public class Chat extends Cheat implements Listeners {
 			}
 			if(foundInsults.length() > 0) {
 				boolean mayCancel = Negativity.alertMod(foundInsults.length() > 1 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(90 + (foundInsults.length() - 1) * 5), "insult", "Insults: " + foundInsults.toString(),
+						UniversalUtils.parseInPorcent(90 + (foundInsults.length() - 1) * 5), "insult", "Insults: " + foundInsults,
 						hoverMsg("main", "%msg%", foundInsults.toString()));
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);

@@ -49,7 +49,7 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 				sj.add(tempAlias);
 			}
 			
-			LOGGER.warn("[SpongeItemRegistrar] Could not find material : " + id + sj.toString());
+			LOGGER.warn("[SpongeItemRegistrar] Could not find material : " + id + sj);
 			return null;
 		});
 	}

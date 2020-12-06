@@ -101,7 +101,7 @@ public abstract class Inventory implements NegativityObject {
 		if (Materials.GRAY_STAINED_GLASS_PANE.getId().contains("gray")) {
 			builder.color(DyeColor.GRAY);
 		}
-		builder.displayName(ChatColor.RESET.toString() + " - ");
+		builder.displayName(ChatColor.RESET + " - ");
 		EMPTY = builder.build();
 	}
 }

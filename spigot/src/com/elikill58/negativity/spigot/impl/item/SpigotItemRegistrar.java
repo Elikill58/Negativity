@@ -36,7 +36,7 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 		}*/
 		StringJoiner sj = new StringJoiner(", ", " : ", "");
 		for(String tempAlias : alias) sj.add(tempAlias);
-		SpigotNegativity.getInstance().getLogger().info("[SpigotItemRegistrar] Cannot find material " + id + sj.toString());
+		SpigotNegativity.getInstance().getLogger().info("[SpigotItemRegistrar] Cannot find material " + id + sj);
 		return null;
 	}
 	

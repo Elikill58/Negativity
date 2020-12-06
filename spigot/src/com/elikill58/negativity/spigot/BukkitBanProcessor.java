@@ -39,7 +39,7 @@ public class BukkitBanProcessor implements BanProcessor {
 		BanEntry banEntry = Bukkit.getServer().getBanList(BanList.Type.NAME)
 				.addBan(player.getName(), ban.getReason(), expirationDate, ban.getBannedBy());
 		if (banEntry == null) {
-			Adapter.getAdapter().debug("[BukkitProcessor] Cannot find BanEntry " + ban.getPlayerId().toString());
+			Adapter.getAdapter().debug("[BukkitProcessor] Cannot find BanEntry " + ban.getPlayerId());
 			return null;
 		}
 		BanUtils.kickForBan(player, ban);

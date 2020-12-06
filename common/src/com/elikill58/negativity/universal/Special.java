@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.ServiceLoader;
 
 import com.elikill58.negativity.api.events.EventManager;
@@ -34,7 +35,7 @@ public abstract class Special {
 	 */
 	public Special(String key, boolean needPacket, String... alias) {
 		this.needPacket = needPacket;
-		this.key = key.toLowerCase();
+		this.key = key.toLowerCase(Locale.ROOT);
 		this.aliases = alias;
 		
 		String fileName = this.key + ".yml";
@@ -65,7 +66,7 @@ public abstract class Special {
 	 * @return the key in upper case
 	 */
 	public String getKey() {
-		return key.toUpperCase();
+		return key.toUpperCase(Locale.ROOT);
 	}
 	
 	/**

@@ -1,5 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
+import java.util.Locale;
 import java.util.TimerTask;
 
 import com.elikill58.negativity.api.GameMode;
@@ -109,7 +110,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 							boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this, relia,
 									"ticked",
 									"Distance after damage: " + d + "; Damager: "
-											+ e.getDamager().getType().name().toLowerCase(),
+											+ e.getDamager().getType().name().toLowerCase(Locale.ROOT),
 									hoverMsg("main", "%distance%", d));
 							if (isSetBack() && mayCancel)
 								p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));

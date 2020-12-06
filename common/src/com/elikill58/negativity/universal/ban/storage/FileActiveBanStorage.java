@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -151,7 +152,7 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 					expirationTime = Long.parseLong(value);
 					break;
 				case "bantype":
-					banType = BanType.valueOf(value.toUpperCase());
+					banType = BanType.valueOf(value.toUpperCase(Locale.ROOT));
 					break;
 				case "def":
 					// Here for compatibility with files generated from an older version

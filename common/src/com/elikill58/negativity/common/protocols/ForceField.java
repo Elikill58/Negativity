@@ -3,6 +3,7 @@ package com.elikill58.negativity.common.protocols;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import java.text.NumberFormat;
+import java.util.Locale;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -74,7 +75,7 @@ public class ForceField extends Cheat implements Listeners {
 		if(checkActive("line-sight") && p.hasLineOfSight(cible)) {
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
 					"Hit " + cible.getType().name() + " but cannot see it",
-					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase()));
+					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase(Locale.ROOT)));
 		}
 		if(Utils.hasThorns(p)) {
 			if (isSetBack() && mayCancel)
@@ -88,9 +89,9 @@ public class ForceField extends Cheat implements Listeners {
 			double dis = tempLoc.distance(p.getLocation());
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 			if (checkActive("reach") && dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !e.getDamager().getType().equals(EntityType.ENDER_DRAGON)) {
-				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getEntity().getType().name().toLowerCase() : e.getEntity().getName();
+				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getEntity().getType().name().toLowerCase(Locale.ROOT) : e.getEntity().getName();
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10), "reach",
-						"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns", hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
+						"Big distance with: " + e.getEntity().getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns", hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
 			}
 		}
 		if (isSetBack() && mayCancel)

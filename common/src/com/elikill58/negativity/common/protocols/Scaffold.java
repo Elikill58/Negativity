@@ -1,5 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
+import java.util.Locale;
 import java.util.TimerTask;
 
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -52,8 +53,8 @@ public class Scaffold extends Cheat implements Listeners {
 						boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, Scaffold.this,
 								UniversalUtils.parseInPorcent(120 / localPing), "below",
 								"Item in hand: " + m.getId() + " Block placed: " + placed.getId(),
-								hoverMsg("main", "%item%", m.getId().toLowerCase(), "%block%",
-										placed.getId().toLowerCase()));
+								hoverMsg("main", "%item%", m.getId().toLowerCase(Locale.ROOT), "%block%",
+										placed.getId().toLowerCase(Locale.ROOT)));
 						if (isSetBack() && mayCancel) {
 							p.getInventory().addItem(ItemBuilder.Builder(placed).build());
 							e.getBlock().setType(Materials.AIR);

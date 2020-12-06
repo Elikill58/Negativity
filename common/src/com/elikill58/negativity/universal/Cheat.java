@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.ServiceLoader;
@@ -63,7 +64,7 @@ public abstract class Cheat {
 		this.needPacket = needPacket;
 		this.m = m;
 		this.cheatCategory = type;
-		this.key = key.toLowerCase();
+		this.key = key.toLowerCase(Locale.ROOT);
 		this.aliases = alias;
 		this.hasVerif = hasVerif;
 		
@@ -89,7 +90,7 @@ public abstract class Cheat {
 					json = (JSONObject) new JSONParser().parse(line);
 				} catch (Exception e) {}
 				SetBackEntry entry = json == null ? new SetBackEntry(line) : new SetBackEntry(json);
-				switch (entry.getType().toLowerCase()) {
+				switch (entry.getType().toLowerCase(Locale.ROOT)) {
 				case "potion_effect":
 					setBackProcessor.add(new PotionEffectProcessor(entry));
 					break;
@@ -116,7 +117,7 @@ public abstract class Cheat {
 	 * @return the cheat key in upper case
 	 */
 	public String getKey() {
-		return key.toUpperCase();
+		return key.toUpperCase(Locale.ROOT);
 	}
 	
 	/**

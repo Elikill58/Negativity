@@ -1,5 +1,7 @@
 package com.elikill58.negativity.universal;
 
+import java.util.Locale;
+
 public enum Version {
 	
 	V1_7("1.7", 7, 500, 0, 5),
@@ -127,7 +129,7 @@ public enum Version {
 	 */
 	public static Version getVersion(String version) {
 		for (Version v : Version.values())
-			if (version.toLowerCase().startsWith(v.name().toLowerCase()))
+			if (version.toLowerCase(Locale.ROOT).startsWith(v.name().toLowerCase(Locale.ROOT)))
 				return v;
 		return HIGHER;
 	}

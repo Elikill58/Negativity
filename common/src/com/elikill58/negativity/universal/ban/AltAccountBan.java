@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal.ban;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -20,12 +21,12 @@ public class AltAccountBan {
 	
 	public AltAccountBan(int altNb, Configuration config) {
 		this.altNb = altNb;
-		this.action = BanAltAction.valueOf(config.getString("action").toUpperCase());
+		this.action = BanAltAction.valueOf(config.getString("action").toUpperCase(Locale.ROOT));
 		this.alertMessage = Utils.coloredMessage(config.getString("message"));
 		this.banTime = config.getLong("time", -1);
 		this.banDef = config.getBoolean("def", banTime == -1);
 		Configuration condConf = config.getSection("condition");
-		condConf.getKeys().forEach((s) -> conditions.put(ReportType.valueOf(s.toUpperCase()), condConf.getInt(s, 0)));
+		condConf.getKeys().forEach((s) -> conditions.put(ReportType.valueOf(s.toUpperCase(Locale.ROOT)), condConf.getInt(s, 0)));
 	}
 	
 	public int getAltNb() {

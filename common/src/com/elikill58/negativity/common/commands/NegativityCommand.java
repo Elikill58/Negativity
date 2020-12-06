@@ -136,7 +136,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			}
 			InventoryManager.getInventory(NegativityInventory.MOD).ifPresent((inv) -> inv.openInventory((Player) sender));
 			return true;
-		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase().contains("manage")) {
+		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase(Locale.ROOT).contains("manage")) {
 			if (arg.length >= 2 && arg[1].equalsIgnoreCase("updateMessages")) {
 				if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getCached(((Player) sender).getUniqueId()), Perm.MANAGE_CHEAT)) {
 					Messages.sendMessage(sender, "not_permission");
@@ -294,7 +294,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 		if (arg.length == 1) {
 			// /negativity |
 			for (com.elikill58.negativity.api.entity.Player p : Adapter.getAdapter().getOnlinePlayers()) {
-				if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
+				if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
 					suggestions.add(p.getName());
 				}
 			}
@@ -313,21 +313,21 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				if (arg.length == 2) {
 					// /negativity verif |
 					for (com.elikill58.negativity.api.entity.Player p : Adapter.getAdapter().getOnlinePlayers()) {
-						if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
+						if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
 							suggestions.add(p.getName());
 						}
 					}
 				} else if (Adapter.getAdapter().getPlayer(arg[1]) != null) {
 					// /negativity verif <target> |
 					for (Cheat c : Cheat.values()) {
-						if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
+						if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
 							suggestions.add(c.getName());
 						}
 					}
 				}
 			} else if (arg[0].equalsIgnoreCase("debug")) {
 				for (Cheat c : Cheat.values()) {
-					if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
+					if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
 						suggestions.add(c.getName());
 					}
 				}

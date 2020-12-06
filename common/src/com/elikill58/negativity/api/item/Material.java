@@ -1,5 +1,7 @@
 package com.elikill58.negativity.api.item;
 
+import java.util.Locale;
+
 import com.elikill58.negativity.api.NegativityObject;
 
 public abstract class Material implements NegativityObject {
@@ -35,7 +37,7 @@ public abstract class Material implements NegativityObject {
 	 * @return true if can be ate
 	 */
 	public boolean isConsumable() {
-		String id = getId().toLowerCase();
+		String id = getId().toLowerCase(Locale.ROOT);
 		return id.contains("cooked") || id.contains("mutton") || id.contains("beef") || id.contains("apple")
 				|| id.contains("potato") || id.contains("carrot") || id.contains("bread") || id.contains("chicken")
 				|| id.contains("salmon") || id.contains("rabbit") || id.contains("porkshop") || id.contains("fish");

@@ -47,7 +47,7 @@ public class CommandsListeners implements CommandCallable {
 	@Override
 	public List<String> getSuggestions(CommandSource src, String message, Location<World> arg2) throws CommandException {
 		String[] arg = message.split(" ");
-		String prefix = arg.length == 0 ? " " : arg[arg.length - 1].toLowerCase();
+		String prefix = arg.length == 0 ? " " : arg[arg.length - 1].toLowerCase(Locale.ROOT);
 		TabExecutionEvent event = new TabExecutionEvent(cmd, SpongeEntityManager.getExecutor(src), arg, prefix);
 		EventManager.callEvent(event);
 		return event.getTabContent();

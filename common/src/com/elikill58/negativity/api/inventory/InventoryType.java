@@ -1,5 +1,7 @@
 package com.elikill58.negativity.api.inventory;
 
+import java.util.Locale;
+
 public enum InventoryType {
 
 	ANVIL,
@@ -32,7 +34,7 @@ public enum InventoryType {
 	public static InventoryType get(String name) {
 		if(name == null)
 			return UNKNOW;
-		name = name.toUpperCase();
+		name = name.toUpperCase(Locale.ROOT);
 		for(InventoryType type : values())
 			if(type.name().equalsIgnoreCase(name) || name.contains(type.name()))
 				return type;

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 
@@ -85,11 +86,11 @@ public final class NegativityAccount {
 	}
 
 	public int getWarn(Cheat cheat) {
-		return getWarn(cheat.getKey().toLowerCase());
+		return getWarn(cheat.getKey().toLowerCase(Locale.ROOT));
 	}
 
 	public void setWarnCount(Cheat cheat, int count) {
-		setWarnCount(cheat.getKey().toLowerCase(), count);
+		setWarnCount(cheat.getKey().toLowerCase(Locale.ROOT), count);
 	}
 
 	public void setWarnCount(String cheatKey, int count) {

@@ -3,6 +3,7 @@ package com.elikill58.negativity.bungee;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
@@ -51,7 +52,7 @@ public class BungeeListeners implements Listener {
 
 	@EventHandler
 	public void onMessageReceived(PluginMessageEvent event) {
-		if (!event.getTag().toLowerCase().contains("negativity"))
+		if (!event.getTag().toLowerCase(Locale.ROOT).contains("negativity"))
 			return;
 
 		event.setCancelled(true);

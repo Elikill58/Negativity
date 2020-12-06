@@ -2,6 +2,7 @@ package com.elikill58.negativity.common.protocols;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringJoiner;
 
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -47,10 +48,10 @@ public class Chat extends Cheat implements Listeners {
 		if(checkActive("insult")) {
 			final List<String> insults = new ArrayList<>();
 			getConfig().getStringList("insults").forEach((s) -> {
-				insults.add(s.toLowerCase());
+				insults.add(s.toLowerCase(Locale.ENGLISH));
 			});
 			final StringJoiner foundInsults = new StringJoiner(", ");
-			for(String s : msg.toLowerCase().split(" ")) {
+			for(String s : msg.toLowerCase(Locale.ENGLISH).split(" ")) {
 				if(insults.contains(s))
 					foundInsults.add(s);
 			}

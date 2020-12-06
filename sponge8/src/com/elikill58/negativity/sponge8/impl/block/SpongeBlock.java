@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge8.impl.block;
 
+import java.util.Locale;
+
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.item.ItemType;
@@ -100,7 +102,7 @@ public class SpongeBlock extends Block {
 	
 	@Override
 	public boolean isLiquid() {
-		String name = getType().getId().toLowerCase();
+		String name = getType().getId().toLowerCase(Locale.ROOT);
 		return name.contains("water") || name.contains("lava");
 	}
 	

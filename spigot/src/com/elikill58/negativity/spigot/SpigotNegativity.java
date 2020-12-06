@@ -6,6 +6,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Locale;
 import java.util.logging.Level;
 
 import org.bstats.bukkit.Metrics;
@@ -71,7 +72,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (v.equals(Version.HIGHER))
 			getLogger().warning("Unknow server version " + Utils.VERSION + " ! Some problems can appears.");
 		else
-			getLogger().info("Detected server version: " + v.name().toLowerCase() + " (" + Utils.VERSION + ")");
+			getLogger().info("Detected server version: " + v.name().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ")");
 		
 		packetManager = new NegativityPacketManager(this);
 		new File(getDataFolder().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();

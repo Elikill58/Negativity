@@ -2,6 +2,7 @@ package com.elikill58.negativity.sponge.impl.location;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
@@ -43,7 +44,7 @@ public class SpongeWorld extends World {
 
 	@Override
 	public Difficulty getDifficulty() {
-		return Difficulty.valueOf(w.getDifficulty().getId().toUpperCase());
+		return Difficulty.valueOf(w.getDifficulty().getId().toUpperCase(Locale.ROOT));
 	}
 
 	@Override

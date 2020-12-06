@@ -1,5 +1,7 @@
 package com.elikill58.negativity.universal.setBack.processor;
 
+import java.util.Locale;
+
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.location.Vector;
@@ -12,7 +14,7 @@ public class ValueEditorProcessor implements SetBackProcessor {
 	private Object obj;
 	
 	public ValueEditorProcessor(SetBackEntry entry) {
-		valueEditor = ValueEditorAction.valueOf(entry.getKey().toUpperCase());
+		valueEditor = ValueEditorAction.valueOf(entry.getKey().toUpperCase(Locale.ROOT));
 		switch (valueEditor) {
 		case DAMAGE:
 			obj = Double.parseDouble(entry.getValue());

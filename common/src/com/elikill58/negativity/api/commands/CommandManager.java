@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api.commands;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
@@ -62,14 +63,14 @@ public class CommandManager implements Listeners {
 	
 	@EventListener
 	public void onCommand(CommandExecutionEvent e) {
-		CommandListeners cmd = commands.get(e.getCommand().toLowerCase());
+		CommandListeners cmd = commands.get(e.getCommand().toLowerCase(Locale.ROOT));
 		if(cmd != null)
 			e.setGoodResult(cmd.onCommand(e.getSender(), e.getArgument(), e.getPrefix()));
 	}
 	
 	@EventListener
 	public void onTab(TabExecutionEvent e) {
-		TabListeners cmd = tabs.get(e.getCommand().toLowerCase());
+		TabListeners cmd = tabs.get(e.getCommand().toLowerCase(Locale.ROOT));
 		if(cmd != null)
 			e.setTabContent(cmd.onTabComplete(e.getSender(), e.getArgument(), e.getPrefix()));
 	}

@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal.bypass.checkers;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import com.elikill58.negativity.api.block.Block;
@@ -18,7 +19,7 @@ public class ItemUseBypass implements BypassChecker {
 	public static final List<ItemUseBypass> CLICK_BYPASS = new ArrayList<>();
 	
 	public static boolean hasBypassWithClick(Player p, Cheat c, ItemStack item, String actionName) {
-		return CLICK_BYPASS.stream().filter((ib) -> ib.isForThisCheat(c) && actionName.toLowerCase().contains(ib.getWhen().name().toLowerCase())).findAny().isPresent();
+		return CLICK_BYPASS.stream().filter((ib) -> ib.isForThisCheat(c) && actionName.toLowerCase(Locale.ROOT).contains(ib.getWhen().name().toLowerCase(Locale.ROOT))).findAny().isPresent();
 	}
 	
 	private String item;
@@ -26,7 +27,7 @@ public class ItemUseBypass implements BypassChecker {
 	private WhenBypass when;
 	
 	public ItemUseBypass(String itemName, String cheats, String when) {
-		this.item = itemName.toLowerCase();
+		this.item = itemName.toLowerCase(Locale.ROOT);
 		this.when = WhenBypass.getWhenBypass(when);
 		this.cheats = updateCheats(cheats);
 		if(this.item == null)

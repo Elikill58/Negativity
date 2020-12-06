@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.utils;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 
 import org.bukkit.Bukkit;
@@ -90,7 +91,7 @@ public class Utils {
 	public static ItemStack getItemFromString(String s) {
 		Preconditions.checkNotNull(s, "Error while creating item. The material is null.");
 		try {
-			String[] splitted = s.toUpperCase().split(":");
+			String[] splitted = s.toUpperCase(Locale.ROOT).split(":");
 			String key = splitted[0];
 			Material temp = null;
 			try {

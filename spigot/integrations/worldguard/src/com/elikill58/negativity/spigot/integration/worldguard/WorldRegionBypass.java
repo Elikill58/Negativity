@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.integration.worldguard;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -16,7 +17,7 @@ public class WorldRegionBypass implements BypassChecker {
 
 	public boolean hasBypass(Player p, Cheat c) {
 		Location loc = p.getLocation();
-		if(getWorlds().contains(loc.getWorld().getName().toLowerCase()))
+		if(getWorlds().contains(loc.getWorld().getName().toLowerCase(Locale.ROOT)))
 			return true;
 		return WorldGuardSupport.isInAreas(loc, getRegions());
 	}
@@ -34,7 +35,7 @@ public class WorldRegionBypass implements BypassChecker {
 		}
 		
 		regions = section.getStringList("regions");
-		worlds = section.getStringList("worlds").stream().map((s) -> s.toLowerCase()).collect(Collectors.toList());
+		worlds = section.getStringList("worlds").stream().map((s) -> s.toLowerCase(Locale.ROOT)).collect(Collectors.toList());
 	}
 	
 	public List<String> getRegions() {

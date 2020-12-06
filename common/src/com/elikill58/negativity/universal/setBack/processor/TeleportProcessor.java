@@ -1,5 +1,7 @@
 package com.elikill58.negativity.universal.setBack.processor;
 
+import java.util.Locale;
+
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.universal.Adapter;
@@ -12,7 +14,7 @@ public class TeleportProcessor implements SetBackProcessor {
 	
 	public TeleportProcessor(SetBackEntry entry) {
 		try {
-			direction = TeleportDirection.valueOf(entry.getKey().toUpperCase()).getVector();
+			direction = TeleportDirection.valueOf(entry.getKey().toUpperCase(Locale.ROOT)).getVector();
 			if(direction == null) {
 				String[] data = entry.getValue().split(",");
 				direction = new Vector(Double.parseDouble(data[0]), Double.parseDouble(data[1]), Double.parseDouble(data[2]));

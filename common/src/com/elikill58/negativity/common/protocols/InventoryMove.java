@@ -1,7 +1,5 @@
 package com.elikill58.negativity.common.protocols;
 
-import java.util.TimerTask;
-
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -14,6 +12,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.report.ReportType;
 
 public class InventoryMove extends Cheat implements Listeners {
@@ -47,31 +46,25 @@ public class InventoryMove extends Cheat implements Listeners {
 		if (p.hasElytra())
 			return;
 		if (p.isSprinting() || p.isSneaking()) {
-			new java.util.Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					if (p.isSprinting() || p.isSneaking())
-						Negativity.alertMod(ReportType.WARNING, p, instance,
-								NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "sprint",
-									"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking(), hoverMsg("main", "%name%", from));
-				}
-			}, 150);
+			Scheduler.getInstance().runDelayed(() -> {
+				if (p.isSprinting() || p.isSneaking())
+					Negativity.alertMod(ReportType.WARNING, p, instance,
+						NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "sprint",
+						"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking(), hoverMsg("main", "%name%", from));
+			}, 3);
 		} else if (check) {
 			final Location lastLoc = p.getLocation().clone();
-			new java.util.Timer().schedule(new TimerTask() {
-				@Override
-				public void run() {
-					if(!lastLoc.getWorld().equals(p.getLocation().getWorld()))
-						return;
-					double dis = lastLoc.distance(p.getLocation());
-					if (dis > 1 && (lastLoc.getY() - p.getLocation().getY()) < 0.1
-							&& p.getOpenInventory() != null) {
-						Negativity.alertMod(ReportType.WARNING, p, instance,
-								NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "distance",
-									"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()), hoverMsg("main", "%name%", from));
-					}
+			Scheduler.getInstance().runDelayed(() -> {
+				if (!lastLoc.getWorld().equals(p.getLocation().getWorld()))
+					return;
+				double dis = lastLoc.distance(p.getLocation());
+				if (dis > 1 && (lastLoc.getY() - p.getLocation().getY()) < 0.1
+					&& p.getOpenInventory() != null) {
+					Negativity.alertMod(ReportType.WARNING, p, instance,
+						NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "distance",
+						"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()), hoverMsg("main", "%name%", from));
 				}
-			}, 250);
+			}, 5);
 		}
 	}
 	

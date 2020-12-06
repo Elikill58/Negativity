@@ -10,8 +10,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 
@@ -33,6 +31,8 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.PacketType;
+import com.elikill58.negativity.universal.ScheduledTask;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
@@ -88,7 +88,7 @@ public class NegativityPlayer {
 	public boolean isInFight = false, already_blink = false, disableShowingAlert = false, isFreeze = false, isJumpingWithBlock = false, isUsingSlimeBlock = false,
 			mustToBeSaved = false, isInvisible = false;
 	private boolean isBedrockPlayer = false;
-	private Timer fightTimer;
+	private ScheduledTask fightCooldownTask;
 
 	public NegativityPlayer(Player p) {
 		this.p = p;
@@ -435,15 +435,9 @@ public class NegativityPlayer {
 	 */
 	public void fight() {
 		isInFight = true;
-		if(fightTimer != null)
-			fightTimer.cancel();
-		fightTimer = new Timer();
-		fightTimer.schedule(new TimerTask() {
-			@Override
-			public void run() {
-				unfight();
-			}
-		}, 5000);
+		if (fightCooldownTask != null)
+			fightCooldownTask.cancel();
+		fightCooldownTask = Scheduler.getInstance().runRepeating(this::unfight, 100);
 	}
 
 	/**

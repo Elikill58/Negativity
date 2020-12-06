@@ -8,8 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 import java.util.StringJoiner;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.UUID;
 
 import com.elikill58.negativity.api.GameMode;
@@ -29,6 +27,7 @@ import com.elikill58.negativity.universal.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -94,16 +93,13 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			}
 			UUID askerUUID = (sender instanceof Player ? ((Player) sender).getUniqueId() : CONSOLE);
 			VerificationManager.create(askerUUID, target.getUniqueId(), new Verificator(nTarget, sender.getName(), cheatsToVerify));
-			new Timer("verif-wait-" + sender.getName()).schedule(new TimerTask() {
-				@Override
-				public void run() {
-					Verificator verif = VerificationManager.getVerificationsFrom(target.getUniqueId(), askerUUID).get();
-					verif.generateMessage();
-					verif.getMessages().forEach((s) -> sender.sendMessage(Utils.coloredMessage("&a[&2Verif&a] " + s)));
-					verif.save();
-					VerificationManager.remove(askerUUID, target.getUniqueId());
-				}
-			}, time * 1000);
+			Scheduler.getInstance().runRepeating(() -> {
+				Verificator verif = VerificationManager.getVerificationsFrom(target.getUniqueId(), askerUUID).get();
+				verif.generateMessage();
+				verif.getMessages().forEach((s) -> sender.sendMessage(Utils.coloredMessage("&a[&2Verif&a] " + s)));
+				verif.save();
+				VerificationManager.remove(askerUUID, target.getUniqueId());
+			}, time * 20, "verif-wait-" + sender.getName());
 			return true;
 		} else if (arg[0].equalsIgnoreCase("alert")) {
 			if (!(sender instanceof Player)) {

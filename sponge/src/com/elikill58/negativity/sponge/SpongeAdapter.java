@@ -40,6 +40,7 @@ import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
 import com.elikill58.negativity.sponge.impl.plugin.SpongeExternalPlugin;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.account.SimpleAccountManager;
@@ -60,7 +61,8 @@ public class SpongeAdapter extends Adapter {
 	private final TranslationProviderFactory translationProviderFactory;
 	private final SpongeItemRegistrar itemRegistrar;
 	private final Version serverVersion;
-
+	private final Scheduler scheduler;
+	
 	public SpongeAdapter(SpongeNegativity sn) {
 		this.plugin = sn;
 		this.logger = new Slf4jLoggerAdapter(sn.getLogger());
@@ -68,6 +70,7 @@ public class SpongeAdapter extends Adapter {
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("lang"), "Negativity", "CheatHover");
 		this.itemRegistrar = new SpongeItemRegistrar();
 		this.serverVersion = Version.getVersionByName(getVersion());
+		this.scheduler = new SpongeScheduler(sn);
 	}
 	
 	@Override
@@ -270,6 +273,11 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public void runSync(Runnable call) {
 		Task.builder().execute(call).submit(plugin);
+	}
+	
+	@Override
+	public Scheduler getScheduler() {
+		return this.scheduler;
 	}
 	
 	@Override

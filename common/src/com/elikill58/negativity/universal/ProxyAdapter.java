@@ -51,4 +51,9 @@ public abstract class ProxyAdapter extends Adapter {
 	public FakePlayer createFakePlayer(Location loc, String name) {
 		return null;
 	}
+	
+	@Override
+	public Scheduler getScheduler() {
+		throw new UnsupportedOperationException("Scheduler can't be used on proxy servers");
+	}
 }

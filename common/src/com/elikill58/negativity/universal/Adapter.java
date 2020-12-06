@@ -295,6 +295,11 @@ public abstract class Adapter {
 	 */
 	public abstract void runSync(Runnable call);
 	
+	/**
+	 * @return a synchronous scheduler that can be used to schedule task on the server thread.
+	 */
+	public abstract Scheduler getScheduler();
+	
 	public boolean canSendStats() {
 		return true;
 	}

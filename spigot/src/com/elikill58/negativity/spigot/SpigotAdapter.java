@@ -39,6 +39,7 @@ import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.account.SimpleAccountManager;
@@ -56,6 +57,7 @@ public class SpigotAdapter extends Adapter {
 	private final LoggerAdapter logger;
 	private final SpigotItemRegistrar itemRegistrar;
 	private final Version serverVersion;
+	private final Scheduler scheduler;
 	private Configuration config;
 
 	public SpigotAdapter(JavaPlugin pl) {
@@ -66,6 +68,7 @@ public class SpigotAdapter extends Adapter {
 		this.logger = new JavaLoggerAdapter(pl.getLogger());
 		this.itemRegistrar = new SpigotItemRegistrar();
 		this.serverVersion = Version.getVersion(getVersion());
+		this.scheduler = new SpigotScheduler(pl);
 	}
 	
 	@Override
@@ -294,5 +297,10 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public void runSync(Runnable call) {
 		Bukkit.getScheduler().runTask(pl, call);
+	}
+	
+	@Override
+	public Scheduler getScheduler() {
+		return this.scheduler;
 	}
 }

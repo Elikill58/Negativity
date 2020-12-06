@@ -1,7 +1,7 @@
 package com.elikill58.negativity.common.protocols;
 
 import java.util.Locale;
-import java.util.TimerTask;
+import java.util.function.Consumer;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -28,6 +28,8 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
+import com.elikill58.negativity.universal.ScheduledTask;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -86,39 +88,31 @@ public class AntiKnockback extends Cheat implements Listeners {
 		if (damager.getType().equals(EntityType.ARROW) && ((Arrow) damager).getShooter() instanceof Player)
 			if (((Arrow) damager).getShooter().equals(p))
 				return;
-
-		new java.util.Timer().schedule(new TimerTask() {
-
-			@Override
-			public void run() {
-				if (e.isCancelled())
+		
+		Scheduler.getInstance().runDelayed(() -> {
+			if (e.isCancelled())
+				return;
+			final Location last = p.getLocation().clone();
+			p.damage(0D);
+			// p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
+			Scheduler.getInstance().runDelayed(() -> {
+				Location actual = p.getLocation();
+				if (last.getWorld() != actual.getWorld() || p.isDead())
 					return;
-				final Location last = p.getLocation().clone();
-				p.damage(0D);
-				// p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
-				new java.util.Timer().schedule(new TimerTask() {
-
-					@Override
-					public void run() {
-						Location actual = p.getLocation();
-						if (last.getWorld() != actual.getWorld() || p.isDead())
-							return;
-						double d = last.distance(actual);
-						recordData(p.getUniqueId(), DISTANCE_DAMAGE, d);
-						int relia = UniversalUtils.parseInPorcent(100 - d);
-						if (d < 0.1 && !actual.getBlock().getType().equals(Materials.WEB) && !p.isSneaking()) {
-							boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this, relia,
-									"ticked",
-									"Distance after damage: " + d + "; Damager: "
-											+ e.getDamager().getType().name().toLowerCase(Locale.ROOT),
-									hoverMsg("main", "%distance%", d));
-							if (isSetBack() && mayCancel)
-								p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));
-						}
-					}
-				}, 250);
-			}
-		}, 50);
+				double d = last.distance(actual);
+				recordData(p.getUniqueId(), DISTANCE_DAMAGE, d);
+				int relia = UniversalUtils.parseInPorcent(100 - d);
+				if (d < 0.1 && !actual.getBlock().getType().equals(Materials.WEB) && !p.isSneaking()) {
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this, relia,
+						"ticked",
+						"Distance after damage: " + d + "; Damager: "
+							+ e.getDamager().getType().name().toLowerCase(Locale.ROOT),
+						hoverMsg("main", "%distance%", d));
+					if (isSetBack() && mayCancel)
+						p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));
+				}
+			}, 5);
+		}, 1);
 	}
 
 	@EventListener
@@ -173,7 +167,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 
 		if (velY < 5000) {
 			// give client some time to react
-			new java.util.Timer().schedule(new TimerTask() {
+			Scheduler.getInstance().runRepeating(new Consumer<ScheduledTask>() {
 				public int iterations = 0;
 				public double reachedY = 0 /* diff reached */, baseY = p.getLocation().getY();
 				/*public Vector baseVector = p.getVelocity().clone();
@@ -181,7 +175,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 				public boolean vectorChanged = false;*/
 
 				@Override
-				public void run() {
+				public void accept(ScheduledTask task) {
 					iterations++;
 					Location loc = p.getLocation();
 					if (loc.getY() - baseY > reachedY)
@@ -206,17 +200,17 @@ public class AntiKnockback extends Cheat implements Listeners {
 						double percentage = Math.abs(((reachedY - predictedY) / predictedY));
 						if (predictedY > reachedY && percentage > 50) {
 							Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this,
-									UniversalUtils.parseInPorcent(percentage), "packet",
-									"ReachedY: " + reachedY + ", predictedY: " + predictedY + ", percentage: "
-											+ percentage + ", algo: " + algo + ".",
-									new CheatHover.Literal("Reached Y too different from predicted Y"));
+								UniversalUtils.parseInPorcent(percentage), "packet",
+								"ReachedY: " + reachedY + ", predictedY: " + predictedY + ", percentage: "
+									+ percentage + ", algo: " + algo + ".",
+								new CheatHover.Literal("Reached Y too different from predicted Y"));
 						} else
 							ada.debug("AntiKb detection: prediction: " + predictedY + ", percentage: " + percentage
-									+ ", reachedY: " + reachedY);
-						cancel();
+								+ ", reachedY: " + reachedY);
+						task.cancel();
 					}
 				}
-			}, 1000 / 20, 1000 / 20);
+			}, 1, 1);
 		}
 	}
 

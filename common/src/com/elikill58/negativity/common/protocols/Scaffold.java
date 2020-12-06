@@ -1,7 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
 import java.util.Locale;
-import java.util.TimerTask;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
@@ -20,6 +19,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -40,28 +40,24 @@ public class Scaffold extends Cheat implements Listeners {
 			int ping = p.getPing(), slot = p.getInventory().getHeldItemSlot();
 			if (ping > 120)
 				return;
-			new java.util.Timer().schedule(new TimerTask() {
-				
-				@Override
-				public void run() {
-					Material m = p.getItemInHand().getType(), placed = e.getBlock().getType();
-					if ((m == null || (!m.isSolid() && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot()
-							&& !placed.equals(Materials.AIR)) {
-						int localPing = ping;
-						if (localPing == 0)
-							localPing = 1;
-						boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, Scaffold.this,
-								UniversalUtils.parseInPorcent(120 / localPing), "below",
-								"Item in hand: " + m.getId() + " Block placed: " + placed.getId(),
-								hoverMsg("main", "%item%", m.getId().toLowerCase(Locale.ROOT), "%block%",
-										placed.getId().toLowerCase(Locale.ROOT)));
-						if (isSetBack() && mayCancel) {
-							p.getInventory().addItem(ItemBuilder.Builder(placed).build());
-							e.getBlock().setType(Materials.AIR);
-						}
+			Scheduler.getInstance().runDelayed(() -> {
+				Material m = p.getItemInHand().getType(), placed = e.getBlock().getType();
+				if ((m == null || (!m.isSolid() && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot()
+					&& !placed.equals(Materials.AIR)) {
+					int localPing = ping;
+					if (localPing == 0)
+						localPing = 1;
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, Scaffold.this,
+						UniversalUtils.parseInPorcent(120 / localPing), "below",
+						"Item in hand: " + m.getId() + " Block placed: " + placed.getId(),
+						hoverMsg("main", "%item%", m.getId().toLowerCase(Locale.ROOT), "%block%",
+							placed.getId().toLowerCase(Locale.ROOT)));
+					if (isSetBack() && mayCancel) {
+						p.getInventory().addItem(ItemBuilder.Builder(placed).build());
+						e.getBlock().setType(Materials.AIR);
 					}
 				}
-			}, 50);
+			}, 1);
 		}
 		if(checkActive("distance")) {
 			Block place = e.getBlock();

@@ -39,6 +39,7 @@ import com.elikill58.negativity.sponge8.impl.plugin.SpongeExternalPlugin;
 import com.elikill58.negativity.sponge8.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.account.SimpleAccountManager;
@@ -62,6 +63,7 @@ public class SpongeAdapter extends Adapter {
 	private final NegativityTranslationProviderFactory translationProviderFactory;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpongeNegativity::sendPluginMessage);
 	private final SpongeItemRegistrar itemRegistrar = new SpongeItemRegistrar();
+	private final Scheduler scheduler;
 	
 	public SpongeAdapter(SpongeNegativity plugin) {
 		this.plugin = plugin;
@@ -70,6 +72,7 @@ public class SpongeAdapter extends Adapter {
 		
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(plugin.getConfigDir().resolve("lang"), "Negativity", "CheatHover");
 		this.serverVersion = Version.getVersionByName(getVersion());
+		this.scheduler = new SpongeScheduler(plugin.getContainer());
 	}
 	
 	@Override
@@ -276,5 +279,10 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public void runSync(Runnable call) {
 		Sponge.getServer().getScheduler().submit(Task.builder().plugin(this.plugin.getContainer()).execute(call).build());
+	}
+	
+	@Override
+	public Scheduler getScheduler() {
+		return this.scheduler;
 	}
 }

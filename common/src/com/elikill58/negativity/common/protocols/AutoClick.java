@@ -1,7 +1,5 @@
 package com.elikill58.negativity.common.protocols;
 
-import java.util.TimerTask;
-
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
@@ -14,6 +12,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.bypass.checkers.ItemUseBypass;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -29,25 +28,22 @@ public class AutoClick extends Cheat implements Listeners {
 	
 	public AutoClick() {
 		super(CheatKeys.AUTO_CLICK, CheatCategory.COMBAT, Materials.FISHING_ROD, true, true, "auto-click", "autoclic");
-		new java.util.Timer().scheduleAtFixedRate(new TimerTask() {
-			@Override
-			public void run() {
-				for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
-					NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-					NegativityAccount account = np.getAccount();
-					if (account.getMostClicksPerSecond() < np.ACTUAL_CLICK) {
-						account.setMostClicksPerSecond(np.ACTUAL_CLICK);
-					}
-					recordData(p.getUniqueId(), CLICKS, np.ACTUAL_CLICK);
-					np.LAST_CLICK = np.ACTUAL_CLICK;
-					np.ACTUAL_CLICK = 0;
-					if (np.SEC_ACTIVE < 2) {
+		Scheduler.getInstance().runRepeating(() -> {
+			for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
+				NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+				NegativityAccount account = np.getAccount();
+				if (account.getMostClicksPerSecond() < np.ACTUAL_CLICK) {
+					account.setMostClicksPerSecond(np.ACTUAL_CLICK);
+				}
+				recordData(p.getUniqueId(), CLICKS, np.ACTUAL_CLICK);
+				np.LAST_CLICK = np.ACTUAL_CLICK;
+				np.ACTUAL_CLICK = 0;
+				if (np.SEC_ACTIVE < 2) {
 						np.SEC_ACTIVE++;
 						return;
 					}
-				}
 			}
-		}, 1000, 1000);
+		}, 20, 20);
 	}
 	
 	@EventListener

@@ -59,7 +59,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
 	public static boolean hasBypass = false, isCraftBukkit = false;
-	private BukkitTask invTimer = null, timeTimeBetweenAlert = null, packetTimer = null, runSpawnFakePlayer = null;
+	private BukkitTask clickTimer = null, invTimer = null, pendingAlertsTimer = null, packetTimer = null, runSpawnFakePlayer = null;
 	public static String CHANNEL_NAME_FML = "";
 	private NegativityPacketManager packetManager;
 	
@@ -132,15 +132,13 @@ public class SpigotNegativity extends JavaPlugin {
 		
 		NegativityAccountStorage.setDefaultStorage("file");
 
-		getServer().getScheduler().runTaskTimer(this, new ClickManagerTimer(), 20, 20);
+		clickTimer = getServer().getScheduler().runTaskTimer(this, new ClickManagerTimer(), 20, 20);
 		invTimer = getServer().getScheduler().runTaskTimer(this, new ActualizeInvTimer(), 5, 5);
 		packetTimer = getServer().getScheduler().runTaskTimer(this, new AnalyzePacketTimer(), 20, 20);
 		runSpawnFakePlayer = getServer().getScheduler().runTaskTimer(this, new SpawnFakePlayerTimer(), 20, 20 * 60 * 10);
 		if(Negativity.timeBetweenAlert != -1) {
-			int timeTick = (Negativity.timeBetweenAlert / 1000) * 20;
-			if(timeTimeBetweenAlert != null)
-				timeTimeBetweenAlert.cancel();
-			timeTimeBetweenAlert = getServer().getScheduler().runTaskTimer(this, new PendingAlertsTimer(), timeTick, timeTick);
+			int timeTick = Negativity.timeBetweenAlert / 50;
+			pendingAlertsTimer = getServer().getScheduler().runTaskTimer(this, new PendingAlertsTimer(), 20, timeTick);
 		}
 		trySendProxyPing();
 	}
@@ -219,10 +217,13 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
+		clickTimer.cancel();
 		invTimer.cancel();
 		packetTimer.cancel();
 		runSpawnFakePlayer.cancel();
-		timeTimeBetweenAlert.cancel();
+		if (pendingAlertsTimer != null) {
+			pendingAlertsTimer.cancel();
+		}
 		packetManager.getPacketManager().clear();
 	}
 	

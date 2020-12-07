@@ -73,27 +73,39 @@ public class Speed extends Cheat implements Listeners {
 			np.BYPASS_SPEED--;
 			return;
 		}
-		Location loc = p.getLocation().clone(), locDown = loc.clone().sub(0, 1, 0);
+		Location loc = p.getLocation().clone();
+		Block under = loc.clone().sub(0, 1, 0).getBlock();
+		Location locDown = under.getLocation();
+		boolean onGround = p.isOnGround();
+		double dif = to.getY() - from.getY();
 		boolean hasIceBelow = locDown.getBlock().getType().getId().contains("ICE");
 		if(hasIceBelow)
 			np.booleans.set("ALL", "speed-has-ice", hasIceBelow);
 		else
 			hasIceBelow = np.booleans.get("ALL", "speed-has-ice", false);
-		Block under = loc.clone().sub(0, 1, 0).getBlock();
-		if (hasMaterialsAround(loc.getBlock().getRelative(BlockFace.UP).getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| hasMaterialsAround(loc.clone().add(0, 2, 0), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| hasMaterialsAround(under.getLocation(), "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
+		
+		if(onGround && dif < 0) {
+			double firstIce = np.doubles.get("ALL", "speed-has-ice-first", 4d);
+			if(firstIce <= 0) {
+				np.booleans.remove("ALL", "speed-has-ice");
+				np.booleans.remove("ALL", "speed-has-ice-first");
+			} else {
+				np.doubles.set("ALL", "speed-has-ice-first", firstIce - 1);
+			}
+		}
+		
+		if (hasIceBelow || hasMaterialsAround(loc.getBlock().getRelative(BlockFace.UP).getLocation(), "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| hasMaterialsAround(loc.clone().add(0, 2, 0), "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+				|| hasMaterialsAround(under.getLocation(), "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
 		double amplifierSpeed = p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED, 0, 0)).getAmplifier();
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
-		double dif = to.getY() - from.getY();
 		double distance = from.distance(to);
-		boolean mayCancel = false, onGround = p.isOnGround();
+		boolean mayCancel = false;
 		if(onGround && checkActive("distance-ground") && amplifierSpeed < 5) {
 			double walkSpeed = (p.getWalkSpeed() - getEssentialsRealMoveSpeed(p)); // TODO rewrite without converting to essentials values
 			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
-			if((((walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D))) || walkTest)
-					&& !hasIceBelow){
+			if(((walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D))) || walkTest){
 				int porcent = UniversalUtils.parseInPorcent(y * 50 + UniversalUtils.getPorcentFromBoolean(walkTest, 20)
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
@@ -105,12 +117,12 @@ public class Speed extends Cheat implements Listeners {
 		if(onGround && checkActive("calculated")) {
 			double calculatedSpeedWithoutY = getSpeed(from, to), velocity = p.getVelocity().getY();
 			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && velocity > 0.0
-					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR") && !hasIceBelow) { // "+0.01" if to prevent lag"
+					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated",
 						"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + velocity);
 			}
 		}
-		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10)) >= 0.85D) {
+		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10)) >= 0.85D && !hasIceBelow) {
 			mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(y * 100 * 2), "distance-jumping",
 					"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed()
@@ -147,17 +159,6 @@ public class Speed extends Cheat implements Listeners {
 						this, 95, "walk-speed", "Differences : " + dif + ", distance: " + String.format("%.4f", distance) + ", withSpeed: "
 						+ String.format("%.4f", distanceWithSpeed) + ", speedAmplifier: " + amplifierSpeed
 						+ ", walkSpeed: " + p.getWalkSpeed() + ", onGround: " + onGround);
-			}
-		}
-		if(onGround) {
-			if(dif < 0 && hasIceBelow) {
-				double firstIce = np.doubles.get("ALL", "speed-has-ice-first", 4d);
-				if(firstIce <= 0) {
-					np.booleans.remove("ALL", "speed-has-ice");
-					np.booleans.remove("ALL", "speed-has-ice-first");
-				} else {
-					np.doubles.set("ALL", "speed-has-ice-first", firstIce - 1);
-				}
 			}
 		}
 		if (mayCancel && isSetBack())

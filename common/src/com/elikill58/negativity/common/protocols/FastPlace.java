@@ -39,7 +39,7 @@ public class FastPlace extends Cheat implements Listeners {
 			return;
 		
 		int ping = p.getPing();
-		long last = System.currentTimeMillis() - np.LAST_BLOCK_PLACE, lastPing = last - (ping / 9);
+		long last = System.currentTimeMillis() - np.LAST_BLOCK_PLACE, lastPing = last + ((ping - 50) / 10);
 		if(last < 10000) // last block is too old
 			recordData(p.getUniqueId(), TIME_PLACE, last);
 		np.LAST_BLOCK_PLACE = System.currentTimeMillis();

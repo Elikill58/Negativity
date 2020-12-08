@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.impl.item;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.StringJoiner;
 
@@ -14,17 +15,24 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 
 	@Override
 	public synchronized com.elikill58.negativity.api.item.Material get(String id, String... alias) {
-		return cache.computeIfAbsent(id, key -> new SpigotMaterial(getMaterial(key, alias)));
+		return cache.computeIfAbsent(id, key -> new SpigotMaterial(getMaterial(key, alias), id));
 	}
 	
 	private org.bukkit.Material getMaterial(String id, String... alias){
 		Material idM = get(id);
 		if(idM != null)
 			return idM;
+
 		for(String s : alias) {
 			Material m = get(s);
 			if(m != null)
 				return m;
+		}
+		if(id.contains("_")) {
+			for(String types : Arrays.asList("WOOL", "STAINED_CLAY", "CARPET", "STAINED_GLASS_PANE", "BANNER", "WOOD")) {
+				if(id.contains(types))
+					return get(types);
+			}
 		}
 		/*org.bukkit.Material type = org.bukkit.Material.getMaterial(id.toUpperCase());
 		if(type != null)

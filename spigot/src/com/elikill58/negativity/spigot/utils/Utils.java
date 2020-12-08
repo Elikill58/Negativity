@@ -14,7 +14,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.impl.item.SpigotMaterial;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.base.Preconditions;
@@ -104,11 +106,20 @@ public class Utils {
 					// method not found because of too recent version
 				}
 			}
+			byte b = splitted.length > 1 ? Byte.parseByte(s.split(":")[1]) : -1;
+			if(temp == null) {
+				com.elikill58.negativity.api.item.Material ownMaterial = ItemRegistrar.getInstance().get(s);
+				if(ownMaterial != null) {
+					temp = (Material) ownMaterial.getDefault();
+					b = ((SpigotMaterial) ownMaterial).getDamage();
+				}
+			}
+			
 			if(temp == null) {
 				SpigotNegativity.getInstance().getLogger().warning("Error while creating item. Cannot find item for " + s + ".");
 				return null;
 			}
-			return splitted.length > 1 ? new ItemStack(temp, 1, Byte.parseByte(s.split(":")[1])) : new ItemStack(temp);
+			return b != -1 ? new ItemStack(temp, 1, b) : new ItemStack(temp);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

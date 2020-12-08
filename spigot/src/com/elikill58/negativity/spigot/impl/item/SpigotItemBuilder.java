@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -26,9 +27,17 @@ public class SpigotItemBuilder extends ItemBuilder {
     private ItemStack itemStack;
     private ItemMeta itemMeta;
 
-    public SpigotItemBuilder(Material type) {
+    @SuppressWarnings("deprecation")
+	public SpigotItemBuilder(Material type) {
     	this.itemStack = new ItemStack((org.bukkit.Material) type.getDefault());
+    	byte damage = ((SpigotMaterial) type).getDamage();
     	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
+    	if(!Version.getVersion().isNewerOrEquals(Version.V1_13) && damage > 0) {
+    		if(itemMeta instanceof BannerMeta)
+    			((BannerMeta) this.itemMeta).setBaseColor(org.bukkit.DyeColor.getByDyeData(damage));
+    		else
+    			this.itemStack.setDurability(damage);
+    	}
     }
 
     public SpigotItemBuilder(String material) {

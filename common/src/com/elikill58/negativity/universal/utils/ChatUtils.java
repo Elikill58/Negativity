@@ -103,40 +103,20 @@ public class ChatUtils {
 		String stringTime = "", timeKey = "";
 		for (String c : duration.split("")) {
 			if (UniversalUtils.isInteger(c)) {
-				if(!timeKey.isEmpty()) {
-					switch (c) {
-						case "s":
-							time += Integer.parseInt(stringTime) * SECONDS;
-							break;
-						case "m":
-							time += Integer.parseInt(stringTime) * MINUTES;
-							break;
-						case "h":
-							time += Integer.parseInt(stringTime) * HOURS;
-							break;
-						case "j":
-						case "d":
-							time += Integer.parseInt(stringTime) * DAYS;
-							break;
-						case "mu":
-						case "mo":
-							time += Integer.parseInt(stringTime) * MONTHS;
-							break;
-						case "y":
-						case "yo":
-							time += Integer.parseInt(stringTime) * YEARS;
-							break;
-						default:
-							throw new IllegalArgumentException("Unknown time marker '" + c + "'");
-					}
-					timeKey = "";
+				if (!timeKey.isEmpty()) {
+					time += getTimeForMarker(timeKey, Long.parseLong(stringTime));
 					stringTime = "";
+					timeKey = "";
 				}
-				
 				stringTime += c;
 			} else {
 				timeKey += c;
 			}
+		}
+		if (!timeKey.isEmpty()) {
+			time += getTimeForMarker(timeKey, Long.parseLong(stringTime));
+			stringTime = "";
+			timeKey = "";
 		}
 
 		if (!stringTime.isEmpty()) {
@@ -144,5 +124,36 @@ public class ChatUtils {
 		}
 
 		return time;
+	}
+
+	private static long getTimeForMarker(String marker, long time) {
+		switch (marker) {
+		case "s":
+		case "sec":
+		case "seconds":
+			return time * SECONDS;
+		case "m":
+		case "min":
+		case "minutes":
+			return time * MINUTES;
+		case "h":
+		case "hour":
+		case "hours":
+			return time * HOURS;
+		case "j":
+		case "d":
+		case "days":
+			return time * DAYS;
+		case "mu":
+		case "mo":
+		case "months":
+			return time * MONTHS;
+		case "y":
+		case "yo":
+		case "years":
+			return time * YEARS;
+		default:
+			throw new IllegalArgumentException("Unknown time marker '" + marker + "'");
+		}
 	}
 }

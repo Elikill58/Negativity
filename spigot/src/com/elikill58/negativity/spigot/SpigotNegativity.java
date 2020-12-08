@@ -97,8 +97,13 @@ public class SpigotNegativity extends JavaPlugin {
 		Negativity.loadNegativity();
 		SpigotFakePlayer.loadClass();
 
-		new Metrics(this, 1743)
-				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
+		try {
+			Class.forName("com.google.gson.JsonObject");
+			new Metrics(this, 1743)
+					.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
+		} catch (ClassNotFoundException e) {
+			// on 1.7, there isn't any gson feature
+		}
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersListeners(), this);

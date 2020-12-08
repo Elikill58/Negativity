@@ -1,6 +1,8 @@
 package com.elikill58.negativity.spigot.impl.entity;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.LivingEntity;
 
 import com.elikill58.negativity.api.entity.AbstractEntity;
@@ -50,11 +52,14 @@ public class SpigotEntity<E extends Entity> extends AbstractEntity {
 
 	@Override
 	public void sendMessage(String msg) {
-		entity.sendMessage(msg);
+		if(entity instanceof CommandSender)
+			((CommandSender) entity).sendMessage(msg);
 	}
 
 	@Override
 	public String getName() {
+		if(entity instanceof HumanEntity) // prevent 1.7 error
+			return ((HumanEntity) entity).getName();
 		return entity.getName();
 	}
 	

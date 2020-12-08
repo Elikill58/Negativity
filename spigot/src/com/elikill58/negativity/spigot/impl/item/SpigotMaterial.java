@@ -16,23 +16,25 @@ public class SpigotMaterial extends Material {
 	
 	private byte getDamageWithId(String id) {
 		// STAINED_CLAY = TERRACOTA for 1.12 and lower
-		for(String types : Arrays.asList("_WOOL", "_STAINED_CLAY", "_CARPET", "_STAINED_GLASS_PANE", "_BANNER"))
+		for(String types : Arrays.asList("_WOOL", "_STAINED_CLAY", "_CARPET", "_STAINED_GLASS_PANE"))
 			if(id.endsWith(types))
-				return getForWoolTerracotaGlassCarpet(id.replace(types, ""));
+				return getByteForWoolTerracotaGlassCarpet(id.replace(types, ""));
+		if(id.endsWith("_BANNER"))
+			return getByteForBanner(id.replace("_BANNER", ""));
 		if(id.endsWith("_WOOD"))
 			return getForWood(id.replace("_WOOD", ""));
 		return -1;
 	}
 	
 	/**
-	 * Get the data value for wool color<p>
+	 * Get the data value for wool, terracota, glass and carpet color<p>
 	 * Source:<p>
 	 * https://minecraft.gamepedia.com/Java_Edition_data_value/Pre-flattening#Wool.2C_terracotta.2C_stained_Glass_and_carpet
 	 * 
 	 * @param color the color name (in upper case)
 	 * @return the data value in byte
 	 */
-	private byte getForWoolTerracotaGlassCarpet(String color) {
+	private byte getByteForWoolTerracotaGlassCarpet(String color) {
 		switch (color) {
 		case "ORANGE":
 			return 1;
@@ -64,11 +66,54 @@ public class SpigotMaterial extends Material {
 			return 14;
 		case "BLACK":
 			return 15;
-		default:
+		default: // white color
 			return 0;
 		}
 	}
 
+	/**
+	 * Get the data value for banner color<p>
+	 * 
+	 * @param color the color name (in upper case)
+	 * @return the data value in byte
+	 */
+	private byte getByteForBanner(String color) {
+		switch (color) {
+		case "WHITE":
+			return 15;
+		case "ORANGE":
+			return 14;
+		case "MAGENTA":
+			return 13;
+		case "LIGHT_BLUE":
+			return 12;
+		case "YELLOW":
+			return 11;
+		case "LIME":
+			return 10;
+		case "PINK":
+			return 9;
+		case "GRAY":
+			return 8;
+		case "LIGHT_GRAY":
+			return 7;
+		case "CYAN":
+			return 6;
+		case "PURPLE":
+			return 5;
+		case "BLUE":
+			return 4;
+		case "BROWN":
+			return 3;
+		case "GREEN":
+			return 2;
+		case "RED":
+			return 1;
+		default: // black color
+			return 0;
+		}
+	}
+	
 	/**
 	 * Get the data value for wood type<p>
 	 * Source:<p>

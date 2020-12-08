@@ -37,7 +37,7 @@ public class KickInventory extends AbstractInventory<KickHolder> {
 		Player cible = (Player) args[0];
 		Inventory inv = Inventory.createInventory("Kick", UniversalUtils.getMultipleOf(Sanction.getMaxSlot(sanctions) + 2, 9, 1, 54), new KickHolder(cible));
 		sanctions.stream().filter((b) -> b.hasPermission(p)).forEach((kick) -> {
-			inv.set(kick.getSlot(), kick.getItem());
+			inv.set(kick.getSlot(), kick.getItem(cible));
 		});
 		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage("inventory.close")).build());
 		p.openInventory(inv);

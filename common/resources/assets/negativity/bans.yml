@@ -111,10 +111,73 @@ alt:
 
 
 sanctions:
-  cheat:
-    name: "&4Cheat"
-    material: RED_BANNER
+  ads:
+    name: "&1Ads &6(7 days)"
+    material: BLUE_BANNER
+    slot: 0
+    message: "&6%name% &ahave been banned for %reason%"
+    command: "nban %name% 7d Ads"
+    permission: "negativity.sanction.ads"
+    lore:
+    - "&7Ban %name% for Ads"
+    - "&7During 7 days"
+  racism:
+    name: "&9Racism &6(7 days)"
+    material: BLUE_BANNER
     slot: 1
     message: "&6%name% &ahave been banned for %reason%"
-    command: "nban %name% 30d Cheat."
+    command: "nban %name% 7d Cheat"
+    permission: "negativity.sanction.racism"
+    lore:
+    - "&7Ban %name% for Racism"
+    - "&7During 30 days"
+  dirty:
+    name: "&8Dirty (Skin or Build) &6(Definitively)"
+    material: BROWN_BANNER
+    slot: 2
+    message: "&6%name% &ahave been banned for %reason%"
+    command: "nban %name% def Dirty"
+    permission: "negativity.sanction.dirty"
+    lore:
+    - "&7Ban %name% for dirty skin and/or build"
+    - "&7Definitly"
+  irl_threat:
+    name: "&6IRL threat &6(1 year)"
+    material: ORANGE_BANNER
+    slot: 9
+    message: "&6%name% &ahave been banned for %reason%"
+    command: "nban %name% 1y Cheat"
+    permission: "negativity.sanction.irl_threat"
+    lore:
+    - "&7Ban %name% for IRL threat"
+    - "&7During 1 year"
+  cheat:
+    name: "&4Cheat &6(30d)"
+    material: RED_BANNER
+    slot: 10
+    message: "&6%name% &ahave been banned for %reason%"
+    command: "nban %name% 30d Cheat"
     permission: "negativity.sanction.cheat"
+    lore:
+    - "&7Ban %name% for cheat"
+    - "&7During 30 days"
+  cheat_confession:
+    name: "&4Cheat confession &6(2 months)"
+    material: RED_BANNER
+    slot: 11
+    message: "&6%name% &ahave been banned for %reason%"
+    command: "nban %name% 2mo Cheat confession"
+    permission: "negativity.sanction.cheat_confession"
+    lore:
+    - "&7Ban %name% for cheat confession"
+    - "&7During 2 months"
+  hack:
+    name: "&4Hack &6(Definitively)"
+    material: BLACK_BANNER
+    slot: 12
+    message: "&6%name% &ahave been banned for %reason%"
+    command: "nban %name% def Hack"
+    permission: "negativity.sanction.hack"
+    lore:
+    - "&7Ban %name% for Hack"
+    - "&7Definitly"

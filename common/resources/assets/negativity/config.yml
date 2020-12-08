@@ -242,16 +242,24 @@ kicks:
     material: YELLOW_BANNER
     # the slot of item in inventory
     slot: 0
-    # the message sent to player when report player
-    message: "&6%name% &ahave been reported for %reason%"
+    # the message sent to player which use the inventory
+    message: "&6%name% &ahave been kicked for %reason%"
+    # the command to run when mod click on the item
     command: "nkick %name% Spam"
     # "permission" is not necessary. If you don't set it, everyone will be able to use it.
   insult:
     name: "&cInsult"
-    material: RED_BANNER
+    material: ORANGE_BANNER
     slot: 1
-    message: "&6%name% &ahave been reported for %reason%"
+    message: "&6%name% &ahave been kicked for %reason%"
     command: "nkick %name% Insult"
+    permission: "negativity.report.insult"
+  invalid_name:
+    name: "&cInvalid Name"
+    material: RED_BANNER
+    slot: 2
+    message: "&6%name% &ahave been kicked for %reason%"
+    command: "nkick %name% Invalid Name"
     permission: "negativity.report.insult"
 
 alert:

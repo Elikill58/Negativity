@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge8;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.file.Path;
@@ -10,12 +11,15 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.command.Command;
 import org.spongepowered.api.config.ConfigDir;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+import org.spongepowered.api.event.EventManager;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.lifecycle.ConstructPluginEvent;
 import org.spongepowered.api.event.lifecycle.LoadedGameEvent;
 import org.spongepowered.api.event.lifecycle.RefreshGameEvent;
+import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.event.lifecycle.StartingEngineEvent;
 import org.spongepowered.api.event.lifecycle.StoppingEngineEvent;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
@@ -25,11 +29,18 @@ import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.jvm.Plugin;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.common.timers.ClickManagerTimer;
 import com.elikill58.negativity.common.timers.PendingAlertsTimer;
 import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
+import com.elikill58.negativity.sponge8.listeners.BlockListeners;
+import com.elikill58.negativity.sponge8.listeners.EntityListeners;
+import com.elikill58.negativity.sponge8.listeners.FightManager;
+import com.elikill58.negativity.sponge8.listeners.InventoryListeners;
+import com.elikill58.negativity.sponge8.listeners.NegativityCommandWrapper;
+import com.elikill58.negativity.sponge8.listeners.PlayersListeners;
 import com.elikill58.negativity.sponge8.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
@@ -40,6 +51,7 @@ import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
 
 @Plugin("negativity")
@@ -73,6 +85,13 @@ public class SpongeNegativity {
 		Negativity.loadNegativity();
 		NegativityAccountStorage.setDefaultStorage("file");
 		
+		EventManager eventManager = Sponge.getEventManager();
+		eventManager.registerListeners(this.container, new FightManager());
+		eventManager.registerListeners(this.container, new BlockListeners());
+		eventManager.registerListeners(this.container, new EntityListeners());
+		eventManager.registerListeners(this.container, new InventoryListeners());
+		eventManager.registerListeners(this.container, new PlayersListeners());
+		
 		schedule(new ClickManagerTimer(), 20, null);
 		schedule(new ActualizeInvTimer(), 5, null);
 		schedule(new AnalyzePacketTimer(), 20, "negativity-packets");
@@ -98,6 +117,11 @@ public class SpongeNegativity {
 	}
 	
 	@Listener
+	public void onCommandRegistration(RegisterCommandEvent<Command.Raw> event) {
+		loadCommands(event);
+	}
+	
+	@Listener
 	public void onStoppingEngine(StoppingEngineEvent<Server> event) {
 		NegativityPlayer.getAllPlayers().values().forEach(NegativityPlayer::destroy);
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
@@ -110,6 +134,38 @@ public class SpongeNegativity {
 			taskBuilder.name(name);
 		}
 		Sponge.getServer().getScheduler().submit(taskBuilder.build());
+	}
+	
+	private void loadCommands(RegisterCommandEvent<Command.Raw> event) {
+		// TODO support commands reloading
+		registerCommand(event, "negativity", "neg", "n");
+		
+		Configuration config = Adapter.getAdapter().getConfig();
+		if (config.getBoolean("commands.mod")) {
+			registerCommand(event, "nmod", "mod");
+		}
+		if (config.getBoolean("commands.kick")) {
+			registerCommand(event, "nkick", "kick");
+		}
+		if (config.getBoolean("commands.lang")) {
+			registerCommand(event, "nlang", "lang");
+		}
+		if (config.getBoolean("commands.report")) {
+			registerCommand(event, "nreport", "report");
+		}
+		
+		// BanManager#init is not called yet, so we have to work around it
+		Configuration banConfig = UniversalUtils.loadConfig(new File(Adapter.getAdapter().getDataFolder(), "bans.yml"), "bans.yml");
+		if (banConfig.getBoolean("commands.ban")) {
+			registerCommand(event, "nban", "negban", "ban");
+		}
+		if (banConfig.getBoolean("commands.unban")) {
+			registerCommand(event, "nunban", "negunban", "unban");
+		}
+	}
+	
+	private void registerCommand(RegisterCommandEvent<Command.Raw> event, String command, String... alias) {
+		event.register(this.container, new NegativityCommandWrapper(command), command, alias);
 	}
 	
 	public Logger getLogger() {

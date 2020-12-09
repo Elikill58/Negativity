@@ -161,7 +161,7 @@ public abstract class Location implements Cloneable, NegativityObject {
 		if ((o.getWorld() == null) || (getWorld() == null)) {
 			throw new IllegalArgumentException("Cannot measure distance to a null world");
 		}
-		if (o.getWorld().getName() != getWorld().getName()) {
+		if (!o.getWorld().getName().equals(getWorld().getName())) {
 			throw new IllegalArgumentException(
 					"Cannot measure distance between " + getWorld().getName() + " and " + o.getWorld().getName());
 		}

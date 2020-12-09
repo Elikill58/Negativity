@@ -1,10 +1,14 @@
 package com.elikill58.negativity.sponge8.impl.inventory;
 
 import java.util.UUID;
+import java.util.function.Supplier;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.item.inventory.Container;
+import org.spongepowered.api.item.inventory.ContainerType;
+import org.spongepowered.api.item.inventory.ContainerTypes;
 import org.spongepowered.api.item.inventory.type.CarriedInventory;
+import org.spongepowered.api.item.inventory.type.ViewableInventory;
 
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryType;
@@ -32,9 +36,9 @@ public class SpongeInventory extends Inventory {
 	
 	public SpongeInventory(String inventoryName, int size, NegativityHolder holder) {
 		this.holder = new SpongeNegativityHolder(holder);
-		// TODO set inventory name
-		this.inv = org.spongepowered.api.item.inventory.Inventory.builder()
-			.slots(size)
+		// TODO set inventory name when possible
+		this.inv = ViewableInventory.builder()
+			.type(containerTypeForSize(size))
 			.completeStructure()
 			.carrier(this.holder)
 			.identity(NEGATIVITY_INV_ID)
@@ -90,5 +94,23 @@ public class SpongeInventory extends Inventory {
 	public Object getDefault() {
 		return inv;
 	}
-	
+
+	private static Supplier<ContainerType> containerTypeForSize(int size) {
+		switch (size / 9) {
+			case 1:
+				return ContainerTypes.GENERIC_9x1;
+			case 2:
+				return ContainerTypes.GENERIC_9x2;
+			case 3:
+				return ContainerTypes.GENERIC_9x3;
+			case 4:
+				return ContainerTypes.GENERIC_9x4;
+			case 5:
+				return ContainerTypes.GENERIC_9x5;
+			case 6:
+				return ContainerTypes.GENERIC_9x6;
+			default:
+				throw new IllegalArgumentException("Size (" + size + ") does not fit a generic ContainerType");
+		}
+	}
 }

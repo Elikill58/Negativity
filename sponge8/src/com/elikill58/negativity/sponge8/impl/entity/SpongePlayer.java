@@ -191,8 +191,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public ItemStack getItemInHand() {
-		org.spongepowered.api.item.inventory.ItemStack item = entity.getItemInHand(HandTypes.MAIN_HAND);
-		return item.isEmpty() ? null : new SpongeItemStack(item);
+		return new SpongeItemStack(entity.getItemInHand(HandTypes.MAIN_HAND));
 	}
 	
 	@Override
@@ -365,8 +364,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public ItemStack getItemInOffHand() {
-		org.spongepowered.api.item.inventory.ItemStack item = entity.getItemInHand(HandTypes.OFF_HAND);
-		return item.isEmpty() ? null : new SpongeItemStack(item);
+		return new SpongeItemStack(entity.getItemInHand(HandTypes.OFF_HAND));
 	}
 	
 	@Override

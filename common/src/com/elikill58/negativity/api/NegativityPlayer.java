@@ -1,8 +1,8 @@
 package com.elikill58.negativity.api;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -351,14 +351,10 @@ public class NegativityPlayer {
 		if (proof.isEmpty())
 			return;
 		try {
-			File temp = new File(Adapter.getAdapter().getDataFolder().getAbsolutePath() + File.separator
-					+ "user" + File.separator + "proof" + File.separator + getUUID() + ".txt");
-			if (!temp.exists())
-				temp.createNewFile();
-			String msg = "";
-			for (String s : proof)
-				msg += s + "\n";
-			Files.write(temp.toPath(), msg.getBytes(), StandardOpenOption.APPEND);
+			Path proofDir = Adapter.getAdapter().getDataFolder().getAbsoluteFile().toPath().resolve("user").resolve("proof");
+			Path proofFile = proofDir.resolve(getUUID() + ".txt");
+			Files.createDirectories(proofDir);
+			Files.write(proofFile, (String.join("\n", proof) + '\n').getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
 			proof.clear();
 		} catch (IOException e) {
 			e.printStackTrace();

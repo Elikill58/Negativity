@@ -93,13 +93,13 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			}
 			UUID askerUUID = (sender instanceof Player ? ((Player) sender).getUniqueId() : CONSOLE);
 			VerificationManager.create(askerUUID, target.getUniqueId(), new Verificator(nTarget, sender.getName(), cheatsToVerify));
-			Scheduler.getInstance().runRepeating(() -> {
+			Scheduler.getInstance().runDelayed(() -> {
 				Verificator verif = VerificationManager.getVerificationsFrom(target.getUniqueId(), askerUUID).get();
 				verif.generateMessage();
 				verif.getMessages().forEach((s) -> sender.sendMessage(Utils.coloredMessage("&a[&2Verif&a] " + s)));
 				verif.save();
 				VerificationManager.remove(askerUUID, target.getUniqueId());
-			}, time * 20, "verif-wait-" + sender.getName());
+			}, time * 20);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("alert")) {
 			if (!(sender instanceof Player)) {

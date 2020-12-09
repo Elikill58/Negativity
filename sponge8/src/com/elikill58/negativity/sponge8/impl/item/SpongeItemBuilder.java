@@ -38,13 +38,13 @@ public class SpongeItemBuilder extends ItemBuilder {
 	
 	@Override
 	public ItemBuilder displayName(String displayName) {
-		item.offer(Keys.DISPLAY_NAME, LegacyComponentSerializer.legacyAmpersand().deserialize(displayName));
+		item.offer(Keys.CUSTOM_NAME, LegacyComponentSerializer.legacyAmpersand().deserialize(displayName));
 		return this;
 	}
 	
 	@Override
 	public ItemBuilder resetDisplayName() {
-		item.remove(Keys.DISPLAY_NAME);
+		item.remove(Keys.CUSTOM_NAME);
 		return this;
 	}
 	

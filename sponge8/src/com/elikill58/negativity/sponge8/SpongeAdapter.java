@@ -97,9 +97,8 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public void debug(String msg) {
-		if (UniversalUtils.DEBUG) {
+		if(getConfig().getBoolean("debug", false))
 			this.logger.info(msg);
-		}
 	}
 	
 	@Override

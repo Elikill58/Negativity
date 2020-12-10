@@ -58,7 +58,7 @@ public class VelocityAdapter extends ProxyAdapter {
 
 	@Override
 	public void debug(String msg) {
-		if(UniversalUtils.DEBUG)
+		if(getConfig().getBoolean("debug", false))
 			getLogger().info(msg);
 	}
 

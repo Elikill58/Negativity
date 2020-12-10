@@ -50,7 +50,7 @@ public class UniversalUtils {
 
 	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	public static final String BUNDLED_ASSETS_BASE = "/assets/negativity/";
-	public static boolean HAVE_INTERNET = true, DEBUG = false;
+	public static boolean HAVE_INTERNET = true;
 
 	public static int getMultipleOf(int i, int multiple, int more) {
 		return getMultipleOf(i, multiple, more, -1);

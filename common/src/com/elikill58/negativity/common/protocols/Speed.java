@@ -79,18 +79,20 @@ public class Speed extends Cheat implements Listeners {
 		boolean onGround = p.isOnGround();
 		double dif = to.getY() - from.getY();
 		boolean hasIceBelow = locDown.getBlock().getType().getId().contains("ICE");
-		if(hasIceBelow)
-			np.booleans.set("ALL", "speed-has-ice", hasIceBelow);
-		else
+		if(hasIceBelow) {
+			np.booleans.set("ALL", "speed-has-ice", true);
+			Adapter.getAdapter().debug("Has ice below " + p.getName());
+		} else
 			hasIceBelow = np.booleans.get("ALL", "speed-has-ice", false);
 		
 		if(onGround && dif < 0) {
-			double firstIce = np.doubles.get("ALL", "speed-has-ice-first", 4d);
+			int firstIce = np.ints.get("ALL", "speed-has-ice-first", 4);
 			if(firstIce <= 0) {
+				Adapter.getAdapter().debug("Removing ice bypass for " + p.getName());
 				np.booleans.remove("ALL", "speed-has-ice");
-				np.booleans.remove("ALL", "speed-has-ice-first");
+				np.ints.remove("ALL", "speed-has-ice-first");
 			} else {
-				np.doubles.set("ALL", "speed-has-ice-first", firstIce - 1);
+				np.ints.set("ALL", "speed-has-ice-first", firstIce - 1);
 			}
 		}
 		

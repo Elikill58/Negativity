@@ -88,7 +88,7 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public void debug(String msg) {
-		if (UniversalUtils.DEBUG)
+		if (getConfig().getBoolean("debug", false))
 			pl.getLogger().info(msg);
 	}
 

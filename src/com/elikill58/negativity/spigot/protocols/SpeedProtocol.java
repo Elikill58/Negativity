@@ -28,6 +28,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 @SuppressWarnings("deprecation")
@@ -76,23 +77,36 @@ public class SpeedProtocol extends Cheat implements Listener {
 			return;
 		}
 		Location loc = p.getLocation().clone(), locDown = loc.clone().subtract(0, 1, 0);
-		boolean hasIceBelow = locDown.getBlock().getType().name().contains("ICE");
-		if(hasIceBelow)
-			np.contentBoolean.put("speed-has-ice", hasIceBelow);
-		else
+		double dif = to.getY() - from.getY();
+		boolean hasIceBelow = locDown.getBlock().getType().name().contains("ICE"), onGround = np.isOnGround();
+		if(hasIceBelow) {
+			np.contentBoolean.put("speed-has-ice", true);
+			Adapter.getAdapter().debug("Has ice below " + p.getName());
+		} else
 			hasIceBelow = np.contentBoolean.getOrDefault("speed-has-ice", false);
-		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
+		
+		if(onGround && dif < 0) {
+			int firstIce = np.contentInts.getOrDefault("speed-has-ice-first", 4);
+			if(firstIce <= 0) {
+				Adapter.getAdapter().debug("Removing ice bypass for " + p.getName());
+				np.contentBoolean.remove("speed-has-ice");
+				np.contentInts.remove("speed-has-ice-first");
+			} else {
+				np.contentInts.put("speed-has-ice-first", firstIce - 1);
+			}
+		}
+		
+		if (hasIceBelow || hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
 				|| hasMaterialsAround(loc.clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
 				|| hasMaterialsAround(loc.clone().add(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
 				|| hasMaterialsAround(loc.clone().add(0, 2, 0), "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET"))
 			return;
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		boolean mayCancel = false;
-		if (np.isOnGround()) {
+		if (onGround) {
 			double walkSpeed = SpigotNegativity.essentialsSupport ? (p.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : p.getWalkSpeed();
 			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
-			if(((SpigotNegativity.essentialsSupport ? (walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D)) : y >= 0.75D) || walkTest)
-					&& !hasIceBelow){
+			if((SpigotNegativity.essentialsSupport ? (walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D)) : y >= 0.75D) || walkTest){
 				int porcent = UniversalUtils.parseInPorcent(y * 50 + (walkTest ? 20 : 0)
 						+ (walkWithEssTest == walkTest ? 20 : 0) + (walkWithEssTest ? 10 : 0));
 				ReportType type = np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING;
@@ -102,21 +116,11 @@ public class SpeedProtocol extends Cheat implements Listener {
 			}
 			double calculatedSpeedWithoutY = Utils.getSpeed(from, to);
 			if(p.getWalkSpeed() < 1.0 && calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() < calculatedSpeedWithoutY && p.getVelocity().getY() > 0
-					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR") && !hasIceBelow) { // "+0.01" is to prevent lag
+					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" is to prevent lag
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, 90, "Calculated speed: "
 					+ calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().getY());
 			}
-			double dif = to.getY() - from.getY();
-			if(dif < 0 && hasIceBelow) {
-				double firstIce = np.contentDouble.getOrDefault("speed-has-ice-first", 4d);
-				if(firstIce <= 0) {
-					np.contentBoolean.remove("speed-has-ice");
-					np.contentBoolean.remove("speed-has-ice-first");
-				} else {
-					np.contentDouble.put("speed-has-ice-first", firstIce - 1);
-				}
-			}
-		} else if (!np.isOnGround()) {
+		} else {
 			for (Entity entity : p.getNearbyEntities(5, 5, 5))
 				if (entity instanceof Creeper || entity.getType().equals(EntityType.CREEPER))
 					return;

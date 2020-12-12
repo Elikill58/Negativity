@@ -65,14 +65,14 @@ public class ForceField extends Cheat implements Listeners {
 		if (!(e.getDamager() instanceof Player) || e.isCancelled())
 			return;
 		Player p = (Player) e.getDamager();
-		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this) || e.getEntity() == null)
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		boolean mayCancel = false;
 		Entity cible = e.getEntity();
-		if(checkActive("line-sight") && p.hasLineOfSight(cible)) {
+		if(checkActive("line-sight") && !p.hasLineOfSight(cible) && p != cible) {
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
 					"Hit " + cible.getType().name() + " but cannot see it",
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase(Locale.ROOT)));

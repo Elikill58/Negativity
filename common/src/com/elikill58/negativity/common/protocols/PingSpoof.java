@@ -25,7 +25,9 @@ public class PingSpoof extends Cheat implements Listeners {
 					@Override
 					public void run() {
 						for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
-							managePingSpoof(p, NegativityPlayer.getNegativityPlayer(p));
+							NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+							if(np.hasDetectionActive(PingSpoof.this))
+								managePingSpoof(p, np);
 						}
 					}
 				}, 6l, 6l);

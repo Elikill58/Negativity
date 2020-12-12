@@ -191,8 +191,6 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				p.sendMessage(ChatColor.RED + "Lot of detection are disabled if you're not on survival/adventure.");
 				hasBypass = true;
 			}
-			if(np.isInFight || p.getPing() > 150)
-				hasBypass = true;
 			if(arg.length > 1) {
 				Cheat c = Cheat.fromString(arg[1]);
 				if(c != null) {
@@ -242,8 +240,11 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 						Negativity.alertMod(ReportType.INFO, p, c, 100, "", "");
 				} else
 					p.sendMessage(ChatColor.RED + "Unknow cheat " + arg[1] + ".");
-			} else
+			} else {
+				if(np.isInFight || p.getPing() > 150)
+					hasBypass = true;
 				p.sendMessage(ChatColor.YELLOW + (np.isInFight ? "In fight, " : "") + "Ping: " + p.getPing() + "ms (by default, at 150ms you bypass it)");
+			}
 			p.sendMessage(hasBypass ? ChatColor.RED + "Warn: You have bypass, so you cannot be detected." : ChatColor.GREEN + "Good news: you can be detected !");
 			return true;
 		}

@@ -1,7 +1,7 @@
 # Simplify attack (multiple entities, attack without line of sight ...)
 
 # The display name of cheat
-exact_name: "NoWeb"
+exact_name: "ForceField"
 
 # enable/disable detection
 active: true

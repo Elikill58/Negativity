@@ -1,0 +1,14 @@
+not_permission=&cNu ai permisiunea să faci asta.
+
+alert=&a[&2Negativity&a] &c%name%&7 s-ar putea să folosească &c%cheat% &7(&2Fiabilitate: %reliability%%&7) !
+alert_multiple=&a[&2Negativity&a] &c%name%&7 s-ar putea să folosească &c%cheat% %nb%x &7(&Fiabilitate: %reliability%%&7) !
+alert_hover=&6Fiabilitate: %reliability%\nPing: %ping%
+alert_tp_info=&7Click pentru a te teleporta la &o%playername%
+report=&a[&2Negativity&a] &c%name% &7a fost raportat(ă) de &c%report% &7pentru &c%reason%
+report_hover=&7Click pentru a te teleporta la &c%playername%
+
+ban.kick_time=&cBanat de %reason% p %time% by %by%.
+ban.kick_def=&cBan definitly for %reason% by %by%.
+
+messages_update.backup_failed=&cBackup-ul mesajelor a eșuat: %error%
+messages_update.update_done=&eMesajele au fost actualizate și reîncărcate

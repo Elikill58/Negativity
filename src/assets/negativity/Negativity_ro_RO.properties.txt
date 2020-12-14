@@ -12,7 +12,7 @@ fake_entities=Jucători falși
 ban.kick_time=&cBanat pentru %reason% până la %time% de către %by%.
 ban.kick_def=&cBanat definitiv pentru %reason% de către %by%.
 ban.help=/nban <jucător> <def | time(ex: 2h5d)> <motiv> : Banează jucătorul specificat
-ban.well_ban=&a[&2Negativity&a]&c %name% well banned for %reason%.
+ban.well_ban=&a[&2Negativity&a]&c %name% a fost banat cu bine de către %reason%.
 
 lang.invalid_lang=%arg% este o limbă invalidă!
 lang.help=/nlang <new lang> : Schimbați limba implcită
@@ -21,13 +21,13 @@ lang.edit=Editați limba implictă
 lang.language_set=&a[&2Negativity&a] &7Mesajele de la Negativity sunt acum în Engleză
 lang.translation_disabled=&a[&2Negativity&a] &cTraducerile per-jucător sunt dezactivate
 
-unban.well_unban=&a[&2Negativity&a]&c %name% well unbanned.
+unban.well_unban=&a[&2Negativity&a]&c %name% a fost debanat cu bine.
 unban.not_banned=&c%name% nu este banat.
 unban.not_exact=%arg% nu este numele exact al unui jucător banat.
 unban.help=/nunban <player> : Unbanați jucătorul specificat
 
 kick.help=/nkick <player> <reason> : Dați afară jucătorului specificat
-kick.well_kick=&a[&2Negativity&a]&c %name% well kicked for %reason%.
+kick.well_kick=&a[&2Negativity&a]&c %name% dat afară cu bine pentru %reason%.
 kick.kicked=Ați fost dat afară de către %name% pentru %reason%
 kick.neg_kick=&a[&2Negativity&a]&c Ați fost dat afară din acest server pentru Cheating (%cheat%)
 

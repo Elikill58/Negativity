@@ -162,9 +162,10 @@ public class UniversalUtils {
 			return false;
 
 		Optional<String> optVer = getLatestVersion();
-		if (optVer.isPresent())
-			return version.equalsIgnoreCase(optVer.get());
-		else
+		if (optVer.isPresent()) {
+			String v = optVer.get();
+			return version.equalsIgnoreCase(v) && v.startsWith("2");
+		} else
 			return true;
 	}
 	

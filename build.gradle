@@ -4,7 +4,7 @@ plugins {
 }
 
 shadowJar {
-    archiveBaseName.set('negativity')
+    archiveBaseName.set('Negativity')
     archiveClassifier.set(null)
     mergeServiceFiles()
 }

@@ -28,9 +28,11 @@ dependencies {
 }
 
 processResources {
+    def props = [version: version]
+    inputs.properties(props)
     // Do not try to expand service files, they may contain a dollar sign to mark inner classes
     filesNotMatching('META-INF/services/*') {
-        expand(project.properties)
+        expand(props)
     }
 }
 

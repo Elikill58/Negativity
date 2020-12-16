@@ -65,7 +65,7 @@ public class Nuker extends Cheat implements Listeners {
 	}
 	
 	private boolean isInstantBlock(String m) {
-		return m.contains("SLIME") || m.contains("TNT") || m.contains("LEAVE") || m.contains("NETHERRACK");
+		return m.contains("SLIME") || m.contains("TNT") || m.contains("LEAVE") || m.contains("NETHERRACK") || m.contains("BAMBOO");
 	}
 
 	

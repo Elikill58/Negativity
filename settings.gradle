@@ -1,6 +1,6 @@
 rootProject.name = 'Negativity'
 
-include 'common', 'spigot', 'bungee', 'sponge', 'sponge8', 'velocity'
+include 'common', 'spigot', 'bungee', 'sponge', 'velocity'//, 'sponge8'
 
 include 'common:integrations:litebans', 'common:integrations:advancedban', 'common:integrations:viaversion',
         'spigot:integrations:essentials', 'spigot:integrations:floodgate', 'spigot:integrations:gadgetsmenu',

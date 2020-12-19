@@ -164,7 +164,7 @@ public class UniversalUtils {
 		Optional<String> optVer = getLatestVersion();
 		if (optVer.isPresent()) {
 			String v = optVer.get();
-			return version.equalsIgnoreCase(v) && v.startsWith("2");
+			return version.equalsIgnoreCase(v) || !v.startsWith("2");
 		} else
 			return true;
 	}

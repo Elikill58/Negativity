@@ -2,19 +2,20 @@ package com.elikill58.negativity.sponge8.impl.item;
 
 import java.util.HashMap;
 import java.util.Optional;
-import java.util.StringJoiner;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.item.ItemType;
-import org.spongepowered.api.registry.CatalogRegistry;
+import org.spongepowered.api.registry.Registry;
+import org.spongepowered.api.registry.RegistryHolder;
+import org.spongepowered.api.registry.RegistryTypes;
 
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
-
-import net.kyori.adventure.key.Key;
 
 public class SpongeItemRegistrar extends ItemRegistrar {
 	
@@ -23,46 +24,35 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 	private final HashMap<String, Material> cache = new HashMap<>();
 	
 	@Override
-	public Material get(String id, String... alias) {
+	public @Nullable Material get(String id, String... alias) {
 		return cache.computeIfAbsent(id, key -> {
-			CatalogRegistry registry = Sponge.getRegistry().getCatalogRegistry();
-			Optional<ItemType> optId = registry.get(ItemType.class, parse(id));
-			if (optId.isPresent()) {
-				return new SpongeMaterial(optId.get());
+			RegistryHolder registries = Sponge.getGame().registries();
+			ResourceKey resourceKey = parse(id);
+			
+			Registry<ItemType> itemTypeRegistry = registries.registry(RegistryTypes.ITEM_TYPE);
+			Optional<ItemType> maybeItemType = itemTypeRegistry.findValue(resourceKey);
+			if (maybeItemType.isPresent()) {
+				return new SpongeMaterial(maybeItemType.get());
 			}
 			
-			Optional<BlockType> optBlock = registry.get(BlockType.class, parse(id));
-			if (optBlock.isPresent() && optBlock.get().getItem().isPresent()) {
-				return new SpongeMaterial(optBlock.get().getItem().get());
+			Optional<BlockType> maybeBlockType = registries.registry(RegistryTypes.BLOCK_TYPE).findValue(resourceKey);
+			if (maybeBlockType.isPresent() && maybeBlockType.get().getItem().isPresent()) {
+				return new SpongeMaterial(maybeBlockType.get().getItem().get());
 			}
 			
 			for (String tempID : alias) {
-				Optional<ItemType> optAlias = registry.get(ItemType.class, parse(tempID));
-				if (optAlias.isPresent()) {
-					return new SpongeMaterial(optAlias.get());
+				Optional<ItemType> maybeAliasedItemType = itemTypeRegistry.findValue(parse(tempID));
+				if (maybeAliasedItemType.isPresent()) {
+					return new SpongeMaterial(maybeAliasedItemType.get());
 				}
 			}
 			
-			StringJoiner sj = new StringJoiner(", ");
-			for (String tempAlias : alias) {
-				//sj.add(tempAlias + " (" + parse(tempAlias) + ")");
-				sj.add(tempAlias);
-			}
-			
-			LOGGER.warn("[SpongeItemRegistrar] Could not find material : " + id + sj);
+			LOGGER.warn("[SpongeItemRegistrar] Could not find material : " + id + String.join(", ", alias));
 			return null;
 		});
 	}
 	
-	private Key parse(String base) {
-		return Key.key(base);
-		//StringJoiner sj = new StringJoiner("");
-		//for(String ch : base.split("")) {
-		//	if(ch.equals("["))
-		//		return sj.toString();
-		//	else
-		//		sj.add(ch);
-		//}
-		//return sj.toString();
+	private ResourceKey parse(String base) {
+		return ResourceKey.resolve(base);
 	}
 }

@@ -2,8 +2,8 @@ package com.elikill58.negativity.sponge8.impl.item;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
+import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.data.type.DyeColor;
@@ -12,6 +12,8 @@ import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
+import org.spongepowered.api.registry.Registry;
+import org.spongepowered.api.registry.RegistryTypes;
 
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
@@ -50,7 +52,8 @@ public class SpongeItemBuilder extends ItemBuilder {
 	
 	@Override
 	public ItemBuilder enchant(Enchantment enchantment, int level) {
-		Supplier<EnchantmentType> enchantmentType = Sponge.getRegistry().getCatalogRegistry().provideSupplier(EnchantmentType.class, enchantment.getId());
+		Registry<EnchantmentType> registry = Sponge.getGame().registries().registry(RegistryTypes.ENCHANTMENT_TYPE);
+		EnchantmentType enchantmentType = registry.value(ResourceKey.resolve(enchantment.getId()));
 		item.offerSingle(Keys.APPLIED_ENCHANTMENTS, org.spongepowered.api.item.enchantment.Enchantment.of(enchantmentType, level));
 		return this;
 	}

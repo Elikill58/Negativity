@@ -30,7 +30,7 @@ public class NegativityCommandWrapper implements Command.Raw {
 	@Override
 	public CommandResult process(CommandCause cause, String arguments) throws CommandException {
 		String[] args = arguments.isEmpty() ? new String[0] : arguments.split(" ");
-		String prefix = args[args.length - 1].toLowerCase(Locale.ROOT);
+		String prefix = args.length == 0 ? "" : args[args.length - 1].toLowerCase(Locale.ROOT);
 		CommandSender executor = SpongeEntityManager.getExecutor(cause.getCause().first(Audience.class)
 			.orElseThrow(() -> new CommandException(Component.text("Could not find appropriate command executor"))));
 		CommandExecutionEvent event = new CommandExecutionEvent(cmd, executor, args, prefix);

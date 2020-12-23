@@ -98,17 +98,17 @@ public class SpongeInventory extends Inventory {
 	private static Supplier<ContainerType> containerTypeForSize(int size) {
 		switch (size / 9) {
 			case 1:
-				return ContainerTypes.GENERIC_9x1;
+				return ContainerTypes.GENERIC_9X1;
 			case 2:
-				return ContainerTypes.GENERIC_9x2;
+				return ContainerTypes.GENERIC_9X2;
 			case 3:
-				return ContainerTypes.GENERIC_9x3;
+				return ContainerTypes.GENERIC_9X3;
 			case 4:
-				return ContainerTypes.GENERIC_9x4;
+				return ContainerTypes.GENERIC_9X4;
 			case 5:
-				return ContainerTypes.GENERIC_9x5;
+				return ContainerTypes.GENERIC_9X5;
 			case 6:
-				return ContainerTypes.GENERIC_9x6;
+				return ContainerTypes.GENERIC_9X6;
 			default:
 				throw new IllegalArgumentException("Size (" + size + ") does not fit a generic ContainerType");
 		}

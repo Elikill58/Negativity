@@ -2,6 +2,8 @@ package com.elikill58.negativity.sponge8.impl.block;
 
 import java.util.Locale;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.item.ItemType;
@@ -14,9 +16,11 @@ import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.sponge8.impl.location.SpongeLocation;
+import com.elikill58.negativity.sponge8.utils.Utils;
 
 public class SpongeBlock extends Block {
 	
+	private @Nullable Material cachedMaterial;
 	private final BlockSnapshot block;
 	
 	public SpongeBlock(BlockSnapshot block) {
@@ -25,7 +29,11 @@ public class SpongeBlock extends Block {
 	
 	@Override
 	public Material getType() {
-		return ItemRegistrar.getInstance().get(block.getState().getType().key().asString());
+		if (this.cachedMaterial == null) {
+			ResourceKey key = Utils.getKey(block.getState().getType());
+			this.cachedMaterial = ItemRegistrar.getInstance().get(key.asString());
+		}
+		return this.cachedMaterial;
 	}
 	
 	@Override

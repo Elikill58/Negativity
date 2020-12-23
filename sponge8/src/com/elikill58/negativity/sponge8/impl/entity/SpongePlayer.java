@@ -19,6 +19,7 @@ import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
 import org.spongepowered.api.network.channel.Channel;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
+import org.spongepowered.api.registry.RegistryTypes;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.world.ServerLocation;
 import org.spongepowered.math.vector.Vector3d;
@@ -105,7 +106,8 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public GameMode getGameMode() {
-		return GameMode.get(entity.require(Keys.GAME_MODE).getKey().value().toUpperCase(Locale.ROOT));
+		ResourceKey key = Sponge.getGame().registries().registry(RegistryTypes.GAME_MODE).valueKey(entity.require(Keys.GAME_MODE));
+		return GameMode.get(key.value().toUpperCase(Locale.ROOT));
 	}
 	
 	@Override
@@ -237,7 +239,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 			return false;
 		}
 		for (org.spongepowered.api.effect.potion.PotionEffect effect : potionEffects) {
-			if (effect.getType().key().asString().equalsIgnoreCase(type.getId())) {
+			if (Utils.getKey(effect.getType()).asString().equalsIgnoreCase(type.getId())) {
 				return true;
 			}
 		}
@@ -259,7 +261,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	public Optional<PotionEffect> getPotionEffect(PotionEffectType type) {
 		return entity.get(Keys.POTION_EFFECTS).flatMap(effects -> {
 			for (org.spongepowered.api.effect.potion.PotionEffect effect : effects) {
-				if (effect.getType().key().asString().equalsIgnoreCase(type.getId())) {
+				if (Utils.getKey(effect.getType()).asString().equalsIgnoreCase(type.getId())) {
 					return Optional.of(createPotionEffect(effect));
 				}
 			}
@@ -268,7 +270,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	}
 	
 	private PotionEffect createPotionEffect(org.spongepowered.api.effect.potion.PotionEffect effect) {
-		return new PotionEffect(PotionEffectType.forId(effect.getType().key().asString()), effect.getDuration(), effect.getAmplifier());
+		return new PotionEffect(PotionEffectType.forId(Utils.getKey(effect.getType()).asString()), effect.getDuration(), effect.getAmplifier());
 	}
 	
 	@Override
@@ -288,7 +290,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	public void removePotionEffect(PotionEffectType type) {
 		entity.transform(Keys.POTION_EFFECTS, effects -> {
 			if (effects != null) {
-				effects.removeIf(effect -> effect.getType().key().asString().equals(type.getId()));
+				effects.removeIf(effect -> Utils.getKey(effect.getType()).asString().equals(type.getId()));
 				return effects;
 			}
 			return Collections.emptyList();

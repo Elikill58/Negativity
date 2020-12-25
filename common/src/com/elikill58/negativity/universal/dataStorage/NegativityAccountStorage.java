@@ -7,6 +7,8 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.account.NegativityAccount;
@@ -18,7 +20,7 @@ public abstract class NegativityAccountStorage {
 	private static final Map<String, NegativityAccountStorage> storages = new HashMap<>();
 	private static String storageId;
 
-	public abstract CompletableFuture<NegativityAccount> loadAccount(UUID playerId);
+	public abstract CompletableFuture<@Nullable NegativityAccount> loadAccount(UUID playerId);
 
 	public abstract CompletableFuture<Void> saveAccount(NegativityAccount account);
 

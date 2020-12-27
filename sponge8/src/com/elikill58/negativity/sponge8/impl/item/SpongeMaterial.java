@@ -1,8 +1,13 @@
 package com.elikill58.negativity.sponge8.impl.item;
 
+import java.util.Optional;
+
+import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.item.ItemType;
 
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.sponge8.utils.Utils;
 
 public class SpongeMaterial extends Material {
 
@@ -14,12 +19,13 @@ public class SpongeMaterial extends Material {
 	
 	@Override
 	public boolean isSolid() {
-		return true; // TODO find how to implement this
+		Optional<BlockType> blockType = type.getBlock();
+		return !blockType.isPresent() || blockType.get().getDefaultState().require(Keys.IS_SOLID);
 	}
 
 	@Override
 	public String getId() {
-		return type.key().asString();
+		return Utils.getKey(type).asString();
 	}
 
 	@Override

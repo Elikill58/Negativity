@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.sponge8.impl.block.SpongeBlock;
 import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
+import com.elikill58.negativity.sponge8.utils.Utils;
 
 public class SpongeWorld extends World {
 
@@ -46,7 +47,7 @@ public class SpongeWorld extends World {
 
 	@Override
 	public Difficulty getDifficulty() {
-		return Difficulty.valueOf(w.getDifficulty().key().value().toUpperCase(Locale.ROOT));
+		return Difficulty.valueOf(Utils.getKey(w.getDifficulty()).value().toUpperCase(Locale.ROOT));
 	}
 
 	@Override

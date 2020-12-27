@@ -30,11 +30,11 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 	}
 
 	@Override
-	public CompletableFuture<NegativityAccount> loadAccount(UUID playerId) {
+	public CompletableFuture<@Nullable NegativityAccount> loadAccount(UUID playerId) {
 		return CompletableFuture.supplyAsync(() -> {
 			File file = new File(userDir, playerId + ".yml");
 			if (!file.exists()) {
-				return new NegativityAccount(playerId);
+				return null;
 			}
 			Configuration config = YamlConfiguration.load(file);
 			String playerName = config.getString("playername");

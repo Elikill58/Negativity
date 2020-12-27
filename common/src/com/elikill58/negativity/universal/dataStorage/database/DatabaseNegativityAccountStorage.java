@@ -13,6 +13,8 @@ import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Minerate;
@@ -34,7 +36,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 	}
 
 	@Override
-	public CompletableFuture<NegativityAccount> loadAccount(UUID playerId) {
+	public CompletableFuture<@Nullable NegativityAccount> loadAccount(UUID playerId) {
 		return CompletableFuture.supplyAsync(() -> {
 			try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_accounts WHERE id = ?")) {
 				stm.setString(1, playerId.toString());
@@ -53,7 +55,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
-			return new NegativityAccount(playerId);
+			return null;
 		});
 	}
 

@@ -3,15 +3,17 @@ package com.elikill58.negativity.sponge8.impl.item;
 import java.util.Collections;
 import java.util.List;
 
+import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.registry.RegistryTypes;
 
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.sponge8.utils.Utils;
 
-import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 
 public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack {
@@ -29,7 +31,8 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 
 	@Override
 	public Material getType() {
-		return SpongeItemRegistrar.getInstance().get(item.getType().key().asString(), item.getType().key().value());
+		ResourceKey key = Utils.getKey(item.getType());
+		return SpongeItemRegistrar.getInstance().get(key.asString(), key.value());
 	}
 
 	@Override
@@ -46,7 +49,7 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 			return false;
 		}
 		for (org.spongepowered.api.item.enchantment.Enchantment enchantment : enchantments) {
-			if (enchantment.getType().key().asString().equalsIgnoreCase(enchant.getId())) {
+			if (Utils.getKey(enchantment.getType()).asString().equalsIgnoreCase(enchant.getId())) {
 				return true;
 			}
 		}
@@ -60,7 +63,7 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 			return 0;
 		}
 		for (org.spongepowered.api.item.enchantment.Enchantment enchantment : enchantments) {
-			if (enchantment.getType().key().asString().equalsIgnoreCase(enchant.getId())) {
+			if (Utils.getKey(enchantment.getType()).asString().equalsIgnoreCase(enchant.getId())) {
 				return enchantment.getLevel();
 			}
 		}
@@ -73,9 +76,7 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 	}
 	
 	private EnchantmentType getEnchantType(Enchantment enchant) {
-		return Sponge.getRegistry().getCatalogRegistry()
-			.get(EnchantmentType.class, Key.key(enchant.getId()))
-			.orElseThrow(() -> new RuntimeException("Unknown enchantment " + enchant.getId()));
+		return Sponge.getGame().registries().registry(RegistryTypes.ENCHANTMENT_TYPE).value(ResourceKey.resolve(enchant.getId()));
 	}
 
 	@Override
@@ -84,7 +85,7 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 			if (enchantments == null) {
 				return Collections.emptyList();
 			}
-			enchantments.removeIf(enchantment -> enchantment.getType().key().asString().equalsIgnoreCase(enchant.getId()));
+			enchantments.removeIf(enchantment -> Utils.getKey(enchantment.getType()).asString().equalsIgnoreCase(enchant.getId()));
 			return enchantments;
 		});
 	}

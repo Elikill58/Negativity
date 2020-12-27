@@ -1,5 +1,9 @@
 package com.elikill58.negativity.sponge8.impl.entity;
 
+import java.util.Locale;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.world.server.ServerWorld;
@@ -10,6 +14,7 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.sponge8.impl.location.SpongeLocation;
+import com.elikill58.negativity.sponge8.utils.Utils;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
@@ -19,6 +24,7 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 
 	protected final E entity;
 	private final SpongeLocation loc;
+	private @Nullable EntityType cachedEntityType;
 	
 	public SpongeEntity(E e) {
 		this.entity = e;
@@ -48,7 +54,11 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 
 	@Override
 	public EntityType getType() {
-		return EntityType.get(entity.getType().key().value()); // TODO implement this properly using real minecraft IDs
+		if (this.cachedEntityType == null) {
+			ResourceKey key = Utils.getKey(this.entity.getType());
+			this.cachedEntityType = EntityType.get(key.value().toUpperCase(Locale.ROOT)); // TODO implement this properly using real minecraft IDs
+		}
+		return this.cachedEntityType;
 	}
 
 	@Override
@@ -66,7 +76,7 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public String getName() {
 		return entity.get(Keys.DISPLAY_NAME).map(component -> PlainComponentSerializer.plain().serialize(component))
-			.orElseGet(() -> entity.getType().key().asString());
+			.orElseGet(() -> Utils.getKey(entity.getType()).value());
 	}
 	
 	@Override

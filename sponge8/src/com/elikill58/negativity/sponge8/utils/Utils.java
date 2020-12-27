@@ -8,13 +8,21 @@ import java.util.Locale;
 
 import javax.annotation.Nullable;
 
+import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.Keys;
+import org.spongepowered.api.effect.potion.PotionEffectType;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.item.enchantment.EnchantmentType;
 import org.spongepowered.api.item.inventory.ItemStack;
+import org.spongepowered.api.registry.RegistryTypes;
+import org.spongepowered.api.world.difficulty.Difficulty;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.metadata.PluginDependency;
 
@@ -98,5 +106,29 @@ public class Utils {
 			}
 		}
 		return false;
+	}
+	
+	public static ResourceKey getKey(EntityType<?> entityType) {
+		return RegistryTypes.ENTITY_TYPE.keyFor(Sponge.getGame().registries(), entityType);
+	}
+	
+	public static ResourceKey getKey(BlockType blockType) {
+		return RegistryTypes.BLOCK_TYPE.keyFor(Sponge.getGame().registries(), blockType);
+	}
+	
+	public static ResourceKey getKey(ItemType itemType) {
+		return RegistryTypes.ITEM_TYPE.keyFor(Sponge.getGame().registries(), itemType);
+	}
+	
+	public static ResourceKey getKey(PotionEffectType potionEffectType) {
+		return RegistryTypes.POTION_EFFECT_TYPE.keyFor(Sponge.getGame().registries(), potionEffectType);
+	}
+	
+	public static ResourceKey getKey(EnchantmentType enchantmentType) {
+		return RegistryTypes.ENCHANTMENT_TYPE.keyFor(Sponge.getGame().registries(), enchantmentType);
+	}
+	
+	public static ResourceKey getKey(Difficulty difficulty) {
+		return RegistryTypes.DIFFICULTY.keyFor(Sponge.getGame().registries(), difficulty);
 	}
 }

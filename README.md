@@ -74,6 +74,7 @@ We support a lot of languages :
 - **Czech Republic** (*cs_CZ*) By Disordeon#1824
 - **Albanian** (*sq_SQ*) By ErzenX#2439
 - **Polish** (*pl_PL*) By Tytano#5336
+- **Egyptian Arabic** (*ar_EG*) By Andro Sameh#6837
 
 To change the lang, just use "/nlang" or change "Translation.default" to the one that you want.
 

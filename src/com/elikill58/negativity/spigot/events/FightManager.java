@@ -114,6 +114,8 @@ public class FightManager implements Listener {
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		for(Player pl : Utils.getOnlinePlayers()) {
+			if(p == pl)
+				continue;
 			SpigotNegativityPlayer npOther = SpigotNegativityPlayer.getNegativityPlayer(p);
 			if(npOther.isInFight && np.isInFight)
 				continue;

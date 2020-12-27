@@ -39,7 +39,7 @@ The default config enable you to directly test the plugin !
 
 ## I want to test it before download !
 
-You can check it on **server.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.16.1).
+You can check it on **server.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.16.4).
 
 ## What are the detected cheat ?
 
@@ -73,7 +73,11 @@ We support a lot of languages :
 - **Italian** (*it_IT*) By Herobrine99dan#1564
 - **Czech Republic** (*cs_CZ*) By Disordeon#1824
 - **Albanian** (*sq_SQ*) By ErzenX#2439
+- **Polish** (*pl_PL*) By Tytano#5336
+- **Romanian** (*ro_RO*) By @Edward205
 - **Egyptian Arabic** (*ar_EG*) By Andro Sameh#6837
+
+To change the lang, just use "/nlang" or change "Translation.default" to the one that you want.
 
 You find a grammar error on your language ? You want to add your own ? Contact me on discord (link below)
 

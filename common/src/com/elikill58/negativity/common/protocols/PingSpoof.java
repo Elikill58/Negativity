@@ -50,6 +50,11 @@ public class PingSpoof extends Cheat implements Listeners {
 		if (newPing == lastPing)
 			return;
 		np.ints.set(PINGSPOOF, "last-ping", newPing);
+		if(!np.booleans.get(PINGSPOOF, "can-ping-spoof", false) && newPing < 10000) {
+			if(newPing <= 200)
+				np.booleans.set(PINGSPOOF, "can-ping-spoof", true);
+			return;
+		}
 		if (newPing <= 200)
 			return;
 		try {

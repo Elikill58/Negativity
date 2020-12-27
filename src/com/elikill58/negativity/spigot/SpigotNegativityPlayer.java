@@ -85,7 +85,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public String LAST_OTHER_KEEP_ALIVE, LAST_CHAT_MESSAGE = "";
 	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false, disableShowingAlert = false,
 			isInvisible = false, isUsingSlimeBlock = false, already_blink = false, isJumpingWithBlock = false,
-			isOnLadders = false, lastClickInv = false, useAntiNoFallSystem = false;
+			isOnLadders = false, lastClickInv = false, useAntiNoFallSystem = false, canPingSpoof = false;
 	public boolean mustToBeSaved = false;
 	private boolean isOnGround = true, isBedrockPlayer = false;
 	public PacketType lastPacketType = null;
@@ -296,7 +296,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 			hasRelia = e.hasManyReliability() ? true : hasRelia;
 			
-			if(hoverProof == null && e.getHover() != null)
+			if(hoverProof == null)
 				hoverProof = e.getHover();
 			
 			nbConsole += e.getNbAlertConsole();

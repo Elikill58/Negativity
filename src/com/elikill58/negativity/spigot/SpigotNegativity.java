@@ -336,8 +336,10 @@ public class SpigotNegativity extends JavaPlugin {
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		invTimer.cancel();
 		packetTimer.cancel();
-		runSpawnFakePlayer.cancel();
-		timeTimeBetweenAlert.cancel();
+		if(runSpawnFakePlayer != null)
+			runSpawnFakePlayer.cancel();
+		if(timeTimeBetweenAlert != null)
+			timeTimeBetweenAlert.cancel();
 		packetManager.getPacketManager().clear();
 	}
 	

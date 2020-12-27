@@ -31,6 +31,12 @@ public class PingSpoofProtocol extends Cheat implements Listener {
 		if (newPing == lastPing)
 			return;
 		np.LAST_PING = newPing;
+		
+		if(!np.canPingSpoof && newPing < 10000) {
+			if(newPing <= 200)
+				np.canPingSpoof = true;
+			return;
+		}
 		if (newPing <= 200)
 			return;
 		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), () -> {
@@ -38,7 +44,7 @@ public class PingSpoofProtocol extends Cheat implements Listener {
 				if (p.getPlayer().getAddress().getAddress().isReachable(newPing - 150)) {
 					Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(),
 							() -> SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.PINGSPOOF),
-									98, "Last ping: " + lastPing + ", new ping: " + newPing + "."));
+									98, "Last ping: " + lastPing + ", new ping: " + newPing));
 				}
 			} catch (IOException e1) {
 				e1.printStackTrace();

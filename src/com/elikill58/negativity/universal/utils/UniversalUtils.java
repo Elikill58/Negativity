@@ -133,7 +133,7 @@ public class UniversalUtils {
 			all += (temp * relia.get(temp));
 			divide += relia.get(temp);
 		}
-		return parseInPorcent(all / divide);
+		return (all / divide);
 	}
 
 	public static List<String> getClasseNamesInPackage(String jarName, String packageName) {

@@ -253,6 +253,9 @@ public class SpigotAdapter extends Adapter {
 	@SuppressWarnings("deprecation")
 	@Override
 	public OfflinePlayer getOfflinePlayer(String name) {
+		Player tempP = getPlayer(name);
+		if(tempP != null)
+			return tempP;
 		org.bukkit.OfflinePlayer p = Bukkit.getOfflinePlayer(name);
 		if(p == null)
 			return null;
@@ -261,6 +264,9 @@ public class SpigotAdapter extends Adapter {
 	
 	@Override
 	public OfflinePlayer getOfflinePlayer(UUID uuid) {
+		Player tempP = getPlayer(uuid);
+		if(tempP != null)
+			return tempP;
 		org.bukkit.OfflinePlayer p = Bukkit.getOfflinePlayer(uuid);
 		if(p == null)
 			return null;

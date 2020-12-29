@@ -237,12 +237,18 @@ public class SpongeAdapter extends Adapter {
 
 	@Override
 	public OfflinePlayer getOfflinePlayer(String name) {
+		Player tempP = getPlayer(name);
+		if(tempP != null)
+			return tempP;
 		Optional<User> optUser = Sponge.getServiceManager().provide(UserStorageService.class).get().get(name);
 	    return optUser.isPresent() ? new SpongeOfflinePlayer(optUser.get()) : null;
 	}
 	
 	@Override
 	public OfflinePlayer getOfflinePlayer(UUID uuid) {
+		Player tempP = getPlayer(uuid);
+		if(tempP != null)
+			return tempP;
 		Optional<User> optUser = Sponge.getServiceManager().provide(UserStorageService.class).get().get(uuid);
 	    return optUser.isPresent() ? new SpongeOfflinePlayer(optUser.get()) : null;
 	}

@@ -210,7 +210,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 					if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
 						for (PlayerModifications modification : PlayerModificationsManager.getModifications()) {
 							if (modification.shouldIgnoreMovementChecks(p)) {
-								p.sendMessage(ChatColor.RED + modification.getDisplayname() + "movement bypass.");
+								p.sendMessage(ChatColor.RED + modification.getDisplayname() + " movement bypass.");
 								hasBypass = true;
 							}
 						}

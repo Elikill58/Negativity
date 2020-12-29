@@ -3,6 +3,7 @@ package com.elikill58.negativity.common.inventories.negativity.players;
 import java.util.List;
 
 import com.elikill58.negativity.api.colors.ChatColor;
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
@@ -26,7 +27,7 @@ public class SeeReportInventory extends AbstractInventory<SeeReportHolder> {
 	
 	@Override
 	public void openInventory(Player p, Object... args) {
-		Player cible = (Player) args[0];
+		OfflinePlayer cible = (OfflinePlayer) args[0];
 		NegativityAccount na = NegativityAccount.get(cible.getUniqueId());
 		List<Report> reports = na.getReports();
 		int page = (args.length == 1 ? 0 : (int) args[1]);
@@ -61,9 +62,12 @@ public class SeeReportInventory extends AbstractInventory<SeeReportHolder> {
 		SeeReportHolder rh = nh;
 		if(m.equals(Materials.ARROW)) {
 			int slot = e.getSlot();
-			if(slot == 0)
-				InventoryManager.open(NegativityInventory.CHECK_MENU, p, rh.getCible());
-			else if(e.getSlot() == 3)
+			if(slot == 0) {
+				if(rh.getCible() instanceof Player)
+					InventoryManager.open(NegativityInventory.CHECK_MENU, p, rh.getCible());
+				else
+					InventoryManager.open(NegativityInventory.CHECK_MENU_OFFLINE, p, rh.getCible());
+			} else if(e.getSlot() == 3)
 				openInventory(p, rh.getCible(), rh.getPage() - 1);
 			else
 				openInventory(p, rh.getCible(), rh.getPage() + 1);

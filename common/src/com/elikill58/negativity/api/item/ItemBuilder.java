@@ -7,6 +7,7 @@ import javax.annotation.Nullable;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.colors.DyeColor;
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
 
@@ -130,6 +131,16 @@ public abstract class ItemBuilder {
 	}
 	
 	/**
+	 * Create an ItemBuilder for SkullItem
+	 * 
+	 * @param owner the owner of the skull
+	 * @return the builder for skull item
+	 */
+	public static ItemBuilder Builder(OfflinePlayer owner) {
+		return Adapter.getAdapter().createSkullItemBuilder(owner);
+	}
+	
+	/**
 	 * Get the skull item showed in negativity's inventory
 	 * Display name and lore are already set, and are according to the given player cible
 	 * 
@@ -139,5 +150,9 @@ public abstract class ItemBuilder {
 	public static ItemStack getSkullItem(Player cible) {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		return ItemBuilder.Builder(cible).displayName(cible.getName()).lore(ChatColor.GOLD + "UUID: " + cible.getUniqueId(), ChatColor.GREEN + "Version: " + cible.getPlayerVersion().getName(), ChatColor.GREEN + "Platform: " + (np.isBedrockPlayer() ? "Bedrock" : "Java")).build();
+	}
+	
+	public static ItemStack getSkullItem(OfflinePlayer cible) {
+		return ItemBuilder.Builder(Materials.ARROW).displayName(cible.getName()).lore(ChatColor.RED + "Offline", ChatColor.GOLD + "UUID: " + cible.getUniqueId()).build();
 	}
 }

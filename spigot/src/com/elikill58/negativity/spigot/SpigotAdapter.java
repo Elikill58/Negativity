@@ -28,6 +28,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.impl.entity.SpigotOfflinePlayer;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
@@ -233,21 +234,20 @@ public class SpigotAdapter extends Adapter {
 	public ItemBuilder createSkullItemBuilder(Player owner) {
 		return new SpigotItemBuilder(owner);
 	}
+	
+	@Override
+	public ItemBuilder createSkullItemBuilder(OfflinePlayer owner) {
+		return new SpigotItemBuilder(owner);
+	}
 
 	@Override
 	public Player getPlayer(String name) {
-		org.bukkit.entity.Player p = Bukkit.getPlayer(name);
-		if(p == null)
-			return null;
-		return new SpigotPlayer(p);
+		return SpigotEntityManager.getPlayer(Bukkit.getPlayer(name));
 	}
 
 	@Override
 	public Player getPlayer(UUID uuid) {
-		org.bukkit.entity.Player p = Bukkit.getPlayer(uuid);
-		if(p == null)
-			return null;
-		return new SpigotPlayer(p);
+		return SpigotEntityManager.getPlayer(Bukkit.getPlayer(uuid));
 	}
 
 	@SuppressWarnings("deprecation")

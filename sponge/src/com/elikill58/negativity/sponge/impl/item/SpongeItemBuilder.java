@@ -9,7 +9,7 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.DyeColor;
 import org.spongepowered.api.data.type.DyeColors;
 import org.spongepowered.api.data.type.SkullTypes;
-import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.enchantment.EnchantmentType;
@@ -30,10 +30,10 @@ public class SpongeItemBuilder extends ItemBuilder {
 		this.item = org.spongepowered.api.item.inventory.ItemStack.of((ItemType) type.getDefault());
 	}
 	
-	public SpongeItemBuilder(com.elikill58.negativity.api.entity.Player owner) {
+	public SpongeItemBuilder(com.elikill58.negativity.api.entity.OfflinePlayer owner) {
 		this.item = org.spongepowered.api.item.inventory.ItemStack.builder()
 				.itemType(ItemTypes.SKULL)
-				.add(Keys.REPRESENTED_PLAYER, ((Player) owner.getDefault()).getProfile())
+				.add(Keys.REPRESENTED_PLAYER, ((User) owner.getDefault()).getProfile())
 				.add(Keys.SKULL_TYPE, SkullTypes.PLAYER).build();
 	}
 

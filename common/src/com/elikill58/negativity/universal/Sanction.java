@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
@@ -31,7 +32,7 @@ public class Sanction {
 			Adapter.getAdapter().getLogger().error("Failed to load sanction item " + key + ": No command specified.");
 	}
 
-	private String applyPlaceholders(String value, Player cible) {
+	private String applyPlaceholders(String value, OfflinePlayer cible) {
 		return value.replaceAll("%name%", cible.getName()).replaceAll("%reason%", name);
 	}
 
@@ -67,7 +68,7 @@ public class Sanction {
 		return command;
 	}
 
-	public ItemStack getItem(Player cible) {
+	public ItemStack getItem(OfflinePlayer cible) {
 		return ItemBuilder.Builder(type).displayName(applyPlaceholders(getName(), cible))
 				.lore(getLore().stream().map((s) -> applyPlaceholders(s, cible)).collect(Collectors.toList())).build();
 	}

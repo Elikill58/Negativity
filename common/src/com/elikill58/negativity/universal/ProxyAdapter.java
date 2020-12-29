@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal;
 
 import com.elikill58.negativity.api.entity.FakePlayer;
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
@@ -34,6 +35,11 @@ public abstract class ProxyAdapter extends Adapter {
 
 	@Override
 	public ItemBuilder createSkullItemBuilder(Player owner) {
+		return null;
+	}
+	
+	@Override
+	public ItemBuilder createSkullItemBuilder(OfflinePlayer owner) {
 		return null;
 	}
 

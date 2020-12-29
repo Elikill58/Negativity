@@ -16,6 +16,7 @@ import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.commands.CommandListeners;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.commands.TabListeners;
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
@@ -249,7 +250,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			return true;
 		}
 
-		Player targetPlayer = Adapter.getAdapter().getPlayer(arg[0]);
+		OfflinePlayer targetPlayer = Adapter.getAdapter().getOfflinePlayer(arg[0]);
 		if (targetPlayer != null) {
 			if (!(sender instanceof Player)) {
 				Messages.sendMessage(sender, "only_player");
@@ -261,8 +262,10 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				Messages.sendMessage(sender, "not_permission");
 				return false;
 			}
-			
-			InventoryManager.open(NegativityInventory.CHECK_MENU, playerSender, targetPlayer);
+			if(targetPlayer instanceof Player)
+				InventoryManager.open(NegativityInventory.CHECK_MENU, playerSender, targetPlayer);
+			else
+				InventoryManager.open(NegativityInventory.CHECK_MENU_OFFLINE, playerSender, targetPlayer);
 			return true;
 		}
 

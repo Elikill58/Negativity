@@ -11,7 +11,7 @@ import com.elikill58.negativity.api.entity.Entity;
 public class SpigotEntityManager {
 
 	public static com.elikill58.negativity.api.entity.Player getPlayer(Player p){
-		return NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p)).getPlayer();
+		return p == null ? null : NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p)).getPlayer();
 	}
 	
 	public static Entity getEntity(org.bukkit.entity.Entity bukkitEntity) {

@@ -70,7 +70,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		Player cible = (Player) args[0];
 		Inventory inv = args.length > 1 ? (Inventory) args[1] : p.getOpenInventory();
 		if(inv == null || !inv.getType().equals(InventoryType.CHEST)) return;
-		NegativityPlayer np = NegativityPlayer.getCached(cible.getUniqueId());
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		int betterClick = np.getAccount().getMostClicksPerSecond();
 		try {
 			inv.set(0, getClickItem(Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), np.ACTUAL_CLICK));
@@ -85,7 +85,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		}
 	}
 	
-	private static ItemStack getClickItem(String name, int clicks) {
+	public static ItemStack getClickItem(String name, int clicks) {
 		if(Materials.LIME_STAINED_CLAY.getId().contains("lime")) {
 			return ItemBuilder.Builder(getMaterialFromClick(clicks)).displayName(name).build();
 		} else {
@@ -94,7 +94,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		}
 	}
 
-	private static Material getMaterialFromClick(int click) {
+	public static Material getMaterialFromClick(int click) {
 		if (click > 25)
 			return Materials.RED_STAINED_CLAY;
 		else if (click < 25 && click > 15)
@@ -103,7 +103,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 			return Materials.LIME_STAINED_CLAY;
 	}
 
-	private static DyeColor getColorFromClick(int click) {
+	public static DyeColor getColorFromClick(int click) {
 		if (click > 25)
 			return DyeColor.RED;
 		else if (click < 25 && click > 15)
@@ -112,7 +112,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 			return DyeColor.LIME;
 	}
 	
-	private static ItemStack getWoolItem(Player player, boolean b) {
+	public static ItemStack getWoolItem(Player player, boolean b) {
 		Material type = (b ? Materials.RED_WOOL : Materials.LIME_WOOL);
 		ItemBuilder builder = ItemBuilder.Builder(type);
 		if(!type.getId().contains("_"))

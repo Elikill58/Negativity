@@ -2,6 +2,7 @@ package com.elikill58.negativity.common.inventories.negativity.players;
 
 import java.util.List;
 
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
@@ -25,7 +26,7 @@ public class BanInventory extends AbstractInventory<BanHolder> {
 
 	@Override
 	public void openInventory(Player p, Object... args) {
-		Player cible = (Player) args[0];
+		OfflinePlayer cible = (OfflinePlayer) args[0];
 		List<Sanction> sanctions = BanManager.getSanctions();
 		Inventory inv = Inventory.createInventory("Ban", UniversalUtils.getMultipleOf(Sanction.getMaxSlot(sanctions) + 1, 9, 1, 54), new BanHolder(cible));
 		sanctions.stream().filter((b) -> b.hasPermission(p)).forEach((ban) -> {
@@ -40,7 +41,7 @@ public class BanInventory extends AbstractInventory<BanHolder> {
 		BanManager.getSanctions().stream().forEach((ban) -> {
 			if(ban.hasPermission(p) && ban.getSlot() == e.getSlot()) {
 				p.closeInventory();
-				Player cible = nh.getCible();
+				OfflinePlayer cible = nh.getCible();
 				Adapter.getAdapter().runConsoleCommand(ban.getCommand().replaceAll("%name%", cible.getName()));
 				p.sendMessage(Utils.coloredMessage(ban.getMessage().replaceAll("%name%", cible.getName()).replaceAll("%reason%", ban.getName())));
 			}

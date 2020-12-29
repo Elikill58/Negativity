@@ -14,7 +14,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.colors.DyeColor;
-import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
@@ -46,7 +46,7 @@ public class SpigotItemBuilder extends ItemBuilder {
     }
 
     @SuppressWarnings("deprecation")
-	public SpigotItemBuilder(Player owner) {
+	public SpigotItemBuilder(OfflinePlayer owner) {
     	this.itemStack = new ItemStack((org.bukkit.Material) Materials.PLAYER_HEAD.getDefault(), 1, (byte) 3);
     	SkullMeta skullmeta = (SkullMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
 		skullmeta.setOwner(owner.getName());

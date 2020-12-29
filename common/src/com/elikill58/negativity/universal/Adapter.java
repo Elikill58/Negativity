@@ -190,6 +190,14 @@ public abstract class Adapter {
 	 * @return an item builder of the skull
 	 */
 	public abstract ItemBuilder createSkullItemBuilder(Player owner);
+	
+	/**
+	 * Create a new item builder of skull with the current owner
+	 * 
+	 * @param owner the player owner of the skull
+	 * @return an item builder of the skull
+	 */
+	public abstract ItemBuilder createSkullItemBuilder(OfflinePlayer owner);
 
 	/**
 	 * Create a new location

@@ -219,6 +219,11 @@ public class SpongeAdapter extends Adapter {
 	public ItemBuilder createSkullItemBuilder(Player owner) {
 		return new SpongeItemBuilder(owner);
 	}
+	
+	@Override
+	public ItemBuilder createSkullItemBuilder(OfflinePlayer owner) {
+		return new SpongeItemBuilder(owner);
+	}
 
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {

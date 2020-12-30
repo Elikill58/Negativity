@@ -3,7 +3,6 @@ package com.elikill58.negativity.spigot.inventories.admin;
 import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -69,7 +68,7 @@ public class LangInventory extends AbstractInventory {
 			String lang = "";
 			String name = e.getCurrentItem().getItemMeta().getDisplayName();
 			for(String s : TranslatedMessages.LANGS) {
-				if(name.equalsIgnoreCase(ChatColor.RESET + s))
+				if(name.contains(s))
 					lang = s;
 			}
 			if(lang != "") {
@@ -77,8 +76,8 @@ public class LangInventory extends AbstractInventory {
 				SpigotNegativity.getInstance().saveConfig();
 				TranslatedMessages.DEFAULT_LANG = lang;
 				TranslatedMessages.loadMessages();
-				update(e.getClickedInventory(), p);
-				p.updateInventory();
+				Messages.sendMessage(p, "lang.language_set");
+				p.closeInventory();
 			}
 		}
 	}

@@ -397,7 +397,12 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public void openInventory(Inventory inv) {
-		entity.openInventory((org.spongepowered.api.item.inventory.Inventory) inv.getDefault());
+		Sponge.getServer().getScheduler().submit(
+			Task.builder()
+				.plugin(SpongeNegativity.container())
+				.execute(() -> entity.openInventory((org.spongepowered.api.item.inventory.Inventory) inv.getDefault()))
+				.build()
+		);
 	}
 	
 	@Override

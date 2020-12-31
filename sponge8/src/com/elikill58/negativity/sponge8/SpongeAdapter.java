@@ -230,12 +230,20 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public OfflinePlayer getOfflinePlayer(String name) {
+		Player online = getPlayer(name);
+		if (online != null) {
+			return online;
+		}
 		return Sponge.getServer().getUserManager().get(name)
 			.map(SpongeOfflinePlayer::new).orElse(null);
 	}
 	
 	@Override
 	public OfflinePlayer getOfflinePlayer(UUID uuid) {
+		Player online = getPlayer(uuid);
+		if (online != null) {
+			return online;
+		}
 		return Sponge.getServer().getUserManager().get(uuid)
 			.map(SpongeOfflinePlayer::new).orElse(null);
 	}

@@ -210,12 +210,12 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public ItemBuilder createSkullItemBuilder(Player owner) {
-		return new SpongeItemBuilder(owner);
+		return new SpongeItemBuilder(((org.spongepowered.api.entity.living.player.Player) owner.getDefault()).getProfile());
 	}
 	
 	@Override
 	public ItemBuilder createSkullItemBuilder(OfflinePlayer owner) {
-		return new SpongeItemBuilder(owner);
+		return new SpongeItemBuilder(((org.spongepowered.api.entity.living.player.User) owner.getDefault()).getProfile());
 	}
 	
 	@Override

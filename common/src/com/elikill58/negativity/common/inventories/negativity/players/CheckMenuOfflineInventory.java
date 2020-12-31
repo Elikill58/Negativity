@@ -35,7 +35,7 @@ public class CheckMenuOfflineInventory extends AbstractInventory<CheckMenuOfflin
 		inv.set(0, CheckMenuInventory.getClickItem(Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), betterClick));
 		
 		inv.set(3, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
-		inv.set(5, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.main.active_report")).build());
+		inv.set(5, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.main.active_report", "%name%", p.getName())).build());
 		
 		inv.set(8, ItemBuilder.getSkullItem(cible));
 		inv.set(9, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());

@@ -4,11 +4,31 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.api.block.entity.BlockEntity;
+import org.spongepowered.api.block.entity.EnderChest;
+import org.spongepowered.api.block.entity.carrier.Barrel;
+import org.spongepowered.api.block.entity.carrier.Beacon;
+import org.spongepowered.api.block.entity.carrier.BrewingStand;
+import org.spongepowered.api.block.entity.carrier.Dispenser;
+import org.spongepowered.api.block.entity.carrier.Dropper;
+import org.spongepowered.api.block.entity.carrier.Hopper;
+import org.spongepowered.api.block.entity.carrier.ShulkerBox;
+import org.spongepowered.api.block.entity.carrier.chest.Chest;
+import org.spongepowered.api.block.entity.carrier.furnace.BlastFurnace;
+import org.spongepowered.api.block.entity.carrier.furnace.Furnace;
+import org.spongepowered.api.block.entity.carrier.furnace.Smoker;
+import org.spongepowered.api.entity.vehicle.minecart.carrier.ChestMinecart;
+import org.spongepowered.api.entity.vehicle.minecart.carrier.HopperMinecart;
+import org.spongepowered.api.item.inventory.Carrier;
 import org.spongepowered.api.item.inventory.Container;
 import org.spongepowered.api.item.inventory.ContainerType;
 import org.spongepowered.api.item.inventory.ContainerTypes;
+import org.spongepowered.api.item.inventory.crafting.CraftingInventory;
+import org.spongepowered.api.item.inventory.entity.UserInventory;
+import org.spongepowered.api.item.inventory.type.BlockEntityInventory;
 import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import org.spongepowered.api.item.inventory.type.ViewableInventory;
+import org.spongepowered.api.item.merchant.Merchant;
 
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryType;
@@ -47,7 +67,50 @@ public class SpongeInventory extends Inventory {
 	
 	@Override
 	public InventoryType getType() {
-		return InventoryType.UNKNOW; // TODO find how to implement
+		if (this.inv instanceof BlockEntityInventory) {
+			BlockEntity blockEntity = ((BlockEntityInventory<?>) this.inv).getBlockEntity().orElse(null);
+			if (blockEntity instanceof Barrel) {
+				return InventoryType.BARREL;
+			} else if (blockEntity instanceof Beacon) {
+				return InventoryType.BEACON;
+			} else if (blockEntity instanceof BlastFurnace) {
+				return InventoryType.BLAST_FURNACE;
+			} else if (blockEntity instanceof BrewingStand) {
+				return InventoryType.BREWING;
+			} else if (blockEntity instanceof Chest) {
+				return InventoryType.CHEST;
+			} else if (blockEntity instanceof Dispenser) {
+				return InventoryType.DISPENSER;
+			} else if (blockEntity instanceof Dropper) {
+				return InventoryType.DROPPER;
+			} else if (blockEntity instanceof EnderChest) {
+				return InventoryType.ENDER_CHEST;
+			} else if (blockEntity instanceof Furnace) {
+				return InventoryType.FURNACE;
+			} else if (blockEntity instanceof Hopper) {
+				return InventoryType.ENDER_CHEST;
+			} else if (blockEntity instanceof Smoker) {
+				return InventoryType.SMOKER;
+			} else if (blockEntity instanceof ShulkerBox) {
+				return InventoryType.SHULKER_BOX;
+			}
+		} else if (this.inv instanceof ViewableInventory) {
+			return InventoryType.CHEST;
+		} else if (this.inv instanceof CraftingInventory) {
+			return InventoryType.CRAFTING;
+		} else if (this.inv instanceof UserInventory) {
+			return InventoryType.PLAYER;
+		} else if (this.inv instanceof CarriedInventory) {
+			Carrier carrier = ((CarriedInventory<?>) this.inv).getCarrier().orElse(null);
+			if (carrier instanceof Merchant) {
+				return InventoryType.MERCHANT;
+			} else if (inv instanceof ChestMinecart) {
+				return InventoryType.CHEST;
+			} else if (inv instanceof HopperMinecart) {
+				return InventoryType.HOPPER;
+			}
+		}
+		return InventoryType.UNKNOW;
 	}
 	
 	@Override

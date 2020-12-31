@@ -54,6 +54,6 @@ public abstract class Material implements NegativityObject {
 
 	@Override
 	public String toString() {
-		return "Material{id=" + getId() + "}";
+		return getClass().getSimpleName() + "{id=" + getId() + "}";
 	}
 }

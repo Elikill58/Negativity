@@ -9,11 +9,11 @@ import org.spongepowered.api.item.ItemType;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.sponge8.utils.Utils;
 
-public class SpongeMaterial extends Material {
+public class SpongeItemMaterial extends Material {
 
 	private final ItemType type;
 	
-	public SpongeMaterial(ItemType type) {
+	public SpongeItemMaterial(ItemType type) {
 		this.type = type;
 	}
 	
@@ -34,7 +34,7 @@ public class SpongeMaterial extends Material {
 	}
 
 	@Override
-	public Object getDefault() {
+	public ItemType getDefault() {
 		return type;
 	}
 }

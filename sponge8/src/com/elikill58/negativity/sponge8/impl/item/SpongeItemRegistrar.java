@@ -9,6 +9,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.registry.Registry;
@@ -17,6 +18,7 @@ import org.spongepowered.api.registry.RegistryTypes;
 
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.sponge8.impl.block.SpongeBlockMaterial;
 
 public class SpongeItemRegistrar extends ItemRegistrar {
 	
@@ -30,23 +32,27 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 			RegistryHolder registries = Sponge.getGame().registries();
 			ResourceKey resourceKey = parse(id);
 			
+			Registry<BlockType> blockTypeRegistry = registries.registry(RegistryTypes.BLOCK_TYPE);
+			@Nullable BlockType blockItemType = blockTypeRegistry.findValue(resourceKey).orElse(null);
+			if (blockItemType != null && !returnedDefaultValue(resourceKey, blockItemType)) {
+				return new SpongeBlockMaterial(blockItemType);
+			}
+			
 			Registry<ItemType> itemTypeRegistry = registries.registry(RegistryTypes.ITEM_TYPE);
 			@Nullable ItemType itemType = itemTypeRegistry.findValue(resourceKey).orElse(null);
 			if (itemType != null && !returnedDefaultValue(resourceKey, itemType)) {
-				return new SpongeMaterial(itemType);
-			}
-			
-			@Nullable ItemType blockItemType = registries.registry(RegistryTypes.BLOCK_TYPE).findValue(resourceKey)
-				.flatMap(BlockType::getItem).orElse(null);
-			if (blockItemType != null && !returnedDefaultValue(resourceKey, blockItemType)) {
-				return new SpongeMaterial(blockItemType);
+				return new SpongeItemMaterial(itemType);
 			}
 			
 			for (String alias : aliases) {
 				ResourceKey aliasKey = parse(alias);
+				@Nullable BlockType aliasedBlockType = blockTypeRegistry.findValue(aliasKey).orElse(null);
+				if (aliasedBlockType != null && !returnedDefaultValue(aliasKey, aliasedBlockType)) {
+					return new SpongeBlockMaterial(aliasedBlockType);
+				}
 				@Nullable ItemType aliasedItemType = itemTypeRegistry.findValue(aliasKey).orElse(null);
 				if (aliasedItemType != null && !returnedDefaultValue(aliasKey, aliasedItemType)) {
-					return new SpongeMaterial(aliasedItemType);
+					return new SpongeItemMaterial(aliasedItemType);
 				}
 			}
 			
@@ -60,6 +66,13 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 			return false;
 		}
 		return value.isAnyOf(ItemTypes.AIR);
+	}
+	
+	private static boolean returnedDefaultValue(ResourceKey key, BlockType value) {
+		if (key.namespace().equals("minecraft") && key.value().equals("air")) {
+			return false;
+		}
+		return value.isAnyOf(BlockTypes.AIR);
 	}
 	
 	private ResourceKey parse(String base) {

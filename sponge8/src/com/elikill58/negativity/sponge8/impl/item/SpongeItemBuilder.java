@@ -19,6 +19,7 @@ import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.sponge8.utils.Utils;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -28,7 +29,11 @@ public class SpongeItemBuilder extends ItemBuilder {
 	private final org.spongepowered.api.item.inventory.ItemStack item;
 	
 	public SpongeItemBuilder(Material type) {
-		this.item = org.spongepowered.api.item.inventory.ItemStack.of((ItemType) type.getDefault());
+		ItemType itemType = Utils.getItemType(type);
+		if (itemType == null) {
+			throw new IllegalArgumentException("No ItemType for material " + type);
+		}
+		this.item = org.spongepowered.api.item.inventory.ItemStack.of(itemType);
 	}
 	
 	public SpongeItemBuilder(GameProfile skullProfile) {

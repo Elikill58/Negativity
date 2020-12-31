@@ -27,6 +27,7 @@ import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.metadata.PluginDependency;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.sponge8.Messages;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -106,6 +107,28 @@ public class Utils {
 			}
 		}
 		return false;
+	}
+	
+	@Nullable
+	public static ItemType getItemType(Material material) {
+		Object platformType = material.getDefault();
+		if (platformType instanceof ItemType) {
+			return (ItemType) platformType;
+		} else if (platformType instanceof BlockType) {
+			return ((BlockType) platformType).getItem().orElse(null);
+		}
+		return null;
+	}
+	
+	@Nullable
+	public static BlockType getBlockType(Material material) {
+		Object platformType = material.getDefault();
+		if (platformType instanceof BlockType) {
+			return (BlockType) platformType;
+		} else if (platformType instanceof ItemType) {
+			return ((ItemType) platformType).getBlock().orElse(null);
+		}
+		return null;
 	}
 	
 	public static ResourceKey getKey(EntityType<?> entityType) {

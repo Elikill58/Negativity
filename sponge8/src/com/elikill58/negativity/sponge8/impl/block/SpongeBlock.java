@@ -5,8 +5,8 @@ import java.util.Locale;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.block.BlockSnapshot;
+import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.Keys;
-import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.ServerLocation;
 
@@ -118,8 +118,10 @@ public class SpongeBlock extends Block {
 	public void setType(Material type) {
 		ServerLocation loc = block.getLocation().orElse(null);
 		if (loc != null) {
-			ItemType item = (ItemType) type.getDefault();
-			item.getBlock().ifPresent(loc::setBlockType);
+			BlockType blockType = Utils.getBlockType(type);
+			if (blockType != null) {
+				loc.setBlockType(blockType);
+			}
 		}
 	}
 	

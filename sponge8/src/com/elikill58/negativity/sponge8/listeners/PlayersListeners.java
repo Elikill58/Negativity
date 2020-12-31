@@ -7,6 +7,7 @@ import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
@@ -33,6 +34,7 @@ import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge8.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge8.impl.item.SpongeItemStack;
 import com.elikill58.negativity.sponge8.impl.location.SpongeLocation;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Scheduler;
 
@@ -120,7 +122,13 @@ public class PlayersListeners {
 	public void onInteract(InteractEvent e, @First ServerPlayer p) {
 		PlayerInteractEvent event = new PlayerInteractEvent(SpongeEntityManager.getPlayer(p), Action.LEFT_CLICK_AIR);
 		EventManager.callEvent(event);
-		e.setCancelled(event.isCancelled());
+		if (event.isCancelled()) {
+			if (e instanceof Cancellable) {
+				((Cancellable) e).setCancelled(true);
+			} else {
+				Adapter.getAdapter().getLogger().warn("PlayerInteractEvent was cancelled but Sponge event " + e.getClass().getName() + " can't be cancelled");
+			}
+		}
 	}
 	
 	@Listener

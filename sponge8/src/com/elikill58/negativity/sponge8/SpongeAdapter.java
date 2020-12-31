@@ -214,6 +214,11 @@ public class SpongeAdapter extends Adapter {
 	}
 	
 	@Override
+	public ItemBuilder createSkullItemBuilder(OfflinePlayer owner) {
+		return new SpongeItemBuilder(owner);
+	}
+	
+	@Override
 	public Location createLocation(World w, double x, double y, double z) {
 		return new SpongeLocation(w, x, y, z);
 	}

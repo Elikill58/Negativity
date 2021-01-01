@@ -6,6 +6,7 @@ import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
@@ -27,6 +28,7 @@ import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.utils.SemVer;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ConnectionManager implements Listeners {
@@ -77,15 +79,18 @@ public class ConnectionManager implements Listeners {
 					p.sendMessage(msg);
 				ReportCommand.REPORT_LAST.clear();
 			}
-			new Thread(() -> {
-				if(!Perm.hasPerm(np, Perm.SHOW_ALERT))
-					return;
-				String newerVersion = UniversalUtils.getLatestVersion().orElse("unknow");
-				if(newerVersion.equalsIgnoreCase(Adapter.getAdapter().getPluginVersion()) || !newerVersion.startsWith("2"))
-					return;
-				Adapter.getAdapter().sendMessageRunnableHover(p, ChatColor.YELLOW + "New version of Negativity available (" + newerVersion +  "). "
-					+ ChatColor.BOLD + "Download it here.", "Click here", "https://www.spigotmc.org/resources/48399/");
-			}).start();
+			
+			if (Perm.hasPerm(np, Perm.SHOW_ALERT)) {
+				CompletableFuture.runAsync(() -> {
+					SemVer latestVersion = UniversalUtils.getLatestVersionIfNewer();
+					if (latestVersion != null) {
+						Adapter.getAdapter().sendMessageRunnableHover(p,
+							ChatColor.YELLOW + "New version of Negativity available (" + latestVersion.toFormattedString() + "). "
+								+ ChatColor.BOLD + "Download it here.",
+							"Click here", "https://www.spigotmc.org/resources/48399/");
+					}
+				});
+			}
 		}
 		np.manageAutoVerif();
 	}

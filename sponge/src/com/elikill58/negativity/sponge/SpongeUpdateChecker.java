@@ -7,9 +7,10 @@ import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Optional;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+
+import com.elikill58.negativity.universal.utils.SemVer;
 
 import ninja.leaping.configurate.ConfigurationNode;
 import ninja.leaping.configurate.gson.GsonConfigurationLoader;
@@ -18,19 +19,27 @@ public class SpongeUpdateChecker {
 	
 	private static final String BASE_URL = "https://ore.spongepowered.org/api/v2/";
 	
-	private static String latestVersion;
+	private static @Nullable String latestVersionString;
 	
 	private static boolean checkForUpdate() throws IOException {
-		Optional<String> currentVersion = SpongeNegativity.getInstance().getContainer().getVersion();
-		if (!currentVersion.isPresent())
+		SemVer currentVersion = SpongeNegativity.getInstance().getContainer().getVersion()
+			.map(SemVer::parse).orElse(null);
+		if (currentVersion == null) {
 			return false;
+		}
 		
 		String session = openSession();
 		try {
 			HttpURLConnection connection = prepareConnection("projects/negativity/versions?limit=1", session);
 			ConfigurationNode response = readJsonResponse(connection);
-			latestVersion = response.getNode("result", 0, "name").getString();
-			return !currentVersion.get().equals(latestVersion);
+			String versionString = response.getNode("result", 0, "name").getString();
+			if (versionString == null) {
+				return false;
+			}
+			
+			latestVersionString = versionString;
+			SemVer latestVersion = SemVer.parse(versionString);
+			return latestVersion != null && latestVersion.isNewerThan(currentVersion);
 		} finally {
 			closeSession(session);
 		}
@@ -89,10 +98,10 @@ public class SpongeUpdateChecker {
 	}
 	
 	public static String getDownloadUrl() {
-		return "https://ore.spongepowered.org/Elikill58/Negativity/versions/" + latestVersion;
+		return "https://ore.spongepowered.org/Elikill58/Negativity/versions/" + latestVersionString;
 	}
 	
-	public static String getVersionString() {
-		return latestVersion;
+	public static @Nullable String getVersionString() {
+		return latestVersionString;
 	}
 }

@@ -157,18 +157,6 @@ public class UniversalUtils {
 		}
 	}
 
-	public static boolean isLatestVersion(String version) {
-		if (version == null)
-			return false;
-
-		Optional<String> optVer = getLatestVersion();
-		if (optVer.isPresent()) {
-			String v = optVer.get();
-			return version.equalsIgnoreCase(v) || !v.startsWith("2");
-		} else
-			return true;
-	}
-	
 	public static Optional<String> getContentFromURL(String url){
 		return getContentFromURL(url, "");
 	}
@@ -212,8 +200,26 @@ public class UniversalUtils {
 		return Optional.empty();
 	}
 
-	public static Optional<String> getLatestVersion() {
+	public static Optional<String> getLatestVersionString() {
 		return getContentFromURL("https://api.spigotmc.org/legacy/update.php?resource=48399");
+	}
+	
+	public static Optional<SemVer> getLatestVersion() {
+		return getLatestVersionString().map(SemVer::parse);
+	}
+	
+	public static @Nullable SemVer getLatestVersionIfNewer() {
+		SemVer currentVersion = SemVer.parse(Adapter.getAdapter().getPluginVersion());
+		if (currentVersion == null) {
+			return null;
+		}
+		
+		SemVer latestVersion = getLatestVersion().orElse(null);
+		if (latestVersion != null  && latestVersion.isNewerThan(currentVersion)) {
+			return latestVersion;
+		}
+		
+		return null;
 	}
 
 	public static CompletableFuture<@Nullable String> requestMcleaksData(String uuid) {

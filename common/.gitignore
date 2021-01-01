@@ -6,6 +6,8 @@
 
 !/src/
 !/resources/
+!/testSrc/
+!/testResources/
 
 !/integrations/
 /integrations/*/*

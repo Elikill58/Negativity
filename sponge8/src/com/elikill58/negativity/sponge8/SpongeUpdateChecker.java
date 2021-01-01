@@ -12,20 +12,32 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 
+import com.elikill58.negativity.universal.utils.SemVer;
+
 public class SpongeUpdateChecker {
 	
 	private static final String BASE_URL = "https://ore.spongepowered.org/api/v2/";
 	
-	private static String latestVersion;
+	private static @Nullable String latestVersionString;
 	
 	private static boolean checkForUpdate() throws IOException {
-		String currentVersion = SpongeNegativity.getInstance().getContainer().getMetadata().getVersion();
+		SemVer currentVersion = SemVer.parse(SpongeNegativity.getInstance().getContainer().getMetadata().getVersion());
+		if (currentVersion == null) {
+			return false;
+		}
+		
 		String session = openSession();
 		try {
 			HttpURLConnection connection = prepareConnection("projects/negativity/versions?limit=1", session);
 			ConfigurationNode response = readJsonResponse(connection);
-			latestVersion = response.node("result", 0, "name").getString();
-			return !currentVersion.equals(latestVersion);
+			String versionString = response.node("result", 0, "name").getString();
+			if (versionString == null) {
+				return false;
+			}
+			
+			latestVersionString = versionString;
+			SemVer latestVersion = SemVer.parse(versionString);
+			return latestVersion != null && latestVersion.isNewerThan(currentVersion);
 		} finally {
 			closeSession(session);
 		}
@@ -84,10 +96,10 @@ public class SpongeUpdateChecker {
 	}
 	
 	public static String getDownloadUrl() {
-		return "https://ore.spongepowered.org/Elikill58/Negativity/versions/" + latestVersion;
+		return "https://ore.spongepowered.org/Elikill58/Negativity/versions/" + latestVersionString;
 	}
 	
-	public static String getVersionString() {
-		return latestVersion;
+	public static @Nullable String getVersionString() {
+		return latestVersionString;
 	}
 }

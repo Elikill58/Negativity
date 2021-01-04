@@ -41,6 +41,8 @@ public class PlayersListeners implements Listener {
 	@EventHandler
 	public void onQuit(PlayerQuitEvent e) {
 		Player p = e.getPlayer();
+		if(p.hasMetadata("NPC"))
+			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p));
 		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, e.getQuitMessage());
 		EventManager.callEvent(event);
@@ -51,6 +53,8 @@ public class PlayersListeners implements Listener {
 	@EventHandler
 	public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
 		Player p = e.getPlayer();
+		if(p.hasMetadata("NPC"))
+			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p));
 		if(np.isFreeze && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR))
 			e.setCancelled(true);
@@ -80,12 +84,16 @@ public class PlayersListeners implements Listener {
 	
 	@EventHandler
 	public void onDamageByEntity(EntityDamageByEntityEvent e) {
+		if(e.getEntity().hasMetadata("NPC"))
+			return;
 		if(e.getEntity() instanceof Player)
 			EventManager.callEvent(new PlayerDamageByEntityEvent(SpigotEntityManager.getPlayer((Player) e.getEntity()), SpigotEntityManager.getEntity(e.getDamager())));
 	}
 	
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
+		if(e.getEntity().hasMetadata("NPC"))
+			return;
 		EventManager.callEvent(new com.elikill58.negativity.api.events.player.PlayerDeathEvent(SpigotEntityManager.getPlayer(e.getEntity())));
 	}
 	
@@ -104,7 +112,7 @@ public class PlayersListeners implements Listener {
 	
 	@EventHandler
 	public void onRegainHealth(EntityRegainHealthEvent e) {
-		if(e.getEntity() instanceof Player) {
+		if(e.getEntity() instanceof Player && !e.getEntity().hasMetadata("NPC")) {
 			PlayerRegainHealthEvent event = new PlayerRegainHealthEvent(SpigotEntityManager.getPlayer((Player) e.getEntity()));
 			EventManager.callEvent(event);
 			if(event.isCancelled())
@@ -128,6 +136,8 @@ public class PlayersListeners implements Listener {
 	@EventHandler
 	public void onPlayerJoin(PlayerJoinEvent e) {
 		Player p = e.getPlayer();
+		if(p.hasMetadata("NPC"))
+			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p));
 		PlayerConnectEvent event = new PlayerConnectEvent(np.getPlayer(), np, e.getJoinMessage());
 		EventManager.callEvent(event);

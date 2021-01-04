@@ -216,7 +216,11 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public String getIP() {
-		return entity.getAddress().getAddress().getHostAddress();
+		try {
+			return entity.getAddress().getAddress().getHostAddress();
+		} catch (NullPointerException e) {
+			return "127.0.0.1";
+		}
 	}
 
 	@Override

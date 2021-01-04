@@ -130,6 +130,8 @@ public class PlayersListeners implements Listener {
 	
 	@EventHandler
 	public void onTeleport(org.bukkit.event.player.PlayerTeleportEvent e) {
+		if(e.getPlayer().hasMetadata("NPC"))
+			return;
 		EventManager.callEvent(new PlayerTeleportEvent(SpigotEntityManager.getPlayer(e.getPlayer()), new SpigotLocation(e.getFrom()), new SpigotLocation(e.getTo())));
 	}
 	

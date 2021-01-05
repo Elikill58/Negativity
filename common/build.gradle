@@ -37,6 +37,7 @@ shadowJar {
     mergeServiceFiles()
     from(
             project('integrations:advancedban').jar.outputs.files,
+            project('integrations:dkbans').jar.outputs.files,
             project('integrations:litebans').jar.outputs.files,
             project('integrations:viaversion').jar.outputs.files
     )

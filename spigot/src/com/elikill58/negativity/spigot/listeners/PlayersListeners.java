@@ -120,8 +120,11 @@ public class PlayersListeners implements Listener {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	public void onPreLogin(AsyncPlayerPreLoginEvent e) {
+		if(!e.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) // already kicked
+			return;
+		SpigotNegativity.getInstance().getLogger().info("Login of " + e.getName() + ": " + e.getLoginResult().name());
 		LoginEvent event = new LoginEvent(e.getUniqueId(), e.getName(), Result.valueOf(e.getLoginResult().name()), e.getAddress(), e.getKickMessage());
 		EventManager.callEvent(event);
 		e.setKickMessage(event.getKickMessage());

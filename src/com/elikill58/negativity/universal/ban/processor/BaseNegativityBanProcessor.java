@@ -85,4 +85,9 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 		}
 		return banLogsStorage.load(playerId);
 	}
+	
+	@Override
+	public boolean isHandledByNegativity() {
+		return true;
+	}
 }

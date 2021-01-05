@@ -140,6 +140,9 @@ public class NegativityListener implements Listener {
 
 	@EventHandler
 	public void onPreLogin(LoginEvent event) {
+		if (!BanManager.shouldNegativityHandleBans()) {
+			return;
+		}
 		UUID playerId = event.getConnection().getUniqueId();
 		Ban activeBan = BanManager.getActiveBan(playerId);
 		if (activeBan != null) {

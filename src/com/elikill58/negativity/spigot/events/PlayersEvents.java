@@ -52,7 +52,7 @@ public class PlayersEvents implements Listener {
 		this.invalidNameSection = invalidNameSection;
 	}
 	
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPreLogin(AsyncPlayerPreLoginEvent e) {
 		if(!e.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) // already kicked
 			return;
@@ -61,7 +61,7 @@ public class PlayersEvents implements Listener {
 		NegativityAccount account = NegativityAccount.get(playerId);
 		
 		Ban activeBan = BanManager.getActiveBan(playerId);
-		if (activeBan != null) {
+		if (BanManager.shouldNegativityHandleBans() && activeBan != null) {
 			String kickMsgKey;
 			String formattedExpiration;
 			if (activeBan.isDefinitive()) {

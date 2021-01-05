@@ -158,6 +158,9 @@ public class NegativityListener {
 
 	@Subscribe
 	public void onLogin(LoginEvent event) {
+		if (!BanManager.shouldNegativityHandleBans()) {
+			return;
+		}
 		Player p = event.getPlayer();
 		Ban activeBan = BanManager.getActiveBan(p.getUniqueId());
 		if (activeBan != null) {

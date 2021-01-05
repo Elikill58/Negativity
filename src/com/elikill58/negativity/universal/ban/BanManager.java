@@ -93,6 +93,14 @@ public class BanManager {
 
 		return processor.revokeBan(playerId);
 	}
+	
+	/**
+	 * Indicates whether Negativity should kick banned players
+	 */
+	public static boolean shouldNegativityHandleBans() {
+		BanProcessor processor = getProcessor();
+		return processor != null && processor.isHandledByNegativity();
+	}
 
 	public static String getProcessorId() {
 		return processorId;

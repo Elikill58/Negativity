@@ -48,4 +48,12 @@ public interface BanProcessor {
 	Ban getActiveBan(UUID playerId);
 
 	List<Ban> getLoggedBans(UUID playerId);
+
+	/**
+	 * @return whether Negativity should kick banned players when this BanProcessor
+	 * 	is used, should return {@code false} if bans are handled by another plugin.
+	 */
+	default boolean isHandledByNegativity() {
+		return false;
+	}
 }

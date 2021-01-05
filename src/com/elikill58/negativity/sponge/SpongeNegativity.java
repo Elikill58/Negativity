@@ -311,7 +311,7 @@ public class SpongeNegativity {
 		NegativityAccount account = NegativityAccount.get(playerId);
 		Ban activeBan = BanManager.getActiveBan(playerId);
 		String name = e.getProfile().getName().orElse("");
-		if (activeBan != null) {
+		if (BanManager.shouldNegativityHandleBans() && activeBan != null) {
 			String kickMsgKey;
 			String formattedExpiration;
 			if (activeBan.isDefinitive()) {

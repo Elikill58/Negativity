@@ -120,10 +120,8 @@ public class PlayersListeners implements Listener {
 		}
 	}
 	
-	@EventHandler(priority = EventPriority.MONITOR)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPreLogin(AsyncPlayerPreLoginEvent e) {
-		if(!e.getLoginResult().equals(AsyncPlayerPreLoginEvent.Result.ALLOWED)) // already kicked
-			return;
 		LoginEvent event = new LoginEvent(e.getUniqueId(), e.getName(), Result.valueOf(e.getLoginResult().name()), e.getAddress(), e.getKickMessage());
 		EventManager.callEvent(event);
 		e.setKickMessage(event.getKickMessage());

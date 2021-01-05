@@ -97,7 +97,7 @@ public class ConnectionManager implements Listeners {
 
 	@EventListener
 	public void onLogin(LoginEvent e) {
-		if(!e.getLoginResult().equals(Result.ALLOWED)) // already kicked
+		if(!BanManager.shouldNegativityHandleBans() || !e.getLoginResult().equals(Result.ALLOWED)) // already kicked
 			return;
 		UUID playerId = e.getUUID();
 

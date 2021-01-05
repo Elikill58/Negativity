@@ -132,6 +132,14 @@ public class BanManager {
 		return ban;
 	}
 	
+	/**
+	 * Indicates whether Negativity should kick banned players
+	 */
+	public static boolean shouldNegativityHandleBans() {
+		BanProcessor processor = getProcessor();
+		return processor != null && processor.isHandledByNegativity();
+	}
+	
 	public static List<Sanction> getSanctions() {
 		return SANCTIONS;
 	}

@@ -71,6 +71,9 @@ ban:
   # - file : Saves bans under the ban/ directory of the configuration directory
   # - database : Saves bans in a database. Needs a configured database (see the Database category)
   # - command : Runs commands to ban or unban
+  # The following plugins are also supported :
+  # - dkbans
+  # - litebans
   # Defaults to "file"
   processor: "file"
   # Commands to execute when using the "command" processor

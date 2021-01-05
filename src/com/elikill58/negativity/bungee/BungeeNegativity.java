@@ -4,12 +4,15 @@ import java.io.File;
 import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.util.LinkedHashMap;
+import java.util.StringJoiner;
 
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.adapter.BungeeAdapter;
+import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.ban.support.DKBansProcessor;
 import com.elikill58.negativity.universal.config.MD5ConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -53,6 +56,18 @@ public class BungeeNegativity extends Plugin {
 
 		NegativityAccountStorage.setDefaultStorage("database");
 
+
+		StringJoiner supportedPluginName = new StringJoiner(", ");
+		
+		if(getProxy().getPluginManager().getPlugin("DKBans") != null) {
+			BanManager.registerProcessor("dkbans", new DKBansProcessor());
+			supportedPluginName.add("DKBans");
+		}
+		
+		if (supportedPluginName.length() > 0) {
+			getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
+		}
+		
 		Perm.registerChecker(Perm.PLATFORM_CHECKER, new BungeePermissionChecker());
 
 		Stats.loadStats();

@@ -38,7 +38,7 @@ public class AirJump extends Cheat implements Listeners {
 
 		double diffYtoFrom = e.getTo().getY() - e.getFrom().getY();
 		double lastDiffY = np.doubles.get(AIR_JUMP, "diff-y", 0.0);
-		if(checkActive("diff-y")) {
+		if(checkActive("diff-y") && !np.booleans.get("ALL", "jump-boost-use", false)) {
 			if (diffYtoFrom > 0.35 && lastDiffY < diffYtoFrom && lastDiffY > 0 && !hasOtherThanAir
 					&& !hasOtherThanAirDown
 					&& !hasOtherThanExtended(loc.clone().sub(0, 2, 0), "AIR")) {

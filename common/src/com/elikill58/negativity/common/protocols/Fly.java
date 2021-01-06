@@ -102,22 +102,20 @@ public class Fly extends Cheat implements Listeners {
 				}
 			}
 			
-			if(checkActive("no-ground-down")) {
+			if(checkActive("no-ground-down") && !np.booleans.get("ALL", "jump-boost-use", false)) {
 				if (!np.isUsingSlimeBlock && !hasOtherThanExtended(p.getLocation(), "AIR")
 						&& !hasOtherThanExtended(locUnder, "AIR") && !np.booleans.get(FLY, "boat-falling", false)
-						&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0 && np.booleans.get("ALL", "jump-boost-use", false)
+						&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
 						&& (from.getY() <= to.getY() || inBoat) && p.getVelocity().length() < 1.5) {
-					if (p.getPotionEffect(PotionEffectType.JUMP).orElseGet(() -> new PotionEffect(PotionEffectType.JUMP)).getAmplifier() > 3) {
-						double nbTimeAirBelow = np.doubles.get(FLY, "air-below", 0.0);
-						np.doubles.set(FLY, "air-below", nbTimeAirBelow + 1);
-						if(nbTimeAirBelow > 6) { // we don't care when player jump
-							int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
-							if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Materials.AIR))
-								porcent = parseInPorcent(porcent - 15);
-							mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
-									this, porcent, "no-ground-down", "Player not in ground (" + nb + " air blocks down), distance Y: " + d,
-											hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb));
-						}
+					double nbTimeAirBelow = np.doubles.get(FLY, "air-below", 0.0);
+					np.doubles.set(FLY, "air-below", nbTimeAirBelow + 1);
+					if(nbTimeAirBelow > 6) { // we don't care when player jump
+						int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
+						if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Materials.AIR))
+							porcent = parseInPorcent(porcent - 15);
+						mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
+								this, porcent, "no-ground-down", "Player not in ground (" + nb + " air blocks down), distance Y: " + d,
+										hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb));
 					}
 				} else
 					np.doubles.remove(FLY, "air-below");

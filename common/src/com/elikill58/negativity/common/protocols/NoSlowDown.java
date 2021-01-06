@@ -17,7 +17,6 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -64,13 +63,13 @@ public class NoSlowDown extends Cheat implements Listeners {
 						hoverMsg("main", "%distance%", String.format("%.2f", distance)));
 			}
 	    }
-	    if(checkActive("walk-speed")) {
+	    /*if(checkActive("walk-speed")) {
 			double dif = to.getY() - from.getY();
-			if (dif == 0 && distance >= p.getWalkSpeed() && np.booleans.get(NO_SLOW_DOWN, "eating", false)) {
+			if (dif == 0 && distance >= p.getWalkSpeed() && np.ints.get(NO_SLOW_DOWN, "eating", 0) >= 3) {
 				mayCancel = Negativity.alertMod(distance >= (p.getWalkSpeed() * 1.5) ? ReportType.VIOLATION : ReportType.WARNING, p,
 						this, UniversalUtils.parseInPorcent(distance * 350), "walk-speed", "Distance: " + distance + ", walkSpeed: " + p.getWalkSpeed());
 			}
-	    }
+	    }*/
 		if (isSetBack() && mayCancel)
 			e.setTo(from.clone().add(fl.getX() / 2, (fl.getY() / 2) + 0.5, fl.getZ()));
 	}
@@ -96,16 +95,18 @@ public class NoSlowDown extends Cheat implements Listeners {
 	
 	@EventListener
 	public void onPacket(PacketReceiveEvent e) {
+		/*if(!checkActive("walk-speed"))
+			return;
 		Player p = e.getPlayer();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		PacketType type = e.getPacket().getPacketType();
-		if(type.equals(PacketType.Client.ARM_ANIMATION)) {
+		if(type.equals(PacketType.Client.BLOCK_PLACE)) {
 			ItemStack item = e.getPlayer().getItemInHand();
 			if(item != null && item.getType().isConsumable())
-				np.booleans.set(NO_SLOW_DOWN, "eating", true);
+				np.ints.set(NO_SLOW_DOWN, "eating", np.ints.get(NO_SLOW_DOWN, "eating", 0) + 1);
 			
 		} else if(!type.isFlyingPacket()) {
-			np.booleans.remove(NO_SLOW_DOWN, "eating");
-		}
+			np.ints.remove(NO_SLOW_DOWN, "eating");
+		}*/
 	}
 }

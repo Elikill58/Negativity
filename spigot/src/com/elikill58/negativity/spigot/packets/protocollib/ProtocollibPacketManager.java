@@ -27,6 +27,8 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 		protocolManager.addPacketListener(new PacketAdapter(pl, ListenerPriority.LOWEST, PacketRegistry.getClientPacketTypes()) {
 			@Override
 			public void onPacketSending(PacketEvent e) {
+		        if(e.isPlayerTemporary())
+		        	return;
 				AbstractPacket packet = onPacketSent(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),
 						e.getPlayer(), e.getPacket().getHandle(), e);
 		        if(!e.isCancelled())
@@ -50,6 +52,8 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 		protocolManager.addPacketListener(new PacketAdapter(pl, ListenerPriority.LOWEST, packets) {
 			@Override
 			public void onPacketSending(PacketEvent e) {
+		        if(e.isPlayerTemporary())
+		        	return;
 				AbstractPacket packet = onPacketSent(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),
 						e.getPlayer(), e.getPacket().getHandle(), e);
 		        if(!e.isCancelled())

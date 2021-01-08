@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
@@ -38,6 +39,9 @@ public class Jesus extends Cheat implements Listeners {
 		if (!np.hasDetectionActive(this))
 			return;
 		if (p.hasElytra() || p.isInsideVehicle() || p.isSwimming())
+			return;
+		ItemStack item = p.getItemInHand();
+		if(item != null && item.getType().getId().contains("TRIDENT"))
 			return;
 		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom(), under = loc.clone().sub(0, 1, 0);
 		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY")

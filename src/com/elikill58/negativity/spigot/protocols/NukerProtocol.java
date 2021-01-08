@@ -58,7 +58,7 @@ public class NukerProtocol extends Cheat implements Listener {
 	}
 	
 	private boolean isInstantBlock(String m) {
-		return m.contains("SLIME") || m.contains("TNT") || m.contains("LEAVE") || m.contains("NETHERRACK");
+		return m.contains("SLIME") || m.contains("TNT") || m.contains("LEAVE") || m.contains("NETHERRACK") || m.contains("BAMBOO") || m.contains("SNOW");
 	}
 
 	public static boolean hasDigSpeedEnchant(ItemStack item) {

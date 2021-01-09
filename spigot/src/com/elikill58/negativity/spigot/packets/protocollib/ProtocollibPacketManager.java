@@ -1,7 +1,7 @@
 package com.elikill58.negativity.spigot.packets.protocollib;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -25,6 +25,7 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 	public ProtocollibPacketManager(Plugin pl) {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		protocolManager.addPacketListener(new PacketAdapter(pl, ListenerPriority.LOWEST, PacketRegistry.getClientPacketTypes()) {
+			
 			@Override
 			public void onPacketSending(PacketEvent e) {
 		        if(e.isPlayerTemporary())
@@ -48,7 +49,10 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 		        	e.setCancelled(packet.isCancelled());
 			}
 		});
-		List<com.comphenix.protocol.PacketType> packets = Play.Server.getInstance().values().stream().filter(com.comphenix.protocol.PacketType::isSupported).collect(Collectors.toList());
+		//List<com.comphenix.protocol.PacketType> packetToDontUse= Arrays.asList(Play.Server.MAP, Play.Server.ENTITY_METADATA);
+		//List<com.comphenix.protocol.PacketType> packets = Play.Server.getInstance().values().stream().filter(com.comphenix.protocol.PacketType::isSupported).filter(packetToDontUse::contains).collect(Collectors.toList());
+		//protocolManager.addPacketListener(new PacketAdapter(pl, ListenerPriority.LOWEST, Play.Server.MAP, Play.Server.ENTITY_METADATA) {
+		List<com.comphenix.protocol.PacketType> packets = Arrays.asList(Play.Server.ENTITY_VELOCITY, Play.Server.ENTITY_EFFECT, Play.Server.REMOVE_ENTITY_EFFECT);
 		protocolManager.addPacketListener(new PacketAdapter(pl, ListenerPriority.LOWEST, packets) {
 			@Override
 			public void onPacketSending(PacketEvent e) {

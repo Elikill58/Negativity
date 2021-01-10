@@ -95,10 +95,10 @@ public class SpiderProtocol extends Cheat implements Listener {
 	}
 		
 	private boolean hasBypassBlockAround(Location loc) {
-		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD"))
+		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD", "CAKE"))
 			return true;
 		loc = loc.clone().subtract(0, 1, 0);
-		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD"))
+		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD", "CAKE"))
 			return true;
 		return false;
 	}

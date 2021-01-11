@@ -39,7 +39,7 @@ public class FastLadder extends Cheat implements Listeners {
 			np.isOnLadders = true;
 			return;
 		}
-		if(p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP))
+		if(p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP) || p.hasElytra())
 			return;
 		for (PotionEffect pe : p.getActivePotionEffect())
 			if (pe.getType().equals(PotionEffectType.SPEED) && pe.getAmplifier() > 2)

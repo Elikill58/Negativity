@@ -49,6 +49,8 @@ public class Step extends Cheat implements Listeners {
 				p.isFlying() || LocationUtils.isUsingElevator(p))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
+		if(to.clone().sub(0, 1, 0).getBlock().getType().getId().contains("SHULKER"))
+			return;
 		double dif = to.getY() - from.getY();
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier() : 0);
 		boolean isUsingJumpBoost = false;

@@ -54,6 +54,8 @@ public class StepProtocol extends Cheat implements Listener {
 				|| p.isFlying() || LocationUtils.isUsingElevator(p) || p.isInsideVehicle())
 			return;
 		Location from = e.getFrom(), to = e.getTo();
+		if(to.clone().subtract(0, 1, 0).getBlock().getType().name().contains("SHULKER"))
+			return;
 		double dif = to.getY() - from.getY();
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? Utils.getPotionEffect(p, PotionEffectType.JUMP).getAmplifier() : 0);
 		boolean isUsingJumpBoost = false;

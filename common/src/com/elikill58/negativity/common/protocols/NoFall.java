@@ -41,8 +41,8 @@ public class NoFall extends Cheat implements Listeners {
 		Block b = p.getLocation().getBlock();
 		Location locDown = b.getRelative(BlockFace.DOWN).getLocation();
 		Location locUp = b.getRelative(BlockFace.UP).getLocation();
+		double motionY = from.getY() - to.getY();
 		if(checkActive("motion-y")) {
-			double motionY = from.getY() - to.getY();
 			if(to.clone().add(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).getBlock().getType().equals(Materials.AIR)
 					&& locDown.getBlock().getType().equals(Materials.AIR) && locUp.getBlock().getType().equals(Materials.AIR)
 					&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD") && (motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
@@ -89,11 +89,11 @@ public class NoFall extends Cheat implements Listeners {
 					}
 				}
 			} else if(!p.isOnGround() && checkActive("have-to-ground")) {
-				Material justUnder = p.getLocation().clone().sub(0, 0.1, 0).getBlock().getType();
-				if(justUnder.isSolid() && p.getFallDistance() > 3.0 && !np.isInFight) {
+				Material justUnder = p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();
+				if(justUnder.isSolid() && p.getFallDistance() > 3.0 && !np.isInFight && motionY <= 0) {
 					int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(100 - (ping / 5) + p.getFallDistance());
 					boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "have-to-ground",
-							"Player not ground with fall damage (FallDistance: " + p.getFallDistance() + "). Block 0.1 below: " + justUnder.getId()
+							"Player not ground with fall damage (FallDistance: " + p.getFallDistance() + "). Block down: " + justUnder.getId()
 									+ ", DistanceBetweenFromAndTo: " + distance);
 					if(mayCancel && isSetBack())
 						manageDamage(p, (int) p.getFallDistance(), relia);

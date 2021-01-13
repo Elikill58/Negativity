@@ -21,6 +21,7 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
@@ -55,6 +56,8 @@ public class StepProtocol extends Cheat implements Listener {
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		if(to.clone().subtract(0, 1, 0).getBlock().getType().name().contains("SHULKER"))
+			return;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
 		double dif = to.getY() - from.getY();
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? Utils.getPotionEffect(p, PotionEffectType.JUMP).getAmplifier() : 0);

@@ -46,6 +46,8 @@ public class SpiderProtocol extends Cheat implements Listener {
 			return;
 		if (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT"))
 			return;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
+			return;
 		if(hasBypassBlockAround(loc))
 			return;
 		double y = e.getTo().getY() - e.getFrom().getY();

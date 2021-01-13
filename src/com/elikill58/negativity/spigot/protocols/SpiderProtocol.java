@@ -16,6 +16,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 @SuppressWarnings("deprecation")
@@ -74,6 +75,8 @@ public class SpiderProtocol extends Cheat implements Listener {
 			return;
 		String blockName = p.getLocation().getBlock().getType().name();
 		if(blockName.contains("LADDER") || blockName.contains("VINE"))
+			return;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
 		
 		double y = e.getTo().getY() - e.getFrom().getY();

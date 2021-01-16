@@ -39,6 +39,8 @@ checks:
   # Check the reach
   reach:
     active: true
+    # Yes it's 4 and not 3 because of internal maths. It will edited soon.
+    value: 4
   # Has fake player enabled
   ghost:
     active: true

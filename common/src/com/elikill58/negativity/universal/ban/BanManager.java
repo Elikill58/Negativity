@@ -26,6 +26,9 @@ import com.elikill58.negativity.universal.ban.storage.DatabaseBanLogsStorage;
 import com.elikill58.negativity.universal.ban.storage.FileActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.FileBanLogsStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.webhooks.WebhookManager;
+import com.elikill58.negativity.universal.webhooks.WebhookMessage;
+import com.elikill58.negativity.universal.webhooks.WebhookMessage.WebhookMessageType;
 
 public class BanManager {
 
@@ -79,7 +82,11 @@ public class BanManager {
 			return new BanResult(BanResultType.UNKNOW_PROCESSOR, null);
 		}
 
-		return processor.executeBan(ban);
+		BanResult br = processor.executeBan(ban);
+		if(br.isSuccess()) {
+			WebhookManager.send(new WebhookMessage(WebhookMessageType.BAN, Adapter.getAdapter().getPlayer(ban.getPlayerId()), ban.getBannedBy(), ban.getExecutionTime()));
+		}
+		return br;
 	}
 
 	/**

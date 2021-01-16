@@ -12,6 +12,9 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.webhooks.WebhookManager;
+import com.elikill58.negativity.universal.webhooks.WebhookMessage;
+import com.elikill58.negativity.universal.webhooks.WebhookMessage.WebhookMessageType;
 
 public class KickCommand implements CommandListeners, TabListeners {
 
@@ -48,6 +51,7 @@ public class KickCommand implements CommandListeners, TabListeners {
 		String reason = stringJoiner.toString();
 		target.kick(Messages.getMessage(target, "kick.kicked", "%name%", target.getName(), "%reason%", reason));
 		Messages.sendMessage(sender, "kick.well_kick", "%name%", target.getName(), "%reason%", reason);
+		WebhookManager.send(new WebhookMessage(WebhookMessageType.KICK, target, sender.getName(), System.currentTimeMillis(), "%reason%", reason));
 		return false;
 	}
 

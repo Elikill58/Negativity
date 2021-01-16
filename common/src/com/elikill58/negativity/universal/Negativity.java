@@ -42,6 +42,9 @@ import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
+import com.elikill58.negativity.universal.webhooks.WebhookManager;
+import com.elikill58.negativity.universal.webhooks.WebhookMessage;
+import com.elikill58.negativity.universal.webhooks.WebhookMessage.WebhookMessageType;
 
 public class Negativity {
 
@@ -214,6 +217,8 @@ public class Negativity {
 						+ p.getUniqueId() + ") seem to use " + c.getName() + " "
 						+ (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability + " " + sLoc);
 		}
+		WebhookManager.send(new WebhookMessage(WebhookMessageType.ALERT, p, "Negativity", System.currentTimeMillis(), "%cheat%", alert.getCheat().getName(),
+				"%amount%", alert.getNbAlert() == 0 ? 1 : alert.getNbAlert(), "%reliability%", alert.getReliability()));
 		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
 			sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg, alert.getNbAlert());
@@ -333,6 +338,7 @@ public class Negativity {
 			PlayerVersionManager.init();
 			PlayerModificationsManager.init();
 			VerificationManager.init();
+			WebhookManager.init();
 		}
 		UniversalUtils.init();
 		

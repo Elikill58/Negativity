@@ -18,7 +18,6 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.utils.Utils;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -88,7 +87,7 @@ public class ForceField extends Cheat implements Listeners {
 			tempLoc.setY(p.getLocation().getY());
 			double dis = tempLoc.distance(p.getLocation());
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-			if (checkActive("reach") && dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !e.getDamager().getType().equals(EntityType.ENDER_DRAGON)) {
+			if (checkActive("reach") && dis > getConfig().getDouble("check.reach.value", 3.9) && !e.getDamager().getType().equals(EntityType.ENDER_DRAGON)) {
 				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getEntity().getType().name().toLowerCase(Locale.ROOT) : e.getEntity().getName();
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10), "reach",
 						"Big distance with: " + e.getEntity().getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns", hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));

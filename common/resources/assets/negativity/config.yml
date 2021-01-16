@@ -321,3 +321,215 @@ region-bypass:
     # the cheats keys
     cheats:
     - "fly"
+
+# Manage webhook
+webhooks:
+  enable: false
+  hook:
+    discord-example:
+      type: "discord"
+      # register the webhook URL used by Negativity
+      url: "https://discord.com/api/webhooks/theRestOfDiscordUrl"
+      # Configure messages presentation
+      # If you don't set one of them, it will get the default configuration
+      #
+      # Placeholders available everywhere :
+      # %name% : Name of the player which procude the message
+      # %uuid% : UUID of the player which procude the message
+      # %ip% : IP of the player which produce the message
+      # %date% : Date when the player procude the message
+      # %sender% : The sender of the message (such as banner or reporter)
+      # 
+      messages:
+        # Configure discord webhook message for ban.
+        #
+        # Placeholders available :
+        # %cheat% : the cheat name
+        # %amount% : Amount of alert made by player
+        # %reliability% : Reliability of the cheat
+        alert:
+          enabled: true
+          # The name which will send the message
+          username: "Negativity"
+          # The content of the message
+          content: ""
+          # The URL of the message avatar
+          avatar_url: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
+          # Now let's configure embed message (the section with black background)
+          embed:
+            # Color of the embed (used with the line on the left)
+            color: "green"
+            # The embed title
+            title: "Alert"
+            # Main description
+            description: "%name% seems to use %cheat% %amount%x (Reliability: %reliability%)"
+            # All fields.
+            # There is 3 fields per line MAX.
+            # Else, they will automatically be on the next line.
+            fields:
+              1:
+                # The key which will be at top of field (and bold)
+                key: "Player name"
+                # The value of the field
+                value: "%name%"
+                # If the field is inline
+                inline: true
+              2:
+                key: "Player UUID"
+                value: "%uuid%"
+                inline: true
+            # Thumbnail of the message
+            thumbnail: "https://kryptongta.com/images/kryptonlogo.png"
+            # The footer of the message
+            footer:
+              name: "Negativity - %date%"
+              link: "https://kryptongta.com/images/kryptonlogodark.png"
+            # Author details of the message
+            author:
+              name: "Negativity"
+              link: "https://github.com/Elikill58/Negativity"
+              icon: "https://kryptongta.com/images/kryptonlogowide.png"
+        # Configure discord webhook message for ban.
+        #
+        # Placeholders available :
+        # %name% : Name of the banned player
+        # %uuid% : UUID of the banned player
+        # %date% : Date when the player have been banned
+        ban:
+          enabled: true
+          # The name which will send the message
+          username: "Negativity"
+          # The content of the message
+          content: ""
+          # The URL of the message avatar
+          avatar_url: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
+          # Now let's configure embed message (the section with black background)
+          embed:
+            # Color of the embed (used with the line on the left)
+            color: "red"
+            # The embed title
+            title: "Ban"
+            # Main description
+            description: "%name% have been banned by %sender% for %reason%"
+            # All fields.
+            # There is 3 fields per line MAX.
+            # Else, they will automatically be on the next line.
+            fields:
+              1:
+                # The key which will be at top of field (and bold)
+                key: "Player name"
+                # The value of the field
+                value: "%name%"
+                # If the field is inline
+                inline: true
+              2:
+                key: "Player UUID"
+                value: "%uuid%"
+                inline: true
+            # Thumbnail of the message
+            thumbnail: "https://kryptongta.com/images/kryptonlogo.png"
+            # The footer of the message
+            footer:
+              name: "Negativity - %date%"
+              link: "https://kryptongta.com/images/kryptonlogodark.png"
+            # Author details of the message
+            author:
+              name: "Negativity"
+              link: "https://github.com/Elikill58/Negativity"
+              icon: "https://kryptongta.com/images/kryptonlogowide.png"
+        # Configure discord webhook message for ban.
+        #
+        # Placeholders available :
+        # %reason% : Name of the banned player
+        kick:
+          enabled: true
+          # The name which will send the message
+          username: "Negativity"
+          # The content of the message
+          content: ""
+          # The URL of the message avatar
+          avatar_url: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
+          # Now let's configure embed message (the section with black background)
+          embed:
+            # Color of the embed (used with the line on the left)
+            color: "blue"
+            # The embed title
+            title: "Kick"
+            # Main description
+            description: "%name% have been kicked by %sender% for %reason%"
+            # All fields.
+            # There is 3 fields per line MAX.
+            # Else, they will automatically be on the next line.
+            fields:
+              1:
+                # The key which will be at top of field (and bold)
+                key: "Player name"
+                # The value of the field
+                value: "%name%"
+                # If the field is inline
+                inline: true
+              2:
+                key: "Player UUID"
+                value: "%uuid%"
+                inline: true
+            # Thumbnail of the message
+            thumbnail: "https://kryptongta.com/images/kryptonlogo.png"
+            # The footer of the message
+            footer:
+              name: "Negativity - %date%"
+              link: "https://kryptongta.com/images/kryptonlogodark.png"
+            # Author details of the message
+            author:
+              name: "Negativity"
+              link: "https://github.com/Elikill58/Negativity"
+              icon: "https://kryptongta.com/images/kryptonlogowide.png"
+        # Configure discord webhook message for ban.
+        #
+        # Placeholders available :
+        # %reason% : Name of the banned player
+        report:
+          enabled: true
+          # The name which will send the message
+          username: "Negativity"
+          # The content of the message
+          content: ""
+          # The URL of the message avatar
+          avatar_url: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
+          # Now let's configure embed message (the section with black background)
+          embed:
+            # Color of the embed (used with the line on the left)
+            color: "red"
+            # The embed title
+            title: "Report"
+            # Main description
+            description: "%name% have been reported by %sender% for %reason%"
+            # All fields.
+            # There is 3 fields per line MAX.
+            # Else, they will automatically be on the next line.
+            fields:
+              1:
+                # The key which will be at top of field (and bold)
+                key: "Player name"
+                # The value of the field
+                value: "%name%"
+                # If the field is inline
+                inline: true
+              2:
+                key: "Player UUID"
+                value: "%uuid%"
+                inline: true
+            # Thumbnail of the message
+            thumbnail: "https://kryptongta.com/images/kryptonlogo.png"
+            # The footer of the message
+            footer:
+              name: "Negativity - %date%"
+              link: "https://kryptongta.com/images/kryptonlogodark.png"
+            # Author details of the message
+            author:
+              name: "Negativity"
+              link: "https://github.com/Elikill58/Negativity"
+              icon: "https://kryptongta.com/images/kryptonlogowide.png"
+
+    discord-another-example:
+      type: "discord"
+      url: "https://discord.com/api/webhooks/theRestOfSecondDiscordUrl"

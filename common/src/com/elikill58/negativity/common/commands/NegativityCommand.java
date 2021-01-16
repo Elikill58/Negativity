@@ -39,6 +39,8 @@ import com.elikill58.negativity.universal.translation.MessagesUpdater;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 import com.elikill58.negativity.universal.verif.Verificator;
+import com.elikill58.negativity.universal.webhooks.Webhook;
+import com.elikill58.negativity.universal.webhooks.WebhookManager;
 
 public class NegativityCommand implements CommandListeners, TabListeners {
 
@@ -135,7 +137,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			return true;
 		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase(Locale.ROOT).contains("manage")) {
 			if (arg.length >= 2 && arg[1].equalsIgnoreCase("updateMessages")) {
-				if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getCached(((Player) sender).getUniqueId()), Perm.MANAGE_CHEAT)) {
+				if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getNegativityPlayer((Player) sender), Perm.MANAGE_CHEAT)) {
 					Messages.sendMessage(sender, "not_permission");
 					return true;
 				}
@@ -162,6 +164,28 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			} catch (Exception e) {
 				sender.sendMessage("An error occurred when performing migration: " + e.getMessage());
 				e.printStackTrace();
+			}
+			return true;
+		} else if (arg[0].equalsIgnoreCase("webhook")) {
+			if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getNegativityPlayer((Player) sender), Perm.ADMIN)) {
+				Messages.sendMessage(sender, "not_permission");
+				return true;
+			}
+			if(WebhookManager.isEnabled()) {
+				List<Webhook> webhooks = WebhookManager.getWebhooks();
+				if(webhooks.isEmpty()) {
+					sender.sendMessage(ChatColor.YELLOW + "No webhook configurated.");
+				} else {
+					for(Webhook hook : webhooks) {
+						if(hook.ping(sender.getName())) {
+							sender.sendMessage(ChatColor.GREEN + hook.getWebhookName() + " well configurated.");
+						} else {
+							sender.sendMessage(ChatColor.RED + hook.getWebhookName() + " seems to don't work.");
+						}
+					}
+				}
+			} else {
+				sender.sendMessage(ChatColor.YELLOW + "Webhooks are disabled.");
 			}
 			return true;
 		} else if (arg[0].equalsIgnoreCase("debug")) {

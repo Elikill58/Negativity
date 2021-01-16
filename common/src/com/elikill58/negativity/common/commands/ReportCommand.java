@@ -20,6 +20,9 @@ import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.report.Report;
+import com.elikill58.negativity.universal.webhooks.WebhookManager;
+import com.elikill58.negativity.universal.webhooks.WebhookMessage;
+import com.elikill58.negativity.universal.webhooks.WebhookMessage.WebhookMessageType;
 
 public class ReportCommand implements CommandListeners, TabListeners {
 
@@ -90,6 +93,8 @@ public class ReportCommand implements CommandListeners, TabListeners {
 
 		NegativityPlayer.getNegativityPlayer(reporter).TIME_REPORT = System.currentTimeMillis()
 				+ Adapter.getAdapter().getConfig().getInt("time_between_report");
+		
+		WebhookManager.send(new WebhookMessage(WebhookMessageType.REPORT, target, reporter.getName(), System.currentTimeMillis(), "%reason%", reason));
 	}
 
 	@Override

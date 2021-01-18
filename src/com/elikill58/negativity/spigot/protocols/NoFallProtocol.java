@@ -48,17 +48,18 @@ public class NoFallProtocol extends Cheat implements Listener {
 		if (p.getAllowFlight() || np.hasElytra() || p.getVehicle() != null || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
+		if(LocationUtils.hasMaterialsAround(to, "WATER"))
+			return;
 		double distance = to.toVector().distance(from.toVector());
 		Block b = p.getLocation().getBlock();
 		Location locDown = b.getRelative(BlockFace.DOWN).getLocation();
 		Location locUp = b.getRelative(BlockFace.UP).getLocation();
 		double motionY = from.getY() - to.getY();
-		if (to.clone().add(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).getBlock().getType().equals(Material.AIR)
-				&& locDown.getBlock().getType().equals(Material.AIR)
+		if (np.isOnGround() && to.clone().add(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).getBlock().getType().equals(Material.AIR)
+				&& locDown.getBlock().getType().equals(Material.AIR) && !np.isInFight && !isWaterLogged(locDown.getBlock())
 				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD", "SLAB", "HONEY_BLOCK")
-				&& ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0)
-				|| (motionY > (p.getWalkSpeed() / 2)) && (np.isOnGround() && p.getFallDistance() > 0.2)
-						&& p.getWalkSpeed() > p.getFallDistance()) && !np.isInFight && !isWaterLogged(locDown.getBlock())) {
+				&& ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0) || (motionY > (p.getWalkSpeed() / 2)))
+				&& p.getFallDistance() > 0.2 && p.getWalkSpeed() > p.getFallDistance()) {
 			if (locUp.getBlock().getType().name().contains("WATER") || LocationUtils.isUsingElevator(p))
 				np.useAntiNoFallSystem = true;
 			if (!np.useAntiNoFallSystem) {

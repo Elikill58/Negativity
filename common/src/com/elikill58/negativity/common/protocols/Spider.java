@@ -36,7 +36,7 @@ public class Spider extends Cheat implements Listeners {
 			return;
 		if(!checkActive("nothing-around"))
 			return;
-		if (p.getFallDistance() != 0 || p.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP)
+		if (p.getFallDistance() != 0 || p.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP) || np.booleans.get("ALL", "jump-boost-use", false)
 				|| !LocationUtils.hasOtherThan(loc, Materials.AIR) || (e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ()))
 				return;
 		Material underPlayer = loc.clone().sub(0, 1, 0).getBlock().getType(),

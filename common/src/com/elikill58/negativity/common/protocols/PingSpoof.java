@@ -55,6 +55,8 @@ public class PingSpoof extends Cheat implements Listeners {
 		}
 		if (newPing <= 200)
 			return;
+		if (newPing < lastPing && (newPing * 1.2) < lastPing) // if ping is going normal
+			return;
 		try {
 			if (p.getAddress().getAddress().isReachable(newPing - 150)) {
 				Negativity.alertMod(ReportType.WARNING, p, Cheat.forKey(PINGSPOOF), 98, "reachable",

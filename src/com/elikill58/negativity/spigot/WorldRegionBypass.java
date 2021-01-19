@@ -31,7 +31,7 @@ public class WorldRegionBypass {
 	public static boolean hasBypass(Cheat c, Location loc) {
 		if(!IS_ENABLED || REGIONS_BYPASS.isEmpty())
 			return false;
-		List<WorldRegionBypass> list = REGIONS_BYPASS.stream().distinct().filter((by) -> by.getCheats().contains(c)).collect(Collectors.toList());
+		List<WorldRegionBypass> list = REGIONS_BYPASS.stream().distinct().filter((by) -> by.getCheatKeys().contains(c.getKey())).collect(Collectors.toList());
 		if(list.isEmpty())
 			return false;
 		for(WorldRegionBypass bypass : list) {
@@ -43,16 +43,20 @@ public class WorldRegionBypass {
 		return false;
 	}
 	
-	private final List<Cheat> cheats = new ArrayList<>();
+	private final List<String> cheats = new ArrayList<>();
 	private final List<String> regions, worlds;
 	
 	public WorldRegionBypass(ConfigurationSection section) {
 		for(String possibleCheats : section.getStringList("cheats")) {
-			Cheat cheat = Cheat.fromString(possibleCheats);
-			if(cheat == null)
-				SpigotNegativity.getInstance().getLogger().info("Cannot find the cheat " + possibleCheats + " in region bypass (Path: " + section.getCurrentPath() + ")");
-			else
-				cheats.add(cheat);
+			if(possibleCheats.equalsIgnoreCase("all")) {
+				cheats.addAll(Cheat.CHEATS_BY_KEY.keySet());
+			} else {
+				Cheat cheat = Cheat.fromString(possibleCheats);
+				if(cheat == null)
+					SpigotNegativity.getInstance().getLogger().info("Cannot find the cheat " + possibleCheats + " in region bypass (Path: " + section.getCurrentPath() + ")");
+				else
+					cheats.add(cheat.getKey());
+			}
 		}
 		
 		regions = section.getStringList("regions");
@@ -61,7 +65,7 @@ public class WorldRegionBypass {
 		REGIONS_BYPASS.add(this);
 	}
 	
-	public List<Cheat> getCheats() {
+	public List<String> getCheatKeys() {
 		return cheats;
 	}
 

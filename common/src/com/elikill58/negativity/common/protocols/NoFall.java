@@ -16,6 +16,7 @@ import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -35,6 +36,8 @@ public class NoFall extends Cheat implements Listeners {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		if(p.getAllowFlight() || p.hasElytra() || p.isInsideVehicle() || p.hasPotionEffect(PotionEffectType.SPEED))
+			return;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		if(LocationUtils.hasMaterialsAround(to, "WATER"))

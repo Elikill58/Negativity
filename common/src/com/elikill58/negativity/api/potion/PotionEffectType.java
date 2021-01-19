@@ -26,6 +26,7 @@ public enum PotionEffectType {
 	REGENERATION("minecraft:regeneration", "HEALTH_BOOST"),
 	SLOW("minecraft:slowness"),
 	SLOW_DIGGING("minecraft:mining_fatigue"),
+	SLOW_FALLING("minecraft:slow_falling"),
 	SPEED("minecraft:speed"),
 	WATER_BREATHING("minecraft:water_breathing"),
 	WEAKNESS("minecraft:weakness"),

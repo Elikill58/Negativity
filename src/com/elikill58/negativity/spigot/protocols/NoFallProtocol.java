@@ -47,6 +47,8 @@ public class NoFallProtocol extends Cheat implements Listener {
 			return;
 		if (p.getAllowFlight() || np.hasElytra() || p.getVehicle() != null || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
+			return;
 		Location from = e.getFrom(), to = e.getTo();
 		if(LocationUtils.hasMaterialsAround(to, "WATER"))
 			return;

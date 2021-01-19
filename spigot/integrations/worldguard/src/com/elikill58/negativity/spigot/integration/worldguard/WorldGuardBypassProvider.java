@@ -23,7 +23,7 @@ public class WorldGuardBypassProvider implements BypassCheckerProvider, PluginDe
 		List<BypassChecker> checkers = new ArrayList<>();
 		for (String keys : sectionRegionBypass.getKeys()) {
 			if (!keys.equalsIgnoreCase("enabled")) {
-				checkers.add(new WorldRegionBypass(sectionRegionBypass.getSection(keys)));
+				checkers.add(new RegionBypass(sectionRegionBypass.getSection(keys)));
 			}
 		}
 		return checkers;

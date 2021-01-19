@@ -135,6 +135,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 			Adapter.getAdapter().reload();
 			Messages.sendMessage(sender, "negativity.reload_done");
+			sender.sendMessage(ChatColor.YELLOW + "Warn: We are sorry but this reload option can don't reload what you want. So, if anything change, we suggest you to make a complete reload/restart.");
 			return true;
 		} else if (arg[0].equalsIgnoreCase("mod")) {
 			if (!(sender instanceof Player)) {

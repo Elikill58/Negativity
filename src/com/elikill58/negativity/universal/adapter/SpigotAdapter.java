@@ -102,6 +102,7 @@ public class SpigotAdapter extends Adapter {
 	public void reload() {
 		reloadConfig();
 		UniversalUtils.init();
+		Cheat.loadCheat();
 		ProxyCompanionManager.updateForceDisabled(getConfig().getBoolean("disableProxyIntegration"));
 		SpigotNegativity.trySendProxyPing();
 		SpigotNegativity.setupValue();

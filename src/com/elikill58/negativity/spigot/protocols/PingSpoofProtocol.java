@@ -39,6 +39,8 @@ public class PingSpoofProtocol extends Cheat implements Listener {
 		}
 		if (newPing <= 200)
 			return;
+		if (newPing < lastPing && (newPing * 1.2) < lastPing) // if ping is going normal
+			return;
 		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), () -> {
 			try {
 				if (p.getPlayer().getAddress().getAddress().isReachable(newPing - 150)) {

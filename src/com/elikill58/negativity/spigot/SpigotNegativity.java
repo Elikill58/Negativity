@@ -134,7 +134,7 @@ public class SpigotNegativity extends JavaPlugin {
 			getConfig().options().copyDefaults();
 			saveDefaultConfig();
 		}
-		getLogger().info("This plugin is free, but you can bye the premium version : https://www.spigotmc.org/resources/86874 <3");
+		getLogger().info("This plugin is free, but you can buy the premium version : https://www.spigotmc.org/resources/86874 <3");
 		UniversalUtils.init();
 		Cheat.loadCheat();
 		FakePlayer.loadClass();

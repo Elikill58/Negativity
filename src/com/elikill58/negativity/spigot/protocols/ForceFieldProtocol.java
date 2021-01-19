@@ -74,7 +74,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		ItemStack inHand = Utils.getItemInHand(p);
 		if(inHand == null || !inHand.getType().equals(Material.BOW)) {
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !e.getEntityType().equals(EntityType.ENDER_DRAGON)) {
+			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !e.getEntityType().equals(EntityType.ENDER_DRAGON) && !p.getLocation().getBlock().getType().name().contains("WATER")) {
 				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getEntity().getType().name().toLowerCase() : e.getEntity().getName();
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10),
 						"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"

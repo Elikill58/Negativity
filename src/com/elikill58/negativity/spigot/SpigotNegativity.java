@@ -455,12 +455,6 @@ public class SpigotNegativity extends JavaPlugin {
 			return false;
 		np.addWarn(c, reliability, amount);
 		logProof(np, type, p, c, reliability, proof, ping);
-		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
-			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
-			Bukkit.getPluginManager().callEvent(kick);
-			if (!kick.isCancelled())
-				p.kickPlayer(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName(), "%reason%", np.getReason(c), "%playername%", p.getName()));
-		}
 		if(BanManager.isBanned(np.getUUID())) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			return false;
@@ -469,6 +463,12 @@ public class SpigotNegativity extends JavaPlugin {
 		if (BanUtils.banIfNeeded(np, c, reliability) != null) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			return false;
+		}
+		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
+			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
+			Bukkit.getPluginManager().callEvent(kick);
+			if (!kick.isCancelled())
+				p.kickPlayer(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName(), "%reason%", np.getReason(c), "%playername%", p.getName()));
 		}
 		manageAlertCommand(np, type, p, c, reliability);
 		if(timeBetweenAlert != -1) {

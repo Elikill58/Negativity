@@ -13,7 +13,7 @@ A clear and concise description of what the bug is.
 **Your plugin version**
 The version of Negativity that you are using
 
-**Your platform version (and precise the platforme (spigot/sponge))**
+**Your server version (and the software type (spigot/sponge))**
 The version of your server
 
 **Screenshots**

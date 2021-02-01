@@ -15,6 +15,7 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -35,6 +36,8 @@ public class Spider extends Cheat implements Listeners {
 		if (!np.hasDetectionActive(this) || LocationUtils.isUsingElevator(p))
 			return;
 		if(!checkActive("nothing-around"))
+			return;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
 		if (p.getFallDistance() != 0 || p.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP) || np.booleans.get("ALL", "jump-boost-use", false)
 				|| !LocationUtils.hasOtherThan(loc, Materials.AIR) || (e.getFrom().getX() == e.getTo().getX() && e.getFrom().getZ() == e.getTo().getZ()))
@@ -69,6 +72,8 @@ public class Spider extends Cheat implements Listeners {
 		if (!np.hasDetectionActive(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null || LocationUtils.isUsingElevator(p))
 			return;
 		if(!checkActive("distance"))
+			return;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
 		Location loc = p.getLocation().clone();
 		if(hasBypassBlockAround(loc) || (p.getItemInHand() != null && p.getItemInHand().getType().getId().contains("TRIDENT")))

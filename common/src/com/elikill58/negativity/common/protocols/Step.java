@@ -16,6 +16,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
@@ -44,6 +45,8 @@ public class Step extends Cheat implements Listeners {
 		if (!np.hasDetectionActive(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
+			return;
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
 		if (p.hasElytra() || p.getItemInHand().getType().getId().contains("TRIDENT") || np.isUsingSlimeBlock || p.isSwimming() ||
 				p.isFlying() || LocationUtils.isUsingElevator(p))

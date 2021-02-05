@@ -164,7 +164,7 @@ public class SpigotNegativity extends JavaPlugin {
 		for (Player p : Utils.getOnlinePlayers())
 			manageAutoVerif(p);
 
-		(invTimer = new ActualizeInvTimer()).runTaskTimerAsynchronously(this, 5, 5);
+		(invTimer = new ActualizeInvTimer()).runTaskTimer(this, 5, 5);
 		(packetTimer = new TimerAnalyzePacket()).runTaskTimer(this, 20, 20);
 		(runSpawnFakePlayer = new TimerSpawnFakePlayer()).runTaskTimer(this, 20, 20 * 60 * 10);
 

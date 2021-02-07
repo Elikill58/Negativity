@@ -52,7 +52,8 @@ public class Step extends Cheat implements Listeners {
 				p.isFlying() || LocationUtils.isUsingElevator(p))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
-		if(to.clone().sub(0, 1, 0).getBlock().getType().getId().contains("SHULKER"))
+		Location down = to.clone().sub(0, 1, 0);
+		if(down.getBlock().getType().getId().contains("SHULKER"))
 			return;
 		double dif = to.getY() - from.getY();
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier() : 0);
@@ -61,6 +62,8 @@ public class Step extends Cheat implements Listeners {
 			np.booleans.remove("ALL", "jump-boost-use");
 		} else
 			isUsingJumpBoost = np.booleans.get("ALL", "jump-boost-use", false);
+		if(np.isBedrockPlayer() && LocationUtils.hasMaterialsAround(down, "SLAB", "FENCE", "STAIRS"))
+			return;
 		if(checkActive("dif")) {
 			if (!isUsingJumpBoost && dif > 0 && dif != 0.60) {
 				int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(dif * 50);

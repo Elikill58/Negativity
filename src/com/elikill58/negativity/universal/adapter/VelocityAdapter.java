@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal.adapter;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +98,8 @@ public class VelocityAdapter extends Adapter {
 
 	@Override
 	public void reload() {
-
+		reloadConfig();
+		UniversalUtils.init();
 	}
 
 	@Override
@@ -107,7 +109,11 @@ public class VelocityAdapter extends Adapter {
 
 	@Override
 	public void reloadConfig() {
-
+		try {
+			getConfig().load();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Nullable

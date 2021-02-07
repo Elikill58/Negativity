@@ -10,6 +10,7 @@ import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 
 import net.kyori.text.TextComponent;
 
+@SuppressWarnings("deprecation")
 public class VelocityPlayer extends AbstractProxyPlayer {
 
 	private final com.velocitypowered.api.proxy.Player pp;

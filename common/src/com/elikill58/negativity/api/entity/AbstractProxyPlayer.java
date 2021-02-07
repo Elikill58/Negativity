@@ -31,6 +31,11 @@ public abstract class AbstractProxyPlayer extends AbstractEntity implements Play
 	}
 	
 	@Override
+	public boolean isUsingRiptide() {
+		return false;
+	}
+	
+	@Override
 	public boolean hasElytra() {
 		return false;
 	}

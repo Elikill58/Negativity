@@ -53,7 +53,7 @@ public class VelocityNegativity {
     	getLogger().info("Loading Negativity");
 	    server.getEventManager().register(this, new VelocityListeners());
 	    server.getChannelRegistrar().register(NEGATIVITY_CHANNEL_ID);
-	    server.getCommandManager().register(new VNegativityCommand(), "vnegativity");
+	    server.getCommandManager().register("vnegativity", new VNegativityCommand());
 	    
 		Adapter.setAdapter(new VelocityAdapter(this));
 		Negativity.loadNegativity();

@@ -45,6 +45,7 @@ import net.kyori.text.event.ClickEvent;
 import net.kyori.text.event.HoverEvent;
 import net.kyori.text.format.TextColor;
 
+@SuppressWarnings("deprecation")
 public class VelocityListeners {
 
 	public static List<Report> report = new ArrayList<>();

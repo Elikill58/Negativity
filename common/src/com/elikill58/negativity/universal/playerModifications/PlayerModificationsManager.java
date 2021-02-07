@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Version;
 
 public class PlayerModificationsManager {
 	
@@ -25,6 +26,14 @@ public class PlayerModificationsManager {
 			}
 			return false;
 		});
+		if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+			MODIFICATIONS.add(new PlayerModifications() {
+				@Override
+				public boolean shouldIgnoreMovementChecks(Player player) {
+					return player.isUsingRiptide();
+				}
+			});
+		}
 	}
 	
 	public static boolean isProtected(Player player, Entity damager) {

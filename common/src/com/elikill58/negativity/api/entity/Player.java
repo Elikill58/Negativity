@@ -48,6 +48,13 @@ public interface Player extends OfflinePlayer {
 	 */
 	boolean isSwimming();
 	/**
+	 * Know if the player is currently using riptide effect
+	 * (compatible with 1.12 and lower)
+	 * 
+	 * @return true if it's ripting
+	 */
+	boolean isUsingRiptide();
+	/**
 	 * Check if the player is using elytra (flying with it)
 	 * (compatible with 1.8 and lower)
 	 * 

@@ -181,6 +181,11 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public boolean isSneaking() {
 		return entity.isSneaking();
 	}
+	
+	@Override
+	public boolean isUsingRiptide() {
+		return Version.getVersion().isNewerOrEquals(Version.V1_13) && entity.isRiptiding();
+	}
 
 	@Override
 	public double getEyeHeight() {

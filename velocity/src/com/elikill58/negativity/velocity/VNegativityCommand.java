@@ -17,6 +17,7 @@ import net.kyori.text.TextComponent;
 
 public class VNegativityCommand implements Command {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void execute(CommandSource source, @NonNull String[] args) {
 		if (source instanceof Player && !Perm.hasPerm(NegativityPlayer.getCached(((Player) source).getUniqueId()), Perm.ADMIN)) {

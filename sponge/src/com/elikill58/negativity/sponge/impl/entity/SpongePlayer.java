@@ -208,6 +208,12 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	}
 
 	@Override
+	public boolean isUsingRiptide() {
+		// TODO implement riptide for sponge
+		return false;
+	}
+	
+	@Override
 	public double getEyeHeight() {
 		return Utils.getPlayerHeadHeight(entity);
 	}

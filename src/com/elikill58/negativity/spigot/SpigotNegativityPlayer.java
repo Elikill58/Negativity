@@ -154,7 +154,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if(SpigotNegativity.tps_alert_stop > Utils.getLastTPS()) // to make TPS go upper
 			return false;
 		Player p = getPlayer();
-		if(SpigotNegativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) &&  GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
+		if(SpigotNegativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) && GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
+			return false;
+		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT) && isUsingRiptide())
 			return false;
 		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
 			return false;
@@ -580,6 +582,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			e.printStackTrace();
 		}
 		return false;
+	}
+	
+	public boolean isUsingRiptide() {
+		return Version.getVersion().isNewerOrEquals(Version.V1_13) && getPlayer().isRiptiding();
 	}
 	
 	public PotionEffect getPotionEffect(PotionEffectType type) {

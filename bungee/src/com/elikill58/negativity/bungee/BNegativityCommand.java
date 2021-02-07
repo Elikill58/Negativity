@@ -1,6 +1,7 @@
 package com.elikill58.negativity.bungee;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
@@ -39,6 +40,10 @@ public class BNegativityCommand extends Command {
 			} else {
 				sender.sendMessage(new TextComponent("You must use a subcommand"));
 			}
+			return;
+		} else if(args[0].equalsIgnoreCase("reload")) {
+			Adapter.getAdapter().reload();
+			sender.sendMessage(new TextComponent(Messages.getMessage("negativity.reload_done")));
 			return;
 		}
 

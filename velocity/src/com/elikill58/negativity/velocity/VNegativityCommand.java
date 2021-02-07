@@ -6,6 +6,7 @@ import java.util.List;
 import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
@@ -36,6 +37,10 @@ public class VNegativityCommand implements Command {
 			} else {
 				source.sendMessage(TextComponent.of("You must use a subcommand"));
 			}
+			return;
+		} else if(args[0].equalsIgnoreCase("reload")) {
+			Adapter.getAdapter().reload();
+			source.sendMessage(TextComponent.of(Messages.getMessage("negativity.reload_done")));
 			return;
 		}
 

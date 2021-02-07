@@ -16,6 +16,7 @@ import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.bungee.impl.plugin.BungeeExternalPlugin;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.ProxyAdapter;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
@@ -34,7 +35,7 @@ import net.md_5.bungee.api.plugin.PluginDescription;
 
 public class BungeeAdapter extends ProxyAdapter {
 
-	private final Configuration config;
+	private Configuration config;
 	private final Plugin pl;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Proxy();
 	private final TranslationProviderFactory translationProviderFactory;
@@ -75,7 +76,8 @@ public class BungeeAdapter extends ProxyAdapter {
 
 	@Override
 	public void reload() {
-
+		reloadConfig();
+		Negativity.loadNegativity();
 	}
 
 	@SuppressWarnings("deprecation")
@@ -91,7 +93,7 @@ public class BungeeAdapter extends ProxyAdapter {
 
 	@Override
 	public void reloadConfig() {
-
+		this.config = UniversalUtils.loadConfig(new File(pl.getDataFolder(), "config.yml"), "config_bungee.yml");
 	}
 
 	@Override

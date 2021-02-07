@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.ProxyAdapter;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
@@ -69,7 +70,8 @@ public class VelocityAdapter extends ProxyAdapter {
 
 	@Override
 	public void reload() {
-
+		reloadConfig();
+		Negativity.loadNegativity();
 	}
 
 	@Override
@@ -84,7 +86,7 @@ public class VelocityAdapter extends ProxyAdapter {
 
 	@Override
 	public void reloadConfig() {
-
+		config = UniversalUtils.loadConfig(new File(pl.getDataFolder(), "config.yml"), "config_bungee.yml");
 	}
 
 	@Override

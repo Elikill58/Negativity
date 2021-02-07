@@ -33,6 +33,7 @@ public class BungeeNegativity extends Plugin {
 		NegativityAccountStorage.setDefaultStorage("database");
 
 		try {
+			@SuppressWarnings("deprecation")
 			int port = ProxyServer.getInstance().getConfig().getListeners().iterator().next().getQueryPort();
 			Stats.sendStartupStats(port);
 		} catch (Exception e) {

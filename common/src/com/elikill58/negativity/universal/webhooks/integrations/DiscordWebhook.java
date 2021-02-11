@@ -36,7 +36,7 @@ public class DiscordWebhook implements Webhook {
     
     @Override
     public boolean send(WebhookMessage msg) {
-    	Configuration confMsg = config.getSection(msg.getMessageType().name().toLowerCase());
+    	Configuration confMsg = config.getSection("messages").getSection(msg.getMessageType().name().toLowerCase());
     	if(confMsg == null)
     		confMsg = new Configuration();
     	if(!confMsg.getBoolean("enabled", true))

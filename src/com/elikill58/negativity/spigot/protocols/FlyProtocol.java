@@ -56,7 +56,7 @@ public class FlyProtocol extends Cheat implements Listener {
 				locUnder = p.getLocation().clone().subtract(0, 1, 0),
 				locUnderUnder = p.getLocation().clone().subtract(0, 2, 0);
 		Material type = loc.getBlock().getType(), typeUpper = loc.getBlock().getRelative(BlockFace.UP).getType();
-		boolean hasBuggedBlockAroundForGeyser = np.isBedrockPlayer() && LocationUtils.hasMaterialsAround(locUnder, "SLAB", "FENCE", "STAIRS");
+		boolean hasBuggedBlockAroundForGeyser = np.isBedrockPlayer() && LocationUtils.hasMaterialsAround(locUnder, "SLAB", "FENCE", "STAIRS", "BED");
 		boolean isInWater = loc.getBlock().getType().name().contains("WATER"), isOnWater = locUnder.getBlock().getType().name().contains("WATER");
 		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle() && !inBoat && !hasBuggedBlockAroundForGeyser
 				&& !np.isInFight && !LocationUtils.hasBoatAroundHim(p.getLocation()) && !(isInWater || isOnWater) && !LocationUtils.hasMaterialsAround(loc, "SCAFFOLD")){

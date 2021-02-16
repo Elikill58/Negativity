@@ -29,6 +29,7 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
+import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -166,8 +167,25 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				e.printStackTrace();
 			}
 			return true;
+		} else if (arg[0].equalsIgnoreCase("clear")) {
+			if (!Perm.hasPerm(sender, Perm.MOD)) {
+				Messages.sendMessage(sender, "not_permission");
+				return true;
+			}
+
+			Player target = arg.length == 1 ? null : Adapter.getAdapter().getPlayer(arg[1]);
+			if (target == null) {
+				Messages.sendMessage(sender, "invalid_player", "%arg%", arg[1]);
+				return false;
+			}
+			NegativityAccount account = NegativityAccount.get(target.getUniqueId());
+			for (Cheat c : Cheat.values()) {
+				account.setWarnCount(c, 0);
+			}
+			Adapter.getAdapter().getAccountManager().update(account);
+			Messages.sendMessage(sender, "negativity.cleared", "%name%", target.getName());
 		} else if (arg[0].equalsIgnoreCase("webhook")) {
-			if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getNegativityPlayer((Player) sender), Perm.ADMIN)) {
+			if (!Perm.hasPerm(sender, Perm.ADMIN)) {
 				Messages.sendMessage(sender, "not_permission");
 				return true;
 			}

@@ -80,7 +80,7 @@ public class Fly extends Cheat implements Listeners {
 			}
 		} else {
 			if(checkActive("suspicious-y")) {
-				boolean hasBuggedBlockAroundForGeyser = np.isBedrockPlayer() && LocationUtils.hasMaterialsAround(locUnder, "SLAB", "FENCE", "STAIRS");
+				boolean hasBuggedBlockAroundForGeyser = np.isBedrockPlayer() && LocationUtils.hasMaterialsAround(locUnder, "SLAB", "FENCE", "STAIRS", "BED");
 				String strY = String.valueOf(y);
 				if(strY.contains("E") && !strY.equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle()
 						&& !np.isInFight && !LocationUtils.hasBoatAroundHim(p.getLocation()) && !(isInWater || isOnWater)

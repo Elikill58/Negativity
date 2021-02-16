@@ -78,7 +78,7 @@ public class Spider extends Cheat implements Listeners {
 		Location loc = p.getLocation().clone();
 		if(hasBypassBlockAround(loc) || (p.getItemInHand() != null && p.getItemInHand().getType().getId().contains("TRIDENT")))
 			return;
-		if(LocationUtils.hasExtended(loc, "STAIRS"))
+		if(LocationUtils.hasExtended(loc, "STAIRS") || p.getLocation().getBlock().getType().getId().contains("LAVA"))
 			return;
 		String blockName = p.getLocation().getBlock().getType().getId();
 		if(blockName.contains("LADDER") || blockName.contains("VINE"))

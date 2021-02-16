@@ -12,6 +12,7 @@ public class Database {
 	private static String url, username, password;
 	public static boolean hasCustom = false;
 	private static long lastValidityCheck = 0;
+	private static DatabaseType databaseType;
 
 	/**
 	 * Create a connection to the database
@@ -25,13 +26,13 @@ public class Database {
 		Database.username = username;
 		Database.password = password;
 		try {
-			try { // load Mysql drivers
-				Class.forName("com.mysql.jdbc.Driver");
+			try { // load drivers
+				Class.forName(databaseType.getDriver());
 			} catch (ClassNotFoundException e) {
-				Adapter.getAdapter().getLogger().warn("Cannot find driver for MySQL.");
+				Adapter.getAdapter().getLogger().warn("Cannot find driver for " + databaseType.getName() + ".");
 			}
-			connection = DriverManager.getConnection("jdbc:mysql://" + url, username, password);
-			Adapter.getAdapter().getLogger().info("Connection to database " + url + " done !");
+			connection = DriverManager.getConnection("jdbc:" + databaseType.getType() + "://" + url, username, password);
+			Adapter.getAdapter().getLogger().info("Connection to database " + url + " (with " + databaseType.getName() + ") done !");
 			Database.hasCustom = true;
 		} catch (SQLException e) {
 			Adapter.getAdapter().getLogger().error("[Negativity] Error while connection to the database.");
@@ -88,9 +89,35 @@ public class Database {
 	public static void init() {
 		Configuration store = Adapter.getAdapter().getConfig();
 		if (hasCustom = store.getBoolean("Database.isActive")) {
+			databaseType = DatabaseType.valueOf(store.getString("Database.type", "mysql").toUpperCase());
 			Database.connect(store.getString("Database.url"),
 					store.getString("Database.user"),
 					store.getString("Database.password"));
+		}
+	}
+	
+	public static enum DatabaseType {
+		MARIA("mariadb", "MariaDB", "org.mariadb.jdbc.Driver"),
+		MYSQL("mysql", "MySQL", "com.mysql.jdbc.Driver");
+		
+		private final String type, name, driver;
+		
+		private DatabaseType(String type, String name, String driver) {
+			this.type = type;
+			this.name = name;
+			this.driver = driver;
+		}
+		
+		public String getName() {
+			return name;
+		}
+		
+		public String getType() {
+			return type;
+		}
+		
+		public String getDriver() {
+			return driver;
 		}
 	}
 }

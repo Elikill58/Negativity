@@ -70,6 +70,7 @@ public class DefaultConfigValue {
 		STRINGS.put("Database.url", "127.0.0.1/myDb");
 		STRINGS.put("Database.user", "root");
 		STRINGS.put("Database.password", "myPassword");
+		STRINGS.put("Database.type", "mysql");
 
 		BOOLEANS.put("inventory.alerts.no_started_verif_cheat", false);
 		BOOLEANS.put("inventory.alerts.only_cheat_active", true);

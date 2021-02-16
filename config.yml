@@ -53,6 +53,7 @@ Database:
   url: "127.0.0.1/myDb"
   user: root
   password: "myPassword"
+  type: "mysql"
 
 inventory:
   alerts:

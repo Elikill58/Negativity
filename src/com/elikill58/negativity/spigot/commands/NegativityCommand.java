@@ -34,6 +34,7 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
@@ -180,6 +181,23 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				e.printStackTrace();
 			}
 			return true;
+		} else if (arg[0].equalsIgnoreCase("clear")) {
+			if (sender instanceof Player && !Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.MOD)) {
+				Messages.sendMessage(sender, "not_permission");
+				return true;
+			}
+
+			Player target = arg.length == 1 ? null : Bukkit.getPlayer(arg[1]);
+			if (target == null) {
+				Messages.sendMessage(sender, "invalid_player", "%arg%", arg[1]);
+				return false;
+			}
+			NegativityAccount account = NegativityAccount.get(target.getUniqueId());
+			for (Cheat c : Cheat.values()) {
+				account.setWarnCount(c, 0);
+			}
+			Adapter.getAdapter().getAccountManager().update(account);
+			Messages.sendMessage(sender, "negativity.cleared", "%name%", target.getName());
 		} else if (arg[0].equalsIgnoreCase("debug")) {
 			if (!(sender instanceof Player)) {
 				Messages.sendMessage(sender, "only_player");

@@ -37,7 +37,7 @@ public class SpigotWorld extends World {
 	@Override
 	public List<Entity> getEntities() {
 		List<Entity> list = new ArrayList<>();
-		w.getEntities().forEach((e) -> list.add(SpigotEntityManager.getEntity(e)));
+		new ArrayList<>(w.getEntities()).forEach((e) -> list.add(SpigotEntityManager.getEntity(e)));
 		return list;
 	}
 

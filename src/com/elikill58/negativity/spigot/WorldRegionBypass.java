@@ -29,6 +29,8 @@ public class WorldRegionBypass {
 	}
 	
 	public static boolean hasBypass(Cheat c, Location loc) {
+		if(loc.getWorld() == null || !loc.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ()))
+			return false;
 		if(!IS_ENABLED || REGIONS_BYPASS.isEmpty())
 			return false;
 		List<WorldRegionBypass> list = REGIONS_BYPASS.stream().distinct().filter((by) -> by.getCheatKeys().contains(c.getKey())).collect(Collectors.toList());

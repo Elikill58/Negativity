@@ -7,8 +7,10 @@ import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.property.InventoryDimension;
 import org.spongepowered.api.item.inventory.property.InventoryTitle;
+import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
 import org.spongepowered.api.item.inventory.type.GridInventory;
+import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 
 import com.elikill58.negativity.sponge.Inv;
@@ -62,14 +64,13 @@ public class OneCheatInventory extends AbstractInventory {
 	public void actualizeInventory(Player p, Object... args) {
 		Cheat c = (Cheat) args[0];
 		Inventory inv = (Inventory) args[1];
-		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		invGrid.set(2, 0, createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
+		inv.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(2))).set(createItem(ItemTypes.DIAMOND, Messages.getStringMessage(p,
 				"inventory.manager.setActive", "%active%", getMessage(p, c.isActive()))));
-		invGrid.set(3, 0, createItem(ItemTypes.TNT, Messages.getStringMessage(p,
+		inv.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(3))).set(createItem(ItemTypes.TNT, Messages.getStringMessage(p,
 				"inventory.manager.setBack", "%back%", getMessage(p, c.isSetBack()))));
-		invGrid.set(4, 0, createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
+		inv.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(4))).set(createItem(ItemTypes.BLAZE_ROD, Messages.getStringMessage(p,
 				"inventory.manager.allowKick", "%allow%", getMessage(p, c.allowKick()))));
-		invGrid.set(5, 0, createItem(ItemTypes.APPLE, Messages.getStringMessage(p,
+		inv.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(5))).set(createItem(ItemTypes.APPLE, Messages.getStringMessage(p,
 				"inventory.manager.verif", "%verif%", getMessage(p, c.hasVerif()))));
 	}
 
@@ -91,7 +92,7 @@ public class OneCheatInventory extends AbstractInventory {
 		else if(m.equals(ItemTypes.APPLE))
 			c.setVerif(!c.hasVerif());
 		
-		actualizeInventory(p, c, e.getTargetInventory());
+		Task.builder().execute(() -> actualizeInventory(p, c, e.getTargetInventory())).submit(SpongeNegativity.getInstance());
 	}
 
 	@Override

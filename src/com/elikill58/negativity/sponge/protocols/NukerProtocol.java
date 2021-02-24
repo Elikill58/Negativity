@@ -59,7 +59,8 @@ public class NukerProtocol extends Cheat {
 			}
 		}
 		long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
-		if(dis < 50 && breakedBlock.getProperty(SolidCubeProperty.class).get().getValue() && !hasDigSpeedEnchant(e.getContext().get(EventContextKeys.USED_ITEM).orElse(null))) {
+		if(dis < 50 && breakedBlock.getProperty(SolidCubeProperty.class).get().getValue() && !hasDigSpeedEnchant(e.getContext().get(EventContextKeys.USED_ITEM).orElse(null))
+				&& !isInstantBlock(breakedBlock.getState().getId())) {
 			boolean mayCancel = SpongeNegativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis),
 					"Type: " + breakedBlock.getState().getType().getName() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: "
 			+ dis + " (ping: " + Utils.getPing(p) + "). Warn: " + np.getWarn(this), hoverMsg("breaked_in", "%time%", dis));
@@ -67,6 +68,10 @@ public class NukerProtocol extends Cheat {
 				e.setCancelled(true);
 		}
 		np.LAST_BLOCK_BREAK = temp;
+	}
+	
+	private boolean isInstantBlock(String m) {
+		return m.contains("SLIME") || m.contains("TNT") || m.contains("LEAVE") || m.contains("NETHERRACK") || m.contains("BAMBOO") || m.contains("SNOW");
 	}
 
 	public static boolean hasDigSpeedEnchant(ItemStackSnapshot item) {

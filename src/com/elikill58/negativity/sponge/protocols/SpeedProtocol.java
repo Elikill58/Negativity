@@ -111,7 +111,7 @@ public class SpeedProtocol extends Cheat {
 				if(et.getType().equals(EntityTypes.CREEPER))
 					return;
 			if(!mayCancel) {
-				if(moveY >= 0.85D) {
+				if(moveY >= 0.85D && (np.getWalkSpeed() * 1.1) < moveY) {
 					String proof = "In ground: " + p.isOnGround() + " WalkSpeed: " + p.get(Keys.WALKING_SPEED).get() + "  Distance between from/to location: " + moveY;
 					mayCancel = SpongeNegativity.alertMod(type, p, this, UniversalUtils.parseInPorcent(moveY * 100 * 2), proof,
 							hoverMsg("distance_jumping", "%distance%", numberFormat.format(moveY)));

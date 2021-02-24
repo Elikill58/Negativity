@@ -48,6 +48,8 @@ public class InventoryMoveProtocol extends Cheat {
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
 			return;
 		}
+		if(p.get(Keys.IS_ELYTRA_FLYING).orElse(false) || p.getVehicle().isPresent())
+			return;
 		if (p.get(Keys.IS_SPRINTING).orElse(false) || p.get(Keys.IS_SNEAKING).orElse(false)) {
 			Task.builder().delay(150, TimeUnit.MILLISECONDS).execute(() -> {
 				if(p.get(Keys.IS_SPRINTING).orElse(false) || p.get(Keys.IS_SNEAKING).orElse(false))

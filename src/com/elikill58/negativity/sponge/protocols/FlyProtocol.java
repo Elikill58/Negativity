@@ -66,7 +66,7 @@ public class FlyProtocol extends Cheat {
 			for (PotionEffect pe : np.getActiveEffects())
 				if (pe.getType().equals(PotionEffectTypes.SPEED))
 					speed += pe.getAmplifier() + 1;
-			if (speed > 20)
+			if (speed > 5)
 				return;
 		}
 		if (np.hasPotionEffect(PotionEffectTypes.JUMP_BOOST)) {

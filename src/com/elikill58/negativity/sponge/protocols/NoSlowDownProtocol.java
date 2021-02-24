@@ -89,4 +89,9 @@ public class NoSlowDownProtocol extends Cheat {
 				e.setCancelled(true);
 		}
 	}
+	
+	@Override
+	public boolean isBlockedInFight() {
+		return true;
+	}
 }

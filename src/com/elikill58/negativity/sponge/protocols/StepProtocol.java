@@ -4,6 +4,7 @@ import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
+import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
@@ -15,6 +16,7 @@ import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -36,7 +38,7 @@ public class StepProtocol extends Cheat {
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this)) {
+		if (!np.hasDetectionActive(this) || LocationUtils.isUsingElevator(p) || np.hasPotionEffect(PotionEffectTypes.LEVITATION)) {
 			return;
 		}
 
@@ -54,6 +56,8 @@ public class StepProtocol extends Cheat {
 
 		Location<World> from = e.getFromTransform().getLocation();
 		Location<World> to = e.getToTransform().getLocation();
+		if(to.copy().sub(0, 1, 0).getBlock().getType().getId().contains("SHULKER"))
+			return;
 		double dif = to.getY() - from.getY();
 		if (!np.hasPotionEffect(PotionEffectTypes.JUMP_BOOST)) {
 			if (!np.isUsingSlimeBlock) {
@@ -78,7 +82,7 @@ public class StepProtocol extends Cheat {
 		double diffBoost = dif - (amplifier / 10);
 		if(diffBoost > 0.2) {
 			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
-			if(diffBoost > 0.6)
+			if(diffBoost > 0.6 && p.getNearbyEntities(3).stream().filter((et) -> et.getType().equals(EntityTypes.BOAT)).count() == 0)
 				SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
 					"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
 					hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));

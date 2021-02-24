@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import org.spongepowered.api.effect.potion.PotionEffectTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.event.Listener;
@@ -32,7 +33,7 @@ public class FastStairsProtocol extends Cheat {
 			return;
 		}
 		
-		if(np.getFallDistance() != 0)
+		if(np.getFallDistance() != 0 || np.hasPotionEffect(PotionEffectTypes.SPEED))
 			return;
 		String blockName = e.getToTransform().getLocation().copy().sub(0, 0.0001, 0).getBlock().getType().getId();
 		if(!blockName.contains("STAIRS"))

@@ -16,6 +16,7 @@ import org.spongepowered.api.text.Text;
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.commands.child.AdminCommand;
 import com.elikill58.negativity.sponge.commands.child.AlertCommand;
+import com.elikill58.negativity.sponge.commands.child.ClearCommand;
 import com.elikill58.negativity.sponge.commands.child.ModCommand;
 import com.elikill58.negativity.sponge.commands.child.ReloadCommand;
 import com.elikill58.negativity.sponge.commands.child.VerifCommand;
@@ -50,6 +51,7 @@ public class NegativityCommand implements CommandExecutor {
 				.executor(new NegativityCommand())
 				.arguments(requiringPermission(player(Text.of("target")), "negativity.verif"))
 				.child(VerifCommand.create(), "verif")
+				.child(ClearCommand.create(), "clear")
 				.child(AlertCommand.create(), "alert")
 				.child(ModCommand.create(), "mod")
 				.child(AdminCommand.create(), "admin")

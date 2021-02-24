@@ -42,19 +42,19 @@ public class NoFallProtocol extends Cheat {
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE))
 			return;
 
-		if (p.get(Keys.CAN_FLY).orElse(false) || p.get(Keys.IS_ELYTRA_FLYING).orElse(false)
+		Location<World> from = e.getFromTransform().getLocation();
+		Location<World> to = e.getToTransform().getLocation();
+		if (p.get(Keys.CAN_FLY).orElse(false) || p.get(Keys.IS_ELYTRA_FLYING).orElse(false) || LocationUtils.has(to, "WATER")
 				|| np.hasPotionEffect(PotionEffectTypes.SPEED) || p.getVehicle().isPresent())
 			return;
 
-		Location<World> from = e.getFromTransform().getLocation();
-		Location<World> to = e.getToTransform().getLocation();
 		double distance = to.getPosition().distance(from.getPosition());
 
 		float fallDistance = np.getFallDistance(), walkSpeed = np.getWalkSpeed();
 		Location<World> locDown = p.getLocation().copy().sub(0, 1, 0);
 		double motionY = from.getY() - to.getY();
 		if(locDown.getBlock().getType().equals(BlockTypes.AIR)
-				&& !LocationUtils.has(locDown, "STAIRS")) {
+				&& !LocationUtils.has(locDown, "STAIRS", "SCAFFOLD", "SLAB", "HONEY_BLOCK")) {
 			if ((motionY > walkSpeed && fallDistance == 0)
 					|| (motionY > (walkSpeed / 2) && p.isOnGround() && np.getFallDistance() > 0.2 && walkSpeed > fallDistance)) {
 				int porcent = UniversalUtils.parseInPorcent(900 * motionY);

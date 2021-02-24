@@ -339,4 +339,10 @@ public class LocationUtils {
 		}
 		return i;
 	}
+
+	public static boolean isUsingElevator(Player p) {
+		Location<?> loc = p.getLocation().copy();
+		BlockType m = loc.getBlock().getType();
+		return m.getId().contains("WATER") || has(loc, "WATER", "BUBBLE");
+	}
 }

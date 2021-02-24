@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge.protocols;
 
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.manipulator.mutable.PotionEffectData;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
@@ -35,7 +36,7 @@ public class FastLadderProtocol extends Cheat {
 		}
 
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this)) {
+		if (!np.hasDetectionActive(this) || p.get(Keys.IS_ELYTRA_FLYING).orElse(false)) {
 			return;
 		}
 

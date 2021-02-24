@@ -71,7 +71,7 @@ public class ForceFieldProtocol extends Cheat {
 
 		double distance = e.getTargetEntity().getLocation().getPosition().distance(p.getLocation().getPosition());
 		double allowedReach = Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") + (p.gameMode().get().equals(GameModes.CREATIVE) ? 1 : 0);
-		if (!(usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW) && !e.getTargetEntity().getType().equals(EntityTypes.ENDER_DRAGON)) {
+		if (!(usedItem.isPresent() && usedItem.get().getType() == ItemTypes.BOW) && !e.getTargetEntity().getType().equals(EntityTypes.ENDER_DRAGON) && !p.getLocation().getBlock().getType().getId().contains("WATER")) {
 			recordData(p.getUniqueId(), HIT_DISTANCE, distance);
 			if(distance > allowedReach)
 				SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 2 * 10), "Big distance with: "

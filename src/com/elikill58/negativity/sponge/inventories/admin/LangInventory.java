@@ -110,7 +110,7 @@ public class LangInventory extends AbstractInventory {
 			String lang = "";
 			String name = e.getTransactions().get(0).getOriginal().get(Keys.DISPLAY_NAME).orElse(Text.of()).toPlain();
 			for(String s : TranslatedMessages.LANGS) {
-				if(name.equalsIgnoreCase("§r" + s))
+				if(name.contains(s))
 					lang = s;
 			}
 			if(lang != "") {

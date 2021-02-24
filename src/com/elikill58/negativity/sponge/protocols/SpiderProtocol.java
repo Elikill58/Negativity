@@ -43,7 +43,7 @@ public class SpiderProtocol extends Cheat {
 			return;
 		}
 
-		if (p.getVehicle().isPresent()) {
+		if (p.getVehicle().isPresent() || LocationUtils.isUsingElevator(p)) {
 			// Mounting horses triggers false positives constantly
 			return;
 		}
@@ -88,7 +88,7 @@ public class SpiderProtocol extends Cheat {
 		if (!p.gameMode().get().equals(GameModes.SURVIVAL) && !p.gameMode().get().equals(GameModes.ADVENTURE)) {
 			return;
 		}
-		if (p.getVehicle().isPresent()) {
+		if (p.getVehicle().isPresent() || LocationUtils.isUsingElevator(p)) {
 			// Mounting horses triggers false positives constantly
 			return;
 		}
@@ -122,10 +122,10 @@ public class SpiderProtocol extends Cheat {
 	}
 
 	private boolean hasBypassBlockAround(Location<World> loc) {
-		if (has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD"))
+		if (has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD", "CAKE"))
 			return true;
 		loc = loc.copy().sub(0, 1, 0);
-		if (has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD"))
+		if (has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD", "CAKE"))
 			return true;
 		return false;
 	}

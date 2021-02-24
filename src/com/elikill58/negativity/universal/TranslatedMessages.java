@@ -9,6 +9,7 @@ import java.util.UUID;
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 
@@ -28,14 +29,15 @@ public class TranslatedMessages {
 	private static TranslationProvider fallbackTranslationProvider = null;
 
 	public static void init() {
-		DEFAULT_LANG = Adapter.getAdapter().getConfig().getString("Translation.default");
-		LANGS = Adapter.getAdapter().getConfig().getStringList("Translation.lang_available");
-		activeTranslation = Adapter.getAdapter().getConfig().getBoolean("Translation.active");
+		ConfigAdapter config = Adapter.getAdapter().getConfig();
+		DEFAULT_LANG = config.getString("Translation.default");
+		LANGS = config.getStringList("Translation.lang_available");
+		activeTranslation = config.getBoolean("Translation.active");
 
 		platformFactory = Adapter.getAdapter().getPlatformTranslationProviderFactory();
 		registerTranslationProviderFactory(PLATFORM_PROVIDER_ID, platformFactory);
 
-		providerFactoryId = Adapter.getAdapter().getConfig().getString("Translation.provider");
+		providerFactoryId = config.getString("Translation.provider");
 		loadMessages();
 	}
 

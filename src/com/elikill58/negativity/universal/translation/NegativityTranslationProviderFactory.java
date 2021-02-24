@@ -20,6 +20,7 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 
 	private final Path messagesDir;
 	private final String[] bundles;
+	private TranslationProvider fallbackProvider;
 
 	public NegativityTranslationProviderFactory(Path messagesDir, String... bundles) {
 		this.messagesDir = messagesDir;
@@ -64,6 +65,8 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 	@Nullable
 	@Override
 	public TranslationProvider createFallbackTranslationProvider() {
+		if(fallbackProvider != null)
+			return fallbackProvider;
 		Adapter adapter = Adapter.getAdapter();
 		StringBuilder concatenatedBundles = new StringBuilder(8000);
 		for (String bundle : this.bundles) {
@@ -90,7 +93,7 @@ public class NegativityTranslationProviderFactory implements TranslationProvider
 
 		try (StringReader reader = new StringReader(concatenatedBundles.toString())) {
 			PropertyResourceBundle bundle = new PropertyResourceBundle(reader);
-			return new CachingTranslationProvider(new ResourceBundleTranslationProvider(bundle));
+			return fallbackProvider = new CachingTranslationProvider(new ResourceBundleTranslationProvider(bundle));
 		} catch (IOException e) {
 			adapter.getLogger().error("Failed to load fallback translation resource.");
 			e.printStackTrace();

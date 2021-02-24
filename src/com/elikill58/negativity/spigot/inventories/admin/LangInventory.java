@@ -2,6 +2,8 @@ package com.elikill58.negativity.spigot.inventories.admin;
 
 import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
 
+import java.io.IOException;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,12 +12,12 @@ import org.bukkit.inventory.Inventory;
 
 import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.holders.LangHolder;
 import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class LangInventory extends AbstractInventory {
@@ -72,8 +74,12 @@ public class LangInventory extends AbstractInventory {
 					lang = s;
 			}
 			if(lang != "") {
-				SpigotNegativity.getInstance().getConfig().set("Translation.default", lang);
-				SpigotNegativity.getInstance().saveConfig();
+				Adapter.getAdapter().getConfig().set("Translation.default", lang);
+				try {
+					Adapter.getAdapter().getConfig().save();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 				TranslatedMessages.DEFAULT_LANG = lang;
 				TranslatedMessages.loadMessages();
 				Messages.sendMessage(p, "lang.language_set");

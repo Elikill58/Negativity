@@ -2,7 +2,6 @@ package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
-import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
@@ -10,22 +9,26 @@ import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.report.ReportType;
 
 import java.util.EnumSet;
 
 public class GroundSpoof extends Cheat implements Listeners {
-    private static final EnumSet<BlockFace> totalFaces = EnumSet.of(BlockFace.WEST, BlockFace.EAST, BlockFace.SOUTH,
+    private static final EnumSet<BlockFace> SUPPORTED_FACES = EnumSet.of(BlockFace.WEST, BlockFace.EAST, BlockFace.SOUTH,
             BlockFace.NORTH, BlockFace.NORTH_WEST, BlockFace.SOUTH_WEST, BlockFace.NORTH_EAST, BlockFace.SOUTH_EAST);
 
     public GroundSpoof() {
-        super("GROUND_SPOOF", CheatCategory.MOVEMENT, Materials.DIRT, false, false, "groundspoof");
+        super(CheatKeys.GROUND_SPOOF, CheatCategory.MOVEMENT, Materials.DIRT, false, false, "groundspoof");
     }
 
     @EventListener
     public void onGroundSpoof(PlayerMoveEvent e) {
-        if (!((Entity) e.getPlayer()).isOnGround()) {
+        if (!checkActive("check-blocks-under")) {
+            return;
+        }
+        if (!e.getPlayer().isOnGround()) {
             return;
         }
         if (isOnGround(e.getPlayer())) {
@@ -38,8 +41,8 @@ public class GroundSpoof extends Cheat implements Listeners {
                 && isNotAir(downBlock.getRelative(BlockFace.WEST)))) {
             return;
         }
-        Negativity.alertMod(ReportType.WARNING, e.getPlayer(), this, 99, "groundspoof",
-                "",
+        Negativity.alertMod(ReportType.WARNING, e.getPlayer(), this, getReliability(e.getPlayer()), "groundspoof",
+                "AIR BlockFaces: " + getAirBlocks(e.getPlayer()).toString(),
                 new CheatHover.Literal("Ground Spoof (Fly, NoFall, and other movement hacks)"));
     }
 
@@ -49,20 +52,41 @@ public class GroundSpoof extends Cheat implements Listeners {
 
     public static boolean isOnGround(Player player) {
         final Block block = player.getLocation().getBlock();
-        final Block downBlock = player.getLocation().getBlock().getRelative(BlockFace.DOWN);
+        final Block downBlock = block.getRelative(BlockFace.DOWN);
 
         if (isNotAir(block.getRelative(BlockFace.DOWN))) {
             return true;
         }
 
-        for (final BlockFace face : totalFaces) {
-            if (isNotAir(downBlock.getRelative(face))) {
-                if (isSupportedBy(player.getLocation(), face)) {
-                    return true;
-                }
+        for (final BlockFace face : SUPPORTED_FACES) {
+            if (isNotAir(downBlock.getRelative(face)) && isSupportedBy(player.getLocation(), face)) {
+                return true;
             }
         }
         return false;
+    }
+
+    private int getReliability(Player player) {
+        final int air = Math.round((int) (((double) getAirBlocks(player).size()) / 1.5));
+        return 95 + air;
+    }
+
+    private EnumSet<BlockFace> getAirBlocks(Player player) {
+        final Block block = player.getLocation().getBlock();
+        final Block downBlock = block.getRelative(BlockFace.DOWN);
+
+        if (isNotAir(block.getRelative(BlockFace.DOWN))) {
+            return EnumSet.noneOf(BlockFace.class);
+        }
+
+        final EnumSet<BlockFace> faces = EnumSet.noneOf(BlockFace.class);
+        for (final BlockFace face : SUPPORTED_FACES) {
+            if (isNotAir(downBlock.getRelative(face))) {
+                continue;
+            }
+            faces.add(face);
+        }
+        return faces;
     }
 
     public static boolean isSupportedBy(final Location playerLoc, final BlockFace face) {

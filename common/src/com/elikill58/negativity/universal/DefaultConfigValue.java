@@ -15,7 +15,7 @@ public class DefaultConfigValue {
 		if(INTS.containsKey(dir))
 			return INTS.get(dir);
 		else {
-			Adapter.getAdapter().getLogger().warn("Unknow default int value: " + dir);
+			Adapter.getAdapter().getLogger().warn("Unknown default int value: " + dir);
 			return -1;
 		}
 	}
@@ -24,7 +24,7 @@ public class DefaultConfigValue {
 		if(STRINGS.containsKey(dir))
 			return STRINGS.get(dir);
 		else {
-			Adapter.getAdapter().getLogger().warn("Unknow default string value: " + dir);
+			Adapter.getAdapter().getLogger().warn("Unknown default string value: " + dir);
 			return dir;
 		}
 	}
@@ -33,7 +33,7 @@ public class DefaultConfigValue {
 		if(BOOLEANS.containsKey(dir))
 			return BOOLEANS.get(dir);
 		else {
-			Adapter.getAdapter().getLogger().warn("Unknow default boolean value: " + dir);
+			Adapter.getAdapter().getLogger().warn("Unknown default boolean value: " + dir);
 			return false;
 		}
 	}
@@ -42,7 +42,7 @@ public class DefaultConfigValue {
 		if(DOUBLES.containsKey(dir))
 			return DOUBLES.get(dir);
 		else {
-			Adapter.getAdapter().getLogger().warn("Unknow default double value: " + dir);
+			Adapter.getAdapter().getLogger().warn("Unknown default double value: " + dir);
 			return -1;
 		}
 	}
@@ -92,7 +92,7 @@ public class DefaultConfigValue {
 		BOOLEANS.put("Permissions.bypass.active", false);
 
 		String[] cheats = new String[]{"airjump", "antipotion", "fasteat", "regen", "antiknockback", "autoclick", "autosteal",
-				"blink", "chat", "critical", "forcefield", "fastplace", "fastladder", "fastbow", "faststairs", "inventorymove", "jesus", "fly",
+				"blink", "chat", "critical", "forcefield", "fastplace", "fastladder", "fastbow", "faststairs", "groundspoof", "inventorymove", "jesus", "fly",
 				"nofall", "nopitchlimit", "noslowdown", "noweb", "nuker", "phase", "scaffold", "sneak", "speed", "spider", "step", "timer", "xray"};
 		for (String localCheat : cheats) {
 			//STRINGS.put("Permissions.bypass." + localCheat, "negativity.bypass." + localCheat);

@@ -179,10 +179,12 @@ public class SpigotNegativity extends JavaPlugin {
 			for (String s : cs.getKeys(false))
 				new ItemUseBypass(s, cs.getString(s + ".cheats"), cs.getString(s + ".when"));
 		}
-		if (!UniversalUtils.isLatestVersion(getDescription().getVersion())) {
-			getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
-					+ "). Download it here: https://www.spigotmc.org/resources/48399/");
-		}
+		Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
+			if (!UniversalUtils.isLatestVersion(getDescription().getVersion())) {
+				getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
+						+ "). Download it here: https://www.spigotmc.org/resources/48399/");
+			}
+		});
 		getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
 			@Override
 			public void run() {

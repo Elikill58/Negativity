@@ -8,6 +8,7 @@ import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.nio.charset.Charset;
@@ -210,6 +211,8 @@ public class UniversalUtils {
 			URL url = new URL(urlName);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setUseCaches(true);
+			connection.setConnectTimeout(5000);
+			connection.setReadTimeout(5000);
 			connection.setRequestProperty("User-Agent", "Negativity " + ada.getName() + " - " + ada.getVersion());
 			connection.setDoOutput(true);
 			if(!post.equalsIgnoreCase("")) {
@@ -226,6 +229,9 @@ public class UniversalUtils {
 				content = content + input;
 			br.close();
 			return Optional.of(content);
+        } catch (SocketTimeoutException e) {
+        	HAVE_INTERNET = false;
+        	Adapter.getAdapter().getLogger().info("Failed to access to " + urlName + " (Reason: timed out).");
         } catch (UnknownHostException | MalformedURLException e) {
         	HAVE_INTERNET = false;
         	Adapter.getAdapter().getLogger().info("Could not use the internet connection to check for update or send stats");

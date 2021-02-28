@@ -63,9 +63,9 @@ public class StepProtocol extends Cheat implements Listener {
 		if(np.isBedrockPlayer() && LocationUtils.hasMaterialsAround(down, "SLAB", "FENCE", "STAIRS"))
 			return;
 		double dif = to.getY() - from.getY();
-		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? Utils.getPotionEffect(p, PotionEffectType.JUMP).getAmplifier() : 0);
+		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? Utils.getPotionEffect(p, PotionEffectType.JUMP).getAmplifier() + 1 : 0);
 		boolean isUsingJumpBoost = false;
-		if(np.isOnGround() && amplifier == 0) {
+		if(np.isOnGround() || amplifier == 0) {
 			np.contentBoolean.remove("jump-boost-use");
 		} else
 			isUsingJumpBoost = np.contentBoolean.getOrDefault("jump-boost-use", false);

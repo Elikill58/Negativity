@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.protocols;
 
 import java.lang.reflect.Field;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -49,19 +50,20 @@ public class NoFallProtocol extends Cheat implements Listener {
 		if(Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
-		if(LocationUtils.hasMaterialsAround(to, "WATER"))
+		if(LocationUtils.hasMaterialsAround(to, "WATER", "BUBBLE"))
 			return;
 		double distance = to.toVector().distance(from.toVector());
 		Block b = p.getLocation().getBlock();
 		Location locDown = b.getRelative(BlockFace.DOWN).getLocation();
 		Location locUp = b.getRelative(BlockFace.UP).getLocation();
 		double motionY = from.getY() - to.getY();
-		if (np.isOnGround() && to.clone().add(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).getBlock().getType().equals(Material.AIR)
+		if (np.isOnGround()
 				&& locDown.getBlock().getType().equals(Material.AIR) && !np.isInFight && !isWaterLogged(locDown.getBlock())
-				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD", "SLAB", "HONEY_BLOCK")
 				&& ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0) || (motionY > (p.getWalkSpeed() / 2)))
-				&& p.getFallDistance() > 0.2 && p.getWalkSpeed() > p.getFallDistance()) {
-			if (locUp.getBlock().getType().name().contains("WATER") || LocationUtils.isUsingElevator(p))
+				&& p.getFallDistance() > 0.2 && p.getWalkSpeed() > p.getFallDistance()
+				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD", "SLAB", "HONEY_BLOCK")
+				&& to.clone().add(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).getBlock().getType().equals(Material.AIR)) {
+			if (locUp.getBlock().getType().name().contains("WATER"))
 				np.useAntiNoFallSystem = true;
 			if (!np.useAntiNoFallSystem) {
 				int porcent = UniversalUtils.parseInPorcent(900 * motionY);
@@ -133,24 +135,26 @@ public class NoFallProtocol extends Cheat implements Listener {
 
 	@EventHandler
 	public void onNegPacket(PacketReceiveEvent e) {
-		AbstractPacket pa = e.getPacket();
-		PacketType type = pa.getPacketType();
-		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
-			return;
-		if (type.equals(PacketType.Client.FLYING)) {
-			if (pa.getContent().getBooleans().read(0) && np.contentBoolean.getOrDefault("packet-going-down", false)
-					&& np.lastPacketType != type && p.getFallDistance() > 0.3) {
-				SpigotNegativity.alertMod(ReportType.WARNING, p, this, 99, "Player going down, last PackeType: "
-						+ np.lastPacketType.getFullName() + ", fallDistance: " + p.getFallDistance());
+		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), () -> {
+			AbstractPacket pa = e.getPacket();
+			PacketType type = pa.getPacketType();
+			Player p = e.getPlayer();
+			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+			if (!np.hasDetectionActive(this))
+				return;
+			if (type.equals(PacketType.Client.FLYING)) {
+				if (pa.getContent().getBooleans().read(0) && np.contentBoolean.getOrDefault("packet-going-down", false)
+						&& np.lastPacketType != type && p.getFallDistance() > 0.3) {
+					SpigotNegativity.alertMod(ReportType.WARNING, p, this, 99, "Player going down, last PackeType: "
+							+ np.lastPacketType.getFullName() + ", fallDistance: " + p.getFallDistance());
+				}
+			} else if (type.equals(PacketType.Client.POSITION) || type.equals(PacketType.Client.POSITION_LOOK)) {
+				double newY = getY(pa.getPacket());
+				np.contentBoolean.put("packet-going-down", np.contentDouble.getOrDefault("packet-diff-y", 0.0) > newY);
+				np.contentDouble.put("packet-diff-y", newY);
 			}
-		} else if (type.equals(PacketType.Client.POSITION) || type.equals(PacketType.Client.POSITION_LOOK)) {
-			double newY = getY(pa.getPacket());
-			np.contentBoolean.put("packet-going-down", np.contentDouble.getOrDefault("packet-diff-y", 0.0) > newY);
-			np.contentDouble.put("packet-diff-y", newY);
-		}
-		np.lastPacketType = type;
+			np.lastPacketType = type;
+		});
 	}
 
 	public double getY(Object obj) {

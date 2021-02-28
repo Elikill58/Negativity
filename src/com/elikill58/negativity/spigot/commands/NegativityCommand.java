@@ -204,18 +204,26 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				return true;
 			}
 			Player p = (Player) sender;
-			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+			Player target = (arg.length == 1 ? p : Bukkit.getPlayer(arg[1]));
+			if (target == null) {
+				Messages.sendMessage(sender, "invalid_player", "%arg%", arg[1]);
+				return false;
+			}
+			String name = (target == p ? "You" : target.getName());
+			
+			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(target);
 			p.sendMessage(ChatColor.YELLOW + "--- Checking debug for bypass | no alert ---");
 			Adapter ada = Adapter.getAdapter();
 			p.sendMessage(ChatColor.GOLD + ada.getName() + ": " + ada.getVersion() + ". Negativity " + SpigotNegativity.getInstance().getDescription().getVersion());
 			long time = System.currentTimeMillis();
 			boolean hasBypass = false;
+			Cheat c = Cheat.values().stream().filter(Cheat::isActive).findFirst().get();
 			if (np.TIME_INVINCIBILITY > time) {
 				p.sendMessage(ChatColor.RED + "Invincibility (stay " + (time - np.TIME_INVINCIBILITY) + "ms)");
 				hasBypass = true;
 			}
 			if (np.isFreeze) {
-				p.sendMessage(ChatColor.RED + "You are currently freezed.");
+				p.sendMessage(ChatColor.RED + name + " are currently freezed.");
 				hasBypass = true;
 			}
 			double tps = Utils.getLastTPS();
@@ -223,15 +231,15 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				p.sendMessage(ChatColor.RED + "Too low TPS : " + tps);
 				hasBypass = true;
 			}
-			if(!(p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE))) {
+			if(!(target.getGameMode().equals(GameMode.SURVIVAL) || target.getGameMode().equals(GameMode.ADVENTURE))) {
 				p.sendMessage(ChatColor.RED + "Lot of detection are disabled if you're not on survival/adventure.");
 				hasBypass = true;
 			}
 			int ping = np.ping;
-			if(np.isInFight || ping > 150)
+			if(np.isInFight)
 				hasBypass = true;
-			if(arg.length > 1) {
-				Cheat c = Cheat.fromString(arg[1]);
+			if(arg.length > 2) {
+				c = Cheat.fromString(arg[2]);
 				if(c != null) {
 					p.sendMessage(ChatColor.GREEN + "Checking for cheat " + c.getName() + ".");
 					if(!c.isActive()) {
@@ -242,18 +250,18 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 						p.sendMessage(ChatColor.RED + "Bypass for blink.");
 						hasBypass = true;
 					}
-					if(WorldRegionBypass.hasBypass(c, p.getLocation())) {
-						p.sendMessage(ChatColor.RED + "You have a bypass actually");
+					if(WorldRegionBypass.hasBypass(c, target.getLocation())) {
+						p.sendMessage(ChatColor.RED + name + " have a location bypass actually");
 						hasBypass = true;
 					}
 					if (SpigotNegativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) 
-							&& GadgetMenuSupport.checkGadgetsMenuPreconditions(p)) {
-						p.sendMessage(ChatColor.RED + "GadgetMenu movement bypass.");
+							&& GadgetMenuSupport.checkGadgetsMenuPreconditions(target)) {
+						p.sendMessage(ChatColor.RED + name + " has GadgetMenu movement bypass.");
 						hasBypass = true;
 					}
-					if (SpigotNegativity.essentialsSupport && c.getKey().equals(CheatKeys.FLY) && p.hasPermission("essentials.fly")
-							&& EssentialsSupport.checkEssentialsPrecondition(p)) {
-						p.sendMessage(ChatColor.RED + "Essentials fly bypass.");
+					if (SpigotNegativity.essentialsSupport && c.getKey().equals(CheatKeys.FLY) && target.hasPermission("essentials.fly")
+							&& EssentialsSupport.checkEssentialsPrecondition(target)) {
+						p.sendMessage(ChatColor.RED + name + " has Essentials fly bypass.");
 						hasBypass = true;
 					}
 					if(np.isInFight && c.isBlockedInFight()) {
@@ -268,13 +276,15 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 						p.sendMessage(ChatColor.RED + "Detection of " + c.getName() + " not active.");
 						hasBypass = true;
 					}
-					if(!hasBypass)
-						SpigotNegativity.alertMod(ReportType.INFO, p, c, 100, "");
 				} else
-					p.sendMessage(ChatColor.RED + "Unknow cheat " + arg[1] + ".");
+					p.sendMessage(ChatColor.RED + "Unknow cheat " + arg[2] + ".");
 			} else
-				p.sendMessage(ChatColor.YELLOW + (np.isInFight ? "In fight, " : "") + "Ping: " + ping + "ms (by default, at 150ms you bypass it)");
-			p.sendMessage(hasBypass ? ChatColor.RED + "Warn: You have bypass, so you cannot be detected." : ChatColor.GREEN + "Good news: you can be detected !");
+				p.sendMessage(ChatColor.YELLOW + (np.isInFight ? "In fight, " : "") + "Ping: " + ping + "ms (by default, at 200ms you bypass it)");
+			if((c != null && ping > c.getMaxAlertPing()) || ping > 200)
+				hasBypass = true;
+			p.sendMessage(hasBypass ? ChatColor.RED + "Warn: " + name +" have bypass, so you cannot be detected." : ChatColor.GREEN + "Good news: " + name + " can be detected !");
+			if(!hasBypass && c != null)
+				SpigotNegativity.alertMod(ReportType.INFO, target, c, 100, "", new Cheat.CheatHover.Literal("This is just a debug alert"));
 			return true;
 		}
 		
@@ -314,9 +324,10 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			if ("admin".startsWith(prefix) && (sender instanceof Player) && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.MANAGE_CHEAT))
 				suggestions.add("admin");
 		} else {
-			if (arg[0].equalsIgnoreCase("verif")) {
+			if (arg[0].equalsIgnoreCase("verif") || arg[0].equalsIgnoreCase("debug")) {
+				// both command use tab arguments to works
 				if (arg.length == 2) {
-					// /negativity verif |
+					// /negativity verif | OR /negativity debug |
 					for (Player p : Utils.getOnlinePlayers()) {
 						if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
 							suggestions.add(p.getName());
@@ -328,12 +339,6 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 						if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
 							suggestions.add(c.getName());
 						}
-					}
-				}
-			} else if (arg[0].equalsIgnoreCase("debug")) {
-				for (Cheat c : Cheat.values()) {
-					if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
-						suggestions.add(c.getName());
 					}
 				}
 			} else if (arg[0].equalsIgnoreCase("admin") && arg.length == 2) {

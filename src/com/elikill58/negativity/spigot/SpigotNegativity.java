@@ -450,6 +450,10 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(type, p, c, reliability,
 				c.getReliabilityAlert() < reliability, ping, proof, hover, amount);
+		if(type == ReportType.INFO) { // if it's a debug alert, ignore it
+			sendAlertMessage(np, alert);
+			return false;
+		}
 		Bukkit.getPluginManager().callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
@@ -502,7 +506,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		Player p = alert.getPlayer();
 		int ping = alert.getPing();
-		if(alert.getNbAlertConsole() > 0 && log_console) {
+		if(alert.getNbAlertConsole() > 0 && log_console && !alert.getReportType().equals(ReportType.INFO)) {
 			Location location = p.getLocation();
 			String sLoc = "[" + location.getWorld().getName() + ": " + location.getBlockX() + "," + location.getBlockY() + "," + location.getBlockZ() + "]";
 			INSTANCE.getLogger().info("New " + alert.getReportType().getName() + " for " + p.getName() + " (" + ping + " ms, UUID: "
@@ -533,7 +537,7 @@ public class SpigotNegativity extends JavaPlugin {
 					hasPermPeople = true;
 				}
 			}
-			if(hasPermPeople) {
+			if(hasPermPeople && !alert.getReportType().equals(ReportType.INFO)) {
 				np.ALERT_NOT_SHOWED.remove(c);
 				Stats.updateStats(StatsType.CHEAT, c.getKey().toLowerCase(), reliability + "");
 			}
@@ -579,7 +583,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private static void logProof(SpigotNegativityPlayer np, ReportType type, Player p, Cheat c, int reliability,
 			String proof, int ping) {
-		if(log)
+		if(log && type != ReportType.INFO)
 			np.logProof(new Timestamp(System.currentTimeMillis()) + ": (" + ping + "ms) " + reliability + "% " + c.getKey()
 				+ " > " + proof + ". Player version: " + np.getPlayerVersion().name() + ". TPS: " + Arrays.toString(Utils.getTPS()));
 	}

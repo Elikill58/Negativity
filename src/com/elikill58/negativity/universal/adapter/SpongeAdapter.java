@@ -185,4 +185,9 @@ public class SpongeAdapter extends Adapter {
 	public LoggerAdapter getLogger() {
 		return logger;
 	}
+	
+	@Override
+	public void runAsync(Runnable call) {
+		Sponge.getScheduler().createAsyncExecutor(plugin).submit(call);
+	}
 }

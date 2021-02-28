@@ -171,4 +171,9 @@ public class VelocityAdapter extends Adapter {
 	public LoggerAdapter getLogger() {
 		return logger;
 	}
+	
+	@Override
+	public void runAsync(Runnable call) {
+		new Thread(call).start();
+	}
 }

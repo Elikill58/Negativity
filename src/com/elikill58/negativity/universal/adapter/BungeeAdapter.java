@@ -174,4 +174,9 @@ public class BungeeAdapter extends Adapter {
 	public LoggerAdapter getLogger() {
 		return logger;
 	}
+	
+	@Override
+	public void runAsync(Runnable call) {
+		pl.getProxy().getScheduler().runAsync(pl, call);
+	}
 }

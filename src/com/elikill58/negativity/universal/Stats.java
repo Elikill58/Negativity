@@ -1,15 +1,12 @@
 package com.elikill58.negativity.universal;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.RejectedExecutionException;
-
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Stats {
 
-	private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
+	//private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
 
     private static final String SITE_FILE = "https://api.eliapp.fr/negativity.php";
     public static boolean STATS_IN_MAINTENANCE = false;
@@ -38,27 +35,28 @@ public class Stats {
 	private static void sendUpdateStats(StatsType type, String post) {
 		if(STATS_IN_MAINTENANCE || !UniversalUtils.HAVE_INTERNET)
 			return;
+		Adapter ada = Adapter.getAdapter();
+		final LoggerAdapter log = ada.getLogger();
 		Runnable task = () -> {
 			try {
 				String end = UniversalUtils.getContentFromURL(SITE_FILE, post).orElse(null);
 				if(end == null) {
-					Adapter.getAdapter().getLogger().info("Error while updating stats, it seems to be a firewall that blocking the stats.");
+					log.info("Error while updating stats, it seems to be a firewall that blocking the stats.");
 					STATS_IN_MAINTENANCE = true;
-				}
-				else if (!end.equalsIgnoreCase("")) {
-					Adapter.getAdapter().getLogger().info(
-							"Error while updating stats. Please, report this to Elikill58 (Mail: arpetzouille@gmail.com | Discord: @Elikill58#0743 | Twitter: @Elikill58 / @elinegativity");
-					Adapter.getAdapter().getLogger().info(end);
+				} else if (!end.equalsIgnoreCase("")) {
+					log.info("Error while updating stats. Please, report this to Elikill58 (Mail: arpetzouille@gmail.com | Discord: @Elikill58#0743 | Twitter: @Elikill58 / @elinegativity");
+					log.info(end);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		};
-		try {
+		ada.runAsync(task);
+		/*try {
 			THREAD_POOL.submit(task);
 		} catch (RejectedExecutionException e) {
-			Adapter.getAdapter().getLogger().error("Could not update stats: " + e.getMessage());
-		}
+			log.error("Could not update stats: " + e.getMessage());
+		}*/
 	}
 
 	public static void loadStats() {
@@ -76,13 +74,14 @@ public class Stats {
 				e.printStackTrace();
 			}
 		};
-		try {
+		Adapter.getAdapter().runAsync(task);
+		/*try {
 			THREAD_POOL.submit(task);
 		} catch (RejectedExecutionException e) {
 			Adapter.getAdapter().getLogger()
 					.error("Could not load stats: " + e.getMessage());
 			e.printStackTrace();
-		}
+		}*/
 	}
 	
 	public static enum StatsType {

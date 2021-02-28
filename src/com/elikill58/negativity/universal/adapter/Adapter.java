@@ -185,4 +185,5 @@ public abstract class Adapter {
 	public abstract void runConsoleCommand(String cmd);
 	public abstract CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId);
 	public abstract List<UUID> getOnlinePlayers();
+	public abstract void runAsync(Runnable call);
 }

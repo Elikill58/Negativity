@@ -52,7 +52,6 @@ public class JesusProtocol extends Cheat implements Listener {
 		Material type = loc.getBlock().getType(), underType = under.getBlock().getType();
 		boolean isInWater = type.name().contains("WATER"), isOnWater = underType.name().contains("WATER");
 		boolean mayCancel = false;
-		int ping = Utils.getPing(p);
 		double dif = e.getFrom().getY() - e.getTo().getY();
 		if (type.name().equalsIgnoreCase("AIR") && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
 			if (!hasOtherThanExtended(under, STATIONARY_WATER)) {
@@ -71,12 +70,12 @@ public class JesusProtocol extends Cheat implements Listener {
 					reliability = 90;
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(reliability),
 						"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif
-								+ " and ping: " + ping);
+								+ " and ping: " + np.ping);
 			}
 		}
 		if (dif == -0.5 && (isInWater || isOnWater) && !type.name().contains("FENCE")) {
 			mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "Warn for Jesus: "
-					+ np.getWarn(this) + ", dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + " " + ping + ", type: " + type.name() + ", type Under: " + underType.name());
+					+ np.getWarn(this) + ", dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + ", type: " + type.name() + ", type Under: " + underType.name());
 		}
 
 		boolean jesusState = np.contentBoolean.getOrDefault("jesus-state", false);
@@ -87,7 +86,7 @@ public class JesusProtocol extends Cheat implements Listener {
 						"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: "
 								+ dif + " (other: "
 								+ np.contentDouble.getOrDefault("jesus-last-y-" + (!jesusState), 0.0)
-								+ ") and ping: " + ping);
+								+ ") and ping: " + np.ping);
 			}
 		}
 		np.contentDouble.put("jesus-last-y-" + jesusState, dif);
@@ -101,7 +100,7 @@ public class JesusProtocol extends Cheat implements Listener {
 			if (!hasMaterialsAround(loc, "WATER_LILY") && !hasMaterialsAround(upper, "WATER_LILY")
 					&& !hasOtherThan(under, "WATER")) {
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.JESUS), 98,
-						"In water, distance: " + distanceAbs + ", ping: " + ping,
+						"In water, distance: " + distanceAbs + ", ping: " + np.ping,
 						hoverMsg("main", "%distance%", distanceAbs));
 			}
 		}

@@ -78,7 +78,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getEntity().getType().name().toLowerCase() : e.getEntity().getName();
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10),
 						"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
-						+ ". Ping: " + Utils.getPing(p), hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
+						+ ". Ping: " + np.ping, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
 			}
 		}
 		if (isSetBack() && mayCancel)

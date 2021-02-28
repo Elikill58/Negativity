@@ -12,7 +12,6 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -51,8 +50,7 @@ public class PhaseProtocol extends Cheat implements Listener {
 			return;
 		if (!np.isJumpingWithBlock) {
 			SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent((y * 200) + 20),
-					"Player on air. No jumping. DistanceBetweenFromAndTo: " + y + " (ping: " + Utils.getPing(p)
-							+ "). Warn: " + np.getWarn(this));
+					"Player on air. No jumping. DistanceBetweenFromAndTo: " + y + ". Warn: " + np.getWarn(this));
 		}
 	}
 }

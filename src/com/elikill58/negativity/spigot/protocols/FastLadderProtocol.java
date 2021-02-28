@@ -13,7 +13,6 @@ import org.bukkit.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -59,7 +58,7 @@ public class FastLadderProtocol extends Cheat implements Listener {
 			tempLoc.add(0, -1, 0);
 		}
 		if (distance > 0.23 && distance < 3.8 && nbLadder > 2 && loc.add(0, 1, 0).getBlock().getType().name().contains("LADDER")) {
-			int ping = Utils.getPing(p);
+			int ping = np.ping;
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 350),
 					"On ladders. Distance from/to : " + distance + ". Ping: " + ping + "ms. Number Ladder: " + nbLadder, hoverMsg("main", "%nb%", nbLadder));
 			if (isSetBack() && mayCancel)

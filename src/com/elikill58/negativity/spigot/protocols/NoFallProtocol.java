@@ -22,7 +22,6 @@ import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.PacketType;
@@ -106,8 +105,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 			} else if (!np.isOnGround()) {
 				Material justUnder = p.getLocation().clone().subtract(0, 0.1, 0).getBlock().getType();
 				if (justUnder.isSolid() && p.getFallDistance() > 3.0 && !np.isInFight) {
-					int ping = Utils.getPing(p),
-							relia = UniversalUtils.parseInPorcent(100 - (ping / 5) + p.getFallDistance());
+					int relia = UniversalUtils.parseInPorcent(100 - (np.ping / 5) + p.getFallDistance());
 					boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
 							"Player not ground with fall damage (FallDistance: " + p.getFallDistance()
 									+ "). Block 0.1 below: " + justUnder.name() + ", DistanceBetweenFromAndTo: "

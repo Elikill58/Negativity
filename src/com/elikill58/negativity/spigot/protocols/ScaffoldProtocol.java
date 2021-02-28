@@ -11,7 +11,6 @@ import org.bukkit.inventory.ItemStack;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -33,19 +32,19 @@ public class ScaffoldProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
-		int ping = Utils.getPing(p), slot = p.getInventory().getHeldItemSlot();
-		if(ping > 120)
+		int slot = p.getInventory().getHeldItemSlot();
+		if(np.ping > 120)
 			return;
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), new Runnable() {
 			@Override
 			public void run() {
 				Material m = p.getItemInHand().getType(), placed = e.getBlockPlaced().getType();
 				if ((m == null || (!m.isBlock() && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot() && !placed.equals(Material.AIR)) {
-					int localPing = ping;
+					int localPing = np.ping;
 					if(localPing == 0)
 						localPing = 1;
 					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, instance, UniversalUtils.parseInPorcent(120 / localPing),
-							"Item in hand: " + m.name() + " Block placed: " + placed.name() + " Ping: " + ping,
+							"Item in hand: " + m.name() + " Block placed: " + placed.name(),
 							hoverMsg("main", "%item%", m.name().toLowerCase(), "%block%", placed.name().toLowerCase()));
 					if(isSetBack() && mayCancel) {
 						p.getInventory().addItem(new ItemStack(placed));

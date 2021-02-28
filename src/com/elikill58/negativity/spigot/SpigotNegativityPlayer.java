@@ -95,13 +95,14 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public List<String> proof = new ArrayList<>();
 	public boolean isInFight = false;
 	public BukkitTask fightTask = null;
-	public int fakePlayerTouched = 0;
+	public int fakePlayerTouched = 0, ping = 0;
 	public long timeStartFakePlayer = 0;
 	private final Version playerVersion;
 
 	public SpigotNegativityPlayer(Player p) {
 		super(p.getUniqueId(), p.getName());
 		this.p = new WeakReference<>(p);
+		this.ping = Utils.getPing(p);
 		initMods(p);
 		isBedrockPlayer = SpigotNegativity.floodGateSupport ? FloodGateSupport.isBedrockPlayer(p) : false;
 		playerVersion = SpigotNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : (SpigotNegativity.protocolSupportSupport ? ProtocolSupportSupport.getPlayerVersion(p) : Version.getVersion());
@@ -162,7 +163,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return false;
 		if(SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase()) || Perm.hasPerm(this, "bypass.all")))
 			return false;
-		return Utils.getPing(p) < c.getMaxAlertPing();
+		return ping < c.getMaxAlertPing();
 	}
 	
 	public void updateCheckMenu() {
@@ -509,7 +510,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public boolean isOnGround() {
-		return isOnGround || p.get().isOnGround();
+		return isOnGround || getPlayer().isOnGround();
 	}
 	
 	public void setOnGround(boolean b) {

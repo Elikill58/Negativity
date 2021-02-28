@@ -43,8 +43,8 @@ public class AirJumpProtocol extends Cheat implements Listener {
 				&& !hasOtherThanAirDown && !hasOtherThanExtended(loc.clone().subtract(0, 2, 0), "AIR")) {
 			mayCancel = SpigotNegativity.alertMod(
 					diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-							UniversalUtils.parseInPorcent((int) (diffYtoFrom * 210) - Utils.getPing(p)),
-					"Actual diff Y: " + np.lastYDiff + ", last diff Y: " + diffYtoFrom + ", ping: " + Utils.getPing(p)
+							UniversalUtils.parseInPorcent((int) (diffYtoFrom * 210) - np.ping),
+					"Actual diff Y: " + np.lastYDiff + ", last diff Y: " + diffYtoFrom + ", ping: " + np.ping
 							+ ". Warn for AirJump: " + np.getWarn(this));
 		}
 		np.lastYDiff = diffYtoFrom;

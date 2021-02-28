@@ -11,7 +11,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.PacketType;
@@ -42,7 +41,7 @@ public class BlinkProtocol extends Cheat implements Listener {
 			return;
 		if (!(!np.bypassBlink && (p.getGameMode().equals(GameMode.ADVENTURE) || p.getGameMode().equals(GameMode.SURVIVAL))))
 			return;
-		int ping = Utils.getPing(p);
+		int ping = np.ping;
 		if (ping < 140 && !np.isBedrockPlayer()) {
 			int total = np.ALL - np.PACKETS.getOrDefault(PacketType.Client.KEEP_ALIVE, 0);
 			if (total == 0) {

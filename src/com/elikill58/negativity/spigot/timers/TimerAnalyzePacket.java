@@ -35,7 +35,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 				np.SEC_ACTIVE++;
 				return;
 			}
-			int ping = Utils.getPing(p);
+			int ping = np.ping = Utils.getPing(p);
 			if (ping == 0)
 				ping = 1;
 			

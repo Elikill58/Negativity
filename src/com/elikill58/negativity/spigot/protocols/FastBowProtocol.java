@@ -10,7 +10,6 @@ import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
@@ -45,7 +44,7 @@ public class FastBowProtocol extends Cheat implements Listener {
 			np.flyingReason = FlyingReason.BOW;
 			long actual = System.currentTimeMillis(), dif = actual - np.LAST_SHOT_BOW;
 			if (np.LAST_SHOT_BOW != 0) {
-				int ping = Utils.getPing(p);
+				int ping = np.ping;
 				if (dif < (200 + ping)) {
 					boolean mayCancel = false;
 					if (dif < (50 + ping))

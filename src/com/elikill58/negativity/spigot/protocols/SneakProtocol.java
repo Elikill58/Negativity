@@ -9,7 +9,6 @@ import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -32,7 +31,7 @@ public class SneakProtocol extends Cheat implements Listener {
 			return;
 		if (p.isSneaking() && p.isSprinting() && !p.isFlying() && np.contentBoolean.getOrDefault("sneak-was-sneaking", false)) {
 			if(!np.getPlayerVersion().isNewerOrEquals(Version.V1_14)) {
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (Utils.getPing(p) / 10)), "Sneaking, sprinting and not flying");
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (np.ping / 10)), "Sneaking, sprinting and not flying");
 				if(mayCancel && isSetBack()) {
 					e.setCancelled(true);
 					p.setSprinting(false);

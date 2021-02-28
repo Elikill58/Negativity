@@ -406,7 +406,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if(VerificationManager.isDisablingAlertOnVerif() && !hasVerifications(p.getUniqueId()))
 			return false;
 		
-		int ping = Utils.getPing(p);
+		int ping = np.ping;
 		long currentTimeMilli = System.currentTimeMillis();
 		if (np.TIME_INVINCIBILITY > currentTimeMilli || ping > c.getMaxAlertPing()
 				|| np.getLife() == 0.0D || np.isFreeze

@@ -9,7 +9,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ItemUseBypass;
@@ -25,7 +24,7 @@ public class AutoStealProtocol extends Cheat implements Listener {
 	public static final int TIME_CLICK = 55;
 	
 	@SuppressWarnings("deprecation")
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler
 	public void onInvClick(InventoryClickEvent e) {
 		Player p = (Player) e.getWhoClicked();
 		if(!(p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)))
@@ -41,7 +40,6 @@ public class AutoStealProtocol extends Cheat implements Listener {
 						return;
 			}
 		long actual = System.currentTimeMillis(), dif = actual - np.LAST_CLICK_INV;
-		int ping = Utils.getPing(p);
 		int tempSlot = np.LAST_SLOT_CLICK;
 		if (e.getCurrentItem() != null) {
 			if (tempSlot == e.getSlot())
@@ -52,10 +50,10 @@ public class AutoStealProtocol extends Cheat implements Listener {
 		np.LAST_SLOT_CLICK = e.getSlot();
 		if(dif < 0 || np.LAST_SLOT_CLICK == e.getSlot())
 			return;
-		if((ping + TIME_CLICK) >= dif && tempSlot != e.getRawSlot()){
+		if((np.ping + TIME_CLICK) >= dif && tempSlot != e.getRawSlot()){
 			if(np.lastClickInv){
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((100 + TIME_CLICK) - dif - ping),
-						"Time between 2 click: " + dif + ". Ping: " + ping, hoverMsg("main", "%time%", dif));
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((100 + TIME_CLICK) - dif - np.ping),
+						"Time between 2 click: " + dif + ". Ping: " + np.ping, hoverMsg("main", "%time%", dif));
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}

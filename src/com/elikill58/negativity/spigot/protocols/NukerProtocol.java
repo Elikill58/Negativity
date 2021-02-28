@@ -40,8 +40,8 @@ public class NukerProtocol extends Cheat implements Listener {
 		if(target != null) {
 			double distance = target.getLocation().distance(e.getBlock().getLocation());
 			if ((target.getType() != e.getBlock().getType()) && distance > 3.5 && target.getType() != Material.AIR) {
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - Utils.getPing(p)),
-						"BlockDig " + e.getBlock().getType().name() + ", player see " + target.getType().name() + ". Distance between blocks " + distance + " block. Ping: " + Utils.getPing(p) + ". Warn: " + np.getWarn(this));
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - np.ping),
+						"BlockDig " + e.getBlock().getType().name() + ", player see " + target.getType().name() + ". Distance between blocks " + distance + " block. Warn: " + np.getWarn(this));
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}
@@ -50,7 +50,7 @@ public class NukerProtocol extends Cheat implements Listener {
 		Material m = e.getBlock().getType();
 		if(dis < 50 && m.isSolid() && !isInstantBlock(m.name()) && !hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.FAST_DIGGING)) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis),
-					"Type: " + e.getBlock().getType().name() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis + " (ping: " + Utils.getPing(p) + "). Warn: " + np.getWarn(this), hoverMsg("breaked_in", "%time%", dis));
+					"Type: " + e.getBlock().getType().name() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis + ". Warn: " + np.getWarn(this), hoverMsg("breaked_in", "%time%", dis));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}

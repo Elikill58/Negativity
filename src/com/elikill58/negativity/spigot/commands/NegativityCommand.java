@@ -227,7 +227,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				p.sendMessage(ChatColor.RED + "Lot of detection are disabled if you're not on survival/adventure.");
 				hasBypass = true;
 			}
-			int ping = Utils.getPing(p);
+			int ping = np.ping;
 			if(np.isInFight || ping > 150)
 				hasBypass = true;
 			if(arg.length > 1) {

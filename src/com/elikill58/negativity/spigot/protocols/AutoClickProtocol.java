@@ -75,7 +75,7 @@ public class AutoClickProtocol extends Cheat implements Listener {
 			}
 		np.ACTUAL_CLICK++;
 		np.updateCheckMenu();
-		int ping = Utils.getPing(p), click = np.ACTUAL_CLICK - (ping / 9);
+		int ping = np.ping, click = np.ACTUAL_CLICK - (ping / 9);
 		if (click > CLICK_ALERT && np.hasDetectionActive(this)) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(np.ACTUAL_CLICK * 2.5),

@@ -12,7 +12,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
@@ -57,7 +56,7 @@ public class RegenProtocol extends Cheat implements Listener {
 		if (np.LAST_REGEN != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && !p.hasPotionEffect(PotionEffectType.HEAL) && np.hasDetectionActive(this)
 				&& (np.LAST_REGEN != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))
 				&& !p.getWorld().getDifficulty().equals(Difficulty.PEACEFUL)) {
-			int ping = Utils.getPing(p);
+			int ping = np.ping;
 			if (dif < (Version.getVersion().getTimeBetweenTwoRegenFromVersion() + ping)) {
 				boolean mayCancel = SpigotNegativity.alertMod(dif < (50 + ping) ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(200 - dif - ping), "Player regen, last regen: " + np.LAST_REGEN

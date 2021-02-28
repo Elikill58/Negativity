@@ -14,7 +14,6 @@ import org.bukkit.event.Listener;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.PacketType;
@@ -58,7 +57,7 @@ public class TimerProtocol extends Cheat implements Listener {
 		int medianValue = (medianList.size() % 2 == 1) ? medianList.get(middle) : (int) ((medianList.get(middle-1) + medianList.get(middle)) / 2.0);
 		boolean medianRespect = MAX_VARIATION > medianValue;
 		int amount = (int) (sum - MAX_VARIATION);
-		SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (Utils.getPing(p) / 100) - (medianRespect ? 15 : -10)),
+		SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (np.ping / 100) - (medianRespect ? 15 : -10)),
 				"Flying: " + flying + ", position: " + position + ", look: " + look + ", positionLook: " + positonLook + ", sum: " + sum + ", median: " + medianValue,
 				(CheatHover) null, amount > 0 ? amount : 1);
 		// TODO implement setBack option for Timer

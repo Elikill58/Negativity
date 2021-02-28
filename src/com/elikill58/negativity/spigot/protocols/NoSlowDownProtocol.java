@@ -15,7 +15,6 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -55,11 +54,11 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 		Location fl = from.clone().subtract(to.clone());
 		double distance = to.toVector().distance(from.toVector());
 		if (distance > 0.2) {
-			int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(distance * 400);
+			int relia = UniversalUtils.parseInPorcent(distance * 400);
 			if((from.getY() - to.getY()) < -0.001)
 				return;
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia,
-					"Soul sand under player. Distance from/to : " + distance + ". Ping: " + ping);
+					"Soul sand under player. Distance from/to : " + distance + ". Ping: " + np.ping);
 			if (isSetBack() && mayCancel)
 				e.setTo(from.clone().add(new Location(fl.getWorld(), fl.getX() / 2, fl.getY() / 2, fl.getZ())).add(0, 0.5, 0));
 		}

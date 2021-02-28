@@ -80,7 +80,7 @@ public class CheckMenuInventory extends AbstractInventory {
 			inv.setItem(1, getClickItem(Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), betterClick));
 			inv.setItem(2, getClickItem(Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), np.LAST_CLICK));
 
-			inv.setItem(7, createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", Utils.getPing(cible) + "")));
+			inv.setItem(7, createItem(Material.ARROW, Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", np.ping)));
 			inv.setItem(9, ItemUtils.hideAttributes(createItem(Material.DIAMOND_SWORD, "Fight: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled")))));
 			p.updateInventory();
 		} catch (ArrayIndexOutOfBoundsException e) {

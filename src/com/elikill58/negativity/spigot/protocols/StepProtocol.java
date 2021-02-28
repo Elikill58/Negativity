@@ -43,7 +43,7 @@ public class StepProtocol extends Cheat implements Listener {
 	}
 
 	@SuppressWarnings("deprecation")
-	@EventHandler(ignoreCancelled = true)
+	@EventHandler
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
@@ -70,10 +70,10 @@ public class StepProtocol extends Cheat implements Listener {
 		} else
 			isUsingJumpBoost = np.contentBoolean.getOrDefault("jump-boost-use", false);
 		if (!isUsingJumpBoost && dif > 0 && dif != 0.60) {
-			int ping = Utils.getPing(p), relia = UniversalUtils.parseInPorcent(dif * 50);
-			if (dif > 1.499 && ping < 200) {
+			int relia = UniversalUtils.parseInPorcent(dif * 50);
+			if (dif > 1.499 && np.ping < 200) {
 				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
-						+ np.getWarn(this) + ". Move " + dif + " blocks up. ping: " + ping, hoverMsg("main", "%block%", String.format("%.2f", dif)));
+						+ np.getWarn(this) + ". Move " + dif + " blocks up. ping: " + np.ping, hoverMsg("main", "%block%", String.format("%.2f", dif)));
 				if (isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}

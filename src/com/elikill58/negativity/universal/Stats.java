@@ -15,6 +15,10 @@ public class Stats {
     private static final HashMap<Cheat, CheatStats> CHEAT_STATS = new HashMap<>();
 
     public static void updateStats(StatsType type, Object... value) {
+    	updateStats(false, type, value);
+    }
+
+    public static void updateStats(boolean forceSync, StatsType type, Object... value) {
     	if(!Adapter.getAdapter().getConfig().getBoolean("stats") || STATS_IN_MAINTENANCE)
     		return;
     	String post = "";
@@ -33,10 +37,10 @@ public class Stats {
 			post = "&value=" + value[0];
 			break;
 		}
-    	sendUpdateStats(type, "platform=" + Adapter.getAdapter().getName() + "&type=" + type.getKey() + post);
+    	sendUpdateStats(forceSync, type, "platform=" + Adapter.getAdapter().getName() + "&type=" + type.getKey() + post);
     }
     
-	private static void sendUpdateStats(StatsType type, String post) {
+	private static void sendUpdateStats(boolean forceSync, StatsType type, String post) {
 		if(STATS_IN_MAINTENANCE || !UniversalUtils.HAVE_INTERNET)
 			return;
 		Adapter ada = Adapter.getAdapter();
@@ -55,7 +59,10 @@ public class Stats {
 				e.printStackTrace();
 			}
 		};
-		ada.runAsync(task);
+		if(forceSync)
+			task.run();
+		else
+			ada.runAsync(task);
 		/*try {
 			THREAD_POOL.submit(task);
 		} catch (RejectedExecutionException e) {
@@ -64,7 +71,7 @@ public class Stats {
 	}
 	
 	public static void update() {
-		CHEAT_STATS.forEach((c, cs) -> sendUpdateStats(StatsType.CHEAT, "platform=" + Adapter.getAdapter().getName() + "&type=cheat&hack=" + c.getKey().toLowerCase() + "&reliability=" + cs.getReliability() + "&amount=" + cs.getAmount()));
+		CHEAT_STATS.forEach((c, cs) -> sendUpdateStats(false, StatsType.CHEAT, "platform=" + Adapter.getAdapter().getName() + "&type=cheat&hack=" + c.getKey().toLowerCase() + "&reliability=" + cs.getReliability() + "&amount=" + cs.getAmount()));
 		CHEAT_STATS.clear();
 	}
 	

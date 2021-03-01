@@ -46,8 +46,8 @@ public class JesusProtocol extends Cheat implements Listener {
 			return;
 		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom();
 		Location under = loc.clone().subtract(0, 1, 0);
-		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE")
-				|| hasMaterialsAround(under, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE"))
+		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE", "BED")
+				|| hasMaterialsAround(under, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE", "BED"))
 			return;
 		Material type = loc.getBlock().getType(), underType = under.getBlock().getType();
 		boolean isInWater = type.name().contains("WATER"), isOnWater = underType.name().contains("WATER");

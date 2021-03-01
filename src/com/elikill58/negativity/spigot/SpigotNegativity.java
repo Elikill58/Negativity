@@ -343,7 +343,7 @@ public class SpigotNegativity extends JavaPlugin {
 			SpigotNegativityPlayer.removeFromCache(p.getUniqueId());
 		}
 		Database.close();
-		Stats.updateStats(StatsType.ONLINE, 0 + "");
+		Stats.updateStats(true, StatsType.ONLINE, 0 + "");
 		invTimer.cancel();
 		packetTimer.cancel();
 		if(runSpawnFakePlayer != null)

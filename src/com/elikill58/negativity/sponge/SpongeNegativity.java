@@ -215,6 +215,10 @@ public class SpongeNegativity {
 					}
 				}
 			}).submit(this);
+		
+		if(config.getBoolean("stats")) {
+			Task.builder().async().delay(5, TimeUnit.MINUTES).execute(Stats::update).submit(this);
+		}
 	}
 
 	@Listener
@@ -562,21 +566,20 @@ public class SpongeNegativity {
 			return false;
 		np.addWarn(c, reliability, alertCounts);
 		logProof(type, p, c, reliability, proof, ping);
+		if(np.isBanned()) {
+			return false;
+		}
+
+		if (BanUtils.banIfNeeded(np, c, reliability) != null) {
+			return false;
+		}
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatEvent.Kick kick = new PlayerCheatEvent.Kick(type, p, c, reliability, hover, ping);
 			Sponge.getEventManager().post(kick);
 			if (!kick.isCancelled())
 				p.kick(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName()));
 		}
-		if(np.isBanned()) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
-			return false;
-		}
-
-		if (BanUtils.banIfNeeded(np, c, reliability) != null) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
-			return false;
-		}
+		Stats.updateStats(StatsType.CHEAT, c, reliability, alertCounts);
 		if(timeBetweenAlert != -1) {
 			List<PlayerCheatEvent.Alert> tempList = np.pendingAlerts.containsKey(c) ? np.pendingAlerts.get(c) : new ArrayList<>();
 			tempList.add(alert);
@@ -635,7 +638,6 @@ public class SpongeNegativity {
 			}
 			if(hasPermPeople) {
 				np.pendingAlerts.remove(c);
-				Stats.updateStats(StatsType.CHEAT, c.getKey().toLowerCase(), reliability + "");
 			}
 		}
 	}

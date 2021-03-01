@@ -1,5 +1,7 @@
 package com.elikill58.negativity.universal;
 
+import java.util.HashMap;
+
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -7,12 +9,13 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Stats {
 
 	//private static final ExecutorService THREAD_POOL = Executors.newCachedThreadPool();
-
+	
     private static final String SITE_FILE = "https://api.eliapp.fr/negativity.php";
     public static boolean STATS_IN_MAINTENANCE = false;
+    private static final HashMap<Cheat, CheatStats> CHEAT_STATS = new HashMap<>();
 
-    public static void updateStats(StatsType type, String... value) {
-    	if(!Adapter.getAdapter().getConfig().getBoolean("stats"))
+    public static void updateStats(StatsType type, Object... value) {
+    	if(!Adapter.getAdapter().getConfig().getBoolean("stats") || STATS_IN_MAINTENANCE)
     		return;
     	String post = "";
     	switch (type) {
@@ -20,8 +23,9 @@ public class Stats {
 			post = "&value=" + value[0];
 			break;
 		case CHEAT:
-			post = "&hack=" + value[0] + "&reliability=" + value[1] + "&amount=" + (value.length > 2 ? value[2] : "1");
-			break;
+			//post = "&hack=" + value[0] + "&reliability=" + value[1] + "&amount=" + (value.length > 2 ? value[2] : "1");
+			CHEAT_STATS.computeIfAbsent((Cheat) value[0], (c) -> new CheatStats()).add((int) value[1], value.length > 2 ? (int) value[2] : 1);
+			return;
 		case ONLINE:
 			post = "&value=" + value[0];
 			break;
@@ -58,7 +62,12 @@ public class Stats {
 			log.error("Could not update stats: " + e.getMessage());
 		}*/
 	}
-
+	
+	public static void update() {
+		CHEAT_STATS.forEach((c, cs) -> sendUpdateStats(StatsType.CHEAT, "platform=" + Adapter.getAdapter().getName() + "&type=cheat&hack=" + c.getKey().toLowerCase() + "&reliability=" + cs.getReliability() + "&amount=" + cs.getAmount()));
+		CHEAT_STATS.clear();
+	}
+	
 	public static void loadStats() {
 		Runnable task = () -> {
 			try {
@@ -95,6 +104,34 @@ public class Stats {
 
 		public String getKey() {
 			return key;
+		}
+	}
+	
+	public static class CheatStats {
+		
+		private int reliability;
+		private int amount;
+
+		public CheatStats() {
+			this(0, 0);
+		}
+		
+		public CheatStats(int reliability, int amount) {
+			this.reliability = reliability;
+			this.amount = amount;
+		}
+		
+		public int getReliability() {
+			return reliability;
+		}
+		
+		public int getAmount() {
+			return amount;
+		}
+		
+		public void add(int reliability, int amount) {
+			this.reliability += reliability;
+			this.amount += amount;
 		}
 	}
 }

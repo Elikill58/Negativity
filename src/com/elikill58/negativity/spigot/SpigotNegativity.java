@@ -193,6 +193,8 @@ public class SpigotNegativity extends JavaPlugin {
 				Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort() + "");
 			}
 		});
+		if(getConfig().getBoolean("stats", true))
+			getServer().getScheduler().runTaskTimerAsynchronously(this, Stats::update, 20 * 60 * 5, 20 * 60 * 5);
 		AbstractInventory.init(this);
 
 		NegativityAccountStorage.register("file", new SpigotFileNegativityAccountStorage(new File(getDataFolder(), "user")));
@@ -462,14 +464,13 @@ public class SpigotNegativity extends JavaPlugin {
 		np.addWarn(c, reliability, amount);
 		logProof(np, type, p, c, reliability, proof, ping);
 		if(BanManager.isBanned(np.getUUID())) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			return false;
 		}
 
 		if (BanUtils.banIfNeeded(np, c, reliability) != null) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
 			return false;
 		}
+		Stats.updateStats(StatsType.CHEAT, c, reliability, amount);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			Bukkit.getPluginManager().callEvent(kick);
@@ -541,7 +542,6 @@ public class SpigotNegativity extends JavaPlugin {
 			}
 			if(hasPermPeople && !alert.getReportType().equals(ReportType.INFO)) {
 				np.ALERT_NOT_SHOWED.remove(c);
-				Stats.updateStats(StatsType.CHEAT, c.getKey().toLowerCase(), reliability + "");
 			}
 		}
 	}

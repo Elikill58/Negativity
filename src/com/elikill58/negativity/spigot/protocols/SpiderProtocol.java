@@ -68,7 +68,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null || np.hasElytra())
+		if (!np.hasDetectionActive(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null || np.hasElytra() || np.isUsingSlimeBlock)
 			return;
 		Location loc = p.getLocation().clone();
 		if(hasBypassBlockAround(loc) || (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT")))

@@ -8,7 +8,9 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -141,21 +143,21 @@ public class PlayersEvents implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent e){
-		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if(np.isFreeze && !p.getLocation().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR))
-			e.setCancelled(true);
-	}
-
-	@EventHandler
 	public void slimeManager(PlayerMoveEvent e){
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if(p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("SLIME")) {
+		Location locBelow = p.getLocation().clone().subtract(0, 1, 0);
+		if(!np.isFreeze && np.isUsingSlimeBlock && e.getFrom().getY() < e.getTo().getY()) // checking if need to check for freeze / slime
+			return;
+		Block b = locBelow.getBlock();
+		if(np.isFreeze && !b.getType().equals(Material.AIR)) // freeze management
+			e.setCancelled(true);
+		
+		if(b.getType().name().contains("SLIME")) { // manage slime
 			np.isUsingSlimeBlock = true;
-		} else if(np.isUsingSlimeBlock && (np.isOnGround() && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("AIR")))
+		} else if(np.isUsingSlimeBlock && (np.isOnGround() && !b.getType().name().contains("AIR")) && !locBelow.subtract(0, 1, 0).getBlock().getType().name().contains("PISTON")) {
 			np.isUsingSlimeBlock = false;
+		}
 	}
 
 	@EventHandler

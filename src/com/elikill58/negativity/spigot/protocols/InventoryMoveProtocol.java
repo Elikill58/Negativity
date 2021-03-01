@@ -8,7 +8,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryOpenEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -32,7 +31,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 		checkInvMove((Player) e.getWhoClicked(), true, "Click");
 	}
 
-	@EventHandler
+	/*@EventHandler
 	public void onOpen(InventoryOpenEvent e) {
 		if (!(e.getPlayer() instanceof Player) || e.getInventory() == null)
 			return;
@@ -40,7 +39,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 		if (!np.hasDetectionActive(this))
 			return;
 		checkInvMove((Player) e.getPlayer(), false, "Open");
-	}
+	}*/
 
 	private void checkInvMove(Player p, boolean check, String from) {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))

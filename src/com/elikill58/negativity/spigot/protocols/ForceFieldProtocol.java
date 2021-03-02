@@ -56,6 +56,9 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
+		EntityType type = e.getEntityType();
+		if(type == EntityType.ENDER_DRAGON || type.name().contains("PHANTOM") || type.name().contains("BALL") || type.name().contains("TNT"))
+			return;
 		boolean mayCancel = false;
 		/*Entity cible = e.getEntity();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_8) && !LocationUtils.canSeeEntity(p, cible)) {
@@ -74,7 +77,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		ItemStack inHand = Utils.getItemInHand(p);
 		if(inHand == null || !inHand.getType().equals(Material.BOW)) {
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !e.getEntityType().equals(EntityType.ENDER_DRAGON) && !p.getLocation().getBlock().getType().name().contains("WATER")) {
+			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !p.getLocation().getBlock().getType().name().contains("WATER")) {
 				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getEntity().getType().name().toLowerCase() : e.getEntity().getName();
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10),
 						"Big distance with: " + e.getEntity().getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"

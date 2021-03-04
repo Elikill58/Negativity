@@ -53,6 +53,7 @@ public class NegativityPlayer {
 	public ArrayList<String> proof = new ArrayList<>();
 	public HashMap<String, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
+	public ArrayList<Double> flyMoveAmount = new ArrayList<>();
 	
 	// packets
 	public HashMap<PacketType, Integer> PACKETS = new HashMap<>();

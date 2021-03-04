@@ -1,8 +1,10 @@
 package com.elikill58.negativity.common.protocols;
 
+import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.universal.CheatKeys.FLY;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
-import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
+
+import java.util.List;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -24,6 +26,7 @@ import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.report.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Fly extends Cheat implements Listeners {
 
@@ -150,6 +153,47 @@ public class Fly extends Cheat implements Listeners {
 		if (isSetBack() && mayCancel) {
 			LocationUtils.teleportPlayerOnGround(p);
 		}
+	}
+	
+
+	@EventListener
+	public void onMove(PlayerMoveEvent e) {
+		Player p = e.getPlayer();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		if (!np.hasDetectionActive(this) || e.isCancelled() || !checkActive("omega-craft"))
+			return;
+		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
+			return;
+		if(np.isUsingSlimeBlock)
+			return;
+		boolean onGround = p.isOnGround(), wasOnGround = np.booleans.get(FLY, "fly-wasOnGround", true);
+		double y = e.getTo().getY() - e.getFrom().getY();
+		List<Double> list = np.flyMoveAmount;
+		if(p.getFallDistance() <= 0.000001 && list.size() > 1) {
+			int size = list.size();
+			int amount = 0;
+			for(int i = 1; i < size - 1; i++) {
+				double last = list.get(i - 1);
+				double current = list.get(i);
+				if((last + current) == 0) {
+					if(i < (size - 2)) {
+						double next = list.get(i + 1);
+						if((current + next) == 0) {
+							amount++;
+						}
+					} else
+						amount++;
+				}
+			}
+			if(amount > 0) {
+				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + list.size() + " > " + onGround + " : " + wasOnGround, "omega-craft", (CheatHover) null, amount > 1 ? amount - 1 : 1);
+			}
+		}
+		if((onGround && wasOnGround) || (y > 0.1 || y < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME"))
+			list.clear();
+		else
+			list.add(y);
+		np.booleans.set(FLY, "fly-wasOnGround", onGround);
 	}
 
 	@EventListener

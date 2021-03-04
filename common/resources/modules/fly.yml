@@ -53,3 +53,6 @@ checks:
   # When not moving Y
   not-moving-y:
     active: true
+  # Check made for omega craft fly but works with others fly
+  omega-craft:
+    active: true

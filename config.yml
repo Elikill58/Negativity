@@ -325,7 +325,7 @@ cheats:
 
   # Forcefield is to hit more entity than real people in the same time and further
   forcefield:
-    reach: 3.9 # In blocks !
+    reach: 3.3 # In blocks !
     # Disabled by default because they can be viewable for someone
     ghost_disabled: true
     ping: 200

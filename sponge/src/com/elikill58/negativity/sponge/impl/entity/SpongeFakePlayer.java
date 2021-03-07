@@ -11,9 +11,11 @@ import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
+import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.api.entity.AbstractEntity;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
@@ -106,5 +108,14 @@ public class SpongeFakePlayer extends AbstractEntity implements FakePlayer {
 	@Override
 	public Object getDefault() {
 		return fakePlayer;
+	}
+	
+	@Override
+	public BoundingBox getBoundingBox() {
+		AABB box = fakePlayer.getBoundingBox().orElse(null);
+		if(box == null)
+			return null;
+		Vector3d min = box.getMin(), max = box.getMax();
+		return new BoundingBox(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 	}
 }

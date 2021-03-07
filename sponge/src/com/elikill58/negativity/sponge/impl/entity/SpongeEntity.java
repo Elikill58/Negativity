@@ -5,8 +5,10 @@ import org.spongepowered.api.data.property.entity.EyeLocationProperty;
 import org.spongepowered.api.entity.Entity;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.text.channel.MessageReceiver;
+import org.spongepowered.api.util.AABB;
 
 import com.elikill58.negativity.api.entity.AbstractEntity;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
@@ -82,5 +84,14 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public int getEntityId() {
 		return 0;
+	}
+	
+	@Override
+	public BoundingBox getBoundingBox() {
+		AABB box = entity.getBoundingBox().orElse(null);
+		if(box == null)
+			return null;
+		Vector3d min = box.getMin(), max = box.getMax();
+		return new BoundingBox(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 	}
 }

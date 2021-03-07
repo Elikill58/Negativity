@@ -208,4 +208,16 @@ public class PacketUtils {
 			return null;
 		}
 	}
+
+	public static Object getBoundingBox(Entity p) {
+		try {
+			//((CraftEntity) p).getHandle().getBoundingBox();
+			Object cp = CRAFT_ENTITY_CLASS.cast(p);
+			Object ep = cp.getClass().getDeclaredMethod("getHandle").invoke(cp);
+			return getNmsClass("Entity").getDeclaredMethod("getBoundingBox").invoke(ep);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.impl.entity;
 import java.util.UUID;
 
 import com.elikill58.negativity.api.entity.AbstractEntity;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 
 public class SpigotOfflinePlayer extends AbstractEntity implements OfflinePlayer {
@@ -41,5 +42,10 @@ public class SpigotOfflinePlayer extends AbstractEntity implements OfflinePlayer
 	@Override
 	public boolean hasPlayedBefore() {
 		return op.hasPlayedBefore();
+	}
+	
+	@Override
+	public BoundingBox getBoundingBox() {
+		return null;
 	}
 }

@@ -25,12 +25,12 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
 		if (arg.length < 3) {
-			Messages.sendMessageList(sender, "ban.help");
+			Messages.sendMessage(sender, "ban.help");
 			return false;
 		}
 
 		if (arg[0].equalsIgnoreCase("help")) {
-			Messages.sendMessageList(sender, "ban.help");
+			Messages.sendMessage(sender, "ban.help");
 			return false;
 		}
 

@@ -64,7 +64,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 		}
 
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this) || e.getDamage() >= p.getHealth())
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;

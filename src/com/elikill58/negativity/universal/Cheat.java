@@ -2,6 +2,7 @@ package com.elikill58.negativity.universal;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -169,6 +170,7 @@ public abstract class Cheat {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		CHEATS.sort(Comparator.comparing(Cheat::getKey));
 	}
 
 	public static List<Cheat> values() {

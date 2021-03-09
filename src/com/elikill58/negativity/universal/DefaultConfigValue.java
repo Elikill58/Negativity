@@ -97,12 +97,9 @@ public class DefaultConfigValue {
 		STRINGS.put("Permissions.bypass.all", "negativity.bypass.all");
 		STRINGS.put("Permissions.bypass.ban", "negativity.bypass.ban");
 
-		String[] cheats = new String[]{"airjump", "antipotion", "fasteat", "regen", "antiknockback", "autoclick", "autosteal",
-				"blink", "chat", "critical", "forcefield", "fastplace", "fastladder", "fastbow", "faststairs", "inventorymove", "jesus", "fly",
-				"nofall", "nopitchlimit", "noslowdown", "noweb", "nuker", "pingspoof", "phase", "scaffold", "sneak", "speed", "spider", "step", "timer", "xray"};
-		for (String localCheat : cheats) {
+		for (String localCheat : CheatKeys.values()) {
 			//STRINGS.put("Permissions.bypass." + localCheat, "negativity.bypass." + localCheat);
-			STRINGS.put("Permissions.bypass." + localCheat + ".default", "negativity.bypass." + localCheat);
+			STRINGS.put("Permissions.bypass." + localCheat.toLowerCase() + ".default", "negativity.bypass." + localCheat.toLowerCase());
 		}
 
 		BOOLEANS.put("Translation.active", false);
@@ -134,7 +131,8 @@ public class DefaultConfigValue {
 		BOOLEANS.put("verif.disable_alert_on_verif", false);
 		STRINGS.put("verif.storage.id", "default");
 
-		for(String lc : cheats) {
+		for(String lc : CheatKeys.values()) {
+			lc = lc.toLowerCase();
 			INTS.put("cheats." + lc + ".ping", 150);
 			STRINGS.put("cheats." + lc + ".exact_name", lc);
 			BOOLEANS.put("cheats." + lc + ".isActive", true);

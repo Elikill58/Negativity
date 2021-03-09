@@ -1,8 +1,12 @@
 package com.elikill58.negativity.universal;
 
-public class CheatKeys {
+import java.util.Arrays;
+import java.util.List;
 
+public class CheatKeys {
+	
 	public static final String AIR_JUMP = "AIRJUMP";
+	public static final String AIR_PLACE = "AIRPLACE";
 	public static final String ANTI_KNOCKBACK = "ANTIKNOCKBACK";
 	public static final String ANTI_POTION = "ANTIPOTION";
 	public static final String AUTO_CLICK = "AUTOCLICK";
@@ -34,4 +38,12 @@ public class CheatKeys {
 	public static final String STEP = "STEP";
 	public static final String TIMER = "TIMER";
 	public static final String XRAY = "XRAY";
+
+	public static final List<String> KEYS = Arrays.asList(AIR_JUMP, AIR_PLACE, ANTI_KNOCKBACK, ANTI_POTION, AUTO_CLICK, AUTO_STEAL, BLINK, CHAT, CRITICAL,
+			FAST_BOW, FAST_EAT, FAST_LADDER, FAST_PLACE, FAST_STAIRS, FLY, FORCEFIELD, INVENTORY_MOVE, JESUS, NO_FALL, NO_PITCH_LIMIT, NO_SLOW_DOWN, NO_WEB, NUKER,
+			PHASE, PINGSPOOF, REGEN, SCAFFOLD, SNEAK, SPEED, SPIDER, STEP, TIMER, XRAY);
+
+	public static List<String> values() {
+		return KEYS;
+	}
 }

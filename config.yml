@@ -116,6 +116,8 @@ Permissions:
       default: "negativity.bypass.ban"
     all:
       default: "negativity.bypass.all"
+    airplace:
+      default: "negativity.bypass.airplace"
     forcefield:
       default: "negativity.bypass.forcefield"
     fastplace:
@@ -322,6 +324,17 @@ cheats:
   #
   # WARNING: An auto verification of all cheat can be create some lag on your server.
   #
+
+  # AirPlace is when someone place a block on the air or on liquid (and not replace it)
+  airplace:
+    ping: 200
+    exact_name: "AirPlace"
+    isActive: true
+    reliability_alert: 60
+    setBack: false
+    kick: false
+    alert_to_kick: 5
+    check_in_verif: true
 
   # Forcefield is to hit more entity than real people in the same time and further
   forcefield:

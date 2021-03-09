@@ -127,7 +127,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if(np.isUsingSlimeBlock)
+		if(np.isUsingSlimeBlock || p.isInsideVehicle())
 			return;
 		boolean onGround = ((Entity) p).isOnGround(), wasOnGround = np.contentBoolean.getOrDefault("fly-wasOnGround", true);
 		double y = e.getTo().getY() - e.getFrom().getY();

@@ -41,7 +41,7 @@ public class AirPlaceProtocol extends Cheat implements Listener {
 		for(BlockFace face : BLOCK_FACES) {
 			Block b = theBlock.getRelative(face);
 			String name = b.getType().name();
-			if(!name.contains("AIR") && !name.contains("WATER") && !name.contains("LAVA") && !name.contains("CAVE"))
+			if(name.contains("STAIRS") || !(name.contains("AIR") || name.contains("WATER") || name.contains("LAVA") || name.contains("CAVE")))
 				return;
 			blockNames.add(face.name().toLowerCase() + ": " + name);
 		}

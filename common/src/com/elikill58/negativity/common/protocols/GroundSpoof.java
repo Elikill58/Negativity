@@ -1,5 +1,7 @@
 package com.elikill58.negativity.common.protocols;
 
+import com.elikill58.negativity.api.GameMode;
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.Player;
@@ -20,7 +22,7 @@ public class GroundSpoof extends Cheat implements Listeners {
             BlockFace.NORTH, BlockFace.NORTH_WEST, BlockFace.SOUTH_WEST, BlockFace.NORTH_EAST, BlockFace.SOUTH_EAST);
 
     public GroundSpoof() {
-        super(CheatKeys.GROUND_SPOOF, CheatCategory.MOVEMENT, Materials.DIRT, false, false, "groundspoof");
+        super(CheatKeys.GROUND_SPOOF, CheatCategory.MOVEMENT, Materials.STONE, false, false, "groundspoof");
     }
 
     @EventListener
@@ -28,21 +30,27 @@ public class GroundSpoof extends Cheat implements Listeners {
         if (!checkActive("check-blocks-under")) {
             return;
         }
-        if (!e.getPlayer().isOnGround()) {
+        Player p = e.getPlayer();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		if (!np.hasDetectionActive(this) || e.isCancelled())
+			return;
+		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
+			return;
+        if (!p.isOnGround()) {
             return;
         }
-        if (isOnGround(e.getPlayer())) {
+        if (isOnGround(p)) {
             return;
         }
-        final Block downBlock = e.getPlayer().getLocation().getBlock().getRelative(BlockFace.DOWN);
+        Block downBlock = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
         if (isNotAir(downBlock.getRelative(BlockFace.NORTH))
                 && isNotAir(downBlock.getRelative(BlockFace.SOUTH))
                 || (isNotAir(downBlock.getRelative(BlockFace.EAST))
                 && isNotAir(downBlock.getRelative(BlockFace.WEST)))) {
             return;
         }
-        Negativity.alertMod(ReportType.WARNING, e.getPlayer(), this, getReliability(e.getPlayer()), "groundspoof",
-                "AIR BlockFaces: " + getAirBlocks(e.getPlayer()).toString(),
+        Negativity.alertMod(ReportType.WARNING, p, this, getReliability(p), "check-blocks-under",
+                "Air BlockFaces: " + getAirBlocks(p).toString(),
                 new CheatHover.Literal("Ground Spoof (Fly, NoFall, and other movement hacks)"));
     }
 

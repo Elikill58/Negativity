@@ -5,6 +5,7 @@ import static com.elikill58.negativity.universal.verif.VerificationManager.hasVe
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -56,14 +57,15 @@ import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
 import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
 import com.elikill58.negativity.spigot.timers.TimerTimeBetweenAlert;
+import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
+import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Stats;
@@ -93,7 +95,7 @@ import com.elikill58.negativity.universal.verif.VerificationManager;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean log = false, log_console = false, hasBypass = false, reloading = false, essentialsSupport = false,
+	public static boolean log = false, log_console = false, hasBypass = false, reloading = false, timeDrop = false, essentialsSupport = false,
 			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false, floodGateSupport = false, isCraftBukkit = false;
 	public static double tps_alert_stop = 19.0;
 	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
@@ -259,6 +261,30 @@ public class SpigotNegativity extends JavaPlugin {
 		 getServer().getScheduler().runTaskLater(this, () -> {
 			 reloading = false;
 		 }, 3 * 20);
+
+		try {
+			String fieldNameLastTimeTps = v.isNewerOrEquals(Version.V1_13) ? "h" : (v.equals(Version.V1_7) ? "g" : "h");
+			Class<?> mcServerClass = PacketUtils.getNmsClass("MinecraftServer");
+			Object mcServer = mcServerClass.getMethod("getServer").invoke(mcServerClass);
+			Field fieldLastTimeTps = mcServerClass.getDeclaredField(fieldNameLastTimeTps);
+			Method mathHelperMethod = PacketUtils.getNmsClass("MathHelper").getDeclaredMethod("a", long[].class);
+			getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
+				try {
+					Object lastTime = fieldLastTimeTps.get(mcServer);
+					double i = ((double) mathHelperMethod.invoke(null, lastTime)) * 1.0E-6D;
+					if(timeDrop && i < 50) { // if disabled and need to be enabled
+						timeDrop = false;
+					} else if(!timeDrop && i > 50) { // if disabled but need to be
+						timeDrop = true;
+						Adapter.getAdapter().debug("Disabling detection because of TPS lagspike: " + i);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}, 1, 1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void loadChannelInOut(Messenger messenger, String channel, ChannelEvents event) {

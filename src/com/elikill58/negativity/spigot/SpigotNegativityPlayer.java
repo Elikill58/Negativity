@@ -145,7 +145,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	public boolean hasDetectionActive(Cheat c) {
-		if(!c.isActive())
+		if(!c.isActive() || SpigotNegativity.timeDrop)
 			return false;
 		if(!ACTIVE_CHEAT.contains(c))
 			return false;

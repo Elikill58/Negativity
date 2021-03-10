@@ -51,6 +51,7 @@ public class Negativity {
 	public static boolean log = false;
 	public static boolean log_console = false;
 	public static boolean hasBypass = false;
+	public static boolean tpsDrop = false;
 	public static int timeBetweenAlert = -1;
 
 	/**
@@ -118,7 +119,7 @@ public class Negativity {
 	 */
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String checkName, String proof,
 			CheatHover hover, int amount) {
-		if(!c.isActive() || reliability < 55)
+		if(!c.isActive() || reliability < 55 || tpsDrop)
 			return false;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.already_blink && c.getKey().equals(CheatKeys.BLINK)) {

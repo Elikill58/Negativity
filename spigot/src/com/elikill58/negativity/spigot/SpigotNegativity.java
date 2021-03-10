@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -38,6 +39,7 @@ import com.elikill58.negativity.spigot.listeners.FightManager;
 import com.elikill58.negativity.spigot.listeners.InventoryListeners;
 import com.elikill58.negativity.spigot.listeners.PlayersListeners;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
+import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
@@ -151,6 +153,30 @@ public class SpigotNegativity extends JavaPlugin {
 			pendingAlertsTimer = getServer().getScheduler().runTaskTimer(this, new PendingAlertsTimer(), 20, timeTick);
 		}
 		trySendProxyPing();
+
+		try {
+			String fieldNameLastTimeTps = v.isNewerOrEquals(Version.V1_13) ? "h" : (v.equals(Version.V1_7) ? "g" : "h");
+			Class<?> mcServerClass = PacketUtils.getNmsClass("MinecraftServer");
+			Object mcServer = mcServerClass.getMethod("getServer").invoke(mcServerClass);
+			Field fieldLastTimeTps = mcServerClass.getDeclaredField(fieldNameLastTimeTps);
+			Method mathHelperMethod = PacketUtils.getNmsClass("MathHelper").getDeclaredMethod("a", long[].class);
+			getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
+				try {
+					Object lastTime = fieldLastTimeTps.get(mcServer);
+					double i = ((double) mathHelperMethod.invoke(null, lastTime)) * 1.0E-6D;
+					if(Negativity.tpsDrop && i < 50) { // if disabled and need to be enabled
+						Negativity.tpsDrop = false;
+					} else if(!Negativity.tpsDrop && i > 50) { // if disabled but need to be
+						Negativity.tpsDrop = true;
+						Adapter.getAdapter().debug("Disabling detection because of TPS lagspike: " + i);
+					}
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}, 1, 1);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void loadChannelInOut(Messenger messenger, String channel, ChannelListeners event) {

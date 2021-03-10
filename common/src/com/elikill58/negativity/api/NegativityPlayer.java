@@ -30,6 +30,7 @@ import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ScheduledTask;
 import com.elikill58.negativity.universal.Scheduler;
@@ -154,7 +155,7 @@ public class NegativityPlayer {
 	 * @return true if the player can be detected
 	 */
 	public boolean hasDetectionActive(Cheat c) {
-		if (!c.isActive())
+		if (!c.isActive() || Negativity.tpsDrop)
 			return false;
 		if (!ACTIVE_CHEAT.contains(c.getKey()))
 			return false;

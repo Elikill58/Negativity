@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -13,44 +14,88 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.packets.AbstractPacket;
+import com.elikill58.negativity.spigot.packets.PacketContent;
+import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
+import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
+import com.elikill58.negativity.universal.PacketType;
+import com.elikill58.negativity.universal.PacketType.Client;
 import com.elikill58.negativity.universal.ReportType;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
+@SuppressWarnings("deprecation")
 public class NukerProtocol extends Cheat implements Listener {
 
 	public NukerProtocol() {
 		super(CheatKeys.NUKER, true, Material.BEDROCK, CheatCategory.WORLD, true, "breaker", "bed breaker", "bedbreaker");
 	}
 	
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent e) {
+		Player p = e.getPlayer();
+		if(e.getBlock() == null || !Version.getVersion().equals(Version.V1_7))
+			return;
+		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		if (!np.hasDetectionActive(this))
+			return;
+		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
+			return;
+		if(p.hasPotionEffect(PotionEffectType.FAST_DIGGING))
+			return;
+		manageNuker(e, p, np, e.getBlock());
+	}
+	
+	@EventHandler
+	public void onPacketDig(PacketReceiveEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if(p.hasPotionEffect(PotionEffectType.FAST_DIGGING) || e.getBlock() == null)
+		if(p.hasPotionEffect(PotionEffectType.FAST_DIGGING))
 			return;
+		AbstractPacket packet = e.getPacket();
+		PacketType type = packet.getPacketType();
+		if(!type.equals(Client.BLOCK_DIG) || Version.getVersion().equals(Version.V1_7))
+			return;
+		PacketContent content = packet.getContent();
+		Object dig = content.getSpecificModifier(PacketUtils.getNmsClass("PacketPlayInBlockDig$EnumPlayerDigType")).read("c");
+		if(!dig.toString().contains("STOP_DESTROY_BLOCK"))
+			return;
+		try {
+			Object bp = content.getSpecificModifier(PacketUtils.getNmsClass("BlockPosition")).read("a");
+			Class<?> baseBpClass = PacketUtils.getNmsClass("BaseBlockPosition");
+			int x = (int) baseBpClass.getDeclaredMethod("getX").invoke(bp);
+			int y = (int) baseBpClass.getDeclaredMethod("getY").invoke(bp);
+			int z = (int) baseBpClass.getDeclaredMethod("getZ").invoke(bp);
+			Block b = p.getWorld().getBlockAt(x, y, z);
+			manageNuker(e, p, np, b);
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}
+	}
+	
+	public void manageNuker(Cancellable e, Player p, SpigotNegativityPlayer np, Block b) {
 		Block target = Utils.getTargetBlock(p, 5);
 		if(target != null) {
-			double distance = target.getLocation().distance(e.getBlock().getLocation());
-			if ((target.getType() != e.getBlock().getType()) && distance > 3.5 && target.getType() != Material.AIR) {
+			double distance = target.getLocation().distance(b.getLocation());
+			if ((target.getType() != b.getType()) && distance > 3.5 && target.getType() != Material.AIR) {
 				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - np.ping),
-						"BlockDig " + e.getBlock().getType().name() + ", player see " + target.getType().name() + ". Distance between blocks " + distance + " block. Warn: " + np.getWarn(this));
+						"BlockDig " + b.getType().name() + ", player see " + target.getType().name() + ". Distance between blocks " + distance + " block. Warn: " + np.getWarn(this));
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}
 		}
 		long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
-		Material m = e.getBlock().getType();
+		Material m = b.getType();
 		if(dis < 50 && m.isSolid() && !isInstantBlock(m.name()) && !hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.FAST_DIGGING)) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis),
-					"Type: " + e.getBlock().getType().name() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis + ". Warn: " + np.getWarn(this), hoverMsg("breaked_in", "%time%", dis));
+					"Type: " + b.getType().name() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis + ". Warn: " + np.getWarn(this), hoverMsg("breaked_in", "%time%", dis));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}

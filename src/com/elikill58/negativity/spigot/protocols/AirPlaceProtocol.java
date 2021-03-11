@@ -17,6 +17,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ReportType;
 
@@ -35,7 +36,9 @@ public class AirPlaceProtocol extends Cheat implements Listener {
 		if(!np.hasDetectionActive(this) || e.isCancelled())
 			return;
 		Block theBlock = e.getBlock();
-		
+		Material type = theBlock.getType();
+		if(type.equals(ItemUtils.WATER_LILY))
+			return;
 		StringJoiner blockNames = new StringJoiner(", ");
 		
 		for(BlockFace face : BLOCK_FACES) {

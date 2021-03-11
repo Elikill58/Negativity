@@ -127,7 +127,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if(np.isUsingSlimeBlock || p.isInsideVehicle())
+		if(np.isUsingSlimeBlock || p.isInsideVehicle() || np.hasElytra() || LocationUtils.hasMaterialAround(e.getTo(), ItemUtils.WATER_LILY))
 			return;
 		boolean onGround = ((Entity) p).isOnGround(), wasOnGround = np.contentBoolean.getOrDefault("fly-wasOnGround", true);
 		double y = e.getTo().getY() - e.getFrom().getY();
@@ -152,7 +152,7 @@ public class FlyProtocol extends Cheat implements Listener {
 				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + list.size() + " > " + onGround + " : " + wasOnGround, (CheatHover) null, amount > 1 ? amount - 1 : 1);
 			}
 		}
-		if((onGround && wasOnGround) || (y > 0.1 || y < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME"))
+		if((onGround && wasOnGround) || (y > 0.1 || y < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY"))
 			list.clear();
 		else
 			list.add(y);

@@ -167,6 +167,33 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		return ping < c.getMaxAlertPing();
 	}
 	
+	public String getWhyDetectionNotActive(Cheat c) {
+		if(!c.isActive())
+			return "Cheat disabled";
+		if(SpigotNegativity.timeDrop)
+			return "TPS drop";
+		if(!ACTIVE_CHEAT.contains(c))
+			return "Cheat not active";
+		if(TIME_INVINCIBILITY > System.currentTimeMillis())
+			return "Player invincibility";
+		if (isInFight && c.isBlockedInFight())
+			return "In fight";
+		if(SpigotNegativity.tps_alert_stop > Utils.getLastTPS()) // to make TPS go upper
+			return "Low TPS";
+		Player p = getPlayer();
+		if(SpigotNegativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) && GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
+			return "GadgetMenu bypass";
+		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT) && isUsingRiptide())
+			return "Riptide bypass";
+		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
+			return "World bypass";
+		if(SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase()) || Perm.hasPerm(this, "bypass.all")))
+			return "Permission bypass";
+		if(ping < c.getMaxAlertPing())
+			return "Too high ping (" + ping + " > " + c.getMaxAlertPing() + ")";
+		return "none";
+	}
+	
 	public void updateCheckMenu() {
 		for (Player p : Inv.CHECKING.keySet()) {
 			if (p.getOpenInventory() != null) {

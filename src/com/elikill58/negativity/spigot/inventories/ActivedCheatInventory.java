@@ -31,9 +31,12 @@ public class ActivedCheatInventory extends AbstractInventory {
 		Inventory inv = Bukkit.createInventory(new ActivedCheatHolder(), UniversalUtils.getMultipleOf(np.ACTIVE_CHEAT.size() + 3, 9, 1, 54), Inv.NAME_ACTIVED_CHEAT_MENU);
 		if (np.ACTIVE_CHEAT.size() > 0) {
 			int slot = 0;
-			for (Cheat c : np.ACTIVE_CHEAT)
-				if(inv.getSize() > slot)
-					inv.setItem(slot++, ItemUtils.hideAttributes(createItem((Material) c.getMaterial(), ChatColor.RESET + c.getName())));
+			for (Cheat c : np.ACTIVE_CHEAT) {
+				if(inv.getSize() > slot) {
+					String lore = np.hasDetectionActive(c) ? ChatColor.GREEN + "You can be detected." : ChatColor.RED + "Cannot be detected.\n&7Reason: &c" + np.getWhyDetectionNotActive(c);
+					inv.setItem(slot++, ItemUtils.hideAttributes(createItem((Material) c.getMaterial(), ChatColor.RESET + c.getName(), lore.split("\n"))));
+				}
+			}
 		} else
 			inv.setItem(4, createItem(Material.REDSTONE_BLOCK, Messages.getMessage(p, "inventory.detection.no_active", "%name%", cible.getName())));
 		inv.setItem(inv.getSize() - 2, createItem(Material.ARROW, Messages.getMessage(p, "inventory.back")));

@@ -37,7 +37,7 @@ public class PingSpoofProtocol extends Cheat implements Listener {
 				np.canPingSpoof = true;
 			return;
 		}
-		if (newPing <= 200)
+		if (newPing <= 200 || lastPing == 0)
 			return;
 		if (newPing < lastPing && (newPing * 1.2) < lastPing) // if ping is going normal
 			return;

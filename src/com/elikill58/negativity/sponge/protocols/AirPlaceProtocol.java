@@ -8,6 +8,8 @@ import java.util.StringJoiner;
 
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockState;
+import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
@@ -35,13 +37,16 @@ public class AirPlaceProtocol extends Cheat {
 			return;
 
 		BlockSnapshot theBlock = e.getTransactions().get(0).getOriginal();
+		BlockType type = theBlock.getState().getType();
+		if(type.equals(BlockTypes.WATERLILY))
+			return;
 		
 		StringJoiner blockNames = new StringJoiner(", ");
 		
 		for(Direction direction : BLOCK_FACES) {
 			BlockState b = theBlock.getLocation().get().getRelative(direction).getBlock();
 			String name = b.getId();
-			if(!name.contains("AIR") && !name.contains("WATER") && !name.contains("LAVA") && !name.contains("CAVE"))
+			if(name.contains("STAIRS") || !(name.contains("AIR") || name.contains("WATER") || name.contains("LAVA") || name.contains("CAVE")))
 				return;
 			blockNames.add(direction.name().toLowerCase() + ": " + name);
 		}

@@ -53,7 +53,7 @@ public class PingSpoof extends Cheat implements Listeners {
 				np.booleans.set(PINGSPOOF, "can-ping-spoof", true);
 			return;
 		}
-		if (newPing <= 200)
+		if (newPing <= 200 || lastPing == 0)
 			return;
 		if (newPing < lastPing && (newPing * 1.2) < lastPing) // if ping is going normal
 			return;

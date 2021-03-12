@@ -38,6 +38,7 @@ public class Materials {
     public static final Material GOLD_ORE = ItemRegistrar.getInstance().get("gold_ore");
     public static final Material GOLDEN_APPLE = ItemRegistrar.getInstance().get("golden_apple");
     public static final Material GOLDEN_CARROT = ItemRegistrar.getInstance().get("golden_carrot");
+    public static final Material GLASS_BOTTLE = ItemRegistrar.getInstance().get("glass_bottle");
     public static final Material GRASS = ItemRegistrar.getInstance().get("grass_block", "grass");
     public static final Material GRAVEL = ItemRegistrar.getInstance().get("gravel");
 
@@ -97,6 +98,7 @@ public class Materials {
     
     public static final Material WATER_BUCKET = ItemRegistrar.getInstance().get("water_bucket");
     public static final Material WEB = ItemRegistrar.getInstance().get("cobweb", "web");
+    public static final Material WATER_LILY = ItemRegistrar.getInstance().get("WATER_LILY", "LILY_PAD");
     
     /* WOOL */
     public static final Material LIME_WOOL = ItemRegistrar.getInstance().get("lime_wool", "wool");

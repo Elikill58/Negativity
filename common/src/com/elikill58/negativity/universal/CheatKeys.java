@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal;
 public class CheatKeys {
 
 	public static final String AIR_JUMP = "AIRJUMP";
+	public static final String AIR_PLACE = "AIRPLACE";
 	public static final String ANTI_KNOCKBACK = "ANTIKNOCKBACK";
 	public static final String ANTI_POTION = "ANTIPOTION";
 	public static final String AUTO_CLICK = "AUTOCLICK";

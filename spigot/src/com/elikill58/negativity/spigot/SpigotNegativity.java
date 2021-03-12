@@ -155,7 +155,15 @@ public class SpigotNegativity extends JavaPlugin {
 		trySendProxyPing();
 
 		try {
-			String fieldNameLastTimeTps = v.isNewerOrEquals(Version.V1_13) ? "h" : (v.equals(Version.V1_7) ? "g" : "h");
+			String fieldNameLastTimeTps = null;
+			if(v.equals(Version.V1_13))
+				fieldNameLastTimeTps = "d";
+			else if(v.equals(Version.V1_7))
+				fieldNameLastTimeTps = "g";
+			else if(v.equals(Version.V1_14) || v.equals(Version.V1_15))
+				fieldNameLastTimeTps = "f";
+			else
+				fieldNameLastTimeTps = "h";
 			Class<?> mcServerClass = PacketUtils.getNmsClass("MinecraftServer");
 			Object mcServer = mcServerClass.getMethod("getServer").invoke(mcServerClass);
 			Field fieldLastTimeTps = mcServerClass.getDeclaredField(fieldNameLastTimeTps);

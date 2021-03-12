@@ -216,7 +216,10 @@ public class PacketUtils {
 			//((CraftEntity) p).getHandle().getBoundingBox();
 			Object cp = CRAFT_ENTITY_CLASS.cast(p);
 			Object ep = cp.getClass().getDeclaredMethod("getHandle").invoke(cp);
-			return getNmsClass("Entity").getDeclaredMethod("getBoundingBox").invoke(ep);
+			if(Version.getVersion().equals(Version.V1_7))
+				return getNmsClass("Entity").getDeclaredField("boundingBox").get(ep);
+			else
+				return getNmsClass("Entity").getDeclaredMethod("getBoundingBox").invoke(ep);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

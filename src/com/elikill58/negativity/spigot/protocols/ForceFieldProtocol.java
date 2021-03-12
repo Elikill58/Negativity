@@ -4,7 +4,6 @@ import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPor
 
 import java.text.NumberFormat;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -59,26 +58,24 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		EntityType type = e.getEntityType();
 		if(type == EntityType.ENDER_DRAGON || type.name().contains("PHANTOM") || type.name().contains("BALL") || type.name().contains("TNT"))
 			return;
-		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), () -> {
-			boolean mayCancel = false;
-			Entity cible = e.getEntity();
-			
-			Object pBB = PacketUtils.getBoundingBox(p);
-			Object cibleBB = PacketUtils.getBoundingBox(cible);
-			double dis = distance(pBB, cibleBB);
-			ItemStack inHand = Utils.getItemInHand(p);
-			if(inHand == null || !inHand.getType().equals(Material.BOW)) {
-				recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-				if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !p.getLocation().getBlock().getType().name().contains("WATER")) {
-					String entityName = Version.getVersion().equals(Version.V1_7) ? cible.getType().name().toLowerCase() : cible.getName();
-					mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 3 * 10),
-							"Big distance with: " + cible.getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
-							+ ". Ping: " + np.ping, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
-				}
+		boolean mayCancel = false;
+		Entity cible = e.getEntity();
+		
+		Object pBB = PacketUtils.getBoundingBox(p);
+		Object cibleBB = PacketUtils.getBoundingBox(cible);
+		double dis = distance(pBB, cibleBB);
+		ItemStack inHand = Utils.getItemInHand(p);
+		if(inHand == null || !inHand.getType().equals(Material.BOW)) {
+			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
+			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !p.getLocation().getBlock().getType().name().contains("WATER")) {
+				String entityName = Version.getVersion().equals(Version.V1_7) ? cible.getType().name().toLowerCase() : cible.getName();
+				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 3 * 10),
+						"Big distance with: " + cible.getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
+						+ ". Ping: " + np.ping, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
 			}
-			if (isSetBack() && mayCancel)
-				e.setCancelled(true);
-		});
+		}
+		if (isSetBack() && mayCancel)
+			e.setCancelled(true);
 	}
 	
 	private double sens = 0.005;

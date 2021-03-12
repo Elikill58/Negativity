@@ -111,11 +111,12 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void initMods(Player p) {
 		Plugin pl = SpigotNegativity.getInstance();
-		if(pl.isEnabled()) {
+		if(pl.isEnabled() && pl.getServer().getMessenger().isOutgoingChannelRegistered(pl, SpigotNegativity.CHANNEL_NAME_FML)) { // if not, we ignore it
 			p.sendPluginMessage(pl, SpigotNegativity.CHANNEL_NAME_FML, new byte[] { -2, 0 });
 			p.sendPluginMessage(pl, SpigotNegativity.CHANNEL_NAME_FML, new byte[] { 0, 2, 0, 0, 0, 0 });
 			p.sendPluginMessage(pl, SpigotNegativity.CHANNEL_NAME_FML, new byte[] { 2, 0, 0, 0, 0 });
-		}
+		} else
+			MODS.put("Not checked", "0.0");
 	}
 
 	@Override

@@ -146,13 +146,6 @@ public class SpigotNegativity extends JavaPlugin {
 		new Metrics(this)
 				.addCustomChart(new Metrics.SimplePie("custom_permission", () -> String.valueOf(Database.hasCustom)));
 
-		PluginManager pm = Bukkit.getPluginManager();
-		pm.registerEvents(new PlayersEvents(this), this);
-		pm.registerEvents(new FightManager(), this);
-		pm.registerEvents(new ServerCrasherEvents(this), this);
-		if(v.isNewerOrEquals(Version.V1_9))
-			pm.registerEvents(new ElytraEvents(), this);
-
 		Messenger messenger = getServer().getMessenger();
 		ChannelEvents channelEvents = new ChannelEvents();
 		if (v.isNewerOrEquals(Version.V1_13)) {
@@ -162,6 +155,13 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID, channelEvents);
 		loadChannelInOut(messenger, CHANNEL_NAME_FML, channelEvents);
+
+		PluginManager pm = Bukkit.getPluginManager();
+		pm.registerEvents(new PlayersEvents(this), this);
+		pm.registerEvents(new FightManager(), this);
+		pm.registerEvents(new ServerCrasherEvents(this), this);
+		if(v.isNewerOrEquals(Version.V1_9))
+			pm.registerEvents(new ElytraEvents(), this);
 		
 		for (Player p : Utils.getOnlinePlayers())
 			manageAutoVerif(p);

@@ -177,6 +177,32 @@ public class NegativityPlayer {
 			return false;
 		return p.getPing() < c.getMaxAlertPing();
 	}
+	
+	public String getWhyDetectionNotActive(Cheat c) {
+		if(!c.isActive())
+			return "Cheat disabled";
+		if(Negativity.tpsDrop)
+			return "TPS drop";
+		if(!ACTIVE_CHEAT.contains(c.getKey()))
+			return "Cheat not active";
+		if(TIME_INVINCIBILITY > System.currentTimeMillis())
+			return "Player invincibility";
+		if (isInFight && c.isBlockedInFight())
+			return "In fight";
+		Adapter ada = Adapter.getAdapter();
+		if(ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
+			return "Low TPS";
+		Player p = getPlayer();
+		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT) && PlayerModificationsManager.shouldIgnoreMovementChecks(p))
+			return "Should ignore movement";
+		if (c.getKey().equals(CheatKeys.FLY) && PlayerModificationsManager.canFly(p))
+			return "Allowed to fly";
+		if(BypassManager.hasBypass(p, c))
+			return "Has bypass";
+		if(p.getPing() < c.getMaxAlertPing())
+			return "Too high ping (" + p.getPing() + " > " + c.getMaxAlertPing() + ")";
+		return "none";
+	}
 
 	/**
 	 * Get warn of the cheat

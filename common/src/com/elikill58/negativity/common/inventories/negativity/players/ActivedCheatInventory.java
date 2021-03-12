@@ -30,8 +30,10 @@ public class ActivedCheatInventory extends AbstractInventory<ActivedCheatHolder>
 			int slot = 0;
 			for (String cheatKey : np.ACTIVE_CHEAT) {
 				Cheat c = Cheat.forKey(cheatKey);
-				if (inv.getSize() > slot)
-					inv.set(slot++, ItemBuilder.Builder(c.getMaterial()).displayName(ChatColor.RESET + c.getName()).build());
+				if (inv.getSize() > slot) {
+					String lore = np.hasDetectionActive(c) ? ChatColor.GREEN + "You can be detected." : ChatColor.RED + "Cannot be detected.\n&7Reason: &c" + np.getWhyDetectionNotActive(c);
+					inv.set(slot++, ItemBuilder.Builder(c.getMaterial()).displayName(ChatColor.RESET + c.getName()).lore(lore.split("\n")).build());
+				}
 			}
 		} else
 			inv.set(4, ItemBuilder.Builder(Materials.REDSTONE_BLOCK).displayName(Messages.getMessage(p, "inventory.detection.no_active", "%name%", cible.getName())).build());

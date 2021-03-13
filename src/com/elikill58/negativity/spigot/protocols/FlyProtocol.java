@@ -129,6 +129,8 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if(np.isUsingSlimeBlock || p.isInsideVehicle() || np.hasElytra() || LocationUtils.hasMaterialAround(e.getTo(), ItemUtils.WATER_LILY))
 			return;
+		if (p.getAllowFlight() || p.getEntityId() == 100 || Utils.isSwimming(p))
+			return;
 		boolean onGround = ((Entity) p).isOnGround(), wasOnGround = np.contentBoolean.getOrDefault("fly-wasOnGround", true);
 		double y = e.getTo().getY() - e.getFrom().getY();
 		List<Double> list = np.flyMoveAmount;

@@ -1,6 +1,6 @@
 package com.elikill58.negativity.sponge8.impl.location;
 
-import org.spongepowered.api.world.ServerLocation;
+import org.spongepowered.api.world.server.ServerLocation;
 import org.spongepowered.api.world.server.ServerWorld;
 import org.spongepowered.math.vector.Vector3d;
 

@@ -140,7 +140,7 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public void runConsoleCommand(String cmd) {
 		try {
-			Sponge.getCommandManager().process(cmd);
+			Sponge.getServer().getCommandManager().process(cmd);
 		} catch (CommandException e) {
 			this.plugin.getLogger().error("Failed to run command as console", e);
 		}

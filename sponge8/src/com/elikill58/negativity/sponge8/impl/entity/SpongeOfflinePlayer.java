@@ -5,6 +5,7 @@ import java.util.UUID;
 import org.spongepowered.api.entity.living.player.User;
 
 import com.elikill58.negativity.api.entity.AbstractEntity;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 
 public class SpongeOfflinePlayer extends AbstractEntity implements OfflinePlayer {
@@ -34,7 +35,12 @@ public class SpongeOfflinePlayer extends AbstractEntity implements OfflinePlayer
 	public boolean isOp() {
 		return u.hasPermission("*");
 	}
-
+	
+	@Override
+	public BoundingBox getBoundingBox() {
+		return null;
+	}
+	
 	@Override
 	public String getName() {
 		return u.getName();

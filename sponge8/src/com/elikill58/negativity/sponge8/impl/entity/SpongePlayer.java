@@ -21,7 +21,7 @@ import org.spongepowered.api.network.channel.Channel;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
 import org.spongepowered.api.registry.RegistryTypes;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.world.ServerLocation;
+import org.spongepowered.api.world.server.ServerLocation;
 import org.spongepowered.math.vector.Vector3d;
 
 import com.elikill58.negativity.api.GameMode;
@@ -362,6 +362,12 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 		if (loc.getBlock().getType().getId().contains("WATER"))
 			return true;
 		return loc.sub(0, 1, 0).getBlock().getType().getId().contains("WATER");
+	}
+	
+	@Override
+	public boolean isUsingRiptide() {
+		// TODO SpongeAPI 8 does not expose this information (yet)
+		return false;
 	}
 	
 	@Override

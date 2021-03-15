@@ -6,10 +6,12 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.util.AABB;
 import org.spongepowered.api.world.server.ServerWorld;
 import org.spongepowered.math.vector.Vector3d;
 
 import com.elikill58.negativity.api.entity.AbstractEntity;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
@@ -95,5 +97,14 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public int getEntityId() {
 		return 0;
+	}
+	
+	@Override
+	public BoundingBox getBoundingBox() {
+		AABB box = entity.getBoundingBox().orElse(null);
+		if(box == null)
+			return null;
+		Vector3d min = box.getMin(), max = box.getMax();
+		return new BoundingBox(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 	}
 }

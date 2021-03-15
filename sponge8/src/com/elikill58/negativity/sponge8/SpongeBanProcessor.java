@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.concurrent.ExecutionException;
 
 import javax.annotation.Nullable;
 
@@ -56,12 +57,20 @@ public class SpongeBanProcessor implements BanProcessor {
 	public BanResult revokeBan(UUID playerId) {
 		BanService banService = Sponge.getServer().getServiceProvider().banService();
 		GameProfile profile = GameProfile.of(playerId);
-		Optional<org.spongepowered.api.service.ban.Ban.Profile> existingBan = banService.getBanFor(profile);
-		if (!existingBan.isPresent() || !banService.pardon(profile)) {
+		org.spongepowered.api.service.ban.Ban.Profile revokedBan;
+		try {
+			Optional<org.spongepowered.api.service.ban.Ban.Profile> existingBan = banService.getBanFor(profile).get();
+			if (!existingBan.isPresent() || !banService.pardon(profile).get()) {
+				return null;
+			}
+			
+			revokedBan = existingBan.get();
+		} catch (InterruptedException | ExecutionException e) {
+			Adapter.getAdapter().getLogger().error("Failed to get or revoke ban of player " + playerId);
+			e.printStackTrace();
 			return null;
 		}
-
-		org.spongepowered.api.service.ban.Ban.Profile revokedBan = existingBan.get();
+		
 		String reason = revokedBan.getReason().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
 		String bannedBy = revokedBan.getBanSource().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
 		long expirationTime = revokedBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
@@ -71,19 +80,33 @@ public class SpongeBanProcessor implements BanProcessor {
 
 	@Override
 	public boolean isBanned(UUID playerId) {
-		return Sponge.getServer().getServiceProvider().banService().isBanned(GameProfile.of(playerId));
+		try {
+			return Sponge.getServer().getServiceProvider().banService().getBanFor(GameProfile.of(playerId)).get().isPresent();
+		} catch (InterruptedException | ExecutionException e) {
+			Adapter.getAdapter().getLogger().error("Could not determine if player " + playerId + " is banned");
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	@Nullable
 	@Override
 	public Ban getActiveBan(UUID playerId) {
 		BanService banService = Sponge.getServer().getServiceProvider().banService();
-		Optional<org.spongepowered.api.service.ban.Ban.Profile> existingBan = banService.getBanFor(GameProfile.of(playerId));
-		if (!existingBan.isPresent()) {
+		org.spongepowered.api.service.ban.Ban.Profile activeBan;
+		try {
+			Optional<org.spongepowered.api.service.ban.Ban.Profile> existingBan = banService.getBanFor(GameProfile.of(playerId)).get();
+			if (!existingBan.isPresent()) {
+				return null;
+			}
+			
+			activeBan = existingBan.get();
+		} catch (InterruptedException | ExecutionException e) {
+			Adapter.getAdapter().getLogger().error("Could not get active ban of player " + playerId);
+			e.printStackTrace();
 			return null;
 		}
-
-		org.spongepowered.api.service.ban.Ban.Profile activeBan = existingBan.get();
+		
 		String reason = activeBan.getReason().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
 		String bannedBy = activeBan.getBanSource().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
 		long expirationTime = activeBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);

@@ -8,7 +8,7 @@ import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.util.Direction;
-import org.spongepowered.api.world.ServerLocation;
+import org.spongepowered.api.world.server.ServerLocation;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
@@ -127,7 +127,7 @@ public class SpongeBlock extends Block {
 	
 	@Override
 	public boolean isWaterLogged() {
-		return block.require(Keys.IS_WATERLOGGED);
+		return block.getOrElse(Keys.IS_WATERLOGGED, false);
 	}
 	
 	@Override

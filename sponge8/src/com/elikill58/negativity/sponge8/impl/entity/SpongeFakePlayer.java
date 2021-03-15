@@ -9,7 +9,7 @@ import org.spongepowered.api.entity.living.Human;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.util.Ticks;
-import org.spongepowered.api.world.ServerLocation;
+import org.spongepowered.api.world.server.ServerLocation;
 
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.location.Location;

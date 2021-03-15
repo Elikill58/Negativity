@@ -9,6 +9,7 @@ import org.spongepowered.api.command.Command;
 import org.spongepowered.api.command.CommandCause;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.exception.CommandException;
+import org.spongepowered.api.command.parameter.ArgumentReader;
 
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.events.EventManager;
@@ -28,8 +29,8 @@ public class NegativityCommandWrapper implements Command.Raw {
 	}
 	
 	@Override
-	public CommandResult process(CommandCause cause, String arguments) throws CommandException {
-		String[] args = arguments.isEmpty() ? new String[0] : arguments.split(" ");
+	public CommandResult process(CommandCause cause, ArgumentReader.Mutable arguments) throws CommandException {
+		String[] args = arguments.getInput().split(" ");
 		String prefix = args.length == 0 ? "" : args[args.length - 1].toLowerCase(Locale.ROOT);
 		CommandSender executor = SpongeEntityManager.getExecutor(cause.getCause().first(Audience.class)
 			.orElseThrow(() -> new CommandException(Component.text("Could not find appropriate command executor"))));
@@ -39,9 +40,9 @@ public class NegativityCommandWrapper implements Command.Raw {
 	}
 	
 	@Override
-	public List<String> getSuggestions(CommandCause cause, String arguments) throws CommandException {
-		String[] args = arguments.split(" ");
-		if (arguments.endsWith(" ")) {
+	public List<String> getSuggestions(CommandCause cause, ArgumentReader.Mutable arguments) throws CommandException {
+		String[] args = arguments.getInput().split(" ");
+		if (arguments.getInput().endsWith(" ")) {
 			args = Arrays.copyOf(args, args.length + 1);
 			args[args.length - 1] = "";
 		}

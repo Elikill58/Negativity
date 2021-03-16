@@ -128,7 +128,7 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().info("------ Negativity Information ------");
 			getLogger().info("");
 			getLogger().info(" > Thanks for downloading Negativity :)");
-			getLogger().info("I'm trying to make the better anti-cheat has possible.");
+			getLogger().info("I'm trying to make the best anti-cheat as possible.");
 			getLogger().info("If you get error/false positive, or just have suggestion, you can contact me via:");
 			getLogger().info("Discord: @Elikill58#0743, @Elikill58 on twitter or in all other web site like Spigotmc ...");
 			getLogger().info("");

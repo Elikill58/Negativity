@@ -2,8 +2,8 @@ package com.elikill58.negativity.spigot.protocols;
 
 import static com.elikill58.negativity.spigot.utils.ItemUtils.STATIONARY_WATER;
 import static com.elikill58.negativity.spigot.utils.LocationUtils.hasMaterialsAround;
-import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThan;
+import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import org.bukkit.GameMode;
@@ -12,11 +12,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -32,11 +32,11 @@ public class JesusProtocol extends Cheat implements Listener {
 
 	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent e) {
+	public void onPlayerMove(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		if (!np.hasDetectionActive(this))
 			return;
 		if (np.hasElytra() || p.isInsideVehicle() || Utils.isSwimming(p))

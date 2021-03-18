@@ -8,11 +8,11 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.ReportType;
@@ -26,10 +26,10 @@ public class NoWebProtocol extends Cheat implements Listener {
 		super(CheatKeys.NO_WEB, false, WEB, CheatCategory.MOVEMENT, true, "no web");
 	}
 
-	@EventHandler(ignoreCancelled = true)
-	public void onPlayerMove(PlayerMoveEvent e) {
+	@EventHandler
+	public void onPlayerMove(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		if (!np.hasDetectionActive(this))
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))

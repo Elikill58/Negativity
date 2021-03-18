@@ -14,11 +14,11 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -36,9 +36,9 @@ public class FlyProtocol extends Cheat implements Listener {
 
 	@SuppressWarnings("deprecation")
 	@EventHandler
-	public void onPlayerMove(PlayerMoveEvent e) {
+	public void onPlayerMove(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		if (!np.hasDetectionActive(this) || e.isCancelled())
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
@@ -120,9 +120,9 @@ public class FlyProtocol extends Cheat implements Listener {
 	
 
 	@EventHandler
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		if (!np.hasDetectionActive(this) || e.isCancelled())
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
@@ -162,9 +162,9 @@ public class FlyProtocol extends Cheat implements Listener {
 	}
 	
 	@EventHandler
-	public void boatManager(PlayerMoveEvent e) {
+	public void boatManager(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		boolean nextValue = np.contentBoolean.getOrDefault("boat-falling", false);
 		if(p.isInsideVehicle() && p.getVehicle().getType().equals(EntityType.BOAT)) {
 			Location from = e.getFrom().clone(), to = e.getTo().clone();

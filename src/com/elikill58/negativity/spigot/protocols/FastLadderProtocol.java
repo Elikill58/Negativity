@@ -6,12 +6,12 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -24,13 +24,13 @@ public class FastLadderProtocol extends Cheat implements Listener {
 		super(CheatKeys.FAST_LADDER, false, Material.LADDER, CheatCategory.MOVEMENT, true, "ladder", "ladders");
 	}
 
-	@EventHandler(ignoreCancelled = true)
-	public void onPlayerMove(PlayerMoveEvent e) {
+	@EventHandler
+	public void onPlayerMove(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this) || np.hasElytra())
+		SpigotNegativityPlayer np = e.getNegativityPlayer();
+		if (!np.hasDetectionActive(this) || np.hasElytra() || e.isCancelled())
 			return;
 		Location loc = p.getLocation().clone();
 		if (!loc.getBlock().getType().equals(Material.LADDER)){

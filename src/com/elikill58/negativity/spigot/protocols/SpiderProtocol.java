@@ -6,11 +6,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -27,12 +27,12 @@ public class SpiderProtocol extends Cheat implements Listener {
 				"wall");
 	}
 
-	@EventHandler(ignoreCancelled = true)
-	public void onPlayerMove(PlayerMoveEvent e) {
+	@EventHandler
+	public void onPlayerMove(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		Location loc = p.getLocation();
 		if (!np.hasDetectionActive(this) || LocationUtils.isUsingElevator(p))
 			return;
@@ -62,12 +62,12 @@ public class SpiderProtocol extends Cheat implements Listener {
 		}
 	}
 	
-	@EventHandler(ignoreCancelled = true)
-	public void onPlayerContinueMove(PlayerMoveEvent e) {
+	@EventHandler
+	public void onPlayerContinueMove(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		if (!np.hasDetectionActive(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null || np.hasElytra() || np.isUsingSlimeBlock)
 			return;
 		Location loc = p.getLocation().clone();

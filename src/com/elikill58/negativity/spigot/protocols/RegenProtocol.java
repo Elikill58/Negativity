@@ -26,7 +26,7 @@ public class RegenProtocol extends Cheat implements Listener {
 		super(CheatKeys.REGEN, true, Material.GOLDEN_APPLE, CheatCategory.PLAYER, true, "regen", "autoregen");
 	}
 
-	@EventHandler (ignoreCancelled = true)
+	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
 		Material m = p.getItemInHand().getType();
@@ -34,7 +34,7 @@ public class RegenProtocol extends Cheat implements Listener {
 			SpigotNegativityPlayer.getNegativityPlayer(p).flyingReason = FlyingReason.REGEN;
 	}
 
-	@EventHandler (ignoreCancelled = true)
+	@EventHandler
 	public void onRegen(EntityRegainHealthEvent e) {
 		if (!(e.getEntity() instanceof Player))
 			return;

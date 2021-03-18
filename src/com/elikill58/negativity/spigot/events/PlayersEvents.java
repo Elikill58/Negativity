@@ -29,6 +29,7 @@ import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.commands.ReportCommand;
+import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityAccount;
@@ -157,6 +158,9 @@ public class PlayersEvents implements Listener {
 			np.isUsingSlimeBlock = true;
 		} else if(np.isUsingSlimeBlock && (np.isOnGround() && !b.getType().name().contains("AIR")) && !locBelow.subtract(0, 1, 0).getBlock().getType().name().contains("PISTON")) {
 			np.isUsingSlimeBlock = false;
+		}
+		if(!e.isCancelled()) {
+			Bukkit.getPluginManager().callEvent(new NegativityPlayerMoveEvent(e));
 		}
 	}
 

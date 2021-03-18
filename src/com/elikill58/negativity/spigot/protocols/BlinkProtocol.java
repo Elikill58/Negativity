@@ -6,10 +6,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -29,14 +29,14 @@ public class BlinkProtocol extends Cheat implements Listener {
 	}
 	
 	@EventHandler(ignoreCancelled = true)
-	public void onPlayerMove(PlayerMoveEvent e){
-		SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer()).bypassBlink = false;
+	public void onPlayerMove(NegativityPlayerMoveEvent e){
+		e.getNegativityPlayer().bypassBlink = false;
 	}
 	
 	@EventHandler
 	public void onPacketClear(PlayerPacketsClearEvent e) {
 		Player p = e.getPlayer();
-		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		if(!np.hasDetectionActive(this))
 			return;
 		if (!(!np.bypassBlink && (p.getGameMode().equals(GameMode.ADVENTURE) || p.getGameMode().equals(GameMode.SURVIVAL))))

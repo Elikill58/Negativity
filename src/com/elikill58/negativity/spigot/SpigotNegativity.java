@@ -452,7 +452,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		if (c.equals(Cheat.forKey(CheatKeys.FLY)) && p.hasPermission("essentials.fly") && essentialsSupport && EssentialsSupport.checkEssentialsPrecondition(p))
 			return false;
-		if(VerificationManager.isDisablingAlertOnVerif() && !hasVerifications(p.getUniqueId()))
+		if(VerificationManager.isDisablingAlertOnVerif() && hasVerifications(p.getUniqueId()))
 			return false;
 		
 		int ping = np.ping;

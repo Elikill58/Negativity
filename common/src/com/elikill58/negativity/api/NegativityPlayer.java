@@ -49,7 +49,63 @@ public class NegativityPlayer {
 
 	private final UUID playerId;
 	private final Player p;
+	private double clicks;
+	private double averageClicks;
+	private double deviationClicks;
+	private double averageDeviation;
+	private int clicksTicks;
+	private Entity lastHitted;
 	
+	
+	
+	public int getClicksTicks() {
+		return clicksTicks;
+	}
+
+	public void setClicksTicks(int clicksTicks) {
+		this.clicksTicks = clicksTicks;
+	}
+	
+	public void setLastHitted(Entity last) {
+		this.lastHitted = last;
+	}
+	
+	public Entity getLastHitted() {
+		return lastHitted;
+	}
+
+	public double getClicks() {
+		return clicks;
+	}
+
+	public void setClicks(double clicks) {
+		this.clicks = clicks;
+	}
+
+	public double getAverageClicks() {
+		return averageClicks;
+	}
+
+	public void setAverageClicks(double averageClicks) {
+		this.averageClicks = averageClicks;
+	}
+
+	public double getDeviationClicks() {
+		return deviationClicks;
+	}
+
+	public void setDeviationClicks(double deviationClicks) {
+		this.deviationClicks = deviationClicks;
+	}
+
+	public double getAverageDeviation() {
+		return averageDeviation;
+	}
+
+	public void setAverageDeviation(double averageDeviation) {
+		this.averageDeviation = averageDeviation;
+	}
+
 	public Set<String> ACTIVE_CHEAT = new HashSet<>();
 	public ArrayList<String> proof = new ArrayList<>();
 	public HashMap<String, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();

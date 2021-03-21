@@ -60,4 +60,6 @@ public class Timer extends Cheat implements Listeners {
 				null, amount > 0 ? amount : 1);
 		// TODO implement setBack option for Timer
 	}
+	
+	
 }

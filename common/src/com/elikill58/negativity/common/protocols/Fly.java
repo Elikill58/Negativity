@@ -18,12 +18,14 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -153,7 +155,39 @@ public class Fly extends Cheat implements Listeners {
 		if (isSetBack() && mayCancel) {
 			LocationUtils.teleportPlayerOnGround(p);
 		}
+		Player player = e.getPlayer();
+		Vector vec = new Vector(to.getX(), to.getY(), to.getZ());
+
+		double diff = vec.distance(new Vector(from.getX(), from.getY(), from.getZ()));
+
+		if (diff < 0.30 && diff > 0.2 && player.getLocation().add(+2, -2, +2).getBlock().getType() == Materials.AIR
+				&& player.getLocation().add(-2, -2, -2).getBlock().getType() == Materials.AIR
+				&& player.getLocation().add(0, -3, 0).getBlock().getType() == Materials.AIR
+				&& player.getLocation().add(0, -4, 0).getBlock().getType() == Materials.AIR
+				&& isReallyOnGround(player)) {
+			Scheduler.getInstance().runDelayed(() -> {
+				if (isReallyOnGround(player)) {
+					
+					Negativity.alertMod(ReportType.VIOLATION,player, this, (int)diff * 70, "Bypass" , "Spoofing ground");
+					
+
+				}
+			}, 3);
+
+		}
+
 	}
+
+	
+
+	public static boolean isReallyOnGround(Player player) {
+		if (player.getLocation().add(0, -1, 0).getBlock().getType() == Materials.AIR && player.isOnGround()) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 	
 
 	@EventListener

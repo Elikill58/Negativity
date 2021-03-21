@@ -33,7 +33,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Speed extends Cheat implements Listeners {
 
 	private NumberFormat numberFormat = NumberFormat.getInstance();
-	
+
 	public Speed() {
 		super(SPEED, CheatCategory.MOVEMENT, Materials.BEACON, true, false, "speed", "speedhack");
 		numberFormat.setMaximumFractionDigits(4);
@@ -47,24 +47,24 @@ public class Speed extends Cheat implements Listeners {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
 			return;
-		if(p.hasElytra() || LocationUtils.isUsingElevator(p))
+		if (p.hasElytra() || LocationUtils.isUsingElevator(p))
 			return;
-		
-		if(checkActive("move-amount")) {
+
+		if (checkActive("move-amount")) {
 			np.MOVE_TIME++;
 			if (np.MOVE_TIME > 60) {
-				boolean b = Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
-						this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount", "Move " + np.MOVE_TIME + " times.");
+				boolean b = Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+						UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount",
+						"Move " + np.MOVE_TIME + " times.");
 				if (b && isSetBack())
 					e.setCancelled(true);
 			}
 		}
 		Location from = e.getFrom().clone(), to = e.getTo().clone();
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Materials.SPONGE)
-				|| p.getVehicle() != null || p.getAllowFlight()
-				|| p.getFlySpeed() > 3.0F || p.getWalkSpeed() > 2.0F
-				|| p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE) || p.isInsideVehicle()
-				|| hasEnderDragonAround(p) || p.getItemInHand().getType().getId().contains("TRIDENT"))
+				|| p.getVehicle() != null || p.getAllowFlight() || p.getFlySpeed() > 3.0F || p.getWalkSpeed() > 2.0F
+				|| p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE) || p.isInsideVehicle() || hasEnderDragonAround(p)
+				|| p.getItemInHand().getType().getId().contains("TRIDENT"))
 			return;
 		for (Entity entity : p.getNearbyEntities(5, 5, 5))
 			if (entity.getType().equals(EntityType.CREEPER))
@@ -79,15 +79,15 @@ public class Speed extends Cheat implements Listeners {
 		boolean onGround = p.isOnGround();
 		double dif = to.getY() - from.getY();
 		boolean hasIceBelow = locDown.getBlock().getType().getId().contains("ICE");
-		if(hasIceBelow) {
+		if (hasIceBelow) {
 			np.booleans.set("ALL", "speed-has-ice", true);
 			Adapter.getAdapter().debug("Has ice below " + p.getName());
 		} else
 			hasIceBelow = np.booleans.get("ALL", "speed-has-ice", false);
-		
-		if(onGround && dif < 0) {
+
+		if (onGround && dif < 0) {
 			int firstIce = np.ints.get("ALL", "speed-has-ice-first", 4);
-			if(firstIce <= 0) {
+			if (firstIce <= 0) {
 				Adapter.getAdapter().debug("Removing ice bypass for " + p.getName());
 				np.booleans.remove("ALL", "speed-has-ice");
 				np.ints.remove("ALL", "speed-has-ice-first");
@@ -95,58 +95,68 @@ public class Speed extends Cheat implements Listeners {
 				np.ints.set("ALL", "speed-has-ice-first", firstIce - 1);
 			}
 		}
-		
-		if (hasIceBelow || hasMaterialsAround(loc.getBlock().getRelative(BlockFace.UP).getLocation(), "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+
+		if (hasIceBelow
+				|| hasMaterialsAround(loc.getBlock().getRelative(BlockFace.UP).getLocation(), "TRAPDOOR", "SLAB",
+						"STAIRS", "CARPET")
 				|| hasMaterialsAround(loc.clone().add(0, 2, 0), "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
 				|| hasMaterialsAround(under.getLocation(), "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
-		double amplifierSpeed = p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED, 0, 0)).getAmplifier();
+		double amplifierSpeed = p.getPotionEffect(PotionEffectType.SPEED)
+				.orElseGet(() -> new PotionEffect(PotionEffectType.SPEED, 0, 0)).getAmplifier();
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
 		double distance = from.distance(to);
 		boolean mayCancel = false;
-		if(onGround && checkActive("distance-ground") && amplifierSpeed < 5) {
-			double walkSpeed = (p.getWalkSpeed() - getEssentialsRealMoveSpeed(p)); // TODO rewrite without converting to essentials values
+		if (onGround && checkActive("distance-ground") && amplifierSpeed < 5) {
+			double walkSpeed = (p.getWalkSpeed() - getEssentialsRealMoveSpeed(p)); // TODO rewrite without converting to
+																					// essentials values
 			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
-			if(((walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D))) || walkTest){
+			if (((walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D))) || walkTest) {
 				int porcent = UniversalUtils.parseInPorcent(y * 50 + UniversalUtils.getPorcentFromBoolean(walkTest, 20)
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
-				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent, "distance-ground",
-						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: " + walkTest +
-						", walkWithEssentialsTest: " + walkWithEssTest, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
+				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
+						this, porcent, "distance-ground",
+						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y
+								+ ", walkTest: " + walkTest + ", walkWithEssentialsTest: " + walkWithEssTest,
+						hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
 			}
 		}
-		if(onGround && checkActive("calculated")) {
+		if (onGround && checkActive("calculated")) {
 			double calculatedSpeedWithoutY = getSpeed(from, to), velocity = p.getVelocity().getY();
-			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && velocity > 0.0
-					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
-				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated",
-						"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + velocity);
+			if (calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY
+					&& velocity > 0.0 && !hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent
+																							// lag"
+				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated", "Calculated speed: "
+						+ calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + velocity);
 			}
 		}
-		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10)) >= 0.85D && !hasIceBelow) {
+		if (checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10)) >= 0.85D && !hasIceBelow) {
 			mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(y * 100 * 2), "distance-jumping",
-					"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed()
-							+ " Distance between from/to location: " + y + ", ySpeed: " + (y - (amplifierSpeed / 10)),
-							hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
+					"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed() + " Distance between from/to location: " + y
+							+ ", ySpeed: " + (y - (amplifierSpeed / 10)),
+					hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
 		}
-		if(checkActive("high-speed") && !onGround && y < 0.85D && !np.booleans.get("ALL", "jump-boost-use", false)) {
-			if (!under.getType().getId().contains("STEP") && !np.isUsingSlimeBlock && !(under.getType().getId().contains("WATER") || p.isSwimming())) {
+		if (checkActive("high-speed") && !onGround && y < 0.85D && !np.booleans.get("ALL", "jump-boost-use", false)) {
+			if (!under.getType().getId().contains("STEP") && !np.isUsingSlimeBlock
+					&& !(under.getType().getId().contains("WATER") || p.isSwimming())) {
 				to.setY(from.getY());
 				double yy = to.distance(from);
 				if (distance > 0.45 && (distance > (yy * 2)) && p.getFallDistance() < 1) {
 					np.SPEED_NB++;
 					if (np.SPEED_NB > 4)
-						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "high-speed",
-								"HighSpeed - Block under: " + under.getType().getId() + ", Speed: " + distance + ", nb: " + np.SPEED_NB + ", fallDistance: " + p.getFallDistance());
+						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
+								UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "high-speed",
+								"HighSpeed - Block under: " + under.getType().getId() + ", Speed: " + distance
+										+ ", nb: " + np.SPEED_NB + ", fallDistance: " + p.getFallDistance());
 				} else
 					np.SPEED_NB = 0;
 			}
 		}
-		if(checkActive("same-diff")) {
+		if (checkActive("same-diff")) {
 			double d = np.doubles.get(SPEED, "dif-y", 0.0);
-			if(dif != 0.0 && d != 0.0) {
+			if (dif != 0.0 && d != 0.0) {
 				if (dif == d || dif == -d) {
 					mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
 							this, 95, "same-diff", "Differences : " + dif + " / " + d);
@@ -154,18 +164,23 @@ public class Speed extends Cheat implements Listeners {
 				np.doubles.set(SPEED, "dif-y", dif);
 			}
 		}
-		if(checkActive("walk-speed") && Adapter.getAdapter().getPlatformID().equals(Platform.SPIGOT)) {
+		if (checkActive("walk-speed") && Adapter.getAdapter().getPlatformID().equals(Platform.SPIGOT)) {
 			double distanceWithSpeed = distance - (amplifierSpeed / 10);
-			if(dif == 0 && distanceWithSpeed >= (p.getWalkSpeed() * (p.isSprinting() ? 2.5 : 2))) {
+			if (dif == 0 && distanceWithSpeed >= (p.getWalkSpeed() * (p.isSprinting() ? 2.5 : 2))) {
 				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
-						this, 95, "walk-speed", "Differences : " + dif + ", distance: " + String.format("%.4f", distance) + ", withSpeed: "
-						+ String.format("%.4f", distanceWithSpeed) + ", speedAmplifier: " + amplifierSpeed
-						+ ", walkSpeed: " + p.getWalkSpeed() + ", onGround: " + onGround);
+						this, 95, "walk-speed",
+						"Differences : " + dif + ", distance: " + String.format("%.4f", distance) + ", withSpeed: "
+								+ String.format("%.4f", distanceWithSpeed) + ", speedAmplifier: " + amplifierSpeed
+								+ ", walkSpeed: " + p.getWalkSpeed() + ", onGround: " + onGround);
 			}
 		}
 		if (mayCancel && isSetBack())
 			e.setCancelled(true);
-	}
+	
+		}
+
+	
+
 
 	private static float getEssentialsRealMoveSpeed(Player p) {
 		final float defaultSpeed = p.isFlying() ? 0.1f : 0.2f;
@@ -192,20 +207,21 @@ public class Speed extends Cheat implements Listeners {
 	public boolean isBlockedInFight() {
 		return true;
 	}
-	
+
 	public static double getSpeed(Location from, Location to) {
 		double x = to.getX() - from.getX();
 		double z = to.getZ() - from.getZ();
 
 		return x * x + z * z;
 	}
-	
+
 	@EventListener
 	public void onPacketClear(PlayerPacketsClearEvent e) {
 		NegativityPlayer np = e.getNegativityPlayer();
-		if(np.hasDetectionActive(this) && checkActive("move-amount"))
-			if(np.MOVE_TIME > 60)
-				Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, np.getPlayer(), this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2),
-						"move-amount", "Move " + np.MOVE_TIME + " times.");
+		if (np.hasDetectionActive(this) && checkActive("move-amount"))
+			if (np.MOVE_TIME > 60)
+				Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, np.getPlayer(),
+						this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount",
+						"Move " + np.MOVE_TIME + " times.");
 	}
 }

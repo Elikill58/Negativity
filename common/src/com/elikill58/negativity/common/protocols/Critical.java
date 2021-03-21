@@ -18,6 +18,8 @@ public class Critical extends Cheat implements Listeners {
 	public Critical() {
 		super(CheatKeys.CRITICAL, CheatCategory.COMBAT, Materials.FIREBALL, false, false, "crit", "critic");
 	}
+	
+	
 
 	@EventListener
 	public void onDamage(PlayerDamageByEntityEvent e) {

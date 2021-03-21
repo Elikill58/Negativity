@@ -48,4 +48,7 @@ public class NoPitchLimit extends Cheat implements Listeners {
 		DataCounter<Float> counter = data.getData(PITCH);
 		return Utils.coloredMessage("&6Pitch &7Min: " + String.format("%.2f", counter.getMin()) + "&7, Max: " + String.format("%.2f", counter.getMax()) + " &8(Normal when -90 < pitch < 90)");
 	}
+	
+	
+	
 }

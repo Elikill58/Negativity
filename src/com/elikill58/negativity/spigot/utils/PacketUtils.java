@@ -215,7 +215,8 @@ public class PacketUtils {
 		try {
 			//((CraftEntity) p).getHandle().getBoundingBox();
 			Object cp = CRAFT_ENTITY_CLASS.cast(p);
-			Object ep = cp.getClass().getDeclaredMethod("getHandle").invoke(cp);
+			Class<?> craftMonsterClass = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftLivingEntity");
+			Object ep = craftMonsterClass.getDeclaredMethod("getHandle").invoke(craftMonsterClass.cast(cp));
 			if(Version.getVersion().equals(Version.V1_7))
 				return getNmsClass("Entity").getDeclaredField("boundingBox").get(ep);
 			else

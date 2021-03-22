@@ -20,22 +20,22 @@ import com.elikill58.negativity.api.NegativityPlayer;
 public class FightManager {
 	
 	@Listener
-	public void onEntityDamageByEntity(DamageEntityEvent e, @First ServerPlayer attacker, @Getter("getEntity") ServerPlayer attacked) {
-		NegativityPlayer.getCached(attacked.getUniqueId()).fight();
-		NegativityPlayer.getCached(attacker.getUniqueId()).fight();
+	public void onEntityDamageByEntity(DamageEntityEvent e, @First ServerPlayer attacker, @Getter("entity") ServerPlayer attacked) {
+		NegativityPlayer.getCached(attacked.uniqueId()).fight();
+		NegativityPlayer.getCached(attacker.uniqueId()).fight();
 	}
 	
 	@Listener
-	public void onProjectileHit(DamageEntityEvent e, @Getter("getEntity") Potion potion) {
+	public void onProjectileHit(DamageEntityEvent e, @Getter("entity") Potion potion) {
 		for (PotionEffect effect : potion.require(Keys.POTION_EFFECTS)) {
-			PotionEffectType type = effect.getType();
+			PotionEffectType type = effect.type();
 			if (type == PotionEffectTypes.INSTANT_DAMAGE.get() || type == PotionEffectTypes.POISON.get()
 				|| type == PotionEffectTypes.SLOWNESS.get() || type == PotionEffectTypes.WEAKNESS.get()
 				|| type == PotionEffectTypes.FIRE_RESISTANCE.get() || type == PotionEffectTypes.INSTANT_HEALTH.get()
 				|| type == PotionEffectTypes.REGENERATION.get() || type == PotionEffectTypes.STRENGTH.get()
 				|| type == PotionEffectTypes.SPEED.get()) {
-				for (Entity hitPlayer : potion.getNearbyEntities(9, entity -> entity instanceof Player)) {
-					NegativityPlayer.getCached(hitPlayer.getUniqueId()).fight();
+				for (Entity hitPlayer : potion.nearbyEntities(9, entity -> entity instanceof Player)) {
+					NegativityPlayer.getCached(hitPlayer.uniqueId()).fight();
 				}
 			}
 		}
@@ -43,14 +43,14 @@ public class FightManager {
 	
 	@Listener
 	public void onPlayerDeath(DestructEntityEvent.Death e, @First ServerPlayer p) {
-		NegativityPlayer.getCached(p.getUniqueId()).unfight();
+		NegativityPlayer.getCached(p.uniqueId()).unfight();
 	}
 	
 	@Listener
 	public void onEntityExplode(ExplosionEvent.Detonate e) {
-		for (Entity entity : e.getEntities()) {
+		for (Entity entity : e.entities()) {
 			if (entity instanceof Player) {
-				NegativityPlayer.getCached(entity.getUniqueId()).fight();
+				NegativityPlayer.getCached(entity.uniqueId()).fight();
 			}
 		}
 	}

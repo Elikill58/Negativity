@@ -21,7 +21,7 @@ public class SpongeBlockMaterial extends Material {
 	
 	@Override
 	public boolean isSolid() {
-		return this.blockType.getDefaultState().require(Keys.IS_SOLID);
+		return this.blockType.defaultState().require(Keys.IS_SOLID);
 	}
 	
 	@Override

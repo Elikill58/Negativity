@@ -47,7 +47,7 @@ public class SpongeInventory extends Inventory {
 	public SpongeInventory(Container container) {
 		this.inv = container;
 		if (container instanceof CarriedInventory) {
-			Object carrier = ((CarriedInventory<?>) container).getCarrier().orElse(null);
+			Object carrier = ((CarriedInventory<?>) container).carrier().orElse(null);
 			if (carrier instanceof SpongeNegativityHolder) {
 				this.holder = (SpongeNegativityHolder) carrier;
 			}
@@ -68,7 +68,7 @@ public class SpongeInventory extends Inventory {
 	@Override
 	public InventoryType getType() {
 		if (this.inv instanceof BlockEntityInventory) {
-			BlockEntity blockEntity = ((BlockEntityInventory<?>) this.inv).getBlockEntity().orElse(null);
+			BlockEntity blockEntity = ((BlockEntityInventory<?>) this.inv).blockEntity().orElse(null);
 			if (blockEntity instanceof Barrel) {
 				return InventoryType.BARREL;
 			} else if (blockEntity instanceof Beacon) {
@@ -101,7 +101,7 @@ public class SpongeInventory extends Inventory {
 		} else if (this.inv instanceof UserInventory) {
 			return InventoryType.PLAYER;
 		} else if (this.inv instanceof CarriedInventory) {
-			Carrier carrier = ((CarriedInventory<?>) this.inv).getCarrier().orElse(null);
+			Carrier carrier = ((CarriedInventory<?>) this.inv).carrier().orElse(null);
 			if (carrier instanceof Merchant) {
 				return InventoryType.MERCHANT;
 			} else if (inv instanceof ChestMinecart) {

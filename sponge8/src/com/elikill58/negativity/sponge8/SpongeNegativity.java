@@ -77,7 +77,7 @@ public class SpongeNegativity {
 	public void onConstructPlugin(ConstructPluginEvent event) {
 		Adapter.setAdapter(new SpongeAdapter(this));
 		ResourceKey channelKey = ResourceKey.resolve(NegativityMessagesManager.CHANNEL_ID);
-		this.channel = Sponge.getChannelRegistry().getOfType(channelKey, RawDataChannel.class);
+		this.channel = Sponge.channelRegistry().ofType(channelKey, RawDataChannel.class);
 	}
 	
 	@Listener
@@ -85,7 +85,7 @@ public class SpongeNegativity {
 		Negativity.loadNegativity();
 		NegativityAccountStorage.setDefaultStorage("file");
 		
-		EventManager eventManager = Sponge.getEventManager();
+		EventManager eventManager = Sponge.eventManager();
 		eventManager.registerListeners(this.container, new FightManager());
 		eventManager.registerListeners(this.container, new BlockListeners());
 		eventManager.registerListeners(this.container, new EntityListeners());
@@ -107,7 +107,7 @@ public class SpongeNegativity {
 
 	@Listener
 	public void onLoadedGame(LoadedGameEvent event) {
-		Stats.sendStartupStats(Sponge.getServer().getBoundAddress().map(InetSocketAddress::getPort).orElse(-1));
+		Stats.sendStartupStats(Sponge.server().boundAddress().map(InetSocketAddress::getPort).orElse(-1));
 		logger.info("Hello from Negativity v{}", container.getMetadata().getVersion());
 	}
 	
@@ -133,7 +133,7 @@ public class SpongeNegativity {
 		if (name != null) {
 			taskBuilder.name(name);
 		}
-		Sponge.getServer().getScheduler().submit(taskBuilder.build());
+		Sponge.server().scheduler().submit(taskBuilder.build());
 	}
 	
 	private void loadCommands(RegisterCommandEvent<Command.Raw> event) {
@@ -201,7 +201,7 @@ public class SpongeNegativity {
 	}
 	
 	public static void trySendProxyPing() {
-		Iterator<ServerPlayer> onlinePlayers = Sponge.getServer().getOnlinePlayers().iterator();
+		Iterator<ServerPlayer> onlinePlayers = Sponge.server().onlinePlayers().iterator();
 		if (onlinePlayers.hasNext()) {
 			sendProxyPing(onlinePlayers.next());
 		}

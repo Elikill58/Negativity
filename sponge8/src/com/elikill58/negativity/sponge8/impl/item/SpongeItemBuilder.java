@@ -57,7 +57,7 @@ public class SpongeItemBuilder extends ItemBuilder {
 	
 	@Override
 	public ItemBuilder enchant(Enchantment enchantment, int level) {
-		Registry<EnchantmentType> registry = Sponge.getGame().registries().registry(RegistryTypes.ENCHANTMENT_TYPE);
+		Registry<EnchantmentType> registry = Sponge.game().registries().registry(RegistryTypes.ENCHANTMENT_TYPE);
 		EnchantmentType enchantmentType = registry.value(ResourceKey.resolve(enchantment.getId()));
 		item.offerSingle(Keys.APPLIED_ENCHANTMENTS, org.spongepowered.api.item.enchantment.Enchantment.of(enchantmentType, level));
 		return this;

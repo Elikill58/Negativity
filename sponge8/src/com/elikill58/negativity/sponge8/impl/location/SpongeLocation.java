@@ -13,7 +13,7 @@ public class SpongeLocation extends Location {
 	private final ServerLocation loc;
 	
 	public SpongeLocation(ServerLocation location) {
-		super(new SpongeWorld(location.getWorld()), location.getX(), location.getY(), location.getZ());
+		super(new SpongeWorld(location.world()), location.x(), location.y(), location.z());
 		this.loc = location;
 	}
 	

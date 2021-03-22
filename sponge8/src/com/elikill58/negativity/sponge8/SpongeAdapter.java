@@ -114,7 +114,7 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public String getVersion() {
-		return Sponge.getPlatform().getMinecraftVersion().getName();
+		return Sponge.platform().minecraftVersion().name();
 	}
 	
 	@Override
@@ -140,7 +140,7 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public void runConsoleCommand(String cmd) {
 		try {
-			Sponge.getServer().getCommandManager().process(cmd);
+			Sponge.server().commandManager().process(cmd);
 		} catch (CommandException e) {
 			this.plugin.getLogger().error("Failed to run command as console", e);
 		}
@@ -168,8 +168,8 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public List<UUID> getOnlinePlayersUUID() {
 		List<UUID> list = new ArrayList<>();
-		for (ServerPlayer player : Sponge.getServer().getOnlinePlayers()) {
-			list.add(player.getUniqueId());
+		for (ServerPlayer player : Sponge.server().onlinePlayers()) {
+			list.add(player.uniqueId());
 		}
 		return list;
 	}
@@ -177,7 +177,7 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public List<Player> getOnlinePlayers() {
 		List<Player> list = new ArrayList<>();
-		for (ServerPlayer player : Sponge.getServer().getOnlinePlayers()) {
+		for (ServerPlayer player : Sponge.server().onlinePlayers()) {
 			list.add(SpongeEntityManager.getPlayer(player));
 		}
 		return list;
@@ -190,7 +190,7 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public double getLastTPS() {
-		return Sponge.getServer().getTicksPerSecond();
+		return Sponge.server().ticksPerSecond();
 	}
 	
 	@Override
@@ -210,12 +210,12 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public ItemBuilder createSkullItemBuilder(Player owner) {
-		return new SpongeItemBuilder(((org.spongepowered.api.entity.living.player.Player) owner.getDefault()).getProfile());
+		return new SpongeItemBuilder(((org.spongepowered.api.entity.living.player.Player) owner.getDefault()).profile());
 	}
 	
 	@Override
 	public ItemBuilder createSkullItemBuilder(OfflinePlayer owner) {
-		return new SpongeItemBuilder(((org.spongepowered.api.entity.living.player.User) owner.getDefault()).getProfile());
+		return new SpongeItemBuilder(((org.spongepowered.api.entity.living.player.User) owner.getDefault()).profile());
 	}
 	
 	@Override
@@ -234,7 +234,7 @@ public class SpongeAdapter extends Adapter {
 		if (online != null) {
 			return online;
 		}
-		return Sponge.getServer().getUserManager().get(name)
+		return Sponge.server().userManager().find(name)
 			.map(SpongeOfflinePlayer::new).orElse(null);
 	}
 	
@@ -244,18 +244,18 @@ public class SpongeAdapter extends Adapter {
 		if (online != null) {
 			return online;
 		}
-		return Sponge.getServer().getUserManager().get(uuid)
+		return Sponge.server().userManager().find(uuid)
 			.map(SpongeOfflinePlayer::new).orElse(null);
 	}
 	
 	@Override
 	public Player getPlayer(String name) {
-		return SpongeEntityManager.getPlayer(Sponge.getServer().getPlayer(name).orElse(null));
+		return SpongeEntityManager.getPlayer(Sponge.server().player(name).orElse(null));
 	}
 	
 	@Override
 	public Player getPlayer(UUID uuid) {
-		return SpongeEntityManager.getPlayer(Sponge.getServer().getPlayer(uuid).orElse(null));
+		return SpongeEntityManager.getPlayer(Sponge.server().player(uuid).orElse(null));
 	}
 	
 	@Override
@@ -272,17 +272,17 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public boolean hasPlugin(String name) {
-		return Sponge.getPluginManager().isLoaded(name);
+		return Sponge.pluginManager().isLoaded(name);
 	}
 	
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		return new SpongeExternalPlugin(Sponge.getPluginManager().getPlugin(name).orElse(null));
+		return new SpongeExternalPlugin(Sponge.pluginManager().plugin(name).orElse(null));
 	}
 	
 	@Override
 	public List<ExternalPlugin> getDependentPlugins() {
-		return Sponge.getPluginManager().getPlugins().stream()
+		return Sponge.pluginManager().plugins().stream()
 			.filter(plugin -> Utils.dependsOn(plugin, "negativity"))
 			.map(SpongeExternalPlugin::new)
 			.collect(Collectors.toList());
@@ -290,7 +290,7 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public void runSync(Runnable call) {
-		Sponge.getServer().getScheduler().submit(Task.builder().plugin(this.plugin.getContainer()).execute(call).build());
+		Sponge.server().scheduler().submit(Task.builder().plugin(this.plugin.getContainer()).execute(call).build());
 	}
 	
 	@Override

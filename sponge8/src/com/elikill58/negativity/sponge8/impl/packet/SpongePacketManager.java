@@ -15,7 +15,7 @@ public abstract class SpongePacketManager extends PacketManager {
 	
 	public void notifyHandlersReceive(PacketSourceType source, AbstractPacket packet) {
 		// Go on main Thread
-		Sponge.getServer().getScheduler().submit(
+		Sponge.server().scheduler().submit(
 			Task.builder()
 				.plugin(SpongeNegativity.container())
 				.execute(() -> {
@@ -28,7 +28,7 @@ public abstract class SpongePacketManager extends PacketManager {
 	
 	public void notifyHandlersSent(PacketSourceType source, AbstractPacket packet) {
 		// Go on main Thread
-		Sponge.getServer().getScheduler().submit(
+		Sponge.server().scheduler().submit(
 			Task.builder()
 				.plugin(SpongeNegativity.container())
 				.execute(() -> {

@@ -66,7 +66,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public UUID getUniqueId() {
-		return entity.getUniqueId();
+		return entity.uniqueId();
 	}
 	
 	@Override
@@ -106,7 +106,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public GameMode getGameMode() {
-		ResourceKey key = Sponge.getGame().registries().registry(RegistryTypes.GAME_MODE).valueKey(entity.require(Keys.GAME_MODE));
+		ResourceKey key = Sponge.game().registries().registry(RegistryTypes.GAME_MODE).valueKey(entity.require(Keys.GAME_MODE));
 		return GameMode.get(key.value().toUpperCase(Locale.ROOT));
 	}
 	
@@ -138,22 +138,22 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public Location getLocation() {
-		return new SpongeLocation(entity.getServerLocation());
+		return new SpongeLocation(entity.serverLocation());
 	}
 	
 	@Override
 	public int getPing() {
-		return entity.getConnection().getLatency();
+		return entity.connection().latency();
 	}
 	
 	@Override
 	public World getWorld() {
-		return new SpongeWorld(entity.getWorld());
+		return new SpongeWorld(entity.world());
 	}
 	
 	@Override
 	public String getName() {
-		return entity.getName();
+		return entity.name();
 	}
 	
 	@Override
@@ -193,7 +193,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public ItemStack getItemInHand() {
-		return new SpongeItemStack(entity.getItemInHand(HandTypes.MAIN_HAND));
+		return new SpongeItemStack(entity.itemInHand(HandTypes.MAIN_HAND));
 	}
 	
 	@Override
@@ -203,7 +203,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {
-		Channel channel = Sponge.getChannelRegistry().get(ResourceKey.resolve(channelId)).orElse(null);
+		Channel channel = Sponge.channelRegistry().get(ResourceKey.resolve(channelId)).orElse(null);
 		if (channel == null) {
 			Adapter.getAdapter().getLogger().warn("Channel " + channelId + " does not exist");
 			Thread.dumpStack();
@@ -239,7 +239,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 			return false;
 		}
 		for (org.spongepowered.api.effect.potion.PotionEffect effect : potionEffects) {
-			if (Utils.getKey(effect.getType()).asString().equalsIgnoreCase(type.getId())) {
+			if (Utils.getKey(effect.type()).asString().equalsIgnoreCase(type.getId())) {
 				return true;
 			}
 		}
@@ -261,7 +261,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	public Optional<PotionEffect> getPotionEffect(PotionEffectType type) {
 		return entity.get(Keys.POTION_EFFECTS).flatMap(effects -> {
 			for (org.spongepowered.api.effect.potion.PotionEffect effect : effects) {
-				if (Utils.getKey(effect.getType()).asString().equalsIgnoreCase(type.getId())) {
+				if (Utils.getKey(effect.type()).asString().equalsIgnoreCase(type.getId())) {
 					return Optional.of(createPotionEffect(effect));
 				}
 			}
@@ -270,7 +270,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	}
 	
 	private PotionEffect createPotionEffect(org.spongepowered.api.effect.potion.PotionEffect effect) {
-		return new PotionEffect(PotionEffectType.forId(Utils.getKey(effect.getType()).asString()), effect.getDuration(), effect.getAmplifier());
+		return new PotionEffect(PotionEffectType.forId(Utils.getKey(effect.type()).asString()), effect.duration(), effect.amplifier());
 	}
 	
 	@Override
@@ -290,7 +290,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	public void removePotionEffect(PotionEffectType type) {
 		entity.transform(Keys.POTION_EFFECTS, effects -> {
 			if (effects != null) {
-				effects.removeIf(effect -> Utils.getKey(effect.getType()).asString().equals(type.getId()));
+				effects.removeIf(effect -> Utils.getKey(effect.type()).asString().equals(type.getId()));
 				return effects;
 			}
 			return Collections.emptyList();
@@ -299,7 +299,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public String getIP() {
-		return entity.getConnection().getAddress().getAddress().getHostAddress();
+		return entity.connection().address().getAddress().getHostAddress();
 	}
 	
 	@Override
@@ -350,7 +350,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	@Override
 	public List<Entity> getNearbyEntities(double x, double y, double z) {
 		List<Entity> list = new ArrayList<>();
-		entity.getNearbyEntities(x).forEach((entity) -> list.add(SpongeEntityManager.getEntity(entity)));
+		entity.nearbyEntities(x).forEach((entity) -> list.add(SpongeEntityManager.getEntity(entity)));
 		return list;
 	}
 	
@@ -372,7 +372,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public ItemStack getItemInOffHand() {
-		return new SpongeItemStack(entity.getItemInHand(HandTypes.OFF_HAND));
+		return new SpongeItemStack(entity.itemInHand(HandTypes.OFF_HAND));
 	}
 	
 	@Override
@@ -393,17 +393,17 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public boolean hasOpenInventory() {
-		return entity.getOpenInventory().isPresent();
+		return entity.openInventory().isPresent();
 	}
 	
 	@Override
 	public Inventory getOpenInventory() {
-		return entity.getOpenInventory().map(SpongeInventory::new).orElse(null);
+		return entity.openInventory().map(SpongeInventory::new).orElse(null);
 	}
 	
 	@Override
 	public void openInventory(Inventory inv) {
-		Sponge.getServer().getScheduler().submit(
+		Sponge.server().scheduler().submit(
 			Task.builder()
 				.plugin(SpongeNegativity.container())
 				.execute(() -> entity.openInventory((org.spongepowered.api.item.inventory.Inventory) inv.getDefault()))
@@ -413,7 +413,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public void closeInventory() {
-		Sponge.getServer().getScheduler().submit(
+		Sponge.server().scheduler().submit(
 			Task.builder()
 				.plugin(SpongeNegativity.container())
 				.execute(entity::closeInventory)
@@ -448,12 +448,12 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	@Override
 	public Location getEyeLocation() {
 		Vector3d pos = entity.require(Keys.EYE_POSITION);
-		return new SpongeLocation(new SpongeWorld(entity.getWorld()), pos.getX(), pos.getY(), pos.getZ());
+		return new SpongeLocation(new SpongeWorld(entity.world()), pos.getX(), pos.getY(), pos.getZ());
 	}
 	
 	@Override
 	public InetSocketAddress getAddress() {
-		return entity.getConnection().getVirtualHost();
+		return entity.connection().virtualHost();
 	}
 	
 	@Override

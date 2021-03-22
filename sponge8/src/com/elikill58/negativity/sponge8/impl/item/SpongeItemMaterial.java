@@ -19,8 +19,8 @@ public class SpongeItemMaterial extends Material {
 	
 	@Override
 	public boolean isSolid() {
-		Optional<BlockType> blockType = type.getBlock();
-		return !blockType.isPresent() || blockType.get().getDefaultState().require(Keys.IS_SOLID);
+		Optional<BlockType> blockType = type.block();
+		return !blockType.isPresent() || blockType.get().defaultState().require(Keys.IS_SOLID);
 	}
 
 	@Override

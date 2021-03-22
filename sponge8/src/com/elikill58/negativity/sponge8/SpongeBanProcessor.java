@@ -33,7 +33,7 @@ public class SpongeBanProcessor implements BanProcessor {
 
 	@Override
 	public BanResult executeBan(Ban ban) {
-		BanService banService = Sponge.getServer().getServiceProvider().banService();
+		BanService banService = Sponge.server().serviceProvider().banService();
 		Instant expirationDate = ban.isDefinitive() ? null : Instant.ofEpochMilli(ban.getExpirationTime());
 		org.spongepowered.api.service.ban.Ban spongeBan = org.spongepowered.api.service.ban.Ban.builder()
 				.type(BanTypes.PROFILE)
@@ -55,11 +55,11 @@ public class SpongeBanProcessor implements BanProcessor {
 	@Nullable
 	@Override
 	public BanResult revokeBan(UUID playerId) {
-		BanService banService = Sponge.getServer().getServiceProvider().banService();
+		BanService banService = Sponge.server().serviceProvider().banService();
 		GameProfile profile = GameProfile.of(playerId);
 		org.spongepowered.api.service.ban.Ban.Profile revokedBan;
 		try {
-			Optional<org.spongepowered.api.service.ban.Ban.Profile> existingBan = banService.getBanFor(profile).get();
+			Optional<org.spongepowered.api.service.ban.Ban.Profile> existingBan = banService.banFor(profile).get();
 			if (!existingBan.isPresent() || !banService.pardon(profile).get()) {
 				return null;
 			}
@@ -71,17 +71,17 @@ public class SpongeBanProcessor implements BanProcessor {
 			return null;
 		}
 		
-		String reason = revokedBan.getReason().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
-		String bannedBy = revokedBan.getBanSource().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
-		long expirationTime = revokedBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
-		long executionTime = revokedBan.getCreationDate().toEpochMilli();
+		String reason = revokedBan.reason().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
+		String bannedBy = revokedBan.banSource().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
+		long expirationTime = revokedBan.expirationDate().map(Instant::toEpochMilli).orElse(-1L);
+		long executionTime = revokedBan.creationDate().toEpochMilli();
 		return new BanResult(new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, BanStatus.REVOKED, executionTime, System.currentTimeMillis()));
 	}
 
 	@Override
 	public boolean isBanned(UUID playerId) {
 		try {
-			return Sponge.getServer().getServiceProvider().banService().getBanFor(GameProfile.of(playerId)).get().isPresent();
+			return Sponge.server().serviceProvider().banService().banFor(GameProfile.of(playerId)).get().isPresent();
 		} catch (InterruptedException | ExecutionException e) {
 			Adapter.getAdapter().getLogger().error("Could not determine if player " + playerId + " is banned");
 			e.printStackTrace();
@@ -92,10 +92,10 @@ public class SpongeBanProcessor implements BanProcessor {
 	@Nullable
 	@Override
 	public Ban getActiveBan(UUID playerId) {
-		BanService banService = Sponge.getServer().getServiceProvider().banService();
+		BanService banService = Sponge.server().serviceProvider().banService();
 		org.spongepowered.api.service.ban.Ban.Profile activeBan;
 		try {
-			Optional<org.spongepowered.api.service.ban.Ban.Profile> existingBan = banService.getBanFor(GameProfile.of(playerId)).get();
+			Optional<org.spongepowered.api.service.ban.Ban.Profile> existingBan = banService.banFor(GameProfile.of(playerId)).get();
 			if (!existingBan.isPresent()) {
 				return null;
 			}
@@ -107,10 +107,10 @@ public class SpongeBanProcessor implements BanProcessor {
 			return null;
 		}
 		
-		String reason = activeBan.getReason().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
-		String bannedBy = activeBan.getBanSource().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
-		long expirationTime = activeBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
-		long executionTime = activeBan.getCreationDate().toEpochMilli();
+		String reason = activeBan.reason().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
+		String bannedBy = activeBan.banSource().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
+		long expirationTime = activeBan.expirationDate().map(Instant::toEpochMilli).orElse(-1L);
+		long executionTime = activeBan.creationDate().toEpochMilli();
 		return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, BanStatus.ACTIVE, executionTime);
 	}
 

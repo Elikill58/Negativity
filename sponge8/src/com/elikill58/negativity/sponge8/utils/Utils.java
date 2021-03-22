@@ -39,7 +39,7 @@ public class Utils {
 
 	@Nullable
 	public static ServerPlayer getFirstOnlinePlayer() {
-		Collection<ServerPlayer> onlinePlayers = Sponge.getServer().getOnlinePlayers();
+		Collection<ServerPlayer> onlinePlayers = Sponge.server().onlinePlayers();
 		return onlinePlayers.isEmpty() ? null : onlinePlayers.iterator().next();
 	}
 
@@ -115,7 +115,7 @@ public class Utils {
 		if (platformType instanceof ItemType) {
 			return (ItemType) platformType;
 		} else if (platformType instanceof BlockType) {
-			return ((BlockType) platformType).getItem().orElse(null);
+			return ((BlockType) platformType).item().orElse(null);
 		}
 		return null;
 	}
@@ -126,32 +126,32 @@ public class Utils {
 		if (platformType instanceof BlockType) {
 			return (BlockType) platformType;
 		} else if (platformType instanceof ItemType) {
-			return ((ItemType) platformType).getBlock().orElse(null);
+			return ((ItemType) platformType).block().orElse(null);
 		}
 		return null;
 	}
 	
 	public static ResourceKey getKey(EntityType<?> entityType) {
-		return RegistryTypes.ENTITY_TYPE.keyFor(Sponge.getGame().registries(), entityType);
+		return RegistryTypes.ENTITY_TYPE.keyFor(Sponge.game().registries(), entityType);
 	}
 	
 	public static ResourceKey getKey(BlockType blockType) {
-		return RegistryTypes.BLOCK_TYPE.keyFor(Sponge.getGame().registries(), blockType);
+		return RegistryTypes.BLOCK_TYPE.keyFor(Sponge.game().registries(), blockType);
 	}
 	
 	public static ResourceKey getKey(ItemType itemType) {
-		return RegistryTypes.ITEM_TYPE.keyFor(Sponge.getGame().registries(), itemType);
+		return RegistryTypes.ITEM_TYPE.keyFor(Sponge.game().registries(), itemType);
 	}
 	
 	public static ResourceKey getKey(PotionEffectType potionEffectType) {
-		return RegistryTypes.POTION_EFFECT_TYPE.keyFor(Sponge.getGame().registries(), potionEffectType);
+		return RegistryTypes.POTION_EFFECT_TYPE.keyFor(Sponge.game().registries(), potionEffectType);
 	}
 	
 	public static ResourceKey getKey(EnchantmentType enchantmentType) {
-		return RegistryTypes.ENCHANTMENT_TYPE.keyFor(Sponge.getGame().registries(), enchantmentType);
+		return RegistryTypes.ENCHANTMENT_TYPE.keyFor(Sponge.game().registries(), enchantmentType);
 	}
 	
 	public static ResourceKey getKey(Difficulty difficulty) {
-		return RegistryTypes.DIFFICULTY.keyFor(Sponge.getGame().registries(), difficulty);
+		return RegistryTypes.DIFFICULTY.keyFor(Sponge.game().registries(), difficulty);
 	}
 }

@@ -16,17 +16,17 @@ public class BlockListeners {
 
 	@Listener
 	public void onBlockChange(ChangeBlockEvent.All e, @First ServerPlayer p) {
-		e.getTransactions(Operations.BREAK.get())
+		e.transactions(Operations.BREAK.get())
 			.forEach(transaction -> {
-				BlockBreakEvent event = new BlockBreakEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(transaction.getOriginal()));
+				BlockBreakEvent event = new BlockBreakEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(transaction.original()));
 				EventManager.callEvent(event);
 				if (event.isCancelled()) {
 					transaction.invalidate();
 				}
 			});
-		e.getTransactions(Operations.PLACE.get())
+		e.transactions(Operations.PLACE.get())
 			.forEach(transaction -> {
-				BlockPlaceEvent event = new BlockPlaceEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(transaction.getOriginal()));
+				BlockPlaceEvent event = new BlockPlaceEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(transaction.original()));
 				EventManager.callEvent(event);
 				if (event.isCancelled()) {
 					transaction.invalidate();

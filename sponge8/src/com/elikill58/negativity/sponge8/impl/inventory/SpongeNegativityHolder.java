@@ -19,7 +19,7 @@ public class SpongeNegativityHolder extends PlatformHolder implements Carrier {
 	}
 
 	@Override
-	public CarriedInventory<? extends Carrier> getInventory() {
+	public CarriedInventory<? extends Carrier> inventory() {
 		return null;
 	}
 }

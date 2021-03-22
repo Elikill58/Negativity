@@ -27,8 +27,8 @@ public class SpongeFakePlayer extends SpongeEntity<Human> implements FakePlayer 
 
 	public void show(com.elikill58.negativity.api.entity.Player pl) {
 		Player p = (Player) pl.getDefault();
-		p.getWorld().spawnEntity(entity);
-		Sponge.getServer().getScheduler().submit(
+		p.world().spawnEntity(entity);
+		Sponge.server().scheduler().submit(
 			Task.builder()
 				.plugin(SpongeNegativity.container())
 				.delay(Ticks.of(20))
@@ -46,6 +46,6 @@ public class SpongeFakePlayer extends SpongeEntity<Human> implements FakePlayer 
 	
 	@Override
 	public UUID getUUID() {
-		return entity.getUniqueId();
+		return entity.uniqueId();
 	}
 }

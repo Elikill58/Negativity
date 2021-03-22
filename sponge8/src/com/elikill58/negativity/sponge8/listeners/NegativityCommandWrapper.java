@@ -30,9 +30,9 @@ public class NegativityCommandWrapper implements Command.Raw {
 	
 	@Override
 	public CommandResult process(CommandCause cause, ArgumentReader.Mutable arguments) throws CommandException {
-		String[] args = arguments.getInput().split(" ");
+		String[] args = arguments.input().split(" ");
 		String prefix = args.length == 0 ? "" : args[args.length - 1].toLowerCase(Locale.ROOT);
-		CommandSender executor = SpongeEntityManager.getExecutor(cause.getCause().first(Audience.class)
+		CommandSender executor = SpongeEntityManager.getExecutor(cause.cause().first(Audience.class)
 			.orElseThrow(() -> new CommandException(Component.text("Could not find appropriate command executor"))));
 		CommandExecutionEvent event = new CommandExecutionEvent(cmd, executor, args, prefix);
 		EventManager.callEvent(event);
@@ -40,14 +40,14 @@ public class NegativityCommandWrapper implements Command.Raw {
 	}
 	
 	@Override
-	public List<String> getSuggestions(CommandCause cause, ArgumentReader.Mutable arguments) throws CommandException {
-		String[] args = arguments.getInput().split(" ");
-		if (arguments.getInput().endsWith(" ")) {
+	public List<String> suggestions(CommandCause cause, ArgumentReader.Mutable arguments) throws CommandException {
+		String[] args = arguments.input().split(" ");
+		if (arguments.input().endsWith(" ")) {
 			args = Arrays.copyOf(args, args.length + 1);
 			args[args.length - 1] = "";
 		}
 		String prefix = args[args.length - 1].toLowerCase(Locale.ROOT);
-		CommandSender executor = SpongeEntityManager.getExecutor(cause.getCause().first(Audience.class)
+		CommandSender executor = SpongeEntityManager.getExecutor(cause.cause().first(Audience.class)
 			.orElseThrow(() -> new CommandException(Component.text("Could not find appropriate command executor"))));
 		TabExecutionEvent event = new TabExecutionEvent(cmd, executor, args, prefix);
 		EventManager.callEvent(event);
@@ -60,17 +60,17 @@ public class NegativityCommandWrapper implements Command.Raw {
 	}
 	
 	@Override
-	public Optional<Component> getShortDescription(CommandCause cause) {
+	public Optional<Component> shortDescription(CommandCause cause) {
 		return Optional.empty();
 	}
 	
 	@Override
-	public Optional<Component> getExtendedDescription(CommandCause cause) {
+	public Optional<Component> extendedDescription(CommandCause cause) {
 		return Optional.empty();
 	}
 	
 	@Override
-	public Component getUsage(CommandCause cause) {
+	public Component usage(CommandCause cause) {
 		return Component.empty();
 	}
 }

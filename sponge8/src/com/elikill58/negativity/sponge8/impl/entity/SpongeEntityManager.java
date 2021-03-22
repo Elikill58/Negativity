@@ -15,7 +15,7 @@ import net.kyori.adventure.audience.Audience;
 public class SpongeEntityManager {
 
 	public static com.elikill58.negativity.api.entity.Player getPlayer(ServerPlayer p){
-		return NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpongePlayer(p)).getPlayer();
+		return NegativityPlayer.getNegativityPlayer(p.uniqueId(), () -> new SpongePlayer(p)).getPlayer();
 	}
 	
 	public static Entity getEntity(org.spongepowered.api.entity.Entity e) {

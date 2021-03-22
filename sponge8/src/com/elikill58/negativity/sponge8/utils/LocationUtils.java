@@ -12,13 +12,13 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class LocationUtils {
 
 	public static boolean hasLineOfSight(Player player, ServerLocation loc) {
-		ServerWorld world = player.getServerLocation().getWorld();
+		ServerWorld world = player.serverLocation().world();
 		Vector3d eyePos = player.eyePosition().get();
 		if (hasNaN(eyePos)) {
 			return true;
 		}
 		
-		Vector3d vec3d1 = new Vector3d(loc.getX(), loc.getY() + 1.74F, loc.getZ());
+		Vector3d vec3d1 = new Vector3d(loc.x(), loc.y() + 1.74F, loc.z());
 		if (hasNaN(vec3d1)) {
 			return true;
 		}
@@ -30,7 +30,7 @@ public class LocationUtils {
 		int vecY = UniversalUtils.floor(vec3d1.getY());
 		int vecZ = UniversalUtils.floor(vec3d1.getZ());
 		Vector3i vector = new Vector3i(posX, posY, posZ);
-		if (world.getBlock(vector).getType() != BlockTypes.AIR.get() && hasMovingPosition(vector, eyePos, vec3d1))
+		if (world.block(vector).type() != BlockTypes.AIR.get() && hasMovingPosition(vector, eyePos, vec3d1))
 			return false;
 		
 		int i = 200;
@@ -98,7 +98,7 @@ public class LocationUtils {
 			posY = UniversalUtils.floor(eyePos.getY()) - (direction == Direction.UP ? 1 : 0);
 			posZ = UniversalUtils.floor(eyePos.getZ()) - (direction == Direction.SOUTH ? 1 : 0);
 			vector = new Vector3i(posX, posY, posZ);
-			if (world.getBlock(vector).getType() != BlockTypes.AIR.get())
+			if (world.block(vector).type() != BlockTypes.AIR.get())
 				if (hasMovingPosition(vector, eyePos, vec3d1))
 					return false;
 		}

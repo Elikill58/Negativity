@@ -30,7 +30,7 @@ public class SpongeBlock extends Block {
 	@Override
 	public Material getType() {
 		if (this.cachedMaterial == null) {
-			ResourceKey key = Utils.getKey(block.getState().getType());
+			ResourceKey key = Utils.getKey(block.state().type());
 			this.cachedMaterial = ItemRegistrar.getInstance().get(key.asString());
 		}
 		return this.cachedMaterial;
@@ -38,22 +38,22 @@ public class SpongeBlock extends Block {
 	
 	@Override
 	public int getX() {
-		return block.getPosition().getX();
+		return block.position().getX();
 	}
 	
 	@Override
 	public int getY() {
-		return block.getPosition().getY();
+		return block.position().getY();
 	}
 	
 	@Override
 	public int getZ() {
-		return block.getPosition().getZ();
+		return block.position().getZ();
 	}
 	
 	@Override
 	public Block getRelative(BlockFace blockFace) {
-		return block.getLocation()
+		return block.location()
 			.map(loc -> new SpongeBlock(loc.relativeTo(getDirection(blockFace)).createSnapshot()))
 			.orElse(this);
 	}
@@ -105,7 +105,7 @@ public class SpongeBlock extends Block {
 	
 	@Override
 	public Location getLocation() {
-		return new SpongeLocation(block.getLocation().get());
+		return new SpongeLocation(block.location().get());
 	}
 	
 	@Override
@@ -116,7 +116,7 @@ public class SpongeBlock extends Block {
 	
 	@Override
 	public void setType(Material type) {
-		ServerLocation loc = block.getLocation().orElse(null);
+		ServerLocation loc = block.location().orElse(null);
 		if (loc != null) {
 			BlockType blockType = Utils.getBlockType(type);
 			if (blockType != null) {

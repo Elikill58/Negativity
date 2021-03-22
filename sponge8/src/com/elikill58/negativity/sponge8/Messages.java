@@ -47,11 +47,11 @@ public class Messages {
 	}
 
 	private static String getLang(Audience receiver) {
-		return receiver instanceof Player ? TranslatedMessages.getLang(((Player) receiver).getUniqueId()) : TranslatedMessages.getDefaultLang();
+		return receiver instanceof Player ? TranslatedMessages.getLang(((Player) receiver).uniqueId()) : TranslatedMessages.getDefaultLang();
 	}
 
 	public static void broadcastMessageList(String dir, Object... placeholders) {
-		for (Player p : Sponge.getServer().getOnlinePlayers())
+		for (Player p : Sponge.server().onlinePlayers())
 			sendMessageList(p, dir, placeholders);
 	}
 }

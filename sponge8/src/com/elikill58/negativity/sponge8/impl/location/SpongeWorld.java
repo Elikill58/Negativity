@@ -25,29 +25,29 @@ public class SpongeWorld extends World {
 
 	@Override
 	public String getName() {
-		return w.getKey().asString();
+		return w.key().asString();
 	}
 
 	@Override
 	public Block getBlockAt(int x, int y, int z) {
-		return new SpongeBlock(w.getBlock(x, y, z).snapshotFor(w.getLocation(x, y, z)));
+		return new SpongeBlock(w.block(x, y, z).snapshotFor(w.location(x, y, z)));
 	}
 
 	@Override
 	public Block getBlockAt(Location loc) {
-		return new SpongeBlock(w.getBlock(loc.getBlockZ(), loc.getBlockY(), loc.getBlockZ()).snapshotFor(w.getLocation(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
+		return new SpongeBlock(w.block(loc.getBlockZ(), loc.getBlockY(), loc.getBlockZ()).snapshotFor(w.location(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
 	}
 
 	@Override
 	public List<Entity> getEntities() {
 		List<Entity> list = new ArrayList<>();
-		w.getEntities().forEach((e) -> list.add(SpongeEntityManager.getEntity(e)));
+		w.entities().forEach((e) -> list.add(SpongeEntityManager.getEntity(e)));
 		return list;
 	}
 
 	@Override
 	public Difficulty getDifficulty() {
-		return Difficulty.valueOf(Utils.getKey(w.getDifficulty()).value().toUpperCase(Locale.ROOT));
+		return Difficulty.valueOf(Utils.getKey(w.difficulty()).value().toUpperCase(Locale.ROOT));
 	}
 
 	@Override

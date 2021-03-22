@@ -26,12 +26,12 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 
 	@Override
 	public int getAmount() {
-		return item.getQuantity();
+		return item.quantity();
 	}
 
 	@Override
 	public Material getType() {
-		ResourceKey key = Utils.getKey(item.getType());
+		ResourceKey key = Utils.getKey(item.type());
 		return SpongeItemRegistrar.getInstance().get(key.asString(), key.value());
 	}
 
@@ -49,7 +49,7 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 			return false;
 		}
 		for (org.spongepowered.api.item.enchantment.Enchantment enchantment : enchantments) {
-			if (Utils.getKey(enchantment.getType()).asString().equalsIgnoreCase(enchant.getId())) {
+			if (Utils.getKey(enchantment.type()).asString().equalsIgnoreCase(enchant.getId())) {
 				return true;
 			}
 		}
@@ -63,8 +63,8 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 			return 0;
 		}
 		for (org.spongepowered.api.item.enchantment.Enchantment enchantment : enchantments) {
-			if (Utils.getKey(enchantment.getType()).asString().equalsIgnoreCase(enchant.getId())) {
-				return enchantment.getLevel();
+			if (Utils.getKey(enchantment.type()).asString().equalsIgnoreCase(enchant.getId())) {
+				return enchantment.level();
 			}
 		}
 		return 0;
@@ -76,7 +76,7 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 	}
 	
 	private EnchantmentType getEnchantType(Enchantment enchant) {
-		return Sponge.getGame().registries().registry(RegistryTypes.ENCHANTMENT_TYPE).value(ResourceKey.resolve(enchant.getId()));
+		return Sponge.game().registries().registry(RegistryTypes.ENCHANTMENT_TYPE).value(ResourceKey.resolve(enchant.getId()));
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 			if (enchantments == null) {
 				return Collections.emptyList();
 			}
-			enchantments.removeIf(enchantment -> Utils.getKey(enchantment.getType()).asString().equalsIgnoreCase(enchant.getId()));
+			enchantments.removeIf(enchantment -> Utils.getKey(enchantment.type()).asString().equalsIgnoreCase(enchant.getId()));
 			return enchantments;
 		});
 	}

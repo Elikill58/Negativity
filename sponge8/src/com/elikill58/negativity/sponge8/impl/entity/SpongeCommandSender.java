@@ -22,7 +22,7 @@ public class SpongeCommandSender<T extends Audience & Nameable> implements Comma
 
 	@Override
 	public String getName() {
-		return sender.getName();
+		return sender.name();
 	}
 	
 	@Override

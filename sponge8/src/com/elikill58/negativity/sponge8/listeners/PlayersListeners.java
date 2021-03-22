@@ -45,11 +45,11 @@ public class PlayersListeners {
 	
 	@Listener
 	public void onPreLogin(ServerSideConnectionEvent.Auth e) {
-		UUID playerId = e.getProfile().getUniqueId();
-		String playerName = e.getProfile().getName().orElse(null);
+		UUID playerId = e.profile().uniqueId();
+		String playerName = e.profile().name().orElse(null);
 		Result result = e.isCancelled() ? Result.KICK_BANNED : Result.ALLOWED;
-		InetAddress address = e.getConnection().getAddress().getAddress();
-		String kickMessage = PlainComponentSerializer.plain().serialize(e.getMessage());
+		InetAddress address = e.connection().address().getAddress();
+		String kickMessage = PlainComponentSerializer.plain().serialize(e.message());
 		LoginEvent event = new LoginEvent(playerId, playerName, result, address, kickMessage);
 		EventManager.callEvent(event);
 		e.setMessage(Component.text(event.getKickMessage()));
@@ -58,8 +58,8 @@ public class PlayersListeners {
 	
 	@Listener
 	public void onPlayerJoin(ServerSideConnectionEvent.Join e, @First ServerPlayer p) {
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpongePlayer(p));
-		PlayerConnectEvent event = new PlayerConnectEvent(np.getPlayer(), np, PlainComponentSerializer.plain().serialize(e.getMessage()));
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.uniqueId(), () -> new SpongePlayer(p));
+		PlayerConnectEvent event = new PlayerConnectEvent(np.getPlayer(), np, PlainComponentSerializer.plain().serialize(e.message()));
 		EventManager.callEvent(event);
 		e.setMessage(Component.text(event.getJoinMessage()));
 		
@@ -71,24 +71,24 @@ public class PlayersListeners {
 	
 	@Listener
 	public void onLeave(ServerSideConnectionEvent.Disconnect e, @First ServerPlayer p) {
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpongePlayer(p));
-		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, PlainComponentSerializer.plain().serialize(e.getMessage()));
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.uniqueId(), () -> new SpongePlayer(p));
+		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, PlainComponentSerializer.plain().serialize(e.message()));
 		EventManager.callEvent(event);
 		e.setMessage(Component.text(event.getQuitMessage()));
-		NegativityPlayer.removeFromCache(p.getUniqueId());
+		NegativityPlayer.removeFromCache(p.uniqueId());
 	}
 	
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First ServerPlayer p) {
-		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
+		NegativityPlayer np = NegativityPlayer.getCached(p.uniqueId());
 		PlayerMoveEvent event = new PlayerMoveEvent(np.getPlayer(),
-			new SpongeLocation(p.getWorld(), e.getOriginalPosition()), new SpongeLocation(p.getWorld(), e.getDestinationPosition()));
+			new SpongeLocation(p.world(), e.originalPosition()), new SpongeLocation(p.world(), e.destinationPosition()));
 		EventManager.callEvent(event);
 		if (event.hasToSet()) {
-			e.setDestinationPosition(((ServerLocation) event.getTo().getDefault()).getPosition());
+			e.setDestinationPosition(((ServerLocation) event.getTo().getDefault()).position());
 		}
 		
-		BlockType blockTypeBelowPlayer = p.getLocation().sub(0, 1, 0).getBlockType();
+		BlockType blockTypeBelowPlayer = p.location().sub(0, 1, 0).blockType();
 		if (np.isFreeze && !blockTypeBelowPlayer.equals(BlockTypes.AIR.get()))
 			e.setCancelled(true);
 		
@@ -107,7 +107,7 @@ public class PlayersListeners {
 	
 	@Listener
 	public void onChat(org.spongepowered.api.event.message.PlayerChatEvent e, @First ServerPlayer p) {
-		String message = PlainComponentSerializer.plain().serialize(e.getMessage());
+		String message = PlainComponentSerializer.plain().serialize(e.message());
 		PlayerChatEvent event = new PlayerChatEvent(SpongeEntityManager.getPlayer(p), message, message);
 		EventManager.callEvent(event);
 		e.setCancelled(event.isCancelled());
@@ -133,7 +133,7 @@ public class PlayersListeners {
 	
 	@Listener
 	public void onItemConsume(UseItemStackEvent.Finish e, @First ServerPlayer p) {
-		PlayerItemConsumeEvent event = new PlayerItemConsumeEvent(SpongeEntityManager.getPlayer(p), new SpongeItemStack(e.getItemStackInUse().createStack()));
+		PlayerItemConsumeEvent event = new PlayerItemConsumeEvent(SpongeEntityManager.getPlayer(p), new SpongeItemStack(e.itemStackInUse().createStack()));
 		EventManager.callEvent(event);
 		e.setCancelled(event.isCancelled());
 	}

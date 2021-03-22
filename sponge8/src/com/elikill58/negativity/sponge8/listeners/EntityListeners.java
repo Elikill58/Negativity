@@ -18,15 +18,15 @@ import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
 public class EntityListeners {
 	
 	@Listener
-	public void onDamageByEntity(DamageEntityEvent e, @First ServerPlayer attacker, @Getter("getEntity") ServerPlayer attacked) {
+	public void onDamageByEntity(DamageEntityEvent e, @First ServerPlayer attacker, @Getter("entity") ServerPlayer attacked) {
 		EventManager.callEvent(new PlayerDamageByEntityEvent(SpongeEntityManager.getPlayer(attacker), SpongeEntityManager.getEntity(attacked)));
 	}
 	
 	@Listener
 	public void onRegainHealth(ChangeDataHolderEvent.ValueChange e, @First ServerPlayer p) {
-		DataTransactionResult changes = e.getEndResult();
-		for (Value.Immutable<?> replaced : changes.getReplacedData()) {
-			if (replaced.getKey().equals(Keys.HEALTH)) {
+		DataTransactionResult changes = e.endResult();
+		for (Value.Immutable<?> replaced : changes.replacedData()) {
+			if (replaced.key().equals(Keys.HEALTH)) {
 				PlayerRegainHealthEvent event = new PlayerRegainHealthEvent(SpongeEntityManager.getPlayer(p));
 				EventManager.callEvent(event);
 				e.setCancelled(event.isCancelled()); // TODO do not cancel, set result instead

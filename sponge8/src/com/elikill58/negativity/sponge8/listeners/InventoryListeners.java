@@ -28,15 +28,15 @@ public class InventoryListeners {
 	
 	@Listener
 	public void onInvClick(ClickContainerEvent e, @First ServerPlayer p) {
-		if (e.getTransactions().isEmpty()) {
+		if (e.transactions().isEmpty()) {
 			return;
 		}
 		
 		InventoryAction action = getAction(e);
-		SlotTransaction transaction = e.getTransactions().get(0);
-		ItemStack item = new SpongeItemStack(transaction.getOriginal().createStack());
-		int slotIndex = transaction.getSlot().getInt(Keys.SLOT_INDEX).orElse(-1);
-		InventoryClickEvent event = new InventoryClickEvent(SpongeEntityManager.getPlayer(p), action, slotIndex, item, new SpongeInventory(e.getContainer()));
+		SlotTransaction transaction = e.transactions().get(0);
+		ItemStack item = new SpongeItemStack(transaction.original().createStack());
+		int slotIndex = transaction.slot().getInt(Keys.SLOT_INDEX).orElse(-1);
+		InventoryClickEvent event = new InventoryClickEvent(SpongeEntityManager.getPlayer(p), action, slotIndex, item, new SpongeInventory(e.container()));
 		EventManager.callEvent(event);
 		e.setCancelled(event.isCancelled());
 	}
@@ -66,6 +66,6 @@ public class InventoryListeners {
 	
 	@Listener
 	public void onInventoryClose(ClickContainerEvent.Close e, @First ServerPlayer p) {
-		EventManager.callEvent(new InventoryCloseEvent(SpongeEntityManager.getPlayer(p), new SpongeInventory(e.getContainer())));
+		EventManager.callEvent(new InventoryCloseEvent(SpongeEntityManager.getPlayer(p), new SpongeInventory(e.container())));
 	}
 }

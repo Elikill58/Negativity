@@ -20,7 +20,7 @@ public class SpongePlayerInventory extends PlayerInventory {
 	
 	public SpongePlayerInventory(Player p) {
 		this.p = p;
-		this.inv = p.getInventory();
+		this.inv = p.inventory();
 	}
 
 	@Override
@@ -145,7 +145,7 @@ public class SpongePlayerInventory extends PlayerInventory {
 	}
 	
 	private @Nullable ItemStack getEquipment(Supplier<EquipmentType> equipment) {
-		return nonEmptyOrNull(p.getEquipped(equipment.get()).orElse(null));
+		return nonEmptyOrNull(p.equipped(equipment.get()).orElse(null));
 	}
 	
 	private @Nullable ItemStack nonEmptyOrNull(org.spongepowered.api.item.inventory.@Nullable ItemStack stack) {

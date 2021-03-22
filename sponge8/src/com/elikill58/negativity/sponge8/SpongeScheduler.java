@@ -21,7 +21,7 @@ public class SpongeScheduler implements Scheduler {
 	
 	@Override
 	public void runRepeating(Consumer<ScheduledTask> task, int delayTicks, int intervalTicks) {
-		Sponge.getServer().getScheduler().submit(Task.builder()
+		Sponge.server().scheduler().submit(Task.builder()
 			.plugin(this.plugin)
 			.execute(spongeTask -> task.accept(new SpongeTaskWrapper(spongeTask)))
 			.delay(Ticks.of(delayTicks))
@@ -31,7 +31,7 @@ public class SpongeScheduler implements Scheduler {
 	
 	@Override
 	public ScheduledTask runRepeating(Runnable task, int delayTicks, int intervalTicks) {
-		return new SpongeTaskWrapper(Sponge.getServer().getScheduler().submit(Task.builder()
+		return new SpongeTaskWrapper(Sponge.server().scheduler().submit(Task.builder()
 			.plugin(this.plugin)
 			.execute(task)
 			.delay(Ticks.of(delayTicks))
@@ -48,12 +48,12 @@ public class SpongeScheduler implements Scheduler {
 		if (name != null) {
 			builder.name(name);
 		}
-		return new SpongeTaskWrapper(Sponge.getServer().getScheduler().submit(builder.build()));
+		return new SpongeTaskWrapper(Sponge.server().scheduler().submit(builder.build()));
 	}
 	
 	@Override
 	public ScheduledTask runDelayed(Runnable task, int delayTicks) {
-		return new SpongeTaskWrapper(Sponge.getServer().getScheduler().submit(Task.builder()
+		return new SpongeTaskWrapper(Sponge.server().scheduler().submit(Task.builder()
 			.plugin(this.plugin)
 			.execute(task)
 			.delay(Ticks.of(delayTicks)).build()));

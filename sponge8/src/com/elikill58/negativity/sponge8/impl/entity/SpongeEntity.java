@@ -30,7 +30,7 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	
 	public SpongeEntity(E e) {
 		this.entity = e;
-		this.loc = new SpongeLocation(e.getServerLocation());
+		this.loc = new SpongeLocation(e.serverLocation());
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public EntityType getType() {
 		if (this.cachedEntityType == null) {
-			ResourceKey key = Utils.getKey(this.entity.getType());
+			ResourceKey key = Utils.getKey(this.entity.type());
 			this.cachedEntityType = EntityType.get(key.value().toUpperCase(Locale.ROOT)); // TODO implement this properly using real minecraft IDs
 		}
 		return this.cachedEntityType;
@@ -78,19 +78,19 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public String getName() {
 		return entity.get(Keys.DISPLAY_NAME).map(component -> PlainComponentSerializer.plain().serialize(component))
-			.orElseGet(() -> Utils.getKey(entity.getType()).value());
+			.orElseGet(() -> Utils.getKey(entity.type()).value());
 	}
 	
 	@Override
 	public Location getEyeLocation() {
 		return entity.get(Keys.EYE_POSITION)
-			.map(vec -> new SpongeLocation((ServerWorld) entity.getWorld(), vec))
-			.orElseGet(() -> new SpongeLocation(entity.getServerLocation()));
+			.map(vec -> new SpongeLocation((ServerWorld) entity.world(), vec))
+			.orElseGet(() -> new SpongeLocation(entity.serverLocation()));
 	}
 	
 	@Override
 	public Vector getRotation() {
-		Vector3d vec = entity.getRotation();
+		Vector3d vec = entity.rotation();
 		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
 	
@@ -101,10 +101,10 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	
 	@Override
 	public BoundingBox getBoundingBox() {
-		AABB box = entity.getBoundingBox().orElse(null);
+		AABB box = entity.boundingBox().orElse(null);
 		if(box == null)
 			return null;
-		Vector3d min = box.getMin(), max = box.getMax();
+		Vector3d min = box.min(), max = box.max();
 		return new BoundingBox(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
 	}
 }

@@ -1,9 +1,12 @@
 package com.elikill58.negativity.common.protocols;
 
+import org.bukkit.Bukkit;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.packets.PacketEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.item.ItemStack;
@@ -123,5 +126,52 @@ public class AutoClick extends Cheat implements Listeners {
 		} else if (event.getPacket().getPacketType() == PacketType.Client.FLYING) {
 			data.setClicksTicks(data.getClicksTicks() + 1);
 		}
+	}
+	
+	@EventListener
+	public void onPacketEvent(PacketEvent event) {
+		NegativityPlayer data = NegativityPlayer.getNegativityPlayer(event.getPlayer());
+		int actualClicks = data.ACTUAL_CLICK;
+	
+		Scheduler.getInstance().runDelayed(() -> {
+		int afterClicks = data.ACTUAL_CLICK;
+		if(afterClicks == actualClicks) {
+			Scheduler.getInstance().runDelayed(() -> {
+				int afterAfterClicks   = data.ACTUAL_CLICK;
+				if(afterAfterClicks == afterClicks)
+				Scheduler.getInstance().runDelayed(() -> {
+					int afterAfterAfterClicks   = data.ACTUAL_CLICK;
+					if(afterAfterAfterClicks == afterAfterClicks)
+					Scheduler.getInstance().runDelayed(() -> {
+						int afterAfterAfterAfterClicks   = data.ACTUAL_CLICK;
+						if(afterAfterAfterAfterClicks == afterAfterAfterClicks) 
+						Scheduler.getInstance().runDelayed(() -> {
+							int afterAfterAfterAfterAfterClicks   = data.ACTUAL_CLICK;
+							if(afterAfterAfterAfterAfterClicks == afterAfterAfterAfterClicks) {
+								int finalCheckTicks = 23 +(actualClicks * afterClicks * afterAfterClicks * afterAfterAfterClicks * afterAfterAfterAfterClicks * afterAfterAfterAfterAfterClicks) / 6;
+								Scheduler.getInstance().runDelayed(() -> {
+									Negativity.alertMod(ReportType.VIOLATION, data.getPlayer(), this, finalCheckTicks * 4, "Consistent and strange clicking" , "Final check int: " + finalCheckTicks);
+								},finalCheckTicks);
+							}
+							
+						},5);
+					},5);
+				},5);
+			},5);
+			
+		}
+		
+			
+		},5);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 }

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.common.protocols;
 
 import java.util.Locale;
+import java.util.WeakHashMap;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
@@ -8,6 +9,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockPlaceEvent;
+import com.elikill58.negativity.api.events.packets.PacketEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
@@ -86,4 +88,29 @@ public class Scaffold extends Cheat implements Listeners {
 			});
 		}
 	}
+	
+	
+	public static WeakHashMap<NegativityPlayer, Boolean> wasLastPacketArmAnimation = new WeakHashMap<>();
+	@EventListener
+	public void onPacketEvent(PacketEvent event) {
+		NegativityPlayer data =NegativityPlayer.getNegativityPlayer(event.getPlayer());
+		if(event.getPacket().getPacketType() == PacketType.Client.BLOCK_PLACE) {
+			if(wasLastPacketArmAnimation.get(data) == false) {
+				Negativity.alertMod(ReportType.VIOLATION,data.getPlayer(), this, 56, "NoSwing", "Last packet was not an ArmAnimation packet");
+			}
+		}
+		else if(event.getPacket().getPacketType() == PacketType.Client.ARM_ANIMATION && event.getPacket().getPacketType() != PacketType.Client.BLOCK_DIG ) {
+			wasLastPacketArmAnimation.put(data, true);
+		}else if(event.getPacket().getPacketType() == PacketType.Client.FLYING) {
+			wasLastPacketArmAnimation.put(data, false);
+		}
+		
+	}
+	
+	
+	
+	
+	
+	
+	
 }

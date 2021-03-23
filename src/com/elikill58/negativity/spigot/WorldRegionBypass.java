@@ -12,24 +12,24 @@ import com.elikill58.negativity.universal.Cheat;
 
 public class WorldRegionBypass {
 
-	private static final List<WorldRegionBypass> REGIONS_BYPASS = new ArrayList<>();
-	private static final boolean IS_ENABLED;
+	private static List<WorldRegionBypass> REGIONS_BYPASS = new ArrayList<>();
+	private static boolean IS_ENABLED;
 	
 	static {
+		init();
+	}
+	
+	public static void init() {
 		ConfigurationSection section = SpigotNegativity.getInstance().getConfig().getConfigurationSection("region-bypass");
 		if(section != null) {
 			IS_ENABLED = section.getBoolean("enabled", false);
-			for(String keys : section.getKeys(false)) {
-				if(keys.equalsIgnoreCase("enabled"))
-					continue;
-				new WorldRegionBypass(section.getConfigurationSection(keys));
-			}
+			REGIONS_BYPASS = section.getKeys(false).stream().filter((s) -> !s.equalsIgnoreCase("enabled")).map(section::getConfigurationSection).map(WorldRegionBypass::new).collect(Collectors.toList());
 		} else
 			IS_ENABLED = false;
 	}
 	
 	public static boolean hasBypass(Cheat c, Location loc) {
-		if(loc.getWorld() == null || !loc.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ()))
+		if(loc.getWorld() == null)// || !loc.getWorld().isChunkLoaded(loc.getBlockX(), loc.getBlockZ()))
 			return false;
 		if(!IS_ENABLED || REGIONS_BYPASS.isEmpty())
 			return false;
@@ -62,7 +62,7 @@ public class WorldRegionBypass {
 		}
 		
 		regions = section.getStringList("regions");
-		worlds = section.getStringList("worlds").stream().map((s) -> s.toLowerCase()).collect(Collectors.toList());
+		worlds = section.getStringList("worlds").stream().map(String::toLowerCase).collect(Collectors.toList());
 		
 		REGIONS_BYPASS.add(this);
 	}

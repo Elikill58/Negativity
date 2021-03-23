@@ -623,7 +623,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {
-		return players.computeIfAbsent(p.getUniqueId(), id -> new SpigotNegativityPlayer(p));
+		synchronized (players) {
+			return players.computeIfAbsent(p.getUniqueId(), id -> new SpigotNegativityPlayer(p));
+		}
+		//return players.computeIfAbsent(p.getUniqueId(), id -> new SpigotNegativityPlayer(p));
 	}
 
 	public static SpigotNegativityPlayer getCached(UUID playerId) {

@@ -226,17 +226,13 @@ public class Utils {
 	 * @return true if the player is swimming
 	 */
 	public static boolean isSwimming(Player p) {
-		if(Version.getVersion().isNewerOrEquals(Version.V1_13))
-			return p.isSwimming() || p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE);
+		if(Version.getVersion().isNewerOrEquals(Version.V1_13) && (p.isSwimming() || p.hasPotionEffect(PotionEffectType.DOLPHINS_GRACE)))
+			return true;
 		else {
-			if(!p.isSprinting())
-				return false;
 			Location loc = p.getLocation().clone();
 			if(loc.getBlock().getType().name().contains("WATER"))
 				return true;
-			if(loc.subtract(0, 1, 0).getBlock().getType().name().contains("WATER"))
-				return true;
-			return false;
+			return loc.subtract(0, 1, 0).getBlock().getType().name().contains("WATER");
 		}
 	}
 

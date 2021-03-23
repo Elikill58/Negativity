@@ -3,8 +3,6 @@ package com.elikill58.negativity.spigot.protocols;
 import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
-import java.util.List;
-
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -43,7 +41,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT"))
+		if (np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT") || LocationUtils.hasMaterialAround(e.getTo(), ItemUtils.WATER_LILY, ItemUtils.WEB))
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
@@ -113,13 +111,42 @@ public class FlyProtocol extends Cheat implements Listener {
 			np.contentBoolean.put("fly-not-moving-y", true);
 		} else
 			np.contentBoolean.put("fly-not-moving-y", false);
+		
+
+		boolean onGround = ((Entity) p).isOnGround(), wasOnGround = np.contentBoolean.getOrDefault("fly-wasOnGround", true);
+		if(p.getFallDistance() <= 0.000001 && np.flyMoveAmount.size() > 1) {
+			int size = np.flyMoveAmount.size();
+			int amount = 0;
+			for(int x = 1; x < size - 1; x++) {
+				double last = np.flyMoveAmount.get(x - 1);
+				double current = np.flyMoveAmount.get(x);
+				if((last + current) == 0) {
+					if(i < (size - 2)) {
+						double next = np.flyMoveAmount.get(x + 1);
+						if((current + next) == 0) {
+							amount++;
+						}
+					} else
+						amount++;
+				}
+			}
+			if(amount > 0) {
+				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + np.flyMoveAmount.size() + " > " + onGround + " : " + wasOnGround + ", d: " + d, (CheatHover) null, amount > 1 ? amount - 1 : 1);
+			}
+		}
+		if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY"))
+			np.flyMoveAmount.clear();
+		else
+			np.flyMoveAmount.add(d);
+		np.contentBoolean.put("fly-wasOnGround", onGround);
+		
 		if (isSetBack() && mayCancel) {
 			Utils.teleportPlayerOnGround(p);
 		}
 	}
 	
 
-	@EventHandler
+	/*@EventHandler
 	public void onMove(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = e.getNegativityPlayer();
@@ -127,7 +154,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if(np.isUsingSlimeBlock || p.isInsideVehicle() || np.hasElytra() || LocationUtils.hasMaterialAround(e.getTo(), ItemUtils.WATER_LILY))
+		if(np.isUsingSlimeBlock || p.isInsideVehicle() || np.hasElytra() || LocationUtils.hasMaterialAround(e.getTo(), ItemUtils.WATER_LILY, ItemUtils.WEB))
 			return;
 		if (p.getAllowFlight() || p.getEntityId() == 100 || Utils.isSwimming(p))
 			return;
@@ -159,7 +186,7 @@ public class FlyProtocol extends Cheat implements Listener {
 		else
 			list.add(y);
 		np.contentBoolean.put("fly-wasOnGround", onGround);
-	}
+	}*/
 	
 	@EventHandler
 	public void boatManager(NegativityPlayerMoveEvent e) {

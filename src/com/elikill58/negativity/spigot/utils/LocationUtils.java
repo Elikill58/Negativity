@@ -40,6 +40,8 @@ public class LocationUtils {
 	public static boolean hasMaterialAround(Location loc, Material... ms) {
 		loc = loc.clone();
 		List<Material> m = Arrays.asList(ms);
+		if (m.contains(loc.getBlock().getType()))
+			return true;
 		if (m.contains(loc.add(0, 0, 1).getBlock().getType()))
 			return true;
 		if (m.contains(loc.add(1, 0, 0).getBlock().getType()))

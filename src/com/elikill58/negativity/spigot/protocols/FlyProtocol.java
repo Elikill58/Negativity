@@ -41,7 +41,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT") || LocationUtils.hasMaterialAround(e.getTo(), ItemUtils.WATER_LILY, ItemUtils.WEB))
+		if (np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT") || LocationUtils.hasMaterialAround(e.getTo(), ItemUtils.WATER_LILY, ItemUtils.WEB, Material.LADDER))
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;

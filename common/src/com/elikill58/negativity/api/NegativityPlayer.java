@@ -516,14 +516,16 @@ public class NegativityPlayer {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getNegativityPlayer(UUID uuid, Callable<Player> call) {
-		return players.computeIfAbsent(uuid, id -> {
-			try {
-				return new NegativityPlayer(call.call());
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-		});
+		synchronized (players) {
+			return players.computeIfAbsent(uuid, id -> {
+				try {
+					return new NegativityPlayer(call.call());
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+				}
+			});
+		}
 	}
 
 	/**

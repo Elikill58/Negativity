@@ -126,7 +126,7 @@ public class Negativity {
 			np.already_blink = true;
 			return false;
 		}
-		if(VerificationManager.isDisablingAlertOnVerif() && !hasVerifications(p.getUniqueId()))
+		if(VerificationManager.isDisablingAlertOnVerif() && hasVerifications(p.getUniqueId()))
 			return false;
 		int ping = p.getPing();
 		if (ping < 0)

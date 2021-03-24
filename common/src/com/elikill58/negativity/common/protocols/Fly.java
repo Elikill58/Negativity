@@ -4,8 +4,6 @@ import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExten
 import static com.elikill58.negativity.universal.CheatKeys.FLY;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
-import java.util.List;
-
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.BlockFace;
@@ -47,7 +45,7 @@ public class Fly extends Cheat implements Listeners {
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		if (p.getAllowFlight() || p.isSwimming())
+		if (p.getAllowFlight() || p.isSwimming() || LocationUtils.hasMaterialAround(e.getTo(), Materials.WATER_LILY, Materials.WEB, Materials.LADDER))
 			return;
 		if (p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED)).getAmplifier() > 5)
 			return;
@@ -65,6 +63,35 @@ public class Fly extends Cheat implements Listeners {
 		double i = to.toVector().distance(from.toVector());
 		double d = to.getY() - from.getY();
 		double distance = from.distance(to);
+		
+		if(checkActive("omega-craft")) {
+			boolean onGround = p.isOnGround(), wasOnGround = np.booleans.get(FLY, "fly-wasOnGround", true);
+			if(p.getFallDistance() <= 0.000001 && np.flyMoveAmount.size() > 1 && !p.isInsideVehicle()) {
+				int size = np.flyMoveAmount.size();
+				int amount = 0;
+				for(int x = 1; x < size - 1; x++) {
+					double last = np.flyMoveAmount.get(x - 1);
+					double current = np.flyMoveAmount.get(x);
+					if((last + current) == 0) {
+						if(i < (size - 2)) {
+							double next = np.flyMoveAmount.get(x + 1);
+							if((current + next) == 0) {
+								amount++;
+							}
+						} else
+							amount++;
+					}
+				}
+				if(amount > 0) {
+					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + np.flyMoveAmount.size() + " > " + onGround + " : " + wasOnGround, "omega-craft", (CheatHover) null, amount > 1 ? amount - 1 : 1);
+				}
+			}
+			if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME"))
+				np.flyMoveAmount.clear();
+			else
+				np.flyMoveAmount.add(d);
+			np.booleans.set(FLY, "fly-wasOnGround", onGround);
+		}
 		
 		if(p.hasElytra()) {
 			if(checkActive("elytra")) {
@@ -155,47 +182,6 @@ public class Fly extends Cheat implements Listeners {
 		}
 	}
 	
-
-	@EventListener
-	public void onMove(PlayerMoveEvent e) {
-		Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this) || e.isCancelled() || !checkActive("omega-craft"))
-			return;
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
-			return;
-		if(np.isUsingSlimeBlock)
-			return;
-		boolean onGround = p.isOnGround(), wasOnGround = np.booleans.get(FLY, "fly-wasOnGround", true);
-		double y = e.getTo().getY() - e.getFrom().getY();
-		List<Double> list = np.flyMoveAmount;
-		if(p.getFallDistance() <= 0.000001 && list.size() > 1) {
-			int size = list.size();
-			int amount = 0;
-			for(int i = 1; i < size - 1; i++) {
-				double last = list.get(i - 1);
-				double current = list.get(i);
-				if((last + current) == 0) {
-					if(i < (size - 2)) {
-						double next = list.get(i + 1);
-						if((current + next) == 0) {
-							amount++;
-						}
-					} else
-						amount++;
-				}
-			}
-			if(amount > 0) {
-				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + list.size() + " > " + onGround + " : " + wasOnGround, "omega-craft", (CheatHover) null, amount > 1 ? amount - 1 : 1);
-			}
-		}
-		if((onGround && wasOnGround) || (y > 0.1 || y < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME"))
-			list.clear();
-		else
-			list.add(y);
-		np.booleans.set(FLY, "fly-wasOnGround", onGround);
-	}
-
 	@EventListener
 	public void boatManager(PlayerMoveEvent e) {
 		if(!checkActive("no-ground-down"))

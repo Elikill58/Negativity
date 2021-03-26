@@ -101,7 +101,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 					Location locBehind = last.clone().add(vector.clone());
 					locBehind.setY(last.getY());
 					Material typeBehind = locBehind.getBlock().getType();
-					if (typeBehind.isSolid())// cannot move
+					if (typeBehind.isSolid() || typeBehind.name().contains("STAIRS") || typeBehind.name().contains("SLAB"))// cannot move
 						return;
 				}
 			}

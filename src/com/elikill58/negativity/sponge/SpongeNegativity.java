@@ -118,7 +118,7 @@ import com.google.inject.Inject;
 
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
-@Plugin(id = "negativity", name = "Negativity", version = "1.9.8", description = "It's an Advanced AntiCheat Detection", authors = { "Elikill58", "RedNesto" }, dependencies = {
+@Plugin(id = "negativity", name = "Negativity", version = "1.9.8-fix", description = "It's an Advanced AntiCheat Detection", authors = { "Elikill58", "RedNesto" }, dependencies = {
 		@Dependency(id = "packetgate") })
 public class SpongeNegativity {
 

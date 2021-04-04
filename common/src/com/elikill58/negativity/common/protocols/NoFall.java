@@ -16,6 +16,7 @@ import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -103,10 +104,35 @@ public class NoFall extends Cheat implements Listeners {
 						manageDamage(p, (int) p.getFallDistance(), relia);
 				}
 			}
+		}else if(p.isOnGround()) {
+			if(!isCloseToGround(e.getTo())) {
+				Scheduler.getInstance().runDelayed(() -> {
+					if(p.isOnGround() ) {
+					if(!isCloseToGround(e.getTo())) {
+					
+						Negativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(100 - (p.getPing() / 5)), "SpoofGround", "Client spoofed ground");
+					}
+						
+					}
+				},3);
+			}
 		}
 	}
 	
 	private void manageDamage(Player p, int damage, int relia) {
 		p.damage(damage >= p.getHealth() ? (getConfig().getBoolean("set_back.kill.active") ? damage : p.getHealth() - 0.5) : damage);
 	}
+	private static boolean isCloseToGround(Location location) {
+        double distanceToGround = 0.3;
+        for (double locX = -distanceToGround; locX <= distanceToGround; locX += distanceToGround) {
+            for (double locZ = -distanceToGround; locZ <= distanceToGround; locZ += distanceToGround) {
+                if (location.clone().add(0, -0.5001, 0).getBlock().getType() == Materials.AIR) {
+                    return false;
+                }
+            }
+
+
+        }
+        return true;
+    }
 }

@@ -4,6 +4,7 @@ import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPor
 
 import java.text.NumberFormat;
 import java.util.Locale;
+import java.util.Map;
 import java.util.WeakHashMap;
 
 import com.elikill58.negativity.api.GameMode;
@@ -265,4 +266,35 @@ public class ForceField extends Cheat implements Listeners {
 		}
 
 	}
+
+	Map<NegativityPlayer, PacketType> lastPackets = new WeakHashMap<>();
+	WeakHashMap<Map<NegativityPlayer, PacketType>, Long> lastPacketsTime = new WeakHashMap<>();
+
+	@EventListener
+	public void onPacketSameTime(PacketEvent event) {
+
+		NegativityPlayer data = NegativityPlayer.getNegativityPlayer(event.getPlayer());
+		if (event.getPacket().getPacketType() == PacketType.Client.USE_ENTITY) {
+			lastPackets.put(data, event.getPacket().getPacketType());
+			long currentTime = System.currentTimeMillis();
+			if (lastPackets.get(data).isFlyingPacket()) {
+				
+				if (lastPacketsTime.get(lastPackets.get(data)) == currentTime) {
+					Negativity.alertMod(ReportType.VIOLATION, data.getPlayer(), this,
+							(int)
+							(currentTime - lastPacketsTime.get(data) * 1000), "BadPackets",
+							"sended flying and use entity packets at the exact same time");
+
+				}
+			}
+	
+		} else if (event.getPacket().getPacketType() == PacketType.Client.FLYING) {
+			long currentTime = System.currentTimeMillis();
+			lastPacketsTime.put(lastPackets, currentTime);
+			lastPackets.put(data, event.getPacket().getPacketType());
+
+		}
+
+	}
+
 }

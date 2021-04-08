@@ -574,7 +574,7 @@ public class SpigotNegativity extends JavaPlugin {
 				boolean basicPerm = Perm.hasPerm(npMod, Perm.SHOW_ALERT);
 				ShowAlertPermissionEvent permissionEvent = new ShowAlertPermissionEvent(p, np, basicPerm);
 				Bukkit.getPluginManager().callEvent(permissionEvent);
-				if (permissionEvent.isCancelled() || npMod.disableShowingAlert)
+				if (permissionEvent.isCancelled() || !npMod.isShowAlert())
 					continue;
 				if (permissionEvent.hasBasicPerm()) {
 					new ClickableText().addRunnableHoverEvent(

@@ -22,6 +22,7 @@ import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.NegativityPlayerUpdateMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
@@ -86,7 +87,7 @@ public class NegativityListener implements Listener {
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers()) {
 				BungeeNegativityPlayer nPlayer = BungeeNegativityPlayer.getNegativityPlayer(pp);
-				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT)) {
+				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT) && nPlayer.isShowAlert()) {
 					TextComponent alertMessage = new TextComponent(BungeeMessages.getMessage(pp, alertMessageKey, place));
 
 					ComponentBuilder hoverComponent = new ComponentBuilder(BungeeMessages.getMessage(pp, "alert_hover", place));
@@ -133,6 +134,9 @@ public class NegativityListener implements Listener {
 			AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) message;
 			NegativityAccount account = accountUpdateMessage.getAccount();
 			Adapter.getAdapter().getAccountManager().update(account);
+		} else if(message instanceof NegativityPlayerUpdateMessage) {
+			//NegativityPlayerUpdateMessage negUpdatemsg = (NegativityPlayerUpdateMessage) message;
+			// already done in input reader
 		} else {
 			BungeeNegativity.getInstance().getLogger().log(Level.WARNING, "Unhandled plugin message %s.", message.getClass());
 		}

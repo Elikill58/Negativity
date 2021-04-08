@@ -627,7 +627,7 @@ public class SpongeNegativity {
 			boolean hasPermPeople = false;
 			for (Player pl : Utils.getOnlinePlayers()) {
 				SpongeNegativityPlayer npMod = SpongeNegativityPlayer.getNegativityPlayer(pl);
-				if (!Perm.hasPerm(npMod, Perm.SHOW_ALERT) || npMod.disableShowingAlert) {
+				if (!Perm.hasPerm(npMod, Perm.SHOW_ALERT) || !np.isShowAlert()) {
 					continue;
 				}
 

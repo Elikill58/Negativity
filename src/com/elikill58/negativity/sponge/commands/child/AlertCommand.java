@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.commands.child;
 
+import java.io.IOException;
+
 import org.spongepowered.api.command.CommandCallable;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.CommandSource;
@@ -9,7 +11,10 @@ import org.spongepowered.api.command.spec.CommandSpec;
 import org.spongepowered.api.entity.living.player.Player;
 
 import com.elikill58.negativity.sponge.Messages;
+import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.NegativityPlayerUpdateMessage;
 
 public class AlertCommand implements CommandExecutor {
 
@@ -20,8 +25,15 @@ public class AlertCommand implements CommandExecutor {
 		}
 		Player p = (Player) src;
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
-		np.disableShowingAlert = !np.disableShowingAlert;
-		Messages.sendMessage(p, np.disableShowingAlert ? "negativity.see_no_longer_alert" : "negativity.see_alert");
+		np.setShowAlert(!np.isShowAlert());
+		Messages.sendMessage(p, np.isShowAlert() ? "negativity.see_alert" : "negativity.see_no_longer_alert");
+		SpongeNegativity.channel.sendTo(p, (buffer) -> {
+			try {
+				buffer.writeBytes(NegativityMessagesManager.writeMessage(new NegativityPlayerUpdateMessage(np)));
+			} catch (IOException ex) {
+				SpongeNegativity.getInstance().getLogger().error("Could not write ProxyPingMessage.", ex);
+			}
+		});
 		return CommandResult.success();
 	}
 

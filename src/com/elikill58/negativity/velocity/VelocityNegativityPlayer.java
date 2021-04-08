@@ -13,6 +13,7 @@ public class VelocityNegativityPlayer extends NegativityPlayer {
 
 	private static final Map<UUID, VelocityNegativityPlayer> players = new HashMap<>();
 	private Player p;
+	private boolean showAlert = true;
 
 	public VelocityNegativityPlayer(Player p) {
 		super(p.getUniqueId(), p.getUsername());
@@ -25,6 +26,14 @@ public class VelocityNegativityPlayer extends NegativityPlayer {
 
 	public static void removeFromCache(UUID playerId) {
 		players.remove(playerId);
+	}
+	
+	public boolean isShowAlert() {
+		return showAlert;
+	}
+	
+	public void setShowAlert(boolean showAlert) {
+		this.showAlert = showAlert;
 	}
 
 	@Override

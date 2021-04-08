@@ -75,7 +75,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0, LAST_BLOCK_BREAK = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0;
 	public String LAST_OTHER_KEEP_ALIVE;
-	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, disableShowingAlert = false,
+	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false,
 			isFreeze = false, isUsingSlimeBlock = false, already_blink = false,
 			isJumpingWithBlock = false, isOnLadders = false, lastClickInv = false;
 	private boolean mustToBeSaved = false;

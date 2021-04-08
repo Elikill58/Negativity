@@ -84,7 +84,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0, TIME_LAST_MESSAGE = 0,
 			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0, LAST_BLOCK_BREAK = 0, LAST_USE_ENTITY = 0, TIME_INVINCIBILITY_SPEED = 0;
 	public String LAST_OTHER_KEEP_ALIVE, LAST_CHAT_MESSAGE = "";
-	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false, disableShowingAlert = false,
+	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false, 
 			isInvisible = false, isUsingSlimeBlock = false, already_blink = false, isJumpingWithBlock = false,
 			isOnLadders = false, lastClickInv = false, useAntiNoFallSystem = false, canPingSpoof = false;
 	public boolean mustToBeSaved = false;

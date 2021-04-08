@@ -15,6 +15,7 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 
 	private static final Map<UUID, BungeeNegativityPlayer> players = new HashMap<>();
 	private ProxiedPlayer p;
+	private boolean showAlert = true;
 
 	public BungeeNegativityPlayer(ProxiedPlayer p) {
 		super(p.getUniqueId(), p.getName());
@@ -27,6 +28,14 @@ public class BungeeNegativityPlayer extends NegativityPlayer {
 	
 	public static void removeFromCache(UUID playerId) {
 		players.remove(playerId);
+	}
+	
+	public boolean isShowAlert() {
+		return showAlert;
+	}
+	
+	public void setShowAlert(boolean showAlert) {
+		this.showAlert = showAlert;
 	}
 
 	@Override

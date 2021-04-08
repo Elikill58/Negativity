@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.commands;
 
 import static com.elikill58.negativity.universal.verif.VerificationManager.CONSOLE;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -39,6 +40,8 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.NegativityPlayerUpdateMessage;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
@@ -126,8 +129,22 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 			Player playerSender = (Player) sender;
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(playerSender);
-			np.disableShowingAlert = !np.disableShowingAlert;
-			Messages.sendMessage(playerSender, np.disableShowingAlert ? "negativity.see_no_longer_alert" : "negativity.see_alert");
+			boolean nextVal = !np.isShowAlert();
+			if(arg.length > 1) {
+				if(arg[1].equalsIgnoreCase("on"))
+					nextVal = true;
+				else if(arg[1].equalsIgnoreCase("off"))
+					nextVal = false;
+			}
+			np.setShowAlert(nextVal);
+			Messages.sendMessage(playerSender, np.isShowAlert() ? "negativity.see_alert" : "negativity.see_no_longer_alert");
+			
+			try {
+				byte[] rawMessage = NegativityMessagesManager.writeMessage(new NegativityPlayerUpdateMessage(np));
+				playerSender.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, rawMessage);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			return true;
 		} else if (arg[0].equalsIgnoreCase("reload")) {
 			if (sender instanceof Player && !Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.RELOAD)) {

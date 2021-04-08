@@ -9,7 +9,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 public abstract class NegativityPlayer {
 
 	private final UUID playerId;
-	private boolean isBanned = false, isMcLeaks = false;
+	private boolean isBanned = false, isMcLeaks = false, showAlert = true;
 	// To remove multiple ban at follow
 	private boolean isInBanning = false;
 
@@ -35,6 +35,10 @@ public abstract class NegativityPlayer {
 		return isMcLeaks;
 	}
 	
+	public void setMcLeaks(boolean isMcLeaks) {
+		this.isMcLeaks = isMcLeaks;
+	}
+	
 	public boolean isBanned() {
 		return isBanned;
 	}
@@ -57,6 +61,14 @@ public abstract class NegativityPlayer {
 
 	public int getAllWarn(Cheat c) {
 		return getAccount().getWarn(c);
+	}
+	
+	public boolean isShowAlert() {
+		return showAlert;
+	}
+
+	public void setShowAlert(boolean showAlert) {
+		this.showAlert = showAlert;
 	}
 
 	public abstract Object getPlayer();

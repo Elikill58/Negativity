@@ -24,6 +24,7 @@ import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.NegativityPlayerUpdateMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
@@ -85,7 +86,7 @@ public class NegativityListener {
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers()) {
 				VelocityNegativityPlayer nPlayer = VelocityNegativityPlayer.getNegativityPlayer(pp);
-				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT)) {
+				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT) && nPlayer.isShowAlert()) {
 					Builder msg = TextComponent.builder();
 					msg.append(VelocityMessages.getMessage(pp, alertMessageKey, place));
 
@@ -142,6 +143,9 @@ public class NegativityListener {
 			AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) message;
 			NegativityAccount account = accountUpdateMessage.getAccount();
 			Adapter.getAdapter().getAccountManager().update(account);
+		} else if(message instanceof NegativityPlayerUpdateMessage) {
+			//NegativityPlayerUpdateMessage negUpdatemsg = (NegativityPlayerUpdateMessage) message;
+			// already done in input reader
 		} else {
 			VelocityNegativity.getInstance().getLogger().warn("Unhandled plugin message: {}.", message.getClass().getName());
 		}

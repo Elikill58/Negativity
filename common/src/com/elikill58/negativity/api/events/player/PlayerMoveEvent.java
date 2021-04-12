@@ -8,7 +8,7 @@ public class PlayerMoveEvent implements Event {
 
 	private final Player p;
 	private Location from, to;
-	private boolean cancel, hasToSet = false;
+	private boolean cancel = false, hasToSet = false;
 	
 	public PlayerMoveEvent(Player p, Location from, Location to) {
 		this.p = p;
@@ -21,7 +21,7 @@ public class PlayerMoveEvent implements Event {
 	}
 	
 	public Location getTo() {
-		return to;
+		return to.clone();
 	}
 	
 	public void setTo(Location loc) {
@@ -30,7 +30,7 @@ public class PlayerMoveEvent implements Event {
 	}
 	
 	public Location getFrom() {
-		return from;
+		return from.clone();
 	}
 	
 	public void setFrom(Location loc) {

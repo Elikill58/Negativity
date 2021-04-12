@@ -37,7 +37,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 			return;
 		Location loc = p.getLocation();
 		Location from = e.getFrom(), to = e.getTo();
-		Location fl = from.clone().sub(to.clone());
+		Location fl = from.sub(to);
 		double xSpeed = Math.abs(from.getX() - to.getX());
 	    double zSpeed = Math.abs(from.getZ() - to.getZ());
 	    double xzSpeed = Math.sqrt(xSpeed * xSpeed + zSpeed * zSpeed);

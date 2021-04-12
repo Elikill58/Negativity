@@ -16,6 +16,7 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
@@ -93,6 +94,14 @@ public class AntiKnockback extends Cheat implements Listeners {
 			if (e.isCancelled())
 				return;
 			final Location last = p.getLocation().clone();
+			if (last.clone().add(0, 2, 0).getBlock().getType().isSolid()) { // check for block upper
+				Vector vector = damager.getEyeLocation().getDirection();
+				Location locBehind = last.clone().add(vector.clone());
+				locBehind.setY(last.getY());
+				Material typeBehind = locBehind.getBlock().getType();
+				if (typeBehind.isSolid() || typeBehind.getId().contains("STAIRS") || typeBehind.getId().contains("SLAB"))// cannot move
+					return;
+			}
 			p.damage(0D);
 			// p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
 			Scheduler.getInstance().runDelayed(() -> {

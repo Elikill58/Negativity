@@ -59,7 +59,7 @@ public class Speed extends Cheat implements Listeners {
 					e.setCancelled(true);
 			}
 		}
-		Location from = e.getFrom().clone(), to = e.getTo().clone();
+		Location from = e.getFrom(), to = e.getTo();
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Materials.SPONGE)
 				|| p.getVehicle() != null || p.getAllowFlight()
 				|| p.getFlySpeed() > 3.0F || p.getWalkSpeed() > 2.0F

@@ -21,7 +21,7 @@ tps_alert_stop: 19
 
 commands:
   # Disable or enable commands
-
+  
   # Enable /nreport: (Alias: /report)
   report: true
 
@@ -78,7 +78,7 @@ inventory:
 # Disable checking for cheats with certain blocks/items
 items:
   # Item Name:
-  # when: When to disable checking for the cheat
+  # when: Set conditions
   # cheats: Which cheat(s) to disable (the id: fly, speed, antiknockback, etc.)
   #
   # Possible "when" values:

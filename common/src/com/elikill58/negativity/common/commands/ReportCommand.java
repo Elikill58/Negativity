@@ -46,6 +46,11 @@ public class ReportCommand implements CommandListeners, TabListeners {
 			return false;
 		}
 
+		if (arg.length < 2) {
+			Messages.sendMessage(p, "report.report_usage");
+			return false;
+		}
+
 		Player target = Adapter.getAdapter().getPlayer(arg[0]);
 		if (target == null) {
 			Messages.sendMessage(p, "invalid_player", "%arg%", arg[0]);

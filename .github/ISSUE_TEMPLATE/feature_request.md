@@ -7,11 +7,11 @@ assignees: ''
 
 ---
 
-It's about :
-- [x] A translation
-- [x] A new plugin support
-- [x] New detection
-- [x] Other
+**It's about :**
+- [ ] A translation
+- [ ] A new plugin support
+- [ ] New detection
+- [ ] Other
 
 **Explain the feature that you want**
 Describe the feature and why you want it

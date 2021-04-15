@@ -211,31 +211,44 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				Messages.sendMessage(sender, "only_player");
 				return true;
 			}
-			Player p = (Player) sender;
-			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-			p.sendMessage(ChatColor.YELLOW + "--- Checking debug for bypass | no alert ---");
 			Adapter ada = Adapter.getAdapter();
-			p.sendMessage(ChatColor.GOLD + ada.getName() + ": " + ada.getVersion() + ". Negativity " + ada.getPluginVersion());
+
+			Player p = (Player) sender;
+			Player target = (arg.length == 1 ? p : ada.getPlayer(arg[1]));
+			if (target == null) {
+				Messages.sendMessage(sender, "invalid_player", "%arg%", arg[1]);
+				return false;
+			}
+			String name = (target == p ? "You" : target.getName());
+			
+			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(target);
+			p.sendMessage(ChatColor.YELLOW + "--- Checking debug for bypass | no alert ---");
+			p.sendMessage(ChatColor.GOLD + ada.getName() + ": " + ada.getServerVersion() + ". Negativity " + ada.getVersion());
 			long time = System.currentTimeMillis();
 			boolean hasBypass = false;
+			Cheat c = Cheat.values().stream().filter(Cheat::isActive).findFirst().get();
 			if (np.TIME_INVINCIBILITY > time) {
 				p.sendMessage(ChatColor.RED + "Invincibility (stay " + (time - np.TIME_INVINCIBILITY) + "ms)");
 				hasBypass = true;
 			}
 			if (np.isFreeze) {
-				p.sendMessage(ChatColor.RED + "You are currently freezed.");
+				p.sendMessage(ChatColor.RED + name + " are currently freezed.");
 				hasBypass = true;
 			}
-			if(ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) {
-				p.sendMessage(ChatColor.RED + "Too low TPS : " + ada.getLastTPS());
+			double tps = ada.getLastTPS();
+			if(ada.getConfig().getDouble("tps_alert_stop") > tps) {
+				p.sendMessage(ChatColor.RED + "Too low TPS : " + tps);
 				hasBypass = true;
 			}
-			if(!(p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE))) {
+			if(!(target.getGameMode().equals(GameMode.SURVIVAL) || target.getGameMode().equals(GameMode.ADVENTURE))) {
 				p.sendMessage(ChatColor.RED + "Lot of detection are disabled if you're not on survival/adventure.");
 				hasBypass = true;
 			}
-			if(arg.length > 1) {
-				Cheat c = Cheat.fromString(arg[1]);
+			int ping = target.getPing();
+			if(np.isInFight)
+				hasBypass = true;
+			if(arg.length > 2) {
+				c = Cheat.fromString(arg[2]);
 				if(c != null) {
 					p.sendMessage(ChatColor.GREEN + "Checking for cheat " + c.getName() + ".");
 					if(!c.isActive()) {
@@ -266,7 +279,6 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 							}
 						}
 					}
-					int ping = p.getPing();
 					if(np.isInFight && c.isBlockedInFight()) {
 						p.sendMessage(ChatColor.RED + "Bypass because in fight.");
 						hasBypass = true;
@@ -279,16 +291,15 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 						p.sendMessage(ChatColor.RED + "Detection of " + c.getName() + " not active.");
 						hasBypass = true;
 					}
-					if(!hasBypass)
-						Negativity.alertMod(ReportType.INFO, p, c, 100, "", "");
 				} else
-					p.sendMessage(ChatColor.RED + "Unknow cheat " + arg[1] + ".");
-			} else {
-				if(np.isInFight || p.getPing() > 150)
-					hasBypass = true;
-				p.sendMessage(ChatColor.YELLOW + (np.isInFight ? "In fight, " : "") + "Ping: " + p.getPing() + "ms (by default, at 150ms you bypass it)");
-			}
-			p.sendMessage(hasBypass ? ChatColor.RED + "Warn: You have bypass, so you cannot be detected." : ChatColor.GREEN + "Good news: you can be detected !");
+					p.sendMessage(ChatColor.RED + "Unknow cheat " + arg[2] + ".");
+			} else
+				p.sendMessage(ChatColor.YELLOW + (np.isInFight ? "In fight, " : "") + "Ping: " + ping + "ms (by default, at 200ms you bypass it)");
+			if((c != null && ping > c.getMaxAlertPing()) || ping > 200)
+				hasBypass = true;
+			p.sendMessage(hasBypass ? ChatColor.RED + "Warn: " + name + " have bypass, so you cannot be detected." : ChatColor.GREEN + "Good news: " + name + " can be detected !");
+			if(!hasBypass && c != null)
+				Negativity.alertMod(ReportType.INFO, target, c, 100, "test", "");
 			return true;
 		}
 
@@ -351,10 +362,11 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			if ("debug".startsWith(prefix))
 				suggestions.add("debug");
 		} else {
-			if (arg[0].equalsIgnoreCase("verif")) {
+			if (arg[0].equalsIgnoreCase("verif") || arg[0].equalsIgnoreCase("debug")) {
+				// both command use tab arguments to works
 				if (arg.length == 2) {
-					// /negativity verif |
-					for (com.elikill58.negativity.api.entity.Player p : Adapter.getAdapter().getOnlinePlayers()) {
+					// /negativity verif | OR /negativity debug |
+					for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
 						if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
 							suggestions.add(p.getName());
 						}
@@ -365,12 +377,6 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 						if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
 							suggestions.add(c.getName());
 						}
-					}
-				}
-			} else if (arg[0].equalsIgnoreCase("debug")) {
-				for (Cheat c : Cheat.values()) {
-					if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
-						suggestions.add(c.getName());
 					}
 				}
 			} else if (arg[0].equalsIgnoreCase("admin") && arg.length == 2) {

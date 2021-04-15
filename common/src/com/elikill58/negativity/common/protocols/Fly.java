@@ -86,7 +86,7 @@ public class Fly extends Cheat implements Listeners {
 					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + np.flyMoveAmount.size() + " > " + onGround + " : " + wasOnGround, "omega-craft", (CheatHover) null, amount > 1 ? amount - 1 : 1);
 				}
 			}
-			if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME"))
+			if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME") || LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME"))
 				np.flyMoveAmount.clear();
 			else
 				np.flyMoveAmount.add(d);

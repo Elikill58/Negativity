@@ -40,6 +40,7 @@ import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.report.ReportType;
+import com.elikill58.negativity.universal.utils.SemVer;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 import com.elikill58.negativity.universal.webhooks.WebhookManager;
@@ -351,6 +352,11 @@ public class Negativity {
 		
 		if (!integratedPlugins.isEmpty()) {
 			ada.getLogger().info("Loaded support for " + String.join(", ", integratedPlugins) + ".");
+		}
+
+		SemVer latestVersion = UniversalUtils.getLatestVersionIfNewer();
+		if (latestVersion != null) {
+			ada.getLogger().info("New version of Negativity available: " + latestVersion.toFormattedString() + ". Download it here: https://www.spigotmc.org/resources/86874/");
 		}
 	}
 	

@@ -201,7 +201,7 @@ public class UniversalUtils {
 	}
 
 	public static Optional<String> getLatestVersionString() {
-		return getContentFromURL("https://api.spigotmc.org/legacy/update.php?resource=48399");
+		return getContentFromURL("https://api.spigotmc.org/legacy/update.php?resource=86874");
 	}
 	
 	public static Optional<SemVer> getLatestVersion() {

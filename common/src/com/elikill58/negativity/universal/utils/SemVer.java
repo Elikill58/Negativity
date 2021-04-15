@@ -100,9 +100,10 @@ public final class SemVer implements Comparable<SemVer> {
 	
 	public String toFormattedString() {
 		if (suffix == null) {
-			return major + "." + minor + "." + patch;
+			if(patch > 0)
+				return major + "." + minor + (patch > 0 ? "." + patch : "");
 		}
-		return major + "." + minor + "." + patch + "-" + suffix;
+		return major + "." + minor + (patch > 0 ? "." + patch : "") + "-" + suffix.getText();
 	}
 	
 	public static @Nullable SemVer parse(@NonNull String text) {
@@ -143,7 +144,10 @@ public final class SemVer implements Comparable<SemVer> {
 	public static final class Suffix implements Comparable<Suffix> {
 		
 		public static final Suffix SNAPSHOT = new Suffix(0, "SNAPSHOT");
-		public static final Suffix ALPHA = new Suffix(5, "SNAPSHOT");
+		public static final Suffix ALPHA = new Suffix(1, "ALPHA");
+		public static final Suffix BETA = new Suffix(2, "BETA");
+		public static final Suffix GAMMA = new Suffix(3, "GAMMA");
+		public static final Suffix DELTA = new Suffix(4, "DELTA");
 		
 		private final int weight;
 		private final String text;
@@ -191,6 +195,12 @@ public final class SemVer implements Comparable<SemVer> {
 				return SNAPSHOT;
 			case "ALPHA":
 				return ALPHA;
+			case "BETA":
+				return BETA;
+			case "GAMMA":
+				return GAMMA;
+			case "DELTA":
+				return DELTA;
 			default:
 				return new Suffix(-1, uppercaseText);
 			}

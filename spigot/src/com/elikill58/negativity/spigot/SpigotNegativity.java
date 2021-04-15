@@ -8,7 +8,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.concurrent.CompletableFuture;
 import java.util.logging.Level;
 
 import org.bstats.bukkit.Metrics;
@@ -56,8 +55,6 @@ import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManag
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
-import com.elikill58.negativity.universal.utils.SemVer;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class SpigotNegativity extends JavaPlugin {
 
@@ -133,13 +130,6 @@ public class SpigotNegativity extends JavaPlugin {
 
 		loadCommand();
 		
-		CompletableFuture.runAsync(() -> {
-			SemVer latestVersion = UniversalUtils.getLatestVersionIfNewer();
-			if (latestVersion != null) {
-				getLogger().info("New version available (" + latestVersion.toFormattedString() +
-					"). Download it here: https://www.spigotmc.org/resources/48399/");
-			}
-		});
 		Stats.sendStartupStats(Bukkit.getServer().getPort());
 		
 		NegativityAccountStorage.setDefaultStorage("file");

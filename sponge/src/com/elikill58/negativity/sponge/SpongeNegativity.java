@@ -136,10 +136,6 @@ public class SpongeNegativity {
 		}
 		
 		NegativityAccountStorage.setDefaultStorage("file");
-
-		if(SpongeUpdateChecker.isUpdateAvailable()) {
-			getLogger().info("New version available (" + SpongeUpdateChecker.getVersionString() + ") : " + SpongeUpdateChecker.getDownloadUrl());
-		}
 		
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
 	}

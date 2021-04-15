@@ -85,7 +85,7 @@ public class ConnectionManager implements Listeners {
 					SemVer latestVersion = UniversalUtils.getLatestVersionIfNewer();
 					if (latestVersion != null) {
 						Adapter.getAdapter().sendMessageRunnableHover(p,
-							ChatColor.YELLOW + "New version of Negativity available (" + latestVersion.toFormattedString() + "). "
+							ChatColor.YELLOW + "New version of Negativity available: " + latestVersion.toFormattedString() + ". "
 								+ ChatColor.BOLD + "Download it here.",
 							"Click here", "https://www.spigotmc.org/resources/48399/");
 					}

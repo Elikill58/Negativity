@@ -1,0 +1,184 @@
+#################################
+#                               #
+#     Negativity AntiCheat      #
+#                               #
+#     Configuration of ban      #
+#                               #
+#################################
+
+# Configuration of the bans subsystem. For more information
+# see https://github.com/Elikill58/Negativity/wiki/Bans
+
+# Enable or disable ALL ban feature
+active: false
+
+# Manage bans commands
+commands:
+  # Manage /nban (Alias: /ban)
+  # DON'T FORGET TO ENABLE BAN BELOW
+  ban: true
+  # Manage /nunban (Alias: /unban)
+  # DON'T FORGET TO ENABLE BAN BELOW
+  unban: true
+
+
+
+# Processors manage bans. Only one processor can be used at the time.
+# Available processors :
+# - file : Saves bans under the ban/ directory of the configuration directory
+# - database : Saves bans in a database. Needs a configured database (see the Database category)
+# - command : Runs commands to ban or unban
+# - bukkit : Uses Bukkit's ban system
+# - proxy : Forwards ban execution and revocations to the proxy companion plugin.
+#   You must enable bans on the proxy plugin's configuration for it to work
+# The following plugins are also supported :
+# - maxbans
+# - advancedban
+# - litebans
+# - dkbans
+# Defaults to "file"
+processor: "file"
+# Commands to execute when using the "command" processor
+# You can execute as many commands as you want. Order is respected.
+#
+# Available placeholders:
+# %uuid% : uuid of banned player
+# %name% : name of banned player
+# %ip% : ip of the banned player
+# %reason% : detected cheat
+# %alert% : number of alerts for the detected cheat that triggered the ban
+# %all_alert% : all alerts for the detected cheat since you added Negativity on your server
+command:
+  ban:
+  - "ban %uuid% %reason%"
+  unban:
+  - "unban %uuid% %reason%"
+# Need to be banned
+reliability_need: 95
+alert_need: 10
+# How to calculate the time during the player will be banned
+# IN MILLISECONDES
+time:
+  # %reliability% : reliability of last alert
+  # %alert% : number of alert sent
+  calculator: "360000000 + (%reliability% * 20 * %alert%)"
+def:
+  # Number that you need to be ban definitly
+  ban_time: 2
+file:
+  # Log expired or revoked bans when using the "file" processor
+  log_bans: true
+database:
+  # Log expired or revoked bans when using the "database" processor
+  log_bans: true
+
+# Manage alternative account on same IP
+# More information on wiki:
+# https://github.com/Elikill58/Negativity/wiki/Bans
+alt:
+  active: false
+  # the key tell the X th account.
+  # Here, it's for the second account
+  2:
+    action: alert
+    message: "&a[&2Negativity&a]&c &cFigyelmeztetés: Egy másik accountod bannolva van a szerveren."
+  3:
+    action: alert_mod
+    message: "&a[&2Negativity&a]&c &cFigyelmeztetés: %name% felcsatlakozott ugyanazzal az ip címmel amivel már egy accountja bannolva van."
+  4:
+    action: ban
+    message: "Alt-fiókok nem megengedettek!"
+    # the time of the ban in milliseconds.
+    # set '-1' or "def: true" for definitive ban
+    time: 360000
+    # condition to be banned
+    # Get Warn and Violation from ALL account
+    condition:
+      # Need at least 30 warn (violations are count as warn)
+      warning: 30
+      # Need at least 10 violations
+      violation: 10
+  5:
+    action: ban
+    message: "Alt-fiókok nem megengetettek!"
+    def: true
+    condition:
+      warning: 40
+      violation: 20
+  6:
+    # the ban_all action ban definitively all account on the IP
+    action: ban_all
+  # Such as there is not any information for 6th, 7th ... account, we will take the last, so the 5th.
+
+
+sanctions:
+  ads:
+    name: "&1Reklámozás &6(7 days)"
+    material: BLUE_BANNER
+    slot: 0
+    message: "&6%name% &aki lett bannolva %reason%-ért"
+    command: "nban %name% 7d Ads"
+    permission: "negativity.sanction.ads"
+    lore:
+    - "&7%name% bannolása hirdetésért"
+    - "&7Bann hossza: 7 nap"
+  racism:
+    name: "&9Rasszizmus &6(7 days)"
+    material: BLUE_BANNER
+    slot: 1
+    message: "&6%name% &aki lett bannolva %reason%-ért"
+    command: "nban %name% 7d Cheat"
+    permission: "negativity.sanction.racism"
+    lore:
+    - "&7%name% bannolása rasszizmusért"
+    - "&7Bann hossza: 30 nap"
+  dirty:
+    name: "&8Inaporatív (skin vagy építmény) (örök kitiltás)"
+    material: BROWN_BANNER
+    slot: 2
+    message: "&6%name% &aki lett bannolva %reason%-ért"
+    command: "nban %name% def Dirty"
+    permission: "negativity.sanction.dirty"
+    lore:
+    - "&7%name% bannolása inaporatív skinért vagy/és építményért"
+    - "&7Bann hossza: örök"
+  irl_threat:
+    name: "&6Valós életben való fenyegetés &6(1 év)"
+    material: ORANGE_BANNER
+    slot: 9
+    message: "&6%name% &aki lett bannolva %reason%-ért"
+    command: "nban %name% 1y Cheat"
+    permission: "negativity.sanction.irl_threat"
+    lore:
+    - "&7%name% bannolása valós életben való fenyegetésért"
+    - "&7Bann hossza: 1 év"
+  cheat:
+    name: "&4Csalás &6(30 nap)"
+    material: RED_BANNER
+    slot: 10
+    message: "&6%name% &aki lett bannolva %reason%-ért"
+    command: "nban %name% 30d Cheat"
+    permission: "negativity.sanction.cheat"
+    lore:
+    - "&7%name% bannolása csalásért"
+    - "&7Bann hossza: 30 nap"
+  cheat_confession:
+    name: "&4Csalás bevallása &6(2 hónap)"
+    material: RED_BANNER
+    slot: 11
+    message: "&6%name% &aki lett bannolva %reason%-ért"
+    command: "nban %name% 2mo Cheat confession"
+    permission: "negativity.sanction.cheat_confession"
+    lore:
+    - "&7%name% bannolása csalás bevallásáért"
+    - "&7Bann hossza: 2 hónap"
+  hack:
+    name: "&4Hackelés &6(örök)"
+    material: BLACK_BANNER
+    slot: 12
+    message: "&6%name% &aki lett bannolva %reason%-ért"
+    command: "nban %name% def Hack"
+    permission: "negativity.sanction.hack"
+    lore:
+    - "&7%name% bannolása hackelésért"
+    - "&7Bann hossza: örök"

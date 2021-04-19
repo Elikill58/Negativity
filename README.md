@@ -76,6 +76,7 @@ We support a lot of languages :
 - **Polish** (*pl_PL*) By Tytano#5336
 - **Romanian** (*ro_RO*) By @Edward205
 - **Egyptian Arabic** (*ar_EG*) By Andro Sameh#6837
+- **Hungarian** (*hu_HU*) By HasX#1966
 
 To change the lang, just use "/nlang" or change "Translation.default" to the one that you want.
 

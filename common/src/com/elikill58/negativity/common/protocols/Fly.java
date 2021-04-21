@@ -66,20 +66,24 @@ public class Fly extends Cheat implements Listeners {
 		
 		if(checkActive("omega-craft")) {
 			boolean onGround = p.isOnGround(), wasOnGround = np.booleans.get(FLY, "fly-wasOnGround", true);
-			if(p.getFallDistance() <= 0.000001 && np.flyMoveAmount.size() > 1 && !p.isInsideVehicle()) {
-				int size = np.flyMoveAmount.size();
+			if(p.getFallDistance() <= 0.000001 && !p.isInsideVehicle()) {
 				int amount = 0;
-				for(int x = 1; x < size - 1; x++) {
-					double last = np.flyMoveAmount.get(x - 1);
-					double current = np.flyMoveAmount.get(x);
-					if((last + current) == 0) {
-						if(i < (size - 2)) {
-							double next = np.flyMoveAmount.get(x + 1);
-							if((current + next) == 0) {
-								amount++;
+				synchronized (np.flyMoveAmount) {
+					int size = np.flyMoveAmount.size();
+					if(size > 1) {
+						for(int x = 1; x < size - 1; x++) {
+							double last = np.flyMoveAmount.get(x - 1);
+							double current = np.flyMoveAmount.get(x);
+							if((last + current) == 0) {
+								if(i < (size - 2)) {
+									double next = np.flyMoveAmount.get(x + 1);
+									if((current + next) == 0) {
+										amount++;
+									}
+								} else
+									amount++;
 							}
-						} else
-							amount++;
+						}
 					}
 				}
 				if(amount > 0) {

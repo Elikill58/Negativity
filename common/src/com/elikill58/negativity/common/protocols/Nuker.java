@@ -11,8 +11,10 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.ItemUtils;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -41,11 +43,16 @@ public class Nuker extends Cheat implements Listeners {
 		if(checkActive("distance")) {
 			List<Block> target = p.getTargetBlock(5);
 			if(!target.isEmpty()) {
+				Location blockLoc = b.getLocation();
 				for(Block targetBlock : target) {
-					double distance = targetBlock.getLocation().distance(e.getBlock().getLocation());
+					if(!targetBlock.getLocation().getWorld().getName().equals(blockLoc.getWorld().getName())) {
+						Adapter.getAdapter().debug("[Nuker] Wrong world: player/block/targetBlock > " + p.getWorld().getName() + "/" + blockLoc.getWorld().getName() + "/" + targetBlock.getLocation().getWorld().getName());
+						break;
+					}
+					double distance = targetBlock.getLocation().distance(blockLoc);
 					if ((targetBlock.getType() != e.getBlock().getType()) && distance > 3.5 && targetBlock.getType() != Materials.AIR) {
 						boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - ping), "distance",
-								"BlockDig " + b.getType().getId() + ", player see " + targetBlock.getType().getId() + ". Distance between blocks " + distance + " block. Ping: " + ping + ". Warn: " + np.getWarn(this));
+								"BlockDig " + b.getType().getId() + ", player see " + targetBlock.getType().getId() + ". Distance between blocks " + distance + " block.");
 						if(isSetBack() && mayCancel)
 							e.setCancelled(true);
 					}

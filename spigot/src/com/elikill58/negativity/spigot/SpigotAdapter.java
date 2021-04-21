@@ -131,7 +131,7 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public void runConsoleCommand(String cmd) {
-		Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd);
+		Bukkit.getScheduler().callSyncMethod(pl, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd));
 	}
 
 	@Override

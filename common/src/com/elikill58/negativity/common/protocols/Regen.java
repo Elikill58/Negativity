@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.protocols;
+  package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;

@@ -5,6 +5,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.packets.PacketEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Cheat;
@@ -18,6 +19,8 @@ public class Critical extends Cheat implements Listeners {
 	public Critical() {
 		super(CheatKeys.CRITICAL, CheatCategory.COMBAT, Materials.FIREBALL, false, false, "crit", "critic");
 	}
+	
+	
 
 	@EventListener
 	public void onDamage(PlayerDamageByEntityEvent e) {
@@ -44,5 +47,10 @@ public class Critical extends Cheat implements Listeners {
 					e.setCancelled(true);
 			}
 		}
+	}
+	
+	@EventListener
+	public void onPacket(PacketEvent event) {
+		NegativityPlayer data = NegativityPlayer.getNegativityPlayer(event.getPlayer());
 	}
 }

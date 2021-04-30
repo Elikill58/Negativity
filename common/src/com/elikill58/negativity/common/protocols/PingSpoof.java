@@ -55,7 +55,7 @@ public class PingSpoof extends Cheat implements Listeners {
 		}
 		if (newPing <= 200 || lastPing == 0)
 			return;
-		if (newPing < lastPing && (newPing * 1.2) < lastPing) // if ping is going normal
+		if (newPing < lastPing && ((newPing * 1.2) < lastPing || newPing < 1000)) // if ping is going normal
 			return;
 		try {
 			if (p.getAddress().getAddress().isReachable(newPing - 150)) {

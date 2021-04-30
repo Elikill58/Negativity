@@ -80,6 +80,9 @@ public class Materials {
     public static final Material SPONGE = ItemRegistrar.getInstance().get("sponge");
     public static final Material STATIONARY_WATER = ItemRegistrar.getInstance().get("stationary_water", "water");
     public static final Material STICK = ItemRegistrar.getInstance().get("stick");
+
+    public static final Material VINE = ItemRegistrar.getInstance().get("vine", "vines");
+    
     
     /* STAINED MATERIALS */
     

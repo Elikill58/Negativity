@@ -45,7 +45,7 @@ public class Fly extends Cheat implements Listeners {
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		if (p.getAllowFlight() || p.isSwimming() || LocationUtils.hasMaterialAround(e.getTo(), Materials.WATER_LILY, Materials.WEB, Materials.LADDER))
+		if (p.getAllowFlight() || p.isSwimming() || LocationUtils.hasMaterialAround(e.getTo(), Materials.WATER_LILY, Materials.WEB, Materials.LADDER, Materials.VINE))
 			return;
 		if (p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED)).getAmplifier() > 5)
 			return;
@@ -94,7 +94,7 @@ public class Fly extends Cheat implements Listeners {
 					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + np.flyMoveAmount.size() + " > " + onGround + " : " + wasOnGround, "omega-craft", (CheatHover) null, amount > 1 ? amount - 1 : 1);
 				}
 			}
-			if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY") || LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY"))
+			if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY") || LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE"))
 				np.flyMoveAmount.clear();
 			else
 				np.flyMoveAmount.add(d);
@@ -123,8 +123,9 @@ public class Fly extends Cheat implements Listeners {
 				if(strY.contains("E") && !strY.equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle()
 						&& !np.isInFight && !LocationUtils.hasBoatAroundHim(p.getLocation()) && !(isInWater || isOnWater)
 						&& !LocationUtils.hasMaterialsAround(loc, "SCAFFOLD", "LAVA", "WATER") && !inBoat && !hasBuggedBlockAroundForGeyser){
+					int eY = Math.abs(Integer.parseInt(String.valueOf(y).split("E")[0]));
 					mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
-								p, this, 97, "suspicious-y", "Suspicious Y: " + y);
+								p, this, UniversalUtils.parseInPorcent(120 - (eY * eY * eY)), "suspicious-y", "Suspicious Y: " + y);
 				}
 			}
 			if(checkActive("no-ground-i")) {

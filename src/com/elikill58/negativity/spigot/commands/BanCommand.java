@@ -6,6 +6,7 @@ import java.util.Locale;
 import java.util.StringJoiner;
 
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -22,6 +23,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class BanCommand implements CommandExecutor, TabCompleter {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
 		if (arg.length < 3) {
@@ -34,7 +36,7 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 			return false;
 		}
 
-		Player target = Bukkit.getPlayer(arg[0]);
+		OfflinePlayer target = Bukkit.getOfflinePlayer(arg[0]);
 		if (target == null) {
 			Messages.sendMessage(sender, "invalid_player", "%arg%", arg[0]);
 			return false;

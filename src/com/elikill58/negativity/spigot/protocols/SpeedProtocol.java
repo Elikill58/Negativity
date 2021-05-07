@@ -76,17 +76,17 @@ public class SpeedProtocol extends Cheat implements Listener {
 			np.BYPASS_SPEED--;
 			return;
 		}
-		Location loc = p.getLocation().clone(), locDown = loc.clone().subtract(0, 1, 0);
+		Location loc = p.getLocation().clone(), locDown = loc.clone().subtract(0, 1, 0), locUp = loc.clone().add(0, 1, 0);
 		double dif = to.getY() - from.getY();
-		boolean hasIceBelow = locDown.getBlock().getType().name().contains("ICE"), onGround = np.isOnGround();
-		if(hasIceBelow) {
+		boolean hasIce = locDown.getBlock().getType().name().contains("ICE") || locUp.getBlock().getType().name().contains("ICE"), onGround = np.isOnGround();
+		if(hasIce) {
 			np.contentBoolean.put("speed-has-ice", true);
 			Adapter.getAdapter().debug("Has ice below " + p.getName());
 		} else
-			hasIceBelow = np.contentBoolean.getOrDefault("speed-has-ice", false);
+			hasIce = np.contentBoolean.getOrDefault("speed-has-ice", false);
 		
 		if(onGround && dif < 0) {
-			int firstIce = np.contentInts.getOrDefault("speed-has-ice-first", 4);
+			int firstIce = np.contentInts.getOrDefault("speed-has-ice-first", 5);
 			if(firstIce <= 0) {
 				Adapter.getAdapter().debug("Removing ice bypass for " + p.getName());
 				np.contentBoolean.remove("speed-has-ice");
@@ -96,9 +96,9 @@ public class SpeedProtocol extends Cheat implements Listener {
 			}
 		}
 		
-		if (hasIceBelow || hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
-				|| hasMaterialsAround(loc.clone().subtract(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
-				|| hasMaterialsAround(loc.clone().add(0, 1, 0), "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
+		if (hasIce || hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
+				|| hasMaterialsAround(locDown, "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
+				|| hasMaterialsAround(locUp, "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
 				|| hasMaterialsAround(loc.clone().add(0, 2, 0), "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET"))
 			return;
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
@@ -115,7 +115,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 				mayCancel = SpigotNegativity.alertMod(type, p, this, porcent, proof, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
 			}
 			double calculatedSpeedWithoutY = Utils.getSpeed(from, to);
-			if(p.getWalkSpeed() < 1.0 && calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() < calculatedSpeedWithoutY && p.getVelocity().getY() > 0
+			if(p.getWalkSpeed() < 1.0 && calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() < calculatedSpeedWithoutY && p.getVelocity().getY() > 0.1
 					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" is to prevent lag
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, 90, "Calculated speed: "
 					+ calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().getY());

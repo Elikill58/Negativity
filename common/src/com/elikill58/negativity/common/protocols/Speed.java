@@ -75,10 +75,10 @@ public class Speed extends Cheat implements Listeners {
 		}
 		Location loc = p.getLocation().clone();
 		Block under = loc.clone().sub(0, 1, 0).getBlock();
-		Location locDown = under.getLocation();
+		Location locDown = under.getLocation(), locUp = loc.clone().add(0, 1, 0);
 		boolean onGround = p.isOnGround();
 		double dif = to.getY() - from.getY();
-		boolean hasIceBelow = locDown.getBlock().getType().getId().contains("ICE");
+		boolean hasIceBelow = under.getType().getId().contains("ICE") || locUp.getBlock().getType().getId().contains("ICE");
 		if(hasIceBelow) {
 			np.booleans.set("ALL", "speed-has-ice", true);
 			Adapter.getAdapter().debug("Has ice below " + p.getName());
@@ -86,7 +86,7 @@ public class Speed extends Cheat implements Listeners {
 			hasIceBelow = np.booleans.get("ALL", "speed-has-ice", false);
 		
 		if(onGround && dif < 0) {
-			int firstIce = np.ints.get("ALL", "speed-has-ice-first", 4);
+			int firstIce = np.ints.get("ALL", "speed-has-ice-first", 5);
 			if(firstIce <= 0) {
 				Adapter.getAdapter().debug("Removing ice bypass for " + p.getName());
 				np.booleans.remove("ALL", "speed-has-ice");
@@ -96,9 +96,9 @@ public class Speed extends Cheat implements Listeners {
 			}
 		}
 		
-		if (hasIceBelow || hasMaterialsAround(loc.getBlock().getRelative(BlockFace.UP).getLocation(), "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
+		if (hasIceBelow || hasMaterialsAround(locUp, "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
 				|| hasMaterialsAround(loc.clone().add(0, 2, 0), "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| hasMaterialsAround(under.getLocation(), "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
+				|| hasMaterialsAround(locDown, "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
 		double amplifierSpeed = p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED, 0, 0)).getAmplifier();
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
@@ -118,7 +118,7 @@ public class Speed extends Cheat implements Listeners {
 		}
 		if(onGround && checkActive("calculated")) {
 			double calculatedSpeedWithoutY = getSpeed(from, to), velocity = p.getVelocity().getY();
-			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && velocity > 0.0
+			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && velocity > 0.1
 					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated",
 						"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + velocity);

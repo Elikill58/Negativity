@@ -64,11 +64,12 @@ public class AirJump extends Cheat implements Listeners {
 
 			if (checkActive("going-down")) {
 				boolean wasGoingDown = np.booleans.get(AIR_JUMP, "going-down", false);
-				if (diffYtoFrom > lastDiffY && wasGoingDown && diffYtoFrom != 0.5) { // 0.5 when use stairs or slab
+				if (diffYtoFrom > lastDiffY && wasGoingDown && diffYtoFrom != 0.5
+						&& locDown.getBlock().getType().getId().equalsIgnoreCase("AIR")) { // 0.5 when use stairs or
+																							// slab
 					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 							UniversalUtils.parseInPorcent(diffYtoFrom * 200), "going-down",
-							"Was going down, last y " + lastDiffY + ", current: " + diffYtoFrom + ". Down: "
-									+ locDown.getBlock().getType().getId() + ", Down Down: "
+							"Was going down, last y " + lastDiffY + ", current: " + diffYtoFrom + ". Down Down: "
 									+ locDownDown.getBlock().getType().getId());
 				}
 			}

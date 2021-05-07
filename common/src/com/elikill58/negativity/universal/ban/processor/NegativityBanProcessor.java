@@ -21,8 +21,7 @@ public class NegativityBanProcessor extends BaseNegativityBanProcessor {
 	@Override
 	public BanResult executeBan(Ban ban) {
 		NegativityPlayer nPlayer = NegativityPlayer.getCached(ban.getPlayerId());
-		if (nPlayer == null)
-			return null;
+		// warn: nPlayer will be null if player is offline
 
 		BanResult executedBan = super.executeBan(ban);
 

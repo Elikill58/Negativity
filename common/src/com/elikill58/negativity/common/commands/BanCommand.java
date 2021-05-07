@@ -8,6 +8,7 @@ import java.util.StringJoiner;
 import com.elikill58.negativity.api.commands.CommandListeners;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.commands.TabListeners;
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
@@ -37,7 +38,7 @@ public class BanCommand implements CommandListeners, TabListeners {
 			return true;
 		}
 
-		Player target = Adapter.getAdapter().getPlayer(arg[0]);
+		OfflinePlayer target = Adapter.getAdapter().getOfflinePlayer(arg[0]);
 		if (target == null) {
 			Messages.sendMessage(sender, "invalid_player", "%arg%", arg[0]);
 			return false;
@@ -68,7 +69,7 @@ public class BanCommand implements CommandListeners, TabListeners {
 		}
 
 		String reason = reasonJoiner.toString();
-		BanResult ban = BanManager.executeBan(Ban.active(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, cheatName, target.getIP()));
+		BanResult ban = BanManager.executeBan(Ban.active(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, cheatName, (target instanceof Player ? ((Player) target).getIP() : null)));
 		if(ban.isSuccess())
 			Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
 		else

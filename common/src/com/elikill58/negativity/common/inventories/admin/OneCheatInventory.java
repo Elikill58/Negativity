@@ -1,5 +1,6 @@
 package com.elikill58.negativity.common.inventories.admin;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
@@ -40,7 +41,7 @@ public class OneCheatInventory extends AbstractInventory<OneCheatHolder> {
 		Cheat c = (Cheat) args[0];
 		Inventory inv = (Inventory) args[1];
 		inv.set(2, ItemBuilder.Builder(Materials.DIAMOND).displayName(Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))).build());
-		inv.set(3, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.manager.setBack", "%back%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))).build());
+		inv.set(3, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.manager.setBack.name", "%state%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))).lore(Messages.getMessage(p, "inventory.manager.setBack.lore")).build());
 		inv.set(4, ItemBuilder.Builder(Materials.BLAZE_ROD).displayName(Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))).build());
 		inv.set(5, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.manager.verif", "%verif%", Messages.getMessage(p, "inventory.manager." + (c.hasVerif() ? "enabled" : "disabled")))).build());
 	}

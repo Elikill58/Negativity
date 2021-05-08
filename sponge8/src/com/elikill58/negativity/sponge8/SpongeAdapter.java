@@ -124,7 +124,7 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public String getPluginVersion() {
-		return this.plugin.getContainer().getMetadata().getVersion();
+		return this.plugin.getContainer().metadata().version();
 	}
 	
 	@Override

@@ -38,17 +38,17 @@ public class SpongeBlock extends Block {
 	
 	@Override
 	public int getX() {
-		return block.position().getX();
+		return block.position().x();
 	}
 	
 	@Override
 	public int getY() {
-		return block.position().getY();
+		return block.position().y();
 	}
 	
 	@Override
 	public int getZ() {
-		return block.position().getZ();
+		return block.position().z();
 	}
 	
 	@Override

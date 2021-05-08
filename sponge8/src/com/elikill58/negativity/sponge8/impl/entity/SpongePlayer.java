@@ -383,7 +383,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	@Override
 	public Vector getVelocity() {
 		Vector3d vel = entity.require(Keys.VELOCITY);
-		return new Vector(vel.getX(), vel.getY(), vel.getZ());
+		return new Vector(vel.x(), vel.y(), vel.z());
 	}
 	
 	@Override
@@ -448,7 +448,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	@Override
 	public Location getEyeLocation() {
 		Vector3d pos = entity.require(Keys.EYE_POSITION);
-		return new SpongeLocation(new SpongeWorld(entity.world()), pos.getX(), pos.getY(), pos.getZ());
+		return new SpongeLocation(new SpongeWorld(entity.world()), pos.x(), pos.y(), pos.z());
 	}
 	
 	@Override

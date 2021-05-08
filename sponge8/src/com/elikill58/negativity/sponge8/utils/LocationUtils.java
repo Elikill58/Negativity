@@ -23,12 +23,12 @@ public class LocationUtils {
 			return true;
 		}
 		
-		int posX = UniversalUtils.floor(eyePos.getX());
-		int posY = UniversalUtils.floor(eyePos.getY());
-		int posZ = UniversalUtils.floor(eyePos.getZ());
-		int vecX = UniversalUtils.floor(vec3d1.getX());
-		int vecY = UniversalUtils.floor(vec3d1.getY());
-		int vecZ = UniversalUtils.floor(vec3d1.getZ());
+		int posX = UniversalUtils.floor(eyePos.x());
+		int posY = UniversalUtils.floor(eyePos.y());
+		int posZ = UniversalUtils.floor(eyePos.z());
+		int vecX = UniversalUtils.floor(vec3d1.x());
+		int vecY = UniversalUtils.floor(vec3d1.y());
+		int vecZ = UniversalUtils.floor(vec3d1.z());
 		Vector3i vector = new Vector3i(posX, posY, posZ);
 		if (world.block(vector).type() != BlockTypes.AIR.get() && hasMovingPosition(vector, eyePos, vec3d1))
 			return false;
@@ -44,9 +44,9 @@ public class LocationUtils {
 			boolean movingX = true, movingY = true, movingZ = true;
 			double d0 = 999.0D, d1 = 999.0D, d2 = 999.0D;
 			double d3 = 999.0D, d4 = 999.0D, d5 = 999.0D;
-			double d6 = vec3d1.getX() - eyePos.getX();
-			double d7 = vec3d1.getY() - eyePos.getY();
-			double d8 = vec3d1.getZ() - eyePos.getZ();
+			double d6 = vec3d1.x() - eyePos.x();
+			double d7 = vec3d1.y() - eyePos.y();
+			double d8 = vec3d1.z() - eyePos.z();
 			if (vecX > posX) {
 				d0 = posX + 1.0D;
 			} else if (vecX < posX) {
@@ -69,34 +69,34 @@ public class LocationUtils {
 				movingZ = false;
 
 			if (movingX) {
-				d3 = (d0 - eyePos.getX()) / d6;
+				d3 = (d0 - eyePos.x()) / d6;
 				if (d3 == -0.0D)
 					d3 = -1.0E-4D;
 			}
 			if (movingY) {
-				d4 = (d1 - eyePos.getY()) / d7;
+				d4 = (d1 - eyePos.y()) / d7;
 				if (d4 == -0.0D)
 					d4 = -1.0E-4D;
 			}
 			if (movingZ) {
-				d5 = (d2 - eyePos.getZ()) / d8;
+				d5 = (d2 - eyePos.z()) / d8;
 				if (d5 == -0.0D)
 					d5 = -1.0E-4D;
 			}
 			Direction direction;
 			if ((d3 < d4) && (d3 < d5)) {
 				direction = vecX > posX ? Direction.WEST : Direction.EAST;
-				eyePos = new Vector3d(d0, eyePos.getY() + d7 * d3, eyePos.getZ() + d8 * d3);
+				eyePos = new Vector3d(d0, eyePos.y() + d7 * d3, eyePos.z() + d8 * d3);
 			} else if (d4 < d5) {
 				direction = vecY > posY ? Direction.DOWN : Direction.UP;
-				eyePos = new Vector3d(eyePos.getX() + d6 * d4, d1, eyePos.getZ() + d8 * d4);
+				eyePos = new Vector3d(eyePos.x() + d6 * d4, d1, eyePos.z() + d8 * d4);
 			} else {
 				direction = vecZ > posZ ? Direction.NORTH : Direction.SOUTH;
-				eyePos = new Vector3d(eyePos.getX() + d6 * d5, eyePos.getY() + d7 * d5, d2);
+				eyePos = new Vector3d(eyePos.x() + d6 * d5, eyePos.y() + d7 * d5, d2);
 			}
-			posX = UniversalUtils.floor(eyePos.getX()) - (direction == Direction.EAST ? 1 : 0);
-			posY = UniversalUtils.floor(eyePos.getY()) - (direction == Direction.UP ? 1 : 0);
-			posZ = UniversalUtils.floor(eyePos.getZ()) - (direction == Direction.SOUTH ? 1 : 0);
+			posX = UniversalUtils.floor(eyePos.x()) - (direction == Direction.EAST ? 1 : 0);
+			posY = UniversalUtils.floor(eyePos.y()) - (direction == Direction.UP ? 1 : 0);
+			posZ = UniversalUtils.floor(eyePos.z()) - (direction == Direction.SOUTH ? 1 : 0);
 			vector = new Vector3i(posX, posY, posZ);
 			if (world.block(vector).type() != BlockTypes.AIR.get())
 				if (hasMovingPosition(vector, eyePos, vec3d1))
@@ -106,12 +106,12 @@ public class LocationUtils {
 	}
 	
 	private static boolean hasNaN(Vector3d playerEyesPos) {
-		return Double.isNaN(playerEyesPos.getX()) || Double.isNaN(playerEyesPos.getY()) || Double.isNaN(playerEyesPos.getZ());
+		return Double.isNaN(playerEyesPos.x()) || Double.isNaN(playerEyesPos.y()) || Double.isNaN(playerEyesPos.z());
 	}
 	
 	private static boolean hasMovingPosition(Vector3i position, Vector3d vec3d, Vector3d vec3d1) {
-		vec3d = vec3d.add(-position.getX(), -position.getY(), -position.getZ());
-		vec3d1 = vec3d1.add(-position.getX(), -position.getY(), -position.getZ());
+		vec3d = vec3d.add(-position.x(), -position.y(), -position.z());
+		vec3d1 = vec3d1.add(-position.x(), -position.y(), -position.z());
 		Vector3d vec3minX = getVectorX(vec3d, vec3d1, 0);
 		Vector3d vec3maxX = getVectorX(vec3d, vec3d1, 1);
 		Vector3d vec3minY = getVectorY(vec3d, vec3d1, 0);
@@ -141,40 +141,40 @@ public class LocationUtils {
 	}
 
 	private static Vector3d getVectorX(Vector3d main, Vector3d vec1, double paramDouble) {
-		double d1 = vec1.getX() - main.getX();
-		double d2 = vec1.getY() - main.getY();
-		double d3 = vec1.getZ() - main.getZ();
+		double d1 = vec1.x() - main.x();
+		double d2 = vec1.y() - main.y();
+		double d3 = vec1.z() - main.z();
 		if (d1 * d1 < 1.0000000116860974E-7D)
 			return null;
-		double d4 = (paramDouble - main.getX()) / d1;
+		double d4 = (paramDouble - main.x()) / d1;
 		if ((d4 < 0.0D) || (d4 > 1.0D))
 			return null;
-		return new Vector3d(main.getX() + d1 * d4, main.getY() + d2 * d4, main.getZ() + d3 * d4);
+		return new Vector3d(main.x() + d1 * d4, main.y() + d2 * d4, main.z() + d3 * d4);
 	}
 
 	private static Vector3d getVectorY(Vector3d main, Vector3d vec1, double paramDouble) {
-		double d1 = vec1.getX() - main.getX();
-		double d2 = vec1.getY() - main.getY();
-		double d3 = vec1.getZ() - main.getZ();
+		double d1 = vec1.x() - main.x();
+		double d2 = vec1.y() - main.y();
+		double d3 = vec1.z() - main.z();
 		if (d2 * d2 < 1.0000000116860974E-7D)
 			return null;
-		double d4 = (paramDouble - main.getY()) / d2;
+		double d4 = (paramDouble - main.y()) / d2;
 		if ((d4 < 0.0D) || (d4 > 1.0D))
 			return null;
-		return new Vector3d(main.getX() + d1 * d4, main.getY() + d2 * d4, main.getZ() + d3 * d4);
+		return new Vector3d(main.x() + d1 * d4, main.y() + d2 * d4, main.z() + d3 * d4);
 	}
 
 	private static Vector3d getVectorZ(Vector3d main, Vector3d vec1, double paramDouble) {
-		double d1 = vec1.getX() - main.getX();
-		double d2 = vec1.getY() - main.getY();
-		double d3 = vec1.getZ() - main.getZ();
+		double d1 = vec1.x() - main.x();
+		double d2 = vec1.y() - main.y();
+		double d3 = vec1.z() - main.z();
 		if (d3 * d3 < 1.0000000116860974E-7D) {
 			return null;
 		}
-		double d4 = (paramDouble - main.getZ()) / d3;
+		double d4 = (paramDouble - main.z()) / d3;
 		if ((d4 < 0.0D) || (d4 > 1.0D)) {
 			return null;
 		}
-		return new Vector3d(main.getX() + d1 * d4, main.getY() + d2 * d4, main.getZ() + d3 * d4);
+		return new Vector3d(main.x() + d1 * d4, main.y() + d2 * d4, main.z() + d3 * d4);
 	}
 }

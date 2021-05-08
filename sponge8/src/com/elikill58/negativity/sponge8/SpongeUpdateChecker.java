@@ -21,7 +21,7 @@ public class SpongeUpdateChecker {
 	private static @Nullable String latestVersionString;
 	
 	private static boolean checkForUpdate() throws IOException {
-		SemVer currentVersion = SemVer.parse(SpongeNegativity.getInstance().getContainer().getMetadata().getVersion());
+		SemVer currentVersion = SemVer.parse(SpongeNegativity.getInstance().getContainer().metadata().version());
 		if (currentVersion == null) {
 			return false;
 		}

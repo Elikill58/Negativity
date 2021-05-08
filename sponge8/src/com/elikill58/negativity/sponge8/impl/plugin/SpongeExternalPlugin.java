@@ -14,7 +14,7 @@ public class SpongeExternalPlugin extends ExternalPlugin {
 	
 	@Override
 	public String getId() {
-		return pl.getMetadata().getId();
+		return pl.metadata().id();
 	}
 	
 	@Override
@@ -24,7 +24,7 @@ public class SpongeExternalPlugin extends ExternalPlugin {
 
 	@Override
 	public Object getDefault() {
-		return pl.getInstance();
+		return pl.instance();
 	}
 	
 	

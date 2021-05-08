@@ -91,7 +91,7 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public Vector getRotation() {
 		Vector3d vec = entity.rotation();
-		return new Vector(vec.getX(), vec.getY(), vec.getZ());
+		return new Vector(vec.x(), vec.y(), vec.z());
 	}
 	
 	@Override
@@ -105,6 +105,6 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 		if(box == null)
 			return null;
 		Vector3d min = box.min(), max = box.max();
-		return new BoundingBox(min.getX(), min.getY(), min.getZ(), max.getX(), max.getY(), max.getZ());
+		return new BoundingBox(min.x(), min.y(), min.z(), max.x(), max.y(), max.z());
 	}
 }

@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge8.listeners;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
@@ -7,6 +8,7 @@ import java.util.Optional;
 
 import org.spongepowered.api.command.Command;
 import org.spongepowered.api.command.CommandCause;
+import org.spongepowered.api.command.CommandCompletion;
 import org.spongepowered.api.command.CommandResult;
 import org.spongepowered.api.command.exception.CommandException;
 import org.spongepowered.api.command.parameter.ArgumentReader;
@@ -40,7 +42,7 @@ public class NegativityCommandWrapper implements Command.Raw {
 	}
 	
 	@Override
-	public List<String> suggestions(CommandCause cause, ArgumentReader.Mutable arguments) throws CommandException {
+	public List<CommandCompletion> complete(CommandCause cause, ArgumentReader.Mutable arguments) throws CommandException {
 		String[] args = arguments.input().split(" ");
 		if (arguments.input().endsWith(" ")) {
 			args = Arrays.copyOf(args, args.length + 1);
@@ -51,7 +53,13 @@ public class NegativityCommandWrapper implements Command.Raw {
 			.orElseThrow(() -> new CommandException(Component.text("Could not find appropriate command executor"))));
 		TabExecutionEvent event = new TabExecutionEvent(cmd, executor, args, prefix);
 		EventManager.callEvent(event);
-		return event.getTabContent();
+		
+		List<String> suggestions = event.getTabContent();
+		List<CommandCompletion> completions = new ArrayList<>(suggestions.size());
+		for (String suggestion : suggestions) {
+			completions.add(CommandCompletion.of(suggestion));
+		}
+		return completions;
 	}
 	
 	@Override

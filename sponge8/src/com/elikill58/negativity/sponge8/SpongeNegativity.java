@@ -108,7 +108,7 @@ public class SpongeNegativity {
 	@Listener
 	public void onLoadedGame(LoadedGameEvent event) {
 		Stats.sendStartupStats(Sponge.server().boundAddress().map(InetSocketAddress::getPort).orElse(-1));
-		logger.info("Hello from Negativity v{}", container.getMetadata().getVersion());
+		logger.info("Hello from Negativity v{}", container.metadata().version());
 	}
 	
 	@Listener

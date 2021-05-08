@@ -28,12 +28,12 @@ public class SpongeLocation extends Location {
 	}
 	
 	public SpongeLocation(com.elikill58.negativity.api.location.World w, Vector3d pos) {
-		super(w, pos.getX(), pos.getY(), pos.getZ());
+		super(w, pos.x(), pos.y(), pos.z());
 		this.loc = ServerLocation.of((ServerWorld) w.getDefault(), pos);
 	}
 	
 	public SpongeLocation(ServerWorld w, Vector3d pos) {
-		super(new SpongeWorld(w), pos.getX(), pos.getY(), pos.getZ());
+		super(new SpongeWorld(w), pos.x(), pos.y(), pos.z());
 		this.loc = ServerLocation.of(w, pos);
 	}
 

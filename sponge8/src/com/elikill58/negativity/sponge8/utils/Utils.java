@@ -101,8 +101,8 @@ public class Utils {
 	}
 	
 	public static boolean dependsOn(PluginContainer plugin, String dependencyId) {
-		for (PluginDependency dependency : plugin.getMetadata().getDependencies()) {
-			if (dependency.getId().equalsIgnoreCase(dependencyId)) {
+		for (PluginDependency dependency : plugin.metadata().dependencies()) {
+			if (dependency.id().equalsIgnoreCase(dependencyId)) {
 				return true;
 			}
 		}

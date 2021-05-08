@@ -4,8 +4,6 @@ import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExten
 import static com.elikill58.negativity.universal.CheatKeys.FLY;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
-import org.bukkit.entity.Boat;
-
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.BlockFace;

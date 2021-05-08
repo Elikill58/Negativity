@@ -7,6 +7,7 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -115,6 +116,7 @@ public class FlyProtocol extends Cheat implements Listener {
 		
 
 		boolean onGround = ((Entity) p).isOnGround(), wasOnGround = np.contentBoolean.getOrDefault("fly-wasOnGround", true);
+		boolean hasBoatAround = p.getWorld().getNearbyEntities(loc, 3, 3, 3).stream().filter((entity) -> entity instanceof Boat).findFirst().isPresent();
 		if(p.getFallDistance() <= 0.000001 && np.flyMoveAmount.size() > 1 && !p.isInsideVehicle()) {
 			int size = np.flyMoveAmount.size();
 			int amount = 0;
@@ -135,7 +137,7 @@ public class FlyProtocol extends Cheat implements Listener {
 				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + np.flyMoveAmount.size() + " > " + onGround + " : " + wasOnGround + ", d: " + d, (CheatHover) null, amount > 1 ? amount - 1 : 1);
 			}
 		}
-		if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY") || LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE"))
+		if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY") || LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE") || hasBoatAround)
 			np.flyMoveAmount.clear();
 		else
 			np.flyMoveAmount.add(d);

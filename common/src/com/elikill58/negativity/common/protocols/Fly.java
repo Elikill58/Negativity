@@ -4,6 +4,8 @@ import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExten
 import static com.elikill58.negativity.universal.CheatKeys.FLY;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
+import org.bukkit.entity.Boat;
+
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.BlockFace;
@@ -66,6 +68,7 @@ public class Fly extends Cheat implements Listeners {
 		
 		if(checkActive("omega-craft")) {
 			boolean onGround = p.isOnGround(), wasOnGround = np.booleans.get(FLY, "fly-wasOnGround", true);
+			boolean hasBoatAround = p.getWorld().getEntities().stream().filter((entity) -> entity.getType().equals(EntityType.BOAT) && entity.getLocation().distance(loc) < 3).findFirst().isPresent();
 			if(p.getFallDistance() <= 0.000001 && !p.isInsideVehicle()) {
 				int amount = 0;
 				synchronized (np.flyMoveAmount) {
@@ -94,7 +97,7 @@ public class Fly extends Cheat implements Listeners {
 					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + np.flyMoveAmount.size() + " > " + onGround + " : " + wasOnGround, "omega-craft", (CheatHover) null, amount > 1 ? amount - 1 : 1);
 				}
 			}
-			if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY") || LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE"))
+			if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY") || LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE") || hasBoatAround)
 				np.flyMoveAmount.clear();
 			else
 				np.flyMoveAmount.add(d);

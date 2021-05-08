@@ -1,6 +1,5 @@
 package com.elikill58.negativity.common.inventories.admin;
 
-import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;

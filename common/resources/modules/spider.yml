@@ -39,3 +39,6 @@ checks:
   # Distance when going up
   distance:
     active: true
+  # Player player move wth exact same Y
+  same-y:
+    active: true

@@ -471,4 +471,9 @@ public class LocationUtils {
 			loc.sub(0, 1, 0);
 		p.teleport(loc);
 	}
+
+	public static boolean isInWater(Location loc) {
+		return loc.getBlock().isLiquid() || loc.clone().add(0, -1, 0).getBlock().isLiquid()
+				|| loc.clone().add(0, 1, 0).getBlock().isLiquid();
+	}
 }

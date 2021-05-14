@@ -75,6 +75,7 @@ public class NegativityPlayer {
 	public boolean bypassBlink = false, isOnLadders = false, useAntiNoFallSystem = false;
 	public PlayerChatEvent LAST_CHAT_EVENT = null;
 	public List<Integer> TIMER_COUNT = new ArrayList<>();
+	public List<Double> lastY = new ArrayList<>();
 	public Location lastSpiderLoc = null;
 	public String LAST_OTHER_KEEP_ALIVE = "";
 	

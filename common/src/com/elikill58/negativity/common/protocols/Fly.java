@@ -124,7 +124,7 @@ public class Fly extends Cheat implements Listeners {
 				if(strY.contains("E") && !strY.equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle()
 						&& !np.isInFight && !LocationUtils.hasBoatAroundHim(p.getLocation()) && !(isInWater || isOnWater)
 						&& !LocationUtils.hasMaterialsAround(loc, "SCAFFOLD", "LAVA", "WATER") && !inBoat && !hasBuggedBlockAroundForGeyser){
-					int eY = Math.abs(Integer.parseInt(String.valueOf(y).split("E")[0]));
+					int eY = (int) Math.abs(Double.parseDouble(String.valueOf(y).split("E")[0]));
 					mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
 								p, this, UniversalUtils.parseInPorcent(120 - (eY * eY * eY)), "suspicious-y", "Suspicious Y: " + y);
 				}

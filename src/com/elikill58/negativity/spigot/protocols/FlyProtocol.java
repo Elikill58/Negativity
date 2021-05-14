@@ -63,7 +63,7 @@ public class FlyProtocol extends Cheat implements Listener {
 		boolean isInWater = loc.getBlock().getType().name().contains("WATER"), isOnWater = locUnder.getBlock().getType().name().contains("WATER");
 		if(String.valueOf(y).contains("E") && !String.valueOf(y).equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle() && !inBoat && !hasBuggedBlockAroundForGeyser
 				&& !np.isInFight && !LocationUtils.hasBoatAroundHim(p.getLocation()) && !(isInWater || isOnWater) && !LocationUtils.hasMaterialsAround(loc, "SCAFFOLD")){
-			int eY = Math.abs(Integer.parseInt(String.valueOf(y).split("E")[0]));
+			int eY = (int) Math.abs(Double.parseDouble(String.valueOf(y).split("E")[0]));
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, UniversalUtils.parseInPorcent(120 - (eY * eY * eY)), "Suspicious Y: " + y);
 		}

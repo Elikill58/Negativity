@@ -108,4 +108,13 @@ public class BukkitBanProcessor implements BanProcessor {
 		long revocationTime = revoked ? System.currentTimeMillis() : -1;
 		return new Ban(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason, status, executionTime, revocationTime);
 	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<Ban> getAllBans() {
+		List<Ban> loggedBans = new ArrayList<>();
+		Bukkit.getServer().getBanList(BanList.Type.NAME).getBanEntries()
+				.forEach(entry -> loggedBans.add(loggedBanFrom(entry, Bukkit.getOfflinePlayer(entry.getTarget()).getUniqueId(), false)));
+		return loggedBans;
+	}
 }

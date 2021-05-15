@@ -47,7 +47,20 @@ public interface BanProcessor {
 	@Nullable
 	Ban getActiveBan(UUID playerId);
 
+	/**
+	 * Get all old ban for the given UUID
+	 * 
+	 * @param playerId player UUID who we are looking for bans
+	 * @return all logged bans
+	 */
 	List<Ban> getLoggedBans(UUID playerId);
+	
+	/**
+	 * Get all current ban.
+	 * 
+	 * @return all active bans
+	 */
+	List<Ban> getAllBans();
 
 	/**
 	 * @return whether Negativity should kick banned players when this BanProcessor

@@ -89,4 +89,13 @@ public class MaxBansProcessor implements BanProcessor {
 		}
 		return loggedBans;
 	}
+	
+	@Override
+	public List<Ban> getAllBans() {
+		List<Ban> loggedBans = new ArrayList<>();
+		MaxBans.instance.getBanManager().getBans().forEach((name, ban) -> {
+			loggedBans.add(new Ban(UUID.fromString(ban.getId()), ban.getKickMessage(), ban.getBanner(), BanType.UNKNOW, 0, ban.getKickMessage(), BanStatus.ACTIVE, ban.getCreated()));
+		});
+		return loggedBans;
+	}
 }

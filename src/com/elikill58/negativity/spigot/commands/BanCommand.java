@@ -26,6 +26,35 @@ public class BanCommand implements CommandExecutor, TabCompleter {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] arg) {
+		if(!BanManager.banActive) {
+			Messages.sendMessage(sender, "ban.not_active");
+			return false;
+		}
+		if(arg.length >= 1 && arg[0].equalsIgnoreCase("list")) {
+			List<Ban> activeBan = BanManager.getProcessor().getAllBans();
+			if(activeBan.isEmpty()) {
+				Messages.sendMessage(sender, "ban.list.none");
+				return false;
+			}
+			int linePerPage = 10;
+			int start = 0, end = linePerPage;
+			if(arg.length >= 2 && UniversalUtils.isInteger(arg[1])) {
+				// selecting page
+				int page = Integer.parseInt(arg[1]);
+				start = page * linePerPage;
+				end = (page + 1) * linePerPage;
+			}
+			if(end > activeBan.size())
+				end = activeBan.size();
+			Messages.sendMessage(sender, "ban.list.header", "%start%", start + 1, "%end%", end, "%max%", activeBan.size());
+			for(int i = start; i < end; i++) {
+				if(activeBan.size() <= i)
+					return false;
+				Ban ban = activeBan.get(i);
+				Messages.sendMessage(sender, "ban.list.line", "%number%", i + 1, "%name%", Bukkit.getOfflinePlayer(ban.getPlayerId()).getName(), "%by%", ban.getBannedBy(), "%reason%", ban.getReason());
+			}
+			return false;
+		}
 		if (arg.length < 3) {
 			Messages.sendMessage(sender, "ban.help");
 			return false;

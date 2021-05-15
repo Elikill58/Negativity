@@ -90,4 +90,9 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 	public boolean isHandledByNegativity() {
 		return true;
 	}
+
+	@Override
+	public List<Ban> getAllBans() {
+		return activeBanStorage.getAll();
+	}
 }

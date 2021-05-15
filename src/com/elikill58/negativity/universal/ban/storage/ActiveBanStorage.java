@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.ban.storage;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -37,4 +38,11 @@ public interface ActiveBanStorage {
 	 * @param playerId the UUID of the player
 	 */
 	void remove(UUID playerId);
+	
+	/**
+	 * Get all active bans
+	 * 
+	 * @return all active bans
+	 */
+	List<Ban> getAll();
 }

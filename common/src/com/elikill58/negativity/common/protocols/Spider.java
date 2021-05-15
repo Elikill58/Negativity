@@ -41,6 +41,7 @@ public class Spider extends Cheat implements Listeners {
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
+		boolean mayCancel = false;
 		if(checkActive("nothing-around")) {
 			if (!LocationUtils.hasOtherThan(loc, Materials.AIR) || (from.getX() == to.getX() && from.getZ() == to.getZ()))
 					return;
@@ -56,17 +57,15 @@ public class Spider extends Cheat implements Listeners {
 			boolean isAris = ((float) y) == p.getWalkSpeed();
 			if (((y > 0.499 && y < 0.7) || isAris) && !np.isUsingSlimeBlock && !p.isSprinting() && p.getVelocity().length() < 1.5) {
 				int relia = UniversalUtils.parseInPorcent(y * 160 + (isAris ? 39 : 0));
-				if (Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this, relia,
+				mayCancel = Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this, relia,
 						"nothing-around", "Nothing around him. To > From: " + y + " isAris: " + isAris + ", has not stab slairs")
-						&& isSetBack()) {
-					LocationUtils.teleportPlayerOnGround(p);
-				}
+						&& isSetBack();
 			}
 		}
 		if(checkActive("same-y")) {
 			int amount = 0;
 			if (y <= 0.0 || y == 0.25 || y == 0.5 || LocationUtils.isInWater(to)
-					|| LocationUtils.hasMaterialsAround(to, "LADDER", "CLIMB", "SCAFFOLD", "WATER", "LAVA", "VINE")) {
+					|| hasBypassBlockAround(to)) {//(to, "LADDER", "CLIMB", "SCAFFOLD", "WATER", "LAVA", "VINE")) {
 				np.lastY.clear();
 			} else {
 				int i = np.lastY.size() - 1;
@@ -88,14 +87,14 @@ public class Spider extends Cheat implements Listeners {
 				}
 			}
 			if (amount > 1) {
-				if (Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this, 80 + amount * 3,
+				mayCancel = (Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this, 80 + amount * 3,
 						"nothing-around", "Y: " + y + ", fall: " + p.getFallDistance() + ", aount: " + amount)
-						&& isSetBack()) {
-					LocationUtils.teleportPlayerOnGround(p);
-				}
+						&& isSetBack()) || mayCancel;
 			}
 			np.lastY.add(y);
 		}
+		if(mayCancel)
+			LocationUtils.teleportPlayerOnGround(p);
 	}
 	
 	@EventListener

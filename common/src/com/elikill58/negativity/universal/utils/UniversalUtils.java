@@ -50,6 +50,7 @@ public class UniversalUtils {
 
 	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	public static final String BUNDLED_ASSETS_BASE = "/assets/negativity/";
+	public static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
 	public static boolean HAVE_INTERNET = true;
 
 	public static int getMultipleOf(int i, int multiple, int more) {
@@ -356,6 +357,48 @@ public class UniversalUtils {
 			}
 		}
 		return YamlConfiguration.load(configFile);
+	}
+	
+	public static String hexToString(byte[] data) {
+		char[] chars = new char[data.length * 2];
+		for (int i = 0; i < data.length; i++) {
+			chars[i * 2] = HEX_DIGITS[(data[i] << 4) & 0xF];
+			chars[i * 2 + 1] = HEX_DIGITS[data[i] & 0xF];
+		}
+		return new String(chars);
+	}
+	
+	public static byte[] stringToHex(String string) {
+		int length = string.length();
+		if (length % 2 != 0) {
+			throw new IllegalArgumentException("Input string must have an even amount of characters");
+		}
+
+		byte[] bytes = new byte[length / 2];
+		for (int i = 0; i < length; i += 2) {
+			int h = hexToBin(string.charAt(i));
+			int l = hexToBin(string.charAt(i + 1));
+			if (h == -1 || l == -1) {
+				throw new IllegalArgumentException("contains illegal character for hexBinary: " + string);
+			}
+			
+			
+			bytes[i / 2] = (byte) (h * 16 + l);
+		}
+		return bytes;
+	}
+	
+	private static int hexToBin(char ch) {
+		if ('0' <= ch && ch <= '9') {
+			return ch - '0';
+		}
+		if ('A' <= ch && ch <= 'F') {
+			return ch - 'A' + 10;
+		}
+		if ('a' <= ch && ch <= 'f') {
+			return ch - 'a' + 10;
+		}
+		return -1;
 	}
 
 	public static OS os = null;

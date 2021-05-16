@@ -7,8 +7,10 @@ sourceSets {
 
 repositories {
     maven {
-        name 'bansystem-repo'
-        url 'https://raw.githubusercontent.com/DevKrieger/repository/master/'
+        url = 'http://repo.eliapp.fr:8080/repository/internal/'
+        metadataSources {
+            artifact()
+        }
     }
 }
 

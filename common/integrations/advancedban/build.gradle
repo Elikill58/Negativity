@@ -8,6 +8,9 @@ sourceSets {
 repositories {
     maven {
         url = 'http://repo.eliapp.fr:8080/repository/internal/'
+        metadataSources {
+            artifact()
+        }
     }
 }
 

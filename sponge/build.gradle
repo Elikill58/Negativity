@@ -9,14 +9,15 @@ buildscript {
     }
 
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:2.3-SNAPSHOT'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:4.1.+'
     }
 }
 
 plugins {
-    id 'net.minecrell.vanillagradle.server' version '2.2-6'
     id 'com.github.johnrengelman.shadow'
 }
+
+apply plugin: 'net.minecraftforge.gradle'
 
 sourceSets {
     main {
@@ -36,15 +37,15 @@ dependencies {
     api project(':common')
     compileOnly 'org.spongepowered:spongeapi:7.1.0'
 
+    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
+
     implementation 'org.bstats:bstats-sponge-lite:1.7'
 
     compileOnly 'com.github.CrushedPixel:PacketGate:0.1.1'
 }
 
 minecraft {
-    version = '1.12.2'
-    mappings = 'snapshot_20180131'
-    makeObfSourceJar = false
+    mappings channel: 'snapshot', version: '20180131-1.12'
 }
 
 processResources {
@@ -60,6 +61,11 @@ shadowJar {
     archiveBaseName.set('negativity')
     archiveAppendix.set('sponge')
     archiveClassifier.set(null)
+
+    dependencies {
+        it.include(it.project(':common'))
+        it.include(it.dependency('org.bstats:bstats-sponge-lite'))
+    }
 
     mergeServiceFiles()
     from(project(':common').tasks.shadowJar)

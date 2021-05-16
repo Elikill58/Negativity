@@ -22,55 +22,55 @@ import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 
 @Plugin(id = "negativity")
 public class VelocityNegativity {
-
+	
 	public static final LegacyChannelIdentifier NEGATIVITY_CHANNEL_ID = new LegacyChannelIdentifier(NegativityMessagesManager.CHANNEL_ID);
 	
-    private final ProxyServer server;
-    private final Logger logger;
-    private final PluginContainer container;
-
-    @Inject
-    public VelocityNegativity(ProxyServer server, Logger logger, PluginContainer container) {
-        this.server = server;
-        this.logger = logger;
+	private final ProxyServer server;
+	private final Logger logger;
+	private final PluginContainer container;
+	
+	@Inject
+	public VelocityNegativity(ProxyServer server, Logger logger, PluginContainer container) {
+		this.server = server;
+		this.logger = logger;
 		this.container = container;
 	}
-
-    public ProxyServer getServer() {
-    	return server;
-    }
-
-    public Logger getLogger() {
-    	return logger;
-    }
-
+	
+	public ProxyServer getServer() {
+		return server;
+	}
+	
+	public Logger getLogger() {
+		return logger;
+	}
+	
 	public PluginContainer getContainer() {
 		return container;
 	}
-
-    @Subscribe
-    public void onProxyInitialization(ProxyInitializeEvent event) {
-    	getLogger().info("Loading Negativity");
-	    server.getEventManager().register(this, new VelocityListeners());
-	    server.getChannelRegistrar().register(NEGATIVITY_CHANNEL_ID);
-	    server.getCommandManager().register("vnegativity", new VNegativityCommand());
-	    
+	
+	@Subscribe
+	public void onProxyInitialization(ProxyInitializeEvent event) {
+		getLogger().info("Loading Negativity");
+		server.getEventManager().register(this, new VelocityListeners());
+		server.getChannelRegistrar().register(NEGATIVITY_CHANNEL_ID);
+		server.getCommandManager().register("vnegativity", new VNegativityCommand());
+		
 		Adapter.setAdapter(new VelocityAdapter(this));
 		Negativity.loadNegativity();
-
+		
 		NegativityAccountStorage.setDefaultStorage("database");
-
+		
 		Stats.sendStartupStats(getServer().getBoundAddress().getPort());
-    	getLogger().info("Negativity enabled");
+		getLogger().info("Negativity enabled");
 	}
-
-    @Subscribe
-    public void onProxyDisable(ProxyShutdownEvent e) {
+	
+	@Subscribe
+	public void onProxyDisable(ProxyShutdownEvent e) {
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
 	}
-
-    public final File getDataFolder() {
-        return new File("./plugins/Negativity");
-    }
+	
+	public final File getDataFolder() {
+		return new File("./plugins/Negativity");
+	}
 }

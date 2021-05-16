@@ -46,40 +46,40 @@ import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.NamedTextColor;
 
 public class VelocityListeners {
-
-	public static List<Report> report = new ArrayList<>();
-
+	
+	public static final List<Report> REPORTS = new ArrayList<>();
+	
 	@Subscribe
 	public void onMessageReceived(PluginMessageEvent event) {
 		if (!event.getIdentifier().equals(VelocityNegativity.NEGATIVITY_CHANNEL_ID)) {
 			return;
 		}
-
+		
 		event.setResult(PluginMessageEvent.ForwardResult.handled());
-
+		
 		NegativityMessage message;
 		try {
 			message = NegativityMessagesManager.readMessage(event.getData());
 			if (message == null) {
 				Adapter.getAdapter().getLogger().warn("Received unknown plugin message from channel "
-						+ event.getIdentifier().getId() + " sent by " + event.getSource() + " to " + event.getTarget());
+					+ event.getIdentifier().getId() + " sent by " + event.getSource() + " to " + event.getTarget());
 				return;
 			}
 		} catch (IOException e) {
 			Adapter.getAdapter().getLogger().error("Could not read plugin message : " + e.getMessage());
 			return;
 		}
-
+		
 		Player p = (Player) (event.getSource() instanceof Player ? event.getSource() : (event.getTarget() instanceof Player ? event.getTarget() : null));
 		if (p == null) {
 			Adapter.getAdapter().getLogger().error("Source and Target not proxied (Source: " + event.getSource() + " Target: " + event.getTarget() + ")");
 			return;
 		}
-
+		
 		if (message instanceof AlertMessage) {
 			AlertMessage alert = (AlertMessage) message;
 			Object[] place = new Object[]{"%name%", alert.getPlayername(), "%cheat%", alert.getCheat(),
-					"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
+				"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (com.elikill58.negativity.api.entity.Player commonPlayer : Adapter.getAdapter().getOnlinePlayers()) {
 				NegativityPlayer nPlayer = NegativityPlayer.getNegativityPlayer(commonPlayer);
@@ -118,7 +118,7 @@ public class VelocityListeners {
 			});
 		} else if (message instanceof ReportMessage) {
 			ReportMessage report = (ReportMessage) message;
-			Object[] place = new Object[] { "%name%", report.getReported(), "%reason%", report.getReason(), "%report%", report.getReporter() };
+			Object[] place = new Object[]{"%name%", report.getReported(), "%reason%", report.getReason(), "%report%", report.getReporter()};
 			boolean hasPermitted = false;
 			for (com.elikill58.negativity.api.entity.Player commonPlayer : Adapter.getAdapter().getOnlinePlayers()) {
 				if (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(commonPlayer), Perm.SHOW_REPORT)) {
@@ -132,7 +132,7 @@ public class VelocityListeners {
 				}
 			}
 			if (!hasPermitted) {
-				VelocityListeners.report.add(new Report("/server " + p.getCurrentServer().get().getServerInfo().getName(), place));
+				VelocityListeners.REPORTS.add(new Report("/server " + p.getCurrentServer().get().getServerInfo().getName(), place));
 			}
 		} else if (message instanceof ProxyExecuteBanMessage) {
 			ProxyExecuteBanMessage banMessage = (ProxyExecuteBanMessage) message;
@@ -148,7 +148,7 @@ public class VelocityListeners {
 			Adapter.getAdapter().getLogger().warn("Unhandled plugin message: " + message.getClass().getName());
 		}
 	}
-
+	
 	private String getCommand(Player targetPlayer, Player notifiedPlayer) {
 		ServerInfo targetPlayerServer = targetPlayer.getCurrentServer().get().getServerInfo();
 		ServerInfo notifiedPlayerServer = notifiedPlayer.getCurrentServer().get().getServerInfo();
@@ -157,7 +157,7 @@ public class VelocityListeners {
 		}
 		return "/server " + notifiedPlayerServer.getName();
 	}
-
+	
 	@Subscribe
 	public void onLogin(com.velocitypowered.api.event.connection.LoginEvent e) {
 		Player p = e.getPlayer();
@@ -166,7 +166,7 @@ public class VelocityListeners {
 		if (!event.getLoginResult().equals(Result.ALLOWED))
 			e.setResult(ResultedEvent.ComponentResult.denied(Component.text(event.getKickMessage())));
 	}
-
+	
 	@Subscribe
 	public void onPostLogin(PostLoginEvent e) {
 		Player p = e.getPlayer();
@@ -174,7 +174,7 @@ public class VelocityListeners {
 		PlayerConnectEvent event = new PlayerConnectEvent(np.getPlayer(), np, "");
 		EventManager.callEvent(event);
 	}
-
+	
 	@Subscribe
 	public void onPlayerQuit(DisconnectEvent e) {
 		Player p = e.getPlayer();
@@ -182,21 +182,21 @@ public class VelocityListeners {
 		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, "");
 		EventManager.callEvent(event);
 	}
-
+	
 	@Subscribe
 	public void onServerChange(ServerConnectedEvent event) {
 		List<ModInfo.Mod> modsList = event.getPlayer().getModInfo()
-				.map(ModInfo::getMods)
-				.orElseGet(Collections::emptyList);
+			.map(ModInfo::getMods)
+			.orElseGet(Collections::emptyList);
 		if (modsList.isEmpty()) {
 			return;
 		}
-
+		
 		Map<String, String> mods = new HashMap<>();
 		for (ModInfo.Mod mod : modsList) {
 			mods.put(mod.getId(), mod.getVersion());
 		}
-
+		
 		try {
 			byte[] rawMessage = NegativityMessagesManager.writeMessage(new ClientModsListMessage(mods));
 			event.getServer().sendPluginMessage(VelocityNegativity.NEGATIVITY_CHANNEL_ID, rawMessage);
@@ -204,18 +204,17 @@ public class VelocityListeners {
 			Adapter.getAdapter().getLogger().error("Could not write ClientModsListMessage: " + e.getMessage());
 		}
 	}
-
+	
 	public static class Report {
-
-		private Object[] place;
-		private String cmd;
-
+		
+		private final Object[] place;
+		private final String cmd;
+		
 		public Report(String cmd, Object... parts) {
-			place = new Object[] { "%name%", parts[0], "%cheat%", parts[1], "%reliability%", parts[2], "%ping%",
-					parts[3] };
+			place = new Object[]{"%name%", parts[0], "%cheat%", parts[1], "%reliability%", parts[2], "%ping%", parts[3]};
 			this.cmd = cmd;
 		}
-
+		
 		public TextComponent toMessage(Player p) {
 			TextComponent.Builder msg = Component.text().content(Messages.getMessage(p.getUniqueId(), "alert", place));
 			String hover = Messages.getMessage(p.getUniqueId(), "alert_hover", place);

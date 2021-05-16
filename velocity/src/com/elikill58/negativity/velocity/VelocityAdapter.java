@@ -28,13 +28,13 @@ import com.elikill58.negativity.velocity.impl.plugin.VelocityExternalPlugin;
 import com.google.gson.Gson;
 
 public class VelocityAdapter extends ProxyAdapter {
-
-	private Configuration config;
-	private VelocityNegativity pl;
+	
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Proxy();
 	private final TranslationProviderFactory translationProviderFactory;
 	private final LoggerAdapter logger;
-
+	private Configuration config;
+	private final VelocityNegativity pl;
+	
 	public VelocityAdapter(VelocityNegativity pl) {
 		this.pl = pl;
 		this.config = UniversalUtils.loadConfig(new File(pl.getDataFolder(), "config.yml"), "config_bungee.yml");
@@ -51,29 +51,34 @@ public class VelocityAdapter extends ProxyAdapter {
 	public Configuration getConfig() {
 		return config;
 	}
-
+	
 	@Override
 	public File getDataFolder() {
 		return pl.getDataFolder();
 	}
-
+	
+	@Override
+	public LoggerAdapter getLogger() {
+		return logger;
+	}
+	
 	@Override
 	public void debug(String msg) {
-		if(getConfig().getBoolean("debug", false))
+		if (getConfig().getBoolean("debug", false))
 			getLogger().info(msg);
 	}
-
+	
 	@Override
 	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
 		return this.translationProviderFactory;
 	}
-
+	
 	@Override
 	public void reload() {
 		reloadConfig();
 		Negativity.loadNegativity();
 	}
-
+	
 	@Override
 	public String getVersion() {
 		return pl.getServer().getVersion().getVersion();
@@ -83,22 +88,22 @@ public class VelocityAdapter extends ProxyAdapter {
 	public String getPluginVersion() {
 		return pl.getContainer().getDescription().getVersion().orElse("unknown");
 	}
-
+	
 	@Override
 	public void reloadConfig() {
 		config = UniversalUtils.loadConfig(new File(pl.getDataFolder(), "config.yml"), "config_bungee.yml");
 	}
-
+	
 	@Override
 	public NegativityAccountManager getAccountManager() {
 		return accountManager;
 	}
-
+	
 	@Override
 	public void runConsoleCommand(String cmd) {
 		pl.getServer().getCommandManager().executeAsync(pl.getServer().getConsoleCommandSource(), cmd).join();
 	}
-
+	
 	@Override
 	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
 		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {
@@ -118,61 +123,31 @@ public class VelocityAdapter extends ProxyAdapter {
 			return false;
 		});
 	}
-
-	@Override
-	public LoggerAdapter getLogger() {
-		return logger;
-	}
-
+	
 	@Override
 	public List<UUID> getOnlinePlayersUUID() {
 		List<UUID> list = new ArrayList<>();
 		pl.getServer().getAllPlayers().forEach((p) -> list.add(p.getUniqueId()));
 		return list;
 	}
-
-	@Override
-	public double[] getTPS() {
-		return null;
-	}
-
-	@Override
-	public double getLastTPS() {
-		return 0;
-	}
-
-	@Override
-	public void sendMessageRunnableHover(com.elikill58.negativity.api.entity.Player p, String message, String hover,
-			String command) {
-		
-	}
-
+	
 	@Override
 	public List<Player> getOnlinePlayers() {
 		List<Player> list = new ArrayList<>();
 		pl.getServer().getAllPlayers().forEach((p) -> list.add(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer()));
 		return list;
 	}
-
+	
 	@Override
-	public Player getPlayer(String name) {
-		Optional<com.velocitypowered.api.proxy.Player> opt = pl.getServer().getPlayer(name);
-		if(opt.isPresent()) {
-			com.velocitypowered.api.proxy.Player p = opt.get();
-			return NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer();
-		} else
-			return null;
+	public double[] getTPS() {
+		return null;
 	}
-
+	
 	@Override
-	public Player getPlayer(UUID uuid) {
-		Optional<com.velocitypowered.api.proxy.Player> opt = pl.getServer().getPlayer(uuid);
-		if(opt.isPresent()) {
-			return NegativityPlayer.getNegativityPlayer(uuid, () -> new VelocityPlayer(opt.get())).getPlayer();
-		} else
-			return null;
+	public double getLastTPS() {
+		return 0;
 	}
-
+	
 	@Override
 	public OfflinePlayer getOfflinePlayer(String name) {
 		return null;
@@ -182,12 +157,37 @@ public class VelocityAdapter extends ProxyAdapter {
 	public OfflinePlayer getOfflinePlayer(UUID uuid) {
 		return null;
 	}
-
+	
+	@Override
+	public Player getPlayer(String name) {
+		Optional<com.velocitypowered.api.proxy.Player> opt = pl.getServer().getPlayer(name);
+		if (opt.isPresent()) {
+			com.velocitypowered.api.proxy.Player p = opt.get();
+			return NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer();
+		} else
+			return null;
+	}
+	
+	@Override
+	public Player getPlayer(UUID uuid) {
+		Optional<com.velocitypowered.api.proxy.Player> opt = pl.getServer().getPlayer(uuid);
+		if (opt.isPresent()) {
+			return NegativityPlayer.getNegativityPlayer(uuid, () -> new VelocityPlayer(opt.get())).getPlayer();
+		} else
+			return null;
+	}
+	
+	@Override
+	public void sendMessageRunnableHover(com.elikill58.negativity.api.entity.Player p, String message, String hover,
+										 String command) {
+		
+	}
+	
 	@Override
 	public boolean hasPlugin(String name) {
 		return pl.getServer().getPluginManager().isLoaded(name);
 	}
-
+	
 	@Override
 	public ExternalPlugin getPlugin(String name) {
 		return new VelocityExternalPlugin(pl.getServer().getPluginManager().getPlugin(name).orElse(null));
@@ -196,9 +196,9 @@ public class VelocityAdapter extends ProxyAdapter {
 	@Override
 	public List<ExternalPlugin> getDependentPlugins() {
 		return pl.getServer().getPluginManager().getPlugins().stream()
-				.filter(plugin -> plugin.getDescription().getDependency("negativity").isPresent())
-				.map(VelocityExternalPlugin::new)
-				.collect(Collectors.toList());
+			.filter(plugin -> plugin.getDescription().getDependency("negativity").isPresent())
+			.map(VelocityExternalPlugin::new)
+			.collect(Collectors.toList());
 	}
 	
 	@Override

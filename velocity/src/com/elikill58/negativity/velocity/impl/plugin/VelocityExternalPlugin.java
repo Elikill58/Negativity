@@ -4,7 +4,7 @@ import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.velocitypowered.api.plugin.PluginContainer;
 
 public class VelocityExternalPlugin extends ExternalPlugin {
-
+	
 	private final PluginContainer pl;
 	
 	public VelocityExternalPlugin(PluginContainer pl) {
@@ -20,12 +20,12 @@ public class VelocityExternalPlugin extends ExternalPlugin {
 	public boolean isEnabled() {
 		return pl != null;
 	}
-
+	
 	@Override
 	public Object getDefault() {
 		// Let's assume the instance exists
 		//noinspection OptionalGetWithoutIsPresent
 		return pl.getInstance().get();
 	}
-
+	
 }

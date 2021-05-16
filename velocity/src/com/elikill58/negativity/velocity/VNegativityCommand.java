@@ -18,6 +18,10 @@ import net.kyori.adventure.text.Component;
 
 public class VNegativityCommand implements SimpleCommand {
 	
+	private static boolean hasAdminPermission(CommandSource source) {
+		return !(source instanceof Player) || Perm.hasPerm(NegativityPlayer.getCached(((Player) source).getUniqueId()), Perm.ADMIN);
+	}
+	
 	@Override
 	public void execute(Invocation invocation) {
 		CommandSource source = invocation.source();
@@ -62,9 +66,5 @@ public class VNegativityCommand implements SimpleCommand {
 			}
 		}
 		return Collections.emptyList();
-	}
-	
-	private static boolean hasAdminPermission(CommandSource source) {
-		return !(source instanceof Player) || Perm.hasPerm(NegativityPlayer.getCached(((Player) source).getUniqueId()), Perm.ADMIN);
 	}
 }

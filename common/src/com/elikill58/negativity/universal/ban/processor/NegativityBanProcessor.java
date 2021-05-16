@@ -1,6 +1,6 @@
 package com.elikill58.negativity.universal.ban.processor;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.ban.Ban;

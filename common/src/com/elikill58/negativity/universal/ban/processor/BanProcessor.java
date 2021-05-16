@@ -3,7 +3,7 @@ package com.elikill58.negativity.universal.ban.processor;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;

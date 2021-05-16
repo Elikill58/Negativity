@@ -1,6 +1,6 @@
 package com.elikill58.negativity.sponge8;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;

@@ -1,6 +1,6 @@
 package com.elikill58.negativity.api.ray;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.item.Material;

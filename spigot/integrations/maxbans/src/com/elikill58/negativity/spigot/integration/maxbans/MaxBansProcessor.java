@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.maxgamer.maxbans.MaxBans;
 import org.maxgamer.maxbans.banmanager.HistoryRecord;

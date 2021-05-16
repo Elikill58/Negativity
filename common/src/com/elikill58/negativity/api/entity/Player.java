@@ -4,7 +4,7 @@ import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.inventory.Inventory;

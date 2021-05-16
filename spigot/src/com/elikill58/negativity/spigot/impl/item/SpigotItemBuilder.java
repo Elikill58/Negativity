@@ -3,7 +3,7 @@ package com.elikill58.negativity.spigot.impl.item;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;

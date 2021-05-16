@@ -1,6 +1,6 @@
 package com.elikill58.negativity.universal.translation;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public interface TranslationProviderFactory {
 

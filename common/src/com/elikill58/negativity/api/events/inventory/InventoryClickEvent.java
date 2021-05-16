@@ -1,6 +1,6 @@
 package com.elikill58.negativity.api.events.inventory;
 
-import javax.annotation.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Event;

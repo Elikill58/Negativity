@@ -94,10 +94,9 @@ public class VelocityAdapter extends ProxyAdapter {
 		return accountManager;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void runConsoleCommand(String cmd) {
-		pl.getServer().getCommandManager().execute(pl.getServer().getConsoleCommandSource(), cmd);
+		pl.getServer().getCommandManager().executeAsync(pl.getServer().getConsoleCommandSource(), cmd).join();
 	}
 
 	@Override

@@ -1,57 +1,60 @@
 package com.elikill58.negativity.velocity;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
-import com.velocitypowered.api.command.Command;
 import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 
-import net.kyori.text.TextComponent;
+import net.kyori.adventure.identity.Identity;
+import net.kyori.adventure.text.Component;
 
-public class VNegativityCommand implements Command {
-
-	@SuppressWarnings("deprecation")
+public class VNegativityCommand implements SimpleCommand {
+	
 	@Override
-	public void execute(CommandSource source, @NonNull String[] args) {
+	public void execute(Invocation invocation) {
+		CommandSource source = invocation.source();
 		if (source instanceof Player && !Perm.hasPerm(NegativityPlayer.getCached(((Player) source).getUniqueId()), Perm.ADMIN)) {
-			source.sendMessage(TextComponent.of(Messages.getMessage(((Player) source).getUniqueId(), "not_permission")));
+			source.sendMessage(Identity.nil(), Component.text(Messages.getMessage(((Player) source).getUniqueId(), "not_permission")));
 			return;
 		}
-
+		
+		String[] args = invocation.arguments();
 		if (args.length <= 0) {
-			source.sendMessage(TextComponent.of("You must use a subcommand"));
+			source.sendMessage(Component.text("You must use a subcommand"));
 			return;
 		}
-
+		
 		if (args[0].equalsIgnoreCase("admin")) {
 			if (args.length > 1 && args[1].equalsIgnoreCase("updateMessages")) {
-				MessagesUpdater.performUpdate("lang", (message, placeholders) -> source.sendMessage(TextComponent.of(Messages.getMessage(message, (Object[]) placeholders))));
+				MessagesUpdater.performUpdate("lang", (message, placeholders) -> source.sendMessage(Component.text(Messages.getMessage(message, (Object[]) placeholders))));
 			} else {
-				source.sendMessage(TextComponent.of("You must use a subcommand"));
+				source.sendMessage(Component.text("You must use a subcommand"));
 			}
 			return;
-		} else if(args[0].equalsIgnoreCase("reload")) {
+		} else if (args[0].equalsIgnoreCase("reload")) {
 			Adapter.getAdapter().reload();
-			source.sendMessage(TextComponent.of(Messages.getMessage("negativity.reload_done")));
+			source.sendMessage(Component.text(Messages.getMessage("negativity.reload_done")));
 			return;
 		}
-
-		source.sendMessage(TextComponent.of("Unknown subcommand"));
+		
+		source.sendMessage(Component.text("Unknown subcommand"));
 	}
-
+	
 	@Override
-	public List<String> suggest(CommandSource source, @NonNull String[] args) {
-		if (args.length == 1) {
+	public List<String> suggest(Invocation invocation) {
+		CommandSource source = invocation.source();
+		String[] args = invocation.arguments();
+		if (args.length < 2) {
 			if (hasAdminPermission(source)) {
-				return Collections.singletonList("admin");
+				return Arrays.asList("admin", "reload");
 			}
 		} else if (args.length == 2 && args[0].equalsIgnoreCase("admin")) {
 			if (hasAdminPermission(source)) {
@@ -60,7 +63,7 @@ public class VNegativityCommand implements Command {
 		}
 		return Collections.emptyList();
 	}
-
+	
 	private static boolean hasAdminPermission(CommandSource source) {
 		return !(source instanceof Player) || Perm.hasPerm(NegativityPlayer.getCached(((Player) source).getUniqueId()), Perm.ADMIN);
 	}

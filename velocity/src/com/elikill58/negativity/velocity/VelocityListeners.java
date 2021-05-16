@@ -39,13 +39,12 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.ServerInfo;
 import com.velocitypowered.api.util.ModInfo;
 
-import net.kyori.text.TextComponent;
-import net.kyori.text.TextComponent.Builder;
-import net.kyori.text.event.ClickEvent;
-import net.kyori.text.event.HoverEvent;
-import net.kyori.text.format.TextColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 
-@SuppressWarnings("deprecation")
 public class VelocityListeners {
 
 	public static List<Report> report = new ArrayList<>();
@@ -86,24 +85,26 @@ public class VelocityListeners {
 				NegativityPlayer nPlayer = NegativityPlayer.getNegativityPlayer(commonPlayer);
 				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT)) {
 					Player pp = (Player) commonPlayer.getDefault();
-					Builder msg = TextComponent.builder();
-					msg.append(Messages.getMessage(pp.getUniqueId(), alertMessageKey, place));
-
-					Builder hoverMessage = TextComponent.builder(Messages.getMessage(pp.getUniqueId(), "alert_hover", place), TextColor.GOLD);
+					TextComponent.Builder msg = Component.text()
+						.content(Messages.getMessage(pp.getUniqueId(), alertMessageKey, place));
+					
+					TextComponent.Builder hoverMessage = Component.text()
+						.content(Messages.getMessage(pp.getUniqueId(), "alert_hover", place))
+						.color(NamedTextColor.GOLD);
 					Cheat.CheatHover hoverInfo = alert.getHoverInfo();
 					if (hoverInfo != null) {
-						hoverMessage.append(TextComponent.newline())
-								.append(TextComponent.newline())
-								.resetStyle()
-								.append(Messages.getMessage(hoverInfo.compile(nPlayer)));
+						hoverMessage.append(Component.newline())
+							.append(Component.newline())
+							.resetStyle()
+							.append(Component.text(Messages.getMessage(hoverInfo.compile(nPlayer))));
 					}
-
-					hoverMessage.append(TextComponent.newline())
-							.append(TextComponent.newline())
-							.append(Messages.getMessage(pp.getUniqueId(), "alert_tp_info", "%playername%", alert.getPlayername()));
-
-					msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, hoverMessage.build()));
-					msg.clickEvent(ClickEvent.of(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
+					
+					hoverMessage.append(Component.newline())
+						.append(Component.newline())
+						.append(Component.text(Messages.getMessage(pp.getUniqueId(), "alert_tp_info", "%playername%", alert.getPlayername())));
+					
+					msg.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, hoverMessage.build()));
+					msg.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
 					pp.sendMessage(msg.build());
 				}
 			}
@@ -123,10 +124,10 @@ public class VelocityListeners {
 				if (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(commonPlayer), Perm.SHOW_REPORT)) {
 					hasPermitted = true;
 					Player pp = (Player) commonPlayer.getDefault();
-					Builder msg = TextComponent.builder();
-					msg.append(Messages.getMessage(pp.getUniqueId(), "report", place));
-					msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, TextComponent.of(Messages.getMessage(pp.getUniqueId(), "report_hover", "%playername%", report.getReported()))));
-					msg.clickEvent(ClickEvent.of(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
+					TextComponent.Builder msg = Component.text()
+						.content(Messages.getMessage(pp.getUniqueId(), "report", place))
+						.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(Messages.getMessage(pp.getUniqueId(), "report_hover", "%playername%", report.getReported()))))
+						.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
 					pp.sendMessage(msg.build());
 				}
 			}
@@ -162,8 +163,8 @@ public class VelocityListeners {
 		Player p = e.getPlayer();
 		LoginEvent event = new LoginEvent(p.getUniqueId(), p.getUsername(), e.getResult().isAllowed() ? Result.ALLOWED : Result.KICK_BANNED, p.getRemoteAddress().getAddress(), "");
 		EventManager.callEvent(event);
-		if(!event.getLoginResult().equals(Result.ALLOWED))
-			e.setResult(ResultedEvent.ComponentResult.denied(TextComponent.of(event.getKickMessage())));
+		if (!event.getLoginResult().equals(Result.ALLOWED))
+			e.setResult(ResultedEvent.ComponentResult.denied(Component.text(event.getKickMessage())));
 	}
 
 	@Subscribe
@@ -216,18 +217,18 @@ public class VelocityListeners {
 		}
 
 		public TextComponent toMessage(Player p) {
-			Builder msg = TextComponent.builder(Messages.getMessage(p.getUniqueId(), "alert", place));
+			TextComponent.Builder msg = Component.text().content(Messages.getMessage(p.getUniqueId(), "alert", place));
 			String hover = Messages.getMessage(p.getUniqueId(), "alert_hover", place);
 			if (hover.contains("\\n")) {
-				Builder hoverMessage = TextComponent.builder("");
-				hoverMessage.color(TextColor.GOLD);
-				for(String s : hover.split("\\n"))
-					hoverMessage.append(TextComponent.builder(s));
-				msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, hoverMessage.build()));
-			} else
-				msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, TextComponent.builder(hover).build()));
-			msg.clickEvent(ClickEvent.of(ClickEvent.Action.RUN_COMMAND, cmd));
-			return msg.build();
+				TextComponent.Builder hoverMessage = Component.text().color(NamedTextColor.GOLD);
+				for (String s : hover.split("\\n")) {
+					hoverMessage.append(Component.text(s));
+				}
+				msg.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, hoverMessage.build()));
+			} else {
+				msg.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(hover)));
+			}
+			return msg.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, cmd)).build();
 		}
 	}
 }

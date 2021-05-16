@@ -8,9 +8,8 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Version;
 import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 
-import net.kyori.text.TextComponent;
+import net.kyori.adventure.text.Component;
 
-@SuppressWarnings("deprecation")
 public class VelocityPlayer extends AbstractProxyPlayer {
 
 	private final com.velocitypowered.api.proxy.Player pp;
@@ -46,7 +45,7 @@ public class VelocityPlayer extends AbstractProxyPlayer {
 
 	@Override
 	public void sendMessage(String msg) {
-		pp.sendMessage(TextComponent.of(msg));
+		pp.sendMessage(Component.text(msg));
 	}
 
 	@Override
@@ -66,7 +65,7 @@ public class VelocityPlayer extends AbstractProxyPlayer {
 	
 	@Override
 	public void kick(String reason) {
-		pp.disconnect(TextComponent.of(reason));
+		pp.disconnect(Component.text(reason));
 	}
 
 	@Override

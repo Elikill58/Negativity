@@ -18,15 +18,14 @@ public class AlertMessage implements NegativityMessage {
 	private String cheat;
 	private int reliability;
 	private int ping;
-	@Nullable
-	private Cheat.CheatHover hoverInfo;
+	private Cheat.@Nullable CheatHover hoverInfo;
 	private int alertsCount;
 
 	public AlertMessage() {
 		this("", "", -1, -1, null, 0);
 	}
 
-	public AlertMessage(String playername, String cheat, int reliability, int ping, @Nullable Cheat.CheatHover hoverInfo, int alertsCount) {
+	public AlertMessage(String playername, String cheat, int reliability, int ping, Cheat.@Nullable CheatHover hoverInfo, int alertsCount) {
 		this.playername = playername;
 		this.cheat = cheat;
 		this.reliability = reliability;
@@ -60,8 +59,7 @@ public class AlertMessage implements NegativityMessage {
 		output.writeInt(alertsCount);
 	}
 
-	@Nullable
-	private Cheat.CheatHover readCheatHover(DataInputStream input) throws IOException {
+	private Cheat.@Nullable CheatHover readCheatHover(DataInputStream input) throws IOException {
 		String key = input.readUTF();
 		if (key.isEmpty()) {
 			return null;
@@ -75,7 +73,7 @@ public class AlertMessage implements NegativityMessage {
 		return new Cheat.CheatHover(key, args.toArray());
 	}
 
-	private void writeCheatHover(@Nullable Cheat.CheatHover hover, DataOutputStream output) throws IOException {
+	private void writeCheatHover(Cheat.@Nullable CheatHover hover, DataOutputStream output) throws IOException {
 		if (hover == null) {
 			output.writeUTF("");
 			return;
@@ -105,8 +103,7 @@ public class AlertMessage implements NegativityMessage {
 		return ping;
 	}
 
-	@Nullable
-	public Cheat.CheatHover getHoverInfo() {
+	public Cheat.@Nullable CheatHover getHoverInfo() {
 		return hoverInfo;
 	}
 

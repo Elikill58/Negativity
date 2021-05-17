@@ -69,4 +69,9 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 	public List<Ban> getActiveBanOnSameIP(String ip) {
 		return Collections.emptyList();
 	}
+	
+	@Override
+	public List<Ban> getAllBans() {
+		return Collections.emptyList();
+	}
 }

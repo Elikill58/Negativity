@@ -39,5 +39,18 @@ public interface ActiveBanStorage {
 	 */
 	void remove(UUID playerId);
 	
+	/**
+	 * Get all active ban on given IP
+	 * 
+	 * @param ip which we are looking for bans
+	 * @return all active ban on ip
+	 */
 	List<Ban> loadBanOnIP(String ip);
+
+	/**
+	 * Get all active bans
+	 * 
+	 * @return all active bans
+	 */
+	List<Ban> getAll();
 }

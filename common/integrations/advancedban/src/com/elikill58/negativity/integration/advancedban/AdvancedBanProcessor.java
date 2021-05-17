@@ -22,6 +22,7 @@ import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 import me.leoko.advancedban.manager.PunishmentManager;
 import me.leoko.advancedban.utils.Punishment;
 import me.leoko.advancedban.utils.PunishmentType;
+import me.leoko.advancedban.utils.SQLQuery;
 
 public class AdvancedBanProcessor implements BanProcessor {
 
@@ -51,7 +52,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
 		CompletableFuture.runAsync(punishment::delete);
 		
-		return new BanResult(loggedBanFrom(playerId, punishment, BanStatus.REVOKED));
+		return new BanResult(loggedBanFrom(punishment, BanStatus.REVOKED));
 	}
 
 	@Override
@@ -82,7 +83,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 	public List<Ban> getLoggedBans(UUID playerId) {
 		List<Punishment> punishments = PunishmentManager.get().getPunishments(playerId.toString(), PunishmentType.BAN, false);
 		List<Ban> loggedBans = new ArrayList<>();
-		punishments.forEach(punishment -> loggedBans.add(loggedBanFrom(playerId, punishment, BanStatus.EXPIRED)));
+		punishments.forEach(punishment -> loggedBans.add(loggedBanFrom(punishment, BanStatus.EXPIRED)));
 		return loggedBans;
 	}
 	
@@ -91,8 +92,16 @@ public class AdvancedBanProcessor implements BanProcessor {
 		return Collections.emptyList();
 	}
 
-	private Ban loggedBanFrom(UUID uuid, Punishment punishment, BanStatus status) {
-		return new Ban(uuid,
+	@Override
+	public List<Ban> getAllBans() {
+		List<Punishment> punishments = PunishmentManager.get().getPunishments(SQLQuery.SELECT_ALL_PUNISHMENTS);
+		List<Ban> loggedBans = new ArrayList<>();
+		punishments.forEach(punishment -> loggedBans.add(loggedBanFrom(punishment, BanStatus.EXPIRED)));
+		return loggedBans;
+	}
+
+	private Ban loggedBanFrom(Punishment punishment, BanStatus status) {
+		return new Ban(UUID.fromString(punishment.getUuid()),
 				punishment.getReason(),
 				punishment.getOperator(),
 				BanType.UNKNOW,

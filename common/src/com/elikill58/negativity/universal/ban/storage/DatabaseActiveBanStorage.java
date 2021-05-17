@@ -43,15 +43,7 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 			if (!rs.next()) {
 				return null;
 			}
-
-			String reason = rs.getString("reason");
-			long expirationTime = rs.getLong("expiration_time");
-			String cheatName = rs.getString("cheat_name");
-			String bannedBy = rs.getString("banned_by");
-			String ip = rs.getString("ip");
-			Timestamp executionTimestamp = rs.getTimestamp("execution_time");
-			long executionTime = executionTimestamp == null ? -1 : executionTimestamp.getTime();
-			return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, cheatName, ip, BanStatus.ACTIVE, executionTime);
+			return getBan(rs);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -98,18 +90,39 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 
 			ResultSet rs = stm.executeQuery();
 			while(rs.next()) {
-				UUID playerId = UUID.fromString(rs.getString("id"));
-				String reason = rs.getString("reason");
-				long expirationTime = rs.getLong("expiration_time");
-				String cheatName = rs.getString("cheat_name");
-				String bannedBy = rs.getString("banned_by");
-				Timestamp executionTimestamp = rs.getTimestamp("execution_time");
-				long executionTime = executionTimestamp == null ? -1 : executionTimestamp.getTime();
-				list.add(new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, cheatName, ip, BanStatus.ACTIVE, executionTime));
+				list.add(getBan(rs));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+
+	@Override
+	public List<Ban> getAll() {
+		try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_bans_active")) {
+			ResultSet rs = stm.executeQuery();
+			List<Ban> list = new ArrayList<Ban>();
+			while(rs.next()) {
+				list.add(getBan(rs));
+			}
+			return list;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return new ArrayList<Ban>();
+	}
+
+	private Ban getBan(ResultSet rs) throws SQLException {
+		UUID playerId = UUID.fromString(rs.getString("id"));
+		String reason = rs.getString("reason");
+		long expirationTime = rs.getLong("expiration_time");
+		String cheatName = rs.getString("cheat_name");
+		String bannedBy = rs.getString("banned_by");
+		String ip = rs.getString("ip");
+		Timestamp executionTimestamp = rs.getTimestamp("execution_time");
+		long executionTime = executionTimestamp == null ? -1 : executionTimestamp.getTime();
+		return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, cheatName, ip, BanStatus.ACTIVE, executionTime);
 	}
 }

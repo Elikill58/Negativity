@@ -67,6 +67,13 @@ public interface BanProcessor {
 	List<Ban> getActiveBanOnSameIP(String ip);
 	
 	/**
+	 * Get all current ban.
+	 * 
+	 * @return all active bans
+	 */
+	List<Ban> getAllBans();
+	
+	/**
 	 * @return whether Negativity should kick banned players when this BanProcessor
 	 * 	is used, should return {@code false} if bans are handled by another plugin.
 	 */

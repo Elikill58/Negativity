@@ -147,6 +147,32 @@ public class LiteBansProcessor implements BanProcessor {
 		}).join();
 	}
 	
+	@Override
+	public List<Ban> getAllBans() {
+		return CompletableFuture.supplyAsync(() -> {
+			List<Ban> loggedBans = new ArrayList<>();
+			try (PreparedStatement st = Database.get().prepareStatement("SELECT * FROM {bans} WHERE active = ?")) {
+			    st.setBoolean(1, true);
+			    try (ResultSet rs = st.executeQuery()) {
+			        while (rs.next()) {
+			        	UUID playerId = UUID.fromString(rs.getString("uuid"));
+			            String reason = rs.getString("reason");
+			            String ip = rs.getString("ip");
+			            String bannedByName = rs.getString("banned_by_name");
+			            BanType banType = getBanType(rs.getString("banned_by_uuid"));
+			            long revocation = rs.getTimestamp("removed_by_date").getTime();
+			            long time = rs.getLong("time");
+			            long until = rs.getLong("until");
+			            loggedBans.add(new Ban(playerId, reason, bannedByName, banType, until, reason, ip, BanStatus.ACTIVE, time, revocation));
+			        }
+			    }
+			} catch (SQLException e) {
+			    e.printStackTrace();
+			}
+			return loggedBans;
+		}).join();
+	}
+	
 	public BanType getBanType(String type) {
 		if(type.equalsIgnoreCase("CONSOLE"))
 			return BanType.CONSOLE;

@@ -19,6 +19,7 @@ import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.ChatUtils;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class BanCommand implements CommandListeners, TabListeners {
 
@@ -28,6 +29,36 @@ public class BanCommand implements CommandListeners, TabListeners {
 			Messages.sendMessage(sender, "not_permission");
 			return false;
 		}
+		if(!BanManager.banActive) {
+			Messages.sendMessage(sender, "ban.not_active");
+			return false;
+		}
+		if(arg.length >= 1 && arg[0].equalsIgnoreCase("list")) {
+			List<Ban> activeBan = BanManager.getProcessor().getAllBans();
+			if(activeBan.isEmpty()) {
+				Messages.sendMessage(sender, "ban.list.none");
+				return false;
+			}
+			int linePerPage = 10;
+			int start = 0, end = linePerPage;
+			if(arg.length >= 2 && UniversalUtils.isInteger(arg[1])) {
+				// selecting page
+				int page = Integer.parseInt(arg[1]);
+				start = page * linePerPage;
+				end = (page + 1) * linePerPage;
+			}
+			if(end > activeBan.size())
+				end = activeBan.size();
+			Messages.sendMessage(sender, "ban.list.header", "%start%", start + 1, "%end%", end, "%max%", activeBan.size());
+			for(int i = start; i < end; i++) {
+				if(activeBan.size() <= i)
+					return false;
+				Ban ban = activeBan.get(i);
+				Messages.sendMessage(sender, "ban.list.line", "%number%", i + 1, "%name%", Adapter.getAdapter().getOfflinePlayer(ban.getPlayerId()).getName(), "%by%", ban.getBannedBy(), "%reason%", ban.getReason());
+			}
+			return false;
+		}
+		
 		if (arg.length < 3) {
 			Messages.sendMessageList(sender, "ban.help");
 			return false;

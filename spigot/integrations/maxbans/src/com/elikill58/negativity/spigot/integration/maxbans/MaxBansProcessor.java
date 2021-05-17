@@ -106,6 +106,15 @@ public class MaxBansProcessor implements BanProcessor {
 		return list;
 	}
 	
+	@Override
+	public List<Ban> getAllBans() {
+		List<Ban> loggedBans = new ArrayList<>();
+		MaxBans.instance.getBanManager().getBans().forEach((name, ban) -> {
+			loggedBans.add(new Ban(UUID.fromString(ban.getId()), ban.getKickMessage(), ban.getBanner(), BanType.UNKNOW, 0, ban.getKickMessage(), null, BanStatus.ACTIVE, ban.getCreated()));
+		});
+		return loggedBans;
+	}
+	
 	public static class Provider implements BanProcessorProvider, PluginDependentExtension {
 		
 		@Override

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.io.UncheckedIOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -68,6 +69,25 @@ public class FileActiveBanStorage implements ActiveBanStorage {
 		} catch (IOException e) {
 			throw new UncheckedIOException(e);
 		}
+	}
+	
+	@Override
+	public List<Ban> getAll() {
+		List<Ban> list = new ArrayList<Ban>();
+		Path banFile = banDir.resolve("active.txt");
+		if (Files.notExists(banFile))
+			return list;
+
+		try (BufferedReader reader = Files.newBufferedReader(banFile)) {
+			String line;
+			while ((line = reader.readLine()) != null) {
+				list.add(fromString(line));
+			}
+		} catch (IOException e) {
+			throw new UncheckedIOException(e);
+		}
+
+		return list;
 	}
 
 	/**

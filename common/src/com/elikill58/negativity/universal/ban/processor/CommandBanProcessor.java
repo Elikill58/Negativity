@@ -54,6 +54,11 @@ public class CommandBanProcessor implements BanProcessor {
 		return Collections.emptyList();
 	}
 
+	@Override
+	public List<Ban> getAllBans() {
+		return Collections.emptyList();
+	}
+
 	private static String applyPlaceholders(String rawCommand, UUID playerId, String reason) {
 		String life = "?";
 		String name = "???";

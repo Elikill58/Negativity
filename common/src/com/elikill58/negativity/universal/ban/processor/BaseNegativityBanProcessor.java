@@ -93,6 +93,11 @@ public class BaseNegativityBanProcessor implements BanProcessor {
 		}
 		return activeBanStorage.loadBanOnIP(ip);
 	}
+
+	@Override
+	public List<Ban> getAllBans() {
+		return activeBanStorage.getAll();
+	}
 	
 	@Override
 	public boolean isHandledByNegativity() {

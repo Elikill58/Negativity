@@ -99,6 +99,15 @@ public class BukkitBanProcessor implements BanProcessor {
 	public List<Ban> getActiveBanOnSameIP(String ip) {
 		return Collections.emptyList();
 	}
+	
+	@SuppressWarnings("deprecation")
+	@Override
+	public List<Ban> getAllBans() {
+		List<Ban> loggedBans = new ArrayList<>();
+		Bukkit.getServer().getBanList(BanList.Type.NAME).getBanEntries()
+				.forEach(entry -> loggedBans.add(loggedBanFrom(entry, Bukkit.getOfflinePlayer(entry.getTarget()).getUniqueId(), false)));
+		return loggedBans;
+	}
 
 	private Ban loggedBanFrom(BanEntry banEntry, UUID playerId, boolean revoked) {
 		long expirationTime = -1;

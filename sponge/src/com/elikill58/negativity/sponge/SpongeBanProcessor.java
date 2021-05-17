@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -12,6 +13,7 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.api.service.ban.BanService;
 import org.spongepowered.api.text.serializer.TextSerializers;
+import org.spongepowered.api.util.ban.Ban.Profile;
 import org.spongepowered.api.util.ban.BanTypes;
 
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -68,12 +70,8 @@ public class SpongeBanProcessor implements BanProcessor {
 			return null;
 		}
 
-		org.spongepowered.api.util.ban.Ban.Profile revokedBan = existingBan.get();
-		String reason = revokedBan.getReason().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
-		String bannedBy = revokedBan.getBanSource().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
-		long expirationTime = revokedBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
-		long executionTime = revokedBan.getCreationDate().toEpochMilli();
-		return new BanResult(new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, BanStatus.REVOKED, executionTime, System.currentTimeMillis()));
+		
+		return new BanResult(toNegativityBan(existingBan.get(), playerId));
 	}
 
 	@Override
@@ -98,13 +96,8 @@ public class SpongeBanProcessor implements BanProcessor {
 		if (!existingBan.isPresent()) {
 			return null;
 		}
-
-		org.spongepowered.api.util.ban.Ban.Profile activeBan = existingBan.get();
-		String reason = activeBan.getReason().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
-		String bannedBy = activeBan.getBanSource().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
-		long expirationTime = activeBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
-		long executionTime = activeBan.getCreationDate().toEpochMilli();
-		return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, BanStatus.ACTIVE, executionTime);
+		
+		return toNegativityBan(existingBan.get(), playerId);
 	}
 
 	@Override
@@ -115,6 +108,28 @@ public class SpongeBanProcessor implements BanProcessor {
 	@Override
 	public List<Ban> getActiveBanOnSameIP(String ip) {
 		return Collections.emptyList();
+	}
+
+	@Override
+	public List<Ban> getAllBans() {
+		BanService banService = Sponge.getServiceManager().provide(BanService.class).orElse(null);
+		return banService.getProfileBans().stream().map(this::toNegativityBan).collect(Collectors.toList());
+	}
+
+	private Ban toNegativityBan(Profile profile) {
+		String reason = profile.getReason().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
+		String bannedBy = profile.getBanSource().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
+		long expirationTime = profile.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
+		long executionTime = profile.getCreationDate().toEpochMilli();
+		return new Ban(profile.getProfile().getUniqueId(), reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, BanStatus.ACTIVE, executionTime);
+	}
+
+	private Ban toNegativityBan(org.spongepowered.api.util.ban.Ban activeBan, UUID uuid) {
+		String reason = activeBan.getReason().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
+		String bannedBy = activeBan.getBanSource().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
+		long expirationTime = activeBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
+		long executionTime = activeBan.getCreationDate().toEpochMilli();
+		return new Ban(uuid, reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, BanStatus.ACTIVE, executionTime);
 	}
 	
 	public static class Provider implements BanProcessorProvider, PlatformDependentExtension {

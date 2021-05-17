@@ -16,6 +16,7 @@ import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 
 import ch.dkrieger.bansystem.lib.BanSystem;
 import ch.dkrieger.bansystem.lib.player.NetworkPlayer;
+import ch.dkrieger.bansystem.lib.player.PlayerManager;
 import ch.dkrieger.bansystem.lib.player.history.BanType;
 import ch.dkrieger.bansystem.lib.player.history.entry.HistoryEntry;
 import ch.dkrieger.bansystem.lib.player.history.entry.Unban;
@@ -60,6 +61,19 @@ public class DKBansProcessor implements BanProcessor {
 		List<Ban> list = new ArrayList<Ban>();
 		BanSystem.getInstance().getPlayerManager().getPlayers(ip)
 				.forEach((p) -> list.addAll(getLoggedBans(p.getUUID())));
+		return list;
+	}
+	
+	@Override
+	public List<Ban> getAllBans() {
+		List<Ban> list = new ArrayList<>();
+		PlayerManager pm = BanSystem.getInstance().getPlayerManager();
+		pm.getLoadedPlayers().forEach((uuid, np) -> {
+			ch.dkrieger.bansystem.lib.player.history.entry.Ban ban = np.getBan(BanType.NETWORK);
+			if(ban == null)
+				return;
+			list.add(parseToNegativityBan(ban, BanStatus.ACTIVE));
+		});
 		return list;
 	}
 

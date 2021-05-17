@@ -28,7 +28,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 		try {
 			Connection connection = Database.getConnection();
 			if (connection != null) {
-				DatabaseMigrator.executeRemainingMigrations(connection, "accounts");
+				DatabaseMigrator.executeRemainingMigrations(connection, Database.getType().getType(), "accounts");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

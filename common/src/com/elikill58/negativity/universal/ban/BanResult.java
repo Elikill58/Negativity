@@ -1,5 +1,7 @@
 package com.elikill58.negativity.universal.ban;
 
+import java.util.Objects;
+
 public class BanResult {
 	
 	private final BanResultType resultType;
@@ -30,6 +32,24 @@ public class BanResult {
 	
 	public boolean isSuccess() {
 		return getResultType().isSuccess();
+	}
+	
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		BanResult banResult = (BanResult) o;
+		return resultType == banResult.resultType && Objects.equals(ban, banResult.ban);
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(resultType, ban);
+	}
+	
+	@Override
+	public String toString() {
+		return "BanResult{resultType=" + resultType + ", ban=" + ban + '}';
 	}
 	
 	public enum BanResultType {

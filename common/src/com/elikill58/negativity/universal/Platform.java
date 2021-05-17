@@ -5,7 +5,8 @@ public enum Platform {
 	BUNGEE("bungee", true),
 	SPIGOT("spigot", false),
 	SPONGE("sponge", false),
-	VELOCITY("velocity", true);
+	VELOCITY("velocity", true),
+	TEST("test", true);
 	
 	private final String name;
 	private final boolean proxy;

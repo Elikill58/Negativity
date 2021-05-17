@@ -12,6 +12,10 @@ import java.nio.file.attribute.BasicFileAttributes;
 public class FileUtils {
 
 	public static Path cleanDirectory(Path directory) throws IOException {
+		if (!Files.exists(directory)) {
+			return directory;
+		}
+
 		if (!Files.isDirectory(directory)) {
 			throw new NotDirectoryException(directory.toAbsolutePath().toString());
 		}

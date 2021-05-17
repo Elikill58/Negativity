@@ -22,7 +22,7 @@ public class DatabaseBanLogsStorage implements BanLogsStorage {
 		try {
 			Connection connection = Database.getConnection();
 			if (connection != null) {
-				DatabaseMigrator.executeRemainingMigrations(connection, "bans/logs");
+				DatabaseMigrator.executeRemainingMigrations(connection, Database.getType().getType(), "bans/logs");
 			}
 		} catch (Exception e) {
 			Adapter.getAdapter().getLogger().error("Failed to execute ban logs database migration: " + e.getMessage());

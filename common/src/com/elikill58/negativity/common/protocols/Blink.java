@@ -61,7 +61,7 @@ public class Blink extends Cheat implements Listeners {
 					boolean last = np.IS_LAST_SEC_BLINK == 2;
 					np.IS_LAST_SEC_BLINK++;
 					long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
-					if (last && time_last >= 1000) {
+					if (last && time_last >= 1000 && !np.LAST_OTHER_KEEP_ALIVE.equalsIgnoreCase("PacketPlayInCustomPayload")) {
 						Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - ping),
 								"no-packet", "No packet. Last other than KeepAlive: " + np.LAST_OTHER_KEEP_ALIVE + " there is: "
 										+ time_last + "ms .");

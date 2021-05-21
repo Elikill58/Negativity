@@ -80,7 +80,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 				int relia = UniversalUtils.parseInPorcent(distance * 100);
 				if (np.isOnGround() && !np.isUsingSlimeBlock) {
 					if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && SpigotNegativity.essentialsSupport
-							&& EssentialsSupport.checkEssentialsSpeedPrecondition(p))) {
+							&& EssentialsSupport.checkEssentialsSpeedPrecondition(p)) && !np.isInFight) {
 						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
 								"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceBetweenFromAndTo: "
 										+ distance + ". Warn: " + np.getWarn(this));

@@ -57,14 +57,6 @@ public class SpeedProtocol extends Cheat implements Listener {
 				np.TIME_INVINCIBILITY_SPEED = System.currentTimeMillis() + pe.getAmplifier() * 100;
 			return;
 		}
-		
-		np.MOVE_TIME++;
-		if (np.MOVE_TIME > 60) {
-			boolean b = SpigotNegativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
-					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Warn for Speed: " + np.getWarn(this));
-			if (b && isSetBack())
-				e.setCancelled(true);
-		}
 		Location from = e.getFrom().clone(), to = e.getTo().clone();
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)
 				|| p.getEntityId() == 100 || p.getVehicle() != null || p.getAllowFlight()
@@ -76,6 +68,15 @@ public class SpeedProtocol extends Cheat implements Listener {
 			np.BYPASS_SPEED--;
 			return;
 		}
+		
+		np.MOVE_TIME++;
+		if (np.MOVE_TIME > 60) {
+			boolean b = SpigotNegativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
+					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Warn for Speed: " + np.getWarn(this));
+			if (b && isSetBack())
+				e.setCancelled(true);
+		}
+		
 		Location loc = p.getLocation().clone(), locDown = loc.clone().subtract(0, 1, 0), locUp = loc.clone().add(0, 1, 0);
 		double dif = to.getY() - from.getY();
 		boolean hasIce = locDown.getBlock().getType().name().contains("ICE") || locUp.getBlock().getType().name().contains("ICE"), onGround = np.isOnGround();

@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Locale;
 
 import com.elikill58.negativity.api.yaml.config.Configuration;
 
@@ -89,7 +90,7 @@ public class Database {
 	public static void init() {
 		Configuration store = Adapter.getAdapter().getConfig();
 		if (hasCustom = store.getBoolean("Database.isActive")) {
-			databaseType = DatabaseType.valueOf(store.getString("Database.type", "mysql").toUpperCase());
+			databaseType = DatabaseType.valueOf(store.getString("Database.type", "mysql").toUpperCase(Locale.ROOT));
 			Database.connect(store.getString("Database.url"),
 					store.getString("Database.user"),
 					store.getString("Database.password"));

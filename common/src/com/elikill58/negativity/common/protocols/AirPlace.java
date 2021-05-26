@@ -4,6 +4,7 @@ import static com.elikill58.negativity.universal.CheatKeys.AIR_PLACE;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringJoiner;
 
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -44,7 +45,7 @@ public class AirPlace extends Cheat implements Listeners {
 			String name = b.getType().getId();
 			if(name.contains("STAIRS") || !(name.contains("AIR") || name.contains("WATER") || name.contains("LAVA") || name.contains("CAVE")))
 				return;
-			blockNames.add(face.name().toLowerCase() + ": " + name);
+			blockNames.add(face.name().toLowerCase(Locale.ROOT) + ": " + name);
 		}
 
 		boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 100, "block-around", "Blocks: " + blockNames.toString(), new CheatHover.Literal("Any block around the placed block"), 2);

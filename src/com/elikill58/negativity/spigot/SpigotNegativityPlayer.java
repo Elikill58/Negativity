@@ -8,6 +8,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
@@ -163,7 +164,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return false;
 		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
 			return false;
-		if(SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase()) || Perm.hasPerm(this, "bypass.all")))
+		if(SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase(Locale.ROOT)) || Perm.hasPerm(this, "bypass.all")))
 			return false;
 		return ping < c.getMaxAlertPing();
 	}
@@ -188,7 +189,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return "Riptide bypass";
 		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
 			return "World bypass";
-		if(SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase()) || Perm.hasPerm(this, "bypass.all")))
+		if(SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase(Locale.ROOT)) || Perm.hasPerm(this, "bypass.all")))
 			return "Permission bypass";
 		if(ping < c.getMaxAlertPing())
 			return "Too high ping (" + ping + " > " + c.getMaxAlertPing() + ")";

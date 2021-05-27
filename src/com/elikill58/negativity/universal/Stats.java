@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
@@ -71,7 +72,7 @@ public class Stats {
 	}
 	
 	public static void update() {
-		CHEAT_STATS.forEach((c, cs) -> sendUpdateStats(false, StatsType.CHEAT, "platform=" + Adapter.getAdapter().getName() + "&type=cheat&hack=" + c.getKey().toLowerCase() + "&reliability=" + cs.getReliability() + "&amount=" + cs.getAmount()));
+		CHEAT_STATS.forEach((c, cs) -> sendUpdateStats(false, StatsType.CHEAT, "platform=" + Adapter.getAdapter().getName() + "&type=cheat&hack=" + c.getKey().toLowerCase(Locale.ROOT) + "&reliability=" + cs.getReliability() + "&amount=" + cs.getAmount()));
 		CHEAT_STATS.clear();
 	}
 	

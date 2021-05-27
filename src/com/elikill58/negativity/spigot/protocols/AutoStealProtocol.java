@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import java.util.Locale;
+
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -36,7 +38,7 @@ public class AutoStealProtocol extends Cheat implements Listener {
 			if(ItemUseBypass.ITEM_BYPASS.containsKey(p.getItemInHand().getType().name())) {
 				ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(p.getItemInHand().getType().name());
 				if(ib.getWhen().isClick() && ib.isForThisCheat(this))
-					if(e.getAction().name().toLowerCase().contains(ib.getWhen().name().toLowerCase()))
+					if(e.getAction().name().toLowerCase(Locale.ROOT).contains(ib.getWhen().name().toLowerCase(Locale.ROOT)))
 						return;
 			}
 		long actual = System.currentTimeMillis(), dif = actual - np.LAST_CLICK_INV;

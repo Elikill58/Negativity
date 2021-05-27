@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import java.util.Locale;
+
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -117,7 +119,7 @@ public class AntiKnockbackProtocol extends Cheat implements Listener {
 				if (d < 0.1 && !actual.getBlock().getType().equals(ItemUtils.WEB) && !p.isSneaking()) {
 					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia,
 							"Distance after damage: " + d + "; Damager: "
-									+ e.getDamager().getType().name().toLowerCase() + " Ping: " + ping,
+									+ e.getDamager().getType().name().toLowerCase(Locale.ROOT) + " Ping: " + ping,
 							hoverMsg("main", "%distance%", d));
 					if (isSetBack() && mayCancel)
 						p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));

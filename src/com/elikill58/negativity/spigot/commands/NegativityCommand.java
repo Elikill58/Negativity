@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.commands;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.CONSOLE;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -46,6 +44,8 @@ import com.elikill58.negativity.universal.translation.MessagesUpdater;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 import com.elikill58.negativity.universal.verif.Verificator;
+
+import static com.elikill58.negativity.universal.verif.VerificationManager.CONSOLE;
 
 public class NegativityCommand implements CommandExecutor, TabCompleter {
 
@@ -167,7 +167,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			}
 			AbstractInventory.getInventory(InventoryType.MOD).ifPresent((inv) -> inv.openInventory(p));
 			return true;
-		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase().contains("manage")) {
+		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase(Locale.ROOT).contains("manage")) {
 			if (arg.length >= 2 && arg[1].equalsIgnoreCase("updateMessages")) {
 				if (sender instanceof Player && !Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.MANAGE_CHEAT)) {
 					Messages.sendMessage(sender, "not_permission");
@@ -326,7 +326,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 		if (arg.length == 1) {
 			// /negativity |
 			for (Player p : Utils.getOnlinePlayers()) {
-				if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
+				if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
 					suggestions.add(p.getName());
 				}
 			}
@@ -346,14 +346,14 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				if (arg.length == 2) {
 					// /negativity verif | OR /negativity debug |
 					for (Player p : Utils.getOnlinePlayers()) {
-						if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
+						if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
 							suggestions.add(p.getName());
 						}
 					}
 				} else if (Bukkit.getPlayer(arg[1]) != null) {
 					// /negativity verif <target> |
 					for (Cheat c : Cheat.values()) {
-						if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase()) || prefix.isEmpty()) {
+						if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
 							suggestions.add(c.getName());
 						}
 					}

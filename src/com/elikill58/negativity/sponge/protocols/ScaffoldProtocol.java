@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import java.util.Locale;
 import java.util.Optional;
 
 import org.spongepowered.api.block.BlockType;
@@ -56,7 +57,7 @@ public class ScaffoldProtocol extends Cheat {
 
 				boolean mayCancel = SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(120 / localPing),
 						"Item in hand: " + m.getName() + " Block placed: " + placed.getName() + " Ping: " + ping,
-						hoverMsg("main", "%item%", m.getName().toLowerCase(), "%block%", placed.getName().toLowerCase()));
+						hoverMsg("main", "%item%", m.getName().toLowerCase(Locale.ROOT), "%block%", placed.getName().toLowerCase(Locale.ROOT)));
 				if (isSetBack() && mayCancel) {
 					e.setCancelled(true);
 				}

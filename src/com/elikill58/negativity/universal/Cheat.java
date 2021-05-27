@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -31,12 +32,12 @@ public abstract class Cheat {
 		this.m = m;
 		this.cheatCategory = type;
 		this.hasListener = hasListener;
-		this.key = key.toLowerCase();
+		this.key = key.toLowerCase(Locale.ROOT);
 		this.aliases = alias;
 	}
 	
 	public String getKey() {
-		return key.toUpperCase();
+		return key.toUpperCase(Locale.ROOT);
 	}
 	
 	public String getName() {
@@ -144,7 +145,7 @@ public abstract class Cheat {
 	}
 	
 	public static Cheat forKey(String key) {
-		return CHEATS_BY_KEY.get(key.toLowerCase());
+		return CHEATS_BY_KEY.get(key.toLowerCase(Locale.ROOT));
 	}
 	
 	public static void loadCheat() {

@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Locale;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
@@ -67,7 +68,7 @@ public class Database {
 	public static void init() {
 		ConfigAdapter config = Adapter.getAdapter().getConfig();
 		if (hasCustom = config.getBoolean("Database.isActive")) {
-			databaseType = DatabaseType.valueOf(config.getString("Database.type").toUpperCase());
+			databaseType = DatabaseType.valueOf(config.getString("Database.type").toUpperCase(Locale.ROOT));
 			Database.connect(config.getString("Database.url"),
 					config.getString("Database.user"),
 					config.getString("Database.password"));

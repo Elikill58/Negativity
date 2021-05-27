@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
 import javax.annotation.Nullable;
@@ -74,7 +75,7 @@ public class Utils {
 		String s = "", name = "", version = "unknow";
 		boolean isVersion = false, checkVersion = false;
 		for (String parts : modName.split("")) {
-			if (listCaracters.contains(parts.toLowerCase())) {
+			if (listCaracters.contains(parts.toLowerCase(Locale.ROOT))) {
 				if (checkVersion) {
 					if (UniversalUtils.isInteger(parts)) {
 						checkVersion = false;

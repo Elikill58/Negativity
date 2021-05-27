@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.utils;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -93,7 +94,7 @@ public class LocationUtils {
 	}
 	
 	private static boolean blockIsOneOfThem(Block b, String... ms) {
-		String type = b.getType().name().toUpperCase();
+		String type = b.getType().name().toUpperCase(Locale.ROOT);
 		for(String s : ms)
 			if(type.contains(s))
 				return true;

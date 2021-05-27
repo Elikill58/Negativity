@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import java.util.Locale;
+
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,7 +39,7 @@ public class FastBowProtocol extends Cheat implements Listener {
 		if(ItemUseBypass.ITEM_BYPASS.containsKey(item.getType().name())) {
 			ItemUseBypass ib = ItemUseBypass.ITEM_BYPASS.get(item.getType().name());
 			if(ib.getWhen().isClick() && ib.isForThisCheat(this))
-				if(e.getAction().name().toLowerCase().contains(ib.getWhen().name().toLowerCase()))
+				if(e.getAction().name().toLowerCase(Locale.ROOT).contains(ib.getWhen().name().toLowerCase(Locale.ROOT)))
 					return;
 		}
 		if (item.getType().equals(Material.BOW) && e.getAction().name().contains("RIGHT_CLICK")) {

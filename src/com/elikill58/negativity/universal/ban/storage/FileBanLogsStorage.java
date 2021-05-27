@@ -6,6 +6,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
@@ -102,7 +103,7 @@ public class FileBanLogsStorage implements BanLogsStorage {
 			String type = part[0], value = part[1];
 			switch (type) {
 				case "bantype":
-					banType = BanType.valueOf(value.toUpperCase());
+					banType = BanType.valueOf(value.toUpperCase(Locale.ROOT));
 					break;
 				case "def":
 					// Here for compatibility with files generated from an older version

@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -12,6 +10,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map.Entry;
 import java.util.StringJoiner;
 import java.util.logging.Level;
@@ -92,6 +91,8 @@ import com.elikill58.negativity.universal.utils.ReflectionUtils;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
+
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
@@ -113,7 +114,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (v.equals(Version.HIGHER))
 			getLogger().warning("Unknow server version " + Utils.VERSION + " ! Some problems can appears.");
 		else
-			getLogger().info("Detected server version: " + v.name().toLowerCase() + " (" + Utils.VERSION + ")");
+			getLogger().info("Detected server version: " + v.name().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ")");
 		
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
@@ -490,7 +491,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		
 		Bukkit.getPluginManager().callEvent(new PlayerCheatEvent(p, c, reliability));
-		if (hasBypass && (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase())
+		if (hasBypass && (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase(Locale.ROOT))
 				|| Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), Perm.BYPASS_ALL))) {
 			PlayerCheatBypassEvent bypassEvent = new PlayerCheatBypassEvent(p, c, reliability);
 			Bukkit.getPluginManager().callEvent(bypassEvent);
@@ -540,7 +541,7 @@ public class SpigotNegativity extends JavaPlugin {
 			return;
 		for(String s : conf.getStringList("alert.command.run")) {
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), UniversalUtils.replacePlaceholders(s, "%name%",
-					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey().toLowerCase(), "%cheat_name%",
+					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey().toLowerCase(Locale.ROOT), "%cheat_name%",
 					c.getName(), "%reliability%", reliability, "%report_type%", type.name(), "%warn%", np.getWarn(c)));
 		}
 	}

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal;
 
 import java.util.HashMap;
+import java.util.Locale;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -99,7 +100,7 @@ public class DefaultConfigValue {
 
 		for (String localCheat : CheatKeys.values()) {
 			//STRINGS.put("Permissions.bypass." + localCheat, "negativity.bypass." + localCheat);
-			STRINGS.put("Permissions.bypass." + localCheat.toLowerCase() + ".default", "negativity.bypass." + localCheat.toLowerCase());
+			STRINGS.put("Permissions.bypass." + localCheat.toLowerCase(Locale.ROOT) + ".default", "negativity.bypass." + localCheat.toLowerCase(Locale.ROOT));
 		}
 
 		BOOLEANS.put("Translation.active", false);
@@ -132,7 +133,7 @@ public class DefaultConfigValue {
 		STRINGS.put("verif.storage.id", "default");
 
 		for(String lc : CheatKeys.values()) {
-			lc = lc.toLowerCase();
+			lc = lc.toLowerCase(Locale.ROOT);
 			INTS.put("cheats." + lc + ".ping", 150);
 			STRINGS.put("cheats." + lc + ".exact_name", lc);
 			BOOLEANS.put("cheats." + lc + ".isActive", true);

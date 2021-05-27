@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal.ban;
 
 import java.sql.Timestamp;
+import java.util.Locale;
 
 import javax.annotation.Nullable;
 
@@ -34,7 +35,7 @@ public class BanUtils {
 			return false;
 		}
 		ConfigAdapter config = Adapter.getAdapter().getConfig();
-		if(config.getStringList("ban.cheat_disabled").contains(cheat.getKey().toLowerCase()))
+		if(config.getStringList("ban.cheat_disabled").contains(cheat.getKey().toLowerCase(Locale.ROOT)))
 			return false;
 		return config.getInt("ban.reliability_need") <= relia && config.getInt("ban.alert_need") <= np.getAllWarn(cheat);
 	}

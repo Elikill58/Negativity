@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
@@ -53,7 +54,7 @@ public class NegativityListener implements Listener {
 
 	@EventHandler
 	public void onMessageReceived(PluginMessageEvent event) {
-		if (!event.getTag().toLowerCase().contains("negativity"))
+		if (!event.getTag().toLowerCase(Locale.ROOT).contains("negativity"))
 			return;
 
 		event.setCancelled(true);

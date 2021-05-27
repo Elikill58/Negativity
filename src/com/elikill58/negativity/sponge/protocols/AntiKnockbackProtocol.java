@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.protocols;
 
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import org.spongepowered.api.block.BlockType;
@@ -90,10 +91,10 @@ public class AntiKnockbackProtocol extends Cheat {
 			}
 		}
 
-		if(p.getItemInHand(HandTypes.MAIN_HAND).isPresent() && p.getItemInHand(HandTypes.MAIN_HAND).get().getType().getId().toUpperCase().contains("SHIELD"))
+		if(p.getItemInHand(HandTypes.MAIN_HAND).isPresent() && p.getItemInHand(HandTypes.MAIN_HAND).get().getType().getId().toUpperCase(Locale.ROOT).contains("SHIELD"))
 			return;
 		
-		if(p.getItemInHand(HandTypes.OFF_HAND).isPresent() && p.getItemInHand(HandTypes.OFF_HAND).get().getType().getId().toUpperCase().contains("SHIELD"))
+		if(p.getItemInHand(HandTypes.OFF_HAND).isPresent() && p.getItemInHand(HandTypes.OFF_HAND).get().getType().getId().toUpperCase(Locale.ROOT).contains("SHIELD"))
 			return;
 		
 		Task.builder().delay(20, TimeUnit.MILLISECONDS).execute(() -> {

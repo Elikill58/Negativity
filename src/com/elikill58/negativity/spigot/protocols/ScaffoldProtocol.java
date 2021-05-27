@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import java.util.Locale;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -45,7 +47,7 @@ public class ScaffoldProtocol extends Cheat implements Listener {
 						localPing = 1;
 					boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, instance, UniversalUtils.parseInPorcent(120 / localPing),
 							"Item in hand: " + m.name() + " Block placed: " + placed.name(),
-							hoverMsg("main", "%item%", m.name().toLowerCase(), "%block%", placed.name().toLowerCase()));
+							hoverMsg("main", "%item%", m.name().toLowerCase(Locale.ROOT), "%block%", placed.name().toLowerCase(Locale.ROOT)));
 					if(isSetBack() && mayCancel) {
 						p.getInventory().addItem(new ItemStack(placed));
 						e.getBlockPlaced().setType(Material.AIR);

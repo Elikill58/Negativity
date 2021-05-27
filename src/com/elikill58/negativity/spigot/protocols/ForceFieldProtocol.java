@@ -1,8 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
-
 import java.text.NumberFormat;
+import java.util.Locale;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -33,6 +32,8 @@ import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
+
+import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 public class ForceFieldProtocol extends Cheat implements Listener {
 
@@ -71,9 +72,9 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 				recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 				if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !p.getLocation().getBlock().getType().name().contains("WATER")) {
 					Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> { // go back sync for bukkit events
-						String entityName = Version.getVersion().equals(Version.V1_7) ? cible.getType().name().toLowerCase() : cible.getName();
+						String entityName = Version.getVersion().equals(Version.V1_7) ? cible.getType().name().toLowerCase(Locale.ROOT) : cible.getName();
 						boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 3 * 10),
-								"Big distance with: " + cible.getType().name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
+								"Big distance with: " + cible.getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns"
 								+ ". Ping: " + np.ping, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
 						if (isSetBack() && mayCancel)
 							e.setCancelled(true);

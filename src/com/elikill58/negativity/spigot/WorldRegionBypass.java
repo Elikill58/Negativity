@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 import org.bukkit.Location;
@@ -37,7 +38,7 @@ public class WorldRegionBypass {
 		if(list.isEmpty())
 			return false;
 		for(WorldRegionBypass bypass : list) {
-			if(bypass.getWorlds().contains(loc.getWorld().getName().toLowerCase()))
+			if(bypass.getWorlds().contains(loc.getWorld().getName().toLowerCase(Locale.ROOT)))
 				return true;
 			if(SpigotNegativity.worldGuardSupport && WorldGuardSupport.isInAreas(loc, bypass.getRegions()))
 				return true;
@@ -62,7 +63,7 @@ public class WorldRegionBypass {
 		}
 		
 		regions = section.getStringList("regions");
-		worlds = section.getStringList("worlds").stream().map(String::toLowerCase).collect(Collectors.toList());
+		worlds = section.getStringList("worlds").stream().map(s -> s.toLowerCase(Locale.ROOT)).collect(Collectors.toList());
 		
 		REGIONS_BYPASS.add(this);
 	}

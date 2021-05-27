@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
 
@@ -24,7 +25,7 @@ public class ItemUseBypass {
 	private WhenBypass when;
 	
 	public ItemUseBypass(String itemName, String cheats, String when) {
-		this.item = itemName.toLowerCase();
+		this.item = itemName.toLowerCase(Locale.ROOT);
 		this.when = WhenBypass.getWhenBypass(when);
 		this.cheats = updateCheats(cheats);
 		if(this.item == null)

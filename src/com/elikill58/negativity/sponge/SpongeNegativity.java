@@ -1,7 +1,5 @@
 package com.elikill58.negativity.sponge;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
-
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -15,6 +13,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Optional;
@@ -118,6 +117,8 @@ import com.elikill58.negativity.universal.verif.VerificationManager;
 import com.google.inject.Inject;
 
 import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
+
+import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
 
 @Plugin(id = "negativity", name = "Negativity", version = "1.9.8-fix", description = "It's an Advanced AntiCheat Detection", authors = { "Elikill58", "RedNesto" }, dependencies = {
 		@Dependency(id = "packetgate") })
@@ -559,7 +560,7 @@ public class SpongeNegativity {
 			return false;
 		Sponge.getEventManager().post(new PlayerCheatEvent(type, p, c, reliability, hover, ping));
 		if (hasBypass && (Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), Perm.BYPASS_ALL) ||
-				Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase()))) {
+				Perm.hasPerm(SpongeNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase(Locale.ROOT)))) {
 			PlayerCheatEvent.Bypass bypassEvent = new PlayerCheatEvent.Bypass(type, p, c, reliability, hover, ping);
 			Sponge.getEventManager().post(bypassEvent);
 			if (!bypassEvent.isCancelled())

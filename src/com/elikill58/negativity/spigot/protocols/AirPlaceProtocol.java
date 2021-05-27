@@ -1,9 +1,8 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import static com.elikill58.negativity.universal.CheatKeys.AIR_PLACE;
-
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.StringJoiner;
 
 import org.bukkit.Material;
@@ -20,6 +19,8 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ReportType;
+
+import static com.elikill58.negativity.universal.CheatKeys.AIR_PLACE;
 
 public class AirPlaceProtocol extends Cheat implements Listener {
 
@@ -46,7 +47,7 @@ public class AirPlaceProtocol extends Cheat implements Listener {
 			String name = b.getType().name();
 			if(name.contains("STAIRS") || !(name.contains("AIR") || name.contains("WATER") || name.contains("LAVA") || name.contains("CAVE")))
 				return;
-			blockNames.add(face.name().toLowerCase() + ": " + name);
+			blockNames.add(face.name().toLowerCase(Locale.ROOT) + ": " + name);
 		}
 
 		boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, 100, "Blocks: " + blockNames.toString(), new CheatHover.Literal("Any block around the placed block"), 2);

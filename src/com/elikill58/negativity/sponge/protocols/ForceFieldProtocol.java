@@ -3,6 +3,7 @@ package com.elikill58.negativity.sponge.protocols;
 import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.util.Locale;
 import java.util.Optional;
 
 import org.spongepowered.api.entity.Entity;
@@ -75,7 +76,7 @@ public class ForceFieldProtocol extends Cheat {
 			recordData(p.getUniqueId(), HIT_DISTANCE, distance);
 			if(distance > allowedReach)
 				SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 2 * 10), "Big distance with: "
-						+ e.getTargetEntity().getType().getName().toLowerCase() + ". Exact distance: " + distance + ". Ping: " + Utils.getPing(p),
+						+ e.getTargetEntity().getType().getName().toLowerCase(Locale.ROOT) + ". Exact distance: " + distance + ". Ping: " + Utils.getPing(p),
 						hoverMsg("distance", "%name%", e.getTargetEntity().getType().getName(), "%distance%", distanceFormatter.format(distance)));
 		}
 		if (isSetBack() && mayCancel)

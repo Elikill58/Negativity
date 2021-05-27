@@ -45,7 +45,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if(np.hasElytra() || p.isInsideVehicle())
+		if(np.hasElytra() || p.isInsideVehicle() || p.getLocation().getBlock().getType().name().contains("WATER"))
 			return;
 		if (p.isSprinting() || p.isSneaking()) {
 			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {

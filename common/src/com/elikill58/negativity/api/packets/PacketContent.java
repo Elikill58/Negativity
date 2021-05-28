@@ -18,7 +18,7 @@ public class PacketContent {
 	 */
 	public PacketContent(AbstractPacket packet) {
 		this.packet = packet;
-		this.obj = packet.getPacket();
+		this.obj = packet.getNmsPacket();
 	}
 	
 	/**

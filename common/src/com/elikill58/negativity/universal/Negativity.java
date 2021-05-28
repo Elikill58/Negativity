@@ -354,10 +354,12 @@ public class Negativity {
 			ada.getLogger().info("Loaded support for " + String.join(", ", integratedPlugins) + ".");
 		}
 
-		SemVer latestVersion = UniversalUtils.getLatestVersionIfNewer();
-		if (latestVersion != null) {
-			ada.getLogger().info("New version of Negativity available: " + latestVersion.toFormattedString() + ". Download it here: https://www.spigotmc.org/resources/86874/");
-		}
+		new Thread(() -> {
+			SemVer latestVersion = UniversalUtils.getLatestVersionIfNewer();
+			if (latestVersion != null) {
+				ada.getLogger().info("New version of Negativity available: " + latestVersion.toFormattedString() + ". Download it here: https://www.spigotmc.org/resources/86874/");
+			}
+		}).start();
 	}
 	
 	public static <T> void loadExtensions(Class<T> extensionClass, Predicate<T> extensionConsumer) {

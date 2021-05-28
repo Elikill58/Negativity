@@ -11,11 +11,11 @@ import com.elikill58.negativity.api.events.player.PlayerDeathEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.PacketType.Client;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.PacketType;
-import com.elikill58.negativity.universal.PacketType.Client;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 

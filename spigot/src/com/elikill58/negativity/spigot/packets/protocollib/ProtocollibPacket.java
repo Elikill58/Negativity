@@ -4,18 +4,21 @@ import org.bukkit.entity.Player;
 
 import com.comphenix.protocol.events.PacketEvent;
 import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
-import com.elikill58.negativity.universal.PacketType;
 
 public class ProtocollibPacket extends AbstractPacket {
-	
+
 	private PacketEvent event;
-	
-	public ProtocollibPacket(PacketType type, Object packet, Player p, PacketEvent event) {
-		super(type, packet, SpigotEntityManager.getPlayer(p));
+
+	public ProtocollibPacket(NPacket nPacket, Object nmsPacket, Player p, PacketEvent event) {
+		super(nPacket == null || nPacket.getPacketType().isUnset()
+				? PacketType.getType(nmsPacket.getClass().getSimpleName())
+				: nPacket.getPacketType(), nmsPacket, nPacket, SpigotEntityManager.getPlayer(p));
 		this.event = event;
 	}
-	
+
 	public PacketEvent getProtocollibEvent() {
 		return event;
 	}

@@ -15,8 +15,9 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.injector.packet.PacketRegistry;
 import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
 import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.spigot.impl.packet.SpigotPacketManager;
-import com.elikill58.negativity.universal.PacketType;
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 
 public class ProtocollibPacketManager extends SpigotPacketManager {
 
@@ -30,8 +31,9 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 			public void onPacketSending(PacketEvent e) {
 		        if(e.isPlayerTemporary())
 		        	return;
-				AbstractPacket packet = onPacketSent(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),
-						e.getPlayer(), e.getPacket().getHandle(), e);
+		        Object nmsPacket = e.getPacket().getHandle();
+		        NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(nmsPacket, nmsPacket.getClass().getSimpleName());
+				AbstractPacket packet = onPacketSent(commonPacket, e.getPlayer(), e.getPacket().getHandle(), e);
 		        if(!e.isCancelled())
 		        	e.setCancelled(packet.isCancelled());
 			}
@@ -43,8 +45,9 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 		            return;
 		        if(e.isPlayerTemporary())
 		        	return;
-		        AbstractPacket packet = onPacketReceive(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),
-		        		e.getPlayer(), e.getPacket().getHandle(), e);
+		        Object nmsPacket = e.getPacket().getHandle();
+		        NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(nmsPacket, nmsPacket.getClass().getSimpleName());
+				AbstractPacket packet = onPacketReceive(commonPacket, e.getPlayer(), e.getPacket().getHandle(), e);
 		        if(!e.isCancelled())
 		        	e.setCancelled(packet.isCancelled());
 			}
@@ -58,8 +61,9 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 			public void onPacketSending(PacketEvent e) {
 		        if(e.isPlayerTemporary())
 		        	return;
-				AbstractPacket packet = onPacketSent(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),
-						e.getPlayer(), e.getPacket().getHandle(), e);
+		        Object nmsPacket = e.getPacket().getHandle();
+		        NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(nmsPacket, nmsPacket.getClass().getSimpleName());
+				AbstractPacket packet = onPacketSent(commonPacket, e.getPlayer(), e.getPacket().getHandle(), e);
 		        if(!e.isCancelled())
 		        	e.setCancelled(packet.isCancelled());
 			}
@@ -71,8 +75,9 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 		            return;
 		        if(e.isPlayerTemporary())
 		        	return;
-		        AbstractPacket packet = onPacketReceive(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),
-		        		e.getPlayer(), e.getPacket().getHandle(), e);
+		        Object nmsPacket = e.getPacket().getHandle();
+		        NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(nmsPacket, nmsPacket.getClass().getSimpleName());
+				AbstractPacket packet = onPacketReceive(commonPacket, e.getPlayer(), e.getPacket().getHandle(), e);
 		        if(!e.isCancelled())
 		        	e.setCancelled(packet.isCancelled());
 			}
@@ -88,14 +93,14 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 	@Override
 	public void clear() {}
 
-	public AbstractPacket onPacketSent(PacketType type, Player sender, Object packet, PacketEvent event) {
-		ProtocollibPacket customPacket = new ProtocollibPacket(type, packet, sender, event);
+	public AbstractPacket onPacketSent(NPacket commonPacket, Player sender, Object packet, PacketEvent event) {
+		ProtocollibPacket customPacket = new ProtocollibPacket(commonPacket, packet, sender, event);
 		notifyHandlersSent(PacketSourceType.PROTOCOLLIB, customPacket);
 		return customPacket;
 	}
 
-	public AbstractPacket onPacketReceive(PacketType type, Player sender, Object packet, PacketEvent event) {
-		ProtocollibPacket customPacket = new ProtocollibPacket(type, packet, sender, event);
+	public AbstractPacket onPacketReceive(NPacket commonPacket, Player sender, Object packet, PacketEvent event) {
+		ProtocollibPacket customPacket = new ProtocollibPacket(commonPacket, packet, sender, event);
 		notifyHandlersReceive(PacketSourceType.PROTOCOLLIB, customPacket);
 		return customPacket;
 	}

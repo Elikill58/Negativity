@@ -5,7 +5,7 @@ import java.util.HashMap;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Event;
-import com.elikill58.negativity.universal.PacketType;
+import com.elikill58.negativity.api.packets.PacketType;
 
 public class PlayerPacketsClearEvent implements Event {
 

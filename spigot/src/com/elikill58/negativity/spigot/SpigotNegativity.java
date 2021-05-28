@@ -37,6 +37,7 @@ import com.elikill58.negativity.spigot.listeners.EntityListeners;
 import com.elikill58.negativity.spigot.listeners.FightManager;
 import com.elikill58.negativity.spigot.listeners.InventoryListeners;
 import com.elikill58.negativity.spigot.listeners.PlayersListeners;
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -72,8 +73,10 @@ public class SpigotNegativity extends JavaPlugin {
 		Version v = Version.getVersion(Utils.VERSION);
 		if (v.equals(Version.HIGHER))
 			getLogger().warning("Unknow server version " + Utils.VERSION + " ! Some problems can appears.");
-		else
+		else {
+			SpigotVersionAdapter.getVersionAdapter();
 			getLogger().info("Detected server version: " + v.name().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ")");
+		}
 		
 		packetManager = new NegativityPacketManager(this);
 		new File(getDataFolder().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();

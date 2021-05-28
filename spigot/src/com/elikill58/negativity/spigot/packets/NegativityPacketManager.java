@@ -9,14 +9,14 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
 import com.elikill58.negativity.api.packets.AbstractPacket;
-import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.PacketHandler;
+import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.packet.SpigotPacketManager;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 import com.elikill58.negativity.spigot.packets.protocollib.ProtocollibPacketManager;
-import com.elikill58.negativity.spigot.utils.PacketUtils;
-import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.Version;
 
 public class NegativityPacketManager {
@@ -75,16 +75,25 @@ public class NegativityPacketManager {
 		PacketType type = packet.getPacketType();
 		np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
 		if(type == PacketType.Client.USE_ENTITY) {
-			try {
-				/*int id = packet.getContent().getIntegers().read(0);
+			/*try {
+				int id = packet.getContent().getIntegers().read(0);
 				for(FakePlayer fp : np.getFakePlayers())
 					if(fp.getEntityId() == id)
-						np.removeFakePlayer(fp, true);*/
+						np.removeFakePlayer(fp, true);
 			} catch (Exception e) {
 				e.printStackTrace();
-			}
-		} else if(type == PacketType.Client.BLOCK_DIG && !Version.getVersion().equals(Version.V1_7)) {
-			PacketContent content = packet.getContent();
+			}*/
+		} else if(type == PacketType.Client.BLOCK_DIG && !Version.getVersion().equals(Version.V1_7) && packet.getPacket() instanceof NPacketPlayInBlockDig) {
+			NPacketPlayInBlockDig blockDig = (NPacketPlayInBlockDig) packet.getPacket();
+			if(blockDig.action != DigAction.FINISHED_DIGGING)
+				return;
+			
+			Block b = blockDig.getBlock(p.getWorld());
+			BlockBreakEvent event = new BlockBreakEvent(p, b);
+			EventManager.callEvent(event);
+			if(event.isCancelled())
+				packet.setCancelled(event.isCancelled());
+			/*PacketContent content = packet.getContent();
 			Object dig = content.getSpecificModifier(PacketUtils.getNmsClass("PacketPlayInBlockDig$EnumPlayerDigType")).read("c");
 			if(!dig.toString().contains("STOP_DESTROY_BLOCK"))
 				return;
@@ -101,7 +110,7 @@ public class NegativityPacketManager {
 					packet.setCancelled(event.isCancelled());
 			} catch (Exception exc) {
 				exc.printStackTrace();
-			}
+			}*/
 		}
 	}
 }

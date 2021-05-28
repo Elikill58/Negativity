@@ -10,9 +10,9 @@ import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
+import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.Special;
 import com.elikill58.negativity.universal.SpecialKeys;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -37,8 +37,15 @@ public class ServerCrasher extends Special implements Listeners {
 		if(!isActive())
 			return;
 		Player p = e.getPlayer();
+		/*try {
+			Adapter.getAdapter().getLogger().info("> " + e.getPacket().getPacketType() + " : " + e.getPacket().getPacketName());
+			//if(!e.getPacket().getPacketType().name().contains("CHAT") && !e.getPacket().getPacketType().isFlyingPacket()) // prevent infinite loop
+				//p.sendMessage("> " + e.getPacket().getPacketType() + " ! " + e.getPacket().getPacketName());
+		} catch (Exception exc) {
+			exc.printStackTrace();
+		}*/
 		if(e.getPacket().getPacketType() == PacketType.Client.POSITION && !inDisconnection.contains(p.getUniqueId())) {
-			if(NegativityPlayer.getCached(p.getUniqueId()).PACKETS.getOrDefault(PacketType.Client.POSITION, 0) > 1000) {
+			if(NegativityPlayer.getNegativityPlayer(p).PACKETS.getOrDefault(PacketType.Client.POSITION, 0) > 1000) {
 				e.getPacket().setCancelled(tryingToCrash(e.getPlayer()));
 			}
 		}

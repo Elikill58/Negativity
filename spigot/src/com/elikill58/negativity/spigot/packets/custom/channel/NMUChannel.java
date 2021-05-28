@@ -8,9 +8,10 @@ import java.util.NoSuchElementException;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
-import com.elikill58.negativity.universal.PacketType;
 
 import net.minecraft.util.io.netty.channel.Channel;
 import net.minecraft.util.io.netty.channel.ChannelHandlerContext;
@@ -91,9 +92,10 @@ public class NMUChannel extends ChannelAbstract {
 
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
-			AbstractPacket nextPacket = getPacketManager().onPacketReceive(PacketType.getType(packet.getClass().getSimpleName()), SpigotEntityManager.getPlayer(this.owner), packet);
-			if(!nextPacket.isCancelled())
-				super.channelRead(ctx, packet);
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(packet, packet.getClass().getSimpleName());
+			AbstractPacket nextPacket = getPacketManager().onPacketReceive(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
+			if(!nextPacket.isCancelled() && nextPacket.getNmsPacket() != null)
+				super.channelRead(ctx, nextPacket.getNmsPacket());
 		}
 	}
 
@@ -107,9 +109,10 @@ public class NMUChannel extends ChannelAbstract {
 		
 		@Override
 		public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
-			AbstractPacket nextPacket = getPacketManager().onPacketSent(PacketType.getType(packet.getClass().getSimpleName()), SpigotEntityManager.getPlayer(this.owner), packet);
-			if(!nextPacket.isCancelled())
-				super.write(ctx, packet, promise);
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(packet, packet.getClass().getSimpleName());
+			AbstractPacket nextPacket = getPacketManager().onPacketSent(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
+			if(!nextPacket.isCancelled() && nextPacket.getNmsPacket() != null)
+				super.write(ctx, nextPacket.getNmsPacket(), promise);
 		}
 	}
 }

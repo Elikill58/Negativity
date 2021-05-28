@@ -32,6 +32,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
+@SuppressWarnings("deprecation")
 public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> implements Player {
 
 	private Version playerVersion;
@@ -156,7 +157,6 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 		return entity.isInsideVehicle() ? SpigotEntityManager.getEntity(entity.getVehicle()) : null;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public ItemStack getItemInHand() {
 		return new SpigotItemStack(entity.getItemInHand());
@@ -339,12 +339,12 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public void closeInventory() {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.closeInventory());
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), entity::closeInventory);
 	}
 
 	@Override
 	public void updateInventory() {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.updateInventory());
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), entity::updateInventory);
 	}
 
 	@Override
@@ -352,7 +352,6 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 		entity.setAllowFlight(b);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setVanished(boolean vanished) {
 		if (vanished) {

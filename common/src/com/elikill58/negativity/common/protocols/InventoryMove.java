@@ -43,7 +43,7 @@ public class InventoryMove extends Cheat implements Listeners {
 	private void checkInvMove(Player p, boolean check, String from) {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (p.hasElytra() || p.isInsideVehicle())
+		if (p.hasElytra() || p.isInsideVehicle() || p.getLocation().getBlock().getType().getId().contains("WATER"))
 			return;
 		if (p.isSprinting() || p.isSneaking()) {
 			Scheduler.getInstance().runDelayed(() -> {

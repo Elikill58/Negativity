@@ -8,14 +8,14 @@ import com.elikill58.negativity.api.entity.Player;
 public abstract class PacketManager {
 
 	/**
-	 * Add player to analysed one
+	 * Add player to analyzed one
 	 * 
 	 * @param p the player added to packet listener
 	 */
 	public abstract void addPlayer(Player p);
 	
 	/**
-	 * Remove player to analysed one
+	 * Remove player to analyzed one
 	 * 
 	 * @param p the player removed to packet listener
 	 */

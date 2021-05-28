@@ -187,6 +187,8 @@ public class UniversalUtils {
 			br.close();
 			return Optional.of(content);
         } catch (UnknownHostException | MalformedURLException e) {
+        	if(!HAVE_INTERNET)
+    			return Optional.empty();
         	HAVE_INTERNET = false;
         	Adapter.getAdapter().getLogger().info("Could not use the internet connection to check for update or send stats");
         } catch (ConnectException e) {
@@ -297,7 +299,7 @@ public class UniversalUtils {
 	}
 	
 	public static void init() {
-		getContentFromURL("https://google.fr");
+		new Thread(() -> getContentFromURL("https://google.fr")).start();
 	}
 	
 	/**

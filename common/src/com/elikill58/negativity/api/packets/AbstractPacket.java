@@ -1,20 +1,22 @@
 package com.elikill58.negativity.api.packets;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.universal.PacketType;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 
 public abstract class AbstractPacket {
 
 	protected final Player player;
-	protected final Object packet;
+	protected Object nmsPacket;
 	protected PacketContent content;
 	protected PacketType type;
+	protected final NPacket nPacket;
 	protected boolean cancel = false;
 	
-	public AbstractPacket(PacketType type, Object packet, Player player) {
+	public AbstractPacket(PacketType type, Object nmsPacket, NPacket nPacket, Player player) {
 		this.player = player;
-		this.packet = packet;
+		this.nmsPacket = nmsPacket;
 		this.type = type;
+		this.nPacket = nPacket;
 		this.content = new PacketContent(this);
 	}
 
@@ -51,8 +53,26 @@ public abstract class AbstractPacket {
 	 * 
 	 * @return the sent/received packet
 	 */
-	public Object getPacket() {
-		return packet;
+	public Object getNmsPacket() {
+		return nmsPacket;
+	}
+	
+	/**
+	 * Change the given NMS packet
+	 * 
+	 * @param nmsPacket the next packet
+	 */
+	public void setNmsPacket(Object nmsPacket) {
+		this.nmsPacket = nmsPacket;
+	}
+	
+	/**
+	 * Get the Negativity Packet which correspond to the NMS one
+	 * 
+	 * @return the sent/received packet
+	 */
+	public NPacket getPacket() {
+		return nPacket;
 	}
 
 	/**
@@ -61,7 +81,7 @@ public abstract class AbstractPacket {
 	 * @return the packet name
 	 */
 	public String getPacketName() {
-		return packet.getClass().getSimpleName();
+		return nmsPacket.getClass().getSimpleName();
 	}
 	
 	/**

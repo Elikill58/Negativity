@@ -24,6 +24,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -147,6 +148,8 @@ public class PlayersEvents implements Listener {
 	public void slimeManager(PlayerMoveEvent e){
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
+		if(p.isOnGround())
+			np.wasFlying = false;
 		Location locBelow = p.getLocation().clone().subtract(0, 1, 0);
 		if(!np.isFreeze && np.isUsingSlimeBlock && e.getFrom().getY() < e.getTo().getY()) // checking if need to check for freeze / slime
 			return;
@@ -179,5 +182,11 @@ public class PlayersEvents implements Listener {
 	@EventHandler
 	public void onBedLeave(PlayerBedLeaveEvent e) {
 		SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer()).TIME_INVINCIBILITY = System.currentTimeMillis() + 2000;
+	}
+
+	@EventHandler
+	public void onToggleFly(PlayerToggleFlightEvent e) {
+		if(!e.isFlying()) // if disabling fly
+			SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer()).wasFlying = true;
 	}
 }

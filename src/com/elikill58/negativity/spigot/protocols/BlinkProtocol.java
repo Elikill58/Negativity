@@ -49,7 +49,7 @@ public class BlinkProtocol extends Cheat implements Listener {
 					boolean last = np.IS_LAST_SEC_BLINK == 2;
 					np.IS_LAST_SEC_BLINK++;
 					long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
-					if (last && !np.LAST_OTHER_KEEP_ALIVE.equalsIgnoreCase("PacketPlayInCustomPayload")) {
+					if (last && np.LAST_OTHER_KEEP_ALIVE != null && !np.LAST_OTHER_KEEP_ALIVE.equalsIgnoreCase("PacketPlayInCustomPayload")) {
 						SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - ping),
 								"No packet. Last other than KeepAlive: " + np.LAST_OTHER_KEEP_ALIVE + " there is: "
 										+ time_last + "ms . Ping: " + ping + ". Warn: " + np.getWarn(this));

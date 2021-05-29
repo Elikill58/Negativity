@@ -51,7 +51,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			if (Utils.getPotionEffect(p, PotionEffectType.SPEED).getAmplifier() > 5)
 				return;
 		}
-		if (p.getAllowFlight() || p.getEntityId() == 100 || Utils.isSwimming(p) || p.isFlying())
+		if (np.getAllowFlight() || p.getEntityId() == 100 || Utils.isSwimming(p) || p.isFlying())
 			return;
 		boolean mayCancel = false, inBoat = Utils.isInBoat(p);
 		double y = e.getFrom().getY() - e.getTo().getY();

@@ -88,7 +88,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false, 
 			isInvisible = false, isUsingSlimeBlock = false, already_blink = false, isJumpingWithBlock = false,
 			isOnLadders = false, lastClickInv = false, useAntiNoFallSystem = false, canPingSpoof = false;
-	public boolean mustToBeSaved = false;
+	public boolean mustToBeSaved = false, wasFlying = false;
 	private boolean isOnGround = true, isBedrockPlayer = false;
 	public PacketType lastPacketType = null;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
@@ -258,6 +258,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			MAX_FLYING = flying;
 		ALL = 0;
 		PACKETS.clear();
+	}
+	
+	public boolean getAllowFlight() {
+		return wasFlying || getPlayer().getAllowFlight();
 	}
 	
 	@Override

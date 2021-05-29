@@ -30,6 +30,7 @@ import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.account.NegativityAccount;
+import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -327,18 +328,36 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 	}
 	
 	private void sendHelp(CommandSender sender) {
-		Messages.sendMessageList(sender, "negativity.verif.help");
+		if (Perm.hasPerm(sender, Perm.VERIF))
+			Messages.sendMessageList(sender, "negativity.verif.help");
+		if (Perm.hasPerm(sender, Perm.CHECK))
+			Messages.sendMessageList(sender, "negativity.help");
+		if (sender instanceof Player)
+			Messages.sendMessageList(sender, "negativity.alert.help");
+		if (!(sender instanceof Player) || Perm.hasPerm(sender, Perm.RELOAD))
+			Messages.sendMessageList(sender, "negativity.reload.help");
+		if (sender instanceof Player && Perm.hasPerm(sender, Perm.MOD))
+			Messages.sendMessageList(sender, "negativity.mod.help");
+		if (Perm.hasPerm(sender, Perm.MOD))
+			Messages.sendMessageList(sender, "negativity.clear.help");
+		if (sender instanceof Player && Perm.hasPerm(sender, Perm.MANAGE_CHEAT))
+			Messages.sendMessageList(sender, "negativity.admin.help");
+		if (Perm.hasPerm(sender, Perm.ADMIN) && WebhookManager.isEnabled())
+			Messages.sendMessageList(sender, "negativity.webhook.help");
+		if (sender instanceof Player)
+			Messages.sendMessageList(sender, "negativity.debug.help");
 		Configuration conf = Adapter.getAdapter().getConfig();
 		if(conf.getBoolean("commands.report") && Perm.hasPerm(sender, Perm.REPORT))
-			Messages.sendMessage(sender, "report.report_usage");
-		if(conf.getBoolean("commands.ban") && Perm.hasPerm(sender, Perm.BAN))
-			Messages.sendMessageList(sender, "ban.help");
-		if(conf.getBoolean("commands.unban") && Perm.hasPerm(sender, Perm.UNBAN))
-			Messages.sendMessage(sender, "unban.help");
+			Messages.sendMessage(sender, "report.help");
 		if(conf.getBoolean("commands.kick") && Perm.hasPerm(sender, Perm.MOD))
 			Messages.sendMessage(sender, "kick.help");
 		if(Perm.hasPerm(sender, Perm.LANG))
 			Messages.sendMessage(sender, "lang.help");
+		Configuration banConfig = BanManager.getBanConfig();
+		if(banConfig.getBoolean("commands.ban") && Perm.hasPerm(sender, Perm.BAN))
+			Messages.sendMessageList(sender, "ban.help");
+		if(banConfig.getBoolean("commands.unban") && Perm.hasPerm(sender, Perm.UNBAN))
+			Messages.sendMessage(sender, "unban.help");
 	}
 
 	@Override

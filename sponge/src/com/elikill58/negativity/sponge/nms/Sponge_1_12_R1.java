@@ -19,6 +19,7 @@ import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.server.SPacketBlockBreakAnim;
 import net.minecraft.network.play.server.SPacketKeepAlive;
+import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
 public class Sponge_1_12_R1 extends SpongeVersionAdapter {
@@ -28,7 +29,7 @@ public class Sponge_1_12_R1 extends SpongeVersionAdapter {
 		packetsPlayIn.put("CPacketPlayerDigging", (packet) -> {
 			CPacketPlayerDigging blockDig = (CPacketPlayerDigging) packet;
 			BlockPos pos = blockDig.getPosition();
-			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), DigAction.valueOf(blockDig.getAction().name()), DigFace.valueOf(blockDig.getFacing().name()));
+			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), translateDigAction(blockDig.getAction()), translateFacing(blockDig.getFacing()));
 		});
 
 		packetsPlayIn.put("CPacketChatMessage", (packet) -> new NPacketPlayInChat(((CPacketChatMessage) packet).getMessage()));
@@ -59,8 +60,46 @@ public class Sponge_1_12_R1 extends SpongeVersionAdapter {
 			BlockPos pos = packet.getPosition();
 			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), packet.getBreakerId(), packet.getProgress());
 		});
-		packetsPlayOut.put("SPacketKeepAlive", (f) -> new NPacketPlayOutKeepAlive(((SPacketKeepAlive) f).getId()));
+		packetsPlayOut.put("SPacketKeepAlive", (f) -> new NPacketPlayOutKeepAlive(((SPacketKeepAlive) f).id));
 		
 		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
+	}
+	
+	private static DigAction translateDigAction(CPacketPlayerDigging.Action action) {
+		switch (action) {
+		case START_DESTROY_BLOCK:
+			return DigAction.START_DIGGING;
+		case ABORT_DESTROY_BLOCK:
+			return DigAction.CANCEL_DIGGING;
+		case STOP_DESTROY_BLOCK:
+			return DigAction.FINISHED_DIGGING;
+		case DROP_ALL_ITEMS:
+			return DigAction.DROP_ITEM_STACK;
+		case DROP_ITEM:
+			return DigAction.DROP_ITEM;
+		case RELEASE_USE_ITEM:
+			return DigAction.FINISH_ACTION;
+		case SWAP_HELD_ITEMS:
+			return DigAction.SWAP_ITEM;
+		}
+		throw new IllegalStateException("Unexpected CPacketPlayerDigging.Action constant: " + action.name());
+	}
+	
+	private static DigFace translateFacing(EnumFacing facing) {
+		switch (facing) {
+		case DOWN:
+			return DigFace.BOTTOM;
+		case UP:
+			return DigFace.TOP;
+		case NORTH:
+			return DigFace.NORTH;
+		case SOUTH:
+			return DigFace.SOUTH;
+		case WEST:
+			return DigFace.WEST;
+		case EAST:
+			return DigFace.EAST;
+		}
+		throw new IllegalStateException("Unexpected EnumFacing constant: " + facing.name());
 	}
 }

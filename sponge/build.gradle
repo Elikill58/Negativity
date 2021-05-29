@@ -46,6 +46,7 @@ dependencies {
 
 minecraft {
     mappings channel: 'snapshot', version: '20180131-1.12'
+    accessTransformer(file('resources/META-INF/negativity_at.cfg'))
 }
 
 processResources {
@@ -55,6 +56,10 @@ processResources {
     filesNotMatching('META-INF/services/*') {
         expand(props)
     }
+}
+
+jar.manifest {
+    attributes 'FMLAT': 'negativity_at.cfg'
 }
 
 shadowJar {
@@ -74,6 +79,16 @@ shadowJar {
 }
 
 build.dependsOn shadowJar
+afterEvaluate {
+    shadowJar.finalizedBy reobfJar
+    reobfJar {
+        dependsOn shadowJar
+        doFirst {
+            // We have to do it in doFirst because the input is overwritten between the task configuration and execution
+            input(shadowJar.archiveFile.get().asFile)
+        }
+    }
+}
 
 parent.tasks.named('shadowJar', ShadowJar) {
     it.from(shadowJar.outputs)

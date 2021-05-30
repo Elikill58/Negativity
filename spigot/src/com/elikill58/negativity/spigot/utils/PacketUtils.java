@@ -214,14 +214,16 @@ public class PacketUtils {
 			//((CraftEntity) p).getHandle().getBoundingBox();
 			Object cp = CRAFT_ENTITY_CLASS.cast(p);
 			Class<?> craftMonsterClass = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftLivingEntity");
-			Object ep = craftMonsterClass.getDeclaredMethod("getHandle").invoke(craftMonsterClass.cast(cp));
-			if(Version.getVersion().equals(Version.V1_7))
-				return getNmsClass("Entity").getDeclaredField("boundingBox").get(ep);
-			else
-				return getNmsClass("Entity").getDeclaredMethod("getBoundingBox").invoke(ep);
+			if(cp.getClass().isInstance(craftMonsterClass)) { // prevent protected items
+				Object ep = craftMonsterClass.getDeclaredMethod("getHandle").invoke(craftMonsterClass.cast(cp));
+				if(Version.getVersion().equals(Version.V1_7))
+					return getNmsClass("Entity").getDeclaredField("boundingBox").get(ep);
+				else
+					return getNmsClass("Entity").getDeclaredMethod("getBoundingBox").invoke(ep);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			return null;
 		}
+		return null;
 	}
 }

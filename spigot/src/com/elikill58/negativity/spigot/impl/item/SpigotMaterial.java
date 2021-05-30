@@ -1,6 +1,7 @@
 package com.elikill58.negativity.spigot.impl.item;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 import com.elikill58.negativity.api.item.Material;
 
@@ -11,7 +12,7 @@ public class SpigotMaterial extends Material {
 	
 	public SpigotMaterial(org.bukkit.Material type, String id) {
 		this.type = type;
-		this.damage = getDamageWithId(id.toUpperCase());
+		this.damage = getDamageWithId(id.toUpperCase(Locale.ROOT));
 	}
 	
 	private byte getDamageWithId(String id) {

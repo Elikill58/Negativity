@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 
@@ -36,7 +37,7 @@ public class DiscordWebhook implements Webhook {
     
     @Override
     public boolean send(WebhookMessage msg) {
-    	Configuration confMsg = config.getSection("messages").getSection(msg.getMessageType().name().toLowerCase());
+    	Configuration confMsg = config.getSection("messages").getSection(msg.getMessageType().name().toLowerCase(Locale.ROOT));
     	if(confMsg == null)
     		confMsg = new Configuration();
     	if(!confMsg.getBoolean("enabled", true))
@@ -49,7 +50,7 @@ public class DiscordWebhook implements Webhook {
 	    if(embed != null) {
 		    EmbedObject obj = new DiscordWebhookRequest.EmbedObject();
 		    obj.setColor(Color.getColor(embed.getString("color", "red")));
-		    obj.setTitle(msg.applyPlaceHolders(embed.getString("title", msg.getMessageType().name().toLowerCase())));
+		    obj.setTitle(msg.applyPlaceHolders(embed.getString("title", msg.getMessageType().name().toLowerCase(Locale.ROOT))));
 		    obj.setDescription(msg.applyPlaceHolders(embed.getString("description", "")));
 		    
 		    Configuration fields = embed.getSection("fields");

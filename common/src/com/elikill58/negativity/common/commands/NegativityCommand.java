@@ -334,7 +334,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			Messages.sendMessageList(sender, "negativity.help");
 		if (sender instanceof Player)
 			Messages.sendMessageList(sender, "negativity.alert.help");
-		if (!(sender instanceof Player) || Perm.hasPerm(sender, Perm.RELOAD))
+		if (Perm.hasPerm(sender, Perm.RELOAD))
 			Messages.sendMessageList(sender, "negativity.reload.help");
 		if (sender instanceof Player && Perm.hasPerm(sender, Perm.MOD))
 			Messages.sendMessageList(sender, "negativity.mod.help");

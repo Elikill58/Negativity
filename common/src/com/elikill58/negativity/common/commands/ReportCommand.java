@@ -47,7 +47,7 @@ public class ReportCommand implements CommandListeners, TabListeners {
 		}
 
 		if (arg.length < 2) {
-			Messages.sendMessage(p, "report.report_usage");
+			Messages.sendMessage(p, "report.help");
 			return false;
 		}
 

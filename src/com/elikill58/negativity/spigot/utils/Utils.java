@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.spigot.ClickableText;
@@ -246,6 +247,13 @@ public class Utils {
 	public static double getSpeed(Location from, Location to) {
 		double x = to.getX() - from.getX();
 		double z = to.getZ() - from.getZ();
+
+		return x * x + z * z;
+	}
+
+	public static double getSpeed(Location from, Location to, Vector dir) {
+		double x = to.getX() - from.getX() - dir.getX();
+		double z = to.getZ() - from.getZ() - dir.getZ();
 
 		return x * x + z * z;
 	}

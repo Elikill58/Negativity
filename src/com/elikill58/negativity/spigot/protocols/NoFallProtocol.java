@@ -14,6 +14,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -79,11 +80,14 @@ public class NoFallProtocol extends Cheat implements Listener {
 			if (p.getFallDistance() == 0.0F && locDown.getBlock().getType().equals(Material.AIR)) {
 				int relia = UniversalUtils.parseInPorcent(distance * 100);
 				if (np.isOnGround() && !np.isUsingSlimeBlock) {
-					if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && SpigotNegativity.essentialsSupport
+					Vector direction = p.getVelocity().clone();
+					double distanceVector = to.toVector().clone().add(direction).distance(from.toVector());
+					double disWithDirY = from.clone().add(direction).toVector().setY(0).distanceSquared(to.toVector().setY(0));
+					if ((distance - Math.abs(distanceVector)) > 0.79D && !(p.getWalkSpeed() > 0.45F && SpigotNegativity.essentialsSupport
 							&& EssentialsSupport.checkEssentialsSpeedPrecondition(p)) && !np.isInFight) {
 						boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, relia,
-								"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceBetweenFromAndTo: "
-										+ distance + ". Warn: " + np.getWarn(this));
+								"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceFrom/To: "
+										+ distance + ", Velocity Y: " + p.getVelocity().getY() + ", distanceVector: " + distanceVector + ", disDirY: " + disWithDirY);
 						if (mayCancel)
 							np.NO_FALL_DAMAGE += 1;
 					} else if (np.NO_FALL_DAMAGE != 0) {

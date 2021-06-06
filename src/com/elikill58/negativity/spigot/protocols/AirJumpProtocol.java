@@ -46,11 +46,11 @@ public class AirJumpProtocol extends Cheat implements Listener {
 			
 			boolean mayCancel = false;
 			
-			double diffYtoFrom = e.getTo().getY() - e.getFrom().getY();
+			double diffYtoFrom = e.getTo().getY() - e.getFrom().getY() - Math.abs(e.getTo().getDirection().getY());
 			if (diffYtoFrom > 0.35 && np.lastYDiff < diffYtoFrom && np.lastYDiff > 0 && !hasOtherThanExtended(locDownDown, "AIR")) {
 				mayCancel = SpigotNegativity.alertMod(
 						diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-								parseInPorcent((int) (diffYtoFrom * 210) - np.ping), "Actual diff Y: " + np.lastYDiff + ", last diff Y: " + diffYtoFrom + ". Down: " + locDown.getBlock().getType().name() + ", Down Down: " + locDownDown.getBlock().getType().name());
+								parseInPorcent((int) (diffYtoFrom * 210) - np.ping), "Actual diff Y: " + diffYtoFrom + ", last diff Y: " + np.lastYDiff + ". Down: " + locDown.getBlock().getType().name() + ", Down Down: " + locDownDown.getBlock().getType().name());
 			}
 			np.lastYDiff = diffYtoFrom;
 			

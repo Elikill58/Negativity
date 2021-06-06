@@ -78,12 +78,12 @@ public class StepProtocol extends Cheat implements Listener {
 					e.setCancelled(true);
 			}
 		}
-		double diffBoost = dif - (amplifier / 10);
+		double diffBoost = dif - (amplifier / 10) - Math.abs(p.getVelocity().getY());
 		if(diffBoost > 0.2) {
 			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
 			if(diffBoost > 0.6 && !isUsingJumpBoost && p.getNearbyEntities(3, 3, 3).stream().filter((et) -> et.getType().equals(EntityType.BOAT)).count() == 0) {
 				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost * 125),
-						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
+						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ") Dir Y: " + p.getLocation().getDirection().getY(),
 						hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
 			}
 		}

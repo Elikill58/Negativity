@@ -1,5 +1,9 @@
+import org.spongepowered.gradle.plugin.config.PluginLoaders
+import org.spongepowered.plugin.metadata.PluginDependency
+
 plugins {
     id 'com.github.johnrengelman.shadow'
+    id 'org.spongepowered.gradle.plugin' version '1.1.1'
 }
 
 sourceSets {
@@ -9,27 +13,32 @@ sourceSets {
     }
 }
 
-repositories {
-    jcenter()
-    maven {
-        url 'https://repo-new.spongepowered.org/repository/maven-snapshots/'
-    }
-    maven {
-        url 'https://repo-new.spongepowered.org/repository/sponge-legacy/'
-    }
-}
-
 dependencies {
     api project(':common')
-    compileOnly "org.spongepowered:spongeapi:$spongeApiVersion"
 }
 
-processResources {
-    def props = [version: version, spongeApiVersion: spongeApiVersion]
-    inputs.properties(props)
-    // Do not try to expand service files, they may contain a dollar sign to mark inner classes
-    filesNotMatching('META-INF/services/*') {
-        expand(props)
+sponge {
+    apiVersion(spongeApiVersion.replace('-SNAPSHOT', ''))
+    plugin('negativity') {
+        loader(PluginLoaders.JAVA_PLAIN)
+        displayName('Negativity')
+        mainClass('com.elikill58.negativity.sponge8.SpongeNegativity')
+        description('An Advanced AntiCheat Plugin')
+        links {
+            homepage('https://ore.spongepowered.org/Elikill58/Negativity')
+            source('https://github.com/Elikill58/Negativity')
+            issues('https://github.com/Elikill58/Negativity/issues')
+        }
+        contributor('Elikill58') {
+            description('Author')
+        }
+        contributor('RedNesto') {
+            description('Author')
+        }
+        dependency('spongeapi') {
+            loadOrder(PluginDependency.LoadOrder.AFTER)
+            optional(false)
+        }
     }
 }
 
@@ -52,5 +61,12 @@ task prepareServer(type: Copy) {
         enabled(false)
     } else {
         into pluginDir
+    }
+}
+
+runServer {
+    def runDir = System.getProperty("sponge8.run.dir")
+    if (runDir != null) {
+        workingDir(runDir)
     }
 }

@@ -20,6 +20,7 @@ import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.LocationUtils;
@@ -105,19 +106,22 @@ public class Speed extends Cheat implements Listeners {
 		double distance = from.distance(to);
 		boolean mayCancel = false;
 		if(onGround && checkActive("distance-ground") && amplifierSpeed < 5) {
+			Vector direction = p.getVelocity().clone();
+			double disWithDir = from.clone().add(direction).distanceSquared(to);
+			double disWithDirY = from.clone().add(direction).toVector().setY(0).distanceSquared(to.toVector().setY(0));
 			double walkSpeed = (p.getWalkSpeed() - getEssentialsRealMoveSpeed(p)); // TODO rewrite without converting to essentials values
 			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
-			if(((walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D))) || walkTest){
+			if((((walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D))) || walkTest) && (y < (disWithDir + disWithDirY))){
 				int porcent = UniversalUtils.parseInPorcent(y * 50 + UniversalUtils.getPorcentFromBoolean(walkTest, 20)
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
 				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent, "distance-ground",
 						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: " + walkTest +
-						", walkWithEssentialsTest: " + walkWithEssTest, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
+						", walkWithEss: " + walkWithEssTest + ", y: " + y + ", disDir: " + disWithDir + ", disDirY: " + disWithDirY, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
 			}
 		}
 		if(onGround && checkActive("calculated")) {
-			double calculatedSpeedWithoutY = getSpeed(from, to), velocity = p.getVelocity().getY();
+			double calculatedSpeedWithoutY = getSpeed(from, to, p.getVelocity()), velocity = p.getVelocity().getY();
 			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && velocity > 0.1
 					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated",
@@ -193,9 +197,9 @@ public class Speed extends Cheat implements Listeners {
 		return true;
 	}
 	
-	public static double getSpeed(Location from, Location to) {
-		double x = to.getX() - from.getX();
-		double z = to.getZ() - from.getZ();
+	public static double getSpeed(Location from, Location to, Vector vec) {
+		double x = to.getX() - from.getX() - vec.getX();
+		double z = to.getZ() - from.getZ() - vec.getZ();
 
 		return x * x + z * z;
 	}

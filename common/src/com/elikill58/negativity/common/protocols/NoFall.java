@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
@@ -67,10 +68,13 @@ public class NoFall extends Cheat implements Listeners {
 				int relia = UniversalUtils.parseInPorcent(distance * 100);
 				if (p.isOnGround()) {
 					if(checkActive("distance-ground")) {
+						Vector direction = p.getVelocity().clone();
+						double distanceVector = to.toVector().clone().add(direction).distance(from.toVector());
+						double disWithDirY = from.clone().add(direction).toVector().setY(0).distanceSquared(to.toVector().setY(0));
 						if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && PlayerModificationsManager.isSpeedUnlocked(p))) {
 							boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "distance-ground",
-									"Player in ground. FallDamage: " + p.getFallDistance() + ", DistanceBetweenFromAndTo: "
-											+ distance);
+									"Player in ground. FallDamage: " + p.getFallDistance() + ", Distance From/To: "
+											+ distance + ", Velocity Y: " + p.getVelocity().getY() + ", distanceVector: " + distanceVector + ", disDirY: " + disWithDirY);
 							if(mayCancel)
 								np.NO_FALL_DAMAGE += 1;
 						} else if (np.NO_FALL_DAMAGE != 0) {

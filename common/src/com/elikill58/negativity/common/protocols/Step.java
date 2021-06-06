@@ -75,13 +75,13 @@ public class Step extends Cheat implements Listeners {
 			}
 		}
 		if(checkActive("dif-boost")) {
-			double diffBoost = dif - (amplifier / 10);
+			double diffBoost = dif - (amplifier / 10) - Math.abs(p.getVelocity().getY());
 			if(diffBoost > 0.2) {
 				recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
 				if (!isUsingJumpBoost && (diffBoost > 0.5) && !(diffBoost <= 0.6 && diffBoost >= 0.56) // 0.56-0.6 is to bypass carpet and other no-full blocks
 					&& !(amplifier > 0 && diffBoost < 0.55) && !LocationUtils.hasBoatAroundHim(p.getLocation())) {
 					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffBoost == 0.25 ? 95 : diffBoost * 125), "dif-boost",
-						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ")",
+						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier " + amplifier + ") Dir Y: " + p.getLocation().getDirection().getY(),
 						hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
 				}
 			}

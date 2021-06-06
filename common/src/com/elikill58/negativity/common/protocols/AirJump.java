@@ -47,7 +47,7 @@ public class AirJump extends Cheat implements Listeners {
 				return;
 			boolean mayCancel = false;
 
-			double diffYtoFrom = e.getTo().getY() - e.getFrom().getY();
+			double diffYtoFrom = e.getTo().getY() - e.getFrom().getY() - Math.abs(e.getTo().getDirection().getY());
 			double lastDiffY = np.doubles.get(AIR_JUMP, "diff-y", 0.0);
 			if (checkActive("diff-y") && !np.booleans.get("ALL", "jump-boost-use", false)) {
 				if (diffYtoFrom > 0.35 && lastDiffY < diffYtoFrom && lastDiffY > 0
@@ -55,7 +55,7 @@ public class AirJump extends Cheat implements Listeners {
 					mayCancel = Negativity.alertMod(
 							diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 							this, UniversalUtils.parseInPorcent((int) (diffYtoFrom * 210) - p.getPing()), "diff-y",
-							"Actual diff Y: " + lastDiffY + ", last diff Y: " + diffYtoFrom + ". Down: "
+							"Actual diff Y: " + diffYtoFrom + ", last diff Y: " + lastDiffY + ". Down: "
 									+ locDown.getBlock().getType().getId() + ", Down Down: "
 									+ locDownDown.getBlock().getType().getId());
 				}

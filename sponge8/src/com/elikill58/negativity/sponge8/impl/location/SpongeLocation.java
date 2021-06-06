@@ -10,40 +10,37 @@ import com.elikill58.negativity.sponge8.impl.block.SpongeBlock;
 
 public class SpongeLocation extends Location {
 
-	private final ServerLocation loc;
-	
 	public SpongeLocation(ServerLocation location) {
 		super(new SpongeWorld(location.world()), location.x(), location.y(), location.z());
-		this.loc = location;
 	}
 	
 	public SpongeLocation(com.elikill58.negativity.api.location.World w, double x, double y, double z) {
 		super(w, x, y, z);
-		this.loc = ServerLocation.of((ServerWorld) w.getDefault(), x, y, z);
 	}
 	
 	public SpongeLocation(ServerWorld w, double x, double y, double z) {
 		super(new SpongeWorld(w), x, y, z);
-		this.loc = ServerLocation.of(w, x, y, z);
 	}
 	
 	public SpongeLocation(com.elikill58.negativity.api.location.World w, Vector3d pos) {
 		super(w, pos.x(), pos.y(), pos.z());
-		this.loc = ServerLocation.of((ServerWorld) w.getDefault(), pos);
 	}
 	
 	public SpongeLocation(ServerWorld w, Vector3d pos) {
 		super(new SpongeWorld(w), pos.x(), pos.y(), pos.z());
-		this.loc = ServerLocation.of(w, pos);
 	}
 
 	@Override
 	public Block getBlock() {
-		return new SpongeBlock(loc.createSnapshot());
+		return new SpongeBlock(getSpongeWorld().createSnapshot(getBlockX(), getBlockY(), getBlockZ()));
 	}
 
 	@Override
 	public Object getDefault() {
-		return loc;
+		return ServerLocation.of(getSpongeWorld(), getX(), getY(), getZ());
+	}
+	
+	private ServerWorld getSpongeWorld() {
+		return (ServerWorld) getWorld().getDefault();
 	}
 }

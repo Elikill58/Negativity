@@ -49,6 +49,7 @@ shadowJar {
 
     mergeServiceFiles()
     from(project(':common').tasks.shadowJar)
+    from(writePluginMetadata)
 }
 
 build.dependsOn shadowJar

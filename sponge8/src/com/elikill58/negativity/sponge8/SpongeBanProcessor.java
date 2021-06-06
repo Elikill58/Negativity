@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge8;
 
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -8,7 +9,6 @@ import java.util.UUID;
 import java.util.concurrent.ExecutionException;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.api.service.ban.BanService;
@@ -30,54 +30,47 @@ import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class SpongeBanProcessor implements BanProcessor {
-
+	
 	@Override
 	public BanResult executeBan(Ban ban) {
 		BanService banService = Sponge.server().serviceProvider().banService();
 		Instant expirationDate = ban.isDefinitive() ? null : Instant.ofEpochMilli(ban.getExpirationTime());
 		org.spongepowered.api.service.ban.Ban spongeBan = org.spongepowered.api.service.ban.Ban.builder()
-				.type(BanTypes.PROFILE)
-				.profile(GameProfile.of(ban.getPlayerId()))
-				.reason(LegacyComponentSerializer.legacyAmpersand().deserialize(ban.getReason()))
-				.expirationDate(expirationDate)
-				.source(LegacyComponentSerializer.legacyAmpersand().deserialize(ban.getBannedBy()))
-				.build();
+			.type(BanTypes.PROFILE)
+			.profile(GameProfile.of(ban.getPlayerId()))
+			.reason(LegacyComponentSerializer.legacyAmpersand().deserialize(ban.getReason()))
+			.expirationDate(expirationDate)
+			.source(LegacyComponentSerializer.legacyAmpersand().deserialize(ban.getBannedBy()))
+			.build();
 		banService.addBan(spongeBan);
-
+		
 		NegativityPlayer player = NegativityPlayer.getCached(ban.getPlayerId());
 		if (player != null) {
 			BanUtils.kickForBan(player, ban);
 		}
-
+		
 		return new BanResult(BanResultType.DONE, ban);
 	}
-
+	
 	@Nullable
 	@Override
 	public BanResult revokeBan(UUID playerId) {
 		BanService banService = Sponge.server().serviceProvider().banService();
 		GameProfile profile = GameProfile.of(playerId);
-		org.spongepowered.api.service.ban.Ban.Profile revokedBan;
 		try {
 			Optional<org.spongepowered.api.service.ban.Ban.Profile> existingBan = banService.banFor(profile).get();
 			if (!existingBan.isPresent() || !banService.pardon(profile).get()) {
 				return null;
 			}
 			
-			revokedBan = existingBan.get();
+			return new BanResult(toNegativityRevokedBan(existingBan.get()));
 		} catch (InterruptedException | ExecutionException e) {
 			Adapter.getAdapter().getLogger().error("Failed to get or revoke ban of player " + playerId);
 			e.printStackTrace();
 			return null;
 		}
-		
-		String reason = revokedBan.reason().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
-		String bannedBy = revokedBan.banSource().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
-		long expirationTime = revokedBan.expirationDate().map(Instant::toEpochMilli).orElse(-1L);
-		long executionTime = revokedBan.creationDate().toEpochMilli();
-		return new BanResult(new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, BanStatus.REVOKED, executionTime, System.currentTimeMillis()));
 	}
-
+	
 	@Override
 	public boolean isBanned(UUID playerId) {
 		try {
@@ -88,32 +81,22 @@ public class SpongeBanProcessor implements BanProcessor {
 			return false;
 		}
 	}
-
+	
 	@Nullable
 	@Override
 	public Ban getActiveBan(UUID playerId) {
 		BanService banService = Sponge.server().serviceProvider().banService();
-		org.spongepowered.api.service.ban.Ban.Profile activeBan;
 		try {
-			Optional<org.spongepowered.api.service.ban.Ban.Profile> existingBan = banService.banFor(GameProfile.of(playerId)).get();
-			if (!existingBan.isPresent()) {
-				return null;
-			}
-			
-			activeBan = existingBan.get();
+			return banService.banFor(GameProfile.of(playerId)).get()
+				.map(SpongeBanProcessor::toNegativityActiveBan)
+				.orElse(null);
 		} catch (InterruptedException | ExecutionException e) {
 			Adapter.getAdapter().getLogger().error("Could not get active ban of player " + playerId);
 			e.printStackTrace();
 			return null;
 		}
-		
-		String reason = activeBan.reason().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
-		String bannedBy = activeBan.banSource().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
-		long expirationTime = activeBan.expirationDate().map(Instant::toEpochMilli).orElse(-1L);
-		long executionTime = activeBan.creationDate().toEpochMilli();
-		return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, BanStatus.ACTIVE, executionTime);
 	}
-
+	
 	@Override
 	public List<Ban> getLoggedBans(UUID playerId) {
 		return Collections.emptyList();
@@ -122,6 +105,43 @@ public class SpongeBanProcessor implements BanProcessor {
 	@Override
 	public List<Ban> getActiveBanOnSameIP(String ip) {
 		return Collections.emptyList();
+	}
+	
+	@Override
+	public List<Ban> getAllBans() {
+		try {
+			BanService banService = Sponge.server().serviceProvider().banService();
+			return banService.bans().thenApply(bans -> {
+				List<Ban> negativityBans = new ArrayList<>();
+				for (org.spongepowered.api.service.ban.Ban ban : bans) {
+					if (ban instanceof org.spongepowered.api.service.ban.Ban.Profile) {
+						negativityBans.add(toNegativityActiveBan((org.spongepowered.api.service.ban.Ban.Profile) ban));
+					}
+				}
+				return negativityBans;
+			}).get();
+		} catch (InterruptedException | ExecutionException e) {
+			Adapter.getAdapter().getLogger().error("Could not get all active bans");
+			e.printStackTrace();
+			return Collections.emptyList();
+		}
+	}
+	
+	private static Ban toNegativityActiveBan(org.spongepowered.api.service.ban.Ban.Profile ban) {
+		return toNegativityBan(ban, BanStatus.ACTIVE, -1);
+	}
+	
+	private static Ban toNegativityRevokedBan(org.spongepowered.api.service.ban.Ban.Profile ban) {
+		return toNegativityBan(ban, BanStatus.REVOKED, System.currentTimeMillis());
+	}
+	
+	private static Ban toNegativityBan(org.spongepowered.api.service.ban.Ban.Profile ban, BanStatus banStatus, long revocationTime) {
+		UUID playerId = ban.profile().uuid();
+		String reason = ban.reason().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
+		String bannedBy = ban.banSource().map(LegacyComponentSerializer.legacyAmpersand()::serialize).orElse("");
+		long expirationTime = ban.expirationDate().map(Instant::toEpochMilli).orElse(-1L);
+		long executionTime = ban.creationDate().toEpochMilli();
+		return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, banStatus, executionTime, revocationTime);
 	}
 	
 	public static class Provider implements BanProcessorProvider, PlatformDependentExtension {

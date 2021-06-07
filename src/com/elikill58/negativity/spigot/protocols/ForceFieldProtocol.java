@@ -87,6 +87,8 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	private double sens = 0.005;
 	
 	private double distance(Object a, Object b) {
+		if(a == null || b == null)
+			return 0.0;
 		try {
 			Rect r1 = new Rect(a);
 			Rect r2 = new Rect(b);

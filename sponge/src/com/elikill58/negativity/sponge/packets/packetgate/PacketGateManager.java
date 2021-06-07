@@ -75,9 +75,7 @@ public class PacketGateManager extends SpongePacketManager {
 			}*/
 			SpongeVersionAdapter ada = SpongeVersionAdapter.getVersionAdapter();
 			Packet<?> nmsPacket = e.getPacket();
-			String[] parts = nmsPacket.getClass().getName().split("\\.");
-			String packetName = parts[parts.length - 1];
-			AbstractPacket packet = packetManager.onPacketReceive(ada.getPacket(nmsPacket, packetName), p, nmsPacket, e);
+			AbstractPacket packet = packetManager.onPacketReceive(ada.getPacket(nmsPacket), p, nmsPacket, e);
 			e.setCancelled(packet.isCancelled());
 		}
 		
@@ -89,9 +87,7 @@ public class PacketGateManager extends SpongePacketManager {
 			Player p = optionalPlayer.get();
 			SpongeVersionAdapter ada = SpongeVersionAdapter.getVersionAdapter();
 			Packet<?> nmsPacket = e.getPacket();
-			String[] parts = nmsPacket.getClass().getName().split("\\.");
-			String packetName = parts[parts.length - 1];
-			AbstractPacket packet = packetManager.onPacketSent(ada.getPacket(nmsPacket, packetName), p, nmsPacket, e);
+			AbstractPacket packet = packetManager.onPacketSent(ada.getPacket(nmsPacket), p, nmsPacket, e);
 			e.setCancelled(packet.isCancelled());
 		}
 	}

@@ -22,10 +22,10 @@ import net.minecraft.network.play.server.SPacketKeepAlive;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 
-public class Sponge_1_12_R1 extends SpongeVersionAdapter {
+public class Sponge_1_12_2 extends SpongeVersionAdapter {
 
-	public Sponge_1_12_R1() {
-		super("v1_12_R1");
+	public Sponge_1_12_2() {
+		super("v1_12_2");
 		packetsPlayIn.put("CPacketPlayerDigging", (packet) -> {
 			CPacketPlayerDigging blockDig = (CPacketPlayerDigging) packet;
 			BlockPos pos = blockDig.getPosition();

@@ -1,7 +1,7 @@
 package com.elikill58.negativity.sponge.nms;
 
-import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Function;
 
 import com.elikill58.negativity.api.packets.packet.NPacket;
@@ -15,8 +15,8 @@ import net.minecraft.network.Packet;
 
 public abstract class SpongeVersionAdapter {
 	
-	protected HashMap<String, Function<Packet<?>, NPacketPlayOut>> packetsPlayOut = new HashMap<String, Function<Packet<?>, NPacketPlayOut>>();
-	protected HashMap<String, Function<Packet<?>, NPacketPlayIn>> packetsPlayIn = new HashMap<String, Function<Packet<?>, NPacketPlayIn>>();
+	protected Map<String, Function<Packet<?>, NPacketPlayOut>> packetsPlayOut = new HashMap<>();
+	protected Map<String, Function<Packet<?>, NPacketPlayIn>> packetsPlayIn = new HashMap<>();
 	protected final String version;
 	
 	public SpongeVersionAdapter(String version) {
@@ -27,11 +27,13 @@ public abstract class SpongeVersionAdapter {
 		return version;
 	}
 	
-	public NPacket getPacket(Packet<?> nms, String packetName) {
+	public NPacket getPacket(Packet<?> nmsPacket) {
+		String packetClassName = nmsPacket.getClass().getName();
+		String packetName = packetClassName.substring(packetClassName.lastIndexOf('.') + 1);
 		if(packetName.startsWith("CPacket"))
-			return packetsPlayIn.getOrDefault(packetName, (obj) -> new NPacketPlayInUnset()).apply(nms);
+			return packetsPlayIn.getOrDefault(packetName, (obj) -> new NPacketPlayInUnset()).apply(nmsPacket);
 		if(packetName.startsWith("SPacket"))
-			return packetsPlayOut.getOrDefault(packetName, (obj) -> new NPacketPlayOutUnset()).apply(nms);
+			return packetsPlayOut.getOrDefault(packetName, (obj) -> new NPacketPlayOutUnset()).apply(nmsPacket);
 		/*if(packetName.startsWith(PacketType.LOGIN_PREFIX))
 			return new NPacketLoginUnset();
 		if(packetName.startsWith(PacketType.STATUS_PREFIX))
@@ -40,44 +42,9 @@ public abstract class SpongeVersionAdapter {
 		return null;
 	}
 	
-	private static SpongeVersionAdapter instance = new Sponge_1_12_R1();
+	private static SpongeVersionAdapter instance = new Sponge_1_12_2();
 	
 	public static SpongeVersionAdapter getVersionAdapter() {
 		return instance;
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected <T> T get(Object obj, Class<?> clazz, String name) {
-		try {
-			Field f = clazz.getDeclaredField(name);
-			f.setAccessible(true);
-			return (T) f.get(obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	protected <T> T get(Object obj, String name) {
-		try {
-			Field f = obj.getClass().getDeclaredField(name);
-			f.setAccessible(true);
-			return (T) f.get(obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	protected Object getSafe(Object obj, String name) {
-		try {
-			Field f = obj.getClass().getDeclaredField(name);
-			f.setAccessible(true);
-			return f.get(obj);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
 	}
 }

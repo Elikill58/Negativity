@@ -1,9 +1,11 @@
 import org.spongepowered.gradle.plugin.config.PluginLoaders
+import org.spongepowered.gradle.vanilla.repository.MinecraftPlatform
 import org.spongepowered.plugin.metadata.PluginDependency
 
 plugins {
     id 'com.github.johnrengelman.shadow'
     id 'org.spongepowered.gradle.plugin' version '1.1.1'
+    id 'org.spongepowered.gradle.vanilla' version '0.2'
 }
 
 sourceSets {
@@ -15,6 +17,12 @@ sourceSets {
 
 dependencies {
     api project(':common')
+}
+
+minecraft {
+    version '1.16.5'
+    platform MinecraftPlatform.SERVER
+    injectRepositories false
 }
 
 sponge {

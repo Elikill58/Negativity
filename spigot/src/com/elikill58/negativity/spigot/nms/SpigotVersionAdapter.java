@@ -32,13 +32,13 @@ public abstract class SpigotVersionAdapter {
 	
 	public SpigotVersionAdapter(String version) {
 		this.version = version;
-		packetsPlayIn.put("PacketPlayInArmAnimation", (packet) -> new NPacketPlayInArmAnimation(get(packet, "timestamp")));
+		packetsPlayIn.put("PacketPlayInArmAnimation", (packet) -> new NPacketPlayInArmAnimation(System.currentTimeMillis()));
 		packetsPlayIn.put("PacketPlayInChat", (packet) -> new NPacketPlayInChat(get(packet, "a")));
 
 		packetsPlayIn.put("PacketPlayInPositionLook", (f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
-				return new NPacketPlayInPositionLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, "f"));
+				return new NPacketPlayInPositionLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, "f"));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -47,7 +47,7 @@ public abstract class SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInPosition", (f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
-				return new NPacketPlayInPosition(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, "f"));
+				return new NPacketPlayInPosition(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, "f"));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -56,7 +56,7 @@ public abstract class SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInLook", (f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
-				return new NPacketPlayInLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, "f"));
+				return new NPacketPlayInLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, "f"));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;

@@ -53,12 +53,12 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 		}
 		Location fl = from.clone().subtract(to.clone());
 		double distance = to.toVector().distance(from.toVector());
-		if (distance > 0.2) {
+		if (distance > 0.2 && distance >= p.getWalkSpeed()) {
 			int relia = UniversalUtils.parseInPorcent(distance * 400);
 			if((from.getY() - to.getY()) < -0.001)
 				return;
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia,
-					"Soul sand under player. Distance from/to : " + distance + ". Ping: " + np.ping);
+					"Soul sand. Distance from/to : " + distance + ". WalkSpeed: " + p.getWalkSpeed() + ", VelY: " + p.getVelocity().getY());
 			if (isSetBack() && mayCancel)
 				e.setTo(from.clone().add(new Location(fl.getWorld(), fl.getX() / 2, fl.getY() / 2, fl.getZ())).add(0, 0.5, 0));
 		}

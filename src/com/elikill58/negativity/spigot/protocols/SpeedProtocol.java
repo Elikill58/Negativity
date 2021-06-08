@@ -119,11 +119,12 @@ public class SpeedProtocol extends Cheat implements Listener {
 							+ walkTest + ", walkWithEss: " + walkWithEssTest + ", y: " + y + ", disDir: " + disWithDir + ", disDirY: " + disWithDirY;
 				mayCancel = SpigotNegativity.alertMod(type, p, this, porcent, proof, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
 			}
+			double calculatedSpeedWith = Utils.getSpeed(from, to);
 			double calculatedSpeedWithoutY = Utils.getSpeed(from, to, p.getVelocity());
 			if(p.getWalkSpeed() < 1.0 && calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() < calculatedSpeedWithoutY && p.getVelocity().getY() > 0.1
 					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" is to prevent lag
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, 90, "Calculated speed: "
-					+ calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().toString());
+					+ calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().toString() + ", speed: " + calculatedSpeedWith);
 			}
 		} else {
 			for (Entity entity : p.getNearbyEntities(5, 5, 5))

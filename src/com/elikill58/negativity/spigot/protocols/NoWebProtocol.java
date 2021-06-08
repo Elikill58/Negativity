@@ -20,7 +20,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NoWebProtocol extends Cheat implements Listener {
 
-	private static final double MAX = 0.7421028493192875;
+	public static final double MAX = 0.7421028493192875;
 	
 	public NoWebProtocol() {
 		super(CheatKeys.NO_WEB, false, WEB, CheatCategory.MOVEMENT, true, "no web");
@@ -36,15 +36,16 @@ public class NoWebProtocol extends Cheat implements Listener {
 			return;
 		if(p.isFlying() || p.hasPotionEffect(PotionEffectType.SPEED) || p.getFallDistance() > 1)
 			return;
-		Location l = p.getLocation();
-		double distance = e.getTo().distance(e.getFrom());
-		if (!(distance > MAX)) {
-			Block under = new Location(p.getWorld(), l.getX(), l.getY(), l.getZ()).getBlock();
-			if (under.getType() == WEB && distance > 0.13716039608514914) {
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500), "Distance: " + distance + ", fallDistance: " + p.getFallDistance());
+		Location from = e.getFrom();
+		Location to = e.getFrom();
+		double distance = to.distance(from);
+		//if (!(distance > MAX)) {
+			Block under = new Location(p.getWorld(), (from.getX() + to.getX()) / 2, ((from.getY() + to.getY()) / 2) - 1, (from.getZ() + to.getZ()) / 2).getBlock();
+			if (under.getType() == WEB && distance > (p.getWalkSpeed() * 0.17)) { //&& distance > 0.13716039608514914) {
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500), "Distance: " + distance + ", fallDistance: " + p.getFallDistance() + ", walkSpeed: " + p.getWalkSpeed());
 				if(mayCancel && isSetBack())
 					e.setCancelled(true);
 			}
-		}
+		//}
 	}
 }

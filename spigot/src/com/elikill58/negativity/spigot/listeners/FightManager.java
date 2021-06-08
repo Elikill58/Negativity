@@ -1,8 +1,12 @@
 package com.elikill58.negativity.spigot.listeners;
 
+import java.util.Collection;
+
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Projectile;
+import org.bukkit.entity.ThrownPotion;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -14,7 +18,8 @@ import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
-import org.bukkit.potion.Potion;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -63,37 +68,38 @@ public class FightManager implements Listener {
 	
 	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent e) {
-		if(!e.getEntity().getType().equals(EntityType.SPLASH_POTION) || !(e.getEntity() instanceof Potion))
+		Projectile hittingEntity = e.getEntity();
+		if (!(hittingEntity instanceof ThrownPotion)) {
 			return;
-		Location loc = e.getEntity().getLocation();
-		switch(((Potion) e.getEntity()).getType()) {
-		case NIGHT_VISION:
-		case INVISIBILITY:
-		case WATER:
-		case WATER_BREATHING:
-			return;
-		case FIRE_RESISTANCE:
-		case INSTANT_HEAL:
-		case REGEN:
-		case SPEED:
-		case STRENGTH:
-			for(Player p : Utils.getOnlinePlayers())
-				if(loc.getWorld().equals(p.getLocation().getWorld()))
-					if(loc.distance(p.getLocation()) < 18 && loc.distance(p.getLocation()) > 4)
-						NegativityPlayer.getCached(p.getUniqueId()).fight();
-			break;
-		case INSTANT_DAMAGE:
-		case POISON:
-		case WEAKNESS:
-		case SLOWNESS:
-			for(Player p : Utils.getOnlinePlayers())
-				if(loc.getWorld().equals(p.getLocation().getWorld()))
-					if(loc.distance(p.getLocation()) < 9)
-						NegativityPlayer.getCached(p.getUniqueId()).fight();
-			break;
-		default:
-			break;
 		}
+		
+		Collection<PotionEffect> effects = ((ThrownPotion) hittingEntity).getEffects();
+		Location loc = hittingEntity.getLocation();
+		for (PotionEffect effect : effects) {
+			PotionEffectType type = effect.getType();
+			if (isPositiveFightEffect(type)) {
+				for (Player p : loc.getWorld().getPlayers()) {
+					if (loc.distance(p.getLocation()) < 18 && loc.distance(p.getLocation()) > 4)
+						NegativityPlayer.getCached(p.getUniqueId()).fight();
+				}
+			} else if (isNegativeFightEffect(type)) {
+				for (Player p : loc.getWorld().getPlayers()) {
+					if (loc.distance(p.getLocation()) < 9)
+						NegativityPlayer.getCached(p.getUniqueId()).fight();
+				}
+			}
+		}
+	}
+	
+	private boolean isNegativeFightEffect(PotionEffectType type) {
+		return PotionEffectType.HARM.equals(type) || PotionEffectType.POISON.equals(type)
+			|| PotionEffectType.WEAKNESS.equals(type) || PotionEffectType.SLOW.equals(type);
+	}
+	
+	private boolean isPositiveFightEffect(PotionEffectType type) {
+		return PotionEffectType.FIRE_RESISTANCE.equals(type) || PotionEffectType.HEAL.equals(type)
+			|| PotionEffectType.REGENERATION.equals(type) || PotionEffectType.SPEED.equals(type)
+			|| PotionEffectType.INCREASE_DAMAGE.equals(type);
 	}
 	
 	@EventHandler

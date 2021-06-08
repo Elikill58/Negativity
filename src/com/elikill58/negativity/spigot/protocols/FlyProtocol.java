@@ -117,7 +117,7 @@ public class FlyProtocol extends Cheat implements Listener {
 
 		boolean onGround = ((Entity) p).isOnGround(), wasOnGround = np.contentBoolean.getOrDefault("fly-wasOnGround", true);
 		boolean hasBoatAround = p.getWorld().getNearbyEntities(loc, 3, 3, 3).stream().filter((entity) -> entity instanceof Boat).findFirst().isPresent();
-		if(p.getFallDistance() <= 0.000001 && np.flyMoveAmount.size() > 1 && !p.isInsideVehicle()) {
+		if(p.getFallDistance() <= 0.000001 && np.flyMoveAmount.size() > 1 && !p.isInsideVehicle() && onGround == wasOnGround) {
 			int size = np.flyMoveAmount.size();
 			int amount = 0;
 			for(int x = 1; x < size - 1; x++) {

@@ -33,7 +33,7 @@ public class AirJumpProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		SpigotNegativityPlayer np = e.getNegativityPlayer();
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this) || np.hasPotionEffect("JUMP_BOOST"))
 			return;
 		if (p.isFlying() || p.getVehicle() != null || p.getItemInHand().getType().name().contains("TRIDENT") || np.hasElytra() || np.isInFight)
 			return;
@@ -46,7 +46,8 @@ public class AirJumpProtocol extends Cheat implements Listener {
 			
 			boolean mayCancel = false;
 			
-			double diffYtoFrom = e.getTo().getY() - e.getFrom().getY() - Math.abs(e.getTo().getDirection().getY());
+			double diffYtoFromBasic = e.getTo().getY() - e.getFrom().getY();
+			double diffYtoFrom = diffYtoFromBasic - Math.abs(e.getTo().getDirection().getY());
 			if (diffYtoFrom > 0.35 && np.lastYDiff < diffYtoFrom && np.lastYDiff > 0 && !hasOtherThanExtended(locDownDown, "AIR")) {
 				mayCancel = SpigotNegativity.alertMod(
 						diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
@@ -56,9 +57,9 @@ public class AirJumpProtocol extends Cheat implements Listener {
 			
 			boolean wasGoingDown = np.contentBoolean.getOrDefault("going-down", false);
 			double d = np.contentDouble.getOrDefault("airjump-diff-y", 0.0);
-			if(diffYtoFrom > d && wasGoingDown && diffYtoFrom != 0.5 && locDown.getBlock().getType().name().equalsIgnoreCase("AIR")) { // 0.5 when use stairs or slab
+			if(diffYtoFromBasic > d && wasGoingDown && diffYtoFromBasic != 0.5 && locDown.getBlock().getType().name().equalsIgnoreCase("AIR")) { // 0.5 when use stairs or slab
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(diffYtoFrom * 200),
-						"Was going down, last y " + d + ", current: " + diffYtoFrom + ". Down Down: " + locDownDown.getBlock().getType().name()) || mayCancel;
+						"Was going down, lastY " + d + ", current: " + diffYtoFrom + ". Down Down: " + locDownDown.getBlock().getType().name() + ", velY: " + p.getVelocity().getY() + ", diffY base: " + diffYtoFromBasic) || mayCancel;
 			}
 			np.contentDouble.put("airjump-diff-y", diffYtoFrom);
 			np.contentBoolean.put("going-down", diffYtoFrom < 0);

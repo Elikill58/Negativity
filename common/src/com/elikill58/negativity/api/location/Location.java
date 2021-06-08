@@ -182,6 +182,11 @@ public abstract class Location implements Cloneable, NegativityObject {
 	}
 	
 	@Override
+	public String toString() {
+		return "Location{w=" + w + ",x=" + x + ",y=" + y + ",z=" + z + ",yaw=" + yaw + ",pitch=" + pitch + '}';
+	}
+	
+	@Override
 	public Location clone() {
 		try {
 			return (Location) super.clone();

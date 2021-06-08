@@ -24,4 +24,9 @@ public class Spigot_1_14_R1 extends SpigotVersionAdapter {
 			return new NPacketPlayInBlockPlace(pos.getX(), pos.getY(), pos.getZ(), item, place.getFace(), vector);
 		});*/
 	}
+	
+	@Override
+	protected String isOnGroundFieldName() {
+		return "f";
+	}
 }

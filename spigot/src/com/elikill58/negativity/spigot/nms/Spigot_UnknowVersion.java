@@ -12,6 +12,11 @@ public class Spigot_UnknowVersion extends SpigotVersionAdapter {
 	}
 	
 	@Override
+	protected String isOnGroundFieldName() {
+		return "f";
+	}
+	
+	@Override
 	public NPacket getPacket(Object nms, String packetName) {
 		return new NPacketUnknown();
 	}

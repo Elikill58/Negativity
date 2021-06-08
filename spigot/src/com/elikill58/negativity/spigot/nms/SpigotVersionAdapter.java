@@ -38,7 +38,7 @@ public abstract class SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInPositionLook", (f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
-				return new NPacketPlayInPositionLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, "f"));
+				return new NPacketPlayInPositionLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, isOnGroundFieldName()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -47,7 +47,7 @@ public abstract class SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInPosition", (f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
-				return new NPacketPlayInPosition(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, "f"));
+				return new NPacketPlayInPosition(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, isOnGroundFieldName()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -56,7 +56,7 @@ public abstract class SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInLook", (f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
-				return new NPacketPlayInLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, "f"));
+				return new NPacketPlayInLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, isOnGroundFieldName()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -64,7 +64,7 @@ public abstract class SpigotVersionAdapter {
 			//return new NPacketPlayInLook(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"));
 		});
 		packetsPlayIn.put("PacketPlayInFlying", (f) -> {
-			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"), get(f, "f"), get(f, "hasPos"), get(f, "hasLook"));
+			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"), get(f, isOnGroundFieldName()), get(f, "hasPos"), get(f, "hasLook"));
 		});
 		packetsPlayIn.put("PacketPlayInKeepAlive", (f) -> new NPacketPlayInKeepAlive(new Long(getSafe(f, "a").toString())));
 		
@@ -77,6 +77,8 @@ public abstract class SpigotVersionAdapter {
 		
 		SpigotNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
 	}
+	
+	protected abstract String isOnGroundFieldName();
 	
 	public String getVersion() {
 		return version;

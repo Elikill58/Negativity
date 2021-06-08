@@ -61,6 +61,7 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 		});
 	}
 	
+	@SuppressWarnings("unchecked")
 	private static boolean returnedDefaultValue(ResourceKey key, ItemType value) {
 		if (key.namespace().equals("minecraft") && key.value().equals("air")) {
 			return false;
@@ -68,6 +69,7 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 		return value.isAnyOf(ItemTypes.AIR);
 	}
 	
+	@SuppressWarnings("unchecked")
 	private static boolean returnedDefaultValue(ResourceKey key, BlockType value) {
 		if (key.namespace().equals("minecraft") && key.value().equals("air")) {
 			return false;

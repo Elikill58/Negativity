@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.FakePlayer;
@@ -241,36 +242,40 @@ public class SpigotAdapter extends Adapter {
 	}
 
 	@Override
-	public Player getPlayer(String name) {
+	public @Nullable Player getPlayer(String name) {
 		return SpigotEntityManager.getPlayer(Bukkit.getPlayer(name));
 	}
 
 	@Override
-	public Player getPlayer(UUID uuid) {
+	public @Nullable Player getPlayer(UUID uuid) {
 		return SpigotEntityManager.getPlayer(Bukkit.getPlayer(uuid));
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public OfflinePlayer getOfflinePlayer(String name) {
-		Player tempP = getPlayer(name);
-		if(tempP != null)
-			return tempP;
+	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
+		Player online = getPlayer(name);
+		if (online != null) {
+			return online;
+		}
 		org.bukkit.OfflinePlayer p = Bukkit.getOfflinePlayer(name);
-		if(p == null)
-			return null;
-		return new SpigotOfflinePlayer(p);
+		if (p.hasPlayedBefore()) {
+			return new SpigotOfflinePlayer(p);
+		}
+		return null;
 	}
 	
 	@Override
-	public OfflinePlayer getOfflinePlayer(UUID uuid) {
-		Player tempP = getPlayer(uuid);
-		if(tempP != null)
-			return tempP;
+	public @Nullable OfflinePlayer getOfflinePlayer(UUID uuid) {
+		Player online = getPlayer(uuid);
+		if (online != null) {
+			return online;
+		}
 		org.bukkit.OfflinePlayer p = Bukkit.getOfflinePlayer(uuid);
-		if(p == null)
-			return null;
-		return new SpigotOfflinePlayer(p);
+		if (p.hasPlayedBefore()) {
+			return new SpigotOfflinePlayer(p);
+		}
+		return null;
 	}
 	
 	@Override

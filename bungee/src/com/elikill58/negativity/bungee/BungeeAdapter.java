@@ -9,6 +9,8 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -161,28 +163,30 @@ public class BungeeAdapter extends ProxyAdapter {
 	}
 
 	@Override
-	public Player getPlayer(String name) {
+	public @Nullable Player getPlayer(String name) {
 		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(name);
-		if(pp == null)
+		if (pp == null) {
 			return null;
+		}
 		return NegativityPlayer.getNegativityPlayer(pp.getUniqueId(), () -> new BungeePlayer(pp)).getPlayer();
 	}
 
 	@Override
-	public Player getPlayer(UUID uuid) {
+	public @Nullable Player getPlayer(UUID uuid) {
 		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(uuid);
-		if(pp == null)
+		if (pp == null) {
 			return null;
+		}
 		return NegativityPlayer.getNegativityPlayer(uuid, () -> new BungeePlayer(pp)).getPlayer();
 	}
 
 	@Override
-	public OfflinePlayer getOfflinePlayer(String name) {
+	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
 		return null;
 	}
 	
 	@Override
-	public OfflinePlayer getOfflinePlayer(UUID uuid) {
+	public @Nullable OfflinePlayer getOfflinePlayer(UUID uuid) {
 		return null;
 	}
 	

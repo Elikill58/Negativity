@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.impl.entity;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.command.CommandSource;
 import org.spongepowered.api.entity.EntityTypes;
 import org.spongepowered.api.entity.living.golem.IronGolem;
@@ -13,11 +14,11 @@ import com.elikill58.negativity.api.entity.Entity;
 
 public class SpongeEntityManager {
 
-	public static com.elikill58.negativity.api.entity.Player getPlayer(Player p){
-		return NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpongePlayer(p)).getPlayer();
+	public static com.elikill58.negativity.api.entity.@Nullable Player getPlayer(@Nullable Player p){
+		return p == null ? null : NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpongePlayer(p)).getPlayer();
 	}
 	
-	public static Entity getEntity(org.spongepowered.api.entity.Entity e) {
+	public static @Nullable Entity getEntity(org.spongepowered.api.entity.@Nullable Entity e) {
 		if(e == null)
 			return null;
 		if(e.getType().equals(EntityTypes.PLAYER))
@@ -30,7 +31,7 @@ public class SpongeEntityManager {
 			return new SpongeEntity<>(e);
 	}
 
-	public static CommandSender getExecutor(CommandSource src) {
+	public static @Nullable CommandSender getExecutor(@Nullable CommandSource src) {
 		if(src == null)
 			return null;
 		if(src instanceof Player)
@@ -38,7 +39,7 @@ public class SpongeEntityManager {
 		return new SpongeCommandSender(src);
 	}
 
-	public static Entity getProjectile(ProjectileSource shooter) {
+	public static @Nullable Entity getProjectile(@Nullable ProjectileSource shooter) {
 		if(shooter == null)
 			return null;
 		if(shooter instanceof Player)

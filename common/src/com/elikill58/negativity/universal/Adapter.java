@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -223,36 +225,36 @@ public abstract class Adapter {
 	/**
 	 * Get offline player with the given name
 	 * Prefer use {@link #getOfflinePlayer(UUID)} because this method isn't supported on all platform, and a name can be changed
-	 * 
+	 *
 	 * @param name the offline player name
-	 * @return the offline player
+	 * @return the offline player, or {@code null} if no player matching this name has played on this server
 	 */
-	public abstract OfflinePlayer getOfflinePlayer(String name);
+	public abstract @Nullable OfflinePlayer getOfflinePlayer(String name);
 	
 	/**
 	 * Get offline player with the given UUID
 	 * 
 	 * @param uuid the offline player UUID
-	 * @return the offline player
+	 * @return the offline player, or {@code null} if no player with this UUID has played on this server
 	 */
-	public abstract OfflinePlayer getOfflinePlayer(UUID uuid);
+	public abstract @Nullable OfflinePlayer getOfflinePlayer(UUID uuid);
 
 	/**
 	 * Get player with the given name
 	 * Prefer use {@link #getPlayer(UUID)} because this method isn't supported on all platform, and a name can be changed
 	 * 
 	 * @param name the player name
-	 * @return the player
+	 * @return the player, or {@code null} if no player matching this name is online
 	 */
-	public abstract Player getPlayer(String name);
+	public abstract @Nullable Player getPlayer(String name);
 	
 	/**
 	 * Get player with the given UUID
 	 * 
 	 * @param uuid the player UUID
-	 * @return the player
+	 * @return the player, or {@code null} if no player with this UUID is online
 	 */
-	public abstract Player getPlayer(UUID uuid);
+	public abstract @Nullable Player getPlayer(UUID uuid);
 	
 	/**
 	 * Create a fake player

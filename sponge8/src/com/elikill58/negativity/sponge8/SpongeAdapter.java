@@ -9,6 +9,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.exception.CommandException;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
@@ -229,7 +230,7 @@ public class SpongeAdapter extends Adapter {
 	}
 	
 	@Override
-	public OfflinePlayer getOfflinePlayer(String name) {
+	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
 		Player online = getPlayer(name);
 		if (online != null) {
 			return online;
@@ -239,7 +240,7 @@ public class SpongeAdapter extends Adapter {
 	}
 	
 	@Override
-	public OfflinePlayer getOfflinePlayer(UUID uuid) {
+	public @Nullable OfflinePlayer getOfflinePlayer(UUID uuid) {
 		Player online = getPlayer(uuid);
 		if (online != null) {
 			return online;
@@ -249,12 +250,12 @@ public class SpongeAdapter extends Adapter {
 	}
 	
 	@Override
-	public Player getPlayer(String name) {
+	public @Nullable Player getPlayer(String name) {
 		return SpongeEntityManager.getPlayer(Sponge.server().player(name).orElse(null));
 	}
 	
 	@Override
-	public Player getPlayer(UUID uuid) {
+	public @Nullable Player getPlayer(UUID uuid) {
 		return SpongeEntityManager.getPlayer(Sponge.server().player(uuid).orElse(null));
 	}
 	

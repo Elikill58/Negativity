@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.impl.entity;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.commands.CommandSender;
@@ -10,11 +11,11 @@ import com.elikill58.negativity.api.entity.Entity;
 
 public class SpigotEntityManager {
 
-	public static com.elikill58.negativity.api.entity.Player getPlayer(Player p){
+	public static com.elikill58.negativity.api.entity.@Nullable Player getPlayer(@Nullable Player p){
 		return p == null ? null : NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p)).getPlayer();
 	}
 	
-	public static Entity getEntity(org.bukkit.entity.Entity bukkitEntity) {
+	public static @Nullable Entity getEntity(org.bukkit.entity.@Nullable Entity bukkitEntity) {
 		if(bukkitEntity == null)
 			return null;
 		switch (bukkitEntity.getType()) {
@@ -29,7 +30,7 @@ public class SpigotEntityManager {
 		}
 	}
 	
-	public static Entity getProjectile(org.bukkit.projectiles.ProjectileSource bukkitEntity) {
+	public static @Nullable Entity getProjectile(org.bukkit.projectiles.@Nullable ProjectileSource bukkitEntity) {
 		if(bukkitEntity == null)
 			return null;
 		if(bukkitEntity instanceof Player)
@@ -39,7 +40,7 @@ public class SpigotEntityManager {
 		return null;
 	}
 
-	public static CommandSender getExecutor(org.bukkit.command.CommandSender sender) {
+	public static @Nullable CommandSender getExecutor(org.bukkit.command.@Nullable CommandSender sender) {
 		if(sender == null)
 			return null;
 		if(sender instanceof Player)

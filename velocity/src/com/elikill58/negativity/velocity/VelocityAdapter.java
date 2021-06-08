@@ -4,10 +4,11 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
@@ -149,32 +150,27 @@ public class VelocityAdapter extends ProxyAdapter {
 	}
 	
 	@Override
-	public OfflinePlayer getOfflinePlayer(String name) {
+	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
 		return null;
 	}
 	
 	@Override
-	public OfflinePlayer getOfflinePlayer(UUID uuid) {
+	public @Nullable OfflinePlayer getOfflinePlayer(UUID uuid) {
 		return null;
 	}
 	
 	@Override
-	public Player getPlayer(String name) {
-		Optional<com.velocitypowered.api.proxy.Player> opt = pl.getServer().getPlayer(name);
-		if (opt.isPresent()) {
-			com.velocitypowered.api.proxy.Player p = opt.get();
-			return NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer();
-		} else
-			return null;
+	public @Nullable Player getPlayer(String name) {
+		return pl.getServer().getPlayer(name)
+			.map(player -> NegativityPlayer.getNegativityPlayer(player.getUniqueId(), () -> new VelocityPlayer(player)).getPlayer())
+			.orElse(null);
 	}
 	
 	@Override
-	public Player getPlayer(UUID uuid) {
-		Optional<com.velocitypowered.api.proxy.Player> opt = pl.getServer().getPlayer(uuid);
-		if (opt.isPresent()) {
-			return NegativityPlayer.getNegativityPlayer(uuid, () -> new VelocityPlayer(opt.get())).getPlayer();
-		} else
-			return null;
+	public @Nullable Player getPlayer(UUID uuid) {
+		return pl.getServer().getPlayer(uuid)
+			.map(player -> NegativityPlayer.getNegativityPlayer(uuid, () -> new VelocityPlayer(player)).getPlayer())
+			.orElse(null);
 	}
 	
 	@Override

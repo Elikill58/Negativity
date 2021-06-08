@@ -5,13 +5,12 @@ import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.LiteralText;
@@ -231,31 +230,33 @@ public class SpongeAdapter extends Adapter {
 	}
 
 	@Override
-	public Player getPlayer(String name) {
+	public @Nullable Player getPlayer(String name) {
 		return SpongeEntityManager.getPlayer(Sponge.getServer().getPlayer(name).orElse(null));
 	}
 
 	@Override
-	public Player getPlayer(UUID uuid) {
+	public @Nullable Player getPlayer(UUID uuid) {
 		return SpongeEntityManager.getPlayer(Sponge.getServer().getPlayer(uuid).orElse(null));
 	}
 
 	@Override
-	public OfflinePlayer getOfflinePlayer(String name) {
-		Player tempP = getPlayer(name);
-		if(tempP != null)
-			return tempP;
-		Optional<User> optUser = Sponge.getServiceManager().provide(UserStorageService.class).get().get(name);
-	    return optUser.isPresent() ? new SpongeOfflinePlayer(optUser.get()) : null;
+	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
+		Player online = getPlayer(name);
+		if (online != null) {
+			return online;
+		}
+		return Sponge.getServiceManager().provideUnchecked(UserStorageService.class)
+			.get(name).map(SpongeOfflinePlayer::new).orElse(null);
 	}
 	
 	@Override
-	public OfflinePlayer getOfflinePlayer(UUID uuid) {
-		Player tempP = getPlayer(uuid);
-		if(tempP != null)
-			return tempP;
-		Optional<User> optUser = Sponge.getServiceManager().provide(UserStorageService.class).get().get(uuid);
-	    return optUser.isPresent() ? new SpongeOfflinePlayer(optUser.get()) : null;
+	public @Nullable OfflinePlayer getOfflinePlayer(UUID uuid) {
+		Player online = getPlayer(uuid);
+		if (online != null) {
+			return online;
+		}
+		return Sponge.getServiceManager().provideUnchecked(UserStorageService.class)
+			.get(uuid).map(SpongeOfflinePlayer::new).orElse(null);
 	}
 	
 	@Override

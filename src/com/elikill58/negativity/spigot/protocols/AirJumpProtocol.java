@@ -48,16 +48,16 @@ public class AirJumpProtocol extends Cheat implements Listener {
 			
 			double diffYtoFromBasic = e.getTo().getY() - e.getFrom().getY();
 			double diffYtoFrom = diffYtoFromBasic - Math.abs(e.getTo().getDirection().getY());
-			if (diffYtoFrom > 0.35 && np.lastYDiff < diffYtoFrom && np.lastYDiff > 0 && !hasOtherThanExtended(locDownDown, "AIR")) {
+			if (diffYtoFrom > 0.35 && np.lastYDiff < diffYtoFrom && np.lastYDiff > p.getVelocity().getY() && !hasOtherThanExtended(locDownDown, "AIR")) {
 				mayCancel = SpigotNegativity.alertMod(
 						diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-								parseInPorcent((int) (diffYtoFrom * 210) - np.ping), "Actual diff Y: " + diffYtoFrom + ", last diff Y: " + np.lastYDiff + ". Down: " + locDown.getBlock().getType().name() + ", Down Down: " + locDownDown.getBlock().getType().name());
+								parseInPorcent((int) (diffYtoFrom * 210) - np.ping), "Actual diff Y: " + diffYtoFrom + ", last diff Y: " + np.lastYDiff + ". Down: " + locDown.getBlock().getType().name() + ", Down Down: " + locDownDown.getBlock().getType().name() + ", velY: " + p.getVelocity().getY());
 			}
 			np.lastYDiff = diffYtoFrom;
 			
 			boolean wasGoingDown = np.contentBoolean.getOrDefault("going-down", false);
 			double d = np.contentDouble.getOrDefault("airjump-diff-y", 0.0);
-			if(diffYtoFromBasic > d && wasGoingDown && diffYtoFromBasic != 0.5 && locDown.getBlock().getType().name().equalsIgnoreCase("AIR")) { // 0.5 when use stairs or slab
+			if(diffYtoFromBasic > d && wasGoingDown && diffYtoFromBasic != 0.5 && locDown.getBlock().getType().name().equalsIgnoreCase("AIR") && p.getVelocity().getY() < 0.5) { // 0.5 when use stairs or slab
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(diffYtoFrom * 200),
 						"Was going down, lastY " + d + ", current: " + diffYtoFrom + ". Down Down: " + locDownDown.getBlock().getType().name() + ", velY: " + p.getVelocity().getY() + ", diffY base: " + diffYtoFromBasic) || mayCancel;
 			}

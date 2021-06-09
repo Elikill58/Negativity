@@ -69,11 +69,10 @@ public class StepProtocol extends Cheat implements Listener {
 			np.contentBoolean.remove("jump-boost-use");
 		} else
 			isUsingJumpBoost = np.contentBoolean.getOrDefault("jump-boost-use", false);
-		if (!isUsingJumpBoost && dif > 0 && dif != 0.60) {
+		if (!isUsingJumpBoost && dif > 0 && dif != 0.60 && p.getVelocity().getY() < 0.5) {
 			int relia = UniversalUtils.parseInPorcent(dif * 50);
 			if (dif > 1.499 && np.ping < 200) {
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia, "Warn for Step: "
-						+ np.getWarn(this) + ". Move " + dif + " blocks up. ping: " + np.ping, hoverMsg("main", "%block%", String.format("%.2f", dif)));
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia, "Move " + dif + " blocks up. VelY: " + p.getVelocity().getY(), hoverMsg("main", "%block%", String.format("%.2f", dif)));
 				if (isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}

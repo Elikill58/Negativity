@@ -16,7 +16,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
@@ -200,14 +199,6 @@ public abstract class Adapter {
 	 * @return an item builder of the skull
 	 */
 	public abstract ItemBuilder createSkullItemBuilder(OfflinePlayer owner);
-	
-	/**
-	 * Get a world
-	 * 
-	 * @param worldName name of required world
-	 * @return a world
-	 */
-	public abstract World getWorld(String worldName);
 	
 	/**
 	 * Create a new inventory

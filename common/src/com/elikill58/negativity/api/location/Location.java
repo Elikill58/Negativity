@@ -5,7 +5,7 @@ import java.util.Objects;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.universal.utils.Maths;
 
-public class Location implements Cloneable {
+public final class Location implements Cloneable {
 
 	private World w;
 	private double x, y, z;

@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -27,7 +26,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
@@ -36,7 +34,6 @@ import com.elikill58.negativity.sponge.impl.entity.SpongeOfflinePlayer;
 import com.elikill58.negativity.sponge.impl.inventory.SpongeInventory;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemBuilder;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemRegistrar;
-import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge.impl.plugin.SpongeExternalPlugin;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
@@ -220,12 +217,6 @@ public class SpongeAdapter extends Adapter {
 		return new SpongeItemBuilder(owner);
 	}
 	
-	@Override
-	public World getWorld(String worldName) {
-		Optional<org.spongepowered.api.world.World> optWorld = Sponge.getServer().getWorld(worldName);
-		return optWorld.isPresent() ? null : new SpongeWorld(optWorld.get());
-	}
-
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
 		return new SpongeInventory(inventoryName, size, holder);

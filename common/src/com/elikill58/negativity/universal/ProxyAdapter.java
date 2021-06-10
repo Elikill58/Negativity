@@ -9,7 +9,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.World;
 
 public abstract class ProxyAdapter extends Adapter {
 
@@ -43,11 +42,6 @@ public abstract class ProxyAdapter extends Adapter {
 		return null;
 	}
 	
-	@Override
-	public World getWorld(String worldName) {
-		return null;
-	}
-
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
 		return null;

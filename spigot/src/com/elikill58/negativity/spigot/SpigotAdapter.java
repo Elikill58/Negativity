@@ -26,7 +26,6 @@ import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.json.parser.ParseException;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
@@ -35,7 +34,6 @@ import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemBuilder;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemRegistrar;
-import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.impl.plugin.SpigotExternalPlugin;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -206,12 +204,6 @@ public class SpigotAdapter extends Adapter {
 		return itemRegistrar;
 	}
 	
-	@Override
-	public World getWorld(String worldName) {
-		org.bukkit.World w = Bukkit.getWorld(worldName);
-		return w == null ? null : new SpigotWorld(w);
-	}
-
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
 		return new SpigotInventory(inventoryName, size, holder);

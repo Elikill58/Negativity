@@ -67,7 +67,7 @@ public class Fly extends Cheat implements Listeners {
 		if(checkActive("omega-craft")) {
 			boolean onGround = p.isOnGround(), wasOnGround = np.booleans.get(FLY, "fly-wasOnGround", true);
 			boolean hasBoatAround = p.getWorld().getEntities().stream().filter((entity) -> entity.getType().equals(EntityType.BOAT) && entity.getLocation().distance(loc) < 3).findFirst().isPresent();
-			if(p.getFallDistance() <= 0.000001 && !p.isInsideVehicle()) {
+			if(p.getFallDistance() <= 0.000001 && !p.isInsideVehicle() && onGround == wasOnGround) {
 				int amount = 0;
 				synchronized (np.flyMoveAmount) {
 					int size = np.flyMoveAmount.size();

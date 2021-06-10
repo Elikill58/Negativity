@@ -54,12 +54,12 @@ public class NoSlowDown extends Cheat implements Listeners {
 	    
 	    boolean mayCancel = false;
 	    if(checkActive("move") && loc.getBlock().getType().equals(Materials.SOUL_SAND) && !p.hasPotionEffect(PotionEffectType.SPEED)) {
-			if (distance > 0.2) {
+			if (distance > 0.2 && distance >= p.getWalkSpeed()) {
 				int relia = UniversalUtils.parseInPorcent(distance * 400);
 				if((from.getY() - to.getY()) < -0.001)
 					return;
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "move",
-						"Soul sand under player. Distance from/to : " + distance + ".",
+						"Soul sand under player. Distance from/to : " + distance + ". WalkSpeed: " + p.getWalkSpeed() + ", VelY: " + p.getVelocity().getY(),
 						hoverMsg("main", "%distance%", String.format("%.2f", distance)));
 			}
 	    }

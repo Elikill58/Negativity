@@ -65,7 +65,7 @@ public class Step extends Cheat implements Listeners {
 		if(np.isBedrockPlayer() && LocationUtils.hasMaterialsAround(down, "SLAB", "FENCE", "STAIRS"))
 			return;
 		if(checkActive("dif")) {
-			if (!isUsingJumpBoost && dif > 0 && dif != 0.60) {
+			if (!isUsingJumpBoost && dif > 0 && dif != 0.60 && p.getVelocity().getY() < 0.5) {
 				int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(dif * 50);
 				if ((dif > 1.499) && ping < 300) {
 					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "dif", "Move " + dif + " blocks up.", hoverMsg("main", "%block%", String.format("%.2f", dif)));

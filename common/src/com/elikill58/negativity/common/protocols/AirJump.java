@@ -12,6 +12,7 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
@@ -31,7 +32,7 @@ public class AirJump extends Cheat implements Listeners {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this) || p.hasPotionEffect(PotionEffectType.JUMP))
 			return;
 		if (p.isFlying() || p.isInsideVehicle() || p.getItemInHand().getType().getId().contains("TRIDENT")
 				|| p.hasElytra() || np.isInFight)
@@ -47,24 +48,26 @@ public class AirJump extends Cheat implements Listeners {
 				return;
 			boolean mayCancel = false;
 
-			double diffYtoFrom = e.getTo().getY() - e.getFrom().getY() - Math.abs(e.getTo().getDirection().getY());
+			double diffYtoFromBasic = e.getTo().getY() - e.getFrom().getY();
+			double diffYtoFrom = diffYtoFromBasic - Math.abs(e.getTo().getDirection().getY());
+			//double diffYtoFrom = e.getTo().getY() - e.getFrom().getY() - Math.abs(e.getTo().getDirection().getY());
 			double lastDiffY = np.doubles.get(AIR_JUMP, "diff-y", 0.0);
 			if (checkActive("diff-y") && !np.booleans.get("ALL", "jump-boost-use", false)) {
-				if (diffYtoFrom > 0.35 && lastDiffY < diffYtoFrom && lastDiffY > 0
+				if (diffYtoFrom > 0.35 && lastDiffY < diffYtoFrom && lastDiffY > p.getVelocity().getY()
 						&& !hasOtherThanExtended(loc.clone().sub(0, 2, 0), "AIR")) {
 					mayCancel = Negativity.alertMod(
 							diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 							this, UniversalUtils.parseInPorcent((int) (diffYtoFrom * 210) - p.getPing()), "diff-y",
 							"Actual diff Y: " + diffYtoFrom + ", last diff Y: " + lastDiffY + ". Down: "
 									+ locDown.getBlock().getType().getId() + ", Down Down: "
-									+ locDownDown.getBlock().getType().getId());
+									+ locDownDown.getBlock().getType().getId() + ", velY: " + p.getVelocity().getY() + ", diffY base: " + diffYtoFromBasic);
 				}
 				lastDiffY = diffYtoFrom;
 			}
 
 			if (checkActive("going-down")) {
 				boolean wasGoingDown = np.booleans.get(AIR_JUMP, "going-down", false);
-				if (diffYtoFrom > lastDiffY && wasGoingDown && diffYtoFrom != 0.5
+				if (diffYtoFrom > lastDiffY && wasGoingDown && diffYtoFrom != 0.5 && p.getVelocity().getY() < 0.5
 						&& locDown.getBlock().getType().getId().equalsIgnoreCase("AIR")) { // 0.5 when use stairs or
 																							// slab
 					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,

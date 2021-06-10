@@ -121,11 +121,12 @@ public class Speed extends Cheat implements Listeners {
 			}
 		}
 		if(onGround && checkActive("calculated")) {
+			double calculatedSpeedWith = getSpeed(from, to);
 			double calculatedSpeedWithoutY = getSpeed(from, to, p.getVelocity()), velocity = p.getVelocity().getY();
 			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && velocity > 0.1
 					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated",
-						"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + velocity);
+						"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + velocity + ", speed: " + calculatedSpeedWith);
 			}
 		}
 		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10)) >= 0.85D && !hasIceBelow) {
@@ -195,6 +196,13 @@ public class Speed extends Cheat implements Listeners {
 	@Override
 	public boolean isBlockedInFight() {
 		return true;
+	}
+	
+	public static double getSpeed(Location from, Location to) {
+		double x = to.getX() - from.getX();
+		double z = to.getZ() - from.getZ();
+
+		return x * x + z * z;
 	}
 	
 	public static double getSpeed(Location from, Location to, Vector vec) {

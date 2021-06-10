@@ -29,7 +29,7 @@ subprojects {
     group = 'com.elikill58'
 
     repositories {
-        jcenter()
+        mavenCentral()
         maven {
             name 'jitpack'
             url 'https://jitpack.io/'

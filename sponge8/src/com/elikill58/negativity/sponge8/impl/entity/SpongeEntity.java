@@ -20,7 +20,7 @@ import com.elikill58.negativity.sponge8.utils.Utils;
 
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class SpongeEntity<E extends Entity> extends AbstractEntity {
 
@@ -77,7 +77,7 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 
 	@Override
 	public String getName() {
-		return entity.get(Keys.DISPLAY_NAME).map(component -> PlainComponentSerializer.plain().serialize(component))
+		return entity.get(Keys.DISPLAY_NAME).map(component -> PlainTextComponentSerializer.plainText().serialize(component))
 			.orElseGet(() -> Utils.getKey(entity.type()).value());
 	}
 	

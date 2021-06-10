@@ -38,7 +38,7 @@ import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Scheduler;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class PlayersListeners {
 	
@@ -48,7 +48,7 @@ public class PlayersListeners {
 		String playerName = e.profile().name().orElse(null);
 		Result result = e.isCancelled() ? Result.KICK_BANNED : Result.ALLOWED;
 		InetAddress address = e.connection().address().getAddress();
-		String kickMessage = PlainComponentSerializer.plain().serialize(e.message());
+		String kickMessage = PlainTextComponentSerializer.plainText().serialize(e.message());
 		LoginEvent event = new LoginEvent(playerId, playerName, result, address, kickMessage);
 		EventManager.callEvent(event);
 		e.setMessage(Component.text(event.getKickMessage()));
@@ -58,7 +58,7 @@ public class PlayersListeners {
 	@Listener
 	public void onPlayerJoin(ServerSideConnectionEvent.Join e, @First ServerPlayer p) {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.uniqueId(), () -> new SpongePlayer(p));
-		PlayerConnectEvent event = new PlayerConnectEvent(np.getPlayer(), np, PlainComponentSerializer.plain().serialize(e.message()));
+		PlayerConnectEvent event = new PlayerConnectEvent(np.getPlayer(), np, PlainTextComponentSerializer.plainText().serialize(e.message()));
 		EventManager.callEvent(event);
 		e.setMessage(Component.text(event.getJoinMessage()));
 		
@@ -71,7 +71,7 @@ public class PlayersListeners {
 	@Listener
 	public void onLeave(ServerSideConnectionEvent.Disconnect e, @First ServerPlayer p) {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.uniqueId(), () -> new SpongePlayer(p));
-		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, PlainComponentSerializer.plain().serialize(e.message()));
+		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, PlainTextComponentSerializer.plainText().serialize(e.message()));
 		EventManager.callEvent(event);
 		e.setMessage(Component.text(event.getQuitMessage()));
 		NegativityPlayer.removeFromCache(p.uniqueId());
@@ -106,7 +106,7 @@ public class PlayersListeners {
 	
 	@Listener
 	public void onChat(org.spongepowered.api.event.message.PlayerChatEvent e, @First ServerPlayer p) {
-		String message = PlainComponentSerializer.plain().serialize(e.message());
+		String message = PlainTextComponentSerializer.plainText().serialize(e.message());
 		PlayerChatEvent event = new PlayerChatEvent(SpongeEntityManager.getPlayer(p), message, message);
 		EventManager.callEvent(event);
 		e.setCancelled(event.isCancelled());

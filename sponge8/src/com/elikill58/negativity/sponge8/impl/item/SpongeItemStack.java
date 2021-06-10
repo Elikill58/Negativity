@@ -14,7 +14,7 @@ import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.sponge8.utils.Utils;
 
-import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 
 public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack {
 	
@@ -38,7 +38,7 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 	@Override
 	public String getName() {
 		return item.get(Keys.DISPLAY_NAME)
-			.map(component -> PlainComponentSerializer.plain().serialize(component))
+			.map(component -> PlainTextComponentSerializer.plainText().serialize(component))
 			.orElse(null);
 	}
 

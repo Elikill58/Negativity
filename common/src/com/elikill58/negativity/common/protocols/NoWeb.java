@@ -19,8 +19,6 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NoWeb extends Cheat implements Listeners {
 
-	private static final double MAX = 0.7421028493192875;
-	
 	public NoWeb() {
 		super(CheatKeys.NO_WEB, CheatCategory.MOVEMENT, WEB, false, false, "no web");
 	}
@@ -37,16 +35,15 @@ public class NoWeb extends Cheat implements Listeners {
 			return;
 		if(!checkActive("speed"))
 			return;
-		Location l = p.getLocation();
-		double distance = e.getTo().distance(e.getFrom());
-		if (!(distance > MAX)) {
-			Block under = l.getBlock();
-			if (under.getType() == WEB && distance > 0.13716039608514914) {
-				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500),
-						"speed", "Distance: " + distance + ", fallDistance: " + p.getFallDistance());
-				if(mayCancel && isSetBack())
-					e.setCancelled(true);
-			}
+		
+		Location from = e.getFrom();
+		Location to = e.getFrom();
+		double distance = to.distance(from);
+		Block under = p.getWorld().getBlockAt((from.getX() + to.getX()) / 2, ((from.getY() + to.getY()) / 2) - 1, (from.getZ() + to.getZ()) / 2);
+		if (under.getType() == WEB && distance > (p.getWalkSpeed() * 0.17)) { //&& distance > 0.13716039608514914) {
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 500), "speed", "Distance: " + distance + ", fallDistance: " + p.getFallDistance() + ", walkSpeed: " + p.getWalkSpeed());
+			if(mayCancel && isSetBack())
+				e.setCancelled(true);
 		}
 	}
 }

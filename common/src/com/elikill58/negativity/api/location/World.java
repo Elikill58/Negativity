@@ -32,6 +32,20 @@ public abstract class World implements NegativityObject {
 	 * Return a block with AIR type if not found
 	 * Can create error if world not loaded AND loading it async
 	 * 
+	 * @param x The X block location
+	 * @param y The Y block location
+	 * @param z The Z block location
+	 * @return the founded block
+	 */
+	public Block getBlockAt(double x, double y, double z) {
+		return getBlockAt((int) x, (int) y, (int) z);
+	}
+
+	/**
+	 * Get the block at the specified location on this world
+	 * Return a block with AIR type if not found
+	 * Can create error if world not loaded AND loading it async
+	 * 
 	 * @param loc the block location
 	 * @return the founded block
 	 */

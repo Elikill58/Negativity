@@ -96,7 +96,7 @@ public class SpongeBlock extends Block {
 
 	@Override
 	public Location getLocation() {
-		return new SpongeLocation(block.getLocation().orElse(null));
+		return SpongeLocation.toCommon(block.getLocation().orElse(null));
 	}
 
 	@Override

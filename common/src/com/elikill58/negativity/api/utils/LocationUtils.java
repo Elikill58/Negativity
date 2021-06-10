@@ -12,7 +12,6 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class LocationUtils {
@@ -309,7 +308,7 @@ public class LocationUtils {
 				int vecX = UniversalUtils.floor(vec3d1.getX());
 				int vecY = UniversalUtils.floor(vec3d1.getY());
 				int vecZ = UniversalUtils.floor(vec3d1.getZ());
-				Location vector = Adapter.getAdapter().createLocation(w, posX, posY, posZ);
+				Location vector = new Location(w, posX, posY, posZ);
 				Material type = w.getBlockAt(vector).getType();
 				if (!type.equals(Materials.AIR) && hasMovingPosition(w, vector, vec3d, vec3d1)
 						&& !type.getId().contains("WATER"))
@@ -379,7 +378,7 @@ public class LocationUtils {
 					posX = UniversalUtils.floor(vec3d.getX()) - (direction == Direction.EAST ? 1 : 0);
 					posY = UniversalUtils.floor(vec3d.getY()) - (direction == Direction.UP ? 1 : 0);
 					posZ = UniversalUtils.floor(vec3d.getZ()) - (direction == Direction.SOUTH ? 1 : 0);
-					vector = Adapter.getAdapter().createLocation(w, posX, posY, posZ);
+					vector = new Location(w, posX, posY, posZ);
 					if (!w.getBlockAt(vector).getType().equals(Materials.AIR)
 							&& hasMovingPosition(w, vector, vec3d, vec3d1)) {
 						return false;

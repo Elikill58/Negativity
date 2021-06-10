@@ -19,6 +19,7 @@ import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
@@ -60,7 +61,7 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 		this.name = name;
         try {
     		this.gameProfile = gameProfileConstructor.newInstance(uuid, name);
-			Object worldServerObj = PacketUtils.getWorldServer((org.bukkit.Location) loc.getDefault());
+			Object worldServerObj = PacketUtils.getWorldServer(SpigotLocation.fromCommon(loc));
 			Object temp = playerInteractManagerConstructor.newInstance(worldServerObj);
 			entityPlayer = entityPlayerConstructor.newInstance(minecraftServer, worldServerObj, gameProfile, temp);
 			id = (int) entityPlayer.getClass().getMethod("getId").invoke(entityPlayer);
@@ -73,7 +74,7 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 	public void show(com.elikill58.negativity.api.entity.Player pl) {
 		Player p = (Player) pl.getDefault();
 		// We don't load chunk, but we cannot spawn entity on no-loaded area
-		if(!((org.bukkit.Location) loc.getDefault()).getChunk().isLoaded())
+		if(!SpigotLocation.fromCommon(loc).getChunk().isLoaded())
 			return;
 		try {
 			entityPlayer.getClass().getMethod("setLocation", double.class, double.class, double.class, float.class, float.class).invoke(entityPlayer, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());

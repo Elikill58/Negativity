@@ -42,9 +42,9 @@ public abstract class ProxyAdapter extends Adapter {
 	public ItemBuilder createSkullItemBuilder(OfflinePlayer owner) {
 		return null;
 	}
-
+	
 	@Override
-	public Location createLocation(World w, double x, double y, double z) {
+	public World getWorld(String worldName) {
 		return null;
 	}
 

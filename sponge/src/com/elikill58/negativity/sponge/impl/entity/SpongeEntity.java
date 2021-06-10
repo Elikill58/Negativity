@@ -19,11 +19,11 @@ import com.flowpowered.math.vector.Vector3d;
 public class SpongeEntity<E extends Entity> extends AbstractEntity {
 
 	protected final E entity;
-	private final SpongeLocation loc;
+	private final Location loc;
 	
 	public SpongeEntity(E e) {
 		this.entity = e;
-		this.loc = new SpongeLocation(e.getLocation());
+		this.loc = SpongeLocation.toCommon(e.getLocation());
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public Location getEyeLocation() {
 		Vector3d vec = entity.getProperty(EyeLocationProperty.class).map(EyeLocationProperty::getValue).orElse(entity.getRotation());
-		return new SpongeLocation(new SpongeWorld(entity.getWorld()), vec.getX(), vec.getY(), vec.getZ());
+		return new Location(new SpongeWorld(entity.getWorld()), vec.getX(), vec.getY(), vec.getZ());
 	}
 	
 	@Override

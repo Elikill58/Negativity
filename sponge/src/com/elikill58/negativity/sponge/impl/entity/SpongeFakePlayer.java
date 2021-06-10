@@ -21,10 +21,8 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
-import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
 import com.flowpowered.math.vector.Vector3d;
 
-@SuppressWarnings("unchecked")
 public class SpongeFakePlayer extends AbstractEntity implements FakePlayer {
 
 	private Entity fakePlayer;
@@ -34,7 +32,7 @@ public class SpongeFakePlayer extends AbstractEntity implements FakePlayer {
 	public SpongeFakePlayer(Location loc, String name) {
 		this.loc = loc;
 		this.name = name;
-		org.spongepowered.api.world.Location<World> spongeLoc = (org.spongepowered.api.world.Location<World>) loc.getDefault();
+		org.spongepowered.api.world.Location<World> spongeLoc = SpongeLocation.fromCommon(loc);
 		fakePlayer = spongeLoc.getExtent().createEntity(EntityTypes.HUMAN, spongeLoc.getPosition());
 		fakePlayer.offer(Keys.DISPLAY_NAME, Text.of(name));
 		fakePlayer.getOrCreate(InvisibilityData.class).ifPresent((data) -> {
@@ -96,7 +94,7 @@ public class SpongeFakePlayer extends AbstractEntity implements FakePlayer {
 	@Override
 	public Location getEyeLocation() {
 		Vector3d vec = fakePlayer.getProperty(EyeLocationProperty.class).map(EyeLocationProperty::getValue).orElse(fakePlayer.getRotation());
-		return new SpongeLocation(new SpongeWorld(fakePlayer.getWorld()), vec.getX(), vec.getY(), vec.getZ());
+		return SpongeLocation.toCommon(fakePlayer.getWorld(), vec.getX(), vec.getY(), vec.getZ());
 	}
 
 	@Override

@@ -45,7 +45,7 @@ public class SpigotBlock extends Block {
 
 	@Override
 	public Location getLocation() {
-		return new SpigotLocation(block.getLocation());
+		return SpigotLocation.toCommon(block.getLocation());
 	}
 
 	@Override

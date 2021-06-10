@@ -1,33 +1,20 @@
 package com.elikill58.negativity.sponge.impl.location;
 
 import org.spongepowered.api.world.World;
-import org.spongepowered.api.world.extent.Extent;
 
-import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.sponge.impl.block.SpongeBlock;
 
-public class SpongeLocation extends Location {
+public class SpongeLocation {
 
-	public SpongeLocation(org.spongepowered.api.world.Location<World> location) {
-		super(new SpongeWorld(location.getExtent()), location.getX(), location.getY(), location.getZ());
-	}
-	
-	public SpongeLocation(com.elikill58.negativity.api.location.World w, double x, double y, double z) {
-		super(w, x, y, z);
+	public static org.spongepowered.api.world.Location<World> fromCommon(Location loc){
+		return new org.spongepowered.api.world.Location<World>((World) loc.getWorld().getDefault(), loc.getX(), loc.getY(), loc.getZ());
 	}
 
-	@Override
-	public Block getBlock() {
-		return new SpongeBlock(getSpongeExtent().createSnapshot(getBlockX(), getBlockY(), getBlockZ()));
+	public static Location toCommon(org.spongepowered.api.world.Location<org.spongepowered.api.world.World> loc){
+		return new Location(new SpongeWorld(loc.getExtent()), loc.getX(), loc.getY(), loc.getZ());
 	}
 
-	@Override
-	public Object getDefault() {
-		return new org.spongepowered.api.world.Location<>(getSpongeExtent(), getX(), getY(), getZ());
-	}
-	
-	private Extent getSpongeExtent() {
-		return (Extent) getWorld().getDefault();
+	public static Location toCommon(World w, double x, double y, double z){
+		return new Location(new SpongeWorld(w), x, y, z);
 	}
 }

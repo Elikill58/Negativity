@@ -1,7 +1,6 @@
 package com.elikill58.negativity.spigot.listeners;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -58,11 +57,11 @@ public class PlayersListeners implements Listener {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p));
 		if(np.isFreeze && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR))
 			e.setCancelled(true);
-		PlayerMoveEvent event = new PlayerMoveEvent(SpigotEntityManager.getPlayer(p), new SpigotLocation(e.getFrom()), new SpigotLocation(e.getTo()));
+		PlayerMoveEvent event = new PlayerMoveEvent(SpigotEntityManager.getPlayer(p), SpigotLocation.toCommon(e.getFrom()), SpigotLocation.toCommon(e.getTo()));
 		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), () -> EventManager.callEvent(event));
 		if(event.hasToSet()) {
-			e.setTo((Location) event.getTo().getDefault());
-			e.setFrom((Location) event.getFrom().getDefault());
+			e.setTo(SpigotLocation.fromCommon(event.getTo()));
+			e.setFrom(SpigotLocation.fromCommon(event.getFrom()));
 		}
 		if(e.isCancelled())
 			return;
@@ -132,7 +131,7 @@ public class PlayersListeners implements Listener {
 	public void onTeleport(org.bukkit.event.player.PlayerTeleportEvent e) {
 		if(e.getPlayer().hasMetadata("NPC"))
 			return;
-		EventManager.callEvent(new PlayerTeleportEvent(SpigotEntityManager.getPlayer(e.getPlayer()), new SpigotLocation(e.getFrom()), new SpigotLocation(e.getTo())));
+		EventManager.callEvent(new PlayerTeleportEvent(SpigotEntityManager.getPlayer(e.getPlayer()), SpigotLocation.toCommon(e.getFrom()), SpigotLocation.toCommon(e.getTo())));
 	}
 	
 	@EventHandler

@@ -13,7 +13,6 @@ import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
-import org.spongepowered.api.world.Location;
 import org.spongepowered.api.world.World;
 
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -69,16 +68,15 @@ public class PlayersListeners {
 		NegativityPlayer.removeFromCache(p.getUniqueId());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
 		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
 		Transform<World> to = e.getToTransform();
 		PlayerMoveEvent event = new PlayerMoveEvent(SpongeEntityManager.getPlayer(p),
-				new SpongeLocation(e.getFromTransform().getLocation()), new SpongeLocation(to.getLocation()));
+				SpongeLocation.toCommon(e.getFromTransform().getLocation()), SpongeLocation.toCommon(to.getLocation()));
 		EventManager.callEvent(event);
 		if(event.hasToSet()) {
-			to.setLocation((Location<World>) event.getTo().getDefault());
+			to.setLocation(SpongeLocation.fromCommon(event.getTo()));
 			e.setToTransform(to);
 		}
 		if(np.isFreeze && !p.getLocation().copy().sub(0, 1, 0).getBlock().getType().equals(BlockTypes.AIR))
@@ -92,8 +90,8 @@ public class PlayersListeners {
 	
 	@Listener
 	public void onTeleport(MoveEntityEvent.Teleport e, @First Player p) {
-		EventManager.callEvent(new PlayerTeleportEvent(SpongeEntityManager.getPlayer(p), new SpongeLocation(e.getFromTransform().getLocation()),
-				new SpongeLocation(e.getToTransform().getLocation())));
+		EventManager.callEvent(new PlayerTeleportEvent(SpongeEntityManager.getPlayer(p), SpongeLocation.toCommon(e.getFromTransform().getLocation()),
+				SpongeLocation.toCommon(e.getToTransform().getLocation())));
 	}
 	
 	@Listener

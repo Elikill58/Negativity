@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ import com.elikill58.negativity.sponge.impl.entity.SpongeOfflinePlayer;
 import com.elikill58.negativity.sponge.impl.inventory.SpongeInventory;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemBuilder;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemRegistrar;
-import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
+import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge.impl.plugin.SpongeExternalPlugin;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
@@ -183,11 +184,6 @@ public class SpongeAdapter extends Adapter {
 	}
 
 	@Override
-	public Location createLocation(World w, double x, double y, double z) {
-		return new SpongeLocation(w, x, y, z);
-	}
-
-	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
 		LiteralText text = Text.builder(message)
 			.onHover(TextActions.showText(Text.of(hover)))
@@ -222,6 +218,12 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public ItemBuilder createSkullItemBuilder(OfflinePlayer owner) {
 		return new SpongeItemBuilder(owner);
+	}
+	
+	@Override
+	public World getWorld(String worldName) {
+		Optional<org.spongepowered.api.world.World> optWorld = Sponge.getServer().getWorld(worldName);
+		return optWorld.isPresent() ? null : new SpongeWorld(optWorld.get());
 	}
 
 	@Override

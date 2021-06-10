@@ -75,10 +75,9 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 		return entity.get(Keys.IS_ELYTRA_FLYING).orElse(false);
 	}
 	
-	@SuppressWarnings("unchecked")
 	@Override
 	public boolean hasLineOfSight(Entity entity) {
-		return LocationUtils.hasLineOfSight(this.entity, (org.spongepowered.api.world.Location<org.spongepowered.api.world.World>) entity.getLocation().getDefault());
+		return LocationUtils.hasLineOfSight(this.entity, SpongeLocation.fromCommon(entity.getLocation()));
 	}
 
 	@Override
@@ -129,7 +128,7 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 
 	@Override
 	public Location getLocation() {
-		return new SpongeLocation(entity.getLocation());
+		return SpongeLocation.toCommon(entity.getLocation());
 	}
 
 	@Override
@@ -313,10 +312,9 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 		teleport(et.getLocation());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public void teleport(Location loc) {
-		entity.setLocation((org.spongepowered.api.world.Location<org.spongepowered.api.world.World>) loc.getDefault());
+		entity.setLocation(SpongeLocation.fromCommon(loc));
 	}
 
 	@Override

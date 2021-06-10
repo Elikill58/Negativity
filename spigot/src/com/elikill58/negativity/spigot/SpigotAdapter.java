@@ -35,7 +35,7 @@ import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemBuilder;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemRegistrar;
-import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
+import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.impl.plugin.SpigotExternalPlugin;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -205,10 +205,11 @@ public class SpigotAdapter extends Adapter {
 	public ItemRegistrar getItemRegistrar() {
 		return itemRegistrar;
 	}
-
+	
 	@Override
-	public Location createLocation(World w, double x, double y, double z) {
-		return new SpigotLocation(w, x, y, z);
+	public World getWorld(String worldName) {
+		org.bukkit.World w = Bukkit.getWorld(worldName);
+		return w == null ? null : new SpigotWorld(w);
 	}
 
 	@Override

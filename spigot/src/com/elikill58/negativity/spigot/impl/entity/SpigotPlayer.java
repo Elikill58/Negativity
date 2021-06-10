@@ -103,7 +103,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public Location getLocation() {
-		return new SpigotLocation(entity.getLocation());
+		return SpigotLocation.toCommon(entity.getLocation());
 	}
 
 	@Override
@@ -261,7 +261,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public void teleport(Location loc) {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.teleport((org.bukkit.Location) loc.getDefault()));
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.teleport(SpigotLocation.fromCommon(loc)));
 	}
 
 	@Override

@@ -200,17 +200,14 @@ public abstract class Adapter {
 	 * @return an item builder of the skull
 	 */
 	public abstract ItemBuilder createSkullItemBuilder(OfflinePlayer owner);
-
+	
 	/**
-	 * Create a new location
+	 * Get a world
 	 * 
-	 * @param w the world location
-	 * @param x the X location
-	 * @param y the Y location
-	 * @param z the Z location
-	 * @return a new location
+	 * @param worldName name of required world
+	 * @return a world
 	 */
-	public abstract Location createLocation(World w, double x, double y, double z);
+	public abstract World getWorld(String worldName);
 	
 	/**
 	 * Create a new inventory

@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.ResourceKey;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.data.Keys;
@@ -15,7 +16,8 @@ import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.sponge8.impl.location.SpongeLocation;
+import com.elikill58.negativity.api.location.World;
+import com.elikill58.negativity.sponge8.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge8.utils.Utils;
 
 public class SpongeBlock extends Block {
@@ -105,7 +107,10 @@ public class SpongeBlock extends Block {
 	
 	@Override
 	public Location getLocation() {
-		return new SpongeLocation(block.location().get());
+		World world = Sponge.server().worldManager().world(block.world())
+			.map(SpongeWorld::new)
+			.orElseThrow(() -> new IllegalStateException("Failed to get world " + block.world() + " from Block"));
+		return new Location(world, getX(), getY(), getZ());
 	}
 	
 	@Override

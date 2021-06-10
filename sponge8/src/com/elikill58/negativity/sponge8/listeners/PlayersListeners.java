@@ -15,7 +15,6 @@ import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.item.inventory.UseItemStackEvent;
 import org.spongepowered.api.event.network.ServerSideConnectionEvent;
-import org.spongepowered.api.world.server.ServerLocation;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
@@ -33,7 +32,7 @@ import com.elikill58.negativity.sponge8.SpongeNegativity;
 import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge8.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge8.impl.item.SpongeItemStack;
-import com.elikill58.negativity.sponge8.impl.location.SpongeLocation;
+import com.elikill58.negativity.sponge8.utils.LocationUtils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Scheduler;
@@ -82,10 +81,10 @@ public class PlayersListeners {
 	public void onPlayerMove(MoveEntityEvent e, @First ServerPlayer p) {
 		NegativityPlayer np = NegativityPlayer.getCached(p.uniqueId());
 		PlayerMoveEvent event = new PlayerMoveEvent(np.getPlayer(),
-			new SpongeLocation(p.world(), e.originalPosition()), new SpongeLocation(p.world(), e.destinationPosition()));
+			LocationUtils.toNegativity(p.world(), e.originalPosition()), LocationUtils.toNegativity(p.world(), e.destinationPosition()));
 		EventManager.callEvent(event);
 		if (event.hasToSet()) {
-			e.setDestinationPosition(((ServerLocation) event.getTo().getDefault()).position());
+			e.setDestinationPosition(LocationUtils.toSpongePosition(event.getTo()));
 		}
 		
 		BlockType blockTypeBelowPlayer = p.location().sub(0, 1, 0).blockType();

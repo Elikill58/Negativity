@@ -15,7 +15,7 @@ import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.sponge8.impl.location.SpongeLocation;
+import com.elikill58.negativity.sponge8.utils.LocationUtils;
 import com.elikill58.negativity.sponge8.utils.Utils;
 
 import net.kyori.adventure.audience.Audience;
@@ -25,12 +25,12 @@ import net.kyori.adventure.text.serializer.plain.PlainComponentSerializer;
 public class SpongeEntity<E extends Entity> extends AbstractEntity {
 
 	protected final E entity;
-	private final SpongeLocation loc;
+	private final Location loc;
 	private @Nullable EntityType cachedEntityType;
 	
 	public SpongeEntity(E e) {
 		this.entity = e;
-		this.loc = new SpongeLocation(e.serverLocation());
+		this.loc = LocationUtils.toNegativity(e.serverLocation());
 	}
 
 	@Override
@@ -84,8 +84,8 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public Location getEyeLocation() {
 		return entity.get(Keys.EYE_POSITION)
-			.map(vec -> new SpongeLocation((ServerWorld) entity.world(), vec))
-			.orElseGet(() -> new SpongeLocation(entity.serverLocation()));
+			.map(vec -> LocationUtils.toNegativity((ServerWorld) entity.world(), vec))
+			.orElseGet(() -> LocationUtils.toNegativity(entity.serverLocation()));
 	}
 	
 	@Override

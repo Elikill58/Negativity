@@ -21,7 +21,6 @@ import org.spongepowered.api.network.channel.Channel;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
 import org.spongepowered.api.registry.RegistryTypes;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.world.server.ServerLocation;
 import org.spongepowered.math.vector.Vector3d;
 
 import com.elikill58.negativity.api.GameMode;
@@ -41,7 +40,6 @@ import com.elikill58.negativity.sponge8.impl.SpongePotionEffectType;
 import com.elikill58.negativity.sponge8.impl.inventory.SpongeInventory;
 import com.elikill58.negativity.sponge8.impl.inventory.SpongePlayerInventory;
 import com.elikill58.negativity.sponge8.impl.item.SpongeItemStack;
-import com.elikill58.negativity.sponge8.impl.location.SpongeLocation;
 import com.elikill58.negativity.sponge8.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge8.utils.LocationUtils;
 import com.elikill58.negativity.sponge8.utils.Utils;
@@ -86,7 +84,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public boolean hasLineOfSight(Entity entity) {
-		return LocationUtils.hasLineOfSight(this.entity, (ServerLocation) entity.getLocation().getDefault());
+		return LocationUtils.hasLineOfSight(this.entity, entity.getLocation());
 	}
 	
 	@Override
@@ -138,7 +136,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public Location getLocation() {
-		return new SpongeLocation(entity.serverLocation());
+		return LocationUtils.toNegativity(entity.serverLocation());
 	}
 	
 	@Override
@@ -329,7 +327,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public void teleport(Location loc) {
-		entity.setLocation((ServerLocation) loc.getDefault());
+		entity.setLocation(LocationUtils.toSponge(loc));
 	}
 	
 	@Override
@@ -448,7 +446,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	@Override
 	public Location getEyeLocation() {
 		Vector3d pos = entity.require(Keys.EYE_POSITION);
-		return new SpongeLocation(new SpongeWorld(entity.world()), pos.x(), pos.y(), pos.z());
+		return new Location(new SpongeWorld(entity.world()), pos.x(), pos.y(), pos.z());
 	}
 	
 	@Override

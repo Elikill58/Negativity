@@ -26,7 +26,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
@@ -35,7 +34,6 @@ import com.elikill58.negativity.sponge8.impl.entity.SpongeOfflinePlayer;
 import com.elikill58.negativity.sponge8.impl.inventory.SpongeInventory;
 import com.elikill58.negativity.sponge8.impl.item.SpongeItemBuilder;
 import com.elikill58.negativity.sponge8.impl.item.SpongeItemRegistrar;
-import com.elikill58.negativity.sponge8.impl.location.SpongeLocation;
 import com.elikill58.negativity.sponge8.impl.plugin.SpongeExternalPlugin;
 import com.elikill58.negativity.sponge8.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
@@ -217,11 +215,6 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public ItemBuilder createSkullItemBuilder(OfflinePlayer owner) {
 		return new SpongeItemBuilder(((org.spongepowered.api.entity.living.player.User) owner.getDefault()).profile());
-	}
-	
-	@Override
-	public Location createLocation(World w, double x, double y, double z) {
-		return new SpongeLocation(w, x, y, z);
 	}
 	
 	@Override

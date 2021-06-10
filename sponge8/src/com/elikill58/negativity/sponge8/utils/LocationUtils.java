@@ -1,6 +1,8 @@
 package com.elikill58.negativity.sponge8.utils;
 
 import org.spongepowered.api.block.BlockTypes;
+import org.spongepowered.api.entity.Entity;
+import org.spongepowered.api.entity.EntityType;
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.util.Direction;
 import org.spongepowered.api.world.server.ServerLocation;
@@ -8,17 +10,20 @@ import org.spongepowered.api.world.server.ServerWorld;
 import org.spongepowered.math.vector.Vector3d;
 import org.spongepowered.math.vector.Vector3i;
 
+import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.sponge8.impl.location.SpongeWorld;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+
 public class LocationUtils {
 
-	public static boolean hasLineOfSight(Player player, ServerLocation loc) {
+	public static boolean hasLineOfSight(Player player, Location loc) {
 		ServerWorld world = player.serverLocation().world();
 		Vector3d eyePos = player.eyePosition().get();
 		if (hasNaN(eyePos)) {
 			return true;
 		}
 		
-		Vector3d vec3d1 = new Vector3d(loc.x(), loc.y() + 1.74F, loc.z());
+		Vector3d vec3d1 = new Vector3d(loc.getX(), loc.getY() + 1.74F, loc.getZ());
 		if (hasNaN(vec3d1)) {
 			return true;
 		}
@@ -176,5 +181,25 @@ public class LocationUtils {
 			return null;
 		}
 		return new Vector3d(main.x() + d1 * d4, main.y() + d2 * d4, main.z() + d3 * d4);
+	}
+	
+	public static Vector3d toSpongePosition(Location location) {
+		return new Vector3d(location.getX(), location.getY(), location.getZ());
+	}
+	
+	public static <E extends Entity> E createEntityAt(Location location, EntityType<E> entityType) {
+		return ((ServerWorld) location.getWorld().getDefault()).createEntity(entityType, toSpongePosition(location));
+	}
+	
+	public static ServerLocation toSponge(Location location) {
+		return ServerLocation.of(((ServerWorld) location.getWorld().getDefault()), location.getX(), location.getY(), location.getZ());
+	}
+	
+	public static Location toNegativity(ServerLocation location) {
+		return new Location(new SpongeWorld(location.world()), location.x(), location.y(), location.z());
+	}
+	
+	public static Location toNegativity(ServerWorld world, Vector3d vec) {
+		return new Location(new SpongeWorld(world), vec.x(), vec.y(), vec.z());
 	}
 }

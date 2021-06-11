@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
@@ -141,21 +140,6 @@ public class BungeeAdapter extends ProxyAdapter {
 	}
 
 	@Override
-	public double[] getTPS() {
-		return null;
-	}
-
-	@Override
-	public double getLastTPS() {
-		return 0;
-	}
-
-	@Override
-	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
-		
-	}
-
-	@Override
 	public List<Player> getOnlinePlayers() {
 		List<Player> list = new ArrayList<>();
 		pl.getProxy().getPlayers().forEach((p) -> list.add(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new BungeePlayer(p)).getPlayer()));
@@ -178,16 +162,6 @@ public class BungeeAdapter extends ProxyAdapter {
 			return null;
 		}
 		return NegativityPlayer.getNegativityPlayer(uuid, () -> new BungeePlayer(pp)).getPlayer();
-	}
-
-	@Override
-	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
-		return null;
-	}
-	
-	@Override
-	public @Nullable OfflinePlayer getOfflinePlayer(UUID uuid) {
-		return null;
 	}
 	
 	@Override

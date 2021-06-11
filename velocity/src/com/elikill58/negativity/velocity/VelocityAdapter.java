@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
@@ -140,26 +139,6 @@ public class VelocityAdapter extends ProxyAdapter {
 	}
 	
 	@Override
-	public double[] getTPS() {
-		return null;
-	}
-	
-	@Override
-	public double getLastTPS() {
-		return 0;
-	}
-	
-	@Override
-	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
-		return null;
-	}
-	
-	@Override
-	public @Nullable OfflinePlayer getOfflinePlayer(UUID uuid) {
-		return null;
-	}
-	
-	@Override
 	public @Nullable Player getPlayer(String name) {
 		return pl.getServer().getPlayer(name)
 			.map(player -> NegativityPlayer.getNegativityPlayer(player.getUniqueId(), () -> new VelocityPlayer(player)).getPlayer())
@@ -171,12 +150,6 @@ public class VelocityAdapter extends ProxyAdapter {
 		return pl.getServer().getPlayer(uuid)
 			.map(player -> NegativityPlayer.getNegativityPlayer(uuid, () -> new VelocityPlayer(player)).getPlayer())
 			.orElse(null);
-	}
-	
-	@Override
-	public void sendMessageRunnableHover(com.elikill58.negativity.api.entity.Player p, String message, String hover,
-										 String command) {
-		
 	}
 	
 	@Override

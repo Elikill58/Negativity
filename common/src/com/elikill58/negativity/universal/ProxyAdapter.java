@@ -1,5 +1,9 @@
 package com.elikill58.negativity.universal;
 
+import java.util.UUID;
+
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -19,41 +23,65 @@ public abstract class ProxyAdapter extends Adapter {
 
 	@Override
 	public ItemRegistrar getItemRegistrar() {
-		return null;
+		throw new UnsupportedOperationException("ItemRegistrar is unsupported on proxies");
 	}
 
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
-		return null;
+		throw new UnsupportedOperationException("ItemBuilder is unsupported on proxies");
 	}
 
 	@Override
 	public ItemBuilder createItemBuilder(String type) {
-		return null;
+		throw new UnsupportedOperationException("ItemBuilder is unsupported on proxies");
 	}
 
 	@Override
 	public ItemBuilder createSkullItemBuilder(Player owner) {
-		return null;
+		throw new UnsupportedOperationException("ItemBuilder is unsupported on proxies");
 	}
 	
 	@Override
 	public ItemBuilder createSkullItemBuilder(OfflinePlayer owner) {
-		return null;
+		throw new UnsupportedOperationException("ItemBuilder is unsupported on proxies");
 	}
 	
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
-		return null;
+		throw new UnsupportedOperationException("Inventory is unsupported on proxies");
 	}
 
 	@Override
 	public FakePlayer createFakePlayer(Location loc, String name) {
-		return null;
+		throw new UnsupportedOperationException("FakePlayer is unsupported on proxies");
 	}
 	
 	@Override
 	public Scheduler getScheduler() {
 		throw new UnsupportedOperationException("Scheduler can't be used on proxy servers");
+	}
+	
+	@Override
+	public double[] getTPS() {
+		throw new UnsupportedOperationException("Proxies don't have TPS");
+	}
+	
+	@Override
+	public double getLastTPS() {
+		throw new UnsupportedOperationException("Proxies don't have TPS");
+	}
+	
+	@Override
+	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
+		throw new UnsupportedOperationException("OfflinePlayer is unsupported on proxies");
+	}
+	
+	@Override
+	public @Nullable OfflinePlayer getOfflinePlayer(UUID uuid) {
+		throw new UnsupportedOperationException("OfflinePlayer is unsupported on proxies");
+	}
+	
+	@Override
+	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
 	}
 }

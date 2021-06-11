@@ -1,6 +1,6 @@
 # Negativity
 
-A Minecraft AntiCheat for **Spigot** (1.7.10 to 1.16.1) and **Sponge** (API 7.1.0) (*also works with PaperSpigot*).
+A Minecraft AntiCheat for **Spigot** (1.7.10 to 1.17) and **Sponge** (API 7.1.0) (*also works with PaperSpigot*).
 It is also compatible with **Bungeecord and Velocity**.
 You need to put the plugin on Spigot/Sponge even if you put it on your proxy.
 

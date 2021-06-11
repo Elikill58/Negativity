@@ -28,7 +28,7 @@ import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 import net.md_5.bungee.config.ConfigurationProvider;
 import net.md_5.bungee.config.YamlConfiguration;
 
-@Plugin(id = "negativity", name = "Negativity", version = "1.9.8-fix",
+@Plugin(id = "negativity", name = "Negativity", version = "1.10",
         description = "It's an Advanced AntiCheat Detection", authors = {"Elikill58", "RedNesto"})
 public class VelocityNegativity {
 

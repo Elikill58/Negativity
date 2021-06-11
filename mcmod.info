@@ -1,7 +1,7 @@
 [{
     "modid": "negativity",
     "name": "Negativity",
-    "version": "1.9.8-fix",
+    "version": "1.10",
     "description": "It's an Advanced AntiCheat Detection",
     "authorList": [
         "Elikill58",

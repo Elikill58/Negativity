@@ -347,7 +347,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void makeAppearEntities() {
-		if (!ACTIVE_CHEAT.contains(Cheat.forKey(CheatKeys.FORCEFIELD))
+		if (!ACTIVE_CHEAT.contains(Cheat.forKey(CheatKeys.FORCEFIELD)) || Version.getVersion().isNewerOrEquals(Version.V1_17)
 				|| SpigotNegativity.getInstance().getConfig().getBoolean("cheats.forcefield.ghost_disabled"))
 			return;
 		timeStartFakePlayer = System.currentTimeMillis();

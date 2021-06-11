@@ -73,14 +73,14 @@ public class FakePlayer {
 			entityPlayer.getClass().getMethod("setLocation", double.class, double.class, double.class, float.class, float.class).invoke(entityPlayer, loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
 			Object dw = entityPlayer.getClass().getMethod("getDataWatcher").invoke(entityPlayer);
 			if(Version.getVersion().isNewerThan(Version.V1_8)) {
-				Class<?> dwRegistryClass = getNmsClass("DataWatcherRegistry");
+				Class<?> dwRegistryClass = getNmsClass("DataWatcherRegistry", "network.syncher.");
 				Object dwByteSerializer = dwRegistryClass.getDeclaredField("a").get(dwRegistryClass);
 
 				Method dwByteSerializerCreate = dwByteSerializer.getClass().getMethod("a", int.class);
 				dwByteSerializerCreate.setAccessible(true);
 				Object dwObject = dwByteSerializerCreate.invoke(dwByteSerializer, 0);
 
-				Class<?> dataWatcherObjectClass = getNmsClass("DataWatcherObject");
+				Class<?> dataWatcherObjectClass = getNmsClass("DataWatcherObject", "network.syncher.");
 				Method setDwMethod = dw.getClass().getMethod("set", dataWatcherObjectClass, Object.class);
 				setDwMethod.invoke(dw, dwObject, (byte) 0x20);
 			} else {
@@ -90,8 +90,8 @@ public class FakePlayer {
 	        PacketUtils.sendPacket(p, packetEntityMetadataConstructor.newInstance(bukkitEntity.getClass().getMethod("getEntityId").invoke(bukkitEntity), dw, true));
 	        PacketUtils.sendPacket(p, packetEntitySpawnConstructor.newInstance(entityPlayer));
 			if(Version.getVersion().equals(Version.V1_7)) {
-				getNmsClass("PacketPlayOutPlayerInfo").getMethod("addPlayer", entityPlayer.getClass())
-						.invoke(getNmsClass("PacketPlayOutPlayerInfo"), entityPlayer);
+				getNmsClass("PacketPlayOutPlayerInfo", "network.protocol.game.").getMethod("addPlayer", entityPlayer.getClass())
+						.invoke(getNmsClass("PacketPlayOutPlayerInfo", "network.protocol.game."), entityPlayer);
 			} else {
 				PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoAddPlayer, ((Iterable<?>) Arrays.asList(entityPlayer))));
 			}
@@ -103,8 +103,8 @@ public class FakePlayer {
 			public void run() {
 				try {
 					if(Version.getVersion().equals(Version.V1_7)) {
-						getNmsClass("PacketPlayOutPlayerInfo").getMethod("removePlayer", entityPlayer.getClass())
-								.invoke(getNmsClass("PacketPlayOutPlayerInfo"), entityPlayer);
+						getNmsClass("PacketPlayOutPlayerInfo", "network.protocol.game.").getMethod("removePlayer", entityPlayer.getClass())
+								.invoke(getNmsClass("PacketPlayOutPlayerInfo", "network.protocol.game."), entityPlayer);
 					} else {
 						PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoRemovePlayer, ((Iterable<?>) Arrays.asList(entityPlayer))));
 					}
@@ -130,8 +130,8 @@ public class FakePlayer {
 	public void hide(Player p) {
 		try {
 			if(Version.getVersion().equals(Version.V1_7)) {
-				getNmsClass("PacketPlayOutPlayerInfo").getMethod("removePlayer", entityPlayer.getClass())
-							.invoke(getNmsClass("PacketPlayOutPlayerInfo"), entityPlayer);
+				getNmsClass("PacketPlayOutPlayerInfo", "network.protocol.game.").getMethod("removePlayer", entityPlayer.getClass())
+							.invoke(getNmsClass("PacketPlayOutPlayerInfo", "network.protocol.game."), entityPlayer);
 			} else {
 				PacketUtils.sendPacket(p, packetPlayerInfoConstructor.newInstance(playerInfoRemovePlayer, ((Iterable<?>) Arrays.asList(entityPlayer))));
 			}
@@ -208,18 +208,22 @@ public class FakePlayer {
 	 */
 	public static void loadClass() {
 		try {
-			gameProfileClass = Class.forName(Version.getVersion().equals(Version.V1_7) ? "net.minecraft.util.com.mojang.authlib.GameProfile" : "com.mojang.authlib.GameProfile");
+			Version ver = Version.getVersion();
+			gameProfileClass = Class.forName(ver.equals(Version.V1_7) ? "net.minecraft.util.com.mojang.authlib.GameProfile" : "com.mojang.authlib.GameProfile");
 			gameProfileConstructor = gameProfileClass.getConstructor(UUID.class, String.class);
 			
-	    	entityPlayerConstructor = getNmsClass("EntityPlayer").getConstructor(getNmsClass("MinecraftServer"), getNmsClass("WorldServer"), gameProfileClass, getNmsClass("PlayerInteractManager"));
-			playerInteractManagerConstructor = getNmsClass("PlayerInteractManager").getConstructor(getNmsClass("World" + (Version.getVersion().isNewerOrEquals(Version.V1_14) ? "Server" : "")));
-			minecraftServer = getNmsClass("MinecraftServer").getMethod("getServer").invoke(getNmsClass("MinecraftServer"));
+			/*if(ver.isNewerOrEquals(Version.V1_17))
+				entityPlayerConstructor = getNmsClass("EntityPlayer", "server.level.").getConstructor(getNmsClass("MinecraftServer", "server."), getNmsClass("WorldServer", "server.level."), gameProfileClass);
+			else*/
+				entityPlayerConstructor = getNmsClass("EntityPlayer", "server.level.").getConstructor(getNmsClass("MinecraftServer", "server."), getNmsClass("WorldServer", "server.level."), gameProfileClass, getNmsClass("PlayerInteractManager", "server.level."));
+			playerInteractManagerConstructor = getNmsClass("PlayerInteractManager", "server.level.").getConstructor(getNmsClass("World" + (Version.getVersion().isNewerOrEquals(Version.V1_14) ? "Server" : ""), "server.level."));
+			minecraftServer = getNmsClass("MinecraftServer", "server.").getMethod("getServer").invoke(getNmsClass("MinecraftServer", "server."));
 			
-			packetEntityMetadataConstructor = getNmsClass("PacketPlayOutEntityMetadata").getConstructor(int.class, getNmsClass("DataWatcher"), boolean.class);
-			packetEntitySpawnConstructor = getNmsClass("PacketPlayOutNamedEntitySpawn").getConstructor(getNmsClass("EntityHuman"));
-			packetEntityDestroyConstructor = getNmsClass("PacketPlayOutEntityDestroy").getConstructor(int[].class);
-			if(!Version.getVersion().equals(Version.V1_7)) {
-				packetPlayerInfoConstructor = getNmsClass("PacketPlayOutPlayerInfo").getConstructor(ENUM_PLAYER_INFO, Iterable.class);
+			packetEntityMetadataConstructor = getNmsClass("PacketPlayOutEntityMetadata", "network.protocol.game.").getConstructor(int.class, getNmsClass("DataWatcher", "network.syncher."), boolean.class);
+			packetEntitySpawnConstructor = getNmsClass("PacketPlayOutNamedEntitySpawn", "network.protocol.game.").getConstructor(getNmsClass("EntityHuman", "world.entity.player."));
+			packetEntityDestroyConstructor = getNmsClass("PacketPlayOutEntityDestroy", "network.protocol.game.").getConstructor(int[].class);
+			if(!ver.equals(Version.V1_7)) {
+				packetPlayerInfoConstructor = getNmsClass("PacketPlayOutPlayerInfo", "network.protocol.game.").getConstructor(ENUM_PLAYER_INFO, Iterable.class);
 				playerInfoAddPlayer = ENUM_PLAYER_INFO.getField("ADD_PLAYER").get(ENUM_PLAYER_INFO);
 				playerInfoRemovePlayer = ENUM_PLAYER_INFO.getField("REMOVE_PLAYER").get(ENUM_PLAYER_INFO);
 			}

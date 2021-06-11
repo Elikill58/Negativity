@@ -11,6 +11,7 @@ import org.bukkit.plugin.Plugin;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.PacketManager;
 import com.elikill58.negativity.spigot.packets.custom.channel.ChannelAbstract;
+import com.elikill58.negativity.spigot.packets.custom.channel.INC2Channel;
 import com.elikill58.negativity.spigot.packets.custom.channel.INCChannel;
 import com.elikill58.negativity.spigot.packets.custom.channel.NMUChannel;
 import com.elikill58.negativity.spigot.packets.event.PacketEvent.PacketSourceType;
@@ -26,7 +27,10 @@ public class CustomPacketManager extends PacketManager implements Listener {
 
 	public CustomPacketManager(Plugin pl) {
 		this.pl = pl;
-		if (Version.getVersion(Utils.VERSION).equals(Version.V1_7))
+		Version version = Version.getVersion(Utils.VERSION);
+		if (version.isNewerOrEquals(Version.V1_17))
+			channel = new INC2Channel(this);
+		else if (version.equals(Version.V1_7))
 			channel = new NMUChannel(this);
 		else
 			channel = new INCChannel(this);
@@ -79,12 +83,16 @@ public class CustomPacketManager extends PacketManager implements Listener {
 	}
 
 	public AbstractPacket onPacketSent(PacketType type, Player sender, Object packet) {
+		if(type == null)
+			return null;
 		CustomPacket customPacket = new CustomPacket(type, packet, sender);
 		notifyHandlersSent(PacketSourceType.CUSTOM, customPacket);
 		return customPacket;
 	}
 
 	public AbstractPacket onPacketReceive(PacketType type, Player sender, Object packet) {
+		if(type == null)
+			return null;
 		CustomPacket customPacket = new CustomPacket(type, packet, sender);
 		notifyHandlersReceive(PacketSourceType.CUSTOM, customPacket);
 		return customPacket;

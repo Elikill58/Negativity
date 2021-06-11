@@ -64,12 +64,12 @@ public class NukerProtocol extends Cheat implements Listener {
 		if(!type.equals(Client.BLOCK_DIG) || Version.getVersion().equals(Version.V1_7))
 			return;
 		PacketContent content = packet.getContent();
-		Object dig = content.getSpecificModifier(PacketUtils.getNmsClass("PacketPlayInBlockDig$EnumPlayerDigType")).read("c");
+		Object dig = content.getSpecificModifier(PacketUtils.getNmsClass("PacketPlayInBlockDig$EnumPlayerDigType", "network.protocol.game.")).read("c");
 		if(!dig.toString().contains("STOP_DESTROY_BLOCK"))
 			return;
 		try {
-			Object bp = content.getSpecificModifier(PacketUtils.getNmsClass("BlockPosition")).read("a");
-			Class<?> baseBpClass = PacketUtils.getNmsClass("BaseBlockPosition");
+			Object bp = content.getSpecificModifier(PacketUtils.getNmsClass("BlockPosition", "core.")).read("a");
+			Class<?> baseBpClass = PacketUtils.getNmsClass("BaseBlockPosition", "core.");
 			int x = (int) baseBpClass.getDeclaredMethod("getX").invoke(bp);
 			int y = (int) baseBpClass.getDeclaredMethod("getY").invoke(bp);
 			int z = (int) baseBpClass.getDeclaredMethod("getZ").invoke(bp);

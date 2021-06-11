@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
+
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -91,8 +93,6 @@ import com.elikill58.negativity.universal.utils.ReflectionUtils;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 
-import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
-
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
@@ -140,7 +140,8 @@ public class SpigotNegativity extends JavaPlugin {
 		getLogger().info("This plugin is free, but you can buy the premium version : https://www.spigotmc.org/resources/86874 <3");
 		UniversalUtils.init();
 		Cheat.loadCheat();
-		FakePlayer.loadClass();
+		if(!v.isNewerOrEquals(Version.V1_17))
+			FakePlayer.loadClass();
 		ProxyCompanionManager.updateForceDisabled(getConfig().getBoolean("disableProxyIntegration"));
 		setupValue();
 
@@ -275,7 +276,9 @@ public class SpigotNegativity extends JavaPlugin {
 			// 1.8 = h
 			// 1.7 = g
 			String fieldNameLastTimeTps = null;
-			if(v.equals(Version.V1_13))
+			if(v.isNewerOrEquals(Version.V1_17))
+				fieldNameLastTimeTps = "n";
+			else if(v.equals(Version.V1_13))
 				fieldNameLastTimeTps = "d";
 			else if(v.equals(Version.V1_7))
 				fieldNameLastTimeTps = "g";
@@ -284,10 +287,10 @@ public class SpigotNegativity extends JavaPlugin {
 			else
 				fieldNameLastTimeTps = "h";
 			
-			Class<?> mcServerClass = PacketUtils.getNmsClass("MinecraftServer");
+			Class<?> mcServerClass = PacketUtils.getNmsClass("MinecraftServer", "server.");
 			Object mcServer = mcServerClass.getMethod("getServer").invoke(mcServerClass);
 			Field fieldLastTimeTps = mcServerClass.getDeclaredField(fieldNameLastTimeTps);
-			Method mathHelperMethod = PacketUtils.getNmsClass("MathHelper").getDeclaredMethod("a", long[].class);
+			Method mathHelperMethod = PacketUtils.getNmsClass("MathHelper", "util.").getDeclaredMethod("a", long[].class);
 			getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
 				try {
 					Object lastTime = fieldLastTimeTps.get(mcServer);

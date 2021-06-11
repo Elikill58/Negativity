@@ -19,6 +19,7 @@ public enum Version {
 	V1_15("1.15", 15, 100, 550, 578),
 	V1_16("1.16", 16, 100, 700, 800),
 	V1_17("1.17", 17, 100, 800, 1000),
+	V1_18("1.18", 17, 100, 800, 1000),
 	HIGHER("higher", 42, 100, 1000, 1000);
 
 	private final int power, timeBetweenRegen;

@@ -336,7 +336,7 @@ public class LocationUtils {
 			PacketContent content = null;
 			try {
 				Object nmsEntity = PacketUtils.getNMSEntity(entityToSee);
-				content = new PacketContent(PacketUtils.getNmsClass("Entity").getDeclaredMethod("getBoundingBox").invoke(nmsEntity));
+				content = new PacketContent(PacketUtils.getNmsClass("Entity", "world.entity.").getDeclaredMethod("getBoundingBox").invoke(nmsEntity));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

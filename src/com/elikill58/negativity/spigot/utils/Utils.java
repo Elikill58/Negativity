@@ -54,7 +54,7 @@ public class Utils {
 	public static List<Player> getOnlinePlayers() {
 		List<Player> list = new ArrayList<>();
 		try {
-			Class<?> mcServer = Class.forName("net.minecraft.server." + VERSION + ".MinecraftServer");
+			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer", "server.");
 			Object server = mcServer.getMethod("getServer").invoke(mcServer);
 			Object craftServer = server.getClass().getField("server").get(server);
 			Object getted = craftServer.getClass().getMethod("getOnlinePlayers").invoke(craftServer);
@@ -100,7 +100,10 @@ public class Utils {
 	public static int getPing(Player p) {
 		try {
 			Object entityPlayer = PacketUtils.getEntityPlayer(p);
-			return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
+			if(Version.getVersion().isNewerOrEquals(Version.V1_17))
+				return entityPlayer.getClass().getField("e").getInt(entityPlayer);
+			else
+				return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -141,7 +144,7 @@ public class Utils {
 			return new double[] {20, 20, 20};
 		} else {
 			try {
-				Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer");
+				Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer", "server.");
 				Object server = mcServer.getMethod("getServer").invoke(mcServer);
 				return (double[]) server.getClass().getField("recentTps").get(server);
 			} catch (Exception e) {

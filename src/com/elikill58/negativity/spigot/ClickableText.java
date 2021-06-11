@@ -122,10 +122,10 @@ public class ClickableText {
 					ClickableTextBungeeAPI.send(p, this);
 				} else {
 					for (Object obj : compile()) {
-						Class<?> chatBaseComponent = PacketUtils.getNmsClass("ChatBaseComponent");
+						Class<?> chatBaseComponent = PacketUtils.getNmsClass("ChatBaseComponent", "network.chat.");
 
 						chatBaseComponent.getMethod("a", Iterable.class).invoke(chatBaseComponent, obj);
-						PacketUtils.sendPacket(p, "PacketPlayOutChat", PacketUtils.getNmsClass("IChatBaseComponent"), obj);
+						PacketUtils.sendPacket(p, "PacketPlayOutChat", Class.forName("net.minecraft.server." + Utils.VERSION + ".IChatBaseComponent"), obj);
 					}
 				}
 			} catch (Exception e) {
@@ -138,7 +138,7 @@ public class ClickableText {
 				for (Object c : nmsChat) {
 					Object chatModifier = c.getClass().getMethod("getChatModifier").invoke(c);
 					if (a.isHover()) {
-						Class<?> chatHoverable = PacketUtils.getNmsClass("ChatHoverable");
+						Class<?> chatHoverable = Class.forName("net.minecraft.server." + Utils.VERSION + ".ChatHoverable");
 						Method m = null;
 						try {
 							m = chatModifier.getClass().getMethod("setChatHoverable", chatHoverable);
@@ -151,14 +151,14 @@ public class ClickableText {
 						} catch (ClassNotFoundException e) {
 							enumHover = a.getClazz().getDeclaredClasses()[0];
 						}
-						Class<?> chatComponent = PacketUtils.getNmsClass("ChatComponentText");
+						Class<?> chatComponent = Class.forName("net.minecraft.server." + Utils.VERSION + ".ChatComponentText");
 						Constructor<?> clickableConstructor = chatHoverable.getConstructor(enumHover,
-								PacketUtils.getNmsClass("IChatBaseComponent"));
+								Class.forName("net.minecraft.server." + Utils.VERSION + ".IChatBaseComponent"));
 						m.invoke(chatModifier,
 								clickableConstructor.newInstance(enumHover.getField(a.name()).get(enumHover),
 										chatComponent.getConstructor(String.class).newInstance(data)));
 					} else {
-						Class<?> chatClickable = PacketUtils.getNmsClass("ChatClickable");
+						Class<?> chatClickable = Class.forName("net.minecraft.server." + Utils.VERSION + ".ChatClickable");
 						Method setChatClickable = chatModifier.getClass().getMethod("setChatClickable", chatClickable);
 						Class<?> enumClick = null;
 						try {
@@ -186,14 +186,14 @@ public class ClickableText {
 							} catch (ClassNotFoundException e) {
 								enumHover = a.getClazz().getDeclaredClasses()[0];
 							}
-							Class<?> chatComponent = PacketUtils.getNmsClass("ChatComponentText");
+							Class<?> chatComponent = Class.forName("net.minecraft.server." + Utils.VERSION + ".ChatComponentText");
 							Constructor<?> clickableConstructor = chatHoverable.getConstructor(enumHover,
-									PacketUtils.getNmsClass("IChatBaseComponent"));
+									Class.forName("net.minecraft.server." + Utils.VERSION + ".IChatBaseComponent"));
 							m.invoke(chatModifier,
 									clickableConstructor.newInstance(enumHover.getField(a2.name()).get(enumHover),
 											chatComponent.getConstructor(String.class).newInstance(data2)));
 						} else {
-							Class<?> chatClickable = PacketUtils.getNmsClass("ChatClickable");
+							Class<?> chatClickable = Class.forName("net.minecraft.server." + Utils.VERSION + ".ChatClickable");
 							Method setChatClickable = chatModifier.getClass().getMethod("setChatClickable",
 									chatClickable);
 							Class<?> enumClick = null;

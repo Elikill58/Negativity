@@ -13,12 +13,20 @@ public class PacketUtils {
 
 	public static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
 			.split(",")[3];
+	public static final String NMS_PREFIX;
 
 	public static Class<?> CRAFT_PLAYER_CLASS, CRAFT_ENTITY_CLASS;
-	public static Class<?> ENUM_PLAYER_INFO = getEnumPlayerInfoAction();
+	public static Class<?> ENUM_PLAYER_INFO;
+	
+	/**
+	 * This Map is to reduce Reflection action which take more ressources than just RAM action
+	 */
+	private static final HashMap<String, Class<?>> ALL_CLASS = new HashMap<>();
 	
 	static {
+		NMS_PREFIX = Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? "net.minecraft." : "net.minecraft.server." + VERSION + ".";
 		try {
+			ENUM_PLAYER_INFO = getEnumPlayerInfoAction();
 			CRAFT_PLAYER_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer");
 			CRAFT_ENTITY_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftEntity");
 		} catch (Exception e) {
@@ -27,21 +35,16 @@ public class PacketUtils {
 	}
 	
 	/**
-	 * This Map is to reduce Reflection action which take more ressources than just RAM action
-	 */
-	private static final HashMap<String, Class<?>> ALL_CLASS = new HashMap<>();
-	
-	/**
 	 * Get the Class in NMS, with a processing reducer
 	 * 
 	 * @param name of the NMS class (in net.minecraft.server package ONLY, because it's NMS)
-	 * @return clazz
+	 * @return clazz the searched class
 	 */
-	public static Class<?> getNmsClass(String name){
+	public static Class<?> getNmsClass(String name, String packagePrefix){
 		if(ALL_CLASS.containsKey(name))
 			return ALL_CLASS.get(name);
 		try {
-			Class<?> clazz = Class.forName("net.minecraft.server." + VERSION + "." + name);
+			Class<?> clazz = Class.forName(NMS_PREFIX + (Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? packagePrefix : "") + name);
 			ALL_CLASS.put(name, clazz);
 			return clazz;
 		} catch (Exception e) {
@@ -58,7 +61,7 @@ public class PacketUtils {
 	 */
 	public static Object createPacket(String packetName) {
 		try {
-			return getNmsClass(packetName).getConstructor().newInstance();
+			return getNmsClass(packetName, "network.protocol.game.").getConstructor().newInstance();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -91,7 +94,7 @@ public class PacketUtils {
 	 */
 	public static void sendPacket(Player p, String packetName, Class<?> type, Object data) {
 		try {
-			sendPacket(p, getNmsClass(packetName).getConstructor(type).newInstance(data));
+			sendPacket(p, getNmsClass(packetName, "network.protocol.game.").getConstructor(type).newInstance(data));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -106,7 +109,7 @@ public class PacketUtils {
 	public static void sendPacket(Player p, Object packet) {
 		try {
 			Object playerConnection = getPlayerConnection(p);
-			playerConnection.getClass().getMethod("sendPacket", getNmsClass("Packet")).invoke(playerConnection, packet);
+			playerConnection.getClass().getMethod("sendPacket", getNmsClass("Packet", "network.protocol.")).invoke(playerConnection, packet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -121,7 +124,10 @@ public class PacketUtils {
 	public static Object getPlayerConnection(Player p) {
 		try {
 			Object entityPlayer = getEntityPlayer(p);
-			return entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
+			if(Version.getVersion().isNewerOrEquals(Version.V1_17))
+				return entityPlayer.getClass().getField("b").get(entityPlayer);
+			else
+				return entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -164,19 +170,16 @@ public class PacketUtils {
 	 * Get the EnumPlayerInfoAction class which depend of packet PacketPlayOutPlayerInfo
 	 * 
 	 * @return the class of EnumPlayerInfoAction
+	 * @throws ClassNotFoundException 
+	 * @throws SecurityException 
 	 */
-	private static Class<?> getEnumPlayerInfoAction() {
+	private static Class<?> getEnumPlayerInfoAction() throws SecurityException, ClassNotFoundException {
 		try {
-			try {
-				return Class.forName("net.minecraft.server." + VERSION + ".EnumPlayerInfoAction");
-			} catch (Exception e) {
-				for(Class<?> clazz : Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutPlayerInfo").getDeclaredClasses())
-					if(clazz.getName().contains("EnumPlayerInfoAction"))
-						return clazz;
-				return null;
-			}
+			return getNmsClass("PacketPlayOutPlayerInfo$EnumPlayerInfoAction", "network.protocol.game.");
 		} catch (Exception e) {
-			e.printStackTrace();
+			for(Class<?> clazz : getNmsClass("PacketPlayOutPlayerInfo", "network.protocol.game.").getDeclaredClasses())
+				if(clazz.getName().contains("EnumPlayerInfoAction"))
+					return clazz;
 			return null;
 		}
 	}
@@ -200,10 +203,10 @@ public class PacketUtils {
 	public static String getNmsEntityName(Object nmsEntity) {
 		try {
 			if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
-				Object chatBaseComponent = getNmsClass("Entity").getDeclaredMethod("getDisplayName").invoke(nmsEntity);
-				return (String) getNmsClass("IChatBaseComponent").getDeclaredMethod("getString").invoke(chatBaseComponent);
+				Object chatBaseComponent = getNmsClass("Entity", "world.entity.").getDeclaredMethod("getDisplayName").invoke(nmsEntity);
+				return (String) getNmsClass("IChatBaseComponent", "network.chat.").getDeclaredMethod("getString").invoke(chatBaseComponent);
 			} else {
-				return (String) getNmsClass("Entity").getDeclaredMethod("getName").invoke(nmsEntity);
+				return (String) getNmsClass("Entity", "world.entity.").getDeclaredMethod("getName").invoke(nmsEntity);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -219,9 +222,9 @@ public class PacketUtils {
 			if(cp.getClass().isInstance(craftMonsterClass)) { // prevent protected items
 				Object ep = craftMonsterClass.getDeclaredMethod("getHandle").invoke(craftMonsterClass.cast(cp));
 				if(Version.getVersion().equals(Version.V1_7))
-					return getNmsClass("Entity").getDeclaredField("boundingBox").get(ep);
+					return getNmsClass("Entity", "world.entity.").getDeclaredField("boundingBox").get(ep);
 				else
-					return getNmsClass("Entity").getDeclaredMethod("getBoundingBox").invoke(ep);
+					return getNmsClass("Entity", "world.entity.").getDeclaredMethod("getBoundingBox").invoke(ep);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

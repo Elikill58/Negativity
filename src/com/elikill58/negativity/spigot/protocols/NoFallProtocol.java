@@ -163,7 +163,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 
 	public double getY(Object obj) {
 		try {
-			Field f = obj.getClass().getSuperclass().getDeclaredField("y");
+			Field f = obj.getClass().getSuperclass().getDeclaredField(Version.getVersion().isNewerOrEquals(Version.V1_17) ? "b" : "y");
 			f.setAccessible(true);
 			return f.getDouble(obj);
 		} catch (Exception e) {

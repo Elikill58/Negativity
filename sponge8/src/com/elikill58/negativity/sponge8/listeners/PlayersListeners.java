@@ -10,11 +10,13 @@ import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.InteractEvent;
+import org.spongepowered.api.event.entity.ChangeEntityWorldEvent;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
 import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.item.inventory.UseItemStackEvent;
 import org.spongepowered.api.event.network.ServerSideConnectionEvent;
+import org.spongepowered.api.world.server.ServerWorld;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
@@ -28,6 +30,8 @@ import com.elikill58.negativity.api.events.player.PlayerInteractEvent.Action;
 import com.elikill58.negativity.api.events.player.PlayerItemConsumeEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.sponge8.SpongeNegativity;
 import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge8.impl.entity.SpongePlayer;
@@ -98,11 +102,20 @@ public class PlayersListeners {
 		}
 	}
 	
-	//@Listener TODO
-	//public void onTeleport(MoveEntityEvent.Teleport e, @First ServerPlayer p) {
-	//	EventManager.callEvent(new PlayerTeleportEvent(SpongeEntityManager.getPlayer(p), new SpongeLocation(e.getFromTransform().getLocation()),
-	//		new SpongeLocation(e.getToTransform().getLocation())));
-	//}
+	@Listener
+	public void onTeleport(MoveEntityEvent e, @First ServerPlayer p) {
+		Location from;
+		Location to;
+		if (e instanceof ChangeEntityWorldEvent) {
+			from = LocationUtils.toNegativity(((ChangeEntityWorldEvent) e).originalWorld(), e.originalPosition());
+			to = LocationUtils.toNegativity(((ChangeEntityWorldEvent) e).destinationWorld(), e.destinationPosition());
+		} else {
+			ServerWorld world = (ServerWorld) e.entity().world();
+			from = LocationUtils.toNegativity(world, e.originalPosition());
+			to = LocationUtils.toNegativity(world, e.destinationPosition());
+		}
+		EventManager.callEvent(new PlayerTeleportEvent(SpongeEntityManager.getPlayer(p), from, to));
+	}
 	
 	@Listener
 	public void onChat(org.spongepowered.api.event.message.PlayerChatEvent e, @First ServerPlayer p) {

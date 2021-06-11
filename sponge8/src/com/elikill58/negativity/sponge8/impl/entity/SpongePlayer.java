@@ -364,7 +364,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public boolean isUsingRiptide() {
-		// TODO SpongeAPI 8 does not expose this information (yet)
+		// TODO SpongeAPI 8 does not expose this information yet: https://github.com/SpongePowered/SpongeAPI/pull/2315
 		return false;
 	}
 	

@@ -50,8 +50,7 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 
 	@Override
 	public double getEyeHeight() {
-		// TODO implement getEyeHeight
-		return 0;
+		return entity.require(Keys.EYE_HEIGHT);
 	}
 
 	@Override

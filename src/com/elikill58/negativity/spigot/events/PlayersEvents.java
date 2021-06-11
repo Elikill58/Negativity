@@ -39,6 +39,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanType;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -99,8 +100,12 @@ public class PlayersEvents implements Listener {
 				e.setLoginResult(Result.KICK_OTHER);
 			}
 		} else {
-			int maxAllowedIP = Adapter.getAdapter().getConfig().getInt("cheats.special.max-player-by-ip.number");
+			ConfigAdapter config = Adapter.getAdapter().getConfig().getChild("cheats.special.max-player-by-ip");
+			boolean bypassEnabled = config.getBoolean("perm-bypass-enabled");
+			int maxAllowedIP = config.getInt("number");
 			int currentOnIP = SpigotNegativityPlayer.getAllPlayers().values().stream().filter((np) -> {
+				if(bypassEnabled && Perm.hasPerm(np, Perm.MAX_PLAYER_BY_ID))
+					return false;
 				try {
 					return np.getPlayer().isOnline() && np.getIP().equals(e.getAddress().getHostAddress());
 				} catch (NullPointerException exc) {

@@ -94,6 +94,7 @@ public class DefaultConfigValue {
 		STRINGS.put("Permissions.notBanned.default", "negativity.notbanned");
 		STRINGS.put("Permissions.mod.default", "negativity.mod");
 		STRINGS.put("Permissions.lang.default", "negativity.lang");
+		STRINGS.put("Permissions.max-player-by-ip.default", "negativity.bypass.max-player-by-ip");
 		BOOLEANS.put("Permissions.bypass.active", false);
 		STRINGS.put("Permissions.bypass.all", "negativity.bypass.all");
 		STRINGS.put("Permissions.bypass.ban", "negativity.bypass.ban");
@@ -180,6 +181,7 @@ public class DefaultConfigValue {
 
 		INTS.put("cheats.special.max-player-by-ip.number", 4);
 		STRINGS.put("cheats.special.max-player-by-ip.name", "Max Player/IP");
+		BOOLEANS.put("cheats.special.max-player-by-ip.perm-bypass-enabled", false);
 		
 		BOOLEANS.put("stats", true);
 	}

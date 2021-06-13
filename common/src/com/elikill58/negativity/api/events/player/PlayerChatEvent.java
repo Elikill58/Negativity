@@ -1,22 +1,17 @@
 package com.elikill58.negativity.api.events.player;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Event;
+import com.elikill58.negativity.api.events.PlayerEvent;
 
-public class PlayerChatEvent implements Event {
+public class PlayerChatEvent extends PlayerEvent {
 	
-	private final Player p;
 	private String message, format;
 	private boolean cancel;
 	
 	public PlayerChatEvent(Player p, String message, String format) {
-		this.p = p;
+		super(p);
 		this.message = message;
 		this.format = format;
-	}
-
-	public Player getPlayer() {
-		return p;
 	}
 
 	public String getMessage() {

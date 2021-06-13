@@ -37,6 +37,31 @@ public class EventManager {
 		}
 	}
 	
+	/**
+	 * Remove all event for the specified instance
+	 * 
+	 * @param src the instance that will not longer be in listener
+	 */
+	public static void unregisterEvent(Listeners src) {
+		List<CallableEvent> allCall = EVENT_METHOD.get(src.getClass());
+		if(allCall == null)
+			return;
+		for(CallableEvent call : new ArrayList<>(allCall)) {
+			if(call.source == src) {
+				allCall.remove(call); // remove concerned call
+			}
+		}
+	}
+	
+	/**
+	 * Remove all event for the specified class, including ALL instance
+	 * 
+	 * @param clazz the class removed
+	 */
+	public static void unregisterEventForClass(Class<?> clazz) {
+		EVENT_METHOD.remove(clazz);
+	}
+	
 	private static void checkClass(Listeners src) throws InstantiationException, IllegalAccessException {
 		Class<?> clazz = src.getClass();
 		for(Method m : clazz.getDeclaredMethods()) {
@@ -84,8 +109,16 @@ public class EventManager {
 	 * @param ev the event which have to be called
 	 */
 	public static void callEvent(Event ev) {
-		List<CallableEvent> methods = EVENT_METHOD.get(ev.getClass());
-		if(methods != null)
+		runEventForClass(ev, ev.getClass());
+		Class<?> superClass = ev.getClass().getSuperclass();
+		if(!superClass.equals(Object.class)) {
+			runEventForClass(ev, superClass);
+		}
+	}
+	
+	private static void runEventForClass(Event ev, Class<?> clazz) {
+		List<CallableEvent> methods = EVENT_METHOD.get(clazz);
+		if(methods != null) {
 			new ArrayList<>(methods).forEach((m) -> {
 				try {
 					m.call(ev);
@@ -93,6 +126,7 @@ public class EventManager {
 					e.printStackTrace();
 				}
 			});
+		}
 	}
 	
 	public static class CallableEvent {

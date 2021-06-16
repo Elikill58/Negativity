@@ -17,7 +17,7 @@ public class Spigot_1_9_R1 extends SpigotVersionAdapter {
 
 	public Spigot_1_9_R1() {
 		super("v1_9_R1");
-		packetsPlayIn.put("PacketPlayInBlockDig", (packet) -> {
+		packetsPlayIn.put("PacketPlayInBlockDig", (player, packet) -> {
 			PacketPlayInBlockDig blockDig = (PacketPlayInBlockDig) packet;
 			BlockPosition pos = blockDig.a();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), DigAction.getById(blockDig.c().ordinal()), DigFace.getById(blockDig.b().a()));

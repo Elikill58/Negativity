@@ -21,11 +21,11 @@ public class Spigot_1_7_R4 extends SpigotVersionAdapter {
 	
 	public Spigot_1_7_R4() {
 		super("v1_7_R4");
-		packetsPlayIn.put("PacketPlayInBlockDig", (packet) -> {
+		packetsPlayIn.put("PacketPlayInBlockDig", (player, packet) -> {
 			PacketPlayInBlockDig blockDig = (PacketPlayInBlockDig) packet;
 			return new NPacketPlayInBlockDig(blockDig.c(), blockDig.d(), blockDig.e(), DigAction.getById(blockDig.g()), DigFace.getById(blockDig.f()));
 		});
-		packetsPlayIn.put("PacketPlayInBlockPlace", (packet) -> {
+		packetsPlayIn.put("PacketPlayInBlockPlace", (player, packet) -> {
 			PacketPlayInBlockPlace place = (PacketPlayInBlockPlace) packet;
 			ItemStack item = new SpigotItemStack(CraftItemStack.asBukkitCopy(place.getItemStack()));
 			Vector vector = new Vector(place.h(), place.i(), place.j());

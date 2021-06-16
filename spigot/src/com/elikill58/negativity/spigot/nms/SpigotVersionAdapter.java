@@ -6,7 +6,7 @@ import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.function.Function;
+import java.util.function.BiFunction;
 
 import org.bukkit.entity.Player;
 
@@ -36,16 +36,16 @@ import io.netty.channel.Channel;
 
 public abstract class SpigotVersionAdapter {
 	
-	protected HashMap<String, Function<Object, NPacketPlayOut>> packetsPlayOut = new HashMap<String, Function<Object, NPacketPlayOut>>();
-	protected HashMap<String, Function<Object, NPacketPlayIn>> packetsPlayIn = new HashMap<String, Function<Object, NPacketPlayIn>>();
+	protected HashMap<String, BiFunction<Player, Object, NPacketPlayOut>> packetsPlayOut = new HashMap<>();
+	protected HashMap<String, BiFunction<Player, Object, NPacketPlayIn>> packetsPlayIn = new HashMap<>();
 	private final String version;
 	
 	public SpigotVersionAdapter(String version) {
 		this.version = version;
-		packetsPlayIn.put("PacketPlayInArmAnimation", (packet) -> new NPacketPlayInArmAnimation(System.currentTimeMillis()));
-		packetsPlayIn.put("PacketPlayInChat", (packet) -> new NPacketPlayInChat(get(packet, "a")));
+		packetsPlayIn.put("PacketPlayInArmAnimation", (player, packet) -> new NPacketPlayInArmAnimation(System.currentTimeMillis()));
+		packetsPlayIn.put("PacketPlayInChat", (player, packet) -> new NPacketPlayInChat(get(packet, "a")));
 
-		packetsPlayIn.put("PacketPlayInPositionLook", (f) -> {
+		packetsPlayIn.put("PacketPlayInPositionLook", (player, f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
 				return new NPacketPlayInPositionLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, isOnGroundFieldName()));
@@ -54,7 +54,7 @@ public abstract class SpigotVersionAdapter {
 				return null;
 			}
 		});
-		packetsPlayIn.put("PacketPlayInPosition", (f) -> {
+		packetsPlayIn.put("PacketPlayInPosition", (player, f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
 				return new NPacketPlayInPosition(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, isOnGroundFieldName()));
@@ -63,7 +63,7 @@ public abstract class SpigotVersionAdapter {
 				return null;
 			}
 		});
-		packetsPlayIn.put("PacketPlayInLook", (f) -> {
+		packetsPlayIn.put("PacketPlayInLook", (player, f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
 				return new NPacketPlayInLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, isOnGroundFieldName()));
@@ -73,17 +73,17 @@ public abstract class SpigotVersionAdapter {
 			}
 			//return new NPacketPlayInLook(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"));
 		});
-		packetsPlayIn.put("PacketPlayInFlying", (f) -> {
+		packetsPlayIn.put("PacketPlayInFlying", (player, f) -> {
 			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"), get(f, isOnGroundFieldName()), get(f, "hasPos"), get(f, "hasLook"));
 		});
-		packetsPlayIn.put("PacketPlayInKeepAlive", (f) -> new NPacketPlayInKeepAlive(new Long(getSafe(f, "a").toString())));
+		packetsPlayIn.put("PacketPlayInKeepAlive", (player, f) -> new NPacketPlayInKeepAlive(new Long(getSafe(f, "a").toString())));
 		
 
-		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (packet) -> {
+		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, packet) -> {
 			Object pos = get(packet, "b");
 			return new NPacketPlayOutBlockBreakAnimation(get(pos, "x"), get(pos, "y"), get(pos, "z"), get(packet, "a"), get(packet, "c"));
 		});
-		packetsPlayOut.put("PacketPlayOutKeepAlive", (f) -> new NPacketPlayOutKeepAlive(new Long(getSafe(f, "a").toString())));
+		packetsPlayOut.put("PacketPlayOutKeepAlive", (player, f) -> new NPacketPlayOutKeepAlive(new Long(getSafe(f, "a").toString())));
 		
 		SpigotNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
 	}
@@ -177,11 +177,11 @@ public abstract class SpigotVersionAdapter {
 		return version;
 	}
 	
-	public NPacket getPacket(Object nms, String packetName) {
+	public NPacket getPacket(Player player, Object nms, String packetName) {
 		if(packetName.startsWith(PacketType.CLIENT_PREFIX))
-			return packetsPlayIn.getOrDefault(packetName, (obj) -> new NPacketPlayInUnset()).apply(nms);
+			return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset()).apply(player, nms);
 		if(packetName.startsWith(PacketType.SERVER_PREFIX))
-			return packetsPlayOut.getOrDefault(packetName, (obj) -> new NPacketPlayOutUnset()).apply(nms);
+			return packetsPlayOut.getOrDefault(packetName, (p, obj) -> new NPacketPlayOutUnset()).apply(player, nms);
 		if(packetName.startsWith(PacketType.LOGIN_PREFIX))
 			return new NPacketLoginUnset();
 		if(packetName.startsWith(PacketType.STATUS_PREFIX))

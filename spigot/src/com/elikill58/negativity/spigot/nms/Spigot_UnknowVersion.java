@@ -24,7 +24,7 @@ public class Spigot_UnknowVersion extends SpigotVersionAdapter {
 	}
 	
 	@Override
-	public NPacket getPacket(Object nms, String packetName) {
+	public NPacket getPacket(Player player, Object nms, String packetName) {
 		return new NPacketUnknown();
 	}
 	

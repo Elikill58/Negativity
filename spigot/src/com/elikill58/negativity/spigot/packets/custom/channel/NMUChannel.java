@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.packets.custom.channel;
 
-import static com.elikill58.negativity.spigot.utils.PacketUtils.getPlayerConnection;
-
 import java.lang.reflect.Field;
 import java.util.NoSuchElementException;
 
@@ -67,7 +65,7 @@ public class NMUChannel extends ChannelAbstract {
 
 	private Channel getChannel(Player p) {
 		try {
-			Object playerConnection = getPlayerConnection(p);
+			Object playerConnection = SpigotVersionAdapter.getVersionAdapter().getPlayerConnection(p);
 			Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
 			
 			for (Field field : networkManager.getClass().getDeclaredFields())

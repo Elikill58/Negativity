@@ -54,6 +54,7 @@ dependencies {
     implementation 'org.bstats:bstats-bukkit:1.7'
     compileOnly 'com.comphenix.protocol:ProtocolLib:4.5.0'
 
+    spigot17CompileOnly project(':common')
     spigot17CompileOnly sourceSets.main.output
     spigot17Remapped 'org.spigotmc:spigot:1.17-R0.1-SNAPSHOT:remapped-mojang'
     spigot17Obf 'org.spigotmc:spigot:1.17-R0.1-SNAPSHOT:remapped-obf'

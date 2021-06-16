@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Version;
 
 public class PacketUtils {
@@ -15,7 +16,7 @@ public class PacketUtils {
 			.split(",")[3];
 
 	public static Class<?> CRAFT_PLAYER_CLASS, CRAFT_ENTITY_CLASS;
-	public static Class<?> ENUM_PLAYER_INFO = getEnumPlayerInfoAction();
+	public static Class<?> ENUM_PLAYER_INFO = SpigotVersionAdapter.getVersionAdapter().getEnumPlayerInfoAction();
 	
 	static {
 		try {
@@ -65,7 +66,7 @@ public class PacketUtils {
 	
 	/**
 	 * Get the current player ping
-	 * 
+	 *
 	 * @param p the player
 	 * @return the player ping
 	 */
@@ -102,28 +103,7 @@ public class PacketUtils {
 	 * @param packet the packet to sent
 	 */
 	public static void sendPacket(Player p, Object packet) {
-		try {
-			Object playerConnection = getPlayerConnection(p);
-			playerConnection.getClass().getMethod("sendPacket", getNmsClass("Packet")).invoke(playerConnection, packet);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * Get NMS player connection of specified player
-	 * 
-	 * @param p Player of which we want to get the player connection
-	 * @return the NMS player connection
-	 */
-	public static Object getPlayerConnection(Player p) {
-		try {
-			Object entityPlayer = getEntityPlayer(p);
-			return entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		SpigotVersionAdapter.getVersionAdapter().sendPacket(p, packet);
 	}
 	
 	/**
@@ -152,27 +132,6 @@ public class PacketUtils {
 		try {
 			Object craftEntity = CRAFT_ENTITY_CLASS.cast(et);
 			return craftEntity.getClass().getMethod("getHandle").invoke(craftEntity);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	/**
-	 * Get the EnumPlayerInfoAction class which depend of packet PacketPlayOutPlayerInfo
-	 * 
-	 * @return the class of EnumPlayerInfoAction
-	 */
-	private static Class<?> getEnumPlayerInfoAction() {
-		try {
-			try {
-				return Class.forName("net.minecraft.server." + VERSION + ".EnumPlayerInfoAction");
-			} catch (Exception e) {
-				for(Class<?> clazz : Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutPlayerInfo").getDeclaredClasses())
-					if(clazz.getName().contains("EnumPlayerInfoAction"))
-						return clazz;
-				return null;
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

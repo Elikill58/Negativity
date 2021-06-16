@@ -27,7 +27,7 @@ import com.elikill58.negativity.spigot.impl.inventory.SpigotPlayerInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
-import com.elikill58.negativity.spigot.utils.PacketUtils;
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
@@ -108,13 +108,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public int getPing() {
-		try {
-			Object entityPlayer = PacketUtils.getEntityPlayer(entity);
-			return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return 0;
+		return SpigotVersionAdapter.getVersionAdapter().getPlayerPing(entity);
 	}
 
 	@Override

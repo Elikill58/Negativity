@@ -1,17 +1,15 @@
 package com.elikill58.negativity.spigot.packets.custom.channel;
 
-import static com.elikill58.negativity.spigot.utils.PacketUtils.getPlayerConnection;
-
 import java.util.NoSuchElementException;
 
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.api.packets.AbstractPacket;
-import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
+import com.elikill58.negativity.universal.Adapter;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
@@ -67,15 +65,8 @@ public class INCChannel extends ChannelAbstract {
 		});
 	}
 
-	private Channel getChannel(Player p) throws ReflectiveOperationException {
-		try {
-			Object playerConnection = getPlayerConnection(p);
-			Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
-			return new PacketContent(networkManager).getSpecificModifier(Channel.class).readSafely(0);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	private Channel getChannel(Player p) {
+		return SpigotVersionAdapter.getVersionAdapter().getPlayerChannel(p);
 	}
 
 	private class ChannelHandlerReceive extends ChannelInboundHandlerAdapter {
@@ -93,6 +84,12 @@ public class INCChannel extends ChannelAbstract {
 			if(!nextPacket.isCancelled() && nextPacket.getNmsPacket() != null)
 				super.channelRead(ctx, nextPacket.getNmsPacket());
 		}
+		
+		@Override
+		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+			Adapter.getAdapter().getLogger().error("Exception caught when reading packet");
+			cause.printStackTrace();
+		}
 	}
 
 	private class ChannelHandlerSent extends ChannelOutboundHandlerAdapter {
@@ -109,6 +106,12 @@ public class INCChannel extends ChannelAbstract {
 			AbstractPacket nextPacket = getPacketManager().onPacketSent(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
 			if(!nextPacket.isCancelled() && nextPacket.getNmsPacket() != null)
 				super.write(ctx, nextPacket.getNmsPacket(), promise);
+		}
+		
+		@Override
+		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+			Adapter.getAdapter().getLogger().error("Exception caught when sending packet");
+			cause.printStackTrace();
 		}
 	}
 }

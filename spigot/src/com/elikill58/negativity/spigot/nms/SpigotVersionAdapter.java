@@ -1,9 +1,16 @@
 package com.elikill58.negativity.spigot.nms;
 
+import static com.elikill58.negativity.spigot.utils.Utils.VERSION;
+
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.Function;
 
+import org.bukkit.entity.Player;
+
+import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
@@ -22,7 +29,10 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAli
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 import com.elikill58.negativity.spigot.SpigotNegativity;
-import com.elikill58.negativity.spigot.utils.Utils;
+import com.elikill58.negativity.spigot.utils.PacketUtils;
+import com.elikill58.negativity.universal.Adapter;
+
+import io.netty.channel.Channel;
 
 public abstract class SpigotVersionAdapter {
 	
@@ -80,6 +90,89 @@ public abstract class SpigotVersionAdapter {
 	
 	protected abstract String isOnGroundFieldName();
 	
+	public abstract double getAverageTps();
+	
+	public List<Player> getOnlinePlayers() {
+		List<Player> list = new ArrayList<>();
+		try {
+			Class<?> mcServer = Class.forName("net.minecraft.server." + VERSION + ".MinecraftServer");
+			Object server = mcServer.getMethod("getServer").invoke(mcServer);
+			Object craftServer = server.getClass().getField("server").get(server);
+			Object getted = craftServer.getClass().getMethod("getOnlinePlayers").invoke(craftServer);
+			if (getted instanceof Player[])
+				for (Player obj : (Player[]) getted)
+					list.add(obj);
+			else if (getted instanceof List)
+				for (Object obj : (List<?>) getted)
+					list.add((Player) obj);
+			else
+				System.out.println("Unknow getOnlinePlayers");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
+	public abstract int getPlayerPing(Player player);
+	
+	public Class<?> getEnumPlayerInfoAction() {
+		try {
+			try {
+				return Class.forName("net.minecraft.server." + VERSION + ".EnumPlayerInfoAction");
+			} catch (Exception e) {
+				for(Class<?> clazz : Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutPlayerInfo").getDeclaredClasses())
+					if(clazz.getName().contains("EnumPlayerInfoAction"))
+						return clazz;
+				return null;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public double[] getTps() {
+		try {
+			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer");
+			Object server = mcServer.getMethod("getServer").invoke(mcServer);
+			return (double[]) server.getClass().getField("recentTps").get(server);
+		} catch (Exception e) {
+			Adapter.getAdapter().getLogger().warn("Cannot get TPS (Work on Spigot but NOT CraftBukkit).");
+			e.printStackTrace();
+			return new double[] {20, 20, 20};
+		}
+	}
+	
+	public Object getPlayerConnection(Player p) {
+		try {
+			Object entityPlayer = PacketUtils.getEntityPlayer(p);
+			return entityPlayer.getClass().getField("playerConnection").get(entityPlayer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public void sendPacket(Player p, Object packet) {
+		try {
+			Object playerConnection = getPlayerConnection(p);
+			playerConnection.getClass().getMethod("sendPacket", PacketUtils.getNmsClass("Packet")).invoke(playerConnection, packet);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Channel getPlayerChannel(Player p) {
+		try {
+			Object playerConnection = getPlayerConnection(p);
+			Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
+			return new PacketContent(networkManager).getSpecificModifier(Channel.class).readSafely(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 	public String getVersion() {
 		return version;
 	}
@@ -101,7 +194,7 @@ public abstract class SpigotVersionAdapter {
 	
 	public static SpigotVersionAdapter getVersionAdapter() {
 		if(instance == null) {
-			switch (Utils.VERSION) {
+			switch (VERSION) {
 			case "v1_7_R4":
 				return instance = new Spigot_1_7_R4();
 			case "v1_8_R3":
@@ -124,8 +217,14 @@ public abstract class SpigotVersionAdapter {
 				return instance = new Spigot_1_16_R1();
 			case "v1_16_R3":
 				return instance = new Spigot_1_16_R3();
+			case "v1_17_R1":
+				try {
+					return instance = (SpigotVersionAdapter) Class.forName("com.elikill58.negativity.spigot17.Spigot_1_17_R1").getConstructor().newInstance();
+				} catch (ReflectiveOperationException e) {
+					throw new RuntimeException(e);
+				}
 			default:
-				return instance = new Spigot_UnknowVersion(Utils.VERSION);
+				return instance = new Spigot_UnknowVersion(VERSION);
 			}
 		}
 		return instance;

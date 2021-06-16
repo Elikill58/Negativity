@@ -58,7 +58,7 @@ public class PlayersListeners implements Listener {
 		if(np.isFreeze && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR))
 			e.setCancelled(true);
 		PlayerMoveEvent event = new PlayerMoveEvent(SpigotEntityManager.getPlayer(p), SpigotLocation.toCommon(e.getFrom()), SpigotLocation.toCommon(e.getTo()));
-		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), () -> EventManager.callEvent(event));
+		EventManager.callEvent(event);
 		if(event.hasToSet()) {
 			e.setTo(SpigotLocation.fromCommon(event.getTo()));
 			e.setFrom(SpigotLocation.fromCommon(event.getFrom()));

@@ -21,7 +21,11 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 configurations {
     spigot
     compileClasspath.extendsFrom spigot
-    reobfMap
+    spigot17Remapped
+    spigot17CompileClasspath.extendsFrom spigot17Remapped
+    spigot17Obf
+    reobfMapMojang
+    reobfMapSpigot
     specialSource
 }
 
@@ -51,10 +55,12 @@ dependencies {
     compileOnly 'com.comphenix.protocol:ProtocolLib:4.5.0'
 
     spigot17CompileOnly sourceSets.main.output
-    spigot17CompileOnly 'org.spigotmc:spigot:1.17-R0.1-SNAPSHOT:remapped-mojang'
+    spigot17Remapped 'org.spigotmc:spigot:1.17-R0.1-SNAPSHOT:remapped-mojang'
+    spigot17Obf 'org.spigotmc:spigot:1.17-R0.1-SNAPSHOT:remapped-obf'
     spigot fileTree(dir: "spigotJars", includes: ['*.jar'])
 
-    reobfMap group: 'org.spigotmc', name: 'minecraft-server', version: '1.17-R0.1-SNAPSHOT', classifier: 'maps-mojang', ext: 'txt'
+    reobfMapMojang group: 'org.spigotmc', name: 'minecraft-server', version: '1.17-R0.1-SNAPSHOT', classifier: 'maps-mojang', ext: 'txt'
+    reobfMapSpigot group: 'org.spigotmc', name: 'minecraft-server', version: '1.17-R0.1-SNAPSHOT', classifier: 'maps-spigot', ext: 'csrg'
     specialSource 'net.md-5:SpecialSource:1.10.0'
 }
 
@@ -94,23 +100,46 @@ shadowJar {
     )
 }
 
-task reobfSpigotPlugin(type: JavaExec) {
+// These tasks are based on the manual instructions from MD-5 given there:
+// https://www.spigotmc.org/threads/spigot-bungeecord-1-17.510208/#post-4184317
+task reobfSpigotPluginStep1(type: JavaExec) {
     dependsOn(shadowJar)
 
     classpath += configurations.specialSource
+    classpath += configurations.spigot17Remapped
     main 'net.md_5.specialsource.SpecialSource'
 
     workingDir file(Paths.get('build', 'tmp', name))
     workingDir.mkdirs()
 
-    File mapFile = configurations.reobfMap.singleFile
+    File mapFile = configurations.reobfMapMojang.singleFile
     File inputFile = shadowJar.outputs.files.singleFile
     inputs.files(mapFile, inputFile)
 
     String outputPath = inputFile.absolutePath.replace('.jar', '-obf.jar')
     outputs.file(outputPath)
 
-    args '-i', inputFile, '-o', outputPath, '-m', mapFile, '--reverse'
+    args '--live', '-i', inputFile, '-o', outputPath, '-m', mapFile, '--reverse'
+}
+
+task reobfSpigotPlugin(type: JavaExec) {
+    dependsOn(reobfSpigotPluginStep1)
+
+    classpath += configurations.specialSource
+    classpath += configurations.spigot17Obf
+    main 'net.md_5.specialsource.SpecialSource'
+
+    workingDir file(Paths.get('build', 'tmp', name))
+    workingDir.mkdirs()
+
+    File mapFile = configurations.reobfMapSpigot.singleFile
+    File inputFile = reobfSpigotPluginStep1.outputs.files.singleFile
+    inputs.files(mapFile, inputFile)
+
+    String outputPath = inputFile.absolutePath.replace('-obf.jar', '.jar')
+    outputs.file(outputPath)
+
+    args '--live', '-i', inputFile, '-o', outputPath, '-m', mapFile
 }
 
 build.dependsOn reobfSpigotPlugin

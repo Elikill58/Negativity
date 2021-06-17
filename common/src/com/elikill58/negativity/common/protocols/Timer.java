@@ -8,11 +8,11 @@ import java.util.List;
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -25,11 +25,9 @@ public class Timer extends Cheat implements Listeners {
 		super(CheatKeys.TIMER, CheatCategory.MOVEMENT, Materials.PACKED_ICE, true, false);
 	}
 	
-	@EventListener
+	@Check(name = "packet")
 	public void onPacketClear(PlayerPacketsClearEvent e) {
 		NegativityPlayer np = e.getNegativityPlayer();
-		if(!np.hasDetectionActive(this) || !checkActive("packet"))
-			return;
 		HashMap<PacketType, Integer> packets = e.getPackets();
 		int flying = packets.getOrDefault(PacketType.Client.FLYING, 0);
 		int position = packets.getOrDefault(PacketType.Client.POSITION, 0);

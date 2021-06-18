@@ -1,10 +1,10 @@
 package com.elikill58.negativity.api.events.negativity;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Event;
+import com.elikill58.negativity.api.events.PlayerEvent;
 import com.elikill58.negativity.universal.Cheat;
 
-public class PlayerCheatKickEvent implements Event {
+public class PlayerCheatKickEvent extends PlayerEvent {
 
 	private boolean cancel = false;
 	private Player p;
@@ -12,6 +12,7 @@ public class PlayerCheatKickEvent implements Event {
 	private int relia;
 	
 	public PlayerCheatKickEvent(Player p, Cheat c, int reliability) {
+		super(p);
 		this.p = p;
 		this.c = c;
 		this.relia = reliability;

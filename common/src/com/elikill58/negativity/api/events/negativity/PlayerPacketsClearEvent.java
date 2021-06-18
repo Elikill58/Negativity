@@ -4,16 +4,17 @@ import java.util.HashMap;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Event;
+import com.elikill58.negativity.api.events.PlayerEvent;
 import com.elikill58.negativity.api.packets.PacketType;
 
-public class PlayerPacketsClearEvent implements Event {
+public class PlayerPacketsClearEvent extends PlayerEvent {
 
 	private final Player p;
 	private final NegativityPlayer np;
 	private final HashMap<PacketType, Integer> packets;
 	
 	public PlayerPacketsClearEvent(Player p, NegativityPlayer np) {
+		super(p);
 		this.p = p;
 		this.np = np;
 		this.packets = new HashMap<>(np.PACKETS);

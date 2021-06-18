@@ -1,12 +1,12 @@
 package com.elikill58.negativity.api.events.negativity;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Event;
+import com.elikill58.negativity.api.events.PlayerEvent;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.report.ReportType;
 
-public class PlayerCheatAlertEvent implements Event {
+public class PlayerCheatAlertEvent extends PlayerEvent {
 
 	private final Player p;
 	private final Cheat c;
@@ -22,6 +22,7 @@ public class PlayerCheatAlertEvent implements Event {
 	}
 	
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert, int nbAlertConsole) {
+		super(p);
 		this.type = type;
 		this.p = p;
 		this.c = c;

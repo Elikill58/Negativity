@@ -97,6 +97,10 @@ public class Database {
 		}
 	}
 	
+	public static DatabaseType getType() {
+		return databaseType;
+	}
+	
 	public static enum DatabaseType {
 		MARIA("mariadb", "MariaDB", "org.mariadb.jdbc.Driver"),
 		MYSQL("mysql", "MySQL", "com.mysql.jdbc.Driver");

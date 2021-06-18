@@ -27,7 +27,7 @@ public abstract class Adapter {
 	private static Adapter adapter = null;
 
 	public static void setAdapter(Adapter adapter) {
-		if(Adapter.adapter != null) {
+		if(Adapter.adapter != null && !Boolean.getBoolean("negativity.testing")) {
 			try {
 				throw new IllegalAccessException("No ! You don't must to change the Adapter !");
 			} catch (IllegalAccessException e) {

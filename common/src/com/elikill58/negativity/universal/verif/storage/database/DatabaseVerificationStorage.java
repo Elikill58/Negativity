@@ -28,7 +28,7 @@ public class DatabaseVerificationStorage extends VerificationStorage {
 		try {
 			Connection connection = Database.getConnection();
 			if (connection != null) {
-				DatabaseMigrator.executeRemainingMigrations(connection, "verifications");
+				DatabaseMigrator.executeRemainingMigrations(connection, Database.getType().getType(), "verifications");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

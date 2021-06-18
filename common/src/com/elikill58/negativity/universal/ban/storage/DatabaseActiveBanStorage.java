@@ -25,7 +25,7 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 		try {
 			Connection connection = Database.getConnection();
 			if (connection != null) {
-				DatabaseMigrator.executeRemainingMigrations(connection, "bans/active");
+				DatabaseMigrator.executeRemainingMigrations(connection, Database.getType().getType(), "bans/active");
 			}
 		} catch (Exception e) {
 			Adapter.getAdapter().getLogger().error("Failed to execute active bans database migration: " + e.getMessage());

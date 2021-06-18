@@ -289,7 +289,7 @@ public class UniversalUtils {
 	
 	/**
 	 * Check if the given string contains a chinese characters
-	 * 
+	 *
 	 * @param s The string where we are looking for chinese char
 	 * @return true if there is a chinese char
 	 */
@@ -339,19 +339,28 @@ public class UniversalUtils {
 	}
 	
 	public static Configuration loadConfig(File configFile, String configName) {
-		if(!configFile.exists()) {
+		if (!configFile.exists()) {
 			configFile.getParentFile().mkdirs();
 			try {
 				URI migrationsDirUri = UniversalUtils.class.getResource("/assets/negativity").toURI();
 				if (migrationsDirUri.getScheme().equals("jar")) {
 					try (FileSystem jarFs = FileSystems.newFileSystem(migrationsDirUri, Collections.emptyMap())) {
 						Path cheatPath = jarFs.getPath("/assets/negativity", configName);
-						if(Files.isRegularFile(cheatPath)) {
+						if (Files.isRegularFile(cheatPath)) {
 							Files.copy(cheatPath, Paths.get(configFile.toURI()));
 						} else {
 							Adapter.getAdapter().getLogger().error("Cannot load config.");
 							return null;
 						}
+					}
+				} else {
+					Path cheatPath = Paths.get(migrationsDirUri).resolve(configName);
+					if (Files.isRegularFile(cheatPath)) {
+						Path target = Paths.get(configFile.toURI());
+						Files.copy(cheatPath, target);
+					} else {
+						Adapter.getAdapter().getLogger().error("Cannot load config.");
+						return null;
 					}
 				}
 			} catch (URISyntaxException | IOException e) {

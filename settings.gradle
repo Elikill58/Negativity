@@ -5,4 +5,3 @@ include 'common', 'spigot', 'bungee', 'sponge', 'velocity'//, 'sponge8'
 include 'common:integrations:litebans', 'common:integrations:advancedban', 'common:integrations:dkbans', 'common:integrations:viaversion',
         'spigot:integrations:essentials', 'spigot:integrations:floodgate', 'spigot:integrations:gadgetsmenu',
         'spigot:integrations:maxbans', 'spigot:integrations:protocolsupport', 'spigot:integrations:worldguard'
-

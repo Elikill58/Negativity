@@ -51,7 +51,7 @@ public class CheckManager implements Listeners {
 				if(!NegativityPlayer.getNegativityPlayer(p).hasDetectionActive(check.getCheat()))
 					return;
 				for(CheckConditions condition : check.getCheck().conditions()) {
-					if(condition.check(p)) {
+					if(!condition.check(p)) {
 						return;
 					}
 				}

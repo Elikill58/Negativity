@@ -1,6 +1,6 @@
 package com.elikill58.negativity.api.protocols;
 
-import java.util.function.Function;
+import java.util.function.Predicate;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -32,13 +32,13 @@ public enum CheckConditions {
 	NO_ELYTRA((p) -> !p.hasElytra()),
 	NO_FLY((p) -> !p.isFlying());
 
-	private Function<Player, Boolean> function;
+	private Predicate<Player> function;
 	
-	private CheckConditions(Function<Player, Boolean> function) {
+	private CheckConditions(Predicate<Player> function) {
 		this.function = function;
 	}
 	
 	public boolean check(Player p) {
-		return function.apply(p);
+		return function.test(p);
 	}
 }

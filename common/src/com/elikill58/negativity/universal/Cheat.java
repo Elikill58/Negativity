@@ -432,7 +432,7 @@ public abstract class Cheat {
 		CHEATS.sort(Comparator.comparing(Cheat::getKey));
 		
 		EventManager.unregisterEventForClass(CheckManager.class);
-		EventManager.registerEvent(new CheckManager());
+		EventManager.registerEvent(new CheckManager(CHEATS));
 		ada.getLogger().info("Loaded " + CHEATS.size() + " cheat detections.");
 	}
 

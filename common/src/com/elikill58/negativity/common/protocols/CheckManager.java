@@ -13,11 +13,11 @@ import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.universal.Cheat;
 
-public class ProtocolManager implements Listeners {
+public class CheckManager implements Listeners {
 
 	private List<CheckMethod> allChecks = new ArrayList<>();
 	
-	public ProtocolManager() {
+	public CheckManager() {
 		// don't need reload option because it's only static informations
 		Cheat.CHEATS.forEach((cheat) -> {
 			for(Method possibleMethod : cheat.getClass().getMethods()) {

@@ -45,9 +45,8 @@ public class XRay extends Cheat implements Listeners {
 	}
 
 	@Check(name = "mining-direction")
-	public void onBlockBreak(BlockBreakEvent e) {
+	public void onBlockBreak(BlockBreakEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		Block b = e.getBlock();
 		
 		long time = System.currentTimeMillis();

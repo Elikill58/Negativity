@@ -27,9 +27,8 @@ public class NoSlowDown extends Cheat implements Listeners {
 	}
 
 	@Check(name = "move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA })
-	public void onPlayerMove(PlayerMoveEvent e) {
+	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		Location loc = p.getLocation();
 		Location from = e.getFrom(), to = e.getTo();
 		Location fl = from.sub(to);
@@ -70,9 +69,8 @@ public class NoSlowDown extends Cheat implements Listeners {
 	}
 
 	@Check(name = "eat", conditions = { CheckConditions.NO_ELYTRA })
-	public void foodCheck(PlayerItemConsumeEvent e) {
+	public void foodCheck(PlayerItemConsumeEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		double dis = np.doubles.get(NO_SLOW_DOWN, "eating-distance", 0.0);
 		if (dis > p.getWalkSpeed() || p.isSprinting()) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(dis * 200), "item",

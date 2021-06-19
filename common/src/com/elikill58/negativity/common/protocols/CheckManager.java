@@ -27,8 +27,8 @@ public class CheckManager implements Listeners {
 				}
 				
 				Class<?>[] parameterTypes = possibleMethod.getParameterTypes();
-				if (parameterTypes.length == 0) {
-					Adapter.getAdapter().getLogger().warn("Method for check " + check.name() + " must have a PlayerEvent as first parameter.");
+				if (parameterTypes.length == 0 || parameterTypes.length > 2) {
+					Adapter.getAdapter().getLogger().warn("Method for check " + check.name() + " must have a PlayerEvent as first parameter and can have the NegativityPlayer as second parameter.");
 					continue;
 				}
 				boolean hasNegativityPlayer = parameterTypes.length > 1;

@@ -15,19 +15,30 @@ import com.elikill58.negativity.universal.Cheat;
 
 public class ProtocolManager implements Listeners {
 
-	private List<CheckMethod> allChecks = new ArrayList<>();
+	private final List<CheckMethod> allChecks = new ArrayList<>();
 	
-	public ProtocolManager() {
-		// don't need reload option because it's only static informations
-		Cheat.CHEATS.forEach((cheat) -> {
-			for(Method possibleMethod : cheat.getClass().getMethods()) {
-				if(possibleMethod.isAnnotationPresent(Check.class) && possibleMethod.getParameterCount() == 1) {
-					Check check = possibleMethod.getAnnotation(Check.class);
-					
-					allChecks.add(new CheckMethod(cheat, check, possibleMethod));
+	public ProtocolManager(List<Cheat> cheats) {
+		for (Cheat cheat : cheats) {
+			for (Method possibleMethod : cheat.getClass().getMethods()) {
+				Check check = possibleMethod.getAnnotation(Check.class);
+				if (check == null) {
+					continue;
 				}
+				
+				Class<?>[] parameterTypes = possibleMethod.getParameterTypes();
+				if (parameterTypes.length != 1) {
+					Adapter.getAdapter().getLogger().warn("Method for check " + check.name() + " must have exactly one parameter.");
+					continue;
+				}
+				
+				if (!PlayerEvent.class.isAssignableFrom(parameterTypes[0])) {
+					Adapter.getAdapter().getLogger().warn("Parameter of check method " + possibleMethod.getName() + " must be a subclass of PlayerEvent.");
+					continue;
+				}
+				
+				allChecks.add(new CheckMethod(cheat, check, possibleMethod));
 			}
-		});
+		}
 	}
 	
 	@EventListener

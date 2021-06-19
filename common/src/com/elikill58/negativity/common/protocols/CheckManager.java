@@ -27,17 +27,22 @@ public class CheckManager implements Listeners {
 				}
 				
 				Class<?>[] parameterTypes = possibleMethod.getParameterTypes();
-				if (parameterTypes.length != 1) {
-					Adapter.getAdapter().getLogger().warn("Method for check " + check.name() + " must have exactly one parameter.");
+				if (parameterTypes.length == 0) {
+					Adapter.getAdapter().getLogger().warn("Method for check " + check.name() + " must have a PlayerEvent as first parameter.");
 					continue;
 				}
-				
+				boolean hasNegativityPlayer = parameterTypes.length > 1;
 				if (!PlayerEvent.class.isAssignableFrom(parameterTypes[0])) {
 					Adapter.getAdapter().getLogger().warn("Parameter of check method " + possibleMethod.getName() + " must be a subclass of PlayerEvent.");
 					continue;
 				}
 				
-				allChecks.add(new CheckMethod(cheat, check, possibleMethod));
+				if (parameterTypes.length > 1 && !NegativityPlayer.class.isAssignableFrom(parameterTypes[1])) {
+					Adapter.getAdapter().getLogger().warn("Second parameter of check method " + possibleMethod.getName() + " must be NegativityPlayer.");
+					continue;
+				}
+				
+				allChecks.add(new CheckMethod(cheat, check, possibleMethod, hasNegativityPlayer));
 			}
 		}
 	}
@@ -48,7 +53,8 @@ public class CheckManager implements Listeners {
 			Player p = e.getPlayer();
 			if(check.getCheat().isActive() && check.getMethod().getParameterTypes()[0].equals(e.getClass())) {
 				// now checking all conditions
-				if(!NegativityPlayer.getNegativityPlayer(p).hasDetectionActive(check.getCheat()))
+				NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+				if(!np.hasDetectionActive(check.getCheat()))
 					return;
 				for(CheckConditions condition : check.getCheck().conditions()) {
 					if(!condition.check(p)) {
@@ -56,7 +62,7 @@ public class CheckManager implements Listeners {
 					}
 				}
 				
-				check.invoke(e);
+				check.invoke(e, np);
 			}
 		});
 	}
@@ -66,11 +72,13 @@ public class CheckManager implements Listeners {
 		private final Cheat cheat;
 		private final Check check;
 		private final Method method;
+		private final boolean askNegativityPlayer;
 		
-		public CheckMethod(Cheat cheat, Check check, Method method) {
+		public CheckMethod(Cheat cheat, Check check, Method method, boolean askNegativityPlayer) {
 			this.cheat = cheat;
 			this.check = check;
 			this.method = method;
+			this.askNegativityPlayer = askNegativityPlayer;
 		}
 		
 		public Cheat getCheat() {
@@ -85,9 +93,16 @@ public class CheckManager implements Listeners {
 			return method;
 		}
 		
-		public void invoke(PlayerEvent event) {
+		public boolean isAskNegativityPlayer() {
+			return askNegativityPlayer;
+		}
+		
+		public void invoke(PlayerEvent event, NegativityPlayer np) {
 			try {
-				method.invoke(cheat, event);
+				if(askNegativityPlayer)
+					method.invoke(cheat, event, np);
+				else
+					method.invoke(cheat, event);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

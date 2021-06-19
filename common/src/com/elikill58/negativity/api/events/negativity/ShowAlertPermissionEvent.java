@@ -7,19 +7,13 @@ import com.elikill58.negativity.api.events.PlayerEvent;
 public class ShowAlertPermissionEvent extends PlayerEvent {
 
 	private final boolean basicPerm;
-	private final Player p;
 	private final NegativityPlayer np;
 	private boolean cancel = false;
 	
 	public ShowAlertPermissionEvent(Player p, NegativityPlayer np, boolean hasBasicPerm) {
 		super(p);
-		this.p = p;
 		this.np = np;
 		this.basicPerm = hasBasicPerm;
-	}
-	
-	public Player getPlayer() {
-		return p;
 	}
 	
 	public NegativityPlayer getNegativityPlayer() {

@@ -9,19 +9,13 @@ import com.elikill58.negativity.api.packets.PacketType;
 
 public class PlayerPacketsClearEvent extends PlayerEvent {
 
-	private final Player p;
 	private final NegativityPlayer np;
 	private final HashMap<PacketType, Integer> packets;
 	
 	public PlayerPacketsClearEvent(Player p, NegativityPlayer np) {
 		super(p);
-		this.p = p;
 		this.np = np;
 		this.packets = new HashMap<>(np.PACKETS);
-	}
-	
-	public Player getPlayer() {
-		return p;
 	}
 	
 	public NegativityPlayer getNegativityPlayer() {

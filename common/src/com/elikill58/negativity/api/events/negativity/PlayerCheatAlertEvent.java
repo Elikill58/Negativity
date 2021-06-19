@@ -8,7 +8,6 @@ import com.elikill58.negativity.universal.report.ReportType;
 
 public class PlayerCheatAlertEvent extends PlayerEvent {
 
-	private final Player p;
 	private final Cheat c;
 	private boolean cancel = false, hasRelia, alert;
 	private int relia, ping, nbAlert;
@@ -24,7 +23,6 @@ public class PlayerCheatAlertEvent extends PlayerEvent {
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert, int nbAlertConsole) {
 		super(p);
 		this.type = type;
-		this.p = p;
 		this.c = c;
 		this.relia = reliability;
 		this.hasRelia = hasRelia;
@@ -46,10 +44,6 @@ public class PlayerCheatAlertEvent extends PlayerEvent {
 	
 	public ReportType getReportType() {
 		return type;
-	}
-	
-	public Player getPlayer() {
-		return p;
 	}
 	
 	public Cheat getCheat() {

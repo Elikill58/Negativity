@@ -46,9 +46,11 @@ public class EventManager {
 		List<CallableEvent> allCall = EVENT_METHOD.get(src.getClass());
 		if(allCall == null)
 			return;
-		for(CallableEvent call : new ArrayList<>(allCall)) {
-			if(call.source == src) {
-				allCall.remove(call); // remove concerned call
+		synchronized (allCall) {
+			for(CallableEvent call : allCall) {
+				if(call.source == src) {
+					allCall.remove(call); // remove concerned call
+				}
 			}
 		}
 	}

@@ -5,12 +5,10 @@ import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPor
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
@@ -18,6 +16,8 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -42,52 +42,53 @@ public class ForceField extends Cheat implements Listeners {
 		nf.setMaximumIntegerDigits(2);
 	}
 	
-	@EventListener
-	public void onPacketClear(PlayerPacketsClearEvent e) {
-		NegativityPlayer np = e.getNegativityPlayer();
-		if (np.hasDetectionActive(this) && checkActive("packet")) {
-			int arm = e.getPackets().getOrDefault(PacketType.Client.ARM_ANIMATION, 0);
-			int useEntity = e.getPackets().getOrDefault(PacketType.Client.USE_ENTITY, 0);
-			if (arm > 16 && useEntity > 20) {
-				ReportType type = ReportType.WARNING;
-				if (np.getWarn(this) > 5)
-					type = ReportType.VIOLATION;
-				Negativity.alertMod(type, np.getPlayer(), this, UniversalUtils.parseInPorcent(arm + useEntity + np.getWarn(this)),
-						"packet", "ArmAnimation (Attack in one second): " + arm + ", UseEntity (interaction with other entity): "
-						+ useEntity);
-			}
+	@Check(name = "packet")
+	public void onPacketClear(PlayerPacketsClearEvent e, NegativityPlayer np) {
+		int arm = e.getPackets().getOrDefault(PacketType.Client.ARM_ANIMATION, 0);
+		int useEntity = e.getPackets().getOrDefault(PacketType.Client.USE_ENTITY, 0);
+		if (arm > 16 && useEntity > 20) {
+			ReportType type = ReportType.WARNING;
+			if (np.getWarn(this) > 5)
+				type = ReportType.VIOLATION;
+			Negativity.alertMod(type, e.getPlayer(), this, UniversalUtils.parseInPorcent(arm + useEntity + np.getWarn(this)),
+					"packet", "ArmAnimation (Attack in one second): " + arm + ", UseEntity (interaction with other entity): "
+					+ useEntity);
 		}
 	}
 
-	@EventListener
-	public void onEntityDamageByEntity(PlayerDamageByEntityEvent e) {
+	@Check(name = "line-sight", conditions = CheckConditions.SURVIVAL)
+	public void onEntityDamageByEntity(PlayerDamageByEntityEvent e, NegativityPlayer np) {
 		if (!(e.getDamager() instanceof Player) || e.isCancelled())
 			return;
 		Player p = (Player) e.getDamager();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this) || e.getEntity() == null)
-			return;
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
+		if (e.getEntity() == null)
 			return;
 		boolean mayCancel = false;
 		Entity cible = e.getEntity();
-		if(checkActive("line-sight") && !p.hasLineOfSight(cible) && p != cible) {
+		if(p != cible && !p.hasLineOfSight(cible)) {
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
 					"Hit " + cible.getType().name() + " but cannot see it",
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase(Locale.ROOT)));
 		}
-		if(Utils.hasThorns(p)) {
-			if (isSetBack() && mayCancel)
-				e.setCancelled(true);
+		if (isSetBack() && mayCancel)
+			e.setCancelled(true);
+	}
+
+	@Check(name = "reach", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_THORNS })
+	public void onCheckReach(PlayerDamageByEntityEvent e, NegativityPlayer np) {
+		if (!(e.getDamager() instanceof Player) || e.isCancelled())
 			return;
-		}
+		Player p = (Player) e.getDamager();
+		if (e.getEntity() == null)
+			return;
+		boolean mayCancel = false;
 		ItemStack inHand = p.getItemInHand();
 		if(inHand == null || !inHand.getType().equals(Materials.BOW)) {
 			Location tempLoc = e.getEntity().getLocation().clone();
 			tempLoc.setY(p.getLocation().getY());
 			double dis = tempLoc.distance(p.getLocation());
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-			if (checkActive("reach") && dis > getConfig().getDouble("check.reach.value", 3.9) && !e.getDamager().getType().equals(EntityType.ENDER_DRAGON) && !p.getLocation().getBlock().getType().getId().contains("WATER")) {
+			if (dis > getConfig().getDouble("check.reach.value", 3.9) && !e.getDamager().getType().equals(EntityType.ENDER_DRAGON) && !p.getLocation().getBlock().getType().getId().contains("WATER")) {
 				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getEntity().getType().name().toLowerCase(Locale.ROOT) : e.getEntity().getName();
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10), "reach",
 						"Big distance with: " + e.getEntity().getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns", hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));

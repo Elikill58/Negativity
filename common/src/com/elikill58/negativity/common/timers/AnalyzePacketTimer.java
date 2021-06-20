@@ -25,7 +25,7 @@ public class AnalyzePacketTimer implements Runnable {
 				NegativityPlayer.removeFromCache(p.getUniqueId());
 				continue;
 			}
-			NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
+			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 			if (np.SEC_ACTIVE < 2) {
 				np.SEC_ACTIVE++;
 				return;

@@ -18,6 +18,8 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -192,14 +194,11 @@ public class Fly extends Cheat implements Listeners {
 		}
 	}
 	
-	@EventListener
-	public void boatManager(PlayerMoveEvent e) {
-		if(!checkActive("no-ground-down"))
-			return;
+	@Check(name = "no-ground-down", conditions = CheckConditions.NO_INSIDE_VEHICLE)
+	public void boatManager(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		boolean nextValue = np.booleans.get(FLY, "boat-falling", false);
-		if(p.isInsideVehicle() && p.getVehicle().getType().equals(EntityType.BOAT)) {
+		if(p.getVehicle().getType().equals(EntityType.BOAT)) {
 			Location from = e.getFrom().clone(), to = e.getTo().clone();
 			double moveY = (to.getY() - from.getY());
 			

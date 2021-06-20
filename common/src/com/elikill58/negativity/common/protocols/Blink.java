@@ -1,6 +1,5 @@
 package com.elikill58.negativity.common.protocols;
 
-import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
@@ -13,6 +12,8 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.PacketType.Client;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -45,13 +46,10 @@ public class Blink extends Cheat implements Listeners {
 		}
 	}
 	
-	@EventListener
-	public void onPacketClear(PlayerPacketsClearEvent e) {
+	@Check(name = "no_packet", conditions = { CheckConditions.SURVIVAL })
+	public void onPacketClear(PlayerPacketsClearEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if(!np.hasDetectionActive(this))
-			return;
-		if (!(!np.bypassBlink && (p.getGameMode().equals(GameMode.ADVENTURE) || p.getGameMode().equals(GameMode.SURVIVAL))))
+		if (np.bypassBlink)
 			return;
 		int ping = p.getPing();
 		if (ping < 140) {

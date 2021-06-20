@@ -1,14 +1,13 @@
 package com.elikill58.negativity.common.protocols;
 
-import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockPlaceEvent;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.Utils;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -27,23 +26,16 @@ public class FastPlace extends Cheat implements Listeners {
 		super(CheatKeys.FAST_PLACE, CheatCategory.WORLD, Materials.DIRT, false, true, "fp");
 	}
 
-	@EventListener
-	public void onBlockPlace(BlockPlaceEvent e) {
+	@Check(name = "time", conditions = { CheckConditions.SURVIVAL })
+	public void onBlockPlace(BlockPlaceEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
-			return;
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
-			return;
-		if(Adapter.getAdapter().getLastTPS() < 19.1)
-			return;
 		
 		int ping = p.getPing();
 		long last = System.currentTimeMillis() - np.LAST_BLOCK_PLACE, lastPing = last + ((ping - 50) / 10);
 		if(last < 10000) // last block is too old
 			recordData(p.getUniqueId(), TIME_PLACE, last);
 		np.LAST_BLOCK_PLACE = System.currentTimeMillis();
-		if (checkActive("time") && lastPing < getConfig().getInt("time_2_place", 50)) {
+		if (lastPing < getConfig().getInt("time_2_place", 50)) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(50 + lastPing),
 					"time", "Block placed too quickly. Last time: " + last + ", Last with ping: "
 					+ lastPing + ".", hoverMsg("main", "%time%", last));

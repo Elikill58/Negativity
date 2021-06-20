@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.entity.Arrow;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
@@ -21,9 +20,11 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.maths.Expression;
-import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.PacketContent.ContentModifier;
+import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
@@ -50,23 +51,13 @@ public class AntiKnockback extends Cheat implements Listeners {
 				"no-kb", "nokb");
 	}
 
-	@EventListener
-	public void onDamage(PlayerDamageByEntityEvent e) {
+	@Check(name = "ticked", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL, CheckConditions.NOT_IRON_TARGET, CheckConditions.NOT_THORNS })
+	public void onDamage(PlayerDamageByEntityEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;
 		Player p = e.getEntity();
-
-		if (p.isInsideVehicle()) {
-			// Knockback is not applied to entities riding other entities
-			return;
-		}
-
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this) || !checkActive("ticked"))
-			return;
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
-			return;
-		if (p.hasPotionEffect(PotionEffectType.POISON) || Utils.hasThorns(p))
+		
+		if (p.hasPotionEffect(PotionEffectType.POISON))
 			return;
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9)) {
 			ItemStack inHand = p.getItemInHand();
@@ -82,7 +73,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 			return;
 		if (PlayerModificationsManager.isProtected(p, damager))
 			return;
-		if (damagerType.name().contains("TNT") || np.isTargetByIronGolem())
+		if (damagerType.name().contains("TNT"))
 			return;
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
@@ -124,11 +115,9 @@ public class AntiKnockback extends Cheat implements Listeners {
 		}, 1);
 	}
 
-	@EventListener
+	@Check(name = "packet", conditions = { CheckConditions.SURVIVAL })
 	public void onPacket(PacketSendEvent e) {
 		if (!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_VELOCITY))
-			return;
-		if (!checkActive("packet"))
 			return;
 		ContentModifier<Integer> ints = e.getPacket().getContent().getIntegers();
 		int entId = ints.read("a", -1);
@@ -151,9 +140,6 @@ public class AntiKnockback extends Cheat implements Listeners {
 			// found player
 			if (p.getEntityId() == entId) {
 				NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-				if (!np.hasDetectionActive(this))
-					return;
-
 				if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 					return;
 				if (!p.isOnGround() || np.isOnLadders || p.isInsideVehicle() || p.isFlying() || p.isDead())

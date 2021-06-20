@@ -2,25 +2,20 @@ package com.elikill58.negativity.api.events.block;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Event;
+import com.elikill58.negativity.api.events.PlayerEvent;
 
-public class BlockBreakEvent implements Event {
+public class BlockBreakEvent extends PlayerEvent {
 
-	private final Player p;
 	private final Block b;
 	private boolean cancel;
 	
 	public BlockBreakEvent(Player p, Block b) {
-		this.p = p;
+		super(p);
 		this.b = b;
 	}
 	
 	public Block getBlock() {
 		return b;
-	}
-	
-	public Player getPlayer() {
-		return p;
 	}
 
 	public boolean isCancelled() {

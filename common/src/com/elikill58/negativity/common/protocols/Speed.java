@@ -23,6 +23,8 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
@@ -187,6 +189,18 @@ public class Speed extends Cheat implements Listeners {
 				return true;
 		return false;
 	}
+	
+	@Check(name = "move-amount", description = "Amount of move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NO_ELYTRA })
+	public void onMoveAmount(PlayerMoveEvent e, NegativityPlayer np) {
+		Player p = e.getPlayer();
+		np.MOVE_TIME++;
+		if (np.MOVE_TIME > 60) {
+			boolean b = Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
+					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount", "Move " + np.MOVE_TIME + " times.");
+			if (b && isSetBack())
+				e.setCancelled(true);
+		}
+	}
 
 	@EventListener
 	public void onEntityDamage(PlayerDamageByEntityEvent e) {
@@ -212,12 +226,10 @@ public class Speed extends Cheat implements Listeners {
 		return x * x + z * z;
 	}
 	
-	@EventListener
-	public void onPacketClear(PlayerPacketsClearEvent e) {
-		NegativityPlayer np = e.getNegativityPlayer();
-		if(np.hasDetectionActive(this) && checkActive("move-amount"))
-			if(np.MOVE_TIME > 60)
-				Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, np.getPlayer(), this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2),
-						"move-amount", "Move " + np.MOVE_TIME + " times.");
+	@Check(name = "move-amount-packet", description = "Move amount in packet version")
+	public void onPacketClear(PlayerPacketsClearEvent e, NegativityPlayer np) {
+		if(np.MOVE_TIME > 60)
+			Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, e.getPlayer(), this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2),
+					"move-amount", "Move " + np.MOVE_TIME + " times.");
 	}
 }

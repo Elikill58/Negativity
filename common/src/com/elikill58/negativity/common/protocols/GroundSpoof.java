@@ -1,21 +1,21 @@
 package com.elikill58.negativity.common.protocols;
 
-import com.elikill58.negativity.api.GameMode;
+import java.util.EnumSet;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.report.ReportType;
-
-import java.util.EnumSet;
 
 public class GroundSpoof extends Cheat implements Listeners {
     private static final EnumSet<BlockFace> SUPPORTED_FACES = EnumSet.of(BlockFace.WEST, BlockFace.EAST, BlockFace.SOUTH,
@@ -25,24 +25,15 @@ public class GroundSpoof extends Cheat implements Listeners {
         super(CheatKeys.GROUND_SPOOF, CheatCategory.MOVEMENT, Materials.STONE, false, false, "groundspoof");
     }
 
-    @EventListener
-    public void onGroundSpoof(PlayerMoveEvent e) {
-        if (!checkActive("check-blocks-under")) {
-            return;
-        }
+    @Check(name = "check-blocks-under", description = "Block under player have to be considered as ground", conditions = { CheckConditions.SURVIVAL, CheckConditions.GROUND })
+    public void onGroundSpoof(PlayerMoveEvent e, NegativityPlayer np) {
         Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this) || e.isCancelled())
+		if (e.isCancelled())
 			return;
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
-			return;
-        if (!p.isOnGround()) {
-            return;
-        }
         if (isOnGround(p)) {
             return;
         }
-        Block downBlock = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
+        Block downBlock = e.getTo().getBlock().getRelative(BlockFace.DOWN);
         if (isNotAir(downBlock.getRelative(BlockFace.NORTH))
                 && isNotAir(downBlock.getRelative(BlockFace.SOUTH))
                 || (isNotAir(downBlock.getRelative(BlockFace.EAST))

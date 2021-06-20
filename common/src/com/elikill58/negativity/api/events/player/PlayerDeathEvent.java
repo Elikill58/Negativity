@@ -1,17 +1,12 @@
 package com.elikill58.negativity.api.events.player;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Event;
+import com.elikill58.negativity.api.events.PlayerEvent;
 
-public class PlayerDeathEvent implements Event {
+public class PlayerDeathEvent extends PlayerEvent {
 
-	private final Player p;
-	
 	public PlayerDeathEvent(Player p) {
-		this.p = p;
+		super(p);
 	}
 	
-	public Player getPlayer() {
-		return p;
-	}
 }

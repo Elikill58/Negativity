@@ -2,15 +2,15 @@ package com.elikill58.negativity.common.protocols;
 
 import static com.elikill58.negativity.universal.CheatKeys.FAST_STAIRS;
 
-import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -22,16 +22,9 @@ public class FastStairs extends Cheat implements Listeners {
 		super(FAST_STAIRS, CheatCategory.MOVEMENT, Materials.BRICK_STAIRS, false, false, "stairs");
 	}
 	
-	@EventListener
-	public void onMove(PlayerMoveEvent e) {
+	@Check(name = "distance", description = "Check distance", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FALL_DISTANCE })
+	public void onMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if(!np.hasDetectionActive(this))
-			return;
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
-			return;
-		if(p.getFallDistance() != 0)
-			return;
 		String blockName = e.getTo().clone().sub(0, 0.0001, 0).getBlock().getType().getId();
 		if(!blockName.contains("STAIRS") || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;

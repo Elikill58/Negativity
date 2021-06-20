@@ -11,11 +11,12 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockPlaceEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -28,11 +29,10 @@ public class AirPlace extends Cheat implements Listeners {
 		super(AIR_PLACE, CheatCategory.WORLD, Materials.GLASS_BOTTLE, false, false, "liquidinteract", "liquid");
 	}
 
-	@EventListener
-	public void onPlaceBlock(BlockPlaceEvent e) {
+	@Check(name = "block-around", description = "Check blocks around", conditions = { CheckConditions.SURVIVAL })
+	public void onPlaceBlock(BlockPlaceEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if(!np.hasDetectionActive(this) || e.isCancelled() || !checkActive("block-around"))
+		if(e.isCancelled())
 			return;
 		Block theBlock = e.getBlock();
 		Material type = theBlock.getType();

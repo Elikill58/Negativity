@@ -1,15 +1,15 @@
 package com.elikill58.negativity.common.protocols;
 
-import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -23,14 +23,9 @@ public class FastLadder extends Cheat implements Listeners {
 		super(CheatKeys.FAST_LADDER, CheatCategory.MOVEMENT, Materials.LADDER, false, false, "ladder", "ladders");
 	}
 
-	@EventListener
-	public void onPlayerMove(PlayerMoveEvent e) {
+	@Check(name = "distance", description = "Check Y move only", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY })
+	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
-			return;
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
-			return;
 		Location loc = p.getLocation().clone();
 		if (!loc.getBlock().getType().equals(Materials.LADDER)){
 			np.isOnLadders = false;
@@ -40,7 +35,7 @@ public class FastLadder extends Cheat implements Listeners {
 			np.isOnLadders = true;
 			return;
 		}
-		if(p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP) || p.hasElytra())
+		if(p.hasPotionEffect(PotionEffectType.JUMP))
 			return;
 		for (PotionEffect pe : p.getActivePotionEffect())
 			if (pe.getType().equals(PotionEffectType.SPEED) && pe.getAmplifier() > 2)

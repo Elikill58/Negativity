@@ -1,19 +1,14 @@
 package com.elikill58.negativity.api.events.inventory;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Event;
+import com.elikill58.negativity.api.events.PlayerEvent;
 
-public class InventoryOpenEvent implements Event {
+public class InventoryOpenEvent extends PlayerEvent {
 
-	private final Player p;
 	private boolean cancel = false;
 	
 	public InventoryOpenEvent(Player p) {
-		this.p = p;
-	}
-	
-	public Player getPlayer() {
-		return p;
+		super(p);
 	}
 
 	public boolean isCancelled() {

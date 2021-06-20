@@ -2,16 +2,16 @@ package com.elikill58.negativity.common.protocols;
 
 import static com.elikill58.negativity.universal.CheatKeys.SPIDER;
 
-import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
@@ -26,87 +26,83 @@ public class Spider extends Cheat implements Listeners {
 				"wall");
 	}
 
-	@EventListener
-	public void onPlayerMove(PlayerMoveEvent e) {
+	@Check(name = "nothing-around", description = "Walking with nothing around", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY, CheckConditions.NO_FALL_DISTANCE, CheckConditions.NO_SPRINT, CheckConditions.NOT_USE_SLIME })
+	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
-			return;
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		Location loc = p.getLocation();
-		if (!np.hasDetectionActive(this) || LocationUtils.isUsingElevator(p))
-			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		if(p.getFallDistance() != 0 || p.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP) || np.booleans.get("ALL", "jump-boost-use", false))
+		if(p.hasPotionEffect(PotionEffectType.JUMP) || np.booleans.get("ALL", "jump-boost-use", false))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
-		boolean mayCancel = false;
-		if(checkActive("nothing-around")) {
-			if (!LocationUtils.hasOtherThan(loc, Materials.AIR) || (from.getX() == to.getX() && from.getZ() == to.getZ()))
-					return;
-			Material underPlayer = loc.clone().sub(0, 1, 0).getBlock().getType(),
-					underUnder = loc.clone().sub(0, 2, 0).getBlock().getType();
-			if (!underPlayer.equals(Materials.AIR) || !underUnder.equals(Materials.AIR)
-					|| !loc.getBlock().getType().equals(Materials.AIR))
+		if (!LocationUtils.hasOtherThan(loc, Materials.AIR) || (from.getX() == to.getX() && from.getZ() == to.getZ()))
 				return;
-			if (p.getItemInHand() != null && p.getItemInHand().getType().getId().contains("TRIDENT"))
-				return;
-			if(hasBypassBlockAround(loc) || LocationUtils.isUsingElevator(p))
-				return;
-			boolean isAris = ((float) y) == p.getWalkSpeed();
-			if (((y > 0.499 && y < 0.7) || isAris) && !np.isUsingSlimeBlock && !p.isSprinting() && p.getVelocity().length() < 1.5) {
-				int relia = UniversalUtils.parseInPorcent(y * 160 + (isAris ? 39 : 0));
-				mayCancel = Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this, relia,
-						"nothing-around", "Nothing around him. To > From: " + y + " isAris: " + isAris + ", has not stab slairs")
-						&& isSetBack();
-			}
+		Material underPlayer = loc.clone().sub(0, 1, 0).getBlock().getType(),
+				underUnder = loc.clone().sub(0, 2, 0).getBlock().getType();
+		if (!underPlayer.equals(Materials.AIR) || !underUnder.equals(Materials.AIR)
+				|| !loc.getBlock().getType().equals(Materials.AIR))
+			return;
+		if (p.getItemInHand() != null && p.getItemInHand().getType().getId().contains("TRIDENT"))
+			return;
+		if(hasBypassBlockAround(loc))
+			return;
+		boolean isAris = ((float) y) == p.getWalkSpeed();
+		if (((y > 0.499 && y < 0.7) || isAris) && p.getVelocity().length() < 1.5) {
+			int relia = UniversalUtils.parseInPorcent(y * 160 + (isAris ? 39 : 0));
+			boolean mayCancel = Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this, relia,
+					"nothing-around", "Nothing around him. To > From: " + y + " isAris: " + isAris + ", has not stab slairs")
+					&& isSetBack();
+			if(mayCancel)
+				LocationUtils.teleportPlayerOnGround(p);
 		}
-		if(checkActive("same-y")) {
-			int amount = 0;
-			if (y <= 0.0 || y == 0.25 || y == 0.5 || LocationUtils.isInWater(to)
-					|| hasBypassBlockAround(to)) {//(to, "LADDER", "CLIMB", "SCAFFOLD", "WATER", "LAVA", "VINE")) {
-				np.lastY.clear();
-			} else {
-				int i = np.lastY.size() - 1;
-				while (i > 0) {
-					double value = np.lastY.get(i);
-					if (value == y) {
-						++amount;
-						--i;
-					} else {
-						if (i == np.lastY.size() - 1) {
-							np.lastY.clear();
-							break;
-						}
-						for (int x = 0; x < i; ++x) {
-							np.lastY.remove(0);
-						}
+	}
+
+	@Check(name = "same-y", description = "Player move with same Y", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY, CheckConditions.NO_FALL_DISTANCE })
+	public void onPlayerMoveSameY(PlayerMoveEvent e, NegativityPlayer np) {
+		Player p = e.getPlayer();
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
+			return;
+		if(p.hasPotionEffect(PotionEffectType.JUMP) || np.booleans.get("ALL", "jump-boost-use", false))
+			return;
+		int amount = 0;
+		Location from = e.getFrom(), to = e.getTo();
+		double y = to.getY() - from.getY();
+		if (y <= 0.0 || y == 0.25 || y == 0.5 || LocationUtils.isInWater(to)
+				|| hasBypassBlockAround(to)) {//(to, "LADDER", "CLIMB", "SCAFFOLD", "WATER", "LAVA", "VINE")) {
+			np.lastY.clear();
+		} else {
+			int i = np.lastY.size() - 1;
+			while (i > 0) {
+				double value = np.lastY.get(i);
+				if (value == y) {
+					++amount;
+					--i;
+				} else {
+					if (i == np.lastY.size() - 1) {
+						np.lastY.clear();
 						break;
 					}
+					for (int x = 0; x < i; ++x) {
+						np.lastY.remove(0);
+					}
+					break;
 				}
 			}
-			if (amount > 1) {
-				mayCancel = (Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this, 80 + amount * 3,
-						"nothing-around", "Y: " + y + ", fall: " + p.getFallDistance() + ", aount: " + amount)
-						&& isSetBack()) || mayCancel;
-			}
-			np.lastY.add(y);
 		}
-		if(mayCancel)
-			LocationUtils.teleportPlayerOnGround(p);
+		if (amount > 1) {
+			boolean mayCancel = (Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this, 80 + amount * 3,
+					"nothing-around", "Y: " + y + ", fall: " + p.getFallDistance() + ", aount: " + amount)
+					&& isSetBack());
+			if(mayCancel)
+				LocationUtils.teleportPlayerOnGround(p);
+		}
+		np.lastY.add(y);
 	}
 	
-	@EventListener
-	public void onPlayerContinueMove(PlayerMoveEvent e) {
+	@Check(name = "distance", description = "Distance when going up", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NOT_USE_ELEVATOR })
+	public void onPlayerContinueMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
-			return;
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null || LocationUtils.isUsingElevator(p))
-			return;
-		if(!checkActive("distance"))
-			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
 		Location loc = p.getLocation().clone();

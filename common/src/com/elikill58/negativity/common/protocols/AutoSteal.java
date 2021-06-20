@@ -2,16 +2,16 @@ package com.elikill58.negativity.common.protocols;
 
 import static com.elikill58.negativity.universal.CheatKeys.AUTO_STEAL;
 
-import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.inventory.InventoryAction;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.bypass.checkers.ItemUseBypass;
@@ -26,14 +26,9 @@ public class AutoSteal extends Cheat implements Listeners {
 
 	public static final int TIME_CLICK = 55;
 	
-	@EventListener
-	public void onInvClick(InventoryClickEvent e) {
+	@Check(name = "time-click", description = "Time between 2 clicks", conditions = { CheckConditions.SURVIVAL })
+	public void onInvClick(InventoryClickEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		if(!(p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)))
-			return;
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if(!np.hasDetectionActive(this) || !checkActive("time-click"))
-			return;
 		ItemStack inHand = p.getItemInHand();
 		if(inHand != null)
 			if(ItemUseBypass.hasBypassWithClick(p, this, inHand, e.getAction().name()))

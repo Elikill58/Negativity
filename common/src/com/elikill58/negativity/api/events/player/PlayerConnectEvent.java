@@ -2,22 +2,17 @@ package com.elikill58.negativity.api.events.player;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Event;
+import com.elikill58.negativity.api.events.PlayerEvent;
 
-public class PlayerConnectEvent implements Event {
+public class PlayerConnectEvent extends PlayerEvent {
 
-	private final Player p;
 	private final NegativityPlayer np;
 	private String joinMessage;
 	
 	public PlayerConnectEvent(Player p, NegativityPlayer np, String joinMessage) {
-		this.p = p;
+		super(p);
 		this.np = np;
 		this.joinMessage = joinMessage;
-	}
-	
-	public Player getPlayer() {
-		return p;
 	}
 	
 	public NegativityPlayer getNegativityPlayer() {

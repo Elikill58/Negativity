@@ -2,11 +2,11 @@ package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
@@ -46,10 +46,26 @@ public class AutoClick extends Cheat implements Listeners {
 		}, 20, 20);
 	}
 	
-	@EventListener
-	public void onInteract(PlayerInteractEvent e) {
+	@Check(name = "count", description = "Count click 1 by 1")
+	public void onInteract(PlayerInteractEvent e, NegativityPlayer np) {
 		if(e.getAction().name().contains("AIR")) {
-			manageClick(e.getPlayer(), e);
+			Player p = e.getPlayer();
+			ItemStack inHand = p.getItemInHand();
+			if (inHand != null) {
+				if(ItemUseBypass.hasBypassWithClick(p, this, inHand, e.getAction().name()))
+					return;
+			}
+			np.ACTUAL_CLICK++;
+			int ping = p.getPing(), click = np.ACTUAL_CLICK - (ping / 9);
+			if (click > getConfig().getInt("click_alert", 20)) {
+				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
+						UniversalUtils.parseInPorcent(np.ACTUAL_CLICK * 2.5), "count",
+						"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
+								+ "; Better click in one second: " + np.getAccount().getMostClicksPerSecond(),
+								hoverMsg("main", "%click%", np.ACTUAL_CLICK));
+				if (isSetBack() && mayCancel)
+					e.setCancelled(true);
+			}
 		}
 	}
 	
@@ -58,26 +74,6 @@ public class AutoClick extends Cheat implements Listeners {
 		if(e.getPacket().getPacketType() == PacketType.Client.ARM_ANIMATION)
 			manageClick(e.getPlayer(), e);
 	}*/
-		
-	private void manageClick(Player p, PlayerInteractEvent e) {
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		ItemStack inHand = p.getItemInHand();
-		if (inHand != null) {
-			if(ItemUseBypass.hasBypassWithClick(p, this, inHand, e.getAction().name()))
-				return;
-		}
-		np.ACTUAL_CLICK++;
-		int ping = p.getPing(), click = np.ACTUAL_CLICK - (ping / 9);
-		if (click > getConfig().getInt("click_alert", 20) && np.hasDetectionActive(this)) {
-			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(np.ACTUAL_CLICK * 2.5), "count",
-					"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
-							+ "; Better click in one second: " + np.getAccount().getMostClicksPerSecond(),
-							hoverMsg("main", "%click%", np.ACTUAL_CLICK));
-			if (isSetBack() && mayCancel)
-				e.setCancelled(true);
-		}
-	}
 	
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {

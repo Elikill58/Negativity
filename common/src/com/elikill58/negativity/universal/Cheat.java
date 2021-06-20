@@ -28,6 +28,7 @@ import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
+import com.elikill58.negativity.common.protocols.CheckManager;
 import com.elikill58.negativity.universal.setBack.SetBackEntry;
 import com.elikill58.negativity.universal.setBack.SetBackProcessor;
 import com.elikill58.negativity.universal.setBack.processor.PotionEffectProcessor;
@@ -429,6 +430,9 @@ public abstract class Cheat {
 			CHEATS.add(cheat);
 		}
 		CHEATS.sort(Comparator.comparing(Cheat::getKey));
+		
+		EventManager.unregisterEventForClass(CheckManager.class);
+		EventManager.registerEvent(new CheckManager(CHEATS));
 		ada.getLogger().info("Loaded " + CHEATS.size() + " cheat detections.");
 	}
 

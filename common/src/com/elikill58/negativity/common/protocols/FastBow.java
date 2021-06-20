@@ -12,6 +12,7 @@ import com.elikill58.negativity.api.events.entity.EntityShootBowEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Negativity;
@@ -30,16 +31,13 @@ public class FastBow extends Cheat implements Listeners {
 		super(FAST_BOW, CheatCategory.COMBAT, Materials.BOW, true, true, "bow");
 	}
 	
-	@EventListener
-	public void onPlayerInteract(PlayerInteractEvent e) {
+	@Check(name = "last-shot", description = "Time with last shot")
+	public void onPlayerInteract(PlayerInteractEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		ItemStack item = p.getItemInHand();
 		if(item == null)
 			return;
-		if(!np.hasDetectionActive(this) || !checkActive("last-shot"))
-			return;
-
+		
 		if (item.getType().equals(Materials.BOW) && e.getAction().name().contains("RIGHT_CLICK")) {
 			if(ItemUseBypass.hasBypassWithClick(p, this, item, e.getAction().name()))
 				return;
@@ -50,15 +48,10 @@ public class FastBow extends Cheat implements Listeners {
 			if (lastShotWithBow != 0) {
 				int ping = p.getPing();
 				if (dif < (200 + ping)) {
-					boolean mayCancel = false;
-					if (dif < (50 + ping))
-						mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent(200 - dif - ping),
-								"last-shot", "Player use Bow, last shot: " + lastShotWithBow
-								+ " Actual time: " + actual + " Difference: " + dif, hoverMsg("main", "%time%", dif));
-					else
-						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - dif - ping),
-								"last-shot", "Player use Bow, last shot: " + lastShotWithBow
-								+ " Actual time: " + actual + " Difference: " + dif, hoverMsg("main", "%time%", dif));
+					boolean mayCancel = Negativity.alertMod(dif < (50 + ping) ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+							UniversalUtils.parseInPorcent((dif < (50 + ping) ? 200 : 100) - dif - ping), "last-shot",
+							"Player use Bow, last shot: " + lastShotWithBow + " Actual time: " + actual + " Difference: " + dif,
+							hoverMsg("main", "%time%", dif));
 					if(isSetBack() && mayCancel)
 						e.setCancelled(true);
 				}

@@ -1,23 +1,18 @@
 package com.elikill58.negativity.api.events.player;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Event;
+import com.elikill58.negativity.api.events.PlayerEvent;
 import com.elikill58.negativity.api.location.Location;
 
-public class PlayerMoveEvent implements Event {
+public class PlayerMoveEvent extends PlayerEvent {
 
-	private final Player p;
 	private Location from, to;
 	private boolean cancel = false, hasToSet = false;
 	
 	public PlayerMoveEvent(Player p, Location from, Location to) {
-		this.p = p;
+		super(p);
 		this.from = from;
 		this.to = to;
-	}
-	
-	public Player getPlayer() {
-		return p;
 	}
 	
 	public Location getTo() {

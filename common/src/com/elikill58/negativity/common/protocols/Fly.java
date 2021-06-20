@@ -194,7 +194,7 @@ public class Fly extends Cheat implements Listeners {
 		}
 	}
 	
-	@Check(name = "no-ground-down", conditions = CheckConditions.INSIDE_VEHICLE)
+	@Check(name = "no-ground-down", description = "When not in ground, check Y move", conditions = CheckConditions.INSIDE_VEHICLE)
 	public void boatManager(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		boolean nextValue = np.booleans.get(FLY, "boat-falling", false);

@@ -29,7 +29,7 @@ public class Scaffold extends Cheat implements Listeners {
 		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS, false, false);
 	}
 
-	@Check(name=  "below")
+	@Check(name=  "below", description = "Block placed below")
 	public void onBlockBreak(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		int ping = p.getPing(), slot = p.getInventory().getHeldItemSlot();
@@ -55,7 +55,7 @@ public class Scaffold extends Cheat implements Listeners {
 		}, 1);
 	}
 
-	@Check(name = "distance")
+	@Check(name = "distance", description = "Distance between placed and target one")
 	public void onBlockBreakDistance(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		Block place = e.getBlock();
@@ -70,7 +70,7 @@ public class Scaffold extends Cheat implements Listeners {
 		}
 	}
 	
-	@Check(name = "packet")
+	@Check(name = "packet", description = "Distance of move with packet")
 	public void onPacket(PacketReceiveEvent e) {
 		AbstractPacket pa = e.getPacket();
 		Player p = e.getPlayer();

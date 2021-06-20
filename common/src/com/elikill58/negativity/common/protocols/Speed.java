@@ -190,7 +190,7 @@ public class Speed extends Cheat implements Listeners {
 		return false;
 	}
 	
-	@Check(name = "move-amount", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NO_ELYTRA })
+	@Check(name = "move-amount", description = "Amount of move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NO_ELYTRA })
 	public void onMoveAmount(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		np.MOVE_TIME++;
@@ -226,7 +226,7 @@ public class Speed extends Cheat implements Listeners {
 		return x * x + z * z;
 	}
 	
-	@Check(name = "move-amount")
+	@Check(name = "move-amount-packet", description = "Move amount in packet version")
 	public void onPacketClear(PlayerPacketsClearEvent e, NegativityPlayer np) {
 		if(np.MOVE_TIME > 60)
 			Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, e.getPlayer(), this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2),

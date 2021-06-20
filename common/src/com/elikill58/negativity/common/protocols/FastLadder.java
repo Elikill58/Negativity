@@ -23,7 +23,7 @@ public class FastLadder extends Cheat implements Listeners {
 		super(CheatKeys.FAST_LADDER, CheatCategory.MOVEMENT, Materials.LADDER, false, false, "ladder", "ladders");
 	}
 
-	@Check(name = "distance", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY })
+	@Check(name = "distance", description = "Check Y move only", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location loc = p.getLocation().clone();

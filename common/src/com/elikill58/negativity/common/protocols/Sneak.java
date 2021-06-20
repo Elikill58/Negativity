@@ -23,7 +23,7 @@ public class Sneak extends Cheat implements Listeners {
 		super(SNEAK, CheatCategory.MOVEMENT, Materials.BLAZE_POWDER, true, false, "sneack", "sneac");
 	}
 
-	@Check(name = "sneak-sprint", conditions = { CheckConditions.SURVIVAL, CheckConditions.SNEAK, CheckConditions.SPRINT, CheckConditions.NO_FLY })
+	@Check(name = "sneak-sprint", description = "Sneak while sprinting", conditions = { CheckConditions.SURVIVAL, CheckConditions.SNEAK, CheckConditions.SPRINT, CheckConditions.NO_FLY })
 	public void onMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
@@ -40,7 +40,7 @@ public class Sneak extends Cheat implements Listeners {
 		np.booleans.set(SNEAK, "was-sneaking", p.isSneaking());
 	}
 	
-	@Check(name = "packet")
+	@Check(name = "packet", description = "Amount of sneacking packet")
 	public void onPacketClear(PlayerPacketsClearEvent e) {
 		NegativityPlayer np = e.getNegativityPlayer();
 		Player p = e.getPlayer();

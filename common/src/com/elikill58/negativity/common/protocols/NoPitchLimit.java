@@ -25,7 +25,7 @@ public class NoPitchLimit extends Cheat implements Listeners {
 		super(CheatKeys.NO_PITCH_LIMIT, CheatCategory.PLAYER, Materials.SKELETON_SKULL, false, true, "pitch");
 	}
 	
-	@Check(name = "head-mov")
+	@Check(name = "head-mov", description = "Check head movement")
 	public void test(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		float pitch = p.getLocation().getPitch();

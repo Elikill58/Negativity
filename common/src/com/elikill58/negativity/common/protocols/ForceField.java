@@ -42,7 +42,7 @@ public class ForceField extends Cheat implements Listeners {
 		nf.setMaximumIntegerDigits(2);
 	}
 	
-	@Check(name = "packet")
+	@Check(name = "packet", description = "Count packet")
 	public void onPacketClear(PlayerPacketsClearEvent e, NegativityPlayer np) {
 		int arm = e.getPackets().getOrDefault(PacketType.Client.ARM_ANIMATION, 0);
 		int useEntity = e.getPackets().getOrDefault(PacketType.Client.USE_ENTITY, 0);
@@ -56,7 +56,7 @@ public class ForceField extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "line-sight", conditions = CheckConditions.SURVIVAL)
+	@Check(name = "line-sight", description = "Player has line of sight the cible", conditions = CheckConditions.SURVIVAL)
 	public void onEntityDamageByEntity(PlayerDamageByEntityEvent e, NegativityPlayer np) {
 		if (!(e.getDamager() instanceof Player) || e.isCancelled())
 			return;
@@ -74,7 +74,7 @@ public class ForceField extends Cheat implements Listeners {
 			e.setCancelled(true);
 	}
 
-	@Check(name = "reach", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_THORNS })
+	@Check(name = "reach", description = "The reach", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_THORNS })
 	public void onCheckReach(PlayerDamageByEntityEvent e, NegativityPlayer np) {
 		if (!(e.getDamager() instanceof Player) || e.isCancelled())
 			return;

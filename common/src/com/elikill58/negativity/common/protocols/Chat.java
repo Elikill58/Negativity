@@ -23,7 +23,7 @@ public class Chat extends Cheat implements Listeners {
 		super(CheatKeys.CHAT, CheatCategory.PLAYER, Materials.BOOK_AND_QUILL, false, false);
 	}
 
-	@Check(name = "spam")
+	@Check(name = "spam", description = "Spam of a message")
 	public void onChatSpam(PlayerChatEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		String msg = e.getMessage();
@@ -41,7 +41,7 @@ public class Chat extends Cheat implements Listeners {
 		np.TIME_LAST_MESSAGE = System.currentTimeMillis();
 	}
 
-	@Check(name = "insult")
+	@Check(name = "insult", description = "Manage insult")
 	public void onChatInsult(PlayerChatEvent e) {
 		Player p = e.getPlayer();
 		String msg = e.getMessage();

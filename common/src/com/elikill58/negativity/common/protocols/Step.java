@@ -39,7 +39,7 @@ public class Step extends Cheat implements Listeners {
 		NegativityPlayer.getNegativityPlayer(e.getPlayer()).booleans.set("ALL", "jump-boost-use", true);
 	}
 
-	@Check(name = "dif", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_FLY, CheckConditions.IS_NO_BEDROCK, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NOT_USE_SLIME, CheckConditions.NOT_USE_TRIDENT })
+	@Check(name = "dif", description = "Distance about blocks up", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_FLY, CheckConditions.IS_NO_BEDROCK, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NOT_USE_SLIME, CheckConditions.NOT_USE_TRIDENT })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
@@ -67,7 +67,7 @@ public class Step extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "dif-boost", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_FLY, CheckConditions.IS_NO_BEDROCK, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NOT_USE_SLIME, CheckConditions.NOT_USE_TRIDENT })
+	@Check(name = "dif-boost", description = "Distance while counting jump", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_FLY, CheckConditions.IS_NO_BEDROCK, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NOT_USE_SLIME, CheckConditions.NOT_USE_TRIDENT })
 	public void onPlayerMoveDifBoost(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))

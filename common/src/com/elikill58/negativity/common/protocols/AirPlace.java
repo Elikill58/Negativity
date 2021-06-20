@@ -29,7 +29,7 @@ public class AirPlace extends Cheat implements Listeners {
 		super(AIR_PLACE, CheatCategory.WORLD, Materials.GLASS_BOTTLE, false, false, "liquidinteract", "liquid");
 	}
 
-	@Check(name = "block-around", conditions = { CheckConditions.SURVIVAL })
+	@Check(name = "block-around", description = "Check blocks around", conditions = { CheckConditions.SURVIVAL })
 	public void onPlaceBlock(BlockPlaceEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if(e.isCancelled())

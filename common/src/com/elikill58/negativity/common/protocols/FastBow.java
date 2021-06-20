@@ -31,7 +31,7 @@ public class FastBow extends Cheat implements Listeners {
 		super(FAST_BOW, CheatCategory.COMBAT, Materials.BOW, true, true, "bow");
 	}
 	
-	@Check(name = "last-shot")
+	@Check(name = "last-shot", description = "Time with last shot")
 	public void onPlayerInteract(PlayerInteractEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		ItemStack item = p.getItemInHand();

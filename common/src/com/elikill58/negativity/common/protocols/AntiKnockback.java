@@ -51,7 +51,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 				"no-kb", "nokb");
 	}
 
-	@Check(name = "ticked", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL, CheckConditions.NOT_IRON_TARGET, CheckConditions.NOT_THORNS })
+	@Check(name = "ticked", description = "Get move after a tick", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL, CheckConditions.NOT_IRON_TARGET, CheckConditions.NOT_THORNS })
 	public void onDamage(PlayerDamageByEntityEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;
@@ -115,7 +115,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 		}, 1);
 	}
 
-	@Check(name = "packet", conditions = { CheckConditions.SURVIVAL })
+	@Check(name = "packet", description = "Packet velocity", conditions = { CheckConditions.SURVIVAL })
 	public void onPacket(PacketSendEvent e) {
 		if (!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_VELOCITY))
 			return;

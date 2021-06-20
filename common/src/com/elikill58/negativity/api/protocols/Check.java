@@ -12,4 +12,7 @@ public @interface Check {
 	String name();
 	
 	CheckConditions[] conditions() default {};
+
+	String description();
+
 }

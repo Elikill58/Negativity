@@ -25,7 +25,7 @@ public class Timer extends Cheat implements Listeners {
 		super(CheatKeys.TIMER, CheatCategory.MOVEMENT, Materials.PACKED_ICE, true, false);
 	}
 	
-	@Check(name = "packet")
+	@Check(name = "packet", description = "Check Y move only")
 	public void onPacketClear(PlayerPacketsClearEvent e) {
 		NegativityPlayer np = e.getNegativityPlayer();
 		HashMap<PacketType, Integer> packets = e.getPackets();

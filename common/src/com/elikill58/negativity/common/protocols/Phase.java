@@ -21,7 +21,7 @@ public class Phase extends Cheat implements Listeners {
 		super(CheatKeys.PHASE, CheatCategory.MOVEMENT, Materials.WHITE_STAINED_GLASS, false, false);
 	}
 
-	@Check(name = "no-jump", conditions = CheckConditions.SURVIVAL)
+	@Check(name = "no-jump", description = "On air and don't jump", conditions = CheckConditions.SURVIVAL)
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location loc = p.getLocation();

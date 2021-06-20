@@ -23,7 +23,7 @@ public class NoWeb extends Cheat implements Listeners {
 		super(CheatKeys.NO_WEB, CheatCategory.MOVEMENT, WEB, false, false, "no web");
 	}
 
-	@Check(name = "speed", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY })
+	@Check(name = "speed", description = "Speed on web", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if(p.hasPotionEffect(PotionEffectType.SPEED) || p.getFallDistance() > 1)

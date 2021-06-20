@@ -28,7 +28,7 @@ public class Nuker extends Cheat implements Listeners {
 		super(CheatKeys.NUKER, CheatCategory.WORLD, Materials.BEDROCK, true, false, "breaker", "bed breaker", "bedbreaker");
 	}
 
-	@Check(name = "distance", conditions = CheckConditions.SURVIVAL)
+	@Check(name = "distance", description = "Distance between target and breaked block", conditions = CheckConditions.SURVIVAL)
 	public void onBlockBreak(BlockBreakEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Block b = e.getBlock();
@@ -54,7 +54,7 @@ public class Nuker extends Cheat implements Listeners {
 		}
 	}
 	
-	@Check(name = "time", conditions = CheckConditions.SURVIVAL)
+	@Check(name = "time", description = "Time between 2 block break", conditions = CheckConditions.SURVIVAL)
 	public void onBlockBreakTime(BlockBreakEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Block b = e.getBlock();
@@ -75,7 +75,7 @@ public class Nuker extends Cheat implements Listeners {
 	}
 
 	
-	@Check(name = "packet")
+	@Check(name = "packet", description = "Amount of block break packet")
 	public void onPacketClear(PlayerPacketsClearEvent e) {
 		Player p = e.getPlayer();
 		int ping = p.getPing();

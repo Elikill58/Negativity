@@ -26,7 +26,7 @@ public class AirJump extends Cheat implements Listeners {
 		super(AIR_JUMP, CheatCategory.MOVEMENT, Materials.FEATHER, false, false, "airjump", "air", "jump");
 	}
 
-	@Check(name = "diff-y", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "diff-y", description = "Y difference", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (p.hasPotionEffect(PotionEffectType.JUMP) || p.getItemInHand().getType().getId().contains("TRIDENT"))
@@ -65,7 +65,7 @@ public class AirJump extends Cheat implements Listeners {
 		}, 5);
 	}
 
-	@Check(name = "going-down", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "going-down", description = "Going down", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onMoveGoingDown(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (p.hasPotionEffect(PotionEffectType.JUMP) || p.getItemInHand().getType().getId().contains("TRIDENT"))

@@ -28,7 +28,7 @@ public class NoFall extends Cheat implements Listeners {
 		super(CheatKeys.NO_FALL, CheatCategory.MOVEMENT, Materials.YELLOW_WOOL, true, false);
 	}
 	
-	@Check(name = "motion-y", conditions = { CheckConditions.NOT_USE_ELEVATOR, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "motion-y", description = "Motion Y when fall", conditions = { CheckConditions.NOT_USE_ELEVATOR, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onMoveMotionY(PlayerMoveEvent e, NegativityPlayer np) {
 		if(e.isCancelled())
 			return;
@@ -59,7 +59,7 @@ public class NoFall extends Cheat implements Listeners {
 			np.useAntiNoFallSystem = false;
 	}
 	
-	@Check(name = "distance-no-ground", conditions = { CheckConditions.NO_GROUND, CheckConditions.NO_FALL_DISTANCE, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "distance-no-ground", description = "Distance when player NOT in ground", conditions = { CheckConditions.NO_GROUND, CheckConditions.NO_FALL_DISTANCE, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onMoveDistanceNoGround(PlayerMoveEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;
@@ -86,7 +86,7 @@ public class NoFall extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "distance-ground", conditions = { CheckConditions.GROUND, CheckConditions.NO_FALL_DISTANCE, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "distance-ground", description = "DIstance when player in now on ground", conditions = { CheckConditions.GROUND, CheckConditions.NO_FALL_DISTANCE, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onMoveDistanceGround(PlayerMoveEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;
@@ -116,7 +116,7 @@ public class NoFall extends Cheat implements Listeners {
 		}
 	}
 	
-	@Check(name = "have-to-ground", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_GROUND })
+	@Check(name = "have-to-ground", description = "Player try to spoof ground", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_GROUND })
 	public void onMoveHaveToGround(PlayerMoveEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;

@@ -26,7 +26,7 @@ public class FastPlace extends Cheat implements Listeners {
 		super(CheatKeys.FAST_PLACE, CheatCategory.WORLD, Materials.DIRT, false, true, "fp");
 	}
 
-	@Check(name = "time", conditions = { CheckConditions.SURVIVAL })
+	@Check(name = "time", description = "Time between 2 place", conditions = { CheckConditions.SURVIVAL })
 	public void onBlockPlace(BlockPlaceEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		

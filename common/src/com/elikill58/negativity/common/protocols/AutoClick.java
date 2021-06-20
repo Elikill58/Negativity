@@ -46,7 +46,7 @@ public class AutoClick extends Cheat implements Listeners {
 		}, 20, 20);
 	}
 	
-	@Check(name = "count")
+	@Check(name = "count", description = "Count click 1 by 1")
 	public void onInteract(PlayerInteractEvent e, NegativityPlayer np) {
 		if(e.getAction().name().contains("AIR")) {
 			Player p = e.getPlayer();

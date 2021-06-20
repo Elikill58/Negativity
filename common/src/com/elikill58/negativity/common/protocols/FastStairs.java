@@ -22,7 +22,7 @@ public class FastStairs extends Cheat implements Listeners {
 		super(FAST_STAIRS, CheatCategory.MOVEMENT, Materials.BRICK_STAIRS, false, false, "stairs");
 	}
 	
-	@Check(name = "distance", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FALL_DISTANCE })
+	@Check(name = "distance", description = "Check distance", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FALL_DISTANCE })
 	public void onMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		String blockName = e.getTo().clone().sub(0, 0.0001, 0).getBlock().getType().getId();

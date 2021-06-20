@@ -19,7 +19,7 @@ public class Critical extends Cheat implements Listeners {
 		super(CheatKeys.CRITICAL, CheatCategory.COMBAT, Materials.FIREBALL, false, false, "crit", "critic");
 	}
 
-	@Check(name = "ground", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_GROUND })
+	@Check(name = "ground", description = "Check damage according to Y", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_GROUND })
 	public void onDamage(PlayerDamageByEntityEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;

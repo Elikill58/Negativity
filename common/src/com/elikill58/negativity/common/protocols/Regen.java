@@ -56,7 +56,7 @@ public class Regen extends Cheat implements Listeners {
 			np.flyingReason = FlyingReason.REGEN;
 	}
 	
-	@Check(name = "time")
+	@Check(name = "time", description = "Time between 2 regen")
 	public void onRegenTime(PlayerRegainHealthEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		long actual = System.currentTimeMillis(), dif = actual - np.LAST_REGEN;

@@ -26,7 +26,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 		super(NO_SLOW_DOWN, CheatCategory.MOVEMENT, Materials.SOUL_SAND, false, false, "slowdown");
 	}
 
-	@Check(name = "move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA })
+	@Check(name = "move", description = "Move verif", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location loc = p.getLocation();
@@ -68,7 +68,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 			e.setTo(from.clone().add(fl.getX() / 2, (fl.getY() / 2) + 0.5, fl.getZ()));
 	}
 
-	@Check(name = "eat", conditions = { CheckConditions.NO_ELYTRA })
+	@Check(name = "eat", description = "Check eat", conditions = { CheckConditions.NO_ELYTRA })
 	public void foodCheck(PlayerItemConsumeEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		double dis = np.doubles.get(NO_SLOW_DOWN, "eating-distance", 0.0);

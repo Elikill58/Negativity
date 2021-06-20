@@ -25,7 +25,7 @@ public class GroundSpoof extends Cheat implements Listeners {
         super(CheatKeys.GROUND_SPOOF, CheatCategory.MOVEMENT, Materials.STONE, false, false, "groundspoof");
     }
 
-    @Check(name = "check-blocks-under", conditions = { CheckConditions.SURVIVAL, CheckConditions.GROUND })
+    @Check(name = "check-blocks-under", description = "Block under player have to be considered as ground", conditions = { CheckConditions.SURVIVAL, CheckConditions.GROUND })
     public void onGroundSpoof(PlayerMoveEvent e, NegativityPlayer np) {
         Player p = e.getPlayer();
 		if (e.isCancelled())

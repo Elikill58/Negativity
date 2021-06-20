@@ -27,7 +27,12 @@ public class SpongeItemBuilder extends ItemBuilder {
 	private final org.spongepowered.api.item.inventory.ItemStack item;
 
 	public SpongeItemBuilder(Material type) {
-		this.item = org.spongepowered.api.item.inventory.ItemStack.of((ItemType) type.getDefault());
+		Object spongeMaterial = type.getDefault();
+		if (spongeMaterial instanceof ItemType) {
+			this.item = org.spongepowered.api.item.inventory.ItemStack.of((ItemType) spongeMaterial);
+		} else {
+			throw new IllegalArgumentException("Material " + type.getId() + " does not have a corresponding item");
+		}
 	}
 	
 	public SpongeItemBuilder(com.elikill58.negativity.api.entity.OfflinePlayer owner) {

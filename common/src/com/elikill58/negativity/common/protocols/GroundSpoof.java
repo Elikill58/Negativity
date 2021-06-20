@@ -25,7 +25,7 @@ public class GroundSpoof extends Cheat implements Listeners {
         super(CheatKeys.GROUND_SPOOF, CheatCategory.MOVEMENT, Materials.STONE, false, false, "groundspoof");
     }
 
-    @Check(name = "check-blocks-under", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_GROUND })
+    @Check(name = "check-blocks-under", conditions = { CheckConditions.SURVIVAL, CheckConditions.GROUND })
     public void onGroundSpoof(PlayerMoveEvent e, NegativityPlayer np) {
         Player p = e.getPlayer();
 		if (e.isCancelled())
@@ -33,7 +33,7 @@ public class GroundSpoof extends Cheat implements Listeners {
         if (isOnGround(p)) {
             return;
         }
-        Block downBlock = p.getLocation().getBlock().getRelative(BlockFace.DOWN);
+        Block downBlock = e.getTo().getBlock().getRelative(BlockFace.DOWN);
         if (isNotAir(downBlock.getRelative(BlockFace.NORTH))
                 && isNotAir(downBlock.getRelative(BlockFace.SOUTH))
                 || (isNotAir(downBlock.getRelative(BlockFace.EAST))

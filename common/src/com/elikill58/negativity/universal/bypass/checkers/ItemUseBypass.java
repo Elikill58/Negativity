@@ -71,20 +71,16 @@ public class ItemUseBypass implements BypassChecker {
 
 		ItemStack itemInHand = p.getItemInHand();
 		if(getWhen().equals(WhenBypass.ALWAYS)) {
-			if(itemInHand != null && itemInHand.getType().getId().equalsIgnoreCase(item)) {
-				return false;
-			}
+			return itemInHand != null && itemInHand.getType().getId().equalsIgnoreCase(item);
 		} else if(getWhen().equals(WhenBypass.BELOW)) {
 			Material blockBelow = p.getLocation().clone().sub(0, 1, 0).getBlock().getType();
-			if(blockBelow.getId().equalsIgnoreCase(item)) {
-				return false;
-			}
+			return blockBelow.getId().equalsIgnoreCase(item);
 		} else if(getWhen().equals(WhenBypass.LOOKING)) {
 			List<Block> targetVisual = p.getTargetBlock(7);
 			if(!targetVisual.isEmpty()) {
 				for(Block b : targetVisual)
 					if(b.getType().getId().equalsIgnoreCase(item))
-						return false;
+						return true;
 			}
 		}
 		return false;

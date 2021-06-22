@@ -30,12 +30,12 @@ public class SpongeWorld extends World {
 
 	@Override
 	public Block getBlockAt(int x, int y, int z) {
-		return new SpongeBlock(w.block(x, y, z).snapshotFor(w.location(x, y, z)));
+		return new SpongeBlock(w.createSnapshot(x, y, z));
 	}
 
 	@Override
 	public Block getBlockAt(Location loc) {
-		return new SpongeBlock(w.block(loc.getBlockZ(), loc.getBlockY(), loc.getBlockZ()).snapshotFor(w.location(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ())));
+		return getBlockAt(loc.getBlockZ(), loc.getBlockY(), loc.getBlockZ());
 	}
 
 	@Override

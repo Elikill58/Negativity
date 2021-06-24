@@ -83,7 +83,7 @@ public class Spider extends Cheat implements Listeners {
 						np.lastY.clear();
 						break;
 					}
-					for (int x = 0; x < i; ++x) {
+					for (int x = 0; x < i; x++) {
 						np.lastY.remove(0);
 					}
 					break;

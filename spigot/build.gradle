@@ -1,7 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 
-import java.nio.file.Paths
-
 plugins {
     id 'com.github.johnrengelman.shadow'
 }
@@ -11,22 +9,6 @@ sourceSets {
         java.srcDirs = ['src']
         resources.srcDirs = ['resources']
     }
-    spigot17 {
-        java.srcDir 'spigot17'
-    }
-}
-
-java.toolchain.languageVersion = JavaLanguageVersion.of(8)
-
-configurations {
-    spigot
-    compileClasspath.extendsFrom spigot
-    spigot17Remapped
-    spigot17CompileClasspath.extendsFrom spigot17Remapped
-    spigot17Obf
-    reobfMapMojang
-    reobfMapSpigot
-    specialSource
 }
 
 repositories {
@@ -38,15 +20,13 @@ repositories {
         name 'spigot'
         url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
     }
-    mavenLocal {
-        metadataSources {
-            mavenPom()
-            artifact()
-        }
-        content {
-            includeGroup('org.spigotmc')
-        }
-    }
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+
+configurations {
+    spigot
+    compileClasspath.extendsFrom spigot
 }
 
 dependencies {
@@ -54,15 +34,7 @@ dependencies {
     implementation 'org.bstats:bstats-bukkit:1.7'
     compileOnly 'com.comphenix.protocol:ProtocolLib:4.5.0'
 
-    spigot17CompileOnly project(':common')
-    spigot17CompileOnly sourceSets.main.output
-    spigot17Remapped 'org.spigotmc:spigot:1.17-R0.1-SNAPSHOT:remapped-mojang'
-    spigot17Obf 'org.spigotmc:spigot:1.17-R0.1-SNAPSHOT:remapped-obf'
     spigot fileTree(dir: "spigotJars", includes: ['*.jar'])
-
-    reobfMapMojang group: 'org.spigotmc', name: 'minecraft-server', version: '1.17-R0.1-SNAPSHOT', classifier: 'maps-mojang', ext: 'txt'
-    reobfMapSpigot group: 'org.spigotmc', name: 'minecraft-server', version: '1.17-R0.1-SNAPSHOT', classifier: 'maps-spigot', ext: 'csrg'
-    specialSource 'net.md-5:SpecialSource:1.10.0'
 }
 
 processResources {
@@ -73,10 +45,6 @@ processResources {
         expand(props)
     }
 }
-
-compileSpigot17Java.javaCompiler.set(
-        javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(16) }
-)
 
 compileJava.javaCompiler.set(
         javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(8) }
@@ -91,7 +59,6 @@ shadowJar {
 
     mergeServiceFiles()
     from(project(':common').tasks.shadowJar,
-            sourceSets.spigot17.output,
             project('integrations:essentials').jar.outputs.files,
             project('integrations:floodgate').jar.outputs.files,
             project('integrations:gadgetsmenu').jar.outputs.files,
@@ -101,56 +68,14 @@ shadowJar {
     )
 }
 
-// These tasks are based on the manual instructions from MD-5 given there:
-// https://www.spigotmc.org/threads/spigot-bungeecord-1-17.510208/#post-4184317
-task reobfSpigotPluginStep1(type: JavaExec) {
-    dependsOn(shadowJar)
-
-    classpath += configurations.specialSource
-    classpath += configurations.spigot17Remapped
-    main 'net.md_5.specialsource.SpecialSource'
-
-    workingDir file(Paths.get('build', 'tmp', name))
-    workingDir.mkdirs()
-
-    File mapFile = configurations.reobfMapMojang.singleFile
-    File inputFile = shadowJar.outputs.files.singleFile
-    inputs.files(mapFile, inputFile)
-
-    String outputPath = inputFile.absolutePath.replace('.jar', '-obf.jar')
-    outputs.file(outputPath)
-
-    args '--live', '-i', inputFile, '-o', outputPath, '-m', mapFile, '--reverse'
-}
-
-task reobfSpigotPlugin(type: JavaExec) {
-    dependsOn(reobfSpigotPluginStep1)
-
-    classpath += configurations.specialSource
-    classpath += configurations.spigot17Obf
-    main 'net.md_5.specialsource.SpecialSource'
-
-    workingDir file(Paths.get('build', 'tmp', name))
-    workingDir.mkdirs()
-
-    File mapFile = configurations.reobfMapSpigot.singleFile
-    File inputFile = reobfSpigotPluginStep1.outputs.files.singleFile
-    inputs.files(mapFile, inputFile)
-
-    String outputPath = inputFile.absolutePath.replace('-obf.jar', '.jar')
-    outputs.file(outputPath)
-
-    args '--live', '-i', inputFile, '-o', outputPath, '-m', mapFile
-}
-
-build.dependsOn reobfSpigotPlugin
+build.dependsOn shadowJar
 
 parent.tasks.named('shadowJar', ShadowJar) {
-    it.from(reobfSpigotPlugin.outputs)
+    it.from(shadowJar.outputs)
 }
 
 task prepareServer(type: Copy) {
-    from reobfSpigotPlugin
+    from shadowJar
     rename { 'negativity.jar' }
     def pluginDir = System.getProperty('plugins.dir')
     if (pluginDir == null) {

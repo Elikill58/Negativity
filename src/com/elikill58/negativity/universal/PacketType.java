@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.universal.adapter.Adapter;
 
 public interface PacketType {
 
@@ -12,7 +13,6 @@ public interface PacketType {
 	String getFullName();
 	List<String> getAlias();
 	
-	static boolean LOG_UNKNOW_PACKET = false;
 	static final String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus";
 	
 	public static PacketType getType(String packetName) {
@@ -20,32 +20,32 @@ public interface PacketType {
 			for(Client client : Client.values())
 				if(client.getFullName().equalsIgnoreCase(packetName) || client.getPacketName().equalsIgnoreCase(packetName) || client.getAlias().contains(packetName))
 					return client;
-			if(LOG_UNKNOW_PACKET)
+			if(Adapter.getAdapter().getConfig().getBoolean("debug"))
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow client packet " + packetName);
 			return Client.UNSET;
 		} else if(packetName.startsWith(SERVER_PREFIX)) {
 			for(Server srv : Server.values())
 				if(srv.getFullName().equalsIgnoreCase(packetName) || srv.getPacketName().equalsIgnoreCase(packetName)  || srv.getAlias().contains(packetName))
 					return srv;
-			if(LOG_UNKNOW_PACKET)
+			if(Adapter.getAdapter().getConfig().getBoolean("debug"))
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow server packet " + packetName);
 			return Server.UNSET;
 		} else if(packetName.startsWith(LOGIN_PREFIX)) {
 			for(Login login : Login.values())
 				if(login.getFullName().equalsIgnoreCase(packetName) || login.getPacketName().equalsIgnoreCase(packetName)  || login.getAlias().contains(packetName))
 					return login;
-			if(LOG_UNKNOW_PACKET)
+			if(Adapter.getAdapter().getConfig().getBoolean("debug"))
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow login packet " + packetName);
 			return Login.UNSET;
 		} else if(packetName.startsWith(STATUS_PREFIX)) {
 			for(Status status : Status.values())
 				if(status.getFullName().equalsIgnoreCase(packetName) || status.getPacketName().equalsIgnoreCase(packetName)  || status.getAlias().contains(packetName))
 					return status;
-			if(LOG_UNKNOW_PACKET)
+			if(Adapter.getAdapter().getConfig().getBoolean("debug"))
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow status packet " + packetName);
 			return Status.UNSET;
 		} else {
-			if(LOG_UNKNOW_PACKET)
+			if(Adapter.getAdapter().getConfig().getBoolean("debug"))
 				SpigotNegativity.getInstance().getLogger().info("[Packet] Unknow packet " + packetName);
 			return null;
 		}

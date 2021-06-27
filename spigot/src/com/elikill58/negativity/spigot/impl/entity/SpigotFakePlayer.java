@@ -21,6 +21,7 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
+import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
@@ -187,6 +188,10 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 	 * Load all reflection class for optimization
 	 */
 	public static void loadClass() {
+		if (Version.getVersion(Utils.VERSION).isNewerOrEquals(Version.V1_17)) {
+			// TODO implement fake players for 1.17
+			return;
+		}
 		// run it async to remove loading time on main thread
 		CompletableFuture.runAsync(() -> {
 			try {

@@ -82,12 +82,18 @@ public class CustomPacketManager extends SpigotPacketManager implements Listener
 
 	public AbstractPacket onPacketSent(NPacket commonPacket, Player sender, Object packet) {
 		CustomPacket customPacket = new CustomPacket(commonPacket, packet, sender);
+		if (commonPacket == null) {
+			return customPacket;
+		}
 		notifyHandlersSent(PacketSourceType.CUSTOM, customPacket);
 		return customPacket;
 	}
 
 	public AbstractPacket onPacketReceive(NPacket commonPacket, Player sender, Object packet) {
 		CustomPacket customPacket = new CustomPacket(commonPacket, packet, sender);
+		if (commonPacket == null) {
+			return customPacket;
+		}
 		notifyHandlersReceive(PacketSourceType.CUSTOM, customPacket);
 		return customPacket;
 	}

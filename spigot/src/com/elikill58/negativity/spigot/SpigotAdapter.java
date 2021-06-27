@@ -35,7 +35,7 @@ import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemBuilder;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemRegistrar;
 import com.elikill58.negativity.spigot.impl.plugin.SpigotExternalPlugin;
-import com.elikill58.negativity.spigot.utils.PacketUtils;
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
@@ -187,15 +187,7 @@ public class SpigotAdapter extends Adapter {
 		if(SpigotNegativity.isCraftBukkit) {
 			return new double[] {20, 20, 20};
 		} else {
-			try {
-				Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer");
-				Object server = mcServer.getMethod("getServer").invoke(mcServer);
-				return (double[]) server.getClass().getField("recentTps").get(server);
-			} catch (Exception e) {
-				getLogger().warn("Cannot get TPS (Work on Spigot but NOT CraftBukkit).");
-				e.printStackTrace();
-				return new double[] {20, 20, 20};
-			}
+			return SpigotVersionAdapter.getVersionAdapter().getTps();
 		}
 	}
 

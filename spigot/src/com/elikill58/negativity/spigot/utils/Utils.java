@@ -1,6 +1,5 @@
 package com.elikill58.negativity.spigot.utils;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
@@ -17,6 +16,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.item.SpigotMaterial;
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.base.Preconditions;
@@ -29,24 +29,7 @@ public class Utils {
 			.split(",")[3];
 
 	public static List<Player> getOnlinePlayers() {
-		List<Player> list = new ArrayList<>();
-		try {
-			Class<?> mcServer = Class.forName("net.minecraft.server." + VERSION + ".MinecraftServer");
-			Object server = mcServer.getMethod("getServer").invoke(mcServer);
-			Object craftServer = server.getClass().getField("server").get(server);
-			Object getted = craftServer.getClass().getMethod("getOnlinePlayers").invoke(craftServer);
-			if (getted instanceof Player[])
-				for (Player obj : (Player[]) getted)
-					list.add(obj);
-			else if (getted instanceof List)
-				for (Object obj : (List<?>) getted)
-					list.add((Player) obj);
-			else
-				System.out.println("Unknow getOnlinePlayers");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return list;
+		return SpigotVersionAdapter.getVersionAdapter().getOnlinePlayers();
 	}
 
 	@Nullable

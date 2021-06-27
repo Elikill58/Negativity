@@ -22,6 +22,8 @@ repositories {
     }
 }
 
+java.toolchain.languageVersion = JavaLanguageVersion.of(8)
+
 configurations {
     spigot
     compileClasspath.extendsFrom spigot
@@ -43,6 +45,10 @@ processResources {
         expand(props)
     }
 }
+
+compileJava.javaCompiler.set(
+        javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(8) }
+)
 
 shadowJar {
     archiveBaseName.set('negativity')
@@ -69,7 +75,7 @@ parent.tasks.named('shadowJar', ShadowJar) {
 }
 
 task prepareServer(type: Copy) {
-    from shadowJar.outputs
+    from shadowJar
     rename { 'negativity.jar' }
     def pluginDir = System.getProperty('plugins.dir')
     if (pluginDir == null) {
@@ -77,4 +83,19 @@ task prepareServer(type: Copy) {
     } else {
         into pluginDir
     }
+}
+
+subprojects {
+    repositories {
+        mavenLocal {
+            metadataSources {
+                mavenPom()
+                artifact()
+            }
+            content {
+                includeGroup('org.spigotmc')
+            }
+        }
+    }
+    java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 }

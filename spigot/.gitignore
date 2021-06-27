@@ -6,6 +6,7 @@
 
 !/src/
 !/resources/
+!/spigot17/
 
 !/integrations/
 /integrations/*/*

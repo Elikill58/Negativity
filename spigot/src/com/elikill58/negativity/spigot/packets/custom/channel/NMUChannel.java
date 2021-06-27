@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.packets.custom.channel;
 
-import static com.elikill58.negativity.spigot.utils.PacketUtils.getPlayerConnection;
-
 import java.lang.reflect.Field;
 import java.util.NoSuchElementException;
 
@@ -67,7 +65,7 @@ public class NMUChannel extends ChannelAbstract {
 
 	private Channel getChannel(Player p) {
 		try {
-			Object playerConnection = getPlayerConnection(p);
+			Object playerConnection = SpigotVersionAdapter.getVersionAdapter().getPlayerConnection(p);
 			Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
 			
 			for (Field field : networkManager.getClass().getDeclaredFields())
@@ -92,7 +90,7 @@ public class NMUChannel extends ChannelAbstract {
 
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(packet, packet.getClass().getSimpleName());
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet, packet.getClass().getSimpleName());
 			AbstractPacket nextPacket = getPacketManager().onPacketReceive(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
 			if(!nextPacket.isCancelled() && nextPacket.getNmsPacket() != null)
 				super.channelRead(ctx, nextPacket.getNmsPacket());
@@ -109,7 +107,7 @@ public class NMUChannel extends ChannelAbstract {
 		
 		@Override
 		public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(packet, packet.getClass().getSimpleName());
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet, packet.getClass().getSimpleName());
 			AbstractPacket nextPacket = getPacketManager().onPacketSent(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
 			if(!nextPacket.isCancelled() && nextPacket.getNmsPacket() != null)
 				super.write(ctx, nextPacket.getNmsPacket(), promise);

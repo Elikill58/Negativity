@@ -87,6 +87,8 @@ public class INCChannel extends ChannelAbstract {
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
 			AbstractPacket nextPacket = getPacketManager().onPacketReceive(PacketType.getType(packet.getClass().getSimpleName()), this.owner, packet);
+			if(nextPacket == null)
+				return;
 			if(!nextPacket.isCancelled())
 				super.channelRead(ctx, nextPacket.getPacket());
 		}
@@ -103,6 +105,8 @@ public class INCChannel extends ChannelAbstract {
 		@Override
 		public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
 			AbstractPacket nextPacket = getPacketManager().onPacketSent(PacketType.getType(packet.getClass().getSimpleName()), owner, packet);
+			if(nextPacket == null)
+				return;
 			if(!nextPacket.isCancelled())
 				super.write(ctx, packet, promise);
 		}

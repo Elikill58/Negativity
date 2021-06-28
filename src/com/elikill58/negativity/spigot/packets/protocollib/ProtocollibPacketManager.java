@@ -27,8 +27,13 @@ public class ProtocollibPacketManager extends PacketManager {
 		protocolManager.addPacketListener(new PacketAdapter(pl, ListenerPriority.LOWEST, PacketRegistry.getClientPacketTypes()) {
 			@Override
 			public void onPacketSending(PacketEvent e) {
+				Player p = e.getPlayer();
+		        if (p == null || e.isPlayerTemporary())
+		        	return;
 				AbstractPacket packet = onPacketSent(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),
-						e.getPlayer(), e.getPacket().getHandle(), e);
+						p, e.getPacket().getHandle(), e);
+				if(packet == null)
+					return;
 		        if(!e.isCancelled())
 		        	e.setCancelled(packet.isCancelled());
 			}
@@ -36,12 +41,12 @@ public class ProtocollibPacketManager extends PacketManager {
 			@Override
 			public void onPacketReceiving(PacketEvent e) {
 				Player p = e.getPlayer();
-		        if (p == null)
-		            return;
-		        if(e.isPlayerTemporary())
+		        if (p == null || e.isPlayerTemporary())
 		        	return;
 		        AbstractPacket packet = onPacketReceive(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),
-		        		e.getPlayer(), e.getPacket().getHandle(), e);
+		        		p, e.getPacket().getHandle(), e);
+				if(packet == null)
+					return;
 		        if(!e.isCancelled())
 		        	e.setCancelled(packet.isCancelled());
 			}
@@ -51,8 +56,13 @@ public class ProtocollibPacketManager extends PacketManager {
 		protocolManager.addPacketListener(new PacketAdapter(pl, ListenerPriority.LOWEST, packets) {
 			@Override
 			public void onPacketSending(PacketEvent e) {
+				Player p = e.getPlayer();
+		        if (p == null || e.isPlayerTemporary())
+		        	return;
 				AbstractPacket packet = onPacketSent(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),
-						e.getPlayer(), e.getPacket().getHandle(), e);
+						p, e.getPacket().getHandle(), e);
+				if(packet == null)
+					return;
 		        if(!e.isCancelled())
 		        	e.setCancelled(packet.isCancelled());
 			}
@@ -60,12 +70,12 @@ public class ProtocollibPacketManager extends PacketManager {
 			@Override
 			public void onPacketReceiving(PacketEvent e) {
 				Player p = e.getPlayer();
-		        if (p == null)
-		            return;
-		        if(e.isPlayerTemporary())
+		        if (p == null || e.isPlayerTemporary())
 		        	return;
 		        AbstractPacket packet = onPacketReceive(PacketType.getType(e.getPacket().getHandle().getClass().getSimpleName()),
 		        		e.getPlayer(), e.getPacket().getHandle(), e);
+				if(packet == null)
+					return;
 		        if(!e.isCancelled())
 		        	e.setCancelled(packet.isCancelled());
 			}
@@ -82,12 +92,16 @@ public class ProtocollibPacketManager extends PacketManager {
 	public void clear() {}
 
 	public AbstractPacket onPacketSent(PacketType type, Player sender, Object packet, PacketEvent event) {
+		if(type == null)
+			return null;
 		ProtocollibPacket customPacket = new ProtocollibPacket(type, packet, sender, event);
 		notifyHandlersSent(PacketSourceType.PROTOCOLLIB, customPacket);
 		return customPacket;
 	}
 
 	public AbstractPacket onPacketReceive(PacketType type, Player sender, Object packet, PacketEvent event) {
+		if(type == null)
+			return null;
 		ProtocollibPacket customPacket = new ProtocollibPacket(type, packet, sender, event);
 		notifyHandlersReceive(PacketSourceType.PROTOCOLLIB, customPacket);
 		return customPacket;

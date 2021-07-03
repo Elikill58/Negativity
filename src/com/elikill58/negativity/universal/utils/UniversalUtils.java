@@ -366,7 +366,7 @@ public class UniversalUtils {
 	}
 	
 	public static void init() {
-		getContentFromURL("https://google.fr");
+		new Thread(() -> getContentFromURL("https://google.fr")).start();
 		DefaultConfigValue.init();
 		Database.init();
 		Perm.init();

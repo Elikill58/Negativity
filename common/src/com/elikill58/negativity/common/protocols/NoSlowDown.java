@@ -72,9 +72,9 @@ public class NoSlowDown extends Cheat implements Listeners {
 	public void foodCheck(PlayerItemConsumeEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		double dis = np.doubles.get(NO_SLOW_DOWN, "eating-distance", 0.0);
-		if (dis > p.getWalkSpeed() || p.isSprinting()) {
-			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(dis * 200), "eat",
-					"Distance while eating: " + dis + ", WalkSpeed: " + p.getWalkSpeed(), hoverMsg("main", "%distance%", String.format("%.2f", dis)));
+		if (dis > p.getWalkSpeed()) {
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(dis * 200 + (p.isSprinting() ? 20 : 0)), "eat",
+					"Distance while eating: " + dis + ", WalkSpeed: " + p.getWalkSpeed() + (p.isSprinting() ? " and Sprinting" : ""), hoverMsg("main", "%distance%", String.format("%.2f", dis)));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}

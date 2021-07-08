@@ -31,12 +31,17 @@ public class BanUtils {
 	}
 
 	public static boolean shouldBan(Cheat cheat, NegativityPlayer np, int relia) {
-		if (!cheat.isActive() || !BanManager.banActive || np.isInBanning() || Perm.hasPerm(np, Perm.BYPASS_BAN)) {
+		Adapter ada = Adapter.getAdapter();
+		ConfigAdapter config = ada.getConfig();
+		if (!cheat.isActive() || !BanManager.banActive || np.isInBanning() || (config.getBoolean("Permissions.bypass.active") && Perm.hasPerm(np, Perm.BYPASS_BAN))) {
+			ada.debug("[BanUtils-shouldBan] cheatActive: " + cheat.isActive()  + ", banActive: " + BanManager.banActive + ", alreadyBanning: " + np.isInBanning() + ", bypassPerm: " + Perm.hasPerm(np, Perm.BYPASS_BAN));
 			return false;
 		}
-		ConfigAdapter config = Adapter.getAdapter().getConfig();
-		if(config.getStringList("ban.cheat_disabled").contains(cheat.getKey().toLowerCase(Locale.ROOT)))
+		if(config.getStringList("ban.cheat_disabled").contains(cheat.getKey().toLowerCase(Locale.ROOT))) {
+			ada.debug("[BanUtils-shouldBan] Cheat " + cheat.getKey() + " disabled.");
 			return false;
+		}
+		ada.debug("[BanUtils-shouldBan] Reliability need: " + (config.getInt("ban.reliability_need") <= relia)  + ", alert needed: " + (config.getInt("ban.alert_need") <= np.getAllWarn(cheat)));
 		return config.getInt("ban.reliability_need") <= relia && config.getInt("ban.alert_need") <= np.getAllWarn(cheat);
 	}
 
@@ -47,6 +52,7 @@ public class BanUtils {
 	@Nullable
 	public static Ban banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability) {
 		if (!shouldBan(cheat, player, reliability)) {
+			Adapter.getAdapter().debug("[BanUtils-shouldBan] Should NOT ban " + player.getName() + ".");
 			return null;
 		}
 		player.setInBanning(true);

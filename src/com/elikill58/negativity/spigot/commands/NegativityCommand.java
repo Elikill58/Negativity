@@ -236,7 +236,7 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 			boolean hasBypass = false;
 			Cheat c = Cheat.values().stream().filter(Cheat::isActive).findFirst().get();
 			if (np.TIME_INVINCIBILITY > time) {
-				p.sendMessage(ChatColor.RED + "Invincibility (stay " + (time - np.TIME_INVINCIBILITY) + "ms)");
+				p.sendMessage(ChatColor.RED + "Invincibility (stay " + (np.TIME_INVINCIBILITY - time) + "ms)");
 				hasBypass = true;
 			}
 			if (np.isFreeze) {

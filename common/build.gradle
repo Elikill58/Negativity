@@ -52,3 +52,6 @@ parent.tasks.named('shadowJar', ShadowJar) {
 test {
     useJUnitPlatform()
 }
+
+// Uncomment to enable event listeners instrumentation
+//com.elikill58.negativity.build.InstrumentClassesTask.setupInstrumentation(project, sourceSets.main)

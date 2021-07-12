@@ -186,7 +186,7 @@ public abstract class SpigotVersionAdapter {
 			return new NPacketLoginUnset();
 		if(packetName.startsWith(PacketType.STATUS_PREFIX))
 			return new NPacketStatusUnset();
-		SpigotNegativity.getInstance().getLogger().info("Unknow packet " + packetName + ".");
+		Adapter.getAdapter().debug("[SpigotVersionAdapter] Unknow packet " + packetName + ".");
 		return null;
 	}
 	

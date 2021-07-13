@@ -103,7 +103,7 @@ public final class SemVer implements Comparable<SemVer> {
 			if(patch > 0)
 				return major + "." + minor + (patch > 0 ? "." + patch : "");
 		}
-		return major + "." + minor + (patch > 0 ? "." + patch : "") + "-" + suffix.getText();
+		return major + "." + minor + (patch > 0 ? "." + patch : "") + (suffix == null ? "" : "-" + suffix.getText());
 	}
 	
 	public static @Nullable SemVer parse(@NonNull String text) {

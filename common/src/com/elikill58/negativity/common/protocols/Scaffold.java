@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.ray.BlockRay.BlockRayBuilder;
 import com.elikill58.negativity.api.ray.BlockRayResult;
 import com.elikill58.negativity.universal.Cheat;
@@ -29,7 +30,7 @@ public class Scaffold extends Cheat implements Listeners {
 		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS, false, false);
 	}
 
-	@Check(name=  "below", description = "Block placed below")
+	@Check(name=  "below", description = "Block placed below", conditions = CheckConditions.SURVIVAL)
 	public void onBlockBreak(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		int ping = p.getPing(), slot = p.getInventory().getHeldItemSlot();
@@ -55,7 +56,7 @@ public class Scaffold extends Cheat implements Listeners {
 		}, 1);
 	}
 
-	@Check(name = "distance", description = "Distance between placed and target one")
+	@Check(name = "distance", description = "Distance between placed and target one", conditions = CheckConditions.SURVIVAL)
 	public void onBlockBreakDistance(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		Block place = e.getBlock();
@@ -70,7 +71,7 @@ public class Scaffold extends Cheat implements Listeners {
 		}
 	}
 	
-	@Check(name = "packet", description = "Distance of move with packet")
+	@Check(name = "packet", description = "Distance of move with packet", conditions = CheckConditions.SURVIVAL)
 	public void onPacket(PacketReceiveEvent e) {
 		AbstractPacket pa = e.getPacket();
 		Player p = e.getPlayer();

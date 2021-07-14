@@ -119,7 +119,7 @@ public class SpigotNegativity extends JavaPlugin {
 		Messenger messenger = getServer().getMessenger();
 		ChannelListeners channelListeners = new ChannelListeners();
 		if (v.isNewerOrEquals(Version.V1_13)) {
-			CHANNEL_NAME_FML = "negativity:fml";
+			CHANNEL_NAME_FML = "fml:hs";
 		} else {
 			CHANNEL_NAME_FML = "FML|HS";
 		}

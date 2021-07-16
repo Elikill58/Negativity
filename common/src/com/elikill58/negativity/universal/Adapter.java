@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -298,7 +299,20 @@ public abstract class Adapter {
 	 */
 	public abstract Scheduler getScheduler();
 	
+	/**
+	 * Check if can send stats
+	 * 
+	 * @return true is can send stats
+	 */
 	public boolean canSendStats() {
 		return true;
 	}
+	
+	/**
+	 * Register incoming channel and call consumer when receiving new channel message
+	 * 
+	 * @param channel the channel name
+	 * @param event The callable event which will be fired when received message from this channel
+	 */
+	public abstract void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event);
 }

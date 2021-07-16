@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
@@ -298,5 +299,10 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public Scheduler getScheduler() {
 		return this.scheduler;
+	}
+	
+	@Override
+	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
+		pl.getServer().getMessenger().registerIncomingPluginChannel(pl, channel, (String ch, org.bukkit.entity.Player p, byte[] data) -> event.accept(SpigotEntityManager.getPlayer(p), data));
 	}
 }

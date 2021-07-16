@@ -1,0 +1,18 @@
+# Special detection
+
+# Manage player who try to download world
+active: true
+
+# The display name
+name: "World Downloader"
+
+# Kick player if they try to dl world
+kick: true
+
+# Ban player if they try to dl world
+ban:
+  # Enable or disable it
+  active: false
+  # the time of the ban, in milliseconds
+  # -1 for a definitive ban
+  time: -1

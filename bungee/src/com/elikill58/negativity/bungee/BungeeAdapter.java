@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -188,5 +189,10 @@ public class BungeeAdapter extends ProxyAdapter {
 	@Override
 	public void runSync(Runnable call) {
 		this.pl.getProxy().getScheduler().schedule(pl, call, 0, TimeUnit.MILLISECONDS);
+	}
+	
+	@Override
+	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
+		// TODO implement channel for bungee
 	}
 }

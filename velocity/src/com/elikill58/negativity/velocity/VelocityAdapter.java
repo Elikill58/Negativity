@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -173,5 +174,10 @@ public class VelocityAdapter extends ProxyAdapter {
 	@Override
 	public void runSync(Runnable call) {
 		pl.getServer().getScheduler().buildTask(pl, call);
+	}
+	
+	@Override
+	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
+		// TODO implement channel for velocity
 	}
 }

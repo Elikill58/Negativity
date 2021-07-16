@@ -161,11 +161,13 @@ public abstract class Special {
 		SPECIALS.clear();
 		Adapter ada = Adapter.getAdapter();
 		for (Special special : ServiceLoader.load(Special.class, Special.class.getClassLoader())) {
-			try {
-				EventManager.registerEvent((Listeners) special);
-			} catch (Exception temp) {
-				ada.getLogger().error("Failed to load special " + special.getName());
-				temp.printStackTrace();
+			if(special instanceof Listeners) {
+				try {
+					EventManager.registerEvent((Listeners) special);
+				} catch (Exception temp) {
+					ada.getLogger().error("Failed to load special " + special.getName());
+					temp.printStackTrace();
+				}
 			}
 			SPECIALS.add(special);
 		}

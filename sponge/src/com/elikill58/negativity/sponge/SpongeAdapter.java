@@ -7,9 +7,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.user.UserStorageService;
@@ -288,5 +290,18 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public boolean canSendStats() {
 		return Sponge.getMetricsConfigManager().areMetricsEnabled(plugin.getContainer());
+	}
+	
+	@Override
+	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
+		Sponge.getChannelRegistrar().getOrCreateRaw(plugin, channel).addListener((data, connection, side) -> {
+			if(side == Type.CLIENT) {
+				Sponge.getServer().getOnlinePlayers().forEach((p) -> {
+					if(p.getConnection().getAddress().equals(connection.getAddress())) {
+						event.accept(SpongeEntityManager.getPlayer(p), data.array());
+					}
+				});
+			}
+		});
 	}
 }

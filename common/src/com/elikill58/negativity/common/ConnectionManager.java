@@ -36,6 +36,9 @@ public class ConnectionManager implements Listeners {
 	@EventListener
 	public void onConnect(PlayerConnectEvent e) {
 		Player p = e.getPlayer();
+		NegativityPlayer np = e.getNegativityPlayer();
+		np.TIME_INVINCIBILITY = System.currentTimeMillis() + 8000;
+		
 		if(UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
 		
@@ -71,8 +74,6 @@ public class ConnectionManager implements Listeners {
 			}
 		}
 		
-		NegativityPlayer np = e.getNegativityPlayer();
-		np.TIME_INVINCIBILITY = System.currentTimeMillis() + 8000;
 		if (Perm.hasPerm(np, Perm.SHOW_REPORT)) {
 			if(ReportCommand.REPORT_LAST.size() > 0) {
 				for (String msg : ReportCommand.REPORT_LAST)

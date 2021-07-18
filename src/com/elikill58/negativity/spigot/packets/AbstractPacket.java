@@ -28,7 +28,7 @@ public abstract class AbstractPacket {
 	public String getPlayername() {
 		return getPlayer().getName();
 	}
-
+	
 	public Object getPacket() {
 		return packet;
 	}

@@ -74,6 +74,7 @@ public abstract class AbstractInventory implements Listener {
 		PluginManager pm = pl.getServer().getPluginManager();
 		pm.registerEvents(new ActivedCheatInventory(), pl);
 		pm.registerEvents(new AlertInventory(), pl);
+		pm.registerEvents(new CheckMenuOfflineInventory(), pl);
 		pm.registerEvents(new ModInventory(), pl);
 		pm.registerEvents(new CheckMenuInventory(), pl);
 		pm.registerEvents(new CheatManagerInventory(), pl);
@@ -88,7 +89,9 @@ public abstract class AbstractInventory implements Listener {
 		ACTIVED_CHEAT,
 		ADMIN,
 		ALERT,
+		ALERT_OFFLINE,
 		CHECK_MENU,
+		CHECK_MENU_OFFLINE,
 		CHEAT_MANAGER,
 		FREEZE,
 		MOD,

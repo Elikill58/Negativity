@@ -18,6 +18,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.Particle;
 import org.bukkit.World;
 import org.bukkit.entity.Damageable;
@@ -25,6 +26,8 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -33,6 +36,8 @@ import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
+import com.elikill58.negativity.spigot.inventories.holders.CheckMenuHolder;
+import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
@@ -106,8 +111,15 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		this.p = new WeakReference<>(p);
 		this.ping = Utils.getPing(p);
 		initMods(p);
-		isBedrockPlayer = SpigotNegativity.floodGateSupport ? FloodGateSupport.isBedrockPlayer(p) : false;
+		isBedrockPlayer = SpigotNegativity.floodGateSupport && FloodGateSupport.isBedrockPlayer(p.getUniqueId());
 		playerVersion = SpigotNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : (SpigotNegativity.protocolSupportSupport ? ProtocolSupportSupport.getPlayerVersion(p) : Version.getVersion());
+	}
+
+	public SpigotNegativityPlayer(OfflinePlayer p) {
+		super(p.getUniqueId(), p.getName());
+		this.p = new WeakReference<>(null);
+		isBedrockPlayer = SpigotNegativity.floodGateSupport && FloodGateSupport.isBedrockPlayer(p.getUniqueId());
+		playerVersion = Version.getVersion();
 	}
 
 	public void initMods(Player p) {
@@ -197,10 +209,19 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 	
 	public void updateCheckMenu() {
-		for (Player p : Inv.CHECKING.keySet()) {
+		for (Player p : Utils.getOnlinePlayers()) {
 			if (p.getOpenInventory() != null) {
+				Inventory topInv = p.getOpenInventory().getTopInventory();
+				if(topInv == null || !topInv.getType().equals(org.bukkit.event.inventory.InventoryType.CHEST)) {
+					continue;
+				}
+				InventoryHolder holder = topInv.getHolder();
+				if(!(holder instanceof NegativityHolder)) {
+					continue;
+				}
+				NegativityHolder nh = (NegativityHolder) holder;
 				if (InventoryUtils.getInventoryTitle(p.getOpenInventory()).equals(Inv.NAME_CHECK_MENU)){
-					AbstractInventory.getInventory(InventoryType.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
+					AbstractInventory.getInventory(InventoryType.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, ((CheckMenuHolder) nh).getCible()));
 					//CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
 				}
 			}
@@ -631,7 +652,12 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		synchronized (players) {
 			return players.computeIfAbsent(p.getUniqueId(), id -> new SpigotNegativityPlayer(p));
 		}
-		//return players.computeIfAbsent(p.getUniqueId(), id -> new SpigotNegativityPlayer(p));
+	}
+	
+	public static SpigotNegativityPlayer getNegativityPlayer(OfflinePlayer p) {
+		synchronized (players) {
+			return players.computeIfAbsent(p.getUniqueId(), id -> new SpigotNegativityPlayer(p));
+		}
 	}
 
 	public static SpigotNegativityPlayer getCached(UUID playerId) {

@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.commands;
 
+import static com.elikill58.negativity.universal.verif.VerificationManager.CONSOLE;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedHashSet;
@@ -12,6 +14,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -20,7 +23,6 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -44,8 +46,6 @@ import com.elikill58.negativity.universal.translation.MessagesUpdater;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 import com.elikill58.negativity.universal.verif.Verificator;
-
-import static com.elikill58.negativity.universal.verif.VerificationManager.CONSOLE;
 
 public class NegativityCommand implements CommandExecutor, TabCompleter {
 
@@ -306,11 +306,15 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 		}
 		
 		if(sender instanceof Player && Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer((Player) sender), Perm.CHECK)) {
-			Player targetPlayer = Bukkit.getPlayer(arg[0]);
+			@SuppressWarnings("deprecation")
+			OfflinePlayer targetPlayer = Bukkit.getOfflinePlayer(arg[0]);
 			if (targetPlayer != null) {
 				Player playerSender = (Player) sender;
-				Inv.CHECKING.put(playerSender, targetPlayer);
-				AbstractInventory.open(InventoryType.CHECK_MENU, playerSender, targetPlayer);
+				//Inv.CHECKING.put(playerSender, targetPlayer);
+				if(targetPlayer instanceof Player)
+					AbstractInventory.open(InventoryType.CHECK_MENU, playerSender, targetPlayer);
+				else
+					AbstractInventory.open(InventoryType.CHECK_MENU_OFFLINE, playerSender, targetPlayer);
 				return true;
 			}
 		}

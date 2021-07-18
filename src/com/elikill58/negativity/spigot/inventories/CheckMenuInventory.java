@@ -40,7 +40,7 @@ public class CheckMenuInventory extends AbstractInventory {
 	@Override
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
-		Inventory inv = Bukkit.createInventory(new CheckMenuHolder(), 27, Inv.NAME_CHECK_MENU);
+		Inventory inv = Bukkit.createInventory(new CheckMenuHolder(cible), 27, Inv.NAME_CHECK_MENU);
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
@@ -129,11 +129,11 @@ public class CheckMenuInventory extends AbstractInventory {
 
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
-		Player cible = Inv.CHECKING.get(p);
+		CheckMenuHolder cm = (CheckMenuHolder) nh;
+		Player cible = cm.getCible();
 		if (m == ItemUtils.EYE_OF_ENDER) {
 			p.teleport(cible);
 			p.closeInventory();
-			Inv.CHECKING.remove(p);
 		} else if (m == ItemUtils.SKELETON_SKULL) {
 			if(e.getRawSlot() == 12) {
 				p.closeInventory();
@@ -145,7 +145,6 @@ public class CheckMenuInventory extends AbstractInventory {
 			switch (m) {
 			case SPIDER_EYE:
 				p.openInventory(cible.getInventory());
-				Inv.CHECKING.remove(p);
 				break;
 			case TNT:
 				AbstractInventory.open(InventoryType.ACTIVED_CHEAT, p, cible);

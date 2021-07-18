@@ -5,6 +5,7 @@ import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
@@ -27,10 +28,10 @@ public class ForgeModsInventory extends AbstractInventory {
 	
 	@Override
 	public void openInventory(Player mod, Object... args) {
-		Player p = (Player) args[0];
+		OfflinePlayer p = (OfflinePlayer) args[0];
 		slot = 0;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		Inventory inv = Bukkit.createInventory(new ForgeModsHolder(), UniversalUtils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), Inv.NAME_FORGE_MOD_MENU);
+		Inventory inv = Bukkit.createInventory(new ForgeModsHolder(p), UniversalUtils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), Inv.NAME_FORGE_MOD_MENU);
 		if(np.MODS.size() == 0) {
 			inv.setItem(4, createItem(Material.DIAMOND, "No mods"));
 			inv.setItem(inv.getSize() - 1, createItem(Material.ARROW, Messages.getMessage(mod, "inventory.back")));
@@ -46,7 +47,7 @@ public class ForgeModsInventory extends AbstractInventory {
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, NegativityHolder nh) {
 		if(m.equals(Material.ARROW))
-			AbstractInventory.open(InventoryType.CHECK_MENU, p, Inv.CHECKING.get(p));
+			AbstractInventory.open(InventoryType.CHECK_MENU, p, ((ForgeModsHolder) nh).getCible());
 	}
 
 	@Override

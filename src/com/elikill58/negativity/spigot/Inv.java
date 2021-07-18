@@ -1,9 +1,6 @@
 package com.elikill58.negativity.spigot;
 
-import java.util.HashMap;
-
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -16,7 +13,7 @@ public class Inv {
 	public static final String NAME_CHECK_MENU = "Check", ADMIN_MENU = "Admin",
 			NAME_ACTIVED_CHEAT_MENU = Messages.getMessage("inventory.detection.name_inv"), NAME_FREEZE_MENU = "Freeze",
 			NAME_MOD_MENU = "Mod", NAME_ALERT_MENU = "Alerts", CHEAT_MANAGER = "Cheat Manager", NAME_FORGE_MOD_MENU = "Mods";
-	public static final HashMap<Player, Player> CHECKING = new HashMap<>();
+	//public static final HashMap<Player, OfflinePlayer> CHECKING = new HashMap<>();
 	public static final ItemStack EMPTY;
 
 	static {

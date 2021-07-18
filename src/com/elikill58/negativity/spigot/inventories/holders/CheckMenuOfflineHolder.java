@@ -4,11 +4,11 @@ import org.bukkit.OfflinePlayer;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 
-public class ForgeModsHolder extends NegativityHolder implements InventoryHolder {
+public class CheckMenuOfflineHolder extends NegativityHolder implements InventoryHolder {
 
 	private OfflinePlayer cible;
 	
-	public ForgeModsHolder(OfflinePlayer cible) {
+	public CheckMenuOfflineHolder(OfflinePlayer cible) {
 		this.cible = cible;
 	}
 	

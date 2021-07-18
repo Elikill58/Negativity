@@ -6,7 +6,6 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import com.elikill58.negativity.spigot.Inv;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
@@ -23,7 +22,7 @@ public class ActualizeInvTimer extends BukkitRunnable {
 
 	@Override
 	public void run() {
-		for (Player p : Inv.CHECKING.keySet()) {
+		for (Player p : Utils.getOnlinePlayers()) {
 			if (p.getOpenInventory() != null) {
 				Inventory topInv = p.getOpenInventory().getTopInventory();
 				if(topInv == null || !topInv.getType().equals(org.bukkit.event.inventory.InventoryType.CHEST)) {
@@ -35,12 +34,11 @@ public class ActualizeInvTimer extends BukkitRunnable {
 				}
 				NegativityHolder nh = (NegativityHolder) holder;
 				if (nh instanceof CheckMenuHolder)
-					AbstractInventory.getInventory(InventoryType.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
+					AbstractInventory.getInventory(InventoryType.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, ((CheckMenuHolder) nh).getCible()));
 					//CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
 				else if (nh instanceof AlertHolder)
-					AbstractInventory.getInventory(InventoryType.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
-			} else
-				Inv.CHECKING.remove(p);
+					AbstractInventory.getInventory(InventoryType.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, ((AlertHolder) nh).getCible()));
+			}
 		}
 		for (Player p : Utils.getOnlinePlayers()) {
 			if (SpigotNegativityPlayer.getNegativityPlayer(p).isFreeze && INV_FREEZE_ACTIVE) {

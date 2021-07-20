@@ -133,6 +133,12 @@ public class SpongeAdapter extends Adapter {
 		Player player = Sponge.getServer().getPlayer(playerId).orElse(null);
 		return player != null ? SpongeNegativityPlayer.getNegativityPlayer(player) : null;
 	}
+	
+	@Override
+	public UUID getPlayerUUID(String name) {
+		Player player = Sponge.getServer().getPlayer(name).orElse(null);
+		return player != null ? player.getUniqueId() : null;
+	}
 
 	@Override
 	public NegativityAccountManager getAccountManager() {

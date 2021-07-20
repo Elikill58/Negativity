@@ -125,6 +125,12 @@ public class BungeeAdapter extends Adapter {
 		ProxiedPlayer player = ProxyServer.getInstance().getPlayer(playerId);
 		return player != null ? BungeeNegativityPlayer.getNegativityPlayer(player) : null;
 	}
+	
+	@Override
+	public UUID getPlayerUUID(String name) {
+		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(name);
+		return pp != null ? pp.getUniqueId() : null;
+	}
 
 	@Override
 	public NegativityAccountManager getAccountManager() {

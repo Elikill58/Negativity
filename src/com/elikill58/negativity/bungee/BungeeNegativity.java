@@ -14,6 +14,7 @@ import com.elikill58.negativity.universal.adapter.BungeeAdapter;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.support.AdvancedBanProcessor;
 import com.elikill58.negativity.universal.ban.support.DKBansProcessor;
+import com.elikill58.negativity.universal.ban.support.LiteBansProcessor;
 import com.elikill58.negativity.universal.config.MD5ConfigAdapter;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -68,6 +69,11 @@ public class BungeeNegativity extends Plugin {
 		if (getProxy().getPluginManager().getPlugin("AdvancedBan") != null) {
 			BanManager.registerProcessor("advancedban", new AdvancedBanProcessor());
 			supportedPluginName.add("AdvancedBan");
+		}
+
+		if (getProxy().getPluginManager().getPlugin("LiteBans") != null) {
+			BanManager.registerProcessor("litebans", new LiteBansProcessor());
+			supportedPluginName.add("LiteBans");
 		}
 		
 		if (supportedPluginName.length() > 0) {

@@ -179,6 +179,8 @@ public abstract class Adapter {
 	public abstract NegativityAccountManager getAccountManager();
 	@Nullable
 	public abstract NegativityPlayer getNegativityPlayer(UUID playerId);
+	@Nullable
+	public abstract UUID getPlayerUUID(String name);
 	@Deprecated
 	public abstract void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof);
 	public abstract void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, CheatHover hover);

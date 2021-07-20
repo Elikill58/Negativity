@@ -122,6 +122,12 @@ public class VelocityAdapter extends Adapter {
 		Optional<Player> player = pl.getServer().getPlayer(playerId);
 		return player.isPresent() ? VelocityNegativityPlayer.getNegativityPlayer(player.get()) : null;
 	}
+	
+	@Override
+	public UUID getPlayerUUID(String name) {
+		Optional<Player> player = pl.getServer().getPlayer(name);
+		return player.isPresent() ? player.get().getUniqueId() : null;
+	}
 
 	@Override
 	public NegativityAccountManager getAccountManager() {

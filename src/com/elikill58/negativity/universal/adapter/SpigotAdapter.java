@@ -137,6 +137,12 @@ public class SpigotAdapter extends Adapter {
 		Player player = Bukkit.getPlayer(playerId);
 		return player != null ? SpigotNegativityPlayer.getNegativityPlayer(player) : null;
 	}
+	
+	@Override
+	public UUID getPlayerUUID(String name) {
+		Player player = Bukkit.getPlayer(name);
+		return player != null ? player.getUniqueId() : null;
+	}
 
 	@Override
 	public void alertMod(ReportType type, Object p, Cheat c, int reliability, String proof, String hover_proof) {

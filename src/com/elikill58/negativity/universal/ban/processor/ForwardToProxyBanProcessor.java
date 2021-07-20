@@ -32,6 +32,7 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 		try {
 			byte[] rawMessage = NegativityMessagesManager.writeMessage(new ProxyExecuteBanMessage(ban));
 			pluginMessageSender.accept(rawMessage);
+			Adapter.getAdapter().debug("Sent ban to proxy " + ban.getPlayerId().toString());
 		} catch (IOException e) {
 			Adapter.getAdapter().getLogger().error("Could not write ProxyBanMessage: " + e.getMessage());
 			e.printStackTrace();

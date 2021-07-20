@@ -36,8 +36,10 @@ public class BanManager {
 
 	public static boolean isBanned(UUID playerId) {
 		BanProcessor processor = getProcessor();
-		if (processor == null)
+		if (processor == null) {
+			Adapter.getAdapter().debug("Cannot find ban processor while trying check if players banned for " + playerId.toString());
 			return false;
+		}
 
 		return processor.isBanned(playerId);
 	}
@@ -69,6 +71,7 @@ public class BanManager {
 			return null;
 		}
 
+		Adapter.getAdapter().debug("Running ban for player UUID " + ban.getPlayerId().toString());
 		return processor.executeBan(ban);
 	}
 

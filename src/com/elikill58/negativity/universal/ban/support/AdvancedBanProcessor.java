@@ -6,9 +6,6 @@ import java.util.UUID;
 
 import javax.annotation.Nullable;
 
-import org.bukkit.Bukkit;
-
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -35,7 +32,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 		PunishmentType type = ban.isDefinitive() ? PunishmentType.BAN : PunishmentType.TEMP_BAN;
 		Punishment punishment = new Punishment(player.getName(), ban.getPlayerId().toString(), ban.getReason(), ban.getBannedBy(), type, System.currentTimeMillis(), endTime, "", -1);
 		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
-		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), (Runnable) punishment::create);
+		Adapter.getAdapter().runAsync(punishment::create);
 
 		return ban;
 	}
@@ -49,7 +46,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 		}
 
 		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
-		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), punishment::delete);
+		Adapter.getAdapter().runAsync(punishment::delete);
 		return loggedBanFrom(punishment, BanStatus.REVOKED);
 	}
 

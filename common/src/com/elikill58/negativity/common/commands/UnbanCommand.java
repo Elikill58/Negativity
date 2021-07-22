@@ -30,7 +30,7 @@ public class UnbanCommand implements CommandListeners, TabListeners {
 		}
 
 		OfflinePlayer cible = Adapter.getAdapter().getOfflinePlayer(arg[0]);
-		if (!cible.hasPlayedBefore()) {
+		if (cible == null || !cible.hasPlayedBefore()) {
 			Messages.sendMessage(sender, "invalid_player", "%arg%", arg[0]);
 			return false;
 		}

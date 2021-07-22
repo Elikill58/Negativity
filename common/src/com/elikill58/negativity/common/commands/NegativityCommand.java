@@ -229,7 +229,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			boolean hasBypass = false;
 			Cheat c = Cheat.values().stream().filter(Cheat::isActive).findFirst().get();
 			if (np.TIME_INVINCIBILITY > time) {
-				p.sendMessage(ChatColor.RED + "Invincibility (stay " + (time - np.TIME_INVINCIBILITY) + "ms)");
+				p.sendMessage(ChatColor.RED + "Invincibility (stay " + (np.TIME_INVINCIBILITY - time) + "ms)");
 				hasBypass = true;
 			}
 			if (np.isFreeze) {
@@ -289,7 +289,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 						hasBypass = true;
 					}
 					if(!np.hasDetectionActive(c)) {
-						p.sendMessage(ChatColor.RED + "Detection of " + c.getName() + " not active.");
+						p.sendMessage(ChatColor.RED + "Detection of " + c.getName() + " not active: " + np.getWhyDetectionNotActive(c));
 						hasBypass = true;
 					}
 				} else

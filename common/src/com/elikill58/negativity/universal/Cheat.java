@@ -163,7 +163,7 @@ public abstract class Cheat {
 	 */
 	public boolean checkActive(String checkName) {
 		//if(config.contains("checks." + checkName + ".active"))
-			return config.getBoolean("check." + checkName + ".active", true);
+			return config.getBoolean("checks." + checkName + ".active", true);
 		//config.set("checks." + checkName + ".active", true);
 		//return true;
 	}

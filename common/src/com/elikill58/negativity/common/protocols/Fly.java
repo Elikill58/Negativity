@@ -16,6 +16,7 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
@@ -24,6 +25,7 @@ import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -187,6 +189,22 @@ public class Fly extends Cheat implements Listeners {
 					np.ints.set(FLY, "y-0-times", time0 + 1);
 				} else
 					np.ints.remove(FLY, "y-0-times");
+			}
+			if(checkActive("bypass-ground")) {
+				Vector vec = new Vector(to.getX(), to.getY(), to.getZ());
+				double diff = vec.distance(new Vector(from.getX(), from.getY(), from.getZ()));
+				if (diff < 0.35 && loc.clone().add(+2, -2, +2).getBlock().getType().equals(Materials.AIR)
+						&& loc.clone().add(-2, -2, -2).getBlock().getType().equals(Materials.AIR)
+						&& loc.clone().add(0, -3, 0).getBlock().getType().equals(Materials.AIR)
+						&& loc.clone().add(0, -4, 0).getBlock().getType().equals(Materials.AIR)) {
+					if(!(loc.clone().add(0, -1, 0).getBlock().getType().equals(Materials.AIR) && p.isOnGround())) {
+						Scheduler.getInstance().runDelayed(() -> {
+							if(!(loc.clone().add(0, -1, 0).getBlock().getType().equals(Materials.AIR) && p.isOnGround())) {
+								Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diff * 150), "bypass-ground", "Bypass on ground. Diff: " + diff, new CheatHover.Literal("Difference: " + diff));
+							}
+						}, 3);
+					}
+				}
 			}
 		}
 		if (isSetBack() && mayCancel) {

@@ -30,7 +30,7 @@ public class GroundSpoof extends Cheat implements Listeners {
         Player p = e.getPlayer();
 		if (e.isCancelled())
 			return;
-        if (isOnGround(p)) {
+        if (isOnGround(p) || p.getFallDistance() > 3 || p.getFallDistance() > p.getWalkSpeed()) {
             return;
         }
         Block downBlock = e.getTo().getBlock().getRelative(BlockFace.DOWN);
@@ -41,7 +41,7 @@ public class GroundSpoof extends Cheat implements Listeners {
             return;
         }
         Negativity.alertMod(ReportType.WARNING, p, this, getReliability(p), "check-blocks-under",
-                "Air BlockFaces: " + getAirBlocks(p).toString(),
+                "Air BlockFaces: " + getAirBlocks(p).toString() + ", fall: " + p.getFallDistance(),
                 new CheatHover.Literal("Ground Spoof (Fly, NoFall, and other movement hacks)"));
     }
 

@@ -56,11 +56,11 @@ public class StepProtocol extends Cheat implements Listener {
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		Location down = to.clone().subtract(0, 1, 0);
-		if(down.getBlock().getType().name().contains("SHULKER"))
+		if(down.getBlock().getType().name().contains("SHULKER") || to.getBlock().getType().name().contains("SNOW"))
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		if(np.isBedrockPlayer() && LocationUtils.hasMaterialsAround(down, "SLAB", "FENCE", "STAIRS"))
+		if(np.isBedrockPlayer() && LocationUtils.hasMaterialsAround(down, "SLAB", "FENCE", "STAIRS", "SNOW"))
 			return;
 		double dif = to.getY() - from.getY();
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? Utils.getPotionEffect(p, PotionEffectType.JUMP).getAmplifier() + 1 : 0);

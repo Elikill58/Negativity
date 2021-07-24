@@ -76,7 +76,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		if(LocationUtils.hasExtended(loc, "STAIRS") || LocationUtils.isUsingElevator(p) || p.getLocation().getBlock().getType().name().contains("LAVA"))
 			return;
 		String blockName = p.getLocation().getBlock().getType().name();
-		if(blockName.contains("LADDER") || blockName.contains("VINE"))
+		if(blockName.contains("LADDER") || blockName.contains("VINE") || blockName.contains("SNOW"))
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;

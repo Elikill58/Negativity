@@ -1,30 +1,27 @@
 package com.elikill58.negativity.velocity;
 
-import java.util.Collections;
-import java.util.List;
-
-import org.checkerframework.checker.nullness.qual.NonNull;
-
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
-import com.velocitypowered.api.command.Command;
 import com.velocitypowered.api.command.CommandSource;
+import com.velocitypowered.api.command.SimpleCommand;
 import com.velocitypowered.api.proxy.Player;
 
-import net.kyori.text.TextComponent;
+import net.kyori.adventure.text.Component;
 
-public class VNegativityCommand implements Command {
+public class VNegativityCommand implements SimpleCommand {
 
 	@Override
-	public void execute(CommandSource source, @NonNull String[] args) {
+	public void execute(Invocation inv) {
+		CommandSource source = inv.source();
+		String[] args = inv.arguments();
 		if (source instanceof Player && !Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer((Player) source), Perm.ADMIN)) {
 			source.sendMessage(VelocityMessages.getMessage((Player) source, "not_permission"));
 			return;
 		}
 
 		if (args.length <= 0) {
-			source.sendMessage(TextComponent.of("You must use a subcommand"));
+			source.sendMessage(Component.text("You must use a subcommand"));
 			return;
 		}
 
@@ -32,7 +29,7 @@ public class VNegativityCommand implements Command {
 			if (args.length > 1 && args[1].equalsIgnoreCase("updateMessages")) {
 				MessagesUpdater.performUpdate("lang", (message, placeholders) -> VelocityMessages.sendMessage(source, message, placeholders));
 			} else {
-				source.sendMessage(TextComponent.of("You must use a subcommand"));
+				source.sendMessage(Component.text("You must use a subcommand"));
 			}
 			return;
 		} else if(args[0].equalsIgnoreCase("reload")) {
@@ -41,10 +38,10 @@ public class VNegativityCommand implements Command {
 			return;
 		}
 
-		source.sendMessage(TextComponent.of("Unknown subcommand"));
+		source.sendMessage(Component.text("Unknown subcommand"));
 	}
 
-	@Override
+	/*@Override
 	public List<String> suggest(CommandSource source, @NonNull String[] args) {
 		if (args.length == 1) {
 			if (hasAdminPermission(source)) {
@@ -56,9 +53,9 @@ public class VNegativityCommand implements Command {
 			}
 		}
 		return Collections.emptyList();
-	}
+	}*/
 
-	private static boolean hasAdminPermission(CommandSource source) {
+	/*private static boolean hasAdminPermission(CommandSource source) {
 		return !(source instanceof Player) || Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer((Player) source), Perm.ADMIN);
-	}
+	}*/
 }

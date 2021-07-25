@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.spongepowered.api.block.BlockSnapshot;
+import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.property.block.SolidCubeProperty;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
@@ -48,7 +49,7 @@ public class NukerProtocol extends Cheat {
 		if(np.hasPotionEffect(PotionEffectTypes.HASTE))
 			return;
 		BlockSnapshot breakedBlock = e.getTransactions().get(0).getOriginal();
-		BlockRay<World> blockRay = BlockRay.from(p).skipFilter(BlockRay.onlyAirFilter()).stopFilter(BlockRay.onlyAirFilter()).build();
+		BlockRay<World> blockRay = BlockRay.from(p).whilst(input -> input.getLocation().getBlockType() == BlockTypes.AIR).build();
 		BlockRayHit<World> target = blockRay.end().orElse(null);
 		if(target != null) {
 			double distance = target.getLocation().getPosition().distance(breakedBlock.getLocation().get().getPosition());

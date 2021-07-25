@@ -18,6 +18,7 @@ import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
+import com.velocitypowered.api.command.CommandManager;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.proxy.ProxyInitializeEvent;
 import com.velocitypowered.api.event.proxy.ProxyShutdownEvent;
@@ -63,7 +64,9 @@ public class VelocityNegativity {
     	getLogger().info("Loading Negativity");
 	    server.getEventManager().register(this, new NegativityListener());
 	    server.getChannelRegistrar().register(NEGATIVITY_CHANNEL_ID);
-	    server.getCommandManager().register(new VNegativityCommand(), "vnegativity");
+	    
+        CommandManager cmdManager = server.getCommandManager();
+        cmdManager.register(cmdManager.metaBuilder("vnegativity").build(), new VNegativityCommand());
 
 		MD5ConfigAdapter.ByProvider config = new MD5ConfigAdapter.ByProvider(ConfigurationProvider.getProvider(YamlConfiguration.class),
 				getDataFolder().toPath().resolve("config.yml"),

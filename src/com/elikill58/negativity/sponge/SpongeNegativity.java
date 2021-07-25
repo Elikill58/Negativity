@@ -533,7 +533,7 @@ public class SpongeNegativity {
 			return false;
 		ItemStack itemInHand = p.getItemInHand(HandTypes.MAIN_HAND).orElse(null);
 		BlockType blockBelow = p.getLocation().copy().sub(0, 1, 0).getBlock().getType();
-		Optional<BlockRayHit<World>> target = BlockRay.from(p).skipFilter(BlockRay.onlyAirFilter(), BlockRay.blockTypeFilter(BlockTypes.WATER)).stopFilter(BlockRay.onlyAirFilter()).distanceLimit(7).build().end();
+		Optional<BlockRayHit<World>> target = BlockRay.from(p).whilst(input -> input.getLocation().getBlockType() == BlockTypes.AIR || input.getLocation().getBlockType() == BlockTypes.WATER).distanceLimit(7).build().end();
 		for(Entry<String, ItemUseBypass> itemUseBypass : ItemUseBypass.ITEM_BYPASS.entrySet()) {
 			String id = itemUseBypass.getKey();
 			ItemUseBypass itemBypass = itemUseBypass.getValue();

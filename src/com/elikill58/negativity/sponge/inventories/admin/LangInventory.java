@@ -29,8 +29,6 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-import net.kyori.text.format.TextColor;
-
 public class LangInventory extends AbstractInventory {
 
 	public LangInventory() {
@@ -119,7 +117,7 @@ public class LangInventory extends AbstractInventory {
 				try {
 					config.save();
 				} catch (IOException ex) {
-					p.sendMessage(Text.of(TextColor.RED, "Failed to save configuration after changing the default language ", lang));
+					p.sendMessage(Text.of("Failed to save configuration after changing the default language ", lang));
 					SpongeNegativity.getInstance().getLogger().error("Failed to save configuration after {} changed the default language to {}", p.getName(), lang, ex);
 				}
 

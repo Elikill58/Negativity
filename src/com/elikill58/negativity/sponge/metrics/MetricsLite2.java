@@ -15,6 +15,7 @@ import org.spongepowered.api.event.game.state.GamePreInitializationEvent;
 import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.scheduler.Scheduler;
 import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.util.metric.MetricsConfigManager;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
@@ -165,6 +166,9 @@ public class MetricsLite2 implements Metrics {
 
     // The list of instances from the bStats 1 instance's that started first
     private List<Object> oldInstances = new ArrayList<>();
+
+	@Inject
+	private MetricsConfigManager metricsConfigManager;
 
     // The constructor is not meant to be called by the user, but by using the Factory
     private MetricsLite2(PluginContainer plugin, Logger logger, Path configDir, int pluginId) {
@@ -337,7 +341,7 @@ public class MetricsLite2 implements Metrics {
         List<String> enabled = new ArrayList<>();
         List<String> disabled = new ArrayList<>();
         for (Metrics metrics : knownMetricsInstances) {
-            if (Sponge.getMetricsConfigManager().areMetricsEnabled(metrics.getPluginContainer())) {
+            if (this.metricsConfigManager.getCollectionState(metrics.getPluginContainer()).asBoolean()) {
                 enabled.add(metrics.getPluginContainer().getName());
             } else {
                 disabled.add(metrics.getPluginContainer().getName());
@@ -409,7 +413,7 @@ public class MetricsLite2 implements Metrics {
         JsonArray pluginData = new JsonArray();
         // Search for all other bStats Metrics classes to get their plugin data
         for (Metrics metrics : knownMetricsInstances) {
-            if (!Sponge.getMetricsConfigManager().areMetricsEnabled(metrics.getPluginContainer())) {
+            if (!this.metricsConfigManager.getCollectionState(metrics.getPluginContainer()).asBoolean()) {
                 continue;
             }
             JsonObject plugin = metrics.getPluginData();

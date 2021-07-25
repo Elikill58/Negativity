@@ -4,8 +4,8 @@ import com.elikill58.negativity.universal.TranslatedMessages;
 import com.velocitypowered.api.command.CommandSource;
 import com.velocitypowered.api.proxy.Player;
 
-import net.kyori.text.TextComponent;
-import net.kyori.text.serializer.legacy.LegacyComponentSerializer;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 
 public class VelocityMessages {
 
@@ -26,6 +26,6 @@ public class VelocityMessages {
 	}
 
 	public static TextComponent coloredBungeeMessage(String msg) {
-		return LegacyComponentSerializer.legacy().deserialize(msg, '&');
+		return Component.text(msg.replaceAll("&", "§"));
 	}
 }

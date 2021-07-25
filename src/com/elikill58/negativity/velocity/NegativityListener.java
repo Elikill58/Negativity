@@ -41,11 +41,12 @@ import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.ServerInfo;
 import com.velocitypowered.api.util.ModInfo;
 
-import net.kyori.text.TextComponent;
-import net.kyori.text.TextComponent.Builder;
-import net.kyori.text.event.ClickEvent;
-import net.kyori.text.event.HoverEvent;
-import net.kyori.text.format.TextColor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.TextComponent.Builder;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
+import net.kyori.adventure.text.format.NamedTextColor;
 
 public class NegativityListener {
 
@@ -87,24 +88,24 @@ public class NegativityListener {
 			for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers()) {
 				VelocityNegativityPlayer nPlayer = VelocityNegativityPlayer.getNegativityPlayer(pp);
 				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT) && nPlayer.isShowAlert()) {
-					Builder msg = TextComponent.builder();
+					Builder msg = Component.text();
 					msg.append(VelocityMessages.getMessage(pp, alertMessageKey, place));
 
-					Builder hoverMessage = VelocityMessages.getMessage(pp, "alert_hover", place).color(TextColor.GOLD).toBuilder();
+					Builder hoverMessage = VelocityMessages.getMessage(pp, "alert_hover", place).color(NamedTextColor.GOLD).toBuilder();
 					Cheat.CheatHover hoverInfo = alert.getHoverInfo();
 					if (hoverInfo != null) {
-						hoverMessage.append(TextComponent.newline())
-								.append(TextComponent.newline())
+						hoverMessage.append(Component.newline())
+								.append(Component.newline())
 								.resetStyle()
 								.append(VelocityMessages.coloredBungeeMessage(hoverInfo.compile(nPlayer)));
 					}
 
-					hoverMessage.append(TextComponent.newline())
-							.append(TextComponent.newline())
+					hoverMessage.append(Component.newline())
+							.append(Component.newline())
 							.append(VelocityMessages.getMessage(pp, "alert_tp_info", "%playername%", alert.getPlayername()));
 
-					msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, hoverMessage.build()));
-					msg.clickEvent(ClickEvent.of(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
+					msg.hoverEvent(HoverEvent.showText(hoverMessage.build()));
+					msg.clickEvent(ClickEvent.runCommand(getCommand(p, pp)));
 					pp.sendMessage(msg.build());
 				}
 			}
@@ -123,10 +124,10 @@ public class NegativityListener {
 			for (Player pp : VelocityNegativity.getInstance().getServer().getAllPlayers()) {
 				if (Perm.hasPerm(VelocityNegativityPlayer.getNegativityPlayer(pp), Perm.SHOW_REPORT)) {
 					hasPermitted = true;
-					Builder msg = TextComponent.builder();
+					Builder msg = Component.text();
 					msg.append(VelocityMessages.getMessage(pp, "report", place));
-					msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, VelocityMessages.getMessage(pp, "report_hover", "%playername%", report.getReported())));
-					msg.clickEvent(ClickEvent.of(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
+					msg.hoverEvent(HoverEvent.showText(VelocityMessages.getMessage(pp, "report_hover", "%playername%", report.getReported())));
+					msg.clickEvent(ClickEvent.runCommand(getCommand(p, pp)));
 					pp.sendMessage(msg.build());
 				}
 			}
@@ -238,17 +239,17 @@ public class NegativityListener {
 		}
 
 		public TextComponent toMessage(Player p) {
-			Builder msg = TextComponent.builder(VelocityMessages.getStringMessage(p, "alert", place));
+			Builder msg = Component.text().append(VelocityMessages.getMessage(p, "alert", place));
 			String hover = VelocityMessages.getStringMessage(p, "alert_hover", place);
 			if (hover.contains("\\n")) {
-				Builder hoverMessage = TextComponent.builder("");
-				hoverMessage.color(TextColor.GOLD);
+				Builder hoverMessage = Component.text();
+				hoverMessage.color(NamedTextColor.GOLD);
 				for(String s : hover.split("\\n"))
-					hoverMessage.append(TextComponent.builder(s));
-				msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, hoverMessage.build()));
+					hoverMessage.append(Component.text(s));
+				msg.hoverEvent(HoverEvent.showText(hoverMessage.build()));
 			} else
-				msg.hoverEvent(HoverEvent.of(HoverEvent.Action.SHOW_TEXT, TextComponent.builder(hover).build()));
-			msg.clickEvent(ClickEvent.of(ClickEvent.Action.RUN_COMMAND, cmd));
+				msg.hoverEvent(HoverEvent.showText(Component.text(hover)));
+			msg.clickEvent(ClickEvent.runCommand(cmd));
 			return msg.build();
 		}
 	}

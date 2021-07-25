@@ -142,7 +142,7 @@ public class VelocityAdapter extends Adapter {
 
 	@Override
 	public void runConsoleCommand(String cmd) {
-		pl.getServer().getCommandManager().execute(pl.getServer().getConsoleCommandSource(), cmd);
+		pl.getServer().getCommandManager().executeAsync(pl.getServer().getConsoleCommandSource(), cmd);
 	}
 
 	@Override

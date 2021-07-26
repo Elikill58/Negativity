@@ -9,7 +9,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:4.1.+'
+        classpath 'net.minecraftforge.gradle:ForgeGradle:5.1.+'
     }
 }
 
@@ -83,10 +83,7 @@ afterEvaluate {
     shadowJar.finalizedBy reobfJar
     reobfJar {
         dependsOn shadowJar
-        doFirst {
-            // We have to do it in doFirst because the input is overwritten between the task configuration and execution
-            input(shadowJar.archiveFile.get().asFile)
-        }
+        input = shadowJar.archiveFile
     }
 }
 

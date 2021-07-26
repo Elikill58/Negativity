@@ -60,7 +60,7 @@ task reobfSpigotPluginStep1(type: JavaExec) {
 
     classpath += configurations.specialSource
     classpath += configurations.remapped
-    main 'net.md_5.specialsource.SpecialSource'
+    mainClass.set('net.md_5.specialsource.SpecialSource')
 
     workingDir file(Paths.get('build', 'tmp', name))
     workingDir.mkdirs()
@@ -80,7 +80,7 @@ task reobfSpigotPlugin(type: JavaExec) {
 
     classpath += configurations.specialSource
     classpath += configurations.obf
-    main 'net.md_5.specialsource.SpecialSource'
+    mainClass.set('net.md_5.specialsource.SpecialSource')
 
     workingDir file(Paths.get('build', 'tmp', name))
     workingDir.mkdirs()

@@ -1,1 +1,15 @@
-/build/
+/*
+
+!/.gitignore
+
+!/essentials/
+!/floodgate/
+!/gadgetsmenu/
+!/maxbans/
+!/protocolsupport/
+!/worldguard/
+
+# Keep src, resources and build.gradle in all dirs included above
+!/*/src/
+!/*/resources/
+!/*/build.gradle

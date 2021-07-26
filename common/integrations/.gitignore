@@ -1,1 +1,13 @@
-/build/
+/*
+
+!/.gitignore
+
+!/advancedban/
+!/dkbans/
+!/litebans/
+!/viaversion/
+
+# Keep src, resources and build.gradle in all dirs included above
+!/*/src/
+!/*/resources/
+!/*/build.gradle

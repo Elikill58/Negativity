@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -228,7 +229,7 @@ public class SpongeAdapter extends Adapter {
 		if (online != null) {
 			return online;
 		}
-		return Sponge.server().userManager().find(name)
+		return Sponge.server().userManager().load(name).join()
 			.map(SpongeOfflinePlayer::new).orElse(null);
 	}
 	
@@ -238,7 +239,7 @@ public class SpongeAdapter extends Adapter {
 		if (online != null) {
 			return online;
 		}
-		return Sponge.server().userManager().find(uuid)
+		return Sponge.server().userManager().load(uuid).join()
 			.map(SpongeOfflinePlayer::new).orElse(null);
 	}
 	
@@ -290,5 +291,10 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public Scheduler getScheduler() {
 		return this.scheduler;
+	}
+	
+	@Override
+	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
+		// TODO this is tricky because we have to register channels in a lifecycle event...
 	}
 }

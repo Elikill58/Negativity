@@ -201,7 +201,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {
-		Channel channel = Sponge.channelRegistry().get(ResourceKey.resolve(channelId)).orElse(null);
+		Channel channel = Sponge.channelManager().get(ResourceKey.resolve(channelId)).orElse(null);
 		if (channel == null) {
 			Adapter.getAdapter().getLogger().warn("Channel " + channelId + " does not exist");
 			Thread.dumpStack();
@@ -364,8 +364,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public boolean isUsingRiptide() {
-		// TODO SpongeAPI 8 does not expose this information yet: https://github.com/SpongePowered/SpongeAPI/pull/2315
-		return false;
+		return entity.require(Keys.IS_AUTO_SPIN_ATTACK);
 	}
 	
 	@Override

@@ -42,7 +42,7 @@ public class SpongeBanProcessor implements BanProcessor {
 			.expirationDate(expirationDate)
 			.source(LegacyComponentSerializer.legacyAmpersand().deserialize(ban.getBannedBy()))
 			.build();
-		banService.addBan(spongeBan);
+		banService.add(spongeBan);
 		
 		NegativityPlayer player = NegativityPlayer.getCached(ban.getPlayerId());
 		if (player != null) {
@@ -58,7 +58,7 @@ public class SpongeBanProcessor implements BanProcessor {
 		BanService banService = Sponge.server().serviceProvider().banService();
 		GameProfile profile = GameProfile.of(playerId);
 		try {
-			Optional<org.spongepowered.api.service.ban.Ban.Profile> existingBan = banService.banFor(profile).get();
+			Optional<org.spongepowered.api.service.ban.Ban.Profile> existingBan = banService.find(profile).get();
 			if (!existingBan.isPresent() || !banService.pardon(profile).get()) {
 				return null;
 			}
@@ -74,7 +74,7 @@ public class SpongeBanProcessor implements BanProcessor {
 	@Override
 	public boolean isBanned(UUID playerId) {
 		try {
-			return Sponge.server().serviceProvider().banService().banFor(GameProfile.of(playerId)).get().isPresent();
+			return Sponge.server().serviceProvider().banService().find(GameProfile.of(playerId)).get().isPresent();
 		} catch (InterruptedException | ExecutionException e) {
 			Adapter.getAdapter().getLogger().error("Could not determine if player " + playerId + " is banned");
 			e.printStackTrace();
@@ -87,7 +87,7 @@ public class SpongeBanProcessor implements BanProcessor {
 	public Ban getActiveBan(UUID playerId) {
 		BanService banService = Sponge.server().serviceProvider().banService();
 		try {
-			return banService.banFor(GameProfile.of(playerId)).get()
+			return banService.find(GameProfile.of(playerId)).get()
 				.map(SpongeBanProcessor::toNegativityActiveBan)
 				.orElse(null);
 		} catch (InterruptedException | ExecutionException e) {

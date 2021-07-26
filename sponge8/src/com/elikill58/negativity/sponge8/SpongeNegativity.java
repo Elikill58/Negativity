@@ -77,7 +77,7 @@ public class SpongeNegativity {
 	public void onConstructPlugin(ConstructPluginEvent event) {
 		Adapter.setAdapter(new SpongeAdapter(this));
 		ResourceKey channelKey = ResourceKey.resolve(NegativityMessagesManager.CHANNEL_ID);
-		this.channel = Sponge.channelRegistry().ofType(channelKey, RawDataChannel.class);
+		this.channel = Sponge.channelManager().ofType(channelKey, RawDataChannel.class);
 	}
 	
 	@Listener

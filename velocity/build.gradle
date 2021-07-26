@@ -14,7 +14,7 @@ sourceSets {
 repositories {
     maven {
         name 'velocity'
-        url 'https://repo.velocitypowered.com/snapshots/'
+        url 'https://nexus.velocitypowered.com/repository/maven-public/'
     }
 }
 

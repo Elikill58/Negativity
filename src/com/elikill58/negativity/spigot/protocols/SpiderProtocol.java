@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -82,7 +83,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 			return;
 		
 		double y = e.getTo().getY() - e.getFrom().getY();
-		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
+		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld() != null && Bukkit.getWorld(np.lastSpiderLoc.getWorld().getName()) != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
 			double tempDis = loc.getY() - np.lastSpiderLoc.getY(), lastSpiderDistance = np.contentDouble.getOrDefault("spider-last-distance", 0.0);
 			if (lastSpiderDistance == tempDis && tempDis != 0) {
 				np.SPIDER_SAME_DIST++;

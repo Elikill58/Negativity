@@ -7,6 +7,7 @@ com.elikill58.negativity.common.protocols.AutoSteal
 com.elikill58.negativity.common.protocols.Blink
 com.elikill58.negativity.common.protocols.Chat
 com.elikill58.negativity.common.protocols.Critical
+com.elikill58.negativity.common.protocols.ElytraFly
 com.elikill58.negativity.common.protocols.FastBow
 com.elikill58.negativity.common.protocols.FastEat
 com.elikill58.negativity.common.protocols.FastLadder

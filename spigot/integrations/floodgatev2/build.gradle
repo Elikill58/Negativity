@@ -1,0 +1,24 @@
+evaluationDependsOn(':spigot')
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+repositories {
+    maven {
+        url = 'http://repo.eliapp.fr:8080/repository/internal/'
+        allowInsecureProtocol true
+        metadataSources {
+            artifact()
+        }
+    }
+}
+
+dependencies {
+    compileOnly 'org.geysermc:FloodGate:2.0-SNAPSHOT'
+    compileOnly(project(':spigot'))
+    compileOnly(project(path: ':spigot', configuration: 'spigot'))
+}

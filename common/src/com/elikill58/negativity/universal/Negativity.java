@@ -313,7 +313,7 @@ public class Negativity {
 		return sj.toString();
 	}
 	
-	public static final Set<String> integratedPlugins = Collections.synchronizedSet(new HashSet<>());
+	private static final Set<String> integratedPlugins = Collections.synchronizedSet(new HashSet<>());
 	
 	/**
 	 * Load all Negativity's class and content.

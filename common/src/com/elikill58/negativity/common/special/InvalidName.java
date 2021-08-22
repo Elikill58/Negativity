@@ -30,7 +30,7 @@ public class InvalidName extends Special implements Listeners {
 		NegativityAccount account = NegativityAccount.get(playerId);
 		if (!UniversalUtils.isValidName(e.getName())) {
 			// check for ban / kick only if the player is not already banned
-			if (getConfig().getBoolean("ban.active")) {
+			if (getConfig().getBoolean("ban")) {
 				if (!BanManager.banActive) {
 					Adapter ada = Adapter.getAdapter();
 					ada.getLogger().warn("Cannot ban player " + e.getName() + " for " + getName() + " because ban is NOT config.");

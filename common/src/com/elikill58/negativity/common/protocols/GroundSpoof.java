@@ -35,9 +35,9 @@ public class GroundSpoof extends Cheat implements Listeners {
         }
         Block downBlock = e.getTo().getBlock().getRelative(BlockFace.DOWN);
         if (isNotAir(downBlock.getRelative(BlockFace.NORTH))
-                && isNotAir(downBlock.getRelative(BlockFace.SOUTH))
-                || (isNotAir(downBlock.getRelative(BlockFace.EAST))
-                && isNotAir(downBlock.getRelative(BlockFace.WEST)))) {
+                || isNotAir(downBlock.getRelative(BlockFace.SOUTH))
+                || isNotAir(downBlock.getRelative(BlockFace.EAST))
+                || isNotAir(downBlock.getRelative(BlockFace.WEST))) {
             return;
         }
         Negativity.alertMod(ReportType.WARNING, p, this, getReliability(p), "check-blocks-under",
@@ -74,7 +74,7 @@ public class GroundSpoof extends Cheat implements Listeners {
         final Block block = player.getLocation().getBlock();
         final Block downBlock = block.getRelative(BlockFace.DOWN);
 
-        if (isNotAir(block.getRelative(BlockFace.DOWN))) {
+        if (isNotAir(downBlock)) {
             return EnumSet.noneOf(BlockFace.class);
         }
 

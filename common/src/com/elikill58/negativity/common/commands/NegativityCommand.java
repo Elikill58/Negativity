@@ -224,7 +224,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(target);
 			p.sendMessage(ChatColor.YELLOW + "--- Checking debug for bypass | no alert ---");
-			p.sendMessage(ChatColor.GOLD + ada.getName() + ": " + ada.getServerVersion() + ". Negativity " + ada.getVersion());
+			p.sendMessage(ChatColor.GOLD + ada.getName() + ": " + ada.getVersion() + ". Negativity: " + ada.getPluginVersion());
 			long time = System.currentTimeMillis();
 			boolean hasBypass = false;
 			Cheat c = Cheat.values().stream().filter(Cheat::isActive).findFirst().get();

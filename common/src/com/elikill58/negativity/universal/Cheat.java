@@ -43,6 +43,10 @@ public abstract class Cheat {
 	public static final String BUNDLED_MODULES_BASE = "/modules/";
 	protected static final Path MODULE_FOLDER = Adapter.getAdapter().getDataFolder().toPath().resolve("modules");
 	public static final List<Cheat> CHEATS = new ArrayList<>();
+	private static CheckManager checkManager;
+	public static CheckManager getCheckManager() {
+		return checkManager;
+	}
 	private final String key;
 	private Configuration config;
 	private boolean needPacket, hasVerif;
@@ -162,10 +166,7 @@ public abstract class Cheat {
 	 * @return true if the detection is active
 	 */
 	public boolean checkActive(String checkName) {
-		//if(config.contains("checks." + checkName + ".active"))
-			return config.getBoolean("checks." + checkName + ".active", true);
-		//config.set("checks." + checkName + ".active", true);
-		//return true;
+		return config.getBoolean("checks." + checkName + ".active", true);
 	}
 	
 	/**
@@ -432,7 +433,7 @@ public abstract class Cheat {
 		CHEATS.sort(Comparator.comparing(Cheat::getKey));
 		
 		EventManager.unregisterEventForClass(CheckManager.class);
-		EventManager.registerEvent(new CheckManager(CHEATS));
+		EventManager.registerEvent(checkManager = new CheckManager(CHEATS));
 		ada.getLogger().info("Loaded " + CHEATS.size() + " cheat detections.");
 	}
 

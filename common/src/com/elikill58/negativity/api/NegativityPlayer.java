@@ -200,9 +200,9 @@ public class NegativityPlayer {
 			return "Allowed to fly";
 		if(BypassManager.hasBypass(p, c))
 			return "Has bypass";
-		if(p.getPing() < c.getMaxAlertPing())
+		if(p.getPing() > c.getMaxAlertPing())
 			return "Too high ping (" + p.getPing() + " > " + c.getMaxAlertPing() + ")";
-		return "none";
+		return "Unknown";
 	}
 
 	/**

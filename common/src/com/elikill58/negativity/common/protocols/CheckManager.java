@@ -3,6 +3,7 @@ package com.elikill58.negativity.common.protocols;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -45,6 +46,10 @@ public class CheckManager implements Listeners {
 				allChecks.add(new CheckMethod(cheat, check, possibleMethod, hasNegativityPlayer));
 			}
 		}
+	}
+	
+	public List<CheckMethod> getCheckMethodForCheat(Cheat c){
+		return allChecks.stream().filter((ch) -> ch.getCheat().equals(c)).collect(Collectors.toList());
 	}
 	
 	@EventListener

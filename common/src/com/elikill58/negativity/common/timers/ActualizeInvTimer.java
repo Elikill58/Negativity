@@ -3,11 +3,12 @@ package com.elikill58.negativity.common.timers;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
-import com.elikill58.negativity.common.inventories.holders.negativity.players.AlertHolder;
-import com.elikill58.negativity.common.inventories.holders.negativity.players.CheckMenuHolder;
 import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.PlatformHolder;
+import com.elikill58.negativity.common.inventories.holders.negativity.players.ActivedCheatHolder;
+import com.elikill58.negativity.common.inventories.holders.negativity.players.AlertHolder;
+import com.elikill58.negativity.common.inventories.holders.negativity.players.CheckMenuHolder;
 import com.elikill58.negativity.universal.Adapter;
 
 public class ActualizeInvTimer implements Runnable {
@@ -29,6 +30,8 @@ public class ActualizeInvTimer implements Runnable {
 					InventoryManager.getInventory(NegativityInventory.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, ((CheckMenuHolder) nh).getCible()));
 				else if (nh instanceof AlertHolder)
 					InventoryManager.getInventory(NegativityInventory.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, ((AlertHolder) nh).getCible()));
+				else if (nh instanceof ActivedCheatHolder)
+					InventoryManager.getInventory(NegativityInventory.ACTIVED_CHEAT).ifPresent((inv) -> inv.actualizeInventory(p, ((ActivedCheatHolder) nh).getCible()));
 			}
 		}
 		for (Player p : Adapter.getAdapter().getOnlinePlayers()) {

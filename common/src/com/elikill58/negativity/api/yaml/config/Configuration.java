@@ -10,6 +10,8 @@ import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
+import com.elikill58.negativity.universal.Adapter;
+
 @SuppressWarnings("unchecked")
 public final class Configuration {
 	
@@ -52,7 +54,12 @@ public final class Configuration {
             section = new Configuration((this.defaults == null) ? null : this.defaults.getSection(root));
             this.self.put(root, section);
         }
-        return (Configuration)section;
+        try {
+        	return (Configuration)section;
+        } catch (ClassCastException e) {
+        	Adapter.getAdapter().getLogger().warn("Failed to cast " + section + " into Configuration while trying to get " + path);
+        	return this;
+		}
     }
     
     private String getChild(final String path) {

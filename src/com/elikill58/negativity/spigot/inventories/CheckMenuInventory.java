@@ -58,7 +58,7 @@ public class CheckMenuInventory extends AbstractInventory {
 			inv.setItem(18, createItem(Material.SPIDER_EYE, Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
 		inv.setItem(19, createItem(ItemUtils.EYE_OF_ENDER, Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
 		if(!p.getUniqueId().equals(cible.getUniqueId()) && !(Perm.hasPerm(np, Perm.MOD) || Perm.hasPerm(np, Perm.ADMIN)))
-			inv.setItem(20, createItem(Material.PACKED_ICE, Messages.getMessage(p, "inventory.main.freezing", "%name%", cible.getName())));
+			inv.setItem(20, createItem(Material.PACKED_ICE, Messages.getMessage(p, "inventory.main." + (np.isFreeze ? "un" : "") + "freezing", "%name%", cible.getName())));
 		inv.setItem(21, createItem(Material.PAPER, Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())));
 		inv.setItem(22, createItem(Material.TNT, Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())));
 		for (int i = 0; i < inv.getSize(); i++)

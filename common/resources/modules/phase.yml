@@ -34,4 +34,5 @@ verif:
 # Disable one check and not all detections
 checks:
   # On air and no jumping
-  no-jump: true
+  no-jump:
+    active: true

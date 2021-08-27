@@ -57,7 +57,7 @@ public final class Configuration {
         try {
         	return (Configuration)section;
         } catch (ClassCastException e) {
-        	Adapter.getAdapter().getLogger().warn("Failed to cast " + section + " into Configuration while trying to get " + path);
+        	Adapter.getAdapter().getLogger().warn("[Yaml-Configuration] Failed to cast " + section + " into Configuration while trying to get " + path + " in " + file.getAbsolutePath() + ".");
         	return this;
 		}
     }

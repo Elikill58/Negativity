@@ -41,7 +41,7 @@ public class AlertInventory extends AbstractInventory<AlertHolder> {
 					|| (!isActive && config.getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
 		}
-		Inventory inv = Inventory.createInventory(Messages.getMessage(p, "inventory.detection.name_inv"),
+		Inventory inv = Inventory.createInventory(Messages.getMessage(p, "inventory.alerts.name_inv"),
 				UniversalUtils.getMultipleOf(TO_SEE.size() + 3, 9, 1, 54), new AlertHolder(cible));
 		int slot = 0;
 		for (Cheat c : TO_SEE) {

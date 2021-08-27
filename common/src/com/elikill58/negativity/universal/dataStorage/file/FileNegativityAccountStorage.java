@@ -15,6 +15,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.account.NegativityAccount;
@@ -36,16 +37,22 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 			if (!file.exists()) {
 				return null;
 			}
-			Configuration config = YamlConfiguration.load(file);
-			String playerName = config.getString("playername");
-			String language = config.getString("lang", TranslatedMessages.getDefaultLang());
-			Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getSection("minerate"));
-			int mostClicksPerSecond = config.getInt("better-click");
-			Map<String, Integer> warns = deserializeViolations(config.getSection("cheats"));
-			List<Report> reports = deserializeReports(config);
-			String IP = config.getString("ip", "0.0.0.0");
-			long creationTime = config.getLong("creation-time", System.currentTimeMillis());
-			return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, IP, creationTime);
+			try {
+				Configuration config = YamlConfiguration.load(file);
+				String playerName = config.getString("playername");
+				String language = config.getString("lang", TranslatedMessages.getDefaultLang());
+				Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getSection("minerate"));
+				int mostClicksPerSecond = config.getInt("better-click");
+				Map<String, Integer> warns = deserializeViolations(config.getSection("cheats"));
+				List<Report> reports = deserializeReports(config);
+				String IP = config.getString("ip", "0.0.0.0");
+				long creationTime = config.getLong("creation-time", System.currentTimeMillis());
+				return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, IP, creationTime);
+			} catch (Exception e) { // prevent parsing error due to corrupted file.
+				Adapter ada = Adapter.getAdapter(); // TODO try to get data from corrupted file
+				ada.getLogger().info("File account of " + ada.getOfflinePlayer(playerId).getName() + " have been corrupted. Creating a new one ...");
+				return new NegativityAccount(playerId);
+			}
 		});
 	}
 

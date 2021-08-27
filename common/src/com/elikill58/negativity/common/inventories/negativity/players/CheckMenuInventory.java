@@ -56,8 +56,9 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 
 		inv.set(18, ItemBuilder.Builder(Materials.SPIDER_EYE).displayName(Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())).build());
 		inv.set(19, ItemBuilder.Builder(Materials.EYE_OF_ENDER).displayName(Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())).build());
-		if(!p.getUniqueId().equals(cible.getUniqueId()))
-			inv.set(20, ItemBuilder.Builder(Materials.PACKED_ICE).displayName(Messages.getMessage(p, "inventory.main.freezing", "%name%", cible.getName())).build());
+		if(!p.getUniqueId().equals(cible.getUniqueId())) {
+			inv.set(20, ItemBuilder.Builder(Materials.PACKED_ICE).displayName(Messages.getMessage(p, "inventory.main." + (np.isFreeze ? "un" : "") + "freezing", "%name%", cible.getName())).build());
+		}
 		inv.set(21, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
 		inv.set(22, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())).build());
 		inv.set(23, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.main.active_report", "%name%", p.getName())).build());

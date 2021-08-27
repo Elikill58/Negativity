@@ -50,7 +50,7 @@ public class AlertInventory extends AbstractInventory {
 				TO_SEE.add(c);
 		}
 		Inventory inv = Bukkit.createInventory(new AlertHolder(cible), UniversalUtils.getMultipleOf(TO_SEE.size() + 3, 9, 1, 54),
-				Messages.getMessage(p, "inventory.detection.name_inv"));
+				Messages.getMessage(p, "inventory.alerts.inv_name"));
 		int slot = 0;
 		for (Cheat c : TO_SEE) {
 			if (c.getMaterial() != null){

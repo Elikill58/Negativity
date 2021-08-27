@@ -203,9 +203,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return "World bypass";
 		if(SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase(Locale.ROOT)) || Perm.hasPerm(this, "bypass.all")))
 			return "Permission bypass";
-		if(ping < c.getMaxAlertPing())
+		if(ping > c.getMaxAlertPing())
 			return "Too high ping (" + ping + " > " + c.getMaxAlertPing() + ")";
-		return "none";
+		return "Unknown";
 	}
 	
 	public void updateCheckMenu() {

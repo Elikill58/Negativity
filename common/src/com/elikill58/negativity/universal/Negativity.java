@@ -341,6 +341,9 @@ public class Negativity {
 			PlayerModificationsManager.init();
 			VerificationManager.init();
 			WebhookManager.init();
+			ada.registerNewIncomingChannel(ada.getServerVersion().isNewerOrEquals(Version.V1_13) ? "minecraft:brand" : "MC|Brand", (p, msg) -> {
+				NegativityPlayer.getNegativityPlayer(p).setClientName(new String(msg).substring(1));
+			});
 		}
 		UniversalUtils.init();
 		

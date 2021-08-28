@@ -91,6 +91,7 @@ public class NegativityPlayer {
 	public boolean isInFight = false, already_blink = false, disableShowingAlert = false, isFreeze = false, isJumpingWithBlock = false, isUsingSlimeBlock = false,
 			mustToBeSaved = false, isInvisible = false;
 	private boolean isBedrockPlayer = false;
+	private String clientName;
 	private ScheduledTask fightCooldownTask;
 
 	public NegativityPlayer(Player p) {
@@ -102,13 +103,8 @@ public class NegativityPlayer {
 		account.setIp(p.getIP());
 		ada.getAccountManager().save(playerId);
 		ACTIVE_CHEAT.clear();
-		//boolean needPacket = false;
-		for (Cheat c : Cheat.values())
-			if (c.isActive()) {
-				startAnalyze(c);
-				//if (c.needPacket())
-					//needPacket = true;
-			}
+		Cheat.values().stream().filter(Cheat::isActive).forEach(this::startAnalyze);
+		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p);
 	}
 
@@ -232,6 +228,24 @@ public class NegativityPlayer {
 	 */
 	public Player getPlayer() {
 		return p;
+	}
+	
+	/**
+	 * Get the name of the client such as vanilla/fabric...
+	 * 
+	 * @return client name
+	 */
+	public String getClientName() {
+		return clientName;
+	}
+
+	/**
+	 * Set the name of the client such as vanilla/fabric...
+	 * 
+	 * @param clientName the new client name
+	 */
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
 	}
 	
 	/**

@@ -101,6 +101,7 @@ public class SpigotNegativity extends JavaPlugin {
 	public static double tps_alert_stop = 19.0;
 	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
+	public static String CHANNEL_NAME_BRAND = "";
 	private static int timeBetweenAlert = -1;
 	private NegativityPacketManager packetManager;
 	
@@ -152,11 +153,14 @@ public class SpigotNegativity extends JavaPlugin {
 		ChannelEvents channelEvents = new ChannelEvents();
 		if (v.isNewerOrEquals(Version.V1_13)) {
 			CHANNEL_NAME_FML = "fml:hs";
+			CHANNEL_NAME_BRAND = "minecraft:brand";
 		} else {
 			CHANNEL_NAME_FML = "FML|HS";
+			CHANNEL_NAME_BRAND = "MC|Brand";
 		}
 		loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID, channelEvents);
 		loadChannelInOut(messenger, CHANNEL_NAME_FML, channelEvents);
+		loadChannelInOut(messenger, CHANNEL_NAME_BRAND, channelEvents);
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersEvents(this), this);

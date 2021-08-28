@@ -102,6 +102,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public List<String> proof = new ArrayList<>();
 	public boolean isInFight = false;
 	public BukkitTask fightTask = null;
+	public String clientName;
 	public int fakePlayerTouched = 0, ping = 0;
 	public long timeStartFakePlayer = 0;
 	private final Version playerVersion;
@@ -111,6 +112,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		this.p = new WeakReference<>(p);
 		this.ping = Utils.getPing(p);
 		initMods(p);
+		this.clientName = "Not loaded";
 		isBedrockPlayer = SpigotNegativity.floodGateSupport && FloodGateSupport.isBedrockPlayer(p.getUniqueId());
 		playerVersion = SpigotNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : (SpigotNegativity.protocolSupportSupport ? ProtocolSupportSupport.getPlayerVersion(p) : Version.getVersion());
 	}

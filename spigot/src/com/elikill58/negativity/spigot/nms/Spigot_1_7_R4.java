@@ -34,7 +34,7 @@ public class Spigot_1_7_R4 extends SpigotVersionAdapter {
 	}
 	
 	@Override
-	protected String isOnGroundFieldName() {
+	protected String getOnGroundFieldName() {
 		return "g";
 	}
 	

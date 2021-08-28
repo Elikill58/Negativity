@@ -14,7 +14,7 @@ public class Spigot_UnknowVersion extends SpigotVersionAdapter {
 	}
 	
 	@Override
-	protected String isOnGroundFieldName() {
+	protected String getOnGroundFieldName() {
 		return "f";
 	}
 	

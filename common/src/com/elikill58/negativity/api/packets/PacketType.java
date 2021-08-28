@@ -8,15 +8,7 @@ import java.util.concurrent.Callable;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.NPacketUnknown;
 import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimation;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
+import com.elikill58.negativity.api.packets.packet.playin.*;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
@@ -166,7 +158,7 @@ public interface PacketType {
 		TR_SEL("TrSel", NPacketUnknown::new),
 		TRANSACTION("Transaction", NPacketUnknown::new),
 		UPDATE_SIGN("UpdateSign", NPacketUnknown::new),
-		USE_ENTITY("UseEntity", NPacketUnknown::new),
+		USE_ENTITY("UseEntity", NPacketPlayInUseEntity::new),
 		USE_ITEM("UseItem", NPacketUnknown::new),
 		VEHICLE_MOVE("VehicleMove", NPacketUnknown::new),
 		WINDOW_CLICK("WindowClick", NPacketUnknown::new),

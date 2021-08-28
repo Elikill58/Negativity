@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge.nms;
 
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
@@ -9,6 +10,8 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.sponge.SpongeNegativity;
@@ -17,10 +20,12 @@ import net.minecraft.network.play.client.CPacketChatMessage;
 import net.minecraft.network.play.client.CPacketKeepAlive;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
+import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketBlockBreakAnim;
 import net.minecraft.network.play.server.SPacketKeepAlive;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Vec3d;
 
 public class Sponge_1_12_2 extends SpongeVersionAdapter {
 
@@ -53,6 +58,11 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 			return new NPacketPlayInFlying(packet.getX(0), packet.getY(0), packet.getZ(0), yaw, pitch, packet.isOnGround(), yaw == packet.getYaw(Float.MAX_VALUE), pitch == packet.getPitch(Float.MAX_VALUE));
 		});
 		packetsPlayIn.put("CPacketKeepAlive", (f) -> new NPacketPlayInKeepAlive(((CPacketKeepAlive) f).getKey()));
+		packetsPlayIn.put("CPacketUseEntity", (f) -> {
+			CPacketUseEntity p = (CPacketUseEntity) f;
+			Vec3d v = p.getHitVec();
+			return new NPacketPlayInUseEntity(0, new Vector(v.x, v.y, v.z), EnumEntityUseAction.valueOf(p.getAction().name()));
+		});
 		
 
 		packetsPlayOut.put("SPacketBlockBreakAnim", (f) -> {

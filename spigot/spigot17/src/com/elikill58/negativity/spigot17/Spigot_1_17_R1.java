@@ -7,6 +7,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.BlockPosition;
@@ -25,6 +26,7 @@ import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 
 import io.netty.channel.Channel;
+import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
 import net.minecraft.network.protocol.game.ClientboundKeepAlivePacket;
@@ -37,58 +39,63 @@ import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.phys.Vec3;
 
 public class Spigot_1_17_R1 extends SpigotVersionAdapter {
-	
-	@SuppressWarnings("unused") // Used via reflection in SpigotVersionAdapter
+
 	public Spigot_1_17_R1() {
 		super("v1_17_R1");
 		packetsPlayIn.put("PacketPlayInChat", (player, raw) -> new NPacketPlayInChat(((ServerboundChatPacket) raw).getMessage()));
 		
 		packetsPlayIn.put("PacketPlayInPositionLook", (player, raw) -> {
-			var packet = (ServerboundMovePlayerPacket.PosRot) raw;
+			ServerboundMovePlayerPacket.PosRot packet = (ServerboundMovePlayerPacket.PosRot) raw;
 			return new NPacketPlayInPositionLook(packet.x, packet.y, packet.z, packet.xRot, packet.yRot, packet.isOnGround());
 		});
 		packetsPlayIn.put("PacketPlayInPosition", (player, raw) -> {
-			var packet = (ServerboundMovePlayerPacket.Pos) raw;
+			ServerboundMovePlayerPacket.Pos packet = (ServerboundMovePlayerPacket.Pos) raw;
 			return new NPacketPlayInPosition(packet.x, packet.y, packet.z, packet.xRot, packet.yRot, packet.isOnGround());
 		});
 		packetsPlayIn.put("PacketPlayInLook", (player, raw) -> {
-			var packet = (ServerboundMovePlayerPacket.Rot) raw;
+			ServerboundMovePlayerPacket.Rot packet = (ServerboundMovePlayerPacket.Rot) raw;
 			return new NPacketPlayInLook(packet.x, packet.y, packet.z, packet.xRot, packet.yRot, packet.isOnGround());
 		});
 		
 		packetsPlayIn.put("PacketPlayInBlockDig", (player, raw) -> {
-			var packet = (ServerboundPlayerActionPacket) raw;
-			var action = NPacketPlayInBlockDig.DigAction.values()[packet.getAction().ordinal()];
-			var face = NPacketPlayInBlockDig.DigFace.values()[packet.getDirection().ordinal()];
-			var pos = packet.getPos();
+			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) raw;
+			NPacketPlayInBlockDig.DigAction action = NPacketPlayInBlockDig.DigAction.values()[packet.getAction().ordinal()];
+			NPacketPlayInBlockDig.DigFace face = NPacketPlayInBlockDig.DigFace.values()[packet.getDirection().ordinal()];
+			BlockPos pos = packet.getPos();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), action, face);
 		});
 		packetsPlayIn.put("PacketPlayInBlockPlace", (player, raw) -> {
-			if (raw instanceof ServerboundUseItemOnPacket packet) {
-				var inventory = player.getInventory();
+			if (raw instanceof ServerboundUseItemOnPacket) {
+				ServerboundUseItemOnPacket packet = (ServerboundUseItemOnPacket) raw;
+				PlayerInventory inventory = player.getInventory();
 				ItemStack item;
 				if (packet.getHand() == InteractionHand.MAIN_HAND) {
 					item = new SpigotItemStack(inventory.getItemInMainHand());
 				} else {
 					item = new SpigotItemStack(inventory.getItemInOffHand());
 				}
-				var rawBlockPos = packet.getHitResult().getBlockPos();
-				var blockPos = new BlockPosition(rawBlockPos.getX(), rawBlockPos.getY(), rawBlockPos.getZ());
-				var face = packet.getHitResult().getDirection().ordinal();
-				var rawPoint = packet.getHitResult().getLocation();
-				var point = new Vector(rawPoint.x, rawPoint.y, rawPoint.z);
+				BlockPos rawBlockPos = packet.getHitResult().getBlockPos();
+				BlockPosition blockPos = new BlockPosition(rawBlockPos.getX(), rawBlockPos.getY(), rawBlockPos.getZ());
+				int face = packet.getHitResult().getDirection().ordinal();
+				Vec3 rawPoint = packet.getHitResult().getLocation();
+				Vector point = new Vector(rawPoint.x, rawPoint.y, rawPoint.z);
 				return new NPacketPlayInBlockPlace(blockPos, item, face, point);
 			}
 			return new NPacketPlayInUnset();
 		});
+		/*packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {
+			ServerboundEntityTagQuery packet = (ServerboundEntityTagQuery) f;
+			return new NPacketPlayInUseEntity(packet.getEntityId(), new Vector(0, 0, 0), EnumEntityUseAction.INTERACT);
+		});*/
 		
 		packetsPlayIn.put("PacketPlayInKeepAlive", (player, raw) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) raw).getId()));
 		
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, raw) -> {
-			var packet = (ClientboundBlockDestructionPacket) raw;
-			var pos = packet.getPos();
+			ClientboundBlockDestructionPacket packet = (ClientboundBlockDestructionPacket) raw;
+			BlockPos pos = packet.getPos();
 			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), packet.getId(), packet.getProgress());
 		});
 		
@@ -96,7 +103,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 	}
 	
 	@Override
-	protected String isOnGroundFieldName() {
+	protected String getOnGroundFieldName() {
 		throw new UnsupportedOperationException("Should not be called");
 	}
 	

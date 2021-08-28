@@ -10,6 +10,7 @@ import java.util.function.BiFunction;
 
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
@@ -24,6 +25,8 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
@@ -48,7 +51,7 @@ public abstract class SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInPositionLook", (player, f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
-				return new NPacketPlayInPositionLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, isOnGroundFieldName()));
+				return new NPacketPlayInPositionLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, getOnGroundFieldName()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -57,7 +60,7 @@ public abstract class SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInPosition", (player, f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
-				return new NPacketPlayInPosition(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, isOnGroundFieldName()));
+				return new NPacketPlayInPosition(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, getOnGroundFieldName()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -66,7 +69,7 @@ public abstract class SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInLook", (player, f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
-				return new NPacketPlayInLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, isOnGroundFieldName()));
+				return new NPacketPlayInLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, getOnGroundFieldName()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -74,9 +77,14 @@ public abstract class SpigotVersionAdapter {
 			//return new NPacketPlayInLook(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"));
 		});
 		packetsPlayIn.put("PacketPlayInFlying", (player, f) -> {
-			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"), get(f, isOnGroundFieldName()), get(f, "hasPos"), get(f, "hasLook"));
+			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"), get(f, getOnGroundFieldName()), get(f, "hasPos"), get(f, "hasLook"));
 		});
 		packetsPlayIn.put("PacketPlayInKeepAlive", (player, f) -> new NPacketPlayInKeepAlive(new Long(getSafe(f, "a").toString())));
+		packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {
+			Object vec3D = get(f, "c");
+			Vector vec = new Vector(get(vec3D, "x"), get(vec3D, "y"), get(vec3D, "z"));
+			return new NPacketPlayInUseEntity(get(f, "a"), vec, EnumEntityUseAction.valueOf(((Enum<?>) get(f, "action")).name()));
+		});
 		
 
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, packet) -> {
@@ -88,7 +96,7 @@ public abstract class SpigotVersionAdapter {
 		SpigotNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
 	}
 	
-	protected abstract String isOnGroundFieldName();
+	protected abstract String getOnGroundFieldName();
 	
 	public abstract double getAverageTps();
 	

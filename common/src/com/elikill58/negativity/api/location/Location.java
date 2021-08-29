@@ -40,7 +40,7 @@ public final class Location implements Cloneable {
 	}
 
 	public int getBlockX() {
-		return (int) x;
+		return Maths.roundLoc(x);
 	}
 
 	public void setX(double x) {
@@ -52,7 +52,7 @@ public final class Location implements Cloneable {
 	}
 
 	public int getBlockY() {
-		return (int) y;
+		return Maths.roundLoc(y);
 	}
 
 	public void setY(double y) {
@@ -64,7 +64,7 @@ public final class Location implements Cloneable {
 	}
 
 	public int getBlockZ() {
-		return (int) z;
+		return Maths.roundLoc(z);
 	}
 
 	public void setZ(double z) {

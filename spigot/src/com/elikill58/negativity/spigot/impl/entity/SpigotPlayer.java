@@ -68,7 +68,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	
 	@Override
 	public boolean hasLineOfSight(Entity entity) {
-		return SpigotNegativity.isCraftBukkit || this.entity.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefault());
+		return SpigotNegativity.isCraftBukkit || ((org.bukkit.entity.Entity) entity.getDefault()).hasMetadata("NPC") || this.entity.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefault());
 	}
 
 	@Override
@@ -103,7 +103,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public Location getLocation() {
-		return SpigotLocation.toCommon(entity.getLocation());
+		return SpigotLocation.toCommon(entity.getLocation().clone());
 	}
 
 	@Override

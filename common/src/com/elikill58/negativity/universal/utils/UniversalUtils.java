@@ -35,6 +35,7 @@ import java.util.concurrent.CompletableFuture;
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLException;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
@@ -172,6 +173,7 @@ public class UniversalUtils {
 			connection.setUseCaches(true);
 			connection.setRequestProperty("User-Agent", "Negativity " + ada.getName() + " - " + ada.getVersion());
 			connection.setDoOutput(true);
+			connection.setConnectTimeout(1000);
 			if(!post.equalsIgnoreCase("")) {
 				connection.setRequestMethod("POST");
 				OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
@@ -197,6 +199,8 @@ public class UniversalUtils {
             	Adapter.getAdapter().getLogger().info("As chinese people, you cannot access to the website " + urlName + ".");
         	} else
             	Adapter.getAdapter().getLogger().warn("Cannot connect to " + urlName + " (Reason: " + e.getMessage() + ").");
+        } catch (SSLException e) {
+        	Adapter.getAdapter().getLogger().warn("Failed to connect with the internet connection to check for update or send stats.");
         } catch (IOException e) {
         	e.printStackTrace();
 		}

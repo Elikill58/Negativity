@@ -62,7 +62,7 @@ public class Scaffold extends Cheat implements Listeners {
 		Block place = e.getBlock();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_14) && place.getType().equals(Materials.SCAFFOLD))
 			return;
-		BlockRayResult result = new BlockRayBuilder(p.getLocation().clone().add(0, 1.5, 0), p).ignoreAir(true)
+		BlockRayResult result = new BlockRayBuilder(p.getLocation().clone(), p).ignoreAir(true)
 				.neededPositions(place.getLocation().toVector()).build().compile();
 		Block searched = result.getBlock() == null ? place : result.getBlock();
 		double distance = place.getLocation().distance(searched.getLocation());

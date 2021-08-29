@@ -86,6 +86,8 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 			}
 			return new NPacketPlayInUnset();
 		});
+		packetsPlayIn.remove("PacketPlayInUseEntity"); // temporary remove unsupported packet
+		// TODO add support of packet PacketPlayInUseEntity
 		/*packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {
 			ServerboundEntityTagQuery packet = (ServerboundEntityTagQuery) f;
 			return new NPacketPlayInUseEntity(packet.getEntityId(), new Vector(0, 0, 0), EnumEntityUseAction.INTERACT);

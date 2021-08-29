@@ -34,7 +34,8 @@ public class GroundSpoof extends Cheat implements Listeners {
             return;
         }
         Block downBlock = e.getTo().getBlock().getRelative(BlockFace.DOWN);
-        if (isNotAir(downBlock.getRelative(BlockFace.NORTH))
+        if (isNotAir(downBlock)
+        		|| isNotAir(downBlock.getRelative(BlockFace.NORTH))
                 || isNotAir(downBlock.getRelative(BlockFace.SOUTH))
                 || isNotAir(downBlock.getRelative(BlockFace.EAST))
                 || isNotAir(downBlock.getRelative(BlockFace.WEST))) {

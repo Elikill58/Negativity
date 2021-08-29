@@ -181,10 +181,10 @@ public class Fly extends Cheat implements Listeners {
 					np.booleans.remove(FLY, "not-moving-y");
 			}
 			if(checkActive("not-moving-y")) {
-				if(p.isOnGround() && y == 0 && locUnder.getBlock().getType().equals(Materials.AIR) && distance > 0.1 && !LocationUtils.hasOtherThan(locUnder, Materials.AIR)) {
+				if(p.isOnGround() && y == 0 && locUnder.getBlock().getType().equals(Materials.AIR) && distance > p.getWalkSpeed() && !LocationUtils.hasOtherThan(locUnder, Materials.AIR)) {
 					int time0 = np.ints.get(FLY, "y-0-times", 0);
 					if(time0 > 2) {
-						mayCancel = Negativity.alertMod(time0 > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, this, parseInPorcent(time0 * 30), "not-moving-y", "Times not moving Y and on ground: " + time0 + ", distance: " + distance, null, time0 < 3 ? 1 : time0 - 2);
+						mayCancel = Negativity.alertMod(time0 > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, this, parseInPorcent(time0 * 30), "not-moving-y", "Times not moving Y and on ground: " + time0 + ", distance: " + distance + ", ws: " + p.getWalkSpeed(), null, time0 < 3 ? 1 : time0 - 2);
 					}
 					np.ints.set(FLY, "y-0-times", time0 + 1);
 				} else

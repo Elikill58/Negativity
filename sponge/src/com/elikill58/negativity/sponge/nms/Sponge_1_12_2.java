@@ -13,7 +13,12 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionL
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 
 import net.minecraft.network.play.client.CPacketChatMessage;
@@ -22,7 +27,12 @@ import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketBlockBreakAnim;
+import net.minecraft.network.play.server.SPacketEntity;
+import net.minecraft.network.play.server.SPacketEntityTeleport;
+import net.minecraft.network.play.server.SPacketEntityVelocity;
+import net.minecraft.network.play.server.SPacketExplosion;
 import net.minecraft.network.play.server.SPacketKeepAlive;
+import net.minecraft.network.play.server.SPacketPlayerPosLook;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Vec3d;
@@ -71,6 +81,26 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), packet.getBreakerId(), packet.getProgress());
 		});
 		packetsPlayOut.put("SPacketKeepAlive", (f) -> new NPacketPlayOutKeepAlive(((SPacketKeepAlive) f).id));
+		packetsPlayOut.put("SPacketEntityTeleport", (f) -> {
+			SPacketEntityTeleport packet = (SPacketEntityTeleport) f;
+			return new NPacketPlayOutEntityTeleport(packet.getEntityId(), packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch(), packet.getOnGround());
+		});
+		packetsPlayOut.put("SPacketEntityVelocity", (f) -> {
+			SPacketEntityVelocity packet = (SPacketEntityVelocity) f;
+			return new NPacketPlayOutEntityVelocity(packet.getEntityID(), packet.getMotionX(), packet.getMotionY(), packet.getMotionZ());
+		});
+		packetsPlayOut.put("SPacketPlayerPosLook", (f) -> {
+			SPacketPlayerPosLook packet = (SPacketPlayerPosLook) f;
+			return new NPacketPlayOutPosition(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch());
+		});
+		packetsPlayOut.put("SPacketExplosion", (f) -> {
+			SPacketExplosion packet = (SPacketExplosion) f;
+			return new NPacketPlayOutExplosion(packet.getX(), packet.getY(), packet.getZ(), packet.getMotionX(), packet.getMotionY(), packet.getMotionZ());
+		});
+		packetsPlayOut.put("SPacketEntity", (f) -> {
+			SPacketEntity packet = (SPacketEntity) f;
+			return new NPacketPlayOutEntity(0, packet.getX(), packet.getY(), packet.getZ()); // TODO fix entity ID
+		});
 		
 		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
 	}

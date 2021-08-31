@@ -9,8 +9,7 @@ import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.NPacketUnknown;
 import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
 import com.elikill58.negativity.api.packets.packet.playin.*;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.*;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 import com.elikill58.negativity.universal.Adapter;
 
@@ -233,7 +232,7 @@ public interface PacketType {
 		COMMANDS("Commands", NPacketUnknown::new),
 		CUSTOM_PAYLOAD("CustomPayload", NPacketUnknown::new),
 		CUSTOM_SOUND_EFFECT("CustomSoundEffect", NPacketUnknown::new),
-		ENTITY("Entity", NPacketUnknown::new),
+		ENTITY("Entity", NPacketPlayOutEntity::new),
 		ENTITY_DESTROY("EntityDestroy", NPacketUnknown::new),
 		ENTITY_EFFECT("EntityEffect", NPacketUnknown::new),
 		ENTITY_EQUIPMENT("EntityEquipment", NPacketUnknown::new),
@@ -242,10 +241,10 @@ public interface PacketType {
 		ENTITY_METADATA("EntityMetadata", NPacketUnknown::new),
 		ENTITY_STATUS("EntityStatus", NPacketUnknown::new),
 		ENTITY_SOUND("EntitySound", NPacketUnknown::new),
-		ENTITY_TELEPORT("EntityTeleport", NPacketUnknown::new),
-		ENTITY_VELOCITY("EntityVelocity", NPacketUnknown::new),
+		ENTITY_TELEPORT("EntityTeleport", NPacketPlayOutEntityTeleport::new),
+		ENTITY_VELOCITY("EntityVelocity", NPacketPlayOutEntityVelocity::new),
 		EXPERIENCE("Experience", NPacketUnknown::new),
-		EXPLOSION("Explosion", NPacketUnknown::new),
+		EXPLOSION("Explosion", NPacketPlayOutExplosion::new),
 		GAME_STATE_CHANGE("GameStateChange", NPacketUnknown::new),
 		HELD_ITEM_SLOT("HeldItemSlot", NPacketUnknown::new),
 		KEEP_ALIVE("KeepAlive", NPacketPlayOutKeepAlive::new),
@@ -268,7 +267,7 @@ public interface PacketType {
 		OPEN_WINDOW_HORSE("OpenWindowHorse", NPacketUnknown::new),
 		PLAYER_INFO("PlayerInfo", NPacketUnknown::new),
 		PLAYER_LIST_HEADER_FOOTER("PlayerListHeaderFooter", NPacketUnknown::new),
-		POSITION("Position", NPacketUnknown::new),
+		POSITION("Position", NPacketPlayOutPosition::new),
 		RECIPES("Recipes", NPacketUnknown::new),
 		RECIPE_UPDATE("RecipeUpdate", NPacketUnknown::new),
 		REL_ENTITY_MOVE("RelEntityMove", NPacketUnknown::new),

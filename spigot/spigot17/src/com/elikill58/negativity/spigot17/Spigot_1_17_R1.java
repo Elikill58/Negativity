@@ -21,7 +21,12 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 
@@ -29,7 +34,11 @@ import io.netty.channel.Channel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
+import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.network.protocol.game.ClientboundKeepAlivePacket;
+import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
+import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
 import net.minecraft.network.protocol.game.ServerboundKeepAlivePacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
@@ -102,6 +111,25 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 		});
 		
 		packetsPlayOut.put("PacketPlayOutKeepAlive", (player, raw) -> new NPacketPlayOutKeepAlive(((ClientboundKeepAlivePacket) raw).getId()));
+		packetsPlayOut.put("PacketPlayOutEntityTeleport", (player, raw) -> {
+			ClientboundTeleportEntityPacket packet = (ClientboundTeleportEntityPacket) raw;
+			return new NPacketPlayOutEntityTeleport(packet.getId(), packet.getX(), packet.getY(), packet.getZ(), packet.getxRot(), packet.getyRot(), packet.isOnGround());
+		});
+		packetsPlayOut.put("PacketPlayOutEntityVelocity", (p, pa) -> {
+			ClientboundSetEntityMotionPacket packet = (ClientboundSetEntityMotionPacket) pa;
+			return new NPacketPlayOutEntityVelocity(packet.getId(), packet.getXa(), packet.getYa(), packet.getZa());
+		});
+		packetsPlayOut.put("PacketPlayOutPosition", (p, raw) -> {
+			ClientboundPlayerPositionPacket packet = (ClientboundPlayerPositionPacket) raw;
+			return new NPacketPlayOutPosition(packet.getX(), packet.getY(), packet.getZ(), packet.getXRot(), packet.getYRot());
+		});
+		packetsPlayOut.put("PacketPlayOutExplosion", (p, raw) -> {
+			ClientboundExplodePacket packet = (ClientboundExplodePacket) raw;
+			return new NPacketPlayOutExplosion(packet.getX(), packet.getY(), packet.getZ(), packet.getKnockbackX(), packet.getKnockbackY(), packet.getKnockbackZ());
+		});
+		packetsPlayOut.put("PacketPlayOutEntity", (player, packet) -> {
+			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")), Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
+		});
 	}
 	
 	@Override

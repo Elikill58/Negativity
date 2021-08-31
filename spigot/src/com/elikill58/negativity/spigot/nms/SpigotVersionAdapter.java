@@ -28,7 +28,12 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -92,6 +97,16 @@ public abstract class SpigotVersionAdapter {
 			return new NPacketPlayOutBlockBreakAnimation(get(pos, "x"), get(pos, "y"), get(pos, "z"), get(packet, "a"), get(packet, "c"));
 		});
 		packetsPlayOut.put("PacketPlayOutKeepAlive", (player, f) -> new NPacketPlayOutKeepAlive(new Long(getSafe(f, "a").toString())));
+		packetsPlayOut.put("PacketPlayOutEntityTeleport", (player, packet) -> {
+			return new NPacketPlayOutEntityTeleport(get(packet, "a"), Double.parseDouble(getStr(packet, "b")), Double.parseDouble(getStr(packet, "c")),
+					Double.parseDouble(getStr(packet, "d")), Float.parseFloat(getStr(packet, "e")), Float.parseFloat(getStr(packet, "f")), get(packet, "g"));
+		});
+		packetsPlayOut.put("PacketPlayOutEntityVelocity", (p, pa) -> new NPacketPlayOutEntityVelocity(get(pa, "a"), get(pa, "b"), get(pa, "c"), get(pa, "d")));
+		packetsPlayOut.put("PacketPlayOutPosition", (p, pa) -> new NPacketPlayOutPosition(get(pa, "a"), get(pa, "b"), get(pa, "c"), get(pa, "d"), get(pa, "e")));
+		packetsPlayOut.put("PacketPlayOutExplosion", (p, pa) -> new NPacketPlayOutExplosion(get(pa, "a"), get(pa, "b"), get(pa, "c"), get(pa, "f"), get(pa, "g"), get(pa, "h")));
+		packetsPlayOut.put("PacketPlayOutEntity", (player, packet) -> {
+			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")), Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
+		});
 		
 		SpigotNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
 	}
@@ -283,6 +298,17 @@ public abstract class SpigotVersionAdapter {
 			Field f = obj.getClass().getDeclaredField(name);
 			f.setAccessible(true);
 			return f.get(obj);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	protected String getStr(Object obj, String name) {
+		try {
+			Field f = obj.getClass().getDeclaredField(name);
+			f.setAccessible(true);
+			return f.get(obj).toString();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

@@ -74,7 +74,7 @@ public class ModInventory extends AbstractInventory<ModHolder> {
 			p.setVanished(np.isInvisible);
 			Messages.sendMessage(p, np.isInvisible ? "inventory.mod.now_invisible" : "inventory.mod.no_longer_invisible");
 		} else if (m.equals(Materials.TNT)) {
-			InventoryManager.open(NegativityInventory.CHEAT_MANAGER, p, false);
+			InventoryManager.open(NegativityInventory.ADMIN_CHEAT_MANAGER, p, false);
 			/*p.closeInventory();
 			CheatManagerInventory.openCheatManagerMenu(p);*/
 		} else if (m.equals(Materials.FEATHER)) {

@@ -76,6 +76,7 @@ public class AnalyzePacketTimer implements Runnable {
 			
 			np.MOVE_TIME = 0;
 			np.clearPackets();
+			np.saveProof(); // TODO don't write all files at same time
 		}
 	}
 }

@@ -12,6 +12,7 @@ public class Materials {
     public static final Material BEACON = ItemRegistrar.getInstance().get("beacon");
     public static final Material BLAZE_POWDER = ItemRegistrar.getInstance().get("blaze_powder");
     public static final Material BLAZE_ROD = ItemRegistrar.getInstance().get("blaze_rod");
+    public static final Material BOOK = ItemRegistrar.getInstance().get("book");
     public static final Material BOOK_AND_QUILL = ItemRegistrar.getInstance().get("writable_book", "book_and_quill");
     public static final Material BONE = ItemRegistrar.getInstance().get("bone");
     public static final Material BOW = ItemRegistrar.getInstance().get("bow");
@@ -75,6 +76,7 @@ public class Materials {
     public static final Material SCAFFOLD = ItemRegistrar.getInstance().get("scaffold", "ladder");
     public static final Material SOUL_SAND = ItemRegistrar.getInstance().get("soul_sand");
     public static final Material SKELETON_SKULL = ItemRegistrar.getInstance().get("skeleton_skull", "skull_item", "skull");
+    public static final Material SLIME_BALL = ItemRegistrar.getInstance().get("slime_ball", "emerald"); // emerald for 1.7 support
     public static final Material SLIME_BLOCK = ItemRegistrar.getInstance().get("slime_block", "emerald_block"); // emerald for 1.7 support
     public static final Material SPIDER_EYE = ItemRegistrar.getInstance().get("spider_eye");
     public static final Material SPONGE = ItemRegistrar.getInstance().get("sponge");

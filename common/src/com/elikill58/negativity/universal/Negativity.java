@@ -4,10 +4,8 @@ import static com.elikill58.negativity.universal.verif.VerificationManager.hasVe
 
 import java.io.IOException;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Locale;
 import java.util.ServiceLoader;
 import java.util.Set;
@@ -28,6 +26,10 @@ import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Stats.StatsType;
+import com.elikill58.negativity.universal.alerts.AlertShower;
+import com.elikill58.negativity.universal.alerts.hook.AmountAlertShower;
+import com.elikill58.negativity.universal.alerts.hook.InstantAlertShower;
+import com.elikill58.negativity.universal.alerts.hook.TimeAlertShower;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
@@ -53,7 +55,7 @@ public class Negativity {
 	public static boolean log_console = false;
 	public static boolean hasBypass = false;
 	public static boolean tpsDrop = false;
-	public static int timeBetweenAlert = -1;
+	private static AlertShower alertShower;
 
 	/**
 	 * Try to alert moderator.
@@ -164,12 +166,13 @@ public class Negativity {
 			return false;
 		}
 		manageAlertCommand(np, type, p, c, reliability);
-		if(timeBetweenAlert != -1) {
+		alertShower.alert(np, alert);
+		/*if(timeBetweenAlert != -1) {
 			List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c.getKey()) ? np.ALERT_NOT_SHOWED.get(c.getKey()) : new ArrayList<>();
 			tempList.add(alert);
 			np.ALERT_NOT_SHOWED.put(c.getKey(), tempList);
 		} else
-			sendAlertMessage(np, alert);
+			sendAlertMessage(np, alert);*/
 		c.performSetBack(p);
 		return true;
 	}
@@ -344,6 +347,7 @@ public class Negativity {
 			ada.registerNewIncomingChannel(ada.getServerVersion().isNewerOrEquals(Version.V1_13) ? "minecraft:brand" : "MC|Brand", (p, msg) -> {
 				NegativityPlayer.getNegativityPlayer(p).setClientName(new String(msg).substring(1));
 			});
+			initAlertShower(ada);
 		}
 		UniversalUtils.init();
 		
@@ -351,7 +355,6 @@ public class Negativity {
 		log = config.getBoolean("log_alerts", true);
 		log_console = config.getBoolean("log_alerts_in_console", true);
 		hasBypass = config.getBoolean("Permissions.bypass.active", false);
-		timeBetweenAlert = config.getInt("time_between_alert", 1000);
 		
 		if (!integratedPlugins.isEmpty()) {
 			ada.getLogger().info("Loaded support for " + String.join(", ", integratedPlugins) + ".");
@@ -400,5 +403,49 @@ public class Negativity {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static AlertShower getAlertShower() {
+		return alertShower;
+	}
+	
+	public static AlertShower getAlertShowerOfTypeName(String type) {
+		if(type.equalsIgnoreCase("instant")) {
+			return new InstantAlertShower();
+		} else if(type.equalsIgnoreCase("amount")) {
+			return new AmountAlertShower();
+		} else { // default one
+			return new TimeAlertShower();
+		}
+	}
+	
+	private static void initAlertShower(Adapter ada) {
+		Configuration config = ada.getConfig().getSection("alert.show");
+
+		String type = config.getString("type", "time");
+		alertShower = getAlertShowerOfTypeName(type);
+		alertShower.config(config);
+	}
+	
+	public static void refreshAlertShower(Adapter ada, AlertShower newShower) {
+		if(alertShower != null)
+			alertShower.stop();
+		Configuration config = ada.getConfig().getSection("alert.show");
+
+		alertShower = newShower;
+		alertShower.config(config);
+	}
+	
+	public static void setAlertShower(String type) {
+		setAlertShower(getAlertShowerOfTypeName(type));
+	}
+	
+	public static void setAlertShower(AlertShower shower) {
+		Adapter ada = Adapter.getAdapter();
+		Configuration config = ada.getConfig();
+		config.set("alert.show.type", shower.getName());
+		config.set("alert.show.value", shower.getValue());
+		config.save();
+		refreshAlertShower(ada, shower);
 	}
 }

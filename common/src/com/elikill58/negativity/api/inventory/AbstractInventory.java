@@ -81,18 +81,19 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 	public enum NegativityInventory {
 		ACTIVED_CHEAT,
 		ADMIN,
+		ADMIN_ALERT,
+		ADMIN_LANG,
+		ADMIN_CHEAT_MANAGER,
 		ALERT,
 		ALERT_OFFLINE,
 		BAN,
 		CHECK_MENU,
 		CHECK_MENU_OFFLINE,
-		CHEAT_MANAGER,
 		FREEZE,
 		KICK,
 		MOD,
 		ONE_CHEAT,
 		FORGE_MODS,
-		LANG,
 		REPORT,
 		SEE_REPORT
 	}

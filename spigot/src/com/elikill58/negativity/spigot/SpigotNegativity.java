@@ -24,7 +24,6 @@ import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.common.timers.ClickManagerTimer;
-import com.elikill58.negativity.common.timers.PendingAlertsTimer;
 import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.spigot.impl.entity.SpigotFakePlayer;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
@@ -139,10 +138,6 @@ public class SpigotNegativity extends JavaPlugin {
 		invTimer = getServer().getScheduler().runTaskTimer(this, new ActualizeInvTimer(), 5, 5);
 		packetTimer = getServer().getScheduler().runTaskTimer(this, new AnalyzePacketTimer(), 20, 20);
 		runSpawnFakePlayer = getServer().getScheduler().runTaskTimer(this, new SpawnFakePlayerTimer(), 20, 20 * 60 * 10);
-		if(Negativity.timeBetweenAlert != -1) {
-			int timeTick = Negativity.timeBetweenAlert / 50;
-			pendingAlertsTimer = getServer().getScheduler().runTaskTimer(this, new PendingAlertsTimer(), 20, timeTick);
-		}
 		trySendProxyPing();
 		
 		getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {

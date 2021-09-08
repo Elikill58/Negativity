@@ -91,7 +91,7 @@ public abstract class Inventory implements NegativityObject {
 		return Adapter.getAdapter().createInventory(inventoryName, size, holder);
 	}
 	
-	public static final String NAME_CHECK_MENU = "Check", ADMIN_MENU = "Admin",
+	public static final String NAME_CHECK_MENU = "Check", ADMIN_MENU = "Admin", ADMIN_ALERT = Messages.getMessage("inventory.alerts.shower.manage"),
 			NAME_ACTIVED_CHEAT_MENU = Messages.getMessage("inventory.detection.name_inv"), NAME_FREEZE_MENU = "Freeze",
 			NAME_MOD_MENU = "Mod", NAME_ALERT_MENU = "Alerts", CHEAT_MANAGER = "Cheat Manager", NAME_FORGE_MOD_MENU = "Mods";
 	public static final ItemStack EMPTY;

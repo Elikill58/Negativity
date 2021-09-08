@@ -18,7 +18,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class LangInventory extends AbstractInventory<LangHolder> {
 
 	public LangInventory() {
-		super(NegativityInventory.LANG, LangHolder.class);
+		super(NegativityInventory.ADMIN_LANG, LangHolder.class);
 	}
 	
 	@Override

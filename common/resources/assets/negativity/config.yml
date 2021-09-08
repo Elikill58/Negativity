@@ -34,11 +34,6 @@ commands:
 # -1 to disable
 time_between_report: 1000
 
-# The time between 2 alerts
-# in milliseconds
-# -1 to disable
-time_between_alert: 1000
-
 Database:
   isActive: false
   # To get the information. We use the player uuid to get the information.
@@ -267,6 +262,15 @@ kicks:
     permission: "negativity.report.insult"
 
 alert:
+  show:
+    # Available types :
+    # instant: instantly send alerts
+    # time: the value (in milliseconds) corresponds to the time between 2 alerts. Use '-1' to send messages instantly
+    # amount: the value is the amount of required alerts of one cheat to send the message.
+    type: "time"
+    # The value according to the type.
+    value: 1000
+  
   # To run command when someone get alert
   command:
     active: false

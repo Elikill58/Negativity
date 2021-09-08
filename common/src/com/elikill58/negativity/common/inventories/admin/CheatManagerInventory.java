@@ -16,7 +16,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class CheatManagerInventory extends AbstractInventory<CheatManagerHolder> {
 
 	public CheatManagerInventory() {
-		super(NegativityInventory.CHEAT_MANAGER, CheatManagerHolder.class);
+		super(NegativityInventory.ADMIN_CHEAT_MANAGER, CheatManagerHolder.class);
 	}
 	
 	@Override

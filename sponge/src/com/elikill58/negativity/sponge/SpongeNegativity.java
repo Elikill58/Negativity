@@ -130,9 +130,6 @@ public class SpongeNegativity {
 		schedule(new ActualizeInvTimer(), 5, null);
 		schedule(new AnalyzePacketTimer(), 20, "negativity-packets");
 		schedule(new SpawnFakePlayerTimer(), 20 * 60 * 10, null);
-		/*if (Negativity.timeBetweenAlert != -1) {
-			schedule(new PendingAlertsTimer(), Negativity.timeBetweenAlert / 50, "negativity-pending-alerts");
-		}*/
 		
 		NegativityAccountStorage.setDefaultStorage("file");
 		

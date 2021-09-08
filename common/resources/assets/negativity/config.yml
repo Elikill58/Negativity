@@ -263,10 +263,10 @@ kicks:
 
 alert:
   show:
-    # Available type :
-    # instant: instantly send alert
-    # time: the value (in milliseconds) correspond to the time between 2 alerts. Use '-1' to send message instantly
-    # amount: the value is the amount of required alert of one cheat to alert
+    # Available types :
+    # instant: instantly send alerts
+    # time: the value (in milliseconds) corresponds to the time between 2 alerts. Use '-1' to send messages instantly
+    # amount: the value is the amount of required alerts of one cheat to send the message.
     type: "time"
     # The value according to the type.
     value: 1000

@@ -167,12 +167,6 @@ public class Negativity {
 		}
 		manageAlertCommand(np, type, p, c, reliability);
 		alertSender.alert(np, alert);
-		/*if(timeBetweenAlert != -1) {
-			List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c.getKey()) ? np.ALERT_NOT_SHOWED.get(c.getKey()) : new ArrayList<>();
-			tempList.add(alert);
-			np.ALERT_NOT_SHOWED.put(c.getKey(), tempList);
-		} else
-			sendAlertMessage(np, alert);*/
 		c.performSetBack(p);
 		return true;
 	}

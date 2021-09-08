@@ -26,10 +26,10 @@ import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.Stats.StatsType;
-import com.elikill58.negativity.universal.alerts.AlertShower;
-import com.elikill58.negativity.universal.alerts.hook.AmountAlertShower;
-import com.elikill58.negativity.universal.alerts.hook.InstantAlertShower;
-import com.elikill58.negativity.universal.alerts.hook.TimeAlertShower;
+import com.elikill58.negativity.universal.alerts.AlertSender;
+import com.elikill58.negativity.universal.alerts.hook.AmountAlertSender;
+import com.elikill58.negativity.universal.alerts.hook.InstantAlertSender;
+import com.elikill58.negativity.universal.alerts.hook.TimeAlertSender;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
@@ -55,7 +55,7 @@ public class Negativity {
 	public static boolean log_console = false;
 	public static boolean hasBypass = false;
 	public static boolean tpsDrop = false;
-	private static AlertShower alertShower;
+	private static AlertSender alertSender;
 
 	/**
 	 * Try to alert moderator.
@@ -166,7 +166,7 @@ public class Negativity {
 			return false;
 		}
 		manageAlertCommand(np, type, p, c, reliability);
-		alertShower.alert(np, alert);
+		alertSender.alert(np, alert);
 		/*if(timeBetweenAlert != -1) {
 			List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.containsKey(c.getKey()) ? np.ALERT_NOT_SHOWED.get(c.getKey()) : new ArrayList<>();
 			tempList.add(alert);
@@ -405,17 +405,17 @@ public class Negativity {
 		}
 	}
 	
-	public static AlertShower getAlertShower() {
-		return alertShower;
+	public static AlertSender getAlertShower() {
+		return alertSender;
 	}
 	
-	public static AlertShower getAlertShowerOfTypeName(String type) {
+	public static AlertSender getAlertShowerOfTypeName(String type) {
 		if(type.equalsIgnoreCase("instant")) {
-			return new InstantAlertShower();
+			return new InstantAlertSender();
 		} else if(type.equalsIgnoreCase("amount")) {
-			return new AmountAlertShower();
+			return new AmountAlertSender();
 		} else { // default one
-			return new TimeAlertShower();
+			return new TimeAlertSender();
 		}
 	}
 	
@@ -423,24 +423,24 @@ public class Negativity {
 		Configuration config = ada.getConfig().getSection("alert.show");
 
 		String type = config.getString("type", "time");
-		alertShower = getAlertShowerOfTypeName(type);
-		alertShower.config(config);
+		alertSender = getAlertShowerOfTypeName(type);
+		alertSender.config(config);
 	}
 	
-	public static void refreshAlertShower(Adapter ada, AlertShower newShower) {
-		if(alertShower != null)
-			alertShower.stop();
+	public static void refreshAlertShower(Adapter ada, AlertSender newShower) {
+		if(alertSender != null)
+			alertSender.stop();
 		Configuration config = ada.getConfig().getSection("alert.show");
 
-		alertShower = newShower;
-		alertShower.config(config);
+		alertSender = newShower;
+		alertSender.config(config);
 	}
 	
 	public static void setAlertShower(String type) {
 		setAlertShower(getAlertShowerOfTypeName(type));
 	}
 	
-	public static void setAlertShower(AlertShower shower) {
+	public static void setAlertShower(AlertSender shower) {
 		Adapter ada = Adapter.getAdapter();
 		Configuration config = ada.getConfig();
 		config.set("alert.show.type", shower.getName());

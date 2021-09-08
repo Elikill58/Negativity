@@ -15,20 +15,20 @@ import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.admin.AdminAlertHolder;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.alerts.AlertShower;
-import com.elikill58.negativity.universal.alerts.hook.AmountAlertShower;
-import com.elikill58.negativity.universal.alerts.hook.InstantAlertShower;
-import com.elikill58.negativity.universal.alerts.hook.TimeAlertShower;
+import com.elikill58.negativity.universal.alerts.AlertSender;
+import com.elikill58.negativity.universal.alerts.hook.AmountAlertSender;
+import com.elikill58.negativity.universal.alerts.hook.InstantAlertSender;
+import com.elikill58.negativity.universal.alerts.hook.TimeAlertSender;
 
 public class AdminAlertInventory extends AbstractInventory<AdminAlertHolder> {
 
-	private HashMap<Integer, AlertShower> slotPerAlertShower = new HashMap<>();
+	private HashMap<Integer, AlertSender> slotPerAlertShower = new HashMap<>();
 	
 	public AdminAlertInventory() {
 		super(NegativityInventory.ADMIN_ALERT, AdminAlertHolder.class);
-		slotPerAlertShower.put(10, new InstantAlertShower());
-		slotPerAlertShower.put(11, new TimeAlertShower());
-		slotPerAlertShower.put(12, new AmountAlertShower());
+		slotPerAlertShower.put(10, new InstantAlertSender());
+		slotPerAlertShower.put(11, new TimeAlertSender());
+		slotPerAlertShower.put(12, new AmountAlertSender());
 	}
 	
 	@Override
@@ -51,7 +51,7 @@ public class AdminAlertInventory extends AbstractInventory<AdminAlertHolder> {
 		p.openInventory(inv);
 	}
 
-	private void setShowerItem(Inventory inv, Player p, AlertShower shower) {
+	private void setShowerItem(Inventory inv, Player p, AlertSender shower) {
 		inv.set(17, ItemBuilder.Builder(Materials.EMPTY_MAP).displayName(Messages.getMessage(p, "inventory.alerts.shower." + shower.getName()))
 					.lore(ChatColor.GRAY + "Value: " + shower.getShowedValue()).build());
 	}
@@ -67,8 +67,8 @@ public class AdminAlertInventory extends AbstractInventory<AdminAlertHolder> {
 		} else if(m.equals(Materials.SLIME_BALL) || m.equals(Materials.REDSTONE)) {
 			int slot = e.getSlot();
 			int more = slot > 9 ? -1 : 1; // for slot in last line of inv = remove one
-			AlertShower shower = Negativity.getAlertShower();
-			AlertShower otherShower = slotPerAlertShower.get(slot + (9 * more)); // retrieve good alert shower
+			AlertSender shower = Negativity.getAlertShower();
+			AlertSender otherShower = slotPerAlertShower.get(slot + (9 * more)); // retrieve good alert shower
 			if(!shower.getName().equalsIgnoreCase(otherShower.getName())) { // not same alert shower, so we have to change
 				shower = otherShower;
 			}

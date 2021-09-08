@@ -9,9 +9,9 @@ import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ScheduledTask;
-import com.elikill58.negativity.universal.alerts.AlertShower;
+import com.elikill58.negativity.universal.alerts.AlertSender;
 
-public class TimeAlertShower implements AlertShower {
+public class TimeAlertSender implements AlertSender {
 
 	private ScheduledTask task;
 	private int time = 1000;

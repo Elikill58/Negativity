@@ -8,10 +8,10 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.negativity.PlayerCheatAlertEvent;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.alerts.AlertShower;
+import com.elikill58.negativity.universal.alerts.AlertSender;
 import com.elikill58.negativity.universal.report.ReportType;
 
-public class AmountAlertShower implements AlertShower {
+public class AmountAlertSender implements AlertSender {
 
 	private int amount = 10;
 	

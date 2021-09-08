@@ -4,7 +4,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.negativity.PlayerCheatAlertEvent;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 
-public interface AlertShower {
+public interface AlertSender {
 
 	public String getName();
 	

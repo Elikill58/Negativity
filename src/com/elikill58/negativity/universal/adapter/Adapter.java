@@ -155,6 +155,7 @@ public abstract class Adapter {
 		return Cheat.CHEATS;
 	}
 	public abstract void reload();
+	public abstract String getPluginVersion();
 	public abstract String getVersion();
 	public abstract void reloadConfig();
 

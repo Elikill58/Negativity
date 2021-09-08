@@ -104,10 +104,14 @@ public class BungeeAdapter extends Adapter {
 		UniversalUtils.init();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public String getVersion() {
-		return ProxyServer.getInstance().getGameVersion();
+		return ProxyServer.getInstance().getVersion();
+	}
+	
+	@Override
+	public String getPluginVersion() {
+		return pl.getDescription().getVersion();
 	}
 
 	@Override

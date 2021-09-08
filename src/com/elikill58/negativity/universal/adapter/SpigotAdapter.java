@@ -116,6 +116,11 @@ public class SpigotAdapter extends Adapter {
 	public String getVersion() {
 		return Bukkit.getServer().getClass().getPackage().getName().replace(".", ",").split(",")[3];
 	}
+	
+	@Override
+	public String getPluginVersion() {
+		return pl.getDescription().getVersion();
+	}
 
 	@Override
 	public void reloadConfig() {

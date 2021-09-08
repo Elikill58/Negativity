@@ -106,6 +106,11 @@ public class VelocityAdapter extends Adapter {
 	public String getVersion() {
 		return pl.getServer().getVersion().getVersion();
 	}
+	
+	@Override
+	public String getPluginVersion() {
+		return pl.getServer().getPluginManager().getPlugin("negativity").get().getDescription().getVersion().orElse("Unknown");
+	}
 
 	@Override
 	public void reloadConfig() {

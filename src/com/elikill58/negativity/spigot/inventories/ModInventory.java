@@ -1,6 +1,9 @@
 package com.elikill58.negativity.spigot.inventories;
 
+import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
+
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -18,8 +21,6 @@ import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.permissions.Perm;
 
-import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
-
 public class ModInventory extends AbstractInventory {
 
 	public ModInventory() {
@@ -34,7 +35,8 @@ public class ModInventory extends AbstractInventory {
 		inv.setItem(11, createItem(Material.PUMPKIN_PIE, Messages.getMessage(p, "inventory.mod.invisible")));
 		inv.setItem(12, createItem(Material.FEATHER, "Fly: " + Messages.getMessage(p, "inventory.manager." + (p.isFlying() ? "enabled" : "disabled"))));
 		if(Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), Perm.MANAGE_CHEAT))
-			inv.setItem(14, createItem(Material.TNT, Messages.getMessage(p, "inventory.mod.cheat_manage")));
+			inv.setItem(13, createItem(Material.TNT, Messages.getMessage(p, "inventory.mod.cheat_manage")));
+		inv.setItem(14, createItem(Material.APPLE, "Heal"));
 		inv.setItem(15, createItem(ItemUtils.LEASH, Messages.getMessage(p, "inventory.mod.random_tp")));
 		inv.setItem(16, ItemUtils.hideAttributes(createItem(ItemUtils.IRON_SPADE, Messages.getMessage(p, "inventory.mod.clear_inv"))));
 		
@@ -86,6 +88,10 @@ public class ModInventory extends AbstractInventory {
 			p.setAllowFlight(!p.getAllowFlight());
 			p.sendMessage("Flying: "
 					+ Messages.getMessage(p, "inventory.manager." + (p.getAllowFlight() ? "enabled" : "disabled")));
+		} else if (m.equals(Material.APPLE)) {
+			p.setHealth(p.getMaxHealth());
+			p.setFoodLevel(20);
+			p.sendMessage(ChatColor.GOLD + "Healed !");
 		}
 	}
 

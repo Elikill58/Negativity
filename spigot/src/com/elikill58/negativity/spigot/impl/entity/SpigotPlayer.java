@@ -80,6 +80,16 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public double getHealth() {
 		return entity.getHealth();
 	}
+	
+	@Override
+	public double getMaxHealth() {
+		return entity.getMaxHealth();
+	}
+	
+	@Override
+	public void setHealth(double health) {
+		entity.setHealth(health);
+	}
 
 	@Override
 	public float getFallDistance() {
@@ -137,8 +147,13 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	}
 	
 	@Override
-	public double getFoodLevel() {
+	public int getFoodLevel() {
 		return entity.getFoodLevel();
+	}
+	
+	@Override
+	public void setFoodLevel(int foodlevel) {
+		entity.setFoodLevel(foodlevel);
 	}
 
 	@Override

@@ -64,9 +64,12 @@ public abstract class AbstractProxyPlayer extends AbstractEntity implements Play
 	}
 	
 	@Override
-	public double getFoodLevel() {
+	public int getFoodLevel() {
 		return 0;
 	}
+	
+	@Override
+	public void setFoodLevel(int foodlevel) {}
 	
 	@Override
 	public float getFlySpeed() {
@@ -87,6 +90,14 @@ public abstract class AbstractProxyPlayer extends AbstractEntity implements Play
 	public double getHealth() {
 		return 0;
 	}
+	
+	@Override
+	public double getMaxHealth() {
+		return 0;
+	}
+	
+	@Override
+	public void setHealth(double health) {}
 	
 	@Override
 	public GameMode getGameMode() {

@@ -89,6 +89,16 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	public double getHealth() {
 		return entity.require(Keys.HEALTH);
 	}
+	
+	@Override
+	public double getMaxHealth() {
+		return entity.require(Keys.MAX_HEALTH);
+	}
+	
+	@Override
+	public void setHealth(double health) {
+		entity.offer(Keys.HEALTH, health);
+	}
 
 	@Override
 	public float getFallDistance() {
@@ -167,8 +177,13 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	}
 	
 	@Override
-	public double getFoodLevel() {
+	public int getFoodLevel() {
 		return entity.require(Keys.FOOD_LEVEL);
+	}
+	
+	@Override
+	public void setFoodLevel(int foodlevel) {
+		entity.offer(Keys.FOOD_LEVEL, foodlevel);
 	}
 
 	@Override

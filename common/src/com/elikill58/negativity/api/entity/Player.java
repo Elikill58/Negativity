@@ -135,11 +135,32 @@ public interface Player extends OfflinePlayer {
 	double getHealth();
 	
 	/**
+	 * Get the max player health
+	 * 
+	 * @return the max health
+	 */
+	double getMaxHealth();
+	
+	/**
+	 * Change the player health
+	 * 
+	 * @param health next health
+	 */
+	void setHealth(double health);
+	
+	/**
 	 * Get the current player food level
 	 * 
 	 * @return the food level
 	 */
-	double getFoodLevel();
+	int getFoodLevel();
+	
+	/**
+	 * Change the food level
+	 * 
+	 * @param foodlevel the new food level
+	 */
+	void setFoodLevel(int foodlevel);
 	
 	/**
 	 * Get player gamemode

@@ -77,29 +77,29 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 
 		packetsPlayOut.put("SPacketBlockBreakAnim", (f) -> {
 			SPacketBlockBreakAnim packet = (SPacketBlockBreakAnim) f;
-			BlockPos pos = packet.getPosition();
-			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), packet.getBreakerId(), packet.getProgress());
+			BlockPos pos = packet.position;
+			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), packet.breakerId, packet.progress);
 		});
 		packetsPlayOut.put("SPacketKeepAlive", (f) -> new NPacketPlayOutKeepAlive(((SPacketKeepAlive) f).id));
 		packetsPlayOut.put("SPacketEntityTeleport", (f) -> {
 			SPacketEntityTeleport packet = (SPacketEntityTeleport) f;
-			return new NPacketPlayOutEntityTeleport(packet.getEntityId(), packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch(), packet.getOnGround());
+			return new NPacketPlayOutEntityTeleport(packet.entityId, packet.posX, packet.posY, packet.posZ, packet.yaw, packet.pitch, packet.onGround);
 		});
 		packetsPlayOut.put("SPacketEntityVelocity", (f) -> {
 			SPacketEntityVelocity packet = (SPacketEntityVelocity) f;
-			return new NPacketPlayOutEntityVelocity(packet.getEntityID(), packet.getMotionX(), packet.getMotionY(), packet.getMotionZ());
+			return new NPacketPlayOutEntityVelocity(packet.entityID, packet.motionX, packet.motionY, packet.motionZ);
 		});
 		packetsPlayOut.put("SPacketPlayerPosLook", (f) -> {
 			SPacketPlayerPosLook packet = (SPacketPlayerPosLook) f;
-			return new NPacketPlayOutPosition(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch());
+			return new NPacketPlayOutPosition(packet.x, packet.y, packet.z, packet.yaw, packet.pitch);
 		});
 		packetsPlayOut.put("SPacketExplosion", (f) -> {
 			SPacketExplosion packet = (SPacketExplosion) f;
-			return new NPacketPlayOutExplosion(packet.getX(), packet.getY(), packet.getZ(), packet.getMotionX(), packet.getMotionY(), packet.getMotionZ());
+			return new NPacketPlayOutExplosion(packet.posX, packet.posY, packet.posZ, packet.motionX, packet.motionY, packet.motionZ);
 		});
 		packetsPlayOut.put("SPacketEntity", (f) -> {
 			SPacketEntity packet = (SPacketEntity) f;
-			return new NPacketPlayOutEntity(0, packet.getX(), packet.getY(), packet.getZ()); // TODO fix entity ID
+			return new NPacketPlayOutEntity(0, packet.posX, packet.posY, packet.posZ); // TODO fix entity ID
 		});
 		
 		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");

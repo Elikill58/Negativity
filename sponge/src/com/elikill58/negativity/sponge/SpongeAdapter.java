@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.network.ChannelRegistrationException;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.LiteralText;
@@ -294,14 +295,18 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
-		Sponge.getChannelRegistrar().getOrCreateRaw(plugin, channel).addListener((data, connection, side) -> {
-			if(side == Type.CLIENT) {
-				Sponge.getServer().getOnlinePlayers().forEach((p) -> {
-					if(p.getConnection().getAddress().equals(connection.getAddress())) {
-						event.accept(SpongeEntityManager.getPlayer(p), data.array());
-					}
-				});
-			}
-		});
+		try {
+			Sponge.getChannelRegistrar().getOrCreateRaw(plugin, channel).addListener((data, connection, side) -> {
+				if(side == Type.CLIENT) {
+					Sponge.getServer().getOnlinePlayers().forEach((p) -> {
+						if(p.getConnection().getAddress().equals(connection.getAddress())) {
+							event.accept(SpongeEntityManager.getPlayer(p), data.array());
+						}
+					});
+				}
+			});
+		} catch (ChannelRegistrationException e) {
+			plugin.getLogger().warn("Failed to register channel " + channel + ": " + e.getMessage());
+		}
 	}
 }

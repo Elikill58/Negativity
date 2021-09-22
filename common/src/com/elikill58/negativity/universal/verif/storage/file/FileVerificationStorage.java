@@ -19,6 +19,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.Verificator;
@@ -48,7 +49,7 @@ public class FileVerificationStorage extends VerificationStorage {
 				for(Path verification : entries) {
 					try (BufferedReader reader = Files.newBufferedReader(verification)) {
 						JSONObject json = (JSONObject) new JSONParser().parse(reader);
-						Map<String, VerifData> cheats = new HashMap<>(); // don't need to load it
+						Map<CheatKeys, VerifData> cheats = new HashMap<>(); // don't need to load it
 						String startedBy = json.get("startedBy").toString();
 						@SuppressWarnings("unchecked")
 						List<String> result = (List<String>) json.get("result");

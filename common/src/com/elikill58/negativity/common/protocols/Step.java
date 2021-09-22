@@ -36,7 +36,7 @@ public class Step extends Cheat implements Listeners {
 	public void onPacket(PacketSendEvent e) {
 		if(!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_EFFECT))
 			return;
-		NegativityPlayer.getNegativityPlayer(e.getPlayer()).booleans.set("ALL", "jump-boost-use", true);
+		NegativityPlayer.getNegativityPlayer(e.getPlayer()).booleans.set(CheatKeys.ALL, "jump-boost-use", true);
 	}
 
 	@Check(name = "dif", description = "Distance about blocks up", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_FLY, CheckConditions.IS_NO_BEDROCK, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NOT_USE_SLIME, CheckConditions.NOT_USE_TRIDENT })
@@ -52,9 +52,9 @@ public class Step extends Cheat implements Listeners {
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier() : 0);
 		boolean isUsingJumpBoost = false;
 		if(p.isOnGround() && amplifier == 0) {
-			np.booleans.remove("ALL", "jump-boost-use");
+			np.booleans.remove(CheatKeys.ALL, "jump-boost-use");
 		} else
-			isUsingJumpBoost = np.booleans.get("ALL", "jump-boost-use", false);
+			isUsingJumpBoost = np.booleans.get(CheatKeys.ALL, "jump-boost-use", false);
 		if(LocationUtils.hasMaterialsAround(down, "SLAB", "FENCE", "STAIRS"))
 			return;
 		if (!isUsingJumpBoost && dif > 0 && dif != 0.60 && p.getVelocity().getY() < 0.5) {
@@ -80,9 +80,9 @@ public class Step extends Cheat implements Listeners {
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier() : 0);
 		boolean isUsingJumpBoost = false;
 		if(p.isOnGround() && amplifier == 0) {
-			np.booleans.remove("ALL", "jump-boost-use");
+			np.booleans.remove(CheatKeys.ALL, "jump-boost-use");
 		} else
-			isUsingJumpBoost = np.booleans.get("ALL", "jump-boost-use", false);
+			isUsingJumpBoost = np.booleans.get(CheatKeys.ALL, "jump-boost-use", false);
 		if(LocationUtils.hasMaterialsAround(down, "SLAB", "FENCE", "STAIRS"))
 			return;
 		double diffBoost = dif - (amplifier / 10) - Math.abs(p.getVelocity().getY());

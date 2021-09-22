@@ -28,6 +28,7 @@ import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -83,19 +84,19 @@ public class Speed extends Cheat implements Listeners {
 		double dif = to.getY() - from.getY();
 		boolean hasIceBelow = under.getType().getId().contains("ICE") || locUp.getBlock().getType().getId().contains("ICE");
 		if(hasIceBelow) {
-			np.booleans.set("ALL", "speed-has-ice", true);
+			np.booleans.set(CheatKeys.ALL, "speed-has-ice", true);
 			Adapter.getAdapter().debug("Has ice below " + p.getName());
 		} else
-			hasIceBelow = np.booleans.get("ALL", "speed-has-ice", false);
+			hasIceBelow = np.booleans.get(CheatKeys.ALL, "speed-has-ice", false);
 		
 		if(onGround && dif < 0) {
-			int firstIce = np.ints.get("ALL", "speed-has-ice-first", 5);
+			int firstIce = np.ints.get(CheatKeys.ALL, "speed-has-ice-first", 5);
 			if(firstIce <= 0) {
 				Adapter.getAdapter().debug("Removing ice bypass for " + p.getName());
-				np.booleans.remove("ALL", "speed-has-ice");
-				np.ints.remove("ALL", "speed-has-ice-first");
+				np.booleans.remove(CheatKeys.ALL, "speed-has-ice");
+				np.ints.remove(CheatKeys.ALL, "speed-has-ice-first");
 			} else {
-				np.ints.set("ALL", "speed-has-ice-first", firstIce - 1);
+				np.ints.set(CheatKeys.ALL, "speed-has-ice-first", firstIce - 1);
 			}
 		}
 		
@@ -138,7 +139,7 @@ public class Speed extends Cheat implements Listeners {
 							+ " Distance between from/to location: " + y + ", ySpeed: " + (y - (amplifierSpeed / 10)),
 							hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
 		}
-		if(checkActive("high-speed") && !onGround && y < 0.85D && !np.booleans.get("ALL", "jump-boost-use", false)) {
+		if(checkActive("high-speed") && !onGround && y < 0.85D && !np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
 			if (!under.getType().getId().contains("STEP") && !np.isUsingSlimeBlock && !(under.getType().getId().contains("WATER") || p.isSwimming())) {
 				to.setY(from.getY());
 				double yy = to.distance(from);

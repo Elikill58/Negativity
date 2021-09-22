@@ -50,9 +50,9 @@ public class NegativityPlayer {
 	private final UUID playerId;
 	private final Player p;
 	
-	public Set<String> ACTIVE_CHEAT = new HashSet<>();
+	public Set<CheatKeys> ACTIVE_CHEAT = new HashSet<>();
 	public ArrayList<String> proof = new ArrayList<>();
-	public HashMap<String, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
+	public HashMap<CheatKeys, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	public ArrayList<Double> flyMoveAmount = new ArrayList<>();
 	
@@ -324,7 +324,7 @@ public class NegativityPlayer {
 		ACTIVE_CHEAT.add(c.getKey());
 		if (c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
 			INJECTED.add(getPlayer().getUniqueId());
-		if (c.getKey().equalsIgnoreCase(CheatKeys.FORCEFIELD)) {
+		if (c.getKey().equals(CheatKeys.FORCEFIELD)) {
 			/*if (timeStartFakePlayer == 0)
 				timeStartFakePlayer = 1; // not on the player connection
 			else

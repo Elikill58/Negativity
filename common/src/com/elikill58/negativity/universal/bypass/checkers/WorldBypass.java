@@ -14,12 +14,13 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.bypass.BypassChecker;
 import com.elikill58.negativity.universal.bypass.BypassCheckerProvider;
 
 public class WorldBypass implements BypassChecker {
 	
-	private final Set<String> cheats = new HashSet<>();
+	private final Set<CheatKeys> cheats = new HashSet<>();
 	private final List<String> worlds;
 	
 	public WorldBypass(Configuration section) {

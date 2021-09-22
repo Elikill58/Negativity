@@ -47,7 +47,7 @@ public abstract class Cheat {
 	public static CheckManager getCheckManager() {
 		return checkManager;
 	}
-	private final String key;
+	private final CheatKeys key;
 	private Configuration config;
 	private boolean needPacket, hasVerif;
 	private CheatCategory cheatCategory;
@@ -65,11 +65,11 @@ public abstract class Cheat {
 	 * @param hasVerif know if the cheat can be used in verification system
 	 * @param alias all other names of the cheat
 	 */
-	public Cheat(String key, CheatCategory type, Material m, boolean needPacket, boolean hasVerif, String... alias) {
+	public Cheat(CheatKeys key, CheatCategory type, Material m, boolean needPacket, boolean hasVerif, String... alias) {
 		this.needPacket = needPacket;
 		this.m = m;
 		this.cheatCategory = type;
-		this.key = key.toLowerCase(Locale.ROOT);
+		this.key = key;
 		this.aliases = alias;
 		this.hasVerif = hasVerif;
 		
@@ -121,8 +121,8 @@ public abstract class Cheat {
 	 * 
 	 * @return the cheat key in upper case
 	 */
-	public String getKey() {
-		return key.toUpperCase(Locale.ROOT);
+	public CheatKeys getKey() {
+		return key;
 	}
 	
 	/**
@@ -147,7 +147,7 @@ public abstract class Cheat {
 	 * @return the name
 	 */
 	public String getName() {
-		return config.getString("exact_name", key);
+		return config.getString("exact_name", key.getLowerKey());
 	}
 
 	/**
@@ -377,7 +377,7 @@ public abstract class Cheat {
 	public static Cheat fromString(String name) {
 		for (Cheat c : Cheat.values()) {
 			try {
-				if (c.getKey().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name) || Arrays.asList(c.getAliases()).contains(name))
+				if (c.getKey().getKey().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name) || Arrays.asList(c.getAliases()).contains(name))
 					return c;
 			} catch (NullPointerException e) {
 				e.printStackTrace();
@@ -392,8 +392,8 @@ public abstract class Cheat {
 	 * @param key the cheat key
 	 * @return the cheat or null if anything is found
 	 */
-	public static Cheat forKey(String key) {
-		return CHEATS.stream().filter((c) -> c.getKey().equalsIgnoreCase(key)).findAny().orElse(null);
+	public static Cheat forKey(CheatKeys key) {
+		return CHEATS.stream().filter((c) -> c.getKey().equals(key)).findAny().orElse(null);
 	}
 	
 	/**
@@ -401,7 +401,7 @@ public abstract class Cheat {
 	 * 
 	 * @return all cheat keys
 	 */
-	public static Set<String> getCheatKeys(){
+	public static Set<CheatKeys> getCheatKeys(){
 		return Cheat.CHEATS.stream().collect(Collectors.groupingBy(Cheat::getKey)).keySet();
 	}
 	
@@ -410,7 +410,7 @@ public abstract class Cheat {
 	 * 
 	 * @return keys and their cheat
 	 */
-	public static Map<String, Cheat> getCheatByKeys(){
+	public static Map<CheatKeys, Cheat> getCheatByKeys(){
 		return CHEATS.stream().collect(Collectors.toMap(Cheat::getKey, Function.identity()));
 	}
 	

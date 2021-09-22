@@ -7,6 +7,7 @@ import java.util.List;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.negativity.PlayerCheatAlertEvent;
 import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.alerts.AlertSender;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -57,7 +58,7 @@ public class AmountAlertSender implements AlertSender {
 	
 	@Override
 	public void alert(NegativityPlayer np, PlayerCheatAlertEvent alert) {
-		String cheatKey = alert.getCheat().getKey();
+		CheatKeys cheatKey = alert.getCheat().getKey();
 		List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.getOrDefault(cheatKey, new ArrayList<>());
 		tempList.add(alert);
 		PlayerCheatAlertEvent nextAlert = np.getAlertForCheat(alert.getCheat(), tempList);

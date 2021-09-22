@@ -12,6 +12,7 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.bypass.BypassChecker;
 
 public class ItemUseBypass implements BypassChecker {
@@ -23,7 +24,7 @@ public class ItemUseBypass implements BypassChecker {
 	}
 	
 	private String item;
-	private Set<String> cheats;
+	private Set<CheatKeys> cheats;
 	private WhenBypass when;
 	
 	public ItemUseBypass(String itemName, String cheats, String when) {
@@ -40,17 +41,17 @@ public class ItemUseBypass implements BypassChecker {
 			CLICK_BYPASS.add(this);
 	}
 	
-	private Set<String> updateCheats(String cheats){
-		Set<String> keys = new HashSet<>();
-		Set<String> allCheatKeys = Cheat.getCheatKeys();
+	private Set<CheatKeys> updateCheats(String cheats){
+		Set<CheatKeys> keys = new HashSet<>();
+		Set<CheatKeys> allCheatKeys = Cheat.getCheatKeys();
 		for(String cheat : cheats.split(","))
-			for (String knownCheat : allCheatKeys)
-				if(knownCheat.equalsIgnoreCase(cheat))
+			for (CheatKeys knownCheat : allCheatKeys)
+				if(knownCheat.getKey().equalsIgnoreCase(cheat))
 					keys.add(knownCheat);
 		return keys;
 	}
 	
-	public Set<String> getCheats(){
+	public Set<CheatKeys> getCheats(){
 		return cheats;
 	}
 	

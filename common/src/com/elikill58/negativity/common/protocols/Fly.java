@@ -24,6 +24,7 @@ import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
@@ -147,7 +148,7 @@ public class Fly extends Cheat implements Listeners {
 				}
 			}
 			
-			if(checkActive("no-ground-down") && !np.booleans.get("ALL", "jump-boost-use", false)) {
+			if(checkActive("no-ground-down") && !np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
 				if (!np.isUsingSlimeBlock && !hasOtherThanExtended(p.getLocation(), "AIR")
 						&& !hasOtherThanExtended(locUnder, "AIR") && !np.booleans.get(FLY, "boat-falling", false)
 						&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0

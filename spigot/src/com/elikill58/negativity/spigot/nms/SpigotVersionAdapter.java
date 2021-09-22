@@ -87,7 +87,7 @@ public abstract class SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInKeepAlive", (player, f) -> new NPacketPlayInKeepAlive(new Long(getSafe(f, "a").toString())));
 		packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {
 			Object vec3D = get(f, "c");
-			Vector vec = new Vector(get(vec3D, "x"), get(vec3D, "y"), get(vec3D, "z"));
+			Vector vec = vec3D == null ? new Vector(0, 0, 0) : new Vector(get(vec3D, "x"), get(vec3D, "y"), get(vec3D, "z"));
 			return new NPacketPlayInUseEntity(get(f, "a"), vec, EnumEntityUseAction.valueOf(((Enum<?>) get(f, "action")).name()));
 		});
 		
@@ -259,6 +259,8 @@ public abstract class SpigotVersionAdapter {
 			Field f = clazz.getDeclaredField(name);
 			f.setAccessible(true);
 			return (T) f.get(obj);
+		} catch (NoSuchFieldException e) { // prevent issue when wrong version
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -269,24 +271,10 @@ public abstract class SpigotVersionAdapter {
 	protected <T> T get(Object obj, String name) {
 		try {
 			Field f = obj.getClass().getDeclaredField(name);
-			/*Field f = null;
-			Class<?> searchClass = obj.getClass();
-			while(f == null) {
-				try {
-					f = searchClass.getDeclaredField(name);
-					// if field find, end of while
-				} catch (NoSuchFieldException e) {
-					// not found, get error
-					if(searchClass.getSuperclass().equals(Object.class)) {
-						SpigotNegativity.getInstance().getLogger().info("[SVA] Class " + searchClass.getName() + " is superclassed by Object.");
-						return null;
-					} else {
-						searchClass = searchClass.getSuperclass();
-					}
-				}
-			}*/
 			f.setAccessible(true);
 			return (T) f.get(obj);
+		} catch (NoSuchFieldException e) { // prevent issue when wrong version
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -298,6 +286,8 @@ public abstract class SpigotVersionAdapter {
 			Field f = obj.getClass().getDeclaredField(name);
 			f.setAccessible(true);
 			return f.get(obj);
+		} catch (NoSuchFieldException e) { // prevent issue when wrong version
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -309,6 +299,8 @@ public abstract class SpigotVersionAdapter {
 			Field f = obj.getClass().getDeclaredField(name);
 			f.setAccessible(true);
 			return f.get(obj).toString();
+		} catch (NoSuchFieldException e) { // prevent issue when wrong version
+			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

@@ -9,7 +9,7 @@ import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.filter.cause.First;
 
 import com.elikill58.negativity.api.events.EventManager;
-import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
+import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerRegainHealthEvent;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 
@@ -19,7 +19,7 @@ public class EntityListeners {
 	public void onDamageByEntity(DamageEntityEvent e,
 			   @First DamageSource damageSource,
 			   @Getter("getTargetEntity") Player p) {
-		EventManager.callEvent(new PlayerDamageByEntityEvent(SpongeEntityManager.getPlayer(p), SpongeEntityManager.getEntity(e.getTargetEntity())));
+		EventManager.callEvent(new PlayerDamagedByEntityEvent(SpongeEntityManager.getPlayer(p), SpongeEntityManager.getEntity(e.getTargetEntity())));
 	}
 
 	@Listener

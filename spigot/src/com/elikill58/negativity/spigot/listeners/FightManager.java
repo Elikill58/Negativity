@@ -22,6 +22,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.utils.Utils;
 
 @SuppressWarnings("deprecation")
@@ -33,15 +34,15 @@ public class FightManager implements Listener {
 		if(e.getDamager().hasMetadata("NPC") || e.getEntity().hasMetadata("NPC"))
 			return;
 		if(e.getDamager() instanceof Player)
-			NegativityPlayer.getCached(e.getDamager().getUniqueId()).fight();
+			NegativityPlayer.getNegativityPlayer(SpigotEntityManager.getPlayer((Player) e.getDamager())).fight();
 		if(e.getEntity() instanceof Player)
-			NegativityPlayer.getCached(e.getEntity().getUniqueId()).fight();
+			NegativityPlayer.getNegativityPlayer(SpigotEntityManager.getPlayer((Player) e.getEntity())).fight();
 	}
 	
 	@EventHandler
 	public void onEntityDamageByEntity(EntityDamageEvent e) {
 		if (e.getEntity() instanceof Player && !e.getEntity().hasMetadata("NPC"))
-			NegativityPlayer.getCached(e.getEntity().getUniqueId()).fight();
+			NegativityPlayer.getNegativityPlayer(SpigotEntityManager.getPlayer((Player) e.getEntity())).fight();
 	}
 
 	@EventHandler
@@ -104,7 +105,7 @@ public class FightManager implements Listener {
 	
 	@EventHandler
 	public void onDeath(PlayerDeathEvent e) {
-		NegativityPlayer.getCached(e.getEntity().getUniqueId()).unfight();
+		NegativityPlayer.getNegativityPlayer(SpigotEntityManager.getPlayer(e.getEntity())).unfight();
 	}
 	
 	@EventHandler

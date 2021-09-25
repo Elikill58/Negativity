@@ -13,7 +13,7 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
-import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
+import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
@@ -52,10 +52,10 @@ public class AntiKnockback extends Cheat implements Listeners {
 	}
 
 	@Check(name = "ticked", description = "Get move after a tick", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL, CheckConditions.NOT_IRON_TARGET, CheckConditions.NOT_THORNS })
-	public void onDamage(PlayerDamageByEntityEvent e, NegativityPlayer np) {
+	public void onDamage(PlayerDamagedByEntityEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;
-		Player p = e.getEntity();
+		Player p = e.getPlayer();
 		
 		if (p.hasPotionEffect(PotionEffectType.POISON))
 			return;

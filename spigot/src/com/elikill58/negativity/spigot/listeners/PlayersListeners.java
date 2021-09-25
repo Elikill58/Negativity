@@ -21,7 +21,7 @@ import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
-import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
+import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent.Action;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
@@ -86,7 +86,7 @@ public class PlayersListeners implements Listener {
 		if(e.getEntity().hasMetadata("NPC"))
 			return;
 		if(e.getEntity() instanceof Player)
-			EventManager.callEvent(new PlayerDamageByEntityEvent(SpigotEntityManager.getPlayer((Player) e.getEntity()), SpigotEntityManager.getEntity(e.getDamager())));
+			EventManager.callEvent(new PlayerDamagedByEntityEvent(SpigotEntityManager.getPlayer((Player) e.getEntity()), SpigotEntityManager.getEntity(e.getDamager())));
 	}
 	
 	@EventHandler

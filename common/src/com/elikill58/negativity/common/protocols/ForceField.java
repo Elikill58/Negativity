@@ -11,7 +11,7 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
-import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
+import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
@@ -57,14 +57,14 @@ public class ForceField extends Cheat implements Listeners {
 	}
 
 	@Check(name = "line-sight", description = "Player has line of sight the cible", conditions = CheckConditions.SURVIVAL)
-	public void onEntityDamageByEntity(PlayerDamageByEntityEvent e, NegativityPlayer np) {
+	public void onEntityDamageByEntity(PlayerDamagedByEntityEvent e, NegativityPlayer np) {
 		if (!(e.getDamager() instanceof Player) || e.isCancelled())
 			return;
 		Player p = (Player) e.getDamager();
-		if (e.getEntity() == null)
+		if (e.getPlayer() == null)
 			return;
 		boolean mayCancel = false;
-		Entity cible = e.getEntity();
+		Entity cible = e.getPlayer();
 		if(p != cible && !p.hasLineOfSight(cible)) {
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
 					"Hit " + cible.getType().name() + " but cannot see it",
@@ -75,23 +75,23 @@ public class ForceField extends Cheat implements Listeners {
 	}
 
 	@Check(name = "reach", description = "The reach", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_THORNS })
-	public void onCheckReach(PlayerDamageByEntityEvent e, NegativityPlayer np) {
+	public void onCheckReach(PlayerDamagedByEntityEvent e, NegativityPlayer np) {
 		if (!(e.getDamager() instanceof Player) || e.isCancelled())
 			return;
 		Player p = (Player) e.getDamager();
-		if (e.getEntity() == null)
+		if (e.getPlayer() == null)
 			return;
 		boolean mayCancel = false;
 		ItemStack inHand = p.getItemInHand();
 		if(inHand == null || !inHand.getType().equals(Materials.BOW)) {
-			Location tempLoc = e.getEntity().getLocation().clone();
+			Location tempLoc = e.getPlayer().getLocation().clone();
 			tempLoc.setY(p.getLocation().getY());
 			double dis = tempLoc.distance(p.getLocation());
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 			if (dis > getConfig().getDouble("check.reach.value", 3.9) && !e.getDamager().getType().equals(EntityType.ENDER_DRAGON) && !p.getLocation().getBlock().getType().getId().contains("WATER")) {
-				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getEntity().getType().name().toLowerCase(Locale.ROOT) : e.getEntity().getName();
+				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getPlayer().getType().name().toLowerCase(Locale.ROOT) : e.getPlayer().getName();
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10), "reach",
-						"Big distance with: " + e.getEntity().getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns", hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
+						"Big distance with: " + e.getPlayer().getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns", hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
 			}
 		}
 		if (isSetBack() && mayCancel)

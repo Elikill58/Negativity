@@ -5,9 +5,10 @@ import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 
 public class NPacketPlayInUnset implements NPacketPlayIn {
 
+	public final String packetName;
 	
-	public NPacketPlayInUnset() {
-		
+	public NPacketPlayInUnset(String packetName) {
+		this.packetName = packetName;
 	}
 
 	@Override

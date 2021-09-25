@@ -45,4 +45,14 @@ public class Spigot_1_14_R1 extends SpigotVersionAdapter {
 	public int getPlayerPing(Player player) {
 		return ((CraftPlayer) player).getHandle().ping;
 	}
+	
+	@Override
+	public float cos(float f) {
+		return MathHelper.cos(f);
+	}
+	
+	@Override
+	public float sin(float f) {
+		return MathHelper.sin(f);
+	}
 }

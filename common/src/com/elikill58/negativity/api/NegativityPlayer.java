@@ -520,7 +520,9 @@ public class NegativityPlayer {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getNegativityPlayer(Player p) {
-		return players.computeIfAbsent(p.getUniqueId(), id -> new NegativityPlayer(p));
+		synchronized (players) {
+			return players.computeIfAbsent(p.getUniqueId(), id -> new NegativityPlayer(p));
+		}
 	}
 
 	/**

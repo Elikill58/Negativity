@@ -3,7 +3,7 @@ package com.elikill58.negativity.common.protocols;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
-import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
+import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
@@ -20,10 +20,10 @@ public class Critical extends Cheat implements Listeners {
 	}
 
 	@Check(name = "ground", description = "Check damage according to Y", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_GROUND })
-	public void onDamage(PlayerDamageByEntityEvent e, NegativityPlayer np) {
+	public void onDamage(PlayerDamagedByEntityEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;
-		Player p = e.getEntity();
+		Player p = e.getPlayer();
 
 		// because of new PvP, this detection has to be remade
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9))

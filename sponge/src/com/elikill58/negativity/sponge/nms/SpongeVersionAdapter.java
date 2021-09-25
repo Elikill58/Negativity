@@ -31,7 +31,7 @@ public abstract class SpongeVersionAdapter {
 		String packetClassName = nmsPacket.getClass().getName();
 		String packetName = packetClassName.substring(packetClassName.lastIndexOf('.') + 1);
 		if(packetName.startsWith("CPacket"))
-			return packetsPlayIn.getOrDefault(packetName, (obj) -> new NPacketPlayInUnset()).apply(nmsPacket);
+			return packetsPlayIn.getOrDefault(packetName, (obj) -> new NPacketPlayInUnset(packetName)).apply(nmsPacket);
 		if(packetName.startsWith("SPacket"))
 			return packetsPlayOut.getOrDefault(packetName, (obj) -> new NPacketPlayOutUnset()).apply(nmsPacket);
 		/*if(packetName.startsWith(PacketType.LOGIN_PREFIX))

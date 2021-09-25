@@ -4,13 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Bukkit;
-import org.bukkit.craftbukkit.v1_17_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_17_R1.entity.CraftPlayer;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.elikill58.negativity.api.item.ItemStack;
-import com.elikill58.negativity.api.location.BlockPosition;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
@@ -20,6 +18,8 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
@@ -29,6 +29,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAli
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
+import com.elikill58.negativity.spigot.utils.PacketUtils;
 
 import io.netty.channel.Channel;
 import net.minecraft.core.BlockPos;
@@ -40,80 +41,106 @@ import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
+import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.network.protocol.game.ServerboundKeepAlivePacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
-import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
+import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
 import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
-import net.minecraft.world.InteractionHand;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 
 	public Spigot_1_17_R1() {
 		super("v1_17_R1");
-		packetsPlayIn.put("PacketPlayInChat", (player, raw) -> new NPacketPlayInChat(((ServerboundChatPacket) raw).getMessage()));
-		
+		packetsPlayIn.put("PacketPlayInChat",
+				(player, raw) -> new NPacketPlayInChat(((ServerboundChatPacket) raw).getMessage()));
+
 		packetsPlayIn.put("PacketPlayInPositionLook", (player, raw) -> {
 			ServerboundMovePlayerPacket.PosRot packet = (ServerboundMovePlayerPacket.PosRot) raw;
-			return new NPacketPlayInPositionLook(packet.x, packet.y, packet.z, packet.xRot, packet.yRot, packet.isOnGround());
+			return new NPacketPlayInPositionLook(packet.x, packet.y, packet.z, packet.xRot, packet.yRot,
+					packet.isOnGround());
 		});
 		packetsPlayIn.put("PacketPlayInPosition", (player, raw) -> {
 			ServerboundMovePlayerPacket.Pos packet = (ServerboundMovePlayerPacket.Pos) raw;
-			return new NPacketPlayInPosition(packet.x, packet.y, packet.z, packet.xRot, packet.yRot, packet.isOnGround());
+			return new NPacketPlayInPosition(packet.x, packet.y, packet.z, packet.xRot, packet.yRot,
+					packet.isOnGround());
 		});
 		packetsPlayIn.put("PacketPlayInLook", (player, raw) -> {
 			ServerboundMovePlayerPacket.Rot packet = (ServerboundMovePlayerPacket.Rot) raw;
 			return new NPacketPlayInLook(packet.x, packet.y, packet.z, packet.xRot, packet.yRot, packet.isOnGround());
 		});
-		
+
 		packetsPlayIn.put("PacketPlayInBlockDig", (player, raw) -> {
 			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) raw;
-			NPacketPlayInBlockDig.DigAction action = NPacketPlayInBlockDig.DigAction.values()[packet.getAction().ordinal()];
-			NPacketPlayInBlockDig.DigFace face = NPacketPlayInBlockDig.DigFace.values()[packet.getDirection().ordinal()];
+			NPacketPlayInBlockDig.DigAction action = NPacketPlayInBlockDig.DigAction.values()[packet.getAction()
+					.ordinal()];
+			NPacketPlayInBlockDig.DigFace face = NPacketPlayInBlockDig.DigFace.values()[packet.getDirection()
+					.ordinal()];
 			BlockPos pos = packet.getPos();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), action, face);
 		});
-		packetsPlayIn.put("PacketPlayInBlockPlace", (player, raw) -> {
-			if (raw instanceof ServerboundUseItemOnPacket) {
-				ServerboundUseItemOnPacket packet = (ServerboundUseItemOnPacket) raw;
-				PlayerInventory inventory = player.getInventory();
-				ItemStack item;
-				if (packet.getHand() == InteractionHand.MAIN_HAND) {
-					item = new SpigotItemStack(inventory.getItemInMainHand());
-				} else {
-					item = new SpigotItemStack(inventory.getItemInOffHand());
-				}
-				BlockPos rawBlockPos = packet.getHitResult().getBlockPos();
-				BlockPosition blockPos = new BlockPosition(rawBlockPos.getX(), rawBlockPos.getY(), rawBlockPos.getZ());
-				int face = packet.getHitResult().getDirection().ordinal();
-				Vec3 rawPoint = packet.getHitResult().getLocation();
-				Vector point = new Vector(rawPoint.x, rawPoint.y, rawPoint.z);
-				return new NPacketPlayInBlockPlace(blockPos, item, face, point);
+		packetsPlayIn.put("PacketPlayInBlockPlace", (p, raw) -> {
+			ServerboundUseItemPacket packet = (ServerboundUseItemPacket) raw;
+			PlayerInventory inventory = p.getInventory();
+			ItemStack handItem;
+			if (getStr(packet, "a").equalsIgnoreCase("MAIN_HAND")) {
+				handItem = new SpigotItemStack(inventory.getItemInMainHand());
+			} else {
+				handItem = new SpigotItemStack(inventory.getItemInOffHand());
 			}
-			return new NPacketPlayInUnset();
+			ServerPlayer ep = (ServerPlayer) PacketUtils.getEntityPlayer(p);
+			float f1 = ep.getXRot();
+			float f2 = ep.getYRot();
+			double d0 = ep.getX();
+			double d1 = ep.getY() + ep.getEyeHeight();
+			double d2 = ep.getZ();
+			Vec3 vec3d = new Vec3(d0, d1, d2);
+			float f3 = cos(-f2 * 0.017453292F - 3.1415927F);
+			float f4 = sin(-f2 * 0.017453292F - 3.1415927F);
+			float f5 = -cos(-f1 * 0.017453292F);
+			float f6 = sin(-f1 * 0.017453292F);
+			float f7 = f4 * f5;
+			float f8 = f3 * f5;
+			double d3 = (p.getGameMode() == GameMode.CREATIVE) ? 5.0D : 4.5D;
+			Vec3 vec3d1 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
+			BlockHitResult hitResult = ep.level.rayTraceBlock(new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, ep), ep.blockPosition());
+			if(hitResult.isInside()) {
+				BlockPos pos = hitResult.getBlockPos();
+				Vec3 vec = hitResult.getLocation();
+				return new NPacketPlayInBlockPlace(pos.getX(), pos.getY(), pos.getZ(), handItem, new Vector(vec.x,  vec.y, vec.z));
+			} else {
+				p.sendMessage("Failed to find something " + ep.blockPosition());
+				return new NPacketPlayInUnset("PacketPlayInBlockPlace");
+			}
 		});
-		packetsPlayIn.remove("PacketPlayInUseEntity"); // temporary remove unsupported packet
-		// TODO add support of packet PacketPlayInUseEntity
-		/*packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {
-			ServerboundEntityTagQuery packet = (ServerboundEntityTagQuery) f;
-			return new NPacketPlayInUseEntity(packet.getEntityId(), new Vector(0, 0, 0), EnumEntityUseAction.INTERACT);
-		});*/
-		
-		packetsPlayIn.put("PacketPlayInKeepAlive", (player, raw) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) raw).getId()));
-		
+		packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {
+			ServerboundInteractPacket packet = (ServerboundInteractPacket) f;
+			return new NPacketPlayInUseEntity(get(packet, "a"), new Vector(0, 0, 0),
+					EnumEntityUseAction.valueOf(((Object) getFromMethod(get(packet, "b"), "a")).toString()));
+		});
+
+		packetsPlayIn.put("PacketPlayInKeepAlive",
+				(player, raw) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) raw).getId()));
+
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, raw) -> {
 			ClientboundBlockDestructionPacket packet = (ClientboundBlockDestructionPacket) raw;
 			BlockPos pos = packet.getPos();
-			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), packet.getId(), packet.getProgress());
+			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), packet.getId(),
+					packet.getProgress());
 		});
-		
-		packetsPlayOut.put("PacketPlayOutKeepAlive", (player, raw) -> new NPacketPlayOutKeepAlive(((ClientboundKeepAlivePacket) raw).getId()));
+
+		packetsPlayOut.put("PacketPlayOutKeepAlive",
+				(player, raw) -> new NPacketPlayOutKeepAlive(((ClientboundKeepAlivePacket) raw).getId()));
 		packetsPlayOut.put("PacketPlayOutEntityTeleport", (player, raw) -> {
 			ClientboundTeleportEntityPacket packet = (ClientboundTeleportEntityPacket) raw;
-			return new NPacketPlayOutEntityTeleport(packet.getId(), packet.getX(), packet.getY(), packet.getZ(), packet.getxRot(), packet.getyRot(), packet.isOnGround());
+			return new NPacketPlayOutEntityTeleport(packet.getId(), packet.getX(), packet.getY(), packet.getZ(),
+					packet.getxRot(), packet.getyRot(), packet.isOnGround());
 		});
 		packetsPlayOut.put("PacketPlayOutEntityVelocity", (p, pa) -> {
 			ClientboundSetEntityMotionPacket packet = (ClientboundSetEntityMotionPacket) pa;
@@ -121,63 +148,76 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 		});
 		packetsPlayOut.put("PacketPlayOutPosition", (p, raw) -> {
 			ClientboundPlayerPositionPacket packet = (ClientboundPlayerPositionPacket) raw;
-			return new NPacketPlayOutPosition(packet.getX(), packet.getY(), packet.getZ(), packet.getXRot(), packet.getYRot());
+			return new NPacketPlayOutPosition(packet.getX(), packet.getY(), packet.getZ(), packet.getXRot(),
+					packet.getYRot());
 		});
 		packetsPlayOut.put("PacketPlayOutExplosion", (p, raw) -> {
 			ClientboundExplodePacket packet = (ClientboundExplodePacket) raw;
-			return new NPacketPlayOutExplosion(packet.getX(), packet.getY(), packet.getZ(), packet.getKnockbackX(), packet.getKnockbackY(), packet.getKnockbackZ());
+			return new NPacketPlayOutExplosion(packet.getX(), packet.getY(), packet.getZ(), packet.getKnockbackX(),
+					packet.getKnockbackY(), packet.getKnockbackZ());
 		});
 		packetsPlayOut.put("PacketPlayOutEntity", (player, packet) -> {
-			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")), Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
+			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
+					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
 		});
 	}
-	
+
 	@Override
 	protected String getOnGroundFieldName() {
 		throw new UnsupportedOperationException("Should not be called");
 	}
-	
+
 	@Override
 	public double getAverageTps() {
 		return Mth.average(getServer().tickTimes);
 	}
-	
+
 	@Override
 	public List<Player> getOnlinePlayers() {
 		return new ArrayList<>(Bukkit.getOnlinePlayers());
 	}
-	
+
 	@Override
 	public int getPlayerPing(Player player) {
-		return ((CraftPlayer) player).getHandle().latency;
+		return ((ServerPlayer) PacketUtils.getEntityPlayer(player)).latency;
 	}
-	
+
 	@Override
 	public Class<?> getEnumPlayerInfoAction() {
 		return ServerboundPlayerActionPacket.Action.class;
 	}
-	
+
 	@Override
 	public double[] getTps() {
 		return getServer().recentTps;
 	}
-	
+
 	@Override
 	public ServerGamePacketListenerImpl getPlayerConnection(Player p) {
-		return ((CraftPlayer) p).getHandle().connection;
+		return ((ServerPlayer) PacketUtils.getEntityPlayer(p)).connection;
 	}
-	
+
 	@Override
 	public void sendPacket(Player p, Object packet) {
 		getPlayerConnection(p).send((Packet<?>) packet);
 	}
-	
+
 	@Override
 	public Channel getPlayerChannel(Player p) {
 		return getPlayerConnection(p).connection.channel;
 	}
-	
+
 	private DedicatedServer getServer() {
-		return ((CraftServer) Bukkit.getServer()).getServer();
+		return (DedicatedServer) PacketUtils.getDedicatedServer(Bukkit.getServer());
+	}
+
+	@Override
+	public float cos(float f) {
+		return Mth.cos(f);
+	}
+
+	@Override
+	public float sin(float f) {
+		return Mth.sin(f);
 	}
 }

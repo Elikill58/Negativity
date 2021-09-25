@@ -32,7 +32,7 @@ public class Spigot_1_8_R3 extends SpigotVersionAdapter {
 			BlockPosition pos = place.a();
 			ItemStack item = new SpigotItemStack(CraftItemStack.asBukkitCopy(place.getItemStack()));
 			Vector vector = new Vector(place.d(), place.e(), place.f());
-			return new NPacketPlayInBlockPlace(pos.getX(), pos.getY(), pos.getZ(), item, place.getFace(), vector);
+			return new NPacketPlayInBlockPlace(pos.getX(), pos.getY(), pos.getZ(), item, vector);
 		});
 		
 	}
@@ -50,5 +50,15 @@ public class Spigot_1_8_R3 extends SpigotVersionAdapter {
 	@Override
 	public int getPlayerPing(Player player) {
 		return ((CraftPlayer) player).getHandle().ping;
+	}
+	
+	@Override
+	public float cos(float f) {
+		return MathHelper.cos(f);
+	}
+	
+	@Override
+	public float sin(float f) {
+		return MathHelper.sin(f);
 	}
 }

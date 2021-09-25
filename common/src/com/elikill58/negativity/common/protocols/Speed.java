@@ -16,7 +16,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
-import com.elikill58.negativity.api.events.player.PlayerDamageByEntityEvent;
+import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
@@ -203,8 +203,8 @@ public class Speed extends Cheat implements Listeners {
 	}
 
 	@EventListener
-	public void onEntityDamage(PlayerDamageByEntityEvent e) {
-		NegativityPlayer.getNegativityPlayer(e.getEntity()).BYPASS_SPEED = 3;
+	public void onEntityDamage(PlayerDamagedByEntityEvent e) {
+		NegativityPlayer.getNegativityPlayer(e.getPlayer()).BYPASS_SPEED = 3;
 	}
 
 	@Override

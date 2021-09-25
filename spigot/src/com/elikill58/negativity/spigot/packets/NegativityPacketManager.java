@@ -5,14 +5,18 @@ import org.bukkit.plugin.Plugin;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
+import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketHandler;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.packet.SpigotPacketManager;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
@@ -70,7 +74,7 @@ public class NegativityPacketManager {
 	
 	private void manageReceive(AbstractPacket packet) {
 		Player p = packet.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		np.ALL_PACKETS++;
 		PacketType type = packet.getPacketType();
 		np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
@@ -83,6 +87,19 @@ public class NegativityPacketManager {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}*/
+			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet.getPacket();
+			if(useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
+				Bukkit.getScheduler().runTask(plugin, () -> {
+					for(Entity entity : p.getWorld().getEntities()) {
+						if(entity.getEntityId() == useEntityPacket.entityId && useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
+							PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity);
+							EventManager.callEvent(event);
+							if(event.isCancelled())
+								packet.setCancelled(event.isCancelled());
+						}
+					}
+				});
+			}
 		} else if(type == PacketType.Client.BLOCK_DIG && !Version.getVersion().equals(Version.V1_7) && packet.getPacket() instanceof NPacketPlayInBlockDig) {
 			NPacketPlayInBlockDig blockDig = (NPacketPlayInBlockDig) packet.getPacket();
 			if(blockDig.action != DigAction.FINISHED_DIGGING)

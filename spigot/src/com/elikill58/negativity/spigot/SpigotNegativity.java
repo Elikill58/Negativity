@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot;
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -224,9 +225,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		for (Player p : Utils.getOnlinePlayers()) {
-			NegativityPlayer.removeFromCache(p.getUniqueId());
-		}
+		new Thread(() -> new ArrayList<>(NegativityPlayer.getAllPlayers().keySet()).forEach(NegativityPlayer::removeFromCache)).start();
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		clickTimer.cancel();

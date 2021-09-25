@@ -3,13 +3,18 @@ package com.elikill58.negativity.spigot.nms;
 import static com.elikill58.negativity.spigot.utils.Utils.VERSION;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.PacketType;
@@ -18,6 +23,7 @@ import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
 import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimation;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
@@ -37,26 +43,31 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPositio
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Adapter;
 
 import io.netty.channel.Channel;
+import net.minecraft.server.v1_10_R1.Vec3D;
 
+@SuppressWarnings("unchecked")
 public abstract class SpigotVersionAdapter {
-	
+
 	protected HashMap<String, BiFunction<Player, Object, NPacketPlayOut>> packetsPlayOut = new HashMap<>();
 	protected HashMap<String, BiFunction<Player, Object, NPacketPlayIn>> packetsPlayIn = new HashMap<>();
 	private final String version;
-	
+
 	public SpigotVersionAdapter(String version) {
 		this.version = version;
-		packetsPlayIn.put("PacketPlayInArmAnimation", (player, packet) -> new NPacketPlayInArmAnimation(System.currentTimeMillis()));
+		packetsPlayIn.put("PacketPlayInArmAnimation",
+				(player, packet) -> new NPacketPlayInArmAnimation(System.currentTimeMillis()));
 		packetsPlayIn.put("PacketPlayInChat", (player, packet) -> new NPacketPlayInChat(get(packet, "a")));
 
 		packetsPlayIn.put("PacketPlayInPositionLook", (player, f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
-				return new NPacketPlayInPositionLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, getOnGroundFieldName()));
+				return new NPacketPlayInPositionLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"),
+						get(f, c, "pitch"), get(f, c, getOnGroundFieldName()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -65,7 +76,8 @@ public abstract class SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInPosition", (player, f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
-				return new NPacketPlayInPosition(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, getOnGroundFieldName()));
+				return new NPacketPlayInPosition(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"),
+						get(f, c, "pitch"), get(f, c, getOnGroundFieldName()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -74,47 +86,98 @@ public abstract class SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInLook", (player, f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
-				return new NPacketPlayInLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"), get(f, c, "pitch"), get(f, c, getOnGroundFieldName()));
+				return new NPacketPlayInLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"),
+						get(f, c, "pitch"), get(f, c, getOnGroundFieldName()));
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
 			}
-			//return new NPacketPlayInLook(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"));
+			// return new NPacketPlayInLook(get(f, "x"), get(f, "y"), get(f, "z"), get(f,
+			// "yaw"), get(f, "pitch"));
 		});
 		packetsPlayIn.put("PacketPlayInFlying", (player, f) -> {
-			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"), get(f, getOnGroundFieldName()), get(f, "hasPos"), get(f, "hasLook"));
+			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"),
+					get(f, getOnGroundFieldName()), get(f, "hasPos"), get(f, "hasLook"));
 		});
-		packetsPlayIn.put("PacketPlayInKeepAlive", (player, f) -> new NPacketPlayInKeepAlive(new Long(getSafe(f, "a").toString())));
+		packetsPlayIn.put("PacketPlayInKeepAlive",
+				(player, f) -> new NPacketPlayInKeepAlive(new Long(getSafe(f, "a").toString())));
 		packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {
 			Object vec3D = get(f, "c");
-			Vector vec = vec3D == null ? new Vector(0, 0, 0) : new Vector(get(vec3D, "x"), get(vec3D, "y"), get(vec3D, "z"));
-			return new NPacketPlayInUseEntity(get(f, "a"), vec, EnumEntityUseAction.valueOf(((Enum<?>) get(f, "action")).name()));
+			Vector vec = vec3D == null ? new Vector(0, 0, 0)
+					: new Vector(get(vec3D, "x"), get(vec3D, "y"), get(vec3D, "z"));
+			return new NPacketPlayInUseEntity(get(f, "a"), vec,
+					EnumEntityUseAction.valueOf(((Enum<?>) get(f, "action")).name()));
 		});
-		
+		packetsPlayIn.put("PacketPlayInBlockPlace", (p, packet) -> {
+			try {
+				PlayerInventory inventory = p.getInventory();
+				ItemStack handItem;
+				if (getStr(packet, "a").equalsIgnoreCase("MAIN_HAND")) {
+					handItem = new SpigotItemStack(inventory.getItemInMainHand());
+				} else {
+					handItem = new SpigotItemStack(inventory.getItemInOffHand());
+				}
+				Object player = PacketUtils.getEntityPlayer(p);
+				float f1 = get(player, "pitch");
+				float f2 = get(player, "yaw");
+				double d0 = get(player, "locX");
+				double d1 = ((double) get(player, "locY")) + ((double) getFromMethod(player, "getHeadHeight"));
+				double d2 = get(player, "locZ");
+				Vec3D vec3d = new Vec3D(d0, d1, d2);
+				float f3 = cos(-f2 * 0.017453292F - 3.1415927F);
+				float f4 = sin(-f2 * 0.017453292F - 3.1415927F);
+				float f5 = -cos(-f1 * 0.017453292F);
+				float f6 = sin(-f1 * 0.017453292F);
+				float f7 = f4 * f5;
+				float f8 = f3 * f5;
+				double d3 = (p.getGameMode().equals(GameMode.CREATIVE)) ? 5.0D : 4.5D;
+				Vec3D vec3d1 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
+				Location loc = p.getLocation();
+				Object worldServer = PacketUtils.getWorldServer(loc);
+				Object movingObj = PacketUtils.getNmsClass("World").getMethod("rayTrace", vec3d.getClass(), vec3d1.getClass()).invoke(worldServer, vec3d, vec3d1);
+				Object vec = getFromMethod(movingObj, "a");
+				return new NPacketPlayInBlockPlace(getFromMethod(vec, "getX"), getFromMethod(vec, "getY"), getFromMethod(vec, "getZ"), handItem,
+					new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		});
 
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, packet) -> {
 			Object pos = get(packet, "b");
-			return new NPacketPlayOutBlockBreakAnimation(get(pos, "x"), get(pos, "y"), get(pos, "z"), get(packet, "a"), get(packet, "c"));
+			return new NPacketPlayOutBlockBreakAnimation(get(pos, "x"), get(pos, "y"), get(pos, "z"), get(packet, "a"),
+					get(packet, "c"));
 		});
-		packetsPlayOut.put("PacketPlayOutKeepAlive", (player, f) -> new NPacketPlayOutKeepAlive(new Long(getSafe(f, "a").toString())));
+		packetsPlayOut.put("PacketPlayOutKeepAlive",
+				(player, f) -> new NPacketPlayOutKeepAlive(new Long(getSafe(f, "a").toString())));
 		packetsPlayOut.put("PacketPlayOutEntityTeleport", (player, packet) -> {
-			return new NPacketPlayOutEntityTeleport(get(packet, "a"), Double.parseDouble(getStr(packet, "b")), Double.parseDouble(getStr(packet, "c")),
-					Double.parseDouble(getStr(packet, "d")), Float.parseFloat(getStr(packet, "e")), Float.parseFloat(getStr(packet, "f")), get(packet, "g"));
+			return new NPacketPlayOutEntityTeleport(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
+					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")),
+					Float.parseFloat(getStr(packet, "e")), Float.parseFloat(getStr(packet, "f")), get(packet, "g"));
 		});
-		packetsPlayOut.put("PacketPlayOutEntityVelocity", (p, pa) -> new NPacketPlayOutEntityVelocity(get(pa, "a"), get(pa, "b"), get(pa, "c"), get(pa, "d")));
-		packetsPlayOut.put("PacketPlayOutPosition", (p, pa) -> new NPacketPlayOutPosition(get(pa, "a"), get(pa, "b"), get(pa, "c"), get(pa, "d"), get(pa, "e")));
-		packetsPlayOut.put("PacketPlayOutExplosion", (p, pa) -> new NPacketPlayOutExplosion(get(pa, "a"), get(pa, "b"), get(pa, "c"), get(pa, "f"), get(pa, "g"), get(pa, "h")));
+		packetsPlayOut.put("PacketPlayOutEntityVelocity",
+				(p, pa) -> new NPacketPlayOutEntityVelocity(get(pa, "a"), get(pa, "b"), get(pa, "c"), get(pa, "d")));
+		packetsPlayOut.put("PacketPlayOutPosition", (p, pa) -> new NPacketPlayOutPosition(get(pa, "a"), get(pa, "b"),
+				get(pa, "c"), get(pa, "d"), get(pa, "e")));
+		packetsPlayOut.put("PacketPlayOutExplosion", (p, pa) -> new NPacketPlayOutExplosion(get(pa, "a"), get(pa, "b"),
+				get(pa, "c"), get(pa, "f"), get(pa, "g"), get(pa, "h")));
 		packetsPlayOut.put("PacketPlayOutEntity", (player, packet) -> {
-			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")), Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
+			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
+					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
 		});
-		
-		SpigotNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
+
+		SpigotNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size()
+				+ " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
 	}
-	
+
 	protected abstract String getOnGroundFieldName();
-	
+
 	public abstract double getAverageTps();
-	
+
+	public abstract float cos(float f);
+	public abstract float sin(float f);
+
 	public List<Player> getOnlinePlayers() {
 		List<Player> list = new ArrayList<>();
 		try {
@@ -135,16 +198,17 @@ public abstract class SpigotVersionAdapter {
 		}
 		return list;
 	}
-	
+
 	public abstract int getPlayerPing(Player player);
-	
+
 	public Class<?> getEnumPlayerInfoAction() {
 		try {
 			try {
 				return Class.forName("net.minecraft.server." + VERSION + ".EnumPlayerInfoAction");
 			} catch (Exception e) {
-				for(Class<?> clazz : Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutPlayerInfo").getDeclaredClasses())
-					if(clazz.getName().contains("EnumPlayerInfoAction"))
+				for (Class<?> clazz : Class.forName("net.minecraft.server." + VERSION + ".PacketPlayOutPlayerInfo")
+						.getDeclaredClasses())
+					if (clazz.getName().contains("EnumPlayerInfoAction"))
 						return clazz;
 				return null;
 			}
@@ -153,7 +217,7 @@ public abstract class SpigotVersionAdapter {
 			return null;
 		}
 	}
-	
+
 	public double[] getTps() {
 		try {
 			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer");
@@ -162,10 +226,10 @@ public abstract class SpigotVersionAdapter {
 		} catch (Exception e) {
 			Adapter.getAdapter().getLogger().warn("Cannot get TPS (Work on Spigot but NOT CraftBukkit).");
 			e.printStackTrace();
-			return new double[] {20, 20, 20};
+			return new double[] { 20, 20, 20 };
 		}
 	}
-	
+
 	public Object getPlayerConnection(Player p) {
 		try {
 			Object entityPlayer = PacketUtils.getEntityPlayer(p);
@@ -175,16 +239,17 @@ public abstract class SpigotVersionAdapter {
 			return null;
 		}
 	}
-	
+
 	public void sendPacket(Player p, Object packet) {
 		try {
 			Object playerConnection = getPlayerConnection(p);
-			playerConnection.getClass().getMethod("sendPacket", PacketUtils.getNmsClass("Packet")).invoke(playerConnection, packet);
+			playerConnection.getClass().getMethod("sendPacket", PacketUtils.getNmsClass("Packet"))
+					.invoke(playerConnection, packet);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Channel getPlayerChannel(Player p) {
 		try {
 			Object playerConnection = getPlayerConnection(p);
@@ -195,28 +260,29 @@ public abstract class SpigotVersionAdapter {
 			return null;
 		}
 	}
-	
+
 	public String getVersion() {
 		return version;
 	}
-	
+
 	public NPacket getPacket(Player player, Object nms, String packetName) {
-		if(packetName.startsWith(PacketType.CLIENT_PREFIX))
-			return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset()).apply(player, nms);
-		if(packetName.startsWith(PacketType.SERVER_PREFIX))
+		if (packetName.startsWith(PacketType.CLIENT_PREFIX))
+			return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset(nms.getClass().getName()))
+					.apply(player, nms);
+		if (packetName.startsWith(PacketType.SERVER_PREFIX))
 			return packetsPlayOut.getOrDefault(packetName, (p, obj) -> new NPacketPlayOutUnset()).apply(player, nms);
-		if(packetName.startsWith(PacketType.LOGIN_PREFIX))
+		if (packetName.startsWith(PacketType.LOGIN_PREFIX))
 			return new NPacketLoginUnset();
-		if(packetName.startsWith(PacketType.STATUS_PREFIX))
+		if (packetName.startsWith(PacketType.STATUS_PREFIX))
 			return new NPacketStatusUnset();
 		Adapter.getAdapter().debug("[SpigotVersionAdapter] Unknow packet " + packetName + ".");
 		return null;
 	}
-	
+
 	private static SpigotVersionAdapter instance;
-	
+
 	public static SpigotVersionAdapter getVersionAdapter() {
-		if(instance == null) {
+		if (instance == null) {
 			switch (VERSION) {
 			case "v1_7_R4":
 				return instance = new Spigot_1_7_R4();
@@ -242,7 +308,8 @@ public abstract class SpigotVersionAdapter {
 				return instance = new Spigot_1_16_R3();
 			case "v1_17_R1":
 				try {
-					return instance = (SpigotVersionAdapter) Class.forName("com.elikill58.negativity.spigot17.Spigot_1_17_R1").getConstructor().newInstance();
+					return instance = (SpigotVersionAdapter) Class
+							.forName("com.elikill58.negativity.spigot17.Spigot_1_17_R1").getConstructor().newInstance();
 				} catch (ReflectiveOperationException e) {
 					throw new RuntimeException(e);
 				}
@@ -252,8 +319,7 @@ public abstract class SpigotVersionAdapter {
 		}
 		return instance;
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	protected <T> T get(Object obj, Class<?> clazz, String name) {
 		try {
 			Field f = clazz.getDeclaredField(name);
@@ -266,8 +332,7 @@ public abstract class SpigotVersionAdapter {
 			return null;
 		}
 	}
-	
-	@SuppressWarnings("unchecked")
+
 	protected <T> T get(Object obj, String name) {
 		try {
 			Field f = obj.getClass().getDeclaredField(name);
@@ -306,4 +371,41 @@ public abstract class SpigotVersionAdapter {
 			return null;
 		}
 	}
+
+	protected <T> T getFromMethod(Object obj, String methodName) {
+		try {
+			Method f = obj.getClass().getDeclaredMethod(methodName);
+			f.setAccessible(true);
+			return (T) f.invoke(obj);
+		} catch (NoSuchMethodException e) { // prevent issue when wrong version
+			e.printStackTrace(); // TODO remove this (keep it for debug)
+			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/*public NPacketPlayInBlockPlace getBlockPlacePacket(Player p, ItemStack handItem) {
+		EntityPlayer player = ((CraftPlayer) p).getHandle();
+		float f1 = player.pitch;
+		float f2 = player.yaw;
+		double d0 = player.locX;
+		double d1 = player.locY + player.getHeadHeight();
+		double d2 = player.locZ;
+		Vec3D vec3d = new Vec3D(d0, d1, d2);
+		float f3 = cos(-f2 * 0.017453292F - 3.1415927F);
+		float f4 = sin(-f2 * 0.017453292F - 3.1415927F);
+		float f5 = -cos(-f1 * 0.017453292F);
+		float f6 = sin(-f1 * 0.017453292F);
+		float f7 = f4 * f5;
+		float f8 = f3 * f5;
+		double d3 = (p.getGameMode().equals(GameMode.CREATIVE)) ? 5.0D : 4.5D;
+		Vec3D vec3d1 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
+		MovingObjectPosition obj = (((CraftWorld) p.getWorld()).getHandle()).rayTrace(vec3d, vec3d1);
+		net.minecraft.server.v1_10_R1.BlockPosition vec = obj.a();
+		Location loc = p.getLocation();
+		return new NPacketPlayInBlockPlace(vec.getX(), vec.getY(), vec.getZ(), handItem,
+				new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
+	}*/
 }

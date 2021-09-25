@@ -35,9 +35,7 @@ public abstract class PacketManager {
 	 * @return true if the handler have been added
 	 */
 	public boolean addHandler(PacketHandler handler) {
-		boolean b = handlers.contains(handler);
-		handlers.add(handler);
-		return !b;
+		return handlers.add(handler);
 	}
 
 	/**

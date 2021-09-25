@@ -6,13 +6,13 @@ public enum FlyingReason {
 	EAT(CheatKeys.FAST_EAT),
 	BOW(CheatKeys.FAST_BOW);
 	
-	private final String key;
+	private final CheatKeys key;
 	
-	FlyingReason(String key) {
+	FlyingReason(CheatKeys key) {
 		this.key = key;
 	}
 	
-	public String getKey() {
+	public CheatKeys getKey() {
 		return key;
 	}
 

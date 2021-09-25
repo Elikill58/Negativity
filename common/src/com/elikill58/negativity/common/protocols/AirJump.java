@@ -15,6 +15,7 @@ import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -46,7 +47,7 @@ public class AirJump extends Cheat implements Listeners {
 			double diffYtoFrom = diffYtoFromBasic - Math.abs(e.getTo().getDirection().getY());
 			//double diffYtoFrom = e.getTo().getY() - e.getFrom().getY() - Math.abs(e.getTo().getDirection().getY());
 			double lastDiffY = np.doubles.get(AIR_JUMP, "diff-y", 0.0);
-			if (!np.booleans.get("ALL", "jump-boost-use", false)) {
+			if (!np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
 				if (diffYtoFrom > 0.35 && lastDiffY < diffYtoFrom && lastDiffY > p.getVelocity().getY()
 						&& !hasOtherThanExtended(loc.clone().sub(0, 2, 0), "AIR")) {
 					mayCancel = Negativity.alertMod(

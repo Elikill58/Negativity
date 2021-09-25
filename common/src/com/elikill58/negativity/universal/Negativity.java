@@ -6,7 +6,6 @@ import java.io.IOException;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.HashSet;
-import java.util.Locale;
 import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.StringJoiner;
@@ -136,7 +135,7 @@ public class Negativity {
 			return false;
 		
 		EventManager.callEvent(new PlayerCheatEvent(p, c, reliability));
-		if (hasBypass && (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase(Locale.ROOT))
+		if (hasBypass && (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().getLowerKey())
 				|| Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.BYPASS_ALL))) {
 			PlayerCheatBypassEvent bypassEvent = new PlayerCheatBypassEvent(p, c, reliability);
 			EventManager.callEvent(bypassEvent);
@@ -157,12 +156,12 @@ public class Negativity {
 				p.kick(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName(), "%reason%", np.getReason(c), "%playername%", p.getName()));
 		}
 		if(BanManager.isBanned(np.getUUID())) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
+			Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
 			return false;
 		}
 
 		if (BanUtils.banIfNeeded(np, c, reliability).isSuccess()) {
-			Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
+			Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
 			return false;
 		}
 		manageAlertCommand(np, type, p, c, reliability);
@@ -186,7 +185,7 @@ public class Negativity {
 			return;
 		for(String s : conf.getStringList("alert.command.run")) {
 			Adapter.getAdapter().runConsoleCommand(UniversalUtils.replacePlaceholders(s, "%name%",
-					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey().toLowerCase(Locale.ROOT), "%cheat_name%",
+					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey().getLowerKey(), "%cheat_name%",
 					c.getName(), "%reliability%", reliability, "%report_type%", type.name(), "%warn%", np.getWarn(c)));
 		}
 	}
@@ -247,7 +246,7 @@ public class Negativity {
 			}
 			if(hasPermPeople) {
 				np.ALERT_NOT_SHOWED.remove(c.getKey());
-				Stats.updateStats(StatsType.CHEAT, c.getKey(), reliability + "");
+				Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
 			}
 		}
 	}

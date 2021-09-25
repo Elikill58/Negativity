@@ -15,15 +15,16 @@ import java.util.stream.Collectors;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 
 public class Verificator {
 	
 	public static final int VERIFICATION_VERSION = 0;
-	private static final Collector<Cheat, ?, Map<String, VerifData>> COLLECTOR = Collectors.toMap(Cheat::getKey, t -> new VerifData());
+	private static final Collector<Cheat, ?, Map<CheatKeys, VerifData>> COLLECTOR = Collectors.toMap(Cheat::getKey, t -> new VerifData());
 	
-	private final Map<String, VerifData> cheats;
+	private final Map<CheatKeys, VerifData> cheats;
 	private final NegativityPlayer np;
 	private final String asker;
 	private final List<String> messages;
@@ -62,7 +63,7 @@ public class Verificator {
 	 * @param version the version of verification
 	 * @param playerVersion the player version
 	 */
-	public Verificator(NegativityPlayer np, String asker, Map<String, VerifData> cheats, List<String> messages, int version, Version playerVersion) {
+	public Verificator(NegativityPlayer np, String asker, Map<CheatKeys, VerifData> cheats, List<String> messages, int version, Version playerVersion) {
 		this.np = np;
 		this.asker = asker;
 		this.cheats = cheats;
@@ -103,7 +104,7 @@ public class Verificator {
 	 * 
 	 * @return cheat and verif data
 	 */
-	public Map<String, VerifData> getCheats() {
+	public Map<CheatKeys, VerifData> getCheats() {
 		return cheats;
 	}
 	
@@ -151,7 +152,7 @@ public class Verificator {
 	 */
 	public void generateMessage() {
 		StringJoiner messageCheatNothing = new StringJoiner(", ");
-		for(Entry<String, VerifData> currentCheat : cheats.entrySet()) {
+		for(Entry<CheatKeys, VerifData> currentCheat : cheats.entrySet()) {
 			Cheat c = Cheat.forKey(currentCheat.getKey());
 			VerifData data = currentCheat.getValue();
 			if(data.hasSomething()) {

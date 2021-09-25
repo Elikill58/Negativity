@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.json.JSONObject;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.dataStorage.database.DatabaseMigrator;
@@ -44,7 +45,7 @@ public class DatabaseVerificationStorage extends VerificationStorage {
 				stm.setString(1, playerId.toString());
 				ResultSet resultQuery = stm.executeQuery();
 				while (resultQuery.next()) {
-					Map<String, VerifData> cheats = new HashMap<>(); // don't need to load it
+					Map<CheatKeys, VerifData> cheats = new HashMap<>(); // don't need to load it
 					List<String> result = Arrays.asList(resultQuery.getString("result").split("\n"));
 					String startedBy = resultQuery.getString("startedBy");
 					int version = resultQuery.getInt("version");

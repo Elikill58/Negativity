@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -32,7 +33,7 @@ public class Spider extends Cheat implements Listeners {
 		Location loc = p.getLocation();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		if(p.hasPotionEffect(PotionEffectType.JUMP) || np.booleans.get("ALL", "jump-boost-use", false))
+		if(p.hasPotionEffect(PotionEffectType.JUMP) || np.booleans.get(CheatKeys.ALL, "jump-boost-use", false))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
@@ -63,7 +64,7 @@ public class Spider extends Cheat implements Listeners {
 		Player p = e.getPlayer();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		if(p.hasPotionEffect(PotionEffectType.JUMP) || np.booleans.get("ALL", "jump-boost-use", false))
+		if(p.hasPotionEffect(PotionEffectType.JUMP) || np.booleans.get(CheatKeys.ALL, "jump-boost-use", false))
 			return;
 		int amount = 0;
 		Location from = e.getFrom(), to = e.getTo();

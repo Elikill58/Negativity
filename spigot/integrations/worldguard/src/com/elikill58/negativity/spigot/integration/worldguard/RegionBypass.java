@@ -8,6 +8,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.bypass.BypassChecker;
 
 public class RegionBypass implements BypassChecker {
@@ -17,7 +18,7 @@ public class RegionBypass implements BypassChecker {
 		return WorldGuardSupport.isInAreas(p.getLocation(), getRegions());
 	}
 	
-	private final Set<String> cheats = new HashSet<>();
+	private final Set<CheatKeys> cheats = new HashSet<>();
 	private final List<String> regions;
 	
 	public RegionBypass(Configuration section) {

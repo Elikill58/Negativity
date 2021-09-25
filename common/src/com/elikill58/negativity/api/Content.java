@@ -9,7 +9,7 @@ public class Content<T> {
 	/**
 	 * The saved content. Please, to use directly this map
 	 */
-	private final HashMap<String, HashMap<String, T>> mainContent = new HashMap<>();
+	private final HashMap<CheatKeys, HashMap<String, T>> mainContent = new HashMap<>();
 	
 	/**
 	 * Obtain the saved value
@@ -19,7 +19,7 @@ public class Content<T> {
 	 * @param defaultValue returned when type or valueName not saved / don't exist
 	 * @return the needed value according to the type and the valueName
 	 */
-	public T get(String type, String valueName, T defaultValue) {
+	public T get(CheatKeys type, String valueName, T defaultValue) {
 		HashMap<String, T> hashContent = mainContent.get(type);
 		if(hashContent == null)
 			return defaultValue;
@@ -34,7 +34,7 @@ public class Content<T> {
 	 * @param valueName the value key
 	 * @param value the saved value
 	 */
-	public void set(String type, String valueName, T value) {
+	public void set(CheatKeys type, String valueName, T value) {
 		mainContent.computeIfAbsent(type, (typee) -> new HashMap<>()).put(valueName, value);
 	}
 	
@@ -44,7 +44,7 @@ public class Content<T> {
 	 * @param type where the value to remove is (we suggest you to use {@link CheatKeys}}
 	 * @param valueName the value to remove
 	 */
-	public void remove(String type, String valueName) {
+	public void remove(CheatKeys type, String valueName) {
 		try {
 			mainContent.get(type).remove(valueName);
 		} catch (NullPointerException e) {

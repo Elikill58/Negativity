@@ -35,6 +35,9 @@ commands:
     description: Language management
     permission: negativity.lang
     aliases: [lang]
+  nclearchat:
+    description: Clear chat of everyone
+    aliases: [clearchat]
 
 permissions:
   negativity.*:

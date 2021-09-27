@@ -28,6 +28,10 @@ commands:
   mod: true
   # Manage /nlang (Alias: /lang)
   lang: true
+  # Manage all commands about chat
+  chat:
+    # Enable the /clearchat command
+    clear: true
 
 # The time between 2 /report
 # in milliseconds
@@ -98,6 +102,9 @@ Permissions:
     default: "negativity.mod"
   lang:
     default: "negativity.lang"
+  chat:
+    clear:
+      default: "negativity.chat.cleat"
   bypass:
     active: false
     ban:

@@ -190,6 +190,7 @@ public class SpongeNegativity {
 		reloadCommand("report", cmd, () -> new CommandsListeners("nreport"), "nreport", "report", "repot");
 		reloadCommand("ban", cmd, () -> new CommandsListeners("nban"), "nban", "negban", "ban");
 		reloadCommand("unban", cmd, () -> new CommandsListeners("nunban"), "nunban", "negunban", "unban");
+		reloadCommand("chat.clear", cmd, () -> new CommandsListeners("nclearchat"), "nclearchat", "negclearchat", "clearchat");
 	}
 
 	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {

@@ -28,6 +28,9 @@ import com.elikill58.negativity.velocity.impl.entity.VelocityPlayer;
 import com.elikill58.negativity.velocity.impl.plugin.VelocityExternalPlugin;
 import com.google.gson.Gson;
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+
 public class VelocityAdapter extends ProxyAdapter {
 	
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Proxy();
@@ -179,5 +182,11 @@ public class VelocityAdapter extends ProxyAdapter {
 	@Override
 	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
 		// TODO implement channel for velocity
+	}
+	
+	@Override
+	public void broadcastMessage(String message) {
+		TextComponent text = Component.text(message);
+		pl.getServer().getAllPlayers().forEach((p) -> p.sendMessage(text));
 	}
 }

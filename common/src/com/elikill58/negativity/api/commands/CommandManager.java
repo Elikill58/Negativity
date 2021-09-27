@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.events.others.CommandExecutionEvent;
 import com.elikill58.negativity.api.events.others.TabExecutionEvent;
 import com.elikill58.negativity.api.yaml.config.Configuration;
 import com.elikill58.negativity.common.commands.BanCommand;
+import com.elikill58.negativity.common.commands.ClearChatCommand;
 import com.elikill58.negativity.common.commands.KickCommand;
 import com.elikill58.negativity.common.commands.LangCommand;
 import com.elikill58.negativity.common.commands.ModCommand;
@@ -29,20 +30,20 @@ public class CommandManager implements Listeners {
 		tabs.put("negativity", negativity);
 		
 		Configuration conf = Adapter.getAdapter().getConfig();
-		if(conf.getBoolean("commands.kick")) {
+		if(conf.getBoolean("commands.kick", true)) {
 			KickCommand kick = new KickCommand();
 			commands.put("nkick", kick);
 			tabs.put("nkick", kick);
 		}
-		if(conf.getBoolean("commands.lang")) {
+		if(conf.getBoolean("commands.lang", true)) {
 			LangCommand lang = new LangCommand();
 			commands.put("nlang", lang);
 			tabs.put("nlang", lang);
 		}
-		if(conf.getBoolean("commands.mod")) {
+		if(conf.getBoolean("commands.mod", true)) {
 			commands.put("nmod", new ModCommand());
 		}
-		if(conf.getBoolean("commands.report")) {
+		if(conf.getBoolean("commands.report", true)) {
 			ReportCommand report = new ReportCommand();
 			commands.put("nreport", report);
 			tabs.put("nreport", report);
@@ -58,6 +59,10 @@ public class CommandManager implements Listeners {
 			UnbanCommand unban = new UnbanCommand();
 			commands.put("nunban", unban);
 			tabs.put("nunban", unban);
+		}
+		if(conf.getBoolean("commands.chat.clear", true)) {
+			ClearChatCommand clearchat = new ClearChatCommand();
+			commands.put("nclearchat", clearchat);
 		}
 	}
 	

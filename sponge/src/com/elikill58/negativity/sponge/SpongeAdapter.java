@@ -309,4 +309,9 @@ public class SpongeAdapter extends Adapter {
 			plugin.getLogger().warn("Failed to register channel " + channel + ": " + e.getMessage());
 		}
 	}
+	
+	@Override
+	public void broadcastMessage(String message) {
+		Sponge.getServer().getBroadcastChannel().send(Text.of(message));
+	}
 }

@@ -305,4 +305,9 @@ public class SpigotAdapter extends Adapter {
 	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
 		pl.getServer().getMessenger().registerIncomingPluginChannel(pl, channel, (String ch, org.bukkit.entity.Player p, byte[] data) -> event.accept(SpigotEntityManager.getPlayer(p), data));
 	}
+	
+	@Override
+	public void broadcastMessage(String message) {
+		Bukkit.broadcastMessage(message);
+	}
 }

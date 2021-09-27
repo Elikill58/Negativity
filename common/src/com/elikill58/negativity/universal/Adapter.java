@@ -315,4 +315,11 @@ public abstract class Adapter {
 	 * @param event The callable event which will be fired when received message from this channel
 	 */
 	public abstract void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event);
+	
+	/**
+	 * Broadcast the message to all online player, without any filter.
+	 * 
+	 * @param message the message to send
+	 */
+	public abstract void broadcastMessage(String message);
 }

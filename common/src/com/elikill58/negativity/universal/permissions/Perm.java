@@ -15,6 +15,8 @@ public class Perm {
 	public static final String ADMIN = "admin";
 	public static final String CHECK = "check";
 	public static final String CHAT_CLEAR = "chat.clear";
+	public static final String CHAT_LOCK = "chat.lock";
+	public static final String CHAT_LOCK_BYPASS = "chat.lock_bypass";
 	public static final String SHOW_ALERT = "showAlert";
 	public static final String SHOW_REPORT = "showReport";
 	public static final String VERIF = "verif";

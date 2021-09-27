@@ -38,6 +38,9 @@ commands:
   nclearchat:
     description: Clear chat of everyone
     aliases: [clearchat]
+  nlockchat:
+    description: Lock chat for not-bypass people
+    aliases: [lockchat]
 
 permissions:
   negativity.*:

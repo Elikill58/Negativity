@@ -229,6 +229,14 @@ public class SpigotNegativity extends JavaPlugin {
 			clearCheatCmd.setAliases(Arrays.asList("clearchat"));
 			clearCheatCmd.setExecutor(command);
 		}
+
+		PluginCommand lockChatCmd = getCommand("nlockchat");
+		if (!commandSection.getBoolean("chat.lock", true))
+			unRegisterBukkitCommand(lockChatCmd);
+		else {
+			lockChatCmd.setAliases(Arrays.asList("lockchat"));
+			lockChatCmd.setExecutor(command);
+		}
 	}
 
 	@Override

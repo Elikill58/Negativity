@@ -73,12 +73,10 @@ public class PlayersListeners implements Listener {
 	
 	@EventHandler
 	public void onChat(AsyncPlayerChatEvent e) {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
-			PlayerChatEvent event = new PlayerChatEvent(SpigotEntityManager.getPlayer(e.getPlayer()), e.getMessage(), e.getFormat());
-			EventManager.callEvent(event);
-			if(event.isCancelled())
-				e.setCancelled(event.isCancelled());
-		});
+		PlayerChatEvent event = new PlayerChatEvent(SpigotEntityManager.getPlayer(e.getPlayer()), e.getMessage(), e.getFormat());
+		EventManager.callEvent(event);
+		if(event.isCancelled())
+			e.setCancelled(event.isCancelled());
 	}
 	
 	@EventHandler

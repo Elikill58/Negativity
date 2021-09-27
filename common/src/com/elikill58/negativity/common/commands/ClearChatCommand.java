@@ -16,7 +16,7 @@ public class ClearChatCommand implements CommandListeners {
 		}
 		for(int i = 0; i < 100; i++)
 			Adapter.getAdapter().broadcastMessage("  ");
-		Adapter.getAdapter().broadcastMessage(Messages.getMessage("negativity.chat.cleared_broadcast", "%name%", sender.getName()));
+		Messages.broadcastMessage("negativity.chat.cleared_broadcast", "%name%", sender.getName());
 		Messages.sendMessage(sender, "negativity.chat.cleared", "%amount%", Adapter.getAdapter().getOnlinePlayers().size());
 		return true;
 	}

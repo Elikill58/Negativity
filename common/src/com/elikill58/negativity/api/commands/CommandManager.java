@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import com.elikill58.negativity.api.events.EventListener;
+import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.others.CommandExecutionEvent;
 import com.elikill58.negativity.api.events.others.TabExecutionEvent;
@@ -12,6 +13,7 @@ import com.elikill58.negativity.common.commands.BanCommand;
 import com.elikill58.negativity.common.commands.ClearChatCommand;
 import com.elikill58.negativity.common.commands.KickCommand;
 import com.elikill58.negativity.common.commands.LangCommand;
+import com.elikill58.negativity.common.commands.LockChatCommand;
 import com.elikill58.negativity.common.commands.ModCommand;
 import com.elikill58.negativity.common.commands.NegativityCommand;
 import com.elikill58.negativity.common.commands.ReportCommand;
@@ -50,12 +52,12 @@ public class CommandManager implements Listeners {
 		}
 		
 		conf = BanManager.getBanConfig();
-		if(conf.getBoolean("commands.ban")) {
+		if(conf.getBoolean("commands.ban", false)) {
 			BanCommand ban = new BanCommand();
 			commands.put("nban", ban);
 			tabs.put("nban", ban);
 		}
-		if(conf.getBoolean("commands.unban")) {
+		if(conf.getBoolean("commands.unban", false)) {
 			UnbanCommand unban = new UnbanCommand();
 			commands.put("nunban", unban);
 			tabs.put("nunban", unban);
@@ -63,6 +65,11 @@ public class CommandManager implements Listeners {
 		if(conf.getBoolean("commands.chat.clear", true)) {
 			ClearChatCommand clearchat = new ClearChatCommand();
 			commands.put("nclearchat", clearchat);
+		}
+		if(conf.getBoolean("commands.chat.lock", true)) {
+			LockChatCommand lockchat = new LockChatCommand();
+			commands.put("nlockchat", lockchat);
+			EventManager.registerEvent(lockchat);
 		}
 	}
 	

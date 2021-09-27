@@ -91,4 +91,8 @@ public class Messages {
 			sender.sendMessage(Utils.coloredMessage(s));
 		}
 	}
+	
+	public static void broadcastMessage(String dir, Object... placeholders) {
+		Adapter.getAdapter().getOnlinePlayers().forEach((p) -> sendMessage(p, dir, placeholders));
+	}
 }

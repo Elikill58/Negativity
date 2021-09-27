@@ -48,8 +48,12 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 
 	@Override
 	public boolean onCommand(CommandSender sender, String[] arg, String prefix) {
-		if (arg.length == 0 || arg[0].equalsIgnoreCase("help")) {
-			sendHelp(sender);
+		if (arg.length == 0) {
+			sendHelp(sender, 1);
+			return true;
+		}
+		if (arg[0].equalsIgnoreCase("help")) {
+			sendHelp(sender, (arg.length > 1 && UniversalUtils.isInteger(arg[1]) ? Integer.parseInt(arg[1]) : 1));
 			return true;
 		}
 
@@ -323,41 +327,61 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			return true;
 		}
 
-		sendHelp(sender);
+		sendHelp(sender, 1);
 		return true;
 	}
 	
-	private void sendHelp(CommandSender sender) {
+	private void sendHelp(CommandSender sender, int page) {
+		int nbPerPage = 8;
+		List<String> list = new ArrayList<>();
+		// lets construct all lines
 		if (Perm.hasPerm(sender, Perm.VERIF))
-			Messages.sendMessageList(sender, "negativity.verif.help");
+			list.addAll(Messages.getMessageList(sender, "negativity.verif.help"));
 		if (Perm.hasPerm(sender, Perm.CHECK))
-			Messages.sendMessageList(sender, "negativity.help");
+			list.addAll(Messages.getMessageList(sender, "negativity.help"));
 		if (sender instanceof Player)
-			Messages.sendMessageList(sender, "negativity.alert.help");
+			list.addAll(Messages.getMessageList(sender, "negativity.alert.help"));
 		if (Perm.hasPerm(sender, Perm.RELOAD))
-			Messages.sendMessageList(sender, "negativity.reload.help");
+			list.addAll(Messages.getMessageList(sender, "negativity.reload.help"));
 		if (sender instanceof Player && Perm.hasPerm(sender, Perm.MOD))
-			Messages.sendMessageList(sender, "negativity.mod.help");
+			list.addAll(Messages.getMessageList(sender, "negativity.mod.help"));
 		if (Perm.hasPerm(sender, Perm.MOD))
-			Messages.sendMessageList(sender, "negativity.clear.help");
+			list.addAll(Messages.getMessageList(sender, "negativity.clear.help"));
 		if (sender instanceof Player && Perm.hasPerm(sender, Perm.MANAGE_CHEAT))
-			Messages.sendMessageList(sender, "negativity.admin.help");
+			list.addAll(Messages.getMessageList(sender, "negativity.admin.help"));
 		if (Perm.hasPerm(sender, Perm.ADMIN) && WebhookManager.isEnabled())
-			Messages.sendMessageList(sender, "negativity.webhook.help");
+			list.addAll(Messages.getMessageList(sender, "negativity.webhook.help"));
 		if (sender instanceof Player)
-			Messages.sendMessageList(sender, "negativity.debug.help");
+			list.addAll(Messages.getMessageList(sender, "negativity.debug.help"));
+		
 		Configuration conf = Adapter.getAdapter().getConfig();
-		if(conf.getBoolean("commands.report") && Perm.hasPerm(sender, Perm.REPORT))
-			Messages.sendMessage(sender, "report.help");
-		if(conf.getBoolean("commands.kick") && Perm.hasPerm(sender, Perm.MOD))
-			Messages.sendMessage(sender, "kick.help");
+		if(conf.getBoolean("commands.report", true) && Perm.hasPerm(sender, Perm.REPORT))
+			list.add(Messages.getMessage(sender, "report.help"));
+		if(conf.getBoolean("commands.kick", true) && Perm.hasPerm(sender, Perm.MOD))
+			list.add(Messages.getMessage(sender, "kick.help"));
 		if(Perm.hasPerm(sender, Perm.LANG))
-			Messages.sendMessage(sender, "lang.help");
+			list.add(Messages.getMessage(sender, "lang.help"));
+		if(conf.getBoolean("commands.chat.clear", true) && Perm.hasPerm(sender, Perm.CHAT_CLEAR))
+			list.add(Messages.getMessage(sender, "negativity.chat.clear.help"));
+		if(conf.getBoolean("commands.chat.lock", true) && Perm.hasPerm(sender, Perm.CHAT_LOCK))
+			list.add(Messages.getMessage(sender, "negativity.chat.lock.help"));
+		
 		Configuration banConfig = BanManager.getBanConfig();
-		if(banConfig.getBoolean("commands.ban") && Perm.hasPerm(sender, Perm.BAN))
-			Messages.sendMessageList(sender, "ban.help");
-		if(banConfig.getBoolean("commands.unban") && Perm.hasPerm(sender, Perm.UNBAN))
-			Messages.sendMessage(sender, "unban.help");
+		if(banConfig.getBoolean("commands.ban", false) && Perm.hasPerm(sender, Perm.BAN))
+			list.addAll(Messages.getMessageList(sender, "ban.help"));
+		if(banConfig.getBoolean("commands.unban", false) && Perm.hasPerm(sender, Perm.UNBAN))
+			list.add(Messages.getMessage(sender, "unban.help"));
+		
+		int nbLine = list.size();
+		int nbPage = 0;
+		while(nbPage * nbPerPage < nbLine)
+			nbPage++;
+		// now let's find which lines have to be sent
+		Messages.sendMessage(sender, "negativity.help.header", "%page%", page, "%max%", nbPage);
+		for(int i = (page - 1) * nbPerPage; i < (page) * nbPerPage; i++) {
+			if(nbLine > i)
+				sender.sendMessage(list.get(i));
+		}
 	}
 
 	@Override

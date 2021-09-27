@@ -2,6 +2,7 @@ package com.elikill58.negativity.universal;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.entity.Player;
@@ -81,15 +82,25 @@ public class Messages {
 	 * @param dir the message key
 	 * @param placeholders all messages placeholders
 	 */
-	public static void sendMessageList(CommandSender sender, String dir, Object... placeholders) {
+	public static List<String> getMessageList(CommandSender sender, String dir, Object... placeholders) {
 		String lang = (sender instanceof Player ? TranslatedMessages.getLang(((Player) sender).getUniqueId()) : TranslatedMessages.DEFAULT_LANG);
 		List<String> lines = TranslatedMessages.getStringListFromLang(lang, dir, placeholders);
 		if(lines.isEmpty()) {
 			lines.add(dir);
 		}
-		for (String s : lines) {
-			sender.sendMessage(Utils.coloredMessage(s));
-		}
+		return lines.stream().map(Utils::coloredMessage).collect(Collectors.toList());
+	}
+
+	/**
+	 * Send a list of message to the given command sender
+	 * If the key is not found, is will show the key of the message
+	 * 
+	 * @param sender the sender which will receive the message
+	 * @param dir the message key
+	 * @param placeholders all messages placeholders
+	 */
+	public static void sendMessageList(CommandSender sender, String dir, Object... placeholders) {
+		getMessageList(sender, dir, placeholders).forEach(sender::sendMessage);
 	}
 	
 	public static void broadcastMessage(String dir, Object... placeholders) {

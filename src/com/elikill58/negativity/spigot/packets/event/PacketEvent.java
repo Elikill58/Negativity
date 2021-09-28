@@ -17,8 +17,23 @@ public abstract class PacketEvent extends Event {
 		this.p = p;
 	}
 	
+	/**
+	 * Get the player that send/receive the packet<br>
+	 * WARN: it can be NULL ! Specially for handshake packet.
+	 * 
+	 * @return the player OR NULL
+	 */
 	public Player getPlayer() {
 		return p;
+	}
+	
+	/**
+	 * Check if there is a player for this packet
+	 * 
+	 * @return true if player is defined
+	 */
+	public boolean hasPlayer() {
+		return p != null;
 	}
 	
 	public AbstractPacket getPacket() {

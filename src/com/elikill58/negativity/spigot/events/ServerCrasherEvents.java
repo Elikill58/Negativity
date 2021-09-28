@@ -14,6 +14,7 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -38,11 +39,13 @@ public class ServerCrasherEvents implements Listener {
 	
 	@EventHandler
 	public void onPacketClear(PacketReceiveEvent e) {
+		AbstractPacket packet = e.getPacket();
+		if(packet.getPacketType() != PacketType.Client.POSITION)
+			return;
 		Player p = e.getPlayer();
-		if(e.getPacket().getPacketType() == PacketType.Client.POSITION && !inDisconnection.contains(p.getUniqueId())) {
+		if(!inDisconnection.contains(p.getUniqueId())) {
 			if(SpigotNegativityPlayer.getNegativityPlayer(p).PACKETS.getOrDefault(PacketType.Client.POSITION, 0) > 1000) {
-				boolean mustCancel = tryingToCrash(e.getPlayer());
-				e.getPacket().setCancelled(mustCancel);
+				packet.setCancelled(tryingToCrash(p));
 			}
 		}
 	}

@@ -3,17 +3,24 @@ package com.elikill58.negativity.spigot.packets.custom.channel;
 import static com.elikill58.negativity.spigot.utils.PacketUtils.getPlayerConnection;
 
 import java.lang.reflect.Field;
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
+import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.PacketType;
+import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 import net.minecraft.util.io.netty.channel.Channel;
+import net.minecraft.util.io.netty.channel.ChannelFuture;
 import net.minecraft.util.io.netty.channel.ChannelHandlerContext;
 import net.minecraft.util.io.netty.channel.ChannelInboundHandlerAdapter;
+import net.minecraft.util.io.netty.channel.ChannelInitializer;
 import net.minecraft.util.io.netty.channel.ChannelOutboundHandlerAdapter;
 import net.minecraft.util.io.netty.channel.ChannelPromise;
 
@@ -21,6 +28,46 @@ public class NMUChannel extends ChannelAbstract {
 
 	public NMUChannel(CustomPacketManager customPacketManager) {
 		super(customPacketManager);
+		try {
+			Object dedicatedSrv = PacketUtils.getCraftServer();
+			Object mcServer = dedicatedSrv.getClass().getMethod("getServer").invoke(dedicatedSrv);
+			Object co = ReflectionUtils.getFirstWith(mcServer, PacketUtils.getNmsClass("MinecraftServer", "server."), PacketUtils.getNmsClass("ServerConnection", "network."));
+			@SuppressWarnings("unchecked")
+			List<ChannelFuture> g = (List<ChannelFuture>) ReflectionUtils.getField(co, "g");
+			g.forEach((channelFuture) -> {
+				channelFuture.channel().pipeline().addFirst(new ChannelInboundHandlerAdapter() {
+					@Override
+					public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
+						((Channel) msg).pipeline().addFirst(new ChannelInitializer<Channel>() {
+							@Override
+							protected void initChannel(Channel channel) {
+								try {
+									channel.eventLoop().submit(() -> {
+										try {
+											ChannelHandlerHandshakeReceive interceptor = (ChannelHandlerHandshakeReceive) channel.pipeline().get(KEY_HANDSHAKE);
+											// Inject our packet interceptor
+											if (interceptor == null) {
+												interceptor = new ChannelHandlerHandshakeReceive();
+												channel.pipeline().addBefore("packet_handler", KEY_HANDSHAKE, interceptor);
+											}
+											return interceptor;
+										} catch (IllegalArgumentException e) {
+											// Try again
+											return (ChannelHandlerHandshakeReceive) channel.pipeline().get(KEY_HANDSHAKE);
+										}
+									});
+								} catch (Exception e) {
+									getPacketManager().getPlugin().getLogger().log(Level.SEVERE, "Cannot inject incomming channel " + channel, e);
+								}
+							}
+						});
+						ctx.fireChannelRead(msg);
+					}
+				});
+			});
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -111,6 +158,26 @@ public class NMUChannel extends ChannelAbstract {
 			if(nextPacket != null && nextPacket.isCancelled())
 				return;
 			super.write(ctx, packet, promise);
+		}
+	}
+
+	private class ChannelHandlerHandshakeReceive extends ChannelInboundHandlerAdapter {
+
+		@Override
+		public void channelRead(ChannelHandlerContext ctx, Object packet) {
+			try {
+				PacketType packetType = PacketType.getType(packet.getClass().getSimpleName());
+				if(packetType instanceof PacketType.Client || packetType instanceof PacketType.Server)
+					return;
+				//SpigotNegativity.getInstance().getLogger().info("PacketType: " + packet.getClass().getSimpleName() + " > " + packetType);
+				AbstractPacket nextPacket = getPacketManager().onPacketReceive(packetType, null, packet);
+				if(nextPacket != null && nextPacket.isCancelled())
+					return;
+				super.channelRead(ctx, packet);
+			} catch (Exception e) {
+				SpigotNegativity.getInstance().getLogger().severe("Error while reading packet : " + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 	}
 }

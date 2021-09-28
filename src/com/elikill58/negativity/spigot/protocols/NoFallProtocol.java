@@ -139,9 +139,11 @@ public class NoFallProtocol extends Cheat implements Listener {
 
 	@EventHandler
 	public void onNegPacket(PacketReceiveEvent e) {
+		AbstractPacket pa = e.getPacket();
+		PacketType type = pa.getPacketType();
+		if (!(type.equals(PacketType.Client.FLYING) || type.equals(PacketType.Client.POSITION) || type.equals(PacketType.Client.POSITION_LOOK)))
+			return;
 		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), () -> {
-			AbstractPacket pa = e.getPacket();
-			PacketType type = pa.getPacketType();
 			Player p = e.getPlayer();
 			SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 			if (!np.hasDetectionActive(this))

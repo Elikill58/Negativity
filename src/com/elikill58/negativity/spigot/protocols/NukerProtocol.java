@@ -51,6 +51,10 @@ public class NukerProtocol extends Cheat implements Listener {
 	
 	@EventHandler
 	public void onPacketDig(PacketReceiveEvent e) {
+		AbstractPacket packet = e.getPacket();
+		PacketType type = packet.getPacketType();
+		if(!type.equals(Client.BLOCK_DIG) || Version.getVersion().equals(Version.V1_7))
+			return;
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this))
@@ -58,10 +62,6 @@ public class NukerProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		if(p.hasPotionEffect(PotionEffectType.FAST_DIGGING))
-			return;
-		AbstractPacket packet = e.getPacket();
-		PacketType type = packet.getPacketType();
-		if(!type.equals(Client.BLOCK_DIG) || Version.getVersion().equals(Version.V1_7))
 			return;
 		PacketContent content = packet.getContent();
 		Object dig = content.getSpecificModifier(PacketUtils.getNmsClass("PacketPlayInBlockDig$EnumPlayerDigType", "network.protocol.game.")).read("c");

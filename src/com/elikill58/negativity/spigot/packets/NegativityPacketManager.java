@@ -38,6 +38,10 @@ public class NegativityPacketManager {
 			
 			@Override
 			public void onReceive(AbstractPacket packet) {
+				if(!packet.hasPlayer()) {
+					plugin.getLogger().info("Packet: " + packet.getPacketType().getFullName() +  " : " + packet.getPacketType().getPacketName());
+					return;
+				}
 				Player p = packet.getPlayer();
 				if (!SpigotNegativityPlayer.INJECTED.contains(p.getUniqueId()))
 					return;

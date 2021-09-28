@@ -12,7 +12,7 @@ import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 public abstract class ChannelAbstract {
 
 	private ExecutorService addChannelExecutor, removeChannelExecutor;
-	static final String KEY_HANDLER_PLAYER = "packet_handler", KEY_PLAYER = "packet_player_negativity",
+	static final String KEY_HANDLER_PLAYER = "packet_handler", KEY_PLAYER = "packet_player_negativity", KEY_HANDSHAKE = "packet_handshake_negativity",
 			KEY_HANDLER_SERVER = "packet_handler", KEY_SERVER = "packet_server_negativity";
 
 	private CustomPacketManager customPacketManager;

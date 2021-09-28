@@ -15,7 +15,7 @@ public class PacketUtils {
 			.split(",")[3];
 	public static final String NMS_PREFIX;
 
-	public static Class<?> CRAFT_PLAYER_CLASS, CRAFT_ENTITY_CLASS;
+	public static Class<?> CRAFT_PLAYER_CLASS, CRAFT_SERVER_CLASS, CRAFT_ENTITY_CLASS;
 	public static Class<?> ENUM_PLAYER_INFO;
 	
 	/**
@@ -28,6 +28,7 @@ public class PacketUtils {
 		try {
 			ENUM_PLAYER_INFO = getEnumPlayerInfoAction();
 			CRAFT_PLAYER_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer");
+			CRAFT_SERVER_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".CraftServer");
 			CRAFT_ENTITY_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftEntity");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -144,6 +145,22 @@ public class PacketUtils {
 		try {
 			Object craftPlayer = CRAFT_PLAYER_CLASS.cast(p);
 			return craftPlayer.getClass().getMethod("getHandle").invoke(craftPlayer);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	/**
+	 * Get NMS entity player of specified one
+	 * 
+	 * @param p the player that we want the NMS entity player
+	 * @return the entity player
+	 */
+	public static Object getCraftServer() {
+		try {
+			Object craftServer = CRAFT_SERVER_CLASS.cast(Bukkit.getServer());
+			return craftServer.getClass().getMethod("getHandle").invoke(craftServer);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

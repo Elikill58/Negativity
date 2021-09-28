@@ -12,40 +12,34 @@ public interface PacketType {
 	String getFullName();
 	List<String> getAlias();
 	
-	static final String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus";
+	static final String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus", HANDSHAKE_PREFIX = "PacketHandshaking";
 	
 	public static PacketType getType(String packetName) {
 		if(packetName.startsWith(CLIENT_PREFIX)) {
-			for(Client client : Client.values())
-				if(client.getFullName().equalsIgnoreCase(packetName) || client.getPacketName().equalsIgnoreCase(packetName) || client.getAlias().contains(packetName))
-					return client;
-			Adapter.getAdapter().debug("[Packet] Unknow client packet " + packetName);
-			return Client.UNSET;
+			return getPacketTypeFor(packetName, Client.values(), Client.UNSET);
 		} else if(packetName.startsWith(SERVER_PREFIX)) {
-			for(Server srv : Server.values())
-				if(srv.getFullName().equalsIgnoreCase(packetName) || srv.getPacketName().equalsIgnoreCase(packetName)  || srv.getAlias().contains(packetName))
-					return srv;
-			Adapter.getAdapter().debug("[Packet] Unknow server packet " + packetName);
-			return Server.UNSET;
+			return getPacketTypeFor(packetName, Server.values(), Server.UNSET);
 		} else if(packetName.startsWith(LOGIN_PREFIX)) {
-			for(Login login : Login.values())
-				if(login.getFullName().equalsIgnoreCase(packetName) || login.getPacketName().equalsIgnoreCase(packetName)  || login.getAlias().contains(packetName))
-					return login;
-			Adapter.getAdapter().debug("[Packet] Unknow login packet " + packetName);
-			return Login.UNSET;
+			return getPacketTypeFor(packetName, Login.values(), Login.UNSET);
 		} else if(packetName.startsWith(STATUS_PREFIX)) {
-			for(Status status : Status.values())
-				if(status.getFullName().equalsIgnoreCase(packetName) || status.getPacketName().equalsIgnoreCase(packetName)  || status.getAlias().contains(packetName))
-					return status;
-			Adapter.getAdapter().debug("[Packet] Unknow status packet " + packetName);
-			return Status.UNSET;
+			return getPacketTypeFor(packetName, Status.values(), Status.UNSET);
+		} else if(packetName.startsWith(HANDSHAKE_PREFIX)) {
+			return getPacketTypeFor(packetName, Handshake.values(), Handshake.UNSET);
 		} else {
 			Adapter.getAdapter().debug("[Packet] Unknow packet " + packetName);
 			return null;
 		}
 	}
 	
-	enum Client implements PacketType {
+	static PacketType getPacketTypeFor(String packetName, PacketType[] types, PacketType unset) {
+		for(PacketType packet : types)
+			if(packet.getFullName().equalsIgnoreCase(packetName) || packet.getPacketName().equalsIgnoreCase(packetName)  || packet.getAlias().contains(packetName))
+				return packet;
+		Adapter.getAdapter().debug("[Packet] Unknow packet " + packetName);
+		return unset;
+	}
+	
+	public static enum Client implements PacketType {
 		ABILITIES("Abilities"),
 		ADVANCEMENTS("Advancements"),
 		ARM_ANIMATION("ArmAnimation"),
@@ -322,5 +316,38 @@ public interface PacketType {
 		public List<String> getAlias() {
 			return alias;
 		}
+	}
+
+	public static enum Handshake implements PacketType {
+		
+		IN_LISTENER("InListener"),
+		IS_SET_PROTOCOL("InSetProtocol"),
+		UNSET("Unset");
+		
+		private final String packetName, fullName;
+		private List<String> alias = new ArrayList<>();
+		
+		private Handshake(String packetName, String... alias) {
+			this.packetName = packetName;
+			for(String al : alias)
+				this.alias.add(HANDSHAKE_PREFIX + al);
+			this.fullName = HANDSHAKE_PREFIX + packetName;
+		}
+
+		@Override
+		public String getPacketName() {
+			return packetName;
+		}
+
+		@Override
+		public String getFullName() {
+			return fullName;
+		}
+		
+		@Override
+		public List<String> getAlias() {
+			return alias;
+		}
+		
 	}
 }

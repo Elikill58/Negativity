@@ -19,9 +19,7 @@ public abstract class PacketManager {
 
 	private final List<PacketHandler> handlers = new ArrayList<>();
 	public boolean addHandler(PacketHandler handler) {
-		boolean b = handlers.contains(handler);
-		handlers.add(handler);
-		return !b;
+		return !handlers.add(handler);
 	}
 
 	public boolean removeHandler(PacketHandler handler) {

@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.packets.custom;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +25,7 @@ public class CustomPacketManager extends PacketManager implements Listener {
 	
 	private ChannelAbstract channel;
 	private Plugin pl;
+	public HashMap<Object, Integer> protocolVersionPerChannel = new HashMap<>();
 	private boolean isStarted = false;
 
 	public CustomPacketManager(Plugin pl) {

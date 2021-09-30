@@ -2,9 +2,9 @@ package com.elikill58.negativity.spigot.packets.custom.channel;
 
 import static com.elikill58.negativity.spigot.utils.PacketUtils.getPlayerConnection;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 
@@ -20,53 +20,32 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
-import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 
+@SuppressWarnings("unchecked")
 public class INCChannel extends ChannelAbstract {
 	
 	public INCChannel(CustomPacketManager customPacketManager) {
 		super(customPacketManager);
+		getFuturChannel().forEach((channelFuture) -> {
+			channelFuture.channel().pipeline().addFirst(new ChannelInboundHandler(customPacketManager));
+		});
+	}
+
+	public List<ChannelFuture> getFuturChannel() {
 		try {
 			Object dedicatedSrv = PacketUtils.getCraftServer();
 			Object mcServer = dedicatedSrv.getClass().getMethod("getServer").invoke(dedicatedSrv);
 			Object co = ReflectionUtils.getFirstWith(mcServer, PacketUtils.getNmsClass("MinecraftServer", "server."), PacketUtils.getNmsClass("ServerConnection", "network."));
-			@SuppressWarnings("unchecked")
-			List<ChannelFuture> g = (List<ChannelFuture>) ReflectionUtils.getField(co, "g");
-			g.forEach((channelFuture) -> {
-				channelFuture.channel().pipeline().addFirst(new ChannelInboundHandlerAdapter() {
-					@Override
-					public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-						((Channel) msg).pipeline().addFirst(new ChannelInitializer<Channel>() {
-							@Override
-							protected void initChannel(Channel channel) {
-								try {
-									channel.eventLoop().submit(() -> {
-										try {
-											ChannelHandlerHandshakeReceive interceptor = (ChannelHandlerHandshakeReceive) channel.pipeline().get(KEY_HANDSHAKE);
-											// Inject our packet interceptor
-											if (interceptor == null) {
-												interceptor = new ChannelHandlerHandshakeReceive();
-												channel.pipeline().addBefore("packet_handler", KEY_HANDSHAKE, interceptor);
-											}
-											return interceptor;
-										} catch (IllegalArgumentException e) {
-											// Try again
-											return (ChannelHandlerHandshakeReceive) channel.pipeline().get(KEY_HANDSHAKE);
-										}
-									});
-								} catch (Exception e) {
-									getPacketManager().getPlugin().getLogger().log(Level.SEVERE, "Cannot inject incomming channel " + channel, e);
-								}
-							}
-						});
-						ctx.fireChannelRead(msg);
-					}
-				});
-			});
+			try {
+				return (List<ChannelFuture>) ReflectionUtils.getPrivateField(co, "g");
+			} catch (NoSuchFieldException e) {
+				return (List<ChannelFuture>) ReflectionUtils.getPrivateField(co, "listeningChannels");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
+			return new ArrayList<>();
 		}
 	}
 
@@ -112,15 +91,11 @@ public class INCChannel extends ChannelAbstract {
 		});
 	}
 
-	private Channel getChannel(Player p) throws ReflectiveOperationException {
-		try {
-			Object playerConnection = getPlayerConnection(p);
-			Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
-			return new PacketContent(networkManager).getSpecificModifier(Channel.class).readSafely(0);//(Channel) networkManager.getClass().getDeclaredField("channel").get(networkManager);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	@Override
+	public Channel getChannel(Player p) throws Exception {
+		Object playerConnection = getPlayerConnection(p);
+		Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
+		return new PacketContent(networkManager).getSpecificModifier(Channel.class).readSafely(0);//(Channel) networkManager.getClass().getDeclaredField("channel").get(networkManager);
 	}
 
 	private class ChannelHandlerReceive extends ChannelInboundHandlerAdapter {
@@ -161,24 +136,4 @@ public class INCChannel extends ChannelAbstract {
 			super.write(ctx, packet, promise);
 		}
 	}
-
-	private class ChannelHandlerHandshakeReceive extends ChannelInboundHandlerAdapter {
-
-		@Override
-		public void channelRead(ChannelHandlerContext ctx, Object packet) {
-			try {
-				PacketType packetType = PacketType.getType(packet.getClass().getSimpleName());
-				if(!(packetType instanceof PacketType.Client || packetType instanceof PacketType.Server)) {
-					AbstractPacket nextPacket = getPacketManager().onPacketReceive(packetType, null, packet);
-					if(nextPacket != null && nextPacket.isCancelled())
-						return;
-				}
-				super.channelRead(ctx, packet);
-			} catch (Exception e) {
-				SpigotNegativity.getInstance().getLogger().severe("Error while reading packet : " + e.getMessage());
-				e.printStackTrace();
-			}
-		}
-	}
-
 }

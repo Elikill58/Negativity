@@ -7,6 +7,7 @@ import java.util.concurrent.Executors;
 
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 
 public abstract class ChannelAbstract {
@@ -47,8 +48,16 @@ public abstract class ChannelAbstract {
 	}
 
 	public void addPlayer(Player p) {
-		if(players.add(p.getUniqueId()))
+		if(players.add(p.getUniqueId())) {
 			addChannel(p, p.getUniqueId().toString());
+			try {
+				Integer protocol = customPacketManager.protocolVersionPerChannel.remove(getChannel(p));
+				if(protocol != null)
+					SpigotNegativityPlayer.getNegativityPlayer(p).setProtocolVersion(protocol);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void removePlayer(Player p) {
@@ -59,5 +68,7 @@ public abstract class ChannelAbstract {
 	public abstract void addChannel(Player player, String endChannelName);
 
 	public abstract void removeChannel(Player player, String endChannelName);
+	
+	public abstract Object getChannel(Player p) throws Exception;
 
 }

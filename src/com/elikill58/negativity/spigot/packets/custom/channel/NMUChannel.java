@@ -18,6 +18,7 @@ import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 import net.minecraft.util.io.netty.channel.Channel;
 import net.minecraft.util.io.netty.channel.ChannelFuture;
+import net.minecraft.util.io.netty.channel.ChannelHandler;
 import net.minecraft.util.io.netty.channel.ChannelHandlerContext;
 import net.minecraft.util.io.netty.channel.ChannelInboundHandlerAdapter;
 import net.minecraft.util.io.netty.channel.ChannelInitializer;
@@ -44,16 +45,16 @@ public class NMUChannel extends ChannelAbstract {
 								try {
 									channel.eventLoop().submit(() -> {
 										try {
-											ChannelHandlerHandshakeReceive interceptor = (ChannelHandlerHandshakeReceive) channel.pipeline().get(KEY_HANDSHAKE);
+											ChannelHandler interceptor = channel.pipeline().get(KEY_HANDSHAKE);
 											// Inject our packet interceptor
 											if (interceptor == null) {
-												interceptor = new ChannelHandlerHandshakeReceive();
+												interceptor = new ChannelHandlerHandshakeReceive(channel);
 												channel.pipeline().addBefore("packet_handler", KEY_HANDSHAKE, interceptor);
 											}
 											return interceptor;
 										} catch (IllegalArgumentException e) {
 											// Try again
-											return (ChannelHandlerHandshakeReceive) channel.pipeline().get(KEY_HANDSHAKE);
+											return channel.pipeline().get(KEY_HANDSHAKE);
 										}
 									});
 								} catch (Exception e) {
@@ -110,21 +111,17 @@ public class NMUChannel extends ChannelAbstract {
 		});
 	}
 
-	private Channel getChannel(Player p) {
-		try {
-			Object playerConnection = getPlayerConnection(p);
-			Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
-			
-			for (Field field : networkManager.getClass().getDeclaredFields())
-				if (field.getType().equals(Channel.class)) {
-					field.setAccessible(true);
-					return (Channel) field.get(networkManager);
-				}
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+	@Override
+	public Channel getChannel(Player p) throws Exception {
+		Object playerConnection = getPlayerConnection(p);
+		Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
+		
+		for (Field field : networkManager.getClass().getDeclaredFields())
+			if (field.getType().equals(Channel.class)) {
+				field.setAccessible(true);
+				return (Channel) field.get(networkManager);
+			}
+		return null;
 	}
 
 	private class ChannelHandlerReceive extends ChannelInboundHandlerAdapter {
@@ -163,16 +160,23 @@ public class NMUChannel extends ChannelAbstract {
 
 	private class ChannelHandlerHandshakeReceive extends ChannelInboundHandlerAdapter {
 
+		private final Channel channel;
+		
+		public ChannelHandlerHandshakeReceive(Channel channel) {
+			this.channel = channel;
+		}
+		
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object packet) {
 			try {
 				PacketType packetType = PacketType.getType(packet.getClass().getSimpleName());
-				if(packetType instanceof PacketType.Client || packetType instanceof PacketType.Server)
-					return;
-				//SpigotNegativity.getInstance().getLogger().info("PacketType: " + packet.getClass().getSimpleName() + " > " + packetType);
-				AbstractPacket nextPacket = getPacketManager().onPacketReceive(packetType, null, packet);
-				if(nextPacket != null && nextPacket.isCancelled())
-					return;
+				if(!(packetType instanceof PacketType.Client || packetType instanceof PacketType.Server) && packetType != null) {
+					AbstractPacket nextPacket = getPacketManager().onPacketReceive(packetType, null, packet);
+					if(nextPacket != null && nextPacket.isCancelled())
+						return;
+					if(packetType.equals(PacketType.Handshake.IS_SET_PROTOCOL))
+						getPacketManager().protocolVersionPerChannel.put(channel, nextPacket.getContent().getIntegers().readSafely(0, 0));
+				}
 				super.channelRead(ctx, packet);
 			} catch (Exception e) {
 				SpigotNegativity.getInstance().getLogger().severe("Error while reading packet : " + e.getMessage());

@@ -103,9 +103,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean isInFight = false;
 	public BukkitTask fightTask = null;
 	public String clientName;
-	public int fakePlayerTouched = 0, ping = 0;
+	public int fakePlayerTouched = 0, ping = 0, protocolVersion = 0;
 	public long timeStartFakePlayer = 0;
-	private final Version playerVersion;
+	private Version playerVersion;
 
 	public SpigotNegativityPlayer(Player p) {
 		super(p.getUniqueId(), p.getName());
@@ -154,6 +154,15 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	@Override
 	public Version getPlayerVersion() {
 		return playerVersion;
+	}
+	
+	public int getProtocolVersion() {
+		return protocolVersion;
+	}
+	
+	public void setProtocolVersion(int protocolVersion) {
+		this.protocolVersion = protocolVersion;
+		this.playerVersion = Version.getVersionByProtocolID(protocolVersion);
 	}
 	
 	public boolean isBedrockPlayer() {

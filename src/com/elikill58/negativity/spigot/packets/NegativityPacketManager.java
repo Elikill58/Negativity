@@ -11,6 +11,7 @@ import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 import com.elikill58.negativity.spigot.packets.protocollib.ProtocollibPacketManager;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.PacketType.Client;
+import com.elikill58.negativity.universal.adapter.Adapter;
 
 public class NegativityPacketManager {
 
@@ -39,7 +40,7 @@ public class NegativityPacketManager {
 			@Override
 			public void onReceive(AbstractPacket packet) {
 				if(!packet.hasPlayer()) {
-					plugin.getLogger().info("Packet: " + packet.getPacketType().getFullName() +  " : " + packet.getPacketType().getPacketName());
+					Adapter.getAdapter().debug("Packet: " + packet.getPacketType().getFullName() +  " : " + packet.getPacketType().getPacketName());
 					return;
 				}
 				Player p = packet.getPlayer();

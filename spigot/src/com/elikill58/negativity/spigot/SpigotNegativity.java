@@ -62,12 +62,13 @@ public class SpigotNegativity extends JavaPlugin {
 	private BukkitTask clickTimer = null, invTimer = null, pendingAlertsTimer = null, packetTimer = null, runSpawnFakePlayer = null;
 	public static String CHANNEL_NAME_FML = "";
 	private NegativityPacketManager packetManager;
-	
+		
 	@Override
 	public void onEnable() {
 		INSTANCE = this;
 		if (Adapter.getAdapter() == null)
 			Adapter.setAdapter(new SpigotAdapter(this));
+
 		Version v = Version.getVersion(Utils.VERSION);
 		if (v.equals(Version.HIGHER))
 			getLogger().warning("Unknow server version " + Utils.VERSION + " ! Some problems can appears.");
@@ -77,6 +78,8 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		
 		packetManager = new NegativityPacketManager(this);
+		packetManager.getPacketManager().load();
+		
 		new File(getDataFolder().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
 		if (!new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml").exists()) {
 			getLogger().info("------ Negativity Information ------");

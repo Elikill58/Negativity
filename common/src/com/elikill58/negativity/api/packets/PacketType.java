@@ -7,9 +7,27 @@ import java.util.concurrent.Callable;
 
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.NPacketUnknown;
+import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInListener;
+import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
+import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeUnset;
 import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
-import com.elikill58.negativity.api.packets.packet.playin.*;
-import com.elikill58.negativity.api.packets.packet.playout.*;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimation;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 import com.elikill58.negativity.universal.Adapter;
 
@@ -64,7 +82,7 @@ public interface PacketType {
 	 */
 	NPacket createNewPacket();
 	
-	String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus";
+	String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus", HANDSHAKE_PREFIX = "PacketHandshaking";
 
 
 	public static List<PacketType> values() {
@@ -83,35 +101,29 @@ public interface PacketType {
 	 * @param packetName the packet name
 	 * @return the packet type, or the UNSET value of the PacketType section or null
 	 */
-	static PacketType getType(String packetName) {
+	public static PacketType getType(String packetName) {
 		if(packetName.startsWith(CLIENT_PREFIX)) {
-			for(Client client : Client.values())
-				if(client.getFullName().equalsIgnoreCase(packetName) || client.getPacketName().equalsIgnoreCase(packetName) || client.getAlias().contains(packetName))
-					return client;
-			Adapter.getAdapter().debug("[Packet] Unknow client packet " + packetName);
-			return Client.UNSET;
+			return getPacketTypeFor(packetName, Client.values(), Client.UNSET);
 		} else if(packetName.startsWith(SERVER_PREFIX)) {
-			for(Server srv : Server.values())
-				if(srv.getFullName().equalsIgnoreCase(packetName) || srv.getPacketName().equalsIgnoreCase(packetName)  || srv.getAlias().contains(packetName))
-					return srv;
-			Adapter.getAdapter().debug("[Packet] Unknow server packet " + packetName);
-			return Server.UNSET;
+			return getPacketTypeFor(packetName, Server.values(), Server.UNSET);
 		} else if(packetName.startsWith(LOGIN_PREFIX)) {
-			for(Login login : Login.values())
-				if(login.getFullName().equalsIgnoreCase(packetName) || login.getPacketName().equalsIgnoreCase(packetName)  || login.getAlias().contains(packetName))
-					return login;
-			Adapter.getAdapter().debug("[Packet] Unknow login packet " + packetName);
-			return Login.UNSET;
+			return getPacketTypeFor(packetName, Login.values(), Login.UNSET);
 		} else if(packetName.startsWith(STATUS_PREFIX)) {
-			for(Status status : Status.values())
-				if(status.getFullName().equalsIgnoreCase(packetName) || status.getPacketName().equalsIgnoreCase(packetName)  || status.getAlias().contains(packetName))
-					return status;
-			Adapter.getAdapter().debug("[Packet] Unknow status packet " + packetName);
-			return Status.UNSET;
+			return getPacketTypeFor(packetName, Status.values(), Status.UNSET);
+		} else if(packetName.startsWith(HANDSHAKE_PREFIX)) {
+			return getPacketTypeFor(packetName, Handshake.values(), Handshake.UNSET);
 		} else {
 			Adapter.getAdapter().debug("[Packet] Unknow packet " + packetName);
 			return null;
 		}
+	}
+	
+	static PacketType getPacketTypeFor(String packetName, PacketType[] types, PacketType unset) {
+		for(PacketType packet : types)
+			if(packet.getFullName().equalsIgnoreCase(packetName) || packet.getPacketName().equalsIgnoreCase(packetName)  || packet.getAlias().contains(packetName))
+				return packet;
+		Adapter.getAdapter().debug("[Packet] Unknow packet " + packetName);
+		return unset;
 	}
 	
 	enum Client implements PacketType {
@@ -480,5 +492,60 @@ public interface PacketType {
 				return null;
 			}
 		}
+	}
+
+	enum Handshake implements PacketType {
+		
+		IN_LISTENER("InListener", NPacketHandshakeInListener::new),
+		IS_SET_PROTOCOL("InSetProtocol", NPacketHandshakeInSetProtocol::new),
+		UNSET("Unset", NPacketHandshakeUnset::new);
+		
+		private final String packetName, fullName;
+		private final Callable<NPacket> fun;
+		private List<String> alias = new ArrayList<>();
+		
+		Handshake(String packetName, Callable<NPacket> fun, String... alias) {
+			this.packetName = packetName;
+			this.fun = fun;
+			for(String al : alias)
+				this.alias.add(HANDSHAKE_PREFIX + al);
+			this.fullName = HANDSHAKE_PREFIX + packetName;
+		}
+
+		@Override
+		public String getPacketName() {
+			return packetName;
+		}
+
+		@Override
+		public String getFullName() {
+			return fullName;
+		}
+		
+		@Override
+		public List<String> getAlias() {
+			return alias;
+		}
+
+		@Override
+		public boolean isFlyingPacket() {
+			return false;
+		}
+
+		@Override
+		public boolean isUnset() {
+			return this == UNSET;
+		}
+
+		@Override
+		public NPacket createNewPacket() {
+			try {
+				return fun.call();
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
+		}
+		
 	}
 }

@@ -18,9 +18,15 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.PacketContent.ContentModifier;
 import com.elikill58.negativity.api.packets.packet.NPacket;
+import com.elikill58.negativity.api.packets.packet.NPacketHandshake;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
+import com.elikill58.negativity.api.packets.packet.NPacketStatus;
+import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInListener;
+import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
+import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeUnset;
 import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimation;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
@@ -46,8 +52,10 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import net.minecraft.server.v1_10_R1.Vec3D;
 
 @SuppressWarnings("unchecked")
@@ -55,6 +63,8 @@ public abstract class SpigotVersionAdapter {
 
 	protected HashMap<String, BiFunction<Player, Object, NPacketPlayOut>> packetsPlayOut = new HashMap<>();
 	protected HashMap<String, BiFunction<Player, Object, NPacketPlayIn>> packetsPlayIn = new HashMap<>();
+	protected HashMap<String, BiFunction<Player, Object, NPacketHandshake>> packetsHandshake = new HashMap<>();
+	protected HashMap<String, BiFunction<Player, Object, NPacketStatus>> packetsStatus = new HashMap<>();
 	private final String version;
 
 	public SpigotVersionAdapter(String version) {
@@ -166,9 +176,16 @@ public abstract class SpigotVersionAdapter {
 			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
 					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
 		});
+		
+		packetsHandshake.put("PacketHandshakingInListener", (player, t) -> new NPacketHandshakeInListener());
+		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
+			PacketContent content = new PacketContent(raw);
+			ContentModifier<Integer> ints = content.getIntegers();
+			return new NPacketHandshakeInSetProtocol(ints.read("a", 0), content.getStrings().readSafely(0, "0.0.0.0"), ints.read("port", 0));
+		});
 
 		SpigotNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size()
-				+ " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
+				+ " PlayIn, " + packetsPlayOut.size() + " PlayOut, " + packetsHandshake.size() + " Handshake and " + packetsStatus.size() + " Status.");
 	}
 
 	protected abstract String getOnGroundFieldName();
@@ -261,6 +278,21 @@ public abstract class SpigotVersionAdapter {
 		}
 	}
 
+	public List<ChannelFuture> getFuturChannel() {
+		try {
+			Object mcServer = PacketUtils.getDedicatedServer();
+			Object co = ReflectionUtils.getFirstWith(mcServer, PacketUtils.getNmsClass("MinecraftServer"), PacketUtils.getNmsClass("ServerConnection"));
+			try {
+				return (List<ChannelFuture>) ReflectionUtils.getPrivateField(co, "g");
+			} catch (NoSuchFieldException e) {
+				return (List<ChannelFuture>) ReflectionUtils.getPrivateField(co, "listeningChannels");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
+	}
+
 	public String getVersion() {
 		return version;
 	}
@@ -269,12 +301,14 @@ public abstract class SpigotVersionAdapter {
 		if (packetName.startsWith(PacketType.CLIENT_PREFIX))
 			return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset(nms.getClass().getName()))
 					.apply(player, nms);
-		if (packetName.startsWith(PacketType.SERVER_PREFIX))
+		else if (packetName.startsWith(PacketType.SERVER_PREFIX))
 			return packetsPlayOut.getOrDefault(packetName, (p, obj) -> new NPacketPlayOutUnset()).apply(player, nms);
-		if (packetName.startsWith(PacketType.LOGIN_PREFIX))
+		else if (packetName.startsWith(PacketType.LOGIN_PREFIX))
 			return new NPacketLoginUnset();
-		if (packetName.startsWith(PacketType.STATUS_PREFIX))
-			return new NPacketStatusUnset();
+		else if (packetName.startsWith(PacketType.STATUS_PREFIX))
+			return packetsStatus.getOrDefault(packetName, (p, obj) -> new NPacketStatusUnset()).apply(player, nms);
+		else if (packetName.startsWith(PacketType.HANDSHAKE_PREFIX))
+			return packetsHandshake.getOrDefault(packetName, (p, obj) -> new NPacketHandshakeUnset()).apply(player, nms);
 		Adapter.getAdapter().debug("[SpigotVersionAdapter] Unknow packet " + packetName + ".");
 		return null;
 	}

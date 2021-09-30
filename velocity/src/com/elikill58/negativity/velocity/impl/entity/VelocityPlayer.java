@@ -59,6 +59,16 @@ public class VelocityPlayer extends AbstractProxyPlayer {
 	}
 	
 	@Override
+	public int getProtocolVersion() {
+		return pp.getProtocolVersion().getProtocol();
+	}
+	
+	@Override
+	public void setProtocolVersion(int protocolVersion) {
+		// don't need it on velocity
+	}
+	
+	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {
 		pp.sendPluginMessage(new LegacyChannelIdentifier(channelId), writeMessage);
 	}

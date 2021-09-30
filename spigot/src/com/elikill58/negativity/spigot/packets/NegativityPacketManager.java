@@ -49,6 +49,8 @@ public class NegativityPacketManager {
 			
 			@Override
 			public void onReceive(AbstractPacket packet) {
+				if(packet.getPlayer() == null)
+					return;
 				Player p = packet.getPlayer();
 				if (!NegativityPlayer.INJECTED.contains(p.getUniqueId()))
 					return;

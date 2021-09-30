@@ -15,6 +15,10 @@ public abstract class PacketEvent extends PlayerEvent {
 		this.packet = packet;
 	}
 	
+	public boolean hasPlayer() {
+		return getPlayer() != null;
+	}
+	
 	public AbstractPacket getPacket() {
 		return packet;
 	}

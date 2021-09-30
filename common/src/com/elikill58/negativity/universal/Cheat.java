@@ -73,7 +73,7 @@ public abstract class Cheat {
 		this.aliases = alias;
 		this.hasVerif = hasVerif;
 		
-		String fileName = this.key + ".yml";
+		String fileName = this.key.getLowerKey() + ".yml";
 		Path moduleFile = MODULE_FOLDER.resolve(fileName);
 		try {
 			moduleFile = UniversalUtils.copyBundledFile(BUNDLED_MODULES_BASE + fileName, moduleFile);

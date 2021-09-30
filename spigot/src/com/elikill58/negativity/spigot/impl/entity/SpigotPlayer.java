@@ -35,15 +35,39 @@ import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 @SuppressWarnings("deprecation")
 public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> implements Player {
 
+	private int protocolVersion = 0;
 	private Version playerVersion;
 	
 	public SpigotPlayer(org.bukkit.entity.Player p) {
 		super(p);
-		this.playerVersion = loadVersion();
+		this.protocolVersion = PlayerVersionManager.getPlayerProtocolVersion(this);
+		this.playerVersion = Version.getVersionByProtocolID(getProtocolVersion());
+	}
+
+	@Override
+	public Version getPlayerVersion() {
+		return isVersionSet() ? playerVersion : (playerVersion = Version.getVersionByProtocolID(getProtocolVersion()));
 	}
 	
-	private Version loadVersion() {
-		return PlayerVersionManager.getPlayerVersion(this);
+	private boolean isVersionSet() {
+		return playerVersion != null && !playerVersion.equals(Version.HIGHER);
+	}
+	
+	@Override
+	public int getProtocolVersion() {
+		return protocolVersion;
+	}
+	
+	@Override
+	public void setProtocolVersion(int protocolVersion) {
+		if(this.protocolVersion == 0 || Version.getVersion().getFirstProtocolNumber() == PlayerVersionManager.getPlayerProtocolVersion(this)
+					|| !isVersionSet()) { // if his using default values
+			this.playerVersion = Version.getVersionByProtocolID(protocolVersion);
+			Adapter.getAdapter().debug("Setting ProtocolVersion: " + protocolVersion + ", founded: " + playerVersion.name() + " (previous: " + this.protocolVersion + ")");
+			if(protocolVersion == 0 && this.protocolVersion != 0)
+				return;// prevent losing good value
+			this.protocolVersion = protocolVersion;
+		}
 	}
 
 	@Override
@@ -129,11 +153,6 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	@Override
 	public boolean hasPermission(String perm) {
 		return entity.hasPermission(perm);
-	}
-
-	@Override
-	public Version getPlayerVersion() {
-		return playerVersion.equals(Version.HIGHER) ? (playerVersion = loadVersion()) : playerVersion;
 	}
 
 	@Override

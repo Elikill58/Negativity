@@ -44,15 +44,31 @@ import com.flowpowered.math.vector.Vector3d;
 
 public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.living.player.Player> implements Player {
 
+	private int protocolVersion = 0;
 	private Version playerVersion;
 
 	public SpongePlayer(org.spongepowered.api.entity.living.player.Player p) {
 		super(p);
-		this.playerVersion = loadVersion();
+		this.protocolVersion = PlayerVersionManager.getPlayerProtocolVersion(this);
+	}
+
+	@Override
+	public Version getPlayerVersion() {
+		return isVersionSet() ? playerVersion : (playerVersion = Version.getVersionByProtocolID(getProtocolVersion()));
 	}
 	
-	private Version loadVersion() {
-		return PlayerVersionManager.getPlayerVersion(this);
+	private boolean isVersionSet() {
+		return playerVersion != null && !playerVersion.equals(Version.HIGHER);
+	}
+	
+	@Override
+	public int getProtocolVersion() {
+		return protocolVersion;
+	}
+	
+	@Override
+	public void setProtocolVersion(int protocolVersion) {
+		this.protocolVersion = protocolVersion;
 	}
 
 	@Override
@@ -159,11 +175,6 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	@Override
 	public boolean hasPermission(String perm) {
 		return entity.hasPermission(perm);
-	}
-
-	@Override
-	public Version getPlayerVersion() {
-		return playerVersion == Version.HIGHER ? (playerVersion = loadVersion()) : playerVersion;
 	}
 
 	@Override

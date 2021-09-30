@@ -38,9 +38,9 @@ public class Blink extends Cheat implements Listeners {
 	
 	@EventListener
 	public void onPacketReceive(PacketReceiveEvent e) {
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
 		AbstractPacket packet = e.getPacket();
-		if (packet.getPacketType() != Client.KEEP_ALIVE) {
+		if (packet.getPacketType() != Client.KEEP_ALIVE && e.hasPlayer()) {
+			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
 			np.TIME_OTHER_KEEP_ALIVE = System.currentTimeMillis();
 			np.LAST_OTHER_KEEP_ALIVE = packet.getPacketName();
 		}

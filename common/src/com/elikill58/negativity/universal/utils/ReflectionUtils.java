@@ -4,8 +4,7 @@ import java.lang.reflect.Field;
 
 public class ReflectionUtils {
 	
-	public static Object getPrivateField(Object object, String field)
-			throws SecurityException, NoSuchFieldException, IllegalArgumentException, IllegalAccessException {
+	public static Object getPrivateField(Object object, String field) throws Exception {
 		Field objectField = object.getClass().getDeclaredField(field);
 		objectField.setAccessible(true);
 		return objectField.get(object);
@@ -30,7 +29,7 @@ public class ReflectionUtils {
 	 */
 	public static Object getField(Object source, String field) {
 		try {
-			Field f = source.getClass().getField(field);
+			Field f = source.getClass().getDeclaredField(field);
 			f.setAccessible(true);
 			return f.get(source);
 		} catch (Exception e) {
@@ -53,5 +52,25 @@ public class ReflectionUtils {
 			e.printStackTrace();
 			return null;
 		}
+	}
+
+	/**
+	 * Get the first field which have the searching for class type
+	 * 
+	 * @param from the object where we will try to find the field
+	 * @param clazz the class that have to define the field
+	 * @param searchingFor the class of the required field
+	 * @return the field (or null if not found)
+	 * @throws Exception if something gone wrong
+	 */
+	@SuppressWarnings("unchecked")
+	public static <T> T getFirstWith(Object from, Class<?> clazz, Class<T> searchingFor) throws Exception {
+		for (Field f : clazz.getDeclaredFields()) {
+			if (f.getType().equals(searchingFor)) {
+				f.setAccessible(true);
+				return (T) f.get(from);
+			}
+		}
+		return null;
 	}
 }

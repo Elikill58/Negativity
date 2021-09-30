@@ -16,6 +16,11 @@ public class ProtocolSupportPlayerVersionFetcher implements PlayerVersionFetcher
 		return Version.getVersionByProtocolID(ProtocolSupportAPI.getProtocolVersion((org.bukkit.entity.Player) p.getDefault()).getId());
 	}
 	
+	@Override
+	public Integer getPlayerProtocolVersion(Player p) {
+		return ProtocolSupportAPI.getProtocolVersion((org.bukkit.entity.Player) p.getDefault()).getId();
+	}
+	
 	public static class Provider implements PlayerVersionFetcherProvider, PluginDependentExtension {
 		
 		@Override

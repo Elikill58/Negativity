@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.packets.custom;
 
+import java.util.HashMap;
+
 import org.bukkit.Bukkit;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -24,6 +26,7 @@ public class CustomPacketManager extends SpigotPacketManager implements Listener
 	
 	private ChannelAbstract channel;
 	private Plugin pl;
+	public HashMap<Object, Integer> protocolVersionPerChannel = new HashMap<>();
 	private boolean isStarted = false;
 
 	public CustomPacketManager(Plugin pl) {
@@ -32,9 +35,16 @@ public class CustomPacketManager extends SpigotPacketManager implements Listener
 			channel = new NMUChannel(this);
 		else
 			channel = new INCChannel(this);
-		pl.getServer().getPluginManager().registerEvents(this, pl);
-		
+	}
+	
+	public Plugin getPlugin() {
+		return pl;
+	}
+	
+	@Override
+	public void load() {
 		// we wait the start server
+		pl.getServer().getPluginManager().registerEvents(this, pl);
 		Bukkit.getScheduler().runTaskLater(pl, new Runnable() {
 			@Override
 			public void run() {
@@ -43,10 +53,6 @@ public class CustomPacketManager extends SpigotPacketManager implements Listener
 					addPlayer(p);
 			}
 		}, 40);
-	}
-	
-	public Plugin getPlugin() {
-		return pl;
 	}
 
 	@EventHandler

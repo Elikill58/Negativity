@@ -35,6 +35,9 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 	}
 	
 	@Override
+	public void load() {}
+	
+	@Override
 	public void addPlayer(com.elikill58.negativity.api.entity.Player p) {}
 	
 	@Override

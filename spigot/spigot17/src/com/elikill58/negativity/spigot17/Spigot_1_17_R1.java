@@ -10,6 +10,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
@@ -30,8 +31,10 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPositio
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
+import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 import io.netty.channel.Channel;
+import io.netty.channel.ChannelFuture;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
@@ -46,8 +49,11 @@ import net.minecraft.network.protocol.game.ServerboundKeepAlivePacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
+import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.server.network.ServerConnectionListener;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ClipContext;
@@ -160,6 +166,12 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
 					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
 		});
+		
+		
+		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
+			ClientIntentionPacket packet = (ClientIntentionPacket) raw;
+			return new NPacketHandshakeInSetProtocol(packet.getProtocolVersion(), packet.hostName, packet.port);
+		});
 	}
 
 	@Override
@@ -168,13 +180,13 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 	}
 
 	@Override
-	public double getAverageTps() {
-		return Mth.average(getServer().tickTimes);
+	public List<Player> getOnlinePlayers() {
+		return new ArrayList<>(Bukkit.getOnlinePlayers());
 	}
 
 	@Override
-	public List<Player> getOnlinePlayers() {
-		return new ArrayList<>(Bukkit.getOnlinePlayers());
+	public double getAverageTps() {
+		return Mth.average(getServer().tickTimes);
 	}
 
 	@Override
@@ -208,7 +220,20 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 	}
 
 	private DedicatedServer getServer() {
-		return (DedicatedServer) PacketUtils.getDedicatedServer(Bukkit.getServer());
+		return (DedicatedServer) PacketUtils.getDedicatedServer();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ChannelFuture> getFuturChannel() {
+		try {
+			DedicatedServer mcServer = (DedicatedServer) PacketUtils.getDedicatedServer();
+			Object co = ReflectionUtils.getFirstWith(mcServer, MinecraftServer.class, ServerConnectionListener.class);
+			return ((List<ChannelFuture>) ReflectionUtils.getField(co, "f"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new ArrayList<>();
+		}
 	}
 
 	@Override

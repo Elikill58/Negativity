@@ -7,6 +7,8 @@ import com.elikill58.negativity.api.entity.Player;
 
 public abstract class PacketManager {
 
+	public abstract void load();
+	
 	/**
 	 * Add player to analyzed one
 	 * 

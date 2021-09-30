@@ -40,6 +40,17 @@ public enum Version {
 	}
 
 	/**
+	 * Get the first protocol number of this version.
+	 * 
+	 * This value is used as default protocol version of a version.
+	 * 
+	 * @return the protocol version
+	 */
+	public int getFirstProtocolNumber() {
+		return firstProtocolNumber;
+	}
+	
+	/**
 	 * Check if this version is strictly newer than the given one
 	 * 
 	 * @param other the version which will be compared

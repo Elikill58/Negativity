@@ -222,7 +222,11 @@ public interface Player extends OfflinePlayer {
 	 * @return the version which player use on server
 	 */
 	Version getPlayerVersion();
-
+	
+	int getProtocolVersion();
+	
+	void setProtocolVersion(int protocolVersion);
+	
 	/**
 	 * Get the entity which is used as vehicle.
 	 * It can be a wagon or a zombie.

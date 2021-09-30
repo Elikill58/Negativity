@@ -74,8 +74,8 @@ public class Scaffold extends Cheat implements Listeners {
 	@Check(name = "packet", description = "Distance of move with packet", conditions = CheckConditions.SURVIVAL)
 	public void onPacket(PacketReceiveEvent e) {
 		AbstractPacket pa = e.getPacket();
-		Player p = e.getPlayer();
 		if(pa.getPacketType().equals(PacketType.Client.BLOCK_PLACE)) {
+			Player p = e.getPlayer();
 			pa.getContent().getSpecificModifier(float.class).getContent().forEach((field, value) -> {
 				if(value > 1.5) {
 					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(value * 10), "packet",

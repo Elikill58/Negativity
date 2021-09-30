@@ -7,12 +7,13 @@ import java.util.concurrent.Executors;
 
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 
 public abstract class ChannelAbstract {
 
 	private ExecutorService addChannelExecutor, removeChannelExecutor;
-	static final String KEY_HANDLER_PLAYER = "packet_handler", KEY_PLAYER = "packet_player_negativity",
+	static final String KEY_HANDLER_PLAYER = "packet_handler", KEY_PLAYER = "packet_player_negativity", KEY_HANDSHAKE = "packet_handshake_negativity",
 			KEY_HANDLER_SERVER = "packet_handler", KEY_SERVER = "packet_server_negativity";
 
 	private CustomPacketManager customPacketManager;
@@ -47,8 +48,16 @@ public abstract class ChannelAbstract {
 	}
 
 	public void addPlayer(Player p) {
-		if(players.add(p.getUniqueId()))
+		if(players.add(p.getUniqueId())) {
 			addChannel(p, p.getUniqueId().toString());
+			try {
+				Integer protocol = customPacketManager.protocolVersionPerChannel.remove(getChannel(p));
+				if(protocol != null)
+					SpigotEntityManager.getPlayer(p).setProtocolVersion(protocol);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public void removePlayer(Player p) {
@@ -59,5 +68,7 @@ public abstract class ChannelAbstract {
 	public abstract void addChannel(Player player, String endChannelName);
 
 	public abstract void removeChannel(Player player, String endChannelName);
+	
+	public abstract Object getChannel(Player p) throws Exception;
 
 }

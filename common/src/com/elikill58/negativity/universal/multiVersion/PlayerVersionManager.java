@@ -34,4 +34,14 @@ public class PlayerVersionManager {
 		}
 		return Version.HIGHER;
 	}
+	
+	public static int getPlayerProtocolVersion(Player player) {
+		for (PlayerVersionFetcher fetcher : FETCHERS) {
+			Integer playerVersion = fetcher.getPlayerProtocolVersion(player);
+			if (playerVersion != null) {
+				return playerVersion;
+			}
+		}
+		return Version.getVersion().getFirstProtocolNumber();
+	}
 }

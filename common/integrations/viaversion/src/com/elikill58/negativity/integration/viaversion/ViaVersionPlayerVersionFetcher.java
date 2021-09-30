@@ -16,6 +16,11 @@ public class ViaVersionPlayerVersionFetcher implements PlayerVersionFetcher {
 		return Version.getVersionByProtocolID(Via.getAPI().getPlayerVersion(p.getUniqueId()));
 	}
 	
+	@Override
+	public Integer getPlayerProtocolVersion(Player p) {
+		return Via.getAPI().getPlayerVersion(p.getUniqueId());
+	}
+	
 	public static class SpigotProvider implements PlayerVersionFetcherProvider, PluginDependentExtension {
 		
 		@Override

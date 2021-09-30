@@ -28,6 +28,9 @@ public class PacketGateManager extends SpongePacketManager {
 	}
 	
 	@Override
+	public void load() {}
+	
+	@Override
 	public void addPlayer(com.elikill58.negativity.api.entity.Player p) {}
 	
 	@Override

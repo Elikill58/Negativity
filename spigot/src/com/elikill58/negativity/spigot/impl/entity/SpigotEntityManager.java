@@ -44,7 +44,7 @@ public class SpigotEntityManager {
 		if(sender == null)
 			return null;
 		if(sender instanceof Player)
-			return new SpigotPlayer((Player) sender);
+			return getPlayer((Player) sender);
 		return new SpigotCommandSender(sender);
 	}
 }

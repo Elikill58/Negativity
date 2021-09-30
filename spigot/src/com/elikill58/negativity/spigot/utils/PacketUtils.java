@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -130,9 +129,9 @@ public class PacketUtils {
 	 * @param p the player that we want the NMS entity player
 	 * @return the entity player
 	 */
-	public static Object getDedicatedServer(Server srv) {
+	public static Object getDedicatedServer() {
 		try {
-			Object server = CRAFT_SERVER_CLASS.cast(srv);
+			Object server = CRAFT_SERVER_CLASS.cast(Bukkit.getServer());
 			return server.getClass().getMethod("getServer").invoke(server);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -98,7 +98,7 @@ public class ConnectionManager implements Listeners {
 
 	@EventListener
 	public void onLogin(LoginEvent e) {
-		if(!BanManager.shouldNegativityHandleBans() || !e.getLoginResult().equals(Result.ALLOWED)) // already kicked
+		if(!BanManager.shouldNegativityHandleBans() || !e.getLoginResult().equals(Result.ALLOWED) || !BanManager.banActive) // already kicked or ban not enabled
 			return;
 		UUID playerId = e.getUUID();
 
@@ -120,7 +120,6 @@ public class ConnectionManager implements Listeners {
 			e.setLoginResult(Result.KICK_BANNED);
 			e.setKickMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));
 			ada.getAccountManager().dispose(playerId);
-			return;
 		}
 	}
 	

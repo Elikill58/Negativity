@@ -177,6 +177,11 @@ public class INCChannel extends ChannelAbstract {
 			} catch (Exception e) {
 				SpigotNegativity.getInstance().getLogger().severe("Error while reading packet : " + e.getMessage());
 				e.printStackTrace();
+				try {
+					super.channelRead(ctx, packet); // even if an issue appear the packet is read
+				} catch (Exception e1) {
+					e1.printStackTrace();
+				}
 			}
 		}
 	}

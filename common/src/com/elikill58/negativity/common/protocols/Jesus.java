@@ -52,12 +52,12 @@ public class Jesus extends Cheat implements Listeners {
 		boolean mayCancel = false;
 		double dif = e.getFrom().getY() - e.getTo().getY();
 		if(checkActive("water-around")) {
-			if (type.getId().equalsIgnoreCase("AIR") && !isInWater && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
+			if (type.equals(Materials.AIR) && !isInWater && isOnWater && !LocationUtils.hasBoatAroundHim(loc) && !p.isFlying()) {
 				if (!hasOtherThanExtended(under, STATIONARY_WATER)) {
 					double reliability = 0;
 					if (dif < 0.0005 && dif > 0.00000005)
 						reliability = dif * 10000000 - 1;
-					else if (dif < 0.1 && dif > 0.08)
+					else if (dif < 0.1 && dif > 0.08 && p.getFallDistance() <= 0.0)
 						reliability = dif * 1000;
 					else if (dif == 0.5)
 						reliability = 75;

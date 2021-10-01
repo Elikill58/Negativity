@@ -116,6 +116,9 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 			double d3 = (p.getGameMode() == GameMode.CREATIVE) ? 5.0D : 4.5D;
 			Vec3 vec3d1 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
 			BlockHitResult hitResult = ep.level.rayTraceBlock(new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, ep), ep.blockPosition());
+			if(hitResult == null) { // ignore because it should be only interact and not block pose
+				return new NPacketPlayInUnset("PacketPlayInBlockPlace");
+			}
 			if(hitResult.isInside()) {
 				BlockPos pos = hitResult.getBlockPos();
 				Vec3 vec = hitResult.getLocation();

@@ -67,7 +67,9 @@ public class Step extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "dif-boost", description = "Distance while counting jump", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_FLY, CheckConditions.IS_NO_BEDROCK, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NOT_USE_SLIME, CheckConditions.NOT_USE_TRIDENT })
+	@Check(name = "dif-boost", description = "Distance while counting jump", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA,
+			CheckConditions.NO_SWIM, CheckConditions.NO_FLY, CheckConditions.IS_NO_BEDROCK, CheckConditions.NOT_USE_ELEVATOR,
+			CheckConditions.NOT_USE_SLIME, CheckConditions.NOT_USE_TRIDENT, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onPlayerMoveDifBoost(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))

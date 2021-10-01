@@ -215,7 +215,8 @@ public class Negativity {
 						+ p.getUniqueId() + ") seem to use " + c.getName() + " "
 						+ (alert.getNbAlertConsole() > 1 ? alert.getNbAlertConsole() + " times " : "") + "Reliability: " + reliability + " " + sLoc);
 		}
-		WebhookManager.send(new WebhookMessage(WebhookMessageType.ALERT, p, "Negativity", System.currentTimeMillis(), "%cheat%", alert.getCheat().getName(),
+		if(!alert.getReportType().equals(ReportType.INFO))
+			WebhookManager.send(new WebhookMessage(WebhookMessageType.ALERT, p, "Negativity", System.currentTimeMillis(), "%cheat%", alert.getCheat().getName(),
 				"%amount%", alert.getNbAlert() == 0 ? 1 : alert.getNbAlert(), "%reliability%", alert.getReliability()));
 		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
@@ -290,7 +291,7 @@ public class Negativity {
 
 	private static void logProof(NegativityPlayer np, ReportType type, Player p, Cheat c, int reliability,
 			String checkName, String proof, int ping, int amount) {
-		if(!log)
+		if(!log || type.equals(ReportType.INFO))
 			return;
 		String time = new Timestamp(System.currentTimeMillis()).toString().split("\\.")[0];
 		np.logProof(time + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " x" + amount + " - " + checkName

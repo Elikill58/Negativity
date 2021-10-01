@@ -57,6 +57,6 @@ public enum CheatKeys implements Comparable<CheatKeys> {
 	
 	@Override
 	public String toString() {
-		return key;
+		return getLowerKey();
 	}
 }

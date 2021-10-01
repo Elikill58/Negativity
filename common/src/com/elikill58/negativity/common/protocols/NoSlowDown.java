@@ -4,6 +4,7 @@ import static com.elikill58.negativity.universal.CheatKeys.NO_SLOW_DOWN;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerItemConsumeEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
@@ -25,6 +26,19 @@ public class NoSlowDown extends Cheat implements Listeners {
 	public NoSlowDown() {
 		super(NO_SLOW_DOWN, CheatCategory.MOVEMENT, Materials.SOUL_SAND, false, false, "slowdown");
 	}
+	
+	@EventListener
+	public void onMove(PlayerMoveEvent e) {
+		Player p = e.getPlayer(); // manage eating distance even when "move" check is disabled
+		Location from = e.getFrom(), to = e.getTo();
+		double xSpeed = Math.abs(from.getX() - to.getX());
+	    double zSpeed = Math.abs(from.getZ() - to.getZ());
+	    double xzSpeed = Math.sqrt(xSpeed * xSpeed + zSpeed * zSpeed);
+	    double maxSpeed = (xSpeed >= zSpeed ? xSpeed : zSpeed);
+	    if(maxSpeed < xzSpeed)
+	    	maxSpeed = xzSpeed;
+	    NegativityPlayer.getNegativityPlayer(p).doubles.set(NO_SLOW_DOWN, "eating-distance", maxSpeed);
+	}
 
 	@Check(name = "move", description = "Move verif", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
@@ -32,14 +46,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 		Location loc = p.getLocation();
 		Location from = e.getFrom(), to = e.getTo();
 		Location fl = from.sub(to);
-		double xSpeed = Math.abs(from.getX() - to.getX());
-	    double zSpeed = Math.abs(from.getZ() - to.getZ());
-	    double xzSpeed = Math.sqrt(xSpeed * xSpeed + zSpeed * zSpeed);
-	    double maxSpeed = (xSpeed >= zSpeed ? xSpeed : zSpeed);
-	    if(maxSpeed < xzSpeed)
-	    	maxSpeed = xzSpeed;
 	    double distance = to.toVector().distance(from.toVector());
-	    np.doubles.set(NO_SLOW_DOWN, "eating-distance", maxSpeed);
 	    if(Version.getVersion().isNewerOrEquals(Version.V1_16)) {
 		    ItemStack boots = p.getInventory().getBoots();
 		    if(boots != null && boots.hasEnchant(Enchantment.SOUL_SPEED))

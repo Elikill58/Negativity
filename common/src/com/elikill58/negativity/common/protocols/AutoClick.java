@@ -38,10 +38,8 @@ public class AutoClick extends Cheat implements Listeners {
 				recordData(p.getUniqueId(), CLICKS, np.ACTUAL_CLICK);
 				np.LAST_CLICK = np.ACTUAL_CLICK;
 				np.ACTUAL_CLICK = 0;
-				if (np.SEC_ACTIVE < 2) {
-						np.SEC_ACTIVE++;
-						return;
-					}
+				if (np.SEC_ACTIVE < 2)
+					np.SEC_ACTIVE++;
 			}
 		}, 20, 20);
 	}

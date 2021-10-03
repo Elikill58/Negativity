@@ -25,25 +25,30 @@ public class GroundSpoof extends Cheat implements Listeners {
         super(CheatKeys.GROUND_SPOOF, CheatCategory.MOVEMENT, Materials.STONE, false, false, "groundspoof");
     }
 
-    @Check(name = "check-blocks-under", description = "Block under player have to be considered as ground", conditions = { CheckConditions.SURVIVAL, CheckConditions.GROUND })
+    @Check(name = "check-blocks-under", description = "Block under player have to be considered as ground",
+    		conditions = { CheckConditions.SURVIVAL, CheckConditions.GROUND, CheckConditions.NO_SNEAK })
     public void onGroundSpoof(PlayerMoveEvent e, NegativityPlayer np) {
         Player p = e.getPlayer();
-		if (e.isCancelled())
+		if (e.isCancelled() || !p.isOnGround()) // cancelled or player say he not on ground
 			return;
         if (isOnGround(p) || p.getFallDistance() > 3 || p.getFallDistance() > p.getWalkSpeed()) {
             return;
         }
-        Block downBlock = e.getTo().getBlock().getRelative(BlockFace.DOWN);
-        if (isNotAir(downBlock)
-        		|| isNotAir(downBlock.getRelative(BlockFace.NORTH))
-                || isNotAir(downBlock.getRelative(BlockFace.SOUTH))
-                || isNotAir(downBlock.getRelative(BlockFace.EAST))
-                || isNotAir(downBlock.getRelative(BlockFace.WEST))) {
+        Block block = e.getTo().getBlock();
+        Block downBlock = block.getRelative(BlockFace.DOWN);
+        if (blockJustAroundAreNotAir(block) || blockJustAroundAreNotAir(downBlock)) {
             return;
         }
         Negativity.alertMod(ReportType.WARNING, p, this, getReliability(p), "check-blocks-under",
-                "Air BlockFaces: " + getAirBlocks(p).toString() + ", fall: " + p.getFallDistance(),
+                "Air BlockFaces: " + getAirBlocks(p).toString() + ", fall: " + p.getFallDistance() + ", sneaking: " + p.isSneaking(),
                 new CheatHover.Literal("Ground Spoof (Fly, NoFall, and other movement hacks)"));
+    }
+    
+    private boolean blockJustAroundAreNotAir(Block block) {
+    	return isNotAir(block) || isNotAir(block.getRelative(BlockFace.NORTH))
+		        || isNotAir(block.getRelative(BlockFace.SOUTH))
+		        || isNotAir(block.getRelative(BlockFace.EAST))
+		        || isNotAir(block.getRelative(BlockFace.WEST));
     }
 
     private static boolean isNotAir(Block block) {
@@ -54,7 +59,7 @@ public class GroundSpoof extends Cheat implements Listeners {
         final Block block = player.getLocation().getBlock();
         final Block downBlock = block.getRelative(BlockFace.DOWN);
 
-        if (isNotAir(block.getRelative(BlockFace.DOWN))) {
+        if (isNotAir(block) || isNotAir(downBlock)) {
             return true;
         }
 

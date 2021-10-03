@@ -24,7 +24,7 @@ public class BlockRay {
 	private boolean hasOther = false;
 	private List<Vector> positions;
 	
-	protected BlockRay(World w, Location position, Vector vector, int maxTest, Material[] neededType, boolean ignoreAir, Material[] filter, List<Vector> positions) {
+	protected BlockRay(World w, Location position, Vector vector, int maxTest, Material[] neededType, boolean ignoreAir, boolean ignoreEntity, Material[] filter, List<Vector> positions) {
 		this.w = w;
 		this.position = position.clone();
 		this.test = maxTest;
@@ -34,6 +34,8 @@ public class BlockRay {
 		this.positions = positions;
 		if(ignoreAir)
 			this.filter.add(Materials.AIR);
+		if(ignoreEntity)
+			w.getEntities().stream().map(Entity::getLocation).map(Location::toVector).forEach(positions::add);
 	}
 	
 	private double parseVector(double d) {
@@ -146,7 +148,7 @@ public class BlockRay {
 		
 		private final World w;
 		private final Location position;
-		private boolean ignoreAir = true;
+		private boolean ignoreAir = true, ignoreEntity = true;
 		private Vector vector = Vector.ZERO;
 		private int maxTest = 200;
 		private Material[] filter = new Material[0], neededType = null;
@@ -185,6 +187,17 @@ public class BlockRay {
 		 */
 		public BlockRayBuilder ignoreAir(boolean air) {
 			this.ignoreAir = air;
+			return this;
+		}
+		
+		/**
+		 * Say if we have to ignore entity
+		 * 
+		 * @param entity true if the ray ignore entity
+		 * @return this builder
+		 */
+		public BlockRayBuilder ignoreEntity(boolean entity) {
+			this.ignoreEntity = entity;
 			return this;
 		}
 		
@@ -245,12 +258,13 @@ public class BlockRay {
 		}
 		
 		/**
-		 * Build BlockRay
+		 * Build BlockRay<br>
+		 * Warn: this method have to be runned as sync.
 		 * 
 		 * @return the block ray
 		 */
 		public BlockRay build() {
-			return new BlockRay(w, position, vector, maxTest, neededType, ignoreAir, filter, positions);
+			return new BlockRay(w, position, vector, maxTest, neededType, ignoreAir, ignoreEntity, filter, positions);
 		}
 	}
 

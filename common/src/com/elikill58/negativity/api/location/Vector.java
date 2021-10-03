@@ -1,7 +1,7 @@
 package com.elikill58.negativity.api.location;
 
 import static com.elikill58.negativity.universal.utils.Maths.square;
-import static com.elikill58.negativity.universal.utils.Maths.floor;
+import static com.elikill58.negativity.universal.utils.Maths.roundLoc;
 
 public class Vector implements Cloneable {
 
@@ -239,7 +239,7 @@ public class Vector implements Cloneable {
 	}
 
 	public int getBlockX() {
-		return floor(this.x);
+		return roundLoc(this.x);
 	}
 
 	public double getY() {
@@ -247,7 +247,7 @@ public class Vector implements Cloneable {
 	}
 
 	public int getBlockY() {
-		return floor(this.y);
+		return roundLoc(this.y);
 	}
 
 	public double getZ() {
@@ -255,7 +255,7 @@ public class Vector implements Cloneable {
 	}
 
 	public int getBlockZ() {
-		return floor(this.z);
+		return roundLoc(this.z);
 	}
 
 	public Vector setX(int x) {

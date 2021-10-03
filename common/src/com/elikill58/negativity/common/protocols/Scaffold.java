@@ -10,12 +10,14 @@ import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.ray.BlockRay.BlockRayBuilder;
 import com.elikill58.negativity.api.ray.BlockRayResult;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -57,18 +59,24 @@ public class Scaffold extends Cheat implements Listeners {
 	}
 
 	@Check(name = "distance", description = "Distance between placed and target one", conditions = CheckConditions.SURVIVAL)
-	public void onBlockBreakDistance(BlockPlaceEvent e) {
+	public void onBlockPlaceDistance(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		Block place = e.getBlock();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_14) && place.getType().equals(Materials.SCAFFOLD))
 			return;
-		BlockRayResult result = new BlockRayBuilder(p.getLocation().clone(), p).ignoreAir(true)
-				.neededPositions(place.getLocation().toVector()).build().compile();
-		Block searched = result.getBlock() == null ? place : result.getBlock();
-		double distance = place.getLocation().distance(searched.getLocation());
-		if(distance > 3 && searched.getY() < p.getLocation().getY()) {
-			Negativity.alertMod(distance > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 30), "distance", "Place: " + place + ", targetVisual: " + searched + ". Distance: " + distance);
-		}
+		if(place.getY() >= p.getLocation().getY())
+			return;
+		Vector vector = new Vector(4, 4, 4);
+		BlockRayBuilder builder = new BlockRayBuilder(p.getLocation().clone(), p).vector(p.getRotation().divide(vector))
+				.ignoreAir(true).neededPositions(place.getLocation().toVector());
+		Adapter.getAdapter().runSync(() -> {
+			BlockRayResult result = builder.build().compile();
+			Block searched = result.getBlock() == null ? place : result.getBlock();
+			double distance = place.getLocation().distance(searched.getLocation());
+			if(distance > 4.6 && searched.getY() < p.getLocation().getY()) {
+				Negativity.alertMod(distance > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 30), "distance", "Place: " + place + ", targetVisual: " + searched + ". Distance: " + distance);
+			}
+		});
 	}
 	
 	@Check(name = "packet", description = "Distance of move with packet", conditions = CheckConditions.SURVIVAL)

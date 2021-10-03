@@ -35,23 +35,25 @@ public class Nuker extends Cheat implements Listeners {
 		if(p.hasPotionEffect(PotionEffectType.FAST_DIGGING) || b == null || !b.getType().isSolid() || isInstantBlock(b.getType().getId()))
 			return;
 		int ping = p.getPing();
-		List<Block> target = p.getTargetBlock(5);
-		if(!target.isEmpty()) {
-			Location blockLoc = b.getLocation();
-			for(Block targetBlock : target) {
-				if(!targetBlock.getLocation().getWorld().getName().equals(blockLoc.getWorld().getName())) {
-					Adapter.getAdapter().debug("[Nuker] Wrong world: player/block/targetBlock > " + p.getWorld().getName() + "/" + blockLoc.getWorld().getName() + "/" + targetBlock.getLocation().getWorld().getName());
-					break;
-				}
-				double distance = targetBlock.getLocation().distance(blockLoc);
-				if ((targetBlock.getType() != e.getBlock().getType()) && distance > 3.5 && targetBlock.getType() != Materials.AIR) {
-					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - ping), "distance",
-							"BlockDig " + b.getType().getId() + ", player see " + targetBlock.getType().getId() + ". Distance between blocks " + distance + " block.");
-					if(isSetBack() && mayCancel)
-						e.setCancelled(true);
+		Adapter.getAdapter().runSync(() -> {
+			List<Block> target = p.getTargetBlock(5);
+			if(!target.isEmpty()) {
+				Location blockLoc = b.getLocation();
+				for(Block targetBlock : target) {
+					if(!targetBlock.getLocation().getWorld().getName().equals(blockLoc.getWorld().getName())) {
+						Adapter.getAdapter().debug("[Nuker] Wrong world: player/block/targetBlock > " + p.getWorld().getName() + "/" + blockLoc.getWorld().getName() + "/" + targetBlock.getLocation().getWorld().getName());
+						break;
+					}
+					double distance = targetBlock.getLocation().distance(blockLoc);
+					if ((targetBlock.getType() != e.getBlock().getType()) && distance > 3.5 && targetBlock.getType() != Materials.AIR) {
+						boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - ping), "distance",
+								"BlockDig " + b.getType().getId() + ", player see " + targetBlock.getType().getId() + ". Distance between blocks " + distance + " block.");
+						if(isSetBack() && mayCancel)
+							e.setCancelled(true);
+					}
 				}
 			}
-		}
+		});
 	}
 	
 	@Check(name = "time", description = "Time between 2 block break", conditions = CheckConditions.SURVIVAL)

@@ -3,6 +3,8 @@ package com.elikill58.negativity.sponge;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -13,7 +15,10 @@ import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
+import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
+import org.spongepowered.api.network.ChannelRegistrar;
 import org.spongepowered.api.network.ChannelRegistrationException;
+import org.spongepowered.api.plugin.PluginContainer;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.service.user.UserStorageService;
 import org.spongepowered.api.text.LiteralText;
@@ -295,19 +300,35 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
+		RawDataChannel spongeChannel = null;
 		try {
-			Sponge.getChannelRegistrar().getOrCreateRaw(plugin, channel).addListener((data, connection, side) -> {
-				if(side == Type.CLIENT) {
-					Sponge.getServer().getOnlinePlayers().forEach((p) -> {
-						if(p.getConnection().getAddress().equals(connection.getAddress())) {
-							event.accept(SpongeEntityManager.getPlayer(p), data.array());
-						}
-					});
-				}
-			});
+			spongeChannel = Sponge.getChannelRegistrar().getOrCreateRaw(plugin, channel);
 		} catch (ChannelRegistrationException e) {
-			plugin.getLogger().warn("Failed to register channel " + channel + ": " + e.getMessage());
+			try {
+				Class<?> vanillaRawChannelClass = Class.forName("org.spongepowered.server.network.VanillaRawDataChannel");
+				Constructor<?> rawChannelConstructor = vanillaRawChannelClass.getConstructor(ChannelRegistrar.class, String.class, PluginContainer.class);
+				spongeChannel = (RawDataChannel) rawChannelConstructor.newInstance(Sponge.getChannelRegistrar(), channel, plugin.getContainer()); // new channel instance
+		        // now register channel
+				Class<?> vanillaChannelRegistrarClass = Class.forName("org.spongepowered.server.network.VanillaChannelRegistrar");
+				Method registerChannel = vanillaChannelRegistrarClass.getDeclaredMethod("registerChannel", Class.forName("org.spongepowered.server.network.VanillaChannelBinding"));
+				registerChannel.setAccessible(true);
+				registerChannel.invoke(Sponge.getChannelRegistrar(), spongeChannel);
+			} catch (Exception exc) {
+				exc.printStackTrace();
+				plugin.getLogger().warn("Failed to register channel " + channel + " even with second method: " + exc.getMessage());
+			}
 		}
+		if(spongeChannel == null)
+			return;
+		spongeChannel.addListener((data, connection, side) -> {
+			if(side == Type.CLIENT) {
+				Sponge.getServer().getOnlinePlayers().forEach((p) -> {
+					if(p.getConnection().getAddress().equals(connection.getAddress())) {
+						event.accept(SpongeEntityManager.getPlayer(p), data.array());
+					}
+				});
+			}
+		});;
 	}
 	
 	@Override

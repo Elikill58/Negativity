@@ -52,6 +52,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 import io.netty.channel.Channel;
@@ -113,8 +114,7 @@ public abstract class SpigotVersionAdapter {
 				(player, f) -> new NPacketPlayInKeepAlive(new Long(getSafe(f, "a").toString())));
 		packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {
 			Object vec3D = get(f, "c");
-			Vector vec = vec3D == null ? new Vector(0, 0, 0)
-					: new Vector(get(vec3D, "x"), get(vec3D, "y"), get(vec3D, "z"));
+			Vector vec = vec3D == null ? new Vector(0, 0, 0) : getVectorFromVec3D(vec3D);
 			return new NPacketPlayInUseEntity(get(f, "a"), vec,
 					EnumEntityUseAction.valueOf(((Enum<?>) get(f, "action")).name()));
 		});
@@ -360,6 +360,7 @@ public abstract class SpigotVersionAdapter {
 			f.setAccessible(true);
 			return (T) f.get(obj);
 		} catch (NoSuchFieldException e) { // prevent issue when wrong version
+			Adapter.getAdapter().debug("Failed to find field " + name + " in class " + obj.getClass().getSimpleName() + " for class " + clazz.getSimpleName());
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -373,6 +374,7 @@ public abstract class SpigotVersionAdapter {
 			f.setAccessible(true);
 			return (T) f.get(obj);
 		} catch (NoSuchFieldException e) { // prevent issue when wrong version
+			Adapter.getAdapter().debug("Failed to find field " + name + " in class " + obj.getClass().getSimpleName());
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -386,6 +388,7 @@ public abstract class SpigotVersionAdapter {
 			f.setAccessible(true);
 			return f.get(obj);
 		} catch (NoSuchFieldException e) { // prevent issue when wrong version
+			Adapter.getAdapter().debug("Failed to find safe field " + name + " in class " + obj.getClass().getSimpleName());
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -399,6 +402,7 @@ public abstract class SpigotVersionAdapter {
 			f.setAccessible(true);
 			return f.get(obj).toString();
 		} catch (NoSuchFieldException e) { // prevent issue when wrong version
+			Adapter.getAdapter().debug("Failed to find str field " + name + " in class " + obj.getClass().getSimpleName());
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -412,34 +416,19 @@ public abstract class SpigotVersionAdapter {
 			f.setAccessible(true);
 			return (T) f.invoke(obj);
 		} catch (NoSuchMethodException e) { // prevent issue when wrong version
-			e.printStackTrace(); // TODO remove this (keep it for debug)
+			Adapter.getAdapter().debug("Failed to find method " + methodName + " in class " + obj.getClass().getSimpleName());
 			return null;
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
-	/*public NPacketPlayInBlockPlace getBlockPlacePacket(Player p, ItemStack handItem) {
-		EntityPlayer player = ((CraftPlayer) p).getHandle();
-		float f1 = player.pitch;
-		float f2 = player.yaw;
-		double d0 = player.locX;
-		double d1 = player.locY + player.getHeadHeight();
-		double d2 = player.locZ;
-		Vec3D vec3d = new Vec3D(d0, d1, d2);
-		float f3 = cos(-f2 * 0.017453292F - 3.1415927F);
-		float f4 = sin(-f2 * 0.017453292F - 3.1415927F);
-		float f5 = -cos(-f1 * 0.017453292F);
-		float f6 = sin(-f1 * 0.017453292F);
-		float f7 = f4 * f5;
-		float f8 = f3 * f5;
-		double d3 = (p.getGameMode().equals(GameMode.CREATIVE)) ? 5.0D : 4.5D;
-		Vec3D vec3d1 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
-		MovingObjectPosition obj = (((CraftWorld) p.getWorld()).getHandle()).rayTrace(vec3d, vec3d1);
-		net.minecraft.server.v1_10_R1.BlockPosition vec = obj.a();
-		Location loc = p.getLocation();
-		return new NPacketPlayInBlockPlace(vec.getX(), vec.getY(), vec.getZ(), handItem,
-				new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
-	}*/
+
+	public Vector getVectorFromVec3D(Object vec) {
+		if(Version.getVersion().isNewerOrEquals(Version.V1_9)) {
+			return new Vector((double) get(vec, "x"), (double) get(vec, "x"), (double) get(vec, "x"));
+		} else {
+			return new Vector((double) get(vec, "a"), (double) get(vec, "b"), (double) get(vec, "c"));
+		}
+	}
 }

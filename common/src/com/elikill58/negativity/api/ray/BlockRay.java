@@ -34,7 +34,7 @@ public class BlockRay {
 		this.positions = positions;
 		if(ignoreAir)
 			this.filter.add(Materials.AIR);
-		if(ignoreEntity)
+		if(!ignoreEntity)
 			w.getEntities().stream().map(Entity::getLocation).map(Location::toVector).forEach(positions::add);
 	}
 	

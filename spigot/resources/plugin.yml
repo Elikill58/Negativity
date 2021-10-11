@@ -37,9 +37,11 @@ commands:
     aliases: [lang]
   nclearchat:
     description: Clear chat of everyone
+    permission: negativity.chat.cleat
     aliases: [clearchat]
   nlockchat:
     description: Lock chat for not-bypass people
+    permission: negativity.chat.lock
     aliases: [lockchat]
 
 permissions:

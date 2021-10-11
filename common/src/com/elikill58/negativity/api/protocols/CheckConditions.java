@@ -18,7 +18,7 @@ public enum CheckConditions {
 	NOT_USE_SLIME("Using slime", (p) -> !NegativityPlayer.getNegativityPlayer(p).isUsingSlimeBlock),
 	NOT_USE_ELEVATOR("Using elevator", (p) -> !LocationUtils.isUsingElevator(p)),
 	NOT_IRON_TARGET("Target by iron golem", (p) -> !NegativityPlayer.getNegativityPlayer(p).isTargetByIronGolem()),
-	NOT_THORNS("Thorns", Utils::hasThorns),
+	NOT_THORNS("Thorns", p -> !Utils.hasThorns(p)),
 	
 	SPRINT("Sprint", Player::isSprinting),
 	SNEAK("Sneak", Player::isSneaking),

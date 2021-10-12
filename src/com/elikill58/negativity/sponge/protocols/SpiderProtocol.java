@@ -62,7 +62,6 @@ public class SpiderProtocol extends Cheat {
 				|| isClimbableBlock(loc.sub(0, 2, 0).getBlockType())) {
 			return;
 		}
-		// TODO implement Trident use
 		if(hasBypassBlockAround(loc))
 			return;
 

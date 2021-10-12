@@ -44,7 +44,7 @@ public class CheckMenuInventory extends AbstractInventory {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
-		actualizeInventory(p, cible);
+		actualizeInventory(p, cible, inv);
 		
 		inv.setItem(8, Utils.createSkull(cible.getName(), 1, cible.getName(), ChatColor.GOLD + "UUID: " + cible.getUniqueId(), ChatColor.GREEN + "Version: " + np.getPlayerVersion().getName(), ChatColor.GREEN + "Platform: " + (np.isBedrockPlayer() ? "Bedrock" : "Java")));
 
@@ -71,7 +71,7 @@ public class CheckMenuInventory extends AbstractInventory {
 	@Override
 	public void actualizeInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
-		Inventory inv = p.getOpenInventory().getTopInventory();
+		Inventory inv = args.length == 1 ? p.getOpenInventory().getTopInventory() : (Inventory) args[1];
 		if(inv == null || !inv.getType().equals(org.bukkit.event.inventory.InventoryType.CHEST)) return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
 		int betterClick = np.getAccount().getMostClicksPerSecond();

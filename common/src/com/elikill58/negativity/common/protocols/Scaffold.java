@@ -64,6 +64,8 @@ public class Scaffold extends Cheat implements Listeners {
 		Block place = e.getBlock();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_14) && place.getType().equals(Materials.SCAFFOLD))
 			return;
+		if(place.getType().getId().contains("SLAB")) // TODO fix : temporary fix for ray tracing which pass through slab (more than other block)
+			return;
 		if(place.getY() >= p.getLocation().getY())
 			return;
 		Vector vector = new Vector(4, 4, 4);

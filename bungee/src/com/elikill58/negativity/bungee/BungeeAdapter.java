@@ -194,7 +194,7 @@ public class BungeeAdapter extends ProxyAdapter {
 	
 	@Override
 	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
-		// TODO implement channel for bungee
+		BungeeListeners.channelListeners.put(channel, event);
 	}
 	
 	@Override

@@ -22,13 +22,6 @@ public class Spigot_1_9_R1 extends SpigotVersionAdapter {
 			BlockPosition pos = blockDig.a();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), DigAction.getById(blockDig.c().ordinal()), DigFace.getById(blockDig.b().a()));
 		});
-		/*packetsPlayIn.put("PacketPlayInBlockPlace", (packet) -> {
-			PacketPlayInBlockPlace place = (PacketPlayInBlockPlace) packet;
-			BlockPosition pos = place.a();
-			ItemStack item = new SpigotItemStack(CraftItemStack.asBukkitCopy(place.getItemStack()));
-			Vector vector = new Vector(place.d(), place.e(), place.f());
-			return new NPacketPlayInBlockPlace(pos.getX(), pos.getY(), pos.getZ(), item, place.getFace(), vector);
-		});*/
 	}
 	
 	@Override

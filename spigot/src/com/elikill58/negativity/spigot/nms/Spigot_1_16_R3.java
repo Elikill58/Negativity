@@ -22,14 +22,6 @@ public class Spigot_1_16_R3 extends SpigotVersionAdapter {
 			BlockPosition pos = blockDig.b();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), DigAction.getById(blockDig.c().ordinal()), DigFace.getById((int) blockDig.b().asLong()));
 		});
-		// TODO implement PacketPlayInBlockPlace for 1.16
-		/*packetsPlayIn.put("PacketPlayInBlockPlace", (packet) -> {
-			PacketPlayInBlockPlace place = (PacketPlayInBlockPlace) packet;
-			BlockPosition pos = place.b();
-			ItemStack item = new SpigotItemStack(CraftItemStack.asBukkitCopy(place.getItemStack()));
-			Vector vector = new Vector(place.d(), place.e(), place.f());
-			return new NPacketPlayInBlockPlace(pos.getX(), pos.getY(), pos.getZ(), item, place.getFace(), vector);
-		});*/
 		
 	}
 	

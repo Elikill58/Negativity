@@ -327,7 +327,12 @@ public class Vector implements Cloneable {
 		}
 	}
 
+	@Override
 	public String toString() {
 		return this.x + "," + this.y + "," + this.z;
+	}
+
+	public String toShowableString() {
+		return String.format("%.2f", this.x) + ", " + String.format("%.2f", this.z);
 	}
 }

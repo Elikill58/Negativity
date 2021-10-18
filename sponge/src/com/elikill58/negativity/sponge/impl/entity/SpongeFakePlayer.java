@@ -90,6 +90,17 @@ public class SpongeFakePlayer extends AbstractEntity implements FakePlayer {
 	public double getEyeHeight() {
 		return 0;
 	}
+	
+	@Override
+	public Vector getVelocity() {
+		Vector3d vel = fakePlayer.getVelocity();
+		return new Vector(vel.getX(), vel.getY(), vel.getZ());
+	}
+
+	@Override
+	public void setVelocity(Vector vel) {
+		fakePlayer.setVelocity(new Vector3d(vel.getX(), vel.getY(), vel.getZ()));
+	}
 
 	@Override
 	public Location getEyeLocation() {

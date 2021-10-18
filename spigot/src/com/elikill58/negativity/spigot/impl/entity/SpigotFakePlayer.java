@@ -241,6 +241,16 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 	public Vector getRotation() {
 		return null;
 	}
+	
+	@Override
+	public Vector getVelocity() {
+		return null;
+	}
+	
+	@Override
+	public void setVelocity(Vector vel) {
+
+	}
 
 	@Override
 	public String getName() {

@@ -14,7 +14,7 @@ public enum CheatKeys implements Comparable<CheatKeys> {
 	BLINK("BLINK"),
 	CHAT("CHAT"),
 	CRITICAL("CRITICAL"),
-	ELYTRA_FLY("ELYTRAFLY"),
+	ELYTRA_FLY("ELYTRAFLY", Version.V1_9),
 	FAST_BOW("FASTBOW"),
 	FAST_EAT("FASTEAT"),
 	FAST_LADDER("FASTLADDER"),
@@ -32,6 +32,7 @@ public enum CheatKeys implements Comparable<CheatKeys> {
 	NUKER("NUKER"),
 	PINGSPOOF("PINGSPOOF"),
 	PHASE("PHASE"),
+	REACH("REACH"),
 	REGEN("REGEN"),
 	SCAFFOLD("SCAFFOLD"),
 	SNEAK("SNEAK"),
@@ -42,13 +43,23 @@ public enum CheatKeys implements Comparable<CheatKeys> {
 	XRAY("XRAY");
 	
 	private final String key;
+	private final Version minVersion;
 	
 	private CheatKeys(String key) {
+		this(key, Version.V1_7);
+	}
+	
+	private CheatKeys(String key, Version minVersion) {
 		this.key = key;
+		this.minVersion = minVersion;
 	}
 	
 	public String getKey() {
 		return key;
+	}
+	
+	public Version getMinVersion() {
+		return minVersion;
 	}
 	
 	public String getLowerKey() {

@@ -25,6 +25,7 @@ com.elikill58.negativity.common.protocols.NoWeb
 com.elikill58.negativity.common.protocols.Nuker
 com.elikill58.negativity.common.protocols.Phase
 com.elikill58.negativity.common.protocols.PingSpoof
+com.elikill58.negativity.common.protocols.Reach
 com.elikill58.negativity.common.protocols.Regen
 com.elikill58.negativity.common.protocols.Scaffold
 com.elikill58.negativity.common.protocols.Sneak

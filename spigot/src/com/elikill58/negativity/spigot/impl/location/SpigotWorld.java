@@ -1,7 +1,7 @@
 package com.elikill58.negativity.spigot.impl.location;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
@@ -36,11 +36,9 @@ public class SpigotWorld extends World {
 
 	@Override
 	public List<Entity> getEntities() {
-		List<Entity> list = new ArrayList<>();
 		synchronized (w) {
-			new ArrayList<>(w.getEntities()).forEach((e) -> list.add(SpigotEntityManager.getEntity(e)));
+			return w.getEntities().stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
 		}
-		return list;
 	}
 
 	@Override

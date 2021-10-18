@@ -91,16 +91,14 @@ public class NegativityPacketManager {
 			}*/
 			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet.getPacket();
 			if(useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
-				Bukkit.getScheduler().runTask(plugin, () -> {
-					for(Entity entity : p.getWorld().getEntities()) {
-						if(entity.getEntityId() == useEntityPacket.entityId && useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
-							PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity);
-							EventManager.callEvent(event);
-							if(event.isCancelled())
-								packet.setCancelled(event.isCancelled());
-						}
+				for(Entity entity : p.getWorld().getEntities()) {
+					if(entity.getEntityId() == useEntityPacket.entityId && useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
+						PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity);
+						EventManager.callEvent(event);
+						if(event.isCancelled())
+							packet.setCancelled(event.isCancelled());
 					}
-				});
+				}
 			}
 		} else if(type == PacketType.Client.BLOCK_DIG && !Version.getVersion().equals(Version.V1_7) && packet.getPacket() instanceof NPacketPlayInBlockDig) {
 			NPacketPlayInBlockDig blockDig = (NPacketPlayInBlockDig) packet.getPacket();

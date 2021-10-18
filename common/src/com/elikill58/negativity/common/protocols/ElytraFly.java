@@ -18,7 +18,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class ElytraFly extends Cheat implements Listeners {
 
 	public ElytraFly() {
-		super(CheatKeys.ELYTRA_FLY, CheatCategory.COMBAT, Materials.STICK, false, true, "elitra");
+		super(CheatKeys.ELYTRA_FLY, CheatCategory.COMBAT, Materials.ELYTRA, false, true, "elitra");
 	}
 
 	@Check(name = "diff-y", description = "Get move after a tick", conditions = { CheckConditions.ELYTRA, CheckConditions.SURVIVAL })

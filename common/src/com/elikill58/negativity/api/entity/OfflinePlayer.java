@@ -37,6 +37,16 @@ public interface OfflinePlayer extends Entity {
 	default Vector getRotation() {
 		return null;
 	}
+	
+	@Override
+	default Vector getVelocity() {
+		return null;
+	}
+	
+	@Override
+	default void setVelocity(Vector vel) {
+		
+	}
 
 	@Override
 	default void sendMessage(String msg) {}

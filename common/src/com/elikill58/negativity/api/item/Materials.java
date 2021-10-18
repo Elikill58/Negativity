@@ -33,6 +33,7 @@ public class Materials {
     
     public static final Material EMPTY_MAP = ItemRegistrar.getInstance().get("empty_map", "map");
     public static final Material EMERALD_ORE = ItemRegistrar.getInstance().get("emerald_ore");
+    public static final Material ELYTRA = ItemRegistrar.getInstance().get("elytra", "diamond_chestplate");
     public static final Material EYE_OF_ENDER = ItemRegistrar.getInstance().get("eye_of_ender", "ender_eye");
     
     public static final Material GHAST_TEAR = ItemRegistrar.getInstance().get("ghast_tear");
@@ -82,6 +83,7 @@ public class Materials {
     public static final Material SPONGE = ItemRegistrar.getInstance().get("sponge");
     public static final Material STATIONARY_WATER = ItemRegistrar.getInstance().get("stationary_water", "water");
     public static final Material STICK = ItemRegistrar.getInstance().get("stick");
+    public static final Material STONE_AXE = ItemRegistrar.getInstance().get("stone_axe");
 
     public static final Material VINE = ItemRegistrar.getInstance().get("vine", "vines");
     

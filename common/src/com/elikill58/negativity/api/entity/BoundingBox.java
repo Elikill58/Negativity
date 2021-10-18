@@ -1,5 +1,8 @@
 package com.elikill58.negativity.api.entity;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.BiFunction;
 
 import com.elikill58.negativity.api.maths.Point;
@@ -71,14 +74,21 @@ public class BoundingBox {
 				&& (Math.min(minY, maxY) <= y && y <= Math.max(minY, maxY))
 				&& (Math.min(minZ, maxZ) <= z && z <= Math.max(minZ, maxZ));
 	}
+	
+	public Point getNearestPoint(Point other) {
+		double x = getNeareatValue(other.x, Arrays.asList(minX, maxX));
+		double y = getNeareatValue(other.y, Arrays.asList(minY, maxY));
+		double z = getNeareatValue(other.z, Arrays.asList(minZ, maxZ));
+		return new Point(x, y, z);
+	}
+	
+	private double getNeareatValue(Double to, List<Double> all) {
+		return all.stream().min(Comparator.comparingInt(i -> Math.abs((int) (i - to)))).get();
+	}
 
 	@Override
 	public String toString() {
 		return "BoundingBox[minX=" + minX + ",minY=" + minY + ",minZ=" + minZ + ",then,maxX=" + maxX + ",maxY=" + maxY
 				+ ",maxZ=" + maxZ + ",]";
-	}
-
-	public static interface CallableFunction {
-
 	}
 }

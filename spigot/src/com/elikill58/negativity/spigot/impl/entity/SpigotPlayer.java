@@ -17,7 +17,6 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -339,12 +338,6 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	}
 
 	@Override
-	public Vector getVelocity() {
-		org.bukkit.util.Vector vel = entity.getVelocity();
-		return new Vector(vel.getX(), vel.getY(), vel.getZ());
-	}
-
-	@Override
 	public PlayerInventory getInventory() {
 		return new SpigotPlayerInventory(entity.getInventory());
 	}
@@ -391,11 +384,6 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 				((org.bukkit.entity.Player) other.getDefault()).showPlayer(entity);
 			}
 		}
-	}
-
-	@Override
-	public void setVelocity(Vector vel) {
-		entity.setVelocity(new org.bukkit.util.Vector(vel.getX(), vel.getY(), vel.getZ()));
 	}
 
 	@Override

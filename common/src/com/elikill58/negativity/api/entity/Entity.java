@@ -9,6 +9,11 @@ import com.elikill58.negativity.api.location.Vector;
 
 public interface Entity extends CommandSender {
 
+	/**
+	 * Check if the given entity is currently on ground
+	 * 
+	 * @return true if is on ground
+	 */
 	boolean isOnGround();
 
 	boolean isOp();
@@ -28,4 +33,18 @@ public interface Entity extends CommandSender {
 	int getEntityId();
 	
 	BoundingBox getBoundingBox();
+	
+	/**
+	 * Get current entity velocity
+	 * 
+	 * @return the entity velocity
+	 */
+	Vector getVelocity();
+	
+	/**
+	 * Edit the entity velocity
+	 * 
+	 * @param vel the new velocity
+	 */
+	void setVelocity(Vector vel);
 }

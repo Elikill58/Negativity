@@ -25,7 +25,6 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -40,7 +39,6 @@ import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
-import com.flowpowered.math.vector.Vector3d;
 
 public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.living.player.Player> implements Player {
 
@@ -386,12 +384,6 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	}
 
 	@Override
-	public Vector getVelocity() {
-		Vector3d vel = entity.getVelocity();
-		return new Vector(vel.getX(), vel.getY(), vel.getZ());
-	}
-
-	@Override
 	public PlayerInventory getInventory() {
 		return new SpongePlayerInventory(entity);
 	}
@@ -433,11 +425,6 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 			entity.offer(Keys.VANISH_IGNORES_COLLISION, true);
 			entity.offer(Keys.VANISH_PREVENTS_TARGETING, true);
 		}
-	}
-
-	@Override
-	public void setVelocity(Vector vel) {
-		entity.setVelocity(new Vector3d(vel.getX(), vel.getY(), vel.getZ()));
 	}
 	
 	@Override

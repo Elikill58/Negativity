@@ -78,6 +78,17 @@ public class SpigotEntity<E extends Entity> extends AbstractEntity {
 		org.bukkit.util.Vector vec = entity.getLocation().getDirection();
 		return new Vector(vec.getX(), vec.getY(), vec.getZ());
 	}
+
+	@Override
+	public Vector getVelocity() {
+		org.bukkit.util.Vector vel = entity.getVelocity();
+		return new Vector(vel.getX(), vel.getY(), vel.getZ());
+	}
+	
+	@Override
+	public void setVelocity(Vector vel) {
+		entity.setVelocity(new org.bukkit.util.Vector(vel.getX(), vel.getY(), vel.getZ()));
+	}
 	
 	@Override
 	public int getEntityId() {

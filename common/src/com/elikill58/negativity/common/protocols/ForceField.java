@@ -7,38 +7,30 @@ import java.util.Locale;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Entity;
-import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
-import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
-import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
-import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 
 public class ForceField extends Cheat implements Listeners {
 
-	public static final DataType<Double> HIT_DISTANCE = new DataType<Double>("hit_distance", "Hit Distance", () -> new DoubleDataCounter());
 	public static final DataType<Integer> FAKE_PLAYERS = new DataType<Integer>("fake_players", "Fake Players", () -> new IntegerDataCounter());
 
 	private NumberFormat nf = NumberFormat.getInstance();
 	
 	public ForceField() {
-		super(CheatKeys.FORCEFIELD, CheatCategory.COMBAT, Materials.DIAMOND_SWORD, true, true, "ff", "killaura");
+		super(CheatKeys.FORCEFIELD, CheatCategory.COMBAT, Materials.DIAMOND_SWORD, true, false, "ff", "killaura");
 		nf.setMaximumIntegerDigits(2);
 	}
 	
@@ -69,30 +61,6 @@ public class ForceField extends Cheat implements Listeners {
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
 					"Hit " + cible.getType().name() + " but cannot see it",
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase(Locale.ROOT)));
-		}
-		if (isSetBack() && mayCancel)
-			e.setCancelled(true);
-	}
-
-	@Check(name = "reach", description = "The reach", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_THORNS })
-	public void onCheckReach(PlayerDamagedByEntityEvent e, NegativityPlayer np) {
-		if (!(e.getDamager() instanceof Player) || e.isCancelled())
-			return;
-		Player p = (Player) e.getDamager();
-		if (e.getPlayer() == null)
-			return;
-		boolean mayCancel = false;
-		ItemStack inHand = p.getItemInHand();
-		if(inHand == null || !inHand.getType().equals(Materials.BOW)) {
-			Location tempLoc = e.getPlayer().getLocation().clone();
-			tempLoc.setY(p.getLocation().getY());
-			double dis = tempLoc.distance(p.getLocation());
-			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-			if (dis > getConfig().getDouble("check.reach.value", 3.9) && !e.getDamager().getType().equals(EntityType.ENDER_DRAGON) && !p.getLocation().getBlock().getType().getId().contains("WATER")) {
-				String entityName = Version.getVersion().equals(Version.V1_7) ? e.getPlayer().getType().name().toLowerCase(Locale.ROOT) : e.getPlayer().getName();
-				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10), "reach",
-						"Big distance with: " + e.getPlayer().getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns", hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
-			}
 		}
 		if (isSetBack() && mayCancel)
 			e.setCancelled(true);
@@ -158,14 +126,6 @@ public class ForceField extends Cheat implements Listeners {
 		}
 		return 0.0;
 	}*/
-	
-	@Override
-	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
-		double av = data.getData(HIT_DISTANCE).getAverage();
-		int nb = data.getData(FAKE_PLAYERS).getSize();
-		String color = (av > 3 ? (av > 4 ? "&c" : "&6") : "&a");
-		return Utils.coloredMessage("Hit distance : " + color + String.format("%.3f", av) + (nb > 0 ? " &7and &c" + nb + " &7fake players touched." : ""));
-	}
 	
 	public static void manageForcefieldForFakeplayer(Player p, NegativityPlayer np) {
 		if(np.fakePlayerTouched == 0) return;

@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -295,19 +294,6 @@ public interface Player extends OfflinePlayer {
 	 * @param vanished true is the player should NOT be visible
 	 */
 	void setVanished(boolean vanished);
-	
-	/**
-	 * Get current player velocity
-	 * 
-	 * @return the player velocity
-	 */
-	Vector getVelocity();
-	/**
-	 * Edit the player velocity
-	 * 
-	 * @param vel the new velocity
-	 */
-	void setVelocity(Vector vel);
 
 	/**
 	 * Get the player address

@@ -428,6 +428,8 @@ public abstract class Cheat {
 				ada.getLogger().error("Failed to register cheat " + cheat.getName() + " as a listener");
 				e.printStackTrace();
 			}
+			if(cheat.getKey().getMinVersion().isNewerThan(ada.getServerVersion())) // cheat made for futur version - no need to show it
+				continue;
 			CHEATS.add(cheat);
 		}
 		CHEATS.sort(Comparator.comparing(Cheat::getKey));

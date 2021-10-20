@@ -6,6 +6,7 @@ plugins {
 shadowJar {
     archiveBaseName.set('Negativity')
     archiveClassifier.set(null)
+    
     mergeServiceFiles()
 }
 
@@ -37,6 +38,10 @@ subprojects {
         maven {
             name 'codemc'
             url 'https://repo.codemc.org/repository/maven-public/'
+        }
+        maven {
+            name 'Sonatype'
+            url 'https://oss.sonatype.org/content/groups/public/'
         }
     }
 

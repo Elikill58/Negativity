@@ -13,8 +13,8 @@ import java.util.concurrent.CompletableFuture;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.api.yaml.config.Configuration;
-import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
+import com.elikill58.negativity.api.yaml.Configuration;
+import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.TranslatedMessages;

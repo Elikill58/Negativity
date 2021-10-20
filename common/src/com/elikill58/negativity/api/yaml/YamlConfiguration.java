@@ -1,4 +1,4 @@
-package com.elikill58.negativity.api.yaml.config;
+package com.elikill58.negativity.api.yaml;
 
 import java.io.File;
 import java.io.FileReader;
@@ -9,12 +9,12 @@ import java.io.Writer;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.elikill58.negativity.api.yaml.DumperOptions;
-import com.elikill58.negativity.api.yaml.Yaml;
-import com.elikill58.negativity.api.yaml.constructor.Constructor;
-import com.elikill58.negativity.api.yaml.nodes.Node;
-import com.elikill58.negativity.api.yaml.representer.Represent;
-import com.elikill58.negativity.api.yaml.representer.Representer;
+import org.yaml.snakeyaml.DumperOptions;
+import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.nodes.Node;
+import org.yaml.snakeyaml.representer.Represent;
+import org.yaml.snakeyaml.representer.Representer;
 
 @SuppressWarnings("unchecked")
 public class YamlConfiguration {

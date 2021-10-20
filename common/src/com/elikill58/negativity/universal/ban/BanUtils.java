@@ -4,7 +4,7 @@ import java.sql.Timestamp;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.maths.Expression;
-import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;

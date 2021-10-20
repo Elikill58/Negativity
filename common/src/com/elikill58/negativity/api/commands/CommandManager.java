@@ -8,7 +8,7 @@ import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.others.CommandExecutionEvent;
 import com.elikill58.negativity.api.events.others.TabExecutionEvent;
-import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.common.commands.BanCommand;
 import com.elikill58.negativity.common.commands.ClearChatCommand;
 import com.elikill58.negativity.common.commands.KickCommand;

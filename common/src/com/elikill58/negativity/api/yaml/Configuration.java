@@ -1,4 +1,4 @@
-package com.elikill58.negativity.api.yaml.config;
+package com.elikill58.negativity.api.yaml;
 
 import java.io.File;
 import java.io.IOException;

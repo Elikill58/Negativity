@@ -12,8 +12,8 @@ import java.util.ServiceLoader;
 
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
-import com.elikill58.negativity.api.yaml.config.Configuration;
-import com.elikill58.negativity.api.yaml.config.YamlConfiguration;
+import com.elikill58.negativity.api.yaml.Configuration;
+import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public abstract class Special {

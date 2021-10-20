@@ -28,7 +28,7 @@ import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.json.parser.ParseException;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
-import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.impl.entity.SpigotOfflinePlayer;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;

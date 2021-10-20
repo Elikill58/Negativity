@@ -49,7 +49,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 				long creationTime = config.getLong("creation-time", System.currentTimeMillis());
 				return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, IP, creationTime);
 			} catch (Exception e) { // prevent parsing error due to corrupted file.
-				Adapter ada = Adapter.getAdapter(); // TODO try to get data from corrupted file
+				Adapter ada = Adapter.getAdapter();
 				ada.getLogger().info("File account of " + ada.getOfflinePlayer(playerId).getName() + " have been corrupted. Creating a new one ...");
 				if(!file.delete())
 					file.deleteOnExit();

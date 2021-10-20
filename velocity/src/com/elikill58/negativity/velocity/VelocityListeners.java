@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
@@ -48,10 +49,16 @@ import net.kyori.adventure.text.format.NamedTextColor;
 public class VelocityListeners {
 	
 	public static final List<Report> REPORTS = new ArrayList<>();
+	public static HashMap<String, BiConsumer<com.elikill58.negativity.api.entity.Player, byte[]>> channelListeners = new HashMap<>();
 	
 	@Subscribe
 	public void onMessageReceived(PluginMessageEvent event) {
 		if (!event.getIdentifier().equals(VelocityNegativity.NEGATIVITY_CHANNEL_ID)) {
+			BiConsumer<com.elikill58.negativity.api.entity.Player, byte[]> cons = channelListeners.get(event.getIdentifier().getId());
+			Player p = (Player) (event.getSource() instanceof Player ? event.getSource() : (event.getTarget() instanceof Player ? event.getTarget() : null));
+			if(cons != null && p != null) {
+				cons.accept(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer(), event.getData());
+			}
 			return;
 		}
 		

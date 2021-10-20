@@ -181,7 +181,7 @@ public class VelocityAdapter extends ProxyAdapter {
 	
 	@Override
 	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
-		// TODO implement channel for velocity
+		VelocityListeners.channelListeners.put(channel, event);
 	}
 	
 	@Override

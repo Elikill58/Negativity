@@ -14,7 +14,7 @@ import com.elikill58.negativity.universal.translation.TranslationProviderFactory
 
 public class TranslatedMessages {
 
-	public static final String PLATFORM_PROVIDER_ID = "platform";
+	public static final String PLATFORM_PROVIDER_ID = "platform", DEFAULT_PREFIX = "&a[&2Negativity&a]";
 
 	public static String DEFAULT_LANG = Adapter.getAdapter().getConfig().getString("Translation.default");
 	public static List<String> LANGS = Adapter.getAdapter().getConfig().getStringList("Translation.lang_available");
@@ -107,6 +107,12 @@ public class TranslatedMessages {
 		if (provider != null) {
 			String message = provider.get(key, placeholders);
 			if (message != null) {
+				if(message.contains("%prefix%")) { // contains prefix
+					String prefix = provider.get("prefix");
+					if(prefix == null || prefix.isEmpty())
+						prefix = DEFAULT_PREFIX;
+					return message.replaceAll("%prefix%", prefix);
+				}
 				return message;
 			}
 		}

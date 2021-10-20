@@ -51,9 +51,11 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 			} catch (Exception e) { // prevent parsing error due to corrupted file.
 				Adapter ada = Adapter.getAdapter(); // TODO try to get data from corrupted file
 				ada.getLogger().info("File account of " + ada.getOfflinePlayer(playerId).getName() + " have been corrupted. Creating a new one ...");
+				if(!file.delete())
+					file.deleteOnExit();
 				NegativityAccount acc = new NegativityAccount(playerId);
 				// TODO try to get most data as possible from old file
-				saveAccount(acc);
+				saveAccount(acc).join();
 				return acc;
 			}
 		});

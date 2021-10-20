@@ -465,7 +465,7 @@ public class NegativityPlayer {
 	public void destroy() {
 		saveProof();
 		NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
-		accountManager.save(playerId);
+		accountManager.save(playerId).join();
 		accountManager.dispose(playerId);
 	}
 

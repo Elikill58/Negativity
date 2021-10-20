@@ -4,5 +4,5 @@ include 'common', 'spigot', 'spigot:spigot17', 'bungee', 'sponge', 'velocity'//,
 
 include 'common:integrations:litebans', 'common:integrations:advancedban', 'common:integrations:dkbans', 'common:integrations:viaversion',
         'spigot:integrations:essentials', 'spigot:integrations:floodgate', 'spigot:integrations:floodgatev2', 'spigot:integrations:gadgetsmenu',
-        'spigot:integrations:maxbans', 'spigot:integrations:protocolsupport', 'spigot:integrations:worldguard'
+        'spigot:integrations:maxbans', 'spigot:integrations:protocolsupport', 'spigot:integrations:worldguardv6', 'spigot:integrations:worldguardv7'
 

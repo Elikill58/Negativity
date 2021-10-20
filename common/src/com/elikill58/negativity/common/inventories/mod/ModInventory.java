@@ -3,7 +3,6 @@ package com.elikill58.negativity.common.inventories.mod;
 import java.util.List;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
@@ -33,10 +32,10 @@ public class ModInventory extends AbstractInventory<ModHolder> {
 
 		inv.set(10, ItemBuilder.Builder(Materials.GHAST_TEAR).displayName(Messages.getMessage(p, "inventory.mod.night_vision")).build());
 		inv.set(11, ItemBuilder.Builder(Materials.PUMPKIN_PIE).displayName(Messages.getMessage(p, "inventory.mod.invisible")).build());
-		inv.set(12, ItemBuilder.Builder(Materials.FEATHER).displayName("Fly: " + Messages.getMessage(p, "inventory.manager." + (p.isFlying() ? "enabled" : "disabled"))).build());
+		inv.set(12, ItemBuilder.Builder(Materials.FEATHER).displayName(Messages.getMessage(p, "inventory.mod.fly", "%state%", Messages.getMessage(p, "inventory.manager." + (p.isFlying() ? "enabled" : "disabled")))).build());
 		if(Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.MANAGE_CHEAT))
 			inv.set(13, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.mod.cheat_manage")).build());
-		inv.set(14, ItemBuilder.Builder(Materials.APPLE).displayName("Heal").build());
+		inv.set(14, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.mod.heal")).build());
 		inv.set(15, ItemBuilder.Builder(Materials.LEASH).displayName(Messages.getMessage(p, "inventory.mod.random_tp")).build());
 		inv.set(16, ItemBuilder.Builder(Materials.IRON_SHOVEL).displayName(Messages.getMessage(p, "inventory.mod.clear_inv")).build());
 		
@@ -82,12 +81,11 @@ public class ModInventory extends AbstractInventory<ModHolder> {
 		} else if (m.equals(Materials.FEATHER)) {
 			p.closeInventory();
 			p.setAllowFlight(!p.getAllowFlight());
-			p.sendMessage("Flying: "
-					+ Messages.getMessage(p, "inventory.manager." + (p.getAllowFlight() ? "enabled" : "disabled")));
+			Messages.sendMessage(p, "inventory.mod.fly_changed", "%state%", Messages.getMessage(p, "inventory.manager." + (p.getAllowFlight() ? "enabled" : "disabled")));
 		} else if (m.equals(Materials.APPLE)) {
 			p.setHealth(p.getMaxHealth());
 			p.setFoodLevel(20);
-			p.sendMessage(ChatColor.GOLD + "Healed !");
+			Messages.sendMessage(p, "inventory.mod.healed");
 		}
 	}
 

@@ -20,12 +20,12 @@ public class AnalyzePacketTimer implements Runnable {
 
 	@Override
 	public void run() {
-		for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
-			if(!p.isOnline()){
-				NegativityPlayer.removeFromCache(p.getUniqueId());
+		for (NegativityPlayer np : NegativityPlayer.getAllNegativityPlayers()) {
+			Player p = np.getPlayer();
+			if(p == null || !p.isOnline()){
+				NegativityPlayer.removeFromCache(np.getUUID());
 				continue;
 			}
-			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 			if (np.SEC_ACTIVE < 2) {
 				np.SEC_ACTIVE++;
 				return;

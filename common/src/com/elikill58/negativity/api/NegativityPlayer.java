@@ -563,6 +563,12 @@ public class NegativityPlayer {
 	public static Map<UUID, NegativityPlayer> getAllPlayers(){
 		return players;
 	}
+	
+	public static List<NegativityPlayer> getAllNegativityPlayers() {
+		synchronized (players) {
+			return new ArrayList<>(players.values());
+		}
+	}
 
 	/**
 	 * Remove the player from cache

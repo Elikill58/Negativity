@@ -383,8 +383,9 @@ public class Negativity {
 				
 				String dependencyPluginId = null;
 				if (extension instanceof PluginDependentExtension) {
-					dependencyPluginId = ((PluginDependentExtension) extension).getPluginId();
-					if (!adapter.hasPlugin(dependencyPluginId)) {
+					PluginDependentExtension depExt = (PluginDependentExtension) extension;
+					dependencyPluginId = depExt.getPluginId();
+					if (!adapter.hasPlugin(dependencyPluginId) || !depExt.hasPreRequises()) {
 						continue;
 					}
 				}

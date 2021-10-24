@@ -9,5 +9,9 @@ package com.elikill58.negativity.universal;
  */
 public interface PluginDependentExtension {
 
+	default boolean hasPreRequises() {
+		return true;
+	}
+	
 	String getPluginId();
 }

@@ -1,9 +1,10 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
+
 import java.text.NumberFormat;
 import java.util.Locale;
 
-import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -30,10 +31,9 @@ import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
+import com.elikill58.negativity.universal.verif.data.DataCounter;
 import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
-
-import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 public class ForceFieldProtocol extends Cheat implements Listener {
 
@@ -58,37 +58,34 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		EntityType type = e.getEntityType();
-		if(type == EntityType.ENDER_DRAGON || type.name().contains("PHANTOM") || type.name().contains("BALL") || type.name().contains("TNT"))
+		if(type == EntityType.ENDER_DRAGON || type.name().contains("PHANTOM") || type.name().contains("BALL") || type.name().contains("TNT") || type.name().contains("ARROW"))
 			return;
 		Entity cible = e.getEntity();
-		
 		Object pBB = PacketUtils.getBoundingBox(p);
 		Object cibleBB = PacketUtils.getBoundingBox(cible);
-		Bukkit.getScheduler().runTaskAsynchronously(SpigotNegativity.getInstance(), () -> {// go async for maths calculation
-			
-			double dis = distance(pBB, cibleBB);
-			ItemStack inHand = Utils.getItemInHand(p);
-			if(inHand == null || !inHand.getType().equals(Material.BOW)) {
-				recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-				if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !p.getLocation().getBlock().getType().name().contains("WATER")) {
-					Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> { // go back sync for bukkit events
-						String entityName = Version.getVersion().equals(Version.V1_7) ? cible.getType().name().toLowerCase(Locale.ROOT) : cible.getName();
-						boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 3 * 10),
-								"Big distance with: " + cible.getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns"
-								+ ". Ping: " + np.ping, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
-						if (isSetBack() && mayCancel)
-							e.setCancelled(true);
-					});
-				}
+		double dis = distance(pBB, cibleBB);
+		ItemStack inHand = Utils.getItemInHand(p);
+		if(inHand == null || !inHand.getType().equals(Material.BOW)) {
+			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
+			Material blockType = p.getLocation().getBlock().getType();
+			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !blockType.name().contains("WATER") && !blockType.name().contains("LAVA")) {
+				String entityName = Version.getVersion().equals(Version.V1_7) ? cible.getType().name().toLowerCase(Locale.ROOT) : cible.getName();
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 3 * 10),
+						"Big distance with: " + cible.getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns"
+						+ ". Ping: " + np.ping, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
+				if (isSetBack() && mayCancel)
+					e.setCancelled(true);
 			}
-		});
+		}
 	}
 	
 	private double sens = 0.005;
 	
 	private double distance(Object a, Object b) {
-		if(a == null || b == null)
+		if(a == null || b == null) {
+			SpigotNegativity.getInstance().getLogger().info("Failed to get entity BoundyBox (=HitBox) A/B null: " + a + "/" + b);
 			return 0.0;
+		}
 		try {
 			Rect r1 = new Rect(a);
 			Rect r2 = new Rect(b);
@@ -126,10 +123,15 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
-		double av = data.getData(HIT_DISTANCE).getAverage();
+		DataCounter<Double> reach = data.getData(HIT_DISTANCE);
+		double av = reach.getAverage(), maxReach = reach.getMax();
+		String reachStr = "Hit distance (Av/Max) : " + getColor(av) + String.format("%.3f", av) + " / " + getColor(maxReach) + String.format("%.3f", maxReach);
 		int nb = data.getData(FAKE_PLAYERS).getSize();
-		String color = (av > 3 ? (av > 4 ? "&c" : "&6") : "&a");
-		return Utils.coloredMessage("Hit distance : " + color + String.format("%.3f", av) + (nb > 0 ? " &7and &c" + nb + " &7fake players touched." : ""));
+		return Utils.coloredMessage(reachStr + (nb > 0 ? " &7and &c" + nb + " &7fake players touched." : ""));
+	}
+	
+	private String getColor(double d) {
+		return (d > 3 ? (d > 4 ? "&c" : "&6") : "&a");
 	}
 	
 	public static void manageForcefieldForFakeplayer(Player p, SpigotNegativityPlayer np) {

@@ -95,7 +95,7 @@ public class Verificator {
 			messageCheatNothing.add(c.getName());
 		}
 		if (messageCheatNothing.length() > 0)
-			messages.add("Nothing detected: " + messageCheatNothing);
+			messages.add("Nothing specially founded: " + messageCheatNothing);
 	}
 	
 	public void save() {

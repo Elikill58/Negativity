@@ -43,6 +43,8 @@ public class FastBowProtocol extends Cheat implements Listener {
 					return;
 		}
 		if (item.getType().equals(Material.BOW) && e.getAction().name().contains("RIGHT_CLICK")) {
+			if(!p.getInventory().contains(Material.ARROW))
+				return;
 			np.flyingReason = FlyingReason.BOW;
 			long actual = System.currentTimeMillis(), dif = actual - np.LAST_SHOT_BOW;
 			if (np.LAST_SHOT_BOW != 0) {

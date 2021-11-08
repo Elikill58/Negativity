@@ -54,6 +54,7 @@ import com.elikill58.negativity.spigot.listeners.PlayerCheatKickEvent;
 import com.elikill58.negativity.spigot.listeners.ShowAlertPermissionEvent;
 import com.elikill58.negativity.spigot.packets.NegativityPacketManager;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
+import com.elikill58.negativity.spigot.support.FloodGateSupportManager;
 import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
 import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
@@ -97,7 +98,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, reloading = false, timeDrop = false, essentialsSupport = false,
-			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false, floodGateSupport = false, isCraftBukkit = false;
+			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false, isCraftBukkit = false;
 	public static double tps_alert_stop = 19.0;
 	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
@@ -254,7 +255,13 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		
 		if (Bukkit.getPluginManager().getPlugin("floodgate-bukkit") != null) {
-			floodGateSupport = true;
+			FloodGateSupportManager.hasSupport = true;
+			supportedPluginName.add("FloodGate");
+		}
+		
+		if (Bukkit.getPluginManager().getPlugin("floodgate") != null) {
+			FloodGateSupportManager.hasSupport = true;
+			FloodGateSupportManager.isV2 = true;
 			supportedPluginName.add("FloodGate");
 		}
 		

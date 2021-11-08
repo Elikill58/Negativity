@@ -41,7 +41,7 @@ import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
-import com.elikill58.negativity.spigot.support.FloodGateSupport;
+import com.elikill58.negativity.spigot.support.FloodGateSupportManager;
 import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
 import com.elikill58.negativity.spigot.support.ProtocolSupportSupport;
 import com.elikill58.negativity.spigot.support.ViaVersionSupport;
@@ -113,14 +113,14 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		this.ping = Utils.getPing(p);
 		initMods(p);
 		this.clientName = "Not loaded";
-		isBedrockPlayer = SpigotNegativity.floodGateSupport && FloodGateSupport.isBedrockPlayer(p.getUniqueId());
+		isBedrockPlayer = FloodGateSupportManager.isBedrockPlayer(p.getUniqueId());
 		playerVersion = SpigotNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : (SpigotNegativity.protocolSupportSupport ? ProtocolSupportSupport.getPlayerVersion(p) : Version.getVersion());
 	}
 
 	public SpigotNegativityPlayer(OfflinePlayer p) {
 		super(p.getUniqueId(), p.getName());
 		this.p = new WeakReference<>(null);
-		isBedrockPlayer = SpigotNegativity.floodGateSupport && FloodGateSupport.isBedrockPlayer(p.getUniqueId());
+		isBedrockPlayer = FloodGateSupportManager.isBedrockPlayer(p.getUniqueId());
 		playerVersion = Version.getVersion();
 	}
 

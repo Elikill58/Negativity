@@ -31,7 +31,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.commands.ReportCommand;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
-import com.elikill58.negativity.spigot.support.FloodGateSupport;
+import com.elikill58.negativity.spigot.support.FloodGateSupportManager;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.NegativityAccount;
@@ -81,7 +81,7 @@ public class PlayersEvents implements Listener {
 			e.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
 			e.setKickMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));
 			Adapter.getAdapter().getAccountManager().dispose(playerId);
-		} else if(!UniversalUtils.isValidName(e.getName()) && !FloodGateSupport.isBedrockPlayer(playerId)) {
+		} else if(!UniversalUtils.isValidName(e.getName()) && !FloodGateSupportManager.isBedrockPlayer(playerId)) {
 			// check for ban / kick only if the player is not already banned
 			String banReason = invalidNameSection.getString("name", "Invalid Name");
 			if(invalidNameSection.getBoolean("ban", false)) {

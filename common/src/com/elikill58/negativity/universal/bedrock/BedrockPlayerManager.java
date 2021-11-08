@@ -2,8 +2,8 @@ package com.elikill58.negativity.universal.bedrock;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 
@@ -22,9 +22,9 @@ public class BedrockPlayerManager {
 		});
 	}
 	
-	public static boolean isBedrockPlayer(Player player) {
+	public static boolean isBedrockPlayer(UUID uuid) {
 		for (BedrockPlayerChecker checker : CHECKERS) {
-			if (checker.isBedrockPlayer(player)) {
+			if (checker.isBedrockPlayer(uuid)) {
 				return true;
 			}
 		}

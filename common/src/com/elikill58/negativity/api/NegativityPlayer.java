@@ -105,7 +105,7 @@ public class NegativityPlayer {
 		ACTIVE_CHEAT.clear();
 		Cheat.values().stream().filter(Cheat::isActive).forEach(this::startAnalyze);
 		this.clientName = "Not loaded";
-		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p);
+		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
 	}
 
 	/**

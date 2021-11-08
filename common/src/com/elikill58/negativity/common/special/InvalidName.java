@@ -14,6 +14,7 @@ import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanType;
+import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class InvalidName extends Special implements Listeners {
@@ -28,7 +29,7 @@ public class InvalidName extends Special implements Listeners {
 			return;
 		UUID playerId = e.getUUID();
 		NegativityAccount account = NegativityAccount.get(playerId);
-		if (!UniversalUtils.isValidName(e.getName())) {
+		if (!UniversalUtils.isValidName(e.getName()) && !BedrockPlayerManager.isBedrockPlayer(playerId)) {
 			// check for ban / kick only if the player is not already banned
 			if (getConfig().getBoolean("ban")) {
 				if (!BanManager.banActive) {

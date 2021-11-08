@@ -1,8 +1,8 @@
 package com.elikill58.negativity.universal.bedrock;
 
-import com.elikill58.negativity.api.entity.Player;
+import java.util.UUID;
 
 public interface BedrockPlayerChecker {
 	
-	boolean isBedrockPlayer(Player player);
+	boolean isBedrockPlayer(UUID uuid);
 }

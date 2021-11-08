@@ -27,11 +27,7 @@ public class Database {
 		Database.username = username;
 		Database.password = password;
 		try {
-			try { // load drivers
-				Class.forName(databaseType.getDriver());
-			} catch (ClassNotFoundException e) {
-				Adapter.getAdapter().getLogger().warn("Cannot find driver for " + databaseType.getName() + ".");
-			}
+			databaseType.loadDriver();
 			connection = DriverManager.getConnection("jdbc:" + databaseType.getType() + "://" + url, username, password);
 			Adapter.getAdapter().getLogger().info("Connection to database " + url + " (with " + databaseType.getName() + ") done !");
 			Database.hasCustom = true;
@@ -98,15 +94,32 @@ public class Database {
 	}
 	
 	public static enum DatabaseType {
-		MARIA("mariadb", "MariaDB", "org.mariadb.jdbc.Driver"),
-		MYSQL("mysql", "MySQL", "com.mysql.jdbc.Driver");
+		MARIA("mariadb", "MariaDB", () -> {
+			try {
+				Class.forName("org.mariadb.jdbc.Driver");
+			} catch (ClassNotFoundException e) {
+				Adapter.getAdapter().getLogger().warn("Cannot find driver for MariaDB.");
+			}
+		}),
+		MYSQL("mysql", "MySQL", () -> {
+			try {
+				Class.forName("com.mysql.cj.jdbc.Driver");
+			} catch (ClassNotFoundException e1) {
+				try {
+					Class.forName("com.mysql.jdbc.Driver");
+				} catch (ClassNotFoundException e2) {
+					Adapter.getAdapter().getLogger().warn("Cannot find driver for MySQL.");
+				}
+			}
+		});
 		
-		private final String type, name, driver;
+		private final String type, name;
+		private final Runnable driverLoader;
 		
-		private DatabaseType(String type, String name, String driver) {
+		private DatabaseType(String type, String name, Runnable driverLoader) {
 			this.type = type;
 			this.name = name;
-			this.driver = driver;
+			this.driverLoader = driverLoader;
 		}
 		
 		public String getName() {
@@ -117,8 +130,8 @@ public class Database {
 			return type;
 		}
 		
-		public String getDriver() {
-			return driver;
+		public void loadDriver() {
+			driverLoader.run();
 		}
 	}
 }

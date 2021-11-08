@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.entity.MainPlayerInventory;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
@@ -12,6 +13,7 @@ import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
 
 public class SpongePlayerInventory extends PlayerInventory {
@@ -144,4 +146,8 @@ public class SpongePlayerInventory extends PlayerInventory {
 		return getItem(p.getBoots());
 	}
 	
+	@Override
+	public boolean contains(Material type) {
+		return inv.contains((ItemType) type.getDefault());
+	}
 }

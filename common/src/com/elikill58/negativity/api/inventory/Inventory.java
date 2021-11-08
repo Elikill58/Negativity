@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.colors.DyeColor;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
@@ -55,6 +56,14 @@ public abstract class Inventory implements NegativityObject {
 	 * @param build the new item
 	 */
 	public abstract void addItem(ItemStack build);
+	
+	/**
+	 * Check if the current inventory contains at least one item with this material
+	 * 
+	 * @param type the search type
+	 * @return true if found at least one
+	 */
+	public abstract boolean contains(Material type);
 	
 	/**
 	 * Get the size of the inventory

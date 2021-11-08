@@ -38,7 +38,7 @@ public class FastBow extends Cheat implements Listeners {
 		if(item == null)
 			return;
 		
-		if (item.getType().equals(Materials.BOW) && e.getAction().name().contains("RIGHT_CLICK")) {
+		if (item.getType().equals(Materials.BOW) && e.getAction().name().contains("RIGHT_CLICK") && p.getInventory().contains(Materials.ARROW)) {
 			if(ItemUseBypass.hasBypassWithClick(p, this, item, e.getAction().name()))
 				return;
 			np.flyingReason = FlyingReason.BOW;

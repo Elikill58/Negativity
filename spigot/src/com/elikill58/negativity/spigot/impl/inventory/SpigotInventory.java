@@ -8,6 +8,7 @@ import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.PlatformHolder;
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 
 public class SpigotInventory extends Inventory {
@@ -86,5 +87,9 @@ public class SpigotInventory extends Inventory {
 	public void addItem(ItemStack build) {
 		inv.addItem((org.bukkit.inventory.ItemStack) build.getDefault());
 	}
-
+	
+	@Override
+	public boolean contains(Material type) {
+		return inv.contains((org.bukkit.Material) type.getDefault());
+	}
 }

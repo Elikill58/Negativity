@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge.impl.inventory;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.inventory.Container;
 import org.spongepowered.api.item.inventory.property.InventoryDimension;
 import org.spongepowered.api.item.inventory.property.InventoryTitle;
@@ -14,6 +15,7 @@ import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.PlatformHolder;
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.sponge.Inv;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
@@ -96,5 +98,9 @@ public class SpongeInventory extends Inventory {
 	public Object getDefault() {
 		return inv;
 	}
-
+	
+	@Override
+	public boolean contains(Material type) {
+		return inv.contains((ItemType) type.getDefault());
+	}
 }

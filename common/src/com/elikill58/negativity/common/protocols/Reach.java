@@ -46,8 +46,6 @@ public class Reach extends Cheat implements Listeners {
 		if (e.isCancelled())
 			return;
 		Player p = e.getPlayer();
-		if (e.getPlayer() == null)
-			return;
 		boolean mayCancel = false;
 		ItemStack inHand = p.getItemInHand();
 		if(inHand == null || !IGNORED_TYPE.contains(inHand.getType())) {

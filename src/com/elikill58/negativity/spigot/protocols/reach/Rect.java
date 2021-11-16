@@ -2,17 +2,17 @@ package com.elikill58.negativity.spigot.protocols.reach;
 
 import java.util.function.Function;
 
-import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.spigot.SpigotNegativity;
 
 public class Rect {
-
-	protected final double x1, y1, z1;
-	protected final double x2, y2, z2;
+	
+	protected double x1 = 0, y1 = 0, z1 = 0;
+	protected double x2 = 0, y2 = 0, z2 = 0;
 	
 	public Rect(Object bb) throws Exception {
 		//this(bb.a, bb.b, bb.c, bb.d, bb.e, bb.f);
 		Class<?> clss = bb.getClass();
-		if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+		try {
 			x1 = clss.getField("minX").getDouble(bb);
 			y1 = clss.getField("minY").getDouble(bb);
 			z1 = clss.getField("minZ").getDouble(bb);
@@ -20,14 +20,19 @@ public class Rect {
 			x2 = clss.getField("maxX").getDouble(bb);
 			y2 = clss.getField("maxY").getDouble(bb);
 			z2 = clss.getField("maxZ").getDouble(bb);
-		} else {
-			x1 = clss.getField("a").getDouble(bb);
-			y1 = clss.getField("b").getDouble(bb);
-			z1 = clss.getField("c").getDouble(bb);
-			
-			x2 = clss.getField("d").getDouble(bb);
-			y2 = clss.getField("e").getDouble(bb);
-			z2 = clss.getField("f").getDouble(bb);
+		} catch (Exception e) {
+			try {
+				x1 = clss.getField("a").getDouble(bb);
+				y1 = clss.getField("b").getDouble(bb);
+				z1 = clss.getField("c").getDouble(bb);
+				
+				x2 = clss.getField("d").getDouble(bb);
+				y2 = clss.getField("e").getDouble(bb);
+				z2 = clss.getField("f").getDouble(bb);
+			} catch (Exception e2) {
+				SpigotNegativity.getInstance().getLogger().warning("Failed to find values in BoundingBox or AxisAlignedBB.");
+				e2.printStackTrace();
+			}
 		}
 	}
 	

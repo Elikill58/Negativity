@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal;
 import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,6 +35,7 @@ import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
+import com.elikill58.negativity.universal.file.FileSaverTimer;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
@@ -342,6 +344,13 @@ public class Negativity {
 				NegativityPlayer.getNegativityPlayer(p).setClientName(new String(msg).substring(1));
 			});
 			initAlertShower(ada);
+			try {
+				// Create proof folder at startup to don't check after
+				Files.createDirectories(Adapter.getAdapter().getDataFolder().getAbsoluteFile().toPath().resolve("user").resolve("proof"));
+				ada.getScheduler().runRepeatingAsync(new FileSaverTimer(), 20);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 		UniversalUtils.init();
 		

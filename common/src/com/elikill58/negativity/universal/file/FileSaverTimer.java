@@ -12,7 +12,7 @@ public class FileSaverTimer implements Runnable {
 	public static FileSaverTimer getInstance() {
 		return instance;
 	}
-    public static final int MAX_RUNNING = 10, SKIP_WHEN_ALREADY = 2;
+	private static final int MAX_RUNNING = 10, SKIP_WHEN_ALREADY = 2;
     private final List<FileSaverAction> allActions = new ArrayList<>();
     public void addAction(FileSaverAction action) {
         allActions.add(action);
@@ -40,10 +40,7 @@ public class FileSaverTimer implements Runnable {
         
         // now check for old handle
         NegativityPlayer.getAllNegativityPlayers().forEach(NegativityPlayer::checkProofFileHandler);
-        FileHandle.FILE_HANDLES.forEach((fh) -> {
-			if(fh.shouldBeClosed())
-				fh.close();
-        });
+        FileHandle.getFileHandles().stream().filter(FileHandle::shouldBeClosed).forEach(FileHandle::close);
     }
     
     public void runAll() {

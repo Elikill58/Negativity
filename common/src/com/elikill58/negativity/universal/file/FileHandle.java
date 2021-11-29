@@ -8,15 +8,19 @@ import java.util.List;
 
 public class FileHandle {
 
-	public static final List<FileHandle> FILE_HANDLES = new ArrayList<>();
-	public static final long MAX_TIME = 10000; // 1000 = 1 second
+	private static final List<FileHandle> FILE_HANDLES = new ArrayList<>();
+	public static List<FileHandle> getFileHandles() {
+		return FILE_HANDLES;
+	}
+	private static final long MAX_TIME = 10000; // 1000 = 1 second
 	private final FileWriter handle;
 	private boolean closed = false;
 	private long lastUpdate;
 	
 	public FileHandle(File file) throws IOException {
-		this.handle = new FileWriter(file);
+		this.handle = new FileWriter(file, true);
 		this.lastUpdate = System.currentTimeMillis();
+		FILE_HANDLES.add(this);
 	}
 	
 	public void update() {

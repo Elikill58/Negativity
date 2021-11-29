@@ -416,7 +416,7 @@ public class NegativityPlayer implements FileSaverAction {
 	
 	public FileHandle getOrCreateProofFileHandler() throws IOException {
 		if(proofFileHandler == null || proofFileHandler.isClosed()) {
-			File proofFile = new File(Adapter.getAdapter().getDataFolder().getAbsoluteFile(), "user" + File.pathSeparator + "proof" + File.pathSeparator + getUUID() + ".txt");
+			File proofFile = new File(Adapter.getAdapter().getDataFolder().getAbsoluteFile(), "user" + File.separator + "proof" + File.separator + getUUID() + ".txt");
 			if(!proofFile.exists())
 				proofFile.createNewFile();
 			proofFileHandler = new FileHandle(proofFile);

@@ -383,6 +383,7 @@ public class NegativityPlayer implements FileSaverAction {
 	 */
 	public void logProof(String msg) {
 		proof.add(msg);
+		FileSaverTimer.getInstance().addAction(this);
 	}
 	
 	/**
@@ -416,6 +417,8 @@ public class NegativityPlayer implements FileSaverAction {
 	public FileHandle getOrCreateProofFileHandler() throws IOException {
 		if(proofFileHandler == null || proofFileHandler.isClosed()) {
 			File proofFile = new File(Adapter.getAdapter().getDataFolder().getAbsoluteFile(), "user" + File.pathSeparator + "proof" + File.pathSeparator + getUUID() + ".txt");
+			if(!proofFile.exists())
+				proofFile.createNewFile();
 			proofFileHandler = new FileHandle(proofFile);
 		}
 		return proofFileHandler;
@@ -423,8 +426,10 @@ public class NegativityPlayer implements FileSaverAction {
 	
 	@Override
 	public void save(FileSaverTimer timer) {
-		if (proof.isEmpty())
+		if (proof.isEmpty()) {
+	    	timer.removeActionRunning();
 			return;
+		}
 		
 		try {
 			getOrCreateProofFileHandler().write(proof);
@@ -432,7 +437,8 @@ public class NegativityPlayer implements FileSaverAction {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
+    	timer.removeActionRunning();
 	}
 	
 	/**

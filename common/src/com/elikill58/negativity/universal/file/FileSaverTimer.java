@@ -31,7 +31,7 @@ public class FileSaverTimer implements Runnable {
     @Override
     public void run() {
         if(actionRunning < SKIP_WHEN_ALREADY) {
-	        for(int i = actionRunning; !allActions.isEmpty() && i < MAX_RUNNING; i++) {
+	        for(int i = 0; !allActions.isEmpty() && i < MAX_RUNNING; i++) {
 	            FileSaverAction action = allActions.remove(0); // removing first item
 	            actionRunning++; // adding a running task
 	            action.save(this); // save, and when it's finished removing running task
@@ -44,6 +44,10 @@ public class FileSaverTimer implements Runnable {
 			if(fh.shouldBeClosed())
 				fh.close();
         });
+    }
+    
+    public void runAll() {
+    	allActions.forEach((a) -> a.save(this));
     }
 
     public void removeActionRunning() {

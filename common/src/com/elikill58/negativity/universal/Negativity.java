@@ -347,7 +347,11 @@ public class Negativity {
 			try {
 				// Create proof folder at startup to don't check after
 				Files.createDirectories(Adapter.getAdapter().getDataFolder().getAbsoluteFile().toPath().resolve("user").resolve("proof"));
-				ada.getScheduler().runRepeatingAsync(new FileSaverTimer(), 20);
+				FileSaverTimer old = FileSaverTimer.getInstance();
+				if(old != null)
+					old.runAll();
+				else
+					ada.getScheduler().runRepeatingAsync(new FileSaverTimer(), 20);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

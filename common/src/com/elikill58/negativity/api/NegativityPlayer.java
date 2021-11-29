@@ -495,7 +495,8 @@ public class NegativityPlayer implements FileSaverAction {
 	 */
 	public void destroy() {
 		save(FileSaverTimer.getInstance());
-		proofFileHandler.close();
+		if(proofFileHandler != null && !proofFileHandler.isClosed())
+			proofFileHandler.close();
 		NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
 		accountManager.save(playerId).join();
 		accountManager.dispose(playerId);

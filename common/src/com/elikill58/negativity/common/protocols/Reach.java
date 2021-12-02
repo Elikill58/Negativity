@@ -23,7 +23,6 @@ import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
@@ -51,12 +50,12 @@ public class Reach extends Cheat implements Listeners {
 		if(inHand == null || !IGNORED_TYPE.contains(inHand.getType())) {
 			Entity et = e.getDamaged();
 			BoundingBox bb1 = p.getBoundingBox(), bb2 = et.getBoundingBox();
-			double dis = bb1.getNearestPoint(bb2.getMid()).distance(bb2.getNearestPoint(bb2.getMid()));
+			double dis = bb1.getAsHeadPoint().distance(bb2.getIntersectPoint(p));
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-			if (dis > getConfig().getDouble("check.reach-event.value", 3.1) && !et.getType().equals(EntityType.ENDER_DRAGON) && !p.getLocation().getBlock().getType().getId().contains("WATER")) {
-				String entityName = Version.getVersion().equals(Version.V1_7) ? et.getType().name().toLowerCase(Locale.ROOT) : et.getName();
+			if (dis > getConfig().getDouble("check.reach-event.value", 3.06) && !et.getType().equals(EntityType.ENDER_DRAGON) && !p.getLocation().getBlock().getType().getId().contains("WATER")) {
+				String entityName = et.getName();
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10), "reach-event",
-						"High distance with: " + et.getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns", hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
+						"High distance with: " + et.getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ". BB1: " + bb1 + ", BB2: " + bb2, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
 			}
 		}
 		if (isSetBack() && mayCancel)
@@ -71,6 +70,6 @@ public class Reach extends Cheat implements Listeners {
 	}
 	
 	private String getColoredDistance(double dis) {
-		return (dis > 3 ? (dis > 4 ? "&c" : "&6") : "&a") + String.format("%.3f", dis);
+		return Utils.coloredMessage((dis > 3 ? (dis > 4 ? "&c" : "&6") : "&a") + String.format("%.3f", dis) + "&r");
 	}
 }

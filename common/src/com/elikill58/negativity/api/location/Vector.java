@@ -1,7 +1,9 @@
 package com.elikill58.negativity.api.location;
 
-import static com.elikill58.negativity.universal.utils.Maths.square;
 import static com.elikill58.negativity.universal.utils.Maths.roundLoc;
+import static com.elikill58.negativity.universal.utils.Maths.square;
+
+import com.elikill58.negativity.api.maths.Point;
 
 public class Vector implements Cloneable {
 
@@ -197,6 +199,10 @@ public class Vector implements Cloneable {
 		return this.x * other.x + this.y * other.y + this.z * other.z;
 	}
 
+	public double dot(Point other) {
+		return this.x * other.x + this.y * other.y + this.z * other.z;
+	}
+
 	public Vector crossProduct(Vector o) {
 		double newX = this.y * o.z - o.y * this.z;
 		double newY = this.z * o.x - o.z * this.x;
@@ -333,6 +339,6 @@ public class Vector implements Cloneable {
 	}
 
 	public String toShowableString() {
-		return String.format("%.2f", this.x) + ", " + String.format("%.2f", this.z);
+		return "x: " + String.format("%.2f", this.x) + ", y: " + String.format("%.2f", this.y) + ", z: " + String.format("%.2f", this.z);
 	}
 }

@@ -57,7 +57,6 @@ import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
-import net.minecraft.server.v1_10_R1.Vec3D;
 
 @SuppressWarnings("unchecked")
 public abstract class SpigotVersionAdapter {
@@ -133,7 +132,8 @@ public abstract class SpigotVersionAdapter {
 				double d0 = get(player, "locX");
 				double d1 = ((double) get(player, "locY")) + ((double) getFromMethod(player, "getHeadHeight"));
 				double d2 = get(player, "locZ");
-				Vec3D vec3d = new Vec3D(d0, d1, d2);
+				Class<?> vec3DClass = PacketUtils.getNmsClass("Vec3D");
+				Object vec3d = vec3DClass.getConstructor(double.class, double.class, double.class).newInstance(d0, d1, d2);
 				float f3 = cos(-f2 * 0.017453292F - 3.1415927F);
 				float f4 = sin(-f2 * 0.017453292F - 3.1415927F);
 				float f5 = -cos(-f1 * 0.017453292F);
@@ -141,10 +141,10 @@ public abstract class SpigotVersionAdapter {
 				float f7 = f4 * f5;
 				float f8 = f3 * f5;
 				double d3 = (p.getGameMode().equals(GameMode.CREATIVE)) ? 5.0D : 4.5D;
-				Vec3D vec3d1 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
+				Object vec3d1 = vec3DClass.getMethod("add", double.class, double.class, double.class).invoke(vec3d, f7 * d3, f6 * d3, f8 * d3);
 				Location loc = p.getLocation();
 				Object worldServer = PacketUtils.getWorldServer(loc);
-				Object movingObj = PacketUtils.getNmsClass("World").getMethod("rayTrace", vec3d.getClass(), vec3d1.getClass()).invoke(worldServer, vec3d, vec3d1);
+				Object movingObj = PacketUtils.getNmsClass("World").getMethod("rayTrace", vec3DClass, vec3DClass).invoke(worldServer, vec3d, vec3d1);
 				Object vec = getFromMethod(movingObj, "a");
 				return new NPacketPlayInBlockPlace(getFromMethod(vec, "getX"), getFromMethod(vec, "getY"), getFromMethod(vec, "getZ"), handItem,
 					new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
@@ -344,6 +344,13 @@ public abstract class SpigotVersionAdapter {
 				try {
 					return instance = (SpigotVersionAdapter) Class
 							.forName("com.elikill58.negativity.spigot17.Spigot_1_17_R1").getConstructor().newInstance();
+				} catch (ReflectiveOperationException e) {
+					throw new RuntimeException(e);
+				}
+			case "v1_18_R1":
+				try {
+					return instance = (SpigotVersionAdapter) Class
+							.forName("com.elikill58.negativity.spigot18.Spigot_1_18_R1").getConstructor().newInstance();
 				} catch (ReflectiveOperationException e) {
 					throw new RuntimeException(e);
 				}

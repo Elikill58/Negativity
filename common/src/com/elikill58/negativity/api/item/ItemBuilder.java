@@ -153,6 +153,8 @@ public abstract class ItemBuilder {
 	}
 	
 	public static ItemStack getSkullItem(OfflinePlayer cible) {
-		return ItemBuilder.Builder(Materials.ARROW).displayName(cible.getName()).lore(ChatColor.RED + "Offline", ChatColor.GOLD + "UUID: " + cible.getUniqueId()).build();
+		if(cible instanceof Player)
+			return getSkullItem((Player) cible);
+		return ItemBuilder.Builder(cible).displayName(cible.getName()).lore(ChatColor.RED + "Offline", ChatColor.GOLD + "UUID: " + cible.getUniqueId()).build();
 	}
 }

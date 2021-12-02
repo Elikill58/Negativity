@@ -33,12 +33,6 @@ verif:
 
 # Disable one check and not all detections
 checks:
-  # Get move after a tick
-  ticked:
-    active: true
-  # Check if the player vector change
-  vector:
-    active: true
   # Check the packet velocity
   packet:
     active: true

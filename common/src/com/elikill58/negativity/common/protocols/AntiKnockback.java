@@ -1,28 +1,19 @@
 package com.elikill58.negativity.common.protocols;
 
-import java.util.Locale;
 import java.util.function.Consumer;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
-import com.elikill58.negativity.api.entity.Arrow;
-import com.elikill58.negativity.api.entity.Entity;
-import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
-import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
-import com.elikill58.negativity.api.item.ItemStack;
-import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.maths.Expression;
 import com.elikill58.negativity.api.packets.PacketContent.ContentModifier;
 import com.elikill58.negativity.api.packets.PacketType;
-import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.Utils;
@@ -32,8 +23,6 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ScheduledTask;
 import com.elikill58.negativity.universal.Scheduler;
-import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
@@ -49,70 +38,6 @@ public class AntiKnockback extends Cheat implements Listeners {
 	public AntiKnockback() {
 		super(CheatKeys.ANTI_KNOCKBACK, CheatCategory.COMBAT, Materials.STICK, false, true, "antikb", "anti-kb",
 				"no-kb", "nokb");
-	}
-
-	@Check(name = "ticked", description = "Get move after a tick", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL, CheckConditions.NOT_IRON_TARGET, CheckConditions.NOT_THORNS })
-	public void onDamage(PlayerDamagedByEntityEvent e, NegativityPlayer np) {
-		if (e.isCancelled())
-			return;
-		Player p = e.getPlayer();
-		
-		if (p.hasPotionEffect(PotionEffectType.POISON))
-			return;
-		if (Version.getVersion().isNewerOrEquals(Version.V1_9)) {
-			ItemStack inHand = p.getItemInHand();
-			if (inHand != null && inHand.getType().getId().contains("SHIELD"))
-				return;
-			ItemStack inOffHand = p.getItemInOffHand();
-			if (inOffHand != null && inOffHand.getType().getId().contains("SHIELD"))
-				return;
-		}
-		Entity damager = e.getDamager();
-		EntityType damagerType = damager.getType();
-		if (damagerType.equals(EntityType.EGG) || damagerType.equals(EntityType.SNOWBALL))
-			return;
-		if (PlayerModificationsManager.isProtected(p, damager))
-			return;
-		if (damagerType.name().contains("TNT"))
-			return;
-		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
-			return;
-		if (damager.getType().equals(EntityType.ARROW) && ((Arrow) damager).getShooter() instanceof Player)
-			if (((Arrow) damager).getShooter().equals(p))
-				return;
-		
-		Scheduler.getInstance().runDelayed(() -> {
-			if (e.isCancelled())
-				return;
-			final Location last = p.getLocation().clone();
-			if (last.clone().add(0, 2, 0).getBlock().getType().isSolid()) { // check for block upper
-				Vector vector = damager.getEyeLocation().getDirection();
-				Location locBehind = last.clone().add(vector.clone());
-				locBehind.setY(last.getY());
-				Material typeBehind = locBehind.getBlock().getType();
-				if (typeBehind.isSolid() || typeBehind.getId().contains("STAIRS") || typeBehind.getId().contains("SLAB"))// cannot move
-					return;
-			}
-			p.damage(0D);
-			// p.setLastDamageCause(new EntityDamageEvent(p, DamageCause.CUSTOM, 0D));
-			Scheduler.getInstance().runDelayed(() -> {
-				Location actual = p.getLocation();
-				if (last.getWorld() != actual.getWorld() || p.isDead())
-					return;
-				double d = last.distance(actual);
-				recordData(p.getUniqueId(), DISTANCE_DAMAGE, d);
-				int relia = UniversalUtils.parseInPorcent(100 - d);
-				if (d < 0.1 && !actual.getBlock().getType().equals(Materials.WEB) && !p.isSneaking()) {
-					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this, relia,
-						"ticked",
-						"Distance after damage: " + d + "; Damager: "
-							+ e.getDamager().getType().name().toLowerCase(Locale.ROOT),
-						hoverMsg("main", "%distance%", d));
-					if (isSetBack() && mayCancel)
-						p.setVelocity(p.getVelocity().add(new Vector(0, 1, 0)));
-				}
-			}, 5);
-		}, 1);
 	}
 
 	@Check(name = "packet", description = "Packet velocity", conditions = { CheckConditions.SURVIVAL })

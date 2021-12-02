@@ -54,9 +54,6 @@ public class NegativityPacketManager {
 	
 	private void manageReceive(AbstractPacket packet) {
 		Player p = packet.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
-		np.PACKETS.put(packet.getPacketType(), np.PACKETS.getOrDefault(packet.getPacketType(), 0) + 1);
-
 		PacketType type = packet.getPacketType();
 		if(type == PacketType.Client.USE_ENTITY) {
 			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet.getPacket();

@@ -28,6 +28,7 @@ import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.report.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Jesus extends Cheat implements Listeners {
 
@@ -125,12 +126,12 @@ public class Jesus extends Cheat implements Listeners {
 			if(b.getType().getId().contains("WATER"))
 				i++;
 		}
-		boolean wasOnGround = np.booleans.get(JESUS, "gw-was-ground", false);
+		boolean wasOnGround = np.booleans.get(JESUS, "bw-was-ground", false);
 		boolean isOnGround = p.isOnGround();
-		if(wasOnGround && isOnGround && p.getLocation().getBlock().getType().equals(Materials.AIR) && sub.getType().getId().contains("WATER") && i > 2) {
-			Negativity.alertMod(ReportType.WARNING, p, this, i * 25, "ground-water", "I: " + i);
+		if(wasOnGround && isOnGround && p.getLocation().getBlock().getType().equals(Materials.AIR) && sub.getType().getId().contains("WATER") && i > 3) {
+			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(i * 25), "ground-water", "I: " + i);
 		}
-		np.booleans.set(JESUS, "gw-was-ground", isOnGround);
+		np.booleans.set(JESUS, "bw-was-ground", isOnGround);
 	}
 	
 	@Override

@@ -19,20 +19,15 @@ public class PlayerMoveEvent extends PlayerEvent {
 		return to.clone();
 	}
 	
-	public void setTo(Location loc) {
-		this.to = loc;
-		hasToSet = true;
+	public void setTo(Location to) {
+		this.to = to;
+		this.hasToSet = true;
 	}
 	
 	public Location getFrom() {
 		return from.clone();
 	}
 	
-	public void setFrom(Location loc) {
-		this.from = loc;
-		hasToSet = true;
-	}
-
 	public boolean isCancelled() {
 		return cancel;
 	}

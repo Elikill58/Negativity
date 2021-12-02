@@ -70,7 +70,9 @@ public class PlayersListeners {
 
 	@Listener
 	public void onPlayerMove(MoveEntityEvent e, @First Player p) {
-		NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpongePlayer(p));
+		if(e.isCancelled())
+			return;
 		Transform<World> to = e.getToTransform();
 		PlayerMoveEvent event = new PlayerMoveEvent(SpongeEntityManager.getPlayer(p),
 				SpongeLocation.toCommon(e.getFromTransform().getLocation()), SpongeLocation.toCommon(to.getLocation()));
@@ -79,8 +81,15 @@ public class PlayersListeners {
 			to.setLocation(SpongeLocation.fromCommon(event.getTo()));
 			e.setToTransform(to);
 		}
-		if(np.isFreeze && !p.getLocation().copy().sub(0, 1, 0).getBlock().getType().equals(BlockTypes.AIR))
+		if(event.isCancelled()) {
 			e.setCancelled(true);
+			return;
+		}
+		
+		if(np.isFreeze && !p.getLocation().copy().sub(0, 1, 0).getBlock().getType().equals(BlockTypes.AIR)) {
+			e.setCancelled(true);
+			return;
+		}
 		
 		if(p.getLocation().copy().sub(0, 1, 0).getBlock().getType().getId().contains("SLIME")) {
 			np.isUsingSlimeBlock = true;

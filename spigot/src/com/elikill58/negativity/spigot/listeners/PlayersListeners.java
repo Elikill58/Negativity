@@ -52,19 +52,22 @@ public class PlayersListeners implements Listener {
 	@EventHandler
 	public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
 		Player p = e.getPlayer();
-		if(p.hasMetadata("NPC"))
+		if(p.hasMetadata("NPC") || e.isCancelled())
 			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p));
-		if(np.isFreeze && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR))
+		if(np.isFreeze && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
 			e.setCancelled(true);
+			return;
+		}
 		PlayerMoveEvent event = new PlayerMoveEvent(SpigotEntityManager.getPlayer(p), SpigotLocation.toCommon(e.getFrom()), SpigotLocation.toCommon(e.getTo()));
 		EventManager.callEvent(event);
 		if(event.hasToSet()) {
 			e.setTo(SpigotLocation.fromCommon(event.getTo()));
-			e.setFrom(SpigotLocation.fromCommon(event.getFrom()));
 		}
-		if(e.isCancelled())
+		if(event.isCancelled()) {
+			e.setCancelled(true);
 			return;
+		}
 		if(p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("SLIME")) {
 			np.isUsingSlimeBlock = true;
 		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("AIR")))

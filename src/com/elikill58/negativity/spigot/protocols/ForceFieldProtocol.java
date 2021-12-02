@@ -83,7 +83,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	
 	private double distance(Object a, Object b) {
 		if(a == null || b == null) {
-			SpigotNegativity.getInstance().getLogger().info("Failed to get entity BoundyBox (=HitBox) A/B null: " + a + "/" + b);
+			SpigotNegativity.getInstance().getLogger().info("Failed to get entity BoundingBox (=HitBox) A/B null: " + a + "/" + b);
 			return 0.0;
 		}
 		try {

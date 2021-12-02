@@ -21,8 +21,6 @@ import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
-import net.minecraft.server.dedicated.DedicatedPlayerList;
-import net.minecraft.server.dedicated.DedicatedServer;
 
 public class INC2Channel extends ChannelAbstract {
 	
@@ -30,7 +28,8 @@ public class INC2Channel extends ChannelAbstract {
 	public INC2Channel(CustomPacketManager customPacketManager) {
 		super(customPacketManager);
 		try {
-			DedicatedServer mcServer = ((DedicatedPlayerList) PacketUtils.getCraftServer()).getServer();
+			Object mcServer = ReflectionUtils.callMethod(PacketUtils.getCraftServer(), Version.getVersion().equals(Version.V1_17) ? "getServer" : "b");
+			//DedicatedServer mcServer = ((DedicatedPlayerList) PacketUtils.getCraftServer()).b();//getServer();
 			Object co = ReflectionUtils.getFirstWith(mcServer, PacketUtils.getNmsClass("MinecraftServer", "server."), PacketUtils.getNmsClass("ServerConnection", "server.network."));
 			((List<ChannelFuture>) ReflectionUtils.getField(co, "f")).forEach((channelFuture) -> {
 				channelFuture.channel().pipeline().addFirst(new ChannelInboundHandler(customPacketManager));

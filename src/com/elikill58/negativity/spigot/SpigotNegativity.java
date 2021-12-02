@@ -288,6 +288,8 @@ public class SpigotNegativity extends JavaPlugin {
 			// 1.7 = g
 			String fieldNameLastTimeTps = null;
 			if(v.isNewerOrEquals(Version.V1_17))
+				fieldNameLastTimeTps = "p";
+			else if(v.isNewerOrEquals(Version.V1_17))
 				fieldNameLastTimeTps = "n";
 			else if(v.equals(Version.V1_13))
 				fieldNameLastTimeTps = "d";
@@ -297,10 +299,10 @@ public class SpigotNegativity extends JavaPlugin {
 				fieldNameLastTimeTps = "f";
 			else
 				fieldNameLastTimeTps = "h";
-			
 			Class<?> mcServerClass = PacketUtils.getNmsClass("MinecraftServer", "server.");
 			Object mcServer = mcServerClass.getMethod("getServer").invoke(mcServerClass);
 			Field fieldLastTimeTps = mcServerClass.getDeclaredField(fieldNameLastTimeTps);
+			fieldLastTimeTps.setAccessible(true);
 			Method mathHelperMethod = PacketUtils.getNmsClass("MathHelper", "util.").getDeclaredMethod("a", long[].class);
 			getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
 				try {

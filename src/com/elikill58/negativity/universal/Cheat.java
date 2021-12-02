@@ -148,7 +148,6 @@ public abstract class Cheat {
 		return CHEATS_BY_KEY.get(key.toLowerCase(Locale.ROOT));
 	}
 	
-	@SuppressWarnings("deprecation")
 	public static void loadCheat() {
 		CHEATS.clear();
 		CHEATS_BY_KEY.clear();

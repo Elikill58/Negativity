@@ -156,7 +156,7 @@ public abstract class SpigotVersionAdapter {
 
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, packet) -> {
 			Object pos = get(packet, "b");
-			return new NPacketPlayOutBlockBreakAnimation(get(pos, "x"), get(pos, "y"), get(pos, "z"), get(packet, "a"),
+			return pos == null ? null : new NPacketPlayOutBlockBreakAnimation(get(pos, "x"), get(pos, "y"), get(pos, "z"), get(packet, "a"),
 					get(packet, "c"));
 		});
 		packetsPlayOut.put("PacketPlayOutKeepAlive",

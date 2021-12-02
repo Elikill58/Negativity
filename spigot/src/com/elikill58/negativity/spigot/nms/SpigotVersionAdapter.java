@@ -132,7 +132,7 @@ public abstract class SpigotVersionAdapter {
 				double d0 = get(player, "locX");
 				double d1 = ((double) get(player, "locY")) + ((double) getFromMethod(player, "getHeadHeight"));
 				double d2 = get(player, "locZ");
-				Class<?> vec3DClass = PacketUtils.getNmsClass("Vec3D");
+				Class<?> vec3DClass = PacketUtils.getNmsClass("Vec3D", "world.phys.");
 				Object vec3d = vec3DClass.getConstructor(double.class, double.class, double.class).newInstance(d0, d1, d2);
 				float f3 = cos(-f2 * 0.017453292F - 3.1415927F);
 				float f4 = sin(-f2 * 0.017453292F - 3.1415927F);
@@ -144,7 +144,7 @@ public abstract class SpigotVersionAdapter {
 				Object vec3d1 = vec3DClass.getMethod("add", double.class, double.class, double.class).invoke(vec3d, f7 * d3, f6 * d3, f8 * d3);
 				Location loc = p.getLocation();
 				Object worldServer = PacketUtils.getWorldServer(loc);
-				Object movingObj = PacketUtils.getNmsClass("World").getMethod("rayTrace", vec3DClass, vec3DClass).invoke(worldServer, vec3d, vec3d1);
+				Object movingObj = PacketUtils.getNmsClass("World", "world.level.").getMethod("rayTrace", vec3DClass, vec3DClass).invoke(worldServer, vec3d, vec3d1);
 				Object vec = getFromMethod(movingObj, "a");
 				return new NPacketPlayInBlockPlace(getFromMethod(vec, "getX"), getFromMethod(vec, "getY"), getFromMethod(vec, "getZ"), handItem,
 					new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
@@ -237,7 +237,7 @@ public abstract class SpigotVersionAdapter {
 
 	public double[] getTps() {
 		try {
-			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer");
+			Class<?> mcServer = PacketUtils.getNmsClass("MinecraftServer", "server.");
 			Object server = mcServer.getMethod("getServer").invoke(mcServer);
 			return (double[]) server.getClass().getField("recentTps").get(server);
 		} catch (Exception e) {
@@ -260,7 +260,7 @@ public abstract class SpigotVersionAdapter {
 	public void sendPacket(Player p, Object packet) {
 		try {
 			Object playerConnection = getPlayerConnection(p);
-			playerConnection.getClass().getMethod("sendPacket", PacketUtils.getNmsClass("Packet"))
+			playerConnection.getClass().getMethod("sendPacket", PacketUtils.getNmsClass("Packet", "network.protocol.game."))
 					.invoke(playerConnection, packet);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -281,7 +281,7 @@ public abstract class SpigotVersionAdapter {
 	public List<ChannelFuture> getFuturChannel() {
 		try {
 			Object mcServer = PacketUtils.getDedicatedServer();
-			Object co = ReflectionUtils.getFirstWith(mcServer, PacketUtils.getNmsClass("MinecraftServer"), PacketUtils.getNmsClass("ServerConnection"));
+			Object co = ReflectionUtils.getFirstWith(mcServer, PacketUtils.getNmsClass("MinecraftServer", "server."), PacketUtils.getNmsClass("ServerConnection", "server.network."));
 			try {
 				return (List<ChannelFuture>) ReflectionUtils.getPrivateField(co, "g");
 			} catch (NoSuchFieldException e) {

@@ -14,11 +14,13 @@ public class PacketUtils {
 
 	private static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
 			.split(",")[3];
+	public static final String NMS_PREFIX;
 
 	public static Class<?> CRAFT_PLAYER_CLASS, CRAFT_SERVER_CLASS, CRAFT_ENTITY_CLASS;
 	public static Class<?> ENUM_PLAYER_INFO = SpigotVersionAdapter.getVersionAdapter().getEnumPlayerInfoAction();
 	
 	static {
+		NMS_PREFIX = Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? "net.minecraft." : "net.minecraft.server." + VERSION + ".";
 		try {
 			CRAFT_PLAYER_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer");
 			CRAFT_ENTITY_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftEntity");
@@ -37,12 +39,25 @@ public class PacketUtils {
 	 * Get the Class in NMS, with a processing reducer
 	 * 
 	 * @param name of the NMS class (in net.minecraft.server package ONLY, because it's NMS)
-	 * @return clazz
+	 * @return the loaded or cached class
 	 */
 	public static Class<?> getNmsClass(String name){
+		return getNmsClass(name, "");
+	}
+	
+	/**
+	 * Get the Class in NMS, with a processing reducer
+	 * 
+	 * @param name of the NMS class (in net.minecraft.server package ONLY, because it's NMS)
+	 * @param packagePrefix the prefix of the package for 1.17+
+	 * @return the loaded or cached class
+	 */
+	public static Class<?> getNmsClass(String name, String packagePrefix){
 		return ALL_CLASS.computeIfAbsent(name, (s) -> {
 			try {
-				return Class.forName("net.minecraft.server." + VERSION + "." + name);
+				Class<?> clazz = Class.forName(NMS_PREFIX + (Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? packagePrefix : "") + name);
+				ALL_CLASS.put(name, clazz);
+				return clazz;
 			} catch (Exception e) {
 				e.printStackTrace();
 				return null;
@@ -91,7 +106,7 @@ public class PacketUtils {
 	 */
 	public static void sendPacket(Player p, String packetName, Class<?> type, Object data) {
 		try {
-			sendPacket(p, getNmsClass(packetName).getConstructor(type).newInstance(data));
+			sendPacket(p, getNmsClass(packetName, "network.protocol.game.").getConstructor(type).newInstance(data));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -190,9 +205,11 @@ public class PacketUtils {
 			//((CraftEntity) p).getHandle().getBoundingBox();
 			Object ep = CRAFT_ENTITY_CLASS.getDeclaredMethod("getHandle").invoke(CRAFT_ENTITY_CLASS.cast(p));
 			if(Version.getVersion().equals(Version.V1_7))
-				return getNmsClass("Entity").getDeclaredField("boundingBox").get(ep);
+				return getNmsClass("Entity", "world.entity.").getDeclaredField("boundingBox").get(ep);
+			else if(Version.getVersion().isNewerOrEquals(Version.V1_18))
+				return getNmsClass("Entity", "world.entity.").getDeclaredMethod("cw").invoke(ep);
 			else
-				return getNmsClass("Entity").getDeclaredMethod("getBoundingBox").invoke(ep);
+				return getNmsClass("Entity", "world.entity.").getDeclaredMethod("getBoundingBox").invoke(ep);
 			/*Class<?> craftMonsterClass = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftEntity");
 			if(cp.getClass().isInstance(craftMonsterClass)) { // prevent protected items
 				Object ep = craftMonsterClass.getDeclaredMethod("getHandle").invoke(craftMonsterClass.cast(cp));

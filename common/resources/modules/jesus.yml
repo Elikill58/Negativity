@@ -45,3 +45,6 @@ checks:
   # Distance in water
   distance-in:
     active: true
+  # Ground and on water
+  ground-water:
+    active: true

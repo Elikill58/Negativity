@@ -7,8 +7,12 @@ import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExten
 import static com.elikill58.negativity.universal.CheatKeys.JESUS;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
+import java.util.Arrays;
+
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
@@ -18,6 +22,8 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
@@ -107,6 +113,24 @@ public class Jesus extends Cheat implements Listeners {
 
 		if (isSetBack() && mayCancel)
 			p.teleport(p.getLocation().sub(0, 1, 0));
+	}
+	
+	@Check(name = "ground-water", description = "Ground and on water", conditions = CheckConditions.SURVIVAL)
+	public void on(PlayerMoveEvent e, NegativityPlayer np) {
+		Player p = e.getPlayer();
+		Block sub = p.getLocation().clone().sub(0, 1, 0).getBlock();
+		int i = 0;
+		for(BlockFace bf : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
+			Block b = sub.getRelative(bf);
+			if(b.getType().getId().contains("WATER"))
+				i++;
+		}
+		boolean wasOnGround = np.booleans.get(JESUS, "gw-was-ground", false);
+		boolean isOnGround = p.isOnGround();
+		if(wasOnGround && isOnGround && p.getLocation().getBlock().getType().equals(Materials.AIR) && sub.getType().getId().contains("WATER") && i > 2) {
+			Negativity.alertMod(ReportType.WARNING, p, this, i * 25, "ground-water", "I: " + i);
+		}
+		np.booleans.set(JESUS, "gw-was-ground", isOnGround);
 	}
 	
 	@Override

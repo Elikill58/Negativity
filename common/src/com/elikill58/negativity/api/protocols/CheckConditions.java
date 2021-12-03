@@ -13,12 +13,6 @@ public enum CheckConditions {
 	SURVIVAL("Survival", (p) -> p.getGameMode().equals(GameMode.SURVIVAL) || p.getGameMode().equals(GameMode.ADVENTURE)),
 	
 	INSIDE_VEHICLE("Inside vehicle", Player::isInsideVehicle),
-	IS_NO_BEDROCK("Is on bedrock", (p) -> !NegativityPlayer.getNegativityPlayer(p).isBedrockPlayer()),
-	NOT_USE_TRIDENT("Using trident", (p) -> !p.getItemInHand().getType().getId().contains("TRIDENT")),
-	NOT_USE_SLIME("Using slime", (p) -> !NegativityPlayer.getNegativityPlayer(p).isUsingSlimeBlock),
-	NOT_USE_ELEVATOR("Using elevator", (p) -> !LocationUtils.isUsingElevator(p)),
-	NOT_IRON_TARGET("Target by iron golem", (p) -> !NegativityPlayer.getNegativityPlayer(p).isTargetByIronGolem()),
-	NOT_THORNS("Thorns", p -> !Utils.hasThorns(p)),
 	
 	SPRINT("Sprint", Player::isSprinting),
 	SNEAK("Sneak", Player::isSneaking),
@@ -29,6 +23,12 @@ public enum CheckConditions {
 	ALLOW_FLY("Allow to fly", Player::getAllowFlight),
 	GROUND("On ground", Player::isOnGround),
 
+	NO_ON_BEDROCK("Not on bedrock", (p) -> !NegativityPlayer.getNegativityPlayer(p).isBedrockPlayer()),
+	NO_USE_TRIDENT("Using trident", (p) -> !p.getItemInHand().getType().getId().contains("TRIDENT")),
+	NO_USE_SLIME("Using slime", (p) -> !NegativityPlayer.getNegativityPlayer(p).isUsingSlimeBlock),
+	NO_USE_ELEVATOR("Using elevator", (p) -> !LocationUtils.isUsingElevator(p)),
+	NO_IRON_TARGET("Target by iron golem", (p) -> !NegativityPlayer.getNegativityPlayer(p).isTargetByIronGolem()),
+	NO_THORNS("Thorns", p -> !Utils.hasThorns(p)),
 	NO_INSIDE_VEHICLE("Not inside vehicle", (p) -> !p.isInsideVehicle()),
 	NO_SPRINT("Not sprinting", (p) -> !p.isSprinting()),
 	NO_SNEAK("Not sneaking", (p) -> !p.isSneaking()),

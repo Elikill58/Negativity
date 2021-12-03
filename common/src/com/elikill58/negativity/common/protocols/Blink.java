@@ -46,7 +46,7 @@ public class Blink extends Cheat implements Listeners {
 		}
 	}
 	
-	@Check(name = "no-packet", description = "Count when player don't send any packet", conditions = { CheckConditions.SURVIVAL, CheckConditions.IS_NO_BEDROCK })
+	@Check(name = "no-packet", description = "Count when player don't send any packet", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ON_BEDROCK })
 	public void onPacketClear(PlayerPacketsClearEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (np.bypassBlink)

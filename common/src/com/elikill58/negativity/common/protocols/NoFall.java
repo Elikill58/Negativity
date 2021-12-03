@@ -28,7 +28,7 @@ public class NoFall extends Cheat implements Listeners {
 		super(CheatKeys.NO_FALL, CheatCategory.MOVEMENT, Materials.YELLOW_WOOL, true, false);
 	}
 	
-	@Check(name = "motion-y", description = "Motion Y when fall", conditions = { CheckConditions.NOT_USE_ELEVATOR, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "motion-y", description = "Motion Y when fall", conditions = { CheckConditions.NO_USE_ELEVATOR, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onMoveMotionY(PlayerMoveEvent e, NegativityPlayer np) {
 		if(e.isCancelled())
 			return;

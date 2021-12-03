@@ -27,7 +27,7 @@ public class Spider extends Cheat implements Listeners {
 				"wall");
 	}
 
-	@Check(name = "nothing-around", description = "Walking with nothing around", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY, CheckConditions.NO_FALL_DISTANCE, CheckConditions.NO_SPRINT, CheckConditions.NOT_USE_SLIME })
+	@Check(name = "nothing-around", description = "Walking with nothing around", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY, CheckConditions.NO_FALL_DISTANCE, CheckConditions.NO_SPRINT, CheckConditions.NO_USE_SLIME })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location loc = p.getLocation();
@@ -59,7 +59,7 @@ public class Spider extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "same-y", description = "Player move with same Y", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY, CheckConditions.NO_FALL_DISTANCE })
+	@Check(name = "same-y", description = "Player move with same Y", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY, CheckConditions.NO_FALL_DISTANCE })
 	public void onPlayerMoveSameY(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
@@ -101,7 +101,7 @@ public class Spider extends Cheat implements Listeners {
 		np.lastY.add(y);
 	}
 	
-	@Check(name = "distance", description = "Distance when going up", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NOT_USE_ELEVATOR })
+	@Check(name = "distance", description = "Distance when going up", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_USE_ELEVATOR })
 	public void onPlayerContinueMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))

@@ -40,7 +40,7 @@ public class Reach extends Cheat implements Listeners {
 		nf.setMaximumIntegerDigits(2);
 	}
 
-	@Check(name = "reach-event", description = "The reach", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_THORNS, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "reach-event", description = "The reach", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_THORNS, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onCheckReach(PlayerDamageEntityEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;

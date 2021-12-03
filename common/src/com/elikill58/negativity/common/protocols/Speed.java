@@ -191,7 +191,7 @@ public class Speed extends Cheat implements Listeners {
 		return false;
 	}
 	
-	@Check(name = "move-amount", description = "Amount of move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NOT_USE_ELEVATOR, CheckConditions.NO_ELYTRA })
+	@Check(name = "move-amount", description = "Amount of move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA })
 	public void onMoveAmount(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		np.MOVE_TIME++;

@@ -2,6 +2,7 @@ package com.elikill58.negativity.common.protocols;
 
 import java.util.List;
 
+import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
@@ -39,18 +40,24 @@ public class Nuker extends Cheat implements Listeners {
 			List<Block> target = p.getTargetBlock(5);
 			if(!target.isEmpty()) {
 				Location blockLoc = b.getLocation();
+				Block bestBlock = null;
+				double bestDistance = Double.MAX_VALUE;
 				for(Block targetBlock : target) {
 					if(!targetBlock.getLocation().getWorld().getName().equals(blockLoc.getWorld().getName())) {
 						Adapter.getAdapter().debug("[Nuker] Wrong world: player/block/targetBlock > " + p.getWorld().getName() + "/" + blockLoc.getWorld().getName() + "/" + targetBlock.getLocation().getWorld().getName());
 						break;
 					}
 					double distance = targetBlock.getLocation().distance(blockLoc);
-					if ((targetBlock.getType() != e.getBlock().getType()) && distance > 3.5 && targetBlock.getType() != Materials.AIR) {
-						boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 15 - ping), "distance",
-								"BlockDig " + b.getType().getId() + ", player see " + targetBlock.getType().getId() + ". Distance between blocks " + distance + " block.");
-						if(isSetBack() && mayCancel)
-							e.setCancelled(true);
+					if(distance < bestDistance) {
+						bestBlock = targetBlock;
+						bestDistance = distance;
 					}
+				}
+				if ((bestBlock.getType() != e.getBlock().getType()) && bestDistance > (p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4) && bestBlock.getType() != Materials.AIR && bestDistance != Double.MAX_VALUE) {
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(bestDistance * 15 - ping), "distance",
+							"BlockDig " + b.toString() + ", player see " + bestBlock.toString() + ". Distance between blocks " + bestDistance + " block.");
+					if(isSetBack() && mayCancel)
+						e.setCancelled(true);
 				}
 			}
 		});

@@ -71,7 +71,7 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 		packetsPlayIn.put("CPacketUseEntity", (f) -> {
 			CPacketUseEntity p = (CPacketUseEntity) f;
 			Vec3d v = p.getHitVec();
-			return new NPacketPlayInUseEntity(0, new Vector(v.x, v.y, v.z), EnumEntityUseAction.valueOf(p.getAction().name()));
+			return new NPacketPlayInUseEntity(0, v == null ? new Vector(0, 0, 0) : new Vector(v.x, v.y, v.z), EnumEntityUseAction.valueOf(p.getAction().name()));
 		});
 		
 
@@ -99,7 +99,7 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 		});
 		packetsPlayOut.put("SPacketEntity", (f) -> {
 			SPacketEntity packet = (SPacketEntity) f;
-			return new NPacketPlayOutEntity(0, packet.posX, packet.posY, packet.posZ); // TODO fix entity ID
+			return new NPacketPlayOutEntity(packet.entityId, packet.posX, packet.posY, packet.posZ);
 		});
 		
 		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");

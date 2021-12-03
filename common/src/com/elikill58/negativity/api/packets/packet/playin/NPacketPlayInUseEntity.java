@@ -7,7 +7,10 @@ import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 public class NPacketPlayInUseEntity implements NPacketPlayIn {
 
 	public int entityId;
-	public Vector vector; // WARN: this value seems to be not present in 1.17+
+	/**
+	 * WARN: this value seems to be not present in 1.17+
+	 */
+	public Vector vector;
 	public EnumEntityUseAction action;
 
 	public NPacketPlayInUseEntity() {

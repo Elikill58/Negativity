@@ -36,3 +36,4 @@ checks:
   # Check difference between ping and reachable value
   reachable:
     active: true
+    min_ping: 400

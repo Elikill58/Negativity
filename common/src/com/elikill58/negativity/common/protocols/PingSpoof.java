@@ -43,7 +43,7 @@ public class PingSpoof extends Cheat implements Listeners {
 	 * @param p the player to check ping
 	 * @param np the negativity player of player
 	 */
-	public static void managePingSpoof(Player p, NegativityPlayer np) {
+	public void managePingSpoof(Player p, NegativityPlayer np) {
 		int newPing = p.getPing(), lastPing = np.ints.get(PINGSPOOF, "last-ping", -1);
 		if (newPing == lastPing)
 			return;
@@ -53,7 +53,7 @@ public class PingSpoof extends Cheat implements Listeners {
 				np.booleans.set(PINGSPOOF, "can-ping-spoof", true);
 			return;
 		}
-		if (newPing <= 200 || lastPing == 0)
+		if (newPing <= getConfig().getInt("checks.reachable.min_ping", 400) || lastPing == 0)
 			return;
 		if (newPing < lastPing && ((newPing * 1.2) < lastPing || newPing < 1000)) // if ping is going normal
 			return;

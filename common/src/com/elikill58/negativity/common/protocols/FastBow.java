@@ -68,6 +68,6 @@ public class FastBow extends Cheat implements Listeners {
 	
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
-		return "Time between shot : " + ChatColor.GREEN + data.getData(TIME_SHOT).getAverage();
+		return "Time between shot : " + ChatColor.YELLOW + data.getData(TIME_SHOT).getAverage();
 	}
 }

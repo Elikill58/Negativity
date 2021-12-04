@@ -46,7 +46,9 @@ public class AutoClick extends Cheat implements Listeners {
 	
 	@Check(name = "count", description = "Count click 1 by 1")
 	public void onInteract(PlayerInteractEvent e, NegativityPlayer np) {
-		if(e.getAction().name().contains("AIR")) {
+		if(e.isCancelled())
+			return;
+		//if(e.getAction().name().contains("AIR")) {
 			Player p = e.getPlayer();
 			ItemStack inHand = p.getItemInHand();
 			if (inHand != null) {
@@ -64,7 +66,7 @@ public class AutoClick extends Cheat implements Listeners {
 				if (isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}
-		}
+		//}
 	}
 	
 	/*@EventHandler

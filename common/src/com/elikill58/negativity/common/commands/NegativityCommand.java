@@ -186,6 +186,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			} else {
 				InventoryManager.open(NegativityInventory.CHECK_MENU, p, target);
 			}
+			return true;
 		} else if (arg[0].equalsIgnoreCase("migrateoldbans") && !(sender instanceof Player)) {
 			try {
 				OldBansDbMigrator.performMigration();

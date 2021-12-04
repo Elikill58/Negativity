@@ -29,7 +29,7 @@ public class GroundSpoof extends Cheat implements Listeners {
     		conditions = { CheckConditions.SURVIVAL, CheckConditions.GROUND, CheckConditions.NO_SNEAK })
     public void onGroundSpoof(PlayerMoveEvent e, NegativityPlayer np) {
         Player p = e.getPlayer();
-		if (e.isCancelled() || !p.isOnGround()) // cancelled or player say he not on ground
+		if (e.isCancelled() || !p.isOnGround()) // cancelled or player say he is not on ground
 			return;
         if (isOnGround(p) || p.getFallDistance() > 3 || p.getFallDistance() > p.getWalkSpeed()) {
             return;

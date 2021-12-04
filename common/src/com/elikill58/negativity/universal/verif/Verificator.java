@@ -39,7 +39,7 @@ public class Verificator {
 	 * @param asker the name of the player which ask for verif
 	 */
 	public Verificator(NegativityPlayer np, String asker) {
-		this(np, asker, new HashSet<>(Cheat.CHEATS));
+		this(np, asker, new HashSet<>(Cheat.CHEATS), false);
 	}
 
 	/**
@@ -48,9 +48,10 @@ public class Verificator {
 	 * @param np the negativity player of the verified player
 	 * @param asker the name of the player which ask for verif
 	 * @param list all cheat which have to be verified, filtered if they have verification available
+	 * @param forceGiven true if filter cheat according to they have verif
 	 */
-	public Verificator(NegativityPlayer np, String asker, Set<Cheat> list) {
-		this(np, asker, list.stream().filter(Cheat::hasVerif).collect(COLLECTOR), new ArrayList<>(), VERIFICATION_VERSION, np.getPlayer().getPlayerVersion());
+	public Verificator(NegativityPlayer np, String asker, Set<Cheat> list, boolean forceGiven) {
+		this(np, asker, list.stream().filter((c) -> c.hasVerif() || forceGiven).collect(COLLECTOR), new ArrayList<>(), VERIFICATION_VERSION, np.getPlayer().getPlayerVersion());
 	}
 	
 	/**

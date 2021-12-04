@@ -77,6 +77,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			NegativityPlayer nTarget = NegativityPlayer.getNegativityPlayer(target);
 			int time = UniversalUtils.getFirstInt(arg).orElse(VerificationManager.getTimeVerif() / 20);
 			Set<Cheat> cheatsToVerify = new LinkedHashSet<>();
+			boolean forceGiven = false;
 			if (arg.length == 2 || (arg.length == 3 && UniversalUtils.isInteger(arg[2]))) {
 				nTarget.startAllAnalyze();
 				Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", target.getName(), "%time%", time);
@@ -97,13 +98,14 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 					Messages.sendMessage(sender, "negativity.verif.start_none");
 					return false;
 				} else {
+					forceGiven = true;
 					Messages.sendMessage(sender, "negativity.verif.start", "%name%", target.getName(), "%cheat%", cheatsList, "%time%", time);
 				}
 			}
 			UUID askerUUID = (sender instanceof Player ? ((Player) sender).getUniqueId() : CONSOLE);
-			VerificationManager.create(askerUUID, target.getUniqueId(), new Verificator(nTarget, sender.getName(), cheatsToVerify));
+			Verificator verif = VerificationManager.create(askerUUID, target.getUniqueId(), new Verificator(nTarget, sender.getName(), cheatsToVerify, forceGiven));
 			Scheduler.getInstance().runDelayed(() -> {
-				Verificator verif = VerificationManager.getVerificationsFrom(target.getUniqueId(), askerUUID).get();
+				//Verificator verif = VerificationManager.getVerificationsFrom(target.getUniqueId(), askerUUID).get();
 				verif.generateMessage();
 				verif.getMessages().forEach((s) -> sender.sendMessage(Utils.coloredMessage("&a[&2Verif&a] " + s)));
 				verif.save();

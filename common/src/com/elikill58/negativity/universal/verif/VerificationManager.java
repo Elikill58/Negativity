@@ -62,9 +62,11 @@ public class VerificationManager {
 	 * @param asker the UUID of the player which are the verif
 	 * @param target the UUID of the verified player
 	 * @param verificator the verificator
+	 * @return the created and used verificator object
 	 */
-	public static void create(UUID asker, UUID target, Verificator verificator) {
+	public static Verificator create(UUID asker, UUID target, Verificator verificator) {
 		VERIFICATIONS_BY_MOD.computeIfAbsent(target, id -> new HashMap<>()).put(asker, verificator);
+		return verificator;
 	}
 	
 	/**

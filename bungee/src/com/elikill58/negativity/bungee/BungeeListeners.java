@@ -115,10 +115,7 @@ public class BungeeListeners implements Listener {
 					hoverComponent.append("\n\n" + Messages.getMessage(pp.getUniqueId(), "alert_tp_info",
 							"%playername%", alert.getPlayername()), ComponentBuilder.FormatRetention.NONE);
 					alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent.create()));
-
-					String tpCommand = pp.getServer().equals(player.getServer()) ? "/tp " + alert.getPlayername()
-							: "/server " + player.getServer().getInfo().getName();
-					alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, tpCommand));
+					alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/n tp " + alert.getPlayername() + " " + player.getServer().getInfo().getName()));
 					pp.sendMessage(alertMessage);
 				}
 			}

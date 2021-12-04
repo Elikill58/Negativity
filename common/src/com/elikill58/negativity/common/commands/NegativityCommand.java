@@ -164,6 +164,27 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 
 			InventoryManager.open(NegativityInventory.ADMIN, p);
 			return true;
+		} else if (arg[0].equalsIgnoreCase("tp")) {
+			if (!(sender instanceof Player)) {
+				Messages.sendMessage(sender, "only_player");
+				return true;
+			}
+			if(arg.length == 1) {
+				Messages.sendMessage(sender, "not_forget_player");
+				return true;
+			}
+			Player p = (Player) sender;
+			Player target = Adapter.getAdapter().getPlayer(arg[1]);
+			if (target == null) {
+				if(arg.length == 2) { // not precise server
+					Messages.sendMessage(sender, "invalid_player", "%arg%", arg[1]);
+				} else {
+					//p.
+				}
+				return false;
+			} else {
+				InventoryManager.open(NegativityInventory.CHECK_MENU, p, target);
+			}
 		} else if (arg[0].equalsIgnoreCase("migrateoldbans") && !(sender instanceof Player)) {
 			try {
 				OldBansDbMigrator.performMigration();
@@ -332,7 +353,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 	}
 	
 	private void sendHelp(CommandSender sender, int page) {
-		int nbPerPage = 8;
+		int nbPerPage = 6;
 		List<String> list = new ArrayList<>();
 		// lets construct all lines
 		if (Perm.hasPerm(sender, Perm.VERIF))

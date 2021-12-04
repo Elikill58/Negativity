@@ -162,7 +162,7 @@ public class Verificator {
 					messages.add("&6" + c.getName() + "&8: &7" + name);
 					continue;
 				}
-			} else if(c.hasVerif())
+			} else
 				messageCheatNothing.add(c.getName());
 		}
 		if (messageCheatNothing.length() > 0)

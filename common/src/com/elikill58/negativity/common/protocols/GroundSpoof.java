@@ -31,7 +31,7 @@ public class GroundSpoof extends Cheat implements Listeners {
         Player p = e.getPlayer();
 		if (e.isCancelled() || !p.isOnGround()) // cancelled or player say he is not on ground
 			return;
-        if (isOnGround(p) || p.getFallDistance() > 3 || p.getFallDistance() > p.getWalkSpeed()) {
+        if (isOnGround(e.getTo()) || p.getFallDistance() > 3 || p.getFallDistance() > p.getWalkSpeed()) {
             return;
         }
         Block block = e.getTo().getBlock();
@@ -55,16 +55,16 @@ public class GroundSpoof extends Cheat implements Listeners {
         return !block.getType().equals(Materials.AIR);
     }
 
-    public static boolean isOnGround(Player player) {
-        final Block block = player.getLocation().getBlock();
-        final Block downBlock = block.getRelative(BlockFace.DOWN);
+    public static boolean isOnGround(Location to) {
+        return isOnGroundForBlock(to, to.getBlock()) || isOnGroundForBlock(to, to.getBlock().getRelative(BlockFace.DOWN));
+    }
 
-        if (isNotAir(block) || isNotAir(downBlock)) {
+    public static boolean isOnGroundForBlock(Location to, Block block) {
+        if (isNotAir(block)) {
             return true;
         }
-
         for (final BlockFace face : SUPPORTED_FACES) {
-            if (isNotAir(downBlock.getRelative(face)) && isSupportedBy(player.getLocation(), face)) {
+            if (isNotAir(block.getRelative(face)) && isSupportedBy(to, face)) {
                 return true;
             }
         }
@@ -72,8 +72,7 @@ public class GroundSpoof extends Cheat implements Listeners {
     }
 
     private int getReliability(Player player) {
-        final int air = Math.round((int) (((double) getAirBlocks(player).size()) / 1.5));
-        return 95 + air;
+        return 85 + getAirBlocks(player).size();
     }
 
     private EnumSet<BlockFace> getAirBlocks(Player player) {

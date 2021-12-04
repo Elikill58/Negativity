@@ -36,6 +36,7 @@ import org.spongepowered.api.event.game.state.GameStoppingServerEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
 import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
 import org.spongepowered.api.network.ChannelBuf;
+import org.spongepowered.api.network.ChannelRegistrar;
 import org.spongepowered.api.network.PlayerConnection;
 import org.spongepowered.api.network.RawDataListener;
 import org.spongepowered.api.network.RemoteConnection;
@@ -94,7 +95,7 @@ public class SpongeNegativity {
 	@ConfigDir(sharedRoot = false)
 	private Path configDir;
 	private NegativityPacketManager packetManager;
-	public static RawDataChannel channel = null, fmlChannel = null;
+	public static RawDataChannel channel = null, fmlChannel = null, bungeecordChannel = null;
 
 	private final Map<String, CommandMapping> reloadableCommands = new HashMap<>();
 
@@ -154,13 +155,15 @@ public class SpongeNegativity {
 		}
 
 		loadCommands(false);
-
-		channel = Sponge.getChannelRegistrar().createRawChannel(this, NegativityMessagesManager.CHANNEL_ID);
+		
+		ChannelRegistrar channelRegistrar = Sponge.getChannelRegistrar();
+		channel = channelRegistrar.createRawChannel(this, NegativityMessagesManager.CHANNEL_ID);
 		channel.addListener(new ProxyCompanionListener());
-		if (Sponge.getChannelRegistrar().isChannelAvailable("FML|HS")) {
-			fmlChannel = Sponge.getChannelRegistrar().getOrCreateRaw(this, "FML|HS");
+		if (channelRegistrar.isChannelAvailable("FML|HS")) {
+			fmlChannel = channelRegistrar.getOrCreateRaw(this, "FML|HS");
 			fmlChannel.addListener(new FmlRawDataListener());
 		}
+		bungeecordChannel = channelRegistrar.getOrCreateRaw(this, "BungeeCord");
 		
 		Stats.sendStartupStats(Sponge.getServer().getBoundAddress().map(InetSocketAddress::getPort).orElse(-1));
 	}

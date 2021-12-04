@@ -433,6 +433,14 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	}
 	
 	@Override
+	public void sendToServer(String serverName) {
+		SpongeNegativity.bungeecordChannel.sendTo(entity, (buf) -> {
+			buf.writeUTF("Connect");
+			buf.writeUTF(serverName);
+		});
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Player)) {
 			return false;

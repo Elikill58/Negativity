@@ -30,13 +30,15 @@ import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
+import com.google.common.io.ByteArrayDataOutput;
+import com.google.common.io.ByteStreams;
 
 @SuppressWarnings("deprecation")
 public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> implements Player {
 
 	private int protocolVersion = 0;
 	private Version playerVersion;
-	
+
 	public SpigotPlayer(org.bukkit.entity.Player p) {
 		super(p);
 		this.protocolVersion = PlayerVersionManager.getPlayerProtocolVersion(this);
@@ -47,23 +49,25 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public Version getPlayerVersion() {
 		return isVersionSet() ? playerVersion : (playerVersion = Version.getVersionByProtocolID(getProtocolVersion()));
 	}
-	
+
 	private boolean isVersionSet() {
 		return playerVersion != null && !playerVersion.equals(Version.HIGHER);
 	}
-	
+
 	@Override
 	public int getProtocolVersion() {
 		return protocolVersion;
 	}
-	
+
 	@Override
 	public void setProtocolVersion(int protocolVersion) {
-		if(this.protocolVersion == 0 || Version.getVersion().getFirstProtocolNumber() == PlayerVersionManager.getPlayerProtocolVersion(this)
-					|| !isVersionSet()) { // if his using default values
+		if (this.protocolVersion == 0
+				|| Version.getVersion().getFirstProtocolNumber() == PlayerVersionManager.getPlayerProtocolVersion(this)
+				|| !isVersionSet()) { // if his using default values
 			this.playerVersion = Version.getVersionByProtocolID(protocolVersion);
-			Adapter.getAdapter().debug("Setting ProtocolVersion: " + protocolVersion + ", founded: " + playerVersion.name() + " (previous: " + this.protocolVersion + ")");
-			if(protocolVersion == 0 && this.protocolVersion != 0)
+			Adapter.getAdapter().debug("Setting ProtocolVersion: " + protocolVersion + ", founded: "
+					+ playerVersion.name() + " (previous: " + this.protocolVersion + ")");
+			if (protocolVersion == 0 && this.protocolVersion != 0)
 				return;// prevent losing good value
 			this.protocolVersion = protocolVersion;
 		}
@@ -88,10 +92,11 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public boolean hasElytra() {
 		return Version.getVersion().isNewerOrEquals(Version.V1_9) && entity.isGliding();
 	}
-	
+
 	@Override
 	public boolean hasLineOfSight(Entity entity) {
-		return SpigotNegativity.isCraftBukkit || ((org.bukkit.entity.Entity) entity.getDefault()).hasMetadata("NPC") || this.entity.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefault());
+		return SpigotNegativity.isCraftBukkit || ((org.bukkit.entity.Entity) entity.getDefault()).hasMetadata("NPC")
+				|| this.entity.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefault());
 	}
 
 	@Override
@@ -103,12 +108,12 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public double getHealth() {
 		return entity.getHealth();
 	}
-	
+
 	@Override
 	public double getMaxHealth() {
 		return entity.getMaxHealth();
 	}
-	
+
 	@Override
 	public void setHealth(double health) {
 		entity.setHealth(health);
@@ -123,7 +128,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public GameMode getGameMode() {
 		return GameMode.get(entity.getGameMode().name());
 	}
-	
+
 	@Override
 	public void setGameMode(GameMode gameMode) {
 		entity.setGameMode(org.bukkit.GameMode.valueOf(gameMode.name()));
@@ -163,12 +168,12 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public int getLevel() {
 		return entity.getLevel();
 	}
-	
+
 	@Override
 	public int getFoodLevel() {
 		return entity.getFoodLevel();
 	}
-	
+
 	@Override
 	public void setFoodLevel(int foodlevel) {
 		entity.setFoodLevel(foodlevel);
@@ -208,7 +213,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public boolean isSneaking() {
 		return entity.isSneaking();
 	}
-	
+
 	@Override
 	public boolean isUsingRiptide() {
 		return Version.getVersion().isNewerOrEquals(Version.V1_13) && entity.isRiptiding();
@@ -221,22 +226,23 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public boolean hasPotionEffect(PotionEffectType type) {
-		return entity.getActivePotionEffects().stream().filter((pe) -> pe.getType().getName().equalsIgnoreCase(type.name()))
-				.findAny().isPresent();
+		return entity.getActivePotionEffects().stream()
+				.filter((pe) -> pe.getType().getName().equalsIgnoreCase(type.name())).findAny().isPresent();
 	}
 
 	@Override
 	public List<PotionEffect> getActivePotionEffect() {
 		List<PotionEffect> list = new ArrayList<>();
 		entity.getActivePotionEffects()
-				.forEach((pe) -> list.add(new PotionEffect(PotionEffectType.fromName(pe.getType().getName()), pe.getDuration(), pe.getAmplifier())));
+				.forEach((pe) -> list.add(new PotionEffect(PotionEffectType.fromName(pe.getType().getName()),
+						pe.getDuration(), pe.getAmplifier())));
 		return list;
 	}
-	
+
 	@Override
 	public Optional<PotionEffect> getPotionEffect(PotionEffectType type) {
-		for(PotionEffect pe : getActivePotionEffect())
-			if(pe.getType().equals(type))
+		for (PotionEffect pe : getActivePotionEffect())
+			if (pe.getType().equals(type))
 				return Optional.of(pe);
 		return Optional.empty();
 	}
@@ -267,8 +273,8 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
-		entity.addPotionEffect(new org.bukkit.potion.PotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()),
-				duration, amplifier));
+		entity.addPotionEffect(new org.bukkit.potion.PotionEffect(
+				org.bukkit.potion.PotionEffectType.getByName(type.name()), duration, amplifier));
 	}
 
 	@Override
@@ -288,7 +294,8 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public void teleport(Location loc) {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.teleport(SpigotLocation.fromCommon(loc)));
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(),
+				() -> entity.teleport(SpigotLocation.fromCommon(loc)));
 	}
 
 	@Override
@@ -309,7 +316,8 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	@Override
 	public List<Entity> getNearbyEntities(double x, double y, double z) {
 		List<Entity> list = new ArrayList<>();
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.getNearbyEntities(x, y, z).forEach((entity) -> list.add(SpigotEntityManager.getEntity(entity))));
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.getNearbyEntities(x, y, z)
+				.forEach((entity) -> list.add(SpigotEntityManager.getEntity(entity))));
 		return list;
 	}
 
@@ -329,7 +337,9 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public ItemStack getItemInOffHand() {
-		return Version.getVersion().isNewerOrEquals(Version.V1_9) && entity.getInventory().getItemInOffHand() != null ? new SpigotItemStack(entity.getInventory().getItemInOffHand()) : null;
+		return Version.getVersion().isNewerOrEquals(Version.V1_9) && entity.getInventory().getItemInOffHand() != null
+				? new SpigotItemStack(entity.getInventory().getItemInOffHand())
+				: null;
 	}
 
 	@Override
@@ -341,10 +351,11 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public PlayerInventory getInventory() {
 		return new SpigotPlayerInventory(entity.getInventory());
 	}
-	
+
 	@Override
 	public boolean hasOpenInventory() {
-		return entity.getOpenInventory() != null && entity.getOpenInventory().getTopInventory() != null && entity.getOpenInventory().getTopInventory().getType().equals(InventoryType.CHEST);
+		return entity.getOpenInventory() != null && entity.getOpenInventory().getTopInventory() != null
+				&& entity.getOpenInventory().getTopInventory().getType().equals(InventoryType.CHEST);
 	}
 
 	@Override
@@ -355,7 +366,8 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public void openInventory(Inventory inv) {
-		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.openInventory((org.bukkit.inventory.Inventory) inv.getDefault()));
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(),
+				() -> entity.openInventory((org.bukkit.inventory.Inventory) inv.getDefault()));
 	}
 
 	@Override
@@ -390,7 +402,15 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public InetSocketAddress getAddress() {
 		return entity.getAddress();
 	}
-	
+
+	@Override
+	public void sendToServer(String serverName) {
+		ByteArrayDataOutput out = ByteStreams.newDataOutput();
+		out.writeUTF("Connect");
+		out.writeUTF(serverName);
+		entity.sendPluginMessage(SpigotNegativity.getInstance(), "BungeeCord", out.toByteArray());
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Player)) {

@@ -312,6 +312,14 @@ public interface Player extends OfflinePlayer {
 		return true;
 	}
 	
+	/**
+	 * Send current player to the given server name.<br>
+	 * Work only with proxy (Bungee/Velocity)
+	 * 
+	 * @param serverName the name of the proxy server
+	 */
+	void sendToServer(String serverName);
+	
 	static boolean isSamePlayer(Player player1, Player player2) {
 		return player1.getUniqueId().equals(player2.getUniqueId());
 	}

@@ -128,6 +128,7 @@ public class SpigotNegativity extends JavaPlugin {
 		}
 		loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID, channelListeners);
 		loadChannelInOut(messenger, CHANNEL_NAME_FML, channelListeners);
+		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		
 		for (Player p : Utils.getOnlinePlayers())
 			NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p)).manageAutoVerif();

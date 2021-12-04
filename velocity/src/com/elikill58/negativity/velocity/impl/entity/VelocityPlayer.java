@@ -6,6 +6,7 @@ import java.util.UUID;
 import com.elikill58.negativity.api.entity.AbstractProxyPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.velocity.VelocityNegativity;
 import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 
 import net.kyori.adventure.text.Component;
@@ -91,6 +92,13 @@ public class VelocityPlayer extends AbstractProxyPlayer {
 	@Override
 	public Object getDefault() {
 		return pp;
+	}
+	
+	@Override
+	public void sendToServer(String serverName) {
+		VelocityNegativity.getInstance().getServer().getServer(serverName).ifPresent((srv) -> {
+			pp.createConnectionRequest(srv).fireAndForget();
+		});
 	}
 	
 	@Override

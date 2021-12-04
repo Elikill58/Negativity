@@ -36,6 +36,10 @@ import com.velocitypowered.api.proxy.messages.LegacyChannelIdentifier;
 @Plugin(id = "negativity")
 public class VelocityNegativity {
 	
+	private static VelocityNegativity instance;
+	public static VelocityNegativity getInstance() {
+		return instance;
+	}
 	public static final LegacyChannelIdentifier NEGATIVITY_CHANNEL_ID = new LegacyChannelIdentifier(NegativityMessagesManager.CHANNEL_ID);
 	
 	private static final String MYSQL_DRIVER_URL = "https://repo1.maven.org/maven2/mysql/mysql-connector-java/8.0.25/mysql-connector-java-8.0.25.jar";
@@ -50,6 +54,7 @@ public class VelocityNegativity {
 	
 	@Inject
 	public VelocityNegativity(ProxyServer server, Logger logger, PluginContainer container, PluginManager pluginManager) {
+		instance = this;
 		this.server = server;
 		this.logger = logger;
 		this.container = container;

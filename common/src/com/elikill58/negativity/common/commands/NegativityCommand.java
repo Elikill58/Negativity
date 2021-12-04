@@ -179,7 +179,8 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				if(arg.length == 2) { // not precise server
 					Messages.sendMessage(sender, "invalid_player", "%arg%", arg[1]);
 				} else {
-					//p.
+					p.sendMessage(ChatColor.GREEN + "Teleporting to server " + arg[2] + " ...");
+					p.sendToServer(arg[2]);
 				}
 				return false;
 			} else {

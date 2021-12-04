@@ -7,8 +7,10 @@ import com.elikill58.negativity.api.entity.AbstractProxyPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Version;
 
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.ServerConnectEvent.Reason;
 
 public class BungeePlayer extends AbstractProxyPlayer {
 
@@ -92,6 +94,11 @@ public class BungeePlayer extends AbstractProxyPlayer {
 	@Override
 	public InetSocketAddress getAddress() {
 		return pp.getPendingConnection().getVirtualHost();
+	}
+	
+	@Override
+	public void sendToServer(String serverName) {
+		pp.connect(ProxyServer.getInstance().getServerInfo(serverName), Reason.PLUGIN);
 	}
 	
 	@Override

@@ -121,7 +121,7 @@ public class Negativity {
 	 */
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String checkName, String proof,
 			CheatHover hover, int amount) {
-		if(!c.isActive() || reliability < 55 || tpsDrop)
+		if(!c.isActive() || reliability < 55 || tpsDrop || amount == 0)
 			return false;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.already_blink && c.getKey().equals(CheatKeys.BLINK)) {

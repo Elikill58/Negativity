@@ -9,15 +9,22 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.report.ReportType;
+import com.elikill58.negativity.universal.verif.VerifData;
+import com.elikill58.negativity.universal.verif.VerifData.DataType;
+import com.elikill58.negativity.universal.verif.data.DataCounter;
+import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 
 public class PingSpoof extends Cheat implements Listeners {
 
+	public static final DataType<Integer> PLAYER_PING = new DataType<Integer>("player_ping", "Ping", () -> new IntegerDataCounter());
+	
 	public PingSpoof() {
-		super(PINGSPOOF, CheatCategory.PLAYER, Materials.SPONGE, false, false, "ping", "spoofing");
+		super(PINGSPOOF, CheatCategory.PLAYER, Materials.SPONGE, false, true, "ping", "spoofing");
 
 		if (checkActive("reachable")) {
 			new Thread(() -> {
@@ -34,6 +41,12 @@ public class PingSpoof extends Cheat implements Listeners {
 			}).start();
 		}
 	}
+	
+	@Override
+	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
+		DataCounter<Integer> counters = data.getData(PLAYER_PING);
+		return Utils.coloredMessage("Latency (Sum/Min/Max) : " + counters.getAverage() + "/" + counters.getMin() + "/" + counters.getMax());
+	}
 
 	/**
 	 * Manage the ping and check if it spoof
@@ -45,8 +58,9 @@ public class PingSpoof extends Cheat implements Listeners {
 	 */
 	public void managePingSpoof(Player p, NegativityPlayer np) {
 		int newPing = p.getPing(), lastPing = np.ints.get(PINGSPOOF, "last-ping", -1);
-		if (newPing == lastPing)
+		if (newPing == lastPing) // ping don't change
 			return;
+		recordData(p.getUniqueId(), PLAYER_PING, newPing);
 		np.ints.set(PINGSPOOF, "last-ping", newPing);
 		if(!np.booleans.get(PINGSPOOF, "can-ping-spoof", false) && newPing < 10000) {
 			if(newPing <= 200)

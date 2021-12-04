@@ -39,8 +39,11 @@ public class GroundSpoof extends Cheat implements Listeners {
         if (blockJustAroundAreNotAir(block) || blockJustAroundAreNotAir(downBlock)) {
             return;
         }
+        double diffY = e.getTo().getY() - e.getFrom().getY();
+        if(diffY >= 0.3)
+        	return;
         Negativity.alertMod(ReportType.WARNING, p, this, getReliability(p), "check-blocks-under",
-                "Air BlockFaces: " + getAirBlocks(p).toString() + ", fall: " + p.getFallDistance() + ", sneaking: " + p.isSneaking(),
+                "Air BlockFaces: " + getAirBlocks(p).toString() + ", fall: " + p.getFallDistance() + ", sneaking: " + p.isSneaking() + ", Y diff: " + diffY,
                 new CheatHover.Literal("Ground Spoof (Fly, NoFall, and other movement hacks)"));
     }
     

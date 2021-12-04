@@ -117,7 +117,7 @@ public class Jesus extends Cheat implements Listeners {
 	}
 	
 	@Check(name = "ground-water", description = "Ground and on water", conditions = CheckConditions.SURVIVAL)
-	public void on(PlayerMoveEvent e, NegativityPlayer np) {
+	public void onGroundWater(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Block sub = p.getLocation().clone().sub(0, 1, 0).getBlock();
 		int i = 0;

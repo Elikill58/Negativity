@@ -1,8 +1,10 @@
 package com.elikill58.negativity.universal.file;
 
-import java.io.File;
-import java.io.FileWriter;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,12 +15,12 @@ public class FileHandle {
 		return FILE_HANDLES;
 	}
 	private static final long MAX_TIME = 10000; // 1000 = 1 second
-	private final FileWriter handle;
+	private final BufferedWriter handle;
 	private boolean closed = false;
 	private long lastUpdate;
 	
-	public FileHandle(File file) throws IOException {
-		this.handle = new FileWriter(file, true);
+	public FileHandle(Path file) throws IOException {
+		this.handle = Files.newBufferedWriter(file, StandardOpenOption.APPEND);
 		this.lastUpdate = System.currentTimeMillis();
 		FILE_HANDLES.add(this);
 	}

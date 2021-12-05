@@ -1,7 +1,8 @@
 package com.elikill58.negativity.api;
 
-import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -148,7 +149,7 @@ public class NegativityPlayer implements FileSaverAction {
 	
 	/**
 	 * Check if the player have be detected for the given cheat
-	 * It also cehck for bypass and TPS drop
+	 * It also check for bypass and TPS drop
 	 * 
 	 * @param c the cheat which we are trying to detect
 	 * @return true if the player can be detected
@@ -394,17 +395,6 @@ public class NegativityPlayer implements FileSaverAction {
 			mustToBeSaved = false;
 			Adapter.getAdapter().getAccountManager().save(getUUID());
 		}
-		/*if (proof.isEmpty())
-			return;
-		try {
-			Path proofDir = Adapter.getAdapter().getDataFolder().getAbsoluteFile().toPath().resolve("user").resolve("proof");
-			Path proofFile = proofDir.resolve(getUUID() + ".txt");
-			Files.createDirectories(proofDir);
-			Files.write(proofFile, (String.join("\n", proof) + '\n').getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
-			proof.clear();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}*/
 	}
 	
 	public void checkProofFileHandler() {
@@ -416,9 +406,9 @@ public class NegativityPlayer implements FileSaverAction {
 	
 	public FileHandle getOrCreateProofFileHandler() throws IOException {
 		if(proofFileHandler == null || proofFileHandler.isClosed()) {
-			File proofFile = new File(Adapter.getAdapter().getDataFolder().getAbsoluteFile(), "user" + File.separator + "proof" + File.separator + getUUID() + ".txt");
-			if(!proofFile.exists())
-				proofFile.createNewFile();
+			Path proofFile = Adapter.getAdapter().getDataFolder().toPath().resolve("user").resolve("proof").resolve(getUUID() + ".txt");
+			if(!Files.exists(proofFile))
+				Files.createFile(proofFile);
 			proofFileHandler = new FileHandle(proofFile);
 		}
 		return proofFileHandler;

@@ -40,6 +40,8 @@ public class Jesus extends Cheat implements Listeners {
 	@EventListener
 	public void onPlayerMove(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
+		if(!e.isMovePosition())
+			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
@@ -116,8 +118,10 @@ public class Jesus extends Cheat implements Listeners {
 			p.teleport(p.getLocation().sub(0, 1, 0));
 	}
 	
-	@Check(name = "ground-water", description = "Ground and on water", conditions = CheckConditions.SURVIVAL)
+	@Check(name = "ground-water", description = "Ground and on water", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_SNEAK })
 	public void onGroundWater(PlayerMoveEvent e, NegativityPlayer np) {
+		if(!e.isMovePosition())
+			return;
 		Player p = e.getPlayer();
 		Block sub = p.getLocation().clone().sub(0, 1, 0).getBlock();
 		int i = 0;
@@ -129,7 +133,7 @@ public class Jesus extends Cheat implements Listeners {
 		boolean wasOnGround = np.booleans.get(JESUS, "bw-was-ground", false);
 		boolean isOnGround = p.isOnGround();
 		if(wasOnGround && isOnGround && p.getLocation().getBlock().getType().equals(Materials.AIR) && sub.getType().getId().contains("WATER") && i > 3) {
-			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(i * 25), "ground-water", "I: " + i);
+			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(i * 25), "ground-water", "I: " + i + ", sneak: " + p.isSneaking() + ", swim: " + p.isSwimming());
 		}
 		np.booleans.set(JESUS, "bw-was-ground", isOnGround);
 	}

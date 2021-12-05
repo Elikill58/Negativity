@@ -53,16 +53,16 @@ public class PacketUtils {
 	 * @return the loaded or cached class
 	 */
 	public static Class<?> getNmsClass(String name, String packagePrefix){
-		return ALL_CLASS.computeIfAbsent(name, (s) -> {
-			try {
-				Class<?> clazz = Class.forName(NMS_PREFIX + (Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? packagePrefix : "") + name);
-				ALL_CLASS.put(name, clazz);
-				return clazz;
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
-		});
+		synchronized(ALL_CLASS) {
+			return ALL_CLASS.computeIfAbsent(name, (s) -> {
+				try {
+					return Class.forName(NMS_PREFIX + (Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? packagePrefix : "") + name);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+				}
+			});
+		}
 	}
 	
 	/**

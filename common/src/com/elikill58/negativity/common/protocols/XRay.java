@@ -64,7 +64,7 @@ public class XRay extends Cheat implements Listeners {
 					Location playerLoc = p.getLocation().clone();
 					playerLoc.setY(b.getY());
 					Vector v = p.getRotation().setY(b.getY());
-					BlockRayResult checkForBuildDir = new BlockRayBuilder(playerLoc, v.multiply(new Vector(-1, 1, -1))).maxTest(10).build().compile();
+					BlockRayResult checkForBuildDir = new BlockRayBuilder(playerLoc, v.multiply(new Vector(-1, 1, -1))).maxDistance(10).build().compile();
 					double distanceWithBuild = checkForBuildDir.getBlock() == null ? Double.MAX_VALUE : checkForBuildDir.getBlock().getLocation().distance(p.getLocation());
 					
 					Location loc = b.getLocation();

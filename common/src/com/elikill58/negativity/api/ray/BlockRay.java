@@ -17,30 +17,31 @@ import com.elikill58.negativity.api.location.World;
 public class BlockRay {
 	
 	private final World w;
-	private final Location position;
+	private final Location position, basePosition;
 	private final Vector vector;
 	private final List<Material> filter, neededType;
-	private int test;
+	private final int maxDistance;
 	private boolean hasOther = false;
-	private List<Vector> positions;
+	private List<Location> positions;
 	
-	protected BlockRay(World w, Location position, Vector vector, int maxTest, Material[] neededType, boolean ignoreAir, boolean ignoreEntity, Material[] filter, List<Vector> positions) {
+	protected BlockRay(World w, Location position, Vector vector, int maxDistance, Material[] neededType, boolean ignoreAir, boolean ignoreEntity, Material[] filter, List<Location> positions) {
 		this.w = w;
 		this.position = position.clone();
-		this.test = maxTest;
-		this.vector = new Vector(parseVector(vector.getX()), parseVector(vector.getY()), parseVector(vector.getZ()));
+		this.basePosition = position.clone();
+		this.maxDistance = maxDistance;
+		this.vector = vector.normalize();// new Vector(parseVector(vector.getX()), parseVector(vector.getY()), parseVector(vector.getZ()));
 		this.neededType = neededType == null ? null : new ArrayList<>(Arrays.asList(neededType));
 		this.filter = new ArrayList<>(Arrays.asList(filter));
 		this.positions = positions;
 		if(ignoreAir)
 			this.filter.add(Materials.AIR);
 		if(!ignoreEntity)
-			w.getEntities().stream().map(Entity::getLocation).map(Location::toVector).forEach(positions::add);
+			w.getEntities().stream().map(Entity::getLocation).forEach(positions::add);
 	}
 	
-	private double parseVector(double d) {
+	/*private double parseVector(double d) {
 		return (d < 1 && d > -1) ? d : (d > 0 ? 1 : -1);
-	}
+	}*/
 	
 	/**
 	 * Get world where is the ray action
@@ -86,7 +87,7 @@ public class BlockRay {
 	 * 
 	 * @return Return an empty array if there is not any needed positions
 	 */
-	public List<Vector> getNeededPositions() {
+	public List<Location> getNeededPositions() {
 		return positions;
 	}
 	
@@ -120,14 +121,14 @@ public class BlockRay {
 			return RayResult.REACH_TOP;
 		if(position.getBlockY() < 0)
 			return RayResult.REACH_BOTTOM;
-		test--;
-		if(test == -1)
-			return neededType != null ? RayResult.NEEDED_NOT_FOUND : RayResult.END_TRY;
 		Block b = position.add(vector).getBlock();
+		double distance = position.distance(basePosition); // check between both distance
+		if(distance >= maxDistance)
+			return neededType != null ? RayResult.NEEDED_NOT_FOUND : RayResult.END_TRY;
 		Material type = b.getType();
 		if(!positions.isEmpty()) {
 			int baseX = b.getX(), baseY = b.getY(), baseZ = b.getZ();
-			for(Vector vec : getNeededPositions()) {
+			for(Location vec : positions) {
 				if(vec.getBlockX() == baseX && vec.getBlockY() == baseY && vec.getBlockZ() == baseZ) {
 					return RayResult.NEEDED_FOUND;
 				}
@@ -150,9 +151,9 @@ public class BlockRay {
 		private final Location position;
 		private boolean ignoreAir = true, ignoreEntity = true;
 		private Vector vector = Vector.ZERO;
-		private int maxTest = 200;
+		private int maxDistance = 10;
 		private Material[] filter = new Material[0], neededType = null;
-		private List<Vector> positions = new ArrayList<>();
+		private List<Location> positions = new ArrayList<>();
 		
 		/**
 		 * Create a new BlockRayBuilder
@@ -236,24 +237,24 @@ public class BlockRay {
 		}
 		
 		/**
-		 * Edit the maximum amount of test
-		 * 
-		 * @param max Maximum test of ray
-		 * @return this builder
-		 */
-		public BlockRayBuilder maxTest(int max) {
-			this.maxTest = max;
-			return this;
-		}
-		
-		/**
 		 * Add searched position.
 		 * 
-		 * @param vec searched positions
+		 * @param loc searched positions
 		 * @return this builder
 		 */
-		public BlockRayBuilder neededPositions(Vector... vec) {
+		public BlockRayBuilder neededPositions(Location... vec) {
 			this.positions.addAll(Arrays.asList(vec));
+			return this;
+		}
+
+		/**
+		 * Change the max ray distance
+		 * 
+		 * @param max the max distance of ray
+		 * @return this builder
+		 */
+		public BlockRayBuilder maxDistance(int max) {
+			this.maxDistance = max;
 			return this;
 		}
 		
@@ -264,7 +265,7 @@ public class BlockRay {
 		 * @return the block ray
 		 */
 		public BlockRay build() {
-			return new BlockRay(w, position, vector, maxTest, neededType, ignoreAir, ignoreEntity, filter, positions);
+			return new BlockRay(w, position, vector, maxDistance, neededType, ignoreAir, ignoreEntity, filter, positions);
 		}
 	}
 

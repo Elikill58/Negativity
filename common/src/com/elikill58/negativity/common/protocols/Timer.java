@@ -51,6 +51,8 @@ public class Timer extends Cheat implements Listeners {
 		medianList.sort(Comparator.naturalOrder());
 		int middle = medianList.size() / 2;
 		int medianValue = (medianList.size() % 2 == 1) ? medianList.get(middle) : (int) ((medianList.get(middle-1) + medianList.get(middle)) / 2.0);
+		if(medianValue < MAX + 3) // if only one time, and median is safe
+			return;
 		boolean medianRespect = MAX_VARIATION > medianValue;
 		int amount = (int) (sum - MAX_VARIATION);
 		Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (p.getPing() / 100) - (medianRespect ? 15 : -10)), "packet",

@@ -26,7 +26,7 @@ public abstract class AbstractEntity implements Entity {
 			}
 		}*/
 		BlockRayResult result;
-		result = new BlockRay.BlockRayBuilder(getLocation(), this).maxTest(maxDistance).ignoreAir(true).build().compile();
+		result = new BlockRay.BlockRayBuilder(getLocation(), this).maxDistance(maxDistance).ignoreAir(true).build().compile();
 		Block b = result.getBlock();
 		return b == null ? new ArrayList<>() : Arrays.asList(b);
 	}

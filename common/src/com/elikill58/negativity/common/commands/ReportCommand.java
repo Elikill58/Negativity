@@ -21,8 +21,8 @@ import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.report.Report;
 import com.elikill58.negativity.universal.webhooks.WebhookManager;
-import com.elikill58.negativity.universal.webhooks.WebhookMessage;
-import com.elikill58.negativity.universal.webhooks.WebhookMessage.WebhookMessageType;
+import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
+import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage.WebhookMessageType;
 
 public class ReportCommand implements CommandListeners, TabListeners {
 

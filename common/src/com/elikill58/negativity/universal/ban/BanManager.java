@@ -27,8 +27,8 @@ import com.elikill58.negativity.universal.ban.storage.FileActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.FileBanLogsStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.webhooks.WebhookManager;
-import com.elikill58.negativity.universal.webhooks.WebhookMessage;
-import com.elikill58.negativity.universal.webhooks.WebhookMessage.WebhookMessageType;
+import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
+import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage.WebhookMessageType;
 
 public class BanManager {
 

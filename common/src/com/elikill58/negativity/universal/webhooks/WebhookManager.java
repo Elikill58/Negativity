@@ -5,6 +5,7 @@ import java.util.List;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.webhooks.integrations.DiscordWebhook;
+import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ public class WebhookManager {
 	private static boolean enabled = false;
 	
 	public static void init() {
+		WEBHOOKS.forEach(Webhook::runQueue); // clean queue
 		WEBHOOKS.clear();
 		Adapter ada = Adapter.getAdapter();
 		Configuration config = ada.getConfig().getSection("webhooks");
@@ -36,6 +38,9 @@ public class WebhookManager {
 				ada.getLogger().warn("Unknow webhook type " + type + ".");
 			}
 		});
+		ada.getScheduler().runRepeating(() -> {
+			WEBHOOKS.forEach(Webhook::runQueue);
+		}, 20);
 	}
 	
 	public static void send(WebhookMessage msg) {
@@ -44,6 +49,18 @@ public class WebhookManager {
 		WEBHOOKS.forEach((w) -> {
 			try {
 				w.send(msg);
+			} catch (Exception e) {
+				Adapter.getAdapter().getLogger().error("Error while using webhook " + w.getWebhookName() + ": " + e.getMessage() + " (" + e.getStackTrace()[0].toString() + ")");
+			}
+		});
+	}
+	
+	public static void addToQueue(WebhookMessage msg) {
+		if(!enabled)
+			return;
+		WEBHOOKS.forEach((w) -> {
+			try {
+				w.addToQueue(msg);
 			} catch (Exception e) {
 				Adapter.getAdapter().getLogger().error("Error while using webhook " + w.getWebhookName() + ": " + e.getMessage() + " (" + e.getStackTrace()[0].toString() + ")");
 			}

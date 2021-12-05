@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.webhooks;
+package com.elikill58.negativity.universal.webhooks.messages;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -9,17 +9,17 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class WebhookMessage {
 
-	private final WebhookMessageType messageType;
-	private final String sender;
-	private final Player concerned;
-	private final Object[] placeholders;
-	private final String date;
+	protected final WebhookMessageType messageType;
+	protected final String sender;
+	protected final Player concerned;
+	protected final Object[] placeholders;
+	protected final long date;
 	
 	public WebhookMessage(WebhookMessageType messageType, Player concerned, String sender, long date, Object... placeholders) {
 		this.messageType = messageType;
 		this.concerned = concerned;
 		this.sender = sender;
-		this.date = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault()));
+		this.date = date;
 		this.placeholders = placeholders;
 	}
 	
@@ -66,9 +66,29 @@ public class WebhookMessage {
 	 * @return the given message with all replaced object
 	 */
 	public String applyPlaceHolders(String message) {
-		return UniversalUtils.replacePlaceholders(message, getPlaceholders()).replaceAll("%date%", date)
+		String sDate = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault()));
+		return UniversalUtils.replacePlaceholders(message, getPlaceholders()).replaceAll("%date%", sDate)
 				.replaceAll("%name%", concerned.getName()).replaceAll("%uuid%", concerned.getUniqueId().toString())
 				.replaceAll("%ip%", concerned.getIP()).replaceAll("%sender%", sender);
+	}
+	
+	/**
+	 * Combine actual message instance with given one
+	 * 
+	 * @param msg the message to add
+	 * @return the combined object, or null if not combined
+	 */
+	public WebhookMessage combine(WebhookMessage msg) {
+		return null;
+	}
+	
+	/**
+	 * Know if this type of webhook message can be combined.
+	 * 
+	 * @return true if can combine
+	 */
+	public boolean canCombine() {
+		return false;
 	}
 	
 	public static enum WebhookMessageType {

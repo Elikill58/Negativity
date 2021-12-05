@@ -12,22 +12,35 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 
 import javax.net.ssl.HttpsURLConnection;
 
 import com.elikill58.negativity.api.yaml.Configuration;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.webhooks.Webhook;
-import com.elikill58.negativity.universal.webhooks.WebhookMessage;
 import com.elikill58.negativity.universal.webhooks.integrations.DiscordWebhook.DiscordWebhookRequest.EmbedObject;
+import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
 
 public class DiscordWebhook implements Webhook {
     
 	private final Configuration config;
 	private final String webhookUrl;
+	private final ScheduledExecutorService executorService;
+	private List<WebhookMessage> queue = new ArrayList<>();
+	private int skip = 0;
 	
 	public DiscordWebhook(Configuration config) {
 		this.config = config;
 		this.webhookUrl = config.getString("url");
+		this.executorService = Executors.newScheduledThreadPool(1);
+	}
+	
+	@Override
+	public void close() {
+		if(!executorService.isShutdown())
+			executorService.shutdown();
 	}
 	
     @Override
@@ -36,12 +49,67 @@ public class DiscordWebhook implements Webhook {
     }
     
     @Override
-    public boolean send(WebhookMessage msg) {
+    public void addToQueue(WebhookMessage msg) {
+    	if(!msg.canCombine())
+    		send(msg);
+    	else
+    		queue.add(msg);
+    }
+    
+    @Override
+    public void runQueue() {
+    	// firstly, combine all
+    	synchronized (queue) {
+    		if(queue.isEmpty())
+    			return;
+    		while(!queue.isEmpty()) {
+	    		WebhookMessage msg = queue.remove(0);
+	    		if(queue.isEmpty()) { // removed is last
+	    			send(msg);
+	    		} else if(queue.size() == 1) {
+	    			WebhookMessage other = queue.remove(0);
+	    			WebhookMessage third = msg.combine(other);
+	    			if(third != null)
+	    				send(third);
+	    			else {
+	    				send(msg);
+	    				send(other);
+	    			}
+	    		} else {
+	    			List<WebhookMessage> toRemove = new ArrayList<>();
+					for(int i = 0; i < queue.size(); i++) {
+						if(queue.size() <= i)
+							break;
+						WebhookMessage other = queue.get(i);
+						WebhookMessage third = msg.combine(other);
+						if(third != null) {
+							msg = third;
+							toRemove.add(other);
+						}
+					}
+					queue.removeAll(toRemove);
+					send(msg);
+	    		}
+    		}
+		}
+    }
+    
+    @Override
+    public void send(WebhookMessage msg) {
+    	executorService.execute(() -> sendAsync(msg));
+    }
+    
+    private void sendAsync(WebhookMessage msg) {
     	Configuration confMsg = config.getSection("messages").getSection(msg.getMessageType().name().toLowerCase(Locale.ROOT));
     	if(confMsg == null)
     		confMsg = new Configuration();
     	if(!confMsg.getBoolean("enabled", true))
-    		return true;
+    		return;
+    	if(skip > 0) { // should skip
+    		queue.add(msg);
+    		skip--;
+    		return;
+    	}
     	DiscordWebhookRequest webhook = new DiscordWebhookRequest(webhookUrl);
     	webhook.setUsername(msg.applyPlaceHolders(confMsg.getString("username", "Negativity")));
 	    webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content", "")));
@@ -78,11 +146,14 @@ public class DiscordWebhook implements Webhook {
 		    webhook.addEmbed(obj);
 	    }
 	    try {
-			webhook.execute();
-		    return true;
+			int code = webhook.execute();
+	    	Adapter.getAdapter().debug("Webhook message sent, code: " + code);
+	    	if(code == 429) { // good config and error while sending
+	    		queue.add(msg);
+	    		skip = 5; // wait 5 s untl next send
+	    	}
 		} catch (IOException e) {
 			e.printStackTrace();
-			return false;
 		}
     }
     
@@ -155,7 +226,7 @@ public class DiscordWebhook implements Webhook {
 	        this.embeds.add(embed);
 	    }
 	
-	    public void execute() throws IOException {
+	    public int execute() throws IOException {
 	        if (this.content == null && this.embeds.isEmpty()) {
 	            throw new IllegalArgumentException("Set content or add at least one EmbedObject");
 	        }
@@ -247,14 +318,19 @@ public class DiscordWebhook implements Webhook {
 	        connection.addRequestProperty("User-Agent", "Java-DiscordWebhook-BY-Gelox_");
 	        connection.setDoOutput(true);
 	        connection.setRequestMethod("POST");
-	
 	        OutputStream stream = connection.getOutputStream();
 	        stream.write(json.toString().getBytes());
 	        stream.flush();
 	        stream.close();
-	
-	        connection.getInputStream().close(); //I'm not sure why but it doesn't work without getting the InputStream
-	        connection.disconnect();
+	        int code = connection.getResponseCode();
+	        try {
+		        connection.getInputStream().close(); //I'm not sure why but it doesn't work without getting the InputStream
+		        connection.disconnect();
+	        } catch (Exception e) {
+	        	if(code != 200 && code != 429)
+	        		e.printStackTrace();
+			}
+	        return code;
 	    }
 	
 	    public static class EmbedObject {

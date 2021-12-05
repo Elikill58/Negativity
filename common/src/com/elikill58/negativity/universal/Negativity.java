@@ -34,6 +34,7 @@ import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
+import com.elikill58.negativity.universal.file.FileSaverTimer;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
@@ -341,6 +342,11 @@ public class Negativity {
 				NegativityPlayer.getNegativityPlayer(p).setClientName(new String(msg).substring(1));
 			});
 			initAlertShower(ada);
+			FileSaverTimer old = FileSaverTimer.getInstance();
+			if(old != null)
+				old.runAll();
+			else
+				ada.getScheduler().runRepeatingAsync(new FileSaverTimer(), 20);
 		}
 		UniversalUtils.init();
 		

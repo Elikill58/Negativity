@@ -36,6 +36,15 @@ public class SpongeScheduler implements Scheduler {
 	}
 	
 	@Override
+	public ScheduledTask runRepeatingAsync(Runnable task, int intervalTicks, @Nullable String name) {
+		Task.Builder builder = Task.builder().execute(task).async().intervalTicks(intervalTicks);
+		if (name != null) {
+			builder.name(name);
+		}
+		return new TaskWrapper(builder.submit(this.plugin));
+	}
+	
+	@Override
 	public ScheduledTask runDelayed(Runnable task, int delayTicks) {
 		return new TaskWrapper(Task.builder().execute(task).delayTicks(delayTicks).submit(this.plugin));
 	}

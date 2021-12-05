@@ -3,7 +3,6 @@ package com.elikill58.negativity.api;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -38,11 +37,14 @@ import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.bypass.BypassManager;
+import com.elikill58.negativity.universal.file.FileHandle;
+import com.elikill58.negativity.universal.file.FileSaverAction;
+import com.elikill58.negativity.universal.file.FileSaverTimer;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class NegativityPlayer {
+public class NegativityPlayer implements FileSaverAction {
 
 	private static final Map<UUID, NegativityPlayer> players = new HashMap<>();
 	public static ArrayList<UUID> INJECTED = new ArrayList<>();
@@ -93,6 +95,7 @@ public class NegativityPlayer {
 	private boolean isBedrockPlayer = false;
 	private String clientName;
 	private ScheduledTask fightCooldownTask;
+	private FileHandle proofFileHandler;
 
 	public NegativityPlayer(Player p) {
 		this.p = p;
@@ -146,7 +149,7 @@ public class NegativityPlayer {
 	
 	/**
 	 * Check if the player have be detected for the given cheat
-	 * It also cehck for bypass and TPS drop
+	 * It also check for bypass and TPS drop
 	 * 
 	 * @param c the cheat which we are trying to detect
 	 * @return true if the player can be detected
@@ -381,27 +384,51 @@ public class NegativityPlayer {
 	 */
 	public void logProof(String msg) {
 		proof.add(msg);
+		FileSaverTimer.getInstance().addAction(this);
 	}
 	
 	/**
 	 * Save proof and account manager if need to be saved
 	 */
-	public void saveProof() {
+	public void saveAccount() {
 		if(mustToBeSaved) {
 			mustToBeSaved = false;
 			Adapter.getAdapter().getAccountManager().save(getUUID());
 		}
-		if (proof.isEmpty())
+	}
+	
+	public void checkProofFileHandler() {
+		if(proofFileHandler != null && proofFileHandler.shouldBeClosed()) {
+			proofFileHandler.close();
+			proofFileHandler = null;
+		}
+	}
+	
+	public FileHandle getOrCreateProofFileHandler() throws IOException {
+		if(proofFileHandler == null || proofFileHandler.isClosed()) {
+			Path proofFile = Adapter.getAdapter().getDataFolder().toPath().resolve("user").resolve("proof").resolve(getUUID() + ".txt");
+			if(!Files.exists(proofFile))
+				Files.createFile(proofFile);
+			proofFileHandler = new FileHandle(proofFile);
+		}
+		return proofFileHandler;
+	}
+	
+	@Override
+	public void save(FileSaverTimer timer) {
+		if (proof.isEmpty()) {
+	    	timer.removeActionRunning();
 			return;
+		}
+		
 		try {
-			Path proofDir = Adapter.getAdapter().getDataFolder().getAbsoluteFile().toPath().resolve("user").resolve("proof");
-			Path proofFile = proofDir.resolve(getUUID() + ".txt");
-			Files.createDirectories(proofDir);
-			Files.write(proofFile, (String.join("\n", proof) + '\n').getBytes(), StandardOpenOption.CREATE, StandardOpenOption.APPEND);
+			getOrCreateProofFileHandler().write(proof);
 			proof.clear();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+    	timer.removeActionRunning();
 	}
 	
 	/**
@@ -463,7 +490,9 @@ public class NegativityPlayer {
 	 * Save and destroy Negativity player and account
 	 */
 	public void destroy() {
-		saveProof();
+		save(FileSaverTimer.getInstance());
+		if(proofFileHandler != null && !proofFileHandler.isClosed())
+			proofFileHandler.close();
 		NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
 		accountManager.save(playerId).join();
 		accountManager.dispose(playerId);

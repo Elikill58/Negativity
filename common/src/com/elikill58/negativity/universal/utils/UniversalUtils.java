@@ -173,7 +173,7 @@ public class UniversalUtils {
 			connection.setUseCaches(true);
 			connection.setRequestProperty("User-Agent", "Negativity " + ada.getName() + " - " + ada.getVersion());
 			connection.setDoOutput(true);
-			connection.setConnectTimeout(1000);
+			connection.setConnectTimeout(5000);
 			if(!post.equalsIgnoreCase("")) {
 				connection.setRequestMethod("POST");
 				OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());

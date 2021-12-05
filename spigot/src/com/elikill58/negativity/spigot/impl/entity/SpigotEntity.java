@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.impl.entity;
 
+import java.lang.reflect.Field;
+
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
@@ -100,7 +102,11 @@ public class SpigotEntity<E extends Entity> extends AbstractEntity {
 		try {
 			Object bb = PacketUtils.getBoundingBox(entity);
 			Class<?> clss = bb.getClass();
-			if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
+			boolean hasMinField = false;
+			for(Field f : clss.getFields())
+				if(f.getName().equalsIgnoreCase("minX"))
+					hasMinField = true;
+			if(Version.getVersion().isNewerOrEquals(Version.V1_13) && hasMinField) {
 				double minX = clss.getField("minX").getDouble(bb);
 				double minY = clss.getField("minY").getDouble(bb);
 				double minZ = clss.getField("minZ").getDouble(bb);

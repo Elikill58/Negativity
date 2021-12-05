@@ -125,6 +125,11 @@ public class INCChannel extends ChannelAbstract {
 		
 		@Override
 		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+			if(ctx == null || ctx.isRemoved())
+				return;
+			if(cause.getMessage().toLowerCase().contains("connection reset by ")
+					|| cause.getLocalizedMessage().toLowerCase().contains("connection reset by "))
+				return;
 			Adapter.getAdapter().getLogger().error("Exception caught when reading packet");
 			cause.printStackTrace();
 		}

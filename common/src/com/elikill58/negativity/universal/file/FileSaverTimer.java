@@ -1,5 +1,7 @@
 package com.elikill58.negativity.universal.file;
 
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +32,11 @@ public class FileSaverTimer implements Runnable {
     
     @Override
     public void run() {
+		try {
+			Files.createDirectories(Adapter.getAdapter().getDataFolder().getAbsoluteFile().toPath().resolve("user").resolve("proof"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
         if(actionRunning < SKIP_WHEN_ALREADY) {
 	        for(int i = 0; !allActions.isEmpty() && i < MAX_RUNNING; i++) {
 	            FileSaverAction action = allActions.remove(0); // removing first item

@@ -3,7 +3,6 @@ package com.elikill58.negativity.universal;
 import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
 
 import java.io.IOException;
-import java.nio.file.Files;
 import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.HashSet;
@@ -344,17 +343,11 @@ public class Negativity {
 				NegativityPlayer.getNegativityPlayer(p).setClientName(new String(msg).substring(1));
 			});
 			initAlertShower(ada);
-			try {
-				// Create proof folder at startup to don't check after
-				Files.createDirectories(Adapter.getAdapter().getDataFolder().getAbsoluteFile().toPath().resolve("user").resolve("proof"));
-				FileSaverTimer old = FileSaverTimer.getInstance();
-				if(old != null)
-					old.runAll();
-				else
-					ada.getScheduler().runRepeatingAsync(new FileSaverTimer(), 20);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+			FileSaverTimer old = FileSaverTimer.getInstance();
+			if(old != null)
+				old.runAll();
+			else
+				ada.getScheduler().runRepeatingAsync(new FileSaverTimer(), 20);
 		}
 		UniversalUtils.init();
 		

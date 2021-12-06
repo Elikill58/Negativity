@@ -549,9 +549,7 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getNegativityPlayer(Player p) {
-		synchronized (players) {
-			return players.computeIfAbsent(p.getUniqueId(), id -> new NegativityPlayer(p));
-		}
+		return getNegativityPlayer(p.getUniqueId(), () -> p);
 	}
 
 	/**
@@ -563,15 +561,17 @@ public class NegativityPlayer implements FileSaverAction {
 	 */
 	public static NegativityPlayer getNegativityPlayer(UUID uuid, Callable<Player> call) {
 		synchronized (players) {
-			return players.computeIfAbsent(uuid, id -> {
-				try {
-					return new NegativityPlayer(call.call());
-				} catch (Exception e) {
-					e.printStackTrace();
-					return null;
-				}
-			});
+			if(players.containsKey(uuid))
+				return players.get(uuid);
+			try {
+				NegativityPlayer np = new NegativityPlayer(call.call());
+				players.put(uuid, np);
+				return np;
+			} catch (Exception e1) {
+				e1.printStackTrace();
+			}
 		}
+		return null;
 	}
 
 	/**

@@ -118,6 +118,10 @@ public class INCChannel extends ChannelAbstract {
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
 			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet, packet.getClass().getSimpleName());
+			if(commonPacket == null) {
+				super.channelRead(ctx, packet);
+				return;
+			}
 			AbstractPacket nextPacket = getPacketManager().onPacketReceive(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
 			if(!nextPacket.isCancelled())
 				super.channelRead(ctx, nextPacket.getNmsPacket() != null ? nextPacket.getNmsPacket() : packet);
@@ -146,6 +150,10 @@ public class INCChannel extends ChannelAbstract {
 		@Override
 		public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
 			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet, packet.getClass().getSimpleName());
+			if(commonPacket == null) {
+				super.write(ctx, packet, promise);
+				return;
+			}
 			AbstractPacket nextPacket = getPacketManager().onPacketSent(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
 			if(!nextPacket.isCancelled())
 				super.write(ctx, nextPacket.getNmsPacket() != null ? nextPacket.getNmsPacket() : packet, promise);

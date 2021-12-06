@@ -141,7 +141,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 		clickTimer = getServer().getScheduler().runTaskTimer(this, new ClickManagerTimer(), 20, 20);
 		invTimer = getServer().getScheduler().runTaskTimer(this, new ActualizeInvTimer(), 5, 5);
-		packetTimer = getServer().getScheduler().runTaskTimer(this, new AnalyzePacketTimer(), 20, 20);
+		packetTimer = getServer().getScheduler().runTaskTimerAsynchronously(this, new AnalyzePacketTimer(), 20, 20);
 		runSpawnFakePlayer = getServer().getScheduler().runTaskTimer(this, new SpawnFakePlayerTimer(), 20, 20 * 60 * 10);
 		trySendProxyPing();
 		

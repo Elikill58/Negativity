@@ -119,8 +119,8 @@ public class INCChannel extends ChannelAbstract {
 		public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
 			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet, packet.getClass().getSimpleName());
 			AbstractPacket nextPacket = getPacketManager().onPacketReceive(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
-			if(!nextPacket.isCancelled() && nextPacket.getNmsPacket() != null)
-				super.channelRead(ctx, nextPacket.getNmsPacket());
+			if(!nextPacket.isCancelled())
+				super.channelRead(ctx, nextPacket.getNmsPacket() != null ? nextPacket.getNmsPacket() : packet);
 		}
 		
 		@Override
@@ -147,12 +147,15 @@ public class INCChannel extends ChannelAbstract {
 		public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
 			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet, packet.getClass().getSimpleName());
 			AbstractPacket nextPacket = getPacketManager().onPacketSent(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
-			if(!nextPacket.isCancelled() && nextPacket.getNmsPacket() != null)
-				super.write(ctx, nextPacket.getNmsPacket(), promise);
+			if(!nextPacket.isCancelled())
+				super.write(ctx, nextPacket.getNmsPacket() != null ? nextPacket.getNmsPacket() : packet, promise);
 		}
 		
 		@Override
 		public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
+			if(cause.getMessage().toLowerCase().contains("connection reset by ")
+					|| cause.getLocalizedMessage().toLowerCase().contains("connection reset by "))
+				return;
 			Adapter.getAdapter().getLogger().error("Exception caught when sending packet");
 			cause.printStackTrace();
 		}

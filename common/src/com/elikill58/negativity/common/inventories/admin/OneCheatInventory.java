@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.admin.OneCheatHolder;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 
@@ -64,7 +63,7 @@ public class OneCheatInventory extends AbstractInventory<OneCheatHolder> {
 		else if(m.equals(Materials.APPLE))
 			c.setVerif(!c.hasVerif());
 		
-		Adapter.getAdapter().getConfig().save();
+		c.saveConfig();
 		actualizeInventory(p, c, inv);
 		p.updateInventory();
 	}

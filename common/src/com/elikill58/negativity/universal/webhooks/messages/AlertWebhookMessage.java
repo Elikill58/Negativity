@@ -33,6 +33,6 @@ public class AlertWebhookMessage extends WebhookMessage {
 	
 	@Override
 	public String applyPlaceHolders(String message) {
-		return super.applyPlaceHolders(message).replace("%amount%", String.valueOf(amount)).replace("%amount%", String.valueOf(reliability)).replace("%cheat%", cheat.getName());
+		return super.applyPlaceHolders(message).replace("%amount%", String.valueOf(amount)).replace("%reliability%", String.valueOf(reliability)).replace("%cheat%", cheat.getName());
 	}
 }

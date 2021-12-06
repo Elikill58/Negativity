@@ -243,7 +243,17 @@ public class BlockRay {
 		 * @return this builder
 		 */
 		public BlockRayBuilder neededPositions(Location... vec) {
-			this.positions.addAll(Arrays.asList(vec));
+			return neededPositions(Arrays.asList(vec));
+		}
+		
+		/**
+		 * Add searched position.
+		 * 
+		 * @param loc searched positions
+		 * @return this builder
+		 */
+		public BlockRayBuilder neededPositions(List<Location> vec) {
+			this.positions.addAll(vec);
 			return this;
 		}
 

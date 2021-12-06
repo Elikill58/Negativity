@@ -7,7 +7,9 @@ import java.util.TimerTask;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
@@ -42,6 +44,11 @@ public class PingSpoof extends Cheat implements Listeners {
 		}
 	}
 	
+	@EventListener
+	public void onMove(PlayerMoveEvent e) {
+		NegativityPlayer.getNegativityPlayer(e.getPlayer()).TIME_LAST_MOVE = System.currentTimeMillis();
+	}
+	
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		DataCounter<Integer> counters = data.getData(PLAYER_PING);
@@ -67,7 +74,8 @@ public class PingSpoof extends Cheat implements Listeners {
 				np.booleans.set(PINGSPOOF, "can-ping-spoof", true);
 			return;
 		}
-		if (newPing <= getConfig().getInt("checks.reachable.min_ping", 400) || lastPing == 0)
+		long lastMove = System.currentTimeMillis() - np.TIME_LAST_MOVE;
+		if (newPing <= getConfig().getInt("checks.reachable.min_ping", 400) || lastPing == 0 || lastMove < 2000)
 			return;
 		if (newPing < lastPing && ((newPing * 1.2) < lastPing || newPing < 1000)) // if ping is going normal
 			return;

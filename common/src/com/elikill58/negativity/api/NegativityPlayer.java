@@ -71,7 +71,7 @@ public class NegativityPlayer implements FileSaverAction {
 	
 	// detection and bypass
 	public long TIME_INVINCIBILITY = 0, TIME_LAST_MESSAGE = 0, timeStartFakePlayer = 0, LAST_BLOCK_BREAK = 0, LAST_BLOCK_PLACE = 0, LAST_REGEN = 0, TIME_REPORT = 0,
-			TIME_OTHER_KEEP_ALIVE = 0;
+			TIME_OTHER_KEEP_ALIVE = 0, TIME_LAST_MOVE = 0;
 	public int MOVE_TIME = 0, LAST_CHAT_MESSAGE_NB = 0, fakePlayerTouched = 0, BYPASS_SPEED = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0, IS_LAST_SEC_BLINK = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public boolean bypassBlink = false, isOnLadders = false, useAntiNoFallSystem = false;

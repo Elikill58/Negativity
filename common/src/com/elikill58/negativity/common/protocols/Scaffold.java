@@ -1,5 +1,7 @@
 package com.elikill58.negativity.common.protocols;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import com.elikill58.negativity.api.block.Block;
@@ -10,7 +12,9 @@ import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
@@ -68,15 +72,27 @@ public class Scaffold extends Cheat implements Listeners {
 			return;
 		if(place.getY() >= p.getLocation().getY())
 			return;
-		Vector vector = new Vector(4, 4, 4);
-		BlockRayBuilder builder = new BlockRayBuilder(p.getLocation().clone(), p).maxDistance(6).vector(p.getRotation().divide(vector))
-				.ignoreAir(true).neededPositions(place.getLocation());
+		Location loc = place.getLocation();
+		World w = loc.getWorld();
+		double x = loc.getX(), y = loc.getY(), z = loc.getZ();
+		List<Location> allLocs = new ArrayList<>();
+		loc.add(loc);
+		double more = 1;
+		loc.add(new Location(w, x + more, y, z));
+		loc.add(new Location(w, x, y + more, z));
+		loc.add(new Location(w, x, y, z + more));
+		loc.add(new Location(w, x - more, y, z));
+		loc.add(new Location(w, x, y - more, z));
+		loc.add(new Location(w, x, y, z - more));
+		Vector vec = p.getEyeLocation().getDirection();
+		BlockRayBuilder builder = new BlockRayBuilder(p.getLocation().clone(), p).maxDistance(6).vector(vec)
+				.ignoreAir(true).neededPositions(allLocs);
 		Adapter.getAdapter().runSync(() -> {
 			BlockRayResult result = builder.build().compile();
 			Block searched = result.getBlock() == null ? place : result.getBlock();
 			double distance = place.getLocation().distance(searched.getLocation());
 			if(distance > 4.6 && searched.getY() < p.getLocation().getY()) {
-				Negativity.alertMod(distance > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 30), "distance", "Place: " + place + ", targetVisual: " + searched + ". Distance: " + distance);
+				Negativity.alertMod(distance > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 30), "distance", "Place: " + place + ", targetVisual: " + searched + ", vector: " + vec.toShowableString() + ". Distance: " + distance);
 			}
 		});
 	}

@@ -161,7 +161,11 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public void kick(String reason) {
-		entity.kickPlayer(reason);
+		if(Bukkit.isPrimaryThread())
+			entity.kickPlayer(reason);
+		else {
+			Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> entity.kickPlayer(reason));
+		}
 	}
 
 	@Override

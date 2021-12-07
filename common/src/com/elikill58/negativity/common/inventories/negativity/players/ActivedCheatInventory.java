@@ -2,6 +2,7 @@ package com.elikill58.negativity.common.inventories.negativity.players;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.StringJoiner;
 
@@ -45,7 +46,9 @@ public class ActivedCheatInventory extends AbstractInventory<ActivedCheatHolder>
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		if (np.ACTIVE_CHEAT.size() > 0) {
 			int slot = 0;
-			for (CheatKeys cheatKey : np.ACTIVE_CHEAT) {
+			List<CheatKeys> active = new ArrayList<>(np.ACTIVE_CHEAT);
+			active.sort(Comparator.comparing(CheatKeys::getKey));
+			for (CheatKeys cheatKey : active) {
 				Cheat c = Cheat.forKey(cheatKey);
 				if (inv.getSize() > slot) {
 					List<String> lore = new ArrayList<>();

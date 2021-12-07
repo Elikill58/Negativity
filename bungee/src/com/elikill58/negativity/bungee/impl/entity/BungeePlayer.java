@@ -102,6 +102,11 @@ public class BungeePlayer extends AbstractProxyPlayer {
 	}
 	
 	@Override
+	public String getServerName() {
+		return pp.getServer().getInfo().getName();
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Player)) {
 			return false;

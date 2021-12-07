@@ -414,6 +414,11 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 		out.writeUTF(serverName);
 		entity.sendPluginMessage(SpigotNegativity.getInstance(), "BungeeCord", out.toByteArray());
 	}
+	
+	@Override
+	public String getServerName() {
+		return Bukkit.getServerName();
+	}
 
 	@Override
 	public boolean equals(Object obj) {

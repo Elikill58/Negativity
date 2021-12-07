@@ -16,16 +16,17 @@ public class NegativityTpCommand implements Listeners {
 	@EventListener
 	public void onCommandPreProcess(PlayerCommandPreProcessEvent e) {
 		Player p = e.getPlayer();
+		p.sendMessage(ChatColor.YELLOW + "Handling cmd: " + e.getCommand() + ", proxy: " + e.isProxy());
 		if(!e.getCommand().equalsIgnoreCase("negativitytp"))
 			return; // not my command -> ignore
 		
 		if (!Perm.hasPerm(p, Perm.SHOW_ALERT)) { // don't have perm to run this command
 			return;
 		}
+		e.setCancelled(true); // our command
 		String[] arg = e.getArgument();
 		if(arg.length == 0) {
 			Messages.sendMessage(p, "not_forget_player");
-			e.setCancelled(true); // command already handled here
 			return;
 		}
 		Player target = Adapter.getAdapter().getPlayer(arg[0]);
@@ -36,10 +37,13 @@ public class NegativityTpCommand implements Listeners {
 				p.sendMessage(ChatColor.GREEN + "Teleporting to server " + arg[1] + " ...");
 				p.sendToServer(arg[1]);
 			}
-			e.setCancelled(true); // command already handled here
-		} else if(!e.isProxy()) {
+		} else if(e.isProxy()) {
+			if(p.getServerName().equals(target.getServerName()))
+				e.setCancelled(false); // must be handled by spigot
+			else
+				p.sendToServer(target.getServerName()); // tp to server
+		} else {
 			InventoryManager.open(NegativityInventory.CHECK_MENU, p, target);
-			e.setCancelled(true); // command already handled here
 		}
 	}
 

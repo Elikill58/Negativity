@@ -441,6 +441,11 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	}
 	
 	@Override
+	public String getServerName() {
+		return "SpongeServer"; // TODO check if sponge can have a server name
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Player)) {
 			return false;

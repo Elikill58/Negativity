@@ -319,6 +319,13 @@ public interface Player extends OfflinePlayer {
 	 * @param serverName the name of the proxy server
 	 */
 	void sendToServer(String serverName);
+
+	/**
+	 * Get the name of the server where the player is actually
+	 * 
+	 * @return the name of actual server
+	 */
+	String getServerName();
 	
 	static boolean isSamePlayer(Player player1, Player player2) {
 		return player1.getUniqueId().equals(player2.getUniqueId());

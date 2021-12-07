@@ -16,6 +16,7 @@ import com.elikill58.negativity.common.commands.LangCommand;
 import com.elikill58.negativity.common.commands.LockChatCommand;
 import com.elikill58.negativity.common.commands.ModCommand;
 import com.elikill58.negativity.common.commands.NegativityCommand;
+import com.elikill58.negativity.common.commands.NegativityTpCommand;
 import com.elikill58.negativity.common.commands.ReportCommand;
 import com.elikill58.negativity.common.commands.UnbanCommand;
 import com.elikill58.negativity.universal.Adapter;
@@ -30,6 +31,8 @@ public class CommandManager implements Listeners {
 		NegativityCommand negativity = new NegativityCommand();
 		commands.put("negativity", negativity);
 		tabs.put("negativity", negativity);
+
+		EventManager.registerEvent(new NegativityTpCommand());
 		
 		Configuration conf = Adapter.getAdapter().getConfig();
 		if(conf.getBoolean("commands.kick", true)) {

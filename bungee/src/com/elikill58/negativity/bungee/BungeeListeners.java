@@ -10,6 +10,7 @@ import java.util.function.BiConsumer;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
@@ -40,6 +41,7 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.event.ChatEvent;
 import net.md_5.bungee.api.event.PlayerDisconnectEvent;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
@@ -115,7 +117,7 @@ public class BungeeListeners implements Listener {
 					hoverComponent.append("\n\n" + Messages.getMessage(pp.getUniqueId(), "alert_tp_info",
 							"%playername%", alert.getPlayername()), ComponentBuilder.FormatRetention.NONE);
 					alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent.create()));
-					alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/n tp " + alert.getPlayername() + " " + player.getServer().getInfo().getName()));
+					alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/negativitytp " + alert.getPlayername() + " " + player.getServer().getInfo().getName()));
 					pp.sendMessage(alertMessage);
 				}
 			}
@@ -178,6 +180,22 @@ public class BungeeListeners implements Listener {
 		if (comp == null || comp.length == 0)
 			return "";
 		return comp[0].toPlainText();
+	}
+	
+	@EventHandler
+	public void onCommand(ChatEvent e) {
+		if(!(e.getSender() instanceof ProxiedPlayer))
+			return;
+		ProxiedPlayer p = (ProxiedPlayer) e.getSender();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new BungeePlayer(p));
+		String message = e.getMessage().substring(1);
+		String cmd = message.split(" ")[0];
+		String[] arg = message.replace(cmd + " ", "").split(" ");
+		String prefix = arg.length == 0 ? "" : arg[arg.length - 1].toLowerCase(Locale.ROOT);
+		PlayerCommandPreProcessEvent event = new PlayerCommandPreProcessEvent(np.getPlayer(), cmd, arg, prefix, true);
+		EventManager.callEvent(event);
+		if(event.isCancelled())
+			e.setCancelled(true);
 	}
 
 	@EventHandler

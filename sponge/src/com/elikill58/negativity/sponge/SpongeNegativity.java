@@ -55,6 +55,7 @@ import com.elikill58.negativity.common.timers.ClickManagerTimer;
 import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge.listeners.BlockListeners;
+import com.elikill58.negativity.sponge.listeners.CommandsExecutorManager;
 import com.elikill58.negativity.sponge.listeners.CommandsListeners;
 import com.elikill58.negativity.sponge.listeners.EntityListeners;
 import com.elikill58.negativity.sponge.listeners.FightManager;
@@ -126,6 +127,7 @@ public class SpongeNegativity {
 		eventManager.registerListeners(this, new EntityListeners());
 		eventManager.registerListeners(this, new InventoryListeners());
 		eventManager.registerListeners(this, new PlayersListeners());
+		eventManager.registerListeners(this, new CommandsListeners());
 
 		schedule(new ClickManagerTimer(), 20, null);
 		schedule(new ActualizeInvTimer(), 5, null);
@@ -184,17 +186,17 @@ public class SpongeNegativity {
 		CommandManager cmd = Sponge.getCommandManager();
 
 		if (!reload) {
-			cmd.register(this, new CommandsListeners("negativity"), "negativity", "neg", "n");
+			cmd.register(this, new CommandsExecutorManager("negativity"), "negativity", "neg", "n");
 		}
 
-		reloadCommand("mod", cmd, () -> new CommandsListeners("nmod"), "nmod", "mod");
-		reloadCommand("kick", cmd, () -> new CommandsListeners("nkick"), "nkick", "kick");
-		reloadCommand("lang", cmd, () -> new CommandsListeners("nlang"), "nlang", "lang");
-		reloadCommand("report", cmd, () -> new CommandsListeners("nreport"), "nreport", "report", "repot");
-		reloadCommand("ban", cmd, () -> new CommandsListeners("nban"), "nban", "negban", "ban");
-		reloadCommand("unban", cmd, () -> new CommandsListeners("nunban"), "nunban", "negunban", "unban");
-		reloadCommand("chat.clear", cmd, () -> new CommandsListeners("nclearchat"), "nclearchat", "clearchat");
-		reloadCommand("chat.lock", cmd, () -> new CommandsListeners("nlockchat"), "nlockchat", "lockchat");
+		reloadCommand("mod", cmd, () -> new CommandsExecutorManager("nmod"), "nmod", "mod");
+		reloadCommand("kick", cmd, () -> new CommandsExecutorManager("nkick"), "nkick", "kick");
+		reloadCommand("lang", cmd, () -> new CommandsExecutorManager("nlang"), "nlang", "lang");
+		reloadCommand("report", cmd, () -> new CommandsExecutorManager("nreport"), "nreport", "report", "repot");
+		reloadCommand("ban", cmd, () -> new CommandsExecutorManager("nban"), "nban", "negban", "ban");
+		reloadCommand("unban", cmd, () -> new CommandsExecutorManager("nunban"), "nunban", "negunban", "unban");
+		reloadCommand("chat.clear", cmd, () -> new CommandsExecutorManager("nclearchat"), "nclearchat", "clearchat");
+		reloadCommand("chat.lock", cmd, () -> new CommandsExecutorManager("nlockchat"), "nlockchat", "lockchat");
 	}
 
 	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command, String... aliases) {

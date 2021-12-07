@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.function.BiConsumer;
 
@@ -12,6 +13,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
+import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.universal.Adapter;
@@ -32,6 +34,8 @@ import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.velocity.impl.entity.VelocityPlayer;
 import com.velocitypowered.api.event.ResultedEvent;
 import com.velocitypowered.api.event.Subscribe;
+import com.velocitypowered.api.event.command.CommandExecuteEvent;
+import com.velocitypowered.api.event.command.CommandExecuteEvent.CommandResult;
 import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
@@ -188,6 +192,22 @@ public class VelocityListeners {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p));
 		PlayerLeaveEvent event = new PlayerLeaveEvent(np.getPlayer(), np, "");
 		EventManager.callEvent(event);
+	}
+	
+	@Subscribe
+	public void onCommandPreProcess(CommandExecuteEvent e) {
+		if(!(e.getCommandSource() instanceof Player))
+			return;
+		Player p = (Player) e.getCommandSource();
+		String message = e.getCommand().substring(1);
+		String cmd = message.split(" ")[0];
+		String[] arg = message.replace(cmd + " ", "").split(" ");
+		String prefix = arg.length == 0 ? "" : arg[arg.length - 1].toLowerCase(Locale.ROOT);
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p));
+		PlayerCommandPreProcessEvent event = new PlayerCommandPreProcessEvent(np.getPlayer(), cmd, arg, prefix, true);
+		EventManager.callEvent(event);
+		if(event.isCancelled())
+			e.setResult(CommandResult.denied());
 	}
 	
 	@Subscribe

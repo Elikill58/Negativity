@@ -135,7 +135,7 @@ public class Speed extends Cheat implements Listeners {
 		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10)) >= 0.85D && !hasIceBelow) {
 			mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(y * 100 * 2), "distance-jumping",
-					"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed()
+					"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed() + ", fallDistance: " + p.getFallDistance()
 							+ " Distance between from/to location: " + y + ", ySpeed: " + (y - (amplifierSpeed / 10)),
 							hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
 		}

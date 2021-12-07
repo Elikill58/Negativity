@@ -116,6 +116,7 @@ public class SpigotNegativity extends JavaPlugin {
 		pm.registerEvents(new InventoryListeners(), this);
 		pm.registerEvents(new BlockListeners(), this);
 		pm.registerEvents(new EntityListeners(), this);
+		pm.registerEvents(new CommandsListeners(), this);
 		if(v.isNewerOrEquals(Version.V1_9))
 			pm.registerEvents(new ElytraListeners(), this);
 

@@ -37,6 +37,7 @@ public class ActivedCheatInventory extends AbstractInventory<ActivedCheatHolder>
 		inv.set(inv.getSize() - 2, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
 		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
 		p.openInventory(inv);
+		actualizeInventory(p, args);
 	}
 	
 	@Override

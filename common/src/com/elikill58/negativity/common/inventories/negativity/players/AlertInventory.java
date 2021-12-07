@@ -19,6 +19,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.account.NegativityAccount;
+import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class AlertInventory extends AbstractInventory<AlertHolder> {
@@ -67,6 +68,8 @@ public class AlertInventory extends AbstractInventory<AlertHolder> {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
 		for (Cheat c : Cheat.values()) {
+			if (!c.isActive())
+				continue;
 			Configuration config = Adapter.getAdapter().getConfig();
 			boolean isActive = np.hasDetectionActive(c);
 			if ((config.getBoolean("inventory.alerts.only_cheat_active") && isActive)
@@ -75,7 +78,10 @@ public class AlertInventory extends AbstractInventory<AlertHolder> {
 		}
 		int slot = 0;
 		for (Cheat c : TO_SEE)
-			inv.set(slot++,
+			if (c.getMaterial().getDefault() == null)
+				Adapter.getAdapter().getLogger().error("Cannot find material for cheat " + c.getName());
+			else
+				inv.set(slot++,
 					ItemBuilder.Builder(c.getMaterial())
 							.displayName(Messages.getMessage(p, "inventory.alerts.item_name", "%exact_name%",
 									c.getName(), "%warn%", np.getWarn(c)))
@@ -94,6 +100,7 @@ public class AlertInventory extends AbstractInventory<AlertHolder> {
 				account.setWarnCount(c, 0);
 			}
 			actualizeInventory(p, cible);
+			NegativityAccountStorage.getStorage().saveAccount(account);
 		}
 	}
 }

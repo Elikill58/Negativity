@@ -6,7 +6,6 @@ import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
@@ -22,9 +21,9 @@ public class BlockRay {
 	private final List<Material> filter, neededType;
 	private final int maxDistance;
 	private boolean hasOther = false;
-	private List<Location> positions;
+	private List<Vector> positions, testedVec = new ArrayList<>();
 	
-	protected BlockRay(World w, Location position, Vector vector, int maxDistance, Material[] neededType, boolean ignoreAir, boolean ignoreEntity, Material[] filter, List<Location> positions) {
+	protected BlockRay(World w, Location position, Vector vector, int maxDistance, Material[] neededType, boolean ignoreAir, boolean ignoreEntity, Material[] filter, List<Vector> positions) {
 		this.w = w;
 		this.position = position.clone();
 		this.basePosition = position.clone();
@@ -36,7 +35,7 @@ public class BlockRay {
 		if(ignoreAir)
 			this.filter.add(Materials.AIR);
 		if(!ignoreEntity)
-			w.getEntities().stream().map(Entity::getLocation).forEach(positions::add);
+			w.getEntities().stream().map(Entity::getLocation).map(Location::toVector).forEach(positions::add);
 	}
 	
 	/*private double parseVector(double d) {
@@ -87,7 +86,7 @@ public class BlockRay {
 	 * 
 	 * @return Return an empty array if there is not any needed positions
 	 */
-	public List<Location> getNeededPositions() {
+	public List<Vector> getNeededPositions() {
 		return positions;
 	}
 	
@@ -108,7 +107,7 @@ public class BlockRay {
 	public BlockRayResult compile() {
 		RayResult ray;
 		while(!(ray = next()).canFinish());
-		return new BlockRayResult(this, ray, position.getBlock(), hasOther);
+		return new BlockRayResult(this, ray, position.getBlock(), hasOther, testedVec);
 	}
 	
 	/**
@@ -121,19 +120,20 @@ public class BlockRay {
 			return RayResult.REACH_TOP;
 		if(position.getBlockY() < 0)
 			return RayResult.REACH_BOTTOM;
-		Block b = position.add(vector).getBlock();
-		double distance = position.distance(basePosition); // check between both distance
+		Location loc = position.add(vector);
+		double distance = loc.distance(basePosition); // check between both distance
 		if(distance >= maxDistance)
 			return neededType != null ? RayResult.NEEDED_NOT_FOUND : RayResult.END_TRY;
-		Material type = b.getType();
+		testedVec.add(loc.toVector());
 		if(!positions.isEmpty()) {
-			int baseX = b.getX(), baseY = b.getY(), baseZ = b.getZ();
-			for(Location vec : positions) {
+			int baseX = loc.getBlockX(), baseY = loc.getBlockY(), baseZ = loc.getBlockZ();
+			for(Vector vec : positions) {
 				if(vec.getBlockX() == baseX && vec.getBlockY() == baseY && vec.getBlockZ() == baseZ) {
 					return RayResult.NEEDED_FOUND;
 				}
 			}
 		}
+		Material type = loc.getBlock().getType();
 		if(neededType != null) {
 			if(neededType.contains(type))
 				return RayResult.NEEDED_FOUND;
@@ -153,7 +153,7 @@ public class BlockRay {
 		private Vector vector = Vector.ZERO;
 		private int maxDistance = 10;
 		private Material[] filter = new Material[0], neededType = null;
-		private List<Location> positions = new ArrayList<>();
+		private List<Vector> positions = new ArrayList<>();
 		
 		/**
 		 * Create a new BlockRayBuilder
@@ -242,7 +242,7 @@ public class BlockRay {
 		 * @param loc searched positions
 		 * @return this builder
 		 */
-		public BlockRayBuilder neededPositions(Location... vec) {
+		public BlockRayBuilder neededPositions(Vector... vec) {
 			return neededPositions(Arrays.asList(vec));
 		}
 		
@@ -252,7 +252,7 @@ public class BlockRay {
 		 * @param loc searched positions
 		 * @return this builder
 		 */
-		public BlockRayBuilder neededPositions(List<Location> vec) {
+		public BlockRayBuilder neededPositions(List<Vector> vec) {
 			this.positions.addAll(vec);
 			return this;
 		}
@@ -281,16 +281,27 @@ public class BlockRay {
 
 	public enum RayResult {
 		
-		REACH_BOTTOM(true), REACH_TOP(true), NEEDED_FOUND(true), NEEDED_NOT_FOUND(true), END_TRY(true), END_FIND(true), CONTINUE(false);
+		REACH_BOTTOM(true, false),
+		REACH_TOP(true, false),
+		NEEDED_FOUND(true, true),
+		NEEDED_NOT_FOUND(true, false),
+		END_TRY(true, false),
+		END_FIND(true, false),
+		CONTINUE(false, false);
 		
-		private final boolean canFinish;
+		private final boolean canFinish, founded;
 		
-		RayResult(boolean canFinish) {
+		RayResult(boolean canFinish, boolean founded) {
 			this.canFinish = canFinish;
+			this.founded = founded;
 		}
 		
 		public boolean canFinish() {
 			return canFinish;
+		}
+		
+		public boolean isFounded() {
+			return founded;
 		}
 	}
 }

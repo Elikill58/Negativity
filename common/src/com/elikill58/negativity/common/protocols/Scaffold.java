@@ -14,7 +14,6 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
@@ -73,17 +72,16 @@ public class Scaffold extends Cheat implements Listeners {
 		if(place.getY() >= p.getLocation().getY())
 			return;
 		Location loc = place.getLocation();
-		World w = loc.getWorld();
 		double x = loc.getX(), y = loc.getY(), z = loc.getZ();
-		List<Location> allLocs = new ArrayList<>();
-		loc.add(loc);
-		double more = 1;
-		loc.add(new Location(w, x + more, y, z));
-		loc.add(new Location(w, x, y + more, z));
-		loc.add(new Location(w, x, y, z + more));
-		loc.add(new Location(w, x - more, y, z));
-		loc.add(new Location(w, x, y - more, z));
-		loc.add(new Location(w, x, y, z - more));
+		List<Vector> allLocs = new ArrayList<>();
+		allLocs.add(loc.toVector());
+		double more = 0.5;
+		allLocs.add(new Vector(x + more, y, z));
+		//allLocs.add(new Vector(x, y + more, z));
+		allLocs.add(new Vector(x, y, z + more));
+		allLocs.add(new Vector(x - more, y, z));
+		allLocs.add(new Vector(x, y - more, z));
+		allLocs.add(new Vector(x, y, z - more));
 		Vector vec = p.getEyeLocation().getDirection();
 		BlockRayBuilder builder = new BlockRayBuilder(p.getLocation().clone(), p).maxDistance(6).vector(vec)
 				.ignoreAir(true).neededPositions(allLocs);
@@ -91,8 +89,9 @@ public class Scaffold extends Cheat implements Listeners {
 			BlockRayResult result = builder.build().compile();
 			Block searched = result.getBlock() == null ? place : result.getBlock();
 			double distance = place.getLocation().distance(searched.getLocation());
-			if(distance > 4.6 && searched.getY() < p.getLocation().getY()) {
-				Negativity.alertMod(distance > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 30), "distance", "Place: " + place + ", targetVisual: " + searched + ", vector: " + vec.toShowableString() + ". Distance: " + distance);
+			if(distance > 4.6 || !result.getRayResult().isFounded()) {
+				Negativity.alertMod(distance > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 30), "distance", "Place: " + place + ", targetVisual: "
+							+ searched + ", vector: " + vec.toShowableString() + ". Distance: " + distance + ". Found: " + result.getRayResult().isFounded());
 			}
 		});
 	}

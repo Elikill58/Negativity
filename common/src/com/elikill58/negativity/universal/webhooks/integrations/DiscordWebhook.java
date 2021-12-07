@@ -110,6 +110,7 @@ public class DiscordWebhook implements Webhook {
     		skip--;
     		return;
     	}
+    	queue.remove(msg);
     	DiscordWebhookRequest webhook = new DiscordWebhookRequest(webhookUrl);
     	webhook.setUsername(msg.applyPlaceHolders(confMsg.getString("username", "Negativity")));
 	    webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content", "")));

@@ -16,7 +16,6 @@ public class NegativityTpCommand implements Listeners {
 	@EventListener
 	public void onCommandPreProcess(PlayerCommandPreProcessEvent e) {
 		Player p = e.getPlayer();
-		p.sendMessage(ChatColor.YELLOW + "Handling cmd: " + e.getCommand() + ", proxy: " + e.isProxy());
 		if(!e.getCommand().equalsIgnoreCase("negativitytp"))
 			return; // not my command -> ignore
 		

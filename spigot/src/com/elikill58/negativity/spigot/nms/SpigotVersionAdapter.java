@@ -11,6 +11,8 @@ import java.util.function.BiFunction;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -295,6 +297,10 @@ public abstract class SpigotVersionAdapter {
 
 	public String getVersion() {
 		return version;
+	}
+	
+	public List<Entity> getEntities(World w){
+		return w.getEntities();
 	}
 
 	public NPacket getPacket(Player player, Object nms, String packetName) {

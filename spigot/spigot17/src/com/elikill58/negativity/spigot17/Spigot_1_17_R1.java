@@ -5,6 +5,11 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -115,14 +120,17 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 			float f8 = f3 * f5;
 			double d3 = (p.getGameMode() == GameMode.CREATIVE) ? 5.0D : 4.5D;
 			Vec3 vec3d1 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
-			BlockHitResult hitResult = ep.level.rayTraceBlock(new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, ep), ep.blockPosition());
-			if(hitResult == null) { // ignore because it should be only interact and not block pose
+			BlockHitResult hitResult = ep.level.rayTraceBlock(
+					new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, ep),
+					ep.blockPosition());
+			if (hitResult == null) { // ignore because it should be only interact and not block pose
 				return new NPacketPlayInUnset("PacketPlayInBlockPlace");
 			}
-			if(hitResult.isInside()) {
+			if (hitResult.isInside()) {
 				BlockPos pos = hitResult.getBlockPos();
 				Vec3 vec = hitResult.getLocation();
-				return new NPacketPlayInBlockPlace(pos.getX(), pos.getY(), pos.getZ(), handItem, new Vector(vec.x,  vec.y, vec.z));
+				return new NPacketPlayInBlockPlace(pos.getX(), pos.getY(), pos.getZ(), handItem,
+						new Vector(vec.x, vec.y, vec.z));
 			} else {
 				p.sendMessage("Failed to find something " + ep.blockPosition());
 				return new NPacketPlayInUnset("PacketPlayInBlockPlace");
@@ -169,8 +177,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
 					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
 		});
-		
-		
+
 		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
 			ClientIntentionPacket packet = (ClientIntentionPacket) raw;
 			return new NPacketHandshakeInSetProtocol(packet.getProtocolVersion(), packet.hostName, packet.port);
@@ -222,10 +229,21 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 		return getPlayerConnection(p).connection.channel;
 	}
 
+	@Override
+	public List<Entity> getEntities(World w) {
+		List<Entity> entities = new ArrayList<>();
+		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().forEach((mcEnt) -> {
+			CraftEntity craftEntity = mcEnt.getBukkitEntity();
+			if (craftEntity != null && craftEntity instanceof LivingEntity && craftEntity.isValid())
+				entities.add((LivingEntity) craftEntity);
+		});
+		return entities;
+	}
+
 	private DedicatedServer getServer() {
 		return (DedicatedServer) PacketUtils.getDedicatedServer();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelFuture> getFuturChannel() {

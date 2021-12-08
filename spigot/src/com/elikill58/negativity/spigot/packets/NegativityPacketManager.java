@@ -83,16 +83,14 @@ public class NegativityPacketManager {
 			}*/
 			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet.getPacket();
 			if(useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
-				Bukkit.getScheduler().runTask(plugin, () -> { // TODO maintain own entity list to prevent async entity call
-					for(Entity entity : p.getWorld().getEntities()) {
-						if(entity.getEntityId() == useEntityPacket.entityId) {
-							PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity);
-							EventManager.callEvent(event);
-							if(event.isCancelled())
-								packet.setCancelled(event.isCancelled());
-						}
+				for(Entity entity : p.getWorld().getEntities()) {
+					if(entity.getEntityId() == useEntityPacket.entityId) {
+						PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
+						EventManager.callEvent(event);
+						if(event.isCancelled())
+							packet.setCancelled(event.isCancelled());
 					}
-				});
+				}
 			}
 		}
 	}

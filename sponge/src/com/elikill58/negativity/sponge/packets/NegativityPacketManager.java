@@ -59,7 +59,7 @@ public class NegativityPacketManager {
 			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet.getPacket();
 			for(Entity entity : p.getWorld().getEntities()) {
 				if(entity.getEntityId() == useEntityPacket.entityId) {
-					PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity);
+					PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
 					EventManager.callEvent(event);
 					if(event.isCancelled())
 						packet.setCancelled(event.isCancelled());

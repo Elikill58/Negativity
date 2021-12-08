@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.impl.block.SpigotBlock;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 
 public class SpigotWorld extends World {
 
@@ -37,7 +38,7 @@ public class SpigotWorld extends World {
 	@Override
 	public List<Entity> getEntities() {
 		synchronized (w) {
-			return w.getEntities().stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
+			return SpigotVersionAdapter.getVersionAdapter().getEntities(w).stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
 		}
 	}
 

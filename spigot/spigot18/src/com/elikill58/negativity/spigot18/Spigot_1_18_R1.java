@@ -5,6 +5,11 @@ import java.util.List;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.World;
+import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -220,6 +225,17 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 	@Override
 	public Channel getPlayerChannel(Player p) {
 		return getPlayerConnection(p).connection.channel;
+	}
+
+	@Override
+	public List<Entity> getEntities(World w) {
+		List<Entity> entities = new ArrayList<>();
+		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().forEach((mcEnt) -> {
+			CraftEntity craftEntity = mcEnt.getBukkitEntity();
+			if (craftEntity != null && craftEntity instanceof LivingEntity && craftEntity.isValid())
+				entities.add((LivingEntity) craftEntity);
+		});
+		return entities;
 	}
 
 	private DedicatedServer getServer() {

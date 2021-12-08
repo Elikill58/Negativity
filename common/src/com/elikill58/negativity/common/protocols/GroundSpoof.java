@@ -40,7 +40,7 @@ public class GroundSpoof extends Cheat implements Listeners {
             return;
         }
         double diffY = e.getTo().getY() - e.getFrom().getY();
-        if(diffY >= 0.3)
+        if(diffY >= 0.3 || diffY < 0)
         	return;
         Negativity.alertMod(ReportType.WARNING, p, this, getReliability(p), "check-blocks-under",
                 "Air BlockFaces: " + getAirBlocks(p).toString() + ", fall: " + p.getFallDistance() + ", sneaking: " + p.isSneaking() + ", Y diff: " + diffY,

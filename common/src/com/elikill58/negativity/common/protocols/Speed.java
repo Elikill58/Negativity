@@ -132,7 +132,7 @@ public class Speed extends Cheat implements Listeners {
 						"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + velocity + ", speed: " + calculatedSpeedWith);
 			}
 		}
-		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10)) >= 0.85D && !hasIceBelow) {
+		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10)) >= 0.85D && !hasIceBelow && !np.isInFight) {
 			mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(y * 100 * 2), "distance-jumping",
 					"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed() + ", fallDistance: " + p.getFallDistance()

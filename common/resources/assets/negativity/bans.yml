@@ -36,6 +36,7 @@ commands:
 # - advancedban
 # - litebans
 # - dkbans
+# - professionalbans
 # Defaults to "file"
 processor: "file"
 # Commands to execute when using the "command" processor

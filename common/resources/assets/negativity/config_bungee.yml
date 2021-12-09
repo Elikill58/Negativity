@@ -73,6 +73,7 @@ ban:
   # - database : Saves bans in a database. Needs a configured database (see the Database category)
   # - command : Runs commands to ban or unban
   # The following plugins are also supported :
+  # - advancedban
   # - dkbans
   # - litebans
   # - professionalbans

@@ -52,7 +52,7 @@ public class Reach extends Cheat implements Listeners {
 			BoundingBox bb1 = p.getBoundingBox(), bb2 = et.getBoundingBox();
 			double dis = bb1.getAsHeadPoint().distance(bb2.getIntersectPoint(p));
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-			if (dis > getConfig().getDouble("check.reach-event.value", 3.06) && !et.getType().equals(EntityType.ENDER_DRAGON) && !p.getLocation().getBlock().getType().getId().contains("WATER")) {
+			if (dis > getConfig().getDouble("checks.reach-event.value", 3.2) && !et.getType().equals(EntityType.ENDER_DRAGON) && !p.getLocation().getBlock().getType().getId().contains("WATER")) {
 				String entityName = et.getName();
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10), "reach-event",
 						"High distance with: " + et.getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ". BB1: " + bb1 + ", BB2: " + bb2, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));

@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 
@@ -30,6 +31,10 @@ public class Spigot_1_7_R4 extends SpigotVersionAdapter {
 			ItemStack item = new SpigotItemStack(CraftItemStack.asBukkitCopy(place.getItemStack()));
 			Vector vector = new Vector(place.h(), place.i(), place.j());
 			return new NPacketPlayInBlockPlace(place.c(), place.d(), place.e(), item, vector);
+		});
+		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, packet) -> {
+			// in 1.7 -> no BlockPos, directly use x/y/z
+			return new NPacketPlayOutBlockBreakAnimation(get(packet, "b"), get(packet, "c"), get(packet, "d"), get(packet, "a"), get(packet, "c"));
 		});
 	}
 	
@@ -56,5 +61,10 @@ public class Spigot_1_7_R4 extends SpigotVersionAdapter {
 	@Override
 	public float sin(float f) {
 		return MathHelper.sin(f);
+	}
+	
+	@Override
+	public com.elikill58.negativity.api.location.BlockPosition getBlockPosition(Object obj) {
+		return null; // no block pos object in 1.7
 	}
 }

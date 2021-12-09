@@ -49,4 +49,10 @@ public class Spigot_1_16_R3 extends SpigotVersionAdapter {
 	public float sin(float f) {
 		return MathHelper.sin(f);
 	}
+	
+	@Override
+	public com.elikill58.negativity.api.location.BlockPosition getBlockPosition(Object obj) {
+		BlockPosition pos = (BlockPosition) obj;
+		return new com.elikill58.negativity.api.location.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
+	}
 }

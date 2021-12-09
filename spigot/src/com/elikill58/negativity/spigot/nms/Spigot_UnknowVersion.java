@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.nms;
 
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.api.location.BlockPosition;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.NPacketUnknown;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -48,5 +49,10 @@ public class Spigot_UnknowVersion extends SpigotVersionAdapter {
 	@Override
 	public float sin(float f) {
 		return b[(int) (f * 10430.378F) & 0xFFFF];
+	}
+	
+	@Override
+	public BlockPosition getBlockPosition(Object obj) {
+		return new BlockPosition(get(obj, "x"), get(obj, "y"), get(obj, "z"));
 	}
 }

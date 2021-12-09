@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.location.BlockPosition;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.PacketType;
@@ -157,9 +158,8 @@ public abstract class SpigotVersionAdapter {
 		});
 
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, packet) -> {
-			Adapter.getAdapter().debug("Packet: " + packet + ", pos: " + get(packet, "b"));
 			Object pos = get(packet, "b");
-			return pos == null ? null : new NPacketPlayOutBlockBreakAnimation(get(pos, "x"), get(pos, "y"), get(pos, "z"), get(packet, "a"),
+			return pos == null ? null : new NPacketPlayOutBlockBreakAnimation(getBlockPosition(pos), get(packet, "a"),
 					get(packet, "c"));
 		});
 		packetsPlayOut.put("PacketPlayOutKeepAlive",
@@ -303,6 +303,8 @@ public abstract class SpigotVersionAdapter {
 	public List<Entity> getEntities(World w){
 		return w.getEntities();
 	}
+	
+	public abstract BlockPosition getBlockPosition(Object obj);
 
 	public NPacket getPacket(Player player, Object nms, String packetName) {
 		if (packetName.startsWith(PacketType.CLIENT_PREFIX))

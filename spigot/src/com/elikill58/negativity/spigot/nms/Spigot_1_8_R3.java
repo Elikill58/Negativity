@@ -1,7 +1,9 @@
 package com.elikill58.negativity.spigot.nms;
 
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
-import org.bukkit.craftbukkit.v1_8_R3.inventory.CraftItemStack;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.api.item.ItemStack;
@@ -13,10 +15,12 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlac
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
+import net.minecraft.server.v1_8_R3.EntityPlayer;
 import net.minecraft.server.v1_8_R3.MathHelper;
 import net.minecraft.server.v1_8_R3.MinecraftServer;
 import net.minecraft.server.v1_8_R3.PacketPlayInBlockDig;
-import net.minecraft.server.v1_8_R3.PacketPlayInBlockPlace;
+import net.minecraft.server.v1_8_R3.Vec3D;
+import net.minecraft.server.v1_8_R3.WorldServer;
 
 public class Spigot_1_8_R3 extends SpigotVersionAdapter {
 
@@ -27,12 +31,29 @@ public class Spigot_1_8_R3 extends SpigotVersionAdapter {
 			BlockPosition pos = blockDig.a();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), DigAction.getById(blockDig.c().ordinal()), DigFace.getById(blockDig.b().a()));
 		});
-		packetsPlayIn.put("PacketPlayInBlockPlace", (player, packet) -> {
-			PacketPlayInBlockPlace place = (PacketPlayInBlockPlace) packet;
-			BlockPosition pos = place.a();
-			ItemStack item = new SpigotItemStack(CraftItemStack.asBukkitCopy(place.getItemStack()));
-			Vector vector = new Vector(place.d(), place.e(), place.f());
-			return new NPacketPlayInBlockPlace(pos.getX(), pos.getY(), pos.getZ(), item, vector);
+		packetsPlayIn.put("PacketPlayInBlockPlace", (p, packet) -> {
+			@SuppressWarnings("deprecation")
+			ItemStack handItem = new SpigotItemStack(p.getItemInHand());
+			EntityPlayer player = ((CraftPlayer) p).getHandle();
+			float f1 = player.pitch;
+			float f2 = player.yaw;
+			double d0 = player.locX;
+			double d1 = player.locY + player.getHeadHeight();
+			double d2 = player.locZ;
+			Vec3D vec3d = new Vec3D(d0, d1, d2);
+			float f3 = cos(-f2 * 0.017453292F - 3.1415927F);
+			float f4 = sin(-f2 * 0.017453292F - 3.1415927F);
+			float f5 = -cos(-f1 * 0.017453292F);
+			float f6 = sin(-f1 * 0.017453292F);
+			float f7 = f4 * f5;
+			float f8 = f3 * f5;
+			double d3 = (p.getGameMode().equals(GameMode.CREATIVE)) ? 5.0D : 4.5D;
+			Vec3D vec3d1 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
+			Location loc = p.getLocation();
+			WorldServer worldServer = ((CraftWorld) loc.getWorld()).getHandle();
+			BlockPosition vec = worldServer.rayTrace(vec3d, vec3d1).a();
+			return new NPacketPlayInBlockPlace(vec.getX(), vec.getY(), vec.getZ(), handItem,
+				new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
 		});
 		
 	}

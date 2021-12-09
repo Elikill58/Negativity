@@ -29,6 +29,8 @@ import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.common.protocols.CheckManager;
+import com.elikill58.negativity.universal.file.FileSaverTimer;
+import com.elikill58.negativity.universal.file.hook.FileRunnableSaverAction;
 import com.elikill58.negativity.universal.setBack.SetBackEntry;
 import com.elikill58.negativity.universal.setBack.SetBackProcessor;
 import com.elikill58.negativity.universal.setBack.processor.PotionEffectProcessor;
@@ -138,7 +140,7 @@ public abstract class Cheat {
 	 * Save the configuration of the cheat
 	 */
 	public void saveConfig() {
-		config.save();
+		FileSaverTimer.getInstance().addAction(new FileRunnableSaverAction(config::save));
 	}
 	
 	/**

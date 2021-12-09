@@ -130,11 +130,12 @@ public abstract class SpigotVersionAdapter {
 					handItem = new SpigotItemStack(inventory.getItemInOffHand());
 				}
 				Object player = PacketUtils.getEntityPlayer(p);
-				float f1 = get(player, "pitch");
-				float f2 = get(player, "yaw");
-				double d0 = get(player, "locX");
-				double d1 = ((double) get(player, "locY")) + ((double) getFromMethod(player, "getHeadHeight"));
-				double d2 = get(player, "locZ");
+				Class<?> entityClass = PacketUtils.getNmsClass("Entity");
+				float f1 = get(entityClass, player, "pitch");
+				float f2 = get(entityClass, player, "yaw");
+				double d0 = get(entityClass, player, "locX");
+				double d1 = ((double) get(entityClass, player, "locY")) + ((double) getFromMethod(entityClass, player, "getHeadHeight"));
+				double d2 = get(entityClass, player, "locZ");
 				Class<?> vec3DClass = PacketUtils.getNmsClass("Vec3D", "world.phys.");
 				Object vec3d = vec3DClass.getConstructor(double.class, double.class, double.class).newInstance(d0, d1, d2);
 				float f3 = cos(-f2 * 0.017453292F - 3.1415927F);
@@ -385,8 +386,12 @@ public abstract class SpigotVersionAdapter {
 	}
 
 	protected <T> T get(Object obj, String name) {
+		return get(obj.getClass(), obj, name);
+	}
+
+	protected <T> T get(Class<?> clazz, Object obj, String name) {
 		try {
-			Field f = obj.getClass().getDeclaredField(name);
+			Field f = clazz.getDeclaredField(name);
 			f.setAccessible(true);
 			return (T) f.get(obj);
 		} catch (NoSuchFieldException e) { // prevent issue when wrong version
@@ -427,8 +432,12 @@ public abstract class SpigotVersionAdapter {
 	}
 
 	protected <T> T getFromMethod(Object obj, String methodName) {
+		return getFromMethod(obj.getClass(), obj, methodName);
+	}
+
+	protected <T> T getFromMethod(Class<?> clazz, Object obj, String methodName) {
 		try {
-			Method f = obj.getClass().getDeclaredMethod(methodName);
+			Method f = clazz.getDeclaredMethod(methodName);
 			f.setAccessible(true);
 			return (T) f.invoke(obj);
 		} catch (NoSuchMethodException e) { // prevent issue when wrong version

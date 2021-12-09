@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
-import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -31,9 +30,9 @@ public class LiteBansProcessor implements BanProcessor {
 			String sender;
 			switch (ban.getBanType()) {
 			case MOD:
-				Player mod = Adapter.getAdapter().getPlayer(ban.getBannedBy());
-				if(mod != null) { // get UUID to support when MOD change her name
-					sender = "--sender-uuid=" + mod.getUniqueId();
+				UUID modUUID = ban.getBannedByUUID();
+				if(modUUID != null) { // get UUID to support when MOD change her name
+					sender = "--sender-uuid=" + modUUID.toString();
 					break;
 				}
 			case CONSOLE:

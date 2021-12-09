@@ -1,0 +1,24 @@
+evaluationDependsOn(':spigot')
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+repositories {
+    maven {
+        url = 'http://repo.eliapp.fr:8080/repository/internal/'
+        allowInsecureProtocol true
+        metadataSources {
+            artifact()
+        }
+    }
+}
+
+dependencies {
+    compileOnly 'com.github.Tutorialwork:ProfessionalBans-Reloaded:3.0.1-spigot'
+    compileOnly(project(':spigot'))
+    compileOnly(project(path: ':spigot', configuration: 'spigot'))
+}

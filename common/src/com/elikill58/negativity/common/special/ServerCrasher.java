@@ -50,7 +50,8 @@ public class ServerCrasher extends Special implements Listeners {
 		Player p = e.getPlayer();
 		if(!inDisconnection.contains(p.getUniqueId())) {
 			if(NegativityPlayer.getNegativityPlayer(p).PACKETS.getOrDefault(PacketType.Client.POSITION, 0) > 1000) {
-				packet.setCancelled(tryingToCrash(p));
+				tryingToCrash(p);
+				packet.setCancelled(true);
 			}
 		}
 	}
@@ -61,17 +62,17 @@ public class ServerCrasher extends Special implements Listeners {
 				Adapter.getAdapter().getLogger().warn("Cannot ban player " + p.getName() + " for " + getName() + " because ban is NOT config.");
 				Adapter.getAdapter().getLogger().warn("Please, enable ban in config and restart your server");
 				if(getConfig().getBoolean("kick", true)) {
-					p.kick(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
 					inDisconnection.add(p.getUniqueId());
+					p.kick(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
 				}
 			} else {
+				inDisconnection.add(p.getUniqueId());
 				BanManager.executeBan(Ban.active(p.getUniqueId(), getName(), "Negativity", BanType.PLUGIN,
 						System.currentTimeMillis() + getConfig().getLong("ban.time", 2629800000l), "server_crash", p.getIP()));
-				inDisconnection.add(p.getUniqueId());
 			}
 		} else if(getConfig().getBoolean("kick", true)) {
-			p.kick(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
 			inDisconnection.add(p.getUniqueId());
+			p.kick(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
 		}
 		return inDisconnection.contains(p.getUniqueId());
 	}

@@ -52,7 +52,7 @@ public class Spigot_1_7_R4 extends SpigotVersionAdapter {
 			Location loc = p.getLocation();
 			WorldServer worldServer = ((CraftWorld) loc.getWorld()).getHandle();
 			MovingObjectPosition vec = worldServer.rayTrace(vec3d, vec3d1, false);
-			return new NPacketPlayInBlockPlace(vec.b, vec.c, vec.d, handItem,
+			return vec == null ? null : new NPacketPlayInBlockPlace(vec.b, vec.c, vec.d, handItem,
 				new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
 		});
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, packet) -> {

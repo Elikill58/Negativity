@@ -17,11 +17,12 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 
-import net.minecraft.server.v1_16_R3.RayTrace;
 import net.minecraft.server.v1_16_R3.BlockPosition;
 import net.minecraft.server.v1_16_R3.EntityPlayer;
 import net.minecraft.server.v1_16_R3.MathHelper;
+import net.minecraft.server.v1_16_R3.MovingObjectPositionBlock;
 import net.minecraft.server.v1_16_R3.PacketPlayInBlockDig;
+import net.minecraft.server.v1_16_R3.RayTrace;
 import net.minecraft.server.v1_16_R3.Vec3D;
 import net.minecraft.server.v1_16_R3.WorldServer;
 
@@ -59,7 +60,10 @@ public class Spigot_1_16_R3 extends SpigotVersionAdapter {
 			Vec3D vec3d1 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
 			Location loc = p.getLocation();
 			WorldServer worldServer = ((CraftWorld) loc.getWorld()).getHandle();
-			BlockPosition vec = worldServer.rayTrace(new RayTrace(vec3d, vec3d1, RayTrace.BlockCollisionOption.OUTLINE, RayTrace.FluidCollisionOption.NONE, player)).getBlockPosition();
+			MovingObjectPositionBlock mov = worldServer.rayTrace(new RayTrace(vec3d, vec3d1, RayTrace.BlockCollisionOption.OUTLINE, RayTrace.FluidCollisionOption.NONE, player));
+			if(mov == null)
+				return null;
+			BlockPosition vec = mov.getBlockPosition();
 			return new NPacketPlayInBlockPlace(vec.getX(), vec.getY(), vec.getZ(), handItem,
 				new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
 		});

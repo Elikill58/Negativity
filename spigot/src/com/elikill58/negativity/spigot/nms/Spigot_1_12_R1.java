@@ -23,6 +23,7 @@ import net.minecraft.server.v1_12_R1.PacketPlayInBlockDig;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
 import net.minecraft.server.v1_12_R1.Vec3D;
 import net.minecraft.server.v1_12_R1.WorldServer;
+import net.minecraft.server.v1_12_R1.MovingObjectPosition;
 
 public class Spigot_1_12_R1 extends SpigotVersionAdapter {
 	
@@ -58,7 +59,10 @@ public class Spigot_1_12_R1 extends SpigotVersionAdapter {
 			Vec3D vec3d1 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
 			Location loc = p.getLocation();
 			WorldServer worldServer = ((CraftWorld) loc.getWorld()).getHandle();
-			BlockPosition vec = worldServer.rayTrace(vec3d, vec3d1).a();
+			MovingObjectPosition mov = worldServer.rayTrace(vec3d, vec3d1);
+			if(mov == null)
+				return null;
+			BlockPosition vec = mov.a();
 			return new NPacketPlayInBlockPlace(vec.getX(), vec.getY(), vec.getZ(), handItem,
 				new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
 		});

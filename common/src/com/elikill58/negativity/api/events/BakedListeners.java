@@ -4,5 +4,5 @@ import java.util.function.BiConsumer;
 
 public interface BakedListeners {
 	
-	void bakeListeners(BiConsumer<Class<? extends Event>, Listener<?>> registrator);
+	void bakeListeners(BiConsumer<Class<? extends Event>, ListenerCaller> registrator);
 }

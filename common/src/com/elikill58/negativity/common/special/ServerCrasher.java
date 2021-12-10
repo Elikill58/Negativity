@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
+import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
@@ -33,9 +34,9 @@ public class ServerCrasher extends Special implements Listeners {
 		inDisconnection.remove(e.getPlayer().getUniqueId());
 	}
 	
-	@EventListener
+	@EventListener(priority = EventPriority.PRE)
 	public void onPacketClear(PacketReceiveEvent e) {
-		if(!isActive())
+		if(!isActive() || !e.hasPlayer())
 			return;
 		/*try {
 			Adapter.getAdapter().getLogger().info("> " + e.getPacket().getPacketType() + " : " + e.getPacket().getPacketName());

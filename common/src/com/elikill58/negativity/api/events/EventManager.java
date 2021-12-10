@@ -4,9 +4,8 @@ import java.lang.invoke.MethodHandle;
 import java.lang.invoke.MethodHandles;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.Map.Entry;
 
 import com.elikill58.negativity.api.commands.CommandManager;
 import com.elikill58.negativity.api.inventory.InventoryManager;
@@ -16,7 +15,7 @@ import com.elikill58.negativity.universal.Adapter;
 
 public class EventManager {
 
-	private static final HashMap<Class<?>, List<Listener<?>>> EVENT_METHOD = new HashMap<>();
+	private static final HashMap<Class<?>, HashMap<ListenerCaller, EventListener>> EVENT_METHOD = new HashMap<>();
 
 	public static void load() {
 		EVENT_METHOD.clear();
@@ -33,12 +32,11 @@ public class EventManager {
 	 *
 	 * @param src the given object which contains event method
 	 */
-	@SuppressWarnings({"unchecked", "rawtypes"})
 	public static void registerEvent(Listeners src) {
-		if (src instanceof BakedListeners) {
+		/*if (src instanceof BakedListeners) {
 			((BakedListeners) src).bakeListeners((eventClass, listener) -> registerListener((Listener) listener, (Class) eventClass));
 			return;
-		}
+		}*/
 		
 		try {
 			checkClass(src);
@@ -53,13 +51,14 @@ public class EventManager {
 	 * @param src the instance that will not longer be in listener
 	 */
 	public static void unregisterEvent(Listeners src) {
-		List<Listener<?>> allCall = EVENT_METHOD.get(src.getClass());
+		HashMap<ListenerCaller, EventListener> allCall = EVENT_METHOD.get(src.getClass());
 		if(allCall == null)
 			return;
 		synchronized (allCall) {
-			for(Listener<?> call : allCall) {
+			for(Entry<ListenerCaller, EventListener> entries : allCall.entrySet()) {
+				ListenerCaller call = entries.getKey();
 				// TODO allow any Listener implementation to be unregistered
-				if(call instanceof ReflectionBasedListener && ((ReflectionBasedListener<?>) call).source == src) {
+				if(call instanceof ReflectionBasedListener && ((ReflectionBasedListener) call).source == src) {
 					allCall.remove(call); // remove concerned call
 				}
 			}
@@ -79,8 +78,10 @@ public class EventManager {
 	private static void checkClass(Listeners src) throws InstantiationException, IllegalAccessException {
 		Class<?> clazz = src.getClass();
 		for(Method m : clazz.getDeclaredMethods()) {
-			if(!m.isAnnotationPresent(EventListener.class))
+			EventListener eventListener = m.getAnnotation(EventListener.class);
+			if (eventListener == null) {
 				continue;
+			}
 			if(m.getParameterCount() > 1)
 				Adapter.getAdapter().getLogger().error("Too many arguments for method " + m.getName() + " in " + clazz.getCanonicalName());
 			else if(m.getParameterCount() == 0)
@@ -88,8 +89,8 @@ public class EventManager {
 			else {
 				Class<?> paramEvent = m.getParameterTypes()[0];
 				if(isAssignableFrom(paramEvent)) {
-					Listener<Event> listener = new HandleBasedListener<>(MethodHandles.lookup().unreflect(m), src);
-					registerListener(listener, (Class<Event>) paramEvent);
+					ListenerCaller listener = new HandleBasedListener(MethodHandles.lookup().unreflect(m), src);
+					registerListener(listener, (Class<Event>) paramEvent, eventListener);
 				} else {
 					Adapter.getAdapter().getLogger().error(paramEvent.getCanonicalName() + " isn't an Event ! (Located at " + clazz.getCanonicalName() + ")");
 				}
@@ -97,10 +98,8 @@ public class EventManager {
 		}
 	}
 	
-	public static <E extends Event> void registerListener(Listener<E> listener, Class<E> paramEvent) {
-		List<Listener<?>> list = EVENT_METHOD.computeIfAbsent(paramEvent, c -> new ArrayList<>());
-		list.add(listener);
-		EVENT_METHOD.put(paramEvent, list);
+	public static void registerListener(ListenerCaller listener, Class<Event> paramEvent, EventListener eventListener) {
+		EVENT_METHOD.computeIfAbsent(paramEvent, c -> new HashMap<>()).put(listener, eventListener);
 	}
 	
 	private static boolean isAssignableFrom(Class<?> clazz) {
@@ -128,28 +127,36 @@ public class EventManager {
 	 * @param ev the event which have to be called
 	 */
 	public static void callEvent(Event ev) {
-		runEventForClass(ev, ev.getClass());
+		HashMap<ListenerCaller, EventListener> allMethods = new HashMap<>();
+		allMethods.putAll(getEventForClass(ev, ev.getClass()));
 		Class<?> superClass = ev.getClass().getSuperclass();
 		if(!superClass.equals(Object.class)) {
-			runEventForClass(ev, superClass);
+			allMethods.putAll(getEventForClass(ev, superClass));
 		}
+		HashMap<ListenerCaller, EventListener> map = new HashMap<>(allMethods);
+		callEvent(ev, EventPriority.PRE, map);
+		callEvent(ev, EventPriority.BASIC, map);
+		callEvent(ev, EventPriority.POST, map);
+	}
+	
+	private static void callEvent(Event ev, EventPriority priority, HashMap<ListenerCaller, EventListener> allMethods) {
+		allMethods.forEach((method, tag) -> {
+			try {
+				if(tag.priority().equals(priority)) {
+					method.call(ev);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		});
 	}
 	
 	@SuppressWarnings("unchecked")
-	private static void runEventForClass(Event ev, Class<?> clazz) {
-		List<Listener<Event>> methods = (List<Listener<Event>>) (Object) EVENT_METHOD.get(clazz);
-		if(methods != null) {
-			new ArrayList<>(methods).forEach((m) -> {
-				try {
-					m.call(ev);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			});
-		}
+	private static HashMap<ListenerCaller, EventListener> getEventForClass(Event ev, Class<?> clazz) {
+		return (HashMap<ListenerCaller, EventListener>) (Object) EVENT_METHOD.getOrDefault(clazz, new HashMap<>());
 	}
 	
-	public static class ReflectionBasedListener<E extends Event> implements Listener<E> {
+	public static class ReflectionBasedListener implements ListenerCaller {
 		private final Method method;
 		private final Object source;
 		
@@ -159,7 +166,7 @@ public class EventManager {
 		}
 		
 		@Override
-		public void call(E ev) {
+		public void call(Event ev) {
 			try {
 				method.invoke(source, ev);
 			} catch (Exception e) {
@@ -168,7 +175,8 @@ public class EventManager {
 		}
 	}
 	
-	public static class HandleBasedListener<E extends Event> implements Listener<E> {
+	public static class HandleBasedListener implements ListenerCaller {
+		
 		private final MethodHandle method;
 		private final Object source;
 		
@@ -178,7 +186,7 @@ public class EventManager {
 		}
 		
 		@Override
-		public void call(E ev) {
+		public void call(Event ev) {
 			try {
 				method.invoke(source, ev);
 			} catch (Throwable e) {

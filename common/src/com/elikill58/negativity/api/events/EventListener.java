@@ -9,4 +9,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 public @interface EventListener {
 
+	EventPriority priority() default EventPriority.BASIC;
+	
 }

@@ -38,9 +38,9 @@ import com.elikill58.negativity.universal.file.FileSaverTimer;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
-import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
+import com.elikill58.negativity.universal.proxysender.ProxySenderManager;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.SemVer;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -220,7 +220,7 @@ public class Negativity {
 			WebhookManager.addToQueue(new AlertWebhookMessage(WebhookMessageType.ALERT, p, "Negativity", System.currentTimeMillis(), alert.getNbAlert() == 0 ? 1 : alert.getNbAlert(), alert.getReliability(), alert.getCheat()));
 		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg, alert.getNbAlert());
+			ProxySenderManager.sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg, alert.getNbAlert());
 			np.ALERT_NOT_SHOWED.remove(c.getKey());
 		} else {
 			boolean hasPermPeople = false;
@@ -265,26 +265,6 @@ public class Negativity {
 			reporter.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(reportMessage));
 		} catch (IOException e) {
 			Adapter.getAdapter().getLogger().error("Could not send report message to the proxy.");
-			e.printStackTrace();
-		}
-	}
-
-	/**
-	 * If there is a proxy, and we are on no-proxy platform, a message is sent to proxy
-	 * 
-	 * @param p the player which just cheat
-	 * @param cheatName the cheatName
-	 * @param reliability the reliability of cheat
-	 * @param ping the ping of the player
-	 * @param hover the cheat hover
-	 * @param alertsCount the number of alert
-	 */
-	private static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover, int alertsCount) {
-		try {
-			AlertMessage alertMessage = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);
-			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(alertMessage));
-		} catch (IOException e) {
-			Adapter.getAdapter().getLogger().error("Could not send alert message to the proxy.");
 			e.printStackTrace();
 		}
 	}

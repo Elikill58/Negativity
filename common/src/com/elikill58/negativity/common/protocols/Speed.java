@@ -187,7 +187,7 @@ public class Speed extends Cheat implements Listeners {
 		np.MOVE_TIME++;
 		if (np.MOVE_TIME > 60) {
 			boolean b = Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
-					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount", "Move " + np.MOVE_TIME + " times.");
+					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount", "Move " + np.MOVE_TIME + " times.", new CheatHover.Literal("Move too many times: " + np.MOVE_TIME + " (should be 20)"));
 			if (b && isSetBack())
 				e.setCancelled(true);
 		} else

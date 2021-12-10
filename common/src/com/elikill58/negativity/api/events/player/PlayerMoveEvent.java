@@ -1,10 +1,11 @@
 package com.elikill58.negativity.api.events.player;
 
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.CancellableEvent;
 import com.elikill58.negativity.api.events.PlayerEvent;
 import com.elikill58.negativity.api.location.Location;
 
-public class PlayerMoveEvent extends PlayerEvent {
+public class PlayerMoveEvent extends PlayerEvent implements CancellableEvent {
 
 	private Location from, to;
 	private final boolean movePos, moveLook;
@@ -31,10 +32,12 @@ public class PlayerMoveEvent extends PlayerEvent {
 		return from.clone();
 	}
 	
+	@Override
 	public boolean isCancelled() {
 		return cancel;
 	}
 
+	@Override
 	public void setCancelled(boolean cancel) {
 		this.cancel = cancel;
 	}

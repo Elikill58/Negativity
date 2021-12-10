@@ -1,9 +1,10 @@
 package com.elikill58.negativity.api.events.player;
 
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.CancellableEvent;
 import com.elikill58.negativity.api.events.PlayerEvent;
 
-public class PlayerCommandPreProcessEvent extends PlayerEvent {
+public class PlayerCommandPreProcessEvent extends PlayerEvent implements CancellableEvent {
 
 	private final String[] arg;
 	private final String command, prefix;
@@ -38,10 +39,12 @@ public class PlayerCommandPreProcessEvent extends PlayerEvent {
 		return proxy;
 	}
 
+	@Override
 	public boolean isCancelled() {
 		return cancelled;
 	}
 	
+	@Override
 	public void setCancelled(boolean cancelled) {
 		this.cancelled = cancelled;
 	}

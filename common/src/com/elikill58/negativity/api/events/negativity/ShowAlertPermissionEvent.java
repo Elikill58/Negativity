@@ -2,9 +2,10 @@ package com.elikill58.negativity.api.events.negativity;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.CancellableEvent;
 import com.elikill58.negativity.api.events.PlayerEvent;
 
-public class ShowAlertPermissionEvent extends PlayerEvent {
+public class ShowAlertPermissionEvent extends PlayerEvent implements CancellableEvent {
 
 	private final boolean basicPerm;
 	private final NegativityPlayer np;
@@ -39,10 +40,12 @@ public class ShowAlertPermissionEvent extends PlayerEvent {
 		return !isCancelled() && basicPerm;
 	}
 	
+	@Override
 	public boolean isCancelled() {
 		return cancel;
 	}
 
+	@Override
 	public void setCancelled(boolean c) {
 		cancel = c;
 	}

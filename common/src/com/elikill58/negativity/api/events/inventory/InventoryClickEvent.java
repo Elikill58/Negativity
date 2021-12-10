@@ -3,11 +3,12 @@ package com.elikill58.negativity.api.events.inventory;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.CancellableEvent;
 import com.elikill58.negativity.api.events.PlayerEvent;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.item.ItemStack;
 
-public class InventoryClickEvent extends PlayerEvent {
+public class InventoryClickEvent extends PlayerEvent implements CancellableEvent {
 
 	private final InventoryAction action;
 	private final int slot;
@@ -40,10 +41,12 @@ public class InventoryClickEvent extends PlayerEvent {
 		return inv;
 	}
 
+	@Override
 	public boolean isCancelled() {
 		return cancel;
 	}
 
+	@Override
 	public void setCancelled(boolean cancel) {
 		this.cancel = cancel;
 	}

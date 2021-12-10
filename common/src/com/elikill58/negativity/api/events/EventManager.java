@@ -134,9 +134,20 @@ public class EventManager {
 			allMethods.putAll(getEventForClass(ev, superClass));
 		}
 		HashMap<ListenerCaller, EventListener> map = new HashMap<>(allMethods);
-		callEvent(ev, EventPriority.PRE, map);
-		callEvent(ev, EventPriority.BASIC, map);
-		callEvent(ev, EventPriority.POST, map);
+		if(ev instanceof CancellableEvent) {
+			CancellableEvent cancel = (CancellableEvent) ev;
+			callEvent(cancel, EventPriority.PRE, map);
+			if(cancel.isCancelled()) // if pre event cancel
+				return;
+			callEvent(cancel, EventPriority.BASIC, map);
+			if(cancel.isCancelled()) // if basic event cancel
+				return;
+			callEvent(cancel, EventPriority.POST, map);
+		} else {
+			callEvent(ev, EventPriority.PRE, map);
+			callEvent(ev, EventPriority.BASIC, map);
+			callEvent(ev, EventPriority.POST, map);
+		}
 	}
 	
 	private static void callEvent(Event ev, EventPriority priority, HashMap<ListenerCaller, EventListener> allMethods) {

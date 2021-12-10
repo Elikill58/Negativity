@@ -1,10 +1,11 @@
 package com.elikill58.negativity.api.events.negativity;
 
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.CancellableEvent;
 import com.elikill58.negativity.api.events.PlayerEvent;
 import com.elikill58.negativity.universal.Cheat;
 
-public class PlayerCheatKickEvent extends PlayerEvent {
+public class PlayerCheatKickEvent extends PlayerEvent implements CancellableEvent {
 
 	private boolean cancel = false;
 	private Cheat c;
@@ -24,10 +25,12 @@ public class PlayerCheatKickEvent extends PlayerEvent {
 		return relia;
 	}
 	
+	@Override
 	public boolean isCancelled() {
 		return cancel;
 	}
 
+	@Override
 	public void setCancelled(boolean cancel) {
 		this.cancel = cancel;
 	}

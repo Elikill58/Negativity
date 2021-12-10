@@ -23,11 +23,13 @@ public class AnalyzePacketTimer implements Runnable {
 		for (NegativityPlayer np : NegativityPlayer.getAllNegativityPlayers()) {
 			Player p = np.getPlayer();
 			if(p == null || !p.isOnline()){
+				np.MOVE_TIME = 0;
 				NegativityPlayer.removeFromCache(np.getUUID());
 				continue;
 			}
 			if (np.SEC_ACTIVE < 2) {
 				np.SEC_ACTIVE++;
+				np.MOVE_TIME = 0;
 				return;
 			}
 			int ping = p.getPing();
@@ -73,7 +75,7 @@ public class AnalyzePacketTimer implements Runnable {
 					}
 				}
 			}
-			
+
 			np.MOVE_TIME = 0;
 			np.clearPackets();
 		}

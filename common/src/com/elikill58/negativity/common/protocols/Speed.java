@@ -15,7 +15,6 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
-import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
@@ -54,15 +53,6 @@ public class Speed extends Cheat implements Listeners {
 		if(p.hasElytra() || LocationUtils.isUsingElevator(p))
 			return;
 		
-		if(checkActive("move-amount")) {
-			np.MOVE_TIME++;
-			if (np.MOVE_TIME > 60) {
-				boolean b = Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
-						this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount", "Move " + np.MOVE_TIME + " times.");
-				if (b && isSetBack())
-					e.setCancelled(true);
-			}
-		}
 		Location from = e.getFrom(), to = e.getTo();
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Materials.SPONGE)
 				|| p.getVehicle() != null || p.getAllowFlight()
@@ -200,7 +190,8 @@ public class Speed extends Cheat implements Listeners {
 					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount", "Move " + np.MOVE_TIME + " times.");
 			if (b && isSetBack())
 				e.setCancelled(true);
-		}
+		} else
+			Adapter.getAdapter().debug("Move time: " + np.MOVE_TIME);
 	}
 
 	@EventListener
@@ -225,12 +216,5 @@ public class Speed extends Cheat implements Listeners {
 		double z = to.getZ() - from.getZ() - vec.getZ();
 
 		return x * x + z * z;
-	}
-	
-	@Check(name = "move-amount-packet", description = "Move amount in packet version")
-	public void onPacketClear(PlayerPacketsClearEvent e, NegativityPlayer np) {
-		if(np.MOVE_TIME > 60)
-			Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, e.getPlayer(), this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2),
-					"move-amount", "Move " + np.MOVE_TIME + " times.");
 	}
 }

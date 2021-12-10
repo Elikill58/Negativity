@@ -334,6 +334,8 @@ public abstract class SpigotVersionAdapter {
 				return instance = new Spigot_1_8_R3();
 			case "v1_9_R1":
 				return instance = new Spigot_1_9_R1();
+			case "v1_9_R2":
+				return instance = new Spigot_1_9_R2();
 			case "v1_10_R1":
 				return instance = new Spigot_1_10_R1();
 			case "v1_11_R1":

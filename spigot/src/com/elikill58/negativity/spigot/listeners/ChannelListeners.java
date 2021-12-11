@@ -45,7 +45,7 @@ public class ChannelListeners implements PluginMessageListener {
 
 		if (message instanceof ProxyPingMessage) {
 			ProxyPingMessage pingMessage = (ProxyPingMessage) message;
-			ProxyCompanionManager.foundCompanion(pingMessage.getProtocol());
+			ProxyCompanionManager.foundCompanion(pingMessage);
 		} else if (message instanceof ClientModsListMessage) {
 			ClientModsListMessage modsMessage = (ClientModsListMessage) message;
 			NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());

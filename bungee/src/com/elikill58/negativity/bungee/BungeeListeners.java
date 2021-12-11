@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -47,6 +48,8 @@ import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.plugin.PluginDescription;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.event.EventHandler;
 
@@ -123,8 +126,9 @@ public class BungeeListeners implements Listener {
 			}
 		} else if (message instanceof ProxyPingMessage) {
 			try {
+				List<String> plugins = ProxyServer.getInstance().getPluginManager().getPlugins().stream().map(Plugin::getDescription).map(PluginDescription::getName).collect(Collectors.toList());
 				player.getServer().sendData(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager
-						.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION)));
+						.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION, plugins)));
 			} catch (IOException e) {
 				Adapter.getAdapter().getLogger().error("Could not write PingProxyMessage: " + e.getMessage());
 			}

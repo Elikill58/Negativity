@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
@@ -40,6 +41,8 @@ import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
+import com.velocitypowered.api.plugin.PluginContainer;
+import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.ServerInfo;
 import com.velocitypowered.api.util.ModInfo;
@@ -122,7 +125,8 @@ public class VelocityListeners {
 		} else if (message instanceof ProxyPingMessage) {
 			p.getCurrentServer().ifPresent(server -> {
 				try {
-					server.sendPluginMessage(VelocityNegativity.NEGATIVITY_CHANNEL_ID, NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION)));
+					List<String> plugins = VelocityNegativity.getInstance().getServer().getPluginManager().getPlugins().stream().map(PluginContainer::getDescription).map(PluginDescription::getId).collect(Collectors.toList());
+					server.sendPluginMessage(VelocityNegativity.NEGATIVITY_CHANNEL_ID, NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION, plugins)));
 				} catch (IOException e) {
 					Adapter.getAdapter().getLogger().error("Could not write PingProxyMessage: " + e.getMessage());
 				}

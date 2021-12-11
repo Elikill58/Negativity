@@ -385,7 +385,7 @@ public class SpongeNegativity {
 
 			if (message instanceof ProxyPingMessage) {
 				ProxyPingMessage pingMessage = (ProxyPingMessage) message;
-				ProxyCompanionManager.foundCompanion(pingMessage.getProtocol());
+				ProxyCompanionManager.foundCompanion(pingMessage);
 			}
 		}
 	}

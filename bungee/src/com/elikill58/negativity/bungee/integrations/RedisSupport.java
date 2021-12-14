@@ -1,7 +1,12 @@
 package com.elikill58.negativity.bungee.integrations;
 
+import java.util.UUID;
+
+import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.bungee.BungeeNegativity;
 import com.elikill58.negativity.bungee.NegativityChannels;
+import com.elikill58.negativity.bungee.impl.entity.RedisBungeePlayer;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -33,6 +38,16 @@ public class RedisSupport implements Listener {
 		}
 	}
 
+	public static Player tryGetPlayer(String name) {
+		return tryGetPlayer(RedisBungee.getApi().getUuidFromName(name));
+	}
+
+	public static Player tryGetPlayer(UUID uuid) {
+		if(uuid == null)
+			return null;
+		return NegativityPlayer.getNegativityPlayer(uuid, () -> new RedisBungeePlayer(uuid)).getPlayer();
+	}
+	
 	@EventHandler
 	public void pubSub(PubSubMessageEvent e) {
 		if (!e.getChannel().equals(REDIS_CHANNEL))

@@ -18,6 +18,7 @@ import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.bungee.impl.plugin.BungeeExternalPlugin;
+import com.elikill58.negativity.bungee.integrations.RedisSupport;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.ProxyAdapter;
@@ -152,6 +153,9 @@ public class BungeeAdapter extends ProxyAdapter {
 	public @Nullable Player getPlayer(String name) {
 		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(name);
 		if (pp == null) {
+			if(BungeeNegativity.isRedisBungee()) { // search for redis bungee player
+				return RedisSupport.tryGetPlayer(name);
+			}
 			return null;
 		}
 		return NegativityPlayer.getNegativityPlayer(pp.getUniqueId(), () -> new BungeePlayer(pp)).getPlayer();
@@ -161,6 +165,9 @@ public class BungeeAdapter extends ProxyAdapter {
 	public @Nullable Player getPlayer(UUID uuid) {
 		ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(uuid);
 		if (pp == null) {
+			if(BungeeNegativity.isRedisBungee()) { // search for redis bungee player
+				return RedisSupport.tryGetPlayer(uuid);
+			}
 			return null;
 		}
 		return NegativityPlayer.getNegativityPlayer(uuid, () -> new BungeePlayer(pp)).getPlayer();

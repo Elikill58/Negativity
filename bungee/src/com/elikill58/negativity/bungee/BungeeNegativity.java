@@ -18,7 +18,10 @@ import net.md_5.bungee.api.plugin.PluginManager;
 
 public class BungeeNegativity extends Plugin {
 
-	private static boolean hasRedisBungee = false;
+	private static boolean redisBungee = false;
+	public static boolean isRedisBungee() {
+		return redisBungee;
+	}
 	
 	@Override
 	public void onEnable() {
@@ -37,7 +40,7 @@ public class BungeeNegativity extends Plugin {
 
 		NegativityAccountStorage.setDefaultStorage("database");
 
-		if(hasRedisBungee = getProxy().getPluginManager().getPlugin("RedisBungee") != null) {
+		if(redisBungee = getProxy().getPluginManager().getPlugin("RedisBungee") != null) {
 			RedisSupport.load(this);
 			getLogger().info("Loaded RedisBungee support.");
 		}
@@ -58,11 +61,11 @@ public class BungeeNegativity extends Plugin {
 	}
 	
 	public static void sendRedisMessageIfNeed(RedisNegativityMessage redisMsg) {
-		if(hasRedisBungee)
+		if(redisBungee)
 			RedisSupport.sendMessage(redisMsg);
 	}
 	
 	public static String getProxyId() {
-		return hasRedisBungee ? RedisSupport.getProxyId() : "proxy";
+		return redisBungee ? RedisSupport.getProxyId() : "proxy";
 	}
 }

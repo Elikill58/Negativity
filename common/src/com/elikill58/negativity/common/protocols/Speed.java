@@ -190,8 +190,7 @@ public class Speed extends Cheat implements Listeners {
 					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount", "Move " + np.MOVE_TIME + " times.", new CheatHover.Literal("Move too many times: " + np.MOVE_TIME + " (should be 20)"));
 			if (b && isSetBack())
 				e.setCancelled(true);
-		} else
-			Adapter.getAdapter().debug("Move time: " + np.MOVE_TIME);
+		}
 	}
 
 	@EventListener

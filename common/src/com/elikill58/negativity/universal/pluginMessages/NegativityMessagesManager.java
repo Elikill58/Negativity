@@ -28,6 +28,7 @@ public class NegativityMessagesManager {
 		messages.put(ProxyExecuteBanMessage.MESSAGE_ID, ProxyExecuteBanMessage::new);
 		messages.put(ProxyRevokeBanMessage.MESSAGE_ID, ProxyRevokeBanMessage::new);
 		messages.put(AccountUpdateMessage.MESSAGE_ID, AccountUpdateMessage::new);
+		messages.put(RedisNegativityMessage.MESSAGE_ID, RedisNegativityMessage::new);
 		MESSAGES_BY_ID = Collections.unmodifiableMap(messages);
 	}
 

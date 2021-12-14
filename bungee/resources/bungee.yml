@@ -2,3 +2,5 @@ name: BungeeNegativity
 author: Elikill58
 version: ${version}
 main: com.elikill58.negativity.bungee.BungeeNegativity
+
+softdepend: [RedisBungee]

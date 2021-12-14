@@ -3,6 +3,8 @@ package com.elikill58.negativity.universal;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.plugins.ProxyPluginListEvent;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 
@@ -31,6 +33,7 @@ public class ProxyCompanionManager {
 		} else {
 			ada.getLogger().info("Proxy companion plugin found, it will be used. " + message.getPlugins().size() + " plugins founded on proxy.");
 			pluginsProxy = message.getPlugins();
+			EventManager.callEvent(new ProxyPluginListEvent(pluginsProxy));
 		}
 	}
 }

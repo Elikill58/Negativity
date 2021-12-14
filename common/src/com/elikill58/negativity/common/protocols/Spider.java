@@ -134,10 +134,10 @@ public class Spider extends Cheat implements Listeners {
 	}
 		
 	private boolean hasBypassBlockAround(Location loc) {
-		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD", "CAKE"))
+		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD", "CAKE", "SNOW"))
 			return true;
 		loc = loc.clone().sub(0, 1, 0);
-		return has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD", "CAKE");
+		return has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD", "CAKE", "SNOW");
 	}
 
 	public boolean has(Location loc, String... m) {

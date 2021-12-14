@@ -130,7 +130,7 @@ public class Speed extends Cheat implements Listeners {
 							hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
 		}
 		if(checkActive("high-speed") && !onGround && y < 0.85D && !np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
-			if (!under.getType().getId().contains("STEP") && !np.isUsingSlimeBlock && !(under.getType().getId().contains("WATER") || p.isSwimming())) {
+			if (!under.getType().getId().contains("STEP") && !np.isUsingSlimeBlock && !(under.getType().getId().contains("WATER") || under.isWaterLogged() || under.isLiquid() || p.isSwimming())) {
 				to.setY(from.getY());
 				double yy = to.distance(from);
 				if (distance > 0.45 && (distance > (yy * 2)) && p.getFallDistance() < 1) {

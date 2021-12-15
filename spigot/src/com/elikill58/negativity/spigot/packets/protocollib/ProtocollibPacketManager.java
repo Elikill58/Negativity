@@ -48,12 +48,18 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 
 	public AbstractPacket onPacketSent(NPacket commonPacket, Player sender, Object packet, PacketEvent event) {
 		ProtocollibPacket customPacket = new ProtocollibPacket(commonPacket, packet, sender, event);
+		if (commonPacket == null) {
+			return customPacket;
+		}
 		notifyHandlersSent(PacketSourceType.PROTOCOLLIB, customPacket);
 		return customPacket;
 	}
 
 	public AbstractPacket onPacketReceive(NPacket commonPacket, Player sender, Object packet, PacketEvent event) {
 		ProtocollibPacket customPacket = new ProtocollibPacket(commonPacket, packet, sender, event);
+		if (commonPacket == null) {
+			return customPacket;
+		}
 		notifyHandlersReceive(PacketSourceType.PROTOCOLLIB, customPacket);
 		return customPacket;
 	}
@@ -75,6 +81,8 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 			}
 			Object nmsPacket = e.getPacket().getHandle();
 			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player, nmsPacket, nmsPacket.getClass().getSimpleName());
+			if(commonPacket == null)
+				return;
 			AbstractPacket packet = ProtocollibPacketManager.this.onPacketSent(commonPacket, player, nmsPacket, e);
 			if (!e.isCancelled()) {
 				e.setCancelled(packet.isCancelled());
@@ -92,6 +100,8 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 			}
 			Object nmsPacket = e.getPacket().getHandle();
 			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player, nmsPacket, nmsPacket.getClass().getSimpleName());
+			if(commonPacket == null)
+				return;
 			AbstractPacket packet = ProtocollibPacketManager.this.onPacketReceive(commonPacket, player, nmsPacket, e);
 			if (!e.isCancelled()) {
 				e.setCancelled(packet.isCancelled());

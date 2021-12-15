@@ -19,7 +19,7 @@ public class PacketListener implements Listeners {
 
 	@EventListener
 	public void onPacketReceive(PacketReceiveEvent e) {
-		if(!e.hasPlayer())
+		if(!e.hasPlayer() || e.getPacket().getPacketType() == null)
 			return;
 		Player p = e.getPlayer();
 		AbstractPacket packet = e.getPacket();

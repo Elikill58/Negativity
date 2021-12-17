@@ -120,14 +120,17 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 			float f8 = f3 * f5;
 			double d3 = (p.getGameMode() == GameMode.CREATIVE) ? 5.0D : 4.5D;
 			Vec3 vec3d1 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
-			BlockHitResult hitResult = ep.getLevel().clip(new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, ep), ep.blockPosition());
-			if(hitResult == null) { // ignore because it should be only interact and not block pose
+			BlockHitResult hitResult = ep.getLevel().clip(
+					new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, ep),
+					ep.blockPosition());
+			if (hitResult == null) { // ignore because it should be only interact and not block pose
 				return new NPacketPlayInUnset("PacketPlayInBlockPlace");
 			}
-			if(hitResult.isInside()) {
+			if (hitResult.isInside()) {
 				BlockPos pos = hitResult.getBlockPos();
 				Vec3 vec = hitResult.getLocation();
-				return new NPacketPlayInBlockPlace(pos.getX(), pos.getY(), pos.getZ(), handItem, new Vector(vec.x,  vec.y, vec.z));
+				return new NPacketPlayInBlockPlace(pos.getX(), pos.getY(), pos.getZ(), handItem,
+						new Vector(vec.x, vec.y, vec.z));
 			} else {
 				p.sendMessage("Failed to find something " + ep.blockPosition());
 				return new NPacketPlayInUnset("PacketPlayInBlockPlace");
@@ -174,14 +177,24 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
 					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
 		});
-		
-		
+
 		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
 			ClientIntentionPacket packet = (ClientIntentionPacket) raw;
 			return new NPacketHandshakeInSetProtocol(packet.getProtocolVersion(), packet.hostName, packet.port);
 		});
+
+		/*try {
+			SpigotNegativity.getInstance().getLogger().info("Java version: " + execCmd());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}*/
 	}
 
+	public static String execCmd() throws java.io.IOException {
+		Process p = new ProcessBuilder("java", "-version").start();
+		return new String(p.getErrorStream().readAllBytes());
+	}
+	
 	@Override
 	protected String getOnGroundFieldName() {
 		throw new UnsupportedOperationException("Should not be called");
@@ -241,7 +254,7 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 	private DedicatedServer getServer() {
 		return (DedicatedServer) PacketUtils.getDedicatedServer();
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelFuture> getFuturChannel() {
@@ -264,7 +277,7 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 	public float sin(float f) {
 		return Mth.sin(f);
 	}
-	
+
 	@Override
 	public com.elikill58.negativity.api.location.BlockPosition getBlockPosition(Object obj) {
 		BlockPos pos = (BlockPos) obj;

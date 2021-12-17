@@ -76,6 +76,7 @@ public class SpigotNegativity extends JavaPlugin {
 			SpigotVersionAdapter.getVersionAdapter();
 			getLogger().info("Detected server version: " + v.name().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ")");
 		}
+		getLogger().info("Running with Java " + System.getProperty("java.version"));
 		
 		packetManager = new NegativityPacketManager(this);
 		packetManager.getPacketManager().load();

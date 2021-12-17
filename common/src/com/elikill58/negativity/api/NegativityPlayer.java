@@ -594,7 +594,9 @@ public class NegativityPlayer implements FileSaverAction {
 	}
 	
 	public static List<NegativityPlayer> getAllNegativityPlayers() {
-		return new ArrayList<>(players.values());
+		synchronized (players) {
+			return new ArrayList<>(players.values());
+		}
 	}
 
 	/**

@@ -46,8 +46,8 @@ public class FileSaverTimer implements Runnable {
         }// too many already running, skipping save of others ...
         
         // now check for old handle
-        NegativityPlayer.getAllNegativityPlayers().forEach(NegativityPlayer::checkProofFileHandler);
         FileHandle.getFileHandles().stream().filter(FileHandle::shouldBeClosed).forEach(FileHandle::close);
+        NegativityPlayer.getAllNegativityPlayers().forEach(NegativityPlayer::checkProofFileHandler);
     }
     
     public void runAll() {

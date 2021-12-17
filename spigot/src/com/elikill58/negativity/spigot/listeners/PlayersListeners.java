@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.listeners;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -54,8 +55,9 @@ public class PlayersListeners implements Listener {
 		Player p = e.getPlayer();
 		if(p.hasMetadata("NPC") || e.isCancelled())
 			return;
+		Block below = p.getLocation().clone().subtract(0, 1, 0).getBlock();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p));
-		if(np.isFreeze && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)) {
+		if(np.isFreeze && !below.getType().equals(Material.AIR)) {
 			e.setCancelled(true);
 			return;
 		}
@@ -68,9 +70,9 @@ public class PlayersListeners implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-		if(p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("SLIME")) {
+		if(below.getType().name().contains("SLIME")) {
 			np.isUsingSlimeBlock = true;
-		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !p.getLocation().clone().subtract(0, 1, 0).getBlock().getType().name().contains("AIR")))
+		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !below.getType().name().contains("AIR")))
 			np.isUsingSlimeBlock = false;
 	}
 	

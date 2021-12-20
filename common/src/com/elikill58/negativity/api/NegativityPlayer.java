@@ -11,6 +11,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.IronGolem;
@@ -46,7 +47,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NegativityPlayer implements FileSaverAction {
 
-	private static final Map<UUID, NegativityPlayer> players = new HashMap<>();
+	private static final ConcurrentHashMap<UUID, NegativityPlayer> players = new ConcurrentHashMap<>();
 	public static ArrayList<UUID> INJECTED = new ArrayList<>();
 
 	private final UUID playerId;

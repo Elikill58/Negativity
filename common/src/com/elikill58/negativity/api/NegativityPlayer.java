@@ -540,7 +540,7 @@ public class NegativityPlayer implements FileSaverAction {
 	 * Create ban effect
 	 */
 	public void banEffect() {
-		
+		// TODO add ban effect
 	}
 	
 	/**
@@ -562,17 +562,15 @@ public class NegativityPlayer implements FileSaverAction {
 	 */
 	public static NegativityPlayer getNegativityPlayer(UUID uuid, Callable<Player> call) {
 		synchronized (players) {
-			if(players.containsKey(uuid))
-				return players.get(uuid);
-			try {
-				NegativityPlayer np = new NegativityPlayer(call.call());
-				players.put(uuid, np);
-				return np;
-			} catch (Exception e1) {
-				e1.printStackTrace();
-			}
+			return players.computeIfAbsent(uuid, (a) -> {
+				try {
+					return new NegativityPlayer(call.call());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return null;
+			});
 		}
-		return null;
 	}
 
 	/**
@@ -582,7 +580,9 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getCached(UUID playerId) {
-		return players.get(playerId);
+		synchronized (players) {
+			return players.get(playerId);
+		}
 	}
 	
 	/**
@@ -591,7 +591,9 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @return negativity players
 	 */
 	public static Map<UUID, NegativityPlayer> getAllPlayers(){
-		return players;
+		synchronized (players) {
+			return players;
+		}
 	}
 	
 	public static List<NegativityPlayer> getAllNegativityPlayers() {
@@ -606,9 +608,11 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @param playerId the player UUID
 	 */
 	public static void removeFromCache(UUID playerId) {
-		NegativityPlayer cached = players.remove(playerId);
-		if (cached != null) {
-			cached.destroy();
+		synchronized (players) {
+			NegativityPlayer cached = players.remove(playerId);
+			if (cached != null) {
+				cached.destroy();
+			}
 		}
 	}
 }

@@ -32,7 +32,7 @@ public class SpigotWorld extends World {
 
 	@Override
 	public Block getBlockAt(Location loc) {
-		return new SpigotBlock(w.getBlockAt(loc.getBlockZ(), loc.getBlockY(), loc.getBlockZ()));
+		return new SpigotBlock(w.getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 	}
 
 	@Override
@@ -41,7 +41,7 @@ public class SpigotWorld extends World {
 			return SpigotVersionAdapter.getVersionAdapter().getEntities(w).stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
 		}
 	}
-
+	
 	@Override
 	public Difficulty getDifficulty() {
 		return Difficulty.valueOf(w.getDifficulty().name());

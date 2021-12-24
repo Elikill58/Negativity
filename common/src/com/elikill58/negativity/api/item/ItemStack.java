@@ -33,6 +33,6 @@ public abstract class ItemStack implements NegativityObject {
 
 	@Override
 	public String toString() {
-		return "ItemStack{type=" + getType().getId() + ",amount=" + getAmount() + ",name=" + getName() + "}";
+		return "ItemStack{type=" + getType().getId() + ",amount=" + getAmount() + (getName() != null ? ",name=" + getName() : "") + "}";
 	}
 }

@@ -59,11 +59,13 @@ public class CheckManager implements Listeners {
 			if(check.getCheat().isActive() && check.getMethod().getParameterTypes()[0].equals(e.getClass())) {
 				// now checking all conditions
 				NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-				if(!np.hasDetectionActive(check.getCheat()))
-					return;
-				for(CheckConditions condition : check.getCheck().conditions()) {
-					if(!condition.check(p)) {
+				if(!check.getCheck().ignoreCancel()) {
+					if(!np.hasDetectionActive(check.getCheat()))
 						return;
+					for(CheckConditions condition : check.getCheck().conditions()) {
+						if(!condition.check(p)) {
+							return;
+						}
 					}
 				}
 				

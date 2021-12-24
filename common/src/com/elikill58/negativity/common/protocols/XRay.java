@@ -38,10 +38,10 @@ public class XRay extends Cheat implements Listeners {
 	}
 
 	
-	@Check(name = "minerate", description = "Count minerate")
+	@Check(name = "minerate", description = "Count minerate", ignoreCancel = true)
 	public void onBlockBreakMinerate(BlockBreakEvent e) {
 		Player p = e.getPlayer();
-		NegativityAccount.get(p.getUniqueId()).getMinerate().addMine(MinerateType.fromId(e.getBlock().getType().getId()), p);
+		NegativityAccount.get(p.getUniqueId()).getMinerate().addMine(MinerateType.getMinerateType(e.getBlock().getType().getId()), p);
 	}
 
 	@Check(name = "mining-direction", description = "Check mining direction of player")

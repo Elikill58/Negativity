@@ -50,7 +50,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 	    if(Version.getVersion().isNewerOrEquals(Version.V1_16)) {
 		    ItemStack boots = p.getInventory().getBoots();
 		    if(boots != null && boots.hasEnchant(Enchantment.SOUL_SPEED))
-		    		return;
+		    	return;
 	    }
 	    
 	    boolean mayCancel = false;

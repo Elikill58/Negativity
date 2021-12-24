@@ -28,7 +28,8 @@ public class NoFall extends Cheat implements Listeners {
 		super(CheatKeys.NO_FALL, CheatCategory.MOVEMENT, Materials.YELLOW_WOOL, true, false);
 	}
 	
-	@Check(name = "motion-y", description = "Motion Y when fall", conditions = { CheckConditions.NO_USE_ELEVATOR, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "motion-y", description = "Motion Y when fall", conditions = { CheckConditions.NO_USE_ELEVATOR, CheckConditions.SURVIVAL,
+			CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_LIQUID_AROUND })
 	public void onMoveMotionY(PlayerMoveEvent e, NegativityPlayer np) {
 		if(e.isCancelled())
 			return;
@@ -38,8 +39,6 @@ public class NoFall extends Cheat implements Listeners {
 		if(Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
-		if(LocationUtils.hasMaterialsAround(to, "WATER"))
-			return;
 		Block b = p.getLocation().getBlock();
 		Location locDown = b.getRelative(BlockFace.DOWN).getLocation();
 		Location locUp = b.getRelative(BlockFace.UP).getLocation();
@@ -59,7 +58,8 @@ public class NoFall extends Cheat implements Listeners {
 			np.useAntiNoFallSystem = false;
 	}
 	
-	@Check(name = "distance-no-ground", description = "Distance when player NOT in ground", conditions = { CheckConditions.NO_GROUND, CheckConditions.NO_FALL_DISTANCE, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "distance-no-ground", description = "Distance when player NOT in ground", conditions = { CheckConditions.NO_GROUND, CheckConditions.NO_FALL_DISTANCE,
+			CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_LIQUID_AROUND })
 	public void onMoveDistanceNoGround(PlayerMoveEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;
@@ -70,7 +70,7 @@ public class NoFall extends Cheat implements Listeners {
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double distance = to.toVector().distance(from.toVector());
-		if(LocationUtils.hasMaterialsAround(to, "WATER") || distance == 0.0D || from.getY() < to.getY())
+		if(distance == 0.0D || from.getY() < to.getY())
 			return;
 		int relia = UniversalUtils.parseInPorcent(distance * 100);
 		if (distance > 2D) {

@@ -35,7 +35,6 @@ public class ElytraFly extends Cheat implements Listeners {
 			if(amount == 0)
 				amount = 1;
 			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(diffYtoFrom * 80), "diff-y", "Diff basic: " + diffYtoFromBasic + ", diff from: " + diffYtoFrom, null, amount);
-			//p.sendMessage(NegativityTest.PREFIX + "ElytraFly " + ChatColor.RED + diffYtoFrom);
 		}
 	}
 

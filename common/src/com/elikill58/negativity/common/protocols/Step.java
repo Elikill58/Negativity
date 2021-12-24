@@ -4,6 +4,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
+import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
@@ -32,14 +33,28 @@ public class Step extends Cheat implements Listeners {
 		super(CheatKeys.STEP, CheatCategory.MOVEMENT, Materials.SLIME_BLOCK, true, true);
 	}
 	
+	@EventListener(priority = EventPriority.PRE)
+	public void onJumpBoostUse(PlayerMoveEvent e) {
+		Player p = e.getPlayer();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier() : 0);
+		if(p.isOnGround() && amplifier == 0) {
+			np.booleans.remove(CheatKeys.ALL, "jump-boost-use");
+		} else
+			np.booleans.get(CheatKeys.ALL, "jump-boost-use", false);
+	}
+	
 	@EventListener
 	public void onPacket(PacketSendEvent e) {
 		if(!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_EFFECT))
 			return;
+		// TODO prevent when other effects
 		NegativityPlayer.getNegativityPlayer(e.getPlayer()).booleans.set(CheatKeys.ALL, "jump-boost-use", true);
 	}
 
-	@Check(name = "dif", description = "Distance about blocks up", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_FLY, CheckConditions.NO_ON_BEDROCK, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_USE_SLIME, CheckConditions.NO_USE_TRIDENT })
+	@Check(name = "dif", description = "Distance about blocks up", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM,
+			CheckConditions.NO_FLY, CheckConditions.NO_ON_BEDROCK, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_USE_SLIME,
+			CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_BLOCK_MID_AROUND_BELOW })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
@@ -49,14 +64,7 @@ public class Step extends Cheat implements Listeners {
 		if(down.getBlock().getType().getId().contains("SHULKER"))
 			return;
 		double dif = to.getY() - from.getY();
-		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier() : 0);
-		boolean isUsingJumpBoost = false;
-		if(p.isOnGround() && amplifier == 0) {
-			np.booleans.remove(CheatKeys.ALL, "jump-boost-use");
-		} else
-			isUsingJumpBoost = np.booleans.get(CheatKeys.ALL, "jump-boost-use", false);
-		if(LocationUtils.hasMaterialsAround(down, "SLAB", "FENCE", "STAIRS"))
-			return;
+		boolean isUsingJumpBoost = np.booleans.get(CheatKeys.ALL, "jump-boost-use", false);
 		if (!isUsingJumpBoost && dif > 0 && dif != 0.60 && p.getVelocity().getY() < 0.5) {
 			int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(dif * 50);
 			if ((dif > 1.499) && ping < 300) {
@@ -69,7 +77,8 @@ public class Step extends Cheat implements Listeners {
 
 	@Check(name = "dif-boost", description = "Distance while counting jump", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA,
 			CheckConditions.NO_SWIM, CheckConditions.NO_FLY, CheckConditions.NO_ON_BEDROCK, CheckConditions.NO_USE_ELEVATOR,
-			CheckConditions.NO_USE_SLIME, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_INSIDE_VEHICLE })
+			CheckConditions.NO_USE_SLIME, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_INSIDE_VEHICLE,
+			CheckConditions.NO_BLOCK_MID_AROUND_BELOW })
 	public void onPlayerMoveDifBoost(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
@@ -80,13 +89,7 @@ public class Step extends Cheat implements Listeners {
 			return;
 		double dif = to.getY() - from.getY();
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier() : 0);
-		boolean isUsingJumpBoost = false;
-		if(p.isOnGround() && amplifier == 0) {
-			np.booleans.remove(CheatKeys.ALL, "jump-boost-use");
-		} else
-			isUsingJumpBoost = np.booleans.get(CheatKeys.ALL, "jump-boost-use", false);
-		if(LocationUtils.hasMaterialsAround(down, "SLAB", "FENCE", "STAIRS"))
-			return;
+		boolean isUsingJumpBoost = np.booleans.get(CheatKeys.ALL, "jump-boost-use", false);
 		double diffBoost = dif - (amplifier / 10) - Math.abs(p.getVelocity().getY());
 		if(diffBoost > 0.2) {
 			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);

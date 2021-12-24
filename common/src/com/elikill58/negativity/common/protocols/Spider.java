@@ -59,7 +59,8 @@ public class Spider extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "same-y", description = "Player move with same Y", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY, CheckConditions.NO_FALL_DISTANCE })
+	@Check(name = "same-y", description = "Player move with same Y", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR,
+			CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY, CheckConditions.NO_FALL_DISTANCE })
 	public void onPlayerMoveSameY(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
@@ -69,8 +70,7 @@ public class Spider extends Cheat implements Listeners {
 		int amount = 0;
 		Location from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
-		if (y <= 0.0 || y == 0.25 || y == 0.5 || LocationUtils.isInWater(to)
-				|| hasBypassBlockAround(to)) {//(to, "LADDER", "CLIMB", "SCAFFOLD", "WATER", "LAVA", "VINE")) {
+		if (y <= 0.0 || y == 0.25 || y == 0.5 || LocationUtils.isInWater(to) || hasBypassBlockAround(to)) {
 			np.lastY.clear();
 		} else {
 			int i = np.lastY.size() - 1;
@@ -101,16 +101,14 @@ public class Spider extends Cheat implements Listeners {
 		np.lastY.add(y);
 	}
 	
-	@Check(name = "distance", description = "Distance when going up", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_USE_ELEVATOR })
+	@Check(name = "distance", description = "Distance when going up", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_BLOCK_MID_AROUND_BELOW,
+			CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_LIQUID_AROUND,
+			CheckConditions.NO_STAIRS_AROUND_EXTENDED, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_BLOCK_MID_AROUND, CheckConditions.NO_FLY })
 	public void onPlayerContinueMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
 		Location loc = p.getLocation().clone();
-		if(hasBypassBlockAround(loc) || (p.getItemInHand() != null && p.getItemInHand().getType().getId().contains("TRIDENT")))
-			return;
-		if(LocationUtils.hasExtended(loc, "STAIRS") || p.getLocation().getBlock().getType().getId().contains("LAVA"))
-			return;
 		String blockName = p.getLocation().getBlock().getType().getId();
 		if(blockName.contains("LADDER") || blockName.contains("VINE"))
 			return;
@@ -129,7 +127,8 @@ public class Spider extends Cheat implements Listeners {
 			} else
 				np.SPIDER_SAME_DIST = 0;
 			np.doubles.set(SPIDER, "last-distance", tempDis);
-		}
+		} else
+			np.SPIDER_SAME_DIST = 0;
 		np.lastSpiderLoc = loc;
 	}
 		

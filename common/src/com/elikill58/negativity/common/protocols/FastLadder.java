@@ -10,7 +10,6 @@ import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
-import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
@@ -23,7 +22,8 @@ public class FastLadder extends Cheat implements Listeners {
 		super(CheatKeys.FAST_LADDER, CheatCategory.MOVEMENT, Materials.LADDER, false, false, "ladder", "ladders");
 	}
 
-	@Check(name = "distance", description = "Check Y move only", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY })
+	@Check(name = "distance", description = "Check Y move only", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY,
+			CheckConditions.NO_LIQUID_AROUND })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location loc = p.getLocation().clone();
@@ -40,8 +40,6 @@ public class FastLadder extends Cheat implements Listeners {
 		for (PotionEffect pe : p.getActivePotionEffect())
 			if (pe.getType().equals(PotionEffectType.SPEED) && pe.getAmplifier() > 2)
 				return;
-		if(LocationUtils.hasMaterialsAround(loc, "WATER"))
-			return;
 		Location from = e.getFrom(), to = e.getTo();
 		Location fl = from.clone().sub(to);
 		double distance = to.toVector().distance(from.toVector());

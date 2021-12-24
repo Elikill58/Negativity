@@ -6,7 +6,6 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
-import com.elikill58.negativity.api.events.inventory.InventoryOpenEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.universal.Cheat;
@@ -32,13 +31,13 @@ public class InventoryMove extends Cheat implements Listeners {
 		checkInvMove(e.getPlayer(), true, "Click");
 	}
 
-	@EventListener
+	/*@EventListener
 	public void onOpen(InventoryOpenEvent e) {
 		NegativityPlayer np = NegativityPlayer.getCached(e.getPlayer().getUniqueId());
 		if (!np.hasDetectionActive(this))
 			return;
 		checkInvMove(e.getPlayer(), false, "Open");
-	}
+	}*/
 
 	private void checkInvMove(Player p, boolean check, String from) {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))

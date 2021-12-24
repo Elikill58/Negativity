@@ -23,12 +23,17 @@ public enum CheckConditions {
 	ALLOW_FLY("Allow to fly", Player::getAllowFlight),
 	GROUND("On ground", Player::isOnGround),
 
+	NO_BLOCK_MID_AROUND("Block MID (fence, slab...) around", (p) -> LocationUtils.hasMaterialsAround(p.getLocation(), "SLAB", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
+	NO_BLOCK_MID_AROUND_BELOW("Block MID (fence, slab...) below", (p) -> LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "SLAB", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
+	NO_LIQUID_AROUND("Liquid around", (p) -> LocationUtils.hasMaterialsAround(p.getLocation(), "WATER", "LAVA"), true),
+	NO_STAIRS_AROUND_EXTENDED("Stairs around", (p) -> LocationUtils.hasExtended(p.getLocation(), "STAIRS"), true),
+	
 	NO_ON_BEDROCK("Not on bedrock", (p) -> !NegativityPlayer.getNegativityPlayer(p).isBedrockPlayer()),
 	NO_USE_TRIDENT("Using trident", (p) -> !p.getItemInHand().getType().getId().contains("TRIDENT")),
 	NO_USE_SLIME("Using slime", (p) -> !NegativityPlayer.getNegativityPlayer(p).isUsingSlimeBlock),
-	NO_USE_ELEVATOR("Using elevator", (p) -> !LocationUtils.isUsingElevator(p)),
-	NO_IRON_TARGET("Target by iron golem", (p) -> !NegativityPlayer.getNegativityPlayer(p).isTargetByIronGolem()),
-	NO_THORNS("Thorns", p -> !Utils.hasThorns(p)),
+	NO_USE_ELEVATOR("Using elevator", (p) -> !LocationUtils.isUsingElevator(p), true),
+	NO_IRON_TARGET("Target by iron golem", (p) -> !NegativityPlayer.getNegativityPlayer(p).isTargetByIronGolem(), true),
+	NO_THORNS("Thorns", p -> !Utils.hasThorns(p), true),
 	NO_INSIDE_VEHICLE("Not inside vehicle", (p) -> !p.isInsideVehicle()),
 	NO_SPRINT("Not sprinting", (p) -> !p.isSprinting()),
 	NO_SNEAK("Not sneaking", (p) -> !p.isSneaking()),
@@ -42,10 +47,16 @@ public enum CheckConditions {
 
 	private final String displayName;
 	private final Predicate<Player> function;
+	private final boolean shouldBeCached;
 	
 	private CheckConditions(String displayName, Predicate<Player> function) {
+		this(displayName, function, false);
+	}
+	
+	private CheckConditions(String displayName, Predicate<Player> function, boolean shouldBeCached) {
 		this.displayName = displayName;
 		this.function = function;
+		this.shouldBeCached = shouldBeCached;
 	}
 	
 	public boolean check(Player p) {
@@ -54,5 +65,9 @@ public enum CheckConditions {
 	
 	public String getDisplayName() {
 		return displayName;
+	}
+	
+	public boolean shouldBeCached() {
+		return shouldBeCached;
 	}
 }

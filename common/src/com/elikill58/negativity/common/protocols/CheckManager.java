@@ -2,6 +2,7 @@ package com.elikill58.negativity.common.protocols;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -54,7 +55,8 @@ public class CheckManager implements Listeners {
 	
 	@EventListener
 	public void onPlayerEvent(PlayerEvent e) {
-		allChecks.forEach((check) -> {
+		HashMap<CheckConditions, Boolean> conditionResult = new HashMap<>();
+		new ArrayList<>(allChecks).forEach((check) -> {
 			Player p = e.getPlayer();
 			if(check.getCheat().isActive() && check.getMethod().getParameterTypes()[0].equals(e.getClass())) {
 				// now checking all conditions
@@ -63,9 +65,12 @@ public class CheckManager implements Listeners {
 					if(!np.hasDetectionActive(check.getCheat()))
 						return;
 					for(CheckConditions condition : check.getCheck().conditions()) {
-						if(!condition.check(p)) {
+						if(condition.shouldBeCached()) { // should be cached, cache it and check it
+							conditionResult.computeIfAbsent(condition, (c) -> condition.check(p));
+							if(!conditionResult.get(condition))
+								return;
+						} else if(condition.check(p)) // no cache, always check it
 							return;
-						}
 					}
 				}
 				

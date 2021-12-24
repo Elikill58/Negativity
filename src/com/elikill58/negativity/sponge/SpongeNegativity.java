@@ -75,7 +75,6 @@ import com.elikill58.negativity.sponge.inventories.AbstractInventory;
 import com.elikill58.negativity.sponge.listeners.FightManager;
 import com.elikill58.negativity.sponge.listeners.PlayerCheatEvent;
 import com.elikill58.negativity.sponge.listeners.PlayersEventsManager;
-import com.elikill58.negativity.sponge.metrics.MetricsLite2;
 import com.elikill58.negativity.sponge.packets.NegativityPacketManager;
 import com.elikill58.negativity.sponge.timers.ActualizerTimer;
 import com.elikill58.negativity.sponge.timers.PacketsTimers;
@@ -147,11 +146,6 @@ public class SpongeNegativity {
 
 	public static boolean log = true, log_console = true, hasPacketGate = false, hasPrecogs = false, hasBypass = false, viaVersionSupport = false,
 			essentialsSupport = false;
-	
-	@Inject
-	public SpongeNegativity(MetricsLite2.Factory metricsFactory) {
-		metricsFactory.make(7896);
-	}
 
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {

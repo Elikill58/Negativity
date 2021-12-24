@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal;
 
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -152,14 +153,14 @@ public abstract class Cheat {
 		CHEATS.clear();
 		CHEATS_BY_KEY.clear();
 		try {
-			String dir = Cheat.class.getProtectionDomain().getCodeSource().getLocation().getFile().replaceAll("%20", " ");
+			String dir = Cheat.class.getProtectionDomain().getCodeSource().getLocation().getFile();
 			if (dir.endsWith(".class"))
 				dir = dir.substring(0, dir.lastIndexOf('!'));
 
 			if (dir.startsWith("file:/"))
 				dir = dir.substring(UniversalUtils.getOs() == UniversalUtils.OS.LINUX ? 5 : 6);
 
-			for (Object classDir : UniversalUtils.getClasseNamesInPackage(dir, "com.elikill58.negativity." + Adapter.getAdapter().getName() + ".protocols")) {
+			for (Object classDir : UniversalUtils.getClasseNamesInPackage(URLEncoder.encode(dir, "UTF-8"), "com.elikill58.negativity." + Adapter.getAdapter().getName() + ".protocols")) {
 				try {
 					Cheat cheat = (Cheat) Class.forName(classDir.toString().replaceAll(".class", "")).newInstance();
 					CHEATS.add(cheat);

@@ -9,11 +9,11 @@ public class SpongePotionEffectType {
 		switch (type) {
 		case BLINDNESS:
 			return PotionEffectTypes.BLINDNESS;
-		case CONFUSION:
+		case NAUSEA:
 			return PotionEffectTypes.NAUSEA;
 		case DOLPHINS_GRACE:
 			return null;
-		case FAST_DIGGING:
+		case HASTE:
 			return PotionEffectTypes.HASTE;
 		case HUNGER:
 			return PotionEffectTypes.HUNGER;
@@ -29,7 +29,7 @@ public class SpongePotionEffectType {
 			return PotionEffectTypes.POISON;
 		case REGENERATION:
 			return PotionEffectTypes.REGENERATION;
-		case SLOW_DIGGING:
+		case SLOW_MINING:
 			return PotionEffectTypes.MINING_FATIGUE;
 		case SPEED:
 			return PotionEffectTypes.SPEED;

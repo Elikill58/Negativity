@@ -46,8 +46,8 @@ public class Regen extends Cheat implements Listeners {
 		for (PotionEffect pe : p.getActivePotionEffect())
 			if (pe.getType().equals(PotionEffectType.POISON) || pe.getType().equals(PotionEffectType.BLINDNESS)
 					|| pe.getType().equals(PotionEffectType.WITHER)
-					|| pe.getType().equals(PotionEffectType.SLOW_DIGGING)
-					|| pe.getType().equals(PotionEffectType.WEAKNESS) || pe.getType().equals(PotionEffectType.CONFUSION)
+					|| pe.getType().equals(PotionEffectType.SLOW_MINING)
+					|| pe.getType().equals(PotionEffectType.WEAKNESS) || pe.getType().equals(PotionEffectType.NAUSEA)
 					|| pe.getType().equals(PotionEffectType.HUNGER))
 				hasPotion = true;
 		if (hasPotion)

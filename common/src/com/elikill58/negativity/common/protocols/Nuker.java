@@ -33,7 +33,7 @@ public class Nuker extends Cheat implements Listeners {
 	public void onBlockBreak(BlockBreakEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Block b = e.getBlock();
-		if(p.hasPotionEffect(PotionEffectType.FAST_DIGGING) || b == null || !b.getType().isSolid() || isInstantBlock(b.getType().getId()))
+		if(p.hasPotionEffect(PotionEffectType.HASTE) || b == null || !b.getType().isSolid() || isInstantBlock(b.getType().getId()))
 			return;
 		int ping = p.getPing();
 		Adapter.getAdapter().runSync(() -> {
@@ -67,10 +67,10 @@ public class Nuker extends Cheat implements Listeners {
 	public void onBlockBreakTime(BlockBreakEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Block b = e.getBlock();
-		if(p.hasPotionEffect(PotionEffectType.FAST_DIGGING) || b == null || !b.getType().isSolid() || isInstantBlock(b.getType().getId()))
+		if(p.hasPotionEffect(PotionEffectType.HASTE) || b == null || !b.getType().isSolid() || isInstantBlock(b.getType().getId()))
 			return;
 		long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
-		if(dis < 50 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.FAST_DIGGING)) {
+		if(dis < 50 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.HASTE)) {
 			boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis), "time",
 					"Type: " + e.getBlock().getType().getId() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis, hoverMsg("breaked_in", "%time%", dis));
 			if(isSetBack() && mayCancel)

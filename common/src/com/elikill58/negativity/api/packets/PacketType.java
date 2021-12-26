@@ -23,6 +23,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionL
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
@@ -246,7 +247,7 @@ public interface PacketType {
 		CUSTOM_SOUND_EFFECT("CustomSoundEffect", NPacketUnknown::new),
 		ENTITY("Entity", NPacketPlayOutEntity::new),
 		ENTITY_DESTROY("EntityDestroy", NPacketUnknown::new),
-		ENTITY_EFFECT("EntityEffect", NPacketUnknown::new),
+		ENTITY_EFFECT("EntityEffect", NPacketPlayOutEntityEffect::new),
 		ENTITY_EQUIPMENT("EntityEquipment", NPacketUnknown::new),
 		ENTITY_HEAD_ROTATION("EntityHeadRotation", NPacketUnknown::new),
 		ENTITY_LOOK("EntityLook", NPacketUnknown::new),

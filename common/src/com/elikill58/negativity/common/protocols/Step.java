@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
@@ -48,8 +49,9 @@ public class Step extends Cheat implements Listeners {
 	public void onPacket(PacketSendEvent e) {
 		if(!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_EFFECT))
 			return;
-		// TODO prevent when other effects
-		NegativityPlayer.getNegativityPlayer(e.getPlayer()).booleans.set(CheatKeys.ALL, "jump-boost-use", true);
+		NPacketPlayOutEntityEffect packet = (NPacketPlayOutEntityEffect) e.getPacket().getPacket();
+		if(packet.type.equals(PotionEffectType.JUMP))
+			NegativityPlayer.getNegativityPlayer(e.getPlayer()).booleans.set(CheatKeys.ALL, "jump-boost-use", true);
 	}
 
 	@Check(name = "dif", description = "Distance about blocks up", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM,

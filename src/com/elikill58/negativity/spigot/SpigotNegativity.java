@@ -529,7 +529,7 @@ public class SpigotNegativity extends JavaPlugin {
 			return false;
 		}
 
-		if (BanUtils.banIfNeeded(np, c, reliability) != null) {
+		if (BanManager.autoBan && BanUtils.banIfNeeded(np, c, reliability) != null) {
 			return false;
 		}
 		Stats.updateStats(StatsType.CHEAT, c, reliability, amount);

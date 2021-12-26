@@ -115,6 +115,7 @@ public class DefaultConfigValue {
 
 		BOOLEANS.put("ban.active", false);
 		STRINGS.put("ban.processor", "file");
+		BOOLEANS.put("ban.auto", false);
 		INTS.put("ban.reliability_need", 95);
 		INTS.put("ban.alert_need", 10);
 		STRINGS.put("ban.time.calculator", "360000000 + (%reliability% * 20 * %alert%)");

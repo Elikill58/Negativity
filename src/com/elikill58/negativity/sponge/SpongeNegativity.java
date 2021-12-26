@@ -571,7 +571,7 @@ public class SpongeNegativity {
 			return false;
 		}
 
-		if (BanUtils.banIfNeeded(np, c, reliability) != null) {
+		if (BanManager.autoBan && BanUtils.banIfNeeded(np, c, reliability) != null) {
 			return false;
 		}
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {

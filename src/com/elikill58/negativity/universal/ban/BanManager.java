@@ -21,7 +21,7 @@ import com.elikill58.negativity.universal.ban.storage.FileBanLogsStorage;
 
 public class BanManager {
 
-	public static boolean banActive;
+	public static boolean banActive, autoBan = false;
 
 	private static String processorId;
 	private static Map<String, BanProcessor> processors = new HashMap<>();
@@ -139,6 +139,7 @@ public class BanManager {
 			boolean dbLogBans = adapter.getConfig().getBoolean("ban.database.log_bans");
 			registerProcessor("database", new NegativityBanProcessor(new DatabaseActiveBanStorage(), dbLogBans ? new DatabaseBanLogsStorage() : null));
 		}
+		autoBan = adapter.getConfig().getBoolean("ban.auto");
 
 		List<String> banCommands = adapter.getConfig().getStringList("ban.command.ban");
 		List<String> unbanCommands = adapter.getConfig().getStringList("ban.command.unban");

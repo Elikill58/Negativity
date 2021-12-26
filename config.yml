@@ -294,6 +294,8 @@ ban:
     - "ban %uuid% %reason%"
     unban:
     - "unban %uuid% %reason%"
+  # Set automatic ban as true or not
+  auto: false
   # Cheats that aren't auto-banned for
   cheat_disabled:
   - xray

@@ -54,6 +54,9 @@ command:
   - "ban %uuid% %reason%"
   unban:
   - "unban %uuid% %reason%"
+
+# Set auto ban or not
+auto: false
 # Need to be banned
 reliability_need: 95
 alert_need: 10

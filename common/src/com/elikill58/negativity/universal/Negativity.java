@@ -161,7 +161,7 @@ public class Negativity {
 			return false;
 		}
 
-		if (BanUtils.banIfNeeded(np, c, reliability).isSuccess()) {
+		if (BanManager.autoBan && BanUtils.banIfNeeded(np, c, reliability).isSuccess()) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
 			return false;
 		}

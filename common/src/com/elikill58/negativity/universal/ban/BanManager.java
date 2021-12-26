@@ -32,7 +32,7 @@ import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage.Webho
 
 public class BanManager {
 
-	public static boolean banActive;
+	public static boolean banActive, autoBan;
 	private static Configuration banConfig;
 
 	private static String processorId;
@@ -181,6 +181,8 @@ public class BanManager {
 			return;
 
 		processorId = banConfig.getString("processor");
+		
+		autoBan = banConfig.getBoolean("auto", false);
 
 		Path dataDir = adapter.getDataFolder().toPath();
 		Path banDir = dataDir.resolve("bans");

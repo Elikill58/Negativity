@@ -44,7 +44,7 @@ public class CheckMenuOfflineInventory extends AbstractInventory<CheckMenuOfflin
 			inv.set(13, ItemBuilder.Builder(Materials.ANVIL).displayName("Ban").build());
 		}
 
-		inv.set(17, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
+		inv.set(17, Inventory.getCloseItem(p));
 		p.openInventory(inv);
 	}
 

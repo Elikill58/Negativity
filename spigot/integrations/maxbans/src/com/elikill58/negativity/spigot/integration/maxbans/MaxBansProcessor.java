@@ -1,6 +1,7 @@
 package com.elikill58.negativity.spigot.integration.maxbans;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import org.maxgamer.maxbans.banmanager.HistoryRecord;
 import org.maxgamer.maxbans.banmanager.Temporary;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -113,6 +115,16 @@ public class MaxBansProcessor implements BanProcessor {
 			loggedBans.add(new Ban(UUID.fromString(ban.getId()), ban.getKickMessage(), ban.getBanner(), BanType.UNKNOW, 0, ban.getKickMessage(), null, BanStatus.ACTIVE, ban.getCreated()));
 		});
 		return loggedBans;
+	}
+	
+	@Override
+	public String getName() {
+		return "MaxBans";
+	}
+	
+	@Override
+	public List<String> getDescription() {
+		return Arrays.asList(ChatColor.YELLOW + "Processor from MaxBans plugin");
 	}
 	
 	public static class Provider implements BanProcessorProvider, PluginDependentExtension {

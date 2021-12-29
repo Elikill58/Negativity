@@ -11,6 +11,10 @@ import com.elikill58.negativity.universal.account.NegativityAccount;
 
 public class Messages {
 
+	public static String getStateName(CommandSender sender, boolean b) {
+		return getMessage(sender, "inventory.manager." + (b ? "enabled" : "disabled"));
+	}
+	
 	/**
 	 * Get a message with the default lang
 	 * 

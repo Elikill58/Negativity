@@ -17,6 +17,7 @@ import com.elikill58.negativity.api.colors.DyeColor;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
+import com.elikill58.negativity.api.item.ItemFlag;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.Utils;
@@ -31,6 +32,19 @@ public class SpigotItemBuilder extends ItemBuilder {
 	public SpigotItemBuilder(Material type) {
     	this.itemStack = new ItemStack((org.bukkit.Material) type.getDefault());
     	byte damage = ((SpigotMaterial) type).getDamage();
+    	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
+    	if(!Version.getVersion().isNewerOrEquals(Version.V1_13) && damage > 0) {
+    		if(!Version.getVersion().equals(Version.V1_7) && itemMeta instanceof BannerMeta)
+    			((BannerMeta) this.itemMeta).setBaseColor(org.bukkit.DyeColor.getByDyeData(damage));
+    		else
+    			this.itemStack.setDurability(damage);
+    	}
+    }
+
+    @SuppressWarnings("deprecation")
+	public SpigotItemBuilder(com.elikill58.negativity.api.item.ItemStack item) {
+    	this.itemStack = (ItemStack) item.getDefault();
+    	byte damage = ((SpigotMaterial) item.getType()).getDamage();
     	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
     	if(!Version.getVersion().isNewerOrEquals(Version.V1_13) && damage > 0) {
     		if(!Version.getVersion().equals(Version.V1_7) && itemMeta instanceof BannerMeta)
@@ -63,18 +77,27 @@ public class SpigotItemBuilder extends ItemBuilder {
     public ItemBuilder resetDisplayName() {
         return this.displayName(null);
     }
+    
+    @Override
+    public ItemBuilder itemFlag(ItemFlag... itemFlag) {
+    	for(ItemFlag flag : itemFlag)
+    		itemMeta.addItemFlags(org.bukkit.inventory.ItemFlag.valueOf(flag.name()));
+    	return this;
+    }
 
-    @SuppressWarnings("deprecation")
     @Override
 	public ItemBuilder enchant(Enchantment enchantment, int level) {
-        this.itemMeta.addEnchant(org.bukkit.enchantments.Enchantment.getByName(enchantment.name()), level, true);
+		org.bukkit.enchantments.Enchantment en = SpigotEnchants.getEnchant(enchantment);
+		if(en != null)
+			this.itemMeta.addEnchant(en, level, true);
         return this;
     }
 
-    @SuppressWarnings("deprecation")
     @Override
     public ItemBuilder unsafeEnchant(Enchantment enchantment, int level) {
-        this.itemMeta.addEnchant(org.bukkit.enchantments.Enchantment.getByName(enchantment.name()), level, true);
+		org.bukkit.enchantments.Enchantment en = SpigotEnchants.getEnchant(enchantment);
+		if(en != null)
+			this.itemMeta.addEnchant(en, level, true);
         return this;
     }
 
@@ -87,7 +110,7 @@ public class SpigotItemBuilder extends ItemBuilder {
 	@SuppressWarnings("deprecation")
     @Override
 	public ItemBuilder color(DyeColor color) {
-		itemStack.setDurability(color.getWool());
+		itemStack.setDurability(color.getColorFor(new SpigotMaterial(itemStack.getType())));
 		if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
 			ItemMeta meta = itemStack.getItemMeta();
 			((Damageable) meta).setDamage(color.getWool());

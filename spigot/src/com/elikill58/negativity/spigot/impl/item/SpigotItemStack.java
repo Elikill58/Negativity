@@ -28,28 +28,35 @@ public class SpigotItemStack extends ItemStack {
 		return item.hasItemMeta() && item.getItemMeta().hasDisplayName() ? item.getItemMeta().getDisplayName() : null;
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean hasEnchant(Enchantment enchant) {
-		return item.containsEnchantment(org.bukkit.enchantments.Enchantment.getByName(enchant.name()));
+		org.bukkit.enchantments.Enchantment en = SpigotEnchants.getEnchant(enchant);
+		return en != null && item.containsEnchantment(en);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public int getEnchantLevel(Enchantment enchant) {
-		return item.getEnchantments().getOrDefault(org.bukkit.enchantments.Enchantment.getByName(enchant.name()), 0);
+		org.bukkit.enchantments.Enchantment en = SpigotEnchants.getEnchant(enchant);
+		return en == null ? 0 : item.getEnchantments().getOrDefault(en, 0);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void addEnchant(Enchantment enchant, int level) {
-		item.addUnsafeEnchantment(org.bukkit.enchantments.Enchantment.getByName(enchant.name()), level);
+		org.bukkit.enchantments.Enchantment en = SpigotEnchants.getEnchant(enchant);
+		if(en != null)
+			item.addUnsafeEnchantment(en, level);
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public void removeEnchant(Enchantment enchant) {
-		item.removeEnchantment(org.bukkit.enchantments.Enchantment.getByName(enchant.name()));
+		org.bukkit.enchantments.Enchantment en = SpigotEnchants.getEnchant(enchant);
+		if(en != null)
+			item.removeEnchantment(en);
+	}
+	
+	@Override
+	public ItemStack clone() {
+		return new SpigotItemStack(item.clone());
 	}
 
 	@Override

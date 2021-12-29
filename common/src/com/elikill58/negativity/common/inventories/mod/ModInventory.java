@@ -39,7 +39,7 @@ public class ModInventory extends AbstractInventory<ModHolder> {
 		inv.set(15, ItemBuilder.Builder(Materials.LEASH).displayName(Messages.getMessage(p, "inventory.mod.random_tp")).build());
 		inv.set(16, ItemBuilder.Builder(Materials.IRON_SHOVEL).displayName(Messages.getMessage(p, "inventory.mod.clear_inv")).build());
 		
-		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
+		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
 
 		p.openInventory(inv);
 	}

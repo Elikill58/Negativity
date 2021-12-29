@@ -10,6 +10,10 @@ public class SpigotMaterial extends Material {
 	private final org.bukkit.Material type;
 	private final byte damage;
 	
+	public SpigotMaterial(org.bukkit.Material type) {
+		this(type, type.name());
+	}
+	
 	public SpigotMaterial(org.bukkit.Material type, String id) {
 		this.type = type;
 		this.damage = getDamageWithId(id.toUpperCase(Locale.ROOT));

@@ -4,12 +4,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -128,6 +130,16 @@ public class ProfessionalBansProcessor implements BanProcessor {
 			e.printStackTrace();
 		}
 		return list;
+	}
+	
+	@Override
+	public String getName() {
+		return "Professional Bans";
+	}
+	
+	@Override
+	public List<String> getDescription() {
+		return Arrays.asList(ChatColor.YELLOW + "Processor from Professional Bans plugin.", "", ChatColor.RED + "Not available:", "&7- Logged ban");
 	}
 
 	public static class Provider implements BanProcessorProvider, PluginDependentExtension {

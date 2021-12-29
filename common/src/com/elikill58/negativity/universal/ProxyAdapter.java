@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 
@@ -28,6 +29,11 @@ public abstract class ProxyAdapter extends Adapter {
 
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
+		throw new UnsupportedOperationException("ItemBuilder is unsupported on proxies");
+	}
+
+	@Override
+	public ItemBuilder createItemBuilder(ItemStack item) {
 		throw new UnsupportedOperationException("ItemBuilder is unsupported on proxies");
 	}
 

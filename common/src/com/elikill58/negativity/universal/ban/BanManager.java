@@ -14,6 +14,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
+import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Sanction;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
@@ -32,7 +33,7 @@ import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage.Webho
 
 public class BanManager {
 
-	public static boolean banActive, autoBan;
+	public static boolean banActive, autoBan = false;
 	private static Configuration banConfig;
 
 	private static String processorId;
@@ -154,6 +155,12 @@ public class BanManager {
 	public static String getProcessorId() {
 		return processorId;
 	}
+	
+	public static void setProcessorId(String processorId) {
+		BanManager.processorId = processorId;
+		banConfig.set("processor", processorId);
+		banConfig.save();
+	}
 
 	@Nullable
 	public static BanProcessor getProcessor() {
@@ -161,6 +168,20 @@ public class BanManager {
 			return null;
 
 		return processors.get(processorId);
+	}
+	
+	public static String getProcessorName() {
+		BanProcessor proc = getProcessor();
+		return proc == null ? Messages.getMessage("none") : proc.getName();
+	}
+	
+	public static List<String> getProcessorDescription() {
+		BanProcessor proc = getProcessor();
+		return proc == null ? new ArrayList<>() : proc.getDescription();
+	}
+	
+	public static Map<String, BanProcessor> getProcessors() {
+		return processors;
 	}
 
 	public static void registerProcessor(String id, BanProcessor processor) {
@@ -177,8 +198,6 @@ public class BanManager {
 		banConfig = UniversalUtils.loadConfig(new File(adapter.getDataFolder(), "bans.yml"), "bans.yml");
 		
 		banActive = banConfig.getBoolean("active");
-		if (!banActive)
-			return;
 
 		processorId = banConfig.getString("processor");
 		
@@ -188,11 +207,11 @@ public class BanManager {
 		Path banDir = dataDir.resolve("bans");
 		Path banLogsDir = banDir.resolve("logs");
 		boolean fileLogBans = banConfig.getBoolean("file.log_bans");
-		registerProcessor("file", new NegativityBanProcessor(new FileActiveBanStorage(banDir), fileLogBans ? new FileBanLogsStorage(banLogsDir) : null));
+		registerProcessor("file", new NegativityBanProcessor(new FileActiveBanStorage(banDir), fileLogBans ? new FileBanLogsStorage(banLogsDir) : null, "file"));
 
 		if (Database.hasCustom) {
 			boolean dbLogBans = banConfig.getBoolean("database.log_bans");
-			registerProcessor("database", new NegativityBanProcessor(new DatabaseActiveBanStorage(), dbLogBans ? new DatabaseBanLogsStorage() : null));
+			registerProcessor("database", new NegativityBanProcessor(new DatabaseActiveBanStorage(), dbLogBans ? new DatabaseBanLogsStorage() : null, "database"));
 		}
 
 		List<String> banCommands = banConfig.getStringList("command.ban");
@@ -219,6 +238,29 @@ public class BanManager {
 			}
 			return false;
 		});
+	}
+	
+	/**
+	 * Change the state of ban<br>
+	 * This doesn't save the config
+	 * 
+	 * @param b true if the ban feature should be enabled
+	 */
+	public static void setBanActive(boolean b) {
+		BanManager.banActive = b;
+		banConfig.set("active", b);
+	}
+
+	
+	/**
+	 * Change the state of auto ban<br>
+	 * This doesn't save the config
+	 * 
+	 * @param b true if the auto ban feature should be enabled
+	 */
+	public static void setAutoBan(boolean b) {
+		BanManager.autoBan = b;
+		banConfig.set("auto", b);
 	}
 	
 	public static Configuration getBanConfig() {

@@ -22,6 +22,7 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
@@ -210,6 +211,11 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
 		return new SpigotItemBuilder(type);
+	}
+	
+	@Override
+	public ItemBuilder createItemBuilder(ItemStack item) {
+		return new SpigotItemBuilder(item);
 	}
 	
 	@Override

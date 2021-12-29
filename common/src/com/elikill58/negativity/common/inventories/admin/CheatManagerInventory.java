@@ -30,7 +30,7 @@ public class CheatManagerInventory extends AbstractInventory<CheatManagerHolder>
 						.lore(ChatColor.GRAY + "State: " + Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled"))).build());
 
 		inv.set(inv.getSize() - 2, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
-		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
+		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
 		p.openInventory(inv);
 	}
 

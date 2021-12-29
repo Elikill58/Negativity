@@ -26,6 +26,13 @@ public abstract class ItemStack implements NegativityObject {
 	 */
 	public abstract String getName();
 	
+	/**
+	 * Clone the current item
+	 * 
+	 * @return a new instance of this item
+	 */
+	public abstract ItemStack clone();
+	
 	public abstract boolean hasEnchant(Enchantment enchant);
 	public abstract int getEnchantLevel(Enchantment enchant);
 	public abstract void addEnchant(Enchantment enchant, int level);

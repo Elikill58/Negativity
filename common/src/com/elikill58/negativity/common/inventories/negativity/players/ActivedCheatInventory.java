@@ -35,7 +35,7 @@ public class ActivedCheatInventory extends AbstractInventory<ActivedCheatHolder>
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		Inventory inv = Inventory.createInventory(Inventory.NAME_ACTIVED_CHEAT_MENU, UniversalUtils.getMultipleOf(np.ACTIVE_CHEAT.size() + 3, 9, 1, 54), new ActivedCheatHolder(cible));
 		inv.set(inv.getSize() - 2, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
-		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
+		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
 		p.openInventory(inv);
 		actualizeInventory(p, args);
 	}

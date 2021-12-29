@@ -38,6 +38,15 @@ public abstract class ItemBuilder {
      * @return this builder
      */
 	public abstract ItemBuilder enchant(Enchantment enchantment, int level);
+
+    /**
+     * Add enchant to item
+     * 
+     * @param enchantment the enchant name
+     * @param level the level of the enchant
+     * @return this builder
+     */
+	public abstract ItemBuilder itemFlag(ItemFlag... itemFlag);
 	
 	/**
 	 * Add enchant to item without checking if it exist
@@ -100,13 +109,22 @@ public abstract class ItemBuilder {
 	
     /**
      * Create an ItemBuilder with a material.
-     * NOT compatible with "material:byte" from 1.12
      * 
      * @param type the material of the item
      * @return the item builder
      */
 	public static ItemBuilder Builder(Material type) {
 		return Adapter.getAdapter().createItemBuilder(type);
+	}
+	
+    /**
+     * Create an ItemBuilder with a default item.
+     * 
+     * @param item the beginning item
+     * @return the item builder
+     */
+	public static ItemBuilder Builder(ItemStack item) {
+		return Adapter.getAdapter().createItemBuilder(item);
 	}
 	
 	/**

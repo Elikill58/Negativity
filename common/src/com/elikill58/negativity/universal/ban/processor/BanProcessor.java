@@ -74,6 +74,20 @@ public interface BanProcessor {
 	List<Ban> getAllBans();
 	
 	/**
+	 * Get the name of the processor
+	 * 
+	 * @return processor name
+	 */
+	String getName();
+	
+	/**
+	 * Get the description of the processor, including what's not available with this
+	 * 
+	 * @return the processor description
+	 */
+	List<String> getDescription();
+	
+	/**
 	 * @return whether Negativity should kick banned players when this BanProcessor
 	 * 	is used, should return {@code false} if bans are handled by another plugin.
 	 */

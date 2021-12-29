@@ -218,7 +218,7 @@ public class Fly extends Cheat implements Listeners {
 	public void boatManager(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		boolean nextValue = np.booleans.get(FLY, "boat-falling", false);
-		if(p.getVehicle().getType().equals(EntityType.BOAT)) {
+		if(p.getVehicle() != null && p.getVehicle().getType().equals(EntityType.BOAT)) {
 			Location from = e.getFrom().clone(), to = e.getTo().clone();
 			double moveY = (to.getY() - from.getY());
 			

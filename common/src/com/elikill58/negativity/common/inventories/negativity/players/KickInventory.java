@@ -7,14 +7,11 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
-import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.common.inventories.holders.negativity.players.KickHolder;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Sanction;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -39,7 +36,7 @@ public class KickInventory extends AbstractInventory<KickHolder> {
 		sanctions.stream().filter((b) -> b.hasPermission(p)).forEach((kick) -> {
 			inv.set(kick.getSlot(), kick.getItem(cible));
 		});
-		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage("inventory.close")).build());
+		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
 		p.openInventory(inv);
 	}
 

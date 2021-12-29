@@ -37,7 +37,7 @@ public class SeeReportInventory extends AbstractInventory<SeeReportHolder> {
 		for(int i = 0; i < 9; i++) inv.set(i, ItemBuilder.Builder(Materials.GRAY_STAINED_GLASS_PANE).build());
 		inv.set(0, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
 		inv.set(4, ItemBuilder.getSkullItem(cible));
-		inv.set(8, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
+		inv.set(8, Inventory.getCloseItem(p));
 		
 		int limit = 45;
 		int offset = limit * page;

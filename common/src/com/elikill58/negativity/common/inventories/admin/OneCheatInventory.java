@@ -30,7 +30,7 @@ public class OneCheatInventory extends AbstractInventory<OneCheatHolder> {
 		actualizeInventory(p, c, inv);
 		
 		inv.set(7, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
-		inv.set(8, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());
+		inv.set(8, Inventory.getCloseItem(p));
 		p.openInventory(inv);
 	}
 	

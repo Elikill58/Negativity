@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.ban.processor;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -7,6 +8,7 @@ import java.util.UUID;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -57,6 +59,17 @@ public class CommandBanProcessor implements BanProcessor {
 	@Override
 	public List<Ban> getAllBans() {
 		return Collections.emptyList();
+	}
+	
+	@Override
+	public String getName() {
+		return "Command";
+	}
+	
+	@Override
+	public List<String> getDescription() {
+		return Arrays.asList(ChatColor.YELLOW + "Use command to ban/unban.", "", "&cNot available:", "&6Everything that need to get data.",
+				"&7- Active bans", "&7- All bans", "&7- Ban on same IP", "&7- Logged/Old bans");
 	}
 
 	private static String applyPlaceholders(String rawCommand, UUID playerId, String reason) {

@@ -87,6 +87,8 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 		ALERT,
 		ALERT_OFFLINE,
 		BAN,
+		BAN_MANAGER,
+		BAN_PROCESSOR_MANAGER,
 		CHECK_MENU,
 		CHECK_MENU_OFFLINE,
 		FREEZE,

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.integration.advancedban;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -9,6 +10,7 @@ import java.util.concurrent.CompletableFuture;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -98,6 +100,16 @@ public class AdvancedBanProcessor implements BanProcessor {
 		List<Ban> loggedBans = new ArrayList<>();
 		punishments.forEach(punishment -> loggedBans.add(loggedBanFrom(punishment, BanStatus.EXPIRED)));
 		return loggedBans;
+	}
+	
+	@Override
+	public String getName() {
+		return "AdvancedBan";
+	}
+	
+	@Override
+	public List<String> getDescription() {
+		return Arrays.asList(ChatColor.YELLOW + "Processor from AdvancedBan plugin.", "", ChatColor.RED + "Not available:", "&7- Ban on same IP");
 	}
 
 	private Ban loggedBanFrom(Punishment punishment, BanStatus status) {

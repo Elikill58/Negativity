@@ -57,7 +57,7 @@ public class LangInventory extends AbstractInventory<LangHolder> {
 	private void update(Inventory inv, Player p) {
 		inv.set(8, ItemBuilder.Builder(Materials.EMPTY_MAP).displayName(Messages.getMessage(p, "lang.current", "%lang%", TranslatedMessages.getDefaultLang())).build());
 		inv.set(inv.getSize() - 2, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
-		inv.set(inv.getSize() - 1, ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build());	
+		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));	
 	}
 
 	@Override

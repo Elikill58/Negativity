@@ -1,10 +1,12 @@
 package com.elikill58.negativity.integration.dkbans;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
 import com.elikill58.negativity.universal.ban.Ban;
@@ -75,6 +77,16 @@ public class DKBansProcessor implements BanProcessor {
 			list.add(parseToNegativityBan(ban, BanStatus.ACTIVE));
 		});
 		return list;
+	}
+	
+	@Override
+	public String getName() {
+		return "DKBans";
+	}
+	
+	@Override
+	public List<String> getDescription() {
+		return Arrays.asList(ChatColor.YELLOW + "Processor from DKBans plugin");
 	}
 
 	private Ban parseToNegativityBan(HistoryEntry he, BanStatus bs) {

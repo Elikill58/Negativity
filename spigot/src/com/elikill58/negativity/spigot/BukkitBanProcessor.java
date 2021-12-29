@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot;
 
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
@@ -14,6 +15,7 @@ import org.bukkit.BanList;
 import org.bukkit.Bukkit;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.PlatformDependentExtension;
@@ -107,6 +109,16 @@ public class BukkitBanProcessor implements BanProcessor {
 		Bukkit.getServer().getBanList(BanList.Type.NAME).getBanEntries()
 				.forEach(entry -> loggedBans.add(loggedBanFrom(entry, Bukkit.getOfflinePlayer(entry.getTarget()).getUniqueId(), false)));
 		return loggedBans;
+	}
+	
+	@Override
+	public String getName() {
+		return "Bukkit";
+	}
+	
+	@Override
+	public List<String> getDescription() {
+		return Arrays.asList(ChatColor.YELLOW + "Processor from Professional Bans plugin.", "", ChatColor.RED + "Not available:", "&7- Bans on same IP");
 	}
 
 	private Ban loggedBanFrom(BanEntry banEntry, UUID playerId, boolean revoked) {

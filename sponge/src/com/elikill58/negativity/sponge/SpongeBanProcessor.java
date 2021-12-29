@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge;
 
 import java.time.Instant;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,7 @@ import org.spongepowered.api.util.ban.Ban.Profile;
 import org.spongepowered.api.util.ban.BanTypes;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.PlatformDependentExtension;
@@ -110,6 +112,16 @@ public class SpongeBanProcessor implements BanProcessor {
 		return Collections.emptyList();
 	}
 
+	@Override
+	public String getName() {
+		return "Sponge";
+	}
+	
+	@Override
+	public List<String> getDescription() {
+		return Arrays.asList(ChatColor.YELLOW + "Processor from Sponge.", "", ChatColor.RED + "Not available:", "&7- Ban on same IP", "&7- Logged/Old ban");
+	}
+	
 	@Override
 	public List<Ban> getAllBans() {
 		BanService banService = Sponge.getServiceManager().provide(BanService.class).orElse(null);

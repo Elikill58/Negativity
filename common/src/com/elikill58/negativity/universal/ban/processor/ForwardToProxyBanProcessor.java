@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal.ban.processor;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
@@ -8,6 +9,7 @@ import java.util.function.Consumer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
@@ -73,5 +75,15 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 	@Override
 	public List<Ban> getAllBans() {
 		return Collections.emptyList();
+	}
+	
+	@Override
+	public String getName() {
+		return "Forward To Proxy";
+	}
+	
+	@Override
+	public List<String> getDescription() {
+		return Arrays.asList(ChatColor.YELLOW + "Send request to proxy.", "&eDepend of proxy config.");
 	}
 }

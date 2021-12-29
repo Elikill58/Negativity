@@ -19,6 +19,7 @@ import org.spongepowered.api.text.serializer.TextSerializers;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
+import com.elikill58.negativity.api.item.ItemFlag;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 
@@ -26,6 +27,10 @@ public class SpongeItemBuilder extends ItemBuilder {
 
 	private final org.spongepowered.api.item.inventory.ItemStack item;
 
+	public SpongeItemBuilder(ItemStack def) {
+		this.item = (org.spongepowered.api.item.inventory.ItemStack) def.getDefault();
+	}
+	
 	public SpongeItemBuilder(Material type) {
 		Object spongeMaterial = type.getDefault();
 		if (spongeMaterial instanceof ItemType) {
@@ -60,6 +65,24 @@ public class SpongeItemBuilder extends ItemBuilder {
 				.of(Sponge.getRegistry().getType(EnchantmentType.class, enchantment.name()).get(), level)));
 		return this;
 	}
+	
+	@Override
+	public ItemBuilder itemFlag(ItemFlag... itemFlag) {
+		for(ItemFlag flag : itemFlag) {
+			switch (flag) {
+			case HIDE_ATTRIBUTES:
+				item.offer(Keys.HIDE_ATTRIBUTES, true);
+				break;
+			case HIDE_ENCHANTS:
+				item.offer(Keys.HIDE_ENCHANTMENTS, true);
+				break;
+			case HIDE_UNBREAKABLE:
+				item.offer(Keys.HIDE_UNBREAKABLE, true);
+				break;
+			}
+		}
+		return this;
+	}
 
 	@Override
 	public ItemBuilder unsafeEnchant(Enchantment enchantment, int level) {
@@ -90,6 +113,16 @@ public class SpongeItemBuilder extends ItemBuilder {
 			return DyeColors.WHITE;
 		case YELLOW:
 			return DyeColors.YELLOW;
+		case LIGHT_BLUE:
+			return DyeColors.LIGHT_BLUE;
+		case MAGENTA:
+			return DyeColors.MAGENTA;
+		case ORANGE:
+			return DyeColors.ORANGE;
+		case PINK:
+			return DyeColors.PINK;
+		case PURPLE:
+			return DyeColors.PURPLE;
 		}
 		return DyeColors.BROWN;
 	}

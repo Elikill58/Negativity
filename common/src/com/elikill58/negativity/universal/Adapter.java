@@ -15,6 +15,7 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
@@ -176,6 +177,14 @@ public abstract class Adapter {
 	 * @return a new item builder of itemstack with the given type
 	 */
 	public abstract ItemBuilder createItemBuilder(Material type);
+	
+	/**
+	 * Create a new item builder with the given item
+	 * 
+	 * @param item the beginning item
+	 * @return a new item builder of itemstack with the given type
+	 */
+	public abstract ItemBuilder createItemBuilder(ItemStack item);
 	
 	/**
 	 * Create a new item builder with the given type name

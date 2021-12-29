@@ -32,6 +32,7 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
@@ -208,6 +209,11 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
 		return new SpongeItemBuilder(type);
+	}
+
+	@Override
+	public ItemBuilder createItemBuilder(ItemStack item) {
+		return new SpongeItemBuilder(item);
 	}
 	
 	@Override

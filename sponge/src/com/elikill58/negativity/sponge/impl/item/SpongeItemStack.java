@@ -96,6 +96,11 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 			return enchantments;
 		});
 	}
+	
+	@Override
+	public com.elikill58.negativity.api.item.ItemStack clone() {
+		return new SpongeItemStack(item.copy());
+	}
 
 	@Override
 	public Object getDefault() {

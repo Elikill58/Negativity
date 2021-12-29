@@ -4,6 +4,7 @@ public enum Enchantment {
 	
 	DIG_SPEED("minecraft:efficiency"),
 	THORNS("minecraft:thorns"),
+	UNBREAKING("minecraft:unbreaking"),
 	SOUL_SPEED("minecraft:soul_speed");
 	
 	private final String id;

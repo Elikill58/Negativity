@@ -41,7 +41,7 @@ public class AutoClick extends Cheat implements Listeners {
 				if (np.SEC_ACTIVE < 2)
 					np.SEC_ACTIVE++;
 			}
-		}, 20, 20);
+		}, 20);
 	}
 	
 	@Check(name = "count", description = "Count click 1 by 1")

@@ -125,8 +125,8 @@ public abstract class Inventory implements NegativityObject {
 	static {
 		EMPTY = createEmptyColoredItem(Materials.GRAY_STAINED_GLASS_PANE, DyeColor.GRAY);
 		EMPTY_RED = createEmptyColoredItem(Materials.RED_STAINED_GLASS_PANE, DyeColor.RED);
-		DYE_GRAY = createEmptyColoredItem(Materials.INK_SACK, DyeColor.GRAY);
-		DYE_GREEN = createEmptyColoredItem(Materials.INK_SACK, DyeColor.LIME);
+		DYE_GRAY = createEmptyColoredItem(Materials.GRAY_DYE, DyeColor.GRAY);
+		DYE_GREEN = createEmptyColoredItem(Materials.LIME_DYE, DyeColor.LIME);
 	}
 
 	private static ItemStack createEmptyColoredItem(Material item, DyeColor color) {

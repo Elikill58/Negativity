@@ -249,9 +249,11 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 	public List<Entity> getEntities(World w) {
 		List<Entity> entities = new ArrayList<>();
 		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().forEach((mcEnt) -> {
-			CraftEntity craftEntity = mcEnt.getBukkitEntity();
-			if (craftEntity != null && craftEntity instanceof LivingEntity && craftEntity.isValid())
-				entities.add((LivingEntity) craftEntity);
+			if(mcEnt != null) {
+				CraftEntity craftEntity = mcEnt.getBukkitEntity();
+				if (craftEntity != null && craftEntity instanceof LivingEntity && craftEntity.isValid())
+					entities.add((LivingEntity) craftEntity);
+			}
 		});
 		return entities;
 	}

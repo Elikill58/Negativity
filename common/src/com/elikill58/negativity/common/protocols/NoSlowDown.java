@@ -44,35 +44,35 @@ public class NoSlowDown extends Cheat implements Listeners {
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location loc = p.getLocation();
-		Location from = e.getFrom(), to = e.getTo();
-		Location fl = from.sub(to);
-	    double distance = to.toVector().distance(from.toVector());
 	    if(Version.getVersion().isNewerOrEquals(Version.V1_16)) {
 		    ItemStack boots = p.getInventory().getBoots();
 		    if(boots != null && boots.hasEnchant(Enchantment.SOUL_SPEED))
 		    	return;
 	    }
-	    
-	    boolean mayCancel = false;
-	    if(loc.getBlock().getType().equals(Materials.SOUL_SAND) && !p.hasPotionEffect(PotionEffectType.SPEED)) {
-			if (distance > 0.2 && distance >= p.getWalkSpeed()) {
-				int relia = UniversalUtils.parseInPorcent(distance * 400);
-				if((from.getY() - to.getY()) < -0.001)
-					return;
-				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "move",
-						"Soul sand under player. Distance from/to : " + distance + ". WalkSpeed: " + p.getWalkSpeed() + ", VelY: " + p.getVelocity().getY(),
-						hoverMsg("main", "%distance%", String.format("%.2f", distance)));
-			}
+	    if(p.hasPotionEffect(PotionEffectType.SPEED)) {
+	    	np.booleans.remove(NO_SLOW_DOWN, "on-soul-sand");
+	    	return;
 	    }
-	    /*if(checkActive("walk-speed")) {
-			double dif = to.getY() - from.getY();
-			if (dif == 0 && distance >= p.getWalkSpeed() && np.ints.get(NO_SLOW_DOWN, "eating", 0) >= 3) {
-				mayCancel = Negativity.alertMod(distance >= (p.getWalkSpeed() * 1.5) ? ReportType.VIOLATION : ReportType.WARNING, p,
-						this, UniversalUtils.parseInPorcent(distance * 350), "walk-speed", "Distance: " + distance + ", walkSpeed: " + p.getWalkSpeed());
-			}
-	    }*/
-		if (isSetBack() && mayCancel)
-			e.setTo(from.clone().add(fl.getX() / 2, (fl.getY() / 2) + 0.5, fl.getZ()));
+	    
+	    if(loc.getBlock().getType().equals(Materials.SOUL_SAND)) {
+	    	boolean had = np.booleans.get(NO_SLOW_DOWN, "on-soul-sand", false);
+	    	if(had) {
+		    	Location from = e.getFrom(), to = e.getTo();
+		    	double distance = to.toVector().distance(from.toVector());
+				if (distance > 0.2 && distance >= p.getWalkSpeed()) {
+					int relia = UniversalUtils.parseInPorcent(distance * 400);
+					if((from.getY() - to.getY()) < -0.001)
+						return;
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "move",
+							"Soul sand under player. Distance from/to : " + distance + ". WalkSpeed: " + p.getWalkSpeed() + ", VelY: " + p.getVelocity().getY(),
+							hoverMsg("main", "%distance%", String.format("%.2f", distance)));
+					if (mayCancel && isSetBack())
+						e.setCancelled(true);
+				}
+	    	}
+			np.booleans.set(NO_SLOW_DOWN, "on-soul-sand", true);
+	    } else
+	    	np.booleans.remove(NO_SLOW_DOWN, "on-soul-sand");
 	}
 
 	@Check(name = "eat", description = "Check eat", conditions = { CheckConditions.NO_ELYTRA })

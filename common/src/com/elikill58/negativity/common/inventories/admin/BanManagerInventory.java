@@ -83,6 +83,7 @@ public class BanManagerInventory extends AbstractInventory<BanManagerHolder> {
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, BanManagerHolder nh) {
 		boolean change = false;
 		Configuration conf = BanManager.getBanConfig();
+		Configuration cmdConf = conf.getSection("commands");
 		if (m.equals(Materials.ANVIL)) {
 			BanManager.setBanActive(!BanManager.banActive);
 			change = true;
@@ -98,10 +99,10 @@ public class BanManagerInventory extends AbstractInventory<BanManagerHolder> {
 			conf.set("alert_need", conf.getInt("alert_need") + (e.getAction().name().contains("RIGHT") ? 1 : -1));
 			change = true;
 		} else if(e.getSlot() == 14) {
-			conf.set("ban", !conf.getBoolean("ban", false));
+			cmdConf.set("ban", !cmdConf.getBoolean("ban", false));
 			change = true;
 		} else if(e.getSlot() == 15) {
-			conf.set("unban", !conf.getBoolean("unban", false));
+			cmdConf.set("unban", !cmdConf.getBoolean("unban", false));
 			change = true;
 		}
 		if (change) {

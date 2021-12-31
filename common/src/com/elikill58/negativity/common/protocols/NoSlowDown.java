@@ -75,7 +75,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 	    	np.booleans.remove(NO_SLOW_DOWN, "on-soul-sand");
 	}
 
-	@Check(name = "eat", description = "Check eat", conditions = { CheckConditions.NO_ELYTRA })
+	@Check(name = "eat", description = "Check eat", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA })
 	public void foodCheck(PlayerItemConsumeEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		double dis = np.doubles.get(NO_SLOW_DOWN, "eating-distance", 0.0);

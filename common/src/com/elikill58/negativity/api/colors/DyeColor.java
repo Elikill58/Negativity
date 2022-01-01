@@ -31,7 +31,7 @@ public enum DyeColor {
 	}
 	
 	public short getColorFor(Material type) {
-		if(type.getId().contains("WOOL") || type.getId().contains("STAINED_GLASS_PANE") || type.getId().contains("CARPET"))
+		if(type.getId().contains("WOOL") || type.getId().contains("STAINED_GLASS_PANE") || type.getId().contains("CARPET") || type.getId().contains("STAINED_CLAY"))
 			return getWool();
 		else if(type.getId().equalsIgnoreCase("INK_SACK"))
 			return getDye();

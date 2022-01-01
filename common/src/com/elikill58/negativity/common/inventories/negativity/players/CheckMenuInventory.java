@@ -48,7 +48,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		// TODO add again fake players
 		//inv.set(13, ItemBuilder.Builder(Materials.SKELETON_SKULL).displayName(Messages.getMessage(p, "fake_entities")).build());
 		
-		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN)) {
+		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN) && BanManager.banActive) {
 			inv.set(16, ItemBuilder.Builder(Materials.DIAMOND_SHOVEL).displayName("Kick").build());
 			inv.set(17, ItemBuilder.Builder(Materials.ANVIL).displayName("Ban").build());
 		} else {

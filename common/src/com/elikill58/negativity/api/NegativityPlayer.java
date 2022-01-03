@@ -24,6 +24,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.potion.PotionEffect;
+import com.elikill58.negativity.api.protocols.CheckProcessor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatCategory;
@@ -52,7 +53,8 @@ public class NegativityPlayer implements FileSaverAction {
 
 	private final UUID playerId;
 	private final Player p;
-	
+
+	public ArrayList<CheckProcessor> checkProcessors = new ArrayList<>();
 	public Set<CheatKeys> ACTIVE_CHEAT = new HashSet<>();
 	public ArrayList<String> proof = new ArrayList<>();
 	public HashMap<CheatKeys, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
@@ -110,6 +112,9 @@ public class NegativityPlayer implements FileSaverAction {
 		Cheat.values().stream().filter(Cheat::isActive).forEach(this::startAnalyze);
 		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
+		
+		// add processors like this: checkProcessors.add(new SpiderExampleCheckProcessor(this));
+		checkProcessors.forEach(CheckProcessor::begin);
 	}
 
 	/**
@@ -491,6 +496,7 @@ public class NegativityPlayer implements FileSaverAction {
 	 * Save and destroy Negativity player and account
 	 */
 	public void destroy() {
+		checkProcessors.forEach(CheckProcessor::stop);
 		save(FileSaverTimer.getInstance());
 		if(proofFileHandler != null && !proofFileHandler.isClosed())
 			proofFileHandler.close();
@@ -514,6 +520,15 @@ public class NegativityPlayer implements FileSaverAction {
 	 */
 	public void unfight() {
 		isInFight = false;
+	}
+	
+	/**
+	 * Get active check processors
+	 * 
+	 * @return all checks processors
+	 */
+	public ArrayList<CheckProcessor> getCheckProcessors() {
+		return checkProcessors;
 	}
 
 	/**

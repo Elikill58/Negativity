@@ -20,6 +20,14 @@ public class Point implements Cloneable {
 		return square(this.x - o.x) + square(this.y - o.y) + square(this.z - o.z);
 	}
 	
+	public double distanceXZ(Point o) {
+		return o == null ? 0 : Math.sqrt(distanceSquaredXZ(o));
+	}
+
+	public double distanceSquaredXZ(Point o) {
+		return square(this.x - o.x) + square(this.z - o.z);
+	}
+	
 	public double square(double a) {
 		return a * a;
 	}

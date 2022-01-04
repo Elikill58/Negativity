@@ -17,7 +17,6 @@ public abstract class SpongePacketManager extends PacketManager {
 		Task.builder().execute(() -> {
 			PacketReceiveEvent event = new PacketReceiveEvent(source, packet, packet.getPlayer());
 			EventManager.callEvent(event);
-			handlers.forEach((handler) -> handler.onReceive(packet));
 		}).submit(SpongeNegativity.getInstance());
 	}
 
@@ -26,7 +25,6 @@ public abstract class SpongePacketManager extends PacketManager {
 		Task.builder().execute(() -> {
 			PacketSendEvent event = new PacketSendEvent(source, packet, packet.getPlayer());
 			EventManager.callEvent(event);
-			handlers.forEach((handler) -> handler.onSend(packet));
 		}).submit(SpongeNegativity.getInstance());
 	}
 }

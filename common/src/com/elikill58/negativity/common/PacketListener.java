@@ -4,17 +4,21 @@ import java.util.ArrayList;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.Maths;
@@ -73,6 +77,17 @@ public class PacketListener implements Listeners {
 		}
 		if (type == PacketType.Client.USE_ENTITY) {
 			np.isAttacking = true;
+			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet.getPacket();
+			if(useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
+				for(Entity entity : p.getWorld().getEntities()) {
+					if(entity.getEntityId() == useEntityPacket.entityId) {
+						PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
+						EventManager.callEvent(event);
+						if(event.isCancelled())
+							packet.setCancelled(event.isCancelled());
+					}
+				}
+			}
 		} else if (type == PacketType.Client.KEEP_ALIVE) {
 			np.isAttacking = false;
 		}

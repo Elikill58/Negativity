@@ -1,8 +1,5 @@
 package com.elikill58.negativity.api.packets;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.elikill58.negativity.api.entity.Player;
 
 public abstract class PacketManager {
@@ -27,26 +24,4 @@ public abstract class PacketManager {
 	 * Remove all player in current listener
 	 */
 	public abstract void clear();
-
-	protected final List<PacketHandler> handlers = new ArrayList<>();
-	
-	/**
-	 * Add handler at current packet manager
-	 * 
-	 * @param handler the new handler
-	 * @return true if the handler have been added
-	 */
-	public boolean addHandler(PacketHandler handler) {
-		return handlers.add(handler);
-	}
-
-	/**
-	 * Remove handler at current packet manager
-	 * 
-	 * @param handler the removed handler
-	 * @return true if the handler was existing
-	 */
-	public boolean removeHandler(PacketHandler handler) {
-		return handlers.remove(handler);
-	}
 }

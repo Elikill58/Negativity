@@ -69,11 +69,10 @@ public class CheckManager implements Listeners {
 							conditionResult.computeIfAbsent(condition, (c) -> condition.check(p));
 							if(!conditionResult.get(condition))
 								return;
-						} else if(condition.check(p)) // no cache, always check it
+						} else if(!condition.check(p)) // no cache, always check it
 							return;
 					}
 				}
-				
 				check.invoke(e, np);
 			}
 		});

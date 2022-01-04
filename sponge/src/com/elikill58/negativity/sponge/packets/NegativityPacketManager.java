@@ -2,15 +2,6 @@ package com.elikill58.negativity.sponge.packets;
 
 import org.slf4j.Logger;
 
-import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.entity.Entity;
-import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventManager;
-import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
-import com.elikill58.negativity.api.packets.AbstractPacket;
-import com.elikill58.negativity.api.packets.PacketHandler;
-import com.elikill58.negativity.api.packets.PacketType;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.impl.packet.SpongePacketManager;
 import com.elikill58.negativity.sponge.packets.packetgate.PacketGateManager;
@@ -18,7 +9,7 @@ import com.elikill58.negativity.sponge.packets.packetgate.PacketGateManager;
 public class NegativityPacketManager {
 
 	private SpongePacketManager spongePacketManager;
-	
+
 	public NegativityPacketManager(SpongeNegativity pl) {
 
 		try {
@@ -36,35 +27,9 @@ public class NegativityPacketManager {
 			log.warn("");
 			log.warn("----- Negativity Problem -----");
 		}
-		
-		spongePacketManager.addHandler(new PacketHandler() {
-			
-			@Override
-			public void onSend(AbstractPacket packet) {}
-			
-			@Override
-			public void onReceive(AbstractPacket packet) {
-				Player p = packet.getPlayer();
-				if (!NegativityPlayer.INJECTED.contains(p.getUniqueId()))
-					return;
-				manageReceive(packet);
-			}
-		});
 	}
-	
-	private void manageReceive(AbstractPacket packet) {
-		Player p = packet.getPlayer();
-		PacketType type = packet.getPacketType();
-		if(type == PacketType.Client.USE_ENTITY) {
-			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet.getPacket();
-			for(Entity entity : p.getWorld().getEntities()) {
-				if(entity.getEntityId() == useEntityPacket.entityId) {
-					PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
-					EventManager.callEvent(event);
-					if(event.isCancelled())
-						packet.setCancelled(event.isCancelled());
-				}
-			}
-		}
+
+	public SpongePacketManager getSpongePacketManager() {
+		return spongePacketManager;
 	}
 }

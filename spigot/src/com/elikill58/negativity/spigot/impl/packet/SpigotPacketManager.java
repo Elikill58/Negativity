@@ -14,7 +14,6 @@ public abstract class SpigotPacketManager extends PacketManager {
 			return;
 		PacketReceiveEvent event = new PacketReceiveEvent(source, packet, packet.getPlayer());
 		EventManager.callEvent(event);
-		handlers.forEach((handler) -> handler.onReceive(packet));
 	}
 
 	public void notifyHandlersSent(PacketSourceType source, AbstractPacket packet) {
@@ -22,6 +21,5 @@ public abstract class SpigotPacketManager extends PacketManager {
 			return;
 		PacketSendEvent event = new PacketSendEvent(source, packet, packet.getPlayer());
 		EventManager.callEvent(event);
-		handlers.forEach((handler) -> handler.onSend(packet));
 	}
 }

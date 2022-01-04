@@ -18,4 +18,10 @@ public class Maths {
 	public static double square(double num) {
 		return num * num;
 	}
+    
+    public static double getGcd(double a, double b) {
+    	if(a < b)
+    		return getGcd(b, a);
+    	return Math.abs(b) < 0.001 ? a : getGcd(b, a - Math.floor(a / b) * b);
+    }
 }

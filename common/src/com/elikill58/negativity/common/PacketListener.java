@@ -15,7 +15,9 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.utils.Maths;
 
 public class PacketListener implements Listeners {
 
@@ -30,8 +32,33 @@ public class PacketListener implements Listeners {
 		PacketType type = packet.getPacketType();
 		if(type.isFlyingPacket()) {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
-			if(flying.hasLook || flying.hasLook) // if it's real flying
+			if(flying.hasLook || flying.hasPos) // if it's real flying
 				np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
+			if(flying.hasLook && np.shouldCheckSensitivity) {
+				
+				final double deltaPitch = flying.pitch - np.doubles.get(CheatKeys.ALL, "sens-pitch", 0.0);
+				final double lastDeltaPitch = np.doubles.get(CheatKeys.ALL, "sens-delta-pitch", 0.0);
+
+				float actualGcd = (float) Maths.getGcd(Math.abs(deltaPitch), Math.abs(lastDeltaPitch));
+				double sensModifier = Math.cbrt(0.8333 * actualGcd);
+				double tmpSens = ((1.666 * sensModifier) - 0.3333) * 200;
+				np.doubles.set(CheatKeys.ALL, "sens-delta-pitch", deltaPitch);
+				np.doubles.set(CheatKeys.ALL, "sens-pitch", (double) flying.pitch);	
+				if(tmpSens > 0 && tmpSens < 200) {
+					if((int) np.sensitivity == (int) tmpSens) {
+						int nb = np.ints.get(CheatKeys.ALL, "sens-nb", 0);
+						if(nb >= 4) {
+							np.shouldCheckSensitivity = false;
+							np.doubles.remove(CheatKeys.ALL, "sens-delta-pitch");
+							np.doubles.remove(CheatKeys.ALL, "sens-pitch");
+							np.doubles.remove(CheatKeys.ALL, "sens-nb");
+						}
+						np.ints.set(CheatKeys.ALL, "sens-nb", nb + 1);
+					} else
+						np.ints.set(CheatKeys.ALL, "sens-nb", 0);
+					np.sensitivity = tmpSens;
+				}
+			}
 		}
 		if(type == PacketType.Client.BLOCK_DIG && !Version.getVersion().equals(Version.V1_7) && packet.getPacket() instanceof NPacketPlayInBlockDig) {
 			NPacketPlayInBlockDig blockDig = (NPacketPlayInBlockDig) packet.getPacket();
@@ -43,6 +70,11 @@ public class PacketListener implements Listeners {
 			EventManager.callEvent(event);
 			if(event.isCancelled())
 				packet.setCancelled(event.isCancelled());
+		}
+		if (type == PacketType.Client.USE_ENTITY) {
+			np.isAttacking = true;
+		} else if (type == PacketType.Client.KEEP_ALIVE) {
+			np.isAttacking = false;
 		}
 		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketReceived(e));
 	}

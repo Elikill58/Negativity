@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.protocols;
 
+import java.lang.reflect.Method;
+
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -30,8 +32,26 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 @SuppressWarnings("deprecation")
 public class NukerProtocol extends Cheat implements Listener {
 
+	private Method getX, getY, getZ;
+	
 	public NukerProtocol() {
 		super(CheatKeys.NUKER, true, Material.BEDROCK, CheatCategory.WORLD, true, "breaker", "bed breaker", "bedbreaker");
+		try {
+			Class<?> baseBpClass = PacketUtils.getNmsClass("BaseBlockPosition", "core.");
+			try {
+				getX = baseBpClass.getDeclaredMethod("getX");
+				getY = baseBpClass.getDeclaredMethod("getY");
+				getZ = baseBpClass.getDeclaredMethod("getZ");
+				SpigotNegativity.getInstance().getLogger().info("Founded getX baseBlock's methods");
+			} catch (Exception e) {
+				getX = baseBpClass.getDeclaredMethod("u");
+				getY = baseBpClass.getDeclaredMethod("v");
+				getZ = baseBpClass.getDeclaredMethod("w");
+				SpigotNegativity.getInstance().getLogger().info("Founded u/v/w baseBlock's methods");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@EventHandler
@@ -65,14 +85,13 @@ public class NukerProtocol extends Cheat implements Listener {
 			return;
 		PacketContent content = packet.getContent();
 		Object dig = content.getSpecificModifier(PacketUtils.getNmsClass("PacketPlayInBlockDig$EnumPlayerDigType", "network.protocol.game.")).read("c");
-		if(!dig.toString().contains("STOP_DESTROY_BLOCK"))
+		if(!dig.toString().contains("STOP_DESTROY_BLOCK") || getX == null || getY == null || getZ == null)
 			return;
 		try {
 			Object bp = content.getSpecificModifier(PacketUtils.getNmsClass("BlockPosition", "core.")).read("a");
-			Class<?> baseBpClass = PacketUtils.getNmsClass("BaseBlockPosition", "core.");
-			int x = (int) baseBpClass.getDeclaredMethod("getX").invoke(bp);
-			int y = (int) baseBpClass.getDeclaredMethod("getY").invoke(bp);
-			int z = (int) baseBpClass.getDeclaredMethod("getZ").invoke(bp);
+			int x = (int) getX.invoke(bp);
+			int y = (int) getY.invoke(bp);
+			int z = (int) getZ.invoke(bp);
 			Block b = p.getWorld().getBlockAt(x, y, z);
 			manageNuker(e, p, np, b);
 		} catch (Exception exc) {

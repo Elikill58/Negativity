@@ -38,9 +38,6 @@ public class ScaffoldProtocol extends Cheat {
 			return;
 		}
 
-		// TODO get current the selected slot, and replace the 'slot != 0' appearing
-		//  later with a comparison with the hotbar selected slot
-		int slot = -1;
 		Task.builder().delayTicks(0).execute(() -> {
 			ItemType m = np.getItemTypeInHand();
 			BlockType placed = e.getTransactions().get(0).getOriginal().getState().getType();
@@ -49,7 +46,7 @@ public class ScaffoldProtocol extends Cheat {
 				return;
 			}
 
-			if (!np.isBlock(m) && slot != 0) {
+			if (!np.isBlock(m)) {
 				int localPing = ping;
 				if (localPing == 0) {
 					localPing = 1;

@@ -21,6 +21,7 @@ import org.spongepowered.api.network.channel.Channel;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
 import org.spongepowered.api.registry.RegistryTypes;
 import org.spongepowered.api.scheduler.Task;
+import org.spongepowered.api.util.Ticks;
 import org.spongepowered.math.vector.Vector3d;
 
 import com.elikill58.negativity.api.GameMode;
@@ -50,12 +51,14 @@ import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 import net.kyori.adventure.text.Component;
 
 public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
-	
+
+	private int protocolVersion = 0;
 	private Version playerVersion;
 	
 	public SpongePlayer(ServerPlayer p) {
 		super(p);
 		this.playerVersion = loadVersion();
+		this.protocolVersion = PlayerVersionManager.getPlayerProtocolVersion(this);
 	}
 	
 	private Version loadVersion() {
@@ -104,7 +107,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	
 	@Override
 	public GameMode getGameMode() {
-		ResourceKey key = Sponge.game().registries().registry(RegistryTypes.GAME_MODE).valueKey(entity.require(Keys.GAME_MODE));
+		ResourceKey key = Sponge.game().registry(RegistryTypes.GAME_MODE).valueKey(entity.require(Keys.GAME_MODE));
 		return GameMode.get(key.value().toUpperCase(Locale.ROOT));
 	}
 	
@@ -175,7 +178,7 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	}
 	
 	@Override
-	public double getFoodLevel() {
+	public int getFoodLevel() {
 		return entity.require(Keys.FOOD_LEVEL);
 	}
 	
@@ -268,14 +271,14 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	}
 	
 	private PotionEffect createPotionEffect(org.spongepowered.api.effect.potion.PotionEffect effect) {
-		return new PotionEffect(PotionEffectType.forId(Utils.getKey(effect.type()).asString()), effect.duration(), effect.amplifier());
+		return new PotionEffect(PotionEffectType.forId(Utils.getKey(effect.type()).asString()), (int) effect.duration().ticks(), effect.amplifier());
 	}
 	
 	@Override
 	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
 		entity.transform(Keys.POTION_EFFECTS, effects -> {
 			org.spongepowered.api.effect.potion.PotionEffect effect =
-				org.spongepowered.api.effect.potion.PotionEffect.of(SpongePotionEffectType.getEffect(type), amplifier, duration);
+				org.spongepowered.api.effect.potion.PotionEffect.of(SpongePotionEffectType.getEffect(type).get(), amplifier, Ticks.of(duration));
 			if (effects == null) {
 				return Collections.singletonList(effect);
 			}
@@ -428,8 +431,10 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 		entity.offer(Keys.CAN_FLY, b);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void setVanished(boolean vanished) {
+		// TODO don't use deprecated fields
 		entity.offer(Keys.VANISH, vanished);
 		if (vanished) {
 			entity.offer(Keys.VANISH_IGNORES_COLLISION, true);
@@ -459,5 +464,43 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 			return false;
 		}
 		return Player.isSamePlayer(this, (Player) obj);
+	}
+
+	@Override
+	public double getMaxHealth() {
+		return entity.maxHealth().get();
+	}
+
+	@Override
+	public void setHealth(double health) {
+		entity.health().set(health);
+	}
+
+	@Override
+	public void setFoodLevel(int foodlevel) {
+		entity.foodLevel().set(foodlevel);
+	}
+
+	@Override
+	public int getProtocolVersion() {
+		return protocolVersion;
+	}
+
+	@Override
+	public void setProtocolVersion(int protocolVersion) {
+		this.protocolVersion = protocolVersion;
+	}
+
+	@Override
+	public void sendToServer(String serverName) {
+		SpongeNegativity.getInstance().getBungeecordChannel().play().sendTo(entity, (buf) -> {
+			buf.writeUTF("Connect");
+			buf.writeUTF(serverName);
+		});
+	}
+
+	@Override
+	public String getServerName() {
+		return null;
 	}
 }

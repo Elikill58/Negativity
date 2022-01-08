@@ -45,9 +45,6 @@ public class SpongeScheduler implements Scheduler {
 			.plugin(this.plugin)
 			.execute(task)
 			.interval(Ticks.of(intervalTicks));
-		if (name != null) {
-			builder.name(name);
-		}
 		return new SpongeTaskWrapper(Sponge.server().scheduler().submit(builder.build()));
 	}
 	
@@ -57,6 +54,15 @@ public class SpongeScheduler implements Scheduler {
 			.plugin(this.plugin)
 			.execute(task)
 			.delay(Ticks.of(delayTicks)).build()));
+	}
+
+	@Override
+	public ScheduledTask runRepeatingAsync(Runnable task, int intervalTicks, @Nullable String name) {
+		Task.Builder builder = Task.builder()
+				.plugin(this.plugin)
+				.execute(task)
+				.interval(Ticks.of(intervalTicks));
+		return new SpongeTaskWrapper(Sponge.server().scheduler().submit(builder.build()));
 	}
 	
 	private static class SpongeTaskWrapper implements ScheduledTask {

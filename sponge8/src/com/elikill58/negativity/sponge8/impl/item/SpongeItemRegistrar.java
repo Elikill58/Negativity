@@ -29,7 +29,7 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 	@Override
 	public @Nullable Material get(String id, String... aliases) {
 		return cache.computeIfAbsent(id, key -> {
-			RegistryHolder registries = Sponge.game().registries();
+			RegistryHolder registries = Sponge.game();
 			ResourceKey resourceKey = parse(id);
 			
 			Registry<BlockType> blockTypeRegistry = registries.registry(RegistryTypes.BLOCK_TYPE);

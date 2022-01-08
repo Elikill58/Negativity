@@ -25,10 +25,11 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
-import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge8.impl.entity.SpongeFakePlayer;
 import com.elikill58.negativity.sponge8.impl.entity.SpongeOfflinePlayer;
@@ -48,6 +49,7 @@ import com.elikill58.negativity.universal.translation.NegativityTranslationProvi
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
+import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.event.ClickEvent;
 import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
@@ -124,7 +126,7 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public String getPluginVersion() {
-		return this.plugin.getContainer().metadata().version();
+		return this.plugin.getContainer().metadata().version().getQualifier();
 	}
 	
 	@Override
@@ -204,6 +206,11 @@ public class SpongeAdapter extends Adapter {
 	}
 	
 	@Override
+	public ItemBuilder createItemBuilder(ItemStack item) {
+		return new SpongeItemBuilder(item);
+	}
+	
+	@Override
 	public ItemBuilder createItemBuilder(String type) {
 		return new SpongeItemBuilder(itemRegistrar.get(type.split(":")[0]));
 	}
@@ -267,7 +274,7 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public boolean hasPlugin(String name) {
-		return Sponge.pluginManager().isLoaded(name);
+		return Sponge.pluginManager().plugin(name).isPresent();
 	}
 	
 	@Override
@@ -296,5 +303,10 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
 		// TODO this is tricky because we have to register channels in a lifecycle event...
+	}
+
+	@Override
+	public void broadcastMessage(String message) {
+		Sponge.server().broadcastAudience().sendMessage(Component.text(message));
 	}
 }

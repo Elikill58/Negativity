@@ -118,7 +118,7 @@ public class BukkitBanProcessor implements BanProcessor {
 	
 	@Override
 	public List<String> getDescription() {
-		return Arrays.asList(ChatColor.YELLOW + "Processor from Professional Bans plugin.", "", ChatColor.RED + "Not available:", "&7- Bans on same IP");
+		return Arrays.asList(ChatColor.YELLOW + "Processor which use Bukkit's ban.", "", ChatColor.RED + "Not available:", "&7- Bans on same IP");
 	}
 
 	private Ban loggedBanFrom(BanEntry banEntry, UUID playerId, boolean revoked) {

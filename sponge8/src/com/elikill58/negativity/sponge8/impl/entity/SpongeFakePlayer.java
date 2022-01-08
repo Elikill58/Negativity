@@ -19,6 +19,7 @@ import net.kyori.adventure.text.Component;
 
 public class SpongeFakePlayer extends SpongeEntity<Human> implements FakePlayer {
 
+	@SuppressWarnings("deprecation")
 	public SpongeFakePlayer(Location loc, String name) {
 		super(LocationUtils.createEntityAt(loc, EntityTypes.HUMAN.get()));
 		entity.offer(Keys.DISPLAY_NAME, Component.text(name));

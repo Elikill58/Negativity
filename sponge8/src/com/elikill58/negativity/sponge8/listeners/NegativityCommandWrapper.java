@@ -38,7 +38,7 @@ public class NegativityCommandWrapper implements Command.Raw {
 			.orElseThrow(() -> new CommandException(Component.text("Could not find appropriate command executor"))));
 		CommandExecutionEvent event = new CommandExecutionEvent(cmd, executor, args, prefix);
 		EventManager.callEvent(event);
-		return event.hasGoodResult() ? CommandResult.success() : CommandResult.empty();
+		return CommandResult.success(); // TODO support bad results ?
 	}
 	
 	@Override

@@ -76,7 +76,7 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 	}
 	
 	private EnchantmentType getEnchantType(Enchantment enchant) {
-		return Sponge.game().registries().registry(RegistryTypes.ENCHANTMENT_TYPE).value(ResourceKey.resolve(enchant.getId()));
+		return Sponge.game().registry(RegistryTypes.ENCHANTMENT_TYPE).value(ResourceKey.resolve(enchant.getId()));
 	}
 
 	@Override
@@ -93,5 +93,10 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 	@Override
 	public Object getDefault() {
 		return item;
+	}
+
+	@Override
+	public com.elikill58.negativity.api.item.ItemStack clone() {
+		return new SpongeItemStack(item.copy());
 	}
 }

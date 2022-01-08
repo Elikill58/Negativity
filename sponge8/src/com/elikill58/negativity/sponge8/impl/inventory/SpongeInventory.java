@@ -35,6 +35,7 @@ import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.PlatformHolder;
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.sponge8.impl.item.SpongeItemStack;
 
 public class SpongeInventory extends Inventory {
@@ -145,7 +146,7 @@ public class SpongeInventory extends Inventory {
 	
 	@Override
 	public String getInventoryName() {
-		return ""; // TODO
+		return ""; // TODO get inventory name
 	}
 	
 	@Override
@@ -175,5 +176,10 @@ public class SpongeInventory extends Inventory {
 			default:
 				throw new IllegalArgumentException("Size (" + size + ") does not fit a generic ContainerType");
 		}
+	}
+
+	@Override
+	public boolean contains(Material type) {
+		return inv.contains((org.spongepowered.api.item.ItemType) type.getDefault());
 	}
 }

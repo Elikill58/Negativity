@@ -21,7 +21,6 @@ public abstract class SpongePacketManager extends PacketManager {
 				.execute(() -> {
 					PacketReceiveEvent event = new PacketReceiveEvent(source, packet, packet.getPlayer());
 					EventManager.callEvent(event);
-					handlers.forEach((handler) -> handler.onReceive(packet));
 				}).build()
 		);
 	}
@@ -34,7 +33,6 @@ public abstract class SpongePacketManager extends PacketManager {
 				.execute(() -> {
 					PacketSendEvent event = new PacketSendEvent(source, packet, packet.getPlayer());
 					EventManager.callEvent(event);
-					handlers.forEach((handler) -> handler.onSend(packet));
 				}).build()
 		);
 	}

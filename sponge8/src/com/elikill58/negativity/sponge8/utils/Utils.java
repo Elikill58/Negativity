@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Locale;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
@@ -24,7 +23,7 @@ import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.registry.RegistryTypes;
 import org.spongepowered.api.world.difficulty.Difficulty;
 import org.spongepowered.plugin.PluginContainer;
-import org.spongepowered.plugin.metadata.PluginDependency;
+import org.spongepowered.plugin.metadata.model.PluginDependency;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.item.Material;
@@ -132,26 +131,26 @@ public class Utils {
 	}
 	
 	public static ResourceKey getKey(EntityType<?> entityType) {
-		return RegistryTypes.ENTITY_TYPE.keyFor(Sponge.game().registries(), entityType);
+		return RegistryTypes.ENTITY_TYPE.keyFor(Sponge.game(), entityType);
 	}
 	
 	public static ResourceKey getKey(BlockType blockType) {
-		return RegistryTypes.BLOCK_TYPE.keyFor(Sponge.game().registries(), blockType);
+		return RegistryTypes.BLOCK_TYPE.keyFor(Sponge.game(), blockType);
 	}
 	
 	public static ResourceKey getKey(ItemType itemType) {
-		return RegistryTypes.ITEM_TYPE.keyFor(Sponge.game().registries(), itemType);
+		return RegistryTypes.ITEM_TYPE.keyFor(Sponge.game(), itemType);
 	}
 	
 	public static ResourceKey getKey(PotionEffectType potionEffectType) {
-		return RegistryTypes.POTION_EFFECT_TYPE.keyFor(Sponge.game().registries(), potionEffectType);
+		return RegistryTypes.POTION_EFFECT_TYPE.keyFor(Sponge.game(), potionEffectType);
 	}
 	
 	public static ResourceKey getKey(EnchantmentType enchantmentType) {
-		return RegistryTypes.ENCHANTMENT_TYPE.keyFor(Sponge.game().registries(), enchantmentType);
+		return RegistryTypes.ENCHANTMENT_TYPE.keyFor(Sponge.game(), enchantmentType);
 	}
 	
 	public static ResourceKey getKey(Difficulty difficulty) {
-		return RegistryTypes.DIFFICULTY.keyFor(Sponge.game().registries(), difficulty);
+		return RegistryTypes.DIFFICULTY.keyFor(Sponge.game(), difficulty);
 	}
 }

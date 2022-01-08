@@ -26,14 +26,12 @@ import org.spongepowered.api.network.channel.raw.RawDataChannel;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.util.Ticks;
 import org.spongepowered.plugin.PluginContainer;
-import org.spongepowered.plugin.jvm.Plugin;
+import org.spongepowered.plugin.builtin.jvm.Plugin;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.yaml.config.Configuration;
+import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
-import com.elikill58.negativity.common.timers.ClickManagerTimer;
-import com.elikill58.negativity.common.timers.PendingAlertsTimer;
 import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.sponge8.listeners.BlockListeners;
 import com.elikill58.negativity.sponge8.listeners.EntityListeners;
@@ -63,7 +61,11 @@ public class SpongeNegativity {
 	private final PluginContainer container;
 	private final Path configDir;
 	
-	private RawDataChannel channel;
+	private RawDataChannel channel = null, bungeecordChannel = null;
+	
+	public RawDataChannel getBungeecordChannel() {
+		return bungeecordChannel;
+	}
 	
 	@Inject
 	public SpongeNegativity(Logger logger, PluginContainer container, @ConfigDir(sharedRoot = false) Path configDir) {
@@ -76,8 +78,8 @@ public class SpongeNegativity {
 	@Listener
 	public void onConstructPlugin(ConstructPluginEvent event) {
 		Adapter.setAdapter(new SpongeAdapter(this));
-		ResourceKey channelKey = ResourceKey.resolve(NegativityMessagesManager.CHANNEL_ID);
-		this.channel = Sponge.channelManager().ofType(channelKey, RawDataChannel.class);
+		this.channel = Sponge.channelManager().ofType(ResourceKey.resolve(NegativityMessagesManager.CHANNEL_ID), RawDataChannel.class);
+		this.bungeecordChannel = Sponge.channelManager().ofType(ResourceKey.resolve("BungeeCord"), RawDataChannel.class);
 	}
 	
 	@Listener
@@ -92,13 +94,9 @@ public class SpongeNegativity {
 		eventManager.registerListeners(this.container, new InventoryListeners());
 		eventManager.registerListeners(this.container, new PlayersListeners());
 		
-		schedule(new ClickManagerTimer(), 20, null);
 		schedule(new ActualizeInvTimer(), 5, null);
 		schedule(new AnalyzePacketTimer(), 20, "negativity-packets");
 		schedule(new SpawnFakePlayerTimer(), 20 * 60 * 10, null);
-		if (Negativity.timeBetweenAlert != -1) {
-			schedule(new PendingAlertsTimer(), Negativity.timeBetweenAlert / 50, "negativity-pending-alerts");
-		}
 		
 		if (SpongeUpdateChecker.isUpdateAvailable()) {
 			logger.info("New version available ({}) : {}", SpongeUpdateChecker.getVersionString(), SpongeUpdateChecker.getDownloadUrl());
@@ -131,7 +129,7 @@ public class SpongeNegativity {
 	private void schedule(Runnable task, int intervalTicks, @Nullable String name) {
 		Task.Builder taskBuilder = Task.builder().execute(task).interval(Ticks.of(intervalTicks)).plugin(this.container);
 		if (name != null) {
-			taskBuilder.name(name);
+			//taskBuilder.name(name);
 		}
 		Sponge.server().scheduler().submit(taskBuilder.build());
 	}

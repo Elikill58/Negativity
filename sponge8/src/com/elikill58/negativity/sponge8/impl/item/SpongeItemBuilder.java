@@ -17,6 +17,7 @@ import org.spongepowered.api.registry.RegistryTypes;
 
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
+import com.elikill58.negativity.api.item.ItemFlag;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.sponge8.utils.Utils;
@@ -34,6 +35,10 @@ public class SpongeItemBuilder extends ItemBuilder {
 			throw new IllegalArgumentException("No ItemType for material " + type);
 		}
 		this.item = org.spongepowered.api.item.inventory.ItemStack.of(itemType);
+	}
+	
+	public SpongeItemBuilder(ItemStack item) {
+		this.item = (org.spongepowered.api.item.inventory.ItemStack) item.getDefault();
 	}
 	
 	public SpongeItemBuilder(GameProfile skullProfile) {
@@ -57,7 +62,7 @@ public class SpongeItemBuilder extends ItemBuilder {
 	
 	@Override
 	public ItemBuilder enchant(Enchantment enchantment, int level) {
-		Registry<EnchantmentType> registry = Sponge.game().registries().registry(RegistryTypes.ENCHANTMENT_TYPE);
+		Registry<EnchantmentType> registry = Sponge.game().registry(RegistryTypes.ENCHANTMENT_TYPE);
 		EnchantmentType enchantmentType = registry.value(ResourceKey.resolve(enchantment.getId()));
 		item.offerSingle(Keys.APPLIED_ENCHANTMENTS, org.spongepowered.api.item.enchantment.Enchantment.of(enchantmentType, level));
 		return this;
@@ -92,6 +97,16 @@ public class SpongeItemBuilder extends ItemBuilder {
 			return DyeColors.WHITE.get();
 		case YELLOW:
 			return DyeColors.YELLOW.get();
+		case LIGHT_BLUE:
+			return DyeColors.LIGHT_BLUE.get();
+		case MAGENTA:
+			return DyeColors.MAGENTA.get();
+		case ORANGE:
+			return DyeColors.ORANGE.get();
+		case PINK:
+			return DyeColors.PINK.get();
+		case PURPLE:
+			return DyeColors.PURPLE.get();
 		}
 		return DyeColors.BROWN.get();
 	}
@@ -126,6 +141,24 @@ public class SpongeItemBuilder extends ItemBuilder {
 	@Override
 	public ItemStack build() {
 		return new SpongeItemStack(item);
+	}
+
+	@Override
+	public ItemBuilder itemFlag(ItemFlag... itemFlag) {
+		for(ItemFlag flag : itemFlag) {
+			switch (flag) {
+			case HIDE_ATTRIBUTES:
+				item.offer(Keys.HIDE_ATTRIBUTES, true);
+				break;
+			case HIDE_ENCHANTS:
+				item.offer(Keys.HIDE_ENCHANTMENTS, true);
+				break;
+			case HIDE_UNBREAKABLE:
+				item.offer(Keys.HIDE_UNBREAKABLE, true);
+				break;
+			}
+		}
+		return this;
 	}
 	
 }

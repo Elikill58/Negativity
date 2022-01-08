@@ -106,4 +106,15 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 		Vector3d min = box.min(), max = box.max();
 		return new BoundingBox(min.x(), min.y(), min.z(), max.x(), max.y(), max.z());
 	}
+
+	@Override
+	public Vector getVelocity() {
+		Vector3d vec = entity.getOrElse(Keys.VELOCITY, new Vector3d(0, 0, 0));
+		return new Vector(vec.x(), vec.y(), vec.z());
+	}
+
+	@Override
+	public void setVelocity(Vector vel) {
+		entity.offer(Keys.VELOCITY, new Vector3d(vel.getX(), vel.getY(), vel.getZ()));
+	}
 }

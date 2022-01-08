@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.sponge8.impl.item.SpongeItemStack;
 
 public class SpongePlayerInventory extends PlayerInventory {
@@ -150,5 +151,10 @@ public class SpongePlayerInventory extends PlayerInventory {
 	
 	private @Nullable ItemStack nonEmptyOrNull(org.spongepowered.api.item.inventory.@Nullable ItemStack stack) {
 		return stack != null && !stack.isEmpty() ? new SpongeItemStack(stack) : null;
+	}
+
+	@Override
+	public boolean contains(Material type) {
+		return inv.contains((org.spongepowered.api.item.ItemType) type.getDefault());
 	}
 }

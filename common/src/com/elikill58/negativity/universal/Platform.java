@@ -5,6 +5,7 @@ public enum Platform {
 	BUNGEE("bungee", true),
 	SPIGOT("spigot", false),
 	SPONGE("sponge", false),
+	SPONGE8("sponge8", false),
 	VELOCITY("velocity", true);
 	
 	private final String name;

@@ -161,7 +161,7 @@ public class SpongeBanProcessor implements BanProcessor {
 		
 		@Override
 		public Platform getPlatform() {
-			return Platform.SPONGE;
+			return Platform.SPONGE8;
 		}
 	}
 

@@ -24,6 +24,6 @@ public class SpongeForwardToProxyBanProcessorProvider implements BanProcessorPro
 	
 	@Override
 	public Platform getPlatform() {
-		return Platform.SPONGE;
+		return Platform.SPONGE8;
 	}
 }

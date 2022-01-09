@@ -79,7 +79,7 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public Platform getPlatformID() {
-		return Platform.SPONGE;
+		return Platform.SPONGE8;
 	}
 	
 	@Override

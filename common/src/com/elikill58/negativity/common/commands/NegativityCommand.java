@@ -141,7 +141,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				Messages.sendMessage(sender, "not_permission");
 				return true;
 			}
-			InventoryManager.getInventory(NegativityInventory.MOD).ifPresent((inv) -> inv.openInventory((Player) sender));
+			InventoryManager.open(NegativityInventory.MOD, (Player) sender);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase(Locale.ROOT).contains("manage")) {
 			if (arg.length >= 2 && arg[1].equalsIgnoreCase("updateMessages")) {

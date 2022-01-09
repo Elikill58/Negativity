@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge8.listeners;
 
 import java.net.InetAddress;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.spongepowered.api.block.BlockType;
@@ -8,8 +9,10 @@ import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Cancellable;
+import org.spongepowered.api.event.EventContextKeys;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.InteractEvent;
+import org.spongepowered.api.event.cause.entity.MovementType;
 import org.spongepowered.api.event.entity.ChangeEntityWorldEvent;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
@@ -104,6 +107,9 @@ public class PlayersListeners {
 	
 	@Listener
 	public void onTeleport(MoveEntityEvent e, @First ServerPlayer p) {
+		Optional<MovementType> optMoveType = e.context().get(EventContextKeys.MOVEMENT_TYPE);
+		if(!optMoveType.isPresent())
+			return;
 		Location from;
 		Location to;
 		if (e instanceof ChangeEntityWorldEvent) {

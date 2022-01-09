@@ -32,7 +32,7 @@ public class PlayerVersionManager {
 				return playerVersion;
 			}
 		}
-		return Version.HIGHER;
+		return Adapter.getAdapter().getServerVersion(); // prefer use server version that HIGHEST, because it seems to be the srv version without ViaVersion of something
 	}
 	
 	public static int getPlayerProtocolVersion(Player player) {

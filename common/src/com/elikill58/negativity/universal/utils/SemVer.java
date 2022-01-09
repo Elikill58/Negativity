@@ -107,7 +107,7 @@ public final class SemVer implements Comparable<SemVer> {
 	}
 	
 	public static @Nullable SemVer parse(@NonNull String text) {
-		if (text.isEmpty()) {
+		if (text == null || text.isEmpty()) {
 			return null;
 		}
 		

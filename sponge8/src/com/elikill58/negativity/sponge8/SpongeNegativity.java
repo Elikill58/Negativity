@@ -79,7 +79,7 @@ public class SpongeNegativity {
 	public void onConstructPlugin(ConstructPluginEvent event) {
 		Adapter.setAdapter(new SpongeAdapter(this));
 		this.channel = Sponge.channelManager().ofType(ResourceKey.resolve(NegativityMessagesManager.CHANNEL_ID), RawDataChannel.class);
-		this.bungeecordChannel = Sponge.channelManager().ofType(ResourceKey.resolve("BungeeCord"), RawDataChannel.class);
+		this.bungeecordChannel = Sponge.channelManager().ofType(ResourceKey.resolve("bungeecord"), RawDataChannel.class);
 	}
 	
 	@Listener
@@ -106,7 +106,7 @@ public class SpongeNegativity {
 	@Listener
 	public void onLoadedGame(LoadedGameEvent event) {
 		Stats.sendStartupStats(Sponge.server().boundAddress().map(InetSocketAddress::getPort).orElse(-1));
-		logger.info("Hello from Negativity v{}", container.metadata().version());
+		logger.info("Negativity v{} fully started !", container.metadata().version());
 	}
 	
 	@Listener

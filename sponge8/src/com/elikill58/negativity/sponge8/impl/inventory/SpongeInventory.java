@@ -36,6 +36,7 @@ import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.PlatformHolder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.sponge8.SpongeNegativity;
 import com.elikill58.negativity.sponge8.impl.item.SpongeItemStack;
 
 public class SpongeInventory extends Inventory {
@@ -43,10 +44,12 @@ public class SpongeInventory extends Inventory {
 	public static final UUID NEGATIVITY_INV_ID = UUID.fromString("68f4d048-43cb-a15e-8a1b-2ce8d4a1baf5");
 	
 	private final org.spongepowered.api.item.inventory.Inventory inv;
+	private final String inventoryName;
 	private SpongeNegativityHolder holder;
 	
 	public SpongeInventory(Container container) {
 		this.inv = container;
+		this.inventoryName = "";
 		if (container instanceof CarriedInventory) {
 			Object carrier = ((CarriedInventory<?>) container).carrier().orElse(null);
 			if (carrier instanceof SpongeNegativityHolder) {
@@ -57,13 +60,14 @@ public class SpongeInventory extends Inventory {
 	
 	public SpongeInventory(String inventoryName, int size, NegativityHolder holder) {
 		this.holder = new SpongeNegativityHolder(holder);
-		// TODO set inventory name when possible
 		this.inv = ViewableInventory.builder()
 			.type(containerTypeForSize(size))
 			.completeStructure()
 			.carrier(this.holder)
 			.identity(NEGATIVITY_INV_ID)
+			.plugin(SpongeNegativity.container())
 			.build();
+		this.inventoryName = inventoryName;
 	}
 	
 	@Override
@@ -146,7 +150,7 @@ public class SpongeInventory extends Inventory {
 	
 	@Override
 	public String getInventoryName() {
-		return ""; // TODO get inventory name
+		return this.inventoryName;
 	}
 	
 	@Override

@@ -84,7 +84,7 @@ public class SpongePlayerInventory extends PlayerInventory {
 
 	@Override
 	public String getInventoryName() {
-		return ""; // TODO
+		return "";
 	}
 
 	@Override

@@ -49,6 +49,7 @@ import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 
@@ -406,7 +407,16 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 		Sponge.server().scheduler().submit(
 			Task.builder()
 				.plugin(SpongeNegativity.container())
-				.execute(() -> entity.openInventory((org.spongepowered.api.item.inventory.Inventory) inv.getDefault()))
+				.execute(() -> {
+					String invName = inv.getInventoryName();
+					org.spongepowered.api.item.inventory.Inventory spongeInv = (org.spongepowered.api.item.inventory.Inventory) inv.getDefault();
+					if (invName != null && !invName.isEmpty()) {
+						Component invNameComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(invName);
+						entity.openInventory(spongeInv, invNameComponent);
+					} else {
+						entity.openInventory(spongeInv);
+					}
+				})
 				.build()
 		);
 	}

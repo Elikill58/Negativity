@@ -36,7 +36,7 @@ public class ItemUtils {
 	
 	// colored items
 	public static final Material GRAY_STAINED_GLASS_PANE = getMaterialWithCompatibility("STAINED_GLASS_PANE", "GRAY_STAINED_GLASS_PANE");
-	public static final Material WHITE_STAINED_GLASS = getMaterialWithCompatibility("STAINED_GLASS_PANE", "WHITE_STAINED_GLASS");
+	public static final Material WHITE_STAINED_GLASS = getMaterialWithCompatibility("STAINED_GLASS_PANE", "WHITE_STAINED_GLASS_PANE");
 	
 	public static final Material LIME_STAINED_CLAY = getMaterialWithCompatibility("STAINED_CLAY", "LIME_TERRACOTTA");
 	public static final Material ORANGE_STAINED_CLAY = getMaterialWithCompatibility("STAINED_CLAY", "ORANGE_TERRACOTTA");

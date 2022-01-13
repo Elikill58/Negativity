@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal.ban.support;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.StringJoiner;
@@ -64,16 +65,7 @@ public class LiteBansProcessor implements BanProcessor {
 			    st.setBoolean(2, true);
 			    try (ResultSet rs = st.executeQuery()) {
 			        while (rs.next()) {
-			            String reason = rs.getString("reason");
-			            String bannedByName = rs.getString("banned_by_name");
-			            BanType banType = getBanType(rs.getString("banned_by_uuid"));
-			            String removedByName = rs.getString("removed_by_name");
-			            long revocation = rs.getTimestamp("removed_by_date").getTime();
-			            long time = rs.getLong("time");
-			            long until = rs.getLong("until");
-			            boolean active = rs.getBoolean("active");
-			            BanStatus banState = (active ? BanStatus.ACTIVE : (removedByName.equalsIgnoreCase("#expired") ? BanStatus.EXPIRED : BanStatus.REVOKED));
-			            return new Ban(playerId, reason, bannedByName, banType, until, reason, banState, time, revocation);
+			            return getBanFromResultSet(rs);
 			        }
 			    }
 			} catch (SQLException e) {
@@ -91,16 +83,7 @@ public class LiteBansProcessor implements BanProcessor {
 			    st.setString(1, playerId.toString());
 			    try (ResultSet rs = st.executeQuery()) {
 			        while (rs.next()) {
-			            String reason = rs.getString("reason");
-			            String bannedByName = rs.getString("banned_by_name");
-			            BanType banType = getBanType(rs.getString("banned_by_uuid"));
-			            String removedByName = rs.getString("removed_by_name");
-			            long revocation = rs.getTimestamp("removed_by_date").getTime();
-			            long time = rs.getLong("time");
-			            long until = rs.getLong("until");
-			            boolean active = rs.getBoolean("active");
-			            BanStatus banState = (active ? BanStatus.ACTIVE : (removedByName.equalsIgnoreCase("#expired") ? BanStatus.EXPIRED : BanStatus.REVOKED));
-			            loggedBans.add(new Ban(playerId, reason, bannedByName, banType, until, reason, banState, time, revocation));
+			            loggedBans.add(getBanFromResultSet(rs));
 			        }
 			    }
 			} catch (SQLException e) {
@@ -118,14 +101,7 @@ public class LiteBansProcessor implements BanProcessor {
 			    st.setBoolean(1, true);
 			    try (ResultSet rs = st.executeQuery()) {
 			        while (rs.next()) {
-			        	UUID playerId = UUID.fromString(rs.getString("uuid"));
-			            String reason = rs.getString("reason");
-			            String bannedByName = rs.getString("banned_by_name");
-			            BanType banType = getBanType(rs.getString("banned_by_uuid"));
-			            long revocation = rs.getTimestamp("removed_by_date").getTime();
-			            long time = rs.getLong("time");
-			            long until = rs.getLong("until");
-			            loggedBans.add(new Ban(playerId, reason, bannedByName, banType, until, reason, BanStatus.ACTIVE, time, revocation));
+			            loggedBans.add(getBanFromResultSet(rs));
 			        }
 			    }
 			} catch (SQLException e) {
@@ -133,6 +109,21 @@ public class LiteBansProcessor implements BanProcessor {
 			}
 			return loggedBans;
 		}).join();
+	}
+	
+	private Ban getBanFromResultSet(ResultSet rs) throws SQLException {
+    	UUID playerId = UUID.fromString(rs.getString("uuid"));
+        String reason = rs.getString("reason");
+        String bannedByName = rs.getString("banned_by_name");
+        BanType banType = getBanType(rs.getString("banned_by_uuid"));
+        String removedByName = rs.getString("removed_by_name");
+        Timestamp removedByDateStamp = rs.getTimestamp("removed_by_date");
+        long revocation = removedByDateStamp == null ? -1 : removedByDateStamp.getTime();
+        long time = rs.getLong("time");
+        long until = rs.getLong("until");
+        boolean active = rs.getBoolean("active");
+        BanStatus banState = (active ? BanStatus.ACTIVE : (removedByName.equalsIgnoreCase("#expired") ? BanStatus.EXPIRED : BanStatus.REVOKED));
+       return new Ban(playerId, reason, bannedByName, banType, until, reason, banState, time, revocation);
 	}
 
 	public static final long YEARS = 3600 * 24 * 30 * 12;

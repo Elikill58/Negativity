@@ -79,7 +79,7 @@ inventory:
 items:
   # Item Name:
   # when: Set conditions
-  # cheats: Which cheat(s) to disable (the id: fly, speed, antiknockback, etc.)
+  # cheats: Which cheat(s) to disable (the id: fly, speed, etc.)
   #
   # Possible "when" values:
   # always : disable whenever the player has it in their hand
@@ -167,8 +167,6 @@ Permissions:
       default: "negativity.bypass.fasteat"
     regen:
       default: "negativity.bypass.regen"
-    antiknockback:
-      default: "negativity.bypass.antiknockback"
     jesus:
       default: "negativity.bypass.jesus"
     nofall:
@@ -510,19 +508,6 @@ cheats:
     kick: false
     alert_to_kick: 5
     check_in_verif: true
-
-  # AntiKnockback removes the knockback effect for a hacker
-  antiknockback:
-    ping: 200
-    exact_name: "AntiKnockback"
-    isActive: true
-    reliability_alert: 60
-    setBack: false
-    kick: false
-    alert_to_kick: 5
-    check_in_verif: true
-    # Configuration to prevent false flagging. Set to false to prevent all possible incidents
-    algo: "(0.00000008 * velY * velY) + (0.0001 * velY) - 0.0219"
 
   # Blink enables a hacker to teleport by simulating low ping (i.e. lag)
   blink:

@@ -5,19 +5,9 @@ sourceSets {
     }
 }
 
-repositories {
-    maven {
-        url = 'http://repo.eliapp.fr:8080/repository/internal/'
-        allowInsecureProtocol true
-        metadataSources {
-            artifact()
-        }
-    }
-}
-
 dependencies {
     compileOnly 'ch.dkrieger.bansystem.lib:bansystem-lib:2.1.2'
     compileOnly 'ch.dkrieger.bansystem.bukkit:bansystem-bukkit:2.1.2'
     compileOnly 'ch.dkrieger.bansystem.bungeecord:bansystem-bungeecord:2.1.2'
-    compileOnly(project(':common'))
+    api(project(':common'))
 }

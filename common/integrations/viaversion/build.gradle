@@ -14,5 +14,5 @@ repositories {
 
 dependencies {
     compileOnly 'us.myles:viaversion:2.2.3'
-    compileOnly(project(':common'))
+    api(project(':common'))
 }

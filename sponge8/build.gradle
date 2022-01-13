@@ -18,6 +18,8 @@ sourceSets {
 
 dependencies {
     api project(':common')
+    
+    compileOnly 'eu.crushedpixel:PacketGate:0.2.0'
 }
 
 minecraft {
@@ -27,7 +29,7 @@ minecraft {
 }
 
 sponge {
-    apiVersion("8.0.0-SNAPSHOT")
+    apiVersion("8.0.0")
     license("NO_LICENCE_YET")
     loader {
         name(PluginLoaders.JAVA_PLAIN)

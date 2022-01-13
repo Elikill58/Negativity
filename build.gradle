@@ -43,6 +43,10 @@ subprojects {
             name 'Sonatype'
             url 'https://oss.sonatype.org/content/groups/public/'
         }
+        maven {
+            name 'eliapp'
+            url 'https://repo.eliapp.fr:8081/repository/internal/'
+        }
     }
 
     dependencies {

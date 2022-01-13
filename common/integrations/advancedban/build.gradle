@@ -5,17 +5,8 @@ sourceSets {
     }
 }
 
-repositories {
-    maven {
-        url = 'http://repo.eliapp.fr:8080/repository/internal/'
-        allowInsecureProtocol true
-        metadataSources {
-            artifact()
-        }
-    }
-}
-
 dependencies {
-    compileOnly 'me.leoko:AdvancedBan:2.2.1'
-    compileOnly(project(':common'))
+	compileOnly 'com.github.DevLeoko:AdvancedBan:v2.2.1'
+    api project(':common')
+    //compileOnly(project(':common'))
 }

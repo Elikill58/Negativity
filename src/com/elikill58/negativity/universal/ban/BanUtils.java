@@ -17,13 +17,18 @@ import com.elikill58.negativity.universal.permissions.Perm;
 
 public class BanUtils {
 
-	public static long computeBanDuration(NegativityPlayer player, int reliability, Cheat cheat) {
+	public static double computeBanDuration(NegativityPlayer player, int reliability, Cheat cheat) {
 		try {
 			Expression expression = new Expression(Adapter.getAdapter().getConfig().getString("ban.time.calculator")
 					.replaceAll("%reliability%", String.valueOf(reliability))
 					.replaceAll("%alert%", String.valueOf(player.getWarn(cheat)))
 					.replaceAll("%all_alert%", String.valueOf(player.getAllWarn(cheat))));
-			return (long) expression.calculate();
+			double d = expression.calculate();
+			if(((int) d) == Integer.MAX_VALUE)
+				Adapter.getAdapter().debug("Reach max int value for ban time value: " + d);
+			if(((long) d) == Long.MAX_VALUE)
+				Adapter.getAdapter().debug("Reach max long value for ban time value: " + d);
+			return d;
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -62,7 +67,7 @@ public class BanUtils {
 		int banDefThreshold = Adapter.getAdapter().getConfig().getInt("ban.def.ban_time");
 		boolean isDefinitive = BanManager.getLoggedBans(player.getUUID()).size() >= banDefThreshold;
 		if (!isDefinitive) {
-			banDuration = System.currentTimeMillis() + BanUtils.computeBanDuration(player, reliability, cheat);
+			banDuration = (long) (System.currentTimeMillis() + BanUtils.computeBanDuration(player, reliability, cheat));
 		}
 		return BanManager.executeBan(Ban.active(player.getUUID(), "Cheat (" + reason + ")", "Negativity", BanType.MOD, banDuration, reason));
 	}

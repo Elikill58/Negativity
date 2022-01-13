@@ -48,7 +48,7 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	}
 	
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert) {
-		this(type, p, c, reliability, hasRelia, ping, proof, hover, nbAlert, 1);
+		this(type, p, c, reliability, hasRelia, ping, proof, hover, nbAlert, nbAlert);
 	}
 	
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert, int nbAlertConsole) {

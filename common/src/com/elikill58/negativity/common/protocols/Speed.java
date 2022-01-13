@@ -122,12 +122,12 @@ public class Speed extends Cheat implements Listeners {
 						"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + velocity + ", speed: " + calculatedSpeedWith);
 			}
 		}
-		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10)) >= 0.85D && !hasIceBelow && !np.isInFight) {
+		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10)) >= 0.85D && !hasIceBelow && !np.isInFight && p.getVelocity().length() < 1) {
 			mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(y * 100 * 2), "distance-jumping",
-					"Player NOT in ground. WalkSpeed: " + p.getWalkSpeed() + ", fallDistance: " + p.getFallDistance()
-							+ " Distance between from/to location: " + y + ", ySpeed: " + (y - (amplifierSpeed / 10)),
-							hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
+					UniversalUtils.parseInPorcent(y * 100 * 2), "distance-jumping", "NOT in ground. WS: " + p.getWalkSpeed()
+						+ ", fallDis: " + p.getFallDistance() + " Dis from/to: " + y + ", ySpeed: " + (y - (amplifierSpeed / 10))
+						+ ", vel: " + p.getVelocity().toShowableString() + ", vel len: " + p.getVelocity().length(),
+						hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
 		}
 		if(checkActive("high-speed") && !onGround && y < 0.85D && !np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
 			if (!under.getType().getId().contains("STEP") && !np.isUsingSlimeBlock && !(under.getType().getId().contains("WATER") || under.isWaterLogged() || under.isLiquid() || p.isSwimming())) {

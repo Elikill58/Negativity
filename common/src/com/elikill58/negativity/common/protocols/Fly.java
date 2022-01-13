@@ -136,7 +136,7 @@ public class Fly extends Cheat implements Listeners {
 				}
 			}
 			if(checkActive("no-ground-i")) {
-				if (!(p.isSprinting() && d > 0)
+				if (!(p.isSprinting() && d > 0 && p.getVelocity().length() < 1)
 						&& locUnder.getBlock().getType().equals(Materials.AIR)
 						&& locUnderUnder.getBlock().getType().equals(Materials.AIR)
 						&& (p.getFallDistance() == 0.0F || inBoat)

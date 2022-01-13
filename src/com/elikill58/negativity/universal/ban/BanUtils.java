@@ -17,13 +17,13 @@ import com.elikill58.negativity.universal.permissions.Perm;
 
 public class BanUtils {
 
-	public static int computeBanDuration(NegativityPlayer player, int reliability, Cheat cheat) {
+	public static long computeBanDuration(NegativityPlayer player, int reliability, Cheat cheat) {
 		try {
 			Expression expression = new Expression(Adapter.getAdapter().getConfig().getString("ban.time.calculator")
 					.replaceAll("%reliability%", String.valueOf(reliability))
 					.replaceAll("%alert%", String.valueOf(player.getWarn(cheat)))
 					.replaceAll("%all_alert%", String.valueOf(player.getAllWarn(cheat))));
-			return (int) expression.calculate();
+			return (long) expression.calculate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

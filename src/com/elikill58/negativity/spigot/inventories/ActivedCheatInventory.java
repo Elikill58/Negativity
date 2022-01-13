@@ -2,6 +2,8 @@ package com.elikill58.negativity.spigot.inventories;
 
 import static com.elikill58.negativity.spigot.utils.ItemUtils.createItem;
 
+import java.util.List;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -29,10 +31,11 @@ public class ActivedCheatInventory extends AbstractInventory {
 	public void openInventory(Player p, Object... args) {
 		OfflinePlayer cible = (OfflinePlayer) args[0];
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(cible);
-		Inventory inv = Bukkit.createInventory(new ActivedCheatHolder(cible), UniversalUtils.getMultipleOf(np.ACTIVE_CHEAT.size() + 3, 9, 1, 54), Inv.NAME_ACTIVED_CHEAT_MENU);
-		if (np.ACTIVE_CHEAT.size() > 0) {
+		List<Cheat> cheats = Cheat.values();
+		Inventory inv = Bukkit.createInventory(new ActivedCheatHolder(cible), UniversalUtils.getMultipleOf(cheats.size() + 3, 9, 1, 54), Inv.NAME_ACTIVED_CHEAT_MENU);
+		if (cheats.size() > 0) {
 			int slot = 0;
-			for (Cheat c : np.ACTIVE_CHEAT) {
+			for (Cheat c : cheats) {
 				if(inv.getSize() > slot) {
 					String lore = np.hasDetectionActive(c) ? ChatColor.GREEN + "You can be detected." : ChatColor.RED + "Cannot be detected.\n&7Reason: &c" + np.getWhyDetectionNotActive(c);
 					inv.setItem(slot++, ItemUtils.hideAttributes(createItem((Material) c.getMaterial(), ChatColor.RESET + c.getName(), lore.split("\n"))));

@@ -97,7 +97,6 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 				for (int i = 2; i < arg.length; i++) {
 					Cheat cheat = Cheat.fromString(arg[i]);
 					if (cheat != null) {
-						nTarget.startAnalyze(cheat);
 						cheatNamesJoiner.add(cheat.getName());
 						cheatsToVerify.add(cheat);
 					}

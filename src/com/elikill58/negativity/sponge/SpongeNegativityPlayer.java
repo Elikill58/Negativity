@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
@@ -39,6 +40,7 @@ import com.elikill58.negativity.sponge.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.sponge.precogs.NegativityBypassTicket;
 import com.elikill58.negativity.sponge.protocols.ForceFieldProtocol;
 import com.elikill58.negativity.sponge.support.ViaVersionSupport;
+import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -48,6 +50,7 @@ import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.flowpowered.math.vector.Vector3d;
 
@@ -56,7 +59,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	private static final Map<UUID, SpongeNegativityPlayer> PLAYERS_CACHE = new HashMap<>();
 
 	public static ArrayList<Player> INJECTED = new ArrayList<>();
-	private ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
 	public HashMap<String, String> MODS = new HashMap<>();
 	public ArrayList<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
@@ -128,11 +130,20 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public boolean hasDetectionActive(Cheat c) {
-		return ACTIVE_CHEAT.contains(c) && !hasBypassTicket(c);
-	}
-
-	public ArrayList<Cheat> getActiveCheat() {
-		return ACTIVE_CHEAT;
+		if(!c.isActive())
+			return false;
+		if(TIME_INVINCIBILITY > System.currentTimeMillis())
+			return false;
+		if (isInFight && c.isBlockedInFight())
+			return false;
+		Player p = getPlayer();
+		//if(WorldRegionBypass.hasBypass(c, p.getLocation()))
+			//return false;
+		if(SpongeNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase(Locale.ROOT)) || Perm.hasPerm(this, "bypass.all")))
+			return false;
+		if(hasBypassTicket(c))
+			return false;
+		return Utils.getPing(p) < c.getMaxAlertPing();
 	}
 
 	public void logProof(String msg) {
@@ -201,8 +212,6 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public void startAnalyze(Cheat c) {
 		if (!c.isActive())
 			return;
-		if (!ACTIVE_CHEAT.contains(c))
-			ACTIVE_CHEAT.add(c);
 		if (c.getKey().equalsIgnoreCase(CheatKeys.FORCEFIELD)) {
 			if (timeStartFakePlayer == 0)
 				timeStartFakePlayer = 1; // not on the player connection
@@ -218,7 +227,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 
 	@Override
 	public void stopAnalyze(Cheat c) {
-		ACTIVE_CHEAT.remove(c);
+		
 	}
 
 	private void destroy() {
@@ -226,7 +235,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void makeAppearEntities() {
-		if (!ACTIVE_CHEAT.contains(Cheat.forKey(CheatKeys.FORCEFIELD))
+		if (!Cheat.forKey(CheatKeys.FORCEFIELD).isActive()
 				|| Adapter.getAdapter().getConfig().getBoolean("cheats.forcefield.ghost_disabled"))
 			return;
 		timeStartFakePlayer = System.currentTimeMillis();

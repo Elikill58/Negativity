@@ -68,7 +68,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	private static final Map<UUID, SpigotNegativityPlayer> players = new HashMap<>();
 
 	public static ArrayList<UUID> INJECTED = new ArrayList<>();
-	public ArrayList<Cheat> ACTIVE_CHEAT = new ArrayList<>();
 	public ArrayList<FakePlayer> FAKE_PLAYER = new ArrayList<>();
 	public HashMap<PacketType, Integer> PACKETS = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
@@ -148,7 +147,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public String getIP() {
-		return p.get().getAddress().getAddress().getHostAddress();
+		return getPlayer().getAddress().getAddress().getHostAddress();
 	}
 	
 	@Override
@@ -171,8 +170,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	
 	public boolean hasDetectionActive(Cheat c) {
 		if(!c.isActive() || SpigotNegativity.timeDrop)
-			return false;
-		if(!ACTIVE_CHEAT.contains(c))
 			return false;
 		if(TIME_INVINCIBILITY > System.currentTimeMillis())
 			return false;
@@ -197,8 +194,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return "Cheat disabled";
 		if(SpigotNegativity.timeDrop)
 			return "TPS drop";
-		if(!ACTIVE_CHEAT.contains(c))
-			return "Cheat not active";
 		if(TIME_INVINCIBILITY > System.currentTimeMillis())
 			return "Player invincibility";
 		if (isInFight && c.isBlockedInFight())
@@ -303,7 +298,6 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	
 	@Override
 	public void startAnalyze(Cheat c) {
-		ACTIVE_CHEAT.add(c);
 		if (c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
 			INJECTED.add(getPlayer().getUniqueId());
 		if (c.getKey().equalsIgnoreCase(CheatKeys.FORCEFIELD)) {
@@ -317,13 +311,11 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	@Override
 	public void startAllAnalyze() {
 		INJECTED.add(getPlayer().getUniqueId());
-		for (Cheat c : Cheat.values())
-			startAnalyze(c);
 	}
 
 	@Override
 	public void stopAnalyze(Cheat c) {
-		ACTIVE_CHEAT.remove(c);
+		
 	}
 	
 	@Override
@@ -379,7 +371,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void makeAppearEntities() {
-		if (!ACTIVE_CHEAT.contains(Cheat.forKey(CheatKeys.FORCEFIELD)) || Version.getVersion().isNewerOrEquals(Version.V1_17)
+		if (!Cheat.forKey(CheatKeys.FORCEFIELD).isActive() || Version.getVersion().isNewerOrEquals(Version.V1_17)
 				|| SpigotNegativity.getInstance().getConfig().getBoolean("cheats.forcefield.ghost_disabled"))
 			return;
 		timeStartFakePlayer = System.currentTimeMillis();

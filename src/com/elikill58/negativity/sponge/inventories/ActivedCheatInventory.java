@@ -17,7 +17,6 @@ import org.spongepowered.api.text.Text;
 import com.elikill58.negativity.sponge.Inv;
 import com.elikill58.negativity.sponge.Messages;
 import com.elikill58.negativity.sponge.SpongeNegativity;
-import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.inventories.holders.ActivedCheatHolder;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.sponge.utils.ItemUtils;
@@ -42,10 +41,9 @@ public class ActivedCheatInventory extends AbstractInventory {
 				.build(SpongeNegativity.INSTANCE);
 		Utils.fillInventoryWith(Inv.EMPTY, inv);
 		GridInventory invGrid = inv.query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
-		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
 		int i = 0;
-		if (np.getActiveCheat().size() > 0) {
-			for (Cheat c : np.getActiveCheat()) {
+		if (Cheat.values().size() > 0) {
+			for (Cheat c : Cheat.values()) {
 				invGrid.set(SlotIndex.of(i), ItemUtils.hideAttributes(createItem((ItemType) c.getMaterial(), "&r" + c.getName())));
 				i++;
 			}

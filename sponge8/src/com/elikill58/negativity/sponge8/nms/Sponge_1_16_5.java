@@ -3,6 +3,7 @@ package com.elikill58.negativity.sponge8.nms;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
@@ -12,6 +13,8 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.sponge8.SpongeNegativity;
@@ -20,9 +23,11 @@ import com.elikill58.negativity.universal.Adapter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
+import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.network.protocol.game.ServerboundKeepAlivePacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
+import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unchecked")
 public class Sponge_1_16_5 extends SpongeVersionAdapter {
@@ -58,12 +63,12 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 					get(f, "yRot"), get(f, "xRot"), get(f,  "onGround"), get(f, "hasPos"), get(f, "hasRot"));
 		});
 		packetsPlayIn.put("ServerboundKeepAlivePacket", (f) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) f).getId()));
-		/*packetsPlayIn.put("CPacketUseEntity", (f) -> {
-			ClientboundUseEntityPacket p = (ClientboundUseEntityPacket) f;
-			Vec3d v = p.getHitVec();
+		packetsPlayIn.put("ServerboundInteractPacket", (f) -> {
+			ServerboundInteractPacket p = (ServerboundInteractPacket) f;
+			Vec3 v = p.getLocation();
 			return new NPacketPlayInUseEntity(0, v == null ? new Vector(0, 0, 0) : new Vector(v.x, v.y, v.z),
 					EnumEntityUseAction.valueOf(p.getAction().name()));
-		});*/
+		});
 
 		
 		

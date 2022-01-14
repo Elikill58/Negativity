@@ -9,6 +9,7 @@ import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.packet.NPacket;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
 import com.elikill58.negativity.sponge8.impl.packet.SpongePacketManager;
 import com.elikill58.negativity.sponge8.nms.SpongeVersionAdapter;
 import com.elikill58.negativity.universal.Adapter;
@@ -29,8 +30,8 @@ public class PacketGateManager extends SpongePacketManager {
 	public AbstractPacket onPacketSent(NPacket packet, ServerPlayer sender, Object nmsPacket, PacketEvent event) {
 		if(packet == null || packet.getPacketType() == null)
 			return null;
-		if(!packet.getPacketType().isUnset())
-			Adapter.getAdapter().debug("Unset PacketType sent for " + nmsPacket.getClass().getCanonicalName());
+		/*if(packet.getPacketType().isUnset())
+			Adapter.getAdapter().debug("Unset PacketType sent for " + nmsPacket.getClass().getCanonicalName());*/
 		PacketGatePacket customPacket = new PacketGatePacket(packet, nmsPacket, sender, event);
 		notifyHandlersSent(PacketSourceType.PACKETGATE, customPacket);
 		return customPacket;
@@ -39,8 +40,8 @@ public class PacketGateManager extends SpongePacketManager {
 	public AbstractPacket onPacketReceive(NPacket packet, ServerPlayer sender, Object nmsPacket, PacketEvent event) {
 		if(packet == null || packet.getPacketType() == null) 
 			return null;
-		if(!packet.getPacketType().isUnset())
-			Adapter.getAdapter().debug("Unset PacketType receive for " + nmsPacket.getClass().getCanonicalName());
+		if(packet.getPacketType().isUnset())
+			Adapter.getAdapter().debug("Unset PacketType receive for " + ((NPacketPlayInUnset) packet).packetName + " : " + nmsPacket.getClass().getName());
 		PacketGatePacket customPacket = new PacketGatePacket(packet, nmsPacket, sender, event);
 		notifyHandlersReceive(PacketSourceType.PACKETGATE, customPacket);
 		return customPacket;

@@ -18,6 +18,7 @@ import com.elikill58.negativity.sponge8.SpongeNegativity;
 import com.elikill58.negativity.universal.Adapter;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
 import net.minecraft.network.protocol.game.ServerboundKeepAlivePacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
@@ -28,10 +29,11 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 
 	public Sponge_1_16_5() {
 		super("v1_16_5");
-		packetsPlayIn.put("ClientboundBlockBreakAckPacket", (packet) -> {
-			BlockPos pos = get(packet, "pos");
+		packetsPlayIn.put("ServerboundPlayerActionPacket", (f) -> {
+			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) f;
+			BlockPos pos = packet.getPos();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(),
-					translateDigAction(get(packet, "action")), DigFace.BOTTOM);
+					translateDigAction(packet.getAction()), translateDigDirection(packet.getDirection()));
 		});
 
 		packetsPlayIn.put("ServerboundChatPacket", (packet) -> new NPacketPlayInChat(((ServerboundChatPacket) packet).getMessage()));
@@ -101,6 +103,24 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 
 		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size()
 				+ " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
+	}
+
+	private DigFace translateDigDirection(Direction direction) {
+		switch (direction) {
+		case DOWN:
+			return DigFace.BOTTOM;
+		case EAST:
+			return DigFace.EAST;
+		case NORTH:
+			return DigFace.NORTH;
+		case SOUTH:
+			return DigFace.SOUTH;
+		case UP:
+			return DigFace.TOP;
+		case WEST:
+			return DigFace.WEST;
+		}
+		return null;
 	}
 
 	private static DigAction translateDigAction(ServerboundPlayerActionPacket.Action action) {

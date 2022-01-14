@@ -10,7 +10,6 @@ import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
-import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.packets.AbstractPacket;
@@ -20,7 +19,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.Maths;
@@ -65,7 +63,8 @@ public class PacketListener implements Listeners {
 					np.sensitivity = tmpSens;
 				}
 			}
-		}
+		} else
+			np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
 		if(type == PacketType.Client.BLOCK_DIG && !Version.getVersion().equals(Version.V1_7) && packet.getPacket() instanceof NPacketPlayInBlockDig) {
 			NPacketPlayInBlockDig blockDig = (NPacketPlayInBlockDig) packet.getPacket();
 			if(blockDig.action != DigAction.FINISHED_DIGGING)
@@ -94,13 +93,5 @@ public class PacketListener implements Listeners {
 			np.isAttacking = false;
 		}
 		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketReceived(e));
-	}
-	
-	@EventListener
-	public void onPacketClear(PlayerPacketsClearEvent e) {
-		int i = 0;
-		for(int a : e.getPackets().values())
-			i += a;
-		Adapter.getAdapter().broadcastMessage(e.getPlayer().getName() + " sent " + i + " packets (for " + e.getPackets().size() + " types)");
 	}
 }

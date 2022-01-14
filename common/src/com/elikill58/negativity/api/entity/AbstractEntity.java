@@ -7,6 +7,7 @@ import java.util.List;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.ray.BlockRay;
 import com.elikill58.negativity.api.ray.BlockRayResult;
+import com.elikill58.negativity.universal.Adapter;
 
 public abstract class AbstractEntity implements Entity {
 	
@@ -25,8 +26,12 @@ public abstract class AbstractEntity implements Entity {
 				blocks.add(block);
 			}
 		}*/
-		BlockRayResult result;
-		result = new BlockRay.BlockRayBuilder(getLocation(), this).maxDistance(maxDistance).ignoreAir(true).build().compile();
+		BlockRay ray = new BlockRay.BlockRayBuilder(getLocation(), this).maxDistance(maxDistance).ignoreAir(true).build();
+		BlockRayResult result = ray.compile();
+		if(!result.getRayResult().isFounded()) {
+			Adapter.getAdapter().debug("Begin: " + getLocation() + ", vec: " + ray.getVector().toString());
+			Adapter.getAdapter().debug("Tested locs: " + result.getAllTestedLoc().toString());
+		}
 		Block b = result.getBlock();
 		return b == null ? new ArrayList<>() : Arrays.asList(b);
 	}

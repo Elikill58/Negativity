@@ -1,12 +1,12 @@
 package com.elikill58.negativity.api.ray;
 
-import java.util.List;
+import java.util.HashMap;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.ray.BlockRay.RayResult;
 
 public class BlockRayResult {
@@ -15,9 +15,9 @@ public class BlockRayResult {
 	private final RayResult rayResult;
 	private final Block block;
 	private final boolean hasBlockExceptSearched;
-	private final List<Vector> alltestedLoc;
+	private final HashMap<Location, Material> alltestedLoc;
 	
-	protected BlockRayResult(BlockRay ray, RayResult rayResult, Block block, boolean hasBlockExceptSearched, List<Vector> testedLoc) {
+	protected BlockRayResult(BlockRay ray, RayResult rayResult, Block block, boolean hasBlockExceptSearched, HashMap<Location, Material> testedLoc) {
 		this.ray = ray;
 		this.rayResult = rayResult;
 		this.block = block;
@@ -74,7 +74,7 @@ public class BlockRayResult {
 		return hasBlockExceptSearched;
 	}
 	
-	public List<Vector> getAlltestedLoc() {
+	public HashMap<Location, Material> getAllTestedLoc() {
 		return alltestedLoc;
 	}
 }

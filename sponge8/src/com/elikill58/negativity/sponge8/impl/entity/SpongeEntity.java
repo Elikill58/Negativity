@@ -89,7 +89,7 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	
 	@Override
 	public Vector getRotation() {
-		Vector3d vec = entity.rotation();
+		Vector3d vec = entity.direction();
 		return new Vector(vec.x(), vec.y(), vec.z());
 	}
 	

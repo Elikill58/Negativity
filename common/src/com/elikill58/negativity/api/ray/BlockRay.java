@@ -2,6 +2,7 @@ package com.elikill58.negativity.api.ray;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -21,7 +22,8 @@ public class BlockRay {
 	private final List<Material> filter, neededType;
 	private final int maxDistance;
 	private boolean hasOther = false;
-	private List<Vector> positions, testedVec = new ArrayList<>();
+	private List<Vector> positions;
+	private HashMap<Location, Material> testedVec = new HashMap<>();
 	
 	protected BlockRay(World w, Location position, Vector vector, int maxDistance, Material[] neededType, boolean ignoreAir, boolean ignoreEntity, Material[] filter, List<Vector> positions) {
 		this.w = w;
@@ -120,11 +122,11 @@ public class BlockRay {
 			return RayResult.REACH_TOP;
 		if(position.getBlockY() < 0)
 			return RayResult.REACH_BOTTOM;
-		Location loc = position.add(vector);
+		Location loc = position.add(vector).clone();
+		testedVec.put(loc, Materials.STICK); // will be replaced when getting from exact block
 		double distance = loc.distance(basePosition); // check between both distance
 		if(distance >= maxDistance)
 			return neededType != null ? RayResult.NEEDED_NOT_FOUND : RayResult.END_TRY;
-		testedVec.add(loc.toVector());
 		if(!positions.isEmpty()) {
 			int baseX = loc.getBlockX(), baseY = loc.getBlockY(), baseZ = loc.getBlockZ();
 			for(Vector vec : positions) {
@@ -134,6 +136,7 @@ public class BlockRay {
 			}
 		}
 		Material type = loc.getBlock().getType();
+		testedVec.put(loc, type); // changed tested type to the getted one
 		if(neededType != null) {
 			if(neededType.contains(type))
 				return RayResult.NEEDED_FOUND;

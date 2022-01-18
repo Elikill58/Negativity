@@ -50,6 +50,7 @@ import net.minecraft.network.protocol.game.ClientboundKeepAlivePacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
+import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.network.protocol.game.ServerboundKeepAlivePacket;
@@ -67,6 +68,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+@SuppressWarnings("resource")
 public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 
 	public Spigot_1_18_R1() {
@@ -179,8 +181,10 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
 					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
 		});
-		packetsPlayOut.put("PacketPlayOutEntityEffect", (player, packet) -> {
-			return new NPacketPlayOutEntityEffect(get(packet, "d"), get(packet, "e"), get(packet, "f"), get(packet, "g"), get(packet, "h"));
+		packetsPlayOut.put("PacketPlayOutEntityEffect", (player, f) -> {
+			ClientboundUpdateMobEffectPacket packet = (ClientboundUpdateMobEffectPacket) f;
+			return new NPacketPlayOutEntityEffect(packet.getEntityId(), packet.getEffectId(), packet.getEffectAmplifier(), packet.getEffectDurationTicks(), (byte) 0);
+			//return new NPacketPlayOutEntityEffect(get(packet, "d"), get(packet, "e"), get(packet, "f"), get(packet, "g"), get(packet, "h"));
 		});
 
 		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {

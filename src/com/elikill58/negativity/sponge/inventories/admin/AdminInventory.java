@@ -21,7 +21,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 
 import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
 
-public class AdminInventory extends AbstractInventory {
+public class AdminInventory extends AbstractInventory<AdminHolder> {
 
 	public AdminInventory() {
 		super(InventoryType.ADMIN);
@@ -50,7 +50,7 @@ public class AdminInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
+	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, AdminHolder nh) {
 		if(m.equals(ItemTypes.PAPER)) {
 			delayed(() -> AbstractInventory.open(InventoryType.LANG, p));
 		} else if (m.equals(ItemTypes.TNT))

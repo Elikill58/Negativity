@@ -1,10 +1,8 @@
 package com.elikill58.negativity.sponge;
 
-import java.util.HashMap;
 import java.util.UUID;
 
 import org.spongepowered.api.data.type.DyeColors;
-import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
 import org.spongepowered.api.item.inventory.property.Identifiable;
@@ -13,11 +11,10 @@ import com.elikill58.negativity.sponge.utils.ItemUtils;
 
 public class Inv {
 
-	public static final String NAME_CHECK_MENU = "Check", NAME_ADMIN_MENU = "Admin", NAME_LANG_MENU = "Lang",
+	public static final String NAME_CHECK_MENU = "Check", NAME_CHECK_MENU_OFFLINE = "Check Offline", NAME_ADMIN_MENU = "Admin", NAME_LANG_MENU = "Lang",
 			NAME_ACTIVED_CHEAT_MENU = Messages.getMessage("inventory.detection.name_inv"), NAME_FREEZE_MENU = "Freeze",
 			NAME_MOD_MENU = "Mod", NAME_ALERT_MENU = "Alerts", NAME_FORGE_MOD_MENU = "Mods";
-	public static final ItemStack EMPTY = ItemUtils.createItem(ItemTypes.STAINED_GLASS_PANE, "-", 1, DyeColors.GRAY);;
-	public static final HashMap<Player, Player> CHECKING = new HashMap<>();
+	public static final ItemStack EMPTY = ItemUtils.createItem(ItemTypes.STAINED_GLASS_PANE, "-", 1, DyeColors.GRAY);
 
 	public static final String INV_ID_KEY = "negativity_inv";
 	public static final Identifiable CHECK_INV_ID = new Identifiable(UUID.fromString("aac9b596-8431-4d0b-87f5-b6623abfae00"));

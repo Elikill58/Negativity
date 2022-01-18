@@ -29,7 +29,7 @@ import com.elikill58.negativity.sponge.utils.ItemUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.permissions.Perm;
 
-public class ModInventory extends AbstractInventory {
+public class ModInventory extends AbstractInventory<ModHolder> {
 
 	private final PotionEffect NIGHT_VISION_EFFECT = PotionEffect.builder().potionType(PotionEffectTypes.NIGHT_VISION).amplifier(1).duration(10000).build();
 	
@@ -65,7 +65,7 @@ public class ModInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
+	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, ModHolder nh) {
 		if (m.equals(ItemTypes.GHAST_TEAR)) {
 			delayedInvClose(p);
 			PotionEffectData potionEffects = p.getOrCreate(PotionEffectData.class).orElse(null);

@@ -20,16 +20,15 @@ public class ActualizerTimer implements Consumer<Task> {
 
 	@Override
     public void accept(Task task) {
-        for (Player p : Inv.CHECKING.keySet()) {
-            if (p.getOpenInventory().get().getName().get().equals(Inv.NAME_ACTIVED_CHEAT_MENU)) {
-            } else if (p.getOpenInventory().get().getName().get().equals(Inv.NAME_CHECK_MENU))
-                AbstractInventory.getInventory(InventoryType.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
-            else if (p.getOpenInventory().get().getName().get().equals(Inv.NAME_ALERT_MENU))
-                AbstractInventory.getInventory(InventoryType.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, Inv.CHECKING.get(p)));
-            else
-                Inv.CHECKING.remove(p);
-        }
         for (Player p : Utils.getOnlinePlayers()) {
+        	p.getOpenInventory().ifPresent((openInv) -> {
+	            if (openInv.getName().get().equals(Inv.NAME_CHECK_MENU))
+	                AbstractInventory.getInventory(InventoryType.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p));
+	            else if (openInv.getName().get().equals(Inv.NAME_CHECK_MENU_OFFLINE))
+	                AbstractInventory.getInventory(InventoryType.CHECK_MENU_OFFLINE).ifPresent((inv) -> inv.actualizeInventory(p));
+	            else if (openInv.getName().get().equals(Inv.NAME_ALERT_MENU))
+	                AbstractInventory.getInventory(InventoryType.ALERT).ifPresent((inv) -> inv.actualizeInventory(p));
+        	});
         	SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(p);
             if (np.isFreeze && INV_FREEZE_ACTIVE) {
                 Container openInventory = p.getOpenInventory().orElse(null);

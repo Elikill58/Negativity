@@ -29,7 +29,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class LangInventory extends AbstractInventory {
+public class LangInventory extends AbstractInventory<LangHolder> {
 
 	public LangInventory() {
 		super(InventoryType.LANG);
@@ -101,7 +101,7 @@ public class LangInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
+	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, LangHolder nh) {
 		if(m.equals(ItemTypes.ARROW)) {
 			AbstractInventory.open(InventoryType.ADMIN, p);
 		} else if(m.equals(ItemTypes.PAPER)) {

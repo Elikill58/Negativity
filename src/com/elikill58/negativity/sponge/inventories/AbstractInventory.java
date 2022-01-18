@@ -23,9 +23,9 @@ import com.elikill58.negativity.sponge.inventories.admin.LangInventory;
 import com.elikill58.negativity.sponge.inventories.admin.OneCheatInventory;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
 
-public abstract class AbstractInventory {
+public abstract class AbstractInventory<T extends NegativityHolder> {
 
-	private static final List<AbstractInventory> INVENTORIES = new ArrayList<>();
+	private static final List<AbstractInventory<? extends NegativityHolder>> INVENTORIES = new ArrayList<>();
 	private final InventoryType type;
 	
 	public AbstractInventory(InventoryType type) {
@@ -37,6 +37,7 @@ public abstract class AbstractInventory {
 		return type;
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Listener
 	public void onClick(ClickInventoryEvent e, @First Player p) {
 		if (e.getTransactions().isEmpty() || !(e.getTargetInventory() instanceof CarriedInventory<?>))
@@ -52,18 +53,18 @@ public abstract class AbstractInventory {
 			if (m.equals(ItemTypes.BARRIER))
 				delayedInvClose(p);
 			else
-				manageInventory(e, m, p, (NegativityHolder) optCarrier.get());
+				manageInventory(e, m, p, (T) optCarrier.get());
 		}
 	}
 
 	public abstract boolean isInstance(NegativityHolder nh);
 	public abstract void openInventory(Player p, Object... args);
 	public void closeInventory(Player p, InteractInventoryEvent.Close e) {}
-	public abstract void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh);
+	public abstract void manageInventory(ClickInventoryEvent e, ItemType m, Player p, T nh);
 	public void actualizeInventory(Player p, Object... args) {}
 	
-	public static Optional<AbstractInventory> getInventory(InventoryType type) {
-		for(AbstractInventory inv : INVENTORIES)
+	public static Optional<AbstractInventory<? extends NegativityHolder>> getInventory(InventoryType type) {
+		for(AbstractInventory<? extends NegativityHolder> inv : INVENTORIES)
 			if(inv.getType().equals(type))
 				return Optional.of(inv);
 		return Optional.empty();
@@ -79,6 +80,7 @@ public abstract class AbstractInventory {
 		pm.registerListeners(np, new AlertInventory());
 		pm.registerListeners(np, new ModInventory());
 		pm.registerListeners(np, new CheckMenuInventory());
+		pm.registerListeners(np, new CheckMenuOfflineInventory());
 		pm.registerListeners(np, new CheatManagerInventory());
 		pm.registerListeners(np, new ForgeModsInventory());
 		pm.registerListeners(np, new OneCheatInventory());
@@ -102,6 +104,7 @@ public abstract class AbstractInventory {
 		ADMIN,
 		ALERT,
 		CHECK_MENU,
+		CHECK_MENU_OFFLINE,
 		CHEAT_MANAGER,
 		FREEZE,
 		MOD,

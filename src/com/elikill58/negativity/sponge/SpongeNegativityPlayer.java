@@ -26,6 +26,7 @@ import org.spongepowered.api.data.type.HandTypes;
 import org.spongepowered.api.effect.potion.PotionEffect;
 import org.spongepowered.api.effect.potion.PotionEffectType;
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.enchantment.Enchantment;
@@ -99,6 +100,11 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 		playerVersion = SpongeNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : Version.getVersion();
 	}
 
+	public SpongeNegativityPlayer(User p) {
+		super(p.getUniqueId(), p.getName());
+		playerVersion = Version.getVersion();
+	}
+
 	public void initFmlMods() {
 		if (SpongeForgeSupport.isOnSpongeForge) {
 			MODS = SpongeForgeSupport.getClientMods(p);
@@ -137,14 +143,14 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 			return false;
 		if (isInFight && c.isBlockedInFight())
 			return false;
-		Player p = getPlayer();
 		//if(WorldRegionBypass.hasBypass(c, p.getLocation()))
 			//return false;
 		if(SpongeNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase(Locale.ROOT)) || Perm.hasPerm(this, "bypass.all")))
 			return false;
 		if(hasBypassTicket(c))
 			return false;
-		return Utils.getPing(p) < c.getMaxAlertPing();
+		Player p = getPlayer();
+		return p == null || Utils.getPing(p) < c.getMaxAlertPing();
 	}
 
 	public void logProof(String msg) {
@@ -517,6 +523,10 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	}
 
 	public static SpongeNegativityPlayer getNegativityPlayer(Player player) {
+		return PLAYERS_CACHE.computeIfAbsent(player.getUniqueId(), id -> new SpongeNegativityPlayer(player));
+	}
+
+	public static SpongeNegativityPlayer getNegativityPlayer(User player) {
 		return PLAYERS_CACHE.computeIfAbsent(player.getUniqueId(), id -> new SpongeNegativityPlayer(player));
 	}
 	

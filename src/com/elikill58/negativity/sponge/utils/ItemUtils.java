@@ -6,7 +6,7 @@ import java.util.List;
 import org.spongepowered.api.data.key.Keys;
 import org.spongepowered.api.data.type.DyeColor;
 import org.spongepowered.api.data.type.SkullTypes;
-import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
 import org.spongepowered.api.item.inventory.ItemStack;
@@ -36,7 +36,7 @@ public class ItemUtils {
 		return item;
 	}
 
-	public static ItemStack createSkull(String name, int amount, Player owner, String... lore) {
+	public static ItemStack createSkull(String name, int amount, User owner, String... lore) {
 		ItemStack skull = ItemStack.builder()
 				.itemType(ItemTypes.SKULL)
 				.add(Keys.SKULL_TYPE, SkullTypes.PLAYER)

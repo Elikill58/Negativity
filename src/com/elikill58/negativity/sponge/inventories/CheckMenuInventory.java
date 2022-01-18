@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge.inventories;
 
+import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
+
 import org.spongepowered.api.entity.living.player.Player;
 import org.spongepowered.api.event.item.inventory.ClickInventoryEvent;
 import org.spongepowered.api.item.ItemType;
@@ -8,6 +10,7 @@ import org.spongepowered.api.item.inventory.Inventory;
 import org.spongepowered.api.item.inventory.property.InventoryDimension;
 import org.spongepowered.api.item.inventory.property.InventoryTitle;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
+import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import org.spongepowered.api.item.inventory.type.GridInventory;
 import org.spongepowered.api.text.Text;
 
@@ -23,9 +26,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.NegativityAccount;
 import com.elikill58.negativity.universal.permissions.Perm;
 
-import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
-
-public class CheckMenuInventory extends AbstractInventory {
+public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 
 	public CheckMenuInventory() {
 		super(InventoryType.CHECK_MENU);
@@ -39,7 +40,7 @@ public class CheckMenuInventory extends AbstractInventory {
 	@Override
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
-		Inventory inv = Inventory.builder().withCarrier(new CheckMenuHolder())
+		Inventory inv = Inventory.builder().withCarrier(new CheckMenuHolder(cible))
 				.property(InventoryTitle.PROPERTY_NAME, new InventoryTitle(Text.of(Inv.NAME_CHECK_MENU)))
 				.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, 3))
 				.property(Inv.INV_ID_KEY, Inv.CHECK_INV_ID).build(SpongeNegativity.getInstance());
@@ -92,19 +93,16 @@ public class CheckMenuInventory extends AbstractInventory {
 				Messages.getStringMessage(p, "inventory.main.active_detection", "%name%", cible.getName())));
 		invGrid.set(8, 2, createItem(ItemTypes.BARRIER, Messages.getStringMessage(p, "inventory.close")));
 		p.openInventory(inv);
-		Inv.CHECKING.put(p, cible);
 	}
 
 	@Override
-	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
-		Player cible = Inv.CHECKING.get(p);
+	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, CheckMenuHolder nh) {
+		Player cible = nh.getPlayer();
 		if (m.equals(ItemTypes.ENDER_EYE)) {
 			p.setLocation(cible.getLocation());
 			delayedInvClose(p);
-			Inv.CHECKING.remove(p);
 		} else if (m.equals(ItemTypes.SPIDER_EYE)) {
 			delayed(() -> p.openInventory(cible.getInventory()));
-			Inv.CHECKING.remove(p);
 		} else if (m.equals(ItemTypes.TNT)) {
 			delayed(() -> AbstractInventory.open(InventoryType.ACTIVED_CHEAT, p, cible));
 		} else if (m.equals(ItemTypes.PACKED_ICE) && p != cible) {
@@ -130,8 +128,8 @@ public class CheckMenuInventory extends AbstractInventory {
 
 	@Override
 	public void actualizeInventory(Player p, Object... args) {
-		Player cible = (Player) args[0];
 		Inventory inv = p.getOpenInventory().get();
+		Player cible = (Player) ((CheckMenuHolder) ((CarriedInventory<?>) inv).getCarrier().get()).getPlayer();
 		GridInventory invGrid = inv.first().query(QueryOperationTypes.INVENTORY_TYPE.of(GridInventory.class));
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
 		NegativityAccount account = np.getAccount();

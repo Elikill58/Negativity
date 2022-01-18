@@ -9,6 +9,6 @@ public class SpongePermissionChecker extends BasePlatformPermissionChecker {
 
 	@Override
 	protected boolean doPlatformCheck(NegativityPlayer player, String platformPerm) {
-		return ((Player) player.getPlayer()).hasPermission(platformPerm);
+		return player.getPlayer() != null && ((Player) player.getPlayer()).hasPermission(platformPerm);
 	}
 }

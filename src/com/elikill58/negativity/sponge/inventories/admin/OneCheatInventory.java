@@ -24,7 +24,7 @@ import com.elikill58.negativity.universal.Cheat;
 
 import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
 
-public class OneCheatInventory extends AbstractInventory {
+public class OneCheatInventory extends AbstractInventory<OneCheatHolder> {
 
 	public OneCheatInventory() {
 		super(InventoryType.ONE_CHEAT);
@@ -75,12 +75,12 @@ public class OneCheatInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
+	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, OneCheatHolder nh) {
 		if (m.equals(ItemTypes.ARROW)) {
 			delayed(() -> AbstractInventory.open(InventoryType.CHEAT_MANAGER, p, false));
 			return;
 		}
-		Cheat c = ((OneCheatHolder) nh).getCheat();
+		Cheat c = nh.getCheat();
 		if (m.equals(c.getMaterial()))
 			return;
 		if(m.equals(ItemTypes.TNT))

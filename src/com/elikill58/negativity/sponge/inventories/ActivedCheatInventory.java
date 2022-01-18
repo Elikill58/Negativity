@@ -3,6 +3,7 @@ package com.elikill58.negativity.sponge.inventories;
 import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
 
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.event.item.inventory.ClickInventoryEvent;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
@@ -24,7 +25,7 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class ActivedCheatInventory extends AbstractInventory {
+public class ActivedCheatInventory extends AbstractInventory<ActivedCheatHolder> {
 
 	public ActivedCheatInventory() {
 		super(InventoryType.ACTIVED_CHEAT);
@@ -32,9 +33,9 @@ public class ActivedCheatInventory extends AbstractInventory {
 	
 	@Override
 	public void openInventory(Player p, Object... args) {
-		Player cible = (Player) args[0];
+		User cible = (User) args[0];
 		int size = UniversalUtils.getMultipleOf(Cheat.values().size() + 3, 9, 1, 54), nbLine = size / 9;
-		Inventory inv = Inventory.builder().withCarrier(new ActivedCheatHolder())
+		Inventory inv = Inventory.builder().withCarrier(new ActivedCheatHolder(cible))
 				.property(InventoryTitle.PROPERTY_NAME, new InventoryTitle(Text.of(Inv.NAME_ACTIVED_CHEAT_MENU)))
 				.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, nbLine))
 				.property(Inv.INV_ID_KEY, Inv.ACTIVE_CHEAT_INV_ID)
@@ -57,9 +58,13 @@ public class ActivedCheatInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
-		if (m.equals(ItemTypes.ARROW))
-			AbstractInventory.open(InventoryType.CHECK_MENU, p, Inv.CHECKING.get(p));
+	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, ActivedCheatHolder nh) {
+		if (m.equals(ItemTypes.ARROW)) {
+			if(nh.getUser() instanceof Player)
+				AbstractInventory.open(InventoryType.CHECK_MENU, p, nh.getUser());
+			else
+				AbstractInventory.open(InventoryType.CHECK_MENU_OFFLINE, p, nh.getUser());
+		}
 	}
 	
 	@Override

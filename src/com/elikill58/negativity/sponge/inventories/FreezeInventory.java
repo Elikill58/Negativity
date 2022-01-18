@@ -21,7 +21,7 @@ import com.elikill58.negativity.sponge.SpongeNegativityPlayer;
 import com.elikill58.negativity.sponge.inventories.holders.FreezeHolder;
 import com.elikill58.negativity.sponge.inventories.holders.NegativityHolder;
 
-public class FreezeInventory extends AbstractInventory {
+public class FreezeInventory extends AbstractInventory<FreezeHolder> {
 
 	public FreezeInventory() {
 		super(InventoryType.FREEZE);
@@ -51,7 +51,7 @@ public class FreezeInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
+	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, FreezeHolder nh) {
 		
 	}
 }

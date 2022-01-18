@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.User;
 import org.spongepowered.api.event.item.inventory.ClickInventoryEvent;
 import org.spongepowered.api.item.ItemType;
 import org.spongepowered.api.item.ItemTypes;
@@ -14,6 +15,7 @@ import org.spongepowered.api.item.inventory.property.InventoryDimension;
 import org.spongepowered.api.item.inventory.property.InventoryTitle;
 import org.spongepowered.api.item.inventory.property.SlotIndex;
 import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
+import org.spongepowered.api.item.inventory.type.CarriedInventory;
 import org.spongepowered.api.item.inventory.type.GridInventory;
 import org.spongepowered.api.text.Text;
 
@@ -31,7 +33,7 @@ import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.config.ConfigAdapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class AlertInventory extends AbstractInventory {
+public class AlertInventory extends AbstractInventory<AlertHolder> {
 
 	public AlertInventory() {
 		super(InventoryType.ALERT);
@@ -39,7 +41,7 @@ public class AlertInventory extends AbstractInventory {
 	
 	@Override
 	public void openInventory(Player p, Object... args) {
-		Player cible = (Player) args[0];
+		User cible = (User) args[0];
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
 		ConfigAdapter config = Adapter.getAdapter().getConfig();
@@ -50,7 +52,7 @@ public class AlertInventory extends AbstractInventory {
 							&& config.getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
 		int size = UniversalUtils.getMultipleOf(TO_SEE.size() + 4, 9, 1, 54), nbLine = size / 9;
-		Inventory inv = Inventory.builder().withCarrier(new AlertHolder())
+		Inventory inv = Inventory.builder().withCarrier(new AlertHolder(cible))
 				.property(InventoryTitle.PROPERTY_NAME, new InventoryTitle(Text.of(Inv.NAME_ALERT_MENU)))
 				.property(InventoryDimension.PROPERTY_NAME, new InventoryDimension(9, nbLine))
 				.property(Inv.INV_ID_KEY, Inv.ALERT_INV_ID)
@@ -63,7 +65,7 @@ public class AlertInventory extends AbstractInventory {
 			int alertCount = Math.min(Math.max(np.getWarn(c), 1), itemType.getMaxStackQuantity()); // Avoid quantity overflow
 			invGrid.set(SlotIndex.of(i), ItemUtils.hideAttributes(createItem(itemType,
 					Messages.getStringMessage(p, "inventory.alerts.item_name", "%exact_name%",
-					c.getName(), "%warn%", String.valueOf(np.getWarn(c))),
+					c.getName(), "%warn%", np.getWarn(c)),
 					alertCount)));
 			i++;
 		}
@@ -77,8 +79,8 @@ public class AlertInventory extends AbstractInventory {
 	
 	@Override
 	public void actualizeInventory(Player p, Object... args) {
-		Player cible = (Player) args[0];
 		Inventory inv = p.getOpenInventory().get();
+		User cible = (User) ((AlertHolder) ((CarriedInventory<?>) inv).getCarrier().get()).getUser();
 		SpongeNegativityPlayer np = SpongeNegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
 		ConfigAdapter config = Adapter.getAdapter().getConfig();
@@ -103,11 +105,14 @@ public class AlertInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
+	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, AlertHolder nh) {
 		if (m.equals(ItemTypes.ARROW))
-			delayed(() -> AbstractInventory.open(InventoryType.CHECK_MENU, p, Inv.CHECKING.get(p)));
+			if(nh.getUser() instanceof Player)
+				delayed(() -> AbstractInventory.open(InventoryType.CHECK_MENU, p, nh.getUser()));
+			else
+				delayed(() -> AbstractInventory.open(InventoryType.CHECK_MENU_OFFLINE, p, nh.getUser()));
 		else if (m.equals(ItemTypes.BONE)) {
-			NegativityAccount account = NegativityAccount.get(Inv.CHECKING.get(p).getUniqueId());
+			NegativityAccount account = NegativityAccount.get(nh.getUser().getUniqueId());
 			for (Cheat c : Cheat.values())
 				account.setWarnCount(c, 0);
 		}

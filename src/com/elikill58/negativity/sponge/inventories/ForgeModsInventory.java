@@ -24,7 +24,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import static com.elikill58.negativity.sponge.utils.ItemUtils.createItem;
 
-public class ForgeModsInventory extends AbstractInventory {
+public class ForgeModsInventory extends AbstractInventory<ForgeModsHolder> {
 
 	public ForgeModsInventory() {
 		super(InventoryType.FORGE_MODS);
@@ -64,7 +64,7 @@ public class ForgeModsInventory extends AbstractInventory {
 	}
 
 	@Override
-	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, NegativityHolder nh) {
+	public void manageInventory(ClickInventoryEvent e, ItemType m, Player p, ForgeModsHolder nh) {
 		
 	}
 }

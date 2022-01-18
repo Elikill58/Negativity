@@ -132,8 +132,9 @@ public class EventManager {
 		HashMap<ListenerCaller, EventListener> allMethods = new HashMap<>();
 		allMethods.putAll(getEventForClass(ev, ev.getClass()));
 		Class<?> superClass = ev.getClass().getSuperclass();
-		if(!superClass.equals(Object.class)) {
+		while(superClass != Object.class) {
 			allMethods.putAll(getEventForClass(ev, superClass));
+			superClass = superClass.getSuperclass();
 		}
 		HashMap<ListenerCaller, EventListener> map = new HashMap<>(allMethods);
 		if(ev instanceof CancellableEvent) {

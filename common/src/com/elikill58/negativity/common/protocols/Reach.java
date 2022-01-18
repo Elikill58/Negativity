@@ -52,7 +52,7 @@ public class Reach extends Cheat implements Listeners {
 			BoundingBox bb1 = p.getBoundingBox(), bb2 = et.getBoundingBox();
 			double dis = bb1.getAsHeadPoint().distance(bb2.getIntersectPoint(p));
 			double xz = bb1.getMid().distanceXZ(bb2.getMid());
-			Adapter.getAdapter().debug("Distance: " + getColoredDistance(xz) + ", old: " + getColoredDistance(dis));
+			Adapter.getAdapter().debug("Distance: " + xz + ", old: " + dis);
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 			if (dis > getConfig().getDouble("checks.reach-event.value", 3.2) && !et.getType().equals(EntityType.ENDER_DRAGON) && !p.getLocation().getBlock().getType().getId().contains("WATER")) {
 				String entityName = et.getName();

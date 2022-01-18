@@ -20,10 +20,7 @@ public class Content<T> {
 	 * @return the needed value according to the type and the valueName
 	 */
 	public T get(CheatKeys type, String valueName, T defaultValue) {
-		HashMap<String, T> hashContent = mainContent.get(type);
-		if(hashContent == null)
-			return defaultValue;
-		return hashContent.getOrDefault(valueName, defaultValue);
+		return mainContent.computeIfAbsent(type, (typee) -> new HashMap<>()).computeIfAbsent(valueName, (a) -> defaultValue);
 	}
 	
 	/**

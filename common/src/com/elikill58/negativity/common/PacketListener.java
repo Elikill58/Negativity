@@ -89,7 +89,7 @@ public class PacketListener implements Listeners {
 					}
 				}
 			}
-		} else if (type == PacketType.Client.KEEP_ALIVE) {
+		} else if (type == PacketType.Client.KEEP_ALIVE || type == PacketType.Client.POSITION) {
 			np.isAttacking = false;
 		}
 		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketReceived(e));

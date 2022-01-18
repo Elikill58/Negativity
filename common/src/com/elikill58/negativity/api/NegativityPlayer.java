@@ -85,6 +85,7 @@ public class NegativityPlayer implements FileSaverAction {
 	public String LAST_OTHER_KEEP_ALIVE = "";
 	
 	// content
+	public Content<List<Double>> listDoubles = new Content<>();
 	public Content<Location> locations = new Content<>();
 	public Content<Material> materials = new Content<>();
 	public Content<Boolean> booleans = new Content<>();

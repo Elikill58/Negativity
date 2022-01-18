@@ -5,6 +5,7 @@ import java.util.Locale;
 public enum CheatKeys implements Comparable<CheatKeys> {
 
 	ALL("ALL"),
+	AIM_BOT("AIMBOT"),
 	AIR_JUMP("AIRJUMP"),
 	AIR_PLACE("AIRPLACE"),
 	ANTI_KNOCKBACK("ANTIKNOCKBACK"),

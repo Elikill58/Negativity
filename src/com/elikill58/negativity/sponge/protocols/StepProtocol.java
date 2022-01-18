@@ -56,7 +56,8 @@ public class StepProtocol extends Cheat {
 
 		Location<World> from = e.getFromTransform().getLocation();
 		Location<World> to = e.getToTransform().getLocation();
-		if(to.copy().sub(0, 1, 0).getBlock().getType().getId().contains("SHULKER"))
+		String belowSubType = to.copy().sub(0, 1, 0).getBlock().getType().getId();
+		if(belowSubType.contains("SHULKER") || belowSubType.contains("SNOW"))
 			return;
 		double dif = to.getY() - from.getY();
 		if (!np.hasPotionEffect(PotionEffectTypes.JUMP_BOOST)) {

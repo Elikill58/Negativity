@@ -2,6 +2,7 @@ package com.elikill58.negativity.sponge.protocols;
 
 import java.util.Optional;
 
+import org.bukkit.entity.Boat;
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.data.key.Keys;
@@ -137,6 +138,35 @@ public class FlyProtocol extends Cheat {
 			np.contentBoolean.put("fly-not-moving-y", true);
 		} else
 			np.contentBoolean.put("fly-not-moving-y", false);
+
+		boolean onGround = ((Entity) p).isOnGround(), wasOnGround = np.contentBoolean.getOrDefault("fly-wasOnGround", true);
+		boolean hasBoatAround = p.getWorld().getNearbyEntities(loc.getPosition(), 3).stream().filter((entity) -> entity instanceof Boat).findFirst().isPresent();
+		if(np.getFallDistance() <= 0.000001 && np.flyMoveAmount.size() > 1 && !p.getVehicle().isPresent() && onGround == wasOnGround && p.getVelocity().length() == 0) {
+			int size = np.flyMoveAmount.size();
+			int amount = 0;
+			for(int x = 1; x < size - 1; x++) {
+				double last = np.flyMoveAmount.get(x - 1);
+				double current = np.flyMoveAmount.get(x);
+				if((last + current) == 0) {
+					if(distance < (size - 2)) {
+						double next = np.flyMoveAmount.get(x + 1);
+						if((current + next) == 0) {
+							amount++;
+						}
+					} else
+						amount++;
+				}
+			}
+			if(amount > 0) {
+				SpongeNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + np.flyMoveAmount.size() + " > " + onGround + " : " + wasOnGround + ", d: " + d, (CheatHover) null, amount > 1 ? amount - 1 : 1);
+			}
+		}
+		if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.has(e.getToTransform().getLocation(), "FENCE", "SLIME", "LILY") || LocationUtils.has(locUnder, "FENCE", "SLIME", "LILY", "VINE") || hasBoatAround)
+			np.flyMoveAmount.clear();
+		else
+			np.flyMoveAmount.add(d);
+		np.contentBoolean.put("fly-wasOnGround", onGround);
+		
 		if (isSetBack() && mayCancel) {
 			Utils.teleportPlayerOnGround(p);
 		}

@@ -65,6 +65,7 @@ public class SpongeNegativityPlayer extends NegativityPlayer {
 	public Map<Cheat, List<PlayerCheatEvent.Alert>> pendingAlerts = new HashMap<>();
 	public HashMap<String, Double> contentDouble = new HashMap<>();
 	public HashMap<String, Boolean> contentBoolean = new HashMap<>();
+	public ArrayList<Double> flyMoveAmount = new ArrayList<>();
 	private Player p = null;
 	// Packets
 	public int FLYING = 0, MAX_FLYING = 0, POSITION_LOOK = 0, KEEP_ALIVE = 0, POSITION = 0, BLOCK_PLACE = 0,

@@ -151,6 +151,6 @@ public class SpiderProtocol extends Cheat {
 	}
 
 	private static boolean isClimbableBlock(BlockType blockType) {
-		return blockType == BlockTypes.VINE || blockType == BlockTypes.LADDER;
+		return blockType == BlockTypes.VINE || blockType == BlockTypes.LADDER || blockType == BlockTypes.SNOW || blockType == BlockTypes.SNOW_LAYER;
 	}
 }

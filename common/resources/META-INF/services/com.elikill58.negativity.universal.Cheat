@@ -33,5 +33,6 @@ com.elikill58.negativity.common.protocols.Sneak
 com.elikill58.negativity.common.protocols.Speed
 com.elikill58.negativity.common.protocols.Spider
 com.elikill58.negativity.common.protocols.Step
+com.elikill58.negativity.common.protocols.SuperKnockback
 com.elikill58.negativity.common.protocols.Timer
 com.elikill58.negativity.common.protocols.XRay

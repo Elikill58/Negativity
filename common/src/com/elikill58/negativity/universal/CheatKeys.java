@@ -40,6 +40,7 @@ public enum CheatKeys implements Comparable<CheatKeys> {
 	SPEED("SPEED"),
 	SPIDER("SPIDER"),
 	STEP("STEP"),
+	SUPER_KNOCKBACK("SUPERKNOCKBACK"),
 	TIMER("TIMER"),
 	XRAY("XRAY");
 	

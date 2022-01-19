@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.maths.Expression;
@@ -150,6 +151,9 @@ public class AntiKnockback extends Cheat implements Listeners {
 	}
 
 	public static boolean hasAntiKbBypass(Player p) {
+		for(ItemStack item : p.getInventory().getArmorContent())
+			if(item != null && item.getType().getId().contains("NETHERITE"))
+				return true;
 		return isInWater(p.getLocation()) || isInWeb(p.getLocation()) || hasCeiling(p);
 	}
 

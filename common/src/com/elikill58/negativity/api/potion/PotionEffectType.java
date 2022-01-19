@@ -12,7 +12,7 @@ public enum PotionEffectType {
 	SLOWNESS((byte) 2, "minecraft:slowness"),
 	HASTE((byte) 3, "minecraft:haste"),
 	SLOW_MINING((byte) 4, "minecraft:mining_fatigue"),
-	STRENGTH((byte) 5, "minecraft:strength"),
+	STRENGTH((byte) 5, "minecraft:strength", "INCREASE_DAMAGE"),
 	INSTANT_HEAL((byte) 6, "minecraft:instant_health", "HEAL"),
 	INSTANT_DAMAGE((byte) 7, "minecraft:instant_damage"),
 	JUMP((byte) 8, "minecraft:jump_boost"),

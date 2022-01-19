@@ -11,9 +11,10 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.maths.Expression;
-import com.elikill58.negativity.api.packets.PacketContent.ContentModifier;
 import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.Utils;
@@ -44,9 +45,9 @@ public class AntiKnockback extends Cheat implements Listeners {
 	public void onPacket(PacketSendEvent e) {
 		if (!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_VELOCITY))
 			return;
-		ContentModifier<Integer> ints = e.getPacket().getContent().getIntegers();
-		int entId = ints.read("a", -1);
-		int velY = ints.read("c", -1);
+		NPacketPlayOutEntityVelocity packet = (NPacketPlayOutEntityVelocity) e.getPacket().getPacket();
+		int entId = packet.entityId;
+		double velY = packet.vec.getY();
 
 		Adapter ada = Adapter.getAdapter();
 		if (entId == -1 || velY == -1) {
@@ -75,7 +76,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 		}
 	}
 
-	private void checkPlayerForVectorPacketAntiKb(Player p, int velY, String algo) {
+	private void checkPlayerForVectorPacketAntiKb(Player p, double velY, String algo) {
 		Adapter ada = Adapter.getAdapter();
 		// don't check if there is a ceiling or anything that could block from taking kb
 		if (hasAntiKbBypass(p)) {
@@ -90,9 +91,9 @@ public class AntiKnockback extends Cheat implements Listeners {
 			Scheduler.getInstance().runRepeating(new Consumer<ScheduledTask>() {
 				public int iterations = 0;
 				public double reachedY = 0 /* diff reached */, baseY = p.getLocation().getY();
-				/*public Vector baseVector = p.getVelocity().clone();
+				public Vector baseVector = p.getVelocity().clone();
 				public Location basLoc = p.getLocation().clone();
-				public boolean vectorChanged = false;*/
+				public boolean vectorChanged = false;
 
 				@Override
 				public void accept(ScheduledTask task) {
@@ -100,24 +101,24 @@ public class AntiKnockback extends Cheat implements Listeners {
 					Location loc = p.getLocation();
 					if (loc.getY() - baseY > reachedY)
 						reachedY = loc.getY() - baseY;
-					/*if (checkActive("vector")) {
+					if (checkActive("vector")) {
 						if (iterations <= 5) {
 							double d = baseVector.distance(p.getVelocity());
 							if (d != 0)
 								vectorChanged = true;
-							ada.debug("KB Distance: " + d);
-						} else if (!vectorChanged && loc.distance(basLoc) > 0.3) {
-							Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this, 90 + iterations, "vector",
+							ada.debug("KB Distance: " + String.format("%.3f", d));
+						} else if (loc.distance(basLoc) > (iterations * p.getWalkSpeed())) {
+							Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this, UniversalUtils.parseInPorcent((vectorChanged ? 70 : 90) + iterations), "vector",
 									"No changes for the " + iterations + " times. Vector: " + baseVector.toString(),
 									new CheatHover.Literal(
 											"No direction changes during " + (((double) iterations) / 20) + " second"));
-
-						}
-					}*/
+						} else
+							ada.debug("Vector: " + String.format("%.3f", loc.distance(basLoc)) + ", " + (iterations * p.getWalkSpeed()));
+					}
 					if (iterations > ticksToReact) {
 						// default algo : (0.00000008 * velY * velY) + (0.0001 * velY) - 0.0219
 						double predictedY = new Expression(algo.replaceAll("velY", String.valueOf(velY)).replaceAll("reachedY", String.valueOf(reachedY))).calculate();
-						double percentage = Math.abs(((reachedY - predictedY) / predictedY));
+						double percentage = Math.abs(((reachedY - predictedY) / predictedY)) * 100;
 						if (predictedY > reachedY && percentage > 50) {
 							Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this,
 								UniversalUtils.parseInPorcent(percentage), "packet",

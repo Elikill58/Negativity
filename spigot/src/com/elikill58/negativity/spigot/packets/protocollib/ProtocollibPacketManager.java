@@ -30,21 +30,10 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 		//List<com.comphenix.protocol.PacketType> packetToDontUse= Arrays.asList(Play.Server.MAP, Play.Server.ENTITY_METADATA);
 		//List<com.comphenix.protocol.PacketType> packets = Play.Server.getInstance().values().stream().filter(com.comphenix.protocol.PacketType::isSupported).filter(packetToDontUse::contains).collect(Collectors.toList());
 		//protocolManager.addPacketListener(new PacketAdapter(pl, ListenerPriority.LOWEST, Play.Server.MAP, Play.Server.ENTITY_METADATA) {
+		// TODO manage all server packet sent to client
 		List<com.comphenix.protocol.PacketType> packets = Arrays.asList(Play.Server.ENTITY_VELOCITY, Play.Server.ENTITY_EFFECT);
 		protocolManager.addPacketListener(new NegativityPacketAdapter(pl, ListenerPriority.LOWEST, packets));
 	}
-	
-	@Override
-	public void load() {}
-	
-	@Override
-	public void addPlayer(com.elikill58.negativity.api.entity.Player p) {}
-	
-	@Override
-	public void removePlayer(com.elikill58.negativity.api.entity.Player p) {}
-
-	@Override
-	public void clear() {}
 
 	public AbstractPacket onPacketSent(NPacket commonPacket, Player sender, Object packet, PacketEvent event) {
 		ProtocollibPacket customPacket = new ProtocollibPacket(commonPacket, packet, sender, event);

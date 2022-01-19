@@ -91,9 +91,9 @@ public class AntiKnockback extends Cheat implements Listeners {
 			Scheduler.getInstance().runRepeating(new Consumer<ScheduledTask>() {
 				public int iterations = 0;
 				public double reachedY = 0 /* diff reached */, baseY = p.getLocation().getY();
-				public Vector baseVector = p.getVelocity().clone();
+				/*public Vector baseVector = p.getVelocity().clone();
 				public Location basLoc = p.getLocation().clone();
-				public boolean vectorChanged = false;
+				public boolean vectorChanged = false;*/
 
 				@Override
 				public void accept(ScheduledTask task) {
@@ -101,20 +101,25 @@ public class AntiKnockback extends Cheat implements Listeners {
 					Location loc = p.getLocation();
 					if (loc.getY() - baseY > reachedY)
 						reachedY = loc.getY() - baseY;
+					/*
+					This detection is in WIP. Why ?
+					
+					It's bad when people don't move. I think it can be usefull, but actually it's not
+					 
 					if (checkActive("vector")) {
 						if (iterations <= 5) {
 							double d = baseVector.distance(p.getVelocity());
 							if (d != 0)
 								vectorChanged = true;
 							ada.debug("KB Distance: " + String.format("%.3f", d));
-						} else if (loc.distance(basLoc) > (iterations * p.getWalkSpeed())) {
+						} else if (loc.distance(basLoc) > (iterations * p.getWalkSpeed()) && p.getVelocity().length() > 0.09) {
 							Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this, UniversalUtils.parseInPorcent((vectorChanged ? 70 : 90) + iterations), "vector",
-									"No changes for the " + iterations + " times. Vector: " + baseVector.toString(),
+									"No changes " + iterations + " times. Vector: " + baseVector.toString() + ", velocity: " + p.getVelocity() + ", dis: " + loc.distance(basLoc) + ", ws: " + p.getWalkSpeed(),
 									new CheatHover.Literal(
 											"No direction changes during " + (((double) iterations) / 20) + " second"));
 						} else
 							ada.debug("Vector: " + String.format("%.3f", loc.distance(basLoc)) + ", " + (iterations * p.getWalkSpeed()));
-					}
+					}*/
 					if (iterations > ticksToReact) {
 						// default algo : (0.00000008 * velY * velY) + (0.0001 * velY) - 0.0219
 						double predictedY = new Expression(algo.replaceAll("velY", String.valueOf(velY)).replaceAll("reachedY", String.valueOf(reachedY))).calculate();

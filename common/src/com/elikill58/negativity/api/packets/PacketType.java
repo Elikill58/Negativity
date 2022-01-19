@@ -15,6 +15,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimat
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
@@ -144,7 +145,7 @@ public interface PacketType {
 		DIFFICULTY_CHANGE("DifficultyChange", NPacketUnknown::new),
 		DIFFICULTY_LOCK("DifficultyLock", NPacketUnknown::new),
 		ENCHANT_ITEM("EnchantItem", NPacketUnknown::new),
-		ENTITY_ACTION("EntityAction", NPacketUnknown::new),
+		ENTITY_ACTION("EntityAction", NPacketPlayInEntityAction::new),
 		ENTITY_NBT_QUERY("EntityNBTQuery", NPacketUnknown::new),
 		FLYING("Flying", NPacketPlayInFlying::new),
 		HELD_ITEM_SLOT("HeldItemSlot", NPacketUnknown::new),

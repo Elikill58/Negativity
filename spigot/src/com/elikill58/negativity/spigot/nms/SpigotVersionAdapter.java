@@ -34,6 +34,8 @@ import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimation;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
@@ -158,6 +160,11 @@ public abstract class SpigotVersionAdapter {
 				return null;
 			}
 		});
+		packetsPlayIn.put("PacketPlayInEntityAction", (player, f) -> {
+			EnumPlayerAction action = EnumPlayerAction.getAction(getStr(f, Version.getVersion().isNewerOrEquals(Version.V1_17) ? "b" : "animation"));
+			return new NPacketPlayInEntityAction(get(f, "a"), action, get(f, "c"));
+		});
+		
 
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, packet) -> {
 			Object pos = get(packet, "b");

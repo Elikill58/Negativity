@@ -1,10 +1,14 @@
 package com.elikill58.negativity.sponge.nms;
 
+import java.lang.reflect.Field;
+
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
@@ -23,6 +27,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPositio
 import com.elikill58.negativity.sponge.SpongeNegativity;
 
 import net.minecraft.network.play.client.CPacketChatMessage;
+import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketKeepAlive;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
@@ -74,6 +79,18 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 			CPacketUseEntity p = (CPacketUseEntity) f;
 			Vec3d v = p.getHitVec();
 			return new NPacketPlayInUseEntity(0, v == null ? new Vector(0, 0, 0) : new Vector(v.x, v.y, v.z), EnumEntityUseAction.valueOf(p.getAction().name()));
+		});
+		packetsPlayIn.put("CPacketEntityAction", (f) -> {
+			try {
+				CPacketEntityAction packet = (CPacketEntityAction) f;
+				Field entityIdField = f.getClass().getDeclaredField("entityID");
+				entityIdField.setAccessible(true);
+				return new NPacketPlayInEntityAction(entityIdField.getInt(f),
+						EnumPlayerAction.getAction(packet.getAction().name()), packet.getAuxData());
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
 		});
 		
 

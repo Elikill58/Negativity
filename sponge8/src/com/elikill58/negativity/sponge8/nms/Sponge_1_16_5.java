@@ -8,6 +8,8 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
@@ -27,6 +29,7 @@ import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.network.protocol.game.ServerboundKeepAlivePacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
+import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
 import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unchecked")
@@ -68,6 +71,18 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 			Vec3 v = p.getLocation();
 			return new NPacketPlayInUseEntity(0, v == null ? new Vector(0, 0, 0) : new Vector(v.x, v.y, v.z),
 					EnumEntityUseAction.valueOf(p.getAction().name()));
+		});
+		packetsPlayIn.put("ServerboundPlayerCommandPacket", (f) -> {
+			try {
+				ServerboundPlayerCommandPacket packet = (ServerboundPlayerCommandPacket) f;
+				Field entityIdField = f.getClass().getDeclaredField("id");
+				entityIdField.setAccessible(true);
+				return new NPacketPlayInEntityAction(entityIdField.getInt(f),
+						EnumPlayerAction.getAction(packet.getAction().name()), packet.getData());
+			} catch (Exception e) {
+				e.printStackTrace();
+				return null;
+			}
 		});
 
 		

@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.maths.Expression;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
@@ -128,7 +127,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 							Negativity.alertMod(ReportType.WARNING, p, AntiKnockback.this,
 								UniversalUtils.parseInPorcent(percentage), "packet",
 								"ReachedY: " + reachedY + ", predictedY: " + predictedY + ", percentage: "
-									+ percentage + ", algo: " + algo + ".",
+									+ percentage,
 								new CheatHover.Literal("Reached Y too different from predicted Y"));
 						} else
 							ada.debug("AntiKb detection: prediction: " + predictedY + ", percentage: " + percentage
@@ -192,7 +191,12 @@ public class AntiKnockback extends Cheat implements Listeners {
 	}
 
 	public static boolean hasCeiling(Player player) {
-		Location loc = player.getLocation().clone().add(0, 2, 0);
+		return hasCeilingForLoc(player, player.getLocation().clone().add(0, 2, 0))/*
+				|| hasCeilingForLoc(player, player.getLocation().clone().add(0, 1, 0))
+				|| hasCeilingForLoc(player, player.getLocation())*/;
+	}
+
+	private static boolean hasCeilingForLoc(Player player, Location loc) {
 		if (loc.getBlock().getType().isSolid())
 			return true;
 		else if (loc.getX() > 0.66 && loc.getBlock().getRelative(BlockFace.EAST).getType().isSolid())

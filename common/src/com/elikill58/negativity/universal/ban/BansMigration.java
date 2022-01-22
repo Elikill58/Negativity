@@ -25,7 +25,7 @@ public class BansMigration {
 		if (Files.notExists(oldBanDir))
 			return;
 
-		Path bansBackupDir = oldBanDir.resolveSibling(oldBanDir.getFileName() + "_old");
+		Path bansBackupDir = oldBanDir.resolveSibling(oldBanDir.getFileName()).resolveSibling("ban-migrations");
 		if (Files.exists(bansBackupDir))
 			return;
 

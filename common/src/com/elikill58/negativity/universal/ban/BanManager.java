@@ -228,7 +228,8 @@ public class BanManager {
 		Configuration sanctionConfig = banConfig.getSection("sanctions");
 		sanctionConfig.getKeys().forEach((key) -> SANCTIONS.add(new Sanction(key, sanctionConfig.getSection(key))));
 		
-		BansMigration.migrateBans(banDir, banLogsDir);
+		if(processorId != null && !processorId.equalsIgnoreCase("proxy")) // don't have ban to migrate because it's managed on proxy
+			BansMigration.migrateBans(banDir, banLogsDir);
 		
 		Negativity.loadExtensions(BanProcessorProvider.class, provider -> {
 			BanProcessor processor = provider.create(adapter);

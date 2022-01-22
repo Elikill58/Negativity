@@ -203,7 +203,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				return true;
 			}
 
-			Player target = arg.length == 1 ? null : Adapter.getAdapter().getPlayer(arg[1]);
+			OfflinePlayer target = arg.length == 1 ? null : Adapter.getAdapter().getOfflinePlayer(arg[1]);
 			if (target == null) {
 				Messages.sendMessage(sender, "invalid_player", "%arg%", arg[1]);
 				return false;

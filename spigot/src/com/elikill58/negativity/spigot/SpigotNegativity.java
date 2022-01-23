@@ -24,7 +24,6 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
-import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.spigot.impl.entity.SpigotFakePlayer;
 import com.elikill58.negativity.spigot.listeners.BlockListeners;
 import com.elikill58.negativity.spigot.listeners.ChannelListeners;
@@ -57,7 +56,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
 	public static boolean hasBypass = false, isCraftBukkit = false;
-	private BukkitTask invTimer = null, pendingAlertsTimer = null, packetTimer = null, runSpawnFakePlayer = null;
+	private BukkitTask invTimer = null, pendingAlertsTimer = null, packetTimer = null;
 	public static String CHANNEL_NAME_FML = "";
 	private NegativityPacketManager packetManager;
 		
@@ -139,7 +138,6 @@ public class SpigotNegativity extends JavaPlugin {
 
 		invTimer = getServer().getScheduler().runTaskTimer(this, new ActualizeInvTimer(), 5, 5);
 		packetTimer = getServer().getScheduler().runTaskTimerAsynchronously(this, new AnalyzePacketTimer(), 20, 20);
-		runSpawnFakePlayer = getServer().getScheduler().runTaskTimer(this, new SpawnFakePlayerTimer(), 20, 20 * 60 * 10);
 		trySendProxyPing();
 		
 		getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
@@ -247,7 +245,6 @@ public class SpigotNegativity extends JavaPlugin {
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		invTimer.cancel();
 		packetTimer.cancel();
-		runSpawnFakePlayer.cancel();
 		if (pendingAlertsTimer != null) {
 			pendingAlertsTimer.cancel();
 		}

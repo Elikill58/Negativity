@@ -51,7 +51,6 @@ import org.spongepowered.api.text.format.TextColors;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
-import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge.listeners.BlockListeners;
 import com.elikill58.negativity.sponge.listeners.CommandsExecutorManager;
@@ -130,7 +129,6 @@ public class SpongeNegativity {
 
 		schedule(new ActualizeInvTimer(), 5, null);
 		schedule(new AnalyzePacketTimer(), 20, "negativity-packets");
-		schedule(new SpawnFakePlayerTimer(), 20 * 60 * 10, null);
 		
 		NegativityAccountStorage.setDefaultStorage("file");
 		

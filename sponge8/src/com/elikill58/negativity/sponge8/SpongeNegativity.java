@@ -32,7 +32,6 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
-import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.sponge8.listeners.BlockListeners;
 import com.elikill58.negativity.sponge8.listeners.EntityListeners;
 import com.elikill58.negativity.sponge8.listeners.FightManager;
@@ -98,7 +97,6 @@ public class SpongeNegativity {
 		
 		schedule(new ActualizeInvTimer(), 5, null);
 		schedule(new AnalyzePacketTimer(), 20, "negativity-packets");
-		schedule(new SpawnFakePlayerTimer(), 20 * 60 * 10, null);
 		
 		if (SpongeUpdateChecker.isUpdateAvailable()) {
 			logger.info("New version available ({}) : {}", SpongeUpdateChecker.getVersionString(), SpongeUpdateChecker.getDownloadUrl());

@@ -65,7 +65,7 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 				return;
 			}
 			Player player = e.getPlayer();
-			if (player == null) {
+			if (player == null || player.hasMetadata("NPC")) {
 				return;
 			}
 			Object nmsPacket = e.getPacket().getHandle();
@@ -84,7 +84,7 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 				return;
 			}
 			Player player = e.getPlayer();
-			if (player == null) {
+			if (player == null || player.hasMetadata("NPC")) {
 				return;
 			}
 			Object nmsPacket = e.getPacket().getHandle();

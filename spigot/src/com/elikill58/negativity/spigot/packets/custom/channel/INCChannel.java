@@ -62,9 +62,9 @@ public class INCChannel extends ChannelAbstract {
 
 	@Override
 	public void addChannel(final Player player, String endChannelName) {
+		if(!player.isOnline() || player.hasMetadata("NPC"))
+			return;
 		getOrCreateAddChannelExecutor().execute(() -> {
-			if(!player.isOnline())
-				return;
 			try {
 				Channel channel = getChannel(player);
 				// Managing incoming packet (from player)

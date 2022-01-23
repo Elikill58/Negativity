@@ -5,16 +5,13 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
-import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
-import com.elikill58.negativity.common.inventories.holders.admin.OneCheatHolder;
 import com.elikill58.negativity.common.inventories.holders.admin.OneSpecialHolder;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.detections.Special;
-
 
 public class OneSpecialInventory extends AbstractInventory<OneSpecialHolder> {
 
@@ -55,10 +52,5 @@ public class OneSpecialInventory extends AbstractInventory<OneSpecialHolder> {
 
 		actualizeInventory(p, s, inv);
 		p.updateInventory();
-	}
-
-	@Override
-	public boolean isInstance(NegativityHolder nh) {
-		return nh instanceof OneCheatHolder;
 	}
 }

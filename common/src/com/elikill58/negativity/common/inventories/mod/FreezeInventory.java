@@ -6,7 +6,6 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.events.inventory.InventoryCloseEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
-import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
@@ -17,11 +16,6 @@ public class FreezeInventory extends AbstractInventory<FreezeHolder> {
 
 	public FreezeInventory() {
 		super(NegativityInventory.FREEZE, FreezeHolder.class);
-	}
-
-	@Override
-	public boolean isInstance(NegativityHolder nh) {
-		return nh instanceof FreezeHolder;
 	}
 
 	@Override

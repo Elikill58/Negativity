@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.common.inventories.holders.admin.SpecialManagerHolder;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -25,7 +24,7 @@ public class SpecialManagerInventory extends AbstractInventory<SpecialManagerHol
 	public void openInventory(Player p, Object... args){
 		Inventory inv = Inventory.createInventory(Inventory.SPECIAL_MANAGER, UniversalUtils.getMultipleOf(Special.values().size() + 3, 9, 1, 54), new SpecialManagerHolder());
 		int slot = 0;
-		for(Cheat c : Cheat.values())
+		for(Special c : Special.values())
 			if(c.getMaterial() != null)
 				inv.set(slot++, ItemBuilder.Builder(c.getMaterial()).displayName(c.getName())
 						.lore(ChatColor.GRAY + "State: " + Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled"))).build());

@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Special;
@@ -20,7 +21,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class InvalidName extends Special implements Listeners {
 
 	public InvalidName() {
-		super(SpecialKeys.INVALID_NAME, false);
+		super(SpecialKeys.INVALID_NAME, Materials.PAPER, false);
 	}
 
 	@EventListener

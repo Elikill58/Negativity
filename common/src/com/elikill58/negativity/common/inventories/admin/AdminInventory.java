@@ -24,9 +24,10 @@ public class AdminInventory extends AbstractInventory<AdminHolder> {
 		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 
 		inv.set(0, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.mod.cheat_manage")).build());
-		inv.set(1, ItemBuilder.Builder(Materials.BOOK).displayName(Messages.getMessage(p, "lang.edit")).build());
-		inv.set(2, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.alerts.shower.manage")).build());
-		inv.set(3, ItemBuilder.Builder(Materials.ANVIL).displayName(Messages.getMessage(p, "inventory.bans.manage")).build());
+		inv.set(1, ItemBuilder.Builder(Materials.REDSTONE).displayName(Messages.getMessage(p, "inventory.mod.special_manage")).build());
+		inv.set(3, ItemBuilder.Builder(Materials.BOOK).displayName(Messages.getMessage(p, "lang.edit")).build());
+		inv.set(4, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.alerts.shower.manage")).build());
+		inv.set(5, ItemBuilder.Builder(Materials.ANVIL).displayName(Messages.getMessage(p, "inventory.bans.manage")).build());
 		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
 		p.openInventory(inv);
 	}
@@ -34,12 +35,14 @@ public class AdminInventory extends AbstractInventory<AdminHolder> {
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, AdminHolder nh) {
 		if (m.equals(Materials.TNT))
-			InventoryManager.open(NegativityInventory.ADMIN_CHEAT_MANAGER, p, true);
+			InventoryManager.open(NegativityInventory.ADMIN_CHEAT_MANAGER, p);
+		else if(m.equals(Materials.REDSTONE))
+			InventoryManager.open(NegativityInventory.ADMIN_SPECIAL_MANAGER, p);
 		else if(m.equals(Materials.BOOK))
-			InventoryManager.open(NegativityInventory.ADMIN_LANG, p, true);
+			InventoryManager.open(NegativityInventory.ADMIN_LANG, p);
 		else if (m.equals(Materials.PAPER))
-			InventoryManager.open(NegativityInventory.ADMIN_ALERT, p, true);
+			InventoryManager.open(NegativityInventory.ADMIN_ALERT, p);
 		else if (m.equals(Materials.ANVIL))
-			InventoryManager.open(NegativityInventory.BAN_MANAGER, p, true);
+			InventoryManager.open(NegativityInventory.BAN_MANAGER, p);
 	}
 }

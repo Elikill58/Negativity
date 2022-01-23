@@ -118,7 +118,7 @@ public abstract class Inventory implements NegativityObject {
 			ADMIN_ALERT = Messages.getMessage("inventory.alerts.shower.manage"),
 			NAME_ACTIVED_CHEAT_MENU = Messages.getMessage("inventory.detection.name_inv"), NAME_FREEZE_MENU = "Freeze",
 			BAN_MANAGER_MENU = "Bans", BAN_PROCESSOR_MANAGER_MENU = "Bans processors", NAME_MOD_MENU = "Mod",
-			NAME_ALERT_MENU = "Alerts", CHEAT_MANAGER = "Cheat Manager", NAME_FORGE_MOD_MENU = "Mods";
+			NAME_ALERT_MENU = "Alerts", CHEAT_MANAGER = "Cheat Manager", SPECIAL_MANAGER = "Special Manager", NAME_FORGE_MOD_MENU = "Mods";
 	public static final ItemStack EMPTY, EMPTY_RED;
 	public static final ItemStack DYE_GRAY, DYE_GREEN;
 

@@ -2,6 +2,7 @@ package com.elikill58.negativity.common.special;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Special;
@@ -14,7 +15,7 @@ import com.elikill58.negativity.universal.keys.SpecialKeys;
 public class WorldDownloader extends Special implements Listeners {
 
 	public WorldDownloader() {
-		super(SpecialKeys.WORLD_DOWNLOADER, false);
+		super(SpecialKeys.WORLD_DOWNLOADER, Materials.GRASS, false);
 		Adapter.getAdapter().registerNewIncomingChannel(Version.getVersion().isNewerOrEquals(Version.V1_13) ? "wdl:init" : "WDL|INIT", (p, data) -> {
 			if(!isActive())
 				return;

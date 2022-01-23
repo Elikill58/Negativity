@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.universal.Adapter;
@@ -26,7 +27,7 @@ public class ServerCrasher extends Special implements Listeners {
 	private List<UUID> inDisconnection = new ArrayList<>();
 	
 	public ServerCrasher() {
-		super(SpecialKeys.SERVER_CRASHER, true);
+		super(SpecialKeys.SERVER_CRASHER, Materials.TNT, true);
 	}
 	
 	@EventListener

@@ -11,6 +11,7 @@ import java.util.ServiceLoader;
 
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.keys.SpecialKeys;
@@ -22,6 +23,7 @@ public abstract class Special {
 	private static final Path MODULE_FOLDER = Cheat.MODULE_FOLDER.resolve("special");
 	private static final List<Special> SPECIALS = new ArrayList<>();
 	private final SpecialKeys key;
+	private final Material material;
 	private Configuration config;
 	private boolean needPacket;
 	private String[] aliases;
@@ -33,8 +35,9 @@ public abstract class Special {
 	 * @param needPacket if it need packet to work
 	 * @param alias all alias of the special detection
 	 */
-	public Special(SpecialKeys key, boolean needPacket, String... alias) {
+	public Special(SpecialKeys key, Material material, boolean needPacket, String... alias) {
 		this.key = key;
+		this.material = material;
 		this.needPacket = needPacket;
 		this.aliases = alias;
 		
@@ -62,6 +65,10 @@ public abstract class Special {
 	
 	public SpecialKeys getKey() {
 		return key;
+	}
+	
+	public Material getMaterial() {
+		return material;
 	}
 	
 	/**

@@ -46,6 +46,7 @@ import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.Special;
 
 public class UniversalUtils {
 
@@ -117,6 +118,13 @@ public class UniversalUtils {
 
 	public static Optional<Cheat> getCheatFromItem(Object m) {
 		for (Cheat c : Cheat.values())
+			if (c.getMaterial().equals(m))
+				return Optional.of(c);
+		return Optional.empty();
+	}
+
+	public static Optional<Special> getSpecialFromItem(Object m) {
+		for (Special c : Special.values())
 			if (c.getMaterial().equals(m))
 				return Optional.of(c);
 		return Optional.empty();

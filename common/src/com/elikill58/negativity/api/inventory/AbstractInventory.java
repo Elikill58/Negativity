@@ -84,6 +84,7 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 		ADMIN_ALERT,
 		ADMIN_LANG,
 		ADMIN_CHEAT_MANAGER,
+		ADMIN_SPECIAL_MANAGER,
 		ALERT,
 		ALERT_OFFLINE,
 		BAN,
@@ -95,6 +96,7 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 		KICK,
 		MOD,
 		ONE_CHEAT,
+		ONE_SPECIAL,
 		FORGE_MODS,
 		REPORT,
 		SEE_REPORT

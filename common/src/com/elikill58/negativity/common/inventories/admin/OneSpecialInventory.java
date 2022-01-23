@@ -42,14 +42,16 @@ public class OneSpecialInventory extends AbstractInventory<OneSpecialHolder> {
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, OneSpecialHolder nh) {
 		if (m.equals(Materials.ARROW)) {
-			InventoryManager.open(NegativityInventory.ADMIN_CHEAT_MANAGER, p, true);
+			InventoryManager.open(NegativityInventory.ADMIN_SPECIAL_MANAGER, p, true);
 			return;
 		}
 		Inventory inv = e.getClickedInventory();
 		Special s = nh.getSpecial();
 		if (m.equals(s.getMaterial()))
 			return;
-
+		if(m.equals(Materials.DIAMOND))
+			s.setActive(!s.isActive());
+		s.saveConfig();
 		actualizeInventory(p, s, inv);
 		p.updateInventory();
 	}

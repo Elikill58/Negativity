@@ -106,7 +106,6 @@ public class NegativityPlayer implements FileSaverAction {
 		account.setPlayerName(p.getName());
 		account.setIp(p.getIP());
 		ada.getAccountManager().save(playerId);
-		Cheat.values().stream().filter(Cheat::isActive).forEach(this::startAnalyze);
 		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
 		
@@ -298,36 +297,6 @@ public class NegativityPlayer implements FileSaverAction {
 		NegativityAccount account = getAccount();
 		account.setWarnCount(c, alerts);
 		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
-	}
-	
-	/**
-	 * Start the analyze of the given cheat
-	 * 
-	 * @param c the cheat to analyze
-	 */
-	public void startAnalyze(Cheat c) {
-		if (c.getKey().equals(CheatKeys.FORCEFIELD)) {
-			/*if (timeStartFakePlayer == 0)
-				timeStartFakePlayer = 1; // not on the player connection
-			else
-				makeAppearEntities();*/
-		}
-	}
-
-	/**
-	 * Start analyze of all cheat
-	 */
-	public void startAllAnalyze() {
-		for (Cheat c : Cheat.values())
-			startAnalyze(c);
-	}
-
-	/**
-	 * Stop analyze of the given cheat
-	 * 
-	 * @param c the cheat to disable
-	 */
-	public void stopAnalyze(Cheat c) {
 	}
 	
 	/**

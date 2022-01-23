@@ -116,6 +116,18 @@ public abstract class AbstractDetection<T extends IDetectionKeys<T>> implements 
 		return config.getBoolean("active", true);
 	}
 	
+	/**
+	 * Set if the cheat is active
+	 * Warn: this don't save the config
+	 * 
+	 * @param active the new value
+	 * @return the given boolean value
+	 */
+	public boolean setActive(boolean active) {
+		config.set("active", active);
+		return active;
+	}
+	
 	@Override
 	public int compareTo(T o) {
 		return key.compareTo(o);

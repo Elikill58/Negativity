@@ -183,25 +183,6 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 		return b;
 	}
 
-
-	/**
-	 * Set if the cheat is active
-	 * Warn: this don't save the config
-	 * 
-	 * @param active the new value
-	 * @return the given boolean value
-	 */
-	public boolean setActive(boolean active) {
-		config.set("active", active);
-		for(Player players : Adapter.getAdapter().getOnlinePlayers()) {
-			if(active)
-				NegativityPlayer.getNegativityPlayer(players).startAnalyze(this);
-			else
-				NegativityPlayer.getNegativityPlayer(players).stopAnalyze(this);
-		}
-		return active;
-	}
-
 	/**
 	 * Get the maximum ping to create alert
 	 * By default it's 150ms

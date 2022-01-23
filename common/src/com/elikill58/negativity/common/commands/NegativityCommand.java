@@ -79,7 +79,6 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			Set<Cheat> cheatsToVerify = new LinkedHashSet<>();
 			boolean forceGiven = false;
 			if (arg.length == 2 || (arg.length == 3 && UniversalUtils.isInteger(arg[2]))) {
-				nTarget.startAllAnalyze();
 				Messages.sendMessage(sender, "negativity.verif.start_all", "%name%", target.getName(), "%time%", time);
 				cheatsToVerify.addAll(Cheat.CHEATS);
 			} else {
@@ -87,7 +86,6 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				for (int i = 2; i < arg.length; i++) {
 					Cheat cheat = Cheat.fromString(arg[i]);
 					if (cheat != null) {
-						nTarget.startAnalyze(cheat);
 						cheatNamesJoiner.add(cheat.getName());
 						cheatsToVerify.add(cheat);
 					}

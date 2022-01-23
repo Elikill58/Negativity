@@ -5,10 +5,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ConcurrentHashMap;
@@ -49,13 +47,11 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class NegativityPlayer implements FileSaverAction {
 
 	private static final ConcurrentHashMap<UUID, NegativityPlayer> players = new ConcurrentHashMap<>();
-	public static ArrayList<UUID> INJECTED = new ArrayList<>();
 
 	private final UUID playerId;
 	private final Player p;
 
 	public ArrayList<CheckProcessor> checkProcessors = new ArrayList<>();
-	public Set<CheatKeys> ACTIVE_CHEAT = new HashSet<>();
 	public ArrayList<String> proof = new ArrayList<>();
 	public HashMap<CheatKeys, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
 	public HashMap<String, String> MODS = new HashMap<>();
@@ -110,7 +106,6 @@ public class NegativityPlayer implements FileSaverAction {
 		account.setPlayerName(p.getName());
 		account.setIp(p.getIP());
 		ada.getAccountManager().save(playerId);
-		ACTIVE_CHEAT.clear();
 		Cheat.values().stream().filter(Cheat::isActive).forEach(this::startAnalyze);
 		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
@@ -165,8 +160,6 @@ public class NegativityPlayer implements FileSaverAction {
 	public boolean hasDetectionActive(Cheat c) {
 		if (!c.isActive() || Negativity.tpsDrop)
 			return false;
-		if (!ACTIVE_CHEAT.contains(c.getKey()))
-			return false;
 		if (TIME_INVINCIBILITY > System.currentTimeMillis())
 			return false;
 		if (isFreeze)
@@ -191,8 +184,6 @@ public class NegativityPlayer implements FileSaverAction {
 			return "Cheat disabled";
 		if(Negativity.tpsDrop)
 			return "TPS drop";
-		if(!ACTIVE_CHEAT.contains(c.getKey()))
-			return "Cheat not active";
 		if(TIME_INVINCIBILITY > System.currentTimeMillis())
 			return "Player invincibility";
 		if (isInFight && c.isBlockedInFight())
@@ -260,23 +251,6 @@ public class NegativityPlayer implements FileSaverAction {
 	}
 	
 	/**
-	 * Manage autoverif.
-	 * Remove all current cheat detected, and re-add all which have to be verified
-	 */
-	public void manageAutoVerif() {
-		ACTIVE_CHEAT.clear();
-		boolean needPacket = false;
-		for (Cheat c : Cheat.values())
-			if (c.isActive()) {
-				startAnalyze(c);
-				if (c.needPacket())
-					needPacket = true;
-			}
-		if (needPacket && !NegativityPlayer.INJECTED.contains(p.getUniqueId()))
-			NegativityPlayer.INJECTED.add(p.getUniqueId());
-	}
-	
-	/**
 	 * Kick the player after a ban
 	 * 
 	 * @param reason the reason of kick
@@ -332,9 +306,6 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @param c the cheat to analyze
 	 */
 	public void startAnalyze(Cheat c) {
-		ACTIVE_CHEAT.add(c.getKey());
-		if (c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
-			INJECTED.add(getPlayer().getUniqueId());
 		if (c.getKey().equals(CheatKeys.FORCEFIELD)) {
 			/*if (timeStartFakePlayer == 0)
 				timeStartFakePlayer = 1; // not on the player connection
@@ -347,7 +318,6 @@ public class NegativityPlayer implements FileSaverAction {
 	 * Start analyze of all cheat
 	 */
 	public void startAllAnalyze() {
-		INJECTED.add(getPlayer().getUniqueId());
 		for (Cheat c : Cheat.values())
 			startAnalyze(c);
 	}
@@ -358,7 +328,6 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @param c the cheat to disable
 	 */
 	public void stopAnalyze(Cheat c) {
-		ACTIVE_CHEAT.remove(c.getKey());
 	}
 	
 	/**

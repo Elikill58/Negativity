@@ -14,7 +14,7 @@ import com.elikill58.negativity.universal.file.FileSaverTimer;
 import com.elikill58.negativity.universal.file.hook.FileRunnableSaverAction;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public abstract class AbstractDetection<T extends IDetectionKeys<T>> {
+public abstract class AbstractDetection<T extends IDetectionKeys<T>> implements Comparable<T> {
 
 	protected final T key;
 	protected final Material material;
@@ -114,5 +114,10 @@ public abstract class AbstractDetection<T extends IDetectionKeys<T>> {
 	 */
 	public boolean isActive() {
 		return config.getBoolean("active", true);
+	}
+	
+	@Override
+	public int compareTo(T o) {
+		return key.compareTo(o);
 	}
 }

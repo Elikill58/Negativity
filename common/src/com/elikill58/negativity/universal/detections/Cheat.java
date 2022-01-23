@@ -347,6 +347,10 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	public static List<Cheat> values() {
 		return CHEATS;
 	}
+	
+	public static List<Cheat> getEnabledCheat() {
+		return new ArrayList<>(CHEATS).stream().filter(Cheat::isActive).collect(Collectors.toList());
+	}
 
 	public enum CheatCategory {
 		

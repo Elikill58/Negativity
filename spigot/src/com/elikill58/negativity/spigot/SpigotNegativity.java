@@ -26,7 +26,6 @@ import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.common.timers.SpawnFakePlayerTimer;
 import com.elikill58.negativity.spigot.impl.entity.SpigotFakePlayer;
-import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.listeners.BlockListeners;
 import com.elikill58.negativity.spigot.listeners.ChannelListeners;
 import com.elikill58.negativity.spigot.listeners.CommandsListeners;
@@ -130,10 +129,7 @@ public class SpigotNegativity extends JavaPlugin {
 		loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID, channelListeners);
 		loadChannelInOut(messenger, CHANNEL_NAME_FML, channelListeners);
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
-		//getServer().getMessenger().registerOutgoingPluginChannel(this, "RedisBungee");
 		
-		for (Player p : Utils.getOnlinePlayers())
-			NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpigotPlayer(p)).manageAutoVerif();
 
 		loadCommand();
 		

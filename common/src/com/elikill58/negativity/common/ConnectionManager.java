@@ -93,7 +93,6 @@ public class ConnectionManager implements Listeners {
 				});
 			}
 		}
-		np.manageAutoVerif();
 	}
 
 	@EventListener

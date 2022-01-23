@@ -34,10 +34,8 @@ public class AlertInventory extends AbstractInventory<AlertHolder> {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
 		for (Cheat c : Cheat.values()) {
-			if (!c.isActive())
-				continue;
 			Configuration config = Adapter.getAdapter().getConfig();
-			boolean isActive = np.ACTIVE_CHEAT.contains(c.getKey());
+			boolean isActive = c.isActive();
 			if ((config.getBoolean("inventory.alerts.only_cheat_active") && isActive)
 					|| (!isActive && config.getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
@@ -68,10 +66,8 @@ public class AlertInventory extends AbstractInventory<AlertHolder> {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		List<Cheat> TO_SEE = new ArrayList<>();
 		for (Cheat c : Cheat.values()) {
-			if (!c.isActive())
-				continue;
 			Configuration config = Adapter.getAdapter().getConfig();
-			boolean isActive = np.hasDetectionActive(c);
+			boolean isActive = c.isActive();
 			if ((config.getBoolean("inventory.alerts.only_cheat_active") && isActive)
 					|| (!isActive && config.getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);

@@ -16,11 +16,11 @@ import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.Special;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanType;
-import com.elikill58.negativity.universal.keys.SpecialKeys;
+import com.elikill58.negativity.universal.detections.Special;
+import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
 
 public class ServerCrasher extends Special implements Listeners {
 	

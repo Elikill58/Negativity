@@ -1,6 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
-import static com.elikill58.negativity.universal.keys.CheatKeys.XRAY;
+import static com.elikill58.negativity.universal.detections.keys.CheatKeys.XRAY;
 
 import java.util.Arrays;
 import java.util.List;
@@ -18,10 +18,10 @@ import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.ray.BlockRay.BlockRayBuilder;
 import com.elikill58.negativity.api.ray.BlockRay.RayResult;
 import com.elikill58.negativity.api.ray.BlockRayResult;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.account.NegativityAccount;
+import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.report.ReportType;
 
 public class XRay extends Cheat implements Listeners {

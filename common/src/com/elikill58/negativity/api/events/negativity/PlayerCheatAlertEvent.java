@@ -3,8 +3,8 @@ package com.elikill58.negativity.api.events.negativity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.CancellableEvent;
 import com.elikill58.negativity.api.events.PlayerEvent;
-import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.Cheat.CheatHover;
+import com.elikill58.negativity.universal.detections.Cheat;
+import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.report.ReportType;
 
 public class PlayerCheatAlertEvent extends PlayerEvent implements CancellableEvent {

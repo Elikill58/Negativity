@@ -1,9 +1,11 @@
-package com.elikill58.negativity.universal.keys;
+package com.elikill58.negativity.universal.detections.keys;
+
+import java.nio.file.Path;
 
 import com.elikill58.negativity.universal.Version;
 
 public enum SpecialKeys implements IDetectionKeys<SpecialKeys> {
-
+	
 	INVALID_NAME("INVALID-NAME"),
 	MAX_PLAYER_PER_IP("MAX-PLAYER-BY-IP"),
 	MC_LEAKS("MCLEAKS"),
@@ -11,6 +13,9 @@ public enum SpecialKeys implements IDetectionKeys<SpecialKeys> {
 	WORLD_DOWNLOADER("WORLD-DOWNLOADER");
 	
 
+	public static final String BUNDLED_SPECIAL_MODULES_BASE = CheatKeys.BUNDLED_MODULES_BASE + "special/";
+	public static final Path MODULE_FOLDER = CheatKeys.MODULE_FOLDER.resolve("special");
+	
 	private final String key;
 	private final Version minVersion;
 	
@@ -36,5 +41,15 @@ public enum SpecialKeys implements IDetectionKeys<SpecialKeys> {
 	@Override
 	public String toString() {
 		return getLowerKey();
+	}
+
+	@Override
+	public Path getFolder() {
+		return MODULE_FOLDER;
+	}
+
+	@Override
+	public String getPathBundle() {
+		return BUNDLED_SPECIAL_MODULES_BASE;
 	}
 }

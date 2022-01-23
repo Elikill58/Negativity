@@ -13,7 +13,7 @@ import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.admin.OneCheatHolder;
 import com.elikill58.negativity.common.inventories.holders.admin.OneSpecialHolder;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.Special;
+import com.elikill58.negativity.universal.detections.Special;
 
 
 public class OneSpecialInventory extends AbstractInventory<OneSpecialHolder> {

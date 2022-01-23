@@ -1,7 +1,7 @@
 package com.elikill58.negativity.common.inventories.holders.admin;
 
 import com.elikill58.negativity.api.inventory.NegativityHolder;
-import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.detections.Cheat;
 
 public class OneCheatHolder extends NegativityHolder {
 

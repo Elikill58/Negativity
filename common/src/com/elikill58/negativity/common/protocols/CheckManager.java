@@ -14,7 +14,7 @@ import com.elikill58.negativity.api.events.PlayerEvent;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.detections.Cheat;
 
 public class CheckManager implements Listeners {
 

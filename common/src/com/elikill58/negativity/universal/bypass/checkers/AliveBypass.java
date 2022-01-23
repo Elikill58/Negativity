@@ -1,8 +1,8 @@
 package com.elikill58.negativity.universal.bypass.checkers;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.bypass.BypassChecker;
+import com.elikill58.negativity.universal.detections.Cheat;
 
 public class AliveBypass implements BypassChecker {
 

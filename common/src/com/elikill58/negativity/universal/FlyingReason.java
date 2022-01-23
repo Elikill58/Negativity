@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal;
 
-import com.elikill58.negativity.universal.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.Cheat;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 
 public enum FlyingReason {
 	POTION(CheatKeys.ANTI_POTION),

@@ -18,9 +18,9 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.common.inventories.holders.negativity.players.ActivedCheatHolder;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.Cheat;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ActivedCheatInventory extends AbstractInventory<ActivedCheatHolder> {

@@ -4,7 +4,7 @@ import static com.elikill58.negativity.api.item.Materials.STATIONARY_WATER;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialsAround;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
-import static com.elikill58.negativity.universal.keys.CheatKeys.JESUS;
+import static com.elikill58.negativity.universal.detections.keys.CheatKeys.JESUS;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import java.util.Arrays;
@@ -25,8 +25,8 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 

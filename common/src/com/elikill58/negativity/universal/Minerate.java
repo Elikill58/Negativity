@@ -4,7 +4,8 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.universal.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.Cheat;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 
 public class Minerate {

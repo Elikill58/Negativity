@@ -9,7 +9,7 @@ import java.util.UUID;
 
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 
 public class VerificationManager {

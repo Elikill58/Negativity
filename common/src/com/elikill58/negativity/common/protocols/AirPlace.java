@@ -1,6 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
-import static com.elikill58.negativity.universal.keys.CheatKeys.AIR_PLACE;
+import static com.elikill58.negativity.universal.detections.keys.CheatKeys.AIR_PLACE;
 
 import java.util.Arrays;
 import java.util.List;
@@ -17,8 +17,8 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.report.ReportType;
 
 public class AirPlace extends Cheat implements Listeners {

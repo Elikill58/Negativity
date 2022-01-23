@@ -8,7 +8,7 @@ import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.universal.Cheat;
+import com.elikill58.negativity.universal.detections.Cheat;
 
 public class AlertMessage implements NegativityMessage {
 

@@ -1,7 +1,7 @@
 package com.elikill58.negativity.universal.proxysender;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.universal.Cheat.CheatHover;
+import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 
 public interface ProxySender {
 	

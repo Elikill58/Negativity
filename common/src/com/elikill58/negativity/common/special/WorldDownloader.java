@@ -5,12 +5,12 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.Special;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanType;
-import com.elikill58.negativity.universal.keys.SpecialKeys;
+import com.elikill58.negativity.universal.detections.Special;
+import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
 
 public class WorldDownloader extends Special implements Listeners {
 

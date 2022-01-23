@@ -10,7 +10,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ScheduledTask;
 import com.elikill58.negativity.universal.alerts.AlertSender;
-import com.elikill58.negativity.universal.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 
 public class TimeAlertSender implements AlertSender {
 

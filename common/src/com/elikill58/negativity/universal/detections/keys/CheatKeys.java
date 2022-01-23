@@ -1,5 +1,8 @@
-package com.elikill58.negativity.universal.keys;
+package com.elikill58.negativity.universal.detections.keys;
 
+import java.nio.file.Path;
+
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 
 public enum CheatKeys implements IDetectionKeys<CheatKeys> {
@@ -43,6 +46,9 @@ public enum CheatKeys implements IDetectionKeys<CheatKeys> {
 	SUPER_KNOCKBACK("SUPERKNOCKBACK"),
 	TIMER("TIMER"),
 	XRAY("XRAY");
+
+	public static final String BUNDLED_MODULES_BASE = "/modules/";
+	public static final Path MODULE_FOLDER = Adapter.getAdapter().getDataFolder().toPath().resolve("modules");
 	
 	private final String key;
 	private final Version minVersion;
@@ -69,5 +75,15 @@ public enum CheatKeys implements IDetectionKeys<CheatKeys> {
 	@Override
 	public String toString() {
 		return getLowerKey();
+	}
+	
+	@Override
+	public Path getFolder() {
+		return MODULE_FOLDER;
+	}
+
+	@Override
+	public String getPathBundle() {
+		return BUNDLED_MODULES_BASE;
 	}
 }

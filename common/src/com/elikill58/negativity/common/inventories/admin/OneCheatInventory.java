@@ -11,8 +11,8 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.admin.OneCheatHolder;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.detections.Cheat;
 
 
 public class OneCheatInventory extends AbstractInventory<OneCheatHolder> {

@@ -1,9 +1,5 @@
-package com.elikill58.negativity.universal;
+package com.elikill58.negativity.universal.detections;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
@@ -26,36 +22,27 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
-import com.elikill58.negativity.api.yaml.Configuration;
-import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.common.protocols.CheckManager;
-import com.elikill58.negativity.universal.file.FileSaverTimer;
-import com.elikill58.negativity.universal.file.hook.FileRunnableSaverAction;
-import com.elikill58.negativity.universal.keys.CheatKeys;
+import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.TranslatedMessages;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.setBack.SetBackEntry;
 import com.elikill58.negativity.universal.setBack.SetBackProcessor;
 import com.elikill58.negativity.universal.setBack.processor.PotionEffectProcessor;
 import com.elikill58.negativity.universal.setBack.processor.TeleportProcessor;
 import com.elikill58.negativity.universal.setBack.processor.ValueEditorProcessor;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerificationManager;
 
-public abstract class Cheat {
+public abstract class Cheat extends AbstractDetection<CheatKeys> {
 
-	public static final String BUNDLED_MODULES_BASE = "/modules/";
-	protected static final Path MODULE_FOLDER = Adapter.getAdapter().getDataFolder().toPath().resolve("modules");
 	public static final List<Cheat> CHEATS = new ArrayList<>();
 	private static CheckManager checkManager;
 	public static CheckManager getCheckManager() {
 		return checkManager;
 	}
-	private final CheatKeys key;
-	private Configuration config;
-	private boolean needPacket, hasVerif;
+	private boolean hasVerif;
 	private CheatCategory cheatCategory;
-	private Material m;
-	private String[] aliases;
 	private final List<SetBackProcessor> setBackProcessor = new ArrayList<>();
 
 	/**
@@ -69,79 +56,30 @@ public abstract class Cheat {
 	 * @param alias all other names of the cheat
 	 */
 	public Cheat(CheatKeys key, CheatCategory type, Material m, boolean needPacket, boolean hasVerif, String... alias) {
-		this.needPacket = needPacket;
-		this.m = m;
+		super(key, m, needPacket, alias);
 		this.cheatCategory = type;
-		this.key = key;
-		this.aliases = alias;
 		this.hasVerif = hasVerif;
 		
-		String fileName = this.key.getLowerKey() + ".yml";
-		Path moduleFile = MODULE_FOLDER.resolve(fileName);
-		try {
-			moduleFile = UniversalUtils.copyBundledFile(BUNDLED_MODULES_BASE + fileName, moduleFile);
-			if (moduleFile == null) {
-				Adapter.getAdapter().getLogger().error("Could not find default module file '" + fileName + "'");
-				return;
+		this.config.getStringList("set_back.action").forEach((line) -> {
+			JSONObject json = null;
+			try {
+				json = (JSONObject) new JSONParser().parse(line);
+			} catch (Exception e) {}
+			SetBackEntry entry = json == null ? new SetBackEntry(line) : new SetBackEntry(json);
+			switch (entry.getType().toLowerCase(Locale.ROOT)) {
+			case "potion_effect":
+				setBackProcessor.add(new PotionEffectProcessor(entry));
+				break;
+			case "teleport":
+				setBackProcessor.add(new TeleportProcessor(entry));
+				break;
+			case "value_editor":
+				setBackProcessor.add(new ValueEditorProcessor(entry));
+				break;
+			default:
+				break;
 			}
-		} catch (IOException e) {
-			Adapter.getAdapter().getLogger().error("Failed to copy default module file '" + fileName + "' to '" + moduleFile + "'");
-			e.printStackTrace();
-			return;
-		}
-		
-		try (BufferedReader reader = Files.newBufferedReader(moduleFile)) {
-			this.config = YamlConfiguration.load(moduleFile.toFile(), reader);
-			this.config.getStringList("set_back.action").forEach((line) -> {
-				JSONObject json = null;
-				try {
-					json = (JSONObject) new JSONParser().parse(line);
-				} catch (Exception e) {}
-				SetBackEntry entry = json == null ? new SetBackEntry(line) : new SetBackEntry(json);
-				switch (entry.getType().toLowerCase(Locale.ROOT)) {
-				case "potion_effect":
-					setBackProcessor.add(new PotionEffectProcessor(entry));
-					break;
-				case "teleport":
-					setBackProcessor.add(new TeleportProcessor(entry));
-					break;
-				case "value_editor":
-					setBackProcessor.add(new ValueEditorProcessor(entry));
-					break;
-				default:
-					break;
-				}
-			});
-		} catch (Exception e) {
-			Adapter.getAdapter().getLogger().error("Failed to load cheat " + this.key);
-			e.printStackTrace();
-		}
-	}
-	
-	/**
-	 * The cheat key
-	 * In upper case to be compared to CheatKeys's value
-	 * 
-	 * @return the cheat key in upper case
-	 */
-	public CheatKeys getKey() {
-		return key;
-	}
-	
-	/**
-	 * Get the configuration of the cheat
-	 * 
-	 * @return the cheat config
-	 */
-	public Configuration getConfig() {
-		return config;
-	}
-	
-	/**
-	 * Save the configuration of the cheat
-	 */
-	public void saveConfig() {
-		FileSaverTimer.getInstance().addAction(new FileRunnableSaverAction(config::save));
+		});
 	}
 	
 	/**
@@ -151,15 +89,6 @@ public abstract class Cheat {
 	 */
 	public String getName() {
 		return config.getString("exact_name", key.getLowerKey());
-	}
-
-	/**
-	 * Check if the cheat is active
-	 * 
-	 * @return true if the cheat is active
-	 */
-	public boolean isActive() {
-		return config.getBoolean("active", true);
 	}
 	
 	/**
@@ -189,24 +118,6 @@ public abstract class Cheat {
 	 */
 	public CheatCategory getCheatCategory() {
 		return cheatCategory;
-	}
-
-	/**
-	 * Check if the cheat need packet for at least one detection
-	 * 
-	 * @return true if the cheat need packet
-	 */
-	public boolean needPacket() {
-		return needPacket;
-	}
-
-	/**
-	 * Get the cheat material which can be showed on inventory
-	 * 
-	 * @return the material
-	 */
-	public Material getMaterial() {
-		return m;
 	}
 
 	/**
@@ -299,15 +210,6 @@ public abstract class Cheat {
 	 */
 	public int getMaxAlertPing() {
 		return config.getInt("ping", 150);
-	}
-	
-	/**
-	 * Get all alias of this cheat
-	 * 
-	 * @return cheat aliases
-	 */
-	public String[] getAliases() {
-		return aliases;
 	}
 
 	/**

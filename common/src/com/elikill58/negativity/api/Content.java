@@ -2,8 +2,8 @@ package com.elikill58.negativity.api;
 
 import java.util.HashMap;
 
-import com.elikill58.negativity.universal.keys.CheatKeys;
-import com.elikill58.negativity.universal.keys.IDetectionKeys;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.keys.IDetectionKeys;
 
 public class Content<T> {
 	

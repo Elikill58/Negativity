@@ -20,7 +20,7 @@ import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.Verificator;
 import com.elikill58.negativity.universal.verif.storage.VerificationStorage;

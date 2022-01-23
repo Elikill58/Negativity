@@ -16,10 +16,10 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.common.inventories.holders.negativity.players.AlertHolder;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
+import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class AlertInventory extends AbstractInventory<AlertHolder> {

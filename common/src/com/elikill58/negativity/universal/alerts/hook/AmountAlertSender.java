@@ -9,7 +9,7 @@ import com.elikill58.negativity.api.events.negativity.PlayerCheatAlertEvent;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.alerts.AlertSender;
-import com.elikill58.negativity.universal.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 
 public class AmountAlertSender implements AlertSender {

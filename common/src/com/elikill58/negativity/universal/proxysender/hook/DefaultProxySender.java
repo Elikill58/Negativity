@@ -4,7 +4,7 @@ import java.io.IOException;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Cheat.CheatHover;
+import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.proxysender.ProxySender;

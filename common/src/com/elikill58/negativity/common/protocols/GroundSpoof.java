@@ -13,8 +13,8 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 
 public class GroundSpoof extends Cheat implements Listeners {

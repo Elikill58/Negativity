@@ -3,14 +3,13 @@ package com.elikill58.negativity.common.special;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Special;
-import com.elikill58.negativity.universal.SpecialKeys;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanType;
+import com.elikill58.negativity.universal.keys.SpecialKeys;
 
 public class WorldDownloader extends Special implements Listeners {
 
@@ -20,7 +19,7 @@ public class WorldDownloader extends Special implements Listeners {
 			if(!isActive())
 				return;
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-			if(np.booleans.get(CheatKeys.valueOf(getKey().toUpperCase()), "already-logged", false)) {
+			if(np.booleans.get(getKey(), "already-logged", false)) {
 				if(getConfig().getBoolean("ban.active", false)) {
 					if(!BanManager.banActive) {
 						Adapter.getAdapter().getLogger().warn("Cannot ban player " + p.getName() + " for " + getName() + " because ban is NOT config.");
@@ -36,7 +35,7 @@ public class WorldDownloader extends Special implements Listeners {
 					p.kick(Messages.getMessage(p, "kick.kicked", "%name%", "Negativity", "%reason%", getName()));
 				}
 			}
-			np.booleans.set(CheatKeys.valueOf(getKey().toUpperCase()), "already-logged", true);
+			np.booleans.set(getKey(), "already-logged", true);
 		});
 	}
 

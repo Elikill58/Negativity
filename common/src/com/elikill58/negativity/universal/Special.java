@@ -7,13 +7,13 @@ import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Locale;
 import java.util.ServiceLoader;
 
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.api.yaml.YamlConfiguration;
+import com.elikill58.negativity.universal.keys.SpecialKeys;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public abstract class Special {
@@ -21,7 +21,7 @@ public abstract class Special {
 	public static final String BUNDLED_SPECIAL_MODULES_BASE = Cheat.BUNDLED_MODULES_BASE + "special/";
 	private static final Path MODULE_FOLDER = Cheat.MODULE_FOLDER.resolve("special");
 	private static final List<Special> SPECIALS = new ArrayList<>();
-	private final String key;
+	private final SpecialKeys key;
 	private Configuration config;
 	private boolean needPacket;
 	private String[] aliases;
@@ -33,12 +33,12 @@ public abstract class Special {
 	 * @param needPacket if it need packet to work
 	 * @param alias all alias of the special detection
 	 */
-	public Special(String key, boolean needPacket, String... alias) {
+	public Special(SpecialKeys key, boolean needPacket, String... alias) {
+		this.key = key;
 		this.needPacket = needPacket;
-		this.key = key.toLowerCase(Locale.ROOT);
 		this.aliases = alias;
 		
-		String fileName = this.key + ".yml";
+		String fileName = this.key.getLowerKey() + ".yml";
 		Path moduleFile = MODULE_FOLDER.resolve(fileName);
 		try {
 			moduleFile = UniversalUtils.copyBundledFile(BUNDLED_SPECIAL_MODULES_BASE + fileName, moduleFile);
@@ -60,13 +60,8 @@ public abstract class Special {
 		}
 	}
 	
-	/**
-	 * Get the special key
-	 * 
-	 * @return the key in upper case
-	 */
-	public String getKey() {
-		return key.toUpperCase(Locale.ROOT);
+	public SpecialKeys getKey() {
+		return key;
 	}
 	
 	/**
@@ -91,7 +86,7 @@ public abstract class Special {
 	 * @return the name
 	 */
 	public String getName() {
-		return config.getString("name", key);
+		return config.getString("name", key.getLowerKey());
 	}
 
 	/**
@@ -130,7 +125,7 @@ public abstract class Special {
 	public static Special fromString(String name) {
 		for (Special c : Special.values()) {
 			try {
-				if (c.getKey().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name) || Arrays.asList(c.getAliases()).contains(name))
+				if (c.getKey().getKey().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name) || Arrays.asList(c.getAliases()).contains(name))
 					return c;
 			} catch (NullPointerException e) {
 				e.printStackTrace();
@@ -150,7 +145,7 @@ public abstract class Special {
 	 * @return the special detection or null
 	 */
 	public static Special forKey(String key) {
-		return SPECIALS.stream().filter((c) -> c.getKey().equalsIgnoreCase(key)).findAny().orElse(null);
+		return SPECIALS.stream().filter((c) -> c.getKey().getKey().equalsIgnoreCase(key)).findAny().orElse(null);
 	}
 	
 	/**

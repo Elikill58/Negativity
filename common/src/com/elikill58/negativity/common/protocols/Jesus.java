@@ -4,7 +4,7 @@ import static com.elikill58.negativity.api.item.Materials.STATIONARY_WATER;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialsAround;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
-import static com.elikill58.negativity.universal.CheatKeys.JESUS;
+import static com.elikill58.negativity.universal.keys.CheatKeys.JESUS;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import java.util.Arrays;

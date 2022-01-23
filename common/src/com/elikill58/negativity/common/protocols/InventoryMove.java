@@ -9,9 +9,9 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
+import com.elikill58.negativity.universal.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 
 public class InventoryMove extends Cheat implements Listeners {

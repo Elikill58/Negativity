@@ -2,7 +2,7 @@ package com.elikill58.negativity.common.protocols;
 
 import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialsAround;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
-import static com.elikill58.negativity.universal.CheatKeys.SPEED;
+import static com.elikill58.negativity.universal.keys.CheatKeys.SPEED;
 
 import java.text.NumberFormat;
 
@@ -27,9 +27,9 @@ import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Platform;
+import com.elikill58.negativity.universal.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 

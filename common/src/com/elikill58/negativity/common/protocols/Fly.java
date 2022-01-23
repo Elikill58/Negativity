@@ -1,7 +1,7 @@
 package com.elikill58.negativity.common.protocols;
 
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
-import static com.elikill58.negativity.universal.CheatKeys.FLY;
+import static com.elikill58.negativity.universal.keys.CheatKeys.FLY;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import com.elikill58.negativity.api.GameMode;
@@ -24,10 +24,10 @@ import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 

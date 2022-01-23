@@ -13,8 +13,8 @@ import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
+import com.elikill58.negativity.universal.keys.CheatKeys;
 
 public class AntiPotion extends Cheat implements Listeners {
 

@@ -7,8 +7,8 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerItemConsumeEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.FlyingReason;
+import com.elikill58.negativity.universal.keys.CheatKeys;
 
 public class FastEat extends Cheat implements Listeners {
 	

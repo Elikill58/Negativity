@@ -1,6 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
-import static com.elikill58.negativity.universal.CheatKeys.XRAY;
+import static com.elikill58.negativity.universal.keys.CheatKeys.XRAY;
 
 import java.util.Arrays;
 import java.util.List;

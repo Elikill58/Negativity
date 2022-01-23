@@ -1,6 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
-import static com.elikill58.negativity.universal.CheatKeys.FAST_BOW;
+import static com.elikill58.negativity.universal.keys.CheatKeys.FAST_BOW;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;

@@ -1,8 +1,8 @@
-package com.elikill58.negativity.universal;
+package com.elikill58.negativity.universal.keys;
 
-import java.util.Locale;
+import com.elikill58.negativity.universal.Version;
 
-public enum CheatKeys implements Comparable<CheatKeys> {
+public enum CheatKeys implements IDetectionKeys<CheatKeys> {
 
 	ALL("ALL"),
 	AIM_BOT("AIMBOT"),
@@ -56,16 +56,14 @@ public enum CheatKeys implements Comparable<CheatKeys> {
 		this.minVersion = minVersion;
 	}
 	
+	@Override
 	public String getKey() {
 		return key;
 	}
-	
+
+	@Override
 	public Version getMinVersion() {
 		return minVersion;
-	}
-	
-	public String getLowerKey() {
-		return key.toLowerCase(Locale.ROOT);
 	}
 	
 	@Override

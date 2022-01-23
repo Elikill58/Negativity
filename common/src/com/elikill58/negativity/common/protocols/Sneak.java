@@ -1,6 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
-import static com.elikill58.negativity.universal.CheatKeys.SNEAK;
+import static com.elikill58.negativity.universal.keys.CheatKeys.SNEAK;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;

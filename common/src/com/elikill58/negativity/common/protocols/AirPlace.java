@@ -1,6 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
-import static com.elikill58.negativity.universal.CheatKeys.AIR_PLACE;
+import static com.elikill58.negativity.universal.keys.CheatKeys.AIR_PLACE;
 
 import java.util.Arrays;
 import java.util.List;

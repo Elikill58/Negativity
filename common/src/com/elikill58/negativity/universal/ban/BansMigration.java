@@ -21,7 +21,8 @@ public class BansMigration {
 
 	public static void migrateBans(Path activeBanStorageDir, Path loggedBanStorageDir) {
 		Adapter adapter = Adapter.getAdapter();
-		Path oldBanDir = adapter.getDataFolder().toPath().resolve(adapter.getConfig().getString("ban.file.dir"));
+		Path oldBanDir = adapter.getDataFolder().toPath().resolve(adapter.getConfig().getString("ban.file.dir", "xxxxxxxxxx"));
+		// the "xxxxxxxxxx" field is to prevent empty path, and so always founded because it's the actual folder
 		if (Files.notExists(oldBanDir))
 			return;
 

@@ -302,6 +302,7 @@ public class Negativity {
 	public static void loadNegativity() {
 		Adapter ada = Adapter.getAdapter();
 		ada.getLogger().info("Thanks for buying Negativity <3");
+		ada.reloadConfig();
 		
 		integratedPlugins.clear();
 
@@ -332,7 +333,6 @@ public class Negativity {
 				ada.getScheduler().runRepeatingAsync(new FileSaverTimer(), 20);
 		}
 		UniversalUtils.init();
-		
 		Configuration config = ada.getConfig();
 		log = config.getBoolean("log_alerts", true);
 		log_console = config.getBoolean("log_alerts_in_console", true);

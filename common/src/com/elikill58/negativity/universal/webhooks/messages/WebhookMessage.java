@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class WebhookMessage {
@@ -66,10 +67,13 @@ public class WebhookMessage {
 	 * @return the given message with all replaced object
 	 */
 	public String applyPlaceHolders(String message) {
+		Adapter ada = Adapter.getAdapter();
 		String sDate = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault()));
-		return UniversalUtils.replacePlaceholders(message, getPlaceholders()).replaceAll("%date%", sDate)
-				.replaceAll("%name%", concerned.getName()).replaceAll("%uuid%", concerned.getUniqueId().toString())
-				.replaceAll("%ip%", concerned.getIP()).replaceAll("%sender%", sender);
+		return UniversalUtils.replacePlaceholders(message, getPlaceholders(), "%date%", sDate, "%name%", concerned.getName(),
+				"%uuid%", concerned.getUniqueId().toString(), "%ip%", concerned.getIP(), "%sender%", sender,
+				"%server_name%", concerned.getServerName(), "%player_version%", concerned.getPlayerVersion().getName(),
+				"%server_version%", ada.getServerVersion().getName(), "%tps%", String.format("%.3f%", ada.getLastTPS()),
+				"%ping%", concerned.getPing(), "%world%", concerned.getWorld() != null ? concerned.getWorld().getName() : "-");
 	}
 	
 	/**

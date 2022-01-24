@@ -1,5 +1,7 @@
 package com.elikill58.negativity.bungee;
 
+import java.util.UUID;
+
 import org.bstats.bungeecord.MetricsLite;
 
 import com.elikill58.negativity.bungee.integrations.RedisSupport;
@@ -13,6 +15,8 @@ import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManag
 import com.elikill58.negativity.universal.pluginMessages.RedisNegativityMessage;
 
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.config.ServerInfo;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginManager;
 
@@ -67,5 +71,28 @@ public class BungeeNegativity extends Plugin {
 	
 	public static String getProxyId() {
 		return redisBungee ? RedisSupport.getProxyId() : "proxy";
+	}
+	
+	public static String getNameFromUUID(UUID uuid) {
+		if(redisBungee) {
+			String redisName = RedisSupport.getPlayerName(uuid);
+			if(redisName != null)
+				return redisName;
+		}
+		return ProxyServer.getInstance().getPlayer(uuid).getName();
+	}
+	
+	public static String getServerNameForPlayer(UUID uuid) {
+		if(redisBungee) {
+			String redisName = RedisSupport.getServerNameForPlayer(uuid);
+			if(redisName != null)
+				return redisName;
+		}
+		ProxiedPlayer p = ProxyServer.getInstance().getPlayer(uuid);
+		return p == null ? "" : getServerName(p.getServer().getInfo());
+	}
+	
+	public static String getServerName(ServerInfo info) {
+		return info == null ? "" : info.getName();
 	}
 }

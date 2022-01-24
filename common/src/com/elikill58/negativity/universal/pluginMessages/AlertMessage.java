@@ -5,6 +5,7 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -14,7 +15,7 @@ public class AlertMessage implements NegativityMessage {
 
 	public static final byte MESSAGE_ID = 0;
 
-	private String playername;
+	private UUID playerId;
 	private String cheat;
 	private int reliability;
 	private int ping;
@@ -22,11 +23,11 @@ public class AlertMessage implements NegativityMessage {
 	private int alertsCount;
 
 	public AlertMessage() {
-		this("", "", -1, -1, null, 0);
+		this(UUID.fromString("00000000-0000-0000-0000-000000000000"), "", -1, -1, null, 0);
 	}
 
-	public AlertMessage(String playername, String cheat, int reliability, int ping, Cheat.@Nullable CheatHover hoverInfo, int alertsCount) {
-		this.playername = playername;
+	public AlertMessage(UUID playerId, String cheat, int reliability, int ping, Cheat.@Nullable CheatHover hoverInfo, int alertsCount) {
+		this.playerId = playerId;
 		this.cheat = cheat;
 		this.reliability = reliability;
 		this.ping = ping;
@@ -41,7 +42,7 @@ public class AlertMessage implements NegativityMessage {
 
 	@Override
 	public void readFrom(DataInputStream input) throws IOException {
-		playername = input.readUTF();
+		playerId = UUID.fromString(input.readUTF());
 		cheat = input.readUTF();
 		reliability = input.readInt();
 		ping = input.readInt();
@@ -51,7 +52,7 @@ public class AlertMessage implements NegativityMessage {
 
 	@Override
 	public void writeTo(DataOutputStream output) throws IOException {
-		output.writeUTF(playername);
+		output.writeUTF(playerId.toString());
 		output.writeUTF(cheat);
 		output.writeInt(reliability);
 		output.writeInt(ping);
@@ -87,8 +88,8 @@ public class AlertMessage implements NegativityMessage {
 		}
 	}
 
-	public String getPlayername() {
-		return playername;
+	public UUID getPlayerUUID() {
+		return playerId;
 	}
 
 	public String getCheat() {

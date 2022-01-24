@@ -304,7 +304,7 @@ public class SpongeNegativity {
 	public static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover, int alertsCount) {
 		channel.sendTo(p, (payload) -> {
 			try {
-				AlertMessage message = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);
+				AlertMessage message = new AlertMessage(p.getUniqueId(), cheatName, reliability, ping, hover, alertsCount);
 				payload.writeBytes(NegativityMessagesManager.writeMessage(message));
 			} catch (IOException e) {
 				SpongeNegativity.getInstance().getLogger().error("Could not send alert message to the proxy.", e);

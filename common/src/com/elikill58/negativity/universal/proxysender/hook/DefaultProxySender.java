@@ -15,7 +15,7 @@ public class DefaultProxySender implements ProxySender {
 	public void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover,
 			int alertsCount) {
 		try {
-			AlertMessage alertMessage = new AlertMessage(p.getName(), cheatName, reliability, ping, hover, alertsCount);
+			AlertMessage alertMessage = new AlertMessage(p.getUniqueId(), cheatName, reliability, ping, hover, alertsCount);
 			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID,
 					NegativityMessagesManager.writeMessage(alertMessage));
 		} catch (IOException e) {

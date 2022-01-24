@@ -48,6 +48,14 @@ public class RedisSupport implements Listener {
 		return NegativityPlayer.getNegativityPlayer(uuid, () -> new RedisBungeePlayer(uuid)).getPlayer();
 	}
 	
+	public static String getPlayerName(UUID uuid) {
+		return RedisBungee.getApi().getNameFromUuid(uuid);
+	}
+	
+	public static String getServerNameForPlayer(UUID uuid) {
+		return BungeeNegativity.getServerName(RedisBungee.getApi().getServerFor(uuid));
+	}
+	
 	@EventHandler
 	public void pubSub(PubSubMessageEvent e) {
 		if (!e.getChannel().equals(REDIS_CHANNEL))

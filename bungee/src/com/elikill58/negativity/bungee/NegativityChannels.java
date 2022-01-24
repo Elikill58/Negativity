@@ -39,9 +39,10 @@ public class NegativityChannels {
 		String server = redisMessage.getServer();
 		if (message instanceof AlertMessage) {
 			AlertMessage alert = (AlertMessage) message;
-			Object[] place = new Object[] { "%name%", alert.getPlayername(), "%cheat%", alert.getCheat(),
+			String playername = BungeeNegativity.getNameFromUUID(alert.getPlayerUUID());
+			Object[] place = new Object[] { "%name%", playername, "%cheat%", alert.getCheat(),
 					"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%",
-					alert.getAlertsCount() };
+					alert.getAlertsCount(), "%server_name%", BungeeNegativity.getServerNameForPlayer(alert.getPlayerUUID()) };
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers()) {
 				NegativityPlayer nPlayer = NegativityPlayer.getCached(pp.getUniqueId());
@@ -57,9 +58,9 @@ public class NegativityChannels {
 								ComponentBuilder.FormatRetention.NONE);
 					}
 					hoverComponent.append("\n\n" + Messages.getMessage(pp.getUniqueId(), "alert_tp_info",
-							"%playername%", alert.getPlayername()), ComponentBuilder.FormatRetention.NONE);
+							"%playername%", playername), ComponentBuilder.FormatRetention.NONE);
 					alertMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, hoverComponent.create()));
-					alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/negativitytp " + alert.getPlayername() + " " + server));
+					alertMessage.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, "/negativitytp " + playername + " " + server));
 					pp.sendMessage(alertMessage);
 				}
 			}

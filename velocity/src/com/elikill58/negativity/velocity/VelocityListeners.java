@@ -92,7 +92,10 @@ public class VelocityListeners {
 		
 		if (message instanceof AlertMessage) {
 			AlertMessage alert = (AlertMessage) message;
-			Object[] place = new Object[]{"%name%", alert.getPlayername(), "%cheat%", alert.getCheat(),
+			Player cible = VelocityNegativity.getInstance().getServer().getPlayer(alert.getPlayerUUID()).get();
+			String playername = cible.getUsername();
+			String serverName = cible.getCurrentServer().isPresent() ? cible.getCurrentServer().get().getServerInfo().getName() : "Unknow";
+			Object[] place = new Object[]{"%name%", playername, "%cheat%", alert.getCheat(), "%server_name%", serverName,
 				"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (com.elikill58.negativity.api.entity.Player commonPlayer : Adapter.getAdapter().getOnlinePlayers()) {
@@ -115,7 +118,7 @@ public class VelocityListeners {
 					
 					hoverMessage.append(Component.newline())
 						.append(Component.newline())
-						.append(Component.text(Messages.getMessage(pp.getUniqueId(), "alert_tp_info", "%playername%", alert.getPlayername())));
+						.append(Component.text(Messages.getMessage(pp.getUniqueId(), "alert_tp_info", "%playername%", playername)));
 					
 					msg.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, hoverMessage.build()));
 					msg.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));

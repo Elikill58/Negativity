@@ -69,10 +69,10 @@ public class WebhookMessage {
 	public String applyPlaceHolders(String message) {
 		Adapter ada = Adapter.getAdapter();
 		String sDate = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(LocalDateTime.ofInstant(Instant.ofEpochMilli(date), ZoneId.systemDefault()));
-		return UniversalUtils.replacePlaceholders(message, getPlaceholders(), "%date%", sDate, "%name%", concerned.getName(),
+		return UniversalUtils.replacePlaceholders(UniversalUtils.replacePlaceholders(message, getPlaceholders()), "%date%", sDate, "%name%", concerned.getName(),
 				"%uuid%", concerned.getUniqueId().toString(), "%ip%", concerned.getIP(), "%sender%", sender,
 				"%server_name%", concerned.getServerName(), "%player_version%", concerned.getPlayerVersion().getName(),
-				"%server_version%", ada.getServerVersion().getName(), "%tps%", String.format("%.3f%", ada.getLastTPS()),
+				"%server_version%", ada.getServerVersion().getName(), "%tps%", String.format("%.3f", ada.getLastTPS()),
 				"%ping%", concerned.getPing(), "%world%", concerned.getWorld() != null ? concerned.getWorld().getName() : "-");
 	}
 	

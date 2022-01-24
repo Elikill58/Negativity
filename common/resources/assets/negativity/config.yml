@@ -358,6 +358,12 @@ webhooks:
       # %ip% : IP of the player which produce the message
       # %date% : Date when the player procude the message
       # %sender% : The sender of the message (such as banner or reporter)
+      # %ping% : The ping of the player
+      # %world% : The world of the player
+      # %server_name% : The name of the server where the player is
+      # %server_version% : Version of the server
+      # %player_version% : Version of the player
+      # %tps% : Actual server TPS
       # 
       messages:
         # Configure discord webhook message for ban.
@@ -369,7 +375,7 @@ webhooks:
         alert:
           enabled: true
           # The name which will send the message
-          username: "Negativity"
+          username: "Negativity Alert"
           # The content of the message
           content: ""
           # The URL of the message avatar
@@ -377,37 +383,58 @@ webhooks:
           # Now let's configure embed message (the section with black background)
           embed:
             # Color of the embed (used with the line on the left)
-            color: "green"
+            # More informations: https://docs.oracle.com/javase/7/docs/api/java/awt/Color.html
+            color: "65280"
             # The embed title
-            title: "Alert"
+            title: "Negativity Alert"
             # Main description
-            description: "%name% seems to use %cheat% %amount%x (Reliability: %reliability%)"
+            description: "%name% seems to use %cheat% %amount%x (Reliability: %reliability%%)"
             # All fields.
             # There is 3 fields per line MAX.
             # Else, they will automatically be on the next line.
             fields:
               1:
                 # The key which will be at top of field (and bold)
-                key: "Player name"
+                key: "Player Name"
                 # The value of the field
                 value: "%name%"
                 # If the field is inline
                 inline: true
               2:
+                key: "Ping"
+                value: "%ping% ms"
+                inline: true
+              3:
+                key: "Version"
+                value: "%player_version%"
+                inline: true
+              4:
+                key: "World"
+                value: "%world%"
+                inline: true
+              5:
+                key: "Server Name"
+                value: "%server_name%"
+                inline: true
+              6:
+                key: "Server TPS"
+                value: "%tps%"
+                inline: true
+              7:
                 key: "Player UUID"
                 value: "%uuid%"
-                inline: true
+                inline: false
             # Thumbnail of the message
-            thumbnail: "https://kryptongta.com/images/kryptonlogo.png"
+            thumbnail: ""
             # The footer of the message
             footer:
               name: "Negativity - %date%"
-              link: "https://kryptongta.com/images/kryptonlogodark.png"
+              link: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
             # Author details of the message
             author:
-              name: "Negativity"
+              name: ""
               link: "https://github.com/Elikill58/Negativity"
-              icon: "https://kryptongta.com/images/kryptonlogowide.png"
+              icon: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
         # Configure discord webhook message for ban.
         #
         # Placeholders available :
@@ -446,16 +473,16 @@ webhooks:
                 value: "%uuid%"
                 inline: true
             # Thumbnail of the message
-            thumbnail: "https://kryptongta.com/images/kryptonlogo.png"
+            thumbnail: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
             # The footer of the message
             footer:
               name: "Negativity - %date%"
-              link: "https://kryptongta.com/images/kryptonlogodark.png"
+              link: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
             # Author details of the message
             author:
               name: "Negativity"
               link: "https://github.com/Elikill58/Negativity"
-              icon: "https://kryptongta.com/images/kryptonlogowide.png"
+              icon: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
         # Configure discord webhook message for ban.
         #
         # Placeholders available :
@@ -492,16 +519,16 @@ webhooks:
                 value: "%uuid%"
                 inline: true
             # Thumbnail of the message
-            thumbnail: "https://kryptongta.com/images/kryptonlogo.png"
+            thumbnail: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
             # The footer of the message
             footer:
               name: "Negativity - %date%"
-              link: "https://kryptongta.com/images/kryptonlogodark.png"
+              link: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
             # Author details of the message
             author:
               name: "Negativity"
               link: "https://github.com/Elikill58/Negativity"
-              icon: "https://kryptongta.com/images/kryptonlogowide.png"
+              icon: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
         # Configure discord webhook message for ban.
         #
         # Placeholders available :
@@ -538,16 +565,16 @@ webhooks:
                 value: "%uuid%"
                 inline: true
             # Thumbnail of the message
-            thumbnail: "https://kryptongta.com/images/kryptonlogo.png"
+            thumbnail: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
             # The footer of the message
             footer:
               name: "Negativity - %date%"
-              link: "https://kryptongta.com/images/kryptonlogodark.png"
+              link: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
             # Author details of the message
             author:
               name: "Negativity"
               link: "https://github.com/Elikill58/Negativity"
-              icon: "https://kryptongta.com/images/kryptonlogowide.png"
+              icon: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
 
     discord-another-example:
       type: "discord"

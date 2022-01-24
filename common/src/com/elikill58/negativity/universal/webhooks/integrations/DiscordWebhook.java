@@ -100,11 +100,22 @@ public class DiscordWebhook implements Webhook {
     }
     
     private void sendAsync(WebhookMessage msg) {
+    	try {
+    		sendAsyncWithException(msg);
+    	} catch (Exception e) {
+    		e.printStackTrace();
+		}
+    }
+    
+    private void sendAsyncWithException(WebhookMessage msg) throws Exception {
+    	Adapter ada = Adapter.getAdapter();
     	Configuration confMsg = config.getSection("messages").getSection(msg.getMessageType().name().toLowerCase(Locale.ROOT));
     	if(confMsg == null)
     		confMsg = new Configuration();
-    	if(!confMsg.getBoolean("enabled", true))
+    	if(!confMsg.getBoolean("enabled", true)) {
+        	ada.debug("Webhook for " + msg.getMessageType().name() + " is not enabled.");
     		return;
+    	}
     	if(skip > 0) { // should skip
     		queue.add(msg);
     		skip--;
@@ -121,7 +132,7 @@ public class DiscordWebhook implements Webhook {
 		    obj.setColor(Color.getColor(embed.getString("color", "red")));
 		    obj.setTitle(msg.applyPlaceHolders(embed.getString("title", msg.getMessageType().name().toLowerCase(Locale.ROOT))));
 		    obj.setDescription(msg.applyPlaceHolders(embed.getString("description", "")));
-		    
+
 		    Configuration fields = embed.getSection("fields");
 		    if(fields != null) {
 		    	fields.getKeys().forEach((key) -> {
@@ -132,30 +143,26 @@ public class DiscordWebhook implements Webhook {
 		    	});
 		    }
 		    
-		    obj.setThumbnail(msg.applyPlaceHolders(embed.getString("thumbnail", "https://kryptongta.com/images/kryptonlogo.png")));
+		    obj.setThumbnail(msg.applyPlaceHolders(embed.getString("thumbnail", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")));
 		    Configuration footer = embed.getSection("footer");
 		    if(footer != null) {
-		    	obj.setFooter(msg.applyPlaceHolders(footer.getString("name", "Negativity - %date%")), footer.getString("link", "https://kryptongta.com/images/kryptonlogodark.png"));
+		    	obj.setFooter(msg.applyPlaceHolders(footer.getString("name", "Negativity - %date%")), footer.getString("link", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"));
 		    }
 		    Configuration author = embed.getSection("author");
 		    if(author != null) {
 		    	obj.setAuthor(msg.applyPlaceHolders(author.getString("name", "Negativity")),
 		    			msg.applyPlaceHolders(author.getString("link", "https://github.com/Elikill58/Negativity")),
-		    			msg.applyPlaceHolders(author.getString("icon", "https://kryptongta.com/images/kryptonlogowide.png")));
+		    			msg.applyPlaceHolders(author.getString("icon", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")));
 		    }
-		    
+
 		    webhook.addEmbed(obj);
 	    }
-	    try {
-			int code = webhook.execute();
-	    	Adapter.getAdapter().debug("Webhook message sent, code: " + code);
-	    	if(code == 429) { // good config and error while sending
-	    		queue.add(msg);
-	    		skip = 5; // wait 5 s untl next send
-	    	}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		int code = webhook.execute();
+		ada.debug("Webhook message sent, code: " + code);
+    	if(code == 429) { // good config and error while sending
+    		queue.add(msg);
+    		skip = 5; // wait 5 s until next send
+    	}
     }
     
     @Override
@@ -169,9 +176,9 @@ public class DiscordWebhook implements Webhook {
             .setTitle("Test")
             .setDescription(asker + " try to ping webhook.")
 		    .addField("Player name", asker, true)
-		    .setThumbnail("https://kryptongta.com/images/kryptonlogo.png")
-		    .setFooter("Negativity - " + new Timestamp(System.currentTimeMillis()).toString().split("\\.", 2)[0], "https://kryptongta.com/images/kryptonlogodark.png")
-		    .setAuthor("Negativity", "https://github.com/Elikill58/Negativity", "https://kryptongta.com/images/kryptonlogowide.png")
+		    .setThumbnail("https://www.spigotmc.org/data/resource_icons/86/86874.jpg")
+		    .setFooter("Negativity - " + new Timestamp(System.currentTimeMillis()).toString().split("\\.", 2)[0], "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")
+		    .setAuthor("Negativity", "https://github.com/Elikill58/Negativity", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")
 		    .setUrl("https://github.com/Elikill58/Negativity"));
 	    try {
 			webhook.execute();
@@ -316,21 +323,17 @@ public class DiscordWebhook implements Webhook {
 	        URL url = new URL(this.url);
 	        HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
 	        connection.addRequestProperty("Content-Type", "application/json");
-	        connection.addRequestProperty("User-Agent", "Java-DiscordWebhook-BY-Gelox_");
+	        connection.addRequestProperty("User-Agent", "Java-Negativity-DiscordWebhook-BY-Gelox_");
 	        connection.setDoOutput(true);
 	        connection.setRequestMethod("POST");
 	        OutputStream stream = connection.getOutputStream();
+	        Adapter.getAdapter().debug("Send json: " + json.toString());
 	        stream.write(json.toString().getBytes());
 	        stream.flush();
 	        stream.close();
 	        int code = connection.getResponseCode();
-	        try {
-		        connection.getInputStream().close(); //I'm not sure why but it doesn't work without getting the InputStream
-		        connection.disconnect();
-	        } catch (Exception e) {
-	        	if(code != 200 && code != 429)
-	        		e.printStackTrace();
-			}
+	        connection.getInputStream().close(); //I'm not sure why but it doesn't work without getting the InputStream
+	        connection.disconnect();
 	        return code;
 	    }
 	

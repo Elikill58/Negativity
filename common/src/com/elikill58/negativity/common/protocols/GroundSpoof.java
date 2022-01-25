@@ -29,22 +29,30 @@ public class GroundSpoof extends Cheat implements Listeners {
     		conditions = { CheckConditions.SURVIVAL, CheckConditions.GROUND, CheckConditions.NO_SNEAK })
     public void onGroundSpoof(PlayerMoveEvent e, NegativityPlayer np) {
         Player p = e.getPlayer();
-		if (e.isCancelled() || !p.isOnGround()) // cancelled or player say he is not on ground
+		if (e.isCancelled() || !p.isOnGround()) {// cancelled or player say he is not on ground
+			np.booleans.remove(getKey(), "was-alert");
 			return;
+		}
         if (isOnGround(e.getTo()) || p.getFallDistance() > 3 || p.getFallDistance() > p.getWalkSpeed()) {
+			np.booleans.remove(getKey(), "was-alert");
             return;
         }
         Block block = e.getTo().getBlock();
         Block downBlock = block.getRelative(BlockFace.DOWN);
         if (blockJustAroundAreNotAir(block) || blockJustAroundAreNotAir(downBlock)) {
+			np.booleans.remove(getKey(), "was-alert");
             return;
         }
         double diffY = e.getTo().getY() - e.getFrom().getY();
         if(diffY >= 0.3 || diffY < 0)
         	return;
-        Negativity.alertMod(ReportType.WARNING, p, this, getReliability(p), "check-blocks-under",
+        boolean b = np.booleans.get(getKey(), "was-alert", false);
+        if(b)
+        	Negativity.alertMod(ReportType.WARNING, p, this, getReliability(p), "check-blocks-under",
                 "Air BlockFaces: " + getAirBlocks(p).toString() + ", fall: " + p.getFallDistance() + ", sneaking: " + p.isSneaking() + ", Y diff: " + diffY,
                 new CheatHover.Literal("Ground Spoof (Fly, NoFall, and other movement hacks)"));
+        else
+        	np.booleans.set(getKey(), "was-alert", true);
     }
     
     private boolean blockJustAroundAreNotAir(Block block) {

@@ -79,12 +79,15 @@ public class NegativityPlayer implements FileSaverAction {
 	public List<Double> lastY = new ArrayList<>();
 	public Location lastSpiderLoc = null;
 	public String LAST_OTHER_KEEP_ALIVE = "";
+	public List<Location> lastLocations = new ArrayList<>();
 	
 	// content
+	public Content<List<Location>> listLocations = new Content<>();
 	public Content<List<Double>> listDoubles = new Content<>();
 	public Content<Location> locations = new Content<>();
 	public Content<Material> materials = new Content<>();
 	public Content<Boolean> booleans = new Content<>();
+	public Content<Entity> entities = new Content<>();
 	public Content<Double> doubles = new Content<>();
 	public Content<Integer> ints = new Content<>();
 	public Content<Long> longs = new Content<>();

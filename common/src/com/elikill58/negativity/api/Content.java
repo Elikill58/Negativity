@@ -2,20 +2,19 @@ package com.elikill58.negativity.api;
 
 import java.util.HashMap;
 
-import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.detections.keys.IDetectionKeys;
 
 public class Content<T> {
 	
 	/**
-	 * The saved content. Please, to use directly this map
+	 * The saved content. Please, don't use directly this map
 	 */
 	private final HashMap<IDetectionKeys<?>, HashMap<String, T>> mainContent = new HashMap<>();
 	
 	/**
 	 * Obtain the saved value
 	 * 
-	 * @param type where the value is (we suggest you to use {@link CheatKeys}}
+	 * @param type where the value is
 	 * @param valueName the value name
 	 * @param defaultValue returned when type or valueName not saved / don't exist
 	 * @return the needed value according to the type and the valueName
@@ -28,7 +27,7 @@ public class Content<T> {
 	 * Edit the value :
 	 * type > valueName:value
 	 * 
-	 * @param type where the value will be (we suggest you to use {@link CheatKeys}}
+	 * @param type where the value will be
 	 * @param valueName the value key
 	 * @param value the saved value
 	 */
@@ -39,14 +38,27 @@ public class Content<T> {
 	/**
 	 * Remove value for the specified type
 	 * 
-	 * @param type where the value to remove is (we suggest you to use {@link CheatKeys}}
+	 * @param type where the value to remove is
 	 * @param valueName the value to remove
+	 * @return 
 	 */
-	public void remove(IDetectionKeys<?> type, String valueName) {
+	public T remove(IDetectionKeys<?> type, String valueName) {
 		try {
-			mainContent.get(type).remove(valueName);
+			return mainContent.get(type).remove(valueName);
 		} catch (NullPointerException e) {
 			// ignore because the type is not present, so we have already remove it
 		}
+		return null;
+	}
+	
+	/**
+	 * Check if the given value is set or not
+	 * 
+	 * @param type the key of the detection
+	 * @param valueName the name of the value
+	 * @return true if the value is present
+	 */
+	public boolean has(IDetectionKeys<?> type, String valueName) {
+		return mainContent.containsKey(type) && mainContent.get(type).containsKey(valueName);
 	}
 }

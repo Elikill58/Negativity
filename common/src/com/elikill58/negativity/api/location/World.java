@@ -2,6 +2,8 @@ package com.elikill58.negativity.api.location;
 
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import com.elikill58.negativity.api.NegativityObject;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
@@ -58,6 +60,19 @@ public abstract class World implements NegativityObject {
 	 */
 	public abstract List<Entity> getEntities();
 
+	/**
+	 * Get an entity by the ID
+	 * 
+	 * @param entityId the ID of the entity
+	 * @return the founded entity or null if not is this world/no longer existing
+	 */
+	public @Nullable Entity getEntityWithID(int entityId) {
+		for(Entity et : getEntities())
+			if(et.getEntityId() == entityId)
+				return et;
+		return null;
+	}
+	
 	/**
 	 * Get the world difficulty
 	 * 

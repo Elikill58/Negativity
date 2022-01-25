@@ -210,6 +210,7 @@ public class UniversalUtils {
         } catch (SSLException e) {
         	Adapter.getAdapter().getLogger().warn("Failed to connect with the internet connection to check for update or send stats.");
         } catch (IOException e) {
+        	Adapter.getAdapter().getLogger().info("An error occured while trying to make web request to: " + urlName);
         	e.printStackTrace();
 		}
 		return Optional.empty();

@@ -63,6 +63,11 @@ public class PacketListener implements Listeners {
 					np.sensitivity = tmpSens;
 				}
 			}
+			if(flying.hasPos) {
+				np.lastLocations.add(flying.getLocation(p.getWorld()));
+				if(np.lastLocations.size() >= 10)
+					np.lastLocations.remove(0); // limit to 10 last loc
+			}
 		} else
 			np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
 		if(type == PacketType.Client.BLOCK_DIG && !Version.getVersion().equals(Version.V1_7) && packet.getPacket() instanceof NPacketPlayInBlockDig) {

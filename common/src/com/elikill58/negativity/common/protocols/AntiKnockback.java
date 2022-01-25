@@ -70,7 +70,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 					return;
 				if (!p.isOnGround() || np.isOnLadders || p.isInsideVehicle() || p.isFlying() || p.isDead())
 					return;
-				ada.runSync(() -> checkPlayerForVectorPacketAntiKb(p, velY, algo));
+				ada.getScheduler().runDelayed(() -> checkPlayerForVectorPacketAntiKb(p, velY, algo), 5);
 				return;
 			}
 		}

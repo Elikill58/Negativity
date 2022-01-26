@@ -73,7 +73,7 @@ public class NegativityPlayer implements FileSaverAction {
 			TIME_OTHER_KEEP_ALIVE = 0, TIME_LAST_MOVE = 0;
 	public int MOVE_TIME = 0, LAST_CHAT_MESSAGE_NB = 0, fakePlayerTouched = 0, BYPASS_SPEED = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0, IS_LAST_SEC_BLINK = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
-	public boolean bypassBlink = false, isOnLadders = false, useAntiNoFallSystem = false;
+	public boolean bypassBlink = false, isOnLadders = false, useAntiNoFallSystem = false, isTeleporting = false;
 	public PlayerChatEvent LAST_CHAT_EVENT = null;
 	public List<Integer> TIMER_COUNT = new ArrayList<>();
 	public List<Double> lastY = new ArrayList<>();
@@ -100,6 +100,7 @@ public class NegativityPlayer implements FileSaverAction {
 	private String clientName;
 	private ScheduledTask fightCooldownTask;
 	private FileHandle proofFileHandler;
+	public Entity lastHittedEntitty = null, lastHitByEntity = null;
 
 	public NegativityPlayer(Player p) {
 		this.p = p;

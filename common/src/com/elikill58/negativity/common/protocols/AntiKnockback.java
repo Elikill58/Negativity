@@ -43,7 +43,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 
 	@Check(name = "packet", description = "Packet velocity", conditions = { CheckConditions.SURVIVAL })
 	public void onPacket(PacketSendEvent e) {
-		if (!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_VELOCITY))
+		if (!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_VELOCITY) || checkActive("packet"))
 			return;
 		NPacketPlayOutEntityVelocity packet = (NPacketPlayOutEntityVelocity) e.getPacket().getPacket();
 		int entId = packet.entityId;
@@ -51,7 +51,8 @@ public class AntiKnockback extends Cheat implements Listeners {
 
 		Adapter ada = Adapter.getAdapter();
 		if (entId == -1 || velY == -1) {
-			ada.debug("The AntiKnockback is disabled because the entity ID is " + entId + " and the velocity is " + velY
+			if(entId == -1)
+				ada.debug("The AntiKnockback is disabled because the entity ID is " + entId + " and the velocity is " + velY
 					+ " for EntityVelocity.");
 			return;
 		}

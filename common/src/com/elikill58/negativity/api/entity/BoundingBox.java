@@ -92,6 +92,10 @@ public class BoundingBox {
 		return isIn(p.x, p.y, p.z);
 	}
 
+	public boolean isCollide(BoundingBox bb) {
+		return bb.getAllPoints().stream().filter(this::isIn).count() > 0; // at least one is in -> collide
+	}
+
 	public boolean isIn(double x, double y, double z) {
 		return (Math.min(minX, maxX) <= x && x <= Math.max(minX, maxX))
 				&& (Math.min(minY, maxY) <= y && y <= Math.max(minY, maxY))

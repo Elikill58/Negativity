@@ -11,12 +11,14 @@ import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.universal.Version;
@@ -68,6 +70,8 @@ public class PacketListener implements Listeners {
 				if(np.lastLocations.size() >= 10)
 					np.lastLocations.remove(0); // limit to 10 last loc
 			}
+			if(flying instanceof NPacketPlayInPositionLook)
+				np.isTeleporting = false;
 		} else
 			np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
 		if(type == PacketType.Client.BLOCK_DIG && !Version.getVersion().equals(Version.V1_7) && packet.getPacket() instanceof NPacketPlayInBlockDig) {
@@ -91,6 +95,9 @@ public class PacketListener implements Listeners {
 						EventManager.callEvent(event);
 						if(event.isCancelled())
 							packet.setCancelled(event.isCancelled());
+						np.lastHittedEntitty = entity;
+						if(entity instanceof Player)
+							NegativityPlayer.getNegativityPlayer((Player) entity).lastHitByEntity = p;
 					}
 				}
 			}
@@ -101,5 +108,15 @@ public class PacketListener implements Listeners {
 			p.applyTheoricVelocity();
 		}
 		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketReceived(e));
+	}
+
+
+	@EventListener
+	public void onPacketSend(PacketSendEvent e) {
+		if(!e.hasPlayer())
+			return;
+		Player p = e.getPlayer();
+		if(e.getPacket().getPacketType().equals(PacketType.Server.POSITION))
+			NegativityPlayer.getNegativityPlayer(p).isTeleporting = true;
 	}
 }

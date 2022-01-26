@@ -242,6 +242,11 @@ public abstract class AbstractProxyPlayer extends AbstractEntity implements Play
 	}
 	
 	@Override
+	public Vector getTheoricVelocity() {
+		return null;
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Player)) {
 			return false;

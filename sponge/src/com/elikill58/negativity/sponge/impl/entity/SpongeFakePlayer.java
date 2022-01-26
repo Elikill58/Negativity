@@ -92,7 +92,7 @@ public class SpongeFakePlayer extends AbstractEntity implements FakePlayer {
 	}
 	
 	@Override
-	public Vector getVelocity() {
+	public Vector getTheoricVelocity() {
 		Vector3d vel = fakePlayer.getVelocity();
 		return new Vector(vel.getX(), vel.getY(), vel.getZ());
 	}

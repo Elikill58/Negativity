@@ -59,7 +59,7 @@ public class Reach extends Cheat implements Listeners {
 				positions.stream().mapToDouble(other -> getDistance(loc, other)).min().ifPresent(dis -> {
 					recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 					Adapter.getAdapter().debug("Distance between " + p.getName() + " and " + cible.getName() + ": " + dis);
-					double max = getConfig().getDouble("checks.reach-event.value", 3.1) + (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0);
+					double max = getConfig().getDouble("checks.reach-event.value", 3.2) + (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0);
 					if (dis > max) {
 						boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 								parseInPorcent((dis - max) * 90), "reach-event",

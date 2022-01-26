@@ -382,12 +382,6 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	}
 	
 	@Override
-	public Vector getVelocity() {
-		Vector3d vel = entity.require(Keys.VELOCITY);
-		return new Vector(vel.x(), vel.y(), vel.z());
-	}
-	
-	@Override
 	public PlayerInventory getInventory() {
 		return new SpongePlayerInventory(entity);
 	}

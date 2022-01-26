@@ -5,11 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.ray.BlockRay;
 import com.elikill58.negativity.api.ray.BlockRayResult;
 import com.elikill58.negativity.universal.Adapter;
 
 public abstract class AbstractEntity implements Entity {
+	
+	private Vector velocity = null;
 	
 	@Override
 	public List<Block> getTargetBlock(int maxDistance) {
@@ -34,6 +37,16 @@ public abstract class AbstractEntity implements Entity {
 		}
 		Block b = result.getBlock();
 		return b == null ? new ArrayList<>() : Arrays.asList(b);
+	}
+	
+	@Override
+	public void applyTheoricVelocity() {
+		this.velocity = getTheoricVelocity();
+	}
+	
+	@Override
+	public Vector getVelocity() {
+		return velocity == null ? getTheoricVelocity() : velocity;
 	}
 	
 	@Override

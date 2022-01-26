@@ -44,6 +44,11 @@ public interface OfflinePlayer extends Entity {
 	}
 	
 	@Override
+	default Vector getTheoricVelocity() {
+		return null;
+	}
+	
+	@Override
 	default void setVelocity(Vector vel) {
 		
 	}

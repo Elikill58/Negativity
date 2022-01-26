@@ -108,7 +108,7 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	}
 
 	@Override
-	public Vector getVelocity() {
+	public Vector getTheoricVelocity() {
 		Vector3d vec = entity.getOrElse(Keys.VELOCITY, new Vector3d(0, 0, 0));
 		return new Vector(vec.x(), vec.y(), vec.z());
 	}

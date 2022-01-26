@@ -41,6 +41,15 @@ public interface Entity extends CommandSender {
 	 */
 	Vector getVelocity();
 	
+	void applyTheoricVelocity();
+	
+	/**
+	 * Get the velocity that the entity SHOULD be take
+	 *
+	 * @return the theoric (and platform) velocity
+	 */
+	Vector getTheoricVelocity();
+	
 	/**
 	 * Edit the entity velocity
 	 * 

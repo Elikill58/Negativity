@@ -70,7 +70,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 					return;
 				if (!p.isOnGround() || np.isOnLadders || p.isInsideVehicle() || p.isFlying() || p.isDead())
 					return;
-				ada.getScheduler().runDelayed(() -> checkPlayerForVectorPacketAntiKb(p, velY, algo), 5);
+				ada.runSync(() -> checkPlayerForVectorPacketAntiKb(p, velY, algo));
 				return;
 			}
 		}
@@ -120,7 +120,7 @@ public class AntiKnockback extends Cheat implements Listeners {
 						} else
 							ada.debug("Vector: " + String.format("%.3f", loc.distance(basLoc)) + ", " + (iterations * p.getWalkSpeed()));
 					}*/
-					if (iterations > ticksToReact) {
+					if (iterations > ticksToReact && p.getVelocity().equals(p.getTheoricVelocity())) { // wait until the person take the kb
 						// default algo : (0.00000008 * velY * velY) + (0.0001 * velY) - 0.0219
 						double predictedY = new Expression(algo.replaceAll("velY", String.valueOf(velY)).replaceAll("reachedY", String.valueOf(reachedY))).calculate();
 						double percentage = Math.abs(((reachedY - predictedY) / predictedY)) * 100;

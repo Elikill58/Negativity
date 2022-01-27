@@ -253,6 +253,14 @@ public class NegativityPlayer implements FileSaverAction {
 		this.clientName = clientName;
 	}
 	
+	public Location getPingedLocation() {
+		int ping = p.getPing();
+		int nbLast = (int) (ping / 50);
+		if(lastLocations.size() < nbLast)
+			return lastLocations.get(lastLocations.size() - 1);
+		return lastLocations.get(nbLast);
+	}
+	
 	/**
 	 * Kick the player after a ban
 	 * 

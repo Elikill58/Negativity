@@ -19,14 +19,15 @@ import com.elikill58.negativity.api.location.World;
 public class BlockRay {
 	
 	private final World w;
-	private final Location position, basePosition;
+	private final Location basePosition;
 	private final Vector vector;
 	private final List<Material> filter, neededType;
 	private final int maxDistance;
 	private final boolean ignoreAllTypes;
+	private Location position;
 	private boolean hasOther = false;
 	private List<Vector> positions;
-	private HashMap<Location, Material> testedVec = new HashMap<>();
+	private HashMap<Vector, Material> testedVec = new HashMap<>();
 	
 	protected BlockRay(World w, Location position, Vector vector, int maxDistance, Material[] neededType, boolean ignoreAllTypes, boolean ignoreAir, boolean ignoreEntity, Material[] filter, List<Vector> positions) {
 		this.w = w;
@@ -55,6 +56,15 @@ public class BlockRay {
 	 */
 	public World getWorld() {
 		return w;
+	}
+	
+	/**
+	 * Get the begin point of the ray. It's used to check the distance between begin and actual ray.
+	 * 
+	 * @return the base position
+	 */
+	public Location getBasePosition() {
+		return basePosition;
 	}
 	
 	/**
@@ -113,7 +123,7 @@ public class BlockRay {
 	public BlockRayResult compile() {
 		RayResult ray;
 		while(!(ray = next()).canFinish());
-		return new BlockRayResult(this, ray, position.getBlock(), hasOther, testedVec);
+		return new BlockRayResult(this, ray, position.getBlock(), hasOther, vector, testedVec);
 	}
 	
 	/**
@@ -129,48 +139,77 @@ public class BlockRay {
 		Location oldLoc = position.clone();
 		Location loc = position.add(vector).clone();
 		if(loc.getBlockX() != oldLoc.getBlockX()) { // if X change
-			RayResult rs = tryLoc(new Location(w, loc.getX(), oldLoc.getY(), oldLoc.getZ()));
+			RayResult rs = tryLoc(new Vector(loc.getBlockX(), oldLoc.getBlockY(), oldLoc.getBlockZ()));
 			if(rs.isFounded())
 				return rs;
+			if(loc.getBlockY() != oldLoc.getBlockY()) { // if Y change
+				RayResult rsY = tryLoc(new Vector(loc.getBlockX(), loc.getBlockY(), oldLoc.getBlockZ()));
+				if(rsY.canFinish())
+					return rsY;
+			}
 		}
 		if(loc.getBlockY() != oldLoc.getBlockY()) { // if Y change
-			RayResult rs = tryLoc(new Location(w, oldLoc.getX(), loc.getY(), oldLoc.getZ()));
+			RayResult rs = tryLoc(new Vector(oldLoc.getBlockX(), loc.getBlockY(), oldLoc.getBlockZ()));
 			if(rs.isFounded())
 				return rs;
+			if(loc.getBlockZ() != oldLoc.getBlockZ()) { // if Z change
+				RayResult rsZ = tryLoc(new Vector(oldLoc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
+				if(rsZ.canFinish())
+					return rsZ;
+			}
 		}
 		if(loc.getBlockZ() != oldLoc.getBlockZ()) { // if Z change
-			RayResult rs = tryLoc(new Location(w, oldLoc.getX(), oldLoc.getY(), loc.getZ()));
+			RayResult rs = tryLoc(new Vector(oldLoc.getBlockX(), oldLoc.getBlockY(), loc.getBlockZ()));
 			if(rs.isFounded())
 				return rs;
+			if(loc.getBlockX() != oldLoc.getBlockX()) { // if Z change
+				RayResult rsX = tryLoc(new Vector(loc.getBlockX(), oldLoc.getBlockY(), loc.getBlockZ()));
+				if(rsX.canFinish())
+					return rsX;
+			}
+			// already manage Z & X and Z & Y change before
 		}
-		return tryLoc(loc); // if change but nothing found, check basic way
+		return tryLoc(loc.toBlockVector()); // if change but nothing found, check basic way
 	}
 	
-	private RayResult tryLoc(Location loc) {
-		testedVec.put(loc, Materials.STICK); // will be replaced when getting from exact block
-		double distance = loc.distance(basePosition); // check between both distance
-		if(distance >= maxDistance)
-			return neededType != null ? RayResult.NEEDED_NOT_FOUND : RayResult.END_TRY;
+	private RayResult tryLoc(Vector v) {
+		if(testedVec.containsKey(v))
+			return RayResult.CONTINUE;
+		testedVec.put(v, Materials.STICK); // will be replaced when getting from exact block
 		if(!positions.isEmpty()) {
-			int baseX = loc.getBlockX(), baseY = loc.getBlockY(), baseZ = loc.getBlockZ();
+			int baseX = v.getBlockX(), baseY = v.getBlockY(), baseZ = v.getBlockZ();
 			for(Vector vec : positions) {
 				if(vec.getBlockX() == baseX && vec.getBlockY() == baseY && vec.getBlockZ() == baseZ) {
+					position = new Location(w, vec.getX(), vec.getY(), vec.getZ());
 					return RayResult.NEEDED_FOUND;
 				}
 			}
 		}
-		Material type = loc.getBlock().getType();
-		testedVec.put(loc, type); // changed tested type to the getted one
+		double distance = v.distance(basePosition.toVector()); // check between both distance
+		if(distance >= maxDistance) {
+			if(neededType != null) {
+				Material type = w.getBlockAt(v).getType();
+				testedVec.put(v, type); // changed tested type to the getted one
+				if(neededType.contains(type)) {
+					position = new Location(w, v.getX(), v.getY(), v.getZ());
+					return RayResult.NEEDED_FOUND;
+				}
+			}
+			return RayResult.TOO_FAR; // Too far
+		}
+		Material type = w.getBlockAt(v).getType();
+		testedVec.put(v, type); // changed tested type to the getted one
 		if(ignoreAllTypes) {
 			return RayResult.CONTINUE;
-		} else if(neededType != null) {
-			if(neededType.contains(type))
+		} else if(neededType != null) { // searching for specific type
+			if(neededType.contains(type)) {// founded type
+				position = new Location(w, v.getX(), v.getY(), v.getZ());
 				return RayResult.NEEDED_FOUND;
-			else if(!hasOther && !type.equals(Materials.AIR))
+			} else if(!hasOther && !type.equals(Materials.AIR))
 				hasOther = true;
 			return RayResult.CONTINUE;
 		} else {
-			return getFilter().contains(type) ? RayResult.CONTINUE : RayResult.END_FIND;
+			return getFilter().contains(type) ? RayResult.CONTINUE : RayResult.FIND_OTHER;
 		}
 	}
 	
@@ -199,6 +238,20 @@ public class BlockRay {
 			this.w = position.getWorld();
 			if(entity != null)
 				this.vector = entity.getRotation();
+		}
+		
+		/**
+		 * Create a new BlockRayBuilder
+		 * 
+		 * @param position the started position of ray
+		 * @param entity which will give the rotation (and so the vector)
+		 */
+		public BlockRayBuilder(Player p) {
+			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+			Location loc = np.lastLocations.size() < 2 ? p.getLocation() : np.lastLocations.get(np.lastLocations.size() - 2);
+			this.position = loc.clone().add(0, (p.isSneaking() ? (np.isBedrockPlayer() ? 1.75 : 1.5) : 1.8), 0);
+			this.w = position.getWorld();
+			this.vector = p.getRotation();
 		}
 		
 		/**
@@ -324,19 +377,20 @@ public class BlockRay {
 
 	public enum RayResult {
 		
-		REACH_BOTTOM(true, false),
-		REACH_TOP(true, false),
-		NEEDED_FOUND(true, true),
-		NEEDED_NOT_FOUND(true, false),
-		END_TRY(true, false),
-		END_FIND(true, false),
-		CONTINUE(false, false);
+		REACH_BOTTOM(true, false, true),
+		REACH_TOP(true, false, true),
+		NEEDED_FOUND(true, true, true),
+		NEEDED_NOT_FOUND(true, false, true),
+		TOO_FAR(true, false, false),
+		FIND_OTHER(true, false, false),
+		CONTINUE(false, false, false);
 		
-		private final boolean canFinish, founded;
+		private final boolean canFinish, founded, shouldFinish;
 		
-		RayResult(boolean canFinish, boolean founded) {
+		RayResult(boolean canFinish, boolean founded, boolean shouldFinish) {
 			this.canFinish = canFinish;
 			this.founded = founded;
+			this.shouldFinish = shouldFinish;
 		}
 		
 		public boolean canFinish() {
@@ -345,6 +399,10 @@ public class BlockRay {
 		
 		public boolean isFounded() {
 			return founded;
+		}
+		
+		public boolean isShouldFinish() {
+			return shouldFinish;
 		}
 	}
 }

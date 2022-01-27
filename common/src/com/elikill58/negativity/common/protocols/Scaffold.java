@@ -3,6 +3,7 @@ package com.elikill58.negativity.common.protocols;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
@@ -18,6 +19,7 @@ import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.api.ray.BlockRay;
 import com.elikill58.negativity.api.ray.BlockRay.BlockRayBuilder;
 import com.elikill58.negativity.api.ray.BlockRayResult;
 import com.elikill58.negativity.universal.Adapter;
@@ -44,15 +46,15 @@ public class Scaffold extends Cheat implements Listeners {
 		Scheduler.getInstance().runDelayed(() -> {
 			Material m = p.getItemInHand().getType(), placed = e.getBlock().getType();
 			if ((m == null || (!m.isSolid() && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot()
-				&& !placed.equals(Materials.AIR)) {
+					&& !placed.equals(Materials.AIR)) {
 				int localPing = ping;
 				if (localPing == 0)
 					localPing = 1;
 				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, Scaffold.this,
-					UniversalUtils.parseInPorcent(120 / localPing), "below",
-					"Item in hand: " + m.getId() + " Block placed: " + placed.getId(),
-					hoverMsg("main", "%item%", m.getId().toLowerCase(Locale.ROOT), "%block%",
-						placed.getId().toLowerCase(Locale.ROOT)));
+						UniversalUtils.parseInPorcent(120 / localPing), "below",
+						"Item in hand: " + m.getId() + " Block placed: " + placed.getId(),
+						hoverMsg("main", "%item%", m.getId().toLowerCase(Locale.ROOT), "%block%",
+								placed.getId().toLowerCase(Locale.ROOT)));
 				if (isSetBack() && mayCancel) {
 					p.getInventory().addItem(ItemBuilder.Builder(placed).build());
 					e.getBlock().setType(Materials.AIR);
@@ -65,46 +67,58 @@ public class Scaffold extends Cheat implements Listeners {
 	public void onBlockPlaceDistance(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		Block place = e.getBlock();
-		if(Version.getVersion().isNewerOrEquals(Version.V1_14) && place.getType().equals(Materials.SCAFFOLD))
-			return;
-		if(place.getType().getId().contains("SLAB")) // TODO fix : temporary fix for ray tracing which pass through slab (more than other block)
-			return;
-		if(place.getY() >= p.getLocation().getY())
+		if (Version.getVersion().isNewerOrEquals(Version.V1_14) && place.getType().equals(Materials.SCAFFOLD))
 			return;
 		Location loc = place.getLocation();
 		double x = loc.getX(), y = loc.getY(), z = loc.getZ();
 		List<Vector> allLocs = new ArrayList<>();
 		allLocs.add(loc.toVector());
-		double more = 0.5;
+		double more = 1;
+		// just right near
 		allLocs.add(new Vector(x + more, y, z));
-		//allLocs.add(new Vector(x, y + more, z));
+		allLocs.add(new Vector(x, y + more, z));
 		allLocs.add(new Vector(x, y, z + more));
 		allLocs.add(new Vector(x - more, y, z));
 		allLocs.add(new Vector(x, y - more, z));
 		allLocs.add(new Vector(x, y, z - more));
-		Vector vec = p.getEyeLocation().getDirection();
-		BlockRayBuilder builder = new BlockRayBuilder(p.getLocation().clone(), p).maxDistance(6).vector(vec)
-				.ignoreAllTypes(true).neededPositions(allLocs);
+
+		// angle, to prevent item just at border
+		/*allLocs.add(new Vector(x + littleMore, y, z + littleMore));
+		allLocs.add(new Vector(x + littleMore, y, z - littleMore));
+		allLocs.add(new Vector(x - littleMore, y, z - littleMore));
+		allLocs.add(new Vector(x - littleMore, y, z + littleMore));
+
+		allLocs.add(new Vector(x, y + littleMore, z + littleMore));
+		allLocs.add(new Vector(x, y + littleMore, z - littleMore));
+		allLocs.add(new Vector(x + littleMore, y - littleMore, z));
+		allLocs.add(new Vector(x - littleMore, y - littleMore, z));*/
+		
+		BlockRay blockRay = new BlockRayBuilder(p.getLocation().clone(), p).maxDistance(6).ignoreAllTypes(true)
+				.neededPositions(allLocs.stream().map(Vector::toBlockVector).distinct().collect(Collectors.toList())).build();
 		Adapter.getAdapter().runSync(() -> {
-			BlockRayResult result = builder.build().compile();
+			BlockRayResult result = blockRay.compile();
 			Block searched = result.getBlock() == null ? place : result.getBlock();
 			double distance = place.getLocation().distance(searched.getLocation());
-			if(distance > 4.6 || !result.getRayResult().isFounded()) {
-				Negativity.alertMod(distance > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 30), "distance", "Place: " + place + ", targetVisual: "
-							+ searched + ", vector: " + vec.toShowableString() + ". Distance: " + distance + ". Found: " + result.getRayResult().isFounded());
+			if (distance > 4.6 || !result.getRayResult().isFounded()) {
+				Negativity.alertMod(distance > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+						UniversalUtils.parseInPorcent(distance * 30), "distance",
+						"Place: " + place + ", targetVisual: " + searched + ", vec: " + result.getVector() + ", begin: " + blockRay.getBasePosition()
+								+ " Distance: " + distance + ". Result: " + result.getRayResult()
+								+ ", Tested: " + result.getAllTestedLoc() + ", needed: "
+								+ blockRay.getNeededPositions());
 			}
 		});
 	}
-	
+
 	@Check(name = "packet", description = "Distance of move with packet", conditions = CheckConditions.SURVIVAL)
 	public void onPacket(PacketReceiveEvent e) {
 		AbstractPacket pa = e.getPacket();
-		if(pa.getPacketType().equals(PacketType.Client.BLOCK_PLACE)) {
+		if (pa.getPacketType().equals(PacketType.Client.BLOCK_PLACE)) {
 			Player p = e.getPlayer();
 			pa.getContent().getSpecificModifier(float.class).getContent().forEach((field, value) -> {
-				if(value > 1.5) {
-					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(value * 10), "packet",
-							"Wrong value " + field.getName() + ": " + value + " for packet BlockPlace");
+				if (value > 1.5) {
+					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(value * 10),
+							"packet", "Wrong value " + field.getName() + ": " + value + " for packet BlockPlace");
 				}
 			});
 		}

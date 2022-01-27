@@ -34,9 +34,9 @@ public abstract class AbstractEntity implements Entity {
 		if(!result.getRayResult().isFounded()) {
 			Adapter.getAdapter().debug("Begin: " + getLocation() + ", vec: " + ray.getVector().toString());
 			Adapter.getAdapter().debug("Tested locs: " + result.getAllTestedLoc().toString());
+			return new ArrayList<>();
 		}
-		Block b = result.getBlock();
-		return b == null ? new ArrayList<>() : Arrays.asList(b);
+		return Arrays.asList(result.getBlock());
 	}
 	
 	@Override

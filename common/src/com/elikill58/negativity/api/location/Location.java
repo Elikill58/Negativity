@@ -132,6 +132,10 @@ public final class Location implements Cloneable {
 	public Vector toVector() {
 		return new Vector(this);
 	}
+
+	public Vector toBlockVector() {
+		return new Vector(getBlockX(), getBlockY(), getBlockZ());
+	}
 	
 	public Block getBlock() {
 		return w.getBlockAt(getBlockX(), getBlockY(), getBlockZ());
@@ -178,6 +182,14 @@ public final class Location implements Cloneable {
 		if(!w.getName().equals(loc.getWorld().getName()))
 			return false;
 		return x == loc.x && y == loc.y && z == loc.z;
+	}
+	
+	@Override
+	public int hashCode() {
+		int hash = getBlockX();
+	    hash = 31 * hash + getBlockY();
+	    hash = 31 * hash + getBlockZ();
+	    return hash * w.getName().hashCode();
 	}
 	
 	@Override

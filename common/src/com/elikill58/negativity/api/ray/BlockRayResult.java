@@ -6,7 +6,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.ray.BlockRay.RayResult;
 
 public class BlockRayResult {
@@ -15,13 +15,15 @@ public class BlockRayResult {
 	private final RayResult rayResult;
 	private final Block block;
 	private final boolean hasBlockExceptSearched;
-	private final HashMap<Location, Material> alltestedLoc;
+	private final HashMap<Vector, Material> alltestedLoc;
+	private final Vector vec;
 	
-	protected BlockRayResult(BlockRay ray, RayResult rayResult, Block block, boolean hasBlockExceptSearched, HashMap<Location, Material> testedLoc) {
+	protected BlockRayResult(BlockRay ray, RayResult rayResult, Block block, boolean hasBlockExceptSearched, Vector vec, HashMap<Vector, Material> testedLoc) {
 		this.ray = ray;
 		this.rayResult = rayResult;
 		this.block = block;
 		this.hasBlockExceptSearched = hasBlockExceptSearched;
+		this.vec = vec;
 		this.alltestedLoc = testedLoc;
 	}
 
@@ -74,7 +76,21 @@ public class BlockRayResult {
 		return hasBlockExceptSearched;
 	}
 	
-	public HashMap<Location, Material> getAllTestedLoc() {
+	/**
+	 * Get the vector used to make the ray
+	 * 
+	 * @return the vector
+	 */
+	public Vector getVector() {
+		return vec;
+	}
+	
+	/**
+	 * Get ALL tested locations as vector with the material founded.
+	 * 
+	 * @return all locations with their materials
+	 */
+	public HashMap<Vector, Material> getAllTestedLoc() {
 		return alltestedLoc;
 	}
 }

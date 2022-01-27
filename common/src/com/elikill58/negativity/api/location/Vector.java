@@ -68,6 +68,15 @@ public class Vector implements Cloneable {
 		this.y = y;
 		this.z = z;
 	}
+	
+	/**
+	 * Convert this vector into a new one with int block
+	 * 
+	 * @return a new vector
+	 */
+	public Vector toBlockVector() {
+		return new Vector(getBlockX(), getBlockY(), getBlockZ());
+	}
 
 	/**
 	 * Add vector to another vector
@@ -332,10 +341,18 @@ public class Vector implements Cloneable {
 			throw new Error(e);
 		}
 	}
+	
+	@Override
+	public int hashCode() {
+		int hash = getBlockX();
+	    hash = 31 * hash + getBlockY();
+	    hash = 31 * hash + getBlockZ();
+	    return hash;
+	}
 
 	@Override
 	public String toString() {
-		return this.x + "," + this.y + "," + this.z;
+		return "Vector{" + this.x + "," + this.y + "," + this.z + "}";
 	}
 
 	public String toShowableString() {

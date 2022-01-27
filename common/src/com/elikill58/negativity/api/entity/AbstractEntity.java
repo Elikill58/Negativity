@@ -16,20 +16,8 @@ public abstract class AbstractEntity implements Entity {
 	
 	@Override
 	public List<Block> getTargetBlock(int maxDistance) {
-		/*if (maxDistance > 120) {
-			maxDistance = 120;
-		}
-		ArrayList<Block> blocks = new ArrayList<>();
-		Iterator<Block> itr = new BlockIterator(this, maxDistance);
-		while (itr.hasNext() && maxDistance > 0 && blocks.size() < 5) {
-			maxDistance--;
-			Block block = (Block) itr.next();
-			Material material = block.getType();
-			if (!material.isTransparent()) {
-				blocks.add(block);
-			}
-		}*/
-		BlockRay ray = new BlockRay.BlockRayBuilder(getLocation(), this).maxDistance(maxDistance).ignoreEntity(true).ignoreAir(true).build();
+		BlockRay ray = (this instanceof Player ? new BlockRay.BlockRayBuilder((Player) this) : new BlockRay.BlockRayBuilder(getLocation(), this))
+				.maxDistance(maxDistance).ignoreAir(true).build();
 		BlockRayResult result = ray.compile();
 		if(!result.getRayResult().isFounded()) {
 			Adapter.getAdapter().debug("Begin: " + getLocation() + ", vec: " + ray.getVector().toString());

@@ -93,8 +93,8 @@ public class Scaffold extends Cheat implements Listeners {
 		allLocs.add(new Vector(x + littleMore, y - littleMore, z));
 		allLocs.add(new Vector(x - littleMore, y - littleMore, z));*/
 		
-		BlockRay blockRay = new BlockRayBuilder(p.getLocation().clone(), p).maxDistance(6).ignoreAllTypes(true)
-				.neededPositions(allLocs.stream().map(Vector::toBlockVector).distinct().collect(Collectors.toList())).build();
+		BlockRay blockRay = new BlockRayBuilder(p).neededPositions(allLocs.stream().map(Vector::toBlockVector).distinct().collect(Collectors.toList()))
+				.maxDistance(6).build();
 		Adapter.getAdapter().runSync(() -> {
 			BlockRayResult result = blockRay.compile();
 			Block searched = result.getBlock() == null ? place : result.getBlock();

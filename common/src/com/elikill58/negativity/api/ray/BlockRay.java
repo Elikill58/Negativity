@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.function.Function;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -23,26 +24,22 @@ public class BlockRay {
 	private final Vector vector;
 	private final List<Material> filter, neededType;
 	private final int maxDistance;
-	private final boolean ignoreAllTypes;
+	private final RaySearch search;
 	private Location position;
 	private boolean hasOther = false;
 	private List<Vector> positions;
 	private HashMap<Vector, Material> testedVec = new HashMap<>();
 	
-	protected BlockRay(World w, Location position, Vector vector, int maxDistance, Material[] neededType, boolean ignoreAllTypes, boolean ignoreAir, boolean ignoreEntity, Material[] filter, List<Vector> positions) {
+	protected BlockRay(World w, Location position, Vector vector, int maxDistance, Material[] neededType, RaySearch search, Material[] filter, List<Vector> positions) {
 		this.w = w;
 		this.position = position.clone();
 		this.basePosition = position.clone();
 		this.maxDistance = maxDistance;
-		this.ignoreAllTypes = ignoreAllTypes;
+		this.search = search;
 		this.vector = vector.normalize();// new Vector(parseVector(vector.getX()), parseVector(vector.getY()), parseVector(vector.getZ()));
 		this.neededType = neededType == null ? null : new ArrayList<>(Arrays.asList(neededType));
 		this.filter = new ArrayList<>(Arrays.asList(filter));
 		this.positions = positions;
-		if(ignoreAir)
-			this.filter.add(Materials.AIR);
-		if(!ignoreEntity)
-			w.getEntities().stream().map(Entity::getLocation).map(Location::toVector).forEach(positions::add);
 	}
 	
 	/*private double parseVector(double d) {
@@ -175,8 +172,11 @@ public class BlockRay {
 	private RayResult tryLoc(Vector v) {
 		if(testedVec.containsKey(v))
 			return RayResult.CONTINUE;
+		double distance = v.distance(basePosition.toVector()); // check between both distance
+		if(distance >= maxDistance)
+			return RayResult.TOO_FAR; // Too far
 		testedVec.put(v, Materials.STICK); // will be replaced when getting from exact block
-		if(!positions.isEmpty()) {
+		if(search.equals(RaySearch.POSITION)) {
 			int baseX = v.getBlockX(), baseY = v.getBlockY(), baseZ = v.getBlockZ();
 			for(Vector vec : positions) {
 				if(vec.getBlockX() == baseX && vec.getBlockY() == baseY && vec.getBlockZ() == baseZ) {
@@ -185,42 +185,32 @@ public class BlockRay {
 				}
 			}
 		}
-		double distance = v.distance(basePosition.toVector()); // check between both distance
-		if(distance >= maxDistance) {
-			if(neededType != null) {
-				Material type = w.getBlockAt(v).getType();
-				testedVec.put(v, type); // changed tested type to the getted one
-				if(neededType.contains(type)) {
-					position = new Location(w, v.getX(), v.getY(), v.getZ());
-					return RayResult.NEEDED_FOUND;
-				}
-			}
-			return RayResult.TOO_FAR; // Too far
-		}
 		Material type = w.getBlockAt(v).getType();
 		testedVec.put(v, type); // changed tested type to the getted one
-		if(ignoreAllTypes) {
-			return RayResult.CONTINUE;
-		} else if(neededType != null) { // searching for specific type
+		if(search.equals(RaySearch.TYPE_SPECIFIC)) {
 			if(neededType.contains(type)) {// founded type
 				position = new Location(w, v.getX(), v.getY(), v.getZ());
 				return RayResult.NEEDED_FOUND;
-			} else if(!hasOther && !type.equals(Materials.AIR))
-				hasOther = true;
+			}
 			return RayResult.CONTINUE;
-		} else {
-			return getFilter().contains(type) ? RayResult.CONTINUE : RayResult.FIND_OTHER;
+		} else if(search.equals(RaySearch.TYPE_NOT_AIR)) {
+			if(!type.equals(Materials.AIR)) {
+				position = new Location(w, v.getX(), v.getY(), v.getZ());
+				return RayResult.NEEDED_FOUND;
+			}
+			return RayResult.CONTINUE;
 		}
+		return getFilter().contains(type) ? RayResult.CONTINUE : RayResult.FIND_OTHER;
 	}
 	
 	public static class BlockRayBuilder {
 		
 		private final World w;
 		private final Location position;
-		private boolean ignoreAir = true, ignoreEntity = true, ignoreAllTypes = false;
+		private RaySearch search = RaySearch.TYPE_NOT_AIR;
 		private Vector vector = Vector.ZERO;
 		private int maxDistance = 10;
-		private Material[] filter = new Material[0], neededType = null;
+		private Material[] filter = new Material[0], neededType = new Material[0];
 		private List<Vector> positions = new ArrayList<>();
 		
 		/**
@@ -273,28 +263,7 @@ public class BlockRay {
 		 * @return this builder
 		 */
 		public BlockRayBuilder ignoreAir(boolean air) {
-			this.ignoreAir = air;
-			return this;
-		}
-		
-		/**
-		 * Say that you are looking only for location and for nothing else
-		 * 
-		 * @return this builder
-		 */
-		public BlockRayBuilder ignoreAllTypes(boolean types) {
-			this.ignoreAllTypes = types;
-			return this;
-		}
-		
-		/**
-		 * Say if we have to ignore entity
-		 * 
-		 * @param entity true if the ray ignore entity
-		 * @return this builder
-		 */
-		public BlockRayBuilder ignoreEntity(boolean entity) {
-			this.ignoreEntity = entity;
+			this.search = RaySearch.TYPE_NOT_AIR;
 			return this;
 		}
 		
@@ -307,6 +276,7 @@ public class BlockRay {
 		 */
 		public BlockRayBuilder neededType(Material... type) {
 			this.neededType = type;
+			this.search = RaySearch.TYPE_SPECIFIC;
 			return this;
 		}
 		
@@ -350,6 +320,7 @@ public class BlockRay {
 		 */
 		public BlockRayBuilder neededPositions(List<Vector> vec) {
 			this.positions.addAll(vec);
+			this.search = RaySearch.POSITION;
 			return this;
 		}
 
@@ -371,7 +342,26 @@ public class BlockRay {
 		 * @return the block ray
 		 */
 		public BlockRay build() {
-			return new BlockRay(w, position, vector, maxDistance, neededType, ignoreAllTypes, ignoreAir, ignoreEntity, filter, positions);
+			if(search == null || !search.isValid(this))
+				throw new IllegalArgumentException("Please check what you set as param before running ray.");
+			return new BlockRay(w, position, vector, maxDistance, neededType, search, filter, positions);
+		}
+	}
+	
+	public enum RaySearch {
+		
+		POSITION(builder -> !builder.positions.isEmpty()),
+		TYPE_SPECIFIC(builder -> builder.neededType != null && builder.neededType.length > 0),
+		TYPE_NOT_AIR(builder -> true);
+		
+		private final Function<BlockRayBuilder, Boolean> checkIfValid;
+		
+		private RaySearch(Function<BlockRayBuilder, Boolean> checkIfValid) {
+			this.checkIfValid = checkIfValid;
+		}
+		
+		public boolean isValid(BlockRayBuilder builder) {
+			return checkIfValid.apply(builder);
 		}
 	}
 

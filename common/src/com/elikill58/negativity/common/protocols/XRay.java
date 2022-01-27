@@ -58,7 +58,7 @@ public class XRay extends Cheat implements Listeners {
 			if(timeMiningOre > 0) {
 				if(isMining) {
 					// search for ore
-					BlockRayResult blockResult = new BlockRayBuilder(p.getLocation().add(0, 1.5, 0), p)
+					BlockRayResult blockResult = new BlockRayBuilder(p)
 								.neededType(IMPORTANT_ORES.toArray(new Material[0])).build().compile();
 					
 					Location playerLoc = p.getLocation().clone();

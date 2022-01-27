@@ -49,6 +49,17 @@ public class SpongeWorld extends World {
 	public Difficulty getDifficulty() {
 		return Difficulty.valueOf(Utils.getKey(w.difficulty()).value().toUpperCase(Locale.ROOT));
 	}
+	
+	@Override
+	public int getMaxHeight() {
+		return w.maximumHeight();
+	}
+	
+	@Override
+	public int getMinHeight() {
+		int min = w.min().y();
+		return min > 0 ? 0 : min;
+	}
 
 	@Override
 	public Object getDefault() {

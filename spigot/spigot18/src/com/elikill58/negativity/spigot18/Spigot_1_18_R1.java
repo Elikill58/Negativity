@@ -191,17 +191,6 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 			ClientIntentionPacket packet = (ClientIntentionPacket) raw;
 			return new NPacketHandshakeInSetProtocol(packet.getProtocolVersion(), packet.hostName, packet.port);
 		});
-
-		/*try {
-			SpigotNegativity.getInstance().getLogger().info("Java version: " + execCmd());
-		} catch (Exception e) {
-			e.printStackTrace();
-		}*/
-	}
-
-	public static String execCmd() throws java.io.IOException {
-		Process p = new ProcessBuilder("java", "-version").start();
-		return new String(p.getErrorStream().readAllBytes());
 	}
 	
 	@Override

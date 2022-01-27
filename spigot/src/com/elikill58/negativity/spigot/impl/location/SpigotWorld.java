@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.impl.block.SpigotBlock;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
+import com.elikill58.negativity.universal.Version;
 
 public class SpigotWorld extends World {
 
@@ -45,6 +46,16 @@ public class SpigotWorld extends World {
 	@Override
 	public Difficulty getDifficulty() {
 		return Difficulty.valueOf(w.getDifficulty().name());
+	}
+	
+	@Override
+	public int getMaxHeight() {
+		return w.getMaxHeight();
+	}
+	
+	@Override
+	public int getMinHeight() {
+		return Version.getVersion().isNewerOrEquals(Version.V1_18) ? -64 : 0;
 	}
 
 	@Override

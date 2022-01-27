@@ -132,9 +132,9 @@ public class BlockRay {
 	 * @return the ray result of next block
 	 */
 	private RayResult next() {
-		if(position.getBlockY() > 200)
+		if(position.getBlockY() >= w.getMaxHeight())
 			return RayResult.REACH_TOP;
-		if(position.getBlockY() < 0)
+		if(position.getBlockY() <= w.getMinHeight())
 			return RayResult.REACH_BOTTOM;
 		Location oldLoc = position.clone();
 		Location loc = position.add(vector).clone();

@@ -46,6 +46,16 @@ public class SpongeWorld extends World {
 	public Difficulty getDifficulty() {
 		return Difficulty.valueOf(w.getDifficulty().getId().toUpperCase(Locale.ROOT));
 	}
+	
+	@Override
+	public int getMaxHeight() {
+		return w.getDimension().getBuildHeight();
+	}
+	
+	@Override
+	public int getMinHeight() {
+		return 0;
+	}
 
 	@Override
 	public Object getDefault() {

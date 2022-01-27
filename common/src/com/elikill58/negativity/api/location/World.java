@@ -91,4 +91,18 @@ public abstract class World implements NegativityObject {
 	 * @return the world difficulty
 	 */
 	public abstract Difficulty getDifficulty();
+	
+	/**
+	 * Get the max height of the world
+	 * 
+	 * @return the max height
+	 */
+	public abstract int getMaxHeight();
+	
+	/**
+	 * Get the min height of the world
+	 * 
+	 * @return the min height
+	 */
+	public abstract int getMinHeight();
 }

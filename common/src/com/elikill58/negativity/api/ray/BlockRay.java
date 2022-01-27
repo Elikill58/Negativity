@@ -7,7 +7,9 @@ import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Entity;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
@@ -21,15 +23,17 @@ public class BlockRay {
 	private final Vector vector;
 	private final List<Material> filter, neededType;
 	private final int maxDistance;
+	private final boolean ignoreAllTypes;
 	private boolean hasOther = false;
 	private List<Vector> positions;
 	private HashMap<Location, Material> testedVec = new HashMap<>();
 	
-	protected BlockRay(World w, Location position, Vector vector, int maxDistance, Material[] neededType, boolean ignoreAir, boolean ignoreEntity, Material[] filter, List<Vector> positions) {
+	protected BlockRay(World w, Location position, Vector vector, int maxDistance, Material[] neededType, boolean ignoreAllTypes, boolean ignoreAir, boolean ignoreEntity, Material[] filter, List<Vector> positions) {
 		this.w = w;
 		this.position = position.clone();
 		this.basePosition = position.clone();
 		this.maxDistance = maxDistance;
+		this.ignoreAllTypes = ignoreAllTypes;
 		this.vector = vector.normalize();// new Vector(parseVector(vector.getX()), parseVector(vector.getY()), parseVector(vector.getZ()));
 		this.neededType = neededType == null ? null : new ArrayList<>(Arrays.asList(neededType));
 		this.filter = new ArrayList<>(Arrays.asList(filter));
@@ -122,7 +126,27 @@ public class BlockRay {
 			return RayResult.REACH_TOP;
 		if(position.getBlockY() < 0)
 			return RayResult.REACH_BOTTOM;
+		Location oldLoc = position.clone();
 		Location loc = position.add(vector).clone();
+		if(loc.getBlockX() != oldLoc.getBlockX()) { // if X change
+			RayResult rs = tryLoc(new Location(w, loc.getX(), oldLoc.getY(), oldLoc.getZ()));
+			if(rs.isFounded())
+				return rs;
+		}
+		if(loc.getBlockY() != oldLoc.getBlockY()) { // if Y change
+			RayResult rs = tryLoc(new Location(w, oldLoc.getX(), loc.getY(), oldLoc.getZ()));
+			if(rs.isFounded())
+				return rs;
+		}
+		if(loc.getBlockZ() != oldLoc.getBlockZ()) { // if Z change
+			RayResult rs = tryLoc(new Location(w, oldLoc.getX(), oldLoc.getY(), loc.getZ()));
+			if(rs.isFounded())
+				return rs;
+		}
+		return tryLoc(loc); // if change but nothing found, check basic way
+	}
+	
+	private RayResult tryLoc(Location loc) {
 		testedVec.put(loc, Materials.STICK); // will be replaced when getting from exact block
 		double distance = loc.distance(basePosition); // check between both distance
 		if(distance >= maxDistance)
@@ -137,7 +161,9 @@ public class BlockRay {
 		}
 		Material type = loc.getBlock().getType();
 		testedVec.put(loc, type); // changed tested type to the getted one
-		if(neededType != null) {
+		if(ignoreAllTypes) {
+			return RayResult.CONTINUE;
+		} else if(neededType != null) {
 			if(neededType.contains(type))
 				return RayResult.NEEDED_FOUND;
 			else if(!hasOther && !type.equals(Materials.AIR))
@@ -152,7 +178,7 @@ public class BlockRay {
 		
 		private final World w;
 		private final Location position;
-		private boolean ignoreAir = true, ignoreEntity = true;
+		private boolean ignoreAir = true, ignoreEntity = true, ignoreAllTypes = false;
 		private Vector vector = Vector.ZERO;
 		private int maxDistance = 10;
 		private Material[] filter = new Material[0], neededType = null;
@@ -165,7 +191,11 @@ public class BlockRay {
 		 * @param entity which will give the rotation (and so the vector)
 		 */
 		public BlockRayBuilder(Location position, @Nullable Entity entity) {
-			this.position = position;
+			if(entity instanceof Player) {
+				Player p = (Player) entity;
+				this.position = position.clone().add(0, (p.isSneaking() ? (NegativityPlayer.getNegativityPlayer(p).isBedrockPlayer() ? 1.75 : 1.5) : 1.8), 0);
+			} else
+				this.position = position.clone().add(0, 0.5, 0); // TODO manage all entities
 			this.w = position.getWorld();
 			if(entity != null)
 				this.vector = entity.getRotation();
@@ -191,6 +221,16 @@ public class BlockRay {
 		 */
 		public BlockRayBuilder ignoreAir(boolean air) {
 			this.ignoreAir = air;
+			return this;
+		}
+		
+		/**
+		 * Say that you are looking only for location and for nothing else
+		 * 
+		 * @return this builder
+		 */
+		public BlockRayBuilder ignoreAllTypes(boolean types) {
+			this.ignoreAllTypes = types;
 			return this;
 		}
 		
@@ -278,7 +318,7 @@ public class BlockRay {
 		 * @return the block ray
 		 */
 		public BlockRay build() {
-			return new BlockRay(w, position, vector, maxDistance, neededType, ignoreAir, ignoreEntity, filter, positions);
+			return new BlockRay(w, position, vector, maxDistance, neededType, ignoreAllTypes, ignoreAir, ignoreEntity, filter, positions);
 		}
 	}
 

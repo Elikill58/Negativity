@@ -29,7 +29,7 @@ public abstract class AbstractEntity implements Entity {
 				blocks.add(block);
 			}
 		}*/
-		BlockRay ray = new BlockRay.BlockRayBuilder(getLocation(), this).maxDistance(maxDistance).ignoreAir(true).build();
+		BlockRay ray = new BlockRay.BlockRayBuilder(getLocation(), this).maxDistance(maxDistance).ignoreEntity(true).ignoreAir(true).build();
 		BlockRayResult result = ray.compile();
 		if(!result.getRayResult().isFounded()) {
 			Adapter.getAdapter().debug("Begin: " + getLocation() + ", vec: " + ray.getVector().toString());

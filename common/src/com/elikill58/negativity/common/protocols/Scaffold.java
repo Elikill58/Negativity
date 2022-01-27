@@ -35,7 +35,7 @@ public class Scaffold extends Cheat implements Listeners {
 		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS, false, false);
 	}
 
-	@Check(name=  "below", description = "Block placed below", conditions = CheckConditions.SURVIVAL)
+	@Check(name = "below", description = "Block placed below", conditions = CheckConditions.SURVIVAL)
 	public void onBlockBreak(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		int ping = p.getPing(), slot = p.getInventory().getHeldItemSlot();
@@ -84,7 +84,7 @@ public class Scaffold extends Cheat implements Listeners {
 		allLocs.add(new Vector(x, y, z - more));
 		Vector vec = p.getEyeLocation().getDirection();
 		BlockRayBuilder builder = new BlockRayBuilder(p.getLocation().clone(), p).maxDistance(6).vector(vec)
-				.ignoreAir(true).neededPositions(allLocs);
+				.ignoreAllTypes(true).neededPositions(allLocs);
 		Adapter.getAdapter().runSync(() -> {
 			BlockRayResult result = builder.build().compile();
 			Block searched = result.getBlock() == null ? place : result.getBlock();

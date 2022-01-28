@@ -90,6 +90,7 @@ public class NegativityPlayer implements FileSaverAction {
 	public Content<Entity> entities = new Content<>();
 	public Content<Double> doubles = new Content<>();
 	public Content<Integer> ints = new Content<>();
+	public Content<Float> floats = new Content<>();
 	public Content<Long> longs = new Content<>();
 	
 	// general values

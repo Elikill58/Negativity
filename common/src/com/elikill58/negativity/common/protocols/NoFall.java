@@ -1,15 +1,21 @@
 package com.elikill58.negativity.common.protocols;
 
+import java.util.Arrays;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
@@ -139,6 +145,37 @@ public class NoFall extends Cheat implements Listeners {
 			if(mayCancel && isSetBack())
 				manageDamage(p, (int) p.getFallDistance(), relia);
 		}
+	}
+	
+	@Check(name = "packet", description = "Player send spoofing packet when risk to have fall damage")
+	public void onPacket(PacketReceiveEvent e, NegativityPlayer np) {
+		Player p = e.getPlayer();
+		AbstractPacket packet = e.getPacket();
+		PacketType type = packet.getPacketType();
+    	if(!type.isFlyingPacket())
+    		return;
+    	NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
+    	if(flying.isGround) {
+    		float lastFall = np.floats.get(getKey(), "last-fall", 0f);
+	    	for(float f : Arrays.asList(2f, 3f)) {
+	    		if(lastFall < f && p.getFallDistance() > f) { // just pass over specific amount of fall
+	    			Location loc = flying.getLocation(p.getWorld());
+	    			if(loc == null)
+	    				loc = p.getLocation();
+	    			Block justBelow = loc.clone().sub(0, 0.2, 0).getBlock();
+	    			boolean belowTransparent = justBelow.getType().isTransparent();
+	    			boolean downTransparent = justBelow.getRelative(BlockFace.DOWN).getType().isTransparent();
+	    			if(belowTransparent || downTransparent) {
+	    				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.NO_FALL), 100, "packet",
+	    						"Fall: " + lastFall + ", " + p.getFallDistance() + ", block: " + justBelow, null, (belowTransparent && downTransparent ? 5 : 1));
+	    				if(mayCancel && isSetBack())
+	    					manageDamage(p, (int) p.getFallDistance(), 95);
+	    			}
+	    		}
+	    	}
+    	}
+    	
+    	np.floats.set(getKey(), "last-fall", p.getFallDistance());
 	}
 	
 	private void manageDamage(Player p, int damage, int relia) {

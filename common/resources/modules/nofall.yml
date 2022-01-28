@@ -50,3 +50,6 @@ checks:
   # Have to be on ground but spoof and it's not
   have-to-ground:
     active: true
+  # Player send spoofing packet when risk to have fall damage
+  packet:
+    active: true

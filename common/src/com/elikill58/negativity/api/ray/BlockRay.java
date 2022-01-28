@@ -184,6 +184,7 @@ public class BlockRay {
 					return RayResult.NEEDED_FOUND;
 				}
 			}
+			return RayResult.CONTINUE;
 		}
 		Material type = w.getBlockAt(v).getType();
 		testedVec.put(v, type); // changed tested type to the getted one

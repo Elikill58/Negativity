@@ -172,6 +172,24 @@ public final class Location implements Cloneable {
 		}
 		return Maths.square(this.x - o.x) + Maths.square(this.y - o.y) + Maths.square(this.z - o.z);
 	}
+	
+	public double distanceXZ(Location o) {
+		return Math.sqrt(distanceSquaredXZ(o));
+	}
+
+	public double distanceSquaredXZ(Location o) {
+		if (o == null) {
+			throw new IllegalArgumentException("Cannot measure distance to a null location");
+		}
+		if ((o.getWorld() == null) || (getWorld() == null)) {
+			throw new IllegalArgumentException("Cannot measure distance to a null world");
+		}
+		if (!o.getWorld().getName().equals(getWorld().getName())) {
+			throw new IllegalArgumentException(
+					"Cannot measure distance between " + getWorld().getName() + " and " + o.getWorld().getName());
+		}
+		return Maths.square(this.x - o.x) + Maths.square(this.z - o.z);
+	}
 
 	@Override
 	public boolean equals(Object obj) {

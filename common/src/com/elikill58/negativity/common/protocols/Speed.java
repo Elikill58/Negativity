@@ -154,11 +154,11 @@ public class Speed extends Cheat implements Listeners {
 		}
 		if(checkActive("walk-speed") && Adapter.getAdapter().getPlatformID().equals(Platform.SPIGOT)) {
 			double distanceWithSpeed = distance - (amplifierSpeed / 10);
-			if(dif == 0 && distanceWithSpeed >= (p.getWalkSpeed() * (p.isSprinting() ? 2.5 : 2))) {
+			if(dif == 0 && distanceWithSpeed >= (p.getWalkSpeed() * (p.isSprinting() ? 2.5 : 2) * 1.01)) {
 				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
 						this, 95, "walk-speed", "Differences : " + dif + ", distance: " + String.format("%.4f", distance) + ", withSpeed: "
 						+ String.format("%.4f", distanceWithSpeed) + ", speedAmplifier: " + amplifierSpeed
-						+ ", walkSpeed: " + p.getWalkSpeed() + ", onGround: " + onGround);
+						+ ", walkSpeed: " + p.getWalkSpeed() + ", onGround: " + onGround + ", distanceXZ: " + from.distanceXZ(to));
 			}
 		}
 		if (mayCancel && isSetBack())

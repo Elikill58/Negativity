@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTransaction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
@@ -24,15 +25,18 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityV
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutTransaction;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 
 import net.minecraft.network.play.client.CPacketChatMessage;
+import net.minecraft.network.play.client.CPacketConfirmTransaction;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketKeepAlive;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketBlockBreakAnim;
+import net.minecraft.network.play.server.SPacketConfirmTransaction;
 import net.minecraft.network.play.server.SPacketEntity;
 import net.minecraft.network.play.server.SPacketEntityEffect;
 import net.minecraft.network.play.server.SPacketEntityTeleport;
@@ -92,6 +96,10 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 				return null;
 			}
 		});
+		packetsPlayIn.put("CPacketConfirmTransaction", (f) -> {
+			CPacketConfirmTransaction p = (CPacketConfirmTransaction) f;
+			return new NPacketPlayInTransaction(p.getWindowId(), p.getUid(), false);
+		});
 		
 
 		packetsPlayOut.put("SPacketBlockBreakAnim", (f) -> {
@@ -123,6 +131,10 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 		packetsPlayOut.put("SPacketEntityEffect", (f) -> {
 			SPacketEntityEffect packet = (SPacketEntityEffect) f;
 			return new NPacketPlayOutEntityEffect(packet.getEntityId(), packet.getEffectId(), packet.getAmplifier(), packet.getDuration(), (byte) 0);
+		});
+		packetsPlayOut.put("SPacketConfirmTransaction", (f) -> {
+			SPacketConfirmTransaction p = (SPacketConfirmTransaction) f;
+			return new NPacketPlayOutTransaction(p.getWindowId(), p.getActionNumber(), p.wasAccepted());
 		});
 		
 		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");

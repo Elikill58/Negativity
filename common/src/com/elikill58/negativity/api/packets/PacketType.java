@@ -30,6 +30,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityV
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutTransaction;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 import com.elikill58.negativity.universal.Adapter;
 
@@ -310,7 +311,7 @@ public interface PacketType {
 		TAGS("Tags", NPacketUnknown::new),
 		TILE_ENTITY_DATA("TileEntityData", NPacketUnknown::new),
 		TITLE("Title", NPacketUnknown::new),
-		TRANSACTION("Transaction", NPacketUnknown::new),
+		TRANSACTION("Transaction", NPacketPlayOutTransaction::new),
 		UNLOAD_CHUNK("UnloadChunk", NPacketUnknown::new),
 		UPDATE_ATTRIBUTES("UpdateAttributes", NPacketUnknown::new),
 		UPDATE_ENTITY_NBT("UpdateEntityNBT", NPacketUnknown::new),

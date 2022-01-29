@@ -165,7 +165,7 @@ public class NoFall extends Cheat implements Listeners {
 	    			Block justBelow = loc.clone().sub(0, 0.2, 0).getBlock();
 	    			boolean belowTransparent = justBelow.getType().isTransparent();
 	    			boolean downTransparent = justBelow.getRelative(BlockFace.DOWN).getType().isTransparent();
-	    			if(belowTransparent || downTransparent) {
+	    			if((belowTransparent || downTransparent) && !LocationUtils.hasOtherThan(justBelow.getLocation(), "AIR")) {
 	    				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.NO_FALL), 100, "packet",
 	    						"Fall: " + lastFall + ", " + p.getFallDistance() + ", block: " + justBelow, null, (belowTransparent && downTransparent ? 5 : 1));
 	    				if(mayCancel && isSetBack())

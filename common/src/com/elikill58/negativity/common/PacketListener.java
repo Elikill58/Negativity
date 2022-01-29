@@ -101,9 +101,7 @@ public class PacketListener implements Listeners {
 					}
 				}
 			}
-		} else if (type == PacketType.Client.KEEP_ALIVE) {
-			np.isAttacking = false;
-		} else if(type == PacketType.Client.POSITION) {
+		} else if (type == PacketType.Client.KEEP_ALIVE || type == PacketType.Client.POSITION) {
 			np.isAttacking = false;
 			p.applyTheoricVelocity();
 		}

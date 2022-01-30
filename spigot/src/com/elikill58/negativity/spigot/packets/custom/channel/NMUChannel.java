@@ -171,7 +171,7 @@ public class NMUChannel extends ChannelAbstract {
 			try {
 				PacketType packetType = PacketType.getType(packet.getClass().getSimpleName());
 				if(!(packetType instanceof PacketType.Client || packetType instanceof PacketType.Server)) {
-					NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(null, packet);
+					NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket((Player) null, packet);
 					AbstractPacket nextPacket = getPacketManager().onPacketReceive(commonPacket, null, packet);
 					if(nextPacket != null && nextPacket.isCancelled())
 						return;

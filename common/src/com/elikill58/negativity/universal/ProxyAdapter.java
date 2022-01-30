@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 
 public abstract class ProxyAdapter extends Adapter {
 
@@ -89,5 +90,10 @@ public abstract class ProxyAdapter extends Adapter {
 	
 	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
+	}
+
+	@Override
+	public VersionAdapter<?> getVersionAdapter() {
+		throw new UnsupportedOperationException("VersionAdapter is unsupported on proxies");
 	}
 }

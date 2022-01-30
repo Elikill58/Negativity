@@ -186,6 +186,8 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			ContentModifier<Integer> ints = content.getIntegers();
 			return new NPacketHandshakeInSetProtocol(ints.read("a", 0), content.getStrings().readSafely(0, "0.0.0.0"), ints.read("port", 0));
 		});
+		
+		
 
 		SpigotNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size()
 				+ " PlayIn, " + packetsPlayOut.size() + " PlayOut, " + packetsHandshake.size() + " Handshake and " + packetsStatus.size() + " Status.");

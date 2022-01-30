@@ -28,6 +28,7 @@ import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.json.parser.ParseException;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
@@ -315,5 +316,10 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public void broadcastMessage(String message) {
 		Bukkit.broadcastMessage(message);
+	}
+	
+	@Override
+	public VersionAdapter<?> getVersionAdapter() {
+		return SpigotVersionAdapter.getVersionAdapter();
 	}
 }

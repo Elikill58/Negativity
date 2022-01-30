@@ -35,6 +35,7 @@ import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
@@ -44,6 +45,7 @@ import com.elikill58.negativity.sponge.impl.inventory.SpongeInventory;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemBuilder;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemRegistrar;
 import com.elikill58.negativity.sponge.impl.plugin.SpongeExternalPlugin;
+import com.elikill58.negativity.sponge.nms.SpongeVersionAdapter;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.Scheduler;
@@ -340,5 +342,10 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public void broadcastMessage(String message) {
 		Sponge.getServer().getBroadcastChannel().send(Text.of(message));
+	}
+	
+	@Override
+	public VersionAdapter<?> getVersionAdapter() {
+		return SpongeVersionAdapter.getVersionAdapter();
 	}
 }

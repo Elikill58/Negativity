@@ -12,8 +12,10 @@ import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
+import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 
 public interface Player extends OfflinePlayer {
@@ -326,6 +328,15 @@ public interface Player extends OfflinePlayer {
 	 * @return the name of actual server
 	 */
 	String getServerName();
+
+	/**
+	 * Send packet to the given player
+	 * 
+	 * @param packet the packet to send
+	 */
+	default void sendPacket(NPacket packet) {
+		Adapter.getAdapter().getVersionAdapter().sendPacket(this, packet);
+	}
 	
 	static boolean isSamePlayer(Player player1, Player player2) {
 		return player1.getUniqueId().equals(player2.getUniqueId());

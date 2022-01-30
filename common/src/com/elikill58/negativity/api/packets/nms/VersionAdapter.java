@@ -3,6 +3,7 @@ package com.elikill58.negativity.api.packets.nms;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.packets.PacketTransferManager;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
@@ -25,7 +26,12 @@ public abstract class VersionAdapter<R> {
 	protected PacketTransferManager<NPacketHandshake, R> packetsHandshake = new PacketTransferManager<>((p, obj) -> new NPacketHandshakeUnset(), (p, a) -> null);
 	protected PacketTransferManager<NPacketStatus, R> packetsStatus = new PacketTransferManager<>((p, obj) -> new NPacketStatusUnset(), (p, a) -> null);
 	
-	public void sendPacket(R p, NPacket packet) {
+	private R getR(Player p) {
+		return (R) p.getDefault();
+	}
+	
+	public void sendPacket(Player pl, NPacket packet) {
+		R p = getR(pl);
 		if(packet instanceof NPacketPlayIn)
 			sendPacket(p, packetsPlayIn.negativityToBukkit(p, (NPacketPlayIn) packet));
 		else if(packet instanceof NPacketPlayOut)
@@ -37,6 +43,10 @@ public abstract class VersionAdapter<R> {
 	}
 	
 	public abstract void sendPacket(R p, Object basicPacket);
+
+	public NPacket getPacket(Player pl, Object nms) {
+		return getPacket(getR(pl), nms);
+	}
 
 	public NPacket getPacket(R player, Object nms) {
 		String packetName = nms.getClass().getSimpleName();

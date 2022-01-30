@@ -34,6 +34,7 @@ import com.elikill58.negativity.universal.Adapter;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.network.protocol.game.ServerboundKeepAlivePacket;
@@ -245,6 +246,7 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 	
 	@Override
 	public void sendPacket(ServerPlayer p, Object basicPacket) {
+		((net.minecraft.server.level.ServerPlayer) p).connection.send((Packet<?>) basicPacket);
 		// TODO fix packet not sent
 		//((EntityPlayerMP) p).connection.sendPacket((Packet<?>) basicPacket);
 	}

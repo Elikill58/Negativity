@@ -1,5 +1,10 @@
 package com.elikill58.negativity.spigot.nms;
 
+import static com.elikill58.negativity.spigot.utils.Utils.VERSION;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_7_R4.CraftWorld;
@@ -79,6 +84,28 @@ public class Spigot_1_7_R4 extends SpigotVersionAdapter {
 	@Override
 	public float cos(float f) {
 		return MathHelper.cos(f);
+	}
+	
+	@Override
+	public List<Player> getOnlinePlayers() {
+		List<Player> list = new ArrayList<>();
+		try {
+			Class<?> mcServer = Class.forName("net.minecraft.server." + VERSION + ".MinecraftServer");
+			Object server = mcServer.getMethod("getServer").invoke(mcServer);
+			Object craftServer = server.getClass().getField("server").get(server);
+			Object getted = craftServer.getClass().getMethod("getOnlinePlayers").invoke(craftServer);
+			if (getted instanceof Player[])
+				for (Player obj : (Player[]) getted)
+					list.add(obj);
+			else if (getted instanceof List)
+				for (Object obj : (List<?>) getted)
+					list.add((Player) obj);
+			else
+				System.out.println("Unknow getOnlinePlayers");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
 	}
 	
 	@Override

@@ -55,7 +55,6 @@ import net.minecraft.util.math.Vec3d;
 public class Sponge_1_12_2 extends SpongeVersionAdapter {
 
 	public Sponge_1_12_2() {
-		super("v1_12_2");
 		packetsPlayIn.addTo("CPacketPlayerDigging", (p, packet) -> {
 			CPacketPlayerDigging blockDig = (CPacketPlayerDigging) packet;
 			BlockPos pos = blockDig.getPosition();
@@ -135,7 +134,7 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 		});
 		packetsPlayOut.addTo("SPacketConfirmTransaction", (p, f) -> new NPacketPlayOutPing(((SPacketConfirmTransaction) f).getActionNumber()));
 		
-		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
+		SpongeNegativity.getInstance().getLogger().info("[Packets-v1_12_2] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
 	}
 	
 	private static DigAction translateDigAction(CPacketPlayerDigging.Action action) {

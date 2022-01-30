@@ -2,11 +2,10 @@ package com.elikill58.negativity.spigot.nms;
 
 import static com.elikill58.negativity.spigot.utils.Utils.VERSION;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -57,10 +56,7 @@ import io.netty.channel.ChannelFuture;
 @SuppressWarnings("unchecked")
 public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
-	private final String version;
-
 	public SpigotVersionAdapter(String version) {
-		this.version = version;
 		packetsPlayIn.addTo("PacketPlayInArmAnimation",
 				(p, packet) -> new NPacketPlayInArmAnimation(System.currentTimeMillis()));
 		packetsPlayIn.addTo("PacketPlayInChat", (p, packet) -> new NPacketPlayInChat(get(packet, "a")));
@@ -203,24 +199,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	public abstract float sin(float f);
 
 	public List<Player> getOnlinePlayers() {
-		List<Player> list = new ArrayList<>();
-		try {
-			Class<?> mcServer = Class.forName("net.minecraft.server." + VERSION + ".MinecraftServer");
-			Object server = mcServer.getMethod("getServer").invoke(mcServer);
-			Object craftServer = server.getClass().getField("server").get(server);
-			Object getted = craftServer.getClass().getMethod("getOnlinePlayers").invoke(craftServer);
-			if (getted instanceof Player[])
-				for (Player obj : (Player[]) getted)
-					list.add(obj);
-			else if (getted instanceof List)
-				for (Object obj : (List<?>) getted)
-					list.add((Player) obj);
-			else
-				System.out.println("Unknow getOnlinePlayers");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return list;
+		return new ArrayList<>(Bukkit.getOnlinePlayers());
 	}
 
 	public abstract int getPlayerPing(Player player);
@@ -264,6 +243,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 		}
 	}
 
+	@Override
 	public void sendPacket(Player p, Object packet) {
 		try {
 			Object playerConnection = getPlayerConnection(p);
@@ -298,10 +278,6 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			e.printStackTrace();
 			return new ArrayList<>();
 		}
-	}
-
-	public String getVersion() {
-		return version;
 	}
 	
 	public List<Entity> getEntities(World w){
@@ -358,84 +334,6 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			}
 		}
 		return instance;
-	}
-
-	protected <T> T get(Object obj, Class<?> clazz, String name) {
-		try {
-			Field f = clazz.getDeclaredField(name);
-			f.setAccessible(true);
-			return (T) f.get(obj);
-		} catch (NoSuchFieldException e) { // prevent issue when wrong version
-			Adapter.getAdapter().debug("Failed to find field " + name + " in class " + obj.getClass().getSimpleName() + " for class " + clazz.getSimpleName());
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	protected <T> T get(Object obj, String name) {
-		return get(obj.getClass(), obj, name);
-	}
-
-	protected <T> T get(Class<?> clazz, Object obj, String name) {
-		try {
-			Field f = clazz.getDeclaredField(name);
-			f.setAccessible(true);
-			return (T) f.get(obj);
-		} catch (NoSuchFieldException e) { // prevent issue when wrong version
-			Adapter.getAdapter().debug("Failed to find field " + name + " in class " + obj.getClass().getSimpleName());
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	protected Object getSafe(Object obj, String name) {
-		try {
-			Field f = obj.getClass().getDeclaredField(name);
-			f.setAccessible(true);
-			return f.get(obj);
-		} catch (NoSuchFieldException e) { // prevent issue when wrong version
-			Adapter.getAdapter().debug("Failed to find safe field " + name + " in class " + obj.getClass().getSimpleName());
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	protected String getStr(Object obj, String name) {
-		try {
-			Field f = obj.getClass().getDeclaredField(name);
-			f.setAccessible(true);
-			return f.get(obj).toString();
-		} catch (NoSuchFieldException e) { // prevent issue when wrong version
-			Adapter.getAdapter().debug("Failed to find str field " + name + " in class " + obj.getClass().getSimpleName());
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	protected <T> T getFromMethod(Object obj, String methodName) {
-		return getFromMethod(obj.getClass(), obj, methodName);
-	}
-
-	protected <T> T getFromMethod(Class<?> clazz, Object obj, String methodName) {
-		try {
-			Method f = clazz.getDeclaredMethod(methodName);
-			f.setAccessible(true);
-			return (T) f.invoke(obj);
-		} catch (NoSuchMethodException e) { // prevent issue when wrong version
-			Adapter.getAdapter().debug("Failed to find method " + methodName + " in class " + obj.getClass().getSimpleName());
-			return null;
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
 	}
 
 	public Vector getVectorFromVec3D(Object vec) {

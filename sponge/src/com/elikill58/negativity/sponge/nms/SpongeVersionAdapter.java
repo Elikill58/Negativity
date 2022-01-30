@@ -10,16 +10,6 @@ import com.elikill58.negativity.universal.Adapter;
 
 public abstract class SpongeVersionAdapter extends VersionAdapter<Player> {
 	
-	protected final String version;
-	
-	public SpongeVersionAdapter(String version) {
-		this.version = version;
-	}
-	
-	public String getVersion() {
-		return version;
-	}
-	
 	@Override
 	public NPacket getPacket(Player player, Object nms) {
 		String packetClassName = nms.getClass().getName();

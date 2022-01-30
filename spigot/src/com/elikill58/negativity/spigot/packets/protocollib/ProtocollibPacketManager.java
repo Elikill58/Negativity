@@ -69,7 +69,7 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 				return;
 			}
 			Object nmsPacket = e.getPacket().getHandle();
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player, nmsPacket, nmsPacket.getClass().getSimpleName());
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player, nmsPacket);
 			if(commonPacket == null)
 				return;
 			AbstractPacket packet = ProtocollibPacketManager.this.onPacketSent(commonPacket, player, nmsPacket, e);
@@ -88,7 +88,7 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 				return;
 			}
 			Object nmsPacket = e.getPacket().getHandle();
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player, nmsPacket, nmsPacket.getClass().getSimpleName());
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player, nmsPacket);
 			if(commonPacket == null)
 				return;
 			AbstractPacket packet = ProtocollibPacketManager.this.onPacketReceive(commonPacket, player, nmsPacket, e);

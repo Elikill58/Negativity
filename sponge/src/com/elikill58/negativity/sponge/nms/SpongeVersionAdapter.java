@@ -1,22 +1,15 @@
 package com.elikill58.negativity.sponge.nms;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+import org.spongepowered.api.entity.living.player.Player;
 
+import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.packet.NPacket;
-import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
-import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
-import com.elikill58.negativity.sponge.SpongeNegativity;
+import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
+import com.elikill58.negativity.universal.Adapter;
 
-import net.minecraft.network.Packet;
-
-public abstract class SpongeVersionAdapter {
+public abstract class SpongeVersionAdapter extends VersionAdapter<Player> {
 	
-	protected Map<String, Function<Packet<?>, NPacketPlayOut>> packetsPlayOut = new HashMap<>();
-	protected Map<String, Function<Packet<?>, NPacketPlayIn>> packetsPlayIn = new HashMap<>();
 	protected final String version;
 	
 	public SpongeVersionAdapter(String version) {
@@ -27,18 +20,21 @@ public abstract class SpongeVersionAdapter {
 		return version;
 	}
 	
-	public NPacket getPacket(Packet<?> nmsPacket) {
-		String packetClassName = nmsPacket.getClass().getName();
+	@Override
+	public NPacket getPacket(Player player, Object nms) {
+		String packetClassName = nms.getClass().getName();
 		String packetName = packetClassName.substring(packetClassName.lastIndexOf('.') + 1);
-		if(packetName.startsWith("CPacket"))
-			return packetsPlayIn.getOrDefault(packetName, (obj) -> new NPacketPlayInUnset(packetName)).apply(nmsPacket);
-		if(packetName.startsWith("SPacket"))
-			return packetsPlayOut.getOrDefault(packetName, (obj) -> new NPacketPlayOutUnset()).apply(nmsPacket);
-		/*if(packetName.startsWith(PacketType.LOGIN_PREFIX))
+		if (packetName.startsWith("CPacket"))
+			return packetsPlayIn.bukkitToNegativity(player, nms);
+		else if (packetName.startsWith("SPacket"))
+			return packetsPlayOut.bukkitToNegativity(player, nms);
+		else if (packetName.startsWith(PacketType.LOGIN_PREFIX))
 			return new NPacketLoginUnset();
-		if(packetName.startsWith(PacketType.STATUS_PREFIX))
-			return new NPacketStatusUnset();*/
-		SpongeNegativity.getInstance().getLogger().info("Unknow packet " + packetName + ".");
+		else if (packetName.startsWith(PacketType.STATUS_PREFIX))
+			return packetsStatus.bukkitToNegativity(player, nms);
+		else if (packetName.startsWith(PacketType.HANDSHAKE_PREFIX))
+			return packetsHandshake.bukkitToNegativity(player, nms);
+		Adapter.getAdapter().debug("[SpigotVersionAdapter] Unknow packet " + packetName + ".");
 		return null;
 	}
 	

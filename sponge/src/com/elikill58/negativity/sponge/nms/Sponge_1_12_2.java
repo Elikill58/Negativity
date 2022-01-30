@@ -2,6 +2,8 @@ package com.elikill58.negativity.sponge.nms;
 
 import java.lang.reflect.Field;
 
+import org.spongepowered.api.entity.living.player.Player;
+
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
@@ -28,6 +30,8 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 
+import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketChatMessage;
 import net.minecraft.network.play.client.CPacketConfirmTransaction;
 import net.minecraft.network.play.client.CPacketEntityAction;
@@ -52,39 +56,39 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 
 	public Sponge_1_12_2() {
 		super("v1_12_2");
-		packetsPlayIn.put("CPacketPlayerDigging", (packet) -> {
+		packetsPlayIn.addTo("CPacketPlayerDigging", (p, packet) -> {
 			CPacketPlayerDigging blockDig = (CPacketPlayerDigging) packet;
 			BlockPos pos = blockDig.getPosition();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), translateDigAction(blockDig.getAction()), translateFacing(blockDig.getFacing()));
 		});
 
-		packetsPlayIn.put("CPacketChatMessage", (packet) -> new NPacketPlayInChat(((CPacketChatMessage) packet).getMessage()));
+		packetsPlayIn.addTo("CPacketChatMessage", (p, packet) -> new NPacketPlayInChat(((CPacketChatMessage) packet).getMessage()));
 
-		packetsPlayIn.put("CPacketPlayer$PositionRotation", (f) -> {
+		packetsPlayIn.addTo("CPacketPlayer$PositionRotation", (p, f) -> {
 			CPacketPlayer packet = (CPacketPlayer) f;
 			return new NPacketPlayInPositionLook(packet.getX(0), packet.getY(0), packet.getZ(0), packet.getYaw(0), packet.getPitch(0), packet.isOnGround());
 		});
-		packetsPlayIn.put("CPacketPlayer$Position", (f) -> {
+		packetsPlayIn.addTo("CPacketPlayer$Position", (p, f) -> {
 			CPacketPlayer packet = (CPacketPlayer) f;
 			return new NPacketPlayInPosition(packet.getX(0), packet.getY(0), packet.getZ(0), packet.getYaw(0), packet.getPitch(0), packet.isOnGround());
 		});
-		packetsPlayIn.put("CPacketPlayer$Rotation", (f) -> {
+		packetsPlayIn.addTo("CPacketPlayer$Rotation", (p, f) -> {
 			CPacketPlayer packet = (CPacketPlayer) f;
 			return new NPacketPlayInLook(packet.getX(0), packet.getY(0), packet.getZ(0), packet.getYaw(0), packet.getPitch(0), packet.isOnGround());
 		});
-		packetsPlayIn.put("CPacketPlayer", (f) -> {
+		packetsPlayIn.addTo("CPacketPlayer", (p, f) -> {
 			CPacketPlayer packet = (CPacketPlayer) f;
 			float yaw = packet.getYaw(0);
 			float pitch = packet.getPitch(0);
 			return new NPacketPlayInFlying(packet.getX(0), packet.getY(0), packet.getZ(0), yaw, pitch, packet.isOnGround(), yaw == packet.getYaw(Float.MAX_VALUE), pitch == packet.getPitch(Float.MAX_VALUE));
 		});
-		packetsPlayIn.put("CPacketKeepAlive", (f) -> new NPacketPlayInKeepAlive(((CPacketKeepAlive) f).getKey()));
-		packetsPlayIn.put("CPacketUseEntity", (f) -> {
+		packetsPlayIn.addTo("CPacketKeepAlive", (p, f) -> new NPacketPlayInKeepAlive(((CPacketKeepAlive) f).getKey()));
+		packetsPlayIn.addTo("CPacketUseEntity", (pa, f) -> {
 			CPacketUseEntity p = (CPacketUseEntity) f;
 			Vec3d v = p.getHitVec();
 			return new NPacketPlayInUseEntity(0, v == null ? new Vector(0, 0, 0) : new Vector(v.x, v.y, v.z), EnumEntityUseAction.valueOf(p.getAction().name()));
 		});
-		packetsPlayIn.put("CPacketEntityAction", (f) -> {
+		packetsPlayIn.addTo("CPacketEntityAction", (p, f) -> {
 			try {
 				CPacketEntityAction packet = (CPacketEntityAction) f;
 				Field entityIdField = f.getClass().getDeclaredField("entityID");
@@ -96,46 +100,40 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 				return null;
 			}
 		});
-		packetsPlayIn.put("CPacketConfirmTransaction", (f) -> {
-			CPacketConfirmTransaction p = (CPacketConfirmTransaction) f;
-			return new NPacketPlayInPong(p.getUid());
-		});
+		packetsPlayIn.addTo("CPacketConfirmTransaction", (p, f) -> new NPacketPlayInPong(((CPacketConfirmTransaction) f).getUid()));
 		
 
-		packetsPlayOut.put("SPacketBlockBreakAnim", (f) -> {
+		packetsPlayOut.addTo("SPacketBlockBreakAnim", (p, f) -> {
 			SPacketBlockBreakAnim packet = (SPacketBlockBreakAnim) f;
 			BlockPos pos = packet.position;
 			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), packet.breakerId, packet.progress);
 		});
-		packetsPlayOut.put("SPacketKeepAlive", (f) -> new NPacketPlayOutKeepAlive(((SPacketKeepAlive) f).id));
-		packetsPlayOut.put("SPacketEntityTeleport", (f) -> {
+		packetsPlayOut.addTo("SPacketKeepAlive", (p, f) -> new NPacketPlayOutKeepAlive(((SPacketKeepAlive) f).id));
+		packetsPlayOut.addTo("SPacketEntityTeleport", (p, f) -> {
 			SPacketEntityTeleport packet = (SPacketEntityTeleport) f;
 			return new NPacketPlayOutEntityTeleport(packet.entityId, packet.posX, packet.posY, packet.posZ, packet.yaw, packet.pitch, packet.onGround);
 		});
-		packetsPlayOut.put("SPacketEntityVelocity", (f) -> {
+		packetsPlayOut.addTo("SPacketEntityVelocity", (p, f) -> {
 			SPacketEntityVelocity packet = (SPacketEntityVelocity) f;
 			return new NPacketPlayOutEntityVelocity(packet.entityID, packet.motionX, packet.motionY, packet.motionZ);
 		});
-		packetsPlayOut.put("SPacketPlayerPosLook", (f) -> {
+		packetsPlayOut.addTo("SPacketPlayerPosLook", (p, f) -> {
 			SPacketPlayerPosLook packet = (SPacketPlayerPosLook) f;
 			return new NPacketPlayOutPosition(packet.x, packet.y, packet.z, packet.yaw, packet.pitch);
 		});
-		packetsPlayOut.put("SPacketExplosion", (f) -> {
+		packetsPlayOut.addTo("SPacketExplosion", (p, f) -> {
 			SPacketExplosion packet = (SPacketExplosion) f;
 			return new NPacketPlayOutExplosion(packet.posX, packet.posY, packet.posZ, packet.motionX, packet.motionY, packet.motionZ);
 		});
-		packetsPlayOut.put("SPacketEntity", (f) -> {
+		packetsPlayOut.addTo("SPacketEntity", (p, f) -> {
 			SPacketEntity packet = (SPacketEntity) f;
 			return new NPacketPlayOutEntity(packet.entityId, packet.posX, packet.posY, packet.posZ);
 		});
-		packetsPlayOut.put("SPacketEntityEffect", (f) -> {
+		packetsPlayOut.addTo("SPacketEntityEffect", (p, f) -> {
 			SPacketEntityEffect packet = (SPacketEntityEffect) f;
 			return new NPacketPlayOutEntityEffect(packet.getEntityId(), packet.getEffectId(), packet.getAmplifier(), packet.getDuration(), (byte) 0);
 		});
-		packetsPlayOut.put("SPacketConfirmTransaction", (f) -> {
-			SPacketConfirmTransaction p = (SPacketConfirmTransaction) f;
-			return new NPacketPlayOutPing(p.getActionNumber());
-		});
+		packetsPlayOut.addTo("SPacketConfirmTransaction", (p, f) -> new NPacketPlayOutPing(((SPacketConfirmTransaction) f).getActionNumber()));
 		
 		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
 	}
@@ -176,5 +174,10 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 			return DigFace.EAST;
 		}
 		throw new IllegalStateException("Unexpected EnumFacing constant: " + facing.name());
+	}
+	
+	@Override
+	public void sendPacket(Player p, Object basicPacket) {
+		((EntityPlayerMP) p).connection.sendPacket((Packet<?>) basicPacket);
 	}
 }

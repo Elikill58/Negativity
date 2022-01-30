@@ -1,21 +1,15 @@
 package com.elikill58.negativity.sponge8.nms;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Function;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
+import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.packet.NPacket;
-import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
-import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
+import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
+import com.elikill58.negativity.universal.Adapter;
 
-import net.minecraft.network.protocol.Packet;
-
-public abstract class SpongeVersionAdapter {
+public abstract class SpongeVersionAdapter extends VersionAdapter<ServerPlayer> {
 	
-	protected Map<String, Function<Packet<?>, NPacketPlayOut>> packetsPlayOut = new HashMap<>();
-	protected Map<String, Function<Packet<?>, NPacketPlayIn>> packetsPlayIn = new HashMap<>();
 	protected final String version;
 	
 	public SpongeVersionAdapter(String version) {
@@ -26,21 +20,34 @@ public abstract class SpongeVersionAdapter {
 		return version;
 	}
 	
-	public NPacket getPacket(Packet<?> nmsPacket) {
+	@Override
+	public NPacket getPacket(ServerPlayer player, Object nms) {
+		String packetName = nms.getClass().getCanonicalName().replace('.', '$');
+		if(packetName.contains("Serverbound"))
+			return packetsPlayIn.bukkitToNegativity(player, nms);
+		else if(packetName.contains("Clientbound"))
+			return packetsPlayOut.bukkitToNegativity(player, nms);
+		else if (packetName.startsWith(PacketType.LOGIN_PREFIX))
+			return new NPacketLoginUnset();
+		else if (packetName.startsWith(PacketType.STATUS_PREFIX))
+			return packetsStatus.bukkitToNegativity(player, nms);
+		else if (packetName.startsWith(PacketType.HANDSHAKE_PREFIX))
+			return packetsHandshake.bukkitToNegativity(player, nms);
+		Adapter.getAdapter().debug("[SpigotVersionAdapter] Unknow packet " + packetName + ".");
+		return null;
+	}
+	
+	/*public NPacket getPacket(Packet<?> nmsPacket) {
 		String packetName = nmsPacket.getClass().getCanonicalName().replace('.', '$');
 		// see https://www.spigotmc.org/posts/3183758/
 		if(packetName.contains("Serverbound"))
 			return packetsPlayIn.getOrDefault(getParsedName(packetName, "Serverbound"), (obj) -> new NPacketPlayInUnset(getParsedName(packetName, "Serverbound"))).apply(nmsPacket);
 		if(packetName.contains("Clientbound"))
 			return packetsPlayOut.getOrDefault(getParsedName(packetName, "Clientbound"), (obj) -> new NPacketPlayOutUnset()).apply(nmsPacket);
-		/*if(packetName.startsWith(PacketType.LOGIN_PREFIX))
-			return new NPacketLoginUnset();
-		if(packetName.startsWith(PacketType.STATUS_PREFIX))
-			return new NPacketStatusUnset();*/
 		return null;
-	}
+	}*/
 	
-	private String getParsedName(String name, String key) {
+	public String getParsedName(String name, String key) {
 		return key + name.split(key)[1];
 	}
 	

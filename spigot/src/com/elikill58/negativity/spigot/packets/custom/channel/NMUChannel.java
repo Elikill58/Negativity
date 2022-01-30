@@ -134,7 +134,7 @@ public class NMUChannel extends ChannelAbstract {
 
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet, packet.getClass().getSimpleName());
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet);
 			AbstractPacket nextPacket = getPacketManager().onPacketReceive(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
 			if(!nextPacket.isCancelled() && nextPacket.getNmsPacket() != null)
 				super.channelRead(ctx, nextPacket.getNmsPacket());
@@ -151,7 +151,7 @@ public class NMUChannel extends ChannelAbstract {
 		
 		@Override
 		public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet, packet.getClass().getSimpleName());
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet);
 			AbstractPacket nextPacket = getPacketManager().onPacketSent(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
 			if(!nextPacket.isCancelled() && nextPacket.getNmsPacket() != null)
 				super.write(ctx, nextPacket.getNmsPacket(), promise);
@@ -171,7 +171,7 @@ public class NMUChannel extends ChannelAbstract {
 			try {
 				PacketType packetType = PacketType.getType(packet.getClass().getSimpleName());
 				if(!(packetType instanceof PacketType.Client || packetType instanceof PacketType.Server)) {
-					NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(null, packet, packet.getClass().getSimpleName());
+					NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(null, packet);
 					AbstractPacket nextPacket = getPacketManager().onPacketReceive(commonPacket, null, packet);
 					if(nextPacket != null && nextPacket.isCancelled())
 						return;

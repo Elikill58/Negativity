@@ -5,9 +5,7 @@ import static com.elikill58.negativity.spigot.utils.Utils.VERSION;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.function.BiFunction;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -21,16 +19,9 @@ import com.elikill58.negativity.api.location.BlockPosition;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.PacketContent.ContentModifier;
-import com.elikill58.negativity.api.packets.PacketType;
-import com.elikill58.negativity.api.packets.packet.NPacket;
-import com.elikill58.negativity.api.packets.packet.NPacketHandshake;
-import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
-import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
-import com.elikill58.negativity.api.packets.packet.NPacketStatus;
+import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInListener;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
-import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeUnset;
-import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimation;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
@@ -42,7 +33,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
@@ -54,8 +44,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosi
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
-import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
@@ -67,21 +55,17 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 
 @SuppressWarnings("unchecked")
-public abstract class SpigotVersionAdapter {
+public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
-	protected HashMap<String, BiFunction<Player, Object, NPacketPlayOut>> packetsPlayOut = new HashMap<>();
-	protected HashMap<String, BiFunction<Player, Object, NPacketPlayIn>> packetsPlayIn = new HashMap<>();
-	protected HashMap<String, BiFunction<Player, Object, NPacketHandshake>> packetsHandshake = new HashMap<>();
-	protected HashMap<String, BiFunction<Player, Object, NPacketStatus>> packetsStatus = new HashMap<>();
 	private final String version;
 
 	public SpigotVersionAdapter(String version) {
 		this.version = version;
-		packetsPlayIn.put("PacketPlayInArmAnimation",
-				(player, packet) -> new NPacketPlayInArmAnimation(System.currentTimeMillis()));
-		packetsPlayIn.put("PacketPlayInChat", (player, packet) -> new NPacketPlayInChat(get(packet, "a")));
+		packetsPlayIn.addTo("PacketPlayInArmAnimation",
+				(p, packet) -> new NPacketPlayInArmAnimation(System.currentTimeMillis()));
+		packetsPlayIn.addTo("PacketPlayInChat", (p, packet) -> new NPacketPlayInChat(get(packet, "a")));
 
-		packetsPlayIn.put("PacketPlayInPositionLook", (player, f) -> {
+		packetsPlayIn.addTo("PacketPlayInPositionLook", (p, f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
 				return new NPacketPlayInPositionLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"),
@@ -91,7 +75,7 @@ public abstract class SpigotVersionAdapter {
 				return null;
 			}
 		});
-		packetsPlayIn.put("PacketPlayInPosition", (player, f) -> {
+		packetsPlayIn.addTo("PacketPlayInPosition", (p, f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
 				return new NPacketPlayInPosition(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"),
@@ -101,7 +85,7 @@ public abstract class SpigotVersionAdapter {
 				return null;
 			}
 		});
-		packetsPlayIn.put("PacketPlayInLook", (player, f) -> {
+		packetsPlayIn.addTo("PacketPlayInLook", (p, f) -> {
 			try {
 				Class<?> c = f.getClass().getSuperclass();
 				return new NPacketPlayInLook(get(f, c, "x"), get(f, c, "y"), get(f, c, "z"), get(f, c, "yaw"),
@@ -113,19 +97,19 @@ public abstract class SpigotVersionAdapter {
 			// return new NPacketPlayInLook(get(f, "x"), get(f, "y"), get(f, "z"), get(f,
 			// "yaw"), get(f, "pitch"));
 		});
-		packetsPlayIn.put("PacketPlayInFlying", (player, f) -> {
+		packetsPlayIn.addTo("PacketPlayInFlying", (p, f) -> {
 			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "yaw"), get(f, "pitch"),
 					get(f, getOnGroundFieldName()), get(f, "hasPos"), get(f, "hasLook"));
 		});
-		packetsPlayIn.put("PacketPlayInKeepAlive",
-				(player, f) -> new NPacketPlayInKeepAlive(new Long(getSafe(f, "a").toString())));
-		packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {
+		packetsPlayIn.addTo("PacketPlayInKeepAlive",
+				(p, f) -> new NPacketPlayInKeepAlive(new Long(getSafe(f, "a").toString())));
+		packetsPlayIn.addTo("PacketPlayInUseEntity", (p, f) -> {
 			Object vec3D = get(f, "c");
 			Vector vec = vec3D == null ? new Vector(0, 0, 0) : getVectorFromVec3D(vec3D);
 			return new NPacketPlayInUseEntity(get(f, "a"), vec,
 					EnumEntityUseAction.valueOf(((Enum<?>) get(f, "action")).name()));
 		});
-		packetsPlayIn.put("PacketPlayInBlockPlace", (p, packet) -> {
+		packetsPlayIn.addTo("PacketPlayInBlockPlace", (p, packet) -> {
 			try {
 				PlayerInventory inventory = p.getInventory();
 				ItemStack handItem;
@@ -162,46 +146,46 @@ public abstract class SpigotVersionAdapter {
 				return null;
 			}
 		});
-		packetsPlayIn.put("PacketPlayInEntityAction", (player, f) -> {
+		packetsPlayIn.addTo("PacketPlayInEntityAction", (p, f) -> {
 			EnumPlayerAction action = EnumPlayerAction.getAction(getStr(f, Version.getVersion().isNewerOrEquals(Version.V1_17) ? "b" : "animation"));
 			return new NPacketPlayInEntityAction(get(f, "a"), action, get(f, "c"));
 		});
-		packetsPlayIn.put("PacketPlayInTransaction", (player, f) -> {
+		packetsPlayIn.addTo("PacketPlayInTransaction", (p, f) -> {
 			return new NPacketPlayInPong((int) (short) get(f, "b"));
 		});
 		
 
-		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, packet) -> {
+		packetsPlayOut.addTo("PacketPlayOutBlockBreakAnimation", (p, packet) -> {
 			Object pos = get(packet, "b");
 			return pos == null ? null : new NPacketPlayOutBlockBreakAnimation(getBlockPosition(pos), get(packet, "a"),
 					get(packet, "c"));
 		});
-		packetsPlayOut.put("PacketPlayOutKeepAlive",
-				(player, f) -> new NPacketPlayOutKeepAlive(new Long(getSafe(f, "a").toString())));
-		packetsPlayOut.put("PacketPlayOutEntityTeleport", (player, packet) -> {
+		packetsPlayOut.addTo("PacketPlayOutKeepAlive",
+				(p, f) -> new NPacketPlayOutKeepAlive(new Long(getSafe(f, "a").toString())));
+		packetsPlayOut.addTo("PacketPlayOutEntityTeleport", (p, packet) -> {
 			return new NPacketPlayOutEntityTeleport(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
 					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")),
 					Float.parseFloat(getStr(packet, "e")), Float.parseFloat(getStr(packet, "f")), get(packet, "g"));
 		});
-		packetsPlayOut.put("PacketPlayOutEntityVelocity",
-				(p, pa) -> new NPacketPlayOutEntityVelocity(get(pa, "a"), get(pa, "b"), get(pa, "c"), get(pa, "d")));
-		packetsPlayOut.put("PacketPlayOutPosition", (p, pa) -> new NPacketPlayOutPosition(get(pa, "a"), get(pa, "b"),
-				get(pa, "c"), get(pa, "d"), get(pa, "e")));
-		packetsPlayOut.put("PacketPlayOutExplosion", (p, pa) -> new NPacketPlayOutExplosion(get(pa, "a"), get(pa, "b"),
-				get(pa, "c"), get(pa, "f"), get(pa, "g"), get(pa, "h")));
-		packetsPlayOut.put("PacketPlayOutEntity", (player, packet) -> {
-			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
-					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
+		packetsPlayOut.addTo("PacketPlayOutEntityVelocity",
+				(p, f) -> new NPacketPlayOutEntityVelocity(get(f, "a"), get(f, "b"), get(f, "c"), get(f, "d")));
+		packetsPlayOut.addTo("PacketPlayOutPosition", (p, f) -> new NPacketPlayOutPosition(get(f, "a"), get(f, "b"),
+				get(f, "c"), get(f, "d"), get(f, "e")));
+		packetsPlayOut.addTo("PacketPlayOutExplosion", (p, f) -> new NPacketPlayOutExplosion(get(f, "a"), get(f, "b"),
+				get(f, "c"), get(f, "f"), get(f, "g"), get(f, "h")));
+		packetsPlayOut.addTo("PacketPlayOutEntity", (p, f) -> {
+			return new NPacketPlayOutEntity(get(f, "a"), Double.parseDouble(getStr(f, "b")),
+					Double.parseDouble(getStr(f, "c")), Double.parseDouble(getStr(f, "d")));
 		});
-		packetsPlayOut.put("PacketPlayOutEntityEffect", (player, packet) -> {
+		packetsPlayOut.addTo("PacketPlayOutEntityEffect", (p, packet) -> {
 			return new NPacketPlayOutEntityEffect(get(packet, "a"), get(packet, "b"), get(packet, "c"), get(packet, "d"), get(packet, "e"));
 		});
-		packetsPlayOut.put("PacketPlayOutTransaction", (player, f) -> {
+		packetsPlayOut.addTo("PacketPlayOutTransaction", (p, f) -> {
 			return new NPacketPlayOutPing((int) (short) get(f, "b"));
 		});
 		
-		packetsHandshake.put("PacketHandshakingInListener", (player, t) -> new NPacketHandshakeInListener());
-		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
+		packetsHandshake.addTo("PacketHandshakingInListener", (p, t) -> new NPacketHandshakeInListener());
+		packetsHandshake.addTo("PacketHandshakingInSetProtocol", (p, raw) -> {
 			PacketContent content = new PacketContent(raw);
 			ContentModifier<Integer> ints = content.getIntegers();
 			return new NPacketHandshakeInSetProtocol(ints.read("a", 0), content.getStrings().readSafely(0, "0.0.0.0"), ints.read("port", 0));
@@ -325,22 +309,6 @@ public abstract class SpigotVersionAdapter {
 	}
 	
 	public abstract BlockPosition getBlockPosition(Object obj);
-
-	public NPacket getPacket(Player player, Object nms, String packetName) {
-		if (packetName.startsWith(PacketType.CLIENT_PREFIX))
-			return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset(nms.getClass().getName()))
-					.apply(player, nms);
-		else if (packetName.startsWith(PacketType.SERVER_PREFIX))
-			return packetsPlayOut.getOrDefault(packetName, (p, obj) -> new NPacketPlayOutUnset()).apply(player, nms);
-		else if (packetName.startsWith(PacketType.LOGIN_PREFIX))
-			return new NPacketLoginUnset();
-		else if (packetName.startsWith(PacketType.STATUS_PREFIX))
-			return packetsStatus.getOrDefault(packetName, (p, obj) -> new NPacketStatusUnset()).apply(player, nms);
-		else if (packetName.startsWith(PacketType.HANDSHAKE_PREFIX))
-			return packetsHandshake.getOrDefault(packetName, (p, obj) -> new NPacketHandshakeUnset()).apply(player, nms);
-		Adapter.getAdapter().debug("[SpigotVersionAdapter] Unknow packet " + packetName + ".");
-		return null;
-	}
 
 	private static SpigotVersionAdapter instance;
 

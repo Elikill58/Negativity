@@ -117,7 +117,7 @@ public class INCChannel extends ChannelAbstract {
 
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet, packet.getClass().getSimpleName());
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet);
 			if(commonPacket == null) {
 				super.channelRead(ctx, packet);
 				return;
@@ -149,7 +149,7 @@ public class INCChannel extends ChannelAbstract {
 
 		@Override
 		public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet, packet.getClass().getSimpleName());
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet);
 			if(commonPacket == null) {
 				super.write(ctx, packet, promise);
 				return;
@@ -182,7 +182,7 @@ public class INCChannel extends ChannelAbstract {
 			try {
 				PacketType packetType = PacketType.getType(packet.getClass().getSimpleName());
 				if(!(packetType instanceof PacketType.Client || packetType instanceof PacketType.Server)) {
-					NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(null, packet, packet.getClass().getSimpleName());
+					NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(null, packet);
 					AbstractPacket nextPacket = getPacketManager().onPacketReceive(commonPacket, null, packet);
 					if(nextPacket != null && nextPacket.isCancelled())
 						return;

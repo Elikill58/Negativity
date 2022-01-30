@@ -3,6 +3,8 @@ package com.elikill58.negativity.sponge8.nms;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
@@ -47,42 +49,42 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 
 	public Sponge_1_16_5() {
 		super("v1_16_5");
-		packetsPlayIn.put("ServerboundPlayerActionPacket", (f) -> {
+		packetsPlayIn.addTo("ServerboundPlayerActionPacket", (p, f) -> {
 			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) f;
 			BlockPos pos = packet.getPos();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(),
 					translateDigAction(packet.getAction()), translateDigDirection(packet.getDirection()));
 		});
 
-		packetsPlayIn.put("ServerboundChatPacket", (packet) -> new NPacketPlayInChat(((ServerboundChatPacket) packet).getMessage()));
+		packetsPlayIn.addTo("ServerboundChatPacket", (p, packet) -> new NPacketPlayInChat(((ServerboundChatPacket) packet).getMessage()));
 
-		packetsPlayIn.put("ServerboundMovePlayerPacket$PosRot", (f) -> {
+		packetsPlayIn.addTo("ServerboundMovePlayerPacket$PosRot", (p, f) -> {
 			Class<?> sup = ServerboundMovePlayerPacket.class;
 			return new NPacketPlayInPositionLook(get(f, sup, "x"), get(f, sup, "y"), get(f, sup, "z"),
 					get(f, sup, "yRot"), get(f, sup, "xRot"), get(f, sup, "onGround"));
 		});
-		packetsPlayIn.put("ServerboundMovePlayerPacket$Pos", (f) -> {
+		packetsPlayIn.addTo("ServerboundMovePlayerPacket$Pos", (p, f) -> {
 			Class<?> sup = ServerboundMovePlayerPacket.class;
 			return new NPacketPlayInPosition(get(f, sup, "x"), get(f, sup, "y"), get(f, sup, "z"),
 					get(f, sup, "yRot"), get(f, sup, "xRot"), get(f, sup, "onGround"));
 		});
-		packetsPlayIn.put("ServerboundMovePlayerPacket$Rot", (f) -> {
+		packetsPlayIn.addTo("ServerboundMovePlayerPacket$Rot", (p, f) -> {
 			Class<?> sup = ServerboundMovePlayerPacket.class;
 			return new NPacketPlayInLook(get(f, sup, "x"), get(f, sup, "y"), get(f, sup, "z"),
 					get(f, sup, "yRot"), get(f, sup, "xRot"), get(f, sup, "onGround"));
 		});
-		packetsPlayIn.put("ServerboundMovePlayerPacket", (f) -> {
+		packetsPlayIn.addTo("ServerboundMovePlayerPacket", (p, f) -> {
 			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"),
 					get(f, "yRot"), get(f, "xRot"), get(f,  "onGround"), get(f, "hasPos"), get(f, "hasRot"));
 		});
-		packetsPlayIn.put("ServerboundKeepAlivePacket", (f) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) f).getId()));
-		packetsPlayIn.put("ServerboundInteractPacket", (f) -> {
+		packetsPlayIn.addTo("ServerboundKeepAlivePacket", (p, f) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) f).getId()));
+		packetsPlayIn.addTo("ServerboundInteractPacket", (pl, f) -> {
 			ServerboundInteractPacket p = (ServerboundInteractPacket) f;
 			Vec3 v = p.getLocation();
 			return new NPacketPlayInUseEntity(0, v == null ? new Vector(0, 0, 0) : new Vector(v.x, v.y, v.z),
 					EnumEntityUseAction.valueOf(p.getAction().name()));
 		});
-		packetsPlayIn.put("ServerboundPlayerCommandPacket", (f) -> {
+		packetsPlayIn.addTo("ServerboundPlayerCommandPacket", (p, f) -> {
 			try {
 				ServerboundPlayerCommandPacket packet = (ServerboundPlayerCommandPacket) f;
 				Field entityIdField = f.getClass().getDeclaredField("id");
@@ -94,32 +96,32 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 				return null;
 			}
 		});
-		packetsPlayIn.put("ServerboundPingRequestPacket", (f) -> new NPacketPlayInPong(((ServerboundPingRequestPacket) f).getTime()));
+		packetsPlayIn.addTo("ServerboundPingRequestPacket", (p, f) -> new NPacketPlayInPong(((ServerboundPingRequestPacket) f).getTime()));
 
 		
 		
-		packetsPlayOut.put("ClientboundBlockBreakAckPacket", (f) -> {
+		packetsPlayOut.addTo("ClientboundBlockBreakAckPacket", (p, f) -> {
 			BlockPos pos = get(f, "pos");
 			BlockState state = get(f, "state");
 			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), 0, state.hashCode());
 		});
-		packetsPlayOut.put("ClientboundKeepAlivePacket", (f) -> new NPacketPlayOutKeepAlive(get(f, "id")));
-		packetsPlayOut.put("ClientboundTeleportEntityPacket", (f) -> 
+		packetsPlayOut.addTo("ClientboundKeepAlivePacket", (p, f) -> new NPacketPlayOutKeepAlive(get(f, "id")));
+		packetsPlayOut.addTo("ClientboundTeleportEntityPacket", (p, f) -> 
 			new NPacketPlayOutEntityTeleport(get(f, "id"), get(f, "x"), get(f, "y"), get(f, "z"), (float) (byte) get(f, "yRot"), (float) (byte) get(f, "xRot"), get(f, "onGround")));
-		packetsPlayOut.put("ClientboundMoveEntityPacket", (f) -> {
+		packetsPlayOut.addTo("ClientboundMoveEntityPacket", (p, f) -> {
 			return new NPacketPlayOutPosition(get(f, "xa"), get(f, "ya"), get(f, "za"), (float) (byte) get(f, "yRot"), (float) (byte) get(f, "xRot"));
 		});
-		packetsPlayOut.put("ClientboundExplodePacket", (f) -> {
+		packetsPlayOut.addTo("ClientboundExplodePacket", (p, f) -> {
 			return new NPacketPlayOutExplosion(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "knockbackX"), get(f, "knockbackY"), get(f, "knockbackZ"));
 		});
-		packetsPlayOut.put("ClientboundPlayerPositionPacket", (f) ->  new NPacketPlayOutEntity(get(f, "id"), get(f, "x"), get(f, "y"), get(f, "z")));
-		packetsPlayOut.put("ClientboundSetEntityMotionPacket", (f) -> {
+		packetsPlayOut.addTo("ClientboundPlayerPositionPacket", (p, f) ->  new NPacketPlayOutEntity(get(f, "id"), get(f, "x"), get(f, "y"), get(f, "z")));
+		packetsPlayOut.addTo("ClientboundSetEntityMotionPacket", (p, f) -> {
 			return new NPacketPlayOutEntityVelocity(get(f, "id"), get(f, "xa"), get(f, "ya"), get(f, "za"));
 		});
-		packetsPlayOut.put("ClientboundUpdateMobEffectPacket", (f) -> {
+		packetsPlayOut.addTo("ClientboundUpdateMobEffectPacket", (p, f) -> {
 			return new NPacketPlayOutEntityEffect(get(f, "entityId"), get(f, "effectId"), get(f, "effectAmplifier"), get(f, "effectDurationTicks"), get(f, "flags"));
 		});
-		packetsPlayOut.put("ClientboundPongResponsePacket", (f) -> new NPacketPlayOutPing(get(f, "time")));
+		packetsPlayOut.addTo("ClientboundPongResponsePacket", (p, f) -> new NPacketPlayOutPing(get(f, "time")));
 
 		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size()
 				+ " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
@@ -239,5 +241,11 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	@Override
+	public void sendPacket(ServerPlayer p, Object basicPacket) {
+		// TODO fix packet not sent
+		//((EntityPlayerMP) p).connection.sendPacket((Packet<?>) basicPacket);
 	}
 }

@@ -50,42 +50,42 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 
 	public Sponge_1_16_5() {
 		super("v1_16_5");
-		packetsPlayIn.addTo("ServerboundPlayerActionPacket", (p, f) -> {
+		packetsPlayIn.put("ServerboundPlayerActionPacket", (p, f) -> {
 			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) f;
 			BlockPos pos = packet.getPos();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(),
 					translateDigAction(packet.getAction()), translateDigDirection(packet.getDirection()));
 		});
 
-		packetsPlayIn.addTo("ServerboundChatPacket", (p, packet) -> new NPacketPlayInChat(((ServerboundChatPacket) packet).getMessage()));
+		packetsPlayIn.put("ServerboundChatPacket", (p, packet) -> new NPacketPlayInChat(((ServerboundChatPacket) packet).getMessage()));
 
-		packetsPlayIn.addTo("ServerboundMovePlayerPacket$PosRot", (p, f) -> {
+		packetsPlayIn.put("ServerboundMovePlayerPacket$PosRot", (p, f) -> {
 			Class<?> sup = ServerboundMovePlayerPacket.class;
 			return new NPacketPlayInPositionLook(get(f, sup, "x"), get(f, sup, "y"), get(f, sup, "z"),
 					get(f, sup, "yRot"), get(f, sup, "xRot"), get(f, sup, "onGround"));
 		});
-		packetsPlayIn.addTo("ServerboundMovePlayerPacket$Pos", (p, f) -> {
+		packetsPlayIn.put("ServerboundMovePlayerPacket$Pos", (p, f) -> {
 			Class<?> sup = ServerboundMovePlayerPacket.class;
 			return new NPacketPlayInPosition(get(f, sup, "x"), get(f, sup, "y"), get(f, sup, "z"),
 					get(f, sup, "yRot"), get(f, sup, "xRot"), get(f, sup, "onGround"));
 		});
-		packetsPlayIn.addTo("ServerboundMovePlayerPacket$Rot", (p, f) -> {
+		packetsPlayIn.put("ServerboundMovePlayerPacket$Rot", (p, f) -> {
 			Class<?> sup = ServerboundMovePlayerPacket.class;
 			return new NPacketPlayInLook(get(f, sup, "x"), get(f, sup, "y"), get(f, sup, "z"),
 					get(f, sup, "yRot"), get(f, sup, "xRot"), get(f, sup, "onGround"));
 		});
-		packetsPlayIn.addTo("ServerboundMovePlayerPacket", (p, f) -> {
+		packetsPlayIn.put("ServerboundMovePlayerPacket", (p, f) -> {
 			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"),
 					get(f, "yRot"), get(f, "xRot"), get(f,  "onGround"), get(f, "hasPos"), get(f, "hasRot"));
 		});
-		packetsPlayIn.addTo("ServerboundKeepAlivePacket", (p, f) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) f).getId()));
-		packetsPlayIn.addTo("ServerboundInteractPacket", (pl, f) -> {
+		packetsPlayIn.put("ServerboundKeepAlivePacket", (p, f) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) f).getId()));
+		packetsPlayIn.put("ServerboundInteractPacket", (pl, f) -> {
 			ServerboundInteractPacket p = (ServerboundInteractPacket) f;
 			Vec3 v = p.getLocation();
 			return new NPacketPlayInUseEntity(0, v == null ? new Vector(0, 0, 0) : new Vector(v.x, v.y, v.z),
 					EnumEntityUseAction.valueOf(p.getAction().name()));
 		});
-		packetsPlayIn.addTo("ServerboundPlayerCommandPacket", (p, f) -> {
+		packetsPlayIn.put("ServerboundPlayerCommandPacket", (p, f) -> {
 			try {
 				ServerboundPlayerCommandPacket packet = (ServerboundPlayerCommandPacket) f;
 				Field entityIdField = f.getClass().getDeclaredField("id");
@@ -97,32 +97,32 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 				return null;
 			}
 		});
-		packetsPlayIn.addTo("ServerboundPingRequestPacket", (p, f) -> new NPacketPlayInPong(((ServerboundPingRequestPacket) f).getTime()));
+		packetsPlayIn.put("ServerboundPingRequestPacket", (p, f) -> new NPacketPlayInPong(((ServerboundPingRequestPacket) f).getTime()));
 
 		
 		
-		packetsPlayOut.addTo("ClientboundBlockBreakAckPacket", (p, f) -> {
+		packetsPlayOut.put("ClientboundBlockBreakAckPacket", (p, f) -> {
 			BlockPos pos = get(f, "pos");
 			BlockState state = get(f, "state");
 			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), 0, state.hashCode());
 		});
-		packetsPlayOut.addTo("ClientboundKeepAlivePacket", (p, f) -> new NPacketPlayOutKeepAlive(get(f, "id")));
-		packetsPlayOut.addTo("ClientboundTeleportEntityPacket", (p, f) -> 
+		packetsPlayOut.put("ClientboundKeepAlivePacket", (p, f) -> new NPacketPlayOutKeepAlive(get(f, "id")));
+		packetsPlayOut.put("ClientboundTeleportEntityPacket", (p, f) -> 
 			new NPacketPlayOutEntityTeleport(get(f, "id"), get(f, "x"), get(f, "y"), get(f, "z"), (float) (byte) get(f, "yRot"), (float) (byte) get(f, "xRot"), get(f, "onGround")));
-		packetsPlayOut.addTo("ClientboundMoveEntityPacket", (p, f) -> {
+		packetsPlayOut.put("ClientboundMoveEntityPacket", (p, f) -> {
 			return new NPacketPlayOutPosition(get(f, "xa"), get(f, "ya"), get(f, "za"), (float) (byte) get(f, "yRot"), (float) (byte) get(f, "xRot"));
 		});
-		packetsPlayOut.addTo("ClientboundExplodePacket", (p, f) -> {
+		packetsPlayOut.put("ClientboundExplodePacket", (p, f) -> {
 			return new NPacketPlayOutExplosion(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "knockbackX"), get(f, "knockbackY"), get(f, "knockbackZ"));
 		});
-		packetsPlayOut.addTo("ClientboundPlayerPositionPacket", (p, f) ->  new NPacketPlayOutEntity(get(f, "id"), get(f, "x"), get(f, "y"), get(f, "z")));
-		packetsPlayOut.addTo("ClientboundSetEntityMotionPacket", (p, f) -> {
+		packetsPlayOut.put("ClientboundPlayerPositionPacket", (p, f) ->  new NPacketPlayOutEntity(get(f, "id"), get(f, "x"), get(f, "y"), get(f, "z")));
+		packetsPlayOut.put("ClientboundSetEntityMotionPacket", (p, f) -> {
 			return new NPacketPlayOutEntityVelocity(get(f, "id"), get(f, "xa"), get(f, "ya"), get(f, "za"));
 		});
-		packetsPlayOut.addTo("ClientboundUpdateMobEffectPacket", (p, f) -> {
+		packetsPlayOut.put("ClientboundUpdateMobEffectPacket", (p, f) -> {
 			return new NPacketPlayOutEntityEffect(get(f, "entityId"), get(f, "effectId"), get(f, "effectAmplifier"), get(f, "effectDurationTicks"), get(f, "flags"));
 		});
-		packetsPlayOut.addTo("ClientboundPongResponsePacket", (p, f) -> new NPacketPlayOutPing(get(f, "time")));
+		packetsPlayOut.put("ClientboundPongResponsePacket", (p, f) -> new NPacketPlayOutPing(get(f, "time")));
 
 		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size()
 				+ " PlayIn and " + packetsPlayOut.size() + " PlayOut.");

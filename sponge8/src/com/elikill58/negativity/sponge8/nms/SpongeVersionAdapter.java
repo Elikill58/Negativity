@@ -2,11 +2,8 @@ package com.elikill58.negativity.sponge8.nms;
 
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
-import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.packet.NPacket;
-import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
-import com.elikill58.negativity.universal.Adapter;
 
 public abstract class SpongeVersionAdapter extends VersionAdapter<ServerPlayer> {
 	
@@ -23,23 +20,16 @@ public abstract class SpongeVersionAdapter extends VersionAdapter<ServerPlayer> 
 	@Override
 	public NPacket getPacket(ServerPlayer player, Object nms) {
 		String packetName = nms.getClass().getCanonicalName().replace('.', '$');
+		// see https://www.spigotmc.org/posts/3183758/
 		if(packetName.contains("Serverbound"))
-			return packetsPlayIn.bukkitToNegativity(player, nms);
+			return getPacket(player, nms, getParsedName(packetName, "Serverbound"));
 		else if(packetName.contains("Clientbound"))
-			return packetsPlayOut.bukkitToNegativity(player, nms);
-		else if (packetName.startsWith(PacketType.LOGIN_PREFIX))
-			return new NPacketLoginUnset();
-		else if (packetName.startsWith(PacketType.STATUS_PREFIX))
-			return packetsStatus.bukkitToNegativity(player, nms);
-		else if (packetName.startsWith(PacketType.HANDSHAKE_PREFIX))
-			return packetsHandshake.bukkitToNegativity(player, nms);
-		Adapter.getAdapter().debug("[SpigotVersionAdapter] Unknow packet " + packetName + ".");
-		return null;
+			return getPacket(player, nms, getParsedName(packetName, "Clientbound"));
+		return getPacket(player, nms, packetName);
 	}
 	
 	/*public NPacket getPacket(Packet<?> nmsPacket) {
 		String packetName = nmsPacket.getClass().getCanonicalName().replace('.', '$');
-		// see https://www.spigotmc.org/posts/3183758/
 		if(packetName.contains("Serverbound"))
 			return packetsPlayIn.getOrDefault(getParsedName(packetName, "Serverbound"), (obj) -> new NPacketPlayInUnset(getParsedName(packetName, "Serverbound"))).apply(nmsPacket);
 		if(packetName.contains("Clientbound"))

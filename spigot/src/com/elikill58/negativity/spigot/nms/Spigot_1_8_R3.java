@@ -27,12 +27,12 @@ public class Spigot_1_8_R3 extends SpigotVersionAdapter {
 
 	public Spigot_1_8_R3() {
 		super("v1_8_R3");
-		packetsPlayIn.addTo("PacketPlayInBlockDig", (player, packet) -> {
+		packetsPlayIn.put("PacketPlayInBlockDig", (player, packet) -> {
 			PacketPlayInBlockDig blockDig = (PacketPlayInBlockDig) packet;
 			BlockPosition pos = blockDig.a();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), DigAction.getById(blockDig.c().ordinal()), DigFace.getById(blockDig.b().a()));
 		});
-		packetsPlayIn.addTo("PacketPlayInBlockPlace", (p, packet) -> {
+		packetsPlayIn.put("PacketPlayInBlockPlace", (p, packet) -> {
 			@SuppressWarnings("deprecation")
 			ItemStack handItem = new SpigotItemStack(p.getItemInHand());
 			EntityPlayer player = ((CraftPlayer) p).getHandle();

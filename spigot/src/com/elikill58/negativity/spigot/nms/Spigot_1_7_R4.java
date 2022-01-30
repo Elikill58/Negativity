@@ -32,11 +32,11 @@ public class Spigot_1_7_R4 extends SpigotVersionAdapter {
 	
 	public Spigot_1_7_R4() {
 		super("v1_7_R4");
-		packetsPlayIn.addTo("PacketPlayInBlockDig", (player, packet) -> {
+		packetsPlayIn.put("PacketPlayInBlockDig", (player, packet) -> {
 			PacketPlayInBlockDig blockDig = (PacketPlayInBlockDig) packet;
 			return new NPacketPlayInBlockDig(blockDig.c(), blockDig.d(), blockDig.e(), DigAction.getById(blockDig.g()), DigFace.getById(blockDig.f()));
 		});
-		packetsPlayIn.addTo("PacketPlayInBlockPlace", (p, packet) -> {
+		packetsPlayIn.put("PacketPlayInBlockPlace", (p, packet) -> {
 			@SuppressWarnings("deprecation")
 			ItemStack handItem = new SpigotItemStack(p.getItemInHand());
 			EntityPlayer player = ((CraftPlayer) p).getHandle();
@@ -60,7 +60,7 @@ public class Spigot_1_7_R4 extends SpigotVersionAdapter {
 			return vec == null ? null : new NPacketPlayInBlockPlace(vec.b, vec.c, vec.d, handItem,
 				new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
 		});
-		packetsPlayOut.addTo("PacketPlayOutBlockBreakAnimation", (player, packet) -> {
+		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, packet) -> {
 			// in 1.7 -> no BlockPos, directly use x/y/z
 			return new NPacketPlayOutBlockBreakAnimation(get(packet, "b"), get(packet, "c"), get(packet, "d"), get(packet, "a"), get(packet, "c"));
 		});

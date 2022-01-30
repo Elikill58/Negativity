@@ -75,25 +75,25 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 
 	public Spigot_1_17_R1() {
 		super("v1_17_R1");
-		packetsPlayIn.addTo("PacketPlayInChat",
+		packetsPlayIn.put("PacketPlayInChat",
 				(player, raw) -> new NPacketPlayInChat(((ServerboundChatPacket) raw).getMessage()));
 
-		packetsPlayIn.addTo("PacketPlayInPositionLook", (player, raw) -> {
+		packetsPlayIn.put("PacketPlayInPositionLook", (player, raw) -> {
 			ServerboundMovePlayerPacket.PosRot packet = (ServerboundMovePlayerPacket.PosRot) raw;
 			return new NPacketPlayInPositionLook(packet.x, packet.y, packet.z, packet.xRot, packet.yRot,
 					packet.isOnGround());
 		});
-		packetsPlayIn.addTo("PacketPlayInPosition", (player, raw) -> {
+		packetsPlayIn.put("PacketPlayInPosition", (player, raw) -> {
 			ServerboundMovePlayerPacket.Pos packet = (ServerboundMovePlayerPacket.Pos) raw;
 			return new NPacketPlayInPosition(packet.x, packet.y, packet.z, packet.xRot, packet.yRot,
 					packet.isOnGround());
 		});
-		packetsPlayIn.addTo("PacketPlayInLook", (player, raw) -> {
+		packetsPlayIn.put("PacketPlayInLook", (player, raw) -> {
 			ServerboundMovePlayerPacket.Rot packet = (ServerboundMovePlayerPacket.Rot) raw;
 			return new NPacketPlayInLook(packet.x, packet.y, packet.z, packet.xRot, packet.yRot, packet.isOnGround());
 		});
 
-		packetsPlayIn.addTo("PacketPlayInBlockDig", (player, raw) -> {
+		packetsPlayIn.put("PacketPlayInBlockDig", (player, raw) -> {
 			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) raw;
 			NPacketPlayInBlockDig.DigAction action = NPacketPlayInBlockDig.DigAction.values()[packet.getAction()
 					.ordinal()];
@@ -102,7 +102,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 			BlockPos pos = packet.getPos();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), action, face);
 		});
-		packetsPlayIn.addTo("PacketPlayInBlockPlace", (p, raw) -> {
+		packetsPlayIn.put("PacketPlayInBlockPlace", (p, raw) -> {
 			ServerboundUseItemPacket packet = (ServerboundUseItemPacket) raw;
 			PlayerInventory inventory = p.getInventory();
 			ItemStack handItem;
@@ -142,54 +142,54 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 				return new NPacketPlayInUnset("PacketPlayInBlockPlace");
 			}
 		});
-		packetsPlayIn.addTo("PacketPlayInUseEntity", (player, f) -> {
+		packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {
 			ServerboundInteractPacket packet = (ServerboundInteractPacket) f;
 			return new NPacketPlayInUseEntity(get(packet, "a"), new Vector(0, 0, 0),
 					EnumEntityUseAction.valueOf(((Object) getFromMethod(get(packet, "b"), "a")).toString()));
 		});
 
-		packetsPlayIn.addTo("PacketPlayInKeepAlive",
+		packetsPlayIn.put("PacketPlayInKeepAlive",
 				(player, f) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) f).getId()));
-		packetsPlayIn.addTo("PacketPlayInPong", (player, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
+		packetsPlayIn.put("PacketPlayInPong", (player, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
 
-		packetsPlayOut.addTo("PacketPlayOutBlockBreakAnimation", (player, raw) -> {
+		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, raw) -> {
 			ClientboundBlockDestructionPacket packet = (ClientboundBlockDestructionPacket) raw;
 			BlockPos pos = packet.getPos();
 			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), packet.getId(),
 					packet.getProgress());
 		});
 
-		packetsPlayOut.addTo("PacketPlayOutKeepAlive",
+		packetsPlayOut.put("PacketPlayOutKeepAlive",
 				(player, raw) -> new NPacketPlayOutKeepAlive(((ClientboundKeepAlivePacket) raw).getId()));
-		packetsPlayOut.addTo("PacketPlayOutEntityTeleport", (player, raw) -> {
+		packetsPlayOut.put("PacketPlayOutEntityTeleport", (player, raw) -> {
 			ClientboundTeleportEntityPacket packet = (ClientboundTeleportEntityPacket) raw;
 			return new NPacketPlayOutEntityTeleport(packet.getId(), packet.getX(), packet.getY(), packet.getZ(),
 					packet.getxRot(), packet.getyRot(), packet.isOnGround());
 		});
-		packetsPlayOut.addTo("PacketPlayOutEntityVelocity", (p, pa) -> {
+		packetsPlayOut.put("PacketPlayOutEntityVelocity", (p, pa) -> {
 			ClientboundSetEntityMotionPacket packet = (ClientboundSetEntityMotionPacket) pa;
 			return new NPacketPlayOutEntityVelocity(packet.getId(), packet.getXa(), packet.getYa(), packet.getZa());
 		});
-		packetsPlayOut.addTo("PacketPlayOutPosition", (p, raw) -> {
+		packetsPlayOut.put("PacketPlayOutPosition", (p, raw) -> {
 			ClientboundPlayerPositionPacket packet = (ClientboundPlayerPositionPacket) raw;
 			return new NPacketPlayOutPosition(packet.getX(), packet.getY(), packet.getZ(), packet.getXRot(),
 					packet.getYRot());
 		});
-		packetsPlayOut.addTo("PacketPlayOutExplosion", (p, raw) -> {
+		packetsPlayOut.put("PacketPlayOutExplosion", (p, raw) -> {
 			ClientboundExplodePacket packet = (ClientboundExplodePacket) raw;
 			return new NPacketPlayOutExplosion(packet.getX(), packet.getY(), packet.getZ(), packet.getKnockbackX(),
 					packet.getKnockbackY(), packet.getKnockbackZ());
 		});
-		packetsPlayOut.addTo("PacketPlayOutEntity", (player, packet) -> {
+		packetsPlayOut.put("PacketPlayOutEntity", (player, packet) -> {
 			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
 					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
 		});
-		packetsPlayOut.addTo("PacketPlayOutEntityEffect", (player, packet) -> {
+		packetsPlayOut.put("PacketPlayOutEntityEffect", (player, packet) -> {
 			return new NPacketPlayOutEntityEffect(get(packet, "d"), get(packet, "e"), get(packet, "f"), get(packet, "g"), get(packet, "h"));
 		});
-		packetsPlayOut.addTo("PacketPlayOutPong", (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
+		packetsPlayOut.put("PacketPlayOutPong", (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
 
-		packetsHandshake.addTo("PacketHandshakingInSetProtocol", (player, raw) -> {
+		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
 			ClientIntentionPacket packet = (ClientIntentionPacket) raw;
 			return new NPacketHandshakeInSetProtocol(packet.getProtocolVersion(), packet.hostName, packet.port);
 		});

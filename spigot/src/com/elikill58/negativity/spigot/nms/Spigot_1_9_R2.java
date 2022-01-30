@@ -29,12 +29,12 @@ public class Spigot_1_9_R2 extends SpigotVersionAdapter {
 
 	public Spigot_1_9_R2() {
 		super("v1_9_R2");
-		packetsPlayIn.addTo("PacketPlayInBlockDig", (player, packet) -> {
+		packetsPlayIn.put("PacketPlayInBlockDig", (player, packet) -> {
 			PacketPlayInBlockDig blockDig = (PacketPlayInBlockDig) packet;
 			BlockPosition pos = blockDig.a();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), DigAction.getById(blockDig.c().ordinal()), DigFace.getById(blockDig.b().a()));
 		});
-		packetsPlayIn.addTo("PacketPlayInBlockPlace", (p, packet) -> {
+		packetsPlayIn.put("PacketPlayInBlockPlace", (p, packet) -> {
 			PlayerInventory inventory = p.getInventory();
 			ItemStack handItem;
 			if (getStr(packet, "a").equalsIgnoreCase("MAIN_HAND")) {

@@ -2,9 +2,10 @@ package com.elikill58.negativity.api.packets.nms;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.function.BiFunction;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.packets.PacketTransferManager;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.NPacketHandshake;
@@ -21,25 +22,26 @@ import com.elikill58.negativity.universal.Adapter;
 @SuppressWarnings("unchecked")
 public abstract class VersionAdapter<R> {
 
-	protected PacketTransferManager<NPacketPlayOut, R> packetsPlayOut = new PacketTransferManager<>((p, obj) -> new NPacketPlayOutUnset(obj.getClass().getName()), (p, a) -> null);
+	protected final HashMap<String, BiFunction<R, Object, NPacketPlayOut>> packetsPlayOut = new HashMap<>();
+	protected final HashMap<String, BiFunction<R, Object, NPacketPlayIn>> packetsPlayIn = new HashMap<>();
+	protected final HashMap<String, BiFunction<R, Object, NPacketHandshake>> packetsHandshake = new HashMap<>();
+	protected final HashMap<String, BiFunction<R, Object, NPacketStatus>> packetsStatus = new HashMap<>();
+	protected final HashMap<PacketType, BiFunction<R, NPacket, Object>> negativityToBukkit = new HashMap<>();
+	/*protected PacketTransferManager<NPacketPlayOut, R> packetsPlayOut = new PacketTransferManager<>((p, obj) -> new NPacketPlayOutUnset(obj.getClass().getName()), (p, a) -> null);
 	protected PacketTransferManager<NPacketPlayIn, R> packetsPlayIn = new PacketTransferManager<>((p, obj) -> new NPacketPlayInUnset(obj.getClass().getName()), (p, a) -> null);
 	protected PacketTransferManager<NPacketHandshake, R> packetsHandshake = new PacketTransferManager<>((p, obj) -> new NPacketHandshakeUnset(), (p, a) -> null);
-	protected PacketTransferManager<NPacketStatus, R> packetsStatus = new PacketTransferManager<>((p, obj) -> new NPacketStatusUnset(), (p, a) -> null);
+	protected PacketTransferManager<NPacketStatus, R> packetsStatus = new PacketTransferManager<>((p, obj) -> new NPacketStatusUnset(), (p, a) -> null);*/
 	
 	private R getR(Player p) {
 		return (R) p.getDefault();
 	}
 	
 	public void sendPacket(Player pl, NPacket packet) {
+		BiFunction<R, NPacket, Object> packetMaker = negativityToBukkit.get(packet.getPacketType());
+		if(packetMaker == null)
+			return;
 		R p = getR(pl);
-		if(packet instanceof NPacketPlayIn)
-			sendPacket(p, packetsPlayIn.negativityToBukkit(p, (NPacketPlayIn) packet));
-		else if(packet instanceof NPacketPlayOut)
-			sendPacket(p, packetsPlayOut.negativityToBukkit(p, (NPacketPlayOut) packet));
-		else if(packet instanceof NPacketHandshake)
-			sendPacket(p, packetsHandshake.negativityToBukkit(p, (NPacketHandshake) packet));
-		else if(packet instanceof NPacketStatus)
-			sendPacket(p, packetsStatus.negativityToBukkit(p, (NPacketStatus) packet));
+		sendPacket(p, packetMaker.apply(p, packet));
 	}
 	
 	public abstract void sendPacket(R p, Object basicPacket);
@@ -49,17 +51,20 @@ public abstract class VersionAdapter<R> {
 	}
 
 	public NPacket getPacket(R player, Object nms) {
-		String packetName = nms.getClass().getSimpleName();
+		return getPacket(player, nms, nms.getClass().getSimpleName());
+	}
+
+	public NPacket getPacket(R player, Object nms, String packetName) {
 		if (packetName.startsWith(PacketType.CLIENT_PREFIX))
-			return packetsPlayIn.bukkitToNegativity(player, nms);
+			return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset(obj.getClass().getName())).apply(player, nms);
 		else if (packetName.startsWith(PacketType.SERVER_PREFIX))
-			return packetsPlayOut.bukkitToNegativity(player, nms);
+			return packetsPlayOut.getOrDefault(packetName, (p, obj) -> new NPacketPlayOutUnset(obj.getClass().getName())).apply(player, nms);
 		else if (packetName.startsWith(PacketType.LOGIN_PREFIX))
 			return new NPacketLoginUnset();
 		else if (packetName.startsWith(PacketType.STATUS_PREFIX))
-			return packetsStatus.bukkitToNegativity(player, nms);
+			return packetsStatus.getOrDefault(packetName, (p, obj) -> new NPacketStatusUnset()).apply(player, nms);
 		else if (packetName.startsWith(PacketType.HANDSHAKE_PREFIX))
-			return packetsHandshake.bukkitToNegativity(player, nms);
+			return packetsHandshake.getOrDefault(packetName, (p, obj) -> new NPacketHandshakeUnset()).apply(player, nms);
 		Adapter.getAdapter().debug("[VersionAdapter] Unknow packet " + packetName + ".");
 		return null;
 	}

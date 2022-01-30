@@ -338,6 +338,10 @@ public interface Player extends OfflinePlayer {
 		Adapter.getAdapter().getVersionAdapter().sendPacket(this, packet);
 	}
 	
+	default void queuePacket(NPacket packet) {
+		Adapter.getAdapter().getVersionAdapter().queuePacket(this, packet);
+	}
+	
 	static boolean isSamePlayer(Player player1, Player player2) {
 		return player1.getUniqueId().equals(player2.getUniqueId());
 	}

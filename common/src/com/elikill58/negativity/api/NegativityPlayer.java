@@ -64,7 +64,7 @@ public class NegativityPlayer implements FileSaverAction {
 	public int ACTUAL_CLICK = 0, LAST_CLICK = 0, SEC_ACTIVE = 0;
 	
 	// setBack
-	public int NO_FALL_DAMAGE = 0;
+	public int NO_FALL_DAMAGE = 0, idWaitingAppliedVelocity = -1;
 	public Material eatMaterial = null;
 	public List<PotionEffect> POTION_EFFECTS = new ArrayList<>();
 	

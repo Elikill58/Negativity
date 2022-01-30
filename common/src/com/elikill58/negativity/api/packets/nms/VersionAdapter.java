@@ -1,5 +1,6 @@
 package com.elikill58.negativity.api.packets.nms;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
@@ -55,6 +56,17 @@ public abstract class VersionAdapter<R> {
 	}
 	
 	public abstract void sendPacket(R p, Object basicPacket);
+
+	
+	public void queuePacket(Player pl, NPacket packet) {
+		BiFunction<R, NPacket, Object> packetMaker = negativityToPlatform.get(packet.getPacketType());
+		if(packetMaker == null)
+			return;
+		R p = getR(pl);
+		queuePacket(p, packetMaker.apply(p, packet));
+	}
+	
+	public abstract void queuePacket(R p, Object basicPacket);
 
 	public NPacket getPacket(Player pl, Object nms) {
 		return getPacket(getR(pl), nms);
@@ -151,6 +163,17 @@ public abstract class VersionAdapter<R> {
 		} catch (NoSuchMethodException e) { // prevent issue when wrong version
 			Adapter.getAdapter().debug("Failed to find method " + methodName + " in class " + obj.getClass().getSimpleName());
 			return null;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	protected Object callFirstConstructor(Class<?> clazz, Object... args) {
+		try {
+			Constructor<?> cons = clazz.getConstructors()[0];
+			cons.setAccessible(true);
+			return cons.newInstance(args);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

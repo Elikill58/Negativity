@@ -1,6 +1,7 @@
 package com.elikill58.negativity.common;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
@@ -18,9 +19,11 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.utils.Maths;
@@ -104,6 +107,12 @@ public class PacketListener implements Listeners {
 		} else if (type == PacketType.Client.KEEP_ALIVE || type == PacketType.Client.POSITION) {
 			np.isAttacking = false;
 			p.applyTheoricVelocity();
+		} else if (type == PacketType.Client.PONG) {
+			NPacketPlayInPong pong = (NPacketPlayInPong) packet.getPacket();
+			if(np.idWaitingAppliedVelocity != -1 && np.idWaitingAppliedVelocity == pong.id) {
+				p.applyTheoricVelocity();
+				np.idWaitingAppliedVelocity = -1;
+			}
 		}
 		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketReceived(e));
 	}
@@ -114,7 +123,11 @@ public class PacketListener implements Listeners {
 		if(!e.hasPlayer())
 			return;
 		Player p = e.getPlayer();
-		if(e.getPacket().getPacketType().equals(PacketType.Server.POSITION))
-			NegativityPlayer.getNegativityPlayer(p).isTeleporting = true;
+		PacketType type = e.getPacket().getPacketType();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		if(type.equals(PacketType.Server.POSITION))
+			np.isTeleporting = true;
+		else if(type.equals(PacketType.Server.ENTITY_VELOCITY))
+			p.queuePacket(new NPacketPlayOutPing(np.idWaitingAppliedVelocity = new Random().nextInt()));
 	}
 }

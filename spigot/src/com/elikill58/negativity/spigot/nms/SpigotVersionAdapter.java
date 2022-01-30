@@ -4,6 +4,7 @@ import static com.elikill58.negativity.spigot.utils.Utils.VERSION;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -250,17 +251,6 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 		}
 	}
 
-	@Override
-	public void sendPacket(Player p, Object packet) {
-		try {
-			Object playerConnection = getPlayerConnection(p);
-			playerConnection.getClass().getMethod("sendPacket", PacketUtils.getNmsClass("Packet", "network.protocol.game."))
-					.invoke(playerConnection, packet);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public Channel getPlayerChannel(Player p) {
 		try {
 			Object playerConnection = getPlayerConnection(p);
@@ -348,6 +338,29 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			return new Vector((double) get(vec, "x"), (double) get(vec, "x"), (double) get(vec, "x"));
 		} else {
 			return new Vector((double) get(vec, "a"), (double) get(vec, "b"), (double) get(vec, "c"));
+		}
+	}
+
+	@Override
+	public void sendPacket(Player p, Object packet) {
+		try {
+			Object playerConnection = getPlayerConnection(p);
+			playerConnection.getClass().getMethod("sendPacket", PacketUtils.getNmsClass("Packet", "network.protocol.game."))
+					.invoke(playerConnection, packet);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	@Override
+	public void queuePacket(Player p, Object packet) {
+		try {
+			Object network = get(getPlayerConnection(p), "networkManager");
+			Queue queue = (Queue) get(network, Version.getVersion().isNewerOrEquals(Version.V1_13) ? "packetQueue" : "i");
+			queue.add(callFirstConstructor(PacketUtils.getNmsClass("NetworkManager$QueuedPacket"), packet, null));
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

@@ -2,6 +2,7 @@ package com.elikill58.negativity.sponge8.nms;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.Queue;
 
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
@@ -34,6 +35,7 @@ import com.elikill58.negativity.universal.Adapter;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
@@ -249,7 +251,17 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 	@Override
 	public void sendPacket(ServerPlayer p, Object basicPacket) {
 		((net.minecraft.server.level.ServerPlayer) p).connection.send((Packet<?>) basicPacket);
-		// TODO fix packet not sent
-		//((EntityPlayerMP) p).connection.sendPacket((Packet<?>) basicPacket);
+	}
+	
+	@SuppressWarnings({ "rawtypes" })
+	@Override
+	public void queuePacket(ServerPlayer p, Object basicPacket) {
+		try {
+			Object packetQueued = callFirstConstructor(Connection.class.getDeclaredClasses()[0], basicPacket, null);
+			
+			((Queue) get(((net.minecraft.server.level.ServerPlayer) p).connection, "queue")).add(packetQueued);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

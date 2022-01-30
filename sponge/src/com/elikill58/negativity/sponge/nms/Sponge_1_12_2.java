@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge.nms;
 
 import java.lang.reflect.Field;
+import java.util.Queue;
 
 import org.spongepowered.api.entity.living.player.Player;
 
@@ -31,6 +32,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketChatMessage;
 import net.minecraft.network.play.client.CPacketConfirmTransaction;
@@ -181,5 +183,17 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 	@Override
 	public void sendPacket(Player p, Object basicPacket) {
 		((EntityPlayerMP) p).connection.sendPacket((Packet<?>) basicPacket);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void queuePacket(Player p, Object basicPacket) {
+		try {
+			Object packetQueued = callFirstConstructor(NetworkManager.class.getDeclaredClasses()[0], basicPacket, null);
+			
+			((Queue) get(((EntityPlayerMP) p).connection.netManager, "outboundPacketsQueue")).add(packetQueued);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 }

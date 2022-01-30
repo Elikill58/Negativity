@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot17;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Queue;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -45,6 +46,7 @@ import com.elikill58.negativity.universal.utils.ReflectionUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
@@ -238,6 +240,17 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 	@Override
 	public void sendPacket(Player p, Object packet) {
 		getPlayerConnection(p).send((Packet<?>) packet);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void queuePacket(Player p, Object packet) {
+		try {
+			Queue queue = (Queue) get(getPlayerConnection(p).connection, "queue");
+			queue.add(callFirstConstructor(Connection.class.getDeclaredClasses()[0], packet, null));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

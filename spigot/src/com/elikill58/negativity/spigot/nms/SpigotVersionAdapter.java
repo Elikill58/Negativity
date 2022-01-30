@@ -39,9 +39,9 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAct
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTransaction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
@@ -52,8 +52,8 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityT
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutTransaction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -167,7 +167,7 @@ public abstract class SpigotVersionAdapter {
 			return new NPacketPlayInEntityAction(get(f, "a"), action, get(f, "c"));
 		});
 		packetsPlayIn.put("PacketPlayInTransaction", (player, f) -> {
-			return new NPacketPlayInTransaction(get(f, "a"), get(f, "b"), get(f, "c"));
+			return new NPacketPlayInPong((int) (short) get(f, "b"));
 		});
 		
 
@@ -197,7 +197,7 @@ public abstract class SpigotVersionAdapter {
 			return new NPacketPlayOutEntityEffect(get(packet, "a"), get(packet, "b"), get(packet, "c"), get(packet, "d"), get(packet, "e"));
 		});
 		packetsPlayOut.put("PacketPlayOutTransaction", (player, f) -> {
-			return new NPacketPlayOutTransaction(get(f, "a"), get(f, "b"), get(f, "c"));
+			return new NPacketPlayOutPing((int) (short) get(f, "b"));
 		});
 		
 		packetsHandshake.put("PacketHandshakingInListener", (player, t) -> new NPacketHandshakeInListener());

@@ -13,12 +13,20 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAct
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.sponge8.SpongeNegativity;
 import com.elikill58.negativity.universal.Adapter;
 
@@ -30,6 +38,8 @@ import net.minecraft.network.protocol.game.ServerboundKeepAlivePacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
+import net.minecraft.network.protocol.status.ServerboundPingRequestPacket;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unchecked")
@@ -84,42 +94,32 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 				return null;
 			}
 		});
+		packetsPlayIn.put("ServerboundPingRequestPacket", (f) -> new NPacketPlayInPong(((ServerboundPingRequestPacket) f).getTime()));
 
 		
 		
-		packetsPlayOut.put("ServerboundPlayerActionPacket", (f) -> {
-			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) f;
-			BlockPos pos = packet.getPos();
-			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), 0, 0);
+		packetsPlayOut.put("ClientboundBlockBreakAckPacket", (f) -> {
+			BlockPos pos = get(f, "pos");
+			BlockState state = get(f, "state");
+			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), 0, state.hashCode());
 		});
 		packetsPlayOut.put("ClientboundKeepAlivePacket", (f) -> new NPacketPlayOutKeepAlive(get(f, "id")));
-		/*packetsPlayOut.put("SPacketEntityTeleport", (f) -> {
-			ServerboundEntityTeleport packet = (ServerboundEntityTeleportPacket) f;
-			return new NPacketPlayOutEntityTeleport(packet.entityId, packet.posX, packet.posY, packet.posZ, packet.yaw,
-					packet.pitch, packet.onGround);
+		packetsPlayOut.put("ClientboundTeleportEntityPacket", (f) -> 
+			new NPacketPlayOutEntityTeleport(get(f, "id"), get(f, "x"), get(f, "y"), get(f, "z"), (float) (byte) get(f, "yRot"), (float) (byte) get(f, "xRot"), get(f, "onGround")));
+		packetsPlayOut.put("ClientboundMoveEntityPacket", (f) -> {
+			return new NPacketPlayOutPosition(get(f, "xa"), get(f, "ya"), get(f, "za"), (float) (byte) get(f, "yRot"), (float) (byte) get(f, "xRot"));
 		});
-		packetsPlayOut.put("SPacketEntityVelocity", (f) -> {
-			ServerboundEntityVelocityPacket packet = (ServerboundEntityVelocityPacket) f;
-			return new NPacketPlayOutEntityVelocity(packet.entityID, packet.motionX, packet.motionY, packet.motionZ);
+		packetsPlayOut.put("ClientboundExplodePacket", (f) -> {
+			return new NPacketPlayOutExplosion(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "knockbackX"), get(f, "knockbackY"), get(f, "knockbackZ"));
 		});
-		packetsPlayOut.put("SPacketPlayerPosLook", (f) -> {
-			ServerboundPlayerPosLookPacket packet = (ServerboundPlayerPosLookPacket) f;
-			return new NPacketPlayOutPosition(packet.x, packet.y, packet.z, packet.yaw, packet.pitch);
+		packetsPlayOut.put("ClientboundPlayerPositionPacket", (f) ->  new NPacketPlayOutEntity(get(f, "id"), get(f, "x"), get(f, "y"), get(f, "z")));
+		packetsPlayOut.put("ClientboundSetEntityMotionPacket", (f) -> {
+			return new NPacketPlayOutEntityVelocity(get(f, "id"), get(f, "xa"), get(f, "ya"), get(f, "za"));
 		});
-		packetsPlayOut.put("SPacketExplosion", (f) -> {
-			ServerboundExplosionPacket packet = (ServerboundExplosionPacket) f;
-			return new NPacketPlayOutExplosion(packet.posX, packet.posY, packet.posZ, packet.motionX, packet.motionY,
-					packet.motionZ);
+		packetsPlayOut.put("ClientboundUpdateMobEffectPacket", (f) -> {
+			return new NPacketPlayOutEntityEffect(get(f, "entityId"), get(f, "effectId"), get(f, "effectAmplifier"), get(f, "effectDurationTicks"), get(f, "flags"));
 		});
-		packetsPlayOut.put("SPacketEntity", (f) -> {
-			ServerboundEntityPacket packet = (ServerboundEntityPacket) f;
-			return new NPacketPlayOutEntity(packet.entityId, packet.posX, packet.posY, packet.posZ);
-		});
-		packetsPlayOut.put("SPacketEntityEffect", (f) -> {
-			ServerboundEntityEffectPacket packet = (ServerboundEntityEffectPacket) f;
-			return new NPacketPlayOutEntityEffect(packet.getEntityId(), packet.getEffectId(), packet.getAmplifier(),
-					packet.getDuration(), (byte) 0);
-		});*/
+		packetsPlayOut.put("ClientboundPongResponsePacket", (f) -> new NPacketPlayOutPing(get(f, "time")));
 
 		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size()
 				+ " PlayIn and " + packetsPlayOut.size() + " PlayOut.");

@@ -21,6 +21,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlac
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
@@ -33,6 +34,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityT
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
@@ -46,6 +48,7 @@ import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.network.protocol.game.ClientboundKeepAlivePacket;
+import net.minecraft.network.protocol.game.ClientboundPingPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
@@ -54,6 +57,7 @@ import net.minecraft.network.protocol.game.ServerboundInteractPacket;
 import net.minecraft.network.protocol.game.ServerboundKeepAlivePacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
+import net.minecraft.network.protocol.game.ServerboundPongPacket;
 import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
 import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
 import net.minecraft.server.MinecraftServer;
@@ -66,6 +70,7 @@ import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
+@SuppressWarnings("resource")
 public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 
 	public Spigot_1_17_R1() {
@@ -144,7 +149,8 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 		});
 
 		packetsPlayIn.put("PacketPlayInKeepAlive",
-				(player, raw) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) raw).getId()));
+				(player, f) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) f).getId()));
+		packetsPlayIn.put("PacketPlayInPong", (player, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
 
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, raw) -> {
 			ClientboundBlockDestructionPacket packet = (ClientboundBlockDestructionPacket) raw;
@@ -181,6 +187,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 		packetsPlayOut.put("PacketPlayOutEntityEffect", (player, packet) -> {
 			return new NPacketPlayOutEntityEffect(get(packet, "d"), get(packet, "e"), get(packet, "f"), get(packet, "g"), get(packet, "h"));
 		});
+		packetsPlayOut.put("PacketPlayOutPong", (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
 
 		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
 			ClientIntentionPacket packet = (ClientIntentionPacket) raw;

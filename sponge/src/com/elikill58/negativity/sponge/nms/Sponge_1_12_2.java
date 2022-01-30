@@ -12,9 +12,9 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAct
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTransaction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
@@ -24,8 +24,8 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityT
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutTransaction;
 import com.elikill58.negativity.sponge.SpongeNegativity;
 
 import net.minecraft.network.play.client.CPacketChatMessage;
@@ -98,7 +98,7 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 		});
 		packetsPlayIn.put("CPacketConfirmTransaction", (f) -> {
 			CPacketConfirmTransaction p = (CPacketConfirmTransaction) f;
-			return new NPacketPlayInTransaction(p.getWindowId(), p.getUid(), false);
+			return new NPacketPlayInPong(p.getUid());
 		});
 		
 
@@ -134,7 +134,7 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 		});
 		packetsPlayOut.put("SPacketConfirmTransaction", (f) -> {
 			SPacketConfirmTransaction p = (SPacketConfirmTransaction) f;
-			return new NPacketPlayOutTransaction(p.getWindowId(), p.getActionNumber(), p.wasAccepted());
+			return new NPacketPlayOutPing(p.getActionNumber());
 		});
 		
 		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");

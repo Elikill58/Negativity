@@ -14,16 +14,16 @@ public class NPacketPlayOutEntityEffect implements NPacketPlayOut {
 	 * Warn: the meaning of this variable change over the time.<br>
 	 * We not support it.
 	 */
-	public byte e; // don't support this variable
+	public byte flags; // don't support this variable
 
 	public NPacketPlayOutEntityEffect() {}
 	
-	public NPacketPlayOutEntityEffect(int entityId, byte typeByte, byte amplifier, int duration, byte e) {
+	public NPacketPlayOutEntityEffect(int entityId, byte typeByte, byte amplifier, int duration, byte flags) {
 		this.entityId = entityId;
 		this.type = PotionEffectType.fromByte(typeByte);
 		this.amplifier = amplifier;
 		this.duration = duration;
-		this.e = e;
+		this.flags = flags;
 	}
 	
 	public boolean isMaxDuration() {

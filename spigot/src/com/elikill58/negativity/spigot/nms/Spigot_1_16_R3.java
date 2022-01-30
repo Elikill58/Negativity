@@ -26,6 +26,7 @@ import net.minecraft.server.v1_16_R3.RayTrace;
 import net.minecraft.server.v1_16_R3.Vec3D;
 import net.minecraft.server.v1_16_R3.WorldServer;
 
+@SuppressWarnings("resource")
 public class Spigot_1_16_R3 extends SpigotVersionAdapter {
 	
 	public Spigot_1_16_R3() {

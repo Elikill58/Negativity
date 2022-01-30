@@ -19,6 +19,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAct
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
@@ -29,8 +30,8 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityT
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutTransaction;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 import com.elikill58.negativity.universal.Adapter;
 
@@ -170,7 +171,7 @@ public interface PacketType {
 		TELEPORT_ACCEPT("TeleportAccept", NPacketUnknown::new),
 		TILE_NBT_QUERY("TileNBTQuery", NPacketUnknown::new),
 		TR_SEL("TrSel", NPacketUnknown::new),
-		TRANSACTION("Transaction", NPacketUnknown::new),
+		PONG("Transaction", NPacketPlayInPong::new, "Transaction"),
 		UPDATE_SIGN("UpdateSign", NPacketUnknown::new),
 		USE_ENTITY("UseEntity", NPacketPlayInUseEntity::new),
 		USE_ITEM("UseItem", NPacketUnknown::new),
@@ -311,7 +312,7 @@ public interface PacketType {
 		TAGS("Tags", NPacketUnknown::new),
 		TILE_ENTITY_DATA("TileEntityData", NPacketUnknown::new),
 		TITLE("Title", NPacketUnknown::new),
-		TRANSACTION("Transaction", NPacketPlayOutTransaction::new),
+		PING("Ping", NPacketPlayOutPing::new, "Transaction"),
 		UNLOAD_CHUNK("UnloadChunk", NPacketUnknown::new),
 		UPDATE_ATTRIBUTES("UpdateAttributes", NPacketUnknown::new),
 		UPDATE_ENTITY_NBT("UpdateEntityNBT", NPacketUnknown::new),
@@ -357,7 +358,7 @@ public interface PacketType {
 		
 		@Override
 		public boolean isFlyingPacket() {
-			return this == LOOK_AT || this == POSITION;
+			return this == LOOK_AT || this == POSITION || this == REL_ENTITY_MOVE || this == REL_ENTITY_MOVE_LOOK;
 		}
 		
 		@Override

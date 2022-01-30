@@ -15,6 +15,7 @@ import org.bukkit.inventory.PlayerInventory;
 
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
@@ -187,12 +188,16 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 		packetsPlayOut.put("PacketPlayOutEntityEffect", (player, packet) -> {
 			return new NPacketPlayOutEntityEffect(get(packet, "d"), get(packet, "e"), get(packet, "f"), get(packet, "g"), get(packet, "h"));
 		});
-		packetsPlayOut.put("PacketPlayOutPong", (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
+		packetsPlayOut.put("PacketPlayOutPing", (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
 
 		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
 			ClientIntentionPacket packet = (ClientIntentionPacket) raw;
 			return new NPacketHandshakeInSetProtocol(packet.getProtocolVersion(), packet.hostName, packet.port);
 		});
+
+		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundPingPacket(((NPacketPlayOutPing) f).id));
+
+		log();
 	}
 
 	@Override

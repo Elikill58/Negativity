@@ -17,6 +17,7 @@ public class Spigot_UnknowVersion extends SpigotVersionAdapter {
 	public Spigot_UnknowVersion(String version) {
 		super(version);
 		SpigotNegativity.getInstance().getLogger().warning("Failed to find version adapter for " + version + ".");
+		log();
 	}
 
 	@Override

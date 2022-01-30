@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
@@ -29,7 +30,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosi
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
-import com.elikill58.negativity.sponge8.SpongeNegativity;
 import com.elikill58.negativity.universal.Adapter;
 
 import net.minecraft.core.BlockPos;
@@ -41,6 +41,7 @@ import net.minecraft.network.protocol.game.ServerboundKeepAlivePacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
+import net.minecraft.network.protocol.status.ClientboundPongResponsePacket;
 import net.minecraft.network.protocol.status.ServerboundPingRequestPacket;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -124,8 +125,9 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 		});
 		packetsPlayOut.put("ClientboundPongResponsePacket", (p, f) -> new NPacketPlayOutPing(get(f, "time")));
 
-		SpongeNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size()
-				+ " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
+		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundPongResponsePacket(((NPacketPlayOutPing) f).id));
+
+		log();
 	}
 
 	private DigFace translateDigDirection(Direction direction) {

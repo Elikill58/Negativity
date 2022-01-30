@@ -64,6 +64,7 @@ public class Spigot_1_7_R4 extends SpigotVersionAdapter {
 			// in 1.7 -> no BlockPos, directly use x/y/z
 			return new NPacketPlayOutBlockBreakAnimation(get(packet, "b"), get(packet, "c"), get(packet, "d"), get(packet, "a"), get(packet, "c"));
 		});
+		log();
 	}
 	
 	@Override

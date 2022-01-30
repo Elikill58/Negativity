@@ -26,18 +26,28 @@ public abstract class VersionAdapter<R> {
 	protected final HashMap<String, BiFunction<R, Object, NPacketPlayIn>> packetsPlayIn = new HashMap<>();
 	protected final HashMap<String, BiFunction<R, Object, NPacketHandshake>> packetsHandshake = new HashMap<>();
 	protected final HashMap<String, BiFunction<R, Object, NPacketStatus>> packetsStatus = new HashMap<>();
-	protected final HashMap<PacketType, BiFunction<R, NPacket, Object>> negativityToBukkit = new HashMap<>();
-	/*protected PacketTransferManager<NPacketPlayOut, R> packetsPlayOut = new PacketTransferManager<>((p, obj) -> new NPacketPlayOutUnset(obj.getClass().getName()), (p, a) -> null);
-	protected PacketTransferManager<NPacketPlayIn, R> packetsPlayIn = new PacketTransferManager<>((p, obj) -> new NPacketPlayInUnset(obj.getClass().getName()), (p, a) -> null);
-	protected PacketTransferManager<NPacketHandshake, R> packetsHandshake = new PacketTransferManager<>((p, obj) -> new NPacketHandshakeUnset(), (p, a) -> null);
-	protected PacketTransferManager<NPacketStatus, R> packetsStatus = new PacketTransferManager<>((p, obj) -> new NPacketStatusUnset(), (p, a) -> null);*/
+	protected final HashMap<PacketType, BiFunction<R, NPacket, Object>> negativityToPlatform = new HashMap<>();
+	protected final String version;
+	
+	public VersionAdapter(String version) {
+		this.version = version;
+	}
+	
+	public String getVersion() {
+		return version;
+	}
 	
 	private R getR(Player p) {
 		return (R) p.getDefault();
 	}
 	
+	protected void log() {
+		Adapter.getAdapter().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size()
+		+ " PlayIn, " + packetsPlayOut.size() + " PlayOut, " + packetsHandshake.size() + " Handshake, " + packetsStatus.size() + " Status and " + negativityToPlatform.size() + " negativity-to-platform.");
+	}
+	
 	public void sendPacket(Player pl, NPacket packet) {
-		BiFunction<R, NPacket, Object> packetMaker = negativityToBukkit.get(packet.getPacketType());
+		BiFunction<R, NPacket, Object> packetMaker = negativityToPlatform.get(packet.getPacketType());
 		if(packetMaker == null)
 			return;
 		R p = getR(pl);

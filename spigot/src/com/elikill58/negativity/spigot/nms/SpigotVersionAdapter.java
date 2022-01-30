@@ -18,6 +18,7 @@ import com.elikill58.negativity.api.location.BlockPosition;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.PacketContent.ContentModifier;
+import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInListener;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
@@ -43,7 +44,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosi
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
-import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Adapter;
@@ -57,6 +57,7 @@ import io.netty.channel.ChannelFuture;
 public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public SpigotVersionAdapter(String version) {
+		super(version);
 		packetsPlayIn.put("PacketPlayInArmAnimation",
 				(p, packet) -> new NPacketPlayInArmAnimation(System.currentTimeMillis()));
 		packetsPlayIn.put("PacketPlayInChat", (p, packet) -> new NPacketPlayInChat(get(packet, "a")));
@@ -185,10 +186,16 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			return new NPacketHandshakeInSetProtocol(ints.read("a", 0), content.getStrings().readSafely(0, "0.0.0.0"), ints.read("port", 0));
 		});
 		
-		
-
-		SpigotNegativity.getInstance().getLogger().info("[Packets-" + version + "] Loaded " + packetsPlayIn.size()
-				+ " PlayIn, " + packetsPlayOut.size() + " PlayOut, " + packetsHandshake.size() + " Handshake and " + packetsStatus.size() + " Status.");
+		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> {
+			try {
+				NPacketPlayOutPing packet = (NPacketPlayOutPing) f;
+				return PacketUtils.getNmsClass("PacketPlayOutTransaction").getConstructor(int.class, short.class, boolean.class)
+						.newInstance(0, (short) packet.id, false);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return null;
+		});
 	}
 
 	protected abstract String getOnGroundFieldName();

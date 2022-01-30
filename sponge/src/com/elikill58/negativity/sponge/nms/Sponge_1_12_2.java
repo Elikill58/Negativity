@@ -5,6 +5,7 @@ import java.lang.reflect.Field;
 import org.spongepowered.api.entity.living.player.Player;
 
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
@@ -28,7 +29,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosi
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
-import com.elikill58.negativity.sponge.SpongeNegativity;
 
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.Packet;
@@ -55,6 +55,7 @@ import net.minecraft.util.math.Vec3d;
 public class Sponge_1_12_2 extends SpongeVersionAdapter {
 
 	public Sponge_1_12_2() {
+		super("v1_12_2");
 		packetsPlayIn.put("CPacketPlayerDigging", (p, packet) -> {
 			CPacketPlayerDigging blockDig = (CPacketPlayerDigging) packet;
 			BlockPos pos = blockDig.getPosition();
@@ -134,7 +135,9 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 		});
 		packetsPlayOut.put("SPacketConfirmTransaction", (p, f) -> new NPacketPlayOutPing(((SPacketConfirmTransaction) f).getActionNumber()));
 		
-		SpongeNegativity.getInstance().getLogger().info("[Packets-v1_12_2] Loaded " + packetsPlayIn.size() + " PlayIn and " + packetsPlayOut.size() + " PlayOut.");
+		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new SPacketConfirmTransaction(0, (short) ((NPacketPlayOutPing) f).id, false));
+
+		log();
 	}
 	
 	private static DigAction translateDigAction(CPacketPlayerDigging.Action action) {

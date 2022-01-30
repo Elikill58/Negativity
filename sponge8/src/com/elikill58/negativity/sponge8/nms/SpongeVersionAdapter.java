@@ -7,14 +7,8 @@ import com.elikill58.negativity.api.packets.packet.NPacket;
 
 public abstract class SpongeVersionAdapter extends VersionAdapter<ServerPlayer> {
 	
-	protected final String version;
-	
 	public SpongeVersionAdapter(String version) {
-		this.version = version;
-	}
-	
-	public String getVersion() {
-		return version;
+		super(version);
 	}
 	
 	@Override

@@ -66,6 +66,7 @@ public class Spigot_1_9_R1 extends SpigotVersionAdapter {
 			return new NPacketPlayInBlockPlace(vec.getX(), vec.getY(), vec.getZ(), handItem,
 				new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
 		});
+		log();
 	}
 	
 	@Override

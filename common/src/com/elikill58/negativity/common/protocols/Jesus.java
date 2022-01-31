@@ -126,9 +126,11 @@ public class Jesus extends Cheat implements Listeners {
 		Block sub = p.getLocation().clone().sub(0, 1, 0).getBlock();
 		int i = 0;
 		for(BlockFace bf : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
-			Block b = sub.getRelative(bf);
-			if(b.getType().getId().contains("WATER"))
+			String id = sub.getRelative(bf).getType().getId();
+			if(id.contains("WATER"))
 				i++;
+			else if(id.contains("LILY") || id.contains("PAD"))
+				return;
 		}
 		boolean wasOnGround = np.booleans.get(JESUS, "bw-was-ground", false);
 		boolean isOnGround = p.isOnGround();

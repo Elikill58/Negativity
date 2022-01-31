@@ -352,9 +352,13 @@ public class Vector implements Cloneable {
 
 	@Override
 	public String toString() {
-		return "Vector{" + this.x + "," + this.y + "," + this.z + "}";
+		return "Vector{x=" + parseDouble(this.x, 10) + ",y=" + parseDouble(this.y, 10) + ",z=" + parseDouble(this.z, 10) + ",len="+ parseDouble(length(), 10) + "}";
 	}
 
+	private String parseDouble(double d, int precision) {
+		return d == 0.0 ? "0,0" : String.format("%." + precision + "f", d);
+	}
+	
 	public String toShowableString() {
 		return "x: " + String.format("%.2f", this.x) + ", y: " + String.format("%.2f", this.y) + ", z: " + String.format("%.2f", this.z);
 	}

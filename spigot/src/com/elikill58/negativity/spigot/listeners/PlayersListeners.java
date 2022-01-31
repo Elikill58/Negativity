@@ -15,6 +15,9 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.event.player.PlayerToggleSprintEvent;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
@@ -29,6 +32,8 @@ import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.events.player.PlayerRegainHealthEvent;
 import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
+import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent;
+import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent.ToggleAction;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
@@ -151,5 +156,26 @@ public class PlayersListeners implements Listener {
 			ProxyCompanionManager.searchedCompanion = true;
 			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> SpigotNegativity.sendProxyPing(p), 20);
 		}
+	}
+	
+	@EventHandler
+	public void onToggleFly(PlayerToggleFlightEvent e) {
+		PlayerToggleActionEvent toggleEvent = new PlayerToggleActionEvent(SpigotEntityManager.getPlayer(e.getPlayer()), ToggleAction.FLY, e.isCancelled());
+		EventManager.callEvent(toggleEvent);
+		e.setCancelled(toggleEvent.isCancelled()); // can do right now because the event take the cancellation of the bukkit event
+	}
+	
+	@EventHandler
+	public void onToggleSneak(PlayerToggleSneakEvent e) {
+		PlayerToggleActionEvent toggleEvent = new PlayerToggleActionEvent(SpigotEntityManager.getPlayer(e.getPlayer()), ToggleAction.SNEAK, e.isCancelled());
+		EventManager.callEvent(toggleEvent);
+		e.setCancelled(toggleEvent.isCancelled()); // can do right now because the event take the cancellation of the bukkit event
+	}
+	
+	@EventHandler
+	public void onToggleSprint(PlayerToggleSprintEvent e) {
+		PlayerToggleActionEvent toggleEvent = new PlayerToggleActionEvent(SpigotEntityManager.getPlayer(e.getPlayer()), ToggleAction.SPRINT, e.isCancelled());
+		EventManager.callEvent(toggleEvent);
+		e.setCancelled(toggleEvent.isCancelled()); // can do right now because the event take the cancellation of the bukkit event
 	}
 }

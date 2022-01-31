@@ -89,10 +89,10 @@ public class Step extends Cheat implements Listeners {
 		Location down = to.clone().sub(0, 1, 0);
 		if(down.getBlock().getType().getId().contains("SHULKER"))
 			return;
-		double dif = to.getY() - from.getY();
+		double dif = to.getY() - from.getY(), velLen = p.getVelocity().length();
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP) ? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier() : 0);
 		boolean isUsingJumpBoost = np.booleans.get(CheatKeys.ALL, "jump-boost-use", false);
-		double diffBoost = dif - (amplifier / 10) - Math.abs(p.getVelocity().getY());
+		double diffBoost = dif - (amplifier / 10) - (velLen > 0.5 ? velLen : 0);
 		if(diffBoost > 0.2) {
 			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
 			if (!isUsingJumpBoost && (diffBoost > 0.5) && !(diffBoost <= 0.6 && diffBoost >= 0.56) // 0.56-0.6 is to bypass carpet and other no-full blocks

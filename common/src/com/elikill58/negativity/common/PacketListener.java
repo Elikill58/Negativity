@@ -23,6 +23,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -127,7 +128,14 @@ public class PacketListener implements Listeners {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if(type.equals(PacketType.Server.POSITION))
 			np.isTeleporting = true;
-		else if(type.equals(PacketType.Server.ENTITY_VELOCITY))
-			p.queuePacket(new NPacketPlayOutPing(np.idWaitingAppliedVelocity = new Random().nextInt()));
+		else if(type.equals(PacketType.Server.ENTITY_VELOCITY)) {
+			NPacketPlayOutEntityVelocity packet = (NPacketPlayOutEntityVelocity) e.getPacket().getPacket();
+			if(packet.entityId != p.getEntityId()) // not giving velocity to itself - not useful to send packet
+				return;
+			int randomNb = new Random().nextInt();
+			if(randomNb == -1)
+				randomNb = -26;
+			p.queuePacket(new NPacketPlayOutPing(np.idWaitingAppliedVelocity = randomNb));
+		}
 	}
 }

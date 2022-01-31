@@ -2,9 +2,15 @@ package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.EventListener;
+import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent;
+import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent.ToggleAction;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
@@ -36,6 +42,9 @@ public class SuperKnockback extends Cheat implements Listeners {
 			return;
 		if (entityAction.action.equals(EnumPlayerAction.START_SPRINTING)
 				|| entityAction.action.equals(EnumPlayerAction.STOP_SPRINTING)) {
+			/*Location locInFront = p.getLocation().clone().add(p.getRotation()), actualLoc = p.getLocation();
+			if(hasBlockJustInFront(actualLoc, locInFront))
+				return;*/
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 			long last = np.longs.get(getKey(), "action-sneak", 0l), actual = System.currentTimeMillis();
 			long diff = actual - last;
@@ -47,5 +56,20 @@ public class SuperKnockback extends Cheat implements Listeners {
 			}
 			np.longs.set(getKey(), "action-sneak", actual);
 		}
+	}
+	
+	public boolean hasBlockJustInFront(Location actual, Location front) {
+		World w = actual.getWorld();
+		if(actual.getBlockX() != front.getBlockX()) {
+			if(!new Location(w, actual.getX(), actual.getY(), actual.getZ()).getBlock().getType().isTransparent())
+				return true;
+		}
+		return false;
+	}
+	
+	@EventListener(priority = EventPriority.POST)
+	public void onToggle(PlayerToggleActionEvent e) {
+		if(e.getAction().equals(ToggleAction.SPRINT) && e.isCancelled())
+			NegativityPlayer.getNegativityPlayer(e.getPlayer()).longs.remove(getKey(), "action-sneak");
 	}
 }

@@ -30,7 +30,7 @@ public class Sneak extends Cheat implements Listeners {
 		if (np.booleans.get(SNEAK, "was-sneaking", false)) {
 			if(!p.getPlayerVersion().isNewerOrEquals(Version.V1_14)) {
 				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (p.getPing() / 10)),
-						"sneak-sprint", "Sneaking, sprinting and not flying. Player version: " + p.getPlayerVersion().getName());
+						"sneak-sprint", "Sneak, sprint, no fly");
 				if(mayCancel && isSetBack()) {
 					e.setCancelled(true);
 					p.setSprinting(false);

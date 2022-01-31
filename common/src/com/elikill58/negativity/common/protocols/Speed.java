@@ -95,7 +95,7 @@ public class Speed extends Cheat implements Listeners {
 				|| hasMaterialsAround(locDown, "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
 		double amplifierSpeed = p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED, 0, 0)).getAmplifier();
-		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
+		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0)), velocity = p.getVelocity().getY(), velLen = p.getVelocity().length();
 		double distance = from.distance(to);
 		boolean mayCancel = false;
 		if(onGround && checkActive("distance-ground") && amplifierSpeed < 5) {
@@ -115,29 +115,29 @@ public class Speed extends Cheat implements Listeners {
 		}
 		if(onGround && checkActive("calculated")) {
 			double calculatedSpeedWith = getSpeed(from, to);
-			double calculatedSpeedWithoutY = getSpeed(from, to, p.getVelocity()), velocity = p.getVelocity().getY();
+			double calculatedSpeedWithoutY = getSpeed(from, to, p.getVelocity());
 			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && velocity > 0.1
 					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" if to prevent lag"
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated",
 						"Calculated speed: " + calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + velocity + ", speed: " + calculatedSpeedWith);
 			}
 		}
-		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10)) >= 0.85D && !hasIceBelow && !np.isInFight && p.getVelocity().length() < 1) {
+		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10) - (velLen > 0.5 ? velLen : 0)) >= 0.85D
+				&& !hasIceBelow && !np.isInFight && p.getTheoricVelocity().length() < 0.85D) { // theoric length to when the new high velocity is actually taken
 			mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(y * 100 * 2), "distance-jumping", "NOT in ground. WS: " + p.getWalkSpeed()
-						+ ", fallDis: " + p.getFallDistance() + " Dis from/to: " + y + ", ySpeed: " + (y - (amplifierSpeed / 10))
-						+ ", vel: " + p.getVelocity().toShowableString() + ", vel len: " + p.getVelocity().length(),
-						hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
+					UniversalUtils.parseInPorcent(y * 190), "distance-jumping", "WS: " + p.getWalkSpeed()
+						+ ", fd: " + p.getFallDistance() + ", from/to: " + String.format("%.10f", y) + ", ySpeed: " + String.format("%.10f", y - (amplifierSpeed / 10) - (velLen > 0.5 ? velLen : 0))
+						+ ", vel: " + p.getVelocity() + ", thvel: " + p.getTheoricVelocity(), hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
 		}
 		if(checkActive("high-speed") && !onGround && y < 0.85D && !np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
 			if (!under.getType().getId().contains("STEP") && !np.isUsingSlimeBlock && !(under.getType().getId().contains("WATER") || under.isWaterLogged() || under.isLiquid() || p.isSwimming())) {
-				to.setY(from.getY());
-				double yy = to.distance(from);
+				Location toHigh = to.clone();
+				toHigh.setY(from.getY());
+				double yy = toHigh.distance(from);
 				if (distance > 0.45 && (distance > (yy * 2)) && p.getFallDistance() < 1) {
-					np.SPEED_NB++;
-					if (np.SPEED_NB > 4)
+					if (np.SPEED_NB++ > 4)
 						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "high-speed",
-								"HighSpeed - Block under: " + under.getType().getId() + ", Speed: " + distance + ", nb: " + np.SPEED_NB + ", fallDistance: " + p.getFallDistance());
+								"HighSpeed - Under: " + under.getType().getId() + ", Speed: " + distance + ", nb: " + np.SPEED_NB + ", FD: " + p.getFallDistance() + ", y: " + yy + ", vel " + p.getVelocity());
 				} else
 					np.SPEED_NB = 0;
 			}
@@ -145,7 +145,7 @@ public class Speed extends Cheat implements Listeners {
 		if(checkActive("same-diff")) {
 			double d = np.doubles.get(SPEED, "dif-y", 0.0);
 			if(dif != 0.0 && d != 0.0) {
-				if (dif == d || dif == -d) {
+				if (dif == Math.abs(d)) {
 					mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
 							this, 95, "same-diff", "Differences : " + dif + " / " + d);
 				}
@@ -157,8 +157,8 @@ public class Speed extends Cheat implements Listeners {
 			if(dif == 0 && distanceWithSpeed >= (p.getWalkSpeed() * (p.isSprinting() ? 2.5 : 2) * 1.01)) {
 				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
 						this, 95, "walk-speed", "Differences : " + dif + ", distance: " + String.format("%.4f", distance) + ", withSpeed: "
-						+ String.format("%.4f", distanceWithSpeed) + ", speedAmplifier: " + amplifierSpeed
-						+ ", walkSpeed: " + p.getWalkSpeed() + ", onGround: " + onGround + ", distanceXZ: " + from.distanceXZ(to));
+						+ String.format("%.4f", distanceWithSpeed) + ", amplifier: " + amplifierSpeed
+						+ ", ws: " + p.getWalkSpeed() + ", ground: " + onGround + ", distanceXZ: " + from.distanceXZ(to));
 			}
 		}
 		if (mayCancel && isSetBack())

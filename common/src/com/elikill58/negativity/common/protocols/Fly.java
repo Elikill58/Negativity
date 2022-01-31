@@ -136,7 +136,7 @@ public class Fly extends Cheat implements Listeners {
 				}
 			}
 			if(checkActive("no-ground-i")) {
-				if (!(p.isSprinting() && d > 0 && p.getVelocity().length() < 1)
+				if (!p.isSprinting() && d > 0 && (i < p.getVelocity().getY() || p.getVelocity().length() < 0.5)
 						&& locUnder.getBlock().getType().equals(Materials.AIR)
 						&& locUnderUnder.getBlock().getType().equals(Materials.AIR)
 						&& (p.getFallDistance() == 0.0F || inBoat)
@@ -144,7 +144,7 @@ public class Fly extends Cheat implements Listeners {
 						&& !p.isOnGround()) {
 					mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 							this, parseInPorcent((int) i * 50), "no-ground-i",
-							"Not ground, i: " + i + ", boat: " + inBoat + ", ytoFrom: " + d,
+							"Not ground, i: " + String.format("%.10f", i) + ", boat: " + inBoat + ", d: " + String.format("%.10f", d) + ", vel: " + p.getVelocity(),
 							inBoat ? hoverMsg("boat") : null);
 				}
 			}
@@ -153,7 +153,7 @@ public class Fly extends Cheat implements Listeners {
 				if (!np.isUsingSlimeBlock && !hasOtherThanExtended(p.getLocation(), "AIR")
 						&& !hasOtherThanExtended(locUnder, "AIR") && !np.booleans.get(FLY, "boat-falling", false)
 						&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
-						&& (from.getY() <= to.getY() || inBoat) && p.getVelocity().length() < 1.5) {
+						&& (from.getY() <= to.getY() || inBoat) && p.getVelocity().length() < d) {
 					double nbTimeAirBelow = np.doubles.get(FLY, "air-below", 0.0);
 					np.doubles.set(FLY, "air-below", nbTimeAirBelow + 1);
 					if(nbTimeAirBelow > 6) { // we don't care when player jump
@@ -161,7 +161,7 @@ public class Fly extends Cheat implements Listeners {
 						if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Materials.AIR))
 							porcent = parseInPorcent(porcent - 15);
 						mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
-								this, porcent, "no-ground-down", "Not ground (" + nb + " down), disY: " + d + ", vel: " + p.getVelocity(),
+								this, porcent, "no-ground-down", "Not ground (" + nb + " down), disY: " + d + ", vel: " + p.getVelocity() + ", fd: " + p.getFallDistance() + ", nbTime: " + nbTimeAirBelow,
 										hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb));
 					}
 				} else

@@ -16,20 +16,45 @@ public interface Entity extends CommandSender {
 	 */
 	boolean isOnGround();
 
+	/**
+	 * Check if the actual entity is OP or not
+	 * 
+	 * @return true if entity OP
+	 */
 	boolean isOp();
 	
 	List<Block> getTargetBlock(int maxDistance);
 	
+	/**
+	 * Get the entity location
+	 * 
+	 * @return entity location
+	 */
 	Location getLocation();
 	
 	double getEyeHeight();
 	
 	Location getEyeLocation();
 	
+	/**
+	 * Get the rotation (also called "direction") of the entity
+	 * 
+	 * @return vector of entity's direction
+	 */
 	Vector getRotation();
 	
+	/**
+	 * Get the type of the entity
+	 * 
+	 * @return the entity type
+	 */
 	EntityType getType();
 	
+	/**
+	 * Get the entity ID. Can not work with Sponge and some other platforms
+	 * 
+	 * @return the entity ID
+	 */
 	int getEntityId();
 	
 	BoundingBox getBoundingBox();

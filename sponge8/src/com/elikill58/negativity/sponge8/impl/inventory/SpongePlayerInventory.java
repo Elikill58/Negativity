@@ -3,7 +3,7 @@ package com.elikill58.negativity.sponge8.impl.inventory;
 import java.util.function.Supplier;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.item.inventory.equipment.EquipmentType;
 import org.spongepowered.api.item.inventory.equipment.EquipmentTypes;
 
@@ -17,9 +17,9 @@ import com.elikill58.negativity.sponge8.impl.item.SpongeItemStack;
 public class SpongePlayerInventory extends PlayerInventory {
 
 	private final org.spongepowered.api.item.inventory.entity.PlayerInventory inv;
-	private final Player p;
+	private final ServerPlayer p;
 	
-	public SpongePlayerInventory(Player p) {
+	public SpongePlayerInventory(ServerPlayer p) {
 		this.p = p;
 		this.inv = p.inventory();
 	}

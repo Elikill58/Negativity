@@ -3,7 +3,9 @@ package com.elikill58.negativity.sponge8;
 import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.logging.log4j.Logger;
@@ -22,7 +24,12 @@ import org.spongepowered.api.event.lifecycle.RefreshGameEvent;
 import org.spongepowered.api.event.lifecycle.RegisterCommandEvent;
 import org.spongepowered.api.event.lifecycle.StartingEngineEvent;
 import org.spongepowered.api.event.lifecycle.StoppingEngineEvent;
+import org.spongepowered.api.network.EngineConnection;
+import org.spongepowered.api.network.PlayerConnection;
+import org.spongepowered.api.network.channel.ChannelBuf;
+import org.spongepowered.api.network.channel.ChannelManager;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
+import org.spongepowered.api.network.channel.raw.play.RawPlayDataHandler;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.util.Ticks;
 import org.spongepowered.plugin.PluginContainer;
@@ -32,6 +39,8 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
+import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
+import com.elikill58.negativity.sponge8.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge8.listeners.BlockListeners;
 import com.elikill58.negativity.sponge8.listeners.EntityListeners;
 import com.elikill58.negativity.sponge8.listeners.FightManager;
@@ -47,7 +56,9 @@ import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.PlayerVersionMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
@@ -79,8 +90,11 @@ public class SpongeNegativity {
 	@Listener
 	public void onConstructPlugin(ConstructPluginEvent event) {
 		Adapter.setAdapter(new SpongeAdapter(this));
-		this.channel = Sponge.channelManager().ofType(ResourceKey.resolve(NegativityMessagesManager.CHANNEL_ID), RawDataChannel.class);
-		this.bungeecordChannel = Sponge.channelManager().ofType(ResourceKey.resolve("bungeecord"), RawDataChannel.class);
+		ChannelManager chan = Sponge.channelManager();
+		chan.ofType(ResourceKey.resolve("fml:hs"), RawDataChannel.class).play().addHandler(new FmlRawDataListener());
+		this.channel = chan.ofType(ResourceKey.resolve(NegativityMessagesManager.CHANNEL_ID), RawDataChannel.class);
+		this.channel.play().addHandler(new ProxyCompanionListener());
+		this.bungeecordChannel = chan.ofType(ResourceKey.resolve("bungeecord"), RawDataChannel.class);
 	}
 	
 	@Listener
@@ -207,6 +221,47 @@ public class SpongeNegativity {
 		Iterator<ServerPlayer> onlinePlayers = Sponge.server().onlinePlayers().iterator();
 		if (onlinePlayers.hasNext()) {
 			sendProxyPing(onlinePlayers.next());
+		}
+	}
+	
+
+	private static class FmlRawDataListener implements RawPlayDataHandler<EngineConnection> {
+
+		@Override
+		public void handlePayload(ChannelBuf data, EngineConnection connection) {
+			if (!(connection instanceof PlayerConnection))
+				return;
+
+			ServerPlayer player = (ServerPlayer) ((PlayerConnection) connection).player();
+			byte[] rawData = data.readBytes(data.available());
+			HashMap<String, String> playerMods = NegativityPlayer.getNegativityPlayer(player.uniqueId(), () -> new SpongePlayer(player)).MODS;
+			playerMods.clear();
+			playerMods.putAll(Utils.getModsNameVersionFromMessage(new String(rawData, StandardCharsets.UTF_8)));
+		}
+	}
+
+	private static class ProxyCompanionListener implements RawPlayDataHandler<EngineConnection> {
+
+		@Override
+		public void handlePayload(ChannelBuf data, EngineConnection connection) {
+			if (!(connection instanceof PlayerConnection))
+				return;
+			byte[] rawData = data.readBytes(data.available());
+			NegativityMessage message;
+			try {
+				message = NegativityMessagesManager.readMessage(rawData);
+			} catch (IOException e) {
+				SpongeNegativity.getInstance().getLogger().error("Failed to read proxy companion message.", e);
+				return;
+			}
+			ServerPlayer p = (ServerPlayer) ((PlayerConnection) connection).player();
+			if (message instanceof ProxyPingMessage) {
+				ProxyPingMessage pingMessage = (ProxyPingMessage) message;
+				ProxyCompanionManager.foundCompanion(pingMessage);
+			} else if(message instanceof PlayerVersionMessage)
+				SpongeEntityManager.getPlayer(p).setPlayerVersion(((PlayerVersionMessage) message).getVersion());
+			else
+				SpongeNegativity.getInstance().getLogger().warn("Received unexpected plugin message " + message.getClass().getName());
 		}
 	}
 	

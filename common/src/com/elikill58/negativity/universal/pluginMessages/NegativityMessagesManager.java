@@ -17,7 +17,7 @@ public class NegativityMessagesManager {
 	private static final Map<Byte, Supplier<NegativityMessage>> MESSAGES_BY_ID;
 
 	public static final String CHANNEL_ID = "negativity:msg";
-	public static final int PROTOCOL_VERSION = 2;
+	public static final int PROTOCOL_VERSION = 3;
 
 	static {
 		Map<Byte, Supplier<NegativityMessage>> messages = new HashMap<>();

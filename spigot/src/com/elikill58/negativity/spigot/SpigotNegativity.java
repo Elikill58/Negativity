@@ -18,12 +18,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
-import org.bukkit.scheduler.BukkitTask;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.yaml.Configuration;
-import com.elikill58.negativity.common.timers.ActualizeInvTimer;
-import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.spigot.impl.entity.SpigotFakePlayer;
 import com.elikill58.negativity.spigot.listeners.BlockListeners;
 import com.elikill58.negativity.spigot.listeners.ChannelListeners;
@@ -45,18 +42,14 @@ import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
-import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
-import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
-import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean hasBypass = false, isCraftBukkit = false;
-	private BukkitTask invTimer = null, pendingAlertsTimer = null, packetTimer = null;
+	public static boolean isCraftBukkit = false;
 	public static String CHANNEL_NAME_FML = "";
 	private NegativityPacketManager packetManager;
 		
@@ -120,24 +113,17 @@ public class SpigotNegativity extends JavaPlugin {
 
 		Messenger messenger = getServer().getMessenger();
 		ChannelListeners channelListeners = new ChannelListeners();
-		if (v.isNewerOrEquals(Version.V1_13)) {
-			CHANNEL_NAME_FML = "fml:hs";
-		} else {
-			CHANNEL_NAME_FML = "FML|HS";
-		}
+		CHANNEL_NAME_FML = v.isNewerOrEquals(Version.V1_13) ? "fml:hs" : "FML|HS";
 		loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID, channelListeners);
 		loadChannelInOut(messenger, CHANNEL_NAME_FML, channelListeners);
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		
-
 		loadCommand();
 		
 		Stats.sendStartupStats(Bukkit.getServer().getPort());
 		
 		NegativityAccountStorage.setDefaultStorage("file");
 
-		invTimer = getServer().getScheduler().runTaskTimer(this, new ActualizeInvTimer(), 5, 5);
-		packetTimer = getServer().getScheduler().runTaskTimerAsynchronously(this, new AnalyzePacketTimer(), 20, 20);
 		trySendProxyPing();
 		
 		getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
@@ -243,11 +229,6 @@ public class SpigotNegativity extends JavaPlugin {
 		new Thread(() -> new ArrayList<>(NegativityPlayer.getAllPlayers().keySet()).forEach(NegativityPlayer::removeFromCache)).start();
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
-		invTimer.cancel();
-		packetTimer.cancel();
-		if (pendingAlertsTimer != null) {
-			pendingAlertsTimer.cancel();
-		}
 		packetManager.getPacketManager().clear();
 	}
 	
@@ -257,26 +238,6 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public static SpigotNegativity getInstance() {
 		return INSTANCE;
-	}
-
-	public static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover, int alertsCount) {
-		try {
-			AlertMessage alertMessage = new AlertMessage(p.getUniqueId(), cheatName, reliability, ping, hover, alertsCount);
-			p.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(alertMessage));
-		} catch (IOException e) {
-			SpigotNegativity.getInstance().getLogger().severe("Could not send alert message to the proxy.");
-			e.printStackTrace();
-		}
-	}
-
-	public static void sendReportMessage(Player reporter, String reason, String reported) {
-		try {
-			ReportMessage reportMessage = new ReportMessage(reported, reason, reporter.getName());
-			reporter.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(reportMessage));
-		} catch (IOException e) {
-			SpigotNegativity.getInstance().getLogger().severe("Could not send report message to the proxy.");
-			e.printStackTrace();
-		}
 	}
 
 	public static void sendProxyPing(Player player) {

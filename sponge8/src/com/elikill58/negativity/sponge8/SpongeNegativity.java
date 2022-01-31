@@ -9,7 +9,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 import org.apache.logging.log4j.Logger;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Server;
 import org.spongepowered.api.Sponge;
@@ -30,15 +29,11 @@ import org.spongepowered.api.network.channel.ChannelBuf;
 import org.spongepowered.api.network.channel.ChannelManager;
 import org.spongepowered.api.network.channel.raw.RawDataChannel;
 import org.spongepowered.api.network.channel.raw.play.RawPlayDataHandler;
-import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.util.Ticks;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.yaml.Configuration;
-import com.elikill58.negativity.common.timers.ActualizeInvTimer;
-import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge8.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge8.listeners.BlockListeners;
@@ -109,9 +104,6 @@ public class SpongeNegativity {
 		eventManager.registerListeners(this.container, new InventoryListeners());
 		eventManager.registerListeners(this.container, new PlayersListeners());
 		
-		schedule(new ActualizeInvTimer(), 5, null);
-		schedule(new AnalyzePacketTimer(), 20, "negativity-packets");
-		
 		if (SpongeUpdateChecker.isUpdateAvailable()) {
 			logger.info("New version available ({}) : {}", SpongeUpdateChecker.getVersionString(), SpongeUpdateChecker.getDownloadUrl());
 		}
@@ -139,14 +131,6 @@ public class SpongeNegativity {
 		NegativityPlayer.getAllPlayers().values().forEach(NegativityPlayer::destroy);
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		Database.close();
-	}
-	
-	private void schedule(Runnable task, int intervalTicks, @Nullable String name) {
-		Task.Builder taskBuilder = Task.builder().execute(task).interval(Ticks.of(intervalTicks)).plugin(this.container);
-		if (name != null) {
-			//taskBuilder.name(name);
-		}
-		Sponge.server().scheduler().submit(taskBuilder.build());
 	}
 	
 	private void loadCommands(RegisterCommandEvent<Command.Raw> event) {

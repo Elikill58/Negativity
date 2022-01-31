@@ -23,6 +23,8 @@ import com.elikill58.negativity.api.events.negativity.ShowAlertPermissionEvent;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
+import com.elikill58.negativity.common.timers.ActualizeInvTimer;
+import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.alerts.AlertSender;
 import com.elikill58.negativity.universal.alerts.hook.AmountAlertSender;
@@ -59,6 +61,7 @@ public class Negativity {
 	public static boolean hasBypass = false;
 	public static boolean tpsDrop = false;
 	private static AlertSender alertSender;
+	private static ScheduledTask actualizeInvTimer, analyzePacketTimer;
 
 	/**
 	 * Try to alert moderator.
@@ -331,6 +334,12 @@ public class Negativity {
 				old.runAll();
 			else
 				ada.getScheduler().runRepeatingAsync(new FileSaverTimer(), 20);
+			if(actualizeInvTimer != null)
+				actualizeInvTimer.cancel();
+			actualizeInvTimer = ada.getScheduler().runRepeating(new ActualizeInvTimer(), 10, 10);
+			if(analyzePacketTimer != null)
+				analyzePacketTimer.cancel();
+			analyzePacketTimer = ada.getScheduler().runRepeating(new AnalyzePacketTimer(), 10, 10);
 		}
 		UniversalUtils.init();
 		Configuration config = ada.getConfig();

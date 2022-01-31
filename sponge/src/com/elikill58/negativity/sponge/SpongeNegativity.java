@@ -17,7 +17,6 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import org.bstats.sponge.MetricsLite2;
-import org.checkerframework.checker.nullness.qual.Nullable;
 import org.slf4j.Logger;
 import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
@@ -49,8 +48,6 @@ import org.spongepowered.api.text.channel.MessageReceiver;
 import org.spongepowered.api.text.format.TextColors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.common.timers.ActualizeInvTimer;
-import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge.listeners.BlockListeners;
@@ -129,9 +126,6 @@ public class SpongeNegativity {
 		eventManager.registerListeners(this, new PlayersListeners());
 		eventManager.registerListeners(this, new CommandsListeners());
 
-		schedule(new ActualizeInvTimer(), 5, null);
-		schedule(new AnalyzePacketTimer(), 20, "negativity-packets");
-		
 		NegativityAccountStorage.setDefaultStorage("file");
 		
 		plugin.getLogger().info("Negativity v" + plugin.getVersion().get() + " loaded.");
@@ -166,14 +160,6 @@ public class SpongeNegativity {
 		bungeecordChannel = channelRegistrar.getOrCreateRaw(this, "BungeeCord");
 		
 		Stats.sendStartupStats(Sponge.getServer().getBoundAddress().map(InetSocketAddress::getPort).orElse(-1));
-	}
-	
-	private void schedule(Runnable task, int intervalTicks, @Nullable String name) {
-		Task.Builder taskBuilder = Task.builder().execute(task).intervalTicks(intervalTicks);
-		if (name != null) {
-			taskBuilder.name(name);
-		}
-		taskBuilder.submit(this);
 	}
 
 	public void reloadCommands() {

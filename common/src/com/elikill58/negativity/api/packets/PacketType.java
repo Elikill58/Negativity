@@ -117,7 +117,6 @@ public interface PacketType {
 		} else if(packetName.startsWith(HANDSHAKE_PREFIX)) {
 			return getPacketTypeFor(packetName, Handshake.values(), Handshake.UNSET);
 		} else {
-			Adapter.getAdapter().debug("[Packet] Unknow packet " + packetName);
 			return null;
 		}
 	}
@@ -266,6 +265,7 @@ public interface PacketType {
 		KEEP_ALIVE("KeepAlive", NPacketPlayOutKeepAlive::new),
 		KICK_DISCONNECT("KickDisconnect", NPacketUnknown::new),
 		LIGHT_UPDATE("LightUpdate", NPacketUnknown::new),
+		LEVEL_CHUNK_LIGHT("LevelChunkWithLight", NPacketUnknown::new),
 		LOOK_AT("LookAt", NPacketUnknown::new),
 		LOGIN("Login", NPacketUnknown::new),
 		MAP("Map", NPacketUnknown::new),

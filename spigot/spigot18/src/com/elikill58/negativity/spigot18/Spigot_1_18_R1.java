@@ -155,7 +155,7 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 		});
 		packetsPlayIn.put("PacketPlayInKeepAlive",
 				(player, raw) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) raw).getId()));
-		packetsPlayIn.put("PacketPlayInPong", (player, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
+		packetsPlayIn.put("ServerboundPongPacket", (player, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
 
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, raw) -> {
 			ClientboundBlockDestructionPacket packet = (ClientboundBlockDestructionPacket) raw;
@@ -194,7 +194,7 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 			return new NPacketPlayOutEntityEffect(packet.getEntityId(), packet.getEffectId(), packet.getEffectAmplifier(), packet.getEffectDurationTicks(), (byte) 0);
 			//return new NPacketPlayOutEntityEffect(get(packet, "d"), get(packet, "e"), get(packet, "f"), get(packet, "g"), get(packet, "h"));
 		});
-		packetsPlayOut.put("PacketPlayOutPong", (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
+		packetsPlayOut.put("ClientboundPingPacket", (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
 
 		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
 			ClientIntentionPacket packet = (ClientIntentionPacket) raw;
@@ -250,7 +250,7 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 	@Override
 	public void queuePacket(Player p, Object packet) {
 		try {
-			Queue queue = (Queue) get(getPlayerConnection(p).connection, "queue");
+			Queue queue = (Queue) get(getPlayerConnection(p).connection, "j");
 			queue.add(callFirstConstructor(Connection.class.getDeclaredClasses()[0], packet, null));
 		} catch (Exception e) {
 			e.printStackTrace();

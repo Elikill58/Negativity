@@ -340,7 +340,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			return new Vector((double) get(vec, "a"), (double) get(vec, "b"), (double) get(vec, "c"));
 		}
 	}
-
+	
 	@Override
 	public void sendPacket(Player p, Object packet) {
 		try {

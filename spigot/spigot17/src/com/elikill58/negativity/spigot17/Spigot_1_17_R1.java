@@ -246,7 +246,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 	@Override
 	public void queuePacket(Player p, Object packet) {
 		try {
-			Queue queue = (Queue) get(getPlayerConnection(p).connection, "queue");
+			Queue queue = (Queue) get(getPlayerConnection(p).connection, "j");
 			queue.add(callFirstConstructor(Connection.class.getDeclaredClasses()[0], packet, null));
 		} catch (Exception e) {
 			e.printStackTrace();

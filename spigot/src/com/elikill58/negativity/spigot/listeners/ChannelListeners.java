@@ -11,10 +11,12 @@ import org.bukkit.plugin.messaging.PluginMessageListener;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.PlayerVersionMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 
 public class ChannelListeners implements PluginMessageListener {
@@ -51,6 +53,8 @@ public class ChannelListeners implements PluginMessageListener {
 			NegativityPlayer np = NegativityPlayer.getCached(p.getUniqueId());
 			np.MODS.clear();
 			np.MODS.putAll(modsMessage.getMods());
+		} else if(message instanceof PlayerVersionMessage) {
+			SpigotEntityManager.getPlayer(p).setPlayerVersion(((PlayerVersionMessage) message).getVersion());
 		} else {
 			SpigotNegativity.getInstance().getLogger().warning("Received unexpected plugin message " + message.getClass().getName());
 		}

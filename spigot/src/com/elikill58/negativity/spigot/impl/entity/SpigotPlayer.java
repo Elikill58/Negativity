@@ -49,6 +49,12 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public Version getPlayerVersion() {
 		return isVersionSet() ? playerVersion : (playerVersion = Version.getVersionByProtocolID(getProtocolVersion()));
 	}
+	
+	@Override
+	public void setPlayerVersion(Version version) {
+		playerVersion = version;
+		protocolVersion = version.getFirstProtocolNumber();
+	}
 
 	private boolean isVersionSet() {
 		return playerVersion != null && !playerVersion.equals(Version.HIGHER);

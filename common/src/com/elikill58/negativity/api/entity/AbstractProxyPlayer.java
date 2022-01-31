@@ -12,6 +12,7 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.universal.Version;
 
 public abstract class AbstractProxyPlayer extends AbstractEntity implements Player {
 	
@@ -244,6 +245,16 @@ public abstract class AbstractProxyPlayer extends AbstractEntity implements Play
 	@Override
 	public Vector getTheoricVelocity() {
 		return null;
+	}
+	
+	@Override
+	public void setPlayerVersion(Version version) {
+		
+	}
+	
+	@Override
+	public void setProtocolVersion(int protocolVersion) {
+		// don't need it on bungee
 	}
 	
 	@Override

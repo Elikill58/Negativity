@@ -45,11 +45,6 @@ public class BungeePlayer extends AbstractProxyPlayer {
 	public int getProtocolVersion() {
 		return pp.getPendingConnection().getVersion();
 	}
-	
-	@Override
-	public void setProtocolVersion(int protocolVersion) {
-		// don't need it on bungee
-	}
 
 	@Override
 	public boolean isOp() {

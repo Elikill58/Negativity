@@ -55,6 +55,12 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 		return isVersionSet() ? playerVersion : (playerVersion = Version.getVersionByProtocolID(getProtocolVersion()));
 	}
 	
+	@Override
+	public void setPlayerVersion(Version version) {
+		playerVersion = version;
+		protocolVersion = version.getFirstProtocolNumber();
+	}
+	
 	private boolean isVersionSet() {
 		return playerVersion != null && !playerVersion.equals(Version.HIGHER);
 	}

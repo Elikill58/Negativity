@@ -51,6 +51,7 @@ import org.spongepowered.api.text.format.TextColors;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
+import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge.listeners.BlockListeners;
 import com.elikill58.negativity.sponge.listeners.CommandsExecutorManager;
@@ -78,6 +79,7 @@ import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.PlayerVersionMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -382,7 +384,10 @@ public class SpongeNegativity {
 			if (message instanceof ProxyPingMessage) {
 				ProxyPingMessage pingMessage = (ProxyPingMessage) message;
 				ProxyCompanionManager.foundCompanion(pingMessage);
-			}
+			} else if(message instanceof PlayerVersionMessage)
+				SpongeEntityManager.getPlayer(((PlayerConnection) connection).getPlayer()).setPlayerVersion(((PlayerVersionMessage) message).getVersion());
+			else
+				SpongeNegativity.getInstance().getLogger().warn("Received unexpected plugin message " + message.getClass().getName());
 		}
 	}
 }

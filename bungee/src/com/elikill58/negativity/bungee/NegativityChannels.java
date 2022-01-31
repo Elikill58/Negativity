@@ -8,6 +8,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.bungee.BungeeListeners.Report;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -16,6 +17,7 @@ import com.elikill58.negativity.universal.pluginMessages.AccountUpdateMessage;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.PlayerVersionMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
@@ -103,6 +105,16 @@ public class NegativityChannels {
 			AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) message;
 			NegativityAccount account = accountUpdateMessage.getAccount();
 			Adapter.getAdapter().getAccountManager().update(account);
+		} else if(message instanceof PlayerVersionMessage) {
+			PlayerVersionMessage playerVersion = (PlayerVersionMessage) message;
+			ProxiedPlayer p = ProxyServer.getInstance().getPlayer(playerVersion.getUUID());
+			if(p != null) {
+				try {
+					p.sendData(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(new PlayerVersionMessage(p.getUniqueId(), Version.getVersionByProtocolID(p.getPendingConnection().getVersion()))));
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		} else {
 			Adapter.getAdapter().getLogger().warn("Unhandled plugin message " + message.getClass());
 		}

@@ -40,11 +40,6 @@ public class RedisBungeePlayer extends AbstractProxyPlayer {
 	public int getProtocolVersion() {
 		return 0;
 	}
-	
-	@Override
-	public void setProtocolVersion(int protocolVersion) {
-		// don't need it on bungee
-	}
 
 	@Override
 	public boolean isOp() {

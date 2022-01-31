@@ -67,6 +67,12 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 	}
 	
 	@Override
+	public void setPlayerVersion(Version version) {
+		playerVersion = version;
+		protocolVersion = version.getFirstProtocolNumber();
+	}
+	
+	@Override
 	public UUID getUniqueId() {
 		return entity.uniqueId();
 	}

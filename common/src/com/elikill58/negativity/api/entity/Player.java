@@ -224,6 +224,8 @@ public interface Player extends OfflinePlayer {
 	 */
 	Version getPlayerVersion();
 	
+	void setPlayerVersion(Version version);
+	
 	int getProtocolVersion();
 	
 	void setProtocolVersion(int protocolVersion);

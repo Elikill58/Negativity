@@ -29,7 +29,7 @@ public class ProxyCompanionManager {
 			ada.getLogger().info("Proxy companion plugin found, but is forcibly disabled.");
 		} else if (protocolVersion != ourProtocolVersion) {
 			protocolVersionMismatch = true;
-			ada.getLogger().info("Proxy companion plugin found, but its protocol version (" + protocolVersion + ") is not the same a ours (" + ourProtocolVersion + ") so it won't be used.");
+			ada.getLogger().warn("Proxy companion plugin found, but its protocol version (" + protocolVersion + ") is not the same a ours (" + ourProtocolVersion + ") so it won't be used.");
 		} else {
 			ada.getLogger().info("Proxy companion plugin found, it will be used. " + message.getPlugins().size() + " plugins founded on proxy.");
 			pluginsProxy = message.getPlugins();

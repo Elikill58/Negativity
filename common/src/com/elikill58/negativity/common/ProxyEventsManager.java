@@ -14,24 +14,21 @@ public class ProxyEventsManager implements Listeners {
 
 	@EventListener
 	public void onProxyPlugin(ProxyPluginListEvent e) {
-		Adapter.getAdapter().getOnlinePlayers().forEach(p -> {
-			try { // send ask version request
-				p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(new PlayerVersionMessage(p.getUniqueId(), null)));
-			} catch (Exception exc) {
-				exc.printStackTrace();
-			}
-		});
+		Adapter.getAdapter().getOnlinePlayers().forEach(this::sendVersionRequest);
 	}
 	
 	@EventListener
 	public void onJoin(PlayerConnectEvent e) {
 		if(ProxyCompanionManager.isIntegrationEnabled()) {
-			try { // send ask version request
-				Player p = e.getPlayer();
-				p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(new PlayerVersionMessage(p.getUniqueId(), null)));
-			} catch (Exception exc) {
-				exc.printStackTrace();
-			}
+			sendVersionRequest(e.getPlayer());
+		}
+	}
+	
+	private void sendVersionRequest(Player p) {
+		try { // send ask version request
+			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(new PlayerVersionMessage(p.getUniqueId(), null)));
+		} catch (Exception exc) {
+			exc.printStackTrace();
 		}
 	}
 }

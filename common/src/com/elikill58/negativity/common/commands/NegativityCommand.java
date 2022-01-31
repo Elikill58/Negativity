@@ -36,6 +36,8 @@ import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModifications;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.PlayerVersionMessage;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -55,6 +57,14 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 		if (arg[0].equalsIgnoreCase("help")) {
 			sendHelp(sender, (arg.length > 1 && UniversalUtils.isInteger(arg[1]) ? Integer.parseInt(arg[1]) : 1));
 			return true;
+		} else if(arg[0].equalsIgnoreCase("test")) {
+			try { // send ask version request
+				Player p = (Player) sender;
+				p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(new PlayerVersionMessage(p.getUniqueId(), null)));
+			} catch (Exception exc) {
+				exc.printStackTrace();
+			}
+			return false;
 		}
 		if (arg[0].equalsIgnoreCase("verif")) {
 			if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getNegativityPlayer((Player) sender), Perm.VERIF)) {

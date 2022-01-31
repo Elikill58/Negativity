@@ -78,7 +78,7 @@ public class BungeePlayer extends AbstractProxyPlayer {
 
 	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {
-		pp.sendData(channelId, writeMessage);
+		pp.getServer().sendData(channelId, writeMessage);
 	}
 
 	@Override

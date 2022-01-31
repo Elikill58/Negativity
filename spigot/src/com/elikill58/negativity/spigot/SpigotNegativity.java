@@ -113,9 +113,8 @@ public class SpigotNegativity extends JavaPlugin {
 
 		Messenger messenger = getServer().getMessenger();
 		ChannelListeners channelListeners = new ChannelListeners();
-		CHANNEL_NAME_FML = v.isNewerOrEquals(Version.V1_13) ? "fml:hs" : "FML|HS";
 		loadChannelInOut(messenger, NegativityMessagesManager.CHANNEL_ID, channelListeners);
-		loadChannelInOut(messenger, CHANNEL_NAME_FML, channelListeners);
+		loadChannelInOut(messenger, CHANNEL_NAME_FML = v.isNewerOrEquals(Version.V1_13) ? "fml:hs" : "FML|HS", channelListeners);
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		
 		loadCommand();

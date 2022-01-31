@@ -316,12 +316,12 @@ public class Negativity {
 		TranslatedMessages.init();
 		NegativityAccountStorage.init();
 		EventManager.load();
+		PlayerVersionManager.init();
 		if(!ada.getPlatformID().isProxy()) {
 			Special.loadSpecial();
 			Cheat.loadCheat();
 			BypassManager.loadBypass();
 			BedrockPlayerManager.init();
-			PlayerVersionManager.init();
 			PlayerModificationsManager.init();
 			VerificationManager.init();
 			WebhookManager.init();

@@ -65,7 +65,7 @@ public class RedisSupport implements Listener {
 			if(negMsg instanceof RedisNegativityMessage) {
 				RedisNegativityMessage redisMsg = (RedisNegativityMessage) negMsg;
 				if(!redisMsg.getProxyId().equalsIgnoreCase(getProxyId()))
-					NegativityChannels.manageReceivedChannelMessage(redisMsg);
+					NegativityChannels.manageGlobalChannelMessage(redisMsg.getServer(), redisMsg.getProxyId(), redisMsg.getMessage());
 			} else
 				Adapter.getAdapter().getLogger().error("Received message with redis is not supported: " + negMsg.getClass().getSimpleName());
 		} catch (Exception exc) {

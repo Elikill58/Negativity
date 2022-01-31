@@ -26,14 +26,15 @@ public class PlayerVersionMessage implements NegativityMessage {
 	@Override
 	public void readFrom(DataInputStream input) throws IOException {
 		uuid = new UUID(input.readLong(), input.readLong());
-		version = Version.getVersionByProtocolID(input.readInt());
+		if(input.readBoolean())
+			version = Version.getVersionByProtocolID(input.readInt());
 	}
 
 	@Override
 	public void writeTo(DataOutputStream output) throws IOException {
 		output.writeLong(uuid.getMostSignificantBits());
 		output.writeLong(uuid.getLeastSignificantBits());
-		
+		output.writeBoolean(version != null);
 		if(version != null)
 			output.writeInt(version.getFirstProtocolNumber());
 	}

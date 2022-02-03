@@ -36,16 +36,16 @@ import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.detections.Cheat;
-import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
+import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.file.FileSaverTimer;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
+import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
-import com.elikill58.negativity.universal.proxysender.ProxySenderManager;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.SemVer;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -226,7 +226,7 @@ public class Negativity {
 			WebhookManager.addToQueue(new AlertWebhookMessage(WebhookMessageType.ALERT, p, "Negativity", System.currentTimeMillis(), alert.getNbAlert() == 0 ? 1 : alert.getNbAlert(), alert.getReliability(), alert.getCheat()));
 		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			ProxySenderManager.sendAlertMessage(p, c.getName(), reliability, ping, hoverMsg, alert.getNbAlert());
+			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new AlertMessage(p.getUniqueId(), c.getName(), reliability, ping, hoverMsg, alert.getNbAlert()));
 			np.ALERT_NOT_SHOWED.remove(c.getKey());
 		} else {
 			boolean hasPermPeople = false;

@@ -19,11 +19,8 @@ import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
-import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
-import com.elikill58.negativity.universal.pluginMessages.RedisNegativityMessage;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -66,38 +63,24 @@ public class BungeeListeners implements Listener {
 		}
 
 		event.setCancelled(true);
-		LoggerAdapter log = Adapter.getAdapter().getLogger();
-		try {
-			NegativityMessage message = NegativityMessagesManager.readMessage(event.getData());
-			if (message == null) {
-				String warnMessage = String.format("Received unknown plugin message. Channel %s send by %s to %s.",
-						event.getTag(), event.getSender(), event.getReceiver());
-				log.warn(warnMessage);
-				return;
-			}
-
-			ProxiedPlayer player = (ProxiedPlayer) (event.getSender() instanceof ProxiedPlayer ? event.getSender()
-					: (event.getReceiver() instanceof ProxiedPlayer ? event.getReceiver() : null));
-			if (player == null) {
-				log.warn("Error while receiving a plugin message." + " Player null (Sender: " + event.getSender()
-						+ " Receiver: " + event.getReceiver() + ")");
-				return;
-			}
-			String srvInfo = player.getServer().getInfo().getName();
-			if (NegativityChannels.isGlobalMessage(message)) {
-				NegativityChannels.manageGlobalChannelMessage(srvInfo, BungeeNegativity.getProxyId(), message);
-				
-				// send to others bungee
-				BungeeNegativity.sendRedisMessageIfNeed(
-						new RedisNegativityMessage(srvInfo, BungeeNegativity.getProxyId(), message));
-			} else {
-				EventManager.callEvent(new ProxyChannelNegativityMessageEvent(NegativityPlayer.getNegativityPlayer(player.getUniqueId(),
-						() -> new BungeePlayer(player)).getPlayer(), event.getData()));
-			}
-		} catch (Exception e) {
-			log.error("Could not read plugin message: " + e.getMessage());
-			e.printStackTrace();
+		
+		ProxiedPlayer player = (ProxiedPlayer) (event.getSender() instanceof ProxiedPlayer ? event.getSender()
+				: (event.getReceiver() instanceof ProxiedPlayer ? event.getReceiver() : null));
+		if (player == null) {
+			Adapter.getAdapter().getLogger().warn("Error while receiving a plugin message." + " Player null (Sender: " + event.getSender()
+					+ " Receiver: " + event.getReceiver() + ")");
+			return;
 		}
+		/*String srvInfo = player.getServer().getInfo().getName();
+		if (NegativityChannels.isGlobalMessage(message)) {
+			NegativityChannels.manageGlobalChannelMessage(srvInfo, BungeeNegativity.getProxyId(), message);
+			
+			// send to others bungee
+			BungeeNegativity.sendRedisMessageIfNeed(
+					new RedisNegativityMessage(srvInfo, BungeeNegativity.getProxyId(), message));
+		} else {*/
+			EventManager.callEvent(new ProxyChannelNegativityMessageEvent(NegativityPlayer.getNegativityPlayer(player.getUniqueId(),
+					() -> new BungeePlayer(player)).getPlayer(), event.getData()));
 	}
 
 	@EventHandler

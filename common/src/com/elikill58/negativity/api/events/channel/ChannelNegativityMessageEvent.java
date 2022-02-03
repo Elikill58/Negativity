@@ -17,7 +17,21 @@ public class ChannelNegativityMessageEvent extends ChannelMessageEvent {
 		}
 	}
 	
+	public ChannelNegativityMessageEvent(Player p, NegativityMessage message) {
+		super(p, NegativityMessagesManager.CHANNEL_ID, toData(message));
+		this.message = message;
+	}
+	
 	public NegativityMessage getMessage() {
 		return message;
+	}
+	
+	private static byte[] toData(NegativityMessage message) {
+		try {
+			return NegativityMessagesManager.writeMessage(message);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return new byte[0];
+		}
 	}
 }

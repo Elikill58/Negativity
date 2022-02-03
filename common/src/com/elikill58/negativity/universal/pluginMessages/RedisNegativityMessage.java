@@ -3,20 +3,22 @@ package com.elikill58.negativity.universal.pluginMessages;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.UUID;
 
 public class RedisNegativityMessage implements NegativityMessage {
 
 	public static final byte MESSAGE_ID = 7;
 	
-	private String server, proxyId;
+	private String proxyId;
+	private UUID uuid;
 	private NegativityMessage message;
 	
 	public RedisNegativityMessage() {
 		
 	}
 	
-	public RedisNegativityMessage(String server, String proxyId, NegativityMessage message) {
-		this.server = server;
+	public RedisNegativityMessage(UUID uuid, String proxyId, NegativityMessage message) {
+		this.uuid = uuid;
 		this.proxyId = proxyId;
 		this.message = message;
 	}
@@ -24,9 +26,9 @@ public class RedisNegativityMessage implements NegativityMessage {
 	public NegativityMessage getMessage() {
 		return message;
 	}
-	
-	public String getServer() {
-		return server;
+
+	public UUID getUUID() {
+		return uuid;
 	}
 	
 	public String getProxyId() {
@@ -40,14 +42,15 @@ public class RedisNegativityMessage implements NegativityMessage {
 
 	@Override
 	public void readFrom(DataInputStream input) throws IOException {
-		server = input.readUTF();
+		uuid = new UUID(input.readLong(), input.readLong());
 		proxyId = input.readUTF();
 		message = NegativityMessagesManager.readMessage(input);
 	}
 
 	@Override
 	public void writeTo(DataOutputStream output) throws IOException {
-		output.writeUTF(server);
+		output.writeLong(uuid.getMostSignificantBits());
+		output.writeLong(uuid.getLeastSignificantBits());
 		output.writeUTF(proxyId);
 		output.write(NegativityMessagesManager.writeMessage(message));
 	}

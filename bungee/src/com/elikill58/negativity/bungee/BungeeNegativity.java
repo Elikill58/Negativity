@@ -12,7 +12,6 @@ import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
-import com.elikill58.negativity.universal.pluginMessages.RedisNegativityMessage;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.config.ServerInfo;
@@ -34,7 +33,6 @@ public class BungeeNegativity extends Plugin {
 		new MetricsLite(this, 3510);
 
 		getProxy().registerChannel(NegativityMessagesManager.CHANNEL_ID);
-		getProxy().registerChannel("RedisBungee");
 		PluginManager pluginManager = getProxy().getPluginManager();
 		pluginManager.registerListener(this, new BungeeListeners());
 		pluginManager.registerCommand(this, new BNegativityCommand());
@@ -45,6 +43,7 @@ public class BungeeNegativity extends Plugin {
 		NegativityAccountStorage.setDefaultStorage("database");
 
 		if(redisBungee = getProxy().getPluginManager().getPlugin("RedisBungee") != null) {
+			getProxy().registerChannel("RedisBungee");
 			RedisSupport.load(this);
 			getLogger().info("Loaded RedisBungee support.");
 		}
@@ -62,11 +61,6 @@ public class BungeeNegativity extends Plugin {
 	public void onDisable() {
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
-	}
-	
-	public static void sendRedisMessageIfNeed(RedisNegativityMessage redisMsg) {
-		if(redisBungee)
-			RedisSupport.sendMessage(redisMsg);
 	}
 	
 	public static String getProxyId() {

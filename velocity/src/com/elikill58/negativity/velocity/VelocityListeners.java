@@ -1,7 +1,6 @@
 package com.elikill58.negativity.velocity;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -19,13 +18,8 @@ import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.detections.Cheat;
-import com.elikill58.negativity.universal.permissions.Perm;
-import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
-import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
-import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.velocity.impl.entity.VelocityPlayer;
 import com.velocitypowered.api.event.ResultedEvent;
 import com.velocitypowered.api.event.Subscribe;
@@ -36,7 +30,6 @@ import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.proxy.Player;
-import com.velocitypowered.api.proxy.server.ServerInfo;
 import com.velocitypowered.api.util.ModInfo;
 
 import net.kyori.adventure.text.Component;
@@ -47,7 +40,6 @@ import net.kyori.adventure.text.format.NamedTextColor;
 
 public class VelocityListeners {
 	
-	public static final List<Report> REPORTS = new ArrayList<>();
 	public static HashMap<String, BiConsumer<com.elikill58.negativity.api.entity.Player, byte[]>> channelListeners = new HashMap<>();
 	
 	@Subscribe
@@ -63,90 +55,12 @@ public class VelocityListeners {
 		
 		event.setResult(PluginMessageEvent.ForwardResult.handled());
 		
-		NegativityMessage message;
-		try {
-			message = NegativityMessagesManager.readMessage(event.getData());
-			if (message == null) {
-				Adapter.getAdapter().getLogger().warn("Received unknown plugin message from channel "
-					+ event.getIdentifier().getId() + " sent by " + event.getSource() + " to " + event.getTarget());
-				return;
-			}
-		} catch (IOException e) {
-			Adapter.getAdapter().getLogger().error("Could not read plugin message : " + e.getMessage());
-			return;
-		}
-		
 		Player p = (Player) (event.getSource() instanceof Player ? event.getSource() : (event.getTarget() instanceof Player ? event.getTarget() : null));
 		if (p == null) {
 			Adapter.getAdapter().getLogger().error("Source and Target not proxied (Source: " + event.getSource() + " Target: " + event.getTarget() + ")");
 			return;
 		}
-		
-		if (message instanceof AlertMessage) {
-			AlertMessage alert = (AlertMessage) message;
-			Player cible = VelocityNegativity.getInstance().getServer().getPlayer(alert.getPlayerUUID()).get();
-			String playername = cible.getUsername();
-			String serverName = cible.getCurrentServer().isPresent() ? cible.getCurrentServer().get().getServerInfo().getName() : "Unknow";
-			Object[] place = new Object[]{"%name%", playername, "%cheat%", alert.getCheat(), "%server_name%", serverName,
-				"%reliability%", alert.getReliability(), "%ping%", alert.getPing(), "%nb%", alert.getAlertsCount()};
-			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
-			for (com.elikill58.negativity.api.entity.Player commonPlayer : Adapter.getAdapter().getOnlinePlayers()) {
-				NegativityPlayer nPlayer = NegativityPlayer.getNegativityPlayer(commonPlayer);
-				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT) && nPlayer.getAccount().isShowAlert()) {
-					Player pp = (Player) commonPlayer.getDefault();
-					TextComponent.Builder msg = Component.text()
-						.content(Messages.getMessage(pp.getUniqueId(), alertMessageKey, place));
-					
-					TextComponent.Builder hoverMessage = Component.text()
-						.content(Messages.getMessage(pp.getUniqueId(), "alert_hover", place))
-						.color(NamedTextColor.GOLD);
-					Cheat.CheatHover hoverInfo = alert.getHoverInfo();
-					if (hoverInfo != null) {
-						hoverMessage.append(Component.newline())
-							.append(Component.newline())
-							.resetStyle()
-							.append(Component.text(Messages.getMessage(hoverInfo.compile(nPlayer))));
-					}
-					
-					hoverMessage.append(Component.newline())
-						.append(Component.newline())
-						.append(Component.text(Messages.getMessage(pp.getUniqueId(), "alert_tp_info", "%playername%", playername)));
-					
-					msg.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, hoverMessage.build()));
-					msg.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
-					pp.sendMessage(msg.build());
-				}
-			}
-		} else if (message instanceof ReportMessage) {
-			ReportMessage report = (ReportMessage) message;
-			Object[] place = new Object[]{"%name%", report.getReported(), "%reason%", report.getReason(), "%report%", report.getReporter()};
-			boolean hasPermitted = false;
-			for (com.elikill58.negativity.api.entity.Player commonPlayer : Adapter.getAdapter().getOnlinePlayers()) {
-				if (Perm.hasPerm(NegativityPlayer.getNegativityPlayer(commonPlayer), Perm.SHOW_REPORT)) {
-					hasPermitted = true;
-					Player pp = (Player) commonPlayer.getDefault();
-					TextComponent.Builder msg = Component.text()
-						.content(Messages.getMessage(pp.getUniqueId(), "report", place))
-						.hoverEvent(HoverEvent.hoverEvent(HoverEvent.Action.SHOW_TEXT, Component.text(Messages.getMessage(pp.getUniqueId(), "report_hover", "%playername%", report.getReported()))))
-						.clickEvent(ClickEvent.clickEvent(ClickEvent.Action.RUN_COMMAND, getCommand(p, pp)));
-					pp.sendMessage(msg.build());
-				}
-			}
-			if (!hasPermitted) {
-				VelocityListeners.REPORTS.add(new Report("/server " + p.getCurrentServer().get().getServerInfo().getName(), place));
-			}
-		} else {
-			EventManager.callEvent(new ProxyChannelNegativityMessageEvent(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer(), event.getData()));
-		}
-	}
-	
-	private String getCommand(Player targetPlayer, Player notifiedPlayer) {
-		ServerInfo targetPlayerServer = targetPlayer.getCurrentServer().get().getServerInfo();
-		ServerInfo notifiedPlayerServer = notifiedPlayer.getCurrentServer().get().getServerInfo();
-		if (targetPlayerServer.equals(notifiedPlayerServer)) {
-			return "/tp " + targetPlayer.getUsername();
-		}
-		return "/server " + notifiedPlayerServer.getName();
+		EventManager.callEvent(new ProxyChannelNegativityMessageEvent(NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new VelocityPlayer(p)).getPlayer(), event.getData()));
 	}
 	
 	@Subscribe

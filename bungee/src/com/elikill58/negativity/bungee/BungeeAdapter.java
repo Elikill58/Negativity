@@ -208,4 +208,10 @@ public class BungeeAdapter extends ProxyAdapter {
 	public void broadcastMessage(String message) {
 		pl.getProxy().broadcast(new TextComponent(message));
 	}
+	
+	@Override
+	public List<String> getAllPlugins() {
+		return pl.getProxy().getPluginManager().getPlugins().stream().map(Plugin::getDescription)
+				.map(PluginDescription::getName).collect(Collectors.toList());
+	}
 }

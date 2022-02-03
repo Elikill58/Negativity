@@ -16,6 +16,7 @@ import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.PlayerVersionMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
+import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ShowAlertStatusMessage;
 
@@ -25,18 +26,18 @@ public class ProxyEventsManager implements Listeners {
 	public void onProxyPlugin(ProxyPluginListEvent e) {
 		Adapter.getAdapter().getOnlinePlayers().forEach(this::sendVersionRequest);
 	}
-	
+
 	@EventListener
 	public void onJoin(PlayerConnectEvent e) {
-		if(ProxyCompanionManager.isIntegrationEnabled()) {
+		if (ProxyCompanionManager.isIntegrationEnabled()) {
 			sendVersionRequest(e.getPlayer());
 		}
 	}
-	
+
 	private void sendVersionRequest(Player p) {
 		p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new PlayerVersionMessage(p.getUniqueId(), null));
 	}
-	
+
 	@EventListener
 	public void onChannelMessage(ProxyChannelNegativityMessageEvent e) {
 		Player p = e.getPlayer();
@@ -50,11 +51,15 @@ public class ProxyEventsManager implements Listeners {
 		} else if (message instanceof AccountUpdateMessage) {
 			AccountUpdateMessage accountUpdateMessage = (AccountUpdateMessage) message;
 			Adapter.getAdapter().getAccountManager().update(accountUpdateMessage.getAccount());
-		} else if(message instanceof PlayerVersionMessage) {
-			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new PlayerVersionMessage(p.getUniqueId(), Version.getVersionByProtocolID(p.getProtocolVersion())));
+		} else if (message instanceof PlayerVersionMessage) {
+			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID,
+					new PlayerVersionMessage(p.getUniqueId(), Version.getVersionByProtocolID(p.getProtocolVersion())));
 		} else if (message instanceof ShowAlertStatusMessage) {
 			ShowAlertStatusMessage msg = (ShowAlertStatusMessage) message;
 			NegativityAccount.get(msg.getUUID()).setShowAlert(msg.isShowAlert());
+		} else if (message instanceof ProxyPingMessage) {
+			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ProxyPingMessage(
+					NegativityMessagesManager.PROTOCOL_VERSION, Adapter.getAdapter().getAllPlugins()));
 		} else
 			Adapter.getAdapter().getLogger().warn("Unhandled plugin message: " + message.getClass().getName());
 	}

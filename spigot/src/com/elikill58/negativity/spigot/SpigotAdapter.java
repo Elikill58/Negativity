@@ -10,6 +10,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -321,5 +322,10 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public VersionAdapter<?> getVersionAdapter() {
 		return SpigotVersionAdapter.getVersionAdapter();
+	}
+	
+	@Override
+	public List<String> getAllPlugins() {
+		return Arrays.asList(pl.getServer().getPluginManager().getPlugins()).stream().map(Plugin::getName).collect(Collectors.toList());
 	}
 }

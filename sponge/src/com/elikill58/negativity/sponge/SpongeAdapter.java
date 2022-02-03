@@ -348,4 +348,9 @@ public class SpongeAdapter extends Adapter {
 	public VersionAdapter<?> getVersionAdapter() {
 		return SpongeVersionAdapter.getVersionAdapter();
 	}
+	
+	@Override
+	public List<String> getAllPlugins() {
+		return Sponge.getPluginManager().getPlugins().stream().map(PluginContainer::getId).collect(Collectors.toList());
+	}
 }

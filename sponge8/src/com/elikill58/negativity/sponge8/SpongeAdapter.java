@@ -17,6 +17,8 @@ import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.configurate.ConfigurationNode;
 import org.spongepowered.configurate.gson.GsonConfigurationLoader;
+import org.spongepowered.plugin.PluginContainer;
+import org.spongepowered.plugin.metadata.PluginMetadata;
 
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
@@ -315,5 +317,10 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public VersionAdapter<?> getVersionAdapter() {
 		return SpongeVersionAdapter.getVersionAdapter();
+	}
+	
+	@Override
+	public List<String> getAllPlugins() {
+		return Sponge.pluginManager().plugins().stream().map(PluginContainer::metadata).map(PluginMetadata::id).collect(Collectors.toList());
 	}
 }

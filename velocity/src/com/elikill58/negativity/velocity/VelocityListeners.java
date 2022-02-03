@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.function.BiConsumer;
-import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.EventManager;
@@ -26,7 +25,6 @@ import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
-import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.velocity.impl.entity.VelocityPlayer;
 import com.velocitypowered.api.event.ResultedEvent;
@@ -37,8 +35,6 @@ import com.velocitypowered.api.event.connection.DisconnectEvent;
 import com.velocitypowered.api.event.connection.PluginMessageEvent;
 import com.velocitypowered.api.event.connection.PostLoginEvent;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
-import com.velocitypowered.api.plugin.PluginContainer;
-import com.velocitypowered.api.plugin.PluginDescription;
 import com.velocitypowered.api.proxy.Player;
 import com.velocitypowered.api.proxy.server.ServerInfo;
 import com.velocitypowered.api.util.ModInfo;
@@ -121,15 +117,6 @@ public class VelocityListeners {
 					pp.sendMessage(msg.build());
 				}
 			}
-		} else if (message instanceof ProxyPingMessage) {
-			p.getCurrentServer().ifPresent(server -> {
-				try {
-					List<String> plugins = VelocityNegativity.getInstance().getServer().getPluginManager().getPlugins().stream().map(PluginContainer::getDescription).map(PluginDescription::getId).collect(Collectors.toList());
-					server.sendPluginMessage(VelocityNegativity.NEGATIVITY_CHANNEL_ID, NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION, plugins)));
-				} catch (IOException e) {
-					Adapter.getAdapter().getLogger().error("Could not write PingProxyMessage: " + e.getMessage());
-				}
-			});
 		} else if (message instanceof ReportMessage) {
 			ReportMessage report = (ReportMessage) message;
 			Object[] place = new Object[]{"%name%", report.getReported(), "%reason%", report.getReason(), "%report%", report.getReporter()};

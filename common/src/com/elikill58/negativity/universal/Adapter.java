@@ -333,5 +333,7 @@ public abstract class Adapter {
 	 */
 	public abstract void broadcastMessage(String message);
 	
+	public abstract List<String> getAllPlugins();
+	
 	public abstract VersionAdapter<?> getVersionAdapter();
 }

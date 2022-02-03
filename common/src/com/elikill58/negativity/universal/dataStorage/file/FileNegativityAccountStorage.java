@@ -47,7 +47,8 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 				List<Report> reports = deserializeReports(config);
 				String IP = config.getString("ip", "0.0.0.0");
 				long creationTime = config.getLong("creation-time", System.currentTimeMillis());
-				return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, IP, creationTime);
+				boolean showAlert = config.getBoolean("show-alert", true);
+				return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, IP, creationTime, showAlert);
 			} catch (Exception e) { // prevent parsing error due to corrupted file.
 				Adapter ada = Adapter.getAdapter();
 				ada.getLogger().info("File account of " + ada.getOfflinePlayer(playerId).getName() + " have been corrupted. Creating a new one ...");

@@ -1,5 +1,6 @@
 package com.elikill58.negativity.api.entity;
 
+import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Optional;
@@ -17,6 +18,8 @@ import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
+import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 
 public interface Player extends OfflinePlayer {
 
@@ -270,6 +273,24 @@ public interface Player extends OfflinePlayer {
 	}
 	void addPotionEffect(PotionEffectType type, int duration, int amplifier);
 	void removePotionEffect(PotionEffectType type);
+	
+	/**
+	 * Send plugin message :
+	 * bungee > spigot
+	 * OR
+	 * spigot > bungee
+	 * On the specified channel
+	 * 
+	 * @param channelId the channel ID
+	 * @param writeMessage the message to sent
+	 */
+	default void sendPluginMessage(String channelId, NegativityMessage message) {
+		try {
+			sendPluginMessage(channelId, NegativityMessagesManager.writeMessage(message));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 	
 	/**
 	 * Send plugin message :

@@ -51,7 +51,8 @@ public class AccountUpdateMessage implements NegativityMessage {
 		// TODO write and read report update message
 		String IP = input.readUTF();
 		long creationTime = input.readLong();
-		account = new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, new ArrayList<>(), IP, creationTime);
+		boolean showAlert = input.readBoolean();
+		account = new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, new ArrayList<>(), IP, creationTime, showAlert);
 	}
 
 	@Override
@@ -82,6 +83,7 @@ public class AccountUpdateMessage implements NegativityMessage {
 		}
 		output.writeUTF(account.getIp());
 		output.writeLong(account.getCreationTime());
+		output.writeBoolean(account.isShowAlert());
 	}
 
 	@Override

@@ -24,7 +24,7 @@ public class ReportMessage implements NegativityMessage {
 
 	@Override
 	public byte messageId() {
-		return 2;
+		return MESSAGE_ID;
 	}
 
 	@Override

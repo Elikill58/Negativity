@@ -25,10 +25,6 @@ public class ProxyEventsManager implements Listeners {
 	}
 	
 	private void sendVersionRequest(Player p) {
-		try { // send ask version request
-			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(new PlayerVersionMessage(p.getUniqueId(), null)));
-		} catch (Exception exc) {
-			exc.printStackTrace();
-		}
+		p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new PlayerVersionMessage(p.getUniqueId(), null));
 	}
 }

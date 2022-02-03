@@ -27,13 +27,13 @@ public final class NegativityAccount {
 	private final List<Report> reports;
 	private final Map<String, Integer> warns;
 	private final long creationTime;
-	private boolean inBanning = false, isMcLeaks = false;
+	private boolean inBanning = false, isMcLeaks = false, showAlert = true;
 
 	public NegativityAccount(UUID playerId) {
-		this(playerId, null, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>(), new ArrayList<>(), "0.0.0.0", System.currentTimeMillis());
+		this(playerId, null, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>(), new ArrayList<>(), "0.0.0.0", System.currentTimeMillis(), true);
 	}
 
-	public NegativityAccount(UUID playerId, String playerName, String lang, Minerate minerate, int mostClicksPerSecond, Map<String, Integer> warns, List<Report> reports, String ip, long creationTime) {
+	public NegativityAccount(UUID playerId, String playerName, String lang, Minerate minerate, int mostClicksPerSecond, Map<String, Integer> warns, List<Report> reports, String ip, long creationTime, boolean showAlert) {
 		this.playerId = playerId;
 		this.playerName = playerName;
 		this.lang = lang;
@@ -43,6 +43,7 @@ public final class NegativityAccount {
 		this.reports = reports;
 		this.ip = ip;
 		this.creationTime = creationTime;
+		this.showAlert = showAlert;
 		Adapter.getAdapter().isUsingMcLeaks(playerId).thenAccept(isUsingMcLeaks -> {
 			this.isMcLeaks = isUsingMcLeaks;
 		});
@@ -127,6 +128,14 @@ public final class NegativityAccount {
 
 	public boolean isInBanning() {
 		return inBanning;
+	}
+	
+	public boolean isShowAlert() {
+		return showAlert;
+	}
+	
+	public void setShowAlert(boolean showAlert) {
+		this.showAlert = showAlert;
 	}
 	
 	public String getIp() {

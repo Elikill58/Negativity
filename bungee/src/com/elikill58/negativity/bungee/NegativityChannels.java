@@ -22,6 +22,7 @@ import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
+import com.elikill58.negativity.universal.pluginMessages.ShowAlertStatusMessage;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -48,7 +49,7 @@ public class NegativityChannels {
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (ProxiedPlayer pp : ProxyServer.getInstance().getPlayers()) {
 				NegativityPlayer nPlayer = NegativityPlayer.getCached(pp.getUniqueId());
-				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT)) {
+				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT) && nPlayer.getAccount().isShowAlert()) {
 					TextComponent alertMessage = new TextComponent(
 							Messages.getMessage(pp.getUniqueId(), alertMessageKey, place));
 
@@ -113,6 +114,9 @@ public class NegativityChannels {
 			p.getServer().sendData(NegativityMessagesManager.CHANNEL_ID,
 					NegativityMessagesManager.writeMessage(new PlayerVersionMessage(p.getUniqueId(),
 							PlayerVersionManager.getPlayerVersion(new BungeePlayer(p)))));
+		} else if (message instanceof ShowAlertStatusMessage) {
+			ShowAlertStatusMessage msg = (ShowAlertStatusMessage) message;
+			NegativityAccount.get(msg.getUUID()).setShowAlert(msg.isShowAlert());
 		} else {
 			Adapter.getAdapter().getLogger().warn("Unhandled plugin message " + message.getClass());
 		}

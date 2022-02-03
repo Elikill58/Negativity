@@ -34,6 +34,7 @@ import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
+import com.elikill58.negativity.universal.pluginMessages.ShowAlertStatusMessage;
 import com.elikill58.negativity.velocity.impl.entity.VelocityPlayer;
 import com.velocitypowered.api.event.ResultedEvent;
 import com.velocitypowered.api.event.Subscribe;
@@ -102,7 +103,7 @@ public class VelocityListeners {
 			String alertMessageKey = alert.isMultiple() ? "alert_multiple" : "alert";
 			for (com.elikill58.negativity.api.entity.Player commonPlayer : Adapter.getAdapter().getOnlinePlayers()) {
 				NegativityPlayer nPlayer = NegativityPlayer.getNegativityPlayer(commonPlayer);
-				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT)) {
+				if (Perm.hasPerm(nPlayer, Perm.SHOW_ALERT) && nPlayer.getAccount().isShowAlert()) {
 					Player pp = (Player) commonPlayer.getDefault();
 					TextComponent.Builder msg = Component.text()
 						.content(Messages.getMessage(pp.getUniqueId(), alertMessageKey, place));
@@ -172,6 +173,9 @@ public class VelocityListeners {
 					e.printStackTrace();
 				}
 			}
+		} else if (message instanceof ShowAlertStatusMessage) {
+			ShowAlertStatusMessage msg = (ShowAlertStatusMessage) message;
+			NegativityAccount.get(msg.getUUID()).setShowAlert(msg.isShowAlert());
 		} else {
 			Adapter.getAdapter().getLogger().warn("Unhandled plugin message: " + message.getClass().getName());
 		}

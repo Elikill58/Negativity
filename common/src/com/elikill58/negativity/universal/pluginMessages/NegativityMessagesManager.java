@@ -30,6 +30,7 @@ public class NegativityMessagesManager {
 		messages.put(AccountUpdateMessage.MESSAGE_ID, AccountUpdateMessage::new);
 		messages.put(RedisNegativityMessage.MESSAGE_ID, RedisNegativityMessage::new);
 		messages.put(PlayerVersionMessage.MESSAGE_ID, PlayerVersionMessage::new);
+		messages.put(ShowAlertStatusMessage.MESSAGE_ID, ShowAlertStatusMessage::new);
 		MESSAGES_BY_ID = Collections.unmodifiableMap(messages);
 	}
 

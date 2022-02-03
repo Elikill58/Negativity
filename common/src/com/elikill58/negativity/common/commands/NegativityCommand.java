@@ -25,6 +25,7 @@ import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -38,6 +39,7 @@ import com.elikill58.negativity.universal.playerModifications.PlayerModification
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.PlayerVersionMessage;
+import com.elikill58.negativity.universal.pluginMessages.ShowAlertStatusMessage;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.translation.MessagesUpdater;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -58,12 +60,9 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			sendHelp(sender, (arg.length > 1 && UniversalUtils.isInteger(arg[1]) ? Integer.parseInt(arg[1]) : 1));
 			return true;
 		} else if(arg[0].equalsIgnoreCase("test")) {
-			try { // send ask version request
-				Player p = (Player) sender;
-				p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager.writeMessage(new PlayerVersionMessage(p.getUniqueId(), null)));
-			} catch (Exception exc) {
-				exc.printStackTrace();
-			}
+			// send ask version request
+			Player p = (Player) sender;
+			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new PlayerVersionMessage(p.getUniqueId(), null));
 			return false;
 		}
 		if (arg[0].equalsIgnoreCase("verif")) {
@@ -125,9 +124,15 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				return true;
 			}
 			Player playerSender = (Player) sender;
-			NegativityPlayer np = NegativityPlayer.getCached(playerSender.getUniqueId());
-			np.disableShowingAlert = !np.disableShowingAlert;
-			Messages.sendMessage(playerSender, np.disableShowingAlert ? "negativity.see_no_longer_alert" : "negativity.see_alert");
+			UUID uuid = playerSender.getUniqueId();
+			NegativityAccount acc = NegativityAccount.get(uuid);
+			boolean newVal = !acc.isShowAlert();
+			acc.setShowAlert(newVal);
+			if(ProxyCompanionManager.isIntegrationEnabled()) {
+				playerSender.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ShowAlertStatusMessage(uuid, newVal)); // send message to bungee
+			}
+			Messages.sendMessage(playerSender, newVal ? "negativity.see_no_longer_alert" : "negativity.see_alert");
+			Adapter.getAdapter().getAccountManager().update(acc);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("reload")) {
 			if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getNegativityPlayer((Player) sender), Perm.RELOAD)) {

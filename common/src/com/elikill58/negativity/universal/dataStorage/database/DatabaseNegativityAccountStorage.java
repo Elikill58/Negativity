@@ -50,7 +50,8 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 					List<Report> reports = deserializeReports(result.getString("reports"));
 					String IP = result.getString("ip");
 					long creationTime = result.getTimestamp("creation_time").getTime();
-					return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, IP, creationTime);
+					boolean showAlert = result.getBoolean("show_alert");
+					return new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, IP, creationTime, showAlert);
 				}
 			} catch (SQLException e) {
 				e.printStackTrace();

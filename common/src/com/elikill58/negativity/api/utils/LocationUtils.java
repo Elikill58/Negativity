@@ -213,7 +213,24 @@ public class LocationUtils {
 	 * @return true if one of specified material if around
 	 */
 	public static boolean hasOtherThan(Location loc, Material m) {
-		return hasOtherThan(loc, m.getId());
+		loc = loc.clone();
+		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, -1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(-1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(-1, 0, 0).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+			return true;
+		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
+			return true;
+		return false;
 	}
 
 	/**

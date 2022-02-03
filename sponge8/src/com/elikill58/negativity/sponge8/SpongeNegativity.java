@@ -33,6 +33,7 @@ import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.builtin.jvm.Plugin;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.events.channel.GameChannelNegativityMessageEvent;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge8.impl.entity.SpongePlayer;
@@ -51,9 +52,7 @@ import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
-import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
-import com.elikill58.negativity.universal.pluginMessages.PlayerVersionMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
@@ -231,21 +230,8 @@ public class SpongeNegativity {
 			if (!(connection instanceof PlayerConnection))
 				return;
 			byte[] rawData = data.readBytes(data.available());
-			NegativityMessage message;
-			try {
-				message = NegativityMessagesManager.readMessage(rawData);
-			} catch (IOException e) {
-				SpongeNegativity.getInstance().getLogger().error("Failed to read proxy companion message.", e);
-				return;
-			}
 			ServerPlayer p = (ServerPlayer) ((PlayerConnection) connection).player();
-			if (message instanceof ProxyPingMessage) {
-				ProxyPingMessage pingMessage = (ProxyPingMessage) message;
-				ProxyCompanionManager.foundCompanion(pingMessage);
-			} else if(message instanceof PlayerVersionMessage)
-				SpongeEntityManager.getPlayer(p).setPlayerVersion(((PlayerVersionMessage) message).getVersion());
-			else
-				SpongeNegativity.getInstance().getLogger().warn("Received unexpected plugin message " + message.getClass().getName());
+			com.elikill58.negativity.api.events.EventManager.callEvent(new GameChannelNegativityMessageEvent(SpongeEntityManager.getPlayer(p), rawData));
 		}
 	}
 	

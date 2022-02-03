@@ -6,10 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.channel.ProxyChannelNegativityMessageEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
 import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
@@ -22,9 +24,11 @@ import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
+import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.RedisNegativityMessage;
 
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -38,6 +42,8 @@ import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.event.PostLoginEvent;
 import net.md_5.bungee.api.event.ServerConnectedEvent;
 import net.md_5.bungee.api.plugin.Listener;
+import net.md_5.bungee.api.plugin.Plugin;
+import net.md_5.bungee.api.plugin.PluginDescription;
 import net.md_5.bungee.chat.ComponentSerializer;
 import net.md_5.bungee.event.EventHandler;
 
@@ -89,9 +95,15 @@ public class BungeeListeners implements Listener {
 				// send to others bungee
 				BungeeNegativity.sendRedisMessageIfNeed(
 						new RedisNegativityMessage(srvInfo, BungeeNegativity.getProxyId(), message));
+			} else if(message instanceof ProxyPingMessage) {
+				ProxyServer srv = ProxyServer.getInstance();
+				List<String> plugins = srv.getPluginManager().getPlugins().stream().map(Plugin::getDescription)
+						.map(PluginDescription::getName).collect(Collectors.toList());
+				player.getServer().sendData(NegativityMessagesManager.CHANNEL_ID, NegativityMessagesManager
+						.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION, plugins)));
 			} else {
-				NegativityChannels.manageReceivedChannelMessage(player, srvInfo, BungeeNegativity.getProxyId(),
-						message);
+				EventManager.callEvent(new ProxyChannelNegativityMessageEvent(NegativityPlayer.getNegativityPlayer(player.getUniqueId(),
+						() -> new BungeePlayer(player)).getPlayer(), event.getData()));
 			}
 		} catch (Exception e) {
 			log.error("Could not read plugin message: " + e.getMessage());

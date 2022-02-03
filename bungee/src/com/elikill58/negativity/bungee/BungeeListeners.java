@@ -71,15 +71,7 @@ public class BungeeListeners implements Listener {
 					+ " Receiver: " + event.getReceiver() + ")");
 			return;
 		}
-		/*String srvInfo = player.getServer().getInfo().getName();
-		if (NegativityChannels.isGlobalMessage(message)) {
-			NegativityChannels.manageGlobalChannelMessage(srvInfo, BungeeNegativity.getProxyId(), message);
-			
-			// send to others bungee
-			BungeeNegativity.sendRedisMessageIfNeed(
-					new RedisNegativityMessage(srvInfo, BungeeNegativity.getProxyId(), message));
-		} else {*/
-			EventManager.callEvent(new ProxyChannelNegativityMessageEvent(NegativityPlayer.getNegativityPlayer(player.getUniqueId(),
+		EventManager.callEvent(new ProxyChannelNegativityMessageEvent(NegativityPlayer.getNegativityPlayer(player.getUniqueId(),
 					() -> new BungeePlayer(player)).getPlayer(), event.getData()));
 	}
 

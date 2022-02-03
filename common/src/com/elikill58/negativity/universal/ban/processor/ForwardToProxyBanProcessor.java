@@ -1,11 +1,9 @@
 package com.elikill58.negativity.universal.ban.processor;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import java.util.function.Consumer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -24,35 +22,17 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 
 	public static final String PROCESSOR_ID = "proxy";
 
-	private final Consumer<byte[]> pluginMessageSender;
-
-	public ForwardToProxyBanProcessor(Consumer<byte[]> pluginMessageSender) {
-		this.pluginMessageSender = pluginMessageSender;
-	}
-
 	@Override
 	public BanResult executeBan(Ban ban) {
-		try {
-			byte[] rawMessage = NegativityMessagesManager.writeMessage(new ProxyExecuteBanMessage(ban));
-			pluginMessageSender.accept(rawMessage);
-		} catch (IOException e) {
-			Adapter.getAdapter().getLogger().error("Could not write ProxyBanMessage: " + e.getMessage());
-			e.printStackTrace();
-		}
+		// get(0) because there is at least the cheating player
+		Adapter.getAdapter().getOnlinePlayers().get(0).sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ProxyExecuteBanMessage(ban));
 		return new BanResult(BanResultType.DONE, ban);
 	}
 	
 	@Override
 	public BanResult revokeBan(UUID playerId) {
-		try {
-			byte[] rawMessage = NegativityMessagesManager.writeMessage(new ProxyRevokeBanMessage(playerId));
-			pluginMessageSender.accept(rawMessage);
-			return new BanResult(BanResultType.DONE, new Ban(playerId, "", "", BanType.UNKNOW, -1, null, null, BanStatus.REVOKED, -1, System.currentTimeMillis()));
-		} catch (IOException e) {
-			Adapter.getAdapter().getLogger().error("Could not write ProxyBanMessage: " + e.getMessage());
-			e.printStackTrace();
-			return new BanResult(BanResultType.EXCEPTION, null);
-		}
+		Adapter.getAdapter().getOnlinePlayers().get(0).sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ProxyRevokeBanMessage(playerId));
+		return new BanResult(BanResultType.DONE, new Ban(playerId, "", "", BanType.UNKNOW, -1, null, null, BanStatus.REVOKED, -1, System.currentTimeMillis()));
 	}
 
 	@Nullable

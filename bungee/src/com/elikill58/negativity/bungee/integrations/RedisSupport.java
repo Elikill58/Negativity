@@ -37,7 +37,8 @@ public class RedisSupport implements Listener, MultiProxy {
 	
 	public static void sendRedisMessage(Player p, NegativityMessage message) {
 		try {
-			RedisBungee.getApi().sendChannelMessage(REDIS_CHANNEL, new String(NegativityMessagesManager.writeMessage(new RedisNegativityMessage(p.getUniqueId(), BungeeNegativity.getProxyId(), message))));
+			RedisBungee.getApi().sendChannelMessage(REDIS_CHANNEL,
+					new String(NegativityMessagesManager.writeMessage(new RedisNegativityMessage(p.getUniqueId(), BungeeNegativity.getProxyId(), message))));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -72,7 +73,7 @@ public class RedisSupport implements Listener, MultiProxy {
 				if(!redisMsg.getProxyId().equalsIgnoreCase(getProxyId())) {
 					UUID uuid = redisMsg.getUUID();
 					Player p = NegativityPlayer.getNegativityPlayer(uuid, () -> new RedisBungeePlayer(uuid)).getPlayer();
-					EventManager.callEvent(new ProxyChannelNegativityMessageEvent(p, redisMsg.getMessage()));
+					EventManager.callEvent(new ProxyChannelNegativityMessageEvent(p, redisMsg.getMessage(), false));
 				}
 			} else
 				Adapter.getAdapter().getLogger().error("Received message with redis is not supported: " + negMsg.getClass().getSimpleName());

@@ -72,7 +72,7 @@ public class BungeeListeners implements Listener {
 			return;
 		}
 		EventManager.callEvent(new ProxyChannelNegativityMessageEvent(NegativityPlayer.getNegativityPlayer(player.getUniqueId(),
-					() -> new BungeePlayer(player)).getPlayer(), event.getData()));
+					() -> new BungeePlayer(player)).getPlayer(), event.getData(), true));
 	}
 
 	@EventHandler

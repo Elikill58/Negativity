@@ -79,7 +79,7 @@ public class ProxyEventsManager implements Listeners {
 					ada.sendMessageRunnableHover(mod, msg, hover, getCommand(p, mod));
 				}
 			}
-			if (MultiProxyManager.isUsingMultiProxy())
+			if (e.isShouldBeSendToMultiProxy() && MultiProxyManager.isUsingMultiProxy())
 				MultiProxyManager.getMultiProxy().sendMessage(p, message);
 		} else if (message instanceof ReportMessage) {
 			ReportMessage report = (ReportMessage) message;
@@ -96,7 +96,7 @@ public class ProxyEventsManager implements Listeners {
 			}
 			if (!hasPermitted)
 				REPORTS.add(report);
-			if (MultiProxyManager.isUsingMultiProxy())
+			if (e.isShouldBeSendToMultiProxy() && MultiProxyManager.isUsingMultiProxy())
 				MultiProxyManager.getMultiProxy().sendMessage(p, message);
 		} else if (message instanceof ProxyExecuteBanMessage) {
 			ProxyExecuteBanMessage banMessage = (ProxyExecuteBanMessage) message;

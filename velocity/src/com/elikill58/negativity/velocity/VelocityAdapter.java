@@ -32,6 +32,8 @@ import com.velocitypowered.api.plugin.PluginDescription;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 
 public class VelocityAdapter extends ProxyAdapter {
 
@@ -198,5 +200,11 @@ public class VelocityAdapter extends ProxyAdapter {
 	public List<String> getAllPlugins() {
 		return VelocityNegativity.getInstance().getServer().getPluginManager().getPlugins().stream()
 				.map(PluginContainer::getDescription).map(PluginDescription::getId).collect(Collectors.toList());
+	}
+	
+	@Override
+	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
+		com.velocitypowered.api.proxy.Player vp = (com.velocitypowered.api.proxy.Player) p.getDefault();
+		vp.sendMessage(Component.text(message).clickEvent(ClickEvent.runCommand(command)).hoverEvent(HoverEvent.showText(Component.text(hover))));
 	}
 }

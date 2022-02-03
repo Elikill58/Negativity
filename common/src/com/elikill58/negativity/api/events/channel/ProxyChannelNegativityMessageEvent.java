@@ -5,12 +5,19 @@ import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 
 public class ProxyChannelNegativityMessageEvent extends ChannelNegativityMessageEvent {
 
-	public ProxyChannelNegativityMessageEvent(Player p, byte[] data) {
+	private final boolean shouldBeSendToMultiProxy;
+	
+	public ProxyChannelNegativityMessageEvent(Player p, byte[] data, boolean shouldBeSendToMultiProxy) {
 		super(p, data);
+		this.shouldBeSendToMultiProxy = shouldBeSendToMultiProxy;
 	}
 
-	public ProxyChannelNegativityMessageEvent(Player p, NegativityMessage message) {
+	public ProxyChannelNegativityMessageEvent(Player p, NegativityMessage message, boolean shouldBeSendToMultiProxy) {
 		super(p, message);
+		this.shouldBeSendToMultiProxy = shouldBeSendToMultiProxy;
 	}
 
+	public boolean isShouldBeSendToMultiProxy() {
+		return shouldBeSendToMultiProxy;
+	}
 }

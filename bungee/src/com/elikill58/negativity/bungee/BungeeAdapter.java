@@ -32,6 +32,9 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.gson.Gson;
 
 import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -213,5 +216,13 @@ public class BungeeAdapter extends ProxyAdapter {
 	public List<String> getAllPlugins() {
 		return pl.getProxy().getPluginManager().getPlugins().stream().map(Plugin::getDescription)
 				.map(PluginDescription::getName).collect(Collectors.toList());
+	}
+	
+	@Override
+	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
+		TextComponent text = new TextComponent(message);
+		text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
+		text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
+		((ProxiedPlayer) p.getDefault()).sendMessage(text);
 	}
 }

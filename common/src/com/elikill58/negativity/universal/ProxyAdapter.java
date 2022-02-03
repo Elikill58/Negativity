@@ -87,10 +87,6 @@ public abstract class ProxyAdapter extends Adapter {
 	public @Nullable OfflinePlayer getOfflinePlayer(UUID uuid) {
 		throw new UnsupportedOperationException("OfflinePlayer is unsupported on proxies");
 	}
-	
-	@Override
-	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
-	}
 
 	@Override
 	public VersionAdapter<?> getVersionAdapter() {

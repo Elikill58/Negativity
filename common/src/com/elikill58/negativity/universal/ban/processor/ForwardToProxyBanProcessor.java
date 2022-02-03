@@ -4,11 +4,14 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Platform;
+import com.elikill58.negativity.universal.PlatformDependentExtension;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
@@ -65,5 +68,22 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 	@Override
 	public List<String> getDescription() {
 		return Arrays.asList(ChatColor.YELLOW + "Send request to proxy.", "&eDepend of proxy config.");
+	}
+
+	public static class Provider implements BanProcessorProvider, PlatformDependentExtension {
+		@Override
+		public String getId() {
+			return PROCESSOR_ID;
+		}
+	
+		@Override
+		public @Nullable BanProcessor create(Adapter adapter) {
+			return new ForwardToProxyBanProcessor();
+		}
+
+		@Override
+		public List<Platform> getPlatforms() {
+			return Arrays.asList(Platform.values()).stream().filter(p -> !p.isProxy()).collect(Collectors.toList());
+		}
 	}
 }

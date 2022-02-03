@@ -374,7 +374,7 @@ public class Negativity {
 		for (T extension : ServiceLoader.load(extensionClass, classLoader)) {
 			try {
 				if (extension instanceof PlatformDependentExtension
-					&& !adapter.getPlatformID().equals(((PlatformDependentExtension) extension).getPlatform())) {
+					&& !((PlatformDependentExtension) extension).getPlatforms().contains(adapter.getPlatformID())) {
 					continue;
 				}
 				

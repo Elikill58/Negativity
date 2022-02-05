@@ -6,7 +6,10 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
+import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
+import com.elikill58.negativity.api.item.ItemFlag;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.common.inventories.holders.admin.SpecialManagerHolder;
@@ -26,12 +29,19 @@ public class SpecialManagerInventory extends AbstractInventory<SpecialManagerHol
 		int slot = 0;
 		for(Special c : Special.values())
 			if(c.getMaterial() != null)
-				inv.set(slot++, ItemBuilder.Builder(c.getMaterial()).displayName(c.getName())
-						.lore(ChatColor.GRAY + "State: " + Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled"))).build());
+				inv.set(slot++, getItem(c, p));
 
 		inv.set(inv.getSize() - 2, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
 		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
 		p.openInventory(inv);
+	}
+
+	private ItemStack getItem(Special c, Player p) {
+		ItemBuilder builder = ItemBuilder.Builder(c.getMaterial()).displayName(c.getName()).lore(ChatColor.GRAY
+				+ "State: " + Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")));
+		if (c.isActive())
+			builder.unsafeEnchant(Enchantment.UNBREAKING, 1).itemFlag(ItemFlag.HIDE_ENCHANTS);
+		return builder.build();
 	}
 
 	@Override

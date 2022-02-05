@@ -13,7 +13,6 @@ import java.util.logging.Level;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.command.PluginCommand;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -56,9 +55,22 @@ public class SpigotNegativity extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		INSTANCE = this;
+		
+		new File(getDataFolder().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
+		if (!new File(getDataFolder().getAbsolutePath(), "config.yml").exists()) {
+			// show message before setting adapter (which create config file)
+			getLogger().info("------ Negativity Information ------");
+			getLogger().info("");
+			getLogger().info(" > Thanks for downloading Negativity :)");
+			getLogger().info("I'm trying to make the better anti-cheat has possible.");
+			getLogger().info("If you get error/false positive, or just have suggestion, you can contact me via:");
+			getLogger().info("Discord: @Elikill58#0743, @Elikill58 on twitter or in all other web site like Spigotmc ...");
+			getLogger().info("");
+			getLogger().info("------ Negativity Information ------");
+		}
 		if (Adapter.getAdapter() == null)
 			Adapter.setAdapter(new SpigotAdapter(this));
-
+		
 		Version v = Version.getVersion(Utils.VERSION);
 		if (v.equals(Version.HIGHER))
 			getLogger().warning("Unknow server version " + Utils.VERSION + " ! Some problems can appears.");
@@ -71,19 +83,6 @@ public class SpigotNegativity extends JavaPlugin {
 		packetManager = new NegativityPacketManager(this);
 		packetManager.getPacketManager().load();
 		
-		new File(getDataFolder().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
-		if (!new File(getDataFolder().getAbsolutePath() + File.separator + "config.yml").exists()) {
-			getLogger().info("------ Negativity Information ------");
-			getLogger().info("");
-			getLogger().info(" > Thanks for downloading Negativity :)");
-			getLogger().info("I'm trying to make the better anti-cheat has possible.");
-			getLogger().info("If you get error/false positive, or just have suggestion, you can contact me via:");
-			getLogger().info("Discord: @Elikill58#0743, @Elikill58 on twitter or in all other web site like Spigotmc ...");
-			getLogger().info("");
-			getLogger().info("------ Negativity Information ------");
-			getConfig().options().copyDefaults();
-			saveDefaultConfig();
-		}
 		try {
 			Class.forName("org.spigotmc.SpigotConfig");
 			isCraftBukkit = false;
@@ -149,7 +148,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private void loadCommand() {
 		CommandsListeners command = new CommandsListeners();
-		ConfigurationSection commandSection = getConfig().getConfigurationSection("commands");
+		Configuration commandSection = Adapter.getAdapter().getConfig().getSection("commands");
 		PluginCommand negativity = getCommand("negativity");
 		negativity.setExecutor(command);
 		negativity.setTabCompleter(command);

@@ -52,9 +52,9 @@ public class Reach extends Cheat implements Listeners {
 		Player p = e.getPlayer();
 		if (packet.getPacketType().equals(PacketType.Client.POSITION)) {
 			if (np.listLocations.has(getKey(), "entity-hit-position")) {
-				Location loc = np.lastLocations.get(np.lastLocations.size() - 2);
-				Entity cible = np.entities.remove(getKey(), "entity-hit-object");
 				List<Location> positions = np.listLocations.remove(getKey(), "entity-hit-position");
+				Location loc = positions.get(positions.size() - 2);
+				Entity cible = np.entities.remove(getKey(), "entity-hit-object");
 
 				positions.stream().mapToDouble(other -> getDistance(loc, other)).min().ifPresent(dis -> {
 					recordData(p.getUniqueId(), HIT_DISTANCE, dis);
@@ -90,7 +90,7 @@ public class Reach extends Cheat implements Listeners {
 			} else
 				list.add(cible.getLocation());
 			np.listLocations.set(getKey(), "entity-hit-position", list);
-			np.entities.set(getKey(), "entity-hit-object", cible);p.getBoundingBox();
+			np.entities.set(getKey(), "entity-hit-object", cible);
 		}
 	}
 

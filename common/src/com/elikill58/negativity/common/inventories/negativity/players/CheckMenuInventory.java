@@ -39,6 +39,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
 		actualizeInventory(p, cible, inv);
+		inv.set(3, ItemBuilder.Builder(Materials.BONE).displayName(ChatColor.GRAY + "Clear clicks").build());
 		
 		inv.set(8, ItemBuilder.getSkullItem(cible));
 				
@@ -127,13 +128,14 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, CheckMenuHolder nh) {
 		Player cible = nh.getCible();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		if (m.equals(Materials.EYE_OF_ENDER)) {
 			p.teleport(cible.getLocation());
 			p.closeInventory();
 		} else if (m.equals(Materials.SKELETON_SKULL)) {
 			if(e.getSlot() == 12) {
 				p.closeInventory();
-				NegativityPlayer.getNegativityPlayer(cible).makeAppearEntities();
+				np.makeAppearEntities();
 			}
 		} else if(m.equals(Materials.SPIDER_EYE)){
 			p.openInventory(cible.getInventory());
@@ -141,7 +143,6 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 			InventoryManager.open(NegativityInventory.ACTIVED_CHEAT, p, cible);
 		} else if(m.equals(Materials.PACKED_ICE)) {
 			p.closeInventory();
-			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 			np.isFreeze = !np.isFreeze;
 			if (np.isFreeze) {
 				if (Adapter.getAdapter().getConfig().getBoolean("inventory.inv_freeze_active"))
@@ -159,6 +160,12 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 			InventoryManager.open(NegativityInventory.KICK, p, cible);
 		} else if(m.equals(Materials.ANVIL)) {
 			InventoryManager.open(NegativityInventory.BAN, p, cible);
+		} else if(m.equals(Materials.BONE)) {
+			np.LAST_CLICK = 0;
+			np.ACTUAL_CLICK = 0;
+			NegativityAccount acc = np.getAccount();
+			acc.setMostClicksPerSecond(0);
+			Adapter.getAdapter().getAccountManager().update(acc);
 		}
 	}
 }

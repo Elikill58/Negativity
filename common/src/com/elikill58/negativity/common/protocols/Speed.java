@@ -109,7 +109,7 @@ public class Speed extends Cheat implements Listeners {
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
 						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
 				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent, "distance-ground",
-						"Player in ground. WalkSpeed: " + walkSpeed + ", Distance between from/to location: " + y + ", walkTest: " + walkTest +
+						"Ground. WS: " + walkSpeed + ", Dis from/to: " + y + ", walkTest: " + walkTest +
 						", walkWithEss: " + walkWithEssTest + ", y: " + y + ", disDir: " + disWithDir + ", disDirY: " + disWithDirY, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
 			}
 		}
@@ -117,7 +117,7 @@ public class Speed extends Cheat implements Listeners {
 			double calculatedSpeedWith = getSpeed(from, to);
 			double calculatedSpeedWithoutY = getSpeed(from, to, p.getVelocity());
 			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && velocity > 0.1
-					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR") && velocity != 0.16477328182606651) { // "+0.01" if to prevent lag"
+					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR") && velocity % 0.16477328182606651 != 0) { // "+0.01" if to prevent lag"
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated",
 						"Calculated speed: " + calculatedSpeedWithoutY + ", WS: " + p.getWalkSpeed() + ", Velocity Y: " + velocity + ", speed: " + calculatedSpeedWith);
 			}

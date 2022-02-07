@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
@@ -95,12 +96,15 @@ public class Scaffold extends Cheat implements Listeners {
 		
 		BlockRay blockRay = new BlockRayBuilder(p).neededPositions(allLocs.stream().map(Vector::toBlockVector).distinct().collect(Collectors.toList()))
 				.maxDistance(6).build();
+		if(blockRay.getBasePosition().getYaw() > 1000)
+			return; // invalid yaw
 		Adapter.getAdapter().runSync(() -> {
 			BlockRayResult result = blockRay.compile();
 			Block searched = result.getBlock() == null ? place : result.getBlock();
 			double distance = place.getLocation().distance(searched.getLocation());
-			if (distance > 4.6 || !result.getRayResult().isFounded()) {
-				Negativity.alertMod(distance > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+			int maxDistance = p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4;
+			if (distance > maxDistance || !result.getRayResult().isFounded()) {
+				Negativity.alertMod(distance > maxDistance + 1 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(distance * 30), "distance",
 						"Place: " + place + ", targetVisual: " + searched + ", vec: " + result.getVector() + ", begin: " + blockRay.getBasePosition()
 								+ " Distance: " + distance + ". Result: " + result.getRayResult()

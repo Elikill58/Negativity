@@ -24,10 +24,10 @@ public class AimBot extends Cheat implements Listeners {
 	public AimBot() {
 		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, true, false, "aim");
 	}
-	
+
 	@Check(name = "gcd", conditions = CheckConditions.SURVIVAL, description = "Calculate GCD between attacks", ignoreCancel = true)
 	public void gcd(PacketReceiveEvent e, NegativityPlayer np) {
-		if(!e.hasPlayer())
+		if (!e.hasPlayer())
 			return;
 		Player p = e.getPlayer();
 		PacketType type = e.getPacket().getPacketType();
@@ -35,7 +35,8 @@ public class AimBot extends Cheat implements Listeners {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
 			if (!flying.hasLook)
 				return;
-			List<Double> allPitchs = np.listDoubles.get(getKey(), "all-pitchs", new ArrayList<Double>(Arrays.asList(0d, 0d, 0d, 0d, 0d)));
+			List<Double> allPitchs = np.listDoubles.get(getKey(), "all-pitchs",
+					new ArrayList<Double>(Arrays.asList(0d, 0d, 0d, 0d, 0d, 0d, 0d)));
 			double deltaYaw = flying.yaw - np.doubles.get(getKey(), "last-yaw", 0.0);
 			double deltaPitch = flying.pitch - np.doubles.get(getKey(), "last-pitch", 0.0);
 			double pitch = flying.pitch;
@@ -44,36 +45,45 @@ public class AimBot extends Cheat implements Listeners {
 			np.doubles.set(getKey(), "last-yaw", (double) flying.yaw);
 			np.doubles.set(getKey(), "last-yaw", (double) flying.pitch);
 			np.doubles.set(getKey(), "last-delta-pitch", deltaPitch);
-			if(!np.isAttacking)
+			if (!np.isAttacking)
 				return;
 
 			allPitchs.add(pitch);
-			
+
 			int invalidChange = 0;
-			double last = pitch;
+			double last = pitch, pitchMore = pitch, pitchLess = pitch;
 			Boolean up = null;
-			for(double actual : allPitchs) {
+			for (double actual : allPitchs) {
 				boolean isUp = actual > last;
-				if(up != null && isUp != up && Math.abs(actual - last) > 2) {
+				if (up != null && isUp != up && Math.abs(actual - last) > 2) {
 					invalidChange++;
 				}
 				up = isUp;
 				last = actual;
+				if (actual > pitchMore)
+					pitchMore = actual;
+				else if (actual < pitchLess)
+					pitchLess = actual;
 			}
-			
+
 			final double gcd = getGcdForLong((long) deltaPitch, (long) lastDeltaPitch);
 
 			final boolean exempt = !(Math.abs(pitch) < 82.5F) || deltaYaw < 5.0;
-			if (!exempt && Math.abs(gcd) > np.sensitivity / getConfig().getInt("checks.gcd.sensitivity-divider", 15) && invalidChange > 2) {
-				String allPitchStr = allPitchs.stream().map((d) -> String.format("%.3f", d)).collect(Collectors.toList()).toString();
-				Negativity.alertMod(ReportType.WARNING, p, this, 100, "gcd", "GCD: " + gcd + ", allPitchs: "
-							+ allPitchStr + ", sens: " + String.format("%.3f", np.sensitivity) + ", changes: " + invalidChange);
+			if (!exempt && Math.abs(gcd) > np.sensitivity / getConfig().getInt("checks.gcd.sensitivity-divider", 15)
+					&& invalidChange > 2 && !(pitchLess < 0 && pitchMore < 50)) {
+				String allPitchStr = allPitchs.stream().map((d) -> String.format("%.3f", d))
+						.collect(Collectors.toList()).toString();
+				Negativity.alertMod(ReportType.WARNING, p, this, 100, "gcd",
+						"GCD: " + gcd + ", allPitchs: " + allPitchStr + ", sens: "
+								+ String.format("%.3f", np.sensitivity) + ", changes: " + invalidChange
+								+ ", More/Less: " + String.format("%.3f", pitchMore) + "/"
+								+ String.format("%.3f", pitchLess));
 			}
 			allPitchs.remove(0);
 		}
 	}
 
-    private long getGcdForLong(final long current, final long previous) {
-        return (previous <= 16384L) ? current : getGcdForLong(previous, current % previous);
-    }
+	private long getGcdForLong(final long current, final long previous) {
+		return (previous <= 16384L) ? current : getGcdForLong(previous, current % previous);
+	}
 }

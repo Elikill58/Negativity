@@ -58,6 +58,8 @@ public class AimBot extends Cheat implements Listeners {
 				if (up != null && isUp != up && Math.abs(actual - last) > 2) {
 					invalidChange++;
 				}
+				if(last == actual) // same as before
+					invalidChange--;
 				up = isUp;
 				last = actual;
 				if (actual > pitchMore)

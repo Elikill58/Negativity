@@ -92,7 +92,7 @@ public class Spider extends Cheat implements Listeners {
 			}
 		}
 		if (amount > 1) {
-			boolean mayCancel = (Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this, 80 + amount * 3,
+			boolean mayCancel = (Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION), p, this, UniversalUtils.parseInPorcent(80 + amount * 3),
 					"nothing-around", "Y: " + y + ", fall: " + p.getFallDistance() + ", aount: " + amount)
 					&& isSetBack());
 			if(mayCancel)

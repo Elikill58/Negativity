@@ -72,7 +72,7 @@ public class AimBot extends Cheat implements Listeners {
 
 			final boolean exempt = !(Math.abs(pitch) < 82.5F) || deltaYaw < 5.0;
 			if (!exempt && Math.abs(gcd) > np.sensitivity / getConfig().getInt("checks.gcd.sensitivity-divider", 15)
-					&& invalidChange > 2 && !(pitchLess < 0 && pitchMore < 50)) {
+					&& invalidChange > getConfig().getInt("checks.gcd.invalid-change", 3) && !(pitchLess < 0 && pitchMore < 50)) {
 				String allPitchStr = allPitchs.stream().map((d) -> String.format("%.3f", d))
 						.collect(Collectors.toList()).toString();
 				Negativity.alertMod(ReportType.WARNING, p, this, 100, "gcd",

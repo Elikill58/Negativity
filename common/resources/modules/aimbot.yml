@@ -38,3 +38,5 @@ checks:
     active: true
     # Low value = less alerts
     sensitivity-divider: 12
+    # high value = less alert
+    invalid-change: 3

@@ -105,9 +105,7 @@ public class Speed extends Cheat implements Listeners {
 			double walkSpeed = (p.getWalkSpeed() - getEssentialsRealMoveSpeed(p)); // TODO rewrite without converting to essentials values
 			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
 			if((((walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D))) || walkTest) && (y < (disWithDir + disWithDirY))){
-				int porcent = UniversalUtils.parseInPorcent(y * 50 + UniversalUtils.getPorcentFromBoolean(walkTest, 20)
-						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest == walkTest, 20)
-						+ UniversalUtils.getPorcentFromBoolean(walkWithEssTest, 10));
+				int porcent = UniversalUtils.parseInPorcent(y * 50 + (walkTest ? 10 : 0) + (walkWithEssTest == walkTest ? 10 : 0) + (walkWithEssTest ? 10 : 0));
 				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent, "distance-ground",
 						"Ground. WS: " + walkSpeed + ", Dis from/to: " + y + ", walkTest: " + walkTest +
 						", walkWithEss: " + walkWithEssTest + ", y: " + y + ", disDir: " + disWithDir + ", disDirY: " + disWithDirY, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));

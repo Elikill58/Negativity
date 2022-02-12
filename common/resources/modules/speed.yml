@@ -33,9 +33,6 @@ verif:
 
 # Disable one check and not all detections
 checks:
-  # Amount of move
-  move-amount:
-    active: true
   # High speed
   high-speed:
     active: true

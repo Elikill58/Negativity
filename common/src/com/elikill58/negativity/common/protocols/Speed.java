@@ -22,8 +22,6 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
-import com.elikill58.negativity.api.protocols.Check;
-import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
@@ -177,18 +175,6 @@ public class Speed extends Cheat implements Listeners {
 			if (et.getType().equals(EntityType.ENDER_DRAGON) && et.getLocation().distance(p.getLocation()) < 15)
 				return true;
 		return false;
-	}
-	
-	@Check(name = "move-amount", description = "Amount of move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA })
-	public void onMoveAmount(PlayerMoveEvent e, NegativityPlayer np) {
-		Player p = e.getPlayer();
-		np.MOVE_TIME++;
-		if (np.MOVE_TIME > 60) {
-			boolean b = Negativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
-					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "move-amount", "Move " + np.MOVE_TIME + " times.", new CheatHover.Literal("Move too many times: " + np.MOVE_TIME + " (should be 20)"));
-			if (b && isSetBack())
-				e.setCancelled(true);
-		}
 	}
 
 	@EventListener

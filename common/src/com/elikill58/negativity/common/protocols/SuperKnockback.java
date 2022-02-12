@@ -48,7 +48,7 @@ public class SuperKnockback extends Cheat implements Listeners {
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 			long last = np.longs.get(getKey(), "action-sneak", 0l), actual = System.currentTimeMillis();
 			long diff = actual - last;
-			if (diff < 15) {
+			if (diff < 5) {
 				int reliability = UniversalUtils.parseInPorcent(100 - diff + (np.isAttacking ? 5 : 0));
 				int amount = (int) ((np.isAttacking ? 5 : 1) * (diff < 10 ? 10 - diff : 1));
 				Negativity.alertMod(ReportType.WARNING, p, this, reliability, "diff", "diff: " + diff + " (" + last

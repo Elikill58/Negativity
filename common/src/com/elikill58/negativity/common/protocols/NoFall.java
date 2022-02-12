@@ -147,7 +147,7 @@ public class NoFall extends Cheat implements Listeners {
 		}
 	}
 	
-	@Check(name = "packet", description = "Player send spoofing packet when risk to have fall damage")
+	@Check(name = "packet", description = "Player send spoofing packet when risk to have fall damage", conditions = CheckConditions.SURVIVAL)
 	public void onPacket(PacketReceiveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		AbstractPacket packet = e.getPacket();

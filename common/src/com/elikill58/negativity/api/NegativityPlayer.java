@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +47,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NegativityPlayer implements FileSaverAction {
 
-	private static final ConcurrentHashMap<UUID, NegativityPlayer> players = new ConcurrentHashMap<>();
+	private static final Map<UUID, NegativityPlayer> players = Collections.synchronizedMap(new ConcurrentHashMap<UUID, NegativityPlayer>());
 
 	private final UUID playerId;
 	private final Player p;

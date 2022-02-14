@@ -222,6 +222,17 @@ public abstract class Adapter {
 	public abstract Inventory createInventory(String inventoryName, int size, NegativityHolder holder);
 	
 	/**
+	 * Get the UUID with the name
+	 * 
+	 * @param name the name of a possible player
+	 * @return the uuid of the player
+	 */
+	public @Nullable UUID getUUID(String name) {
+		OfflinePlayer op = getOfflinePlayer(name);
+		return op == null ? null : op.getUniqueId();
+	}
+	
+	/**
 	 * Get offline player with the given name
 	 * Prefer use {@link #getOfflinePlayer(UUID)} because this method isn't supported on all platform, and a name can be changed
 	 *
@@ -333,7 +344,17 @@ public abstract class Adapter {
 	 */
 	public abstract void broadcastMessage(String message);
 	
+	/**
+	 * Get all plugins on the actual platform.
+	 * 
+	 * @return all plugins names
+	 */
 	public abstract List<String> getAllPlugins();
 	
+	/**
+	 * Get the version adapter for the actual platform version
+	 * 
+	 * @return the version adapter
+	 */
 	public abstract VersionAdapter<?> getVersionAdapter();
 }

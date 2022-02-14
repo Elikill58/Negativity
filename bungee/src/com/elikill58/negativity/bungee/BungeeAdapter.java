@@ -22,6 +22,7 @@ import com.elikill58.negativity.bungee.integrations.RedisSupport;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.ProxyAdapter;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.account.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.JavaLoggerAdapter;
@@ -47,12 +48,14 @@ public class BungeeAdapter extends ProxyAdapter {
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Proxy();
 	private final TranslationProviderFactory translationProviderFactory;
 	private final LoggerAdapter logger;
+	private final BungeeScheduler scheduler;
 
 	public BungeeAdapter(Plugin pl) {
 		this.pl = pl;
 		this.config = UniversalUtils.loadConfig(new File(pl.getDataFolder(), "config.yml"), "config_bungee.yml");
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(pl.getDataFolder().toPath().resolve("lang"), "NegativityProxy", "CheatHover");
 		this.logger = new JavaLoggerAdapter(pl.getLogger());
+		this.scheduler = new BungeeScheduler(pl);
 	}
 	
 	@Override
@@ -224,5 +227,10 @@ public class BungeeAdapter extends ProxyAdapter {
 		text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
 		text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
 		((ProxiedPlayer) p.getDefault()).sendMessage(text);
+	}
+	
+	@Override
+	public Scheduler getScheduler() {
+		return scheduler;
 	}
 }

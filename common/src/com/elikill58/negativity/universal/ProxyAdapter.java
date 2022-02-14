@@ -63,10 +63,10 @@ public abstract class ProxyAdapter extends Adapter {
 		throw new UnsupportedOperationException("FakePlayer is unsupported on proxies");
 	}
 	
-	@Override
+	/*@Override
 	public Scheduler getScheduler() {
 		throw new UnsupportedOperationException("Scheduler can't be used on proxy servers");
-	}
+	}*/
 	
 	@Override
 	public double[] getTPS() {
@@ -76,6 +76,12 @@ public abstract class ProxyAdapter extends Adapter {
 	@Override
 	public double getLastTPS() {
 		throw new UnsupportedOperationException("Proxies don't have TPS");
+	}
+	
+	@Override
+	public @Nullable UUID getUUID(String name) {
+		Player p = getPlayer(name);
+		return p == null ? null : p.getUniqueId();
 	}
 	
 	@Override

@@ -18,6 +18,7 @@ import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.ProxyAdapter;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.account.SimpleAccountManager;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
@@ -40,8 +41,9 @@ public class VelocityAdapter extends ProxyAdapter {
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Proxy();
 	private final TranslationProviderFactory translationProviderFactory;
 	private final LoggerAdapter logger;
-	private Configuration config;
 	private final VelocityNegativity pl;
+	private final VelocityScheduler scheduler;
+	private Configuration config;
 
 	public VelocityAdapter(VelocityNegativity pl) {
 		this.pl = pl;
@@ -49,6 +51,7 @@ public class VelocityAdapter extends ProxyAdapter {
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(
 				pl.getDataFolder().toPath().resolve("lang"), "NegativityProxy", "CheatHover");
 		this.logger = new Slf4jLoggerAdapter(pl.getLogger());
+		this.scheduler = new VelocityScheduler(pl);
 	}
 
 	@Override
@@ -206,5 +209,10 @@ public class VelocityAdapter extends ProxyAdapter {
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
 		com.velocitypowered.api.proxy.Player vp = (com.velocitypowered.api.proxy.Player) p.getDefault();
 		vp.sendMessage(Component.text(message).clickEvent(ClickEvent.runCommand(command)).hoverEvent(HoverEvent.showText(Component.text(hover))));
+	}
+	
+	@Override
+	public Scheduler getScheduler() {
+		return scheduler;
 	}
 }

@@ -124,7 +124,7 @@ public class ProxyEventsManager implements Listeners {
 		String targetPlayerServer = targetPlayer.getServerName();
 		String notifiedPlayerServer = notifiedPlayer.getServerName();
 		if (targetPlayerServer.equals(notifiedPlayerServer)) {
-			return "/tp " + targetPlayer.getName();
+			return "/negativitytp " + targetPlayer.getName();
 		}
 		return "/server " + notifiedPlayerServer;
 	}

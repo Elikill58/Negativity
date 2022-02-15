@@ -5,7 +5,6 @@ import java.util.UUID;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.universal.Adapter;
 
 public final class Ban {
@@ -79,8 +78,7 @@ public final class Ban {
 	}
 
 	public UUID getBannedByUUID() {
-		OfflinePlayer p = Adapter.getAdapter().getOfflinePlayer(bannedBy);
-		return p != null ? p.getUniqueId() : null;
+		return Adapter.getAdapter().getUUID(bannedBy);
 	}
 
 	public boolean isDefinitive() {

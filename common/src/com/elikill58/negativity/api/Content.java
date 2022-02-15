@@ -61,4 +61,8 @@ public class Content<T> {
 	public boolean has(IDetectionKeys<?> type, String valueName) {
 		return mainContent.containsKey(type) && mainContent.get(type).containsKey(valueName);
 	}
+	
+	public HashMap<String, T> getAllContent(IDetectionKeys<?> type){
+		return mainContent.computeIfAbsent(type, (typee) -> new HashMap<>());
+	}
 }

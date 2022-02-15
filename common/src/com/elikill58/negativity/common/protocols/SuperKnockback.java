@@ -1,5 +1,7 @@
 package com.elikill58.negativity.common.protocols;
 
+import java.util.HashMap;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
@@ -9,18 +11,19 @@ import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent;
 import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent.ToggleAction;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
+
+import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 public class SuperKnockback extends Cheat implements Listeners {
 
@@ -30,46 +33,85 @@ public class SuperKnockback extends Cheat implements Listeners {
 	}
 
 	@Check(name = "diff", description = "Check the time and when player sprint", conditions = {})
-	public void onPacketReceive(PacketReceiveEvent e) {
+	public void onPacketReceive(PacketReceiveEvent e, NegativityPlayer np) {
 		if (!e.hasPlayer())
 			return;
 		Player p = e.getPlayer();
 		AbstractPacket packet = e.getPacket();
-		if (!packet.getPacketType().equals(PacketType.Client.ENTITY_ACTION))
-			return;
-		NPacketPlayInEntityAction entityAction = (NPacketPlayInEntityAction) packet.getPacket();
-		if (entityAction.entityId != p.getEntityId())
-			return;
-		if (entityAction.action.equals(EnumPlayerAction.START_SPRINTING)
-				|| entityAction.action.equals(EnumPlayerAction.STOP_SPRINTING)) {
-			/*Location locInFront = p.getLocation().clone().add(p.getRotation()), actualLoc = p.getLocation();
-			if(hasBlockJustInFront(actualLoc, locInFront))
-				return;*/
-			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-			long last = np.longs.get(getKey(), "action-sneak", 0l), actual = System.currentTimeMillis();
-			long diff = actual - last;
-			if (diff < 5) {
-				int reliability = UniversalUtils.parseInPorcent(100 - diff + (np.isAttacking ? 5 : 0));
-				int amount = (int) ((np.isAttacking ? 5 : 1) * (diff < 10 ? 10 - diff : 1));
-				Negativity.alertMod(ReportType.WARNING, p, this, reliability, "diff", "diff: " + diff + " (" + last
-						+ " / " + actual + ") " + entityAction.action.name() + ", attack: " + np.isAttacking, null, amount);
+		PacketType type = packet.getPacketType();
+		long time = System.currentTimeMillis();
+		HashMap<String, Long> longContent = np.longs.getAllContent(getKey());
+		if (!type.equals(PacketType.Client.ENTITY_ACTION) && !type.equals(PacketType.Client.USE_ENTITY)) {
+			if (type.equals(PacketType.Client.POSITION)) {
+				np.objects.set(getKey(), "packet-waiting", PacketWaiting.NOTHING);
+				longContent.put("action-sneak", time);
 			}
-			np.longs.set(getKey(), "action-sneak", actual);
+			return;
+		}
+		PacketWaiting actual = (PacketWaiting) np.objects.get(getKey(), "packet-waiting", PacketWaiting.NOTHING),
+				oldActual = actual;
+		if (type.equals(PacketType.Client.ENTITY_ACTION)) {
+			NPacketPlayInEntityAction entityAction = (NPacketPlayInEntityAction) packet.getPacket();
+			if (entityAction.entityId != p.getEntityId())
+				return;
+
+			if (entityAction.action.equals(EnumPlayerAction.START_SPRINTING)
+					|| entityAction.action.equals(EnumPlayerAction.STOP_SPRINTING)) {
+				if (entityAction.action.equals(EnumPlayerAction.START_SPRINTING)) {
+					if (actual == PacketWaiting.FIRST_STOP) {
+						actual = PacketWaiting.SECOND_START;
+					} else {
+						actual = PacketWaiting.FIRST_START;
+						longContent.put("first-start", time);
+					}
+				} else if (entityAction.action.equals(EnumPlayerAction.STOP_SPRINTING)) {
+					if (actual == PacketWaiting.FIRST_START) {
+						actual = PacketWaiting.FIRST_STOP;
+						longContent.put("time-stop", time);
+					} else if (actual == PacketWaiting.USE_ENTITY) {
+						actual = PacketWaiting.SECOND_STOP;
+					}
+				}
+				long diffAction = time - longContent.getOrDefault("action-sneak", 0l);
+				if (diffAction < 1000) {
+					longContent.put("diff-action", diffAction);
+				}
+				longContent.put("action-sneak", time);
+			}
+			if (oldActual != actual)
+				np.objects.set(getKey(), "packet-waiting", actual);
+		} else {
+			NPacketPlayInUseEntity useEntity = (NPacketPlayInUseEntity) packet.getPacket();
+			if (!useEntity.action.equals(EnumEntityUseAction.ATTACK)) {
+				np.objects.set(getKey(), "packet-waiting", PacketWaiting.USE_ENTITY);
+				return;
+			}
+			if (actual == PacketWaiting.SECOND_START) {
+				long diff = time - longContent.getOrDefault("action-sneak", 0l);
+				if (diff < 25) {
+					long firstStart = longContent.getOrDefault("first-start", 0l),
+							timeStop = longContent.getOrDefault("time-stop", 0l);
+					long totalTimeDiff = timeStop - firstStart;
+					if (totalTimeDiff > 10)
+						return;
+					long diffAction = longContent.getOrDefault("diff-action", 0l);
+					int amount = (int) ((10 - diff) * (10 - diffAction) * (10 - totalTimeDiff));
+					Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(100 - (diff * totalTimeDiff)),
+							"diff", "diff: " + diff + ", totalTime: " + totalTimeDiff + ", action: " + diffAction,
+							null, amount);
+				}
+			}
+			np.objects.set(getKey(), "packet-waiting", PacketWaiting.USE_ENTITY);
 		}
 	}
-	
-	public boolean hasBlockJustInFront(Location actual, Location front) {
-		World w = actual.getWorld();
-		if(actual.getBlockX() != front.getBlockX()) {
-			if(!new Location(w, actual.getX(), actual.getY(), actual.getZ()).getBlock().getType().isTransparent())
-				return true;
-		}
-		return false;
-	}
-	
+
 	@EventListener(priority = EventPriority.POST)
 	public void onToggle(PlayerToggleActionEvent e) {
-		if(e.getAction().equals(ToggleAction.SPRINT) && e.isCancelled())
+		if (e.getAction().equals(ToggleAction.SPRINT) && e.isCancelled())
 			NegativityPlayer.getNegativityPlayer(e.getPlayer()).longs.remove(getKey(), "action-sneak");
+	}
+
+	public static enum PacketWaiting {
+		NOTHING, FIRST_START, FIRST_STOP, SECOND_START, SECOND_STOP, USE_ENTITY;
 	}
 }

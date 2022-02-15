@@ -89,6 +89,7 @@ public class NegativityPlayer implements FileSaverAction {
 	public Content<Material> materials = new Content<>();
 	public Content<Boolean> booleans = new Content<>();
 	public Content<Entity> entities = new Content<>();
+	public Content<Object> objects = new Content<>();
 	public Content<Double> doubles = new Content<>();
 	public Content<Integer> ints = new Content<>();
 	public Content<Float> floats = new Content<>();

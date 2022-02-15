@@ -51,7 +51,7 @@ public class RedisNegativityMessage implements NegativityMessage {
 	public void writeTo(DataOutputStream output) throws IOException {
 		output.writeUTF(uuid.toString());
 		output.writeUTF(proxyId);
-		output.write(NegativityMessagesManager.writeMessage(message));
+		message.writeTo(output);
 	}
 	
 }

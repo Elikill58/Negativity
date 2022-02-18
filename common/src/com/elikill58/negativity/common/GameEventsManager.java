@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.plugins.ProxyPluginListEvent;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.pluginMessages.ClientModsListMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -24,8 +25,11 @@ public class GameEventsManager implements Listeners {
 
 	@EventListener
 	public void onJoin(PlayerConnectEvent e) {
+		Player p = e.getPlayer();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
-			sendVersionRequest(e.getPlayer());
+			sendVersionRequest(p);
+		} else if(!ProxyCompanionManager.searchedCompanion) {
+			Scheduler.getInstance().runDelayed(() -> ProxyCompanionManager.sendProxyPing(p), 20);
 		}
 	}
 

@@ -1,12 +1,10 @@
 package com.elikill58.negativity.sponge8;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.util.HashMap;
-import java.util.Iterator;
 
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.api.ResourceKey;
@@ -48,12 +46,10 @@ import com.elikill58.negativity.sponge8.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
-import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
 
@@ -188,25 +184,6 @@ public class SpongeNegativity {
 			getInstance().getLogger().error("Could not send plugin message to proxy because there are no player online.");
 		}
 	}
-	
-	public static void sendProxyPing(ServerPlayer player) {
-		ProxyCompanionManager.searchedCompanion = true;
-		INSTANCE.channel.play().sendTo(player, buffer -> {
-			try {
-				buffer.writeBytes(NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION)));
-			} catch (IOException ex) {
-				INSTANCE.logger.error("Could not write ProxyPingMessage.", ex);
-			}
-		});
-	}
-	
-	public static void trySendProxyPing() {
-		Iterator<ServerPlayer> onlinePlayers = Sponge.server().onlinePlayers().iterator();
-		if (onlinePlayers.hasNext()) {
-			sendProxyPing(onlinePlayers.next());
-		}
-	}
-	
 
 	private static class FmlRawDataListener implements RawPlayDataHandler<EngineConnection> {
 

@@ -115,7 +115,6 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public void reload() {
 		reloadConfig();
-		SpongeNegativity.trySendProxyPing();
 	}
 	
 	@Override

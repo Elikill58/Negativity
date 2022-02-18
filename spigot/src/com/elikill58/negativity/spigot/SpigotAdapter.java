@@ -104,7 +104,6 @@ public class SpigotAdapter extends Adapter {
 	@Override
 	public void reload() {
 		reloadConfig();
-		SpigotNegativity.trySendProxyPing();
 	}
 
 	@Override

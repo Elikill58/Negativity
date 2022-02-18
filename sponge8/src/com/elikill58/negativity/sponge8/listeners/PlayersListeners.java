@@ -35,14 +35,11 @@ import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.sponge8.SpongeNegativity;
 import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge8.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge8.impl.item.SpongeItemStack;
 import com.elikill58.negativity.sponge8.utils.LocationUtils;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.ProxyCompanionManager;
-import com.elikill58.negativity.universal.Scheduler;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
@@ -68,11 +65,6 @@ public class PlayersListeners {
 		PlayerConnectEvent event = new PlayerConnectEvent(np.getPlayer(), np, PlainTextComponentSerializer.plainText().serialize(e.message()));
 		EventManager.callEvent(event);
 		e.setMessage(Component.text(event.getJoinMessage()));
-		
-		if (!ProxyCompanionManager.searchedCompanion) {
-			ProxyCompanionManager.searchedCompanion = true;
-			Scheduler.getInstance().runDelayed(() -> SpongeNegativity.sendProxyPing(p), 20);
-		}
 	}
 	
 	@Listener

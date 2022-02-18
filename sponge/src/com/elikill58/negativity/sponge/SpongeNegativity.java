@@ -11,7 +11,6 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
@@ -63,7 +62,6 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.account.NegativityAccount;
@@ -76,7 +74,6 @@ import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
-import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.inject.Inject;
@@ -316,18 +313,6 @@ public class SpongeNegativity {
 		});
 	}
 
-	public static void sendProxyPing(Player player) {
-		ProxyCompanionManager.searchedCompanion = true;
-		channel.sendTo(player, (buffer) -> {
-			try {
-				buffer.writeBytes(NegativityMessagesManager
-						.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION)));
-			} catch (IOException ex) {
-				SpongeNegativity.getInstance().getLogger().error("Could not write ProxyPingMessage.", ex);
-			}
-		});
-	}
-
 	public static void sendPluginMessage(byte[] rawMessage) {
 		Player player = Utils.getFirstOnlinePlayer();
 		if (player != null) {
@@ -335,13 +320,6 @@ public class SpongeNegativity {
 		} else {
 			getInstance().getLogger()
 					.error("Could not send plugin message to proxy because there are no player online.");
-		}
-	}
-
-	public static void trySendProxyPing() {
-		Iterator<Player> onlinePlayers = Sponge.getServer().getOnlinePlayers().iterator();
-		if (onlinePlayers.hasNext()) {
-			sendProxyPing(onlinePlayers.next());
 		}
 	}
 

@@ -39,7 +39,6 @@ import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.impl.entity.SpigotPlayer;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
-import com.elikill58.negativity.universal.ProxyCompanionManager;
 
 public class PlayersListeners implements Listener {
 	
@@ -151,11 +150,6 @@ public class PlayersListeners implements Listener {
 		PlayerConnectEvent event = new PlayerConnectEvent(np.getPlayer(), np, e.getJoinMessage());
 		EventManager.callEvent(event);
 		e.setJoinMessage(event.getJoinMessage());
-		
-		if(!ProxyCompanionManager.searchedCompanion) {
-			ProxyCompanionManager.searchedCompanion = true;
-			Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> SpigotNegativity.sendProxyPing(p), 20);
-		}
 	}
 	
 	@EventHandler

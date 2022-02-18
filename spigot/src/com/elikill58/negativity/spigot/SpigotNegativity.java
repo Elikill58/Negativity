@@ -1,14 +1,11 @@
 package com.elikill58.negativity.spigot;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Locale;
-import java.util.logging.Level;
 
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
@@ -35,14 +32,12 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Stats;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
-import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 public class SpigotNegativity extends JavaPlugin {
@@ -121,8 +116,6 @@ public class SpigotNegativity extends JavaPlugin {
 		Stats.sendStartupStats(Bukkit.getServer().getPort());
 		
 		NegativityAccountStorage.setDefaultStorage("file");
-
-		trySendProxyPing();
 		
 		getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
 			try {
@@ -236,23 +229,6 @@ public class SpigotNegativity extends JavaPlugin {
 
 	public static SpigotNegativity getInstance() {
 		return INSTANCE;
-	}
-
-	public static void sendProxyPing(Player player) {
-		ProxyCompanionManager.searchedCompanion = true;
-		try {
-			byte[] pingMessage = NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION));
-			player.sendPluginMessage(SpigotNegativity.getInstance(), NegativityMessagesManager.CHANNEL_ID, pingMessage);
-		} catch (IOException ex) {
-			SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not write ProxyPingMessage.", ex);
-		}
-	}
-
-	public static void trySendProxyPing() {
-		Iterator<? extends Player> onlinePlayers = Utils.getOnlinePlayers().iterator();
-		if (onlinePlayers.hasNext()) {
-			sendProxyPing(onlinePlayers.next());
-		}
 	}
 
 	private Object getKnownCommands(Object object) {

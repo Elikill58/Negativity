@@ -11,7 +11,6 @@ import org.spongepowered.api.event.filter.cause.First;
 import org.spongepowered.api.event.item.inventory.UseItemStackEvent;
 import org.spongepowered.api.event.message.MessageChannelEvent;
 import org.spongepowered.api.event.network.ClientConnectionEvent;
-import org.spongepowered.api.scheduler.Task;
 import org.spongepowered.api.text.Text;
 import org.spongepowered.api.world.World;
 
@@ -28,12 +27,10 @@ import com.elikill58.negativity.api.events.player.PlayerItemConsumeEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
-import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
 import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
-import com.elikill58.negativity.universal.ProxyCompanionManager;
 
 public class PlayersListeners {
 	
@@ -52,11 +49,6 @@ public class PlayersListeners {
 		PlayerConnectEvent event = new PlayerConnectEvent(np.getPlayer(), np, e.getMessage().toPlain());
 		EventManager.callEvent(event);
 		e.setMessage(Text.of(event.getJoinMessage()));
-		
-		if(!ProxyCompanionManager.searchedCompanion) {
-			ProxyCompanionManager.searchedCompanion = true;
-			Task.builder().delayTicks(20).execute(() -> SpongeNegativity.sendProxyPing(p)).submit(SpongeNegativity.getInstance());
-		}
 	}
 
 	@Listener

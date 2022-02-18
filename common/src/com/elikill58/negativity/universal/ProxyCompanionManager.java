@@ -1,8 +1,5 @@
 package com.elikill58.negativity.universal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.plugins.ProxyPluginListEvent;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -10,13 +7,11 @@ import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 
 public class ProxyCompanionManager {
 
+	private static boolean foundCompanion = false, protocolVersionMismatch = false, forceCompagnion = false;
 	public static boolean searchedCompanion = false;
-	public static boolean foundCompanion = false;
-	public static boolean protocolVersionMismatch = false;
-	public static List<String> pluginsProxy = new ArrayList<>();
 
 	public static boolean isIntegrationEnabled() {
-		return foundCompanion && !protocolVersionMismatch && !Adapter.getAdapter().getConfig().getBoolean("disableProxyIntegration");
+		return forceCompagnion || (foundCompanion && !protocolVersionMismatch && !Adapter.getAdapter().getConfig().getBoolean("disableProxyIntegration"));
 	}
 
 	public static void foundCompanion(ProxyPingMessage message) {
@@ -34,8 +29,12 @@ public class ProxyCompanionManager {
 			ada.getLogger().warn("Please upgrade your version of Negativity on proxy !");
 		} else {
 			ada.getLogger().info("Proxy companion plugin found, it will be used. " + message.getPlugins().size() + " plugins founded on proxy.");
-			pluginsProxy = message.getPlugins();
-			EventManager.callEvent(new ProxyPluginListEvent(pluginsProxy));
+			EventManager.callEvent(new ProxyPluginListEvent(message.getPlugins()));
 		}
+	}
+	
+	public static void forceCompanion() {
+		forceCompagnion = true;
+		searchedCompanion = true;
 	}
 }

@@ -44,13 +44,15 @@ public class RedisNegativityMessage implements NegativityMessage {
 	public void readFrom(DataInputStream input) throws IOException {
 		uuid = UUID.fromString(input.readUTF());
 		proxyId = input.readUTF();
-		message = NegativityMessagesManager.readMessage(input);
+		message = NegativityMessagesManager.MESSAGES_BY_ID.get(input.readByte()).get();
+		message.readFrom(input);
 	}
 
 	@Override
 	public void writeTo(DataOutputStream output) throws IOException {
 		output.writeUTF(uuid.toString());
 		output.writeUTF(proxyId);
+		output.writeByte(message.messageId());
 		message.writeTo(output);
 	}
 	

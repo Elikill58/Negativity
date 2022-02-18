@@ -14,7 +14,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class NegativityMessagesManager {
 
-	private static final Map<Byte, Supplier<NegativityMessage>> MESSAGES_BY_ID;
+	public static final Map<Byte, Supplier<NegativityMessage>> MESSAGES_BY_ID;
 
 	public static final String CHANNEL_ID = "negativity:msg";
 	public static final int PROTOCOL_VERSION = 3;

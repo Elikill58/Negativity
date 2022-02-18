@@ -317,6 +317,7 @@ public class Negativity {
 		NegativityAccountStorage.init();
 		EventManager.load();
 		PlayerVersionManager.init();
+		Configuration config = ada.getConfig();
 		if(!ada.getPlatformID().isProxy()) {
 			Special.loadSpecial();
 			Cheat.loadCheat();
@@ -340,9 +341,12 @@ public class Negativity {
 			if(analyzePacketTimer != null)
 				analyzePacketTimer.cancel();
 			analyzePacketTimer = ada.getScheduler().runRepeating(new AnalyzePacketTimer(), 10, 10);
+			if(config.getBoolean("use-proxy-force", false)) {
+				ProxyCompanionManager.forceCompanion();
+				ada.getLogger().info("Force proxy used without sending searching message.");
+			}
 		}
 		UniversalUtils.init();
-		Configuration config = ada.getConfig();
 		log = config.getBoolean("log_alerts", true);
 		log_console = config.getBoolean("log_alerts_in_console", true);
 		hasBypass = config.getBoolean("Permissions.bypass.active", false);

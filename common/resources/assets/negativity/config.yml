@@ -16,6 +16,8 @@
 log_alerts: true
 log_alerts_in_console: true
 tps_alert_stop: 19 # if you get less TPS then this value, all alert will be disabled
+# Don't send ping message to proxy, just let say there is Negativity on proxy
+use-proxy-force: false
 
 commands:
   # Options to enable or disable commands

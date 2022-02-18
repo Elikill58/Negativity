@@ -347,7 +347,7 @@ public class Negativity {
 				ada.getLogger().info("Force proxy used without sending searching message.");
 			} else {
 				List<Player> players = Adapter.getAdapter().getOnlinePlayers();
-				if(players.isEmpty()) {
+				if(!players.isEmpty()) {
 					ProxyCompanionManager.sendProxyPing(players.get(0));
 				}
 			}

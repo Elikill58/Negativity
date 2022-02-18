@@ -67,7 +67,7 @@ public class BungeeListeners implements Listener {
 		ProxiedPlayer player = (ProxiedPlayer) (event.getSender() instanceof ProxiedPlayer ? event.getSender()
 				: (event.getReceiver() instanceof ProxiedPlayer ? event.getReceiver() : null));
 		if (player == null) {
-			Adapter.getAdapter().getLogger().warn("Error while receiving a plugin message." + " Player null (Sender: " + event.getSender()
+			Adapter.getAdapter().getLogger().warn("Error while receiving a plugin message. Player null (Sender: " + event.getSender()
 					+ " Receiver: " + event.getReceiver() + ")");
 			return;
 		}

@@ -49,6 +49,7 @@ public class ProxyCompanionManager {
 	public static void sendProxyPing(Player p) {
 		searchedCompanion = true;
 		try {
+			Adapter.getAdapter().debug("Sending ping message...");
 			byte[] pingMessage = NegativityMessagesManager.writeMessage(new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION));
 			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, pingMessage);
 		} catch (IOException exc) {

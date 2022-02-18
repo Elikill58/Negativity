@@ -95,6 +95,7 @@ public class ProxyEventsManager implements Listeners {
 			ShowAlertStatusMessage msg = (ShowAlertStatusMessage) message;
 			NegativityAccount.get(msg.getUUID()).setShowAlert(msg.isShowAlert());
 		} else if (message instanceof ProxyPingMessage) {
+			Adapter.getAdapter().debug("Received proxy ping from " + p.getName() + ": " + p.getServerName());
 			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID,
 					new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION, ada.getAllPlugins()));
 		} else

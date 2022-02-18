@@ -39,12 +39,14 @@ public class FastPlaceProtocol extends Cheat implements Listener {
 			return;
 		if(Utils.getLastTPS() < 19.1)
 			return;
-		
-		long last = System.currentTimeMillis() - np.LAST_BLOCK_PLACE, lastPing = last - (np.ping / 9);
-		if(last < 10000) // last block is too old
-			recordData(p.getUniqueId(), TIME_PLACE, last);
+		int ping = np.ping;
+		if(ping < 50)
+			ping = 50;
+		long last = System.currentTimeMillis() - np.LAST_BLOCK_PLACE, lastPing = last + (ping / 50);
+		if(last < 1000) // last block is too old
+			recordData(p.getUniqueId(), TIME_PLACE, lastPing);
 		np.LAST_BLOCK_PLACE = System.currentTimeMillis();
-		if (lastPing < Adapter.getAdapter().getConfig().getInt("cheats.fastplace.time_2_place")) {
+		if ((lastPing + 5) < Adapter.getAdapter().getConfig().getInt("cheats.fastplace.time_2_place")) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(50 + lastPing), "Block placed too quickly. Last time: " + last + ", Last with ping: "
 							+ lastPing + ". Ping: " + np.ping, hoverMsg("main", "%time%", last));

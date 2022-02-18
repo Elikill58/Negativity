@@ -26,8 +26,10 @@ public class EventManager {
 		registerEvent(new InventoryManager());
 		registerEvent(new ConnectionManager());
 		registerEvent(new PacketListener());
-		registerEvent(new GameEventsManager());
-		registerEvent(new ProxyEventsManager());
+		if(Adapter.getAdapter().getPlatformID().isProxy())
+			registerEvent(new ProxyEventsManager());
+		else
+			registerEvent(new GameEventsManager());
 	}
 	
 	/**

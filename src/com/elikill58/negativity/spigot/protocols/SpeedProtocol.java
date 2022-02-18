@@ -32,7 +32,6 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.adapter.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-@SuppressWarnings("deprecation")
 public class SpeedProtocol extends Cheat implements Listener {
 
 	private NumberFormat numberFormat = NumberFormat.getInstance();
@@ -63,7 +62,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 				|| p.getEntityId() == 100 || p.getVehicle() != null || np.getAllowFlight()
 				|| p.getFlySpeed() > 3.0F || p.getWalkSpeed() > 2.0F
 				|| np.hasPotionEffect("DOLPHINS_GRACE") || p.isInsideVehicle()
-				|| hasEnderDragonAround(p) || p.getItemInHand().getType().name().contains("TRIDENT"))
+				|| hasEnderDragonAround(p) || np.isUsingTrident())
 			return;
 		if (np.BYPASS_SPEED != 0) {
 			np.BYPASS_SPEED--;

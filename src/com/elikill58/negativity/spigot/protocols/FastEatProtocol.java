@@ -16,13 +16,12 @@ public class FastEatProtocol extends Cheat implements Listener {
 	public FastEatProtocol() {
 		super(CheatKeys.FAST_EAT, true, Material.COOKED_BEEF, CheatCategory.PLAYER, true, "fasteat", "autoeat");
 	}
-
-	@SuppressWarnings("deprecation")
+	
 	@EventHandler (ignoreCancelled = true)
 	public void onItemConsume(PlayerItemConsumeEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		np.flyingReason = FlyingReason.EAT;
-		np.eatMaterial = p.getItemInHand().getType();
+		np.eatMaterial = e.getItem().getType();
 	}
 }

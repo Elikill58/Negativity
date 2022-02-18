@@ -19,7 +19,6 @@ import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-@SuppressWarnings("deprecation")
 public class FastBowProtocol extends Cheat implements Listener {
 	
 	public FastBowProtocol() {
@@ -30,7 +29,7 @@ public class FastBowProtocol extends Cheat implements Listener {
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		ItemStack item = p.getItemInHand();
+		ItemStack item = e.getItem();
 		if(item == null)
 			return;
 		if(!np.hasDetectionActive(this))

@@ -26,7 +26,6 @@ public class AirJumpProtocol extends Cheat implements Listener {
 		super(CheatKeys.AIR_JUMP, false, Material.FEATHER, CheatCategory.MOVEMENT, true, "airjump", "air", "jump");
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onMove(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
@@ -35,7 +34,7 @@ public class AirJumpProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		if (!np.hasDetectionActive(this) || np.hasPotionEffect("JUMP_BOOST"))
 			return;
-		if (p.isFlying() || p.getVehicle() != null || p.getItemInHand().getType().name().contains("TRIDENT") || np.hasElytra() || np.isInFight)
+		if (p.isFlying() || p.getVehicle() != null || np.isUsingTrident() || np.hasElytra() || np.isInFight)
 			return;
 		Location loc = p.getLocation().clone(), locDown = loc.clone().subtract(0, 1, 0), locDownDown = locDown.clone().subtract(0, 1, 0);
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {

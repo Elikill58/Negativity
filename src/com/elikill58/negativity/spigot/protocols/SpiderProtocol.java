@@ -20,7 +20,6 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-@SuppressWarnings("deprecation")
 public class SpiderProtocol extends Cheat implements Listener {
 
 	public SpiderProtocol() {
@@ -43,9 +42,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		Material underPlayer = loc.clone().subtract(0, 1, 0).getBlock().getType(),
 				underUnder = loc.clone().subtract(0, 2, 0).getBlock().getType();
 		if (!underPlayer.equals(Material.AIR) || !underUnder.equals(Material.AIR)
-				|| !loc.getBlock().getType().equals(Material.AIR) || LocationUtils.isUsingElevator(p))
-			return;
-		if (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT"))
+				|| !loc.getBlock().getType().equals(Material.AIR) || LocationUtils.isUsingElevator(p) || np.isUsingTrident())
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
@@ -72,7 +69,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		if (!np.hasDetectionActive(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null || np.hasElytra() || np.isUsingSlimeBlock)
 			return;
 		Location loc = p.getLocation().clone();
-		if(hasBypassBlockAround(loc) || (p.getItemInHand() != null && p.getItemInHand().getType().name().contains("TRIDENT")))
+		if(hasBypassBlockAround(loc) || np.isUsingTrident())
 			return;
 		if(LocationUtils.hasExtended(loc, "STAIRS") || LocationUtils.isUsingElevator(p) || p.getLocation().getBlock().getType().name().contains("LAVA"))
 			return;

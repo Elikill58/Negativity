@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -11,7 +12,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
-import com.elikill58.negativity.spigot.protocols.NukerProtocol;
+import com.elikill58.negativity.spigot.utils.HandUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -110,7 +111,7 @@ public class TimerAnalyzePacket extends BukkitRunnable {
 			}
 			Cheat NUKER = Cheat.forKey(CheatKeys.NUKER);
 			if(np.hasDetectionActive(NUKER))
-				if(ping < NUKER.getMaxAlertPing() && (blockDig - (ping / 10)) > 20 && !NukerProtocol.hasDigSpeedEnchant(p.getItemInHand()))
+				if(ping < NUKER.getMaxAlertPing() && (blockDig - (ping / 10)) > 20 && !HandUtils.handHasEnchant(p, Enchantment.DIG_SPEED))
 					SpigotNegativity.alertMod(blockDig > 200 ? ReportType.VIOLATION : ReportType.WARNING, p, NUKER, UniversalUtils.parseInPorcent(20 + blockDig), "BlockDig packet: " + blockDig + ", ping: " + ping + " Warn for Nuker: " + np.getWarn(NUKER));
 
 			np.clearPackets();

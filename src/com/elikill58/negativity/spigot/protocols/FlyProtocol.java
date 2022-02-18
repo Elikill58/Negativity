@@ -33,7 +33,6 @@ public class FlyProtocol extends Cheat implements Listener {
 		super(CheatKeys.FLY, true, ItemUtils.FIREWORK, CheatCategory.MOVEMENT, true, "flyhack");
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerMove(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
@@ -42,7 +41,7 @@ public class FlyProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		if (np.hasElytra() || p.getItemInHand().getType().name().contains("TRIDENT") || LocationUtils.hasMaterialAround(e.getTo(), ItemUtils.WATER_LILY, ItemUtils.WEB, Material.LADDER, Material.VINE))
+		if (np.hasElytra() || np.isUsingTrident() || LocationUtils.hasMaterialAround(e.getTo(), ItemUtils.WATER_LILY, ItemUtils.WEB, Material.LADDER, Material.VINE))
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;

@@ -11,7 +11,6 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -19,6 +18,7 @@ import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.PacketContent;
 import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
+import com.elikill58.negativity.spigot.utils.HandUtils;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -29,7 +29,6 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-@SuppressWarnings("deprecation")
 public class NukerProtocol extends Cheat implements Listener {
 
 	private Method getX, getY, getZ;
@@ -112,7 +111,7 @@ public class NukerProtocol extends Cheat implements Listener {
 		}
 		long temp = System.currentTimeMillis(), dis = temp - np.LAST_BLOCK_BREAK;
 		Material m = b.getType();
-		if(dis < 50 && m.isSolid() && !isInstantBlock(m.name()) && !hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.FAST_DIGGING)) {
+		if(dis < 50 && m.isSolid() && !isInstantBlock(m.name()) && !HandUtils.handHasEnchant(p, Enchantment.DIG_SPEED) && !p.hasPotionEffect(PotionEffectType.FAST_DIGGING)) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis),
 					"Type: " + b.getType().name() + ". Last: " + np.LAST_BLOCK_BREAK + ", Now: " + temp + ", diff: " + dis + ". Warn: " + np.getWarn(this), hoverMsg("breaked_in", "%time%", dis));
 			if(isSetBack() && mayCancel)
@@ -123,9 +122,5 @@ public class NukerProtocol extends Cheat implements Listener {
 	
 	private boolean isInstantBlock(String m) {
 		return m.contains("SLIME") || m.contains("TNT") || m.contains("LEAVE") || m.contains("NETHERRACK") || m.contains("BAMBOO") || m.contains("SNOW");
-	}
-
-	public static boolean hasDigSpeedEnchant(ItemStack item) {
-		return item != null && item.containsEnchantment(Enchantment.DIG_SPEED) && item.getEnchantmentLevel(Enchantment.DIG_SPEED) > 2;
 	}
 }

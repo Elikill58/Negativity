@@ -12,7 +12,6 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.inventory.ItemStack;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
@@ -30,7 +29,6 @@ public class JesusProtocol extends Cheat implements Listener {
 				"water walk");
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void onPlayerMove(NegativityPlayerMoveEvent e) {
 		Player p = e.getPlayer();
@@ -39,10 +37,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		if (!np.hasDetectionActive(this))
 			return;
-		if (np.hasElytra() || p.isInsideVehicle() || Utils.isSwimming(p))
-			return;
-		ItemStack item = p.getItemInHand();
-		if(item != null && item.getType().name().contains("TRIDENT"))
+		if (np.hasElytra() || p.isInsideVehicle() || Utils.isSwimming(p) || np.isUsingTrident())
 			return;
 		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom();
 		Location under = loc.clone().subtract(0, 1, 0);

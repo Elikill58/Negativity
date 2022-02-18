@@ -19,7 +19,6 @@ import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-@SuppressWarnings("deprecation")
 public class RegenProtocol extends Cheat implements Listener {
 	
 	public RegenProtocol() {
@@ -29,7 +28,7 @@ public class RegenProtocol extends Cheat implements Listener {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
-		Material m = p.getItemInHand().getType();
+		Material m = e.getItem().getType();
 		if (m.equals(Material.GOLDEN_APPLE) || m.equals(Material.GOLDEN_CARROT))
 			SpigotNegativityPlayer.getNegativityPlayer(p).flyingReason = FlyingReason.REGEN;
 	}

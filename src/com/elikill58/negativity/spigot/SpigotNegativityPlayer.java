@@ -45,6 +45,7 @@ import com.elikill58.negativity.spigot.support.FloodGateSupportManager;
 import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
 import com.elikill58.negativity.spigot.support.ProtocolSupportSupport;
 import com.elikill58.negativity.spigot.support.ViaVersionSupport;
+import com.elikill58.negativity.spigot.utils.HandUtils;
 import com.elikill58.negativity.spigot.utils.InventoryUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -84,14 +85,16 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	// warns & other
 	public int LAST_CLICK = 0, ACTUAL_CLICK = 0, SEC_ACTIVE = 0, SPIDER_SAME_DIST = 0, LAST_PING = -1;
 	// setBack
-	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, LAST_SLOT_CLICK = -1, LAST_CHAT_MESSAGE_NB = 0, SPEED_NB = 0;
+	public int NO_FALL_DAMAGE = 0, BYPASS_SPEED = 0, IS_LAST_SEC_BLINK = 0, LAST_SLOT_CLICK = -1,
+			LAST_CHAT_MESSAGE_NB = 0, SPEED_NB = 0;
 	public double lastYDiff = -3.141592654;
-	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0, TIME_LAST_MESSAGE = 0,
-			LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0, LAST_BLOCK_BREAK = 0, LAST_USE_ENTITY = 0, TIME_INVINCIBILITY_SPEED = 0;
+	public long TIME_OTHER_KEEP_ALIVE = 0, TIME_INVINCIBILITY = 0, LAST_SHOT_BOW = 0, LAST_REGEN = 0,
+			TIME_LAST_MESSAGE = 0, LAST_CLICK_INV = 0, LAST_BLOCK_PLACE = 0, TIME_REPORT = 0, LAST_BLOCK_BREAK = 0,
+			LAST_USE_ENTITY = 0, TIME_INVINCIBILITY_SPEED = 0;
 	public String LAST_OTHER_KEEP_ALIVE, LAST_CHAT_MESSAGE = "";
-	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false, 
-			isInvisible = false, isUsingSlimeBlock = false, already_blink = false, isJumpingWithBlock = false,
-			isOnLadders = false, lastClickInv = false, useAntiNoFallSystem = false, canPingSpoof = false;
+	public boolean IS_LAST_SEC_SNEAK = false, bypassBlink = false, isFreeze = false, isInvisible = false,
+			isUsingSlimeBlock = false, already_blink = false, isJumpingWithBlock = false, isOnLadders = false,
+			lastClickInv = false, useAntiNoFallSystem = false, canPingSpoof = false;
 	public boolean mustToBeSaved = false, wasFlying = false;
 	private boolean isOnGround = true, isBedrockPlayer = false;
 	public PacketType lastPacketType = null;
@@ -113,7 +116,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		initMods(p);
 		this.clientName = "Not loaded";
 		isBedrockPlayer = FloodGateSupportManager.isBedrockPlayer(p.getUniqueId());
-		playerVersion = SpigotNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p) : (SpigotNegativity.protocolSupportSupport ? ProtocolSupportSupport.getPlayerVersion(p) : Version.getVersion());
+		playerVersion = SpigotNegativity.viaVersionSupport ? ViaVersionSupport.getPlayerVersion(p)
+				: (SpigotNegativity.protocolSupportSupport ? ProtocolSupportSupport.getPlayerVersion(p)
+						: Version.getVersion());
 	}
 
 	public SpigotNegativityPlayer(OfflinePlayer p) {
@@ -125,7 +130,12 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void initMods(Player p) {
 		Plugin pl = SpigotNegativity.getInstance();
-		if(pl.isEnabled() && pl.getServer().getMessenger().isOutgoingChannelRegistered(pl, SpigotNegativity.CHANNEL_NAME_FML)) { // if not, we ignore it
+		if (pl.isEnabled()
+				&& pl.getServer().getMessenger().isOutgoingChannelRegistered(pl, SpigotNegativity.CHANNEL_NAME_FML)) { // if
+																														// not,
+																														// we
+																														// ignore
+																														// it
 			p.sendPluginMessage(pl, SpigotNegativity.CHANNEL_NAME_FML, new byte[] { -2, 0 });
 			p.sendPluginMessage(pl, SpigotNegativity.CHANNEL_NAME_FML, new byte[] { 0, 2, 0, 0, 0, 0 });
 			p.sendPluginMessage(pl, SpigotNegativity.CHANNEL_NAME_FML, new byte[] { 2, 0, 0, 0, 0 });
@@ -149,91 +159,96 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public String getIP() {
 		return getPlayer().getAddress().getAddress().getHostAddress();
 	}
-	
+
 	@Override
 	public Version getPlayerVersion() {
 		return playerVersion;
 	}
-	
+
 	public int getProtocolVersion() {
 		return protocolVersion;
 	}
-	
+
 	public void setProtocolVersion(int protocolVersion) {
 		this.protocolVersion = protocolVersion;
 		this.playerVersion = Version.getVersionByProtocolID(protocolVersion);
 	}
-	
+
 	public boolean isBedrockPlayer() {
 		return isBedrockPlayer;
 	}
-	
+
 	public boolean hasDetectionActive(Cheat c) {
-		if(!c.isActive() || SpigotNegativity.timeDrop)
+		if (!c.isActive() || SpigotNegativity.timeDrop)
 			return false;
-		if(TIME_INVINCIBILITY > System.currentTimeMillis())
+		if (TIME_INVINCIBILITY > System.currentTimeMillis())
 			return false;
 		if (isInFight && c.isBlockedInFight())
 			return false;
-		if(SpigotNegativity.tps_alert_stop > Utils.getLastTPS()) // to make TPS go upper
+		if (SpigotNegativity.tps_alert_stop > Utils.getLastTPS()) // to make TPS go upper
 			return false;
 		Player p = getPlayer();
-		if(SpigotNegativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) && GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
+		if (SpigotNegativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT)
+				&& GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
 			return false;
-		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT) && isUsingRiptide())
+		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT) && isUsingRiptide())
 			return false;
-		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
+		if (WorldRegionBypass.hasBypass(c, p.getLocation()))
 			return false;
-		if(SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase(Locale.ROOT)) || Perm.hasPerm(this, "bypass.all")))
+		if (SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase(Locale.ROOT))
+				|| Perm.hasPerm(this, "bypass.all")))
 			return false;
 		return ping < c.getMaxAlertPing();
 	}
-	
+
 	public String getWhyDetectionNotActive(Cheat c) {
-		if(!c.isActive())
+		if (!c.isActive())
 			return "Cheat disabled";
-		if(SpigotNegativity.timeDrop)
+		if (SpigotNegativity.timeDrop)
 			return "TPS drop";
-		if(TIME_INVINCIBILITY > System.currentTimeMillis())
+		if (TIME_INVINCIBILITY > System.currentTimeMillis())
 			return "Player invincibility";
 		if (isInFight && c.isBlockedInFight())
 			return "In fight";
-		if(SpigotNegativity.tps_alert_stop > Utils.getLastTPS()) // to make TPS go upper
+		if (SpigotNegativity.tps_alert_stop > Utils.getLastTPS()) // to make TPS go upper
 			return "Low TPS";
 		Player p = getPlayer();
-		if(SpigotNegativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT) && GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
+		if (SpigotNegativity.gadgetMenuSupport && c.getCheatCategory().equals(CheatCategory.MOVEMENT)
+				&& GadgetMenuSupport.checkGadgetsMenuPreconditions(p))
 			return "GadgetMenu bypass";
-		if(c.getCheatCategory().equals(CheatCategory.MOVEMENT) && isUsingRiptide())
+		if (c.getCheatCategory().equals(CheatCategory.MOVEMENT) && isUsingRiptide())
 			return "Riptide bypass";
-		if(WorldRegionBypass.hasBypass(c, p.getLocation()))
+		if (WorldRegionBypass.hasBypass(c, p.getLocation()))
 			return "World bypass";
-		if(SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase(Locale.ROOT)) || Perm.hasPerm(this, "bypass.all")))
+		if (SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase(Locale.ROOT))
+				|| Perm.hasPerm(this, "bypass.all")))
 			return "Permission bypass";
-		if(ping > c.getMaxAlertPing())
+		if (ping > c.getMaxAlertPing())
 			return "Too high ping (" + ping + " > " + c.getMaxAlertPing() + ")";
 		return "Unknown";
 	}
-	
+
 	public void updateCheckMenu() {
 		for (Player p : Utils.getOnlinePlayers()) {
 			if (p.getOpenInventory() != null) {
 				Inventory topInv = p.getOpenInventory().getTopInventory();
-				if(topInv == null || !topInv.getType().equals(org.bukkit.event.inventory.InventoryType.CHEST)) {
+				if (topInv == null || !topInv.getType().equals(org.bukkit.event.inventory.InventoryType.CHEST)) {
 					continue;
 				}
 				InventoryHolder holder = topInv.getHolder();
-				if(!(holder instanceof NegativityHolder)) {
+				if (!(holder instanceof NegativityHolder)) {
 					continue;
 				}
 				NegativityHolder nh = (NegativityHolder) holder;
-				if (InventoryUtils.getInventoryTitle(p.getOpenInventory()).equals(Inv.NAME_CHECK_MENU)){
-					AbstractInventory.getInventory(InventoryType.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, ((CheckMenuHolder) nh).getCible()));
-					//CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
+				if (InventoryUtils.getInventoryTitle(p.getOpenInventory()).equals(Inv.NAME_CHECK_MENU)) {
+					AbstractInventory.getInventory(InventoryType.CHECK_MENU)
+							.ifPresent((inv) -> inv.actualizeInventory(p, ((CheckMenuHolder) nh).getCible()));
+					// CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
 				}
 			}
 		}
 	}
-	
+
 	public void setBetterClick(int click) {
 		NegativityAccount account = getAccount();
 		account.setMostClicksPerSecond(click);
@@ -262,7 +277,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		account.setWarnCount(c, cheats);
 		Adapter.getAdapter().getAccountManager().save(account.getPlayerId());
 	}
-	
+
 	public void setLang(String newLang) {
 		NegativityAccount account = getAccount();
 		account.setLang(newLang);
@@ -272,7 +287,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			try {
 				((SimpleAccountManager.Server) accountManager).sendAccountToProxy(account);
 			} catch (IOException e) {
-				SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not send account update to proxy", e);
+				SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Could not send account update to proxy",
+						e);
 			}
 		}
 	}
@@ -286,16 +302,16 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		ALL = 0;
 		PACKETS.clear();
 	}
-	
+
 	public boolean getAllowFlight() {
 		return wasFlying || getPlayer().getAllowFlight();
 	}
-	
+
 	@Override
 	public boolean isOp() {
 		return getPlayer().isOp();
 	}
-	
+
 	@Override
 	public void startAnalyze(Cheat c) {
 		if (c.needPacket() && !INJECTED.contains(getPlayer().getUniqueId()))
@@ -315,29 +331,29 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	@Override
 	public void stopAnalyze(Cheat c) {
-		
+
 	}
-	
+
 	@Override
 	public String getReason(Cheat c) {
 		String n = "";
-		for(Cheat all : Cheat.values())
-			if(getAllWarn(all) > 5 && all.isActive())
+		for (Cheat all : Cheat.values())
+			if (getAllWarn(all) > 5 && all.isActive())
 				n = n + (n.equals("") ? "" : ", ") + all.getName();
-		if(!n.contains(c.getName()))
+		if (!n.contains(c.getName()))
 			n = n + (n.equals("") ? "" : ", ") + c.getName();
 		return n;
 	}
-	
-	public List<PlayerCheatAlertEvent> getAlertForAllCheat(){
+
+	public List<PlayerCheatAlertEvent> getAlertForAllCheat() {
 		final List<PlayerCheatAlertEvent> list = new ArrayList<>();
 		ALERT_NOT_SHOWED.forEach((c, listAlerts) -> {
-			if(!listAlerts.isEmpty())
+			if (!listAlerts.isEmpty())
 				list.add(getAlertForCheat(c, listAlerts));
 		});
 		return list;
 	}
-	
+
 	public PlayerCheatAlertEvent getAlertForCheat(Cheat c, List<PlayerCheatAlertEvent> list) {
 		int nb = 0, nbConsole = 0;
 		HashMap<Integer, Integer> relia = new HashMap<>();
@@ -345,29 +361,32 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		ReportType type = ReportType.NONE;
 		boolean hasRelia = false;
 		CheatHover hoverProof = null;
-		for(PlayerCheatAlertEvent e : list) {
+		for (PlayerCheatAlertEvent e : list) {
 			nb += e.getNbAlert();
-			
+
 			relia.put(e.getReliability(), relia.getOrDefault(e.getReliability(), 0) + 1);
 
 			ping.put(e.getPing(), ping.getOrDefault(e.getPing(), 0) + 1);
 
-			if(type == ReportType.NONE || (type == ReportType.WARNING && e.getReportType() == ReportType.VIOLATION))
+			if (type == ReportType.NONE || (type == ReportType.WARNING && e.getReportType() == ReportType.VIOLATION))
 				type = e.getReportType();
 
 			hasRelia = e.hasManyReliability() ? true : hasRelia;
-			
-			if(hoverProof == null)
+
+			if (hoverProof == null)
 				hoverProof = e.getHover();
-			
+
 			nbConsole += e.getNbAlertConsole();
 			e.clearNbAlertConsole();
 		}
-		// Don't to 100% each times that there is more than 2 alerts, we made a summary, and a the nb of alert to upgrade it
+		// Don't to 100% each times that there is more than 2 alerts, we made a summary,
+		// and a the nb of alert to upgrade it
 		int newRelia = UniversalUtils.parseInPorcent(UniversalUtils.sum(relia) + nb);
 		int newPing = UniversalUtils.sum(ping);
-		// we can ignore "proof" and "stats_send" because they have been already saved and they are NOT showed to player
-		return new PlayerCheatAlertEvent(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, nb, nbConsole);
+		// we can ignore "proof" and "stats_send" because they have been already saved
+		// and they are NOT showed to player
+		return new PlayerCheatAlertEvent(type, getPlayer(), c, newRelia, hasRelia, newPing, "", hoverProof, nb,
+				nbConsole);
 	}
 
 	public void makeAppearEntities() {
@@ -383,7 +402,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void spawnRandom() {
-		if(fakePlayerTouched > 20) // limit to prevent player freeze
+		if (fakePlayerTouched > 20) // limit to prevent player freeze
 			return;
 		int choice = new Random().nextInt(3);
 		if (choice == 0)
@@ -464,10 +483,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if (!FAKE_PLAYER.contains(fp))
 			return;
 		FAKE_PLAYER.remove(fp);
-		if(!detected) {
-			if(fakePlayerTouched > 0)
+		if (!detected) {
+			if (fakePlayerTouched > 0)
 				ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
-			if(FAKE_PLAYER.size() == 0)
+			if (FAKE_PLAYER.size() == 0)
 				fakePlayerTouched = 0;
 			return;
 		}
@@ -480,7 +499,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			}
 		} else {
 			ForceFieldProtocol.manageForcefieldForFakeplayer(getPlayer(), this);
-			if(fakePlayerTouched < 100) {
+			if (fakePlayerTouched < 100) {
 				spawnRandom();
 				spawnRandom();
 			}
@@ -492,7 +511,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	}
 
 	public void saveProof() {
-		if(mustToBeSaved) {
+		if (mustToBeSaved) {
 			mustToBeSaved = false;
 			Adapter.getAdapter().getAccountManager().save(getUUID());
 		}
@@ -570,11 +589,11 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public boolean isOnGround() {
 		return isOnGround || getPlayer().isOnGround();
 	}
-	
+
 	public void setOnGround(boolean b) {
 		this.isOnGround = b;
 	}
-	
+
 	@Override
 	public void banEffect() {
 		int i = 2;
@@ -619,44 +638,50 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			fightTask.cancel();
 		fightTask = null;
 	}
-	
+
 	public boolean hasElytra() {
 		return Version.getVersion().isNewerOrEquals(Version.V1_9) && getPlayer().isGliding();
 	}
+	
+	public boolean isUsingTrident() {
+		return Version.getVersion().isNewerOrEquals(Version.V1_13)
+				&& (getPlayer().isRiptiding() || HandUtils.handUseItem(getPlayer(), "TRIDENT"));
+	}
 
 	public boolean isTargetByIronGolem() {
-		for(Entity et : getPlayer().getWorld().getEntities())
-			if(et instanceof IronGolem)
-				if(((IronGolem) et).getTarget() != null && ((IronGolem) et).getTarget().equals(getPlayer()))
+		for (Entity et : getPlayer().getWorld().getEntities())
+			if (et instanceof IronGolem)
+				if (((IronGolem) et).getTarget() != null && ((IronGolem) et).getTarget().equals(getPlayer()))
 					return true;
 		return false;
 	}
-	
+
 	public boolean hasPotionEffect(String effectName) {
 		try {
 			PotionEffectType potionEffect = PotionEffectType.getByName(effectName);
-			if(potionEffect != null) // If optionEffect is null, it doesn't exist in this version
+			if (potionEffect != null) // If optionEffect is null, it doesn't exist in this version
 				return getPlayer().hasPotionEffect(potionEffect);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return false;
 	}
-	
+
 	public boolean isUsingRiptide() {
 		return Version.getVersion().isNewerOrEquals(Version.V1_13) && getPlayer().isRiptiding();
 	}
-	
+
 	public PotionEffect getPotionEffect(PotionEffectType type) {
-		return getPlayer().getActivePotionEffects().stream().filter((pe) -> pe.getType().equals(type)).findAny().orElse(null);
+		return getPlayer().getActivePotionEffects().stream().filter((pe) -> pe.getType().equals(type)).findAny()
+				.orElse(null);
 	}
-	
+
 	public static SpigotNegativityPlayer getNegativityPlayer(Player p) {
 		synchronized (players) {
 			return players.computeIfAbsent(p.getUniqueId(), id -> new SpigotNegativityPlayer(p));
 		}
 	}
-	
+
 	public static SpigotNegativityPlayer getNegativityPlayer(OfflinePlayer p) {
 		synchronized (players) {
 			return players.computeIfAbsent(p.getUniqueId(), id -> new SpigotNegativityPlayer(p));
@@ -666,8 +691,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 	public static SpigotNegativityPlayer getCached(UUID playerId) {
 		return players.get(playerId);
 	}
-	
-	public static Map<UUID, SpigotNegativityPlayer> getAllPlayers(){
+
+	public static Map<UUID, SpigotNegativityPlayer> getAllPlayers() {
 		return players;
 	}
 

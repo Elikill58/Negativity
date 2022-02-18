@@ -35,12 +35,11 @@ public class FastStairsProtocol extends Cheat implements Listener {
 		String blockName = e.getTo().clone().subtract(0, 0.0001, 0).getBlock().getType().name();
 		if(!blockName.contains("STAIRS") || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
-		Location from = e.getFrom().clone();
-		from.setY(e.getTo().getY());
-		double distance = from.distance(e.getTo()), lastDistance = np.contentDouble.getOrDefault("stairs-distance", 0.0);
-		if(distance > 0.452 && lastDistance > distance) {
-			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 140),
-					"No fall damage. Block: " + blockName + ", distance: " + distance + ", lastDistance: " + lastDistance,
+		Location from = e.getFrom(), to = e.getTo();
+		double distance = Math.sqrt((from.getX() - to.getX()) * (from.getX() - to.getX()) + (from.getZ() - to.getZ()) * (from.getZ() - to.getZ())), lastDistance = np.contentDouble.getOrDefault("stairs-distance", 0.0);
+		if(distance > (p.getWalkSpeed() * 1.1) && lastDistance > distance) {
+			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 130),
+					"No fall damage. Block: " + blockName + ", distance: " + distance + ", last: " + lastDistance + ", ws: " + p.getWalkSpeed(),
 					hoverMsg("main", "%distance%", String.format("%.3f", distance)));
 			if(mayCancel && isSetBack())
 				e.setCancelled(true);

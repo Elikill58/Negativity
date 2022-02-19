@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.channel.GameChannelNegativityMessageEvent;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 
 public class ChannelListeners implements PluginMessageListener {
@@ -23,6 +24,7 @@ public class ChannelListeners implements PluginMessageListener {
 		}
 
 		if (channel.equalsIgnoreCase(NegativityMessagesManager.CHANNEL_ID)) {
+			Adapter.getAdapter().debug("Receiving channel message");
 			EventManager.callEvent(new GameChannelNegativityMessageEvent(SpigotEntityManager.getPlayer(p), data));
 		}
 	}

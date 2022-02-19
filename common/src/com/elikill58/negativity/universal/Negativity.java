@@ -236,7 +236,7 @@ public class Negativity {
 				boolean basicPerm = Perm.hasPerm(npMod, Perm.SHOW_ALERT);
 				ShowAlertPermissionEvent permissionEvent = new ShowAlertPermissionEvent(pl, npMod, basicPerm);
 				EventManager.callEvent(permissionEvent);
-				if (permissionEvent.isCancelled() || npMod.disableShowingAlert)
+				if (permissionEvent.isCancelled() || !npMod.getAccount().isShowAlert())
 					continue;
 				if (permissionEvent.hasBasicPerm()) {
 					ada.sendMessageRunnableHover(pl, Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),

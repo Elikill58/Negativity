@@ -41,6 +41,7 @@ public class GameEventsManager implements Listeners {
 	public void onChannelMessage(GameChannelNegativityMessageEvent e) {
 		Player p = e.getPlayer();
 		NegativityMessage message = e.getMessage();
+		Adapter.getAdapter().debug("Message: " + (message == null ? null : message.messageId() + ": " + message.getClass().getSimpleName()));
 		if (message instanceof ProxyPingMessage) {
 			ProxyPingMessage pingMessage = (ProxyPingMessage) message;
 			ProxyCompanionManager.foundCompanion(pingMessage);

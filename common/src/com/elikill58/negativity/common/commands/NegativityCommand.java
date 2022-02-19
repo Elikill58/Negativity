@@ -130,7 +130,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			if(ProxyCompanionManager.isIntegrationEnabled()) {
 				playerSender.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ShowAlertStatusMessage(uuid, newVal)); // send message to bungee
 			}
-			Messages.sendMessage(playerSender, newVal ? "negativity.see_no_longer_alert" : "negativity.see_alert");
+			Messages.sendMessage(playerSender, newVal ? "negativity.see_alert" : "negativity.see_no_longer_alert");
 			Adapter.getAdapter().getAccountManager().update(acc);
 			return true;
 		} else if (arg[0].equalsIgnoreCase("reload")) {

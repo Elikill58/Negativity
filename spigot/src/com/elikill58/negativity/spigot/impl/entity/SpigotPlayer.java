@@ -8,6 +8,7 @@ import java.util.UUID;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.plugin.messaging.ChannelNotRegisteredException;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.entity.Entity;
@@ -213,7 +214,13 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {
-		entity.sendPluginMessage(SpigotNegativity.getInstance(), channelId, writeMessage);
+		SpigotNegativity pl = SpigotNegativity.getInstance();
+		try {
+			entity.sendPluginMessage(pl, channelId, writeMessage);
+		} catch (ChannelNotRegisteredException e) {
+			Bukkit.getServer().getMessenger().registerOutgoingPluginChannel(pl, channelId);
+			entity.sendPluginMessage(pl, channelId, writeMessage);
+		}
 	}
 
 	@Override

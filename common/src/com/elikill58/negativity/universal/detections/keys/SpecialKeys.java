@@ -5,7 +5,8 @@ import java.nio.file.Path;
 import com.elikill58.negativity.universal.Version;
 
 public enum SpecialKeys implements IDetectionKeys<SpecialKeys> {
-	
+
+	BANNED_NAME("BANNED-NAME"),
 	INVALID_NAME("INVALID-NAME"),
 	MAX_PLAYER_PER_IP("MAX-PLAYER-BY-IP"),
 	MC_LEAKS("MCLEAKS"),

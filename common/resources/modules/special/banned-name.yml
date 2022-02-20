@@ -1,0 +1,26 @@
+# Special detection
+
+# Manage player with banned names. Here put all banned key-word in names.
+# If you write "somename", all names that contains this word, for example "AnAmazingSomename"
+active: true
+
+# The display name
+name: "Banned Name"
+
+# Give all banned names
+banned_names:
+- "JeanCuleTamere"
+- "Sexuel"
+
+banned_regex: []
+
+# Kick player if they have wrong name
+kick: true
+
+# Ban player if they have wrong name
+ban:
+  # Enable or disable it
+  active: false
+  # the time of the ban, in milliseconds
+  # -1 for a definitive ban
+  time: -1

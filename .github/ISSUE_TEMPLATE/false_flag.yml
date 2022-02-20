@@ -1,17 +1,17 @@
-name: False flag
-about: Report a false flag
-title: ''
-labels: ['false positive']
+name: "False flag"
+description: "Report a false flag"
+title: ""
+labels: ["false positive"]
 assignees:
 - Elikill58
 body:
 - type: markdown
   attributes:
-    value: 'Use this template only if you want to report false flag with Negativity.'
+    value: "Use this template only if you want to report false flag with Negativity."
 - type: dropdown
   id: platform
   attributes:
-    label: Which platform are you using ?
+    label: "Which platform are you using ?"
     multiple: true
     options:
     - Spigot
@@ -24,28 +24,28 @@ body:
 - type: textarea
   id: versions
   attributes:
-    label: Versions of Negativity and of the server
+    label: "Versions of Negativity and of the server"
     description: "Show output result of `/n debug` command"
     placeholder: "Negativity v1.0, paper v1_8_R3"
-    value: ""
+    value: "My version is: "
   validations:
     required: true
 - type: textarea
   id: describe
   attributes:
-    label: How did you made the false flag ?
-    description: Please, try to explain (and show with video or screenshoot) how you reproduce the false flag.
-    placeholder: Explain the false flag here !
-    value: ""
+    label: "How did you made the false flag ?"
+    description: "Please, try to explain (and show with video or screenshoot) how you reproduce the false flag."
+    placeholder: "Explain the false flag here !"
+    value: "Step 1: On this block..."
   validations:
     required: true
 - type: textarea
-  id: describe
+  id: proof-file
   attributes:
-    label: Can you show the proof file ?
-    description: The concerned line in the proof file (located at `/plugins/Negativity/user/proof/`)
-    placeholder: ""
-    value: ""
+    label: "Can you show the proof file ?"
+    description: "The concerned line in the proof file (located at `/plugins/Negativity/user/proof/`)"
+    placeholder: "2022-01-01 00:00:00: (0ms) 1x SOME_CHEAT > proof."
+    value: "My proof file:"
   validations:
     required: true
 

@@ -766,6 +766,11 @@ cheats:
       # The time of the ban, in milliseconds.
       # Default: -1 (definitive)
       ban_time: -1
+      # Here put all banned key-word in names.
+      # If you write "somename", all names that contains this word, for example "AnAmazingSomename"
+      banned_names:
+      - "JeanCuleTamere"
+      - "Sexuel"
     # Max player by IP sets a limit to how many plays can connect from the same IP (i.e. internet router or house)
     max-player-by-ip:
       name: "Max Player/IP"

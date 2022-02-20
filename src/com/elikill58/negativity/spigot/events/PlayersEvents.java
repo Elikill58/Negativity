@@ -81,7 +81,8 @@ public class PlayersEvents implements Listener {
 			e.setLoginResult(AsyncPlayerPreLoginEvent.Result.KICK_BANNED);
 			e.setKickMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));
 			Adapter.getAdapter().getAccountManager().dispose(playerId);
-		} else if(!UniversalUtils.isValidName(e.getName()) && !FloodGateSupportManager.isBedrockPlayer(playerId)) {
+		} else if((!UniversalUtils.isValidName(e.getName()) && !FloodGateSupportManager.isBedrockPlayer(playerId))
+				|| UniversalUtils.isBannedName(invalidNameSection.getStringList("banned_names"), e.getName())) {
 			// check for ban / kick only if the player is not already banned
 			String banReason = invalidNameSection.getString("name", "Invalid Name");
 			if(invalidNameSection.getBoolean("ban", false)) {

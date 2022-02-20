@@ -353,12 +353,17 @@ public class UniversalUtils {
 	public static boolean isValidName(String name) {
 		return name.matches("[0-9A-Za-z-_*]{3," + name.length() + "}");
 	}
+
+	public static boolean isBannedName(List<String> bannedNames, String name) {
+		name = name.toLowerCase();
+		return bannedNames.stream().map(String::toLowerCase).filter(name::contains).count() > 0;
+	}
 	
 	/**
-	 * Check if the given string contains a chinese characters
+	 * Check if the given string contains a Chinese characters
 	 * 
-	 * @param The string where we are looking for chinese char
-	 * @return true if there is a chinese char
+	 * @param The string where we are looking for Chinese char
+	 * @return true if there is a Chinese char
 	 */
 	public static boolean containsChineseCharacters(String s) {
 	    return s.codePoints().anyMatch(codepoint ->

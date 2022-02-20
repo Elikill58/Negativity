@@ -1,6 +1,6 @@
 name: "False flag"
 description: "Report a false flag"
-title: ""
+title: "[FP]: "
 labels: ["false positive"]
 assignees:
 - Elikill58

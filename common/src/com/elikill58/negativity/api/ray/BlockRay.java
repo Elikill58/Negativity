@@ -27,6 +27,7 @@ public class BlockRay {
 	private final RaySearch search;
 	private Location position;
 	private boolean hasOther = false;
+	private double lastDistance = 0;
 	private List<Vector> positions;
 	private HashMap<Vector, Material> testedVec = new HashMap<>();
 	
@@ -120,7 +121,7 @@ public class BlockRay {
 	public BlockRayResult compile() {
 		RayResult ray;
 		while(!(ray = next()).canFinish());
-		return new BlockRayResult(this, ray, position.getBlock(), hasOther, vector, testedVec);
+		return new BlockRayResult(this, ray, position.getBlock(), hasOther, vector, lastDistance, testedVec);
 	}
 	
 	/**
@@ -172,8 +173,8 @@ public class BlockRay {
 	private RayResult tryLoc(Vector v) {
 		if(testedVec.containsKey(v))
 			return RayResult.CONTINUE;
-		double distance = v.distance(basePosition.toVector()); // check between both distance
-		if(distance >= maxDistance)
+		lastDistance = v.distance(basePosition.toVector()); // check between both distance
+		if(lastDistance >= maxDistance)
 			return RayResult.TOO_FAR; // Too far
 		testedVec.put(v, Materials.STICK); // will be replaced when getting from exact block
 		if(search.equals(RaySearch.POSITION)) {

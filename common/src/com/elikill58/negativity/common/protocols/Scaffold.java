@@ -101,11 +101,11 @@ public class Scaffold extends Cheat implements Listeners {
 		Adapter.getAdapter().runSync(() -> {
 			BlockRayResult result = blockRay.compile();
 			Block searched = result.getBlock() == null ? place : result.getBlock();
-			double distance = place.getLocation().distance(searched.getLocation());
-			int maxDistance = p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4;
-			if (distance > maxDistance || !result.getRayResult().isFounded()) {
-				Negativity.alertMod(distance > maxDistance + 1 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(distance * 30), "distance",
+			double distance = result.getLastDistance();
+			double maxDistance = (p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4) + 0.2;
+			if (!result.getRayResult().isFounded()) {
+				Negativity.alertMod(distance > maxDistance + 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+						UniversalUtils.parseInPorcent(distance * 25), "distance",
 						"Place: " + place + ", targetVisual: " + searched + ", vec: " + result.getVector() + ", begin: " + blockRay.getBasePosition()
 								+ " Distance: " + distance + ". Result: " + result.getRayResult()
 								+ ", Tested: " + result.getAllTestedLoc() + ", needed: "

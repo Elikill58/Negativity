@@ -16,14 +16,16 @@ public class BlockRayResult {
 	private final Block block;
 	private final boolean hasBlockExceptSearched;
 	private final HashMap<Vector, Material> alltestedLoc;
+	private final double lastDistance;
 	private final Vector vec;
 	
-	protected BlockRayResult(BlockRay ray, RayResult rayResult, Block block, boolean hasBlockExceptSearched, Vector vec, HashMap<Vector, Material> testedLoc) {
+	protected BlockRayResult(BlockRay ray, RayResult rayResult, Block block, boolean hasBlockExceptSearched, Vector vec, double lastDistance, HashMap<Vector, Material> testedLoc) {
 		this.ray = ray;
 		this.rayResult = rayResult;
 		this.block = block;
 		this.hasBlockExceptSearched = hasBlockExceptSearched;
 		this.vec = vec;
+		this.lastDistance = lastDistance;
 		this.alltestedLoc = testedLoc;
 	}
 
@@ -83,6 +85,15 @@ public class BlockRayResult {
 	 */
 	public Vector getVector() {
 		return vec;
+	}
+	
+	/**
+	 * Get the distance between begin and end.
+	 * 
+	 * @return the distance
+	 */
+	public double getLastDistance() {
+		return lastDistance;
 	}
 	
 	/**

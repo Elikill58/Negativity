@@ -53,12 +53,9 @@ public class Reach extends Cheat implements Listeners {
 		if (packet.getPacketType().equals(PacketType.Client.POSITION)) {
 			if (np.listLocations.has(getKey(), "entity-hit-position")) {
 				List<Location> positions = np.listLocations.remove(getKey(), "entity-hit-position");
-				if(positions.size() <= 2) {
-					np.entities.remove(getKey(), "entity-hit-object");
-					return;
-				}
-				Location loc = positions.get(positions.size() - 2);
 				Entity cible = np.entities.remove(getKey(), "entity-hit-object");
+				Location loc = positions.size() >= 2 ? positions.get(positions.size() - 2) : p.getLocation();
+				Adapter.getAdapter().debug("Positions: " + positions + ", locs: " + loc);
 
 				positions.stream().mapToDouble(other -> getDistance(loc, other)).min().ifPresent(dis -> {
 					recordData(p.getUniqueId(), HIT_DISTANCE, dis);

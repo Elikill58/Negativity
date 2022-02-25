@@ -7,23 +7,18 @@ import java.util.List;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.negativity.PlayerCheatAlertEvent;
 import com.elikill58.negativity.api.yaml.Configuration;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.alerts.AlertSender;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 
-public class AmountAlertSender implements AlertSender {
+public class AmountAlertSender extends AlertSender {
 
 	private int amount = 10;
 	
-	@Override
-	public String getName() {
-		return "amount";
-	}
-	
-	@Override
-	public boolean canChangeDefaultValue() {
-		return true;
+	public AmountAlertSender() {
+		super("amount", true);
 	}
 	
 	@Override
@@ -32,13 +27,13 @@ public class AmountAlertSender implements AlertSender {
 	}
 	
 	@Override
-	public int addOne() {
-		return amount++;
+	public void addOne() {
+		amount++;
 	}
 	
 	@Override
-	public int removeOne() {
-		return amount--;
+	public void removeOne() {
+		amount--;
 	}
 	
 	@Override
@@ -54,6 +49,15 @@ public class AmountAlertSender implements AlertSender {
 	@Override
 	public void config(Configuration config) {
 		amount = config.getInt("value", getDefaultValue());
+	}
+	
+	@Override
+	public void save() {
+		Adapter ada = Adapter.getAdapter();
+		Configuration config = ada.getConfig();
+		config.set("alert.show.type", name);
+		config.set("alert.show.value", amount);
+		config.save();
 	}
 	
 	@Override

@@ -5,18 +5,12 @@ import com.elikill58.negativity.api.events.negativity.PlayerCheatAlertEvent;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.alerts.AlertSender;
 
-public class InstantAlertSender implements AlertSender {
+public class InstantAlertSender extends AlertSender {
 
-	@Override
-	public String getName() {
-		return "instant";
+	public InstantAlertSender() {
+		super("instant", false);
 	}
-	
-	@Override
-	public boolean canChangeDefaultValue() {
-		return false;
-	}
-	
+
 	@Override
 	public void alert(NegativityPlayer np, PlayerCheatAlertEvent alert) {
 		Negativity.sendAlertMessage(np, alert);

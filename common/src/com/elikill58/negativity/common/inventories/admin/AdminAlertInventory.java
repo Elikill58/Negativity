@@ -1,7 +1,5 @@
 package com.elikill58.negativity.common.inventories.admin;
 
-import java.util.HashMap;
-
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
@@ -14,37 +12,31 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.admin.AdminAlertHolder;
 import com.elikill58.negativity.universal.Messages;
-import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.alerts.AlertSender;
-import com.elikill58.negativity.universal.alerts.hook.AmountAlertSender;
-import com.elikill58.negativity.universal.alerts.hook.InstantAlertSender;
-import com.elikill58.negativity.universal.alerts.hook.TimeAlertSender;
 
 public class AdminAlertInventory extends AbstractInventory<AdminAlertHolder> {
-
-	private HashMap<Integer, AlertSender> slotPerAlertShower = new HashMap<>();
 	
 	public AdminAlertInventory() {
 		super(NegativityInventory.ADMIN_ALERT, AdminAlertHolder.class);
-		slotPerAlertShower.put(10, new InstantAlertSender());
-		slotPerAlertShower.put(11, new TimeAlertSender());
-		slotPerAlertShower.put(12, new AmountAlertSender());
 	}
 	
 	@Override
 	public void openInventory(Player p, Object... args) {
-		Inventory inv = Inventory.createInventory(Inventory.ADMIN_MENU, 27, new AdminAlertHolder());
+		AdminAlertHolder holder = new AdminAlertHolder();
+		Inventory inv = Inventory.createInventory(Inventory.ADMIN_MENU, 27, holder);
 		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		
-		slotPerAlertShower.forEach((slot, shower) -> {
-			inv.set(slot, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.alerts.shower." + shower.getName())).build());
-			if(shower.canChangeDefaultValue()) {
+		int slot = 10;
+		for(AlertSender sender : AlertSender.getAllAlertSender()) {
+			inv.set(slot, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.alerts.shower." + sender.getName())).build());
+			if(sender.canChangeDefaultValue()) {
 				inv.set(slot - 9, ItemBuilder.Builder(Materials.SLIME_BALL).displayName("+").build());
 				inv.set(slot + 9, ItemBuilder.Builder(Materials.REDSTONE).displayName("-").build());
 			}
-		});
+			slot++;
+		}
 
-		setShowerItem(inv, p, Negativity.getAlertShower());
+		setShowerItem(inv, p, AlertSender.getAlertShower());
 		
 		inv.set(8, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
 		inv.set(26, Inventory.getCloseItem(p));
@@ -62,13 +54,13 @@ public class AdminAlertInventory extends AbstractInventory<AdminAlertHolder> {
 			InventoryManager.open(NegativityInventory.ADMIN, p);
 		} else if(m.equals(Materials.PAPER)) {
 			int slot = e.getSlot();
-			Negativity.setAlertShower(slotPerAlertShower.get(slot));
-			setShowerItem(e.getClickedInventory(), p, Negativity.getAlertShower());
+			AlertSender.setAlertShower(nh.getAlertSender(slot));
+			setShowerItem(e.getClickedInventory(), p, AlertSender.getAlertShower());
 		} else if(m.equals(Materials.SLIME_BALL) || m.equals(Materials.REDSTONE)) {
 			int slot = e.getSlot();
 			int more = slot > 9 ? -1 : 1; // for slot in last line of inv = remove one
-			AlertSender shower = Negativity.getAlertShower();
-			AlertSender otherShower = slotPerAlertShower.get(slot + (9 * more)); // retrieve good alert shower
+			AlertSender shower = AlertSender.getAlertShower();
+			AlertSender otherShower = nh.getAlertSender(slot + (9 * more)); // retrieve good alert shower
 			if(!shower.getName().equalsIgnoreCase(otherShower.getName())) { // not same alert shower, so we have to change
 				shower = otherShower;
 			}
@@ -76,6 +68,7 @@ public class AdminAlertInventory extends AbstractInventory<AdminAlertHolder> {
 				shower.addOne();
 			else
 				shower.removeOne();
+			shower.save();
 			setShowerItem(e.getClickedInventory(), p, shower);
 		}
 	}

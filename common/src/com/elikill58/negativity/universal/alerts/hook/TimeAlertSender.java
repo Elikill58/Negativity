@@ -12,19 +12,13 @@ import com.elikill58.negativity.universal.ScheduledTask;
 import com.elikill58.negativity.universal.alerts.AlertSender;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 
-public class TimeAlertSender implements AlertSender {
+public class TimeAlertSender extends AlertSender {
 
 	private ScheduledTask task;
 	private int time = 1000;
 	
-	@Override
-	public String getName() {
-		return "time";
-	}
-	
-	@Override
-	public boolean canChangeDefaultValue() {
-		return true;
+	public TimeAlertSender() {
+		super("time", true);
 	}
 	
 	@Override
@@ -33,13 +27,13 @@ public class TimeAlertSender implements AlertSender {
 	}
 	
 	@Override
-	public int addOne() {
-		return time += 1000;
+	public void addOne() {
+		time += 1000;
 	}
 	
 	@Override
-	public int removeOne() {
-		return time -= 1000;
+	public void removeOne() {
+		time -= 1000;
 	}
 	
 	@Override
@@ -67,6 +61,15 @@ public class TimeAlertSender implements AlertSender {
 					Negativity.sendAlertMessage(np, alert);
 			});
 		}, (time * 20) / 1000);
+	}
+	
+	@Override
+	public void save() {
+		Adapter ada = Adapter.getAdapter();
+		Configuration config = ada.getConfig();
+		config.set("alert.show.type", name);
+		config.set("alert.show.value", time);
+		config.save();
 	}
 	
 	@Override

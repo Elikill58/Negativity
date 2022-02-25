@@ -28,9 +28,6 @@ import com.elikill58.negativity.common.timers.ActualizeInvTimer;
 import com.elikill58.negativity.common.timers.AnalyzePacketTimer;
 import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.alerts.AlertSender;
-import com.elikill58.negativity.universal.alerts.hook.AmountAlertSender;
-import com.elikill58.negativity.universal.alerts.hook.InstantAlertSender;
-import com.elikill58.negativity.universal.alerts.hook.TimeAlertSender;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
@@ -61,7 +58,7 @@ public class Negativity {
 	public static boolean log_console = false;
 	public static boolean hasBypass = false;
 	public static boolean tpsDrop = false;
-	private static AlertSender alertSender;
+	
 	private static ScheduledTask actualizeInvTimer, analyzePacketTimer;
 
 	/**
@@ -173,7 +170,7 @@ public class Negativity {
 			return false;
 		}
 		manageAlertCommand(np, type, p, c, reliability);
-		alertSender.alert(np, alert);
+		AlertSender.getAlertShower().alert(np, alert);
 		c.performSetBack(p);
 		return true;
 	}
@@ -330,7 +327,7 @@ public class Negativity {
 			ada.registerNewIncomingChannel(ada.getServerVersion().isNewerOrEquals(Version.V1_13) ? "minecraft:brand" : "MC|Brand", (p, msg) -> {
 				NegativityPlayer.getNegativityPlayer(p).setClientName(new String(msg).substring(1));
 			});
-			initAlertShower(ada);
+			AlertSender.initAlertShower(ada);
 			FileSaverTimer old = FileSaverTimer.getInstance();
 			if(old != null)
 				old.runAll();
@@ -405,49 +402,5 @@ public class Negativity {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	public static AlertSender getAlertShower() {
-		return alertSender;
-	}
-	
-	public static AlertSender getAlertShowerOfTypeName(String type) {
-		if(type.equalsIgnoreCase("instant")) {
-			return new InstantAlertSender();
-		} else if(type.equalsIgnoreCase("amount")) {
-			return new AmountAlertSender();
-		} else { // default one
-			return new TimeAlertSender();
-		}
-	}
-	
-	private static void initAlertShower(Adapter ada) {
-		Configuration config = ada.getConfig().getSection("alert.show");
-
-		String type = config.getString("type", "time");
-		alertSender = getAlertShowerOfTypeName(type);
-		alertSender.config(config);
-	}
-	
-	public static void refreshAlertShower(Adapter ada, AlertSender newShower) {
-		if(alertSender != null)
-			alertSender.stop();
-		Configuration config = ada.getConfig().getSection("alert.show");
-
-		alertSender = newShower;
-		alertSender.config(config);
-	}
-	
-	public static void setAlertShower(String type) {
-		setAlertShower(getAlertShowerOfTypeName(type));
-	}
-	
-	public static void setAlertShower(AlertSender shower) {
-		Adapter ada = Adapter.getAdapter();
-		Configuration config = ada.getConfig();
-		config.set("alert.show.type", shower.getName());
-		config.set("alert.show.value", shower.getValue());
-		config.save();
-		refreshAlertShower(ada, shower);
 	}
 }

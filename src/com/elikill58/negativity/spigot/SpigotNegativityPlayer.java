@@ -37,7 +37,6 @@ import org.bukkit.util.Vector;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory;
 import com.elikill58.negativity.spigot.inventories.AbstractInventory.InventoryType;
 import com.elikill58.negativity.spigot.inventories.holders.CheckMenuHolder;
-import com.elikill58.negativity.spigot.inventories.holders.NegativityHolder;
 import com.elikill58.negativity.spigot.listeners.PlayerCheatAlertEvent;
 import com.elikill58.negativity.spigot.listeners.PlayerPacketsClearEvent;
 import com.elikill58.negativity.spigot.protocols.ForceFieldProtocol;
@@ -46,7 +45,6 @@ import com.elikill58.negativity.spigot.support.GadgetMenuSupport;
 import com.elikill58.negativity.spigot.support.ProtocolSupportSupport;
 import com.elikill58.negativity.spigot.support.ViaVersionSupport;
 import com.elikill58.negativity.spigot.utils.HandUtils;
-import com.elikill58.negativity.spigot.utils.InventoryUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatCategory;
@@ -236,14 +234,9 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 					continue;
 				}
 				InventoryHolder holder = topInv.getHolder();
-				if (!(holder instanceof NegativityHolder)) {
-					continue;
-				}
-				NegativityHolder nh = (NegativityHolder) holder;
-				if (InventoryUtils.getInventoryTitle(p.getOpenInventory()).equals(Inv.NAME_CHECK_MENU)) {
+				if (holder instanceof CheckMenuHolder) {
 					AbstractInventory.getInventory(InventoryType.CHECK_MENU)
-							.ifPresent((inv) -> inv.actualizeInventory(p, ((CheckMenuHolder) nh).getCible()));
-					// CheckMenuInventory.actualizeCheckMenu(p, Inv.CHECKING.get(p));
+							.ifPresent((inv) -> inv.actualizeInventory(p, ((CheckMenuHolder) holder).getCible()));
 				}
 			}
 		}

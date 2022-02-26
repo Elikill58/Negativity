@@ -152,7 +152,7 @@ public class Speed extends Cheat implements Listeners {
 			double distanceWithSpeed = distance - (amplifierSpeed / 10);
 			if(dif == 0 && distanceWithSpeed >= (p.getWalkSpeed() * (p.isSprinting() ? 2.5 : 2) * 1.01)) {
 				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
-						this, 95, "walk-speed", "Differences : " + dif + ", distance: " + String.format("%.4f", distance) + ", withSpeed: "
+						this, UniversalUtils.parseInPorcent(distanceWithSpeed * 100), "walk-speed", "Differences : " + dif + ", distance: " + String.format("%.4f", distance) + ", withSpeed: "
 						+ String.format("%.4f", distanceWithSpeed) + ", amplifier: " + amplifierSpeed
 						+ ", ws: " + p.getWalkSpeed() + ", ground: " + onGround + ", distanceXZ: " + from.distanceXZ(to));
 			}

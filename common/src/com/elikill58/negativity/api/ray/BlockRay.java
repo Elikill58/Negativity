@@ -173,7 +173,7 @@ public class BlockRay {
 	private RayResult tryLoc(Vector v) {
 		if(testedVec.containsKey(v))
 			return RayResult.CONTINUE;
-		lastDistance = v.distance(basePosition.toVector()); // check between both distance
+		lastDistance = v.clone().distance(basePosition.toVector()); // check between both distance
 		if(lastDistance >= maxDistance)
 			return RayResult.TOO_FAR; // Too far
 		testedVec.put(v, Materials.STICK); // will be replaced when getting from exact block
@@ -187,7 +187,7 @@ public class BlockRay {
 			}
 			return RayResult.CONTINUE;
 		}
-		Material type = w.getBlockAt(v).getType();
+		Material type = w.getBlockAt(v.clone()).getType();
 		testedVec.put(v, type); // changed tested type to the getted one
 		if(search.equals(RaySearch.TYPE_SPECIFIC)) {
 			if(neededType.contains(type)) {// founded type

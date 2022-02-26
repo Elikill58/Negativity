@@ -1,6 +1,7 @@
 package com.elikill58.negativity.universal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
@@ -35,7 +36,8 @@ public interface PacketType {
 		for(PacketType packet : types)
 			if(packet.getFullName().equalsIgnoreCase(packetName) || packet.getPacketName().equalsIgnoreCase(packetName)  || packet.getAlias().contains(packetName))
 				return packet;
-		Adapter.getAdapter().debug("[Packet] Unknow packet " + packetName);
+		if(!Arrays.asList("ClientboundLevelChunkWithLightPacket", "d").contains(packetName))
+			Adapter.getAdapter().debug("[Packet] Unknow packet " + packetName);
 		return unset;
 	}
 	

@@ -1,35 +1,37 @@
 package com.elikill58.negativity.universal.webhooks.integrations;
 
 import java.awt.Color;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import com.elikill58.negativity.api.json.JSONObject;
+import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.Tuple;
 import com.elikill58.negativity.universal.webhooks.Webhook;
 import com.elikill58.negativity.universal.webhooks.integrations.DiscordWebhook.DiscordWebhookRequest.EmbedObject;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
 
+@SuppressWarnings("unchecked")
 public class DiscordWebhook implements Webhook {
     
 	private final Configuration config;
 	private final String webhookUrl;
 	private final ScheduledExecutorService executorService;
 	private List<WebhookMessage> queue = new ArrayList<>();
-	private int skip = 0;
+	private long skip = 0;
 	
 	public DiscordWebhook(Configuration config) {
 		this.config = config;
@@ -58,6 +60,10 @@ public class DiscordWebhook implements Webhook {
     
     @Override
     public void runQueue() {
+    	if(skip > 0) { // should skip
+    		skip--;
+    		return;
+    	}
     	// firstly, combine all
     	synchronized (queue) {
     		if(queue.isEmpty())
@@ -157,12 +163,17 @@ public class DiscordWebhook implements Webhook {
 
 		    webhook.addEmbed(obj);
 	    }
-		int code = webhook.execute();
-		ada.debug("Webhook message sent, code: " + code);
-    	if(code == 429) { // good config and error while sending
-    		queue.add(msg);
-    		skip = 5; // wait 5 s until next send
-    	}
+		Tuple<Integer, String> webhookResult = webhook.execute();
+		int code = webhookResult.getA();
+		if(code < 200 || code >= 300) {
+	    	if(code == 429) { // good config and error while sending
+	    		JSONObject json = (JSONObject) new JSONParser().parse(webhookResult.getB());
+	    		queue.add(msg);
+	    		skip = ((long) json.get("retry_after")) / 1000; // wait 5 s until next send
+	    		ada.getLogger().warn("Discord webhook reach rate limit. Wait " + skip + " secs more.");
+	    	} else
+	    		ada.getLogger().warn("Error while trying to send webhook request (code: " + code + "): " + webhookResult.getB());
+		}
     }
     
     @Override
@@ -234,7 +245,7 @@ public class DiscordWebhook implements Webhook {
 	        this.embeds.add(embed);
 	    }
 	
-	    public int execute() throws IOException {
+		public Tuple<Integer, String> execute() throws IOException {
 	        if (this.content == null && this.embeds.isEmpty()) {
 	            throw new IllegalArgumentException("Set content or add at least one EmbedObject");
 	        }
@@ -331,10 +342,25 @@ public class DiscordWebhook implements Webhook {
 	        stream.write(json.toString().getBytes());
 	        stream.flush();
 	        stream.close();
-	        int code = connection.getResponseCode();
-	        connection.getInputStream().close(); //I'm not sure why but it doesn't work without getting the InputStream
+			String result = "";
+			int code = connection.getResponseCode();
+			if(code > 299 || code < 200) { // not successfull
+				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getErrorStream()));
+				String inputLine;
+
+				while ((inputLine = in.readLine()) != null)
+					result += inputLine;
+				in.close();
+			} else { // done
+				BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+				String inputLine;
+		
+				while ((inputLine = in.readLine()) != null)
+					result += inputLine;
+				in.close();
+			}
 	        connection.disconnect();
-	        return code;
+	        return new Tuple<Integer, String>(code, result);
 	    }
 	
 	    public static class EmbedObject {
@@ -518,55 +544,6 @@ public class DiscordWebhook implements Webhook {
 	            private boolean isInline() {
 	                return inline;
 	            }
-	        }
-	    }
-	
-	    private class JSONObject {
-	
-	        private final HashMap<String, Object> map = new HashMap<>();
-	
-	        void put(String key, Object value) {
-	            if (value != null) {
-	                map.put(key, value);
-	            }
-	        }
-	
-	        @Override
-	        public String toString() {
-	            StringBuilder builder = new StringBuilder();
-	            Set<Map.Entry<String, Object>> entrySet = map.entrySet();
-	            builder.append("{");
-	
-	            int i = 0;
-	            for (Map.Entry<String, Object> entry : entrySet) {
-	                Object val = entry.getValue();
-	                builder.append(quote(entry.getKey())).append(":");
-	
-	                if (val instanceof String) {
-	                    builder.append(quote(String.valueOf(val)));
-	                } else if (val instanceof Integer) {
-	                    builder.append(Integer.valueOf(String.valueOf(val)));
-	                } else if (val instanceof Boolean) {
-	                    builder.append(val);
-	                } else if (val instanceof JSONObject) {
-	                    builder.append(val.toString());
-	                } else if (val.getClass().isArray()) {
-	                    builder.append("[");
-	                    int len = Array.getLength(val);
-	                    for (int j = 0; j < len; j++) {
-	                        builder.append(Array.get(val, j).toString()).append(j != len - 1 ? "," : "");
-	                    }
-	                    builder.append("]");
-	                }
-	
-	                builder.append(++i == entrySet.size() ? "}" : ",");
-	            }
-	
-	            return builder.toString();
-	        }
-	
-	        private String quote(String string) {
-	            return "\"" + string + "\"";
 	        }
 	    }
 

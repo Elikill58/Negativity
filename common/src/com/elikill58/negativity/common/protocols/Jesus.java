@@ -1,6 +1,7 @@
 package com.elikill58.negativity.common.protocols;
 
 import static com.elikill58.negativity.api.item.Materials.STATIONARY_WATER;
+import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialAround;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialsAround;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
@@ -123,7 +124,11 @@ public class Jesus extends Cheat implements Listeners {
 		if(!e.isMovePosition())
 			return;
 		Player p = e.getPlayer();
+		if(hasMaterialAround(p.getLocation(), Materials.WATER_LILY))
+			return;
 		Block sub = p.getLocation().clone().sub(0, 1, 0).getBlock();
+		if(sub.getType().equals(Materials.WATER_LILY))
+			return;
 		int i = 0;
 		for(BlockFace bf : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
 			String id = sub.getRelative(bf).getType().getId();

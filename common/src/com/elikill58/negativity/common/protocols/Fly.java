@@ -108,7 +108,7 @@ public class Fly extends Cheat implements Listeners {
 				}
 			}
 			if ((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || hasBoatAround || p.isInsideVehicle()
-					|| !e.getTo().clone().add(0, 2, 0).getBlock().getType().isTransparent()
+					|| !e.getTo().clone().add(0, 2, 0).getBlock().getType().isTransparent() || isInWater || isOnWater
 					|| LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY", "STAIRS")
 					|| LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE", "STAIRS"))
 				flyMoveAmount.clear();

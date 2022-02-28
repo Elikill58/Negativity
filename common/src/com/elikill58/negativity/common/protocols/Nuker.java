@@ -6,7 +6,6 @@ import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.item.Materials;
@@ -23,7 +22,7 @@ import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class Nuker extends Cheat implements Listeners {
+public class Nuker extends Cheat {
 
 	public Nuker() {
 		super(CheatKeys.NUKER, CheatCategory.WORLD, Materials.BEDROCK, true, false, "breaker", "bed breaker", "bedbreaker");

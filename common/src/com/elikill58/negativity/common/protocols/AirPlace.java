@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockPlaceEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
@@ -21,7 +20,7 @@ import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.report.ReportType;
 
-public class AirPlace extends Cheat implements Listeners {
+public class AirPlace extends Cheat {
 
 	public static final List<BlockFace> BLOCK_FACES = Arrays.asList(BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
 

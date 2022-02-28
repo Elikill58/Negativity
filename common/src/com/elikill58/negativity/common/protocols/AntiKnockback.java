@@ -7,7 +7,6 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
@@ -31,7 +30,7 @@ import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DataCounter;
 import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 
-public class AntiKnockback extends Cheat implements Listeners {
+public class AntiKnockback extends Cheat {
 
 	public static final DataType<Double> DISTANCE_DAMAGE = new DataType<Double>("distance_damage",
 			"Distance after Damage", () -> new DoubleDataCounter());

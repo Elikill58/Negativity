@@ -2,7 +2,6 @@ package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
@@ -15,7 +14,7 @@ import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class Phase extends Cheat implements Listeners {
+public class Phase extends Cheat {
 
 	public Phase() {
 		super(CheatKeys.PHASE, CheatCategory.MOVEMENT, Materials.WHITE_STAINED_GLASS, false, false);

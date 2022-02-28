@@ -2,7 +2,6 @@ package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
@@ -17,7 +16,7 @@ import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DataCounter;
 import com.elikill58.negativity.universal.verif.data.FloatDataCounter;
 
-public class NoPitchLimit extends Cheat implements Listeners {
+public class NoPitchLimit extends Cheat {
 
 	public static final DataType<Float> PITCH = new DataType<Float>("pitch", "Pitch", () -> new FloatDataCounter());
 	
@@ -26,7 +25,7 @@ public class NoPitchLimit extends Cheat implements Listeners {
 	}
 	
 	@Check(name = "head-mov", description = "Check head movement")
-	public void test(PlayerMoveEvent e) {
+	public void headMov(PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		float pitch = p.getLocation().getPitch();
 		recordData(p.getUniqueId(), PITCH, pitch);

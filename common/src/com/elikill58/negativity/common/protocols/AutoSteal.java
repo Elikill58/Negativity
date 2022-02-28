@@ -4,7 +4,6 @@ import static com.elikill58.negativity.universal.detections.keys.CheatKeys.AUTO_
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.inventory.InventoryAction;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.item.ItemStack;
@@ -18,7 +17,7 @@ import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class AutoSteal extends Cheat implements Listeners {
+public class AutoSteal extends Cheat {
 
 	public AutoSteal() {
 		super(AUTO_STEAL, CheatCategory.PLAYER, Materials.CHEST, false, false, "steal");

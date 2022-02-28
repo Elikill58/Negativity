@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockPlaceEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.ItemBuilder;
@@ -32,7 +31,7 @@ import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class Scaffold extends Cheat implements Listeners {
+public class Scaffold extends Cheat {
 
 	public Scaffold() {
 		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS, false, false);

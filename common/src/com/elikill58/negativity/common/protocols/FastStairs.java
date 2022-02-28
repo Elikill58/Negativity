@@ -4,7 +4,6 @@ import static com.elikill58.negativity.universal.detections.keys.CheatKeys.FAST_
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
@@ -16,7 +15,7 @@ import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class FastStairs extends Cheat implements Listeners {
+public class FastStairs extends Cheat {
 
 	public FastStairs() {
 		super(FAST_STAIRS, CheatCategory.MOVEMENT, Materials.BRICK_STAIRS, false, false, "stairs");

@@ -308,11 +308,13 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 		CHEATS.clear();
 		Adapter ada = Adapter.getAdapter();
 		for (Cheat cheat : ServiceLoader.load(Cheat.class, Cheat.class.getClassLoader())) {
-			try {
-				EventManager.registerEvent((Listeners) cheat);
-			} catch (Exception e) {
-				ada.getLogger().error("Failed to register cheat " + cheat.getName() + " as a listener");
-				e.printStackTrace();
+			if(cheat instanceof Listeners) {
+				try {
+					EventManager.registerEvent((Listeners) cheat);
+				} catch (Exception e) {
+					ada.getLogger().error("Failed to register cheat " + cheat.getName() + " as a listener");
+					e.printStackTrace();
+				}
 			}
 			if(cheat.getKey().getMinVersion().isNewerThan(ada.getServerVersion())) // cheat made for futur version - no need to show it
 				continue;

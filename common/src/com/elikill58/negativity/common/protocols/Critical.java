@@ -2,7 +2,6 @@ package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
@@ -13,7 +12,7 @@ import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 
-public class Critical extends Cheat implements Listeners {
+public class Critical extends Cheat {
 	
 	public Critical() {
 		super(CheatKeys.CRITICAL, CheatCategory.COMBAT, Materials.FIREBALL, false, false, "crit", "critic");

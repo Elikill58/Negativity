@@ -2,7 +2,6 @@ package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
@@ -22,7 +21,7 @@ import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DataCounter;
 import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 
-public class AutoClick extends Cheat implements Listeners {
+public class AutoClick extends Cheat {
 
 	public static final DataType<Integer> CLICKS = new DataType<Integer>("clicks", "Clicks", () -> new IntegerDataCounter());
 	
@@ -68,12 +67,6 @@ public class AutoClick extends Cheat implements Listeners {
 			}
 		//}
 	}
-	
-	/*@EventHandler
-	public void onPacket(PacketReceiveEvent e) {
-		if(e.getPacket().getPacketType() == PacketType.Client.ARM_ANIMATION)
-			manageClick(e.getPlayer(), e);
-	}*/
 	
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {

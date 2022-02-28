@@ -9,7 +9,6 @@ import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
@@ -31,7 +30,7 @@ import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DataCounter;
 import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 
-public class Reach extends Cheat implements Listeners {
+public class Reach extends Cheat {
 
 	public static final DataType<Double> HIT_DISTANCE = new DataType<Double>("hit_distance", "Hit Distance",
 			() -> new DoubleDataCounter());

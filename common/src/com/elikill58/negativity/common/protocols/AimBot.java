@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
@@ -19,7 +18,7 @@ import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 
-public class AimBot extends Cheat implements Listeners {
+public class AimBot extends Cheat {
 
 	public AimBot() {
 		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, true, false, "aim");

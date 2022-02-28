@@ -8,7 +8,6 @@ import java.util.Locale;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.item.Materials;
@@ -23,7 +22,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 
-public class ForceField extends Cheat implements Listeners {
+public class ForceField extends Cheat {
 
 	public static final DataType<Integer> FAKE_PLAYERS = new DataType<Integer>("fake_players", "Fake Players", () -> new IntegerDataCounter());
 

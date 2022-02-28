@@ -31,7 +31,7 @@ public class DiscordWebhook implements Webhook {
 	private final String webhookUrl;
 	private final ScheduledExecutorService executorService;
 	private List<WebhookMessage> queue = new ArrayList<>();
-	private long skip = 0;
+	private long time = 0;
 	
 	public DiscordWebhook(Configuration config) {
 		this.config = config;
@@ -60,8 +60,7 @@ public class DiscordWebhook implements Webhook {
     
     @Override
     public void runQueue() {
-    	if(skip > 0) { // should skip
-    		skip--;
+    	if(time > System.currentTimeMillis()) { // should skip
     		return;
     	}
     	// firstly, combine all
@@ -122,9 +121,8 @@ public class DiscordWebhook implements Webhook {
         	ada.debug("Webhook for " + msg.getMessageType().name() + " is not enabled.");
     		return;
     	}
-    	if(skip > 0) { // should skip
+    	if(time > System.currentTimeMillis()) { // should skip
     		queue.add(msg);
-    		skip--;
     		return;
     	}
     	queue.remove(msg);
@@ -169,8 +167,9 @@ public class DiscordWebhook implements Webhook {
 	    	if(code == 429) { // good config and error while sending
 	    		JSONObject json = (JSONObject) new JSONParser().parse(webhookResult.getB());
 	    		queue.add(msg);
-	    		skip = ((long) json.get("retry_after")) / 1000; // wait 5 s until next send
-	    		ada.getLogger().warn("Discord webhook reach rate limit. Wait " + skip + " secs more.");
+	    		long retryAfter = (long) json.get("retry_after");
+	    		time = System.currentTimeMillis() + retryAfter; // wait 5 s until next send
+	    		ada.getLogger().warn("Discord webhook reach rate limit. Wait " + (retryAfter / 1000) + " secs more.");
 	    	} else
 	    		ada.getLogger().warn("Error while trying to send webhook request (code: " + code + "): " + webhookResult.getB());
 		}

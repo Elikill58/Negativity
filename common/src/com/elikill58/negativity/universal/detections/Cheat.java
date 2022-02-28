@@ -307,6 +307,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	public static void loadCheat() {
 		CHEATS.clear();
 		Adapter ada = Adapter.getAdapter();
+		int futurCheat = 0;
 		for (Cheat cheat : ServiceLoader.load(Cheat.class, Cheat.class.getClassLoader())) {
 			if(cheat instanceof Listeners) {
 				try {
@@ -316,15 +317,17 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 					e.printStackTrace();
 				}
 			}
-			if(cheat.getKey().getMinVersion().isNewerThan(ada.getServerVersion())) // cheat made for futur version - no need to show it
+			if(cheat.getKey().getMinVersion().isNewerThan(ada.getServerVersion())) {// cheat made for futur version - no need to show it
+				futurCheat++;
 				continue;
+			}
 			CHEATS.add(cheat);
 		}
 		CHEATS.sort(Comparator.comparing(Cheat::getKey));
 		
 		EventManager.unregisterEventForClass(CheckManager.class);
 		EventManager.registerEvent(checkManager = new CheckManager(CHEATS));
-		ada.getLogger().info("Loaded " + CHEATS.size() + " cheat detections.");
+		ada.getLogger().info("Loaded " + CHEATS.size() + " cheat detections" + (futurCheat > 0 ? " (" + futurCheat + " disabled because of require newer MC version)." : "."));
 	}
 
 	public static List<Cheat> values() {

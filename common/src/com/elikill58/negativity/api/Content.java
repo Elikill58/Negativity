@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api;
 
 import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.elikill58.negativity.universal.detections.keys.IDetectionKeys;
 
@@ -9,7 +10,7 @@ public class Content<T> {
 	/**
 	 * The saved content. Please, don't use directly this map
 	 */
-	private final HashMap<IDetectionKeys<?>, HashMap<String, T>> mainContent = new HashMap<>();
+	private final ConcurrentHashMap<IDetectionKeys<?>, HashMap<String, T>> mainContent = new ConcurrentHashMap<>();
 	
 	/**
 	 * Obtain the saved value

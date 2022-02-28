@@ -107,10 +107,10 @@ public class Fly extends Cheat implements Listeners {
 							amount > 1 ? amount - 1 : 1);
 				}
 			}
-			if ((onGround && wasOnGround) || (d > 0.1 || d < -0.1)
+			if ((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || hasBoatAround || p.isInsideVehicle()
+					|| !e.getTo().clone().add(0, 2, 0).getBlock().getType().isTransparent()
 					|| LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY", "STAIRS")
-					|| LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE", "STAIRS")
-					|| hasBoatAround || p.isInsideVehicle())
+					|| LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE", "STAIRS"))
 				flyMoveAmount.clear();
 			else
 				flyMoveAmount.add(d);

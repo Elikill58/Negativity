@@ -62,7 +62,7 @@ public class BypassManager {
 	 * @return true if the player can bypass
 	 */
 	public static boolean hasBypass(Player p, Cheat c) {
-		for(BypassChecker bc : BYPASS_CHECKER)
+		for(BypassChecker bc : new ArrayList<>(BYPASS_CHECKER))
 			if(bc.hasBypass(p, c))
 				return true;
 		return false;

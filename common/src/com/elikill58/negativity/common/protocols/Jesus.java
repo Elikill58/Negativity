@@ -119,7 +119,7 @@ public class Jesus extends Cheat implements Listeners {
 			p.teleport(p.getLocation().sub(0, 1, 0));
 	}
 	
-	@Check(name = "ground-water", description = "Ground and on water", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_SNEAK })
+	@Check(name = "ground-water", description = "Ground and on water", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_SNEAK, CheckConditions.NO_BOAT_AROUND })
 	public void onGroundWater(PlayerMoveEvent e, NegativityPlayer np) {
 		if(!e.isMovePosition())
 			return;

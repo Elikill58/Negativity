@@ -28,6 +28,7 @@ public enum CheckConditions {
 	NO_LIQUID_AROUND("Liquid around", (p) -> LocationUtils.hasMaterialsAround(p.getLocation(), "WATER", "LAVA"), true),
 	NO_STAIRS_AROUND_EXTENDED("Stairs around", (p) -> LocationUtils.hasExtended(p.getLocation(), "STAIRS"), true),
 	
+	NO_BOAT_AROUND("No boat around", (p) -> LocationUtils.hasBoatAroundHim(p.getLocation()), true),
 	NO_ON_BEDROCK("Not on bedrock", (p) -> !NegativityPlayer.getNegativityPlayer(p).isBedrockPlayer()),
 	NO_USE_TRIDENT("Using trident", (p) -> !p.getItemInHand().getType().getId().contains("TRIDENT")),
 	NO_USE_SLIME("Using slime", (p) -> !NegativityPlayer.getNegativityPlayer(p).isUsingSlimeBlock),

@@ -13,6 +13,7 @@ import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.data.type.HandTypes;
+import org.spongepowered.api.effect.VanishState;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
@@ -441,15 +442,9 @@ public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 		entity.offer(Keys.CAN_FLY, b);
 	}
 	
-	@SuppressWarnings("deprecation")
 	@Override
 	public void setVanished(boolean vanished) {
-		// TODO don't use deprecated fields
-		entity.offer(Keys.VANISH, vanished);
-		if (vanished) {
-			entity.offer(Keys.VANISH_IGNORES_COLLISION, true);
-			entity.offer(Keys.VANISH_PREVENTS_TARGETING, true);
-		}
+		entity.offer(Keys.VANISH_STATE, vanished ? VanishState.vanished().ignoreCollisions(true).untargetable(true) : VanishState.unvanished());
 	}
 	
 	@Override

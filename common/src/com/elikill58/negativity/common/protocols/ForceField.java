@@ -3,17 +3,21 @@ package com.elikill58.negativity.common.protocols;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import java.text.NumberFormat;
+import java.util.List;
 import java.util.Locale;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
-import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
+import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.api.ray.entity.EntityRayBuilder;
+import com.elikill58.negativity.api.ray.entity.EntityRayResult;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -48,19 +52,20 @@ public class ForceField extends Cheat {
 	}
 
 	@Check(name = "line-sight", description = "Player has line of sight the cible", conditions = CheckConditions.SURVIVAL)
-	public void onEntityDamageByEntity(PlayerDamagedByEntityEvent e, NegativityPlayer np) {
-		if (!(e.getDamager() instanceof Player) || e.isCancelled())
+	public void onEntityDamageByEntity(PlayerDamageEntityEvent e, NegativityPlayer np) {
+		if (e.isCancelled())
 			return;
-		Player p = (Player) e.getDamager();
-		if (e.getPlayer() == null)
-			return;
+		Player p = e.getPlayer();
 		boolean mayCancel = false;
-		Entity cible = e.getPlayer();
+		Entity cible = e.getDamaged();
+		EntityRayResult ray = new EntityRayBuilder(p).build().compile();
+		List<Entity> lookingEntities = ray.getEntitiesFounded();
 		if(p != cible && !p.hasLineOfSight(cible)) {
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
-					"Hit " + cible.getType().name() + " but cannot see it",
+					"Hit " + cible.getType().name() + " (" + cible.getName() + ") but cannot see it. Looking: " + lookingEntities,
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase(Locale.ROOT)));
-		}
+		} else
+			Adapter.getAdapter().debug(p.getName() + " can see " + cible.getName() + ". " + (lookingEntities.contains(cible) ? "See cible." : "Don't see: " + lookingEntities));
 		if (isSetBack() && mayCancel)
 			e.setCancelled(true);
 	}

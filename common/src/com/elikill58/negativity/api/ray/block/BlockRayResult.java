@@ -1,4 +1,4 @@
-package com.elikill58.negativity.api.ray;
+package com.elikill58.negativity.api.ray.block;
 
 import java.util.HashMap;
 
@@ -7,7 +7,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.ray.BlockRay.RayResult;
+import com.elikill58.negativity.api.ray.RayResult;
 
 public class BlockRayResult {
 

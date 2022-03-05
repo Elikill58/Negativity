@@ -6,6 +6,12 @@ public class Point implements Cloneable {
 
 	public double x, y, z;
 	
+	public Point(Vector v) {
+		this.x = v.getX();
+		this.y = v.getY();
+		this.z = v.getZ();
+	}
+	
 	public Point(double x, double y, double z) {
 		this.x = x;
 		this.y = y;

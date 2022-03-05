@@ -6,8 +6,9 @@ import java.util.List;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.ray.BlockRay;
-import com.elikill58.negativity.api.ray.BlockRayResult;
+import com.elikill58.negativity.api.ray.block.BlockRay;
+import com.elikill58.negativity.api.ray.block.BlockRayBuilder;
+import com.elikill58.negativity.api.ray.block.BlockRayResult;
 import com.elikill58.negativity.universal.Adapter;
 
 public abstract class AbstractEntity implements Entity {
@@ -16,7 +17,7 @@ public abstract class AbstractEntity implements Entity {
 	
 	@Override
 	public List<Block> getTargetBlock(int maxDistance) {
-		BlockRay ray = (this instanceof Player ? new BlockRay.BlockRayBuilder((Player) this) : new BlockRay.BlockRayBuilder(getLocation(), this))
+		BlockRay ray = (this instanceof Player ? new BlockRayBuilder((Player) this) : new BlockRayBuilder(getLocation(), this))
 				.maxDistance(maxDistance).ignoreAir(true).build();
 		BlockRayResult result = ray.compile();
 		if(!result.getRayResult().isFounded()) {

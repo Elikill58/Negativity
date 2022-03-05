@@ -70,6 +70,7 @@ public class RedisSupport implements Listener, MultiProxy {
 			NegativityMessage negMsg = NegativityMessagesManager.readMessage(e.getMessage().getBytes());
 			if(negMsg instanceof RedisNegativityMessage) {
 				RedisNegativityMessage redisMsg = (RedisNegativityMessage) negMsg;
+				Adapter.getAdapter().debug("Received redis message from " + redisMsg.getProxyId() + " (about: " + redisMsg.getUUID().toString() + ")");
 				if(!redisMsg.getProxyId().equalsIgnoreCase(getProxyId())) {
 					UUID uuid = redisMsg.getUUID();
 					Player p = NegativityPlayer.getNegativityPlayer(uuid, () -> new RedisBungeePlayer(uuid)).getPlayer();

@@ -28,6 +28,8 @@ public class RegenProtocol extends Cheat implements Listener {
 	@EventHandler
 	public void onPlayerInteract(PlayerInteractEvent e) {
 		Player p = e.getPlayer();
+		if(e.getItem() == null)
+			return;
 		Material m = e.getItem().getType();
 		if (m.equals(Material.GOLDEN_APPLE) || m.equals(Material.GOLDEN_CARROT))
 			SpigotNegativityPlayer.getNegativityPlayer(p).flyingReason = FlyingReason.REGEN;

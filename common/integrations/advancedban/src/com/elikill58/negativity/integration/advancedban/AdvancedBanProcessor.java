@@ -22,6 +22,7 @@ import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 
 import me.leoko.advancedban.manager.PunishmentManager;
+import me.leoko.advancedban.manager.UUIDManager;
 import me.leoko.advancedban.utils.Punishment;
 import me.leoko.advancedban.utils.PunishmentType;
 import me.leoko.advancedban.utils.SQLQuery;
@@ -37,7 +38,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 
 		long endTime = ban.isDefinitive() ? 0 : ban.getExpirationTime();
 		PunishmentType type = ban.isDefinitive() ? PunishmentType.BAN : PunishmentType.TEMP_BAN;
-		Punishment punishment = new Punishment(player.getName(), ban.getPlayerId().toString(), ban.getReason(), ban.getBannedBy(), type, System.currentTimeMillis(), endTime, "", -1);
+		Punishment punishment = new Punishment(player.getName(), UUIDManager.get().getUUID(player.getName()), ban.getReason(), ban.getBannedBy(), type, System.currentTimeMillis(), endTime, "", -1);
 		// Must be invoked asynchronously because an async event is thrown in there and Bukkit enforces it
 		CompletableFuture.runAsync(punishment::create);
 

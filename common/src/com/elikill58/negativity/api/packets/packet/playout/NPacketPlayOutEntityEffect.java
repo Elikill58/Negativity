@@ -18,9 +18,9 @@ public class NPacketPlayOutEntityEffect implements NPacketPlayOut {
 
 	public NPacketPlayOutEntityEffect() {}
 	
-	public NPacketPlayOutEntityEffect(int entityId, byte typeByte, byte amplifier, int duration, byte flags) {
+	public NPacketPlayOutEntityEffect(int entityId, int typeId, byte amplifier, int duration, byte flags) {
 		this.entityId = entityId;
-		this.type = PotionEffectType.fromByte(typeByte);
+		this.type = PotionEffectType.fromId(typeId);
 		this.amplifier = amplifier;
 		this.duration = duration;
 		this.flags = flags;

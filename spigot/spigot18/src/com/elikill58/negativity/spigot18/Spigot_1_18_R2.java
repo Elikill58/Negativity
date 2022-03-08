@@ -76,10 +76,10 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("resource")
-public class Spigot_1_18_R1 extends SpigotVersionAdapter {
+public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 
-	public Spigot_1_18_R1() {
-		super("v1_18_R1");
+	public Spigot_1_18_R2() {
+		super("v1_18_R2");
 		packetsPlayIn.put("PacketPlayInChat",
 				(player, raw) -> new NPacketPlayInChat(((ServerboundChatPacket) raw).getMessage()));
 

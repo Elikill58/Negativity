@@ -47,6 +47,13 @@ dependencies {
 
     reobfMapMojang group: 'org.spigotmc', name: 'minecraft-server', version: '1.18-R0.1-SNAPSHOT', classifier: 'maps-mojang', ext: 'txt'
     reobfMapSpigot group: 'org.spigotmc', name: 'minecraft-server', version: '1.18-R0.1-SNAPSHOT', classifier: 'maps-spigot', ext: 'csrg'
+    
+    remapped 'org.spigotmc:spigot:1.18.2-R0.1-SNAPSHOT:remapped-mojang'
+    obf 'org.spigotmc:spigot:1.18.2-R0.1-SNAPSHOT:remapped-obf'
+    
+    reobfMapMojang group: 'org.spigotmc', name: 'minecraft-server', version: '1.18.2-R0.1-SNAPSHOT', classifier: 'maps-mojang', ext: 'txt'
+    reobfMapSpigot group: 'org.spigotmc', name: 'minecraft-server', version: '1.18.2-R0.1-SNAPSHOT', classifier: 'maps-spigot', ext: 'csrg'
+    
     specialSource 'net.md-5:SpecialSource:1.11.0'
 }
 

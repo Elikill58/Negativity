@@ -7,8 +7,9 @@ import java.util.Queue;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.World;
-import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
-import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
+import org.bukkit.craftbukkit.v1_18_R1.CraftServer;
+import org.bukkit.craftbukkit.v1_18_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_18_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -275,7 +276,7 @@ public class Spigot_1_18_R1 extends SpigotVersionAdapter {
 	}
 
 	private DedicatedServer getServer() {
-		return (DedicatedServer) PacketUtils.getDedicatedServer();
+		return (DedicatedServer) ((CraftServer) Bukkit.getServer()).getServer();
 	}
 
 	@SuppressWarnings("unchecked")

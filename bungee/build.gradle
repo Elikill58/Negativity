@@ -46,7 +46,7 @@ shadowJar {
     archiveAppendix.set('bungeecord')
     archiveClassifier.set(null)
 
-    relocate('org.bstats', 'com.elikill58.negativity')
+    relocate('org.bstats.bungeecord', 'com.elikill58.negativity.bungee')
 
     mergeServiceFiles()
     from(project(':common').tasks.shadowJar)

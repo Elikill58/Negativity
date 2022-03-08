@@ -67,6 +67,8 @@ shadowJar {
     archiveAppendix.set('sponge')
     archiveClassifier.set(null)
 
+    relocate('org.bstats', 'com.elikill58.negativity')
+
     dependencies {
         it.include(it.project(':common'))
         it.include(it.dependency('org.bstats:bstats-sponge-lite'))

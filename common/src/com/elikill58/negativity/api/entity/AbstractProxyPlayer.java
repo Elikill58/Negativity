@@ -231,10 +231,10 @@ public abstract class AbstractProxyPlayer extends AbstractEntity implements Play
 	public Vector getRotation() {
 		return null;
 	}
-	
+
 	@Override
-	public int getEntityId() {
-		return 0;
+	public String getEntityId() {
+		return null;
 	}
 	
 	@Override

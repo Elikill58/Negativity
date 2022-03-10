@@ -45,6 +45,11 @@ public class SpongeOfflinePlayer extends AbstractEntity implements OfflinePlayer
 	public String getName() {
 		return u.name();
 	}
+	
+	@Override
+	public String getEntityId() {
+		return u.identifier();
+	}
 
 	@Override
 	public Object getDefault() {

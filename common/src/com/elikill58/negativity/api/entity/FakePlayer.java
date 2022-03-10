@@ -18,15 +18,6 @@ public interface FakePlayer extends Entity {
 	 * @param p The player that will not see it
 	 */
 	void hide(Player p);
-
-
-	/**
-	 *  Get the entity ID of the fake player.
-	 *  Alone method to check entity
-	 * 
-	 * @return the entity ID
-	 */
-	int getEntityId();
 	
 	/**
 	 * Get Unique ID of the fake player

@@ -151,8 +151,8 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 	}
 
 	@Override
-	public int getEntityId() {
-		return id;
+	public String getEntityId() {
+		return String.valueOf(id);
 	}
 	
 	/**

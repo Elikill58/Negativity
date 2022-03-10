@@ -57,11 +57,6 @@ public interface OfflinePlayer extends Entity {
 	default void sendMessage(String msg) {}
 	
 	@Override
-	default int getEntityId() {
-		return 0;
-	}
-	
-	@Override
 	default double getEyeHeight() {
 		return 0;
 	}

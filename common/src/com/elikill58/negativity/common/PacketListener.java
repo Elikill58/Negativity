@@ -94,7 +94,7 @@ public class PacketListener implements Listeners {
 			NPacketPlayInUseEntity useEntityPacket = (NPacketPlayInUseEntity) packet.getPacket();
 			if(useEntityPacket.action.equals(EnumEntityUseAction.ATTACK)) {
 				for(Entity entity : p.getWorld().getEntities()) {
-					if(entity.getEntityId() == useEntityPacket.entityId) {
+					if(entity.isSameId(String.valueOf(useEntityPacket.entityId))) {
 						PlayerDamageEntityEvent event = new PlayerDamageEntityEvent(p, entity, false);
 						EventManager.callEvent(event);
 						if(event.isCancelled())
@@ -130,7 +130,7 @@ public class PacketListener implements Listeners {
 			np.isTeleporting = true;
 		else if(type.equals(PacketType.Server.ENTITY_VELOCITY)) {
 			NPacketPlayOutEntityVelocity packet = (NPacketPlayOutEntityVelocity) e.getPacket().getPacket();
-			if(packet.entityId != p.getEntityId()) // not giving velocity to itself - not useful to send packet
+			if(p.isSameId(String.valueOf(packet.entityId))) // not giving velocity to itself - not useful to send packet
 				return;
 			int randomNb = new Random().nextInt();
 			if(randomNb == -1)

@@ -45,6 +45,11 @@ public class SpigotOfflinePlayer extends AbstractEntity implements OfflinePlayer
 	}
 	
 	@Override
+	public String getEntityId() {
+		return op.getUniqueId().toString();
+	}
+	
+	@Override
 	public BoundingBox getBoundingBox() {
 		return null;
 	}

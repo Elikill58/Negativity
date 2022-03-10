@@ -80,7 +80,7 @@ public abstract class World implements NegativityObject {
 	 */
 	public @Nullable Entity getEntityWithID(int entityId) {
 		for(Entity et : getEntities())
-			if(et.getEntityId() == entityId)
+			if(et.isSameId(String.valueOf(entityId)))
 				return et;
 		return null;
 	}

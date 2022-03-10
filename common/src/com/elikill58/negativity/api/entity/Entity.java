@@ -51,12 +51,37 @@ public interface Entity extends CommandSender {
 	EntityType getType();
 	
 	/**
-	 * Get the entity ID. Can not work with Sponge and some other platforms
+	 * Get the entity ID
 	 * 
-	 * @return the entity ID
+	 * @return the ID of the entity
 	 */
-	int getEntityId();
+	String getEntityId();
 	
+	/**
+	 * Check if this entity can be applied to this id
+	 * 
+	 * @param id the id to check
+	 * @return true if the same id
+	 */
+	default boolean isSameId(String id) {
+		return id.equalsIgnoreCase(getEntityId());
+	}
+	
+	/**
+	 * Check if this entity can be applied to this other entity
+	 * 
+	 * @param other the entity
+	 * @return true if the same id
+	 */
+	default boolean isSameId(Entity other) {
+		return getEntityId().equalsIgnoreCase(other.getEntityId());
+	}
+	
+	/**
+	 * Get the bounding box of the current entity
+	 * 
+	 * @return the bounding box
+	 */
 	BoundingBox getBoundingBox();
 	
 	/**

@@ -93,8 +93,18 @@ public class SpigotEntity<E extends Entity> extends AbstractEntity {
 	}
 	
 	@Override
-	public int getEntityId() {
-		return entity.getEntityId();
+	public String getEntityId() {
+		return String.valueOf(entity.getEntityId());
+	}
+	
+	@Override
+	public boolean isSameId(String id) {
+		return String.valueOf(entity.getEntityId()).equalsIgnoreCase(id) || entity.getUniqueId().toString().equalsIgnoreCase(id);
+	}
+	
+	@Override
+	public boolean isSameId(com.elikill58.negativity.api.entity.Entity other) {
+		return getEntityId() == other.getEntityId() || entity.getUniqueId().equals(((Entity) other.getDefault()).getUniqueId());
 	}
 	
 	@Override

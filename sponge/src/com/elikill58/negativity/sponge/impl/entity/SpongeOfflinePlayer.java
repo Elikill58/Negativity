@@ -47,6 +47,11 @@ public class SpongeOfflinePlayer extends AbstractEntity implements OfflinePlayer
 	}
 	
 	@Override
+	public String getEntityId() {
+		return u.getIdentifier();
+	}
+	
+	@Override
 	public BoundingBox getBoundingBox() {
 		return null;
 	}

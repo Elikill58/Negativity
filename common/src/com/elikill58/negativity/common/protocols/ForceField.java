@@ -60,7 +60,7 @@ public class ForceField extends Cheat {
 		Entity cible = e.getDamaged();
 		EntityRayResult ray = new EntityRayBuilder(p).build().compile();
 		List<Entity> lookingEntities = ray.getEntitiesFounded();
-		boolean newSee = !lookingEntities.isEmpty() && lookingEntities.stream().filter(et -> et.getEntityId() == cible.getEntityId()).findFirst().isPresent();
+		boolean newSee = !lookingEntities.isEmpty() && lookingEntities.stream().filter(cible::isSameId).findFirst().isPresent();
 		if(p != cible && !p.hasLineOfSight(cible) && !newSee) {
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
 					"Hit " + cible.getType().name() + " (" + cible.getName() + ") but cannot see it (new: " + newSee +"). Looking: " + lookingEntities,

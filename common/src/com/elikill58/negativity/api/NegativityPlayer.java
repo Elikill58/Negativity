@@ -61,7 +61,7 @@ public class NegativityPlayer implements FileSaverAction {
 	public HashMap<PacketType, Integer> PACKETS = new HashMap<>();
 	public int ALL_PACKETS = 0, MAX_FLYING = 0;
 
-	public int ACTUAL_CLICK = 0, LAST_CLICK = 0, SEC_ACTIVE = 0;
+	public int LAST_CLICK = 0, SEC_ACTIVE = 0;
 	
 	// setBack
 	public int NO_FALL_DAMAGE = 0, idWaitingAppliedVelocity = -1;
@@ -72,6 +72,7 @@ public class NegativityPlayer implements FileSaverAction {
 	public long TIME_INVINCIBILITY = 0, TIME_LAST_MESSAGE = 0, timeStartFakePlayer = 0, LAST_BLOCK_BREAK = 0, LAST_BLOCK_PLACE = 0, LAST_REGEN = 0, TIME_REPORT = 0,
 			TIME_OTHER_KEEP_ALIVE = 0, TIME_LAST_MOVE = 0;
 	public int MOVE_TIME = 0, LAST_CHAT_MESSAGE_NB = 0, fakePlayerTouched = 0, BYPASS_SPEED = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0, IS_LAST_SEC_BLINK = 0;
+	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public boolean bypassBlink = false, isOnLadders = false, useAntiNoFallSystem = false, isTeleporting = false;
 	public PlayerChatEvent LAST_CHAT_EVENT = null;
@@ -510,6 +511,17 @@ public class NegativityPlayer implements FileSaverAction {
 	 */
 	public void banEffect() {
 		// TODO add ban effect
+	}
+	
+	public int getClick() {
+		return rightBlockClick + leftBlockClick + entityClick;
+	}
+	
+	public void clearClick() {
+		rightBlockClick = 0;
+		leftBlockClick = 0;
+		entityClick = 0;
+		leftCancelled = 0;
 	}
 	
 	/**

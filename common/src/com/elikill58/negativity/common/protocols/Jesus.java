@@ -100,7 +100,7 @@ public class Jesus extends Cheat implements Listeners {
 			np.booleans.set(JESUS, "state", !jesusState);
 		}
 		
-		if(checkActive("distance-in") && !p.hasPotionEffect(PotionEffectType.SPEED)) {
+		if(checkActive("distance-in") && !p.hasPotionEffect(PotionEffectType.SPEED) && !np.isInFight) {
 			double distanceAbs = to.distance(from) - Math.abs(from.getY() - to.getY());
 			Location upper = loc.clone().add(0, 1, 0);
 			float distanceFall = p.getFallDistance();

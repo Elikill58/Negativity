@@ -2,16 +2,17 @@ package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
-import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.account.NegativityAccount;
-import com.elikill58.negativity.universal.bypass.checkers.ItemUseBypass;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -23,58 +24,66 @@ import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 
 public class AutoClick extends Cheat {
 
-	public static final DataType<Integer> CLICKS = new DataType<Integer>("clicks", "Clicks", () -> new IntegerDataCounter());
-	
+	public static final DataType<Integer> CLICKS = new DataType<Integer>("clicks", "Clicks",
+			() -> new IntegerDataCounter());
+
 	public AutoClick() {
 		super(CheatKeys.AUTO_CLICK, CheatCategory.COMBAT, Materials.FISHING_ROD, true, true, "auto-click", "autoclic");
 		Scheduler.getInstance().runRepeatingAsync(() -> {
 			for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
 				NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 				NegativityAccount account = np.getAccount();
-				if (account.getMostClicksPerSecond() < np.ACTUAL_CLICK) {
-					account.setMostClicksPerSecond(np.ACTUAL_CLICK);
+				int click = np.getClick();
+				if (account.getMostClicksPerSecond() < click) {
+					account.setMostClicksPerSecond(click);
 				}
-				recordData(p.getUniqueId(), CLICKS, np.ACTUAL_CLICK);
-				np.LAST_CLICK = np.ACTUAL_CLICK;
-				np.ACTUAL_CLICK = 0;
+				recordData(p.getUniqueId(), CLICKS, click);
+				np.LAST_CLICK = click;
+				np.clearClick();
 				if (np.SEC_ACTIVE < 2)
 					np.SEC_ACTIVE++;
 			}
 		}, 20);
 	}
-	
+
 	@Check(name = "count", description = "Count click 1 by 1")
-	public void onInteract(PlayerInteractEvent e, NegativityPlayer np) {
-		if(e.isCancelled())
+	public void onInteract(PacketReceiveEvent e, NegativityPlayer np) {
+		if (!e.hasPlayer())
 			return;
-		//if(e.getAction().name().contains("AIR")) {
-			Player p = e.getPlayer();
-			ItemStack inHand = p.getItemInHand();
-			if (inHand != null) {
-				if(ItemUseBypass.hasBypassWithClick(p, this, inHand, e.getAction().name()))
-					return;
-			}
-			np.ACTUAL_CLICK++;
-			int ping = p.getPing(), click = np.ACTUAL_CLICK - (ping / 9);
-			if (click > getConfig().getInt("click_alert", 20)) {
-				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(np.ACTUAL_CLICK * 2.5), "count",
-						"Clicks in one second: " + np.ACTUAL_CLICK + "; Last second: " + np.LAST_CLICK
-								+ "; Better click in one second: " + np.getAccount().getMostClicksPerSecond(),
-								hoverMsg("main", "%click%", np.ACTUAL_CLICK));
-				if (isSetBack() && mayCancel)
-					e.setCancelled(true);
-			}
-		//}
+		Player p = e.getPlayer();
+		PacketType type = e.getPacket().getPacketType();
+		if (type.equals(PacketType.Client.USE_ENTITY)) {
+			np.entityClick++;
+		} else if (type.equals(PacketType.Client.BLOCK_DIG)) {
+			NPacketPlayInBlockDig dig = (NPacketPlayInBlockDig) e.getPacket().getPacket();
+			if (dig.action.equals(DigAction.START_DIGGING))
+				np.leftBlockClick++;
+			else if (dig.action.equals(DigAction.CANCEL_DIGGING))
+				np.leftCancelled++;
+		} else if (type.equals(PacketType.Client.BLOCK_PLACE)) {
+			np.rightBlockClick++;
+		}
+		int click = np.getClick();
+		int ping = p.getPing(), clickPinged = click - (ping / 9);
+		if (clickPinged > getConfig().getInt("click_alert", 20)) {
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
+					UniversalUtils.parseInPorcent(click * 2.5), "count",
+					"Clicks: " + click + ", pinged: " + clickPinged + ", Last: " + np.LAST_CLICK
+							+ "; Better click in one second: " + np.getAccount().getMostClicksPerSecond(),
+					hoverMsg("main", "%click%", click));
+			if (isSetBack() && mayCancel)
+				e.setCancelled(true);
+		}
 	}
-	
+
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
-		int currentClick = np.ACTUAL_CLICK;
+		int currentClick = np.getClick();
 		DataCounter<Integer> counter = data.getData(CLICKS);
 		counter.add(currentClick);
-		if(counter.getMax() == 0)
+		if (counter.getMax() == 0)
 			return null;
-		return Utils.coloredMessage("&aCurrent&7/&cMaximum&7/&6Average&7: &a" + currentClick + "&7/&c" + counter.getMax() + "&7/&6" + counter.getAverage() + " &7clicks");
+		return Utils.coloredMessage("&aCurrent&7/&cMaximum&7/&6Average&7: &a" + currentClick + "&7/&c"
+				+ counter.getMax() + "&7/&6" + counter.getAverage() + " &7clicks");
 	}
 }

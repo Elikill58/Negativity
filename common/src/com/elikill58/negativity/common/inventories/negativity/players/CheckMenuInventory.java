@@ -74,9 +74,9 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		Inventory inv = args.length > 1 ? (Inventory) args[1] : p.getOpenInventory();
 		if(inv == null || !inv.getType().equals(InventoryType.CHEST)) return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
-		int betterClick = np.getAccount().getMostClicksPerSecond();
+		int betterClick = np.getAccount().getMostClicksPerSecond(), click = np.getClick();
 		try {
-			inv.set(0, getClickItem(Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(np.ACTUAL_CLICK)), np.ACTUAL_CLICK));
+			inv.set(0, getClickItem(Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(click)), click));
 			inv.set(1, getClickItem(Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), betterClick));
 			inv.set(2, getClickItem(Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), np.LAST_CLICK));
 
@@ -162,7 +162,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 			InventoryManager.open(NegativityInventory.BAN, p, cible);
 		} else if(m.equals(Materials.BONE)) {
 			np.LAST_CLICK = 0;
-			np.ACTUAL_CLICK = 0;
+			np.clearClick();
 			NegativityAccount acc = np.getAccount();
 			acc.setMostClicksPerSecond(0);
 			Adapter.getAdapter().getAccountManager().update(acc);

@@ -5,6 +5,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
@@ -13,12 +15,22 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
+import com.elikill58.negativity.universal.verif.VerifData;
+import com.elikill58.negativity.universal.verif.VerifData.DataType;
+import com.elikill58.negativity.universal.verif.data.DataCounter;
+import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
 
 public class AimBot extends Cheat {
+
+	public static final DataType<Double> GCD = new DataType<Double>("gcd", "Gcd of pitchs",
+			() -> new DoubleDataCounter());
+	public static final DataType<Double> PITCHS = new DataType<Double>("pitchs", "Pitchs movements",
+			() -> new DoubleDataCounter());
 
 	public AimBot() {
 		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, true, false, "aim");
@@ -57,7 +69,7 @@ public class AimBot extends Cheat {
 				if (up != null && isUp != up && Math.abs(actual - last) > 2) {
 					invalidChange++;
 				}
-				if(last == actual) // same as before
+				if (last == actual) // same as before
 					invalidChange--;
 				up = isUp;
 				last = actual;
@@ -71,7 +83,8 @@ public class AimBot extends Cheat {
 
 			final boolean exempt = !(Math.abs(pitch) < 82.5F) || deltaYaw < 5.0;
 			if (!exempt && Math.abs(gcd) > np.sensitivity / getConfig().getInt("checks.gcd.sensitivity-divider", 15)
-					&& invalidChange > getConfig().getInt("checks.gcd.invalid-change", 3) && !(pitchLess < 0 && pitchMore < 50) && Math.abs(pitchLess - pitchMore) > 20) {
+					&& invalidChange > getConfig().getInt("checks.gcd.invalid-change", 3)
+					&& !(pitchLess < 0 && pitchMore < 50) && Math.abs(pitchLess - pitchMore) > 20) {
 				String allPitchStr = allPitchs.stream().map((d) -> String.format("%.3f", d))
 						.collect(Collectors.toList()).toString();
 				Negativity.alertMod(ReportType.WARNING, p, this, 100, "gcd",
@@ -80,11 +93,23 @@ public class AimBot extends Cheat {
 								+ ", More/Less: " + String.format("%.3f", pitchMore) + "/"
 								+ String.format("%.3f", pitchLess));
 			}
+			recordData(p.getUniqueId(), GCD, gcd);
+			recordData(p.getUniqueId(), PITCHS, pitch);
 			allPitchs.remove(0);
 		}
 	}
 
 	private long getGcdForLong(final long current, final long previous) {
 		return (previous <= 16384L) ? current : getGcdForLong(previous, current % previous);
+	}
+
+	@Override
+	public @Nullable String makeVerificationSummary(VerifData data, NegativityPlayer np) {
+		DataCounter<Double> gcdCounter = data.getData(GCD);
+		DataCounter<Double> pitchCounter = data.getData(PITCHS);
+
+		return Utils.coloredMessage("&7Average GCD: &e" + String.format("%.2f", gcdCounter.getAverage())
+				+ "&7. Pitchs: max/min/ave &e" + pitchCounter.getMax() + "&7/&e" + pitchCounter.getMin() + "&7/&e"
+				+ pitchCounter.getAverage());
 	}
 }

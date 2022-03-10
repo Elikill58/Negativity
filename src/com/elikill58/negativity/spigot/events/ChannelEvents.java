@@ -25,7 +25,7 @@ public class ChannelEvents implements PluginMessageListener {
 			SpigotNegativityPlayer.getNegativityPlayer(p).MODS.putAll(getModData(data));
 			return;
 		}
-		if(channel.equalsIgnoreCase(SpigotNegativity.CHANNEL_NAME_FML)) {
+		if(channel.equalsIgnoreCase(SpigotNegativity.CHANNEL_NAME_BRAND)) {
 			SpigotNegativityPlayer.getNegativityPlayer(p).clientName = new String(data).substring(1);
 			return;
 		}

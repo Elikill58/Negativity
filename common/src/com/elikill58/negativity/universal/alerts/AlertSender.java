@@ -45,7 +45,7 @@ public abstract class AlertSender {
 		return 0;
 	}
 	
-	public void save() {}
+	public abstract void save();
 	
 	public void config(Configuration config) {}
 	
@@ -65,6 +65,7 @@ public abstract class AlertSender {
 	}
 	
 	public static void initAlertShower(Adapter ada) {
+		allAlertSender.clear();
 		allAlertSender.addAll(Arrays.asList(new InstantAlertSender(), new AmountAlertSender(), new TimeAlertSender()));
 		
 		Configuration config = ada.getConfig().getSection("alert.show");

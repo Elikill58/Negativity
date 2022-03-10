@@ -28,6 +28,7 @@ public class AdminAlertInventory extends AbstractInventory<AdminAlertHolder> {
 		
 		int slot = 10;
 		for(AlertSender sender : AlertSender.getAllAlertSender()) {
+			holder.add(slot, sender);
 			inv.set(slot, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.alerts.shower." + sender.getName())).build());
 			if(sender.canChangeDefaultValue()) {
 				inv.set(slot - 9, ItemBuilder.Builder(Materials.SLIME_BALL).displayName("+").build());

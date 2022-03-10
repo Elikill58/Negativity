@@ -33,7 +33,7 @@ public class AimBot extends Cheat {
 			() -> new DoubleDataCounter());
 
 	public AimBot() {
-		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, true, false, "aim");
+		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, true, true, "aim");
 	}
 
 	@Check(name = "gcd", conditions = CheckConditions.SURVIVAL, description = "Calculate GCD between attacks", ignoreCancel = true)
@@ -109,7 +109,8 @@ public class AimBot extends Cheat {
 		DataCounter<Double> pitchCounter = data.getData(PITCHS);
 
 		return Utils.coloredMessage("&7Average GCD: &e" + String.format("%.2f", gcdCounter.getAverage())
-				+ "&7. Pitchs: max/min/ave &e" + pitchCounter.getMax() + "&7/&e" + pitchCounter.getMin() + "&7/&e"
-				+ pitchCounter.getAverage());
+				+ "&7. Pitchs: max/min/ave &e" + String.format("%.2f", pitchCounter.getMax()) + "&7/&e"
+				+ String.format("%.2f", pitchCounter.getMin()) + "&7/&e"
+				+ String.format("%.2f", pitchCounter.getAverage()));
 	}
 }

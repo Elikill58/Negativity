@@ -24,6 +24,7 @@ import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DataCounter;
 import com.elikill58.negativity.universal.verif.data.DoubleDataCounter;
+import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
 
 public class AimBot extends Cheat {
 
@@ -31,6 +32,8 @@ public class AimBot extends Cheat {
 			() -> new DoubleDataCounter());
 	public static final DataType<Double> PITCHS = new DataType<Double>("pitchs", "Pitchs movements",
 			() -> new DoubleDataCounter());
+	public static final DataType<Integer> INVALID_CHANGE = new DataType<Integer>("invalid_changes", "Invalid changes",
+			() -> new IntegerDataCounter());
 
 	public AimBot() {
 		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, true, true, "aim");
@@ -95,6 +98,7 @@ public class AimBot extends Cheat {
 			}
 			recordData(p.getUniqueId(), GCD, gcd);
 			recordData(p.getUniqueId(), PITCHS, pitch);
+			recordData(p.getUniqueId(), INVALID_CHANGE, invalidChange);
 			allPitchs.remove(0);
 		}
 	}
@@ -107,10 +111,12 @@ public class AimBot extends Cheat {
 	public @Nullable String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		DataCounter<Double> gcdCounter = data.getData(GCD);
 		DataCounter<Double> pitchCounter = data.getData(PITCHS);
-
+		DataCounter<Integer> invalidChangeCounter = data.getData(INVALID_CHANGE);
 		return Utils.coloredMessage("&7Average GCD: &e" + String.format("%.2f", gcdCounter.getAverage())
 				+ "&7. Pitchs: max/min/ave &e" + String.format("%.2f", pitchCounter.getMax()) + "&7/&e"
 				+ String.format("%.2f", pitchCounter.getMin()) + "&7/&e"
-				+ String.format("%.2f", pitchCounter.getAverage()));
+				+ String.format("%.2f", pitchCounter.getAverage()) + "&7. "
+				+ (invalidChangeCounter.getMax() > 2 ? "&c" : "&a") + "Invalid changes: "
+				+ invalidChangeCounter.getAverage());
 	}
 }

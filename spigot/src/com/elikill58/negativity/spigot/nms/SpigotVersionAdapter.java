@@ -174,7 +174,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 					Double.parseDouble(getStr(f, "c")), Double.parseDouble(getStr(f, "d")));
 		});
 		packetsPlayOut.put("PacketPlayOutEntityEffect", (p, packet) -> {
-			return new NPacketPlayOutEntityEffect(get(packet, "a"), get(packet, "b"), get(packet, "c"), get(packet, "d"), get(packet, "e"));
+			return new NPacketPlayOutEntityEffect(get(packet, "a"), (byte) get(packet, "b"), get(packet, "c"), get(packet, "d"), get(packet, "e"));
 		});
 		packetsPlayOut.put("PacketPlayOutTransaction", (p, f) -> {
 			return new NPacketPlayOutPing((int) (short) get(f, "b"));

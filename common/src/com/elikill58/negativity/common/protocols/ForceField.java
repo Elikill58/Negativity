@@ -60,12 +60,13 @@ public class ForceField extends Cheat {
 		Entity cible = e.getDamaged();
 		EntityRayResult ray = new EntityRayBuilder(p).build().compile();
 		List<Entity> lookingEntities = ray.getEntitiesFounded();
-		if(p != cible && !p.hasLineOfSight(cible)) {
+		boolean newSee = !lookingEntities.isEmpty() && lookingEntities.stream().filter(et -> et.getEntityId() == cible.getEntityId()).findFirst().isPresent();
+		if(p != cible && !p.hasLineOfSight(cible) && !newSee) {
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
-					"Hit " + cible.getType().name() + " (" + cible.getName() + ") but cannot see it. Looking: " + lookingEntities,
+					"Hit " + cible.getType().name() + " (" + cible.getName() + ") but cannot see it (new: " + newSee +"). Looking: " + lookingEntities,
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase(Locale.ROOT)));
 		} else
-			Adapter.getAdapter().debug(p.getName() + " can see " + cible.getName() + ". " + (lookingEntities.contains(cible) ? "See cible." : "Don't see: " + lookingEntities));
+			Adapter.getAdapter().debug(p.getName() + " can see " + cible.getName() + ". " + (newSee ? "See cible." : "Don't see: " + lookingEntities));
 		if (isSetBack() && mayCancel)
 			e.setCancelled(true);
 	}

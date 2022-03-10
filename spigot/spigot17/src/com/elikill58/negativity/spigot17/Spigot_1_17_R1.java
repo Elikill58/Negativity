@@ -188,7 +188,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
 		});
 		packetsPlayOut.put("PacketPlayOutEntityEffect", (player, packet) -> {
-			return new NPacketPlayOutEntityEffect(get(packet, "d"), get(packet, "e"), get(packet, "f"), get(packet, "g"), get(packet, "h"));
+			return new NPacketPlayOutEntityEffect(get(packet, "d"), (byte) get(packet, "e"), get(packet, "f"), get(packet, "g"), get(packet, "h"));
 		});
 		packetsPlayOut.put("PacketPlayOutPing", (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
 

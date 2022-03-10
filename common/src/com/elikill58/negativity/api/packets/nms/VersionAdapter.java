@@ -77,16 +77,21 @@ public abstract class VersionAdapter<R> {
 	}
 
 	public NPacket getPacket(R player, Object nms, String packetName) {
-		if (packetName.startsWith(PacketType.CLIENT_PREFIX) || packetName.startsWith("Serverbound"))
-			return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset(packetName)).apply(player, nms);
-		else if (packetName.startsWith(PacketType.SERVER_PREFIX) || packetName.startsWith("Clientbound"))
-			return packetsPlayOut.getOrDefault(packetName, (p, obj) -> new NPacketPlayOutUnset(packetName)).apply(player, nms);
-		else if (packetName.startsWith(PacketType.LOGIN_PREFIX))
-			return new NPacketLoginUnset();
-		else if (packetName.startsWith(PacketType.STATUS_PREFIX))
-			return packetsStatus.getOrDefault(packetName, (p, obj) -> new NPacketStatusUnset()).apply(player, nms);
-		else if (packetName.startsWith(PacketType.HANDSHAKE_PREFIX))
-			return packetsHandshake.getOrDefault(packetName, (p, obj) -> new NPacketHandshakeUnset()).apply(player, nms);
+		try {
+			if (packetName.startsWith(PacketType.CLIENT_PREFIX) || packetName.startsWith("Serverbound"))
+				return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset(packetName)).apply(player, nms);
+			else if (packetName.startsWith(PacketType.SERVER_PREFIX) || packetName.startsWith("Clientbound"))
+				return packetsPlayOut.getOrDefault(packetName, (p, obj) -> new NPacketPlayOutUnset(packetName)).apply(player, nms);
+			else if (packetName.startsWith(PacketType.LOGIN_PREFIX))
+				return new NPacketLoginUnset();
+			else if (packetName.startsWith(PacketType.STATUS_PREFIX))
+				return packetsStatus.getOrDefault(packetName, (p, obj) -> new NPacketStatusUnset()).apply(player, nms);
+			else if (packetName.startsWith(PacketType.HANDSHAKE_PREFIX))
+				return packetsHandshake.getOrDefault(packetName, (p, obj) -> new NPacketHandshakeUnset()).apply(player, nms);
+		} catch (Exception e) {
+			Adapter.getAdapter().debug("[VersionAdapter] Failed to manage packet " + packetName + ". NMS: " + nms.getClass().getSimpleName());
+			e.printStackTrace();
+		}
 		Adapter.getAdapter().debug("[VersionAdapter] Unknow packet " + packetName + ".");
 		return null;
 	}

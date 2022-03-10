@@ -12,6 +12,6 @@ public class ElytraListeners implements Listener {
 	@EventHandler
 	public void onGlide(EntityToggleGlideEvent e) {
 		if(!e.isGliding() && e.getEntity() instanceof Player)
-			NegativityPlayer.getCached(e.getEntity().getUniqueId()).TIME_INVINCIBILITY = System.currentTimeMillis() + 800;
+			NegativityPlayer.getCached(e.getEntity().getUniqueId()).timeInvincibility = System.currentTimeMillis() + 800;
 	}
 }

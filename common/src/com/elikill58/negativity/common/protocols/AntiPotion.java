@@ -35,7 +35,7 @@ public class AntiPotion extends Cheat implements Listeners {
 					|| pe.getType().equals(PotionEffectType.NAUSEA)
 					|| pe.getType().equals(PotionEffectType.HUNGER)){
 				hasPotion = true;
-				np.POTION_EFFECTS.add(pe);
+				np.potionEffects.add(pe);
 			}
 		if (hasPotion)
 			np.flyingReason = FlyingReason.POTION;

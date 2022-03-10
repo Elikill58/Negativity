@@ -207,7 +207,7 @@ public class Negativity {
 		Cheat c = alert.getCheat();
 		int reliability = alert.getReliability();
 		if(reliability == 0) {// alert already sent
-			np.ALERT_NOT_SHOWED.remove(c.getKey());
+			np.alertNotShowed.remove(c.getKey());
 			return;
 		}
 		Adapter ada = Adapter.getAdapter();
@@ -225,7 +225,7 @@ public class Negativity {
 		CheatHover hoverMsg = alert.getHover();
 		if (ProxyCompanionManager.isIntegrationEnabled()) {
 			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new AlertMessage(p.getUniqueId(), c.getName(), reliability, ping, hoverMsg, alert.getNbAlert()));
-			np.ALERT_NOT_SHOWED.remove(c.getKey());
+			np.alertNotShowed.remove(c.getKey());
 		} else {
 			boolean hasPermPeople = false;
 			for (Player pl : ada.getOnlinePlayers()) {
@@ -250,7 +250,7 @@ public class Negativity {
 				}
 			}
 			if(hasPermPeople) {
-				np.ALERT_NOT_SHOWED.remove(c.getKey());
+				np.alertNotShowed.remove(c.getKey());
 				Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
 			}
 		}

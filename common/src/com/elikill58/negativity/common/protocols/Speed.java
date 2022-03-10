@@ -61,8 +61,8 @@ public class Speed extends Cheat implements Listeners {
 		for (Entity entity : p.getNearbyEntities(5, 5, 5))
 			if (entity.getType().equals(EntityType.CREEPER))
 				return;
-		if (np.BYPASS_SPEED != 0) {
-			np.BYPASS_SPEED--;
+		if (np.bypassSpeed != 0) {
+			np.bypassSpeed--;
 			return;
 		}
 		Location loc = p.getLocation().clone();
@@ -131,11 +131,13 @@ public class Speed extends Cheat implements Listeners {
 				toHigh.setY(from.getY());
 				double yy = toHigh.distance(from);
 				if (distance > 0.45 && (distance > (yy * 2)) && p.getFallDistance() < 1) {
-					if (np.SPEED_NB++ > 4)
-						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "high-speed",
-								"HighSpeed - Under: " + under.getType().getId() + ", Speed: " + distance + ", nb: " + np.SPEED_NB + ", FD: " + p.getFallDistance() + ", y: " + yy + ", vel " + p.getVelocity());
+					int nb = np.ints.get(getKey(), "high-speed-amount", 0) + 1;
+					if (nb > 4)
+						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(86 + nb), "high-speed",
+								"HighSpeed - Under: " + under.getType().getId() + ", Speed: " + distance + ", nb: " + nb + ", FD: " + p.getFallDistance() + ", y: " + yy + ", vel " + p.getVelocity());
+					np.ints.set(getKey(), "high-speed-amount", nb);
 				} else
-					np.SPEED_NB = 0;
+					np.ints.remove(getKey(), "high-speed-amount");
 			}
 		}
 		if(checkActive("same-diff")) {
@@ -179,7 +181,7 @@ public class Speed extends Cheat implements Listeners {
 
 	@EventListener
 	public void onEntityDamage(PlayerDamagedByEntityEvent e) {
-		NegativityPlayer.getNegativityPlayer(e.getPlayer()).BYPASS_SPEED = 3;
+		NegativityPlayer.getNegativityPlayer(e.getPlayer()).bypassSpeed = 3;
 	}
 
 	@Override

@@ -51,7 +51,7 @@ public class ServerCrasher extends Special implements Listeners {
 			return;
 		Player p = e.getPlayer();
 		if(!inDisconnection.contains(p.getUniqueId())) {
-			if(NegativityPlayer.getNegativityPlayer(p).PACKETS.getOrDefault(PacketType.Client.POSITION, 0) > 1000) {
+			if(NegativityPlayer.getNegativityPlayer(p).packets.getOrDefault(PacketType.Client.POSITION, 0) > 1000) {
 				tryingToCrash(p);
 				packet.setCancelled(true);
 			}

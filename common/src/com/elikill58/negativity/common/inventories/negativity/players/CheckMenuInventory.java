@@ -44,7 +44,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		inv.set(8, ItemBuilder.getSkullItem(cible));
 				
 		inv.set(10, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());
-		inv.set(11, ItemBuilder.Builder(Materials.GRASS).displayName(ChatColor.RESET + "Mods").lore(ChatColor.GRAY + "Launcher: " + ChatColor.YELLOW + np.getClientName(), ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))).build());
+		inv.set(11, ItemBuilder.Builder(Materials.GRASS).displayName(ChatColor.RESET + "Mods").lore(ChatColor.GRAY + "Launcher: " + ChatColor.YELLOW + np.getClientName(), ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.mods.size() > 0 ? "enabled" : "disabled"))).build());
 		inv.set(12, getWoolItem(p, np.getAccount().isMcLeaks()));
 		// TODO add again fake players
 		//inv.set(13, ItemBuilder.Builder(Materials.SKELETON_SKULL).displayName(Messages.getMessage(p, "fake_entities")).build());
@@ -78,7 +78,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		try {
 			inv.set(0, getClickItem(Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(click)), click));
 			inv.set(1, getClickItem(Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), betterClick));
-			inv.set(2, getClickItem(Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.LAST_CLICK)), np.LAST_CLICK));
+			inv.set(2, getClickItem(Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.lastClick)), np.lastClick));
 
 			inv.set(7, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", cible.getPing() + "")).build());
 			inv.set(9, ItemBuilder.Builder(Materials.DIAMOND_SWORD).displayName("Fight: " + Messages.getMessage(p, "inventory.manager." + (np.isInFight ? "enabled" : "disabled"))).lore(ChatColor.GRAY + "Player sensitivity: " + ChatColor.YELLOW + ((int) np.sensitivity)).build());
@@ -161,7 +161,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 		} else if(m.equals(Materials.ANVIL)) {
 			InventoryManager.open(NegativityInventory.BAN, p, cible);
 		} else if(m.equals(Materials.BONE)) {
-			np.LAST_CLICK = 0;
+			np.lastClick = 0;
 			np.clearClick();
 			NegativityAccount acc = np.getAccount();
 			acc.setMostClicksPerSecond(0);

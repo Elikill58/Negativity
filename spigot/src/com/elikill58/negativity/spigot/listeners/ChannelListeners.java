@@ -19,7 +19,7 @@ public class ChannelListeners implements PluginMessageListener {
 	@Override
 	public void onPluginMessageReceived(String channel, Player p, byte[] data) {
 		if (channel.equalsIgnoreCase(SpigotNegativity.CHANNEL_NAME_FML) && data[0] == 2) {
-			NegativityPlayer.getCached(p.getUniqueId()).MODS.putAll(getModData(data));
+			NegativityPlayer.getCached(p.getUniqueId()).mods.putAll(getModData(data));
 			return;
 		}
 

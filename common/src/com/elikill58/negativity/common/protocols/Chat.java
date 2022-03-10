@@ -26,8 +26,8 @@ public class Chat extends Cheat {
 	public void onChatSpam(PlayerChatEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		String msg = e.getMessage();
-		PlayerChatEvent lastChat = np.LAST_CHAT_EVENT;
-		if(lastChat != null && msg.equalsIgnoreCase(lastChat.getMessage()) && (System.currentTimeMillis() - np.TIME_LAST_MESSAGE < 5000)) {
+		PlayerChatEvent lastChat = np.lastChatEvent;
+		if(lastChat != null && msg.equalsIgnoreCase(lastChat.getMessage()) && (System.currentTimeMillis() - np.timeLastMessage < 5000)) {
 			np.LAST_CHAT_MESSAGE_NB++;
 			boolean mayCancel = Negativity.alertMod(np.LAST_CHAT_MESSAGE_NB > 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(95 + np.LAST_CHAT_MESSAGE_NB), "spam", "Spam " + lastChat.getMessage() + " " + np.LAST_CHAT_MESSAGE_NB + " times",
@@ -36,8 +36,8 @@ public class Chat extends Cheat {
 				e.setCancelled(true);
 		} else
 			np.LAST_CHAT_MESSAGE_NB = 0;
-		np.LAST_CHAT_EVENT = e;
-		np.TIME_LAST_MESSAGE = System.currentTimeMillis();
+		np.lastChatEvent = e;
+		np.timeLastMessage = System.currentTimeMillis();
 	}
 
 	@Check(name = "insult", description = "Manage insult")

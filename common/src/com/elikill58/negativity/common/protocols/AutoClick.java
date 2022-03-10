@@ -38,10 +38,8 @@ public class AutoClick extends Cheat {
 					account.setMostClicksPerSecond(click);
 				}
 				recordData(p.getUniqueId(), CLICKS, click);
-				np.LAST_CLICK = click;
+				np.lastClick = click;
 				np.clearClick();
-				if (np.SEC_ACTIVE < 2)
-					np.SEC_ACTIVE++;
 			}
 		}, 20);
 	}
@@ -68,7 +66,7 @@ public class AutoClick extends Cheat {
 		if (clickPinged > getConfig().getInt("click_alert", 20)) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(click * 2.5), "count",
-					"Clicks: " + click + ", pinged: " + clickPinged + ", Last: " + np.LAST_CLICK
+					"Clicks: " + click + ", pinged: " + clickPinged + ", Last: " + np.lastClick
 							+ "; Better click in one second: " + np.getAccount().getMostClicksPerSecond(),
 					hoverMsg("main", "%click%", click));
 			if (isSetBack() && mayCancel)

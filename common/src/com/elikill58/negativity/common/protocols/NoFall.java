@@ -83,11 +83,11 @@ public class NoFall extends Cheat {
 					"Player not in ground no fall Damage. FallDistance: " + p.getFallDistance()
 							+ ", DistanceBetweenFromAndTo: " + distance);
 			if(mayCancel)
-				np.NO_FALL_DAMAGE += 1;
-		} else if (np.NO_FALL_DAMAGE != 0) {
+				np.noFallDamage += 1;
+		} else if (np.noFallDamage != 0) {
 			if (isSetBack())
-				manageDamage(p, np.NO_FALL_DAMAGE, relia);
-			np.NO_FALL_DAMAGE = 0;
+				manageDamage(p, np.noFallDamage, relia);
+			np.noFallDamage = 0;
 		}
 	}
 
@@ -113,11 +113,11 @@ public class NoFall extends Cheat {
 					"Player in ground. FallDamage: " + p.getFallDistance() + ", Distance From/To: "
 							+ distance + ", Velocity Y: " + p.getVelocity().getY() + ", distanceVector: " + distanceVector + ", disDirY: " + disWithDirY);
 			if(mayCancel)
-				np.NO_FALL_DAMAGE += 1;
-		} else if (np.NO_FALL_DAMAGE != 0) {
+				np.noFallDamage += 1;
+		} else if (np.noFallDamage != 0) {
 			if (isSetBack())
-				manageDamage(p, np.NO_FALL_DAMAGE, relia);
-			np.NO_FALL_DAMAGE = 0;
+				manageDamage(p, np.noFallDamage, relia);
+			np.noFallDamage = 0;
 		}
 	}
 	

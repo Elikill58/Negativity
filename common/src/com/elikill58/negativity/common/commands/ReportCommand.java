@@ -41,7 +41,7 @@ public class ReportCommand implements CommandListeners, TabListeners {
 
 		Player p = (Player) sender;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (np.TIME_REPORT > System.currentTimeMillis() && !Perm.hasPerm(np, Perm.REPORT_WAIT)) {
+		if (np.timeReport > System.currentTimeMillis() && !Perm.hasPerm(np, Perm.REPORT_WAIT)) {
 			Messages.sendMessage(p, "report_wait");
 			return false;
 		}
@@ -96,7 +96,7 @@ public class ReportCommand implements CommandListeners, TabListeners {
 		NegativityAccount.get(target.getUniqueId()).getReports().add(new Report(reason, reporter.getUniqueId()));
 		NegativityPlayer.getNegativityPlayer(target).mustToBeSaved = true;
 
-		NegativityPlayer.getNegativityPlayer(reporter).TIME_REPORT = System.currentTimeMillis()
+		NegativityPlayer.getNegativityPlayer(reporter).timeReport = System.currentTimeMillis()
 				+ Adapter.getAdapter().getConfig().getInt("time_between_report");
 		
 		WebhookManager.send(new WebhookMessage(WebhookMessageType.REPORT, target, reporter.getName(), System.currentTimeMillis(), "%reason%", reason));

@@ -32,10 +32,10 @@ public class FastPlace extends Cheat {
 		int ping = p.getPing();
 		if(ping < 50)
 			ping = 50;
-		long last = System.currentTimeMillis() - np.LAST_BLOCK_PLACE, lastPing = last + (ping / 50);
+		long last = System.currentTimeMillis() - np.lastBlockPlace, lastPing = last + (ping / 50);
 		if(last < 1000) // last block is too old
 			recordData(p.getUniqueId(), TIME_PLACE, last);
-		np.LAST_BLOCK_PLACE = System.currentTimeMillis();
+		np.lastBlockPlace = System.currentTimeMillis();
 		if ((lastPing + 5) < getConfig().getInt("time_2_place", 50)) { // 5 is to prevent some processing time issue
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - lastPing),
 					"time", "Block placed too quickly. Last time: " + last + ", Last with ping: "

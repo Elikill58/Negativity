@@ -63,13 +63,13 @@ public class AmountAlertSender extends AlertSender {
 	@Override
 	public void alert(NegativityPlayer np, PlayerCheatAlertEvent alert) {
 		CheatKeys cheatKey = alert.getCheat().getKey();
-		List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.getOrDefault(cheatKey, new ArrayList<>());
+		List<PlayerCheatAlertEvent> tempList = np.alertNotShowed.getOrDefault(cheatKey, new ArrayList<>());
 		tempList.add(alert);
 		PlayerCheatAlertEvent nextAlert = np.getAlertForCheat(alert.getCheat(), tempList);
 		if(amount <= nextAlert.getNbAlert() || !(alert.getReportType().equals(ReportType.WARNING) || alert.getReportType().equals(ReportType.VIOLATION))) { // if enough alerts
 			Negativity.sendAlertMessage(np, nextAlert);
 		} else
-			np.ALERT_NOT_SHOWED.put(cheatKey, new ArrayList<>(Arrays.asList(nextAlert)));
+			np.alertNotShowed.put(cheatKey, new ArrayList<>(Arrays.asList(nextAlert)));
 	}
 
 }

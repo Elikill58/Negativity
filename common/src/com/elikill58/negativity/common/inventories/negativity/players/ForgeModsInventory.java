@@ -28,12 +28,12 @@ public class ForgeModsInventory extends AbstractInventory<ForgeModsHolder> {
 		Player cible = (Player) args[0];
 		slot = 0;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
-		Inventory inv = Inventory.createInventory(Inventory.NAME_FORGE_MOD_MENU, UniversalUtils.getMultipleOf(np.MODS.size() + 1, 9, 1, 54), new ForgeModsHolder(cible));
+		Inventory inv = Inventory.createInventory(Inventory.NAME_FORGE_MOD_MENU, UniversalUtils.getMultipleOf(np.mods.size() + 1, 9, 1, 54), new ForgeModsHolder(cible));
 		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
-		if(np.MODS.size() == 0) {
+		if(np.mods.size() == 0) {
 			inv.set(4, ItemBuilder.Builder(Materials.DIAMOND).displayName("No mods").build());
 		} else {
-			np.MODS.forEach((name, version) -> {
+			np.mods.forEach((name, version) -> {
 				inv.set(slot++, ItemBuilder.Builder(Materials.GRASS).displayName(name).lore(ChatColor.GRAY + "Version: " + version).build());
 			});
 		}

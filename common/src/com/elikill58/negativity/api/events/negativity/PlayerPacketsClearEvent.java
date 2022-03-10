@@ -15,7 +15,7 @@ public class PlayerPacketsClearEvent extends PlayerEvent {
 	public PlayerPacketsClearEvent(Player p, NegativityPlayer np) {
 		super(p);
 		this.np = np;
-		this.packets = new HashMap<>(np.PACKETS);
+		this.packets = new HashMap<>(np.packets);
 	}
 	
 	public NegativityPlayer getNegativityPlayer() {

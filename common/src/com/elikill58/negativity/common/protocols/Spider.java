@@ -116,18 +116,18 @@ public class Spider extends Cheat {
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
 			double tempDis = loc.getY() - np.lastSpiderLoc.getY(), lastSpiderDistance = np.doubles.get(SPIDER, "last-distance", 0.0);
 			if (lastSpiderDistance == tempDis && tempDis != 0) {
-				np.SPIDER_SAME_DIST++;
-				if(np.SPIDER_SAME_DIST > 2) {
-					if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(tempDis * 400 + np.SPIDER_SAME_DIST), "distance",
-							"Nothing strange around him. To > From: " + y + ", distance: " + lastSpiderDistance + ". Walk with same y " + np.SPIDER_SAME_DIST + " times") && isSetBack()) {
+				np.spiderSameDist++;
+				if(np.spiderSameDist > 2) {
+					if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(tempDis * 400 + np.spiderSameDist), "distance",
+							"Nothing strange around him. To > From: " + y + ", distance: " + lastSpiderDistance + ". Walk with same y " + np.spiderSameDist + " times") && isSetBack()) {
 						LocationUtils.teleportPlayerOnGround(p);
 					}
 				}
 			} else
-				np.SPIDER_SAME_DIST = 0;
+				np.spiderSameDist = 0;
 			np.doubles.set(SPIDER, "last-distance", tempDis);
 		} else
-			np.SPIDER_SAME_DIST = 0;
+			np.spiderSameDist = 0;
 		np.lastSpiderLoc = loc;
 	}
 		

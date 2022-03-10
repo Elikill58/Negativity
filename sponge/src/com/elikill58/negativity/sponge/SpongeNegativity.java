@@ -334,7 +334,7 @@ public class SpongeNegativity {
 			Player player = ((PlayerConnection) connection).getPlayer();
 			byte[] rawData = channelBuf.readBytes(channelBuf.available());
 			HashMap<String, String> playerMods = NegativityPlayer.getNegativityPlayer(player.getUniqueId(),
-					() -> new SpongePlayer(player)).MODS;
+					() -> new SpongePlayer(player)).mods;
 			playerMods.clear();
 			playerMods.putAll(Utils.getModsNameVersionFromMessage(new String(rawData, StandardCharsets.UTF_8)));
 		}

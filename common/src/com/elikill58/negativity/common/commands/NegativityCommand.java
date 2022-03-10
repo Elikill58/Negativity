@@ -268,8 +268,8 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			long time = System.currentTimeMillis();
 			boolean hasBypass = false;
 			Cheat c = Cheat.values().stream().filter(Cheat::isActive).findFirst().get();
-			if (np.TIME_INVINCIBILITY > time) {
-				p.sendMessage(ChatColor.RED + "Invincibility (stay " + (np.TIME_INVINCIBILITY - time) + "ms)");
+			if (np.timeInvincibility > time) {
+				p.sendMessage(ChatColor.RED + "Invincibility (stay " + (np.timeInvincibility - time) + "ms)");
 				hasBypass = true;
 			}
 			if (np.isFreeze) {

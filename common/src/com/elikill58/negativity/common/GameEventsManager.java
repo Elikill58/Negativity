@@ -49,8 +49,8 @@ public class GameEventsManager implements Listeners {
 			ClientModsListMessage modsMessage = (ClientModsListMessage) message;
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 			if(!modsMessage.getMods().isEmpty()) {
-				np.MODS.clear();
-				np.MODS.putAll(modsMessage.getMods());
+				np.mods.clear();
+				np.mods.putAll(modsMessage.getMods());
 			}
 		} else if(message instanceof PlayerVersionMessage) {
 			p.setPlayerVersion(((PlayerVersionMessage) message).getVersion());

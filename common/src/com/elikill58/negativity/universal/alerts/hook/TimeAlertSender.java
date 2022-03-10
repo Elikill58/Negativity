@@ -75,9 +75,9 @@ public class TimeAlertSender extends AlertSender {
 	@Override
 	public void alert(NegativityPlayer np, PlayerCheatAlertEvent alert) {
 		CheatKeys cheatKey = alert.getCheat().getKey();
-		List<PlayerCheatAlertEvent> tempList = np.ALERT_NOT_SHOWED.computeIfAbsent(cheatKey, (a) -> new ArrayList<>());
+		List<PlayerCheatAlertEvent> tempList = np.alertNotShowed.computeIfAbsent(cheatKey, (a) -> new ArrayList<>());
 		tempList.add(alert);
-		np.ALERT_NOT_SHOWED.put(cheatKey, tempList);
+		np.alertNotShowed.put(cheatKey, tempList);
 	}
 
 }

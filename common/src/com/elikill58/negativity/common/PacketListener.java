@@ -38,12 +38,12 @@ public class PacketListener implements Listeners {
 		Player p = e.getPlayer();
 		AbstractPacket packet = e.getPacket();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		np.ALL_PACKETS++;
+		np.allPackets++;
 		PacketType type = packet.getPacketType();
 		if(type.isFlyingPacket()) {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
 			if(flying.hasLook || flying.hasPos) // if it's real flying
-				np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
+				np.packets.put(type, np.packets.getOrDefault(type, 0) + 1);
 			if(flying.hasLook && np.shouldCheckSensitivity) {
 				
 				final double deltaPitch = flying.pitch - np.doubles.get(CheatKeys.ALL, "sens-pitch", 0.0);
@@ -77,7 +77,7 @@ public class PacketListener implements Listeners {
 			if(flying instanceof NPacketPlayInPositionLook)
 				np.isTeleporting = false;
 		} else
-			np.PACKETS.put(type, np.PACKETS.getOrDefault(type, 0) + 1);
+			np.packets.put(type, np.packets.getOrDefault(type, 0) + 1);
 		if(type == PacketType.Client.BLOCK_DIG && !Version.getVersion().equals(Version.V1_7) && packet.getPacket() instanceof NPacketPlayInBlockDig) {
 			NPacketPlayInBlockDig blockDig = (NPacketPlayInBlockDig) packet.getPacket();
 			if(blockDig.action != DigAction.FINISHED_DIGGING)

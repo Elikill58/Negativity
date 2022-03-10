@@ -37,7 +37,7 @@ public class ConnectionManager implements Listeners {
 	public void onConnect(PlayerConnectEvent e) {
 		Player p = e.getPlayer();
 		NegativityPlayer np = e.getNegativityPlayer();
-		np.TIME_INVINCIBILITY = System.currentTimeMillis() + 8000;
+		np.timeInvincibility = System.currentTimeMillis() + 8000;
 		
 		if(UniversalUtils.isMe(p.getUniqueId()))
 			p.sendMessage(ChatColor.GREEN + "Ce serveur utilise Negativity ! Waw :')");
@@ -125,6 +125,6 @@ public class ConnectionManager implements Listeners {
 	@EventListener
 	public void onTeleport(PlayerTeleportEvent e) {
 		Player p = e.getPlayer();
-		NegativityPlayer.getNegativityPlayer(p).TIME_INVINCIBILITY = System.currentTimeMillis() + 1000;
+		NegativityPlayer.getNegativityPlayer(p).timeInvincibility = System.currentTimeMillis() + 1000;
 	}
 }

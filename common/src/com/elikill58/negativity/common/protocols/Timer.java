@@ -33,20 +33,20 @@ public class Timer extends Cheat {
 		int look = packets.getOrDefault(PacketType.Client.LOOK, 0);
 		int positonLook = packets.getOrDefault(PacketType.Client.POSITION_LOOK, 0);
 		int count = flying + look + position + positonLook;
-		np.TIMER_COUNT.add(count);
+		np.timerCount.add(count);
 		
-		if(np.TIMER_COUNT.size() > 5) // now we can remove first value (5 secs later)
-			np.TIMER_COUNT.remove(0);
+		if(np.timerCount.size() > 5) // now we can remove first value (5 secs later)
+			np.timerCount.remove(0);
 		else // loading seconds
 			return;
-		double sum = np.TIMER_COUNT.stream().mapToInt(Integer::intValue).sum() / np.TIMER_COUNT.size();
+		double sum = np.timerCount.stream().mapToInt(Integer::intValue).sum() / np.timerCount.size();
 		int variation = getConfig().getInt("max_variation");
 		Player p = e.getPlayer();
 		int MAX = (p.getGameMode().equals(GameMode.CREATIVE) ? 40 : 20);
 		int MAX_VARIATION = MAX + variation;
 		if(MAX_VARIATION > sum)// in min/max variations
 			return;
-		List<Integer> medianList = new ArrayList<>(np.TIMER_COUNT);
+		List<Integer> medianList = new ArrayList<>(np.timerCount);
 		medianList.sort(Comparator.naturalOrder());
 		int middle = medianList.size() / 2;
 		int medianValue = (medianList.size() % 2 == 1) ? medianList.get(middle) : (int) ((medianList.get(middle-1) + medianList.get(middle)) / 2.0);

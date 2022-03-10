@@ -23,20 +23,14 @@ public class AnalyzePacketTimer implements Runnable {
 		for (NegativityPlayer np : NegativityPlayer.getAllNegativityPlayers()) {
 			Player p = np.getPlayer();
 			if(p == null || !p.isOnline()){
-				np.MOVE_TIME = 0;
 				NegativityPlayer.removeFromCache(np.getUUID());
 				continue;
-			}
-			if (np.SEC_ACTIVE < 2) {
-				np.SEC_ACTIVE++;
-				np.MOVE_TIME = 0;
-				return;
 			}
 			int ping = p.getPing();
 			if (ping == 0)
 				ping = 1;
 			
-			int flying = np.PACKETS.getOrDefault(PacketType.Client.FLYING, 0);
+			int flying = np.packets.getOrDefault(PacketType.Client.FLYING, 0);
 			
 			int flyingWithPing = flying - (ping / 6);
 			if (flyingWithPing > 28) {
@@ -47,7 +41,7 @@ public class AnalyzePacketTimer implements Runnable {
 					double[] allTps = Adapter.getAdapter().getTPS();
 					int porcent = UniversalUtils.parseInPorcent(flyingWithPing - (ping / (allTps[1] - allTps[0] > 0.5 ? 9 : 8)));
 					boolean back = Negativity.alertMod(flyingWithPing > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, c, porcent,
-							"packet", "Flying in one second: " + flying + ", ping: " + ping + ", max_flying: " + np.MAX_FLYING,
+							"packet", "Flying in one second: " + flying + ", ping: " + ping,
 							c.hoverMsg("packet", "%flying%", flyingWithPing), flyingWithPing / 30);
 					if(c.isSetBack() && back){
 						switch(np.flyingReason){
@@ -57,11 +51,11 @@ public class AnalyzePacketTimer implements Runnable {
 							p.getInventory().addItem(ItemBuilder.Builder(np.eatMaterial).build());
 							break;
 						case POTION:
-							List<PotionEffect> po = new ArrayList<>(np.POTION_EFFECTS);
+							List<PotionEffect> po = new ArrayList<>(np.potionEffects);
 							for(PotionEffect pe : po)
 								if(!p.hasPotionEffect(pe.getType())){
 									p.addPotionEffect(pe.getType(), pe.getDuration(), pe.getAmplifier());
-									np.POTION_EFFECTS.remove(pe);
+									np.potionEffects.remove(pe);
 								}
 							break;
 						case REGEN:
@@ -76,7 +70,6 @@ public class AnalyzePacketTimer implements Runnable {
 				}
 			}
 
-			np.MOVE_TIME = 0;
 			np.clearPackets();
 		}
 	}

@@ -47,39 +47,39 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NegativityPlayer implements FileSaverAction {
 
-	private static final Map<UUID, NegativityPlayer> players = Collections.synchronizedMap(new ConcurrentHashMap<UUID, NegativityPlayer>());
+	private static final Map<UUID, NegativityPlayer> PLAYERS = Collections.synchronizedMap(new ConcurrentHashMap<UUID, NegativityPlayer>());
 
 	private final UUID playerId;
 	private final Player p;
 
 	public ArrayList<CheckProcessor> checkProcessors = new ArrayList<>();
 	public ArrayList<String> proof = new ArrayList<>();
-	public HashMap<CheatKeys, List<PlayerCheatAlertEvent>> ALERT_NOT_SHOWED = new HashMap<>();
-	public HashMap<String, String> MODS = new HashMap<>();
+	public HashMap<CheatKeys, List<PlayerCheatAlertEvent>> alertNotShowed = new HashMap<>();
+	public HashMap<String, String> mods = new HashMap<>();
 	
 	// packets
-	public HashMap<PacketType, Integer> PACKETS = new HashMap<>();
-	public int ALL_PACKETS = 0, MAX_FLYING = 0;
+	public HashMap<PacketType, Integer> packets = new HashMap<>();
+	public int allPackets = 0;
 
-	public int LAST_CLICK = 0, SEC_ACTIVE = 0;
+	public int lastClick = 0;
 	
 	// setBack
-	public int NO_FALL_DAMAGE = 0, idWaitingAppliedVelocity = -1;
+	public int noFallDamage = 0, idWaitingAppliedVelocity = -1;
 	public Material eatMaterial = null;
-	public List<PotionEffect> POTION_EFFECTS = new ArrayList<>();
+	public List<PotionEffect> potionEffects = new ArrayList<>();
 	
 	// detection and bypass
-	public long TIME_INVINCIBILITY = 0, TIME_LAST_MESSAGE = 0, timeStartFakePlayer = 0, LAST_BLOCK_BREAK = 0, LAST_BLOCK_PLACE = 0, LAST_REGEN = 0, TIME_REPORT = 0,
-			TIME_OTHER_KEEP_ALIVE = 0, TIME_LAST_MOVE = 0;
-	public int MOVE_TIME = 0, LAST_CHAT_MESSAGE_NB = 0, fakePlayerTouched = 0, BYPASS_SPEED = 0, SPEED_NB = 0, SPIDER_SAME_DIST = 0, IS_LAST_SEC_BLINK = 0;
+	public long timeInvincibility = 0, timeLastMessage = 0, timeStartFakePlayer = 0, lastBlockBreak = 0, lastBlockPlace = 0, lastRegen = 0, timeReport = 0,
+			otherKeepAliveTime = 0, timeLastMove = 0;
+	public int LAST_CHAT_MESSAGE_NB = 0, fakePlayerTouched = 0, bypassSpeed = 0, spiderSameDist = 0;
 	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public boolean bypassBlink = false, isOnLadders = false, useAntiNoFallSystem = false, isTeleporting = false;
-	public PlayerChatEvent LAST_CHAT_EVENT = null;
-	public List<Integer> TIMER_COUNT = new ArrayList<>();
+	public PlayerChatEvent lastChatEvent = null;
+	public List<Integer> timerCount = new ArrayList<>();
 	public List<Double> lastY = new ArrayList<>();
 	public Location lastSpiderLoc = null;
-	public String LAST_OTHER_KEEP_ALIVE = "";
+	public PacketType otherKeepAlivePacket = PacketType.Client.FLYING;
 	public List<Location> lastLocations = new ArrayList<>();
 	
 	// content
@@ -166,7 +166,7 @@ public class NegativityPlayer implements FileSaverAction {
 	public boolean hasDetectionActive(Cheat c) {
 		if (!c.isActive() || Negativity.tpsDrop)
 			return false;
-		if (TIME_INVINCIBILITY > System.currentTimeMillis())
+		if (timeInvincibility > System.currentTimeMillis())
 			return false;
 		if (isFreeze)
 			return false;
@@ -190,7 +190,7 @@ public class NegativityPlayer implements FileSaverAction {
 			return "Cheat disabled";
 		if(Negativity.tpsDrop)
 			return "TPS drop";
-		if(TIME_INVINCIBILITY > System.currentTimeMillis())
+		if(timeInvincibility > System.currentTimeMillis())
 			return "Player invincibility";
 		if (isInFight && c.isBlockedInFight())
 			return "In fight";
@@ -295,7 +295,7 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @param amount the amount of alert
 	 */
 	public void addWarn(Cheat c, int reliability, int amount) {
-		if (System.currentTimeMillis() < TIME_INVINCIBILITY || c.getReliabilityAlert() > reliability)
+		if (System.currentTimeMillis() < timeInvincibility || c.getReliabilityAlert() > reliability)
 			return;
 		NegativityAccount account = getAccount();
 		account.setWarnCount(c, account.getWarn(c) + amount);
@@ -319,7 +319,7 @@ public class NegativityPlayer implements FileSaverAction {
 	 */
 	public void clearPackets() {
 		EventManager.callEvent(new PlayerPacketsClearEvent(getPlayer(), this));
-		PACKETS.clear();
+		packets.clear();
 	}
 	
 	/**
@@ -399,7 +399,7 @@ public class NegativityPlayer implements FileSaverAction {
 	 */
 	public List<PlayerCheatAlertEvent> getAlertForAllCheat(){
 		final List<PlayerCheatAlertEvent> list = new ArrayList<>();
-		ALERT_NOT_SHOWED.forEach((c, listAlerts) -> {
+		alertNotShowed.forEach((c, listAlerts) -> {
 			if(!listAlerts.isEmpty())
 				list.add(getAlertForCheat(Cheat.forKey(c), listAlerts));
 		});
@@ -542,8 +542,8 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getNegativityPlayer(UUID uuid, Callable<Player> call) {
-		synchronized (players) {
-			return players.computeIfAbsent(uuid, (a) -> {
+		synchronized (PLAYERS) {
+			return PLAYERS.computeIfAbsent(uuid, (a) -> {
 				try {
 					return new NegativityPlayer(call.call());
 				} catch (Exception e) {
@@ -561,8 +561,8 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @return the negativity player
 	 */
 	public static NegativityPlayer getCached(UUID playerId) {
-		synchronized (players) {
-			return players.get(playerId);
+		synchronized (PLAYERS) {
+			return PLAYERS.get(playerId);
 		}
 	}
 	
@@ -572,14 +572,14 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @return negativity players
 	 */
 	public static Map<UUID, NegativityPlayer> getAllPlayers(){
-		synchronized (players) {
-			return players;
+		synchronized (PLAYERS) {
+			return PLAYERS;
 		}
 	}
 	
 	public static List<NegativityPlayer> getAllNegativityPlayers() {
-		synchronized (players) {
-			return new ArrayList<>(players.values());
+		synchronized (PLAYERS) {
+			return new ArrayList<>(PLAYERS.values());
 		}
 	}
 
@@ -589,8 +589,8 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @param playerId the player UUID
 	 */
 	public static void removeFromCache(UUID playerId) {
-		synchronized (players) {
-			NegativityPlayer cached = players.remove(playerId);
+		synchronized (PLAYERS) {
+			NegativityPlayer cached = PLAYERS.remove(playerId);
 			if (cached != null) {
 				cached.destroy();
 			}

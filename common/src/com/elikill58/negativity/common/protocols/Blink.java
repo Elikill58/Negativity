@@ -41,8 +41,8 @@ public class Blink extends Cheat implements Listeners {
 		AbstractPacket packet = e.getPacket();
 		if (packet.getPacketType() != Client.KEEP_ALIVE && e.hasPlayer()) {
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
-			np.TIME_OTHER_KEEP_ALIVE = System.currentTimeMillis();
-			np.LAST_OTHER_KEEP_ALIVE = packet.getPacketName();
+			np.otherKeepAliveTime = System.currentTimeMillis();
+			np.otherKeepAlivePacket = packet.getPacketType();
 		}
 	}
 	
@@ -53,25 +53,25 @@ public class Blink extends Cheat implements Listeners {
 			return;
 		int ping = p.getPing();
 		if (ping < 140) {
-			int total = np.ALL_PACKETS - np.PACKETS.getOrDefault(PacketType.Client.KEEP_ALIVE, 0);
+			int total = np.allPackets - np.packets.getOrDefault(PacketType.Client.KEEP_ALIVE, 0);
 			if (total == 0) {
 				if(UniversalUtils.parseInPorcent(100 - ping) >= getReliabilityAlert()) {
-					boolean last = np.IS_LAST_SEC_BLINK == 2;
-					np.IS_LAST_SEC_BLINK++;
-					long time_last = System.currentTimeMillis() - np.TIME_OTHER_KEEP_ALIVE;
-					if (last && time_last >= 1000 && !np.LAST_OTHER_KEEP_ALIVE.equalsIgnoreCase("PacketPlayInCustomPayload")) {
+					boolean last = np.booleans.get(getKey(), "no-packet-is", false);
+					long time_last = System.currentTimeMillis() - np.otherKeepAliveTime;
+					if (last && time_last >= 1000 && !np.otherKeepAlivePacket.equals(PacketType.Client.CUSTOM_PAYLOAD)) {
 						Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - ping),
-								"no-packet", "No packet. Last other than KeepAlive: " + np.LAST_OTHER_KEEP_ALIVE + " there is: "
+								"no-packet", "No packet. Last other than KeepAlive: " + np.otherKeepAlivePacket.getPacketName() + " there is: "
 										+ time_last + "ms .");
 					}
+					np.booleans.set(getKey(), "no-packet-is", true);
 				}
 			} else
-				np.IS_LAST_SEC_BLINK = 0;
+				np.booleans.remove(getKey(), "no-packet-is");
 		} else 
-			np.IS_LAST_SEC_BLINK = 0;
+			np.booleans.remove(getKey(), "no-packet-is");
 		
 		if(ping < getMaxAlertPing()){
-			int posLook = np.PACKETS.getOrDefault(PacketType.Client.POSITION_LOOK, 0), pos = np.PACKETS.getOrDefault(PacketType.Client.POSITION, 0);
+			int posLook = np.packets.getOrDefault(PacketType.Client.POSITION_LOOK, 0), pos = np.packets.getOrDefault(PacketType.Client.POSITION, 0);
 			int allPos = posLook + pos;
 			if(allPos > 60) {
 				Negativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(20 + allPos), "position-packet",

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.common.protocols;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -25,7 +26,6 @@ import com.elikill58.negativity.api.ray.block.BlockRayResult;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
-import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -33,6 +33,8 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Scaffold extends Cheat {
 
+	private static final List<Material> BYPASS_TYPES = Arrays.asList(Materials.AIR, Materials.SCAFFOLD);
+	
 	public Scaffold() {
 		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS, false, false);
 	}
@@ -45,8 +47,10 @@ public class Scaffold extends Cheat {
 			return;
 		Scheduler.getInstance().runDelayed(() -> {
 			Material m = p.getItemInHand().getType(), placed = e.getBlock().getType();
-			if ((m == null || (!m.isSolid() && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot()
-					&& !placed.equals(Materials.AIR)) {
+			if(BYPASS_TYPES.contains(placed))
+				return;
+			
+			if ((m == null || (!m.isSolid() && !m.equals(placed))) && slot != p.getInventory().getHeldItemSlot()) {
 				int localPing = ping;
 				if (localPing == 0)
 					localPing = 1;
@@ -55,7 +59,7 @@ public class Scaffold extends Cheat {
 						"Item in hand: " + m.getId() + " Block placed: " + placed.getId(),
 						hoverMsg("main", "%item%", m.getId().toLowerCase(Locale.ROOT), "%block%",
 								placed.getId().toLowerCase(Locale.ROOT)));
-				if (isSetBack() && mayCancel) {
+				if (mayCancel && isSetBack()) {
 					p.getInventory().addItem(ItemBuilder.Builder(placed).build());
 					e.getBlock().setType(Materials.AIR);
 				}
@@ -67,7 +71,7 @@ public class Scaffold extends Cheat {
 	public void onBlockPlaceDistance(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		Block place = e.getBlock();
-		if (Version.getVersion().isNewerOrEquals(Version.V1_14) && place.getType().equals(Materials.SCAFFOLD))
+		if(BYPASS_TYPES.contains(place.getType()))
 			return;
 		Location loc = place.getLocation();
 		double x = loc.getX(), y = loc.getY(), z = loc.getZ();

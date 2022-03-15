@@ -84,6 +84,7 @@ public class NegativityPlayer implements FileSaverAction {
 	
 	// content
 	public Content<List<Location>> listLocations = new Content<>();
+	public Content<List<Integer>> listIntegers = new Content<>();
 	public Content<List<Double>> listDoubles = new Content<>();
 	public Content<Location> locations = new Content<>();
 	public Content<Material> materials = new Content<>();

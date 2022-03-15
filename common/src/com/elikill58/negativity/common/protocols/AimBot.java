@@ -51,6 +51,8 @@ public class AimBot extends Cheat {
 				return;
 			List<Double> allPitchs = np.listDoubles.get(getKey(), "all-pitchs",
 					new ArrayList<Double>(Arrays.asList(0d, 0d, 0d, 0d, 0d, 0d, 0d)));
+			List<Integer> allInvalidChanges = np.listIntegers.get(getKey(), "all-invalid-changes",
+					Arrays.asList(0, 0, 0, 0, 0, 0, 0));
 			double deltaYaw = flying.yaw - np.doubles.get(getKey(), "last-yaw", 0.0);
 			double deltaPitch = flying.pitch - np.doubles.get(getKey(), "last-pitch", 0.0);
 			double pitch = flying.pitch;
@@ -81,25 +83,27 @@ public class AimBot extends Cheat {
 				else if (actual < pitchLess)
 					pitchLess = actual;
 			}
+			allInvalidChanges.add(invalidChange);
 
-			final double gcd = getGcdForLong((long) deltaPitch, (long) lastDeltaPitch);
-
-			final boolean exempt = !(Math.abs(pitch) < 82.5F) || deltaYaw < 5.0;
+			double gcd = getGcdForLong((long) deltaPitch, (long) lastDeltaPitch);
+			int averageInvalid = (int) allInvalidChanges.stream().mapToInt(a -> a).average().orElse(0);
+			boolean exempt = !(Math.abs(pitch) < 82.5F) || deltaYaw < 5.0;
 			if (!exempt && Math.abs(gcd) > np.sensitivity / getConfig().getInt("checks.gcd.sensitivity-divider", 15)
-					&& invalidChange > getConfig().getInt("checks.gcd.invalid-change", 3)
+					&& invalidChange > getConfig().getInt("checks.gcd.invalid-change", 3) && averageInvalid > 1
 					&& !(pitchLess < 0 && pitchMore < 50) && Math.abs(pitchLess - pitchMore) > 20) {
 				String allPitchStr = allPitchs.stream().map((d) -> String.format("%.3f", d))
 						.collect(Collectors.toList()).toString();
-				Negativity.alertMod(ReportType.WARNING, p, this, 100, "gcd",
-						"GCD: " + gcd + ", allPitchs: " + allPitchStr + ", sens: "
-								+ String.format("%.3f", np.sensitivity) + ", changes: " + invalidChange
-								+ ", More/Less: " + String.format("%.3f", pitchMore) + "/"
-								+ String.format("%.3f", pitchLess));
+				Negativity.alertMod(ReportType.WARNING, p, this, 100, "gcd", "GCD: " + gcd + ", allPitchs: "
+						+ allPitchStr + ", sens: " + String.format("%.3f", np.sensitivity) + ", changes: "
+						+ invalidChange + ", allChanges: " + allInvalidChanges + ", avInvalid: " + averageInvalid
+						+ ", More/Less: " + String.format("%.3f", pitchMore) + "/" + String.format("%.3f", pitchLess));
 			}
 			recordData(p.getUniqueId(), GCD, gcd);
 			recordData(p.getUniqueId(), PITCHS, pitch);
 			recordData(p.getUniqueId(), INVALID_CHANGE, invalidChange);
+
 			allPitchs.remove(0);
+			allInvalidChanges.remove(0);
 		}
 	}
 

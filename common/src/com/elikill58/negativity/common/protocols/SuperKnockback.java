@@ -52,7 +52,7 @@ public class SuperKnockback extends Cheat implements Listeners {
 				oldActual = actual;
 		if (type.equals(PacketType.Client.ENTITY_ACTION)) {
 			NPacketPlayInEntityAction entityAction = (NPacketPlayInEntityAction) packet.getPacket();
-			if (p.isSameId(String.valueOf(entityAction.entityId)))
+			if (!p.isSameId(String.valueOf(entityAction.entityId)))
 				return;
 
 			if (entityAction.action.equals(EnumPlayerAction.START_SPRINTING)

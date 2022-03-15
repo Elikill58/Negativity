@@ -76,7 +76,7 @@ public class ReflectionUtils {
 	
 	public static Class<?> getSubClassWithName(Class<?> clazz, String name){
 		for(Class<?> cl : clazz.getDeclaredClasses())
-			if(cl.getName().equalsIgnoreCase(name))
+			if(cl.getSimpleName().equalsIgnoreCase(name))
 				return cl;
 		return null;
 	}

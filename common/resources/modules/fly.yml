@@ -47,9 +47,6 @@ checks:
   # When not in ground, y
   no-ground-y:
     active: true
-  # Check for elytra hacks
-  elytra:
-    active: true
   # When not moving Y
   not-moving-y:
     active: true

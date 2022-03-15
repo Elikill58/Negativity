@@ -118,26 +118,7 @@ public class Fly extends Cheat implements Listeners {
 			np.booleans.set(FLY, "fly-wasOnGround", onGround);
 		}
 
-		if (p.hasElytra()) {
-			if (checkActive("elytra")) {
-				boolean isUsingFireworks = np.booleans.get(FLY, "fireworks", false);
-				boolean isGoingDown = p.getVelocity().getY() < 0; // if velocity is not enough to go up
-				if (isGoingDown) {
-					np.booleans.remove(FLY, "fireworks");
-				} else if (!isUsingFireworks) {
-					if (hand != null && hand.getType().equals(Materials.FIREWORK)) {
-						np.booleans.set(FLY, "fireworks", true);
-					} else {
-						if (distance > 0.29)
-							Negativity.alertMod(ReportType.WARNING, p, this, 99, "elytra",
-									"Going UP, hand: " + hand + ". Y: " + String.format("%.5f", y) + ", distance: "
-											+ String.format("%.5f", distance) + ", velocity: "
-											+ p.getVelocity().toShowableString(),
-									new CheatHover.Literal("Elytra fly"));
-					}
-				}
-			}
-		} else {
+		if (!p.hasElytra()) {
 			if (checkActive("suspicious-y")) {
 				boolean hasBuggedBlockAroundForGeyser = np.isBedrockPlayer()
 						&& LocationUtils.hasMaterialsAround(locUnder, "SLAB", "FENCE", "STAIRS", "BED");

@@ -136,7 +136,6 @@ public class PacketListener implements Listeners {
 			int randomNb = new Random().nextInt();
 			if(randomNb == -1)
 				randomNb = -26;
-			Adapter.getAdapter().getLogger().info("Send ping packet: " + packet.entityId + ", " + packet.vec);
 			p.queuePacket(new NPacketPlayOutPing(np.idWaitingAppliedVelocity = randomNb));
 		}
 	}

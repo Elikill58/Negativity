@@ -40,6 +40,6 @@ public abstract class AbstractEntity implements Entity {
 	
 	@Override
 	public String toString() {
-		return "Entity{type=" + getType().name() + ",location=" + getLocation() + "}";
+		return "Entity{id=" + getEntityId() + ",type=" + getType().name() + ",location=" + getLocation() + "}";
 	}
 }

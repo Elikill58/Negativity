@@ -63,7 +63,7 @@ public class ForceField extends Cheat {
 		boolean newSee = !lookingEntities.isEmpty() && lookingEntities.stream().filter(cible::isSameId).findFirst().isPresent();
 		if(p != cible && !p.hasLineOfSight(cible) && !newSee) {
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
-					"Hit " + cible.getType().name() + " (" + cible.getName() + ") but cannot see it (new: " + newSee +"). Looking: " + lookingEntities,
+					"Hit " + cible.toString() + " (" + cible.getName() + ") but cannot see it (new: " + newSee +"). Looking: " + lookingEntities,
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase(Locale.ROOT)));
 		} else
 			Adapter.getAdapter().debug(p.getName() + " can see " + cible.getName() + ". " + (newSee ? "See cible." : "Don't see: " + lookingEntities));

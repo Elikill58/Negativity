@@ -15,6 +15,8 @@ public class SpigotEnchants {
 			return Enchantment.THORNS;
 		case UNBREAKING:
 			return Enchantment.DURABILITY;
+		case DEPTH_STRIDER:
+			return Enchantment.DEPTH_STRIDER;
 		}
 		return null;
 	}

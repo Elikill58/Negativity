@@ -106,15 +106,16 @@ public class Jesus extends Cheat implements Listeners {
 			int depthStriderLevel = p.getInventory().getBoots().orElse(ItemBuilder.Builder(Materials.AIR).build()).getEnchantLevel(Enchantment.DEPTH_STRIDER);
 			double distanceAbs = to.distance(from) - Math.abs(from.getY() - to.getY());
 			Location upper = loc.clone().add(0, 1, 0);
-			float distanceFall = p.getFallDistance();
-			if (isInWater && isOnWater && distanceFall < 1 && distanceAbs > (p.getWalkSpeed() * depthStriderLevel * (4/3))
-					&& !upper.getBlock().isLiquid() && !p.isFlying() && !p.getInventory().getBoots().orElse(ItemBuilder.Builder(Materials.AIR).build()).hasEnchant(Enchantment.DIG_SPEED)) {
-				if (!hasMaterialsAround(loc, "WATER_LILY") && !hasMaterialsAround(upper, "WATER_LILY")
+			float distanceFall = p.getFallDistance(), ws = p.getWalkSpeed();
+			if(depthStriderLevel > 0)
+				ws = ws * depthStriderLevel * (4/3);
+			if (isInWater && isOnWater && distanceFall < 1 && distanceAbs > ws && !upper.getBlock().isLiquid() && !p.isFlying()
+					&& !p.getInventory().getBoots().orElse(ItemBuilder.Builder(Materials.AIR).build()).hasEnchant(Enchantment.DIG_SPEED)
+					&& !hasMaterialsAround(loc, "WATER_LILY") && !hasMaterialsAround(upper, "WATER_LILY")
 						&& !hasOtherThan(under, "WATER")) {
-					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98, "distance-in",
-							"In water, distance: " + distanceAbs,
-							hoverMsg("main", "%distance%", distanceAbs));
-				}
+				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98, "distance-in",
+						"In water, distance: " + distanceAbs + ", ws: " + ws + ", depth strider: " + depthStriderLevel,
+						hoverMsg("main", "%distance%", String.format("%.2f", distanceAbs)));
 			}
 		}
 

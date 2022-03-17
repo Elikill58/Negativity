@@ -72,7 +72,7 @@ public class NegativityPlayer implements FileSaverAction {
 	public long timeInvincibility = 0, timeLastMessage = 0, timeStartFakePlayer = 0, lastBlockBreak = 0, lastBlockPlace = 0, lastRegen = 0, timeReport = 0,
 			otherKeepAliveTime = 0, timeLastMove = 0;
 	public int LAST_CHAT_MESSAGE_NB = 0, fakePlayerTouched = 0, bypassSpeed = 0, spiderSameDist = 0;
-	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0;
+	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public boolean bypassBlink = false, isOnLadders = false, useAntiNoFallSystem = false, isTeleporting = false;
 	public PlayerChatEvent lastChatEvent = null;
@@ -523,6 +523,7 @@ public class NegativityPlayer implements FileSaverAction {
 		leftBlockClick = 0;
 		entityClick = 0;
 		leftCancelled = 0;
+		leftFinished = 0;
 	}
 	
 	/**

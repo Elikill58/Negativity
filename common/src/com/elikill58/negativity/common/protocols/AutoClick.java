@@ -58,6 +58,8 @@ public class AutoClick extends Cheat {
 				np.leftBlockClick++;
 			else if (dig.action.equals(DigAction.CANCEL_DIGGING))
 				np.leftCancelled++;
+			else if (dig.action.equals(DigAction.FINISHED_DIGGING))
+				np.leftFinished++;
 		} else if (type.equals(PacketType.Client.BLOCK_PLACE)) {
 			np.rightBlockClick++;
 		}
@@ -66,8 +68,8 @@ public class AutoClick extends Cheat {
 		if (clickPinged > getConfig().getInt("click_alert", 20)) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(click * 2.5), "count",
-					"Clicks: " + click + ", pinged: " + clickPinged + ", Last: " + np.lastClick
-							+ "; Better click in one second: " + np.getAccount().getMostClicksPerSecond(),
+					"Clicks: " + click + ", pinged: " + clickPinged + ". Detailed: entity: " + np.entityClick + ", block start/cancel/finish: " + np.leftBlockClick + "/" + np.leftCancelled + "/" + np.leftFinished + ", place: " + np.rightBlockClick + " Last: " + np.lastClick
+							+ "; Record: " + np.getAccount().getMostClicksPerSecond(),
 					hoverMsg("main", "%click%", click));
 			if (isSetBack() && mayCancel)
 				e.setCancelled(true);

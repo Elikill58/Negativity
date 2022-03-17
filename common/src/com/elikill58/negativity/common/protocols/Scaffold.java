@@ -71,7 +71,7 @@ public class Scaffold extends Cheat {
 	public void onBlockPlaceDistance(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		Block place = e.getBlock();
-		if(BYPASS_TYPES.contains(place.getType()))
+		if(BYPASS_TYPES.contains(place.getType()) || place.getType().getId().contains("FENCE"))
 			return;
 		Location loc = place.getLocation();
 		double x = loc.getX(), y = loc.getY(), z = loc.getZ();

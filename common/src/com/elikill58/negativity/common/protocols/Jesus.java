@@ -18,6 +18,8 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.api.item.Enchantment;
+import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
@@ -101,11 +103,12 @@ public class Jesus extends Cheat implements Listeners {
 		}
 		
 		if(checkActive("distance-in") && !p.hasPotionEffect(PotionEffectType.SPEED) && !np.isInFight) {
+			int depthStriderLevel = p.getInventory().getBoots().orElse(ItemBuilder.Builder(Materials.AIR).build()).getEnchantLevel(Enchantment.DEPTH_STRIDER);
 			double distanceAbs = to.distance(from) - Math.abs(from.getY() - to.getY());
 			Location upper = loc.clone().add(0, 1, 0);
 			float distanceFall = p.getFallDistance();
-			if (isInWater && isOnWater && distanceFall < 1 && distanceAbs > p.getWalkSpeed()
-					&& !upper.getBlock().isLiquid() && !p.isFlying()) {
+			if (isInWater && isOnWater && distanceFall < 1 && distanceAbs > (p.getWalkSpeed() * depthStriderLevel * (4/3))
+					&& !upper.getBlock().isLiquid() && !p.isFlying() && !p.getInventory().getBoots().orElse(ItemBuilder.Builder(Materials.AIR).build()).hasEnchant(Enchantment.DIG_SPEED)) {
 				if (!hasMaterialsAround(loc, "WATER_LILY") && !hasMaterialsAround(upper, "WATER_LILY")
 						&& !hasOtherThan(under, "WATER")) {
 					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98, "distance-in",

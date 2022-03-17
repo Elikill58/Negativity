@@ -1,8 +1,9 @@
 package com.elikill58.negativity.api.item;
 
 public enum Enchantment {
-	
+
 	DIG_SPEED("minecraft:efficiency"),
+	DEPTH_STRIDER("minecraft:depth_strider"),
 	THORNS("minecraft:thorns"),
 	UNBREAKING("minecraft:unbreaking"),
 	SOUL_SPEED("minecraft:soul_speed");

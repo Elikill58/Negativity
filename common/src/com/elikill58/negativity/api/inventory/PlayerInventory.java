@@ -1,5 +1,7 @@
 package com.elikill58.negativity.api.inventory;
 
+import java.util.Optional;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.item.ItemStack;
@@ -62,36 +64,31 @@ public abstract class PlayerInventory extends Inventory {
 	
 	/**
 	 * Get current helmet.
-	 * Return null if no armor present.
 	 * 
 	 * @return the current helmet
 	 */
 	@Nullable
-	public abstract ItemStack getHelmet();
+	public abstract Optional<ItemStack> getHelmet();
 	/**
 	 * Get current chestplate.
-	 * Return null if no armor present.
 	 * 
 	 * @return the current chestplate
 	 */
 	@Nullable
-	public abstract ItemStack getChestplate();
+	public abstract Optional<ItemStack> getChestplate();
 	/**
 	 * Get current legging.
-	 * Return null if no armor present.
 	 * 
 	 * @return the current legging
 	 */
 	@Nullable
-	public abstract ItemStack getLegging();
+	public abstract Optional<ItemStack> getLegging();
 	/**
 	 * Get current boot.
-	 * Return null if no armor present.
 	 * 
 	 * @return the current boot
 	 */
-	@Nullable
-	public abstract ItemStack getBoots();
+	public abstract Optional<ItemStack> getBoots();
 	
 	/**
 	 * Get slot of the hold item by the player

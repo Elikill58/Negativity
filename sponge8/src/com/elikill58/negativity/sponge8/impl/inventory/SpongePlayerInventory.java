@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge8.impl.inventory;
 
+import java.util.Optional;
 import java.util.function.Supplier;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -27,10 +28,10 @@ public class SpongePlayerInventory extends PlayerInventory {
 	@Override
 	public ItemStack[] getArmorContent() {
 		ItemStack[] armor = new ItemStack[4];
-		armor[0] = getHelmet();
-		armor[1] = getChestplate();
-		armor[2] = getLegging();
-		armor[3] = getBoots();
+		armor[0] = getHelmet().orElse(null);
+		armor[1] = getChestplate().orElse(null);
+		armor[2] = getLegging().orElse(null);
+		armor[3] = getBoots().orElse(null);
 		return armor;
 	}
 
@@ -118,22 +119,22 @@ public class SpongePlayerInventory extends PlayerInventory {
 	}
 
 	@Override
-	public @Nullable ItemStack getHelmet() {
+	public Optional<ItemStack> getHelmet() {
 		return getEquipment(EquipmentTypes.HEAD);
 	}
 
 	@Override
-	public @Nullable ItemStack getChestplate() {
+	public Optional<ItemStack> getChestplate() {
 		return getEquipment(EquipmentTypes.CHEST);
 	}
 
 	@Override
-	public @Nullable ItemStack getLegging() {
+	public Optional<ItemStack> getLegging() {
 		return getEquipment(EquipmentTypes.LEGS);
 	}
 
 	@Override
-	public @Nullable ItemStack getBoots() {
+	public Optional<ItemStack> getBoots() {
 		return getEquipment(EquipmentTypes.FEET);
 	}
 	
@@ -145,8 +146,9 @@ public class SpongePlayerInventory extends PlayerInventory {
 		return stack == null ? org.spongepowered.api.item.inventory.ItemStack.empty() : ((org.spongepowered.api.item.inventory.ItemStack) stack.getDefault());
 	}
 	
-	private @Nullable ItemStack getEquipment(Supplier<EquipmentType> equipment) {
-		return nonEmptyOrNull(p.equipped(equipment.get()).orElse(null));
+	private Optional<ItemStack> getEquipment(Supplier<EquipmentType> equipment) {
+		org.spongepowered.api.item.inventory.ItemStack spongeItem = p.equipped(equipment.get()).orElse(null);
+		return spongeItem == null || spongeItem.isEmpty() ? Optional.empty() : Optional.of(new SpongeItemStack(spongeItem));
 	}
 	
 	private @Nullable ItemStack nonEmptyOrNull(org.spongepowered.api.item.inventory.@Nullable ItemStack stack) {

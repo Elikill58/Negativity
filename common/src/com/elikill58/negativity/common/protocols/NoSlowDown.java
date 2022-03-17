@@ -2,6 +2,8 @@ package com.elikill58.negativity.common.protocols;
 
 import static com.elikill58.negativity.universal.detections.keys.CheatKeys.NO_SLOW_DOWN;
 
+import java.util.Optional;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
@@ -45,8 +47,8 @@ public class NoSlowDown extends Cheat implements Listeners {
 		Player p = e.getPlayer();
 		Location loc = p.getLocation();
 	    if(Version.getVersion().isNewerOrEquals(Version.V1_16)) {
-		    ItemStack boots = p.getInventory().getBoots();
-		    if(boots != null && boots.hasEnchant(Enchantment.SOUL_SPEED))
+		    Optional<ItemStack> boots = p.getInventory().getBoots();
+		    if(boots.isPresent() && boots.get().hasEnchant(Enchantment.SOUL_SPEED))
 		    	return;
 	    }
 	    if(p.hasPotionEffect(PotionEffectType.SPEED)) {

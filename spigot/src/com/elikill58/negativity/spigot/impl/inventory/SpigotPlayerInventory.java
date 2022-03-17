@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.impl.inventory;
 
+import java.util.Optional;
+
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.inventory.InventoryType;
@@ -17,13 +19,13 @@ public class SpigotPlayerInventory extends PlayerInventory {
 		this.inv = inv;
 	}
 	
-	private SpigotItemStack getItem(org.bukkit.inventory.ItemStack item) {
-		return item == null ? null : new SpigotItemStack(item);
+	private Optional<ItemStack> getItem(org.bukkit.inventory.ItemStack item) {
+		return item == null ? Optional.empty() : Optional.of(new SpigotItemStack(item));
 	}
 	
 	@Override
 	public ItemStack get(int slot) {
-		return getItem(inv.getItem(slot));
+		return getItem(inv.getItem(slot)).orElse(null);
 	}
 
 	@Override
@@ -53,10 +55,10 @@ public class SpigotPlayerInventory extends PlayerInventory {
 
 	@Override
 	public ItemStack[] getArmorContent() {
-		SpigotItemStack[] items = new SpigotItemStack[inv.getArmorContents().length];
+		ItemStack[] items = new ItemStack[inv.getArmorContents().length];
 		int i = 0;
 		for(org.bukkit.inventory.ItemStack tempItem : inv.getArmorContents()) {
-			items[i] = getItem(tempItem);
+			items[i] = getItem(tempItem).orElse(null);
 			i++;
 		}
 		return items;
@@ -121,22 +123,22 @@ public class SpigotPlayerInventory extends PlayerInventory {
 	}
 
 	@Override
-	public @Nullable ItemStack getHelmet() {
+	public Optional<ItemStack> getHelmet() {
 		return getItem(inv.getHelmet());
 	}
 
 	@Override
-	public @Nullable ItemStack getChestplate() {
+	public Optional<ItemStack> getChestplate() {
 		return getItem(inv.getChestplate());
 	}
 
 	@Override
-	public @Nullable ItemStack getLegging() {
+	public Optional<ItemStack> getLegging() {
 		return getItem(inv.getLeggings());
 	}
 
 	@Override
-	public @Nullable ItemStack getBoots() {
+	public Optional<ItemStack> getBoots() {
 		return getItem(inv.getBoots());
 	}
 	

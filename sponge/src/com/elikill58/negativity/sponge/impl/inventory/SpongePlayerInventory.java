@@ -26,17 +26,17 @@ public class SpongePlayerInventory extends PlayerInventory {
 		this.inv = p.getInventory().query(QueryOperationTypes.INVENTORY_TYPE.of(MainPlayerInventory.class));
 	}
 	
-	private ItemStack getItem(Optional<org.spongepowered.api.item.inventory.ItemStack> opt) {
-		return opt.isPresent() ? new SpongeItemStack(opt.get()) : null;
+	private Optional<ItemStack> getItem(Optional<org.spongepowered.api.item.inventory.ItemStack> opt) {
+		return opt.isPresent() ? Optional.of(new SpongeItemStack(opt.get())) : Optional.empty();
 	}
 
 	@Override
 	public ItemStack[] getArmorContent() {
 		ItemStack[] armor = new ItemStack[4];
-		armor[0] = getItem(p.getHelmet());
-		armor[1] = getItem(p.getChestplate());
-		armor[2] = getItem(p.getLeggings());
-		armor[3] = getItem(p.getBoots());
+		armor[0] = getItem(p.getHelmet()).orElse(null);
+		armor[1] = getItem(p.getChestplate()).orElse(null);
+		armor[2] = getItem(p.getLeggings()).orElse(null);
+		armor[3] = getItem(p.getBoots()).orElse(null);
 		return armor;
 	}
 
@@ -127,22 +127,22 @@ public class SpongePlayerInventory extends PlayerInventory {
 	}
 
 	@Override
-	public @Nullable ItemStack getHelmet() {
+	public Optional<ItemStack> getHelmet() {
 		return getItem(p.getHelmet());
 	}
 
 	@Override
-	public @Nullable ItemStack getChestplate() {
+	public Optional<ItemStack> getChestplate() {
 		return getItem(p.getChestplate());
 	}
 
 	@Override
-	public @Nullable ItemStack getLegging() {
+	public Optional<ItemStack> getLegging() {
 		return getItem(p.getLeggings());
 	}
 
 	@Override
-	public @Nullable ItemStack getBoots() {
+	public Optional<ItemStack> getBoots() {
 		return getItem(p.getBoots());
 	}
 	

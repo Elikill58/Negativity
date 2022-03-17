@@ -8,6 +8,7 @@ import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
@@ -32,7 +33,8 @@ public class Nuker extends Cheat {
 	public void onBlockBreak(BlockBreakEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Block b = e.getBlock();
-		if(p.hasPotionEffect(PotionEffectType.HASTE) || b == null || !b.getType().isSolid() || isInstantBlock(b.getType().getId()))
+		Material type = b.getType();
+		if(p.hasPotionEffect(PotionEffectType.HASTE) || b == null || !type.isSolid() || isInstantBlock(type.getId()))
 			return;
 		int ping = p.getPing();
 		Adapter.getAdapter().runSync(() -> {
@@ -52,7 +54,7 @@ public class Nuker extends Cheat {
 						bestDistance = distance;
 					}
 				}
-				if ((bestBlock.getType() != e.getBlock().getType()) && bestDistance > (p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4) && bestBlock.getType() != Materials.AIR && bestDistance != Double.MAX_VALUE) {
+				if (bestDistance != Double.MAX_VALUE && (bestBlock.getType() != type) && bestDistance > (p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4) && bestBlock.getType() != Materials.AIR) {
 					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(bestDistance * 15 - ping), "distance",
 							"BlockDig " + b.toString() + ", player see " + bestBlock.toString() + ". Distance between blocks " + bestDistance + " block.");
 					if(isSetBack() && mayCancel)

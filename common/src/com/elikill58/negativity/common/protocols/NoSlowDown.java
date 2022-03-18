@@ -66,7 +66,7 @@ public class NoSlowDown extends Cheat implements Listeners {
 					if((from.getY() - to.getY()) < -0.001)
 						return;
 					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "move",
-							"Soul sand under player. Distance from/to : " + distance + ". WalkSpeed: " + p.getWalkSpeed() + ", VelY: " + p.getVelocity().getY(),
+							"Soul sand under player. Distance from/to : " + distance + ". WalkSpeed: " + p.getWalkSpeed() + ", VelY: " + p.getVelocity(),
 							hoverMsg("main", "%distance%", String.format("%.2f", distance)));
 					if (mayCancel && isSetBack())
 						e.setCancelled(true);

@@ -51,6 +51,8 @@ public class Reach extends Cheat {
 				Entity cible = np.entities.remove(getKey(), "entity-hit-object");
 				if(np.isTeleporting)
 					return; // just beeing tp
+				if(cible instanceof Player && NegativityPlayer.getNegativityPlayer((Player) cible).isTeleporting)
+					return;
 				Location loc = p.getLocation();
 				Adapter.getAdapter().debug("Positions: " + positions + ", locs: " + loc);
 				double dis = getDistance(loc, positions);

@@ -70,7 +70,7 @@ public class Reach extends Cheat {
 			}
 		} else if (packet instanceof NPacketPlayInUseEntity) {
 			NPacketPlayInUseEntity useEntity = (NPacketPlayInUseEntity) packet;
-			if (!useEntity.action.equals(NPacketPlayInUseEntity.EnumEntityUseAction.ATTACK))
+			if (!useEntity.action.equals(NPacketPlayInUseEntity.EnumEntityUseAction.ATTACK) || p.hasElytra())
 				return;
 			ItemStack inHand = p.getItemInHand();
 			if (inHand != null && IGNORED_TYPE.contains(inHand.getType()))

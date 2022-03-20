@@ -14,7 +14,6 @@ import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.protocols.Check;
@@ -45,7 +44,7 @@ public class Reach extends Cheat {
 	public void onPacketReceive(PacketReceiveEvent e, NegativityPlayer np) {
 		NPacket packet = e.getPacket().getPacket();
 		Player p = e.getPlayer();
-		if (packet.getPacketType().equals(PacketType.Client.POSITION)) {
+		if (packet.getPacketType().isFlyingPacket()) {
 			if (np.locations.has(getKey(), "entity-hit-position")) {
 				Location positions = np.locations.remove(getKey(), "entity-hit-position");
 				Entity cible = np.entities.remove(getKey(), "entity-hit-object");

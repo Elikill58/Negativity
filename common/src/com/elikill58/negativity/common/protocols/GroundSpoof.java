@@ -43,7 +43,7 @@ public class GroundSpoof extends Cheat {
             return;
         }
         double diffY = e.getTo().getY() - e.getFrom().getY();
-        if(diffY >= 0.3 || diffY < 0)
+        if(diffY >= 0.3 || diffY <= 0)
         	return;
         boolean b = np.booleans.get(getKey(), "was-alert", false);
         if(b)

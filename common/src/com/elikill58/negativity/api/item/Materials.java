@@ -80,7 +80,7 @@ public class Materials {
     public static final Material REDSTONE_TORCH_ON = ItemRegistrar.getInstance().get("redstone_torch_on", "redstone_torch");
     public static final Material REDSTONE_TORCH_OFF = ItemRegistrar.getInstance().get("redstone_torch_off", "redstone_torch");
     
-    public static final Material SCAFFOLD = ItemRegistrar.getInstance().get("scaffold", "ladder", "scaffolding");
+    public static final Material SCAFFOLD = ItemRegistrar.getInstance().get("scaffold", "scaffolding", "ladder");
     public static final Material SOUL_SAND = ItemRegistrar.getInstance().get("soul_sand");
     public static final Material SKELETON_SKULL = ItemRegistrar.getInstance().get("skeleton_skull", "skull_item", "skull");
     public static final Material SLIME_BALL = ItemRegistrar.getInstance().get("slime_ball", "emerald"); // emerald for 1.7 support

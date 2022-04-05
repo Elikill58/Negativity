@@ -154,7 +154,7 @@ public class PacketContent {
 				try {
 					if(clazz == null || f.getType().isAssignableFrom(clazz)) {
 						f.setAccessible(true);
-						content.put(f, (T) f.get(obj));
+						addIfNotNull(f, (T) f.get(obj));
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -165,13 +165,18 @@ public class PacketContent {
 					try {
 						if(clazz == null || f.getType().isAssignableFrom(clazz)) {
 							f.setAccessible(true);
-							content.put(f, (T) f.get(obj));
+							addIfNotNull(f, (T) f.get(obj));
 						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
 			}
+		}
+		
+		private void addIfNotNull(Field f, T o) {
+			if(o != null)
+				content.put(f, o);
 		}
 		
 		/**

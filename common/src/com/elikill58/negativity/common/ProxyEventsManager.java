@@ -108,6 +108,6 @@ public class ProxyEventsManager implements Listeners {
 		if (targetPlayerServer.equals(notifiedPlayerServer)) {
 			return "/negativitytp " + targetPlayer.getName();
 		}
-		return "/server " + notifiedPlayerServer;
+		return "/server " + targetPlayerServer;
 	}
 }

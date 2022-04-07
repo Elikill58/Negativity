@@ -1,14 +1,13 @@
 package com.elikill58.negativity.api.packets.packet.playout;
 
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
 
-public class NPacketPlayOutExplosion implements NPacketPlayOut {
+public class NPacketPlayOutExplosion implements NPacketPlayOut, LocatedPacket {
 
-	public double x;
-	public double y;
-	public double z;
+	public double x, y, z;
 	public Vector vec;
 	
 	public NPacketPlayOutExplosion() {
@@ -20,6 +19,21 @@ public class NPacketPlayOutExplosion implements NPacketPlayOut {
 		this.y = y;
 		this.z = z;
 		this.vec = new Vector(vecX, vecY, vecZ);
+	}
+	
+	@Override
+	public double getX() {
+		return x;
+	}
+	
+	@Override
+	public double getY() {
+		return y;
+	}
+	
+	@Override
+	public double getZ() {
+		return z;
 	}
 
 	@Override

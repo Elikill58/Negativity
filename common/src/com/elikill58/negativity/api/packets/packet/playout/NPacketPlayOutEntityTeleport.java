@@ -1,14 +1,13 @@
 package com.elikill58.negativity.api.packets.packet.playout;
 
+import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
 
-public class NPacketPlayOutEntityTeleport implements NPacketPlayOut {
+public class NPacketPlayOutEntityTeleport implements NPacketPlayOut, LocatedPacket {
 
 	public int entityId;
-	public double x;
-	public double y;
-	public double z;
+	public double x, y, z;
 	public float yaw;
 	public float pitch;
 	public boolean onGround;
@@ -25,6 +24,21 @@ public class NPacketPlayOutEntityTeleport implements NPacketPlayOut {
 		this.yaw = yaw;
 		this.pitch = pitch;
 		this.onGround = onGround;
+	}
+	
+	@Override
+	public double getX() {
+		return x;
+	}
+	
+	@Override
+	public double getY() {
+		return y;
+	}
+	
+	@Override
+	public double getZ() {
+		return z;
 	}
 
 	@Override

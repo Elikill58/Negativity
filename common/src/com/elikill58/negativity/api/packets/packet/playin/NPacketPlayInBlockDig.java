@@ -1,11 +1,10 @@
 package com.elikill58.negativity.api.packets.packet.playin;
 
-import com.elikill58.negativity.api.block.Block;
-import com.elikill58.negativity.api.location.World;
+import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 
-public class NPacketPlayInBlockDig implements NPacketPlayIn {
+public class NPacketPlayInBlockDig implements NPacketPlayIn, LocatedPacket {
 
 	public int x, y, z;
 	public DigFace face;
@@ -22,9 +21,20 @@ public class NPacketPlayInBlockDig implements NPacketPlayIn {
 		this.face = face;
 		this.action = action;
 	}
-	
-	public Block getBlock(World w) {
-		return w.getBlockAt(x, y, z);
+
+	@Override
+	public double getX() {
+		return x;
+	}
+
+	@Override
+	public double getY() {
+		return y;
+	}
+
+	@Override
+	public double getZ() {
+		return z;
 	}
 
 	@Override

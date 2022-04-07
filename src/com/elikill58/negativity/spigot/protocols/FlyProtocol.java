@@ -116,10 +116,12 @@ public class FlyProtocol extends Cheat implements Listener {
 
 		boolean onGround = ((Entity) p).isOnGround(), wasOnGround = np.contentBoolean.getOrDefault("fly-wasOnGround", true);
 		boolean hasBoatAround = p.getWorld().getNearbyEntities(loc, 3, 3, 3).stream().filter((entity) -> entity instanceof Boat).findFirst().isPresent();
-		if(p.getFallDistance() <= 0.000001 && np.flyMoveAmount.size() > 1 && !p.isInsideVehicle() && onGround == wasOnGround && p.getVelocity().length() == 0) {
+		if(p.getFallDistance() <= 0.000001 && np.flyMoveAmount.size() > 1 && !p.isInsideVehicle() && onGround == wasOnGround && !np.isInFight) {
 			int size = np.flyMoveAmount.size();
 			int amount = 0;
 			for(int x = 1; x < size - 1; x++) {
+				if(amount == 30) // limit for each move
+					break;
 				double last = np.flyMoveAmount.get(x - 1);
 				double current = np.flyMoveAmount.get(x);
 				if((last + current) == 0) {
@@ -132,8 +134,8 @@ public class FlyProtocol extends Cheat implements Listener {
 						amount++;
 				}
 			}
-			if(amount > 0) {
-				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + np.flyMoveAmount.size() + " > " + onGround + " : " + wasOnGround + ", d: " + d, (CheatHover) null, amount > 1 ? amount - 1 : 1);
+			if(amount > 1) {
+				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + np.flyMoveAmount.size() + " > " + onGround + " : " + wasOnGround + ", d: " + d, (CheatHover) null, amount);
 			}
 		}
 		if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY") || LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE") || hasBoatAround)

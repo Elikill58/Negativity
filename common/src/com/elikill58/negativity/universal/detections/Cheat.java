@@ -92,6 +92,15 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	}
 	
 	/**
+	 * Get the exact name of the cheat but for command (without special char, space ...)
+	 * 
+	 * @return the name formatted
+	 */
+	public String getCommandName() {
+		return config.getString("exact_name", key.getLowerKey()).replace(" ", "").replace("-", "").replace("_", "");
+	}
+	
+	/**
 	 * Check if a detection is active
 	 * 
 	 * @param checkName the name of the detection
@@ -263,7 +272,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	public static Cheat fromString(String name) {
 		for (Cheat c : Cheat.values()) {
 			try {
-				if (c.getKey().getKey().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name) || Arrays.asList(c.getAliases()).contains(name))
+				if (c.getKey().getKey().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name) || c.getCommandName().equalsIgnoreCase(name) || Arrays.asList(c.getAliases()).contains(name))
 					return c;
 			} catch (NullPointerException e) {
 				e.printStackTrace();

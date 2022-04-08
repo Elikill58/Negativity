@@ -453,8 +453,8 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				} else if (Adapter.getAdapter().getPlayer(arg[1]) != null) {
 					// /negativity verif <target> |
 					for (Cheat c : Cheat.values()) {
-						if (c.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
-							suggestions.add(c.getName());
+						if (c.getCommandName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
+							suggestions.add(c.getCommandName());
 						}
 					}
 				}

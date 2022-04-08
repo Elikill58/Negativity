@@ -79,7 +79,7 @@ public abstract class VersionAdapter<R> {
 	public NPacket getPacket(R player, Object nms, String packetName) {
 		try {
 			if (packetName.startsWith(PacketType.CLIENT_PREFIX) || packetName.startsWith("Serverbound"))
-				return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset(packetName)).apply(player, nms);
+				return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset(packetName, PacketType.getType(packetName))).apply(player, nms);
 			else if (packetName.startsWith(PacketType.SERVER_PREFIX) || packetName.startsWith("Clientbound"))
 				return packetsPlayOut.getOrDefault(packetName, (p, obj) -> new NPacketPlayOutUnset(packetName)).apply(player, nms);
 			else if (packetName.startsWith(PacketType.LOGIN_PREFIX))

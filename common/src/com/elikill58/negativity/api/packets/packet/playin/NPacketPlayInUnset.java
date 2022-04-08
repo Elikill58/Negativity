@@ -6,13 +6,15 @@ import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 public class NPacketPlayInUnset implements NPacketPlayIn {
 
 	public final String packetName;
+	public final PacketType type;
 	
-	public NPacketPlayInUnset(String packetName) {
+	public NPacketPlayInUnset(String packetName, PacketType type) {
 		this.packetName = packetName;
+		this.type = type;
 	}
 
 	@Override
 	public PacketType getPacketType() {
-		return PacketType.Client.UNSET;
+		return type;
 	}
 }

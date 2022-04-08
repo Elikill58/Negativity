@@ -1,8 +1,9 @@
 package com.elikill58.negativity.api.packets.packet.playin;
 
+import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 
-public class NPacketPlayInPositionLook extends NPacketPlayInFlying {
+public class NPacketPlayInPositionLook extends NPacketPlayInFlying implements LocatedPacket {
 
 	public NPacketPlayInPositionLook() {
 		

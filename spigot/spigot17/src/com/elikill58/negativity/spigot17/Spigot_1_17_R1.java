@@ -133,7 +133,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 					new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, ep),
 					ep.blockPosition());
 			if (hitResult == null) { // ignore because it should be only interact and not block pose
-				return new NPacketPlayInUnset("PacketPlayInBlockPlace");
+				return new NPacketPlayInUnset("PacketPlayInBlockPlace", PacketType.Client.BLOCK_PLACE);
 			}
 			if (hitResult.isInside()) {
 				BlockPos pos = hitResult.getBlockPos();
@@ -142,7 +142,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 						new Vector(vec.x, vec.y, vec.z));
 			} else {
 				p.sendMessage("Failed to find something " + ep.blockPosition());
-				return new NPacketPlayInUnset("PacketPlayInBlockPlace");
+				return new NPacketPlayInUnset("PacketPlayInBlockPlace", PacketType.Client.BLOCK_PLACE);
 			}
 		});
 		packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {

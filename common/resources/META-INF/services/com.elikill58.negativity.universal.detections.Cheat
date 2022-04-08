@@ -17,6 +17,7 @@ com.elikill58.negativity.common.protocols.FastStairs
 com.elikill58.negativity.common.protocols.Fly
 com.elikill58.negativity.common.protocols.ForceField
 com.elikill58.negativity.common.protocols.GroundSpoof
+com.elikill58.negativity.common.protocols.IncorrectPacket
 com.elikill58.negativity.common.protocols.InventoryMove
 com.elikill58.negativity.common.protocols.Jesus
 com.elikill58.negativity.common.protocols.NoFall

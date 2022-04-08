@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot.nms;
 
 import static com.elikill58.negativity.spigot.utils.Utils.VERSION;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
@@ -36,6 +37,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
@@ -45,6 +47,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosi
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
+import com.elikill58.negativity.api.utils.LocationUtils.Direction;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Adapter;
@@ -59,6 +62,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public SpigotVersionAdapter(String version) {
 		super(version);
+		Version v = Version.getVersion();
 		packetsPlayIn.put("PacketPlayInArmAnimation",
 				(p, packet) -> new NPacketPlayInArmAnimation(System.currentTimeMillis()));
 		packetsPlayIn.put("PacketPlayInChat", (p, packet) -> new NPacketPlayInChat(get(packet, "a")));
@@ -149,6 +153,28 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			return new NPacketPlayInEntityAction(get(f, "a"), action, get(f, "c"));
 		});
 		packetsPlayIn.put("PacketPlayInTransaction", (p, f) -> new NPacketPlayInPong((int) (short) get(f, "b")));
+		if(v.isNewerOrEquals(Version.V1_14)) {
+			packetsPlayIn.put("PacketPlayInUseItem", (p, f) -> {
+				Object movingObj = get(f, "a");
+				BlockPosition pos = getBlockPosition(get(movingObj, "c"));
+				return new NPacketPlayInUseItem(pos.getX(), pos.getY(), pos.getZ(), Direction.valueOf(getStr(movingObj, "b").toUpperCase()), get(f, "timestamp"));
+			});
+		} else {
+			packetsPlayIn.put("PacketPlayInUseItem", (p, f) -> {
+				BlockPosition pos = getBlockPosition(get(f, "a"));
+				long timestamp = 0l;
+				try {
+					Field timestampField = f.getClass().getDeclaredField("timestamp");
+					timestampField.setAccessible(true);
+					timestamp = timestampField.getLong(f);
+				} catch (NoSuchFieldException e) {
+					// it's an old version of spigot
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				return new NPacketPlayInUseItem(pos.getX(), pos.getY(), pos.getZ(), Direction.valueOf(getStr(f, "b").toUpperCase()), timestamp);
+			});
+		}
 		
 
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (p, packet) -> {

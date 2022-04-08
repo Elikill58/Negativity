@@ -23,6 +23,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
@@ -173,7 +174,7 @@ public interface PacketType {
 		PONG("Transaction", NPacketPlayInPong::new, "Transaction"),
 		UPDATE_SIGN("UpdateSign", NPacketUnknown::new),
 		USE_ENTITY("UseEntity", NPacketPlayInUseEntity::new),
-		USE_ITEM("UseItem", NPacketUnknown::new),
+		USE_ITEM("UseItem", NPacketPlayInUseItem::new),
 		VEHICLE_MOVE("VehicleMove", NPacketUnknown::new),
 		WINDOW_CLICK("WindowClick", NPacketUnknown::new),
 		UNSET("Unset", NPacketUnknown::new);

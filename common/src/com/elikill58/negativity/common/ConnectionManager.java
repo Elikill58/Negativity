@@ -48,7 +48,7 @@ public class ConnectionManager implements Listeners {
 			List<NegativityAccount> accounts = new ArrayList<>();
 			banOnIP.forEach((ban) -> accounts.add(NegativityAccount.get(ban.getPlayerId())));
 			
-			int warns = accounts.stream().mapToInt(NegativityAccount::countAllWarns).sum();
+			long warns = accounts.stream().mapToLong(NegativityAccount::countAllWarns).sum();
 			
 			AltAccountBan alt = BanManager.getAltBanFor(banOnIP.size() + 1);
 			if(alt != null && alt.hasCondition(warns, warns)) {

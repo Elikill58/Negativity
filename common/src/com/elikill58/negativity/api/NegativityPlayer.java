@@ -216,7 +216,7 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @param c the cheat
 	 * @return the number of warn made by the given cheat
 	 */
-	public int getWarn(Cheat c) {
+	public long getWarn(Cheat c) {
 		return getAccount().getWarn(c);
 	}
 
@@ -226,7 +226,7 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @param c the cheat
 	 * @return the number of warn made by the given cheat
 	 */
-	public int getAllWarn(Cheat c) {
+	public long getAllWarn(Cheat c) {
 		return getWarn(c);
 	}
 
@@ -295,7 +295,7 @@ public class NegativityPlayer implements FileSaverAction {
 	 * @param reliability the reliability of all warn
 	 * @param amount the amount of alert
 	 */
-	public void addWarn(Cheat c, int reliability, int amount) {
+	public void addWarn(Cheat c, int reliability, long amount) {
 		if (System.currentTimeMillis() < timeInvincibility || c.getReliabilityAlert() > reliability)
 			return;
 		NegativityAccount account = getAccount();

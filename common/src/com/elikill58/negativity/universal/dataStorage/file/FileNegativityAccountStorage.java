@@ -43,7 +43,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 				String language = config.getString("lang", TranslatedMessages.getDefaultLang());
 				Minerate minerate = deserializeMinerate(config.getInt("minerate-full-mined"), config.getSection("minerate"));
 				int mostClicksPerSecond = config.getInt("better-click");
-				Map<String, Integer> warns = deserializeViolations(config.getSection("cheats"));
+				Map<String, Long> warns = deserializeViolations(config.getSection("cheats"));
 				List<Report> reports = deserializeReports(config);
 				String IP = config.getString("ip", "0.0.0.0");
 				long creationTime = config.getLong("creation-time", System.currentTimeMillis());
@@ -113,20 +113,20 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 	}
 
 	private void serializeViolations(NegativityAccount account, Configuration cheatsSection) {
-		for (Map.Entry<String, Integer> entry : account.getAllWarns().entrySet()) {
+		for (Map.Entry<String, Long> entry : account.getAllWarns().entrySet()) {
 			String cheatKey = entry.getKey().toLowerCase(Locale.ROOT);
 			cheatsSection.set(cheatKey, entry.getValue());
 		}
 	}
 
-	private Map<String, Integer> deserializeViolations(@Nullable Configuration cheatsSection) {
-		Map<String, Integer> violations = new HashMap<>();
+	private Map<String, Long> deserializeViolations(@Nullable Configuration cheatsSection) {
+		Map<String, Long> violations = new HashMap<>();
 		if (cheatsSection == null) {
 			return violations;
 		}
 
 		for (String cheatKey : cheatsSection.getKeys()) {
-			violations.put(cheatKey, cheatsSection.getInt(cheatKey));
+			violations.put(cheatKey, cheatsSection.getLong(cheatKey));
 		}
 		return violations;
 	}

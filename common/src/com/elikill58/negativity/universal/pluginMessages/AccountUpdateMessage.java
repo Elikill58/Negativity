@@ -43,10 +43,10 @@ public class AccountUpdateMessage implements NegativityMessage {
 
 		int mostClicksPerSecond = input.readInt();
 
-		Map<String, Integer> warns = new HashMap<>();
+		Map<String, Long> warns = new HashMap<>();
 		int warnsEntriesCount = input.readInt();
 		for (int i = 0; i < warnsEntriesCount; i++) {
-			warns.put(input.readUTF(), input.readInt());
+			warns.put(input.readUTF(), input.readLong());
 		}
 		// TODO write and read report update message
 		String IP = input.readUTF();
@@ -75,11 +75,11 @@ public class AccountUpdateMessage implements NegativityMessage {
 
 		output.writeInt(account.getMostClicksPerSecond());
 
-		Map<String, Integer> warns = account.getAllWarns();
+		Map<String, Long> warns = account.getAllWarns();
 		output.writeInt(warns.size());
-		for (Map.Entry<String, Integer> warnEntry : warns.entrySet()) {
+		for (Map.Entry<String, Long> warnEntry : warns.entrySet()) {
 			output.writeUTF(warnEntry.getKey());
-			output.writeInt(warnEntry.getValue());
+			output.writeLong(warnEntry.getValue());
 		}
 		output.writeUTF(account.getIp());
 		output.writeLong(account.getCreationTime());

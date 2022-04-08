@@ -40,7 +40,7 @@ public class AlertOfflineInventory extends AbstractInventory<AlertOfflineHolder>
 				UniversalUtils.getMultipleOf(TO_SEE.size() + 3, 9, 1, 54), new AlertOfflineHolder(cible));
 		int slot = 0;
 		for (Cheat c : TO_SEE) {
-			int warn = account.getWarn(c);
+			long warn = account.getWarn(c);
 			if (c.getMaterial().getDefault() == null)
 				Adapter.getAdapter().getLogger().error("Cannot find material for cheat " + c.getName());
 			else
@@ -48,7 +48,7 @@ public class AlertOfflineInventory extends AbstractInventory<AlertOfflineHolder>
 						ItemBuilder.Builder(c.getMaterial())
 								.displayName(Messages.getMessage(p, "inventory.alerts.item_name", "%exact_name%",
 										c.getName(), "%warn%", warn))
-								.amount(warn == 0 ? 1 : warn).build());
+								.amount(warn == 0 ? 1 : (warn > Integer.MAX_VALUE ? 64 : (int) warn)).build());
 		}
 		inv.set(inv.getSize() - 3, ItemBuilder.Builder(Materials.BONE).displayName(ChatColor.RESET + "" + ChatColor.GRAY + "Clear").build());
 		inv.set(inv.getSize() - 2, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
@@ -69,7 +69,7 @@ public class AlertOfflineInventory extends AbstractInventory<AlertOfflineHolder>
 		}
 		int slot = 0;
 		for (Cheat c : TO_SEE) {
-			int warn = account.getWarn(c);
+			long warn = account.getWarn(c);
 			if (c.getMaterial().getDefault() == null)
 				Adapter.getAdapter().getLogger().error("Cannot find material for cheat " + c.getName());
 			else
@@ -77,7 +77,7 @@ public class AlertOfflineInventory extends AbstractInventory<AlertOfflineHolder>
 						ItemBuilder.Builder(c.getMaterial())
 								.displayName(Messages.getMessage(p, "inventory.alerts.item_name", "%exact_name%",
 										c.getName(), "%warn%", warn))
-								.amount(warn == 0 ? 1 : warn).build());
+								.amount(warn == 0 ? 1 : (warn > Integer.MAX_VALUE ? 64 : (int) warn)).build());
 		}
 		p.updateInventory();
 	}

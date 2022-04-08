@@ -25,7 +25,7 @@ public final class NegativityAccount {
 	private final Minerate minerate;
 	private int mostClicksPerSecond;
 	private final List<Report> reports;
-	private final Map<String, Integer> warns;
+	private final Map<String, Long> warns;
 	private final long creationTime;
 	private boolean inBanning = false, isMcLeaks = false, showAlert = true;
 
@@ -33,7 +33,7 @@ public final class NegativityAccount {
 		this(playerId, null, TranslatedMessages.getDefaultLang(), new Minerate(), 0, new HashMap<>(), new ArrayList<>(), "0.0.0.0", System.currentTimeMillis(), true);
 	}
 
-	public NegativityAccount(UUID playerId, String playerName, String lang, Minerate minerate, int mostClicksPerSecond, Map<String, Integer> warns, List<Report> reports, String ip, long creationTime, boolean showAlert) {
+	public NegativityAccount(UUID playerId, String playerName, String lang, Minerate minerate, int mostClicksPerSecond, Map<String, Long> warns, List<Report> reports, String ip, long creationTime, boolean showAlert) {
 		this.playerId = playerId;
 		this.playerName = playerName;
 		this.lang = lang;
@@ -81,27 +81,27 @@ public final class NegativityAccount {
 		this.mostClicksPerSecond = mostClicksPerSecond;
 	}
 
-	public int getWarn(String cheatKey) {
-		return warns.getOrDefault(cheatKey, 0);
+	public long getWarn(String cheatKey) {
+		return warns.getOrDefault(cheatKey, 0l);
 	}
 
-	public int getWarn(Cheat cheat) {
+	public long getWarn(Cheat cheat) {
 		return getWarn(cheat.getKey().getLowerKey());
 	}
 
-	public void setWarnCount(Cheat cheat, int count) {
+	public void setWarnCount(Cheat cheat, long count) {
 		setWarnCount(cheat.getKey().getLowerKey(), count);
 	}
 
-	public void setWarnCount(String cheatKey, int count) {
+	public void setWarnCount(String cheatKey, long count) {
 		warns.put(cheatKey, count);
 	}
 	
-	public int countAllWarns() {
-		return warns.values().stream().reduce(0, Integer::sum);
+	public long countAllWarns() {
+		return warns.values().stream().reduce(0l, Long::sum);
 	}
 
-	public Map<String, Integer> getAllWarns() {
+	public Map<String, Long> getAllWarns() {
 		return Collections.unmodifiableMap(warns);
 	}
 

@@ -80,7 +80,7 @@ public class AltAccountBan {
 	 * @param violations the violations of all players
 	 * @return true if has enough warns/violations
 	 */
-	public boolean hasCondition(int warns, int violations) {
+	public boolean hasCondition(long warns, long violations) {
 		if(conditions.isEmpty())
 			return true;
 		int minWarn = conditions.getOrDefault(ReportType.WARNING, 0);

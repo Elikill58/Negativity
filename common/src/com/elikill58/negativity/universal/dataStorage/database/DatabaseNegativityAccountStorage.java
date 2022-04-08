@@ -46,7 +46,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 					String language = result.getString("language");
 					Minerate minerate = deserializeMinerate(result.getInt("minerate_full_mined"), result.getString("minerate"));
 					int mostClicksPerSecond = result.getInt("most_clicks_per_second");
-					Map<String, Integer> warns = deserializeViolations(result.getString("violations_by_cheat"));
+					Map<String, Long> warns = deserializeViolations(result.getString("violations_by_cheat"));
 					List<Report> reports = deserializeReports(result.getString("reports"));
 					String IP = result.getString("ip");
 					long creationTime = result.getTimestamp("creation_time").getTime();
@@ -117,14 +117,14 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 
 	private static String serializeViolations(NegativityAccount account) {
 		StringJoiner joiner = new StringJoiner(";");
-		for (Map.Entry<String, Integer> entry : account.getAllWarns().entrySet()) {
+		for (Map.Entry<String, Long> entry : account.getAllWarns().entrySet()) {
 			joiner.add(entry.getKey() + '=' + entry.getValue());
 		}
 		return joiner.toString();
 	}
 
-	private static Map<String, Integer> deserializeViolations(String serialized) {
-		Map<String, Integer> violations = new HashMap<>();
+	private static Map<String, Long> deserializeViolations(String serialized) {
+		Map<String, Long> violations = new HashMap<>();
 		String[] fullEntries = serialized.split(";");
 		for (String fullEntry : fullEntries) {
 			String[] entry = fullEntry.split("=");
@@ -133,8 +133,7 @@ public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 			}
 
 			try {
-				int value = Integer.parseInt(entry[1]);
-				violations.put(entry[0], value);
+				violations.put(entry[0], Long.parseLong(entry[1]));
 			} catch (NumberFormatException e) {
 				Adapter.getAdapter().getLogger().warn("Malformed minerate value in entry " + fullEntry);
 			}

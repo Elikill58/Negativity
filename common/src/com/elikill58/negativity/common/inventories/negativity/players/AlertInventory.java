@@ -46,12 +46,14 @@ public class AlertInventory extends AbstractInventory<AlertHolder> {
 		for (Cheat c : TO_SEE) {
 			if (c.getMaterial().getDefault() == null)
 				Adapter.getAdapter().getLogger().error("Cannot find material for cheat " + c.getName());
-			else
+			else {
+				long warn = np.getWarn(c);
 				inv.set(slot++,
 						ItemBuilder.Builder(c.getMaterial())
 								.displayName(Messages.getMessage(p, "inventory.alerts.item_name", "%exact_name%",
 										c.getName(), "%warn%", np.getWarn(c)))
-								.amount(np.getWarn(c) == 0 ? 1 : np.getWarn(c)).build());
+								.amount(warn == 0 ? 1 : (warn > Integer.MAX_VALUE ? 64 : (int) warn)).build());
+			}
 		}
 		inv.set(inv.getSize() - 3, ItemBuilder.Builder(Materials.BONE).displayName(ChatColor.RESET + "" + ChatColor.GRAY + "Clear").build());
 		inv.set(inv.getSize() - 2, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
@@ -76,12 +78,14 @@ public class AlertInventory extends AbstractInventory<AlertHolder> {
 		for (Cheat c : TO_SEE)
 			if (c.getMaterial().getDefault() == null)
 				Adapter.getAdapter().getLogger().error("Cannot find material for cheat " + c.getName());
-			else
+			else {
+				long warn = np.getWarn(c);
 				inv.set(slot++,
 					ItemBuilder.Builder(c.getMaterial())
 							.displayName(Messages.getMessage(p, "inventory.alerts.item_name", "%exact_name%",
 									c.getName(), "%warn%", np.getWarn(c)))
-							.amount(np.getWarn(c) == 0 ? 1 : np.getWarn(c)).build());
+							.amount(warn == 0 ? 1 : (warn > Integer.MAX_VALUE ? 64 : (int) warn)).build());
+			}
 		p.updateInventory();
 	}
 

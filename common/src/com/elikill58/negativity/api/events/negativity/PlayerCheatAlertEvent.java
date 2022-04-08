@@ -11,17 +11,17 @@ public class PlayerCheatAlertEvent extends PlayerEvent implements CancellableEve
 
 	private final Cheat c;
 	private boolean cancel = false, hasRelia, alert;
-	private int relia, ping, nbAlert;
-	private int nbConsole;
+	private int relia, ping;
+	private long nbConsole, nbAlert;
 	private String proof;
 	private CheatHover hover;
 	private ReportType type;
 	
-	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert) {
+	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, long nbAlert) {
 		this(type, p, c, reliability, hasRelia, ping, proof, hover, nbAlert, 1);
 	}
 	
-	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert, int nbAlertConsole) {
+	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, long nbAlert, long nbAlertConsole) {
 		super(p);
 		this.type = type;
 		this.c = c;
@@ -81,7 +81,7 @@ public class PlayerCheatAlertEvent extends PlayerEvent implements CancellableEve
 		return hover;
 	}
 	
-	public int getNbAlert() {
+	public long getNbAlert() {
 		return nbAlert;
 	}
 	
@@ -89,7 +89,7 @@ public class PlayerCheatAlertEvent extends PlayerEvent implements CancellableEve
 		return (nbAlert > 1 ? "negativity.alert_multiple" : "negativity.alert");
 	}
 	
-	public int getNbAlertConsole() {
+	public long getNbAlertConsole() {
 		return nbConsole;
 	}
 	

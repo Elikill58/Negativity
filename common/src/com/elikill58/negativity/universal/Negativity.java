@@ -125,7 +125,7 @@ public class Negativity {
 	 * @return true if the player have to be set back
 	 */
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String checkName, String proof,
-			CheatHover hover, int amount) {
+			CheatHover hover, long amount) {
 		if(!c.isActive() || reliability < 55 || tpsDrop || amount == 0)
 			return false;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
@@ -274,7 +274,7 @@ public class Negativity {
 	}
 
 	private static void logProof(NegativityPlayer np, ReportType type, Player p, Cheat c, int reliability,
-			String checkName, String proof, int ping, int amount) {
+			String checkName, String proof, int ping, long amount) {
 		if(!log || type.equals(ReportType.INFO))
 			return;
 		String time = new Timestamp(System.currentTimeMillis()).toString().split("\\.")[0];

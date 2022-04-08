@@ -17,16 +17,15 @@ public class AlertMessage implements NegativityMessage {
 
 	private UUID playerId;
 	private String cheat;
-	private int reliability;
-	private int ping;
+	private int reliability, ping;
 	private Cheat.@Nullable CheatHover hoverInfo;
-	private int alertsCount;
+	private long alertsCount;
 
 	public AlertMessage() {
 		this(UUID.fromString("00000000-0000-0000-0000-000000000000"), "", -1, -1, null, 0);
 	}
 
-	public AlertMessage(UUID playerId, String cheat, int reliability, int ping, Cheat.@Nullable CheatHover hoverInfo, int alertsCount) {
+	public AlertMessage(UUID playerId, String cheat, int reliability, int ping, Cheat.@Nullable CheatHover hoverInfo, long alertsCount) {
 		this.playerId = playerId;
 		this.cheat = cheat;
 		this.reliability = reliability;
@@ -47,7 +46,7 @@ public class AlertMessage implements NegativityMessage {
 		reliability = input.readInt();
 		ping = input.readInt();
 		hoverInfo = readCheatHover(input);
-		alertsCount = input.readInt();
+		alertsCount = input.readLong();
 	}
 
 	@Override
@@ -57,7 +56,7 @@ public class AlertMessage implements NegativityMessage {
 		output.writeInt(reliability);
 		output.writeInt(ping);
 		writeCheatHover(hoverInfo, output);
-		output.writeInt(alertsCount);
+		output.writeLong(alertsCount);
 	}
 
 	private Cheat.@Nullable CheatHover readCheatHover(DataInputStream input) throws IOException {
@@ -108,7 +107,7 @@ public class AlertMessage implements NegativityMessage {
 		return hoverInfo;
 	}
 
-	public int getAlertsCount() {
+	public long getAlertsCount() {
 		return alertsCount;
 	}
 

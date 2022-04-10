@@ -21,6 +21,11 @@ public class NPacketPlayInBlockDig implements NPacketPlayIn, LocatedPacket {
 		this.face = face;
 		this.action = action;
 	}
+	
+	@Override
+	public boolean hasLocation() {
+		return action == DigAction.START_DIGGING || action == DigAction.CANCEL_DIGGING || action == DigAction.FINISHED_DIGGING;
+	}
 
 	@Override
 	public double getX() {

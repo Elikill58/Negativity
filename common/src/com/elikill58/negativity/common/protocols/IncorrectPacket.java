@@ -32,6 +32,8 @@ public class IncorrectPacket extends Cheat {
 		NPacket packet = e.getPacket().getPacket();
 		if (packet instanceof LocatedPacket && !allowedFarPacket.contains(packet.getPacketType())) {
 			LocatedPacket lp = (LocatedPacket) packet;
+			if(!lp.hasLocation())
+				return;
 			Player p = e.getPlayer();
 			Location loc = p.getLocation();
 			double dx = loc.getX() - lp.getX() + 0.5D;
@@ -41,7 +43,7 @@ public class IncorrectPacket extends Cheat {
 			if (distance > 36) { // distance originally used by spigot
 				e.setCancelled(true); // cancel. Everytime.
 				int relia = UniversalUtils.parseInPorcent(distance * (distance < 100 ? 2.5 : 1));
-				int amount = (int) (distance < 1000 ? distance - 36 : distance);
+				int amount = (int) (distance < 1000 ? distance - 36 : distance / 10);
 				if (amount <= 0)
 					amount = 1;
 				Negativity.alertMod(distance > 1000 ? ReportType.VIOLATION : ReportType.WARNING, p, this, relia,

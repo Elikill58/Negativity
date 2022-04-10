@@ -2,10 +2,11 @@ package com.elikill58.negativity.api.packets.packet.playin;
 
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
+import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 
-public class NPacketPlayInFlying implements NPacketPlayIn {
+public class NPacketPlayInFlying implements NPacketPlayIn, LocatedPacket {
 
 	public double x, y, z;
 	public float yaw, pitch;
@@ -26,6 +27,11 @@ public class NPacketPlayInFlying implements NPacketPlayIn {
 		this.hasLook = hasLook;
 	}
 	
+	@Override
+	public boolean hasLocation() {
+		return hasPos;
+	}
+	
 	/**
 	 * Warn: THIS CAN RETURN NULL.<br>
 	 * If return a {@link Location} object but only according to {@link #hasPos} and {@link #hasLook} values.<br>
@@ -42,15 +48,18 @@ public class NPacketPlayInFlying implements NPacketPlayIn {
 		else
 			return null; // no real location
 	}
-	
+
+	@Override
 	public double getX() {
 		return x;
 	}
-	
+
+	@Override
 	public double getY() {
 		return y;
 	}
-	
+
+	@Override
 	public double getZ() {
 		return z;
 	}

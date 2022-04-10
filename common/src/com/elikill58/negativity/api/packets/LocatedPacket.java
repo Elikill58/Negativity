@@ -16,6 +16,15 @@ import com.elikill58.negativity.universal.utils.Maths;
  */
 public interface LocatedPacket {
 
+	/**
+	 * Check if this packet has valid location
+	 * 
+	 * @return true if location is valid
+	 */
+	default boolean hasLocation() {
+		return !(getX() == 0 && getY() == 0 && getZ() == 0) || !(getX() == -1 && getY() == -1 && getZ() == -1);
+	}
+	
 	double getX();
 
 	default int getBlockX() {

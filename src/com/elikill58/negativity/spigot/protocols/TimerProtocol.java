@@ -56,6 +56,8 @@ public class TimerProtocol extends Cheat implements Listener {
 		int middle = medianList.size() / 2;
 		int medianValue = (medianList.size() % 2 == 1) ? medianList.get(middle) : (int) ((medianList.get(middle-1) + medianList.get(middle)) / 2.0);
 		boolean medianRespect = MAX_VARIATION > medianValue;
+		if(!medianRespect) // prevent false flag
+			return;
 		int amount = (int) (sum - MAX_VARIATION);
 		SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (np.ping / 100) - (medianRespect ? 15 : -10)),
 				"Flying: " + flying + ", position: " + position + ", look: " + look + ", positionLook: " + positonLook + ", sum: " + sum + ", median: " + medianValue,

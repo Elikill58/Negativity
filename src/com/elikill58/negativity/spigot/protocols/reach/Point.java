@@ -26,4 +26,16 @@ public class Point {
 	public double square(double a) {
 		return a * a;
 	}
+	
+	public double getX() {
+		return x;
+	}
+	
+	public double getY() {
+		return y;
+	}
+	
+	public double getZ() {
+		return z;
+	}
 }

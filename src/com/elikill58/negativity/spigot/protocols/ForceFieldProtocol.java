@@ -48,7 +48,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.LOWEST)
-	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) {
+	public void onEntityDamageByEntity(EntityDamageByEntityEvent e) throws Exception {
 		if (!(e.getDamager() instanceof Player) || e.isCancelled() || e.getCause() != DamageCause.ENTITY_ATTACK)
 			return;
 		Player p = (Player) e.getDamager();
@@ -60,12 +60,14 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		EntityType type = e.getEntityType();
 		if(type == EntityType.ENDER_DRAGON || type.name().contains("PHANTOM") || type.name().contains("BALL") || type.name().contains("TNT") || type.name().contains("ARROW"))
 			return;
-		Entity cible = e.getEntity();
-		Object pBB = PacketUtils.getBoundingBox(p);
-		Object cibleBB = PacketUtils.getBoundingBox(cible);
-		double dis = distance(pBB, cibleBB);
 		ItemStack inHand = Utils.getItemInHand(p);
 		if(inHand == null || !inHand.getType().equals(Material.BOW)) {
+			Entity cible = e.getEntity();
+			Object pBB = PacketUtils.getBoundingBox(p);
+			Object cibleBB = PacketUtils.getBoundingBox(cible);
+			double oldDistance = distance(pBB, cibleBB);
+			double dis = new Rect(cibleBB).distance(p);
+			Adapter.getAdapter().debug("Distance: " + dis + ", old: " + oldDistance);
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 			Material blockType = p.getLocation().getBlock().getType();
 			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !blockType.name().contains("WATER") && !blockType.name().contains("LAVA")) {

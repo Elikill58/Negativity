@@ -77,7 +77,11 @@ public class Stats {
 	}
 	
 	public static void loadStats() {
-		Runnable task = () -> {
+		if(!Adapter.getAdapter().getConfig().getBoolean("stats")) {
+			STATS_IN_MAINTENANCE = true;
+			return;
+		}
+		Adapter.getAdapter().runAsync(() -> {
 			try {
 				if(!UniversalUtils.HAVE_INTERNET)
 					STATS_IN_MAINTENANCE = true;
@@ -90,8 +94,7 @@ public class Stats {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		};
-		Adapter.getAdapter().runAsync(task);
+		});
 		/*try {
 			THREAD_POOL.submit(task);
 		} catch (RejectedExecutionException e) {

@@ -70,9 +70,10 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 			Adapter.getAdapter().debug("Distance: " + dis + ", old: " + oldDistance);
 			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 			Material blockType = p.getLocation().getBlock().getType();
-			if (dis > Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach") && !blockType.name().contains("WATER") && !blockType.name().contains("LAVA")) {
+			double maxReach = Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach");
+			if (dis > maxReach && !blockType.name().contains("WATER") && !blockType.name().contains("LAVA")) {
 				String entityName = Version.getVersion().equals(Version.V1_7) ? cible.getType().name().toLowerCase(Locale.ROOT) : cible.getName();
-				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 3 * 10),
+				boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * (oldDistance > maxReach ? 3 : 2) * 10),
 						"Big distance with: " + cible.getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns"
 						+ ". Ping: " + np.ping, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
 				if (isSetBack() && mayCancel)

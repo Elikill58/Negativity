@@ -113,6 +113,10 @@ public abstract class Inventory implements NegativityObject {
 	public static ItemStack getCloseItem(Player p) {
 		return ItemBuilder.Builder(Materials.BARRIER).displayName(Messages.getMessage(p, "inventory.close")).build();
 	}
+	
+	public static ItemStack getBackItem(Player p) {
+		return ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build();
+	}
 
 	public static final String NAME_CHECK_MENU = "Check", ADMIN_MENU = "Admin",
 			ADMIN_ALERT = Messages.getMessage("inventory.alerts.shower.manage"),

@@ -56,7 +56,7 @@ public class UniversalUtils {
 	public static boolean HAVE_INTERNET = true;
 
 	public static int getMultipleOf(int i, int multiple, int more) {
-		return getMultipleOf(i, multiple, more, -1);
+		return getMultipleOf(i, multiple, more, Integer.MAX_VALUE);
 	}
 
 	public static int getMultipleOf(int i, int multiple, int more, int limit) {

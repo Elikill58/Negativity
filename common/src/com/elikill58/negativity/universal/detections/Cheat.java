@@ -22,6 +22,7 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
+import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.common.protocols.CheckManager;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.TranslatedMessages;
@@ -44,6 +45,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	private boolean hasVerif;
 	private CheatCategory cheatCategory;
 	private final List<SetBackProcessor> setBackProcessor = new ArrayList<>();
+	private final List<Check> checks = new ArrayList<>();
 
 	/**
 	 * Create a new cheat object and load default config
@@ -108,6 +110,36 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	 */
 	public boolean checkActive(String checkName) {
 		return config.getBoolean("checks." + checkName + ".active", true);
+	}
+	
+	/**
+	 * Check if a detection is active
+	 * 
+	 * @param checkName the name of the detection
+	 * @return true if the detection is active
+	 */
+	public boolean checkActive(Check check) {
+		return config.getBoolean("checks." + check.name() + ".active", true);
+	}
+	
+	/**
+	 * Check if a detection is active
+	 * 
+	 * @param checkName the name of the detection
+	 * @param active if the check will be active
+	 */
+	public void setCheckActive(String checkName, boolean active) {
+		config.set("checks." + checkName + ".active", active);
+	}
+	
+	/**
+	 * Check if a detection is active
+	 * 
+	 * @param checkName the name of the detection
+	 * @param active if the check will be active
+	 */
+	public void setCheckActive(Check check, boolean active) {
+		config.set("checks." + check.name() + ".active", active);
 	}
 	
 	/**
@@ -260,6 +292,10 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	 */
 	public final <T> void recordData(UUID target, VerifData.DataType<T> type, T value) {
 		VerificationManager.recordData(target, this, type, value);
+	}
+	
+	public List<Check> getChecks() {
+		return checks;
 	}
 	
 	/**

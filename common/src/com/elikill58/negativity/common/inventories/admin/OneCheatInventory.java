@@ -23,24 +23,20 @@ public class OneCheatInventory extends AbstractInventory<OneCheatHolder> {
 	@Override
 	public void openInventory(Player p, Object... args){
 		Cheat c = (Cheat) args[0];
-		Inventory inv = Inventory.createInventory(c.getName(), 9, new OneCheatHolder(c));
+		Inventory inv = Inventory.createInventory(c.getName(), 27, new OneCheatHolder(c));
 		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		inv.set(0, ItemBuilder.Builder(c.getMaterial()).displayName(c.getName()).build());
-		actualizeInventory(p, c, inv);
+		inv.set(11, ItemBuilder.Builder(Materials.DIAMOND).displayName(Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))).build());
+		inv.set(12, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.manager.setBack.name", "%state%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))).lore(Messages.getMessage(p, "inventory.manager.setBack.lore")).build());
+		inv.set(13, ItemBuilder.Builder(Materials.BLAZE_ROD).displayName(Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))).build());
+		inv.set(14, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.manager.verif", "%verif%", Messages.getMessage(p, "inventory.manager." + (c.hasVerif() ? "enabled" : "disabled")))).build());
 		
-		inv.set(7, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
-		inv.set(8, Inventory.getCloseItem(p));
+		if(!c.getChecks().isEmpty())
+			inv.set(15, ItemBuilder.Builder(Materials.ENDER_CHEST).displayName("Checks").build());
+		
+		inv.set(8, Inventory.getBackItem(p));
+		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
 		p.openInventory(inv);
-	}
-	
-	@Override
-	public void actualizeInventory(Player p, Object... args) {
-		Cheat c = (Cheat) args[0];
-		Inventory inv = (Inventory) args[1];
-		inv.set(2, ItemBuilder.Builder(Materials.DIAMOND).displayName(Messages.getMessage(p, "inventory.manager.setActive", "%active%", Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled")))).build());
-		inv.set(3, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.manager.setBack.name", "%state%", Messages.getMessage(p, "inventory.manager." + (c.isSetBack() ? "enabled" : "disabled")))).lore(Messages.getMessage(p, "inventory.manager.setBack.lore")).build());
-		inv.set(4, ItemBuilder.Builder(Materials.BLAZE_ROD).displayName(Messages.getMessage(p, "inventory.manager.allowKick", "%allow%", Messages.getMessage(p, "inventory.manager." + (c.allowKick() ? "enabled" : "disabled")))).build());
-		inv.set(5, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.manager.verif", "%verif%", Messages.getMessage(p, "inventory.manager." + (c.hasVerif() ? "enabled" : "disabled")))).build());
 	}
 
 	@Override
@@ -49,21 +45,25 @@ public class OneCheatInventory extends AbstractInventory<OneCheatHolder> {
 			InventoryManager.open(NegativityInventory.ADMIN_CHEAT_MANAGER, p, true);
 			return;
 		}
-		Inventory inv = e.getClickedInventory();
 		Cheat c = nh.getCheat();
 		if (m.equals(c.getMaterial()))
 			return;
-		if(m.equals(Materials.TNT))
-			c.setBack(!c.isSetBack());
-		else if(m.equals(Materials.BLAZE_ROD))
-			c.setAllowKick(!c.allowKick());
-		else if(m.equals(Materials.DIAMOND))
-			c.setActive(!c.isActive());
-		else if(m.equals(Materials.APPLE))
-			c.setVerif(!c.hasVerif());
-		
-		c.saveConfig();
-		actualizeInventory(p, c, inv);
-		p.updateInventory();
+		if(m.equals(Materials.ENDER_CHEST)) {
+			InventoryManager.open(NegativityInventory.CHEAT_CHECKS, p, c);
+		} else {
+			if(m.equals(Materials.TNT))
+				c.setBack(!c.isSetBack());
+			else if(m.equals(Materials.BLAZE_ROD))
+				c.setAllowKick(!c.allowKick());
+			else if(m.equals(Materials.DIAMOND))
+				c.setActive(!c.isActive());
+			else if(m.equals(Materials.APPLE))
+				c.setVerif(!c.hasVerif());
+			else if(m.equals(Materials.ENDER_CHEST))
+				InventoryManager.open(NegativityInventory.CHEAT_CHECKS, p, c);
+			
+			c.saveConfig();
+			openInventory(p, c);
+		}
 	}
 }

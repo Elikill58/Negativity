@@ -36,6 +36,7 @@ public class Materials {
     public static final Material EMERALD_ORE = ItemRegistrar.getInstance().get("emerald_ore");
     public static final Material ELYTRA = ItemRegistrar.getInstance().get("elytra", "diamond_chestplate");
     public static final Material EYE_OF_ENDER = ItemRegistrar.getInstance().get("eye_of_ender", "ender_eye");
+    public static final Material ENDER_CHEST = ItemRegistrar.getInstance().get("ender_chest");
     
     public static final Material GHAST_TEAR = ItemRegistrar.getInstance().get("ghast_tear");
     public static final Material GOLD_ORE = ItemRegistrar.getInstance().get("gold_ore");

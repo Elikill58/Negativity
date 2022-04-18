@@ -57,6 +57,22 @@ public abstract class ItemBuilder {
 	 * @return this builder
 	 */
     public abstract ItemBuilder unsafeEnchant(Enchantment enchantment, int level);
+    
+    /**
+     * (unsafe) Enchant the item if the condition success and hide it
+     * 
+     * @param enchant the enchant to apply
+     * @param level the level of the enchant
+     * @param b if the enchant should be applied
+     * @return this builder
+     */
+    public ItemBuilder enchantIf(Enchantment enchant, int level, boolean b) {
+    	if(b) {
+    		unsafeEnchant(enchant, level);
+    		itemFlag(ItemFlag.HIDE_ENCHANTS);
+    	}
+    	return this;
+    }
 
     /**
      * Set the amount of the item.

@@ -43,6 +43,7 @@ public class CheckManager implements Listeners {
 					Adapter.getAdapter().getLogger().warn("Second parameter of check method " + possibleMethod.getName() + " must be NegativityPlayer.");
 					continue;
 				}
+				cheat.getChecks().add(check);
 				allChecks.add(new CheckMethod(cheat, check, possibleMethod, hasNegativityPlayer));
 			}
 		}

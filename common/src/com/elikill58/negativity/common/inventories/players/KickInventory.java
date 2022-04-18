@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories.negativity.players;
+package com.elikill58.negativity.common.inventories.players;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,7 +10,7 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.api.yaml.Configuration;
-import com.elikill58.negativity.common.inventories.holders.negativity.players.KickHolder;
+import com.elikill58.negativity.common.inventories.holders.players.KickHolder;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Sanction;
 import com.elikill58.negativity.universal.utils.UniversalUtils;

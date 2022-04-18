@@ -21,15 +21,15 @@ import com.elikill58.negativity.common.inventories.admin.OneSpecialInventory;
 import com.elikill58.negativity.common.inventories.admin.SpecialManagerInventory;
 import com.elikill58.negativity.common.inventories.mod.FreezeInventory;
 import com.elikill58.negativity.common.inventories.mod.ModInventory;
-import com.elikill58.negativity.common.inventories.negativity.players.ActivedCheatInventory;
-import com.elikill58.negativity.common.inventories.negativity.players.AlertInventory;
-import com.elikill58.negativity.common.inventories.negativity.players.AlertOfflineInventory;
-import com.elikill58.negativity.common.inventories.negativity.players.BanInventory;
-import com.elikill58.negativity.common.inventories.negativity.players.CheckMenuInventory;
-import com.elikill58.negativity.common.inventories.negativity.players.CheckMenuOfflineInventory;
-import com.elikill58.negativity.common.inventories.negativity.players.ForgeModsInventory;
-import com.elikill58.negativity.common.inventories.negativity.players.KickInventory;
-import com.elikill58.negativity.common.inventories.negativity.players.SeeReportInventory;
+import com.elikill58.negativity.common.inventories.players.ActivedCheatInventory;
+import com.elikill58.negativity.common.inventories.players.AlertInventory;
+import com.elikill58.negativity.common.inventories.players.AlertOfflineInventory;
+import com.elikill58.negativity.common.inventories.players.BanInventory;
+import com.elikill58.negativity.common.inventories.players.CheckMenuInventory;
+import com.elikill58.negativity.common.inventories.players.CheckMenuOfflineInventory;
+import com.elikill58.negativity.common.inventories.players.ForgeModsInventory;
+import com.elikill58.negativity.common.inventories.players.KickInventory;
+import com.elikill58.negativity.common.inventories.players.SeeReportInventory;
 
 public class InventoryManager implements Listeners {
 	

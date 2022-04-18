@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories.negativity.players;
+package com.elikill58.negativity.common.inventories.players;
 
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -10,7 +10,7 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
-import com.elikill58.negativity.common.inventories.holders.negativity.players.CheckMenuOfflineHolder;
+import com.elikill58.negativity.common.inventories.holders.players.CheckMenuOfflineHolder;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.account.NegativityAccount;

@@ -75,7 +75,7 @@ public class Rect {
 	public double distance(Player p) {
 		Vector origin = p.getEyeLocation().toVector();
 		RayTrace rayTrace = new RayTrace(p.getWorld(), origin, p.getEyeLocation().getDirection());
-		rayTrace.highlight(6.0, 0.01);
+		//rayTrace.highlight(6.0, 0.01);
 		try {
 			return origin.distance(rayTrace.positionOfIntersection(getMin(), getMax(), 6.0, 0.01));
 		} catch (Exception e) {

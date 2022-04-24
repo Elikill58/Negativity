@@ -91,7 +91,7 @@ public class NoFall extends Cheat {
 		}
 	}
 
-	@Check(name = "distance-ground", description = "DIstance when player in now on ground", conditions = { CheckConditions.GROUND, CheckConditions.NO_FALL_DISTANCE, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "distance-ground", description = "Distance when player in now on ground", conditions = { CheckConditions.GROUND, CheckConditions.NO_FALL_DISTANCE, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onMoveDistanceGround(PlayerMoveEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;

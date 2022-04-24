@@ -1,5 +1,6 @@
 package com.elikill58.negativity.common.inventories.admin;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
@@ -29,7 +30,8 @@ public class CheatChecksInventory extends AbstractInventory<CheatChecksHolder> {
 		int slot = 0;
 		for(Check check : c.getChecks()) {
 			holder.add(slot, check);
-			inv.set(slot++, ItemBuilder.Builder(c.getMaterial()).displayName(check.name()).lore(check.description()).enchantIf(Enchantment.UNBREAKING, 1, c.checkActive(check.name())).build());
+			String name = String.valueOf(check.name().charAt(0)).toUpperCase() + check.name().substring(1);
+			inv.set(slot++, ItemBuilder.Builder(c.getMaterial()).displayName(name).lore(ChatColor.GRAY + check.description()).enchantIf(Enchantment.UNBREAKING, 1, c.checkActive(check)).build());
 		}
 		
 		inv.set(inv.getSize() - 2, Inventory.getBackItem(p));

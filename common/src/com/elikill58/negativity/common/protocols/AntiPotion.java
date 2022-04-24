@@ -19,7 +19,7 @@ import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 public class AntiPotion extends Cheat implements Listeners {
 
 	public AntiPotion() {
-		super(CheatKeys.ANTI_POTION, CheatCategory.COMBAT, Materials.POTION, true, false, "antipopo", "nopotion", "anti-potion");
+		super(CheatKeys.ANTI_POTION, CheatCategory.COMBAT, Materials.POTION);
 	}
 
 	@EventListener

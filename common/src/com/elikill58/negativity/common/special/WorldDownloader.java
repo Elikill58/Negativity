@@ -15,7 +15,7 @@ import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
 public class WorldDownloader extends Special implements Listeners {
 
 	public WorldDownloader() {
-		super(SpecialKeys.WORLD_DOWNLOADER, Materials.GRASS, false);
+		super(SpecialKeys.WORLD_DOWNLOADER, Materials.GRASS);
 		Adapter.getAdapter().registerNewIncomingChannel(Version.getVersion().isNewerOrEquals(Version.V1_13) ? "wdl:init" : "WDL|INIT", (p, data) -> {
 			if(!isActive())
 				return;

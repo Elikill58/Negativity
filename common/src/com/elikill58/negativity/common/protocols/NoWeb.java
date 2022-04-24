@@ -19,7 +19,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class NoWeb extends Cheat {
 
 	public NoWeb() {
-		super(CheatKeys.NO_WEB, CheatCategory.MOVEMENT, WEB, false, false, "no web");
+		super(CheatKeys.NO_WEB, CheatCategory.MOVEMENT, WEB);
 	}
 
 	@Check(name = "speed", description = "Speed on web", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY })

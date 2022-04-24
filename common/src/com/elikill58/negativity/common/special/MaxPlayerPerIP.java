@@ -16,7 +16,7 @@ import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
 public class MaxPlayerPerIP extends Special implements Listeners {
 	
 	public MaxPlayerPerIP() {
-		super(SpecialKeys.MAX_PLAYER_PER_IP, Materials.BOOK, false);
+		super(SpecialKeys.MAX_PLAYER_PER_IP, Materials.BOOK);
 	}
 	
 	@EventListener

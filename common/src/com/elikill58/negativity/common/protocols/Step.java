@@ -31,7 +31,7 @@ public class Step extends Cheat implements Listeners {
 	public static final DataType<Double> BLOCKS_UP = new DataType<Double>("blocks_up", "Blocks UP", () -> new DoubleDataCounter());
 	
 	public Step() {
-		super(CheatKeys.STEP, CheatCategory.MOVEMENT, Materials.SLIME_BLOCK, true, true);
+		super(CheatKeys.STEP, CheatCategory.MOVEMENT, Materials.SLIME_BLOCK, CheatDescription.VERIF);
 	}
 	
 	@EventListener(priority = EventPriority.PRE)

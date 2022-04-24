@@ -28,7 +28,7 @@ public class AutoClick extends Cheat {
 			() -> new IntegerDataCounter());
 
 	public AutoClick() {
-		super(CheatKeys.AUTO_CLICK, CheatCategory.COMBAT, Materials.FISHING_ROD, true, true, "auto-click", "autoclic");
+		super(CheatKeys.AUTO_CLICK, CheatCategory.COMBAT, Materials.FISHING_ROD, CheatDescription.VERIF);
 		Scheduler.getInstance().runRepeatingAsync(() -> {
 			for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
 				NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);

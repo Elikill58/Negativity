@@ -20,7 +20,7 @@ import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
 public class BannedName extends Special implements Listeners {
 
 	public BannedName() {
-		super(SpecialKeys.BANNED_NAME, Materials.ANVIL, false);
+		super(SpecialKeys.BANNED_NAME, Materials.ANVIL);
 	}
 
 	@EventListener(priority = EventPriority.POST)

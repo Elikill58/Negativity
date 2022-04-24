@@ -33,7 +33,7 @@ public class XRay extends Cheat {
 	private static final long TIME_MINING = 10000;
 	
 	public XRay() {
-		super(XRAY, CheatCategory.WORLD, Materials.EMERALD_ORE, false, false);
+		super(XRAY, CheatCategory.WORLD, Materials.EMERALD_ORE);
 	}
 
 	

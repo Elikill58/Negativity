@@ -33,7 +33,7 @@ public class ForceField extends Cheat {
 	private NumberFormat nf = NumberFormat.getInstance();
 	
 	public ForceField() {
-		super(CheatKeys.FORCEFIELD, CheatCategory.COMBAT, Materials.DIAMOND_SWORD, true, false, "ff", "killaura");
+		super(CheatKeys.FORCEFIELD, CheatCategory.COMBAT, Materials.DIAMOND_SWORD);
 		nf.setMaximumIntegerDigits(2);
 	}
 	

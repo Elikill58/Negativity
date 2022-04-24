@@ -15,7 +15,7 @@ import com.elikill58.negativity.universal.report.ReportType;
 public class Critical extends Cheat {
 	
 	public Critical() {
-		super(CheatKeys.CRITICAL, CheatCategory.COMBAT, Materials.FIREBALL, false, false, "crit", "critic");
+		super(CheatKeys.CRITICAL, CheatCategory.COMBAT, Materials.FIREBALL);
 	}
 
 	@Check(name = "ground", description = "Check damage according to Y", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_GROUND })

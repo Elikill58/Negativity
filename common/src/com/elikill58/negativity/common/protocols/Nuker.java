@@ -26,7 +26,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Nuker extends Cheat {
 
 	public Nuker() {
-		super(CheatKeys.NUKER, CheatCategory.WORLD, Materials.BEDROCK, true, false, "breaker", "bed breaker", "bedbreaker");
+		super(CheatKeys.NUKER, CheatCategory.WORLD, Materials.BEDROCK);
 	}
 
 	@Check(name = "distance", description = "Distance between target and breaked block", conditions = CheckConditions.SURVIVAL)

@@ -13,7 +13,7 @@ import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
 public class McLeaks extends Special implements Listeners {
 	
 	public McLeaks() {
-		super(SpecialKeys.MC_LEAKS, Materials.SKELETON_SKULL, false);
+		super(SpecialKeys.MC_LEAKS, Materials.SKELETON_SKULL);
 	}
 	
 	@EventListener

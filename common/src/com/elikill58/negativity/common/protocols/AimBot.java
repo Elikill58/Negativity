@@ -36,7 +36,7 @@ public class AimBot extends Cheat {
 			() -> new IntegerDataCounter());
 
 	public AimBot() {
-		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, true, true, "aim");
+		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, CheatDescription.VERIF);
 	}
 
 	@Check(name = "gcd", conditions = CheckConditions.SURVIVAL, description = "Calculate GCD between attacks", ignoreCancel = true)

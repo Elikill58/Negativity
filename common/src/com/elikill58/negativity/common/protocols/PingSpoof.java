@@ -26,7 +26,7 @@ public class PingSpoof extends Cheat implements Listeners {
 	public static final DataType<Integer> PLAYER_PING = new DataType<Integer>("player_ping", "Ping", () -> new IntegerDataCounter());
 	
 	public PingSpoof() {
-		super(PINGSPOOF, CheatCategory.PLAYER, Materials.SPONGE, false, true, "ping", "spoofing");
+		super(PINGSPOOF, CheatCategory.PLAYER, Materials.SPONGE, CheatDescription.VERIF);
 
 		if (checkActive("reachable")) {
 			new Thread(() -> {

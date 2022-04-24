@@ -17,7 +17,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Phase extends Cheat {
 
 	public Phase() {
-		super(CheatKeys.PHASE, CheatCategory.MOVEMENT, Materials.WHITE_STAINED_GLASS, false, false);
+		super(CheatKeys.PHASE, CheatCategory.MOVEMENT, Materials.WHITE_STAINED_GLASS);
 	}
 
 	@Check(name = "no-jump", description = "On air and don't jump", conditions = CheckConditions.SURVIVAL)

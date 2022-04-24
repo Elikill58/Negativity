@@ -28,8 +28,7 @@ import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPor
 public class SuperKnockback extends Cheat implements Listeners {
 
 	public SuperKnockback() {
-		super(CheatKeys.SUPER_KNOCKBACK, CheatCategory.COMBAT, Materials.EYE_OF_ENDER, true, false, "superkb",
-				"gigakb");
+		super(CheatKeys.SUPER_KNOCKBACK, CheatCategory.COMBAT, Materials.EYE_OF_ENDER);
 	}
 
 	@Check(name = "diff", description = "Check the time and when player sprint", conditions = {})

@@ -21,7 +21,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Timer extends Cheat {
 
 	public Timer() {
-		super(CheatKeys.TIMER, CheatCategory.MOVEMENT, Materials.PACKED_ICE, true, false);
+		super(CheatKeys.TIMER, CheatCategory.MOVEMENT, Materials.PACKED_ICE);
 	}
 	
 	@Check(name = "packet", description = "Check Y move only")

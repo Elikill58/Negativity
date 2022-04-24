@@ -18,7 +18,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class FastLadder extends Cheat {
 
 	public FastLadder() {
-		super(CheatKeys.FAST_LADDER, CheatCategory.MOVEMENT, Materials.LADDER, false, false, "ladder", "ladders");
+		super(CheatKeys.FAST_LADDER, CheatCategory.MOVEMENT, Materials.LADDER);
 	}
 
 	@Check(name = "distance", description = "Check Y move only", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY,

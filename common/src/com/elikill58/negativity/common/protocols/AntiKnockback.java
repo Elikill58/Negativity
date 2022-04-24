@@ -36,8 +36,7 @@ public class AntiKnockback extends Cheat {
 			"Distance after Damage", () -> new DoubleDataCounter());
 
 	public AntiKnockback() {
-		super(CheatKeys.ANTI_KNOCKBACK, CheatCategory.COMBAT, Materials.STICK, false, true, "antikb", "anti-kb",
-				"no-kb", "nokb");
+		super(CheatKeys.ANTI_KNOCKBACK, CheatCategory.COMBAT, Materials.STICK, CheatDescription.VERIF);
 	}
 
 	@Check(name = "packet", description = "Packet velocity", conditions = { CheckConditions.SURVIVAL })

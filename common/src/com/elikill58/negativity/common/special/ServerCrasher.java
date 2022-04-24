@@ -27,7 +27,7 @@ public class ServerCrasher extends Special implements Listeners {
 	private List<UUID> inDisconnection = new ArrayList<>();
 	
 	public ServerCrasher() {
-		super(SpecialKeys.SERVER_CRASHER, Materials.TNT, true);
+		super(SpecialKeys.SERVER_CRASHER, Materials.TNT);
 	}
 	
 	@EventListener

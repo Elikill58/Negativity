@@ -19,7 +19,7 @@ public class InventoryMove extends Cheat implements Listeners {
 	private final InventoryMove instance;
 
 	public InventoryMove() {
-		super(CheatKeys.INVENTORY_MOVE, CheatCategory.MOVEMENT, Materials.NETHER_STAR, false, false, "invmove");
+		super(CheatKeys.INVENTORY_MOVE, CheatCategory.MOVEMENT, Materials.NETHER_STAR);
 		instance = this;
 	}
 

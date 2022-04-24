@@ -18,16 +18,11 @@ public abstract class AbstractDetection<T extends IDetectionKeys<T>> implements 
 
 	protected final T key;
 	protected final Material material;
-	protected final boolean needPacket;
-	protected final String[] aliases;
 	protected Configuration config;
 	
-	public AbstractDetection(T key, Material material, boolean needPacket, String... aliases) {
+	public AbstractDetection(T key, Material material) {
 		this.key = key;
 		this.material = material;
-		this.needPacket = needPacket;
-		this.aliases = aliases;
-
 		
 		String fileName = key.getLowerKey() + ".yml";
 		Path moduleFile = key.getFolder().resolve(fileName);
@@ -67,24 +62,6 @@ public abstract class AbstractDetection<T extends IDetectionKeys<T>> implements 
 	 */
 	public Material getMaterial() {
 		return material;
-	}
-	
-	/**
-	 * Get all alias of this detection
-	 * 
-	 * @return cheat aliases
-	 */
-	public String[] getAliases() {
-		return aliases;
-	}
-
-	/**
-	 * Check if the cheat need packet for at least one detection
-	 * 
-	 * @return true if the detection need packet
-	 */
-	public boolean needPacket() {
-		return needPacket;
 	}
 	
 	public Configuration getConfig() {

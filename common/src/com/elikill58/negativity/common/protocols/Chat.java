@@ -19,7 +19,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Chat extends Cheat {
 
 	public Chat() {
-		super(CheatKeys.CHAT, CheatCategory.PLAYER, Materials.BOOK_AND_QUILL, false, false);
+		super(CheatKeys.CHAT, CheatCategory.PLAYER, Materials.BOOK_AND_QUILL);
 	}
 
 	@Check(name = "spam", description = "Spam of a message")

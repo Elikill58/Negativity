@@ -21,7 +21,7 @@ public class GroundSpoof extends Cheat {
             BlockFace.NORTH, BlockFace.NORTH_WEST, BlockFace.SOUTH_WEST, BlockFace.NORTH_EAST, BlockFace.SOUTH_EAST);
 
     public GroundSpoof() {
-        super(CheatKeys.GROUND_SPOOF, CheatCategory.MOVEMENT, Materials.STONE, false, false, "groundspoof");
+        super(CheatKeys.GROUND_SPOOF, CheatCategory.MOVEMENT, Materials.STONE);
     }
 
     @Check(name = "check-blocks-under", description = "Block under player have to be considered as ground",

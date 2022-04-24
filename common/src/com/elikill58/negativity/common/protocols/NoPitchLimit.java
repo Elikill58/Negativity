@@ -21,7 +21,7 @@ public class NoPitchLimit extends Cheat {
 	public static final DataType<Float> PITCH = new DataType<Float>("pitch", "Pitch", () -> new FloatDataCounter());
 	
 	public NoPitchLimit() {
-		super(CheatKeys.NO_PITCH_LIMIT, CheatCategory.PLAYER, Materials.SKELETON_SKULL, false, true, "pitch");
+		super(CheatKeys.NO_PITCH_LIMIT, CheatCategory.PLAYER, Materials.SKELETON_SKULL, CheatDescription.VERIF);
 	}
 	
 	@Check(name = "head-mov", description = "Check head movement")

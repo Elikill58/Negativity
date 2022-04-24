@@ -4,8 +4,6 @@ import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialsAroun
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
 import static com.elikill58.negativity.universal.detections.keys.CheatKeys.SPEED;
 
-import java.text.NumberFormat;
-
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
@@ -32,12 +30,9 @@ import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Speed extends Cheat implements Listeners {
-
-	private NumberFormat numberFormat = NumberFormat.getInstance();
 	
 	public Speed() {
-		super(SPEED, CheatCategory.MOVEMENT, Materials.BEACON, true, false, "speed", "speedhack");
-		numberFormat.setMaximumFractionDigits(4);
+		super(SPEED, CheatCategory.MOVEMENT, Materials.BEACON);
 	}
 
 	@EventListener
@@ -106,7 +101,7 @@ public class Speed extends Cheat implements Listeners {
 				int porcent = UniversalUtils.parseInPorcent(y * 50 + (walkTest ? 10 : 0) + (walkWithEssTest == walkTest ? 10 : 0) + (walkWithEssTest ? 10 : 0));
 				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent, "distance-ground",
 						"Ground. WS: " + walkSpeed + ", Dis from/to: " + y + ", walkTest: " + walkTest +
-						", walkWithEss: " + walkWithEssTest + ", y: " + y + ", disDir: " + disWithDir + ", disDirY: " + disWithDirY, hoverMsg("distance_ground", "%distance%", numberFormat.format(y)));
+						", walkWithEss: " + walkWithEssTest + ", y: " + y + ", disDir: " + disWithDir + ", disDirY: " + disWithDirY, hoverMsg("distance_ground", "%distance%", String.format("%.4f", y)));
 			}
 		}
 		if(onGround && checkActive("calculated")) {
@@ -124,7 +119,7 @@ public class Speed extends Cheat implements Listeners {
 			mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(y * 190), "distance-jumping", "WS: " + p.getWalkSpeed()
 						+ ", fd: " + p.getFallDistance() + ", from/to: " + String.format("%.10f", y) + ", ySpeed: " + String.format("%.10f", y - (amplifierSpeed / 10) - (velLen > 0.5 ? velLen : 0))
-						+ ", vel: " + p.getVelocity() + ", thvel: " + p.getTheoricVelocity(), hoverMsg("distance_jumping", "%distance%", numberFormat.format(y)));
+						+ ", vel: " + p.getVelocity() + ", thvel: " + p.getTheoricVelocity(), hoverMsg("distance_jumping", "%distance%", String.format("%.4f", y)));
 		}
 		if(checkActive("high-speed") && !onGround && y < 0.85D && !np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
 			if (!under.getType().getId().contains("STEP") && !np.isUsingSlimeBlock && !(under.getType().getId().contains("WATER") || under.isWaterLogged() || under.isLiquid() || p.isSwimming()) && p.getVelocity().length() < 1.5) {

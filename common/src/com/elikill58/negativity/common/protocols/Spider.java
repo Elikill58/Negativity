@@ -22,8 +22,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Spider extends Cheat {
 
 	public Spider() {
-		super(SPIDER, CheatCategory.MOVEMENT, Materials.SPIDER_EYE, false, false, "wallhack",
-				"wall");
+		super(SPIDER, CheatCategory.MOVEMENT, Materials.SPIDER_EYE);
 	}
 
 	@Check(name = "nothing-around", description = "Walking with nothing around", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY, CheckConditions.NO_FALL_DISTANCE, CheckConditions.NO_SPRINT, CheckConditions.NO_USE_SLIME })

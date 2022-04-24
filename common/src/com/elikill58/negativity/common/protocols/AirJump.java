@@ -23,7 +23,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class AirJump extends Cheat {
 
 	public AirJump() {
-		super(AIR_JUMP, CheatCategory.MOVEMENT, Materials.FEATHER, false, false, "airjump", "air", "jump");
+		super(AIR_JUMP, CheatCategory.MOVEMENT, Materials.FEATHER);
 	}
 
 	@Check(name = "diff-y", description = "Y difference", conditions = { CheckConditions.SURVIVAL,

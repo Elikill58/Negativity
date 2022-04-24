@@ -37,7 +37,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Fly extends Cheat implements Listeners {
 
 	public Fly() {
-		super(FLY, CheatCategory.MOVEMENT, Materials.FIREWORK, true, false, "flyhack");
+		super(FLY, CheatCategory.MOVEMENT, Materials.FIREWORK);
 	}
 
 	@EventListener

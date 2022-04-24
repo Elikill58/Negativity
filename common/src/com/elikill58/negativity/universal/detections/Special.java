@@ -1,7 +1,6 @@
 package com.elikill58.negativity.universal.detections;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.ServiceLoader;
 
@@ -22,8 +21,8 @@ public abstract class Special extends AbstractDetection<SpecialKeys> {
 	 * @param needPacket if it need packet to work
 	 * @param alias all alias of the special detection
 	 */
-	public Special(SpecialKeys key, Material material, boolean needPacket, String... alias) {
-		super(key, material, needPacket, alias);
+	public Special(SpecialKeys key, Material material) {
+		super(key, material);
 	}
 	
 	/**
@@ -35,7 +34,7 @@ public abstract class Special extends AbstractDetection<SpecialKeys> {
 	public static Special fromString(String name) {
 		for (Special c : Special.values()) {
 			try {
-				if (c.getKey().getKey().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name) || Arrays.asList(c.getAliases()).contains(name))
+				if (c.getKey().getKey().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name))
 					return c;
 			} catch (NullPointerException e) {
 				e.printStackTrace();

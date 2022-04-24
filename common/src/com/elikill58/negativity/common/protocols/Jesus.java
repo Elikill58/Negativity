@@ -36,8 +36,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Jesus extends Cheat implements Listeners {
 
 	public Jesus() {
-		super(JESUS, CheatCategory.MOVEMENT, Materials.WATER_BUCKET, false, false, "waterwalk", "water",
-				"water walk");
+		super(JESUS, CheatCategory.MOVEMENT, Materials.WATER_BUCKET);
 	}
 
 	@EventListener

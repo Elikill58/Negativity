@@ -22,7 +22,7 @@ public class IncorrectPacket extends Cheat {
 	private final List<PacketType> allowedFarPacket = Arrays.asList(PacketType.Client.TELEPORT_ACCEPT);
 
 	public IncorrectPacket() {
-		super(CheatKeys.INCORRECT_PACKET, CheatCategory.WORLD, Materials.NAME_TAG, true, false);
+		super(CheatKeys.INCORRECT_PACKET, CheatCategory.WORLD, Materials.NAME_TAG);
 	}
 
 	@Check(name = "distance", description = "Check distance between player and sent packet")

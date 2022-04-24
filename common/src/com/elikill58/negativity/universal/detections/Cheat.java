@@ -42,10 +42,10 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	public static CheckManager getCheckManager() {
 		return checkManager;
 	}
-	private boolean hasVerif;
 	private CheatCategory cheatCategory;
 	private final List<SetBackProcessor> setBackProcessor = new ArrayList<>();
 	private final List<Check> checks = new ArrayList<>();
+	private final List<CheatDescription> options;
 
 	/**
 	 * Create a new cheat object and load default config
@@ -57,10 +57,10 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	 * @param hasVerif know if the cheat can be used in verification system
 	 * @param alias all other names of the cheat
 	 */
-	public Cheat(CheatKeys key, CheatCategory type, Material m, boolean needPacket, boolean hasVerif, String... alias) {
-		super(key, m, needPacket, alias);
+	public Cheat(CheatKeys key, CheatCategory type, Material m, CheatDescription... options) {
+		super(key, m);
+		this.options = Arrays.asList(options);
 		this.cheatCategory = type;
-		this.hasVerif = hasVerif;
 		
 		this.config.getStringList("set_back.action").forEach((line) -> {
 			JSONObject json = null;
@@ -250,7 +250,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	 * @return true if the cheat can verif
 	 */
 	public boolean hasVerif() {
-		return hasVerif && config.getBoolean("verif.check_in_verif", true);
+		return options.contains(CheatDescription.VERIF) && config.getBoolean("verif.check_in_verif", true);
 	}
 	
 	/**
@@ -298,6 +298,14 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 		return checks;
 	}
 	
+	public List<CheatDescription> getOptions() {
+		return options;
+	}
+	
+	public boolean hasOption(CheatDescription o) {
+		return this.options.contains(o);
+	}
+	
 	/**
 	 * Get cheat from a name
 	 * Can be the key, the name or one of the alias
@@ -308,7 +316,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	public static Cheat fromString(String name) {
 		for (Cheat c : Cheat.values()) {
 			try {
-				if (c.getKey().getKey().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name) || c.getCommandName().equalsIgnoreCase(name) || Arrays.asList(c.getAliases()).contains(name))
+				if (c.getKey().getKey().equalsIgnoreCase(name) || c.getName().equalsIgnoreCase(name) || c.getCommandName().equalsIgnoreCase(name))
 					return c;
 			} catch (NullPointerException e) {
 				e.printStackTrace();
@@ -381,6 +389,10 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	
 	public static List<Cheat> getEnabledCheat() {
 		return new ArrayList<>(CHEATS).stream().filter(Cheat::isActive).collect(Collectors.toList());
+	}
+	
+	public enum CheatDescription {
+		VERIF;
 	}
 
 	public enum CheatCategory {

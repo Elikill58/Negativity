@@ -30,7 +30,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class NoFall extends Cheat {
 
 	public NoFall() {
-		super(CheatKeys.NO_FALL, CheatCategory.MOVEMENT, Materials.YELLOW_WOOL, true, false);
+		super(CheatKeys.NO_FALL, CheatCategory.MOVEMENT, Materials.YELLOW_WOOL);
 	}
 	
 	@Check(name = "motion-y", description = "Motion Y when fall", conditions = { CheckConditions.NO_USE_ELEVATOR, CheckConditions.SURVIVAL,

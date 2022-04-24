@@ -36,7 +36,7 @@ public class Reach extends Cheat {
 	private static final List<Material> IGNORED_TYPE = Arrays.asList(Materials.BOW, Materials.FISHING_ROD);
 
 	public Reach() {
-		super(CheatKeys.REACH, CheatCategory.COMBAT, Materials.STONE_AXE, false, true);
+		super(CheatKeys.REACH, CheatCategory.COMBAT, Materials.STONE_AXE, CheatDescription.VERIF);
 	}
 
 	@Check(name = "reach-event", description = "The reach", conditions = { CheckConditions.NO_THORNS,

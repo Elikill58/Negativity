@@ -19,7 +19,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Sneak extends Cheat {
 
 	public Sneak() {
-		super(SNEAK, CheatCategory.MOVEMENT, Materials.BLAZE_POWDER, true, false, "sneack", "sneac");
+		super(SNEAK, CheatCategory.MOVEMENT, Materials.BLAZE_POWDER);
 	}
 
 	@Check(name = "sneak-sprint", description = "Sneak while sprinting", conditions = { CheckConditions.SURVIVAL, CheckConditions.SNEAK, CheckConditions.SPRINT, CheckConditions.NO_FLY })

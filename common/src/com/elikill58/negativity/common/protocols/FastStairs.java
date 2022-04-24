@@ -18,7 +18,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class FastStairs extends Cheat {
 
 	public FastStairs() {
-		super(FAST_STAIRS, CheatCategory.MOVEMENT, Materials.BRICK_STAIRS, false, false, "stairs");
+		super(FAST_STAIRS, CheatCategory.MOVEMENT, Materials.BRICK_STAIRS);
 	}
 	
 	@Check(name = "distance", description = "Check distance", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FALL_DISTANCE })

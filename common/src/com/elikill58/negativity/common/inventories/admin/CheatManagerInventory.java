@@ -30,6 +30,8 @@ public class CheatManagerInventory extends AbstractInventory<CheatManagerHolder>
 			if (c.getMaterial() != null)
 				inv.set(slot++, ItemBuilder.Builder(c.getMaterial()).displayName(c.getName()).lore(ChatColor.GRAY
 						+ "State: " + Messages.getMessage(p, "inventory.manager." + (c.isActive() ? "enabled" : "disabled"))).enchantIf(Enchantment.UNBREAKING, 1, c.isActive()).build());
+		inv.set(inv.getSize() - 3,
+				ItemBuilder.Builder(Materials.BONE).displayName("Multiple cheat").build());
 		inv.set(inv.getSize() - 2,
 				ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
 		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
@@ -40,6 +42,8 @@ public class CheatManagerInventory extends AbstractInventory<CheatManagerHolder>
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, CheatManagerHolder nh) {
 		if (m.equals(Materials.ARROW))
 			InventoryManager.open(NegativityInventory.ADMIN, p);
+		else if(m.equals(Materials.BONE))
+			InventoryManager.open(NegativityInventory.CHEAT_DESCRIPTION, p);
 		else {
 			UniversalUtils.getCheatFromItem(m)
 					.ifPresent((c) -> InventoryManager.open(NegativityInventory.ONE_CHEAT, p, c));

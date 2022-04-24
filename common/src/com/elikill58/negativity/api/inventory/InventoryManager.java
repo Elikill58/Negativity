@@ -15,6 +15,7 @@ import com.elikill58.negativity.common.inventories.admin.AdminInventory;
 import com.elikill58.negativity.common.inventories.admin.BanManagerInventory;
 import com.elikill58.negativity.common.inventories.admin.BanProcessorManagerInventory;
 import com.elikill58.negativity.common.inventories.admin.CheatChecksInventory;
+import com.elikill58.negativity.common.inventories.admin.CheatDescriptionInventory;
 import com.elikill58.negativity.common.inventories.admin.CheatManagerInventory;
 import com.elikill58.negativity.common.inventories.admin.LangInventory;
 import com.elikill58.negativity.common.inventories.admin.OneCheatInventory;
@@ -46,6 +47,7 @@ public class InventoryManager implements Listeners {
 		new CheckMenuInventory();
 		new CheckMenuOfflineInventory();
 		new CheatManagerInventory();
+		new CheatDescriptionInventory();
 		new SpecialManagerInventory();
 		new ForgeModsInventory();
 		new FreezeInventory();

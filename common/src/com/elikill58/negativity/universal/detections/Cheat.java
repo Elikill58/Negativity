@@ -20,6 +20,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.protocols.Check;
@@ -392,9 +393,24 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	}
 	
 	public enum CheatDescription {
-		VERIF,
-		BLOCKS,
-		HEALTH;
+		VERIF("Verification", "Cheat with verification (Command: 'n verif')"),
+		BLOCKS("Manage blocks", "Change of use blocks to works (i.e. break faster ...)"),
+		HEALTH("Change health behavior", "Make health not going down or just regen faster");
+		
+		private final String name, description;
+		
+		private CheatDescription(String name, String description) {
+			this.name = name;
+			this.description = description;
+		}
+		
+		public String getDescription() {
+			return description;
+		}
+		
+		public String getName() {
+			return name;
+		}
 	}
 
 	public enum CheatCategory {
@@ -402,20 +418,35 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 		/**
 		 * Edit combat value such as attack speed of attack distance
 		 */
-		COMBAT,
-		
+		COMBAT(Materials.DIAMOND_SWORD, "Upgrading combat power"),
 		/**
 		 * Edit player movement
 		 */
-		MOVEMENT,
+		MOVEMENT(Materials.FEATHER, "Edit all player movements"),
 		/**
 		 * Edit the world of the player such as block breaker
 		 */
-		WORLD,
+		WORLD(Materials.DIRT, "Manage world of player"),
 		/**
 		 * Edit player variable/abilities directly
 		 */
-		PLAYER
+		PLAYER(Materials.SKELETON_SKULL, "Edit player capabilities");
+		
+		private final Material type;
+		private final String name;
+		
+		private CheatCategory(Material m, String name) {
+			this.type = m;
+			this.name = name;
+		}
+		
+		public Material getType() {
+			return type;
+		}
+		
+		public String getName() {
+			return name;
+		}
 	}
 	
 	public static class CheatHover {

@@ -392,7 +392,9 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	}
 	
 	public enum CheatDescription {
-		VERIF;
+		VERIF,
+		BLOCKS,
+		HEALTH;
 	}
 
 	public enum CheatCategory {

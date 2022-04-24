@@ -13,7 +13,7 @@ import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 public class FastEat extends Cheat implements Listeners {
 	
 	public FastEat() {
-		super(CheatKeys.FAST_EAT, CheatCategory.PLAYER, Materials.COOKED_BEEF);
+		super(CheatKeys.FAST_EAT, CheatCategory.PLAYER, Materials.COOKED_BEEF, CheatDescription.HEALTH);
 	}
 
 	@EventListener

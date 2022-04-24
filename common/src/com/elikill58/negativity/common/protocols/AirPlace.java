@@ -25,7 +25,7 @@ public class AirPlace extends Cheat {
 	public static final List<BlockFace> BLOCK_FACES = Arrays.asList(BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
 
 	public AirPlace() {
-		super(AIR_PLACE, CheatCategory.WORLD, Materials.GLASS_BOTTLE);
+		super(AIR_PLACE, CheatCategory.WORLD, Materials.GLASS_BOTTLE, CheatDescription.BLOCKS);
 	}
 
 	@Check(name = "block-around", description = "Check blocks around", conditions = { CheckConditions.SURVIVAL })

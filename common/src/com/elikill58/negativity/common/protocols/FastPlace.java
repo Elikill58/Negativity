@@ -22,7 +22,7 @@ public class FastPlace extends Cheat {
 	public static final DataType<Long> TIME_PLACE = new DataType<Long>("time_player", "Time between places", () -> new LongDataCounter());
 
 	public FastPlace() {
-		super(CheatKeys.FAST_PLACE, CheatCategory.WORLD, Materials.DIRT, CheatDescription.VERIF);
+		super(CheatKeys.FAST_PLACE, CheatCategory.WORLD, Materials.DIRT, CheatDescription.VERIF, CheatDescription.BLOCKS);
 	}
 
 	@Check(name = "time", description = "Time between 2 place", conditions = { CheckConditions.SURVIVAL })

@@ -24,7 +24,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Regen extends Cheat implements Listeners {
 	
 	public Regen() {
-		super(CheatKeys.REGEN, CheatCategory.PLAYER, Materials.GOLDEN_APPLE);
+		super(CheatKeys.REGEN, CheatCategory.PLAYER, Materials.GOLDEN_APPLE, CheatDescription.HEALTH);
 	}
 
 	@EventListener

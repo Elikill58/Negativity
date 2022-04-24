@@ -36,7 +36,7 @@ public class Scaffold extends Cheat {
 	private static final List<Material> BYPASS_TYPES = Arrays.asList(Materials.AIR, Materials.SCAFFOLD);
 	
 	public Scaffold() {
-		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS);
+		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS, CheatDescription.BLOCKS);
 	}
 
 	@Check(name = "below", description = "Block placed below", conditions = CheckConditions.SURVIVAL)

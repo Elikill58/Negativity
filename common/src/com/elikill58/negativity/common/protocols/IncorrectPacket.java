@@ -3,6 +3,7 @@ package com.elikill58.negativity.common.protocols;
 import java.util.Arrays;
 import java.util.List;
 
+import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.Materials;
@@ -39,11 +40,12 @@ public class IncorrectPacket extends Cheat {
 			double dx = loc.getX() - lp.getX() + 0.5D;
 			double dy = loc.getY() - lp.getY() + 0.5D + 1.5D;
 			double dz = loc.getZ() - lp.getZ() + 0.5D;
+			int maxDistance = (p.getGameMode().equals(GameMode.CREATIVE) ? 49 : 36) + 5; // +5 is to prevent false flags
 			double distance = dx * dx + dy * dy + dz * dz;
-			if (distance > 36) { // distance originally used by spigot
+			if (distance > maxDistance) { // distance originally used by spigot
 				e.setCancelled(true); // cancel. Everytime.
 				int relia = UniversalUtils.parseInPorcent(distance * (distance < 100 ? 2.5 : 1));
-				int amount = (int) (distance < 1000 ? distance - 36 : distance / 10);
+				int amount = (int) (distance < 1000 ? distance - maxDistance : distance / 10);
 				if (amount <= 0)
 					amount = 1;
 				Negativity.alertMod(distance > 1000 ? ReportType.VIOLATION : ReportType.WARNING, p, this, relia,

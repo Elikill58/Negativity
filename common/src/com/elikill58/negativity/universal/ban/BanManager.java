@@ -85,7 +85,7 @@ public class BanManager {
 
 		BanResult br = processor.executeBan(ban);
 		if(br.isSuccess()) {
-			WebhookManager.send(new WebhookMessage(WebhookMessageType.BAN, Adapter.getAdapter().getPlayer(ban.getPlayerId()), ban.getBannedBy(), ban.getExecutionTime()));
+			WebhookManager.send(new WebhookMessage(WebhookMessageType.BAN, Adapter.getAdapter().getPlayer(ban.getPlayerId()), ban.getBannedBy(), ban.getExecutionTime(), "%reason%", ban.getReason()));
 		}
 		return br;
 	}

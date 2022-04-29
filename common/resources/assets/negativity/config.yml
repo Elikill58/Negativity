@@ -443,6 +443,7 @@ webhooks:
         # %name% : Name of the banned player
         # %uuid% : UUID of the banned player
         # %date% : Date when the player have been banned
+        # %reason% : Reason of the ban
         ban:
           enabled: true
           # The name which will send the message

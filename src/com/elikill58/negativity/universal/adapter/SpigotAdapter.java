@@ -21,6 +21,7 @@ import com.elikill58.json.parser.ParseException;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.WorldRegionBypass;
+import com.elikill58.negativity.spigot.support.FloodGateSupportManager;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
@@ -110,6 +111,10 @@ public class SpigotAdapter extends Adapter {
 		WorldRegionBypass.init();
 		for(Player p : Utils.getOnlinePlayers())
 			SpigotNegativity.manageAutoVerif(p);
+		if(FloodGateSupportManager.hasSupport) {
+			FloodGateSupportManager.disabledCheat.clear();
+			FloodGateSupportManager.disabledCheat.addAll(getConfig().getStringList("cheat-bedrock-disabled"));
+		}
 	}
 
 	@Override

@@ -360,6 +360,9 @@ region-bypass:
     # Cheats to allow in the above regions and worlds
     cheats:
     - "fly"
+cheat-bedrock-disabled:
+- "somecheat"
+
 
 # Per-cheat configuration. For more information about specific cheats
 # and their detections see https://github.com/Elikill58/Negativity/wiki/Cheat

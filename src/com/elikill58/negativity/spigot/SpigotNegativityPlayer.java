@@ -196,6 +196,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if (SpigotNegativity.hasBypass && (Perm.hasPerm(this, "bypass." + c.getKey().toLowerCase(Locale.ROOT))
 				|| Perm.hasPerm(this, "bypass.all")))
 			return false;
+		if(isBedrockPlayer && FloodGateSupportManager.disabledCheat.contains(c.getKey()))
+			return false;
 		return ping < c.getMaxAlertPing();
 	}
 
@@ -223,6 +225,8 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 			return "Permission bypass";
 		if (ping > c.getMaxAlertPing())
 			return "Too high ping (" + ping + " > " + c.getMaxAlertPing() + ")";
+		if(isBedrockPlayer && FloodGateSupportManager.disabledCheat.contains(c.getKey()))
+			return "Bedrock player";
 		return "Unknown";
 	}
 

@@ -20,7 +20,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class IncorrectPacket extends Cheat {
 
-	private final List<PacketType> allowedFarPacket = Arrays.asList(PacketType.Client.TELEPORT_ACCEPT, PacketType.Client.POSITION_LOOK);
+	private final List<PacketType> allowedFarPacket = Arrays.asList(PacketType.Client.TELEPORT_ACCEPT, PacketType.Client.POSITION_LOOK, PacketType.Client.POSITION);
 
 	public IncorrectPacket() {
 		super(CheatKeys.INCORRECT_PACKET, CheatCategory.WORLD, Materials.NAME_TAG);

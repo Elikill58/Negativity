@@ -31,6 +31,7 @@ public abstract class ItemStack implements NegativityObject {
 	 * 
 	 * @return a new instance of this item
 	 */
+	@Override
 	public abstract ItemStack clone();
 	
 	public abstract boolean hasEnchant(Enchantment enchant);

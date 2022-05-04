@@ -73,6 +73,7 @@ public class JSONArray extends ArrayList implements JSONAware, JSONStreamAware {
 		out.write(']');
 	}
 	
+	@Override
 	public void writeJSONString(Writer out) throws IOException{
 		writeJSONString(this, out);
 	}
@@ -368,6 +369,7 @@ public class JSONArray extends ArrayList implements JSONAware, JSONStreamAware {
 		}
 	}
 	
+	@Override
 	public String toJSONString(){
 		return toJSONString(this);
 	}
@@ -376,6 +378,7 @@ public class JSONArray extends ArrayList implements JSONAware, JSONStreamAware {
 	 * Returns a string representation of this array. This is equivalent to
 	 * calling {@link JSONArray#toJSONString()}.
 	 */
+	@Override
 	public String toString() {
 		return toJSONString();
 	}

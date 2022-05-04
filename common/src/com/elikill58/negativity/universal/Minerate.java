@@ -69,6 +69,7 @@ public class Minerate {
 		return s;
 	}
 	
+	@Override
 	public String toString() {
 		String s = "";
 		for(MinerateType m : mined.keySet()) {

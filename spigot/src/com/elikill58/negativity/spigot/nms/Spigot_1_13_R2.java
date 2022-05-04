@@ -62,7 +62,7 @@ public class Spigot_1_13_R2 extends SpigotVersionAdapter {
 			MovingObjectPosition mov = worldServer.rayTrace(vec3d, vec3d1);
 			if(mov == null)
 				return null;
-			BlockPosition vec = mov.a();
+			BlockPosition vec = mov.getBlockPosition();
 			return new NPacketPlayInBlockPlace(vec.getX(), vec.getY(), vec.getZ(), handItem,
 				new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
 		});

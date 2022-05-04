@@ -42,6 +42,7 @@ public class SpongeFakePlayer extends AbstractEntity implements FakePlayer {
 		});
 	}
 
+	@Override
 	public void show(com.elikill58.negativity.api.entity.Player pl) {
 		Player p = (Player) pl.getDefault();
 		p.getWorld().spawnEntity(fakePlayer);
@@ -50,10 +51,12 @@ public class SpongeFakePlayer extends AbstractEntity implements FakePlayer {
 		}).delayTicks(20).submit(SpongeNegativity.getInstance());
 	}
 
+	@Override
 	public Location getLocation() {
 		return loc;
 	}
 
+	@Override
 	public String getName() {
 		return name;
 	}

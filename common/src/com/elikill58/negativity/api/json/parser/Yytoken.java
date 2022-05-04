@@ -25,6 +25,7 @@ public class Yytoken {
 		this.value=value;
 	}
 	
+	@Override
 	public String toString(){
 		StringBuffer sb = new StringBuffer();
 		switch(type){

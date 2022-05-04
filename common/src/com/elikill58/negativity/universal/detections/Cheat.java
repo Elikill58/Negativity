@@ -90,6 +90,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	 * 
 	 * @return the name
 	 */
+	@Override
 	public String getName() {
 		return config.getString("exact_name", key.getLowerKey());
 	}

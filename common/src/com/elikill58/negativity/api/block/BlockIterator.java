@@ -194,11 +194,13 @@ public class BlockIterator implements Iterator<Block> {
 		this(entity, 0);
 	}
 
+	@Override
 	public boolean hasNext() {
 		scan();
 		return this.currentBlock != -1;
 	}
 
+	@Override
 	public Block next() {
 		scan();
 		if (this.currentBlock <= -1) {
@@ -207,6 +209,7 @@ public class BlockIterator implements Iterator<Block> {
 		return this.blockQueue[(this.currentBlock--)];
 	}
 
+	@Override
 	public void remove() {
 		throw new UnsupportedOperationException("[BlockIterator] doesn't support block removal");
 	}

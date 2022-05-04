@@ -170,6 +170,7 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 		throw new IllegalStateException("Unexpected CPacketPlayerDigging.Action constant: " + action.name());
 	}
 
+	@Override
 	protected <T> T get(Object obj, Class<?> clazz, String name) {
 		try {
 			Field f = clazz.getDeclaredField(name);
@@ -184,10 +185,12 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 		}
 	}
 
+	@Override
 	protected <T> T get(Object obj, String name) {
 		return get(obj.getClass(), obj, name);
 	}
 
+	@Override
 	protected <T> T get(Class<?> clazz, Object obj, String name) {
 		try {
 			Field f = clazz.getDeclaredField(name);
@@ -202,6 +205,7 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 		}
 	}
 
+	@Override
 	protected Object getSafe(Object obj, String name) {
 		try {
 			Field f = obj.getClass().getDeclaredField(name);
@@ -216,6 +220,7 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 		}
 	}
 
+	@Override
 	protected String getStr(Object obj, String name) {
 		try {
 			Field f = obj.getClass().getDeclaredField(name);
@@ -230,10 +235,12 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 		}
 	}
 
+	@Override
 	protected <T> T getFromMethod(Object obj, String methodName) {
 		return getFromMethod(obj.getClass(), obj, methodName);
 	}
 
+	@Override
 	protected <T> T getFromMethod(Class<?> clazz, Object obj, String methodName) {
 		try {
 			Method f = clazz.getDeclaredMethod(methodName);

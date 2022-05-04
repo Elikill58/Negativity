@@ -164,6 +164,7 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 		return entityPlayer;
 	}
 	
+	@Override
 	public Location getLocation() {
 		return loc;
 	}

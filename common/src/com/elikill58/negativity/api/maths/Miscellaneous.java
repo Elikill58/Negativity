@@ -110,6 +110,7 @@ class KwStrComparator implements Comparator<KeyWord> {
 	/**
 	 *
 	 */
+	@Override
 	public int compare(KeyWord kw1, KeyWord kw2) {
 		String s1 = kw1.wordString;
 		String s2 = kw2.wordString;
@@ -125,6 +126,7 @@ class DescKwLenComparator implements Comparator<KeyWord> {
 	/**
 	 *
 	 */
+	@Override
 	public int compare(KeyWord kw1, KeyWord kw2) {
 		int l1 = kw1.wordString.length();
 		int l2 = kw2.wordString.length();
@@ -140,6 +142,7 @@ class KwTypeComparator implements Comparator<KeyWord> {
 	/**
 	 *
 	 */
+	@Override
 	public int compare(KeyWord kw1, KeyWord kw2) {
 		int t1 = kw1.wordTypeId * 1000000 + kw1.wordId * 1000 + kw1.wordString.length();
 		int t2 = kw2.wordTypeId * 1000000 + kw2.wordId * 1000 + kw2.wordString.length();

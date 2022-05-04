@@ -40,6 +40,7 @@ public class NPacketPlayInFlying implements NPacketPlayIn, LocatedPacket {
 	 * @param w the world on the location
 	 * @return a location or null
 	 */
+	@Override
 	public Location getLocation(World w) {
 		if(hasPos && hasLook) // if fully move
 			return new Location(w, x, y, z, yaw, pitch);

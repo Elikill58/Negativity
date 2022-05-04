@@ -26,6 +26,7 @@ public class SpongeFakePlayer extends SpongeEntity<Human> implements FakePlayer 
 		entity.offer(Keys.VANISH, true);
 	}
 
+	@Override
 	public void show(com.elikill58.negativity.api.entity.Player pl) {
 		Player p = (Player) pl.getDefault();
 		p.world().spawnEntity(entity);

@@ -127,6 +127,7 @@ public class Token {
 	/**
 	 * Token cloning.
 	 */
+	@Override
 	public Token clone() {
 		Token token = new Token();
 		token.keyWord = keyWord;

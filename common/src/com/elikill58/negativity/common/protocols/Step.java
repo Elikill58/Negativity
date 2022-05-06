@@ -45,7 +45,7 @@ public class Step extends Cheat implements Listeners {
 			np.booleans.get(CheatKeys.ALL, "jump-boost-use", false);
 	}
 	
-	@EventListener
+	@EventListener(priority = EventPriority.PRE)
 	public void onPacket(PacketSendEvent e) {
 		if(!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_EFFECT))
 			return;
@@ -67,13 +67,11 @@ public class Step extends Cheat implements Listeners {
 			return;
 		double dif = to.getY() - from.getY();
 		boolean isUsingJumpBoost = np.booleans.get(CheatKeys.ALL, "jump-boost-use", false);
-		if (!isUsingJumpBoost && dif > 0 && dif != 0.60 && p.getVelocity().getY() < 0.5) {
-			int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(dif * 50);
-			if ((dif > 1.499) && ping < 300) {
-				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "dif", "Move " + dif + " blocks up.", hoverMsg("main", "%block%", String.format("%.2f", dif)));
-				if (isSetBack() && mayCancel)
-					e.setCancelled(true);
-			}
+		if (!isUsingJumpBoost && dif > 0.499 && dif != 0.60 && p.getVelocity().getY() < 0.5) {
+			int relia = UniversalUtils.parseInPorcent(dif * 50);
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "dif", "Move " + dif + " blocks up.", hoverMsg("main", "%block%", String.format("%.2f", dif)));
+			if (isSetBack() && mayCancel)
+				e.setCancelled(true);
 		}
 	}
 

@@ -23,10 +23,10 @@ public enum CheckConditions {
 	ALLOW_FLY("Allow to fly", Player::getAllowFlight),
 	GROUND("On ground", Player::isOnGround),
 
-	NO_BLOCK_MID_AROUND("Block MID (fence, slab...) around", (p) -> LocationUtils.hasMaterialsAround(p.getLocation(), "SLAB", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
-	NO_BLOCK_MID_AROUND_BELOW("Block MID (fence, slab...) below", (p) -> LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "SLAB", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
-	NO_LIQUID_AROUND("Liquid around", (p) -> LocationUtils.hasMaterialsAround(p.getLocation(), "WATER", "LAVA"), true),
-	NO_STAIRS_AROUND_EXTENDED("Stairs around", (p) -> LocationUtils.hasExtended(p.getLocation(), "STAIRS"), true),
+	NO_BLOCK_MID_AROUND("Block MID (fence, slab...) around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "SLAB", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
+	NO_BLOCK_MID_AROUND_BELOW("Block MID (fence, slab...) below", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "SLAB", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
+	NO_LIQUID_AROUND("Liquid around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "WATER", "LAVA"), true),
+	NO_STAIRS_AROUND_EXTENDED("Stairs around", (p) -> !LocationUtils.hasExtended(p.getLocation(), "STAIRS"), true),
 	
 	NO_BOAT_AROUND("No boat around", (p) -> LocationUtils.hasBoatAroundHim(p.getLocation()), true),
 	NO_ON_BEDROCK("Not on bedrock", (p) -> !NegativityPlayer.getNegativityPlayer(p).isBedrockPlayer()),

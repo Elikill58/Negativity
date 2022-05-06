@@ -37,7 +37,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Fly extends Cheat implements Listeners {
 
 	public Fly() {
-		super(FLY, CheatCategory.MOVEMENT, Materials.FIREWORK);
+		super(FLY, CheatCategory.MOVEMENT, Materials.FIREWORK, CheatDescription.NO_FIGHT);
 	}
 
 	@EventListener
@@ -249,10 +249,5 @@ public class Fly extends Cheat implements Listeners {
 		}
 
 		np.booleans.set(FLY, "boat-falling", nextValue);
-	}
-
-	@Override
-	public boolean isBlockedInFight() {
-		return true;
 	}
 }

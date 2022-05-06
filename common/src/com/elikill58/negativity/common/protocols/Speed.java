@@ -32,7 +32,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Speed extends Cheat implements Listeners {
 	
 	public Speed() {
-		super(SPEED, CheatCategory.MOVEMENT, Materials.BEACON);
+		super(SPEED, CheatCategory.MOVEMENT, Materials.BEACON, CheatDescription.NO_FIGHT);
 	}
 
 	@EventListener
@@ -178,11 +178,6 @@ public class Speed extends Cheat implements Listeners {
 	@EventListener
 	public void onEntityDamage(PlayerDamagedByEntityEvent e) {
 		NegativityPlayer.getNegativityPlayer(e.getPlayer()).bypassSpeed = 3;
-	}
-
-	@Override
-	public boolean isBlockedInFight() {
-		return true;
 	}
 	
 	public static double getSpeed(Location from, Location to) {

@@ -19,7 +19,7 @@ public class InventoryMove extends Cheat implements Listeners {
 	private final InventoryMove instance;
 
 	public InventoryMove() {
-		super(CheatKeys.INVENTORY_MOVE, CheatCategory.MOVEMENT, Materials.NETHER_STAR);
+		super(CheatKeys.INVENTORY_MOVE, CheatCategory.MOVEMENT, Materials.NETHER_STAR, CheatDescription.NO_FIGHT);
 		instance = this;
 	}
 
@@ -31,13 +31,12 @@ public class InventoryMove extends Cheat implements Listeners {
 		checkInvMove(e.getPlayer(), true, "Click");
 	}
 
-	/*@EventListener
-	public void onOpen(InventoryOpenEvent e) {
-		NegativityPlayer np = NegativityPlayer.getCached(e.getPlayer().getUniqueId());
-		if (!np.hasDetectionActive(this))
-			return;
-		checkInvMove(e.getPlayer(), false, "Open");
-	}*/
+	/*
+	 * @EventListener public void onOpen(InventoryOpenEvent e) { NegativityPlayer np
+	 * = NegativityPlayer.getCached(e.getPlayer().getUniqueId()); if
+	 * (!np.hasDetectionActive(this)) return; checkInvMove(e.getPlayer(), false,
+	 * "Open"); }
+	 */
 
 	private void checkInvMove(Player p, boolean check, String from) {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
@@ -48,8 +47,9 @@ public class InventoryMove extends Cheat implements Listeners {
 			Scheduler.getInstance().runDelayed(() -> {
 				if (p.isSprinting() || p.isSneaking())
 					Negativity.alertMod(ReportType.WARNING, p, instance,
-						NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "sprint",
-						"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking(), hoverMsg("main", "%name%", from));
+							NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "sprint",
+							"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking(),
+							hoverMsg("main", "%name%", from));
 			}, 3);
 		} else if (check) {
 			final Location lastLoc = p.getLocation().clone();
@@ -57,18 +57,14 @@ public class InventoryMove extends Cheat implements Listeners {
 				if (!lastLoc.getWorld().equals(p.getLocation().getWorld()))
 					return;
 				double dis = lastLoc.distance(p.getLocation());
-				if (dis > 1 && (lastLoc.getY() - p.getLocation().getY()) < 0.1
-					&& p.getOpenInventory() != null) {
+				if (dis > 1 && (lastLoc.getY() - p.getLocation().getY()) < 0.1 && p.getOpenInventory() != null) {
 					Negativity.alertMod(ReportType.WARNING, p, instance,
-						NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "distance",
-						"Detected when " + from + ", Distance: " + dis + " Diff Y: " + (lastLoc.getY() - p.getLocation().getY()), hoverMsg("main", "%name%", from));
+							NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "distance",
+							"Detected when " + from + ", Distance: " + dis + " Diff Y: "
+									+ (lastLoc.getY() - p.getLocation().getY()),
+							hoverMsg("main", "%name%", from));
 				}
 			}, 5);
 		}
-	}
-	
-	@Override
-	public boolean isBlockedInFight() {
-		return true;
 	}
 }

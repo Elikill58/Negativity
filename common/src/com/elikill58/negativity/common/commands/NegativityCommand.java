@@ -33,6 +33,7 @@ import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatCategory;
+import com.elikill58.negativity.universal.detections.Cheat.CheatDescription;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModifications;
@@ -320,7 +321,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 							}
 						}
 					}
-					if(np.isInFight && c.isBlockedInFight()) {
+					if(np.isInFight && c.hasOption(CheatDescription.NO_FIGHT)) {
 						p.sendMessage(ChatColor.RED + "Bypass because in fight.");
 						hasBypass = true;
 					}

@@ -145,16 +145,6 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	}
 	
 	/**
-	 * Check if the cheat is blocked in fight.
-	 * Overrided if true, by default it's false
-	 * 
-	 * @return true if the cheat is blocked in fight
-	 */
-	public boolean isBlockedInFight() {
-		return false;
-	}
-	
-	/**
 	 * Get the category of the cheat
 	 * 
 	 * @return the cheat category
@@ -394,8 +384,10 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	}
 	
 	public enum CheatDescription {
+		
 		VERIF("Verification", "Cheat with verification (Command: 'n verif')"),
 		BLOCKS("Manage blocks", "Change of use blocks to works (i.e. break faster ...)"),
+		NO_FIGHT("Fucked-up when fighting", "Detection may not working well when in fight"),
 		HEALTH("Change health behavior", "Make health not going down or just regen faster");
 		
 		private final String name, description;

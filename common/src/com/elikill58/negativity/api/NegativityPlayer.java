@@ -36,6 +36,7 @@ import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatCategory;
+import com.elikill58.negativity.universal.detections.Cheat.CheatDescription;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.file.FileHandle;
@@ -171,7 +172,7 @@ public class NegativityPlayer implements FileSaverAction {
 			return false;
 		if (isFreeze)
 			return false;
-		if (isInFight && c.isBlockedInFight())
+		if (isInFight && c.hasOption(CheatDescription.NO_FIGHT))
 			return false;
 		Adapter ada = Adapter.getAdapter();
 		if(ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
@@ -193,7 +194,7 @@ public class NegativityPlayer implements FileSaverAction {
 			return "TPS drop";
 		if(timeInvincibility > System.currentTimeMillis())
 			return "Player invincibility";
-		if (isInFight && c.isBlockedInFight())
+		if (isInFight && c.hasOption(CheatDescription.NO_FIGHT))
 			return "In fight";
 		Adapter ada = Adapter.getAdapter();
 		if(ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper

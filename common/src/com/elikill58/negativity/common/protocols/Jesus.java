@@ -36,7 +36,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Jesus extends Cheat implements Listeners {
 
 	public Jesus() {
-		super(JESUS, CheatCategory.MOVEMENT, Materials.WATER_BUCKET);
+		super(JESUS, CheatCategory.MOVEMENT, Materials.WATER_BUCKET, CheatDescription.NO_FIGHT);
 	}
 
 	@EventListener
@@ -146,10 +146,5 @@ public class Jesus extends Cheat implements Listeners {
 			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(i * 25), "ground-water", "I: " + i + ", sneak: " + p.isSneaking() + ", swim: " + p.isSwimming());
 		}
 		np.booleans.set(JESUS, "bw-was-ground", isOnGround);
-	}
-	
-	@Override
-	public boolean isBlockedInFight() {
-		return true;
 	}
 }

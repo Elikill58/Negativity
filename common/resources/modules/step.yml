@@ -39,3 +39,6 @@ checks:
   # Distance while counting jump
   dif-boost:
     active: true
+  # Check dif by using X/Z dif too
+  dif-no-xz:
+    active: true

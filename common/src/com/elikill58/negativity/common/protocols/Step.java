@@ -131,7 +131,7 @@ public class Step extends Cheat implements Listeners {
 		if (down.getBlock().getType().getId().contains("SHULKER"))
 			return;
 		double difY = to.getY() - from.getY(), difX = to.getX() - from.getX(), difZ = to.getZ() - from.getZ();
-		if (difY <= 0.05 || difY % 0.125 == 0 || (difY == 0.5 && (difX != 0 || difZ != 0))) { // all specific block such
+		if (difY <= 0.05 || difY % 0.125 == 0 || (difY == 0.5 && (difX != 0 || difZ != 0)) || p.getVelocity().getY() >= 0.3) { // all specific block such
 																								// as snow
 			np.listDoubles.remove(getKey(), "old-y");
 			return;

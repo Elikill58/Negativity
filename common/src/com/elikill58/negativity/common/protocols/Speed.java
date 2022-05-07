@@ -126,7 +126,7 @@ public class Speed extends Cheat implements Listeners {
 				Location toHigh = to.clone();
 				toHigh.setY(from.getY());
 				double yy = toHigh.distance(from);
-				if (distance > 0.45 && (distance > (yy * 2)) && p.getFallDistance() < 1) {
+				if ((distance - (p.getVelocity().getY() * 0.95)) > 0.45 && (distance > (yy * 2)) && p.getFallDistance() < 1) {
 					int nb = np.ints.get(getKey(), "high-speed-amount", 0) + 1;
 					if (nb > 4)
 						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(86 + nb), "high-speed",

@@ -36,7 +36,6 @@ body:
     label: "What were you doing while finding bypass ?"
     description: "Please, try to explain (and show with video or screenshoot) to reproduce the bypass."
     placeholder: "Explain the bypass here !"
-    value: "Step 1: On this block..."
   validations:
     required: true
 - type: textarea
@@ -45,7 +44,6 @@ body:
     label: "Which client with which mode ?"
     description: "Precise all informations about which cheat exactly: the client (LiquidBounce, Rise, Vape ...), the mode (NPC, vanilla ...)"
     placeholder: "Vape, NPC"
-    value: "My proof file:"
   validations:
     required: true
 

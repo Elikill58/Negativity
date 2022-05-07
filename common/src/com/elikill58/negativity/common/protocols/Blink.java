@@ -49,7 +49,7 @@ public class Blink extends Cheat implements Listeners {
 	@Check(name = "no-packet", description = "Count when player don't send any packet", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ON_BEDROCK })
 	public void onPacketClear(PlayerPacketsClearEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		if (np.bypassBlink)
+		if (np.bypassBlink || np.otherKeepAliveTime == 0)
 			return;
 		int ping = p.getPing();
 		if (ping < 140) {
@@ -61,7 +61,7 @@ public class Blink extends Cheat implements Listeners {
 					if (last && time_last >= 1000 && !np.otherKeepAlivePacket.equals(PacketType.Client.CUSTOM_PAYLOAD)) {
 						Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - ping),
 								"no-packet", "No packet. Last other than KeepAlive: " + np.otherKeepAlivePacket.getPacketName() + " there is: "
-										+ time_last + "ms .");
+										+ time_last + "ms.");
 					}
 					np.booleans.set(getKey(), "no-packet-is", true);
 				}

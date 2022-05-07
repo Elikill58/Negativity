@@ -63,7 +63,7 @@ public class Step extends Cheat implements Listeners {
 	}
 
 	@Check(name = "dif", description = "Distance about blocks up", conditions = { CheckConditions.SURVIVAL,
-			CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_FLY, CheckConditions.NO_ON_BEDROCK,
+			CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ON_BEDROCK,
 			CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_USE_SLIME, CheckConditions.NO_USE_TRIDENT,
 			CheckConditions.NO_BLOCK_MID_AROUND_BELOW })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
@@ -86,7 +86,7 @@ public class Step extends Cheat implements Listeners {
 	}
 
 	@Check(name = "dif-boost", description = "Distance while counting jump", conditions = { CheckConditions.SURVIVAL,
-			CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_FLY, CheckConditions.NO_ON_BEDROCK,
+			CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ON_BEDROCK,
 			CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_USE_SLIME, CheckConditions.NO_USE_TRIDENT,
 			CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_BLOCK_MID_AROUND_BELOW })
 	public void onPlayerMoveDifBoost(PlayerMoveEvent e, NegativityPlayer np) {
@@ -112,15 +112,15 @@ public class Step extends Cheat implements Listeners {
 					&& !(amplifier > 0 && diffBoost < 0.55) && !LocationUtils.hasBoatAroundHim(p.getLocation())) {
 				Negativity.alertMod(ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(diffBoost == 0.25 ? 95 : diffBoost * 125), "dif-boost",
-						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (because of boost amplifier "
-								+ amplifier + ") Dir Y: " + p.getLocation().getDirection().getY(),
+						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (amplifier "
+								+ amplifier + ") Dir Y: " + p.getLocation().getDirection().getY() + ", vel: " + p.getVelocity(),
 						hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));
 			}
 		}
 	}
 
 	@Check(name = "dif-no-xz", description = "Distance without X/Z moving", conditions = { CheckConditions.SURVIVAL,
-			CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_FLY, CheckConditions.NO_USE_ELEVATOR,
+			CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_USE_ELEVATOR,
 			CheckConditions.NO_USE_SLIME, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onDiffNoXZ(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();

@@ -53,3 +53,6 @@ checks:
   # Player send spoofing packet when risk to have fall damage
   packet:
     active: true
+  # Detect when player faking ground
+  fake-ground:
+    active: true

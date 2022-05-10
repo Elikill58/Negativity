@@ -32,57 +32,66 @@ public class NoFall extends Cheat {
 	public NoFall() {
 		super(CheatKeys.NO_FALL, CheatCategory.MOVEMENT, Materials.YELLOW_WOOL);
 	}
-	
-	@Check(name = "motion-y", description = "Motion Y when fall", conditions = { CheckConditions.NO_USE_ELEVATOR, CheckConditions.SURVIVAL,
-			CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_LIQUID_AROUND })
+
+	@Check(name = "motion-y", description = "Motion Y when fall", conditions = { CheckConditions.NO_USE_ELEVATOR,
+			CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA,
+			CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_LIQUID_AROUND,
+			CheckConditions.NO_FALL_LESS_BLOCK_BELOW })
 	public void onMoveMotionY(PlayerMoveEvent e, NegativityPlayer np) {
-		if(e.isCancelled())
+		if (e.isCancelled())
 			return;
 		Player p = e.getPlayer();
-		if(p.hasPotionEffect(PotionEffectType.SPEED))
+		if (p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
-		if(Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
+		if (Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		Block b = p.getLocation().getBlock();
 		Location locDown = b.getRelative(BlockFace.DOWN).getLocation();
 		Location locUp = b.getRelative(BlockFace.UP).getLocation();
 		double motionY = from.getY() - to.getY();
-		if(p.isOnGround() && to.clone().add(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).getBlock().getType().equals(Materials.AIR)
-				&& locDown.getBlock().getType().equals(Materials.AIR) && locUp.getBlock().getType().equals(Materials.AIR)
-				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD", "SLAB", "HONEY_BLOCK") && !np.isInFight && !b.isWaterLogged()
-				&& ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0) || motionY > (p.getWalkSpeed() / 2)) && p.getFallDistance() > 0.2 && p.getWalkSpeed() > p.getFallDistance()) {
+		if (p.isOnGround()
+				&& to.clone().add(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).getBlock()
+						.getType().equals(Materials.AIR)
+				&& locDown.getBlock().getType().equals(Materials.AIR)
+				&& locUp.getBlock().getType().equals(Materials.AIR) && !np.isInFight && !b.isWaterLogged()
+				&& ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0) || motionY > (p.getWalkSpeed() / 2))
+				&& p.getFallDistance() > 0.2 && p.getWalkSpeed() > p.getFallDistance()) {
 			if (locUp.getBlock().getType().getId().contains("WATER") || LocationUtils.isUsingElevator(p))
 				np.useAntiNoFallSystem = true;
 			if (!np.useAntiNoFallSystem) {
 				int porcent = UniversalUtils.parseInPorcent(900 * motionY);
-				Negativity.alertMod(ReportType.WARNING, p, this, porcent, "motion-y", "New NoFall - Player on ground. motionY: " + motionY + ", walkSpeed: " + p.getWalkSpeed()
-						+ ", onGround: " + p.isOnGround() + ", fallDistance: " + p.getFallDistance(), new Cheat.CheatHover.Literal("MotionY (on ground): " + motionY));
+				Negativity.alertMod(ReportType.WARNING, p, this, porcent, "motion-y",
+						"New NoFall - Ground. motionY: " + motionY + ", ws: " + p.getWalkSpeed() + ", ground: "
+								+ p.isOnGround() + ", fd: " + p.getFallDistance(),
+						new Cheat.CheatHover.Literal("MotionY (on ground): " + motionY));
 			}
-		} else if(motionY < 0.1)
+		} else if (motionY < 0.1)
 			np.useAntiNoFallSystem = false;
 	}
-	
-	@Check(name = "distance-no-ground", description = "Distance when player NOT in ground", conditions = { CheckConditions.NO_GROUND, CheckConditions.NO_FALL_DISTANCE,
-			CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_LIQUID_AROUND })
+
+	@Check(name = "distance-no-ground", description = "Distance when player NOT in ground", conditions = {
+			CheckConditions.NO_GROUND, CheckConditions.NO_FALL_DISTANCE, CheckConditions.SURVIVAL,
+			CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE,
+			CheckConditions.NO_LIQUID_AROUND })
 	public void onMoveDistanceNoGround(PlayerMoveEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;
 		Player p = e.getPlayer();
-		if(p.hasPotionEffect(PotionEffectType.SPEED) || !p.getLocation().clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR))
+		if (p.hasPotionEffect(PotionEffectType.SPEED)
+				|| !p.getLocation().clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR))
 			return;
-		if(Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
+		if (Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double distance = to.toVector().distance(from.toVector());
-		if(distance == 0.0D || from.getY() < to.getY())
+		if (distance == 0.0D || from.getY() < to.getY())
 			return;
 		int relia = UniversalUtils.parseInPorcent(distance * 100);
 		if (distance > 2D) {
 			boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "distance-no-ground",
-					"Player not in ground no fall Damage. FallDistance: " + p.getFallDistance()
-							+ ", DistanceBetweenFromAndTo: " + distance);
-			if(mayCancel)
+					"No ground, fd: " + p.getFallDistance() + ", from/to: " + distance);
+			if (mayCancel)
 				np.noFallDamage += 1;
 		} else if (np.noFallDamage != 0) {
 			if (isSetBack())
@@ -91,18 +100,21 @@ public class NoFall extends Cheat {
 		}
 	}
 
-	@Check(name = "distance-ground", description = "Distance when player in now on ground", conditions = { CheckConditions.GROUND, CheckConditions.NO_FALL_DISTANCE, CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "distance-ground", description = "Distance when player in now on ground", conditions = {
+			CheckConditions.GROUND, CheckConditions.NO_FALL_DISTANCE, CheckConditions.SURVIVAL,
+			CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onMoveDistanceGround(PlayerMoveEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;
 		Player p = e.getPlayer();
-		if(p.hasPotionEffect(PotionEffectType.SPEED) || !p.getLocation().clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR))
+		if (p.hasPotionEffect(PotionEffectType.SPEED)
+				|| !p.getLocation().clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR))
 			return;
-		if(Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
+		if (Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double distance = to.toVector().distance(from.toVector());
-		if(LocationUtils.hasMaterialsAround(to, "WATER") || distance == 0.0D || from.getY() < to.getY())
+		if (LocationUtils.hasMaterialsAround(to, "WATER") || distance == 0.0D || from.getY() < to.getY())
 			return;
 		Vector direction = p.getVelocity().clone();
 		int relia = UniversalUtils.parseInPorcent(distance * 100);
@@ -110,9 +122,9 @@ public class NoFall extends Cheat {
 		double disWithDirY = from.clone().add(direction).toVector().setY(0).distanceSquared(to.toVector().setY(0));
 		if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && PlayerModificationsManager.isSpeedUnlocked(p))) {
 			boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "distance-ground",
-					"Player in ground. FallDamage: " + p.getFallDistance() + ", Distance From/To: "
-							+ distance + ", Velocity Y: " + p.getVelocity().getY() + ", distanceVector: " + distanceVector + ", disDirY: " + disWithDirY);
-			if(mayCancel)
+					"Player in ground. Fd: " + p.getFallDistance() + ", From/To: " + distance + ", VelY: "
+							+ p.getVelocity().getY() + ", vec: " + distanceVector + ", disDirY: " + disWithDirY);
+			if (mayCancel)
 				np.noFallDamage += 1;
 		} else if (np.noFallDamage != 0) {
 			if (isSetBack())
@@ -120,64 +132,91 @@ public class NoFall extends Cheat {
 			np.noFallDamage = 0;
 		}
 	}
-	
-	@Check(name = "have-to-ground", description = "Player try to spoof ground", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_GROUND })
+
+	@Check(name = "have-to-ground", description = "Player try to spoof ground", conditions = { CheckConditions.SURVIVAL,
+			CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE,
+			CheckConditions.NO_GROUND })
 	public void onMoveHaveToGround(PlayerMoveEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;
 		Player p = e.getPlayer();
-		if(p.hasPotionEffect(PotionEffectType.SPEED) || p.getLocation().clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR))
+		if (p.hasPotionEffect(PotionEffectType.SPEED)
+				|| p.getLocation().clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR))
 			return;
-		if(Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
+		if (Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double distance = to.toVector().distance(from.toVector());
-		if(LocationUtils.hasMaterialsAround(to, "WATER") || distance == 0.0D || from.getY() < to.getY())
+		if (LocationUtils.hasMaterialsAround(to, "WATER") || distance == 0.0D || from.getY() < to.getY())
 			return;
 		double motionY = from.getY() - to.getY();
 		Material justUnder = p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();
-		if(justUnder.isSolid() && p.getFallDistance() > 3.0 && !np.isInFight && motionY <= 0) {
+		if (justUnder.isSolid() && p.getFallDistance() > 3.0 && !np.isInFight && motionY <= 0) {
 			int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(100 - (ping / 5) + p.getFallDistance());
 			boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "have-to-ground",
-					"Player not ground with fall damage (FallDistance: " + p.getFallDistance() + "). Block down: " + justUnder.getId()
-							+ ", DistanceBetweenFromAndTo: " + distance);
-			if(mayCancel && isSetBack())
+					"No ground with FD (Fd: " + p.getFallDistance() + "). Block down: " + justUnder.getId()
+							+ ", from/to: " + distance);
+			if (mayCancel && isSetBack())
 				manageDamage(p, (int) p.getFallDistance(), relia);
 		}
 	}
-	
+
 	@Check(name = "packet", description = "Player send spoofing packet when risk to have fall damage", conditions = CheckConditions.SURVIVAL)
 	public void onPacket(PacketReceiveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		AbstractPacket packet = e.getPacket();
 		PacketType type = packet.getPacketType();
-    	if(!type.isFlyingPacket())
-    		return;
-    	NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
-    	if(flying.isGround) {
-    		float lastFall = np.floats.get(getKey(), "last-fall", 0f);
-	    	for(float f : Arrays.asList(2f, 3f)) {
-	    		if(lastFall < f && p.getFallDistance() > f) { // just pass over specific amount of fall
-	    			Location loc = flying.getLocation(p.getWorld());
-	    			if(loc == null)
-	    				loc = p.getLocation();
-	    			Block justBelow = loc.clone().sub(0, 0.2, 0).getBlock();
-	    			boolean belowTransparent = justBelow.getType().isTransparent();
-	    			boolean downTransparent = justBelow.getRelative(BlockFace.DOWN).getType().isTransparent();
-	    			if((belowTransparent || downTransparent) && !LocationUtils.hasOtherThan(justBelow.getLocation(), Materials.AIR)) {
-	    				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 95, "packet",
-	    						"Fall: " + lastFall + ", " + p.getFallDistance() + ", block: " + justBelow, null, (belowTransparent && downTransparent ? 5 : 1));
-	    				if(mayCancel && isSetBack())
-	    					manageDamage(p, (int) p.getFallDistance(), 95);
-	    			}
-	    		}
-	    	}
-    	}
-    	
-    	np.floats.set(getKey(), "last-fall", p.getFallDistance());
+		if (!type.isFlyingPacket())
+			return;
+		NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
+		if (flying.isGround) {
+			float lastFall = np.floats.get(getKey(), "last-fall", 0f);
+			for (float f : Arrays.asList(2f, 3f)) {
+				if (lastFall < f && p.getFallDistance() > f) { // just pass over specific amount of fall
+					Location loc = flying.getLocation(p.getWorld());
+					if (loc == null)
+						loc = p.getLocation();
+					Block justBelow = loc.clone().sub(0, 0.2, 0).getBlock();
+					boolean belowTransparent = justBelow.getType().isTransparent();
+					boolean downTransparent = justBelow.getRelative(BlockFace.DOWN).getType().isTransparent();
+					if ((belowTransparent || downTransparent)
+							&& !LocationUtils.hasOtherThan(justBelow.getLocation(), Materials.AIR)) {
+						boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 95, "packet",
+								"Fall: " + lastFall + ", " + p.getFallDistance() + ", block: " + justBelow, null,
+								(belowTransparent && downTransparent ? 5 : 1));
+						if (mayCancel && isSetBack())
+							manageDamage(p, (int) p.getFallDistance(), 95);
+					}
+				}
+			}
+		}
+
+		np.floats.set(getKey(), "last-fall", p.getFallDistance());
 	}
-	
+
+	@Check(name = "fake-ground", description = "Detect when player faking ground", conditions = CheckConditions.SURVIVAL)
+	public void onFakeGround(PlayerMoveEvent e, NegativityPlayer np) {
+		Player p = e.getPlayer();
+		Location from = e.getFrom(), to = e.getTo();
+		double difY = to.getY() - from.getY();
+		if (difY >= 0)
+			return;
+		// double difX = to.getX() - from.getX(), difZ = to.getZ() - from.getZ();
+		// boolean verticalCollision = difY != p.getVelocity().getY();
+		// boolean ownGroundBefore = verticalCollision && difY < 0.0;
+		Material type = to.sub(0, 0.1, 0).getBlock().getType();
+		boolean ownGround = !p.isFlying() && type.isSolid();
+		if (p.isOnGround() && !ownGround) {
+			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(Math.abs(difY) * 250),
+					"fake-ground",
+					"Dif: " + difY + ", " + p.isFlying() + ", type: " + type.getId() + ", vel: " + p.getVelocity(),
+					new CheatHover.Literal("Y: " + String.format("%.3f", difY)), (long) (Math.abs(difY) * 5));
+		}
+	}
+
 	private void manageDamage(Player p, int damage, int relia) {
-		p.damage(damage >= p.getHealth() ? (getConfig().getBoolean("set_back.kill.active") ? damage : p.getHealth() - 0.5) : damage);
+		p.damage(damage >= p.getHealth()
+				? (getConfig().getBoolean("set_back.kill.active") ? damage : p.getHealth() - 0.5)
+				: damage);
 	}
 }

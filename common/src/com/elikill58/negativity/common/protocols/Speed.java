@@ -20,6 +20,8 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
@@ -126,7 +128,7 @@ public class Speed extends Cheat implements Listeners {
 				Location toHigh = to.clone();
 				toHigh.setY(from.getY());
 				double yy = toHigh.distance(from);
-				if ((distance - (p.getVelocity().getY() * 0.95)) > 0.45 && (distance > (yy * 2)) && p.getFallDistance() < 1) {
+				if ((distance - Math.abs(p.getVelocity().getY() * 0.95)) > 0.45 && (distance > (yy * 2)) && p.getFallDistance() < 1) {
 					int nb = np.ints.get(getKey(), "high-speed-amount", 0) + 1;
 					if (nb > 4)
 						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(86 + nb), "high-speed",
@@ -136,16 +138,7 @@ public class Speed extends Cheat implements Listeners {
 					np.ints.remove(getKey(), "high-speed-amount");
 			}
 		}
-		if(checkActive("same-diff")) {
-			double d = np.doubles.get(SPEED, "dif-y", 0.0);
-			if(dif != 0.0 && d != 0.0) {
-				if (dif == Math.abs(d)) {
-					mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
-							this, 95, "same-diff", "Differences : " + dif + " / " + d);
-				}
-				np.doubles.set(SPEED, "dif-y", dif);
-			}
-		}
+		
 		if(checkActive("walk-speed") && Adapter.getAdapter().getPlatformID().equals(Platform.SPIGOT)) {
 			double distanceWithSpeed = distance - (amplifierSpeed / 10);
 			if(dif == 0 && distanceWithSpeed >= (p.getWalkSpeed() * (p.isSprinting() ? 2.5 : 2) * 1.01)) {
@@ -173,6 +166,24 @@ public class Speed extends Cheat implements Listeners {
 			if (et.getType().equals(EntityType.ENDER_DRAGON) && et.getLocation().distance(p.getLocation()) < 15)
 				return true;
 		return false;
+	}
+	
+	@Check(name = "same-diff", description = "Check for same Y movement", conditions = {
+			CheckConditions.NO_ELYTRA, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_USE_ELEVATOR
+	})
+	public void onMove(PlayerMoveEvent e, NegativityPlayer np) {
+		Player p = e.getPlayer();
+		Location from = e.getFrom(), to = e.getTo();
+		double dif = to.getY() - from.getY();
+		double d = np.doubles.get(getKey(), "dif-y", 0.0);
+		if(dif != 0.0 && d != 0.0) {
+			if (Math.abs(dif) == Math.abs(d)) {
+				if(Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
+						this, 95, "same-diff", "Differences : " + dif + " / " + d) && isSetBack())
+					e.setCancelled(true);
+			}
+			np.doubles.set(getKey(), "dif-y", dif);
+		}
 	}
 
 	@EventListener

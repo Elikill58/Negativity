@@ -7,6 +7,7 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.GameMode;
+import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.block.BlockPlaceEvent;
@@ -99,13 +100,16 @@ public class Scaffold extends Cheat {
 		
 		BlockRay blockRay = new BlockRayBuilder(p).neededPositions(allLocs.stream().map(Vector::toBlockVector).distinct().collect(Collectors.toList()))
 				.maxDistance(6).build();
-		if(blockRay.getBasePosition().getYaw() > 1000)
+		if(blockRay.getBasePosition().getYaw() > 1000) {
+			Adapter.getAdapter().debug("Cancel yaw: " + blockRay.getBasePosition().getYaw());
 			return; // invalid yaw
+		}
 		Adapter.getAdapter().runSync(() -> {
 			BlockRayResult result = blockRay.compile();
 			Block searched = result.getBlock() == null ? place : result.getBlock();
 			double distance = result.getLastDistance();
 			double maxDistance = (p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4) + 0.2;
+			Adapter.getAdapter().debug((searched.getX() == place.getX() && searched.getZ() == place.getZ() ? "Result SAME: " : "Result: ") + result.getRayResult() + ", distance: " + distance + ", block: " + searched + ", place: " + place + ", start: " + blockRay.getBasePosition());
 			if (!result.getRayResult().isFounded()) {
 				Negativity.alertMod(distance > maxDistance + 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(distance * 25), "distance",
@@ -130,4 +134,17 @@ public class Scaffold extends Cheat {
 			});
 		}
 	}
+
+	@Check(name = "place-below", description = "When placing block below", conditions = CheckConditions.NO_INSIDE_VEHICLE)
+	public void onPlaceBlock(BlockPlaceEvent e, NegativityPlayer np) { // should works for bad cheats
+		Player p = e.getPlayer();
+		Block placed = e.getBlock();
+		Location loc = p.getLocation();
+		if(placed.getX() == loc.getBlockX() && placed.getZ() == loc.getBlockZ()) { // if block on same X/Z
+			if(placed.getY() == (loc.getBlockY() - 1) && loc.getPitch() < 50) { // block directly below and not looking below
+				if(Negativity.alertMod(ReportType.WARNING, p, this, getReliabilityAlert(), "place-below", placed + ", " + loc, new CheatHover.Literal("Place block just below")) && isSetBack())
+					e.setCancelled(true);
+			}
+		}
+ 	}
 }

@@ -30,6 +30,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
@@ -175,6 +176,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				return new NPacketPlayInUseItem(pos.getX(), pos.getY(), pos.getZ(), Direction.valueOf(getStr(f, "b").toUpperCase()), timestamp);
 			});
 		}
+		packetsPlayIn.put("PacketPlayInHeldItemSlot", (p, f) -> new NPacketPlayInHeldItemSlot((int) ReflectionUtils.getField(f, v.isNewerOrEquals(Version.V1_17) ? "a" : "itemInHandIndex")));
 		
 
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (p, packet) -> {

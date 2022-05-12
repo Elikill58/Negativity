@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
@@ -37,6 +38,7 @@ import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketChatMessage;
 import net.minecraft.network.play.client.CPacketConfirmTransaction;
 import net.minecraft.network.play.client.CPacketEntityAction;
+import net.minecraft.network.play.client.CPacketHeldItemChange;
 import net.minecraft.network.play.client.CPacketKeepAlive;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
@@ -103,6 +105,7 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 			}
 		});
 		packetsPlayIn.put("CPacketConfirmTransaction", (p, f) -> new NPacketPlayInPong(((CPacketConfirmTransaction) f).getUid()));
+		packetsPlayIn.put("CPacketHeldItemChange", (p, f) -> new NPacketPlayInHeldItemSlot(((CPacketHeldItemChange) f).getSlotId()));
 		
 
 		packetsPlayOut.put("SPacketBlockBreakAnim", (p, f) -> {

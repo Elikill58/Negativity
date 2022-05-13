@@ -23,7 +23,7 @@ public class BanUtils {
 	}
 
 	public static BanResult shouldBan(Cheat cheat, NegativityPlayer np, int relia) {
-		if(!BanManager.banActive)
+		if(!BanManager.banActive || !cheat.getConfig().getBoolean("ban.active", true))
 			return new BanResult(BanResultType.NOT_ENABLED);
 		if(np.getAccount().isInBanning())
 			return new BanResult(BanResultType.ALREADY_BANNED);

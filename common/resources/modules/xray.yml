@@ -33,6 +33,7 @@ verif:
 
 # Override global configuration
 ban:
+  active: false
   reliability_need: 95
   alert_need: 10
   time:

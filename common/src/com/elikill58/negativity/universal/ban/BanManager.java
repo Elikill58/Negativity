@@ -26,6 +26,7 @@ import com.elikill58.negativity.universal.ban.storage.DatabaseActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.DatabaseBanLogsStorage;
 import com.elikill58.negativity.universal.ban.storage.FileActiveBanStorage;
 import com.elikill58.negativity.universal.ban.storage.FileBanLogsStorage;
+import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.webhooks.WebhookManager;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
@@ -266,5 +267,13 @@ public class BanManager {
 	
 	public static Configuration getBanConfig() {
 		return banConfig;
+	}
+	
+	public static int getInt(Cheat where, String key) {
+		return where.getConfig().getInt("ban." + key, getBanConfig().getInt(key));
+	}
+	
+	public static String getString(Cheat where, String key) {
+		return where.getConfig().getString("ban." + key, getBanConfig().getString(key));
 	}
 }

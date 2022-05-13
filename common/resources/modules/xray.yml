@@ -31,6 +31,15 @@ verif:
   # Enable/disable the detection when the verification is enabled
   check_in_verif: true
 
+# Override global configuration
+ban:
+  reliability_need: 95
+  alert_need: 10
+  time:
+    # %reliability% : reliability of last alert
+    # %alert% : number of alert sent
+    calculator: "360000000 + (%reliability% * 20 * %alert%)"
+
 # Disable one check and not all detections
 checks:
   # Count minerate

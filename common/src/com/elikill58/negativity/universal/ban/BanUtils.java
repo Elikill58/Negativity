@@ -4,20 +4,17 @@ import java.sql.Timestamp;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.maths.Expression;
-import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class BanUtils {
 
 	public static int computeBanDuration(NegativityPlayer player, int reliability, Cheat cheat) {
 		try {
-			Expression expression = new Expression(BanManager.getBanConfig().getString("time.calculator")
-					.replaceAll("%reliability%", String.valueOf(reliability))
-					.replaceAll("%alert%", String.valueOf(player.getWarn(cheat)))
-					.replaceAll("%all_alert%", String.valueOf(player.getAllWarn(cheat))));
+			Expression expression = new Expression(UniversalUtils.replacePlaceholders(BanManager.getString(cheat, "time.calculator"), "%reliability%", reliability, "%alert%", player.getWarn(cheat), "%all_alert%", player.getAllWarn(cheat)));
 			return (int) expression.calculate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -32,8 +29,7 @@ public class BanUtils {
 			return new BanResult(BanResultType.ALREADY_BANNED);
 		if (!cheat.isActive() || Perm.hasPerm(np, Perm.BYPASS_BAN))
 			return new BanResult(BanResultType.BYPASS);
-		Configuration conf = BanManager.getBanConfig();
-		return new BanResult(conf.getInt("reliability_need") <= relia && conf.getInt("alert_need") <= np.getAllWarn(cheat) ? BanResultType.DONE : BanResultType.BYPASS);
+		return new BanResult(BanManager.getInt(cheat, "reliability_need") <= relia && BanManager.getInt(cheat, "alert_need") <= np.getAllWarn(cheat) ? BanResultType.DONE : BanResultType.BYPASS);
 	}
 
 	/**
@@ -49,7 +45,7 @@ public class BanUtils {
 		Adapter.getAdapter().getLogger().info("Banning " + player.getName() + " ...");
 		String reason = player.getReason(cheat);
 		long banDuration = -1;
-		int banDefThreshold = BanManager.getBanConfig().getInt("def.ban_time");
+		int banDefThreshold = BanManager.getInt(cheat, "def.ban_time");
 		boolean isDefinitive = BanManager.getLoggedBans(player.getUUID()).size() >= banDefThreshold;
 		if (!isDefinitive) {
 			banDuration = System.currentTimeMillis() + BanUtils.computeBanDuration(player, reliability, cheat);

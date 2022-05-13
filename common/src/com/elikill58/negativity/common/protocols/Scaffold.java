@@ -109,7 +109,7 @@ public class Scaffold extends Cheat {
 			Block searched = result.getBlock() == null ? place : result.getBlock();
 			double distance = result.getLastDistance();
 			double maxDistance = (p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4) + 0.2;
-			Adapter.getAdapter().debug((searched.getX() == place.getX() && searched.getZ() == place.getZ() ? "Result SAME: " : "Result: ") + result.getRayResult() + ", distance: " + distance + ", block: " + searched + ", place: " + place + ", start: " + blockRay.getBasePosition());
+			//Adapter.getAdapter().debug((searched.getX() == place.getX() && searched.getZ() == place.getZ() ? "Result SAME: " : "Result: ") + result.getRayResult() + ", distance: " + distance + ", block: " + searched + ", place: " + place + ", start: " + blockRay.getBasePosition());
 			if (!result.getRayResult().isFounded()) {
 				Negativity.alertMod(distance > maxDistance + 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(distance * 25), "distance",
@@ -147,4 +147,9 @@ public class Scaffold extends Cheat {
 			}
 		}
  	}
+	
+	@Check(name = "rise-slot", description = "Detect move of head & slot.\n§cWARN: This check can be created even without hack.\n§cEnable it carefully.")
+	public void onPacket(PacketReceiveEvent e, NegativityPlayer np) {
+		// fully manage in ScaffoldRiseCheckProcessor
+	}
 }

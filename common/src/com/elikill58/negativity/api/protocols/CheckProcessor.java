@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api.protocols;
 
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 
 public interface CheckProcessor {
 
@@ -10,11 +11,18 @@ public interface CheckProcessor {
 	default void begin() {};
 	
 	/**
-	 * Handle a packet. Just check for which type is it
+	 * Handle a packet when it's received from client. Just check for which type is it
 	 * 
 	 * @param e the event of the packet
 	 */
-	void handlePacketReceived(PacketReceiveEvent e);
+	default void handlePacketReceived(PacketReceiveEvent e) {}
+	
+	/**
+	 * Handle a packet when it's send from the server to client. Just check for which type is it
+	 * 
+	 * @param e the event of the packet
+	 */
+	default void handlePacketSent(PacketSendEvent e) {};
 	
 	/**
 	 * End the check processor

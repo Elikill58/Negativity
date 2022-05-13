@@ -24,6 +24,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.protocols.CheckProcessor;
+import com.elikill58.negativity.common.protocols.checkprocessor.ScaffoldRiseCheckProcessor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Messages;
@@ -119,6 +120,7 @@ public class NegativityPlayer implements FileSaverAction {
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
 		
 		// add processors like this: checkProcessors.add(new SpiderExampleCheckProcessor(this));
+		checkProcessors.add(new ScaffoldRiseCheckProcessor(this));
 		checkProcessors.forEach(CheckProcessor::begin);
 	}
 

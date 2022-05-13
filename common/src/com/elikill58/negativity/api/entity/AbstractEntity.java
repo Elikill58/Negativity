@@ -22,7 +22,7 @@ public abstract class AbstractEntity implements Entity {
 		BlockRayResult result = ray.compile();
 		if(!result.getRayResult().isFounded()) {
 			Adapter.getAdapter().debug("Begin: " + getLocation() + ", vec: " + ray.getVector().toString());
-			Adapter.getAdapter().debug("Tested locs: " + result.getAllTestedLoc().toString());
+			//Adapter.getAdapter().debug("Tested locs: " + result.getAllTestedLoc().toString());
 			return new ArrayList<>();
 		}
 		return Arrays.asList(result.getBlock());

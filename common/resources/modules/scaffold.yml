@@ -36,6 +36,13 @@ checks:
   # Block placed below
   below:
     active: true
-  # DIstance between placed and target one
+  # Distance between placed and target one
   distance:
     active: true
+  # Place block below
+  place-below:
+    active: true
+  # Detect move of head & slot. Should mostly be used while testing
+  rise-slot:
+    # By default, it's disabled until it's not clearly good
+    active: false

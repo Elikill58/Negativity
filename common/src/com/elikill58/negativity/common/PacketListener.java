@@ -137,5 +137,6 @@ public class PacketListener implements Listeners {
 				randomNb = -26;
 			p.queuePacket(new NPacketPlayOutPing(np.idWaitingAppliedVelocity = randomNb));
 		}
+		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketSent(e));
 	}
 }

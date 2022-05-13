@@ -28,9 +28,9 @@ public class Phase extends Cheat {
 		double y = to.getY() - from.getY();
 		if (y > 0.1 && (!loc.clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR)
 				|| !LocationUtils.hasOtherThan(loc.clone().sub(0, 1, 0), Materials.AIR)))
-			np.isJumpingWithBlock = true;
+			np.booleans.set(getKey(), "jumping", true);
 		if (y < -0.1)
-			np.isJumpingWithBlock = false;
+			np.booleans.set(getKey(), "jumping", false);
 		if (!loc.clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR)
 				|| !loc.clone().sub(0, 2, 0).getBlock().getType().equals(Materials.AIR)
 				|| !loc.clone().sub(0, 3, 0).getBlock().getType().equals(Materials.AIR)
@@ -40,9 +40,9 @@ public class Phase extends Cheat {
 			return;
 		if (LocationUtils.hasOtherThan(loc.clone(), Materials.AIR) || LocationUtils.hasOtherThan(loc.clone().sub(0, 1, 0), Materials.AIR))
 			return;
-		if (!np.isJumpingWithBlock) {
+		if (!np.booleans.get(getKey(), "jumping", true)) {
 			Negativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent((y * 200) + 20),
-					"no-jump", "Player on air. No jumping. DistanceBetweenFromAndTo: " + y);
+					"no-jump", "Player on air. No jumping. From/To: " + y);
 		}
 	}
 }

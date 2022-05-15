@@ -16,6 +16,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.report.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DataCounter;
@@ -81,7 +82,7 @@ public class PingSpoof extends Cheat implements Listeners {
 			return;
 		try {
 			if (p.getAddress().getAddress().isReachable(newPing)) {
-				Negativity.alertMod(ReportType.WARNING, p, Cheat.forKey(PINGSPOOF), 98, "reachable",
+				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(newPing - lastPing), "reachable",
 						"Last ping: " + lastPing + ", new ping: " + newPing + ".");
 			}
 		} catch (IOException e1) {

@@ -289,14 +289,14 @@ public class NegativityCommand implements CommandExecutor, TabCompleter {
 						hasBypass = true;
 					}
 					if(!np.hasDetectionActive(c)) {
-						p.sendMessage(ChatColor.RED + "Detection of " + c.getName() + " not active.");
+						p.sendMessage(ChatColor.RED + "Detection of " + c.getName() + " not active: " + np.getWhyDetectionNotActive(c));
 						hasBypass = true;
 					}
 				} else
 					p.sendMessage(ChatColor.RED + "Unknow cheat " + arg[2] + ".");
 			} else
 				p.sendMessage(ChatColor.YELLOW + (np.isInFight ? "In fight, " : "") + "Ping: " + ping + "ms (by default, at 200ms you bypass it)");
-			if((c != null && ping > c.getMaxAlertPing()) || ping > 200)
+			if((c != null && ping > c.getMaxAlertPing()) || (c == null && ping > 200))
 				hasBypass = true;
 			p.sendMessage(hasBypass ? ChatColor.RED + "Warn: " + name +" have bypass, so you cannot be detected." : ChatColor.GREEN + "Good news: " + name + " can be detected !");
 			if(!hasBypass && c != null)

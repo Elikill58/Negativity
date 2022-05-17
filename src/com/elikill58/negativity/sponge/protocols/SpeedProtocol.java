@@ -53,14 +53,6 @@ public class SpeedProtocol extends Cheat {
 		if (!np.hasDetectionActive(this)) {
 			return;
 		}
-		np.MOVE_TIME++;
-		if (np.MOVE_TIME > 60) {
-			boolean b = SpongeNegativity.alertMod(np.MOVE_TIME > 100 ? ReportType.VIOLATION : ReportType.WARNING, p,
-					this, UniversalUtils.parseInPorcent(np.MOVE_TIME * 2), "Move " + np.MOVE_TIME + " times. Ping: "
-							+ Utils.getPing(p) + " Warn for Speed: " + np.getWarn(this));
-			if (b && isSetBack())
-				e.setCancelled(true);
-		}
 		if (np.justDismounted) {
 			// Dismounting a boat teleports the player, triggering a false positive
 			return;

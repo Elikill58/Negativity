@@ -17,6 +17,10 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 archivesBaseName = 'Negativity'
 
+loom {
+    serverOnlyMinecraftJar()
+}
+
 dependencies {
     api project(':common')
 

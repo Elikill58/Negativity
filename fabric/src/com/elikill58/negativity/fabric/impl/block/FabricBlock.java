@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.fabric.impl.location.FabricLocation;
 
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.registry.Registry;
 import net.minecraft.world.World;
 
 public class FabricBlock extends Block {
@@ -26,7 +27,8 @@ public class FabricBlock extends Block {
 
 	@Override
 	public Material getType() {
-		return ItemRegistrar.getInstance().get(block.getDefaultState().getMaterial().toString());
+		String id = Registry.BLOCK.getKey(block).orElseThrow().getValue().getPath();
+		return ItemRegistrar.getInstance().get(id);
 	}
 
 	@Override

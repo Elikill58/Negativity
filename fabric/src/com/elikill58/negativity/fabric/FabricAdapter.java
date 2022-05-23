@@ -50,6 +50,7 @@ import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
+import net.minecraft.util.InvalidIdentifierException;
 
 public class FabricAdapter extends Adapter {
 
@@ -249,13 +250,18 @@ public class FabricAdapter extends Adapter {
 
 	@Override
 	public boolean hasPlugin(String name) {
-		return plugin.getServer().getResourceManager().containsResource(new Identifier(name));
+		try {
+			return plugin.getServer().getResourceManager().containsResource(new Identifier(name));
+		} catch (InvalidIdentifierException e) {
+			return false;
+		}
 	}
 
 	@Override
 	public ExternalPlugin getPlugin(String name) {
 		try {
 			return new FabricExternalPlugin(plugin.getServer().getResourceManager().getResource(new Identifier(name)));
+		} catch (InvalidIdentifierException ignore) {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -284,7 +290,18 @@ public class FabricAdapter extends Adapter {
 	
 	@Override
 	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
-		ServerPlayNetworking.registerGlobalReceiver(new Identifier(channel), (srv, p, handler, buf, sender) -> event.accept(FabricEntityManager.getPlayer(p), buf.array()));
+		ServerPlayNetworking.registerGlobalReceiver(new Identifier(channel), (srv, p, handler, buf, sender) -> {
+			Player player = FabricEntityManager.getPlayer(p);
+			byte[] data;
+			if (buf.hasArray()) {
+				data = buf.array();
+			} else {
+				int length = buf.readableBytes();
+				data = new byte[length];
+				buf.getBytes(buf.readerIndex(), data, 0, length);
+			}
+			event.accept(player, data);
+		});
 	}
 	
 	@Override

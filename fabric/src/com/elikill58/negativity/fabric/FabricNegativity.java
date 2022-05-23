@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
@@ -53,6 +54,7 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.PlayChannelHandler;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -79,7 +81,6 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 		new File(configDir.toFile().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
 
 		Adapter.setAdapter(new FabricAdapter(this));
-		Negativity.loadNegativity();
 
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onGameStart);
 		ServerLifecycleEvents.SERVER_STOPPING.register(this::onGameStop);
@@ -103,6 +104,7 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 
 	public void onGameStart(MinecraftServer srv) {
 		this.server = srv;
+		Negativity.loadNegativity();
 		packetManager = new NegativityPacketManager(this);
 
 		loadCommands(false);
@@ -202,7 +204,11 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 	}
 
 	public static List<ServerPlayerEntity> getOnlinePlayers() {
-		return getInstance().server.getPlayerManager().getPlayerList();
+		PlayerManager playerManager = getInstance().server.getPlayerManager();
+		if (playerManager != null) {
+			return playerManager.getPlayerList();
+		}
+		return Collections.emptyList();
 	}
 
 	public static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover,

@@ -26,7 +26,7 @@ public class BlockListeners {
 	public boolean onBlockBreak(World w, PlayerEntity p, BlockPos pos, BlockState state, BlockEntity be) {
 		BlockBreakEvent event = new BlockBreakEvent(FabricEntityManager.getPlayer((ServerPlayerEntity) p), new FabricBlock(state.getBlock(), w, pos));
 		EventManager.callEvent(event);
-		return event.isCancelled();
+		return !event.isCancelled();
 	}
 
 	public void onBlockPlace(BlockPos pos, BlockState state) {

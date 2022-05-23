@@ -176,6 +176,8 @@ public class NegativityPlayer implements FileSaverAction {
 			return false;
 		if (isInFight && c.hasOption(CheatDescription.NO_FIGHT))
 			return false;
+		if(c.isDisabledForBedrock() && BedrockPlayerManager.isBedrockPlayer(getUUID()))
+			return false;
 		Adapter ada = Adapter.getAdapter();
 		if(ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
 			return false;
@@ -198,6 +200,8 @@ public class NegativityPlayer implements FileSaverAction {
 			return "Player invincibility";
 		if (isInFight && c.hasOption(CheatDescription.NO_FIGHT))
 			return "In fight";
+		if(c.isDisabledForBedrock() && BedrockPlayerManager.isBedrockPlayer(getUUID()))
+			return "Bedrock user";
 		Adapter ada = Adapter.getAdapter();
 		if(ada.getConfig().getDouble("tps_alert_stop") > ada.getLastTPS()) // to make TPS go upper
 			return "Low TPS";

@@ -9,6 +9,9 @@ name: "Invalid Name"
 # Kick player if they have wrong name
 kick: true
 
+bedrock:
+  disabled: true
+
 # Ban player if they have wrong name
 ban:
   # Enable or disable it

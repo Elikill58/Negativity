@@ -42,4 +42,12 @@ public interface Scheduler {
 	static Scheduler getInstance() {
 		return Adapter.getAdapter().getScheduler();
 	}
+	
+	static int tickToMilliseconds(int ticks) {
+		return (ticks * 1000) / 20;
+	}
+	
+	static int millisecondsToTicks(int ms) {
+		return (ms * 20) / 1000;
+	}
 }

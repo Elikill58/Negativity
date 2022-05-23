@@ -105,6 +105,10 @@ public abstract class AbstractDetection<T extends IDetectionKeys<T>> implements 
 		return active;
 	}
 	
+	public boolean isDisabledForBedrock() {
+		return config.getBoolean("bedrock.disabled", false);
+	}
+	
 	@Override
 	public int compareTo(T o) {
 		return key.compareTo(o);

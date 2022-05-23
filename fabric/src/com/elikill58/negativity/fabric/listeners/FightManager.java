@@ -1,6 +1,9 @@
 package com.elikill58.negativity.fabric.listeners;
 
 public class FightManager {
+	
+	public static void register() {
+	}
 
 	// TODO re-add all of the fight system
 	/*@Listener

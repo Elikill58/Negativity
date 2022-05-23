@@ -85,9 +85,9 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onGameStart);
 		ServerLifecycleEvents.SERVER_STOPPING.register(this::onGameStop);
 
-		new FightManager();
-		new BlockListeners();
-		new PlayersListeners();
+		FightManager.register();
+		BlockListeners.register();
+		PlayersListeners.register();
 		ServerPlayConnectionEvents.DISCONNECT.register(this::onLeave);
 		ServerPlayConnectionEvents.INIT.register(this::onAuth);
 

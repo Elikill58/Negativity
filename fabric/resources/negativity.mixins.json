@@ -1,11 +1,9 @@
 {
   "required": true,
   "minVersion": "0.8",
-  "package": "com.elikill58.negativity.fabric.listeners.mixin",
+  "package": "com.elikill58.negativity.fabric.mixin",
   "compatibilityLevel": "JAVA_17",
-  "mixins": [
-  ],
-  "client": [
+  "server": [
     "MixinScreenHandler",
     "MixinServerPlayerEntity",
     "MixinServerPlayNetworkHandler"

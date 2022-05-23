@@ -1,9 +1,10 @@
-package com.elikill58.negativity.fabric.listeners.mixin;
+package com.elikill58.negativity.fabric.mixin;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -33,8 +34,8 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity {
 		return networkHandler.getPlayer();
 	}
 
-	@Inject(at = @At(value = "INVOKE"), method = "onDeath(Lnet/minecraft/entity/damage/DamageSource;)V")
-	public void onPlayerDeath(DamageSource source) {
+	@Inject(at = @At(value = "HEAD"), method = "onDeath(Lnet/minecraft/entity/damage/DamageSource;)V")
+	private void onPlayerDeath(DamageSource source, CallbackInfo ci) {
 		Player p = FabricEntityManager.getPlayer(getPlayer());
 		EventManager.callEvent(new PlayerDeathEvent(p));
 		NegativityPlayer.getNegativityPlayer(p).unfight();
@@ -57,7 +58,7 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity {
 	}
 
 	@Override
-	protected void consumeItem() {
+	public void consumeItem() {
 		if (!this.activeItemStack.isEmpty() && isUsingItem()) {
 			PlayerItemConsumeEvent event = new PlayerItemConsumeEvent(FabricEntityManager.getPlayer(getPlayer()),
 					new FabricItemStack(activeItemStack));

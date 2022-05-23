@@ -1,0 +1,72 @@
+package com.elikill58.negativity.fabric.impl.packet;
+
+import java.util.Locale;
+
+import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
+import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.packets.PacketSendEvent;
+import com.elikill58.negativity.api.events.player.PlayerChatEvent;
+import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
+import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.PacketManager;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+
+public abstract class FabricPacketManager extends PacketManager {
+
+	public void notifyHandlersReceive(PacketSourceType source, AbstractPacket packet) {
+		Player p = packet.getPlayer();
+		PacketReceiveEvent event = new PacketReceiveEvent(source, packet, p);
+		if (packet.getPacket() instanceof NPacketPlayInChat) {
+			NPacketPlayInChat chat = (NPacketPlayInChat) packet.getPacket();
+			String cmd = chat.message;
+			if (chat.message.startsWith("/")) {
+				String[] arg = chat.message.substring(chat.message.indexOf(" ") + 1).split(" ");
+				String prefix = arg.length == 0 ? "" : arg[arg.length - 1].toLowerCase(Locale.ROOT);
+				PlayerCommandPreProcessEvent preProcess = new PlayerCommandPreProcessEvent(p, cmd, arg,
+						prefix, false);
+				EventManager.callEvent(preProcess);
+				if (preProcess.isCancelled())
+					event.setCancelled(true);
+			} else {
+				PlayerChatEvent chatEvent = new PlayerChatEvent(p, cmd, cmd);
+				EventManager.callEvent(chatEvent);
+				event.setCancelled(chatEvent.isCancelled());
+			}
+		} else if(packet.getPacket() instanceof NPacketPlayInFlying) {
+			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
+			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+			PlayerMoveEvent move = new PlayerMoveEvent(p, p.getLocation(), flying.getLocation(p.getWorld()));
+			EventManager.callEvent(move);
+			if (move.hasToSet()) {
+				// TODO manage when changed
+			}
+			if (move.isCancelled()) {
+				event.setCancelled(true);
+				return;
+			}
+
+			if (np.isFreeze && !p.getLocation().clone().sub(0, 1, 0).getBlock().getType().equals(Materials.AIR)) {
+				event.setCancelled(true);
+				return;
+			}
+
+			if (p.getLocation().clone().sub(0, 1, 0).getBlock().getType().getId().contains("SLIME")) {
+				np.isUsingSlimeBlock = true;
+			} else if (np.isUsingSlimeBlock && (p.isOnGround()
+					&& !p.getLocation().clone().sub(0, 1, 0).getBlock().getType().getId().contains("AIR")))
+				np.isUsingSlimeBlock = false;
+		}
+		EventManager.callEvent(event);
+	}
+
+	public void notifyHandlersSent(PacketSourceType source, AbstractPacket packet) {
+		PacketSendEvent event = new PacketSendEvent(source, packet, packet.getPlayer());
+		EventManager.callEvent(event);
+	}
+}

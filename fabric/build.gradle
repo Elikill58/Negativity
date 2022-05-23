@@ -1,0 +1,86 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id 'fabric-loom' version '0.12-SNAPSHOT'
+    id 'com.github.johnrengelman.shadow'
+}
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+archivesBaseName = project.archives_base_name
+group = project.maven_group
+
+dependencies {
+    api project(':common')
+
+    minecraft "com.mojang:minecraft:${project.minecraft_version}"
+    mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
+    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
+
+    // Fabric API. This is technically optional, but you probably want it anyway.
+    modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+}
+
+compileJava.javaCompiler.set(
+        javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(17) }
+)
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
+    it.options.release = 17
+}
+
+java {
+    // Loom will automatically attach sourcesJar to a RemapSourcesJar task and to the "build" task
+    // if it is present.
+    // If you remove this line, sources will not be generated.
+    withSourcesJar()
+}
+
+shadowJar {
+    archiveBaseName.set('negativity')
+    archiveAppendix.set('fabric')
+    archiveClassifier.set(null)
+
+    dependencies {
+        it.include(it.project(':common'))
+    }
+
+    mergeServiceFiles()
+    from(project(':common').tasks.shadowJar)
+
+    exclude('dummyThing')
+}
+
+build.dependsOn shadowJar
+
+parent.tasks.named('shadowJar', ShadowJar) {
+    it.from(shadowJar.outputs)
+    it.manifest.inheritFrom(tasks.jar.manifest)
+}
+
+task prepareServer(type: Copy) {
+    from shadowJar.outputs
+    rename { 'negativity.jar' }
+    def pluginDir = System.getProperty('plugins.dir')
+    if (pluginDir == null) {
+        enabled(false)
+    } else {
+        into pluginDir
+    }
+}

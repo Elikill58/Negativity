@@ -14,8 +14,7 @@ sourceSets {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-archivesBaseName = project.archives_base_name
-group = project.maven_group
+archivesBaseName = 'Negativity'
 
 dependencies {
     api project(':common')
@@ -65,6 +64,7 @@ shadowJar {
     from(project(':common').tasks.shadowJar)
 
     exclude('dummyThing')
+    exclude('mappings/*')
 }
 
 build.dependsOn shadowJar

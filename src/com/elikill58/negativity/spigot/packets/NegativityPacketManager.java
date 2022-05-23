@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.packets;
 
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -26,7 +28,7 @@ public class NegativityPacketManager {
 				pl.getLogger().info("The plugin ProtocolLib has been detected. Loading Protocollib support ...");
 				packetManager = new ProtocollibPacketManager(pl);
 			} else {
-				pl.getLogger().warning("The plugin ProtocolLib has been detected but you have an OLD version, so we cannot use it.");
+				pl.getLogger().warning("The plugin ProtocolLib has been detected but you have an old or too new version, so we cannot use it.");
 				pl.getLogger().warning("Fallback to default Packet system ...");
 				packetManager = new CustomPacketManager(pl);
 			}
@@ -58,12 +60,13 @@ public class NegativityPacketManager {
 	}
 	
 	private boolean checkProtocollibConditions() {
-		try {
-			Class.forName("com.comphenix.protocol.injector.server.TemporaryPlayer");
-			return true;
-		} catch (ClassNotFoundException e) {
-			return false;
+		for(String searchedClass : Arrays.asList("com.comphenix.protocol.injector.server.TemporaryPlayer", "com.comphenix.protocol.injector.temporary.TemporaryPlayer")) { // class since 4.4.0 until 4.8.0, then the new one
+			try {
+				Class.forName(searchedClass);
+				return true; // class found
+			} catch (ClassNotFoundException e) {}
 		}
+		return false;
 	}
 	
 	private void manageReceive(AbstractPacket packet) {

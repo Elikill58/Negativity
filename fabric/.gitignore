@@ -3,6 +3,8 @@
 !/.gitignore
 
 !/build.gradle
+!/gradle.properties
+!/settings.gradle
 
 !/src/
 !/resources/

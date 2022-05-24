@@ -1,11 +1,13 @@
 package com.elikill58.negativity.universal;
 
 public enum Platform {
-	
+
 	BUNGEE("bungee", true),
+	FABRIC("fabric", false),
 	SPIGOT("spigot", false),
 	SPONGE("sponge", false),
 	SPONGE8("sponge8", false),
+	SPONGE9("sponge9", false),
 	VELOCITY("velocity", true);
 	
 	private final String name;

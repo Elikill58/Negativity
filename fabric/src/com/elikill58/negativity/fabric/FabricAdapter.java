@@ -76,7 +76,7 @@ public class FabricAdapter extends Adapter {
 	
 	@Override
 	public Platform getPlatformID() {
-		return Platform.SPONGE;
+		return Platform.FABRIC;
 	}
 
 	@Override

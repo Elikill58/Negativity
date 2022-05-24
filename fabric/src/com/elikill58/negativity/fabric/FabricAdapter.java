@@ -236,12 +236,12 @@ public class FabricAdapter extends Adapter {
 
 	@Override
 	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
-		return null; // TODO add offline players
+		return getPlayer(name); // TODO add offline players
 	}
 	
 	@Override
 	public @Nullable OfflinePlayer getOfflinePlayer(UUID uuid) {
-		return null;
+		return getPlayer(uuid);
 	}
 	
 	@Override

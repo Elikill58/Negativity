@@ -29,6 +29,8 @@ public abstract class FabricPacketManager extends PacketManager {
 			if (chat.message.startsWith("/")) {
 				String cmd = chat.message.substring(1).split(" ")[0];
 				String cmdArg = chat.message.substring(cmd.length() + 1); //+1 for the '/'
+				if(cmdArg.startsWith(" "))
+					cmdArg = cmdArg.substring(1);
 				String[] arg = cmdArg.isBlank() ? new String[0] : cmdArg.split(" ");
 				String prefix = arg.length == 0 ? "" : arg[arg.length - 1].toLowerCase(Locale.ROOT);
 				PlayerCommandPreProcessEvent preProcess = new PlayerCommandPreProcessEvent(p, cmd, arg,

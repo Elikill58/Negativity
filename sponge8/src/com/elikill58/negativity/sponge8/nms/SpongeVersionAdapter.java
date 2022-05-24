@@ -5,7 +5,6 @@ import java.util.Arrays;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
-import com.elikill58.negativity.api.packets.packet.NPacket;
 
 public abstract class SpongeVersionAdapter extends VersionAdapter<ServerPlayer> {
 	
@@ -14,7 +13,7 @@ public abstract class SpongeVersionAdapter extends VersionAdapter<ServerPlayer> 
 	}
 	
 	@Override
-	public NPacket getPacket(ServerPlayer player, Object nms) {
+	public String getNameOfPacket(Object nms) {
 		String formattedPacketName = nms.getClass().getCanonicalName().replace('.', '$');
 		// see https://www.spigotmc.org/posts/3183758/
 		for(String possibleType : Arrays.asList("Serverbound", "Clientbound")) {
@@ -22,8 +21,7 @@ public abstract class SpongeVersionAdapter extends VersionAdapter<ServerPlayer> 
 				formattedPacketName = getParsedName(formattedPacketName, possibleType);
 		}
 		String[] splittedFormatted = formattedPacketName.split("\\.");
-		String packetName = splittedFormatted[splittedFormatted.length - 1];
-		return getPacket(player, nms, packetName);
+		return splittedFormatted[splittedFormatted.length - 1];
 	}
 	
 	/*public NPacket getPacket(Packet<?> nmsPacket) {

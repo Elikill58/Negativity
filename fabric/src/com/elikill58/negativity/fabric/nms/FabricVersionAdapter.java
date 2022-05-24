@@ -1,7 +1,6 @@
 package com.elikill58.negativity.fabric.nms;
 
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
-import com.elikill58.negativity.api.packets.packet.NPacket;
 
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -12,10 +11,9 @@ public abstract class FabricVersionAdapter extends VersionAdapter<ServerPlayerEn
 	}
 	
 	@Override
-	public NPacket getPacket(ServerPlayerEntity player, Object nms) {
+	public String getNameOfPacket(Object nms) {
 		String packetClassName = nms.getClass().getName();
-		String packetName = packetClassName.substring(packetClassName.lastIndexOf('.') + 1);
-		return super.getPacket(player, nms, packetName);
+		return packetClassName.substring(packetClassName.lastIndexOf('.') + 1);
 	}
 	
 	private static FabricVersionAdapter instance = new Fabric_1_18_2();

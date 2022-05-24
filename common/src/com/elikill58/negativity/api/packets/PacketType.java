@@ -88,8 +88,15 @@ public interface PacketType {
 	 */
 	NPacket createNewPacket();
 	
+	/**
+	 * Get the packet direction
+	 * 
+	 * @return direction of the packet type
+	 */
+	PacketDirection getDirection();
+	
+	@Deprecated
 	String CLIENT_PREFIX = "PacketPlayIn", SERVER_PREFIX = "PacketPlayOut", LOGIN_PREFIX = "PacketLogin", STATUS_PREFIX = "PacketStatus", HANDSHAKE_PREFIX = "PacketHandshaking";
-
 
 	public static List<PacketType> values() {
 		List<PacketType> list = new ArrayList<>();
@@ -97,6 +104,7 @@ public interface PacketType {
 		list.addAll(Arrays.asList(Server.values()));
 		list.addAll(Arrays.asList(Login.values()));
 		list.addAll(Arrays.asList(Status.values()));
+		list.addAll(Arrays.asList(Handshake.values()));
 		return list;
 	}
 	
@@ -108,22 +116,14 @@ public interface PacketType {
 	 * @return the packet type, or the UNSET value of the PacketType section or null
 	 */
 	public static PacketType getType(String packetName) {
-		if(packetName.startsWith(CLIENT_PREFIX)) {
-			return getPacketTypeFor(packetName, Client.values(), Client.UNSET);
-		} else if(packetName.startsWith(SERVER_PREFIX)) {
-			return getPacketTypeFor(packetName, Server.values(), Server.UNSET);
-		} else if(packetName.startsWith(LOGIN_PREFIX)) {
-			return getPacketTypeFor(packetName, Login.values(), Login.UNSET);
-		} else if(packetName.startsWith(STATUS_PREFIX)) {
-			return getPacketTypeFor(packetName, Status.values(), Status.UNSET);
-		} else if(packetName.startsWith(HANDSHAKE_PREFIX)) {
-			return getPacketTypeFor(packetName, Handshake.values(), Handshake.UNSET);
-		} else {
-			return null;
+		for(PacketDirection dir : PacketDirection.values()) {
+			if(packetName.startsWith(dir.getPrefix()))
+				return getPacketTypeFor(packetName, dir.getTypes(), dir.getUnset());
 		}
+		return null;
 	}
 	
-	static PacketType getPacketTypeFor(String packetName, PacketType[] types, PacketType unset) {
+	static PacketType getPacketTypeFor(String packetName, List<PacketType> types, PacketType unset) {
 		for(PacketType packet : types)
 			if(packet.getFullName().equalsIgnoreCase(packetName) || packet.getPacketName().equalsIgnoreCase(packetName)  || packet.getAlias().contains(packetName))
 				return packet;
@@ -225,6 +225,11 @@ public interface PacketType {
 				e.printStackTrace();
 				return null;
 			}
+		}
+		
+		@Override
+		public PacketDirection getDirection() {
+			return PacketDirection.CLIENT_TO_SERVER;
 		}
 	}
 	
@@ -377,6 +382,11 @@ public interface PacketType {
 				return null;
 			}
 		}
+		
+		@Override
+		public PacketDirection getDirection() {
+			return PacketDirection.SERVER_TO_CLIENT;
+		}
 	}
 	
 	enum Login implements PacketType {
@@ -439,6 +449,11 @@ public interface PacketType {
 				return null;
 			}
 		}
+		
+		@Override
+		public PacketDirection getDirection() {
+			return PacketDirection.LOGIN;
+		}
 	}
 	
 	enum Status implements PacketType {
@@ -498,6 +513,11 @@ public interface PacketType {
 				return null;
 			}
 		}
+		
+		@Override
+		public PacketDirection getDirection() {
+			return PacketDirection.STATUS;
+		}
 	}
 
 	enum Handshake implements PacketType {
@@ -553,5 +573,9 @@ public interface PacketType {
 			}
 		}
 		
+		@Override
+		public PacketDirection getDirection() {
+			return PacketDirection.HANDSHAKE;
+		}
 	}
 }

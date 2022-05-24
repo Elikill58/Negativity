@@ -13,10 +13,12 @@ import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketManager;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.universal.Adapter;
 
 public abstract class FabricPacketManager extends PacketManager {
 
@@ -25,28 +27,33 @@ public abstract class FabricPacketManager extends PacketManager {
 		PacketReceiveEvent event = new PacketReceiveEvent(source, packet, p);
 		if (packet.getPacket() instanceof NPacketPlayInChat) {
 			NPacketPlayInChat chat = (NPacketPlayInChat) packet.getPacket();
-			String cmd = chat.message;
 			if (chat.message.startsWith("/")) {
-				String[] arg = chat.message.substring(chat.message.indexOf(" ") + 1).split(" ");
+				String cmd = chat.message.substring(1).split(" ")[0];
+				String cmdArg = chat.message.substring(cmd.length() + 2); //+2 for the '/' and ' '
+				String[] arg = cmdArg.isBlank() ? new String[0] : cmdArg.split(" ");
 				String prefix = arg.length == 0 ? "" : arg[arg.length - 1].toLowerCase(Locale.ROOT);
 				PlayerCommandPreProcessEvent preProcess = new PlayerCommandPreProcessEvent(p, cmd, arg,
 						prefix, false);
 				EventManager.callEvent(preProcess);
+				Adapter.getAdapter().getLogger().info("Pre processing cmd " + cmd);
 				if (preProcess.isCancelled())
 					event.setCancelled(true);
 				else {
+					Adapter.getAdapter().getLogger().info("Running cmd " + cmd);
 					CommandExecutionEvent cmdEvent = new CommandExecutionEvent(cmd, p, arg, prefix);
 					EventManager.callEvent(cmdEvent);
 				}
 			} else {
-				PlayerChatEvent chatEvent = new PlayerChatEvent(p, cmd, cmd);
+				Adapter.getAdapter().getLogger().info("Chat cmd " + chat.message);
+				PlayerChatEvent chatEvent = new PlayerChatEvent(p, chat.message, "<%1$s> %2$s");// default MC format
 				EventManager.callEvent(chatEvent);
 				event.setCancelled(chatEvent.isCancelled());
 			}
 		} else if(packet.getPacket() instanceof NPacketPlayInFlying) {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-			PlayerMoveEvent move = new PlayerMoveEvent(p, p.getLocation(), flying.getLocation(p.getWorld()));
+			Location to = flying.getLocation(p.getWorld());
+			PlayerMoveEvent move = new PlayerMoveEvent(p, p.getLocation(), to == null ? p.getLocation() : to);
 			EventManager.callEvent(move);
 			if (move.hasToSet()) {
 				// TODO manage when changed

@@ -3,10 +3,13 @@ package com.elikill58.negativity.api.packets.nms;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.function.BiFunction;
 
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.NPacketHandshake;
@@ -28,6 +31,7 @@ public abstract class VersionAdapter<R> {
 	protected final HashMap<String, BiFunction<R, Object, NPacketHandshake>> packetsHandshake = new HashMap<>();
 	protected final HashMap<String, BiFunction<R, Object, NPacketStatus>> packetsStatus = new HashMap<>();
 	protected final HashMap<PacketType, BiFunction<R, NPacket, Object>> negativityToPlatform = new HashMap<>();
+	protected final List<String> unknownPacket = new ArrayList<>();
 	protected final String version;
 	
 	public VersionAdapter(String version) {
@@ -68,14 +72,17 @@ public abstract class VersionAdapter<R> {
 	
 	public abstract void queuePacket(R p, Object basicPacket);
 
+	@Deprecated
 	public NPacket getPacket(Player pl, Object nms) {
 		return getPacket(getR(pl), nms);
 	}
 
+	@Deprecated
 	public NPacket getPacket(R player, Object nms) {
 		return getPacket(player, nms, nms.getClass().getSimpleName());
 	}
 
+	@Deprecated
 	public NPacket getPacket(R player, Object nms, String packetName) {
 		try {
 			if (packetName.startsWith(PacketType.CLIENT_PREFIX) || packetName.startsWith("Serverbound"))
@@ -88,12 +95,72 @@ public abstract class VersionAdapter<R> {
 				return packetsStatus.getOrDefault(packetName, (p, obj) -> new NPacketStatusUnset()).apply(player, nms);
 			else if (packetName.startsWith(PacketType.HANDSHAKE_PREFIX))
 				return packetsHandshake.getOrDefault(packetName, (p, obj) -> new NPacketHandshakeUnset()).apply(player, nms);
+			else { // name are obfuscated, trying to find it anyway
+				if(packetsPlayIn.containsKey(packetName))
+					return packetsPlayIn.get(packetName).apply(player, nms);
+			}
 		} catch (Exception e) {
 			Adapter.getAdapter().debug("[VersionAdapter] Failed to manage packet " + packetName + ". NMS: " + nms.getClass().getSimpleName());
 			e.printStackTrace();
 		}
-		Adapter.getAdapter().debug("[VersionAdapter] Unknow packet " + packetName + ".");
+		if(!unknownPacket.contains(packetName)) { // if wasn't present
+			unknownPacket.add(packetName);
+			Adapter a = Adapter.getAdapter();
+			a.debug("[VersionAdapter] Unknow packet " + packetName + ":");
+			for(Field f : nms.getClass().getDeclaredFields()) {
+				a.debug(" " + f.getName() + " (type: " + f.getType().getSimpleName() + ")");
+			}
+			Class<?> superClass = nms.getClass().getSuperclass();
+			if(!superClass.equals(Object.class)) {
+				a.debug(" SuperClass: " + superClass.getSimpleName());
+			}
+		}
 		return null;
+	}
+
+	public NPacket getPacket(Player pl, PacketDirection dir, Object nms) {
+		return getPacket(getR(pl), dir, nms);
+	}
+
+	public NPacket getPacket(R player, PacketDirection dir, Object nms) {
+		return getPacket(player, dir, nms, getNameOfPacket(nms));
+	}
+
+	public NPacket getPacket(R player, PacketDirection dir, Object nms, String packetName) {
+		try {
+			switch (dir) {
+			case CLIENT_TO_SERVER:
+				return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset(packetName, PacketType.getType(packetName))).apply(player, nms);
+			case SERVER_TO_CLIENT:
+				return packetsPlayOut.getOrDefault(packetName, (p, obj) -> new NPacketPlayOutUnset(packetName)).apply(player, nms);
+			case HANDSHAKE:
+				return packetsHandshake.getOrDefault(packetName, (p, obj) -> new NPacketHandshakeUnset()).apply(player, nms);
+			case LOGIN:
+				return new NPacketLoginUnset();
+			case STATUS:
+				return packetsStatus.getOrDefault(packetName, (p, obj) -> new NPacketStatusUnset()).apply(player, nms);
+			}
+		} catch (Exception e) {
+			Adapter.getAdapter().debug("[VersionAdapter] Failed to manage packet " + packetName + ". NMS: " + nms.getClass().getSimpleName());
+			e.printStackTrace();
+		}
+		if(!unknownPacket.contains(packetName)) { // if wasn't present
+			unknownPacket.add(packetName);
+			Adapter a = Adapter.getAdapter();
+			a.debug("[VersionAdapter] Unknow packet " + packetName + ":");
+			for(Field f : nms.getClass().getDeclaredFields()) {
+				a.debug(" " + f.getName() + " (type: " + f.getType().getSimpleName() + ")");
+			}
+			Class<?> superClass = nms.getClass().getSuperclass();
+			if(!superClass.equals(Object.class)) {
+				a.debug(" SuperClass: " + superClass.getSimpleName());
+			}
+		}
+		return null;
+	}
+	
+	public String getNameOfPacket(Object nms) {
+		return nms.getClass().getSimpleName();
 	}
 
 	protected <T> T get(Object obj, Class<?> clazz, String name) {

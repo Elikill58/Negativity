@@ -8,6 +8,7 @@ import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
 import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
 import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
 import com.elikill58.negativity.sponge8.impl.packet.SpongePacketManager;
@@ -66,7 +67,7 @@ public class PacketGateManager extends SpongePacketManager {
 			ServerPlayer p = optionalPlayer.get();
 			SpongeVersionAdapter ada = SpongeVersionAdapter.getVersionAdapter();
 			Packet<?> nmsPacket = e.packet();
-			AbstractPacket packet = packetManager.onPacketReceive(ada.getPacket(p, nmsPacket), p, nmsPacket, e);
+			AbstractPacket packet = packetManager.onPacketReceive(ada.getPacket(p, PacketDirection.CLIENT_TO_SERVER, nmsPacket), p, nmsPacket, e);
 			if(packet != null)
 				e.setCancelled(packet.isCancelled());
 		}
@@ -82,7 +83,7 @@ public class PacketGateManager extends SpongePacketManager {
 			ServerPlayer p = optionalPlayer.get();
 			SpongeVersionAdapter ada = SpongeVersionAdapter.getVersionAdapter();
 			Packet<?> nmsPacket = e.packet();
-			AbstractPacket packet = packetManager.onPacketSent(ada.getPacket(p, nmsPacket), p, nmsPacket, e);
+			AbstractPacket packet = packetManager.onPacketSent(ada.getPacket(p, PacketDirection.SERVER_TO_CLIENT, nmsPacket), p, nmsPacket, e);
 			if(packet != null)
 				e.setCancelled(packet.isCancelled());
 		}

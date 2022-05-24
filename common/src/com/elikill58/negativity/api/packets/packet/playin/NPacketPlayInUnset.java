@@ -10,7 +10,7 @@ public class NPacketPlayInUnset implements NPacketPlayIn {
 	
 	public NPacketPlayInUnset(String packetName, PacketType type) {
 		this.packetName = packetName;
-		this.type = type;
+		this.type = type == null ? PacketType.Client.UNSET : type;
 	}
 
 	@Override

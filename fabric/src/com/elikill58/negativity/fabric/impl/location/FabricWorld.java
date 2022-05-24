@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.fabric.impl.block.FabricBlock;
 import com.elikill58.negativity.fabric.impl.entity.FabricEntityManager;
+import com.elikill58.negativity.fabric.impl.entity.FabricTypeFilter;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 import net.minecraft.server.world.ServerEntityManager;
@@ -48,7 +49,7 @@ public class FabricWorld extends World {
 		try {
 			ServerEntityManager<net.minecraft.entity.Entity> entityManager = ReflectionUtils.getFirstWith(w,
 					ServerWorld.class, ServerEntityManager.class);
-			entityManager.getLookup().forEach(null, e -> list.add(FabricEntityManager.getEntity(e)));
+			entityManager.getLookup().forEach(FabricTypeFilter.getFilter(), e -> list.add(FabricEntityManager.getEntity(e)));
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}

@@ -10,6 +10,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.slf4j.Logger;
 
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
@@ -63,9 +64,9 @@ public class FabricAdapter extends Adapter {
 	private final Version serverVersion;
 	private final Scheduler scheduler;
 	
-	public FabricAdapter(FabricNegativity sn) {
+	public FabricAdapter(FabricNegativity sn, Logger logger) {
 		this.plugin = sn;
-		this.logger = new Slf4jLoggerAdapter(sn.getLogger());
+		this.logger = new Slf4jLoggerAdapter(logger);
 		this.config = UniversalUtils.loadConfig(new File(getDataFolder(), "config.yml"), "config.yml");
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("lang"), "Negativity", "CheatHover");
 		this.itemRegistrar = new FabricItemRegistrar();

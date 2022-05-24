@@ -85,7 +85,7 @@ public class FabricPlayer extends FabricEntity<ServerPlayerEntity> implements Pl
 
 	@Override
 	public boolean isOp() {
-		return entity.hasPermissionLevel(Integer.MAX_VALUE);
+		return entity.hasPermissionLevel(4);
 	}
 
 	@Override
@@ -160,7 +160,7 @@ public class FabricPlayer extends FabricEntity<ServerPlayerEntity> implements Pl
 
 	@Override
 	public boolean hasPermission(String perm) {
-		return false;
+		return isOp();
 	}
 
 	@Override

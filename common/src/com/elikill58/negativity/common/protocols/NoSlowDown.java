@@ -55,7 +55,6 @@ public class NoSlowDown extends Cheat implements Listeners {
 	    	np.booleans.remove(NO_SLOW_DOWN, "on-soul-sand");
 	    	return;
 	    }
-	    
 	    if(loc.getBlock().getType().equals(Materials.SOUL_SAND)) {
 	    	boolean had = np.booleans.get(NO_SLOW_DOWN, "on-soul-sand", false);
 	    	if(had) {

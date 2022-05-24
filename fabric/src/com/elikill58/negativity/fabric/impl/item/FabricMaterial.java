@@ -19,7 +19,7 @@ public class FabricMaterial extends Material {
 
 	@Override
 	public String getId() {
-		return type.getName().asString();
+		return type.toString();
 	}
 
 	@Override

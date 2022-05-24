@@ -42,6 +42,7 @@ public enum CheatKeys implements IDetectionKeys<CheatKeys> {
 	SCAFFOLD("SCAFFOLD"),
 	SNEAK("SNEAK"),
 	SPEED("SPEED"),
+	STRAFE("STRAFE"),
 	SPIDER("SPIDER"),
 	STEP("STEP"),
 	SUPER_KNOCKBACK("SUPERKNOCKBACK"),

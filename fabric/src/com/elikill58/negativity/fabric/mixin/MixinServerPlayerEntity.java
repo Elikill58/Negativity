@@ -20,7 +20,6 @@ import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 
 @Mixin(ServerPlayerEntity.class)
 public abstract class MixinServerPlayerEntity extends PlayerEntity {
@@ -43,7 +42,6 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity {
 
 	@Override
 	public boolean damage(DamageSource source, float amount) {
-		getPlayer().sendMessage(Text.of("Damage debugger"), false);
 		EventManager.callEvent(new PlayerDamagedByEntityEvent(FabricEntityManager.getPlayer(getPlayer()),
 				FabricEntityManager.getEntity(source.getAttacker())));
 		return super.damage(source, amount);

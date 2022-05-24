@@ -16,6 +16,7 @@ import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.injector.packet.PacketRegistry;
 import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
 import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.spigot.impl.packet.SpigotPacketManager;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
@@ -69,7 +70,7 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 				return;
 			}
 			Object nmsPacket = e.getPacket().getHandle();
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player, nmsPacket);
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player, PacketDirection.SERVER_TO_CLIENT, nmsPacket);
 			if(commonPacket == null)
 				return;
 			AbstractPacket packet = ProtocollibPacketManager.this.onPacketSent(commonPacket, player, nmsPacket, e);
@@ -88,7 +89,7 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 				return;
 			}
 			Object nmsPacket = e.getPacket().getHandle();
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player, nmsPacket);
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player, PacketDirection.CLIENT_TO_SERVER, nmsPacket);
 			if(commonPacket == null)
 				return;
 			AbstractPacket packet = ProtocollibPacketManager.this.onPacketReceive(commonPacket, player, nmsPacket, e);

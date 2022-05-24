@@ -8,7 +8,7 @@ public class NegativityPacketManager {
 	private FabricPacketManager fabricPacketManager;
 
 	public NegativityPacketManager(FabricNegativity pl) {
-		fabricPacketManager = new FabricManager();
+		fabricPacketManager = new CustomPacketManager();
 	}
 
 	public FabricPacketManager getSpongePacketManager() {

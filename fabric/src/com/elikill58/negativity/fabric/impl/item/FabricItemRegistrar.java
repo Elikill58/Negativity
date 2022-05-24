@@ -8,7 +8,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.fabric.FabricNegativity;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import net.minecraft.item.Item;
@@ -40,7 +40,7 @@ public class FabricItemRegistrar extends ItemRegistrar {
 			
 			StringJoiner sj = new StringJoiner(", ", " : ", "");
 			for(String alias : parsedAliases) sj.add(alias + " (" + parse(alias) + ")");
-			FabricNegativity.getInstance().getLogger().info("[FabricItemRegistrar] Cannot find material " + id + sj);
+			Adapter.getAdapter().getLogger().info("[FabricItemRegistrar] Cannot find material " + id + sj);
 			return null;
 		});
 	}

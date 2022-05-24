@@ -10,10 +10,12 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.fabric.impl.block.FabricBlock;
 import com.elikill58.negativity.fabric.impl.entity.FabricEntityManager;
+import com.elikill58.negativity.fabric.impl.entity.FabricTypeFilter;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
+import net.minecraft.server.world.ServerEntityManager;
+import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.entity.EntityLookup;
 
 public class FabricWorld extends World {
 
@@ -44,8 +46,13 @@ public class FabricWorld extends World {
 	public List<Entity> getEntities() {
 		List<Entity> list = new ArrayList<>();
 		w.getProfiler().visit("getEntities");
-		EntityLookup<net.minecraft.entity.Entity> lookup = (EntityLookup<net.minecraft.entity.Entity>) ReflectionUtils.callMethod(w, "getEntityLookup");
-		lookup.forEach(null, e -> list.add(FabricEntityManager.getEntity(e)));
+		try {
+			ServerEntityManager<net.minecraft.entity.Entity> entityManager = ReflectionUtils.getFirstWith(w,
+					ServerWorld.class, ServerEntityManager.class);
+			entityManager.getLookup().forEach(FabricTypeFilter.getFilter(), e -> list.add(FabricEntityManager.getEntity(e)));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
 		return list;
 	}
 
@@ -53,12 +60,12 @@ public class FabricWorld extends World {
 	public Difficulty getDifficulty() {
 		return Difficulty.valueOf(w.getDifficulty().toString());
 	}
-	
+
 	@Override
 	public int getMaxHeight() {
 		return w.getHeight();
 	}
-	
+
 	@Override
 	public int getMinHeight() {
 		return 0;

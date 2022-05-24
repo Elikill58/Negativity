@@ -10,6 +10,7 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.slf4j.Logger;
 
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
@@ -63,9 +64,9 @@ public class FabricAdapter extends Adapter {
 	private final Version serverVersion;
 	private final Scheduler scheduler;
 	
-	public FabricAdapter(FabricNegativity sn) {
+	public FabricAdapter(FabricNegativity sn, Logger logger) {
 		this.plugin = sn;
-		this.logger = new Slf4jLoggerAdapter(sn.getLogger());
+		this.logger = new Slf4jLoggerAdapter(logger);
 		this.config = UniversalUtils.loadConfig(new File(getDataFolder(), "config.yml"), "config.yml");
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("lang"), "Negativity", "CheatHover");
 		this.itemRegistrar = new FabricItemRegistrar();
@@ -75,7 +76,7 @@ public class FabricAdapter extends Adapter {
 	
 	@Override
 	public Platform getPlatformID() {
-		return Platform.SPONGE;
+		return Platform.FABRIC;
 	}
 
 	@Override
@@ -182,7 +183,7 @@ public class FabricAdapter extends Adapter {
 
 	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
-		Text t = Text.of("");
+		Text t = Text.of(message);
 		List<Text> texts = t.getWithStyle(t.getStyle().withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of(hover))).withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command)));
 		ServerPlayerEntity pe = ((ServerPlayerEntity) p.getDefault());
 		texts.forEach(text -> pe.sendMessage(text, false));
@@ -235,12 +236,12 @@ public class FabricAdapter extends Adapter {
 
 	@Override
 	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
-		return null; // TODO add offline players
+		return getPlayer(name); // TODO add offline players
 	}
 	
 	@Override
 	public @Nullable OfflinePlayer getOfflinePlayer(UUID uuid) {
-		return null;
+		return getPlayer(uuid);
 	}
 	
 	@Override

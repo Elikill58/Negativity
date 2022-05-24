@@ -16,6 +16,7 @@ import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.FileSystem;
+import java.nio.file.FileSystemAlreadyExistsException;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -368,6 +369,16 @@ public class UniversalUtils {
 						} else {
 							Adapter.getAdapter().getLogger().error("Cannot load config.");
 							return null;
+						}
+					} catch(FileSystemAlreadyExistsException e) { // already exist
+						try (FileSystem jarFs = FileSystems.getFileSystem(migrationsDirUri)) {
+							Path cheatPath = jarFs.getPath("/assets/negativity", configName);
+							if(Files.isRegularFile(cheatPath)) {
+								Files.copy(cheatPath, Paths.get(configFile.toURI()));
+							} else {
+								Adapter.getAdapter().getLogger().error("Cannot load config.");
+								return null;
+							}
 						}
 					}
 				}

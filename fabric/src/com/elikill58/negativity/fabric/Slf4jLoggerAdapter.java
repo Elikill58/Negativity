@@ -14,17 +14,17 @@ public class Slf4jLoggerAdapter implements LoggerAdapter {
 	
 	@Override
 	public void info(String msg) {
-		logger.info(msg);
+		logger.info("[Negativity] " +  msg);
 	}
 
 	@Override
 	public void warn(String msg) {
-		logger.warn(msg);
+		logger.warn("[Negativity] " +  msg);
 	}
 
 	@Override
 	public void error(String msg) {
-		logger.error(msg);
+		logger.error("[Negativity] " +  msg);
 	}
 
 }

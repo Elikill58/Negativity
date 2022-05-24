@@ -6,6 +6,7 @@ import java.util.logging.Level;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
@@ -117,7 +118,7 @@ public class INCChannel extends ChannelAbstract {
 
 		@Override
 		public void channelRead(ChannelHandlerContext ctx, Object packet) throws Exception {
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet);
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, PacketDirection.CLIENT_TO_SERVER, packet);
 			if(commonPacket == null) {
 				super.channelRead(ctx, packet);
 				return;
@@ -149,7 +150,7 @@ public class INCChannel extends ChannelAbstract {
 
 		@Override
 		public void write(ChannelHandlerContext ctx, Object packet, ChannelPromise promise) throws Exception {
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, packet);
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(owner, PacketDirection.SERVER_TO_CLIENT, packet);
 			if(commonPacket == null) {
 				super.write(ctx, packet, promise);
 				return;
@@ -182,7 +183,7 @@ public class INCChannel extends ChannelAbstract {
 			try {
 				PacketType packetType = PacketType.getType(packet.getClass().getSimpleName());
 				if(!(packetType instanceof PacketType.Client || packetType instanceof PacketType.Server)) {
-					NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket((Player) null, packet);
+					NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket((Player) null, PacketDirection.HANDSHAKE, packet);
 					AbstractPacket nextPacket = getPacketManager().onPacketReceive(commonPacket, null, packet);
 					if(nextPacket != null && nextPacket.isCancelled())
 						return;

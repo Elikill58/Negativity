@@ -79,8 +79,10 @@ public class CommandManager implements Listeners {
 	@EventListener
 	public void onCommand(CommandExecutionEvent e) {
 		CommandListeners cmd = commands.get(e.getCommand().toLowerCase(Locale.ROOT));
-		if(cmd != null)
+		if(cmd != null) {
+			e.setManagedByNegativity(true);
 			e.setGoodResult(cmd.onCommand(e.getSender(), e.getArgument(), e.getPrefix()));
+		}
 	}
 	
 	@EventListener

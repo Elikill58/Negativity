@@ -64,13 +64,14 @@ import net.minecraft.util.Identifier;
 public class FabricNegativity implements DedicatedServerModInitializer {
 
 	public static FabricNegativity INSTANCE;
-	public static final Logger LOGGER = LoggerFactory.getLogger("negativity");
+	private static final Logger LOGGER = LoggerFactory.getLogger("negativity");
 
 	private Path configDir;
 	private MinecraftServer server;
 	private NegativityPacketManager packetManager;
+	private CommandDispatcher<ServerCommandSource> dispatcher;
 	public static Identifier negativityChannel = new Identifier(NegativityMessagesManager.CHANNEL_ID),
-			fmlChannel = new Identifier("fml:hs"), bungeecordChannel = new Identifier("Bungeecord");
+			fmlChannel = new Identifier("fml:hs"), bungeecordChannel = new Identifier("bungeecord");
 
 	@Override
 	public void onInitializeServer() {
@@ -80,10 +81,11 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 		configDir.toFile().mkdirs();
 		new File(configDir.toFile().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
 
-		Adapter.setAdapter(new FabricAdapter(this));
+		Adapter.setAdapter(new FabricAdapter(this, LOGGER));
 
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onGameStart);
 		ServerLifecycleEvents.SERVER_STOPPING.register(this::onGameStop);
+		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> this.dispatcher = dispatcher);
 
 		FightManager.register();
 		BlockListeners.register();
@@ -122,17 +124,19 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 	private void loadCommands(boolean reload) {
 		if (reload)
 			return;
-		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> {
-			registerCommand("negativity", dispatcher, "neg", "n");
-			reloadCommand("nmod", dispatcher, "mod");
-			reloadCommand("kick", dispatcher, "nkick", "kick");
-			reloadCommand("lang", dispatcher, "nlang", "lang");
-			reloadCommand("report", dispatcher, "nreport", "report", "repot");
-			reloadCommand("ban", dispatcher, "nban", "negban", "ban");
-			reloadCommand("unban", dispatcher, "nunban", "negunban", "unban");
-			reloadCommand("chat.clear", dispatcher, "nclearchat", "clearchat");
-			reloadCommand("chat.lock", dispatcher, "nlockchat", "lockchat");
-		});
+		if(dispatcher == null) {
+			Adapter.getAdapter().getLogger().warn("The command dispatcher is not set yet.");
+			return;
+		}
+		registerCommand("negativity", dispatcher, "neg", "n");
+		reloadCommand("nmod", dispatcher, "nmod", "mod");
+		reloadCommand("kick", dispatcher, "nkick", "kick");
+		reloadCommand("lang", dispatcher, "nlang", "lang");
+		reloadCommand("report", dispatcher, "nreport", "report", "repot");
+		reloadCommand("ban", dispatcher, "nban", "negban", "ban");
+		reloadCommand("unban", dispatcher, "nunban", "negunban", "unban");
+		reloadCommand("chat.clear", dispatcher, "nclearchat", "clearchat");
+		reloadCommand("chat.lock", dispatcher, "nlockchat", "lockchat");
 	}
 
 	private void reloadCommand(String configKey, CommandDispatcher<ServerCommandSource> dispatcher, String cmd,
@@ -199,10 +203,6 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 		return packetManager;
 	}
 
-	public Logger getLogger() {
-		return LOGGER;
-	}
-
 	public static List<ServerPlayerEntity> getOnlinePlayers() {
 		PlayerManager playerManager = getInstance().server.getPlayerManager();
 		if (playerManager != null) {
@@ -219,7 +219,7 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 					.writeMessage(new AlertMessage(p.getUniqueId(), cheatName, reliability, ping, hover, alertsCount)));
 			ServerPlayNetworking.send((ServerPlayerEntity) p.getDefault(), negativityChannel, buf);
 		} catch (IOException e) {
-			FabricNegativity.getInstance().getLogger().error("Could not send report message to the proxy.", e);
+			e.printStackTrace();
 		}
 	}
 
@@ -230,7 +230,7 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 					NegativityMessagesManager.writeMessage(new ReportMessage(nameReported, reportMsg, p.getName())));
 			ServerPlayNetworking.send((ServerPlayerEntity) p.getDefault(), negativityChannel, buf);
 		} catch (IOException e) {
-			FabricNegativity.getInstance().getLogger().error("Could not send report message to the proxy.", e);
+			e.printStackTrace();
 		}
 	}
 
@@ -241,7 +241,7 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 			buf.writeBytes(rawMessage);
 			ServerPlayNetworking.send(player, negativityChannel, buf);
 		} else {
-			getInstance().getLogger()
+			Adapter.getAdapter().getLogger()
 					.error("Could not send plugin message to proxy because there are no player online.");
 		}
 	}

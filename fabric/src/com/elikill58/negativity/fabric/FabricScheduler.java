@@ -30,27 +30,27 @@ public class FabricScheduler implements Scheduler {
 			task.accept(wrapper);
 			if(wrapper.getTask().isCancelled() || wrapper.getTask().isDone())
 				tasksWrapper.remove(id);
-		}, Scheduler.tickToMilliseconds(delayTicks), Scheduler.tickToMilliseconds(intervalTicks), TimeUnit.SECONDS)));
+		}, Scheduler.tickToMilliseconds(delayTicks), Scheduler.tickToMilliseconds(intervalTicks), TimeUnit.MILLISECONDS)));
 	}
 	
 	@Override
 	public ScheduledTask runRepeating(Runnable task, int delayTicks, int intervalTicks) {
-		return new TaskWrapper(service.scheduleAtFixedRate(task, Scheduler.tickToMilliseconds(intervalTicks), Scheduler.tickToMilliseconds(intervalTicks), TimeUnit.SECONDS));
+		return new TaskWrapper(service.scheduleAtFixedRate(task, Scheduler.tickToMilliseconds(intervalTicks), Scheduler.tickToMilliseconds(intervalTicks), TimeUnit.MILLISECONDS));
 	}
 	
 	@Override
 	public ScheduledTask runRepeating(Runnable task, int intervalTicks, @Nullable String name) {
-		return new TaskWrapper(service.scheduleAtFixedRate(task, Scheduler.tickToMilliseconds(intervalTicks), Scheduler.tickToMilliseconds(intervalTicks), TimeUnit.SECONDS));
+		return new TaskWrapper(service.scheduleAtFixedRate(task, Scheduler.tickToMilliseconds(intervalTicks), Scheduler.tickToMilliseconds(intervalTicks), TimeUnit.MILLISECONDS));
 	}
 	
 	@Override
 	public ScheduledTask runRepeatingAsync(Runnable task, int intervalTicks, @Nullable String name) {
-		return new TaskWrapper(service.scheduleAtFixedRate(task, Scheduler.tickToMilliseconds(intervalTicks), Scheduler.tickToMilliseconds(intervalTicks), TimeUnit.SECONDS));
+		return new TaskWrapper(service.scheduleAtFixedRate(task, Scheduler.tickToMilliseconds(intervalTicks), Scheduler.tickToMilliseconds(intervalTicks), TimeUnit.MILLISECONDS));
 	}
 	
 	@Override
 	public ScheduledTask runDelayed(Runnable task, int delayTicks) {
-		return new TaskWrapper(service.schedule(task, Scheduler.tickToMilliseconds(delayTicks), TimeUnit.SECONDS));
+		return new TaskWrapper(service.schedule(task, Scheduler.tickToMilliseconds(delayTicks), TimeUnit.MILLISECONDS));
 	}
 	
 	private static class TaskWrapper implements ScheduledTask {

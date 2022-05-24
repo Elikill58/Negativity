@@ -52,32 +52,32 @@ public class Fabric_1_18_2 extends FabricVersionAdapter {
 
 	public Fabric_1_18_2() {
 		super("v1_12_2");
-		packetsPlayIn.put("PlayerActionC2SPacket", (p, packet) -> {
+		packetsPlayIn.put(PlayerActionC2SPacket.class.getSimpleName(), (p, packet) -> {
 			PlayerActionC2SPacket blockDig = (PlayerActionC2SPacket) packet;
 			BlockPos pos = blockDig.getPos();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(),
 					translateDigAction(blockDig.getAction()), translateFacing(blockDig.getDirection()));
 		});
 
-		packetsPlayIn.put("ChatMessageC2SPacket",
+		packetsPlayIn.put(ChatMessageC2SPacket.class.getSimpleName(),
 				(p, packet) -> new NPacketPlayInChat(((ChatMessageC2SPacket) packet).getChatMessage()));
 
-		packetsPlayIn.put("PlayerMoveC2SPacket$Full", (p, f) -> {
+		packetsPlayIn.put(PlayerMoveC2SPacket.Full.class.getSimpleName(), (p, f) -> {
 			PlayerMoveC2SPacket.Full packet = (PlayerMoveC2SPacket.Full) f;
 			return new NPacketPlayInPositionLook(packet.getX(0), packet.getY(0), packet.getZ(0), packet.getYaw(0),
 					packet.getPitch(0), packet.isOnGround());
 		});
-		packetsPlayIn.put("PlayerMoveC2SPacket$PositionAndOnGround", (p, f) -> {
+		packetsPlayIn.put(PlayerMoveC2SPacket.PositionAndOnGround.class.getSimpleName(), (p, f) -> {
 			PlayerMoveC2SPacket.PositionAndOnGround packet = (PlayerMoveC2SPacket.PositionAndOnGround) f;
 			return new NPacketPlayInPosition(packet.getX(0), packet.getY(0), packet.getZ(0), packet.getYaw(0),
 					packet.getPitch(0), packet.isOnGround());
 		});
-		packetsPlayIn.put("PlayerMoveC2SPacket$LookAndOnGround", (p, f) -> {
+		packetsPlayIn.put(PlayerMoveC2SPacket.LookAndOnGround.class.getSimpleName(), (p, f) -> {
 			PlayerMoveC2SPacket.LookAndOnGround packet = (PlayerMoveC2SPacket.LookAndOnGround) f;
 			return new NPacketPlayInLook(packet.getX(0), packet.getY(0), packet.getZ(0), packet.getYaw(0),
 					packet.getPitch(0), packet.isOnGround());
 		});
-		packetsPlayIn.put("PlayerMoveC2SPacket$OnGroundOnly", (p, f) -> {
+		packetsPlayIn.put(PlayerMoveC2SPacket.OnGroundOnly.class.getSimpleName(), (p, f) -> {
 			PlayerMoveC2SPacket.OnGroundOnly packet = (PlayerMoveC2SPacket.OnGroundOnly) f;
 			float yaw = packet.getYaw(0);
 			float pitch = packet.getPitch(0);
@@ -85,58 +85,58 @@ public class Fabric_1_18_2 extends FabricVersionAdapter {
 					packet.isOnGround(), yaw == packet.getYaw(Float.MAX_VALUE),
 					pitch == packet.getPitch(Float.MAX_VALUE));
 		});
-		packetsPlayIn.put("KeepAliveC2SPacket", (p, f) -> new NPacketPlayInKeepAlive(((KeepAliveC2SPacket) f).getId()));
-		packetsPlayIn.put("PlayerInteractEntityC2SPacket", (pa, f) -> {
+		packetsPlayIn.put(KeepAliveC2SPacket.class.getSimpleName(), (p, f) -> new NPacketPlayInKeepAlive(((KeepAliveC2SPacket) f).getId()));
+		packetsPlayIn.put(PlayerInteractEntityC2SPacket.class.getSimpleName(), (pa, f) -> {
 			PlayerInteractEntityC2SPacket p = (PlayerInteractEntityC2SPacket) f;
 			return new NPacketPlayInUseEntity(p.getEntity(pa.getWorld()).getId(), new Vector(0, 0, 0),
 					EnumEntityUseAction.valueOf(getStr(f, "type")));
 		});
-		packetsPlayIn.put("ClientCommandC2SPacket", (p, f) -> {
+		packetsPlayIn.put(ClientCommandC2SPacket.class.getSimpleName(), (p, f) -> {
 			ClientCommandC2SPacket packet = (ClientCommandC2SPacket) f;
 			return new NPacketPlayInEntityAction(packet.getEntityId(),
 					EnumPlayerAction.getAction(packet.getMode().name()), packet.getMountJumpHeight());
 		});
-		packetsPlayIn.put("QueryPingC2SPacket",
+		packetsPlayIn.put(QueryPingC2SPacket.class.getSimpleName(),
 				(p, f) -> new NPacketPlayInPong(((QueryPingC2SPacket) f).getStartTime()));
-		packetsPlayIn.put("PickFromInventoryC2SPacket",
+		packetsPlayIn.put(PickFromInventoryC2SPacket.class.getSimpleName(),
 				(p, f) -> new NPacketPlayInHeldItemSlot(((PickFromInventoryC2SPacket) f).getSlot()));
 
-		packetsPlayOut.put("BlockBreakingProgressS2CPacket", (p, f) -> {
+		packetsPlayOut.put(BlockBreakingProgressS2CPacket.class.getSimpleName(), (p, f) -> {
 			BlockBreakingProgressS2CPacket packet = (BlockBreakingProgressS2CPacket) f;
 			BlockPos pos = packet.getPos();
 			return new NPacketPlayOutBlockBreakAnimation(pos.getX(), pos.getY(), pos.getZ(), packet.getEntityId(),
 					packet.getProgress());
 		});
-		packetsPlayOut.put("SPacketKeepAlive", (p, f) -> new NPacketPlayOutKeepAlive(((KeepAliveS2CPacket) f).getId()));
+		packetsPlayOut.put(KeepAliveS2CPacket.class.getSimpleName(), (p, f) -> new NPacketPlayOutKeepAlive(((KeepAliveS2CPacket) f).getId()));
 		/*packetsPlayOut.put("SPacketEntityTeleport", (p, f) -> {
 			SPacketEntityTeleport packet = (SPacketEntityTeleport) f;
 			return new NPacketPlayOutEntityTeleport(packet.entityId, packet.posX, packet.posY, packet.posZ, packet.yaw,
 					packet.pitch, packet.onGround);
 		});*/ // TODO manage entity teleport packet
-		packetsPlayOut.put("EntityVelocityUpdateS2CPacket", (p, f) -> {
+		packetsPlayOut.put(EntityVelocityUpdateS2CPacket.class.getSimpleName(), (p, f) -> {
 			EntityVelocityUpdateS2CPacket packet = (EntityVelocityUpdateS2CPacket) f;
 			return new NPacketPlayOutEntityVelocity(packet.getId(), packet.getVelocityX(), packet.getVelocityY(),
 					packet.getVelocityZ());
 		});
-		packetsPlayOut.put("PlayerPositionLookS2CPacket", (p, f) -> {
+		packetsPlayOut.put(PlayerPositionLookS2CPacket.class.getSimpleName(), (p, f) -> {
 			PlayerPositionLookS2CPacket packet = (PlayerPositionLookS2CPacket) f;
 			return new NPacketPlayOutPosition(packet.getX(), packet.getY(), packet.getZ(), packet.getYaw(), packet.getPitch());
 		});
-		packetsPlayOut.put("ExplosionS2CPacket", (p, f) -> {
+		packetsPlayOut.put(ExplosionS2CPacket.class.getSimpleName(), (p, f) -> {
 			ExplosionS2CPacket packet = (ExplosionS2CPacket) f;
 			return new NPacketPlayOutExplosion(packet.getX(), packet.getY(), packet.getZ(), packet.getPlayerVelocityX(),
 					packet.getPlayerVelocityY(), packet.getPlayerVelocityZ());
 		});
-		packetsPlayOut.put("EntityPositionS2CPacket", (p, f) -> {
+		packetsPlayOut.put(EntityPositionS2CPacket.class.getSimpleName(), (p, f) -> {
 			EntityPositionS2CPacket packet = (EntityPositionS2CPacket) f;
 			return new NPacketPlayOutEntity(packet.getId(), packet.getX(), packet.getY(), packet.getZ());
 		});
-		packetsPlayOut.put("EntityStatusEffectS2CPacket", (p, f) -> {
+		packetsPlayOut.put(EntityStatusEffectS2CPacket.class.getSimpleName(), (p, f) -> {
 			EntityStatusEffectS2CPacket packet = (EntityStatusEffectS2CPacket) f;
 			return new NPacketPlayOutEntityEffect(packet.getEntityId(), packet.getEffectId(), packet.getAmplifier(),
 					packet.getDuration(), (byte) 0);
 		});
-		packetsPlayOut.put("PlayPingS2CPacket",
+		packetsPlayOut.put(PlayPingS2CPacket.class.getSimpleName(),
 				(p, f) -> new NPacketPlayOutPing(((PlayPingS2CPacket) f).getParameter()));
 
 		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new QueryPingC2SPacket(((NPacketPlayOutPing) f).id));

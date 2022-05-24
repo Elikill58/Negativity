@@ -5,6 +5,7 @@ import java.util.Locale;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.others.CommandExecutionEvent;
 import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
@@ -33,6 +34,10 @@ public abstract class FabricPacketManager extends PacketManager {
 				EventManager.callEvent(preProcess);
 				if (preProcess.isCancelled())
 					event.setCancelled(true);
+				else {
+					CommandExecutionEvent cmdEvent = new CommandExecutionEvent(cmd, p, arg, prefix);
+					EventManager.callEvent(cmdEvent);
+				}
 			} else {
 				PlayerChatEvent chatEvent = new PlayerChatEvent(p, cmd, cmd);
 				EventManager.callEvent(chatEvent);

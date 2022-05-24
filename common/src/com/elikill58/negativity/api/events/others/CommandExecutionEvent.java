@@ -8,7 +8,7 @@ public class CommandExecutionEvent implements Event {
 	private final CommandSender sender;
 	private final String[] arg;
 	private final String command, prefix;
-	private boolean hasGoodResult = true;
+	private boolean hasGoodResult = true, managedByNegativity = false;
 
 	public CommandExecutionEvent(String command, CommandSender sender, String[] arg, String prefix) {
 		this.command = command;
@@ -39,5 +39,13 @@ public class CommandExecutionEvent implements Event {
 	
 	public void setGoodResult(boolean hasGoodResult) {
 		this.hasGoodResult = hasGoodResult;
+	}
+	
+	public boolean isManagedByNegativity() {
+		return managedByNegativity;
+	}
+	
+	public void setManagedByNegativity(boolean managedByNegativity) {
+		this.managedByNegativity = managedByNegativity;
 	}
 }

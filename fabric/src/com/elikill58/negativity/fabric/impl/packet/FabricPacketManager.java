@@ -18,7 +18,6 @@ import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketManager;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
-import com.elikill58.negativity.universal.Adapter;
 
 public abstract class FabricPacketManager extends PacketManager {
 
@@ -29,22 +28,21 @@ public abstract class FabricPacketManager extends PacketManager {
 			NPacketPlayInChat chat = (NPacketPlayInChat) packet.getPacket();
 			if (chat.message.startsWith("/")) {
 				String cmd = chat.message.substring(1).split(" ")[0];
-				String cmdArg = chat.message.substring(cmd.length() + 2); //+2 for the '/' and ' '
+				String cmdArg = chat.message.substring(cmd.length() + 1); //+1 for the '/'
 				String[] arg = cmdArg.isBlank() ? new String[0] : cmdArg.split(" ");
 				String prefix = arg.length == 0 ? "" : arg[arg.length - 1].toLowerCase(Locale.ROOT);
 				PlayerCommandPreProcessEvent preProcess = new PlayerCommandPreProcessEvent(p, cmd, arg,
 						prefix, false);
 				EventManager.callEvent(preProcess);
-				Adapter.getAdapter().getLogger().info("Pre processing cmd " + cmd);
 				if (preProcess.isCancelled())
 					event.setCancelled(true);
 				else {
-					Adapter.getAdapter().getLogger().info("Running cmd " + cmd);
-					CommandExecutionEvent cmdEvent = new CommandExecutionEvent(cmd, p, arg, prefix);
+					CommandExecutionEvent cmdEvent = new CommandExecutionEvent(cmd.equalsIgnoreCase("n") ? "negativity" : cmd, p, arg, prefix);
 					EventManager.callEvent(cmdEvent);
+					if(cmdEvent.isManagedByNegativity())
+						event.setCancelled(true);
 				}
 			} else {
-				Adapter.getAdapter().getLogger().info("Chat cmd " + chat.message);
 				PlayerChatEvent chatEvent = new PlayerChatEvent(p, chat.message, "<%1$s> %2$s");// default MC format
 				EventManager.callEvent(chatEvent);
 				event.setCancelled(chatEvent.isCancelled());

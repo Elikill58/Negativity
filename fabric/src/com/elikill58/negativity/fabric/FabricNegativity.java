@@ -70,7 +70,7 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 	private MinecraftServer server;
 	private NegativityPacketManager packetManager;
 	public static Identifier negativityChannel = new Identifier(NegativityMessagesManager.CHANNEL_ID),
-			fmlChannel = new Identifier("fml:hs"), bungeecordChannel = new Identifier("Bungeecord");
+			fmlChannel = new Identifier("fml:hs"), bungeecordChannel = new Identifier("bungeecord");
 
 	@Override
 	public void onInitializeServer() {

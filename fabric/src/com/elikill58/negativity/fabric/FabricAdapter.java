@@ -183,7 +183,7 @@ public class FabricAdapter extends Adapter {
 
 	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
-		Text t = Text.of("");
+		Text t = Text.of(message);
 		List<Text> texts = t.getWithStyle(t.getStyle().withHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, Text.of(hover))).withClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command)));
 		ServerPlayerEntity pe = ((ServerPlayerEntity) p.getDefault());
 		texts.forEach(text -> pe.sendMessage(text, false));

@@ -1,5 +1,7 @@
 package com.elikill58.negativity.fabric.packets;
 
+import java.util.NoSuchElementException;
+
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
 import com.elikill58.negativity.api.packets.AbstractPacket;
@@ -55,6 +57,9 @@ public class CustomPacketManager extends FabricPacketManager {
 				// Managing outgoing packet (to the player)
 				channel.pipeline().addAfter(KEY_HANDLER_SERVER, KEY_SERVER + p.getName(), new ChannelHandlerSent(p));
 			}
+		} catch (NoSuchElementException e) {
+			// appear when the player's channel isn't accessible because of reload.
+			Adapter.getAdapter().getLogger().warn("Please, don't use reload, this can produce some problem. Currently, " + p.getName() + " isn't fully checked because of that. More details: " + e.getMessage() + " (NoSuchElementException)");
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		}

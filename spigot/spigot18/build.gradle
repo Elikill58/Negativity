@@ -1,18 +1,15 @@
+import com.elikill58.negativity.build.spigot.SpigotReobfPlugin
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
-import java.nio.file.Paths
 
 plugins {
     id 'com.github.johnrengelman.shadow'
+    id 'negativity-spigot-reobf'
 }
 
 sourceSets {
     main {
         java.srcDirs = ['src']
         resources.srcDirs = ['resources']
-    }
-    spigot18 {
-        java.srcDir 'spigot18'
     }
 }
 
@@ -31,72 +28,18 @@ repositories {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-configurations {
-    remapped
-    compileClasspath.extendsFrom remapped
-    obf
-    reobfMapMojang
-    reobfMapSpigot
-    specialSource
-}
-
 dependencies {
     api parent
-    remapped 'org.spigotmc:spigot:1.18-R0.1-SNAPSHOT:remapped-mojang'
-    obf 'org.spigotmc:spigot:1.18-R0.1-SNAPSHOT:remapped-obf'
 
-    reobfMapMojang group: 'org.spigotmc', name: 'minecraft-server', version: '1.18-R0.1-SNAPSHOT', classifier: 'maps-mojang', ext: 'txt'
-    reobfMapSpigot group: 'org.spigotmc', name: 'minecraft-server', version: '1.18-R0.1-SNAPSHOT', classifier: 'maps-spigot', ext: 'csrg'
-    
-    specialSource 'net.md-5:SpecialSource:1.11.0'
+    SpigotReobfPlugin.configureSpigotRemapDeps(project, '1.18-R0.1-SNAPSHOT', '1.11.0')
 }
 
 compileJava.javaCompiler.set(
         javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(17) }
 )
 
-// These tasks are based on the manual instructions from MD-5 given there:
-// https://www.spigotmc.org/threads/spigot-bungeecord-1-17.510208/#post-4184317
-task reobfSpigotPluginStep1(type: JavaExec) {
-    dependsOn(shadowJar)
-
-    classpath += configurations.specialSource
-    classpath += configurations.remapped
-    mainClass.set('net.md_5.specialsource.SpecialSource')
-
-    workingDir file(Paths.get('build', 'tmp', name))
-    workingDir.mkdirs()
-
-    File mapFile = configurations.reobfMapMojang.singleFile
-    File inputFile = shadowJar.outputs.files.singleFile
-    inputs.files(mapFile, inputFile)
-
-    String outputPath = inputFile.absolutePath.replace('.jar', '-obf.jar')
-    outputs.file(outputPath)
-
-    args '--live', '-i', inputFile, '-o', outputPath, '-m', mapFile, '--reverse'
-}
-
-task reobfSpigotPlugin(type: JavaExec) {
-    dependsOn(reobfSpigotPluginStep1)
-
-    classpath += configurations.specialSource
-    classpath += configurations.obf
-    mainClass.set('net.md_5.specialsource.SpecialSource')
-
-    workingDir file(Paths.get('build', 'tmp', name))
-    workingDir.mkdirs()
-
-    File mapFile = configurations.reobfMapSpigot.singleFile
-    File inputFile = reobfSpigotPluginStep1.outputs.files.singleFile
-    inputs.files(mapFile, inputFile)
-
-    String outputPath = inputFile.absolutePath.replace('-obf.jar', '.jar')
-    outputs.file(outputPath)
-
-    args '--live', '-i', inputFile, '-o', outputPath, '-m', mapFile
-}
+tasks.build.dependsOn SpigotReobfPlugin.TASK_REOBF_SPIGOT
 
 parent.tasks.named('shadowJar', ShadowJar) {
-    it.from(reobfSpigotPlugin.outputs)
+    it.from(tasks.getByName(SpigotReobfPlugin.TASK_REOBF_SPIGOT))
 }

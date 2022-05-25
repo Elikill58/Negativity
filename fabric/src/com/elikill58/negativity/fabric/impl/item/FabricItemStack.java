@@ -21,8 +21,7 @@ public class FabricItemStack extends com.elikill58.negativity.api.item.ItemStack
 
 	@Override
 	public Material getType() {
-		String id = Registry.ITEM.getKey(item.getItem()).orElseThrow().getValue().getPath();
-		return FabricItemRegistrar.getInstance().get(id);
+		return FabricItemRegistrar.getInstance().get(Registry.ITEM.getKey(item.getItem()).orElseThrow().getValue().getPath());
 	}
 
 	@Override

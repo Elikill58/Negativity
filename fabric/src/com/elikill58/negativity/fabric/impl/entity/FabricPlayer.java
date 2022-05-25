@@ -22,11 +22,13 @@ import com.elikill58.negativity.fabric.FabricNegativity;
 import com.elikill58.negativity.fabric.impl.FabricPotionEffectType;
 import com.elikill58.negativity.fabric.impl.inventory.FabricInventory;
 import com.elikill58.negativity.fabric.impl.inventory.FabricPlayerInventory;
+import com.elikill58.negativity.fabric.impl.inventory.NegativityScreenHandler;
 import com.elikill58.negativity.fabric.impl.item.FabricItemStack;
 import com.elikill58.negativity.fabric.impl.location.FabricLocation;
 import com.elikill58.negativity.fabric.impl.location.FabricWorld;
 import com.elikill58.negativity.fabric.utils.LocationUtils;
 import com.elikill58.negativity.fabric.utils.Utils;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
@@ -34,7 +36,10 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.screen.NamedScreenHandlerFactory;
+import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.screen.ScreenHandler;
+import net.minecraft.screen.ScreenHandlerContext;
+import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
@@ -348,7 +353,16 @@ public class FabricPlayer extends FabricEntity<ServerPlayerEntity> implements Pl
 
 	@Override
 	public void openInventory(Inventory inv) {
-		entity.openHandledScreen((NamedScreenHandlerFactory) inv.getDefault());
+		Object o = inv.getDefault();
+		if(o instanceof ScreenHandler)
+			entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> (ScreenHandler) o, Text.of(inv.getInventoryName())));
+		else if(o instanceof SimpleInventory) {
+			SimpleInventory si = (SimpleInventory) o;
+			entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new NegativityScreenHandler(si, (ScreenHandlerContext) inv.getHolder()), Text.of(inv.getInventoryName())));
+			
+		} else {
+			Adapter.getAdapter().getLogger().warn("Unsupported opening of inventory " + o.getClass().getName());
+		}
 	}
 
 	@Override

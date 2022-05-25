@@ -1,7 +1,20 @@
+plugins {
+    id 'java-gradle-plugin'
+}
+
 repositories {
     mavenCentral()
 }
 
 dependencies {
     implementation 'org.ow2.asm:asm:9.2'
+}
+
+gradlePlugin {
+    plugins {
+        negativitySpigotReobf {
+            id = 'negativity-spigot-reobf'
+            implementationClass = 'com.elikill58.negativity.build.spigot.SpigotReobfPlugin'
+        }
+    }
 }

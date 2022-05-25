@@ -28,7 +28,7 @@ import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.fabric.impl.entity.FabricEntityManager;
-import com.elikill58.negativity.fabric.impl.inventory.FabricSimpleInventory;
+import com.elikill58.negativity.fabric.impl.inventory.FabricInventory;
 import com.elikill58.negativity.fabric.impl.item.FabricItemBuilder;
 import com.elikill58.negativity.fabric.impl.item.FabricItemRegistrar;
 import com.elikill58.negativity.fabric.impl.plugin.FabricExternalPlugin;
@@ -221,7 +221,7 @@ public class FabricAdapter extends Adapter {
 	
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
-		return new FabricSimpleInventory(inventoryName, size, holder);
+		return new FabricInventory(inventoryName, size, holder);
 	}
 
 	@Override

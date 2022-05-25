@@ -36,9 +36,7 @@ import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
@@ -356,10 +354,11 @@ public class FabricPlayer extends FabricEntity<ServerPlayerEntity> implements Pl
 		Object o = inv.getDefault();
 		if(o instanceof ScreenHandler)
 			entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> (ScreenHandler) o, Text.of(inv.getInventoryName())));
-		else if(o instanceof SimpleInventory) {
-			SimpleInventory si = (SimpleInventory) o;
-			entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> new NegativityScreenHandler(si, (ScreenHandlerContext) inv.getHolder()), Text.of(inv.getInventoryName())));
-			
+		else if(o instanceof NegativityScreenHandler) {
+			NegativityScreenHandler screen = (NegativityScreenHandler) o;
+			entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> screen.open(entity), Text.of(inv.getInventoryName())));
+			screen.updateToClient();
+			screen.sendContentUpdates();
 		} else {
 			Adapter.getAdapter().getLogger().warn("Unsupported opening of inventory " + o.getClass().getName());
 		}

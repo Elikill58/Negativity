@@ -1,25 +1,34 @@
 package com.elikill58.negativity.fabric.impl.inventory;
 
+import com.elikill58.negativity.fabric.impl.inventory.holders.FabricNegativityHolder;
+
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.ScreenHandlerContext;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.slot.SlotActionType;
+import net.minecraft.screen.slot.Slot;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 public class NegativityScreenHandler extends ScreenHandler {
 	
 	private static int syncId = Integer.MIN_VALUE;
 	
-	private final ScreenHandlerContext context;
+	private final FabricNegativityHolder context;
+	private final int size;
+	private final SimpleInventory inv;
 	
-	public NegativityScreenHandler(SimpleInventory si, ScreenHandlerContext context) {
-		super(getTypeForRow(si.size() / 9), syncId++);
+	public NegativityScreenHandler(int size, FabricNegativityHolder context) {
+		super(getTypeForRow(size / 9), syncId++);
+		this.size = size;
 		this.context = context;
+		this.inv = new SimpleInventory(size);
+		this.enableSyncing();
+	    for (int i = 0; i < size; i++)
+	        addSlot(new Slot(inv, i, i / 9, i % 9));
 	}
 	
-	public ScreenHandlerContext getContext() {
+	public FabricNegativityHolder getContext() {
 		return context;
 	}
 	
@@ -41,11 +50,15 @@ public class NegativityScreenHandler extends ScreenHandler {
 
 	@Override
 	public boolean canUse(PlayerEntity player) {
-		return true;
+		return inv.canPlayerUse(player);
 	}
 	
-	@Override
-	public void onSlotClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player) {
-		
+	public int getSize() {
+		return size;
+	}
+	
+	public NegativityScreenHandler open(ServerPlayerEntity p) {
+		inv.onOpen(p);
+		return this;
 	}
 }

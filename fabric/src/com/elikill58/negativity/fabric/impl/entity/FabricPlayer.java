@@ -352,13 +352,13 @@ public class FabricPlayer extends FabricEntity<ServerPlayerEntity> implements Pl
 	@Override
 	public void openInventory(Inventory inv) {
 		Object o = inv.getDefault();
-		if(o instanceof ScreenHandler)
-			entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> (ScreenHandler) o, Text.of(inv.getInventoryName())));
-		else if(o instanceof NegativityScreenHandler) {
+		if(o instanceof NegativityScreenHandler) {
 			NegativityScreenHandler screen = (NegativityScreenHandler) o;
-			entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> screen.open(entity), Text.of(inv.getInventoryName())));
-			screen.updateToClient();
-			screen.sendContentUpdates();
+			//Adapter.getAdapter().getLogger().info("Slot items: " + screen.slots.stream().map(Slot::getStack).map(net.minecraft.item.ItemStack::getItem).map(Item::toString).collect(Collectors.toList()));
+			entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> screen, Text.of(inv.getInventoryName())));
+			//Adapter.getAdapter().getLogger().info("rev: " + entity.currentScreenHandler);
+		} else if(o instanceof ScreenHandler) {
+			entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> (ScreenHandler) o, Text.of(inv.getInventoryName())));
 		} else {
 			Adapter.getAdapter().getLogger().warn("Unsupported opening of inventory " + o.getClass().getName());
 		}

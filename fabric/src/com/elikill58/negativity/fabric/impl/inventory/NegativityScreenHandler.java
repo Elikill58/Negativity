@@ -1,14 +1,16 @@
 package com.elikill58.negativity.fabric.impl.inventory;
 
+import java.util.stream.Collectors;
+
 import com.elikill58.negativity.fabric.impl.inventory.holders.FabricNegativityHolder;
 
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
+import net.minecraft.item.Item;
 import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerType;
 import net.minecraft.screen.slot.Slot;
-import net.minecraft.server.network.ServerPlayerEntity;
 
 public class NegativityScreenHandler extends ScreenHandler {
 	
@@ -23,7 +25,6 @@ public class NegativityScreenHandler extends ScreenHandler {
 		this.size = size;
 		this.context = context;
 		this.inv = new SimpleInventory(size);
-		this.enableSyncing();
 	    for (int i = 0; i < size; i++)
 	        addSlot(new Slot(inv, i, i / 9, i % 9));
 	}
@@ -57,8 +58,8 @@ public class NegativityScreenHandler extends ScreenHandler {
 		return size;
 	}
 	
-	public NegativityScreenHandler open(ServerPlayerEntity p) {
-		inv.onOpen(p);
-		return this;
+	@Override
+	public String toString() {
+		return "NegativityScreenHandler{size=" + size +  ",slots=" + slots.stream().map(Slot::getStack).map(net.minecraft.item.ItemStack::getItem).map(Item::toString).collect(Collectors.toList()) + "}";
 	}
 }

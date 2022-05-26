@@ -10,6 +10,7 @@ import net.minecraft.command.CommandSource;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.entity.projectile.ArrowEntity;
+import net.minecraft.entity.projectile.thrown.PotionEntity;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayerEntity;
 
@@ -26,8 +27,10 @@ public class FabricEntityManager {
 			return getPlayer((ServerPlayerEntity) e);
 		else if(e.getType().equals(EntityType.IRON_GOLEM))
 			return new FabricIronGolem((IronGolemEntity) e);
-		else if(e.getType().getTranslationKey().contains("ARROW"))
+		else if(e.getType().equals(EntityType.ARROW))
 			return new FabricArrow((ArrowEntity) e);
+		else if(e.getType().equals(EntityType.POTION))
+			return new FabricSplashPotion((PotionEntity) e);
 		else
 			return new FabricEntity<>(e);
 	}

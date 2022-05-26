@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.impl.entity;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.ThrownPotion;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -23,6 +24,8 @@ public class SpigotEntityManager {
 			return getPlayer((Player) bukkitEntity);
 		case IRON_GOLEM:
 			return new SpigotIronGolem((IronGolem) bukkitEntity);
+		case SPLASH_POTION:
+			return new SpigotSplashPotion((ThrownPotion) bukkitEntity);
 		case ARROW:
 			return new SpigotArrow((Arrow) bukkitEntity);
 		default:

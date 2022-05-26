@@ -3,6 +3,7 @@ package com.elikill58.negativity.sponge8.impl.entity;
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.entity.living.golem.IronGolem;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+import org.spongepowered.api.entity.projectile.Potion;
 import org.spongepowered.api.entity.projectile.arrow.Arrow;
 import org.spongepowered.api.projectile.source.ProjectileSource;
 import org.spongepowered.api.util.Nameable;
@@ -28,6 +29,8 @@ public class SpongeEntityManager {
 			return new SpongeIronGolem((IronGolem) e);
 		else if(e instanceof Arrow)
 			return new SpongeArrow((Arrow) e);
+		else if(e instanceof Potion)
+			return new SpongeSplashPotion((Potion) e);
 		else
 			return new SpongeEntity<>(e);
 	}

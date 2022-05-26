@@ -23,7 +23,6 @@ import com.elikill58.negativity.spigot.listeners.ChannelListeners;
 import com.elikill58.negativity.spigot.listeners.CommandsListeners;
 import com.elikill58.negativity.spigot.listeners.ElytraListeners;
 import com.elikill58.negativity.spigot.listeners.EntityListeners;
-import com.elikill58.negativity.spigot.listeners.FightManager;
 import com.elikill58.negativity.spigot.listeners.InventoryListeners;
 import com.elikill58.negativity.spigot.listeners.PlayersListeners;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
@@ -97,7 +96,6 @@ public class SpigotNegativity extends JavaPlugin {
 
 		PluginManager pm = Bukkit.getPluginManager();
 		pm.registerEvents(new PlayersListeners(), this);
-		pm.registerEvents(new FightManager(), this);
 		pm.registerEvents(new InventoryListeners(), this);
 		pm.registerEvents(new BlockListeners(), this);
 		pm.registerEvents(new EntityListeners(), this);

@@ -10,6 +10,7 @@ import java.util.Map.Entry;
 import com.elikill58.negativity.api.commands.CommandManager;
 import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.common.ConnectionManager;
+import com.elikill58.negativity.common.FightListeners;
 import com.elikill58.negativity.common.GameEventsManager;
 import com.elikill58.negativity.common.PacketListener;
 import com.elikill58.negativity.common.ProxyEventsManager;
@@ -26,6 +27,7 @@ public class EventManager {
 		registerEvent(new InventoryManager());
 		registerEvent(new ConnectionManager());
 		registerEvent(new PacketListener());
+		registerEvent(new FightListeners());
 		if(Adapter.getAdapter().getPlatformID().isProxy())
 			registerEvent(new ProxyEventsManager());
 		else

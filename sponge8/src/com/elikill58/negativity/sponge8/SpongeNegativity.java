@@ -37,7 +37,6 @@ import com.elikill58.negativity.sponge8.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge8.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge8.listeners.BlockListeners;
 import com.elikill58.negativity.sponge8.listeners.EntityListeners;
-import com.elikill58.negativity.sponge8.listeners.FightManager;
 import com.elikill58.negativity.sponge8.listeners.InventoryListeners;
 import com.elikill58.negativity.sponge8.listeners.NegativityCommandWrapper;
 import com.elikill58.negativity.sponge8.listeners.PlayersListeners;
@@ -93,7 +92,6 @@ public class SpongeNegativity {
 		NegativityAccountStorage.setDefaultStorage("file");
 		
 		EventManager eventManager = Sponge.eventManager();
-		eventManager.registerListeners(this.container, new FightManager());
 		eventManager.registerListeners(this.container, new BlockListeners());
 		eventManager.registerListeners(this.container, new EntityListeners());
 		eventManager.registerListeners(this.container, new InventoryListeners());

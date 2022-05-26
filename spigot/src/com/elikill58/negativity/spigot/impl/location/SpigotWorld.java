@@ -59,6 +59,11 @@ public class SpigotWorld extends World {
 	}
 
 	@Override
+	public boolean isPVP() {
+		return w.getPVP();
+	}
+
+	@Override
 	public Object getDefault() {
 		return w;
 	}

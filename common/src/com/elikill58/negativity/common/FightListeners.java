@@ -97,8 +97,8 @@ public class FightListeners implements Listeners {
 	}*/
 	
 	private void manageFightBetweenTwoPlayers(Player p, int maxDistance) {
-		/*if(!p.getWorld().getPVP())
-			return;*/
+		if(!p.getWorld().isPVP())
+			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		for(Player pl : Adapter.getAdapter().getOnlinePlayers()) {
 			if(pl == p)
@@ -106,7 +106,7 @@ public class FightListeners implements Listeners {
 			NegativityPlayer npOther = NegativityPlayer.getNegativityPlayer(pl);
 			if(npOther.isInFight && np.isInFight)
 				continue;
-			if(pl.getLocation().getWorld().equals(p.getLocation().getWorld())) {
+			if(pl.getWorld().equals(p.getWorld())) {
 				if(pl.getLocation().distance(p.getLocation()) < maxDistance) {
 					np.fight();
 					npOther.fight();

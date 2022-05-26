@@ -105,4 +105,11 @@ public abstract class World implements NegativityObject {
 	 * @return the min height
 	 */
 	public abstract int getMinHeight();
+	
+	/**
+	 * Know if the pvp is enabled in this world.
+	 * 
+	 * @return true if pvp is enabled
+	 */
+	public abstract boolean isPVP();
 }

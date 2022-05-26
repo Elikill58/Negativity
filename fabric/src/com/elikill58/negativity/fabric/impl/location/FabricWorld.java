@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.fabric.impl.block.FabricBlock;
 import com.elikill58.negativity.fabric.impl.entity.FabricEntityManager;
 import com.elikill58.negativity.fabric.impl.entity.FabricTypeFilter;
+import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 import net.minecraft.server.world.ServerEntityManager;
@@ -68,7 +69,12 @@ public class FabricWorld extends World {
 
 	@Override
 	public int getMinHeight() {
-		return 0;
+		return Version.getVersion().isNewerOrEquals(Version.V1_18) ? -64 : 0;
+	}
+	
+	@Override
+	public boolean isPVP() {
+		return true;
 	}
 
 	@Override

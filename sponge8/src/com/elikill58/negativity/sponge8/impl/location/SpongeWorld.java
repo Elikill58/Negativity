@@ -60,6 +60,11 @@ public class SpongeWorld extends World {
 		int min = w.min().y();
 		return min > 0 ? 0 : min;
 	}
+	
+	@Override
+	public boolean isPVP() {
+		return w.properties().pvp();
+	}
 
 	@Override
 	public Object getDefault() {

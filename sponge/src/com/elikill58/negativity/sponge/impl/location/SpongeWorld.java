@@ -56,6 +56,11 @@ public class SpongeWorld extends World {
 	public int getMinHeight() {
 		return 0;
 	}
+	
+	@Override
+	public boolean isPVP() {
+		return w.getProperties().isPVPEnabled();
+	}
 
 	@Override
 	public Object getDefault() {

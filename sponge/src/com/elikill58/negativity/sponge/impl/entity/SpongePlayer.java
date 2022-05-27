@@ -4,18 +4,26 @@ import java.net.InetSocketAddress;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import org.spongepowered.api.data.key.Keys;
+import org.spongepowered.api.ResourceKey;
+import org.spongepowered.api.Sponge;
+import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.data.type.HandTypes;
+import org.spongepowered.api.effect.VanishState;
 import org.spongepowered.api.entity.living.player.gamemode.GameModes;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.cause.entity.damage.DamageTypes;
 import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
-import org.spongepowered.api.item.inventory.InventoryArchetypes;
+import org.spongepowered.api.network.channel.Channel;
+import org.spongepowered.api.network.channel.raw.RawDataChannel;
+import org.spongepowered.api.registry.RegistryTypes;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.text.Text;
+import org.spongepowered.api.util.Ticks;
+import org.spongepowered.math.vector.Vector3d;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.entity.Entity;
@@ -25,6 +33,7 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -33,26 +42,29 @@ import com.elikill58.negativity.sponge.impl.SpongePotionEffectType;
 import com.elikill58.negativity.sponge.impl.inventory.SpongeInventory;
 import com.elikill58.negativity.sponge.impl.inventory.SpongePlayerInventory;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
-import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
 import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
 import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
-public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.living.player.Player> implements Player {
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
+
+public class SpongePlayer extends SpongeEntity<ServerPlayer> implements Player {
 
 	private int protocolVersion = 0;
 	private Version playerVersion;
-
-	public SpongePlayer(org.spongepowered.api.entity.living.player.Player p) {
+	
+	public SpongePlayer(ServerPlayer p) {
 		super(p);
+		this.playerVersion = loadVersion();
 		this.protocolVersion = PlayerVersionManager.getPlayerProtocolVersion(this);
 	}
-
-	@Override
-	public Version getPlayerVersion() {
-		return isVersionSet() ? playerVersion : (playerVersion = Version.getVersionByProtocolID(getProtocolVersion()));
+	
+	private Version loadVersion() {
+		return PlayerVersionManager.getPlayerVersion(this);
 	}
 	
 	@Override
@@ -61,131 +73,113 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 		protocolVersion = version.getFirstProtocolNumber();
 	}
 	
-	private boolean isVersionSet() {
-		return playerVersion != null && !playerVersion.equals(Version.HIGHER);
-	}
-	
-	@Override
-	public int getProtocolVersion() {
-		return protocolVersion;
-	}
-	
-	@Override
-	public void setProtocolVersion(int protocolVersion) {
-		this.protocolVersion = protocolVersion;
-	}
-
 	@Override
 	public UUID getUniqueId() {
-		return entity.getUniqueId();
+		return entity.uniqueId();
 	}
-
+	
 	@Override
 	public void sendMessage(String msg) {
-		entity.sendMessage(Text.of(msg));
+		entity.sendMessage(Component.text(msg));
 	}
-
+	
 	@Override
 	public boolean isOp() {
 		return entity.hasPermission("*");
 	}
-
+	
 	@Override
 	public boolean hasElytra() {
-		return entity.get(Keys.IS_ELYTRA_FLYING).orElse(false);
+		return entity.getOrElse(Keys.IS_ELYTRA_FLYING, false);
 	}
 	
 	@Override
 	public boolean hasLineOfSight(Entity entity) {
-		return LocationUtils.hasLineOfSight(this.entity, SpongeLocation.fromCommon(entity.getLocation()));
+		return LocationUtils.hasLineOfSight(this.entity, entity.getLocation());
 	}
-
+	
 	@Override
 	public float getWalkSpeed() {
 		return entity.require(Keys.WALKING_SPEED).floatValue();
 	}
-
+	
 	@Override
 	public double getHealth() {
 		return entity.require(Keys.HEALTH);
 	}
 	
 	@Override
-	public double getMaxHealth() {
-		return entity.require(Keys.MAX_HEALTH);
+	public float getFallDistance() {
+		return entity.require(Keys.FALL_DISTANCE).floatValue();
 	}
 	
 	@Override
-	public void setHealth(double health) {
-		entity.offer(Keys.HEALTH, health);
-	}
-
-	@Override
-	public float getFallDistance() {
-		return entity.require(Keys.FALL_DISTANCE);
-	}
-
-	@Override
 	public GameMode getGameMode() {
-		return GameMode.get(entity.gameMode().get().getName());
+		ResourceKey key = Sponge.game().registry(RegistryTypes.GAME_MODE).valueKey(entity.require(Keys.GAME_MODE));
+		return GameMode.get(key.value().toUpperCase(Locale.ROOT));
 	}
 	
 	@Override
 	public void setGameMode(GameMode gameMode) {
 		switch (gameMode) {
 		case ADVENTURE:
-			entity.gameMode().set(GameModes.ADVENTURE);
+			entity.offer(Keys.GAME_MODE, GameModes.ADVENTURE.get());
 			break;
 		case CREATIVE:
-			entity.gameMode().set(GameModes.CREATIVE);
+			entity.offer(Keys.GAME_MODE, GameModes.CREATIVE.get());
 			break;
 		case CUSTOM:
-			entity.gameMode().set(GameModes.NOT_SET);
+			entity.offer(Keys.GAME_MODE, GameModes.NOT_SET.get());
 			break;
 		case SPECTATOR:
-			entity.gameMode().set(GameModes.SPECTATOR);
+			entity.offer(Keys.GAME_MODE, GameModes.SPECTATOR.get());
 			break;
 		case SURVIVAL:
-			entity.gameMode().set(GameModes.SURVIVAL);
+			entity.offer(Keys.GAME_MODE, GameModes.SURVIVAL.get());
 			break;
 		}
 	}
-
+	
 	@Override
 	public void damage(double amount) {
 		entity.damage(amount, DamageSource.builder().type(DamageTypes.CUSTOM).build());
 	}
-
+	
 	@Override
 	public Location getLocation() {
-		return SpongeLocation.toCommon(entity.getLocation());
+		return LocationUtils.toNegativity(entity.serverLocation());
 	}
-
+	
 	@Override
 	public int getPing() {
-		return entity.getConnection().getLatency();
+		return entity.connection().latency();
 	}
-
+	
 	@Override
 	public World getWorld() {
-		return new SpongeWorld(entity.getWorld());
+		return new SpongeWorld(entity.world());
 	}
-
+	
 	@Override
 	public String getName() {
-		return entity.getName();
+		return entity.name();
 	}
-
+	
 	@Override
 	public boolean hasPermission(String perm) {
 		return entity.hasPermission(perm);
 	}
-
+	
+	@Override
+	public Version getPlayerVersion() {
+		return playerVersion == Version.HIGHER ? (playerVersion = loadVersion()) : playerVersion;
+	}
+	
 	@Override
 	public void kick(String reason) {
-		entity.kick(Text.of(reason));
+		entity.kick(Component.text(reason));
 	}
-
+	
 	@Override
 	public int getLevel() {
 		return entity.require(Keys.EXPERIENCE_LEVEL);
@@ -197,49 +191,49 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	}
 	
 	@Override
-	public void setFoodLevel(int foodlevel) {
-		entity.offer(Keys.FOOD_LEVEL, foodlevel);
-	}
-
-	@Override
 	public boolean getAllowFlight() {
-		return entity.get(Keys.CAN_FLY).orElse(false);
+		return entity.getOrElse(Keys.CAN_FLY, false);
 	}
-
+	
 	@Override
 	public Entity getVehicle() {
-		return SpongeEntityManager.getEntity(entity.getVehicle().orElse(null));
+		return SpongeEntityManager.getEntity(entity.getOrNull(Keys.VEHICLE));
 	}
 	
 	@Override
 	public ItemStack getItemInHand() {
-		return entity.getItemInHand(HandTypes.MAIN_HAND).map(SpongeItemStack::new).orElse(null);
+		return new SpongeItemStack(entity.itemInHand(HandTypes.MAIN_HAND));
 	}
-
+	
 	@Override
 	public boolean isFlying() {
 		return entity.require(Keys.IS_FLYING);
 	}
-
+	
 	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {
-		(channelId.equalsIgnoreCase("fml") ? SpongeNegativity.fmlChannel : SpongeNegativity.channel).sendTo(entity, (chan) -> chan.writeByteArray(writeMessage));
-	}
+		Channel channel = Sponge.channelManager().get(ResourceKey.resolve(channelId)).orElse(null);
+		if (channel == null) {
+			Adapter.getAdapter().getLogger().warn("Channel " + channelId + " does not exist");
+			Thread.dumpStack();
+			return;
+		}
 
+		if (channel instanceof RawDataChannel) {
+			((RawDataChannel) channel).play().sendTo(entity, buffer -> buffer.writeByteArray(writeMessage));
+		} else {
+			Adapter.getAdapter().getLogger().warn("Channel " + channelId + " is not a RawDataChannel");
+		}
+	}
+	
 	@Override
 	public boolean isSleeping() {
 		return entity.require(Keys.IS_SLEEPING);
 	}
-
+	
 	@Override
 	public boolean isSneaking() {
 		return entity.require(Keys.IS_SNEAKING);
-	}
-
-	@Override
-	public boolean isUsingRiptide() {
-		// TODO implement riptide for sponge
-		return false;
 	}
 	
 	@Override
@@ -254,13 +248,13 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 			return false;
 		}
 		for (org.spongepowered.api.effect.potion.PotionEffect effect : potionEffects) {
-			if (effect.getType().getId().equalsIgnoreCase(type.getId())) {
+			if (Utils.getKey(effect.type()).asString().equalsIgnoreCase(type.getId())) {
 				return true;
 			}
 		}
 		return false;
 	}
-
+	
 	@Override
 	public List<PotionEffect> getActivePotionEffect() {
 		List<org.spongepowered.api.effect.potion.PotionEffect> effects = entity.getOrNull(Keys.POTION_EFFECTS);
@@ -276,7 +270,7 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	public Optional<PotionEffect> getPotionEffect(PotionEffectType type) {
 		return entity.get(Keys.POTION_EFFECTS).flatMap(effects -> {
 			for (org.spongepowered.api.effect.potion.PotionEffect effect : effects) {
-				if (effect.getType().getId().equalsIgnoreCase(type.getId())) {
+				if (Utils.getKey(effect.type()).asString().equalsIgnoreCase(type.getId())) {
 					return Optional.of(createPotionEffect(effect));
 				}
 			}
@@ -285,14 +279,14 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	}
 	
 	private PotionEffect createPotionEffect(org.spongepowered.api.effect.potion.PotionEffect effect) {
-		return new PotionEffect(PotionEffectType.forId(effect.getType().getId()), effect.getDuration(), effect.getAmplifier());
+		return new PotionEffect(PotionEffectType.forId(Utils.getKey(effect.type()).asString()), (int) effect.duration().ticks(), effect.amplifier());
 	}
 	
 	@Override
 	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
 		entity.transform(Keys.POTION_EFFECTS, effects -> {
 			org.spongepowered.api.effect.potion.PotionEffect effect =
-				org.spongepowered.api.effect.potion.PotionEffect.of(SpongePotionEffectType.getEffect(type), amplifier, duration);
+				org.spongepowered.api.effect.potion.PotionEffect.of(SpongePotionEffectType.getEffect(type).get(), amplifier, Ticks.of(duration));
 			if (effects == null) {
 				return Collections.singletonList(effect);
 			}
@@ -305,70 +299,70 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	public void removePotionEffect(PotionEffectType type) {
 		entity.transform(Keys.POTION_EFFECTS, effects -> {
 			if (effects != null) {
-				effects.removeIf(effect -> effect.getType().getId().equals(type.getId()));
+				effects.removeIf(effect -> Utils.getKey(effect.type()).asString().equals(type.getId()));
 				return effects;
 			}
 			return Collections.emptyList();
 		});
 	}
-
+	
 	@Override
 	public String getIP() {
-		return entity.getConnection().getAddress().getAddress().getHostAddress();
+		return entity.connection().address().getAddress().getHostAddress();
 	}
-
+	
 	@Override
 	public boolean isOnline() {
 		return entity.isOnline();
 	}
-
+	
 	@Override
 	public void setSneaking(boolean b) {
 		entity.offer(Keys.IS_SNEAKING, b);
 	}
-
+	
 	@Override
 	public EntityType getType() {
 		return EntityType.PLAYER;
 	}
-
+	
 	@Override
 	public boolean isSprinting() {
 		return entity.require(Keys.IS_SPRINTING);
 	}
-
+	
 	@Override
 	public void teleport(Entity et) {
 		teleport(et.getLocation());
 	}
-
+	
 	@Override
 	public void teleport(Location loc) {
-		entity.setLocation(SpongeLocation.fromCommon(loc));
+		entity.setLocation(LocationUtils.toSponge(loc));
 	}
-
+	
 	@Override
 	public boolean isInsideVehicle() {
-		return entity.getVehicle().isPresent();
+		return entity.get(Keys.VEHICLE).isPresent();
 	}
-
+	
 	@Override
 	public float getFlySpeed() {
 		return entity.require(Keys.FLYING_SPEED).floatValue();
 	}
-
+	
 	@Override
 	public void setSprinting(boolean b) {
 		entity.offer(Keys.IS_SPRINTING, b);
 	}
-
+	
 	@Override
 	public List<Entity> getNearbyEntities(double x, double y, double z) {
 		List<Entity> list = new ArrayList<>();
-		entity.getNearbyEntities(x).forEach((entity) -> list.add(SpongeEntityManager.getEntity(entity)));
+		entity.nearbyEntities(x).forEach((entity) -> list.add(SpongeEntityManager.getEntity(entity)));
 		return list;
 	}
-
+	
 	@Override
 	public boolean isSwimming() {
 		if (!isSprinting())
@@ -378,17 +372,22 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 			return true;
 		return loc.sub(0, 1, 0).getBlock().getType().getId().contains("WATER");
 	}
-
+	
+	@Override
+	public boolean isUsingRiptide() {
+		return entity.require(Keys.IS_AUTO_SPIN_ATTACK);
+	}
+	
 	@Override
 	public ItemStack getItemInOffHand() {
-		return entity.getItemInHand(HandTypes.OFF_HAND).map(SpongeItemStack::new).orElse(null);
+		return new SpongeItemStack(entity.itemInHand(HandTypes.OFF_HAND));
 	}
-
+	
 	@Override
 	public boolean isDead() {
 		return getHealth() <= 0;
 	}
-
+	
 	@Override
 	public PlayerInventory getInventory() {
 		return new SpongePlayerInventory(entity);
@@ -396,59 +395,72 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 	
 	@Override
 	public boolean hasOpenInventory() {
-		return entity.getOpenInventory().isPresent() && entity.getOpenInventory().get().getArchetype().equals(InventoryArchetypes.CHEST);
+		return entity.openInventory().isPresent();
 	}
-
+	
 	@Override
 	public Inventory getOpenInventory() {
-		return entity.getOpenInventory().map(SpongeInventory::new).orElse(null);
+		return entity.openInventory().map(SpongeInventory::new).orElse(null);
 	}
-
+	
 	@Override
 	public void openInventory(Inventory inv) {
-		entity.openInventory((org.spongepowered.api.item.inventory.Inventory) inv.getDefault());
+		Sponge.server().scheduler().submit(
+			Task.builder()
+				.plugin(SpongeNegativity.container())
+				.execute(() -> {
+					String invName = inv.getInventoryName();
+					org.spongepowered.api.item.inventory.Inventory spongeInv = (org.spongepowered.api.item.inventory.Inventory) inv.getDefault();
+					if (invName != null && !invName.isEmpty()) {
+						Component invNameComponent = LegacyComponentSerializer.legacyAmpersand().deserialize(invName);
+						entity.openInventory(spongeInv, invNameComponent);
+					} else {
+						entity.openInventory(spongeInv);
+					}
+				})
+				.build()
+		);
 	}
-
+	
 	@Override
 	public void closeInventory() {
-		Task.builder().execute(entity::closeInventory).submit(SpongeNegativity.getInstance());
+		Sponge.server().scheduler().submit(
+			Task.builder()
+				.plugin(SpongeNegativity.container())
+				.execute(entity::closeInventory)
+				.build()
+		);
 	}
-
+	
 	@Override
 	public void updateInventory() {
 		
 	}
-
+	
 	@Override
 	public void setAllowFlight(boolean b) {
 		entity.offer(Keys.CAN_FLY, b);
 	}
-
+	
 	@Override
 	public void setVanished(boolean vanished) {
-		entity.offer(Keys.VANISH, vanished);
-		if (vanished) {
-			entity.offer(Keys.VANISH_IGNORES_COLLISION, true);
-			entity.offer(Keys.VANISH_PREVENTS_TARGETING, true);
-		}
+		entity.offer(Keys.VANISH_STATE, vanished ? VanishState.vanished().ignoreCollisions(true).untargetable(true) : VanishState.unvanished());
+	}
+	
+	@Override
+	public void setVelocity(Vector vel) {
+		entity.offer(Keys.VELOCITY, new Vector3d(vel.getX(), vel.getY(), vel.getZ()));
+	}
+	
+	@Override
+	public Location getEyeLocation() {
+		Vector3d pos = entity.require(Keys.EYE_POSITION);
+		return new Location(new SpongeWorld(entity.world()), pos.x(), pos.y(), pos.z());
 	}
 	
 	@Override
 	public InetSocketAddress getAddress() {
-		return entity.getConnection().getVirtualHost();
-	}
-	
-	@Override
-	public void sendToServer(String serverName) {
-		SpongeNegativity.bungeecordChannel.sendTo(entity, (buf) -> {
-			buf.writeUTF("Connect");
-			buf.writeUTF(serverName);
-		});
-	}
-	
-	@Override
-	public String getServerName() {
-		return "SpongeServer"; // TODO check if sponge can have a server name
+		return entity.connection().virtualHost();
 	}
 	
 	@Override
@@ -457,5 +469,43 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 			return false;
 		}
 		return Player.isSamePlayer(this, (Player) obj);
+	}
+
+	@Override
+	public double getMaxHealth() {
+		return entity.maxHealth().get();
+	}
+
+	@Override
+	public void setHealth(double health) {
+		entity.health().set(health);
+	}
+
+	@Override
+	public void setFoodLevel(int foodlevel) {
+		entity.foodLevel().set(foodlevel);
+	}
+
+	@Override
+	public int getProtocolVersion() {
+		return protocolVersion;
+	}
+
+	@Override
+	public void setProtocolVersion(int protocolVersion) {
+		this.protocolVersion = protocolVersion;
+	}
+
+	@Override
+	public void sendToServer(String serverName) {
+		SpongeNegativity.getInstance().getBungeecordChannel().play().sendTo(entity, (buf) -> {
+			buf.writeUTF("Connect");
+			buf.writeUTF(serverName);
+		});
+	}
+
+	@Override
+	public String getServerName() {
+		return null;
 	}
 }

@@ -105,7 +105,7 @@ Examples will be using `./gradlew`, if you are on Windows you need to use `gradl
 
 1. Clone this repository: `git clone https://github.com/Elikill58/Negativity.git`
 2. Get Spigot 1.7.10 and 1.13.2 jars and put them in `/spigot/spigotJars/` (you need to create this directory too)
-3. Setup a Forge workspace for the Sponge plugin: `./gradlew :sponge:setupDecompWorkspace`. This step will take some time to complete
+3. Setup a Forge workspace for the Sponge plugin: `./gradlew :sponge7:setupDecompWorkspace`. This step will take some time to complete
 4. Build the plugin: `./gradlew build`
  - You can find the all-in-one jar in `/build/libs/`
  - Platform-specific jars are available in their own project subdirectories (`/spigot/build/libs/` for example)

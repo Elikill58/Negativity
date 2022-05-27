@@ -9,11 +9,10 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 
 import com.elikill58.negativity.universal.utils.SemVer;
-
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.gson.GsonConfigurationLoader;
 
 public class SpongeUpdateChecker {
 	
@@ -22,8 +21,7 @@ public class SpongeUpdateChecker {
 	private static @Nullable String latestVersionString;
 	
 	private static boolean checkForUpdate() throws IOException {
-		SemVer currentVersion = SpongeNegativity.getInstance().getContainer().getVersion()
-			.map(SemVer::parse).orElse(null);
+		SemVer currentVersion = SemVer.parse(SpongeNegativity.getInstance().getContainer().metadata().version().toString());
 		if (currentVersion == null) {
 			return false;
 		}
@@ -32,7 +30,7 @@ public class SpongeUpdateChecker {
 		try {
 			HttpURLConnection connection = prepareConnection("projects/negativity/versions?limit=1", session);
 			ConfigurationNode response = readJsonResponse(connection);
-			String versionString = response.getNode("result", 0, "name").getString();
+			String versionString = response.node("result", 0, "name").getString();
 			if (versionString == null) {
 				return false;
 			}
@@ -49,7 +47,7 @@ public class SpongeUpdateChecker {
 		HttpURLConnection connection = prepareConnection("authenticate", null);
 		connection.setRequestMethod("POST");
 		ConfigurationNode response = readJsonResponse(connection);
-		String session = response.getNode("session").getString();
+		String session = response.node("session").getString();
 		if (session == null) {
 			throw new IOException("Could not open OreApi session: " + toJson(response));
 		}
@@ -77,13 +75,13 @@ public class SpongeUpdateChecker {
 	
 	private static ConfigurationNode readJsonResponse(HttpURLConnection connection) throws IOException {
 		return GsonConfigurationLoader.builder()
-			.setSource(() -> new BufferedReader(new InputStreamReader(connection.getInputStream())))
+			.source(() -> new BufferedReader(new InputStreamReader(connection.getInputStream())))
 			.build().load();
 	}
 	
 	private static String toJson(ConfigurationNode node) throws IOException {
 		try (StringWriter writer = new StringWriter()) {
-			GsonConfigurationLoader.builder().setSink(() -> new BufferedWriter(writer)).build().save(node);
+			GsonConfigurationLoader.builder().sink(() -> new BufferedWriter(writer)).build().save(node);
 			return writer.toString();
 		}
 	}

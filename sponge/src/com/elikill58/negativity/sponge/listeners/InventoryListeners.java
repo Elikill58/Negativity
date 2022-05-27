@@ -1,11 +1,10 @@
 package com.elikill58.negativity.sponge.listeners;
 
-import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.data.Keys;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.filter.cause.First;
-import org.spongepowered.api.event.item.inventory.ClickInventoryEvent;
-import org.spongepowered.api.event.item.inventory.InteractInventoryEvent;
-import org.spongepowered.api.item.inventory.property.SlotIndex;
+import org.spongepowered.api.event.item.inventory.container.ClickContainerEvent;
 import org.spongepowered.api.item.inventory.transaction.SlotTransaction;
 
 import com.elikill58.negativity.api.events.EventManager;
@@ -21,50 +20,52 @@ import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
 public class InventoryListeners {
 	
 	@Listener
-	public void onInventoryOpen(InteractInventoryEvent.Open e, @First Player p) {
+	public void onInventoryOpen(ClickContainerEvent.Open e, @First ServerPlayer p) {
 		InventoryOpenEvent event = new InventoryOpenEvent(SpongeEntityManager.getPlayer(p));
 		EventManager.callEvent(event);
 		e.setCancelled(event.isCancelled());
 	}
 	
 	@Listener
-	public void onInvClick(ClickInventoryEvent e, @First Player p) {
-		if (e.getTransactions().isEmpty())
+	public void onInvClick(ClickContainerEvent e, @First ServerPlayer p) {
+		if (e.transactions().isEmpty()) {
 			return;
+		}
+		
 		InventoryAction action = getAction(e);
-		SlotTransaction transaction = e.getTransactions().get(0);
-		ItemStack item = new SpongeItemStack(transaction.getOriginal().createStack());
-		int slotIndex = transaction.getSlot().getInventoryProperty(SlotIndex.class).map(SlotIndex::getValue).orElse(-1);
-		InventoryClickEvent event = new InventoryClickEvent(SpongeEntityManager.getPlayer(p), action, slotIndex, item, new SpongeInventory(e.getTargetInventory()));
+		SlotTransaction transaction = e.transactions().get(0);
+		ItemStack item = new SpongeItemStack(transaction.original().createStack());
+		int slotIndex = transaction.slot().getInt(Keys.SLOT_INDEX).orElse(-1);
+		InventoryClickEvent event = new InventoryClickEvent(SpongeEntityManager.getPlayer(p), action, slotIndex, item, new SpongeInventory(e.container()));
 		EventManager.callEvent(event);
 		e.setCancelled(event.isCancelled());
 	}
 	
-	private InventoryAction getAction(ClickInventoryEvent e) {
-		if(e instanceof ClickInventoryEvent.Double)
+	private InventoryAction getAction(ClickContainerEvent e) {
+		if(e instanceof ClickContainerEvent.Double)
 			return InventoryAction.DOUBLE;
-		else if(e instanceof ClickInventoryEvent.Creative)
+		else if(e instanceof ClickContainerEvent.Creative)
 			return InventoryAction.CREATIVE;
-		else if(e instanceof ClickInventoryEvent.Drop)
+		else if(e instanceof ClickContainerEvent.Drop)
 			return InventoryAction.DROP;
-		else if(e instanceof ClickInventoryEvent.Middle)
+		else if(e instanceof ClickContainerEvent.Middle)
 			return InventoryAction.MIDDLE;
-		else if(e instanceof ClickInventoryEvent.Shift.Primary)
+		else if(e instanceof ClickContainerEvent.Shift.Primary)
 			return InventoryAction.LEFT_SHIFT;
-		else if(e instanceof ClickInventoryEvent.Shift.Secondary)
+		else if(e instanceof ClickContainerEvent.Shift.Secondary)
 			return InventoryAction.RIGHT_SHIFT;
-		else if(e instanceof ClickInventoryEvent.NumberPress)
+		else if(e instanceof ClickContainerEvent.NumberPress)
 			return InventoryAction.NUMBER;
 		// Order matters! Primary and Secondary are at the end because other events may subclass them (e.g. Shift.Primary)
-		else if(e instanceof ClickInventoryEvent.Primary)
+		else if(e instanceof ClickContainerEvent.Primary)
 			return InventoryAction.LEFT;
-		else if(e instanceof ClickInventoryEvent.Secondary)
+		else if(e instanceof ClickContainerEvent.Secondary)
 			return InventoryAction.RIGHT;
 		return InventoryAction.UNKNOWN;
 	}
 	
 	@Listener
-	public void onInventoryClose(InteractInventoryEvent.Close e, @First Player p) {
-		EventManager.callEvent(new InventoryCloseEvent(SpongeEntityManager.getPlayer(p), new SpongeInventory(e.getTargetInventory())));
+	public void onInventoryClose(ClickContainerEvent.Close e, @First ServerPlayer p) {
+		EventManager.callEvent(new InventoryCloseEvent(SpongeEntityManager.getPlayer(p), new SpongeInventory(e.container())));
 	}
 }

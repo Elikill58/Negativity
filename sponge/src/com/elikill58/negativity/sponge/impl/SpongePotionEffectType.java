@@ -1,18 +1,20 @@
 package com.elikill58.negativity.sponge.impl;
 
+import java.util.function.Supplier;
+
 import org.spongepowered.api.effect.potion.PotionEffectType;
 import org.spongepowered.api.effect.potion.PotionEffectTypes;
 
 public class SpongePotionEffectType {
 	
-	public static PotionEffectType getEffect(com.elikill58.negativity.api.potion.PotionEffectType type) {
+	public static Supplier<PotionEffectType> getEffect(com.elikill58.negativity.api.potion.PotionEffectType type) {
 		switch (type) {
 		case BLINDNESS:
 			return PotionEffectTypes.BLINDNESS;
 		case NAUSEA:
 			return PotionEffectTypes.NAUSEA;
 		case DOLPHINS_GRACE:
-			return null;
+			return PotionEffectTypes.DOLPHINS_GRACE;
 		case HASTE:
 			return PotionEffectTypes.HASTE;
 		case HUNGER:

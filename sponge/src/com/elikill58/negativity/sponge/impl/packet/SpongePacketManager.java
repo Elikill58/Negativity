@@ -8,12 +8,12 @@ import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketManager;
 
 public abstract class SpongePacketManager extends PacketManager {
-
+	
 	public void notifyHandlersReceive(PacketSourceType source, AbstractPacket packet) {
 		PacketReceiveEvent event = new PacketReceiveEvent(source, packet, packet.getPlayer());
 		EventManager.callEvent(event);
 	}
-
+	
 	public void notifyHandlersSent(PacketSourceType source, AbstractPacket packet) {
 		PacketSendEvent event = new PacketSendEvent(source, packet, packet.getPlayer());
 		EventManager.callEvent(event);

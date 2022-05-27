@@ -1,74 +1,83 @@
 package com.elikill58.negativity.sponge.impl.item;
 
 import java.util.HashMap;
-import java.util.Optional;
-import java.util.StringJoiner;
+import java.util.Locale;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.block.BlockTypes;
 import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.item.ItemTypes;
+import org.spongepowered.api.registry.Registry;
+import org.spongepowered.api.registry.RegistryHolder;
+import org.spongepowered.api.registry.RegistryTypes;
 
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.sponge.SpongeNegativity;
+import com.elikill58.negativity.sponge.impl.block.SpongeBlockMaterial;
 
 public class SpongeItemRegistrar extends ItemRegistrar {
-
+	
+	private static final Logger LOGGER = LogManager.getLogger(SpongeItemRegistrar.class);
+	
 	private final HashMap<String, Material> cache = new HashMap<>();
-
+	
 	@Override
 	public @Nullable Material get(String id, String... aliases) {
 		return cache.computeIfAbsent(id, key -> {
-			Material optId = findMaterial(parse(key));
-			if (optId != null) {
-				return optId;
+			RegistryHolder registries = Sponge.game();
+			ResourceKey resourceKey = parse(id);
+			
+			Registry<BlockType> blockTypeRegistry = registries.registry(RegistryTypes.BLOCK_TYPE);
+			@Nullable BlockType blockItemType = blockTypeRegistry.findValue(resourceKey).orElse(null);
+			if (blockItemType != null && !returnedDefaultValue(resourceKey, blockItemType)) {
+				return new SpongeBlockMaterial(blockItemType);
 			}
 			
-			String[] parsedAliases = new String[aliases.length];
-			for (int i = 0, aliasesLength = aliases.length; i < aliasesLength; i++) {
-				parsedAliases[i] = parse(aliases[i]);
+			Registry<ItemType> itemTypeRegistry = registries.registry(RegistryTypes.ITEM_TYPE);
+			@Nullable ItemType itemType = itemTypeRegistry.findValue(resourceKey).orElse(null);
+			if (itemType != null && !returnedDefaultValue(resourceKey, itemType)) {
+				return new SpongeItemMaterial(itemType);
 			}
 			
-			for (String alias : parsedAliases) {
-				Material aliasedMaterial = findMaterial(alias);
-				if (aliasedMaterial != null) {
-					return aliasedMaterial;
+			for (String alias : aliases) {
+				ResourceKey aliasKey = parse(alias);
+				@Nullable BlockType aliasedBlockType = blockTypeRegistry.findValue(aliasKey).orElse(null);
+				if (aliasedBlockType != null && !returnedDefaultValue(aliasKey, aliasedBlockType)) {
+					return new SpongeBlockMaterial(aliasedBlockType);
+				}
+				@Nullable ItemType aliasedItemType = itemTypeRegistry.findValue(aliasKey).orElse(null);
+				if (aliasedItemType != null && !returnedDefaultValue(aliasKey, aliasedItemType)) {
+					return new SpongeItemMaterial(aliasedItemType);
 				}
 			}
 			
-			StringJoiner sj = new StringJoiner(", ", " : ", "");
-			for(String alias : parsedAliases) sj.add(alias + " (" + parse(alias) + ")");
-			SpongeNegativity.getInstance().getLogger().info("[SpongeItemRegistrar] Cannot find material " + id + sj);
+			LOGGER.warn("[SpongeItemRegistrar] Could not find material : " + id + ", " + String.join(", ", aliases));
 			return null;
 		});
 	}
 	
-	private @Nullable Material findMaterial(String key) {
-		Optional<ItemType> optId = Sponge.getRegistry().getType(ItemType.class, key);
-		if (optId.isPresent()) {
-			return new SpongeMaterial(optId.get());
+	@SuppressWarnings("unchecked")
+	private static boolean returnedDefaultValue(ResourceKey key, ItemType value) {
+		if (key.namespace().equals("minecraft") && key.value().equals("air")) {
+			return false;
 		}
-		Optional<BlockType> optBlock = Sponge.getRegistry().getType(BlockType.class, key);
-		if (optBlock.isPresent()) {
-			Optional<ItemType> item = optBlock.get().getItem();
-			if (item.isPresent()) {
-				return new SpongeMaterial(item.get());
-			} else {
-				return new SpongeBlockMaterial(optBlock.get());
-			}
-		}
-		return null;
+		return value.isAnyOf(ItemTypes.AIR);
 	}
 	
-	private String parse(String base) {
-		StringJoiner sj = new StringJoiner("");
-		for(String ch : base.split("")) {
-			if(ch.equals("["))
-				return sj.toString();
-			else
-				sj.add(ch);
+	@SuppressWarnings("unchecked")
+	private static boolean returnedDefaultValue(ResourceKey key, BlockType value) {
+		if (key.namespace().equals("minecraft") && key.value().equals("air")) {
+			return false;
 		}
-		return sj.toString();
+		return value.isAnyOf(BlockTypes.AIR);
+	}
+	
+	private ResourceKey parse(String base) {
+		return ResourceKey.resolve(base.toLowerCase(Locale.ROOT));
 	}
 }

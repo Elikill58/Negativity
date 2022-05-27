@@ -1,52 +1,63 @@
 package com.elikill58.negativity.sponge.impl.block;
 
 import java.util.Locale;
-import java.util.Optional;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+import org.spongepowered.api.ResourceKey;
+import org.spongepowered.api.Sponge;
 import org.spongepowered.api.block.BlockSnapshot;
-import org.spongepowered.api.item.ItemType;
+import org.spongepowered.api.block.BlockType;
+import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.util.Direction;
-import org.spongepowered.api.world.World;
+import org.spongepowered.api.world.server.ServerLocation;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.sponge.impl.location.SpongeLocation;
+import com.elikill58.negativity.api.location.World;
+import com.elikill58.negativity.sponge.impl.location.SpongeWorld;
+import com.elikill58.negativity.sponge.utils.Utils;
 
 public class SpongeBlock extends Block {
-
+	
+	private @Nullable Material cachedMaterial;
 	private final BlockSnapshot block;
 	
 	public SpongeBlock(BlockSnapshot block) {
 		this.block = block;
 	}
-
+	
 	@Override
 	public Material getType() {
-		return ItemRegistrar.getInstance().get(block.getState().getId(), block.getState().getName());
+		if (this.cachedMaterial == null) {
+			ResourceKey key = Utils.getKey(block.state().type());
+			this.cachedMaterial = ItemRegistrar.getInstance().get(key.asString());
+		}
+		return this.cachedMaterial;
 	}
-
+	
 	@Override
 	public int getX() {
-		return block.getPosition().getX();
+		return block.position().x();
 	}
-
+	
 	@Override
 	public int getY() {
-		return block.getPosition().getY();
+		return block.position().y();
 	}
-
+	
 	@Override
 	public int getZ() {
-		return block.getPosition().getZ();
+		return block.position().z();
 	}
-
+	
 	@Override
 	public Block getRelative(BlockFace blockFace) {
-		Optional<org.spongepowered.api.world.Location<World>> opt = block.getLocation();
-		return opt.isPresent() ? new SpongeBlock(opt.get().getBlockRelative(getDirection(blockFace)).createSnapshot()) : this;
+		return block.location()
+			.map(loc -> new SpongeBlock(loc.relativeTo(getDirection(blockFace)).createSnapshot()))
+			.orElse(this);
 	}
 	
 	private Direction getDirection(BlockFace bf) {
@@ -93,36 +104,40 @@ public class SpongeBlock extends Block {
 			return Direction.NONE;
 		}
 	}
-
+	
 	@Override
 	public Location getLocation() {
-		return SpongeLocation.toCommon(block.getLocation().orElse(null));
+		World world = Sponge.server().worldManager().world(block.world())
+			.map(SpongeWorld::new)
+			.orElseThrow(() -> new IllegalStateException("Failed to get world " + block.world() + " from Block"));
+		return new Location(world, getX(), getY(), getZ());
 	}
-
+	
 	@Override
 	public boolean isLiquid() {
 		String name = getType().getId().toLowerCase(Locale.ROOT);
 		return name.contains("water") || name.contains("lava");
 	}
-
+	
 	@Override
 	public void setType(Material type) {
-		org.spongepowered.api.world.Location<World> loc = block.getLocation().orElse(null);
-		if(loc == null)
-			return;
-		ItemType item = (ItemType) type.getDefault();
-		if(item.getBlock().isPresent())
-			loc.setBlockType(item.getBlock().get());
+		ServerLocation loc = block.location().orElse(null);
+		if (loc != null) {
+			BlockType blockType = Utils.getBlockType(type);
+			if (blockType != null) {
+				loc.setBlockType(blockType);
+			}
+		}
 	}
-
+	
 	@Override
 	public boolean isWaterLogged() {
-		return false;
+		return block.getOrElse(Keys.IS_WATERLOGGED, false);
 	}
 	
 	@Override
 	public Object getDefault() {
 		return block;
 	}
-
+	
 }

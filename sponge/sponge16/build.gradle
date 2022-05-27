@@ -1,0 +1,99 @@
+import org.spongepowered.gradle.plugin.config.PluginLoaders
+import org.spongepowered.gradle.vanilla.repository.MinecraftPlatform
+import org.spongepowered.plugin.metadata.model.PluginDependency
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id 'com.github.johnrengelman.shadow'
+    id 'org.spongepowered.gradle.plugin' version '2.0.2'
+    id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT'
+}
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+dependencies {
+    api project(':common')
+    api project(':sponge')
+    
+    compileOnly 'eu.crushedpixel:PacketGate:0.2.0'
+}
+
+minecraft {
+    version '1.16.5'
+    platform MinecraftPlatform.SERVER
+    injectRepositories false
+}
+
+sponge {
+    apiVersion("8.0.0")
+    license("NO_LICENCE_YET")
+    loader {
+        name(PluginLoaders.JAVA_PLAIN)
+        version("1.0")
+    }
+    plugin("negativity") {
+        displayName("Negativity")
+        entrypoint("com.elikill58.negativity.sponge8.SpongeNegativity")
+        description("An Advanced AntiCheat Plugin")
+        links {
+            homepage('https://ore.spongepowered.org/Elikill58/Negativity')
+            source('https://github.com/Elikill58/Negativity')
+            issues('https://github.com/Elikill58/Negativity/issues')
+        }
+        contributor("Elikill58") {
+            description("Main Developer")
+        }
+        contributor("RedNesto") {
+            description("Main Developer")
+        }
+        dependency("spongeapi") {
+            loadOrder(PluginDependency.LoadOrder.AFTER)
+            optional(false)
+        }
+    }
+}
+
+processResources {
+    def props = [version: version]
+    inputs.properties(props)
+}
+
+shadowJar {
+    archiveBaseName.set('negativity')
+    archiveAppendix.set('sponge16')
+    archiveClassifier.set(null)
+
+
+    dependencies {
+        it.include(it.project(':common'))
+    }
+    
+    mergeServiceFiles()
+    from(project(':common').tasks.shadowJar)
+    from(writePluginMetadata)
+    
+    exclude('dummyThing')
+}
+
+build.dependsOn shadowJar
+
+parent.tasks.named('shadowJar', ShadowJar) {
+    it.from(shadowJar.outputs)
+    it.manifest.inheritFrom(tasks.jar.manifest)
+}
+
+task prepareServer(type: Copy) {
+    from shadowJar.outputs
+    rename { 'negativity.jar' }
+    def pluginDir = System.getProperty('plugins.dir')
+    if (pluginDir == null) {
+        enabled(false)
+    } else {
+        into pluginDir
+    }
+}

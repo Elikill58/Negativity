@@ -3,8 +3,6 @@ package com.elikill58.negativity.sponge;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.StringReader;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -13,17 +11,14 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
-import org.spongepowered.api.network.ChannelBinding.RawDataChannel;
-import org.spongepowered.api.network.ChannelRegistrar;
-import org.spongepowered.api.network.ChannelRegistrationException;
-import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.api.command.exception.CommandException;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.api.service.user.UserStorageService;
-import org.spongepowered.api.text.LiteralText;
-import org.spongepowered.api.text.Text;
-import org.spongepowered.api.text.action.TextActions;
+import org.spongepowered.configurate.ConfigurationNode;
+import org.spongepowered.configurate.gson.GsonConfigurationLoader;
+import org.spongepowered.plugin.PluginContainer;
+import org.spongepowered.plugin.metadata.PluginMetadata;
 
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
@@ -46,6 +41,7 @@ import com.elikill58.negativity.sponge.impl.item.SpongeItemBuilder;
 import com.elikill58.negativity.sponge.impl.item.SpongeItemRegistrar;
 import com.elikill58.negativity.sponge.impl.plugin.SpongeExternalPlugin;
 import com.elikill58.negativity.sponge.nms.SpongeVersionAdapter;
+import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.Scheduler;
@@ -57,65 +53,73 @@ import com.elikill58.negativity.universal.translation.NegativityTranslationProvi
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.gson.GsonConfigurationLoader;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.serializer.legacy.LegacyComponentSerializer;
 
 public class SpongeAdapter extends Adapter {
-
-	private final LoggerAdapter logger;
+	
 	private final SpongeNegativity plugin;
+	private final Log4jAdapter logger;
 	private Configuration config;
-	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpongeNegativity::sendPluginMessage);
-	private final TranslationProviderFactory translationProviderFactory;
-	private final SpongeItemRegistrar itemRegistrar;
+	
 	private final Version serverVersion;
+	
+	private final NegativityTranslationProviderFactory translationProviderFactory;
+	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(SpongeNegativity::sendPluginMessage);
+	private final SpongeItemRegistrar itemRegistrar = new SpongeItemRegistrar();
 	private final Scheduler scheduler;
 	
-	public SpongeAdapter(SpongeNegativity sn) {
-		this.plugin = sn;
-		this.logger = new Slf4jLoggerAdapter(sn.getLogger());
-		this.config = UniversalUtils.loadConfig(new File(getDataFolder(), "config.yml"), "config.yml");
-		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("lang"), "Negativity", "CheatHover");
-		this.itemRegistrar = new SpongeItemRegistrar();
+	public SpongeAdapter(SpongeNegativity plugin) {
+		this.plugin = plugin;
+		this.logger = new Log4jAdapter(plugin.getLogger());
+		this.config = UniversalUtils.loadConfig(plugin.getConfigDir().resolve("config.yml").toFile(), "config.yml");
+		
+		this.translationProviderFactory = new NegativityTranslationProviderFactory(plugin.getConfigDir().resolve("lang"), "Negativity", "CheatHover");
 		this.serverVersion = Version.getVersionByName(getVersion());
-		this.scheduler = new SpongeScheduler(sn);
+		this.scheduler = new SpongeScheduler(plugin.getContainer());
 	}
 	
 	@Override
 	public Platform getPlatformID() {
-		return Platform.SPONGE;
+		return Platform.SPONGE8;
 	}
-
+	
 	@Override
 	public Configuration getConfig() {
-		return config;
+		return this.config;
 	}
-
+	
 	@Override
 	public File getDataFolder() {
-		return plugin.getDataFolder().toFile();
+		return this.plugin.getConfigDir().toFile();
 	}
-
+	
+	@Override
+	public LoggerAdapter getLogger() {
+		return this.logger;
+	}
+	
 	@Override
 	public void debug(String msg) {
 		if(getConfig().getBoolean("debug", false))
-			logger.info(msg);
+			this.logger.info(msg);
 	}
-
+	
 	@Override
 	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
 		return this.translationProviderFactory;
 	}
-
+	
 	@Override
 	public void reload() {
 		reloadConfig();
-		plugin.reloadCommands();
 	}
-
+	
 	@Override
 	public String getVersion() {
-		return Sponge.getPlatform().getMinecraftVersion().getName();
+		return Sponge.platform().minecraftVersion().name();
 	}
 	
 	@Override
@@ -125,24 +129,28 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public String getPluginVersion() {
-		return plugin.getContainer().getVersion().orElse("unknown");
+		return this.plugin.getContainer().metadata().version().toString();
 	}
-
+	
 	@Override
 	public void reloadConfig() {
-		this.config = UniversalUtils.loadConfig(new File(getDataFolder(), "config.yml"), "config.yml");
+		this.config = UniversalUtils.loadConfig(plugin.getConfigDir().resolve("config.yml").toFile(), "config.yml");
 	}
-
+	
 	@Override
 	public NegativityAccountManager getAccountManager() {
-		return accountManager;
+		return this.accountManager;
 	}
-
+	
 	@Override
 	public void runConsoleCommand(String cmd) {
-		Sponge.getCommandManager().process(Sponge.getServer().getConsole(), cmd);
+		try {
+			Sponge.server().commandManager().process(cmd);
+		} catch (CommandException e) {
+			this.plugin.getLogger().error("Failed to run command as console", e);
+		}
 	}
-
+	
 	@Override
 	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
 		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {
@@ -151,67 +159,55 @@ public class SpongeAdapter extends Adapter {
 			}
 			try {
 				ConfigurationNode rootNode = GsonConfigurationLoader.builder()
-						.setSource(() -> new BufferedReader(new StringReader(response)))
-						.build()
-						.load();
-				return rootNode.getNode("isMcleaks").getBoolean(false);
+					.source(() -> new BufferedReader(new StringReader(response)))
+					.build()
+					.load();
+				return rootNode.node("isMcleaks").getBoolean(false);
 			} catch (Exception e) {
-				e.printStackTrace();
+				this.plugin.getLogger().error("Failed to parse MCLeaks API response", e);
 			}
 			return false;
 		});
 	}
-
-	@Override
-	public LoggerAdapter getLogger() {
-		return logger;
-	}
-
+	
 	@Override
 	public List<UUID> getOnlinePlayersUUID() {
 		List<UUID> list = new ArrayList<>();
-		for (org.spongepowered.api.entity.living.player.Player temp : Sponge.getServer().getOnlinePlayers())
-			list.add(temp.getUniqueId());
+		for (ServerPlayer player : Sponge.server().onlinePlayers()) {
+			list.add(player.uniqueId());
+		}
 		return list;
 	}
-
-	@Override
-	public double[] getTPS() {
-		return new double[] {getLastTPS()};
-	}
-
-	@Override
-	public double getLastTPS() {
-		return Sponge.getServer().getTicksPerSecond();
-	}
-
-	@Override
-	public ItemRegistrar getItemRegistrar() {
-		return itemRegistrar;
-	}
-
-	@Override
-	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
-		LiteralText text = Text.builder(message)
-			.onHover(TextActions.showText(Text.of(hover)))
-			.onClick(TextActions.runCommand(command))
-			.build();
-		((org.spongepowered.api.entity.living.player.Player) p.getDefault()).sendMessage(text);
-	}
-
+	
 	@Override
 	public List<Player> getOnlinePlayers() {
 		List<Player> list = new ArrayList<>();
-		for (org.spongepowered.api.entity.living.player.Player temp : Sponge.getServer().getOnlinePlayers())
-			list.add(SpongeEntityManager.getPlayer(temp));
+		for (ServerPlayer player : Sponge.server().onlinePlayers()) {
+			list.add(SpongeEntityManager.getPlayer(player));
+		}
 		return list;
 	}
-
+	
+	@Override
+	public double[] getTPS() {
+		return new double[]{getLastTPS()};
+	}
+	
+	@Override
+	public double getLastTPS() {
+		return Sponge.server().ticksPerSecond();
+	}
+	
+	@Override
+	public ItemRegistrar getItemRegistrar() {
+		return this.itemRegistrar;
+	}
+	
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
 		return new SpongeItemBuilder(type);
 	}
-
+	
 	@Override
 	public ItemBuilder createItemBuilder(ItemStack item) {
 		return new SpongeItemBuilder(item);
@@ -224,37 +220,27 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public ItemBuilder createSkullItemBuilder(Player owner) {
-		return new SpongeItemBuilder(owner);
+		return new SpongeItemBuilder(((org.spongepowered.api.entity.living.player.Player) owner.getDefault()).profile());
 	}
 	
 	@Override
 	public ItemBuilder createSkullItemBuilder(OfflinePlayer owner) {
-		return new SpongeItemBuilder(owner);
+		return new SpongeItemBuilder(((org.spongepowered.api.entity.living.player.User) owner.getDefault()).profile());
 	}
 	
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
 		return new SpongeInventory(inventoryName, size, holder);
 	}
-
-	@Override
-	public @Nullable Player getPlayer(String name) {
-		return SpongeEntityManager.getPlayer(Sponge.getServer().getPlayer(name).orElse(null));
-	}
-
-	@Override
-	public @Nullable Player getPlayer(UUID uuid) {
-		return SpongeEntityManager.getPlayer(Sponge.getServer().getPlayer(uuid).orElse(null));
-	}
-
+	
 	@Override
 	public @Nullable OfflinePlayer getOfflinePlayer(String name) {
 		Player online = getPlayer(name);
 		if (online != null) {
 			return online;
 		}
-		return Sponge.getServiceManager().provideUnchecked(UserStorageService.class)
-			.get(name).map(SpongeOfflinePlayer::new).orElse(null);
+		return Sponge.server().userManager().load(name).join()
+			.map(SpongeOfflinePlayer::new).orElse(null);
 	}
 	
 	@Override
@@ -263,36 +249,53 @@ public class SpongeAdapter extends Adapter {
 		if (online != null) {
 			return online;
 		}
-		return Sponge.getServiceManager().provideUnchecked(UserStorageService.class)
-			.get(uuid).map(SpongeOfflinePlayer::new).orElse(null);
+		return Sponge.server().userManager().load(uuid).join()
+			.map(SpongeOfflinePlayer::new).orElse(null);
+	}
+	
+	@Override
+	public @Nullable Player getPlayer(String name) {
+		return SpongeEntityManager.getPlayer(Sponge.server().player(name).orElse(null));
+	}
+	
+	@Override
+	public @Nullable Player getPlayer(UUID uuid) {
+		return SpongeEntityManager.getPlayer(Sponge.server().player(uuid).orElse(null));
 	}
 	
 	@Override
 	public FakePlayer createFakePlayer(Location loc, String name) {
 		return new SpongeFakePlayer(loc, name);
 	}
-
+	
+	@Override
+	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
+		TextComponent mainText = LegacyComponentSerializer.legacyAmpersand().deserialize(message);
+		TextComponent hoverText = LegacyComponentSerializer.legacyAmpersand().deserialize(hover);
+		((ServerPlayer) p.getDefault()).sendMessage(mainText.hoverEvent(hoverText).clickEvent(ClickEvent.runCommand(command)));
+	}
+	
 	@Override
 	public boolean hasPlugin(String name) {
-		return Sponge.getPluginManager().isLoaded(name);
+		return Sponge.pluginManager().plugin(name).isPresent();
 	}
-
+	
 	@Override
 	public ExternalPlugin getPlugin(String name) {
-		return new SpongeExternalPlugin(Sponge.getPluginManager().getPlugin(name).orElse(null));
+		return new SpongeExternalPlugin(Sponge.pluginManager().plugin(name).orElse(null));
 	}
 	
 	@Override
 	public List<ExternalPlugin> getDependentPlugins() {
-		return Sponge.getPluginManager().getPlugins().stream()
-				.filter(plugin -> plugin.getDependency("negativity").isPresent())
-				.map(SpongeExternalPlugin::new)
-				.collect(Collectors.toList());
+		return Sponge.pluginManager().plugins().stream()
+			.filter(plugin -> Utils.dependsOn(plugin, "negativity"))
+			.map(SpongeExternalPlugin::new)
+			.collect(Collectors.toList());
 	}
 	
 	@Override
 	public void runSync(Runnable call) {
-		Task.builder().execute(call).submit(plugin);
+		Sponge.server().scheduler().submit(Task.builder().plugin(this.plugin.getContainer()).execute(call).build());
 	}
 	
 	@Override
@@ -301,46 +304,13 @@ public class SpongeAdapter extends Adapter {
 	}
 	
 	@Override
-	public boolean canSendStats() {
-		return Sponge.getMetricsConfigManager().areMetricsEnabled(plugin.getContainer());
-	}
-	
-	@Override
 	public void registerNewIncomingChannel(String channel, BiConsumer<Player, byte[]> event) {
-		RawDataChannel spongeChannel = null;
-		try {
-			spongeChannel = Sponge.getChannelRegistrar().getOrCreateRaw(plugin, channel);
-		} catch (ChannelRegistrationException e) {
-			try {
-				Class<?> vanillaRawChannelClass = Class.forName("org.spongepowered.server.network.VanillaRawDataChannel");
-				Constructor<?> rawChannelConstructor = vanillaRawChannelClass.getConstructor(ChannelRegistrar.class, String.class, PluginContainer.class);
-				spongeChannel = (RawDataChannel) rawChannelConstructor.newInstance(Sponge.getChannelRegistrar(), channel, plugin.getContainer()); // new channel instance
-		        // now register channel
-				Class<?> vanillaChannelRegistrarClass = Class.forName("org.spongepowered.server.network.VanillaChannelRegistrar");
-				Method registerChannel = vanillaChannelRegistrarClass.getDeclaredMethod("registerChannel", Class.forName("org.spongepowered.server.network.VanillaChannelBinding"));
-				registerChannel.setAccessible(true);
-				registerChannel.invoke(Sponge.getChannelRegistrar(), spongeChannel);
-			} catch (Exception exc) {
-				exc.printStackTrace();
-				plugin.getLogger().warn("Failed to register channel " + channel + " even with second method: " + exc.getMessage());
-			}
-		}
-		if(spongeChannel == null)
-			return;
-		spongeChannel.addListener((data, connection, side) -> {
-			if(side == Type.CLIENT) {
-				Sponge.getServer().getOnlinePlayers().forEach((p) -> {
-					if(p.getConnection().getAddress().equals(connection.getAddress())) {
-						event.accept(SpongeEntityManager.getPlayer(p), data.array());
-					}
-				});
-			}
-		});;
+		// TODO this is tricky because we have to register channels in a lifecycle event...
 	}
-	
+
 	@Override
 	public void broadcastMessage(String message) {
-		Sponge.getServer().getBroadcastChannel().send(Text.of(message));
+		Sponge.server().broadcastAudience().sendMessage(Component.text(message));
 	}
 	
 	@Override
@@ -350,6 +320,6 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public List<String> getAllPlugins() {
-		return Sponge.getPluginManager().getPlugins().stream().map(PluginContainer::getId).collect(Collectors.toList());
+		return Sponge.pluginManager().plugins().stream().map(PluginContainer::metadata).map(PluginMetadata::id).collect(Collectors.toList());
 	}
 }

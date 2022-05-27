@@ -1,31 +1,37 @@
 package com.elikill58.negativity.sponge.listeners;
 
-import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.data.DataTransactionResult;
+import org.spongepowered.api.data.Keys;
+import org.spongepowered.api.data.value.Value;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
-import org.spongepowered.api.event.cause.entity.damage.source.DamageSource;
+import org.spongepowered.api.event.data.ChangeDataHolderEvent;
 import org.spongepowered.api.event.entity.DamageEntityEvent;
-import org.spongepowered.api.event.entity.HealEntityEvent;
 import org.spongepowered.api.event.filter.Getter;
 import org.spongepowered.api.event.filter.cause.First;
 
 import com.elikill58.negativity.api.events.EventManager;
-import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
+import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerRegainHealthEvent;
 import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 
 public class EntityListeners {
-
+	
 	@Listener
-	public void onDamageByEntity(DamageEntityEvent e,
-			   @First DamageSource damageSource,
-			   @Getter("getTargetEntity") Player p) {
-		EventManager.callEvent(new PlayerDamagedByEntityEvent(SpongeEntityManager.getPlayer(p), SpongeEntityManager.getEntity(e.getTargetEntity())));
+	public void onDamageByEntity(DamageEntityEvent e, @First ServerPlayer attacker, @Getter("entity") ServerPlayer attacked) {
+		EventManager.callEvent(new PlayerDamageEntityEvent(SpongeEntityManager.getPlayer(attacker), SpongeEntityManager.getEntity(attacked), true));
 	}
-
+	
 	@Listener
-	public void onRegainHealth(HealEntityEvent e, @First Player p) {
-		PlayerRegainHealthEvent event = new PlayerRegainHealthEvent(SpongeEntityManager.getPlayer(p));
-		EventManager.callEvent(event);
-		e.setCancelled(event.isCancelled());
+	public void onRegainHealth(ChangeDataHolderEvent.ValueChange e, @First ServerPlayer p) {
+		DataTransactionResult changes = e.endResult();
+		for (Value.Immutable<?> replaced : changes.replacedData()) {
+			if (replaced.key().equals(Keys.HEALTH)) {
+				PlayerRegainHealthEvent event = new PlayerRegainHealthEvent(SpongeEntityManager.getPlayer(p));
+				EventManager.callEvent(event);
+				e.setCancelled(event.isCancelled()); // TODO do not cancel, set result instead
+				return;
+			}
+		}
 	}
 }

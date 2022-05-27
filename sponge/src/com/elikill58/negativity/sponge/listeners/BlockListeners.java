@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge.listeners;
 
-import org.spongepowered.api.entity.living.player.Player;
+import org.spongepowered.api.block.transaction.Operations;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.block.ChangeBlockEvent;
 import org.spongepowered.api.event.filter.cause.First;
@@ -12,17 +13,23 @@ import com.elikill58.negativity.sponge.impl.entity.SpongeEntityManager;
 
 public class BlockListeners {
 
-	/*@Listener
-	public void onBlockBreak(ChangeBlockEvent.Break e, @First Player p) {
-		BlockBreakEvent event = new BlockBreakEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(e.getTransactions().get(0).getOriginal()));
-		EventManager.callEvent(event);
-		e.setCancelled(event.isCancelled());
-	}*/
-
 	@Listener
-	public void onBlockPlace(ChangeBlockEvent.Place e, @First Player p) {
-		BlockPlaceEvent event = new BlockPlaceEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(e.getTransactions().get(0).getOriginal()));
-		EventManager.callEvent(event);
-		e.setCancelled(event.isCancelled());
+	public void onBlockChange(ChangeBlockEvent.All e, @First ServerPlayer p) {
+		/*e.transactions(Operations.BREAK.get())
+			.forEach(transaction -> {
+				BlockBreakEvent event = new BlockBreakEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(transaction.original()));
+				EventManager.callEvent(event);
+				if (event.isCancelled()) {
+					transaction.invalidate();
+				}
+			});*/
+		e.transactions(Operations.PLACE.get())
+			.forEach(transaction -> {
+				BlockPlaceEvent event = new BlockPlaceEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(transaction.original()));
+				EventManager.callEvent(event);
+				if (event.isCancelled()) {
+					transaction.invalidate();
+				}
+			});
 	}
 }

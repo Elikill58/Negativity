@@ -1,13 +1,12 @@
 package com.elikill58.negativity.sponge.impl.inventory;
 
 import java.util.Optional;
+import java.util.function.Supplier;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-import org.spongepowered.api.entity.living.player.Player;
-import org.spongepowered.api.item.ItemType;
-import org.spongepowered.api.item.inventory.entity.MainPlayerInventory;
-import org.spongepowered.api.item.inventory.property.SlotIndex;
-import org.spongepowered.api.item.inventory.query.QueryOperationTypes;
+import org.spongepowered.api.entity.living.player.server.ServerPlayer;
+import org.spongepowered.api.item.inventory.equipment.EquipmentType;
+import org.spongepowered.api.item.inventory.equipment.EquipmentTypes;
 
 import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
@@ -18,34 +17,30 @@ import com.elikill58.negativity.sponge.impl.item.SpongeItemStack;
 
 public class SpongePlayerInventory extends PlayerInventory {
 
-	private final MainPlayerInventory inv;
-	private final Player p;
+	private final org.spongepowered.api.item.inventory.entity.PlayerInventory inv;
+	private final ServerPlayer p;
 	
-	public SpongePlayerInventory(Player p) {
+	public SpongePlayerInventory(ServerPlayer p) {
 		this.p = p;
-		this.inv = p.getInventory().query(QueryOperationTypes.INVENTORY_TYPE.of(MainPlayerInventory.class));
-	}
-	
-	private Optional<ItemStack> getItem(Optional<org.spongepowered.api.item.inventory.ItemStack> opt) {
-		return opt.isPresent() ? Optional.of(new SpongeItemStack(opt.get())) : Optional.empty();
+		this.inv = p.inventory();
 	}
 
 	@Override
 	public ItemStack[] getArmorContent() {
 		ItemStack[] armor = new ItemStack[4];
-		armor[0] = getItem(p.getHelmet()).orElse(null);
-		armor[1] = getItem(p.getChestplate()).orElse(null);
-		armor[2] = getItem(p.getLeggings()).orElse(null);
-		armor[3] = getItem(p.getBoots()).orElse(null);
+		armor[0] = getHelmet().orElse(null);
+		armor[1] = getChestplate().orElse(null);
+		armor[2] = getLegging().orElse(null);
+		armor[3] = getBoots().orElse(null);
 		return armor;
 	}
 
 	@Override
 	public void setArmorContent(ItemStack[] items) {
-		p.setHelmet((org.spongepowered.api.item.inventory.ItemStack) items[0].getDefault());
-		p.setChestplate((org.spongepowered.api.item.inventory.ItemStack) items[1].getDefault());
-		p.setLeggings((org.spongepowered.api.item.inventory.ItemStack) items[2].getDefault());
-		p.setBoots((org.spongepowered.api.item.inventory.ItemStack) items[3].getDefault());
+		setHelmet(items[0]);
+		setChestplate(items[1]);
+		setLegging(items[2]);
+		setBoot(items[3]);
 	}
 
 	@Override
@@ -55,20 +50,17 @@ public class SpongePlayerInventory extends PlayerInventory {
 
 	@Override
 	public InventoryType getType() {
-		return InventoryType.get(inv.getArchetype().getId());
+		return InventoryType.PLAYER;
 	}
 
 	@Override
-	public ItemStack get(int slot) {
-		Optional<org.spongepowered.api.item.inventory.ItemStack> opt = this.inv.query(QueryOperationTypes.INVENTORY_PROPERTY.of(SlotIndex.of(slot))).peek();
-		return opt.isPresent() ? new SpongeItemStack(opt.get()) : null;
+	public @Nullable ItemStack get(int slot) {
+		return nonEmptyOrNull(inv.peekAt(slot).orElse(null));
 	}
 
 	@Override
 	public void set(int slot, ItemStack item) {
-		int y = slot / 9;
-		int x = slot - (y * 9);
-		inv.set(x, y, (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
+		inv.set(slot, (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
 	}
 
 	@Override
@@ -78,7 +70,7 @@ public class SpongePlayerInventory extends PlayerInventory {
 
 	@Override
 	public void clear() {
-		inv.forEach((i) -> i.set(null));
+		inv.clear();
 	}
 
 	@Override
@@ -93,7 +85,7 @@ public class SpongePlayerInventory extends PlayerInventory {
 
 	@Override
 	public String getInventoryName() {
-		return inv.getName().get();
+		return "";
 	}
 
 	@Override
@@ -108,46 +100,63 @@ public class SpongePlayerInventory extends PlayerInventory {
 
 	@Override
 	public void setHelmet(@Nullable ItemStack item) {
-		p.setHelmet(item == null ? null : (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
+		setEquipment(EquipmentTypes.HEAD, item);
 	}
 
 	@Override
 	public void setChestplate(@Nullable ItemStack item) {
-		p.setChestplate(item == null ? null : (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
+		setEquipment(EquipmentTypes.CHEST, item);
 	}
 
 	@Override
 	public void setLegging(@Nullable ItemStack item) {
-		p.setLeggings(item == null ? null : (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
+		setEquipment(EquipmentTypes.LEGS, item);
 	}
 
 	@Override
 	public void setBoot(@Nullable ItemStack item) {
-		p.setBoots(item == null ? null : (org.spongepowered.api.item.inventory.ItemStack) item.getDefault());
+		setEquipment(EquipmentTypes.FEET, item);
 	}
 
 	@Override
 	public Optional<ItemStack> getHelmet() {
-		return getItem(p.getHelmet());
+		return getEquipment(EquipmentTypes.HEAD);
 	}
 
 	@Override
 	public Optional<ItemStack> getChestplate() {
-		return getItem(p.getChestplate());
+		return getEquipment(EquipmentTypes.CHEST);
 	}
 
 	@Override
 	public Optional<ItemStack> getLegging() {
-		return getItem(p.getLeggings());
+		return getEquipment(EquipmentTypes.LEGS);
 	}
 
 	@Override
 	public Optional<ItemStack> getBoots() {
-		return getItem(p.getBoots());
+		return getEquipment(EquipmentTypes.FEET);
 	}
 	
+	private void setEquipment(Supplier<EquipmentType> equipment, @Nullable ItemStack stack) {
+		p.equip(equipment, nonNullStack(stack));
+	}
+	
+	private org.spongepowered.api.item.inventory.ItemStack nonNullStack(@Nullable ItemStack stack) {
+		return stack == null ? org.spongepowered.api.item.inventory.ItemStack.empty() : ((org.spongepowered.api.item.inventory.ItemStack) stack.getDefault());
+	}
+	
+	private Optional<ItemStack> getEquipment(Supplier<EquipmentType> equipment) {
+		org.spongepowered.api.item.inventory.ItemStack spongeItem = p.equipped(equipment.get()).orElse(null);
+		return spongeItem == null || spongeItem.isEmpty() ? Optional.empty() : Optional.of(new SpongeItemStack(spongeItem));
+	}
+	
+	private @Nullable ItemStack nonEmptyOrNull(org.spongepowered.api.item.inventory.@Nullable ItemStack stack) {
+		return stack != null && !stack.isEmpty() ? new SpongeItemStack(stack) : null;
+	}
+
 	@Override
 	public boolean contains(Material type) {
-		return inv.contains((ItemType) type.getDefault());
+		return inv.contains((org.spongepowered.api.item.ItemType) type.getDefault());
 	}
 }

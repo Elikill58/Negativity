@@ -3,16 +3,17 @@ package com.elikill58.negativity.sponge.impl.entity;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.spongepowered.api.data.key.Keys;
-import org.spongepowered.api.entity.projectile.ThrownPotion;
+import org.spongepowered.api.data.Keys;
+import org.spongepowered.api.entity.projectile.Potion;
 
 import com.elikill58.negativity.api.entity.SplashPotion;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.sponge.utils.Utils;
 
-public class SpongeSplashPotion extends SpongeEntity<ThrownPotion> implements SplashPotion {
+public class SpongeSplashPotion extends SpongeEntity<Potion> implements SplashPotion {
 	
-	public SpongeSplashPotion(ThrownPotion po) {
+	public SpongeSplashPotion(Potion po) {
 		super(po);
 	}
 
@@ -22,6 +23,6 @@ public class SpongeSplashPotion extends SpongeEntity<ThrownPotion> implements Sp
 	}
 	
 	private PotionEffect createPotionEffect(org.spongepowered.api.effect.potion.PotionEffect effect) {
-		return new PotionEffect(PotionEffectType.forId(effect.getType().getId()), effect.getDuration(), effect.getAmplifier());
+		return new PotionEffect(PotionEffectType.forId(Utils.getKey(effect.type()).asString()), (int) effect.duration().ticks(), effect.amplifier());
 	}
 }

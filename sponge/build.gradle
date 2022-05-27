@@ -1,23 +1,13 @@
+import org.spongepowered.gradle.plugin.config.PluginLoaders
+import org.spongepowered.gradle.vanilla.repository.MinecraftPlatform
+import org.spongepowered.plugin.metadata.model.PluginDependency
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
-buildscript {
-    repositories {
-        maven {
-            name = 'forge'
-            url = 'https://files.minecraftforge.net/maven'
-        }
-    }
-
-    dependencies {
-        classpath 'net.minecraftforge.gradle:ForgeGradle:5.1.+'
-    }
-}
 
 plugins {
     id 'com.github.johnrengelman.shadow'
+    id 'org.spongepowered.gradle.plugin' version '2.0.2'
+    id 'org.spongepowered.gradle.vanilla' version '0.2.1-SNAPSHOT'
 }
-
-apply plugin: 'net.minecraftforge.gradle'
 
 sourceSets {
     main {
@@ -26,27 +16,45 @@ sourceSets {
     }
 }
 
-repositories {
-    maven {
-        name 'spongepowered'
-        url 'https://repo.spongepowered.org/maven/'
-    }
-}
-
 dependencies {
     api project(':common')
-    compileOnly 'org.spongepowered:spongeapi:7.1.0'
-
-    minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2855'
-
-    implementation 'org.bstats:bstats-sponge-lite:1.7'
-
-    compileOnly 'com.github.CrushedPixel:PacketGate:0.1.1'
+    
+    compileOnly 'eu.crushedpixel:PacketGate:0.2.0'
 }
 
 minecraft {
-    mappings channel: 'snapshot', version: '20180131-1.12'
-    accessTransformer(file('resources/META-INF/negativity_at.cfg'))
+    version '1.16.5'
+    platform MinecraftPlatform.SERVER
+    injectRepositories false
+}
+
+sponge {
+    apiVersion("8.0.0")
+    license("NO_LICENCE_YET")
+    loader {
+        name(PluginLoaders.JAVA_PLAIN)
+        version("1.0")
+    }
+    plugin("negativity") {
+        displayName("Negativity")
+        entrypoint("com.elikill58.negativity.sponge.SpongeNegativity")
+        description("An Advanced AntiCheat Plugin")
+        links {
+            homepage('https://ore.spongepowered.org/Elikill58/Negativity')
+            source('https://github.com/Elikill58/Negativity')
+            issues('https://github.com/Elikill58/Negativity/issues')
+        }
+        contributor("Elikill58") {
+            description("Main Developer")
+        }
+        contributor("RedNesto") {
+            description("Main Developer")
+        }
+        dependency("spongeapi") {
+            loadOrder(PluginDependency.LoadOrder.AFTER)
+            optional(false)
+        }
+    }
 }
 
 processResources {
@@ -58,36 +66,24 @@ processResources {
     }
 }
 
-jar.manifest {
-    attributes 'FMLAT': 'negativity_at.cfg'
-}
-
 shadowJar {
     archiveBaseName.set('negativity')
     archiveAppendix.set('sponge')
     archiveClassifier.set(null)
 
-    relocate('org.bstats', 'com.elikill58.negativity')
 
     dependencies {
         it.include(it.project(':common'))
-        it.include(it.dependency('org.bstats:bstats-sponge-lite'))
     }
-
+    
     mergeServiceFiles()
     from(project(':common').tasks.shadowJar)
-
+    from(writePluginMetadata)
+    
     exclude('dummyThing')
 }
 
 build.dependsOn shadowJar
-afterEvaluate {
-    shadowJar.finalizedBy reobfJar
-    reobfJar {
-        dependsOn shadowJar
-        input = shadowJar.archiveFile
-    }
-}
 
 parent.tasks.named('shadowJar', ShadowJar) {
     it.from(shadowJar.outputs)
@@ -102,5 +98,12 @@ task prepareServer(type: Copy) {
         enabled(false)
     } else {
         into pluginDir
+    }
+}
+
+runServer {
+    def runDir = System.getProperty("sponge.run.dir")
+    if (runDir != null) {
+        workingDir(runDir)
     }
 }

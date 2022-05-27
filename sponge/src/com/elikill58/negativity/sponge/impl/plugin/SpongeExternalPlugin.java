@@ -1,6 +1,6 @@
 package com.elikill58.negativity.sponge.impl.plugin;
 
-import org.spongepowered.api.plugin.PluginContainer;
+import org.spongepowered.plugin.PluginContainer;
 
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 
@@ -14,7 +14,7 @@ public class SpongeExternalPlugin extends ExternalPlugin {
 	
 	@Override
 	public String getId() {
-		return pl.getId();
+		return pl.metadata().id();
 	}
 	
 	@Override
@@ -24,10 +24,7 @@ public class SpongeExternalPlugin extends ExternalPlugin {
 
 	@Override
 	public Object getDefault() {
-		// Let's assume the instance exists
-		// Let's assume the instance exists
-		//noinspection OptionalGetWithoutIsPresent
-		return pl.getInstance().get();
+		return pl.instance();
 	}
 	
 	

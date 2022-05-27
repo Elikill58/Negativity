@@ -18,7 +18,7 @@ public class SpongeOfflinePlayer extends AbstractEntity implements OfflinePlayer
 
 	@Override
 	public UUID getUniqueId() {
-		return u.getUniqueId();
+		return u.uniqueId();
 	}
 
 	@Override
@@ -35,10 +35,20 @@ public class SpongeOfflinePlayer extends AbstractEntity implements OfflinePlayer
 	public boolean isOp() {
 		return u.hasPermission("*");
 	}
-
+	
+	@Override
+	public BoundingBox getBoundingBox() {
+		return null;
+	}
+	
 	@Override
 	public String getName() {
-		return u.getName();
+		return u.name();
+	}
+	
+	@Override
+	public String getEntityId() {
+		return u.identifier();
 	}
 
 	@Override
@@ -46,13 +56,5 @@ public class SpongeOfflinePlayer extends AbstractEntity implements OfflinePlayer
 		return u;
 	}
 	
-	@Override
-	public String getEntityId() {
-		return u.getIdentifier();
-	}
 	
-	@Override
-	public BoundingBox getBoundingBox() {
-		return null;
-	}
 }

@@ -5,6 +5,7 @@ import java.util.Arrays;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
+import com.elikill58.negativity.universal.Version;
 
 public abstract class SpongeVersionAdapter extends VersionAdapter<ServerPlayer> {
 	
@@ -37,9 +38,29 @@ public abstract class SpongeVersionAdapter extends VersionAdapter<ServerPlayer> 
 		return key + name.split(key)[1];
 	}
 	
-	private static SpongeVersionAdapter instance = new Sponge_1_16_5();
+	private static SpongeVersionAdapter instance;
 	
 	public static SpongeVersionAdapter getVersionAdapter() {
+		if (instance == null) {
+			switch (Version.getVersion()) {
+			case V1_16:
+				try {
+					return instance = (SpongeVersionAdapter) Class
+							.forName("com.elikill58.negativity.sponge16.Sponge_1_16_5").getConstructor().newInstance();
+				} catch (ReflectiveOperationException e) {
+					throw new RuntimeException(e);
+				}
+			case V1_18:
+				try {
+					return instance = (SpongeVersionAdapter) Class
+							.forName("com.elikill58.negativity.sponge18.Sponge_1_18_2").getConstructor().newInstance();
+				} catch (ReflectiveOperationException e) {
+					throw new RuntimeException(e);
+				}
+			default:
+				return instance = new Sponge_UnknowVersion();
+			}
+		}
 		return instance;
 	}
 }

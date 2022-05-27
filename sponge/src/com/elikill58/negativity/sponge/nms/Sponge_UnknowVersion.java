@@ -32,6 +32,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosi
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
+import com.elikill58.negativity.sponge.SpongeNegativity;
 import com.elikill58.negativity.universal.Adapter;
 
 import net.minecraft.core.BlockPos;
@@ -51,10 +52,11 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unchecked")
-public class Sponge_1_16_5 extends SpongeVersionAdapter {
+public class Sponge_UnknowVersion extends SpongeVersionAdapter {
 
-	public Sponge_1_16_5() {
+	public Sponge_UnknowVersion() {
 		super("v1_16_5");
+		SpongeNegativity.getInstance().getLogger().error("Failed to find a valid version adapter.");
 		packetsPlayIn.put("ServerboundPlayerActionPacket", (p, f) -> {
 			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) f;
 			BlockPos pos = packet.getPos();

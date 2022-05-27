@@ -8,7 +8,8 @@
 !/gadgetsmenu/
 !/maxbans/
 !/protocolsupport/
-!/worldguard/
+!/worldguardv6/
+!/worldguardv7/
 
 # Keep src, resources and build.gradle in all dirs included above
 !/*/src/

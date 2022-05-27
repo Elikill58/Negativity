@@ -1,0 +1,25 @@
+evaluationDependsOn(':spigot')
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+repositories {
+    maven {
+        name 'spigot'
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name 'sk89q'
+        url 'https://maven.enginehub.org/repo/'
+    }
+}
+
+dependencies {
+    compileOnly 'com.sk89q.worldguard:worldguard-bukkit:7.0.0'
+    api(project(':spigot'))
+    compileOnly(project(path: ':spigot', configuration: 'spigot'))
+}

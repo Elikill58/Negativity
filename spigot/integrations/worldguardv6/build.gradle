@@ -1,0 +1,26 @@
+evaluationDependsOn(':spigot')
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+repositories {
+    maven {
+        name 'spigot'
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+    maven {
+        name 'sk89q'
+        url 'https://maven.sk89q.com/repo/'
+    }
+}
+
+dependencies {
+    compileOnly 'com.sk89q:worldguard:6.1'
+    compileOnly 'com.sk89q.worldedit:worldedit-core:6.1.1-SNAPSHOT'
+    api(project(':spigot'))
+    compileOnly(project(path: ':spigot', configuration: 'spigot'))
+}

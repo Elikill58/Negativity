@@ -114,7 +114,8 @@ public class Utils {
 		if (platformType instanceof ItemType) {
 			return (ItemType) platformType;
 		} else if (platformType instanceof BlockType) {
-			return ((BlockType) platformType).item().orElse(null);
+			BlockType bt = ((BlockType) platformType);
+			return bt.item().orElseGet(() -> Sponge.game().registry(RegistryTypes.ITEM_TYPE).value(getKey(bt)));
 		}
 		return null;
 	}

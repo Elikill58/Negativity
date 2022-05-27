@@ -11,7 +11,7 @@ pluginManagement {
 
 rootProject.name = 'Negativity'
 
-include 'common', 'spigot', 'spigot:spigot17', 'spigot:spigot18', 'spigot:spigot182', 'bungee', 'sponge', 'velocity', 'sponge8', 'fabric'
+include 'common', 'spigot', 'spigot:spigot17', 'spigot:spigot18', 'spigot:spigot182', 'bungee', 'sponge', 'velocity', 'sponge8', 'sponge9', 'fabric'
 
 include 'common:integrations:litebans', 'common:integrations:advancedban', 'common:integrations:dkbans', 'common:integrations:viaversion', 'common:integrations:professionalbans', 
         'spigot:integrations:essentials', 'spigot:integrations:floodgate', 'spigot:integrations:floodgatev2', 'spigot:integrations:gadgetsmenu',

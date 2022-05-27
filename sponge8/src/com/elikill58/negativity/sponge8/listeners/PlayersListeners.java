@@ -13,6 +13,7 @@ import org.spongepowered.api.event.EventContextKeys;
 import org.spongepowered.api.event.Listener;
 import org.spongepowered.api.event.action.InteractEvent;
 import org.spongepowered.api.event.cause.entity.MovementType;
+import org.spongepowered.api.event.cause.entity.MovementTypes;
 import org.spongepowered.api.event.entity.ChangeEntityWorldEvent;
 import org.spongepowered.api.event.entity.DestructEntityEvent;
 import org.spongepowered.api.event.entity.MoveEntityEvent;
@@ -101,6 +102,9 @@ public class PlayersListeners {
 	public void onTeleport(MoveEntityEvent e, @First ServerPlayer p) {
 		Optional<MovementType> optMoveType = e.context().get(EventContextKeys.MOVEMENT_TYPE);
 		if(!optMoveType.isPresent())
+			return;
+		MovementType type = optMoveType.get();
+		if(type.equals(MovementTypes.NATURAL.get()))
 			return;
 		Location from;
 		Location to;

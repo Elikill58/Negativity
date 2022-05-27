@@ -30,10 +30,8 @@ import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
-import com.elikill58.negativity.universal.bypass.BypassManager;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatCategory;
-import com.elikill58.negativity.universal.detections.Cheat.CheatDescription;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModifications;
@@ -266,20 +264,10 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(target);
 			p.sendMessage(ChatColor.YELLOW + "--- Checking debug for bypass ---");
 			p.sendMessage(ChatColor.GOLD + ada.getName() + ": " + ada.getVersion() + ". Negativity: " + ada.getPluginVersion());
-			long time = System.currentTimeMillis();
 			boolean hasBypass = false;
 			Cheat c = Cheat.values().stream().filter(Cheat::isActive).findFirst().get();
-			if (np.timeInvincibility > time) {
-				p.sendMessage(ChatColor.RED + "Invincibility (stay " + (np.timeInvincibility - time) + "ms)");
-				hasBypass = true;
-			}
 			if (np.isFreeze) {
 				p.sendMessage(ChatColor.RED + name + " are currently freezed.");
-				hasBypass = true;
-			}
-			double tps = ada.getLastTPS();
-			if(ada.getConfig().getDouble("tps_alert_stop") > tps) {
-				p.sendMessage(ChatColor.RED + "Too low TPS : " + tps);
 				hasBypass = true;
 			}
 			if(!(target.getGameMode().equals(GameMode.SURVIVAL) || target.getGameMode().equals(GameMode.ADVENTURE))) {
@@ -301,10 +289,6 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 						p.sendMessage(ChatColor.RED + "Bypass for blink.");
 						hasBypass = true;
 					}
-					if(BypassManager.hasBypass(p, c)) {
-						p.sendMessage(ChatColor.RED + "You have a bypass actually");
-						hasBypass = true;
-					}
 					if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
 						for (PlayerModifications modification : PlayerModificationsManager.getModifications()) {
 							if (modification.shouldIgnoreMovementChecks(p)) {
@@ -320,10 +304,6 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 								hasBypass = true;
 							}
 						}
-					}
-					if(np.isInFight && c.hasOption(CheatDescription.NO_FIGHT)) {
-						p.sendMessage(ChatColor.RED + "Bypass because in fight.");
-						hasBypass = true;
 					}
 					if(ping > c.getMaxAlertPing()) {
 						p.sendMessage(ChatColor.RED + "To high ping ! " + ChatColor.YELLOW + "(" + ping + " > " + c.getMaxAlertPing() + ")");

@@ -29,6 +29,11 @@ public class NPacketPlayInUseItem implements NPacketPlayIn, LocatedPacket {
 	}
 	
 	@Override
+	public boolean hasLocation() {
+		return x != 0 && y != 0 && z != 0;
+	}
+	
+	@Override
 	public double getX() {
 		return x;
 	}

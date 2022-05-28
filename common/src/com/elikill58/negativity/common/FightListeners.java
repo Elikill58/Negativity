@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerDeathEvent;
 import com.elikill58.negativity.api.events.player.PlayerItemConsumeEvent;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
@@ -50,7 +51,10 @@ public class FightListeners implements Listeners {
 			return;
 		Player p = (Player) e.getPlayer();
 		NPacketPlayInHeldItemSlot held = (NPacketPlayInHeldItemSlot) packet;
-		String name = p.getInventory().get(held.slot).getType().getId().toUpperCase();
+		ItemStack item = p.getInventory().get(held.slot);
+		if(item == null)
+			return;
+		String name = item.getType().getId().toUpperCase();
 		if(name.contains("SWORD") || name.contains("AXE") || name.contains("APPLE") || name.contains("BOW") || name.contains("POTION"))
 			manageFightBetweenTwoPlayers(p, 15);
 	}

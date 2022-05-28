@@ -40,3 +40,6 @@ checks:
     sensitivity-divider: 12
     # high value = less alert
     invalid-change: 3
+  # Check for the direction between player look and cible position
+  direction:
+    active: true

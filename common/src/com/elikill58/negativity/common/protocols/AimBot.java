@@ -8,18 +8,24 @@ import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.api.utils.LocationUtils;
+import com.elikill58.negativity.api.utils.LocationUtils.Direction;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DataCounter;
@@ -110,7 +116,47 @@ public class AimBot extends Cheat {
 	private long getGcdForLong(final long current, final long previous) {
 		return (previous <= 16384L) ? current : getGcdForLong(previous, current % previous);
 	}
-
+	
+	@Check(name = "direction", description = "Check for the direction between player look and cible position", conditions = CheckConditions.NO_THORNS)
+	public void onEntityDamageByEntity(PlayerDamageEntityEvent e, NegativityPlayer np) {
+		if (e.isCancelled())
+			return;
+		Player p = e.getPlayer();
+		Entity cible = e.getDamaged();
+		double angle = LocationUtils.getAngleTo(p, cible.getLocation());
+		Direction direction = LocationUtils.getDirection(angle);
+		long amount = 0;
+		int reliability = 0;
+		switch (direction) {
+		case BACK: // should never appear, clearly a cheat
+			amount = np.getWarn(this) + 1;
+			reliability = 100;
+			break;
+		case BACK_LEFT:
+		case BACK_RIGHT:
+			amount = 5;
+			reliability = 95;
+			break;
+		case FRONT:
+			return; // here it's fine
+		case FRONT_LEFT:
+		case FRONT_RIGHT:
+			if(BedrockPlayerManager.isBedrockPlayer(p.getUniqueId())) {
+				return; // allowed for bedrock
+			}
+			amount = 1;
+			reliability = 60; // low reliability
+			break;
+		case LEFT:
+		case RIGHT:
+			amount = 2;
+			reliability = 90;
+			break;
+		}
+		if(amount > 0)
+			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(reliability), "direction", "Pos: " + p.getLocation() + " / " + cible.getLocation() + ", dir: " + direction.name() + " (" + angle + "°)", null, amount);
+	}
+	
 	@Override
 	public @Nullable String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		DataCounter<Double> gcdCounter = data.getData(GCD);

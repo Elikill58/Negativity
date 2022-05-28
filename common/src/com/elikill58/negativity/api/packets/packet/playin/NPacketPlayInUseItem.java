@@ -1,13 +1,13 @@
 package com.elikill58.negativity.api.packets.packet.playin;
 
+import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
-import com.elikill58.negativity.api.utils.LocationUtils.Direction;
 
 public class NPacketPlayInUseItem implements NPacketPlayIn, LocatedPacket {
 
-	public Direction direction;
+	public BlockFace direction;
 	public int x, y, z;
 	/**
 	 * WARN: this value seems to doesn't exist in some version such as 1.9.
@@ -20,7 +20,7 @@ public class NPacketPlayInUseItem implements NPacketPlayIn, LocatedPacket {
 		
 	}
 	
-	public NPacketPlayInUseItem(int x, int y, int z, Direction dir, long timestamp) {
+	public NPacketPlayInUseItem(int x, int y, int z, BlockFace dir, long timestamp) {
 		this.x = x;
 		this.y = y;
 		this.z = z;

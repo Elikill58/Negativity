@@ -194,7 +194,7 @@ public class NoFall extends Cheat {
 		np.floats.set(getKey(), "last-fall", p.getFallDistance());
 	}
 
-	@Check(name = "fake-ground", description = "Detect when player faking ground", conditions = CheckConditions.SURVIVAL)
+	@Check(name = "fake-ground", description = "Detect when player faking ground", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ON_BEDROCK })
 	public void onFakeGround(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();

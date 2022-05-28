@@ -17,6 +17,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.SkullMeta;
 
+import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.BlockPosition;
@@ -51,7 +52,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosi
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
-import com.elikill58.negativity.api.utils.LocationUtils.Direction;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Adapter;
@@ -161,7 +161,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			packetsPlayIn.put("PacketPlayInUseItem", (p, f) -> {
 				Object movingObj = get(f, "a");
 				BlockPosition pos = getBlockPosition(get(movingObj, "c"));
-				return new NPacketPlayInUseItem(pos.getX(), pos.getY(), pos.getZ(), Direction.valueOf(getStr(movingObj, "b").toUpperCase()), get(f, "timestamp"));
+				return new NPacketPlayInUseItem(pos.getX(), pos.getY(), pos.getZ(), BlockFace.valueOf(getStr(movingObj, "b").toUpperCase()), get(f, "timestamp"));
 			});
 		} else {
 			packetsPlayIn.put("PacketPlayInUseItem", (p, f) -> {
@@ -176,7 +176,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-				return new NPacketPlayInUseItem(pos.getX(), pos.getY(), pos.getZ(), Direction.valueOf(getStr(f, "b").toUpperCase()), timestamp);
+				return new NPacketPlayInUseItem(pos.getX(), pos.getY(), pos.getZ(), BlockFace.valueOf(getStr(f, "b").toUpperCase()), timestamp);
 			});
 		}
 		packetsPlayIn.put("PacketPlayInHeldItemSlot", (p, f) -> new NPacketPlayInHeldItemSlot((int) ReflectionUtils.getField(f, v.isNewerOrEquals(Version.V1_17) ? "a" : "itemInHandIndex")));

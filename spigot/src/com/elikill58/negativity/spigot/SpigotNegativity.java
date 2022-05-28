@@ -120,7 +120,7 @@ public class SpigotNegativity extends JavaPlugin {
 				double i = SpigotVersionAdapter.getVersionAdapter().getAverageTps() * 1.0E-6D;
 				if (Negativity.tpsDrop && i < 50) { // if disabled and need to be enabled
 					Negativity.tpsDrop = false;
-				} else if (!Negativity.tpsDrop && i > 50) { // if disabled but need to be
+				} else if (!Negativity.tpsDrop && i > 50) { // if not disabled but need to be
 					Negativity.tpsDrop = true;
 					Adapter.getAdapter().debug("Disabling detection because of TPS lagspike: " + i);
 				}

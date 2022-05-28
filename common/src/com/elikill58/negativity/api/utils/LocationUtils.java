@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 
+import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
@@ -381,20 +382,20 @@ public class LocationUtils {
 						if (d5 == -0.0D)
 							d5 = -1.0E-4D;
 					}
-					Direction direction;
+					BlockFace direction;
 					if ((d3 < d4) && (d3 < d5)) {
-						direction = vecX > posX ? Direction.WEST : Direction.EAST;
+						direction = vecX > posX ? BlockFace.WEST : BlockFace.EAST;
 						vec3d = new Vector(d0, vec3d.getY() + d7 * d3, vec3d.getZ() + d8 * d3);
 					} else if (d4 < d5) {
-						direction = vecY > posY ? Direction.DOWN : Direction.UP;
+						direction = vecY > posY ? BlockFace.DOWN : BlockFace.UP;
 						vec3d = new Vector(vec3d.getX() + d6 * d4, d1, vec3d.getZ() + d8 * d4);
 					} else {
-						direction = vecZ > posZ ? Direction.NORTH : Direction.SOUTH;
+						direction = vecZ > posZ ? BlockFace.NORTH : BlockFace.SOUTH;
 						vec3d = new Vector(vec3d.getX() + d6 * d5, vec3d.getY() + d7 * d5, d2);
 					}
-					posX = UniversalUtils.floor(vec3d.getX()) - (direction == Direction.EAST ? 1 : 0);
-					posY = UniversalUtils.floor(vec3d.getY()) - (direction == Direction.UP ? 1 : 0);
-					posZ = UniversalUtils.floor(vec3d.getZ()) - (direction == Direction.SOUTH ? 1 : 0);
+					posX = UniversalUtils.floor(vec3d.getX()) - direction.getModX();
+					posY = UniversalUtils.floor(vec3d.getY()) - direction.getModY();
+					posZ = UniversalUtils.floor(vec3d.getZ()) - direction.getModZ();
 					vector = new Location(w, posX, posY, posZ);
 					if (!w.getBlockAt(vector).getType().equals(Materials.AIR)
 							&& hasMovingPosition(w, vector, vec3d, vec3d1)) {
@@ -478,7 +479,7 @@ public class LocationUtils {
 	}
 
 	public enum Direction {
-		NORTH, SOUTH, WEST, EAST, UP, DOWN
+		FRONT, BACK, LEFT, RIGHT, FRONT_LEFT, FRONT_RIGHT, BACK_LEFT, BACK_RIGHT
 	}
 
 	public static void teleportPlayerOnGround(Player p) {
@@ -491,5 +492,56 @@ public class LocationUtils {
 	public static boolean isInWater(Location loc) {
 		return loc.getBlock().isLiquid() || loc.clone().add(0, -1, 0).getBlock().isLiquid()
 				|| loc.clone().add(0, 1, 0).getBlock().isLiquid();
+	}
+
+	/**
+	 * Get the arrow of the direction from the player to the given location
+	 * 
+	 * @param p the player which is requiring for direction
+	 * @param dir the direction
+	 * @return the arrow already parsed
+	 */
+	public static double getAngleTo(Player p, Location loc) {
+		Location position = p.getLocation();
+		Vector a = loc.clone().sub(position).toVector().normalize();
+		Vector b = position.getDirection();
+		double angle = Math.acos(a.dot(b));
+		if (isLeft(position, position.clone().add(b), loc.toVector()))
+			angle = 360 - angle;
+		return Math.toDegrees(angle);
+	}
+
+	public static Direction getDirection(Player p, Location loc) {
+		return getDirection(getAngleTo(p, loc));
+	}
+	
+	public static Direction getDirection(double yaw) {
+		if (22.50 < yaw && yaw < 67.50)
+			return Direction.FRONT_LEFT;
+		else if (67.50 < yaw && yaw < 112.5)
+			return Direction.LEFT;
+		else if (112.50 < yaw && yaw < 157.5)
+			return Direction.BACK_LEFT;
+		else if (157.50 < yaw && yaw < 202.5)
+			return Direction.BACK;
+		else if (202.50 < yaw && yaw < 247.5)
+			return Direction.BACK_RIGHT;
+		else if (247.50 < yaw && yaw < 292.5)
+			return Direction.RIGHT;
+		else if (292.50 < yaw && yaw < 337.5)
+			return Direction.FRONT_RIGHT;
+		return Direction.FRONT;
+	}
+
+	/**
+	 * Check if a point is on the left or right
+	 * 
+	 * @param a the point where the line comes from
+	 * @param b a point of the line
+	 * @param c the point to check
+	 * @return true if on left
+	 */
+	public static boolean isLeft(Location a, Location b, Vector c) {
+		return ((b.getX() - a.getX()) * (c.getZ() - a.getZ()) - (b.getZ() - a.getZ()) * (c.getX() - a.getX())) > 0;
 	}
 }

@@ -17,6 +17,8 @@ import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.ray.entity.EntityRayBuilder;
 import com.elikill58.negativity.api.ray.entity.EntityRayResult;
+import com.elikill58.negativity.api.utils.LocationUtils;
+import com.elikill58.negativity.api.utils.LocationUtils.Direction;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -62,75 +64,19 @@ public class ForceField extends Cheat {
 		List<Entity> lookingEntities = ray.getEntitiesFounded();
 		boolean newSee = !lookingEntities.isEmpty() && lookingEntities.stream().filter(cible::isSameId).findFirst().isPresent();
 		if(p != cible && !p.hasLineOfSight(cible) && !newSee) {
+			double angle = LocationUtils.getAngleTo(p, cible.getLocation());
+			Direction direction = LocationUtils.getDirection(angle);
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
-					"Hit " + cible.toString() + " (" + cible.getName() + ") but cannot see it (new: " + newSee +"). Looking: " + lookingEntities,
-					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase(Locale.ROOT)));
-		} else
-			Adapter.getAdapter().debug(p.getName() + " can see " + cible.getName() + ". " + (newSee ? "See cible." : "Don't see: " + lookingEntities));
+					"Hit " + cible.toString() + " (" + cible.getName() + ") not seeing (new: " + newSee +"). Looking: " + lookingEntities + ". Angle: " + angle + ", direction: " + direction.name(),
+					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase(Locale.ROOT)), direction.name().contains("FRONT") ? 1 : 5);
+		} else {
+			double angle = LocationUtils.getAngleTo(p, cible.getLocation());
+			Direction direction = LocationUtils.getDirection(angle);
+			Adapter.getAdapter().debug(p.getName() + " can see " + cible.getName() + ". " + (newSee ? "See cible." : "Don't see: " + lookingEntities) + ", dir: " + direction.name() + " (" + angle + "°)");
+		}
 		if (isSetBack() && mayCancel)
 			e.setCancelled(true);
 	}
-	
-	/*@EventListener
-	public void onPacket(PacketReceiveEvent e) {
-		AbstractPacket packet = e.getPacket();
-		if(!packet.getPacketType().equals(PacketType.Client.USE_ENTITY))
-			return;
-		Player p = e.getPlayer();
-		if(p.getGameMode().equals(GameMode.CREATIVE))
-			return;
-		ItemStack inHand = p.getItemInHand();
-		if(inHand != null && inHand.getType().equals(Materials.BOW))
-			return;
-		try {
-			Object nmsPacket = packet.getPacket();
-			Location loc = p.getLocation();
-			Object nmsEntity = nmsPacket.getClass().getDeclaredMethod("a", PacketUtils.getNmsClass("World")).invoke(nmsPacket, PacketUtils.getWorldServer(loc));
-			if(nmsEntity == null)
-				return;
-			Location entityLoc = getLocationNMSEntity(nmsEntity, p.getWorld());
-			double dis = loc.distance(entityLoc);
-			recordData(p.getUniqueId(), HIT_DISTANCE, dis);
-			if (dis < Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach"))
-				return;
-			Class<?> entityClass = PacketUtils.getNmsClass("Entity");
-			Entity cible = (Entity) entityClass.getDeclaredMethod("getBukkitEntity").invoke(nmsEntity);
-			EntityType type = cible.getType();
-			if(type.equals(EntityType.ENDER_DRAGON) || type.equals(EntityType.ENDERMAN))
-				return;
-			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * 2 * 10),
-					"[Packet] Big distance with: " + type.name().toLowerCase() + ". Exact distance: " + dis + ", without thorns"
-					+ ". Ping: " + p.getPing(), hoverMsg("distance", "%name%", PacketUtils.getNmsEntityName(nmsEntity), "%distance%", nf.format(dis)));
-			if(mayCancel)
-				packet.setCancelled(true);
-		} catch (Exception exc) {
-			exc.printStackTrace();
-		}
-	}
-	
-	public Location getLocationNMSEntity(Object src, World baseWorld) {
-		return Adapter.getAdapter().createLocation(baseWorld, getFieldOrMethod(src, "locX"), getFieldOrMethod(src, "locY"), getFieldOrMethod(src, "locZ"));
-	}
-	
-	private double getFieldOrMethod(Object src, String name) {
-		Class<?> entityClass = PacketUtils.getNmsClass("Entity");
-		try {
-			Method m = entityClass.getDeclaredMethod(name);
-			m.setAccessible(true);
-			return (double) m.invoke(src);
-		} catch (NoSuchMethodException e) {
-			try {
-				Field f = entityClass.getDeclaredField(name);
-				f.setAccessible(true);
-				return f.getDouble(src);
-			} catch (Exception exc) {
-				exc.printStackTrace();
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return 0.0;
-	}*/
 	
 	public static void manageForcefieldForFakeplayer(Player p, NegativityPlayer np) {
 		if(np.fakePlayerTouched == 0) return;

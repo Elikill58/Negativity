@@ -20,7 +20,6 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.channel.GameChannelNegativityMessageEvent;
 import com.elikill58.negativity.fabric.impl.entity.FabricEntityManager;
 import com.elikill58.negativity.fabric.impl.entity.FabricPlayer;
-import com.elikill58.negativity.fabric.listeners.BlockListeners;
 import com.elikill58.negativity.fabric.listeners.CommandsExecutorManager;
 import com.elikill58.negativity.fabric.listeners.PlayersListeners;
 import com.elikill58.negativity.fabric.packets.NegativityPacketManager;
@@ -87,7 +86,6 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 		ServerLifecycleEvents.SERVER_STOPPING.register(this::onGameStop);
 		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> loadCommands(dispatcher));
 
-		BlockListeners.register();
 		PlayersListeners.register();
 		ServerPlayConnectionEvents.DISCONNECT.register(this::onLeave);
 		ServerPlayConnectionEvents.INIT.register(this::onAuth);

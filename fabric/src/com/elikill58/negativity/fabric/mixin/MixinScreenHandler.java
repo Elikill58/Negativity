@@ -11,7 +11,9 @@ import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.inventory.InventoryAction;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.events.inventory.InventoryCloseEvent;
+import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.fabric.bridge.NegativityHolderOwner;
 import com.elikill58.negativity.fabric.impl.entity.FabricEntityManager;
 import com.elikill58.negativity.fabric.impl.inventory.FabricInventory;
 import com.elikill58.negativity.fabric.impl.item.FabricItemStack;
@@ -24,11 +26,13 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.collection.DefaultedList;
 
 @Mixin(ScreenHandler.class)
-public abstract class MixinScreenHandler {
+public abstract class MixinScreenHandler implements NegativityHolderOwner {
 	
 	@Shadow @Final public DefaultedList<Slot> slots;
 	
 	@Shadow public abstract net.minecraft.item.ItemStack getCursorStack();
+	
+	private NegativityHolder negativity$holder;
 	
 	@Inject(at = @At(value = "HEAD"), method = "onSlotClick(IILnet/minecraft/screen/slot/SlotActionType;Lnet/minecraft/entity/player/PlayerEntity;)V", cancellable = true)
 	private void onInvClick(int slotIndex, int button, SlotActionType actionType, PlayerEntity player, CallbackInfo ci) {
@@ -65,5 +69,15 @@ public abstract class MixinScreenHandler {
 	@Inject(at = @At(value = "HEAD"), method = "close(Lnet/minecraft/entity/player/PlayerEntity;)V")
 	private void onInventoryClose(PlayerEntity player, CallbackInfo ci) {
 		EventManager.callEvent(new InventoryCloseEvent(FabricEntityManager.getPlayer((ServerPlayerEntity) player), new FabricInventory(player.currentScreenHandler)));
+	}
+	
+	@Override
+	public NegativityHolder negativity$getHolder() {
+		return this.negativity$holder;
+	}
+	
+	@Override
+	public void negativity$setHolder(NegativityHolder holder) {
+		this.negativity$holder = holder;
 	}
 }

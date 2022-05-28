@@ -19,10 +19,10 @@ import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.fabric.FabricNegativity;
+import com.elikill58.negativity.fabric.bridge.ServerPlayerEntityBridge;
 import com.elikill58.negativity.fabric.impl.FabricPotionEffectType;
 import com.elikill58.negativity.fabric.impl.inventory.FabricInventory;
 import com.elikill58.negativity.fabric.impl.inventory.FabricPlayerInventory;
-import com.elikill58.negativity.fabric.impl.inventory.NegativityScreenHandler;
 import com.elikill58.negativity.fabric.impl.item.FabricItemStack;
 import com.elikill58.negativity.fabric.impl.location.FabricLocation;
 import com.elikill58.negativity.fabric.impl.location.FabricWorld;
@@ -341,32 +341,46 @@ public class FabricPlayer extends FabricEntity<ServerPlayerEntity> implements Pl
 	
 	@Override
 	public boolean hasOpenInventory() {
-		return entity.currentScreenHandler != null;
+		return entity.currentScreenHandler != entity.playerScreenHandler;
 	}
 
 	@Override
 	public Inventory getOpenInventory() {
+		if (entity.currentScreenHandler == entity.playerScreenHandler) {
+			return null;
+		}
+		
 		return new FabricInventory(entity.currentScreenHandler);
 	}
 
 	@Override
 	public void openInventory(Inventory inv) {
 		Object o = inv.getDefault();
-		if(o instanceof NegativityScreenHandler) {
-			NegativityScreenHandler screen = (NegativityScreenHandler) o;
-			//Adapter.getAdapter().getLogger().info("Slot items: " + screen.slots.stream().map(Slot::getStack).map(net.minecraft.item.ItemStack::getItem).map(Item::toString).collect(Collectors.toList()));
-			entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> screen, Text.of(inv.getInventoryName())));
-			//Adapter.getAdapter().getLogger().info("rev: " + entity.currentScreenHandler);
-		} else if(o instanceof ScreenHandler) {
-			entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> (ScreenHandler) o, Text.of(inv.getInventoryName())));
+		if (o instanceof ScreenHandler screenHandler) {
+			try {
+				((ServerPlayerEntityBridge) entity).negativity$doNotSendScreenClosePacket(true);
+				entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> screenHandler, Text.of(inv.getInventoryName())));
+			} finally {
+				((ServerPlayerEntityBridge) entity).negativity$doNotSendScreenClosePacket(false);
+			}
+		} else if (inv instanceof FabricInventory fabricInventory) {
+			try {
+				((ServerPlayerEntityBridge) entity).negativity$doNotSendScreenClosePacket(true);
+				entity.openHandledScreen(new SimpleNamedScreenHandlerFactory(fabricInventory.getFactory(), Text.of(inv.getInventoryName())));
+			} finally {
+				((ServerPlayerEntityBridge) entity).negativity$doNotSendScreenClosePacket(false);
+			}
+		//} else if (inv instanceof FabricPlayerInventory playerInventory) { // TODO open proper PlayerInventory implementation
+		} else if (o != null) {
+			Adapter.getAdapter().getLogger().warn("Tried opening unsupported inventory " + o.getClass().getName());
 		} else {
-			Adapter.getAdapter().getLogger().warn("Unsupported opening of inventory " + o.getClass().getName());
+			Adapter.getAdapter().getLogger().warn("Tried opening inventory with null platform value from " + inv);
 		}
 	}
 
 	@Override
 	public void closeInventory() {
-		entity.closeScreenHandler();
+		entity.closeHandledScreen();
 	}
 
 	@Override

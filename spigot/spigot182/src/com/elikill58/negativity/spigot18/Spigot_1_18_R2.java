@@ -99,7 +99,7 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 			return new NPacketPlayInLook(packet.x, packet.y, packet.z, packet.xRot, packet.yRot, packet.isOnGround());
 		});
 
-		packetsPlayIn.put("PacketPlayInBlockDig", (player, raw) -> {
+		packetsPlayIn.put(ServerboundPlayerActionPacket.class.getSimpleName(), (player, raw) -> {
 			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) raw;
 			NPacketPlayInBlockDig.DigAction action = NPacketPlayInBlockDig.DigAction.values()[packet.getAction()
 					.ordinal()];
@@ -108,7 +108,7 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 			BlockPos pos = packet.getPos();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), action, face);
 		});
-		packetsPlayIn.put("PacketPlayInBlockPlace", (p, raw) -> {
+		packetsPlayIn.put(ServerboundUseItemPacket.class.getSimpleName(), (p, raw) -> {
 			ServerboundUseItemPacket packet = (ServerboundUseItemPacket) raw;
 			PlayerInventory inventory = p.getInventory();
 			ItemStack handItem;
@@ -153,7 +153,7 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 			return new NPacketPlayInUseEntity(get(packet, "a"), new Vector(0, 0, 0),
 					EnumEntityUseAction.valueOf(((Object) getFromMethod(get(packet, "b"), "a")).toString()));
 		});
-		packetsPlayIn.put("PacketPlayInKeepAlive",
+		packetsPlayIn.put(ServerboundKeepAlivePacket.class.getSimpleName(),
 				(player, raw) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) raw).getId()));
 		packetsPlayIn.put("ServerboundPongPacket", (player, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
 
@@ -164,7 +164,7 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 					packet.getProgress());
 		});
 
-		packetsPlayOut.put("PacketPlayOutKeepAlive",
+		packetsPlayOut.put(ClientboundKeepAlivePacket.class.getSimpleName(),
 				(player, raw) -> new NPacketPlayOutKeepAlive(((ClientboundKeepAlivePacket) raw).getId()));
 		packetsPlayOut.put("PacketPlayOutEntityTeleport", (player, raw) -> {
 			ClientboundTeleportEntityPacket packet = (ClientboundTeleportEntityPacket) raw;
@@ -194,7 +194,7 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 			return new NPacketPlayOutEntityEffect(packet.getEntityId(), packet.getEffectId(), packet.getEffectAmplifier(), packet.getEffectDurationTicks(), (byte) 0);
 			//return new NPacketPlayOutEntityEffect(get(packet, "d"), get(packet, "e"), get(packet, "f"), get(packet, "g"), get(packet, "h"));
 		});
-		packetsPlayOut.put("ClientboundPingPacket", (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
+		packetsPlayOut.put(ClientboundPingPacket.class.getSimpleName(), (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
 
 		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
 			ClientIntentionPacket packet = (ClientIntentionPacket) raw;

@@ -290,7 +290,7 @@ public class FabricPlayer extends FabricEntity<ServerPlayerEntity> implements Pl
 
 	@Override
 	public void teleport(Location loc) {
-		entity.setPos(loc.getX(), loc.getY(), loc.getZ());
+		entity.teleport(loc.getX(), loc.getY(), loc.getZ());
 	}
 
 	@Override

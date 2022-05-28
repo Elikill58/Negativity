@@ -275,7 +275,7 @@ public class FabricAdapter extends Adapter {
 	
 	@Override
 	public void runSync(Runnable call) {
-		call.run();
+		this.plugin.getServer().submit(call);
 	}
 	
 	@Override

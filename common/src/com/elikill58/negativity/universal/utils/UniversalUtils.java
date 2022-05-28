@@ -46,6 +46,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Special;
 
@@ -168,6 +169,15 @@ public class UniversalUtils {
 		}
 	}
 
+	public static boolean isUUID(String s) {
+		try {
+			UUID.fromString(s);
+			return true;
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
+
 	public static Optional<String> getContentFromURL(String url){
 		return getContentFromURL(url, "");
 	}
@@ -240,6 +250,11 @@ public class UniversalUtils {
 	}
 
 	public static CompletableFuture<@Nullable String> requestMcleaksData(String uuid) {
+		if(isUUID(uuid)) {
+			UUID id = UUID.fromString(uuid);
+			if(BedrockPlayerManager.isBedrockPlayer(id))
+				return CompletableFuture.supplyAsync(() -> "{ isMcleaks: false }");
+		}
 		return CompletableFuture.supplyAsync(() -> {
 			Optional<String> optContent = getContentFromURL("https://mcleaks.themrgong.xyz/api/v3/isuuidmcleaks/" + uuid);
 			if(optContent.isPresent()) {

@@ -1,70 +1,103 @@
 package com.elikill58.negativity.common.protocols;
 
-import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
+import com.elikill58.negativity.api.events.inventory.InventoryOpenEvent;
+import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class InventoryMove extends Cheat implements Listeners {
 
-	private final InventoryMove instance;
-
 	public InventoryMove() {
 		super(CheatKeys.INVENTORY_MOVE, CheatCategory.MOVEMENT, Materials.NETHER_STAR, CheatDescription.NO_FIGHT);
-		instance = this;
+	}
+
+	@Check(name = "stay-distance", description = "Keep distance while moving", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE,
+			CheckConditions.NO_FALL_DISTANCE })
+	public void onMove(PlayerMoveEvent e, NegativityPlayer np) {
+		Player p = e.getPlayer();
+		if (p.getLocation().getBlock().getType().getId().contains("WATER") || np.invMoveData == null) // if in water or
+																										// falling
+			return;
+		InventoryMoveData data = np.invMoveData;
+		if (data == null)
+			return;
+		else if (p.getOpenInventory() == null) {
+			Adapter.getAdapter().debug("No opened inventory but data always running ?");
+			return;
+		}
+		double last = data.getLastDistance();
+		double actual = e.getFrom().distance(e.getTo());
+		if (actual >= last && data.timeSinceOpen >= 2) { // if running at least at the same
+			int amount = 1;
+			if (p.isSprinting())
+				amount += data.sprint ? 1 : 5; // more alerts if wasn't sprinting
+			if (p.isSneaking())
+				amount += data.sneak ? 1 : 5; // more alerts if wasn't sneaking
+			Negativity.alertMod(np.getAllWarn(this) > 5 && amount > 1 ? ReportType.VIOLATION : ReportType.WARNING, p,
+					this, UniversalUtils.parseInPorcent(80 + data.getTimeSinceOpen()), "stay-distance",
+					"Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking() + ", data: " + data, null, amount);
+		}
+		data.setDistance(actual);
 	}
 
 	@EventListener
 	public void onClick(InventoryClickEvent e) {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
-		if (!np.hasDetectionActive(this))
-			return;
-		checkInvMove(e.getPlayer(), true, "Click");
+		if (np.hasDetectionActive(this))
+			checkInvMove(np);
 	}
 
-	/*
-	 * @EventListener public void onOpen(InventoryOpenEvent e) { NegativityPlayer np
-	 * = NegativityPlayer.getCached(e.getPlayer().getUniqueId()); if
-	 * (!np.hasDetectionActive(this)) return; checkInvMove(e.getPlayer(), false,
-	 * "Open"); }
-	 */
+	@EventListener
+	public void onOpen(InventoryOpenEvent e) {
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
+		if (np.hasDetectionActive(this))
+			checkInvMove(np);
+	}
 
-	private void checkInvMove(Player p, boolean check, String from) {
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
-			return;
-		if (p.hasElytra() || p.isInsideVehicle() || p.getLocation().getBlock().getType().getId().contains("WATER"))
-			return;
-		if (p.isSprinting() || p.isSneaking()) {
-			Scheduler.getInstance().runDelayed(() -> {
-				if (p.isSprinting() || p.isSneaking())
-					Negativity.alertMod(ReportType.WARNING, p, instance,
-							NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "sprint",
-							"Detected when " + from + ". Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking(),
-							hoverMsg("main", "%name%", from));
-			}, 3);
-		} else if (check) {
-			final Location lastLoc = p.getLocation().clone();
-			Scheduler.getInstance().runDelayed(() -> {
-				if (!lastLoc.getWorld().equals(p.getLocation().getWorld()))
-					return;
-				double dis = lastLoc.distance(p.getLocation());
-				if (dis > 1 && (lastLoc.getY() - p.getLocation().getY()) < 0.1 && p.getOpenInventory() != null) {
-					Negativity.alertMod(ReportType.WARNING, p, instance,
-							NegativityPlayer.getCached(p.getUniqueId()).getAllWarn(instance) > 5 ? 100 : 95, "distance",
-							"Detected when " + from + ", Distance: " + dis + " Diff Y: "
-									+ (lastLoc.getY() - p.getLocation().getY()),
-							hoverMsg("main", "%name%", from));
-				}
-			}, 5);
+	private void checkInvMove(NegativityPlayer np) {
+		np.invMoveData = new InventoryMoveData(np.getPlayer());
+	}
+
+	public static class InventoryMoveData {
+
+		private double lastDistance = 0;
+		public int timeSinceOpen = 0;
+		public final boolean sprint, sneak;
+
+		public InventoryMoveData(Player p) {
+			this.sprint = p.isSprinting();
+			this.sneak = p.isSneaking();
+		}
+
+		public double getLastDistance() {
+			return lastDistance;
+		}
+
+		public int getTimeSinceOpen() {
+			return timeSinceOpen;
+		}
+
+		public void setDistance(double distance) {
+			this.lastDistance = distance;
+			this.timeSinceOpen++;
+		}
+
+		@Override
+		public String toString() {
+			return "InventoryMoveData{sprint=" + sprint + ",sneak=" + sneak + ",distance=" + lastDistance + ",time="
+					+ timeSinceOpen + "}";
 		}
 	}
 }

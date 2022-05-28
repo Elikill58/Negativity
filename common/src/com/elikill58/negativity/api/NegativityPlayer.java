@@ -25,6 +25,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.protocols.CheckProcessor;
+import com.elikill58.negativity.common.protocols.InventoryMove.InventoryMoveData;
 import com.elikill58.negativity.common.protocols.checkprocessor.ScaffoldRiseCheckProcessor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.FlyingReason;
@@ -84,6 +85,7 @@ public class NegativityPlayer implements FileSaverAction {
 	public Location lastSpiderLoc = null;
 	public PacketType otherKeepAlivePacket = PacketType.Client.FLYING;
 	public List<Location> lastLocations = new ArrayList<>();
+	public InventoryMoveData invMoveData;
 	
 	// content
 	public Content<List<Location>> listLocations = new Content<>();

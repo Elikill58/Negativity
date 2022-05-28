@@ -33,9 +33,6 @@ verif:
 
 # Disable one check and not all detections
 checks:
-  # Distance while moving
-  distance:
-    active: true
-  # Use inv when sprint
-  sprint:
+  # Keep distance while moving
+  stay-distance:
     active: true

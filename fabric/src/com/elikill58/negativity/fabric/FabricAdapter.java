@@ -45,6 +45,9 @@ import com.elikill58.negativity.universal.translation.TranslationProviderFactory
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
+import net.fabricmc.loader.api.ModContainer;
+import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.MinecraftVersion;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.ClickEvent;
@@ -117,7 +120,10 @@ public class FabricAdapter extends Adapter {
 	
 	@Override
 	public String getPluginVersion() {
-		return "?";
+		return FabricLoader.getInstance().getModContainer("negativity")
+			.map(ModContainer::getMetadata).map(ModMetadata::getVersion)
+			.map(net.fabricmc.loader.api.Version::getFriendlyString)
+			.orElse("?");
 	}
 
 	@Override

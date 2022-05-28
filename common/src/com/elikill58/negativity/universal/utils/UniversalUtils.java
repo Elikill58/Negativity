@@ -253,7 +253,7 @@ public class UniversalUtils {
 		if(isUUID(uuid)) {
 			UUID id = UUID.fromString(uuid);
 			if(BedrockPlayerManager.isBedrockPlayer(id))
-				return CompletableFuture.supplyAsync(() -> "{ isMcleaks: false }");
+				return CompletableFuture.supplyAsync(() -> "{ \"isMcleaks\": false }");
 		}
 		return CompletableFuture.supplyAsync(() -> {
 			Optional<String> optContent = getContentFromURL("https://mcleaks.themrgong.xyz/api/v3/isuuidmcleaks/" + uuid);

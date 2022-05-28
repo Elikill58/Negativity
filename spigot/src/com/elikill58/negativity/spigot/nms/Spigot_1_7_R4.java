@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.v1_7_R4.CraftWorld;
 import org.bukkit.craftbukkit.v1_7_R4.entity.CraftPlayer;
 import org.bukkit.entity.Player;
@@ -19,6 +20,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
+import com.elikill58.negativity.spigot.utils.Utils;
 
 import net.minecraft.server.v1_7_R4.EntityPlayer;
 import net.minecraft.server.v1_7_R4.MathHelper;
@@ -117,5 +119,10 @@ public class Spigot_1_7_R4 extends SpigotVersionAdapter {
 	@Override
 	public com.elikill58.negativity.api.location.BlockPosition getBlockPosition(Object obj) {
 		return null; // no block pos object in 1.7
+	}
+	
+	@Override
+	public org.bukkit.inventory.ItemStack createSkull(OfflinePlayer owner) { // method used by old versions
+		return Utils.createSkullOldVersion(owner);
 	}
 }

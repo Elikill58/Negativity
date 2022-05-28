@@ -3,14 +3,12 @@ package com.elikill58.negativity.spigot.impl.item;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import org.bukkit.Bukkit;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.SkullMeta;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.colors.DyeColor;
@@ -19,8 +17,8 @@ import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemFlag;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.Utils;
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Version;
 
 public class SpigotItemBuilder extends ItemBuilder {
@@ -59,12 +57,9 @@ public class SpigotItemBuilder extends ItemBuilder {
     	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
     }
 
-    @SuppressWarnings("deprecation")
 	public SpigotItemBuilder(OfflinePlayer owner) {
-    	this.itemStack = new ItemStack((org.bukkit.Material) Materials.PLAYER_HEAD.getDefault(), 1, (byte) 3);
-    	SkullMeta skullmeta = (SkullMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
-		skullmeta.setOwner(owner.getName());
-		this.itemMeta = skullmeta;
+    	this.itemStack = SpigotVersionAdapter.getVersionAdapter().createSkull((org.bukkit.OfflinePlayer) owner.getDefault());
+    	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
 	}
 
 	@Override

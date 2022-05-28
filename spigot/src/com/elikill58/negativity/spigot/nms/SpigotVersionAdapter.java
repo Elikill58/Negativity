@@ -10,12 +10,15 @@ import java.util.Queue;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.SkullMeta;
 
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.BlockPosition;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketContent;
@@ -310,6 +313,15 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	}
 	
 	public abstract BlockPosition getBlockPosition(Object obj);
+	
+	public org.bukkit.inventory.ItemStack createSkull(OfflinePlayer owner) { // method used by old versions
+		// should be "PLAYER_HEAD" and nothing else.
+		// can't use direct material else we will have running issue on old versions
+		org.bukkit.inventory.ItemStack itemStack = new org.bukkit.inventory.ItemStack((org.bukkit.Material) Materials.PLAYER_HEAD.getDefault());
+    	SkullMeta skullmeta = (SkullMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
+		skullmeta.setOwningPlayer(owner); // warn: this method seems to exist since 1.12.1
+		return itemStack;
+	}
 
 	private static SpigotVersionAdapter instance;
 

@@ -8,12 +8,15 @@ import java.util.Set;
 import org.bukkit.Bukkit;
 import org.bukkit.Effect;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.item.ItemRegistrar;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.item.SpigotMaterial;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
@@ -107,5 +110,12 @@ public class Utils {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	
+	public static org.bukkit.inventory.ItemStack createSkullOldVersion(OfflinePlayer owner) { // method used by old versions
+		org.bukkit.inventory.ItemStack itemStack = new org.bukkit.inventory.ItemStack((org.bukkit.Material) Materials.PLAYER_HEAD.getDefault(), 1, (byte) 3);
+    	SkullMeta skullmeta = (SkullMeta) (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
+		skullmeta.setOwner(owner.getName());
+		return itemStack;
 	}
 }

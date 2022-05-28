@@ -4,26 +4,26 @@ import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_12_R1.CraftServer;
-import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_12_R1.CraftWorld;
+import org.bukkit.craftbukkit.v1_12_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 
 import net.minecraft.server.v1_12_R1.BlockPosition;
-import net.minecraft.server.v1_12_R1.MathHelper;
-import net.minecraft.server.v1_12_R1.PacketPlayInBlockDig;
 import net.minecraft.server.v1_12_R1.EntityPlayer;
+import net.minecraft.server.v1_12_R1.MathHelper;
+import net.minecraft.server.v1_12_R1.MovingObjectPosition;
+import net.minecraft.server.v1_12_R1.PacketPlayInBlockDig;
 import net.minecraft.server.v1_12_R1.Vec3D;
 import net.minecraft.server.v1_12_R1.WorldServer;
-import net.minecraft.server.v1_12_R1.MovingObjectPosition;
 
 public class Spigot_1_12_R1 extends SpigotVersionAdapter {
 	

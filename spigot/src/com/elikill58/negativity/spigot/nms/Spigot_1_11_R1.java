@@ -3,6 +3,7 @@ package com.elikill58.negativity.spigot.nms;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.craftbukkit.v1_11_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_11_R1.entity.CraftPlayer;
 import org.bukkit.craftbukkit.v1_11_R1.CraftWorld;
@@ -16,6 +17,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlac
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
+import com.elikill58.negativity.spigot.utils.Utils;
 
 import net.minecraft.server.v1_11_R1.BlockPosition;
 import net.minecraft.server.v1_11_R1.PacketPlayInBlockDig;
@@ -98,5 +100,10 @@ public class Spigot_1_11_R1 extends SpigotVersionAdapter {
 	public com.elikill58.negativity.api.location.BlockPosition getBlockPosition(Object obj) {
 		BlockPosition pos = (BlockPosition) obj;
 		return new com.elikill58.negativity.api.location.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
+	}
+	
+	@Override
+	public org.bukkit.inventory.ItemStack createSkull(OfflinePlayer owner) { // method used by old versions
+		return Utils.createSkullOldVersion(owner);
 	}
 }

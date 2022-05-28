@@ -136,8 +136,7 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 					new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, ep),
 					ep.blockPosition());
 			if (hitResult == null) { // ignore because it should be only interact and not block pose
-				Adapter.getAdapter().debug("No block it, use interact");
-				return new NPacketPlayInUnset("PacketPlayInBlockPlace", PacketType.Client.BLOCK_PLACE);
+				return new NPacketPlayInUnset("PacketPlayInBlockPlace", null);
 			}
 			if (hitResult.isInside()) {
 				BlockPos pos = hitResult.getBlockPos();

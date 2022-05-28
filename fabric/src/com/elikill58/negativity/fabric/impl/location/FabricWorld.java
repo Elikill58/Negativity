@@ -28,7 +28,7 @@ public class FabricWorld extends World {
 
 	@Override
 	public String getName() {
-		return w.asString();
+		return w.getRegistryKey().getValue().toString();
 	}
 
 	@Override

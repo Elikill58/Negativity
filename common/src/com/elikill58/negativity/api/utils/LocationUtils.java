@@ -506,6 +506,8 @@ public class LocationUtils {
 		Vector a = loc.clone().sub(position).toVector().normalize();
 		Vector b = position.getDirection();
 		double angle = Math.acos(a.dot(b));
+		if(angle > 360) // make it as normal number
+			angle = angle % 360;
 		if (isLeft(position, position.clone().add(b), loc.toVector()))
 			angle = 360 - angle;
 		return Math.toDegrees(angle);

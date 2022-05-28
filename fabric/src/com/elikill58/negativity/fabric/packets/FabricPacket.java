@@ -7,7 +7,7 @@ import com.elikill58.negativity.api.packets.packet.NPacket;
 public class FabricPacket extends AbstractPacket {
 	
 	public FabricPacket(NPacket nPacket, Object nmsPacket, Player p) {
-		super(nPacket.getPacketType(), nmsPacket, nPacket, p);
+		super(nmsPacket, nPacket, p);
 	}
 
 }

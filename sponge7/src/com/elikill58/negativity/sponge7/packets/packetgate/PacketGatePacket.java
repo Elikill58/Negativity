@@ -13,8 +13,7 @@ public class PacketGatePacket extends AbstractPacket {
 	private PacketEvent event;
 	
 	public PacketGatePacket(NPacket nPacket, Object nmsPacket, Player p, PacketEvent event) {
-		super(nPacket.getPacketType(), nmsPacket, nPacket, SpongeEntityManager.getPlayer(p));
-		//super(type, packet, null, SpongeEntityManager.getPlayer(p));
+		super(nmsPacket, nPacket, SpongeEntityManager.getPlayer(p));
 		this.event = event;
 	}
 	

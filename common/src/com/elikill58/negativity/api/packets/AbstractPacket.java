@@ -8,14 +8,12 @@ public abstract class AbstractPacket {
 	protected final Player player;
 	protected Object nmsPacket;
 	protected PacketContent content;
-	protected PacketType type;
 	protected final NPacket nPacket;
 	protected boolean cancel = false;
 	
-	public AbstractPacket(PacketType type, Object nmsPacket, NPacket nPacket, Player player) {
+	public AbstractPacket(Object nmsPacket, NPacket nPacket, Player player) {
 		this.player = player;
 		this.nmsPacket = nmsPacket;
-		this.type = type;
 		this.nPacket = nPacket;
 		this.content = new PacketContent(this);
 	}
@@ -92,7 +90,7 @@ public abstract class AbstractPacket {
 	 * @return the type of the packet
 	 */
 	public PacketType getPacketType() {
-		return type;
+		return nPacket.getPacketType();
 	}
 	
 	/**

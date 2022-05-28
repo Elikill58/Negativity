@@ -41,6 +41,7 @@ import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManag
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.mojang.brigadier.CommandDispatcher;
+import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import net.fabricmc.api.DedicatedServerModInitializer;
@@ -68,7 +69,6 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 	private Path configDir;
 	private MinecraftServer server;
 	private NegativityPacketManager packetManager;
-	private CommandDispatcher<ServerCommandSource> dispatcher;
 	public static Identifier negativityChannel = new Identifier(NegativityMessagesManager.CHANNEL_ID),
 			fmlChannel = new Identifier("fml:hs"), bungeecordChannel = new Identifier("bungeecord");
 
@@ -81,10 +81,11 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 		new File(configDir.toFile().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
 
 		Adapter.setAdapter(new FabricAdapter(this, LOGGER));
+		BanManager.init();
 
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onGameStart);
 		ServerLifecycleEvents.SERVER_STOPPING.register(this::onGameStop);
-		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> this.dispatcher = dispatcher);
+		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> loadCommands(dispatcher));
 
 		BlockListeners.register();
 		PlayersListeners.register();
@@ -107,25 +108,13 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 		Negativity.loadNegativity();
 		packetManager = new NegativityPacketManager(this);
 
-		loadCommands(false);
-
 		ServerPlayNetworking.registerGlobalReceiver(fmlChannel, new FmlRawDataListener());
 		ServerPlayNetworking.registerGlobalReceiver(negativityChannel, new ProxyCompanionListener());
 
 		Stats.sendStartupStats(srv.getServerPort());
 	}
 
-	public void reloadCommands() {
-		loadCommands(true);
-	}
-
-	private void loadCommands(boolean reload) {
-		if (reload)
-			return;
-		if(dispatcher == null) {
-			Adapter.getAdapter().getLogger().warn("The command dispatcher is not set yet.");
-			return;
-		}
+	private void loadCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
 		registerCommand("negativity", dispatcher, "neg", "n");
 		reloadCommand("nmod", dispatcher, "nmod", "mod");
 		reloadCommand("kick", dispatcher, "nkick", "kick");
@@ -146,8 +135,11 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 	}
 
 	private void registerCommand(String cmd, CommandDispatcher<ServerCommandSource> dispatcher, String... alias) {
+		CommandsExecutorManager executor = new CommandsExecutorManager(cmd);
 		LiteralCommandNode<ServerCommandSource> node = dispatcher
-				.register(CommandManager.literal(cmd).executes(new CommandsExecutorManager(cmd)));
+				.register(CommandManager.literal(cmd)
+					.executes(executor)
+					.then(CommandManager.argument("args", StringArgumentType.greedyString()).suggests(executor).executes(executor)));
 
 		for (String sub : alias)
 			dispatcher.register(CommandManager.literal(sub).redirect(node));

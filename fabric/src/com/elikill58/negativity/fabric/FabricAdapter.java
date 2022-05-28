@@ -103,7 +103,6 @@ public class FabricAdapter extends Adapter {
 	@Override
 	public void reload() {
 		reloadConfig();
-		plugin.reloadCommands();
 	}
 
 	@Override

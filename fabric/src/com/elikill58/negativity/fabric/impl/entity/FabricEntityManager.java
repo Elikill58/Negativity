@@ -36,10 +36,16 @@ public class FabricEntityManager {
 	}
 
 	public static @Nullable CommandSender getExecutor(@Nullable CommandSource src) {
-		if(src == null)
+		if(src == null) {
 			return null;
-		if(src instanceof ServerPlayerEntity)
+		}
+		
+		if (src instanceof ServerPlayerEntity) {
 			return new FabricPlayer((ServerPlayerEntity) src);
+		} else if (src instanceof ServerCommandSource serverSource && serverSource.getEntity() instanceof ServerPlayerEntity player) {
+			return new FabricPlayer(player);
+		}
+		
 		return new FabricCommandSender((ServerCommandSource) src);
 	}
 

@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.elikill58.negativity.api.entity.Entity;
@@ -460,12 +461,14 @@ public class NegativityPlayer implements FileSaverAction {
 	 */
 	public void destroy() {
 		checkProcessors.forEach(CheckProcessor::stop);
-		save(FileSaverTimer.getInstance());
-		if(proofFileHandler != null && !proofFileHandler.isClosed())
-			proofFileHandler.close();
-		NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
-		accountManager.save(playerId).join();
-		accountManager.dispose(playerId);
+		CompletableFuture.runAsync(() -> {
+			save(FileSaverTimer.getInstance());
+			if(proofFileHandler != null && !proofFileHandler.isClosed())
+				proofFileHandler.close();
+			NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
+			accountManager.save(playerId).join();
+			accountManager.dispose(playerId);
+		}).join();
 	}
 
 	/**

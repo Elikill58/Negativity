@@ -148,7 +148,7 @@ public class Scaffold extends Cheat {
 		}
  	}
 	
-	@Check(name = "rise-slot", description = "Detect move of head & slot.\n§cWARN: This check can be created even without hack.\n§cEnable it carefully.")
+	@Check(name = "rise-slot", description = "Detect move of head & slot.\n§cWARN: This check can be created even without hack.\n§cEnable it carefully.", conditions = CheckConditions.NO_ON_BEDROCK)
 	public void onPacket(PacketReceiveEvent e, NegativityPlayer np) {
 		// fully manage in ScaffoldRiseCheckProcessor
 	}

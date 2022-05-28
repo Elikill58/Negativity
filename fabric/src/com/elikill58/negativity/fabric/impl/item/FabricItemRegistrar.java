@@ -1,7 +1,7 @@
 package com.elikill58.negativity.fabric.impl.item;
 
 import java.util.HashMap;
-import java.util.Optional;
+import java.util.Locale;
 import java.util.StringJoiner;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -9,9 +9,10 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import net.minecraft.item.Item;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.InvalidIdentifierException;
 import net.minecraft.util.registry.Registry;
 
 public class FabricItemRegistrar extends ItemRegistrar {
@@ -46,10 +47,26 @@ public class FabricItemRegistrar extends ItemRegistrar {
 	}
 	
 	private @Nullable Material findMaterial(String key) {
-		if(UniversalUtils.isInteger(key))
-			return new FabricMaterial(Item.byRawId(Integer.parseInt(key)));
-		Optional<Item> opt = Registry.ITEM.stream().filter(i -> i.getTranslationKey().contains(key)).findFirst();
-		return opt.isPresent() ? new FabricMaterial(opt.get()) : null;
+		try {
+			int rawId = Integer.parseInt(key);
+			return new FabricMaterial(Item.byRawId(rawId));
+		} catch (NumberFormatException ignore) {
+		}
+		
+		try {
+			Identifier id = new Identifier(key.toLowerCase(Locale.ROOT));
+			FabricMaterial itemType = Registry.ITEM.getOrEmpty(id).map(FabricMaterial::new).orElse(null);
+			if (itemType != null) {
+				return itemType;
+			}
+			
+			return Registry.BLOCK.getOrEmpty(id).map(FabricMaterial::new).orElse(null);
+		} catch (InvalidIdentifierException e) {
+			Adapter.getAdapter().getLogger().error("Could not find item with key: " + key);
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	private String parse(String base) {

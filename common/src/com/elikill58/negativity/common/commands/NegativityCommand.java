@@ -265,7 +265,6 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			p.sendMessage(ChatColor.YELLOW + "--- Checking debug for bypass ---");
 			p.sendMessage(ChatColor.GOLD + ada.getName() + ": " + ada.getVersion() + ". Negativity: " + ada.getPluginVersion());
 			boolean hasBypass = false;
-			Cheat c = Cheat.values().stream().filter(Cheat::isActive).findFirst().get();
 			if (np.isFreeze) {
 				p.sendMessage(ChatColor.RED + name + " are currently freezed.");
 				hasBypass = true;
@@ -277,46 +276,43 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			int ping = target.getPing();
 			if(np.isInFight)
 				hasBypass = true;
-			if(arg.length > 2) {
-				c = Cheat.fromString(arg[2]);
-				if(c != null) {
-					p.sendMessage(ChatColor.GREEN + "Checking for cheat " + c.getName() + ".");
-					if(!c.isActive()) {
-						p.sendMessage(ChatColor.RED + "Cheat disabled.");
-						hasBypass = true;
-					}
-					if(!np.already_blink && c.getKey().equals(CheatKeys.BLINK)) {
-						p.sendMessage(ChatColor.RED + "Bypass for blink.");
-						hasBypass = true;
-					}
-					if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
-						for (PlayerModifications modification : PlayerModificationsManager.getModifications()) {
-							if (modification.shouldIgnoreMovementChecks(p)) {
-								p.sendMessage(ChatColor.RED + modification.getDisplayname() + " movement bypass.");
-								hasBypass = true;
-							}
+			Cheat c = arg.length > 2 ? Cheat.fromString(arg[2]) : Cheat.values().stream().filter(Cheat::isActive).findFirst().get();
+			if(c != null) {
+				p.sendMessage(ChatColor.GREEN + "Checking for cheat " + c.getName() + ".");
+				if(!c.isActive()) {
+					p.sendMessage(ChatColor.RED + "Cheat disabled.");
+					hasBypass = true;
+				}
+				if(!np.already_blink && c.getKey().equals(CheatKeys.BLINK)) {
+					p.sendMessage(ChatColor.RED + "Bypass for blink.");
+					hasBypass = true;
+				}
+				if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
+					for (PlayerModifications modification : PlayerModificationsManager.getModifications()) {
+						if (modification.shouldIgnoreMovementChecks(p)) {
+							p.sendMessage(ChatColor.RED + modification.getDisplayname() + " movement bypass.");
+							hasBypass = true;
 						}
 					}
-					if (c.getKey().equals(CheatKeys.FLY)) {
-						for (PlayerModifications modification : PlayerModificationsManager.getModifications()) {
-							if (modification.canFly(p)) {
-								p.sendMessage(ChatColor.RED + modification.getDisplayname() + " fly bypass.");
-								hasBypass = true;
-							}
+				}
+				if (c.getKey().equals(CheatKeys.FLY)) {
+					for (PlayerModifications modification : PlayerModificationsManager.getModifications()) {
+						if (modification.canFly(p)) {
+							p.sendMessage(ChatColor.RED + modification.getDisplayname() + " fly bypass.");
+							hasBypass = true;
 						}
 					}
-					if(ping > c.getMaxAlertPing()) {
-						p.sendMessage(ChatColor.RED + "To high ping ! " + ChatColor.YELLOW + "(" + ping + " > " + c.getMaxAlertPing() + ")");
-						hasBypass = true;
-					}
-					if(!np.hasDetectionActive(c)) {
-						p.sendMessage(ChatColor.RED + "Detection of " + c.getName() + " not active: " + np.getWhyDetectionNotActive(c));
-						hasBypass = true;
-					}
-				} else
-					p.sendMessage(ChatColor.RED + "Unknow cheat " + arg[2] + ".");
+				}
+				if(ping > c.getMaxAlertPing()) {
+					p.sendMessage(ChatColor.RED + "To high ping ! " + ChatColor.YELLOW + "(" + ping + " > " + c.getMaxAlertPing() + ")");
+					hasBypass = true;
+				}
+				if(!np.hasDetectionActive(c)) {
+					p.sendMessage(ChatColor.RED + "Detection of " + c.getName() + " not active: " + np.getWhyDetectionNotActive(c));
+					hasBypass = true;
+				}
 			} else
-				p.sendMessage(ChatColor.YELLOW + (np.isInFight ? "In fight, " : "") + "Ping: " + ping + "ms (by default, at 200ms you bypass it)");
+				p.sendMessage(ChatColor.RED + "Unknow cheat " + arg[2] + ".");
 			if((c != null && ping > c.getMaxAlertPing()) || ping > 200)
 				hasBypass = true;
 			p.sendMessage(hasBypass ? ChatColor.RED + "Warn: " + name + " have bypass, so you cannot be detected." : ChatColor.GREEN + "Good news: " + name + " can be detected !");

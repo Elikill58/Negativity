@@ -1,6 +1,7 @@
 package com.elikill58.negativity.fabric.impl.entity;
 
 import java.net.InetSocketAddress;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -148,7 +149,7 @@ public class FabricPlayer extends FabricEntity<ServerPlayerEntity> implements Pl
 
 	@Override
 	public int getPing() {
-		return entity.pingMilliseconds / 1000;
+		return entity.pingMilliseconds;
 	}
 
 	@Override
@@ -405,7 +406,11 @@ public class FabricPlayer extends FabricEntity<ServerPlayerEntity> implements Pl
 	
 	@Override
 	public InetSocketAddress getAddress() {
-		return null;// entity.networkHandler.connection.getAddress().getVirtualHost();
+		SocketAddress address = entity.networkHandler.connection.getAddress();
+		if (address instanceof InetSocketAddress inetAddress) {
+			return inetAddress;
+		}
+		return null;
 	}
 	
 	@Override

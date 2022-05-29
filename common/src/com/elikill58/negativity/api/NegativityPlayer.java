@@ -13,6 +13,8 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.IronGolem;
 import com.elikill58.negativity.api.entity.Player;
@@ -107,7 +109,7 @@ public class NegativityPlayer implements FileSaverAction {
 	private boolean isBedrockPlayer = false;
 	public double sensitivity = 0.0;
 	private String clientName;
-	private ScheduledTask fightCooldownTask;
+	private @Nullable ScheduledTask fightCooldownTask;
 	private FileHandle proofFileHandler;
 	public Entity lastHittedEntitty = null, lastHitByEntity = null;
 
@@ -480,7 +482,7 @@ public class NegativityPlayer implements FileSaverAction {
 		isInFight = true;
 		if (fightCooldownTask != null)
 			fightCooldownTask.cancel();
-		fightCooldownTask = Scheduler.getInstance().runRepeating(this::unfight, 100);
+		fightCooldownTask = Scheduler.getInstance().runDelayed(this::unfight, 100);
 	}
 
 	/**
@@ -488,6 +490,10 @@ public class NegativityPlayer implements FileSaverAction {
 	 */
 	public void unfight() {
 		isInFight = false;
+		if (fightCooldownTask != null) {
+			fightCooldownTask.cancel();
+			fightCooldownTask = null;
+		}
 	}
 	
 	/**

@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -69,8 +70,8 @@ public class Sanction {
 	}
 
 	public ItemStack getItem(OfflinePlayer cible) {
-		return ItemBuilder.Builder(type).displayName(applyPlaceholders(getName(), cible))
-				.lore(getLore().stream().map((s) -> applyPlaceholders(s, cible)).collect(Collectors.toList())).build();
+		return ItemBuilder.Builder(type).displayName(Utils.coloredMessage(applyPlaceholders(getName(), cible)))
+				.lore(getLore().stream().map((s) -> Utils.coloredMessage(applyPlaceholders(s, cible))).collect(Collectors.toList())).build();
 	}
 
 	public static int getMaxSlot(List<Sanction> list) {

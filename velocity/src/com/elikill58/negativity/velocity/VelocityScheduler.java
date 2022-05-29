@@ -1,5 +1,6 @@
 package com.elikill58.negativity.velocity;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -37,17 +38,20 @@ public class VelocityScheduler implements Scheduler {
 	}
 
 	@Override
-	public ScheduledTask runRepeatingAsync(Runnable task, int intervalTicks, @Nullable String name) {
-		return new VelocityRunnableWrapper(
-				scheduler.buildTask(plugin, task).repeat(toMs(intervalTicks), TimeUnit.MILLISECONDS).schedule());
-	}
-
-	@Override
 	public ScheduledTask runDelayed(Runnable task, int delayTicks) {
 		return new VelocityRunnableWrapper(
 				scheduler.buildTask(plugin, task).delay(toMs(delayTicks), TimeUnit.MILLISECONDS).schedule());
 	}
 
+	@Override
+	public ScheduledTask runRepeatingAsync(Runnable task, Duration delay, Duration interval, @Nullable String name) {
+		return new VelocityRunnableWrapper(
+				scheduler.buildTask(plugin, task)
+						.delay(delay.toMillis(), TimeUnit.MILLISECONDS)
+						.repeat(interval.toMillis(), TimeUnit.MILLISECONDS)
+						.schedule());
+	}
+	
 	private long toMs(int ticks) {
 		return (ticks * 1000) / 20;
 	}

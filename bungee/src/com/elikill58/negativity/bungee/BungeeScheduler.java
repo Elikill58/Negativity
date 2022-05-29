@@ -1,5 +1,6 @@
 package com.elikill58.negativity.bungee;
 
+import java.time.Duration;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
@@ -39,14 +40,13 @@ public class BungeeScheduler implements Scheduler {
 	}
 
 	@Override
-	public ScheduledTask runRepeatingAsync(Runnable task, int intervalTicks, @Nullable String name) {
-		long ms = toMs(intervalTicks);
-		return new BungeeRunnableWrapper(scheduler.schedule(plugin, task, ms, ms, TimeUnit.MILLISECONDS));
+	public ScheduledTask runDelayed(Runnable task, int delayTicks) {
+		return new BungeeRunnableWrapper(scheduler.schedule(plugin, task, toMs(delayTicks), TimeUnit.MILLISECONDS));
 	}
 
 	@Override
-	public ScheduledTask runDelayed(Runnable task, int delayTicks) {
-		return new BungeeRunnableWrapper(scheduler.schedule(plugin, task, toMs(delayTicks), TimeUnit.MILLISECONDS));
+	public ScheduledTask runRepeatingAsync(Runnable task, Duration delay, Duration interval, @Nullable String name) {
+		return new BungeeRunnableWrapper(scheduler.schedule(plugin, task, delay.toMillis(), interval.toMillis(), TimeUnit.MILLISECONDS));
 	}
 
 	private long toMs(int ticks) {

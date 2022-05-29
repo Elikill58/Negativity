@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal;
 
+import java.time.Duration;
 import java.util.function.Consumer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -24,12 +25,6 @@ public interface Scheduler {
 	
 	ScheduledTask runRepeating(Runnable task, int intervalTicks, @Nullable String name);
 	
-	default ScheduledTask runRepeatingAsync(Runnable task, int intervalTicks) {
-		return runRepeatingAsync(task, intervalTicks, null);
-	}
-	
-	ScheduledTask runRepeatingAsync(Runnable task, int intervalTicks, @Nullable String name);
-	
 	/**
 	 * Run task after waiting given ticks
 	 * 
@@ -39,15 +34,9 @@ public interface Scheduler {
 	 */
 	ScheduledTask runDelayed(Runnable task, int delayTicks);
 	
+	ScheduledTask runRepeatingAsync(Runnable task, Duration delay, Duration interval, @Nullable String name);
+	
 	static Scheduler getInstance() {
 		return Adapter.getAdapter().getScheduler();
-	}
-	
-	static int tickToMilliseconds(int ticks) {
-		return (ticks * 1000) / 20;
-	}
-	
-	static int millisecondsToTicks(int ms) {
-		return (ms * 20) / 1000;
 	}
 }

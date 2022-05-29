@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge;
 
+import java.time.Duration;
 import java.util.function.Consumer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -57,12 +58,14 @@ public class SpongeScheduler implements Scheduler {
 	}
 
 	@Override
-	public ScheduledTask runRepeatingAsync(Runnable task, int intervalTicks, @Nullable String name) {
-		Task.Builder builder = Task.builder()
+	public ScheduledTask runRepeatingAsync(Runnable task, Duration delay, Duration interval, @Nullable String name) {
+		Task spongeTask = Task.builder()
 				.plugin(this.plugin)
 				.execute(task)
-				.interval(Ticks.of(intervalTicks));
-		return new SpongeTaskWrapper(Sponge.server().scheduler().submit(builder.build()));
+				.delay(delay)
+				.interval(interval)
+				.build();
+		return new SpongeTaskWrapper(Sponge.server().scheduler().submit(spongeTask, name));
 	}
 	
 	private static class SpongeTaskWrapper implements ScheduledTask {

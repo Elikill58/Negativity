@@ -98,6 +98,15 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 	public void onGameStop(MinecraftServer srv) {
 		NegativityPlayer.getAllPlayers().values().forEach(NegativityPlayer::destroy);
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
+		if (FabricAdapter.getAdapter().getScheduler() instanceof FabricScheduler scheduler) {
+			Adapter.getAdapter().getLogger().info("Shutting down scheduler");
+			try {
+				scheduler.shutdown();
+			} catch (Exception e) {
+				Adapter.getAdapter().getLogger().error("Error occurred when shutting down scheduler: " + e.getMessage());
+				e.printStackTrace();
+			}
+		}
 		Database.close();
 	}
 

@@ -1,5 +1,7 @@
 package com.elikill58.negativity.common.protocols;
 
+import java.time.Duration;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
@@ -41,7 +43,7 @@ public class AutoClick extends Cheat {
 				np.lastClick = click;
 				np.clearClick();
 			}
-		}, 20);
+		}, Duration.ofSeconds(1), Duration.ofSeconds(1), "Negativity AutoClick Monitor");
 	}
 
 	@Check(name = "count", description = "Count click 1 by 1")

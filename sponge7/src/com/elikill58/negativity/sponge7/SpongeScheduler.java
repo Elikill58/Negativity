@@ -1,5 +1,7 @@
 package com.elikill58.negativity.sponge7;
 
+import java.time.Duration;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -36,17 +38,19 @@ public class SpongeScheduler implements Scheduler {
 	}
 	
 	@Override
-	public ScheduledTask runRepeatingAsync(Runnable task, int intervalTicks, @Nullable String name) {
-		Task.Builder builder = Task.builder().execute(task).async().intervalTicks(intervalTicks);
+	public ScheduledTask runDelayed(Runnable task, int delayTicks) {
+		return new TaskWrapper(Task.builder().execute(task).delayTicks(delayTicks).submit(this.plugin));
+	}
+	
+	@Override
+	public ScheduledTask runRepeatingAsync(Runnable task, Duration delay, Duration interval, @Nullable String name) {
+		Task.Builder builder = Task.builder().execute(task).async()
+				.delay(delay.toMillis(), TimeUnit.MILLISECONDS)
+				.interval(interval.toMillis(), TimeUnit.MILLISECONDS);
 		if (name != null) {
 			builder.name(name);
 		}
 		return new TaskWrapper(builder.submit(this.plugin));
-	}
-	
-	@Override
-	public ScheduledTask runDelayed(Runnable task, int delayTicks) {
-		return new TaskWrapper(Task.builder().execute(task).delayTicks(delayTicks).submit(this.plugin));
 	}
 	
 	private static class TaskWrapper implements ScheduledTask {

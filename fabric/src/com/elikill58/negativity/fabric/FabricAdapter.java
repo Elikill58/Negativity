@@ -74,7 +74,7 @@ public class FabricAdapter extends Adapter {
 		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("lang"), "Negativity", "CheatHover");
 		this.itemRegistrar = new FabricItemRegistrar();
 		this.serverVersion = Version.getVersionByName(getVersion());
-		this.scheduler = new FabricScheduler(sn);
+		this.scheduler = new FabricScheduler();
 	}
 	
 	@Override

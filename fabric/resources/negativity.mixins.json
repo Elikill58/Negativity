@@ -4,6 +4,7 @@
   "package": "com.elikill58.negativity.fabric.mixin",
   "compatibilityLevel": "JAVA_17",
   "server": [
+    "MixinMinecraftServer",
     "MixinScreenHandler",
     "MixinServerPlayerEntity",
     "MixinServerPlayNetworkHandler"

@@ -4,6 +4,7 @@ import static com.elikill58.negativity.universal.verif.VerificationManager.hasVe
 
 import java.io.IOException;
 import java.sql.Timestamp;
+import java.time.Duration;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -332,7 +333,7 @@ public class Negativity {
 			if(old != null)
 				old.runAll();
 			else
-				ada.getScheduler().runRepeatingAsync(new FileSaverTimer(), 20);
+				ada.getScheduler().runRepeatingAsync(new FileSaverTimer(), Duration.ofSeconds(1), Duration.ofSeconds(1), "Negativity FileSaver");
 			if(actualizeInvTimer != null)
 				actualizeInvTimer.cancel();
 			actualizeInvTimer = ada.getScheduler().runRepeating(new ActualizeInvTimer(), 10, 10);

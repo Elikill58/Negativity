@@ -3,7 +3,7 @@ package com.elikill58.negativity.common.protocols;
 import static com.elikill58.negativity.universal.detections.keys.CheatKeys.PINGSPOOF;
 
 import java.io.IOException;
-import java.util.TimerTask;
+import java.time.Duration;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -30,18 +31,13 @@ public class PingSpoof extends Cheat implements Listeners {
 		super(PINGSPOOF, CheatCategory.PLAYER, Materials.SPONGE, CheatDescription.VERIF);
 
 		if (checkActive("reachable")) {
-			new Thread(() -> {
-				new java.util.Timer().schedule(new TimerTask() {
-					@Override
-					public void run() {
-						for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
-							NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-							if(np.hasDetectionActive(PingSpoof.this))
-								managePingSpoof(p, np);
-						}
-					}
-				}, 6l, 6l);
-			}).start();
+			Scheduler.getInstance().runRepeatingAsync(() -> {
+				for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
+					NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+					if (np.hasDetectionActive(PingSpoof.this))
+						managePingSpoof(p, np);
+				}
+			}, Duration.ofMillis(300), Duration.ofMillis(300), "Negativity PingSpoof Monitor");
 		}
 	}
 	

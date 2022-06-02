@@ -5,13 +5,11 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
-import com.elikill58.negativity.api.events.inventory.InventoryCloseEvent;
 import com.elikill58.negativity.api.events.inventory.InventoryOpenEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
-import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -28,21 +26,14 @@ public class InventoryMove extends Cheat implements Listeners {
 	@Check(name = "stay-distance", description = "Keep distance while moving", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE,
 			CheckConditions.NO_FALL_DISTANCE })
 	public void onMove(PlayerMoveEvent e, NegativityPlayer np) {
-		if (!e.isMoveLook() || !e.isMovePosition()) {
-			return;
-		}
-		
-		InventoryMoveData data = np.invMoveData;
-		if (data == null) {
-			return;
-		}
-		
 		Player p = e.getPlayer();
-		// if in water
-		if (LocationUtils.isInWater(p.getLocation())) {
+		if (p.getLocation().getBlock().getType().getId().contains("WATER") || np.invMoveData == null) // if in water or
+																										// falling
 			return;
-		}
-		if (p.getOpenInventory() == null) {
+		InventoryMoveData data = np.invMoveData;
+		if (data == null)
+			return;
+		else if (p.getOpenInventory() == null) {
 			Adapter.getAdapter().debug("No opened inventory but data always running ?");
 			return;
 		}
@@ -73,13 +64,6 @@ public class InventoryMove extends Cheat implements Listeners {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
 		if (np.hasDetectionActive(this))
 			checkInvMove(np);
-	}
-
-	@EventListener
-	public void onClose(InventoryCloseEvent e) {
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
-		if (np.hasDetectionActive(this))
-			np.invMoveData = null;
 	}
 
 	private void checkInvMove(NegativityPlayer np) {

@@ -24,6 +24,10 @@ task prepareServer(type: Copy) {
 
 build.dependsOn shadowJar
 
+tasks.named('javadoc') {
+    enabled false
+}
+
 subprojects {
     apply plugin: 'java-library'
 
@@ -58,6 +62,21 @@ subprojects {
 
     tasks.withType(JavaCompile) {
         options.encoding = 'UTF-8'
+    }
+
+    tasks.withType(Javadoc) {
+        if (project.name != 'common') {
+            dependsOn ':common:javadoc'
+        }
+        options.encoding = 'UTF-8'
+        setFailOnError(false) // TODO fix all javadoc errors
+        destinationDir = file("${rootProject.buildDir}/docs/javadoc/${project.path.substring(1).replace(':', '-')}")
+        options {
+            if (project.name != 'common') {
+                links '../common'
+            }
+            links "https://docs.oracle.com/javase/${java.toolchain.languageVersion.get().asInt()}/docs/api/"
+        }
     }
 
     tasks.withType(ProcessResources) {

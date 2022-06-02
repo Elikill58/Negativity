@@ -10,8 +10,6 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
@@ -25,6 +23,7 @@ import com.elikill58.negativity.universal.ProxyAdapter;
 import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.account.SimpleAccountManager;
+import com.elikill58.negativity.universal.annotations.Nullable;
 import com.elikill58.negativity.universal.logger.JavaLoggerAdapter;
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.translation.NegativityTranslationProviderFactory;

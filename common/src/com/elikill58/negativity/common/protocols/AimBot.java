@@ -5,8 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
@@ -21,6 +19,7 @@ import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.api.utils.LocationUtils.Direction;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.annotations.Nullable;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;

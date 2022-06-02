@@ -2,14 +2,13 @@ package com.elikill58.negativity.api.item;
 
 import java.util.List;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.colors.DyeColor;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.annotations.Nullable;
 
 public abstract class ItemBuilder {
 

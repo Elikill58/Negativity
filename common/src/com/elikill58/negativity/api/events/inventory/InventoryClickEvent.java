@@ -1,12 +1,11 @@
 package com.elikill58.negativity.api.events.inventory;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.CancellableEvent;
 import com.elikill58.negativity.api.events.PlayerEvent;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.universal.annotations.Nullable;
 
 public class InventoryClickEvent extends PlayerEvent implements CancellableEvent {
 

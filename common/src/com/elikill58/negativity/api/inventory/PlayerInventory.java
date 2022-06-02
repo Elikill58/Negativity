@@ -2,9 +2,8 @@ package com.elikill58.negativity.api.inventory;
 
 import java.util.Optional;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.api.item.ItemStack;
+import com.elikill58.negativity.universal.annotations.Nullable;
 
 public abstract class PlayerInventory extends Inventory {
 

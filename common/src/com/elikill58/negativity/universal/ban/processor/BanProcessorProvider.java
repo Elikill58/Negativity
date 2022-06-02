@@ -1,8 +1,7 @@
 package com.elikill58.negativity.universal.ban.processor;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.annotations.Nullable;
 import com.elikill58.negativity.universal.ban.BanManager;
 
 /**

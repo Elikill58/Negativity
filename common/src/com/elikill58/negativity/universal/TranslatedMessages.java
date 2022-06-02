@@ -6,9 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.universal.account.NegativityAccount;
+import com.elikill58.negativity.universal.annotations.Nullable;
 import com.elikill58.negativity.universal.translation.TranslationProvider;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 

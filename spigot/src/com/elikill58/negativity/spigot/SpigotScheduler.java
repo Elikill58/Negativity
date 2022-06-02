@@ -7,10 +7,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scheduler.BukkitTask;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.ScheduledTask;
 import com.elikill58.negativity.universal.Scheduler;
+import com.elikill58.negativity.universal.annotations.Nullable;
 
 public class SpigotScheduler implements Scheduler {
 	

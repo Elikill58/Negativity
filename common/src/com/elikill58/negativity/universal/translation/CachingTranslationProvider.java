@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import com.elikill58.negativity.universal.annotations.Nullable;
 
 /**
  * A {@link TranslationProvider} that caches results returned from its wrapped provider if possible.

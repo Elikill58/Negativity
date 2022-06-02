@@ -4,11 +4,11 @@ import org.bukkit.entity.Arrow;
 import org.bukkit.entity.IronGolem;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.ThrownPotion;
-import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.entity.Entity;
+import com.elikill58.negativity.universal.annotations.Nullable;
 
 public class SpigotEntityManager {
 

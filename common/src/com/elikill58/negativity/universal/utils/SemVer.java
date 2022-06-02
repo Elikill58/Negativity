@@ -3,8 +3,8 @@ package com.elikill58.negativity.universal.utils;
 import java.util.Locale;
 import java.util.Objects;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-import org.checkerframework.checker.nullness.qual.Nullable;
+import com.elikill58.negativity.universal.annotations.NonNull;
+import com.elikill58.negativity.universal.annotations.Nullable;
 
 /**
  * Represents the simplified SemVer schema Negativity uses for its plugin versions.

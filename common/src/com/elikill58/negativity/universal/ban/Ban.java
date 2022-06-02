@@ -3,9 +3,8 @@ package com.elikill58.negativity.universal.ban;
 import java.util.Objects;
 import java.util.UUID;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.annotations.Nullable;
 
 public final class Ban {
 

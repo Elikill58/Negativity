@@ -3,7 +3,7 @@ package com.elikill58.negativity.universal.translation;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import com.elikill58.negativity.universal.annotations.Nullable;
 
 /**
  * Provides messages, usually from a specific language.

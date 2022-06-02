@@ -24,7 +24,7 @@ import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import com.elikill58.negativity.universal.annotations.Nullable;
 
 public class DatabaseMigrator {
 

@@ -3,10 +3,9 @@ package com.elikill58.negativity.universal.ban;
 import java.util.HashMap;
 import java.util.Locale;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.api.yaml.Configuration;
+import com.elikill58.negativity.universal.annotations.Nullable;
 import com.elikill58.negativity.universal.report.ReportType;
 
 public class AltAccountBan {

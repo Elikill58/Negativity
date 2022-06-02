@@ -9,9 +9,8 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Consumer;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.annotations.Nullable;
 import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.pluginMessages.AccountUpdateMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;

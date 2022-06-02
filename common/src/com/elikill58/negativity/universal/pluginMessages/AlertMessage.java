@@ -7,8 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
+import com.elikill58.negativity.universal.annotations.Nullable;
 import com.elikill58.negativity.universal.detections.Cheat;
 
 public class AlertMessage implements NegativityMessage {

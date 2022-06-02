@@ -3,7 +3,7 @@ package com.elikill58.negativity.universal;
 import java.time.Duration;
 import java.util.function.Consumer;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
+import com.elikill58.negativity.universal.annotations.Nullable;
 
 public interface Scheduler {
 	

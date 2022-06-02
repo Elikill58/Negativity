@@ -8,6 +8,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.colors.DyeColor;
@@ -19,7 +20,6 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.annotations.Nullable;
 
 public class SpigotItemBuilder extends ItemBuilder {
 

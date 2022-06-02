@@ -13,6 +13,8 @@ import java.util.UUID;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
@@ -25,7 +27,6 @@ import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.common.protocols.CheckManager;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.TranslatedMessages;
-import com.elikill58.negativity.universal.annotations.Nullable;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.setBack.SetBackEntry;
 import com.elikill58.negativity.universal.setBack.SetBackProcessor;

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.spigot.impl.inventory;
 
 import org.bukkit.Bukkit;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryType;
@@ -9,7 +10,6 @@ import com.elikill58.negativity.api.inventory.PlatformHolder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
-import com.elikill58.negativity.universal.annotations.Nullable;
 
 public class SpigotInventory extends Inventory {
 

@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Supplier;
 
-import com.elikill58.negativity.universal.annotations.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public class NegativityMessagesManager {
 

@@ -5,6 +5,8 @@ import java.net.InetSocketAddress;
 import java.util.List;
 import java.util.Optional;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
@@ -16,7 +18,6 @@ import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.annotations.Nullable;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 

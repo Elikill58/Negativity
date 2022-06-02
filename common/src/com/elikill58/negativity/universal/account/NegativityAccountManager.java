@@ -5,7 +5,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 
-import com.elikill58.negativity.universal.annotations.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 public abstract class NegativityAccountManager {
 

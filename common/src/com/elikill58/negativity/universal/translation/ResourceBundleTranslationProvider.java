@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import com.elikill58.negativity.universal.annotations.Nullable;
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class ResourceBundleTranslationProvider implements TranslationProvider {

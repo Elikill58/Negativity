@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.universal.account.NegativityAccount;
-import com.elikill58.negativity.universal.annotations.Nullable;
 
 public final class VoidAccountStorage extends NegativityAccountStorage {
 

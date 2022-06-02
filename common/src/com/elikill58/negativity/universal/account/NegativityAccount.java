@@ -7,10 +7,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.TranslatedMessages;
-import com.elikill58.negativity.universal.annotations.NonNull;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.report.Report;
 

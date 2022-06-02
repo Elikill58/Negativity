@@ -10,8 +10,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.PropertyResourceBundle;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.annotations.Nullable;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class NegativityTranslationProviderFactory implements TranslationProviderFactory {

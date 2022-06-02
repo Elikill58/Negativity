@@ -2,13 +2,14 @@ package com.elikill58.negativity.spigot.impl.inventory;
 
 import java.util.Optional;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
-import com.elikill58.negativity.universal.annotations.Nullable;
 
 public class SpigotPlayerInventory extends PlayerInventory {
 

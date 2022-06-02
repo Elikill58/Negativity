@@ -7,10 +7,11 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.account.NegativityAccount;
-import com.elikill58.negativity.universal.annotations.Nullable;
 import com.elikill58.negativity.universal.dataStorage.database.DatabaseNegativityAccountStorage;
 import com.elikill58.negativity.universal.dataStorage.file.FileNegativityAccountStorage;
 

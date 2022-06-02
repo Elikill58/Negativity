@@ -18,8 +18,7 @@ public abstract class Special extends AbstractDetection<SpecialKeys> {
 	 * Create a special detection and load his config
 	 * 
 	 * @param key the key of the special detection
-	 * @param needPacket if it need packet to work
-	 * @param alias all alias of the special detection
+	 * @param material the material used in inventory to represent this special detection
 	 */
 	public Special(SpecialKeys key, Material material) {
 		super(key, material);

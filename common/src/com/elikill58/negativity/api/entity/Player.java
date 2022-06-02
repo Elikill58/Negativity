@@ -281,7 +281,7 @@ public interface Player extends OfflinePlayer {
 	 * On the specified channel
 	 * 
 	 * @param channelId the channel ID
-	 * @param writeMessage the message to sent
+	 * @param message the message to sent
 	 */
 	default void sendPluginMessage(String channelId, NegativityMessage message) {
 		try {

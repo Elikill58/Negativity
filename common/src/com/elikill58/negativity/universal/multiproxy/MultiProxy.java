@@ -8,7 +8,7 @@ public interface MultiProxy {
 	/**
 	 * Know if the proxy sender is using multiproxy
 	 * 
-	 * @return
+	 * @return true if using multiproxy
 	 */
 	boolean isMultiProxy();
 	

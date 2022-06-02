@@ -101,10 +101,8 @@ import com.elikill58.negativity.api.maths.mathcollection.PrimesCache;
  *
  * @version 4.4.2
  *
- * @see RecursiveArgument
  * @see Expression
  * @see Function
- * @see Constant
  */
 public final class mXparser {
 	/**
@@ -234,9 +232,6 @@ public final class mXparser {
 
 	/**
 	 * Check whether a flag to cancel current calculation process is set.
-	 *
-	 * {@link #cancelCurrentCalculation()}
-	 * {@link #resetCancelCurrentCalculationFlag()}
 	 *
 	 * @return true in case cancel calculation flag is active, otherwise false
 	 */

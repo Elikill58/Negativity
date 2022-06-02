@@ -44,8 +44,7 @@ public class BlockRayBuilder {
 	/**
 	 * Create a new BlockRayBuilder
 	 * 
-	 * @param position the started position of ray
-	 * @param entity which will give the rotation (and so the vector)
+	 * @param p the player where the ray start
 	 */
 	public BlockRayBuilder(Player p) {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
@@ -116,7 +115,7 @@ public class BlockRayBuilder {
 	/**
 	 * Add searched position.
 	 * 
-	 * @param loc searched positions
+	 * @param vec searched positions
 	 * @return this builder
 	 */
 	public BlockRayBuilder neededPositions(Vector... vec) {
@@ -126,7 +125,7 @@ public class BlockRayBuilder {
 	/**
 	 * Add searched position.
 	 * 
-	 * @param loc searched positions
+	 * @param vec searched positions
 	 * @return this builder
 	 */
 	public BlockRayBuilder neededPositions(List<Vector> vec) {

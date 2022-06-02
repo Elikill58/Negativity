@@ -42,8 +42,7 @@ public class EntityRayBuilder {
 	/**
 	 * Create a new BlockRayBuilder
 	 * 
-	 * @param position the started position of ray
-	 * @param entity which will give the rotation (and so the vector)
+	 * @param p the player where the ray start
 	 */
 	public EntityRayBuilder(Player p) {
 		bypassEntities.add(p);

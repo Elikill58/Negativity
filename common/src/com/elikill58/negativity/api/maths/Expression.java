@@ -349,9 +349,6 @@ public class Expression {
 	 *
 	 * @param expressionString
 	 *            definition of the expression
-	 * @param elements
-	 *            Optional elements list (variadic - comma separated) of types:
-	 *            Argument, Constant, Function
 	 *
 	 * @see PrimitiveElement
 	 *
@@ -3385,7 +3382,6 @@ public class Expression {
 	 * @return Copy of initial tokens.
 	 *
 	 * @see Token
-	 * @see mXparser#consolePrintTokens(List)
 	 */
 	public List<Token> getCopyOfInitialTokens() {
 		List<Token> tokensListCopy = new ArrayList<Token>();

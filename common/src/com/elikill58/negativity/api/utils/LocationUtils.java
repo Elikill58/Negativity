@@ -498,7 +498,7 @@ public class LocationUtils {
 	 * Get the arrow of the direction from the player to the given location
 	 * 
 	 * @param p the player which is requiring for direction
-	 * @param dir the direction
+	 * @param loc the direction
 	 * @return the arrow already parsed
 	 */
 	public static double getAngleTo(Player p, Location loc) {

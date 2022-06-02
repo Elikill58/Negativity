@@ -10,7 +10,6 @@ import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.Collection;
-import java.util.List;
 // import java.util.List;
 import java.util.Map;
 
@@ -34,7 +33,7 @@ public class JSONValue {
 	 * 
 	 * @deprecated this method may throw an {@code Error} instead of returning
 	 *             {@code null}; please use
-	 *             {@link JSONValue#parseWithException(Reader)} instead
+	 *             {@link JSONValue#parse(Reader)} instead
 	 */
 	public static Object parse(Reader in) {
 		try {
@@ -58,7 +57,7 @@ public class JSONValue {
 	 * 
 	 * @deprecated this method may throw an {@code Error} instead of returning
 	 *             {@code null}; please use
-	 *             {@link JSONValue#parseWithException(String)} instead
+	 *             {@link JSONValue#parse(String)} instead
 	 */
 	public static Object parse(String s) {
 		StringReader in = new StringReader(s);
@@ -76,13 +75,11 @@ public class JSONValue {
 	 * parameter, use JSONObject.writeJSONString(Map, Writer) or
 	 * JSONArray.writeJSONString(List, Writer) instead.
 	 * 
-	 * @see com.elikill58.negativity.api.json.JSONObject#writeJSONString(Map,
-	 *      Writer)
-	 * @see com.elikill58.negativity.api.json.JSONArray#writeJSONString(List,
-	 *      Writer)
+	 * @see com.elikill58.negativity.api.json.JSONObject#writeJSONString(Map, Writer)
+	 * @see com.elikill58.negativity.api.json.JSONArray#writeJSONString(Collection, Writer)
 	 * 
-	 * @param value
-	 * @param writer
+	 * @param value the value to write
+	 * @param writer where write it
 	 */
 	public static void writeJSONString(Object value, Writer out) throws IOException {
 		if (value == null) {
@@ -202,9 +199,9 @@ public class JSONValue {
 	 * JSONObject.toJSONString(Map) or JSONArray.toJSONString(List) instead.
 	 * 
 	 * @see com.elikill58.negativity.api.json.JSONObject#toJSONString(Map)
-	 * @see com.elikill58.negativity.api.json.JSONArray#toJSONString(List)
+	 * @see com.elikill58.negativity.api.json.JSONArray#toJSONString(Collection)
 	 * 
-	 * @param value
+	 * @param value the object to parse to json
 	 * @return JSON text, or "null" if value is null or it's an NaN or an INF
 	 *         number.
 	 */
@@ -224,8 +221,8 @@ public class JSONValue {
 	 * Escape quotes, \, /, \r, \n, \b, \f, \t and other control characters (U+0000
 	 * through U+001F).
 	 * 
-	 * @param s
-	 * @return
+	 * @param s the string to escape
+	 * @return an escaped string
 	 */
 	public static String escape(String s) {
 		if (s == null)

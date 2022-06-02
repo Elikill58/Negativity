@@ -39,10 +39,9 @@ public abstract class ItemBuilder {
 	public abstract ItemBuilder enchant(Enchantment enchantment, int level);
 
     /**
-     * Add enchant to item
+     * Add flag to this item
      * 
-     * @param enchantment the enchant name
-     * @param level the level of the enchant
+     * @param itemFlag all flag to add
      * @return this builder
      */
 	public abstract ItemBuilder itemFlag(ItemFlag... itemFlag);

@@ -41,7 +41,7 @@ public class Content<T> {
 	 * 
 	 * @param type where the value to remove is
 	 * @param valueName the value to remove
-	 * @return 
+	 * @return the removed value or null
 	 */
 	public T remove(IDetectionKeys<?> type, String valueName) {
 		try {

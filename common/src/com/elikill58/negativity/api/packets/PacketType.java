@@ -109,8 +109,8 @@ public interface PacketType {
 	}
 	
 	/**
-	 * Get packet type of the given name
-	 * If the packet is not found and {@link #LOG_UNKNOW_PACKET} is on true, if will log it as info
+	 * Get packet type of the given name<br>
+	 * If the packet is not found and debug is enabled, if will log it as info
 	 * 
 	 * @param packetName the packet name
 	 * @return the packet type, or the UNSET value of the PacketType section or null

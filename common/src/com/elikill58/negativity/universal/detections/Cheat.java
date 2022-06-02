@@ -53,9 +53,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	 * @param key the cheat key
 	 * @param type the cheat category
 	 * @param m the material used in inventory to represent this cheat
-	 * @param needPacket if the cheat need packet in detections
-	 * @param hasVerif know if the cheat can be used in verification system
-	 * @param alias all other names of the cheat
+	 * @param options all options that describe the cheat
 	 */
 	public Cheat(CheatKeys key, CheatCategory type, Material m, CheatDescription... options) {
 		super(key, m);

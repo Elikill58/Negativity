@@ -20,7 +20,6 @@ public interface Webhook {
 	 * Add message to queue of given webhook
 	 * 
 	 * @param msg the message to send
-	 * @return true if the message is well sent
 	 */
 	void addToQueue(WebhookMessage msg);
 	

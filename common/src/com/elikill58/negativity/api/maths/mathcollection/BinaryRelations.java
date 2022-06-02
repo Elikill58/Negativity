@@ -116,8 +116,6 @@ public final class BinaryRelations {
 	 * Returns current epsilon value.
 	 * 
 	 * @return Returns current epsilon value.
-	 *
-	 * @see #setEpsilonComparison()
 	 */
 	public static final double getEpsilon() {
 		return epsilon;

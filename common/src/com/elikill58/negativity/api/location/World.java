@@ -48,7 +48,7 @@ public abstract class World implements NegativityObject {
 	 * Return a block with AIR type if not found
 	 * Can create error if world not loaded AND loading it async
 	 * 
-	 * @param loc the block location
+	 * @param v the block vector position
 	 * @return the founded block
 	 */
 	public Block getBlockAt(Vector v) {

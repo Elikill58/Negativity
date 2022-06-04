@@ -35,8 +35,6 @@ import org.objectweb.asm.ClassVisitor;
 import org.objectweb.asm.ClassWriter;
 import org.objectweb.asm.Opcodes;
 
-import kotlin.text.StringsKt;
-
 public class InstrumentClassesTask extends DefaultTask {
 	
 	private final ConfigurableFileCollection inputClassesDirs;
@@ -95,7 +93,7 @@ public class InstrumentClassesTask extends DefaultTask {
 			File instrumentedOutputDir = new File(classesDirs.toArray(new File[0])[0].getParentFile(), sourceSet.getName() + "-instrumented");
 			task.getOutputDir().convention(project.getLayout().getProjectDirectory().dir(instrumentedOutputDir.getPath()));
 		});
-		String postInstrumentTaskName = "post" + StringsKt.capitalize(instrumentTaskName);
+		String postInstrumentTaskName = "post" + capitalize(instrumentTaskName);
 		TaskProvider<Task> postInstrumentTask = tasks.register(postInstrumentTaskName, task -> {
 			task.dependsOn(instrumentTask);
 			DirectoryProperty instrumentationOutput = instrumentTask.get().getOutputDir();
@@ -103,6 +101,10 @@ public class InstrumentClassesTask extends DefaultTask {
 			task.doLast(t -> classesDirs.setFrom(instrumentationOutput));
 		});
 		sourceSet.compiledBy(postInstrumentTask);
+	}
+	
+	private static String capitalize(String instrumentTaskName) {
+		return Character.toUpperCase(instrumentTaskName.charAt(0)) + instrumentTaskName.substring(1);
 	}
 	
 	private class InstrumentingFileVisitor implements FileVisitor {

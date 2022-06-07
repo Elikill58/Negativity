@@ -6,8 +6,7 @@ import com.elikill58.negativity.universal.PluginDependentExtension;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionFetcher;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionFetcherProvider;
-
-import us.myles.ViaVersion.api.Via;
+import com.viaversion.viaversion.api.Via;
 
 public class ViaVersionPlayerVersionFetcher implements PlayerVersionFetcher {
 

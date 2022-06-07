@@ -13,6 +13,6 @@ repositories {
 }
 
 dependencies {
-    compileOnly 'us.myles:viaversion:2.2.3'
+    compileOnly 'com.viaversion:viaversion-api:4.3.0'
     api(project(':common'))
 }

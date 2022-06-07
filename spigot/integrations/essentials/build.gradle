@@ -14,7 +14,7 @@ repositories {
     }
     maven {
         name 'sk89q'
-        url 'https://maven.sk89q.com/repo/'
+        url 'https://maven.enginehub.org/repo/'
     }
 }
 

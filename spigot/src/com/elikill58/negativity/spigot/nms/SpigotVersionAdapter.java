@@ -373,6 +373,13 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 				} catch (ReflectiveOperationException e) {
 					throw new RuntimeException(e);
 				}
+			case "v1_19_R1":
+				try {
+					return instance = (SpigotVersionAdapter) Class
+							.forName("com.elikill58.negativity.spigot19.Spigot_1_19_R1").getConstructor().newInstance();
+				} catch (ReflectiveOperationException e) {
+					throw new RuntimeException(e);
+				}
 			default:
 				return instance = new Spigot_UnknowVersion(VERSION);
 			}

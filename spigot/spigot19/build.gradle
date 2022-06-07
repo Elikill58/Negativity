@@ -1,0 +1,45 @@
+import com.elikill58.negativity.build.spigot.SpigotReobfPlugin
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id 'com.github.johnrengelman.shadow'
+    id 'negativity-spigot-reobf'
+}
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+repositories {
+    mavenLocal {
+        metadataSources {
+            mavenPom()
+            artifact()
+        }
+        content {
+            includeGroup('org.spigotmc')
+        }
+    }
+    mavenLocal()
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+dependencies {
+    api parent
+
+    SpigotReobfPlugin.configureSpigotRemapDeps(project, '1.19-R0.1-SNAPSHOT', '1.11.0')
+}
+
+compileJava.javaCompiler.set(
+        javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(17) }
+)
+
+tasks.build.dependsOn SpigotReobfPlugin.TASK_REOBF_SPIGOT
+
+parent.tasks.named('shadowJar', ShadowJar) {
+    it.from(tasks.getByName(SpigotReobfPlugin.TASK_REOBF_SPIGOT))
+}

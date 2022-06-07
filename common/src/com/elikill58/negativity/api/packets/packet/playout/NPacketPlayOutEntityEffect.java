@@ -26,6 +26,14 @@ public class NPacketPlayOutEntityEffect implements NPacketPlayOut {
 		this.flags = flags;
 	}
 	
+	public NPacketPlayOutEntityEffect(int entityId, PotionEffectType type, byte amplifier, int duration, byte flags) {
+		this.entityId = entityId;
+		this.type = type;
+		this.amplifier = amplifier;
+		this.duration = duration;
+		this.flags = flags;
+	}
+	
 	public boolean isMaxDuration() {
 		return duration >= 32767;
 	}

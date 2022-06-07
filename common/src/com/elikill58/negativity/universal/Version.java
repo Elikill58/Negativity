@@ -15,8 +15,8 @@ public enum Version {
 	V1_15("1.15", 15, 100, 550, 578),
 	V1_16("1.16", 16, 100, 700, 754),
 	V1_17("1.17", 17, 100, 755, 756),
-	V1_18("1.18", 18, 100, 757, 800),
-	V1_19("1.19", 19, 100, 801, 1000),
+	V1_18("1.18", 18, 100, 757, 758),
+	V1_19("1.19", 19, 100, 759, 1000),
 	HIGHER("higher", 42, 100, 1000, 1000);
 
 	private final int power, timeBetweenRegen, firstProtocolNumber, lastProtocolNumber;

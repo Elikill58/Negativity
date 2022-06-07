@@ -128,7 +128,7 @@ public class Sponge_UnknowVersion extends SpongeVersionAdapter {
 			return new NPacketPlayOutEntityVelocity(get(f, "id"), get(f, "xa"), get(f, "ya"), get(f, "za"));
 		});
 		packetsPlayOut.put("ClientboundUpdateMobEffectPacket", (p, f) -> {
-			return new NPacketPlayOutEntityEffect(get(f, "entityId"), get(f, "effectId"), get(f, "effectAmplifier"), get(f, "effectDurationTicks"), get(f, "flags"));
+			return new NPacketPlayOutEntityEffect(get(f, "entityId"), (int) get(f, "effectId"), get(f, "effectAmplifier"), get(f, "effectDurationTicks"), get(f, "flags"));
 		});
 		packetsPlayOut.put("ClientboundPongResponsePacket", (p, f) -> new NPacketPlayOutPing(get(f, "time")));
 

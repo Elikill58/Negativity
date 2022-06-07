@@ -84,7 +84,7 @@ import net.minecraft.world.phys.Vec3;
 public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 
 	public Spigot_1_19_R1() {
-		super("v1_18_R2");
+		super("v1_19_R1");
 		packetsPlayIn.put("PacketPlayInChat",
 				(player, raw) -> new NPacketPlayInChat(((ServerboundChatPacket) raw).getMessage()));
 

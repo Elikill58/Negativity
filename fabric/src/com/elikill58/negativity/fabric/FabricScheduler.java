@@ -117,9 +117,6 @@ public class FabricScheduler implements Scheduler {
 			this.task.cancel(false);
 		}
 
-		public ScheduledFuture<?> getTask() {
-			return task;
-		}
 	}
 	
 	private static final class SyncTask implements ScheduledTask {

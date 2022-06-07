@@ -40,7 +40,7 @@ public class IncorrectPacket extends Cheat {
 			double dx = loc.getX() - lp.getX() + 0.5D;
 			double dy = loc.getY() - lp.getY() + 0.5D + 1.5D;
 			double dz = loc.getZ() - lp.getZ() + 0.5D;
-			int maxDistance = (p.getGameMode().equals(GameMode.CREATIVE) ? 49 : 36) + 5; // +5 is to prevent false flags
+			int maxDistance = (p.getGameMode().equals(GameMode.CREATIVE) ? 49 : 42) + 5; // +5 is to prevent false flags
 			double distance = dx * dx + dy * dy + dz * dz;
 			if (distance > maxDistance) { // distance originally used by spigot
 				e.setCancelled(true); // cancel. Everytime.

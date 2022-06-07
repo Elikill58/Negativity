@@ -287,7 +287,9 @@ public class SpigotNegativity extends JavaPlugin {
 			// 1.8 = h
 			// 1.7 = g
 			String fieldNameLastTimeTps;
-			if(v.isNewerOrEquals(Version.V1_18)) {
+			if(v.isNewerOrEquals(Version.V1_19)) {
+				fieldNameLastTimeTps = "k";
+			} else if(v.equals(Version.V1_18)) {
 				if(PacketUtils.VERSION.equalsIgnoreCase("v1_18_R2"))
 					fieldNameLastTimeTps = "o";
 				else

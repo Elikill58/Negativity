@@ -149,7 +149,7 @@ public class Step extends Cheat implements Listeners {
 			if (!oldY.isEmpty()) { // was moving UP, now move X/Z
 				oldY.add(difY);
 				double total = oldY.stream().mapToDouble(Double::doubleValue).sum(), min = oldY.stream().mapToDouble(Double::doubleValue).min().getAsDouble(), max = oldY.stream().mapToDouble(Double::doubleValue).max().getAsDouble();
-				if (total >= 1 && min > 0.2) {
+				if ((total == 1 || total > 1.2) && min > 0.2) { // prevent not exact up
 					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(difY * 300), "dif-no-xz",
 							"Total: " + total + ", min/max: " + min + "/" + max + ", all: " + oldY + ", ground: "
 									+ p.isOnGround() + ", vel: " + p.getVelocity(),

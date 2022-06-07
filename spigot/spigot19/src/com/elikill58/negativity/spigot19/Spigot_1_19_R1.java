@@ -210,9 +210,10 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 	}
 	
 	private PotionEffectType getTypeFromNMSEffect(MobEffect mob) {
-		PotionEffectType effect = PotionEffectType.fromName(mob.getDescriptionId());
+		PotionEffectType effect = PotionEffectType.fromName(mob.getDescriptionId().replace("effect.minecraft.", "minecraft:"));
 		if(effect == null) {
 			Adapter.getAdapter().debug("Failed to find effect " + mob + " ('id': " + mob.getDescriptionId() + ")");
+			effect = PotionEffectType.UNKNOW;
 		}
 		return effect;
 	}

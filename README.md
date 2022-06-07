@@ -1,8 +1,15 @@
 # Negativity
 
-A Minecraft AntiCheat for **Spigot** (1.7.10 to 1.16.1) and **Sponge** (API 7.1.0) (*also works with PaperSpigot*).
-It is also compatible with **Bungeecord and Velocity**.
-You need to put the plugin on Spigot/Sponge even if you put it on your proxy.
+It's a Minecraft AntiCheat for multiples platforms :
+- **Spigot** 1.7.10 to 1.18 (*and fork like PaperSpigot or Tuinity*)
+- **Sponge** API 7, 8 & 9
+- **Fabric** v0.53.0 for 1.18
+
+Proxies:
+- **BungeeCord**
+- **Velocity**
+
+If you are using proxy, you should put the plugins on all sub servers where you want to check players.
 
 ## Informations
 
@@ -14,32 +21,11 @@ Suggestions and bug reports can also be filled in [this repository issue tracker
 
 ## How to install ?
 
-1) Download
-
-You can download the plugin here (it's the same plugin, just not on the same website):
-
-[Spigot/Bungeecord](https://www.spigotmc.org/resources/48399),
-[Sponge](https://ore.spongepowered.org/Elikill58/Negativity)
-
-2) Add to your server
-
-On Sponge, you have to place the downloaded file on **/mods folder**.
-
-On Spigot/Bungeecord/Velocity, you have to place it on **/plugins folder**.
-
-3) **Restart** your server
-
-A config file will be automatically generated (at /config/negativity for sponge, /plugins/Negativity for other).
-
-A new "lang" folder will appear on Negativty's config folder.
-
-4) **Enjoy !**
-
-The default config enable you to directly test the plugin !
+Check [installation wiki](https://github.com/Elikill58/Negativity/wiki/Installation) for all informations according to platform.
 
 ## I want to test it before download !
 
-You can check it on **server.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.16.4).
+You can check it on **server.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.18). Warn: it can be offline.
 
 ## What are the detected cheat ?
 
@@ -105,7 +91,8 @@ Examples will be using `./gradlew`, if you are on Windows you need to use `gradl
 
 1. Clone this repository: `git clone https://github.com/Elikill58/Negativity.git`
 2. Get Spigot 1.7.10 and 1.13.2 jars and put them in `/spigot/spigotJars/` (you need to create this directory too)
-3. Setup a Forge workspace for the Sponge plugin: `./gradlew :sponge7:setupDecompWorkspace`. This step will take some time to complete
-4. Build the plugin: `./gradlew build`
+3. You should use buildtools for Spigot 1.17/1.18/1.18.2 (or comment them in `settings.gradle`)
+4. Setup a Forge workspace for the Sponge plugin: `./gradlew :sponge7:setupDecompWorkspace`. This step will take some time to complete
+5. Build the plugin: `./gradlew build`
  - You can find the all-in-one jar in `/build/libs/`
  - Platform-specific jars are available in their own project subdirectories (`/spigot/build/libs/` for example)

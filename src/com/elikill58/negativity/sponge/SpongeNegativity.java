@@ -119,7 +119,7 @@ import ninja.leaping.configurate.hocon.HoconConfigurationLoader;
 
 import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
 
-@Plugin(id = "negativity", name = "Negativity", version = "1.11.1", description = "It's an Advanced AntiCheat Detection", authors = { "Elikill58", "RedNesto" }, dependencies = {
+@Plugin(id = "negativity", name = "Negativity", version = "1.12", description = "It's an Advanced AntiCheat Detection", authors = { "Elikill58", "RedNesto" }, dependencies = {
 		@Dependency(id = "packetgate") })
 public class SpongeNegativity {
 

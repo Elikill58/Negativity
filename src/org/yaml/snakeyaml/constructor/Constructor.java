@@ -364,7 +364,7 @@ public class Constructor extends SafeConstructor
                     final Construct doubleConstructor = Constructor.this.yamlConstructors.get(Tag.FLOAT);
                     result = doubleConstructor.construct(node);
                     if (type == Float.class || type == Float.TYPE) {
-                        result = new Float((double)result);
+                        result = (float) ((double)result);
                     }
                 }
             }

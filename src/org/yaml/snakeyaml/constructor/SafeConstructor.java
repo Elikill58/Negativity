@@ -268,10 +268,10 @@ public class SafeConstructor extends BaseConstructor
             }
             final String valLower = value.toLowerCase();
             if (".inf".equals(valLower)) {
-                return new Double((sign == -1) ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY);
+                return (sign == -1) ? Double.NEGATIVE_INFINITY : Double.POSITIVE_INFINITY;
             }
             if (".nan".equals(valLower)) {
-                return new Double(Double.NaN);
+                return Double.NaN;
             }
             if (value.indexOf(58) != -1) {
                 final String[] digits = value.split(":");
@@ -281,10 +281,9 @@ public class SafeConstructor extends BaseConstructor
                     val += Double.parseDouble(digits[j - i - 1]) * bes;
                     bes *= 60;
                 }
-                return new Double(sign * val);
+                return sign * val;
             }
-            final Double d = Double.valueOf(value);
-            return new Double(d * sign);
+            return Double.valueOf(value) * sign;
         }
     }
     

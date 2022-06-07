@@ -162,7 +162,7 @@ public abstract class Cheat {
 
 			for (Object classDir : UniversalUtils.getClasseNamesInPackage(URLDecoder.decode(dir, "UTF-8"), "com.elikill58.negativity." + Adapter.getAdapter().getName() + ".protocols")) {
 				try {
-					Cheat cheat = (Cheat) Class.forName(classDir.toString().replaceAll(".class", "")).newInstance();
+					Cheat cheat = (Cheat) Class.forName(classDir.toString().replaceAll(".class", "")).getConstructor().newInstance();
 					CHEATS.add(cheat);
 					CHEATS_BY_KEY.put(cheat.key, cheat);
 				} catch (Exception temp) {

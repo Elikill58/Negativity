@@ -1,7 +1,7 @@
 # Negativity
 
 It's a Minecraft AntiCheat for multiples platforms :
-- **Spigot** 1.7.10 to 1.18 (*and fork like PaperSpigot or Tuinity*)
+- **Spigot** 1.7.10 to 1.19 (*and fork like PaperSpigot or Tuinity*)
 - **Sponge** API 7, 8 & 9
 - **Fabric** v0.53.0 for 1.18
 
@@ -25,7 +25,7 @@ Check [installation wiki](https://github.com/Elikill58/Negativity/wiki/Installat
 
 ## I want to test it before download !
 
-You can check it on **server.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.18). Warn: it can be offline.
+You can check it on **server.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.19). Warn: it can be offline.
 
 ## What are the detected cheat ?
 
@@ -91,7 +91,7 @@ Examples will be using `./gradlew`, if you are on Windows you need to use `gradl
 
 1. Clone this repository: `git clone https://github.com/Elikill58/Negativity.git`
 2. Get Spigot 1.7.10 and 1.13.2 jars and put them in `/spigot/spigotJars/` (you need to create this directory too)
-3. You should use buildtools for Spigot 1.17/1.18/1.18.2 (or comment them in `settings.gradle`)
+3. You should use buildtools for Spigot 1.17/1.18/1.18.2/1.19 (or comment them in `settings.gradle`)
 4. Setup a Forge workspace for the Sponge plugin: `./gradlew :sponge7:setupDecompWorkspace`. This step will take some time to complete
 5. Build the plugin: `./gradlew build`
  - You can find the all-in-one jar in `/build/libs/`

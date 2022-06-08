@@ -1,3 +1,3 @@
 ALTER TABLE negativity_bans_log
-    ADD COLUMN execution_time TIMESTAMP,
-    ADD COLUMN revocation_time TIMESTAMP;
+    ADD COLUMN execution_time TIMESTAMP NULL DEFAULT NULL,
+    ADD COLUMN revocation_time TIMESTAMP NULL DEFAULT NULL;

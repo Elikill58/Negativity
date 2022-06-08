@@ -40,7 +40,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 		}
 		double last = data.getLastDistance();
 		double actual = e.getFrom().distance(e.getTo());
-		if (actual >= last && data.timeSinceOpen >= 2) { // if running at least at the same
+		if (actual >= last && data.timeSinceOpen >= 2 && actual >= 0.1) { // if running at least at the same
 			int amount = 1;
 			if (p.isSprinting())
 				amount += data.sprint ? 1 : 5; // more alerts if wasn't sprinting

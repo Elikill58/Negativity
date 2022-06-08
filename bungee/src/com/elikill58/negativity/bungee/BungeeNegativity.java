@@ -49,9 +49,7 @@ public class BungeeNegativity extends Plugin {
 		}
 		
 		try {
-			@SuppressWarnings("deprecation")
-			int port = ProxyServer.getInstance().getConfig().getListeners().iterator().next().getQueryPort();
-			Stats.sendStartupStats(port);
+			Stats.sendStartupStats(ProxyServer.getInstance().getConfigurationAdapter().getListeners().iterator().next().getQueryPort());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

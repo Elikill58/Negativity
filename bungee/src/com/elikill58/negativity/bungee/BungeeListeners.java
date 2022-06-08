@@ -28,6 +28,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.connection.PendingConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.event.ChatEvent;
@@ -161,9 +162,9 @@ public class BungeeListeners implements Listener {
 						new ComponentBuilder(hover.split("\\n")[hover.split("\\n").length - 1]).create()));
 				components.add(hoverMessage);
 				msg.setHoverEvent(
-						new HoverEvent(HoverEvent.Action.SHOW_TEXT, components.toArray(new BaseComponent[0])));
+						new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(components.toArray(new BaseComponent[0]))));
 			} else
-				msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
+				msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(new ComponentBuilder(hover).create())));
 			msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, cmd));
 			return msg;
 		}

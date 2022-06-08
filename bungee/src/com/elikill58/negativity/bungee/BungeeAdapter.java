@@ -37,6 +37,7 @@ import net.md_5.bungee.api.chat.ClickEvent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
+import net.md_5.bungee.api.chat.hover.content.Text;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Plugin;
 import net.md_5.bungee.api.plugin.PluginDescription;
@@ -90,10 +91,9 @@ public class BungeeAdapter extends ProxyAdapter {
 		Negativity.loadNegativity();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
 	public String getVersion() {
-		return ProxyServer.getInstance().getGameVersion();
+		return ProxyServer.getInstance().getVersion();
 	}
 	
 	@Override
@@ -224,7 +224,7 @@ public class BungeeAdapter extends ProxyAdapter {
 	@Override
 	public void sendMessageRunnableHover(Player p, String message, String hover, String command) {
 		TextComponent text = new TextComponent(message);
-		text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new ComponentBuilder(hover).create()));
+		text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new Text(new ComponentBuilder(hover).create())));
 		text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
 		((ProxiedPlayer) p.getDefault()).sendMessage(text);
 	}

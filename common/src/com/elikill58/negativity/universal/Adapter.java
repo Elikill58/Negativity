@@ -81,6 +81,11 @@ public abstract class Adapter {
 	 */
 	public abstract LoggerAdapter getLogger();
 	
+	/**
+	 * Log this message if debug is enabled
+	 * 
+	 * @param msg the message to log
+	 */
 	public abstract void debug(String msg);
 	public abstract TranslationProviderFactory getPlatformTranslationProviderFactory();
 	

@@ -61,19 +61,42 @@ public class Sanction {
 		return permission;
 	}
 
+	/**
+	 * Check if has permission
+	 * 
+	 * @param p the player that we are looking if has permission
+	 * @return true if has permission
+	 */
 	public boolean hasPermission(Player p) {
 		return permission == null || Perm.hasPerm(p, permission);
 	}
 
+	/**
+	 * The command to run
+	 * 
+	 * @return the command to run
+	 */
 	public String getCommand() {
 		return command;
 	}
 
+	/**
+	 * Get the item of this sanction
+	 * 
+	 * @param cible the player which is actually sanctionned
+	 * @return the item
+	 */
 	public ItemStack getItem(OfflinePlayer cible) {
 		return ItemBuilder.Builder(type).displayName(Utils.coloredMessage(applyPlaceholders(getName(), cible)))
 				.lore(getLore().stream().map((s) -> Utils.coloredMessage(applyPlaceholders(s, cible))).collect(Collectors.toList())).build();
 	}
 
+	/**
+	 * Get max slot for the sanction list
+	 * 
+	 * @param list all sanctions that will be used
+	 * @return the max slot
+	 */
 	public static int getMaxSlot(List<Sanction> list) {
 		return list.isEmpty() ? 9
 				: list.stream().sorted((s1, s2) -> s2.getSlot() - s1.getSlot()).findFirst().get().getSlot();

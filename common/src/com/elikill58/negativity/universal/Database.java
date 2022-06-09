@@ -103,10 +103,10 @@ public class Database {
 		}),
 		MYSQL("mysql", "MySQL", () -> {
 			try {
-				Class.forName("com.mysql.cj.jdbc.Driver");
+				Class.forName("com.mysql.cj.jdbc.Driver"); // check for new driver
 			} catch (ClassNotFoundException e1) {
 				try {
-					Class.forName("com.mysql.jdbc.Driver");
+					Class.forName("com.mysql.jdbc.Driver"); // check old driver
 				} catch (ClassNotFoundException e2) {
 					Adapter.getAdapter().getLogger().warn("Cannot find driver for MySQL.");
 				}

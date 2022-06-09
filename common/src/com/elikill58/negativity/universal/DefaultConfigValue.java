@@ -47,6 +47,9 @@ public class DefaultConfigValue {
 		}
 	}
 
+	/**
+	 * Load all default values
+	 */
 	public static void init() {
 		BOOLEANS.clear();
 		INTS.clear();

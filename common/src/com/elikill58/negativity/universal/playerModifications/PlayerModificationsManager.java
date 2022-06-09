@@ -36,6 +36,13 @@ public class PlayerModificationsManager {
 		}
 	}
 	
+	/**
+	 * Check if a player can be protected against the specified damager.
+	 * 
+	 * @param player the player that can be protected
+	 * @param damager the entity that try to damage
+	 * @return true if is protected
+	 */
 	public static boolean isProtected(Player player, Entity damager) {
 		for (PlayerModifications protection : MODIFICATIONS) {
 			if (protection.isProtected(player, damager)) {
@@ -45,6 +52,12 @@ public class PlayerModificationsManager {
 		return false;
 	}
 	
+	/**
+	 * Check if the player can fly
+	 * 
+	 * @param player the player that could fly
+	 * @return true if allowed to fly
+	 */
 	public static boolean canFly(Player player) {
 		for (PlayerModifications protection : MODIFICATIONS) {
 			if (protection.canFly(player)) {
@@ -54,6 +67,12 @@ public class PlayerModificationsManager {
 		return false;
 	}
 	
+	/**
+	 * Check if the player can speed as he wants
+	 * 
+	 * @param player the player
+	 * @return true if can speed
+	 */
 	public static boolean isSpeedUnlocked(Player player) {
 		for (PlayerModifications protection : MODIFICATIONS) {
 			if (protection.isSpeedUnlocked(player)) {
@@ -63,6 +82,12 @@ public class PlayerModificationsManager {
 		return false;
 	}
 	
+	/**
+	 * Check if the movements for this player should be ignored
+	 * 
+	 * @param player the player
+	 * @return true if movement should be ignored
+	 */
 	public static boolean shouldIgnoreMovementChecks(Player player) {
 		for (PlayerModifications protection : MODIFICATIONS) {
 			if (protection.shouldIgnoreMovementChecks(player)) {
@@ -72,6 +97,11 @@ public class PlayerModificationsManager {
 		return false;
 	}
 	
+	/**
+	 * Get all registered modifications
+	 * 
+	 * @return unmodifiable list of modifications
+	 */
 	public static Collection<PlayerModifications> getModifications() {
 		return Collections.unmodifiableCollection(MODIFICATIONS);
 	}

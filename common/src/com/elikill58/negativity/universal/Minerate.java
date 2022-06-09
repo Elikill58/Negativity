@@ -37,6 +37,13 @@ public class Minerate {
 		mined.put(type, value);
 	}
 
+	/**
+	 * Add mined block even if the type is null.<br>
+	 * If type not null, will add mined for this specific type
+	 * 
+	 * @param type the type of the block
+	 * @param player the player that mined it
+	 */
 	public void addMine(MinerateType type, Player player) {
 		fullMined++;
 		if(type == null)
@@ -52,10 +59,21 @@ public class Minerate {
 				xray.hoverMsg("main", "%name%", type.getName(), "%nb%", mined.get(type)));
 	}
 
+	/**
+	 * Get mined block for the given type
+	 * 
+	 * @param type the type
+	 * @return amount of fined type or null if never mined
+	 */
 	public Integer getMinerateType(MinerateType type) {
 		return mined.get(type);
 	}
 
+	/**
+	 * Get full mined blocks
+	 * 
+	 * @return mined blocks
+	 */
 	public int getFullMined() {
 		return fullMined;
 	}

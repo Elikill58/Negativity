@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 public class PacketUtils {
 
@@ -202,24 +203,8 @@ public class PacketUtils {
 
 	public static Object getBoundingBox(Entity p) {
 		try {
-			//((CraftEntity) p).getHandle().getBoundingBox();
 			Object ep = CRAFT_ENTITY_CLASS.getDeclaredMethod("getHandle").invoke(CRAFT_ENTITY_CLASS.cast(p));
-			if(Version.getVersion().equals(Version.V1_7))
-				return getNmsClass("Entity", "world.entity.").getDeclaredField("boundingBox").get(ep);
-			else if(Version.getVersion().isNewerOrEquals(Version.V1_18))
-				return getNmsClass("Entity", "world.entity.").getDeclaredMethod("cw").invoke(ep);
-			else
-				return getNmsClass("Entity", "world.entity.").getDeclaredMethod("getBoundingBox").invoke(ep);
-			/*Class<?> craftMonsterClass = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftEntity");
-			if(cp.getClass().isInstance(craftMonsterClass)) { // prevent protected items
-				Object ep = craftMonsterClass.getDeclaredMethod("getHandle").invoke(craftMonsterClass.cast(cp));
-				if(Version.getVersion().equals(Version.V1_7))
-					return getNmsClass("Entity").getDeclaredField("boundingBox").get(ep);
-				else
-					return getNmsClass("Entity").getDeclaredMethod("getBoundingBox").invoke(ep);
-			} else {
-				SpigotNegativity.getInstance().getLogger().info(cp.getClass().getName() + " isn't " + craftMonsterClass.getName());
-			}*/
+			return ReflectionUtils.getFirstWith(ep, getNmsClass("Entity", "world.entity."), getNmsClass("AxisAlignedBB", "world.phys."));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

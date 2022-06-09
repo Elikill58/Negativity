@@ -255,6 +255,8 @@ alert:
     # %cheat_name% : Cheat name (e.g. "No-Fall") : Can be changed in this config
     # %reliability% : How confident Negativity is that they are cheating
     # %warn% : Amount of warn for this cheat
+    # %ping% : Ping of player
+    # %tps% : Actual TPS
     run:
     - "broadcast %name% might be using %cheat_name%!"
 

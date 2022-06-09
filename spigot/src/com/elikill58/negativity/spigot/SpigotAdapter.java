@@ -160,10 +160,7 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public List<UUID> getOnlinePlayersUUID() {
-		List<UUID> list = new ArrayList<>();
-		for (org.bukkit.entity.Player temp : Utils.getOnlinePlayers())
-			list.add(temp.getUniqueId());
-		return list;
+		return Utils.getOnlinePlayers().stream().map(org.bukkit.entity.Player::getUniqueId).collect(Collectors.toList());
 	}
 
 	@Override

@@ -1,12 +1,16 @@
 package com.elikill58.negativity.common;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
+import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.channel.GameChannelNegativityMessageEvent;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
+import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.events.plugins.ProxyPluginListEvent;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Scheduler;
@@ -57,5 +61,18 @@ public class GameEventsManager implements Listeners {
 		} else {
 			Adapter.getAdapter().getLogger().warn("Received unexpected plugin message " + message.getClass().getName());
 		}
+	}
+	
+	@EventListener(priority = EventPriority.POST)
+	public void onMove(PlayerMoveEvent e) {
+		if(!e.isMovePosition() || e.isCancelled())
+			return;
+		Player p = e.getPlayer();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		Block below = p.getLocation().clone().sub(0, 1, 0).getBlock();
+		if(below.getType().equals(Materials.SLIME_BLOCK)) {
+			np.isUsingSlimeBlock = true;
+		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !below.getType().equals(Materials.AIR)))
+			np.isUsingSlimeBlock = false;
 	}
 }

@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import org.spongepowered.api.block.BlockType;
 import org.spongepowered.api.block.BlockTypes;
-import org.spongepowered.api.data.Keys;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.event.Cancellable;
 import org.spongepowered.api.event.EventContextKeys;
@@ -90,12 +89,6 @@ public class PlayersListeners {
 		BlockType blockTypeBelowPlayer = p.location().sub(0, 1, 0).blockType();
 		if (np.isFreeze && !blockTypeBelowPlayer.equals(BlockTypes.AIR.get()))
 			e.setCancelled(true);
-		
-		if (blockTypeBelowPlayer.equals(BlockTypes.SLIME_BLOCK.get())) {
-			np.isUsingSlimeBlock = true;
-		} else if (np.isUsingSlimeBlock && (p.require(Keys.ON_GROUND) && !blockTypeBelowPlayer.equals(BlockTypes.AIR.get()))) {
-			np.isUsingSlimeBlock = false;
-		}
 	}
 	
 	@Listener

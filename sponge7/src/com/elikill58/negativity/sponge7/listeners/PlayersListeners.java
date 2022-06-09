@@ -23,14 +23,14 @@ import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
 import com.elikill58.negativity.api.events.player.PlayerDeathEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.events.player.PlayerInteractEvent.Action;
-import com.elikill58.negativity.sponge7.impl.entity.SpongeEntityManager;
-import com.elikill58.negativity.sponge7.impl.entity.SpongePlayer;
-import com.elikill58.negativity.sponge7.impl.item.SpongeItemStack;
-import com.elikill58.negativity.sponge7.impl.location.SpongeLocation;
 import com.elikill58.negativity.api.events.player.PlayerItemConsumeEvent;
 import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
+import com.elikill58.negativity.sponge7.impl.entity.SpongeEntityManager;
+import com.elikill58.negativity.sponge7.impl.entity.SpongePlayer;
+import com.elikill58.negativity.sponge7.impl.item.SpongeItemStack;
+import com.elikill58.negativity.sponge7.impl.location.SpongeLocation;
 
 public class PlayersListeners {
 	
@@ -82,11 +82,6 @@ public class PlayersListeners {
 			e.setCancelled(true);
 			return;
 		}
-		
-		if(p.getLocation().copy().sub(0, 1, 0).getBlock().getType().getId().contains("SLIME")) {
-			np.isUsingSlimeBlock = true;
-		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !p.getLocation().copy().sub(0, 1, 0).getBlock().getType().getId().contains("AIR")))
-			np.isUsingSlimeBlock = false;
 	}
 	
 	@Listener
@@ -119,14 +114,5 @@ public class PlayersListeners {
 		PlayerItemConsumeEvent event = new PlayerItemConsumeEvent(SpongeEntityManager.getPlayer(p), new SpongeItemStack(e.getItemStackInUse().createStack()));
 		EventManager.callEvent(event);
 		e.setCancelled(event.isCancelled());
-	}
-
-	@Listener
-	public void slimeManager(MoveEntityEvent e, @First Player p) {
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p.getUniqueId(), () -> new SpongePlayer(p));
-		if(p.getLocation().sub(0, 1, 0).getBlock().getType().getId().contains("SLIME")) {
-			np.isUsingSlimeBlock = true;
-		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !p.getLocation().copy().sub(0, 1, 0).getBlock().getType().equals(BlockTypes.AIR)))
-			np.isUsingSlimeBlock = false;
 	}
 }

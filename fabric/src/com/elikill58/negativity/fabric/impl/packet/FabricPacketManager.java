@@ -60,12 +60,6 @@ public abstract class FabricPacketManager extends PacketManager {
 				event.setCancelled(true);
 				return;
 			}
-
-			if (p.getLocation().clone().sub(0, 1, 0).getBlock().getType().getId().contains("SLIME")) {
-				np.isUsingSlimeBlock = true;
-			} else if (np.isUsingSlimeBlock && (p.isOnGround()
-					&& !p.getLocation().clone().sub(0, 1, 0).getBlock().getType().getId().contains("AIR")))
-				np.isUsingSlimeBlock = false;
 		}
 		EventManager.callEvent(event);
 	}

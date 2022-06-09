@@ -74,10 +74,6 @@ public class PlayersListeners implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-		if(below.getType().name().contains("SLIME")) {
-			np.isUsingSlimeBlock = true;
-		} else if(np.isUsingSlimeBlock && (p.isOnGround() && !below.getType().name().contains("AIR")))
-			np.isUsingSlimeBlock = false;
 	}
 	
 	@EventHandler

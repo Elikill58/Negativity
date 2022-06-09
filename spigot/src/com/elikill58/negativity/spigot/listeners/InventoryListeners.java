@@ -5,6 +5,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryCloseEvent;
+import org.bukkit.event.inventory.InventoryType.SlotType;
 
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.inventory.InventoryAction;
@@ -27,7 +28,7 @@ public class InventoryListeners implements Listener {
 	
 	@EventHandler
 	public void onInventoryClick(org.bukkit.event.inventory.InventoryClickEvent e) {
-		if(!(e.getWhoClicked() instanceof Player) || e.getClickedInventory() == null || e.getCurrentItem() == null)
+		if(!(e.getWhoClicked() instanceof Player) || e.getClickedInventory() == null || e.getCurrentItem() == null || e.getSlotType().equals(SlotType.QUICKBAR))
 			return;
 		com.elikill58.negativity.api.entity.Player p = SpigotEntityManager.getPlayer((Player) e.getWhoClicked());
 		InventoryAction action = getAction(e.getClick());

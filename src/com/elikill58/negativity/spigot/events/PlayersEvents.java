@@ -141,6 +141,13 @@ public class PlayersEvents implements Listener {
 			}
 			Bukkit.getScheduler().runTaskAsynchronously(pl, () -> Utils.sendUpdateMessageIfNeed(p));
 		}
+		if(!Perm.hasPerm(np, Perm.ADMIN)) {
+			SpigotNegativityPlayer.getAllPlayers().values().forEach(npo -> {
+				if(npo.isInvisible) {
+					Utils.hidePlayer(p, npo.getPlayer());
+				}
+			});
+		}
 		SpigotNegativity.manageAutoVerif(p);
 	}
 

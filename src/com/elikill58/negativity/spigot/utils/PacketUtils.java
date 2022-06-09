@@ -8,6 +8,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 public class PacketUtils {
 
@@ -234,12 +235,7 @@ public class PacketUtils {
 	public static Object getBoundingBox(Entity p) {
 		try {
 			Object ep = CRAFT_ENTITY_CLASS.getDeclaredMethod("getHandle").invoke(CRAFT_ENTITY_CLASS.cast(p));
-			if(Version.getVersion().equals(Version.V1_7))
-				return getNmsClass("Entity", "world.entity.").getDeclaredField("boundingBox").get(ep);
-			else if(Version.getVersion().isNewerOrEquals(Version.V1_18))
-				return getNmsClass("Entity", "world.entity.").getDeclaredMethod("cw").invoke(ep);
-			else
-				return getNmsClass("Entity", "world.entity.").getDeclaredMethod("getBoundingBox").invoke(ep);
+			return ReflectionUtils.getFirstWith(ep, getNmsClass("Entity", "world.entity."), getNmsClass("AxisAlignedBB", "world.phys."));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

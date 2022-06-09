@@ -177,7 +177,7 @@ public class PlayersEvents implements Listener {
 			np.isUsingSlimeBlock = false;
 		}
 		if(!e.isCancelled()) {
-			Bukkit.getPluginManager().callEvent(new NegativityPlayerMoveEvent(e));
+			SpigotNegativity.callSyncEvent(new NegativityPlayerMoveEvent(e));
 		}
 	}
 

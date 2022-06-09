@@ -294,7 +294,7 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	public void clearPackets() {
 		PlayerPacketsClearEvent event = new PlayerPacketsClearEvent(getPlayer(), this);
-		Bukkit.getPluginManager().callEvent(event);
+		SpigotNegativity.callSyncEvent(event);
 		int flying = PACKETS.getOrDefault(PacketType.Client.FLYING, 0);
 		if (flying > MAX_FLYING)
 			MAX_FLYING = flying;

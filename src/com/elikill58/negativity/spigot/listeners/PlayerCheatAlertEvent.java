@@ -2,17 +2,16 @@ package com.elikill58.negativity.spigot.listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 
 import com.elikill58.negativity.universal.Cheat;
-import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Cheat.CheatHover;
+import com.elikill58.negativity.universal.ReportType;
 
-public class PlayerCheatAlertEvent extends Event implements Cancellable {
+public class PlayerCheatAlertEvent extends PlayerEvent implements Cancellable {
 
 	private boolean cancel = false, hasRelia, alert;
-	private Player p;
 	private final Cheat c;
 	private final int relia, ping, nbAlert;
 	private int nbConsole;
@@ -52,8 +51,8 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	}
 	
 	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, int nbAlert, int nbAlertConsole) {
+		super(p);
 		this.type = type;
-		this.p = p;
 		this.c = c;
 		this.relia = reliability;
 		this.hasRelia = hasRelia;
@@ -77,10 +76,6 @@ public class PlayerCheatAlertEvent extends Event implements Cancellable {
 	
 	public ReportType getReportType() {
 		return type;
-	}
-	
-	public Player getPlayer() {
-		return p;
 	}
 	
 	public Cheat getCheat() {

@@ -2,26 +2,21 @@ package com.elikill58.negativity.spigot.listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 
-public class ShowAlertPermissionEvent extends Event implements Cancellable {
+public class ShowAlertPermissionEvent extends PlayerEvent implements Cancellable {
 
 	private final boolean basicPerm;
-	private final Player p;
 	private final SpigotNegativityPlayer np;
 	private boolean cancel = false;
 	
 	public ShowAlertPermissionEvent(Player p, SpigotNegativityPlayer np, boolean hasBasicPerm) {
-		this.p = p;
+		super(p);
 		this.np = np;
 		this.basicPerm = hasBasicPerm;
-	}
-	
-	public Player getPlayer() {
-		return p;
 	}
 	
 	public SpigotNegativityPlayer getNegativityPlayer() {

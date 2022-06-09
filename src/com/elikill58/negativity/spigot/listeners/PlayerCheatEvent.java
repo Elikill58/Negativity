@@ -1,25 +1,20 @@
 package com.elikill58.negativity.spigot.listeners;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 
 import com.elikill58.negativity.universal.Cheat;
 
-public class PlayerCheatEvent extends Event {
+public class PlayerCheatEvent extends PlayerEvent {
 
-	private Player p;
 	private Cheat c;
 	private int relia;
 	
 	public PlayerCheatEvent(Player p, Cheat c, int reliability) {
-		this.p = p;
+		super(p);
 		this.c = c;
 		this.relia = reliability;
-	}
-	
-	public Player getPlayer() {
-		return p;
 	}
 	
 	public Cheat getCheat() {

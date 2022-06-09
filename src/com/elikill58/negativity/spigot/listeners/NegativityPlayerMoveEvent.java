@@ -1,29 +1,26 @@
 package com.elikill58.negativity.spigot.listeners;
 
 import org.bukkit.Location;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 
-public class NegativityPlayerMoveEvent extends Event {
+public class NegativityPlayerMoveEvent extends PlayerEvent implements Cancellable {
 
 	private final SpigotNegativityPlayer np;
 	private final PlayerMoveEvent event;
 	
 	public NegativityPlayerMoveEvent(PlayerMoveEvent e) {
+		super(e.getPlayer());
 		this.event = e;
 		this.np = SpigotNegativityPlayer.getNegativityPlayer(e.getPlayer());
 	}
 	
 	public SpigotNegativityPlayer getNegativityPlayer() {
 		return np;
-	}
-	
-	public Player getPlayer() {
-		return event.getPlayer();
 	}
 	
 	public Location getTo() {
@@ -42,10 +39,12 @@ public class NegativityPlayerMoveEvent extends Event {
 		event.setFrom(from);
 	}
 	
+	@Override
 	public boolean isCancelled() {
 		return event.isCancelled();
 	}
 	
+	@Override
 	public void setCancelled(boolean b) {
 		event.setCancelled(b);
 	}

@@ -2,20 +2,19 @@ package com.elikill58.negativity.spigot.listeners;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
+import org.bukkit.event.player.PlayerEvent;
 
 import com.elikill58.negativity.universal.Cheat;
 
-public class PlayerCheatKickEvent  extends Event implements Cancellable {
+public class PlayerCheatKickEvent  extends PlayerEvent implements Cancellable {
 
 	private boolean cancel = false;
-	private Player p;
 	private Cheat c;
 	private int relia;
 	
 	public PlayerCheatKickEvent(Player p, Cheat c, int reliability) {
-		this.p = p;
+		super(p);
 		this.c = c;
 		this.relia = reliability;
 	}
@@ -28,10 +27,6 @@ public class PlayerCheatKickEvent  extends Event implements Cancellable {
 	@Override
 	public void setCancelled(boolean cancel) {
 		this.cancel = cancel;
-	}
-	
-	public Player getPlayer() {
-		return p;
 	}
 	
 	public Cheat getCheat() {

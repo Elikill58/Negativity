@@ -27,6 +27,7 @@ import org.bukkit.command.SimpleCommandMap;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.PluginManager;
@@ -511,11 +512,11 @@ public class SpigotNegativity extends JavaPlugin {
 			}
 		}
 		
-		Bukkit.getPluginManager().callEvent(new PlayerCheatEvent(p, c, reliability));
+		callSyncEvent(new PlayerCheatEvent(p, c, reliability));
 		if (hasBypass && (Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), "bypass." + c.getKey().toLowerCase(Locale.ROOT))
 				|| Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(p), Perm.BYPASS_ALL))) {
 			PlayerCheatBypassEvent bypassEvent = new PlayerCheatBypassEvent(p, c, reliability);
-			Bukkit.getPluginManager().callEvent(bypassEvent);
+			callSyncEvent(bypassEvent);
 			if (!bypassEvent.isCancelled())
 				return false;
 		}
@@ -525,7 +526,7 @@ public class SpigotNegativity extends JavaPlugin {
 			sendAlertMessage(np, alert);
 			return false;
 		}
-		Bukkit.getPluginManager().callEvent(alert);
+		callSyncEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
 		np.addWarn(c, reliability, amount);
@@ -540,7 +541,7 @@ public class SpigotNegativity extends JavaPlugin {
 		Stats.updateStats(StatsType.CHEAT, c, reliability, amount);
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
-			Bukkit.getPluginManager().callEvent(kick);
+			callSyncEvent(kick);
 			if (!kick.isCancelled())
 				p.kickPlayer(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName(), "%reason%", np.getReason(c), "%playername%", p.getName()));
 		}
@@ -725,5 +726,12 @@ public class SpigotNegativity extends JavaPlugin {
 		} else {
 			getInstance().getLogger().severe("Could not send plugin message to proxy because there are no player online.");
 		}
+	}
+	
+	public static void callSyncEvent(Event e) {
+		if(Bukkit.isPrimaryThread())
+			Bukkit.getPluginManager().callEvent(e);
+		else
+			Bukkit.getScheduler().runTask(getInstance(), () -> Bukkit.getPluginManager().callEvent(e));
 	}
 }

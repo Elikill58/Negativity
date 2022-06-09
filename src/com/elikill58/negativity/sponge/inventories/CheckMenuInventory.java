@@ -84,7 +84,7 @@ public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
 					Messages.getStringMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
 		invGrid.set(1, 2, createItem(ItemTypes.ENDER_EYE,
 				Messages.getStringMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
-		if (!p.getUniqueId().equals(cible.getUniqueId()) && !(Perm.hasPerm(np, Perm.MOD) || Perm.hasPerm(np, Perm.ADMIN)))
+		if (!p.getUniqueId().equals(cible.getUniqueId()) && !(Perm.hasPerm(np, Perm.MOD)))
 			invGrid.set(2, 2, createItem(ItemTypes.PACKED_ICE,
 					Messages.getStringMessage(p, "inventory.main.freezing", "%name%", cible.getName())));
 		invGrid.set(3, 2, createItem(ItemTypes.ANVIL,

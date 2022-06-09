@@ -101,6 +101,9 @@ Permissions:
   # 'platform' means Negativity will use supported permissions plugins
   checker: platform
 
+  admin:
+    # Be able to use everything and see vanished player
+    default: "negativity.admin"
   check:
     # Open another player's inventory
     default: "negativity.check"

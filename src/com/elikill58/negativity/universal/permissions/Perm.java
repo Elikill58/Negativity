@@ -34,7 +34,7 @@ public class Perm {
 
 	public static boolean hasPerm(NegativityPlayer np, String perm) {
 		PermissionChecker checker = getActiveChecker();
-		return checker != null && checker.hasPermission(np, perm);
+		return checker != null && (checker.hasPermission(np, perm) || checker.hasPermission(np, ADMIN));
 	}
 
 	@Nullable

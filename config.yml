@@ -258,6 +258,7 @@ alert:
     # %ping% : Ping of player
     # %tps% : Actual TPS like "20.01"
     # %world% : World of the player
+    # %version% : The player version like "1.18"
     run:
     - "broadcast %name% might be using %cheat_name%!"
 

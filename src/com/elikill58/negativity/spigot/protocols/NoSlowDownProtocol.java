@@ -33,7 +33,7 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		SpigotNegativityPlayer np = e.getNegativityPlayer();
-		if (!np.hasDetectionActive(this) || np.hasElytra())
+		if (!np.hasDetectionActive(this) || np.hasElytra() || p.isInsideVehicle())
 			return;
 		Location loc = p.getLocation();
 		Location from = e.getFrom(), to = e.getTo();

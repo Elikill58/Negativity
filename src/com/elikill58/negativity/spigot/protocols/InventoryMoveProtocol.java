@@ -31,7 +31,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this) || np.hasElytra() || p.isInsideVehicle()
 				|| p.getLocation().getBlock().getType().name().contains("WATER") || p.getFallDistance() > 0.5
-				|| np.inventoryMoveData == null) // if in vehicle, in water or falling
+				|| np.inventoryMoveData == null || p.getVelocity().length() > 0.5) // if in vehicle, in water or falling
 			return;
 		if (p.getOpenInventory() == null) {
 			np.inventoryMoveData = null;

@@ -13,6 +13,8 @@ public interface TranslationProvider {
 	/**
 	 * Returns a message of a single line.
 	 * @param key the key of the requested message
+	 * 
+	 * @return get the message according to the key, or null if not found
 	 */
 	@Nullable
 	String get(String key);
@@ -21,6 +23,8 @@ public interface TranslationProvider {
 	 * Returns a message of a single line.
 	 * @param key the key of the requested message
 	 * @param placeholders the placeholders to use in this message
+	 * 
+	 * @return get the message according to the key, or null if not found and replace placehodlers
 	 */
 	@Nullable
 	default String get(String key, Object... placeholders) {
@@ -34,6 +38,8 @@ public interface TranslationProvider {
 	/**
 	 * Returns a message of one or more lines.
 	 * @param key the key of the requested message
+	 * 
+	 * @return get all messages according to the key, or null if not found
 	 */
 	@Nullable
 	List<String> getList(String key);
@@ -42,6 +48,8 @@ public interface TranslationProvider {
 	 * Returns a message of one or more lines.
 	 * @param key the key of the requested message
 	 * @param placeholders the placeholders to use in this message
+	 * 
+	 * @return get all messages according to the key, or null if not found
 	 */
 	@Nullable
 	default List<String> getList(String key, Object... placeholders) {

@@ -140,10 +140,9 @@ public class PacketUtils {
 	}
 	
 	/**
-	 * Get NMS entity player of specified one
+	 * Get NMS server
 	 * 
-	 * @param p the player that we want the NMS entity player
-	 * @return the entity player
+	 * @return the actual NMS server
 	 */
 	public static Object getDedicatedServer() {
 		try {

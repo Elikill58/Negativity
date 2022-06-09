@@ -26,7 +26,7 @@ public class Content<T> {
 	
 	/**
 	 * Edit the value :
-	 * type > valueName:value
+	 * type -> valueName:value
 	 * 
 	 * @param type where the value will be
 	 * @param valueName the value key

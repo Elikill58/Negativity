@@ -34,6 +34,10 @@ public class BanUtils {
 
 	/**
 	 * Basically common code for {@code SpigotNegativity#alertMod} and {@code SpongeNegativity#alertMod}.
+	 * 
+	 * @param player the player to ban if need
+	 * @param cheat the cheat concerned by the try of need
+	 * @param reliability the reliability of the cheat
 	 * @return see {@link BanManager#executeBan}, null if banning was not needed
 	 */
 	public static BanResult banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability) {

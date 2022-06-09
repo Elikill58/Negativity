@@ -23,6 +23,8 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 	
 	/**
 	 * The Negativity inventory type
+	 * 
+	 * @return the type of this inventory
 	 */
 	public NegativityInventory getType() {
 		return type;

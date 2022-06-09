@@ -57,6 +57,7 @@ public class ReflectionUtils {
 	/**
 	 * Get the first field which have the searching for class type
 	 * 
+	 * @param <T> the type that you are looking for
 	 * @param from the object where we will try to find the field
 	 * @param clazz the class that have to define the field
 	 * @param searchingFor the class of the required field

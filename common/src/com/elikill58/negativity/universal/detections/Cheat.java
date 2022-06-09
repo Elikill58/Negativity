@@ -115,7 +115,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	/**
 	 * Check if a detection is active
 	 * 
-	 * @param checkName the name of the detection
+	 * @param check the check that we are looking to check
 	 * @return true if the detection is active
 	 */
 	public boolean checkActive(Check check) {
@@ -135,7 +135,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	/**
 	 * Check if a detection is active
 	 * 
-	 * @param checkName the name of the detection
+	 * @param check the check of the detection
 	 * @param active if the check will be active
 	 */
 	public void setCheckActive(Check check, boolean active) {
@@ -276,6 +276,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	/**
 	 * Add data to verification
 	 * 
+	 * @param <T> The type of the recorded data
 	 * @param target the player which create the data
 	 * @param type the data type
 	 * @param value the value recorded

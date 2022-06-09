@@ -44,6 +44,7 @@ public class PacketContent {
 	/**
 	 * Get content modifier of a custom type
 	 * 
+	 * @param <T> the type used in the content modifier
 	 * @param type the searched type
 	 * @return the content modifier of the type
 	 */
@@ -54,6 +55,7 @@ public class PacketContent {
 	/**
 	 * Get content modifier of a custom type
 	 * 
+	 * @param <T> the type used in the content modifier
 	 * @param clazz the searched type
 	 * @return the content modifier of the type
 	 */

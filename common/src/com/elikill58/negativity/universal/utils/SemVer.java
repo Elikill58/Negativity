@@ -36,6 +36,9 @@ public final class SemVer implements Comparable<SemVer> {
 	 * Slightly different from {@link #equals} in that this method will return
 	 * true if the suffix has the same {@link Suffix#getWeight() weight}
 	 * but not the same {@link Suffix#getText()} text
+	 * 
+	 * @param other the version to compare with
+	 * @return true if version are equivalent
 	 */
 	public boolean isEquivalentTo(SemVer other) {
 		return this.compareTo(other) == 0;

@@ -75,6 +75,7 @@ public class BanManager {
 	 * <p>
 	 * The ban may not be executed if bans are disabled, or for any {@link BanProcessor}-specific reason, like if the player bypassed the ban.
 	 *
+	 * @param ban the ban to execute
 	 * @return the result of the ban with success informations
 	 */
 	public static BanResult executeBan(Ban ban) {
@@ -143,6 +144,8 @@ public class BanManager {
 	
 	/**
 	 * Indicates whether Negativity should kick banned players
+	 * 
+	 * @return true if there is a processor and if it enable negativity's kick
 	 */
 	public static boolean shouldNegativityHandleBans() {
 		BanProcessor processor = getProcessor();

@@ -42,22 +42,25 @@ Translation:
   active: false # enable or disable the translation
   lang_available:
   - ar_EG
+  - cs_CZ
   - de_DE
   - en_US
   - es_ES
   - fr_FR
   - hu_HU
   - it_IT
+  - id_ID
+  - ko_KR
   - nl_NL
   - no_NO
   - pl_PL
   - pt_BR
   - ro_RO
   - ru_RU
+  - sq_SQ
   - sv_SV
   - vi_VN
   - zh_CN
-  - cs_CZ
   default: en_US
   # The provider used to get translated messages, useful if you want to customize the way Negativity gets its messages.
   # The only one available out-of-the-box is "platform".

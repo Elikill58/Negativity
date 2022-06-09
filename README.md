@@ -64,6 +64,7 @@ We support a lot of languages :
 - **Egyptian Arabic** (*ar_EG*) By Andro Sameh#6837
 - **Hungarian** (*hu_HU*) By HasX#1966
 - **Korean** (*ko_KR*) By soshimee#4397
+- **Indonesian** (*id_ID*) By Dave9123#0757
 
 To change the lang, just use "/nlang" or change "Translation.default" to the one that you want.
 

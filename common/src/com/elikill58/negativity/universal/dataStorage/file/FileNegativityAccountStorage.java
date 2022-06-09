@@ -3,13 +3,14 @@ package com.elikill58.negativity.universal.dataStorage.file;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
@@ -25,9 +26,35 @@ import com.elikill58.negativity.universal.report.Report;
 public class FileNegativityAccountStorage extends NegativityAccountStorage {
 
 	private final File userDir;
-
+	private final Configuration ipConfig;
+	
 	public FileNegativityAccountStorage(File userDir) {
 		this.userDir = userDir;
+		File ipFile = new File(userDir.getParent(), "player-ips.yml");
+		if(!ipFile.exists()) { // file doesn't exist
+			try {
+				ipFile.createNewFile();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			ipConfig = YamlConfiguration.load(ipFile);
+			
+			List<File> userFiles = Arrays.asList(userDir.listFiles()).stream().filter(f -> f.getName().endsWith(".yml") && !f.getName().equals(ipFile.getName())).collect(Collectors.toList());
+			if(!userFiles.isEmpty()) { // some player already join, should index them
+				for(File f : userFiles) {
+					Configuration acc = YamlConfiguration.load(f);
+					if(!acc.contains("ip"))
+						continue;
+					String ip = acc.getString("ip");
+					List<String> uuidPerIP = ipConfig.getStringList(ip);
+					uuidPerIP.add(f.getName().split("\\.")[0]);
+					ipConfig.set(ip, uuidPerIP);
+				}
+				ipConfig.save();
+				Adapter.getAdapter().getLogger().info("Old version detected, adding index file for players IPs.");
+			}
+		} else
+			ipConfig = YamlConfiguration.load(ipFile);
 	}
 
 	@Override
@@ -65,7 +92,8 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 	@Override
 	public CompletableFuture<Void> saveAccount(NegativityAccount account) {
 		return CompletableFuture.runAsync(() -> {
-			File file = new File(userDir, account.getPlayerId() + ".yml");
+			String uuid = account.getPlayerId().toString();
+			File file = new File(userDir, uuid + ".yml");
 			if(!file.exists()) {
 				try {
 					userDir.mkdirs();
@@ -75,6 +103,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 				}
 			}
 			Configuration accountConfig = YamlConfiguration.load(file);
+			String oldIp = accountConfig.getString("ip");
 			accountConfig.set("playername", account.getPlayerName());
 			accountConfig.set("lang", account.getLang());
 			accountConfig.set("minerate-full-mined", account.getMinerate().getFullMined());
@@ -85,6 +114,24 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 			accountConfig.set("ip", account.getIp());
 			accountConfig.set("creation-time", account.getCreationTime());
 			accountConfig.save();
+			
+			// now check for IP file
+			if(oldIp == null) { // new account, should just add the UUID to the new IP
+				List<String> uuidPerIP = ipConfig.getStringList(account.getIp());
+				uuidPerIP.add(uuid);
+				ipConfig.set(account.getIp(), uuidPerIP);
+				ipConfig.save();
+			} else if(!oldIp.equalsIgnoreCase(account.getIp())) { // if the IP change
+				List<String> uuidOnOldIp = ipConfig.getStringList(oldIp);
+				if(uuidOnOldIp.size() == 1 && uuidOnOldIp.get(0).equalsIgnoreCase(uuid)) { // only this UUID for this IP
+					ipConfig.set(oldIp, null);
+				}
+				// now add to new IP
+				List<String> uuidPerIP = ipConfig.getStringList(account.getIp());
+				uuidPerIP.add(uuid);
+				ipConfig.set(account.getIp(), uuidPerIP);
+				ipConfig.save();
+			}
 		});
 	}
 
@@ -155,7 +202,6 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 	
 	@Override
 	public List<UUID> getPlayersOnIP(String ip) {
-		// TODO Implement getting players on IP when using file system
-		return Collections.emptyList();
+		return ipConfig.getStringList(ip).stream().map(UUID::fromString).collect(Collectors.toList());
 	}
 }

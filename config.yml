@@ -256,7 +256,8 @@ alert:
     # %reliability% : How confident Negativity is that they are cheating
     # %warn% : Amount of warn for this cheat
     # %ping% : Ping of player
-    # %tps% : Actual TPS
+    # %tps% : Actual TPS like "20.01"
+    # %world% : World of the player
     run:
     - "broadcast %name% might be using %cheat_name%!"
 

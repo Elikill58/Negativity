@@ -8,6 +8,7 @@ import java.util.Locale;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Entity;
+import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
@@ -60,6 +61,8 @@ public class ForceField extends Cheat {
 		Player p = e.getPlayer();
 		boolean mayCancel = false;
 		Entity cible = e.getDamaged();
+		if(cible.getType().equals(EntityType.WITHER) || cible.getType().equals(EntityType.ENDER_DRAGON))
+			return;
 		EntityRayResult ray = new EntityRayBuilder(p).build().compile();
 		List<Entity> lookingEntities = ray.getEntitiesFounded();
 		boolean newSee = !lookingEntities.isEmpty() && lookingEntities.stream().filter(cible::isSameId).findFirst().isPresent();

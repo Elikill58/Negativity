@@ -48,7 +48,7 @@ public class InventoryMove extends Cheat implements Listeners {
 		}
 		double last = data.getLastDistance();
 		double actual = e.getFrom().distance(e.getTo());
-		if (actual >= last && data.timeSinceOpen >= 2 && actual >= 0.1) { // if running at least at the same
+		if (actual >= last && data.timeSinceOpen >= 5 && actual >= 0.1) { // if running at least at the same
 			int amount = 1;
 			if (p.isSprinting())
 				amount += data.sprint ? 1 : 5; // more alerts if wasn't sprinting

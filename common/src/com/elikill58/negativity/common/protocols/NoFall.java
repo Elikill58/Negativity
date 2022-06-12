@@ -206,10 +206,10 @@ public class NoFall extends Cheat {
 		// boolean ownGroundBefore = verticalCollision && difY < 0.0;
 		Material type = to.sub(0, 0.1, 0).getBlock().getType();
 		boolean ownGround = !p.isFlying() && type.isSolid();
-		if (p.isOnGround() && !ownGround) {
+		if (p.isOnGround() && !ownGround && p.getVelocity().getY() <= difY) {
 			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(Math.abs(difY) * 250),
 					"fake-ground",
-					"Dif: " + difY + ", " + p.isFlying() + ", type: " + type.getId() + ", vel: " + p.getVelocity(),
+					"Dif: " + difY + ", " + p.getFallDistance() + ", type: " + type.getId() + ", vel: " + p.getVelocity(),
 					new CheatHover.Literal("Y: " + String.format("%.3f", difY)), (long) (Math.abs(difY) * 5));
 		}
 	}

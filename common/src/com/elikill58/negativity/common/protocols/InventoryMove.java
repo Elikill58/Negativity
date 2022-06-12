@@ -56,7 +56,7 @@ public class InventoryMove extends Cheat implements Listeners {
 				amount += data.sneak ? 1 : 5; // more alerts if wasn't sneaking
 			Negativity.alertMod(np.getAllWarn(this) > 5 && amount > 1 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, UniversalUtils.parseInPorcent(80 + data.getTimeSinceOpen()), "stay-distance",
-					"Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking() + ", data: " + data, null, amount);
+					"Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking() + ", data: " + data + ", vel: " + p.getVelocity() + ", fd: " + String.format("%.5f", p.getFallDistance()), null, amount);
 		}
 		data.setDistance(actual);
 	}

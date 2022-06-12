@@ -235,6 +235,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 					sender.sendMessage(ChatColor.YELLOW + "No webhook configurated.");
 				} else {
 					for(Webhook hook : webhooks) {
+						
 						if(hook.ping(sender.getName())) {
 							sender.sendMessage(ChatColor.GREEN + hook.getWebhookName() + " well configurated.");
 						} else {
@@ -417,6 +418,8 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				suggestions.add("admin");
 			if ("debug".startsWith(prefix))
 				suggestions.add("debug");
+			if ("webhook".startsWith(prefix) && WebhookManager.isEnabled())
+				suggestions.add("webhook");
 		} else {
 			if (arg[0].equalsIgnoreCase("verif") || arg[0].equalsIgnoreCase("debug")) {
 				// both command use tab arguments to works

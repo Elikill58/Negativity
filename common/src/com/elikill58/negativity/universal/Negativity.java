@@ -339,7 +339,7 @@ public class Negativity {
 			actualizeInvTimer = ada.getScheduler().runRepeating(new ActualizeInvTimer(), 10, 10);
 			if(analyzePacketTimer != null)
 				analyzePacketTimer.cancel();
-			analyzePacketTimer = ada.getScheduler().runRepeating(new AnalyzePacketTimer(), 10, 10);
+			analyzePacketTimer = ada.getScheduler().runRepeating(new AnalyzePacketTimer(), 20, 20);
 			if(config.getBoolean("use-proxy-force", false)) {
 				ProxyCompanionManager.forceCompanion();
 				ada.getLogger().info("Force proxy used without sending searching message.");

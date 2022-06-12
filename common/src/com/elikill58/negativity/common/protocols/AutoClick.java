@@ -1,7 +1,5 @@
 package com.elikill58.negativity.common.protocols;
 
-import java.time.Duration;
-
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
@@ -11,10 +9,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.utils.Utils;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.Scheduler;
-import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -31,19 +26,6 @@ public class AutoClick extends Cheat {
 
 	public AutoClick() {
 		super(CheatKeys.AUTO_CLICK, CheatCategory.COMBAT, Materials.FISHING_ROD, CheatDescription.VERIF);
-		Scheduler.getInstance().runRepeatingAsync(() -> {
-			for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
-				NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-				NegativityAccount account = np.getAccount();
-				int click = np.getClick();
-				if (account.getMostClicksPerSecond() < click) {
-					account.setMostClicksPerSecond(click);
-				}
-				recordData(p.getUniqueId(), CLICKS, click);
-				np.lastClick = click;
-				np.clearClick();
-			}
-		}, Duration.ofSeconds(1), Duration.ofSeconds(1), "Negativity AutoClick Monitor");
 	}
 
 	@Check(name = "count", description = "Count click 1 by 1")

@@ -9,10 +9,13 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.potion.PotionEffect;
+import com.elikill58.negativity.common.protocols.AutoClick;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Negativity;
+import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.detections.Cheat;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -70,6 +73,14 @@ public class AnalyzePacketTimer implements Runnable {
 				}
 			}
 
+			NegativityAccount account = np.getAccount();
+			int click = np.getClick();
+			if (account.getMostClicksPerSecond() < click) {
+				account.setMostClicksPerSecond(click);
+			}
+			Cheat.forKey(CheatKeys.AUTO_CLICK).recordData(p.getUniqueId(), AutoClick.CLICKS, click);
+			np.lastClick = click;
+			np.clearClick();
 			np.clearPackets();
 		}
 	}

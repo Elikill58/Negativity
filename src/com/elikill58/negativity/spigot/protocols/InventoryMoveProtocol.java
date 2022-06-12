@@ -31,7 +31,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this) || np.hasElytra() || p.isInsideVehicle()
 				|| p.getLocation().getBlock().getType().name().contains("WATER") || p.getFallDistance() > 0.5
-				|| np.inventoryMoveData == null || p.getVelocity().length() > 0.5) // if in vehicle, in water or falling
+				|| np.inventoryMoveData == null || p.getVelocity().length() > 0.1) // if in vehicle, in water or falling
 			return;
 		if (p.getOpenInventory() == null) {
 			np.inventoryMoveData = null;
@@ -41,7 +41,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 		InventoryMoveData data = np.inventoryMoveData;
 		double last = data.getLastDistance();
 		double actual = e.getFrom().distance(e.getTo());
-		if (actual >= last && data.timeSinceOpen >= 2 && actual >= 0.1) { // if running at least at the same
+		if (actual >= last && data.timeSinceOpen >= 4 && actual >= 0.1) { // if running at least at the same
 			InventoryView iv = p.getOpenInventory();
 			Adapter.getAdapter().debug("IV " + iv.getType().name() + ": " + iv.getBottomInventory().getSize() + " / " + iv.getTopInventory().getSize() + " > " + String.format("%.3f", last) + " / " + String.format("%.3f", actual));
 			int amount = 1;
@@ -51,7 +51,7 @@ public class InventoryMoveProtocol extends Cheat implements Listener {
 				amount += data.sneak ? 1 : 5; // more alerts if wasn't sneaking
 			SpigotNegativity.alertMod(np.getAllWarn(this) > 5 && amount > 1 ? ReportType.VIOLATION : ReportType.WARNING,
 					p, this, UniversalUtils.parseInPorcent(80 + data.getTimeSinceOpen()),
-					"Sprint: " + p.isSprinting() + ", Sneak: " + p.isSneaking() + ", data: " + data, (CheatHover) null,
+					"Sprint: " + p.isSprinting() + ", Sneak: " + p.isSneaking() + ", data: " + data + ", vel: " + p.getVelocity() + ", velLen: " + p.getVelocity().length() + ", fd: " + String.format("%.5f", p.getFallDistance()), (CheatHover) null,
 					amount);
 		}
 		data.setDistance(actual);

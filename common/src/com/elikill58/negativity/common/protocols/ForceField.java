@@ -63,7 +63,7 @@ public class ForceField extends Cheat {
 		Entity cible = e.getDamaged();
 		if(cible.getType().equals(EntityType.WITHER) || cible.getType().equals(EntityType.ENDER_DRAGON))
 			return;
-		EntityRayResult ray = new EntityRayBuilder(p).build().compile();
+		EntityRayResult ray = new EntityRayBuilder(p).onlyPlayers(false).build().compile();
 		List<Entity> lookingEntities = ray.getEntitiesFounded();
 		boolean newSee = !lookingEntities.isEmpty() && lookingEntities.stream().filter(cible::isSameId).findFirst().isPresent();
 		if(p != cible && !p.hasLineOfSight(cible) && !newSee) {

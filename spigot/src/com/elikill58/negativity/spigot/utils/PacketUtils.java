@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 public class PacketUtils {
 
@@ -17,8 +16,9 @@ public class PacketUtils {
 			.split(",")[3];
 	public static final String NMS_PREFIX;
 
+	@Deprecated
 	public static Class<?> CRAFT_PLAYER_CLASS, CRAFT_SERVER_CLASS, CRAFT_ENTITY_CLASS;
-	public static Class<?> ENUM_PLAYER_INFO = SpigotVersionAdapter.getVersionAdapter().getEnumPlayerInfoAction();
+	public static final Class<?> ENUM_PLAYER_INFO = SpigotVersionAdapter.getVersionAdapter().getEnumPlayerInfoAction();
 	
 	static {
 		NMS_PREFIX = Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? "net.minecraft." : "net.minecraft.server." + VERSION + ".";
@@ -32,7 +32,7 @@ public class PacketUtils {
 	}
 	
 	/**
-	 * This Map is to reduce Reflection action which take more ressources than just RAM action
+	 * This Map is to reduce Reflection action which take more resources than just RAM action
 	 */
 	private static final HashMap<String, Class<?>> ALL_CLASS = new HashMap<>();
 	
@@ -58,6 +58,25 @@ public class PacketUtils {
 			return ALL_CLASS.computeIfAbsent(name, (s) -> {
 				try {
 					return Class.forName(NMS_PREFIX + (Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? packagePrefix : "") + name);
+				} catch (Exception e) {
+					e.printStackTrace();
+					return null;
+				}
+			});
+		}
+	}
+	
+	/**
+	 * Get the Class in NMS, with a processing reducer
+	 * 
+	 * @param name of the OBC class (in org.bukkit.craftbukkit.version. package ONLY, because it's OBC)
+	 * @return the loaded or cached class
+	 */
+	public static Class<?> getObcClass(String name){
+		synchronized(ALL_CLASS) {
+			return ALL_CLASS.computeIfAbsent(name, (s) -> {
+				try {
+					return Class.forName("org.bukkit.craftbukkit." + VERSION + "." + name);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;
@@ -131,7 +150,7 @@ public class PacketUtils {
 	 */
 	public static Object getEntityPlayer(Player p) {
 		try {
-			Object craftPlayer = CRAFT_PLAYER_CLASS.cast(p);
+			Object craftPlayer = getObcClass("entity.CraftPlayer").cast(p);
 			return craftPlayer.getClass().getMethod("getHandle").invoke(craftPlayer);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -146,7 +165,7 @@ public class PacketUtils {
 	 */
 	public static Object getDedicatedServer() {
 		try {
-			Object server = CRAFT_SERVER_CLASS.cast(Bukkit.getServer());
+			Object server = getObcClass("CraftServer").cast(Bukkit.getServer());
 			return server.getClass().getMethod("getServer").invoke(server);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -162,7 +181,7 @@ public class PacketUtils {
 	 */
 	public static Object getNMSEntity(Entity et) {
 		try {
-			Object craftEntity = CRAFT_ENTITY_CLASS.cast(et);
+			Object craftEntity = getObcClass("entity.CraftEntity").cast(et);
 			return craftEntity.getClass().getMethod("getHandle").invoke(craftEntity);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -178,7 +197,7 @@ public class PacketUtils {
 	 */
 	public static Object getWorldServer(Location loc) {
 		try {
-			Object object = Class.forName("org.bukkit.craftbukkit." + VERSION + ".CraftWorld").cast(loc.getWorld());
+			Object object = getObcClass("CraftWorld").cast(loc.getWorld());
 			return object.getClass().getMethod("getHandle").invoke(object);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -198,15 +217,5 @@ public class PacketUtils {
 			e.printStackTrace();
 			return null;
 		}
-	}
-
-	public static Object getBoundingBox(Entity p) {
-		try {
-			Object ep = CRAFT_ENTITY_CLASS.getDeclaredMethod("getHandle").invoke(CRAFT_ENTITY_CLASS.cast(p));
-			return ReflectionUtils.getFirstWith(ep, getNmsClass("Entity", "world.entity."), getNmsClass("AxisAlignedBB", "world.phys."));
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return null;
 	}
 }

@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
@@ -75,6 +76,7 @@ import net.minecraft.server.network.ServerConnectionListener;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -307,5 +309,11 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 	public com.elikill58.negativity.api.location.BlockPosition getBlockPosition(Object obj) {
 		BlockPos pos = (BlockPos) obj;
 		return new com.elikill58.negativity.api.location.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
+	}
+	
+	@Override
+	public BoundingBox getBoundingBox(Entity et) {
+		AABB bb = ((CraftEntity) et).getHandle().getBoundingBox();
+		return new BoundingBox(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
 	}
 }

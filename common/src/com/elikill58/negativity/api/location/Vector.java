@@ -131,6 +131,19 @@ public class Vector implements Cloneable {
 	}
 
 	/**
+	 * Divide the current vector to the given length
+	 * 
+	 * @param len the length
+	 * @return this vector
+	 */
+	public Vector divide(double len) {
+		this.x /= len;
+		this.y /= len;
+		this.z /= len;
+		return this;
+	}
+
+	/**
 	 * Copy the given vector to the current.
 	 * 
 	 * @param vec the new vector values of this one
@@ -224,13 +237,7 @@ public class Vector implements Cloneable {
 	}
 
 	public Vector normalize() {
-		double length = length();
-
-		this.x /= length;
-		this.y /= length;
-		this.z /= length;
-
-		return this;
+		return divide(length());
 	}
 
 	public Vector zero() {

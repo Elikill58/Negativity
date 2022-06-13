@@ -16,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
 import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
@@ -69,14 +70,13 @@ import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundPongPacket;
 import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
 import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
-import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.server.network.ServerConnectionListener;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
@@ -295,8 +295,7 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 	@Override
 	public List<ChannelFuture> getFuturChannel() {
 		try {
-			Object co = ReflectionUtils.getFirstWith(getServer(), MinecraftServer.class, ServerConnectionListener.class);
-			return ((List<ChannelFuture>) ReflectionUtils.getField(co, "f"));
+			return ((List<ChannelFuture>) ReflectionUtils.getField(getServer().getConnection(), "f"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new ArrayList<>();
@@ -317,5 +316,11 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 	public com.elikill58.negativity.api.location.BlockPosition getBlockPosition(Object obj) {
 		BlockPos pos = (BlockPos) obj;
 		return new com.elikill58.negativity.api.location.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
+	}
+	
+	@Override
+	public BoundingBox getBoundingBox(Entity et) {
+		AABB bb = ((CraftEntity) et).getHandle().getBoundingBox();
+		return new BoundingBox(bb.minX, bb.minY, bb.minZ, bb.maxX, bb.maxY, bb.maxZ);
 	}
 }

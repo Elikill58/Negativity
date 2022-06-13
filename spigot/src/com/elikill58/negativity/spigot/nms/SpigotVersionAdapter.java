@@ -18,6 +18,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.BlockPosition;
@@ -310,6 +311,43 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	
 	public List<Entity> getEntities(World w){
 		return w.getEntities();
+	}
+	
+	public BoundingBox getBoundingBox(Entity et) {
+		try {
+			Class<?> craftEntityClass = PacketUtils.getObcClass("entity.CraftEntity");
+			Object ep = craftEntityClass.getDeclaredMethod("getHandle").invoke(craftEntityClass.cast(et));
+			Object bb = ReflectionUtils.getFirstWith(ep, PacketUtils.getNmsClass("Entity", "world.entity."), PacketUtils.getNmsClass("AxisAlignedBB", "world.phys."));
+			Class<?> clss = bb.getClass();
+			boolean hasMinField = false;
+			for(Field f : clss.getFields())
+				if(f.getName().equalsIgnoreCase("minX"))
+					hasMinField = true;
+			if(Version.getVersion().isNewerOrEquals(Version.V1_13) && hasMinField) {
+				double minX = clss.getField("minX").getDouble(bb);
+				double minY = clss.getField("minY").getDouble(bb);
+				double minZ = clss.getField("minZ").getDouble(bb);
+				
+				double maxX = clss.getField("maxX").getDouble(bb);
+				double maxY = clss.getField("maxY").getDouble(bb);
+				double maxZ = clss.getField("maxZ").getDouble(bb);
+				
+				return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
+			} else {
+				double minX = clss.getField("a").getDouble(bb);
+				double minY = clss.getField("b").getDouble(bb);
+				double minZ = clss.getField("c").getDouble(bb);
+				
+				double maxX = clss.getField("d").getDouble(bb);
+				double maxY = clss.getField("e").getDouble(bb);
+				double maxZ = clss.getField("f").getDouble(bb);
+				
+				return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public abstract BlockPosition getBlockPosition(Object obj);

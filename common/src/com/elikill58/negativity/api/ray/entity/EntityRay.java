@@ -31,11 +31,11 @@ public class EntityRay {
 		this.position = position.clone();
 		this.basePosition = position.clone();
 		this.maxDistance = maxDistance;
-		this.vector = vector.normalize();
+		this.vector = vector.normalize().divide(2);
 		this.entities = new ArrayList<>(w.getEntities());
 		this.entities.removeAll(bypassEntities);
 		if(onlyPlayers)
-			this.entities.removeIf((et) -> et.getType().equals(EntityType.PLAYER));
+			this.entities.removeIf((et) -> !et.getType().equals(EntityType.PLAYER));
 	}
 	
 	/**
@@ -156,12 +156,22 @@ public class EntityRay {
 		lastDistance = v.clone().distance(basePosition.toVector()); // check between both distance
 		if(lastDistance >= maxDistance)
 			return foundedEntities.isEmpty() ? RayResult.TOO_FAR : RayResult.NEEDED_FOUND; // Too far
-		testedVec.put(v, Materials.STICK); // will be replaced when getting from exact block
+		testedVec.put(v, Materials.STICK); // don't carrying of which block
 		Point point = new Point(v);
+		Point pointPos = new Point(position.toVector());
 		for(Entity et : new ArrayList<>(entities)) {
 			if(et.getBoundingBox().isIn(point)) {
 				entities.remove(et);
 				foundedEntities.add(et);
+			} else {
+				double dis = et.getLocation().distance(position);
+				if(dis < 2) {
+					double pointDis = et.getBoundingBox().getAllPoints().stream().mapToDouble(p -> p.distance(pointPos)).min().orElse(1);
+					if(pointDis < 0.5) {
+						entities.remove(et);
+						foundedEntities.add(et);
+					}
+				}
 			}
 		}
 		return entities.isEmpty() ? (foundedEntities.isEmpty() ? RayResult.NEEDED_NOT_FOUND : RayResult.NEEDED_FOUND) : RayResult.CONTINUE;

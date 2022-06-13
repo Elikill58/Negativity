@@ -1,7 +1,5 @@
 package com.elikill58.negativity.spigot.impl.entity;
 
-import java.lang.reflect.Field;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.HumanEntity;
@@ -13,8 +11,7 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
-import com.elikill58.negativity.spigot.utils.PacketUtils;
-import com.elikill58.negativity.universal.Version;
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 
 public class SpigotEntity<E extends Entity> extends AbstractEntity {
 
@@ -109,37 +106,6 @@ public class SpigotEntity<E extends Entity> extends AbstractEntity {
 	
 	@Override
 	public BoundingBox getBoundingBox() {
-		try {
-			Object bb = PacketUtils.getBoundingBox(entity);
-			Class<?> clss = bb.getClass();
-			boolean hasMinField = false;
-			for(Field f : clss.getFields())
-				if(f.getName().equalsIgnoreCase("minX"))
-					hasMinField = true;
-			if(Version.getVersion().isNewerOrEquals(Version.V1_13) && hasMinField) {
-				double minX = clss.getField("minX").getDouble(bb);
-				double minY = clss.getField("minY").getDouble(bb);
-				double minZ = clss.getField("minZ").getDouble(bb);
-				
-				double maxX = clss.getField("maxX").getDouble(bb);
-				double maxY = clss.getField("maxY").getDouble(bb);
-				double maxZ = clss.getField("maxZ").getDouble(bb);
-				
-				return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
-			} else {
-				double minX = clss.getField("a").getDouble(bb);
-				double minY = clss.getField("b").getDouble(bb);
-				double minZ = clss.getField("c").getDouble(bb);
-				
-				double maxX = clss.getField("d").getDouble(bb);
-				double maxY = clss.getField("e").getDouble(bb);
-				double maxZ = clss.getField("f").getDouble(bb);
-				
-				return new BoundingBox(minX, minY, minZ, maxX, maxY, maxZ);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		return SpigotVersionAdapter.getVersionAdapter().getBoundingBox(entity);
 	}
 }

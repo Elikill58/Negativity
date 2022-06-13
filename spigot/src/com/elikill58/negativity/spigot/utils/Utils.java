@@ -118,4 +118,13 @@ public class Utils {
 		skullmeta.setOwner(owner.getName());
 		return itemStack;
 	}
+	
+	public static String getBukkitServerName() {
+		try {
+			return (String) Bukkit.class.getDeclaredMethod(Version.getVersion().isNewerOrEquals(Version.V1_16) ? "getName" : "getServerName").invoke(null);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 }

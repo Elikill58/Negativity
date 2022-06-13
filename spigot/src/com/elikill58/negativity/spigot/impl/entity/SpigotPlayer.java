@@ -28,6 +28,7 @@ import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
+import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
@@ -441,7 +442,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	
 	@Override
 	public String getServerName() {
-		return Bukkit.getServerName();
+		return Utils.getBukkitServerName();
 	}
 
 	@Override

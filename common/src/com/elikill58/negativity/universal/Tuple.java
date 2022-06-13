@@ -17,4 +17,9 @@ public class Tuple<R, T> {
 	public T getB() {
 		return b;
 	}
+	
+	@Override
+	public String toString() {
+		return "Tuple{" + a + "," + b + "}";
+	}
 }

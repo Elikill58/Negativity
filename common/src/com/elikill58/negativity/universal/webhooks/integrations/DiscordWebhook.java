@@ -108,6 +108,7 @@ public class DiscordWebhook implements Webhook {
     	try {
     		sendAsyncWithException(msg);
     	} catch (Exception e) {
+    		Adapter.getAdapter().getLogger().error("Error while sending webhook messages: " + e.getMessage() + " " + e.getStackTrace()[0].toString());
     		e.printStackTrace();
 		}
     }
@@ -128,7 +129,7 @@ public class DiscordWebhook implements Webhook {
     	ada.debug("Sending webhook message for " + msg.getMessageType().name());
     	queue.remove(msg);
     	DiscordWebhookRequest webhook = new DiscordWebhookRequest(webhookUrl);
-    	webhook.setUsername(msg.applyPlaceHolders(confMsg.getString("username", "Negativity")));
+	    webhook.setUsername(msg.applyPlaceHolders(confMsg.getString("username", "Negativity")));
 	    webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content", "")));
 	    webhook.setAvatarUrl(msg.applyPlaceHolders(confMsg.getString("avatar_url", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")));
 	    Configuration embed = confMsg.getSection("embed");
@@ -161,8 +162,11 @@ public class DiscordWebhook implements Webhook {
 		    }
 
 		    webhook.addEmbed(obj);
-	    }
+		    ada.debug("Added embed");
+	    } else
+		    ada.debug("No embed to add.");
 		Tuple<Integer, String> webhookResult = webhook.execute();
+	    ada.debug("Webhook result: " + webhookResult.toString());
 		int code = webhookResult.getA();
 		if(code < 200 || code >= 300) {
 	    	if(code == 429) { // good config and error while sending

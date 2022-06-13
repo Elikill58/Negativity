@@ -13,8 +13,6 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
 
-import org.bukkit.configuration.ConfigurationSection;
-
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;

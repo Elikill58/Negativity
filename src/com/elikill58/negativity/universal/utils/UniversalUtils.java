@@ -50,6 +50,7 @@ import com.elikill58.negativity.universal.verif.storage.VerificationStorage;
 
 public class UniversalUtils {
 
+	public static final String PLUGIN_VERSION = "1.12.1";
 	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	public static boolean HAVE_INTERNET = true;
 	private static boolean DEBUG = false;

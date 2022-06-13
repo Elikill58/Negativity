@@ -21,33 +21,8 @@ public class ClickableText {
 		return this;
 	}
 
-	public ClickableText addClickableLink(String text, String link) {
-		component.add(new MessageComponent(text, link, Action.OPEN_URL));
-		return this;
-	}
-
-	public ClickableText addRunnableCommand(String text, String command) {
-		component.add(new MessageComponent(text, command, Action.RUN_COMMAND));
-		return this;
-	}
-
-	public ClickableText addChatSuggestion(String text, String suggestion) {
-		component.add(new MessageComponent(text, suggestion, Action.SUGGEST_COMMAND));
-		return this;
-	}
-
-	public ClickableText addHoverEvent(String text, String hover) {
-		component.add(new MessageComponent(text, hover, Action.SHOW_TEXT));
-		return this;
-	}
-
 	public ClickableText addRunnableHoverEvent(String text, String hover, String cmd) {
 		component.add(new MessageComponent(text, hover, Action.SHOW_TEXT, cmd, Action.RUN_COMMAND));
-		return this;
-	}
-
-	public ClickableText addOpenURLHoverEvent(String text, String hover, String url) {
-		component.add(new MessageComponent(text, hover, Action.SHOW_TEXT, url, Action.OPEN_URL));
 		return this;
 	}
 

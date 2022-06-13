@@ -1,15 +1,11 @@
 package com.elikill58.negativity.spigot.utils;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -23,7 +19,6 @@ import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.google.common.base.Preconditions;
-import com.google.common.collect.Sets;
 
 @SuppressWarnings("deprecation")
 public class Utils {
@@ -40,41 +35,6 @@ public class Utils {
 		List<Player> onlinePlayers = getOnlinePlayers();
 		return onlinePlayers.isEmpty() ? null : onlinePlayers.iterator().next();
 	}
-
-	public static Effect getEffect(String effect) {
-		Effect m = null;
-		try {
-			m = (Effect) Effect.class.getField(effect).get(Effect.class);
-		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e) {
-			e.printStackTrace();
-		} catch (NoSuchFieldException e1) {
-			m = null;
-		}
-		return m;
-	}
-	
-	public static Block getTargetBlock(Player p, int distance) {
-		Material[] transparentItem = new Material[] {};
-		try {
-			if(Version.getVersion().isNewerOrEquals(Version.V1_14)) {
-				return (Block) p.getClass().getMethod("getTargetBlockExact", int.class).invoke(p, distance);
-			} else {
-				try {
-					return (Block) p.getClass().getMethod("getTargetBlock", Set.class, int.class).invoke(p, Sets.newHashSet(transparentItem), distance);
-				} catch (NoSuchMethodException e) {}
-				try {
-					HashSet<Byte> hashSet = new HashSet<>();
-					for(Material m : transparentItem)
-						hashSet.add((byte) m.getId());
-					return (Block) p.getClass().getMethod("getTargetBlock", HashSet.class, int.class).invoke(p, hashSet, distance);
-				} catch (NoSuchMethodException e) {}
-			}
-		} catch (Exception exc) {
-			exc.printStackTrace();
-		}
-		return null;
-	}
-
 	
 	public static ItemStack getItemFromString(String s) {
 		Preconditions.checkNotNull(s, "Error while creating item. The material is null.");

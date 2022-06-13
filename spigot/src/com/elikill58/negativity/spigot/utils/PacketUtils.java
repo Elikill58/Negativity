@@ -4,7 +4,6 @@ import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
@@ -14,22 +13,8 @@ public class PacketUtils {
 
 	private static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
 			.split(",")[3];
-	public static final String NMS_PREFIX;
-
-	@Deprecated
-	public static Class<?> CRAFT_PLAYER_CLASS, CRAFT_SERVER_CLASS, CRAFT_ENTITY_CLASS;
+	public static final String NMS_PREFIX = Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? "net.minecraft." : "net.minecraft.server." + VERSION + ".";
 	public static final Class<?> ENUM_PLAYER_INFO = SpigotVersionAdapter.getVersionAdapter().getEnumPlayerInfoAction();
-	
-	static {
-		NMS_PREFIX = Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? "net.minecraft." : "net.minecraft.server." + VERSION + ".";
-		try {
-			CRAFT_PLAYER_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftPlayer");
-			CRAFT_ENTITY_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".entity.CraftEntity");
-			CRAFT_SERVER_CLASS = Class.forName("org.bukkit.craftbukkit." + VERSION + ".CraftServer");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
 	
 	/**
 	 * This Map is to reduce Reflection action which take more resources than just RAM action
@@ -83,37 +68,6 @@ public class PacketUtils {
 				}
 			});
 		}
-	}
-	
-	/**
-	 * Create a new instance of a packet (without any parameters)
-	 * 
-	 * @param packetName the name of the packet which is in NMS
-	 * @return the created packet
-	 */
-	public static Object createPacket(String packetName) {
-		try {
-			return getNmsClass(packetName).getConstructor().newInstance();
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	/**
-	 * Get the current player ping
-	 *
-	 * @param p the player
-	 * @return the player ping
-	 */
-	public static int getPing(Player p) {
-		try {
-			Object entityPlayer = getEntityPlayer(p);
-			return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return 0;
 	}
 
 	/**
@@ -172,22 +126,6 @@ public class PacketUtils {
 			return null;
 		}
 	}
-	
-	/**
-	 * Get NMS entity player of specified one
-	 * 
-	 * @param et the player that we want the NMS entity player
-	 * @return the entity player
-	 */
-	public static Object getNMSEntity(Entity et) {
-		try {
-			Object craftEntity = getObcClass("entity.CraftEntity").cast(et);
-			return craftEntity.getClass().getMethod("getHandle").invoke(craftEntity);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
 
 	/**
 	 * Get the NMS world server
@@ -199,20 +137,6 @@ public class PacketUtils {
 		try {
 			Object object = getObcClass("CraftWorld").cast(loc.getWorld());
 			return object.getClass().getMethod("getHandle").invoke(object);
-		} catch (Exception e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-	
-	public static String getNmsEntityName(Object nmsEntity) {
-		try {
-			if(Version.getVersion().isNewerOrEquals(Version.V1_13)) {
-				Object chatBaseComponent = getNmsClass("Entity").getDeclaredMethod("getDisplayName").invoke(nmsEntity);
-				return (String) getNmsClass("IChatBaseComponent").getDeclaredMethod("getString").invoke(chatBaseComponent);
-			} else {
-				return (String) getNmsClass("Entity").getDeclaredMethod("getName").invoke(nmsEntity);
-			}
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;

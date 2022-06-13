@@ -65,6 +65,7 @@ We support a lot of languages :
 - **Hungarian** (*hu_HU*) By HasX#1966
 - **Korean** (*ko_KR*) By soshimee#4397
 - **Indonesian** (*id_ID*) By Dave9123#0757
+- **Thai** (*th_TH*) By IAmOverD҉A҉R҉K҉E҈S҉T҉#2498
 
 To change the lang, just use "/nlang" or change "Translation.default" to the one that you want.
 

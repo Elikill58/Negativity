@@ -1,5 +1,7 @@
 package com.elikill58.negativity.spigot.packets;
 
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
 
@@ -32,11 +34,12 @@ public class NegativityPacketManager {
 	}
 	
 	private boolean checkProtocollibConditions() {
-		try {
-			Class.forName("com.comphenix.protocol.injector.server.TemporaryPlayer");
-			return true;
-		} catch (ClassNotFoundException e) {
-			return false;
+		for(String searchedClass : Arrays.asList("com.comphenix.protocol.injector.server.TemporaryPlayer", "com.comphenix.protocol.injector.temporary.TemporaryPlayer")) { // class since 4.4.0 until 4.8.0, then the new one
+			try {
+				Class.forName(searchedClass);
+				return true; // class found
+			} catch (ClassNotFoundException e) {}
 		}
+		return false;
 	}
 }

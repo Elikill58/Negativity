@@ -68,7 +68,6 @@ import com.elikill58.negativity.universal.CheatKeys;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.ItemUseBypass.WhenBypass;
-import com.elikill58.negativity.universal.NegativityPlayer;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.ReportType;
 import com.elikill58.negativity.universal.Stats;
@@ -557,11 +556,17 @@ public class SpigotNegativity extends JavaPlugin {
 		return true;
 	}
 
-	private static void manageAlertCommand(NegativityPlayer np, ReportType type, Player p, Cheat c, int reliability) {
-		FileConfiguration conf = getInstance().getConfig();
-		if(!conf.getBoolean("alert.command.active") || conf.getInt("alert.command.reliability_need") > reliability)
+	private static void manageAlertCommand(SpigotNegativityPlayer np, ReportType type, Player p, Cheat c, int reliability) {
+		ConfigurationSection conf = getInstance().getConfig().getConfigurationSection("alert.command");
+		if(conf == null || !conf.getBoolean("active") || conf.getInt("reliability_need") > reliability)
 			return;
-		for(String s : conf.getStringList("alert.command.run")) {
+		int cooldown = conf.getInt("cooldown", 0);
+		if(cooldown > 0) {
+			if(np.lastAlertCommandRan > System.currentTimeMillis())
+				return; // has cooldown
+			np.lastAlertCommandRan = System.currentTimeMillis() + cooldown;
+		}
+		for(String s : conf.getStringList("run")) {
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), UniversalUtils.replacePlaceholders(s, "%version%", np.getPlayerVersion().getName(), "%name%",
 					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey().toLowerCase(Locale.ROOT), "%world%", p.getWorld().getName(), "%cheat_name%",
 					c.getName(), "%reliability%", reliability, "%report_type%", type.name(), "%warn%", np.getWarn(c), "%ping%", PacketUtils.getPing(p), "%tps%", String.format("%.2f", Utils.getLastTPS())));

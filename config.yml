@@ -248,6 +248,8 @@ alert:
   # Run a command when someone triggers an alert
   command:
     active: false
+    # Cooldown in milliseconds between 2 call of commands (time for each player)
+    cooldown: 0
     # How much confidence of a cheat is needed to run command
     reliability_need: 80
     # Available placeholders:

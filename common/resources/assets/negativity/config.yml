@@ -293,6 +293,8 @@ alert:
   # To run command when someone get alert
   command:
     active: false
+    # Cooldown in milliseconds between 2 call of commands (time for each player)
+    cooldown: 0
     # Reliability need to run command
     reliability_need: 80
     # Available arguments:

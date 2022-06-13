@@ -13,6 +13,8 @@ import java.util.Set;
 import java.util.StringJoiner;
 import java.util.function.Predicate;
 
+import org.bukkit.configuration.ConfigurationSection;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
@@ -186,10 +188,16 @@ public class Negativity {
 	 * @param reliability the reliability of detection
 	 */
 	private static void manageAlertCommand(NegativityPlayer np, ReportType type, Player p, Cheat c, int reliability) {
-		Configuration conf = Adapter.getAdapter().getConfig();
-		if(!conf.getBoolean("alert.command.active") || conf.getInt("alert.command.reliability_need") > reliability)
+		Configuration conf = Adapter.getAdapter().getConfig().getSection("alert.command");
+		if(conf == null || !conf.getBoolean("active") || conf.getInt("reliability_need") > reliability)
 			return;
-		for(String s : conf.getStringList("alert.command.run")) {
+		int cooldown = conf.getInt("cooldown", 0);
+		if(cooldown > 0) {
+			if(np.longs.get(CheatKeys.ALL, "alert-cmd-cooldown", 0l) > System.currentTimeMillis())
+				return; // has cooldown
+			np.longs.set(CheatKeys.ALL, "alert-cmd-cooldown", System.currentTimeMillis() + cooldown);
+		}
+		for(String s : conf.getStringList("run")) {
 			Adapter.getAdapter().runConsoleCommand(UniversalUtils.replacePlaceholders(s, "%name%",
 					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey().getLowerKey(), "%cheat_name%",
 					c.getName(), "%reliability%", reliability, "%report_type%", type.name(), "%warn%", np.getWarn(c)));

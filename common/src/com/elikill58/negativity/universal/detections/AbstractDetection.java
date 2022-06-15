@@ -9,12 +9,12 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.detections.keys.IDetectionKeys;
+import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
 import com.elikill58.negativity.universal.file.FileSaverTimer;
 import com.elikill58.negativity.universal.file.hook.FileRunnableSaverAction;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public abstract class AbstractDetection<T extends IDetectionKeys<T>> implements Comparable<T> {
+public abstract class AbstractDetection<T extends IDetectionKey<T>> implements Comparable<T> {
 
 	protected final T key;
 	protected final Material material;

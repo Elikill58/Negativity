@@ -4,6 +4,9 @@ import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import com.elikill58.negativity.api.IKey;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -82,7 +85,7 @@ public class WebhookMessage {
 	 * @param msg the message to add
 	 * @return the combined object, or null if not combined
 	 */
-	public WebhookMessage combine(WebhookMessage msg) {
+	public @Nullable WebhookMessage combine(WebhookMessage msg) {
 		return null;
 	}
 	
@@ -95,7 +98,7 @@ public class WebhookMessage {
 		return false;
 	}
 	
-	public static enum WebhookMessageType {
+	public static enum WebhookMessageType implements IKey<WebhookMessageType> {
 		ALERT,
 		BAN,
 		KICK,

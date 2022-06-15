@@ -4,7 +4,7 @@ import java.nio.file.Path;
 
 import com.elikill58.negativity.universal.Version;
 
-public enum SpecialKeys implements IDetectionKeys<SpecialKeys> {
+public enum SpecialKeys implements IDetectionKey<SpecialKeys> {
 
 	BANNED_NAME("BANNED-NAME"),
 	INVALID_NAME("INVALID-NAME"),

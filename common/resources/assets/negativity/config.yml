@@ -357,6 +357,8 @@ webhooks:
       type: "discord"
       # register the webhook URL used by Negativity
       url: "https://discord.com/api/webhooks/theRestOfDiscordUrl"
+      # Cooldown between each message if cooldown/message not configurated
+      cooldown: 3000
       # Configure messages presentation
       # If you don't set one of them, it will get the default configuration
       #
@@ -382,6 +384,8 @@ webhooks:
         # %reliability% : Reliability of the cheat
         alert:
           enabled: true
+          # Cooldown between 2 alerts sent to discord (will combine all)
+          cooldown: 15000
           # The name which will send the message
           username: "Negativity Alert"
           # The content of the message
@@ -584,7 +588,3 @@ webhooks:
               name: "Negativity"
               link: "https://github.com/Elikill58/Negativity"
               icon: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
-
-    discord-another-example:
-      type: "discord"
-      url: "https://discord.com/api/webhooks/theRestOfSecondDiscordUrl"

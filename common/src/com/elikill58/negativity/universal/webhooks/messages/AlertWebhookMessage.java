@@ -6,15 +6,27 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class AlertWebhookMessage extends WebhookMessage {
 
-	private long amount;
-	private int reliability;
-	private Cheat cheat;
+	private final long amount;
+	private final int reliability;
+	private final Cheat cheat;
 	
 	public AlertWebhookMessage(WebhookMessageType messageType, Player concerned, String sender, long date, long amount, int reliability, Cheat cheat) {
 		super(messageType, concerned, sender, date);
 		this.amount = amount;
 		this.reliability = reliability;
 		this.cheat = cheat;
+	}
+	
+	public long getAmount() {
+		return amount;
+	}
+	
+	public Cheat getCheat() {
+		return cheat;
+	}
+	
+	public int getReliability() {
+		return reliability;
 	}
 	
 	@Override

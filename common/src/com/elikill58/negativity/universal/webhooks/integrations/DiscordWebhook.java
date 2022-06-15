@@ -15,6 +15,8 @@ import java.util.concurrent.ScheduledExecutorService;
 
 import javax.net.ssl.HttpsURLConnection;
 
+import com.elikill58.negativity.api.Content;
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.yaml.Configuration;
@@ -23,20 +25,31 @@ import com.elikill58.negativity.universal.Tuple;
 import com.elikill58.negativity.universal.webhooks.Webhook;
 import com.elikill58.negativity.universal.webhooks.integrations.DiscordWebhook.DiscordWebhookRequest.EmbedObject;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
+import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage.WebhookMessageType;
 
-@SuppressWarnings("unchecked")
 public class DiscordWebhook implements Webhook {
     
 	private final Configuration config;
 	private final String webhookUrl;
 	private final ScheduledExecutorService executorService;
 	private List<WebhookMessage> queue = new ArrayList<>();
-	private long time = 0;
+	private long time = 0, cooldown = 0;
+	private final Content<Long> players = new Content<>();
 	
 	public DiscordWebhook(Configuration config) {
 		this.config = config;
+		this.cooldown = config.getLong("cooldown", 0);
 		this.webhookUrl = config.getString("url");
 		this.executorService = Executors.newScheduledThreadPool(1);
+	}
+
+	public boolean hasCooldown(Player p, WebhookMessageType type) {
+		return players.get(type, p.getUniqueId().toString(), 0l) > System.currentTimeMillis();
+	}
+	
+	public void setCooldown(Player p, WebhookMessageType type) {
+		long cooldown = config.getLong("messages." + type.name().toLowerCase(Locale.ROOT), this.cooldown);
+		players.set(type, p.getUniqueId().toString(), System.currentTimeMillis() + cooldown);
 	}
 	
 	@Override
@@ -115,18 +128,19 @@ public class DiscordWebhook implements Webhook {
     
     private void sendAsyncWithException(WebhookMessage msg) throws Exception {
     	Adapter ada = Adapter.getAdapter();
-    	Configuration confMsg = config.getSection("messages").getSection(msg.getMessageType().name().toLowerCase(Locale.ROOT));
+    	Configuration confMsg = config.getSection("messages." + msg.getMessageType().name().toLowerCase(Locale.ROOT));
     	if(confMsg == null)
     		confMsg = new Configuration();
     	if(!confMsg.getBoolean("enabled", true)) {
         	ada.debug("Webhook for " + msg.getMessageType().name() + " is not enabled.");
     		return;
     	}
-    	if(time > System.currentTimeMillis()) { // should skip
+    	if(time > System.currentTimeMillis() || hasCooldown(msg.getConcerned(), msg.getMessageType())) { // should skip
     		queue.add(msg);
     		return;
     	}
     	ada.debug("Sending webhook message for " + msg.getMessageType().name());
+    	setCooldown(msg.getConcerned(), msg.getMessageType());
     	queue.remove(msg);
     	DiscordWebhookRequest webhook = new DiscordWebhookRequest(webhookUrl);
 	    webhook.setUsername(msg.applyPlaceHolders(confMsg.getString("username", "Negativity")));
@@ -249,6 +263,7 @@ public class DiscordWebhook implements Webhook {
 	        this.embeds.add(embed);
 	    }
 	
+		@SuppressWarnings("unchecked")
 		public Tuple<Integer, String> execute() throws IOException {
 	        if (this.content == null && this.embeds.isEmpty()) {
 	            throw new IllegalArgumentException("Set content or add at least one EmbedObject");

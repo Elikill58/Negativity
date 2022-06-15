@@ -5,7 +5,7 @@ import java.nio.file.Path;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 
-public enum CheatKeys implements IDetectionKeys<CheatKeys> {
+public enum CheatKeys implements IDetectionKey<CheatKeys> {
 
 	ALL("ALL"),
 	AIM_BOT("AIMBOT"),

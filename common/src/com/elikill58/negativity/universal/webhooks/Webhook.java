@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.webhooks;
 
+import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage;
 
 public interface Webhook {
@@ -42,4 +43,11 @@ public interface Webhook {
 	 * @return true if the message is well sent
 	 */
 	boolean ping(String asker);
+	
+	/**
+	 * Clean all data for the given player. Called when the player left.
+	 * 
+	 * @param p the player that left
+	 */
+	void clean(Player p);
 }

@@ -153,8 +153,7 @@ public class DiscordWebhook implements Webhook {
     	try {
     		sendAsyncWithException(msg);
     	} catch (Exception e) {
-    		Adapter.getAdapter().getLogger().error("Error while sending webhook messages: " + e.getMessage() + " " + e.getStackTrace()[0].toString());
-    		e.printStackTrace();
+    		Adapter.getAdapter().getLogger().printError("Error while sending webhook message about " + msg.getConcerned().getName(), e);
 		}
     }
     

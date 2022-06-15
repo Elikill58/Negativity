@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -77,19 +78,22 @@ public class DiscordWebhook implements Webhook {
     
     @Override
     public void addToQueue(WebhookMessage msg) {
+    	if(msg == null)
+    		return;
     	if(!msg.canCombine())
     		send(msg);
     	else {
+    		queue.add(msg);
     		for(WebhookMessage other : new ArrayList<>(queue)) { // for all queued messages
     			WebhookMessage combined = msg.combine(other); // try to combine
     			if(combined != null) { // can combine, remove old and add new
     				queue.remove(other); // remove old old
+    				queue.remove(msg);
     				queue.add(combined); // add new combined
-    				queue.sort(Comparator.naturalOrder());
-    				return; // found combine
+    				break; // found combine
     			}
     		}
-    		queue.add(msg);
+    		queue.removeIf(Objects::isNull);
 			queue.sort(Comparator.naturalOrder());
     	}
     }

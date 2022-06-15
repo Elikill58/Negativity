@@ -27,4 +27,8 @@ public class Slf4jLoggerAdapter implements LoggerAdapter {
 		logger.error("[Negativity] " +  msg);
 	}
 
+	@Override
+	public void printError(String message, Exception e) {
+		logger.error(message, e);
+	}
 }

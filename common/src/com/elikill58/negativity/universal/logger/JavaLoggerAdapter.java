@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.logger;
 
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class JavaLoggerAdapter implements LoggerAdapter {
@@ -25,4 +26,8 @@ public class JavaLoggerAdapter implements LoggerAdapter {
 		logger.severe(msg);
 	}
 
+	@Override
+	public void printError(String message, Exception e) {
+		logger.log(Level.SEVERE, message, e);
+	}
 }

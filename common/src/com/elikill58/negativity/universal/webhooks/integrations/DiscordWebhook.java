@@ -93,8 +93,6 @@ public class DiscordWebhook implements Webhook {
     				break; // found combine
     			}
     		}
-    		queue.removeIf(Objects::isNull);
-			queue.sort(Comparator.naturalOrder());
     	}
     }
     
@@ -106,8 +104,10 @@ public class DiscordWebhook implements Webhook {
     	
     	// firstly, combine all
     	synchronized (queue) {
+    		queue.removeIf(Objects::isNull);
     		if(queue.isEmpty())
     			return;
+			queue.sort(Comparator.naturalOrder());
     		while(!queue.isEmpty()) {
 	    		WebhookMessage msg = queue.remove(0);
 	    		if(queue.isEmpty()) { // removed is last

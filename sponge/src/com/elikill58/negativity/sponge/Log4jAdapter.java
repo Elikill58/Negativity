@@ -1,5 +1,6 @@
 package com.elikill58.negativity.sponge;
 
+
 import org.apache.logging.log4j.Logger;
 
 import com.elikill58.negativity.universal.logger.LoggerAdapter;
@@ -26,4 +27,9 @@ public class Log4jAdapter implements LoggerAdapter {
     public void error(String msg) {
         this.logger.error(msg);
     }
+
+	@Override
+	public void printError(String message, Exception e) {
+		logger.error(message, e);
+	}
 }

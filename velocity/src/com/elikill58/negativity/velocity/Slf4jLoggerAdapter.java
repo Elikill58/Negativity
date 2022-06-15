@@ -26,5 +26,9 @@ public class Slf4jLoggerAdapter implements LoggerAdapter {
 	public void error(String msg) {
 		logger.error(msg);
 	}
-	
+
+	@Override
+	public void printError(String message, Exception e) {
+		logger.error(message, e);
+	}
 }

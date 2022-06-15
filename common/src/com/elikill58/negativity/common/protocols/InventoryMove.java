@@ -25,18 +25,18 @@ public class InventoryMove extends Cheat implements Listeners {
 		super(CheatKeys.INVENTORY_MOVE, CheatCategory.MOVEMENT, Materials.NETHER_STAR, CheatDescription.NO_FIGHT);
 	}
 
-	@Check(name = "stay-distance", description = "Keep distance while moving", conditions = { CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE,
-			CheckConditions.NO_FALL_DISTANCE })
+	@Check(name = "stay-distance", description = "Keep distance while moving", conditions = { CheckConditions.NO_ELYTRA,
+			CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_FALL_DISTANCE })
 	public void onMove(PlayerMoveEvent e, NegativityPlayer np) {
 		if (!e.isMoveLook() || !e.isMovePosition()) {
 			return;
 		}
-		
+
 		InventoryMoveData data = np.invMoveData;
 		if (data == null) {
 			return;
 		}
-		
+
 		Player p = e.getPlayer();
 		// if in water
 		if (LocationUtils.isInWater(p.getLocation()) || p.getVelocity().length() > 0.1) {
@@ -54,9 +54,12 @@ public class InventoryMove extends Cheat implements Listeners {
 				amount += data.sprint ? 1 : 5; // more alerts if wasn't sprinting
 			if (p.isSneaking())
 				amount += data.sneak ? 1 : 5; // more alerts if wasn't sneaking
-			Negativity.alertMod(np.getAllWarn(this) > 5 && amount > 1 ? ReportType.VIOLATION : ReportType.WARNING, p,
-					this, UniversalUtils.parseInPorcent(80 + data.getTimeSinceOpen()), "stay-distance",
-					"Sprint: " + p.isSprinting() + ", Sneak: " + p.isSneaking() + ", data: " + data + ", vel: " + p.getVelocity() + ", fd: " + String.format("%.5f", p.getFallDistance()), null, amount);
+			Negativity
+					.alertMod(np.getAllWarn(this) > 5 && amount > 1 ? ReportType.VIOLATION : ReportType.WARNING, p,
+							this, UniversalUtils.parseInPorcent(80 + data.getTimeSinceOpen()), "stay-distance",
+							"Sprint: " + p.isSprinting() + ", Sneak: " + p.isSneaking() + ", data: " + data + ", vel: "
+									+ p.getVelocity() + ", fd: " + String.format("%.5f", p.getFallDistance()),
+							null, amount);
 		}
 		data.setDistance(actual);
 	}

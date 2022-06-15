@@ -33,7 +33,7 @@ public class ModInventory extends AbstractInventory<ModHolder> {
 		inv.set(11, ItemBuilder.Builder(Materials.PUMPKIN_PIE).displayName(Messages.getMessage(p, "inventory.mod.invisible")).build());
 		inv.set(12, ItemBuilder.Builder(Materials.FEATHER).displayName(Messages.getMessage(p, "inventory.mod.fly", "%state%", Messages.getMessage(p, "inventory.manager." + (p.isFlying() ? "enabled" : "disabled")))).build());
 		if(Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.MANAGE_CHEAT))
-			inv.set(13, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.mod.admin")).build());
+			inv.set(13, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.mod.cheat_manage")).build());
 		inv.set(14, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.mod.heal")).build());
 		inv.set(15, ItemBuilder.Builder(Materials.LEASH).displayName(Messages.getMessage(p, "inventory.mod.random_tp")).build());
 		inv.set(16, ItemBuilder.Builder(Materials.IRON_SHOVEL).displayName(Messages.getMessage(p, "inventory.mod.clear_inv")).build());

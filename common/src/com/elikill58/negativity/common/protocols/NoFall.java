@@ -194,7 +194,8 @@ public class NoFall extends Cheat {
 		np.floats.set(getKey(), "last-fall", p.getFallDistance());
 	}
 
-	@Check(name = "fake-ground", description = "Detect when player faking ground", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ON_BEDROCK })
+	@Check(name = "fake-ground", description = "Detect when player faking ground", conditions = {
+			CheckConditions.SURVIVAL, CheckConditions.NO_ON_BEDROCK })
 	public void onFakeGround(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();
@@ -204,13 +205,15 @@ public class NoFall extends Cheat {
 		// double difX = to.getX() - from.getX(), difZ = to.getZ() - from.getZ();
 		// boolean verticalCollision = difY != p.getVelocity().getY();
 		// boolean ownGroundBefore = verticalCollision && difY < 0.0;
-		Material type = to.sub(0, 0.1, 0).getBlock().getType();
+		Material type = to.sub(0, 0.05, 0).getBlock().getType();
 		boolean ownGround = !p.isFlying() && type.isSolid();
 		if (p.isOnGround() && !ownGround && p.getVelocity().getY() <= difY) {
-			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(Math.abs(difY) * 250),
+			if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(Math.abs(difY) * 250),
 					"fake-ground",
-					"Dif: " + difY + ", " + p.getFallDistance() + ", type: " + type.getId() + ", vel: " + p.getVelocity(),
-					new CheatHover.Literal("Y: " + String.format("%.3f", difY)), (long) (Math.abs(difY) * 5));
+					"Dif: " + difY + ", " + p.getFallDistance() + ", " + type.getId() + ", vel: " + p.getVelocity(),
+					new CheatHover.Literal("Y: " + String.format("%.3f", difY)), (long) (Math.abs(difY) * 5))
+					&& isSetBack())
+				manageDamage(p, (int) p.getFallDistance(), 95);
 		}
 	}
 

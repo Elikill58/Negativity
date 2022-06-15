@@ -39,7 +39,7 @@ public class InventoryMove extends Cheat implements Listeners {
 		
 		Player p = e.getPlayer();
 		// if in water
-		if (LocationUtils.isInWater(p.getLocation())) {
+		if (LocationUtils.isInWater(p.getLocation()) || p.getVelocity().length() > 0.1) {
 			return;
 		}
 		if (p.getOpenInventory() == null) {
@@ -56,7 +56,7 @@ public class InventoryMove extends Cheat implements Listeners {
 				amount += data.sneak ? 1 : 5; // more alerts if wasn't sneaking
 			Negativity.alertMod(np.getAllWarn(this) > 5 && amount > 1 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, UniversalUtils.parseInPorcent(80 + data.getTimeSinceOpen()), "stay-distance",
-					"Sprint: " + p.isSprinting() + ", Sneak:" + p.isSneaking() + ", data: " + data + ", vel: " + p.getVelocity() + ", fd: " + String.format("%.5f", p.getFallDistance()), null, amount);
+					"Sprint: " + p.isSprinting() + ", Sneak: " + p.isSneaking() + ", data: " + data + ", vel: " + p.getVelocity() + ", fd: " + String.format("%.5f", p.getFallDistance()), null, amount);
 		}
 		data.setDistance(actual);
 	}
@@ -77,9 +77,7 @@ public class InventoryMove extends Cheat implements Listeners {
 
 	@EventListener
 	public void onClose(InventoryCloseEvent e) {
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
-		if (np.hasDetectionActive(this))
-			np.invMoveData = null;
+		NegativityPlayer.getNegativityPlayer(e.getPlayer()).invMoveData = null;
 	}
 
 	private void checkInvMove(NegativityPlayer np) {

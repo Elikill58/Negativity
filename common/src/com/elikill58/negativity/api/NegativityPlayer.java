@@ -372,9 +372,11 @@ public class NegativityPlayer implements FileSaverAction {
 	}
 	
 	public void checkProofFileHandler() {
-		if(proofFileHandler != null && proofFileHandler.shouldBeClosed()) {
-			proofFileHandler.close();
-			proofFileHandler = null;
+		if(proofFileHandler != null) {
+			if(proofFileHandler.shouldBeClosed())
+				proofFileHandler.close();
+			if(proofFileHandler.isClosed())
+				proofFileHandler = null;
 		}
 	}
 	

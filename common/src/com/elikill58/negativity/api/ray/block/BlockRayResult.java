@@ -7,44 +7,20 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.ray.AbstractRayResult;
 import com.elikill58.negativity.api.ray.RayResult;
 
-public class BlockRayResult {
+public class BlockRayResult extends AbstractRayResult<BlockRay> {
 
-	private final BlockRay ray;
-	private final RayResult rayResult;
 	private final Block block;
 	private final boolean hasBlockExceptSearched;
-	private final HashMap<Vector, Material> alltestedLoc;
 	private final double lastDistance;
-	private final Vector vec;
 	
-	protected BlockRayResult(BlockRay ray, RayResult rayResult, Block block, boolean hasBlockExceptSearched, Vector vec, double lastDistance, HashMap<Vector, Material> testedLoc) {
-		this.ray = ray;
-		this.rayResult = rayResult;
+	protected BlockRayResult(BlockRay ray, RayResult rayResult, Block block, boolean hasBlockExceptSearched, double lastDistance) {
+		super(ray, rayResult);
 		this.block = block;
 		this.hasBlockExceptSearched = hasBlockExceptSearched;
-		this.vec = vec;
 		this.lastDistance = lastDistance;
-		this.alltestedLoc = testedLoc;
-	}
-
-	/**
-	 * Get BlockRay which does ray action
-	 * 
-	 * @return get ray
-	 */
-	public BlockRay getRay() {
-		return ray;
-	}
-	
-	/**
-	 * Get the Ray result
-	 * 
-	 * @return the result of ray
-	 */
-	public RayResult getRayResult() {
-		return rayResult;
 	}
 	
 	/**
@@ -76,15 +52,6 @@ public class BlockRayResult {
 	 */
 	public boolean hasBlockExceptSearched() {
 		return hasBlockExceptSearched;
-	}
-	
-	/**
-	 * Get the vector used to make the ray
-	 * 
-	 * @return the vector
-	 */
-	public Vector getVector() {
-		return vec;
 	}
 	
 	/**

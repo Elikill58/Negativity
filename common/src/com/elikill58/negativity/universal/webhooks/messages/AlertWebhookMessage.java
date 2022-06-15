@@ -45,6 +45,20 @@ public class AlertWebhookMessage extends WebhookMessage {
 	}
 	
 	@Override
+	public int compareTo(WebhookMessage o) {
+		if(!(o instanceof AlertWebhookMessage))
+			return -1;
+		AlertWebhookMessage m = (AlertWebhookMessage) o;
+		if(getReliability() != m.getReliability()) {
+			return m.getReliability() - getReliability();
+		}
+		if(getAmount() != m.getAmount()) {
+			return (int) (m.getAmount() - getAmount());
+		}
+		return super.compareTo(o);
+	}
+	
+	@Override
 	public String applyPlaceHolders(String message) {
 		return super.applyPlaceHolders(message).replace("%amount%", String.valueOf(amount)).replace("%reliability%", String.valueOf(reliability)).replace("%cheat%", cheat.getName());
 	}

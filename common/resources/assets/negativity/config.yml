@@ -358,7 +358,7 @@ webhooks:
       # register the webhook URL used by Negativity
       url: "https://discord.com/api/webhooks/theRestOfDiscordUrl"
       # Cooldown between each message if cooldown/message not configurated
-      cooldown: 3000
+      cooldown: 1000
       # Configure messages presentation
       # If you don't set one of them, it will get the default configuration
       #
@@ -385,7 +385,7 @@ webhooks:
         alert:
           enabled: true
           # Cooldown between 2 alerts sent to discord (will combine all)
-          cooldown: 15000
+          cooldown: 5000
           # The name which will send the message
           username: "Negativity Alert"
           # The content of the message

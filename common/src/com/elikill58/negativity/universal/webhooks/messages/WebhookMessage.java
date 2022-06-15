@@ -11,7 +11,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class WebhookMessage {
+public class WebhookMessage implements Comparable<WebhookMessage> {
 
 	protected final WebhookMessageType messageType;
 	protected final String sender;
@@ -96,6 +96,11 @@ public class WebhookMessage {
 	 */
 	public boolean canCombine() {
 		return false;
+	}
+	
+	@Override
+	public int compareTo(WebhookMessage o) {
+		return (int) (o.date - date);
 	}
 	
 	public static enum WebhookMessageType implements IKey<WebhookMessageType> {

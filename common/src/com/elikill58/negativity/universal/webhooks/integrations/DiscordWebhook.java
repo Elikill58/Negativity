@@ -8,6 +8,7 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.Executors;
@@ -84,10 +85,12 @@ public class DiscordWebhook implements Webhook {
     			if(combined != null) { // can combine, remove old and add new
     				queue.remove(other); // remove old old
     				queue.add(combined); // add new combined
+    				queue.sort(Comparator.naturalOrder());
     				return; // found combine
     			}
     		}
     		queue.add(msg);
+			queue.sort(Comparator.naturalOrder());
     	}
     }
     

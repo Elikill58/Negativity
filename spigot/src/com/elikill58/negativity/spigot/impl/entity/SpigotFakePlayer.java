@@ -18,6 +18,7 @@ import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.FakePlayer;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
@@ -167,6 +168,11 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 	@Override
 	public Location getLocation() {
 		return loc;
+	}
+	
+	@Override
+	public World getWorld() {
+		return loc.getWorld();
 	}
 
 	/**

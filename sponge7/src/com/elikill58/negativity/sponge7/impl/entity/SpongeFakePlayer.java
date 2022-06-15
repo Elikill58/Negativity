@@ -55,6 +55,11 @@ public class SpongeFakePlayer extends AbstractEntity implements FakePlayer {
 	public Location getLocation() {
 		return loc;
 	}
+	
+	@Override
+	public com.elikill58.negativity.api.location.World getWorld() {
+		return loc.getWorld();
+	}
 
 	@Override
 	public String getName() {

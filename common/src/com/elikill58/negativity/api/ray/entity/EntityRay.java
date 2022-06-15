@@ -34,6 +34,7 @@ public class EntityRay {
 		this.vector = vector.normalize().divide(2);
 		this.entities = new ArrayList<>(w.getEntities());
 		this.entities.removeAll(bypassEntities);
+		this.entities.removeIf(e -> !e.getWorld().equals(w));
 		if(onlyPlayers)
 			this.entities.removeIf((et) -> !et.getType().equals(EntityType.PLAYER));
 	}

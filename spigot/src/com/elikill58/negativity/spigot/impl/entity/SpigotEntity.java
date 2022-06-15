@@ -10,7 +10,9 @@ import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
+import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 
 public class SpigotEntity<E extends Entity> extends AbstractEntity {
@@ -34,6 +36,11 @@ public class SpigotEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public Location getLocation() {
 		return SpigotLocation.toCommon(entity.getLocation());
+	}
+	
+	@Override
+	public World getWorld() {
+		return new SpigotWorld(entity.getWorld());
 	}
 
 	@Override

@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.fabric.FabricNegativity;
 import com.elikill58.negativity.fabric.impl.location.FabricLocation;
 import com.elikill58.negativity.fabric.impl.location.FabricWorld;
@@ -40,6 +41,11 @@ public class FabricEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public Location getLocation() {
 		return loc;
+	}
+	
+	@Override
+	public World getWorld() {
+		return loc.getWorld();
 	}
 
 	@Override

@@ -15,6 +15,7 @@ import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.sponge.utils.LocationUtils;
 import com.elikill58.negativity.sponge.utils.Utils;
 
@@ -46,6 +47,11 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public Location getLocation() {
 		return loc;
+	}
+	
+	@Override
+	public World getWorld() {
+		return loc.getWorld();
 	}
 
 	@Override

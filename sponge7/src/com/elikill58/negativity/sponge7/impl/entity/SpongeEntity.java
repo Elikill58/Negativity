@@ -12,6 +12,7 @@ import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.sponge7.impl.location.SpongeLocation;
 import com.elikill58.negativity.sponge7.impl.location.SpongeWorld;
 import com.flowpowered.math.vector.Vector3d;
@@ -39,6 +40,11 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public Location getLocation() {
 		return loc;
+	}
+	
+	@Override
+	public World getWorld() {
+		return loc.getWorld();
 	}
 
 	@Override

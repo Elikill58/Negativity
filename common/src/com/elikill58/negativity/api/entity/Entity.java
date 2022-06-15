@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 
 public interface Entity extends CommandSender {
 
@@ -31,6 +32,13 @@ public interface Entity extends CommandSender {
 	 * @return entity location
 	 */
 	Location getLocation();
+	
+	/**
+	 * Get the world of the entity
+	 * 
+	 * @return the entity world
+	 */
+	World getWorld();
 	
 	double getEyeHeight();
 	

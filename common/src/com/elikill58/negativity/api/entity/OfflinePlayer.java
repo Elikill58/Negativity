@@ -4,6 +4,7 @@ import java.util.UUID;
 
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 
 public interface OfflinePlayer extends Entity {
 
@@ -12,6 +13,11 @@ public interface OfflinePlayer extends Entity {
 	boolean isOnline();
 	
 	boolean hasPlayedBefore();
+	
+	@Override
+	default World getWorld() {
+		return null;
+	}
 	
 	@Override
 	default boolean isOnGround() {

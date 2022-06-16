@@ -54,7 +54,7 @@ public class ForceField extends Cheat {
 		}
 	}
 
-	@Check(name = "line-sight", description = "Player has line of sight the cible", conditions = CheckConditions.SURVIVAL)
+	@Check(name = "line-sight", description = "Player has line of sight the cible", conditions = {CheckConditions.SURVIVAL, CheckConditions.NO_INSIDE_VEHICLE})
 	public void onEntityDamageByEntity(PlayerDamageEntityEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;
@@ -81,14 +81,13 @@ public class ForceField extends Cheat {
 			e.setCancelled(true);
 	}
 	
-	public static void manageForcefieldForFakeplayer(Player p, NegativityPlayer np) {
+	public void manageForcefieldForFakeplayer(Player p, NegativityPlayer np) {
 		if(np.fakePlayerTouched == 0) return;
-		Cheat forcefield = Cheat.forKey(CheatKeys.FORCEFIELD);
-		forcefield.recordData(p.getUniqueId(), FAKE_PLAYERS, 1);
+		recordData(p.getUniqueId(), FAKE_PLAYERS, 1);
 		double timeBehindStart = System.currentTimeMillis() - np.timeStartFakePlayer;
-		Negativity.alertMod(np.fakePlayerTouched > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, forcefield,
+		Negativity.alertMod(np.fakePlayerTouched > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 				parseInPorcent(np.fakePlayerTouched * 10), "ghost", "Hitting fake entities. " + np.fakePlayerTouched
 				+ " entites touch in " + timeBehindStart + " millisecondes",
-				forcefield.hoverMsg("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
+				hoverMsg("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
 	}
 }

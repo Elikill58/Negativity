@@ -14,7 +14,10 @@
 ###################################################################
 
 log_alerts: true
+# If log alert in console
 log_alerts_in_console: true
+# If you want to log alert when the player will be kicked
+log_alert_with_kick: false
 tps_alert_stop: 19 # if you get less TPS then this value, all alert will be disabled
 # Don't send ping message to proxy, just let say there is Negativity on proxy
 use-proxy-force: false

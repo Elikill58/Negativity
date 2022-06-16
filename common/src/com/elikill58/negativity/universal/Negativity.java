@@ -127,7 +127,7 @@ public class Negativity {
 	 */
 	public static boolean alertMod(ReportType type, Player p, Cheat c, int reliability, String checkName, String proof,
 			CheatHover hover, long amount) {
-		if(!c.isActive() || reliability < 55 || tpsDrop || amount == 0)
+		if(!c.isActive() || reliability < 55 || tpsDrop || amount <= 0)
 			return false;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		if (!np.already_blink && c.getKey().equals(CheatKeys.BLINK)) {
@@ -158,8 +158,14 @@ public class Negativity {
 		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			EventManager.callEvent(kick);
-			if (!kick.isCancelled())
+			if (!kick.isCancelled()) {
+				if(Adapter.getAdapter().getConfig().getBoolean("log_alert_with_kick", false)) {
+					manageAlertCommand(np, type, p, c, reliability);
+					sendAlertMessage(np, alert);
+				}
 				p.kick(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName(), "%reason%", np.getReason(c), "%playername%", p.getName()));
+				return;
+			}
 		}
 		if(BanManager.isBanned(np.getUUID())) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
@@ -172,7 +178,8 @@ public class Negativity {
 		}
 		manageAlertCommand(np, type, p, c, reliability);
 		AlertSender.getAlertShower().alert(np, alert);
-		c.performSetBack(p);
+		if(c.isSetBack())
+			c.performSetBack(p);
 		return true;
 	}
 

@@ -14,7 +14,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.PlayerInventory;
 
-import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
@@ -30,7 +29,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
@@ -137,7 +135,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 					new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, ep),
 					ep.blockPosition());
 			if (hitResult == null) { // ignore because it should be only interact and not block pose
-				return new NPacketPlayInUseItem(0, 0, 0, BlockFace.SELF, packet.timestamp);
+				return new NPacketPlayInUnset("ServerboundUseItemPacket", null);
 			}
 			if (hitResult.isInside()) {
 				BlockPos pos = hitResult.getBlockPos();

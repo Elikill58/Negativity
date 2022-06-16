@@ -164,7 +164,7 @@ public class Negativity {
 					sendAlertMessage(np, alert);
 				}
 				p.kick(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName(), "%reason%", np.getReason(c), "%playername%", p.getName()));
-				return;
+				return false;
 			}
 		}
 		if(BanManager.isBanned(np.getUUID())) {

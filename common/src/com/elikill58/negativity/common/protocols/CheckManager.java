@@ -39,7 +39,7 @@ public class CheckManager implements Listeners {
 					continue;
 				}
 				
-				if (parameterTypes.length > 1 && !NegativityPlayer.class.isAssignableFrom(parameterTypes[1])) {
+				if (hasNegativityPlayer && !NegativityPlayer.class.isAssignableFrom(parameterTypes[1])) {
 					Adapter.getAdapter().getLogger().warn("Second parameter of check method " + possibleMethod.getName() + " must be NegativityPlayer.");
 					continue;
 				}
@@ -117,6 +117,7 @@ public class CheckManager implements Listeners {
 				else
 					method.invoke(cheat, event);
 			} catch (Exception e) {
+				Adapter.getAdapter().getLogger().printError("Error while trying to invoke check method for event " + event.getClass().getSimpleName() + " and cheat " + cheat.getKey().getKey(), e);
 				e.printStackTrace();
 			}
 		}

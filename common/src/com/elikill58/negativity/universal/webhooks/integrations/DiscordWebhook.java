@@ -142,6 +142,7 @@ public class DiscordWebhook implements Webhook {
     
     @Override
     public void send(WebhookMessage msg) {
+    	queue.remove(msg);
     	try {
     		executorService.execute(() -> sendAsync(msg));
     	} catch (Exception e) {
@@ -169,7 +170,7 @@ public class DiscordWebhook implements Webhook {
     	// if offline, don't care about cooldown
     	if(time > System.currentTimeMillis() || (msg.getConcerned().isOnline() && hasCooldown(msg.getConcerned(), msg.getMessageType()))) { // should skip
     		queue.add(msg);
-        	ada.debug("Skipping " + msg.getMessageType().name() + ": " + (time > System.currentTimeMillis() ? "waiting for discord" : "player cooldown"));
+        	ada.debug("Skipping " + msg.getMessageType().name() + ": " + (time > System.currentTimeMillis() ? "waiting for discord" : "player cooldown: " + getCooldown(msg.getConcerned(), msg.getMessageType())));
     		return;
     	}
     	ada.debug("Sending webhook " + msg.getMessageType().name() + " for " + msg.getConcerned().getName() + ": " + getCooldown(msg.getConcerned(), msg.getMessageType()));
@@ -390,7 +391,6 @@ public class DiscordWebhook implements Webhook {
 	        connection.setDoOutput(true);
 	        connection.setRequestMethod("POST");
 	        OutputStream stream = connection.getOutputStream();
-	        Adapter.getAdapter().debug("Send json: " + json.toString());
 	        stream.write(json.toString().getBytes());
 	        stream.flush();
 	        stream.close();

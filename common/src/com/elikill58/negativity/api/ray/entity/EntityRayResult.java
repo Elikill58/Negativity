@@ -9,12 +9,10 @@ import com.elikill58.negativity.api.ray.RayResult;
 public class EntityRayResult extends AbstractRayResult<EntityRay> {
 
 	private final List<Entity> entitiesFounded;
-	private final double lastDistance;
 	
 	protected EntityRayResult(EntityRay ray, RayResult rayResult, List<Entity> foundedEntities, double lastDistance) {
 		super(ray, rayResult);
 		this.entitiesFounded = foundedEntities;
-		this.lastDistance = lastDistance;
 	}
 	
 	/**
@@ -26,12 +24,8 @@ public class EntityRayResult extends AbstractRayResult<EntityRay> {
 		return entitiesFounded;
 	}
 	
-	/**
-	 * Get the distance between begin and end.
-	 * 
-	 * @return the distance
-	 */
-	public double getLastDistance() {
-		return lastDistance;
+	@Override
+	public String toString() {
+		return "entities=" + entitiesFounded + "," + super.toString();
 	}
 }

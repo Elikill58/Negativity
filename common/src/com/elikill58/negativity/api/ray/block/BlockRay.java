@@ -19,7 +19,6 @@ public class BlockRay extends AbstractRay<BlockRayResult> {
 	private final RaySearch search;
 	private boolean hasOther = false;
 	private List<Vector> positions;
-	private double lastDistance = 0;
 	
 	protected BlockRay(World w, Location position, Vector vector, int maxDistance, Material[] neededType, RaySearch search, Material[] filter, List<Vector> positions) {
 		super(w, position, vector, maxDistance);

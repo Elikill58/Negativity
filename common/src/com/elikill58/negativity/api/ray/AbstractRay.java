@@ -13,6 +13,7 @@ public abstract class AbstractRay<T extends AbstractRayResult<?>> {
 	protected final Location basePosition;
 	protected final Vector vector;
 	protected final int maxDistance;
+	protected double lastDistance = 0;
 	protected Location position;
 	protected HashMap<Vector, Material> testedVec = new HashMap<>();
 	
@@ -68,6 +69,15 @@ public abstract class AbstractRay<T extends AbstractRayResult<?>> {
 	 */
 	public HashMap<Vector, Material> getTestedVectors() {
 		return testedVec;
+	}
+	
+	/**
+	 * Get the last distance
+	 * 
+	 * @return last distance
+	 */
+	public double getLastDistance() {
+		return lastDistance;
 	}
 	
 	/**

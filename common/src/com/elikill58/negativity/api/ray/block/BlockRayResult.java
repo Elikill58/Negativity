@@ -1,12 +1,9 @@
 package com.elikill58.negativity.api.ray.block;
 
-import java.util.HashMap;
-
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.ray.AbstractRayResult;
 import com.elikill58.negativity.api.ray.RayResult;
 
@@ -14,13 +11,11 @@ public class BlockRayResult extends AbstractRayResult<BlockRay> {
 
 	private final Block block;
 	private final boolean hasBlockExceptSearched;
-	private final double lastDistance;
 	
 	protected BlockRayResult(BlockRay ray, RayResult rayResult, Block block, boolean hasBlockExceptSearched, double lastDistance) {
 		super(ray, rayResult);
 		this.block = block;
 		this.hasBlockExceptSearched = hasBlockExceptSearched;
-		this.lastDistance = lastDistance;
 	}
 	
 	/**
@@ -54,21 +49,8 @@ public class BlockRayResult extends AbstractRayResult<BlockRay> {
 		return hasBlockExceptSearched;
 	}
 	
-	/**
-	 * Get the distance between begin and end.
-	 * 
-	 * @return the distance
-	 */
-	public double getLastDistance() {
-		return lastDistance;
-	}
-	
-	/**
-	 * Get ALL tested locations as vector with the material founded.
-	 * 
-	 * @return all locations with their materials
-	 */
-	public HashMap<Vector, Material> getAllTestedLoc() {
-		return alltestedLoc;
+	@Override
+	public String toString() {
+		return "block=" + block + "," + super.toString();
 	}
 }

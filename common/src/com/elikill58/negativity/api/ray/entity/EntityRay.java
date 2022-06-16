@@ -16,7 +16,6 @@ import com.elikill58.negativity.api.ray.RayResult;
 public class EntityRay extends AbstractRay<EntityRayResult> {
 
 	private final List<Entity> entities, foundedEntities = new ArrayList<>();
-	private double lastDistance = 0;
 	
 	protected EntityRay(World w, Location position, Vector vector, int maxDistance, boolean onlyPlayers, List<Entity> bypassEntities) {
 		super(w, position, vector, maxDistance);

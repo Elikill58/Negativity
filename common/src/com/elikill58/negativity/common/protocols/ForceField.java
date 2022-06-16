@@ -70,7 +70,7 @@ public class ForceField extends Cheat {
 			double angle = LocationUtils.getAngleTo(p, cible.getLocation());
 			Direction direction = LocationUtils.getDirection(angle);
 			mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
-					"Hit " + cible.toString() + " (" + cible.getName() + ") not seeing (new: " + newSee +"). Looking: " + lookingEntities + ". Angle: " + angle + ", direction: " + direction.name(),
+					"Hit " + cible.toString() + " (" + cible.getName() + ") (new: " + newSee +"). Looking: " + lookingEntities + ". Angle: " + angle + ", direction: " + direction.name() + ", ray: " + ray.toString(),
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase(Locale.ROOT)), direction.name().contains("FRONT") ? 1 : 5);
 		} else {
 			double angle = LocationUtils.getAngleTo(p, cible.getLocation());

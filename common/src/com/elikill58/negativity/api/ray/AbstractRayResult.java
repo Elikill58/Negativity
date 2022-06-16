@@ -9,14 +9,10 @@ public abstract class AbstractRayResult<T extends AbstractRay<?>> {
 
 	protected final T ray;
 	protected final RayResult rayResult;
-	protected final HashMap<Vector, Material> alltestedLoc;
-	protected final Vector vec;
 	
 	protected AbstractRayResult(T ray, RayResult rayResult) {
 		this.ray = ray;
 		this.rayResult = rayResult;
-		this.vec = ray.getVector();
-		this.alltestedLoc = ray.getTestedVectors();
 	}
 
 	/**
@@ -43,7 +39,7 @@ public abstract class AbstractRayResult<T extends AbstractRay<?>> {
 	 * @return the vector
 	 */
 	public Vector getVector() {
-		return vec;
+		return ray.getVector();
 	}
 	
 	/**
@@ -52,6 +48,20 @@ public abstract class AbstractRayResult<T extends AbstractRay<?>> {
 	 * @return all locations with their materials
 	 */
 	public HashMap<Vector, Material> getAllTestedLoc() {
-		return alltestedLoc;
+		return ray.getTestedVectors();
+	}
+	
+	/**
+	 * Get the last distance between begin and end.
+	 * 
+	 * @return last distance
+	 */
+	public double getLastDistance() {
+		return ray.getLastDistance();
+	}
+	
+	@Override
+	public String toString() {
+		return rayResult.name() + ",vec=" + getVector().toString() + ",lastDistance=" + String.format("%.3f", getLastDistance());
 	}
 }

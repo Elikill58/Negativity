@@ -12,7 +12,7 @@ public class BlockRayResult extends AbstractRayResult<BlockRay> {
 	private final Block block;
 	private final boolean hasBlockExceptSearched;
 	
-	protected BlockRayResult(BlockRay ray, RayResult rayResult, Block block, boolean hasBlockExceptSearched, double lastDistance) {
+	protected BlockRayResult(BlockRay ray, RayResult rayResult, Block block, boolean hasBlockExceptSearched) {
 		super(ray, rayResult);
 		this.block = block;
 		this.hasBlockExceptSearched = hasBlockExceptSearched;

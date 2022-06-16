@@ -10,7 +10,7 @@ public class EntityRayResult extends AbstractRayResult<EntityRay> {
 
 	private final List<Entity> entitiesFounded;
 	
-	protected EntityRayResult(EntityRay ray, RayResult rayResult, List<Entity> foundedEntities, double lastDistance) {
+	protected EntityRayResult(EntityRay ray, RayResult rayResult, List<Entity> foundedEntities) {
 		super(ray, rayResult);
 		this.entitiesFounded = foundedEntities;
 	}

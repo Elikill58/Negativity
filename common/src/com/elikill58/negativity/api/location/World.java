@@ -112,4 +112,12 @@ public abstract class World implements NegativityObject {
 	 * @return true if pvp is enabled
 	 */
 	public abstract boolean isPVP();
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(!(obj instanceof World))
+			return false;
+		World w = (World) obj;
+		return getName().equals(w.getName()) || getDefault().equals(w.getDefault());
+	}
 }

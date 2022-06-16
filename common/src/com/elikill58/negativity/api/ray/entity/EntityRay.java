@@ -37,7 +37,7 @@ public class EntityRay extends AbstractRay<EntityRayResult> {
 	
 	@Override
 	protected EntityRayResult createResult(RayResult ray) {
-		return new EntityRayResult(this, ray, foundedEntities, lastDistance);
+		return new EntityRayResult(this, ray, foundedEntities);
 	}
 	
 	@Override

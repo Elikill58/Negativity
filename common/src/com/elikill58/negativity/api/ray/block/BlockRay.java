@@ -59,7 +59,7 @@ public class BlockRay extends AbstractRay<BlockRayResult> {
 	
 	@Override
 	protected BlockRayResult createResult(RayResult ray) {
-		return new BlockRayResult(this, ray, position.getBlock(), hasOther, lastDistance);
+		return new BlockRayResult(this, ray, position.getBlock(), hasOther);
 	}
 
 	@Override

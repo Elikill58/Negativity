@@ -68,7 +68,7 @@ public class Scaffold extends Cheat {
 		}, 1);
 	}
 
-	@Check(name = "distance", description = "Distance between placed and target one", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "distance", description = "Distance between placed and target one", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_ON_BEDROCK })
 	public void onBlockPlaceDistance(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		Block place = e.getBlock();

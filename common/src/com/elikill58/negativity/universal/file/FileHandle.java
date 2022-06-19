@@ -40,6 +40,7 @@ public class FileHandle {
 	public void write(List<String> lines) throws IOException {
 		for(String s : lines)
 			handle.append(s + "\n");
+		update();
 	}
 	
 	public boolean shouldBeClosed() {

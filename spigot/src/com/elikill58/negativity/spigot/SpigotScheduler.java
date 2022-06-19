@@ -48,8 +48,8 @@ public class SpigotScheduler implements Scheduler {
 	
 	@Override
 	public ScheduledTask runRepeatingAsync(Runnable task, Duration delay, Duration interval, @Nullable String name) {
-		long delayTicks = (delay.toMillis() * 1000) / 20;
-		long intervalTicks = (interval.toMillis() * 1000) / 20;
+		long delayTicks = (delay.toMillis() * 20) / 1000;
+		long intervalTicks = (interval.toMillis() * 20) / 1000;
 		return new TaskWrapper(Bukkit.getScheduler().runTaskTimerAsynchronously(this.plugin, task, delayTicks, intervalTicks));
 	}
 	

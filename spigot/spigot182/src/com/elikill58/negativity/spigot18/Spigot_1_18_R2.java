@@ -147,7 +147,7 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 						new Vector(vec.x, vec.y, vec.z));
 			} else {
 				Adapter.getAdapter().getLogger().error("Failed to find something for block place " + ep.blockPosition());
-				return new NPacketPlayInUnset("PacketPlayInBlockPlace", PacketType.Client.BLOCK_PLACE);
+				return new NPacketPlayInUnset("ServerboundUseItemPacket", null);
 			}
 		});
 		packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {

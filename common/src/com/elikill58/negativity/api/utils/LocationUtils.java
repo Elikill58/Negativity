@@ -26,7 +26,7 @@ public class LocationUtils {
 	public static boolean isBlockOfType(Location location, String... materials) {
 		String blockMaterial = location.getBlock().getType().getId().toUpperCase(Locale.ROOT);
 		for (String material : materials) {
-			if (blockMaterial.contains(material)) {
+			if (blockMaterial.contains(material.toUpperCase())) {
 				return true;
 			}
 		}
@@ -72,7 +72,7 @@ public class LocationUtils {
 	 */
 	public static boolean hasMaterialsAround(Location loc, String... ms) {
 		loc = loc.clone();
-		if (isBlockOfType(loc))
+		if (isBlockOfType(loc, ms))
 			return true;
 		if (isBlockOfType(loc.add(0, 0, 1), ms))
 			return true;

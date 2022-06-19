@@ -26,9 +26,9 @@ public class Spider extends Cheat {
 	}
 
 	@Check(name = "nothing-around", description = "Walking with nothing around", conditions = {
-			CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA,
+			CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_LIQUID_AROUND,
 			CheckConditions.NO_FLY, CheckConditions.NO_FALL_DISTANCE, CheckConditions.NO_SPRINT, CheckConditions.NO_USE_TRIDENT,
-			CheckConditions.NO_USE_SLIME })
+			CheckConditions.NO_USE_SLIME, CheckConditions.NO_STAIRS_AROUND, CheckConditions.NO_CLIMB_BLOCK })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location loc = p.getLocation();
@@ -61,7 +61,7 @@ public class Spider extends Cheat {
 
 	@Check(name = "same-y", description = "Player move with same Y", conditions = { CheckConditions.SURVIVAL,
 			CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY,
-			CheckConditions.NO_FALL_DISTANCE })
+			CheckConditions.NO_FALL_DISTANCE, CheckConditions.NO_CLIMB_BLOCK })
 	public void onPlayerMoveSameY(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
@@ -105,17 +105,13 @@ public class Spider extends Cheat {
 	@Check(name = "distance", description = "Distance when going up", conditions = { CheckConditions.SURVIVAL,
 			CheckConditions.NO_BLOCK_MID_AROUND_BELOW, CheckConditions.NO_INSIDE_VEHICLE,
 			CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_LIQUID_AROUND,
-			CheckConditions.NO_STAIRS_AROUND_EXTENDED, CheckConditions.NO_USE_TRIDENT,
-			CheckConditions.NO_BLOCK_MID_AROUND, CheckConditions.NO_FLY })
+			CheckConditions.NO_STAIRS_AROUND, CheckConditions.NO_USE_TRIDENT,
+			CheckConditions.NO_BLOCK_MID_AROUND, CheckConditions.NO_FLY, CheckConditions.NO_CLIMB_BLOCK })
 	public void onPlayerContinueMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
 		Location loc = p.getLocation().clone();
-		String blockName = p.getLocation().getBlock().getType().getId();
-		if (blockName.contains("LADDER") || blockName.contains("VINE"))
-			return;
-
 		double y = e.getTo().getY() - e.getFrom().getY();
 		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
 			double tempDis = loc.getY() - np.lastSpiderLoc.getY(),
@@ -140,10 +136,7 @@ public class Spider extends Cheat {
 	}
 
 	private boolean hasBypassBlockAround(Location loc) {
-		if (has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD", "CAKE", "SNOW"))
-			return true;
-		loc = loc.clone().sub(0, 1, 0);
-		return has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD", "CAKE", "SNOW");
+		return has(loc, "SLAB", "CAKE", "SNOW");
 	}
 
 	public boolean has(Location loc, String... m) {

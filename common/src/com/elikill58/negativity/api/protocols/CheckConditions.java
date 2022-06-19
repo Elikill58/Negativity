@@ -29,7 +29,7 @@ public enum CheckConditions {
 	NO_STAIRS_AROUND("No stairs around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "STAIRS", "SCAFFOLD"), true),
 	NO_FALL_LESS_BLOCK("No block that reduce fall fear", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "STAIRS", "SCAFFOLD", "SLAB", "HONEY_BLOCK"), true),
 	NO_FALL_LESS_BLOCK_BELOW("No block that reduce fall fear below", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "STAIRS", "SCAFFOLD", "SLAB", "HONEY_BLOCK"), true),
-	NO_CLIMB_BLOCK("No limb block around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "STAIRS", "SCAFFOLD", "LADDER", "VINE"), true),
+	NO_CLIMB_BLOCK("No climb block around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "STAIRS", "SCAFFOLD", "LADDER", "VINE"), true),
 	
 	NO_BOAT_AROUND("No boat around", (p) -> LocationUtils.hasBoatAroundHim(p.getLocation()), true),
 	NO_ON_BEDROCK("Not on bedrock", (p) -> !NegativityPlayer.getNegativityPlayer(p).isBedrockPlayer()),

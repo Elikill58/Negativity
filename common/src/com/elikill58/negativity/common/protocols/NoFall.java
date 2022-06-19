@@ -205,7 +205,7 @@ public class NoFall extends Cheat {
 		// double difX = to.getX() - from.getX(), difZ = to.getZ() - from.getZ();
 		// boolean verticalCollision = difY != p.getVelocity().getY();
 		// boolean ownGroundBefore = verticalCollision && difY < 0.0;
-		Material type = to.sub(0, 0.05, 0).getBlock().getType();
+		Material type = to.clone().add(0, p.getVelocity().getY(), 0).getBlock().getType();
 		boolean ownGround = !p.isFlying() && type.isSolid();
 		if (p.isOnGround() && !ownGround && p.getVelocity().getY() <= difY) {
 			if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(Math.abs(difY) * 250),

@@ -461,8 +461,10 @@ webhooks:
           enabled: true
           # The name which will send the message
           username: "Negativity"
-          # The content of the message
+          # The content of the message (at top of embed).
           content: ""
+          # The content of the message (at top of embed). Sent only at first webhook. Can be used to tag role or user
+          content_first: "A new cheater is here: %name%"
           # The URL of the message avatar
           avatar_url: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
           # Now let's configure embed message (the section with black background)

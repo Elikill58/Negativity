@@ -12,6 +12,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 
@@ -34,7 +35,8 @@ public class DiscordWebhook implements Webhook {
 	private final Configuration config;
 	private final String webhookUrl;
 	private final ScheduledExecutorService executorService;
-	private List<WebhookMessage> queue = new ArrayList<>();
+	private final List<UUID> alreadySent = new ArrayList<>();
+	private final List<WebhookMessage> queue = new ArrayList<>();
 	private long time = 0, cooldown = 0;
 	private final Content<Long> players = new Content<>();
 	
@@ -77,6 +79,7 @@ public class DiscordWebhook implements Webhook {
     public void clean(Player p) {
     	for(WebhookMessageType type : WebhookMessageType.values())
     		players.remove(type, p.getUniqueId().toString());
+    	alreadySent.remove(p.getUniqueId());
     }
     
     @Override
@@ -164,10 +167,10 @@ public class DiscordWebhook implements Webhook {
     
     private void sendAsyncWithException(WebhookMessage msg) throws Exception {
     	queue.remove(msg);
-    	Adapter ada = Adapter.getAdapter();
     	Configuration confMsg = config.getSection("messages." + msg.getMessageType().name().toLowerCase(Locale.ROOT));
     	if(confMsg == null) // not config
     		return;
+    	Adapter ada = Adapter.getAdapter();
     	if(!confMsg.getBoolean("enabled", true)) {
         	ada.debug("Webhook for " + msg.getMessageType().name() + " is not enabled.");
     		return;
@@ -183,7 +186,10 @@ public class DiscordWebhook implements Webhook {
     	queue.removeIf(w -> w.getDate() == msg.getDate()); // be sure it's removed
     	DiscordWebhookRequest webhook = new DiscordWebhookRequest(webhookUrl);
 	    webhook.setUsername(msg.applyPlaceHolders(confMsg.getString("username", "Negativity")));
-	    webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content", "")));
+	    boolean shouldShow = !alreadySent.contains(msg.getConcerned().getUniqueId());
+	    if(shouldShow)
+	    	alreadySent.add(msg.getConcerned().getUniqueId());
+	    webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content" + (shouldShow ? "_first" : ""), "")));
 	    webhook.setAvatarUrl(msg.applyPlaceHolders(confMsg.getString("avatar_url", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")));
 	    Configuration embed = confMsg.getSection("embed");
 	    if(embed != null) {

@@ -12,6 +12,7 @@ import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -26,7 +27,7 @@ public class IncorrectPacket extends Cheat {
 		super(CheatKeys.INCORRECT_PACKET, CheatCategory.WORLD, Materials.NAME_TAG);
 	}
 
-	@Check(name = "distance", description = "Check distance between player and sent packet")
+	@Check(name = "distance", description = "Check distance between player and sent packet", conditions = CheckConditions.NO_TELEPORT)
 	public void onPacket(PacketReceiveEvent e) {
 		if (!e.hasPlayer())
 			return;
@@ -44,7 +45,7 @@ public class IncorrectPacket extends Cheat {
 			double distance = dx * dx + dy * dy + dz * dz;
 			if (distance > maxDistance) { // distance originally used by spigot
 				e.setCancelled(true); // cancel. Everytime.
-				int relia = UniversalUtils.parseInPorcent(distance * (distance > 100 ? 2.5 : 1));
+				int relia = UniversalUtils.parseInPorcent(distance * (distance > 100 ? 2 : 1));
 				int amount = (int) (distance < 1000 ? distance - maxDistance : distance / 10) - 1000;
 				if (amount <= 0)
 					return;

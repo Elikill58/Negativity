@@ -1,0 +1,43 @@
+name: "Feature request"
+description: "Suggest an idea for this project"
+title: "Feature: "
+labels: ["enhancement"]
+assignees:
+- Elikill58
+body:
+- type: markdown
+  attributes:
+    value: "Use this template only if you want a new feature for Negativity."
+- type: dropdown
+  id: platform
+  attributes:
+    label: "What is concerned ?"
+    multiple: true
+    options:
+    - Messages
+    - Plugins support
+    - Commands
+    - Cheats
+    - "Fix/Exploits"
+    - Options in feature
+    - Other
+- type: checkboxes
+  id: versions
+  attributes:
+    label: "Are you using v2 (premium, 8€) ?"
+    options:
+      - label: "Yes I bought Negativity V2"
+- type: textarea
+  id: describe
+  attributes:
+    label: "What is your idea ? What do you want ?"
+    description: "Explain your idea with screenshoots, example etc"
+    placeholder: "Explain your idea !"
+    value: "I would like "
+  validations:
+    required: true
+- type: textarea
+  id: why
+  attributes:
+    label: "Why this idea ? Why it should be accepted ?"
+    description: "After explaining the feature by itself, explain why it should be added"

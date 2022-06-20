@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
@@ -51,11 +50,13 @@ public class SpeedProtocol extends Cheat implements Listener {
 			return;
 		if(np.hasElytra() || LocationUtils.isUsingElevator(p) || np.TIME_INVINCIBILITY_SPEED > System.currentTimeMillis())
 			return;
+		int amplifier = 0;
 		if(p.hasPotionEffect(PotionEffectType.SPEED)) {
-			PotionEffect pe = np.getPotionEffect(PotionEffectType.SPEED);
-			if(pe.getAmplifier() > 0)
-				np.TIME_INVINCIBILITY_SPEED = System.currentTimeMillis() + pe.getAmplifier() * 100;
-			return;
+			amplifier = np.getPotionEffect(PotionEffectType.SPEED).getAmplifier();
+			if(amplifier > 5) {
+				np.TIME_INVINCIBILITY_SPEED = System.currentTimeMillis() + amplifier * 100;
+				return;
+			}
 		}
 		Location from = e.getFrom().clone(), to = e.getTo().clone();
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)
@@ -140,7 +141,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 							np.SPEED_NB++;
 							if (np.SPEED_NB > 4)
 								mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p,
-										Cheat.forKey(CheatKeys.SPEED), UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "HighSpeed - Block under: "
+										this, UniversalUtils.parseInPorcent(86 + np.SPEED_NB), "HighSpeed - Block under: "
 												+ under.name() + ", Speed: " + distance + ", nb: " + np.SPEED_NB + ", fallDistance: " + p.getFallDistance());
 						} else
 							np.SPEED_NB = 0;

@@ -90,7 +90,7 @@ public class ScaffoldRiseCheckProcessor implements CheckProcessor {
 						proofLine = "";
 					amountInvalid++;
 				}
-				Adapter.getAdapter().debug(proofLine + amountInvalid + sloc);
+				//Adapter.getAdapter().debug(proofLine + amountInvalid + sloc);
 				proofs.add(proofLine + " { \"yaw\": " + String.format("%.3f", flying.yaw).replace(",", ".") + ", \"pitch\": " + String.format("%.3f", flying.pitch).replace(",", ".") + ", \"sprint\": " + (p.isSprinting() ? 1 : 0) + "} ");
 				setState(RiseCheckState.INVALID);
 				if (p.isSprinting())

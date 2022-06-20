@@ -186,10 +186,12 @@ public class DiscordWebhook implements Webhook {
     	queue.removeIf(w -> w.getDate() == msg.getDate()); // be sure it's removed
     	DiscordWebhookRequest webhook = new DiscordWebhookRequest(webhookUrl);
 	    webhook.setUsername(msg.applyPlaceHolders(confMsg.getString("username", "Negativity")));
-	    boolean shouldShow = !alreadySent.contains(msg.getConcerned().getUniqueId());
-	    if(shouldShow)
+	    if(alreadySent.contains(msg.getConcerned().getUniqueId())) { // if already sent first message
+		    webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content", "")));
+	    } else { // is first message
 	    	alreadySent.add(msg.getConcerned().getUniqueId());
-	    webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content" + (shouldShow ? "_first" : ""), "")));
+		    webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content_first", confMsg.getString("content", ""))));
+	    }
 	    webhook.setAvatarUrl(msg.applyPlaceHolders(confMsg.getString("avatar_url", "https://www.spigotmc.org/data/resource_icons/86/86874.jpg")));
 	    Configuration embed = confMsg.getSection("embed");
 	    if(embed != null) {

@@ -83,16 +83,18 @@ public class DiscordWebhook implements Webhook {
     	if(!msg.canCombine())
     		send(msg);
     	else {
-    		queue.add(msg);
-    		for(WebhookMessage other : new ArrayList<>(queue)) { // for all queued messages
-    			WebhookMessage combined = msg.combine(other); // try to combine
-    			if(combined != null) { // can combine, remove old and add new
-    				queue.remove(other); // remove old old
-    				queue.remove(msg);
-    				queue.add(combined); // add new combined
-    				break; // found combine
-    			}
-    		}
+    		synchronized (queue) {
+        		queue.add(msg);
+        		for(WebhookMessage other : new ArrayList<>(queue)) { // for all queued messages
+        			WebhookMessage combined = msg.combine(other); // try to combine
+        			if(combined != null) { // can combine, remove old and add new
+        				queue.remove(other); // remove old old
+        				queue.remove(msg);
+        				queue.add(combined); // add new combined
+        				break; // found combine
+        			}
+        		}
+			}
     	}
     }
     
@@ -142,7 +144,6 @@ public class DiscordWebhook implements Webhook {
     
     @Override
     public void send(WebhookMessage msg) {
-    	queue.remove(msg);
     	try {
     		executorService.execute(() -> sendAsync(msg));
     	} catch (Exception e) {
@@ -159,6 +160,7 @@ public class DiscordWebhook implements Webhook {
     }
     
     private void sendAsyncWithException(WebhookMessage msg) throws Exception {
+    	queue.remove(msg);
     	Adapter ada = Adapter.getAdapter();
     	Configuration confMsg = config.getSection("messages." + msg.getMessageType().name().toLowerCase(Locale.ROOT));
     	if(confMsg == null) // not config
@@ -175,7 +177,7 @@ public class DiscordWebhook implements Webhook {
     	}
     	ada.debug("Sending webhook " + msg.getMessageType().name() + " for " + msg.getConcerned().getName() + ": " + getCooldown(msg.getConcerned(), msg.getMessageType()));
     	setCooldown(msg.getConcerned(), msg.getMessageType());
-    	queue.remove(msg); // be sure it's removed
+    	queue.removeIf(w -> w.getDate() == msg.getDate()); // be sure it's removed
     	DiscordWebhookRequest webhook = new DiscordWebhookRequest(webhookUrl);
 	    webhook.setUsername(msg.applyPlaceHolders(confMsg.getString("username", "Negativity")));
 	    webhook.setContent(msg.applyPlaceHolders(confMsg.getString("content", "")));

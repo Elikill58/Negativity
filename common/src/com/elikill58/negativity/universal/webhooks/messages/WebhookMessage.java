@@ -63,6 +63,10 @@ public class WebhookMessage implements Comparable<WebhookMessage> {
 		return placeholders;
 	}
 	
+	public long getDate() {
+		return date;
+	}
+	
 	/**
 	 * Apply all placeholders available for this message
 	 * 

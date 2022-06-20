@@ -44,9 +44,13 @@ public class DiscordWebhook implements Webhook {
 		this.webhookUrl = config.getString("url");
 		this.executorService = Executors.newScheduledThreadPool(1);
 	}
+	
+	private long getTheoricCooldown(WebhookMessageType type) {
+		return config.getLong("messages." + type.name().toLowerCase(Locale.ROOT) + ".cooldown", this.cooldown);
+	}
 
 	public long getCooldown(Player p, WebhookMessageType type) {
-		long saved = players.get(type, p.getUniqueId().toString(), 0l);
+		long saved = players.get(type, p.getUniqueId().toString(), System.currentTimeMillis() + getTheoricCooldown(type));
 		return saved == 0 ? 0 : System.currentTimeMillis() - saved;
 	}
 
@@ -55,8 +59,7 @@ public class DiscordWebhook implements Webhook {
 	}
 	
 	public void setCooldown(Player p, WebhookMessageType type) {
-		long cooldown = config.getLong("messages." + type.name().toLowerCase(Locale.ROOT) + ".cooldown", this.cooldown);
-		players.set(type, p.getUniqueId().toString(), System.currentTimeMillis() + cooldown);
+		players.set(type, p.getUniqueId().toString(), System.currentTimeMillis() + getTheoricCooldown(type));
 	}
 	
 	@Override

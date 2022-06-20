@@ -270,6 +270,8 @@ public class NegativityPlayer implements FileSaverAction {
 	}
 	
 	public Location getPingedLocation() {
+		if(lastLocations.isEmpty())
+			return p.getLocation();
 		int ping = p.getPing();
 		int nbLast = (int) (ping / 50);
 		if(lastLocations.size() <= nbLast)

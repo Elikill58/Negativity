@@ -16,6 +16,7 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.player.LoginEvent;
 import com.elikill58.negativity.api.events.player.LoginEvent.Result;
 import com.elikill58.negativity.api.events.player.PlayerConnectEvent;
+import com.elikill58.negativity.api.events.player.PlayerLeaveEvent;
 import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
 import com.elikill58.negativity.common.commands.ReportCommand;
 import com.elikill58.negativity.universal.Adapter;
@@ -30,6 +31,7 @@ import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.SemVer;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.webhooks.WebhookManager;
 
 public class ConnectionManager implements Listeners {
 
@@ -126,5 +128,10 @@ public class ConnectionManager implements Listeners {
 	public void onTeleport(PlayerTeleportEvent e) {
 		Player p = e.getPlayer();
 		NegativityPlayer.getNegativityPlayer(p).timeInvincibility = System.currentTimeMillis() + 1000;
+	}
+	
+	@EventListener
+	public void onLeft(PlayerLeaveEvent e) {
+		WebhookManager.getWebhooks().forEach(w -> w.clean(e.getPlayer()));
 	}
 }

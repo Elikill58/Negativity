@@ -1,6 +1,6 @@
 # Negativity
 
-A Minecraft AntiCheat for **Spigot** (1.7.10 to 1.18) and **Sponge** ([more informations](https://github.com/Elikill58/Negativity/wiki#im-on-sponge-and-wtf-)) (*also works on fork of Spigot*).
+A Minecraft AntiCheat for **Spigot** (1.7.10 to 1.19) and **Sponge** ([more informations](https://github.com/Elikill58/Negativity/wiki#im-on-sponge-and-wtf-)) (*also works on fork of Spigot*).
 It is also compatible with **Bungeecord** and **Velocity**.
 
 You need to put the plugin on Spigot/Sponge even if you put it on your proxy.
@@ -19,7 +19,7 @@ A complete wiki explain [how to install](https://github.com/Elikill58/Negativity
 
 ## I want to test it before download !
 
-You can check it on **server.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.18). Warn: it can be offline.
+You can check it on **server.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.19). Warn: it can be offline.
 
 ## What are the detected cheat ?
 

@@ -25,7 +25,7 @@ public class AutoSteal extends Cheat {
 
 	public static final int TIME_CLICK = 55;
 	
-	@Check(name = "time-click", description = "Time between 2 clicks", conditions = { CheckConditions.SURVIVAL })
+	@Check(name = "time-click", description = "Time between 2 clicks", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_ON_BEDROCK })
 	public void onInvClick(InventoryClickEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		ItemStack inHand = p.getItemInHand();

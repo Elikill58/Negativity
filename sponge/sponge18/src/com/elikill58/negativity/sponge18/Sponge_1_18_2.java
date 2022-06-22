@@ -1,4 +1,4 @@
-package com.elikill58.negativity.sponge16.nms;
+package com.elikill58.negativity.sponge18;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -52,9 +52,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unchecked")
-public class Sponge_1_16_5 extends SpongeVersionAdapter {
+public class Sponge_1_18_2 extends SpongeVersionAdapter {
 
-	public Sponge_1_16_5() {
+	public Sponge_1_18_2() {
 		super("v1_16_5");
 		packetsPlayIn.put("ServerboundPlayerActionPacket", (p, f) -> {
 			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) f;
@@ -87,9 +87,11 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 		packetsPlayIn.put("ServerboundKeepAlivePacket", (p, f) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) f).getId()));
 		packetsPlayIn.put("ServerboundInteractPacket", (pl, f) -> {
 			ServerboundInteractPacket p = (ServerboundInteractPacket) f;
-			Vec3 v = p.getLocation();
+			Object action = get(p, "action");
+			Enum<?> actionType = getFromMethod(action, "getType");
+			Vec3 v = get(action, "location");
 			return new NPacketPlayInUseEntity(0, v == null ? new Vector(0, 0, 0) : new Vector(v.x, v.y, v.z),
-					EnumEntityUseAction.valueOf(p.getAction().name()));
+					EnumEntityUseAction.valueOf(actionType.name()));
 		});
 		packetsPlayIn.put("ServerboundPlayerCommandPacket", (p, f) -> {
 			try {

@@ -156,6 +156,11 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 		return String.valueOf(id);
 	}
 	
+	@Override
+	public boolean isDead() {
+		return false;
+	}
+	
 	/**
 	 * Get the NMS entity player, but as object for compatibility
 	 * 

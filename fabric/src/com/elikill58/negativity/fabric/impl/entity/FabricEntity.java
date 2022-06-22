@@ -32,6 +32,11 @@ public class FabricEntity<E extends Entity> extends AbstractEntity {
 	public boolean isOnGround() {
 		return entity.isOnGround();
 	}
+	
+	@Override
+	public boolean isDead() {
+		return !entity.isAlive();
+	}
 
 	@Override
 	public boolean isOp() {

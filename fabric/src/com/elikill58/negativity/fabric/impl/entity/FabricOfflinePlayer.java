@@ -20,6 +20,11 @@ public class FabricOfflinePlayer extends AbstractEntity implements OfflinePlayer
 	public UUID getUniqueId() {
 		return u.getUuid();
 	}
+	
+	@Override
+	public boolean isDead() {
+		return !u.isAlive();
+	}
 
 	@Override
 	public boolean isOnline() {

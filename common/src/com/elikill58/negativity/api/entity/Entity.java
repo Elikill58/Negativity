@@ -59,6 +59,13 @@ public interface Entity extends CommandSender {
 	EntityType getType();
 	
 	/**
+	 * Check if the entity is dead
+	 * 
+	 * @return true if entity is dead
+	 */
+	boolean isDead();
+	
+	/**
 	 * Get the entity ID
 	 * 
 	 * @return the ID of the entity

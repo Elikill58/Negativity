@@ -21,7 +21,6 @@ public class EntityRay extends AbstractRay<EntityRayResult> {
 		super(w, position, vector, maxDistance);
 		this.entities = new ArrayList<>(w.getEntities());
 		this.entities.removeAll(bypassEntities);
-		this.entities.removeIf(e -> !e.getWorld().equals(w));
 		if(onlyPlayers)
 			this.entities.removeIf((et) -> !et.getType().equals(EntityType.PLAYER));
 	}

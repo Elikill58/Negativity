@@ -20,6 +20,11 @@ public interface OfflinePlayer extends Entity {
 	}
 	
 	@Override
+	default boolean isDead() {
+		return true;
+	}
+	
+	@Override
 	default boolean isOnGround() {
 		return true;
 	}

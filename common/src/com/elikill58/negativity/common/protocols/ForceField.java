@@ -61,7 +61,7 @@ public class ForceField extends Cheat {
 		Player p = e.getPlayer();
 		boolean mayCancel = false;
 		Entity cible = e.getDamaged();
-		if(cible.getType().equals(EntityType.WITHER) || cible.getType().equals(EntityType.ENDER_DRAGON))
+		if(cible.getType().equals(EntityType.WITHER) || cible.getType().equals(EntityType.ENDER_DRAGON) || cible.isDead())
 			return;
 		EntityRayResult ray = new EntityRayBuilder(p).onlyPlayers(false).build().compile();
 		List<Entity> lookingEntities = ray.getEntitiesFounded();

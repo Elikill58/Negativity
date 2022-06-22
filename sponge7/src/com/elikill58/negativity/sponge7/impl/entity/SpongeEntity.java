@@ -31,6 +31,11 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	public boolean isOnGround() {
 		return entity.isOnGround();
 	}
+	
+	@Override
+	public boolean isDead() {
+		return false;
+	}
 
 	@Override
 	public boolean isOp() {

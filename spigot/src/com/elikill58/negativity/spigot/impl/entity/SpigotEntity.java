@@ -27,6 +27,11 @@ public class SpigotEntity<E extends Entity> extends AbstractEntity {
 	public boolean isOnGround() {
 		return entity.isOnGround();
 	}
+	
+	@Override
+	public boolean isDead() {
+		return entity.isDead();
+	}
 
 	@Override
 	public boolean isOp() {

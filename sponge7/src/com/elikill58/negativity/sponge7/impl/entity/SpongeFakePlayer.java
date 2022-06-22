@@ -57,6 +57,11 @@ public class SpongeFakePlayer extends AbstractEntity implements FakePlayer {
 	}
 	
 	@Override
+	public boolean isDead() {
+		return false;
+	}
+	
+	@Override
 	public com.elikill58.negativity.api.location.World getWorld() {
 		return loc.getWorld();
 	}

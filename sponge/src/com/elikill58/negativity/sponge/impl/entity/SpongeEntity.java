@@ -38,6 +38,11 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	public boolean isOnGround() {
 		return entity.require(Keys.ON_GROUND);
 	}
+	
+	@Override
+	public boolean isDead() {
+		return false;
+	}
 
 	@Override
 	public boolean isOp() {

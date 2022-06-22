@@ -3,25 +3,13 @@ package com.elikill58.negativity.common.protocols;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import java.text.NumberFormat;
-import java.util.List;
-import java.util.Locale;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.entity.Entity;
-import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
-import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
-import com.elikill58.negativity.api.protocols.CheckConditions;
-import com.elikill58.negativity.api.ray.RayResult;
-import com.elikill58.negativity.api.ray.entity.EntityRayBuilder;
-import com.elikill58.negativity.api.ray.entity.EntityRayResult;
-import com.elikill58.negativity.api.utils.LocationUtils;
-import com.elikill58.negativity.api.utils.LocationUtils.Direction;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -57,7 +45,7 @@ public class ForceField extends Cheat {
 		}
 	}
 
-	@Check(name = "line-sight", description = "Player has line of sight the cible", conditions = {
+	/*@Check(name = "line-sight", description = "Player has line of sight the cible", conditions = {
 			CheckConditions.SURVIVAL, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onEntityDamageByEntity(PlayerDamageEntityEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
@@ -67,29 +55,26 @@ public class ForceField extends Cheat {
 		if (cible.getType().equals(EntityType.WITHER) || cible.getType().equals(EntityType.ENDER_DRAGON)
 				|| cible.isDead())
 			return;
-		EntityRayResult ray = new EntityRayBuilder(p).onlyPlayers(false).build().compile();
+		EntityRayResult ray = new EntityRayBuilder(p).searched(cible).build().compile();
 		List<Entity> lookingEntities = ray.getEntitiesFounded();
 		boolean newSee = !lookingEntities.isEmpty()
 				&& lookingEntities.stream().filter(cible::isSameId).findFirst().isPresent();
+		double angle = LocationUtils.getAngleTo(p, cible.getLocation());
+		Direction direction = LocationUtils.getDirection(angle);
+		Adapter.getAdapter().debug("Player: " + p.getBoundingBox() + " > " + p.getLocation());
+		Adapter.getAdapter()
+				.debug("Def: " + p.hasLineOfSight(cible) + (newSee ? ", see cible" : ", don't see: " + lookingEntities) + ", dir: " + direction.name()
+						+ " (" + angle + "°)");
 		if (p != cible && !p.hasLineOfSight(cible) && !newSee && !ray.getRayResult().equals(RayResult.NEEDED_FOUND)) {
-			double angle = LocationUtils.getAngleTo(p, cible.getLocation());
-			Direction direction = LocationUtils.getDirection(angle);
 			if (Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(90 + np.getWarn(this)), "line-sight",
-					"Hit " + cible.toString() + " (" + cible.getName() + ") (new: " + newSee + "). Looking: "
+					"Hit " + cible.toString() + ", " + cible.getBoundingBox() + " (new: " + newSee + "). Looking: "
 							+ lookingEntities + ". Angle: " + angle + ", direction: " + direction.name() + ", ray: "
 							+ ray.toString(),
 					hoverMsg("line_sight", "%name%", cible.getType().name().toLowerCase(Locale.ROOT)),
 					direction.name().contains("FRONT") ? 1 : 5) && isSetBack())
 				e.setCancelled(true);
-		} else {
-			double angle = LocationUtils.getAngleTo(p, cible.getLocation());
-			Direction direction = LocationUtils.getDirection(angle);
-			Adapter.getAdapter()
-					.debug(p.getName() + " can see " + cible.getName() + ". "
-							+ (newSee ? "See cible." : "Don't see: " + lookingEntities) + ", dir: " + direction.name()
-							+ " (" + angle + "°)");
 		}
-	}
+	}*/
 
 	public void manageForcefieldForFakeplayer(Player p, NegativityPlayer np) {
 		if (np.fakePlayerTouched == 0)

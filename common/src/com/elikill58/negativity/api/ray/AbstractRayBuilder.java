@@ -2,7 +2,6 @@ package com.elikill58.negativity.api.ray;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.location.Location;
@@ -24,11 +23,7 @@ public abstract class AbstractRayBuilder<T extends AbstractRayBuilder<T, R>, R e
 	 * @param entity which will give the rotation (and so the vector)
 	 */
 	public AbstractRayBuilder(Location position, @Nullable Entity entity) {
-		if(entity instanceof Player) {
-			Player p = (Player) entity;
-			this.position = position.clone().add(0, (p.isSneaking() ? (NegativityPlayer.getNegativityPlayer(p).isBedrockPlayer() ? 1.75 : 1.5) : 1.8), 0);
-		} else
-			this.position = position.clone().add(0, 0.5, 0); // TODO manage all entities
+		this.position = position.clone().add(0, 0.5, 0);
 		this.w = position.getWorld();
 		if(entity != null)
 			this.vector = entity.getRotation();
@@ -40,9 +35,8 @@ public abstract class AbstractRayBuilder<T extends AbstractRayBuilder<T, R>, R e
 	 * @param p the player where the ray start
 	 */
 	public AbstractRayBuilder(Player p) {
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		Location loc = np.lastLocations.size() < 2 ? p.getLocation() : np.lastLocations.get(np.lastLocations.size() - 2);
-		this.position = loc.clone().add(0, (p.isSneaking() ? (np.isBedrockPlayer() ? 1.75 : 1.5) : 1.8), 0);
+		//NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		this.position = p.getEyeLocation();// p.getLocation().clone().add(0, (p.isSneaking() ? (np.isBedrockPlayer() ? 0.75 : 0.5) : 0.8), 0);
 		this.w = position.getWorld();
 		this.vector = p.getRotation();
 	}

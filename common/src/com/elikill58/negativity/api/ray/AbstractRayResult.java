@@ -62,6 +62,6 @@ public abstract class AbstractRayResult<T extends AbstractRay<?>> {
 	
 	@Override
 	public String toString() {
-		return rayResult.name() + ",vec=" + getVector().toString() + ",lastDistance=" + String.format("%.3f", getLastDistance());
+		return rayResult.name() + ",vec=" + getVector().toString() + ",lastDis=" + String.format("%.3f", getLastDistance()) + ",basePoc=" + ray.basePosition.toString();
 	}
 }

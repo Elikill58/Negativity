@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api.ray.entity;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.elikill58.negativity.api.entity.Entity;
@@ -13,16 +14,27 @@ import com.elikill58.negativity.api.maths.Point;
 import com.elikill58.negativity.api.ray.AbstractRay;
 import com.elikill58.negativity.api.ray.RayResult;
 
+/**
+ * This class is already in work-in-progress. Do NOT use it yet.
+ * 
+ * @author Elikill58
+ *
+ * @deprecated don't use this yet
+ */
+@Deprecated
 public class EntityRay extends AbstractRay<EntityRayResult> {
 
 	private final List<Entity> entities, foundedEntities = new ArrayList<>();
 	
-	protected EntityRay(World w, Location position, Vector vector, int maxDistance, boolean onlyPlayers, List<Entity> bypassEntities) {
+	protected EntityRay(World w, Location position, Vector vector, int maxDistance, boolean onlyPlayers, List<Entity> bypassEntities, Entity searched) {
 		super(w, position, vector, maxDistance);
-		this.entities = new ArrayList<>(w.getEntities());
-		this.entities.removeAll(bypassEntities);
-		if(onlyPlayers)
-			this.entities.removeIf((et) -> !et.getType().equals(EntityType.PLAYER));
+		if(searched == null) {
+			this.entities = new ArrayList<>(w.getEntities());
+			this.entities.removeAll(bypassEntities);
+			if(onlyPlayers)
+				this.entities.removeIf((et) -> !et.getType().equals(EntityType.PLAYER));
+		} else
+			this.entities = new ArrayList<>(Arrays.asList(searched));
 	}
 	
 	/**
@@ -52,13 +64,10 @@ public class EntityRay extends AbstractRay<EntityRayResult> {
 				entities.remove(et);
 				foundedEntities.add(et);
 			} else {
-				double dis = et.getLocation().distance(position);
-				if(dis < 2) {
-					double pointDis = et.getBoundingBox().getAllPoints().stream().mapToDouble(p -> p.distance(pointPos)).min().orElse(1);
-					if(pointDis < 0.5) {
-						entities.remove(et);
-						foundedEntities.add(et);
-					}
+				double pointDis = et.getBoundingBox().getAllPoints().stream().mapToDouble(p -> p.distance(pointPos)).min().orElse(1);
+				if(pointDis < 0.5) {
+					entities.remove(et);
+					foundedEntities.add(et);
 				}
 			}
 		}

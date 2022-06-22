@@ -22,7 +22,7 @@ public abstract class AbstractRay<T extends AbstractRayResult<?>> {
 		this.position = position.clone();
 		this.basePosition = position.clone();
 		this.maxDistance = maxDistance;
-		this.vector = vector.normalize().divide(2);
+		this.vector = vector.normalize();
 	}
 	
 	/**

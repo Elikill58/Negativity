@@ -12,10 +12,19 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.ray.AbstractRayBuilder;
 
+/**
+ * This class is already in work-in-progress. Do NOT use it yet.
+ * 
+ * @author Elikill58
+ *
+ * @deprecated don't use this yet
+ */
+@Deprecated
 public class EntityRayBuilder extends AbstractRayBuilder<EntityRayBuilder, EntityRay> {
 
 	private boolean onlyPlayer = false;
 	private final List<Entity> bypassEntities = new ArrayList<>();
+	private Entity searched = null;
 	
 	/**
 	 * Create a new BlockRayBuilder
@@ -71,12 +80,23 @@ public class EntityRayBuilder extends AbstractRayBuilder<EntityRayBuilder, Entit
 	}
 	
 	/**
+	 * Change which entity are selected
+	 * 
+	 * @param b true if we are only looking for players
+	 * @return this builder
+	 */
+	public EntityRayBuilder searched(Entity searched) {
+		this.searched = searched;
+		return this;
+	}
+	
+	/**
 	 * Build BlockRay<br>
 	 * Warn: this method have to be runned as sync.
 	 * 
 	 * @return the block ray
 	 */
 	public EntityRay build() {
-		return new EntityRay(w, position, vector, maxDistance, onlyPlayer, bypassEntities);
+		return new EntityRay(w, position, vector, maxDistance, onlyPlayer, bypassEntities, searched);
 	}
 }

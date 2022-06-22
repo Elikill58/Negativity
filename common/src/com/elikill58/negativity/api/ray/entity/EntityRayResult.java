@@ -6,6 +6,14 @@ import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.ray.AbstractRayResult;
 import com.elikill58.negativity.api.ray.RayResult;
 
+/**
+ * This class is already in work-in-progress. Do NOT use it yet.
+ * 
+ * @author Elikill58
+ *
+ * @deprecated don't use this yet
+ */
+@Deprecated
 public class EntityRayResult extends AbstractRayResult<EntityRay> {
 
 	private final List<Entity> entitiesFounded;
@@ -26,6 +34,6 @@ public class EntityRayResult extends AbstractRayResult<EntityRay> {
 	
 	@Override
 	public String toString() {
-		return "entities=" + entitiesFounded + "," + super.toString();
+		return "entities=" + entitiesFounded + (ray.getEntities().size() == 1 ? ",begin=" + ray.getEntities() : "") + "," + super.toString();
 	}
 }

@@ -7,13 +7,10 @@ import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.api.item.ItemStack;
-import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
-import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.utils.Utils;
 
 import net.minecraft.server.v1_8_R3.BlockPosition;
@@ -35,8 +32,6 @@ public class Spigot_1_8_R3 extends SpigotVersionAdapter {
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), DigAction.getById(blockDig.c().ordinal()), DigFace.getById(blockDig.b().a()));
 		});
 		packetsPlayIn.put("PacketPlayInBlockPlace", (p, packet) -> {
-			@SuppressWarnings("deprecation")
-			ItemStack handItem = new SpigotItemStack(p.getItemInHand());
 			EntityPlayer player = ((CraftPlayer) p).getHandle();
 			float f1 = player.pitch;
 			float f2 = player.yaw;
@@ -58,8 +53,7 @@ public class Spigot_1_8_R3 extends SpigotVersionAdapter {
 			if(mov == null)
 				return null;
 			BlockPosition vec = mov.a();
-			return new NPacketPlayInBlockPlace(vec.getX(), vec.getY(), vec.getZ(), handItem,
-				new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
+			return new NPacketPlayInBlockPlace(vec.getX(), vec.getY(), vec.getZ());
 		});
 
 		log();

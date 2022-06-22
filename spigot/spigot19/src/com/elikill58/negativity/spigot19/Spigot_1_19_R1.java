@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Queue;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_19_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_19_R1.CraftWorld;
@@ -13,22 +12,18 @@ import org.bukkit.craftbukkit.v1_19_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.PlayerInventory;
 
 import com.elikill58.negativity.api.entity.BoundingBox;
-import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
@@ -41,7 +36,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAli
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.api.potion.PotionEffectType;
-import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Adapter;
@@ -66,17 +60,13 @@ import net.minecraft.network.protocol.game.ServerboundKeepAlivePacket;
 import net.minecraft.network.protocol.game.ServerboundMovePlayerPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundPongPacket;
-import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
 import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
 import net.minecraft.server.dedicated.DedicatedServer;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
-import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("resource")
 public class Spigot_1_19_R1 extends SpigotVersionAdapter {
@@ -109,46 +99,6 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 					.ordinal()];
 			BlockPos pos = packet.getPos();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), action, face);
-		});
-		packetsPlayIn.put(ServerboundUseItemPacket.class.getSimpleName(), (p, raw) -> {
-			ServerboundUseItemPacket packet = (ServerboundUseItemPacket) raw;
-			PlayerInventory inventory = p.getInventory();
-			ItemStack handItem;
-			if (getStr(packet, "a").equalsIgnoreCase("MAIN_HAND")) {
-				handItem = new SpigotItemStack(inventory.getItemInMainHand());
-			} else {
-				handItem = new SpigotItemStack(inventory.getItemInOffHand());
-			}
-			ServerPlayer ep = (ServerPlayer) PacketUtils.getEntityPlayer(p);
-			float f1 = ep.getXRot();
-			float f2 = ep.getYRot();
-			double d0 = ep.getX();
-			double d1 = ep.getY() + ep.getEyeHeight();
-			double d2 = ep.getZ();
-			Vec3 vec3d = new Vec3(d0, d1, d2);
-			float f3 = cos(-f2 * 0.017453292F - 3.1415927F);
-			float f4 = sin(-f2 * 0.017453292F - 3.1415927F);
-			float f5 = -cos(-f1 * 0.017453292F);
-			float f6 = sin(-f1 * 0.017453292F);
-			float f7 = f4 * f5;
-			float f8 = f3 * f5;
-			double d3 = (p.getGameMode() == GameMode.CREATIVE) ? 5.0D : 4.5D;
-			Vec3 vec3d1 = vec3d.add(f7 * d3, f6 * d3, f8 * d3);
-			BlockHitResult hitResult = ep.getLevel().clip(
-					new ClipContext(vec3d, vec3d1, ClipContext.Block.OUTLINE, ClipContext.Fluid.NONE, ep),
-					ep.blockPosition());
-			if (hitResult == null) { // ignore because it should be only interact and not block pose
-				return new NPacketPlayInUnset(ServerboundUseItemPacket.class.getSimpleName(), null);
-			}
-			if (hitResult.isInside()) {
-				BlockPos pos = hitResult.getBlockPos();
-				Vec3 vec = hitResult.getLocation();
-				return new NPacketPlayInBlockPlace(pos.getX(), pos.getY(), pos.getZ(), handItem,
-						new Vector(vec.x, vec.y, vec.z));
-			} else {
-				Adapter.getAdapter().getLogger().error("Failed to find something for block place " + ep.blockPosition());
-				return new NPacketPlayInUnset("PacketPlayInBlockPlace", PacketType.Client.BLOCK_PLACE);
-			}
 		});
 		packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {
 			ServerboundInteractPacket packet = (ServerboundInteractPacket) f;

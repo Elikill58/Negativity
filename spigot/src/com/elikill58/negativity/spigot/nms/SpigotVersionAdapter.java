@@ -8,18 +8,14 @@ import java.util.List;
 import java.util.Queue;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.BoundingBox;
-import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.BlockPosition;
 import com.elikill58.negativity.api.location.Vector;
@@ -30,7 +26,6 @@ import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInListener;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInArmAnimation;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
@@ -53,7 +48,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosi
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
-import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
@@ -115,43 +109,6 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			Vector vec = vec3D == null ? new Vector(0, 0, 0) : getVectorFromVec3D(vec3D);
 			return new NPacketPlayInUseEntity(get(f, "a"), vec,
 					EnumEntityUseAction.valueOf(((Enum<?>) get(f, "action")).name()));
-		});
-		packetsPlayIn.put("PacketPlayInBlockPlace", (p, packet) -> {
-			try {
-				PlayerInventory inventory = p.getInventory();
-				ItemStack handItem;
-				if (getStr(packet, "a").equalsIgnoreCase("MAIN_HAND")) {
-					handItem = new SpigotItemStack(inventory.getItemInMainHand());
-				} else {
-					handItem = new SpigotItemStack(inventory.getItemInOffHand());
-				}
-				Object player = PacketUtils.getEntityPlayer(p);
-				Class<?> entityClass = PacketUtils.getNmsClass("Entity");
-				float f1 = get(entityClass, player, "pitch");
-				float f2 = get(entityClass, player, "yaw");
-				double d0 = get(entityClass, player, "locX");
-				double d1 = ((double) get(entityClass, player, "locY")) + ((double) getFromMethod(entityClass, player, "getHeadHeight"));
-				double d2 = get(entityClass, player, "locZ");
-				Class<?> vec3DClass = PacketUtils.getNmsClass("Vec3D", "world.phys.");
-				Object vec3d = vec3DClass.getConstructor(double.class, double.class, double.class).newInstance(d0, d1, d2);
-				float f3 = cos(-f2 * 0.017453292F - 3.1415927F);
-				float f4 = sin(-f2 * 0.017453292F - 3.1415927F);
-				float f5 = -cos(-f1 * 0.017453292F);
-				float f6 = sin(-f1 * 0.017453292F);
-				float f7 = f4 * f5;
-				float f8 = f3 * f5;
-				double d3 = (p.getGameMode().equals(GameMode.CREATIVE)) ? 5.0D : 4.5D;
-				Object vec3d1 = vec3DClass.getMethod("add", double.class, double.class, double.class).invoke(vec3d, f7 * d3, f6 * d3, f8 * d3);
-				Location loc = p.getLocation();
-				Object worldServer = PacketUtils.getWorldServer(loc);
-				Object movingObj = PacketUtils.getNmsClass("World", "world.level.").getMethod("rayTrace", vec3DClass, vec3DClass).invoke(worldServer, vec3d, vec3d1);
-				Object vec = getFromMethod(movingObj, "a");
-				return new NPacketPlayInBlockPlace(getFromMethod(vec, "getX"), getFromMethod(vec, "getY"), getFromMethod(vec, "getZ"), handItem,
-					new Vector(loc.getX(), loc.getY() + p.getEyeHeight(), loc.getZ()));
-			} catch (Exception e) {
-				e.printStackTrace();
-				return null;
-			}
 		});
 		packetsPlayIn.put("PacketPlayInEntityAction", (p, f) -> {
 			EnumPlayerAction action = EnumPlayerAction.getAction(getStr(f, Version.getVersion().isNewerOrEquals(Version.V1_17) ? "b" : "animation"));

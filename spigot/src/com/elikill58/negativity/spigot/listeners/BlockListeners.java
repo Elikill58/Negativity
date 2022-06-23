@@ -34,7 +34,7 @@ public class BlockListeners implements Listener {
 		Block b = e.getBlock();
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9)) { // TODO make it better by using real better and not the parsed one by spigot
 			CustomPacket packet = new CustomPacket(new NPacketPlayInBlockPlace(b.getX(), b.getY(), b.getZ()), new NPacketPlayInBlockPlace(), p);
-			SpigotNegativity.getInstance().getPacketManager().getPacketManager().notifyHandlersSent(PacketSourceType.CUSTOM, packet);
+			SpigotNegativity.getInstance().getPacketManager().getPacketManager().notifyHandlersReceive(PacketSourceType.CUSTOM, packet);
 			if(packet.isCancelled())
 				e.setCancelled(true);
 		}

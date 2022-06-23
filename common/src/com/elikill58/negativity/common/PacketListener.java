@@ -108,6 +108,8 @@ public class PacketListener implements Listeners {
 		} else if (type == PacketType.Client.KEEP_ALIVE || type == PacketType.Client.POSITION) {
 			np.isAttacking = false;
 			p.applyTheoricVelocity();
+		} else if (type == PacketType.Client.STEER_VEHICLE) {
+			np.timeInvincibility = System.currentTimeMillis() + p.getPing() * 2;
 		} else if (type == PacketType.Client.PONG) {
 			NPacketPlayInPong pong = (NPacketPlayInPong) packet.getPacket();
 			if(np.idWaitingAppliedVelocity != -1 && np.idWaitingAppliedVelocity == pong.id) {

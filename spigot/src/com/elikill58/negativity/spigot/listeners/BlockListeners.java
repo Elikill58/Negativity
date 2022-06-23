@@ -32,12 +32,11 @@ public class BlockListeners implements Listener {
 	public void onBlockPlace(org.bukkit.event.block.BlockPlaceEvent e) {
 		Player p = SpigotEntityManager.getPlayer(e.getPlayer());
 		Block b = e.getBlock();
-		if(Version.getVersion().isNewerOrEquals(Version.V1_9)) { // TODO make it better by using real better and not the parsed one by spigot
-			CustomPacket packet = new CustomPacket(new NPacketPlayInBlockPlace(b.getX(), b.getY(), b.getZ()), new NPacketPlayInBlockPlace(), p);
-			SpigotNegativity.getInstance().getPacketManager().getPacketManager().notifyHandlersReceive(PacketSourceType.CUSTOM, packet);
-			if(packet.isCancelled())
-				e.setCancelled(true);
-		}
+		// TODO make it better by using real better and not the parsed one by spigot
+		CustomPacket packet = new CustomPacket(new NPacketPlayInBlockPlace(b.getX(), b.getY(), b.getZ()), new NPacketPlayInBlockPlace(), p);
+		SpigotNegativity.getInstance().getPacketManager().getPacketManager().notifyHandlersReceive(PacketSourceType.CUSTOM, packet);
+		if(packet.isCancelled())
+			e.setCancelled(true);
 		BlockPlaceEvent event = new BlockPlaceEvent(p, new SpigotBlock(b));
 		EventManager.callEvent(event);
 		if(event.isCancelled())

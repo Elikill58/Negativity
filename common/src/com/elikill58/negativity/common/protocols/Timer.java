@@ -32,10 +32,13 @@ public class Timer extends Cheat {
 		int position = packets.getOrDefault(PacketType.Client.POSITION, 0);
 		int look = packets.getOrDefault(PacketType.Client.LOOK, 0);
 		int positonLook = packets.getOrDefault(PacketType.Client.POSITION_LOOK, 0);
-		int count = flying + look + position + positonLook;
+		int steerVehicle = packets.getOrDefault(PacketType.Client.STEER_VEHICLE, 0);
+		int count = flying + look + position + positonLook - steerVehicle;
+		if(count < 0)
+			return;
 		np.timerCount.add(count);
 		
-		if(np.timerCount.size() > 5) // now we can remove first value (5 secs later)
+		if(np.timerCount.size() > 6) // now we can remove first value (6 secs later)
 			np.timerCount.remove(0);
 		else // loading seconds
 			return;

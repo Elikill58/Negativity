@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.item.Materials;
+import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.protocols.Check;
@@ -123,7 +124,13 @@ public class AimBot extends Cheat {
 			return;
 		Player p = e.getPlayer();
 		Entity cible = e.getDamaged();
-		double angle = LocationUtils.getAngleTo(p, cible.getLocation());
+		Location loc = p.getLocation(), cloc = cible.getLocation();
+		boolean notSure = false;
+		if(loc.getY() >= cloc.getY() && loc.getPitch() > 60) // looking just below and entity is down
+			notSure = true;
+		if(loc.getY() <= cloc.getY() && loc.getPitch() < -60) // looking just upper and entity is up
+			notSure = true;
+		double angle = LocationUtils.getAngleTo(p, cloc);
 		Direction direction = LocationUtils.getDirection(angle);
 		long amount = 0;
 		int reliability = 0;
@@ -149,12 +156,14 @@ public class AimBot extends Cheat {
 			break;
 		case LEFT:
 		case RIGHT:
+			if(notSure)
+				return;
 			amount = 2;
 			reliability = 90;
 			break;
 		}
 		if(amount > 0)
-			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(reliability), "direction", "Pos: " + p.getLocation() + " / " + cible.getLocation() + ", dir: " + direction.name() + " (" + angle + "°)", null, amount);
+			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(reliability + (notSure ? -10 : 0)), "direction", "Pos: " + p.getLocation() + " / " + cible.getLocation() + ", dir: " + direction.name() + " (" + angle + "°)", null, amount);
 	}
 	
 	@Override

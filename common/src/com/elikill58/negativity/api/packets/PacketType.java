@@ -211,7 +211,7 @@ public interface PacketType {
 		
 		@Override
 		public boolean isFlyingPacket() {
-			return this == FLYING || this == POSITION || this == LOOK || this == POSITION_LOOK;
+			return this == FLYING || this == POSITION || this == LOOK || this == POSITION_LOOK || this == GROUND;
 		}
 		
 		@Override

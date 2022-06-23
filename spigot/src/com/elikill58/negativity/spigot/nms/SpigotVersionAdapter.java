@@ -36,6 +36,8 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehicle;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
@@ -138,8 +140,16 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 			});
 		}
 		packetsPlayIn.put("PacketPlayInHeldItemSlot", (p, f) -> new NPacketPlayInHeldItemSlot((int) ReflectionUtils.getField(f, v.isNewerOrEquals(Version.V1_17) ? "a" : "itemInHandIndex")));
+		packetsPlayIn.put("PacketPlayInSteerVehicle", (p, f) -> {
+			PacketContent c = new PacketContent(f);
+			ContentModifier<Float> floats = c.getFloats();
+			ContentModifier<Boolean> bools = c.getBooleans();
+			return new NPacketPlayInSteerVehicle(floats.readSafely(0, 0f), floats.readSafely(1, 0f), bools.readSafely(0, false), bools.readSafely(1, false));
+		});
+		if(v.isNewerThan(Version.V1_8)) {
+			packetsPlayIn.put("PacketPlayInTeleportAccept", (p, f) -> new NPacketPlayInTeleportAccept((int) ReflectionUtils.getField(f, "a")));
+		}
 		
-
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (p, packet) -> {
 			Object pos = get(packet, "b");
 			return pos == null ? null : new NPacketPlayOutBlockBreakAnimation(getBlockPosition(pos), get(packet, "a"),

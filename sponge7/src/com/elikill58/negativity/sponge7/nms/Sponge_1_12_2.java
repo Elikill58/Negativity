@@ -20,6 +20,8 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehicle;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
@@ -36,9 +38,11 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
 import net.minecraft.network.play.client.CPacketChatMessage;
+import net.minecraft.network.play.client.CPacketConfirmTeleport;
 import net.minecraft.network.play.client.CPacketConfirmTransaction;
 import net.minecraft.network.play.client.CPacketEntityAction;
 import net.minecraft.network.play.client.CPacketHeldItemChange;
+import net.minecraft.network.play.client.CPacketInput;
 import net.minecraft.network.play.client.CPacketKeepAlive;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
@@ -106,7 +110,11 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 		});
 		packetsPlayIn.put("CPacketConfirmTransaction", (p, f) -> new NPacketPlayInPong(((CPacketConfirmTransaction) f).getUid()));
 		packetsPlayIn.put("CPacketHeldItemChange", (p, f) -> new NPacketPlayInHeldItemSlot(((CPacketHeldItemChange) f).getSlotId()));
-		
+		packetsPlayIn.put("CPacketInput", (p, f) -> {
+			CPacketInput packet = (CPacketInput) f;
+			return new NPacketPlayInSteerVehicle(packet.getStrafeSpeed(), packet.getForwardSpeed(), packet.isJumping(), packet.isSneaking());
+		});
+		packetsPlayIn.put("CPacketConfirmTeleport", (p, f) -> new NPacketPlayInTeleportAccept(((CPacketConfirmTeleport) f).getTeleportId()));
 
 		packetsPlayOut.put("SPacketBlockBreakAnim", (p, f) -> {
 			SPacketBlockBreakAnim packet = (SPacketBlockBreakAnim) f;

@@ -24,6 +24,8 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehicle;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
@@ -168,10 +170,10 @@ public interface PacketType {
 		SET_JIGSAW("SetJigsaw", NPacketUnknown::new),
 		SETTINGS("Settings", NPacketUnknown::new, "ClientSettings"),
 		SPECTATE("Spectate", NPacketUnknown::new),
-		STEER_VEHICLE("SteerVehicle", NPacketUnknown::new),
+		STEER_VEHICLE("SteerVehicle", NPacketPlayInSteerVehicle::new),
 		STRUCT("Struct", NPacketUnknown::new),
 		TAB_COMPLETE("TabComplete", NPacketUnknown::new),
-		TELEPORT_ACCEPT("TeleportAccept", NPacketUnknown::new),
+		TELEPORT_ACCEPT("TeleportAccept", NPacketPlayInTeleportAccept::new),
 		TILE_NBT_QUERY("TileNBTQuery", NPacketUnknown::new),
 		TR_SEL("TrSel", NPacketUnknown::new),
 		PONG("Transaction", NPacketPlayInPong::new, "Transaction"),

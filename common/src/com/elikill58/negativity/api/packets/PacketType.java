@@ -17,6 +17,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlac
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInGround;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
@@ -151,6 +152,7 @@ public interface PacketType {
 		ENTITY_ACTION("EntityAction", NPacketPlayInEntityAction::new),
 		ENTITY_NBT_QUERY("EntityNBTQuery", NPacketUnknown::new),
 		FLYING("Flying", NPacketPlayInFlying::new),
+		GROUND("Ground", NPacketPlayInGround::new),
 		HELD_ITEM_SLOT("HeldItemSlot", NPacketPlayInHeldItemSlot::new),
 		ITEM_NAME("ItemName", NPacketUnknown::new),
 		KEEP_ALIVE("KeepAlive", NPacketPlayInKeepAlive::new),

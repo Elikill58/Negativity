@@ -197,10 +197,12 @@ public class NoFall extends Cheat {
 	@Check(name = "fake-ground", description = "Detect when player faking ground", conditions = {
 			CheckConditions.SURVIVAL, CheckConditions.NO_ON_BEDROCK, CheckConditions.NO_CLIMB_BLOCK })
 	public void onFakeGround(PlayerMoveEvent e, NegativityPlayer np) {
+		if(!e.isMovePosition())
+			return;
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();
 		double difY = to.getY() - from.getY();
-		if (difY >= 0)
+		if (difY >= 0 || p.getFallDistance() == 0)
 			return;
 		// double difX = to.getX() - from.getX(), difZ = to.getZ() - from.getZ();
 		// boolean verticalCollision = difY != p.getVelocity().getY();

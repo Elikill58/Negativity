@@ -15,6 +15,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInGround;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
@@ -79,6 +80,12 @@ public class Sponge_1_18_2 extends SpongeVersionAdapter {
 			Class<?> sup = ServerboundMovePlayerPacket.class;
 			return new NPacketPlayInLook(get(f, sup, "x"), get(f, sup, "y"), get(f, sup, "z"),
 					get(f, sup, "yRot"), get(f, sup, "xRot"), get(f, sup, "onGround"));
+		});
+		packetsPlayIn.put("ServerboundMovePlayerPacket$StatusOnly", (player, raw) -> {
+			if(raw instanceof ServerboundMovePlayerPacket.StatusOnly packet) {
+				return new NPacketPlayInGround(packet.isOnGround());
+			}
+			return null;
 		});
 		packetsPlayIn.put("ServerboundMovePlayerPacket", (p, f) -> {
 			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"),

@@ -18,6 +18,7 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInGround;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
@@ -86,6 +87,12 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInLook", (player, raw) -> {
 			ServerboundMovePlayerPacket.Rot packet = (ServerboundMovePlayerPacket.Rot) raw;
 			return new NPacketPlayInLook(packet.x, packet.y, packet.z, packet.xRot, packet.yRot, packet.isOnGround());
+		});
+		packetsPlayIn.put(ServerboundMovePlayerPacket.StatusOnly.class.getSimpleName(), (player, raw) -> {
+			if(raw instanceof ServerboundMovePlayerPacket.StatusOnly packet) {
+				return new NPacketPlayInGround(packet.isOnGround());
+			}
+			return null;
 		});
 
 		packetsPlayIn.put("PacketPlayInBlockDig", (player, raw) -> {

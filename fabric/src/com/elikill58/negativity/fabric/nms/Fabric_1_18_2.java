@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInGround;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
@@ -80,6 +81,10 @@ public class Fabric_1_18_2 extends FabricVersionAdapter {
 		});
 		packetsPlayIn.put(getNameOfPacket(PlayerMoveC2SPacket.OnGroundOnly.class), (p, f) -> {
 			PlayerMoveC2SPacket.OnGroundOnly packet = (PlayerMoveC2SPacket.OnGroundOnly) f;
+			return new NPacketPlayInGround(packet.isOnGround());
+		});
+		packetsPlayIn.put(getNameOfPacket(PlayerMoveC2SPacket.class), (p, f) -> {
+			PlayerMoveC2SPacket packet = (PlayerMoveC2SPacket) f;
 			float yaw = packet.getYaw(0);
 			float pitch = packet.getPitch(0);
 			return new NPacketPlayInFlying(packet.getX(0), packet.getY(0), packet.getZ(0), yaw, pitch,

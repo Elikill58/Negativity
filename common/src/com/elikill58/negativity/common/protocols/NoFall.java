@@ -205,12 +205,13 @@ public class NoFall extends Cheat {
 		// double difX = to.getX() - from.getX(), difZ = to.getZ() - from.getZ();
 		// boolean verticalCollision = difY != p.getVelocity().getY();
 		// boolean ownGroundBefore = verticalCollision && difY < 0.0;
-		Material type = to.clone().add(p.getVelocity()).getBlock().getType();
-		boolean ownGround = !p.isFlying() && type.isSolid();
+		Location locVelocity = to.clone().add(p.getVelocity()), loc = locVelocity.clone().add(0, 0.1, 0);
+		Material type = loc.getBlock().getType(), typeVelocity = locVelocity.getBlockY() == loc.getBlockY() ? null : locVelocity.getBlock().getType();
+		boolean ownGround = !p.isFlying() && type.isSolid() && (typeVelocity == null || typeVelocity.isSolid());
 		if (p.isOnGround() && !ownGround && p.getVelocity().getY() <= difY) {
 			if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(Math.abs(difY) * 250),
 					"fake-ground",
-					"Dif: " + difY + ", " + p.getFallDistance() + ", " + type.getId() + ", vel: " + p.getVelocity(),
+					"Dif: " + difY + ", " + p.getFallDistance() + ", " + type.getId() + (typeVelocity == null ? "" : ", " + typeVelocity.getId()) + ", vel: " + p.getVelocity(),
 					new CheatHover.Literal("Y: " + String.format("%.3f", difY)), (long) (Math.abs(difY) * 5))
 					&& isSetBack())
 				manageDamage(p, (int) p.getFallDistance(), 95);

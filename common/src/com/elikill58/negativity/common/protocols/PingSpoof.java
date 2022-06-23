@@ -43,7 +43,7 @@ public class PingSpoof extends Cheat implements Listeners {
 	
 	@EventListener
 	public void onMove(PlayerMoveEvent e) {
-		NegativityPlayer.getNegativityPlayer(e.getPlayer()).timeLastMove = System.currentTimeMillis();
+		NegativityPlayer.getNegativityPlayer(e.getPlayer()).longs.get(getKey(), "last-move", System.currentTimeMillis());
 	}
 	
 	@Override
@@ -71,7 +71,7 @@ public class PingSpoof extends Cheat implements Listeners {
 				np.booleans.set(PINGSPOOF, "can-ping-spoof", true);
 			return;
 		}
-		long lastMove = System.currentTimeMillis() - np.timeLastMove;
+		long lastMove = System.currentTimeMillis() - np.longs.get(getKey(), "last-move", 0l);
 		if (newPing <= getConfig().getInt("checks.reachable.min_ping", 400) || lastPing == 0 || lastMove < 2000)
 			return;
 		if (newPing < lastPing && ((newPing * 1.2) < lastPing || newPing < 1000)) // if ping is going normal

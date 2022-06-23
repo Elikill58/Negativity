@@ -59,20 +59,21 @@ public class Regen extends Cheat implements Listeners {
 	@Check(name = "time", description = "Time between 2 regen")
 	public void onRegenTime(PlayerRegainHealthEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		long actual = System.currentTimeMillis(), dif = actual - np.lastRegen;
-		if (np.lastRegen != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && !p.hasPotionEffect(PotionEffectType.INSTANT_HEAL)
-				&& (np.lastRegen != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))
+		long lastRegen = np.longs.get(getKey(), "time", 0l);
+		long actual = System.currentTimeMillis(), dif = actual - lastRegen;
+		if (lastRegen != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && !p.hasPotionEffect(PotionEffectType.INSTANT_HEAL)
+				&& (lastRegen != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))
 				&& !p.getWorld().getDifficulty().equals(Difficulty.PEACEFUL)) {
 			int ping = p.getPing();
 			if (dif + ping < (Version.getVersion().getTimeBetweenTwoRegenFromVersion())) {
 				boolean mayCancel = Negativity.alertMod(dif < (50 + ping) ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(200 - dif - ping), "time", "Player regen, last regen: "
-						+ np.lastRegen + " Actual time: " + actual + " Difference: " + dif + "ms",
+						+ lastRegen + " Actual time: " + actual + " Difference: " + dif + "ms",
 						hoverMsg("main", "%time%", dif));
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}
 		}
-		np.lastRegen = actual;
+		np.longs.set(getKey(), "time", actual);
 	}
 }

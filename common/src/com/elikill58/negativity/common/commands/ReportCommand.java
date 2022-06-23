@@ -10,14 +10,15 @@ import com.elikill58.negativity.api.commands.CommandListeners;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.commands.TabListeners;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
+import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.detections.Cheat;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.report.Report;
 import com.elikill58.negativity.universal.webhooks.WebhookManager;
@@ -41,7 +42,7 @@ public class ReportCommand implements CommandListeners, TabListeners {
 
 		Player p = (Player) sender;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (np.timeReport > System.currentTimeMillis() && !Perm.hasPerm(np, Perm.REPORT_WAIT)) {
+		if (np.longs.get(CheatKeys.ALL, "report-cmd", 0l) > System.currentTimeMillis() && !Perm.hasPerm(np, Perm.REPORT_WAIT)) {
 			Messages.sendMessage(p, "report_wait");
 			return false;
 		}
@@ -96,8 +97,8 @@ public class ReportCommand implements CommandListeners, TabListeners {
 		NegativityAccount.get(target.getUniqueId()).getReports().add(new Report(reason, reporter.getUniqueId()));
 		NegativityPlayer.getNegativityPlayer(target).mustToBeSaved = true;
 
-		NegativityPlayer.getNegativityPlayer(reporter).timeReport = System.currentTimeMillis()
-				+ Adapter.getAdapter().getConfig().getInt("time_between_report");
+		NegativityPlayer.getNegativityPlayer(reporter).longs.set(CheatKeys.ALL, "report-cmd", System.currentTimeMillis()
+				+ Adapter.getAdapter().getConfig().getInt("time_between_report"));
 		
 		WebhookManager.send(new WebhookMessage(WebhookMessageType.REPORT, target, reporter.getName(), System.currentTimeMillis(), "%reason%", reason));
 	}

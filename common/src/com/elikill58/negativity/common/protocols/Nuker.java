@@ -70,14 +70,15 @@ public class Nuker extends Cheat {
 		Block b = e.getBlock();
 		if(p.hasPotionEffect(PotionEffectType.HASTE) || b == null || !b.getType().isSolid() || isInstantBlock(b.getType().getId()))
 			return;
-		long temp = System.currentTimeMillis(), dis = temp - np.lastBlockBreak;
+		long lastBreak = np.longs.get(getKey(), "time", 0l);
+		long temp = System.currentTimeMillis(), dis = temp - lastBreak;
 		if(dis < 50 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.HASTE)) {
 			boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis), "time",
-					"Type: " + e.getBlock().getType().getId() + ". Last: " + np.lastBlockBreak + ", Now: " + temp + ", diff: " + dis, hoverMsg("breaked_in", "%time%", dis));
+					"Type: " + e.getBlock().getType().getId() + ". Last: " + lastBreak + ", Now: " + temp + ", diff: " + dis, hoverMsg("breaked_in", "%time%", dis));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
-		np.lastBlockBreak = temp;
+		np.longs.set(getKey(), "time", temp);
 	}
 	
 	private boolean isInstantBlock(String m) {

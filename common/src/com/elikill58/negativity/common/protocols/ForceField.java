@@ -1,11 +1,8 @@
 package com.elikill58.negativity.common.protocols;
 
-import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
-
 import java.text.NumberFormat;
 
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
@@ -74,7 +71,7 @@ public class ForceField extends Cheat {
 					direction.name().contains("FRONT") ? 1 : 5) && isSetBack())
 				e.setCancelled(true);
 		}
-	}*/
+	}
 
 	public void manageForcefieldForFakeplayer(Player p, NegativityPlayer np) {
 		if (np.fakePlayerTouched == 0)
@@ -86,5 +83,5 @@ public class ForceField extends Cheat {
 				"Hitting fake entities. " + np.fakePlayerTouched + " entites touch in " + timeBehindStart
 						+ " millisecondes",
 				hoverMsg("fake_players", "%nb%", np.fakePlayerTouched, "%time%", timeBehindStart));
-	}
+	}*/
 }

@@ -111,39 +111,37 @@ public class DiscordWebhook implements Webhook {
     	}
     	
     	// firstly, combine all
-    	synchronized (queue) {
-    		queue.removeIf(Objects::isNull);
-    		if(queue.isEmpty())
-    			return;
-			queue.sort(Comparator.naturalOrder());
-    		while(!queue.isEmpty()) {
-	    		WebhookMessage msg = queue.remove(0);
-	    		if(queue.isEmpty()) { // removed is last
-	    			send(msg);
-	    		} else if(queue.size() == 1) { // stay only one other
-	    			WebhookMessage other = queue.remove(0);
-	    			WebhookMessage third = msg.combine(other); // try to combine
-	    			if(third != null) // success, then new one
-	    				send(third);
-	    			else { // failed, send 2 last
-	    				send(msg);
-	    				send(other);
-	    			}
-	    		} else {
-	    			List<WebhookMessage> toRemove = new ArrayList<>();
-					for(int i = 0; i < queue.size(); i++) {
-						if(queue.size() <= i)
-							break;
-						WebhookMessage other = queue.get(i);
-						WebhookMessage third = msg.combine(other);
-						if(third != null) {
-							msg = third;
-							toRemove.add(other);
-						}
+		queue.removeIf(Objects::isNull);
+		if(queue.isEmpty())
+			return;
+		queue.sort(Comparator.naturalOrder());
+		while(!queue.isEmpty()) {
+    		WebhookMessage msg = queue.remove(0);
+    		if(queue.isEmpty()) { // removed is last
+    			send(msg);
+    		} else if(queue.size() == 1) { // stay only one other
+    			WebhookMessage other = queue.remove(0);
+    			WebhookMessage third = msg.combine(other); // try to combine
+    			if(third != null) // success, then new one
+    				send(third);
+    			else { // failed, send 2 last
+    				send(msg);
+    				send(other);
+    			}
+    		} else {
+    			List<WebhookMessage> toRemove = new ArrayList<>();
+				for(int i = 0; i < queue.size(); i++) {
+					if(queue.size() <= i)
+						break;
+					WebhookMessage other = queue.get(i);
+					WebhookMessage third = msg.combine(other);
+					if(third != null) {
+						msg = third;
+						toRemove.add(other);
 					}
-					queue.removeAll(toRemove);
-					send(msg);
-	    		}
+				}
+				queue.removeAll(toRemove);
+				send(msg);
     		}
 		}
     }

@@ -71,8 +71,9 @@ public class Spider extends Cheat {
 		int amount = 0;
 		Location from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
-		if (y <= 0.0 || y == 0.25 || y == 0.5 || LocationUtils.isInWater(to) || hasBypassBlockAround(to)) {
+		if (y <= 0.0 || y == 0.25 || y == 0.5 || y == 0.11837500000000034 /* TODO check if it's a good value */ || LocationUtils.isInWater(to) || hasBypassBlockAround(to)) {
 			np.lastY.clear();
+			return;
 		} else {
 			int i = np.lastY.size() - 1;
 			while (i > 0) {
@@ -93,10 +94,8 @@ public class Spider extends Cheat {
 			}
 		}
 		if (amount > 1) {
-			boolean mayCancel = (Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION),
-					p, this, UniversalUtils.parseInPorcent(80 + amount * 3), "nothing-around",
-					"Y: " + y + ", fall: " + p.getFallDistance() + ", aount: " + amount) && isSetBack());
-			if (mayCancel)
+			if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(80 + amount * 3),
+					"same-y", "Y: " + y + ", fall: " + p.getFallDistance() + ", aount: " + amount + ", last: " + np.lastY) && isSetBack())
 				LocationUtils.teleportPlayerOnGround(p);
 		}
 		np.lastY.add(y);

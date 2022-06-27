@@ -1,6 +1,10 @@
 package com.elikill58.negativity.common.protocols;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
@@ -15,6 +19,7 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
@@ -207,13 +212,21 @@ public class NoFall extends Cheat {
 		// double difX = to.getX() - from.getX(), difZ = to.getZ() - from.getZ();
 		// boolean verticalCollision = difY != p.getVelocity().getY();
 		// boolean ownGroundBefore = verticalCollision && difY < 0.0;
-		Location locVelocity = to.clone().add(p.getVelocity()), loc = locVelocity.clone().add(0, 0.1, 0);
-		Material type = loc.getBlock().getType(), typeVelocity = locVelocity.getBlockY() == loc.getBlockY() ? null : locVelocity.getBlock().getType();
-		boolean ownGround = !p.isFlying() && type.isSolid() && (typeVelocity == null || typeVelocity.isSolid());
-		if (p.isOnGround() && !ownGround && p.getVelocity().getY() <= difY) {
+		Location locVelocity = to.clone().add(p.getVelocity()), loc = locVelocity.clone().add(0, 0.08 + p.getPotionEffect(PotionEffectType.JUMP).orElse(new PotionEffect(PotionEffectType.JUMP, 0, 0)).getAmplifier() / 10, 0);
+		Material type = loc.getBlock().getType();
+		if (p.isOnGround() && !type.isSolid() && !p.isFlying() && p.getVelocity().getY() <= difY) {
+			List<Vector> testedVectors = new ArrayList<>(Arrays.asList(locVelocity.toBlockVector())); 
+			if(locVelocity.getBlockY() == loc.getBlockY())
+				testedVectors.add(loc.toBlockVector());
+			if(((int) to.getX() + 0.1) != to.getBlockX())
+				testedVectors.add(to.clone().add(0.1, 0, 0).toBlockVector());
+			
+			List<Material> materials = testedVectors.stream().map(v -> v.toLocation(p.getWorld())).map(Location::getBlock).map(Block::getType).filter(Objects::nonNull).filter(m -> !m.equals(Materials.AIR)).collect(Collectors.toList());
+			if(!materials.isEmpty())
+				return;
 			if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(Math.abs(difY) * 250),
 					"fake-ground",
-					"Dif: " + difY + ", " + p.getFallDistance() + ", " + type.getId() + (typeVelocity == null ? "" : ", " + typeVelocity.getId()) + ", vel: " + p.getVelocity(),
+					"Dif: " + difY + ", " + p.getFallDistance() + ", " + type.getId() + ", tested: " + testedVectors + ", vel: " + p.getVelocity(),
 					new CheatHover.Literal("Y: " + String.format("%.3f", difY)), (long) (Math.abs(difY) * 5))
 					&& isSetBack())
 				manageDamage(p, (int) p.getFallDistance(), 95);

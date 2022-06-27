@@ -21,7 +21,7 @@ public class ElytraFly extends Cheat implements Listeners {
 		super(CheatKeys.ELYTRA_FLY, CheatCategory.COMBAT, Materials.ELYTRA, CheatDescription.VERIF);
 	}
 
-	@Check(name = "diff-y", description = "Get move after a tick", conditions = { CheckConditions.ELYTRA, CheckConditions.SURVIVAL })
+	@Check(name = "diff-y", description = "Get move after a tick", conditions = { CheckConditions.ELYTRA, CheckConditions.SURVIVAL, CheckConditions.NO_USE_TRIDENT })
 	public void onMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		

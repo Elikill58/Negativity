@@ -328,6 +328,10 @@ public class Vector implements Cloneable {
 	public Vector negate() {
 		return new Vector(-this.x, -this.y, -this.z);
 	}
+	
+	public Location toLocation(World w) {
+		return new Location(w, x, y, z);
+	}
 
 	@Override
 	public boolean equals(Object obj) {

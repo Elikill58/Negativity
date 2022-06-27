@@ -52,8 +52,6 @@ public class CheckMenuInventory extends AbstractInventory {
 		inv.setItem(11, createItem(ItemUtils.GRASS, ChatColor.RESET + "Mods", ChatColor.GRAY + "Launcher: " + ChatColor.YELLOW + np.clientName, ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.MODS.size() > 0 ? "enabled" : "disabled"))));
 		inv.setItem(12, getWoolItem(p, np.isMcLeaks()));
 		inv.setItem(13, createItem(ItemUtils.SKELETON_SKULL, Messages.getMessage(p, "fake_entities")));
-		//inv.setItem(16, Utils.createItem(Utils.getMaterialWith1_13_Compatibility("DIAMOND_SPADE", "LEGACY_DIAMOND_SPADE"), "Kick"));
-		//inv.setItem(17, Utils.createItem(Material.ANVIL, "Ban"));
 		if(!Perm.hasPerm(np, Perm.MOD))
 			inv.setItem(18, createItem(Material.SPIDER_EYE, Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())));
 		inv.setItem(19, createItem(ItemUtils.EYE_OF_ENDER, Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())));
@@ -139,8 +137,6 @@ public class CheckMenuInventory extends AbstractInventory {
 				p.closeInventory();
 				SpigotNegativityPlayer.getNegativityPlayer(cible).makeAppearEntities();
 			}
-		} else if(m == ItemUtils.DIAMOND_SPADE) {
-			// kick
 		} else {
 			switch (m) {
 			case SPIDER_EYE:
@@ -166,9 +162,6 @@ public class CheckMenuInventory extends AbstractInventory {
 			case GRASS:
 				AbstractInventory.open(InventoryType.FORGE_MODS, p, cible);
 				//ForgeModsInventory.openForgeModsMenu(p, cible);
-				break;
-			case ANVIL:
-				// ban
 				break;
 			default:
 				break;

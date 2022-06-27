@@ -180,8 +180,8 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	}
 
 	/**
-	 * Set the allowability to kick
-	 * Warn: this don't save the config
+	 * Set the allowability to kick.<br>
+	 * Warn: this doesn't save the config
 	 * 
 	 * @param b the new value
 	 * @return the given boolean value
@@ -192,7 +192,7 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	}
 
 	/**
-	 * Get the amount of needed alert to kick
+	 * Get the amount of needed alert to kick.<br>
 	 * By default it's 5
 	 * 
 	 * @return the needed alert counter

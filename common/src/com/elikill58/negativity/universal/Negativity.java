@@ -153,15 +153,18 @@ public class Negativity {
 		EventManager.callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
-		np.addWarn(c, reliability, amount);
+		long oldWarn = np.addWarn(c, reliability, amount);
+		if(oldWarn == -1) // no warn added
+			return false;
 		logProof(np, type, p, c, reliability, checkName, proof, ping, amount);
-		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
+		if (c.allowKick() && ((long) (oldWarn / c.getAlertToKick())) < ((long) (np.getWarn(c) / c.getAlertToKick()))) { // if reach new alert state
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			EventManager.callEvent(kick);
 			if (!kick.isCancelled()) {
-				if(Adapter.getAdapter().getConfig().getBoolean("log_alert_with_kick", false)) {
+				if(Adapter.getAdapter().getConfig().getBoolean("log_alert_with_kick", false)) { // if should log
 					manageAlertCommand(np, type, p, c, reliability);
 					sendAlertMessage(np, alert);
+					// don't run set back options because player will be offline
 				}
 				p.kick(Messages.getMessage(p, "kick.neg_kick", "%cheat%", c.getName(), "%reason%", np.getReason(c), "%playername%", p.getName()));
 				return false;
@@ -172,7 +175,7 @@ public class Negativity {
 			return false;
 		}
 
-		if (BanManager.autoBan && BanUtils.banIfNeeded(np, c, reliability).isSuccess()) {
+		if (BanManager.autoBan && BanUtils.banIfNeeded(np, c, reliability, oldWarn).isSuccess()) {
 			Stats.updateStats(StatsType.CHEAT, c.getKey().getKey(), reliability + "");
 			return false;
 		}

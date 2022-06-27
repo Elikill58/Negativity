@@ -22,14 +22,49 @@ public class BanUtils {
 		return -1;
 	}
 
+	/**
+	 * Check if the given player should be banned for the given cheat
+	 * 
+	 * @param cheat the cheat that can ban player
+	 * @param np the concerned player
+	 * @param relia the reliability of the alert
+	 * @return the result of the ban
+	 * @deprecated Use {@link #shouldBan(Cheat, NegativityPlayer, int, long)}
+	 */
 	public static BanResult shouldBan(Cheat cheat, NegativityPlayer np, int relia) {
+		return shouldBan(cheat, np, relia, 0);
+	}
+
+	/**
+	 * Check if the given player should be banned for the given cheat
+	 * 
+	 * @param cheat the cheat that can ban player
+	 * @param np the concerned player
+	 * @param relia the reliability of the alert
+	 * @return the result of the ban
+	 */
+	public static BanResult shouldBan(Cheat cheat, NegativityPlayer np, int relia, long oldWarnAmount) {
 		if(!BanManager.banActive || !cheat.getConfig().getBoolean("ban.active", true))
 			return new BanResult(BanResultType.NOT_ENABLED);
 		if(np.getAccount().isInBanning())
 			return new BanResult(BanResultType.ALREADY_BANNED);
-		if (!cheat.isActive() || Perm.hasPerm(np, Perm.BYPASS_BAN))
+		if (!cheat.isActive() || Perm.hasPerm(np, Perm.BYPASS_BAN) || BanManager.getInt(cheat, "reliability_need") <= relia)
 			return new BanResult(BanResultType.BYPASS);
-		return new BanResult(BanManager.getInt(cheat, "reliability_need") <= relia && BanManager.getInt(cheat, "alert_need") <= np.getAllWarn(cheat) ? BanResultType.DONE : BanResultType.BYPASS);
+		int alertNeeded = BanManager.getInt(cheat, "alert_need");
+		return new BanResult(((long) oldWarnAmount / alertNeeded) < ((long) np.getAllWarn(cheat) / alertNeeded) ? BanResultType.DONE : BanResultType.BYPASS);
+	}
+
+	/**
+	 * Basically common code for {@code SpigotNegativity#alertMod} and {@code SpongeNegativity#alertMod}.
+	 * 
+	 * @param player the player to ban if need
+	 * @param cheat the cheat concerned by the try of need
+	 * @param reliability the reliability of the cheat
+	 * @return see {@link BanManager#executeBan}, null if banning was not needed
+	 * @deprecated Use {@link #banIfNeeded(NegativityPlayer, Cheat, int, long)}
+	 */
+	public static BanResult banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability) {
+		return banIfNeeded(player, cheat, reliability, 0);
 	}
 
 	/**
@@ -40,8 +75,8 @@ public class BanUtils {
 	 * @param reliability the reliability of the cheat
 	 * @return see {@link BanManager#executeBan}, null if banning was not needed
 	 */
-	public static BanResult banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability) {
-		BanResult result = shouldBan(cheat, player, reliability);
+	public static BanResult banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability, long oldWarnAmount) {
+		BanResult result = shouldBan(cheat, player, reliability, oldWarnAmount);
 		if (!result.isSuccess()) {
 			return result;
 		}

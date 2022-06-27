@@ -65,7 +65,7 @@ public class PlayersListeners implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-		PlayerMoveEvent event = new PlayerMoveEvent(SpigotEntityManager.getPlayer(p), SpigotLocation.toCommon(e.getFrom()), SpigotLocation.toCommon(e.getTo()));
+		PlayerMoveEvent event = new PlayerMoveEvent(np.getPlayer(), SpigotLocation.toCommon(e.getFrom()), SpigotLocation.toCommon(e.getTo()));
 		EventManager.callEvent(event);
 		if(event.hasToSet()) {
 			e.setTo(SpigotLocation.fromCommon(event.getTo()));

@@ -158,6 +158,8 @@ public class AimBot extends Cheat {
 		case RIGHT:
 			if(notSure)
 				return;
+			if(Math.abs(angle) < 80)
+				return;
 			amount = 2;
 			reliability = 90;
 			break;

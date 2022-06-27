@@ -69,22 +69,6 @@ public class PacketUtils {
 			return null;
 		}
 	}
-	
-	/**
-	 * Get the current player ping
-	 * 
-	 * @param p the player
-	 * @return the player ping
-	 */
-	public static int getPing(Player p) {
-		try {
-			Object entityPlayer = getEntityPlayer(p);
-			return entityPlayer.getClass().getField("ping").getInt(entityPlayer);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return 0;
-	}
 
 	/**
 	 * Create and send a packet (with only one parameter)

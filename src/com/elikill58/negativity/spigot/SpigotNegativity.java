@@ -569,7 +569,7 @@ public class SpigotNegativity extends JavaPlugin {
 		for(String s : conf.getStringList("run")) {
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), UniversalUtils.replacePlaceholders(s, "%version%", np.getPlayerVersion().getName(), "%name%",
 					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey().toLowerCase(Locale.ROOT), "%world%", p.getWorld().getName(), "%cheat_name%",
-					c.getName(), "%reliability%", reliability, "%report_type%", type.name(), "%warn%", np.getWarn(c), "%ping%", PacketUtils.getPing(p), "%tps%", String.format("%.2f", Utils.getLastTPS())));
+					c.getName(), "%reliability%", reliability, "%report_type%", type.name(), "%warn%", np.getWarn(c), "%ping%", Utils.getPing(p), "%tps%", String.format("%.2f", Utils.getLastTPS())));
 		}
 	}
 

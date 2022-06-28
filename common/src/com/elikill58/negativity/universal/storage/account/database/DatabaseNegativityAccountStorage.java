@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.dataStorage.database;
+package com.elikill58.negativity.universal.storage.account.database;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,8 +19,8 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.account.NegativityAccount;
-import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.report.Report;
+import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 
 public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 

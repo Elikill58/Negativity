@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.dataStorage.file;
+package com.elikill58.negativity.universal.storage.account.file;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,8 +20,8 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.account.NegativityAccount;
-import com.elikill58.negativity.universal.dataStorage.NegativityAccountStorage;
 import com.elikill58.negativity.universal.report.Report;
+import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 
 public class FileNegativityAccountStorage extends NegativityAccountStorage {
 

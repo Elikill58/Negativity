@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.dataStorage;
+package com.elikill58.negativity.universal.storage.account;
 
 import java.util.Collections;
 import java.util.List;

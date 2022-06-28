@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.dataStorage;
+package com.elikill58.negativity.universal.storage.account;
 
 import java.io.File;
 import java.util.HashMap;
@@ -12,8 +12,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.account.NegativityAccount;
-import com.elikill58.negativity.universal.dataStorage.database.DatabaseNegativityAccountStorage;
-import com.elikill58.negativity.universal.dataStorage.file.FileNegativityAccountStorage;
+import com.elikill58.negativity.universal.storage.account.database.DatabaseNegativityAccountStorage;
+import com.elikill58.negativity.universal.storage.account.file.FileNegativityAccountStorage;
 
 public abstract class NegativityAccountStorage {
 

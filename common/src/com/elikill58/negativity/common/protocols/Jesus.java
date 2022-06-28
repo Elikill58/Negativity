@@ -8,7 +8,9 @@ import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExten
 import static com.elikill58.negativity.universal.detections.keys.CheatKeys.JESUS;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -83,7 +85,7 @@ public class Jesus extends Cheat implements Listeners {
 				}
 			}
 		}
-		if (checkActive("dif") && dif == -0.5 && (isInWater || isOnWater) && !type.getId().contains("FENCE")) {
+		if (checkActive("dif") && dif == -0.5 && ((!isInWater && p.getFallDistance() > 0) || isOnWater) && !type.getId().contains("FENCE")) {
 			mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "dif", "dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + ", type: " + type.getId() + ", type Under: " + underType.getId() + ", fallDistance: " + p.getFallDistance());
 		}
 		
@@ -129,21 +131,29 @@ public class Jesus extends Cheat implements Listeners {
 		Player p = e.getPlayer();
 		if(hasMaterialAround(p.getLocation(), Materials.WATER_LILY))
 			return;
-		Block sub = p.getLocation().clone().sub(0, 1, 0).getBlock();
+		Block actual = p.getLocation().getBlock(), sub = new Location(p.getWorld(), p.getLocation().getX(), p.getLocation().getBlockY() - 1, p.getLocation().getZ()).getBlock();
 		if(sub.getType().equals(Materials.WATER_LILY))
 			return;
+		List<String> tested = new ArrayList<>();
 		int i = 0;
 		for(BlockFace bf : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
-			String id = sub.getRelative(bf).getType().getId();
-			if(id.contains("WATER"))
-				i++;
-			else if(id.contains("LILY") || id.contains("PAD"))
-				return;
+			String id = actual.getRelative(bf).getType().getId();
+			String idSub = sub.getRelative(bf).getType().getId();
+			for(String idTmp : Arrays.asList(id, idSub)) {
+				tested.add(idTmp);
+				if(idTmp.contains("WATER"))
+					i++;
+				else if(idTmp.contains("LILY") || idTmp.contains("PAD") || idTmp.contains("SLAB") || idTmp.contains("STEP") || idTmp.contains("STAIRS"))
+					return;
+			}
 		}
 		boolean wasOnGround = np.booleans.get(JESUS, "bw-was-ground", false);
 		boolean isOnGround = p.isOnGround();
 		if(wasOnGround && isOnGround && p.getLocation().getBlock().getType().equals(Materials.AIR) && sub.getType().getId().contains("WATER") && i > 3) {
-			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(i * 25), "ground-water", "I: " + i + ", sneak: " + p.isSneaking() + ", swim: " + p.isSwimming());
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(i * 25), "ground-water", "I: " + i + ", sneak: " +
+						p.isSneaking() + ", swim: " + p.isSwimming() + ", types: " + p.getLocation().getBlock().getType().getId() + ", " + sub.getType().getId() + " > " + tested);
+			if(mayCancel && isSetBack())
+				e.setCancelled(true);
 		}
 		np.booleans.set(JESUS, "bw-was-ground", isOnGround);
 	}

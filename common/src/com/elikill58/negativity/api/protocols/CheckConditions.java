@@ -23,12 +23,12 @@ public enum CheckConditions {
 	ALLOW_FLY("Allow to fly", Player::getAllowFlight),
 	GROUND("On ground", Player::isOnGround),
 
-	NO_BLOCK_MID_AROUND("No block MID (fence, slab...) around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "SLAB", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
-	NO_BLOCK_MID_AROUND_BELOW("No block MID (fence, slab...) below", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "SLAB", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
+	NO_BLOCK_MID_AROUND("No block MID (fence, slab...) around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "SLAB", "STEP", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
+	NO_BLOCK_MID_AROUND_BELOW("No block MID (fence, slab...) below", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "SLAB", "STEP", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
 	NO_LIQUID_AROUND("No liquid around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "WATER", "LAVA"), true),
 	NO_STAIRS_AROUND("No stairs around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "STAIRS", "SCAFFOLD"), true),
-	NO_FALL_LESS_BLOCK("No block that reduce fall fear", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "STAIRS", "SCAFFOLD", "SLAB", "HONEY_BLOCK"), true),
-	NO_FALL_LESS_BLOCK_BELOW("No block that reduce fall fear below", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "STAIRS", "SCAFFOLD", "SLAB", "HONEY_BLOCK"), true),
+	NO_FALL_LESS_BLOCK("No block that reduce fall fear", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "STAIRS", "SCAFFOLD", "STEP", "SLAB", "HONEY_BLOCK"), true),
+	NO_FALL_LESS_BLOCK_BELOW("No block that reduce fall fear below", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "STAIRS", "SCAFFOLD", "STEP", "SLAB", "HONEY_BLOCK"), true),
 	NO_CLIMB_BLOCK("No climb block around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "STAIRS", "SCAFFOLD", "LADDER", "VINE"), true),
 	
 	NO_TELEPORT("No teleport", p -> !NegativityPlayer.getNegativityPlayer(p).isTeleporting),

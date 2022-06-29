@@ -29,7 +29,7 @@ public class Nuker extends Cheat {
 		super(CheatKeys.NUKER, CheatCategory.WORLD, Materials.BEDROCK, CheatDescription.BLOCKS);
 	}
 
-	@Check(name = "distance", description = "Distance between target and breaked block", conditions = CheckConditions.SURVIVAL)
+	@Check(name = "distance", description = "Distance between target and breaked block", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY })
 	public void onBlockBreak(BlockBreakEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Block b = e.getBlock();
@@ -64,7 +64,7 @@ public class Nuker extends Cheat {
 		});
 	}
 	
-	@Check(name = "time", description = "Time between 2 block break", conditions = CheckConditions.SURVIVAL)
+	@Check(name = "time", description = "Time between 2 block break", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY })
 	public void onBlockBreakTime(BlockBreakEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Block b = e.getBlock();

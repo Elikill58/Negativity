@@ -49,7 +49,7 @@ public class Jesus extends Cheat implements Listeners {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this))
+		if (!np.hasDetectionActive(this) || LocationUtils.hasBoatAroundHim(e.getTo()))
 			return;
 		if (p.hasElytra() || p.isInsideVehicle() || p.isSwimming())
 			return;

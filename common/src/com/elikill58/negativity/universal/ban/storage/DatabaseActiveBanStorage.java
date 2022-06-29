@@ -12,11 +12,11 @@ import java.util.UUID;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.BanType;
-import com.elikill58.negativity.universal.storage.account.database.DatabaseMigrator;
+import com.elikill58.negativity.universal.database.Database;
+import com.elikill58.negativity.universal.database.DatabaseMigrator;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class DatabaseActiveBanStorage implements ActiveBanStorage {

@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.Adapter;
 
 public class FileSaverTimer implements Runnable {
@@ -47,7 +46,6 @@ public class FileSaverTimer implements Runnable {
         
         // now check for old handle
         new ArrayList<>(FileHandle.getFileHandles()).stream().filter(FileHandle::shouldBeClosed).forEach(FileHandle::close);
-        NegativityPlayer.getAllNegativityPlayers().forEach(NegativityPlayer::checkProofFileHandler);
     }
     
     public void runAll() {

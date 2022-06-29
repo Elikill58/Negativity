@@ -13,6 +13,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.detections.Cheat;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.Report;
 
 /**
@@ -81,16 +82,24 @@ public final class NegativityAccount {
 		this.mostClicksPerSecond = mostClicksPerSecond;
 	}
 
+	public long getWarn(Cheat cheat) {
+		return getWarn(cheat.getKey());
+	}
+
+	public long getWarn(CheatKeys cheatKey) {
+		return getWarn(cheatKey.getLowerKey());
+	}
+
 	public long getWarn(String cheatKey) {
 		return warns.getOrDefault(cheatKey, 0l);
 	}
 
-	public long getWarn(Cheat cheat) {
-		return getWarn(cheat.getKey().getLowerKey());
+	public void setWarnCount(Cheat cheat, long count) {
+		setWarnCount(cheat.getKey(), count);
 	}
 
-	public void setWarnCount(Cheat cheat, long count) {
-		setWarnCount(cheat.getKey().getLowerKey(), count);
+	public void setWarnCount(CheatKeys cheatKey, long count) {
+		setWarnCount(cheatKey.getLowerKey(), count);
 	}
 
 	public void setWarnCount(String cheatKey, long count) {

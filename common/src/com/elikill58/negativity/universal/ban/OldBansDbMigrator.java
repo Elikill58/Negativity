@@ -8,8 +8,8 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Database;
 import com.elikill58.negativity.universal.ban.storage.DatabaseActiveBanStorage;
+import com.elikill58.negativity.universal.database.Database;
 
 public class OldBansDbMigrator {
 

@@ -160,6 +160,15 @@ public class UniversalUtils {
 		}
 	}
 
+	public static boolean isDouble(String s) {
+		try {
+			Double.parseDouble(s);
+			return true;
+		} catch (IllegalArgumentException e) {
+			return false;
+		}
+	}
+
 	public static boolean isLong(String s) {
 		try {
 			Long.parseLong(s);

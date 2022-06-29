@@ -1,8 +1,5 @@
 package com.elikill58.negativity.api;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -44,14 +41,11 @@ import com.elikill58.negativity.universal.detections.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.detections.Cheat.CheatDescription;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
-import com.elikill58.negativity.universal.file.FileHandle;
-import com.elikill58.negativity.universal.file.FileSaverAction;
-import com.elikill58.negativity.universal.file.FileSaverTimer;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-public class NegativityPlayer implements FileSaverAction {
+public class NegativityPlayer {
 
 	private static final Map<UUID, NegativityPlayer> PLAYERS = Collections.synchronizedMap(new ConcurrentHashMap<UUID, NegativityPlayer>());
 
@@ -59,7 +53,7 @@ public class NegativityPlayer implements FileSaverAction {
 	private final Player p;
 
 	public ArrayList<CheckProcessor> checkProcessors = new ArrayList<>();
-	public ArrayList<String> proof = new ArrayList<>();
+	//public ArrayList<String> proof = new ArrayList<>();
 	public HashMap<CheatKeys, List<PlayerCheatAlertEvent>> alertNotShowed = new HashMap<>();
 	public HashMap<String, String> mods = new HashMap<>();
 	
@@ -109,7 +103,6 @@ public class NegativityPlayer implements FileSaverAction {
 	public double sensitivity = 0.0;
 	private String clientName;
 	private @Nullable ScheduledTask fightCooldownTask;
-	private FileHandle proofFileHandler;
 	public Entity lastHittedEntitty = null, lastHitByEntity = null;
 
 	public NegativityPlayer(Player p) {
@@ -354,16 +347,6 @@ public class NegativityPlayer implements FileSaverAction {
 			n = n + (n.equals("") ? "" : ", ") + c.getName();
 		return n;
 	}
-
-	/**
-	 * Log the given message into proof file
-	 * 
-	 * @param msg the proof message
-	 */
-	public void logProof(String msg) {
-		proof.add(msg);
-		FileSaverTimer.getInstance().addAction(this);
-	}
 	
 	/**
 	 * Save proof and account manager if need to be saved
@@ -373,42 +356,6 @@ public class NegativityPlayer implements FileSaverAction {
 			mustToBeSaved = false;
 			Adapter.getAdapter().getAccountManager().save(getUUID());
 		}
-	}
-	
-	public void checkProofFileHandler() {
-		if(proofFileHandler != null) {
-			if(proofFileHandler.shouldBeClosed())
-				proofFileHandler.close();
-			if(proofFileHandler.isClosed())
-				proofFileHandler = null;
-		}
-	}
-	
-	public FileHandle getOrCreateProofFileHandler() throws IOException {
-		if(proofFileHandler == null || proofFileHandler.isClosed()) {
-			Path proofFile = Adapter.getAdapter().getDataFolder().toPath().resolve("user").resolve("proof").resolve(getUUID() + ".txt");
-			if(!Files.exists(proofFile))
-				Files.createFile(proofFile);
-			proofFileHandler = new FileHandle(proofFile);
-		}
-		return proofFileHandler;
-	}
-	
-	@Override
-	public void save(FileSaverTimer timer) {
-		if (proof.isEmpty()) {
-	    	timer.removeActionRunning();
-			return;
-		}
-		
-		try {
-			getOrCreateProofFileHandler().write(proof);
-			proof.clear();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-    	timer.removeActionRunning();
 	}
 	
 	/**
@@ -472,9 +419,6 @@ public class NegativityPlayer implements FileSaverAction {
 	public void destroy() {
 		checkProcessors.forEach(CheckProcessor::stop);
 		CompletableFuture.runAsync(() -> {
-			save(FileSaverTimer.getInstance());
-			if(proofFileHandler != null && !proofFileHandler.isClosed())
-				proofFileHandler.close();
 			NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
 			accountManager.save(playerId).join();
 			accountManager.dispose(playerId);

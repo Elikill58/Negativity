@@ -101,8 +101,8 @@ public class Fly extends Cheat implements Listeners {
 					}
 				}
 				if (amount > 1) {
-					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount),
-							"OmegaCraftFly - " + flyMoveAmount + " > " + onGround + " : " + wasOnGround, "omega-craft",
+					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "omega-craft",
+							"OmegaCraftFly - " + flyMoveAmount + " > " + onGround + " : " + wasOnGround,
 							new CheatHover.Literal("OmegaCraft: " + amount + " times with no Y changes"),
 							amount > 1 ? amount - 1 : 1);
 				}

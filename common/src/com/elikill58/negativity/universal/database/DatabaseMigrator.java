@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.storage.account.database;
+package com.elikill58.negativity.universal.database;
 
 import java.io.IOException;
 import java.net.URI;

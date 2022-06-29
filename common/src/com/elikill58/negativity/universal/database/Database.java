@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal;
+package com.elikill58.negativity.universal.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.util.Locale;
 
 import com.elikill58.negativity.api.yaml.Configuration;
+import com.elikill58.negativity.universal.Adapter;
 
 public class Database {
 

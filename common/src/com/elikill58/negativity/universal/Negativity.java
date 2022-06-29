@@ -3,7 +3,6 @@ package com.elikill58.negativity.universal;
 import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
 
 import java.io.IOException;
-import java.sql.Timestamp;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.HashSet;
@@ -33,6 +32,7 @@ import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.bypass.BypassManager;
+import com.elikill58.negativity.universal.database.Database;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.detections.Special;
@@ -46,6 +46,7 @@ import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManag
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
+import com.elikill58.negativity.universal.storage.proof.NegativityProofStorage;
 import com.elikill58.negativity.universal.utils.SemVer;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
@@ -156,7 +157,8 @@ public class Negativity {
 		long oldWarn = np.addWarn(c, reliability, amount);
 		if(oldWarn == -1) // no warn added
 			return false;
-		logProof(np, type, p, c, reliability, checkName, proof, ping, amount);
+		if(log && !type.equals(ReportType.INFO))
+			NegativityProofStorage.getStorage().saveProof(new Proof(np, c.getKey(), checkName, ping, amount, reliability, proof));
 		if (c.allowKick() && ((long) (oldWarn / c.getAlertToKick())) < ((long) (np.getWarn(c) / c.getAlertToKick()))) { // if reach new alert state
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			EventManager.callEvent(kick);
@@ -289,15 +291,6 @@ public class Negativity {
 			e.printStackTrace();
 		}
 	}
-
-	private static void logProof(NegativityPlayer np, ReportType type, Player p, Cheat c, int reliability,
-			String checkName, String proof, int ping, long amount) {
-		if(!log || type.equals(ReportType.INFO))
-			return;
-		String time = new Timestamp(System.currentTimeMillis()).toString().split("\\.")[0];
-		np.logProof(time + ": (" + ping + "ms) " + reliability + "% " + c.getKey() + " x" + amount + " - " + checkName
-				+ " > " + proof + " | Warn: " + np.getWarn(c) + ", Version: " + p.getPlayerVersion().name() + ". TPS: " + getVisualTPS());
-	}
 	
 	/**
 	 * Get visual TPS to put them on file
@@ -339,6 +332,7 @@ public class Negativity {
 			BypassManager.loadBypass();
 			BedrockPlayerManager.init();
 			PlayerModificationsManager.init();
+			NegativityProofStorage.init();
 			VerificationManager.init();
 			WebhookManager.init();
 			ada.registerNewIncomingChannel(ada.getServerVersion().isNewerOrEquals(Version.V1_13) ? "minecraft:brand" : "MC|Brand", (p, msg) -> {

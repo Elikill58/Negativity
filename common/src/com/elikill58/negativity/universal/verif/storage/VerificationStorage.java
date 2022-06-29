@@ -10,7 +10,7 @@ import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Database;
+import com.elikill58.negativity.universal.database.Database;
 import com.elikill58.negativity.universal.verif.Verificator;
 import com.elikill58.negativity.universal.verif.storage.database.DatabaseVerificationStorage;
 import com.elikill58.negativity.universal.verif.storage.file.FileVerificationStorage;

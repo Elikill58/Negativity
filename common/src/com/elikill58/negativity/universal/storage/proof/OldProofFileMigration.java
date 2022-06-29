@@ -11,6 +11,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Proof;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class OldProofFileMigration {
@@ -32,7 +33,7 @@ public class OldProofFileMigration {
 		String checkInfo = getContent(s, " > (.*?). Player version");
 		Version version = Version.getVersion(getContent(s, "Player version: (.*?)\\."));
 		double[] tps = getTps(getContent(s, "TPS: \\[(.*?)\\]").split(", "));
-		return new Proof(-1, uuid, cheatKey, null, ping, 1, reliability, date, checkInfo, version, 0, tps);
+		return new Proof(-1, uuid, ReportType.WARNING, cheatKey, null, ping, 1, reliability, date, checkInfo, version, 0, tps);
 	}
 
 	private static @Nullable Proof getForV2(UUID uuid, String s) {
@@ -50,7 +51,7 @@ public class OldProofFileMigration {
 			checkInfo = checkName;
 			checkName = "omega-craft";
 		}
-		return new Proof(-1, uuid, cheatKey, checkName, ping, amount, reliability, date, checkInfo, version, warn, tps);
+		return new Proof(-1, uuid, ReportType.WARNING, cheatKey, checkName, ping, amount, reliability, date, checkInfo, version, warn, tps);
 	}
 	
 	private static double[] getTps(String[] args) {

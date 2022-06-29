@@ -3,6 +3,7 @@ CREATE TABLE IF NOT EXISTS negativity_proofs
     id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
     uuid VARCHAR(36) NOT NULL,
     cheat_key VARCHAR(64) NOT NULL,
+    report_type VACHAR(32) DEFAULT 'WARNING',
     check_name VARCHAR(64),
     check_informations LONGTEXT,
     ping INT DEFAULT 0,

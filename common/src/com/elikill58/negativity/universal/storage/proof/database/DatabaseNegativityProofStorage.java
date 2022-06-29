@@ -19,6 +19,7 @@ import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.database.Database;
 import com.elikill58.negativity.universal.database.DatabaseMigrator;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.storage.proof.NegativityProofStorage;
 import com.elikill58.negativity.universal.storage.proof.OldProofFileMigration;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -101,7 +102,7 @@ public class DatabaseNegativityProofStorage extends NegativityProofStorage {
 	}
 
 	private Proof getWithSet(ResultSet rs) throws SQLException {
-		return new Proof(rs.getInt("id"), UUID.fromString(rs.getString("uuid")), CheatKeys.fromLowerKey(rs.getString("check_key")),
+		return new Proof(rs.getInt("id"), UUID.fromString(rs.getString("uuid")), ReportType.valueOf(rs.getString("report_type")), CheatKeys.fromLowerKey(rs.getString("check_key")),
 				rs.getString("check_name"), rs.getInt("ping"), rs.getLong("amount"), rs.getInt("reliability"),
 				rs.getTimestamp("time"), rs.getString("check_informations"),
 				Version.getVersion(rs.getString("version")), rs.getLong("warn"), sqlToSql(rs.getString("tps")));
@@ -130,18 +131,19 @@ public class DatabaseNegativityProofStorage extends NegativityProofStorage {
 	public void saveProof(Proof proof) {
 		CompletableFuture.runAsync(() -> {
 			try (PreparedStatement stm = Database.getConnection().prepareStatement(
-					"INSERT INTO negativity_proofs(uuid, cheat_key, check_name, ping, amount, reliability, time, check_informations, version, warn, tps) VALUES (?,?,?,?,?,?,?,?,?,?,?)")) {
+					"INSERT INTO negativity_proofs(uuid, report_type, cheat_key, check_name, ping, amount, reliability, time, check_informations, version, warn, tps) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)")) {
 				stm.setString(1, proof.getUUID().toString());
-				stm.setString(2, proof.getCheatKey().getLowerKey());
-				stm.setString(3, proof.getCheckName());
-				stm.setInt(4, proof.getPing());
-				stm.setLong(5, proof.getAmount());
-				stm.setInt(6, proof.getReliability());
-				stm.setTimestamp(7, proof.getTime());
-				stm.setString(8, proof.getCheckInformations());
-				stm.setString(9, proof.getVersion().name());
-				stm.setLong(10, proof.getWarn());
-				stm.setString(11, tpsToSql(proof.getTps()));
+				stm.setString(2, proof.getReportType().name());
+				stm.setString(3, proof.getCheatKey().getLowerKey());
+				stm.setString(4, proof.getCheckName());
+				stm.setInt(5, proof.getPing());
+				stm.setLong(6, proof.getAmount());
+				stm.setInt(7, proof.getReliability());
+				stm.setTimestamp(8, proof.getTime());
+				stm.setString(9, proof.getCheckInformations());
+				stm.setString(10, proof.getVersion().name());
+				stm.setLong(11, proof.getWarn());
+				stm.setString(12, tpsToSql(proof.getTps()));
 				stm.executeUpdate();
 			} catch (SQLException e) {
 				Adapter.getAdapter().getLogger().printError("Failed to save proof " + proof, e);

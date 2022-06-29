@@ -158,7 +158,7 @@ public class Negativity {
 		if(oldWarn == -1) // no warn added
 			return false;
 		if(log && !type.equals(ReportType.INFO))
-			NegativityProofStorage.getStorage().saveProof(new Proof(np, c.getKey(), checkName, ping, amount, reliability, proof));
+			NegativityProofStorage.getStorage().saveProof(new Proof(np, type, c.getKey(), checkName, ping, amount, reliability, proof));
 		if (c.allowKick() && ((long) (oldWarn / c.getAlertToKick())) < ((long) (np.getWarn(c) / c.getAlertToKick()))) { // if reach new alert state
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			EventManager.callEvent(kick);

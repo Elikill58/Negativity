@@ -17,6 +17,7 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Proof;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.storage.proof.NegativityProofStorage;
 import com.elikill58.negativity.universal.storage.proof.OldProofFileMigration;
 
@@ -80,7 +81,7 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 		List<Proof> proof = new ArrayList<>();
 		config.getKeys().forEach(key -> {
 			Configuration c = config.getSection(key);
-			proof.add(new Proof(Integer.parseInt(key), uuid, cheatKey, c.getString("check.name"), c.getInt("ping"), c.getInt("amount"), c.getInt("reliability"), new Timestamp(c.getLong("time")), c.getString("check.informations"), Version.getVersion(c.getString("version")), c.getLong("warn"), fileToTps(c.getDoubleList("tps"))));
+			proof.add(new Proof(Integer.parseInt(key), uuid, ReportType.valueOf(c.getString("report_type", "WARNING")), cheatKey, c.getString("check.name"), c.getInt("ping"), c.getInt("amount"), c.getInt("reliability"), new Timestamp(c.getLong("time")), c.getString("check.informations"), Version.getVersion(c.getString("version")), c.getLong("warn"), fileToTps(c.getDoubleList("tps"))));
 		});
 		return proof;
 	}

@@ -7,6 +7,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.report.ReportType;
 
 public class Proof {
 
@@ -15,6 +16,7 @@ public class Proof {
 	private final int id, ping, reliability;
 	private final long warn, amount;
 	private final CheatKeys cheatKey;
+	private final ReportType reportType;
 	private final String checkName, checkInformations;
 	private final double[] tps;
 	private final Version version;
@@ -29,8 +31,8 @@ public class Proof {
 	 * @param reliability the reliability
 	 * @param explaination all explaination from check
 	 */
-	public Proof(NegativityPlayer np, CheatKeys cheat, @Nullable String checkName, int ping, long amount, int reliability, String checkInformations) {
-		this(-1, np.getUUID(), cheat, checkName, ping, amount, reliability, new Timestamp(System.currentTimeMillis()), checkInformations, np.getPlayer().getPlayerVersion(), np.getAccount().getWarn(checkName), Adapter.getAdapter().getTPS());
+	public Proof(NegativityPlayer np, ReportType reportType, CheatKeys cheat, @Nullable String checkName, int ping, long amount, int reliability, String checkInformations) {
+		this(-1, np.getUUID(), reportType, cheat, checkName, ping, amount, reliability, new Timestamp(System.currentTimeMillis()), checkInformations, np.getPlayer().getPlayerVersion(), np.getAccount().getWarn(checkName), Adapter.getAdapter().getTPS());
 	}
 
 	/**
@@ -49,9 +51,10 @@ public class Proof {
 	 * @param warn amount of warn at the time of proof
 	 * @param tps tps when doing proof
 	 */
-	public Proof(int id, UUID uuid, CheatKeys cheatKey, @Nullable String checkName, int ping, long amount, int reliability, Timestamp time, String checkInformations, Version version, long warn, double[] tps) {
+	public Proof(int id, UUID uuid, ReportType reportType, CheatKeys cheatKey, @Nullable String checkName, int ping, long amount, int reliability, Timestamp time, String checkInformations, Version version, long warn, double[] tps) {
 		this.id = id;
 		this.uuid = uuid;
+		this.reportType = reportType;
 		this.cheatKey = cheatKey;
 		this.checkName = checkName;
 		this.ping = ping;
@@ -74,6 +77,10 @@ public class Proof {
 	
 	public long getAmount() {
 		return amount;
+	}
+	
+	public ReportType getReportType() {
+		return reportType;
 	}
 	
 	public CheatKeys getCheatKey() {

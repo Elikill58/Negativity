@@ -101,7 +101,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 			Vector direction = p.getVelocity().clone();
 			double disWithDir = from.clone().add(direction).distanceSquared(to);
 			double disWithDirY = from.clone().add(direction).toVector().setY(0).distanceSquared(to.toVector().setY(0));
-			double walkSpeed = SpigotNegativity.essentialsSupport ? (p.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : p.getWalkSpeed();
+			double walkSpeed = (SpigotNegativity.essentialsSupport ? (p.getWalkSpeed() - EssentialsSupport.getEssentialsRealMoveSpeed(p)) : p.getWalkSpeed()) + amplifier * 0.1;
 			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
 			if(((SpigotNegativity.essentialsSupport ? (walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D)) : y >= 0.75D) || walkTest) && (y < (disWithDir + disWithDirY))){
 				int porcent = UniversalUtils.parseInPorcent(y * 50 + (walkTest ? 10 : 0) + (walkWithEssTest == walkTest ? 10 : 0) + (walkWithEssTest ? 10 : 0));

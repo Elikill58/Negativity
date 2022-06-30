@@ -595,28 +595,30 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 
 	@Override
 	public void banEffect() {
-		int i = 2;
-		Location loc = getPlayer().getLocation();
-		World w = getPlayer().getWorld();
-		w.spawnEntity(loc, EntityType.FIREWORK);
-		w.spawnEntity(loc, EntityType.FIREWORK);
-		w.spawnEntity(loc, EntityType.FIREWORK);
-		w.spawnEntity(loc, EntityType.FIREWORK);
-		double baseY = loc.getY();
-		for (double y = baseY + 1.5; y > baseY; y = y - 0.05) {
-			for (int u = 0; u < 360; u += i) {
-				Location flameloc = loc.clone();
-				flameloc.setY(y);
-				flameloc.setZ(flameloc.getZ() + Math.cos(u) * i);
-				flameloc.setX(flameloc.getX() + Math.sin(u) * i);
-				if (Version.isNewerOrEquals(Version.getVersion(), Version.V1_13)) {
-					Particle.DustOptions dustOptions = new Particle.DustOptions(Color.ORANGE, 1);
-					w.spawnParticle(Particle.REDSTONE, flameloc, 1, 0, 0, 0, 0, dustOptions);
-				} else {
-					w.playEffect(flameloc.add(0, 1, 0), Utils.getEffect("COLOURED_DUST"), 1);
+		Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
+			int i = 2;
+			Location loc = getPlayer().getLocation();
+			World w = getPlayer().getWorld();
+			w.spawnEntity(loc, EntityType.FIREWORK);
+			w.spawnEntity(loc, EntityType.FIREWORK);
+			w.spawnEntity(loc, EntityType.FIREWORK);
+			w.spawnEntity(loc, EntityType.FIREWORK);
+			double baseY = loc.getY();
+			for (double y = baseY + 1.5; y > baseY; y = y - 0.05) {
+				for (int u = 0; u < 360; u += i) {
+					Location flameloc = loc.clone();
+					flameloc.setY(y);
+					flameloc.setZ(flameloc.getZ() + Math.cos(u) * i);
+					flameloc.setX(flameloc.getX() + Math.sin(u) * i);
+					if (Version.isNewerOrEquals(Version.getVersion(), Version.V1_13)) {
+						Particle.DustOptions dustOptions = new Particle.DustOptions(Color.ORANGE, 1);
+						w.spawnParticle(Particle.REDSTONE, flameloc, 1, 0, 0, 0, 0, dustOptions);
+					} else {
+						w.playEffect(flameloc.add(0, 1, 0), Utils.getEffect("COLOURED_DUST"), 1);
+					}
 				}
 			}
-		}
+		});
 	}
 
 	public void fight() {

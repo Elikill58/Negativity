@@ -5,6 +5,7 @@ import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPor
 import java.text.NumberFormat;
 import java.util.Locale;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
@@ -74,12 +75,14 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 					Material blockType = p.getLocation().getBlock().getType();
 					double maxReach = Adapter.getAdapter().getConfig().getDouble("cheats.forcefield.reach");
 					if (dis > maxReach && !blockType.name().contains("WATER") && !blockType.name().contains("LAVA")) {
-						String entityName = Version.getVersion().equals(Version.V1_7) ? cible.getType().name().toLowerCase(Locale.ROOT) : cible.getName();
-						boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * (oldDistance > maxReach ? 3 : 2) * 10),
-								"Big distance with: " + cible.getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns"
-								+ ". Ping: " + np.ping, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
-						if (isSetBack() && mayCancel)
-							e.setCancelled(true);
+						Bukkit.getScheduler().runTask(SpigotNegativity.getInstance(), () -> {
+							String entityName = Version.getVersion().equals(Version.V1_7) ? cible.getType().name().toLowerCase(Locale.ROOT) : cible.getName();
+							boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(dis * (oldDistance > maxReach ? 3 : 2) * 10),
+									"Big distance with: " + cible.getType().name().toLowerCase(Locale.ROOT) + ". Exact distance: " + dis + ", without thorns"
+									+ ". Ping: " + np.ping, hoverMsg("distance", "%name%", entityName, "%distance%", nf.format(dis)));
+							if (isSetBack() && mayCancel)
+								e.setCancelled(true);
+						});
 					}
 				} catch (Exception exc) {
 					exc.printStackTrace();

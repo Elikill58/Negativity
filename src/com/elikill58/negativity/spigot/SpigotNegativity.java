@@ -560,20 +560,16 @@ public class SpigotNegativity extends JavaPlugin {
 		ConfigurationSection conf = getInstance().getConfig().getConfigurationSection("alert.command");
 		if(conf == null || !conf.getBoolean("active") || conf.getInt("reliability_need") > reliability)
 			return;
-		if(Bukkit.isPrimaryThread()) {
-			int cooldown = conf.getInt("cooldown", 0);
-			if(cooldown > 0) {
-				if(np.lastAlertCommandRan > System.currentTimeMillis())
-					return; // has cooldown
-				np.lastAlertCommandRan = System.currentTimeMillis() + cooldown;
-			}
-			for(String s : conf.getStringList("run")) {
-				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), UniversalUtils.replacePlaceholders(s, "%version%", np.getPlayerVersion().getName(), "%name%",
-						p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey().toLowerCase(Locale.ROOT), "%world%", p.getWorld().getName(), "%cheat_name%",
-						c.getName(), "%reliability%", reliability, "%report_type%", type.name(), "%warn%", np.getWarn(c), "%ping%", Utils.getPing(p), "%tps%", String.format("%.2f", Utils.getLastTPS())));
-			}
-		} else {
-			Bukkit.getScheduler().runTask(getInstance(), () -> manageAlertCommand(np, type, p, c, reliability)); // run this method again but sync
+		int cooldown = conf.getInt("cooldown", 0);
+		if(cooldown > 0) {
+			if(np.lastAlertCommandRan > System.currentTimeMillis())
+				return; // has cooldown
+			np.lastAlertCommandRan = System.currentTimeMillis() + cooldown;
+		}
+		for(String s : conf.getStringList("run")) {
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), UniversalUtils.replacePlaceholders(s, "%version%", np.getPlayerVersion().getName(), "%name%",
+					p.getName(), "%uuid%", p.getUniqueId().toString(), "%cheat_key%", c.getKey().toLowerCase(Locale.ROOT), "%world%", p.getWorld().getName(), "%cheat_name%",
+					c.getName(), "%reliability%", reliability, "%report_type%", type.name(), "%warn%", np.getWarn(c), "%ping%", Utils.getPing(p), "%tps%", String.format("%.2f", Utils.getLastTPS())));
 		}
 	}
 

@@ -153,7 +153,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (!commandSection.getBoolean("kick", true))
 			unRegisterBukkitCommand(kickCmd);
 		else {
-			kickCmd.setAliases(Arrays.asList("negkick"));
+			kickCmd.setAliases(Arrays.asList("kigk"));
 			kickCmd.setExecutor(command);
 			kickCmd.setTabCompleter(command);
 		}
@@ -179,7 +179,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (!banConfig.getBoolean("ban", true))
 			unRegisterBukkitCommand(banCmd);
 		else {
-			banCmd.setAliases(Arrays.asList("negban"));
+			banCmd.setAliases(Arrays.asList("ban"));
 			banCmd.setExecutor(command);
 			banCmd.setTabCompleter(command);
 		}
@@ -188,7 +188,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (!banConfig.getBoolean("unban", true))
 			unRegisterBukkitCommand(unbanCmd);
 		else {
-			unbanCmd.setAliases(Arrays.asList("negunban"));
+			unbanCmd.setAliases(Arrays.asList("unban"));
 			unbanCmd.setExecutor(command);
 			unbanCmd.setTabCompleter(command);
 		}

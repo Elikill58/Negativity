@@ -18,15 +18,12 @@ commands:
   nban:
     description: Ban a player
     permission: negativity.ban
-    aliases: [ban]
   nunban:
     description: Unban a player
     permission: negativity.unban
-    aliases: [unban]
   nkick:
     description: Kick a player
     permission: negativity.kick
-    aliases: [kick]
   nmod:
     description: Option for mod
     permission: negativity.mod

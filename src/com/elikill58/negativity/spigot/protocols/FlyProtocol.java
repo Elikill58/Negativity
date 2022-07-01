@@ -138,7 +138,7 @@ public class FlyProtocol extends Cheat implements Listener {
 				SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "OmegaCraftFly - " + np.flyMoveAmount.size() + " > " + onGround + " : " + wasOnGround + ", d: " + d, (CheatHover) null, amount);
 			}
 		}
-		if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY") || LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE") || hasBoatAround)
+		if((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || isInWater || isOnWater || LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY") || LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE") || hasBoatAround)
 			np.flyMoveAmount.clear();
 		else
 			np.flyMoveAmount.add(d);

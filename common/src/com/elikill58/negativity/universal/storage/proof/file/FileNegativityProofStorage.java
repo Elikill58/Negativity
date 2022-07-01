@@ -120,6 +120,7 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 			while(cheatSection.contains(String.valueOf(key)))
 				key++;
 			Configuration proofConfig = cheatSection.createSection(String.valueOf(key));
+			proofConfig.set("report_type", proof.getReportType().name());
 			proofConfig.set("check.name", proof.getCheckName());
 			proofConfig.set("check.informations", proof.getCheckInformations());
 			proofConfig.set("ping", proof.getPing());
@@ -158,6 +159,7 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 					while(cheatSection.contains(String.valueOf(key)))
 						key++;
 					Configuration proofConfig = cheatSection.createSection(String.valueOf(key));
+					proofConfig.set("report_type", proof.getReportType().name());
 					proofConfig.set("check.name", proof.getCheckName());
 					proofConfig.set("check.informations", proof.getCheckInformations());
 					proofConfig.set("ping", proof.getPing());

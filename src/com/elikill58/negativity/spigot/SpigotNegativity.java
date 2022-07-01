@@ -528,7 +528,7 @@ public class SpigotNegativity extends JavaPlugin {
 		callSyncEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
-		np.addWarn(c, reliability, amount);
+		int oldWarn = np.addWarn(c, reliability, amount);
 		logProof(np, type, p, c, reliability, proof, ping);
 		if(BanManager.isBanned(np.getUUID())) {
 			return false;
@@ -538,7 +538,7 @@ public class SpigotNegativity extends JavaPlugin {
 			return false;
 		}
 		Stats.updateStats(StatsType.CHEAT, c, reliability, amount);
-		if (c.allowKick() && c.getAlertToKick() <= np.getWarn(c)) {
+		if (c.allowKick() && ((long) (oldWarn / c.getAlertToKick())) < ((long) (np.getWarn(c) / c.getAlertToKick()))) { // if reach new alert state
 			PlayerCheatKickEvent kick = new PlayerCheatKickEvent(p, c, reliability);
 			callSyncEvent(kick);
 			if (!kick.isCancelled())

@@ -263,12 +263,14 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		addWarn(c, reliability, 1);
 	}
 
-	public void addWarn(Cheat c, int reliability, int amount) {
+	public int addWarn(Cheat c, int reliability, int amount) {
 		if (System.currentTimeMillis() < TIME_INVINCIBILITY || c.getReliabilityAlert() > reliability)
-			return;
+			return -1;
 		NegativityAccount account = getAccount();
-		account.setWarnCount(c, account.getWarn(c) + amount);
+		int old = account.getWarn(c);
+		account.setWarnCount(c, old + amount);
 		mustToBeSaved = true;
+		return old;
 	}
 
 	public void setWarn(Cheat c, int cheats) {

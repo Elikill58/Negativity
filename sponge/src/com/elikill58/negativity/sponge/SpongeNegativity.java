@@ -45,8 +45,6 @@ import com.elikill58.negativity.sponge.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
-import com.elikill58.negativity.universal.database.Database;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -121,9 +119,7 @@ public class SpongeNegativity {
 	
 	@Listener
 	public void onStoppingEngine(StoppingEngineEvent<Server> event) {
-		NegativityPlayer.getAllPlayers().values().forEach(NegativityPlayer::destroy);
-		Stats.updateStats(StatsType.ONLINE, 0 + "");
-		Database.close();
+		Negativity.closeNegativity();
 	}
 	
 	private void loadCommands(RegisterCommandEvent<Command.Raw> event) {

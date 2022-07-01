@@ -8,8 +8,6 @@ import com.elikill58.negativity.bungee.integrations.RedisSupport;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
-import com.elikill58.negativity.universal.database.Database;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 
@@ -57,8 +55,7 @@ public class BungeeNegativity extends Plugin {
 
 	@Override
 	public void onDisable() {
-		Database.close();
-		Stats.updateStats(StatsType.ONLINE, 0 + "");
+		Negativity.closeNegativity();
 	}
 	
 	public static String getProxyId() {

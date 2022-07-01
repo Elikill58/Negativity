@@ -27,12 +27,10 @@ import com.elikill58.negativity.fabric.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.database.Database;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
@@ -96,8 +94,6 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 	}
 
 	public void onGameStop(MinecraftServer srv) {
-		NegativityPlayer.getAllPlayers().values().forEach(NegativityPlayer::destroy);
-		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		if (FabricAdapter.getAdapter().getScheduler() instanceof FabricScheduler scheduler) {
 			Adapter.getAdapter().getLogger().info("Shutting down scheduler");
 			try {
@@ -107,7 +103,7 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 				e.printStackTrace();
 			}
 		}
-		Database.close();
+		Negativity.closeNegativity();
 	}
 
 	public void onGameStart(MinecraftServer srv) {

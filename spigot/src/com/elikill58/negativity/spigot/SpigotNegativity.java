@@ -2,7 +2,6 @@ package com.elikill58.negativity.spigot;
 
 import java.io.File;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -15,7 +14,6 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 
-import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.spigot.impl.entity.SpigotFakePlayer;
 import com.elikill58.negativity.spigot.listeners.BlockListeners;
@@ -31,7 +29,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.database.Database;
@@ -215,10 +212,8 @@ public class SpigotNegativity extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		new Thread(() -> new ArrayList<>(NegativityPlayer.getAllPlayers().keySet()).forEach(NegativityPlayer::removeFromCache)).start();
-		Database.close();
-		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		packetManager.getPacketManager().clear();
+		Negativity.closeNegativity();
 	}
 	
 	public NegativityPacketManager getPacketManager() {

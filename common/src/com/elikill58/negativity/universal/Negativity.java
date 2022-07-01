@@ -414,4 +414,10 @@ public class Negativity {
 			}
 		}
 	}
+	
+	public static void closeNegativity() {
+		Database.close();
+		Stats.updateStats(StatsType.ONLINE, 0 + "");
+		NegativityPlayer.getAllNegativityPlayers().forEach(NegativityPlayer::destroy);
+	}
 }

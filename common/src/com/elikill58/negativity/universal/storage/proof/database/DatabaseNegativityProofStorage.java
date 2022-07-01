@@ -31,6 +31,8 @@ public class DatabaseNegativityProofStorage extends NegativityProofStorage {
 			Connection connection = Database.getConnection();
 			if (connection != null) {
 				DatabaseMigrator.executeRemainingMigrations(connection, "proofs");
+			} else {
+				Adapter.getAdapter().getLogger().warn("Can't load proof storage because the database isn't fully available.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

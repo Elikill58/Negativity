@@ -11,14 +11,16 @@ import java.util.List;
 import java.util.Map;
 
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.file.FileSaverTimer;
 
 @SuppressWarnings("unchecked")
 public final class Configuration {
 	
     //private static final char SEPARATOR = '.';
-    final Map<String, Object> self;
-    private final Configuration defaults;
-    private final File file;
+	protected final Map<String, Object> self;
+	protected final Configuration defaults;
+	protected final File file;
+	protected boolean isSaving = false;
     
     public Configuration() {
         this(null);
@@ -327,10 +329,17 @@ public final class Configuration {
     }
     
     public void save() {
-    	try {
-			YamlConfiguration.save(this, file);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+    	if(isSaving)
+    		return;
+    	isSaving = true;
+    	FileSaverTimer.getInstance().addAction(timer -> {
+        	try {
+    			YamlConfiguration.save(this, file);
+    		} catch (IOException e) {
+    			e.printStackTrace();
+    		}
+        	isSaving = false;
+    		timer.removeActionRunning();
+    	});
     }
 }

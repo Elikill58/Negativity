@@ -44,7 +44,7 @@ public class AlertInventory extends AbstractInventory {
 			if (!c.isActive())
 				continue;
 			ConfigAdapter config = Adapter.getAdapter().getConfig();
-			boolean isActive = np.hasDetectionActive(c) || !cible.isOnline();
+			boolean isActive = !cible.isOnline() || np.hasDetectionActive(c);
 			if((config.getBoolean("inventory.alerts.only_cheat_active") && isActive)
 					|| (!isActive && config.getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);
@@ -72,7 +72,7 @@ public class AlertInventory extends AbstractInventory {
 		List<Cheat> TO_SEE = new ArrayList<>();
 		for (Cheat c : Cheat.values()) {
 			ConfigAdapter config = Adapter.getAdapter().getConfig();
-			boolean isActive = np.hasDetectionActive(c) || !cible.isOnline();
+			boolean isActive = !cible.isOnline() || np.hasDetectionActive(c);
 			if((config.getBoolean("inventory.alerts.only_cheat_active") && isActive)
 					|| (!isActive && config.getBoolean("inventory.alerts.no_started_verif_cheat")))
 				TO_SEE.add(c);

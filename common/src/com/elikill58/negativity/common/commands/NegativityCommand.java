@@ -155,7 +155,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			return true;
 		} else if (arg[0].equalsIgnoreCase("admin") || arg[0].toLowerCase(Locale.ROOT).contains("manage")) {
 			if (arg.length >= 2 && arg[1].equalsIgnoreCase("updateMessages")) {
-				if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getNegativityPlayer((Player) sender), Perm.MANAGE_CHEAT)) {
+				if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getNegativityPlayer((Player) sender), Perm.ADMIN)) {
 					Messages.sendMessage(sender, "not_permission");
 					return true;
 				}
@@ -169,7 +169,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				return true;
 			}
 			Player p = (Player) sender;
-			if (!Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.MANAGE_CHEAT)) {
+			if (!Perm.hasPerm(NegativityPlayer.getNegativityPlayer(p), Perm.ADMIN)) {
 				Messages.sendMessage(sender, "not_permission");
 				return true;
 			}
@@ -361,7 +361,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			list.addAll(Messages.getMessageList(sender, "negativity.mod.help"));
 		if (Perm.hasPerm(sender, Perm.MOD))
 			list.addAll(Messages.getMessageList(sender, "negativity.clear.help"));
-		if (sender instanceof Player && Perm.hasPerm(sender, Perm.MANAGE_CHEAT))
+		if (sender instanceof Player && Perm.hasPerm(sender, Perm.ADMIN))
 			list.addAll(Messages.getMessageList(sender, "negativity.admin.help"));
 		if (Perm.hasPerm(sender, Perm.ADMIN) && WebhookManager.isEnabled())
 			list.addAll(Messages.getMessageList(sender, "negativity.webhook.help"));
@@ -414,7 +414,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				suggestions.add("reload");
 			if ("alert".startsWith(prefix))
 				suggestions.add("alert");
-			if ("admin".startsWith(prefix) && (sender instanceof Player) && Perm.hasPerm(NegativityPlayer.getCached(((Player) sender).getUniqueId()), Perm.MANAGE_CHEAT))
+			if ("admin".startsWith(prefix) && (sender instanceof Player) && Perm.hasPerm(NegativityPlayer.getCached(((Player) sender).getUniqueId()), Perm.ADMIN))
 				suggestions.add("admin");
 			if ("debug".startsWith(prefix))
 				suggestions.add("debug");

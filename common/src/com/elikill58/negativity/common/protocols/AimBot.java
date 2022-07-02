@@ -125,13 +125,8 @@ public class AimBot extends Cheat {
 		Player p = e.getPlayer();
 		Entity cible = e.getDamaged();
 		Location loc = p.getLocation(), cloc = cible.getLocation();
-		boolean notSure = false;
-		if(loc.getY() >= cloc.getY() && loc.getPitch() > 60) // looking just below and entity is down
-			notSure = true;
-		if(loc.getY() <= cloc.getY() && loc.getPitch() < -60) // looking just upper and entity is up
-			notSure = true;
-		double angle = LocationUtils.getAngleTo(p, cloc);
-		Direction direction = LocationUtils.getDirection(angle);
+		boolean notSure = new Location(p.getWorld(), loc.getX(), 0, loc.getZ()).distance(new Location(p.getWorld(), cloc.getX(), 0, cloc.getZ())) < 0.5; // if X/Z distance too low
+		Direction direction = LocationUtils.getDirection(p, cloc);
 		long amount = 0;
 		int reliability = 0;
 		switch (direction) {
@@ -158,14 +153,12 @@ public class AimBot extends Cheat {
 		case RIGHT:
 			if(notSure)
 				return;
-			if(Math.abs(angle) < 80)
-				return;
 			amount = 2;
 			reliability = 90;
 			break;
 		}
 		if(amount > 0)
-			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(reliability + (notSure ? -10 : 0)), "direction", "Pos: " + p.getLocation() + " / " + cible.getLocation() + ", dir: " + direction.name() + " (" + angle + "°)", null, amount);
+			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(reliability + (notSure ? -10 : 0)), "direction", "Pos: " + p.getLocation() + " / " + cible.getLocation() + ", dir: " + direction.name(), null, amount);
 	}
 	
 	@Override

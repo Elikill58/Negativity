@@ -501,6 +501,7 @@ public class LocationUtils {
 	 * @param loc the direction
 	 * @return the arrow already parsed
 	 */
+	@Deprecated
 	public static double getAngleTo(Player p, Location loc) {
 		Location position = p.getLocation();
 		Vector a = loc.clone().sub(position).toVector().normalize();
@@ -510,9 +511,43 @@ public class LocationUtils {
 	}
 
 	public static Direction getDirection(Player p, Location loc) {
-		return getDirection(getAngleTo(p, loc));
+		Location playerLocation = p.getLocation();
+		Vector locVector = loc.toVector().subtract(playerLocation.toVector());
+		
+		double locAngle = Math.atan2(locVector.getZ(), locVector.getX());
+		double playerAngle = Math.atan2(playerLocation.getDirection().getZ(), playerLocation.getDirection().getX());
+		
+		double angle = playerAngle - locAngle;
+		
+		while (angle > Math.PI) {
+		    angle = angle - 2 * Math.PI;
+		}
+		
+		while (angle < -Math.PI) {
+		    angle = angle + 2 * Math.PI;
+		}
+		
+		if (angle < -2.749 || angle >= 2.749) { // -7/8 pi
+		    return Direction.BACK;
+		} else if (angle < -1.963) { // -5/8 pi
+		    return Direction.BACK_RIGHT;
+		} else if (angle < -1.178) { // -3/8 pi
+		    return Direction.RIGHT;
+		} else if (angle < -0.393) { // -1/8 pi
+		    return Direction.FRONT_RIGHT;
+		} else if (angle < 0.393) { // 1/8 pi
+		    return Direction.FRONT;
+		} else if (angle < 1.178) { // 3/8 pi
+		    return Direction.FRONT_LEFT;
+		} else if (angle < 1.963) { // 5/8 p
+		    return Direction.LEFT;
+		} else if (angle < 2.749) { // 7/8 pi
+		    return Direction.BACK_LEFT;
+		}
+		return null;
 	}
-	
+
+	@Deprecated
 	public static Direction getDirection(double yaw) {
 		if (22.50 < yaw && yaw < 67.50)
 			return Direction.FRONT_LEFT;
@@ -539,6 +574,7 @@ public class LocationUtils {
 	 * @param c the point to check
 	 * @return true if on left
 	 */
+	@Deprecated
 	public static boolean isLeft(Location a, Location b, Vector c) {
 		return ((b.getX() - a.getX()) * (c.getZ() - a.getZ()) - (b.getZ() - a.getZ()) * (c.getX() - a.getX())) > 0;
 	}

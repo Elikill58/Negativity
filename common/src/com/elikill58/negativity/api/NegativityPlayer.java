@@ -70,7 +70,7 @@ public class NegativityPlayer {
 	
 	// detection and bypass
 	public long timeInvincibility = 0, timeLastMessage = 0, otherKeepAliveTime = 0;
-	public int LAST_CHAT_MESSAGE_NB = 0, fakePlayerTouched = 0, bypassSpeed = 0, spiderSameDist = 0;
+	public int LAST_CHAT_MESSAGE_NB = 0, bypassSpeed = 0, spiderSameDist = 0;
 	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public boolean bypassBlink = false, isOnLadders = false, useAntiNoFallSystem = false, isTeleporting = false;
@@ -98,12 +98,11 @@ public class NegativityPlayer {
 	
 	// general values
 	public boolean isInFight = false, already_blink = false, isFreeze = false, isUsingSlimeBlock = false,
-			mustToBeSaved = false, isInvisible = false, isAttacking = false, shouldCheckSensitivity = true;
+			isInvisible = false, isAttacking = false, shouldCheckSensitivity = true;
 	private boolean isBedrockPlayer = false;
 	public double sensitivity = 0.0;
 	private String clientName;
 	private @Nullable ScheduledTask fightCooldownTask;
-	public Entity lastHittedEntitty = null, lastHitByEntity = null;
 
 	public NegativityPlayer(Player p) {
 		this.p = p;
@@ -285,16 +284,6 @@ public class NegativityPlayer {
 	}
 
 	/**
-	 * Add one warn to the given cheat
-	 * 
-	 * @param c the cheat which create alert
-	 * @param reliability the reliability of alert
-	 */
-	public void addWarn(Cheat c, int reliability) {
-		addWarn(c, reliability, 1);
-	}
-
-	/**
 	 * Add multiple warn
 	 * 
 	 * @param c the cheat which create alert
@@ -308,7 +297,7 @@ public class NegativityPlayer {
 		NegativityAccount account = getAccount();
 		long old = account.getWarn(c);
 		account.setWarnCount(c, old + amount);
-		mustToBeSaved = true;
+		Adapter.getAdapter().getAccountManager().save(getUUID());
 		return old;
 	}
 
@@ -346,16 +335,6 @@ public class NegativityPlayer {
 		if(!n.contains(c.getName()))
 			n = n + (n.equals("") ? "" : ", ") + c.getName();
 		return n;
-	}
-	
-	/**
-	 * Save proof and account manager if need to be saved
-	 */
-	public void saveAccount() {
-		if(mustToBeSaved) {
-			mustToBeSaved = false;
-			Adapter.getAdapter().getAccountManager().save(getUUID());
-		}
 	}
 	
 	/**

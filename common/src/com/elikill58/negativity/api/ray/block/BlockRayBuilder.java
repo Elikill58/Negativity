@@ -12,11 +12,10 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.ray.AbstractRayBuilder;
-import com.elikill58.negativity.api.ray.block.BlockRay.RaySearch;
 
 public class BlockRayBuilder extends AbstractRayBuilder<BlockRayBuilder, BlockRay>{
 
-	private RaySearch search = RaySearch.TYPE_NOT_AIR;
+	private BlockRaySearch search = BlockRaySearch.TYPE_NOT_AIR;
 	protected Material[] filter = new Material[0], neededType = new Material[0];
 	protected List<Vector> positions = new ArrayList<>();
 	
@@ -56,7 +55,7 @@ public class BlockRayBuilder extends AbstractRayBuilder<BlockRayBuilder, BlockRa
 	 * @return this builder
 	 */
 	public BlockRayBuilder ignoreAir(boolean air) {
-		this.search = RaySearch.TYPE_NOT_AIR;
+		this.search = BlockRaySearch.TYPE_NOT_AIR;
 		return this;
 	}
 	
@@ -69,7 +68,7 @@ public class BlockRayBuilder extends AbstractRayBuilder<BlockRayBuilder, BlockRa
 	 */
 	public BlockRayBuilder neededType(Material... type) {
 		this.neededType = type;
-		this.search = RaySearch.TYPE_SPECIFIC;
+		this.search = BlockRaySearch.TYPE_SPECIFIC;
 		return this;
 	}
 	
@@ -102,7 +101,7 @@ public class BlockRayBuilder extends AbstractRayBuilder<BlockRayBuilder, BlockRa
 	 */
 	public BlockRayBuilder neededPositions(List<Vector> vec) {
 		this.positions.addAll(vec);
-		this.search = RaySearch.POSITION;
+		this.search = BlockRaySearch.POSITION;
 		return this;
 	}
 	

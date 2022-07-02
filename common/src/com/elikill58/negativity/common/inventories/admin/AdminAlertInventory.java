@@ -23,7 +23,7 @@ public class AdminAlertInventory extends AbstractInventory<AdminAlertHolder> {
 	@Override
 	public void openInventory(Player p, Object... args) {
 		AdminAlertHolder holder = new AdminAlertHolder();
-		Inventory inv = Inventory.createInventory(Inventory.ADMIN_MENU, 27, holder);
+		Inventory inv = Inventory.createInventory(Messages.getMessage(p, "inventory.alerts.shower.manage"), 27, holder);
 		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		
 		int slot = 10;

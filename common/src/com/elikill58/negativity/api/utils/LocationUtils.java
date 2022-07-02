@@ -546,36 +546,4 @@ public class LocationUtils {
 		}
 		return null;
 	}
-
-	@Deprecated
-	public static Direction getDirection(double yaw) {
-		if (22.50 < yaw && yaw < 67.50)
-			return Direction.FRONT_LEFT;
-		else if (67.50 < yaw && yaw < 112.5)
-			return Direction.LEFT;
-		else if (112.50 < yaw && yaw < 157.5)
-			return Direction.BACK_LEFT;
-		else if (157.50 < yaw && yaw < 202.5)
-			return Direction.BACK;
-		else if (202.50 < yaw && yaw < 247.5)
-			return Direction.BACK_RIGHT;
-		else if (247.50 < yaw && yaw < 292.5)
-			return Direction.RIGHT;
-		else if (292.50 < yaw && yaw < 337.5)
-			return Direction.FRONT_RIGHT;
-		return Direction.FRONT;
-	}
-
-	/**
-	 * Check if a point is on the left or right
-	 * 
-	 * @param a the point where the line comes from
-	 * @param b a point of the line
-	 * @param c the point to check
-	 * @return true if on left
-	 */
-	@Deprecated
-	public static boolean isLeft(Location a, Location b, Vector c) {
-		return ((b.getX() - a.getX()) * (c.getZ() - a.getZ()) - (b.getZ() - a.getZ()) * (c.getX() - a.getX())) > 0;
-	}
 }

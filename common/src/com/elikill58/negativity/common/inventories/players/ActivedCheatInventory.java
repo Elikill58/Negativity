@@ -31,7 +31,7 @@ public class ActivedCheatInventory extends AbstractInventory<ActivedCheatHolder>
 	@Override
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
-		Inventory inv = Inventory.createInventory(Inventory.NAME_ACTIVED_CHEAT_MENU, UniversalUtils.getMultipleOf(Cheat.getEnabledCheat().size() + 3, 9, 1, 54), new ActivedCheatHolder(cible));
+		Inventory inv = Inventory.createInventory(Messages.getMessage(p, "inventory.detection.name_inv"), UniversalUtils.getMultipleOf(Cheat.getEnabledCheat().size() + 3, 9, 1, 54), new ActivedCheatHolder(cible));
 		inv.set(inv.getSize() - 2, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.back")).build());
 		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
 		p.openInventory(inv);

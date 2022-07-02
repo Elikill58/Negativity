@@ -3,7 +3,6 @@ package com.elikill58.negativity.api.ray.block;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
 
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
@@ -16,11 +15,11 @@ import com.elikill58.negativity.api.ray.RayResult;
 public class BlockRay extends AbstractRay<BlockRayResult> {
 	
 	private final List<Material> filter, neededType;
-	private final RaySearch search;
+	private final BlockRaySearch search;
 	private boolean hasOther = false;
 	private List<Vector> positions;
 	
-	protected BlockRay(World w, Location position, Vector vector, int maxDistance, Material[] neededType, RaySearch search, Material[] filter, List<Vector> positions) {
+	protected BlockRay(World w, Location position, Vector vector, int maxDistance, Material[] neededType, BlockRaySearch search, Material[] filter, List<Vector> positions) {
 		super(w, position, vector, maxDistance);
 		this.search = search;
 		this.neededType = neededType == null ? null : new ArrayList<>(Arrays.asList(neededType));
@@ -68,7 +67,7 @@ public class BlockRay extends AbstractRay<BlockRayResult> {
 		if(lastDistance >= maxDistance)
 			return RayResult.TOO_FAR; // Too far
 		testedVec.put(v, Materials.STICK); // will be replaced when getting from exact block
-		if(search.equals(RaySearch.POSITION)) {
+		if(search.equals(BlockRaySearch.POSITION)) {
 			int baseX = v.getBlockX(), baseY = v.getBlockY(), baseZ = v.getBlockZ();
 			for(Vector vec : positions) {
 				if(vec.getBlockX() == baseX && vec.getBlockY() == baseY && vec.getBlockZ() == baseZ) {
@@ -80,13 +79,13 @@ public class BlockRay extends AbstractRay<BlockRayResult> {
 		}
 		Material type = w.getBlockAt(v.clone()).getType();
 		testedVec.put(v, type); // changed tested type to the getted one
-		if(search.equals(RaySearch.TYPE_SPECIFIC)) {
+		if(search.equals(BlockRaySearch.TYPE_SPECIFIC)) {
 			if(neededType.contains(type)) {// founded type
 				position = new Location(w, v.getX(), v.getY(), v.getZ());
 				return RayResult.NEEDED_FOUND;
 			}
 			return RayResult.CONTINUE;
-		} else if(search.equals(RaySearch.TYPE_NOT_AIR)) {
+		} else if(search.equals(BlockRaySearch.TYPE_NOT_AIR)) {
 			if(!type.equals(Materials.AIR)) {
 				position = new Location(w, v.getX(), v.getY(), v.getZ());
 				return RayResult.NEEDED_FOUND;
@@ -94,22 +93,5 @@ public class BlockRay extends AbstractRay<BlockRayResult> {
 			return RayResult.CONTINUE;
 		}
 		return getFilter().contains(type) ? RayResult.CONTINUE : RayResult.FIND_OTHER;
-	}
-	
-	public enum RaySearch {
-		
-		POSITION(builder -> !builder.positions.isEmpty()),
-		TYPE_SPECIFIC(builder -> builder.neededType != null && builder.neededType.length > 0),
-		TYPE_NOT_AIR(builder -> true);
-		
-		private final Function<BlockRayBuilder, Boolean> checkIfValid;
-		
-		private RaySearch(Function<BlockRayBuilder, Boolean> checkIfValid) {
-			this.checkIfValid = checkIfValid;
-		}
-		
-		public boolean isValid(BlockRayBuilder builder) {
-			return checkIfValid.apply(builder);
-		}
 	}
 }

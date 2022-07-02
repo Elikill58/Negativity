@@ -111,13 +111,6 @@ public class UniversalUtils {
 		return Optional.empty();
 	}
 
-	public static Optional<Cheat> getCheatFromName(String s) {
-		for (Cheat c : Cheat.values())
-			if (c.getName().equalsIgnoreCase(s))
-				return Optional.of(c);
-		return Optional.empty();
-	}
-
 	public static Optional<Cheat> getCheatFromItem(Object m) {
 		for (Cheat c : Cheat.values())
 			if (c.getMaterial().equals(m))

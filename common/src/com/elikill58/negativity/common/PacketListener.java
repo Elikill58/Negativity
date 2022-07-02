@@ -99,9 +99,6 @@ public class PacketListener implements Listeners {
 						EventManager.callEvent(event);
 						if(event.isCancelled())
 							packet.setCancelled(event.isCancelled());
-						np.lastHittedEntitty = entity;
-						if(entity instanceof Player)
-							NegativityPlayer.getNegativityPlayer((Player) entity).lastHitByEntity = p;
 					}
 				}
 			}

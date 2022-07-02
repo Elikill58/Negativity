@@ -73,16 +73,6 @@ public abstract class VersionAdapter<R> {
 	public abstract void queuePacket(R p, Object basicPacket);
 
 	@Deprecated
-	public NPacket getPacket(Player pl, Object nms) {
-		return getPacket(getR(pl), nms);
-	}
-
-	@Deprecated
-	public NPacket getPacket(R player, Object nms) {
-		return getPacket(player, nms, nms.getClass().getSimpleName());
-	}
-
-	@Deprecated
 	public NPacket getPacket(R player, Object nms, String packetName) {
 		try {
 			if (packetName.startsWith(PacketType.CLIENT_PREFIX) || packetName.startsWith("Serverbound"))

@@ -25,6 +25,7 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.protocols.CheckProcessor;
 import com.elikill58.negativity.common.protocols.InventoryMove.InventoryMoveData;
+import com.elikill58.negativity.common.protocols.checkprocessor.PingSpoofCheckProcessor;
 import com.elikill58.negativity.common.protocols.checkprocessor.ScaffoldRiseCheckProcessor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.FlyingReason;
@@ -117,6 +118,7 @@ public class NegativityPlayer {
 		
 		// add processors like this: checkProcessors.add(new SpiderExampleCheckProcessor(this));
 		checkProcessors.add(new ScaffoldRiseCheckProcessor(this));
+		checkProcessors.add(new PingSpoofCheckProcessor(this));
 		checkProcessors.forEach(CheckProcessor::begin);
 	}
 

@@ -11,6 +11,8 @@ public class FileSaverTimer implements Runnable {
 
 	private static FileSaverTimer instance;
 	public static FileSaverTimer getInstance() {
+		if(instance == null)
+			instance = new FileSaverTimer();
 		return instance;
 	}
 	private static final int MAX_RUNNING = 10, SKIP_WHEN_ALREADY = 2;
@@ -26,7 +28,6 @@ public class FileSaverTimer implements Runnable {
     		Adapter.getAdapter().getLogger().error("Another instance of FileSaveTimer is created even if an old already exist");
     		return;
     	}
-    	instance = this;
     }
     
     @Override

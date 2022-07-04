@@ -160,7 +160,7 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 			return new NPacketHandshakeInSetProtocol(packet.getProtocolVersion(), packet.hostName, packet.port);
 		});
 		
-		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundPingPacket(((NPacketPlayOutPing) f).id));
+		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundPingPacket((int) ((NPacketPlayOutPing) f).id));
 		
 		log();
 	}

@@ -343,7 +343,7 @@ public class Negativity {
 			if(old != null)
 				old.runAll();
 			else
-				ada.getScheduler().runRepeatingAsync(new FileSaverTimer(), Duration.ofSeconds(1), Duration.ofSeconds(1), "Negativity FileSaver");
+				ada.getScheduler().runRepeatingAsync(FileSaverTimer.getInstance(), Duration.ofSeconds(1), Duration.ofSeconds(1), "Negativity FileSaver");
 			if(actualizeInvTimer != null)
 				actualizeInvTimer.cancel();
 			actualizeInvTimer = ada.getScheduler().runRepeating(new ActualizeInvTimer(), 10, 10);

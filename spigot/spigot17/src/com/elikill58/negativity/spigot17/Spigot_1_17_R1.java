@@ -112,7 +112,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 
 		packetsPlayIn.put("PacketPlayInKeepAlive",
 				(player, f) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) f).getId()));
-		packetsPlayIn.put("PacketPlayInPong", (player, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
+		packetsPlayIn.put("ServerboundPongPacket", (player, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
 
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, raw) -> {
 			ClientboundBlockDestructionPacket packet = (ClientboundBlockDestructionPacket) raw;
@@ -149,14 +149,14 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 		packetsPlayOut.put("PacketPlayOutEntityEffect", (player, packet) -> {
 			return new NPacketPlayOutEntityEffect(get(packet, "d"), (byte) get(packet, "e"), get(packet, "f"), get(packet, "g"), get(packet, "h"));
 		});
-		packetsPlayOut.put("PacketPlayOutPing", (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
+		packetsPlayOut.put("ClientboundPingPacket", (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
 
 		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
 			ClientIntentionPacket packet = (ClientIntentionPacket) raw;
 			return new NPacketHandshakeInSetProtocol(packet.getProtocolVersion(), packet.hostName, packet.port);
 		});
 
-		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundPingPacket(((NPacketPlayOutPing) f).id));
+		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundPingPacket((int) ((NPacketPlayOutPing) f).id));
 
 		log();
 	}

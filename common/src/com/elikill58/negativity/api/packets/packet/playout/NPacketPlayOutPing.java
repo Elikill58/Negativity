@@ -10,12 +10,12 @@ import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
  */
 public class NPacketPlayOutPing implements NPacketPlayOut {
 
-	public int id;
+	public long id;
 
 	public NPacketPlayOutPing() {
 	}
 
-	public NPacketPlayOutPing(int id) {
+	public NPacketPlayOutPing(long id) {
 		this.id = id;
 	}
 

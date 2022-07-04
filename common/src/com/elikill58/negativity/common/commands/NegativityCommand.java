@@ -314,7 +314,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				}
 			} else
 				p.sendMessage(ChatColor.RED + "Unknow cheat " + arg[2] + ".");
-			if((c != null && ping > c.getMaxAlertPing()) || ping > 200)
+			if((c != null && ping > c.getMaxAlertPing()) || (c == null && ping > 200))
 				hasBypass = true;
 			p.sendMessage(hasBypass ? ChatColor.RED + "Warn: " + name + " have bypass, so you cannot be detected." : ChatColor.GREEN + "Good news: " + name + " can be detected !");
 			if(!hasBypass && c != null)

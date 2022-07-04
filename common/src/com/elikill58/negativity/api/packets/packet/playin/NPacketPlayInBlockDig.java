@@ -24,7 +24,7 @@ public class NPacketPlayInBlockDig implements NPacketPlayIn, LocatedPacket {
 	
 	@Override
 	public boolean hasLocation() {
-		return action == DigAction.START_DIGGING || action == DigAction.CANCEL_DIGGING || action == DigAction.FINISHED_DIGGING;
+		return (action == DigAction.START_DIGGING || action == DigAction.CANCEL_DIGGING || action == DigAction.FINISHED_DIGGING) && LocatedPacket.super.hasLocation();
 	}
 
 	@Override

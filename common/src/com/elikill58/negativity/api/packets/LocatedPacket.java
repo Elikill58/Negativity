@@ -22,7 +22,7 @@ public interface LocatedPacket {
 	 * @return true if location is valid
 	 */
 	default boolean hasLocation() {
-		return !(getX() == 0 && getY() == 0 && getZ() == 0) || !(getX() == -1 && getY() == -1 && getZ() == -1);
+		return !(getBlockX() == 0 && getBlockY() == 0 && getBlockZ() == 0) || !(getBlockX() == -1 && getBlockY() == -1 && getBlockZ() == -1);
 	}
 	
 	double getX();

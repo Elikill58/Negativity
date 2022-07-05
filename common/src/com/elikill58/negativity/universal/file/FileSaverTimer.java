@@ -18,7 +18,9 @@ public class FileSaverTimer implements Runnable {
 	private static final int MAX_RUNNING = 10, SKIP_WHEN_ALREADY = 2;
     private final List<FileSaverAction> allActions = new ArrayList<>();
     public void addAction(FileSaverAction action) {
-        allActions.add(action);
+    	synchronized (allActions) {
+            allActions.add(action);
+		}
     }
     
     private int actionRunning = 0;
@@ -50,7 +52,7 @@ public class FileSaverTimer implements Runnable {
     }
     
     public void runAll() {
-    	allActions.forEach((a) -> a.save(this));
+    	new ArrayList<>(allActions).forEach((a) -> a.save(this));
     }
 
     public void removeActionRunning() {

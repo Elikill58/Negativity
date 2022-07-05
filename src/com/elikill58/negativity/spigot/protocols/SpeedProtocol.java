@@ -10,6 +10,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Creeper;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -154,8 +155,8 @@ public class SpeedProtocol extends Cheat implements Listener {
 	}
 
 	private boolean hasEnderDragonAround(Player p) {
-		for (Entity et : p.getWorld().getEntities())
-			if (et.getType().equals(EntityType.ENDER_DRAGON) && et.getLocation().distance(p.getLocation()) < 15)
+		for (EnderDragon et : p.getWorld().getEntitiesByClass(EnderDragon.class))
+			if (et.getLocation().distance(p.getLocation()) < 15)
 				return true;
 		return false;
 	}

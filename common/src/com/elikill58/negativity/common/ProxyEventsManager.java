@@ -54,9 +54,9 @@ public class ProxyEventsManager implements Listeners {
 					if (hoverInfo != null) {
 						hover += "\n\n";
 						hover += Messages.getMessage(hoverInfo.compile(nPlayer));
-						hover += "\n\n";
-						hover += Messages.getMessage(mod, "alert_tp_info", "%playername%", playername);
 					}
+					hover += "\n\n";
+					hover += Messages.getMessage(mod, "alert_tp_info", "%playername%", playername);
 					ada.sendMessageRunnableHover(mod, msg, hover, "/negativitytp " + p.getName());
 				}
 			}

@@ -57,7 +57,7 @@ public class ProxyEventsManager implements Listeners {
 						hover += "\n\n";
 						hover += Messages.getMessage(mod, "alert_tp_info", "%playername%", playername);
 					}
-					ada.sendMessageRunnableHover(mod, msg, hover, getCommand(p, mod));
+					ada.sendMessageRunnableHover(mod, msg, hover, "/negativitytp " + p.getName());
 				}
 			}
 			if (e.isShouldBeSendToMultiProxy() && MultiProxyManager.isUsingMultiProxy())
@@ -71,8 +71,7 @@ public class ProxyEventsManager implements Listeners {
 				if (Perm.hasPerm(mod, Perm.SHOW_REPORT)) {
 					hasPermitted = true;
 					ada.sendMessageRunnableHover(mod, Messages.getMessage(mod, "report", place),
-							Messages.getMessage(mod, "report_hover", "%playername%", report.getReported()),
-							getCommand(p, mod));
+							Messages.getMessage(mod, "report_hover", "%playername%", report.getReported()), "/negativitytp " + p.getName());
 				}
 			}
 			if (!hasPermitted)
@@ -100,14 +99,5 @@ public class ProxyEventsManager implements Listeners {
 					new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION, ada.getAllPlugins()));
 		} else
 			ada.getLogger().warn("Unhandled plugin message: " + message.getClass().getName());
-	}
-
-	private String getCommand(Player targetPlayer, Player notifiedPlayer) {
-		String targetPlayerServer = targetPlayer.getServerName();
-		String notifiedPlayerServer = notifiedPlayer.getServerName();
-		if (targetPlayerServer.equals(notifiedPlayerServer)) {
-			return "/negativitytp " + targetPlayer.getName();
-		}
-		return "/server " + targetPlayerServer;
 	}
 }

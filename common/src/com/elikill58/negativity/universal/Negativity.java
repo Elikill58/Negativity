@@ -61,7 +61,7 @@ public class Negativity {
 	public static boolean hasBypass = false;
 	public static boolean tpsDrop = false;
 	
-	private static ScheduledTask actualizeInvTimer, analyzePacketTimer;
+	private static ScheduledTask actualizeInvTimer, analyzePacketTimer, fileSaverTimer;
 
 	/**
 	 * Try to alert moderator.
@@ -339,11 +339,9 @@ public class Negativity {
 				NegativityPlayer.getNegativityPlayer(p).setClientName(new String(msg).substring(1));
 			});
 			AlertSender.initAlertShower(ada);
-			FileSaverTimer old = FileSaverTimer.getInstance();
-			if(old != null)
-				old.runAll();
-			else
-				ada.getScheduler().runRepeatingAsync(FileSaverTimer.getInstance(), Duration.ofSeconds(1), Duration.ofSeconds(1), "Negativity FileSaver");
+			if(fileSaverTimer != null)
+				fileSaverTimer.cancel();
+			fileSaverTimer = ada.getScheduler().runRepeatingAsync(FileSaverTimer.getInstance(), Duration.ofSeconds(1), Duration.ofSeconds(1), "Negativity FileSaver");
 			if(actualizeInvTimer != null)
 				actualizeInvTimer.cancel();
 			actualizeInvTimer = ada.getScheduler().runRepeating(new ActualizeInvTimer(), 10, 10);

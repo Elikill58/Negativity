@@ -7,6 +7,9 @@ import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import com.elikill58.negativity.api.colors.ChatColor;
+import com.elikill58.negativity.api.commands.CommandSender;
+import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.monitor.cpu.CpuMonitorManager;
 
@@ -35,6 +38,50 @@ public abstract class MonitorManager {
 	 */
 	public abstract @NonNull String getName();
 
+	/**
+	 * Show all result lines.<br>
+	 * It's not recommend to use this method, because it can spam the chat.
+	 * 
+	 * @param sender who should see result
+	 */
+	public void showRawResult(CommandSender sender) {
+		getHeaderResult().forEach(sender::sendMessage);
+		getRawResult().forEach(sender::sendMessage);
+		getFooterResult().forEach(sender::sendMessage);
+	}
+
+	/**
+	 * Show cleaned result lines.
+	 * 
+	 * @param sender who should see result
+	 */
+	public void showCleanedResult(CommandSender sender) {
+		getHeaderResult().forEach(sender::sendMessage);
+		getCleanedResult().forEach(sender::sendMessage);
+		getFooterResult().forEach(sender::sendMessage);
+	}
+
+	/**
+	 * See parsed result with color
+	 * 
+	 * @param sender who should see result
+	 */
+	public void showPerCheatResult(CommandSender sender) {
+		getHeaderResult().forEach(sender::sendMessage);
+		getResultPerCheat().forEach((cheat, lines) -> {
+			if(lines.isEmpty())
+				return; // ignore cheat without any informations
+			String cheatName = Cheat.forKey(cheat).getName();
+			if(lines.size() == 1) {
+				sender.sendMessage(ChatColor.GREEN + " " + cheatName + ChatColor.GRAY + ": " + ChatColor.YELLOW + lines.get(0));
+			} else {
+				sender.sendMessage(ChatColor.GREEN + " " + cheatName + ChatColor.GRAY + ": ");
+				lines.forEach(line -> sender.sendMessage(ChatColor.YELLOW  + "  " + lines.get(0)));
+			}
+		});
+		getFooterResult().forEach(sender::sendMessage);
+	}
+	
 	/**
 	 * Get header of result. Used for raw & cleaned result.<br>
 	 * Should include description of the next result

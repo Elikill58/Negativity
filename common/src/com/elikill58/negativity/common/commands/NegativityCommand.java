@@ -6,9 +6,11 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -33,6 +35,7 @@ import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.monitor.MonitorManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModifications;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
@@ -245,6 +248,22 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				}
 			} else {
 				sender.sendMessage(ChatColor.YELLOW + "Webhooks are disabled.");
+			}
+			return true;
+		} else if (arg[0].equalsIgnoreCase("monitor")) {
+			if (!Perm.hasPerm(sender, Perm.ADMIN)) {
+				Messages.sendMessage(sender, "not_permission");
+				return true;
+			}
+			if(arg.length == 1) { // show all possible monitor
+				MonitorManager.getMonitors().forEach(mm -> mm.showPerCheatResult(sender));
+			} else {
+				Optional<MonitorManager> optManager = MonitorManager.getMonitors().stream().filter(mm -> mm.getName().equalsIgnoreCase(arg[1])).findFirst();
+				if(optManager.isPresent()) {
+					optManager.get().showPerCheatResult(sender);
+				} else {
+					sender.sendMessage(ChatColor.RED + "Can't find " + arg[1] + " monitor. You can use: " + String.join(", ", MonitorManager.getMonitors().stream().map(MonitorManager::getName).collect(Collectors.toList())));
+				}
 			}
 			return true;
 		} else if (arg[0].equalsIgnoreCase("debug")) {

@@ -1,21 +1,15 @@
 package com.elikill58.negativity.universal.monitor.cpu;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.IOException;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadInfo;
 import java.lang.management.ThreadMXBean;
-import java.nio.file.Files;
-import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimerTask;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.logger.LoggerAdapter;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 
 /**
  * Based on the project https://github.com/sk89q/WarmRoast by sk89q
@@ -27,14 +21,12 @@ public class CpuMonitorTask extends TimerTask {
 	private static final int MAX_DEPTH = 25;
 
 	private final ThreadMXBean threadMXBean = ManagementFactory.getThreadMXBean();
-	private final LoggerAdapter logger;
 	private final long threadId;
 
 	private CpuMeasurement rootNode;
 	private int samples;
 
-	public CpuMonitorTask(LoggerAdapter logger, long threadId) {
-		this.logger = logger;
+	public CpuMonitorTask(long threadId) {
 		this.threadId = threadId;
 	}
 
@@ -68,26 +60,6 @@ public class CpuMonitorTask extends TimerTask {
 		}
 	}
 
-	@Deprecated
-	public String paste() {
-		try {
-			File folder = new File(Adapter.getAdapter().getDataFolder(), "lag");
-			folder.mkdirs();
-			File file = new File(folder, UUID.randomUUID().toString() + ".txt");
-			file.createNewFile();
-			BufferedWriter handle = Files.newBufferedWriter(file.toPath(), StandardOpenOption.APPEND);
-			handle.write("CLEANED");
-			handle.write(getCleanedResult().toString());
-			handle.write("ALL");
-			handle.write(getRawResult().toString());
-			handle.close();
-		} catch (IOException ex) {
-			logger.printError("Failed to save monitoring data", ex);
-		}
-
-		return null;
-	}
-	
 	@Override
 	public String toString() {
 		return "MonitorTask{threadId=" + threadId + "}";
@@ -106,30 +78,26 @@ public class CpuMonitorTask extends TimerTask {
 	}
 
 	public List<String> getCleanedResult() {
-		ThreadInfo threadInfo = threadMXBean.getThreadInfo(threadId, MAX_DEPTH);
-
 		List<String> result = new ArrayList<>();
-
 		synchronized (this) {
-			result.add(threadInfo.getThreadName() + " " + rootNode.getTotalTime() + "ms");
-
 			rootNode.writeCleanedString(result, 1);
 		}
-
 		return result;
 	}
 	
 	public List<String> getRawResult() {
-		ThreadInfo threadInfo = threadMXBean.getThreadInfo(threadId, MAX_DEPTH);
-
 		List<String> result = new ArrayList<>();
-
 		synchronized (this) {
-			result.add(threadInfo.getThreadName() + " " + rootNode.getTotalTime() + "ms");
-
 			rootNode.writeRawString(result, 1);
 		}
-
 		return result;
+	}
+
+	public HashMap<CheatKeys, List<String>> getResultPerCheat() {
+		HashMap<CheatKeys, List<String>> map = new HashMap<>();
+		synchronized (this) {
+			rootNode.writeResultPerCheat(map);
+		}
+		return map;
 	}
 }

@@ -1,11 +1,12 @@
 package com.elikill58.negativity.universal.monitor.cpu;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.monitor.MonitorManager;
 
 public class CpuMonitorManager extends MonitorManager {
@@ -19,7 +20,7 @@ public class CpuMonitorManager extends MonitorManager {
 			cpuMonitorTask.cancel();
 		if(cpuMonitorTimer != null)
 			cpuMonitorTimer.cancel();
-        cpuMonitorTask = new CpuMonitorTask(Adapter.getAdapter().getLogger(), Thread.currentThread().getId());
+        cpuMonitorTask = new CpuMonitorTask(Thread.currentThread().getId());
 		cpuMonitorTimer = new Timer("Negativity-Monitor");
         cpuMonitorTimer.scheduleAtFixedRate(cpuMonitorTask, CpuMonitorTask.SAMPLE_DELAY, CpuMonitorTask.SAMPLE_INTERVAL);
 	}
@@ -50,6 +51,16 @@ public class CpuMonitorManager extends MonitorManager {
 	@Override
 	public @NonNull List<String> getRawResult() {
 		return getMonitorTask().getRawResult();
+	}
+
+	@Override
+	public boolean canParsePerCheat() {
+		return true;
+	}
+
+	@Override
+	public HashMap<CheatKeys, List<String>> getResultPerCheat() {
+		return getMonitorTask().getResultPerCheat();
 	}
 
 	@Override

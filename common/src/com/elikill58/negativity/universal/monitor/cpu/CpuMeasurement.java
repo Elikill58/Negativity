@@ -8,6 +8,10 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+
 public class CpuMeasurement implements Comparable<CpuMeasurement> {
 
     private final String id;
@@ -16,12 +20,25 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
 
     private final Map<String, CpuMeasurement> childInvokes = new HashMap<>();
     private long totalTime;
+    private CheatKeys cheatKey = null;
 
     public CpuMeasurement(String id, String className, String method) {
         this.id = id;
 
         this.className = className;
         this.method = method;
+        
+        if(className.startsWith("com.elikill58.negativity.common.protocols.")) {
+        	cheatKey = CheatKeys.fromLowerKey(className.split("\\.")[5]);
+        }
+    }
+    
+    public @Nullable CheatKeys getCheatKey() {
+		return cheatKey;
+	}
+    
+    public String getCheatResult() {
+    	return cheatKey == null ? null : totalTime + "ms";
     }
 
     public String getId() {
@@ -90,6 +107,15 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
         for (CpuMeasurement child : getChildInvokes().values()) {
         	result.add(padding + child.id + "() " + child.totalTime + "ms");
             child.writeRawString(result, indent + 1);
+        }
+    }
+    
+    public void writeResultPerCheat(HashMap<CheatKeys, List<String>> map) {
+        for (CpuMeasurement child : getChildInvokes().values()) {
+        	if(child.getCheatKey() == null)
+        		child.writeResultPerCheat(map);
+        	else
+        		map.computeIfAbsent(child.getCheatKey(), a -> new ArrayList<>()).add(child.getCheatResult());
         }
     }
     

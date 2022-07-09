@@ -38,6 +38,7 @@ import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.file.FileSaverTimer;
+import com.elikill58.negativity.universal.monitor.MonitorManager;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
@@ -316,7 +317,8 @@ public class Negativity {
 		ada.reloadConfig();
 		
 		integratedPlugins.clear();
-
+		
+		MonitorManager.load();
 		DefaultConfigValue.init();
 		Database.init();
 		Perm.init();

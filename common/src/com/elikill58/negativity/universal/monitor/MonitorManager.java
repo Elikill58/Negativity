@@ -2,10 +2,12 @@ package com.elikill58.negativity.universal.monitor;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
+import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.monitor.cpu.CpuMonitorManager;
 
 public abstract class MonitorManager {
@@ -57,6 +59,21 @@ public abstract class MonitorManager {
 	 */
 	public abstract @NonNull List<String> getCleanedResult();
 
+	/**
+	 * Tell if the {@link #getResultPerCheat()} method is supported.
+	 * 
+	 * @return true if can parse result
+	 */
+	public abstract boolean canParsePerCheat();
+	
+	/**
+	 * Get result per cheat.<br>
+	 * Use {@link #canParsePerCheat()} to be sure the map can be filled.
+	 * 
+	 * @return all information per key
+	 */
+	public abstract HashMap<CheatKeys, List<String>> getResultPerCheat();
+	
 	/**
 	 * Get footer of result. Used for raw & cleaned result.<br>
 	 * Should include conclusion and things like that.

@@ -2,6 +2,8 @@ package com.elikill58.negativity.universal.detections.keys;
 
 import java.nio.file.Path;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Version;
 
@@ -52,7 +54,7 @@ public enum CheatKeys implements IDetectionKey<CheatKeys> {
 	public static final String BUNDLED_MODULES_BASE = "/modules/";
 	public static final Path MODULE_FOLDER = Adapter.getAdapter().getDataFolder().toPath().resolve("modules");
 	
-	public static CheatKeys fromLowerKey(String name) {
+	public static @Nullable CheatKeys fromLowerKey(String name) {
 		if(name == null)
 			return null;
 		for (CheatKeys c : values()) {

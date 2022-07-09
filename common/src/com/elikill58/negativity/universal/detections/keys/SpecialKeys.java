@@ -2,6 +2,8 @@ package com.elikill58.negativity.universal.detections.keys;
 
 import java.nio.file.Path;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.universal.Version;
 
 public enum SpecialKeys implements IDetectionKey<SpecialKeys> {
@@ -16,6 +18,16 @@ public enum SpecialKeys implements IDetectionKey<SpecialKeys> {
 
 	public static final String BUNDLED_SPECIAL_MODULES_BASE = CheatKeys.BUNDLED_MODULES_BASE + "special/";
 	public static final Path MODULE_FOLDER = CheatKeys.MODULE_FOLDER.resolve("special");
+	
+	public static @Nullable SpecialKeys fromLowerKey(String name) {
+		if(name == null)
+			return null;
+		for (SpecialKeys c : values()) {
+			if (c.getLowerKey().equalsIgnoreCase(name) || c.getKey().replace("-", "").replace("_", "").equalsIgnoreCase(name))
+				return c;
+		}
+		return null;
+	}
 	
 	private final String key;
 	private final Version minVersion;

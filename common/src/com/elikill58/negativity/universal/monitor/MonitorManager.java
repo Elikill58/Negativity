@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
 import com.elikill58.negativity.universal.monitor.cpu.CpuMonitorManager;
 
 public abstract class MonitorManager {
@@ -80,10 +81,10 @@ public abstract class MonitorManager {
 	public void showPerCheatResult(CommandSender sender) {
 		sender.sendMessage(getDescription());
 		getHeaderResult().forEach(sender::sendMessage);
-		getResultPerCheat().forEach((cheat, lines) -> {
+		getResultPerCheat().forEach((key, lines) -> {
 			if(lines.isEmpty())
 				return; // ignore cheat without any informations
-			String cheatName = Cheat.forKey(cheat).getName();
+			String cheatName = key instanceof CheatKeys ? Cheat.forKey((CheatKeys) key).getName() : key.getLowerKey();
 			if(lines.size() == 1) {
 				sender.sendMessage(ChatColor.GREEN + " " + cheatName + ChatColor.GRAY + ": " + ChatColor.YELLOW + lines.get(0));
 			} else {
@@ -131,7 +132,7 @@ public abstract class MonitorManager {
 	 * 
 	 * @return all information per key
 	 */
-	public abstract HashMap<CheatKeys, List<String>> getResultPerCheat();
+	public abstract HashMap<IDetectionKey<?>, List<String>> getResultPerCheat();
 	
 	/**
 	 * Get footer of result. Used for raw & cleaned result.<br>

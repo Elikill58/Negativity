@@ -13,6 +13,8 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
+import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
 
 public class CpuMeasurement implements Comparable<CpuMeasurement> {
 
@@ -22,7 +24,7 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
 
     private final Map<String, CpuMeasurement> childInvokes = new HashMap<>();
     private long totalTime;
-    private CheatKeys cheatKey = null;
+    private IDetectionKey<?> cheatKey = null;
     private CpuMonitorTask task;
 
     public CpuMeasurement(String id, String className, String method, CpuMonitorTask task) {
@@ -32,13 +34,15 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
         this.method = method;
         
         this.task = task;
-        
+
         if(className.startsWith("com.elikill58.negativity.common.protocols.")) {
         	cheatKey = CheatKeys.fromLowerKey(className.split("\\.")[5]);
+        } else if(className.startsWith("com.elikill58.negativity.common.special.")) {
+        	cheatKey = SpecialKeys.fromLowerKey(className.split("\\.")[5]);
         }
     }
     
-    public @Nullable CheatKeys getCheatKey() {
+    public @Nullable IDetectionKey<?> getCheatKey() {
 		return cheatKey;
 	}
     
@@ -133,7 +137,7 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
         }
     }
     
-    public void writeResultPerCheat(HashMap<CheatKeys, List<String>> map) {
+    public void writeResultPerCheat(HashMap<IDetectionKey<?>, List<String>> map) {
         for (CpuMeasurement child : getChildInvokes().values()) {
         	if(child.getCheatKey() == null)
         		child.writeResultPerCheat(map);

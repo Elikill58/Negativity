@@ -10,7 +10,7 @@ import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
 import com.elikill58.negativity.api.colors.ChatColor;
-import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
 
 /**
  * Based on the project https://github.com/sk89q/WarmRoast by sk89q
@@ -94,8 +94,8 @@ public class CpuMonitorTask extends TimerTask {
 		return result;
 	}
 
-	public HashMap<CheatKeys, List<String>> getResultPerCheat() {
-		HashMap<CheatKeys, List<String>> map = new HashMap<>();
+	public HashMap<IDetectionKey<?>, List<String>> getResultPerCheat() {
+		HashMap<IDetectionKey<?>, List<String>> map = new HashMap<>();
 		synchronized (this) {
 			rootNode.writeResultPerCheat(map);
 		}

@@ -6,7 +6,7 @@ import java.util.Timer;
 
 import org.checkerframework.checker.nullness.qual.NonNull;
 
-import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
 import com.elikill58.negativity.universal.monitor.MonitorManager;
 
 public class CpuMonitorManager extends MonitorManager {
@@ -59,7 +59,7 @@ public class CpuMonitorManager extends MonitorManager {
 	}
 
 	@Override
-	public HashMap<CheatKeys, List<String>> getResultPerCheat() {
+	public HashMap<IDetectionKey<?>, List<String>> getResultPerCheat() {
 		return getMonitorTask().getResultPerCheat();
 	}
 

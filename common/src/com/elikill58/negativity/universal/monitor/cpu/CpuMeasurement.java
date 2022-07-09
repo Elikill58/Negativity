@@ -1,5 +1,6 @@
 package com.elikill58.negativity.universal.monitor.cpu;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.stream.IntStream;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 
 public class CpuMeasurement implements Comparable<CpuMeasurement> {
@@ -21,12 +23,15 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
     private final Map<String, CpuMeasurement> childInvokes = new HashMap<>();
     private long totalTime;
     private CheatKeys cheatKey = null;
+    private CpuMonitorTask task;
 
-    public CpuMeasurement(String id, String className, String method) {
+    public CpuMeasurement(String id, String className, String method, CpuMonitorTask task) {
         this.id = id;
 
         this.className = className;
         this.method = method;
+        
+        this.task = task;
         
         if(className.startsWith("com.elikill58.negativity.common.protocols.")) {
         	cheatKey = CheatKeys.fromLowerKey(className.split("\\.")[5]);
@@ -38,7 +43,25 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
 	}
     
     public String getCheatResult() {
-    	return cheatKey == null ? null : totalTime + "ms";
+    	try {
+    		Class<?> clazz = Class.forName(className);
+    		for(Method m : clazz.getDeclaredMethods()) {
+    			if(m.getName().equals(method)) { // found method
+    				Check check = m.getAnnotation(Check.class);
+    				if (check != null) // method with check
+    					return check.name() + " " + totalTime + "ms " + getPorcent();
+    				return method + " (*can be multiple check) " + totalTime + "ms " + getPorcent(); // can't find check
+    			}
+    		}
+    	} catch (Exception e) {
+    		e.printStackTrace();
+		}
+    	return cheatKey == null ? null : method + " " + totalTime + "ms " + getPorcent();
+    }
+    
+    private String getPorcent() {
+    	double l = ((double) totalTime / task.getRootNode().getTotalTime()) * 100;
+    	return l <= 0.01 ? ">0%" : l + "%";
     }
 
     public String getId() {
@@ -80,7 +103,7 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
 
         String idName = nextChildElement.getClassName() + '.' + nextChildElement.getMethodName();
         CpuMeasurement child = childInvokes
-                .computeIfAbsent(idName, (key) -> new CpuMeasurement(key, nextClass, nextMethod));
+                .computeIfAbsent(idName, (key) -> new CpuMeasurement(key, nextClass, nextMethod, task));
         child.onMeasurement(stackTrace, skipElements + 1, time);
     }
     
@@ -93,7 +116,7 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
         for (CpuMeasurement child : getChildInvokes().values()) {
         	if(!isConcerned(child))
         		continue;
-        	result.add(padding + child.id + "() " + child.totalTime + "ms");
+        	result.add(padding + child.id + "() " + child.totalTime + "ms " + ((totalTime / task.getRootNode().getTotalTime()) * 100) + "%");
             child.writeCleanedString(result, indent + 1);
         }
     }
@@ -105,7 +128,7 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
         String padding = b.toString();
 
         for (CpuMeasurement child : getChildInvokes().values()) {
-        	result.add(padding + child.id + "() " + child.totalTime + "ms");
+        	result.add(padding + child.id + "() " + child.totalTime + "ms " + ((totalTime / task.getRootNode().getTotalTime()) * 100) + "%");
             child.writeRawString(result, indent + 1);
         }
     }
@@ -114,13 +137,17 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
         for (CpuMeasurement child : getChildInvokes().values()) {
         	if(child.getCheatKey() == null)
         		child.writeResultPerCheat(map);
-        	else
-        		map.computeIfAbsent(child.getCheatKey(), a -> new ArrayList<>()).add(child.getCheatResult());
+        	else {
+        		List<String> list = map.computeIfAbsent(child.getCheatKey(), a -> new ArrayList<>());
+        		String cheatResult = child.getCheatResult();
+        		if(!list.contains(cheatResult))
+        			list.add(cheatResult);
+        	}
         }
     }
     
     public boolean isConcerned(CpuMeasurement mm) {
-    	for(Entry<String, CpuMeasurement> entry : new HashMap<>(mm.getChildInvokes()).entrySet()) {
+    	for(Entry<String, CpuMeasurement> entry : mm.getChildInvokes().entrySet()) {
     		String id = entry.getValue().getId().toLowerCase();
     		if(id.contains("com.elikill58") || id.contains("negativity"))
     			return true;

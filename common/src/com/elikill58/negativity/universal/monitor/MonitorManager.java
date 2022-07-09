@@ -39,12 +39,22 @@ public abstract class MonitorManager {
 	public abstract @NonNull String getName();
 
 	/**
+	 * Get description that will be showed at TOP of results
+	 * 
+	 * @return the description
+	 */
+	public @NonNull String getDescription() {
+		return ChatColor.YELLOW + "Result of monitor for " + getName() + ":";
+	}
+	
+	/**
 	 * Show all result lines.<br>
 	 * It's not recommend to use this method, because it can spam the chat.
 	 * 
 	 * @param sender who should see result
 	 */
 	public void showRawResult(CommandSender sender) {
+		sender.sendMessage(getDescription());
 		getHeaderResult().forEach(sender::sendMessage);
 		getRawResult().forEach(sender::sendMessage);
 		getFooterResult().forEach(sender::sendMessage);
@@ -56,6 +66,7 @@ public abstract class MonitorManager {
 	 * @param sender who should see result
 	 */
 	public void showCleanedResult(CommandSender sender) {
+		sender.sendMessage(getDescription());
 		getHeaderResult().forEach(sender::sendMessage);
 		getCleanedResult().forEach(sender::sendMessage);
 		getFooterResult().forEach(sender::sendMessage);
@@ -67,6 +78,7 @@ public abstract class MonitorManager {
 	 * @param sender who should see result
 	 */
 	public void showPerCheatResult(CommandSender sender) {
+		sender.sendMessage(getDescription());
 		getHeaderResult().forEach(sender::sendMessage);
 		getResultPerCheat().forEach((cheat, lines) -> {
 			if(lines.isEmpty())

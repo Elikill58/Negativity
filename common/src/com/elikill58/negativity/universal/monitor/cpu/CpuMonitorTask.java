@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 
 /**
@@ -52,7 +53,7 @@ public class CpuMonitorTask extends TimerTask {
 					String rootMethod = rootElement.getMethodName();
 
 					String id = rootClass + '.' + rootMethod;
-					rootNode = new CpuMeasurement(id, rootClass, rootMethod);
+					rootNode = new CpuMeasurement(id, rootClass, rootMethod, this);
 				}
 
 				rootNode.onMeasurement(stackTrace, 0, SAMPLE_INTERVAL);
@@ -71,7 +72,7 @@ public class CpuMonitorTask extends TimerTask {
 		List<String> result = new ArrayList<>();
 
 		synchronized (this) {
-			result.add(threadInfo.getThreadName() + " " + rootNode.getTotalTime() + "ms");
+			result.add(ChatColor.GRAY + threadInfo.getThreadName() + " " + rootNode.getTotalTime() + "ms");
 		}
 
 		return result;

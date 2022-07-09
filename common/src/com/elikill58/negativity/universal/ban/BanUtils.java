@@ -93,6 +93,8 @@ public class BanUtils {
 	}
 
 	public static void kickForBan(NegativityPlayer player, Ban ban) {
+		if(player == null) // player offline
+			return;
 		player.banEffect();
 		String formattedExpTime = new Timestamp(ban.getExpirationTime()).toString().split("\\.", 2)[0];
 		player.kickPlayer(ban.getReason(), formattedExpTime, ban.getBannedBy(), ban.isDefinitive());

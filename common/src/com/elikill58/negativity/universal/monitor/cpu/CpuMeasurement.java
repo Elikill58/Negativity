@@ -8,11 +8,7 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-import org.checkerframework.checker.nullness.qual.NonNull;
-
-import com.elikill58.negativity.universal.monitor.MonitorMeasurement;
-
-public class CpuMeasurement extends MonitorMeasurement<CpuMeasurement> {
+public class CpuMeasurement implements Comparable<CpuMeasurement> {
 
     private final String id;
     private final String className;
@@ -70,13 +66,6 @@ public class CpuMeasurement extends MonitorMeasurement<CpuMeasurement> {
                 .computeIfAbsent(idName, (key) -> new CpuMeasurement(key, nextClass, nextMethod));
         child.onMeasurement(stackTrace, skipElements + 1, time);
     }
-
-    @Override
-    public @NonNull List<String> getCleanedResult() {
-    	List<String> result = new ArrayList<>();
-    	writeCleanedString(result, 1);
-    	return result;
-    }
     
     public void writeCleanedString(List<String> result, int indent) {
         StringBuilder b = new StringBuilder();
@@ -90,13 +79,6 @@ public class CpuMeasurement extends MonitorMeasurement<CpuMeasurement> {
         	result.add(padding + child.id + "() " + child.totalTime + "ms");
             child.writeCleanedString(result, indent + 1);
         }
-    }
-    
-    @Override
-    public @NonNull List<String> getRawResult() {
-    	List<String> result = new ArrayList<>();
-    	writeRawString(result, 1);
-    	return result;
     }
     
     public void writeRawString(List<String> result, int indent) {

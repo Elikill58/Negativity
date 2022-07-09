@@ -1,6 +1,9 @@
 package com.elikill58.negativity.universal.monitor.cpu;
 
+import java.util.List;
 import java.util.Timer;
+
+import org.checkerframework.checker.nullness.qual.NonNull;
 
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.monitor.MonitorManager;
@@ -32,6 +35,21 @@ public class CpuMonitorManager extends MonitorManager {
 	
 	public Timer getMonitorTimer() {
 		return cpuMonitorTimer;
+	}
+
+	@Override
+	public @NonNull List<String> getHeaderResult() {
+		return getMonitorTask().getHeaderResult();
+	}
+	
+	@Override
+	public @NonNull List<String> getCleanedResult() {
+		return getMonitorTask().getCleanedResult();
+	}
+
+	@Override
+	public @NonNull List<String> getRawResult() {
+		return getMonitorTask().getRawResult();
 	}
 
 	@Override

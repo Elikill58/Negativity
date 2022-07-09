@@ -38,7 +38,7 @@ public class CpuMonitorTask extends TimerTask {
 		this.threadId = threadId;
 	}
 
-	public synchronized CpuMeasurement getRootSample() {
+	public synchronized CpuMeasurement getRootNode() {
 		return rootNode;
 	}
 
@@ -91,6 +91,18 @@ public class CpuMonitorTask extends TimerTask {
 	@Override
 	public String toString() {
 		return "MonitorTask{threadId=" + threadId + "}";
+	}
+	
+	public List<String> getHeaderResult() {
+		ThreadInfo threadInfo = threadMXBean.getThreadInfo(threadId, MAX_DEPTH);
+
+		List<String> result = new ArrayList<>();
+
+		synchronized (this) {
+			result.add(threadInfo.getThreadName() + " " + rootNode.getTotalTime() + "ms");
+		}
+
+		return result;
 	}
 
 	public List<String> getCleanedResult() {

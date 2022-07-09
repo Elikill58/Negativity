@@ -89,7 +89,7 @@ public abstract class MonitorManager {
 				sender.sendMessage(ChatColor.GREEN + " " + cheatName + ChatColor.GRAY + ": " + ChatColor.YELLOW + lines.get(0));
 			} else {
 				sender.sendMessage(ChatColor.GREEN + " " + cheatName + ChatColor.GRAY + ": ");
-				lines.forEach(line -> sender.sendMessage(ChatColor.YELLOW  + "  " + lines.get(0)));
+				lines.forEach(line -> sender.sendMessage(ChatColor.YELLOW  + "  " + line));
 			}
 		});
 		getFooterResult().forEach(sender::sendMessage);

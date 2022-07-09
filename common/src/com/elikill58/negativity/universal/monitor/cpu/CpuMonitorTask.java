@@ -17,7 +17,7 @@ import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
  */
 public class CpuMonitorTask extends TimerTask {
 
-	public static final long SAMPLE_INTERVAL = 100L;
+	public static final long SAMPLE_INTERVAL = 25;
 	public static final long SAMPLE_DELAY = TimeUnit.SECONDS.toMillis(1) / 2;
 	private static final int MAX_DEPTH = 25;
 

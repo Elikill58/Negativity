@@ -11,6 +11,7 @@ import java.util.stream.IntStream;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
@@ -54,7 +55,9 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
     				Check check = m.getAnnotation(Check.class);
     				if (check != null) // method with check
     					return check.name() + " " + totalTime + "ms " + getPorcent();
-    				return method + " (*can be multiple check) " + totalTime + "ms " + getPorcent(); // can't find check
+    				if(method.startsWith("lambda")) // sub task on given cheat
+    					return method.substring(7) + ChatColor.GRAY + " (*multiple check) " + ChatColor.YELLOW + totalTime + "ms " + getPorcent(); // can't find check
+					return method + ChatColor.GRAY + " (*multiple check) " + ChatColor.YELLOW + totalTime + "ms " + getPorcent(); // can't find check
     			}
     		}
     	} catch (Exception e) {

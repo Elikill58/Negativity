@@ -61,7 +61,7 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
     
     private String getPorcent() {
     	double l = ((double) totalTime / task.getRootNode().getTotalTime()) * 100;
-    	return l <= 0.01 ? ">0%" : l + "%";
+    	return l <= 0.01 ? ">0%" : String.format("%.2f", l) + "%";
     }
 
     public String getId() {
@@ -116,7 +116,7 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
         for (CpuMeasurement child : getChildInvokes().values()) {
         	if(!isConcerned(child))
         		continue;
-        	result.add(padding + child.id + "() " + child.totalTime + "ms " + ((totalTime / task.getRootNode().getTotalTime()) * 100) + "%");
+        	result.add(padding + child.id + "() " + child.totalTime + "ms " + getPorcent());
             child.writeCleanedString(result, indent + 1);
         }
     }
@@ -128,7 +128,7 @@ public class CpuMeasurement implements Comparable<CpuMeasurement> {
         String padding = b.toString();
 
         for (CpuMeasurement child : getChildInvokes().values()) {
-        	result.add(padding + child.id + "() " + child.totalTime + "ms " + ((totalTime / task.getRootNode().getTotalTime()) * 100) + "%");
+        	result.add(padding + child.id + "() " + child.totalTime + "ms " + getPorcent());
             child.writeRawString(result, indent + 1);
         }
     }

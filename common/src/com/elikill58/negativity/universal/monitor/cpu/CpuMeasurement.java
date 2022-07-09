@@ -8,16 +8,20 @@ import java.util.Map.Entry;
 import java.util.Objects;
 import java.util.stream.IntStream;
 
-public class MethodMeasurement implements Comparable<MethodMeasurement> {
+import org.checkerframework.checker.nullness.qual.NonNull;
+
+import com.elikill58.negativity.universal.monitor.MonitorMeasurement;
+
+public class CpuMeasurement extends MonitorMeasurement<CpuMeasurement> {
 
     private final String id;
     private final String className;
     private final String method;
 
-    private final Map<String, MethodMeasurement> childInvokes = new HashMap<>();
+    private final Map<String, CpuMeasurement> childInvokes = new HashMap<>();
     private long totalTime;
 
-    public MethodMeasurement(String id, String className, String method) {
+    public CpuMeasurement(String id, String className, String method) {
         this.id = id;
 
         this.className = className;
@@ -40,7 +44,7 @@ public class MethodMeasurement implements Comparable<MethodMeasurement> {
         return totalTime;
     }
 
-    public Map<String, MethodMeasurement> getChildInvokes() {
+    public Map<String, CpuMeasurement> getChildInvokes() {
         return new HashMap<>(childInvokes);
     }
 
@@ -62,23 +66,37 @@ public class MethodMeasurement implements Comparable<MethodMeasurement> {
         String nextMethod = nextChildElement.getMethodName();
 
         String idName = nextChildElement.getClassName() + '.' + nextChildElement.getMethodName();
-        MethodMeasurement child = childInvokes
-                .computeIfAbsent(idName, (key) -> new MethodMeasurement(key, nextClass, nextMethod));
+        CpuMeasurement child = childInvokes
+                .computeIfAbsent(idName, (key) -> new CpuMeasurement(key, nextClass, nextMethod));
         child.onMeasurement(stackTrace, skipElements + 1, time);
     }
 
+    @Override
+    public @NonNull List<String> getCleanedResult() {
+    	List<String> result = new ArrayList<>();
+    	writeCleanedString(result, 1);
+    	return result;
+    }
+    
     public void writeCleanedString(List<String> result, int indent) {
         StringBuilder b = new StringBuilder();
         IntStream.range(0, indent).forEach(i -> b.append(' '));
 
         String padding = b.toString();
 
-        for (MethodMeasurement child : getChildInvokes().values()) {
+        for (CpuMeasurement child : getChildInvokes().values()) {
         	if(!isConcerned(child))
         		continue;
         	result.add(padding + child.id + "() " + child.totalTime + "ms");
             child.writeCleanedString(result, indent + 1);
         }
+    }
+    
+    @Override
+    public @NonNull List<String> getRawResult() {
+    	List<String> result = new ArrayList<>();
+    	writeRawString(result, 1);
+    	return result;
     }
     
     public void writeRawString(List<String> result, int indent) {
@@ -87,14 +105,14 @@ public class MethodMeasurement implements Comparable<MethodMeasurement> {
 
         String padding = b.toString();
 
-        for (MethodMeasurement child : getChildInvokes().values()) {
+        for (CpuMeasurement child : getChildInvokes().values()) {
         	result.add(padding + child.id + "() " + child.totalTime + "ms");
             child.writeRawString(result, indent + 1);
         }
     }
     
-    public boolean isConcerned(MethodMeasurement mm) {
-    	for(Entry<String, MethodMeasurement> entry : new HashMap<>(mm.getChildInvokes()).entrySet()) {
+    public boolean isConcerned(CpuMeasurement mm) {
+    	for(Entry<String, CpuMeasurement> entry : new HashMap<>(mm.getChildInvokes()).entrySet()) {
     		String id = entry.getValue().getId().toLowerCase();
     		if(id.contains("com.elikill58") || id.contains("negativity"))
     			return true;
@@ -108,7 +126,7 @@ public class MethodMeasurement implements Comparable<MethodMeasurement> {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        MethodMeasurement that = (MethodMeasurement) o;
+        CpuMeasurement that = (CpuMeasurement) o;
 
         return totalTime == that.totalTime &&
                 Objects.equals(id, that.id) &&
@@ -123,7 +141,7 @@ public class MethodMeasurement implements Comparable<MethodMeasurement> {
     }
 
     @Override
-    public int compareTo(MethodMeasurement other) {
+    public int compareTo(CpuMeasurement other) {
         return Long.compare(this.totalTime, other.totalTime);
     }
     
@@ -134,7 +152,7 @@ public class MethodMeasurement implements Comparable<MethodMeasurement> {
     
     public List<String> getCleanedString() {
     	List<String> result = new ArrayList<>();
-        for (Map.Entry<String, MethodMeasurement> entry : getChildInvokes().entrySet()) {
+        for (Map.Entry<String, CpuMeasurement> entry : getChildInvokes().entrySet()) {
         	result.add(entry.getKey() + "() " + entry.getValue().totalTime + "ms");
             entry.getValue().writeCleanedString(result, 1);
         }
@@ -144,7 +162,7 @@ public class MethodMeasurement implements Comparable<MethodMeasurement> {
     
     public List<String> getRawString() {
     	List<String> result = new ArrayList<>();
-        for (Map.Entry<String, MethodMeasurement> entry : getChildInvokes().entrySet()) {
+        for (Map.Entry<String, CpuMeasurement> entry : getChildInvokes().entrySet()) {
         	result.add(entry.getKey() + "() " + entry.getValue().totalTime + "ms");
             entry.getValue().writeRawString(result, 1);
         }

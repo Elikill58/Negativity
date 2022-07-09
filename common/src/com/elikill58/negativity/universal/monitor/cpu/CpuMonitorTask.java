@@ -20,7 +20,7 @@ import com.elikill58.negativity.universal.logger.LoggerAdapter;
 /**
  * Based on the project https://github.com/sk89q/WarmRoast by sk89q
  */
-public class MonitorTask extends TimerTask {
+public class CpuMonitorTask extends TimerTask {
 
 	public static final long SAMPLE_INTERVAL = 100L;
 	public static final long SAMPLE_DELAY = TimeUnit.SECONDS.toMillis(1) / 2;
@@ -30,15 +30,15 @@ public class MonitorTask extends TimerTask {
 	private final LoggerAdapter logger;
 	private final long threadId;
 
-	private MethodMeasurement rootNode;
+	private CpuMeasurement rootNode;
 	private int samples;
 
-	public MonitorTask(LoggerAdapter logger, long threadId) {
+	public CpuMonitorTask(LoggerAdapter logger, long threadId) {
 		this.logger = logger;
 		this.threadId = threadId;
 	}
 
-	public synchronized MethodMeasurement getRootSample() {
+	public synchronized CpuMeasurement getRootSample() {
 		return rootNode;
 	}
 
@@ -60,7 +60,7 @@ public class MonitorTask extends TimerTask {
 					String rootMethod = rootElement.getMethodName();
 
 					String id = rootClass + '.' + rootMethod;
-					rootNode = new MethodMeasurement(id, rootClass, rootMethod);
+					rootNode = new CpuMeasurement(id, rootClass, rootMethod);
 				}
 
 				rootNode.onMeasurement(stackTrace, 0, SAMPLE_INTERVAL);

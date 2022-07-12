@@ -98,7 +98,7 @@ public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
 	public static boolean log = false, log_console = false, hasBypass = false, reloading = false, timeDrop = false, essentialsSupport = false,
-			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false, isCraftBukkit = false;
+			worldGuardSupport = false, gadgetMenuSupport = false, viaVersionSupport = false, protocolSupportSupport = false, isCraftBukkit = false, isMagma = false;
 	public static double tps_alert_stop = 19.0;
 	private BukkitRunnable invTimer = null, packetTimer = null, runSpawnFakePlayer = null, timeTimeBetweenAlert = null;
 	public static String CHANNEL_NAME_FML = "";
@@ -271,10 +271,18 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().info("Loaded support for " + supportedPluginName.toString() + ".");
 		}
 		
-		 getServer().getScheduler().runTaskLater(this, () -> {
-			 reloading = false;
-		 }, 3 * 20);
-
+		getServer().getScheduler().runTaskLater(this, () -> {
+			reloading = false;
+		}, 3 * 20);
+		 
+		try {
+			 Class.forName("org.magmafoundation.magma.configuration.MagmaConfig");
+			 isMagma = true;
+			 getLogger().info("Magma platform detected.");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		try {
 			// finding field name
 			// 1.16 = h
@@ -303,7 +311,7 @@ public class SpigotNegativity extends JavaPlugin {
 			else if(v.equals(Version.V1_14) || v.equals(Version.V1_15))
 				fieldNameLastTimeTps = "f";
 			else
-				fieldNameLastTimeTps = "h";
+				fieldNameLastTimeTps = isMagma ? "field_71311_j" : "h";
 			Class<?> mcServerClass = PacketUtils.getNmsClass("MinecraftServer", "server.");
 			Object mcServer = mcServerClass.getMethod("getServer").invoke(mcServerClass);
 			Field fieldLastTimeTps = mcServerClass.getDeclaredField(fieldNameLastTimeTps);

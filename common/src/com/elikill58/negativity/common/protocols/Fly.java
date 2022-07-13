@@ -74,50 +74,6 @@ public class Fly extends Cheat implements Listeners {
 		double d = to.getY() - from.getY();
 		double distance = from.distance(to);
 
-		if (checkActive("omega-craft") && !np.isInFight) {
-			List<Double> flyMoveAmount = np.listDoubles.get(FLY, "fly-move", new ArrayList<>());
-			boolean onGround = p.isOnGround(), wasOnGround = np.booleans.get(FLY, "fly-wasOnGround", true);
-			boolean hasBoatAround = p.getWorld().getEntities().stream().filter(
-					(entity) -> entity.getType().equals(EntityType.BOAT) && entity.getLocation().distance(loc) < 3)
-					.findFirst().isPresent();
-			if (p.getFallDistance() <= 0.000001 && !p.isInsideVehicle() && onGround == wasOnGround) {
-				int amount = 0;
-				synchronized (flyMoveAmount) {
-					int size = flyMoveAmount.size();
-					if (size > 1) {
-						for (int x = 1; x < size - 1; x++) {
-							double last = flyMoveAmount.get(x - 1);
-							double current = flyMoveAmount.get(x);
-							if ((last + current) == 0) {
-								if (i < (size - 2)) {
-									double next = flyMoveAmount.get(x + 1);
-									if ((current + next) == 0) {
-										amount++;
-									}
-								} else
-									amount++;
-							}
-						}
-					}
-				}
-				if (amount > 1) {
-					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "omega-craft",
-							"OmegaCraftFly - " + flyMoveAmount + " > " + onGround + " : " + wasOnGround,
-							new CheatHover.Literal("OmegaCraft: " + amount + " times with no Y changes"),
-							amount > 1 ? amount - 1 : 1);
-				}
-			}
-			if ((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || hasBoatAround || p.isInsideVehicle()
-					|| !e.getTo().clone().add(0, 2, 0).getBlock().getType().isTransparent() || isInWater || isOnWater
-					|| LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY", "STAIRS")
-					|| LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE", "STAIRS"))
-				flyMoveAmount.clear();
-			else
-				flyMoveAmount.add(d);
-
-			np.booleans.set(FLY, "fly-wasOnGround", onGround);
-		}
-
 		if (!p.hasElytra()) {
 			if (checkActive("suspicious-y")) {
 				boolean hasBuggedBlockAroundForGeyser = np.isBedrockPlayer()
@@ -249,5 +205,64 @@ public class Fly extends Cheat implements Listeners {
 		}
 
 		np.booleans.set(FLY, "boat-falling", nextValue);
+	}
+	
+	@Check(name = "omega-craft", description = "Check when player keep their Y move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FIGHT, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_FLY, CheckConditions.NO_SWIM })
+	public void omega(PlayerMoveEvent e, NegativityPlayer np) {
+		Player p = e.getPlayer();
+		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
+			return;
+		
+		Location from = e.getFrom(), to = e.getTo();
+
+		Location loc = p.getLocation().clone(), locUnder = p.getLocation().clone().sub(0, 1, 0);
+		boolean isInWater = loc.getBlock().getType().getId().contains("WATER"),
+				isOnWater = locUnder.getBlock().getType().getId().contains("WATER");
+
+		double d = to.getY() - from.getY();
+
+		List<Double> flyMoveAmount = np.listDoubles.get(FLY, "fly-move", new ArrayList<>());
+		boolean onGround = p.isOnGround(), wasOnGround = np.booleans.get(FLY, "fly-wasOnGround", true);
+		boolean hasBoatAround = p.getWorld().getEntities().stream().filter(
+				(entity) -> entity.getType().equals(EntityType.BOAT) && entity.getLocation().distance(loc) < 3)
+				.findFirst().isPresent();
+		if (p.getFallDistance() <= 0.000001 && !p.isInsideVehicle() && onGround == wasOnGround) {
+			double i = to.toVector().distance(from.toVector());
+			int amount = 0;
+			synchronized (flyMoveAmount) {
+				int size = flyMoveAmount.size();
+				if (size > 1) {
+					for (int x = 1; x < size - 1; x++) {
+						double last = flyMoveAmount.get(x - 1);
+						double current = flyMoveAmount.get(x);
+						if ((last + current) == 0) {
+							if (i < (size - 2)) {
+								double next = flyMoveAmount.get(x + 1);
+								if ((current + next) == 0) {
+									amount++;
+								}
+							} else
+								amount++;
+						}
+					}
+				}
+			}
+			if (amount > 1) {
+			 	if(Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "omega-craft",
+						"OmegaCraftFly - " + flyMoveAmount + " > " + onGround + " : " + wasOnGround + ", i: " + i + ", d: " + d,
+						new CheatHover.Literal("OmegaCraft: " + amount + " times with no Y changes"),
+						amount > 1 ? amount - 1 : 1) && isSetBack())
+			 		e.setCancelled(true);
+			}
+		}
+		if ((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || hasBoatAround || p.isInsideVehicle()
+				|| !e.getTo().clone().add(0, 2, 0).getBlock().getType().isTransparent() || isInWater || isOnWater
+				|| LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY", "VINE", "STAIRS", "BED")
+				|| LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE", "STAIRS", "BED"))
+			flyMoveAmount.clear();
+		else
+			flyMoveAmount.add(d);
+
+		np.booleans.set(FLY, "fly-wasOnGround", onGround);
 	}
 }

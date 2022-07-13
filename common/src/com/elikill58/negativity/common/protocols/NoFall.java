@@ -214,7 +214,7 @@ public class NoFall extends Cheat {
 		// boolean ownGroundBefore = verticalCollision && difY < 0.0;
 		Location locVelocity = to.clone().add(p.getVelocity()), loc = locVelocity.clone().add(0, 0.08 + p.getPotionEffect(PotionEffectType.JUMP).orElse(new PotionEffect(PotionEffectType.JUMP, 0, 0)).getAmplifier() / 10, 0);
 		Material type = loc.getBlock().getType();
-		if (p.isOnGround() && !type.isSolid() && !p.isFlying() && p.getVelocity().getY() <= difY) {
+		if (p.isOnGround() && !type.isSolid() && !p.isFlying() && Math.abs(p.getVelocity().getY()) <= Math.abs(difY)) {
 			List<Vector> testedVectors = new ArrayList<>(Arrays.asList(locVelocity.toBlockVector())); 
 			if(locVelocity.getBlockY() == loc.getBlockY())
 				testedVectors.add(loc.toBlockVector());

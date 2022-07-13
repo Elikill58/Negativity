@@ -20,6 +20,8 @@ public class InventoryListeners implements Listener {
 	
 	@EventHandler
 	public void onInventoryOpen(org.bukkit.event.inventory.InventoryOpenEvent e) {
+		if(e.isCancelled())
+			return;
 		InventoryOpenEvent event = new InventoryOpenEvent(SpigotEntityManager.getPlayer((Player) e.getPlayer()));
 		EventManager.callEvent(event);
 		if(event.isCancelled())
@@ -28,7 +30,7 @@ public class InventoryListeners implements Listener {
 	
 	@EventHandler
 	public void onInventoryClick(org.bukkit.event.inventory.InventoryClickEvent e) {
-		if(!(e.getWhoClicked() instanceof Player) || e.getClickedInventory() == null || e.getCurrentItem() == null || e.getSlotType().equals(SlotType.QUICKBAR))
+		if(!(e.getWhoClicked() instanceof Player) || e.getClickedInventory() == null || e.getCurrentItem() == null || e.getSlotType().equals(SlotType.QUICKBAR) || e.isCancelled())
 			return;
 		com.elikill58.negativity.api.entity.Player p = SpigotEntityManager.getPlayer((Player) e.getWhoClicked());
 		InventoryAction action = getAction(e.getClick());

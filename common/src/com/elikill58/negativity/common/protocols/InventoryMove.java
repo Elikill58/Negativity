@@ -69,6 +69,8 @@ public class InventoryMove extends Cheat implements Listeners {
 
 	@EventListener
 	public void onClick(InventoryClickEvent e) {
+		if(e.isCancelled())
+			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
 		if (np.hasDetectionActive(this))
 			checkInvMove(np);
@@ -76,6 +78,8 @@ public class InventoryMove extends Cheat implements Listeners {
 
 	@EventListener
 	public void onOpen(InventoryOpenEvent e) {
+		if(e.isCancelled())
+			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
 		if (np.hasDetectionActive(this))
 			checkInvMove(np);

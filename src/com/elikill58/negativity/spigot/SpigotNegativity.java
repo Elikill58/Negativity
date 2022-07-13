@@ -279,9 +279,7 @@ public class SpigotNegativity extends JavaPlugin {
 			 Class.forName("org.magmafoundation.magma.configuration.MagmaConfig");
 			 isMagma = true;
 			 getLogger().info("Magma platform detected.");
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		} catch (Exception e) {} // ignore
 		
 		try {
 			// finding field name

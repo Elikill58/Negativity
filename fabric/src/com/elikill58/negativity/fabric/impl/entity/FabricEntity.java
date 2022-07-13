@@ -83,7 +83,7 @@ public class FabricEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public Location getEyeLocation() {
 		Vec3d vec = entity.getEyePos();
-		return new Location(new FabricWorld(entity.getWorld()), vec.getX(), vec.getY(), vec.getZ());
+		return new Location(World.getWorld(entity.getWorld().asString(), a -> new FabricWorld(entity.getWorld())), vec.getX(), vec.getY(), vec.getZ());
 	}
 	
 	@Override

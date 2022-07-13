@@ -1,4 +1,7 @@
-package com.elikill58.negativity.api.location;
+package com.elikill58.negativity.api.block;
+
+import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 
 public class BlockPosition {
 

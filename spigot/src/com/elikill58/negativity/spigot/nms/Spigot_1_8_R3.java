@@ -53,9 +53,9 @@ public class Spigot_1_8_R3 extends SpigotVersionAdapter {
 	}
 	
 	@Override
-	public com.elikill58.negativity.api.location.BlockPosition getBlockPosition(Object obj) {
+	public com.elikill58.negativity.api.block.BlockPosition getBlockPosition(Object obj) {
 		BlockPosition pos = (BlockPosition) obj;
-		return new com.elikill58.negativity.api.location.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
+		return new com.elikill58.negativity.api.block.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
 	}
 	
 	@Override

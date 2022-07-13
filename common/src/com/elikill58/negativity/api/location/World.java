@@ -1,15 +1,46 @@
 package com.elikill58.negativity.api.location;
 
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
 
 import javax.annotation.Nullable;
 
 import com.elikill58.negativity.api.NegativityObject;
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.block.BlockHashMap;
 import com.elikill58.negativity.api.entity.Entity;
 
 public abstract class World implements NegativityObject {
 
+	private static final ConcurrentHashMap<String, World> worlds = new ConcurrentHashMap<>();
+	public static ConcurrentHashMap<String, World> getWorlds() {
+		return worlds;
+	}
+	
+	/**
+	 * Get world instance
+	 * 
+	 * @param name the name of world
+	 * @return the world or null if not loaded yet
+	 */
+	public static World getWorld(String name) {
+		return worlds.get(name);
+	}
+	
+	/**
+	 * Get world instance
+	 * 
+	 * @param name the name of world
+	 * @param worldFunction create the world that will be stored
+	 * @return the world or null if not loaded yet
+	 */
+	public static World getWorld(String name, Function<String, World> worldFunction) {
+		return worlds.computeIfAbsent(name, worldFunction);
+	}
+	
+	private final BlockHashMap content = new BlockHashMap(this);
+	
 	/**
 	 * Get the world name
 	 * 
@@ -19,20 +50,22 @@ public abstract class World implements NegativityObject {
 
 	/**
 	 * Get the block at the specified location on this world
-	 * Return a block with AIR type if not found
-	 * Can create error if world not loaded AND loading it async
+	 * Return a block with AIR type if not found<br>
+	 * Try to load from cache or get with {@link #getBlockAt0(int, int, int)}
 	 * 
 	 * @param x The X block location
 	 * @param y The Y block location
 	 * @param z The Z block location
 	 * @return the founded block
 	 */
-	public abstract Block getBlockAt(int x, int y, int z);
+	public Block getBlockAt(int x, int y, int z) {
+		return content.get(x, y, z);
+	}
 
 	/**
 	 * Get the block at the specified location on this world
-	 * Return a block with AIR type if not found
-	 * Can create error if world not loaded AND loading it async
+	 * Return a block with AIR type if not found<br>
+	 * Try to load from cache or get with {@link #getBlockAt0(int, int, int)}
 	 * 
 	 * @param x The X block location
 	 * @param y The Y block location
@@ -40,30 +73,56 @@ public abstract class World implements NegativityObject {
 	 * @return the founded block
 	 */
 	public Block getBlockAt(double x, double y, double z) {
-		return getBlockAt((int) x, (int) y, (int) z);
+		return content.get((int) x, (int) y, (int) z);
 	}
 
 	/**
 	 * Get the block at the specified location on this world
-	 * Return a block with AIR type if not found
-	 * Can create error if world not loaded AND loading it async
+	 * Return a block with AIR type if not found<br>
+	 * Try to load from cache or get with {@link #getBlockAt0(int, int, int)}
 	 * 
 	 * @param v the block vector position
 	 * @return the founded block
 	 */
 	public Block getBlockAt(Vector v) {
-		return getBlockAt(v.getBlockX(), v.getBlockY(), v.getBlockZ());
+		return content.get(v);
 	}
 
 	/**
 	 * Get the block at the specified location on this world
-	 * Return a block with AIR type if not found
-	 * Can create error if world not loaded AND loading it async
+	 * Return a block with AIR type if not found<br>
+	 * Try to load from cache or get with {@link #getBlockAt0(int, int, int)}
 	 * 
 	 * @param loc the block location
 	 * @return the founded block
 	 */
-	public abstract Block getBlockAt(Location loc);
+	public Block getBlockAt(Location loc) {
+		return content.get(loc.toBlockVector());
+	}
+
+	/**
+	 * Get the block at the specified location on this world
+	 * Return a block with AIR type if not found<br>
+	 * Can create error if world not loaded AND loading it async<br>
+	 * Load directly from world
+	 * 
+	 * @param loc the block location
+	 * @return the founded block
+	 */
+	public abstract Block getBlockAt0(Location loc);
+
+	/**
+	 * Get the block at the specified location on this world
+	 * Return a block with AIR type if not found<br>
+	 * Can create error if world not loaded AND loading it async<br>
+	 * Load directly from world
+	 * 
+	 * @param x The X block location
+	 * @param y The Y block location
+	 * @param z The Z block location
+	 * @return the founded block
+	 */
+	public abstract Block getBlockAt0(int x, int y, int z);
 	
 	/**
 	 * Get all entities on this world

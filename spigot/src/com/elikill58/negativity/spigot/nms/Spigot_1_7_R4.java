@@ -83,7 +83,7 @@ public class Spigot_1_7_R4 extends SpigotVersionAdapter {
 	}
 	
 	@Override
-	public com.elikill58.negativity.api.location.BlockPosition getBlockPosition(Object obj) {
+	public com.elikill58.negativity.api.block.BlockPosition getBlockPosition(Object obj) {
 		return null; // no block pos object in 1.7
 	}
 	

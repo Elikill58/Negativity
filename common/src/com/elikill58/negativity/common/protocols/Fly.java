@@ -1,6 +1,5 @@
 package com.elikill58.negativity.common.protocols;
 
-import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.universal.detections.keys.CheatKeys.FLY;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
@@ -69,7 +68,9 @@ public class Fly extends Cheat implements Listeners {
 		Material type = loc.getBlock().getType(), typeUpper = loc.getBlock().getRelative(BlockFace.UP).getType();
 		boolean isInWater = loc.getBlock().getType().getId().contains("WATER"),
 				isOnWater = locUnder.getBlock().getType().getId().contains("WATER");
-
+		boolean hasOtherThanAir = LocationUtils.hasOtherThan(loc, Materials.AIR), hasUnderOtherThanAir = LocationUtils.hasOtherThan(locUnder, Materials.AIR),
+				hasUnderUnderOtherThanAir = LocationUtils.hasOtherThan(locUnderUnder, Materials.AIR);
+		
 		double i = to.toVector().distance(from.toVector());
 		double d = to.getY() - from.getY();
 		double distance = from.distance(to);
@@ -105,9 +106,9 @@ public class Fly extends Cheat implements Listeners {
 			}
 
 			if (checkActive("no-ground-down") && !np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
-				if (!np.isUsingSlimeBlock && !hasOtherThanExtended(p.getLocation(), "AIR")
-						&& !hasOtherThanExtended(locUnder, "AIR") && !np.booleans.get(FLY, "boat-falling", false)
-						&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
+				if (!np.isUsingSlimeBlock && !hasOtherThanAir
+						&& !hasUnderOtherThanAir && !np.booleans.get(FLY, "boat-falling", false)
+						&& !hasUnderUnderOtherThanAir && d != 0.5 && d != 0
 						&& (from.getY() <= to.getY() || inBoat) && p.getVelocity().length() < d) {
 					double nbTimeAirBelow = np.doubles.get(FLY, "air-below", 0.0);
 					np.doubles.set(FLY, "air-below", nbTimeAirBelow + 1);
@@ -144,8 +145,8 @@ public class Fly extends Cheat implements Listeners {
 			if (checkActive("not-moving-y")) {
 				if (p.isOnGround() && y == 0 && type.equals(Materials.AIR)
 						&& locUnder.getBlock().getType().equals(Materials.AIR) && distance > p.getWalkSpeed()
-						&& !LocationUtils.hasOtherThan(loc, Materials.AIR)
-						&& !LocationUtils.hasOtherThan(locUnder, Materials.AIR)) {
+						&& !hasOtherThanAir
+						&& !hasUnderOtherThanAir) {
 					int time0 = np.ints.get(FLY, "y-0-times", 0);
 					if (time0 > 2) {
 						mayCancel = Negativity.alertMod(time0 > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
@@ -210,7 +211,7 @@ public class Fly extends Cheat implements Listeners {
 	@Check(name = "omega-craft", description = "Check when player keep their Y move", conditions = {
 			CheckConditions.SURVIVAL, CheckConditions.NO_FIGHT, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_FLY,
 			CheckConditions.NO_SWIM, CheckConditions.NO_INSIDE_VEHICLE })
-	public void omega(PlayerMoveEvent e, NegativityPlayer np) {
+	public void omegaCraft(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;

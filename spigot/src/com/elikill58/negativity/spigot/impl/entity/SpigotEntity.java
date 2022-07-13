@@ -45,7 +45,7 @@ public class SpigotEntity<E extends Entity> extends AbstractEntity {
 	
 	@Override
 	public World getWorld() {
-		return new SpigotWorld(entity.getWorld());
+		return World.getWorld(entity.getWorld().getName(), a -> new SpigotWorld(entity.getWorld()));
 	}
 
 	@Override

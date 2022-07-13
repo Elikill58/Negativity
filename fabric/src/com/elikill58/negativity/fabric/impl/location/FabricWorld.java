@@ -32,13 +32,13 @@ public class FabricWorld extends World {
 	}
 
 	@Override
-	public Block getBlockAt(int x, int y, int z) {
+	public Block getBlockAt0(int x, int y, int z) {
 		BlockPos pos = new BlockPos(x, y, z);
 		return new FabricBlock(w.getBlockState(pos).getBlock(), w, pos);
 	}
 
 	@Override
-	public Block getBlockAt(Location loc) {
+	public Block getBlockAt0(Location loc) {
 		return getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 	}
 

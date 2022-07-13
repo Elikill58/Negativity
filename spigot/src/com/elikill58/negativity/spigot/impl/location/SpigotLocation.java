@@ -11,6 +11,6 @@ public class SpigotLocation {
 	}
 
 	public static Location toCommon(org.bukkit.Location loc){
-		return new Location(new SpigotWorld(loc.getWorld()), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+		return new Location(com.elikill58.negativity.api.location.World.getWorld(loc.getWorld().getName(), a -> new SpigotWorld(loc.getWorld())), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
 	}
 }

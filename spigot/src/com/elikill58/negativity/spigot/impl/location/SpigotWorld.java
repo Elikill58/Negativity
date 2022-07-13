@@ -27,12 +27,12 @@ public class SpigotWorld extends World {
 	}
 
 	@Override
-	public Block getBlockAt(int x, int y, int z) {
+	public Block getBlockAt0(int x, int y, int z) {
 		return new SpigotBlock(w.getBlockAt(x, y, z));
 	}
 
 	@Override
-	public Block getBlockAt(Location loc) {
+	public Block getBlockAt0(Location loc) {
 		return new SpigotBlock(w.getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 	}
 

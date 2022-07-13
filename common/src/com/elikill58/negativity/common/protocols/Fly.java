@@ -53,8 +53,8 @@ public class Fly extends Cheat implements Listeners {
 			return;
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		if (p.getAllowFlight() || p.isSwimming() || LocationUtils.hasMaterialAround(e.getTo(), Materials.WATER_LILY,
-				Materials.WEB, Materials.LADDER, Materials.VINE))
+		if (p.getAllowFlight() || p.isSwimming() || p.isInsideVehicle() || LocationUtils.hasMaterialAround(e.getTo(),
+				Materials.WATER_LILY, Materials.WEB, Materials.LADDER, Materials.VINE))
 			return;
 		if (p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED))
 				.getAmplifier() > 5)
@@ -91,8 +91,8 @@ public class Fly extends Cheat implements Listeners {
 				}
 			}
 			if (checkActive("no-ground-i")) {
-				if (!p.isSprinting() && d > 0 && (i < p.getVelocity().getY() || p.getVelocity().length() < 0.5) && p.getVelocity().length() < 3
-						&& locUnder.getBlock().getType().equals(Materials.AIR)
+				if (!p.isSprinting() && d > 0 && (i < p.getVelocity().getY() || p.getVelocity().length() < 0.5)
+						&& p.getVelocity().length() < 3 && locUnder.getBlock().getType().equals(Materials.AIR)
 						&& locUnderUnder.getBlock().getType().equals(Materials.AIR)
 						&& (p.getFallDistance() == 0.0F || inBoat) && typeUpper.equals(Materials.AIR) && i > 0.8
 						&& !p.isOnGround()) {
@@ -206,13 +206,15 @@ public class Fly extends Cheat implements Listeners {
 
 		np.booleans.set(FLY, "boat-falling", nextValue);
 	}
-	
-	@Check(name = "omega-craft", description = "Check when player keep their Y move", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FIGHT, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_FLY, CheckConditions.NO_SWIM })
+
+	@Check(name = "omega-craft", description = "Check when player keep their Y move", conditions = {
+			CheckConditions.SURVIVAL, CheckConditions.NO_FIGHT, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_FLY,
+			CheckConditions.NO_SWIM, CheckConditions.NO_INSIDE_VEHICLE })
 	public void omega(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		
+
 		Location from = e.getFrom(), to = e.getTo();
 
 		Location loc = p.getLocation().clone(), locUnder = p.getLocation().clone().sub(0, 1, 0);
@@ -223,8 +225,8 @@ public class Fly extends Cheat implements Listeners {
 
 		List<Double> flyMoveAmount = np.listDoubles.get(FLY, "fly-move", new ArrayList<>());
 		boolean onGround = p.isOnGround(), wasOnGround = np.booleans.get(FLY, "fly-wasOnGround", true);
-		boolean hasBoatAround = p.getWorld().getEntities().stream().filter(
-				(entity) -> entity.getType().equals(EntityType.BOAT) && entity.getLocation().distance(loc) < 3)
+		boolean hasBoatAround = p.getWorld().getEntities().stream()
+				.filter((entity) -> entity.getType().equals(EntityType.BOAT) && entity.getLocation().distance(loc) < 3)
 				.findFirst().isPresent();
 		if (p.getFallDistance() <= 0.000001 && !p.isInsideVehicle() && onGround == wasOnGround) {
 			double i = to.toVector().distance(from.toVector());
@@ -248,11 +250,13 @@ public class Fly extends Cheat implements Listeners {
 				}
 			}
 			if (amount > 1) {
-			 	if(Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount), "omega-craft",
-						"OmegaCraftFly - " + flyMoveAmount + " > " + onGround + " : " + wasOnGround + ", i: " + i + ", d: " + d,
+				if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount),
+						"omega-craft",
+						"OmegaCraftFly - " + flyMoveAmount + " > " + onGround + " : " + wasOnGround + ", i: " + i
+								+ ", d: " + d,
 						new CheatHover.Literal("OmegaCraft: " + amount + " times with no Y changes"),
 						amount > 1 ? amount - 1 : 1) && isSetBack())
-			 		e.setCancelled(true);
+					e.setCancelled(true);
 			}
 		}
 		if ((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || hasBoatAround || p.isInsideVehicle()

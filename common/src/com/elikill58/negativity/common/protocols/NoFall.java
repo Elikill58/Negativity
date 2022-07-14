@@ -216,10 +216,12 @@ public class NoFall extends Cheat {
 		Material type = loc.getBlock().getType();
 		if (p.isOnGround() && !type.isSolid() && !p.isFlying() && Math.abs(p.getVelocity().getY()) <= Math.abs(difY)) {
 			List<Vector> testedVectors = new ArrayList<>(Arrays.asList(locVelocity.toBlockVector())); 
-			if(locVelocity.getBlockY() == loc.getBlockY())
+			if(locVelocity.getBlockY() != loc.getBlockY())
 				testedVectors.add(loc.toBlockVector());
 			if(((int) to.getX() + 0.1) != to.getBlockX())
 				testedVectors.add(to.clone().add(0.1, 0, 0).toBlockVector());
+			if(((int) to.getZ() + 0.1) != to.getBlockZ())
+				testedVectors.add(to.clone().add(0, 0, 0.1).toBlockVector());
 			
 			List<Material> materials = testedVectors.stream().map(v -> v.toLocation(p.getWorld())).map(Location::getBlock).map(Block::getType).filter(Objects::nonNull).filter(m -> !m.equals(Materials.AIR)).collect(Collectors.toList());
 			if(!materials.isEmpty())

@@ -96,7 +96,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 				|| hasMaterialsAround(locUp, "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET")
 				|| hasMaterialsAround(loc.clone().add(0, 2, 0), "ICE", "TRAPDOOR", "SLAB", "STAIR", "CARPET"))
 			return;
-		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0));
+		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0)), velocity = p.getVelocity().getY(), velLen = p.getVelocity().length();
 		boolean mayCancel = false;
 		if (onGround) {
 			Vector direction = p.getVelocity().clone();
@@ -113,8 +113,8 @@ public class SpeedProtocol extends Cheat implements Listener {
 			}
 			double calculatedSpeedWith = Utils.getSpeed(from, to);
 			double calculatedSpeedWithoutY = Utils.getSpeed(from, to, p.getVelocity());
-			if(p.getWalkSpeed() < 1.0 && calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && p.getVelocity().getY() < calculatedSpeedWithoutY && p.getVelocity().getY() > 0.1
-					&& !hasOtherThan(from.clone().add(0, 1, 0), "AIR")) { // "+0.01" is to prevent lag
+			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && !hasOtherThan(from.clone().add(0, 1, 0), "AIR")  && Math.abs(velocity) > 0.1
+					&& calculatedSpeedWithoutY > velLen && calculatedSpeedWithoutY != calculatedSpeedWith && (p.getWalkSpeed() * 2 < calculatedSpeedWith || (p.getWalkSpeed() + 0.1 < calculatedSpeedWithoutY)) && dif != 0) { // "+0.01" if to prevent lag"
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, 90, "Calculated speed: "
 					+ calculatedSpeedWithoutY + ", Walk Speed: " + p.getWalkSpeed() + ", Velocity Y: " + p.getVelocity().toString() + ", speed: " + calculatedSpeedWith);
 			}

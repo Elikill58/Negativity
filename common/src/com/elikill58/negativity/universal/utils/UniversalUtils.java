@@ -333,10 +333,6 @@ public class UniversalUtils {
 	            Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
 	}
 	
-	public static void init() {
-		new Thread(() -> getContentFromURL("https://google.fr")).start();
-	}
-	
 	/**
 	 * Opens a bundled file as an InputStream
 	 *

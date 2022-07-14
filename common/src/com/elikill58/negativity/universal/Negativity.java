@@ -358,7 +358,6 @@ public class Negativity {
 				}
 			}
 		}
-		UniversalUtils.init();
 		log = config.getBoolean("log_alerts", true);
 		log_console = config.getBoolean("log_alerts_in_console", true);
 		hasBypass = config.getBoolean("Permissions.bypass.active", false);

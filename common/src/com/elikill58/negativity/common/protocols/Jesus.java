@@ -136,15 +136,20 @@ public class Jesus extends Cheat implements Listeners {
 			return;
 		List<String> tested = new ArrayList<>();
 		int i = 0;
-		for(BlockFace bf : Arrays.asList(BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
-			String id = actual.getRelative(bf).getType().getId();
-			String idSub = sub.getRelative(bf).getType().getId();
-			for(String idTmp : Arrays.asList(id, idSub)) {
-				tested.add(idTmp);
+		for(BlockFace bf : Arrays.asList(BlockFace.NORTH, BlockFace.NORTH_EAST, BlockFace.SOUTH, BlockFace.NORTH_WEST, BlockFace.EAST, BlockFace.SOUTH_EAST, BlockFace.WEST, BlockFace.SOUTH_WEST)) {
+			Material id = actual.getRelative(bf).getType();
+			Material idSub = sub.getRelative(bf).getType(); // don't check too far block
+			for(Material types : Arrays.asList(id, idSub)) {
+				String idTmp = types.getId();
+				tested.add(bf.name() + ": " + idTmp);
 				if(idTmp.contains("WATER"))
 					i++;
-				else if(idTmp.contains("LILY") || idTmp.contains("PAD") || idTmp.contains("SLAB") || idTmp.contains("STEP") || idTmp.contains("STAIRS"))
-					return;
+				else {
+					if(!types.equals(Materials.AIR) && types.isSolid()) // is solid
+						return;
+					else if(idTmp.contains("LILY") || idTmp.contains("PAD") || idTmp.contains("SLAB") || idTmp.contains("STEP") || idTmp.contains("STAIRS")) // just strange block
+						return;
+				}
 			}
 		}
 		boolean wasOnGround = np.booleans.get(JESUS, "bw-was-ground", false);

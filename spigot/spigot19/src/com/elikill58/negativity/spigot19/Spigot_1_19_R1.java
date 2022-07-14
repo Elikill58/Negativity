@@ -231,7 +231,7 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 	@Override
 	public List<Entity> getEntities(World w) {
 		List<Entity> entities = new ArrayList<>();
-		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().forEach((mcEnt) -> {
+		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().iterator().forEachRemaining((mcEnt) -> {
 			if(mcEnt != null) {
 				CraftEntity craftEntity = mcEnt.getBukkitEntity();
 				if (craftEntity != null && craftEntity instanceof Entity && craftEntity.isValid())

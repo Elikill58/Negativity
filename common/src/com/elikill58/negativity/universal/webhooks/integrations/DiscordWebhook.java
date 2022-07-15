@@ -111,10 +111,12 @@ public class DiscordWebhook implements Webhook {
     		return;
     	
     	// firstly, combine all
-		queue.removeIf(Objects::isNull);
-		if(queue.isEmpty())
-			return;
-		queue.sort(Comparator.naturalOrder());
+    	synchronized (queue) {
+    		queue.removeIf(Objects::isNull);
+    		if(queue.isEmpty())
+    			return;
+    		queue.sort(Comparator.naturalOrder());
+		}
 		while(!queue.isEmpty()) {
     		WebhookMessage msg = queue.remove(0);
     		if(queue.isEmpty()) { // removed is last
@@ -181,7 +183,9 @@ public class DiscordWebhook implements Webhook {
     	}
     	ada.debug("Sending webhook " + msg.getMessageType().name() + " for " + msg.getConcerned().getName() + ": " + getCooldown(msg.getConcerned(), msg.getMessageType()));
     	setCooldown(msg.getConcerned(), msg.getMessageType());
-    	queue.removeIf(w -> w.getDate() == msg.getDate()); // be sure it's removed
+    	synchronized (queue) {
+        	queue.removeIf(w -> w.getDate() == msg.getDate()); // be sure it's removed
+		}
     	DiscordWebhookRequest webhook = new DiscordWebhookRequest(webhookUrl);
 	    webhook.setUsername(msg.applyPlaceHolders(confMsg.getString("username", "Negativity")));
 	    if(alreadySent.contains(msg.getConcerned().getUniqueId())) { // if already sent first message
@@ -230,7 +234,9 @@ public class DiscordWebhook implements Webhook {
 		if(code < 200 || code >= 300) {
 	    	if(code == 429) { // good config and error while sending
 	    		JSONObject json = (JSONObject) new JSONParser().parse(webhookResult.getB());
-	    		queue.add(msg);
+	    		synchronized (queue) {
+	    			queue.add(msg);
+				}
 	    		long retryAfter = (long) json.get("retry_after");
 	    		time = System.currentTimeMillis() + retryAfter; // wait 5 s until next send
 	    		ada.getLogger().warn("Discord webhook reach rate limit. Wait " + (retryAfter / 1000) + " secs more.");

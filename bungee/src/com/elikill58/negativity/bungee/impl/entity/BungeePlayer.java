@@ -78,7 +78,8 @@ public class BungeePlayer extends AbstractProxyPlayer {
 
 	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {
-		pp.getServer().sendData(channelId, writeMessage);
+		if(pp.getServer() != null) // should always be true
+			pp.getServer().sendData(channelId, writeMessage);
 	}
 
 	@Override
@@ -98,7 +99,7 @@ public class BungeePlayer extends AbstractProxyPlayer {
 	
 	@Override
 	public String getServerName() {
-		return pp.getServer().getInfo().getName();
+		return pp.getServer() == null ? "none" : pp.getServer().getInfo().getName();
 	}
 	
 	@Override

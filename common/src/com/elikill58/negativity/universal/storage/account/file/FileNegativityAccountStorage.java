@@ -26,10 +26,16 @@ import com.elikill58.negativity.universal.storage.account.NegativityAccountStora
 public class FileNegativityAccountStorage extends NegativityAccountStorage {
 
 	private final File userDir;
-	private final Configuration ipConfig;
+	private Configuration ipConfig;
 	
 	public FileNegativityAccountStorage(File userDir) {
 		this.userDir = userDir;
+	}
+	
+	@Override
+	public void enable() {
+		if(!userDir.exists())
+			userDir.mkdirs();
 		File ipFile = new File(userDir.getParent(), "player-ips.yml");
 		if(!ipFile.exists()) { // file doesn't exist
 			try {

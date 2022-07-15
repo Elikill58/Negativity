@@ -19,6 +19,8 @@ public abstract class NegativityAccountStorage {
 
 	private static final Map<String, NegativityAccountStorage> storages = new HashMap<>();
 	private static String storageId;
+	
+	public void enable() {}
 
 	public abstract CompletableFuture<@Nullable NegativityAccount> loadAccount(UUID playerId);
 
@@ -44,6 +46,7 @@ public abstract class NegativityAccountStorage {
 
 	public static void setStorageId(String storageId) {
 		NegativityAccountStorage.storageId = storageId;
+		getStorage().enable();
 	}
 
 	public static void setDefaultStorage(String storageId) {
@@ -61,5 +64,6 @@ public abstract class NegativityAccountStorage {
 		if (Database.hasCustom) {
 			NegativityAccountStorage.register("database", new DatabaseNegativityAccountStorage());
 		}
+		getStorage().enable();
 	}
 }

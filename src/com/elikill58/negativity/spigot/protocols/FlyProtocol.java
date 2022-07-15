@@ -71,13 +71,13 @@ public class FlyProtocol extends Cheat implements Listener {
 		if (!(p.isSprinting() && d > 0)
 				&& locUnder.getBlock().getType().equals(Material.AIR)
 				&& locUnderUnder.getBlock().getType().equals(Material.AIR)
-				&& (p.getFallDistance() == 0.0F || inBoat)
+				&& (p.getFallDistance() == 0.0F || inBoat) && !(p.isInsideVehicle() && p.getFallDistance() == 0)
 				&& typeUpper.equals(Material.AIR) && i > 0.8
 				&& !np.isOnGround()) {
 			mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 					this, parseInPorcent((int) i * 50),
-					"Player not in ground, i: " + i + ". Warn for fly: " + np.getWarn(this),
-					inBoat ? hoverMsg("boat") : null);
+					"Player not in ground, i: " + i + ". fall: " + p.getFallDistance() + ", d: " + d,
+					inBoat ? hoverMsg("boat") : null) || mayCancel;
 		}
 
 		if (!np.isUsingSlimeBlock && !hasOtherThanExtended(p.getLocation(), "AIR")
@@ -94,7 +94,7 @@ public class FlyProtocol extends Cheat implements Listener {
 					mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
 							this, porcent, "Player not in ground (" + nb + " air blocks down), distance Y: " + d + ", inBoat: " + inBoat
 									+ ". Warn for fly: " + np.getWarn(this),
-									hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb));
+									hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb)) || mayCancel;
 				}
 			}
 		} else
@@ -108,7 +108,7 @@ public class FlyProtocol extends Cheat implements Listener {
 				&& !type.name().contains("WATER") && distanceWithoutY > 0.3) {
 			if (np.contentBoolean.getOrDefault("fly-not-moving-y", false))
 				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING,
-						p, this, 98, "Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY);
+						p, this, 98, "Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY) || mayCancel;
 			np.contentBoolean.put("fly-not-moving-y", true);
 		} else
 			np.contentBoolean.put("fly-not-moving-y", false);

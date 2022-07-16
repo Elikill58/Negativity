@@ -451,12 +451,7 @@ public class SpongeNegativity {
 	}
 
 	public void loadItemBypasses() {
-		ItemUseBypass.ITEM_BYPASS.clear();
-		ConfigAdapter allItemsConfig = config.getChild("items");
-		for (String key : allItemsConfig.getKeys()) {
-			ConfigAdapter itemConfig = allItemsConfig.getChild(key);
-			new ItemUseBypass(key, itemConfig.getString("cheats"), itemConfig.getString("when"));
-		}
+		ItemUseBypass.load();
 	}
 
 	public static SpongeNegativity getInstance() {

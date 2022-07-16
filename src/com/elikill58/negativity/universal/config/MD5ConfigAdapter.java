@@ -23,6 +23,11 @@ public abstract class MD5ConfigAdapter implements ConfigAdapter {
 	}
 
 	@Override
+	public boolean contains(String key) {
+		return config.contains(key);
+	}
+	
+	@Override
 	public String getString(String key) {
 		if (config.contains(key)) {
 			return config.getString(key);

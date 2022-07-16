@@ -1,15 +1,21 @@
 package com.elikill58.negativity.universal;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
 
 public class ItemUseBypass {
 
-	public static final HashMap<String, ItemUseBypass> ITEM_BYPASS = new HashMap<>();
+	public static final ConcurrentHashMap<String, ItemUseBypass> ITEM_BYPASS = new ConcurrentHashMap<>();
+	
+	public static ConcurrentHashMap<String, ItemUseBypass> getItemBypass() {
+		return ITEM_BYPASS;
+	}
 	
 	public static List<String> getItemBypassWithBypass(WhenBypass when){
 		List<String> list = new ArrayList<>();
@@ -20,39 +26,44 @@ public class ItemUseBypass {
 		return list;
 	}
 	
-	private String item;
-	private List<Cheat> cheats = new ArrayList<>();
-	private WhenBypass when;
+	public static void load() {
+		ITEM_BYPASS.clear();
+		ConfigAdapter config = Adapter.getAdapter().getConfig();
+		if (config.contains("items")) {
+			ConfigAdapter cs = config.getChild("items");
+			for (String s : cs.getKeys())
+				new ItemUseBypass(cs.getChild(s), s);
+		}
+	}
 	
-	public ItemUseBypass(String itemName, String cheats, String when) {
-		this.item = itemName.toLowerCase(Locale.ROOT);
-		this.when = WhenBypass.getWhenBypass(when);
-		this.cheats = updateCheats(cheats);
+	private final String item;
+	private final List<String> cheats;
+	private final WhenBypass when;
+	private final ConfigAdapter config;
+	
+	public ItemUseBypass(ConfigAdapter config, String key) {
+		this.config = config;
+		this.item = key.toLowerCase(Locale.ROOT);
+		this.when = WhenBypass.getWhenBypass(config.getString("when"));
+		this.cheats = Arrays.asList(config.getString("cheats").toLowerCase().split(","));
 		if(this.item == null)
-			Adapter.getAdapter().getLogger().error("[Config - Error] Item bypass System - Unknow item : " + itemName);
+			Adapter.getAdapter().getLogger().error("[Config - Error] Item bypass System - Unknow item : " + key);
 		else if(this.when == WhenBypass.UNKNOW)
-			Adapter.getAdapter().getLogger().error("[Config - Error] Item bypass System - Unknow when : " + when);
-		else if(this.cheats.size() == 0)
-			Adapter.getAdapter().getLogger().error("[Config - Error] Item bypass System - Unknow cheats : " + cheats);
+			Adapter.getAdapter().getLogger().error("[Config - Error] Item bypass System - Unknow when : " + config.getString("when"));
 		else
 			ITEM_BYPASS.put(item, this);
 	}
 	
-	private List<Cheat> updateCheats(String cheats){
-		List<Cheat> list = new ArrayList<>();
-		for(Cheat ac : Cheat.CHEATS)
-			for(String s : cheats.split(","))
-				if(ac.getKey().equalsIgnoreCase(s))
-					list.add(ac);
-		return list;
+	public ConfigAdapter getConfig() {
+		return config;
 	}
 	
-	public List<Cheat> getCheats(){
+	public List<String> getCheats(){
 		return cheats;
 	}
 	
 	public boolean isForThisCheat(Cheat c) {
-		return cheats.contains(c);
+		return cheats.contains(c.getKey().toLowerCase());
 	}
 	
 	public String getItem() {

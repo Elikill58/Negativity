@@ -15,6 +15,11 @@ public abstract class BukkitConfigAdapter implements ConfigAdapter {
 	public BukkitConfigAdapter(ConfigurationSection config) {
 		this.config = config;
 	}
+	
+	@Override
+	public boolean contains(String key) {
+		return config.contains(key);
+	}
 
 	@Override
 	public String getString(String key) {

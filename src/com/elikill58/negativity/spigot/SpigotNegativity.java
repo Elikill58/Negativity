@@ -60,6 +60,7 @@ import com.elikill58.negativity.spigot.timers.ActualizeInvTimer;
 import com.elikill58.negativity.spigot.timers.TimerAnalyzePacket;
 import com.elikill58.negativity.spigot.timers.TimerSpawnFakePlayer;
 import com.elikill58.negativity.spigot.timers.TimerTimeBetweenAlert;
+import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -183,24 +184,17 @@ public class SpigotNegativity extends JavaPlugin {
 
 		loadCommand();
 
-		if (getConfig().get("items") != null) {
-			ConfigurationSection cs = getConfig().getConfigurationSection("items");
-			for (String s : cs.getKeys(false))
-				new ItemUseBypass(s, cs.getString(s + ".cheats"), cs.getString(s + ".when"));
-		}
+		ItemUseBypass.load();
 		Bukkit.getScheduler().runTaskAsynchronously(this, () -> {
 			if (!UniversalUtils.isLatestVersion(getDescription().getVersion())) {
 				getLogger().info("New version available (" + UniversalUtils.getLatestVersion().orElse("unknow")
 						+ "). Download it here: https://www.spigotmc.org/resources/48399/");
 			}
 		});
-		getServer().getScheduler().runTaskAsynchronously(this, new Runnable() {
-			@Override
-			public void run() {
-				Stats.loadStats();
-				Stats.updateStats(StatsType.ONLINE, 1 + "");
-				Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort() + "");
-			}
+		getServer().getScheduler().runTaskAsynchronously(this, () -> {
+			Stats.loadStats();
+			Stats.updateStats(StatsType.ONLINE, 1 + "");
+			Stats.updateStats(StatsType.PORT, Bukkit.getServer().getPort() + "");
 		});
 		if(getConfig().getBoolean("stats", true))
 			getServer().getScheduler().runTaskTimerAsynchronously(this, Stats::update, 20 * 60 * 5, 20 * 60 * 5);
@@ -498,8 +492,10 @@ public class SpigotNegativity extends JavaPlugin {
 		for(Entry<String, ItemUseBypass> itemUseBypass : ItemUseBypass.ITEM_BYPASS.entrySet()) {
 			String id = itemUseBypass.getKey();
 			ItemUseBypass itemBypass = itemUseBypass.getValue();
+			if(!itemBypass.isForThisCheat(c))
+				continue;
 			if(itemBypass.getWhen().equals(WhenBypass.ALWAYS)) {
-				if(itemInHand != null && itemInHand.getType().name().equalsIgnoreCase(id)) {
+				if(ItemUtils.isItemBypass(itemBypass, itemInHand)) {
 					return false;
 				}
 			} else if(itemBypass.getWhen().equals(WhenBypass.BELOW)) {
@@ -516,9 +512,8 @@ public class SpigotNegativity extends JavaPlugin {
 				}
 			} else if(itemBypass.getWhen().equals(WhenBypass.WEARING)) {
 				for(ItemStack armor : p.getInventory().getArmorContents()) {
-					if(armor != null && armor.getType().name().equalsIgnoreCase(id)) {
+					if(ItemUtils.isItemBypass(itemBypass, armor))
 						return false;
-					}
 				}
 			}
 		}

@@ -4,13 +4,17 @@ import java.util.Arrays;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+import com.elikill58.negativity.universal.ItemUseBypass;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.adapter.Adapter;
+import com.elikill58.negativity.universal.config.ConfigAdapter;
 
+@SuppressWarnings("deprecation")
 public class ItemUtils {
 
 	public static final Material MATERIAL_CLOSE = getMaterialWithCompatibility("BARRIER", "REDSTONE");
@@ -79,7 +83,6 @@ public class ItemUtils {
 		return item;
 	}
 
-	@SuppressWarnings("deprecation")
 	public static ItemStack createItem(Material m, String name, int amount, byte b, String... lore) {
 		ItemStack item = new ItemStack(m, amount, b);
 		ItemMeta meta = (ItemMeta) item.getItemMeta();
@@ -97,5 +100,27 @@ public class ItemUtils {
 			stack.setItemMeta(meta);
 		}
 		return stack;
+	}
+	
+	public static boolean isItemBypass(ItemUseBypass use, ItemStack item) {
+		if(use == null || item == null || !item.getType().name().equalsIgnoreCase(use.getItem()))
+			return false;
+		ConfigAdapter c = use.getConfig();
+		ItemMeta meta = item.getItemMeta();
+		if(c.contains("name")) {
+			if(meta == null || !(meta.hasDisplayName() && meta.getDisplayName().equalsIgnoreCase(c.getString("name")))) // wrong name
+				return false;
+		}
+		if(c.contains("unbreakable")) {
+			if(meta.isUnbreakable() != c.getBoolean("unbreakable"))
+				return false;
+		}
+		if(c.contains("enchants")) {
+			for(String enchant : c.getStringList("enchants")) {
+				if(!meta.hasEnchant(Enchantment.getByName(enchant.toUpperCase())))
+					return false;
+			}
+		}
+		return true;
 	}
 }

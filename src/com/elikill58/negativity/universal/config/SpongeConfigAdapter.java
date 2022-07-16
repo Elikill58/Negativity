@@ -32,6 +32,11 @@ public abstract class SpongeConfigAdapter implements ConfigAdapter {
 	}
 
 	@Override
+	public boolean contains(String key) {
+		return getFinalNode(key).getValue() != null;
+	}
+	
+	@Override
 	public String getString(String key) {
 		try {
 			return getFinalNode(key).getValue(TypeTokens.STRING_TOKEN, (Supplier<String>) () -> DefaultConfigValue.getDefaultValueString(key));

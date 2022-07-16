@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface ConfigAdapter {
 
+	boolean contains(String key);
+	
 	String getString(String key);
 
 	boolean getBoolean(String key);

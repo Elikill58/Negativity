@@ -116,7 +116,7 @@ public class Speed extends Cheat implements Listeners {
 						+ ", WS: " + p.getWalkSpeed() + ", Velocity: " + p.getVelocity() + ", speed: " + calculatedSpeedWith + ", dis: " + distance + ", diffY: " + dif);
 			}
 		}
-		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10) - (velLen > 0.5 ? velLen : 0)) >= 0.85D
+		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10) - (velLen > 0.45 ? velLen : 0)) >= 0.85D
 				&& !hasIceBelow && !np.isInFight && p.getTheoricVelocity().length() < 0.85D && p.getVelocity().length() < 0.4) { // theoric length to when the new high velocity is actually taken
 			mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(y * 190), "distance-jumping", "WS: " + p.getWalkSpeed()

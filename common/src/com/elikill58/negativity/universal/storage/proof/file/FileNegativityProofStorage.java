@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.yaml.Configuration;
@@ -151,14 +152,14 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 					}
 				}
 				Configuration accountConfig = YamlConfiguration.load(file);
+				AtomicInteger key = new AtomicInteger(0);
 				list.forEach(proof -> {
 					Configuration cheatSection = accountConfig.getSection(proof.getCheatKey().getLowerKey());
 					if(cheatSection == null)
 						cheatSection = accountConfig.createSection(proof.getCheatKey().getLowerKey());
-					int key = 0;
-					while(cheatSection.contains(String.valueOf(key)))
-						key++;
-					Configuration proofConfig = cheatSection.createSection(String.valueOf(key));
+					while(cheatSection.contains(String.valueOf(key.get())))
+						key.incrementAndGet();
+					Configuration proofConfig = cheatSection.createSection(String.valueOf(key.get()));
 					proofConfig.set("report_type", proof.getReportType().name());
 					proofConfig.set("check.name", proof.getCheckName());
 					proofConfig.set("check.informations", proof.getCheckInformations());
@@ -169,6 +170,7 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 					proofConfig.set("version", proof.getVersion().name());
 					proofConfig.set("warn", proof.getWarn());
 					proofConfig.set("tps", tpsToFile(proof.getTps()));
+					key.incrementAndGet(); // add one for next
 				});
 				accountConfig.save();
 			});

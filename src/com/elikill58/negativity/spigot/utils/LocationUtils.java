@@ -16,6 +16,7 @@ import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.packets.PacketContent;
 import com.elikill58.negativity.spigot.packets.PacketContent.ContentModifier;
 import com.elikill58.negativity.universal.Version;
@@ -25,7 +26,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class LocationUtils {
 
 	public static boolean isUsingElevator(Player p) {
-		Location loc = p.getLocation().clone();
+		SpigotLocation loc = new SpigotLocation(p.getLocation());
 		Material m = loc.getBlock().getType();
 		return m.name().contains("WATER") || hasMaterialsAround(loc, "WATER", "BUBBLE");
 	}
@@ -38,7 +39,7 @@ public class LocationUtils {
 	 * @param ms Material that we are searching
 	 * @return true if one of specified material if around
 	 */
-	public static boolean hasMaterialAround(Location loc, Material... ms) {
+	public static boolean hasMaterialAround(SpigotLocation loc, Material... ms) {
 		loc = loc.clone();
 		List<Material> m = Arrays.asList(ms);
 		if (m.contains(loc.getBlock().getType()))
@@ -70,7 +71,7 @@ public class LocationUtils {
 	 * @param ms Material's name that we are searchingWarn: For 'REDSTONE', we will also find 'REDSTONE_BLOCK' and all other block with contains name ...
 	 * @return true if one of specified material if around
 	 */
-	public static boolean hasMaterialsAround(Location loc, String... ms) {
+	public static boolean hasMaterialsAround(SpigotLocation loc, String... ms) {
 		loc = loc.clone();
 		if (blockIsOneOfThem(loc.getBlock(), ms))
 				return true;
@@ -109,7 +110,7 @@ public class LocationUtils {
 	 * @param m The material that we are searching
 	 * @return true if one of specified material if around
 	 */
-	public static boolean hasOtherThanExtended(Location loc, Material m) {
+	public static boolean hasOtherThanExtended(SpigotLocation loc, Material m) {
 		return hasOtherThanExtended(loc, m.name());
 	}
 
@@ -121,8 +122,8 @@ public class LocationUtils {
 	 * @param m the name that we are searching in material names
 	 * @return true if one of specified material is around
 	 */
-	public static boolean hasOtherThanExtended(Location loc, String m) {
-		Location tempLoc = loc.clone();
+	public static boolean hasOtherThanExtended(SpigotLocation loc, String m) {
+		SpigotLocation tempLoc = loc.clone();
 		loc = loc.clone();
 		if (!loc.getBlock().getType().name().contains(m))
 			return true;
@@ -171,8 +172,8 @@ public class LocationUtils {
 	 * @param ms all name that we are searching in material names
 	 * @return true if one of specified material if around
 	 */
-	public static boolean hasExtended(Location loc, String... ms) {
-		Location tempLoc = loc.clone();
+	public static boolean hasExtended(SpigotLocation loc, String... ms) {
+		SpigotLocation tempLoc = loc.clone();
 		loc = loc.clone();
 		if (blockIsOneOfThem(loc.getBlock(), ms))
 			return true;
@@ -221,7 +222,7 @@ public class LocationUtils {
 	 * @param m The material that we are searching
 	 * @return true if one of specified material if around
 	 */
-	public static boolean hasOtherThan(Location loc, Material m) {
+	public static boolean hasOtherThan(SpigotLocation loc, Material m) {
 		return hasOtherThan(loc, m.name());
 	}
 
@@ -233,7 +234,7 @@ public class LocationUtils {
 	 * @param name the name that we are searching in material names
 	 * @return true if one of specified material if around
 	 */
-	public static boolean hasOtherThan(Location loc, String name) {
+	public static boolean hasOtherThan(SpigotLocation loc, String name) {
 		loc = loc.clone();
 		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(name))
 			return true;
@@ -281,7 +282,7 @@ public class LocationUtils {
 	 * @return the number of air block below
 	 */
 	public static int getNbAirBlockDown(Player p) {
-		Location loc = p.getLocation().clone();
+		SpigotLocation loc = new SpigotLocation(p.getLocation());
 		int i = 0;
 		while (!LocationUtils.hasOtherThan(loc, "AIR") && i < 50) {
 			loc.subtract(0, 1, 0);
@@ -372,7 +373,7 @@ public class LocationUtils {
 				}
 			}
 		}
-		boolean seeLoc = canSeeLocation(p, entityToSee.getLocation(), 100);
+		boolean seeLoc = canSeeLocation(p, new SpigotLocation(entityToSee.getLocation()), 100);
 		Adapter.getAdapter().debug("Checking default see location " + entityToSee.getLocation() + ", result: " + seeLoc);
 		return seeLoc;
 	}
@@ -384,7 +385,7 @@ public class LocationUtils {
 	 * @param locToSee the location to check if it viewable
 	 * @return true if the player can see the location
 	 */
-	public static boolean canSeeLocation(Player p, Location locToSee) {
+	public static boolean canSeeLocation(Player p, SpigotLocation locToSee) {
 		return canSeeLocation(p, locToSee, 100);
 	}
 	
@@ -396,7 +397,7 @@ public class LocationUtils {
 	 * @param maxDistance the maximum distance. Limited to 200
 	 * @return true if the player can see the location
 	 */
-	public static boolean canSeeLocation(Player p, Location locToSee, int maxDistance) {
+	public static boolean canSeeLocation(Player p, SpigotLocation locToSee, int maxDistance) {
 		Location loc = p.getLocation().clone().add(0, 1.5, 0);
 		World w = p.getWorld();
 		Vector vector = loc.getDirection().normalize().clone();
@@ -601,20 +602,21 @@ public class LocationUtils {
 	}
 
 	public static boolean hasAntiKbBypass(Player p) {
-		return isInWater(p.getLocation()) || isInWeb(p.getLocation()) || hasCeiling(p);
+		SpigotLocation loc = new SpigotLocation(p.getLocation());
+		return isInWater(loc) || isInWeb(loc) || hasCeiling(p);
 	}
 
-	public static boolean isInWater(Location loc) {
+	public static boolean isInWater(SpigotLocation loc) {
 		return loc.getBlock().isLiquid()
 				|| loc.clone().add(0, -1, 0).getBlock().isLiquid()
 				|| loc.clone().add(0, 1, 0).getBlock().isLiquid();
 	}
 
-	public static boolean isInWeb(Location loc) {
+	public static boolean isInWeb(SpigotLocation loc) {
 		return isInWebForLocation(loc) || isInWebForLocation(loc.clone().add(0, 1, 0));
 	}
 		
-	private static boolean isInWebForLocation(Location loc) {
+	private static boolean isInWebForLocation(SpigotLocation loc) {
 		double x = loc.getX() - loc.getBlockX(), z = loc.getZ() - loc.getBlockZ();
 
 		if (isWeb(loc.getBlock()))

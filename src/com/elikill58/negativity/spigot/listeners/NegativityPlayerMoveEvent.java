@@ -1,12 +1,12 @@
 package com.elikill58.negativity.spigot.listeners;
 
-import org.bukkit.Location;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.HandlerList;
 import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 
 public class NegativityPlayerMoveEvent extends PlayerEvent implements Cancellable {
 
@@ -23,19 +23,19 @@ public class NegativityPlayerMoveEvent extends PlayerEvent implements Cancellabl
 		return np;
 	}
 	
-	public Location getTo() {
-		return event.getTo();
+	public SpigotLocation getTo() {
+		return new SpigotLocation(event.getTo());
 	}
 	
-	public void setTo(Location to) {
+	public void setTo(SpigotLocation to) {
 		event.setTo(to);
 	}
 	
-	public Location getFrom() {
-		return event.getFrom();
+	public SpigotLocation getFrom() {
+		return new SpigotLocation(event.getFrom());
 	}
 	
-	public void setFrom(Location from) {
+	public void setFrom(SpigotLocation from) {
 		event.setFrom(from);
 	}
 	

@@ -1,12 +1,11 @@
 package com.elikill58.negativity.spigot.protocols;
 
-import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThan;
+import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -14,6 +13,7 @@ import org.bukkit.event.Listener;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
@@ -34,10 +34,10 @@ public class AirJumpProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		if (!np.hasDetectionActive(this) || np.hasPotionEffect("JUMP_BOOST"))
 			return;
-		Location loc = p.getLocation().clone();
+		SpigotLocation loc = new SpigotLocation(p.getLocation().clone());
 		if (p.isFlying() || p.getVehicle() != null || np.isUsingTrident() || np.hasElytra() || np.isInFight || loc.getBlock().getType().name().contains("STAIR"))
 			return;
-		Location locDown = loc.clone().subtract(0, 1, 0), locDownDown = locDown.clone().subtract(0, 1, 0);
+		SpigotLocation locDown = loc.clone().subtract(0, 1, 0), locDownDown = locDown.clone().subtract(0, 1, 0);
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> {
 			if(hasOtherThanExtended(loc, "AIR") || hasOtherThan(locDown, "AIR") || hasOtherThan(locDownDown, "AIR"))
 				return;

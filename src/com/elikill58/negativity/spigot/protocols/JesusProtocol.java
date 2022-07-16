@@ -7,7 +7,6 @@ import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThanEx
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -15,6 +14,7 @@ import org.bukkit.event.Listener;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -39,8 +39,7 @@ public class JesusProtocol extends Cheat implements Listener {
 			return;
 		if (np.hasElytra() || p.isInsideVehicle() || Utils.isSwimming(p) || np.isUsingTrident())
 			return;
-		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom();
-		Location under = loc.clone().subtract(0, 1, 0);
+		SpigotLocation loc = new SpigotLocation(p.getLocation()), to = e.getTo(), from = e.getFrom(), under = loc.clone().subtract(0, 1, 0);
 		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE", "BED")
 				|| hasMaterialsAround(under, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE", "BED"))
 			return;
@@ -88,7 +87,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		np.contentBoolean.put("jesus-state", !jesusState);
 
 		double distanceAbs = to.distance(from) - Math.abs(from.getY() - to.getY());
-		Location upper = loc.clone().add(0, 1, 0);
+		SpigotLocation upper = loc.clone().add(0, 1, 0);
 		float distanceFall = p.getFallDistance();
 		if (isInWater && isOnWater && distanceFall < 1 && distanceAbs > p.getWalkSpeed()
 				&& !upper.getBlock().isLiquid() && !p.isFlying()) {

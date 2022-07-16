@@ -1,7 +1,6 @@
 package com.elikill58.negativity.spigot.protocols;
 
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
@@ -14,6 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -35,8 +35,7 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		if (!np.hasDetectionActive(this) || np.hasElytra() || p.isInsideVehicle())
 			return;
-		Location loc = p.getLocation();
-		Location from = e.getFrom(), to = e.getTo();
+		SpigotLocation loc = new SpigotLocation(p.getLocation()), from = e.getFrom(), to = e.getTo();
 		double xSpeed = Math.abs(from.getX() - to.getX());
 	    double zSpeed = Math.abs(from.getZ() - to.getZ());
 	    double xzSpeed = Math.sqrt(xSpeed * xSpeed + zSpeed * zSpeed);
@@ -51,7 +50,7 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 				return;
 				
 		}
-		Location fl = from.clone().subtract(to.clone());
+		SpigotLocation fl = from.clone().subtract(to.clone());
 		double distance = to.toVector().distance(from.toVector());
 		if (distance > 0.2 && distance >= p.getWalkSpeed()) {
 			int relia = UniversalUtils.parseInPorcent(distance * 400);
@@ -60,7 +59,7 @@ public class NoSlowDownProtocol extends Cheat implements Listener {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, relia,
 					"Soul sand. Distance from/to : " + distance + ". WalkSpeed: " + p.getWalkSpeed() + ", VelY: " + p.getVelocity().getY());
 			if (isSetBack() && mayCancel)
-				e.setTo(from.clone().add(new Location(fl.getWorld(), fl.getX() / 2, fl.getY() / 2, fl.getZ())).add(0, 0.5, 0));
+				e.setTo(from.clone().add(fl.getX() / 2, fl.getY() / 2 + 0.5, fl.getZ()));
 		}
 	}
 

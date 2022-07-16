@@ -2,7 +2,6 @@ package com.elikill58.negativity.spigot.protocols;
 
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -12,6 +11,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.packets.event.PacketSendEvent;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
@@ -53,8 +53,8 @@ public class StepProtocol extends Cheat implements Listener {
 		if (np.hasElytra() || np.isUsingTrident() || np.isUsingSlimeBlock || Utils.isSwimming(p)
 				|| p.isFlying() || LocationUtils.isUsingElevator(p) || p.isInsideVehicle())
 			return;
-		Location from = e.getFrom(), to = e.getTo();
-		Location down = to.clone().subtract(0, 1, 0);
+		SpigotLocation from = e.getFrom(), to = e.getTo();
+		SpigotLocation down = to.clone().subtract(0, 1, 0);
 		if(down.getBlock().getType().name().contains("SHULKER") || to.getBlock().getType().name().contains("SNOW"))
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))

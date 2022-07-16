@@ -4,7 +4,6 @@ import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThanEx
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Boat;
@@ -17,6 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
@@ -52,12 +52,12 @@ public class FlyProtocol extends Cheat implements Listener {
 				return;
 		}
 		if (np.getAllowFlight() || Utils.isSwimming(p) || p.isFlying()
-				|| LocationUtils.hasMaterialsAround(p.getLocation().clone(), "SCAFFOLD"))
+				|| LocationUtils.hasMaterialsAround(new SpigotLocation(p.getLocation()), "SCAFFOLD"))
 			return;
 		boolean mayCancel = false, inBoat = Utils.isInBoat(p);
 		double y = e.getFrom().getY() - e.getTo().getY();
-		Location loc = p.getLocation().clone(), locUnder = p.getLocation().clone().subtract(0, 1, 0),
-				locUnderUnder = p.getLocation().clone().subtract(0, 2, 0);
+		SpigotLocation loc = new SpigotLocation(p.getLocation()), locUnder = loc.clone().subtract(0, 1, 0),
+				locUnderUnder = loc.clone().subtract(0, 2, 0);
 		Material type = loc.getBlock().getType(), typeUpper = loc.getBlock().getRelative(BlockFace.UP).getType();
 		boolean hasBuggedBlockAroundForGeyser = np.isBedrockPlayer()
 				&& LocationUtils.hasMaterialsAround(locUnder, "SLAB", "FENCE", "STAIRS", "BED");
@@ -82,7 +82,7 @@ public class FlyProtocol extends Cheat implements Listener {
 					inBoat ? hoverMsg("boat") : null) || mayCancel;
 		}
 
-		if (!np.isUsingSlimeBlock && !hasOtherThanExtended(p.getLocation(), "AIR")
+		if (!np.isUsingSlimeBlock && !hasOtherThanExtended(loc.clone(), "AIR")
 				&& !hasOtherThanExtended(locUnder, "AIR") && !np.contentBoolean.getOrDefault("boat-falling", false)
 				&& !hasOtherThanExtended(locUnderUnder, "AIR") && d != 0.5 && d != 0
 				&& !np.contentBoolean.getOrDefault("jump-boost-use", false) && (e.getFrom().getY() <= e.getTo().getY())
@@ -105,7 +105,7 @@ public class FlyProtocol extends Cheat implements Listener {
 		} else
 			np.contentDouble.remove("fly-air-below");
 
-		Location to = e.getTo().clone();
+		SpigotLocation to = e.getTo().clone();
 		to.setY(e.getFrom().getY());
 		double distanceWithoutY = to.distance(e.getFrom());
 		if (distanceWithoutY == i && !np.isOnGround() && i != 0 && typeUpper.equals(Material.AIR)
@@ -193,7 +193,7 @@ public class FlyProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		boolean nextValue = np.contentBoolean.getOrDefault("boat-falling", false);
 		if (p.isInsideVehicle() && p.getVehicle().getType().equals(EntityType.BOAT)) {
-			Location from = e.getFrom().clone(), to = e.getTo().clone();
+			SpigotLocation from = e.getFrom().clone(), to = e.getTo().clone();
 			double moveY = (to.getY() - from.getY());
 
 			boolean wasWaterBelow = from.subtract(0, 1, 0).getBlock().getType().name().contains("WATER");

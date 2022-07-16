@@ -4,7 +4,6 @@ import java.lang.reflect.Field;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -18,6 +17,7 @@ import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
@@ -50,13 +50,13 @@ public class NoFallProtocol extends Cheat implements Listener {
 			return;
 		if(Version.getVersion().isNewerOrEquals(Version.V1_13) && p.hasPotionEffect(PotionEffectType.SLOW_FALLING))
 			return;
-		Location from = e.getFrom(), to = e.getTo();
+		SpigotLocation from = e.getFrom(), to = e.getTo();
 		if(LocationUtils.hasMaterialsAround(to, "WATER", "BUBBLE"))
 			return;
 		double distance = to.toVector().distance(from.toVector());
 		Block b = p.getLocation().getBlock();
-		Location locDown = b.getRelative(BlockFace.DOWN).getLocation();
-		Location locUp = b.getRelative(BlockFace.UP).getLocation();
+		SpigotLocation locDown = new SpigotLocation(b.getRelative(BlockFace.DOWN).getLocation());
+		SpigotLocation locUp = new SpigotLocation(b.getRelative(BlockFace.UP).getLocation());
 		double motionY = from.getY() - to.getY();
 		if (np.isOnGround()
 				&& locDown.getBlock().getType().equals(Material.AIR) && !np.isInFight && !isWaterLogged(locDown.getBlock())

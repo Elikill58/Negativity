@@ -1,7 +1,6 @@
 package com.elikill58.negativity.spigot.protocols;
 
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -9,6 +8,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.universal.Cheat;
@@ -35,7 +35,7 @@ public class FastStairsProtocol extends Cheat implements Listener {
 		String blockName = e.getTo().clone().subtract(0, 0.0001, 0).getBlock().getType().name();
 		if(!blockName.contains("STAIRS") || p.hasPotionEffect(PotionEffectType.SPEED))
 			return;
-		Location from = e.getFrom(), to = e.getTo();
+		SpigotLocation from = e.getFrom(), to = e.getTo();
 		double distance = Math.sqrt((from.getX() - to.getX()) * (from.getX() - to.getX()) + (from.getZ() - to.getZ()) * (from.getZ() - to.getZ())), lastDistance = np.contentDouble.getOrDefault("stairs-distance", 0.0);
 		if(distance > (p.getWalkSpeed() * 1.1) && lastDistance > distance) {
 			boolean mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 110),

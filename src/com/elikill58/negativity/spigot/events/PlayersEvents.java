@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.configuration.ConfigurationSection;
@@ -29,6 +28,7 @@ import org.bukkit.event.player.PlayerToggleFlightEvent;
 import com.elikill58.negativity.spigot.Messages;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.commands.ReportCommand;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.support.FloodGateSupportManager;
@@ -164,7 +164,7 @@ public class PlayersEvents implements Listener {
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if(p.isOnGround())
 			np.wasFlying = false;
-		Location locBelow = p.getLocation().clone().subtract(0, 1, 0);
+		SpigotLocation locBelow = new SpigotLocation(p.getLocation()).subtract(0, 1, 0);
 		if(!np.isFreeze && np.isUsingSlimeBlock && e.getFrom().getY() < e.getTo().getY()) // checking if need to check for freeze / slime
 			return;
 		Block b = locBelow.getBlock();

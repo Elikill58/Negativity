@@ -6,7 +6,6 @@ import static com.elikill58.negativity.spigot.utils.LocationUtils.hasOtherThan;
 import java.text.NumberFormat;
 
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Creeper;
@@ -22,6 +21,7 @@ import org.bukkit.util.Vector;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.support.EssentialsSupport;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
@@ -59,7 +59,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 				return;
 			}
 		}
-		Location from = e.getFrom().clone(), to = e.getTo().clone();
+		SpigotLocation from = e.getFrom().clone(), to = e.getTo().clone();
 		if (p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType().equals(Material.SPONGE)
 				|| p.getEntityId() == 100 || p.getVehicle() != null || np.getAllowFlight()
 				|| p.getFlySpeed() > 3.0F || p.getWalkSpeed() > 2.0F
@@ -71,7 +71,7 @@ public class SpeedProtocol extends Cheat implements Listener {
 			return;
 		}
 		
-		Location loc = p.getLocation().clone(), locDown = loc.clone().subtract(0, 1, 0), locUp = loc.clone().add(0, 1, 0);
+		SpigotLocation loc = new SpigotLocation(p.getLocation()), locDown = loc.clone().subtract(0, 1, 0), locUp = loc.clone().add(0, 1, 0);
 		double dif = to.getY() - from.getY();
 		boolean hasIce = locDown.getBlock().getType().name().contains("ICE") || locUp.getBlock().getType().name().contains("ICE"), onGround = np.isOnGround();
 		if(hasIce) {

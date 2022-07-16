@@ -2,7 +2,6 @@ package com.elikill58.negativity.spigot.protocols;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
@@ -33,7 +33,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
 		SpigotNegativityPlayer np = e.getNegativityPlayer();
-		Location loc = p.getLocation();
+		SpigotLocation loc = new SpigotLocation(p.getLocation());
 		if (!np.hasDetectionActive(this) || LocationUtils.isUsingElevator(p))
 			return;
 		if (p.getFallDistance() != 0 || np.hasElytra() || p.isFlying() || p.hasPotionEffect(PotionEffectType.JUMP)
@@ -68,7 +68,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		SpigotNegativityPlayer np = e.getNegativityPlayer();
 		if (!np.hasDetectionActive(this) || p.isFlying() || p.isInsideVehicle() || p.getVehicle() != null || np.hasElytra() || np.isUsingSlimeBlock)
 			return;
-		Location loc = p.getLocation().clone();
+		SpigotLocation loc = new SpigotLocation(p.getLocation());
 		if(hasBypassBlockAround(loc) || np.isUsingTrident())
 			return;
 		if(LocationUtils.hasExtended(loc, "STAIRS") || LocationUtils.isUsingElevator(p) || p.getLocation().getBlock().getType().name().contains("LAVA"))
@@ -97,7 +97,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		np.lastSpiderLoc = loc;
 	}
 		
-	private boolean hasBypassBlockAround(Location loc) {
+	private boolean hasBypassBlockAround(SpigotLocation loc) {
 		if(has(loc, "SLAB", "STAIRS", "VINE", "LADDER", "WATER", "SCAFFOLD", "CAKE"))
 			return true;
 		loc = loc.clone().subtract(0, 1, 0);
@@ -106,7 +106,7 @@ public class SpiderProtocol extends Cheat implements Listener {
 		return false;
 	}
 
-	public boolean has(Location loc, String... m) {
+	public boolean has(SpigotLocation loc, String... m) {
 		String b = loc.getBlock().getType().name(),
 				b1 = loc.clone().add(0, 0, 1).getBlock().getType().name(),
 				b2 = loc.clone().add(1, 0, -1).getBlock().getType().name(),

@@ -1,7 +1,6 @@
 package com.elikill58.negativity.spigot.protocols;
 
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -9,6 +8,7 @@ import org.bukkit.event.Listener;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
+import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
@@ -31,8 +31,8 @@ public class PhaseProtocol extends Cheat implements Listener {
 			return;
 		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
 			return;
-		Location loc = p.getLocation();
-		Location from = e.getFrom(), to = e.getTo();
+		SpigotLocation loc = new SpigotLocation(p.getLocation());
+		SpigotLocation from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
 		if (y > 0.1 && (!loc.clone().subtract(0, 1, 0).getBlock().getType().equals(Material.AIR)
 				|| !LocationUtils.hasOtherThan(loc.clone().subtract(0, 1, 0), Material.AIR)))

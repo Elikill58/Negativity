@@ -328,18 +328,28 @@ public final class Configuration {
         return (List<?>)((val instanceof List) ? ((List<?>)val) : def);
     }
     
+    /**
+     * Save but thread-safely. Will use {@link FileSaverTimer} feature
+     */
     public void save() {
     	if(isSaving)
     		return;
     	isSaving = true;
     	FileSaverTimer.getInstance().addAction(timer -> {
-        	try {
-    			YamlConfiguration.save(this, file);
-    		} catch (IOException e) {
-    			e.printStackTrace();
-    		}
+    		directSave();
         	isSaving = false;
     		timer.removeActionRunning();
     	});
+    }
+    
+    /**
+     * Directly save on the current thread
+     */
+    public void directSave() {
+    	try {
+			YamlConfiguration.save(this, file);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
     }
 }

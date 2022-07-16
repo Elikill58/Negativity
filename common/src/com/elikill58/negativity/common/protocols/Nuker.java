@@ -73,7 +73,7 @@ public class Nuker extends Cheat {
 		long lastBreak = np.longs.get(getKey(), "time", 0l);
 		long temp = System.currentTimeMillis(), dis = temp - lastBreak;
 		if(dis < 50 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.HASTE)) {
-			boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, (int) (100 - dis), "time",
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, (int) (100 - dis), "time",
 					"Type: " + e.getBlock().getType().getId() + ". Last: " + lastBreak + ", Now: " + temp + ", diff: " + dis, hoverMsg("breaked_in", "%time%", dis));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);

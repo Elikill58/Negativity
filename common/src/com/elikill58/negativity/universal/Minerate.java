@@ -54,7 +54,7 @@ public class Minerate {
 			minedType += i;
 		int relia = minedType / fullMined;
 		Cheat xray = Cheat.forKey(CheatKeys.XRAY);
-		Negativity.alertMod(relia > 80 ? ReportType.VIOLATION : ReportType.WARNING, player, xray,
+		Negativity.alertMod(ReportType.WARNING, player, xray,
 				relia, "", type.getOreName() + " mined. Full mined: " + fullMined + ". Mined by type: " + this,
 				xray.hoverMsg("main", "%name%", type.getName(), "%nb%", mined.get(type)));
 	}

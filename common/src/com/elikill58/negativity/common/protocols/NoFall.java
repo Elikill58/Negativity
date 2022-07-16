@@ -94,7 +94,7 @@ public class NoFall extends Cheat {
 			return;
 		int relia = UniversalUtils.parseInPorcent(distance * 100);
 		if (distance > 2D) {
-			boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "distance-no-ground",
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "distance-no-ground",
 					"No ground, fd: " + p.getFallDistance() + ", from/to: " + distance);
 			if (mayCancel)
 				np.noFallDamage += 1;
@@ -126,7 +126,7 @@ public class NoFall extends Cheat {
 		double distanceVector = to.toVector().clone().add(direction).distance(from.toVector());
 		double disWithDirY = from.clone().add(direction).toVector().setY(0).distanceSquared(to.toVector().setY(0));
 		if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && PlayerModificationsManager.isSpeedUnlocked(p))) {
-			boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "distance-ground",
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "distance-ground",
 					"Player in ground. Fd: " + p.getFallDistance() + ", From/To: " + distance + ", VelY: "
 							+ p.getVelocity().getY() + ", vec: " + distanceVector + ", disDirY: " + disWithDirY);
 			if (mayCancel)
@@ -158,7 +158,7 @@ public class NoFall extends Cheat {
 		Material justUnder = p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();
 		if (justUnder.isSolid() && p.getFallDistance() > 3.0 && !np.isInFight && motionY <= 0) {
 			int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(100 - (ping / 5) + p.getFallDistance());
-			boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "have-to-ground",
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "have-to-ground",
 					"No ground with FD (Fd: " + p.getFallDistance() + "). Block down: " + justUnder.getId()
 							+ ", from/to: " + distance);
 			if (mayCancel && isSetBack())

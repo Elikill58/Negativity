@@ -43,7 +43,7 @@ public class AnalyzePacketTimer implements Runnable {
 				if (np.hasDetectionActive(c) && c.checkActive("packet")) {
 					double[] allTps = Adapter.getAdapter().getTPS();
 					int porcent = UniversalUtils.parseInPorcent(flyingWithPing - (ping / (allTps[1] - allTps[0] > 0.5 ? 9 : 8)));
-					boolean back = Negativity.alertMod(flyingWithPing > 30 ? ReportType.WARNING : ReportType.VIOLATION, p, c, porcent,
+					boolean back = Negativity.alertMod(flyingWithPing > 100 ? ReportType.VIOLATION : ReportType.WARNING, p, c, porcent,
 							"packet", "Flying in one second: " + flying + ", ping: " + ping,
 							c.hoverMsg("packet", "%flying%", flyingWithPing), flyingWithPing / 30);
 					if(c.isSetBack() && back){

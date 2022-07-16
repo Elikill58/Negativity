@@ -50,7 +50,7 @@ public class Spider extends Cheat {
 		boolean isAris = ((float) y) == p.getWalkSpeed();
 		if (((y > 0.499 && y < 0.7) || isAris) && p.getVelocity().length() < 1.5) {
 			int relia = UniversalUtils.parseInPorcent(y * 160 + (isAris ? 39 : 0));
-			boolean mayCancel = Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION),
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING,
 					p, this, relia, "nothing-around",
 					"Nothing around him. To > From: " + y + " isAris: " + isAris + ", has not stab slairs")
 					&& isSetBack();

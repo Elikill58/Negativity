@@ -68,9 +68,10 @@ public class Fly extends Cheat implements Listeners {
 		Material type = loc.getBlock().getType(), typeUpper = loc.getBlock().getRelative(BlockFace.UP).getType();
 		boolean isInWater = loc.getBlock().getType().getId().contains("WATER"),
 				isOnWater = locUnder.getBlock().getType().getId().contains("WATER");
-		boolean hasOtherThanAir = LocationUtils.hasOtherThan(loc, Materials.AIR), hasUnderOtherThanAir = LocationUtils.hasOtherThan(locUnder, Materials.AIR),
+		boolean hasOtherThanAir = LocationUtils.hasOtherThan(loc, Materials.AIR),
+				hasUnderOtherThanAir = LocationUtils.hasOtherThan(locUnder, Materials.AIR),
 				hasUnderUnderOtherThanAir = LocationUtils.hasOtherThan(locUnderUnder, Materials.AIR);
-		
+
 		double i = to.toVector().distance(from.toVector());
 		double d = to.getY() - from.getY();
 		double distance = from.distance(to);
@@ -106,19 +107,16 @@ public class Fly extends Cheat implements Listeners {
 			}
 
 			if (checkActive("no-ground-down") && !np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
-				if (!np.isUsingSlimeBlock && !hasOtherThanAir
-						&& !hasUnderOtherThanAir && !np.booleans.get(FLY, "boat-falling", false)
-						&& !hasUnderUnderOtherThanAir && d != 0.5 && d != 0
-						&& (from.getY() <= to.getY() || inBoat) && p.getVelocity().length() < d) {
+				if (!np.isUsingSlimeBlock && !hasOtherThanAir && !hasUnderOtherThanAir
+						&& !np.booleans.get(FLY, "boat-falling", false) && !hasUnderUnderOtherThanAir && d != 0.5
+						&& d != 0 && (from.getY() <= to.getY() || inBoat) && p.getVelocity().length() < d) {
 					double nbTimeAirBelow = np.doubles.get(FLY, "air-below", 0.0);
 					np.doubles.set(FLY, "air-below", nbTimeAirBelow + 1);
 					if (nbTimeAirBelow > 6) { // we don't care when player jump
 						int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
 						if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Materials.AIR))
 							porcent = parseInPorcent(porcent - 15);
-						mayCancel = Negativity.alertMod(
-								np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent,
-								"no-ground-down",
+						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, porcent, "no-ground-down",
 								"Not ground (" + nb + " down), disY: " + d + ", vel: " + p.getVelocity() + ", fd: "
 										+ p.getFallDistance() + ", nbTime: " + nbTimeAirBelow,
 								hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb));
@@ -134,9 +132,7 @@ public class Fly extends Cheat implements Listeners {
 				if (distanceWithoutY == i && !p.isOnGround() && i != 0 && typeUpper.equals(Materials.AIR)
 						&& !p.isInsideVehicle() && !type.getId().contains("WATER") && distanceWithoutY > 0.3) {
 					if (np.booleans.get(FLY, "not-moving-y", false))
-						mayCancel = Negativity.alertMod(
-								np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p, this, 98,
-								"no-ground-y",
+						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98, "no-ground-y",
 								"Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY);
 					np.booleans.set(FLY, "not-moving-y", true);
 				} else
@@ -145,13 +141,12 @@ public class Fly extends Cheat implements Listeners {
 			if (checkActive("not-moving-y")) {
 				if (p.isOnGround() && y == 0 && type.equals(Materials.AIR)
 						&& locUnder.getBlock().getType().equals(Materials.AIR) && distance > p.getWalkSpeed()
-						&& !hasOtherThanAir
-						&& !hasUnderOtherThanAir) {
+						&& !hasOtherThanAir && !hasUnderOtherThanAir) {
 					int time0 = np.ints.get(FLY, "y-0-times", 0);
 					if (time0 > 2) {
-						mayCancel = Negativity.alertMod(time0 > 10 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
-								parseInPorcent(time0 * 30), "not-moving-y", "Times not moving Y and on ground: " + time0
-										+ ", distance: " + distance + ", ws: " + p.getWalkSpeed(),
+						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(time0 * 30),
+								"not-moving-y", "Times not moving Y and on ground: " + time0 + ", distance: " + distance
+										+ ", ws: " + p.getWalkSpeed(),
 								null, time0 < 3 ? 1 : time0 - 2);
 					}
 					np.ints.set(FLY, "y-0-times", time0 + 1);

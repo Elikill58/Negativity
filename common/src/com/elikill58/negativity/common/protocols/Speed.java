@@ -101,7 +101,7 @@ public class Speed extends Cheat implements Listeners {
 			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
 			if((((walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D))) || walkTest) && (y < (disWithDir + disWithDirY))){
 				int porcent = UniversalUtils.parseInPorcent(y * 50 + (walkTest ? 10 : 0) + (walkWithEssTest == walkTest ? 10 : 0) + (walkWithEssTest ? 10 : 0));
-				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent, "distance-ground",
+				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, porcent, "distance-ground",
 						"Ground. WS: " + walkSpeed + ", Dis from/to: " + y + ", walkTest: " + walkTest +
 						", walkWithEss: " + walkWithEssTest + ", y: " + y + ", disDir: " + disWithDir + ", disDirY: " + disWithDirY, hoverMsg("distance_ground", "%distance%", String.format("%.4f", y)));
 			}
@@ -118,7 +118,7 @@ public class Speed extends Cheat implements Listeners {
 		}
 		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10) - (velLen > 0.45 ? velLen : 0)) >= 0.85D
 				&& !hasIceBelow && !np.isInFight && p.getTheoricVelocity().length() < 0.85D && p.getVelocity().length() < 0.4) { // theoric length to when the new high velocity is actually taken
-			mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+			mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(y * 190), "distance-jumping", "WS: " + p.getWalkSpeed()
 						+ ", fd: " + p.getFallDistance() + ", from/to: " + String.format("%.10f", y) + ", ySpeed: " + String.format("%.10f", y - (amplifierSpeed / 10) - (velLen > 0.5 ? velLen : 0))
 						+ ", vel: " + p.getVelocity() + ", thvel: " + p.getTheoricVelocity(), hoverMsg("distance_jumping", "%distance%", String.format("%.4f", y)));
@@ -178,7 +178,7 @@ public class Speed extends Cheat implements Listeners {
 		double d = np.doubles.get(getKey(), "dif-y", 0.0);
 		if(dif != 0.0 && d != 0.0) {
 			if (Math.abs(dif) == Math.abs(d)) {
-				if(Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
+				if(Negativity.alertMod(ReportType.WARNING, p,
 						this, 95, "same-diff", "Differences : " + dif + " / " + d) && isSetBack())
 					e.setCancelled(true);
 			}

@@ -50,18 +50,17 @@ public class InventoryMove extends Cheat implements Listeners {
 		double actual = e.getFrom().distance(e.getTo());
 		if (actual >= last && actual >= p.getWalkSpeed()) { // if running at least at the same
 			data.addTimeSinceOpen();
-			if(data.getTimeSinceOpen() >= 5) {
+			if (data.getTimeSinceOpen() >= 5) {
 				int amount = 1;
 				if (p.isSprinting())
 					amount += data.sprint ? 1 : 5; // more alerts if wasn't sprinting
 				if (p.isSneaking())
 					amount += data.sneak ? 1 : 5; // more alerts if wasn't sneaking
-				Negativity
-						.alertMod(np.getAllWarn(this) > 5 && amount > 1 ? ReportType.VIOLATION : ReportType.WARNING, p,
-								this, UniversalUtils.parseInPorcent(80 + data.getTimeSinceOpen()), "stay-distance",
-								"Sprint: " + p.isSprinting() + ", Sneak: " + p.isSneaking() + ", data: " + data + ", vel: "
-										+ p.getVelocity() + ", fd: " + String.format("%.5f", p.getFallDistance()),
-								null, amount);
+				Negativity.alertMod(ReportType.WARNING, p, this,
+						UniversalUtils.parseInPorcent(80 + data.getTimeSinceOpen()), "stay-distance",
+						"Sprint: " + p.isSprinting() + ", Sneak: " + p.isSneaking() + ", data: " + data + ", vel: "
+								+ p.getVelocity() + ", fd: " + String.format("%.5f", p.getFallDistance()),
+						null, amount);
 			}
 		}
 		data.setDistance(actual);
@@ -69,7 +68,7 @@ public class InventoryMove extends Cheat implements Listeners {
 
 	@EventListener
 	public void onClick(InventoryClickEvent e) {
-		if(e.isCancelled())
+		if (e.isCancelled())
 			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
 		if (np.hasDetectionActive(this))
@@ -78,7 +77,7 @@ public class InventoryMove extends Cheat implements Listeners {
 
 	@EventListener
 	public void onOpen(InventoryOpenEvent e) {
-		if(e.isCancelled())
+		if (e.isCancelled())
 			return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
 		if (np.hasDetectionActive(this))
@@ -112,7 +111,7 @@ public class InventoryMove extends Cheat implements Listeners {
 		public int getTimeSinceOpen() {
 			return timeSinceOpen;
 		}
-		
+
 		public void addTimeSinceOpen() {
 			this.timeSinceOpen++;
 		}
@@ -123,8 +122,8 @@ public class InventoryMove extends Cheat implements Listeners {
 
 		@Override
 		public String toString() {
-			return "InventoryMoveData{sprint=" + sprint + ",sneak=" + sneak + ",distance=" + String.format("%.3f", lastDistance) + ",time="
-					+ timeSinceOpen + "}";
+			return "InventoryMoveData{sprint=" + sprint + ",sneak=" + sneak + ",distance="
+					+ String.format("%.3f", lastDistance) + ",time=" + timeSinceOpen + "}";
 		}
 	}
 }

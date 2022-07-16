@@ -364,7 +364,7 @@ public class NegativityPlayer {
 		int nb = 0, nbConsole = 0;
 		HashMap<Integer, Integer> relia = new HashMap<>();
 		HashMap<Integer, Integer> ping = new HashMap<>();
-		ReportType type = ReportType.NONE;
+		ReportType type = ReportType.INFO;
 		boolean hasRelia = false;
 		CheatHover hoverProof = null;
 		for(PlayerCheatAlertEvent e : list) {
@@ -376,7 +376,7 @@ public class NegativityPlayer {
 
 			ping.put(e.getPing(), ping.getOrDefault(e.getPing(), 0) + 1);
 
-			if(type == ReportType.NONE || (type == ReportType.WARNING && e.getReportType() == ReportType.VIOLATION))
+			if(e.getReportType().isStronger(type))
 				type = e.getReportType();
 
 			hasRelia = e.hasManyReliability() || hasRelia;

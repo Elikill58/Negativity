@@ -51,7 +51,7 @@ public class IncorrectPacket extends Cheat {
 				int amount = (int) (distance < 1000 ? distance - maxDistance : distance / 10) / 10;
 				if (amount <= 0)
 					return;
-				Negativity.alertMod(distance > 10000 ? ReportType.VIOLATION : ReportType.WARNING, p, this, relia,
+				Negativity.alertMod(distance > 10000 && distanceSpawn > 10000 ? ReportType.VIOLATION : ReportType.WARNING, p, this, relia,
 						"distance",
 						"Packet " + e.getPacket().getPacketName() + ", player loc: " + loc.toString() + ", packet loc: "
 								+ lp.getLocation(p.getWorld()).toString() + ", distance: " + distance + ", spawn distance: " + distanceSpawn,

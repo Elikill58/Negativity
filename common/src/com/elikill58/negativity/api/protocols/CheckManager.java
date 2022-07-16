@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.protocols;
+package com.elikill58.negativity.api.protocols;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -11,8 +11,6 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.PlayerEvent;
-import com.elikill58.negativity.api.protocols.Check;
-import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.detections.Cheat;
 

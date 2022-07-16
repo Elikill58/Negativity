@@ -22,4 +22,11 @@ public enum Enchantment {
 	public String toString() {
 		return "Enchantment:" + name();
 	}
+	
+	public static Enchantment getByName(String name) {
+		for(Enchantment e : values())
+			if(e.id.equalsIgnoreCase(name) || e.name().equalsIgnoreCase(name))
+				return e;
+		return null;
+	}
 }

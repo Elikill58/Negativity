@@ -1,15 +1,17 @@
 package com.elikill58.negativity.universal.bypass.checkers;
 
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.bypass.BypassChecker;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -23,14 +25,16 @@ public class ItemUseBypass implements BypassChecker {
 		return CLICK_BYPASS.stream().filter((ib) -> ib.isForThisCheat(c) && actionName.toLowerCase(Locale.ROOT).contains(ib.getWhen().name().toLowerCase(Locale.ROOT))).findAny().isPresent();
 	}
 	
-	private String item;
-	private Set<CheatKeys> cheats;
-	private WhenBypass when;
+	private final String item;
+	private final List<CheatKeys> cheats;
+	private final WhenBypass when;
+	private final Configuration config;
 	
-	public ItemUseBypass(String itemName, String cheats, String when) {
+	public ItemUseBypass(String itemName, Configuration config) {
+		this.config = config;
 		this.item = itemName.toLowerCase(Locale.ROOT);
-		this.when = WhenBypass.getWhenBypass(when);
-		this.cheats = updateCheats(cheats);
+		this.when = WhenBypass.getWhenBypass(config.getString("when"));
+		this.cheats = Arrays.asList(config.getString("cheats").split(",")).stream().map(CheatKeys::fromLowerKey).collect(Collectors.toList());
 		if(this.item == null)
 			Adapter.getAdapter().getLogger().error("[Config - Error] Item bypass System - Unknow item : " + itemName);
 		else if(this.when == WhenBypass.UNKNOW)
@@ -41,17 +45,11 @@ public class ItemUseBypass implements BypassChecker {
 			CLICK_BYPASS.add(this);
 	}
 	
-	private Set<CheatKeys> updateCheats(String cheats){
-		Set<CheatKeys> keys = new HashSet<>();
-		Set<CheatKeys> allCheatKeys = Cheat.getCheatKeys();
-		for(String cheat : cheats.split(","))
-			for (CheatKeys knownCheat : allCheatKeys)
-				if(knownCheat.getKey().equalsIgnoreCase(cheat))
-					keys.add(knownCheat);
-		return keys;
+	public Configuration getConfig() {
+		return config;
 	}
 	
-	public Set<CheatKeys> getCheats(){
+	public List<CheatKeys> getCheats() {
 		return cheats;
 	}
 	
@@ -69,10 +67,10 @@ public class ItemUseBypass implements BypassChecker {
 	
 	@Override
 	public boolean hasBypass(Player p, Cheat c) {
-
-		ItemStack itemInHand = p.getItemInHand();
+		if(!isForThisCheat(c))
+			return false;
 		if(getWhen().equals(WhenBypass.ALWAYS)) {
-			return itemInHand != null && itemInHand.getType().getId().equalsIgnoreCase(item);
+			return isItem(p.getItemInHand());
 		} else if(getWhen().equals(WhenBypass.BELOW)) {
 			Material blockBelow = p.getLocation().clone().sub(0, 1, 0).getBlock().getType();
 			return blockBelow.getId().equalsIgnoreCase(item);
@@ -83,12 +81,39 @@ public class ItemUseBypass implements BypassChecker {
 					if(b.getType().getId().equalsIgnoreCase(item))
 						return true;
 			}
+		} else if(getWhen().equals(WhenBypass.WEARING)) {
+			for(ItemStack armor : p.getInventory().getArmorContent()) {
+				if(isItem(armor)) {
+					return true;
+				}
+			}
 		}
 		return false;
 	}
 	
+	private boolean isItem(ItemStack item) {
+		if(item == null || !item.getType().getId().equalsIgnoreCase(getItem()))
+			return false;
+		if(config.contains("name")) {
+			if(item.getName() == null || !item.getName().equalsIgnoreCase(config.getString("name"))) // wrong name
+				return false;
+		}
+		if(config.contains("enchants")) {
+			for(String enchant : config.getStringList("enchants")) {
+				Enchantment en = Enchantment.getByName(enchant);
+				if(en == null) {
+					Adapter.getAdapter().getLogger().warn("The enchant " + enchant + " isn't known. Please report this.");
+					continue;
+				}
+				if(!item.hasEnchant(en))
+					return false;
+			}
+		}
+		return true;
+	}
+	
 	public enum WhenBypass {
-		ALWAYS, RIGHT_CLICK(true), LEFT_CLICK(true), LOOKING, BELOW, UNKNOW;
+		ALWAYS, RIGHT_CLICK(true), LEFT_CLICK(true), LOOKING, BELOW, WEARING, UNKNOW;
 		
 		private boolean isClick = false;
 		

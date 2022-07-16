@@ -31,7 +31,7 @@ public class BypassManager {
 		Configuration configItems = ada.getConfig().getSection("items");
 		if(configItems != null) {
 			configItems.getKeys().forEach((key) -> {
-				addBypassChecker(new ItemUseBypass(key, configItems.getString(key + ".cheats"), configItems.getString(key + ".when")));
+				addBypassChecker(new ItemUseBypass(key, configItems.getSection(key)));
 			});
 		}
 

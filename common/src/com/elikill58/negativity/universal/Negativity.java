@@ -413,6 +413,12 @@ public class Negativity {
 	}
 	
 	public static void closeNegativity() {
+		if(fileSaverTimer != null)
+			fileSaverTimer.cancel();
+		if(actualizeInvTimer != null)
+			actualizeInvTimer.cancel();
+		if(analyzePacketTimer != null)
+			analyzePacketTimer.cancel();
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		NegativityPlayer.getAllNegativityPlayers().forEach(NegativityPlayer::destroy);

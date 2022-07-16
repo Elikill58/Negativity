@@ -8,6 +8,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
@@ -42,17 +43,18 @@ public class IncorrectPacket extends Cheat {
 			double dy = loc.getY() - lp.getY() + 0.5D + 1.5D;
 			double dz = loc.getZ() - lp.getZ() + 0.5D;
 			int maxDistance = (p.getGameMode().equals(GameMode.CREATIVE) ? 49 : 42); // +5 is to prevent false flags
-			double distance = dx * dx + dy * dy + dz * dz;
-			if (distance > maxDistance) { // distance originally used by spigot
-				e.setCancelled(true); // cancel. Everytime.
-				int relia = UniversalUtils.parseInPorcent(distance * (distance > 100 ? 2 : 1));
-				int amount = (int) (distance < 1000 ? distance - maxDistance : distance / 10) - 1000;
+			double distance = dx * dx + dy * dy + dz * dz, distanceSpawn = new Vector(0, 0, 0).distance(loc.toBlockVector());
+			if (distance > maxDistance && distanceSpawn > 100) { // distance originally used by spigot
+				if(distanceSpawn > 1000 && distance > 1000)
+					e.setCancelled(true); // cancel.
+				int relia = UniversalUtils.parseInPorcent(distanceSpawn);
+				int amount = (int) (distance < 1000 ? distance - maxDistance : distance / 10) / 10;
 				if (amount <= 0)
 					return;
 				Negativity.alertMod(distance > 10000 ? ReportType.VIOLATION : ReportType.WARNING, p, this, relia,
 						"distance",
 						"Packet " + e.getPacket().getPacketName() + ", player loc: " + loc.toString() + ", packet loc: "
-								+ lp.getLocation(p.getWorld()).toString() + ", distance: " + distance,
+								+ lp.getLocation(p.getWorld()).toString() + ", distance: " + distance + ", spawn distance: " + distanceSpawn,
 						null, amount);
 			}
 		}

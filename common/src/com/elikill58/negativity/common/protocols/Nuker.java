@@ -70,19 +70,20 @@ public class Nuker extends Cheat {
 		Block b = e.getBlock();
 		if(p.hasPotionEffect(PotionEffectType.HASTE) || b == null || !b.getType().isSolid() || isInstantBlock(b.getType().getId()))
 			return;
-		long lastBreak = np.longs.get(getKey(), "time", 0l);
+		long lastBreak = np.longs.get(getKey(), "last-break", 0l), time = np.longs.get(getKey(), "time", Long.MAX_VALUE);
 		long temp = System.currentTimeMillis(), dis = temp - lastBreak;
-		if(dis < 50 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.HASTE)) {
+		if(dis < 25 && time < 25 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.HASTE)) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, (int) (100 - dis), "time",
 					"Type: " + e.getBlock().getType().getId() + ". Last: " + lastBreak + ", Now: " + temp + ", diff: " + dis, hoverMsg("breaked_in", "%time%", dis));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
-		np.longs.set(getKey(), "time", temp);
+		np.longs.set(getKey(), "time", dis);
+		np.longs.set(getKey(), "last-break", temp);
 	}
 	
 	private boolean isInstantBlock(String m) {
-		return m.contains("SLIME") || m.contains("TNT") || m.contains("LEAVE") || m.contains("NETHERRACK") || m.contains("BAMBOO") || m.contains("SNOW");
+		return m.contains("SLIME") || m.contains("TNT") || m.contains("LEAVE") || m.contains("NETHERRACK") || m.contains("BAMBOO") || m.contains("SNOW") || m.contains("KELP");
 	}
 
 	

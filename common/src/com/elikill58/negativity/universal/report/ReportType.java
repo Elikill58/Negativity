@@ -29,6 +29,6 @@ public enum ReportType {
 	}
 	
 	public boolean isStronger(ReportType o) {
-		return o.getPower() > getPower();
+		return getPower() > o.getPower();
 	}
 }

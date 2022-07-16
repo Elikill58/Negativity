@@ -111,7 +111,7 @@ public class Speed extends Cheat implements Listeners {
 			double calculatedSpeedWith = getSpeed(from, to);
 			double calculatedSpeedWithoutY = getSpeed(from, to, p.getVelocity());
 			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && !hasOtherThan(from.clone().add(0, 1, 0), "AIR")  && Math.abs(velocity) > 0.1
-					&& calculatedSpeedWithoutY > velLen && calculatedSpeedWithoutY != calculatedSpeedWith && (p.getWalkSpeed() * 2 < calculatedSpeedWith || (p.getWalkSpeed() + 0.1 < calculatedSpeedWithoutY)) && dif != 0) { // "+0.01" if to prevent lag"
+					&& calculatedSpeedWithoutY > velLen && calculatedSpeedWithoutY != calculatedSpeedWith && (p.getWalkSpeed() * 2 < calculatedSpeedWith || (p.getWalkSpeed() + 0.1 < calculatedSpeedWithoutY)) && dif != 0 && calculatedSpeedWith > 0.01) { // "+0.01" if to prevent lag"
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated", "Calculated speed: " + calculatedSpeedWithoutY
 						+ ", WS: " + p.getWalkSpeed() + ", Velocity: " + p.getVelocity() + ", speed: " + calculatedSpeedWith + ", dis: " + distance + ", diffY: " + dif);
 			}
@@ -124,7 +124,7 @@ public class Speed extends Cheat implements Listeners {
 						+ ", vel: " + p.getVelocity() + ", thvel: " + p.getTheoricVelocity(), hoverMsg("distance_jumping", "%distance%", String.format("%.4f", y)));
 		}
 		if(checkActive("high-speed") && !onGround && y < 0.85D && !np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
-			if (!under.getType().getId().contains("STEP") && !np.isUsingSlimeBlock && !(under.getType().getId().contains("WATER") || under.isWaterLogged() || under.isLiquid() || p.isSwimming()) && p.getVelocity().length() < 1.5) {
+			if (!under.getType().getId().contains("STEP") && !under.getType().getId().contains("VOID") && !np.isUsingSlimeBlock && !(under.getType().getId().contains("WATER") || under.isWaterLogged() || under.isLiquid() || p.isSwimming()) && p.getVelocity().length() < 1.5) {
 				Location toHigh = to.clone();
 				toHigh.setY(from.getY());
 				double yy = toHigh.distance(from);

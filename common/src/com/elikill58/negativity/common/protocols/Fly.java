@@ -126,14 +126,12 @@ public class Fly extends Cheat implements Listeners {
 			}
 
 			if (checkActive("no-ground-y")) {
-				to = to.clone();
-				to.setY(from.getY());
-				double distanceWithoutY = to.distance(from);
+				double distanceWithoutY = to.distanceXZ(from);
 				if (distanceWithoutY == i && !p.isOnGround() && i != 0 && typeUpper.equals(Materials.AIR)
-						&& !p.isInsideVehicle() && !type.getId().contains("WATER") && distanceWithoutY > 0.3) {
+						&& !p.isInsideVehicle() && !type.getId().contains("WATER") && distanceWithoutY > 0.3 && p.getVelocity().length() < 0.5) {
 					if (np.booleans.get(FLY, "not-moving-y", false))
 						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98, "no-ground-y",
-								"Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY);
+								"Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY + ", vel: " + p.getVelocity());
 					np.booleans.set(FLY, "not-moving-y", true);
 				} else
 					np.booleans.remove(FLY, "not-moving-y");

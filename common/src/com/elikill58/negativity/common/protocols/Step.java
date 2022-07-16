@@ -97,12 +97,12 @@ public class Step extends Cheat implements Listeners {
 		Location down = to.clone().sub(0, 1, 0);
 		if (down.getBlock().getType().getId().contains("SHULKER"))
 			return;
-		double dif = to.getY() - from.getY(), velLen = p.getVelocity().length();
+		double dif = to.getY() - from.getY();
 		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP)
 				? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier()
 				: 0);
 		boolean isUsingJumpBoost = np.booleans.get(CheatKeys.ALL, "jump-boost-use", false);
-		double diffBoost = dif - (amplifier / 10) - (velLen > 0.5 ? velLen : 0);
+		double diffBoost = dif - (amplifier / 10) - p.getVelocity().getY();
 		if (diffBoost > 0.2) {
 			recordData(p.getUniqueId(), BLOCKS_UP, diffBoost);
 			if (!isUsingJumpBoost && (diffBoost > 0.5) && !(diffBoost <= 0.6 && diffBoost >= 0.56) // 0.56-0.6 is to
@@ -111,7 +111,7 @@ public class Step extends Cheat implements Listeners {
 																									// blocks
 					&& !(amplifier > 0 && diffBoost < 0.55) && !LocationUtils.hasBoatAroundHim(p.getLocation())) {
 				Negativity.alertMod(ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(diffBoost == 0.25 ? 95 : diffBoost * 125), "dif-boost",
+						UniversalUtils.parseInPorcent(diffBoost == 0.25 ? 95 : diffBoost * 120), "dif-boost",
 						"Basic Y diff: " + dif + ", with boost: " + diffBoost + " (amplifier "
 								+ amplifier + ") Dir Y: " + p.getLocation().getDirection().getY() + ", vel: " + p.getVelocity(),
 						hoverMsg("main", "%block%", String.format("%.2f", dif)), (int) ((diffBoost - 0.6) / 0.2));

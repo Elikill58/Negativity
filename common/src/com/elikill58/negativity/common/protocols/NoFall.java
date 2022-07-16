@@ -95,7 +95,7 @@ public class NoFall extends Cheat {
 		int relia = UniversalUtils.parseInPorcent(distance * 100);
 		if (distance > 2D) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "distance-no-ground",
-					"No ground, fd: " + p.getFallDistance() + ", from/to: " + distance + ", vel: " + p.getVelocity() + ", thvel: " + p.getTheoricVelocity());
+					"No ground, fd: " + p.getFallDistance() + ", from/to: " + distance + ", vel: " + p.getVelocity() + ", thvel: " + p.getTheoricVelocity() + ", nbNoDamage: " + np.noFallDamage);
 			if (mayCancel)
 				np.noFallDamage += 1;
 		} else if (np.noFallDamage != 0) {

@@ -514,6 +514,12 @@ public class SpigotNegativity extends JavaPlugin {
 				if(targetVisual != null && targetVisual.getType().name().equalsIgnoreCase(id)) {
 					return false;
 				}
+			} else if(itemBypass.getWhen().equals(WhenBypass.WEARING)) {
+				for(ItemStack armor : p.getInventory().getArmorContents()) {
+					if(armor != null && armor.getType().name().equalsIgnoreCase(id)) {
+						return false;
+					}
+				}
 			}
 		}
 		

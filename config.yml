@@ -86,6 +86,7 @@ items:
   # right_click : disable when the player right clicks
   # left_click : disable when the player left clicks
   # looking : disable when the player is looking at it
+  # wearing : disable when player has item on armor
   # below : disable when the player is standing on it
   #
   # Disable speed and fly checking when the player is holding a compass:

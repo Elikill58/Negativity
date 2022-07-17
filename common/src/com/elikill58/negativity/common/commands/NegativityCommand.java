@@ -517,7 +517,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				if (sender instanceof Player && Perm.hasPerm(sender, Perm.MANAGE_CHEAT)) {
 					suggestions.add("updateMessages");
 				}
-			} else if (arg[0].equalsIgnoreCase("options")) {
+			} else if (arg[0].equalsIgnoreCase("options") && Perm.hasPerm(sender, Perm.ADMIN)) {
 				List<String> possible;
 				if(arg.length == 2) {
 					possible = Arrays.asList("cheat", "special", "global");

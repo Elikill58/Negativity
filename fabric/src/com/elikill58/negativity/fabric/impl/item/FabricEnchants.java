@@ -2,18 +2,12 @@ package com.elikill58.negativity.fabric.impl.item;
 
 import com.elikill58.negativity.api.item.Enchantment;
 
-import net.minecraft.enchantment.Enchantments;
+import net.minecraft.util.Identifier;
+import net.minecraft.util.registry.Registry;
 
 public class FabricEnchants {
 	
 	public static net.minecraft.enchantment.Enchantment getFabricEnchant(Enchantment enchant) {
-		switch (enchant) {
-		case DIG_SPEED:
-			return Enchantments.EFFICIENCY;
-		case THORNS:
-			return Enchantments.THORNS;
-		default:
-			throw new RuntimeException("Unhandled enchantment " + enchant);
-		}
+		return Registry.ENCHANTMENT.get(new Identifier(enchant.getId()));
 	}
 }

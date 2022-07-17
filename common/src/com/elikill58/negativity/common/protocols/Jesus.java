@@ -118,7 +118,7 @@ public class Jesus extends Cheat implements Listeners {
 			if (isInWater && isOnWater && distanceFall < 1 && distanceAbs > ws && !upper.getBlock().isLiquid()
 					&& !p.isFlying()
 					&& !p.getInventory().getBoots().orElse(ItemBuilder.Builder(Materials.AIR).build())
-							.hasEnchant(Enchantment.DIG_SPEED)
+							.hasEnchant(Enchantment.EFFICIENCY)
 					&& !hasMaterialsAround(loc, "WATER_LILY") && !hasMaterialsAround(upper, "WATER_LILY")
 					&& !hasOtherThan(under, "WATER")) {
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98, "distance-in",

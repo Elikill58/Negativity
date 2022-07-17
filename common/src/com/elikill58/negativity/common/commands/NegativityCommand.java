@@ -3,12 +3,15 @@ package com.elikill58.negativity.common.commands;
 import static com.elikill58.negativity.universal.verif.VerificationManager.CONSOLE;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -20,6 +23,7 @@ import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
+import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
@@ -27,12 +31,15 @@ import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ProxyCompanionManager;
 import com.elikill58.negativity.universal.Scheduler;
+import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.OldBansDbMigrator;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatCategory;
+import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModifications;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
@@ -64,7 +71,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			p.sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new PlayerVersionMessage(p.getUniqueId(), null));
 			return false;
 		} else if (arg[0].equalsIgnoreCase("verif")) {
-			if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getNegativityPlayer((Player) sender), Perm.VERIF)) {
+			if (sender instanceof Player && !Perm.hasPerm(sender, Perm.VERIF)) {
 				Messages.sendMessage(sender, "not_permission");
 				return false;
 			}
@@ -157,7 +164,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			if (arg.length >= 2 && arg[1].equalsIgnoreCase("updateMessages")) {
 				if (sender instanceof Player && !Perm.hasPerm(NegativityPlayer.getNegativityPlayer((Player) sender), Perm.ADMIN)) {
 					Messages.sendMessage(sender, "not_permission");
-					return true;
+					return false;
 				}
 
 				MessagesUpdater.performUpdate("lang", (message, placeholders) -> Messages.sendMessage(sender, message, (Object[]) placeholders));
@@ -175,6 +182,71 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			}
 
 			InventoryManager.open(NegativityInventory.ADMIN, p);
+			return true;
+		} else if (arg[0].equalsIgnoreCase("options")) {
+			if (sender instanceof Player && !Perm.hasPerm(sender, Perm.ADMIN)) {
+				Messages.sendMessage(sender, "not_permission");
+				return false;
+			}
+			if(arg.length < 4) {
+				sender.sendMessage(ChatColor.RED + "Unknow options. Please follow tab completion");
+				return true;
+			}
+			
+			if(arg[1].equalsIgnoreCase("cheat")) {
+				Cheat c = Cheat.fromString(arg[2]);
+				if(arg[3].equalsIgnoreCase("active")) {
+					c.setActive(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isActive());
+				} else if(arg[3].equalsIgnoreCase("kick")) {
+					c.setAllowKick(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.allowKick());
+				} else if(arg[3].equalsIgnoreCase("set_back")) {
+					c.setBack(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isSetBack());
+				} else if(arg[3].equalsIgnoreCase("bedrock")) {
+					c.setDisabledForBedrock(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isDisabledForBedrock());
+				} else if(arg[3].equalsIgnoreCase("check")) {
+					Check check = arg.length >= 5 ? c.getChecks().stream().filter(ch -> ch.name().equalsIgnoreCase(arg[4])).findFirst().orElse(null) : null;
+					if(check == null) {
+						sender.sendMessage(ChatColor.RED + "Can't find check.");
+						return false;
+					}
+					c.setCheckActive(check, arg.length >= 6 ? UniversalUtils.getBoolean(arg[5]) : !c.checkActive(check));
+				} else {
+					sender.sendMessage(ChatColor.RED + "Unknow options");
+					return true;
+				}
+				c.saveConfig();
+				sender.sendMessage(ChatColor.GREEN + "Options edited.");
+			} else if(arg[1].equalsIgnoreCase("special")) {
+				Special c = Special.fromString(arg[2]);
+				if(arg[3].equalsIgnoreCase("active")) {
+					c.setActive(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isActive());
+				} else if(arg[3].equalsIgnoreCase("bedrock")) {
+					c.setDisabledForBedrock(arg.length >= 5 ? UniversalUtils.getBoolean(arg[4]) : !c.isDisabledForBedrock());
+				} else {
+					sender.sendMessage(ChatColor.RED + "Unknow options");
+					return true;
+				}
+				c.saveConfig();
+				sender.sendMessage(ChatColor.GREEN + "Options edited.");
+			} else if(arg[1].equalsIgnoreCase("global")) {
+				if(arg[2].equalsIgnoreCase("lang")) {
+					String lang = arg[3];
+					Optional<String> optLang = TranslatedMessages.LANGS.stream().filter(l -> l.equalsIgnoreCase(lang)).findFirst();
+					if(optLang.isPresent()) {
+						Adapter.getAdapter().getConfig().set("Translation.default", lang);
+						Adapter.getAdapter().getConfig().save();
+						TranslatedMessages.DEFAULT_LANG = lang;
+						TranslatedMessages.loadMessages();
+						sender.sendMessage(ChatColor.GREEN + "Lang changed to " + lang);
+					} else {
+						sender.sendMessage(ChatColor.RED + "Unknow lang " + lang);
+					}
+				} else {
+					sender.sendMessage(ChatColor.RED + "Unknow options");
+				}
+			} else {
+				sender.sendMessage(ChatColor.RED + "Unknow options");
+			}
 			return true;
 		} else if (arg[0].equalsIgnoreCase("tp")) {
 			if (!(sender instanceof Player)) {
@@ -224,6 +296,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			}
 			Adapter.getAdapter().getAccountManager().update(account);
 			Messages.sendMessage(sender, "negativity.cleared", "%name%", target.getName());
+			return true;
 		} else if (arg[0].equalsIgnoreCase("webhook")) {
 			if (!Perm.hasPerm(sender, Perm.ADMIN)) {
 				Messages.sendMessage(sender, "not_permission");
@@ -414,8 +487,10 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				suggestions.add("reload");
 			if ("alert".startsWith(prefix))
 				suggestions.add("alert");
-			if ("admin".startsWith(prefix) && (sender instanceof Player) && Perm.hasPerm(NegativityPlayer.getCached(((Player) sender).getUniqueId()), Perm.ADMIN))
+			if ("admin".startsWith(prefix) && Perm.hasPerm(sender, Perm.ADMIN))
 				suggestions.add("admin");
+			if ("options".startsWith(prefix) && Perm.hasPerm(sender, Perm.ADMIN))
+				suggestions.add("options");
 			if ("debug".startsWith(prefix))
 				suggestions.add("debug");
 			if ("webhook".startsWith(prefix) && WebhookManager.isEnabled())
@@ -426,21 +501,71 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				if (arg.length == 2) {
 					// /negativity verif | OR /negativity debug |
 					for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
-						if (p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
+						if (prefix.isEmpty() || p.getName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT))) {
 							suggestions.add(p.getName());
 						}
 					}
 				} else if (Adapter.getAdapter().getPlayer(arg[1]) != null) {
 					// /negativity verif <target> |
 					for (Cheat c : Cheat.values()) {
-						if (c.getCommandName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT)) || prefix.isEmpty()) {
+						if (prefix.isEmpty() || c.getCommandName().toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT))) {
 							suggestions.add(c.getCommandName());
 						}
 					}
 				}
 			} else if (arg[0].equalsIgnoreCase("admin") && arg.length == 2) {
-				if (sender instanceof Player && Perm.hasPerm(NegativityPlayer.getCached(((Player) sender).getUniqueId()), Perm.MANAGE_CHEAT)) {
+				if (sender instanceof Player && Perm.hasPerm(sender, Perm.MANAGE_CHEAT)) {
 					suggestions.add("updateMessages");
+				}
+			} else if (arg[0].equalsIgnoreCase("options")) {
+				List<String> possible;
+				if(arg.length == 2) {
+					possible = Arrays.asList("cheat", "special", "global");
+				} else if(arg[1].equalsIgnoreCase("cheat")) {
+					if(arg.length == 3) {
+						possible = Arrays.asList(CheatKeys.values()).stream().map(CheatKeys::getLowerKey).collect(Collectors.toList());
+					} else if(arg.length == 4) { // what should be changed
+						possible = Arrays.asList("active", "kick", "check", "set_back", "bedrock");
+					} else if(arg.length == 5) {
+						if(arg[3].equalsIgnoreCase("check")) {
+							Cheat c = Cheat.fromString(arg[2]);
+							if(c == null)
+								possible = Arrays.asList();
+							else
+								possible = c.getChecks().stream().map(Check::name).collect(Collectors.toList());
+						} else
+							possible = Arrays.asList("true", "false");
+					} else {
+						possible = null;
+					}
+				} else if(arg[1].equalsIgnoreCase("special")) {
+					if(arg.length == 3) {
+						possible = Arrays.asList(SpecialKeys.values()).stream().map(SpecialKeys::getLowerKey).collect(Collectors.toList());
+					} else if(arg.length == 4) { // what should be changed
+						possible = Arrays.asList("active", "bedrock");
+					} else if(arg.length == 5) {
+						possible = Arrays.asList("true", "false");
+					} else {
+						possible = null;
+					}
+				} else if(arg[1].equalsIgnoreCase("global")) {
+					if(arg.length == 3) {
+						possible = Arrays.asList("lang");
+					} else if(arg.length == 4) {
+						if(arg[2].equalsIgnoreCase("lang"))
+							possible = TranslatedMessages.LANGS;
+						else
+							possible = null;
+					} else
+						possible = null;
+				} else
+					possible = null;
+				if(possible == null) // unknow cmd
+					return suggestions;
+				for (String s : possible) {
+					if (prefix.isEmpty() || s.toLowerCase(Locale.ROOT).startsWith(prefix.toLowerCase(Locale.ROOT))) {
+						suggestions.add(s);
+					}
 				}
 			}
 		}

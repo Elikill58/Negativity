@@ -43,6 +43,7 @@ import javax.net.ssl.X509TrustManager;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
+import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.Adapter;
@@ -111,7 +112,7 @@ public class UniversalUtils {
 		return Optional.empty();
 	}
 
-	public static Optional<Cheat> getCheatFromItem(Object m) {
+	public static Optional<Cheat> getCheatFromItem(Material m) {
 		for (Cheat c : Cheat.values())
 			if (c.getMaterial().equals(m))
 				return Optional.of(c);
@@ -178,6 +179,10 @@ public class UniversalUtils {
 		} catch (IllegalArgumentException e) {
 			return false;
 		}
+	}
+	
+	public static boolean getBoolean(String s) {
+		return s.equalsIgnoreCase("true");
 	}
 
 	public static Optional<String> getContentFromURL(String url){

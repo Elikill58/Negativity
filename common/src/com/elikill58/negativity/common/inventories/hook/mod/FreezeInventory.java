@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories.mod;
+package com.elikill58.negativity.common.inventories.hook.mod;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;

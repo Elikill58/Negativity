@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories.admin;
+package com.elikill58.negativity.common.inventories.hook.admin;
 
 import java.util.HashMap;
 import java.util.Map.Entry;

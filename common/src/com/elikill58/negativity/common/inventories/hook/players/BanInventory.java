@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories.players;
+package com.elikill58.negativity.common.inventories.hook.players;
 
 import java.util.List;
 

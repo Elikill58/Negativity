@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories;
+package com.elikill58.negativity.common.inventories.hook;
 
 import java.util.ArrayList;
 import java.util.List;

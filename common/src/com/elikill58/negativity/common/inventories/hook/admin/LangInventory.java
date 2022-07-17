@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories.admin;
+package com.elikill58.negativity.common.inventories.hook.admin;
 
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;

@@ -8,6 +8,7 @@ import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.IKey;
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -100,6 +101,10 @@ public class WebhookMessage implements Comparable<WebhookMessage> {
 	 */
 	public boolean canCombine() {
 		return false;
+	}
+	
+	public boolean canBeSend(@Nullable Configuration config) {
+		return config != null && config.getBoolean("enabled", true);
 	}
 	
 	@Override

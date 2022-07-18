@@ -400,6 +400,10 @@ webhooks:
           enabled: true
           # Cooldown between 2 alerts sent to discord (will combine all)
           cooldown: 5000
+          # Reliability needed to send the webhook
+          reliability_need: 90
+          # Amount of alert needed to send the webhook
+          amount_need: 1
           # The name which will send the message
           username: "Negativity Alert"
           # The content of the message

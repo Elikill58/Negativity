@@ -1,6 +1,9 @@
 package com.elikill58.negativity.universal.webhooks.messages;
 
+import org.checkerframework.checker.nullness.qual.Nullable;
+
 import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -60,6 +63,11 @@ public class AlertWebhookMessage extends WebhookMessage {
 	
 	@Override
 	public String applyPlaceHolders(String message) {
-		return super.applyPlaceHolders(message).replace("%amount%", String.valueOf(amount)).replace("%reliability%", String.valueOf(reliability)).replace("%cheat%", cheat.getName());
+		return UniversalUtils.replacePlaceholders(super.applyPlaceHolders(message), "%amount%", amount, "%reliability%", reliability, "%cheat%", cheat.getName());
+	}
+	
+	@Override
+	public boolean canBeSend(@Nullable Configuration config) {
+		return super.canBeSend(config) && config.getInt("reliability_need", 90) <= this.reliability && config.getInt("amount_need", 1) <= this.amount;
 	}
 }

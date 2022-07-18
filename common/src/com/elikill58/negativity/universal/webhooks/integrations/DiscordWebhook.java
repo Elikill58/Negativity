@@ -85,7 +85,7 @@ public class DiscordWebhook implements Webhook {
 
 	@Override
 	public void addToQueue(WebhookMessage msg) {
-		if (msg == null || !enabled)
+		if (msg == null || !enabled || !msg.canBeSend(config.getSection("messages." + msg.getMessageType().name().toLowerCase(Locale.ROOT))))
 			return;
 		if (!msg.canCombine()) // don't need to queued it, can only send it
 			send(msg);
@@ -125,6 +125,8 @@ public class DiscordWebhook implements Webhook {
 
 	@Override
 	public void send(WebhookMessage msg) {
+		if(!msg.canBeSend(config.getSection("messages." + msg.getMessageType().name().toLowerCase(Locale.ROOT))))
+			return;
 		try {
 			executorService.execute(() -> sendAsync(msg));
 		} catch (Exception e) {

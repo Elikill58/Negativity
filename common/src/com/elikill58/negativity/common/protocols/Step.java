@@ -93,6 +93,8 @@ public class Step extends Cheat implements Listeners {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
+		if(p.getVelocity().getY() < -0.1)
+			return; // will go down
 		Location from = e.getFrom(), to = e.getTo();
 		Location down = to.clone().sub(0, 1, 0);
 		if (down.getBlock().getType().getId().contains("SHULKER"))

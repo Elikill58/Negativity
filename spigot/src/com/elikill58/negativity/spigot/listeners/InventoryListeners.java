@@ -30,7 +30,7 @@ public class InventoryListeners implements Listener {
 	
 	@EventHandler
 	public void onInventoryClick(org.bukkit.event.inventory.InventoryClickEvent e) {
-		if(!(e.getWhoClicked() instanceof Player) || e.getClickedInventory() == null || e.getCurrentItem() == null || e.getSlotType().equals(SlotType.QUICKBAR) || e.isCancelled())
+		if(!(e.getWhoClicked() instanceof Player) || e.getClickedInventory() == null || e.getCurrentItem() == null || e.getSlotType().equals(SlotType.QUICKBAR))
 			return;
 		com.elikill58.negativity.api.entity.Player p = SpigotEntityManager.getPlayer((Player) e.getWhoClicked());
 		InventoryAction action = getAction(e.getClick());

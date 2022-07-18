@@ -64,9 +64,9 @@ public class SeeReportInventory extends AbstractInventory<SeeReportHolder> {
 			int slot = e.getSlot();
 			if(slot == 0) {
 				if(rh.getCible() instanceof Player)
-					InventoryManager.open(NegativityInventory.CHECK_MENU, p, rh.getCible());
+					InventoryManager.open(NegativityInventory.GLOBAL_PLAYER, p, rh.getCible());
 				else
-					InventoryManager.open(NegativityInventory.CHECK_MENU_OFFLINE, p, rh.getCible());
+					InventoryManager.open(NegativityInventory.GLOBAL_PLAYER_OFFLINE, p, rh.getCible());
 			} else if(e.getSlot() == 3)
 				openInventory(p, rh.getCible(), rh.getPage() - 1);
 			else

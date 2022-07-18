@@ -26,12 +26,12 @@ import com.elikill58.negativity.common.inventories.hook.mod.ModInventory;
 import com.elikill58.negativity.common.inventories.hook.players.ActivedCheatInventory;
 import com.elikill58.negativity.common.inventories.hook.players.AlertInventory;
 import com.elikill58.negativity.common.inventories.hook.players.BanInventory;
-import com.elikill58.negativity.common.inventories.hook.players.CheckMenuInventory;
+import com.elikill58.negativity.common.inventories.hook.players.GlobalPlayerInventory;
 import com.elikill58.negativity.common.inventories.hook.players.ForgeModsInventory;
 import com.elikill58.negativity.common.inventories.hook.players.KickInventory;
 import com.elikill58.negativity.common.inventories.hook.players.SeeReportInventory;
 import com.elikill58.negativity.common.inventories.hook.players.offline.AlertOfflineInventory;
-import com.elikill58.negativity.common.inventories.hook.players.offline.CheckMenuOfflineInventory;
+import com.elikill58.negativity.common.inventories.hook.players.offline.GlobalPlayerOfflineInventory;
 
 public class InventoryManager implements Listeners {
 	
@@ -44,8 +44,8 @@ public class InventoryManager implements Listeners {
 		new BanInventory();
 		new BanManagerInventory();
 		new BanProcessorManagerInventory();
-		new CheckMenuInventory();
-		new CheckMenuOfflineInventory();
+		new GlobalPlayerInventory();
+		new GlobalPlayerOfflineInventory();
 		new CheatManagerInventory();
 		new CheatDescriptionInventory();
 		new SpecialManagerInventory();

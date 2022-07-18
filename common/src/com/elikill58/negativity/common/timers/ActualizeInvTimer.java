@@ -27,7 +27,7 @@ public class ActualizeInvTimer implements Runnable {
 				}
 				NegativityHolder nh = (NegativityHolder) holder;
 				if (nh instanceof CheckMenuHolder)
-					InventoryManager.getInventory(NegativityInventory.CHECK_MENU).ifPresent((inv) -> inv.actualizeInventory(p, ((CheckMenuHolder) nh).getCible()));
+					InventoryManager.getInventory(NegativityInventory.GLOBAL_PLAYER).ifPresent((inv) -> inv.actualizeInventory(p, ((CheckMenuHolder) nh).getCible()));
 				else if (nh instanceof AlertHolder)
 					InventoryManager.getInventory(NegativityInventory.ALERT).ifPresent((inv) -> inv.actualizeInventory(p, ((AlertHolder) nh).getCible()));
 				else if (nh instanceof ActivedCheatHolder)

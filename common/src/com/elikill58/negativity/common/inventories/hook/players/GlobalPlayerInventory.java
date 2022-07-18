@@ -24,10 +24,10 @@ import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 
-public class CheckMenuInventory extends AbstractInventory<CheckMenuHolder> {
+public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 	
-	public CheckMenuInventory() {
-		super(NegativityInventory.CHECK_MENU, CheckMenuHolder.class);
+	public GlobalPlayerInventory() {
+		super(NegativityInventory.GLOBAL_PLAYER, CheckMenuHolder.class);
 	}
 
 	@Override

@@ -268,7 +268,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				}
 				return false;
 			} else {
-				InventoryManager.open(NegativityInventory.CHECK_MENU, p, target);
+				InventoryManager.open(NegativityInventory.GLOBAL_PLAYER, p, target);
 			}
 			return true;
 		} else if (arg[0].equalsIgnoreCase("migrateoldbans") && !(sender instanceof Player)) {
@@ -408,9 +408,9 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				return false;
 			}
 			if(targetPlayer instanceof Player)
-				InventoryManager.open(NegativityInventory.CHECK_MENU, playerSender, targetPlayer);
+				InventoryManager.open(NegativityInventory.GLOBAL_PLAYER, playerSender, targetPlayer);
 			else
-				InventoryManager.open(NegativityInventory.CHECK_MENU_OFFLINE, playerSender, targetPlayer);
+				InventoryManager.open(NegativityInventory.GLOBAL_PLAYER_OFFLINE, playerSender, targetPlayer);
 			return true;
 		}
 

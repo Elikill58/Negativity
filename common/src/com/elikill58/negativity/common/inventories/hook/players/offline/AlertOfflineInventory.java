@@ -86,7 +86,7 @@ public class AlertOfflineInventory extends AbstractInventory<AlertOfflineHolder>
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, AlertOfflineHolder nh) {
 		OfflinePlayer cible = nh.getCible();
 		if (m.equals(Materials.ARROW))
-			InventoryManager.open(NegativityInventory.CHECK_MENU_OFFLINE, p, cible);
+			InventoryManager.open(NegativityInventory.GLOBAL_PLAYER_OFFLINE, p, cible);
 		else if (m.equals(Materials.BONE)) {
 			NegativityAccount account = NegativityAccount.get(cible.getUniqueId());
 			for (Cheat c : Cheat.values()) {

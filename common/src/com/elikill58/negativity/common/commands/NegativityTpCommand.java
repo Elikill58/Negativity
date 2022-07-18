@@ -42,7 +42,7 @@ public class NegativityTpCommand implements Listeners {
 			else
 				p.sendToServer(target.getServerName()); // tp to server
 		} else {
-			InventoryManager.open(NegativityInventory.CHECK_MENU, p, target);
+			InventoryManager.open(NegativityInventory.GLOBAL_PLAYER, p, target);
 		}
 	}
 

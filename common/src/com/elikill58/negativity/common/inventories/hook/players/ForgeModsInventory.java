@@ -44,6 +44,6 @@ public class ForgeModsInventory extends AbstractInventory<ForgeModsHolder> {
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, ForgeModsHolder nh) {
 		if(m.equals(Materials.ARROW))
-			InventoryManager.open(NegativityInventory.CHECK_MENU, p, nh.getCible());
+			InventoryManager.open(NegativityInventory.GLOBAL_PLAYER, p, nh.getCible());
 	}
 }

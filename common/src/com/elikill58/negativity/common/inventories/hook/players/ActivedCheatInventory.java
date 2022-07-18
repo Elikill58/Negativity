@@ -79,6 +79,6 @@ public class ActivedCheatInventory extends AbstractInventory<ActivedCheatHolder>
 	@Override
 	public void manageInventory(InventoryClickEvent e, Material m, Player p, ActivedCheatHolder nh) {
 		if (m.equals(Materials.ARROW))
-			InventoryManager.open(NegativityInventory.CHECK_MENU, p, nh.getCible());
+			InventoryManager.open(NegativityInventory.GLOBAL_PLAYER, p, nh.getCible());
 	}
 }

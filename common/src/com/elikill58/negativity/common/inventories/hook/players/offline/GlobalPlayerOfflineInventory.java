@@ -11,17 +11,17 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.players.offline.CheckMenuOfflineHolder;
-import com.elikill58.negativity.common.inventories.hook.players.CheckMenuInventory;
+import com.elikill58.negativity.common.inventories.hook.players.GlobalPlayerInventory;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 
-public class CheckMenuOfflineInventory extends AbstractInventory<CheckMenuOfflineHolder> {
+public class GlobalPlayerOfflineInventory extends AbstractInventory<CheckMenuOfflineHolder> {
 	
-	public CheckMenuOfflineInventory() {
-		super(NegativityInventory.CHECK_MENU_OFFLINE, CheckMenuOfflineHolder.class);
+	public GlobalPlayerOfflineInventory() {
+		super(NegativityInventory.GLOBAL_PLAYER_OFFLINE, CheckMenuOfflineHolder.class);
 	}
 
 	@Override
@@ -33,7 +33,7 @@ public class CheckMenuOfflineInventory extends AbstractInventory<CheckMenuOfflin
 		Minerate minerate = account.getMinerate();
 		int betterClick = account.getMostClicksPerSecond();
 		
-		inv.set(0, CheckMenuInventory.getClickItem(Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), betterClick));
+		inv.set(0, GlobalPlayerInventory.getClickItem(Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), betterClick));
 		
 		inv.set(3, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
 		inv.set(5, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.main.active_report", "%name%", cible.getName())).build());

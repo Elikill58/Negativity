@@ -35,7 +35,7 @@ public class AlertWebhookMessage extends WebhookMessage {
 			return null;
 		AlertWebhookMessage o = (AlertWebhookMessage) msg;
 		if(o.cheat == cheat && concerned.getUniqueId().equals(o.concerned.getUniqueId()) && messageType.equals(o.messageType))
-			return new AlertWebhookMessage(messageType, concerned, sender, date, amount + o.amount, UniversalUtils.parseInPorcent(this.reliability + o.amount), cheat);
+			return new AlertWebhookMessage(messageType, concerned, sender, Math.max(this.date, o.date), amount + o.amount, UniversalUtils.parseInPorcent(Math.max(this.reliability, o.reliability) + o.amount), cheat);
 		return null;
 	}
 

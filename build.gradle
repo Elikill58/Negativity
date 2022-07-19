@@ -1,3 +1,5 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     id 'java-library'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
@@ -22,7 +24,23 @@ task prepareServer(type: Copy) {
     }
 }
 
-build.dependsOn shadowJar
+def buildSponge7 = tasks.register('buildSponge7', ShadowJar) {
+    it.archiveBaseName.set('Negativity')
+    it.archiveClassifier.set('sponge7')
+
+    it.mergeServiceFiles()
+
+    it.manifest {
+        from(project(':sponge7').tasks.named('jar').get().getManifest())
+    }
+    it.from(project(':bungee').tasks.named('shadowJar'))
+    it.from(project(':velocity').tasks.named('shadowJar'))
+    it.from(project(':spigot').tasks.named('shadowJar'))
+    it.from(project(':sponge7').tasks.named('shadowJar'))
+    it.exclude('com/elikill58/negativity/spigot1*/**.class')
+}
+
+build.dependsOn shadowJar, buildSponge7
 
 tasks.named('javadoc') {
     enabled false

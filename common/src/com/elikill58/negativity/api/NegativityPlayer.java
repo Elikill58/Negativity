@@ -59,7 +59,7 @@ public class NegativityPlayer {
 	public HashMap<String, String> mods = new HashMap<>();
 	
 	// packets
-	public HashMap<PacketType, Integer> packets = new HashMap<>();
+	public ConcurrentHashMap<PacketType, Integer> packets = new ConcurrentHashMap<>();
 	public int allPackets = 0;
 
 	public int lastClick = 0;

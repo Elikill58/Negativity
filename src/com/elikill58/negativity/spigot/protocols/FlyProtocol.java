@@ -149,8 +149,8 @@ public class FlyProtocol extends Cheat implements Listener {
 			}
 		}
 		if ((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || isInWater || isOnWater
-				|| LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY", "WATER")
-				|| LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE") || hasBoatAround)
+				|| LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY", "WATER", "LAVA")
+				|| LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "WATER", "LAVA", "VINE") || hasBoatAround)
 			np.flyMoveAmount.clear();
 		else
 			np.flyMoveAmount.add(d);

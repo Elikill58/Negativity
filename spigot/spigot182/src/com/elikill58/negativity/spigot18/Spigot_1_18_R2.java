@@ -10,7 +10,6 @@ import org.bukkit.craftbukkit.v1_18_R2.CraftServer;
 import org.bukkit.craftbukkit.v1_18_R2.CraftWorld;
 import org.bukkit.craftbukkit.v1_18_R2.entity.CraftEntity;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.api.entity.BoundingBox;
@@ -227,8 +226,8 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().forEach((mcEnt) -> {
 			if(mcEnt != null) {
 				CraftEntity craftEntity = mcEnt.getBukkitEntity();
-				if (craftEntity != null && craftEntity instanceof LivingEntity && craftEntity.isValid())
-					entities.add((LivingEntity) craftEntity);
+				if (craftEntity != null && craftEntity instanceof Entity && craftEntity.isValid())
+					entities.add((Entity) craftEntity);
 			}
 		});
 		return entities;

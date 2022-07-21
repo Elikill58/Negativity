@@ -1,5 +1,6 @@
 package com.elikill58.negativity.spigot.impl.location;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -16,9 +17,11 @@ import com.elikill58.negativity.universal.Version;
 public class SpigotWorld extends World {
 
 	private final org.bukkit.World w;
+	private List<Entity> entities;
 	
 	public SpigotWorld(org.bukkit.World w) {
 		this.w = w;
+		clearEntities();
 	}
 
 	@Override
@@ -36,11 +39,25 @@ public class SpigotWorld extends World {
 		return new SpigotBlock(w.getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ()));
 	}
 
+	public void add(Entity e) {
+		synchronized (entities) {
+			entities.add(e);
+		}
+	}
+
+	public void remove(Entity e) {
+		synchronized (entities) {
+			entities.remove(e);
+		}
+	}
+
+	public void clearEntities() {
+		this.entities = SpigotVersionAdapter.getVersionAdapter().getEntities(w).stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
+	}
+	
 	@Override
 	public List<Entity> getEntities() {
-		synchronized (w) {
-			return SpigotVersionAdapter.getVersionAdapter().getEntities(w).stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
-		}
+		return new ArrayList<>(entities);// SpigotVersionAdapter.getVersionAdapter().getEntities(w).stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
 	}
 	
 	@Override

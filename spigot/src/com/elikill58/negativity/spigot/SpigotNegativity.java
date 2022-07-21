@@ -2,6 +2,7 @@ package com.elikill58.negativity.spigot;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Locale;
@@ -14,8 +15,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.spigot.impl.entity.SpigotFakePlayer;
+import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.listeners.BlockListeners;
 import com.elikill58.negativity.spigot.listeners.ChannelListeners;
 import com.elikill58.negativity.spigot.listeners.CommandsListeners;
@@ -111,6 +114,10 @@ public class SpigotNegativity extends JavaPlugin {
 		Stats.sendStartupStats(Bukkit.getServer().getPort());
 		
 		NegativityAccountStorage.setDefaultStorage("file");
+		
+		getServer().getScheduler().runTaskTimer(this, () -> {
+			new ArrayList<>(World.getWorlds().values()).forEach(w -> ((SpigotWorld) w).clearEntities());
+		}, 20 * 30, 20 * 30);
 		
 		getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
 			try {

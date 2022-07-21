@@ -55,7 +55,12 @@ public class SpigotEntity<E extends Entity> extends AbstractEntity {
 
 	@Override
 	public EntityType getType() {
-		return EntityType.get(entity == null ? null : entity.getType().name());
+		if(entity == null)
+			return EntityType.UNKNOWN;
+		String typeName = entity.getType().name().toUpperCase();
+		if(typeName.contains("BOAT"))
+			return EntityType.BOAT;
+		return EntityType.get(typeName);
 	}
 
 	@Override

@@ -123,7 +123,7 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 				}
 			}
 			if(mr1 == null || mr2 == null) {
-				SpigotNegativity.getInstance().getLogger().warning("Cannot find valid point for calculating distance: " + mr1 + " > " + mr2);
+				//SpigotNegativity.getInstance().getLogger().warning("Cannot find valid point for calculating distance: " + mr1 + " > " + mr2);
 				return 0;
 			}
 			return mr1.distance(mr2);

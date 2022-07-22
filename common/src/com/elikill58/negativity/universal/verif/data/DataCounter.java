@@ -7,6 +7,8 @@ public abstract class DataCounter<T> {
 
 	protected final List<T> list = new ArrayList<>();
 	
+	public abstract T getTotal();
+	
 	/**
 	 * Get all data
 	 * 

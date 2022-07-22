@@ -40,6 +40,8 @@ import com.elikill58.negativity.universal.detections.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
+import com.elikill58.negativity.universal.monitor.MonitorManager;
+import com.elikill58.negativity.universal.monitor.MonitorType;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModifications;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
@@ -182,6 +184,22 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			}
 
 			InventoryManager.open(NegativityInventory.ADMIN, p);
+			return true;
+		} else if (arg[0].equalsIgnoreCase("monitor")) {
+			if (!Perm.hasPerm(sender, Perm.ADMIN)) {
+				Messages.sendMessage(sender, "not_permission");
+				return true;
+			}
+			if(arg.length == 1) { // show all possible monitor
+				MonitorType.getMonitors().forEach(mm -> mm.getMonitor().showResult(sender));
+			} else {
+				Optional<? extends MonitorManager> optManager = MonitorType.getMonitors().stream().filter(mm -> mm.getName().equalsIgnoreCase(arg[1])).map(MonitorType::getMonitor).findFirst();
+				if(optManager.isPresent()) {
+					optManager.get().showPerCheatResult(sender);
+				} else {
+					sender.sendMessage(ChatColor.RED + "Can't find " + arg[1] + " monitor. You can use: " + String.join(", ", MonitorType.getMonitors().stream().map(MonitorType::getName).collect(Collectors.toList())));
+				}
+			}
 			return true;
 		} else if (arg[0].equalsIgnoreCase("options")) {
 			if (sender instanceof Player && !Perm.hasPerm(sender, Perm.ADMIN)) {
@@ -489,6 +507,8 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				suggestions.add("alert");
 			if ("admin".startsWith(prefix) && Perm.hasPerm(sender, Perm.ADMIN))
 				suggestions.add("admin");
+			if ("monitor".startsWith(prefix) && Perm.hasPerm(sender, Perm.ADMIN))
+				suggestions.add("monitor");
 			if ("options".startsWith(prefix) && Perm.hasPerm(sender, Perm.ADMIN))
 				suggestions.add("options");
 			if ("debug".startsWith(prefix))

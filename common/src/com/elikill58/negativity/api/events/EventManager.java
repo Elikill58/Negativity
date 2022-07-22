@@ -146,12 +146,12 @@ public class EventManager {
 		if(ev instanceof CancellableEvent) {
 			CancellableEvent cancel = (CancellableEvent) ev;
 			callEvent(cancel, EventPriority.PRE, map);
-			if(cancel.isCancelled()) // if pre event cancel
-				return;
-			callEvent(cancel, EventPriority.BASIC, map);
-			if(cancel.isCancelled()) // if basic event cancel
-				return;
-			callEvent(cancel, EventPriority.POST, map);
+			if(!cancel.isCancelled()) { // if pre event cancel
+				callEvent(cancel, EventPriority.BASIC, map);
+				if(!cancel.isCancelled()) { // if basic event cancel
+					callEvent(cancel, EventPriority.POST, map);
+				}
+			}
 		} else {
 			callEvent(ev, EventPriority.PRE, map);
 			callEvent(ev, EventPriority.BASIC, map);

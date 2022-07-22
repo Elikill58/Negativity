@@ -5,6 +5,14 @@ import java.util.Comparator;
 public class FloatDataCounter extends DataCounter<Float> {
 
 	@Override
+	public Float getTotal() {
+		float d = 0;
+		for(Float temp : list)
+			d += temp;
+		return d;
+	}
+
+	@Override
 	public Float getMin() {
 		if(list.isEmpty())
 			return null;

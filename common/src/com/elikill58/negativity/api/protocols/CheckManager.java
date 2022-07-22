@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.PlayerEvent;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.detections.Cheat;
+import com.elikill58.negativity.universal.monitor.MonitorType;
 
 public class CheckManager implements Listeners {
 
@@ -63,17 +64,18 @@ public class CheckManager implements Listeners {
 				NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 				if(!np.hasDetectionActive(check.getCheat()) || !check.getCheat().checkActive(check.getCheck().name()))
 					return;
+				long beginTime = System.nanoTime();
 				if(!check.getCheck().ignoreCancel()) {
 					for(CheckConditions condition : check.getCheck().conditions()) {
 						if(condition.shouldBeCached()) { // should be cached, cache it and check it
-							conditionResult.computeIfAbsent(condition, (c) -> condition.check(p));
-							if(!conditionResult.get(condition))
+							if(conditionResult.computeIfAbsent(condition, (c) -> condition.check(p)))
 								return;
-						} else if(!condition.check(p)) // no cache, always check it
+						} else if(!condition.check(p))// no cache, always check it
 							return;
 					}
 				}
 				check.invoke(e, np);
+				MonitorType.CPU.getMonitor().getMeasureForDetection(check.getCheat().getKey()).add(check.getCheck(), (System.nanoTime() - beginTime) / 1000);
 			}
 		});
 	}

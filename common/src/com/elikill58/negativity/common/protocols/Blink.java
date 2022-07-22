@@ -74,7 +74,7 @@ public class Blink extends Cheat implements Listeners {
 			int posLook = np.packets.getOrDefault(PacketType.Client.POSITION_LOOK, 0), pos = np.packets.getOrDefault(PacketType.Client.POSITION, 0);
 			int allPos = posLook + pos;
 			if(allPos > 60) {
-				Negativity.alertMod(allPos > 70 ? ReportType.VIOLATION : ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(20 + allPos), "position-packet",
+				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(20 + allPos), "position-packet",
 						"PositionLook packet: " + posLook + " Position Packet: " + pos +  " (=" + allPos + ")");
 			}
 		}

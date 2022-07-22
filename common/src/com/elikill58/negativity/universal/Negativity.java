@@ -360,7 +360,6 @@ public class Negativity {
 				}
 			}
 		}
-		UniversalUtils.init();
 		log = config.getBoolean("log_alerts", true);
 		log_console = config.getBoolean("log_alerts_in_console", true);
 		hasBypass = config.getBoolean("Permissions.bypass.active", false);
@@ -416,6 +415,12 @@ public class Negativity {
 	}
 	
 	public static void closeNegativity() {
+		if(fileSaverTimer != null)
+			fileSaverTimer.cancel();
+		if(actualizeInvTimer != null)
+			actualizeInvTimer.cancel();
+		if(analyzePacketTimer != null)
+			analyzePacketTimer.cancel();
 		Database.close();
 		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		NegativityPlayer.getAllNegativityPlayers().forEach(NegativityPlayer::destroy);

@@ -15,9 +15,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.api.location.BlockPosition;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.PacketContent.ContentModifier;

@@ -13,14 +13,14 @@ public class FabricLocation {
 	}*/
 
 	public static Location toCommon(World w, BlockPos loc){
-		return new Location(new FabricWorld(w), loc.getX(), loc.getY(), loc.getZ());
+		return new Location(com.elikill58.negativity.api.location.World.getWorld(w.asString(), a -> new FabricWorld(w)), loc.getX(), loc.getY(), loc.getZ());
 	}
 
 	public static Location toCommon(World w, Vec3d v){
-		return new Location(new FabricWorld(w), v.x, v.y, v.z);
+		return new Location(com.elikill58.negativity.api.location.World.getWorld(w.asString(), a -> new FabricWorld(w)), v.x, v.y, v.z);
 	}
 
 	public static Location toCommon(World w, double x, double y, double z){
-		return new Location(new FabricWorld(w), x, y, z);
+		return new Location(com.elikill58.negativity.api.location.World.getWorld(w.asString(), a -> new FabricWorld(w)), x, y, z);
 	}
 }

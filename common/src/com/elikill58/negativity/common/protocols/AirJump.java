@@ -53,8 +53,7 @@ public class AirJump extends Cheat {
 				if (diffYtoFrom - (velY > 0 ? velY : 0) > 0.35 && lastDiffY < diffYtoFrom && lastDiffY > velY
 						&& lastDiffY > p.getTheoricVelocity().getY()
 						&& !hasOtherThanExtended(loc.clone().sub(0, 2, 0), "AIR")) {
-					boolean mayCancel = Negativity.alertMod(
-							diffYtoFrom > 0.5 && np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
+					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p,
 							this, UniversalUtils.parseInPorcent((int) (diffYtoFrom * 190) - (p.getPing() / 50)), "diff-y",
 							"Actual diff Y: " + diffYtoFrom + ", last diff Y: " + lastDiffY + ". Down: " + idDown
 									+ " / " + idDownDown + ", vel: " + p.getVelocity() + ", diffY base: "

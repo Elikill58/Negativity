@@ -50,7 +50,7 @@ public class Spider extends Cheat {
 		boolean isAris = ((float) y) == p.getWalkSpeed();
 		if (((y > 0.499 && y < 0.7) || isAris) && p.getVelocity().length() < 1.5) {
 			int relia = UniversalUtils.parseInPorcent(y * 160 + (isAris ? 39 : 0));
-			boolean mayCancel = Negativity.alertMod((np.getWarn(this) > 6 ? ReportType.WARNING : ReportType.VIOLATION),
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING,
 					p, this, relia, "nothing-around",
 					"Nothing around him. To > From: " + y + " isAris: " + isAris + ", has not stab slairs")
 					&& isSetBack();
@@ -71,31 +71,30 @@ public class Spider extends Cheat {
 		int amount = 0;
 		Location from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
-		if (y <= 0.0 || y == 0.25 || y == 0.5 || y == 0.11837500000000034 /* TODO check if it's a good value */ || LocationUtils.isInWater(to) || hasBypassBlockAround(to)) {
+		if (y <= 0.0 || y == 0.25 || y == 0.5 || y == 0.11837500000000034 /* TODO check if it's a good value */ || LocationUtils.isInWater(to) || hasBypassBlockAround(to) || hasBypassBlockAround(to.clone().sub(0, 1, 0))) {
 			np.lastY.clear();
 			return;
-		} else {
-			int i = np.lastY.size() - 1;
-			while (i > 0) {
-				double value = np.lastY.get(i);
-				if (value == y) {
-					++amount;
-					--i;
-				} else {
-					if (i == np.lastY.size() - 1) {
-						np.lastY.clear();
-						break;
-					}
-					for (int x = 0; x < i; x++) {
-						np.lastY.remove(0);
-					}
+		}
+		int i = np.lastY.size() - 1;
+		while (i > 0) {
+			double value = np.lastY.get(i);
+			if (value == y) {
+				++amount;
+				--i;
+			} else {
+				if (i == np.lastY.size() - 1) {
+					np.lastY.clear();
 					break;
 				}
+				for (int x = 0; x < i; x++) {
+					np.lastY.remove(0);
+				}
+				break;
 			}
 		}
 		if (amount > 1) {
 			if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(80 + amount * 3),
-					"same-y", "Y: " + y + ", fall: " + p.getFallDistance() + ", aount: " + amount + ", last: " + np.lastY) && isSetBack())
+					"same-y", "Y: " + y + ", fall: " + p.getFallDistance() + ", amount: " + amount + ", last: " + np.lastY) && isSetBack())
 				LocationUtils.teleportPlayerOnGround(p);
 		}
 		np.lastY.add(y);
@@ -135,7 +134,7 @@ public class Spider extends Cheat {
 	}
 
 	private boolean hasBypassBlockAround(Location loc) {
-		return has(loc, "SLAB", "CAKE", "SNOW");
+		return has(loc, "SLAB", "CAKE", "SNOW", "LADDER");
 	}
 
 	public boolean has(Location loc, String... m) {

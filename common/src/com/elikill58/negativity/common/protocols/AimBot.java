@@ -125,7 +125,10 @@ public class AimBot extends Cheat {
 		Player p = e.getPlayer();
 		Entity cible = e.getDamaged();
 		Location loc = p.getLocation(), cloc = cible.getLocation();
-		boolean notSure = new Location(p.getWorld(), loc.getX(), 0, loc.getZ()).distance(new Location(p.getWorld(), cloc.getX(), 0, cloc.getZ())) < 0.5; // if X/Z distance too low
+		double xzDistance = loc.distanceXZ(cloc);
+		if(xzDistance < 0.3)
+			return;
+		boolean notSure = xzDistance < 0.6; // if X/Z distance too low
 		Direction direction = LocationUtils.getDirection(p, cloc);
 		long amount = 0;
 		int reliability = 0;
@@ -158,7 +161,7 @@ public class AimBot extends Cheat {
 			break;
 		}
 		if(amount > 0)
-			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(reliability + (notSure ? -10 : 0)), "direction", "Pos: " + p.getLocation() + " / " + cible.getLocation() + ", dir: " + direction.name(), null, amount);
+			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(reliability + (notSure ? -10 : 0)), "direction", "Pos: " + p.getLocation() + " / " + cible.getLocation() + ", dir: " + direction.name() + ", xzDis: " + xzDistance, null, amount);
 	}
 	
 	@Override

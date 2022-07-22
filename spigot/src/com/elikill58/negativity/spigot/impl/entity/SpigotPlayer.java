@@ -18,7 +18,6 @@ import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.PlayerInventory;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.SpigotNegativity;
@@ -26,7 +25,6 @@ import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotPlayerInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
-import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
@@ -158,11 +156,6 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	@Override
 	public int getPing() {
 		return SpigotVersionAdapter.getVersionAdapter().getPlayerPing(entity);
-	}
-
-	@Override
-	public World getWorld() {
-		return new SpigotWorld(entity.getWorld());
 	}
 
 	@Override

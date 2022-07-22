@@ -6,7 +6,7 @@ import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 
 public class NPacketPlayInBlockDig implements NPacketPlayIn, LocatedPacket {
 
-	public int x, y, z;
+	public int x = 0, y = 0, z = 0;
 	public DigFace face;
 	public DigAction action;
 	

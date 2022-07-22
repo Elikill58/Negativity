@@ -54,7 +54,7 @@ public class PlayersListeners implements Listener {
 		Bukkit.getScheduler().runTaskLater(SpigotNegativity.getInstance(), () -> NegativityPlayer.removeFromCache(p.getUniqueId()), 2);
 	}
 	
-	@EventHandler
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onMove(org.bukkit.event.player.PlayerMoveEvent e) {
 		Player p = e.getPlayer();
 		if(p.hasMetadata("NPC") || e.isCancelled())

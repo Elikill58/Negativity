@@ -168,7 +168,7 @@ public class SpongePlayer extends SpongeEntity<org.spongepowered.api.entity.livi
 
 	@Override
 	public World getWorld() {
-		return new SpongeWorld(entity.getWorld());
+		return World.getWorld(entity.getWorld().getName(), a -> new SpongeWorld(entity.getWorld()));
 	}
 
 	@Override

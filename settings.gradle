@@ -27,8 +27,8 @@ rootProject.name = 'Negativity'
 include 'common', 'spigot', 'spigot:spigot17', 'spigot:spigot18', 'spigot:spigot182', 'spigot:spigot19', 'bungee', 'velocity', 'sponge7', 'sponge', 'sponge:sponge16', 'sponge:sponge18', 'fabric'
 
 // all integrations in common
-include 'common:integrations:litebans', 'common:integrations:advancedban', 'common:integrations:dkbans', 'common:integrations:viaversion', 'common:integrations:professionalbans'
+include 'common:integrations:litebans', 'common:integrations:advancedban', 'common:integrations:dkbans', 'common:integrations:viaversion'
 // all integrations in spigot
-include 'spigot:integrations:essentials', 'spigot:integrations:floodgate', 'spigot:integrations:floodgatev2', 'spigot:integrations:gadgetsmenu', 'spigot:integrations:ultrapunishments',
+include 'spigot:integrations:essentials', 'spigot:integrations:floodgate', 'spigot:integrations:floodgatev2', 'spigot:integrations:gadgetsmenu', 'spigot:integrations:professionalbans', 'spigot:integrations:ultrapunishments',
         'spigot:integrations:maxbans', 'spigot:integrations:protocolsupport', 'spigot:integrations:worldguardv6', 'spigot:integrations:worldguardv7'
 

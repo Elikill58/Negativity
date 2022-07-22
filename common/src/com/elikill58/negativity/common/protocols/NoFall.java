@@ -94,8 +94,9 @@ public class NoFall extends Cheat {
 			return;
 		int relia = UniversalUtils.parseInPorcent(distance * 100);
 		if (distance > 2D) {
-			boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "distance-no-ground",
-					"No ground, fd: " + p.getFallDistance() + ", from/to: " + distance);
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "distance-no-ground",
+					"No ground, fd: " + p.getFallDistance() + ", from/to: " + distance + ", vel: " + p.getVelocity()
+							+ ", thvel: " + p.getTheoricVelocity() + ", nbNoDamage: " + np.noFallDamage);
 			if (mayCancel)
 				np.noFallDamage += 1;
 		} else if (np.noFallDamage != 0) {
@@ -126,7 +127,7 @@ public class NoFall extends Cheat {
 		double distanceVector = to.toVector().clone().add(direction).distance(from.toVector());
 		double disWithDirY = from.clone().add(direction).toVector().setY(0).distanceSquared(to.toVector().setY(0));
 		if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && PlayerModificationsManager.isSpeedUnlocked(p))) {
-			boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "distance-ground",
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "distance-ground",
 					"Player in ground. Fd: " + p.getFallDistance() + ", From/To: " + distance + ", VelY: "
 							+ p.getVelocity().getY() + ", vec: " + distanceVector + ", disDirY: " + disWithDirY);
 			if (mayCancel)
@@ -158,7 +159,7 @@ public class NoFall extends Cheat {
 		Material justUnder = p.getLocation().getBlock().getRelative(BlockFace.DOWN).getType();
 		if (justUnder.isSolid() && p.getFallDistance() > 3.0 && !np.isInFight && motionY <= 0) {
 			int ping = p.getPing(), relia = UniversalUtils.parseInPorcent(100 - (ping / 5) + p.getFallDistance());
-			boolean mayCancel = Negativity.alertMod(ReportType.VIOLATION, p, this, relia, "have-to-ground",
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "have-to-ground",
 					"No ground with FD (Fd: " + p.getFallDistance() + "). Block down: " + justUnder.getId()
 							+ ", from/to: " + distance);
 			if (mayCancel && isSetBack())
@@ -202,7 +203,7 @@ public class NoFall extends Cheat {
 	@Check(name = "fake-ground", description = "Detect when player faking ground", conditions = {
 			CheckConditions.SURVIVAL, CheckConditions.NO_ON_BEDROCK, CheckConditions.NO_CLIMB_BLOCK })
 	public void onFakeGround(PlayerMoveEvent e, NegativityPlayer np) {
-		if(!e.isMovePosition())
+		if (!e.isMovePosition())
 			return;
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();
@@ -212,24 +213,31 @@ public class NoFall extends Cheat {
 		// double difX = to.getX() - from.getX(), difZ = to.getZ() - from.getZ();
 		// boolean verticalCollision = difY != p.getVelocity().getY();
 		// boolean ownGroundBefore = verticalCollision && difY < 0.0;
-		Location locVelocity = to.clone().add(p.getVelocity()), loc = locVelocity.clone().add(0, 0.08 + p.getPotionEffect(PotionEffectType.JUMP).orElse(new PotionEffect(PotionEffectType.JUMP, 0, 0)).getAmplifier() / 10, 0);
+		Location locVelocity = to.clone().add(p.getVelocity()),
+				loc = locVelocity.clone().add(0, 0.08 + p.getPotionEffect(PotionEffectType.JUMP)
+						.orElse(new PotionEffect(PotionEffectType.JUMP, 0, 0)).getAmplifier() / 10, 0);
 		Material type = loc.getBlock().getType();
-		if (p.isOnGround() && !type.isSolid() && !p.isFlying() && p.getVelocity().getY() <= difY) {
-			List<Vector> testedVectors = new ArrayList<>(Arrays.asList(locVelocity.toBlockVector())); 
-			if(locVelocity.getBlockY() == loc.getBlockY())
+		if (p.isOnGround() && !type.isSolid() && !p.isFlying() && Math.abs(p.getVelocity().getY()) <= Math.abs(difY)) {
+			List<Vector> testedVectors = new ArrayList<>(Arrays.asList(locVelocity.toBlockVector()));
+			if (locVelocity.getBlockY() != loc.getBlockY())
 				testedVectors.add(loc.toBlockVector());
-			if(((int) to.getX() + 0.1) != to.getBlockX())
-				testedVectors.add(to.clone().add(0.1, 0, 0).toBlockVector());
-			
-			List<Material> materials = testedVectors.stream().map(v -> v.toLocation(p.getWorld())).map(Location::getBlock).map(Block::getType).filter(Objects::nonNull).filter(m -> !m.equals(Materials.AIR)).collect(Collectors.toList());
-			if(!materials.isEmpty())
+			if (((int) to.getX() + 0.1) != to.getBlockX())
+				testedVectors.add(to.clone().add(0.5, 0, 0).toBlockVector());
+			if (((int) to.getZ() + 0.1) != to.getBlockZ())
+				testedVectors.add(to.clone().add(0, 0, 0.5).toBlockVector());
+
+			List<Material> materials = testedVectors.stream().map(v -> v.toLocation(p.getWorld()))
+					.map(Location::getBlock).map(Block::getType).filter(Objects::nonNull)
+					.filter(m -> !m.equals(Materials.AIR)).collect(Collectors.toList());
+			if (!materials.isEmpty())
 				return;
-			if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(Math.abs(difY) * 250),
-					"fake-ground",
-					"Dif: " + difY + ", " + p.getFallDistance() + ", " + type.getId() + ", tested: " + testedVectors + ", vel: " + p.getVelocity(),
+			int reliability = UniversalUtils.parseInPorcent(Math.abs(difY) * 200);
+			if (Negativity.alertMod(ReportType.WARNING, p, this, reliability, "fake-ground",
+					"Dif: " + difY + ", " + p.getFallDistance() + ", " + type.getId() + ", tested: " + testedVectors
+							+ ", vel: " + p.getVelocity(),
 					new CheatHover.Literal("Y: " + String.format("%.3f", difY)), (long) (Math.abs(difY) * 5))
 					&& isSetBack())
-				manageDamage(p, (int) p.getFallDistance(), 95);
+				manageDamage(p, (int) p.getFallDistance(), reliability);
 		}
 	}
 

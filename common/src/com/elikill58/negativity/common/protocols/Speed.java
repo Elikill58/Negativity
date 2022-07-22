@@ -101,7 +101,7 @@ public class Speed extends Cheat implements Listeners {
 			boolean walkTest = y > walkSpeed * 3.1 && y > 0.65D, walkWithEssTest = (y - walkSpeed > (walkSpeed * 2.5));
 			if((((walkWithEssTest || (p.getWalkSpeed() < 0.35 && y >= 0.75D))) || walkTest) && (y < (disWithDir + disWithDirY))){
 				int porcent = UniversalUtils.parseInPorcent(y * 50 + (walkTest ? 10 : 0) + (walkWithEssTest == walkTest ? 10 : 0) + (walkWithEssTest ? 10 : 0));
-				mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this, porcent, "distance-ground",
+				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, porcent, "distance-ground",
 						"Ground. WS: " + walkSpeed + ", Dis from/to: " + y + ", walkTest: " + walkTest +
 						", walkWithEss: " + walkWithEssTest + ", y: " + y + ", disDir: " + disWithDir + ", disDirY: " + disWithDirY, hoverMsg("distance_ground", "%distance%", String.format("%.4f", y)));
 			}
@@ -111,20 +111,20 @@ public class Speed extends Cheat implements Listeners {
 			double calculatedSpeedWith = getSpeed(from, to);
 			double calculatedSpeedWithoutY = getSpeed(from, to, p.getVelocity());
 			if(calculatedSpeedWithoutY > (p.getWalkSpeed() + 0.01) && velocity < calculatedSpeedWithoutY && !hasOtherThan(from.clone().add(0, 1, 0), "AIR")  && Math.abs(velocity) > 0.1
-					&& calculatedSpeedWithoutY > velLen && calculatedSpeedWithoutY != calculatedSpeedWith && (p.getWalkSpeed() * 2 < calculatedSpeedWith || (p.getWalkSpeed() + 0.1 < calculatedSpeedWithoutY)) && dif != 0) { // "+0.01" if to prevent lag"
+					&& calculatedSpeedWithoutY > velLen && calculatedSpeedWithoutY != calculatedSpeedWith && (p.getWalkSpeed() * 2 < calculatedSpeedWith || (p.getWalkSpeed() + 0.1 < calculatedSpeedWithoutY)) && dif != 0 && calculatedSpeedWith > 0.01) { // "+0.01" if to prevent lag"
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 90, "calculated", "Calculated speed: " + calculatedSpeedWithoutY
 						+ ", WS: " + p.getWalkSpeed() + ", Velocity: " + p.getVelocity() + ", speed: " + calculatedSpeedWith + ", dis: " + distance + ", diffY: " + dif);
 			}
 		}
-		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10) - (velLen > 0.5 ? velLen : 0)) >= 0.85D
+		if(checkActive("distance-jumping") && !onGround && (y - (amplifierSpeed / 10) - (velLen > 0.45 ? velLen : 0)) >= 0.85D
 				&& !hasIceBelow && !np.isInFight && p.getTheoricVelocity().length() < 0.85D && p.getVelocity().length() < 0.4) { // theoric length to when the new high velocity is actually taken
-			mayCancel = Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+			mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(y * 190), "distance-jumping", "WS: " + p.getWalkSpeed()
 						+ ", fd: " + p.getFallDistance() + ", from/to: " + String.format("%.10f", y) + ", ySpeed: " + String.format("%.10f", y - (amplifierSpeed / 10) - (velLen > 0.5 ? velLen : 0))
 						+ ", vel: " + p.getVelocity() + ", thvel: " + p.getTheoricVelocity(), hoverMsg("distance_jumping", "%distance%", String.format("%.4f", y)));
 		}
 		if(checkActive("high-speed") && !onGround && y < 0.85D && !np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
-			if (!under.getType().getId().contains("STEP") && !np.isUsingSlimeBlock && !(under.getType().getId().contains("WATER") || under.isWaterLogged() || under.isLiquid() || p.isSwimming()) && p.getVelocity().length() < 1.5) {
+			if (!under.getType().getId().contains("STEP") && !under.getType().getId().contains("VOID") && !np.isUsingSlimeBlock && !(under.getType().getId().contains("WATER") || under.isWaterLogged() || under.isLiquid() || p.isSwimming()) && p.getVelocity().length() < 1.5) {
 				Location toHigh = to.clone();
 				toHigh.setY(from.getY());
 				double yy = toHigh.distance(from);
@@ -178,7 +178,7 @@ public class Speed extends Cheat implements Listeners {
 		double d = np.doubles.get(getKey(), "dif-y", 0.0);
 		if(dif != 0.0 && d != 0.0) {
 			if (Math.abs(dif) == Math.abs(d)) {
-				if(Negativity.alertMod(np.getWarn(this) > 7 ? ReportType.VIOLATION : ReportType.WARNING, p,
+				if(Negativity.alertMod(ReportType.WARNING, p,
 						this, 95, "same-diff", "Differences : " + dif + " / " + d) && isSetBack())
 					e.setCancelled(true);
 			}

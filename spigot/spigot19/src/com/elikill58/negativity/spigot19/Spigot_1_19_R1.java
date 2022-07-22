@@ -231,7 +231,7 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 	@Override
 	public List<Entity> getEntities(World w) {
 		List<Entity> entities = new ArrayList<>();
-		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().forEach((mcEnt) -> {
+		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().iterator().forEachRemaining((mcEnt) -> {
 			if(mcEnt != null) {
 				CraftEntity craftEntity = mcEnt.getBukkitEntity();
 				if (craftEntity != null && craftEntity instanceof Entity && craftEntity.isValid())
@@ -267,9 +267,9 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 	}
 
 	@Override
-	public com.elikill58.negativity.api.location.BlockPosition getBlockPosition(Object obj) {
+	public com.elikill58.negativity.api.block.BlockPosition getBlockPosition(Object obj) {
 		BlockPos pos = (BlockPos) obj;
-		return new com.elikill58.negativity.api.location.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
+		return new com.elikill58.negativity.api.block.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
 	}
 	
 	@Override

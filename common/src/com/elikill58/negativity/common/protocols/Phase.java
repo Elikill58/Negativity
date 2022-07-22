@@ -41,7 +41,7 @@ public class Phase extends Cheat {
 		if (LocationUtils.hasOtherThan(loc.clone(), Materials.AIR) || LocationUtils.hasOtherThan(loc.clone().sub(0, 1, 0), Materials.AIR))
 			return;
 		if (!np.booleans.get(getKey(), "jumping", true)) {
-			Negativity.alertMod(ReportType.VIOLATION, p, this, UniversalUtils.parseInPorcent((y * 200) + 20),
+			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((y * 200) + 20),
 					"no-jump", "Player on air. No jumping. From/To: " + y);
 		}
 	}

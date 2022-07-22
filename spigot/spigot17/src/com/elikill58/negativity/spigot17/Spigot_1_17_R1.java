@@ -9,7 +9,6 @@ import org.bukkit.World;
 import org.bukkit.craftbukkit.v1_17_R1.CraftWorld;
 import org.bukkit.craftbukkit.v1_17_R1.entity.CraftEntity;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.api.entity.BoundingBox;
@@ -223,8 +222,8 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().forEach((mcEnt) -> {
 			if(mcEnt != null) {
 				CraftEntity craftEntity = mcEnt.getBukkitEntity();
-				if (craftEntity != null && craftEntity instanceof LivingEntity && craftEntity.isValid())
-					entities.add((LivingEntity) craftEntity);
+				if (craftEntity != null && craftEntity instanceof Entity && craftEntity.isValid())
+					entities.add((Entity) craftEntity);
 			}
 		});
 		return entities;
@@ -258,9 +257,9 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 	}
 	
 	@Override
-	public com.elikill58.negativity.api.location.BlockPosition getBlockPosition(Object obj) {
+	public com.elikill58.negativity.api.block.BlockPosition getBlockPosition(Object obj) {
 		BlockPos pos = (BlockPos) obj;
-		return new com.elikill58.negativity.api.location.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
+		return new com.elikill58.negativity.api.block.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
 	}
 	
 	@Override

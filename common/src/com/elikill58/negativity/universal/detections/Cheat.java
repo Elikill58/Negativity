@@ -24,7 +24,7 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.protocols.Check;
-import com.elikill58.negativity.common.protocols.CheckManager;
+import com.elikill58.negativity.api.protocols.CheckManager;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;

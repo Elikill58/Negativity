@@ -154,7 +154,7 @@ public class FabricPlayer extends FabricEntity<ServerPlayerEntity> implements Pl
 
 	@Override
 	public World getWorld() {
-		return new FabricWorld(entity.getWorld());
+		return World.getWorld(entity.getWorld().asString(), a -> new FabricWorld(entity.getWorld()));
 	}
 
 	@Override

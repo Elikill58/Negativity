@@ -48,7 +48,7 @@ public class FastBow extends Cheat implements Listeners {
 			if (lastShotWithBow != 0) {
 				int ping = p.getPing();
 				if (dif < (200 + ping)) {
-					boolean mayCancel = Negativity.alertMod(dif < (50 + ping) ? ReportType.VIOLATION : ReportType.WARNING, p, this,
+					boolean mayCancel = Negativity.alertMod(dif == 0 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 							UniversalUtils.parseInPorcent((dif < (50 + ping) ? 200 : 100) - dif - ping), "last-shot",
 							"Player use Bow, last shot: " + lastShotWithBow + " Actual time: " + actual + " Difference: " + dif,
 							hoverMsg("main", "%time%", dif));

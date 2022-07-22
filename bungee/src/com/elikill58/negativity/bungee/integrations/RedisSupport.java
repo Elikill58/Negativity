@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.channel.ProxyChannelNegativityMessageEvent;
 import com.elikill58.negativity.bungee.BungeeNegativity;
+import com.elikill58.negativity.bungee.impl.entity.BungeePlayer;
 import com.elikill58.negativity.bungee.impl.entity.RedisBungeePlayer;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.multiproxy.MultiProxy;
@@ -17,6 +18,8 @@ import com.elikill58.negativity.universal.pluginMessages.RedisNegativityMessage;
 import com.imaginarycode.minecraft.redisbungee.RedisBungee;
 import com.imaginarycode.minecraft.redisbungee.events.PubSubMessageEvent;
 
+import net.md_5.bungee.api.ProxyServer;
+import net.md_5.bungee.api.connection.ProxiedPlayer;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.event.EventHandler;
 
@@ -70,12 +73,16 @@ public class RedisSupport implements Listener, MultiProxy {
 			NegativityMessage negMsg = NegativityMessagesManager.readMessage(e.getMessage().getBytes());
 			if(negMsg instanceof RedisNegativityMessage) {
 				RedisNegativityMessage redisMsg = (RedisNegativityMessage) negMsg;
-				Adapter.getAdapter().debug("Received redis message from " + redisMsg.getProxyId() + " (about: " + redisMsg.getUUID().toString() + ")");
 				if(!redisMsg.getProxyId().equalsIgnoreCase(getProxyId())) {
+					Adapter.getAdapter().debug("Received redis message from " + redisMsg.getProxyId() + " (about: " + redisMsg.getUUID().toString() + "), sending alert...");
 					UUID uuid = redisMsg.getUUID();
-					Player p = NegativityPlayer.getNegativityPlayer(uuid, () -> new RedisBungeePlayer(uuid)).getPlayer();
+					Player p = NegativityPlayer.getNegativityPlayer(uuid, () -> {
+						ProxiedPlayer pp = ProxyServer.getInstance().getPlayer(uuid);
+						return pp == null ? new RedisBungeePlayer(uuid) : new BungeePlayer(pp);
+					}).getPlayer();
 					EventManager.callEvent(new ProxyChannelNegativityMessageEvent(p, redisMsg.getMessage(), false));
-				}
+				} else
+					Adapter.getAdapter().debug("Received redis message from " + redisMsg.getProxyId() + " (about: " + redisMsg.getUUID().toString() + "). Wrong proxy.");
 			} else
 				Adapter.getAdapter().getLogger().error("Received message with redis is not supported: " + negMsg.getClass().getSimpleName());
 		} catch (Exception exc) {

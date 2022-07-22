@@ -519,8 +519,10 @@ public class SpigotNegativityPlayer extends NegativityPlayer {
 		if (proof.size() == 0)
 			return;
 		try {
-			File temp = new File(SpigotNegativity.getInstance().getDataFolder().getAbsolutePath() + File.separator
-					+ "user" + File.separator + "proof" + File.separator + getUUID() + ".txt");
+			File folder = new File(new File(SpigotNegativity.getInstance().getDataFolder(), "user"), "proof");
+			if(!folder.exists())
+				folder.mkdirs();
+			File temp = new File(folder, getUUID() + ".txt");
 			if (!temp.exists())
 				temp.createNewFile();
 			String msg = "";

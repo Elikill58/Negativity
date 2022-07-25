@@ -22,7 +22,6 @@ Database:
   # This plugin doesn't edit the database.
   # The database credentials and IP are never accessable by us.
   url: "127.0.0.1/myDb"
-  user: root
   user: "root"
   password: "myPassword"
 

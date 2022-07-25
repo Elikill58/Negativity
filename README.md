@@ -62,6 +62,7 @@ We support a lot of languages :
 - **Indonesian** (*id_ID*) By Dave9123#0757
 - **Thai** (*th_TH*) By IAmOverD҉A҉R҉K҉E҈S҉T҉#2498
 - **English (GB)** (*en_GB*) By NEWBTW#2108
+- **Turkish** (*tr_TR*) By 'Eternal The God 🕶#0707
 
 To change the lang, just use "/nlang" or change "Translation.default" to the one that you want.
 

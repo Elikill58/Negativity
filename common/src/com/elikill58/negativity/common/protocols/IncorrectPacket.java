@@ -40,16 +40,15 @@ public class IncorrectPacket extends Cheat {
 			Player p = e.getPlayer();
 			Location loc = p.getLocation();
 			double dx = loc.getX() - lp.getX() + 0.5D;
-			double dy = loc.getY() - lp.getY() + 0.5D + 1.5D;
 			double dz = loc.getZ() - lp.getZ() + 0.5D;
-			int maxDistance = (p.getGameMode().equals(GameMode.CREATIVE) ? 49 : 42); // +5 is to prevent false flags
-			double distance = dx * dx + dy * dy + dz * dz, distanceSpawn = new Vector(0, 0, 0).distance(loc.toBlockVector());
+			int maxDistance = (p.getGameMode().equals(GameMode.CREATIVE) ? 49 : 42);
+			double distance = dx * dx + dz * dz, distanceSpawn = new Vector(0, 0, 0).distance(loc.toBlockVector());
 			if (distance > maxDistance && distanceSpawn > 100) { // distance originally used by spigot
 				if(distanceSpawn > 1000 && distance > 1000)
 					e.setCancelled(true); // cancel.
 				int relia = UniversalUtils.parseInPorcent(distanceSpawn);
 				int amount = (int) (distance < 1000 ? distance - maxDistance : distance / 10) / 10;
-				if (amount <= 0)
+				if (amount <= 10) // can be a plugin
 					return;
 				Negativity.alertMod(distance > 10000 && distanceSpawn > 10000 ? ReportType.VIOLATION : ReportType.WARNING, p, this, relia,
 						"distance",

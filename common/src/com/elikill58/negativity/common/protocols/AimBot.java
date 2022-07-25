@@ -126,9 +126,9 @@ public class AimBot extends Cheat {
 		Entity cible = e.getDamaged();
 		Location loc = p.getLocation(), cloc = cible.getLocation();
 		double xzDistance = loc.distanceXZ(cloc);
-		if(xzDistance < 0.3)
+		if(xzDistance < 0.5)
 			return;
-		boolean notSure = xzDistance < 0.6; // if X/Z distance too low
+		boolean notSure = xzDistance < 1; // if X/Z distance too low
 		Direction direction = LocationUtils.getDirection(p, cloc);
 		long amount = 0;
 		int reliability = 0;

@@ -28,31 +28,30 @@ public class AirJump extends Cheat {
 
 	@Check(name = "diff-y", description = "Y difference", conditions = { CheckConditions.SURVIVAL,
 			CheckConditions.NO_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE,
-			CheckConditions.NO_USE_TRIDENT })
+			CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_STAIRS_AROUND })
 	public void onMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (p.hasPotionEffect(PotionEffectType.JUMP))
 			return;
+		double diffYtoFromBasic = e.getTo().getY() - e.getFrom().getY();
+		if(diffYtoFromBasic == 0.5)
+			return; // seems to be stairs
 		Location loc = p.getLocation().clone(), locDown = loc.clone().sub(0, 1, 0),
 				locDownDown = locDown.clone().sub(0, 1, 0);
+		if (hasOtherThanExtended(loc, "AIR") || hasOtherThan(locDown, "AIR") || hasOtherThan(locDownDown, "AIR"))
+			return;
+		String idDown = locDown.getBlock().getType().getId(), idDownDown = locDownDown.getBlock().getType().getId();
+		if (idDownDown.contains("STAIR") || idDown.contains("STAIR"))
+			return;
 
 		Scheduler.getInstance().runDelayed(() -> {
-			if (hasOtherThanExtended(loc, "AIR") || hasOtherThan(locDown, "AIR") || hasOtherThan(locDownDown, "AIR"))
-				return;
-			String idDown = locDown.getBlock().getType().getId(), idDownDown = locDownDown.getBlock().getType().getId();
-			if (idDownDown.contains("STAIR") || idDown.contains("STAIR"))
-				return;
-
-			double diffYtoFromBasic = e.getTo().getY() - e.getFrom().getY();
 			double diffYtoFrom = diffYtoFromBasic - Math.abs(e.getTo().getDirection().getY());
-			// double diffYtoFrom = e.getTo().getY() - e.getFrom().getY() -
-			// Math.abs(e.getTo().getDirection().getY());
 			double lastDiffY = np.doubles.get(AIR_JUMP, "diff-y", 0.0);
 			if (!np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
 				double velY = p.getVelocity().getY();
 				if (diffYtoFrom - (velY > 0 ? velY : 0) > 0.35 && lastDiffY < diffYtoFrom && lastDiffY > velY
 						&& lastDiffY > p.getTheoricVelocity().getY()
-						&& !hasOtherThanExtended(loc.clone().sub(0, 2, 0), "AIR")) {
+						&& !hasOtherThanExtended(locDownDown, "AIR")) {
 					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p,
 							this, UniversalUtils.parseInPorcent((int) (diffYtoFrom * 190) - (p.getPing() / 50)), "diff-y",
 							"Actual diff Y: " + diffYtoFrom + ", last diff Y: " + lastDiffY + ". Down: " + idDown

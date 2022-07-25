@@ -8,6 +8,7 @@ import java.util.List;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
@@ -212,8 +213,9 @@ public class Fly extends Cheat implements Listeners {
 		Location from = e.getFrom(), to = e.getTo();
 
 		Location loc = p.getLocation().clone(), locUnder = p.getLocation().clone().sub(0, 1, 0);
+		Block blockUnder = locUnder.getBlock();
 		boolean isInWater = loc.getBlock().getType().getId().contains("WATER"),
-				isOnWater = locUnder.getBlock().getType().getId().contains("WATER");
+				isOnWater = blockUnder.getType().getId().contains("WATER");
 
 		double d = to.getY() - from.getY();
 
@@ -247,7 +249,7 @@ public class Fly extends Cheat implements Listeners {
 				if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount),
 						"omega-craft",
 						"OmegaCraftFly - " + flyMoveAmount + " > " + onGround + " : " + wasOnGround + ", i: " + i
-								+ ", d: " + d,
+								+ ", d: " + d + ", under: " + blockUnder.getType().getId(),
 						new CheatHover.Literal("OmegaCraft: " + amount + " times with no Y changes"),
 						amount > 1 ? amount - 1 : 1) && isSetBack())
 					e.setCancelled(true);

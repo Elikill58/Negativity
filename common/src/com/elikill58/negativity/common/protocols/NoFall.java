@@ -1,10 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
@@ -19,7 +15,6 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
-import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
@@ -200,7 +195,8 @@ public class NoFall extends Cheat {
 		np.floats.set(getKey(), "last-fall", p.getFallDistance());
 	}
 
-	@Check(name = "fake-ground", description = "Detect when player faking ground", conditions = {
+	// TODO re-add this check
+	/*@Check(name = "fake-ground", description = "Detect when player faking ground", conditions = {
 			CheckConditions.SURVIVAL, CheckConditions.NO_ON_BEDROCK, CheckConditions.NO_CLIMB_BLOCK })
 	public void onFakeGround(PlayerMoveEvent e, NegativityPlayer np) {
 		if (!e.isMovePosition())
@@ -239,7 +235,7 @@ public class NoFall extends Cheat {
 					&& isSetBack())
 				manageDamage(p, (int) p.getFallDistance(), reliability);
 		}
-	}
+	}*/
 
 	private void manageDamage(Player p, int damage, int relia) {
 		p.damage(damage >= p.getHealth()

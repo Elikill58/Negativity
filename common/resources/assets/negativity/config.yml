@@ -123,64 +123,86 @@ Permissions:
       default: "negativity.bypass.ban"
     all:
       default: "negativity.bypass.all"
-    forcefield:
-      default: "negativity.bypass.forcefield"
-    fastplace:
-      default: "negativity.bypass.fastplace"
-    speed:
-      default: "negativity.bypass.speed"
-    autoclick:
-      default: "negativity.bypass.autoclick"
-    fly:
-      default: "negativity.bypass.fly"
-    antipotion:
-      default: "negativity.bypass.antipotion"
-    fasteat:
-      default: "negativity.bypass.fasteat"
-    regen:
-      default: "negativity.bypass.regen"
+    aimbot:
+      default: "negativity.bypass.aimbot"
+    airjump:
+      default: "negativity.bypass.airjump"
+    airplace:
+      default: "negativity.bypass.airplace"
     antiknockback:
       default: "negativity.bypass.antiknockback"
+    antipotion:
+      default: "negativity.bypass.antipotion"
+    autoclick:
+      default: "negativity.bypass.autoclick"
+    autosteal:
+      default: "negativity.bypass.autosteal"
+    blink:
+      default: "negativity.bypass.blink"
+    chat:
+      default: "negativity.bypass.chat"
+    critical:
+      default: "negativity.bypass.critical"
+    elytrafly:
+      default: "negativity.bypass.elytrafly"
+    fastbow:
+      default: "negativity.bypass.fastbow"
+    fasteat:
+      default: "negativity.bypass.fasteat"
+    fastladder:
+      default: "negativity.bypass.fastladder"
+    fastplace:
+      default: "negativity.bypass.fastplace"
+    faststairs:
+      default: "negativity.bypass.faststairs"
+    fly:
+      default: "negativity.bypass.fly"
+    forcefield:
+      default: "negativity.bypass.forcefield"
+    groundspoof:
+      default: "negativity.bypass.groundspoof"
+    incorrectpacket:
+      default: "negativity.bypass.incorrectpacket"
+    inventorymove:
+      default: "negativity.bypass.inventorymove"
     jesus:
       default: "negativity.bypass.jesus"
     nofall:
       default: "negativity.bypass.nofall"
-    blink:
-      default: "negativity.bypass.blink"
-    spider:
-      default: "negativity.bypass.spider"
-    fastbow:
-      default: "negativity.bypass.fastbow"
-    scaffold:
-      default: "negativity.bypass.scaffold"
-    step:
-      default: "negativity.bypass.step"
-    noslowdown:
-      default: "negativity.bypass.noslowdown"
-    fastladder:
-      default: "negativity.bypass.fastladder"
-    phase:
-      default: "negativity.bypass.phase"
-    autosteal:
-      default: "negativity.bypass.autosteal"
-    nuker:
-      default: "negativity.bypass.nuker"
-    airjump:
-      default: "negativity.bypass.airjump"
-    chat:
-      default: "negativity.bypass.chat"
-    noweb:
-      default: "negativity.bypass.noweb"
-    critical:
-      default: "negativity.bypass.critical"
-    inventorymove:
-      default: "negativity.bypass.inventorymove"
-    faststairs:
-      default: "negativity.bypass.faststairs"
     nopitchlimit:
       default: "negativity.bypass.nopitchlimit"
+    noslowdown:
+      default: "negativity.bypass.noslowdown"
+    noweb:
+      default: "negativity.bypass.noweb"
+    nuker:
+      default: "negativity.bypass.nuker"
+    phase:
+      default: "negativity.bypass.phase"
+    pingspoof:
+      default: "negativity.bypass.pingspoof"
+    reach:
+      default: "negativity.bypass.reach"
+    regen:
+      default: "negativity.bypass.regen"
+    scaffold:
+      default: "negativity.bypass.scaffold"
+    sneak:
+      default: "negativity.bypass.sneak"
+    speed:
+      default: "negativity.bypass.speed"
+    spider:
+      default: "negativity.bypass.spider"
+    step:
+      default: "negativity.bypass.step"
+    strafe:
+      default: "negativity.bypass.strafe"
+    superknockback:
+      default: "negativity.bypass.superknockback"
     timer:
       default: "negativity.bypass.timer"
+    xray:
+      default: "negativity.bypass.xray"
 
 Translation:
   active: false # enable or disable the translation

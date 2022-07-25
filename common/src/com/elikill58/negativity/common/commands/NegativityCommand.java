@@ -241,6 +241,11 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 					} else {
 						sender.sendMessage(ChatColor.RED + "Unknow lang " + lang);
 					}
+				} else if(arg[2].equalsIgnoreCase("debug")) {
+					boolean b = UniversalUtils.getBoolean(arg[3]);
+					Adapter.getAdapter().getConfig().set("debug", b);
+					Adapter.getAdapter().getConfig().save();
+					sender.sendMessage(ChatColor.GREEN + "Debug mode " + (b ? "enabled" : "disabled"));
 				} else {
 					sender.sendMessage(ChatColor.RED + "Unknow options");
 				}
@@ -550,10 +555,12 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 					}
 				} else if(arg[1].equalsIgnoreCase("global")) {
 					if(arg.length == 3) {
-						possible = Arrays.asList("lang");
+						possible = Arrays.asList("lang", "debug");
 					} else if(arg.length == 4) {
 						if(arg[2].equalsIgnoreCase("lang"))
 							possible = TranslatedMessages.LANGS;
+						else if(arg[2].equalsIgnoreCase("debug"))
+							possible = Arrays.asList("true", "false");
 						else
 							possible = null;
 					} else

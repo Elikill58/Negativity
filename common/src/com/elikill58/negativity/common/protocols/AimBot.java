@@ -156,8 +156,8 @@ public class AimBot extends Cheat {
 		case RIGHT:
 			if(notSure)
 				return;
-			amount = 2;
-			reliability = 90;
+			amount = 1;
+			reliability = 75;
 			break;
 		}
 		if(amount > 0)

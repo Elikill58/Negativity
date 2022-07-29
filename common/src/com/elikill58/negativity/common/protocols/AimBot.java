@@ -125,6 +125,8 @@ public class AimBot extends Cheat {
 		Player p = e.getPlayer();
 		Entity cible = e.getDamaged();
 		Location loc = p.getLocation(), cloc = cible.getLocation();
+		if(!p.getWorld().equals(cloc.getWorld())) // entity just beeing tp
+			return;
 		double xzDistance = loc.distanceXZ(cloc);
 		if(xzDistance < 0.5)
 			return;

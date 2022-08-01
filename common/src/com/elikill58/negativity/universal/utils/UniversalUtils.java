@@ -56,7 +56,7 @@ public class UniversalUtils {
 	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	public static final String BUNDLED_ASSETS_BASE = "/assets/negativity/";
 	public static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
-	public static boolean HAVE_INTERNET = true;
+	public static boolean HAVE_INTERNET = true, checkAgainForMcleaks = true;
 
 	public static int getMultipleOf(int i, int multiple, int more) {
 		return getMultipleOf(i, multiple, more, Integer.MAX_VALUE);
@@ -190,6 +190,18 @@ public class UniversalUtils {
 	}
 	
 	public static Optional<String> getContentFromURL(String urlName, String post){
+		try {
+			return getContentFromURLWithException(urlName, post);
+        } catch (SSLException e) {
+        	Adapter.getAdapter().getLogger().warn("Failed to connect with the internet connection to check for update or send stats.");
+        } catch (Exception e) {
+        	Adapter.getAdapter().getLogger().info("An error occured while trying to make web request to: " + urlName);
+        	e.printStackTrace();
+		}
+		return Optional.empty();
+	}
+	
+	public static Optional<String> getContentFromURLWithException(String urlName, String post) throws Exception {
 		if(!HAVE_INTERNET)
 			return Optional.empty();
 		try {
@@ -197,7 +209,7 @@ public class UniversalUtils {
 			URL url = new URL(urlName);
 			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
 			connection.setUseCaches(true);
-			connection.setRequestProperty("User-Agent", "Negativity " + ada.getName() + " - " + ada.getVersion());
+			connection.setRequestProperty("User-Agent", "Negativity" + ada.getName() + "/" + ada.getVersion() + "(Linux x64) GoogleChrome");
 			connection.setDoOutput(true);
 			connection.setConnectTimeout(5000);
 			if(!post.equalsIgnoreCase("")) {
@@ -225,11 +237,6 @@ public class UniversalUtils {
             	Adapter.getAdapter().getLogger().info("As chinese people, you cannot access to the website " + urlName + ".");
         	} else
             	Adapter.getAdapter().getLogger().warn("Cannot connect to " + urlName + " (Reason: " + e.getMessage() + ").");
-        } catch (SSLException e) {
-        	Adapter.getAdapter().getLogger().warn("Failed to connect with the internet connection to check for update or send stats.");
-        } catch (IOException e) {
-        	Adapter.getAdapter().getLogger().info("An error occured while trying to make web request to: " + urlName);
-        	e.printStackTrace();
 		}
 		return Optional.empty();
 	}
@@ -257,18 +264,25 @@ public class UniversalUtils {
 	}
 
 	public static CompletableFuture<@Nullable String> requestMcleaksData(String uuid) {
+		if(!checkAgainForMcleaks) // previously get error
+			return CompletableFuture.completedFuture(null);
 		if(isUUID(uuid)) {
 			UUID id = UUID.fromString(uuid);
 			if(BedrockPlayerManager.isBedrockPlayer(id))
 				return CompletableFuture.supplyAsync(() -> "{ \"isMcleaks\": false }");
 		}
 		return CompletableFuture.supplyAsync(() -> {
-			Optional<String> optContent = getContentFromURL("https://mcleaks.themrgong.xyz/api/v3/isuuidmcleaks/" + uuid);
-			if(optContent.isPresent()) {
-				String content = optContent.get();
-				if(content == null)
-					Adapter.getAdapter().getLogger().warn("McLeaks API seem to be down. So, we cannot know if the player is using it.");
-				return content;
+			try {
+				Optional<String> optContent = getContentFromURLWithException("https://mcleaks.themrgong.xyz/api/v3/isuuidmcleaks/" + uuid, "");
+				if(optContent.isPresent()) {
+					String content = optContent.get();
+					if(content == null)
+						Adapter.getAdapter().getLogger().warn("McLeaks API seem to be down. So, we cannot know if the player is using it.");
+					return content;
+				}
+			} catch (Exception e) {
+				checkAgainForMcleaks = false;
+				Adapter.getAdapter().getLogger().printError("Can't check mcleaks for " + uuid + ". An error occurred: ", e);
 			}
 			return null;
 		});

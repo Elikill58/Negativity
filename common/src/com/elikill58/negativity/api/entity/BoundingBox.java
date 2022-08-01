@@ -6,7 +6,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.function.BiFunction;
 
+import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.maths.Point;
 import com.elikill58.negativity.universal.Adapter;
 
@@ -61,6 +63,53 @@ public class BoundingBox {
 
 	public double getMaxZ() {
 		return maxZ;
+	}
+	
+	/**
+	 * Create new bounding box with expanded values
+	 * 
+	 * @param size the size to add
+	 * @return new bounding box
+	 */
+	public BoundingBox expand(double size) {
+		return expand(size, size, size);
+	}
+
+	
+	/**
+	 * Create new bounding box with expanded values
+	 * 
+	 * @param x the x value to add
+	 * @param y the y value to add
+	 * @param z the z value to add
+	 * @return new bounding box
+	 */
+	public BoundingBox expand(double x, double y, double z) {
+		return new BoundingBox(minX - x, minY - y, minZ - z, maxX + x, maxY + y, maxZ + z);
+	}
+
+	
+	/**
+	 * Create new bounding box with reduced values
+	 * 
+	 * @param size the size to remove
+	 * @return new bounding box
+	 */
+	public BoundingBox reduce(double size) {
+		return reduce(size, size, size);
+	}
+
+	
+	/**
+	 * Create new bounding box with reduced values
+	 * 
+	 * @param x the x value to remove
+	 * @param y the y value to remove
+	 * @param z the z value to remove
+	 * @return new bounding box
+	 */
+	public BoundingBox reduce(double x, double y, double z) {
+		return new BoundingBox(minX + x, minY + y, minZ + z, maxX - x, maxY - y, maxZ - z);
 	}
 	
 	public List<Point> getAllPoints(){
@@ -206,6 +255,19 @@ public class BoundingBox {
 			}
 		}
 		return res;
+	}
+	
+	public List<Block> getBlocks(World w) {
+        List<Block> blocks = new ArrayList<>();
+
+        for (double x = minX; x <= maxX; x += (maxX - minX)) {
+            for (double y = minY; y <= maxY + 0.01; y += (maxY - minY)) {
+                for (double z = minZ; z <= maxZ; z += (maxZ - minZ)) {
+                    blocks.add(w.getBlockAt(x, y, z));
+                }
+            }
+        }
+        return blocks;
 	}
 	
 	@Override

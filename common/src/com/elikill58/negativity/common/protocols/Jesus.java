@@ -1,7 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
 import static com.elikill58.negativity.api.item.Materials.STATIONARY_WATER;
-import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialAround;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialsAround;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
@@ -132,13 +131,11 @@ public class Jesus extends Cheat implements Listeners {
 	}
 
 	@Check(name = "ground-water", description = "Ground and on water", conditions = { CheckConditions.SURVIVAL,
-			CheckConditions.NO_SNEAK, CheckConditions.NO_BOAT_AROUND })
+			CheckConditions.NO_SNEAK, CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_BLOCK_MID_AROUND })
 	public void onGroundWater(PlayerMoveEvent e, NegativityPlayer np) {
 		if (!e.isMovePosition())
 			return;
 		Player p = e.getPlayer();
-		if (hasMaterialAround(p.getLocation(), Materials.WATER_LILY))
-			return;
 		Block actual = p.getLocation().getBlock(), sub = new Location(p.getWorld(), p.getLocation().getX(),
 				p.getLocation().getBlockY() - 1, p.getLocation().getZ()).getBlock();
 		if (sub.getType().equals(Materials.WATER_LILY))

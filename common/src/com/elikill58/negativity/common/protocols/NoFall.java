@@ -36,7 +36,7 @@ public class NoFall extends Cheat {
 	@Check(name = "motion-y", description = "Motion Y when fall", conditions = { CheckConditions.NO_USE_ELEVATOR,
 			CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA,
 			CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_LIQUID_AROUND,
-			CheckConditions.NO_FALL_LESS_BLOCK_BELOW })
+			CheckConditions.NO_FALL_LESS_BLOCK })
 	public void onMoveMotionY(PlayerMoveEvent e, NegativityPlayer np) {
 		if (e.isCancelled())
 			return;

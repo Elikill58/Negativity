@@ -65,7 +65,7 @@ public class Step extends Cheat implements Listeners {
 	@Check(name = "dif", description = "Distance about blocks up", conditions = { CheckConditions.SURVIVAL,
 			CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ON_BEDROCK,
 			CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_USE_SLIME, CheckConditions.NO_USE_TRIDENT,
-			CheckConditions.NO_BLOCK_MID_AROUND_BELOW })
+			CheckConditions.NO_BLOCK_MID_AROUND })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
@@ -88,7 +88,7 @@ public class Step extends Cheat implements Listeners {
 	@Check(name = "dif-boost", description = "Distance while counting jump", conditions = { CheckConditions.SURVIVAL,
 			CheckConditions.NO_ELYTRA, CheckConditions.NO_SWIM, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ON_BEDROCK,
 			CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_USE_SLIME, CheckConditions.NO_USE_TRIDENT,
-			CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_BLOCK_MID_AROUND_BELOW })
+			CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_BLOCK_MID_AROUND })
 	public void onPlayerMoveDifBoost(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))

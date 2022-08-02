@@ -101,7 +101,7 @@ public class Spider extends Cheat {
 	}
 
 	@Check(name = "distance", description = "Distance when going up", conditions = { CheckConditions.SURVIVAL,
-			CheckConditions.NO_BLOCK_MID_AROUND_BELOW, CheckConditions.NO_INSIDE_VEHICLE,
+			CheckConditions.NO_INSIDE_VEHICLE,
 			CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_LIQUID_AROUND,
 			CheckConditions.NO_STAIRS_AROUND, CheckConditions.NO_USE_TRIDENT,
 			CheckConditions.NO_BLOCK_MID_AROUND, CheckConditions.NO_FLY, CheckConditions.NO_CLIMB_BLOCK })

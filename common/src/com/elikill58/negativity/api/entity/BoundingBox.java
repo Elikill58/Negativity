@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 import com.elikill58.negativity.api.block.Block;
+import com.elikill58.negativity.api.block.BlockChecker;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.maths.Point;
@@ -257,7 +258,7 @@ public class BoundingBox {
 		return res;
 	}
 	
-	public List<Block> getBlocks(World w) {
+	public BlockChecker getBlocks(World w) {
         List<Block> blocks = new ArrayList<>();
 
         for (double x = minX; x <= maxX; x += (maxX - minX)) {
@@ -267,7 +268,7 @@ public class BoundingBox {
                 }
             }
         }
-        return blocks;
+        return new BlockChecker(blocks);
 	}
 	
 	@Override

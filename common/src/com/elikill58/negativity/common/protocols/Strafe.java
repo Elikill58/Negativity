@@ -20,7 +20,7 @@ public class Strafe extends Cheat implements Listeners {
 
 	@Check(name = "direction", description = "Check for impossible direction change.", conditions = {
 			CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_GROUND, CheckConditions.NO_USE_TRIDENT,
-			CheckConditions.NO_ELYTRA, CheckConditions.NO_FALL_LESS_BLOCK_BELOW, CheckConditions.NO_FALL_LESS_BLOCK })
+			CheckConditions.NO_ELYTRA, CheckConditions.NO_FALL_LESS_BLOCK })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		if (e.isMovePosition()) {
 			final double deltaX = Math.abs(e.getTo().getX() - e.getFrom().getX());

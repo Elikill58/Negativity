@@ -2,6 +2,10 @@ package com.elikill58.negativity.universal.utils;
 
 public class Maths {
 	
+	public static boolean isOnGround(final double y) {
+		return (y % 0.015625 == 0.0);
+	}
+	
 	public static int floor(double num) {
 		int floor = (int) num;
 		return floor == num ? floor : floor - (int) (Double.doubleToRawLongBits(num) >>> 63);

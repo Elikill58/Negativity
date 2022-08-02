@@ -41,6 +41,7 @@ public class LocationUtils {
 	 * @param ms Material that we are searching
 	 * @return true if one of specified material if around
 	 */
+	@Deprecated
 	public static boolean hasMaterialAround(Location loc, Material... ms) {
 		List<Material> m = Arrays.asList(ms);
 		if (m.contains(loc.add(0, 0, 1).getBlock().getType()))
@@ -70,6 +71,7 @@ public class LocationUtils {
 	 * @param ms Material's name that we are searchingWarn: For 'REDSTONE', we will also find 'REDSTONE_BLOCK' and all other block with contains name ...
 	 * @return true if one of specified material if around
 	 */
+	@Deprecated
 	public static boolean hasMaterialsAround(Location loc, String... ms) {
 		loc = loc.clone();
 		if (isBlockOfType(loc, ms))
@@ -101,6 +103,7 @@ public class LocationUtils {
 	 * @param m The material that we are searching
 	 * @return true if one of specified material if around
 	 */
+	@Deprecated
 	public static boolean hasOtherThanExtended(Location loc, Material m) {
 		return hasOtherThanExtended(loc, m.getId());
 	}
@@ -113,6 +116,7 @@ public class LocationUtils {
 	 * @param m the name that we are searching in material names
 	 * @return true if one of specified material if around
 	 */
+	@Deprecated
 	public static boolean hasOtherThanExtended(Location loc, String m) {
 		Location tempLoc = loc.clone();
 		loc = loc.clone();
@@ -163,6 +167,7 @@ public class LocationUtils {
 	 * @param m the name that we are searching in material names
 	 * @return true if one of specified material if around
 	 */
+	@Deprecated
 	public static boolean hasExtended(Location loc, String m) {
 		Location tempLoc = loc.clone();
 		loc = loc.clone();
@@ -213,6 +218,7 @@ public class LocationUtils {
 	 * @param m The material that we are searching
 	 * @return true if one of specified material if around
 	 */
+	@Deprecated
 	public static boolean hasOtherThan(Location loc, Material m) {
 		loc = loc.clone();
 		if (!loc.add(0, 0, 1).getBlock().getType().equals(m))
@@ -242,6 +248,7 @@ public class LocationUtils {
 	 * @param name the name that we are searching in material names
 	 * @return true if one of specified material is around
 	 */
+	@Deprecated
 	public static boolean hasOtherThan(Location loc, String name) {
 		loc = loc.clone();
 		if (!loc.add(0, 0, 1).getBlock().getType().getId().contains(name))
@@ -492,22 +499,6 @@ public class LocationUtils {
 	public static boolean isInWater(Location loc) {
 		return loc.getBlock().isLiquid() || loc.clone().add(0, -1, 0).getBlock().isLiquid()
 				|| loc.clone().add(0, 1, 0).getBlock().isLiquid();
-	}
-
-	/**
-	 * Get the arrow of the direction from the player to the given location
-	 * 
-	 * @param p the player which is requiring for direction
-	 * @param loc the direction
-	 * @return the arrow already parsed
-	 */
-	@Deprecated
-	public static double getAngleTo(Player p, Location loc) {
-		Location position = p.getLocation();
-		Vector a = loc.clone().sub(position).toVector().normalize();
-		Vector b = position.getDirection();
-		double angle = Math.toDegrees(Math.acos(a.dot(b)));
-		return (angle < 0) ? (360 + angle) : angle;
 	}
 
 	public static Direction getDirection(Player p, Location loc) {

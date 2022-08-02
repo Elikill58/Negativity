@@ -14,12 +14,16 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
+import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
@@ -32,6 +36,7 @@ import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
+import com.elikill58.negativity.universal.utils.Maths;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Fly extends Cheat implements Listeners {
@@ -53,8 +58,7 @@ public class Fly extends Cheat implements Listeners {
 			return;
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		if (p.getAllowFlight() || p.isSwimming() || p.isInsideVehicle() || LocationUtils.hasMaterialAround(e.getTo(),
-				Materials.WATER_LILY, Materials.WEB, Materials.LADDER, Materials.VINE))
+		if (p.getAllowFlight() || p.isSwimming() || p.isInsideVehicle() || e.getTo().getBlockChecker(1.5).has(Materials.WATER_LILY, Materials.WEB, Materials.LADDER, Materials.VINE))
 			return;
 		if (p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED))
 				.getAmplifier() > 5)
@@ -69,9 +73,9 @@ public class Fly extends Cheat implements Listeners {
 		Material type = loc.getBlock().getType(), typeUpper = loc.getBlock().getRelative(BlockFace.UP).getType();
 		boolean isInWater = loc.getBlock().getType().getId().contains("WATER"),
 				isOnWater = locUnder.getBlock().getType().getId().contains("WATER");
-		boolean hasOtherThanAir = LocationUtils.hasOtherThan(loc, Materials.AIR),
-				hasUnderOtherThanAir = LocationUtils.hasOtherThan(locUnder, Materials.AIR),
-				hasUnderUnderOtherThanAir = LocationUtils.hasOtherThan(locUnderUnder, Materials.AIR);
+		boolean hasOtherThanAir = loc.getBlockCheckerXZ(1.5).hasOther(Materials.AIR),
+				hasUnderOtherThanAir = locUnder.getBlockCheckerXZ(1).hasOther(Materials.AIR),
+				hasUnderUnderOtherThanAir = locUnderUnder.getBlockCheckerXZ(1).hasOther(Materials.AIR);
 
 		double i = to.toVector().distance(from.toVector());
 		double d = to.getY() - from.getY();
@@ -80,12 +84,12 @@ public class Fly extends Cheat implements Listeners {
 		if (!p.hasElytra()) {
 			if (checkActive("suspicious-y")) {
 				boolean hasBuggedBlockAroundForGeyser = np.isBedrockPlayer()
-						&& LocationUtils.hasMaterialsAround(locUnder, "SLAB", "FENCE", "STAIRS", "BED");
+						&& locUnder.getBlockCheckerXZ(1).has("SLAB", "FENCE", "STAIRS", "BED");
 				String strY = String.valueOf(y);
 				if (strY.contains("E") && !strY.equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle()
 						&& !np.isInFight && !LocationUtils.hasBoatAroundHim(p.getLocation())
 						&& !(isInWater || isOnWater)
-						&& !LocationUtils.hasMaterialsAround(loc, "SCAFFOLD", "LAVA", "WATER") && !inBoat
+						&& !loc.getBlockCheckerXZ(1).has("SCAFFOLD", "LAVA", "WATER") && !inBoat
 						&& !hasBuggedBlockAroundForGeyser) {
 					int eY = (int) Math.abs(Double.parseDouble(String.valueOf(y).split("E")[0]));
 					mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
@@ -115,7 +119,7 @@ public class Fly extends Cheat implements Listeners {
 					np.doubles.set(FLY, "air-below", nbTimeAirBelow + 1);
 					if (nbTimeAirBelow > 6) { // we don't care when player jump
 						int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
-						if (LocationUtils.hasOtherThan(p.getLocation().add(0, -3, 0), Materials.AIR))
+						if (p.getLocation().add(0, -3, 0).getBlockChecker(1, 0, 1).hasOther(Materials.AIR))
 							porcent = parseInPorcent(porcent - 15);
 						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, porcent, "no-ground-down",
 								"Not ground (" + nb + " down), disY: " + d + ", vel: " + p.getVelocity() + ", fd: "
@@ -264,5 +268,30 @@ public class Fly extends Cheat implements Listeners {
 			flyMoveAmount.add(d);
 
 		np.booleans.set(FLY, "fly-wasOnGround", onGround);
+	}
+	
+	@Check(name = "ground-checker", description = "Check for ground on no-ground packet")
+	public void onP(PacketReceiveEvent e) {
+		Player p = e.getPlayer();
+		AbstractPacket packet = e.getPacket();
+		if (packet.getPacketType().equals(PacketType.Client.POSITION)
+				|| packet.getPacketType().equals(PacketType.Client.POSITION_LOOK)) {
+			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
+
+			boolean positionGround = Maths.isOnGround(flying.getY());
+			boolean packetGround = flying.isGround;
+
+			boolean exempt = p.isInsideVehicle() || p.isFlying();// NEAR_VEHICLE, TELEPORT, CLIMBABLE, FLYING, SLIME
+			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+			double actual = np.doubles.get(CheatKeys.FLY, "buffer", 0.0);
+			if (!exempt && positionGround != packetGround) {
+				if (++actual > 4) {
+					Negativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FLY), 90, "motion", "Motion: " + positionGround + " / " + packetGround + ", y: " + flying.getY(), null, (long) (actual - 3));
+				}
+			} else {
+				actual = Math.max(actual - 0.15, 0);
+			}
+			np.doubles.set(CheatKeys.FLY, "buffer", actual);
+		}
 	}
 }

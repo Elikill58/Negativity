@@ -1,6 +1,5 @@
 package com.elikill58.negativity.common.protocols;
 
-import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialsAround;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
 import static com.elikill58.negativity.universal.detections.keys.CheatKeys.SPEED;
 
@@ -85,9 +84,7 @@ public class Speed extends Cheat implements Listeners {
 			}
 		}
 		
-		if (hasIceBelow || hasMaterialsAround(locUp, "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| hasMaterialsAround(loc.clone().add(0, 2, 0), "TRAPDOOR", "SLAB", "STAIRS", "CARPET")
-				|| hasMaterialsAround(locDown, "TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
+		if (hasIceBelow || locDown.getBlockChecker(1.5) .has("TRAPDOOR", "SLAB", "STAIRS", "CARPET"))
 			return;
 		double amplifierSpeed = p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED, 0, 0)).getAmplifier();
 		double y = to.toVector().clone().setY(0).distance(from.toVector().clone().setY(0)), velocity = p.getVelocity().getY(), velLen = p.getVelocity().length();

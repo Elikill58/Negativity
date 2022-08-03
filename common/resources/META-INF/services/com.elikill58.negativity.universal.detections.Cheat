@@ -25,7 +25,6 @@ com.elikill58.negativity.common.protocols.NoPitchLimit
 com.elikill58.negativity.common.protocols.NoSlowDown
 com.elikill58.negativity.common.protocols.NoWeb
 com.elikill58.negativity.common.protocols.Nuker
-com.elikill58.negativity.common.protocols.Phase
 com.elikill58.negativity.common.protocols.PingSpoof
 com.elikill58.negativity.common.protocols.Reach
 com.elikill58.negativity.common.protocols.Regen

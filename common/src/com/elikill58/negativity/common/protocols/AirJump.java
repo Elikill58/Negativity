@@ -1,6 +1,5 @@
 package com.elikill58.negativity.common.protocols;
 
-import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.universal.detections.keys.CheatKeys.AIR_JUMP;
 
 import com.elikill58.negativity.api.NegativityPlayer;
@@ -49,8 +48,7 @@ public class AirJump extends Cheat {
 			if (!np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
 				double velY = p.getVelocity().getY();
 				if (diffYtoFrom - (velY > 0 ? velY : 0) > 0.35 && lastDiffY < diffYtoFrom && lastDiffY > velY
-						&& lastDiffY > p.getTheoricVelocity().getY()
-						&& !hasOtherThanExtended(locDownDown, "AIR")) {
+						&& lastDiffY > p.getTheoricVelocity().getY()) {
 					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p,
 							this, UniversalUtils.parseInPorcent((int) (diffYtoFrom * 190) - (p.getPing() / 50)), "diff-y",
 							"Actual diff Y: " + diffYtoFrom + ", last diff Y: " + lastDiffY + ". Down: " + idDown

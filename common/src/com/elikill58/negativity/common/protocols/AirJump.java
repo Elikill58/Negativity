@@ -1,6 +1,5 @@
 package com.elikill58.negativity.common.protocols;
 
-import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.universal.detections.keys.CheatKeys.AIR_JUMP;
 
@@ -38,7 +37,7 @@ public class AirJump extends Cheat {
 			return; // seems to be stairs
 		Location loc = p.getLocation().clone(), locDown = loc.clone().sub(0, 1, 0),
 				locDownDown = locDown.clone().sub(0, 1, 0);
-		if (hasOtherThanExtended(loc, "AIR") || hasOtherThan(locDown, "AIR") || hasOtherThan(locDownDown, "AIR"))
+		if (locDown.getBlockChecker(1).hasOther("AIR"))
 			return;
 		String idDown = locDown.getBlock().getType().getId(), idDownDown = locDownDown.getBlock().getType().getId();
 		if (idDownDown.contains("STAIR") || idDown.contains("STAIR"))
@@ -76,10 +75,10 @@ public class AirJump extends Cheat {
 			return;
 		Location loc = p.getLocation().clone(), locDown = loc.clone().sub(0, 1, 0),
 				locDownDown = locDown.clone().sub(0, 1, 0);
+		if (locDown.getBlockChecker(1).hasOther("AIR"))
+			return;
 
 		Scheduler.getInstance().runDelayed(() -> {
-			if (hasOtherThanExtended(loc, "AIR") || hasOtherThan(locDown, "AIR") || hasOtherThan(locDownDown, "AIR"))
-				return;
 			if (locDownDown.getBlock().getType().getId().contains("STAIR")
 					|| locDown.getBlock().getType().getId().contains("STAIR"))
 				return;

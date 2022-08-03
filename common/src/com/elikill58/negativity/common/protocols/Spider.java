@@ -5,7 +5,6 @@ import static com.elikill58.negativity.universal.detections.keys.CheatKeys.SPIDE
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
-import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -38,12 +37,9 @@ public class Spider extends Cheat {
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
-		if (!LocationUtils.hasOtherThan(loc, Materials.AIR) || (from.getX() == to.getX() && from.getZ() == to.getZ()))
+		if (!loc.getBlockChecker(1).hasOther(Materials.AIR) || (from.getX() == to.getX() && from.getZ() == to.getZ()))
 			return;
-		Material underPlayer = loc.clone().sub(0, 1, 0).getBlock().getType(),
-				underUnder = loc.clone().sub(0, 2, 0).getBlock().getType();
-		if (!underPlayer.equals(Materials.AIR) || !underUnder.equals(Materials.AIR)
-				|| !loc.getBlock().getType().equals(Materials.AIR))
+		if (!loc.clone().sub(0, 2, 0).getBlock().getType().equals(Materials.AIR))
 			return;
 		if (hasBypassBlockAround(loc))
 			return;

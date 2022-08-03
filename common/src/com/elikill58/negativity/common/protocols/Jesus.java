@@ -1,9 +1,7 @@
 package com.elikill58.negativity.common.protocols;
 
 import static com.elikill58.negativity.api.item.Materials.STATIONARY_WATER;
-import static com.elikill58.negativity.api.utils.LocationUtils.hasMaterialsAround;
 import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThan;
-import static com.elikill58.negativity.api.utils.LocationUtils.hasOtherThanExtended;
 import static com.elikill58.negativity.universal.detections.keys.CheatKeys.JESUS;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
@@ -56,8 +54,7 @@ public class Jesus extends Cheat implements Listeners {
 		if (item != null && item.getType().getId().contains("TRIDENT"))
 			return;
 		Location loc = p.getLocation(), to = e.getTo(), from = e.getFrom(), under = loc.clone().sub(0, 1, 0);
-		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY")
-				|| hasMaterialsAround(under, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY"))
+		if (loc.getBlockChecker(1).has("ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY"))
 			return;
 		Material type = loc.getBlock().getType(), underType = under.getBlock().getType();
 		boolean isInWater = type.getId().contains("WATER"), isOnWater = underType.getId().contains("WATER");
@@ -66,7 +63,7 @@ public class Jesus extends Cheat implements Listeners {
 		if (checkActive("water-around")) {
 			if (type.equals(Materials.AIR) && !isInWater && isOnWater && !LocationUtils.hasBoatAroundHim(loc)
 					&& !p.isFlying()) {
-				if (!hasOtherThanExtended(under, STATIONARY_WATER)) {
+				if (!under.getBlockCheckerXZ(1.5).hasOther(STATIONARY_WATER)) {
 					double reliability = 0;
 					if (dif < 0.0005 && dif > 0.00000005)
 						reliability = dif * 10000000 - 1;
@@ -96,7 +93,7 @@ public class Jesus extends Cheat implements Listeners {
 		if (checkActive("dif-y-2-move")) {
 			boolean jesusState = np.booleans.get(JESUS, "state", false);
 			if (dif == np.doubles.get(JESUS, "last-y-" + jesusState, 0.0) && isInWater && !np.isInFight) {
-				if (!hasOtherThan(under, STATIONARY_WATER) && !p.isSwimming()) {
+				if (!p.isSwimming() && !hasOtherThan(under, STATIONARY_WATER)) {
 					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent((dif + 5) * 10),
 							"dif-y-2-move", "Stationary_water aroud him. Difference between 2 y: " + dif + " (other: "
 									+ np.doubles.get(JESUS, "last-y-" + (!jesusState), 0.0) + ")");
@@ -117,9 +114,7 @@ public class Jesus extends Cheat implements Listeners {
 			if (isInWater && isOnWater && distanceFall < 1 && distanceAbs > ws && !upper.getBlock().isLiquid()
 					&& !p.isFlying()
 					&& !p.getInventory().getBoots().orElse(ItemBuilder.Builder(Materials.AIR).build())
-							.hasEnchant(Enchantment.EFFICIENCY)
-					&& !hasMaterialsAround(loc, "WATER_LILY") && !hasMaterialsAround(upper, "WATER_LILY")
-					&& !hasOtherThan(under, "WATER")) {
+							.hasEnchant(Enchantment.EFFICIENCY) && !loc.getBlockChecker(1).has("LILY", "WATER")) {
 				mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98, "distance-in",
 						"In water, distance: " + distanceAbs + ", ws: " + ws + ", depth strider: " + depthStriderLevel,
 						hoverMsg("main", "%distance%", String.format("%.2f", distanceAbs)));

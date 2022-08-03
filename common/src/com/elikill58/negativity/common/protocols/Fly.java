@@ -261,8 +261,7 @@ public class Fly extends Cheat implements Listeners {
 		}
 		if ((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || hasBoatAround || p.isInsideVehicle()
 				|| !e.getTo().clone().add(0, 2, 0).getBlock().getType().isTransparent() || isInWater || isOnWater
-				|| LocationUtils.hasMaterialsAround(e.getTo(), "FENCE", "SLIME", "LILY", "VINE", "STAIRS", "BED")
-				|| LocationUtils.hasMaterialsAround(locUnder, "FENCE", "SLIME", "LILY", "VINE", "STAIRS", "BED"))
+				|| e.getTo().getBlockChecker(1.5).has("FENCE", "SLIME", "LILY", "VINE", "STAIRS", "BED"))
 			flyMoveAmount.clear();
 		else
 			flyMoveAmount.add(d);
@@ -270,8 +269,8 @@ public class Fly extends Cheat implements Listeners {
 		np.booleans.set(FLY, "fly-wasOnGround", onGround);
 	}
 	
-	@Check(name = "ground-checker", description = "Check for ground on no-ground packet")
-	public void onP(PacketReceiveEvent e) {
+	@Check(name = "ground-checker", description = "Check for ground on no-ground packet", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_FLY, CheckConditions.NO_USE_SLIME, CheckConditions.NO_CLIMB_BLOCK })
+	public void onGroundChecker(PacketReceiveEvent e) {
 		Player p = e.getPlayer();
 		AbstractPacket packet = e.getPacket();
 		if (packet.getPacketType().equals(PacketType.Client.POSITION)
@@ -279,19 +278,17 @@ public class Fly extends Cheat implements Listeners {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
 
 			boolean positionGround = Maths.isOnGround(flying.getY());
-			boolean packetGround = flying.isGround;
 
-			boolean exempt = p.isInsideVehicle() || p.isFlying();// NEAR_VEHICLE, TELEPORT, CLIMBABLE, FLYING, SLIME
 			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-			double actual = np.doubles.get(CheatKeys.FLY, "buffer", 0.0);
-			if (!exempt && positionGround != packetGround) {
+			double actual = np.doubles.get(CheatKeys.FLY, "ground-warn", 0.0);
+			if (positionGround != flying.isGround) {
 				if (++actual > 4) {
-					Negativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FLY), 90, "motion", "Motion: " + positionGround + " / " + packetGround + ", y: " + flying.getY(), null, (long) (actual - 3));
+					Negativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FLY), 90, "ground-checker", "Motion: " + positionGround + " / " + flying.isGround + ", y: " + flying.getY(), null, (long) (actual - 3));
 				}
 			} else {
-				actual = Math.max(actual - 0.15, 0);
+				actual = Math.max(actual - 0.3, 0);
 			}
-			np.doubles.set(CheatKeys.FLY, "buffer", actual);
+			np.doubles.set(CheatKeys.FLY, "ground-warn", actual);
 		}
 	}
 }

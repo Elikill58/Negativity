@@ -38,7 +38,7 @@ public class Phase extends Cheat {
 			return;
 		if (y < 0)
 			return;
-		if (LocationUtils.hasOtherThan(loc.clone(), Materials.AIR) || LocationUtils.hasOtherThan(loc.clone().sub(0, 1, 0), Materials.AIR))
+		if (loc.getBlockChecker(1).hasOther(Materials.AIR))
 			return;
 		if (!np.booleans.get(getKey(), "jumping", true)) {
 			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((y * 200) + 20),

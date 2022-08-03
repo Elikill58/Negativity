@@ -181,7 +181,7 @@ public class NoFall extends Cheat {
 					boolean belowTransparent = justBelow.getType().isTransparent();
 					boolean downTransparent = justBelow.getRelative(BlockFace.DOWN).getType().isTransparent();
 					if ((belowTransparent || downTransparent)
-							&& !LocationUtils.hasOtherThan(justBelow.getLocation(), Materials.AIR)) {
+							&& !justBelow.getLocation().getBlockChecker(1).hasOther(Materials.AIR)) {
 						boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 95, "packet",
 								"Fall: " + lastFall + ", " + p.getFallDistance() + ", block: " + justBelow, null,
 								(belowTransparent && downTransparent ? 5 : 1));

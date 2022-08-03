@@ -34,13 +34,13 @@ public class FastPlace extends Cheat {
 			if(flying < 20) {
 				List<Integer> list = np.listIntegers.get(getKey(), "times", new ArrayList<>());
 				list.add(flying);
-				if(list.size() >= 2) {
+				if(list.size() > 2) {
 					double total = 0;
 					for(Integer temp : list)
 						total += temp;
 					double average = (total / list.size());
 					
-					if (average < 3) {
+					if (average < 2) {
 						boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - average * 5),
 								"time", "Quickly: " + String.format("%.3f", average) + ", " + list);
 						if(isSetBack() && mayCancel)

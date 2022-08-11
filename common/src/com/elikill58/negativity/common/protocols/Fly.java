@@ -250,9 +250,8 @@ public class Fly extends Cheat implements Listeners {
 				}
 			}
 			if (amount > 1) {
-				if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(90 + amount),
-						"omega-craft",
-						"OmegaCraftFly - " + flyMoveAmount + " > " + onGround + " : " + wasOnGround + ", i: " + i
+				if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((np.isBedrockPlayer() ? 70 : 85) + amount),
+						"omega-craft", flyMoveAmount + " > " + onGround + " : " + wasOnGround + ", i: " + i
 								+ ", d: " + d + ", under: " + blockUnder.getType().getId(),
 						new CheatHover.Literal("OmegaCraft: " + amount + " times with no Y changes"),
 						amount > 1 ? amount - 1 : 1) && isSetBack())

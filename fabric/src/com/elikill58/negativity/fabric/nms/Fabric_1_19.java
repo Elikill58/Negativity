@@ -28,6 +28,7 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosi
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
+import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Adapter;
 
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
@@ -54,10 +55,10 @@ import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
-public class Fabric_1_18_2 extends FabricVersionAdapter {
+public class Fabric_1_19 extends FabricVersionAdapter {
 
-	public Fabric_1_18_2() {
-		super("v1_18_2");
+	public Fabric_1_19() {
+		super("v1_19");
 		packetsPlayIn.put(getNameOfPacket(PlayerActionC2SPacket.class), (p, packet) -> {
 			PlayerActionC2SPacket blockDig = (PlayerActionC2SPacket) packet;
 			BlockPos pos = blockDig.getPos();
@@ -155,13 +156,18 @@ public class Fabric_1_18_2 extends FabricVersionAdapter {
 		});
 		packetsPlayOut.put(getNameOfPacket(EntityStatusEffectS2CPacket.class), (p, f) -> {
 			EntityStatusEffectS2CPacket packet = (EntityStatusEffectS2CPacket) f;
-			return new NPacketPlayOutEntityEffect(packet.getEntityId(), packet.getEffectId(), packet.getAmplifier(),
+			return new NPacketPlayOutEntityEffect(packet.getEntityId(), PotionEffectType.fromName(packet.getEffectId().getTranslationKey()), packet.getAmplifier(),
 					packet.getDuration(), (byte) 0);
 		});
 		packetsPlayOut.put(getNameOfPacket(PlayPingS2CPacket.class),
 				(p, f) -> new NPacketPlayOutPing(((PlayPingS2CPacket) f).getParameter()));
 
-		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new QueryPingC2SPacket(((NPacketPlayOutPing) f).id));
+		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> {
+			/*PacketByteBuf buf = PacketByteBufs.create();
+			buf.writeInt((int) ((NPacketPlayOutPing) f).id);
+			ServerPlayNetworking.getSender(p).createPacket(new Identifier("minecraft:ping_request"), buf);*/
+			return new PlayPingS2CPacket((int) ((NPacketPlayOutPing) f).id);
+		});
 
 		Adapter.getAdapter().debug("Packet PlayIn: " + String.join(", ", packetsPlayIn.keySet()));
 		log();

@@ -9,9 +9,9 @@
 		"RedNesto"
 	],
 	"depends": {
-	    "fabricloader": ">=0.14.5",
+	    "fabricloader": ">=${loader_version}",
 	    "fabric": "*",
-	    "minecraft": "~1.18.2",
+	    "minecraft": "~${minecraft_version}",
 	    "java": ">=17"
 	},
 	"environment": "server",

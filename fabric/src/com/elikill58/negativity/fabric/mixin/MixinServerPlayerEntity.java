@@ -33,7 +33,7 @@ public abstract class MixinServerPlayerEntity extends PlayerEntity implements Se
 	private boolean negativity$doNotSendScreenClosePacket;
 	
 	public MixinServerPlayerEntity() {
-		super(null, null, 0f, null);
+		super(null, null, 0f, null, null);
 	}
 	
 	@Shadow public ServerPlayNetworkHandler networkHandler;

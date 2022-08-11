@@ -43,7 +43,7 @@ public class FabricOfflinePlayer extends AbstractEntity implements OfflinePlayer
 
 	@Override
 	public String getName() {
-		return u.getName().asString();
+		return u.getName().getString();
 	}
 
 	@Override

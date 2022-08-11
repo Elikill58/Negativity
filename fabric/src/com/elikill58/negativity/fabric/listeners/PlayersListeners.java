@@ -23,7 +23,7 @@ public class PlayersListeners {
 	}
 
 	public static void onPreLogin(ServerPlayNetworkHandler e, MinecraftServer srv) {
-		LoginEvent event = new LoginEvent(e.getPlayer().getUuid(), e.getPlayer().getName().asString(), Result.ALLOWED,
+		LoginEvent event = new LoginEvent(e.getPlayer().getUuid(), e.getPlayer().getName().getString(), Result.ALLOWED,
 				null, "");
 		EventManager.callEvent(event);
 		if (!event.getLoginResult().equals(Result.ALLOWED))

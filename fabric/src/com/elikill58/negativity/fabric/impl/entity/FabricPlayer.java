@@ -159,7 +159,7 @@ public class FabricPlayer extends FabricEntity<ServerPlayerEntity> implements Pl
 
 	@Override
 	public String getName() {
-		return entity.getName().asString();
+		return entity.getName().getString();
 	}
 
 	@Override

@@ -42,13 +42,14 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
 
 import net.fabricmc.api.DedicatedServerModInitializer;
-import net.fabricmc.fabric.api.command.v1.CommandRegistrationCallback;
+import net.fabricmc.fabric.api.command.v2.CommandRegistrationCallback;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerLifecycleEvents;
 import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
 import net.fabricmc.fabric.api.networking.v1.PacketSender;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayConnectionEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.PlayChannelHandler;
+import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.PlayerManager;
@@ -66,6 +67,8 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 	private Path configDir;
 	private MinecraftServer server;
 	private NegativityPacketManager packetManager;
+	private CommandDispatcher<ServerCommandSource> dispatcher;
+	private boolean commandLoaded = false;
 	public static Identifier negativityChannel = new Identifier(NegativityMessagesManager.CHANNEL_ID),
 			fmlChannel = new Identifier("fml:hs"), bungeecordChannel = new Identifier("bungeecord");
 
@@ -78,11 +81,10 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 		new File(configDir.toFile().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
 
 		Adapter.setAdapter(new FabricAdapter(this, LOGGER));
-		BanManager.init();
 
 		ServerLifecycleEvents.SERVER_STARTING.register(this::onGameStart);
 		ServerLifecycleEvents.SERVER_STOPPING.register(this::onGameStop);
-		CommandRegistrationCallback.EVENT.register((dispatcher, dedicated) -> loadCommands(dispatcher));
+		CommandRegistrationCallback.EVENT.register(this::loadCommands);
 
 		PlayersListeners.register();
 		ServerPlayConnectionEvents.DISCONNECT.register(this::onLeave);
@@ -114,30 +116,42 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 		ServerPlayNetworking.registerGlobalReceiver(fmlChannel, new FmlRawDataListener());
 		ServerPlayNetworking.registerGlobalReceiver(negativityChannel, new ProxyCompanionListener());
 
+		if(dispatcher != null && !commandLoaded) {
+			loadCommandsFinal();
+		}
+		
 		Stats.sendStartupStats(srv.getServerPort());
 	}
 
-	private void loadCommands(CommandDispatcher<ServerCommandSource> dispatcher) {
-		registerCommand("negativity", dispatcher, "neg", "n");
-		reloadCommand("nmod", dispatcher, "nmod", "mod");
-		reloadCommand("kick", dispatcher, "nkick", "kick");
-		reloadCommand("lang", dispatcher, "nlang", "lang");
-		reloadCommand("report", dispatcher, "nreport", "report", "repot");
-		reloadCommand("ban", dispatcher, "nban", "negban", "ban");
-		reloadCommand("unban", dispatcher, "nunban", "negunban", "unban");
-		reloadCommand("chat.clear", dispatcher, "nclearchat", "clearchat");
-		reloadCommand("chat.lock", dispatcher, "nlockchat", "lockchat");
+	private void loadCommands(CommandDispatcher<ServerCommandSource> dispatcher, CommandRegistryAccess registry, CommandManager.RegistrationEnvironment env) {
+		this.dispatcher = dispatcher;
+		if(server == null) // not loaded yet
+			return;
+		loadCommandsFinal();
+	}
+	
+	private void loadCommandsFinal() {
+		registerCommand("negativity", "neg", "n");
+		reloadCommand("nmod", "nmod", "mod");
+		reloadCommand("kick", "nkick", "kick");
+		reloadCommand("lang", "nlang", "lang");
+		reloadCommand("report", "nreport", "report", "repot");
+		reloadCommand("ban", "nban", "negban", "ban");
+		reloadCommand("unban", "nunban", "negunban", "unban");
+		reloadCommand("chat.clear", "nclearchat", "clearchat");
+		reloadCommand("chat.lock", "nlockchat", "lockchat");
+		commandLoaded = true;
 	}
 
-	private void reloadCommand(String configKey, CommandDispatcher<ServerCommandSource> dispatcher, String cmd,
+	private void reloadCommand(String configKey, String cmd,
 			String... alias) {
 		if ((configKey.endsWith("ban") ? BanManager.getBanConfig() : Adapter.getAdapter().getConfig())
 				.getBoolean("commands." + configKey)) {
-			registerCommand(cmd, dispatcher, alias);
+			registerCommand(cmd, alias);
 		}
 	}
 
-	private void registerCommand(String cmd, CommandDispatcher<ServerCommandSource> dispatcher, String... alias) {
+	private void registerCommand(String cmd, String... alias) {
 		CommandsExecutorManager executor = new CommandsExecutorManager(cmd);
 		LiteralCommandNode<ServerCommandSource> node = dispatcher
 				.register(CommandManager.literal(cmd)

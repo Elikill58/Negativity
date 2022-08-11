@@ -30,6 +30,8 @@ dependencies {
 
     // Fabric API. This is technically optional, but you probably want it anyway.
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
+    
+    compileOnly 'io.netty:netty-all:4.1.79.Final'
 }
 
 compileJava.javaCompiler.set(
@@ -40,7 +42,7 @@ processResources {
     inputs.property "version", project.version
 
     filesMatching("fabric.mod.json") {
-        expand "version": project.version
+        expand "version": project.version, "loader_version": project.loader_version, "minecraft_version": project.minecraft_version
     }
 }
 

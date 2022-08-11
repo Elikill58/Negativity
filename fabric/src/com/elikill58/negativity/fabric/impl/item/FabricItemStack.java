@@ -26,7 +26,7 @@ public class FabricItemStack extends com.elikill58.negativity.api.item.ItemStack
 
 	@Override
 	public String getName() {
-		return item.getName().asString();
+		return item.getName().getString();
 	}
 
 	@SuppressWarnings("unlikely-arg-type")

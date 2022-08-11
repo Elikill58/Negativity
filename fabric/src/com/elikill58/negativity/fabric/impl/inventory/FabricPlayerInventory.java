@@ -89,7 +89,7 @@ public class FabricPlayerInventory extends PlayerInventory {
 
 	@Override
 	public String getInventoryName() {
-		return inv.getName().asString();
+		return inv.getName().getString();
 	}
 
 	@Override

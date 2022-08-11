@@ -60,7 +60,7 @@ public class FabricEntity<E extends Entity> extends AbstractEntity {
 
 	@Override
 	public EntityType getType() {
-		return EntityType.get(entity == null ? null : entity.getType().getName().asString());
+		return EntityType.get(entity == null ? null : entity.getType().getName().getString());
 	}
 
 	@Override
@@ -77,7 +77,7 @@ public class FabricEntity<E extends Entity> extends AbstractEntity {
 
 	@Override
 	public String getName() {
-		return entity.getName().asString();
+		return entity.getName().getString();
 	}
 	
 	@Override

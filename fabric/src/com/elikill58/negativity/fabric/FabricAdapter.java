@@ -1,9 +1,9 @@
 package com.elikill58.negativity.fabric;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
@@ -49,6 +49,7 @@ import net.fabricmc.loader.api.FabricLoader;
 import net.fabricmc.loader.api.ModContainer;
 import net.fabricmc.loader.api.metadata.ModMetadata;
 import net.minecraft.MinecraftVersion;
+import net.minecraft.resource.Resource;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.ClickEvent;
 import net.minecraft.text.HoverEvent;
@@ -257,7 +258,7 @@ public class FabricAdapter extends Adapter {
 	@Override
 	public boolean hasPlugin(String name) {
 		try {
-			return plugin.getServer().getResourceManager().containsResource(new Identifier(name));
+			return plugin.getServer().getResourceManager().getResource(new Identifier(name)).isPresent();
 		} catch (InvalidIdentifierException e) {
 			return false;
 		}
@@ -266,10 +267,10 @@ public class FabricAdapter extends Adapter {
 	@Override
 	public ExternalPlugin getPlugin(String name) {
 		try {
-			return new FabricExternalPlugin(plugin.getServer().getResourceManager().getResource(new Identifier(name)));
+			Optional<Resource> opt = plugin.getServer().getResourceManager().getResource(new Identifier(name));
+			if(opt.isPresent())
+				return new FabricExternalPlugin(name, opt.get());
 		} catch (InvalidIdentifierException ignore) {
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		return null;
 	}

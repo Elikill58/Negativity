@@ -6,15 +6,17 @@ import net.minecraft.resource.Resource;
 
 public class FabricExternalPlugin extends ExternalPlugin {
 
+	private final String id;
 	private final Resource pl;
 	
-	public FabricExternalPlugin(Resource pl) {
+	public FabricExternalPlugin(String id, Resource pl) {
+		this.id = id;
 		this.pl = pl;
 	}
 	
 	@Override
 	public String getId() {
-		return pl.getId().getNamespace();
+		return id;
 	}
 	
 	@Override

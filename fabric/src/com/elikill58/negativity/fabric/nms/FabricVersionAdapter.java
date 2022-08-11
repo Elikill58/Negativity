@@ -16,7 +16,7 @@ public abstract class FabricVersionAdapter extends VersionAdapter<ServerPlayerEn
 		return packetClassName.substring(packetClassName.lastIndexOf('.') + 1);
 	}
 	
-	private static FabricVersionAdapter instance = new Fabric_1_18_2();
+	private static FabricVersionAdapter instance = new Fabric_1_19();
 	
 	public static FabricVersionAdapter getVersionAdapter() {
 		return instance;

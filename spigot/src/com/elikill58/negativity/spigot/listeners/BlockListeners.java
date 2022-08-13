@@ -37,7 +37,7 @@ public class BlockListeners implements Listener {
 		SpigotNegativity.getInstance().getPacketManager().getPacketManager().notifyHandlersReceive(PacketSourceType.CUSTOM, packet);
 		if(packet.isCancelled())
 			e.setCancelled(true);
-		BlockPlaceEvent event = new BlockPlaceEvent(p, new SpigotBlock(b));
+		BlockPlaceEvent event = new BlockPlaceEvent(p, new SpigotBlock(b), new SpigotBlock(e.getBlockAgainst()));
 		EventManager.callEvent(event);
 		if(event.isCancelled())
 			e.setCancelled(event.isCancelled());

@@ -31,7 +31,7 @@ public class AirPlace extends Cheat {
 	@Check(name = "block-around", description = "Check blocks around", conditions = { CheckConditions.SURVIVAL })
 	public void onPlaceBlock(BlockPlaceEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		if(e.isCancelled())
+		if(e.isCancelled() || !e.getOldBlock().getType().equals(Materials.AIR))
 			return;
 		Block theBlock = e.getBlock();
 		Material type = theBlock.getType();

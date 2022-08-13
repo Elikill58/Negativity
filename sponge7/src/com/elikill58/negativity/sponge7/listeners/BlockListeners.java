@@ -21,7 +21,7 @@ public class BlockListeners {
 
 	@Listener
 	public void onBlockPlace(ChangeBlockEvent.Place e, @First Player p) {
-		BlockPlaceEvent event = new BlockPlaceEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(e.getTransactions().get(0).getOriginal()));
+		BlockPlaceEvent event = new BlockPlaceEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(e.getTransactions().get(0).getFinal()), new SpongeBlock(e.getTransactions().get(0).getOriginal()));
 		EventManager.callEvent(event);
 		e.setCancelled(event.isCancelled());
 	}

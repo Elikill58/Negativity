@@ -89,6 +89,13 @@ public class Database {
 					Adapter.getAdapter().getLogger().warn("Cannot find driver for MySQL.");
 				}
 			}
+		}),
+		POSTGRESQL("postgresql", "PostGreSQL", () -> {
+			try {
+				Class.forName("org.postgresql.Driver");
+			} catch (ClassNotFoundException e1) {
+				Adapter.getAdapter().getLogger().warn("Cannot find driver for PostGreSQL.");
+			}
 		});
 		
 		private final String type, name;

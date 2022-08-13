@@ -130,7 +130,7 @@ public class Spider extends Cheat {
 	}
 
 	private boolean hasBypassBlockAround(Location loc) {
-		return has(loc, "SLAB", "CAKE", "SNOW", "LADDER");
+		return has(loc, "SLAB", "CAKE", "SNOW", "LADDER", "SCAFFOLD");
 	}
 
 	public boolean has(Location loc, String... m) {

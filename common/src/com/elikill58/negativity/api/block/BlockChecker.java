@@ -32,9 +32,14 @@ public class BlockChecker {
 	
 	public boolean has(String... types) {
 		List<String> m = Arrays.asList(types).stream().map(String::toUpperCase).collect(Collectors.toList());
-		for(Block b : blocks)
-			if(m.contains(b.getType().getId().toUpperCase()))
+		for(Block b : blocks) {
+			String blockId = b.getType().getId().toUpperCase();
+			if(m.contains(blockId))
 				return true;
+			for(String all : m)
+				if(blockId.contains(all))
+					return true;
+		}
 		return false;
 	}
 

@@ -7,6 +7,7 @@ import java.util.StringJoiner;
 import org.bukkit.Material;
 
 import com.elikill58.negativity.api.item.ItemRegistrar;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 
 public class SpigotItemRegistrar extends ItemRegistrar {
@@ -43,7 +44,11 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 				return type;
 		}*/
 		StringJoiner sj = new StringJoiner(", ", " : ", "");
-		for(String tempAlias : alias) sj.add(tempAlias);
+		for(String tempAlias : alias) {
+			if(tempAlias.equals(Materials.IGNORE_KEY))
+				return null; // ignore not found item
+			sj.add(tempAlias);
+		}
 		SpigotNegativity.getInstance().getLogger().info("[SpigotItemRegistrar] Cannot find material " + id + sj);
 		return null;
 	}

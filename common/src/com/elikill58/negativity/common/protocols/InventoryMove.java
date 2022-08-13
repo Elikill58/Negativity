@@ -26,50 +26,55 @@ public class InventoryMove extends Cheat implements Listeners {
 	}
 
 	@Check(name = "stay-distance", description = "Keep distance while moving", conditions = { CheckConditions.NO_ELYTRA,
-			CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_FALL_DISTANCE })
+			CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onMove(PlayerMoveEvent e, NegativityPlayer np) {
-		if (!e.isMoveLook() || !e.isMovePosition()) {
+		if (e.isMoveLook())
 			return;
-		}
 
 		InventoryMoveData data = np.invMoveData;
-		if (data == null) {
+		if (data == null)
 			return;
-		}
-
+		
 		Player p = e.getPlayer();
 		// if in water
 		if (LocationUtils.isInWater(p.getLocation()) || p.getVelocity().length() > 0.1) {
+			Adapter.getAdapter().debug("Velocity length: " + p.getVelocity().length());
 			return;
 		}
 		if (p.getOpenInventory() == null) {
 			Adapter.getAdapter().debug("No opened inventory but data always running ?");
 			return;
 		}
-		double last = data.getLastDistance();
-		double actual = e.getFrom().distance(e.getTo());
-		if (actual >= last && actual >= p.getWalkSpeed()) { // if running at least at the same
-			data.addTimeSinceOpen();
-			if (data.getTimeSinceOpen() >= 5) {
-				int amount = 1;
-				if (p.isSprinting())
-					amount += data.sprint ? 1 : 5; // more alerts if wasn't sprinting
-				if (p.isSneaking())
-					amount += data.sneak ? 1 : 5; // more alerts if wasn't sneaking
-				Negativity.alertMod(ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent(80 + data.getTimeSinceOpen()), "stay-distance",
-						"Sprint: " + p.isSprinting() + ", Sneak: " + p.isSneaking() + ", data: " + data + ", vel: "
-								+ p.getVelocity() + ", fd: " + String.format("%.5f", p.getFallDistance()),
-						null, amount);
-			}
+		int amount = 0;
+		if(p.isSprinting())
+			amount += data.sprint ? 1 : 5; // means it started sprinting since inv open
+		if(p.isSneaking())
+			amount += data.sneak ? 1 : 5; // means it started sneaking since inv open
+
+		double distance = e.getFrom().distance(e.getTo());
+		double distanceXZ = e.getFrom().distanceXZ(e.getTo());
+		if (distanceXZ >= data.distanceXZ && distanceXZ >= p.getWalkSpeed()) // if running at least at the same
+			amount += (data.distanceXZ - distanceXZ) + 1; // +1 to always have alert
+		
+		if(distance >= data.distance && distance >= p.getWalkSpeed() && p.getFallDistance() < 0.5) // fall "allow" to make the distance goes brr
+			amount += (data.distanceXZ - distanceXZ) + 1 - p.getFallDistance();
+		if(data.timeSinceOpen > 2)
+			Adapter.getAdapter().debug("Time: " + data.timeSinceOpen + ", amount: " + amount);
+		if (data.timeSinceOpen >= 3 && amount > 2) {
+			Negativity.alertMod(ReportType.WARNING, p, this,
+					UniversalUtils.parseInPorcent(80 + data.timeSinceOpen), "stay-distance",
+					"Sprint: " + p.isSprinting() + ", Sneak: " + p.isSneaking() + ", data: " + data + ", vel: "
+							+ p.getVelocity() + ", fd: " + String.format("%.5f", p.getFallDistance()),
+					null, amount);
 		}
-		data.setDistance(actual);
+		data.update(distance, distanceXZ);
 	}
 
 	@EventListener
 	public void onClick(InventoryClickEvent e) {
 		if (e.isCancelled())
 			return;
+		Adapter.getAdapter().debug("Click inventory");
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
 		if (np.hasDetectionActive(this))
 			checkInvMove(np);
@@ -79,6 +84,7 @@ public class InventoryMove extends Cheat implements Listeners {
 	public void onOpen(InventoryOpenEvent e) {
 		if (e.isCancelled())
 			return;
+		Adapter.getAdapter().debug("Open inventory");
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
 		if (np.hasDetectionActive(this))
 			checkInvMove(np);
@@ -86,16 +92,18 @@ public class InventoryMove extends Cheat implements Listeners {
 
 	@EventListener
 	public void onClose(InventoryCloseEvent e) {
+		Adapter.getAdapter().debug("Close inventory");
 		NegativityPlayer.getNegativityPlayer(e.getPlayer()).invMoveData = null;
 	}
 
 	private void checkInvMove(NegativityPlayer np) {
-		np.invMoveData = new InventoryMoveData(np.getPlayer());
+		if(np.invMoveData == null)
+			np.invMoveData = new InventoryMoveData(np.getPlayer());
 	}
 
 	public static class InventoryMoveData {
 
-		private double lastDistance = 0;
+		public double distance = 0, distanceXZ = 0;
 		public int timeSinceOpen = 0;
 		public final boolean sprint, sneak;
 
@@ -103,27 +111,17 @@ public class InventoryMove extends Cheat implements Listeners {
 			this.sprint = p.isSprinting();
 			this.sneak = p.isSneaking();
 		}
-
-		public double getLastDistance() {
-			return lastDistance;
-		}
-
-		public int getTimeSinceOpen() {
-			return timeSinceOpen;
-		}
-
-		public void addTimeSinceOpen() {
+		
+		public void update(double distance, double distanceXZ) {
+			this.distance = distance;
+			this.distanceXZ = distanceXZ;
 			this.timeSinceOpen++;
-		}
-
-		public void setDistance(double distance) {
-			this.lastDistance = distance;
 		}
 
 		@Override
 		public String toString() {
 			return "InventoryMoveData{sprint=" + sprint + ",sneak=" + sneak + ",distance="
-					+ String.format("%.3f", lastDistance) + ",time=" + timeSinceOpen + "}";
+					+ String.format("%.3f", distance) + ",distanceXZ=" + String.format("%.3f", distance)  + ",time=" + timeSinceOpen + "}";
 		}
 	}
 }

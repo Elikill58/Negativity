@@ -34,7 +34,7 @@ public class AirPlaceProtocol extends Cheat implements Listener {
 	public void onPlaceBlock(BlockPlaceEvent e) {
 		Player p = e.getPlayer();
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
-		if(!np.hasDetectionActive(this) || e.isCancelled())
+		if(!np.hasDetectionActive(this) || e.isCancelled() || !e.getBlockAgainst().getType().equals(Material.AIR))
 			return;
 		Block theBlock = e.getBlock();
 		Material type = theBlock.getType();

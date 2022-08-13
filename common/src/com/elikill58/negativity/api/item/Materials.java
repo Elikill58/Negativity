@@ -63,6 +63,8 @@ public class Materials {
     public static final Material FISHING_ROD = ItemRegistrar.getInstance().get("fishing_rod");
     public static final Material FIREBALL = ItemRegistrar.getInstance().get("fire_charge", "fireball");
 
+    public static final Material KELP = ItemRegistrar.getInstance().get("kelp", IGNORE_KEY);
+    
     public static final Material LADDER = ItemRegistrar.getInstance().get("ladder");
     public static final Material LAPIS_ORE = ItemRegistrar.getInstance().get("lapis_ore");
     public static final Material LEASH = ItemRegistrar.getInstance().get("lead", "leash");

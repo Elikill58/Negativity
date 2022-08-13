@@ -34,7 +34,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public class Scaffold extends Cheat {
 
-	private static final List<Material> BYPASS_TYPES = Arrays.asList(Materials.AIR, Materials.SCAFFOLD);
+	private static final List<Material> BYPASS_TYPES = Arrays.asList(Materials.AIR, Materials.SCAFFOLD, Materials.KELP);
 	
 	public Scaffold() {
 		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS, CheatDescription.BLOCKS);

@@ -16,7 +16,7 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 
 	@Override
 	public synchronized com.elikill58.negativity.api.item.Material get(String id, String... alias) {
-		return cache.computeIfAbsent(id, key -> new SpigotMaterial(getMaterial(key, alias), id));
+		return cache.computeIfAbsent(id, key -> new SpigotMaterial(getMaterial(key.toUpperCase(), alias), id));
 	}
 	
 	private org.bukkit.Material getMaterial(String id, String... alias){
@@ -54,11 +54,17 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 	}
 	
 	private Material get(String name) {
+		name = name.toUpperCase();
 		try {
-			return (Material) Material.class.getField(name.toUpperCase()).get(Material.class);
+			return (Material) Material.class.getField(name).get(Material.class);
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e2) {
 			e2.printStackTrace();
 		} catch (NoSuchFieldException e) {}
+		if(SpigotNegativity.isMohist) {
+			try {
+				return Material.valueOf(name);
+			} catch (Exception e) {}
+		}
 		return null;
 	}
 }

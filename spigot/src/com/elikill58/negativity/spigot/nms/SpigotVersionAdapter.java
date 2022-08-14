@@ -250,11 +250,19 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 		}
 	}
 
-	public Channel getPlayerChannel(Player p) {
+	public Object getNetworkManager(Player p) {
 		try {
 			Object playerConnection = getPlayerConnection(p);
-			Object networkManager = playerConnection.getClass().getField("networkManager").get(playerConnection);
-			return new PacketContent(networkManager).getSpecificModifier(Channel.class).readSafely(0);
+			return new PacketContent(playerConnection).getSpecificModifier(PacketUtils.getNmsClass("NetworkManager", "network.")).readSafely(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
+	public Channel getPlayerChannel(Player p) {
+		try {
+			return new PacketContent(getNetworkManager(p)).getSpecificModifier(Channel.class).readSafely(0);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return null;
@@ -415,8 +423,7 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	@Override
 	public void queuePacket(Player p, Object packet) {
 		try {
-			Object network = get(getPlayerConnection(p), "networkManager");
-			Queue queue = (Queue) get(network, Version.getVersion().isNewerOrEquals(Version.V1_13) ? "packetQueue" : "i");
+			Queue queue = (Queue) get(getNetworkManager(p), Version.getVersion().isNewerOrEquals(Version.V1_13) ? "packetQueue" : "i");
 			queue.add(callFirstConstructor(PacketUtils.getNmsClass("NetworkManager$QueuedPacket"), packet, null));
 		} catch (Exception e) {
 			e.printStackTrace();

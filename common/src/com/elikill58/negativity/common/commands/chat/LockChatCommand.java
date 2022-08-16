@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.commands;
+package com.elikill58.negativity.common.commands.chat;
 
 import com.elikill58.negativity.api.commands.CommandListeners;
 import com.elikill58.negativity.api.commands.CommandSender;

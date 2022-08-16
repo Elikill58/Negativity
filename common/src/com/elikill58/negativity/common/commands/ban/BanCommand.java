@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.commands;
+package com.elikill58.negativity.common.commands.ban;
 
 import java.util.ArrayList;
 import java.util.List;

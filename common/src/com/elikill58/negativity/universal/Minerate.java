@@ -4,9 +4,6 @@ import java.text.NumberFormat;
 import java.util.HashMap;
 
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.universal.detections.Cheat;
-import com.elikill58.negativity.universal.detections.keys.CheatKeys;
-import com.elikill58.negativity.universal.report.ReportType;
 
 public class Minerate {
 
@@ -49,14 +46,6 @@ public class Minerate {
 		if(type == null)
 			return;
 		mined.put(type, mined.getOrDefault(type, 0) + 1);
-		int minedType = 0;
-		for(int i : mined.values())
-			minedType += i;
-		int relia = minedType / fullMined;
-		Cheat xray = Cheat.forKey(CheatKeys.XRAY);
-		Negativity.alertMod(ReportType.WARNING, player, xray,
-				relia, "", type.getOreName() + " mined. Full mined: " + fullMined + ". Mined by type: " + this,
-				xray.hoverMsg("main", "%name%", type.getName(), "%nb%", mined.get(type)));
 	}
 
 	/**
@@ -67,6 +56,15 @@ public class Minerate {
 	 */
 	public Integer getMinerateType(MinerateType type) {
 		return mined.get(type);
+	}
+	
+	/**
+	 * Get raw mined types and their values
+	 * 
+	 * @return all mined types
+	 */
+	public HashMap<MinerateType, Integer> getMined() {
+		return mined;
 	}
 
 	/**

@@ -261,9 +261,9 @@ public class BoundingBox {
 	public BlockChecker getBlocks(World w) {
         List<Block> blocks = new ArrayList<>();
 
-        for (double x = minX; x <= maxX; x += (maxX - minX)) {
-            for (double y = minY; y <= maxY + 0.01; y += (maxY - minY)) {
-                for (double z = minZ; z <= maxZ; z += (maxZ - minZ)) {
+        for (double x = minX; x <= maxX; x++) {
+            for (double y = minY; y <= maxY + 0.01; y++) {
+                for (double z = minZ; z <= maxZ; z++) {
                     blocks.add(w.getBlockAt(x, y, z));
                 }
             }

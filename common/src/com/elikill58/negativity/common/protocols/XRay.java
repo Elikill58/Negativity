@@ -47,6 +47,8 @@ public class XRay extends Cheat {
 		Minerate mine = acc.getMinerate();
 		MinerateType type = MinerateType.getMinerateType(e.getBlock().getType().getId());
 		mine.addMine(type, p);
+		if(type == null)
+			return;
 		int minedType = 0, fullMined = mine.getFullMined();
 		for (int i : mine.getMined().values())
 			minedType += i;

@@ -28,6 +28,7 @@ public class Perm {
 	public static final String UNBAN = "unban";
 	public static final String MOD = "mod";
 	public static final String LANG = "lang";
+	public static final String WARN = "warn";
 	public static final String BYPASS_ALL = "bypass.all";
 	public static final String BYPASS_BAN = "bypass.ban";
 

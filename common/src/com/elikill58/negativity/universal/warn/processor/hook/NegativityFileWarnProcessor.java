@@ -51,7 +51,7 @@ public class NegativityFileWarnProcessor implements WarnProcessor {
 				id++;
 			set(config.createSection(String.valueOf(id)), warn);
 			config.save();
-			return new WarnResult(WarnResultType.EXCEPTION);
+			return new WarnResult(WarnResultType.DONE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new WarnResult(WarnResultType.EXCEPTION);
@@ -68,7 +68,7 @@ public class NegativityFileWarnProcessor implements WarnProcessor {
 				warnConfig.set("revocation_time", System.currentTimeMillis());
 			});
 			config.save();
-			return new WarnResult(WarnResultType.EXCEPTION);
+			return new WarnResult(WarnResultType.DONE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new WarnResult(WarnResultType.EXCEPTION);
@@ -85,7 +85,7 @@ public class NegativityFileWarnProcessor implements WarnProcessor {
 				warnConfig.set("revocation_time", System.currentTimeMillis());
 			}
 			config.save();
-			return new WarnResult(WarnResultType.EXCEPTION);
+			return new WarnResult(WarnResultType.DONE);
 		} catch (Exception e) {
 			e.printStackTrace();
 			return new WarnResult(WarnResultType.EXCEPTION);

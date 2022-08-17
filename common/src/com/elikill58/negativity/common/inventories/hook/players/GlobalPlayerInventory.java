@@ -23,6 +23,7 @@ import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.warn.WarnManager;
 
 public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 	
@@ -49,12 +50,14 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		// TODO add again fake players
 		//inv.set(13, ItemBuilder.Builder(Materials.SKELETON_SKULL).displayName(Messages.getMessage(p, "fake_entities")).build());
 		
+		int slotSanction = 17;
 		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN) && BanManager.banActive) {
-			inv.set(16, ItemBuilder.Builder(Materials.DIAMOND_SHOVEL).displayName("Kick").build());
-			inv.set(17, ItemBuilder.Builder(Materials.ANVIL).displayName("Ban").build());
-		} else {
-			inv.set(17, ItemBuilder.Builder(Materials.DIAMOND_SHOVEL).displayName("Kick").build());
+			inv.set(slotSanction--, ItemBuilder.Builder(Materials.ANVIL).displayName("Ban").build());
 		}
+		if(!WarnManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.WARN) && WarnManager.warnActive) {
+			inv.set(slotSanction--, ItemBuilder.Builder(Materials.COMPASS).displayName("Warn").build());
+		}
+		inv.set(slotSanction, ItemBuilder.Builder(Materials.DIAMOND_SHOVEL).displayName("Kick").build());
 
 		inv.set(18, ItemBuilder.Builder(Materials.SPIDER_EYE).displayName(Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())).build());
 		inv.set(19, ItemBuilder.Builder(Materials.EYE_OF_ENDER).displayName(Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())).build());
@@ -64,6 +67,7 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		inv.set(21, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
 		inv.set(22, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())).build());
 		inv.set(23, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.main.active_report", "%name%", cible.getName())).build());
+		inv.set(24, ItemBuilder.Builder(Materials.BEACON).displayName(Messages.getMessage(p, "inventory.main.active_warn", "%name%", cible.getName())).build());
 		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
 		p.openInventory(inv);
 	}
@@ -156,6 +160,10 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 			InventoryManager.open(NegativityInventory.FORGE_MODS, p, cible);
 		} else if(m.equals(Materials.APPLE)) {
 			InventoryManager.open(NegativityInventory.SEE_REPORT, p, cible);
+		} else if(m.equals(Materials.BEACON)) {
+			InventoryManager.open(NegativityInventory.WARN_SEE, p, cible);
+		} else if(m.equals(Materials.COMPASS)) {
+			InventoryManager.open(NegativityInventory.WARN, p, cible);
 		} else if(m.equals(Materials.DIAMOND_SHOVEL)) {
 			InventoryManager.open(NegativityInventory.KICK, p, cible);
 		} else if(m.equals(Materials.ANVIL)) {

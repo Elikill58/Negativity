@@ -140,6 +140,7 @@ public class SpongeNegativity {
 			registerCommand(event, "nreport", "report");
 		}
 		
+		// TODO fix the ban config not loaded yet
 		// BanManager#init is not called yet, so we have to work around it
 		Configuration banConfig = UniversalUtils.loadConfig(new File(Adapter.getAdapter().getDataFolder(), "bans.yml"), "bans.yml");
 		if (banConfig.getBoolean("commands.ban")) {
@@ -147,6 +148,11 @@ public class SpongeNegativity {
 		}
 		if (banConfig.getBoolean("commands.unban")) {
 			registerCommand(event, "nunban", "negunban", "unban");
+		}
+
+		Configuration warnConfig = UniversalUtils.loadConfig(new File(Adapter.getAdapter().getDataFolder(), "warns.yml"), "warns.yml");
+		if (warnConfig.getBoolean("commands.warn")) {
+			registerCommand(event, "nwarn", "warn");
 		}
 	}
 	

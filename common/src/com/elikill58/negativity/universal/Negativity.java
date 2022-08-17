@@ -50,6 +50,7 @@ import com.elikill58.negativity.universal.storage.proof.NegativityProofStorage;
 import com.elikill58.negativity.universal.utils.SemVer;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
+import com.elikill58.negativity.universal.warn.WarnManager;
 import com.elikill58.negativity.universal.webhooks.WebhookManager;
 import com.elikill58.negativity.universal.webhooks.messages.AlertWebhookMessage;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage.WebhookMessageType;
@@ -321,6 +322,7 @@ public class Negativity {
 		Database.init();
 		Perm.init();
 		BanManager.init();
+		WarnManager.init();
 		TranslatedMessages.init();
 		NegativityAccountStorage.init();
 		EventManager.load();

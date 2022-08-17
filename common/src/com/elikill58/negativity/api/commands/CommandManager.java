@@ -21,6 +21,7 @@ import com.elikill58.negativity.common.commands.chat.ClearChatCommand;
 import com.elikill58.negativity.common.commands.chat.LockChatCommand;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.ban.BanManager;
+import com.elikill58.negativity.universal.warn.WarnManager;
 
 public class CommandManager implements Listeners {
 
@@ -53,6 +54,15 @@ public class CommandManager implements Listeners {
 			commands.put("nreport", report);
 			tabs.put("nreport", report);
 		}
+		if(conf.getBoolean("commands.chat.clear", true)) {
+			ClearChatCommand clearchat = new ClearChatCommand();
+			commands.put("nclearchat", clearchat);
+		}
+		if(conf.getBoolean("commands.chat.lock", true)) {
+			LockChatCommand lockchat = new LockChatCommand();
+			commands.put("nlockchat", lockchat);
+			EventManager.registerEvent(lockchat);
+		}
 		
 		conf = BanManager.getBanConfig();
 		if(conf.getBoolean("commands.ban", false)) {
@@ -65,14 +75,12 @@ public class CommandManager implements Listeners {
 			commands.put("nunban", unban);
 			tabs.put("nunban", unban);
 		}
-		if(conf.getBoolean("commands.chat.clear", true)) {
-			ClearChatCommand clearchat = new ClearChatCommand();
-			commands.put("nclearchat", clearchat);
-		}
-		if(conf.getBoolean("commands.chat.lock", true)) {
-			LockChatCommand lockchat = new LockChatCommand();
-			commands.put("nlockchat", lockchat);
-			EventManager.registerEvent(lockchat);
+		
+		conf = WarnManager.getWarnConfig();
+		if(conf.getBoolean("commands.warn", false)) {
+			UnbanCommand unban = new UnbanCommand();
+			commands.put("nwarn", unban);
+			tabs.put("nwarn", unban);
 		}
 	}
 	

@@ -13,11 +13,11 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
@@ -99,7 +99,7 @@ public class UltraPunishmentsProcessor implements BanProcessor {
 	private Ban toBan(Punishment pu) {
 		IndexedPlayer p = pu.getTarget().get().get();
 		// store the IP even if not used by plugin mostly to be able to get ban on same IP
-		return new Ban(p.getUuid(), pu.getReason().orElse(null), pu.getIssuerName(), pu.getIssuer().isPresent() ? BanType.MOD : BanType.PLUGIN, 0, null, p.getIP().orElse(null), pu.isExpired() ? BanStatus.EXPIRED : BanStatus.ACTIVE);
+		return new Ban(p.getUuid(), pu.getReason().orElse(null), pu.getIssuerName(), pu.getIssuer().isPresent() ? SanctionnerType.MOD : SanctionnerType.PLUGIN, 0, null, p.getIP().orElse(null), pu.isExpired() ? BanStatus.EXPIRED : BanStatus.ACTIVE);
 	}
 	
 	@Override

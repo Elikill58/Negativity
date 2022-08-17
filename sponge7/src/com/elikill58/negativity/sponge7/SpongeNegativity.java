@@ -47,6 +47,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.channel.GameChannelNegativityMessageEvent;
+import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.sponge7.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge7.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge7.listeners.BlockListeners;
@@ -72,6 +73,7 @@ import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManag
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.warn.WarnManager;
 import com.google.inject.Inject;
 
 @Plugin(id = "negativity")
@@ -164,13 +166,17 @@ public class SpongeNegativity {
 		reloadCommand("unban", cmd, () -> new CommandsExecutorManager("nunban"), "nunban", "negunban", "unban");
 		reloadCommand("chat.clear", cmd, () -> new CommandsExecutorManager("nclearchat"), "nclearchat", "clearchat");
 		reloadCommand("chat.lock", cmd, () -> new CommandsExecutorManager("nlockchat"), "nlockchat", "lockchat");
+		reloadCommand("warn", cmd, () -> new CommandsExecutorManager("nwarn"), "nwarn", "warn");
 	}
 
 	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command,
 			String... aliases) {
-		reloadCommand(configKey,
-				(configKey.endsWith("ban") ? BanManager.getBanConfig() : Adapter.getAdapter().getConfig())
-						.getBoolean("commands." + configKey),
+		Configuration conf = Adapter.getAdapter().getConfig();
+		if(configKey.endsWith("ban"))
+			conf = BanManager.getBanConfig();
+		if(configKey.endsWith("warn"))
+			conf = WarnManager.getWarnConfig();
+		reloadCommand(configKey, conf.getBoolean("commands." + configKey),
 				manager, command, aliases);
 	}
 

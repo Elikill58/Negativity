@@ -8,22 +8,21 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import org.bukkit.BanEntry;
 import org.bukkit.BanList;
 import org.bukkit.Bukkit;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.PlatformDependentExtension;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
@@ -86,7 +85,7 @@ public class BukkitBanProcessor implements BanProcessor {
 		}
 
 		long executionTime = banEntry.getCreated().getTime();
-		return new Ban(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason, null, BanStatus.ACTIVE, executionTime);
+		return new Ban(playerId, reason, banEntry.getSource(), SanctionnerType.UNKNOW, expirationTime, reason, null, BanStatus.ACTIVE, executionTime);
 	}
 
 	@Override
@@ -136,7 +135,7 @@ public class BukkitBanProcessor implements BanProcessor {
 		BanStatus status = revoked ? BanStatus.REVOKED : BanStatus.EXPIRED;
 		long executionTime = banEntry.getCreated().getTime();
 		long revocationTime = revoked ? System.currentTimeMillis() : -1;
-		return new Ban(playerId, reason, banEntry.getSource(), BanType.UNKNOW, expirationTime, reason, null, status, executionTime, revocationTime);
+		return new Ban(playerId, reason, banEntry.getSource(), SanctionnerType.UNKNOW, expirationTime, reason, null, status, executionTime, revocationTime);
 	}
 	
 	public static class Provider implements BanProcessorProvider, PlatformDependentExtension {

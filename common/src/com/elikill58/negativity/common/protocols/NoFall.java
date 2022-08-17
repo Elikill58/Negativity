@@ -27,6 +27,7 @@ import com.elikill58.negativity.universal.playerModifications.PlayerModification
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
+@SuppressWarnings("deprecation")
 public class NoFall extends Cheat {
 
 	public NoFall() {

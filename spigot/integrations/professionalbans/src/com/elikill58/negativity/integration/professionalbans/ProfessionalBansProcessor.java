@@ -14,11 +14,11 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
@@ -54,7 +54,7 @@ public class ProfessionalBansProcessor implements BanProcessor {
 			return new BanResult(BanResultType.UNKNOW_PLAYER);
 		}
 		Main.ban.unban(playerId.toString());
-		return new BanResult(new Ban(playerId, null, null, BanType.UNKNOW, 0, null, null, BanStatus.REVOKED));
+		return new BanResult(new Ban(playerId, null, null, SanctionnerType.UNKNOW, 0, null, null, BanStatus.REVOKED));
 	}
 
 	@Nullable
@@ -72,7 +72,7 @@ public class ProfessionalBansProcessor implements BanProcessor {
 				String by = rs.getString("TEAMUUID");
 				String reason = rs.getString("REASON");
 				long expireTime = rs.getLong("END");
-				return new Ban(playerId, reason, by, BanType.UNKNOW, expireTime, null, null, expireTime > System.currentTimeMillis() ? BanStatus.ACTIVE : BanStatus.EXPIRED);
+				return new Ban(playerId, reason, by, SanctionnerType.UNKNOW, expireTime, null, null, expireTime > System.currentTimeMillis() ? BanStatus.ACTIVE : BanStatus.EXPIRED);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -99,7 +99,7 @@ public class ProfessionalBansProcessor implements BanProcessor {
 				long expireTime = rs.getLong("END");
 				int nbBans = rs.getInt("BANS");
 				for(int i = 0; i < nbBans; i++)
-					list.add(new Ban(playerId, reason, by, BanType.UNKNOW, expireTime, null, ip, expireTime > System.currentTimeMillis() ? BanStatus.ACTIVE : BanStatus.EXPIRED));
+					list.add(new Ban(playerId, reason, by, SanctionnerType.UNKNOW, expireTime, null, ip, expireTime > System.currentTimeMillis() ? BanStatus.ACTIVE : BanStatus.EXPIRED));
 			}
 			rs.close();
 			ps.close();
@@ -122,7 +122,7 @@ public class ProfessionalBansProcessor implements BanProcessor {
 				long expireTime = rs.getLong("END");
 				int nbBans = rs.getInt("BANS");
 				for(int i = 0; i < nbBans; i++)
-					list.add(new Ban(playerId, reason, by, BanType.UNKNOW, expireTime, null, null, expireTime > System.currentTimeMillis() ? BanStatus.ACTIVE : BanStatus.EXPIRED));
+					list.add(new Ban(playerId, reason, by, SanctionnerType.UNKNOW, expireTime, null, null, expireTime > System.currentTimeMillis() ? BanStatus.ACTIVE : BanStatus.EXPIRED));
 			}
 			rs.close();
 			ps.close();

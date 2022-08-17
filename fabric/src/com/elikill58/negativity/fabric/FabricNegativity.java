@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.channel.GameChannelNegativityMessageEvent;
+import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.fabric.impl.entity.FabricEntityManager;
 import com.elikill58.negativity.fabric.impl.entity.FabricPlayer;
 import com.elikill58.negativity.fabric.listeners.CommandsExecutorManager;
@@ -37,6 +38,7 @@ import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManag
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.warn.WarnManager;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.tree.LiteralCommandNode;
@@ -140,13 +142,18 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 		reloadCommand("unban", "nunban", "negunban", "unban");
 		reloadCommand("chat.clear", "nclearchat", "clearchat");
 		reloadCommand("chat.lock", "nlockchat", "lockchat");
+		reloadCommand("warn", "nwarn", "warn");
 		commandLoaded = true;
 	}
 
 	private void reloadCommand(String configKey, String cmd,
 			String... alias) {
-		if ((configKey.endsWith("ban") ? BanManager.getBanConfig() : Adapter.getAdapter().getConfig())
-				.getBoolean("commands." + configKey)) {
+		Configuration conf = Adapter.getAdapter().getConfig();
+		if(configKey.endsWith("ban"))
+			conf = BanManager.getBanConfig();
+		if(configKey.endsWith("warn"))
+			conf = WarnManager.getWarnConfig();
+		if (conf.getBoolean("commands." + configKey)) {
 			registerCommand(cmd, alias);
 		}
 	}

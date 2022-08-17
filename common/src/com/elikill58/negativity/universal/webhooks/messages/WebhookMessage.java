@@ -116,6 +116,7 @@ public class WebhookMessage implements Comparable<WebhookMessage> {
 		ALERT,
 		BAN,
 		KICK,
-		REPORT;
+		REPORT,
+		WARN;
 	}
 }

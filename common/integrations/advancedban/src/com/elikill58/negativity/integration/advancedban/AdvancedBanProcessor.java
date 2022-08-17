@@ -13,11 +13,11 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 
@@ -74,7 +74,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 		return new Ban(playerId,
 				punishment.getReason(),
 				punishment.getOperator(),
-				BanType.UNKNOW,
+				SanctionnerType.UNKNOW,
 				punishment.getEnd(),
 				punishment.getReason(),
 				null,
@@ -117,7 +117,7 @@ public class AdvancedBanProcessor implements BanProcessor {
 		return new Ban(UUID.fromString(punishment.getUuid()),
 				punishment.getReason(),
 				punishment.getOperator(),
-				BanType.UNKNOW,
+				SanctionnerType.UNKNOW,
 				punishment.getEnd(),
 				punishment.getReason(),
 				null,

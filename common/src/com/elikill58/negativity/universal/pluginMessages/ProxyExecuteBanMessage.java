@@ -5,9 +5,9 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 
 public class ProxyExecuteBanMessage implements NegativityMessage {
 
@@ -28,7 +28,7 @@ public class ProxyExecuteBanMessage implements NegativityMessage {
 				new UUID(input.readLong(), input.readLong()),
 				input.readUTF(),
 				input.readUTF(),
-				BanType.valueOf(input.readUTF()),
+				SanctionnerType.valueOf(input.readUTF()),
 				input.readLong(),
 				input.readBoolean() ? input.readUTF() : null,
 				null,

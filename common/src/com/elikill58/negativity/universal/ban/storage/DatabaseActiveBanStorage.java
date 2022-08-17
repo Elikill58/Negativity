@@ -12,9 +12,9 @@ import java.util.UUID;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.database.Database;
 import com.elikill58.negativity.universal.database.DatabaseMigrator;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -123,6 +123,6 @@ public class DatabaseActiveBanStorage implements ActiveBanStorage {
 		String ip = rs.getString("ip");
 		Timestamp executionTimestamp = rs.getTimestamp("execution_time");
 		long executionTime = executionTimestamp == null ? -1 : executionTimestamp.getTime();
-		return new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, cheatName, ip, BanStatus.ACTIVE, executionTime);
+		return new Ban(playerId, reason, bannedBy, SanctionnerType.UNKNOW, expirationTime, cheatName, ip, BanStatus.ACTIVE, executionTime);
 	}
 }

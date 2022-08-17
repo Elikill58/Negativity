@@ -21,12 +21,12 @@ import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
 import com.elikill58.negativity.common.commands.ReportCommand;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.AltAccountBan;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.SemVer;
@@ -64,12 +64,12 @@ public class ConnectionManager implements Listeners {
 							.forEach((mod) -> mod.sendMessage(alt.getAlertMessage().replaceAll("%name%", p.getName())));
 					break;
 				case BAN:
-					BanManager.executeBan(new Ban(p.getUniqueId(), reason, "Negativity", BanType.PLUGIN, alt.isBanDef() ? -1 : alt.getBanTime(), "Alt", ip, BanStatus.ACTIVE));
+					BanManager.executeBan(new Ban(p.getUniqueId(), reason, "Negativity", SanctionnerType.PLUGIN, alt.isBanDef() ? -1 : alt.getBanTime(), "Alt", ip, BanStatus.ACTIVE));
 					break;
 				case BAN_ALL:
 					long time = alt.isBanDef() ? -1 : alt.getBanTime();
 					for(UUID allPlayers : NegativityAccountStorage.getStorage().getPlayersOnIP(ip)) {
-						BanManager.executeBan(new Ban(allPlayers, reason, "Negativity", BanType.PLUGIN, time, "Alt", ip, BanStatus.ACTIVE));
+						BanManager.executeBan(new Ban(allPlayers, reason, "Negativity", SanctionnerType.PLUGIN, time, "Alt", ip, BanStatus.ACTIVE));
 					}
 					break;
 				}

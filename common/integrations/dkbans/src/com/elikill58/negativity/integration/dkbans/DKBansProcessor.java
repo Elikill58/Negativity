@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
@@ -60,7 +61,7 @@ public class DKBansProcessor implements BanProcessor {
 
 	@Override
 	public List<Ban> getActiveBanOnSameIP(String ip) {
-		List<Ban> list = new ArrayList<Ban>();
+		List<Ban> list = new ArrayList<>();
 		BanSystem.getInstance().getPlayerManager().getPlayers(ip)
 				.forEach((p) -> list.addAll(getLoggedBans(p.getUUID())));
 		return list;
@@ -91,8 +92,8 @@ public class DKBansProcessor implements BanProcessor {
 
 	private Ban parseToNegativityBan(HistoryEntry he, BanStatus bs) {
 		return new Ban(he.getUUID(), he.getReason(), he.getStaffName(),
-				he.getStaffAsPlayer() == null ? com.elikill58.negativity.universal.ban.BanType.MOD
-						: com.elikill58.negativity.universal.ban.BanType.CONSOLE,
+				he.getStaffAsPlayer() == null ? SanctionnerType.MOD
+						: SanctionnerType.CONSOLE,
 				he.getTimeStamp(), null, he.getIp(), bs);
 	}
 

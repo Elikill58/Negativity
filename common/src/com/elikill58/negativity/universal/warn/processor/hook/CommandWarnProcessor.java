@@ -1,63 +1,62 @@
-package com.elikill58.negativity.universal.ban.processor;
+package com.elikill58.negativity.universal.warn.processor.hook;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.SanctionnerType;
-import com.elikill58.negativity.universal.ban.Ban;
-import com.elikill58.negativity.universal.ban.BanResult;
-import com.elikill58.negativity.universal.ban.BanStatus;
+import com.elikill58.negativity.universal.warn.Warn;
+import com.elikill58.negativity.universal.warn.WarnResult;
+import com.elikill58.negativity.universal.warn.processor.WarnProcessor;
 
-public class CommandBanProcessor implements BanProcessor {
+public class CommandWarnProcessor implements WarnProcessor {
 
-	private final List<String> banCommands;
-	private final List<String> unbanCommands;
+	private final List<String> warnCommands;
+	private final List<String> unWarnCommands;
 
-	public CommandBanProcessor(List<String> banCommands, List<String> unbanCommands) {
-		this.banCommands = banCommands;
-		this.unbanCommands = unbanCommands;
+	public CommandWarnProcessor(List<String> warnCommands, List<String> unWarnCommands) {
+		this.warnCommands = warnCommands;
+		this.unWarnCommands = unWarnCommands;
 	}
 
 	@Override
-	public BanResult executeBan(Ban ban) {
+	public WarnResult executeWarn(Warn ban) {
 		Adapter adapter = Adapter.getAdapter();
-		banCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, ban.getPlayerId(), ban.getReason())));
-		return new BanResult(ban);
+		warnCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, ban.getPlayerId(), ban.getReason())));
+		return new WarnResult(ban);
 	}
 
 	@Override
-	public BanResult revokeBan(UUID playerId) {
+	public WarnResult revokeWarn(UUID playerId) {
 		Adapter adapter = Adapter.getAdapter();
-		unbanCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, playerId, "Unknown")));
-		return new BanResult(new Ban(playerId, "Unknown", "Unknown", SanctionnerType.UNKNOW, 0, null, null, BanStatus.REVOKED, -1, System.currentTimeMillis()));
-	}
-
-	@Nullable
-	@Override
-	public Ban getActiveBan(UUID playerId) {
-		return null;
+		unWarnCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, playerId, "Unknown")));
+		return new WarnResult(new Warn(playerId, "Unknown", "Unknown", SanctionnerType.UNKNOW, null, -1));
 	}
 
 	@Override
-	public List<Ban> getLoggedBans(UUID playerId) {
-		return Collections.emptyList();
+	public WarnResult revokeWarn(Warn warn) {
+		Adapter adapter = Adapter.getAdapter();
+		unWarnCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, warn.getPlayerId(), "Unknown")));
+		return new WarnResult(warn);
 	}
-	
+
 	@Override
-	public List<Ban> getActiveBanOnSameIP(String ip) {
+	public List<Warn> getActiveWarn(UUID playerId) {
 		return Collections.emptyList();
 	}
 
 	@Override
-	public List<Ban> getAllBans() {
+	public List<Warn> getActiveWarnOnSameIP(String ip) {
+		return Collections.emptyList();
+	}
+
+	@Override
+	public List<Warn> getAllWarns() {
 		return Collections.emptyList();
 	}
 	

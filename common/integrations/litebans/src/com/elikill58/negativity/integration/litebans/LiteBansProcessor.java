@@ -12,11 +12,11 @@ import java.util.concurrent.CompletableFuture;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 import com.elikill58.negativity.universal.utils.ChatUtils;
@@ -74,7 +74,7 @@ public class LiteBansProcessor implements BanProcessor {
 			        while (rs.next()) {
 			            String reason = rs.getString("reason");
 			            String bannedByName = rs.getString("banned_by_name");
-			            BanType banType = getBanType(rs.getString("banned_by_uuid"));
+			            SanctionnerType banType = getSanctionnerType(rs.getString("banned_by_uuid"));
 			            String removedByName = rs.getString("removed_by_name");
 			            String ip = rs.getString("ip");
 			            long revocation = rs.getTimestamp("removed_by_date").getTime();
@@ -102,7 +102,7 @@ public class LiteBansProcessor implements BanProcessor {
 			        while (rs.next()) {
 			            String reason = rs.getString("reason");
 			            String bannedByName = rs.getString("banned_by_name");
-			            BanType banType = getBanType(rs.getString("banned_by_uuid"));
+			            SanctionnerType banType = getSanctionnerType(rs.getString("banned_by_uuid"));
 			            String removedByName = rs.getString("removed_by_name");
 			            String ip = rs.getString("ip");
 			            long revocation = rs.getTimestamp("removed_by_date").getTime();
@@ -131,7 +131,7 @@ public class LiteBansProcessor implements BanProcessor {
 			        	UUID playerId = UUID.fromString(rs.getString("uuid"));
 			            String reason = rs.getString("reason");
 			            String bannedByName = rs.getString("banned_by_name");
-			            BanType banType = getBanType(rs.getString("banned_by_uuid"));
+			            SanctionnerType banType = getSanctionnerType(rs.getString("banned_by_uuid"));
 			            String removedByName = rs.getString("removed_by_name");
 			            long revocation = rs.getTimestamp("removed_by_date").getTime();
 			            long time = rs.getLong("time");
@@ -160,7 +160,7 @@ public class LiteBansProcessor implements BanProcessor {
 			            String reason = rs.getString("reason");
 			            String ip = rs.getString("ip");
 			            String bannedByName = rs.getString("banned_by_name");
-			            BanType banType = getBanType(rs.getString("banned_by_uuid"));
+			            SanctionnerType banType = getSanctionnerType(rs.getString("banned_by_uuid"));
 			            long revocation = rs.getTimestamp("removed_by_date").getTime();
 			            long time = rs.getLong("time");
 			            long until = rs.getLong("until");
@@ -184,14 +184,14 @@ public class LiteBansProcessor implements BanProcessor {
 		return Arrays.asList(ChatColor.YELLOW + "Processor from LiteBans plugin.");
 	}
 	
-	public BanType getBanType(String type) {
+	public SanctionnerType getSanctionnerType(String type) {
 		if(type.equalsIgnoreCase("CONSOLE"))
-			return BanType.CONSOLE;
+			return SanctionnerType.CONSOLE;
 		try{
 		    UUID.fromString(type);
-		    return BanType.MOD;
+		    return SanctionnerType.MOD;
 		} catch (IllegalArgumentException exception){ /* not UUID */ }
-		return BanType.PLUGIN;
+		return SanctionnerType.PLUGIN;
 	}
 	
 	public static class Provider implements BanProcessorProvider, PluginDependentExtension {

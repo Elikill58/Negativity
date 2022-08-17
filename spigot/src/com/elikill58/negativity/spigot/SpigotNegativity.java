@@ -207,6 +207,18 @@ public class SpigotNegativity extends JavaPlugin {
 			unbanCmd.setTabCompleter(command);
 		}
 
+		
+		Configuration warnConfig = BanManager.getBanConfig().getSection("commands");
+		PluginCommand warnCmd = getCommand("nwarn");
+		if (!warnConfig.getBoolean("warn", true))
+			unRegisterBukkitCommand(banCmd);
+		else {
+			warnCmd.setAliases(Arrays.asList("warn"));
+			warnCmd.setExecutor(command);
+			warnCmd.setTabCompleter(command);
+		}
+		
+
 		PluginCommand clearCheatCmd = getCommand("nclearchat");
 		if (!commandSection.getBoolean("chat.clear", true))
 			unRegisterBukkitCommand(clearCheatCmd);

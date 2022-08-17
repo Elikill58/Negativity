@@ -31,6 +31,8 @@ public class NegativityMessagesManager {
 		messages.put(RedisNegativityMessage.MESSAGE_ID, RedisNegativityMessage::new);
 		messages.put(PlayerVersionMessage.MESSAGE_ID, PlayerVersionMessage::new);
 		messages.put(ShowAlertStatusMessage.MESSAGE_ID, ShowAlertStatusMessage::new);
+		messages.put(ProxyExecuteWarnMessage.MESSAGE_ID, ProxyExecuteWarnMessage::new);
+		messages.put(ProxyRevokeWarnMessage.MESSAGE_ID, ProxyRevokeWarnMessage::new);
 		MESSAGES_BY_ID = Collections.unmodifiableMap(messages);
 	}
 

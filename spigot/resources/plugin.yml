@@ -40,6 +40,10 @@ commands:
     description: Lock chat for not-bypass people
     permission: negativity.chat.lock
     aliases: [lockchat]
+  nwarn:
+    description: Warn a player
+    permission: negativity.warn
+    aliases: [warn]
 
 permissions:
   negativity.*:
@@ -56,6 +60,7 @@ permissions:
       negativity.mod: true
       negativity.managecheat: true
       negativity.reportwait: true
+      negativity.warn: true
   negativity.negativity:
     description: See all informations about a player and start verif
     default: op

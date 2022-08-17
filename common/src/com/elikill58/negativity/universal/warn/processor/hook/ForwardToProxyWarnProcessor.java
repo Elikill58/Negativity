@@ -1,4 +1,4 @@
-package com.elikill58.negativity.universal.ban.processor;
+package com.elikill58.negativity.universal.warn.processor.hook;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -13,50 +13,50 @@ import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.PlatformDependentExtension;
 import com.elikill58.negativity.universal.SanctionnerType;
-import com.elikill58.negativity.universal.ban.Ban;
-import com.elikill58.negativity.universal.ban.BanResult;
-import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
-import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
-import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
+import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteWarnMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
+import com.elikill58.negativity.universal.warn.Warn;
+import com.elikill58.negativity.universal.warn.WarnResult;
+import com.elikill58.negativity.universal.warn.WarnResult.WarnResultType;
+import com.elikill58.negativity.universal.warn.processor.WarnProcessor;
+import com.elikill58.negativity.universal.warn.processor.WarnProcessorProvider;
 
-public class ForwardToProxyBanProcessor implements BanProcessor {
+public class ForwardToProxyWarnProcessor implements WarnProcessor {
 
 	public static final String PROCESSOR_ID = "proxy";
 
 	@Override
-	public BanResult executeBan(Ban ban) {
+	public WarnResult executeWarn(Warn ban) {
 		// get(0) because there is at least the cheating player
-		Adapter.getAdapter().getOnlinePlayers().get(0).sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ProxyExecuteBanMessage(ban));
-		return new BanResult(BanResultType.DONE, ban);
+		Adapter.getAdapter().getOnlinePlayers().get(0).sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ProxyExecuteWarnMessage(ban));
+		return new WarnResult(WarnResultType.DONE, ban);
 	}
 	
 	@Override
-	public BanResult revokeBan(UUID playerId) {
+	public WarnResult revokeWarn(UUID playerId) {
 		Adapter.getAdapter().getOnlinePlayers().get(0).sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ProxyRevokeBanMessage(playerId));
-		return new BanResult(BanResultType.DONE, new Ban(playerId, "", "", SanctionnerType.UNKNOW, -1, null, null, BanStatus.REVOKED, -1, System.currentTimeMillis()));
-	}
-
-	@Nullable
-	@Override
-	public Ban getActiveBan(UUID playerId) {
-		// If this processor is active, companion plugins on the proxies are supposed to handle bans
-		return null;
+		return new WarnResult(WarnResultType.DONE, new Warn(playerId, "", "", SanctionnerType.UNKNOW, null, -1));
 	}
 
 	@Override
-	public List<Ban> getLoggedBans(UUID playerId) {
+	public WarnResult revokeWarn(Warn warn) {
+		Adapter.getAdapter().getOnlinePlayers().get(0).sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ProxyRevokeBanMessage(warn.getPlayerId()));
+		return new WarnResult(WarnResultType.DONE, warn);
+	}
+
+	@Override
+	public List<Warn> getActiveWarn(UUID playerId) {
 		return Collections.emptyList();
 	}
 	
 	@Override
-	public List<Ban> getActiveBanOnSameIP(String ip) {
+	public List<Warn> getActiveWarnOnSameIP(String ip) {
 		return Collections.emptyList();
 	}
 	
 	@Override
-	public List<Ban> getAllBans() {
+	public List<Warn> getAllWarns() {
 		return Collections.emptyList();
 	}
 	
@@ -70,15 +70,15 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 		return Arrays.asList(ChatColor.YELLOW + "Send request to proxy.", "&eDepend of proxy config.");
 	}
 
-	public static class Provider implements BanProcessorProvider, PlatformDependentExtension {
+	public static class Provider implements WarnProcessorProvider, PlatformDependentExtension {
 		@Override
 		public String getId() {
 			return PROCESSOR_ID;
 		}
 	
 		@Override
-		public @Nullable BanProcessor create(Adapter adapter) {
-			return new ForwardToProxyBanProcessor();
+		public @Nullable WarnProcessor create(Adapter adapter) {
+			return new ForwardToProxyWarnProcessor();
 		}
 
 		@Override

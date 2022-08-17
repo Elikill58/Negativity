@@ -12,10 +12,10 @@ import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanResult;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.utils.ChatUtils;
@@ -100,7 +100,7 @@ public class BanCommand implements CommandListeners, TabListeners {
 		}
 
 		String reason = reasonJoiner.toString();
-		BanResult ban = BanManager.executeBan(Ban.active(target.getUniqueId(), reason, sender.getName(), BanType.MOD, time, cheatName, (target instanceof Player ? ((Player) target).getIP() : null)));
+		BanResult ban = BanManager.executeBan(Ban.active(target.getUniqueId(), reason, sender.getName(), SanctionnerType.MOD, time, cheatName, (target instanceof Player ? ((Player) target).getIP() : null)));
 		if(ban.isSuccess())
 			Messages.sendMessage(sender, "ban.well_ban", "%name%", target.getName(), "%reason%", reason);
 		else

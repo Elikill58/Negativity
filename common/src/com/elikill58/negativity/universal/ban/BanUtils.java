@@ -5,6 +5,7 @@ import java.sql.Timestamp;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.maths.Expression;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -89,7 +90,7 @@ public class BanUtils {
 		if (!isDefinitive) {
 			banDuration = System.currentTimeMillis() + BanUtils.computeBanDuration(player, reliability, cheat);
 		}
-		return BanManager.executeBan(Ban.active(player.getUUID(), "Cheat (" + reason + ")", "Negativity", BanType.MOD, banDuration, reason, player.getPlayer().getIP()));
+		return BanManager.executeBan(Ban.active(player.getUUID(), "Cheat (" + reason + ")", "Negativity", SanctionnerType.MOD, banDuration, reason, player.getPlayer().getIP()));
 	}
 
 	public static void kickForBan(NegativityPlayer player, Ban ban) {

@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories.holders.admin;
+package com.elikill58.negativity.common.inventories.holders.admin.detections;
 
 import com.elikill58.negativity.api.inventory.NegativityHolder;
 import com.elikill58.negativity.universal.detections.Special;

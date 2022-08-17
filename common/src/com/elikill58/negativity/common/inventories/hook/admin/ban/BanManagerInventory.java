@@ -13,7 +13,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.api.yaml.Configuration;
-import com.elikill58.negativity.common.inventories.holders.admin.BanManagerHolder;
+import com.elikill58.negativity.common.inventories.holders.admin.ban.BanManagerHolder;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.ban.BanManager;
 
@@ -32,7 +32,7 @@ public class BanManagerInventory extends AbstractInventory<BanManagerHolder> {
 		inv.set(8, Inventory.EMPTY_RED);
 
 		Configuration conf = BanManager.getBanConfig();
-		Configuration cmdConf = BanManager.getBanConfig().getSection("commands");
+		Configuration cmdConf = conf.getSection("commands");
 		inv.set(9,
 				createItem(p, Materials.BOOK, "state", "%enabled%", Messages.getStateName(p, BanManager.banActive),
 						"%auto%", Messages.getStateName(p, BanManager.autoBan), "%reliability_amount%",

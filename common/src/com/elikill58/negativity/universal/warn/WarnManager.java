@@ -124,9 +124,17 @@ public class WarnManager {
 	}
 	
 	public static void setProcessorId(String processorId) {
+		WarnProcessor oldProcessor = getProcessor();
+		if(oldProcessor != null)
+			oldProcessor.disable();
+		
 		WarnManager.processorId = processorId;
 		warnConfig.set("processor", processorId);
 		warnConfig.save();
+		
+		WarnProcessor processor = getProcessor();
+		if(processor != null)
+			processor.enable();
 	}
 
 	@Nullable

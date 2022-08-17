@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories.holders.admin;
+package com.elikill58.negativity.common.inventories.holders.admin.ban;
 
 import java.util.HashMap;
 

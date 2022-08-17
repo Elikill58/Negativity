@@ -21,15 +21,19 @@ import com.elikill58.negativity.common.inventories.hook.admin.detections.CheatMa
 import com.elikill58.negativity.common.inventories.hook.admin.detections.OneCheatInventory;
 import com.elikill58.negativity.common.inventories.hook.admin.detections.OneSpecialInventory;
 import com.elikill58.negativity.common.inventories.hook.admin.detections.SpecialManagerInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.warn.WarnManagerInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.warn.WarnProcessorManagerInventory;
 import com.elikill58.negativity.common.inventories.hook.mod.FreezeInventory;
 import com.elikill58.negativity.common.inventories.hook.mod.ModInventory;
 import com.elikill58.negativity.common.inventories.hook.players.ActivedCheatInventory;
 import com.elikill58.negativity.common.inventories.hook.players.AlertInventory;
 import com.elikill58.negativity.common.inventories.hook.players.BanInventory;
-import com.elikill58.negativity.common.inventories.hook.players.GlobalPlayerInventory;
 import com.elikill58.negativity.common.inventories.hook.players.ForgeModsInventory;
+import com.elikill58.negativity.common.inventories.hook.players.GlobalPlayerInventory;
 import com.elikill58.negativity.common.inventories.hook.players.KickInventory;
 import com.elikill58.negativity.common.inventories.hook.players.SeeReportInventory;
+import com.elikill58.negativity.common.inventories.hook.players.SeeWarnInventory;
+import com.elikill58.negativity.common.inventories.hook.players.WarnInventory;
 import com.elikill58.negativity.common.inventories.hook.players.offline.AlertOfflineInventory;
 import com.elikill58.negativity.common.inventories.hook.players.offline.GlobalPlayerOfflineInventory;
 
@@ -59,6 +63,10 @@ public class InventoryManager implements Listeners {
 		new SeeReportInventory();
 		new ReportInventory();
 		new KickInventory();
+		new WarnInventory();
+		new WarnManagerInventory();
+		new WarnProcessorManagerInventory();
+		new SeeWarnInventory();
 		AbstractInventory.INVENTORIES.forEach(AbstractInventory::load);
 	}
 	

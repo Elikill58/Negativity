@@ -11,7 +11,7 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
-import com.elikill58.negativity.common.inventories.holders.admin.CheatChecksHolder;
+import com.elikill58.negativity.common.inventories.holders.admin.detections.CheatChecksHolder;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 

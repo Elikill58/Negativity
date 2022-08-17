@@ -10,7 +10,7 @@ import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.common.inventories.holders.admin.CheatManagerHolder;
+import com.elikill58.negativity.common.inventories.holders.admin.detections.CheatManagerHolder;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.utils.UniversalUtils;

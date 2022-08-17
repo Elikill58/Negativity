@@ -13,7 +13,7 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemFlag;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.common.inventories.holders.admin.CheatDescriptionHolder;
+import com.elikill58.negativity.common.inventories.holders.admin.detections.CheatDescriptionHolder;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatCategory;

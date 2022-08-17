@@ -27,7 +27,8 @@ public class AdminInventory extends AbstractInventory<AdminHolder> {
 		inv.set(1, ItemBuilder.Builder(Materials.REDSTONE).displayName(Messages.getMessage(p, "inventory.mod.special_manage")).build());
 		inv.set(3, ItemBuilder.Builder(Materials.BOOK).displayName(Messages.getMessage(p, "lang.edit")).build());
 		inv.set(4, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.alerts.shower.manage")).build());
-		inv.set(5, ItemBuilder.Builder(Materials.ANVIL).displayName(Messages.getMessage(p, "inventory.bans.manage")).build());
+		inv.set(5, ItemBuilder.Builder(Materials.COMPASS).displayName(Messages.getMessage(p, "inventory.warns.manage")).build());
+		inv.set(6, ItemBuilder.Builder(Materials.ANVIL).displayName(Messages.getMessage(p, "inventory.bans.manage")).build());
 		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
 		p.openInventory(inv);
 	}
@@ -42,6 +43,8 @@ public class AdminInventory extends AbstractInventory<AdminHolder> {
 			InventoryManager.open(NegativityInventory.ADMIN_LANG, p);
 		else if (m.equals(Materials.PAPER))
 			InventoryManager.open(NegativityInventory.ADMIN_ALERT, p);
+		else if (m.equals(Materials.COMPASS))
+			InventoryManager.open(NegativityInventory.WARN_MANAGER, p);
 		else if (m.equals(Materials.ANVIL))
 			InventoryManager.open(NegativityInventory.BAN_MANAGER, p);
 	}

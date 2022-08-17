@@ -74,7 +74,7 @@ public class InventoryMove extends Cheat implements Listeners {
 	public void onClick(InventoryClickEvent e) {
 		if (e.isCancelled())
 			return;
-		Adapter.getAdapter().debug("Click inventory");
+		//Adapter.getAdapter().debug("Click inventory");
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
 		if (np.hasDetectionActive(this))
 			checkInvMove(np);
@@ -84,7 +84,7 @@ public class InventoryMove extends Cheat implements Listeners {
 	public void onOpen(InventoryOpenEvent e) {
 		if (e.isCancelled())
 			return;
-		Adapter.getAdapter().debug("Open inventory");
+		//Adapter.getAdapter().debug("Open inventory");
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(e.getPlayer());
 		if (np.hasDetectionActive(this))
 			checkInvMove(np);
@@ -92,7 +92,7 @@ public class InventoryMove extends Cheat implements Listeners {
 
 	@EventListener
 	public void onClose(InventoryCloseEvent e) {
-		Adapter.getAdapter().debug("Close inventory");
+		//Adapter.getAdapter().debug("Close inventory");
 		NegativityPlayer.getNegativityPlayer(e.getPlayer()).invMoveData = null;
 	}
 

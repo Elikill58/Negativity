@@ -15,6 +15,7 @@ import com.elikill58.negativity.common.commands.ModCommand;
 import com.elikill58.negativity.common.commands.NegativityCommand;
 import com.elikill58.negativity.common.commands.NegativityTpCommand;
 import com.elikill58.negativity.common.commands.ReportCommand;
+import com.elikill58.negativity.common.commands.WarnCommand;
 import com.elikill58.negativity.common.commands.ban.BanCommand;
 import com.elikill58.negativity.common.commands.ban.UnbanCommand;
 import com.elikill58.negativity.common.commands.chat.ClearChatCommand;
@@ -78,7 +79,7 @@ public class CommandManager implements Listeners {
 		
 		conf = WarnManager.getWarnConfig();
 		if(conf.getBoolean("commands.warn", false)) {
-			UnbanCommand unban = new UnbanCommand();
+			WarnCommand unban = new WarnCommand();
 			commands.put("nwarn", unban);
 			tabs.put("nwarn", unban);
 		}

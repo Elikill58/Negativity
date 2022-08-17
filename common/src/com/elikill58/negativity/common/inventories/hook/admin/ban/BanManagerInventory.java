@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories.hook.admin;
+package com.elikill58.negativity.common.inventories.hook.admin.ban;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;

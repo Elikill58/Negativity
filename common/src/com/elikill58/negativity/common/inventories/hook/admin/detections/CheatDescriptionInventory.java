@@ -1,4 +1,4 @@
-package com.elikill58.negativity.common.inventories.hook.admin;
+package com.elikill58.negativity.common.inventories.hook.admin.detections;
 
 import java.util.List;
 import java.util.stream.Collectors;

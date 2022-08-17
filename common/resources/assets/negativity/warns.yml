@@ -1,0 +1,55 @@
+#################################
+#                               #
+#     Negativity AntiCheat      #
+#                               #
+#     Configuration of warn     #
+#                               #
+#################################
+
+# Configuration of the warns subsystem. For more information
+# see https://github.com/Elikill58/Negativity/wiki/Warns
+
+# Enable or disable ALL warn feature
+active: false
+
+# Manage warns commands
+commands:
+  # Manage /nwarn (Alias: /warn)
+  # DON'T FORGET TO ENABLE WARN BELOW
+  warn: true
+
+
+# Processors manage warns. Only one processor can be used at the time.
+# Available processors :
+# - file : Saves warns under the warns/ directory of the configuration directory
+# - database : Saves warns in a database. Needs a configured database (see the Database category)
+# - command : Runs commands to warn or unwarn
+# - proxy : Forwards warn execution and revocations to the proxy companion plugin.
+#   You must enable warns on the proxy plugin's configuration for it to work
+# No plugin support yet
+# Defaults to "file"
+processor: "file"
+# Commands to execute when using the "command" processor
+# You can execute as many commands as you want. Order is respected.
+#
+# Available placeholders:
+# %uuid% : uuid of warned player
+# %name% : name of warned player
+# %ip% : ip of the warned player
+# %reason% : detected cheat
+command:
+  warn:
+  - "kick %name% %reason%"
+  unwarn:
+  - ""
+
+sanctions:
+  ads:
+    name: "&1Spam same message"
+    material: BLUE_BANNER
+    slot: 0
+    message: "&6%name% &ahave been warned for %reason%"
+    command: "nwarn %name% Spam same message"
+    permission: "negativity.sanction.spam"
+    lore:
+    - "&7Warn %name%"

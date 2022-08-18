@@ -33,12 +33,12 @@ public class GlobalPlayerOfflineInventory extends AbstractInventory<CheckMenuOff
 		Minerate minerate = account.getMinerate();
 		int betterClick = account.getMostClicksPerSecond();
 		
-		inv.set(0, GlobalPlayerInventory.getClickItem(Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), betterClick));
+		inv.set(0, GlobalPlayerInventory.getClickItem(Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), betterClick).build());
 		
 		inv.set(3, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
 		inv.set(5, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.main.active_report", "%name%", cible.getName())).build());
 		
-		inv.set(8, ItemBuilder.getSkullItem(cible));
+		inv.set(8, ItemBuilder.getSkullItem(cible, p));
 		inv.set(9, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());
 		
 		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN)) {

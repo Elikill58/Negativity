@@ -35,7 +35,7 @@ public class SeeReportInventory extends AbstractInventory<SeeReportHolder> {
 			page = 0;
 		Inventory inv = Inventory.createInventory("Reports", UniversalUtils.getMultipleOf(reports.size() + 9, 9, 1, 54), new SeeReportHolder(cible, page));
 		for(int i = 0; i < 9; i++) inv.set(i, ItemBuilder.Builder(Materials.GRAY_STAINED_GLASS_PANE).build());
-		inv.set(0, ItemBuilder.getSkullItem(cible));
+		inv.set(0, ItemBuilder.getSkullItem(cible, p));
 		inv.set(7, Inventory.getBackItem(p));
 		inv.set(8, Inventory.getCloseItem(p));
 		

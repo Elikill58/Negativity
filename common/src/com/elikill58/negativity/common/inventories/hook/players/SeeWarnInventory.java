@@ -35,10 +35,10 @@ public class SeeWarnInventory extends AbstractInventory<SeeWarnHolder> {
 		if (page < 0)
 			page = 0;
 		SeeWarnHolder holder = new SeeWarnHolder(cible, page);
-		Inventory inv = Inventory.createInventory("Reports", UniversalUtils.getMultipleOf(warns.size() + 9, 9, 1, 54), holder);
+		Inventory inv = Inventory.createInventory("Warns", UniversalUtils.getMultipleOf(warns.size() + 9, 9, 1, 54), holder);
 		for (int i = 0; i < 9; i++)
 			inv.set(i, ItemBuilder.Builder(Materials.GRAY_STAINED_GLASS_PANE).build());
-		inv.set(0, ItemBuilder.getSkullItem(cible));
+		inv.set(0, ItemBuilder.getSkullItem(cible, p));
 		inv.set(4,
 				ItemBuilder.Builder(Materials.EMERALD)
 						.displayName(Messages.getMessage(p, "inventory.warns.clear.name", "%name%", cible.getName()))

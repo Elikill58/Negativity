@@ -20,16 +20,18 @@ public class AdminInventory extends AbstractInventory<AdminHolder> {
 
 	@Override
 	public void openInventory(Player p, Object... obj) {
-		Inventory inv = Inventory.createInventory(Inventory.ADMIN_MENU, 9, new AdminHolder());
+		Inventory inv = Inventory.createInventory(Inventory.ADMIN_MENU, 18, new AdminHolder());
 		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
+		inv.set(8, Inventory.getCloseItem(p));
 
 		inv.set(0, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.mod.cheat_manage")).build());
 		inv.set(1, ItemBuilder.Builder(Materials.REDSTONE).displayName(Messages.getMessage(p, "inventory.mod.special_manage")).build());
-		inv.set(3, ItemBuilder.Builder(Materials.BOOK).displayName(Messages.getMessage(p, "lang.edit")).build());
-		inv.set(4, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.alerts.shower.manage")).build());
-		inv.set(5, ItemBuilder.Builder(Materials.COMPASS).displayName(Messages.getMessage(p, "inventory.warns.manage")).build());
-		inv.set(6, ItemBuilder.Builder(Materials.ANVIL).displayName(Messages.getMessage(p, "inventory.bans.manage")).build());
-		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
+		
+		inv.set(9, ItemBuilder.Builder(Materials.COMPASS).displayName(Messages.getMessage(p, "inventory.warns.manage")).build());
+		inv.set(10, ItemBuilder.Builder(Materials.ANVIL).displayName(Messages.getMessage(p, "inventory.bans.manage")).build());
+		
+		inv.set(13, ItemBuilder.Builder(Materials.BOOK).displayName(Messages.getMessage(p, "lang.edit")).build());
+		inv.set(14, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.alerts.shower.manage")).build());
 		p.openInventory(inv);
 	}
 

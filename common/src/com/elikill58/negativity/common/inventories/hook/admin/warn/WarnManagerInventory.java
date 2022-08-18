@@ -29,7 +29,7 @@ public class WarnManagerInventory extends AbstractInventory<WarnManagerHolder> {
 		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 
 		inv.set(0, Inventory.EMPTY_RED);
-		inv.set(8, Inventory.EMPTY_RED);
+		inv.set(8, Inventory.getBackItem(p));
 
 		Configuration conf = WarnManager.getWarnConfig();
 		Configuration cmdConf = conf.getSection("commands");
@@ -38,11 +38,11 @@ public class WarnManagerInventory extends AbstractInventory<WarnManagerHolder> {
 		inv.set(11, createItem(p, Materials.COMPASS, WarnManager.warnActive, "on", "off"));
 		inv.set(12, createItem(p, cmdConf.getBoolean("warn", false), Inventory.DYE_GREEN, Inventory.DYE_GRAY,
 				"command.warn"));
-		inv.set(13, createItem(p, Materials.NAME_TAG, "processor"));
-		inv.set(17, Inventory.getCloseItem(p));
+		inv.set(16, createItem(p, Materials.NAME_TAG, "processor"));
+		inv.set(17, Inventory.EMPTY_RED);
 
 		inv.set(18, Inventory.EMPTY_RED);
-		inv.set(26, Inventory.EMPTY_RED);
+		inv.set(26, Inventory.getCloseItem(p));
 		p.openInventory(inv);
 	}
 
@@ -79,6 +79,8 @@ public class WarnManagerInventory extends AbstractInventory<WarnManagerHolder> {
 			openInventory(p); // update inv
 		} else if (m.equals(Materials.NAME_TAG)) {
 			InventoryManager.open(NegativityInventory.WARN_PROCESSOR_MANAGER, p);
+		} else if (m.equals(Materials.ARROW)) {
+			InventoryManager.open(NegativityInventory.ADMIN, p);
 		} else if (e.getSlot() == 12) {
 			Configuration conf = WarnManager.getWarnConfig();
 			conf.set("commands.warn", !conf.getBoolean("commands.warn", false));

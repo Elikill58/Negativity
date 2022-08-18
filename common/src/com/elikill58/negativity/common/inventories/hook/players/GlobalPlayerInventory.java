@@ -1,6 +1,10 @@
 package com.elikill58.negativity.common.inventories.hook.players;
 
+import static com.elikill58.negativity.universal.Messages.getMessage;
+
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
@@ -10,7 +14,6 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
-import com.elikill58.negativity.api.inventory.InventoryType;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
@@ -34,41 +37,49 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 	@Override
 	public void openInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
-		Inventory inv = Inventory.createInventory(Inventory.NAME_CHECK_MENU, 27, new CheckMenuHolder(cible));
+		Inventory inv = Inventory.createInventory(Inventory.NAME_CHECK_MENU, 36, new CheckMenuHolder(cible));
 		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		NegativityAccount account = np.getAccount();
 		Minerate minerate = account.getMinerate();
 		actualizeInventory(p, cible, inv);
-		inv.set(3, ItemBuilder.Builder(Materials.BONE).displayName(ChatColor.GRAY + "Clear clicks").build());
+		inv.set(0, ItemBuilder.getSkullItem(cible, p));
 		
-		inv.set(8, ItemBuilder.getSkullItem(cible));
+		List<ItemStack> sanctionItems = new ArrayList<>();
+		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN) && BanManager.banActive)
+			sanctionItems.add(ItemBuilder.Builder(Materials.ANVIL).displayName("Ban").build());
+		if(!WarnManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.WARN) && WarnManager.warnActive)
+			sanctionItems.add(ItemBuilder.Builder(Materials.COMPASS).displayName("Warn").build());
+		sanctionItems.add(ItemBuilder.Builder(Materials.DIAMOND_SHOVEL).displayName("Kick").build());
+
+		if(sanctionItems.size() == 1)
+			inv.set(4, sanctionItems.get(0));
+		else { // can only be upper than 1
+			inv.set(3, sanctionItems.remove(0)); // get first
+			inv.set(5, sanctionItems.remove(0)); // get second
+			if(!sanctionItems.isEmpty()) // if stay one
+				inv.set(4, sanctionItems.remove(0));
+		}
+
+		inv.set(8, Inventory.getCloseItem(p));
+		inv.set(11, ItemBuilder.Builder(Materials.BONE).displayName(ChatColor.GRAY + "Clear clicks").build());
+		
+		inv.set(16, ItemBuilder.Builder(Materials.PAPER).displayName(getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
+		inv.set(17, ItemBuilder.Builder(Materials.TNT).displayName(getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())).build());
 				
-		inv.set(10, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());
-		inv.set(11, ItemBuilder.Builder(Materials.GRASS).displayName(ChatColor.RESET + "Mods").lore(ChatColor.GRAY + "Launcher: " + ChatColor.YELLOW + np.getClientName(), ChatColor.GRAY + "Forge: " + Messages.getMessage(p, "inventory.manager." + (np.mods.size() > 0 ? "enabled" : "disabled"))).build());
-		inv.set(12, getWoolItem(p, np.getAccount().isMcLeaks()));
+		inv.set(19, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());
+		inv.set(20, getWoolItem(p, np.getAccount().isMcLeaks()));
 		// TODO add again fake players
 		//inv.set(13, ItemBuilder.Builder(Materials.SKELETON_SKULL).displayName(Messages.getMessage(p, "fake_entities")).build());
 		
-		int slotSanction = 17;
-		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN) && BanManager.banActive) {
-			inv.set(slotSanction--, ItemBuilder.Builder(Materials.ANVIL).displayName("Ban").build());
-		}
-		if(!WarnManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.WARN) && WarnManager.warnActive) {
-			inv.set(slotSanction--, ItemBuilder.Builder(Materials.COMPASS).displayName("Warn").build());
-		}
-		inv.set(slotSanction, ItemBuilder.Builder(Materials.DIAMOND_SHOVEL).displayName("Kick").build());
-
-		inv.set(18, ItemBuilder.Builder(Materials.SPIDER_EYE).displayName(Messages.getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())).build());
-		inv.set(19, ItemBuilder.Builder(Materials.EYE_OF_ENDER).displayName(Messages.getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())).build());
+		inv.set(27, ItemBuilder.Builder(Materials.SPIDER_EYE).displayName(getMessage(p, "inventory.main.see_inv", "%name%", cible.getName())).build());
+		inv.set(28, ItemBuilder.Builder(Materials.EYE_OF_ENDER).displayName(getMessage(p, "inventory.main.teleportation_to", "%name%", cible.getName())).build());
 		if(!p.getUniqueId().equals(cible.getUniqueId())) {
-			inv.set(20, ItemBuilder.Builder(Materials.PACKED_ICE).displayName(Messages.getMessage(p, "inventory.main." + (np.isFreeze ? "un" : "") + "freezing", "%name%", cible.getName())).build());
+			inv.set(29, ItemBuilder.Builder(Materials.PACKED_ICE).displayName(getMessage(p, "inventory.main." + (np.isFreeze ? "un" : "") + "freezing", "%name%", cible.getName())).build());
 		}
-		inv.set(21, ItemBuilder.Builder(Materials.PAPER).displayName(Messages.getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
-		inv.set(22, ItemBuilder.Builder(Materials.TNT).displayName(Messages.getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())).build());
-		inv.set(23, ItemBuilder.Builder(Materials.APPLE).displayName(Messages.getMessage(p, "inventory.main.active_report", "%name%", cible.getName())).build());
-		inv.set(24, ItemBuilder.Builder(Materials.BEACON).displayName(Messages.getMessage(p, "inventory.main.active_warn", "%name%", cible.getName())).build());
-		inv.set(inv.getSize() - 1, Inventory.getCloseItem(p));
+		
+		inv.set(34, ItemBuilder.Builder(Materials.APPLE).displayName(getMessage(p, "inventory.main.active_report", "%name%", cible.getName())).build());
+		inv.set(35, ItemBuilder.Builder(Materials.BEACON).displayName(getMessage(p, "inventory.main.active_warn", "%name%", cible.getName())).build());
 		p.openInventory(inv);
 	}
 
@@ -76,28 +87,28 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 	public void actualizeInventory(Player p, Object... args) {
 		Player cible = (Player) args[0];
 		Inventory inv = args.length > 1 ? (Inventory) args[1] : p.getOpenInventory();
-		if(inv == null || !inv.getType().equals(InventoryType.CHEST)) return;
+		if(inv == null) return;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		int betterClick = np.getAccount().getMostClicksPerSecond(), click = np.getClick();
 		try {
-			inv.set(0, getClickItem(Messages.getMessage(p, "inventory.main.actual_click", "%clicks%", String.valueOf(click)), click));
-			inv.set(1, getClickItem(Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), betterClick));
-			inv.set(2, getClickItem(Messages.getMessage(p, "inventory.main.last_click", "%clicks%", String.valueOf(np.lastClick)), np.lastClick));
+			Object[] clickPlaceholders = new Object[] {"%last_clicks%", np.lastClick, "%max_clicks%", betterClick};
+			inv.set(9, getClickItem(getMessage(p, "inventory.main.clicks.name", clickPlaceholders), betterClick).lore(getMessage(p, "inventory.main.clicks.lore", clickPlaceholders)).build());
+			inv.set(10, getClickItem(getMessage(p, "inventory.main.last_click", "%clicks%", click), click).build());
 
-			inv.set(7, ItemBuilder.Builder(Materials.ARROW).displayName(Messages.getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", cible.getPing() + "")).build());
-			inv.set(9, ItemBuilder.Builder(Materials.DIAMOND_SWORD).displayName("Fight: " + Messages.getMessage(p, "inventory.manager." + (np.isInFight ? "enabled" : "disabled"))).lore(ChatColor.GRAY + "Player sensitivity: " + ChatColor.YELLOW + ((int) np.sensitivity)).build());
+			inv.set(1, ItemBuilder.Builder(Materials.ARROW).displayName(getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", cible.getPing() + "")).build());
+			inv.set(18, ItemBuilder.Builder(Materials.DIAMOND_SWORD).displayName("Fight: " + getMessage(p, "inventory.manager." + (np.isInFight ? "enabled" : "disabled"))).lore(ChatColor.GRAY + "Player sensitivity: " + ChatColor.YELLOW + ((int) np.sensitivity)).build());
 			p.updateInventory();
 		} catch (ArrayIndexOutOfBoundsException e) {
 
 		}
 	}
 	
-	public static ItemStack getClickItem(String name, int clicks) {
+	public static ItemBuilder getClickItem(String name, int clicks) {
 		if(Materials.LIME_STAINED_CLAY.getId().contains("lime")) {
-			return ItemBuilder.Builder(getMaterialFromClick(clicks)).displayName(name).build();
+			return ItemBuilder.Builder(getMaterialFromClick(clicks)).displayName(name);
 		} else {
 			// we can use all *_STAINED_CLAY because they will be default STAINED_CLAY
-			return ItemBuilder.Builder(Materials.LIME_STAINED_CLAY).displayName(name).color(getColorFromClick(clicks)).build();
+			return ItemBuilder.Builder(Materials.LIME_STAINED_CLAY).displayName(name).color(getColorFromClick(clicks));
 		}
 	}
 
@@ -124,8 +135,8 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		ItemBuilder builder = ItemBuilder.Builder(type);
 		if(!type.getId().contains("_"))
 			builder.color(b ? DyeColor.RED : DyeColor.LIME);
-		builder.displayName(Messages.getMessage(player, "inventory.main.mcleaks_indicator." + (b ? "positive" : "negative")));
-		builder.lore(Collections.singletonList(Messages.getMessage(player, "inventory.main.mcleaks_indicator.description")));
+		builder.displayName(getMessage(player, "inventory.main.mcleaks_indicator." + (b ? "positive" : "negative")));
+		builder.lore(Collections.singletonList(getMessage(player, "inventory.main.mcleaks_indicator.description")));
 		return builder.build();
 	}
 

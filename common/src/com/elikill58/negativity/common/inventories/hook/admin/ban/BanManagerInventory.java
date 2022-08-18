@@ -29,7 +29,7 @@ public class BanManagerInventory extends AbstractInventory<BanManagerHolder> {
 		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 
 		inv.set(0, Inventory.EMPTY_RED);
-		inv.set(8, Inventory.EMPTY_RED);
+		inv.set(8, Inventory.getBackItem(p));
 
 		Configuration conf = BanManager.getBanConfig();
 		Configuration cmdConf = conf.getSection("commands");
@@ -47,10 +47,10 @@ public class BanManagerInventory extends AbstractInventory<BanManagerHolder> {
 		inv.set(15, createItem(p, cmdConf.getBoolean("unban", false), Inventory.DYE_GREEN, Inventory.DYE_GRAY,
 				"command.unban"));
 		inv.set(16, createItem(p, Materials.NAME_TAG, "processor"));
-		inv.set(17, Inventory.getCloseItem(p));
+		inv.set(17, Inventory.EMPTY_RED);
 
 		inv.set(18, Inventory.EMPTY_RED);
-		inv.set(26, Inventory.EMPTY_RED);
+		inv.set(26, Inventory.getCloseItem(p));
 		p.openInventory(inv);
 	}
 
@@ -92,6 +92,8 @@ public class BanManagerInventory extends AbstractInventory<BanManagerHolder> {
 			change = true;
 		} else if (m.equals(Materials.NAME_TAG)) {
 			InventoryManager.open(NegativityInventory.BAN_PROCESSOR_MANAGER, p);
+		} else if (m.equals(Materials.ARROW)) {
+			InventoryManager.open(NegativityInventory.ADMIN, p);
 		} else if (m.equals(Materials.COMPASS)) {
 			conf.set("reliability_need", conf.getInt("reliability_need") + (e.getAction().name().contains("RIGHT") ? 1 : -1));
 			change = true;

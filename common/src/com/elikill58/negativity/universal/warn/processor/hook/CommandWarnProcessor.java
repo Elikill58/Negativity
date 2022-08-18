@@ -46,17 +46,12 @@ public class CommandWarnProcessor implements WarnProcessor {
 	}
 
 	@Override
-	public List<Warn> getActiveWarn(UUID playerId) {
+	public List<Warn> getWarn(UUID playerId) {
 		return Collections.emptyList();
 	}
 
 	@Override
 	public List<Warn> getActiveWarnOnSameIP(String ip) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public List<Warn> getAllWarns() {
 		return Collections.emptyList();
 	}
 	
@@ -67,8 +62,8 @@ public class CommandWarnProcessor implements WarnProcessor {
 	
 	@Override
 	public List<String> getDescription() {
-		return Arrays.asList(ChatColor.YELLOW + "Use command to ban/unban.", "", "&cNot available:", "&6Everything that need to get data.",
-				"&7- Active bans", "&7- All bans", "&7- Ban on same IP", "&7- Logged/Old bans");
+		return Arrays.asList(ChatColor.YELLOW + "Use command to warn.", "", "&cNot available:", "&6Everything that need to get data.",
+				"&7- Active warns", "&7- Warns on same IP", "&7- Logged/Old warns");
 	}
 
 	private static String applyPlaceholders(String rawCommand, UUID playerId, String reason) {

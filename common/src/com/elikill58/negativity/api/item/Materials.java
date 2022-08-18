@@ -38,6 +38,7 @@ public class Materials {
     public static final Material DIRT = ItemRegistrar.getInstance().get("dirt");
     
     public static final Material EMPTY_MAP = ItemRegistrar.getInstance().get("empty_map", "map");
+    public static final Material EMERALD = ItemRegistrar.getInstance().get("emerald");
     public static final Material EMERALD_ORE = ItemRegistrar.getInstance().get("emerald_ore");
     public static final Material ELYTRA = ItemRegistrar.getInstance().get("elytra", IGNORE_KEY);
     public static final Material EYE_OF_ENDER = ItemRegistrar.getInstance().get("eye_of_ender", "ender_eye");

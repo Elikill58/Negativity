@@ -46,17 +46,12 @@ public class ForwardToProxyWarnProcessor implements WarnProcessor {
 	}
 
 	@Override
-	public List<Warn> getActiveWarn(UUID playerId) {
+	public List<Warn> getWarn(UUID playerId) {
 		return Collections.emptyList();
 	}
 	
 	@Override
 	public List<Warn> getActiveWarnOnSameIP(String ip) {
-		return Collections.emptyList();
-	}
-	
-	@Override
-	public List<Warn> getAllWarns() {
 		return Collections.emptyList();
 	}
 	

@@ -45,6 +45,16 @@ public class WarnManager {
 		return processor.isWarned(playerId);
 	}
 
+	public static List<Warn> getWarn(UUID playerId) {
+		WarnProcessor processor = getProcessor();
+		if (processor == null) {
+			Adapter.getAdapter().debug("Cannot find warn processor while trying to get active warn from " + playerId);
+			return new ArrayList<>();
+		}
+
+		return processor.getWarn(playerId);
+	}
+
 	public static List<Warn> getActiveWarn(UUID playerId) {
 		WarnProcessor processor = getProcessor();
 		if (processor == null) {
@@ -84,6 +94,7 @@ public class WarnManager {
 	 * The revocation may fail if the player is not warned or warns are disabled.
 	 *
 	 * @param playerId the UUID of the player to unwarn
+	 * @param revoker who revoke the warn
 	 *
 	 * @return the logged revoked warn or {@code null} if the revocation failed.
 	 */
@@ -95,6 +106,26 @@ public class WarnManager {
 		}
 
 		return processor.revokeWarn(playerId, revoker);
+	}
+
+	/**
+	 * Revokes the given warn
+	 * <p>
+	 * The revocation may fail if warns are disabled.
+	 *
+	 * @param w the warn to revoke
+	 * @param revoker who revoke the warn
+	 *
+	 * @return the logged revoked warn or {@code null} if the revocation failed.
+	 */
+	public static WarnResult revokeWarn(Warn w, String revoker) {
+		WarnProcessor processor = getProcessor();
+		if (processor == null) {
+			Adapter.getAdapter().debug("Cannot find processor while trying to revoke warn " + w);
+			return new WarnResult(WarnResultType.UNKNOW_PROCESSOR);
+		}
+
+		return processor.revokeWarn(w, revoker);
 	}
 	
 	/**

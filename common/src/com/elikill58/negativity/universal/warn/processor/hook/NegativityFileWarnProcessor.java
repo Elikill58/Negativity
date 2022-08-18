@@ -95,14 +95,12 @@ public class NegativityFileWarnProcessor implements WarnProcessor {
 	}
 
 	@Override
-	public List<Warn> getActiveWarn(UUID playerId) {
+	public List<Warn> getWarn(UUID playerId) {
 		List<Warn> list = new ArrayList<>();
 		try {
 			Configuration config = getYaml(playerId);
 			for(String key : config.getKeys()) {
-				Configuration warnConfig = config.getSection(key);
-				if(warnConfig.getBoolean("active"))
-					list.add(get(playerId, key, warnConfig));
+				list.add(get(playerId, key, config.getSection(key)));
 			}
 			config.save();
 		} catch (Exception e) {
@@ -113,11 +111,6 @@ public class NegativityFileWarnProcessor implements WarnProcessor {
 
 	@Override
 	public List<Warn> getActiveWarnOnSameIP(String ip) {
-		return Collections.emptyList();
-	}
-
-	@Override
-	public List<Warn> getAllWarns() {
 		return Collections.emptyList();
 	}
 	

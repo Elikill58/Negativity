@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -37,15 +38,15 @@ public class NegativityDatabaseWarnProcessor implements WarnProcessor {
 	@Override
 	public WarnResult executeWarn(Warn warn) {
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
-				"INSERT INTO negativity_warns (uuid, reason, warned_by, sanctionner, ip, expiration_time, active, revocation_time, revocation_by) VALUES (?,?,?,?,?,?,?,?,?)")) {
+				"INSERT INTO negativity_warns (uuid, reason, warned_by, sanctionner, ip, execution_time, active, revocation_time, revocation_by) VALUES (?,?,?,?,?,?,?,?,?)")) {
 			stm.setString(1, warn.getPlayerId().toString());
 			stm.setString(2, warn.getReason());
 			stm.setString(3, warn.getWarnedBy());
 			stm.setString(4, warn.getSanctionnerType().name());
 			stm.setString(5, warn.getIp());
-			stm.setLong(6, warn.getExecutionTime());
+			stm.setTimestamp(6, new Timestamp(warn.getExecutionTime()));
 			stm.setBoolean(7, warn.isActive());
-			stm.setLong(8, warn.getRevocationTime());
+			stm.setTimestamp(8, warn.getRevocationTime() > 0 ? new Timestamp(warn.getRevocationTime()) : null);
 			stm.setString(9, warn.getRevocationBy());
 			stm.executeUpdate();
 			return new WarnResult(WarnResultType.DONE, warn);
@@ -85,6 +86,34 @@ public class NegativityDatabaseWarnProcessor implements WarnProcessor {
 			return new WarnResult(WarnResultType.EXCEPTION);
 		}
 	}
+	
+	@Override
+	public boolean isWarned(UUID playerId) {
+		try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT count(*) as nb FROM negativity_warns WHERE uuid = ?")) {
+			stm.setString(1, playerId.toString());
+			ResultSet rs = stm.executeQuery();
+			rs.next();
+			return rs.getInt("nb") > 0;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+
+	@Override
+	public List<Warn> getWarn(UUID playerId) {
+		List<Warn> list = new ArrayList<>();
+		try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_warns WHERE uuid = ?")) {
+			stm.setString(1, playerId.toString());
+			ResultSet rs = stm.executeQuery();
+			while(rs.next()) {
+				list.add(getWarn(rs));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 
 	@Override
 	public List<Warn> getActiveWarn(UUID playerId) {
@@ -117,20 +146,6 @@ public class NegativityDatabaseWarnProcessor implements WarnProcessor {
 	}
 
 	@Override
-	public List<Warn> getAllWarns() {
-		List<Warn> list = new ArrayList<>();
-		try (PreparedStatement stm = Database.getConnection().prepareStatement("SELECT * FROM negativity_warns")) {
-			ResultSet rs = stm.executeQuery();
-			while(rs.next()) {
-				list.add(getWarn(rs));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return list;
-	}
-
-	@Override
 	public String getName() {
 		return "Negativity With database";
 	}
@@ -144,12 +159,13 @@ public class NegativityDatabaseWarnProcessor implements WarnProcessor {
 		int id = rs.getInt("id");
 		UUID playerId = UUID.fromString(rs.getString("uuid"));
 		String reason = rs.getString("reason");
-		long executionTime = rs.getLong("execution_time");
+		long executionTime = rs.getTimestamp("execution_time").getTime();
 		String bannedBy = rs.getString("warned_by");
 		SanctionnerType sanctionner = SanctionnerType.valueOf(rs.getString("sanctionner"));
 		String ip = rs.getString("ip");
 		boolean active = rs.getBoolean("active");
-		long revocationTime = rs.getLong("revocation_time");
+		Timestamp revocationTimestamp = rs.getTimestamp("revocation_time");
+		long revocationTime = revocationTimestamp == null ? -1 : revocationTimestamp.getTime();
 		String revokedBy = rs.getString("revocation_by");
 		return new Warn(id, playerId, reason, bannedBy, sanctionner, ip, executionTime, active, revocationTime, revokedBy);
 	}

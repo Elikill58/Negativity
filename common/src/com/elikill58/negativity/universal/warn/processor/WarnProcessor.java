@@ -2,6 +2,7 @@ package com.elikill58.negativity.universal.warn.processor;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.universal.warn.WarnResult;
 import com.elikill58.negativity.universal.warn.Warn;
@@ -69,6 +70,12 @@ public interface WarnProcessor {
 	 */
 	WarnResult revokeWarn(Warn warn, String revoker);
 
+	/**
+	 * Check if the player is warned with an active one
+	 * 
+	 * @param playerId player to check
+	 * @return true if a warn is active
+	 */
 	default boolean isWarned(UUID playerId) {
 		return !getActiveWarn(playerId).isEmpty();
 	}
@@ -79,7 +86,17 @@ public interface WarnProcessor {
 	 * @param playerId UUID of player
 	 * @return all warns of player, or empty
 	 */
-	List<Warn> getActiveWarn(UUID playerId);
+	List<Warn> getWarn(UUID playerId);
+
+	/**
+	 * Get all active warns of a given player
+	 * 
+	 * @param playerId UUID of player
+	 * @return all active warns of player, or empty
+	 */
+	default List<Warn> getActiveWarn(UUID playerId) {
+		return getWarn(playerId).stream().filter(Warn::isActive).collect(Collectors.toList());
+	}
 	
 	/**
 	 * Get all active warn on the same IP
@@ -88,13 +105,6 @@ public interface WarnProcessor {
 	 * @return all ban on IP
 	 */
 	List<Warn> getActiveWarnOnSameIP(String ip);
-	
-	/**
-	 * Get all current warn.
-	 * 
-	 * @return all active warns
-	 */
-	List<Warn> getAllWarns();
 	
 	/**
 	 * Get the name of the processor

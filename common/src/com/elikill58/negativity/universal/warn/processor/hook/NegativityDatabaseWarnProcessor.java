@@ -37,15 +37,16 @@ public class NegativityDatabaseWarnProcessor implements WarnProcessor {
 	@Override
 	public WarnResult executeWarn(Warn warn) {
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
-				"INSERT INTO negativity_warns (uuid, reason, banned_by, sanctionner, ip, expiration_time, active, revocation_time) VALUES (?,?,?,?,?,?,?,?)")) {
+				"INSERT INTO negativity_warns (uuid, reason, warned_by, sanctionner, ip, expiration_time, active, revocation_time, revocation_by) VALUES (?,?,?,?,?,?,?,?,?)")) {
 			stm.setString(1, warn.getPlayerId().toString());
 			stm.setString(2, warn.getReason());
-			stm.setString(3, warn.getBannedBy());
+			stm.setString(3, warn.getWarnedBy());
 			stm.setString(4, warn.getSanctionnerType().name());
 			stm.setString(5, warn.getIp());
 			stm.setLong(6, warn.getExecutionTime());
 			stm.setBoolean(7, warn.isActive());
 			stm.setLong(8, warn.getRevocationTime());
+			stm.setString(9, warn.getRevocationBy());
 			stm.executeUpdate();
 			return new WarnResult(WarnResultType.DONE, warn);
 		} catch (Exception e) {
@@ -56,10 +57,11 @@ public class NegativityDatabaseWarnProcessor implements WarnProcessor {
 	}
 
 	@Override
-	public WarnResult revokeWarn(UUID playerId) {
+	public WarnResult revokeWarn(UUID playerId, String revoker) {
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
-				"UPDATE negativity_warns SET active = 0, revocation_time = CURRENT_TIMESTAMP WHERE uuid = ?")) {
-			stm.setString(1, playerId.toString());
+				"UPDATE negativity_warns SET active = 0, revocation_time = CURRENT_TIMESTAMP, revocation_by = ? WHERE uuid = ?")) {
+			stm.setString(1, revoker);
+			stm.setString(2, playerId.toString());
 			stm.executeUpdate();
 			return new WarnResult(WarnResultType.DONE);
 		} catch (Exception e) {
@@ -70,10 +72,11 @@ public class NegativityDatabaseWarnProcessor implements WarnProcessor {
 	}
 
 	@Override
-	public WarnResult revokeWarn(Warn warn) {
+	public WarnResult revokeWarn(Warn warn, String revoker) {
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
-				"UPDATE negativity_warns SET active = 0, revocation_time = CURRENT_TIMESTAMP WHERE id = ?")) {
-			stm.setInt(1, warn.getId());
+				"UPDATE negativity_warns SET active = 0, revocation_time = CURRENT_TIMESTAMP, revocation_by = ? WHERE id = ?")) {
+			stm.setString(1, revoker);
+			stm.setInt(2, warn.getId());
 			stm.executeUpdate();
 			return new WarnResult(WarnResultType.DONE);
 		} catch (Exception e) {
@@ -142,10 +145,12 @@ public class NegativityDatabaseWarnProcessor implements WarnProcessor {
 		UUID playerId = UUID.fromString(rs.getString("uuid"));
 		String reason = rs.getString("reason");
 		long executionTime = rs.getLong("execution_time");
-		String bannedBy = rs.getString("banned_by");
+		String bannedBy = rs.getString("warned_by");
+		SanctionnerType sanctionner = SanctionnerType.valueOf(rs.getString("sanctionner"));
 		String ip = rs.getString("ip");
 		boolean active = rs.getBoolean("active");
 		long revocationTime = rs.getLong("revocation_time");
-		return new Warn(id, playerId, reason, bannedBy, SanctionnerType.UNKNOW, ip, executionTime, active, revocationTime);
+		String revokedBy = rs.getString("revocation_by");
+		return new Warn(id, playerId, reason, bannedBy, sanctionner, ip, executionTime, active, revocationTime, revokedBy);
 	}
 }

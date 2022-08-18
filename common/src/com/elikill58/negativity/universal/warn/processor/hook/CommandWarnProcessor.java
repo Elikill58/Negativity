@@ -32,14 +32,14 @@ public class CommandWarnProcessor implements WarnProcessor {
 	}
 
 	@Override
-	public WarnResult revokeWarn(UUID playerId) {
+	public WarnResult revokeWarn(UUID playerId, String revoker) {
 		Adapter adapter = Adapter.getAdapter();
 		unWarnCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, playerId, "Unknown")));
 		return new WarnResult(new Warn(playerId, "Unknown", "Unknown", SanctionnerType.UNKNOW, null, -1));
 	}
 
 	@Override
-	public WarnResult revokeWarn(Warn warn) {
+	public WarnResult revokeWarn(Warn warn, String revoker) {
 		Adapter adapter = Adapter.getAdapter();
 		unWarnCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, warn.getPlayerId(), "Unknown")));
 		return new WarnResult(warn);

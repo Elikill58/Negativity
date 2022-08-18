@@ -7,9 +7,6 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -61,9 +58,7 @@ import com.elikill58.negativity.sponge7.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
-import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
@@ -72,7 +67,6 @@ import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.warn.WarnManager;
 import com.google.inject.Inject;
 
@@ -198,30 +192,6 @@ public class SpongeNegativity {
 	@Listener
 	public void onGameReload(GameReloadEvent event) {
 		Adapter.getAdapter().reload();
-	}
-
-	@Listener
-	public void onAuth(ClientConnectionEvent.Auth e) {
-		UUID playerId = e.getProfile().getUniqueId();
-		NegativityAccount account = NegativityAccount.get(playerId);
-		Ban activeBan = BanManager.getActiveBan(playerId);
-		if (activeBan != null) {
-			String kickMsgKey;
-			String formattedExpiration;
-			if (activeBan.isDefinitive()) {
-				kickMsgKey = "ban.kick_def";
-				formattedExpiration = "definitively";
-			} else {
-				kickMsgKey = "ban.kick_time";
-				LocalDateTime expirationDateTime = LocalDateTime
-						.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
-				formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
-			}
-			e.setCancelled(true);
-			e.setMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%",
-					formattedExpiration, "%by%", activeBan.getBannedBy()));
-			Adapter.getAdapter().getAccountManager().dispose(account.getPlayerId());
-		}
 	}
 
 	@Listener

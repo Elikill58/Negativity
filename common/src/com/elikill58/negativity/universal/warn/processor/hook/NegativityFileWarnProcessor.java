@@ -59,13 +59,14 @@ public class NegativityFileWarnProcessor implements WarnProcessor {
 	}
 
 	@Override
-	public WarnResult revokeWarn(UUID playerId) {
+	public WarnResult revokeWarn(UUID playerId, String revoker) {
 		try {
 			Configuration config = getYaml(playerId);
 			config.getKeys().forEach(key -> {
 				Configuration warnConfig = config.getSection(key);
 				warnConfig.set("active", false);
 				warnConfig.set("revocation_time", System.currentTimeMillis());
+				warnConfig.set("revocation_by", revoker);
 			});
 			config.save();
 			return new WarnResult(WarnResultType.DONE);
@@ -76,13 +77,14 @@ public class NegativityFileWarnProcessor implements WarnProcessor {
 	}
 
 	@Override
-	public WarnResult revokeWarn(Warn warn) {
+	public WarnResult revokeWarn(Warn warn, String revoker) {
 		try {
 			Configuration config = getYaml(warn.getPlayerId());
 			Configuration warnConfig = config.getSection(String.valueOf(warn.getId()));
 			if(warnConfig != null) {
 				warnConfig.set("active", false);
 				warnConfig.set("revocation_time", System.currentTimeMillis());
+				warnConfig.set("revocation_by", revoker);
 			}
 			config.save();
 			return new WarnResult(WarnResultType.DONE);
@@ -122,23 +124,25 @@ public class NegativityFileWarnProcessor implements WarnProcessor {
 	private Warn get(UUID uuid, String key, Configuration config) {
 		int id = Integer.parseInt(key);
 		String reason = config.getString("reason");
-		String banned_by = config.getString("banned_by");
+		String banned_by = config.getString("warned_by");
 		SanctionnerType sanctionner = SanctionnerType.valueOf(config.getString("sanctionner_type"));
 		String ip = config.getString("ip");
 		long executionTime = config.getLong("execution_time", -1);
 		boolean active = config.getBoolean("active", true);
 		long revocationTime = config.getLong("revocation_time", -1);
-		return new Warn(id, uuid, reason, banned_by, sanctionner, ip, executionTime, active, revocationTime);
+		String revocationBy = config.getString("revocation_by");
+		return new Warn(id, uuid, reason, banned_by, sanctionner, ip, executionTime, active, revocationTime, revocationBy);
 	}
 
 	private void set(Configuration config, Warn warn) {
 		config.set("reason", warn.getReason());
-		config.set("banned_by", warn.getBannedBy());
+		config.set("warned_by", warn.getWarnedBy());
 		config.set("sanctionner_type", warn.getSanctionnerType().name());
 		config.set("ip", warn.getIp());
 		config.set("execution_time", warn.getExecutionTime());
 		config.set("active", warn.isActive());
 		config.set("revocation_time", warn.getRevocationTime());
+		config.set("revocation_by", warn.getRevocationBy());
 	}
 	
 	@Override

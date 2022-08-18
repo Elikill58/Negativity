@@ -15,7 +15,7 @@ import com.elikill58.negativity.universal.PlatformDependentExtension;
 import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteWarnMessage;
-import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
+import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeWarnMessage;
 import com.elikill58.negativity.universal.warn.Warn;
 import com.elikill58.negativity.universal.warn.WarnResult;
 import com.elikill58.negativity.universal.warn.WarnResult.WarnResultType;
@@ -34,14 +34,14 @@ public class ForwardToProxyWarnProcessor implements WarnProcessor {
 	}
 	
 	@Override
-	public WarnResult revokeWarn(UUID playerId) {
-		Adapter.getAdapter().getOnlinePlayers().get(0).sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ProxyRevokeBanMessage(playerId));
+	public WarnResult revokeWarn(UUID playerId, String revoker) {
+		Adapter.getAdapter().getOnlinePlayers().get(0).sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ProxyRevokeWarnMessage(playerId, revoker));
 		return new WarnResult(WarnResultType.DONE, new Warn(playerId, "", "", SanctionnerType.UNKNOW, null, -1));
 	}
 
 	@Override
-	public WarnResult revokeWarn(Warn warn) {
-		Adapter.getAdapter().getOnlinePlayers().get(0).sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ProxyRevokeBanMessage(warn.getPlayerId()));
+	public WarnResult revokeWarn(Warn warn, String revoker) {
+		Adapter.getAdapter().getOnlinePlayers().get(0).sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ProxyRevokeWarnMessage(warn.getPlayerId(), revoker));
 		return new WarnResult(WarnResultType.DONE, warn);
 	}
 

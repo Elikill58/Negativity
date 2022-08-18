@@ -4,9 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -28,16 +25,13 @@ import com.elikill58.negativity.fabric.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
-import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.warn.WarnManager;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.brigadier.arguments.StringArgumentType;
@@ -90,7 +84,6 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 
 		PlayersListeners.register();
 		ServerPlayConnectionEvents.DISCONNECT.register(this::onLeave);
-		ServerPlayConnectionEvents.INIT.register(this::onAuth);
 
 		NegativityAccountStorage.setDefaultStorage("file");
 
@@ -171,28 +164,6 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 
 	public MinecraftServer getServer() {
 		return server;
-	}
-
-	public void onAuth(ServerPlayNetworkHandler e, MinecraftServer srv) {
-		UUID playerId = e.getPlayer().getUuid();
-		NegativityAccount account = NegativityAccount.get(playerId);
-		Ban activeBan = BanManager.getActiveBan(playerId);
-		if (activeBan != null) {
-			String kickMsgKey;
-			String formattedExpiration;
-			if (activeBan.isDefinitive()) {
-				kickMsgKey = "ban.kick_def";
-				formattedExpiration = "definitively";
-			} else {
-				kickMsgKey = "ban.kick_time";
-				LocalDateTime expirationDateTime = LocalDateTime
-						.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
-				formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
-			}
-			e.disconnect(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%",
-					formattedExpiration, "%by%", activeBan.getBannedBy()));
-			Adapter.getAdapter().getAccountManager().dispose(account.getPlayerId());
-		}
 	}
 
 	public void onLeave(ServerPlayNetworkHandler e, MinecraftServer srv) {

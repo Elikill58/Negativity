@@ -25,7 +25,7 @@ public class ProxyExecuteWarnMessage implements NegativityMessage {
 	public void readFrom(DataInputStream input) throws IOException {
 		this.warn = new Warn(input.readInt(), new UUID(input.readLong(), input.readLong()), input.readUTF(), input.readUTF(),
 				SanctionnerType.valueOf(input.readUTF()), input.readUTF(), input.readLong(), input.readBoolean(),
-				input.readLong());
+				input.readLong(), input.readUTF());
 	}
 
 	@Override
@@ -34,12 +34,13 @@ public class ProxyExecuteWarnMessage implements NegativityMessage {
 		output.writeLong(warn.getPlayerId().getMostSignificantBits());
 		output.writeLong(warn.getPlayerId().getLeastSignificantBits());
 		output.writeUTF(warn.getReason());
-		output.writeUTF(warn.getBannedBy());
+		output.writeUTF(warn.getWarnedBy());
 		output.writeUTF(warn.getSanctionnerType().name());
 		output.writeUTF(warn.getIp());
 		output.writeLong(warn.getExecutionTime());
 		output.writeBoolean(warn.isActive());
 		output.writeLong(warn.getRevocationTime());
+		output.writeUTF(warn.getRevocationBy());
 	}
 
 	@Override

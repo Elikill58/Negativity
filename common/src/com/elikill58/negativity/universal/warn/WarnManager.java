@@ -73,7 +73,7 @@ public class WarnManager {
 
 		WarnResult br = processor.executeWarn(warn);
 		if(br.isSuccess()) {
-			WebhookManager.send(new WebhookMessage(WebhookMessageType.WARN, Adapter.getAdapter().getPlayer(warn.getPlayerId()), warn.getBannedBy(), warn.getExecutionTime(), "%reason%", warn.getReason()));
+			WebhookManager.send(new WebhookMessage(WebhookMessageType.WARN, Adapter.getAdapter().getPlayer(warn.getPlayerId()), warn.getWarnedBy(), warn.getExecutionTime(), "%reason%", warn.getReason()));
 		}
 		return br;
 	}
@@ -87,14 +87,14 @@ public class WarnManager {
 	 *
 	 * @return the logged revoked warn or {@code null} if the revocation failed.
 	 */
-	public static WarnResult revokeWarn(UUID playerId) {
+	public static WarnResult revokeWarn(UUID playerId, String revoker) {
 		WarnProcessor processor = getProcessor();
 		if (processor == null) {
 			Adapter.getAdapter().debug("Cannot find processor while trying to revoke warn from " + playerId);
 			return new WarnResult(WarnResultType.UNKNOW_PROCESSOR);
 		}
 
-		return processor.revokeWarn(playerId);
+		return processor.revokeWarn(playerId, revoker);
 	}
 	
 	/**

@@ -8,6 +8,7 @@ import java.util.StringJoiner;
 import com.elikill58.negativity.api.commands.CommandListeners;
 import com.elikill58.negativity.api.commands.CommandSender;
 import com.elikill58.negativity.api.commands.TabListeners;
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
@@ -51,15 +52,15 @@ public class WarnCommand implements CommandListeners, TabListeners {
 		for (int i = 1; i < arg.length; i++) {
 			stringJoiner.add(arg[i]);
 		}
-		Warn warn = new Warn(target.getUniqueId(), stringJoiner.toString(), sender.getName(), SanctionnerType.MOD, target.getIP(), System.currentTimeMillis());
+		String reason = stringJoiner.toString();
+		Warn warn = new Warn(target.getUniqueId(), reason, sender instanceof OfflinePlayer ? ((OfflinePlayer) sender).getUniqueId().toString() : sender.getName(), SanctionnerType.MOD, target.getIP(), System.currentTimeMillis());
 		WarnResult result = WarnManager.executeWarn(warn);
 		if(result.isSuccess()) {
-			// TODO add placeholders
-			Messages.sendMessage(sender, "warn.done");
-			Messages.sendMessageList(target, "warn.warned");
-			WebhookManager.send(new WebhookMessage(WebhookMessageType.WARN, target, sender.getName(), System.currentTimeMillis(), "%reason%", warn.getReason()));
+			Messages.sendMessage(sender, "warn.done", "%name%", target.getName(), "%reason%", reason);
+			Messages.sendMessageList(target, "warn.warned", "%warned_by%", sender.getName(), "%reason%", reason);
+			WebhookManager.send(new WebhookMessage(WebhookMessageType.WARN, target, sender.getName(), System.currentTimeMillis(), "%reason%", reason));
 		} else {
-			Messages.sendMessage(sender, "warn.failed");
+			Messages.sendMessage(sender, "warn.failed", "%name%", target.getName(), "%reason%", result.getResultType().getName());
 		}
 		return false;
 	}

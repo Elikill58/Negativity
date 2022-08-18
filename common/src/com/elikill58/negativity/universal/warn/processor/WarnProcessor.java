@@ -49,10 +49,11 @@ public interface WarnProcessor {
 	 * If the revocation was successful a LoggedWarn must always be returned, even if it will not persist in any way.
 	 *
 	 * @param playerId the UUID of the player to unwarn
+	 * @param revoker who revoke warn
 	 *
 	 * @return the logged revoked warn or {@code null} if the revocation failed.
 	 */
-	WarnResult revokeWarn(UUID playerId);
+	WarnResult revokeWarn(UUID playerId, String revoker);
 
 	/**
 	 * Revokes only given warn for the given player
@@ -62,10 +63,11 @@ public interface WarnProcessor {
 	 * If the revocation was successful a LoggedWarn must always be returned, even if it will not persist in any way.
 	 *
 	 * @param warn warn to remove
+	 * @param revoker who revoke warn
 	 *
 	 * @return the logged revoked warn or {@code null} if the revocation failed.
 	 */
-	WarnResult revokeWarn(Warn warn);
+	WarnResult revokeWarn(Warn warn, String revoker);
 
 	default boolean isWarned(UUID playerId) {
 		return !getActiveWarn(playerId).isEmpty();

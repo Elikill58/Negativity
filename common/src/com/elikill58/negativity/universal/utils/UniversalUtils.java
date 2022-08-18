@@ -26,7 +26,6 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Optional;
@@ -53,7 +52,6 @@ import com.elikill58.negativity.universal.detections.Special;
 
 public class UniversalUtils {
 
-	public static final DateTimeFormatter GENERIC_DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
 	public static final String BUNDLED_ASSETS_BASE = "/assets/negativity/";
 	public static final char[] HEX_DIGITS = "0123456789ABCDEF".toCharArray();
 	public static boolean HAVE_INTERNET = true, checkAgainForMcleaks = true;

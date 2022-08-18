@@ -10,6 +10,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
 import com.elikill58.negativity.universal.monitor.MonitorManager;
+import com.elikill58.negativity.universal.monitor.MonitorMeasure;
 import com.elikill58.negativity.universal.monitor.cpu.function.CpuMeasure;
 import com.elikill58.negativity.universal.monitor.cpu.function.DetectionCpuMeasure;
 import com.elikill58.negativity.universal.monitor.cpu.function.EventCpuMeasure;
@@ -62,5 +63,13 @@ public class CpuMonitor extends MonitorManager {
 		HashMap<IDetectionKey<?>, List<String>> results = new HashMap<>();
 		getDetectionMeasures().forEach((key, measure) -> results.put(key, measure.getResultPer()));
 		return results;
+	}
+	
+	@Override
+	public List<MonitorMeasure> getFullConfig() {
+		List<MonitorMeasure> result = new ArrayList<>();
+		getDetectionMeasures().forEach((key, cpu) -> result.addAll(cpu.getResults("detection.")));
+		getEventMeasures().forEach((key, cpu) -> result.addAll(cpu.getResults("event.")));
+		return result;
 	}
 }

@@ -10,6 +10,6 @@ public class EventCpuMeasure extends CpuMeasure<Method> {
 	
 	@Override
 	public String getName(Method o) {
-		return o.getDeclaringClass().getName().replace("com.elikill58.negativity", "neg") + "." + o.getName();
+		return o.getDeclaringClass().getName().replace("com.elikill58.negativity", "negativity").replace('.', '_') + "." + o.getName();
 	}
 }

@@ -8,6 +8,7 @@ import org.checkerframework.checker.nullness.qual.NonNull;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.colors.ChatColor;
+import com.elikill58.negativity.universal.monitor.MonitorMeasure;
 import com.elikill58.negativity.universal.verif.data.LongDataCounter;
 
 public abstract class CpuMeasure<T> {
@@ -67,6 +68,16 @@ public abstract class CpuMeasure<T> {
 				String printed = printData(getName(check), data);
 				if(printed != null)
 					result.add(printed);
+			}
+		});
+		return result;
+	}
+	
+	public List<MonitorMeasure> getResults(String key) {
+		List<MonitorMeasure> result = new ArrayList<>();
+		datas.forEach((check, data) -> {
+			if (data.has()) {
+				result.add(new MonitorMeasure(key + getName(check), data.getAverage(), data.getMin(), data.getMax(), ((double) data.getTotal() / ((System.nanoTime() - timeBegin) / 1000)) * 100));
 			}
 		});
 		return result;

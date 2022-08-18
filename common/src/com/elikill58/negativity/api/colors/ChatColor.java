@@ -1,5 +1,7 @@
 package com.elikill58.negativity.api.colors;
 
+import java.util.regex.Pattern;
+
 public enum ChatColor {
 
 	BLACK("&0"),
@@ -24,7 +26,7 @@ public enum ChatColor {
 	UNDERLINE("&n"),
 	ITALIC("&o"),
 	RESET("&r");
-	
+
 	private final String name;
 
 	ChatColor(String name) {
@@ -40,6 +42,8 @@ public enum ChatColor {
 		return getName().replace('&', '§');
 	}
 
+	private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)§[0-9A-FK-OR]");
+
 	public static String translateAlternateColorCodes(char altColorChar, String textToTranslate) {
 		char[] b = textToTranslate.toCharArray();
 		for (int i = 0; i < b.length - 1; i++) {
@@ -49,5 +53,11 @@ public enum ChatColor {
 			}
 		}
 		return new String(b);
+	}
+
+	public static String stripColor(String input) {
+		if (input == null)
+			return null;
+		return STRIP_COLOR_PATTERN.matcher(input).replaceAll("");
 	}
 }

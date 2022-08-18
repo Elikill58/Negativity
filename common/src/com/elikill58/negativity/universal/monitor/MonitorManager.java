@@ -1,6 +1,6 @@
 package com.elikill58.negativity.universal.monitor;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -108,7 +108,7 @@ public abstract class MonitorManager {
 	 * @return the footer, or empty list
 	 */
 	public @NonNull List<String> getHeaderResult() {
-		return new ArrayList<>();
+		return Collections.emptyList();
 	}
 	
 	/**
@@ -140,7 +140,8 @@ public abstract class MonitorManager {
 	 * @return the footer, or empty list
 	 */
 	public @NonNull List<String> getFooterResult() {
-		return new ArrayList<>();
+		return Collections.emptyList();
 	}
-
+	
+	public abstract List<MonitorMeasure> getFullConfig();
 }

@@ -13,7 +13,10 @@ shadowJar {
 
 task prepareServer(type: Copy) {
     from shadowJar.outputs
-    rename { 'Negativity.jar' }
+    def pluginRename = System.getProperty('plugins.rename')
+    if(pluginRename == null || pluginRename.toBoolean()) {
+    	rename { 'Negativity.jar' }
+    }
     def pluginDir = System.getProperty('plugins.dir')
     if (pluginDir == null) {
         enabled(false)

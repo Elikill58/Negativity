@@ -19,8 +19,13 @@ repositories {
             mavenPom()
             artifact()
         }
-        content {
-            includeGroup('org.spigotmc')
+        exclusiveContent {
+            forRepository {
+                mavenLocal()
+            }
+            filter {
+                includeGroup('org.spigotmc')
+            }
         }
     }
 }

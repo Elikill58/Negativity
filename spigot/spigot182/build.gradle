@@ -19,11 +19,15 @@ repositories {
             mavenPom()
             artifact()
         }
-        content {
-            includeGroup('org.spigotmc')
+        exclusiveContent {
+            forRepository {
+                mavenLocal()
+            }
+            filter {
+                includeGroup('org.spigotmc')
+            }
         }
     }
-    mavenLocal()
 }
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)

@@ -90,16 +90,5 @@ task prepareServer(type: Copy) {
 }
 
 subprojects {
-    repositories {
-        mavenLocal {
-            metadataSources {
-                mavenPom()
-                artifact()
-            }
-            content {
-                includeGroup('org.spigotmc')
-            }
-        }
-    }
     java.toolchain.languageVersion = JavaLanguageVersion.of(8)
 }

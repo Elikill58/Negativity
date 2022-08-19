@@ -13,19 +13,6 @@ sourceSets {
     }
 }
 
-repositories {
-    mavenLocal {
-        metadataSources {
-            mavenPom()
-            artifact()
-        }
-        content {
-            includeGroup('org.spigotmc')
-        }
-    }
-    mavenLocal()
-}
-
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 dependencies {

@@ -100,7 +100,7 @@ Examples will be using `./gradlew`, if you are on Windows you need to use `gradl
  `1.7.10, 1.8.8, 1.9.2, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13`(you need to add a + at the beginning of the name (+spigot1.13.jar for example)`, 
  1.13.2, 1.14.4, 1.15.2, 1.16.1, 1.16.5`
 4. You should use buildtools for Spigot 1.17/1.18/1.18.2/1.19 (or comment them in `settings.gradle`). You need to place the remapped jar in `spigot/spigot18`
- if you want 1.18 and you have comment others ones.
+ if you want 1.18 and you have comment others ones. If you want other version, do the same thing for `spigot/spigot17` etc...
 5. Set up a Forge workspace for the Sponge plugin: `./gradlew :sponge7:setupDecompWorkspace`. This step will take some time to complete
 6. Build the plugin: `./gradlew build`
  - You can find the all-in-one jar in `/build/libs/`

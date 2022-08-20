@@ -1,0 +1,12 @@
+{
+  "entrypoint": "com.elikill58.negativity.minestom.MinestomNegativity",
+  "name": "Negativity",
+  "version": "${version}",
+  "dependencies": [],
+  "externalDependencies": {
+    "repositories": [
+      {"name": "Central", "url": "https://repo1.maven.org/maven2/"}
+    ],
+    "artifacts": []
+  }
+}

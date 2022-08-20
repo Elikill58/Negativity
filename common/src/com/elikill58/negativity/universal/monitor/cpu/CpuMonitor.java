@@ -42,7 +42,7 @@ public class CpuMonitor extends MonitorManager {
 	
 	@Override
 	public @NonNull String getDescription() {
-		return ChatColor.YELLOW + "Result of monitor for " + getName() + " (Unit: nanoseconds /1000):";
+		return ChatColor.YELLOW + "Result of monitor for " + getName() + " (Unit: microseconds):";
 	}
 	
 	@Override

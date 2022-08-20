@@ -208,7 +208,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 					config.set("by", sender.getName());
 					config.set("server.version", Adapter.getAdapter().getServerVersion().getName());
 					for(MonitorType<?> monitor : MonitorType.getMonitors()) {
-						Configuration monitorConfig = config.createSection(monitor.getName().toLowerCase().replace(" ", ""));
+						Configuration monitorConfig = config.createSection(monitor.getName().toLowerCase(Locale.ROOT).replace(" ", ""));
 						monitor.getMonitor().getFullConfig().forEach(result -> {
 							if(!result.isEmpty()) {
 								result.save(monitorConfig);
@@ -571,7 +571,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			} else if (arg[0].equalsIgnoreCase("monitor") && Perm.hasPerm(sender, Perm.ADMIN)) {
 				if(arg.length == 2) {
 					for(MonitorType<?> type : MonitorType.getMonitors())
-						if(prefix.isEmpty() || type.getName().toLowerCase().startsWith(prefix))
+						if(prefix.isEmpty() || type.getName().toLowerCase(Locale.ROOT).startsWith(prefix))
 							suggestions.add(type.getName());
 					if (prefix.isEmpty() || "generate".startsWith(prefix))
 						suggestions.add("generate");

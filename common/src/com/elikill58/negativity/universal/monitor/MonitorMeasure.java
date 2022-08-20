@@ -80,6 +80,6 @@ public class MonitorMeasure {
 	
 	@Override
 	public String toString() {
-		return getDuration() + "ns (Min/Max: " + getMin() + "/" + getMax() + ") " + String.format("%.2f", getPercent()) + "%";
+		return getDuration() + "μs (Min/Max: " + getMin() + "/" + getMax() + ") " + String.format("%.2f", getPercent()) + "%";
 	}
 }

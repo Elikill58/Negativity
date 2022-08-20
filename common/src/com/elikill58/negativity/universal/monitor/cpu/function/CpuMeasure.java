@@ -28,7 +28,7 @@ public abstract class CpuMeasure<T> {
 		double l = ((double) data.getTotal() / ((System.nanoTime() - timeBegin) / 1000)) * 100;
 		if (l <= 0.01)
 			return null;
-		return ChatColor.GREEN + (name.isEmpty() ? "" : name + " ") + ChatColor.YELLOW + data.getAverage() + "ns "
+		return ChatColor.GREEN + (name.isEmpty() ? "" : name + " ") + ChatColor.YELLOW + data.getAverage() + "μs "
 				+ ChatColor.GRAY + "(Min/Max: " + data.getMin() + "/" + data.getMax()
 				+ ") " + ChatColor.AQUA + (l <= 0.01 ? ">0%" : String.format("%.2f", l) + "%");
 	}

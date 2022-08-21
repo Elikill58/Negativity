@@ -496,7 +496,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				suggestions.add("admin");
 			if ("options".startsWith(prefix) && Perm.hasPerm(sender, Perm.ADMIN))
 				suggestions.add("options");
-			if ("debug".startsWith(prefix))
+			if ("debug".startsWith(prefix) || prefix.isEmpty())
 				suggestions.add("debug");
 			if ("webhook".startsWith(prefix) && WebhookManager.isEnabled())
 				suggestions.add("webhook");

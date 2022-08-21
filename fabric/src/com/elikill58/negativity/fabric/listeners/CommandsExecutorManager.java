@@ -45,7 +45,7 @@ public class CommandsExecutorManager implements Command<ServerCommandSource>, Su
 			SuggestionsBuilder builder) throws CommandSyntaxException {
 		String input = context.getInput();
 		String[] args = input.split(" ");
-		args = Arrays.copyOfRange(args, 1, args.length);
+		args = Arrays.copyOfRange(args, 1, args.length); // remove first item
 		String prefix = "";
 		if (args.length > 0) {
 			prefix = args[args.length - 1];

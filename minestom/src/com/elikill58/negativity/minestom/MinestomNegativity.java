@@ -2,6 +2,7 @@ package com.elikill58.negativity.minestom;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import com.elikill58.negativity.api.yaml.Configuration;
@@ -22,6 +23,7 @@ import net.minestom.server.extensions.Extension;
 
 public class MinestomNegativity extends Extension {
 
+	public static final List<String> ALL_COMMANDS = new ArrayList<>();
 	public static MinestomNegativity INSTANCE;
 
 	private NegativityPacketManager packetManager;
@@ -75,6 +77,8 @@ public class MinestomNegativity extends Extension {
 				conf = WarnManager.getWarnConfig();
 		}
 		if (configKey == null || conf.getBoolean("commands." + configKey)) {
+			ALL_COMMANDS.add(cmd);
+			ALL_COMMANDS.addAll(Arrays.asList(alias));
 			MinecraftServer.getCommandManager().register(new MinestomCommand(cmd, alias));
 		}
 	}

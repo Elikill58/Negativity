@@ -1,5 +1,6 @@
 package com.elikill58.negativity.api.entity;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -102,7 +103,7 @@ public abstract class AbstractProxyPlayer extends AbstractEntity implements Play
 	
 	@Override
 	public GameMode getGameMode() {
-		return null;
+		return GameMode.CUSTOM;
 	}
 	
 	@Override
@@ -181,7 +182,7 @@ public abstract class AbstractProxyPlayer extends AbstractEntity implements Play
 	
 	@Override
 	public List<Entity> getNearbyEntities(double x, double y, double z) {
-		return null;
+		return Collections.emptyList();
 	}
 	
 	@Override

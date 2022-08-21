@@ -17,6 +17,7 @@ import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.permissions.Perm;
+import com.elikill58.negativity.universal.warn.WarnManager;
 
 public class GlobalPlayerOfflineInventory extends AbstractInventory<CheckMenuOfflineHolder> {
 	
@@ -40,9 +41,12 @@ public class GlobalPlayerOfflineInventory extends AbstractInventory<CheckMenuOff
 		
 		inv.set(8, ItemBuilder.getSkullItem(cible, p));
 		inv.set(9, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());
-		
+
 		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN)) {
 			inv.set(13, ItemBuilder.Builder(Materials.ANVIL).displayName("Ban").build());
+		}
+		if(!WarnManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.WARN)) {
+			inv.set(14, ItemBuilder.Builder(Materials.COMPASS).displayName("Warn").build());
 		}
 
 		inv.set(17, Inventory.getCloseItem(p));

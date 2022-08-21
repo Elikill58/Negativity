@@ -41,6 +41,7 @@ import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientEntityActionPacket;
 import net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket;
 import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket;
+import net.minestom.server.network.packet.client.play.ClientKeepAlivePacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket.Status;
 import net.minestom.server.network.packet.client.play.ClientPlayerPacket;
@@ -94,8 +95,8 @@ public class Minestom_1_18_2 extends MinestomVersionAdapter {
 			ClientPlayerPacket packet = (ClientPlayerPacket) f;
 			return new NPacketPlayInGround(packet.onGround());
 		});
-		packetsPlayIn.put(getNameOfPacket(KeepAlivePacket.class),
-				(p, f) -> new NPacketPlayInKeepAlive(((KeepAlivePacket) f).getId()));
+		packetsPlayIn.put(getNameOfPacket(ClientKeepAlivePacket.class),
+				(p, f) -> new NPacketPlayInKeepAlive(((ClientKeepAlivePacket) f).id()));
 		packetsPlayIn.put(getNameOfPacket(ClientInteractEntityPacket.class), (p, f) -> {
 			ClientInteractEntityPacket packet = (ClientInteractEntityPacket) f;
 			EnumEntityUseAction action = null;
@@ -140,7 +141,7 @@ public class Minestom_1_18_2 extends MinestomVersionAdapter {
 
 		packetsPlayOut.put(getNameOfPacket(EntityVelocityPacket.class), (p, f) -> {
 			EntityVelocityPacket packet = (EntityVelocityPacket) f;
-			return new NPacketPlayOutEntityVelocity(packet.getId(), packet.velocityX(), packet.velocityY(),
+			return new NPacketPlayOutEntityVelocity(packet.entityId(), packet.velocityX(), packet.velocityY(),
 					packet.velocityZ());
 		});
 		packetsPlayOut.put(getNameOfPacket(PlayerPositionAndLookPacket.class), (p, f) -> {
@@ -165,9 +166,7 @@ public class Minestom_1_18_2 extends MinestomVersionAdapter {
 		});
 		packetsPlayOut.put(getNameOfPacket(PingPacket.class), (p, f) -> new NPacketPlayOutPing(((PingPacket) f).id()));
 
-		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> {
-			return new PingPacket((int) ((NPacketPlayOutPing) f).id);
-		});
+		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new PingPacket((int) ((NPacketPlayOutPing) f).id));
 
 		Adapter.getAdapter().debug("Packet PlayIn: " + String.join(", ", packetsPlayIn.keySet()));
 		log();

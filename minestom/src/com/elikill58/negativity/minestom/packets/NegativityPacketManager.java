@@ -16,9 +16,6 @@ import net.minestom.server.event.player.PlayerPacketEvent;
 import net.minestom.server.event.player.PlayerPacketOutEvent;
 
 public class NegativityPacketManager extends FabricPacketManager {
-
-	static final String KEY_HANDLER_PLAYER = "packet_handler", KEY_PLAYER = "packet_player_negativity", KEY_HANDSHAKE = "packet_handshake_negativity",
-			KEY_HANDLER_SERVER = "packet_handler", KEY_SERVER = "packet_server_negativity";
 	
 	public NegativityPacketManager(EventNode<Event> e) {
 		e.addListener(PlayerPacketEvent.class, this::onPacket);
@@ -44,7 +41,7 @@ public class NegativityPacketManager extends FabricPacketManager {
 	}
 	
 	public AbstractPacket onPacketSent(NPacket packet, Player sender, Object nmsPacket) {
-		FabricPacket customPacket = new FabricPacket(packet, nmsPacket, sender);
+		MinestomPacket customPacket = new MinestomPacket(packet, nmsPacket, sender);
 		notifyHandlersSent(PacketSourceType.CUSTOM, customPacket);
 		return customPacket;
 	}
@@ -52,7 +49,7 @@ public class NegativityPacketManager extends FabricPacketManager {
 	public AbstractPacket onPacketReceive(NPacket packet, Player sender, Object nmsPacket) {
 		if(packet.getPacketType().isUnset())
 			Adapter.getAdapter().debug("Received unset: " + packet.getClass().getSimpleName() + " > " + MinestomVersionAdapter.getVersionAdapter().getNameOfPacket(nmsPacket));
-		FabricPacket customPacket = new FabricPacket(packet, nmsPacket, sender);
+		MinestomPacket customPacket = new MinestomPacket(packet, nmsPacket, sender);
 		notifyHandlersReceive(PacketSourceType.CUSTOM, customPacket);
 		return customPacket;
 	}

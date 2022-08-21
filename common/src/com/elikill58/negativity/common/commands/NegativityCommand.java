@@ -2,6 +2,7 @@ package com.elikill58.negativity.common.commands;
 
 import static com.elikill58.negativity.universal.verif.VerificationManager.CONSOLE;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashSet;
@@ -26,6 +27,7 @@ import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.api.yaml.Configuration;
+import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Negativity;
@@ -40,6 +42,8 @@ import com.elikill58.negativity.universal.detections.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.detections.keys.SpecialKeys;
+import com.elikill58.negativity.universal.monitor.MonitorManager;
+import com.elikill58.negativity.universal.monitor.MonitorType;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModifications;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
@@ -182,6 +186,51 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			}
 
 			InventoryManager.open(NegativityInventory.ADMIN, p);
+			return true;
+		} else if (arg[0].equalsIgnoreCase("monitor")) {
+			if (!Perm.hasPerm(sender, Perm.ADMIN)) {
+				Messages.sendMessage(sender, "not_permission");
+				return true;
+			}
+			if(arg.length == 1) { // show all possible monitor
+				MonitorType.getMonitors().forEach(mm -> mm.getMonitor().showResult(sender));
+			} else if(arg[1].equalsIgnoreCase("generate")) {
+				File file = null;
+				try {
+					File folder = new File(Adapter.getAdapter().getDataFolder(), "monitors");
+					if(!folder.exists()) {
+						folder.mkdirs();
+					}
+					file = new File(folder, System.currentTimeMillis() + ".yml");
+					file.createNewFile();
+					Configuration config = YamlConfiguration.load(file);
+					config.set("date", System.currentTimeMillis());
+					config.set("by", sender.getName());
+					config.set("server.version", Adapter.getAdapter().getServerVersion().getName());
+					for(MonitorType<?> monitor : MonitorType.getMonitors()) {
+						Configuration monitorConfig = config.createSection(monitor.getName().toLowerCase(Locale.ROOT).replace(" ", ""));
+						monitor.getMonitor().getFullConfig().forEach(result -> {
+							if(!result.isEmpty()) {
+								result.save(monitorConfig);
+							}
+						});
+					}
+					config.save();
+					sender.sendMessage(ChatColor.GREEN + "Summary saved at monitors/" + file.getName());
+				} catch (Exception e) {
+					sender.sendMessage(ChatColor.RED + "Failed to save monitor summary.");
+					e.printStackTrace();
+					if(file != null) // try to don't have empty file
+						file.deleteOnExit();
+				}
+			} else {
+				Optional<? extends MonitorManager> optManager = MonitorType.getMonitors().stream().filter(mm -> mm.getName().equalsIgnoreCase(arg[1])).map(MonitorType::getMonitor).findFirst();
+				if(optManager.isPresent()) {
+					optManager.get().showPerCheatResult(sender);
+				} else {
+					sender.sendMessage(ChatColor.RED + "Can't find " + arg[1] + " monitor. You can use: " + String.join(", ", MonitorType.getMonitors().stream().map(MonitorType::getName).collect(Collectors.toList())));
+				}
+			}
 			return true;
 		} else if (arg[0].equalsIgnoreCase("options")) {
 			if (sender instanceof Player && !Perm.hasPerm(sender, Perm.ADMIN)) {
@@ -494,6 +543,8 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 				suggestions.add("alert");
 			if ("admin".startsWith(prefix) && Perm.hasPerm(sender, Perm.ADMIN))
 				suggestions.add("admin");
+			if ("monitor".startsWith(prefix) && Perm.hasPerm(sender, Perm.ADMIN))
+				suggestions.add("monitor");
 			if ("options".startsWith(prefix) && Perm.hasPerm(sender, Perm.ADMIN))
 				suggestions.add("options");
 			if ("debug".startsWith(prefix) || prefix.isEmpty())
@@ -521,6 +572,14 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			} else if (arg[0].equalsIgnoreCase("admin") && arg.length == 2) {
 				if (sender instanceof Player && Perm.hasPerm(sender, Perm.MANAGE_CHEAT)) {
 					suggestions.add("updateMessages");
+				}
+			} else if (arg[0].equalsIgnoreCase("monitor") && Perm.hasPerm(sender, Perm.ADMIN)) {
+				if(arg.length == 2) {
+					for(MonitorType<?> type : MonitorType.getMonitors())
+						if(prefix.isEmpty() || type.getName().toLowerCase(Locale.ROOT).startsWith(prefix))
+							suggestions.add(type.getName());
+					if (prefix.isEmpty() || "generate".startsWith(prefix))
+						suggestions.add("generate");
 				}
 			} else if (arg[0].equalsIgnoreCase("options") && Perm.hasPerm(sender, Perm.ADMIN)) {
 				List<String> possible;

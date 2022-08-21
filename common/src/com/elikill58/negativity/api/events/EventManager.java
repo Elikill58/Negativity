@@ -15,6 +15,8 @@ import com.elikill58.negativity.common.GameEventsManager;
 import com.elikill58.negativity.common.PacketListener;
 import com.elikill58.negativity.common.ProxyEventsManager;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.monitor.MonitorType;
+import com.elikill58.negativity.universal.monitor.cpu.function.EventCpuMeasure;
 
 public class EventManager {
 
@@ -97,7 +99,7 @@ public class EventManager {
 			else {
 				Class<?> paramEvent = m.getParameterTypes()[0];
 				if(isAssignableFrom(paramEvent)) {
-					ListenerCaller listener = new HandleBasedListener(MethodHandles.lookup().unreflect(m), src);
+					ListenerCaller listener = new HandleBasedListener(m, MethodHandles.lookup().unreflect(m), src);
 					registerListener(listener, (Class<Event>) paramEvent, eventListener);
 				} else {
 					Adapter.getAdapter().getLogger().error(paramEvent.getCanonicalName() + " isn't an Event ! (Located at " + clazz.getCanonicalName() + ")");
@@ -135,6 +137,7 @@ public class EventManager {
 	 * @param ev the event which have to be called
 	 */
 	public static void callEvent(Event ev) {
+		EventCpuMeasure cpuMeasure = MonitorType.CPU.getMonitor().getMeasureForEvent(ev.getClass());
 		HashMap<ListenerCaller, EventListener> allMethods = new HashMap<>();
 		allMethods.putAll(getEventForClass(ev, ev.getClass()));
 		Class<?> superClass = ev.getClass().getSuperclass();
@@ -145,25 +148,27 @@ public class EventManager {
 		HashMap<ListenerCaller, EventListener> map = new HashMap<>(allMethods);
 		if(ev instanceof CancellableEvent) {
 			CancellableEvent cancel = (CancellableEvent) ev;
-			callEvent(cancel, EventPriority.PRE, map);
-			if(cancel.isCancelled()) // if pre event cancel
-				return;
-			callEvent(cancel, EventPriority.BASIC, map);
-			if(cancel.isCancelled()) // if basic event cancel
-				return;
-			callEvent(cancel, EventPriority.POST, map);
+			callEvent(cancel, EventPriority.PRE, map, cpuMeasure);
+			if(!cancel.isCancelled()) { // if pre event cancel
+				callEvent(cancel, EventPriority.BASIC, map, cpuMeasure);
+				if(!cancel.isCancelled()) { // if basic event cancel
+					callEvent(cancel, EventPriority.POST, map, cpuMeasure);
+				}
+			}
 		} else {
-			callEvent(ev, EventPriority.PRE, map);
-			callEvent(ev, EventPriority.BASIC, map);
-			callEvent(ev, EventPriority.POST, map);
+			callEvent(ev, EventPriority.PRE, map, cpuMeasure);
+			callEvent(ev, EventPriority.BASIC, map, cpuMeasure);
+			callEvent(ev, EventPriority.POST, map, cpuMeasure);
 		}
 	}
 	
-	private static void callEvent(Event ev, EventPriority priority, HashMap<ListenerCaller, EventListener> allMethods) {
+	private static void callEvent(Event ev, EventPriority priority, HashMap<ListenerCaller, EventListener> allMethods, EventCpuMeasure cpuMeasure) {
 		allMethods.forEach((method, tag) -> {
 			try {
 				if(tag.priority().equals(priority)) {
+					long beginTime = System.nanoTime();
 					method.call(ev);
+					cpuMeasure.add(method.getMethod(), (System.nanoTime() - beginTime) / 1000);
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -186,6 +191,11 @@ public class EventManager {
 		}
 		
 		@Override
+		public Method getMethod() {
+			return method;
+		}
+		
+		@Override
 		public void call(Event ev) {
 			try {
 				method.invoke(source, ev);
@@ -197,12 +207,19 @@ public class EventManager {
 	
 	public static class HandleBasedListener implements ListenerCaller {
 		
+		private final Method m;
 		private final MethodHandle method;
 		private final Object source;
 		
-		public HandleBasedListener(MethodHandle method, Object src) {
+		public HandleBasedListener(Method m, MethodHandle method, Object src) {
+			this.m = m;
 			this.method = method;
 			this.source = src;
+		}
+		
+		@Override
+		public Method getMethod() {
+			return m;
 		}
 		
 		@Override

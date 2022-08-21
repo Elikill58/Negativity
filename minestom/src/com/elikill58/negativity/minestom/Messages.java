@@ -1,6 +1,6 @@
 package com.elikill58.negativity.minestom;
 
-import com.elikill58.negativity.minestom.utils.Utils;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 
@@ -10,7 +10,7 @@ public class Messages {
 
 	public static String getMessage(String dir, Object... placeholders) {
 		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir, placeholders);
-		return Utils.coloredMessage(message);
+		return coloredMessage(message);
 	}
 
 	public static String getMessage(Player receiver, String dir, Object... placeholders) {
@@ -27,7 +27,11 @@ public class Messages {
 
 	private static String getStringMessage(String lang, String dir, Object... placeholders) {
 		String message = TranslatedMessages.getStringFromLang(lang, dir, placeholders);
-		return Utils.coloredMessage(message);
+		return coloredMessage(message);
+	}
+
+	public static String coloredMessage(String msg) {
+		return ChatColor.translateAlternateColorCodes('§', msg);
 	}
 
 	public static void sendMessage(Player receiver, String dir, Object... placeholders) {

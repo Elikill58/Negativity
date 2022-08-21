@@ -2,11 +2,11 @@ package com.elikill58.negativity.minestom.nms;
 
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 
-import net.minecraft.server.network.ServerPlayerEntity;
+import net.minestom.server.entity.Player;
 
-public abstract class FabricVersionAdapter extends VersionAdapter<ServerPlayerEntity> {
+public abstract class MinestomVersionAdapter extends VersionAdapter<Player> {
 	
-	public FabricVersionAdapter(String version) {
+	public MinestomVersionAdapter(String version) {
 		super(version);
 	}
 	
@@ -16,9 +16,9 @@ public abstract class FabricVersionAdapter extends VersionAdapter<ServerPlayerEn
 		return packetClassName.substring(packetClassName.lastIndexOf('.') + 1);
 	}
 	
-	private static FabricVersionAdapter instance = new Fabric_1_19();
+	private static MinestomVersionAdapter instance = new Minestom_1_18_2();
 	
-	public static FabricVersionAdapter getVersionAdapter() {
+	public static MinestomVersionAdapter getVersionAdapter() {
 		return instance;
 	}
 }

@@ -27,11 +27,11 @@ import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.minestom.impl.entity.MinestomEntityManager;
-import com.elikill58.negativity.minestom.impl.inventory.FabricInventory;
-import com.elikill58.negativity.minestom.impl.item.FabricItemBuilder;
-import com.elikill58.negativity.minestom.impl.item.FabricItemRegistrar;
+import com.elikill58.negativity.minestom.impl.inventory.MinestomInventory;
+import com.elikill58.negativity.minestom.impl.item.MinestomItemBuilder;
+import com.elikill58.negativity.minestom.impl.item.MinestomItemRegistrar;
 import com.elikill58.negativity.minestom.impl.plugin.MinestomExternalPlugin;
-import com.elikill58.negativity.minestom.nms.FabricVersionAdapter;
+import com.elikill58.negativity.minestom.nms.MinestomVersionAdapter;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.Scheduler;
@@ -58,7 +58,7 @@ public class MinestomAdapter extends Adapter {
 	private Configuration config;
 	private final NegativityAccountManager accountManager = new SimpleAccountManager.Server(null);
 	private final TranslationProviderFactory translationProviderFactory;
-	private final FabricItemRegistrar itemRegistrar;
+	private final MinestomItemRegistrar itemRegistrar;
 	private final Version serverVersion;
 	private final Scheduler scheduler;
 	
@@ -66,8 +66,8 @@ public class MinestomAdapter extends Adapter {
 		this.plugin = sn;
 		this.logger = new Slf4jLoggerAdapter(logger);
 		this.config = UniversalUtils.loadConfig(new File(getDataFolder(), "config.yml"), "config.yml");
-		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataFolder().resolve("lang"), "Negativity", "CheatHover");
-		this.itemRegistrar = new FabricItemRegistrar();
+		this.translationProviderFactory = new NegativityTranslationProviderFactory(sn.getDataDirectory().resolve("lang"), "Negativity", "CheatHover");
+		this.itemRegistrar = new MinestomItemRegistrar();
 		this.serverVersion = Version.getVersionByName(getVersion());
 		this.scheduler = new MinestomScheduler();
 	}
@@ -84,7 +84,7 @@ public class MinestomAdapter extends Adapter {
 
 	@Override
 	public File getDataFolder() {
-		return plugin.getDataFolder().toFile();
+		return plugin.getDataDirectory().toFile();
 	}
 
 	@Override
@@ -186,32 +186,32 @@ public class MinestomAdapter extends Adapter {
 
 	@Override
 	public ItemBuilder createItemBuilder(Material type) {
-		return new FabricItemBuilder(type);
+		return new MinestomItemBuilder(type);
 	}
 
 	@Override
 	public ItemBuilder createItemBuilder(ItemStack item) {
-		return new FabricItemBuilder(item);
+		return new MinestomItemBuilder(item);
 	}
 	
 	@Override
 	public ItemBuilder createItemBuilder(String type) {
-		return new FabricItemBuilder(itemRegistrar.get(type.split(":")[0]));
+		return new MinestomItemBuilder(itemRegistrar.get(type.split(":")[0]));
 	}
 	
 	@Override
 	public ItemBuilder createSkullItemBuilder(Player owner) {
-		return new FabricItemBuilder(owner);
+		return new MinestomItemBuilder(owner);
 	}
 	
 	@Override
 	public ItemBuilder createSkullItemBuilder(OfflinePlayer owner) {
-		return new FabricItemBuilder(owner);
+		return new MinestomItemBuilder(owner);
 	}
 	
 	@Override
 	public Inventory createInventory(String inventoryName, int size, NegativityHolder holder) {
-		return new FabricInventory(inventoryName, size, holder);
+		return new MinestomInventory(inventoryName, size, holder);
 	}
 
 	@Override
@@ -285,7 +285,7 @@ public class MinestomAdapter extends Adapter {
 	
 	@Override
 	public VersionAdapter<?> getVersionAdapter() {
-		return FabricVersionAdapter.getVersionAdapter();
+		return MinestomVersionAdapter.getVersionAdapter();
 	}
 	
 	@Override

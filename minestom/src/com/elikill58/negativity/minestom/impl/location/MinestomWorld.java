@@ -1,7 +1,7 @@
 package com.elikill58.negativity.minestom.impl.location;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Entity;
@@ -10,31 +10,29 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.minestom.impl.block.MinestomBlock;
 import com.elikill58.negativity.minestom.impl.entity.MinestomEntityManager;
-import com.elikill58.negativity.minestom.impl.entity.FabricTypeFilter;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
-import net.minecraft.server.world.ServerEntityManager;
-import net.minecraft.server.world.ServerWorld;
-import net.minecraft.util.math.BlockPos;
+import net.minestom.server.MinecraftServer;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.instance.Instance;
 
-public class FabricWorld extends World {
+public class MinestomWorld extends World {
 
-	private final net.minecraft.world.World w;
+	private final Instance w;
 
-	public FabricWorld(net.minecraft.world.World w) {
+	public MinestomWorld(Instance w) {
 		this.w = w;
 	}
 
 	@Override
 	public String getName() {
-		return w.getRegistryKey().getValue().toString();
+		return w.getUniqueId().toString();
 	}
 
 	@Override
 	public Block getBlockAt0(int x, int y, int z) {
-		BlockPos pos = new BlockPos(x, y, z);
-		return new MinestomBlock(w.getBlockState(pos).getBlock(), w, pos);
+		Pos pos = new Pos(x, y, z);
+		return new MinestomBlock(w.getBlock(pos), w, pos);
 	}
 
 	@Override
@@ -42,29 +40,19 @@ public class FabricWorld extends World {
 		return getBlockAt(loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Entity> getEntities() {
-		List<Entity> list = new ArrayList<>();
-		w.getProfiler().visit("getEntities");
-		try {
-			ServerEntityManager<net.minecraft.entity.Entity> entityManager = ReflectionUtils.getFirstWith(w,
-					ServerWorld.class, ServerEntityManager.class);
-			entityManager.getLookup().forEach(FabricTypeFilter.getFilter(), e -> list.add(MinestomEntityManager.getEntity(e)));
-		} catch (Exception e1) {
-			e1.printStackTrace();
-		}
-		return list;
+		return w.getEntities().stream().map(MinestomEntityManager::getEntity).collect(Collectors.toList());
 	}
 
 	@Override
 	public Difficulty getDifficulty() {
-		return Difficulty.valueOf(w.getDifficulty().toString());
+		return Difficulty.valueOf(MinecraftServer.getDifficulty().name());
 	}
 
 	@Override
 	public int getMaxHeight() {
-		return w.getHeight();
+		return 255;
 	}
 
 	@Override

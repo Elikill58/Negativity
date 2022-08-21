@@ -7,56 +7,52 @@ import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.minestom.impl.location.FabricLocation;
+import com.elikill58.negativity.minestom.impl.location.MinestomLocation;
 
-import net.minestom.server.registry.Registry;
+import net.minestom.server.coordinate.Point;
+import net.minestom.server.instance.Instance;
 
 public class MinestomBlock extends Block {
 
 	private final net.minestom.server.instance.block.Block block;
-	private final BlockPos position;
-	private final World world;
+	private final Instance w;
+	private final Point position;
 	
-	public MinestomBlock(net.minestom.server.instance.block.Block block, World w, BlockPos position) {
+	public MinestomBlock(net.minestom.server.instance.block.Block block, Instance w, Point position) {
 		this.block = block;
+		this.w = w;
 		this.position = position;
-		this.world = w;
 	}
 
 	@Override
 	public Material getType() {
-		String id = Registry.BLOCK.getKey(block).orElseThrow().getValue().getPath();
-		return ItemRegistrar.getInstance().get(id);
+		return ItemRegistrar.getInstance().get(block.key().asString());
 	}
 
 	@Override
 	public int getX() {
-		return position.getX();
+		return position.blockX();
 	}
 
 	@Override
 	public int getY() {
-		return position.getY();
+		return position.blockY();
 	}
 
 	@Override
 	public int getZ() {
-		return position.getZ();
+		return position.blockZ();
 	}
 
 	@Override
 	public Block getRelative(BlockFace blockFace) {
-		BlockPos pos = getDirection(position, blockFace);
-		return new MinestomBlock(world.getBlockState(pos).getBlock(), world, pos);
-	}
-	
-	public BlockPos getDirection(BlockPos pos, BlockFace bf) {
-		return new BlockPos(pos.getX() + bf.getModX(), pos.getY() + bf.getModY(), pos.getZ() + bf.getModZ());
+		Point pos = position.add(blockFace.getModX(), blockFace.getModY(), blockFace.getModZ());
+		return new MinestomBlock(w.getBlock(pos), w, pos);
 	}
 
 	@Override
 	public Location getLocation() {
-		return FabricLocation.toCommon(world, position);
+		return MinestomLocation.toCommon(w, position);
 	}
 
 	@Override
@@ -67,8 +63,7 @@ public class MinestomBlock extends Block {
 
 	@Override
 	public void setType(Material type) {
-		// TODO change material type
-		//world.setBlockState(position, ((Item) type.getDefault()));
+		w.setBlock(position, ((net.minestom.server.item.Material) type.getDefault()).block());
 	}
 
 	@Override

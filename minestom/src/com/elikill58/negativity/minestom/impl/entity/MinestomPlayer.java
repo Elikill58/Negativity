@@ -2,11 +2,12 @@ package com.elikill58.negativity.minestom.impl.entity;
 
 import java.net.InetSocketAddress;
 import java.net.SocketAddress;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
+
+import org.jetbrains.annotations.NotNull;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.entity.Entity;
@@ -19,29 +20,20 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
-import com.elikill58.negativity.minestom.MinestomNegativity;
-import com.elikill58.negativity.minestom.bridge.ServerPlayerEntityBridge;
-import com.elikill58.negativity.minestom.impl.FabricPotionEffectType;
-import com.elikill58.negativity.minestom.impl.inventory.FabricInventory;
-import com.elikill58.negativity.minestom.impl.inventory.FabricPlayerInventory;
-import com.elikill58.negativity.minestom.impl.item.FabricItemStack;
-import com.elikill58.negativity.minestom.impl.location.FabricLocation;
-import com.elikill58.negativity.minestom.impl.location.FabricWorld;
-import com.elikill58.negativity.minestom.utils.LocationUtils;
-import com.elikill58.negativity.minestom.utils.Utils;
-import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.api.utils.LocationUtils;
+import com.elikill58.negativity.minestom.impl.inventory.MinestomInventory;
+import com.elikill58.negativity.minestom.impl.inventory.MinestomPlayerInventory;
+import com.elikill58.negativity.minestom.impl.item.MinestomItemStack;
+import com.elikill58.negativity.minestom.impl.location.MinestomLocation;
+import com.elikill58.negativity.minestom.impl.location.MinestomWorld;
 import com.elikill58.negativity.universal.Version;
-import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 
-import net.fabricmc.fabric.api.networking.v1.PacketByteBufs;
-import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
-import net.minecraft.entity.damage.DamageSource;
-import net.minecraft.entity.effect.StatusEffectInstance;
-import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
-import net.minecraft.server.network.ServerPlayerEntity;
-import net.minecraft.text.Text;
 import net.minestom.server.MinecraftServer;
+import net.minestom.server.attribute.Attribute;
+import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.damage.DamageType;
+import net.minestom.server.potion.Potion;
+import net.minestom.server.potion.TimedPotion;
 
 public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Player> implements Player {
 
@@ -74,27 +66,27 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 
 	@Override
 	public void sendMessage(String msg) {
-		entity.sendMessage(Text.of(msg), false);
+		entity.sendMessage(msg);
 	}
 
 	@Override
 	public boolean isOp() {
-		return entity.hasPermissionLevel(4);
+		return entity.getPermissionLevel() >= 4;
 	}
 
 	@Override
 	public boolean hasElytra() {
-		return false;
+		return entity.isFlyingWithElytra();
 	}
 	
 	@Override
 	public boolean hasLineOfSight(Entity entity) {
-		return LocationUtils.hasLineOfSight(this.entity, ((net.minecraft.entity.Entity) entity.getDefault()).getPos());
+		return LocationUtils.hasLineOfSight(this, entity.getLocation());
 	}
 
 	@Override
 	public float getWalkSpeed() {
-		return entity.getAbilities().getWalkSpeed();
+		return entity.getAttributeValue(Attribute.MOVEMENT_SPEED);
 	}
 
 	@Override
@@ -114,72 +106,72 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 
 	@Override
 	public float getFallDistance() {
-		return entity.fallDistance;
+		return (float) entity.getGravityAcceleration();
 	}
 
 	@Override
 	public GameMode getGameMode() {
-		return GameMode.get(entity.interactionManager.getGameMode().name());
+		return GameMode.get(entity.getGameMode().name());
 	}
 	
 	@Override
 	public void setGameMode(GameMode gameMode) {
-		entity.changeGameMode(net.minecraft.world.GameMode.byName(gameMode.name()));
+		entity.setGameMode(net.minestom.server.entity.GameMode.valueOf(gameMode.name()));
 	}
 
 	@Override
 	public void damage(double amount) {
-		entity.damage(DamageSource.MAGIC, (float) amount);
+		entity.damage(DamageType.VOID, (float) amount);
 	}
 
 	@Override
 	public Location getLocation() {
-		return FabricLocation.toCommon(entity.getWorld(), entity.getPos());
+		return MinestomLocation.toCommon(entity.getInstance(), entity.getPosition());
 	}
 
 	@Override
 	public int getPing() {
-		return entity.pingMilliseconds;
+		return entity.getLatency();
 	}
 
 	@Override
 	public World getWorld() {
-		return World.getWorld(entity.getWorld().asString(), a -> new FabricWorld(entity.getWorld()));
+		return World.getWorld(entity.getInstance().getUniqueId().toString(), a -> new MinestomWorld(entity.getInstance()));
 	}
 
 	@Override
 	public String getName() {
-		return entity.getName().getString();
+		return entity.getUsername();
 	}
 
 	@Override
 	public boolean hasPermission(String perm) {
-		return isOp();
+		return entity.hasPermission(perm) || isOp();
 	}
 
 	@Override
 	public void kick(String reason) {
-		entity.networkHandler.disconnect(Text.of(reason));
+		entity.kick(reason);
 	}
 
 	@Override
 	public int getLevel() {
-		return entity.experienceLevel;
+		return entity.getLevel();
 	}
 	
 	@Override
 	public int getFoodLevel() {
-		return entity.getHungerManager().getFoodLevel();
+		return entity.getFood();
 	}
 	
 	@Override
 	public void setFoodLevel(int foodlevel) {
-		entity.getHungerManager().setFoodLevel(foodlevel);
+		entity.setFood(foodlevel);
 	}
 
 	@Override
 	public boolean getAllowFlight() {
-		return entity.getAbilities().allowFlying;
+		return entity.isAllowFlying();
 	}
 
 	@Override
@@ -189,22 +181,23 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 	
 	@Override
 	public ItemStack getItemInHand() {
-		return new FabricItemStack(entity.getActiveItem());
+		return new MinestomItemStack(entity.getItemInMainHand());
 	}
 
 	@Override
 	public boolean isFlying() {
-		return entity.getAbilities().flying;
+		return entity.isFlying();
 	}
 
 	@Override
 	public void sendPluginMessage(String channelId, byte[] writeMessage) {
-		ServerPlayNetworking.send(entity, channelId.equalsIgnoreCase("fml") ? MinestomNegativity.fmlChannel : MinestomNegativity.negativityChannel, PacketByteBufs.create().writeByteArray(writeMessage));
+		entity.sendPluginMessage(channelId, writeMessage);
 	}
 
 	@Override
 	public boolean isSleeping() {
-		return entity.isSleeping();
+		// TODO implement is sleeping for minestom
+		return false;
 	}
 
 	@Override
@@ -220,48 +213,51 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 	
 	@Override
 	public double getEyeHeight() {
-		return Utils.getPlayerHeadHeight(entity);
+		return entity.getEyeHeight();
 	}
 	
 	@Override
 	public boolean hasPotionEffect(PotionEffectType type) {
-		return entity.hasStatusEffect(FabricPotionEffectType.getEffect(type));
+		return entity.getActiveEffects().stream().filter(p -> p.getPotion().effect().key().asString().equalsIgnoreCase(type.getId())).count() > 0;
 	}
 
 	@Override
 	public List<PotionEffect> getActivePotionEffect() {
-		return entity.getStatusEffects().stream().map(effect -> new PotionEffect(FabricPotionEffectType.getEffect(effect.getEffectType()), effect.getDuration(), effect.getAmplifier())).collect(Collectors.toList());
+		return entity.getActiveEffects().stream().map(effect -> new PotionEffect(PotionEffectType.forId(effect.getPotion().effect().key().asString()), effect.getPotion().duration(), effect.getPotion().amplifier())).collect(Collectors.toList());
 	}
 	
 	@Override
 	public Optional<PotionEffect> getPotionEffect(PotionEffectType type) {
-		StatusEffectInstance effect = entity.getStatusEffect(FabricPotionEffectType.getEffect(type));
-		return effect == null ? Optional.empty() : Optional.of(new PotionEffect(type, effect.getDuration(), effect.getAmplifier()));
+		for(TimedPotion effect : entity.getActiveEffects()) {
+			if(effect.getPotion().effect().key().asString().equalsIgnoreCase(type.getId()))
+				return Optional.of(new PotionEffect(PotionEffectType.forId(effect.getPotion().effect().key().asString()), effect.getPotion().duration(), effect.getPotion().amplifier()));
+		}
+		return Optional.empty();
 	}
 	
 	@Override
 	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
-		entity.addStatusEffect(new StatusEffectInstance(FabricPotionEffectType.getEffect(type), duration, amplifier));
+		entity.addEffect(new Potion(net.minestom.server.potion.PotionEffect.fromNamespaceId(type.getId()), (byte) amplifier, duration));
 	}
 	
 	@Override
 	public void removePotionEffect(PotionEffectType type) {
-		entity.removeStatusEffect(FabricPotionEffectType.getEffect(type));
+		entity.removeEffect(net.minestom.server.potion.PotionEffect.fromNamespaceId(type.getId()));
 	}
 
 	@Override
 	public String getIP() {
-		return entity.getIp();
+		return entity.getPlayerConnection().getRemoteAddress().toString();
 	}
 
 	@Override
 	public boolean isOnline() {
-		return !entity.isDisconnected();
+		return entity.isOnline();
 	}
 
 	@Override
 	public void setSneaking(boolean b) {
-		entity.isSneaking();
+		entity.setSneaking(b);
 	}
 
 	@Override
@@ -281,7 +277,7 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 
 	@Override
 	public void teleport(Location loc) {
-		entity.teleport(loc.getX(), loc.getY(), loc.getZ());
+		entity.teleport(new Pos(loc.getX(), loc.getY(), loc.getZ()));
 	}
 
 	@Override
@@ -291,7 +287,7 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 
 	@Override
 	public float getFlySpeed() {
-		return entity.getAbilities().getFlySpeed();
+		return entity.getFlyingSpeed();
 	}
 
 	@Override
@@ -301,8 +297,7 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 
 	@Override
 	public List<Entity> getNearbyEntities(double x, double y, double z) {
-		// TODO manage near entity
-		return new ArrayList<>();
+		return entity.getInstance().getNearbyEntities(entity.getPosition(), z).stream().map(MinestomEntityManager::getEntity).collect(Collectors.toList());
 	}
 
 	@Override
@@ -317,61 +312,37 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 
 	@Override
 	public ItemStack getItemInOffHand() {
-		return new FabricItemStack(entity.getOffHandStack());
+		return new MinestomItemStack(entity.getItemInOffHand());
 	}
 
 	@Override
 	public boolean isDead() {
-		return getHealth() <= 0;
+		return entity.isDead();
 	}
 
 	@Override
 	public PlayerInventory getInventory() {
-		return new FabricPlayerInventory(entity);
+		return new MinestomPlayerInventory(entity);
 	}
 	
 	@Override
 	public boolean hasOpenInventory() {
-		return entity.currentScreenHandler != entity.playerScreenHandler;
+		return entity.getOpenInventory() != null;
 	}
 
 	@Override
 	public Inventory getOpenInventory() {
-		if (entity.currentScreenHandler == entity.playerScreenHandler) {
-			return null;
-		}
-		
-		return new FabricInventory(entity.currentScreenHandler);
+		return new MinestomInventory(entity.getOpenInventory());
 	}
 
 	@Override
 	public void openInventory(Inventory inv) {
-		Object o = inv.getDefault();
-		if (o instanceof ScreenHandler screenHandler) {
-			try {
-				((ServerPlayerEntityBridge) entity).negativity$doNotSendScreenClosePacket(true);
-				entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> screenHandler, Text.of(inv.getInventoryName())));
-			} finally {
-				((ServerPlayerEntityBridge) entity).negativity$doNotSendScreenClosePacket(false);
-			}
-		} else if (inv instanceof FabricInventory fabricInventory) {
-			try {
-				((ServerPlayerEntityBridge) entity).negativity$doNotSendScreenClosePacket(true);
-				entity.openHandledScreen(new SimpleNamedScreenHandlerFactory(fabricInventory.getFactory(), Text.of(inv.getInventoryName())));
-			} finally {
-				((ServerPlayerEntityBridge) entity).negativity$doNotSendScreenClosePacket(false);
-			}
-		//} else if (inv instanceof FabricPlayerInventory playerInventory) { // TODO open proper PlayerInventory implementation
-		} else if (o != null) {
-			Adapter.getAdapter().getLogger().warn("Tried opening unsupported inventory " + o.getClass().getName());
-		} else {
-			Adapter.getAdapter().getLogger().warn("Tried opening inventory with null platform value from " + inv);
-		}
+		entity.openInventory((net.minestom.server.inventory.@NotNull Inventory) inv.getDefault());
 	}
 
 	@Override
 	public void closeInventory() {
-		entity.closeHandledScreen();
+		entity.closeInventory();
 	}
 
 	@Override
@@ -381,7 +352,7 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 
 	@Override
 	public void setAllowFlight(boolean b) {
-		entity.getAbilities().allowFlying = b;
+		entity.setAllowFlying(b);
 	}
 
 	@Override
@@ -396,7 +367,7 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 	
 	@Override
 	public InetSocketAddress getAddress() {
-		SocketAddress address = entity.networkHandler.connection.getAddress();
+		SocketAddress address = entity.getPlayerConnection().getRemoteAddress();
 		if (address instanceof InetSocketAddress inetAddress) {
 			return inetAddress;
 		}
@@ -405,12 +376,13 @@ public class MinestomPlayer extends MinestomEntity<net.minestom.server.entity.Pl
 	
 	@Override
 	public void sendToServer(String serverName) {
-		ServerPlayNetworking.send(entity, MinestomNegativity.bungeecordChannel, PacketByteBufs.create().writeString("String").writeString(serverName));
+		// TODO fix send to server
+		//ServerPlayNetworking.send(entity, MinestomNegativity.bungeecordChannel, PacketByteBufs.create().writeString("String").writeString(serverName));
 	}
 	
 	@Override
 	public String getServerName() {
-		return "FabricServer"; // TODO check if fabric can have a server name
+		return MinecraftServer.getBrandName();
 	}
 	
 	@Override

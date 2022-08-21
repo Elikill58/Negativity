@@ -13,12 +13,10 @@ sourceSets {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-archivesBaseName = 'Negativity'
-
 dependencies {
     api project(':common')
 
-    compileOnly 'com.github.Minestom:Minestom:master-SNAPSHOT'
+    compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
 }
 
 compileJava.javaCompiler.set(
@@ -43,12 +41,14 @@ shadowJar {
     archiveAppendix.set('minestom')
     archiveClassifier.set('dev')
 
-    dependencies {
-        it.include(it.project(':common'))
-    }
-
     mergeServiceFiles()
     from(project(':common').tasks.shadowJar)
+}
+
+build.dependsOn shadowJar
+
+parent.tasks.named('shadowJar', ShadowJar) {
+    it.from(shadowJar.outputs)
 }
 
 task prepareServer(type: Copy) {

@@ -1,18 +1,17 @@
 package com.elikill58.negativity.minestom;
 
 import java.io.File;
-import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.yaml.Configuration;
+import com.elikill58.negativity.minestom.listeners.BlockListeners;
+import com.elikill58.negativity.minestom.listeners.EntityListeners;
+import com.elikill58.negativity.minestom.listeners.InventoryListeners;
 import com.elikill58.negativity.minestom.listeners.PlayersListeners;
 import com.elikill58.negativity.minestom.packets.NegativityPacketManager;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.account.NegativityAccountManager;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 import com.elikill58.negativity.universal.warn.WarnManager;
@@ -25,30 +24,26 @@ public class MinestomNegativity extends Extension {
 
 	public static MinestomNegativity INSTANCE;
 
-	private Path configDir;
 	private NegativityPacketManager packetManager;
 
 	@Override
 	public void initialize() {
 		INSTANCE = this;
 
-		this.configDir = Path.of("config", "Negativity");
-		configDir.toFile().mkdirs();
-		new File(configDir.toFile().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
+		new File(getDataDirectory().toFile().getAbsolutePath() + File.separator + "user" + File.separator + "proof").mkdirs();
 
 		Adapter.setAdapter(new MinestomAdapter(this, getLogger()));
-		
-		ServerLifecycleEvents.SERVER_STARTING.register(this::onGameStart);
-		ServerLifecycleEvents.SERVER_STOPPING.register(this::onGameStop);
-		CommandRegistrationCallback.EVENT.register(this::loadCommands);
 
-		PlayersListeners.register();
-		ServerPlayConnectionEvents.DISCONNECT.register(this::onLeave);
 		Negativity.loadNegativity();
-		packetManager = new NegativityPacketManager(this);
 
 		NegativityAccountStorage.setDefaultStorage("file");
 
+		new BlockListeners(getEventNode());
+		new PlayersListeners(getEventNode());
+		new EntityListeners(getEventNode());
+		new InventoryListeners(getEventNode());
+		new NegativityPacketManager(getEventNode());
+		
 		loadCommands();
 		getLogger().info("Negativity v" + getOrigin().getVersion() + " loaded.");
 	}
@@ -84,22 +79,8 @@ public class MinestomNegativity extends Extension {
 		}
 	}
 
-	public void onLeave(ServerPlayNetworkHandler e, MinecraftServer srv) {
-		Adapter.getAdapter().getScheduler().runDelayed(() -> {
-			UUID playerId = e.getPlayer().getUuid();
-			NegativityPlayer.removeFromCache(playerId);
-			NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
-			accountManager.save(playerId);
-			accountManager.dispose(playerId);
-		}, 5);
-	}
-
 	public static MinestomNegativity getInstance() {
 		return INSTANCE;
-	}
-
-	public Path getDataFolder() {
-		return configDir;
 	}
 
 	public NegativityPacketManager getPacketManager() {

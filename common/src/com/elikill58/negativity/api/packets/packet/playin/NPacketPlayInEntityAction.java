@@ -37,7 +37,8 @@ public class NPacketPlayInEntityAction implements NPacketPlayIn {
 		START_RIDING_JUMP("f", "RIDING_JUMP"),
 		STOP_RIDING_JUMP("g"),
 		OPEN_INVENTORY("h"),
-		START_FALL_FLYING("i");
+		START_FALL_FLYING("i"),
+		LEAVE_BED("j");
 		
 		private final List<String> alias;
 		

@@ -2,33 +2,29 @@ package com.elikill58.negativity.minestom.impl.entity;
 
 import java.util.UUID;
 
-import com.elikill58.negativity.api.entity.AbstractEntity;
-import com.elikill58.negativity.api.entity.BoundingBox;
-import com.elikill58.negativity.api.entity.OfflinePlayer;
+import org.checkerframework.checker.nullness.qual.Nullable;
 
-import net.minecraft.entity.player.PlayerEntity;
+import com.elikill58.negativity.api.entity.AbstractEntity;
+import com.elikill58.negativity.api.entity.OfflinePlayer;
 
 public class MinestomOfflinePlayer extends AbstractEntity implements OfflinePlayer {
 
-	private final PlayerEntity u;
+	private final UUID uuid;
+	private final String name;
 	
-	public MinestomOfflinePlayer(PlayerEntity u) {
-		this.u = u;
+	public MinestomOfflinePlayer(UUID uuid, String name) {
+		this.uuid = uuid;
+		this.name = name;
 	}
 
 	@Override
 	public UUID getUniqueId() {
-		return u.getUuid();
-	}
-	
-	@Override
-	public boolean isDead() {
-		return !u.isAlive();
+		return uuid;
 	}
 
 	@Override
 	public boolean isOnline() {
-		return u.isAlive();
+		return false;
 	}
 
 	@Override
@@ -38,26 +34,16 @@ public class MinestomOfflinePlayer extends AbstractEntity implements OfflinePlay
 
 	@Override
 	public boolean isOp() {
-		return u.isCreativeLevelTwoOp();
+		return false;
 	}
 
 	@Override
 	public String getName() {
-		return u.getName().getString();
+		return name;
 	}
 
 	@Override
-	public Object getDefault() {
-		return u;
-	}
-	
-	@Override
-	public String getEntityId() {
-		return String.valueOf(u.getId());
-	}
-	
-	@Override
-	public BoundingBox getBoundingBox() {
+	public @Nullable Object getDefault() {
 		return null;
 	}
 }

@@ -1,7 +1,5 @@
 package com.elikill58.negativity.minestom.impl.entity;
 
-import java.util.Arrays;
-
 import org.jetbrains.annotations.NotNull;
 
 import com.elikill58.negativity.api.entity.AbstractEntity;
@@ -10,23 +8,18 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
-import com.elikill58.negativity.minestom.MinestomNegativity;
-import com.elikill58.negativity.minestom.impl.location.FabricLocation;
-import com.elikill58.negativity.minestom.impl.location.FabricWorld;
-import com.extollit.linalg.mutable.Vec3d;
+import com.elikill58.negativity.minestom.impl.location.MinestomLocation;
+import com.elikill58.negativity.minestom.impl.location.MinestomWorld;
 
-import net.minestom.server.MinecraftServer;
 import net.minestom.server.coordinate.Vec;
 import net.minestom.server.entity.Entity;
 
 public class MinestomEntity<E extends Entity> extends AbstractEntity {
 
 	protected final E entity;
-	private final Location loc;
 	
 	public MinestomEntity(E e) {
 		this.entity = e;
-		this.loc = FabricLocation.toCommon(e.getWorld(), e.getPosition());
 	}
 
 	@Override
@@ -46,12 +39,12 @@ public class MinestomEntity<E extends Entity> extends AbstractEntity {
 
 	@Override
 	public Location getLocation() {
-		return loc;
+		return MinestomLocation.toCommon(entity.getInstance(), entity.getPosition());
 	}
 	
 	@Override
 	public World getWorld() {
-		return loc.getWorld();
+		return World.getWorld(entity.getInstance().getUniqueId().toString(), a -> new MinestomWorld(entity.getInstance()));
 	}
 
 	@Override
@@ -76,14 +69,12 @@ public class MinestomEntity<E extends Entity> extends AbstractEntity {
 	
 	@Override
 	public Location getEyeLocation() {
-		Vec3d vec = entity.getEyePos();
-		return new Location(World.getWorld(entity.getWorld().asString(), a -> new FabricWorld(entity.getWorld())), vec.getX(), vec.getY(), vec.getZ());
+		return getLocation(); // default entity doesn't have eye location
 	}
 	
 	@Override
 	public Vector getRotation() {
-		Vec3d vec = entity.getRotationVector();
-		return new Vector(vec.getX(), vec.getY(), vec.getZ());
+		return new Vector(0, 0, 0);
 	}
 
 	@Override

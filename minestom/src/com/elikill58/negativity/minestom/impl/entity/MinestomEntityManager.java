@@ -25,7 +25,7 @@ public class MinestomEntityManager {
 		else if(e.getEntityType().equals(EntityType.ARROW))
 			return new MinestomArrow(e);
 		else if(e.getEntityType().equals(EntityType.POTION))
-			return new MinestomSplashPotion((PotionEntity) e);
+			return new MinestomSplashPotion(e);
 		else
 			return new MinestomEntity<>(e);
 	}

@@ -1,23 +1,21 @@
 package com.elikill58.negativity.minestom.impl.entity;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.elikill58.negativity.api.entity.SplashPotion;
 import com.elikill58.negativity.api.potion.PotionEffect;
-import com.elikill58.negativity.minestom.impl.FabricPotionEffectType;
 
-import net.minecraft.entity.projectile.thrown.PotionEntity;
-import net.minecraft.potion.PotionUtil;
+import net.minestom.server.entity.Entity;
 
-public class MinestomSplashPotion extends MinestomEntity<PotionEntity> implements SplashPotion {
+public class MinestomSplashPotion extends MinestomEntity<Entity> implements SplashPotion {
 	
-	public MinestomSplashPotion(PotionEntity entity) {
+	public MinestomSplashPotion(Entity entity) {
 		super(entity);
 	}
 
 	@Override
 	public List<PotionEffect> getEffects() {
-		return PotionUtil.getPotionEffects(entity.getStack()).stream().map(effect -> new PotionEffect(FabricPotionEffectType.getEffect(effect.getEffectType()), effect.getDuration(), effect.getAmplifier())).collect(Collectors.toList());
+		return Collections.emptyList(); // TODO fix splash potion
 	}
 }

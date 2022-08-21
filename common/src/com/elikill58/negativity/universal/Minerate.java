@@ -3,6 +3,7 @@ package com.elikill58.negativity.universal;
 import java.text.NumberFormat;
 import java.util.HashMap;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 
 public class Minerate {
@@ -78,10 +79,10 @@ public class Minerate {
 
 	public String[] getInventoryLoreString() {
 		String[] s = new String[MinerateType.values().length + 1];
-		s[0] = "&r&7" + "Full Mined: " + fullMined;
+		s[0] = ChatColor.GRAY + "Full Mined: " + fullMined;
 		int i = 1;
 		for(MinerateType type : MinerateType.values())
-			s[i++] = "&r&7" + type.getName() + ": " + nf.format((mined.get(type) * 100) / (double) (fullMined == 0 ? 1 : fullMined)) + "% (" + mined.get(type) + ")";
+			s[i++] = ChatColor.GRAY + type.getName() + ": " + nf.format((mined.get(type) * 100) / (double) (fullMined == 0 ? 1 : fullMined)) + "% (" + mined.get(type) + ")";
 		return s;
 	}
 	

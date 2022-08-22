@@ -22,9 +22,7 @@ public class MinestomCommand extends Command implements CommandExecutor {
 	public MinestomCommand(String cmd, String... alias) {
 		super(cmd, alias);
 		setDefaultExecutor(this);
-		addSyntax((sender, context) -> {
-			sender.sendMessage("nice");
-		}, ArgumentType.StringArray(cmd + "-args").setSuggestionCallback(this::tabCompletion));
+		addSyntax((sender, context) -> {}, ArgumentType.StringArray(cmd + "-args").setSuggestionCallback(this::tabCompletion));
 	}
 
 	public void tabCompletion(CommandSender sender, CommandContext context, Suggestion suggestion) {

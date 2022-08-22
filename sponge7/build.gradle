@@ -77,16 +77,13 @@ shadowJar {
 }
 
 build.dependsOn shadowJar
+evaluationDependsOn(':common')
 afterEvaluate {
     shadowJar.finalizedBy reobfJar
     reobfJar {
         dependsOn shadowJar
         input = shadowJar.archiveFile
     }
-}
-
-parent.tasks.named('shadowJar', ShadowJar) {
-    it.manifest.inheritFrom(tasks.jar.manifest)
 }
 
 task prepareServer(type: Copy) {

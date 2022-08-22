@@ -88,15 +88,24 @@ For permissions config, [click here](https://github.com/Elikill58/Negativity/wik
 Prerequisites:
 - [Git](https://git-scm.com)
 - JDK 8 (any distribution should work, [AdoptOpenJDK](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=hotspot) for example)
+- JDK 17 (any distribution should work) recommended for latest minecraft version (also work with lower versions)
 
 In the following instructions you will have to execute Gradle tasks. You **must** use the Gradle wrapper distributed in this repository.
 
 Examples will be using `./gradlew`, if you are on Windows you need to use `gradlew.bat` instead.
 
 1. Clone this repository: `git clone https://github.com/Elikill58/Negativity.git`
-2. Get Spigot 1.7.10 and 1.13.2 jars and put them in `/spigot/spigotJars/` (you need to create this directory too)
-3. You should use buildtools for Spigot 1.17/1.18/1.18.2/1.19 (or comment them in `settings.gradle`)
-4. Setup a Forge workspace for the Sponge plugin: `./gradlew :sponge7:setupDecompWorkspace`. This step will take some time to complete
-5. Build the plugin: `./gradlew build`
+
+2. Create a folder called `spigotJars` in `spigot/`
+
+3. Download every spigot version of spigot listed below from [this link](https://getbukkit.org/download/spigot) and put them in `spigot/spigotJars` Versions: 
+ `1.7.10, 1.8.8, 1.9, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13`(you need to add a + at the beginning of the name (+spigot1.13.jar for example)`, 
+ 1.13.2, 1.14.4, 1.15.2, 1.16.1, 1.16.5`
+
+4. You should use buildtools with this command `java -jar BuildTools.jar --rev <version> --remapped` for Spigot 1.17/1.18/1.18.2/1.19 (or comment them in `settings.gradle`).
+
+5. Set up a Forge workspace for the Sponge plugin: `./gradlew :sponge7:setupDecompWorkspace`. This step will take some time to complete
+
+6. Build the plugin: `./gradlew build`
  - You can find the all-in-one jar in `/build/libs/`
  - Platform-specific jars are available in their own project subdirectories (`/spigot/build/libs/` for example)

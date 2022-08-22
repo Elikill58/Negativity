@@ -20,4 +20,4 @@ jobs:
     - name: Upload Artifact to GitHub Action
       uses: actions/upload-artifact@v3
       with:
-        path: build/libs/*.jar
+        path: sponge7/build/libs/*.jar

@@ -46,6 +46,67 @@ public class AimBot extends Cheat {
 		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, CheatDescription.VERIF);
 	}
 
+	// this check seems stupid, although it's a must-have
+	// every decent anti cheat needs this as it fixes most old scaffolds/killauras
+	@Check(name = "invalid", conditions = CheckConditions.SURVIVAL, description = "Checks for an invalid rotation", ignoreCancel = true)
+	public void invalidP(PacketReceiveEvent e, NegativityPlayer np) {
+		if (!e.hasPlayer())
+			return;
+		PacketType type = e.getPacket().getPacketType();
+		if (type.isFlyingPacket()) {
+			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
+			if (!flying.hasLook)
+				return;
+			// easiest aim check ever?
+			// and yes, it seems stupid, but many clients do not follow this
+			// especially old scaffold will fail this check
+			final float maxP = np.isOnLadders ? 91.11f : 90f;
+			if (Math.abs(flying.pitch) > maxP) {
+				Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "invalid", "pitch: ");
+			}
+		}
+	}
+
+	// many killauras use a constant pitch in order to bypass the GDC check
+	// this check will fight against that and fail these killauras
+	@Check(name = "ratio", conditions = CheckConditions.SURVIVAL, description = "Checks for invalid rotation ratios", ignoreCancel = true)
+	public void ratio(PacketReceiveEvent e, NegativityPlayer np) {
+		if (!e.hasPlayer())
+			return;
+		PacketType type = e.getPacket().getPacketType();
+		if (type.isFlyingPacket()) {
+			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
+			if (!flying.hasLook)
+				return;
+			if (!np.isAttacking)
+				return;
+			double deltaYaw = flying.yaw - np.doubles.get(getKey(), "last-yaw-streak", 0.0);
+			double deltaPitch = flying.pitch - np.doubles.get(getKey(), "last-pitch-streak", 0.0);
+			double lastDeltaPitch = np.doubles.get(getKey(), "last-delta-pitch-streak", 0.0);
+			final double difference = Math.abs(deltaPitch - lastDeltaPitch);
+			final double absoluteDeltaYaw = Math.abs(deltaYaw);
+			if (difference < 0.005 && absoluteDeltaYaw > .65) {
+				// increment streak
+				np.ints.set(getKey(), "ratio-streak", np.ints.get(getKey(), "ratio-streak", 1) + 1);
+
+				final int streak = np.ints.get(getKey(), "ratio-streak", 1);
+
+				if (streak > 7) {
+					Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio", "absYaw: "
+							+ String.format("%.3f", absoluteDeltaYaw) + ", streak: " + streak + ", difference: "
+							+ String.format("%.3f", difference));
+
+					np.ints.set(getKey(), "ratio-streak", Math.abs(streak - 3));
+				}
+			} else {
+				np.ints.set(getKey(), "ratio-streak", 0);
+			}
+			np.doubles.set(getKey(), "last-yaw-streak", (double) flying.yaw);
+			np.doubles.set(getKey(), "last-pitch-streak", (double) flying.pitch);
+			np.doubles.set(getKey(), "last-delta-pitch-streak", deltaPitch);
+		}
+	}
+
 	@Check(name = "gcd", conditions = CheckConditions.SURVIVAL, description = "Calculate GCD between attacks", ignoreCancel = true)
 	public void gcd(PacketReceiveEvent e, NegativityPlayer np) {
 		if (!e.hasPlayer())
@@ -66,7 +127,7 @@ public class AimBot extends Cheat {
 			double lastDeltaPitch = np.doubles.get(getKey(), "last-delta-pitch", 0.0);
 
 			np.doubles.set(getKey(), "last-yaw", (double) flying.yaw);
-			np.doubles.set(getKey(), "last-yaw", (double) flying.pitch);
+			np.doubles.set(getKey(), "last-pitch", (double) flying.pitch);
 			np.doubles.set(getKey(), "last-delta-pitch", deltaPitch);
 			if (!np.isAttacking)
 				return;

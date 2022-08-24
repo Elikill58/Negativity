@@ -59,10 +59,12 @@ public class AimBot extends Cheat {
 				return;
 			// easiest aim check ever?
 			// and yes, it seems stupid, but many clients do not follow this
-			// especially old scaffold will fail this check
-			final float maxP = np.isOnLadders ? 91.11f : 90f;
-			if (Math.abs(flying.pitch) > maxP) {
-				Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "invalid", "pitch: ");
+			// especially old scaffolds will fail this check
+			final double maxP = np.isOnLadders ? 91.11d : 90d;
+			final double absolutePitch = Math.abs(flying.pitch);
+			if (absolutePitch > maxP) {
+				Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "invalid", "pitch: "
+						+ String.format("%.2f", absolutePitch) + "/" + maxP);
 			}
 		}
 	}

@@ -89,9 +89,9 @@ public class AimBot extends Cheat {
 			final double absoluteDeltaYaw = Math.abs(deltaYaw);
 			if (difference < 0.005 && absoluteDeltaYaw > .65) {
 				// increment streak
-				np.ints.set(getKey(), "ratio-streak", np.ints.get(getKey(), "ratio-streak", 1) + 1);
+				np.ints.set(getKey(), "ratio-streak", np.ints.get(getKey(), "ratio-streak", 0) + 1);
 
-				final int streak = np.ints.get(getKey(), "ratio-streak", 1);
+				final int streak = np.ints.get(getKey(), "ratio-streak", 0);
 
 				if (streak > 7) {
 					Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio", "absYaw: "

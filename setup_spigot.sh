@@ -10,11 +10,29 @@ else
 fi
 cd $DIR
 
+
+case "$OSTYPE" in
+  solaris*) os=solaris ;;
+  darwin*)  os=macos ;;
+  linux*)   os=linux ;;
+  bsd*)     os=bsd ;;
+  msys*)    os=windows ;;
+  cygwin*)  os=windows ;;
+  *)        os=unknown:$OSTYPE ;;
+esac
+
+echo "OS used: $os"
+extension=.tar.gz
+
+if [[ $os == "windows" ]]; then
+	extension=.zip
+fi
+
 java8=unknown
 java16=unknown
 java17=unknown
 
-if [[ $java8 == *"unknow"* || $java16 == *"unknow"* || $java17 == *"unknow"* ]]; then # if at least one JAVA is NOT set
+if [[ $java8 == *"unknown"* || $java16 == *"unknown"* || $java17 == *"unknown"* ]]; then # if at least one JAVA is NOT set
 	export IFS=";"
 	for javaVersionPath in $JAVA_HOME; do
 	    if [[ $javaVersionPath == *"1.8"* ]]; then # check if has "1.8"
@@ -26,34 +44,34 @@ if [[ $java8 == *"unknow"* || $java16 == *"unknow"* || $java17 == *"unknow"* ]];
 	    fi
 	done
 
-	if [[ $java8 == *"unknow"* ]]; then
+	if [[ $java8 == *"unknown"* ]]; then
 		if [ -d "./jdk-8" ]; then
 			echo "Java 8 and already downloaded, using this version..."
 		else
 			echo "Failed to find Java 8. Downloading it..."
-			curl -o Java8.zip https://download.java.net/openjdk/jdk8u42/ri/openjdk-8u42-b03-windows-i586-14_jul_2022.zip
+			curl -o Java8.zip "https://download.java.net/openjdk/jdk8u42/ri/openjdk-8u42-b03-$os-i586-14_jul_2022.zip"
 			unzip Java8.zip
 			rm Java8.zip
 		fi
 	    java8="$PWD/jdk-8/bin/java.exe"
 	fi
-	if [[ $java16 == *"unknow"* ]]; then
+	if [[ $java16 == *"unknown"* ]]; then
 		if [ -d "./jdk-16" ]; then
 			echo "Java 16 and already downloaded, using this version..."
 		else
 			echo "Failed to find Java 16. Downloading it..."
-			curl -o Java16.zip https://download.java.net/openjdk/jdk16/ri/openjdk-16+36_windows-x64_bin.zip
+			curl -o Java16.zip "https://download.java.net/openjdk/jdk16/ri/openjdk-16+36_$os-x64_bin$extension"
 			unzip Java16.zip
 			rm Java16.zip
 		fi
 	    java16="$PWD/jdk-16/bin/java.exe"
 	fi
-	if [[ $java17 == *"unknow"* ]]; then
+	if [[ $java17 == *"unknown"* ]]; then
 		if [ -d "./jdk-17" ]; then
 			echo "Java 17 and already downloaded, using this version..."
 		else
 			echo "Failed to find Java 17. Downloading it..."
-			curl -o Java17.zip https://download.java.net/openjdk/jdk17/ri/openjdk-17+35_windows-x64_bin.zip
+			curl -o Java17.zip "https://download.oracle.com/java/17/latest/jdk-17_$os-x64_bin$extension"
 			unzip Java17.zip
 			rm Java17.zip
 		fi

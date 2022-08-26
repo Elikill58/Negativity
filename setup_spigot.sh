@@ -8,7 +8,7 @@ if [ -d "$DIR" ]; then
 else
    mkdir -p $DIR
 fi
-cd $DIR
+cd $DIR || exit
 
 
 case "$OSTYPE" in

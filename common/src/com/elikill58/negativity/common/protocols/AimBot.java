@@ -46,8 +46,6 @@ public class AimBot extends Cheat {
 		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, CheatDescription.VERIF);
 	}
 
-	// this check seems stupid, although it's a must-have
-	// every decent anti cheat needs this as it fixes most old scaffolds/killauras
 	@Check(name = "invalid", conditions = CheckConditions.SURVIVAL, description = "Checks for an invalid rotation", ignoreCancel = true)
 	public void invalidP(PacketReceiveEvent e, NegativityPlayer np) {
 		if (!e.hasPlayer())
@@ -63,6 +61,8 @@ public class AimBot extends Cheat {
 			final double maxP = np.isOnLadders ? 91.11d : 90d;
 			final double absolutePitch = Math.abs(flying.pitch);
 			if (absolutePitch > maxP) {
+				if(isSetBack())
+					e.setCancelled(true);
 				Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "invalid", "pitch: "
 						+ String.format("%.2f", absolutePitch) + "/" + maxP);
 			}
@@ -101,7 +101,7 @@ public class AimBot extends Cheat {
 					np.ints.set(getKey(), "ratio-streak", Math.abs(streak - 3));
 				}
 			} else {
-				np.ints.set(getKey(), "ratio-streak", 0);
+				np.ints.remove(getKey(), "ratio-streak");
 			}
 			np.doubles.set(getKey(), "last-yaw-streak", (double) flying.yaw);
 			np.doubles.set(getKey(), "last-pitch-streak", (double) flying.pitch);

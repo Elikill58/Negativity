@@ -100,11 +100,13 @@ Examples will be using `./gradlew`, if you are on Windows you need to use `gradl
 
 3. There is 2 ways (warn: first setup take some times to complete) :
 
-   1) Use installation script. Require [Git bash](https://gitforwindows.org/) or another way to run bash file.
+#### Use installation script
 
-You can directly use `sh install.sh` on [Git bash](https://gitforwindows.org/). It will run buildtools for each required file.
+Require [Git bash](https://gitforwindows.org/) or another way to run bash file.
 
-   2) Manually install spigot jars :
+You should use `sh install.sh`. It will run buildtools for each required file.
+
+#### Manually install spigot jars
 
 - Create a folder called `spigotJars` in `spigot/`
 

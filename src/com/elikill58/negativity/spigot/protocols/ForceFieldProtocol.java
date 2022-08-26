@@ -53,6 +53,8 @@ public class ForceFieldProtocol extends Cheat implements Listener {
 		if (!(e.getDamager() instanceof Player) || e.isCancelled() || e.getCause() != DamageCause.ENTITY_ATTACK)
 			return;
 		Player p = (Player) e.getDamager();
+		if(p.hasMetadata("NPC"))
+			return;
 		SpigotNegativityPlayer np = SpigotNegativityPlayer.getNegativityPlayer(p);
 		if (!np.hasDetectionActive(this) || e.getEntity() == null)
 			return;

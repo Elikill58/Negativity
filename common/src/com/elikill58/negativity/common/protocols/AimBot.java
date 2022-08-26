@@ -61,10 +61,11 @@ public class AimBot extends Cheat {
 			final double maxP = np.isOnLadders ? 91.11d : 90d;
 			final double absolutePitch = Math.abs(flying.pitch);
 			if (absolutePitch > maxP) {
-				if(isSetBack())
-					e.setCancelled(true);
-				Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "invalid", "pitch: "
-						+ String.format("%.2f", absolutePitch) + "/" + maxP);
+				if (Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "invalid", "pitch: "
+						+ String.format("%.2f", absolutePitch) + "/" + maxP)) {
+					if(isSetBack())
+						e.setCancelled(true);
+				}
 			}
 		}
 	}

@@ -96,16 +96,24 @@ Examples will be using `./gradlew`, if you are on Windows you need to use `gradl
 
 1. Clone this repository: `git clone https://github.com/Elikill58/Negativity.git`
 
-2. Create a folder called `spigotJars` in `spigot/`
+2. Change branch to v2 using `git checkout v2`
 
-3. Download every spigot version of spigot listed below from [this link](https://getbukkit.org/download/spigot) and put them in `spigot/spigotJars` Versions: 
+3. There is 2 ways (warn: first setup take some times to complete) :
+
+   1) Use installation script. Require [Git bash](https://gitforwindows.org/) or another way to run bash file.
+
+You can directly use `sh install.sh` on [Git bash](https://gitforwindows.org/). It will run buildtools for each required file.
+
+   2) Manually install spigot jars :
+
+- Create a folder called `spigotJars` in `spigot/`
+
+- Download every spigot version of spigot listed below from [this link](https://getbukkit.org/download/spigot) and put them in `spigot/spigotJars` Versions: 
  `1.7.10, 1.8.8, 1.9, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13`(you need to add a + at the beginning of the name (+spigot1.13.jar for example)`, 
  1.13.2, 1.14.4, 1.15.2, 1.16.1, 1.16.5`
 
-4. You should use buildtools with this command `java -jar BuildTools.jar --rev <version> --remapped` for Spigot 1.17/1.18/1.18.2/1.19 (or comment them in `settings.gradle`).
+- You should use buildtools with this command `java -jar BuildTools.jar --rev <version> --remapped` for Spigot 1.17/1.18/1.18.2/1.19 (or comment them in `settings.gradle`).
 
-5. Set up a Forge workspace for the Sponge plugin: `./gradlew :sponge7:setupDecompWorkspace`. This step will take some time to complete
-
-6. Build the plugin: `./gradlew build`
+4. Build the plugin: `./gradlew build`
  - You can find the all-in-one jar in `/build/libs/`
  - Platform-specific jars are available in their own project subdirectories (`/spigot/build/libs/` for example)

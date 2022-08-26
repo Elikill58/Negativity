@@ -131,7 +131,7 @@ for mcVersion in "1.17" "1.18" "1.18.2" "1.19"; do # all java17 remapped version
    done
 
    if [ $shouldRun == true ]; then
-      if [ -d "$(eval echo "~")/.m2/repository/org/spigotmc/spigot/$snap" ]; then
+      if [ -d "$HOME/.m2/repository/org/spigotmc/spigot/$snap" ]; then
          echo "Found incomplete repository for $mcVersion. Running remapping BuildTools ..."
       fi
       if [[ $mcVersion == "1.17" ]]; then

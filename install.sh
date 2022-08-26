@@ -10,7 +10,7 @@ else
 fi
 cd $DIR
 
-java8=unknow
+java8=unknown
 java16=unknow
 java17=unknow
 
@@ -28,9 +28,9 @@ if [[ $java8 == *"unknow"* || $java16 == *"unknow"* || $java17 == *"unknow"* ]];
 
 	if [[ $java8 == *"unknow"* ]]; then
 		if [ -d "./jdk-8" ]; then
-			echo "Failed to find Java 8 and already downloaded. Use unzipped version ..."
+			echo "Java 8 and already downloaded, using this version..."
 		else
-			echo "Failed to find Java 8. Download it ..."
+			echo "Failed to find Java 8. Downloading it..."
 			curl -o Java8.zip https://download.java.net/openjdk/jdk8u42/ri/openjdk-8u42-b03-windows-i586-14_jul_2022.zip
 			unzip Java8.zip
 		fi
@@ -76,11 +76,11 @@ curl -z BuildTools.jar -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/Bu
 for mcVersion in "1.8.8" "1.9.2" "1.9.4" "1.10.2" "1.11.2" "1.12" "1.13" "1.13.2" "1.14.4" "1.15" "1.16.1" "1.16.4"; do
 	spigotFile=spigot-$mcVersion.jar
 	if [ -f "../$spigotFile" ]; then
-	   echo "Spigot $mcVersion already exist. Skipping ..."
+	   echo "Spigot $mcVersion already exists. Skipping..."
 	else
 		mcCmd="\"$java8\" -jar BuildTools.jar --rev $mcVersion"
 		echo "Running $mcCmd ..."
-		eval $mcCmd
+		eval "$mcCmd"
 		if [ -f "$spigotFile" ]; then # if build successful
 			cp $spigotFile "../$spigotFile"
 		else
@@ -95,8 +95,8 @@ if [ ! -f "../spigot-0-1.13.jar" ]; then
 fi
 for mcVersion in "1.17" "1.18" "1.18.2" "1.19"; do # all java17 remapped versions
 	snap="$mcVersion-R0.1-SNAPSHOT"
-	spigotRepository="$(eval echo "~")/.m2/repository/org/spigotmc/spigot/$snap/spigot-$snap"
-	mcSrvRepository="$(eval echo "~")/.m2/repository/org/spigotmc/minecraft-server/$snap/minecraft-server-$snap"
+	spigotRepository="$HOME/.m2/repository/org/spigotmc/spigot/$snap/spigot-$snap"
+	mcSrvRepository="$HOME/.m2/repository/org/spigotmc/minecraft-server/$snap/minecraft-server-$snap"
 	shouldRun=false
 	for repoFile in "$spigotRepository-remapped-mojang.jar" "$spigotRepository-remapped-obf.jar" "$mcSrvRepository-maps-mojang.txt" "$mcSrvRepository-maps-spigot.csrg"; do
 		if [ ! -f "$repoFile" ]; then
@@ -121,7 +121,7 @@ for mcVersion in "1.17" "1.18" "1.18.2" "1.19"; do # all java17 remapped version
 			exit 500
 		fi
 	else
-		echo "Repository for $mcVersion already exist. Skipping..."
+		echo "Repository for $mcVersion already exists. Skipping..."
 	fi
 done
-echo "Installation complete !"
+echo "Installation complete!"

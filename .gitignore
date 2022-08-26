@@ -10,7 +10,7 @@
 !/build.gradle
 !/settings.gradle
 !/gradle.properties
-!/install.sh
+!/setup_spigot.sh
 
 !/README.md
 

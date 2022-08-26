@@ -104,7 +104,7 @@ Examples will be using `./gradlew`, if you are on Windows you need to use `gradl
 
 On Windows, you must use [Git bash](https://gitforwindows.org/). On Linux and MacOS use the regular terminal.
 
-Run `./install.sh`. It will download spigot jars and JDKs, and use BuildTools appropriately.
+Run `./setup_spigot.sh`. It will download spigot jars and JDKs, and use BuildTools appropriately.
 
 #### Manually install spigot jars
 

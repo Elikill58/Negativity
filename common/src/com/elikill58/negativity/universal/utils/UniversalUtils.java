@@ -26,8 +26,10 @@ import java.security.NoSuchAlgorithmException;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
@@ -187,6 +189,13 @@ public class UniversalUtils {
 		return getContentFromURL(url, "");
 	}
 	
+	/**
+	 * Get content from URL. WARN: this run on the actual thread. Before calling this, use async.
+	 * 
+	 * @param urlName the URL
+	 * @param post post value, or empty if use get
+	 * @return result of empty
+	 */
 	public static Optional<String> getContentFromURL(String urlName, String post){
 		try {
 			return getContentFromURLWithException(urlName, post);
@@ -199,6 +208,14 @@ public class UniversalUtils {
 		return Optional.empty();
 	}
 	
+	/**
+	 * Get content from URL. WARN: this run on the actual thread. Before calling this, use async.
+	 * 
+	 * @param urlName the URL
+	 * @param post post value, or empty if use get
+	 * @return result of empty
+	 * @throws Exception if something gone wrong
+	 */
 	public static Optional<String> getContentFromURLWithException(String urlName, String post) throws Exception {
 		if(!HAVE_INTERNET)
 			return Optional.empty();
@@ -237,6 +254,72 @@ public class UniversalUtils {
             	Adapter.getAdapter().getLogger().warn("Cannot connect to " + urlName + " (Reason: " + e.getMessage() + ").");
 		}
 		return Optional.empty();
+	}
+	
+	/**
+	 * Get content from URL. WARN: this run on the actual thread. Before calling this, use async.
+	 * 
+	 * @param urlName the URL
+	 * @param post post value, or empty if use get
+	 * @return result of empty
+	 */
+	public static List<String> getListFromURL(String urlName){
+		try {
+			return getListFromURLWithException(urlName, "");
+        } catch (SSLException e) {
+        	Adapter.getAdapter().getLogger().warn("Failed to connect with the internet connection to check for update or send stats.");
+        } catch (Exception e) {
+        	Adapter.getAdapter().getLogger().info("An error occured while trying to make web request to: " + urlName);
+        	e.printStackTrace();
+		}
+		return Collections.emptyList();
+	}
+	
+	/**
+	 * Get content from URL. WARN: this run on the actual thread. Before calling this, use async.
+	 * 
+	 * @param urlName the URL
+	 * @param post post value, or empty if use get
+	 * @return result of empty
+	 * @throws Exception if something gone wrong
+	 */
+	public static List<String> getListFromURLWithException(String urlName, String post) throws Exception {
+		if(!HAVE_INTERNET)
+			return Collections.emptyList();
+		List<String> content = new ArrayList<>();
+		try {
+			Adapter ada = Adapter.getAdapter();
+			URL url = new URL(urlName);
+			HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+			connection.setUseCaches(true);
+			connection.setRequestProperty("User-Agent", "Negativity" + ada.getName() + "/" + ada.getVersion() + "(Linux x64) GoogleChrome");
+			connection.setDoOutput(true);
+			connection.setConnectTimeout(5000);
+			if(!post.equalsIgnoreCase("")) {
+				connection.setRequestMethod("POST");
+				OutputStreamWriter writer = new OutputStreamWriter(connection.getOutputStream());
+				writer.write(post);
+				writer.flush();
+				writer.close();
+			} else connection.setRequestMethod("GET");
+			BufferedReader br = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+			String input;
+			while ((input = br.readLine()) != null)
+				content.add(input);
+			br.close();
+        } catch (UnknownHostException | MalformedURLException e) {
+        	if(!HAVE_INTERNET)
+    			return Collections.emptyList();
+        	HAVE_INTERNET = false;
+        	Adapter.getAdapter().getLogger().info("Could not use the internet connection to check for update or send stats");
+        } catch (ConnectException e) {
+        	HAVE_INTERNET = false;
+        	if(containsChineseCharacters(e.getMessage())) {
+            	Adapter.getAdapter().getLogger().info("As chinese people, you cannot access to the website " + urlName + ".");
+        	} else
+            	Adapter.getAdapter().getLogger().warn("Cannot connect to " + urlName + " (Reason: " + e.getMessage() + ").");
+		}
+		return content;
 	}
 
 	public static Optional<String> getLatestVersionString() {

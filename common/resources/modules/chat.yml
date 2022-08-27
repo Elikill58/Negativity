@@ -45,3 +45,8 @@ checks:
   # Disable insults
   insult:
     active: true
+    lang: en
+  # Caps on message
+  caps:
+    active: true
+    percent: 80

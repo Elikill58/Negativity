@@ -62,9 +62,8 @@ public class AimBot extends Cheat {
 			final double absolutePitch = Math.abs(flying.pitch);
 			if (absolutePitch > maxP) {
 				if (Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "invalid", "pitch: "
-						+ String.format("%.2f", absolutePitch) + "/" + maxP)) {
-					if(isSetBack())
-						e.setCancelled(true);
+						+ String.format("%.2f", absolutePitch) + "/" + maxP) && isSetBack()) {
+					e.setCancelled(true);
 				}
 			}
 		}
@@ -95,9 +94,10 @@ public class AimBot extends Cheat {
 				final int streak = np.ints.get(getKey(), "ratio-streak", 0);
 
 				if (streak > 7) {
-					Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio", "absYaw: "
+					if(Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio", "absYaw: "
 							+ String.format("%.3f", absoluteDeltaYaw) + ", streak: " + streak + ", difference: "
-							+ String.format("%.3f", difference));
+							+ String.format("%.3f", difference)) && isSetBack())
+						e.setCancelled(true);
 
 					np.ints.set(getKey(), "ratio-streak", Math.abs(streak - 3));
 				}

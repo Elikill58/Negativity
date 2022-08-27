@@ -10,18 +10,18 @@ import com.elikill58.negativity.universal.report.ReportType;
 public class PlayerCheatAlertEvent extends PlayerEvent implements CancellableEvent {
 
 	private final Cheat c;
+	private final int relia, ping;
+	private final String proof, checkName;
+	private final CheatHover hover;
+	private final ReportType type;
 	private boolean cancel = false, hasRelia, alert;
-	private int relia, ping;
 	private long nbConsole, nbAlert;
-	private String proof;
-	private CheatHover hover;
-	private ReportType type;
 	
-	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, long nbAlert) {
-		this(type, p, c, reliability, hasRelia, ping, proof, hover, nbAlert, 1);
+	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String checkName, String proof, CheatHover hover, long nbAlert) {
+		this(type, p, c, reliability, hasRelia, ping, checkName, proof, hover, nbAlert, 1);
 	}
 	
-	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String proof, CheatHover hover, long nbAlert, long nbAlertConsole) {
+	public PlayerCheatAlertEvent(ReportType type, Player p, Cheat c, int reliability, boolean hasRelia, int ping, String checkName, String proof, CheatHover hover, long nbAlert, long nbAlertConsole) {
 		super(p);
 		this.type = type;
 		this.c = c;
@@ -29,6 +29,7 @@ public class PlayerCheatAlertEvent extends PlayerEvent implements CancellableEve
 		this.hasRelia = hasRelia;
 		this.alert = hasRelia;
 		this.ping = ping;
+		this.checkName = checkName;
 		this.proof = proof;
 		this.hover = hover;
 		this.nbAlert = nbAlert;
@@ -75,6 +76,10 @@ public class PlayerCheatAlertEvent extends PlayerEvent implements CancellableEve
 	
 	public String getProof() {
 		return proof;
+	}
+	
+	public String getCheckName() {
+		return checkName;
 	}
 	
 	public CheatHover getHover() {

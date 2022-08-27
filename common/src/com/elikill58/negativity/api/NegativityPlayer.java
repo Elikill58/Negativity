@@ -390,8 +390,9 @@ public class NegativityPlayer {
 		// Don't to 100% each times that there is more than 2 alerts, we made a summary, and a the nb of alert to upgrade it
 		int newRelia = UniversalUtils.parseInPorcent(UniversalUtils.sum(relia) + nb);
 		int newPing = UniversalUtils.sum(ping);
-		// we can ignore "proof" and "stats_send" because they have been already saved and they are NOT showed to player
-		return new PlayerCheatAlertEvent(type, p, c, newRelia, hasRelia, newPing, "", hoverProof, nb, nbConsole);
+		PlayerCheatAlertEvent first = list.get(0);
+		// tried to get check and proof for one, such as we can't show multiple
+		return new PlayerCheatAlertEvent(type, p, c, newRelia, hasRelia, newPing, first.getCheckName(), first.getProof(), hoverProof, nb, nbConsole);
 	}
 
 	/**

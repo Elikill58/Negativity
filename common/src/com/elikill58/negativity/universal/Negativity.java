@@ -150,8 +150,7 @@ public class Negativity {
 			if (!bypassEvent.isCancelled())
 				return false;
 		}
-		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(type, p, c, reliability,
-				c.getReliabilityAlert() < reliability, ping, proof, hover, amount);
+		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(type, p, c, reliability, c.getReliabilityAlert() < reliability, ping, checkName, proof, hover, amount);
 		EventManager.callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
@@ -259,7 +258,7 @@ public class Negativity {
 					ada.sendMessageRunnableHover(pl, Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
 									"%reliability%", reliability, "%nb%", alert.getNbAlert()),
 							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%", reliability, "%ping%", ping)
-							+ ChatColor.RESET + (hoverMsg == null ? "" : "\n\n" + hoverMsg.compile(npMod)), "/negativity " + p.getName());
+							+ ChatColor.GRAY + "Check: " + alert.getCheckName() + "\n" + ChatColor.RESET + (hoverMsg == null ? "" : "\n\n" + hoverMsg.compile(npMod)), "/negativity " + p.getName());
 					/*new ClickableText().addRunnableHoverEvent(
 							Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
 									"%reliability%", String.valueOf(reliability), "%nb%", String.valueOf(alert.getNbAlert())),

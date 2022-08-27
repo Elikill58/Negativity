@@ -42,26 +42,56 @@ public class BoundingBox {
 				f.apply(a.maxY, b.maxY), f.apply(a.maxZ, b.maxZ));
 	}
 
+	/**
+	 * Get minimum X
+	 * 
+	 * @return min X
+	 */
 	public double getMinX() {
 		return minX;
 	}
 
+	/**
+	 * Get minimum Y
+	 * 
+	 * @return min Y
+	 */
 	public double getMinY() {
 		return minY;
 	}
 
+	/**
+	 * Get minimum Z
+	 * 
+	 * @return min Z
+	 */
 	public double getMinZ() {
 		return minZ;
 	}
 
+	/**
+	 * Get maximum X
+	 * 
+	 * @return max X
+	 */
 	public double getMaxX() {
 		return maxX;
 	}
 
+	/**
+	 * Get maximum Y
+	 * 
+	 * @return max Y
+	 */
 	public double getMaxY() {
 		return maxY;
 	}
 
+	/**
+	 * Get maximum Z
+	 * 
+	 * @return max Z
+	 */
 	public double getMaxZ() {
 		return maxZ;
 	}
@@ -126,14 +156,29 @@ public class BoundingBox {
 		return list;
 	}
 
+	/**
+	 * Get minimum position as point
+	 * 
+	 * @return min point
+	 */
 	public Point getMin() {
 		return new Point(minX, minY, minZ);
 	}
 
+	/**
+	 * Get centered point (in X/Y/Z)
+	 * 
+	 * @return center mid point
+	 */
 	public Point getMid() {
 		return new Point((minX + maxX) / 2, (minY + maxY) / 2, (minZ + maxZ) / 2);
 	}
 
+	/**
+	 * Get maximum position as point
+	 * 
+	 * @return max point
+	 */
 	public Point getMax() {
 		return new Point(maxX, maxY, maxZ);
 	}
@@ -280,11 +325,48 @@ public class BoundingBox {
 	/**
 	 * Format double
 	 * 
-	 * @param d
-	 *            double to format
+	 * @param d double to format
 	 * @return formatted double for to string
 	 */
 	private String fd(double d) {
 		return String.format("%.3f", d);
+	}
+	
+	public double getWidth() {
+		return maxX - minX;
+	}
+	
+	public double getHeight() {
+		return maxY - minY;
+	}
+	
+	public double getDepth() {
+		return maxZ - minZ;
+	}
+	
+	/**
+	 * Create new bounding box with moved position<br>
+	 * This doesn't change the size of box, just move it
+	 * 
+	 * @param x move in X axis
+	 * @param y move in Y axis
+	 * @param z move in Z axis
+	 * @return new box
+	 */
+	public BoundingBox add(double x, double y, double z) {
+		return new BoundingBox(minX + x, minY + y, minZ + z, maxX + x, maxY + y, maxZ + z);
+	}
+	
+	/**
+	 * Create new bounding box with moved position<br>
+	 * This doesn't change the size of box, just move it
+	 * 
+	 * @param x move in X axis
+	 * @param y move in Y axis
+	 * @param z move in Z axis
+	 * @return new box
+	 */
+	public BoundingBox remove(double x, double y, double z) {
+		return new BoundingBox(minX - x, minY - y, minZ - z, maxX - x, maxY - y, maxZ - z);
 	}
 }

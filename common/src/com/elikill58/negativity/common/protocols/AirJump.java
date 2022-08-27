@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
@@ -75,10 +76,14 @@ public class AirJump extends Cheat {
 				locDownDown = locDown.clone().sub(0, 1, 0);
 		if (locDown.getBlockChecker(1).hasOther("AIR"))
 			return;
-
+		Vector oldVel = p.getVelocity();
+		// TODO soon don't use scheduler
 		Scheduler.getInstance().runDelayed(() -> {
 			if (locDownDown.getBlock().getType().getId().contains("STAIR")
 					|| locDown.getBlock().getType().getId().contains("STAIR"))
+				return;
+			Vector newVel = p.getVelocity();
+			if(newVel.length() > oldVel.length() + p.getWalkSpeed()) // check if just get velocity
 				return;
 			boolean mayCancel = false;
 

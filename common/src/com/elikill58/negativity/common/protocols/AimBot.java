@@ -46,29 +46,6 @@ public class AimBot extends Cheat {
 		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, CheatDescription.VERIF);
 	}
 
-	@Check(name = "invalid", conditions = CheckConditions.SURVIVAL, description = "Checks for an invalid rotation", ignoreCancel = true)
-	public void invalidP(PacketReceiveEvent e, NegativityPlayer np) {
-		if (!e.hasPlayer())
-			return;
-		PacketType type = e.getPacket().getPacketType();
-		if (type.isFlyingPacket()) {
-			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
-			if (!flying.hasLook)
-				return;
-			// easiest aim check ever?
-			// and yes, it seems stupid, but many clients do not follow this
-			// especially old scaffolds will fail this check
-			final double maxP = np.isOnLadders ? 91.11d : 90d;
-			final double absolutePitch = Math.abs(flying.pitch);
-			if (absolutePitch > maxP) {
-				if (Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "invalid", "pitch: "
-						+ String.format("%.2f", absolutePitch) + "/" + maxP) && isSetBack()) {
-					e.setCancelled(true);
-				}
-			}
-		}
-	}
-
 	// many killauras use a constant pitch in order to bypass the GDC check
 	// this check will fight against that and fail these killauras
 	@Check(name = "ratio", conditions = CheckConditions.SURVIVAL, description = "Checks for invalid rotation ratios", ignoreCancel = true)

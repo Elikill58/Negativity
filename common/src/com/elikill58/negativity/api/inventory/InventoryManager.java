@@ -31,6 +31,7 @@ import com.elikill58.negativity.common.inventories.hook.players.BanInventory;
 import com.elikill58.negativity.common.inventories.hook.players.ForgeModsInventory;
 import com.elikill58.negativity.common.inventories.hook.players.GlobalPlayerInventory;
 import com.elikill58.negativity.common.inventories.hook.players.KickInventory;
+import com.elikill58.negativity.common.inventories.hook.players.SeeProofInventory;
 import com.elikill58.negativity.common.inventories.hook.players.SeeReportInventory;
 import com.elikill58.negativity.common.inventories.hook.players.SeeWarnInventory;
 import com.elikill58.negativity.common.inventories.hook.players.WarnInventory;
@@ -67,6 +68,7 @@ public class InventoryManager implements Listeners {
 		new WarnManagerInventory();
 		new WarnProcessorManagerInventory();
 		new SeeWarnInventory();
+		new SeeProofInventory();
 		AbstractInventory.INVENTORIES.forEach(AbstractInventory::load);
 	}
 	

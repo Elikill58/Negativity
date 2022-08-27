@@ -104,6 +104,7 @@ public abstract class AbstractInventory<T extends NegativityHolder> {
 		FORGE_MODS,
 		REPORT,
 		SEE_REPORT,
+		SEE_PROOF,
 		WARN_SEE,
 		WARN,
 		WARN_MANAGER,

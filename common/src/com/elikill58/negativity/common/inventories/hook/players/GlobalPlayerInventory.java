@@ -63,7 +63,8 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 
 		inv.set(8, Inventory.getCloseItem(p));
 		inv.set(11, ItemBuilder.Builder(Materials.BONE).displayName(ChatColor.GRAY + "Clear clicks").build());
-		
+
+		inv.set(15, ItemBuilder.Builder(Materials.BOOK).displayName(getMessage(p, "inventory.main.see_proofs", "%name%", cible.getName())).build());
 		inv.set(16, ItemBuilder.Builder(Materials.PAPER).displayName(getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
 		inv.set(17, ItemBuilder.Builder(Materials.TNT).displayName(getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())).build());
 				
@@ -169,6 +170,8 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 			InventoryManager.open(NegativityInventory.ALERT, p, cible);
 		} else if(m.equals(Materials.GRASS)) {
 			InventoryManager.open(NegativityInventory.FORGE_MODS, p, cible);
+		} else if(m.equals(Materials.BOOK)) {
+			InventoryManager.open(NegativityInventory.SEE_PROOF, p, cible);
 		} else if(m.equals(Materials.APPLE)) {
 			InventoryManager.open(NegativityInventory.SEE_REPORT, p, cible);
 		} else if(m.equals(Materials.BEACON)) {

@@ -67,7 +67,7 @@ public class AirJump extends Cheat {
 
 	@Check(name = "going-down", description = "Going down", conditions = { CheckConditions.SURVIVAL,
 			CheckConditions.NO_FLY, CheckConditions.NO_ELYTRA, CheckConditions.NO_INSIDE_VEHICLE,
-			CheckConditions.NO_USE_TRIDENT })
+			CheckConditions.NO_BLOCK_MID_AROUND,CheckConditions.NO_USE_TRIDENT })
 	public void onMoveGoingDown(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		if (p.hasPotionEffect(PotionEffectType.JUMP))

@@ -30,6 +30,7 @@ import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.api.utils.Utils;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
@@ -222,6 +223,15 @@ public class Fly extends Cheat implements Listeners {
 				isOnWater = blockUnder.getType().getId().contains("WATER");
 
 		double d = to.getY() - from.getY();
+		if(d == 0) {
+			for(Block b : p.getBoundingBox().add(0, 0.9, 0).getBlocks(p.getWorld()).getBlocks()) {
+				if(b.getType().isSolid()) {
+					np.listDoubles.remove(FLY, "fly-move");
+					return;
+				} else
+					Adapter.getAdapter().debug("Not solid: " + b.getType().getId());
+			}
+		}
 
 		List<Double> flyMoveAmount = np.listDoubles.get(FLY, "fly-move", new ArrayList<>());
 		boolean onGround = p.isOnGround(), wasOnGround = np.booleans.get(FLY, "fly-wasOnGround", true);

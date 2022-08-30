@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
@@ -20,7 +21,6 @@ import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.api.utils.LocationUtils.Direction;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -212,7 +212,7 @@ public class AimBot extends Cheat {
 		DataCounter<Double> gcdCounter = data.getData(GCD);
 		DataCounter<Double> pitchCounter = data.getData(PITCHS);
 		DataCounter<Integer> invalidChangeCounter = data.getData(INVALID_CHANGE);
-		return Utils.coloredMessage("&7Average GCD: &e" + String.format("%.2f", gcdCounter.getAverage())
+		return ChatColor.color("&7Average GCD: &e" + String.format("%.2f", gcdCounter.getAverage())
 				+ "&7. Pitchs: max/min/ave &e" + String.format("%.2f", pitchCounter.getMax()) + "&7/&e"
 				+ String.format("%.2f", pitchCounter.getMin()) + "&7/&e"
 				+ String.format("%.2f", pitchCounter.getAverage()) + "&7. "

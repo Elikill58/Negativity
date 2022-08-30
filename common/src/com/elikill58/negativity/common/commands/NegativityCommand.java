@@ -25,7 +25,6 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.protocols.Check;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.Adapter;
@@ -122,7 +121,7 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 			Scheduler.getInstance().runDelayed(() -> {
 				//Verificator verif = VerificationManager.getVerificationsFrom(target.getUniqueId(), askerUUID).get();
 				verif.generateMessage();
-				verif.getMessages().forEach((s) -> sender.sendMessage(Utils.coloredMessage("&a[&2Verif&a] " + s)));
+				verif.getMessages().forEach((s) -> sender.sendMessage(ChatColor.color("&a[&2Verif&a] " + s)));
 				verif.save();
 				VerificationManager.remove(askerUUID, target.getUniqueId());
 			}, time * 20);

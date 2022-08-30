@@ -33,28 +33,59 @@ public enum ChatColor {
 		this.name = name;
 	}
 
+	/**
+	 * Get the color code like "&6"
+	 * 
+	 * @return the color code
+	 */
 	public String getName() {
 		return name;
 	}
 
 	@Override
 	public String toString() {
-		return getName().replace('&', '§');
+		return color(getName());
 	}
 
-	private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)§[0-9A-FK-OR]");
+	public static final char COLOR_CHAR = '§';
+	private static final Pattern STRIP_COLOR_PATTERN = Pattern.compile("(?i)" + COLOR_CHAR + "[0-9A-FK-OR]");
 
-	public static String translateAlternateColorCodes(char altColorChar, String textToTranslate) {
-		char[] b = textToTranslate.toCharArray();
+	/**
+	 * Color the given string with all "&X"
+	 * 
+	 * @param textToColor the text to color
+	 * @return the colored text
+	 */
+	public static String color(String textToColor) {
+		return translateAlternateColorCodes('&', textToColor);
+	}
+
+	/**
+	 * Color the given string with given color char
+	 * 
+	 * @param altColorChar the color char. Generally '&'
+	 * @param textToColor the text to color
+	 * @return the colored text
+	 */
+	public static String translateAlternateColorCodes(char altColorChar, String textToColor) {
+		if(textToColor == null)
+			return null;
+		char[] b = textToColor.toCharArray();
 		for (int i = 0; i < b.length - 1; i++) {
 			if ((b[i] == altColorChar) && ("0123456789AaBbCcDdEeFfKkLlMmNnOoRr".indexOf(b[(i + 1)]) > -1)) {
-				b[i] = '§';
+				b[i] = COLOR_CHAR;
 				b[(i + 1)] = Character.toLowerCase(b[(i + 1)]);
 			}
 		}
 		return new String(b);
 	}
 
+	/**
+	 * Remove all colors from the given string
+	 * 
+	 * @param input colored string
+	 * @return same text without color
+	 */
 	public static String stripColor(String input) {
 		if (input == null)
 			return null;

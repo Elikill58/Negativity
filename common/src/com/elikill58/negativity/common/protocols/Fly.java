@@ -29,7 +29,6 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
@@ -67,7 +66,7 @@ public class Fly extends Cheat implements Listeners {
 
 		Location from = e.getFrom(), to = e.getTo();
 
-		boolean mayCancel = false, inBoat = Utils.isInBoat(p);
+		boolean mayCancel = false, inBoat = p.isInBoat();
 		double y = from.getY() - to.getY();
 		Location loc = p.getLocation().clone(), locUnder = p.getLocation().clone().sub(0, 1, 0),
 				locUnderUnder = p.getLocation().clone().sub(0, 2, 0);

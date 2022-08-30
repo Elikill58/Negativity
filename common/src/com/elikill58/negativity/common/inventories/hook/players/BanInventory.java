@@ -2,13 +2,13 @@ package com.elikill58.negativity.common.inventories.hook.players;
 
 import java.util.List;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.common.inventories.holders.players.BanHolder;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Sanction;
@@ -40,7 +40,7 @@ public class BanInventory extends AbstractInventory<BanHolder> {
 				p.closeInventory();
 				OfflinePlayer cible = nh.getCible();
 				Adapter.getAdapter().runConsoleCommand(ban.getCommand().replaceAll("%name%", cible.getName()));
-				p.sendMessage(Utils.coloredMessage(ban.getMessage().replaceAll("%name%", cible.getName()).replaceAll("%reason%", ban.getName())));
+				p.sendMessage(ChatColor.color(ban.getMessage().replaceAll("%name%", cible.getName()).replaceAll("%reason%", ban.getName())));
 			}
 		});
 	}

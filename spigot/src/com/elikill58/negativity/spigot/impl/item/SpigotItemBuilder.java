@@ -17,7 +17,6 @@ import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemFlag;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.universal.Version;
 
@@ -64,7 +63,7 @@ public class SpigotItemBuilder extends ItemBuilder {
 
 	@Override
     public ItemBuilder displayName(@Nullable String displayName) {
-        this.itemMeta.setDisplayName(ChatColor.RESET + Utils.coloredMessage(displayName));
+        this.itemMeta.setDisplayName(ChatColor.WHITE + ChatColor.color(displayName));
         return this;
     }
 
@@ -125,7 +124,7 @@ public class SpigotItemBuilder extends ItemBuilder {
     	for(String s : lore)
     		for(String temp : s.split("\\n"))
         		for(String tt : temp.split("/n"))
-        			list.add(Utils.coloredMessage(tt));
+        			list.add(ChatColor.color(tt));
         this.itemMeta.setLore(list);
         return this;
     }

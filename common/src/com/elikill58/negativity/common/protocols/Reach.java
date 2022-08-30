@@ -7,6 +7,7 @@ import java.util.List;
 
 import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
@@ -18,7 +19,6 @@ import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -100,11 +100,11 @@ public class Reach extends Cheat {
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		DataCounter<Double> counters = data.getData(HIT_DISTANCE);
-		return Utils.coloredMessage("Hit distance (Sum/Min/Max) : " + getColoredDistance(counters.getAverage()) + "/"
+		return ChatColor.color("Hit distance (Sum/Min/Max) : " + getColoredDistance(counters.getAverage()) + "/"
 				+ getColoredDistance(counters.getMin()) + "/" + getColoredDistance(counters.getMax()));
 	}
 
 	private String getColoredDistance(double dis) {
-		return Utils.coloredMessage((dis > 3 ? (dis > 4 ? "&c" : "&6") : "&a") + String.format("%.3f", dis) + "&r");
+		return (dis > 3 ? (dis > 4 ? "&c" : "&6") : "&a") + String.format("%.3f", dis) + "&r";
 	}
 }

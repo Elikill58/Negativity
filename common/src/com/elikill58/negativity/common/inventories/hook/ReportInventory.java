@@ -3,12 +3,12 @@ package com.elikill58.negativity.common.inventories.hook;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.common.commands.ReportCommand;
 import com.elikill58.negativity.common.inventories.holders.ReportHolder;
@@ -48,7 +48,7 @@ public class ReportInventory extends AbstractInventory<ReportHolder> {
 			Player cible = nh.getCible();
 			ReportCommand.report(p, cible, report.getName());
 			if(!report.getMessage().isEmpty())
-				p.sendMessage(Utils.coloredMessage(report.getMessage().replaceAll("%name%", cible.getName()).replaceAll("%reason%", report.getName())));
+				p.sendMessage(ChatColor.color(report.getMessage().replaceAll("%name%", cible.getName()).replaceAll("%reason%", report.getName())));
 		});
 	}
 }

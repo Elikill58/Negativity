@@ -15,6 +15,7 @@ import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.api.registry.Registry;
 import org.spongepowered.api.registry.RegistryTypes;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.item.Enchantment;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemFlag;
@@ -50,7 +51,7 @@ public class SpongeItemBuilder extends ItemBuilder {
 	
 	@Override
 	public ItemBuilder displayName(String displayName) {
-		item.offer(Keys.CUSTOM_NAME, LegacyComponentSerializer.legacyAmpersand().deserialize(displayName));
+		item.offer(Keys.CUSTOM_NAME, LegacyComponentSerializer.legacyAmpersand().deserialize(ChatColor.WHITE + displayName));
 		return this;
 	}
 	

@@ -3,12 +3,12 @@ package com.elikill58.negativity.common.inventories.hook.players;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.common.inventories.holders.players.KickHolder;
 import com.elikill58.negativity.universal.Adapter;
@@ -46,7 +46,7 @@ public class KickInventory extends AbstractInventory<KickHolder> {
 			p.closeInventory();
 			Player cible = nh.getCible();
 			Adapter.getAdapter().runConsoleCommand(kick.getCommand().replaceAll("%name%", cible.getName()));
-			p.sendMessage(Utils.coloredMessage(kick.getMessage().replaceAll("%name%", cible.getName()).replaceAll("%reason%", kick.getName())));
+			p.sendMessage(ChatColor.color(kick.getMessage().replaceAll("%name%", cible.getName()).replaceAll("%reason%", kick.getName())));
 		});
 	}
 }

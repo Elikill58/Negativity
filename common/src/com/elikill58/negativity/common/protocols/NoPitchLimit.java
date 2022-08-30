@@ -1,11 +1,11 @@
 package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -40,7 +40,7 @@ public class NoPitchLimit extends Cheat {
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		DataCounter<Float> counter = data.getData(PITCH);
-		return Utils.coloredMessage("&6Pitch &7Min: " + String.format("%.2f", counter.getMin()) + "&7, Max: "
+		return ChatColor.color("&6Pitch &7Min: " + String.format("%.2f", counter.getMin()) + "&7, Max: "
 				+ String.format("%.2f", counter.getMax()) + " &8(Normal when -90 < pitch < 90)");
 	}
 }

@@ -1,6 +1,7 @@
 package com.elikill58.negativity.common.protocols;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.Materials;
@@ -8,7 +9,6 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.protocols.Check;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -67,7 +67,7 @@ public class AutoClick extends Cheat {
 		counter.add(currentClick);
 		if (counter.getMax() == 0)
 			return null;
-		return Utils.coloredMessage("&aCurrent&7/&cMaximum&7/&6Average&7: &a" + currentClick + "&7/&c"
+		return ChatColor.color("&aCurrent&7/&cMaximum&7/&6Average&7: &a" + currentClick + "&7/&c"
 				+ counter.getMax() + "&7/&6" + counter.getAverage() + " &7clicks");
 	}
 }

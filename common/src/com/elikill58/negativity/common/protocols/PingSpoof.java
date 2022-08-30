@@ -3,6 +3,7 @@ package com.elikill58.negativity.common.protocols;
 import static com.elikill58.negativity.universal.detections.keys.CheatKeys.PINGSPOOF;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketEvent;
@@ -14,7 +15,6 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.protocols.Check;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
@@ -58,6 +58,6 @@ public class PingSpoof extends Cheat implements Listeners {
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
 		DataCounter<Long> counters = data.getData(PLAYER_PING);
-		return Utils.coloredMessage("Latency (Sum/Min/Max) : " + counters.getAverage() + "/" + counters.getMin() + "/" + counters.getMax());
+		return ChatColor.color("Latency (Sum/Min/Max) : " + counters.getAverage() + "/" + counters.getMin() + "/" + counters.getMax());
 	}
 }

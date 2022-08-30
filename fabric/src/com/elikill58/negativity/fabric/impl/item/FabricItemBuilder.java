@@ -40,7 +40,7 @@ public class FabricItemBuilder extends ItemBuilder {
 
 	@Override
 	public ItemBuilder displayName(String displayName) {
-		item.setCustomName(Text.of(ChatColor.RESET + displayName));
+		item.setCustomName(Text.of(ChatColor.WHITE + displayName));
 		return this;
 	}
 

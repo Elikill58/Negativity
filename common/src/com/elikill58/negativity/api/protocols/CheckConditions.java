@@ -6,7 +6,6 @@ import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.utils.LocationUtils;
-import com.elikill58.negativity.api.utils.Utils;
 
 public enum CheckConditions {
 
@@ -39,7 +38,7 @@ public enum CheckConditions {
 	NO_USE_SLIME("Using slime", (p) -> !NegativityPlayer.getNegativityPlayer(p).isUsingSlimeBlock),
 	NO_USE_ELEVATOR("Using elevator", (p) -> !LocationUtils.isUsingElevator(p), true),
 	NO_IRON_TARGET("Target by iron golem", (p) -> !NegativityPlayer.getNegativityPlayer(p).isTargetByIronGolem(), true),
-	NO_THORNS("Thorns", p -> !Utils.hasThorns(p), true),
+	NO_THORNS("Thorns", p -> !p.hasThorns(), true),
 	NO_INSIDE_VEHICLE("Not inside vehicle", (p) -> !p.isInsideVehicle()),
 	NO_SPRINT("Not sprinting", (p) -> !p.isSprinting()),
 	NO_SNEAK("Not sneaking", (p) -> !p.isSneaking()),

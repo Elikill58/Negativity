@@ -5,7 +5,7 @@ import java.util.Locale;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
-import com.elikill58.negativity.api.utils.Utils;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.report.ReportType;
 
@@ -22,7 +22,7 @@ public class AltAccountBan {
 	public AltAccountBan(int altNb, Configuration config) {
 		this.altNb = altNb;
 		this.action = BanAltAction.valueOf(config.getString("action").toUpperCase(Locale.ROOT));
-		this.alertMessage = Utils.coloredMessage(config.getString("message"));
+		this.alertMessage = ChatColor.color(config.getString("message"));
 		this.banTime = config.getLong("time", -1);
 		this.banDef = config.getBoolean("def", banTime == -1);
 		Configuration condConf = config.getSection("condition");

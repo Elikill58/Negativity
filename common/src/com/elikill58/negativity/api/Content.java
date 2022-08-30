@@ -23,8 +23,7 @@ public class Content<T> {
 	}
 	
 	/**
-	 * Edit the value :
-	 * type -> valueName:value
+	 * Edit the value for the specified type
 	 * 
 	 * @param type where the value will be
 	 * @param valueName the value key

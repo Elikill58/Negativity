@@ -46,6 +46,8 @@ public class Token implements java.io.Serializable {
 	 * on by the compiler or interpreter. This attribute value is often different
 	 * from the image. Any subclass of Token that actually wants to return a
 	 * non-null value can override this method as appropriate.
+	 * 
+	 * @return the value or null
 	 */
 	public Object getValue() {
 		return null;
@@ -59,6 +61,9 @@ public class Token implements java.io.Serializable {
 
 	/**
 	 * Constructs a new token for the specified Image and Kind.
+	 * 
+	 * @param kind the kind
+	 * @param image the image of token
 	 */
 	public Token(int kind, String image) {
 		this.kind = kind;
@@ -67,6 +72,8 @@ public class Token implements java.io.Serializable {
 
 	/**
 	 * Returns the image.
+	 * 
+	 * @return the image
 	 */
 	@Override
 	public String toString() {
@@ -84,12 +91,14 @@ public class Token implements java.io.Serializable {
 	 *
 	 * to the following switch statement. Then you can cast matchedToken variable to
 	 * the appropriate type and use sit in your lexical actions.
+	 * 
+	 * @param ofKind the kind
+	 * @param image the image of token
+	 * 
+	 * @return new token object
 	 */
 	public static Token newToken(int ofKind, String image) {
-		switch (ofKind) {
-		default:
-			return new Token(ofKind, image);
-		}
+		return new Token(ofKind, image);
 	}
 
 }

@@ -42,6 +42,7 @@ public class BanUtils {
 	 * @param cheat the cheat that can ban player
 	 * @param np the concerned player
 	 * @param relia the reliability of the alert
+	 * @param oldWarnAmount old warn of warn before adding some of them
 	 * @return the result of the ban
 	 */
 	public static BanResult shouldBan(Cheat cheat, NegativityPlayer np, int relia, long oldWarnAmount) {
@@ -74,6 +75,7 @@ public class BanUtils {
 	 * @param player the player to ban if need
 	 * @param cheat the cheat concerned by the try of need
 	 * @param reliability the reliability of the cheat
+	 * @param oldWarnAmount old warn of warn before adding some of them
 	 * @return see {@link BanManager#executeBan}, null if banning was not needed
 	 */
 	public static BanResult banIfNeeded(NegativityPlayer player, Cheat cheat, int reliability, long oldWarnAmount) {

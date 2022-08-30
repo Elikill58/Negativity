@@ -28,6 +28,7 @@ public interface BanProcessorProvider {
 	 * Creates a BanProcessor, or returns {@code null} if it can't be used on the current system
 	 * (missing plugin dependency, disabled in configuration, etc...)
 	 *
+	 * @param adapter the actual adapter used to create processor
 	 * @return the BanProcessor, or {@code null} if the processor can't be used on the current system
 	 */
 	@Nullable

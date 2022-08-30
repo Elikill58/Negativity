@@ -276,9 +276,9 @@ public interface Player extends OfflinePlayer {
 	
 	/**
 	 * Send plugin message :
-	 * bungee > spigot
+	 * bungee to spigot
 	 * OR
-	 * spigot > bungee
+	 * spigot to bungee
 	 * On the specified channel
 	 * 
 	 * @param channelId the channel ID
@@ -294,9 +294,9 @@ public interface Player extends OfflinePlayer {
 	
 	/**
 	 * Send plugin message :
-	 * bungee > spigot
+	 * bungee to spigot
 	 * OR
-	 * spigot > bungee
+	 * spigot to bungee
 	 * On the specified channel
 	 * 
 	 * @param channelId the channel ID

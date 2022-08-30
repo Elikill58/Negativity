@@ -14,7 +14,7 @@ import java.util.Map;
 /**
  * A JSON object. Key value pairs are unordered. JSONObject supports java.util.Map interface.
  * 
- * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @author FangYidong
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAware{
@@ -30,7 +30,7 @@ public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAwa
 	 * Allows creation of a JSONObject from a Map. After that, both the
 	 * generated JSONObject and the Map can be modified independently.
 	 * 
-	 * @param map
+	 * @param map all content of json object
 	 */
 	public JSONObject(Map map) {
 		super(map);
@@ -43,8 +43,10 @@ public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAwa
      * 
      * @see com.elikill58.negativity.api.json.JSONValue#writeJSONString(Object, Writer)
      * 
-     * @param map
-     * @param out
+     * @param map all content of json
+     * @param out where json should be write
+     * 
+     * @throws IOException if can't write content into writer
      */
 	public static void writeJSONString(Map map, Writer out) throws IOException {
 		if(map == null){
@@ -82,7 +84,7 @@ public class JSONObject extends HashMap implements Map, JSONAware, JSONStreamAwa
 	 * 
 	 * @see com.elikill58.negativity.api.json.JSONValue#toJSONString(Object)
 	 * 
-	 * @param map
+	 * @param map all content of json
 	 * @return JSON text, or "null" if map is null.
 	 */
 	public static String toJSONString(Map map){

@@ -260,7 +260,6 @@ public class UniversalUtils {
 	 * Get content from URL. WARN: this run on the actual thread. Before calling this, use async.
 	 * 
 	 * @param urlName the URL
-	 * @param post post value, or empty if use get
 	 * @return result of empty
 	 */
 	public static List<String> getListFromURL(String urlName){

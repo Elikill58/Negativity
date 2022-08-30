@@ -93,6 +93,7 @@ public enum Version {
 	/**
 	 * The list of all protocol number in this version
 	 * 
+	 * @param protocolId ID of protocol used
 	 * @return list of all version number
 	 */
 	public boolean hasProtocolNumber(int protocolId) {

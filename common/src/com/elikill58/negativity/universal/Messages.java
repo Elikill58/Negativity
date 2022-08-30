@@ -85,6 +85,7 @@ public class Messages {
 	 * @param sender the sender which will receive the message
 	 * @param dir the message key
 	 * @param placeholders all messages placeholders
+	 * @return list of all messages (list with only "dir" if nothing found)
 	 */
 	public static List<String> getMessageList(CommandSender sender, String dir, Object... placeholders) {
 		String lang = (sender instanceof Player ? TranslatedMessages.getLang(((Player) sender).getUniqueId()) : TranslatedMessages.DEFAULT_LANG);

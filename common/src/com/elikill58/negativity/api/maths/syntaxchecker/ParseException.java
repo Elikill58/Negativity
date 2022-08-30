@@ -23,6 +23,10 @@ public class ParseException extends Exception {
 	 * generated parser. Calling this constructor generates a new object of this
 	 * type with the fields "currentToken", "expectedTokenSequences", and
 	 * "tokenImage" set.
+	 * 
+	 * @param currentTokenVal the actual token value
+	 * @param expectedTokenSequencesVal all expected values
+	 * @param tokenImageVal all token images values
 	 */
 	public ParseException(Token currentTokenVal, int[][] expectedTokenSequencesVal, String[] tokenImageVal) {
 		super(initialise(currentTokenVal, expectedTokenSequencesVal, tokenImageVal));
@@ -36,7 +40,6 @@ public class ParseException extends Exception {
 	 * contain relevant information. The JavaCC generated code does not use these
 	 * constructors.
 	 */
-
 	public ParseException() {
 		super();
 	}

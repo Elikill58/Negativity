@@ -3,7 +3,7 @@ package com.elikill58.negativity.api.json.parser;
 /**
  * ParseException explains why and where the error occurs in source JSON text.
  * 
- * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @author FangYidong
  *
  */
 public class ParseException extends Exception {

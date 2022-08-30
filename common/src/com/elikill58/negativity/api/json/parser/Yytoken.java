@@ -5,7 +5,7 @@
 package com.elikill58.negativity.api.json.parser;
 
 /**
- * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @author FangYidong
  */
 public class Yytoken {
 	static final int TYPE_VALUE=0;//JSON primitive value: string,number,boolean,null

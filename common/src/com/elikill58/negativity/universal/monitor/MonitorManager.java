@@ -102,7 +102,7 @@ public abstract class MonitorManager {
 	}
 	
 	/**
-	 * Get header of result. Used for raw & cleaned result.<br>
+	 * Get header of result. Used for raw and cleaned result.<br>
 	 * Should include description of the next result
 	 * 
 	 * @return the footer, or empty list
@@ -134,7 +134,7 @@ public abstract class MonitorManager {
 	public abstract HashMap<IDetectionKey<?>, List<String>> getResultPerCheat();
 	
 	/**
-	 * Get footer of result. Used for raw & cleaned result.<br>
+	 * Get footer of result. Used for raw and cleaned result.<br>
 	 * Should include conclusion and things like that.
 	 * 
 	 * @return the footer, or empty list

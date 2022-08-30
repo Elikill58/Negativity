@@ -39,13 +39,6 @@ public class ServerCrasher extends Special implements Listeners {
 	public void onPacketClear(PacketReceiveEvent e) {
 		if(!isActive() || !e.hasPlayer())
 			return;
-		/*try {
-			Adapter.getAdapter().getLogger().info("> " + e.getPacket().getPacketType() + " : " + e.getPacket().getPacketName());
-			//if(!e.getPacket().getPacketType().name().contains("CHAT") && !e.getPacket().getPacketType().isFlyingPacket()) // prevent infinite loop
-				//p.sendMessage("> " + e.getPacket().getPacketType() + " ! " + e.getPacket().getPacketName());
-		} catch (Exception exc) {
-			exc.printStackTrace();
-		}*/
 		AbstractPacket packet = e.getPacket();
 		if(packet.getPacketType() != PacketType.Client.POSITION)
 			return;

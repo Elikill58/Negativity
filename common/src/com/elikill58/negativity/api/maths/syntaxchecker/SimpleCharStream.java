@@ -6,7 +6,6 @@ package com.elikill58.negativity.api.maths.syntaxchecker;
  * An implementation of interface CharStream, where the stream is assumed to
  * contain only ASCII characters (without unicode processing).
  */
-
 public class SimpleCharStream {
 	/** Whether parser is static. */
 	static final boolean staticFlag = false;
@@ -115,7 +114,6 @@ public class SimpleCharStream {
 		}
 	}
 
-	/** Start. */
 	public char BeginToken() throws java.io.IOException {
 		tokenBegin = -1;
 		char c = readChar();
@@ -157,7 +155,6 @@ public class SimpleCharStream {
 		bufcolumn[bufpos] = column;
 	}
 
-	/** Read a character. */
 	public char readChar() throws java.io.IOException {
 		if (inBuf > 0) {
 			--inBuf;
@@ -192,40 +189,52 @@ public class SimpleCharStream {
 	 * @deprecated
 	 * @see #getEndLine
 	 */
-
 	public int getLine() {
 		return bufline[bufpos];
 	}
 
-	/** Get token end column number. */
+	/**
+	 * Get token end column number
+	 * 
+	 * @return end column number
+	 */
 	public int getEndColumn() {
 		return bufcolumn[bufpos];
 	}
 
-	/** Get token end line number. */
+	/**
+	 * Get token end line number
+	 * 
+	 * @return end line number
+	 */
 	public int getEndLine() {
 		return bufline[bufpos];
 	}
 
-	/** Get token beginning column number. */
+	/**
+	 * Get token beginning column number
+	 * 
+	 * @return begin column number
+	 */
 	public int getBeginColumn() {
 		return bufcolumn[tokenBegin];
 	}
-
-	/** Get token beginning line number. */
+	
+	/**
+	 * Get token beginning line number
+	 * 
+	 * @return begin line number
+	 */
 	public int getBeginLine() {
 		return bufline[tokenBegin];
 	}
 
-	/** Backup a number of characters. */
 	public void backup(int amount) {
-
 		inBuf += amount;
 		if ((bufpos -= amount) < 0)
 			bufpos += bufsize;
 	}
 
-	/** Constructor. */
 	public SimpleCharStream(java.io.Reader dstream, int startline, int startcolumn, int buffersize) {
 		inputStream = dstream;
 		line = startline;
@@ -237,20 +246,22 @@ public class SimpleCharStream {
 		bufcolumn = new int[buffersize];
 	}
 
-	/** Constructor. */
 	public SimpleCharStream(java.io.InputStream dstream, String encoding, int startline, int startcolumn,
 			int buffersize) throws java.io.UnsupportedEncodingException {
 		this(encoding == null ? new java.io.InputStreamReader(dstream)
 				: new java.io.InputStreamReader(dstream, encoding), startline, startcolumn, buffersize);
 	}
 
-	/** Constructor. */
 	public SimpleCharStream(java.io.InputStream dstream, String encoding, int startline, int startcolumn)
 			throws java.io.UnsupportedEncodingException {
 		this(dstream, encoding, startline, startcolumn, 4096);
 	}
 
-	/** Get token literal value. */
+	/**
+	 * Get token literal value.
+	 * 
+	 * @return literal token
+	 */
 	public String GetImage() {
 		if (bufpos >= tokenBegin)
 			return new String(buffer, tokenBegin, bufpos - tokenBegin + 1);

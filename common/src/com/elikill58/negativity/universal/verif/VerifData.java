@@ -15,6 +15,7 @@ public class VerifData {
 	/**
 	 * Get a data counter (or create a new one) of the specified datatype
 	 * 
+	 * @param <T> type of what is counted
 	 * @param type the type of the data counter
 	 * @return the data counter
 	 */

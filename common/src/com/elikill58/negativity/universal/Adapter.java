@@ -103,6 +103,8 @@ public abstract class Adapter {
 	
 	/**
 	 * The Minecraft version the server is running
+	 * 
+	 * @return the version of the server
 	 */
 	public abstract Version getServerVersion();
 	
@@ -304,6 +306,7 @@ public abstract class Adapter {
 	 * Get another plugin
 	 * 
 	 * @param name the plugin name (used by the platform)
+	 * @return the external plugin or null if not found
 	 */
 	public abstract ExternalPlugin getPlugin(String name);
 	

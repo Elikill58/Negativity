@@ -69,6 +69,8 @@ import com.elikill58.negativity.api.maths.parsertokens.Token;
 */
 /**
  * Package level class for handling function parameters.
+ * 
+ * @author <b>Mariusz Gromada</b><br>On github: http://github.com/mariuszgromada/MathParser.org-mXparser
  */
 class FunctionParameter {
 	List<Token> tokens;

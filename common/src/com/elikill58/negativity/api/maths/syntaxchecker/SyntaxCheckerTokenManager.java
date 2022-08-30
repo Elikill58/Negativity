@@ -6,7 +6,6 @@ package com.elikill58.negativity.api.maths.syntaxchecker;
 @SuppressWarnings("unused")
 public class SyntaxCheckerTokenManager implements SyntaxCheckerConstants {
 
-	/** Set debug output. */
 	public void setDebugStream(java.io.PrintStream ds) {
 		
 	}
@@ -1787,7 +1786,6 @@ public class SyntaxCheckerTokenManager implements SyntaxCheckerConstants {
 	int jjmatchedPos;
 	int jjmatchedKind;
 
-	/** Get the next Token. */
 	public Token getNextToken() {
 		Token matchedToken;
 		int curPos = 0;
@@ -1874,7 +1872,6 @@ public class SyntaxCheckerTokenManager implements SyntaxCheckerConstants {
 		} while (start++ != end);
 	}
 
-	/** Constructor. */
 	public SyntaxCheckerTokenManager(SimpleCharStream stream) {
 
 		if (SimpleCharStream.staticFlag)

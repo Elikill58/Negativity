@@ -84,6 +84,8 @@ public class Report {
 	
 	/**
 	 * Convert this report into a JSON string
+	 * 
+	 * @return the json string of report
 	 */
 	@SuppressWarnings("unchecked")
 	public String toJsonString() {

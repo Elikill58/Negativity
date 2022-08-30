@@ -82,7 +82,7 @@ public class EntityRayBuilder extends AbstractRayBuilder<EntityRayBuilder, Entit
 	/**
 	 * Change which entity are selected
 	 * 
-	 * @param b true if we are only looking for players
+	 * @param searched the searched entity
 	 * @return this builder
 	 */
 	public EntityRayBuilder searched(Entity searched) {

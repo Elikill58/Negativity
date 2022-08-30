@@ -34,6 +34,7 @@ public class WarnResult {
 	
 	public enum WarnResultType {
 
+		NOT_WARNED(false, "Not warned"),
 		TOO_MANY(false, "Already unbanned"),
 		BYPASS(false, "Bypass"),
 		DONE(true, "Done"),

@@ -62,7 +62,7 @@ public class NoFallProtocol extends Cheat implements Listener {
 				&& locDown.getBlock().getType().equals(Material.AIR) && !np.isInFight && !isWaterLogged(locDown.getBlock())
 				&& ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0) || (motionY > (p.getWalkSpeed() / 2)))
 				&& p.getFallDistance() > 0.2 && p.getWalkSpeed() > p.getFallDistance()
-				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD", "SLAB", "HONEY_BLOCK")
+				&& !LocationUtils.hasMaterialsAround(locDown, "STAIRS", "SCAFFOLD", "SLAB", "HONEY_BLOCK", "WATER", "BUBBLE")
 				&& to.clone().add(to.getX() - from.getX(), to.getY() - from.getY(), to.getZ() - from.getZ()).getBlock().getType().equals(Material.AIR)) {
 			if (locUp.getBlock().getType().name().contains("WATER"))
 				np.useAntiNoFallSystem = true;

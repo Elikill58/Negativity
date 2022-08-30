@@ -1,5 +1,12 @@
 package com.elikill58.negativity.common.inventories.hook.players.offline;
 
+import static com.elikill58.negativity.universal.Messages.getMessage;
+import static com.elikill58.negativity.common.inventories.hook.players.GlobalPlayerInventory.getClickItem;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
@@ -7,12 +14,11 @@ import com.elikill58.negativity.api.inventory.AbstractInventory;
 import com.elikill58.negativity.api.inventory.Inventory;
 import com.elikill58.negativity.api.inventory.InventoryManager;
 import com.elikill58.negativity.api.item.ItemBuilder;
+import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.utils.InventoryUtils;
 import com.elikill58.negativity.common.inventories.holders.players.offline.CheckMenuOfflineHolder;
-import com.elikill58.negativity.common.inventories.hook.players.GlobalPlayerInventory;
-import com.elikill58.negativity.universal.Messages;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.BanManager;
@@ -28,11 +34,11 @@ public class GlobalPlayerOfflineInventory extends AbstractInventory<CheckMenuOff
 	@Override
 	public void openInventory(Player p, Object... args) {
 		OfflinePlayer cible = (OfflinePlayer) args[0];
-		Inventory inv = Inventory.createInventory(Inventory.NAME_CHECK_MENU, 18, new CheckMenuOfflineHolder(cible));
+		Inventory inv = Inventory.createInventory(Inventory.NAME_CHECK_MENU, 27, new CheckMenuOfflineHolder(cible));
 		InventoryUtils.fillInventory(inv, Inventory.EMPTY);
 		NegativityAccount account = NegativityAccount.get(cible.getUniqueId());
 		Minerate minerate = account.getMinerate();
-		int betterClick = account.getMostClicksPerSecond();
+		/*int betterClick = account.getMostClicksPerSecond();
 		
 		inv.set(0, GlobalPlayerInventory.getClickItem(Messages.getMessage(p, "inventory.main.max_click", "%clicks%", String.valueOf(betterClick)), betterClick).build());
 		
@@ -50,6 +56,37 @@ public class GlobalPlayerOfflineInventory extends AbstractInventory<CheckMenuOff
 		}
 
 		inv.set(17, Inventory.getCloseItem(p));
+		p.openInventory(inv);*/
+
+		inv.set(0, ItemBuilder.getSkullItem(cible, p));
+
+		List<ItemStack> sanctionItems = new ArrayList<>();
+		if(!BanManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.BAN) && BanManager.banActive)
+			sanctionItems.add(ItemBuilder.Builder(Materials.ANVIL).displayName("Ban").build());
+		if(!WarnManager.getSanctions().isEmpty() && Perm.hasPerm(p, Perm.WARN) && WarnManager.warnActive)
+			sanctionItems.add(ItemBuilder.Builder(Materials.COMPASS).displayName("Warn").build());
+
+		if(sanctionItems.size() == 1)
+			inv.set(4, sanctionItems.get(0));
+		else if(!sanctionItems.isEmpty()) { // can only be upper than 1
+			inv.set(3, sanctionItems.remove(0)); // get first
+			inv.set(5, sanctionItems.remove(0)); // get second
+			if(!sanctionItems.isEmpty()) // if stay one
+				inv.set(4, sanctionItems.remove(0));
+		}
+
+		inv.set(8, Inventory.getCloseItem(p));
+		
+		inv.set(9, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());
+		Object[] clickPlaceholders = new Object[] {"%last_clicks%", 0, "%max_clicks%", account.getMostClicksPerSecond()};
+		inv.set(10, getClickItem(getMessage(p, "inventory.main.clicks.name", clickPlaceholders), account.getMostClicksPerSecond()).lore(getMessage(p, "inventory.main.clicks.lore", clickPlaceholders)).build());
+		inv.set(11, ItemBuilder.Builder(Materials.BONE).displayName(ChatColor.GRAY + "Clear clicks").build());
+
+		inv.set(16, ItemBuilder.Builder(Materials.BOOK).displayName(getMessage(p, "inventory.main.see_proofs", "%name%", cible.getName())).build());
+		inv.set(17, ItemBuilder.Builder(Materials.PAPER).displayName(getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
+		
+		inv.set(25, ItemBuilder.Builder(Materials.APPLE).displayName(getMessage(p, "inventory.main.active_report", "%name%", cible.getName())).build());
+		inv.set(26, ItemBuilder.Builder(Materials.BEACON).displayName(getMessage(p, "inventory.main.active_warn", "%name%", cible.getName())).build());
 		p.openInventory(inv);
 	}
 
@@ -58,6 +95,10 @@ public class GlobalPlayerOfflineInventory extends AbstractInventory<CheckMenuOff
 		OfflinePlayer cible = nh.getCible();
 		if(m.equals(Materials.APPLE)) {
 			InventoryManager.open(NegativityInventory.SEE_REPORT, p, cible);
+		} else if(m.equals(Materials.BEACON)) {
+			InventoryManager.open(NegativityInventory.WARN_SEE, p, cible);
+		} else if(m.equals(Materials.BOOK)) {
+			InventoryManager.open(NegativityInventory.SEE_PROOF, p, cible);
 		} else if(m.equals(Materials.PAPER)) {
 			InventoryManager.open(NegativityInventory.ALERT_OFFLINE, p, cible);
 		} else if(m.equals(Materials.ANVIL)) {

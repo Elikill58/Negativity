@@ -64,9 +64,9 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		inv.set(8, Inventory.getCloseItem(p));
 		inv.set(11, ItemBuilder.Builder(Materials.BONE).displayName(ChatColor.GRAY + "Clear clicks").build());
 
-		inv.set(15, ItemBuilder.Builder(Materials.BOOK).displayName(getMessage(p, "inventory.main.see_proofs", "%name%", cible.getName())).build());
-		inv.set(16, ItemBuilder.Builder(Materials.PAPER).displayName(getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
-		inv.set(17, ItemBuilder.Builder(Materials.TNT).displayName(getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())).build());
+		inv.set(15, ItemBuilder.Builder(Materials.TNT).displayName(getMessage(p, "inventory.main.active_detection", "%name%", cible.getName())).build());
+		inv.set(16, ItemBuilder.Builder(Materials.BOOK).displayName(getMessage(p, "inventory.main.see_proofs", "%name%", cible.getName())).build());
+		inv.set(17, ItemBuilder.Builder(Materials.PAPER).displayName(getMessage(p, "inventory.main.see_alerts", "%name%", cible.getName())).build());
 				
 		inv.set(19, ItemBuilder.Builder(Materials.DIAMOND_PICKAXE).displayName("Minerate").lore(minerate.getInventoryLoreString()).build());
 		inv.set(20, getWoolItem(p, np.getAccount().isMcLeaks()));
@@ -92,9 +92,9 @@ public class GlobalPlayerInventory extends AbstractInventory<CheckMenuHolder> {
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(cible);
 		int betterClick = np.getAccount().getMostClicksPerSecond(), click = np.getClick();
 		try {
+			inv.set(9, getClickItem(getMessage(p, "inventory.main.last_click", "%clicks%", click), click).build());
 			Object[] clickPlaceholders = new Object[] {"%last_clicks%", np.lastClick, "%max_clicks%", betterClick};
-			inv.set(9, getClickItem(getMessage(p, "inventory.main.clicks.name", clickPlaceholders), betterClick).lore(getMessage(p, "inventory.main.clicks.lore", clickPlaceholders)).build());
-			inv.set(10, getClickItem(getMessage(p, "inventory.main.last_click", "%clicks%", click), click).build());
+			inv.set(10, getClickItem(getMessage(p, "inventory.main.clicks.name", clickPlaceholders), betterClick).lore(getMessage(p, "inventory.main.clicks.lore", clickPlaceholders)).build());
 
 			inv.set(1, ItemBuilder.Builder(Materials.ARROW).displayName(getMessage(p, "inventory.main.ping", "%name%", cible.getName(), "%ping%", cible.getPing() + "")).build());
 			inv.set(18, ItemBuilder.Builder(Materials.DIAMOND_SWORD).displayName("Fight: " + getMessage(p, "inventory.manager." + (np.isInFight ? "enabled" : "disabled"))).lore(ChatColor.GRAY + "Player sensitivity: " + ChatColor.YELLOW + ((int) np.sensitivity)).build());

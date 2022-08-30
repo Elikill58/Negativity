@@ -1,7 +1,12 @@
 package com.elikill58.negativity.spigot.protocols.reach;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.Function;
 
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
@@ -12,7 +17,7 @@ public class Rect {
 	protected double x1 = 0, y1 = 0, z1 = 0;
 	protected double x2 = 0, y2 = 0, z2 = 0;
 
-	public Rect(Object bb) throws Exception {
+	public Rect(Object bb) {
 		// this(bb.a, bb.b, bb.c, bb.d, bb.e, bb.f);
 		Class<?> clss = bb.getClass();
 		try {
@@ -81,6 +86,23 @@ public class Rect {
 		} catch (Exception e) {
 			return 0.0D;
 		}
+	}
+
+	public Rect add(double x, double y, double z) {
+		return new Rect(x1 + x, y1 + y, z1 + z, x2 + x, y2 + y, z2 + z);
+	}
+	
+	public List<Block> getBlocks(World w) {
+        List<Block> blocks = new ArrayList<>();
+
+        for (double x = x1; x <= x2; x++) {
+            for (double y = y1; y <= y2 + 0.01; y++) {
+                for (double z = z1; z <= z2; z++) {
+                    blocks.add(w.getBlockAt(new Location(w, x, y, z)));
+                }
+            }
+        }
+        return blocks;
 	}
 
 	public static class TwoDouble {

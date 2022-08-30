@@ -5,6 +5,7 @@ import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPor
 
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Boat;
 import org.bukkit.entity.Entity;
@@ -18,8 +19,10 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.blocks.SpigotLocation;
 import com.elikill58.negativity.spigot.listeners.NegativityPlayerMoveEvent;
+import com.elikill58.negativity.spigot.protocols.reach.Rect;
 import com.elikill58.negativity.spigot.utils.ItemUtils;
 import com.elikill58.negativity.spigot.utils.LocationUtils;
+import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Cheat;
 import com.elikill58.negativity.universal.CheatKeys;
@@ -118,6 +121,14 @@ public class FlyProtocol extends Cheat implements Listener {
 		} else
 			np.contentBoolean.put("fly-not-moving-y", false);
 
+		if(d == 0) {
+			for(Block b : new Rect(PacketUtils.getBoundingBox(p)).add(0, 0.9, 0).getBlocks(p.getWorld())) {
+				if(b.getType().isSolid()) {
+					np.flyMoveAmount.clear();
+					return;
+				}
+			}
+		}
 		boolean onGround = ((Entity) p).isOnGround(),
 				wasOnGround = np.contentBoolean.getOrDefault("fly-wasOnGround", true);
 		boolean hasBoatAround = p.getWorld().getNearbyEntities(loc, 3, 3, 3).stream()

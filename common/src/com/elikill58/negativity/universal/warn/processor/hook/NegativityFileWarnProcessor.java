@@ -64,11 +64,13 @@ public class NegativityFileWarnProcessor implements WarnProcessor {
 			Configuration config = getYaml(playerId);
 			config.getKeys().forEach(key -> {
 				Configuration warnConfig = config.getSection(key);
-				warnConfig.set("active", false);
-				warnConfig.set("revocation_time", System.currentTimeMillis());
-				warnConfig.set("revocation_by", revoker);
+				if(warnConfig.getBoolean("active", false)) {
+					warnConfig.set("active", false);
+					warnConfig.set("revocation_time", System.currentTimeMillis());
+					warnConfig.set("revocation_by", revoker);
+				}
 			});
-			config.save();
+			config.directSave();
 			return new WarnResult(WarnResultType.DONE);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,7 +88,7 @@ public class NegativityFileWarnProcessor implements WarnProcessor {
 				warnConfig.set("revocation_time", System.currentTimeMillis());
 				warnConfig.set("revocation_by", revoker);
 			}
-			config.save();
+			config.directSave();
 			return new WarnResult(WarnResultType.DONE);
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -60,7 +60,7 @@ public class NegativityDatabaseWarnProcessor implements WarnProcessor {
 	@Override
 	public WarnResult revokeWarn(UUID playerId, String revoker) {
 		try (PreparedStatement stm = Database.getConnection().prepareStatement(
-				"UPDATE negativity_warns SET active = 0, revocation_time = CURRENT_TIMESTAMP, revocation_by = ? WHERE uuid = ?")) {
+				"UPDATE negativity_warns SET active = 0, revocation_time = CURRENT_TIMESTAMP, revocation_by = ? WHERE uuid = ? AND active = 1")) {
 			stm.setString(1, revoker);
 			stm.setString(2, playerId.toString());
 			stm.executeUpdate();

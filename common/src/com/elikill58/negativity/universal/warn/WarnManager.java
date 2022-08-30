@@ -220,7 +220,7 @@ public class WarnManager {
 		sanctionConfig.getKeys().forEach((key) -> SANCTIONS.add(new Sanction(key, sanctionConfig.getSection(key))));
 		
 		Negativity.loadExtensions(WarnProcessorProvider.class, provider -> {
-			WarnProcessor processor = provider.createWarnProcessor(adapter);
+			WarnProcessor processor = provider.create(adapter);
 			if (processor != null) {
 				registerProcessor(provider.getId(), processor);
 				return true;

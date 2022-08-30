@@ -18,17 +18,17 @@ public final class Warn {
 	private final long executionTime, revocationTime;
 	private final boolean active;
 
-	public Warn(UUID playerId, String reason, String bannedBy, SanctionnerType banType, @Nullable String ip,
+	public Warn(UUID playerId, String reason, String warnedByName, SanctionnerType banType, @Nullable String ip,
 			long executionTime) {
-		this(0, playerId, reason, bannedBy, banType, ip, executionTime, true, -1, null);
+		this(0, playerId, reason, warnedByName, banType, ip, executionTime, true, -1, null);
 	}
 
-	public Warn(int id, UUID playerId, String reason, String bannedBy, SanctionnerType banType, @Nullable String ip,
+	public Warn(int id, UUID playerId, String reason, String warnedByName, SanctionnerType banType, @Nullable String ip,
 			long executionTime, boolean active, long revocationTime, String revocationBy) {
 		this.id = id;
 		this.playerId = playerId;
 		this.reason = reason;
-		this.warnedBy = bannedBy;
+		this.warnedBy = warnedByName;
 		this.banType = banType;
 		this.ip = ip;
 		this.executionTime = executionTime;

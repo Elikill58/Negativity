@@ -32,5 +32,5 @@ public interface WarnProcessorProvider {
 	 * @return the BanProcessor, or {@code null} if the processor can't be used on the current system
 	 */
 	@Nullable
-	WarnProcessor create(Adapter adapter);
+	WarnProcessor createWarnProcessor(Adapter adapter);
 }

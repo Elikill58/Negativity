@@ -236,7 +236,7 @@ public class BanManager {
 			BansMigration.migrateBans(banDir, banLogsDir);
 		
 		Negativity.loadExtensions(BanProcessorProvider.class, provider -> {
-			BanProcessor processor = provider.create(adapter);
+			BanProcessor processor = provider.createBanProcessor(adapter);
 			if (processor != null) {
 				registerProcessor(provider.getId(), processor);
 				return true;

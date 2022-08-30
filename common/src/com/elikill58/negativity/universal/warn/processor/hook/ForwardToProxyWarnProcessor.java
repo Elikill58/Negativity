@@ -72,7 +72,7 @@ public class ForwardToProxyWarnProcessor implements WarnProcessor {
 		}
 	
 		@Override
-		public @Nullable WarnProcessor create(Adapter adapter) {
+		public @Nullable WarnProcessor createWarnProcessor(Adapter adapter) {
 			return new ForwardToProxyWarnProcessor();
 		}
 

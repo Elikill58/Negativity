@@ -77,7 +77,7 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 		}
 	
 		@Override
-		public @Nullable BanProcessor create(Adapter adapter) {
+		public @Nullable BanProcessor createBanProcessor(Adapter adapter) {
 			return new ForwardToProxyBanProcessor();
 		}
 

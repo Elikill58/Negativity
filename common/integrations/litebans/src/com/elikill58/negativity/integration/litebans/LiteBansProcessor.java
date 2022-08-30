@@ -20,10 +20,12 @@ import com.elikill58.negativity.universal.ban.BanStatus;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
 import com.elikill58.negativity.universal.utils.ChatUtils;
+import com.elikill58.negativity.universal.warn.processor.WarnProcessor;
+import com.elikill58.negativity.universal.warn.processor.WarnProcessorProvider;
 
 import litebans.api.Database;
 
-public class LiteBansProcessor implements BanProcessor {
+public class LiteBansProcessor implements BanProcessor, WarnProcessor {
 
 	@Override
 	public BanResult executeBan(Ban ban) {
@@ -203,6 +205,24 @@ public class LiteBansProcessor implements BanProcessor {
 		
 		@Override
 		public BanProcessor create(Adapter adapter) {
+			return new LiteBansProcessor();
+		}
+		
+		@Override
+		public String getPluginId() {
+			return "LiteBans";
+		}
+	}
+	
+	public static class WarnProvider implements WarnProcessorProvider, PluginDependentExtension {
+		
+		@Override
+		public String getId() {
+			return "litebans";
+		}
+		
+		@Override
+		public WarnProcessor create(Adapter adapter) {
 			return new LiteBansProcessor();
 		}
 		

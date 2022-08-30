@@ -57,6 +57,15 @@ public final class Warn {
 		return warnedBy;
 	}
 
+	/**
+	 * Get UUID of staff that warned
+	 * 
+	 * @return the uuid
+	 */
+	public UUID getWarnedByUUID() {
+		return UniversalUtils.isUUID(warnedBy) ? UUID.fromString(warnedBy) : null;
+	}
+
 	public String getWarnedByName() {
 		if(UniversalUtils.isUUID(warnedBy))
 			return Adapter.getAdapter().getOfflinePlayer(UUID.fromString(warnedBy)).getName();

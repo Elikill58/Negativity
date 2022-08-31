@@ -4,10 +4,17 @@ sourceSets {
         resources.srcDirs = ['resources']
     }
 }
+repositories {
+    maven {
+        name 'Petronic - DkBans'
+        url 'https://repository.pretronic.net/repository/pretronic/'
+    }
+}
 
 dependencies {
-    compileOnly 'ch.dkrieger.bansystem.lib:bansystem-lib:2.1.2'
-    compileOnly 'ch.dkrieger.bansystem.bukkit:bansystem-bukkit:2.1.2'
-    compileOnly 'ch.dkrieger.bansystem.bungeecord:bansystem-bungeecord:2.1.2'
+	compileOnly 'net.pretronic.dkbans:dkbans-api:1.9.6.364'
+    //compileOnly 'ch.dkrieger.bansystem.lib:bansystem-lib:2.1.2'
+    //compileOnly 'ch.dkrieger.bansystem.bukkit:bansystem-bukkit:2.1.2'
+    //compileOnly 'ch.dkrieger.bansystem.bungeecord:bansystem-bungeecord:2.1.2'
     api(project(':common'))
 }

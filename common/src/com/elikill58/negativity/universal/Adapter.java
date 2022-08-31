@@ -232,7 +232,7 @@ public abstract class Adapter {
 	 * Get the UUID with the name
 	 * 
 	 * @param name the name of a possible player
-	 * @return the uuid of the player
+	 * @return the uuid of the player or null if can't find
 	 */
 	public @Nullable UUID getUUID(String name) {
 		OfflinePlayer op = getOfflinePlayer(name);

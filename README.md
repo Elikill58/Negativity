@@ -3,7 +3,8 @@
 It's a Minecraft AntiCheat for multiples platforms :
 - **Spigot** 1.7.10 to 1.19 (*and fork like PaperSpigot or Tuinity*)
 - **Sponge** API 7, 8 & 9
-- **Fabric** v0.53.0 for 1.18
+- **Fabric** v0.58.0 for 1.19
+- **Minestom** 1.18.2
 
 Proxies:
 - **BungeeCord**
@@ -25,7 +26,7 @@ Check [installation wiki](https://github.com/Elikill58/Negativity/wiki/Installat
 
 ## I want to test it before download !
 
-You can check it on **server.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.19). Warn: it can be offline.
+You can check it on **play.negativity.fr** (server in 1.18.2, you can connect with 1.9 to 1.19).
 
 ## What are the detected cheat ?
 
@@ -105,6 +106,8 @@ Examples will be using `./gradlew`, if you are on Windows you need to use `gradl
 On Windows, you must use [Git bash](https://gitforwindows.org/). On Linux and MacOS use the regular terminal.
 
 Run `./setup_spigot.sh`. It will download spigot jars and JDKs, and use BuildTools appropriately.
+
+You just need to copy 1.7.10 spigot jar file.
 
 #### Manually install spigot jars
 

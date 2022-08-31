@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api.inventory;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
@@ -87,7 +88,7 @@ public class InventoryManager implements Listeners {
 				if (m.equals(Materials.BARRIER)) {
 					p.closeInventory();
 				} else {
-					inv.manageInventory(e, m, p, nh);
+					CompletableFuture.runAsync(() -> inv.manageInventory(e, m, p, nh)); // do all inventory things async
 				}
 				return;
 			}
@@ -110,6 +111,6 @@ public class InventoryManager implements Listeners {
 	 * @param args the arguments to open the inventory
 	 */
 	public static void open(NegativityInventory type, Player p, Object... args) {
-		getInventory(type).ifPresent((inv) -> inv.openInventory(p, args));
+		CompletableFuture.runAsync(() -> getInventory(type).ifPresent((inv) -> inv.openInventory(p, args)));
 	}
 }

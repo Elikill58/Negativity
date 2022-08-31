@@ -147,6 +147,6 @@ public class NegativityFileWarnProcessor implements WarnProcessor {
 	
 	@Override
 	public List<String> getDescription() {
-		return Arrays.asList(ChatColor.YELLOW + "Processor from Negativity by using files", "", ChatColor.RED + "Not available:", "&6Get all warns.");
+		return Arrays.asList(ChatColor.YELLOW + "Processor from Negativity by using files", "", ChatColor.RED + "Not available:", "&6- Get all warns.");
 	}
 }

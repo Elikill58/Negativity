@@ -26,7 +26,12 @@ commands:
 # - command : Runs commands to warn or unwarn
 # - proxy : Forwards warn execution and revocations to the proxy companion plugin.
 #   You must enable warns on the proxy plugin's configuration for it to work
-# No plugin support yet
+# The following plugins are also supported :
+# - maxbans
+# - advancedban
+# - litebans
+# - dkbans
+# - ultrapunishments
 # Defaults to "file"
 processor: "file"
 # Commands to execute when using the "command" processor

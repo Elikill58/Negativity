@@ -29,7 +29,6 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
@@ -227,8 +226,7 @@ public class Fly extends Cheat implements Listeners {
 				if(b.getType().isSolid()) {
 					np.listDoubles.remove(FLY, "fly-move");
 					return;
-				} else
-					Adapter.getAdapter().debug("Not solid: " + b.getType().getId());
+				}
 			}
 		}
 

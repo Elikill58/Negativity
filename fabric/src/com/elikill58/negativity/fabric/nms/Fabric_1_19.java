@@ -68,7 +68,7 @@ public class Fabric_1_19 extends FabricVersionAdapter {
 		});
 
 		packetsPlayIn.put(getNameOfPacket(ChatMessageC2SPacket.class),
-				(p, packet) -> new NPacketPlayInChat(((ChatMessageC2SPacket) packet).getChatMessage()));
+				(p, packet) -> new NPacketPlayInChat(((ChatMessageC2SPacket) packet).chatMessage()));
 
 		packetsPlayIn.put(getNameOfPacket(PlayerMoveC2SPacket.Full.class), (p, f) -> {
 			PlayerMoveC2SPacket.Full packet = (PlayerMoveC2SPacket.Full) f;

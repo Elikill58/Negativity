@@ -139,7 +139,7 @@ public class FabricAdapter extends Adapter {
 
 	@Override
 	public void runConsoleCommand(String cmd) {
-		plugin.getServer().getCommandManager().execute(plugin.getServer().getCommandSource(), cmd);
+		plugin.getServer().getCommandManager().executeWithPrefix(plugin.getServer().getCommandSource(), cmd);
 	}
 
 	@SuppressWarnings("unchecked")

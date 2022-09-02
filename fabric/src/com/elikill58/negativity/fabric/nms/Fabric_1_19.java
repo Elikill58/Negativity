@@ -37,6 +37,7 @@ import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.network.packet.c2s.play.ClientCommandC2SPacket;
 import net.minecraft.network.packet.c2s.play.KeepAliveC2SPacket;
 import net.minecraft.network.packet.c2s.play.PickFromInventoryC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayPongC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInputC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
@@ -119,6 +120,7 @@ public class Fabric_1_19 extends FabricVersionAdapter {
 			return new NPacketPlayInSteerVehicle(packet.getSideways(), packet.getForward(), packet.isJumping(), packet.isSneaking());
 		});
 		packetsPlayIn.put(getNameOfPacket(TeleportConfirmC2SPacket.class), (p, f) -> new NPacketPlayInTeleportAccept(((TeleportConfirmC2SPacket) f).getTeleportId()));
+		packetsPlayIn.put(getNameOfPacket(PlayPongC2SPacket.class), (p, f) -> new NPacketPlayInPong(((PlayPongC2SPacket) f).getParameter()));
 		
 
 		packetsPlayOut.put(getNameOfPacket(BlockBreakingProgressS2CPacket.class), (p, f) -> {

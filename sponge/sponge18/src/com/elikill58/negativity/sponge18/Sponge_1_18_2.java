@@ -2,7 +2,6 @@ package com.elikill58.negativity.sponge18;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Queue;
 
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
@@ -40,7 +39,6 @@ import com.elikill58.negativity.universal.Adapter;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ServerboundAcceptTeleportationPacket;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
@@ -60,7 +58,7 @@ import net.minecraft.world.phys.Vec3;
 public class Sponge_1_18_2 extends SpongeVersionAdapter {
 
 	public Sponge_1_18_2() {
-		super("v1_16_5");
+		super("v1_18_2");
 		packetsPlayIn.put("ServerboundPlayerActionPacket", (p, f) -> {
 			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) f;
 			BlockPos pos = packet.getPos();
@@ -280,15 +278,8 @@ public class Sponge_1_18_2 extends SpongeVersionAdapter {
 		((net.minecraft.server.level.ServerPlayer) p).connection.send((Packet<?>) basicPacket);
 	}
 	
-	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public void queuePacket(ServerPlayer p, Object basicPacket) {
-		try {
-			Object packetQueued = callFirstConstructor(Connection.class.getDeclaredClasses()[0], basicPacket, null);
-			
-			((Queue) get(((net.minecraft.server.level.ServerPlayer) p).connection, "queue")).add(packetQueued);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		((net.minecraft.server.level.ServerPlayer) p).connection.getConnection().send((Packet<?>) basicPacket);
 	}
 }

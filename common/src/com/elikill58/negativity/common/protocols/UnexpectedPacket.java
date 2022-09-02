@@ -1,5 +1,6 @@
 package com.elikill58.negativity.common.protocols;
 
+import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
@@ -42,6 +43,18 @@ public class UnexpectedPacket extends Cheat {
 			if (action.action.equals(EnumPlayerAction.START_SNEAKING) && p.isInsideVehicle()) {
 				np.longs.set(getKey(), "vehicle-left", System.currentTimeMillis());
 			}
+		}
+	}
+
+	@Check(name = "spectator", description = "Spectate someone without in spectator")
+	public void onSpectate(PacketReceiveEvent e) {
+		Player p = e.getPlayer();
+		if (e.getPacket().getPacketType().equals(Client.SPECTATE) && p.getGameMode().equals(GameMode.CREATIVE)) {
+			boolean cancel = Negativity.alertMod(ReportType.WARNING, p, this, 100, "spectator",
+					"Spectate when using gamemode: " + p.getGameMode().name(),
+					new CheatHover.Literal("Spectate someone when using " + p.getGameMode().getName()));
+			if (cancel && isSetBack())
+				e.setCancelled(true);
 		}
 	}
 }

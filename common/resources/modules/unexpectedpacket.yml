@@ -35,3 +35,6 @@ checks:
   # When moving in vehicle, but not in vehicle
   vehicle-steer:
     active: true
+  # Spectate someone without in spectator
+  spectator:
+    active: true

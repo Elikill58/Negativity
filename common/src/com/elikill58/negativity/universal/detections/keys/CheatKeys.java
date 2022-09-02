@@ -47,6 +47,7 @@ public enum CheatKeys implements IDetectionKey<CheatKeys> {
 	STEP("STEP"),
 	SUPER_KNOCKBACK("SUPERKNOCKBACK"),
 	TIMER("TIMER"),
+	UNEXPECTED_PACKET("UNEXPECTEDPACKET"),
 	XRAY("XRAY");
 
 	public static final String BUNDLED_MODULES_BASE = "/modules/";

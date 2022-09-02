@@ -58,6 +58,8 @@ public class Materials {
     public static final Material IRON_PICKAXE = ItemRegistrar.getInstance().get("iron_pickaxe");
     public static final Material IRON_SHOVEL = ItemRegistrar.getInstance().get("iron_spade", "iron_shovel");
     public static final Material IRON_SWORD = ItemRegistrar.getInstance().get("iron_sword");
+
+    public static final Material JUKEBOX = ItemRegistrar.getInstance().get("jukebox");
     
     public static final Material FEATHER = ItemRegistrar.getInstance().get("feather");
     public static final Material FIREWORK = ItemRegistrar.getInstance().get("firework_rocket", "firework", "fireworks");

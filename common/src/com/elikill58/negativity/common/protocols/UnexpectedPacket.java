@@ -7,6 +7,7 @@ import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType.Client;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.universal.Negativity;
@@ -55,6 +56,21 @@ public class UnexpectedPacket extends Cheat {
 					new CheatHover.Literal("Spectate someone when using " + p.getGameMode().getName()));
 			if (cancel && isSetBack())
 				e.setCancelled(true);
+		}
+	}
+
+	@Check(name = "held-change", description = "Change held slot to the same")
+	public void onHeldChange(PacketReceiveEvent e) {
+		Player p = e.getPlayer();
+		if (e.getPacket().getPacketType().equals(Client.HELD_ITEM_SLOT)) {
+			NPacketPlayInHeldItemSlot slot = (NPacketPlayInHeldItemSlot) e.getPacket().getPacket();
+			if (p.getInventory().getHeldItemSlot() == slot.slot) {
+				boolean cancel = Negativity.alertMod(ReportType.WARNING, p, this, 100, "held-change",
+						"Change held slot to the same" + slot.slot,
+						new CheatHover.Literal("Change held slot to the same"), slot.slot);
+				if (cancel && isSetBack())
+					e.setCancelled(true);
+			}
 		}
 	}
 }

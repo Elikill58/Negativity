@@ -38,3 +38,6 @@ checks:
   # Spectate someone without in spectator
   spectator:
     active: true
+  # Change held slot to the same
+  held-change:
+    active: true

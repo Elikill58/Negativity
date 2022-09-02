@@ -16,11 +16,7 @@ import com.elikill58.negativity.api.packets.packet.NPacketHandshake;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayOut;
 import com.elikill58.negativity.api.packets.packet.NPacketStatus;
-import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeUnset;
 import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
-import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 import com.elikill58.negativity.universal.Adapter;
 
 @SuppressWarnings("unchecked")
@@ -72,42 +68,6 @@ public abstract class VersionAdapter<R> {
 	
 	public abstract void queuePacket(R p, Object basicPacket);
 
-	@Deprecated
-	public NPacket getPacket(R player, Object nms, String packetName) {
-		try {
-			if (packetName.startsWith(PacketType.CLIENT_PREFIX) || packetName.startsWith("Serverbound"))
-				return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset(packetName)).apply(player, nms);
-			else if (packetName.startsWith(PacketType.SERVER_PREFIX) || packetName.startsWith("Clientbound"))
-				return packetsPlayOut.getOrDefault(packetName, (p, obj) -> new NPacketPlayOutUnset(packetName)).apply(player, nms);
-			else if (packetName.startsWith(PacketType.LOGIN_PREFIX))
-				return new NPacketLoginUnset();
-			else if (packetName.startsWith(PacketType.STATUS_PREFIX))
-				return packetsStatus.getOrDefault(packetName, (p, obj) -> new NPacketStatusUnset()).apply(player, nms);
-			else if (packetName.startsWith(PacketType.HANDSHAKE_PREFIX))
-				return packetsHandshake.getOrDefault(packetName, (p, obj) -> new NPacketHandshakeUnset()).apply(player, nms);
-			else { // name are obfuscated, trying to find it anyway
-				if(packetsPlayIn.containsKey(packetName))
-					return packetsPlayIn.get(packetName).apply(player, nms);
-			}
-		} catch (Exception e) {
-			Adapter.getAdapter().debug("[VersionAdapter] Failed to manage packet " + packetName + ". NMS: " + nms.getClass().getSimpleName());
-			e.printStackTrace();
-		}
-		if(!unknownPacket.contains(packetName)) { // if wasn't present
-			unknownPacket.add(packetName);
-			Adapter a = Adapter.getAdapter();
-			a.debug("[VersionAdapter] Unknow packet " + packetName + ":");
-			for(Field f : nms.getClass().getDeclaredFields()) {
-				a.debug(" " + f.getName() + " (type: " + f.getType().getSimpleName() + ")");
-			}
-			Class<?> superClass = nms.getClass().getSuperclass();
-			if(!superClass.equals(Object.class)) {
-				a.debug(" SuperClass: " + superClass.getSimpleName());
-			}
-		}
-		return null;
-	}
-
 	public NPacket getPacket(Player pl, PacketDirection dir, Object nms) {
 		return getPacket(getR(pl), dir, nms);
 	}
@@ -118,18 +78,27 @@ public abstract class VersionAdapter<R> {
 
 	public NPacket getPacket(R player, PacketDirection dir, Object nms, String packetName) {
 		try {
+			BiFunction<R, Object, ? extends NPacket> packetCreator = null;
 			switch (dir) {
 			case CLIENT_TO_SERVER:
-				return packetsPlayIn.getOrDefault(packetName, (p, obj) -> new NPacketPlayInUnset(packetName)).apply(player, nms);
+				packetCreator = packetsPlayIn.get(packetName);
+				break;
 			case SERVER_TO_CLIENT:
-				return packetsPlayOut.getOrDefault(packetName, (p, obj) -> new NPacketPlayOutUnset(packetName)).apply(player, nms);
+				packetCreator = packetsPlayOut.get(packetName);
+				break;
 			case HANDSHAKE:
-				return packetsHandshake.getOrDefault(packetName, (p, obj) -> new NPacketHandshakeUnset()).apply(player, nms);
+				packetCreator = packetsHandshake.get(packetName);
+				break;
 			case LOGIN:
-				return new NPacketLoginUnset();
+				return new NPacketLoginUnset(packetName);
 			case STATUS:
-				return packetsStatus.getOrDefault(packetName, (p, obj) -> new NPacketStatusUnset()).apply(player, nms);
+				packetCreator = packetsStatus.get(packetName);
+				break;
 			}
+			if(packetCreator == null) {
+				return PacketType.createEmptyOrUnsetPacket(dir, packetName);
+			}
+			return packetCreator.apply(player, nms);
 		} catch (Exception e) {
 			Adapter.getAdapter().debug("[VersionAdapter] Failed to manage packet " + packetName + ". NMS: " + nms.getClass().getSimpleName());
 			e.printStackTrace();

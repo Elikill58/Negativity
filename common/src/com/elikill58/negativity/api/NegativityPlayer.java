@@ -98,7 +98,7 @@ public class NegativityPlayer {
 	public Content<Long> longs = new Content<>();
 	
 	// general values
-	public boolean isInFight = false, already_blink = false, isFreeze = false, isUsingSlimeBlock = false,
+	public boolean isInFight = false, isFreeze = false, isUsingSlimeBlock = false,
 			isInvisible = false, isAttacking = false, shouldCheckSensitivity = true;
 	private boolean isBedrockPlayer = false;
 	public double sensitivity = 0.0;

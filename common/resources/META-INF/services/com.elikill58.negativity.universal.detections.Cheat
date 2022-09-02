@@ -5,7 +5,6 @@ com.elikill58.negativity.common.protocols.AntiKnockback
 com.elikill58.negativity.common.protocols.AntiPotion
 com.elikill58.negativity.common.protocols.AutoClick
 com.elikill58.negativity.common.protocols.AutoSteal
-com.elikill58.negativity.common.protocols.Blink
 com.elikill58.negativity.common.protocols.Chat
 com.elikill58.negativity.common.protocols.Critical
 com.elikill58.negativity.common.protocols.ElytraFly

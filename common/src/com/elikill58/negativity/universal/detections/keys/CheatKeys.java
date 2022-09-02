@@ -15,7 +15,6 @@ public enum CheatKeys implements IDetectionKey<CheatKeys> {
 	ANTI_POTION("ANTIPOTION"),
 	AUTO_CLICK("AUTOCLICK"),
 	AUTO_STEAL("AUTOSTEAL"),
-	BLINK("BLINK"),
 	CHAT("CHAT"),
 	CRITICAL("CRITICAL"),
 	ELYTRA_FLY("ELYTRAFLY", Version.V1_9),

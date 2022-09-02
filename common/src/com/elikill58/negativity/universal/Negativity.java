@@ -132,10 +132,6 @@ public class Negativity {
 		if(!c.isActive() || reliability < 55 || tpsDrop || amount <= 0)
 			return false;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.already_blink && c.getKey().equals(CheatKeys.BLINK)) {
-			np.already_blink = true;
-			return false;
-		}
 		if(VerificationManager.isDisablingAlertOnVerif() && hasVerifications(p.getUniqueId()))
 			return false;
 		int ping = p.getPing();

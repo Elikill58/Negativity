@@ -410,10 +410,6 @@ public class NegativityCommand implements CommandListeners, TabListeners {
 					p.sendMessage(ChatColor.RED + "Cheat disabled.");
 					hasBypass = true;
 				}
-				if(!np.already_blink && c.getKey().equals(CheatKeys.BLINK)) {
-					p.sendMessage(ChatColor.RED + "Bypass for blink.");
-					hasBypass = true;
-				}
 				if (c.getCheatCategory().equals(CheatCategory.MOVEMENT)) {
 					for (PlayerModifications modification : PlayerModificationsManager.getModifications()) {
 						if (modification.shouldIgnoreMovementChecks(p)) {

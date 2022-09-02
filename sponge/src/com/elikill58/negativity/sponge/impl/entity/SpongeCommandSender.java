@@ -7,7 +7,7 @@ import com.elikill58.negativity.api.commands.CommandSender;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.text.Component;
 
-public class SpongeCommandSender<T extends Audience & Nameable> implements CommandSender {
+public class SpongeCommandSender<T extends Audience> implements CommandSender {
 
 	private final T sender;
 	
@@ -22,7 +22,7 @@ public class SpongeCommandSender<T extends Audience & Nameable> implements Comma
 
 	@Override
 	public String getName() {
-		return sender.name();
+		return sender instanceof Nameable ? ((Nameable) sender).name() : "";
 	}
 	
 	@Override

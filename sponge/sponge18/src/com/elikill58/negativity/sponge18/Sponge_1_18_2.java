@@ -280,6 +280,7 @@ public class Sponge_1_18_2 extends SpongeVersionAdapter {
 	
 	@Override
 	public void queuePacket(ServerPlayer p, Object basicPacket) {
+		Adapter.getAdapter().debug("> " + basicPacket.getClass().getSimpleName() + " : " + basicPacket);
 		((net.minecraft.server.level.ServerPlayer) p).connection.getConnection().send((Packet<?>) basicPacket);
 	}
 }

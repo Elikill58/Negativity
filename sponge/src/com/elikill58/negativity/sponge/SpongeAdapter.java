@@ -255,7 +255,7 @@ public class SpongeAdapter extends Adapter {
 	
 	@Override
 	public @Nullable Player getPlayer(String name) {
-		return SpongeEntityManager.getPlayer(Sponge.server().player(name).orElse(null));
+		return name == null || name.isEmpty() ? null : SpongeEntityManager.getPlayer(Sponge.server().player(name).orElse(null));
 	}
 	
 	@Override

@@ -40,7 +40,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
-import com.elikill58.negativity.universal.Adapter;
 
 public interface PacketType {
 
@@ -125,7 +124,6 @@ public interface PacketType {
 				return p;
 			}
 		}
-		Adapter.getAdapter().debug("[Packet] Unknow packet " + packetName);
 		return dir.createUnsetPacket(packetName);
 	}
 	

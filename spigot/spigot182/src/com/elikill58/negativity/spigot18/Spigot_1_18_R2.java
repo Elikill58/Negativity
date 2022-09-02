@@ -113,7 +113,7 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 		});
 		packetsPlayIn.put(ServerboundKeepAlivePacket.class.getSimpleName(),
 				(player, raw) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) raw).getId()));
-		packetsPlayIn.put("ServerboundPongPacket", (player, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
+		packetsPlayIn.put(ServerboundPongPacket.class.getSimpleName(), (player, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
 
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, raw) -> {
 			ClientboundBlockDestructionPacket packet = (ClientboundBlockDestructionPacket) raw;

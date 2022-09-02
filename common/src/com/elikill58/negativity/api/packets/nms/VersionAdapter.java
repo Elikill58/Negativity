@@ -95,18 +95,17 @@ public abstract class VersionAdapter<R> {
 				packetCreator = packetsStatus.get(packetName);
 				break;
 			}
-			if(packetCreator == null) {
-				return PacketType.createEmptyOrUnsetPacket(dir, packetName);
-			}
-			return packetCreator.apply(player, nms);
+			if(packetCreator != null)
+				return packetCreator.apply(player, nms);
 		} catch (Exception e) {
 			Adapter.getAdapter().debug("[VersionAdapter] Failed to manage packet " + packetName + ". NMS: " + nms.getClass().getSimpleName());
 			e.printStackTrace();
 		}
-		if(!unknownPacket.contains(packetName)) { // if wasn't present
+		NPacket packet = PacketType.createEmptyOrUnsetPacket(dir, packetName);
+		if(!unknownPacket.contains(packetName) && !dir.equals(PacketDirection.HANDSHAKE) && !packet.getPacketType().isUnset()) { // if wasn't present
 			unknownPacket.add(packetName);
 			Adapter a = Adapter.getAdapter();
-			a.debug("[VersionAdapter] Unknow packet " + packetName + ":");
+			a.debug("[VersionAdapter] Unknow packet " + packetName + " for dir " + dir.name() + ":");
 			for(Field f : nms.getClass().getDeclaredFields()) {
 				a.debug(" " + f.getName() + " (type: " + f.getType().getSimpleName() + ")");
 			}
@@ -115,7 +114,7 @@ public abstract class VersionAdapter<R> {
 				a.debug(" SuperClass: " + superClass.getSimpleName());
 			}
 		}
-		return null;
+		return packet;
 	}
 	
 	public String getNameOfPacket(Object nms) {

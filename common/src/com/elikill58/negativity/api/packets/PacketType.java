@@ -344,7 +344,7 @@ public interface PacketType {
 		TAGS("Tags", NPacketPlayOutUnset::new),
 		TILE_ENTITY_DATA("TileEntityData", NPacketPlayOutUnset::new),
 		TITLE("Title", NPacketPlayOutUnset::new),
-		PING("Ping", NPacketPlayOutPing::new, "Transaction"),
+		PING("Ping", NPacketPlayOutPing::new, "Transaction", "ContainerAckPacket"),
 		UNLOAD_CHUNK("UnloadChunk", NPacketPlayOutUnset::new),
 		UPDATE_ATTRIBUTES("UpdateAttributes", NPacketPlayOutUnset::new),
 		UPDATE_ENTITY_NBT("UpdateEntityNBT", NPacketPlayOutUnset::new),

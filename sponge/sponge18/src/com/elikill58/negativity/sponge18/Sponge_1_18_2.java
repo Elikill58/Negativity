@@ -40,6 +40,7 @@ import com.elikill58.negativity.universal.Adapter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundPingPacket;
 import net.minecraft.network.protocol.game.ServerboundAcceptTeleportationPacket;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
@@ -49,7 +50,6 @@ import net.minecraft.network.protocol.game.ServerboundPickItemPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
-import net.minecraft.network.protocol.status.ClientboundPongResponsePacket;
 import net.minecraft.network.protocol.status.ServerboundPingRequestPacket;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
@@ -143,9 +143,9 @@ public class Sponge_1_18_2 extends SpongeVersionAdapter {
 		packetsPlayOut.put("ClientboundUpdateMobEffectPacket", (p, f) -> {
 			return new NPacketPlayOutEntityEffect(get(f, "entityId"), (int) get(f, "effectId"), get(f, "effectAmplifier"), get(f, "effectDurationTicks"), get(f, "flags"));
 		});
-		packetsPlayOut.put("ClientboundPongResponsePacket", (p, f) -> new NPacketPlayOutPing(get(f, "time")));
+		packetsPlayOut.put("ClientboundPingPacket", (p, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
 
-		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundPongResponsePacket(((NPacketPlayOutPing) f).id));
+		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundPingPacket((int) ((NPacketPlayOutPing) f).id));
 
 		log();
 	}
@@ -280,7 +280,6 @@ public class Sponge_1_18_2 extends SpongeVersionAdapter {
 	
 	@Override
 	public void queuePacket(ServerPlayer p, Object basicPacket) {
-		Adapter.getAdapter().debug("> " + basicPacket.getClass().getSimpleName() + " : " + basicPacket);
 		((net.minecraft.server.level.ServerPlayer) p).connection.getConnection().send((Packet<?>) basicPacket);
 	}
 }

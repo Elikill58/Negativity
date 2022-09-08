@@ -25,7 +25,7 @@ public class FastPlace extends Cheat {
 	public void onBlockPlace(PacketReceiveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		
-		if(e.getPacket().getPacketType().isFlyingPacket()) {
+		if(e.getPacket().getPacketType().equals(PacketType.Client.POSITION_LOOK)) {
 			np.ints.set(getKey(), "times-flying", np.ints.get(getKey(), "times-flying", 0) + 1);
 		} else if(e.getPacket().getPacketType().equals(PacketType.Client.BLOCK_PLACE)) {
 			Integer flying = np.ints.remove(getKey(), "times-flying");
@@ -40,7 +40,7 @@ public class FastPlace extends Cheat {
 						total += temp;
 					double average = (total / list.size());
 					
-					if (average < 2) {
+					if (average < 1.5) {
 						boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - average * 5),
 								"time", "Quickly: " + String.format("%.3f", average) + ", " + list);
 						if(isSetBack() && mayCancel)

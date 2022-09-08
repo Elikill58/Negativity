@@ -62,11 +62,11 @@ public class UnexpectedPacket extends Cheat {
 	@Check(name = "held-change", description = "Change held slot to the same")
 	public void onHeldChange(PacketReceiveEvent e) {
 		Player p = e.getPlayer();
-		if (e.getPacket().getPacketType().equals(Client.HELD_ITEM_SLOT)) {
+		if (e.getPacket().getPacketType().equals(Client.HELD_ITEM_SLOT) && NegativityPlayer.getNegativityPlayer(p).timeInvincibility <= System.currentTimeMillis()) {
 			NPacketPlayInHeldItemSlot slot = (NPacketPlayInHeldItemSlot) e.getPacket().getPacket();
 			if (p.getInventory().getHeldItemSlot() == slot.slot) {
 				boolean cancel = Negativity.alertMod(ReportType.WARNING, p, this, 100, "held-change",
-						"Change held slot to the same" + slot.slot,
+						"Change held slot to the same: " + slot.slot,
 						new CheatHover.Literal("Change held slot to the same"), slot.slot);
 				if (cancel && isSetBack())
 					e.setCancelled(true);

@@ -74,7 +74,7 @@ public class NegativityPlayer {
 	public int LAST_CHAT_MESSAGE_NB = 0, bypassSpeed = 0, spiderSameDist = 0;
 	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
-	public boolean bypassBlink = false, isOnLadders = false, useAntiNoFallSystem = false, isTeleporting = false;
+	public boolean isOnLadders = false, useAntiNoFallSystem = false, isTeleporting = false;
 	public PlayerChatEvent lastChatEvent = null;
 	public List<Integer> timerCount = new ArrayList<>();
 	public List<Double> lastY = new ArrayList<>();

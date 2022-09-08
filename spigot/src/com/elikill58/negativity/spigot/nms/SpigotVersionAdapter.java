@@ -341,8 +341,6 @@ public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 	public static SpigotVersionAdapter getVersionAdapter() {
 		if (instance == null) {
 			switch (VERSION) {
-			case "v1_7_R4":
-				return instance = new Spigot_1_7_R4();
 			case "v1_8_R3":
 				return instance = new Spigot_1_8_R3();
 			case "v1_9_R1":

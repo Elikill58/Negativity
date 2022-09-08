@@ -1,6 +1,10 @@
-package com.elikill58.negativity.spigot.packets.custom.channel;
+package com.elikill58.negativity.spigot.packets.custom;
 
+import java.util.HashSet;
 import java.util.NoSuchElementException;
+import java.util.UUID;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
@@ -13,7 +17,6 @@ import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInS
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
-import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
 import com.elikill58.negativity.universal.Adapter;
 
 import io.netty.channel.Channel;
@@ -24,10 +27,17 @@ import io.netty.channel.ChannelInitializer;
 import io.netty.channel.ChannelOutboundHandlerAdapter;
 import io.netty.channel.ChannelPromise;
 
-public class INCChannel extends ChannelAbstract {
+public class INCChannel {
+
+	static final String KEY_HANDLER_PLAYER = "packet_handler", KEY_PLAYER = "packet_player_negativity", KEY_HANDSHAKE = "packet_handshake_negativity",
+			KEY_HANDLER_SERVER = "packet_handler", KEY_SERVER = "packet_server_negativity";
+	
+	private ExecutorService addChannelExecutor, removeChannelExecutor;
+	private final CustomPacketManager customPacketManager;
+	private HashSet<UUID> players = new HashSet<>();
 	
 	public INCChannel(CustomPacketManager customPacketManager) {
-		super(customPacketManager);
+		this.customPacketManager = customPacketManager;
 		SpigotVersionAdapter.getVersionAdapter().getFuturChannel().forEach((channelFuture) -> {
 			channelFuture.channel().pipeline().addFirst(new ChannelInboundHandlerAdapter() {
 				@Override
@@ -52,7 +62,7 @@ public class INCChannel extends ChannelAbstract {
 									}
 								});
 							} catch (Exception e) {
-								getPacketManager().getPlugin().getLogger().log(Level.SEVERE, "Cannot inject incomming channel " + channel, e);
+								SpigotNegativity.getInstance().getLogger().log(Level.SEVERE, "Cannot inject incomming channel " + channel, e);
 							}
 						}
 					});
@@ -60,8 +70,49 @@ public class INCChannel extends ChannelAbstract {
 			});
 		});
 	}
+	
+	public CustomPacketManager getPacketManager() {
+		return customPacketManager;
+	}
+	
+	public ExecutorService getAddChannelExecutor() {
+		return addChannelExecutor;
+	}
+	
+	public ExecutorService getOrCreateAddChannelExecutor() {
+		if(addChannelExecutor == null)
+			addChannelExecutor = Executors.newSingleThreadExecutor();
+		return addChannelExecutor;
+	}
+	
+	public ExecutorService getRemoveChannelExecutor() {
+		return removeChannelExecutor;
+	}
+	
+	public ExecutorService getOrCreateRemoveChannelExecutor() {
+		if(removeChannelExecutor == null)
+			removeChannelExecutor = Executors.newSingleThreadExecutor();
+		return removeChannelExecutor;
+	}
 
-	@Override
+	public void addPlayer(Player p) {
+		if(players.add(p.getUniqueId())) {
+			addChannel(p, p.getUniqueId().toString());
+			try {
+				Integer protocol = customPacketManager.protocolVersionPerChannel.remove(getChannel(p));
+				if(protocol != null)
+					SpigotEntityManager.getPlayer(p).setProtocolVersion(protocol);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	public void removePlayer(Player p) {
+		if(players.remove(p.getUniqueId()))
+			removeChannel(p, p.getUniqueId().toString());
+	}
+
 	public void addChannel(final Player player, String endChannelName) {
 		if(!player.isOnline() || player.hasMetadata("NPC"))
 			return;
@@ -88,7 +139,6 @@ public class INCChannel extends ChannelAbstract {
 		});
 	}
 
-	@Override
 	public void removeChannel(Player player, String endChannelName) {
 		getOrCreateRemoveChannelExecutor().execute(() -> {
 			try {
@@ -103,7 +153,6 @@ public class INCChannel extends ChannelAbstract {
 		});
 	}
 
-	@Override
 	public Channel getChannel(Player p) {
 		return SpigotVersionAdapter.getVersionAdapter().getPlayerChannel(p);
 	}

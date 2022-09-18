@@ -20,10 +20,10 @@ import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.fabric.FabricNegativity;
-import com.elikill58.negativity.fabric.bridge.ServerPlayerEntityBridge;
 import com.elikill58.negativity.fabric.impl.FabricPotionEffectType;
 import com.elikill58.negativity.fabric.impl.inventory.FabricInventory;
 import com.elikill58.negativity.fabric.impl.inventory.FabricPlayerInventory;
+import com.elikill58.negativity.fabric.impl.inventory.NegativityScreenHandlerFactory;
 import com.elikill58.negativity.fabric.impl.item.FabricItemStack;
 import com.elikill58.negativity.fabric.impl.location.FabricLocation;
 import com.elikill58.negativity.fabric.impl.location.FabricWorld;
@@ -38,7 +38,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.screen.ScreenHandler;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.Text;
 
@@ -358,19 +357,9 @@ public class FabricPlayer extends FabricEntity<ServerPlayerEntity> implements Pl
 	public void openInventory(Inventory inv) {
 		Object o = inv.getDefault();
 		if (o instanceof ScreenHandler screenHandler) {
-			try {
-				((ServerPlayerEntityBridge) entity).negativity$doNotSendScreenClosePacket(true);
-				entity.openHandledScreen(new SimpleNamedScreenHandlerFactory((syncId, inventory, player) -> screenHandler, Text.of(inv.getInventoryName())));
-			} finally {
-				((ServerPlayerEntityBridge) entity).negativity$doNotSendScreenClosePacket(false);
-			}
+			entity.openHandledScreen(new NegativityScreenHandlerFactory((syncId, inventory, player) -> screenHandler, Text.of(inv.getInventoryName())));
 		} else if (inv instanceof FabricInventory fabricInventory) {
-			try {
-				((ServerPlayerEntityBridge) entity).negativity$doNotSendScreenClosePacket(true);
-				entity.openHandledScreen(new SimpleNamedScreenHandlerFactory(fabricInventory.getFactory(), Text.of(inv.getInventoryName())));
-			} finally {
-				((ServerPlayerEntityBridge) entity).negativity$doNotSendScreenClosePacket(false);
-			}
+			entity.openHandledScreen(new NegativityScreenHandlerFactory(fabricInventory.getFactory(), Text.of(inv.getInventoryName())));
 		//} else if (inv instanceof FabricPlayerInventory playerInventory) { // TODO open proper PlayerInventory implementation
 		} else if (o != null) {
 			Adapter.getAdapter().getLogger().warn("Tried opening unsupported inventory " + o.getClass().getName());

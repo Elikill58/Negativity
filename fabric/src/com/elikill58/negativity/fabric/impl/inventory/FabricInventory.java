@@ -22,7 +22,6 @@ import net.minecraft.screen.GenericContainerScreenHandler;
 import net.minecraft.screen.ScreenHandler;
 import net.minecraft.screen.ScreenHandlerFactory;
 import net.minecraft.screen.ScreenHandlerType;
-import net.minecraft.screen.SimpleNamedScreenHandlerFactory;
 import net.minecraft.screen.slot.Slot;
 import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
@@ -77,7 +76,7 @@ public class FabricInventory extends Inventory {
 		this.type = typeFromPlatform(this.platformType);
 		this.size = size;
 		this.earlySlots = DefaultedList.ofSize(size, net.minecraft.item.ItemStack.EMPTY);
-		this.factory = new SimpleNamedScreenHandlerFactory((syncId, inv1, player) -> {
+		this.factory = new NegativityScreenHandlerFactory((syncId, inv1, player) -> {
 			this.inv = platformType.create(syncId, inv1);
 			this.inv.updateSlotStacks(this.inv.nextRevision(), this.earlySlots, net.minecraft.item.ItemStack.EMPTY);
 			((NegativityHolderOwner) this.inv).negativity$setHolder(this.holder);

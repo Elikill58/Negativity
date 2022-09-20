@@ -8,6 +8,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.common.protocols.data.FastStairsData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -17,11 +18,11 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class FastStairs extends Cheat {
 
 	public FastStairs() {
-		super(CheatKeys.FAST_STAIRS, CheatCategory.MOVEMENT, Materials.BRICK_STAIRS);
+		super(CheatKeys.FAST_STAIRS, CheatCategory.MOVEMENT, Materials.BRICK_STAIRS, FastStairsData::new);
 	}
 
 	@Check(name = "distance", description = "Check distance", conditions = { CheckConditions.SURVIVAL })
-	public void onMove(PlayerMoveEvent e, NegativityPlayer np) {
+	public void onMove(PlayerMoveEvent e, NegativityPlayer np, FastStairsData data) {
 		Player p = e.getPlayer();
 		String blockName = e.getTo().clone().sub(0, 0.0001, 0).getBlock().getType().getId();
 		if (!blockName.contains("STAIRS") || p.hasPotionEffect(PotionEffectType.SPEED)) {
@@ -30,7 +31,7 @@ public class FastStairs extends Cheat {
 		}
 		Location from = e.getFrom().clone();
 		from.setY(e.getTo().getY());
-		double distance = from.distance(e.getTo()), lastDistance = np.doubles.get(getKey(), "distance", 0.0);
+		double distance = from.distance(e.getTo()), lastDistance = data.distance;
 		if (distance > 0.452 && lastDistance > distance && p.getFallDistance() == 0) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 					UniversalUtils.parseInPorcent(distance * 140), "distance", "No fall damage. Block: " + blockName
@@ -39,6 +40,6 @@ public class FastStairs extends Cheat {
 			if (mayCancel && isSetBack())
 				e.setCancelled(true);
 		}
-		np.doubles.set(getKey(), "distance", distance);
+		data.distance = distance;
 	}
 }

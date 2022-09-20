@@ -21,7 +21,6 @@ import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.protocols.CheckData;
@@ -85,7 +84,7 @@ public class NegativityPlayer {
 	public List<Location> lastLocations = new ArrayList<>();
 	public ConcurrentHashMap<IDetectionKey<?>, CheckData> checkDatas = new ConcurrentHashMap<>();
 	
-	public Vector delta = new Vector(0, 0, 0), lastDelta = new Vector(0, 0, 0);
+	public Location delta, lastDelta;
 	
 	// content
 	public Content<List<Location>> listLocations = new Content<>();
@@ -102,7 +101,7 @@ public class NegativityPlayer {
 	public Content<Long> longs = new Content<>();
 	
 	// general values
-	public boolean isInFight = false, isFreeze = false, isUsingSlimeBlock = false,
+	public boolean isInFight = false, isFreeze = false, isUsingSlimeBlock = false, isUsingJumpBoost = false,
 			isInvisible = false, isAttacking = false, shouldCheckSensitivity = true;
 	private boolean isBedrockPlayer = false;
 	public double sensitivity = 0.0;
@@ -118,6 +117,7 @@ public class NegativityPlayer {
 		account.setIp(p.getIP());
 		ada.getAccountManager().save(playerId);
 		this.loginTime = System.currentTimeMillis();
+		this.delta = lastDelta = p.getLocation().clone();
 		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
 		

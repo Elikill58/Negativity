@@ -9,13 +9,14 @@ import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.EventManager;
+import com.elikill58.negativity.api.events.EventPriority;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockBreakEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
+import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
@@ -25,8 +26,10 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
+import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.utils.Maths;
@@ -74,7 +77,10 @@ public class PacketListener implements Listeners {
 			if(flying.hasPos) {
 				Location oldLoc = p.getLocation();
 				np.lastDelta = np.delta;
-				np.delta = new Vector(oldLoc.getX() - flying.x, oldLoc.getY() - flying.y, oldLoc.getZ() - flying.z);
+				if(flying.hasLook)
+					np.delta = new Location(p.getWorld(), flying.x - oldLoc.getX(), flying.y - oldLoc.getY(), flying.z - oldLoc.getZ(), flying.yaw - oldLoc.getYaw(), flying.pitch - oldLoc.getPitch());
+				else
+					np.delta = new Location(p.getWorld(), flying.x - oldLoc.getX(), flying.y - oldLoc.getY(), flying.z - oldLoc.getZ(), np.lastDelta.getYaw(), np.lastDelta.getPitch()); // no yaw/pitch move
 				np.lastLocations.add(flying.getLocation(p.getWorld()));
 				if(np.lastLocations.size() >= 10)
 					np.lastLocations.remove(0); // limit to 10 last loc
@@ -122,6 +128,26 @@ public class PacketListener implements Listeners {
 		new ArrayList<>(np.getCheckProcessors()).forEach((cp) -> cp.handlePacketReceived(e));
 	}
 
+	@EventListener(priority = EventPriority.PRE)
+	public void onJumpBoostUse(PlayerMoveEvent e) {
+		Player p = e.getPlayer();
+		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
+		double amplifier = (p.hasPotionEffect(PotionEffectType.JUMP)
+				? p.getPotionEffect(PotionEffectType.JUMP).get().getAmplifier()
+				: 0);
+		if (p.isOnGround() && amplifier == 0)
+			np.isUsingJumpBoost = false;
+		
+	}
+
+	@EventListener(priority = EventPriority.PRE)
+	public void onJumpBoostUse(PacketSendEvent e) {
+		if (!e.getPacket().getPacketType().equals(PacketType.Server.ENTITY_EFFECT))
+			return;
+		NPacketPlayOutEntityEffect packet = (NPacketPlayOutEntityEffect) e.getPacket().getPacket();
+		if (packet.type.equals(PotionEffectType.JUMP))
+			NegativityPlayer.getNegativityPlayer(e.getPlayer()).isUsingJumpBoost = true;
+	}
 
 	@EventListener
 	public void onPacketSend(PacketSendEvent e) {

@@ -14,6 +14,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -26,7 +27,7 @@ public class Chat extends Cheat {
 	private final List<String> insults = new ArrayList<>();
 	
 	public Chat() {
-		super(CheatKeys.CHAT, CheatCategory.PLAYER, Materials.BOOK_AND_QUILL);
+		super(CheatKeys.CHAT, CheatCategory.PLAYER, Materials.BOOK_AND_QUILL, EmptyData::new);
 		if(!isActive())
 			return;
 		CompletableFuture.runAsync(() -> {

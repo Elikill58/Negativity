@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -21,7 +22,7 @@ public class NoPitchLimit extends Cheat {
 	public static final DataType<Float> PITCH = new DataType<Float>("pitch", "Pitch", () -> new FloatDataCounter());
 
 	public NoPitchLimit() {
-		super(CheatKeys.NO_PITCH_LIMIT, CheatCategory.PLAYER, Materials.SKELETON_SKULL, CheatDescription.VERIF);
+		super(CheatKeys.NO_PITCH_LIMIT, CheatCategory.PLAYER, Materials.SKELETON_SKULL, EmptyData::new, CheatDescription.VERIF);
 	}
 
 	@Check(name = "head-mov", description = "Check head movement")

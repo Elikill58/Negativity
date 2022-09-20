@@ -36,6 +36,7 @@ public enum CheckConditions {
 	NO_ON_BEDROCK("Not on bedrock", (p) -> !NegativityPlayer.getNegativityPlayer(p).isBedrockPlayer()),
 	NO_USE_TRIDENT("Using trident", (p) -> !p.getItemInHand().getType().getId().contains("TRIDENT")),
 	NO_USE_SLIME("Using slime", (p) -> !NegativityPlayer.getNegativityPlayer(p).isUsingSlimeBlock),
+	NO_USE_JUMP_BOOST("Using jump boost", (p) -> !NegativityPlayer.getNegativityPlayer(p).isUsingJumpBoost),
 	NO_USE_ELEVATOR("Using elevator", (p) -> !LocationUtils.isUsingElevator(p), true),
 	NO_IRON_TARGET("Target by iron golem", (p) -> !NegativityPlayer.getNegativityPlayer(p).isTargetByIronGolem(), true),
 	NO_THORNS("Thorns", p -> !p.hasThorns(), true),

@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.events.player.PlayerInteractEvent;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.common.protocols.data.FastBowData;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.bypass.checkers.ItemUseBypass;
@@ -28,11 +29,11 @@ public class FastBow extends Cheat implements Listeners {
 	public static final DataType<Long> TIME_SHOT = new DataType<Long>("time_shot", "Time between shot", () -> new LongDataCounter());
 	
 	public FastBow() {
-		super(FAST_BOW, CheatCategory.COMBAT, Materials.BOW, CheatDescription.VERIF);
+		super(FAST_BOW, CheatCategory.COMBAT, Materials.BOW, FastBowData::new, CheatDescription.VERIF);
 	}
 	
 	@Check(name = "last-shot", description = "Time with last shot")
-	public void onPlayerInteract(PlayerInteractEvent e, NegativityPlayer np) {
+	public void onPlayerInteract(PlayerInteractEvent e, NegativityPlayer np, FastBowData data) {
 		Player p = e.getPlayer();
 		ItemStack item = p.getItemInHand();
 		if(item == null)
@@ -42,21 +43,20 @@ public class FastBow extends Cheat implements Listeners {
 			if(ItemUseBypass.hasBypassWithClick(p, this, item, e.getAction().name()))
 				return;
 			np.flyingReason = FlyingReason.BOW;
-			long lastShotWithBow = np.longs.get(FAST_BOW, "last-shot", 0l);
-			long actual = System.currentTimeMillis(), dif = actual - lastShotWithBow;
+			long actual = System.currentTimeMillis(), dif = actual - data.lastShot;
 			recordData(p.getUniqueId(), TIME_SHOT, dif);
-			if (lastShotWithBow != 0) {
+			if (data.lastShot != 0) {
 				int ping = p.getPing();
 				if (dif < (200 + ping)) {
 					boolean mayCancel = Negativity.alertMod(dif == 0 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 							UniversalUtils.parseInPorcent((dif < (50 + ping) ? 200 : 100) - dif - ping), "last-shot",
-							"Player use Bow, last shot: " + lastShotWithBow + " Actual time: " + actual + " Difference: " + dif,
+							"Player use Bow, last shot: " + data.lastShot + " Actual time: " + actual + " Difference: " + dif,
 							hoverMsg("main", "%time%", dif));
 					if(isSetBack() && mayCancel)
 						e.setCancelled(true);
 				}
 			}
-			np.longs.set(FAST_BOW, "last-shot", actual);
+			data.lastShot = actual;
 		}
 	}
 	

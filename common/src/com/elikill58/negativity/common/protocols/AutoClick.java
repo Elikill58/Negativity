@@ -9,6 +9,7 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -25,7 +26,7 @@ public class AutoClick extends Cheat {
 			() -> new IntegerDataCounter());
 
 	public AutoClick() {
-		super(CheatKeys.AUTO_CLICK, CheatCategory.COMBAT, Materials.FISHING_ROD, CheatDescription.VERIF);
+		super(CheatKeys.AUTO_CLICK, CheatCategory.COMBAT, Materials.FISHING_ROD, EmptyData::new, CheatDescription.VERIF);
 	}
 
 	@Check(name = "count", description = "Count click 1 by 1")

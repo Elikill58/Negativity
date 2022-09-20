@@ -1,8 +1,5 @@
 package com.elikill58.negativity.common.protocols;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -21,6 +18,7 @@ import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.api.utils.LocationUtils.Direction;
+import com.elikill58.negativity.common.protocols.data.AimbotData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -43,13 +41,13 @@ public class AimBot extends Cheat {
 			() -> new IntegerDataCounter());
 
 	public AimBot() {
-		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, CheatDescription.VERIF);
+		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, AimbotData::new, CheatDescription.VERIF);
 	}
 
 	// many killauras use a constant pitch in order to bypass the GDC check
 	// this check will fight against that and fail these killauras
 	@Check(name = "ratio", conditions = CheckConditions.SURVIVAL, description = "Checks for invalid rotation ratios", ignoreCancel = true)
-	public void ratio(PacketReceiveEvent e, NegativityPlayer np) {
+	public void ratio(PacketReceiveEvent e, NegativityPlayer np, AimbotData data) {
 		if (!e.hasPlayer())
 			return;
 		PacketType type = e.getPacket().getPacketType();
@@ -59,65 +57,44 @@ public class AimBot extends Cheat {
 				return;
 			if (!np.isAttacking)
 				return;
-			double deltaYaw = flying.yaw - np.doubles.get(getKey(), "last-yaw-streak", 0.0);
-			double deltaPitch = flying.pitch - np.doubles.get(getKey(), "last-pitch-streak", 0.0);
-			double lastDeltaPitch = np.doubles.get(getKey(), "last-delta-pitch-streak", 0.0);
-			final double difference = Math.abs(deltaPitch - lastDeltaPitch);
-			final double absoluteDeltaYaw = Math.abs(deltaYaw);
+			final double difference = Math.abs(np.delta.getPitch() - data.lastDeltaPitchStreak);
+			final double absoluteDeltaYaw = Math.abs(np.delta.getYaw());
 			if (difference < 0.005 && absoluteDeltaYaw > .65) {
 				// increment streak
-				np.ints.set(getKey(), "ratio-streak", np.ints.get(getKey(), "ratio-streak", 0) + 1);
 
-				final int streak = np.ints.get(getKey(), "ratio-streak", 0);
-
-				if (streak > 7) {
+				if (++data.ratioStreak > 7) {
 					if(Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio", "absYaw: "
-							+ String.format("%.3f", absoluteDeltaYaw) + ", streak: " + streak + ", difference: "
+							+ String.format("%.3f", absoluteDeltaYaw) + ", streak: " + data.ratioStreak + ", difference: "
 							+ String.format("%.3f", difference)) && isSetBack())
 						e.setCancelled(true);
-
-					np.ints.set(getKey(), "ratio-streak", Math.abs(streak - 3));
+					
+					data.ratioStreak -= 3;
 				}
 			} else {
-				np.ints.remove(getKey(), "ratio-streak");
+				data.ratioStreak = 0;
 			}
-			np.doubles.set(getKey(), "last-yaw-streak", (double) flying.yaw);
-			np.doubles.set(getKey(), "last-pitch-streak", (double) flying.pitch);
-			np.doubles.set(getKey(), "last-delta-pitch-streak", deltaPitch);
+			data.lastDeltaPitchStreak = np.delta.getPitch();
 		}
 	}
 
 	@Check(name = "gcd", conditions = CheckConditions.SURVIVAL, description = "Calculate GCD between attacks", ignoreCancel = true)
-	public void gcd(PacketReceiveEvent e, NegativityPlayer np) {
+	public void gcd(PacketReceiveEvent e, NegativityPlayer np, AimbotData data) {
 		if (!e.hasPlayer())
 			return;
 		Player p = e.getPlayer();
 		PacketType type = e.getPacket().getPacketType();
 		if (type.isFlyingPacket()) {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
-			if (!flying.hasLook)
+			if (!flying.hasLook || !np.isAttacking)
 				return;
-			List<Double> allPitchs = np.listDoubles.get(getKey(), "all-pitchs",
-					new ArrayList<Double>(Arrays.asList(0d, 0d, 0d, 0d, 0d, 0d, 0d)));
-			List<Integer> allInvalidChanges = np.listIntegers.get(getKey(), "all-invalid-changes",
-					new ArrayList<Integer>(Arrays.asList(0, 0, 0, 0, 0, 0, 0)));
-			double deltaYaw = flying.yaw - np.doubles.get(getKey(), "last-yaw", 0.0);
-			double deltaPitch = flying.pitch - np.doubles.get(getKey(), "last-pitch", 0.0);
+
 			double pitch = flying.pitch;
-			double lastDeltaPitch = np.doubles.get(getKey(), "last-delta-pitch", 0.0);
-
-			np.doubles.set(getKey(), "last-yaw", (double) flying.yaw);
-			np.doubles.set(getKey(), "last-pitch", (double) flying.pitch);
-			np.doubles.set(getKey(), "last-delta-pitch", deltaPitch);
-			if (!np.isAttacking)
-				return;
-
-			allPitchs.add(pitch);
+			data.allPitchs.add(pitch);
 
 			int invalidChange = 0;
 			double last = pitch, pitchMore = pitch, pitchLess = pitch;
 			Boolean up = null;
-			for (double actual : allPitchs) {
+			for (double actual : data.allPitchs) {
 				boolean isUp = actual > last;
 				if (up != null && isUp != up && Math.abs(actual - last) > 2) {
 					invalidChange++;
@@ -131,27 +108,27 @@ public class AimBot extends Cheat {
 				else if (actual < pitchLess)
 					pitchLess = actual;
 			}
-			allInvalidChanges.add(invalidChange);
+			data.allInvalidChanges.add(invalidChange);
 
-			double gcd = getGcdForLong((long) deltaPitch, (long) lastDeltaPitch);
-			int averageInvalid = (int) allInvalidChanges.stream().mapToInt(a -> a).average().orElse(0);
-			boolean exempt = !(Math.abs(pitch) < 82.5F) || deltaYaw < 5.0;
+			double gcd = getGcdForLong((long) np.delta.getPitch(), (long) np.lastDelta.getPitch());
+			int averageInvalid = (int) data.allInvalidChanges.stream().mapToInt(a -> a).average().orElse(0);
+			boolean exempt = !(Math.abs(pitch) < 82.5F) || np.delta.getYaw() < 5.0;
 			if (!exempt && Math.abs(gcd) > np.sensitivity / getConfig().getInt("checks.gcd.sensitivity-divider", 15)
 					&& invalidChange > getConfig().getInt("checks.gcd.invalid-change", 3) && averageInvalid > 2
 					&& !(pitchLess < 0 && pitchMore < 50) && Math.abs(pitchLess - pitchMore) > 20) {
-				String allPitchStr = allPitchs.stream().map((d) -> String.format("%.3f", d))
+				String allPitchStr = data.allPitchs.stream().map((d) -> String.format("%.3f", d))
 						.collect(Collectors.toList()).toString();
 				Negativity.alertMod(ReportType.WARNING, p, this, 100, "gcd", "GCD: " + gcd + ", allPitchs: "
 						+ allPitchStr + ", sens: " + String.format("%.3f", np.sensitivity) + ", changes: "
-						+ invalidChange + ", allChanges: " + allInvalidChanges + ", avInvalid: " + averageInvalid
+						+ invalidChange + ", allChanges: " + data.allInvalidChanges + ", avInvalid: " + averageInvalid
 						+ ", More/Less: " + String.format("%.3f", pitchMore) + "/" + String.format("%.3f", pitchLess));
 			}
 			recordData(p.getUniqueId(), GCD, gcd);
 			recordData(p.getUniqueId(), PITCHS, pitch);
 			recordData(p.getUniqueId(), INVALID_CHANGE, invalidChange);
 
-			allPitchs.remove(0);
-			allInvalidChanges.remove(0);
+			data.allPitchs.remove(0);
+			data.allInvalidChanges.remove(0);
 		}
 	}
 

@@ -24,6 +24,7 @@ import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.ray.block.BlockRay;
 import com.elikill58.negativity.api.ray.block.BlockRayBuilder;
 import com.elikill58.negativity.api.ray.block.BlockRayResult;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
@@ -37,7 +38,7 @@ public class Scaffold extends Cheat {
 	private static final List<Material> BYPASS_TYPES = Arrays.asList(Materials.AIR, Materials.SCAFFOLD, Materials.KELP);
 	
 	public Scaffold() {
-		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS, CheatDescription.BLOCKS);
+		super(CheatKeys.SCAFFOLD, CheatCategory.WORLD, Materials.GRASS, EmptyData::new, CheatDescription.BLOCKS);
 	}
 
 	@Check(name = "below", description = "Block placed below", conditions = CheckConditions.SURVIVAL)

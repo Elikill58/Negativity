@@ -16,6 +16,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -28,7 +29,7 @@ public class IncorrectPacket extends Cheat {
 			PacketType.Client.BLOCK_PLACE);
 
 	public IncorrectPacket() {
-		super(CheatKeys.INCORRECT_PACKET, CheatCategory.WORLD, Materials.NAME_TAG);
+		super(CheatKeys.INCORRECT_PACKET, CheatCategory.WORLD, Materials.NAME_TAG, EmptyData::new);
 	}
 
 	@Check(name = "distance", description = "Check distance between player and sent packet", conditions = {

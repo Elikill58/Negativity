@@ -24,8 +24,8 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.potion.PotionEffect;
+import com.elikill58.negativity.api.protocols.CheckData;
 import com.elikill58.negativity.api.protocols.CheckProcessor;
-import com.elikill58.negativity.common.protocols.InventoryMove.InventoryMoveData;
 import com.elikill58.negativity.common.protocols.checkprocessor.PingSpoofCheckProcessor;
 import com.elikill58.negativity.common.protocols.checkprocessor.ScaffoldRiseCheckProcessor;
 import com.elikill58.negativity.universal.Adapter;
@@ -43,6 +43,7 @@ import com.elikill58.negativity.universal.detections.Cheat.CheatCategory;
 import com.elikill58.negativity.universal.detections.Cheat.CheatDescription;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
+import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -82,7 +83,7 @@ public class NegativityPlayer {
 	public Location lastSpiderLoc = null;
 	public PacketType otherKeepAlivePacket = PacketType.Client.FLYING;
 	public List<Location> lastLocations = new ArrayList<>();
-	public InventoryMoveData invMoveData;
+	public ConcurrentHashMap<IDetectionKey<?>, CheckData> checkDatas = new ConcurrentHashMap<>();
 	
 	public Vector delta = new Vector(0, 0, 0), lastDelta = new Vector(0, 0, 0);
 	

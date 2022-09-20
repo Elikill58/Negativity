@@ -27,23 +27,26 @@ public class CheckManager implements Listeners {
 					continue;
 				}
 				
+				List<MethodArgument> arguments = new ArrayList<>();
 				Class<?>[] parameterTypes = possibleMethod.getParameterTypes();
-				if (parameterTypes.length == 0 || parameterTypes.length > 2) {
-					Adapter.getAdapter().getLogger().warn("Method for check " + check.name() + " must have a PlayerEvent as first parameter and can have the NegativityPlayer as second parameter.");
-					continue;
-				}
-				boolean hasNegativityPlayer = parameterTypes.length > 1;
-				if (!PlayerEvent.class.isAssignableFrom(parameterTypes[0])) {
-					Adapter.getAdapter().getLogger().warn("Parameter of check method " + possibleMethod.getName() + " must be a subclass of PlayerEvent.");
-					continue;
+				for(int i = 0; i < parameterTypes.length; i++) {
+					if (PlayerEvent.class.isAssignableFrom(parameterTypes[i])) {
+						arguments.add(MethodArgument.EVENT);
+					} else  if (NegativityPlayer.class.isAssignableFrom(parameterTypes[i])) {
+						arguments.add(MethodArgument.NEGATIVITY_PLAYER);
+					} else  if (CheckData.class.isAssignableFrom(parameterTypes[i])) {
+						arguments.add(MethodArgument.CHECK_DATA);
+					} else {
+						Adapter.getAdapter().getLogger().warn("Can't find valid assignable argument for " + check.name() + " and class " + parameterTypes[i].getSimpleName());
+					}
 				}
 				
-				if (hasNegativityPlayer && !NegativityPlayer.class.isAssignableFrom(parameterTypes[1])) {
-					Adapter.getAdapter().getLogger().warn("Second parameter of check method " + possibleMethod.getName() + " must be NegativityPlayer.");
+				if (parameterTypes.length != arguments.size()) {
+					Adapter.getAdapter().getLogger().warn("Method for check " + check.name() + " doesn't have known parameters.");
 					continue;
 				}
 				cheat.getChecks().add(check);
-				allChecks.add(new CheckMethod(cheat, check, possibleMethod, hasNegativityPlayer));
+				allChecks.add(new CheckMethod(cheat, check, possibleMethod, arguments.toArray(new MethodArgument[] {})));
 			}
 		}
 	}
@@ -85,13 +88,13 @@ public class CheckManager implements Listeners {
 		private final Cheat cheat;
 		private final Check check;
 		private final Method method;
-		private final boolean askNegativityPlayer;
+		private final MethodArgument[] arguments;
 		
-		public CheckMethod(Cheat cheat, Check check, Method method, boolean askNegativityPlayer) {
+		public CheckMethod(Cheat cheat, Check check, Method method, MethodArgument... arguments) {
 			this.cheat = cheat;
 			this.check = check;
 			this.method = method;
-			this.askNegativityPlayer = askNegativityPlayer;
+			this.arguments = arguments;
 		}
 		
 		public Cheat getCheat() {
@@ -106,20 +109,31 @@ public class CheckManager implements Listeners {
 			return method;
 		}
 		
-		public boolean isAskNegativityPlayer() {
-			return askNegativityPlayer;
-		}
-		
 		public void invoke(PlayerEvent event, NegativityPlayer np) {
 			try {
-				if(askNegativityPlayer)
-					method.invoke(cheat, event, np);
-				else
-					method.invoke(cheat, event);
+				Object[] args = new Object[arguments.length];
+				for(int i = 0; i < arguments.length; i++) {
+					switch (arguments[i]) {
+					case EVENT:
+						args[i] = event;
+						break;
+					case CHECK_DATA:
+						args[i] = cheat.getOrCreate(np);
+						break;
+					case NEGATIVITY_PLAYER:
+						args[i] = np;
+						break;
+					}
+				}
+				method.invoke(cheat, args);
 			} catch (Exception e) {
 				Adapter.getAdapter().getLogger().printError("Error while trying to invoke check method for event " + event.getClass().getSimpleName() + " and cheat " + cheat.getKey().getKey(), e);
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static enum MethodArgument {
+		EVENT, NEGATIVITY_PLAYER, CHECK_DATA;
 	}
 }

@@ -8,6 +8,7 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.common.protocols.data.MotionData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -17,7 +18,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Motion extends Cheat {
 
 	public Motion() {
-		super(CheatKeys.MOTION, CheatCategory.MOVEMENT, Materials.ANDESITE);
+		super(CheatKeys.MOTION, CheatCategory.MOVEMENT, Materials.ANDESITE, MotionData::new);
 	}
 
 	@Check(name = "y-motion", description = "Consistent y-axis motions", conditions = CheckConditions.NO_FLY)

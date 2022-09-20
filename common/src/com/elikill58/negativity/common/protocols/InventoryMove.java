@@ -12,6 +12,7 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
+import com.elikill58.negativity.common.protocols.data.InventoryMoveData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -22,17 +23,13 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class InventoryMove extends Cheat implements Listeners {
 
 	public InventoryMove() {
-		super(CheatKeys.INVENTORY_MOVE, CheatCategory.MOVEMENT, Materials.NETHER_STAR, CheatDescription.NO_FIGHT);
+		super(CheatKeys.INVENTORY_MOVE, CheatCategory.MOVEMENT, Materials.NETHER_STAR, InventoryMoveData::new, CheatDescription.NO_FIGHT);
 	}
 
 	@Check(name = "stay-distance", description = "Keep distance while moving", conditions = { CheckConditions.NO_ELYTRA,
 			CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_INSIDE_VEHICLE })
-	public void onMove(PlayerMoveEvent e, NegativityPlayer np) {
-		if (e.isMoveLook())
-			return;
-
-		InventoryMoveData data = np.invMoveData;
-		if (data == null)
+	public void onMove(PlayerMoveEvent e, NegativityPlayer np, InventoryMoveData data) {
+		if (e.isMoveLook() || !data.active)
 			return;
 		
 		Player p = e.getPlayer();
@@ -92,36 +89,10 @@ public class InventoryMove extends Cheat implements Listeners {
 
 	@EventListener
 	public void onClose(InventoryCloseEvent e) {
-		//Adapter.getAdapter().debug("Close inventory");
-		NegativityPlayer.getNegativityPlayer(e.getPlayer()).invMoveData = null;
+		((InventoryMoveData) getOrCreate(NegativityPlayer.getNegativityPlayer(e.getPlayer()))).reset();
 	}
 
 	private void checkInvMove(NegativityPlayer np) {
-		if(np.invMoveData == null)
-			np.invMoveData = new InventoryMoveData(np.getPlayer());
-	}
-
-	public static class InventoryMoveData {
-
-		public double distance = 0, distanceXZ = 0;
-		public int timeSinceOpen = 0;
-		public final boolean sprint, sneak;
-
-		public InventoryMoveData(Player p) {
-			this.sprint = p.isSprinting();
-			this.sneak = p.isSneaking();
-		}
-		
-		public void update(double distance, double distanceXZ) {
-			this.distance = distance;
-			this.distanceXZ = distanceXZ;
-			this.timeSinceOpen++;
-		}
-
-		@Override
-		public String toString() {
-			return "InventoryMoveData{sprint=" + sprint + ",sneak=" + sneak + ",distance="
-					+ String.format("%.3f", distance) + ",distanceXZ=" + String.format("%.3f", distance)  + ",time=" + timeSinceOpen + "}";
-		}
+		((InventoryMoveData) getOrCreate(np)).active = true;
 	}
 }

@@ -24,6 +24,7 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.json.JSONObject;
 import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.api.protocols.CheckData;
 import com.elikill58.negativity.api.protocols.CheckManager;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.TranslatedMessages;
@@ -43,10 +44,16 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	public static CheckManager getCheckManager() {
 		return checkManager;
 	}
-	private CheatCategory cheatCategory;
+	private final CheatCategory cheatCategory;
 	private final List<SetBackProcessor> setBackProcessor = new ArrayList<>();
 	private final List<Check> checks = new ArrayList<>();
 	private final List<CheatDescription> options;
+	private final Function<NegativityPlayer, ? extends CheckData> checkDataCreator;
+	
+	@Deprecated
+	public Cheat(CheatKeys key, CheatCategory type, Material m, CheatDescription... options) {
+		this(key, type, m, null, options);
+	}
 
 	/**
 	 * Create a new cheat object and load default config
@@ -54,12 +61,14 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	 * @param key the cheat key
 	 * @param type the cheat category
 	 * @param m the material used in inventory to represent this cheat
+	 * @param checkDataCreator the creator of check data
 	 * @param options all options that describe the cheat
 	 */
-	public Cheat(CheatKeys key, CheatCategory type, Material m, CheatDescription... options) {
+	public Cheat(CheatKeys key, CheatCategory type, Material m, Function<NegativityPlayer, ? extends CheckData> checkDataCreator, CheatDescription... options) {
 		super(key, m);
 		this.options = Arrays.asList(options);
 		this.cheatCategory = type;
+		this.checkDataCreator = checkDataCreator;
 		
 		this.config.getStringList("set_back.action").forEach((line) -> {
 			JSONObject json = null;
@@ -285,14 +294,38 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 		VerificationManager.recordData(target, this, type, value);
 	}
 	
+	public Function<NegativityPlayer, ? extends CheckData> getCheckDataCreator() {
+		return checkDataCreator;
+	}
+	
+	public CheckData getOrCreate(NegativityPlayer np) {
+		return np.checkDatas.computeIfAbsent(getKey(), a -> checkDataCreator == null ? null : checkDataCreator.apply(np));
+	}
+	
+	/**
+	 * Get all checks for this cheat
+	 * 
+	 * @return all checks
+	 */
 	public List<Check> getChecks() {
 		return checks;
 	}
 	
+	/**
+	 * Get all cheat options
+	 * 
+	 * @return all options
+	 */
 	public List<CheatDescription> getOptions() {
 		return options;
 	}
 	
+	/**
+	 * Check if this cheat has this option
+	 * 
+	 * @param o the option to check
+	 * @return true if has option
+	 */
 	public boolean hasOption(CheatDescription o) {
 		return this.options.contains(o);
 	}

@@ -14,6 +14,8 @@ import com.elikill58.negativity.api.events.block.BlockBreakEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
+import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
@@ -46,8 +48,8 @@ public class PacketListener implements Listeners {
 				np.packets.put(type, np.packets.getOrDefault(type, 0) + 1);
 			if(flying.hasLook && np.shouldCheckSensitivity) {
 				
-				final double deltaPitch = flying.pitch - np.doubles.get(CheatKeys.ALL, "sens-pitch", 0.0);
-				final double lastDeltaPitch = np.doubles.get(CheatKeys.ALL, "sens-delta-pitch", 0.0);
+				double deltaPitch = flying.pitch - np.doubles.get(CheatKeys.ALL, "sens-pitch", 0.0);
+				double lastDeltaPitch = np.doubles.get(CheatKeys.ALL, "sens-delta-pitch", 0.0);
 
 				float actualGcd = (float) Maths.getGcd(Math.abs(deltaPitch), Math.abs(lastDeltaPitch));
 				double sensModifier = Math.cbrt(0.8333 * actualGcd);
@@ -70,6 +72,9 @@ public class PacketListener implements Listeners {
 				}
 			}
 			if(flying.hasPos) {
+				Location oldLoc = p.getLocation();
+				np.lastDelta = np.delta;
+				np.delta = new Vector(oldLoc.getX() - flying.x, oldLoc.getY() - flying.y, oldLoc.getZ() - flying.z);
 				np.lastLocations.add(flying.getLocation(p.getWorld()));
 				if(np.lastLocations.size() >= 10)
 					np.lastLocations.remove(0); // limit to 10 last loc

@@ -30,11 +30,8 @@ public class Motion extends Cheat {
         if(!flying.hasPos)
         	return;
 
-        double lastDeltaY = np.doubles.get(getKey(), "delta-y", 0.0);
-        double deltaY = np.doubles.get(getKey(), "y", 0.0) - flying.y;
-
-        np.doubles.set(getKey(), "delta-y", deltaY);
-        np.doubles.set(getKey(), "y", flying.y);
+        double lastDeltaY = np.lastDelta.getY();
+        double deltaY = np.delta.getY();
         
         if (deltaY == 0) return;
 

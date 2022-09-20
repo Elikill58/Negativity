@@ -21,6 +21,7 @@ import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.protocols.CheckProcessor;
@@ -82,6 +83,8 @@ public class NegativityPlayer {
 	public PacketType otherKeepAlivePacket = PacketType.Client.FLYING;
 	public List<Location> lastLocations = new ArrayList<>();
 	public InventoryMoveData invMoveData;
+	
+	public Vector delta = new Vector(0, 0, 0), lastDelta = new Vector(0, 0, 0);
 	
 	// content
 	public Content<List<Location>> listLocations = new Content<>();

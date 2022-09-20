@@ -72,7 +72,7 @@ public class NegativityPlayer {
 	public List<PotionEffect> potionEffects = new ArrayList<>();
 	
 	// detection and bypass
-	public long timeInvincibility = 0, timeLastMessage = 0, otherKeepAliveTime = 0;
+	public long loginTime, timeInvincibility = 0, timeLastMessage = 0, otherKeepAliveTime = 0;
 	public int LAST_CHAT_MESSAGE_NB = 0, bypassSpeed = 0, spiderSameDist = 0;
 	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
@@ -117,6 +117,7 @@ public class NegativityPlayer {
 		account.setPlayerName(p.getName());
 		account.setIp(p.getIP());
 		ada.getAccountManager().save(playerId);
+		this.loginTime = System.currentTimeMillis();
 		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
 		

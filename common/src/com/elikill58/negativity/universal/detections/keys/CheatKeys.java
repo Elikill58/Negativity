@@ -34,6 +34,7 @@ public enum CheatKeys implements IDetectionKey<CheatKeys> {
 	NO_SLOW_DOWN("NOSLOWDOWN"),
 	NO_WEB("NOWEB"),
 	NUKER("NUKER"),
+	MOTION("MOTION"),
 	PINGSPOOF("PINGSPOOF"),
 	PHASE("PHASE"),
 	REACH("REACH"),

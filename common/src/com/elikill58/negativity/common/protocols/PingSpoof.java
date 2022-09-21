@@ -37,7 +37,7 @@ public class PingSpoof extends Cheat implements Listeners {
 	public void onPacketSent(PacketSendEvent e) {
 		AbstractPacket packet = e.getPacket();
 		if(packet.getPacketType().equals(PacketType.Server.KEEP_ALIVE)) {
-			PingSpoofData data = (PingSpoofData) getOrCreate(NegativityPlayer.getNegativityPlayer(e.getPlayer()));
+			PingSpoofData data = NegativityPlayer.getNegativityPlayer(e.getPlayer()).getCheckData(this);
 			data.pingId = ((NPacketPlayOutKeepAlive) packet.getPacket()).time;
 			data.pingTime = System.currentTimeMillis();
 		}
@@ -48,7 +48,7 @@ public class PingSpoof extends Cheat implements Listeners {
 		AbstractPacket packet = e.getPacket();
 		if(packet.getPacketType().equals(PacketType.Client.KEEP_ALIVE)) {
 			NPacketPlayInKeepAlive keepAlive = (NPacketPlayInKeepAlive) packet.getPacket();
-			PingSpoofData data = (PingSpoofData) getOrCreate(NegativityPlayer.getNegativityPlayer(e.getPlayer()));
+			PingSpoofData data = NegativityPlayer.getNegativityPlayer(e.getPlayer()).getCheckData(this);
 			if(data.pingId == keepAlive.time && data.pingId != 0) {
 				recordData(e.getPlayer().getUniqueId(), PLAYER_PING, System.currentTimeMillis() - data.pingTime);
 			}

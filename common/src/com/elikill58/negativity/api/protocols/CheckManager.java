@@ -118,7 +118,7 @@ public class CheckManager implements Listeners {
 						args[i] = event;
 						break;
 					case CHECK_DATA:
-						args[i] = cheat.getOrCreate(np);
+						args[i] = np.getCheckData(cheat);
 						break;
 					case NEGATIVITY_PLAYER:
 						args[i] = np;

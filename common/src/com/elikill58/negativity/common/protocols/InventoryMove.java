@@ -89,10 +89,10 @@ public class InventoryMove extends Cheat implements Listeners {
 
 	@EventListener
 	public void onClose(InventoryCloseEvent e) {
-		((InventoryMoveData) getOrCreate(NegativityPlayer.getNegativityPlayer(e.getPlayer()))).reset();
+		NegativityPlayer.getNegativityPlayer(e.getPlayer()).<InventoryMoveData>getCheckData(this).reset();
 	}
 
 	private void checkInvMove(NegativityPlayer np) {
-		((InventoryMoveData) getOrCreate(np)).active = true;
+		np.<InventoryMoveData>getCheckData(this).active = true;
 	}
 }

@@ -22,7 +22,7 @@ public class Motion extends Cheat {
 	}
 
 	@Check(name = "y-motion", description = "Consistent y-axis motions", conditions = CheckConditions.NO_FLY)
-    public void onReceivePacket(PacketReceiveEvent e, NegativityPlayer np) {
+    public void onReceivePacket(PacketReceiveEvent e, NegativityPlayer np, MotionData data) {
 		AbstractPacket pa = e.getPacket();
 		PacketType type = pa.getPacketType();
         if (!type.isFlyingPacket())
@@ -39,15 +39,13 @@ public class Motion extends Cheat {
         double offset = Math.abs(deltaY) / Math.abs(lastDeltaY);
 
         if (offset == 1) {
-        	int i = np.ints.get(getKey(), "buffer", 0);
-            if (++i > 5) {
-            	boolean mayCancel = Negativity.alertMod(ReportType.WARNING, e.getPlayer(), this, UniversalUtils.parseInPorcent(90 + i), "y-motion", "Offset: " + offset + ", deltaY: " + deltaY + ", lastDeltaY: " + lastDeltaY, null, i - 4);
+            if (++data.buffer > 5) {
+            	boolean mayCancel = Negativity.alertMod(ReportType.WARNING, e.getPlayer(), this, UniversalUtils.parseInPorcent(90 + data.buffer), "y-motion", "Offset: " + offset + ", deltaY: " + deltaY + ", lastDeltaY: " + lastDeltaY, null, data.buffer - 4);
             	if(mayCancel && isSetBack())
             		e.setCancelled(true);
             }
-            np.ints.set(getKey(), "buffer", i);
         } else {
-        	np.ints.remove(getKey(), "buffer");
+        	data.buffer = 0;
         }
     }
 }

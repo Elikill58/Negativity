@@ -26,7 +26,7 @@ public class FastStairs extends Cheat {
 		Player p = e.getPlayer();
 		String blockName = e.getTo().clone().sub(0, 0.0001, 0).getBlock().getType().getId();
 		if (!blockName.contains("STAIRS") || p.hasPotionEffect(PotionEffectType.SPEED)) {
-			np.doubles.remove(getKey(), "distance");
+			data.distance = 0;
 			return;
 		}
 		Location from = e.getFrom().clone();

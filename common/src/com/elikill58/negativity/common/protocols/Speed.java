@@ -12,7 +12,6 @@ import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
-import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
@@ -58,10 +57,6 @@ public class Speed extends Cheat implements Listeners {
 		for (Entity entity : p.getNearbyEntities(5, 5, 5))
 			if (entity.getType().equals(EntityType.CREEPER))
 				return;
-		if (np.bypassSpeed != 0) {
-			np.bypassSpeed--;
-			return;
-		}
 		Location loc = p.getLocation().clone();
 		Block under = loc.clone().sub(0, 1, 0).getBlock();
 		Location locDown = under.getLocation(), locUp = loc.clone().add(0, 1, 0);
@@ -182,11 +177,6 @@ public class Speed extends Cheat implements Listeners {
 			}
 			np.doubles.set(getKey(), "dif-y", dif);
 		}
-	}
-
-	@EventListener
-	public void onEntityDamage(PlayerDamagedByEntityEvent e) {
-		NegativityPlayer.getNegativityPlayer(e.getPlayer()).bypassSpeed = 3;
 	}
 	
 	public static double getSpeed(Location from, Location to) {

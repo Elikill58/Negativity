@@ -14,7 +14,7 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
-import com.elikill58.negativity.common.protocols.data.EmptyData;
+import com.elikill58.negativity.common.protocols.data.ChatData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -27,7 +27,7 @@ public class Chat extends Cheat {
 	private final List<String> insults = new ArrayList<>();
 	
 	public Chat() {
-		super(CheatKeys.CHAT, CheatCategory.PLAYER, Materials.BOOK_AND_QUILL, EmptyData::new);
+		super(CheatKeys.CHAT, CheatCategory.PLAYER, Materials.BOOK_AND_QUILL, ChatData::new);
 		if(!isActive())
 			return;
 		CompletableFuture.runAsync(() -> {
@@ -63,23 +63,23 @@ public class Chat extends Cheat {
 	}
 
 	@Check(name = "spam", description = "Spam of a message")
-	public void onChatSpam(PlayerChatEvent e, NegativityPlayer np) {
+	public void onChatSpam(PlayerChatEvent e, NegativityPlayer np, ChatData data) {
 		Player p = e.getPlayer();
 		String msg = e.getMessage();
-		PlayerChatEvent lastChat = np.lastChatEvent;
+		PlayerChatEvent lastChat = data.lastChatEvent;
 		if (lastChat != null && msg.equalsIgnoreCase(lastChat.getMessage())
-				&& (System.currentTimeMillis() - np.timeLastMessage < 5000)) {
-			np.LAST_CHAT_MESSAGE_NB++;
+				&& (System.currentTimeMillis() - data.timeLastMessage < 5000)) {
+			data.amountSameMessage++;
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
-					UniversalUtils.parseInPorcent(95 + np.LAST_CHAT_MESSAGE_NB), "spam",
-					"Spam " + lastChat.getMessage() + " " + np.LAST_CHAT_MESSAGE_NB + " times",
-					hoverMsg("spam", "%msg%", lastChat.getMessage(), "%nb%", np.LAST_CHAT_MESSAGE_NB));
+					UniversalUtils.parseInPorcent(95 + data.amountSameMessage), "spam",
+					"Spam " + lastChat.getMessage() + " " + data.amountSameMessage + " times",
+					hoverMsg("spam", "%msg%", lastChat.getMessage(), "%nb%", data.amountSameMessage));
 			if (mayCancel && isSetBack())
 				e.setCancelled(true);
 		} else
-			np.LAST_CHAT_MESSAGE_NB = 0;
-		np.lastChatEvent = e;
-		np.timeLastMessage = System.currentTimeMillis();
+			data.amountSameMessage = 0;
+		data.lastChatEvent = e;
+		data.timeLastMessage = System.currentTimeMillis();
 	}
 
 	@Check(name = "insult", description = "Manage insult")

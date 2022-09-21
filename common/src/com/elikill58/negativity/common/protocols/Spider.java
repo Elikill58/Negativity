@@ -15,7 +15,6 @@ import com.elikill58.negativity.common.protocols.data.SpiderData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.Cheat;
-import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.ReportType;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
@@ -58,12 +57,12 @@ public class Spider extends Cheat {
 
 	@Check(name = "same-y", description = "Player move with same Y", conditions = { CheckConditions.SURVIVAL,
 			CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY,
-			CheckConditions.NO_FALL_DISTANCE, CheckConditions.NO_CLIMB_BLOCK })
+			CheckConditions.NO_FALL_DISTANCE, CheckConditions.NO_CLIMB_BLOCK, CheckConditions.NO_USE_JUMP_BOOST })
 	public void onPlayerMoveSameY(PlayerMoveEvent e, NegativityPlayer np, SpiderData data) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		if (p.hasPotionEffect(PotionEffectType.JUMP) || np.booleans.get(CheatKeys.ALL, "jump-boost-use", false))
+		if (p.hasPotionEffect(PotionEffectType.JUMP))
 			return;
 		int amount = 0;
 		Location from = e.getFrom(), to = e.getTo();

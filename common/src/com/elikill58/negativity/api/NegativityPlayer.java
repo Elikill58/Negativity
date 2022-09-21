@@ -18,7 +18,6 @@ import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.negativity.PlayerCheatAlertEvent;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
-import com.elikill58.negativity.api.events.player.PlayerChatEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.PacketType;
@@ -55,15 +54,12 @@ public class NegativityPlayer {
 	private final Player p;
 
 	public ArrayList<CheckProcessor> checkProcessors = new ArrayList<>();
-	//public ArrayList<String> proof = new ArrayList<>();
 	public HashMap<CheatKeys, List<PlayerCheatAlertEvent>> alertNotShowed = new HashMap<>();
 	public HashMap<String, String> mods = new HashMap<>();
 	
 	// packets
 	public ConcurrentHashMap<PacketType, Integer> packets = new ConcurrentHashMap<>();
-	public int allPackets = 0;
-
-	public int lastClick = 0;
+	public int allPackets = 0, lastClick = 0;
 	
 	// setBack
 	public int noFallDamage = 0, idWaitingAppliedVelocity = -1;
@@ -71,32 +67,20 @@ public class NegativityPlayer {
 	public List<PotionEffect> potionEffects = new ArrayList<>();
 	
 	// detection and bypass
-	public long loginTime, timeInvincibility = 0, timeLastMessage = 0, otherKeepAliveTime = 0;
-	public int LAST_CHAT_MESSAGE_NB = 0, bypassSpeed = 0;
+	public long loginTime, timeInvincibility = 0;
 	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
-	public boolean isOnLadders = false, useAntiNoFallSystem = false, isTeleporting = false;
-	public PlayerChatEvent lastChatEvent = null;
-	public List<Integer> timerCount = new ArrayList<>();
-	//public List<Double> lastY = new ArrayList<>();
-	public PacketType otherKeepAlivePacket = PacketType.Client.FLYING;
+	public boolean isOnLadders = false, isTeleporting = false;
 	public List<Location> lastLocations = new ArrayList<>();
 	public ConcurrentHashMap<IDetectionKey<?>, CheckData> checkDatas = new ConcurrentHashMap<>();
 	
 	public Location delta, lastDelta;
 	
 	// content
-	public Content<List<Location>> listLocations = new Content<>();
-	public Content<List<Integer>> listIntegers = new Content<>();
 	public Content<List<Double>> listDoubles = new Content<>();
-	public Content<Location> locations = new Content<>();
-	public Content<Material> materials = new Content<>();
 	public Content<Boolean> booleans = new Content<>();
-	public Content<Entity> entities = new Content<>();
-	public Content<Object> objects = new Content<>();
 	public Content<Double> doubles = new Content<>();
 	public Content<Integer> ints = new Content<>();
-	public Content<Float> floats = new Content<>();
 	public Content<Long> longs = new Content<>();
 	
 	// general values

@@ -19,6 +19,7 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
+import com.elikill58.negativity.common.protocols.data.NoFallData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -31,14 +32,14 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class NoFall extends Cheat {
 
 	public NoFall() {
-		super(CheatKeys.NO_FALL, CheatCategory.MOVEMENT, Materials.YELLOW_WOOL);
+		super(CheatKeys.NO_FALL, CheatCategory.MOVEMENT, Materials.YELLOW_WOOL, NoFallData::new);
 	}
 
 	@Check(name = "motion-y", description = "Motion Y when fall", conditions = { CheckConditions.NO_USE_ELEVATOR,
 			CheckConditions.SURVIVAL, CheckConditions.NO_ALLOW_FLY, CheckConditions.NO_ELYTRA,
 			CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_LIQUID_AROUND,
 			CheckConditions.NO_FALL_LESS_BLOCK })
-	public void onMoveMotionY(PlayerMoveEvent e, NegativityPlayer np) {
+	public void onMoveMotionY(PlayerMoveEvent e, NegativityPlayer np, NoFallData data) {
 		if (e.isCancelled())
 			return;
 		Player p = e.getPlayer();
@@ -59,8 +60,8 @@ public class NoFall extends Cheat {
 				&& ((motionY > p.getWalkSpeed() && p.getFallDistance() == 0) || motionY > (p.getWalkSpeed() / 2))
 				&& p.getFallDistance() > 0.2 && p.getWalkSpeed() > p.getFallDistance()) {
 			if (locUp.getBlock().getType().getId().contains("WATER") || LocationUtils.isUsingElevator(p))
-				np.useAntiNoFallSystem = true;
-			if (!np.useAntiNoFallSystem) {
+				data.useAntiNofall = true;
+			if (!data.useAntiNofall) {
 				int porcent = UniversalUtils.parseInPorcent(900 * motionY);
 				Negativity.alertMod(ReportType.WARNING, p, this, porcent, "motion-y",
 						"New NoFall - Ground. motionY: " + motionY + ", ws: " + p.getWalkSpeed() + ", ground: "
@@ -68,7 +69,7 @@ public class NoFall extends Cheat {
 						new Cheat.CheatHover.Literal("MotionY (on ground): " + motionY));
 			}
 		} else if (motionY < 0.1)
-			np.useAntiNoFallSystem = false;
+			data.useAntiNofall = false;
 	}
 
 	@Check(name = "distance-no-ground", description = "Distance when player NOT in ground", conditions = {
@@ -164,7 +165,7 @@ public class NoFall extends Cheat {
 	}
 
 	@Check(name = "packet", description = "Player send spoofing packet when risk to have fall damage", conditions = CheckConditions.SURVIVAL)
-	public void onPacket(PacketReceiveEvent e, NegativityPlayer np) {
+	public void onPacket(PacketReceiveEvent e, NegativityPlayer np, NoFallData data) {
 		Player p = e.getPlayer();
 		AbstractPacket packet = e.getPacket();
 		PacketType type = packet.getPacketType();
@@ -172,9 +173,8 @@ public class NoFall extends Cheat {
 			return;
 		NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();
 		if (flying.isGround) {
-			float lastFall = np.floats.get(getKey(), "last-fall", 0f);
 			for (float f : Arrays.asList(2f, 3f)) {
-				if (lastFall < f && p.getFallDistance() > f) { // just pass over specific amount of fall
+				if (data.lastFloat < f && p.getFallDistance() > f) { // just pass over specific amount of fall
 					Location loc = flying.getLocation(p.getWorld());
 					if (loc == null)
 						loc = p.getLocation();
@@ -184,7 +184,7 @@ public class NoFall extends Cheat {
 					if ((belowTransparent || downTransparent)
 							&& !justBelow.getLocation().getBlockChecker(1).hasOther(Materials.AIR)) {
 						boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 95, "packet",
-								"Fall: " + lastFall + ", " + p.getFallDistance() + ", block: " + justBelow, null,
+								"Fall: " + data.lastFloat + ", " + p.getFallDistance() + ", block: " + justBelow, null,
 								(belowTransparent && downTransparent ? 5 : 1));
 						if (mayCancel && isSetBack())
 							manageDamage(p, (int) p.getFallDistance(), 95);
@@ -192,8 +192,7 @@ public class NoFall extends Cheat {
 				}
 			}
 		}
-
-		np.floats.set(getKey(), "last-fall", p.getFallDistance());
+		data.lastFloat = p.getFallDistance();
 	}
 
 	// TODO re-add this check

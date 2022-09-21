@@ -6,13 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.elikill58.negativity.api.GameMode;
-import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
-import com.elikill58.negativity.common.protocols.data.EmptyData;
+import com.elikill58.negativity.common.protocols.data.TimerData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -22,12 +21,11 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Timer extends Cheat {
 
 	public Timer() {
-		super(CheatKeys.TIMER, CheatCategory.MOVEMENT, Materials.PACKED_ICE, EmptyData::new);
+		super(CheatKeys.TIMER, CheatCategory.MOVEMENT, Materials.PACKED_ICE, TimerData::new);
 	}
 	
 	@Check(name = "packet", description = "Check Y move only")
-	public void onPacketClear(PlayerPacketsClearEvent e) {
-		NegativityPlayer np = e.getNegativityPlayer();
+	public void onPacketClear(PlayerPacketsClearEvent e, TimerData data) {
 		HashMap<PacketType, Integer> packets = e.getPackets();
 		int flying = packets.getOrDefault(PacketType.Client.FLYING, 0);
 		int position = packets.getOrDefault(PacketType.Client.POSITION, 0);
@@ -37,20 +35,20 @@ public class Timer extends Cheat {
 		int count = flying + look + position + positonLook - steerVehicle;
 		if(count < 0)
 			return;
-		np.timerCount.add(count);
+		data.timerCount.add(count);
 		
-		if(np.timerCount.size() > 6) // now we can remove first value (6 secs later)
-			np.timerCount.remove(0);
+		if(data.timerCount.size() > 6) // now we can remove first value (6 secs later)
+			data.timerCount.remove(0);
 		else // loading seconds
 			return;
-		double sum = np.timerCount.stream().mapToInt(Integer::intValue).sum() / np.timerCount.size();
+		double sum = data.timerCount.stream().mapToInt(Integer::intValue).sum() / data.timerCount.size();
 		int variation = getConfig().getInt("max_variation");
 		Player p = e.getPlayer();
 		int MAX = (p.getGameMode().equals(GameMode.CREATIVE) ? 40 : 20);
 		int MAX_VARIATION = MAX + variation;
 		if(MAX_VARIATION > sum)// in min/max variations
 			return;
-		List<Integer> medianList = new ArrayList<>(np.timerCount);
+		List<Integer> medianList = new ArrayList<>(data.timerCount);
 		medianList.sort(Comparator.naturalOrder());
 		int middle = medianList.size() / 2;
 		int medianValue = (medianList.size() % 2 == 1) ? medianList.get(middle) : (int) ((medianList.get(middle-1) + medianList.get(middle)) / 2.0);

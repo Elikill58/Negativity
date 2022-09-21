@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
+import com.elikill58.negativity.common.protocols.data.SpiderData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -21,19 +22,19 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Spider extends Cheat {
 
 	public Spider() {
-		super(SPIDER, CheatCategory.MOVEMENT, Materials.SPIDER_EYE);
+		super(SPIDER, CheatCategory.MOVEMENT, Materials.SPIDER_EYE, SpiderData::new);
 	}
 
 	@Check(name = "nothing-around", description = "Walking with nothing around", conditions = {
 			CheckConditions.SURVIVAL, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_LIQUID_AROUND,
 			CheckConditions.NO_FLY, CheckConditions.NO_FALL_DISTANCE, CheckConditions.NO_SPRINT, CheckConditions.NO_USE_TRIDENT,
-			CheckConditions.NO_USE_SLIME, CheckConditions.NO_STAIRS_AROUND, CheckConditions.NO_CLIMB_BLOCK })
+			CheckConditions.NO_USE_SLIME, CheckConditions.NO_STAIRS_AROUND, CheckConditions.NO_CLIMB_BLOCK, CheckConditions.NO_USE_JUMP_BOOST })
 	public void onPlayerMove(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location loc = p.getLocation();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
-		if (p.hasPotionEffect(PotionEffectType.JUMP) || np.booleans.get(CheatKeys.ALL, "jump-boost-use", false))
+		if (p.hasPotionEffect(PotionEffectType.JUMP))
 			return;
 		Location from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
@@ -58,7 +59,7 @@ public class Spider extends Cheat {
 	@Check(name = "same-y", description = "Player move with same Y", conditions = { CheckConditions.SURVIVAL,
 			CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_ELYTRA, CheckConditions.NO_FLY,
 			CheckConditions.NO_FALL_DISTANCE, CheckConditions.NO_CLIMB_BLOCK })
-	public void onPlayerMoveSameY(PlayerMoveEvent e, NegativityPlayer np) {
+	public void onPlayerMoveSameY(PlayerMoveEvent e, NegativityPlayer np, SpiderData data) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
@@ -68,32 +69,32 @@ public class Spider extends Cheat {
 		Location from = e.getFrom(), to = e.getTo();
 		double y = to.getY() - from.getY();
 		if (y <= 0.0 || y == 0.25 || y == 0.5 || y == 0.11837500000000034 /* TODO check if it's a good value */ || LocationUtils.isInWater(to) || hasBypassBlockAround(to) || hasBypassBlockAround(to.clone().sub(0, 1, 0))) {
-			np.lastY.clear();
+			data.lastY.clear();
 			return;
 		}
-		int i = np.lastY.size() - 1;
+		int i = data.lastY.size() - 1;
 		while (i > 0) {
-			double value = np.lastY.get(i);
+			double value = data.lastY.get(i);
 			if (value == y) {
 				++amount;
 				--i;
 			} else {
-				if (i == np.lastY.size() - 1) {
-					np.lastY.clear();
+				if (i == data.lastY.size() - 1) {
+					data.lastY.clear();
 					break;
 				}
 				for (int x = 0; x < i; x++) {
-					np.lastY.remove(0);
+					data.lastY.remove(0);
 				}
 				break;
 			}
 		}
 		if (amount > 1) {
 			if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(80 + amount * 3),
-					"same-y", "Y: " + y + ", fall: " + p.getFallDistance() + ", amount: " + amount + ", last: " + np.lastY) && isSetBack())
+					"same-y", "Y: " + y + ", fall: " + p.getFallDistance() + ", amount: " + amount + ", last: " + data.lastY) && isSetBack())
 				LocationUtils.teleportPlayerOnGround(p);
 		}
-		np.lastY.add(y);
+		data.lastY.add(y);
 	}
 
 	@Check(name = "distance", description = "Distance when going up", conditions = { CheckConditions.SURVIVAL,
@@ -101,32 +102,31 @@ public class Spider extends Cheat {
 			CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_LIQUID_AROUND,
 			CheckConditions.NO_STAIRS_AROUND, CheckConditions.NO_USE_TRIDENT,
 			CheckConditions.NO_BLOCK_MID_AROUND, CheckConditions.NO_FLY, CheckConditions.NO_CLIMB_BLOCK })
-	public void onPlayerContinueMove(PlayerMoveEvent e, NegativityPlayer np) {
+	public void onPlayerContinueMove(PlayerMoveEvent e, NegativityPlayer np, SpiderData data) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
 		Location loc = p.getLocation().clone();
 		double y = e.getTo().getY() - e.getFrom().getY();
-		if (np.lastSpiderLoc != null && np.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
-			double tempDis = loc.getY() - np.lastSpiderLoc.getY(),
-					lastSpiderDistance = np.doubles.get(SPIDER, "last-distance", 0.0);
-			if (lastSpiderDistance == tempDis && tempDis != 0) {
-				np.spiderSameDist++;
-				if (np.spiderSameDist > 2) {
+		if (data.lastSpiderLoc != null && data.lastSpiderLoc.getWorld().equals(loc.getWorld()) && y > 0) {
+			double tempDis = loc.getY() - data.lastSpiderLoc.getY();
+			if (data.lastDistance == tempDis && tempDis != 0) {
+				data.spiderSameDist++;
+				if (data.spiderSameDist > 2) {
 					if (Negativity.alertMod(ReportType.WARNING, p, this,
-							UniversalUtils.parseInPorcent(tempDis * 400 + np.spiderSameDist), "distance",
-							"Nothing strange around him. To > From: " + y + ", distance: " + lastSpiderDistance
-									+ ". Walk with same y " + np.spiderSameDist + " times")
+							UniversalUtils.parseInPorcent(tempDis * 400 + data.spiderSameDist), "distance",
+							"Nothing strange around him. To > From: " + y + ", distance: " + data.lastDistance
+									+ ". Walk with same y " + data.spiderSameDist + " times")
 							&& isSetBack()) {
 						LocationUtils.teleportPlayerOnGround(p);
 					}
 				}
 			} else
-				np.spiderSameDist = 0;
-			np.doubles.set(SPIDER, "last-distance", tempDis);
+				data.spiderSameDist = 0;
+			data.lastDistance = tempDis;
 		} else
-			np.spiderSameDist = 0;
-		np.lastSpiderLoc = loc;
+			data.spiderSameDist = 0;
+		data.lastSpiderLoc = loc;
 	}
 
 	private boolean hasBypassBlockAround(Location loc) {

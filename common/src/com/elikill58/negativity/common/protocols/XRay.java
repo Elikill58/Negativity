@@ -17,6 +17,7 @@ import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.ray.RayResult;
 import com.elikill58.negativity.api.ray.block.BlockRayBuilder;
 import com.elikill58.negativity.api.ray.block.BlockRayResult;
+import com.elikill58.negativity.common.protocols.data.XRayData;
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.Minerate.MinerateType;
 import com.elikill58.negativity.universal.Negativity;
@@ -37,7 +38,7 @@ public class XRay extends Cheat {
 	private static final long TIME_MINING = 10000;
 
 	public XRay() {
-		super(XRAY, CheatCategory.WORLD, Materials.EMERALD_ORE, CheatDescription.BLOCKS);
+		super(XRAY, CheatCategory.WORLD, Materials.EMERALD_ORE, XRayData::new, CheatDescription.BLOCKS);
 	}
 
 	@Check(name = "minerate", description = "Count minerate")
@@ -60,17 +61,16 @@ public class XRay extends Cheat {
 	}
 
 	@Check(name = "mining-direction", description = "Check mining direction of player")
-	public void onBlockBreak(BlockBreakEvent e, NegativityPlayer np) {
+	public void onBlockBreak(BlockBreakEvent e, NegativityPlayer np, XRayData data) {
 		Player p = e.getPlayer();
 		Block b = e.getBlock();
 
 		long time = System.currentTimeMillis();
-		boolean isMining = (time - np.longs.get(XRAY, "is-mining", 0l)) < TIME_MINING;
+		boolean isMining = (time - data.mining) < TIME_MINING;
 		if (ORES.contains(b.getType())) {
-			np.ints.set(XRAY, "mining-ore", 3);
+			data.miningOre = 3;
 		} else {
-			int timeMiningOre = np.ints.get(XRAY, "mining-ore", 0);
-			if (timeMiningOre > 0) {
+			if (data.miningOre > 0) {
 				if (isMining) {
 					// search for ore
 					BlockRayResult blockResult = new BlockRayBuilder(p)
@@ -88,22 +88,21 @@ public class XRay extends Cheat {
 					double blockDistance = blockResult.getBlock().getLocation().distance(p.getLocation());
 					if (blockResult.getRayResult().equals(RayResult.NEEDED_FOUND)
 							&& blockResult.hasBlockExceptSearched() && blockDistance > 2 && distanceWithBuild < 500) {
-						Location lastLoc = np.locations.get(XRAY, "mining-loc", null);
-						if (lastLoc != null && blockIsJustAround(loc, lastLoc)) {
+						if (data.miningLoc != null && blockIsJustAround(loc, data.miningLoc)) {
 							Negativity.alertMod(ReportType.WARNING, p, this, 80, "mining-direction",
-									"Found " + blockResult.getType() + ", timeMining: " + timeMiningOre
+									"Found " + blockResult.getType() + ", timeMining: " + data.miningOre
 											+ ", blockDistance: " + blockDistance + ", distanceWithBuild: "
 											+ distanceWithBuild);
 						}
-						np.locations.set(XRAY, "mining-loc", loc);
+						data.miningLoc = loc;
 					} else
-						np.ints.set(XRAY, "mining-ore", timeMiningOre - 1);
+						data.miningOre--;
 				} else
-					np.ints.set(XRAY, "mining-ore", timeMiningOre - 1);
+					data.miningOre--;
 			}
 		}
 		if (MINING_BLOCK.contains(b.getType()))
-			np.longs.set(XRAY, "is-mining", time);
+			data.mining = time;
 	}
 
 	private boolean blockIsJustAround(Location loc1, Location loc2) {

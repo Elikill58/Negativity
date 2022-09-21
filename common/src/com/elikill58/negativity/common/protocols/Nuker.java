@@ -16,6 +16,7 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.ItemUtils;
+import com.elikill58.negativity.common.protocols.data.NukerData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -26,7 +27,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Nuker extends Cheat {
 
 	public Nuker() {
-		super(CheatKeys.NUKER, CheatCategory.WORLD, Materials.BEDROCK, CheatDescription.BLOCKS);
+		super(CheatKeys.NUKER, CheatCategory.WORLD, Materials.BEDROCK, NukerData::new, CheatDescription.BLOCKS);
 	}
 
 	@Check(name = "distance", description = "Distance between target and breaked block", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY })
@@ -65,21 +66,20 @@ public class Nuker extends Cheat {
 	}
 	
 	@Check(name = "time", description = "Time between 2 block break", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY })
-	public void onBlockBreakTime(BlockBreakEvent e, NegativityPlayer np) {
+	public void onBlockBreakTime(BlockBreakEvent e, NegativityPlayer np, NukerData data) {
 		Player p = e.getPlayer();
 		Block b = e.getBlock();
 		if(p.hasPotionEffect(PotionEffectType.HASTE) || b == null || !b.getType().isSolid() || isInstantBlock(b.getType().getId()))
 			return;
-		long lastBreak = np.longs.get(getKey(), "last-break", 0l), time = np.longs.get(getKey(), "time", Long.MAX_VALUE);
-		long temp = System.currentTimeMillis(), dis = temp - lastBreak;
-		if(dis < 25 && time < 25 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.HASTE)) {
+		long temp = System.currentTimeMillis(), dis = temp - data.lastBreak;
+		if(dis < 25 && data.time < 25 && !ItemUtils.hasDigSpeedEnchant(p.getItemInHand()) && !p.hasPotionEffect(PotionEffectType.HASTE)) {
 			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, (int) (100 - dis), "time",
-					"Type: " + e.getBlock().getType().getId() + ". Last: " + lastBreak + ", Now: " + temp + ", diff: " + dis, hoverMsg("breaked_in", "%time%", dis));
+					"Type: " + e.getBlock().getType().getId() + ". Last: " + data.lastBreak + ", Now: " + temp + ", diff: " + dis, hoverMsg("breaked_in", "%time%", dis));
 			if(isSetBack() && mayCancel)
 				e.setCancelled(true);
 		}
-		np.longs.set(getKey(), "time", dis);
-		np.longs.set(getKey(), "last-break", temp);
+		data.time = dis;
+		data.lastBreak = temp;
 	}
 	
 	private boolean isInstantBlock(String m) {

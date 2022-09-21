@@ -19,6 +19,7 @@ import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.common.protocols.data.ReachData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -36,38 +37,37 @@ public class Reach extends Cheat {
 	private static final List<Material> IGNORED_TYPE = Arrays.asList(Materials.BOW, Materials.FISHING_ROD);
 
 	public Reach() {
-		super(CheatKeys.REACH, CheatCategory.COMBAT, Materials.STONE_AXE, CheatDescription.VERIF);
+		super(CheatKeys.REACH, CheatCategory.COMBAT, Materials.STONE_AXE, ReachData::new, CheatDescription.VERIF);
 	}
 
 	@Check(name = "reach-event", description = "The reach", conditions = { CheckConditions.NO_THORNS,
 			CheckConditions.NO_INSIDE_VEHICLE })
-	public void onPacketReceive(PacketReceiveEvent e, NegativityPlayer np) {
+	public void onPacketReceive(PacketReceiveEvent e, NegativityPlayer np, ReachData data) {
 		NPacket packet = e.getPacket().getPacket();
 		Player p = e.getPlayer();
 		if (packet.getPacketType().isFlyingPacket()) {
-			if (np.locations.has(getKey(), "entity-hit-position")) {
-				Location positions = np.locations.remove(getKey(), "entity-hit-position");
-				Entity cible = np.entities.remove(getKey(), "entity-hit-object");
-				if(np.isTeleporting)
+			if (data.cible != null) {
+				if(np.isTeleporting || (data.cible instanceof Player && NegativityPlayer.getNegativityPlayer((Player) data.cible).isTeleporting)) {
+					data.reset();
 					return; // just beeing tp
-				if(cible instanceof Player && NegativityPlayer.getNegativityPlayer((Player) cible).isTeleporting)
-					return;
+				}
 				Location loc = p.getLocation();
-				Adapter.getAdapter().debug("Positions: " + positions + ", locs: " + loc);
-				double dis = getDistance(loc, positions);
+				Adapter.getAdapter().debug("Positions: " + data.cibleLocation + ", locs: " + loc);
+				double dis = getDistance(loc, data.cibleLocation);
 				recordData(p.getUniqueId(), HIT_DISTANCE, dis);
 				Adapter.getAdapter()
-						.debug("Distance between " + p.getName() + " and " + cible.getName() + ": " + dis);
+						.debug("Distance between " + p.getName() + " and " + data.cible.getName() + ": " + dis);
 				double max = getConfig().getDouble("checks.reach-event.value", 3.2)
 						+ (p.getGameMode().equals(GameMode.CREATIVE) ? 1 : 0);
 				if (dis > max) {
 					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 							parseInPorcent((dis - max) * 90), "reach-event",
-							"Exact distance: " + dis + ". Loc: " + loc.toString() + ", cible: " + positions,
-							hoverMsg("distance", "%name%", cible.getName(), "%distance%", String.format("%.2f", dis)));
+							"Exact distance: " + dis + ". Loc: " + loc.toString() + ", cible: " + data.cibleLocation,
+							hoverMsg("distance", "%name%", data.cible.getName(), "%distance%", String.format("%.2f", dis)));
 					if (isSetBack() && mayCancel)
 						e.setCancelled(true);
 				}
+				data.reset();
 			}
 		} else if (packet instanceof NPacketPlayInUseEntity) {
 			NPacketPlayInUseEntity useEntity = (NPacketPlayInUseEntity) packet;
@@ -83,8 +83,8 @@ public class Reach extends Cheat {
 			if (cible instanceof Player) {
 				cibleLoc = NegativityPlayer.getNegativityPlayer((Player) cible).getPingedLocation();
 			}
-			np.locations.set(getKey(), "entity-hit-position", cibleLoc);
-			np.entities.set(getKey(), "entity-hit-object", cible);
+			data.cible = cible;
+			data.cibleLocation = cibleLoc;
 		}
 	}
 

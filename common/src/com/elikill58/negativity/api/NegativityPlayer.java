@@ -72,14 +72,13 @@ public class NegativityPlayer {
 	
 	// detection and bypass
 	public long loginTime, timeInvincibility = 0, timeLastMessage = 0, otherKeepAliveTime = 0;
-	public int LAST_CHAT_MESSAGE_NB = 0, bypassSpeed = 0, spiderSameDist = 0;
+	public int LAST_CHAT_MESSAGE_NB = 0, bypassSpeed = 0;
 	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public boolean isOnLadders = false, useAntiNoFallSystem = false, isTeleporting = false;
 	public PlayerChatEvent lastChatEvent = null;
 	public List<Integer> timerCount = new ArrayList<>();
-	public List<Double> lastY = new ArrayList<>();
-	public Location lastSpiderLoc = null;
+	//public List<Double> lastY = new ArrayList<>();
 	public PacketType otherKeepAlivePacket = PacketType.Client.FLYING;
 	public List<Location> lastLocations = new ArrayList<>();
 	public ConcurrentHashMap<IDetectionKey<?>, CheckData> checkDatas = new ConcurrentHashMap<>();

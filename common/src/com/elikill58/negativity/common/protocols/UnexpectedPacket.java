@@ -7,9 +7,10 @@ import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType.Client;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.common.protocols.data.UnexpectedPacketData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -19,15 +20,15 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class UnexpectedPacket extends Cheat {
 
 	public UnexpectedPacket() {
-		super(CheatKeys.UNEXPECTED_PACKET, CheatCategory.PLAYER, Materials.JUKEBOX);
+		super(CheatKeys.UNEXPECTED_PACKET, CheatCategory.PLAYER, Materials.JUKEBOX, UnexpectedPacketData::new);
 	}
 
 	@Check(name = "vehicle-steer", description = "When moving in vehicle, but not in vehicle")
-	public void onPacketReceive(PacketReceiveEvent e, NegativityPlayer np) {
+	public void onPacketReceive(PacketReceiveEvent e, NegativityPlayer np, UnexpectedPacketData data) {
 		Player p = e.getPlayer();
 		if (e.getPacket().getPacketType().equals(Client.STEER_VEHICLE)) {
 			if (!p.isInsideVehicle()) {
-				long timeLeftVehicle = System.currentTimeMillis() - np.longs.get(getKey(), "vehicle-left", 0l);
+				long timeLeftVehicle = System.currentTimeMillis() - data.vehicleLeft;
 				if (timeLeftVehicle < 50)
 					return; // just left, strange packet but prevent issue
 				long amount = timeLeftVehicle / 50;
@@ -42,7 +43,7 @@ public class UnexpectedPacket extends Cheat {
 		} else if (e.getPacket().getPacketType().equals(Client.ENTITY_ACTION)) {
 			NPacketPlayInEntityAction action = (NPacketPlayInEntityAction) e.getPacket().getPacket();
 			if (action.action.equals(EnumPlayerAction.START_SNEAKING) && p.isInsideVehicle()) {
-				np.longs.set(getKey(), "vehicle-left", System.currentTimeMillis());
+				data.vehicleLeft = System.currentTimeMillis();
 			}
 		}
 	}

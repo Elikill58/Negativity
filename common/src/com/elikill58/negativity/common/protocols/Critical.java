@@ -6,6 +6,7 @@ import com.elikill58.negativity.api.events.player.PlayerDamagedByEntityEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -15,7 +16,7 @@ import com.elikill58.negativity.universal.report.ReportType;
 public class Critical extends Cheat {
 	
 	public Critical() {
-		super(CheatKeys.CRITICAL, CheatCategory.COMBAT, Materials.FIREBALL);
+		super(CheatKeys.CRITICAL, CheatCategory.COMBAT, Materials.FIREBALL, EmptyData::new);
 	}
 
 	@Check(name = "ground", description = "Check damage according to Y", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.SURVIVAL, CheckConditions.NO_FLY, CheckConditions.NO_GROUND })

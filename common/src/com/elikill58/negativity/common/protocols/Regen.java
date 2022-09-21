@@ -13,6 +13,7 @@ import com.elikill58.negativity.api.location.Difficulty;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.common.protocols.data.RegenData;
 import com.elikill58.negativity.universal.FlyingReason;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
@@ -24,7 +25,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Regen extends Cheat implements Listeners {
 	
 	public Regen() {
-		super(CheatKeys.REGEN, CheatCategory.PLAYER, Materials.GOLDEN_APPLE, CheatDescription.HEALTH);
+		super(CheatKeys.REGEN, CheatCategory.PLAYER, Materials.GOLDEN_APPLE, RegenData::new, CheatDescription.HEALTH);
 	}
 
 	@EventListener
@@ -57,23 +58,22 @@ public class Regen extends Cheat implements Listeners {
 	}
 	
 	@Check(name = "time", description = "Time between 2 regen")
-	public void onRegenTime(PlayerRegainHealthEvent e, NegativityPlayer np) {
+	public void onRegenTime(PlayerRegainHealthEvent e, NegativityPlayer np, RegenData data) {
 		Player p = e.getPlayer();
-		long lastRegen = np.longs.get(getKey(), "time", 0l);
-		long actual = System.currentTimeMillis(), dif = actual - lastRegen;
-		if (lastRegen != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && !p.hasPotionEffect(PotionEffectType.INSTANT_HEAL)
-				&& (lastRegen != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))
+		long actual = System.currentTimeMillis(), dif = actual - data.lastRegen;
+		if (data.lastRegen != 0 && !p.hasPotionEffect(PotionEffectType.REGENERATION) && !p.hasPotionEffect(PotionEffectType.INSTANT_HEAL)
+				&& (data.lastRegen != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))
 				&& !p.getWorld().getDifficulty().equals(Difficulty.PEACEFUL)) {
 			int ping = p.getPing();
 			if (dif + ping < (Version.getVersion().getTimeBetweenTwoRegenFromVersion())) {
 				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(200 - dif - ping), "time", "Player regen, last regen: "
-						+ lastRegen + " Actual time: " + actual + " Difference: " + dif + "ms",
+						+ data.lastRegen + " Actual time: " + actual + " Difference: " + dif + "ms",
 						hoverMsg("main", "%time%", dif));
 				if(isSetBack() && mayCancel)
 					e.setCancelled(true);
 			}
 		}
-		np.longs.set(getKey(), "time", actual);
+		data.lastRegen = actual;
 	}
 }

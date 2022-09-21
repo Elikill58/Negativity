@@ -12,6 +12,7 @@ import com.elikill58.negativity.api.events.negativity.PlayerPacketsClearEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -21,7 +22,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Timer extends Cheat {
 
 	public Timer() {
-		super(CheatKeys.TIMER, CheatCategory.MOVEMENT, Materials.PACKED_ICE);
+		super(CheatKeys.TIMER, CheatCategory.MOVEMENT, Materials.PACKED_ICE, EmptyData::new);
 	}
 	
 	@Check(name = "packet", description = "Check Y move only")

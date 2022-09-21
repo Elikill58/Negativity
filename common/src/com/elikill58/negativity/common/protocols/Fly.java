@@ -29,6 +29,7 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
@@ -41,7 +42,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Fly extends Cheat implements Listeners {
 
 	public Fly() {
-		super(FLY, CheatCategory.MOVEMENT, Materials.FIREWORK, CheatDescription.NO_FIGHT);
+		super(FLY, CheatCategory.MOVEMENT, Materials.FIREWORK, EmptyData::new, CheatDescription.NO_FIGHT);
 	}
 
 	@EventListener

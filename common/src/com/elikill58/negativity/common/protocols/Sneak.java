@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.common.protocols.data.SneakData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -19,14 +20,13 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Sneak extends Cheat {
 
 	public Sneak() {
-		super(SNEAK, CheatCategory.MOVEMENT, Materials.BLAZE_POWDER);
+		super(SNEAK, CheatCategory.MOVEMENT, Materials.BLAZE_POWDER, SneakData::new);
 	}
 
 	@Check(name = "sneak-sprint", description = "Sneak while sprinting", conditions = { CheckConditions.SURVIVAL, CheckConditions.SNEAK, CheckConditions.SPRINT, CheckConditions.NO_FLY })
-	public void onMove(PlayerMoveEvent e) {
+	public void onMove(PlayerMoveEvent e, NegativityPlayer np, SneakData data) {
 		Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (np.booleans.get(SNEAK, "was-sneaking", false)) {
+		if (data.wasSneaking) {
 			if(!p.getPlayerVersion().isNewerOrEquals(Version.V1_14)) {
 				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(105 - (p.getPing() / 10)),
 						"sneak-sprint", "Sneak, sprint, no fly");
@@ -36,25 +36,25 @@ public class Sneak extends Cheat {
 				}
 			}
 		}
-		np.booleans.set(SNEAK, "was-sneaking", p.isSneaking());
+		data.wasSneaking = p.isSneaking();
 	}
 	
 	@Check(name = "packet", description = "Amount of sneacking packet")
-	public void onPacketClear(PlayerPacketsClearEvent e) {
-		NegativityPlayer np = e.getNegativityPlayer();
+	public void onPacketClear(PlayerPacketsClearEvent e, NegativityPlayer np, SneakData data) {
 		Player p = e.getPlayer();
 		int ping = p.getPing();
 		if(ping < 140) {
 			int entityAction = e.getPackets().getOrDefault(PacketType.Client.ENTITY_ACTION, 0);
 			if(entityAction > 35){
-				if(np.booleans.get(SNEAK, "last-sec", false)){
+				if(data.lastSecond){
 					Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(55 + entityAction), "packet",
 							"EntityAction packet: " + entityAction);
 					if(isSetBack())
 						p.setSneaking(false);
 				}
-				np.booleans.set(SNEAK, "last-sec", true);
-			} else np.booleans.remove(SNEAK, "last-sec");
+				data.lastSecond = true;
+			} else
+				data.lastSecond = false;
 		}
 	}
 }

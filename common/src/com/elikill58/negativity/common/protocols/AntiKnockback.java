@@ -17,6 +17,7 @@ import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.ScheduledTask;
@@ -36,7 +37,7 @@ public class AntiKnockback extends Cheat {
 			"Distance after Damage", () -> new DoubleDataCounter());
 
 	public AntiKnockback() {
-		super(CheatKeys.ANTI_KNOCKBACK, CheatCategory.COMBAT, Materials.STICK, CheatDescription.VERIF);
+		super(CheatKeys.ANTI_KNOCKBACK, CheatCategory.COMBAT, Materials.STICK, EmptyData::new, CheatDescription.VERIF);
 	}
 
 	@Check(name = "packet", description = "Packet velocity", conditions = { CheckConditions.SURVIVAL })

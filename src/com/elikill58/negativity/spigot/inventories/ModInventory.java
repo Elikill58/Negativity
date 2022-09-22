@@ -77,13 +77,12 @@ public class ModInventory extends AbstractInventory {
 				Messages.sendMessage(p, "inventory.mod.now_invisible");
 			} else {
 				for (Player pls : Utils.getOnlinePlayers())
-					pls.showPlayer(p);
+					if(!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pls), Perm.ADMIN))
+						Utils.hidePlayer(pls, p);
 				Messages.sendMessage(p, "inventory.mod.no_longer_invisible");
 			}
 		} else if (m.equals(Material.TNT)) {
 			AbstractInventory.open(InventoryType.CHEAT_MANAGER, p, false);
-			/*p.closeInventory();
-			CheatManagerInventory.openCheatManagerMenu(p);*/
 		} else if (m.name().contains("FEATHER")) {
 			p.closeInventory();
 			p.setAllowFlight(!p.getAllowFlight());

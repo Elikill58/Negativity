@@ -276,4 +276,11 @@ public class Utils {
 		else
 			p.hidePlayer(cible);
 	}
+	
+	public static void showPlayer(Player p, Player cible) {
+		if(Version.getVersion().isNewerOrEquals(Version.V1_13))
+			p.showPlayer(SpigotNegativity.getInstance(), cible);
+		else
+			p.showPlayer(cible);
+	}
 }

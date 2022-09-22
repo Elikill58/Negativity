@@ -69,4 +69,9 @@ public class NPacketPlayInFlying implements NPacketPlayIn, LocatedPacket {
 	public PacketType getPacketType() {
 		return PacketType.Client.FLYING;
 	}
+	
+	@Override
+	public String toString() {
+		return getPacketType().getPacketName() + "{location=" + getLocation(null) + ",ground=" + isGround + "}";
+	}
 }

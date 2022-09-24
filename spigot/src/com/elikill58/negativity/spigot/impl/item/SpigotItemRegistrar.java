@@ -16,7 +16,20 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 
 	@Override
 	public synchronized com.elikill58.negativity.api.item.Material get(String id, String... alias) {
-		return cache.computeIfAbsent(id, key -> new SpigotMaterial(getMaterial(key.toUpperCase(), alias), id));
+		return cache.computeIfAbsent(id, key -> {
+			Material m = getMaterial(key.toUpperCase(), alias);
+			if(m == null) {
+				StringJoiner sj = new StringJoiner(", ", " : ", "");
+				for(String tempAlias : alias) {
+					if(tempAlias.equals(Materials.IGNORE_KEY))
+						return null; // ignore not found item
+					sj.add(tempAlias);
+				}
+				SpigotNegativity.getInstance().getLogger().info("[SpigotItemRegistrar] Cannot find material " + id + ", alias: " + sj);
+				return null;
+			}
+			return new SpigotMaterial(m, id);
+		});
 	}
 	
 	private org.bukkit.Material getMaterial(String id, String... alias){
@@ -49,7 +62,6 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 				return null; // ignore not found item
 			sj.add(tempAlias);
 		}
-		SpigotNegativity.getInstance().getLogger().info("[SpigotItemRegistrar] Cannot find material " + id + sj);
 		return null;
 	}
 	

@@ -78,7 +78,7 @@ public class ModInventory extends AbstractInventory {
 			} else {
 				for (Player pls : Utils.getOnlinePlayers())
 					if(!Perm.hasPerm(SpigotNegativityPlayer.getNegativityPlayer(pls), Perm.ADMIN))
-						Utils.hidePlayer(pls, p);
+						Utils.showPlayer(pls, p);
 				Messages.sendMessage(p, "inventory.mod.no_longer_invisible");
 			}
 		} else if (m.equals(Material.TNT)) {

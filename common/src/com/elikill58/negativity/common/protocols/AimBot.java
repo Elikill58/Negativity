@@ -46,23 +46,21 @@ public class AimBot extends Cheat {
 
 	// many killauras use a constant pitch in order to bypass the GDC check
 	// this check will fight against that and fail these killauras
-	@Check(name = "ratio", conditions = CheckConditions.SURVIVAL, description = "Checks for invalid rotation ratios", ignoreCancel = true)
+	@Check(name = "ratio", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_INSIDE_VEHICLE }, description = "Checks for invalid rotation ratios", ignoreCancel = true)
 	public void ratio(PacketReceiveEvent e, NegativityPlayer np, AimbotData data) {
 		if (!e.hasPlayer())
 			return;
 		PacketType type = e.getPacket().getPacketType();
 		if (type.isFlyingPacket()) {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
-			if (!flying.hasLook)
+			if (!flying.hasLook || !np.isAttacking)
 				return;
-			if (!np.isAttacking)
-				return;
-			final double difference = Math.abs(np.delta.getPitch() - data.lastDeltaPitchStreak);
-			final double absoluteDeltaYaw = Math.abs(np.delta.getYaw());
+			double difference = Math.abs(np.delta.getPitch() - data.lastDeltaPitchStreak);
+			double absoluteDeltaYaw = Math.abs(np.delta.getYaw());
 			if (difference < 0.005 && absoluteDeltaYaw > .65) {
 				// increment streak
 
-				if (++data.ratioStreak > 7) {
+				if (data.ratioStreak++ > 7) {
 					if(Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio", "absYaw: "
 							+ String.format("%.3f", absoluteDeltaYaw) + ", streak: " + data.ratioStreak + ", difference: "
 							+ String.format("%.3f", difference)) && isSetBack())

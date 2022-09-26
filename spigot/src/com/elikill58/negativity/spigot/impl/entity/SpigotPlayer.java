@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryType;
@@ -241,8 +242,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public boolean hasPotionEffect(PotionEffectType type) {
-		return entity.getActivePotionEffects().stream()
-				.filter((pe) -> pe.getType().getName().equalsIgnoreCase(type.name())).findAny().isPresent();
+		return entity.getActivePotionEffects().stream().map(org.bukkit.potion.PotionEffect::getType).map(org.bukkit.potion.PotionEffectType::getName).map(PotionEffectType::fromName).collect(Collectors.toList()).contains(type);
 	}
 
 	@Override
@@ -264,7 +264,10 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public void removePotionEffect(PotionEffectType type) {
-		entity.removePotionEffect(org.bukkit.potion.PotionEffectType.getByName(type.name()));
+		org.bukkit.potion.PotionEffectType spigotType = org.bukkit.potion.PotionEffectType.getByName(type.name());
+		if(spigotType != null)
+			entity.removePotionEffect(spigotType);
+		// else can have error
 	}
 
 	@Override

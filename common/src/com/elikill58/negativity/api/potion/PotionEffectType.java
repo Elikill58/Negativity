@@ -9,7 +9,7 @@ import com.elikill58.negativity.universal.Adapter;
 public enum PotionEffectType {
 
 	SPEED(PotionEffectBehavior.POSITIVE, 1, "minecraft:speed"),
-	SLOWNESS(PotionEffectBehavior.NEGATIVE, 2, "minecraft:slowness"),
+	SLOWNESS(PotionEffectBehavior.NEGATIVE, 2, "minecraft:slowness", "SLOW"),
 	HASTE(PotionEffectBehavior.POSITIVE, 3, "minecraft:haste"),
 	SLOW_MINING(PotionEffectBehavior.NEGATIVE, 4, "minecraft:mining_fatigue"),
 	STRENGTH(PotionEffectBehavior.POSITIVE, 5, "minecraft:strength", "INCREASE_DAMAGE"),
@@ -41,7 +41,7 @@ public enum PotionEffectType {
 	DOLPHINS_GRACE(PotionEffectBehavior.POSITIVE, 30, "minecraft:dolphins_grace"),
 	BAD_OMEN(PotionEffectBehavior.NEUTRAL, 31, "minecraft:bad_omen"),
 	HERO_OF_THE_VILLAGE(PotionEffectBehavior.POSITIVE, 32, "minecraft:hero_of_the_village", "minecraft:village_hero"),
-	DARKNESS(PotionEffectBehavior.NEGATIVE, 33, "minecraft:darkenss"),
+	DARKNESS(PotionEffectBehavior.NEGATIVE, 33, "minecraft:darkness"),
 	UNKNOW(PotionEffectBehavior.NEUTRAL, -1, "minecraft:unknown");
 	
 	private final PotionEffectBehavior behavior;

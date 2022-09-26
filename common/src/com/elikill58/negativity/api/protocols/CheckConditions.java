@@ -26,6 +26,7 @@ public enum CheckConditions {
 	//NO_BLOCK_MID_AROUND_BELOW("No block MID (fence, slab...) below", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("SLAB", "STEP", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
 	NO_LIQUID_AROUND("No liquid around", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("WATER", "LAVA"), true),
 	NO_STAIRS_AROUND("No stairs around", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("STAIRS", "SCAFFOLD"), true),
+	NO_ICE_AROUND("No ice around", (p) -> NegativityPlayer.getNegativityPlayer(p).iceCounter == 0, false),
 	NO_FALL_LESS_BLOCK("No block that reduce fall fear", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("STAIRS", "SCAFFOLD", "STEP", "SLAB", "HONEY_BLOCK"), true),
 	//NO_FALL_LESS_BLOCK_BELOW("No block that reduce fall fear below", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "STAIRS", "SCAFFOLD", "STEP", "SLAB", "HONEY_BLOCK"), true),
 	NO_CLIMB_BLOCK("No climb block around", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("STAIRS", "SCAFFOLD", "LADDER", "VINE"), true),

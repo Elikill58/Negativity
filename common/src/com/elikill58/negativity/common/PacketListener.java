@@ -17,6 +17,7 @@ import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
@@ -74,15 +75,24 @@ public class PacketListener implements Listeners {
 				}
 			}
 			if(flying.hasPos) {
+				World w = p.getWorld();
 				Location oldLoc = p.getLocation();
 				np.lastDelta = np.delta;
 				if(flying.hasLook)
-					np.delta = new Location(p.getWorld(), flying.x - oldLoc.getX(), flying.y - oldLoc.getY(), flying.z - oldLoc.getZ(), flying.yaw - oldLoc.getYaw(), flying.pitch - oldLoc.getPitch());
+					np.delta = new Location(w, flying.x - oldLoc.getX(), flying.y - oldLoc.getY(), flying.z - oldLoc.getZ(), flying.yaw - oldLoc.getYaw(), flying.pitch - oldLoc.getPitch());
 				else
-					np.delta = new Location(p.getWorld(), flying.x - oldLoc.getX(), flying.y - oldLoc.getY(), flying.z - oldLoc.getZ(), np.lastDelta.getYaw(), np.lastDelta.getPitch()); // no yaw/pitch move
+					np.delta = new Location(w, flying.x - oldLoc.getX(), flying.y - oldLoc.getY(), flying.z - oldLoc.getZ(), np.lastDelta.getYaw(), np.lastDelta.getPitch()); // no yaw/pitch move
 				np.lastLocations.add(flying.getLocation(p.getWorld()));
 				if(np.lastLocations.size() >= 10)
 					np.lastLocations.remove(0); // limit to 10 last loc
+
+				Block blockUnder = w.getBlockAt(flying.x, flying.y - 1, flying.z);
+				Block blockUp = w.getBlockAt(flying.x, flying.y + 1, flying.z);
+				if(blockUnder.getType().getId().contains("ICE") || blockUp.getType().getId().contains("ICE")) {
+					np.iceCounter = 5;
+				} else if(flying.isGround && np.iceCounter > 0) {
+					np.iceCounter--;
+				}
 			}
 			if(flying instanceof NPacketPlayInPositionLook)
 				np.isTeleporting = false;

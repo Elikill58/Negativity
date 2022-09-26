@@ -3,9 +3,7 @@ package com.elikill58.negativity.velocity;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -27,7 +25,6 @@ import com.elikill58.negativity.universal.translation.TranslationProviderFactory
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.velocity.impl.entity.VelocityPlayer;
 import com.elikill58.negativity.velocity.impl.plugin.VelocityExternalPlugin;
-import com.google.gson.Gson;
 import com.velocitypowered.api.plugin.PluginContainer;
 import com.velocitypowered.api.plugin.PluginDescription;
 
@@ -75,12 +72,6 @@ public class VelocityAdapter extends ProxyAdapter {
 	}
 
 	@Override
-	public void debug(String msg) {
-		if (getConfig().getBoolean("debug", false))
-			getLogger().info(msg);
-	}
-
-	@Override
 	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
 		return this.translationProviderFactory;
 	}
@@ -114,26 +105,6 @@ public class VelocityAdapter extends ProxyAdapter {
 	@Override
 	public void runConsoleCommand(String cmd) {
 		pl.getServer().getCommandManager().executeAsync(pl.getServer().getConsoleCommandSource(), cmd).join();
-	}
-
-	@Override
-	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
-		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {
-			if (response == null) {
-				return false;
-			}
-			try {
-				Gson gson = new Gson();
-				Map<?, ?> data = gson.fromJson(response, Map.class);
-				Object isMcleaks = data.get("isMcleaks");
-				if (isMcleaks != null) {
-					return Boolean.parseBoolean(isMcleaks.toString());
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return false;
-		});
 	}
 
 	@Override

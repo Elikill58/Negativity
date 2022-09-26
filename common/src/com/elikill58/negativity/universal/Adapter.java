@@ -3,7 +3,6 @@ package com.elikill58.negativity.universal;
 import java.io.File;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
@@ -86,7 +85,10 @@ public abstract class Adapter {
 	 * 
 	 * @param msg the message to log
 	 */
-	public abstract void debug(String msg);
+	public void debug(String msg) {
+		if (getConfig().getBoolean("debug", false))
+			getLogger().info("[Debug] " + msg);
+	}
 	public abstract TranslationProviderFactory getPlatformTranslationProviderFactory();
 	
 	/**
@@ -133,14 +135,6 @@ public abstract class Adapter {
 	 * @param cmd the command which have to be execute
 	 */
 	public abstract void runConsoleCommand(String cmd);
-	
-	/**
-	 * Check if the UUID is a McLeaks account
-	 * 
-	 * @param playerId the player to check
-	 * @return a completable boolean
-	 */
-	public abstract CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId);
 	
 	/**
 	 * Get UUID of all online players

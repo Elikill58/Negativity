@@ -1,14 +1,11 @@
 package com.elikill58.negativity.sponge7;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.StringReader;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -57,9 +54,6 @@ import com.elikill58.negativity.universal.translation.NegativityTranslationProvi
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
-import ninja.leaping.configurate.ConfigurationNode;
-import ninja.leaping.configurate.gson.GsonConfigurationLoader;
-
 public class SpongeAdapter extends Adapter {
 
 	private final LoggerAdapter logger;
@@ -94,12 +88,6 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public File getDataFolder() {
 		return plugin.getDataFolder().toFile();
-	}
-
-	@Override
-	public void debug(String msg) {
-		if(getConfig().getBoolean("debug", false))
-			logger.info(msg);
 	}
 
 	@Override
@@ -141,25 +129,6 @@ public class SpongeAdapter extends Adapter {
 	@Override
 	public void runConsoleCommand(String cmd) {
 		Sponge.getCommandManager().process(Sponge.getServer().getConsole(), cmd);
-	}
-
-	@Override
-	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
-		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {
-			if (response == null) {
-				return false;
-			}
-			try {
-				ConfigurationNode rootNode = GsonConfigurationLoader.builder()
-						.setSource(() -> new BufferedReader(new StringReader(response)))
-						.build()
-						.load();
-				return rootNode.getNode("isMcleaks").getBoolean(false);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return false;
-		});
 	}
 
 	@Override

@@ -39,12 +39,20 @@ public class SpigotWorld extends World {
 	}
 
 	public void add(Entity e) {
-		synchronized (entities) {
-			entities.add(e);
+		if(entities == null)
+			clearEntities();
+		else {
+			synchronized (entities) {
+				entities.add(e);
+			}
 		}
 	}
 
 	public void remove(Entity e) {
+		if(entities == null) {
+			clearEntities();
+			return;
+		}
 		synchronized (entities) {
 			entities.remove(e);
 		}

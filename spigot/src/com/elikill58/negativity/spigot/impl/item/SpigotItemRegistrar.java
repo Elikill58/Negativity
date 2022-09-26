@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.SubPlatform;
 
 public class SpigotItemRegistrar extends ItemRegistrar {
 
@@ -72,7 +73,7 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e2) {
 			e2.printStackTrace();
 		} catch (NoSuchFieldException e) {}
-		if(SpigotNegativity.isMohist) {
+		if(SpigotNegativity.getSubPlatform().equals(SubPlatform.MOHIST)) {
 			try {
 				return Material.valueOf(name);
 			} catch (Exception e) {}

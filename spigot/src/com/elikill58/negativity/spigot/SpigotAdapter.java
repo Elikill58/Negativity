@@ -152,7 +152,7 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public double[] getTPS() {
-		if(SpigotNegativity.isCraftBukkit) {
+		if(SpigotNegativity.getSubPlatform().equals(SubPlatform.CRAFTBUKKIT)) {
 			return new double[] {20, 20, 20};
 		} else {
 			return SpigotVersionAdapter.getVersionAdapter().getTps();

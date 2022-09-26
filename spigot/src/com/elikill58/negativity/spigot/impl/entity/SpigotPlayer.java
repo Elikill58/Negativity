@@ -21,6 +21,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.SubPlatform;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotPlayerInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
@@ -104,7 +105,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public boolean hasLineOfSight(Entity entity) {
-		return SpigotNegativity.isCraftBukkit || ((org.bukkit.entity.Entity) entity.getDefault()).hasMetadata("NPC")
+		return SpigotNegativity.getSubPlatform().equals(SubPlatform.CRAFTBUKKIT) || ((org.bukkit.entity.Entity) entity.getDefault()).hasMetadata("NPC")
 				|| this.entity.hasLineOfSight((org.bukkit.entity.Entity) entity.getDefault());
 	}
 

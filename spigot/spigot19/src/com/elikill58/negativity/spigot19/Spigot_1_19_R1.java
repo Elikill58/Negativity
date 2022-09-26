@@ -36,6 +36,8 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAli
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.SubPlatform;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Adapter;
@@ -62,10 +64,12 @@ import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundPongPacket;
 import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
 import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.level.entity.LevelEntityGetter;
 import net.minecraft.world.phys.AABB;
 
 @SuppressWarnings("resource")
@@ -228,10 +232,18 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 		return getPlayerConnection(p).connection.channel;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Entity> getEntities(World w) {
 		List<Entity> entities = new ArrayList<>();
-		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().iterator().forEachRemaining((mcEnt) -> {
+		ServerLevel srv = ((CraftWorld) w).getHandle();
+		LevelEntityGetter<net.minecraft.world.entity.Entity> getter;
+		if(SpigotNegativity.getSubPlatform().equals(SubPlatform.PAPER)) { // since paper 174
+			getter = (LevelEntityGetter<net.minecraft.world.entity.Entity>) ReflectionUtils.getField(srv, "entityLookup");
+		} else {
+			getter = srv.entityManager.getEntityGetter();
+		}
+		getter.getAll().iterator().forEachRemaining((mcEnt) -> {
 			if(mcEnt != null) {
 				CraftEntity craftEntity = mcEnt.getBukkitEntity();
 				if (craftEntity != null && craftEntity instanceof Entity && craftEntity.isValid())

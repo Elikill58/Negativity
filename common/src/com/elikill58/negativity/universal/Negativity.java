@@ -3,7 +3,6 @@ package com.elikill58.negativity.universal;
 import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -37,7 +36,6 @@ import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
-import com.elikill58.negativity.universal.file.FileSaverTimer;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
@@ -62,7 +60,7 @@ public class Negativity {
 	public static boolean hasBypass = false;
 	public static boolean tpsDrop = false;
 	
-	private static ScheduledTask actualizeInvTimer, analyzePacketTimer, fileSaverTimer;
+	private static ScheduledTask actualizeInvTimer, analyzePacketTimer;
 
 	/**
 	 * Try to alert moderator.
@@ -330,9 +328,6 @@ public class Negativity {
 				NegativityPlayer.getNegativityPlayer(p).setClientName(new String(msg).substring(1));
 			});
 			AlertSender.initAlertShower(ada);
-			if(fileSaverTimer != null)
-				fileSaverTimer.cancel();
-			fileSaverTimer = ada.getScheduler().runRepeatingAsync(FileSaverTimer.getInstance(), Duration.ofSeconds(1), Duration.ofSeconds(1), "Negativity FileSaver");
 			if(actualizeInvTimer != null)
 				actualizeInvTimer.cancel();
 			actualizeInvTimer = ada.getScheduler().runRepeating(new ActualizeInvTimer(), 10, 10);
@@ -404,8 +399,6 @@ public class Negativity {
 	}
 	
 	public static void closeNegativity() {
-		if(fileSaverTimer != null)
-			fileSaverTimer.cancel();
 		if(actualizeInvTimer != null)
 			actualizeInvTimer.cancel();
 		if(analyzePacketTimer != null)

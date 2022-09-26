@@ -9,9 +9,9 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.file.FileSaverTimer;
 
 @SuppressWarnings("unchecked")
 public final class Configuration {
@@ -335,10 +335,9 @@ public final class Configuration {
     	if(isSaving)
     		return;
     	isSaving = true;
-    	FileSaverTimer.getInstance().addAction(timer -> {
+    	CompletableFuture.runAsync(() -> {
     		directSave();
         	isSaving = false;
-    		timer.removeActionRunning();
     	});
     }
     

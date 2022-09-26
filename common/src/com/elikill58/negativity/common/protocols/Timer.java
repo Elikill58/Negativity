@@ -45,8 +45,8 @@ public class Timer extends Cheat {
 		int variation = getConfig().getInt("max_variation");
 		Player p = e.getPlayer();
 		int MAX = (p.getGameMode().equals(GameMode.CREATIVE) ? 40 : 20);
-		int MAX_VARIATION = MAX + variation;
-		if(MAX_VARIATION > sum)// in min/max variations
+		int maxVariation = MAX + variation;
+		if(maxVariation > sum)// in min/max variations
 			return;
 		List<Integer> medianList = new ArrayList<>(data.timerCount);
 		medianList.sort(Comparator.naturalOrder());
@@ -54,8 +54,8 @@ public class Timer extends Cheat {
 		int medianValue = (medianList.size() % 2 == 1) ? medianList.get(middle) : (int) ((medianList.get(middle-1) + medianList.get(middle)) / 2.0);
 		if(medianValue < MAX + 3) // if only one time, and median is safe
 			return;
-		boolean medianRespect = MAX_VARIATION > medianValue;
-		int amount = (int) (sum - MAX_VARIATION);
+		boolean medianRespect = maxVariation > medianValue;
+		int amount = (int) (sum - maxVariation);
 		Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (p.getPing() / 100) - (medianRespect ? 15 : -10)), "packet",
 				"Flying: " + flying + ", position: " + position + ", look: " + look + ", positionLook: " + positonLook + ", sum: " + sum + ", median: " + medianValue,
 				null, amount > 0 ? amount : 1);

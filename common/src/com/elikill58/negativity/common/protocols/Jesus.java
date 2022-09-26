@@ -76,8 +76,6 @@ public class Jesus extends Cheat implements Listeners {
 						reliability = dif * 100 * 2.5;
 					else if (dif < 0.002 && dif > -0.002 && dif != 0.0)
 						reliability = Math.abs(dif * 5000);
-					else if (dif == 0.0 && loc.clone().sub(0, 0.2, 0).getBlock().getType().getId().contains("WATER"))
-						reliability = 90;
 					mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(reliability),
 							"water-around",
 							"Stationary_water aroud him. Diff: " + dif + ", fallDistance: " + p.getFallDistance());

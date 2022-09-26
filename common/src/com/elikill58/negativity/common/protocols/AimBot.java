@@ -57,7 +57,7 @@ public class AimBot extends Cheat {
 				return;
 			double difference = Math.abs(np.delta.getPitch() - data.lastDeltaPitchStreak);
 			double absoluteDeltaYaw = Math.abs(np.delta.getYaw());
-			if (difference < 0.005 && absoluteDeltaYaw > .65) {
+			if (difference < 0.005 && absoluteDeltaYaw > .65 && difference != 0) {
 				// increment streak
 
 				if (data.ratioStreak++ > 7) {

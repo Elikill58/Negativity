@@ -165,7 +165,7 @@ public class FabricAdapter extends Adapter {
 
 	@Override
 	public List<UUID> getOnlinePlayersUUID() {
-		return FabricNegativity.getOnlinePlayers().stream().map(ServerPlayerEntity::getUuid).collect(Collectors.toList());
+		return GlobalFabricNegativity.getOnlinePlayers().stream().map(ServerPlayerEntity::getUuid).collect(Collectors.toList());
 	}
 
 	@Override
@@ -197,7 +197,7 @@ public class FabricAdapter extends Adapter {
 
 	@Override
 	public List<Player> getOnlinePlayers() {
-		return FabricNegativity.getOnlinePlayers().stream().map(FabricEntityManager::getPlayer).collect(Collectors.toList());
+		return GlobalFabricNegativity.getOnlinePlayers().stream().map(FabricEntityManager::getPlayer).collect(Collectors.toList());
 	}
 
 	@Override

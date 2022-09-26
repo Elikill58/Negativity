@@ -4,9 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.UUID;
 
 import org.slf4j.Logger;
@@ -16,9 +14,10 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.channel.GameChannelNegativityMessageEvent;
 import com.elikill58.negativity.api.yaml.Configuration;
+import com.elikill58.negativity.fabric.commands.CommandsExecutorManager;
 import com.elikill58.negativity.fabric.impl.entity.FabricEntityManager;
 import com.elikill58.negativity.fabric.impl.entity.FabricPlayer;
-import com.elikill58.negativity.fabric.listeners.CommandsExecutorManager;
+import com.elikill58.negativity.fabric.impl.location.FabricWorld;
 import com.elikill58.negativity.fabric.listeners.PlayersListeners;
 import com.elikill58.negativity.fabric.packets.NegativityPacketManager;
 import com.elikill58.negativity.fabric.utils.Utils;
@@ -48,7 +47,6 @@ import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking.PlayChannelHan
 import net.minecraft.command.CommandRegistryAccess;
 import net.minecraft.network.PacketByteBuf;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.server.PlayerManager;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
@@ -105,6 +103,7 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 
 	public void onGameStart(MinecraftServer srv) {
 		this.server = srv;
+		GlobalFabricNegativity.load(srv, FabricEntityManager::getExecutor, FabricWorld::new);
 		Negativity.loadNegativity();
 		packetManager = new NegativityPacketManager(this);
 
@@ -186,14 +185,6 @@ public class FabricNegativity implements DedicatedServerModInitializer {
 
 	public NegativityPacketManager getPacketManager() {
 		return packetManager;
-	}
-
-	public static List<ServerPlayerEntity> getOnlinePlayers() {
-		PlayerManager playerManager = getInstance().server.getPlayerManager();
-		if (playerManager != null) {
-			return playerManager.getPlayerList();
-		}
-		return Collections.emptyList();
 	}
 
 	public static void sendAlertMessage(Player p, String cheatName, int reliability, int ping, CheatHover hover,

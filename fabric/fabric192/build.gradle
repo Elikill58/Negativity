@@ -11,7 +11,7 @@ sourceSets {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-archivesBaseName = 'NegativityFabric-19.2'
+archivesBaseName = 'NegativityFabric-1.19.2'
 
 dependencies {
     api project(":fabric")
@@ -42,4 +42,8 @@ processResources {
 
 java {
     withSourcesJar()
+}
+
+loom {
+    serverOnlyMinecraftJar()
 }

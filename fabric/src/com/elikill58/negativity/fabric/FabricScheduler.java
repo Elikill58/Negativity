@@ -60,7 +60,7 @@ public class FabricScheduler implements Scheduler {
 	private ScheduledTask schedule(Consumer<ScheduledTask> task, int delayTicks, int intervalTicks, @Nullable String name) {
 		try {
 			this.tickTasksLock.writeLock().lock();
-			SyncTask syncTask = new SyncTask(task, delayTicks, intervalTicks, FabricNegativity.getInstance().getServer().getTicks(), name);
+			SyncTask syncTask = new SyncTask(task, delayTicks, intervalTicks, GlobalFabricNegativity.getServer().getTicks(), name);
 			this.tickTasks.add(syncTask);
 			return syncTask;
 		} finally {

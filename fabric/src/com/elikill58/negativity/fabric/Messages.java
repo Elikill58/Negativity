@@ -1,6 +1,6 @@
 package com.elikill58.negativity.fabric;
 
-import com.elikill58.negativity.fabric.utils.Utils;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 
@@ -11,7 +11,7 @@ public class Messages {
 
 	public static String getMessage(String dir, Object... placeholders) {
 		String message = TranslatedMessages.getStringFromLang(TranslatedMessages.getDefaultLang(), dir, placeholders);
-		return Utils.coloredMessage(message);
+		return ChatColor.color(message);
 	}
 
 	public static Text getMessage(ServerPlayerEntity receiver, String dir, Object... placeholders) {
@@ -28,7 +28,7 @@ public class Messages {
 
 	private static String getStringMessage(String lang, String dir, Object... placeholders) {
 		String message = TranslatedMessages.getStringFromLang(lang, dir, placeholders);
-		return Utils.coloredMessage(message);
+		return ChatColor.color(message);
 	}
 
 	public static void sendMessage(ServerPlayerEntity receiver, String dir, Object... placeholders) {
@@ -46,7 +46,7 @@ public class Messages {
 	}
 
 	public static void broadcastMessageList(String dir, Object... placeholders) {
-		for (ServerPlayerEntity p : FabricNegativity.getOnlinePlayers())
+		for (ServerPlayerEntity p : GlobalFabricNegativity.getOnlinePlayers())
 			sendMessageList(p, dir, placeholders);
 	}
 }

@@ -67,7 +67,7 @@ public enum CheatKeys implements IDetectionKey<CheatKeys> {
 	private final Version minVersion;
 	
 	private CheatKeys(String key) {
-		this(key, Version.V1_7);
+		this(key, Version.V1_8);
 	}
 	
 	private CheatKeys(String key, Version minVersion) {

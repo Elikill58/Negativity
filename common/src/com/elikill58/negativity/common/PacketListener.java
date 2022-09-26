@@ -30,7 +30,6 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityE
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.potion.PotionEffectType;
-import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.utils.Maths;
 
@@ -89,7 +88,7 @@ public class PacketListener implements Listeners {
 				np.isTeleporting = false;
 		} else
 			np.packets.put(type, np.packets.getOrDefault(type, 0) + 1);
-		if(type == PacketType.Client.BLOCK_DIG && !Version.getVersion().equals(Version.V1_7) && packet.getPacket() instanceof NPacketPlayInBlockDig) {
+		if(type == PacketType.Client.BLOCK_DIG && packet.getPacket() instanceof NPacketPlayInBlockDig) {
 			NPacketPlayInBlockDig blockDig = (NPacketPlayInBlockDig) packet.getPacket();
 			if(blockDig.action != DigAction.FINISHED_DIGGING)
 				return;

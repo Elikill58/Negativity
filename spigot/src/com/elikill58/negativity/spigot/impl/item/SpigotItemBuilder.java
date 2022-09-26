@@ -31,7 +31,7 @@ public class SpigotItemBuilder extends ItemBuilder {
     	byte damage = ((SpigotMaterial) type).getDamage();
     	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
     	if(!Version.getVersion().isNewerOrEquals(Version.V1_13) && damage > 0) {
-    		if(!Version.getVersion().equals(Version.V1_7) && itemMeta instanceof BannerMeta)
+    		if(itemMeta instanceof BannerMeta)
     			((BannerMeta) this.itemMeta).setBaseColor(org.bukkit.DyeColor.getByDyeData(damage));
     		else
     			this.itemStack.setDurability(damage);
@@ -44,7 +44,7 @@ public class SpigotItemBuilder extends ItemBuilder {
     	byte damage = ((SpigotMaterial) item.getType()).getDamage();
     	this.itemMeta = (itemStack.hasItemMeta() ? itemStack.getItemMeta() : Bukkit.getItemFactory().getItemMeta(itemStack.getType()));
     	if(!Version.getVersion().isNewerOrEquals(Version.V1_13) && damage > 0) {
-    		if(!Version.getVersion().equals(Version.V1_7) && itemMeta instanceof BannerMeta)
+    		if(itemMeta instanceof BannerMeta)
     			((BannerMeta) this.itemMeta).setBaseColor(org.bukkit.DyeColor.getByDyeData(damage));
     		else
     			this.itemStack.setDurability(damage);

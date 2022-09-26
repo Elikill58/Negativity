@@ -4,7 +4,7 @@ import java.util.Locale;
 
 public enum Version {
 	
-	V1_7("1.7", 7, 500, 0, 5),
+	LOWER("lower", 0, 0, 0, 5),
 	V1_8("1.8", 8, 500, 6, 47),
 	V1_9("1.9", 9, 400, 48, 110),
 	V1_10("1.10", 10, 400, 201, 210),
@@ -48,6 +48,17 @@ public enum Version {
 	 */
 	public int getFirstProtocolNumber() {
 		return firstProtocolNumber;
+	}
+
+	/**
+	 * Get the last protocol number of this version.
+	 * 
+	 * This value is used as default protocol version of a version.
+	 * 
+	 * @return the protocol version
+	 */
+	public int getLastProtocolNumber() {
+		return lastProtocolNumber;
 	}
 	
 	/**
@@ -117,13 +128,13 @@ public enum Version {
 	 * Get the version thanks to the protocol ID
 	 * 
 	 * @param id the id of the version
-	 * @return the founded version or {@link #HIGHER}
+	 * @return the founded version or {@link #HIGHER} or {@link #LOWER}
 	 */
 	public static Version getVersionByProtocolID(int id) {
 		for (Version v : Version.values())
 			if (v.hasProtocolNumber(id))
 				return v;
-		return HIGHER;
+		return id <= LOWER.getLastProtocolNumber() ? LOWER : HIGHER;
 	}
 	
 	/**

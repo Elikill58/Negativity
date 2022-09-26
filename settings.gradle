@@ -24,8 +24,12 @@ pluginManagement {
 rootProject.name = 'Negativity'
 
 // All global projects
-include 'common', 'spigot', 'spigot:spigot17', 'spigot:spigot18', 'spigot:spigot182', 'spigot:spigot19', 'bungee', 'velocity', 'sponge7', 'sponge', 'sponge:sponge16', 'sponge:sponge18', 'fabric', 'minestom'
+include 'common', 'bungee', 'velocity', 'minestom'
+include 'spigot', 'spigot:spigot17', 'spigot:spigot18', 'spigot:spigot182', 'spigot:spigot19'
+include 'sponge', 'sponge7', 'sponge:sponge16', 'sponge:sponge18'
+include 'fabric', 'fabric:fabric19', 'fabric:fabric192'
 
+// All integrations
 // all integrations in common
 include 'common:integrations:litebans', 'common:integrations:advancedban', 'common:integrations:viaversion'
 // all integrations in spigot

@@ -1,19 +1,20 @@
 package com.elikill58.negativity.common.protocols;
 
-import java.util.Optional;
-
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.Listeners;
+import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.common.protocols.data.SpeedData;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -66,42 +67,34 @@ public class Speed extends Cheat implements Listeners {
 	}
 
 	@Check(name = "walk-speed", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND })
-	public void onWalkSpeed(PlayerMoveEvent e, SpeedData data) {
+	public void onWalkSpeed(PacketReceiveEvent e, SpeedData data) {
+		if(!e.getPacket().getPacketType().isFlyingPacket())
+			return;
+		NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
+		if(!flying.hasPos)
+			return;
 		Player p = e.getPlayer();
-		Location from = e.getFrom(), to = e.getTo();
-		double dif = to.getY() - from.getY();
+		Location from = p.getLocation(), to = flying.getLocation(p.getWorld());
+		double yDif = to.getY() - from.getY();
 
-		double maxDistance = (p.isFlying() ? p.getFlySpeed() : p.getWalkSpeed()) * (p.isSprinting() ? 1.32 : 1);
+		double maxDistance;
+		if(p.isFlying())
+			maxDistance = p.getFlySpeed() * (p.isSprinting() ? 2 : 1);
+		else
+			maxDistance = p.getWalkSpeed() * (p.isSprinting() ? 1.32 : 1);
 
-		// status values from: https://www.mcpk.wiki/wiki/Status_Effects
-		Optional<PotionEffect> optSpeed = p.getPotionEffect(PotionEffectType.SPEED);
-		if (optSpeed.isPresent()) {
-			int amplifierSpeed = optSpeed.get().getAmplifier();
-			maxDistance *= 1 + (double) amplifierSpeed * 0.2;
-			data.oldSpeedLevel = amplifierSpeed;
-		} else if (data.oldSpeedLevel > 0) {
-			maxDistance *= 1 + (double) data.oldSpeedLevel * 0.2;
-			data.oldSpeedLevel--;
-		}
-
-		Optional<PotionEffect> optSlow = p.getPotionEffect(PotionEffectType.SLOWNESS);
-		if (optSlow.isPresent()) {
-			int amplifierSlow = optSlow.get().getAmplifier();
-			maxDistance *= (double) amplifierSlow * 0.15;
-			data.oldSlowLevel = amplifierSlow;
-		} else if (data.oldSlowLevel > 0) {
-			maxDistance *= (double) data.oldSlowLevel * 0.15;
-			data.oldSlowLevel--;
-		}
+		maxDistance *= data.getSpeedModifier();
+		maxDistance *= data.getSlowModifier();
 
 		maxDistance += p.getTheoricVelocity().length();
 
-		double distance = from.distanceXZ(to);
-		if (distance > maxDistance) {
+		double distance = from.distance(to);
+		Adapter.getAdapter().debug((distance > maxDistance && yDif < maxDistance && !(flying.isGround && !p.isOnGround()) ? "X" : "_") + ": " + String.format("%.4f", distance) + ", max: " + String.format("%.4f", maxDistance) + ", fall: " + String.format("%.4f", p.getFallDistance()) + ", yDif: " + String.format("%.4f", yDif));
+		if (distance > maxDistance && yDif < maxDistance && !(flying.isGround && !p.isOnGround())) { // go too far, not just change dir & not just fall on ground
 			double difDistance = distance - maxDistance;
 			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(difDistance * 500),
 					"walk-speed",
-					"Distance: " + distance + ", maxDistance: " + maxDistance + ", yDif: " + dif + ", fall: " + p.getFallDistance() + ", vel: " + p.getTheoricVelocity() + ", ice: " + NegativityPlayer.getNegativityPlayer(p).iceCounter,
+					"Distance: " + distance + ", maxDistance: " + maxDistance + ", yDif: " + yDif + ", fall: " + p.getFallDistance() + ", vel: " + p.getTheoricVelocity() + ", ice: " + NegativityPlayer.getNegativityPlayer(p).iceCounter,
 					new CheatHover.Literal("Move with " + String.format("%.3f", distance) + " but should move max "
 							+ String.format("%.3f", maxDistance)),
 					(long) (difDistance * 50));

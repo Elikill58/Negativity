@@ -59,6 +59,5 @@ public class Timer extends Cheat {
 		Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(100 - (p.getPing() / 100) - (medianRespect ? 15 : -10)), "packet",
 				"Flying: " + flying + ", position: " + position + ", look: " + look + ", positionLook: " + positonLook + ", sum: " + sum + ", median: " + medianValue,
 				null, amount > 0 ? amount : 1);
-		// TODO implement setBack option for Timer
 	}
 }

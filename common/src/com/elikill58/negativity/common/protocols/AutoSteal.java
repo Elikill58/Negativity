@@ -23,8 +23,6 @@ public class AutoSteal extends Cheat {
 		super(AUTO_STEAL, CheatCategory.PLAYER, Materials.CHEST, AutoStealData::new);
 	}
 
-	public static final int TIME_CLICK = 55; // TODO put this into config
-
 	@Check(name = "time-click", description = "Time between 2 clicks", conditions = { CheckConditions.SURVIVAL,
 			CheckConditions.NO_ON_BEDROCK })
 	public void onInvClick(InventoryClickEvent e, NegativityPlayer np, AutoStealData data) {
@@ -47,10 +45,11 @@ public class AutoSteal extends Cheat {
 			data.invClick = actual;
 			return;
 		}
-		if ((ping + TIME_CLICK) >= dif && data.invSlot != e.getSlot()) {
+		int timeClick = getConfig().getInt("checks.time-click.time", 55);
+		if ((ping + timeClick) >= dif && data.invSlot != e.getSlot()) {
 			if (data.invWas && !e.getAction().equals(InventoryAction.LEFT_SHIFT)) {
 				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
-						UniversalUtils.parseInPorcent((100 + TIME_CLICK) - dif - ping), "time-click",
+						UniversalUtils.parseInPorcent((100 + timeClick) - dif - ping), "time-click",
 						"Time between 2 click: " + dif + ", action: " + e.getAction().name(),
 						hoverMsg("main", "%time%", dif));
 				if (isSetBack() && mayCancel)

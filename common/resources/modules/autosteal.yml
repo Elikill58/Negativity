@@ -36,3 +36,4 @@ checks:
   # Check Y move only
   time-click:
     active: true
+    time: 55

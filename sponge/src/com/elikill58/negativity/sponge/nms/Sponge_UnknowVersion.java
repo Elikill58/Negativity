@@ -104,10 +104,8 @@ public class Sponge_UnknowVersion extends SpongeVersionAdapter {
 			}
 		});
 		packetsPlayIn.put("ServerboundPingRequestPacket", (p, f) -> new NPacketPlayInPong(((ServerboundPingRequestPacket) f).getTime()));
-		packetsPlayIn.put("ServerboundPickItemPacket", (p, f) -> new NPacketPlayInHeldItemSlot(((ServerboundPickItemPacket) f).getSlot())); // TODO check if it's good packet
+		packetsPlayIn.put("ServerboundPickItemPacket", (p, f) -> new NPacketPlayInHeldItemSlot(((ServerboundPickItemPacket) f).getSlot()));
 
-		
-		
 		packetsPlayOut.put("ClientboundBlockBreakAckPacket", (p, f) -> {
 			BlockPos pos = get(f, "pos");
 			BlockState state = get(f, "state");

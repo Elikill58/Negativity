@@ -71,7 +71,7 @@ public class Speed extends Cheat implements Listeners {
 		if(!e.getPacket().getPacketType().isFlyingPacket())
 			return;
 		NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
-		if(!flying.hasPos)
+		if(!flying.hasPos || flying.hasPos) // true if to disable it temporary
 			return;
 		Player p = e.getPlayer();
 		Location from = p.getLocation(), to = flying.getLocation(p.getWorld());

@@ -26,7 +26,6 @@ import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckData;
 import com.elikill58.negativity.api.protocols.CheckManager;
-import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -50,11 +49,6 @@ public abstract class Cheat extends AbstractDetection<CheatKeys> {
 	private final List<Check> checks = new ArrayList<>();
 	private final List<CheatDescription> options;
 	private final Function<NegativityPlayer, ? extends CheckData> checkDataCreator;
-	
-	@Deprecated
-	public Cheat(CheatKeys key, CheatCategory type, Material m, CheatDescription... options) {
-		this(key, type, m, EmptyData::new, options);
-	}
 
 	/**
 	 * Create a new cheat object and load default config

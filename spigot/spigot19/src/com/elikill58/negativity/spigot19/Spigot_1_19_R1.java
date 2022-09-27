@@ -27,7 +27,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionL
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
@@ -36,6 +35,8 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAli
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.api.potion.PotionEffectType;
+import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.SubPlatform;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Adapter;
@@ -62,10 +63,12 @@ import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundPongPacket;
 import net.minecraft.network.protocol.handshake.ClientIntentionPacket;
 import net.minecraft.server.dedicated.DedicatedServer;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.level.entity.LevelEntityGetter;
 import net.minecraft.world.phys.AABB;
 
 @SuppressWarnings("resource")
@@ -142,10 +145,6 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 			ClientboundExplodePacket packet = (ClientboundExplodePacket) raw;
 			return new NPacketPlayOutExplosion(packet.getX(), packet.getY(), packet.getZ(), packet.getKnockbackX(),
 					packet.getKnockbackY(), packet.getKnockbackZ());
-		});
-		packetsPlayOut.put("PacketPlayOutEntity", (player, packet) -> {
-			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
-					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
 		});
 		packetsPlayOut.put("PacketPlayOutEntityEffect", (player, f) -> {
 			ClientboundUpdateMobEffectPacket packet = (ClientboundUpdateMobEffectPacket) f;
@@ -228,10 +227,18 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 		return getPlayerConnection(p).connection.channel;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<Entity> getEntities(World w) {
 		List<Entity> entities = new ArrayList<>();
-		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().iterator().forEachRemaining((mcEnt) -> {
+		ServerLevel srv = ((CraftWorld) w).getHandle();
+		LevelEntityGetter<net.minecraft.world.entity.Entity> getter;
+		if(SpigotNegativity.getSubPlatform().equals(SubPlatform.PAPER)) { // since paper 174
+			getter = (LevelEntityGetter<net.minecraft.world.entity.Entity>) ReflectionUtils.getField(srv, "entityLookup");
+		} else {
+			getter = srv.entityManager.getEntityGetter();
+		}
+		getter.getAll().iterator().forEachRemaining((mcEnt) -> {
 			if(mcEnt != null) {
 				CraftEntity craftEntity = mcEnt.getBukkitEntity();
 				if (craftEntity != null && craftEntity instanceof Entity && craftEntity.isValid())

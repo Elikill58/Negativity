@@ -3,35 +3,26 @@ package com.elikill58.negativity.common.protocols;
 import static com.elikill58.negativity.universal.detections.keys.CheatKeys.FLY;
 import static com.elikill58.negativity.universal.utils.UniversalUtils.parseInPorcent;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.entity.Player;
-import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
-import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
-import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
-import com.elikill58.negativity.common.protocols.data.EmptyData;
+import com.elikill58.negativity.common.protocols.data.FlyData;
 import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.Scheduler;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -42,174 +33,56 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class Fly extends Cheat implements Listeners {
 
 	public Fly() {
-		super(FLY, CheatCategory.MOVEMENT, Materials.FIREWORK, EmptyData::new, CheatDescription.NO_FIGHT);
+		super(FLY, CheatCategory.MOVEMENT, Materials.FIREWORK, FlyData::new, CheatDescription.NO_FIGHT);
 	}
 
-	@EventListener
-	public void onPlayerMove(PlayerMoveEvent e) {
+	@Check(name = "no-ground-down", description = "When not in ground, check Y move", conditions = CheckConditions.NO_GROUND)
+	public void boatManager(PlayerMoveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
-		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.hasDetectionActive(this) || e.isCancelled())
-			return;
-		if (!p.getGameMode().equals(GameMode.SURVIVAL) && !p.getGameMode().equals(GameMode.ADVENTURE))
-			return;
-		ItemStack hand = p.getItemInHand();
-		if (hand != null && hand.getType().getId().contains("TRIDENT"))
-			return;
-		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
-			return;
-		if (p.getAllowFlight() || p.isSwimming() || p.isInsideVehicle() || e.getTo().getBlockChecker(1.5).has(Materials.WATER_LILY, Materials.WEB, Materials.LADDER, Materials.VINE))
-			return;
-		if (p.getPotionEffect(PotionEffectType.SPEED).orElseGet(() -> new PotionEffect(PotionEffectType.SPEED))
-				.getAmplifier() > 5)
-			return;
-
-		Location from = e.getFrom(), to = e.getTo();
-
-		boolean mayCancel = false, inBoat = p.isInBoat();
-		double y = from.getY() - to.getY();
+		Location from = e.getFrom().clone(), to = e.getTo().clone();
 		Location loc = p.getLocation().clone(), locUnder = p.getLocation().clone().sub(0, 1, 0),
 				locUnderUnder = p.getLocation().clone().sub(0, 2, 0);
-		Material type = loc.getBlock().getType(), typeUpper = loc.getBlock().getRelative(BlockFace.UP).getType();
-		boolean isInWater = loc.getBlock().getType().getId().contains("WATER"),
-				isOnWater = locUnder.getBlock().getType().getId().contains("WATER");
 		boolean hasOtherThanAir = loc.getBlockCheckerXZ(1.5).hasOther(Materials.AIR),
 				hasUnderOtherThanAir = locUnder.getBlockCheckerXZ(1).hasOther(Materials.AIR),
 				hasUnderUnderOtherThanAir = locUnderUnder.getBlockCheckerXZ(1).hasOther(Materials.AIR);
 
-		double i = to.toVector().distance(from.toVector());
 		double d = to.getY() - from.getY();
-		double distance = from.distance(to);
-
-		if (!p.hasElytra()) {
-			if (checkActive("suspicious-y")) {
-				boolean hasBuggedBlockAroundForGeyser = np.isBedrockPlayer()
-						&& locUnder.getBlockCheckerXZ(1).has("SLAB", "FENCE", "STAIRS", "BED");
-				String strY = String.valueOf(y);
-				if (strY.contains("E") && !strY.equalsIgnoreCase("2.9430145066276694E-4") && !p.isInsideVehicle()
-						&& !np.isInFight && !LocationUtils.hasBoatAroundHim(p.getLocation())
-						&& !(isInWater || isOnWater)
-						&& !loc.getBlockCheckerXZ(1).has("SCAFFOLD", "LAVA", "WATER") && !inBoat
-						&& !hasBuggedBlockAroundForGeyser) {
-					int eY = (int) Math.abs(Double.parseDouble(String.valueOf(y).split("E")[0]));
-					mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
-							this, UniversalUtils.parseInPorcent(120 - (eY * eY * eY)), "suspicious-y",
-							"Suspicious Y: " + y);
-				}
-			}
-			if (checkActive("no-ground-i")) {
-				if (!p.isSprinting() && d > 0 && (i < p.getVelocity().getY() || p.getVelocity().length() < 0.5)
-						&& p.getVelocity().length() < 3 && locUnder.getBlock().getType().equals(Materials.AIR)
-						&& locUnderUnder.getBlock().getType().equals(Materials.AIR)
-						&& (p.getFallDistance() == 0.0F || inBoat) && typeUpper.equals(Materials.AIR) && i > 0.8
-						&& !p.isOnGround()) {
-					mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
-							this, parseInPorcent((int) i * 50), "no-ground-i",
-							"Not ground, i: " + String.format("%.10f", i) + ", boat: " + inBoat + ", d: "
-									+ String.format("%.10f", d) + ", vel: " + p.getVelocity(),
-							inBoat ? hoverMsg("boat") : null);
-				}
-			}
-
-			if (checkActive("no-ground-down") && !np.booleans.get(CheatKeys.ALL, "jump-boost-use", false)) {
-				if (!np.isUsingSlimeBlock && !hasOtherThanAir && !hasUnderOtherThanAir
-						&& !np.booleans.get(FLY, "boat-falling", false) && !hasUnderUnderOtherThanAir && d != 0.5
-						&& d != 0 && (from.getY() <= to.getY() || inBoat) && p.getVelocity().length() < d) {
-					double nbTimeAirBelow = np.doubles.get(FLY, "air-below", 0.0);
-					np.doubles.set(FLY, "air-below", nbTimeAirBelow + 1);
-					if (nbTimeAirBelow > 6) { // we don't care when player jump
-						int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
-						if (p.getLocation().add(0, -3, 0).getBlockChecker(1, 0, 1).hasOther(Materials.AIR))
-							porcent = parseInPorcent(porcent - 15);
-						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, porcent, "no-ground-down",
-								"Not ground (" + nb + " down), disY: " + d + ", vel: " + p.getVelocity() + ", fd: "
-										+ p.getFallDistance() + ", nbTime: " + nbTimeAirBelow,
-								hoverMsg(inBoat ? "boat_air_below" : "air_below", "%nb%", nb));
-					}
-				} else
-					np.doubles.remove(FLY, "air-below");
-			}
-
-			if (checkActive("no-ground-y")) {
-				double distanceWithoutY = to.distanceXZ(from);
-				if (distanceWithoutY == i && !p.isOnGround() && i != 0 && typeUpper.equals(Materials.AIR)
-						&& !p.isInsideVehicle() && !type.getId().contains("WATER") && distanceWithoutY > 0.3 && p.getVelocity().length() < 0.5) {
-					if (np.booleans.get(FLY, "not-moving-y", false))
-						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98, "no-ground-y",
-								"Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY + ", vel: " + p.getVelocity());
-					np.booleans.set(FLY, "not-moving-y", true);
-				} else
-					np.booleans.remove(FLY, "not-moving-y");
-			}
-			if (checkActive("not-moving-y")) {
-				if (p.isOnGround() && y == 0 && type.equals(Materials.AIR)
-						&& locUnder.getBlock().getType().equals(Materials.AIR) && distance > p.getWalkSpeed()
-						&& !hasOtherThanAir && !hasUnderOtherThanAir) {
-					int time0 = np.ints.get(FLY, "y-0-times", 0);
-					if (time0 > 2) {
-						mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(time0 * 30),
-								"not-moving-y", "Times not moving Y and on ground: " + time0 + ", distance: " + distance
-										+ ", ws: " + p.getWalkSpeed(),
-								null, time0 < 3 ? 1 : time0 - 2);
-					}
-					np.ints.set(FLY, "y-0-times", time0 + 1);
-				} else
-					np.ints.remove(FLY, "y-0-times");
-			}
-			if (checkActive("bypass-ground")) {
-				Vector vec = new Vector(to.getX(), to.getY(), to.getZ());
-				double diff = vec.distance(new Vector(from.getX(), from.getY(), from.getZ()));
-				if (diff < 0.35 && loc.clone().add(+2, -2, +2).getBlock().getType().equals(Materials.AIR)
-						&& loc.clone().add(-2, -2, -2).getBlock().getType().equals(Materials.AIR)
-						&& loc.clone().add(0, -3, 0).getBlock().getType().equals(Materials.AIR)
-						&& loc.clone().add(0, -4, 0).getBlock().getType().equals(Materials.AIR)) {
-					if (!(loc.clone().add(0, -1, 0).getBlock().getType().equals(Materials.AIR) && p.isOnGround())) {
-						Scheduler.getInstance().runDelayed(() -> {
-							if (!(loc.clone().add(0, -1, 0).getBlock().getType().equals(Materials.AIR)
-									&& p.isOnGround())) {
-								Negativity.alertMod(ReportType.WARNING, p, this,
-										UniversalUtils.parseInPorcent(diff * 150), "bypass-ground",
-										"Bypass on ground. Diff: " + diff,
-										new CheatHover.Literal("Difference: " + diff));
-							}
-						}, 3);
-					}
-				}
-			}
-		}
-		if (isSetBack() && mayCancel) {
-			LocationUtils.teleportPlayerOnGround(p);
-		}
-	}
-
-	@Check(name = "no-ground-down", description = "When not in ground, check Y move", conditions = CheckConditions.NO_GROUND)
-	public void boatManager(PlayerMoveEvent e, NegativityPlayer np) {
-		Player p = e.getPlayer();
-		boolean nextValue = np.booleans.get(FLY, "boat-falling", false);
 		if (p.getVehicle() != null && p.getVehicle().getType().equals(EntityType.BOAT)) {
-			Location from = e.getFrom().clone(), to = e.getTo().clone();
 			double moveY = (to.getY() - from.getY());
 
 			boolean wasWaterBelow = from.sub(0, 1, 0).getBlock().getType().getId().contains("WATER");
 			boolean willWaterBelow = to.sub(0, 1, 0).getBlock().getType().getId().contains("WATER");
 			if (wasWaterBelow && !willWaterBelow)
-				nextValue = true;
+				data.boatFalling = true;
 
-			if (nextValue && !willWaterBelow && moveY >= 0)
-				nextValue = false;
+			if (data.boatFalling && !willWaterBelow && moveY >= 0)
+				data.boatFalling = false;
 		} else {
-			if (!nextValue)
-				return; // already set to false, don't need to save it while put it in map
-			nextValue = false;
+			data.boatFalling = false;
 		}
-
-		np.booleans.set(FLY, "boat-falling", nextValue);
+		if (!np.isUsingSlimeBlock && !hasOtherThanAir && !hasUnderOtherThanAir && !data.boatFalling
+				&& !hasUnderUnderOtherThanAir && d != 0.5 && d != 0 && (from.getY() <= to.getY() || p.isInBoat())
+				&& p.getVelocity().length() < d) {
+			if (data.nbAirBelow > 6) { // we don't care when player jump
+				int nb = LocationUtils.getNbAirBlockDown(p), porcent = parseInPorcent(nb * 15 + d);
+				if (p.getLocation().add(0, -3, 0).getBlockChecker(1, 0, 1).hasOther(Materials.AIR))
+					porcent = parseInPorcent(porcent - 15);
+				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, porcent, "no-ground-down",
+						"Not ground (" + nb + " down), disY: " + d + ", vel: " + p.getVelocity() + ", fd: "
+								+ p.getFallDistance() + ", nbTime: " + data.nbAirBelow,
+						hoverMsg(p.isInBoat() ? "boat_air_below" : "air_below", "%nb%", nb));
+				if (mayCancel && isSetBack())
+					LocationUtils.teleportPlayerOnGround(p);
+			}
+			data.nbAirBelow++;
+		} else
+			data.nbAirBelow = 0;
 	}
 
 	@Check(name = "omega-craft", description = "Check when player keep their Y move", conditions = {
 			CheckConditions.SURVIVAL, CheckConditions.NO_FIGHT, CheckConditions.NO_USE_TRIDENT, CheckConditions.NO_FLY,
 			CheckConditions.NO_SWIM, CheckConditions.NO_INSIDE_VEHICLE })
-	public void omegaCraft(PlayerMoveEvent e, NegativityPlayer np) {
+	public void omegaCraft(PlayerMoveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
 		if (Version.getVersion().isNewerOrEquals(Version.V1_9) && p.hasPotionEffect(PotionEffectType.LEVITATION))
 			return;
@@ -222,32 +95,31 @@ public class Fly extends Cheat implements Listeners {
 				isOnWater = blockUnder.getType().getId().contains("WATER");
 
 		double d = to.getY() - from.getY();
-		if(d == 0) {
-			for(Block b : p.getBoundingBox().add(0, 0.9, 0).getBlocks(p.getWorld()).getBlocks()) {
-				if(b.getType().isSolid()) {
-					np.listDoubles.remove(FLY, "fly-move");
+		if (d == 0) {
+			for (Block b : p.getBoundingBox().add(0, 0.9, 0).getBlocks(p.getWorld()).getBlocks()) {
+				if (b.getType().isSolid()) {
+					data.flyMove.clear();
 					return;
 				}
 			}
 		}
 
-		List<Double> flyMoveAmount = np.listDoubles.get(FLY, "fly-move", new ArrayList<>());
-		boolean onGround = p.isOnGround(), wasOnGround = np.booleans.get(FLY, "fly-wasOnGround", true);
+		boolean onGround = p.isOnGround();
 		boolean hasBoatAround = p.getWorld().getEntities().stream()
 				.filter((entity) -> entity.getType().equals(EntityType.BOAT) && entity.getLocation().distance(loc) < 3)
 				.findFirst().isPresent();
-		if (p.getFallDistance() <= 0.000001 && !p.isInsideVehicle() && onGround == wasOnGround) {
+		if (p.getFallDistance() <= 0.000001 && !p.isInsideVehicle() && onGround == data.wasOnGround) {
 			double i = to.toVector().distance(from.toVector());
 			int amount = 0;
-			synchronized (flyMoveAmount) {
-				int size = flyMoveAmount.size();
+			synchronized (data.flyMove) {
+				int size = data.flyMove.size();
 				if (size > 1) {
 					for (int x = 1; x < size - 1; x++) {
-						double last = flyMoveAmount.get(x - 1);
-						double current = flyMoveAmount.get(x);
+						double last = data.flyMove.get(x - 1);
+						double current = data.flyMove.get(x);
 						if ((last + current) == 0) {
 							if (i < (size - 2)) {
-								double next = flyMoveAmount.get(x + 1);
+								double next = data.flyMove.get(x + 1);
 								if ((current + next) == 0) {
 									amount++;
 								}
@@ -258,26 +130,29 @@ public class Fly extends Cheat implements Listeners {
 				}
 			}
 			if (amount > 1) {
-				if (Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent((np.isBedrockPlayer() ? 70 : 85) + amount),
-						"omega-craft", flyMoveAmount + " > " + onGround + " : " + wasOnGround + ", i: " + i
-								+ ", d: " + d + ", under: " + blockUnder.getType().getId(),
+				if (Negativity.alertMod(ReportType.WARNING, p, this,
+						UniversalUtils.parseInPorcent((np.isBedrockPlayer() ? 70 : 85) + amount), "omega-craft",
+						data.flyMove + " > " + onGround + " : " + data.wasOnGround + ", i: " + i + ", d: " + d
+								+ ", under: " + blockUnder.getType().getId(),
 						new CheatHover.Literal("OmegaCraft: " + amount + " times with no Y changes"),
 						amount > 1 ? amount - 1 : 1) && isSetBack())
-					e.setCancelled(true);
+					LocationUtils.teleportPlayerOnGround(p);
 			}
 		}
-		if ((onGround && wasOnGround) || (d > 0.1 || d < -0.1) || hasBoatAround || p.isInsideVehicle()
+		if ((onGround && data.wasOnGround) || (d > 0.1 || d < -0.1) || hasBoatAround || p.isInsideVehicle()
 				|| !e.getTo().clone().add(0, 2, 0).getBlock().getType().isTransparent() || isInWater || isOnWater
 				|| e.getTo().getBlockChecker(1.5).has("FENCE", "SLIME", "LILY", "VINE", "STAIRS", "BED"))
-			flyMoveAmount.clear();
+			data.flyMove.clear();
 		else
-			flyMoveAmount.add(d);
+			data.flyMove.add(d);
 
-		np.booleans.set(FLY, "fly-wasOnGround", onGround);
+		data.wasOnGround = onGround;
 	}
-	
-	@Check(name = "ground-checker", description = "Check for ground on no-ground packet", conditions = { CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_FLY, CheckConditions.NO_USE_SLIME, CheckConditions.NO_CLIMB_BLOCK })
-	public void onGroundChecker(PacketReceiveEvent e) {
+
+	@Check(name = "ground-checker", description = "Check for ground on no-ground packet", conditions = {
+			CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_FLY, CheckConditions.NO_USE_SLIME,
+			CheckConditions.NO_CLIMB_BLOCK })
+	public void onGroundChecker(PacketReceiveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
 		AbstractPacket packet = e.getPacket();
 		if (packet.getPacketType().equals(PacketType.Client.POSITION)
@@ -286,16 +161,114 @@ public class Fly extends Cheat implements Listeners {
 
 			boolean positionGround = Maths.isOnGround(flying.getY());
 
-			NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-			double actual = np.doubles.get(CheatKeys.FLY, "ground-warn", 0.0);
 			if (positionGround != flying.isGround) {
-				if (++actual > 4) {
-					Negativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FLY), 90, "ground-checker", "Motion: " + positionGround + " / " + flying.isGround + ", y: " + flying.getY(), null, (long) (actual - 3));
+				if (data.groundWarn++ > 4) {
+					if (Negativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.FLY), 90, "ground-checker",
+							"Motion: " + positionGround + " / " + flying.isGround + ", y: " + flying.getY(), null,
+							(long) (data.groundWarn - 3)) && isSetBack())
+						LocationUtils.teleportPlayerOnGround(p);
 				}
 			} else {
-				actual = Math.max(actual - 0.3, 0);
+				data.groundWarn = Math.max(data.groundWarn - 0.3, 0);
 			}
-			np.doubles.set(CheatKeys.FLY, "ground-warn", actual);
+		}
+	}
+
+	@Check(name = "suspicious-y", description = "Suspicious Y move", conditions = { CheckConditions.NO_ELYTRA,
+			CheckConditions.NO_FIGHT, CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_INSIDE_VEHICLE })
+	public void onSuspiciousY(PlayerMoveEvent e, NegativityPlayer np) {
+		Player p = e.getPlayer();
+		Location from = e.getFrom(), to = e.getTo();
+		double y = from.getY() - to.getY();
+		Location loc = p.getLocation().clone(), locUnder = p.getLocation().clone().sub(0, 1, 0);
+		String strY = String.valueOf(y);
+		if (strY.contains("E") && !strY.equalsIgnoreCase("2.9430145066276694E-4")
+				&& !loc.getBlockCheckerXZ(1).has("SCAFFOLD", "LAVA", "WATER")
+				&& !(np.isBedrockPlayer() && locUnder.getBlockCheckerXZ(1).has("SLAB", "FENCE", "STAIRS", "BED"))) {
+			int eY = (int) Math.abs(Double.parseDouble(String.valueOf(y).split("E")[0]));
+			boolean mayCancel = Negativity.alertMod(np.getWarn(this) > 5 ? ReportType.VIOLATION : ReportType.WARNING, p,
+					this, UniversalUtils.parseInPorcent(120 - (eY * eY * eY)), "suspicious-y", "Suspicious Y: " + y);
+			if (mayCancel && isSetBack())
+				LocationUtils.teleportPlayerOnGround(p);
+		}
+	}
+
+	@Check(name = "no-ground-y", description = "When not in ground, check y", conditions = { CheckConditions.NO_ELYTRA,
+			CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_INSIDE_VEHICLE })
+	public void onGroundY(PlayerMoveEvent e, NegativityPlayer np, FlyData data) {
+		Player p = e.getPlayer();
+		Location from = e.getFrom(), to = e.getTo();
+		double i = to.toVector().distance(from.toVector());
+		double distanceWithoutY = to.distanceXZ(from);
+		if (distanceWithoutY == i && !p.isOnGround() && i != 0 && distanceWithoutY > 0.3
+				&& p.getVelocity().length() < 0.5) {
+			if (data.notMovingY > 1) {
+				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, 98, "no-ground-y",
+						"Player not in ground but not moving Y. DistanceWithoutY: " + distanceWithoutY + ", vel: "
+								+ p.getVelocity());
+				if (mayCancel && isSetBack())
+					LocationUtils.teleportPlayerOnGround(p);
+			}
+			data.notMovingY++;
+		} else
+			data.notMovingY = 0;
+	}
+
+	@Check(name = "not-moving-y", description = "When not moving Y", conditions = { CheckConditions.NO_ELYTRA,
+			CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_INSIDE_VEHICLE })
+	public void onNotMovingY(PlayerMoveEvent e, NegativityPlayer np, FlyData data) {
+		Player p = e.getPlayer();
+
+		Location from = e.getFrom(), to = e.getTo();
+
+		double y = from.getY() - to.getY();
+		Location loc = p.getLocation().clone(), locUnder = p.getLocation().clone().sub(0, 1, 0);
+		Material type = loc.getBlock().getType();
+		boolean hasOtherThanAir = loc.getBlockCheckerXZ(1.5).hasOther(Materials.AIR),
+				hasUnderOtherThanAir = locUnder.getBlockCheckerXZ(1).hasOther(Materials.AIR);
+
+		double distance = from.distance(to);
+
+		if (p.isOnGround() && y == 0 && type.equals(Materials.AIR)
+				&& locUnder.getBlock().getType().equals(Materials.AIR) && distance > p.getWalkSpeed()
+				&& !hasOtherThanAir && !hasUnderOtherThanAir) {
+			if (data.y0times > 2) {
+				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(data.y0times * 30),
+						"not-moving-y", "Times not moving Y and on ground: " + data.y0times + ", distance: " + distance
+								+ ", ws: " + p.getWalkSpeed(),
+						null, data.y0times < 3 ? 1 : data.y0times - 2);
+				if (mayCancel && isSetBack())
+					LocationUtils.teleportPlayerOnGround(p);
+			}
+			data.y0times++;
+		} else
+			data.y0times = 0;
+	}
+
+	@Check(name = "not-moving-y", description = "When not moving Y", conditions = { CheckConditions.NO_ELYTRA,
+			CheckConditions.NO_BOAT_AROUND, CheckConditions.NO_INSIDE_VEHICLE, CheckConditions.NO_SPRINT })
+	public void notGroundI(PlayerMoveEvent e, NegativityPlayer np, FlyData data) {
+		Player p = e.getPlayer();
+
+		Location from = e.getFrom(), to = e.getTo();
+
+		double i = to.toVector().distance(from.toVector());
+		double d = to.getY() - from.getY();
+		Location loc = p.getLocation().clone(), locUnder = p.getLocation().clone().sub(0, 1, 0),
+				locUnderUnder = p.getLocation().clone().sub(0, 2, 0);
+		Material typeUpper = loc.getBlock().getRelative(BlockFace.UP).getType();
+		boolean inBoat = p.isInBoat();
+		if (d > 0 && (i < p.getVelocity().getY() || p.getVelocity().length() < 0.5) && p.getVelocity().length() < 3
+				&& locUnder.getBlock().getType().equals(Materials.AIR)
+				&& locUnderUnder.getBlock().getType().equals(Materials.AIR) && (p.getFallDistance() == 0.0F || inBoat)
+				&& typeUpper.equals(Materials.AIR) && i > 0.8 && !p.isOnGround()) {
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, parseInPorcent((int) i * 50),
+					"no-ground-i",
+					"Not ground, i: " + String.format("%.10f", i) + ", boat: " + inBoat + ", d: "
+							+ String.format("%.10f", d) + ", vel: " + p.getVelocity(),
+					inBoat ? hoverMsg("boat") : null);
+			if (mayCancel && isSetBack())
+				LocationUtils.teleportPlayerOnGround(p);
 		}
 	}
 }

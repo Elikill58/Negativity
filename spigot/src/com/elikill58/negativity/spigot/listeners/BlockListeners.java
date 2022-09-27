@@ -14,14 +14,11 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.block.SpigotBlock;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacket;
-import com.elikill58.negativity.universal.Version;
 
 public class BlockListeners implements Listener {
 
 	@EventHandler
 	public void onBlockBreak(org.bukkit.event.block.BlockBreakEvent e) {
-		if(!Version.getVersion().equals(Version.V1_7)) // for 1.7, event called from PacketManager
-			return;
 		BlockBreakEvent event = new BlockBreakEvent(SpigotEntityManager.getPlayer(e.getPlayer()), new SpigotBlock(e.getBlock()));
 		EventManager.callEvent(event);
 		if(event.isCancelled())

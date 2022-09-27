@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -20,8 +19,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.json.JSONObject;
-import com.elikill58.negativity.api.json.parser.JSONParser;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
@@ -88,12 +85,6 @@ public class MinestomAdapter extends Adapter {
 	}
 
 	@Override
-	public void debug(String msg) {
-		if(getConfig().getBoolean("debug", false))
-			logger.info(msg);
-	}
-
-	@Override
 	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
 		return this.translationProviderFactory;
 	}
@@ -131,22 +122,6 @@ public class MinestomAdapter extends Adapter {
 	@Override
 	public void runConsoleCommand(String cmd) {
 		MinecraftServer.getCommandManager().executeServerCommand(cmd);
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
-		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {
-			if (response == null) {
-				return false;
-			}
-			try {
-				return (boolean) ((JSONObject) new JSONParser().parse(response)).getOrDefault("isMcleaks", false);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return false;
-		});
 	}
 
 	@Override

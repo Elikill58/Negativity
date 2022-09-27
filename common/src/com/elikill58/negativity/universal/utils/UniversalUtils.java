@@ -45,6 +45,9 @@ import javax.net.ssl.X509TrustManager;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.json.JSONObject;
+import com.elikill58.negativity.api.json.parser.JSONParser;
+import com.elikill58.negativity.api.json.parser.ParseException;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.Adapter;
@@ -343,6 +346,33 @@ public class UniversalUtils {
 		return null;
 	}
 
+	/**
+	 * Check if the UUID is a McLeaks account
+	 * 
+	 * @param playerId the player to check
+	 * @return a completable boolean
+	 */
+	public static CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
+		return requestMcleaksData(playerId.toString()).thenApply(response -> {
+			if (response == null) {
+				return false;
+			}
+			try {
+				Object data = new JSONParser().parse(response);
+				if (data instanceof JSONObject) {
+					JSONObject json = (JSONObject) data;
+					Object isMcleaks = json.get("isMcleaks");
+					if (isMcleaks != null) {
+						return Boolean.getBoolean(isMcleaks.toString());
+					}
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+			return false;
+		});
+	}
+
 	public static CompletableFuture<@Nullable String> requestMcleaksData(String uuid) {
 		if(!checkAgainForMcleaks) // previously get error
 			return CompletableFuture.completedFuture(null);
@@ -362,7 +392,7 @@ public class UniversalUtils {
 				}
 			} catch (Exception e) {
 				checkAgainForMcleaks = false;
-				Adapter.getAdapter().getLogger().printError("Can't check mcleaks for " + uuid + ". An error occurred: ", e);
+				Adapter.getAdapter().getLogger().warn("Can't check mcleaks for " + uuid + ". An error occurred: " + e.getMessage());
 			}
 			return null;
 		});

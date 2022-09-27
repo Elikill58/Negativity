@@ -42,22 +42,12 @@ import com.elikill58.negativity.universal.utils.ReflectionUtils;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean isCraftBukkit = false, isMohist = false;
+	private static final SubPlatform platform = SubPlatform.getSubPlatform();
+	public static SubPlatform getSubPlatform() {
+		return platform;
+	}
 	public static String CHANNEL_NAME_FML = "";
 	private NegativityPacketManager packetManager;
-	
-	static {
-		try {
-			Class.forName("org.spigotmc.SpigotConfig");
-			isCraftBukkit = false;
-		} catch (ClassNotFoundException e) {
-			isCraftBukkit = true;
-		}
-		try {
-			Class.forName("com.mohistmc.MohistMC");
-			isMohist = true;
-		} catch (ClassNotFoundException e) {}
-	}
 		
 	@Override
 	public void onEnable() {
@@ -83,7 +73,7 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().warning("Unknow server version " + Utils.VERSION + " ! Some problems can appears.");
 		else {
 			SpigotVersionAdapter.getVersionAdapter();
-			getLogger().info("Detected server version: " + v.name().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ")" + (isMohist ? " using Mohist server." : ""));
+			getLogger().info("Detected server version: " + v.name().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ") using " + getSubPlatform().getName() + " server.");
 		}
 		getLogger().info("Running with Java " + System.getProperty("java.version"));
 		

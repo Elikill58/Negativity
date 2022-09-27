@@ -1,12 +1,9 @@
 package com.elikill58.negativity.sponge;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -15,8 +12,6 @@ import org.spongepowered.api.Sponge;
 import org.spongepowered.api.command.exception.CommandException;
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.scheduler.Task;
-import org.spongepowered.configurate.ConfigurationNode;
-import org.spongepowered.configurate.gson.GsonConfigurationLoader;
 import org.spongepowered.plugin.PluginContainer;
 import org.spongepowered.plugin.metadata.PluginMetadata;
 
@@ -102,12 +97,6 @@ public class SpongeAdapter extends Adapter {
 	}
 	
 	@Override
-	public void debug(String msg) {
-		if(getConfig().getBoolean("debug", false))
-			this.logger.info(msg);
-	}
-	
-	@Override
 	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
 		return this.translationProviderFactory;
 	}
@@ -149,25 +138,6 @@ public class SpongeAdapter extends Adapter {
 		} catch (CommandException e) {
 			this.plugin.getLogger().error("Failed to run command as console", e);
 		}
-	}
-	
-	@Override
-	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
-		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {
-			if (response == null) {
-				return false;
-			}
-			try {
-				ConfigurationNode rootNode = GsonConfigurationLoader.builder()
-					.source(() -> new BufferedReader(new StringReader(response)))
-					.build()
-					.load();
-				return rootNode.node("isMcleaks").getBoolean(false);
-			} catch (Exception e) {
-				this.plugin.getLogger().error("Failed to parse MCLeaks API response", e);
-			}
-			return false;
-		});
 	}
 	
 	@Override

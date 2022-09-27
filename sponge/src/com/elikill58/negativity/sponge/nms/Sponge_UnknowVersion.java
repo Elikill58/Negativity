@@ -24,7 +24,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionL
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
@@ -105,10 +104,8 @@ public class Sponge_UnknowVersion extends SpongeVersionAdapter {
 			}
 		});
 		packetsPlayIn.put("ServerboundPingRequestPacket", (p, f) -> new NPacketPlayInPong(((ServerboundPingRequestPacket) f).getTime()));
-		packetsPlayIn.put("ServerboundPickItemPacket", (p, f) -> new NPacketPlayInHeldItemSlot(((ServerboundPickItemPacket) f).getSlot())); // TODO check if it's good packet
+		packetsPlayIn.put("ServerboundPickItemPacket", (p, f) -> new NPacketPlayInHeldItemSlot(((ServerboundPickItemPacket) f).getSlot()));
 
-		
-		
 		packetsPlayOut.put("ClientboundBlockBreakAckPacket", (p, f) -> {
 			BlockPos pos = get(f, "pos");
 			BlockState state = get(f, "state");
@@ -123,7 +120,6 @@ public class Sponge_UnknowVersion extends SpongeVersionAdapter {
 		packetsPlayOut.put("ClientboundExplodePacket", (p, f) -> {
 			return new NPacketPlayOutExplosion(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "knockbackX"), get(f, "knockbackY"), get(f, "knockbackZ"));
 		});
-		packetsPlayOut.put("ClientboundPlayerPositionPacket", (p, f) ->  new NPacketPlayOutEntity(get(f, "id"), get(f, "x"), get(f, "y"), get(f, "z")));
 		packetsPlayOut.put("ClientboundSetEntityMotionPacket", (p, f) -> {
 			return new NPacketPlayOutEntityVelocity(get(f, "id"), get(f, "xa"), get(f, "ya"), get(f, "za"));
 		});

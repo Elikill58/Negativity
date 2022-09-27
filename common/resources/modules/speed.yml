@@ -39,12 +39,6 @@ checks:
   # Distance when jumping
   distance-jumping:
     active: true
-  # Distance when on ground
-  distance-ground:
-    active: true
-  # Calculated speed
-  calculated:
-    active: true
   # Same Y move
   same-diff:
     active: true

@@ -15,6 +15,7 @@ import com.elikill58.negativity.universal.TranslatedMessages;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
 import com.elikill58.negativity.universal.report.Report;
+import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 /**
  * Contains player-related data that can be accessed when the player is offline.
@@ -45,7 +46,7 @@ public final class NegativityAccount {
 		this.ip = ip;
 		this.creationTime = creationTime;
 		this.showAlert = showAlert;
-		Adapter.getAdapter().isUsingMcLeaks(playerId).thenAccept(isUsingMcLeaks -> {
+		UniversalUtils.isUsingMcLeaks(playerId).thenAccept(isUsingMcLeaks -> {
 			this.isMcLeaks = isUsingMcLeaks;
 		});
 	}

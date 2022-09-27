@@ -120,18 +120,17 @@ public class NoFall extends Cheat {
 		if (LocationUtils.hasMaterialsAround(to, "WATER") || distance == 0.0D || from.getY() < to.getY())
 			return;
 		Vector direction = p.getVelocity().clone();
-		int relia = UniversalUtils.parseInPorcent(distance * 100);
 		double distanceVector = to.toVector().clone().add(direction).distance(from.toVector());
 		double disWithDirY = from.clone().add(direction).toVector().setY(0).distanceSquared(to.toVector().setY(0));
 		if (distance > 0.79D && !(p.getWalkSpeed() > 0.45F && PlayerModificationsManager.isSpeedUnlocked(p))) {
-			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, relia, "distance-ground",
+			boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(distance * 100), "distance-ground",
 					"Player in ground. Fd: " + p.getFallDistance() + ", From/To: " + distance + ", VelY: "
 							+ p.getVelocity().getY() + ", vec: " + distanceVector + ", disDirY: " + disWithDirY);
-			if (mayCancel)
+			if (mayCancel && isSetBack())
 				np.noFallDamage += 1;
 		} else if (np.noFallDamage != 0) {
 			if (isSetBack())
-				manageDamage(p, np.noFallDamage, relia);
+				manageDamage(p, np.noFallDamage, UniversalUtils.parseInPorcent(distance * 100));
 			np.noFallDamage = 0;
 		}
 	}

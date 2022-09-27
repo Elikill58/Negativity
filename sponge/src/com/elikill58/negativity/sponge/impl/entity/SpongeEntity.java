@@ -1,7 +1,5 @@
 package com.elikill58.negativity.sponge.impl.entity;
 
-import java.util.Locale;
-
 import org.checkerframework.checker.nullness.qual.Nullable;
 import org.spongepowered.api.ResourceKey;
 import org.spongepowered.api.data.Keys;
@@ -68,7 +66,7 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	public EntityType getType() {
 		if (this.cachedEntityType == null) {
 			ResourceKey key = Utils.getKey(this.entity.type());
-			this.cachedEntityType = EntityType.get(key.value().toUpperCase(Locale.ROOT)); // TODO implement this properly using real minecraft IDs
+			this.cachedEntityType = EntityType.get(key.asString());
 		}
 		return this.cachedEntityType;
 	}

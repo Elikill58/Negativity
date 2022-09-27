@@ -21,7 +21,6 @@ public class SpigotWorld extends World {
 	
 	public SpigotWorld(org.bukkit.World w) {
 		this.w = w;
-		clearEntities();
 	}
 
 	@Override
@@ -40,12 +39,20 @@ public class SpigotWorld extends World {
 	}
 
 	public void add(Entity e) {
-		synchronized (entities) {
-			entities.add(e);
+		if(entities == null)
+			clearEntities();
+		else {
+			synchronized (entities) {
+				entities.add(e);
+			}
 		}
 	}
 
 	public void remove(Entity e) {
+		if(entities == null) {
+			clearEntities();
+			return;
+		}
 		synchronized (entities) {
 			entities.remove(e);
 		}
@@ -55,8 +62,14 @@ public class SpigotWorld extends World {
 		this.entities = SpigotVersionAdapter.getVersionAdapter().getEntities(w).stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
 	}
 	
+	private void checkEntities() {
+		if(entities == null || entities.isEmpty())
+			clearEntities();
+	}
+	
 	@Override
 	public List<Entity> getEntities() {
+		checkEntities();
 		return new ArrayList<>(entities);// SpigotVersionAdapter.getVersionAdapter().getEntities(w).stream().map(SpigotEntityManager::getEntity).collect(Collectors.toList());
 	}
 	

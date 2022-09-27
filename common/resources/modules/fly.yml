@@ -53,6 +53,3 @@ checks:
   # Check made for omega craft fly but works with others fly
   omega-craft:
     active: true
-  # Bypass on ground (check from @Salers)
-  bypass-ground:
-    active: true

@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
@@ -25,9 +24,6 @@ import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.ItemStack;
 import com.elikill58.negativity.api.item.Material;
-import com.elikill58.negativity.api.json.JSONObject;
-import com.elikill58.negativity.api.json.parser.JSONParser;
-import com.elikill58.negativity.api.json.parser.ParseException;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.packets.nms.VersionAdapter;
 import com.elikill58.negativity.api.plugin.ExternalPlugin;
@@ -91,12 +87,6 @@ public class SpigotAdapter extends Adapter {
 	}
 
 	@Override
-	public void debug(String msg) {
-		if (getConfig().getBoolean("debug", false))
-			pl.getLogger().info("[Debug] " + msg);
-	}
-
-	@Override
 	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
 		return this.translationProviderFactory;
 	}
@@ -137,28 +127,6 @@ public class SpigotAdapter extends Adapter {
 	}
 
 	@Override
-	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
-		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {
-			if (response == null) {
-				return false;
-			}
-			try {
-				Object data = new JSONParser().parse(response);
-				if (data instanceof JSONObject) {
-					JSONObject json = (JSONObject) data;
-					Object isMcleaks = json.get("isMcleaks");
-					if (isMcleaks != null) {
-						return Boolean.getBoolean(isMcleaks.toString());
-					}
-				}
-			} catch (ParseException e) {
-				e.printStackTrace();
-			}
-			return false;
-		});
-	}
-
-	@Override
 	public List<UUID> getOnlinePlayersUUID() {
 		return Utils.getOnlinePlayers().stream().map(org.bukkit.entity.Player::getUniqueId).collect(Collectors.toList());
 	}
@@ -184,7 +152,7 @@ public class SpigotAdapter extends Adapter {
 
 	@Override
 	public double[] getTPS() {
-		if(SpigotNegativity.isCraftBukkit) {
+		if(SpigotNegativity.getSubPlatform().equals(SubPlatform.CRAFTBUKKIT)) {
 			return new double[] {20, 20, 20};
 		} else {
 			return SpigotVersionAdapter.getVersionAdapter().getTps();

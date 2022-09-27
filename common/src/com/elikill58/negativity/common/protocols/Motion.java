@@ -21,7 +21,7 @@ public class Motion extends Cheat {
 		super(CheatKeys.MOTION, CheatCategory.MOVEMENT, Materials.ANDESITE, MotionData::new);
 	}
 
-	@Check(name = "y-motion", description = "Consistent y-axis motions", conditions = CheckConditions.NO_FLY)
+	@Check(name = "y-motion", description = "Consistent y-axis motions", conditions = { CheckConditions.NO_FLY, CheckConditions.NO_CLIMB_BLOCK, CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_USE_TRIDENT })
     public void onReceivePacket(PacketReceiveEvent e, NegativityPlayer np, MotionData data) {
 		AbstractPacket pa = e.getPacket();
 		PacketType type = pa.getPacketType();

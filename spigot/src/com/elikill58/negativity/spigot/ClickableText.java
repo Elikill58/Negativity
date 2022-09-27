@@ -1,15 +1,16 @@
 package com.elikill58.negativity.spigot;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
-import com.elikill58.negativity.universal.Version;
+
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class ClickableText {
 
@@ -38,172 +39,49 @@ public class ClickableText {
 
 	static class MessageComponent {
 
-		Action a, a2 = null;
-		String data, data2 = null;
+		Action action, secondAction = null;
+		String data, secondData = null;
 		String text;
-		Object[] nmsChat, nmsChat2 = null;
 
-		public MessageComponent(String text, String data, Action a) {
-			this.a = a;
+		public MessageComponent(String text, String data, Action action) {
 			this.text = text;
+			this.action = action;
 			this.data = data;
-			try {
-				Class<?> craftChatMessage = Class
-						.forName("org.bukkit.craftbukkit." + Utils.VERSION + ".util.CraftChatMessage");
-				nmsChat = (Object[]) craftChatMessage.getMethod("fromString", String.class).invoke(craftChatMessage,
-						text);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 
-		public MessageComponent(String text, String data, Action a, String data2, Action a2) {
-			this.a = a;
+		public MessageComponent(String text, String data, Action action, String secondData, Action secondAction) {
 			this.text = text;
+			this.action = action;
 			this.data = data;
-			try {
-				Class<?> craftChatMessage = Class
-						.forName("org.bukkit.craftbukkit." + Utils.VERSION + ".util.CraftChatMessage");
-				nmsChat = (Object[]) craftChatMessage.getMethod("fromString", String.class).invoke(craftChatMessage,
-						text);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			this.a2 = a2;
-			this.data2 = data2;
-			try {
-				Class<?> craftChatMessage = Class
-						.forName("org.bukkit.craftbukkit." + Utils.VERSION + ".util.CraftChatMessage");
-				nmsChat2 = (Object[]) craftChatMessage.getMethod("fromString", String.class).invoke(craftChatMessage,
-						text);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			this.secondAction = secondAction;
+			this.secondData = secondData;
 		}
 
 		public void send(Player p) {
-			try {
-				if (Version.getVersion().isNewerOrEquals(Version.V1_8)) {
-					ClickableText1_13.send(p, this);
-				} else {
-					for (Object obj : compile()) {
-						Class<?> chatBaseComponent = PacketUtils.getNmsClass("ChatBaseComponent");
+			TextComponent text = new TextComponent(this.text);
+			if (action == Action.SHOW_TEXT)
+				text.setHoverEvent(new HoverEvent(net.md_5.bungee.api.chat.HoverEvent.Action.SHOW_TEXT,
+						new ComponentBuilder(data).create()));
+			else if (action == Action.SUGGEST_COMMAND)
+				text.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.SUGGEST_COMMAND, data));
+			else if (action == Action.OPEN_URL)
+				text.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.OPEN_URL, data));
+			else if (action == Action.RUN_COMMAND)
+				text.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, data));
 
-						chatBaseComponent.getMethod("a", Iterable.class).invoke(chatBaseComponent, obj);
-						PacketUtils.sendPacket(p, "PacketPlayOutChat", PacketUtils.getNmsClass("IChatBaseComponent"), obj);
-					}
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-
-		public Object[] compile() {
-			try {
-				for (Object c : nmsChat) {
-					Object chatModifier = c.getClass().getMethod("getChatModifier").invoke(c);
-					if (a.isHover()) {
-						Class<?> chatHoverable = PacketUtils.getNmsClass("ChatHoverable");
-						Method m = null;
-						try {
-							m = chatModifier.getClass().getMethod("setChatHoverable", chatHoverable);
-						} catch (NoSuchMethodException e) {
-							m = chatModifier.getClass().getMethod("a", chatHoverable);
-						}
-						Class<?> enumHover = null;
-						try {
-							enumHover = Class.forName("net.minecraft.server." + Utils.VERSION + ".EnumHoverAction");
-						} catch (ClassNotFoundException e) {
-							enumHover = a.getClazz().getDeclaredClasses()[0];
-						}
-						Class<?> chatComponent = PacketUtils.getNmsClass("ChatComponentText");
-						Constructor<?> clickableConstructor = chatHoverable.getConstructor(enumHover,
-								PacketUtils.getNmsClass("IChatBaseComponent"));
-						m.invoke(chatModifier,
-								clickableConstructor.newInstance(enumHover.getField(a.name()).get(enumHover),
-										chatComponent.getConstructor(String.class).newInstance(data)));
-					} else {
-						Class<?> chatClickable = PacketUtils.getNmsClass("ChatClickable");
-						Method setChatClickable = chatModifier.getClass().getMethod("setChatClickable", chatClickable);
-						Class<?> enumClick = null;
-						try {
-							enumClick = Class.forName("net.minecraft.server." + Utils.VERSION + ".EnumClickAction");
-						} catch (ClassNotFoundException e) {
-							enumClick = a.getClazz().getDeclaredClasses()[0];
-						}
-						Object obj = chatClickable.getConstructor(enumClick, String.class)
-								.newInstance(enumClick.getDeclaredField(a.name()).get(enumClick), data);
-						setChatClickable.invoke(chatModifier, obj);
-					}
-					if (a2 != null && data2 != null) {
-						if (a2.isHover()) {
-							Class<?> chatHoverable = Class
-									.forName("net.minecraft.server." + Utils.VERSION + ".ChatHoverable");
-							Method m = null;
-							try {
-								m = chatModifier.getClass().getMethod("setChatHoverable", chatHoverable);
-							} catch (NoSuchMethodException e) {
-								m = chatModifier.getClass().getMethod("a", chatHoverable);
-							}
-							Class<?> enumHover = null;
-							try {
-								enumHover = Class.forName("net.minecraft.server." + Utils.VERSION + ".EnumHoverAction");
-							} catch (ClassNotFoundException e) {
-								enumHover = a.getClazz().getDeclaredClasses()[0];
-							}
-							Class<?> chatComponent = PacketUtils.getNmsClass("ChatComponentText");
-							Constructor<?> clickableConstructor = chatHoverable.getConstructor(enumHover,
-									PacketUtils.getNmsClass("IChatBaseComponent"));
-							m.invoke(chatModifier,
-									clickableConstructor.newInstance(enumHover.getField(a2.name()).get(enumHover),
-											chatComponent.getConstructor(String.class).newInstance(data2)));
-						} else {
-							Class<?> chatClickable = PacketUtils.getNmsClass("ChatClickable");
-							Method setChatClickable = chatModifier.getClass().getMethod("setChatClickable",
-									chatClickable);
-							Class<?> enumClick = null;
-							try {
-								enumClick = Class.forName("net.minecraft.server." + Utils.VERSION + ".EnumClickAction");
-							} catch (ClassNotFoundException e) {
-								enumClick = a.getClazz().getDeclaredClasses()[0];
-							}
-							Object obj = chatClickable.getConstructor(enumClick, String.class)
-									.newInstance(enumClick.getDeclaredField(a2.name()).get(enumClick), data2);
-							setChatClickable.invoke(chatModifier, obj);
-						}
-					}
-				}
-			} catch (Exception e) {
-				SpigotNegativity.getInstance().getLogger().severe(
-						"Error while making ClickableText: " + e.getMessage() + ". Please report this to Elikill58.");
-				e.printStackTrace();
-			}
-			return nmsChat;
+			if (secondAction == Action.OPEN_URL)
+				text.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.OPEN_URL, secondData));
+			else if (secondAction == Action.RUN_COMMAND)
+				text.setClickEvent(new ClickEvent(net.md_5.bungee.api.chat.ClickEvent.Action.RUN_COMMAND, secondData));
+			p.spigot().sendMessage(text);
 		}
 	}
 
 	public enum Action {
 
-		SHOW_TEXT(true), SHOW_ENTITY(true), SHOW_ACHIEVEMENT(true), SHOW_ITEM(true),
+		SHOW_TEXT, SHOW_ENTITY, SHOW_ACHIEVEMENT, SHOW_ITEM,
 
-		OPEN_URL(false), OPEN_FILE(false), RUN_COMMAND(false), SUGGEST_COMMAND(false), CHANGE_PAGE(
-				false), TWITCH_USER_INFO(false);
+		OPEN_URL, OPEN_FILE, RUN_COMMAND, SUGGEST_COMMAND, CHANGE_PAGE, TWITCH_USER_INFO;
 
-		boolean isHover;
-
-		Action(boolean isHover) {
-			this.isHover = isHover;
-		}
-
-		public boolean isHover() {
-			return isHover;
-		}
-
-		public Class<?> getClazz() throws ClassNotFoundException {
-			if (isHover)
-				return Class.forName("net.minecraft.server." + Utils.VERSION + ".ChatHoverable");
-			else
-				return Class.forName("net.minecraft.server." + Utils.VERSION + ".ChatClickable");
-		}
 	}
 }

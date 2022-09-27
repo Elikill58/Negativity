@@ -26,7 +26,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionL
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
@@ -140,10 +139,6 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 			ClientboundExplodePacket packet = (ClientboundExplodePacket) raw;
 			return new NPacketPlayOutExplosion(packet.getX(), packet.getY(), packet.getZ(), packet.getKnockbackX(),
 					packet.getKnockbackY(), packet.getKnockbackZ());
-		});
-		packetsPlayOut.put("PacketPlayOutEntity", (player, packet) -> {
-			return new NPacketPlayOutEntity(get(packet, "a"), Double.parseDouble(getStr(packet, "b")),
-					Double.parseDouble(getStr(packet, "c")), Double.parseDouble(getStr(packet, "d")));
 		});
 		packetsPlayOut.put("PacketPlayOutEntityEffect", (player, packet) -> {
 			return new NPacketPlayOutEntityEffect(get(packet, "d"), (byte) get(packet, "e"), get(packet, "f"), get(packet, "g"), get(packet, "h"));

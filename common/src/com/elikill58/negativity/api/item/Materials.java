@@ -12,7 +12,7 @@ public class Materials {
     public static final Material APPLE = ItemRegistrar.getInstance().get("apple");
     public static final Material ARROW = ItemRegistrar.getInstance().get("arrow");
     
-    public static final Material BARRIER = ItemRegistrar.getInstance().get("barrier", "redstone"); // redstone for 1.7
+    public static final Material BARRIER = ItemRegistrar.getInstance().get("barrier");
     public static final Material BEDROCK = ItemRegistrar.getInstance().get("bedrock");
     public static final Material BEACON = ItemRegistrar.getInstance().get("beacon");
     public static final Material BLAZE_POWDER = ItemRegistrar.getInstance().get("blaze_powder");

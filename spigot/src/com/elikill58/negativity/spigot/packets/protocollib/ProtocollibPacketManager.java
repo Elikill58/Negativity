@@ -1,13 +1,12 @@
 package com.elikill58.negativity.spigot.packets.protocollib;
 
 import java.util.Arrays;
-import java.util.List;
 
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.PacketType.Play;
+import com.comphenix.protocol.PacketType.Play.Server;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.comphenix.protocol.events.ListenerPriority;
@@ -24,16 +23,14 @@ import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 public class ProtocollibPacketManager extends SpigotPacketManager {
 
 	private final ProtocolManager protocolManager;
-	
+
 	public ProtocollibPacketManager(Plugin pl) {
 		protocolManager = ProtocolLibrary.getProtocolManager();
-		protocolManager.addPacketListener(new NegativityPacketAdapter(pl, ListenerPriority.LOWEST, PacketRegistry.getClientPacketTypes()));
-		//List<com.comphenix.protocol.PacketType> packetToDontUse= Arrays.asList(Play.Server.MAP, Play.Server.ENTITY_METADATA);
-		//List<com.comphenix.protocol.PacketType> packets = Play.Server.getInstance().values().stream().filter(com.comphenix.protocol.PacketType::isSupported).filter(packetToDontUse::contains).collect(Collectors.toList());
-		//protocolManager.addPacketListener(new PacketAdapter(pl, ListenerPriority.LOWEST, Play.Server.MAP, Play.Server.ENTITY_METADATA) {
-		// TODO manage all server packet sent to client
-		List<com.comphenix.protocol.PacketType> packets = Arrays.asList(Play.Server.ENTITY_VELOCITY, Play.Server.ENTITY_EFFECT);
-		protocolManager.addPacketListener(new NegativityPacketAdapter(pl, ListenerPriority.LOWEST, packets));
+		protocolManager.addPacketListener(
+				new NegativityPacketAdapter(pl, ListenerPriority.LOWEST, PacketRegistry.getClientPacketTypes()));
+		protocolManager.addPacketListener(new NegativityPacketAdapter(pl, ListenerPriority.LOWEST,
+				Arrays.asList(Server.ENTITY_VELOCITY, Server.ENTITY_EFFECT, Server.BLOCK_BREAK_ANIMATION,
+						Server.KEEP_ALIVE, Server.EXPLOSION, Server.POSITION, Server.ENTITY_TELEPORT, Server.PING)));
 	}
 
 	public AbstractPacket onPacketSent(NPacket commonPacket, Player sender, Object packet, PacketEvent event) {
@@ -53,13 +50,14 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 		notifyHandlersReceive(PacketSourceType.PROTOCOLLIB, customPacket);
 		return customPacket;
 	}
-	
+
 	private class NegativityPacketAdapter extends PacketAdapter {
-		
-		private NegativityPacketAdapter(Plugin plugin, ListenerPriority priority, Iterable<? extends PacketType> types) {
+
+		private NegativityPacketAdapter(Plugin plugin, ListenerPriority priority,
+				Iterable<? extends PacketType> types) {
 			super(plugin, priority, types);
 		}
-		
+
 		@Override
 		public void onPacketSending(PacketEvent e) {
 			if (e.isPlayerTemporary()) {
@@ -70,15 +68,16 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 				return;
 			}
 			Object nmsPacket = e.getPacket().getHandle();
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player, PacketDirection.SERVER_TO_CLIENT, nmsPacket);
-			if(commonPacket == null)
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player,
+					PacketDirection.SERVER_TO_CLIENT, nmsPacket);
+			if (commonPacket == null)
 				return;
 			AbstractPacket packet = ProtocollibPacketManager.this.onPacketSent(commonPacket, player, nmsPacket, e);
 			if (!e.isCancelled()) {
 				e.setCancelled(packet.isCancelled());
 			}
 		}
-		
+
 		@Override
 		public void onPacketReceiving(PacketEvent e) {
 			if (e.isPlayerTemporary()) {
@@ -89,8 +88,9 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 				return;
 			}
 			Object nmsPacket = e.getPacket().getHandle();
-			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player, PacketDirection.CLIENT_TO_SERVER, nmsPacket);
-			if(commonPacket == null)
+			NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket(player,
+					PacketDirection.CLIENT_TO_SERVER, nmsPacket);
+			if (commonPacket == null)
 				return;
 			AbstractPacket packet = ProtocollibPacketManager.this.onPacketReceive(commonPacket, player, nmsPacket, e);
 			if (!e.isCancelled()) {

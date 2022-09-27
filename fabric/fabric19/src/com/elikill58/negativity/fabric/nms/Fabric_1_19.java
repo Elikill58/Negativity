@@ -21,7 +21,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportA
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
@@ -45,7 +44,6 @@ import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.c2s.play.TeleportConfirmC2SPacket;
 import net.minecraft.network.packet.c2s.query.QueryPingC2SPacket;
 import net.minecraft.network.packet.s2c.play.BlockBreakingProgressS2CPacket;
-import net.minecraft.network.packet.s2c.play.EntityPositionS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityStatusEffectS2CPacket;
 import net.minecraft.network.packet.s2c.play.EntityVelocityUpdateS2CPacket;
 import net.minecraft.network.packet.s2c.play.ExplosionS2CPacket;
@@ -151,10 +149,6 @@ public class Fabric_1_19 extends FabricVersionAdapter {
 			ExplosionS2CPacket packet = (ExplosionS2CPacket) f;
 			return new NPacketPlayOutExplosion(packet.getX(), packet.getY(), packet.getZ(), packet.getPlayerVelocityX(),
 					packet.getPlayerVelocityY(), packet.getPlayerVelocityZ());
-		});
-		packetsPlayOut.put(getNameOfPacket(EntityPositionS2CPacket.class), (p, f) -> {
-			EntityPositionS2CPacket packet = (EntityPositionS2CPacket) f;
-			return new NPacketPlayOutEntity(packet.getId(), packet.getX(), packet.getY(), packet.getZ());
 		});
 		packetsPlayOut.put(getNameOfPacket(EntityStatusEffectS2CPacket.class), (p, f) -> {
 			EntityStatusEffectS2CPacket packet = (EntityStatusEffectS2CPacket) f;

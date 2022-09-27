@@ -24,15 +24,13 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 
 	private final ProtocolManager protocolManager;
 
-	@SuppressWarnings("deprecation")
 	public ProtocollibPacketManager(Plugin pl) {
 		protocolManager = ProtocolLibrary.getProtocolManager();
 		protocolManager.addPacketListener(
 				new NegativityPacketAdapter(pl, ListenerPriority.LOWEST, PacketRegistry.getClientPacketTypes()));
 		protocolManager.addPacketListener(new NegativityPacketAdapter(pl, ListenerPriority.LOWEST,
 				Arrays.asList(Server.ENTITY_VELOCITY, Server.ENTITY_EFFECT, Server.BLOCK_BREAK_ANIMATION,
-						Server.KEEP_ALIVE, Server.EXPLOSION, Server.POSITION, Server.ENTITY_TELEPORT, Server.ENTITY,
-						Server.PING)));
+						Server.KEEP_ALIVE, Server.EXPLOSION, Server.POSITION, Server.ENTITY_TELEPORT, Server.PING)));
 	}
 
 	public AbstractPacket onPacketSent(NPacket commonPacket, Player sender, Object packet, PacketEvent event) {

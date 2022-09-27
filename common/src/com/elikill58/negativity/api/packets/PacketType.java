@@ -30,7 +30,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
@@ -279,7 +278,6 @@ public interface PacketType {
 		COMMANDS("Commands", NPacketPlayOutUnset::new),
 		CUSTOM_PAYLOAD("CustomPayload", NPacketPlayOutUnset::new),
 		CUSTOM_SOUND_EFFECT("CustomSoundEffect", NPacketPlayOutUnset::new),
-		ENTITY("Entity", NPacketPlayOutEntity::new),
 		ENTITY_DESTROY("EntityDestroy", NPacketPlayOutUnset::new),
 		ENTITY_EFFECT("EntityEffect", NPacketPlayOutEntityEffect::new),
 		ENTITY_EQUIPMENT("EntityEquipment", NPacketPlayOutUnset::new),

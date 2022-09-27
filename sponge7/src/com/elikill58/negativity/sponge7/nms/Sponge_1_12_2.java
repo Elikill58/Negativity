@@ -25,7 +25,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportA
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
@@ -49,7 +48,6 @@ import net.minecraft.network.play.client.CPacketPlayerDigging;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketBlockBreakAnim;
 import net.minecraft.network.play.server.SPacketConfirmTransaction;
-import net.minecraft.network.play.server.SPacketEntity;
 import net.minecraft.network.play.server.SPacketEntityEffect;
 import net.minecraft.network.play.server.SPacketEntityTeleport;
 import net.minecraft.network.play.server.SPacketEntityVelocity;
@@ -137,10 +135,6 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 		packetsPlayOut.put("SPacketExplosion", (p, f) -> {
 			SPacketExplosion packet = (SPacketExplosion) f;
 			return new NPacketPlayOutExplosion(packet.posX, packet.posY, packet.posZ, packet.motionX, packet.motionY, packet.motionZ);
-		});
-		packetsPlayOut.put("SPacketEntity", (p, f) -> {
-			SPacketEntity packet = (SPacketEntity) f;
-			return new NPacketPlayOutEntity(packet.entityId, packet.posX, packet.posY, packet.posZ);
 		});
 		packetsPlayOut.put("SPacketEntityEffect", (p, f) -> {
 			SPacketEntityEffect packet = (SPacketEntityEffect) f;

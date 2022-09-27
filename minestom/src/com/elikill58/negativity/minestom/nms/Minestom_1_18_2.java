@@ -22,7 +22,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportA
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
@@ -54,7 +53,6 @@ import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacke
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.BlockBreakAnimationPacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
-import net.minestom.server.network.packet.server.play.EntityPositionPacket;
 import net.minestom.server.network.packet.server.play.EntityTeleportPacket;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.network.packet.server.play.ExplosionPacket;
@@ -153,10 +151,6 @@ public class Minestom_1_18_2 extends MinestomVersionAdapter {
 			ExplosionPacket packet = (ExplosionPacket) f;
 			return new NPacketPlayOutExplosion(packet.x(), packet.y(), packet.z(), packet.playerMotionX(),
 					packet.playerMotionY(), packet.playerMotionZ());
-		});
-		packetsPlayOut.put(getNameOfPacket(EntityPositionPacket.class), (p, f) -> {
-			EntityPositionPacket packet = (EntityPositionPacket) f; // TODO check if it's good one
-			return new NPacketPlayOutEntity(packet.entityId(), packet.deltaX(), packet.deltaY(), packet.deltaZ());
 		});
 		packetsPlayOut.put(getNameOfPacket(EntityEffectPacket.class), (p, f) -> {
 			EntityEffectPacket packet = (EntityEffectPacket) f;

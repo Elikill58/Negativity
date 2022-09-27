@@ -19,11 +19,11 @@ public class SpeedData extends CheckData {
 	public double getSpeedModifier() {
 		Optional<PotionEffect> optSpeed = np.getPlayer().getPotionEffect(PotionEffectType.SPEED);
 		if (optSpeed.isPresent()) {
-			int amplifierSpeed = optSpeed.get().getAmplifier();
+			int amplifierSpeed = optSpeed.get().getAmplifier() + 1;
 			oldSpeedLevel = amplifierSpeed;
-			return 1 + (double) amplifierSpeed * 0.2;
+			return 1d + (double) amplifierSpeed * 0.2;
 		} else if (oldSpeedLevel > 0) {
-			return 1 + (double) oldSpeedLevel-- * 0.2;
+			return 1d + (double) oldSpeedLevel-- * 0.2;
 		}
 		return 1;
 	}

@@ -86,18 +86,21 @@ public class Speed extends Cheat implements Listeners {
 		maxDistance *= data.getSpeedModifier();
 		maxDistance *= data.getSlowModifier();
 
-		maxDistance += p.getTheoricVelocity().length();
-
-		double distance = from.distance(to);
-		Adapter.getAdapter().debug((distance > maxDistance && yDif < maxDistance && !(flying.isGround && !p.isOnGround()) ? "X" : "_") + ": " + String.format("%.4f", distance) + ", max: " + String.format("%.4f", maxDistance) + ", fall: " + String.format("%.4f", p.getFallDistance()) + ", yDif: " + String.format("%.4f", yDif));
-		if (distance > maxDistance && yDif < maxDistance && !(flying.isGround && !p.isOnGround())) { // go too far, not just change dir & not just fall on ground
-			double difDistance = distance - maxDistance;
-			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(difDistance * 500),
-					"walk-speed",
-					"Distance: " + distance + ", maxDistance: " + maxDistance + ", yDif: " + yDif + ", fall: " + p.getFallDistance() + ", vel: " + p.getTheoricVelocity() + ", ice: " + NegativityPlayer.getNegativityPlayer(p).iceCounter,
-					new CheatHover.Literal("Move with " + String.format("%.3f", distance) + " but should move max "
-							+ String.format("%.3f", maxDistance)),
-					(long) (difDistance * 50));
+		double maxDistanceX = maxDistance + Math.max(Math.abs(p.getTheoricVelocity().getX()), Math.abs(p.getVelocity().getX())); // to prevent lag issue
+		double maxDistanceZ = maxDistance + Math.max(Math.abs(p.getTheoricVelocity().getZ()), Math.abs(p.getVelocity().getZ())); // to prevent lag issue
+		
+		double distanceX = Math.abs(from.getX() - to.getX());
+		double distanceZ = Math.abs(from.getZ() - to.getZ());
+		
+		Adapter.getAdapter().debug((yDif < maxDistance && !(flying.isGround && !p.isOnGround()) ? (distanceX > maxDistanceX && distanceZ > maxDistanceZ ? "X" : (distanceX > maxDistanceX || distanceZ > maxDistanceZ ? "D" : ":")) : "_") + ": " + String.format("%.4f", distanceX) +"/"+ String.format("%.4f", maxDistanceX) + " >> "+ String.format("%.4f", distanceZ) +"/"+ String.format("%.4f", maxDistanceZ) + ", yDif: " + String.format("%.4f", yDif));
+		if ((distanceX > maxDistanceX || distanceZ > maxDistanceZ) && yDif < maxDistance && !(flying.isGround && !p.isOnGround())) { // go too far, not just change dir & not just fall on ground
+			double difDistance = distanceX - maxDistance;
+			int relia = UniversalUtils.parseInPorcent(difDistance * 500);
+			if(relia > 50)
+				Negativity.alertMod(ReportType.WARNING, p, this, relia, "walk-speed",
+						"Distance X/Z: " + distanceX + "/" + distanceZ + ", maxDistance X/Z: " + maxDistanceX
+						+ "/" + maxDistanceZ + ", yDif: " + yDif + ", fall: " + p.getFallDistance() + ", vel: " + p.getTheoricVelocity(),
+						null, (long) (difDistance * 50));
 		}
 	}
 

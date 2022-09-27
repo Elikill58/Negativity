@@ -27,7 +27,7 @@ public class Speed extends Cheat implements Listeners {
 		super(CheatKeys.SPEED, CheatCategory.MOVEMENT, Materials.BEACON, SpeedData::new, CheatDescription.NO_FIGHT);
 	}
 
-	@Check(name = "distance-jumping", description = "Distance when jumping", conditions = { CheckConditions.NO_USE_TRIDENT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND })
+	@Check(name = "distance-jumping", description = "Distance when jumping", conditions = { CheckConditions.NO_USE_TRIDENT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND, CheckConditions.NO_INSIDE_VEHICLE })
 	public void onDistanceJumping(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();

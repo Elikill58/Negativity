@@ -5,11 +5,13 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 import com.elikill58.negativity.universal.Minerate;
 import com.elikill58.negativity.universal.account.NegativityAccount;
+import com.elikill58.negativity.universal.report.Report;
 
 public class AccountUpdateMessage implements NegativityMessage {
 
@@ -48,11 +50,14 @@ public class AccountUpdateMessage implements NegativityMessage {
 		for (int i = 0; i < warnsEntriesCount; i++) {
 			warns.put(input.readUTF(), input.readLong());
 		}
-		// TODO write and read report update message
+		List<Report> reports = new ArrayList<>();
+		int reportEntriesCount = input.readInt();
+		for(int i = 0; i < reportEntriesCount; i++)
+			reports.add(Report.fromJson(input.readUTF()));
 		String IP = input.readUTF();
 		long creationTime = input.readLong();
 		boolean showAlert = input.readBoolean();
-		account = new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, new ArrayList<>(), IP, creationTime, showAlert);
+		account = new NegativityAccount(playerId, playerName, language, minerate, mostClicksPerSecond, warns, reports, IP, creationTime, showAlert);
 	}
 
 	@Override
@@ -81,6 +86,10 @@ public class AccountUpdateMessage implements NegativityMessage {
 			output.writeUTF(warnEntry.getKey());
 			output.writeLong(warnEntry.getValue());
 		}
+		output.writeInt(account.getReports().size());
+		for(Report r : account.getReports())
+			output.writeUTF(r.toJsonString());
+		
 		output.writeUTF(account.getIp());
 		output.writeLong(account.getCreationTime());
 		output.writeBoolean(account.isShowAlert());

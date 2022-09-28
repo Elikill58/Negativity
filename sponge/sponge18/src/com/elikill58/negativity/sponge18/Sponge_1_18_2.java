@@ -5,9 +5,12 @@ import java.lang.reflect.Method;
 
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
+import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
@@ -24,6 +27,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionL
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehicle;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
@@ -49,8 +53,11 @@ import net.minecraft.network.protocol.game.ServerboundPickItemPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
+import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
+import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
 import net.minecraft.network.protocol.status.ServerboundPingRequestPacket;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unchecked")
@@ -120,6 +127,13 @@ public class Sponge_1_18_2 extends SpongeVersionAdapter {
 			return new NPacketPlayInSteerVehicle(packet.getXxa(), packet.getZza(), packet.isJumping(), packet.isShiftKeyDown());
 		});
 		packetsPlayIn.put("ServerboundAcceptTeleportationPacket", (p, f) -> new NPacketPlayInTeleportAccept(((ServerboundAcceptTeleportationPacket) f).getId()));
+		packetsPlayIn.put("ServerboundUseItemPacket", (p, f) -> new NPacketPlayInUseItem(Hand.getHand(((ServerboundUseItemPacket) f).getHand().name())));
+		packetsPlayIn.put("ServerboundUseItemOnPacket", (p, f) -> {
+			ServerboundUseItemOnPacket packet = (ServerboundUseItemOnPacket) f;
+			BlockHitResult rs = packet.getHitResult();
+			BlockPos pos = rs == null || rs.getBlockPos() == null ? new BlockPos(0, 0, 0) : rs.getBlockPos();
+			return new NPacketPlayInBlockPlace(Hand.getHand(packet.getHand().name()), pos.getX(), pos.getY(), pos.getZ(), BlockFace.valueOf(rs.getDirection().name()));
+		});
 		
 		packetsPlayOut.put("ClientboundBlockBreakAckPacket", (p, f) -> {
 			BlockPos pos = get(f, "pos");

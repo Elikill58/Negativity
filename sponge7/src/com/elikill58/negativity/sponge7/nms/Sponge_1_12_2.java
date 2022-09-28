@@ -5,11 +5,14 @@ import java.util.Queue;
 
 import org.spongepowered.api.entity.living.player.Player;
 
+import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
@@ -24,6 +27,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehi
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
@@ -45,6 +49,8 @@ import net.minecraft.network.play.client.CPacketInput;
 import net.minecraft.network.play.client.CPacketKeepAlive;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.network.play.client.CPacketPlayerDigging;
+import net.minecraft.network.play.client.CPacketPlayerTryUseItem;
+import net.minecraft.network.play.client.CPacketPlayerTryUseItemOnBlock;
 import net.minecraft.network.play.client.CPacketUseEntity;
 import net.minecraft.network.play.server.SPacketBlockBreakAnim;
 import net.minecraft.network.play.server.SPacketConfirmTransaction;
@@ -113,6 +119,12 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 			return new NPacketPlayInSteerVehicle(packet.getStrafeSpeed(), packet.getForwardSpeed(), packet.isJumping(), packet.isSneaking());
 		});
 		packetsPlayIn.put("CPacketConfirmTeleport", (p, f) -> new NPacketPlayInTeleportAccept(((CPacketConfirmTeleport) f).getTeleportId()));
+		packetsPlayIn.put("CPacketPlayerTryUseItem", (p, f) -> new NPacketPlayInUseItem(Hand.getHand(((CPacketPlayerTryUseItem) f).getHand().name())));
+		packetsPlayIn.put("CPacketPlayerTryUseItemOnBlock", (p, f) -> {
+			CPacketPlayerTryUseItemOnBlock packet = (CPacketPlayerTryUseItemOnBlock) f;
+			BlockPos pos = packet.getPos() == null ? new BlockPos(0, 0, 0) : packet.getPos();
+			return new NPacketPlayInBlockPlace(Hand.getHand(packet.getHand().name()), pos.getX(), pos.getY(), pos.getZ(), BlockFace.valueOf(packet.getDirection().name()));
+		});
 
 		packetsPlayOut.put("SPacketBlockBreakAnim", (p, f) -> {
 			SPacketBlockBreakAnim packet = (SPacketBlockBreakAnim) f;

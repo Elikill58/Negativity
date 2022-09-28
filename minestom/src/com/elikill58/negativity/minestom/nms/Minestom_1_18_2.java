@@ -2,11 +2,13 @@ package com.elikill58.negativity.minestom.nms;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
@@ -21,6 +23,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehi
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
@@ -41,6 +44,7 @@ import net.minestom.server.network.packet.client.play.ClientEntityActionPacket;
 import net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket;
 import net.minestom.server.network.packet.client.play.ClientInteractEntityPacket;
 import net.minestom.server.network.packet.client.play.ClientKeepAlivePacket;
+import net.minestom.server.network.packet.client.play.ClientPlayerBlockPlacementPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket;
 import net.minestom.server.network.packet.client.play.ClientPlayerDiggingPacket.Status;
 import net.minestom.server.network.packet.client.play.ClientPlayerPacket;
@@ -50,6 +54,7 @@ import net.minestom.server.network.packet.client.play.ClientPlayerRotationPacket
 import net.minestom.server.network.packet.client.play.ClientPongPacket;
 import net.minestom.server.network.packet.client.play.ClientSteerVehiclePacket;
 import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacket;
+import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.BlockBreakAnimationPacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
@@ -121,7 +126,14 @@ public class Minestom_1_18_2 extends MinestomVersionAdapter {
 		});
 		packetsPlayIn.put(getNameOfPacket(ClientTeleportConfirmPacket.class),
 				(p, f) -> new NPacketPlayInTeleportAccept(((ClientTeleportConfirmPacket) f).teleportId()));
-
+		packetsPlayIn.put(getNameOfPacket(ClientUseItemPacket.class),
+				(p, f) -> new NPacketPlayInUseItem(Hand.getHand(((ClientUseItemPacket) f).hand().name())));
+		packetsPlayIn.put(getNameOfPacket(ClientPlayerBlockPlacementPacket.class), (p, f) -> {
+			ClientPlayerBlockPlacementPacket packet = (ClientPlayerBlockPlacementPacket) f;
+			@NotNull Point pos = packet.blockPosition();
+			return new NPacketPlayInBlockPlace(Hand.getHand(packet.hand().name()), pos.blockX(), pos.blockY(), pos.blockZ(), com.elikill58.negativity.api.block.BlockFace.valueOf(packet.blockFace().name()));
+		});
+		
 		packetsPlayOut.put(getNameOfPacket(BlockBreakAnimationPacket.class), (p, f) -> {
 			BlockBreakAnimationPacket packet = (BlockBreakAnimationPacket) f;
 			Point pos = packet.blockPosition();

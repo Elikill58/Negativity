@@ -1,8 +1,5 @@
-import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-
 plugins {
-    id 'fabric-loom' version '0.12-SNAPSHOT'
-    id 'com.github.johnrengelman.shadow'
+    id 'fabric-loom'
 }
 
 sourceSets {
@@ -14,10 +11,10 @@ sourceSets {
 
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
-archivesBaseName = 'Negativity'
+archivesBaseName = 'NegativityFabric-1.19.2'
 
 dependencies {
-    api project(':common')
+    api project(":fabric")
     
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -28,10 +25,6 @@ dependencies {
 
     compileOnly 'io.netty:netty-all:4.1.79.Final'
 }
-
-compileJava.javaCompiler.set(
-        javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(17) }
-)
 
 processResources {
     def props = [
@@ -53,34 +46,4 @@ java {
 
 loom {
     serverOnlyMinecraftJar()
-}
-
-tasks.withType(JavaCompile).configureEach {
-    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
-    it.options.release = 17
-}
-
-shadowJar {
-    archiveBaseName.set('negativity')
-    archiveAppendix.set('fabric')
-    archiveClassifier.set('dev')
-
-    dependencies {
-        it.include(it.project(':common'))
-    }
-
-    from(project(':common').tasks.shadowJar)
-}
-
-build.dependsOn shadowJar
-
-task prepareServer(type: Copy) {
-    from shadowJar.outputs
-    rename { 'negativity.jar' }
-    def pluginDir = System.getProperty('plugins.dir')
-    if (pluginDir == null) {
-        enabled(false)
-    } else {
-        into pluginDir
-    }
 }

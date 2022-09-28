@@ -3,7 +3,7 @@
 It's a Minecraft AntiCheat for multiples platforms :
 - **Spigot** 1.7.10 to 1.19 (*and fork like PaperSpigot or Tuinity*)
 - **Sponge** API 7, 8 & 9
-- **Fabric** v0.58.0 for 1.19
+- **Fabric** MC 1.19 & 1.19.2
 - **Minestom** 1.18.2
 
 Proxies:

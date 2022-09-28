@@ -8,7 +8,6 @@ import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.fabric.impl.entity.FabricEntityManager;
-import com.elikill58.negativity.fabric.impl.packet.FabricPacketManager;
 import com.elikill58.negativity.fabric.nms.FabricVersionAdapter;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;

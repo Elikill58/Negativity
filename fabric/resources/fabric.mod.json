@@ -1,26 +1,16 @@
 {
-	"schemaVersion": 1,
-	"id": "negativity",
-	"name": "Negativity",
-	"description": "It's an Advanced AntiCheat Detection, by Elikill58.",
-	"version": "${version}",
-	"authors": [
-		"Elikill58",
-		"RedNesto"
-	],
-	"depends": {
-	    "fabricloader": ">=${loader_version}",
-	    "fabric": ">=${fabric_version}",
-	    "minecraft": "~${minecraft_version}",
-	    "java": ">=17"
-	},
-	"environment": "server",
-	"entrypoints": {
-		"server": [
-			"com.elikill58.negativity.fabric.FabricNegativity"
-		]
-	},
-    "mixins": [
-        "negativity.mixins.json"
-    ]
+  "schemaVersion": 1,
+  "id": "negativity",
+  "name": "Negativity",
+  "description": "It's an Advanced AntiCheat Detection, by Elikill58.",
+  "version": "${version}",
+  "environment": "server",
+  "authors": [
+    "Elikill58",
+    "RedNesto"
+  ],
+  "depends": {
+    "fabricloader": ">=0.4.0",
+    "negativityfabric": ">=1.0.0"
+  }
 }

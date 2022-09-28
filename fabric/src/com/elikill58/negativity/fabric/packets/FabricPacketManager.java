@@ -1,4 +1,4 @@
-package com.elikill58.negativity.fabric.impl.packet;
+package com.elikill58.negativity.fabric.packets;
 
 import java.util.Locale;
 

@@ -9,7 +9,7 @@ import java.util.Locale;
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.colors.ChatColor;
-import com.elikill58.negativity.fabric.FabricNegativity;
+import com.elikill58.negativity.fabric.GlobalFabricNegativity;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -23,7 +23,7 @@ public class Utils {
 
 	@Nullable
 	public static ServerPlayerEntity getFirstOnlinePlayer() {
-		Collection<ServerPlayerEntity> onlinePlayers = FabricNegativity.getOnlinePlayers();
+		Collection<ServerPlayerEntity> onlinePlayers = GlobalFabricNegativity.getOnlinePlayers();
 		return onlinePlayers.isEmpty() ? null : onlinePlayers.iterator().next();
 	}
 

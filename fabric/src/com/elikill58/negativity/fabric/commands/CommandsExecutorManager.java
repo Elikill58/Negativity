@@ -1,4 +1,4 @@
-package com.elikill58.negativity.fabric.listeners;
+package com.elikill58.negativity.fabric.commands;
 
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
@@ -6,7 +6,7 @@ import java.util.concurrent.CompletableFuture;
 import com.elikill58.negativity.api.events.EventManager;
 import com.elikill58.negativity.api.events.others.CommandExecutionEvent;
 import com.elikill58.negativity.api.events.others.TabExecutionEvent;
-import com.elikill58.negativity.fabric.impl.entity.FabricEntityManager;
+import com.elikill58.negativity.fabric.GlobalFabricNegativity;
 import com.mojang.brigadier.Command;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
@@ -35,7 +35,7 @@ public class CommandsExecutorManager implements Command<ServerCommandSource>, Su
 		} else {
 			args = new String[]{""};
 		}
-		CommandExecutionEvent event = new CommandExecutionEvent(cmd, FabricEntityManager.getExecutor(context.getSource()), args, prefix);
+		CommandExecutionEvent event = new CommandExecutionEvent(cmd, GlobalFabricNegativity.getExecutor(context.getSource()), args, prefix);
 		EventManager.callEvent(event);
 		return event.hasGoodResult() ? Command.SINGLE_SUCCESS : 0;
 	}
@@ -52,7 +52,7 @@ public class CommandsExecutorManager implements Command<ServerCommandSource>, Su
 		} else {
 			args = new String[]{""};
 		}
-		TabExecutionEvent event = new TabExecutionEvent(cmd, FabricEntityManager.getExecutor(context.getSource()), args, prefix);
+		TabExecutionEvent event = new TabExecutionEvent(cmd, GlobalFabricNegativity.getExecutor(context.getSource()), args, prefix);
 		EventManager.callEvent(event);
 		event.getTabContent().forEach(builder::suggest);
 		

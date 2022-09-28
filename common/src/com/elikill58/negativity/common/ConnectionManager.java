@@ -37,6 +37,7 @@ public class ConnectionManager implements Listeners {
 	public void onConnect(PlayerConnectEvent e) {
 		Player p = e.getPlayer();
 		NegativityPlayer np = e.getNegativityPlayer();
+		np.delta = np.lastDelta = p.getLocation().clone();
 		np.timeInvincibility = System.currentTimeMillis() + 8000;
 		
 		if(UniversalUtils.isMe(p.getUniqueId()))

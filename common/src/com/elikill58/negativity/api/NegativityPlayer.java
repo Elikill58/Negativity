@@ -100,7 +100,6 @@ public class NegativityPlayer {
 		account.setIp(p.getIP());
 		ada.getAccountManager().save(playerId);
 		this.loginTime = System.currentTimeMillis();
-		this.delta = lastDelta = p.getLocation().clone();
 		this.clientName = "Not loaded";
 		this.isBedrockPlayer = BedrockPlayerManager.isBedrockPlayer(p.getUniqueId());
 		

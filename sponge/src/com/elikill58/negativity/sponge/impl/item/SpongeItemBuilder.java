@@ -1,6 +1,7 @@
 package com.elikill58.negativity.sponge.impl.item;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.spongepowered.api.ResourceKey;
@@ -114,29 +115,29 @@ public class SpongeItemBuilder extends ItemBuilder {
 	
 	@Override
 	public ItemBuilder lore(List<String> lore) {
-		List<Component> textLore = new ArrayList<>();
-		for (String lores : lore)
-			textLore.add(LegacyComponentSerializer.legacyAmpersand().deserialize(lores));
-		item.offer(Keys.LORE, textLore);
+		item.offer(Keys.LORE, getArray(new ArrayList<>(), lore));
 		return this;
 	}
 	
 	@Override
 	public ItemBuilder lore(String... lore) {
-		List<Component> textLore = new ArrayList<>();
-		for (String lores : lore)
-			textLore.add(LegacyComponentSerializer.legacyAmpersand().deserialize(lores));
-		item.offer(Keys.LORE, textLore);
+		item.offer(Keys.LORE, getArray(new ArrayList<>(), Arrays.asList(lore)));
 		return this;
 	}
 	
 	@Override
 	public ItemBuilder addToLore(String... loreToAdd) {
-		List<Component> textLore = item.get(Keys.LORE).orElseGet(ArrayList::new);
-		for (String lores : loreToAdd)
-			textLore.add(LegacyComponentSerializer.legacyAmpersand().deserialize(lores));
-		item.offer(Keys.LORE, textLore);
+		item.offer(Keys.LORE, getArray(item.get(Keys.LORE).orElseGet(ArrayList::new), Arrays.asList(loreToAdd)));
 		return this;
+	}
+	
+	private List<Component> getArray(List<Component> base, List<String> lore) {
+		for(String line : lore) {
+			for(String subLine : line.split("\n")) {
+				base.add(Component.text(subLine));
+			}
+		}
+		return base;
 	}
 	
 	@Override

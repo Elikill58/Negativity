@@ -52,9 +52,9 @@ import net.minecraft.network.protocol.game.ServerboundPickItemPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
+import net.minecraft.network.protocol.game.ServerboundPongPacket;
 import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
 import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
-import net.minecraft.network.protocol.status.ServerboundPingRequestPacket;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
@@ -119,7 +119,7 @@ public class Sponge_1_18_2 extends SpongeVersionAdapter {
 				return null;
 			}
 		});
-		packetsPlayIn.put("ServerboundPingRequestPacket", (p, f) -> new NPacketPlayInPong(((ServerboundPingRequestPacket) f).getTime()));
+		packetsPlayIn.put("ServerboundPongPacket", (p, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
 		packetsPlayIn.put("ServerboundPickItemPacket", (p, f) -> new NPacketPlayInHeldItemSlot(((ServerboundPickItemPacket) f).getSlot()));
 		packetsPlayIn.put("ServerboundPlayerInputPacket", (p, f) -> {
 			ServerboundPlayerInputPacket packet = (ServerboundPlayerInputPacket) f;

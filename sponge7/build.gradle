@@ -61,8 +61,8 @@ jar.manifest {
 }
 
 shadowJar {
-    archiveBaseName.set('negativity')
-    archiveAppendix.set('sponge7')
+    archiveBaseName.set('NegativitySponge')
+    archiveAppendix.set('API-7')
     archiveClassifier.set(null)
 
     dependencies {

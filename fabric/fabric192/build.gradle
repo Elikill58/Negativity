@@ -1,5 +1,8 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
 plugins {
     id 'fabric-loom'
+    id 'com.github.johnrengelman.shadow'
 }
 
 sourceSets {
@@ -14,7 +17,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 archivesBaseName = 'NegativityFabric-1.19.2'
 
 dependencies {
-    api project(":fabric")
+    api parent
     
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
@@ -46,4 +49,24 @@ java {
 
 loom {
     serverOnlyMinecraftJar()
+}
+
+shadowJar {
+    archiveBaseName.set('NegativityFabric')
+    archiveAppendix.set('1.19.2')
+    archiveClassifier.set(null)
+
+
+    dependencies {
+        it.include(it.project(':common'))
+    }
+    
+    mergeServiceFiles()
+    from(project(':common').tasks.shadowJar)
+}
+
+build.dependsOn shadowJar
+
+parent.tasks.named('shadowJar', ShadowJar) {
+    it.from(shadowJar.outputs)
 }

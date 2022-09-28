@@ -37,9 +37,9 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 shadowJar {
-    archiveBaseName.set('negativity')
-    archiveAppendix.set('minestom')
-    archiveClassifier.set('dev')
+    archiveBaseName.set('NegativityMinestom')
+    archiveAppendix.set('1.19.2')
+    archiveClassifier.set(null)
 
     mergeServiceFiles()
     from(project(':common').tasks.shadowJar)

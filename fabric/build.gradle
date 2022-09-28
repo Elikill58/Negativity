@@ -61,9 +61,9 @@ tasks.withType(JavaCompile).configureEach {
 }
 
 shadowJar {
-    archiveBaseName.set('negativity')
-    archiveAppendix.set('fabric')
-    archiveClassifier.set('dev')
+    archiveBaseName.set('NegativityFabric')
+    archiveAppendix.set('common')
+    archiveClassifier.set(null)
 
     dependencies {
         it.include(it.project(':common'))
@@ -73,6 +73,10 @@ shadowJar {
 }
 
 build.dependsOn shadowJar
+
+parent.tasks.named('shadowJar', ShadowJar) {
+    it.from(shadowJar.outputs)
+}
 
 task prepareServer(type: Copy) {
     from shadowJar.outputs

@@ -51,8 +51,8 @@ compileJava.javaCompiler.set(
 )
 
 shadowJar {
-    archiveBaseName.set('negativity')
-    archiveAppendix.set('spigot')
+    archiveBaseName.set('NegativitySpigot')
+    archiveAppendix.set(null)
     archiveClassifier.set(null)
 
     relocate('org.bstats', 'com.elikill58.negativity')

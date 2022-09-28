@@ -12,6 +12,17 @@ sourceSets {
     }
 }
 
+repositories {
+    maven {
+    	name 'minecraft'
+    	url 'https://libraries.minecraft.net/'
+    }
+    maven {
+    	name 'fabric'
+    	url 'https://maven.fabricmc.net/'
+    }
+}
+
 java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 archivesBaseName = 'Negativity'
@@ -21,7 +32,6 @@ dependencies {
     
     minecraft "com.mojang:minecraft:${project.minecraft_version}"
     mappings "net.fabricmc:yarn:${project.yarn_mappings}:v2"
-    modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
     modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
     modImplementation "net.fabricmc.fabric-api:fabric-screen-handler-api-v1:${project.fabric_version}"
@@ -30,22 +40,8 @@ dependencies {
 }
 
 compileJava.javaCompiler.set(
-        javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(17) }
+    javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(17) }
 )
-
-processResources {
-    def props = [
-            "version": project.version,
-            "fabric_version": project.fabric_version,
-            "loader_version": project.loader_version,
-            "minecraft_version": project.minecraft_version,
-    ]
-    inputs.properties props
-
-    filesMatching("fabric.mod.json") {
-        expand props
-    }
-}
 
 java {
     withSourcesJar()
@@ -56,7 +52,6 @@ loom {
 }
 
 tasks.withType(JavaCompile).configureEach {
-    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
     it.options.release = 17
 }
 

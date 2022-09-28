@@ -1,6 +1,6 @@
 {
 	"schemaVersion": 1,
-	"id": "negativityfabric",
+	"id": "negativity",
 	"name": "NegativityFabric-1.19",
 	"description": "It's an Advanced AntiCheat Detection, by Elikill58.",
 	"version": "${version}",

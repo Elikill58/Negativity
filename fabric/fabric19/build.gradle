@@ -1,4 +1,5 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
     id 'fabric-loom'
@@ -51,6 +52,11 @@ loom {
     serverOnlyMinecraftJar()
 }
 
+task remapShadowJar(type: RemapJarTask) {
+    dependsOn shadowJar
+    inputFile.set(shadowJar.archiveFile)
+}
+
 shadowJar {
     archiveBaseName.set('NegativityFabric')
     archiveAppendix.set('1.19')
@@ -63,10 +69,14 @@ shadowJar {
     
     mergeServiceFiles()
     from(project(':common').tasks.shadowJar)
+
+    exclude('dummyThing')
+    exclude('mappings/*')
 }
 
-build.dependsOn shadowJar
+build.dependsOn remapShadowJar
 
 parent.tasks.named('shadowJar', ShadowJar) {
     it.from(shadowJar.outputs)
+    it.manifest.inheritFrom(tasks.jar.manifest)
 }

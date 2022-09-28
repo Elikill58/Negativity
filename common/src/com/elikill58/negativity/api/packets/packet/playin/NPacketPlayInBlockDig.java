@@ -1,5 +1,6 @@
 package com.elikill58.negativity.api.packets.packet.playin;
 
+import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.packets.LocatedPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
@@ -7,14 +8,14 @@ import com.elikill58.negativity.api.packets.packet.NPacketPlayIn;
 public class NPacketPlayInBlockDig implements NPacketPlayIn, LocatedPacket {
 
 	public int x = 0, y = 0, z = 0;
-	public DigFace face;
+	public BlockFace face;
 	public DigAction action;
 	
 	public NPacketPlayInBlockDig() {
 		
 	}
 
-	public NPacketPlayInBlockDig(int x, int y, int z, DigAction action, DigFace face) {
+	public NPacketPlayInBlockDig(int x, int y, int z, DigAction action, BlockFace face) {
 		this.x = x;
 		this.y = y;
 		this.z = z;
@@ -84,33 +85,6 @@ public class NPacketPlayInBlockDig implements NPacketPlayIn, LocatedPacket {
 		
 		public static DigAction getById(int id) {
 			for(DigAction da : values())
-				if(da.getId() == id)
-					return da;
-			return null;
-		}
-	}
-
-	public static enum DigFace {
-
-		BOTTOM(0),
-		TOP(1),
-		NORTH(2),
-		SOUTH(3),
-		WEST(4),
-		EAST(5);
-		
-		private final int id;
-		
-		private DigFace(int id) {
-			this.id = id;
-		}
-		
-		public int getId() {
-			return id;
-		}
-		
-		public static DigFace getById(int id) {
-			for(DigFace da : values())
 				if(da.getId() == id)
 					return da;
 			return null;

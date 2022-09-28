@@ -6,11 +6,11 @@ import org.bukkit.craftbukkit.v1_10_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_10_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.spigot.utils.Utils;
 
 import net.minecraft.server.v1_10_R1.BlockPosition;
@@ -25,7 +25,7 @@ public class Spigot_1_10_R1 extends SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInBlockDig", (player, packet) -> {
 			PacketPlayInBlockDig blockDig = (PacketPlayInBlockDig) packet;
 			BlockPosition pos = blockDig.a();
-			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), DigAction.getById(blockDig.c().ordinal()), DigFace.getById(blockDig.b().a()));
+			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), DigAction.getById(blockDig.c().ordinal()), BlockFace.getById(blockDig.b().a()));
 		});
 		packetsPlayIn.put("PacketPlayInBlockPlace", (p, packet) -> new NPacketPlayInUseItem(Hand.getHand(((PacketPlayInBlockPlace) packet).a().name())));
 		

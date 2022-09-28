@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
@@ -179,20 +178,20 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 		throw new IllegalStateException("Unexpected CPacketPlayerDigging.Action constant: " + action.name());
 	}
 	
-	private static DigFace translateFacing(EnumFacing facing) {
+	private static BlockFace translateFacing(EnumFacing facing) {
 		switch (facing) {
 		case DOWN:
-			return DigFace.BOTTOM;
+			return BlockFace.DOWN;
 		case UP:
-			return DigFace.TOP;
+			return BlockFace.UP;
 		case NORTH:
-			return DigFace.NORTH;
+			return BlockFace.NORTH;
 		case SOUTH:
-			return DigFace.SOUTH;
+			return BlockFace.SOUTH;
 		case WEST:
-			return DigFace.WEST;
+			return BlockFace.WEST;
 		case EAST:
-			return DigFace.EAST;
+			return BlockFace.EAST;
 		}
 		throw new IllegalStateException("Unexpected EnumFacing constant: " + facing.name());
 	}

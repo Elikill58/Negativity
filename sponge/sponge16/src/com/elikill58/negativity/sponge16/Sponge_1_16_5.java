@@ -11,7 +11,6 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
@@ -153,20 +152,20 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 		log();
 	}
 
-	private DigFace translateDigDirection(Direction direction) {
+	private BlockFace translateDigDirection(Direction direction) {
 		switch (direction) {
 		case DOWN:
-			return DigFace.BOTTOM;
+			return BlockFace.DOWN;
 		case EAST:
-			return DigFace.EAST;
+			return BlockFace.EAST;
 		case NORTH:
-			return DigFace.NORTH;
+			return BlockFace.NORTH;
 		case SOUTH:
-			return DigFace.SOUTH;
+			return BlockFace.SOUTH;
 		case UP:
-			return DigFace.TOP;
+			return BlockFace.UP;
 		case WEST:
-			return DigFace.WEST;
+			return BlockFace.WEST;
 		}
 		return null;
 	}

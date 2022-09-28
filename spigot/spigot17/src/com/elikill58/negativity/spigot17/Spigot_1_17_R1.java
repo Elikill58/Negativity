@@ -94,7 +94,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 			return new NPacketPlayInLook(packet.x, packet.y, packet.z, packet.xRot, packet.yRot, packet.isOnGround());
 		});
 		packetsPlayIn.put(ServerboundMovePlayerPacket.StatusOnly.class.getSimpleName(), (player, raw) -> {
-			if(raw instanceof ServerboundMovePlayerPacket.StatusOnly packet) {
+			if (raw instanceof ServerboundMovePlayerPacket.StatusOnly packet) {
 				return new NPacketPlayInGround(packet.isOnGround());
 			}
 			return null;
@@ -104,8 +104,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) raw;
 			NPacketPlayInBlockDig.DigAction action = NPacketPlayInBlockDig.DigAction.values()[packet.getAction()
 					.ordinal()];
-			NPacketPlayInBlockDig.DigFace face = NPacketPlayInBlockDig.DigFace.values()[packet.getDirection()
-					.ordinal()];
+			BlockFace face = BlockFace.getById(packet.getDirection().ordinal());
 			BlockPos pos = packet.getPos();
 			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), action, face);
 		});
@@ -114,19 +113,21 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 			return new NPacketPlayInUseEntity(get(packet, "a"), new Vector(0, 0, 0),
 					EnumEntityUseAction.valueOf(((Object) getFromMethod(get(packet, "b"), "a")).toString()));
 		});
-		packetsPlayIn.put(ServerboundUseItemPacket.class.getSimpleName(), (p, packet) -> new NPacketPlayInUseItem(Hand.getHand(((ServerboundUseItemPacket) packet).getHand().name())));
+		packetsPlayIn.put(ServerboundUseItemPacket.class.getSimpleName(), (p, packet) -> new NPacketPlayInUseItem(
+				Hand.getHand(((ServerboundUseItemPacket) packet).getHand().name())));
 		packetsPlayIn.put(ServerboundUseItemOnPacket.class.getSimpleName(), (p, packet) -> {
 			ServerboundUseItemOnPacket pa = (ServerboundUseItemOnPacket) packet;
 			BlockHitResult rs = pa.getHitResult();
 			BlockPos pos = rs == null || rs.getBlockPos() != null ? new BlockPos(0, 0, 0) : rs.getBlockPos();
-			return new NPacketPlayInBlockPlace(Hand.getHand(pa.getHand().name()), pos.getX(), pos.getY(), pos.getZ(), BlockFace.valueOf(rs.getDirection().name()));
+			return new NPacketPlayInBlockPlace(Hand.getHand(pa.getHand().name()), pos.getX(), pos.getY(), pos.getZ(),
+					BlockFace.valueOf(rs.getDirection().name()));
 		});
-		
+
 		packetsPlayIn.put("PacketPlayInKeepAlive",
 				(player, f) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) f).getId()));
-		packetsPlayIn.put("ServerboundPongPacket", (player, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
+		packetsPlayIn.put("ServerboundPongPacket",
+				(player, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
 
-		
 		packetsPlayOut.put("PacketPlayOutBlockBreakAnimation", (player, raw) -> {
 			ClientboundBlockDestructionPacket packet = (ClientboundBlockDestructionPacket) raw;
 			BlockPos pos = packet.getPos();
@@ -156,16 +157,19 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 					packet.getKnockbackY(), packet.getKnockbackZ());
 		});
 		packetsPlayOut.put("PacketPlayOutEntityEffect", (player, packet) -> {
-			return new NPacketPlayOutEntityEffect(get(packet, "d"), (byte) get(packet, "e"), get(packet, "f"), get(packet, "g"), get(packet, "h"));
+			return new NPacketPlayOutEntityEffect(get(packet, "d"), (byte) get(packet, "e"), get(packet, "f"),
+					get(packet, "g"), get(packet, "h"));
 		});
-		packetsPlayOut.put("ClientboundPingPacket", (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
+		packetsPlayOut.put("ClientboundPingPacket",
+				(player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
 
 		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
 			ClientIntentionPacket packet = (ClientIntentionPacket) raw;
 			return new NPacketHandshakeInSetProtocol(packet.getProtocolVersion(), packet.hostName, packet.port);
 		});
 
-		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundPingPacket((int) ((NPacketPlayOutPing) f).id));
+		negativityToPlatform.put(PacketType.Server.PING,
+				(p, f) -> new ClientboundPingPacket((int) ((NPacketPlayOutPing) f).id));
 
 		log();
 	}
@@ -209,13 +213,14 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 	public void sendPacket(Player p, Object packet) {
 		getPlayerConnection(p).send((Packet<?>) packet);
 	}
-	
+
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void queuePacket(Player p, Object packet) {
 		try {
 			Queue queue = (Queue) get(getPlayerConnection(p).connection, "j");
-			queue.add(callFirstConstructor(ReflectionUtils.getSubClassWithName(Connection.class, "QueuedPacket"), packet, null));
+			queue.add(callFirstConstructor(ReflectionUtils.getSubClassWithName(Connection.class, "QueuedPacket"),
+					packet, null));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -230,7 +235,7 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 	public List<Entity> getEntities(World w) {
 		List<Entity> entities = new ArrayList<>();
 		((CraftWorld) w).getHandle().entityManager.getEntityGetter().getAll().forEach((mcEnt) -> {
-			if(mcEnt != null) {
+			if (mcEnt != null) {
 				CraftEntity craftEntity = mcEnt.getBukkitEntity();
 				if (craftEntity != null && craftEntity instanceof Entity && craftEntity.isValid())
 					entities.add((Entity) craftEntity);
@@ -265,13 +270,13 @@ public class Spigot_1_17_R1 extends SpigotVersionAdapter {
 	public float sin(float f) {
 		return Mth.sin(f);
 	}
-	
+
 	@Override
 	public com.elikill58.negativity.api.block.BlockPosition getBlockPosition(Object obj) {
 		BlockPos pos = (BlockPos) obj;
 		return new com.elikill58.negativity.api.block.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
 	}
-	
+
 	@Override
 	public BoundingBox getBoundingBox(Entity et) {
 		AABB bb = ((CraftEntity) et).getHandle().getBoundingBox();

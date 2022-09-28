@@ -2,12 +2,12 @@ package com.elikill58.negativity.minestom.nms;
 
 import org.jetbrains.annotations.NotNull;
 
+import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
@@ -38,7 +38,6 @@ import com.elikill58.negativity.universal.Adapter;
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
 import net.minestom.server.entity.Player;
-import net.minestom.server.instance.block.BlockFace;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientEntityActionPacket;
 import net.minestom.server.network.packet.client.play.ClientHeldItemChangePacket;
@@ -131,7 +130,7 @@ public class Minestom_1_18_2 extends MinestomVersionAdapter {
 		packetsPlayIn.put(getNameOfPacket(ClientPlayerBlockPlacementPacket.class), (p, f) -> {
 			ClientPlayerBlockPlacementPacket packet = (ClientPlayerBlockPlacementPacket) f;
 			@NotNull Point pos = packet.blockPosition();
-			return new NPacketPlayInBlockPlace(Hand.getHand(packet.hand().name()), pos.blockX(), pos.blockY(), pos.blockZ(), com.elikill58.negativity.api.block.BlockFace.valueOf(packet.blockFace().name()));
+			return new NPacketPlayInBlockPlace(Hand.getHand(packet.hand().name()), pos.blockX(), pos.blockY(), pos.blockZ(), translateFacing(packet.blockFace()));
 		});
 		
 		packetsPlayOut.put(getNameOfPacket(BlockBreakAnimationPacket.class), (p, f) -> {
@@ -198,20 +197,20 @@ public class Minestom_1_18_2 extends MinestomVersionAdapter {
 		throw new IllegalStateException("Unexpected Status constant: " + action.name());
 	}
 
-	private static DigFace translateFacing(@NotNull BlockFace blockFace) {
+	private static BlockFace translateFacing(@NotNull net.minestom.server.instance.block.BlockFace blockFace) {
 		switch (blockFace) {
 		case BOTTOM:
-			return DigFace.BOTTOM;
+			return BlockFace.DOWN;
 		case TOP:
-			return DigFace.TOP;
+			return BlockFace.UP;
 		case NORTH:
-			return DigFace.NORTH;
+			return BlockFace.NORTH;
 		case SOUTH:
-			return DigFace.SOUTH;
+			return BlockFace.SOUTH;
 		case WEST:
-			return DigFace.WEST;
+			return BlockFace.WEST;
 		case EAST:
-			return DigFace.EAST;
+			return BlockFace.EAST;
 		}
 		throw new IllegalStateException("Unexpected BlockFace constant: " + blockFace.name());
 	}

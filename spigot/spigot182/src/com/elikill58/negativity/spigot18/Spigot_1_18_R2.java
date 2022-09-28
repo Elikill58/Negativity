@@ -28,8 +28,8 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
@@ -106,10 +106,8 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) raw;
 			NPacketPlayInBlockDig.DigAction action = NPacketPlayInBlockDig.DigAction.values()[packet.getAction()
 					.ordinal()];
-			NPacketPlayInBlockDig.DigFace face = NPacketPlayInBlockDig.DigFace.values()[packet.getDirection()
-					.ordinal()];
 			BlockPos pos = packet.getPos();
-			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), action, face);
+			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), action, BlockFace.getById(packet.getDirection().ordinal()));
 		});
 		
 		packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {

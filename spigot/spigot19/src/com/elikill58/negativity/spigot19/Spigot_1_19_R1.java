@@ -111,10 +111,8 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) raw;
 			NPacketPlayInBlockDig.DigAction action = NPacketPlayInBlockDig.DigAction.values()[packet.getAction()
 					.ordinal()];
-			NPacketPlayInBlockDig.DigFace face = NPacketPlayInBlockDig.DigFace.values()[packet.getDirection()
-					.ordinal()];
 			BlockPos pos = packet.getPos();
-			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), action, face);
+			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), action, BlockFace.getById(packet.getDirection().ordinal()));
 		});
 		packetsPlayIn.put("PacketPlayInUseEntity", (player, f) -> {
 			ServerboundInteractPacket packet = (ServerboundInteractPacket) f;

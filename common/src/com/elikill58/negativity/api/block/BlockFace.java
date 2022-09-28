@@ -1,13 +1,13 @@
 package com.elikill58.negativity.api.block;
 
 public enum BlockFace {
-
-	NORTH(0, 0, -1),
-	EAST(1, 0, 0),
-	SOUTH(0, 0, 1),
-	WEST(-1, 0, 0),
-	UP(0, 1, 0),
-	DOWN(0, -1, 0),
+	
+	NORTH(2, 0, 0, -1),
+	EAST(5, 1, 0, 0),
+	SOUTH(3, 0, 0, 1),
+	WEST(4, -1, 0, 0),
+	UP(1, 0, 1, 0),
+	DOWN(0, 0, -1, 0),
 	NORTH_EAST(NORTH, EAST),
 	NORTH_WEST(NORTH, WEST),
 	SOUTH_EAST(SOUTH, EAST),
@@ -20,11 +20,13 @@ public enum BlockFace {
 	SOUTH_SOUTH_EAST(SOUTH, SOUTH_EAST),
 	SOUTH_SOUTH_WEST(SOUTH, SOUTH_WEST),
 	WEST_SOUTH_WEST(WEST, SOUTH_WEST),
-	SELF(0, 0, 0);
+	SELF(-1, 0, 0, 0);
 
-	private final int modX, modY, modZ, change;
+	
+	private final int id, modX, modY, modZ, change;
 
-	BlockFace(int modX, int modY, int modZ) {
+	BlockFace(int id, int modX, int modY, int modZ) {
+		this.id = id;
 		this.modX = modX;
 		this.modY = modY;
 		this.modZ = modZ;
@@ -32,10 +34,15 @@ public enum BlockFace {
 	}
 
 	BlockFace(BlockFace face1, BlockFace face2) {
+		this.id = -1;
 		this.modX = (face1.getModX() + face2.getModX());
 		this.modY = (face1.getModY() + face2.getModY());
 		this.modZ = (face1.getModZ() + face2.getModZ());
 		this.change = calculateChange();
+	}
+	
+	public int getId() {
+		return id;
 	}
 	
 	private int calculateChange() {
@@ -112,5 +119,12 @@ public enum BlockFace {
 			return EAST_NORTH_EAST;
 		}
 		return SELF;
+	}
+	
+	public static BlockFace getById(int id) {
+		for(BlockFace da : values())
+			if(da.getId() == id)
+				return da;
+		return null;
 	}
 }

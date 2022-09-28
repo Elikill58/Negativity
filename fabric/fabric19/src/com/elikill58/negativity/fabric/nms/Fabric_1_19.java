@@ -1,8 +1,11 @@
 package com.elikill58.negativity.fabric.nms;
 
+import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
@@ -20,6 +23,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehi
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
@@ -39,7 +43,9 @@ import net.minecraft.network.packet.c2s.play.PickFromInventoryC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayPongC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerActionC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInputC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractBlockC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerInteractEntityC2SPacket;
+import net.minecraft.network.packet.c2s.play.PlayerInteractItemC2SPacket;
 import net.minecraft.network.packet.c2s.play.PlayerMoveC2SPacket;
 import net.minecraft.network.packet.c2s.play.TeleportConfirmC2SPacket;
 import net.minecraft.network.packet.c2s.query.QueryPingC2SPacket;
@@ -51,6 +57,7 @@ import net.minecraft.network.packet.s2c.play.KeepAliveS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayPingS2CPacket;
 import net.minecraft.network.packet.s2c.play.PlayerPositionLookS2CPacket;
 import net.minecraft.server.network.ServerPlayerEntity;
+import net.minecraft.util.hit.BlockHitResult;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 
@@ -119,6 +126,13 @@ public class Fabric_1_19 extends FabricVersionAdapter {
 		});
 		packetsPlayIn.put(getNameOfPacket(TeleportConfirmC2SPacket.class), (p, f) -> new NPacketPlayInTeleportAccept(((TeleportConfirmC2SPacket) f).getTeleportId()));
 		packetsPlayIn.put(getNameOfPacket(PlayPongC2SPacket.class), (p, f) -> new NPacketPlayInPong(((PlayPongC2SPacket) f).getParameter()));
+		packetsPlayIn.put(getNameOfPacket(PlayerInteractItemC2SPacket.class), (p, f) -> new NPacketPlayInUseItem(Hand.getHand(((PlayerInteractItemC2SPacket) f).getHand().name())));
+		packetsPlayIn.put(getNameOfPacket(PlayerInteractBlockC2SPacket.class), (p, f) -> {
+			PlayerInteractBlockC2SPacket packet = (PlayerInteractBlockC2SPacket) f;
+			BlockHitResult rs = packet.getBlockHitResult();
+			BlockPos pos = rs == null || rs.getBlockPos() == null ? new BlockPos(0, 0, 0) : rs.getBlockPos();
+			return new NPacketPlayInBlockPlace(Hand.getHand(packet.getHand().name()), pos.getX(), pos.getY(), pos.getZ(), BlockFace.valueOf(rs.getSide().name()));
+		});
 		
 
 		packetsPlayOut.put(getNameOfPacket(BlockBreakingProgressS2CPacket.class), (p, f) -> {

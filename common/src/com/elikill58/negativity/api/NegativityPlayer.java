@@ -389,9 +389,9 @@ public class NegativityPlayer {
 		checkProcessors.forEach(CheckProcessor::stop);
 		CompletableFuture.runAsync(() -> {
 			NegativityAccountManager accountManager = Adapter.getAdapter().getAccountManager();
-			accountManager.save(playerId).join();
+			accountManager.save(playerId);
 			accountManager.dispose(playerId);
-		}).join();
+		});
 	}
 
 	/**

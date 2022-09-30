@@ -89,7 +89,7 @@ public class FileNegativityAccountStorage extends NegativityAccountStorage {
 					file.deleteOnExit();
 				NegativityAccount acc = new NegativityAccount(playerId);
 				// TODO try to get most data as possible from old file
-				saveAccount(acc).join();
+				saveAccount(acc);
 				return acc;
 			}
 		});

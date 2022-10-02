@@ -1,5 +1,9 @@
 package com.elikill58.negativity.common.protocols;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
@@ -7,9 +11,9 @@ import com.elikill58.negativity.api.events.Listeners;
 import com.elikill58.negativity.api.events.block.BlockPlaceEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.common.protocols.data.FastPlaceData;
+import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -24,7 +28,7 @@ public class FastPlace extends Cheat implements Listeners {
 
 	@Check(name = "time", description = "Time between 2 place")
 	public void onBlockPlace(PacketReceiveEvent e, FastPlaceData data) {
-		if (e.getPacket().getPacketType().equals(PacketType.Client.POSITION_LOOK)) {
+		if (e.getPacket().getPacketType().isFlyingPacket()) {
 			data.timeFlying++;
 		}
 	}
@@ -36,15 +40,15 @@ public class FastPlace extends Cheat implements Listeners {
 		if (data.timeFlying < 20) {
 			data.times.add(data.timeFlying);
 			if (data.times.size() > 2) {
-				double total = 0;
-				for (Integer temp : data.times)
-					total += temp;
-				double average = (total / data.times.size());
-
-				if (average < 1.5) {
+				List<Integer> medianList = new ArrayList<>(data.times);
+				medianList.sort(Comparator.naturalOrder());
+				int middle = medianList.size() / 2;
+				int median = (medianList.size() % 2 == 1) ? medianList.get(middle) : (int) ((medianList.get(middle - 1) + medianList.get(middle)) / 2.0);
+				Adapter.getAdapter().debug("Median: " + median);
+				if (median < getConfig().getDouble("checks.times.median", 2)) {
 					boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
-							UniversalUtils.parseInPorcent(100 - average * 5), "time",
-							"Quickly: " + String.format("%.3f", average) + ", " + data.times);
+							UniversalUtils.parseInPorcent(100 - median * 2), "time",
+							"Quickly: " + median + ", " + data.times, null, median == 0 ? 50 : (median == 1 ? 25 : 10 - median));
 					if (isSetBack() && mayCancel)
 						e.setCancelled(true);
 				}

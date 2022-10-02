@@ -46,6 +46,7 @@ We support a lot of languages :
 - **Norwegian** (*no_NO*) By SuchHero
 - **Russian** (*ru_RU*) By VidTu
 - **Chinese** (*zh_CN*) By f0rb1d, SGYRE & Dust
+- **Traditional Chinese** (*zh_TW*) By DreamFuture-Studio (KageRyo, danhaitw01, jason920612)
 - **German** (*de_DE*) By CodingAir
 - **Dutch** (*nl_NL*) By DeveloperBoy
 - **Swedish** (*sv_SV*) By YungSloop

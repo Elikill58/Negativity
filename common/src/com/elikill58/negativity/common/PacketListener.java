@@ -93,6 +93,10 @@ public class PacketListener implements Listeners {
 				} else if(flying.isGround && np.iceCounter > 0) {
 					np.iceCounter--;
 				}
+				if(blockUp.getType().isSolid())
+					np.blockAbove = 4;
+				else if(np.blockAbove > 0)
+					np.blockAbove--;
 			}
 			if(flying instanceof NPacketPlayInPositionLook)
 				np.isTeleporting = false;

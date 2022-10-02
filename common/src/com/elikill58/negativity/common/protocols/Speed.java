@@ -66,8 +66,8 @@ public class Speed extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "walk-speed", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND })
-	public void onWalkSpeed(PacketReceiveEvent e, SpeedData data) {
+	@Check(name = "walk-speed-work", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND })
+	public void onWalkSpeedWork(PacketReceiveEvent e, SpeedData data) {
 		if(!e.getPacket().getPacketType().isFlyingPacket())
 			return;
 		NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
@@ -102,6 +102,77 @@ public class Speed extends Cheat implements Listeners {
 						+ "/" + maxDistanceZ + ", yDif: " + yDif + ", fall: " + p.getFallDistance() + ", vel: " + p.getTheoricVelocity(),
 						null, (long) (difDistance * 50));
 		}
+	}
+
+
+	@Check(name = "walk-speed", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND })
+	public void onWalkSpeed(PacketReceiveEvent e, NegativityPlayer np, SpeedData data) {
+		if(!e.getPacket().getPacketType().isFlyingPacket())
+			return;
+		NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
+        if (!flying.hasPos)
+        	return;
+        Player p = e.getPlayer();
+
+        Location blockLoc = flying.getLocation(p.getWorld());
+        double deltaXZ = blockLoc.distanceXZ(p.getLocation());
+        
+        if (deltaXZ == 0 /*|| !p.isOnGround()*/) {
+        	if(deltaXZ != 0)
+        		p.sendMessage("Distance X/Z: " + deltaXZ);
+        	data.deltaXZ = deltaXZ;
+        	return;
+        }
+
+        blockLoc.setY(p.getBoundingBox().getMinY() - 1);
+        Block block = blockLoc.getBlock();
+
+        /*
+         * Air resistance is automatically being calculated;
+         * We don't need to exempt AIR blocks since they have
+         * a friction of 0.6 and not 0.98 (default drag)
+         *
+         * if (block.getType() == Material.AIR) break friction;
+         */
+
+        double friction = block.getFriction() * 0.91f;
+
+        double predicted = data.deltaXZ * friction;
+
+        double difference = predicted - data.deltaXZ;
+
+        double minSpeed = p.getWalkSpeed() + (np.blockAbove == 0 ? 0 : 0.1) + 0.0864;
+        double speedEffect = data.getSpeedModifier();
+        if(p.isOnGround()) {
+        	//minSpeed += 0.08;
+        	if(speedEffect != 1)
+        		minSpeed *= speedEffect;
+        } else {
+        	//minSpeed += 0.16;
+        	if(speedEffect != 1)
+        		minSpeed *= speedEffect * 0.28;
+        }
+        double multiplication = minSpeed - 0.07;
+        double minDifference = np.blockAbove == 0 ? multiplication : multiplication + 0.5;
+
+        if (deltaXZ > minSpeed && predicted > multiplication && Math.abs(difference) > minDifference) {
+
+        	//p.sendMessage("!! " + (deltaXZ > minSpeed ? "§c" : "§e") + String.format("%.4f", deltaXZ) + " > " + String.format("%.3f", minSpeed) + " §f&& " + (predicted > multiplication ? "§c" : "§a") + String.format("%.4f", predicted) + " > " + String.format("%.3f", multiplication) + " §f&& " + (Math.abs(difference) > minDifference ? "§c" : "§b") + String.format("%.4f", Math.abs(difference)) + " > " + String.format("%.4f", minDifference));
+        	
+            if (++data.walkSpeedBuffer > 2.8) {
+            	Negativity.alertMod(ReportType.WARNING, p, this, 99, "walk-speed",
+            			String.format("xz=%.3f p=%.4f d=%.4f m=%.3f f=%.2f", data.deltaXZ, predicted, difference, minDifference, friction), null, (long) (data.walkSpeedBuffer - 1.8));
+
+                data.walkSpeedBuffer *= 0.7;
+            }
+        } else {
+            //p.sendMessage((deltaXZ > minSpeed ? "§c" : "§e") + String.format("%.4f", deltaXZ) + " > " + String.format("%.3f", minSpeed) + " §f&& " + (predicted > multiplication ? "§c" : "§a") + String.format("%.4f", predicted) + " > " + String.format("%.3f", multiplication) + " §f&& " + (Math.abs(difference) > minDifference ? "§c" : "§b") + String.format("%.4f", Math.abs(difference)) + " > " + String.format("%.4f", minDifference));
+        	data.walkSpeedBuffer -= 0.5;
+        	if(data.walkSpeedBuffer < 0) {
+        		data.walkSpeedBuffer = 0;
+        	}
+        }
+        data.deltaXZ = deltaXZ;
 	}
 
 	@Check(name = "high-speed", description = "Distance with high speed", conditions = {

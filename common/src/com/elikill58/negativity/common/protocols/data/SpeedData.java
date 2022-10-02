@@ -10,7 +10,7 @@ import com.elikill58.negativity.api.protocols.CheckData;
 public class SpeedData extends CheckData {
 
 	public int oldSpeedLevel = 0, oldSlowLevel = 0, highSpeedAmount = 0;
-	public double sameDiffY = 0, oldFriction = 0;
+	public double sameDiffY = 0, oldFriction = 0, walkSpeedBuffer = 0, deltaXZ = 0;
 	
 	public SpeedData(NegativityPlayer np) {
 		super(np);

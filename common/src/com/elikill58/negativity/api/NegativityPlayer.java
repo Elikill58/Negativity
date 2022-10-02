@@ -68,13 +68,13 @@ public class NegativityPlayer {
 	
 	// detection and bypass
 	public long loginTime, timeInvincibility = 0;
-	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0, iceCounter = 0;
+	public int rightBlockClick = 0, leftBlockClick = 0, entityClick = 0, leftCancelled = 0, leftFinished = 0, iceCounter = 0, blockAbove = 0;
 	public FlyingReason flyingReason = FlyingReason.REGEN;
 	public boolean isOnLadders = false, isTeleporting = false;
 	public List<Location> lastLocations = new ArrayList<>();
 	public ConcurrentHashMap<IDetectionKey<?>, CheckData> checkDatas = new ConcurrentHashMap<>();
 	
-	public Location delta, lastDelta;
+	public Location delta = new Location(null, 0, 0, 0), lastDelta = new Location(null, 0, 0, 0);
 	
 	// content
 	public Content<List<Double>> listDoubles = new Content<>();

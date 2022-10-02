@@ -21,6 +21,7 @@ import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.api.ray.RayResult;
 import com.elikill58.negativity.api.ray.block.BlockRay;
 import com.elikill58.negativity.api.ray.block.BlockRayBuilder;
 import com.elikill58.negativity.api.ray.block.BlockRayResult;
@@ -111,7 +112,7 @@ public class Scaffold extends Cheat {
 			double distance = result.getLastDistance();
 			double maxDistance = (p.getGameMode().equals(GameMode.CREATIVE) ? 5 : 4) + 0.2;
 			//Adapter.getAdapter().debug((searched.getX() == place.getX() && searched.getZ() == place.getZ() ? "Result SAME: " : "Result: ") + result.getRayResult() + ", distance: " + distance + ", block: " + searched + ", place: " + place + ", start: " + blockRay.getBasePosition());
-			if (!result.getRayResult().isFounded()) {
+			if (!result.getRayResult().isFounded() && !result.getRayResult().equals(RayResult.NEEDED_NOT_FOUND)) {
 				Negativity.alertMod(distance > maxDistance + 2 ? ReportType.VIOLATION : ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(distance * 25), "distance",
 						"Place: " + place + ", targetVisual: " + searched + ", vec: " + result.getVector() + ", begin: " + blockRay.getBasePosition()

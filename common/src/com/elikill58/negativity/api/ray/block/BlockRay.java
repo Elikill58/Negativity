@@ -65,7 +65,7 @@ public class BlockRay extends AbstractRay<BlockRayResult> {
 	protected RayResult tryLocation(Vector v) {
 		lastDistance = v.clone().distance(basePosition.toVector()); // check between both distance
 		if(lastDistance >= maxDistance)
-			return RayResult.TOO_FAR; // Too far
+			return getNeededPositions().isEmpty() ? RayResult.TOO_FAR : RayResult.NEEDED_NOT_FOUND; // Too far
 		testedVec.put(v, Materials.STICK); // will be replaced when getting from exact block
 		if(search.equals(BlockRaySearch.POSITION)) {
 			int baseX = v.getBlockX(), baseY = v.getBlockY(), baseZ = v.getBlockZ();

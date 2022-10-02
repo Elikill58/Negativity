@@ -13,7 +13,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.ray.AbstractRayBuilder;
 
-public class BlockRayBuilder extends AbstractRayBuilder<BlockRayBuilder, BlockRay>{
+public class BlockRayBuilder extends AbstractRayBuilder<BlockRayBuilder, BlockRay> {
 
 	private BlockRaySearch search = BlockRaySearch.TYPE_NOT_AIR;
 	protected Material[] filter = new Material[0], neededType = new Material[0];

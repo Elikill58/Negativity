@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import org.checkerframework.checker.nullness.qual.NonNull;
+
 import com.elikill58.negativity.api.block.Block;
 import com.elikill58.negativity.api.block.BlockChecker;
 import com.elikill58.negativity.universal.utils.Maths;
@@ -158,11 +160,23 @@ public final class Location implements Cloneable {
 		return new Vector(x, y, z);
 	}
 	
-	public double distance(Location o) {
+	/**
+	 * Get distance with given location
+	 * 
+	 * @param o other location
+	 * @return distance to given location
+	 */
+	public double distance(@NonNull Location o) {
 		return Math.sqrt(distanceSquared(o));
 	}
-
-	public double distanceSquared(Location o) {
+	
+	/**
+	 * Get squared distance with given location
+	 * 
+	 * @param o other location
+	 * @return distance to given location
+	 */
+	public double distanceSquared(@NonNull Location o) {
 		if (o == null) {
 			throw new IllegalArgumentException("Cannot measure distance to a null location");
 		}
@@ -175,11 +189,23 @@ public final class Location implements Cloneable {
 		return Maths.square(this.x - o.x) + Maths.square(this.y - o.y) + Maths.square(this.z - o.z);
 	}
 	
-	public double distanceXZ(Location o) {
+	/**
+	 * Get distance in X/Z axis with given location
+	 * 
+	 * @param o other location
+	 * @return distance to given location
+	 */
+	public double distanceXZ(@NonNull Location o) {
 		return Math.sqrt(distanceSquaredXZ(o));
 	}
-
-	public double distanceSquaredXZ(Location o) {
+	
+	/**
+	 * Get squared distance in X/Z axis with given location
+	 * 
+	 * @param o other location
+	 * @return distance to given location
+	 */
+	public double distanceSquaredXZ(@NonNull Location o) {
 		if (o == null) {
 			throw new IllegalArgumentException("Cannot measure distance to a null location");
 		}

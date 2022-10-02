@@ -1,15 +1,11 @@
 package com.elikill58.negativity.fabric.utils;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 
-import org.checkerframework.checker.nullness.qual.Nullable;
-
 import com.elikill58.negativity.api.colors.ChatColor;
-import com.elikill58.negativity.fabric.GlobalFabricNegativity;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 import net.minecraft.server.network.ServerPlayerEntity;
@@ -19,12 +15,6 @@ public class Utils {
 
 	public static String coloredMessage(String msg) {
 		return ChatColor.translateAlternateColorCodes('§', msg);
-	}
-
-	@Nullable
-	public static ServerPlayerEntity getFirstOnlinePlayer() {
-		Collection<ServerPlayerEntity> onlinePlayers = GlobalFabricNegativity.getOnlinePlayers();
-		return onlinePlayers.isEmpty() ? null : onlinePlayers.iterator().next();
 	}
 
 	public static HashMap<String, String> getModsNameVersionFromMessage(String modName) {

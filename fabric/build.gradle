@@ -41,6 +41,14 @@ compileJava.javaCompiler.set(
     javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(17) }
 )
 
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("fabric.mod.json") {
+        expand "version": project.version
+    }
+}
+
 java {
     withSourcesJar()
 }

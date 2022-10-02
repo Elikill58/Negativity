@@ -167,11 +167,10 @@ public final class Location implements Cloneable {
 			throw new IllegalArgumentException("Cannot measure distance to a null location");
 		}
 		if ((o.getWorld() == null) || (getWorld() == null)) {
-			throw new IllegalArgumentException("Cannot measure distance to a null world");
+			return 0;
 		}
 		if (!o.getWorld().getName().equals(getWorld().getName())) {
-			throw new IllegalArgumentException(
-					"Cannot measure distance between " + getWorld().getName() + " and " + o.getWorld().getName());
+			return 0;
 		}
 		return Maths.square(this.x - o.x) + Maths.square(this.y - o.y) + Maths.square(this.z - o.z);
 	}
@@ -185,11 +184,10 @@ public final class Location implements Cloneable {
 			throw new IllegalArgumentException("Cannot measure distance to a null location");
 		}
 		if ((o.getWorld() == null) || (getWorld() == null)) {
-			throw new IllegalArgumentException("Cannot measure distance to a null world");
+			return 0;
 		}
 		if (!o.getWorld().getName().equals(getWorld().getName())) {
-			throw new IllegalArgumentException(
-					"Cannot measure distance between " + getWorld().getName() + " and " + o.getWorld().getName());
+			return 0;
 		}
 		return Maths.square(this.x - o.x) + Maths.square(this.z - o.z);
 	}

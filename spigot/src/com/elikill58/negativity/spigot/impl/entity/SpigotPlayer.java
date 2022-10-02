@@ -23,6 +23,7 @@ import com.elikill58.negativity.api.potion.PotionEffect;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SubPlatform;
+import com.elikill58.negativity.spigot.impl.SpigotPotionEffectType;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotInventory;
 import com.elikill58.negativity.spigot.impl.inventory.SpigotPlayerInventory;
 import com.elikill58.negativity.spigot.impl.item.SpigotItemStack;
@@ -242,7 +243,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public boolean hasPotionEffect(PotionEffectType type) {
-		return entity.getActivePotionEffects().stream().map(org.bukkit.potion.PotionEffect::getType).map(org.bukkit.potion.PotionEffectType::getName).map(PotionEffectType::fromName).collect(Collectors.toList()).contains(type);
+		return entity.getActivePotionEffects().stream().map(org.bukkit.potion.PotionEffect::getType).map(SpigotPotionEffectType::toCommon).collect(Collectors.toList()).contains(type);
 	}
 
 	@Override
@@ -264,7 +265,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public void removePotionEffect(PotionEffectType type) {
-		org.bukkit.potion.PotionEffectType spigotType = org.bukkit.potion.PotionEffectType.getByName(type.name());
+		org.bukkit.potion.PotionEffectType spigotType = SpigotPotionEffectType.fromCommon(type);
 		if(spigotType != null)
 			entity.removePotionEffect(spigotType);
 		// else can have error
@@ -291,8 +292,9 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
-		entity.addPotionEffect(new org.bukkit.potion.PotionEffect(
-				org.bukkit.potion.PotionEffectType.getByName(type.name()), duration, amplifier));
+		org.bukkit.potion.PotionEffectType spigotType = SpigotPotionEffectType.fromCommon(type);
+		if(spigotType != null)
+			entity.addPotionEffect(new org.bukkit.potion.PotionEffect(spigotType, duration, amplifier));
 	}
 
 	@Override

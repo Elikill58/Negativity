@@ -33,6 +33,7 @@ dependencies {
     api project(':common')
     implementation 'org.bstats:bstats-bukkit:1.7'
     compileOnly 'com.comphenix.protocol:ProtocolLib:4.7.0'
+    compileOnly 'org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT' 
 
     spigot fileTree(dir: "spigotJars", includes: ['*.jar'])
 }

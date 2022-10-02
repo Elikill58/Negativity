@@ -27,7 +27,7 @@ rootProject.name = 'Negativity'
 include 'common', 'bungee', 'velocity', 'minestom'
 include 'spigot', 'spigot:spigot17', 'spigot:spigot18', 'spigot:spigot182', 'spigot:spigot19'
 include 'sponge', 'sponge7', 'sponge:sponge16', 'sponge:sponge18'
-include 'fabric', 'fabric:fabric19', 'fabric:fabric192'
+include 'fabric'
 
 // All integrations
 // all integrations in common

@@ -1,5 +1,4 @@
 import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
-import net.fabricmc.loom.task.RemapJarTask
 
 plugins {
     id 'fabric-loom' version '0.12-SNAPSHOT'
@@ -54,14 +53,6 @@ tasks.withType(JavaCompile).configureEach {
     it.options.release = 17
 }
 
-task remapShadowJar(type: RemapJarTask) {
-    dependsOn shadowJar
-    archiveBaseName.set('NegativityFabric')
-    archiveAppendix.set('common')
-    inputFile.set(shadowJar.archiveFile)
-    destinationDirectory.set(layout.buildDirectory.dir('libs'))
-}
-
 shadowJar {
     archiveBaseName.set('NegativityFabric')
     archiveAppendix.set('common')
@@ -76,19 +67,17 @@ shadowJar {
     
     exclude('dummyThing')
     exclude('mappings/*')
-    
-    destinationDirectory.set(layout.buildDirectory.dir('devlibs'))
 }
 
-build.dependsOn remapShadowJar
+build.dependsOn shadowJar
 
 parent.tasks.named('shadowJar', ShadowJar) {
-    it.from(remapShadowJar.outputs)
+    it.from(shadowJar.outputs)
     it.manifest.inheritFrom(tasks.jar.manifest)
 }
 
 task prepareServer(type: Copy) {
-    from remapShadowJar.outputs
+    from shadowJar.outputs
     rename { 'negativity.jar' }
     def pluginDir = System.getProperty('plugins.dir')
     if (pluginDir == null) {

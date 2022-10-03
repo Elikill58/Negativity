@@ -8,7 +8,7 @@ if [ -d "$DIR" ]; then
 else
    mkdir -p $DIR
 fi
-cd $DIR || exit
+cd "$DIR" || exit
 
 
 case "$OSTYPE" in
@@ -29,6 +29,7 @@ if [[ $os == "windows" ]]; then
    executable=.exe
 fi
 echo "OS used: $os with $extension"
+echo "Check in $JAVA_HOME for java versions..."
 
 java16=unknown
 java17=unknown
@@ -50,8 +51,20 @@ if [[ $java8 == *"unknown"* || $java16 == *"unknown"* || $java17 == *"unknown"* 
    for javaVersionPath in $JAVA_HOME; do
        if [[ $javaVersionPath == *"16."* ]]; then # check if has "16."
           java16="$javaVersionPath/java$executable"
+          eval "\"$java16\" -version"
+          ret_code=$?
+          if [ $ret_code != 0 ]; then
+             echo "Wrong Java 16 path. Don't using it ..."
+             java16=unknown
+          fi
        elif [[ $javaVersionPath == *"17."* ]]; then # check if has "17."
           java17="$javaVersionPath/java$executable"
+          eval "\"$java17\" -version"
+          ret_code=$?
+          if [ $ret_code != 0 ]; then
+             echo "Wrong Java 17 path. Don't using it ..."
+             java17=unknown
+          fi
        fi
    done
 

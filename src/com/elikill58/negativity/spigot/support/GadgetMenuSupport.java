@@ -9,7 +9,7 @@ public class GadgetMenuSupport {
 
 	public static boolean checkGadgetsMenuPreconditions(Player p) {
 		PlayerManager pm = GadgetsMenuAPI.getPlayerManager(p);
-		return pm.isFallDamageDisabled() || pm.isFireDamageDisabled() || pm.isBlockDamageDisabled();
+		return pm != null && (pm.isFallDamageDisabled() || pm.isFireDamageDisabled() || pm.isBlockDamageDisabled());
 	}
 	
 }

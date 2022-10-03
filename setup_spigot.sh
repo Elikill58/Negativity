@@ -86,6 +86,7 @@ echo "-------- WARN --------"
 
 sleep 3s
 
+curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
 for mcVersion in "1.17" "1.18" "1.18.2" "1.19"; do # all java17 remapped versions
    snap="$mcVersion-R0.1-SNAPSHOT"
    spigotRepository="$HOME/.m2/repository/org/spigotmc/spigot/$snap/spigot-$snap"

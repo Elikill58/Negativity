@@ -10,4 +10,5 @@ sourceSets {
 dependencies {
     compileOnly 'com.github.ProtocolSupport:ProtocolSupport:f34959c331'
     api(project(':spigot'))
+    compileOnly(project(path: ':spigot', configuration: 'spigot'))
 }

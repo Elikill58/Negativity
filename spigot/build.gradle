@@ -33,8 +33,7 @@ dependencies {
     api project(':common')
     implementation 'org.bstats:bstats-bukkit:1.7'
     compileOnly 'com.comphenix.protocol:ProtocolLib:4.7.0'
-    compileOnly 'org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT'
-    compileOnly 'org.bukkit:bukkit:1.13-R0.1-SNAPSHOT'
+    spigot 'org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT'
     
     compileOnly 'io.netty:netty-all:4.0.4.Final'
 }
@@ -91,7 +90,8 @@ task prepareServer(type: Copy) {
 
 subprojects {
     java.toolchain.languageVersion = JavaLanguageVersion.of(8)
-	repositories {
+    
+    repositories {
 	    maven {
 	        name 'sonatype'
 	        url 'https://oss.sonatype.org/content/repositories/snapshots/'
@@ -101,9 +101,4 @@ subprojects {
 	        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
 	    }
 	}
-	
-	dependencies {
-	    compileOnly 'org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT'
-	    compileOnly 'org.bukkit:bukkit:1.13-R0.1-SNAPSHOT'
-    }
 }

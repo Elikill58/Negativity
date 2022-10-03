@@ -30,7 +30,6 @@ if [[ $os == "windows" ]]; then
 fi
 echo "OS used: $os with $extension"
 
-java8=unknown
 java16=unknown
 java17=unknown
 
@@ -49,23 +48,13 @@ function installJDK() {
 if [[ $java8 == *"unknown"* || $java16 == *"unknown"* || $java17 == *"unknown"* ]]; then # if at least one JAVA is NOT set
    export IFS=";"
    for javaVersionPath in $JAVA_HOME; do
-       if [[ $javaVersionPath == *"1.8"* ]]; then # check if has "1.8"
-          java8="$javaVersionPath/bin/java$executable"
-       elif [[ $javaVersionPath == *"16."* ]]; then # check if has "16."
+       if [[ $javaVersionPath == *"16."* ]]; then # check if has "16."
           java16="$javaVersionPath/java$executable"
        elif [[ $javaVersionPath == *"17."* ]]; then # check if has "17."
           java17="$javaVersionPath/java$executable"
        fi
    done
 
-   if [[ $java8 == *"unknown"* ]]; then
-      if [ -d "./jdk-8" ]; then
-         echo "Java 8 and already downloaded, using this version..."
-      else
-         installJDK 8 "https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u345-b01/OpenJDK8U-jdk_x64_${os}_hotspot_8u345b01$extension"
-      fi
-     java8="$PWD/jdk-8/bin/java$executable"
-   fi
    if [[ $java16 == *"unknown"* ]]; then
       if [ -d "./jdk-16" ]; then
          echo "Java 16 and already downloaded, using this version..."
@@ -84,7 +73,6 @@ if [[ $java8 == *"unknown"* || $java16 == *"unknown"* || $java17 == *"unknown"* 
    fi
 fi
 
-echo "Using java8: $java8"
 echo "Using java16: $java16"
 echo "Using java17: $java17"
 
@@ -98,26 +86,6 @@ echo "-------- WARN --------"
 
 sleep 3s
 
-curl -o BuildTools.jar https://hub.spigotmc.org/jenkins/job/BuildTools/lastSuccessfulBuild/artifact/target/BuildTools.jar
-for mcVersion in "1.8.8" "1.9.2" "1.9.4" "1.10.2" "1.11.2" "1.12" "1.13" "1.13.2" "1.14.4" "1.15" "1.16.1" "1.16.4"; do
-   spigotFile=spigot-$mcVersion.jar
-   if [ -f "../$spigotFile" ]; then
-      echo "Spigot $mcVersion already exists. Skipping..."
-   else
-      mcCmd="\"$java8\" -jar BuildTools.jar --rev $mcVersion"
-      echo "Running $mcCmd ..."
-      eval "$mcCmd"
-      if [ -f "$spigotFile" ]; then # if build successful
-         cp $spigotFile "../$spigotFile"
-      else
-         echo "Failed to build version $mcVersion."
-         exit 1
-      fi
-   fi
-done
-if [ ! -f "../spigot-0-1.13.jar" ]; then
-   cp "../spigot-1.13.jar" "../spigot-0-1.13.jar" # the first jar of the list
-fi
 for mcVersion in "1.17" "1.18" "1.18.2" "1.19"; do # all java17 remapped versions
    snap="$mcVersion-R0.1-SNAPSHOT"
    spigotRepository="$HOME/.m2/repository/org/spigotmc/spigot/$snap/spigot-$snap"

@@ -7,8 +7,14 @@ sourceSets {
     }
 }
 
+repositories {
+    maven {
+        name 'geyser'
+        url 'https://repo.opencollab.dev/maven-snapshots/'
+    }
+}
+
 dependencies {
-    compileOnly 'org.geysermc:FloodGate:1.0-SNAPSHOT'
+    compileOnly 'org.geysermc.floodgate:api:2.2.0-SNAPSHOT'
     api(project(':spigot'))
-    compileOnly(project(path: ':spigot', configuration: 'spigot'))
 }

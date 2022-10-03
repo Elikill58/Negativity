@@ -2,7 +2,7 @@ package com.elikill58.negativity.spigot.integration.floodgate;
 
 import java.util.UUID;
 
-import org.geysermc.floodgate.FloodgateAPI;
+import org.geysermc.floodgate.api.FloodgateApi;
 
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.PluginDependentExtension;
@@ -13,7 +13,7 @@ public class FloodGateBedrockPlayerChecker implements BedrockPlayerChecker {
 	
 	@Override
 	public boolean isBedrockPlayer(UUID uuid) {
-		return FloodgateAPI.isBedrockPlayer(uuid);
+		return FloodgateApi.getInstance().isFloodgatePlayer(uuid);
 	}
 	
 	public static class Provider implements BedrockPlayerCheckerProvider, PluginDependentExtension {

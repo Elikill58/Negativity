@@ -1,8 +1,7 @@
 name: Build Negativity for sponge 7
 
 # For each push on all branchs
-on: [push, pull_request]
-
+on: workflow_dispatch
 jobs:
   build:
     runs-on: ubuntu-latest

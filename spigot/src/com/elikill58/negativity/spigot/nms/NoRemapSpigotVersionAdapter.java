@@ -46,15 +46,15 @@ public abstract class NoRemapSpigotVersionAdapter extends SpigotVersionAdapter {
 				packetsPlayIn.put("PacketPlayInBlockDig", (player, packet) -> {
 					BlockPosition pos = getBlockPosition(getFromMethod(packet, "b"));
 					return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(),
-							DigAction.valueOf(getFromMethod(packet, "d").toString()),
-							BlockFace.valueOf(getFromMethod(packet, "c").toString()));
+							DigAction.getById(((Enum<?>) getFromMethod(packet, "d")).ordinal()),
+							BlockFace.getById(((Enum<?>) getFromMethod(packet, "c")).ordinal()));
 				});
 			} else {
 				packetsPlayIn.put("PacketPlayInBlockDig", (player, packet) -> {
 					BlockPosition pos = getBlockPosition(getFromMethod(packet, "a"));
 					return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(),
-							DigAction.valueOf(getFromMethod(packet, "c").toString()),
-							BlockFace.valueOf(getFromMethod(packet, "b").toString()));
+							DigAction.getById(((Enum<?>) getFromMethod(packet, "c")).ordinal()),
+							BlockFace.getById(((Enum<?>) getFromMethod(packet, "b")).ordinal()));
 				});
 			}
 			if (v.isNewerOrEquals(Version.V1_9)) {

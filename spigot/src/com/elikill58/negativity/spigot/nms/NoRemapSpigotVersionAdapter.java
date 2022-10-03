@@ -119,7 +119,7 @@ public abstract class NoRemapSpigotVersionAdapter extends SpigotVersionAdapter {
 	@Override
 	public double getAverageTps() {
 		try {
-			return (float) mathTps.invoke(null, tpsField.get(dedicatedServer));
+			return (double) mathTps.invoke(null, tpsField.get(dedicatedServer));
 		} catch (Exception e) {
 			e.printStackTrace();
 			return 0;

@@ -14,7 +14,6 @@ public class PacketUtils {
 	private static final String VERSION = Bukkit.getServer().getClass().getPackage().getName().replace(".", ",")
 			.split(",")[3];
 	public static final String NMS_PREFIX = Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? "net.minecraft." : "net.minecraft.server." + VERSION + ".";
-	public static final Class<?> ENUM_PLAYER_INFO = SpigotVersionAdapter.getVersionAdapter().getEnumPlayerInfoAction();
 	
 	/**
 	 * This Map is to reduce Reflection action which take more resources than just RAM action

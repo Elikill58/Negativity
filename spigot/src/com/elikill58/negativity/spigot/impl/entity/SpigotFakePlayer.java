@@ -1,6 +1,5 @@
 package com.elikill58.negativity.spigot.impl.entity;
 
-import static com.elikill58.negativity.spigot.utils.PacketUtils.ENUM_PLAYER_INFO;
 import static com.elikill58.negativity.spigot.utils.PacketUtils.getNmsClass;
 
 import java.lang.reflect.Constructor;
@@ -21,6 +20,7 @@ import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.impl.location.SpigotLocation;
+import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Version;
@@ -203,9 +203,10 @@ public class SpigotFakePlayer extends AbstractEntity implements FakePlayer {
 				packetEntityMetadataConstructor = getNmsClass("PacketPlayOutEntityMetadata").getConstructor(int.class, getNmsClass("DataWatcher"), boolean.class);
 				packetEntitySpawnConstructor = getNmsClass("PacketPlayOutNamedEntitySpawn").getConstructor(getNmsClass("EntityHuman"));
 				packetEntityDestroyConstructor = getNmsClass("PacketPlayOutEntityDestroy").getConstructor(int[].class);
-				packetPlayerInfoConstructor = getNmsClass("PacketPlayOutPlayerInfo").getConstructor(ENUM_PLAYER_INFO, Iterable.class);
-				playerInfoAddPlayer = ENUM_PLAYER_INFO.getField("ADD_PLAYER").get(ENUM_PLAYER_INFO);
-				playerInfoRemovePlayer = ENUM_PLAYER_INFO.getField("REMOVE_PLAYER").get(ENUM_PLAYER_INFO);
+				Class<?> enumPlayerInfo = SpigotVersionAdapter.getVersionAdapter().getEnumPlayerInfoAction();
+				packetPlayerInfoConstructor = getNmsClass("PacketPlayOutPlayerInfo").getConstructor(enumPlayerInfo, Iterable.class);
+				playerInfoAddPlayer = enumPlayerInfo.getField("ADD_PLAYER").get(enumPlayerInfo);
+				playerInfoRemovePlayer = enumPlayerInfo.getField("REMOVE_PLAYER").get(enumPlayerInfo);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

@@ -7,7 +7,20 @@ sourceSets {
     }
 }
 
+repositories {
+    maven {
+        name 'sonatype'
+        url 'https://oss.sonatype.org/content/repositories/snapshots/'
+    }
+    maven {
+        name 'spigot'
+        url 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+}
+
 dependencies {
+    compileOnly 'org.spigotmc:spigot-api:1.13-R0.1-SNAPSHOT'
+    compileOnly 'org.bukkit:bukkit:1.13-R0.1-SNAPSHOT'
     compileOnly 'com.yapzhenyie:GadgetsMenu:4.3.29'
     api(project(':spigot'))
     compileOnly(project(path: ':spigot', configuration: 'spigot'))

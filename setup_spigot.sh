@@ -27,6 +27,7 @@ executable=
 if [[ $os == "windows" ]]; then
    extension=.zip
    executable=.exe
+   export IFS=";"
 fi
 echo "OS used: $os with $extension"
 echo "Check in $JAVA_HOME for java versions..."
@@ -47,7 +48,6 @@ function installJDK() {
 }
 
 if [[ $java8 == *"unknown"* || $java16 == *"unknown"* || $java17 == *"unknown"* ]]; then # if at least one JAVA is NOT set
-   export IFS=";"
    for javaVersionPath in $JAVA_HOME; do
        if [[ $javaVersionPath == *"16."* ]]; then # check if has "16."
           java16="$javaVersionPath/java$executable"

@@ -1,4 +1,4 @@
-evaluationDependsOn(':spigot')
+evaluationDependsOn(':common')
 
 sourceSets {
     main {
@@ -16,5 +16,5 @@ repositories {
 
 dependencies {
     compileOnly 'org.geysermc.floodgate:api:2.2.0-SNAPSHOT'
-    api(project(':spigot'))
+    api(project(':common'))
 }

@@ -62,8 +62,6 @@ shadowJar {
     mergeServiceFiles()
     from(project(':common').tasks.shadowJar,
             project('integrations:essentials').jar.outputs.files,
-            project('integrations:floodgate').jar.outputs.files,
-            project('integrations:floodgatev2').jar.outputs.files,
             project('integrations:gadgetsmenu').jar.outputs.files,
             project('integrations:maxbans').jar.outputs.files,
             project('integrations:professionalbans').jar.outputs.files,

@@ -1,4 +1,4 @@
-package com.elikill58.negativity.spigot.integration.floodgatev2;
+package com.elikill58.negativity.common.integration.floodgate;
 
 import java.util.UUID;
 
@@ -13,7 +13,6 @@ public class FloodGateBedrockPlayerChecker implements BedrockPlayerChecker {
 	
 	@Override
 	public boolean isBedrockPlayer(UUID uuid) {
-		//player.sendMessage("Are you on bedrock: " + FloodgateApi.getInstance().isFloodgatePlayer(player.getUniqueId()));
 		return FloodgateApi.getInstance().isFloodgatePlayer(uuid);
 	}
 	
@@ -26,7 +25,7 @@ public class FloodGateBedrockPlayerChecker implements BedrockPlayerChecker {
 		
 		@Override
 		public String getPluginId() {
-			return "floodgate";
+			return "floodgate-bukkit";
 		}
 	}
 }

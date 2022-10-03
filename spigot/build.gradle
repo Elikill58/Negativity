@@ -65,7 +65,6 @@ shadowJar {
             project('integrations:maxbans').jar.outputs.files,
             project('integrations:professionalbans').jar.outputs.files,
             project('integrations:ultrapunishments').jar.outputs.files,
-            project('integrations:protocolsupport').jar.outputs.files,
             project('integrations:worldguardv6').jar.outputs.files,
             project('integrations:worldguardv7').jar.outputs.files
     )

@@ -34,5 +34,5 @@ include 'fabric'
 include 'common:integrations:litebans', 'common:integrations:advancedban', 'common:integrations:viaversion', 'common:integrations:floodgate'
 // all integrations in spigot
 include 'spigot:integrations:essentials', 'spigot:integrations:gadgetsmenu', 'spigot:integrations:professionalbans', 'spigot:integrations:ultrapunishments',
-        'spigot:integrations:maxbans', 'spigot:integrations:protocolsupport', 'spigot:integrations:worldguardv6', 'spigot:integrations:worldguardv7'
+        'spigot:integrations:maxbans', 'spigot:integrations:worldguardv6', 'spigot:integrations:worldguardv7'
 

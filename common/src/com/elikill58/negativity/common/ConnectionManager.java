@@ -1,8 +1,5 @@
 package com.elikill58.negativity.common;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -21,14 +18,15 @@ import com.elikill58.negativity.api.events.player.PlayerTeleportEvent;
 import com.elikill58.negativity.common.commands.ReportCommand;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Messages;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.ban.AltAccountBan;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
+import com.elikill58.negativity.universal.utils.ChatUtils;
 import com.elikill58.negativity.universal.utils.SemVer;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.webhooks.WebhookManager;
@@ -39,6 +37,8 @@ public class ConnectionManager implements Listeners {
 	public void onConnect(PlayerConnectEvent e) {
 		Player p = e.getPlayer();
 		NegativityPlayer np = e.getNegativityPlayer();
+		if(!Adapter.getAdapter().getPlatformID().isProxy())
+			np.delta = np.lastDelta = p.getLocation().clone();
 		np.timeInvincibility = System.currentTimeMillis() + 8000;
 		
 		if(UniversalUtils.isMe(p.getUniqueId()))
@@ -64,12 +64,12 @@ public class ConnectionManager implements Listeners {
 							.forEach((mod) -> mod.sendMessage(alt.getAlertMessage().replaceAll("%name%", p.getName())));
 					break;
 				case BAN:
-					BanManager.executeBan(new Ban(p.getUniqueId(), reason, "Negativity", BanType.PLUGIN, alt.isBanDef() ? -1 : alt.getBanTime(), "Alt", ip, BanStatus.ACTIVE));
+					BanManager.executeBan(new Ban(p.getUniqueId(), reason, "Negativity", SanctionnerType.PLUGIN, alt.isBanDef() ? -1 : alt.getBanTime(), "Alt", ip, BanStatus.ACTIVE));
 					break;
 				case BAN_ALL:
 					long time = alt.isBanDef() ? -1 : alt.getBanTime();
 					for(UUID allPlayers : NegativityAccountStorage.getStorage().getPlayersOnIP(ip)) {
-						BanManager.executeBan(new Ban(allPlayers, reason, "Negativity", BanType.PLUGIN, time, "Alt", ip, BanStatus.ACTIVE));
+						BanManager.executeBan(new Ban(allPlayers, reason, "Negativity", SanctionnerType.PLUGIN, time, "Alt", ip, BanStatus.ACTIVE));
 					}
 					break;
 				}
@@ -115,8 +115,7 @@ public class ConnectionManager implements Listeners {
 				formattedExpiration = "definitively";
 			} else {
 				kickMsgKey = "ban.kick_time";
-				LocalDateTime expirationDateTime = LocalDateTime.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
-				formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
+				formattedExpiration = ChatUtils.formatTime(activeBan.getExpirationTime());
 			}
 			e.setLoginResult(Result.KICK_BANNED);
 			e.setKickMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%", formattedExpiration, "%by%", activeBan.getBannedBy()));

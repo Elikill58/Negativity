@@ -7,15 +7,11 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import java.util.function.Supplier;
 
-import org.bstats.sponge.MetricsLite2;
 import org.slf4j.Logger;
 import org.spongepowered.api.Platform.Type;
 import org.spongepowered.api.Sponge;
@@ -48,6 +44,7 @@ import org.spongepowered.api.text.format.TextColors;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.channel.GameChannelNegativityMessageEvent;
+import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.sponge7.impl.entity.SpongeEntityManager;
 import com.elikill58.negativity.sponge7.impl.entity.SpongePlayer;
 import com.elikill58.negativity.sponge7.listeners.BlockListeners;
@@ -61,12 +58,8 @@ import com.elikill58.negativity.sponge7.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
-import com.elikill58.negativity.universal.account.NegativityAccount;
 import com.elikill58.negativity.universal.account.NegativityAccountManager;
-import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanManager;
-import com.elikill58.negativity.universal.database.Database;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.permissions.Perm;
@@ -74,7 +67,7 @@ import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
+import com.elikill58.negativity.universal.warn.WarnManager;
 import com.google.inject.Inject;
 
 @Plugin(id = "negativity")
@@ -97,11 +90,6 @@ public class SpongeNegativity {
 	}
 
 	public static boolean hasPacketGate = false;
-
-	@Inject
-	public SpongeNegativity(MetricsLite2.Factory metricsFactory) {
-		metricsFactory.make(7896);
-	}
 
 	@Listener
 	public void onPreInit(GamePreInitializationEvent event) {
@@ -126,9 +114,7 @@ public class SpongeNegativity {
 
 	@Listener
 	public void onGameStop(GameStoppingServerEvent e) {
-		NegativityPlayer.getAllPlayers().values().forEach(NegativityPlayer::destroy);
-		Stats.updateStats(StatsType.ONLINE, 0 + "");
-		Database.close();
+		Negativity.closeNegativity();
 	}
 
 	@Listener
@@ -174,13 +160,17 @@ public class SpongeNegativity {
 		reloadCommand("unban", cmd, () -> new CommandsExecutorManager("nunban"), "nunban", "negunban", "unban");
 		reloadCommand("chat.clear", cmd, () -> new CommandsExecutorManager("nclearchat"), "nclearchat", "clearchat");
 		reloadCommand("chat.lock", cmd, () -> new CommandsExecutorManager("nlockchat"), "nlockchat", "lockchat");
+		reloadCommand("warn", cmd, () -> new CommandsExecutorManager("nwarn"), "nwarn", "warn");
 	}
 
 	private void reloadCommand(String configKey, CommandManager manager, Supplier<CommandCallable> command,
 			String... aliases) {
-		reloadCommand(configKey,
-				(configKey.endsWith("ban") ? BanManager.getBanConfig() : Adapter.getAdapter().getConfig())
-						.getBoolean("commands." + configKey),
+		Configuration conf = Adapter.getAdapter().getConfig();
+		if(configKey.endsWith("ban"))
+			conf = BanManager.getBanConfig();
+		if(configKey.endsWith("warn"))
+			conf = WarnManager.getWarnConfig();
+		reloadCommand(configKey, conf.getBoolean("commands." + configKey),
 				manager, command, aliases);
 	}
 
@@ -202,30 +192,6 @@ public class SpongeNegativity {
 	@Listener
 	public void onGameReload(GameReloadEvent event) {
 		Adapter.getAdapter().reload();
-	}
-
-	@Listener
-	public void onAuth(ClientConnectionEvent.Auth e) {
-		UUID playerId = e.getProfile().getUniqueId();
-		NegativityAccount account = NegativityAccount.get(playerId);
-		Ban activeBan = BanManager.getActiveBan(playerId);
-		if (activeBan != null) {
-			String kickMsgKey;
-			String formattedExpiration;
-			if (activeBan.isDefinitive()) {
-				kickMsgKey = "ban.kick_def";
-				formattedExpiration = "definitively";
-			} else {
-				kickMsgKey = "ban.kick_time";
-				LocalDateTime expirationDateTime = LocalDateTime
-						.ofInstant(Instant.ofEpochMilli(activeBan.getExpirationTime()), ZoneId.systemDefault());
-				formattedExpiration = UniversalUtils.GENERIC_DATE_TIME_FORMATTER.format(expirationDateTime);
-			}
-			e.setCancelled(true);
-			e.setMessage(Messages.getMessage(account, kickMsgKey, "%reason%", activeBan.getReason(), "%time%",
-					formattedExpiration, "%by%", activeBan.getBannedBy()));
-			Adapter.getAdapter().getAccountManager().dispose(account.getPlayerId());
-		}
 	}
 
 	@Listener

@@ -21,11 +21,12 @@ import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.PlayerVersionMessage;
-import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
+import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteWarnMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ReportMessage;
 import com.elikill58.negativity.universal.pluginMessages.ShowAlertStatusMessage;
+import com.elikill58.negativity.universal.warn.WarnManager;
 
 public class ProxyEventsManager implements Listeners {
 
@@ -54,10 +55,10 @@ public class ProxyEventsManager implements Listeners {
 					if (hoverInfo != null) {
 						hover += "\n\n";
 						hover += Messages.getMessage(hoverInfo.compile(nPlayer));
-						hover += "\n\n";
-						hover += Messages.getMessage(mod, "alert_tp_info", "%playername%", playername);
 					}
-					ada.sendMessageRunnableHover(mod, msg, hover, getCommand(p, mod));
+					hover += "\n\n";
+					hover += Messages.getMessage(mod, "alert_tp_info", "%playername%", playername);
+					ada.sendMessageRunnableHover(mod, msg, hover, "/negativitytp " + p.getName());
 				}
 			}
 			if (e.isShouldBeSendToMultiProxy() && MultiProxyManager.isUsingMultiProxy())
@@ -71,17 +72,16 @@ public class ProxyEventsManager implements Listeners {
 				if (Perm.hasPerm(mod, Perm.SHOW_REPORT)) {
 					hasPermitted = true;
 					ada.sendMessageRunnableHover(mod, Messages.getMessage(mod, "report", place),
-							Messages.getMessage(mod, "report_hover", "%playername%", report.getReported()),
-							getCommand(p, mod));
+							Messages.getMessage(mod, "report_hover", "%playername%", report.getReported()), "/negativitytp " + p.getName());
 				}
 			}
 			if (!hasPermitted)
 				REPORTS.add(report);
 			if (e.isShouldBeSendToMultiProxy() && MultiProxyManager.isUsingMultiProxy())
 				MultiProxyManager.getMultiProxy().sendMessage(p, message);
-		} else if (message instanceof ProxyExecuteBanMessage) {
-			ProxyExecuteBanMessage banMessage = (ProxyExecuteBanMessage) message;
-			BanManager.executeBan(banMessage.getBan());
+		} else if (message instanceof ProxyExecuteWarnMessage) {
+			ProxyExecuteWarnMessage banMessage = (ProxyExecuteWarnMessage) message;
+			WarnManager.executeWarn(banMessage.getWarn());
 		} else if (message instanceof ProxyRevokeBanMessage) {
 			ProxyRevokeBanMessage revocationMessage = (ProxyRevokeBanMessage) message;
 			BanManager.revokeBan(revocationMessage.getPlayerId());
@@ -100,14 +100,5 @@ public class ProxyEventsManager implements Listeners {
 					new ProxyPingMessage(NegativityMessagesManager.PROTOCOL_VERSION, ada.getAllPlugins()));
 		} else
 			ada.getLogger().warn("Unhandled plugin message: " + message.getClass().getName());
-	}
-
-	private String getCommand(Player targetPlayer, Player notifiedPlayer) {
-		String targetPlayerServer = targetPlayer.getServerName();
-		String notifiedPlayerServer = notifiedPlayer.getServerName();
-		if (targetPlayerServer.equals(notifiedPlayerServer)) {
-			return "/negativitytp " + targetPlayer.getName();
-		}
-		return "/server " + targetPlayerServer;
 	}
 }

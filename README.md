@@ -3,7 +3,8 @@
 It's a Minecraft AntiCheat for multiples platforms :
 - **Spigot** 1.7.10 to 1.19 (*and fork like PaperSpigot or Tuinity*)
 - **Sponge** API 7, 8 & 9
-- **Fabric** v0.53.0 for 1.18
+- **Fabric** MC 1.19 & 1.19.2 (Download [here](https://github.com/Elikill58/NegativityFabric#negativityfabric))
+- **Minestom** 1.18.2
 
 Proxies:
 - **BungeeCord**
@@ -25,7 +26,7 @@ Check [installation wiki](https://github.com/Elikill58/Negativity/wiki/Installat
 
 ## I want to test it before download !
 
-You can check it on **server.negativity.fr** (server in 1.13.2, you can connect with 1.13.2 to 1.19). Warn: it can be offline.
+You can check it on **play.negativity.fr** (server in 1.18.2, you can connect with 1.9 to 1.19).
 
 ## What are the detected cheat ?
 
@@ -67,6 +68,7 @@ We support a lot of languages :
 - **Indonesian** (*id_ID*) By Dave9123#0757
 - **Thai** (*th_TH*) By IAmOverD҉A҉R҉K҉E҈S҉T҉#2498
 - **English (GB)** (*en_GB*) By NEWBTW#2108
+- **Turkish** (*tr_TR*) By 'Eternal The God 🕶#0707
 
 To change the lang, just use "/nlang" or change "Translation.default" to the one that you want.
 
@@ -87,15 +89,36 @@ For permissions config, [click here](https://github.com/Elikill58/Negativity/wik
 Prerequisites:
 - [Git](https://git-scm.com)
 - JDK 8 (any distribution should work, [AdoptOpenJDK](https://adoptopenjdk.net/?variant=openjdk8&jvmVariant=hotspot) for example)
+- JDK 17 (any distribution should work) recommended for latest minecraft version (also work with lower versions)
 
 In the following instructions you will have to execute Gradle tasks. You **must** use the Gradle wrapper distributed in this repository.
 
 Examples will be using `./gradlew`, if you are on Windows you need to use `gradlew.bat` instead.
 
 1. Clone this repository: `git clone https://github.com/Elikill58/Negativity.git`
-2. Get Spigot 1.7.10 and 1.13.2 jars and put them in `/spigot/spigotJars/` (you need to create this directory too)
-3. You should use buildtools for Spigot 1.17/1.18/1.18.2/1.19 (or comment them in `settings.gradle`)
-4. Setup a Forge workspace for the Sponge plugin: `./gradlew :sponge7:setupDecompWorkspace`. This step will take some time to complete
-5. Build the plugin: `./gradlew build`
+
+2. Change branch to v2 using `git checkout v2`
+
+3. There is 2 ways (warn: first setup take some times to complete) :
+
+#### Use installation script
+
+On Windows, you must use [Git bash](https://gitforwindows.org/). On Linux and MacOS use the regular terminal.
+
+Run `./setup_spigot.sh`. It will download spigot jars and JDKs, and use BuildTools appropriately.
+
+You just need to copy 1.7.10 spigot jar file.
+
+#### Manually install spigot jars
+
+- Create a folder called `spigotJars` in `spigot/`
+
+- Download every spigot version of spigot listed below from [this link](https://getbukkit.org/download/spigot) and put them in `spigot/spigotJars` Versions: 
+ `1.7.10, 1.8.8, 1.9, 1.9.4, 1.10.2, 1.11.2, 1.12.2, 1.13`(you need to add a + at the beginning of the name (+spigot1.13.jar for example)`, 
+ 1.13.2, 1.14.4, 1.15.2, 1.16.1, 1.16.5`
+
+- You should use buildtools with this command `java -jar BuildTools.jar --rev <version> --remapped` for Spigot 1.17/1.18/1.18.2/1.19 (or comment them in `settings.gradle`).
+
+4. Build the plugin: `./gradlew build`
  - You can find the all-in-one jar in `/build/libs/`
  - Platform-specific jars are available in their own project subdirectories (`/spigot/build/libs/` for example)

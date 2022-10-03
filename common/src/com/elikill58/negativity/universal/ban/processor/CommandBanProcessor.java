@@ -11,10 +11,10 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 
 public class CommandBanProcessor implements BanProcessor {
 
@@ -37,7 +37,7 @@ public class CommandBanProcessor implements BanProcessor {
 	public BanResult revokeBan(UUID playerId) {
 		Adapter adapter = Adapter.getAdapter();
 		unbanCommands.forEach(cmd -> adapter.runConsoleCommand(applyPlaceholders(cmd, playerId, "Unknown")));
-		return new BanResult(new Ban(playerId, "Unknown", "Unknown", BanType.UNKNOW, 0, null, null, BanStatus.REVOKED, -1, System.currentTimeMillis()));
+		return new BanResult(new Ban(playerId, "Unknown", "Unknown", SanctionnerType.UNKNOW, 0, null, null, BanStatus.REVOKED, -1, System.currentTimeMillis()));
 	}
 
 	@Nullable

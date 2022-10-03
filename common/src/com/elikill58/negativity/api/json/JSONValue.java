@@ -16,7 +16,7 @@ import java.util.Map;
 import com.elikill58.negativity.api.json.parser.JSONParser;
 
 /**
- * @author FangYidong<fangyidong@yahoo.com.cn>
+ * @author FangYidong
  */
 @SuppressWarnings("rawtypes")
 public class JSONValue {
@@ -25,9 +25,8 @@ public class JSONValue {
 	 * parseWithException() if you don't want to ignore the exception.
 	 * 
 	 * @see com.elikill58.negativity.api.json.parser.JSONParser#parse(Reader)
-	 * @see #parseWithException(Reader)
 	 * 
-	 * @param in
+	 * @param in the reader where json comes from
 	 * @return Instance of the following: org.json.JSONObject, org.json.JSONArray,
 	 *         java.lang.String, java.lang.Number, java.lang.Boolean, null
 	 * 
@@ -49,9 +48,8 @@ public class JSONValue {
 	 * parseWithException() if you don't want to ignore the exception.
 	 * 
 	 * @see com.elikill58.negativity.api.json.parser.JSONParser#parse(Reader)
-	 * @see #parseWithException(Reader)
 	 * 
-	 * @param s
+	 * @param s the string of json
 	 * @return Instance of the following: org.json.JSONObject, org.json.JSONArray,
 	 *         java.lang.String, java.lang.Number, java.lang.Boolean, null
 	 * 
@@ -79,7 +77,9 @@ public class JSONValue {
 	 * @see com.elikill58.negativity.api.json.JSONArray#writeJSONString(Collection, Writer)
 	 * 
 	 * @param value the value to write
-	 * @param writer where write it
+	 * @param out where write it
+	 * 
+	 * @throws IOException if failed to write into writer
 	 */
 	public static void writeJSONString(Object value, Writer out) throws IOException {
 		if (value == null) {

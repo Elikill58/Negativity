@@ -9,6 +9,7 @@ import java.util.LinkedHashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.universal.Adapter;
 
@@ -16,9 +17,10 @@ import com.elikill58.negativity.universal.Adapter;
 public final class Configuration {
 	
     //private static final char SEPARATOR = '.';
-    final Map<String, Object> self;
-    private final Configuration defaults;
-    private final File file;
+	protected final Map<String, Object> self;
+	protected final Configuration defaults;
+	protected final File file;
+	protected boolean isSaving = false;
     
     public Configuration() {
         this(null);
@@ -326,7 +328,23 @@ public final class Configuration {
         return (List<?>)((val instanceof List) ? ((List<?>)val) : def);
     }
     
+    /**
+     * Save but thread-safely. Will use {@link FileSaverTimer} feature
+     */
     public void save() {
+    	if(isSaving)
+    		return;
+    	isSaving = true;
+    	CompletableFuture.runAsync(() -> {
+    		directSave();
+        	isSaving = false;
+    	});
+    }
+    
+    /**
+     * Directly save on the current thread
+     */
+    public void directSave() {
     	try {
 			YamlConfiguration.save(this, file);
 		} catch (IOException e) {

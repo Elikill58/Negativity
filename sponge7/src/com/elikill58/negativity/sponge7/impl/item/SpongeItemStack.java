@@ -77,10 +77,66 @@ public class SpongeItemStack extends com.elikill58.negativity.api.item.ItemStack
 	
 	private EnchantmentType getEnchantType(Enchantment enchant) {
 		switch (enchant) {
-		case DIG_SPEED:
+		case EFFICIENCY:
 			return EnchantmentTypes.EFFICIENCY;
 		case THORNS:
 			return EnchantmentTypes.THORNS;
+		case AQUA_AFFINITY:
+			return EnchantmentTypes.AQUA_AFFINITY;
+		case BANE_OF_ARTHROPODS:
+			return EnchantmentTypes.BANE_OF_ARTHROPODS;
+		case BINDING_CURSE:
+			return EnchantmentTypes.BINDING_CURSE;
+		case BLAST_PROTECTION:
+			return EnchantmentTypes.BLAST_PROTECTION;
+		case DEPTH_STRIDER:
+			return EnchantmentTypes.DEPTH_STRIDER;
+		case FEATHER_FALLING:
+			return EnchantmentTypes.FEATHER_FALLING;
+		case FIRE_ASPECT:
+			return EnchantmentTypes.FIRE_ASPECT;
+		case FIRE_PROTECTION:
+			return EnchantmentTypes.FIRE_PROTECTION;
+		case FLAME:
+			return EnchantmentTypes.FLAME;
+		case FORTUNE:
+			return EnchantmentTypes.FORTUNE;
+		case FROST_WALKER:
+			return EnchantmentTypes.FROST_WALKER;
+		case INFINITY:
+			return EnchantmentTypes.INFINITY;
+		case KNOCKBACK:
+			return EnchantmentTypes.KNOCKBACK;
+		case LOOTING:
+			return EnchantmentTypes.LOOTING;
+		case LUCK_OF_THE_SEA:
+			return EnchantmentTypes.LUCK_OF_THE_SEA;
+		case LURE:
+			return EnchantmentTypes.LURE;
+		case MENDING:
+			return EnchantmentTypes.MENDING;
+		case POWER:
+			return EnchantmentTypes.POWER;
+		case PROJECTILE_PROTECTION:
+			return EnchantmentTypes.PROJECTILE_PROTECTION;
+		case PROTECTION:
+			return EnchantmentTypes.PROTECTION;
+		case PUNCH:
+			return EnchantmentTypes.PUNCH;
+		case RESPIRATION:
+			return EnchantmentTypes.RESPIRATION;
+		case SHARPNESS:
+			return EnchantmentTypes.SHARPNESS;
+		case SILK_TOUCH:
+			return EnchantmentTypes.SILK_TOUCH;
+		case SMITE:
+			return EnchantmentTypes.SMITE;
+		case SWEEPING:
+			return EnchantmentTypes.SWEEPING;
+		case UNBREAKING:
+			return EnchantmentTypes.UNBREAKING;
+		case VANISHING_CURSE:
+			return EnchantmentTypes.VANISHING_CURSE;
 		default:
 			throw new RuntimeException("Unhandled enchantment " + enchant);
 		}

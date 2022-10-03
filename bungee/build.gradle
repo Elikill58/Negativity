@@ -42,8 +42,8 @@ processResources {
 }
 
 shadowJar {
-    archiveBaseName.set('negativity')
-    archiveAppendix.set('bungeecord')
+    archiveBaseName.set('NegativityBungeecord')
+    archiveAppendix.set(null)
     archiveClassifier.set(null)
 
     relocate('org.bstats.bungeecord', 'com.elikill58.negativity.bungee')

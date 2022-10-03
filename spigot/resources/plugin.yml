@@ -4,7 +4,7 @@ version: ${version}
 author: [Elikill58, RedNesto]
 description: It's an Advanced AntiCheat Detection, by Elikill58.
 api-version: 1.13
-softdepend: [ProtocolLib, Essentials, WorldGuard, GadgetsMenu, MaxBans, AdvancedBan, LiteBans, ViaVersion, ProtocolSupport, floodgate-bukkit, floodgate]
+softdepend: [ProtocolLib, Essentials, WorldGuard, GadgetsMenu, MaxBans, AdvancedBan, LiteBans, ViaVersion, ProtocolSupport, floodgate-bukkit, floodgate, UltraPunishments]
 
 commands:
   negativity:
@@ -18,15 +18,12 @@ commands:
   nban:
     description: Ban a player
     permission: negativity.ban
-    aliases: [ban]
   nunban:
     description: Unban a player
     permission: negativity.unban
-    aliases: [unban]
   nkick:
     description: Kick a player
     permission: negativity.kick
-    aliases: [kick]
   nmod:
     description: Option for mod
     permission: negativity.mod
@@ -43,6 +40,10 @@ commands:
     description: Lock chat for not-bypass people
     permission: negativity.chat.lock
     aliases: [lockchat]
+  nwarn:
+    description: Warn a player
+    permission: negativity.warn
+    aliases: [warn]
 
 permissions:
   negativity.*:
@@ -59,6 +60,7 @@ permissions:
       negativity.mod: true
       negativity.managecheat: true
       negativity.reportwait: true
+      negativity.warn: true
   negativity.negativity:
     description: See all informations about a player and start verif
     default: op

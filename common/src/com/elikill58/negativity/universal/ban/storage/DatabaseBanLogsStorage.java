@@ -9,9 +9,9 @@ import java.util.List;
 import java.util.UUID;
 
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.database.Database;
 import com.elikill58.negativity.universal.database.DatabaseMigrator;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -48,7 +48,7 @@ public class DatabaseBanLogsStorage implements BanLogsStorage {
 				long executionTime = executionTimestamp == null ? -1 : executionTimestamp.getTime();
 				Timestamp revocationTimestamp = rs.getTimestamp("revocation_time");
 				long revocationTime = revocationTimestamp == null ? -1 : revocationTimestamp.getTime();
-				loadedBans.add(new Ban(playerId, reason, bannedBy, BanType.UNKNOW, expirationTime, cheatName, ip, status, executionTime, revocationTime));
+				loadedBans.add(new Ban(playerId, reason, bannedBy, SanctionnerType.UNKNOW, expirationTime, cheatName, ip, status, executionTime, revocationTime));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

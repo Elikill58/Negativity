@@ -83,7 +83,7 @@ public class SpongeEntity<E extends Entity> extends AbstractEntity {
 	@Override
 	public Location getEyeLocation() {
 		Vector3d vec = entity.getProperty(EyeLocationProperty.class).map(EyeLocationProperty::getValue).orElse(entity.getRotation());
-		return new Location(new SpongeWorld(entity.getWorld()), vec.getX(), vec.getY(), vec.getZ());
+		return new Location(World.getWorld(entity.getWorld().getName(), a -> new SpongeWorld(entity.getWorld())), vec.getX(), vec.getY(), vec.getZ());
 	}
 	
 	@Override

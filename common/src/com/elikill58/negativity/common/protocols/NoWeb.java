@@ -10,6 +10,7 @@ import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -19,7 +20,7 @@ import com.elikill58.negativity.universal.utils.UniversalUtils;
 public class NoWeb extends Cheat {
 
 	public NoWeb() {
-		super(CheatKeys.NO_WEB, CheatCategory.MOVEMENT, WEB);
+		super(CheatKeys.NO_WEB, CheatCategory.MOVEMENT, WEB, EmptyData::new);
 	}
 
 	@Check(name = "speed", description = "Speed on web", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_FLY })

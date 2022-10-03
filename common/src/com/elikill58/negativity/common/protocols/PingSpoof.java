@@ -2,88 +2,62 @@ package com.elikill58.negativity.common.protocols;
 
 import static com.elikill58.negativity.universal.detections.keys.CheatKeys.PINGSPOOF;
 
-import java.io.IOException;
-import java.time.Duration;
-
 import com.elikill58.negativity.api.NegativityPlayer;
-import com.elikill58.negativity.api.entity.Player;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.events.EventListener;
 import com.elikill58.negativity.api.events.Listeners;
-import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
+import com.elikill58.negativity.api.events.packets.PacketEvent;
+import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
+import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.api.utils.Utils;
-import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Negativity;
-import com.elikill58.negativity.universal.Scheduler;
+import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.PacketType;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.protocols.Check;
+import com.elikill58.negativity.common.protocols.data.PingSpoofData;
 import com.elikill58.negativity.universal.detections.Cheat;
-import com.elikill58.negativity.universal.report.ReportType;
-import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerifData;
 import com.elikill58.negativity.universal.verif.VerifData.DataType;
 import com.elikill58.negativity.universal.verif.data.DataCounter;
-import com.elikill58.negativity.universal.verif.data.IntegerDataCounter;
+import com.elikill58.negativity.universal.verif.data.LongDataCounter;
 
 public class PingSpoof extends Cheat implements Listeners {
 
-	public static final DataType<Integer> PLAYER_PING = new DataType<Integer>("player_ping", "Ping", () -> new IntegerDataCounter());
+	public static final DataType<Long> PLAYER_PING = new DataType<Long>("player_ping", "Ping", LongDataCounter::new);
 	
 	public PingSpoof() {
-		super(PINGSPOOF, CheatCategory.PLAYER, Materials.SPONGE, CheatDescription.VERIF);
+		super(PINGSPOOF, CheatCategory.PLAYER, Materials.SPONGE, PingSpoofData::new, CheatDescription.VERIF);
+	}
 
-		if (checkActive("reachable")) {
-			Scheduler.getInstance().runRepeatingAsync(() -> {
-				for (Player p : Adapter.getAdapter().getOnlinePlayers()) {
-					NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-					if (np.hasDetectionActive(PingSpoof.this))
-						managePingSpoof(p, np);
-				}
-			}, Duration.ofMillis(300), Duration.ofMillis(300), "Negativity PingSpoof Monitor");
+	@Check(name = "packet", description = "Check for packet order")
+	public void onPacket(PacketEvent e, NegativityPlayer np) {}
+	
+	@EventListener
+	public void onPacketSent(PacketSendEvent e) {
+		AbstractPacket packet = e.getPacket();
+		if(packet.getPacketType().equals(PacketType.Server.KEEP_ALIVE)) {
+			PingSpoofData data = NegativityPlayer.getNegativityPlayer(e.getPlayer()).getCheckData(this);
+			data.pingId = ((NPacketPlayOutKeepAlive) packet.getPacket()).time;
+			data.pingTime = System.currentTimeMillis();
 		}
 	}
 	
 	@EventListener
-	public void onMove(PlayerMoveEvent e) {
-		NegativityPlayer.getNegativityPlayer(e.getPlayer()).longs.get(getKey(), "last-move", System.currentTimeMillis());
+	public void onPacketReceive(PacketReceiveEvent e) {
+		AbstractPacket packet = e.getPacket();
+		if(packet.getPacketType().equals(PacketType.Client.KEEP_ALIVE)) {
+			NPacketPlayInKeepAlive keepAlive = (NPacketPlayInKeepAlive) packet.getPacket();
+			PingSpoofData data = NegativityPlayer.getNegativityPlayer(e.getPlayer()).getCheckData(this);
+			if(data.pingId == keepAlive.time && data.pingId != 0) {
+				recordData(e.getPlayer().getUniqueId(), PLAYER_PING, System.currentTimeMillis() - data.pingTime);
+			}
+		}
 	}
 	
 	@Override
 	public String makeVerificationSummary(VerifData data, NegativityPlayer np) {
-		DataCounter<Integer> counters = data.getData(PLAYER_PING);
-		return Utils.coloredMessage("Latency (Sum/Min/Max) : " + counters.getAverage() + "/" + counters.getMin() + "/" + counters.getMax());
+		DataCounter<Long> counters = data.getData(PLAYER_PING);
+		return ChatColor.color("Latency (Sum/Min/Max) : " + counters.getAverage() + "/" + counters.getMin() + "/" + counters.getMax());
 	}
-
-	/**
-	 * Manage the ping and check if it spoof
-	 * Method: reachable
-	 * Warn: this function have to be called ASYNC.
-	 * 
-	 * @param p the player to check ping
-	 * @param np the negativity player of player
-	 */
-	public void managePingSpoof(Player p, NegativityPlayer np) {
-		int newPing = p.getPing(), lastPing = np.ints.get(PINGSPOOF, "last-ping", -1);
-		if (newPing == lastPing) // ping don't change
-			return;
-		recordData(p.getUniqueId(), PLAYER_PING, newPing);
-		np.ints.set(PINGSPOOF, "last-ping", newPing);
-		if(!np.booleans.get(PINGSPOOF, "can-ping-spoof", false) && newPing < 10000) {
-			if(newPing <= 200)
-				np.booleans.set(PINGSPOOF, "can-ping-spoof", true);
-			return;
-		}
-		long lastMove = System.currentTimeMillis() - np.longs.get(getKey(), "last-move", 0l);
-		if (newPing <= getConfig().getInt("checks.reachable.min_ping", 400) || lastPing == 0 || lastMove < 2000)
-			return;
-		if (newPing < lastPing && ((newPing * 1.2) < lastPing || newPing < 1000)) // if ping is going normal
-			return;
-		try {
-			if (p.getAddress().getAddress().isReachable(newPing)) {
-				Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(newPing - lastPing), "reachable",
-						"Last ping: " + lastPing + ", new ping: " + newPing + ".");
-			}
-		} catch (IOException e1) {
-			e1.printStackTrace();
-		}
-	}
-
 }

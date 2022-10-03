@@ -68,6 +68,16 @@ public interface OfflinePlayer extends Entity {
 	default void sendMessage(String msg) {}
 	
 	@Override
+	default BoundingBox getBoundingBox() {
+		return null;
+	}
+	
+	@Override
+	default String getEntityId() {
+		return null;
+	}
+	
+	@Override
 	default double getEyeHeight() {
 		return 0;
 	}

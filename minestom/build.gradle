@@ -1,0 +1,63 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+
+plugins {
+    id 'com.github.johnrengelman.shadow'
+}
+
+sourceSets {
+    main {
+        java.srcDirs = ['src']
+        resources.srcDirs = ['resources']
+    }
+}
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
+
+dependencies {
+    api project(':common')
+
+    compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
+}
+
+compileJava.javaCompiler.set(
+    javaToolchains.compilerFor { languageVersion = JavaLanguageVersion.of(17) }
+)
+
+processResources {
+    inputs.property "version", project.version
+
+    filesMatching("extension.json") {
+        expand "version": project.version
+    }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    // Minecraft 1.18 (1.18-pre2) upwards uses Java 17.
+    it.options.release = 17
+}
+
+shadowJar {
+    archiveBaseName.set('NegativityMinestom')
+    archiveAppendix.set('1.19.2')
+    archiveClassifier.set(null)
+
+    mergeServiceFiles()
+    from(project(':common').tasks.shadowJar)
+}
+
+build.dependsOn shadowJar
+
+parent.tasks.named('shadowJar', ShadowJar) {
+    it.from(shadowJar.outputs)
+}
+
+task prepareServer(type: Copy) {
+    from shadowJar
+    rename { 'negativity.jar' }
+    def pluginDir = System.getProperty('plugins.dir')
+    if (pluginDir == null) {
+        enabled(false)
+    } else {
+        into pluginDir
+    }
+}

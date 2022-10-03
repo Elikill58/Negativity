@@ -1,13 +1,11 @@
 package com.elikill58.negativity.common.protocols;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.Entity;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
@@ -20,7 +18,7 @@ import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.api.utils.LocationUtils;
 import com.elikill58.negativity.api.utils.LocationUtils.Direction;
-import com.elikill58.negativity.api.utils.Utils;
+import com.elikill58.negativity.common.protocols.data.AimbotData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.bedrock.BedrockPlayerManager;
 import com.elikill58.negativity.universal.detections.Cheat;
@@ -43,40 +41,58 @@ public class AimBot extends Cheat {
 			() -> new IntegerDataCounter());
 
 	public AimBot() {
-		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, CheatDescription.VERIF);
+		super(CheatKeys.AIM_BOT, CheatCategory.COMBAT, Materials.TNT, AimbotData::new, CheatDescription.VERIF);
+	}
+
+	// many killauras use a constant pitch in order to bypass the GDC check
+	// this check will fight against that and fail these killauras
+	@Check(name = "ratio", conditions = { CheckConditions.SURVIVAL, CheckConditions.NO_INSIDE_VEHICLE }, description = "Checks for invalid rotation ratios", ignoreCancel = true)
+	public void ratio(PacketReceiveEvent e, NegativityPlayer np, AimbotData data) {
+		if (!e.hasPlayer())
+			return;
+		PacketType type = e.getPacket().getPacketType();
+		if (type.isFlyingPacket()) {
+			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
+			if (!flying.hasLook || !np.isAttacking)
+				return;
+			double difference = Math.abs(np.delta.getPitch() - data.lastDeltaPitchStreak);
+			double absoluteDeltaYaw = Math.abs(np.delta.getYaw());
+			if (difference < 0.005 && absoluteDeltaYaw > .65 && difference != 0) {
+				// increment streak
+
+				if (data.ratioStreak++ > 7) {
+					if(Negativity.alertMod(ReportType.WARNING, np.getPlayer(), this, 100, "ratio", "absYaw: "
+							+ String.format("%.3f", absoluteDeltaYaw) + ", streak: " + data.ratioStreak + ", difference: "
+							+ String.format("%.3f", difference)) && isSetBack())
+						e.setCancelled(true);
+					
+					data.ratioStreak -= 3;
+				}
+			} else {
+				data.ratioStreak = 0;
+			}
+			data.lastDeltaPitchStreak = np.delta.getPitch();
+		}
 	}
 
 	@Check(name = "gcd", conditions = CheckConditions.SURVIVAL, description = "Calculate GCD between attacks", ignoreCancel = true)
-	public void gcd(PacketReceiveEvent e, NegativityPlayer np) {
+	public void gcd(PacketReceiveEvent e, NegativityPlayer np, AimbotData data) {
 		if (!e.hasPlayer())
 			return;
 		Player p = e.getPlayer();
 		PacketType type = e.getPacket().getPacketType();
 		if (type.isFlyingPacket()) {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
-			if (!flying.hasLook)
+			if (!flying.hasLook || !np.isAttacking)
 				return;
-			List<Double> allPitchs = np.listDoubles.get(getKey(), "all-pitchs",
-					new ArrayList<Double>(Arrays.asList(0d, 0d, 0d, 0d, 0d, 0d, 0d)));
-			List<Integer> allInvalidChanges = np.listIntegers.get(getKey(), "all-invalid-changes",
-					new ArrayList<Integer>(Arrays.asList(0, 0, 0, 0, 0, 0, 0)));
-			double deltaYaw = flying.yaw - np.doubles.get(getKey(), "last-yaw", 0.0);
-			double deltaPitch = flying.pitch - np.doubles.get(getKey(), "last-pitch", 0.0);
+
 			double pitch = flying.pitch;
-			double lastDeltaPitch = np.doubles.get(getKey(), "last-delta-pitch", 0.0);
-
-			np.doubles.set(getKey(), "last-yaw", (double) flying.yaw);
-			np.doubles.set(getKey(), "last-yaw", (double) flying.pitch);
-			np.doubles.set(getKey(), "last-delta-pitch", deltaPitch);
-			if (!np.isAttacking)
-				return;
-
-			allPitchs.add(pitch);
+			data.allPitchs.add(pitch);
 
 			int invalidChange = 0;
 			double last = pitch, pitchMore = pitch, pitchLess = pitch;
 			Boolean up = null;
-			for (double actual : allPitchs) {
+			for (double actual : data.allPitchs) {
 				boolean isUp = actual > last;
 				if (up != null && isUp != up && Math.abs(actual - last) > 2) {
 					invalidChange++;
@@ -90,27 +106,27 @@ public class AimBot extends Cheat {
 				else if (actual < pitchLess)
 					pitchLess = actual;
 			}
-			allInvalidChanges.add(invalidChange);
+			data.allInvalidChanges.add(invalidChange);
 
-			double gcd = getGcdForLong((long) deltaPitch, (long) lastDeltaPitch);
-			int averageInvalid = (int) allInvalidChanges.stream().mapToInt(a -> a).average().orElse(0);
-			boolean exempt = !(Math.abs(pitch) < 82.5F) || deltaYaw < 5.0;
+			double gcd = getGcdForLong((long) np.delta.getPitch(), (long) np.lastDelta.getPitch());
+			int averageInvalid = (int) data.allInvalidChanges.stream().mapToInt(a -> a).average().orElse(0);
+			boolean exempt = !(Math.abs(pitch) < 82.5F) || np.delta.getYaw() < 5.0;
 			if (!exempt && Math.abs(gcd) > np.sensitivity / getConfig().getInt("checks.gcd.sensitivity-divider", 15)
 					&& invalidChange > getConfig().getInt("checks.gcd.invalid-change", 3) && averageInvalid > 2
 					&& !(pitchLess < 0 && pitchMore < 50) && Math.abs(pitchLess - pitchMore) > 20) {
-				String allPitchStr = allPitchs.stream().map((d) -> String.format("%.3f", d))
+				String allPitchStr = data.allPitchs.stream().map((d) -> String.format("%.3f", d))
 						.collect(Collectors.toList()).toString();
 				Negativity.alertMod(ReportType.WARNING, p, this, 100, "gcd", "GCD: " + gcd + ", allPitchs: "
 						+ allPitchStr + ", sens: " + String.format("%.3f", np.sensitivity) + ", changes: "
-						+ invalidChange + ", allChanges: " + allInvalidChanges + ", avInvalid: " + averageInvalid
+						+ invalidChange + ", allChanges: " + data.allInvalidChanges + ", avInvalid: " + averageInvalid
 						+ ", More/Less: " + String.format("%.3f", pitchMore) + "/" + String.format("%.3f", pitchLess));
 			}
 			recordData(p.getUniqueId(), GCD, gcd);
 			recordData(p.getUniqueId(), PITCHS, pitch);
 			recordData(p.getUniqueId(), INVALID_CHANGE, invalidChange);
 
-			allPitchs.remove(0);
-			allInvalidChanges.remove(0);
+			data.allPitchs.remove(0);
+			data.allInvalidChanges.remove(0);
 		}
 	}
 
@@ -124,14 +140,14 @@ public class AimBot extends Cheat {
 			return;
 		Player p = e.getPlayer();
 		Entity cible = e.getDamaged();
-		Location loc = p.getLocation(), cloc = cible.getLocation();
-		boolean notSure = false;
-		if(loc.getY() >= cloc.getY() && loc.getPitch() > 60) // looking just below and entity is down
-			notSure = true;
-		if(loc.getY() <= cloc.getY() && loc.getPitch() < -60) // looking just upper and entity is up
-			notSure = true;
-		double angle = LocationUtils.getAngleTo(p, cloc);
-		Direction direction = LocationUtils.getDirection(angle);
+		Location loc = np.getPingedLocation(), cloc = cible instanceof Player ? NegativityPlayer.getNegativityPlayer((Player) cible).getPingedLocation() : cible.getLocation();
+		if(!p.getWorld().equals(cloc.getWorld())) // entity just beeing tp
+			return;
+		double xzDistance = loc.distanceXZ(cloc);
+		if(xzDistance < 0.5)
+			return;
+		boolean notSure = xzDistance < 1; // if X/Z distance too low
+		Direction direction = LocationUtils.getDirection(p, cloc);
 		long amount = 0;
 		int reliability = 0;
 		switch (direction) {
@@ -158,14 +174,12 @@ public class AimBot extends Cheat {
 		case RIGHT:
 			if(notSure)
 				return;
-			if(Math.abs(angle) < 80)
-				return;
-			amount = 2;
-			reliability = 90;
+			amount = 1;
+			reliability = 75;
 			break;
 		}
 		if(amount > 0)
-			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(reliability + (notSure ? -10 : 0)), "direction", "Pos: " + p.getLocation() + " / " + cible.getLocation() + ", dir: " + direction.name() + " (" + angle + "°)", null, amount);
+			Negativity.alertMod(ReportType.WARNING, p, this, UniversalUtils.parseInPorcent(reliability + (notSure ? -10 : 0)), "direction", "Pos: " + p.getLocation() + " / " + cible.getLocation() + ", dir: " + direction.name() + ", xzDis: " + xzDistance, null, amount);
 	}
 	
 	@Override
@@ -173,7 +187,7 @@ public class AimBot extends Cheat {
 		DataCounter<Double> gcdCounter = data.getData(GCD);
 		DataCounter<Double> pitchCounter = data.getData(PITCHS);
 		DataCounter<Integer> invalidChangeCounter = data.getData(INVALID_CHANGE);
-		return Utils.coloredMessage("&7Average GCD: &e" + String.format("%.2f", gcdCounter.getAverage())
+		return ChatColor.color("&7Average GCD: &e" + String.format("%.2f", gcdCounter.getAverage())
 				+ "&7. Pitchs: max/min/ave &e" + String.format("%.2f", pitchCounter.getMax()) + "&7/&e"
 				+ String.format("%.2f", pitchCounter.getMin()) + "&7/&e"
 				+ String.format("%.2f", pitchCounter.getAverage()) + "&7. "

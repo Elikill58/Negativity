@@ -1,6 +1,7 @@
 package com.elikill58.negativity.api.inventory;
 
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.EventListener;
@@ -9,29 +10,34 @@ import com.elikill58.negativity.api.events.inventory.InventoryClickEvent;
 import com.elikill58.negativity.api.inventory.AbstractInventory.NegativityInventory;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.common.inventories.ReportInventory;
-import com.elikill58.negativity.common.inventories.admin.AdminAlertInventory;
-import com.elikill58.negativity.common.inventories.admin.AdminInventory;
-import com.elikill58.negativity.common.inventories.admin.BanManagerInventory;
-import com.elikill58.negativity.common.inventories.admin.BanProcessorManagerInventory;
-import com.elikill58.negativity.common.inventories.admin.CheatChecksInventory;
-import com.elikill58.negativity.common.inventories.admin.CheatDescriptionInventory;
-import com.elikill58.negativity.common.inventories.admin.CheatManagerInventory;
-import com.elikill58.negativity.common.inventories.admin.LangInventory;
-import com.elikill58.negativity.common.inventories.admin.OneCheatInventory;
-import com.elikill58.negativity.common.inventories.admin.OneSpecialInventory;
-import com.elikill58.negativity.common.inventories.admin.SpecialManagerInventory;
-import com.elikill58.negativity.common.inventories.mod.FreezeInventory;
-import com.elikill58.negativity.common.inventories.mod.ModInventory;
-import com.elikill58.negativity.common.inventories.players.ActivedCheatInventory;
-import com.elikill58.negativity.common.inventories.players.AlertInventory;
-import com.elikill58.negativity.common.inventories.players.AlertOfflineInventory;
-import com.elikill58.negativity.common.inventories.players.BanInventory;
-import com.elikill58.negativity.common.inventories.players.CheckMenuInventory;
-import com.elikill58.negativity.common.inventories.players.CheckMenuOfflineInventory;
-import com.elikill58.negativity.common.inventories.players.ForgeModsInventory;
-import com.elikill58.negativity.common.inventories.players.KickInventory;
-import com.elikill58.negativity.common.inventories.players.SeeReportInventory;
+import com.elikill58.negativity.common.inventories.hook.ReportInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.AdminAlertInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.AdminInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.LangInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.ban.BanManagerInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.ban.BanProcessorManagerInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.detections.CheatChecksInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.detections.CheatDescriptionInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.detections.CheatManagerInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.detections.OneCheatInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.detections.OneSpecialInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.detections.SpecialManagerInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.warn.WarnManagerInventory;
+import com.elikill58.negativity.common.inventories.hook.admin.warn.WarnProcessorManagerInventory;
+import com.elikill58.negativity.common.inventories.hook.mod.FreezeInventory;
+import com.elikill58.negativity.common.inventories.hook.mod.ModInventory;
+import com.elikill58.negativity.common.inventories.hook.players.ActivedCheatInventory;
+import com.elikill58.negativity.common.inventories.hook.players.AlertInventory;
+import com.elikill58.negativity.common.inventories.hook.players.BanInventory;
+import com.elikill58.negativity.common.inventories.hook.players.ForgeModsInventory;
+import com.elikill58.negativity.common.inventories.hook.players.GlobalPlayerInventory;
+import com.elikill58.negativity.common.inventories.hook.players.KickInventory;
+import com.elikill58.negativity.common.inventories.hook.players.SeeProofInventory;
+import com.elikill58.negativity.common.inventories.hook.players.SeeReportInventory;
+import com.elikill58.negativity.common.inventories.hook.players.SeeWarnInventory;
+import com.elikill58.negativity.common.inventories.hook.players.WarnInventory;
+import com.elikill58.negativity.common.inventories.hook.players.offline.AlertOfflineInventory;
+import com.elikill58.negativity.common.inventories.hook.players.offline.GlobalPlayerOfflineInventory;
 
 public class InventoryManager implements Listeners {
 	
@@ -44,8 +50,8 @@ public class InventoryManager implements Listeners {
 		new BanInventory();
 		new BanManagerInventory();
 		new BanProcessorManagerInventory();
-		new CheckMenuInventory();
-		new CheckMenuOfflineInventory();
+		new GlobalPlayerInventory();
+		new GlobalPlayerOfflineInventory();
 		new CheatManagerInventory();
 		new CheatDescriptionInventory();
 		new SpecialManagerInventory();
@@ -59,6 +65,11 @@ public class InventoryManager implements Listeners {
 		new SeeReportInventory();
 		new ReportInventory();
 		new KickInventory();
+		new WarnInventory();
+		new WarnManagerInventory();
+		new WarnProcessorManagerInventory();
+		new SeeWarnInventory();
+		new SeeProofInventory();
 		AbstractInventory.INVENTORIES.forEach(AbstractInventory::load);
 	}
 	
@@ -77,7 +88,7 @@ public class InventoryManager implements Listeners {
 				if (m.equals(Materials.BARRIER)) {
 					p.closeInventory();
 				} else {
-					inv.manageInventory(e, m, p, nh);
+					CompletableFuture.runAsync(() -> inv.manageInventory(e, m, p, nh)); // do all inventory things async
 				}
 				return;
 			}
@@ -100,6 +111,6 @@ public class InventoryManager implements Listeners {
 	 * @param args the arguments to open the inventory
 	 */
 	public static void open(NegativityInventory type, Player p, Object... args) {
-		getInventory(type).ifPresent((inv) -> inv.openInventory(p, args));
+		CompletableFuture.runAsync(() -> getInventory(type).ifPresent((inv) -> inv.openInventory(p, args)));
 	}
 }

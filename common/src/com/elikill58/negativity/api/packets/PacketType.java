@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.concurrent.Callable;
 
 import com.elikill58.negativity.api.packets.packet.NPacket;
-import com.elikill58.negativity.api.packets.packet.NPacketUnknown;
+import com.elikill58.negativity.api.packets.packet.NPacketUnset;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInListener;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeInSetProtocol;
 import com.elikill58.negativity.api.packets.packet.handshake.NPacketHandshakeUnset;
@@ -26,10 +26,10 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehicle;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
@@ -37,8 +37,8 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosi
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
-import com.elikill58.negativity.universal.Adapter;
 
 public interface PacketType {
 
@@ -111,9 +111,23 @@ public interface PacketType {
 		return list;
 	}
 	
+	public static NPacket createEmptyOrUnsetPacket(PacketDirection dir, String packetName) {
+		for(PacketType packet : dir.getTypes()) {
+			if(packet.getFullName().equalsIgnoreCase(packetName) || packet.getPacketName().equalsIgnoreCase(packetName)  || packet.getAlias().contains(packetName)) {
+				NPacket p = packet.createNewPacket();
+				if(p != null && p instanceof NPacketUnset) {// change packename if can
+					NPacketUnset unset = (NPacketUnset) p;
+					unset.setPacketName(packetName);
+					unset.setPacketTypeCible(packet);
+				}
+				return p;
+			}
+		}
+		return dir.createUnsetPacket(packetName);
+	}
+	
 	/**
-	 * Get packet type of the given name<br>
-	 * If the packet is not found and debug is enabled, if will log it as info
+	 * Get packet type of the given name
 	 * 
 	 * @param packetName the packet name
 	 * @return the packet type, or the UNSET value of the PacketType section or null
@@ -121,7 +135,7 @@ public interface PacketType {
 	public static PacketType getType(String packetName) {
 		for(PacketDirection dir : PacketDirection.values()) {
 			if(packetName.startsWith(dir.getPrefix()))
-				return getPacketTypeFor(packetName, dir.getTypes(), dir.getUnset());
+				return getPacketTypeFor(dir, packetName);
 		}
 		return null;
 	}
@@ -130,59 +144,65 @@ public interface PacketType {
 		for(PacketType packet : types)
 			if(packet.getFullName().equalsIgnoreCase(packetName) || packet.getPacketName().equalsIgnoreCase(packetName)  || packet.getAlias().contains(packetName))
 				return packet;
-		Adapter.getAdapter().debug("[Packet] Unknow packet " + packetName);
 		return unset;
 	}
 	
+	static PacketType getPacketTypeFor(PacketDirection dir, String packetName) {
+		for(PacketType packet : dir.getTypes())
+			if(packet.getFullName().equalsIgnoreCase(packetName) || packet.getPacketName().equalsIgnoreCase(packetName)  || packet.getAlias().contains(packetName))
+				return packet;
+		return dir.getUnset();
+	}
+	
 	enum Client implements PacketType {
-		ABILITIES("Abilities", NPacketUnknown::new),
-		ADVANCEMENTS("Advancements", NPacketUnknown::new),
+		ABILITIES("Abilities", NPacketPlayInUnset::new),
+		ADVANCEMENTS("Advancements", NPacketPlayInUnset::new),
 		ARM_ANIMATION("ArmAnimation", NPacketPlayInArmAnimation::new),
-		AUTO_RECIPE("AutoRecipe", NPacketUnknown::new),
-		BEACON("Beacon", NPacketUnknown::new),
-		BEDIT("BEdit", NPacketUnknown::new),
-		BOAT_MOVE("BoatMove", NPacketUnknown::new),
+		AUTO_RECIPE("AutoRecipe", NPacketPlayInUnset::new),
+		BEACON("Beacon", NPacketPlayInUnset::new),
+		BEDIT("BEdit", NPacketPlayInUnset::new),
+		BOAT_MOVE("BoatMove", NPacketPlayInUnset::new),
 		BLOCK_DIG("BlockDig", NPacketPlayInBlockDig::new),
 		BLOCK_PLACE("BlockPlace", NPacketPlayInBlockPlace::new),
 		CHAT("Chat", NPacketPlayInChat::new),
-		CLIENT_COMMAND("ClientCommand", NPacketUnknown::new),
-		CLOSE_WINDOW("CloseWindow", NPacketUnknown::new),
-		CUSTOM_PAYLOAD("CustomPayload", NPacketUnknown::new),
-		DIFFICULTY_CHANGE("DifficultyChange", NPacketUnknown::new),
-		DIFFICULTY_LOCK("DifficultyLock", NPacketUnknown::new),
-		ENCHANT_ITEM("EnchantItem", NPacketUnknown::new),
+		CLIENT_COMMAND("ClientCommand", NPacketPlayInUnset::new),
+		CLOSE_WINDOW("CloseWindow", NPacketPlayInUnset::new),
+		CUSTOM_PAYLOAD("CustomPayload", NPacketPlayInUnset::new),
+		DIFFICULTY_CHANGE("DifficultyChange", NPacketPlayInUnset::new),
+		DIFFICULTY_LOCK("DifficultyLock", NPacketPlayInUnset::new),
+		ENCHANT_ITEM("EnchantItem", NPacketPlayInUnset::new),
 		ENTITY_ACTION("EntityAction", NPacketPlayInEntityAction::new),
-		ENTITY_NBT_QUERY("EntityNBTQuery", NPacketUnknown::new),
+		ENTITY_NBT_QUERY("EntityNBTQuery", NPacketPlayInUnset::new),
 		FLYING("Flying", NPacketPlayInFlying::new),
 		GROUND("Ground", NPacketPlayInGround::new),
 		HELD_ITEM_SLOT("HeldItemSlot", NPacketPlayInHeldItemSlot::new),
-		ITEM_NAME("ItemName", NPacketUnknown::new),
+		ITEM_NAME("ItemName", NPacketPlayInUnset::new),
 		KEEP_ALIVE("KeepAlive", NPacketPlayInKeepAlive::new),
 		LOOK("Look", NPacketPlayInLook::new, "Rotation"),
-		PICK_ITEM("PickItem", NPacketUnknown::new),
+		PICK_ITEM("PickItem", NPacketPlayInUnset::new),
 		POSITION("Position", NPacketPlayInPosition::new),
 		POSITION_LOOK("PositionLook", NPacketPlayInPositionLook::new, "PositionRotation"),
-		RECIPE_DISPLAYED("RecipeDisplayed", NPacketUnknown::new),
-		RESOURCE_PACK_STATUS("ResourcePackStatus", NPacketUnknown::new),
-		SET_COMMAND_BLOCK("SetCommandBlock", NPacketUnknown::new),
-		SET_COMMAND_MINECART("SetCommandMinecart", NPacketUnknown::new),
-		SET_CREATIVE_SLOT("SetCreativeSlot", NPacketUnknown::new),
-		SET_JIGSAW("SetJigsaw", NPacketUnknown::new),
-		SETTINGS("Settings", NPacketUnknown::new, "ClientSettings"),
-		SPECTATE("Spectate", NPacketUnknown::new),
+		RECIPE_DISPLAYED("RecipeDisplayed", NPacketPlayInUnset::new),
+		RESOURCE_PACK_STATUS("ResourcePackStatus", NPacketPlayInUnset::new),
+		SET_COMMAND_BLOCK("SetCommandBlock", NPacketPlayInUnset::new),
+		SET_COMMAND_MINECART("SetCommandMinecart", NPacketPlayInUnset::new),
+		SET_CREATIVE_SLOT("SetCreativeSlot", NPacketPlayInUnset::new),
+		SET_JIGSAW("SetJigsaw", NPacketPlayInUnset::new),
+		SETTINGS("Settings", NPacketPlayInUnset::new, "ClientSettings"),
+		SPECTATE("Spectate", NPacketPlayInUnset::new),
 		STEER_VEHICLE("SteerVehicle", NPacketPlayInSteerVehicle::new),
-		STRUCT("Struct", NPacketUnknown::new),
-		TAB_COMPLETE("TabComplete", NPacketUnknown::new),
+		STRUCT("Struct", NPacketPlayInUnset::new),
+		TAB_COMPLETE("TabComplete", NPacketPlayInUnset::new),
 		TELEPORT_ACCEPT("TeleportAccept", NPacketPlayInTeleportAccept::new),
-		TILE_NBT_QUERY("TileNBTQuery", NPacketUnknown::new),
-		TR_SEL("TrSel", NPacketUnknown::new),
+		TILE_NBT_QUERY("TileNBTQuery", NPacketPlayInUnset::new),
+		TR_SEL("TrSel", NPacketPlayInUnset::new),
 		PONG("Transaction", NPacketPlayInPong::new, "Transaction"),
-		UPDATE_SIGN("UpdateSign", NPacketUnknown::new),
+		UPDATE_SIGN("UpdateSign", NPacketPlayInUnset::new),
 		USE_ENTITY("UseEntity", NPacketPlayInUseEntity::new),
 		USE_ITEM("UseItem", NPacketPlayInUseItem::new),
-		VEHICLE_MOVE("VehicleMove", NPacketUnknown::new),
-		WINDOW_CLICK("WindowClick", NPacketUnknown::new),
-		UNSET("Unset", NPacketUnknown::new);
+		VEHICLE_MOVE("VehicleMove", NPacketPlayInUnset::new),
+		WINDOW_CLICK("WindowClick", NPacketPlayInUnset::new),
+		UNSET("Unset", NPacketPlayInUnset::new);
 		
 		private final String packetName, fullName;
 		private final List<String> alias = new ArrayList<>();
@@ -238,107 +258,106 @@ public interface PacketType {
 	}
 	
 	enum Server implements PacketType {
-		
-		ABILITIES("Abilities", NPacketUnknown::new),
-		ADVANCEMENTS("Advancements", NPacketUnknown::new),
-		ANIMATION("Animation", NPacketUnknown::new),
-		ATTACH_ENTITY("AttachEntity", NPacketUnknown::new),
-		AUTO_RECIPE("AutoRecipe", NPacketUnknown::new),
-		BED("Bed", NPacketUnknown::new),
-		BLOCK_ACTION("BlockAction", NPacketUnknown::new),
-		BLOCK_BREAK("BlockBreak", NPacketUnknown::new),
+
+		ABILITIES("Abilities", NPacketPlayOutUnset::new),
+		ADVANCEMENTS("Advancements", NPacketPlayOutUnset::new),
+		ANIMATION("Animation", NPacketPlayOutUnset::new),
+		ATTACH_ENTITY("AttachEntity", NPacketPlayOutUnset::new),
+		AUTO_RECIPE("AutoRecipe", NPacketPlayOutUnset::new),
+		BED("Bed", NPacketPlayOutUnset::new),
+		BLOCK_ACTION("BlockAction", NPacketPlayOutUnset::new),
+		BLOCK_BREAK("BlockBreak", NPacketPlayOutUnset::new),
 		BLOCK_BREAK_ANIMATION("BlockBreakAnimation", NPacketPlayOutBlockBreakAnimation::new),
-		BLOCK_CHANGE("BlockChange", NPacketUnknown::new),
-		BOSS("Boss", NPacketUnknown::new),
-		CAMERA("Camera", NPacketUnknown::new),
-		CHAT("Chat", NPacketUnknown::new),
-		CLOSE_WINDOW("CloseWindow", NPacketUnknown::new),
-		COLLECT("Collect", NPacketUnknown::new),
-		COMBAT_EVENT("CombatEvent", NPacketUnknown::new),
-		COMMANDS("Commands", NPacketUnknown::new),
-		CUSTOM_PAYLOAD("CustomPayload", NPacketUnknown::new),
-		CUSTOM_SOUND_EFFECT("CustomSoundEffect", NPacketUnknown::new),
-		ENTITY("Entity", NPacketPlayOutEntity::new),
-		ENTITY_DESTROY("EntityDestroy", NPacketUnknown::new),
+		BLOCK_CHANGE("BlockChange", NPacketPlayOutUnset::new),
+		BOSS("Boss", NPacketPlayOutUnset::new),
+		CAMERA("Camera", NPacketPlayOutUnset::new),
+		CHAT("Chat", NPacketPlayOutUnset::new),
+		CLOSE_WINDOW("CloseWindow", NPacketPlayOutUnset::new),
+		COLLECT("Collect", NPacketPlayOutUnset::new),
+		COMBAT_EVENT("CombatEvent", NPacketPlayOutUnset::new),
+		COMMANDS("Commands", NPacketPlayOutUnset::new),
+		CUSTOM_PAYLOAD("CustomPayload", NPacketPlayOutUnset::new),
+		CUSTOM_SOUND_EFFECT("CustomSoundEffect", NPacketPlayOutUnset::new),
+		ENTITY_DESTROY("EntityDestroy", NPacketPlayOutUnset::new),
 		ENTITY_EFFECT("EntityEffect", NPacketPlayOutEntityEffect::new),
-		ENTITY_EQUIPMENT("EntityEquipment", NPacketUnknown::new),
-		ENTITY_HEAD_ROTATION("EntityHeadRotation", NPacketUnknown::new),
-		ENTITY_LOOK("EntityLook", NPacketUnknown::new),
-		ENTITY_METADATA("EntityMetadata", NPacketUnknown::new),
-		ENTITY_STATUS("EntityStatus", NPacketUnknown::new),
-		ENTITY_SOUND("EntitySound", NPacketUnknown::new),
+		ENTITY_EQUIPMENT("EntityEquipment", NPacketPlayOutUnset::new),
+		ENTITY_HEAD_ROTATION("EntityHeadRotation", NPacketPlayOutUnset::new),
+		ENTITY_LOOK("EntityLook", NPacketPlayOutUnset::new),
+		ENTITY_METADATA("EntityMetadata", NPacketPlayOutUnset::new),
+		ENTITY_STATUS("EntityStatus", NPacketPlayOutUnset::new),
+		ENTITY_SOUND("EntitySound", NPacketPlayOutUnset::new),
 		ENTITY_TELEPORT("EntityTeleport", NPacketPlayOutEntityTeleport::new),
 		ENTITY_VELOCITY("EntityVelocity", NPacketPlayOutEntityVelocity::new),
-		EXPERIENCE("Experience", NPacketUnknown::new),
+		EXPERIENCE("Experience", NPacketPlayOutUnset::new),
 		EXPLOSION("Explosion", NPacketPlayOutExplosion::new),
-		GAME_STATE_CHANGE("GameStateChange", NPacketUnknown::new),
-		HELD_ITEM_SLOT("HeldItemSlot", NPacketUnknown::new),
+		GAME_STATE_CHANGE("GameStateChange", NPacketPlayOutUnset::new),
+		HELD_ITEM_SLOT("HeldItemSlot", NPacketPlayOutUnset::new),
 		KEEP_ALIVE("KeepAlive", NPacketPlayOutKeepAlive::new),
-		KICK_DISCONNECT("KickDisconnect", NPacketUnknown::new),
-		LIGHT_UPDATE("LightUpdate", NPacketUnknown::new),
-		LEVEL_CHUNK_LIGHT("LevelChunkWithLight", NPacketUnknown::new),
-		LOOK_AT("LookAt", NPacketUnknown::new),
-		LOGIN("Login", NPacketUnknown::new),
-		MAP("Map", NPacketUnknown::new),
-		MAP_CHUNK("MapChunk", NPacketUnknown::new),
-		MAP_CHUNK_BULK("MapChunkBulk", NPacketUnknown::new),
-		MOUNT("Mount", NPacketUnknown::new),
-		MULTI_BLOCK_CHANGE("MultiBlockChange", NPacketUnknown::new),
-		NAMED_ENTITY_SPAWN("NamedEntitySpawn", NPacketUnknown::new),
-		NAMED_SOUND_EFFECT("NamedSoundEffect", NPacketUnknown::new),
-		NBT_QUERY("NBTQuery", NPacketUnknown::new),
-		OPEN_BOOK("OpenBook", NPacketUnknown::new),
-		OPEN_SIGN_EDITOR("OpenSignEditor", NPacketUnknown::new),
-		OPEN_WINDOW("OpenWindow", NPacketUnknown::new),
-		OPEN_WINDOW_MERCHANT("OpenWindowMerchant", NPacketUnknown::new),
-		OPEN_WINDOW_HORSE("OpenWindowHorse", NPacketUnknown::new),
-		PLAYER_INFO("PlayerInfo", NPacketUnknown::new),
-		PLAYER_LIST_HEADER_FOOTER("PlayerListHeaderFooter", NPacketUnknown::new),
+		KICK_DISCONNECT("KickDisconnect", NPacketPlayOutUnset::new),
+		LIGHT_UPDATE("LightUpdate", NPacketPlayOutUnset::new),
+		LEVEL_CHUNK_LIGHT("LevelChunkWithLight", NPacketPlayOutUnset::new),
+		LOOK_AT("LookAt", NPacketPlayOutUnset::new),
+		LOGIN("Login", NPacketPlayOutUnset::new),
+		MAP("Map", NPacketPlayOutUnset::new),
+		MAP_CHUNK("MapChunk", NPacketPlayOutUnset::new),
+		MAP_CHUNK_BULK("MapChunkBulk", NPacketPlayOutUnset::new),
+		MOUNT("Mount", NPacketPlayOutUnset::new),
+		MULTI_BLOCK_CHANGE("MultiBlockChange", NPacketPlayOutUnset::new),
+		NAMED_ENTITY_SPAWN("NamedEntitySpawn", NPacketPlayOutUnset::new),
+		NAMED_SOUND_EFFECT("NamedSoundEffect", NPacketPlayOutUnset::new),
+		NBT_QUERY("NBTQuery", NPacketPlayOutUnset::new),
+		OPEN_BOOK("OpenBook", NPacketPlayOutUnset::new),
+		OPEN_SIGN_EDITOR("OpenSignEditor", NPacketPlayOutUnset::new),
+		OPEN_WINDOW("OpenWindow", NPacketPlayOutUnset::new),
+		OPEN_WINDOW_MERCHANT("OpenWindowMerchant", NPacketPlayOutUnset::new),
+		OPEN_WINDOW_HORSE("OpenWindowHorse", NPacketPlayOutUnset::new),
+		PLAYER_INFO("PlayerInfo", NPacketPlayOutUnset::new),
+		PLAYER_LIST_HEADER_FOOTER("PlayerListHeaderFooter", NPacketPlayOutUnset::new),
 		POSITION("Position", NPacketPlayOutPosition::new),
-		RECIPES("Recipes", NPacketUnknown::new),
-		RECIPE_UPDATE("RecipeUpdate", NPacketUnknown::new),
-		REL_ENTITY_MOVE("RelEntityMove", NPacketUnknown::new),
-		REL_ENTITY_MOVE_LOOK("RelEntityMoveLook", NPacketUnknown::new),
-		REMOVE_ENTITY_EFFECT("RemoveEntityEffect", NPacketUnknown::new),
-		RESOURCE_PACK_SEND("ResourcePackSend", NPacketUnknown::new),
-		RESPAWN("Respawn", NPacketUnknown::new),
-		SCOREBOARD_DISPLAY_OBJECTIVE("ScoreboardDisplayObjective", NPacketUnknown::new),
-		SCOREBOARD_OBJECTIVE("ScoreboardObjective", NPacketUnknown::new),
-		SCOREBOARD_SCORE("ScoreboardScore", NPacketUnknown::new),
-		SCOREBOARD_TEAM("ScoreboardTeam", NPacketUnknown::new),
-		SERVER_DIFFICULTY("ServerDifficulty", NPacketUnknown::new),
-		SET_COMPRESSION("SetCompression", NPacketUnknown::new),
-		SET_COOLDOWN("SetCooldown", NPacketUnknown::new),
-		SET_SLOT("SetSlot", NPacketUnknown::new),
-		SPAWN_ENTITY("SpawnEntity", NPacketUnknown::new),
-		SPAWN_ENTITY_EXPERIENCE_ORB("SpawnEntityExperienceOrb", NPacketUnknown::new),
-		SPAWN_ENTITY_LIVING("SpawnEntityLiving", NPacketUnknown::new),
-		SPAWN_ENTITY_PAINTING("SpawnEntityPainting", NPacketUnknown::new),
-		SPAWN_ENTITY_WEATHER("SpawnEntityWeather", NPacketUnknown::new),
-		SPAWN_PLAYER("SpawnPlayer", NPacketUnknown::new),
-		SPAWN_POSITION("SpawnPosition", NPacketUnknown::new),
-		STATISTIC("Statistic", NPacketUnknown::new),
-		STOP_SOUND("StopSound", NPacketUnknown::new),
-		TAB_COMPLETE("TabComplete", NPacketUnknown::new),
-		TAGS("Tags", NPacketUnknown::new),
-		TILE_ENTITY_DATA("TileEntityData", NPacketUnknown::new),
-		TITLE("Title", NPacketUnknown::new),
-		PING("Ping", NPacketPlayOutPing::new, "Transaction"),
-		UNLOAD_CHUNK("UnloadChunk", NPacketUnknown::new),
-		UPDATE_ATTRIBUTES("UpdateAttributes", NPacketUnknown::new),
-		UPDATE_ENTITY_NBT("UpdateEntityNBT", NPacketUnknown::new),
-		UPDATE_HEALTH("UpdateHealth", NPacketUnknown::new),
-		UPDATE_SIGN("UpdateSign", NPacketUnknown::new),
-		UPDATE_TIME("UpdateTime", NPacketUnknown::new),
-		VEHICLE_MOVE("VehicleMove", NPacketUnknown::new),
-		VIEW_DISTANCE("ViewDistance", NPacketUnknown::new),
-		VIEW_CENTRE("ViewCentre", NPacketUnknown::new),
-		WINDOW_DATA("WindowData", NPacketUnknown::new),
-		WINDOW_ITEMS("WindowItems", NPacketUnknown::new),
-		WORLD_BORDER("WorldBorder", NPacketUnknown::new),
-		WORLD_EVENT("WorldEvent", NPacketUnknown::new),
-		WORLD_PARTICLES("WorldParticles", NPacketUnknown::new),
-		UNSET("Unset", NPacketUnknown::new);
+		RECIPES("Recipes", NPacketPlayOutUnset::new),
+		RECIPE_UPDATE("RecipeUpdate", NPacketPlayOutUnset::new),
+		REL_ENTITY_MOVE("RelEntityMove", NPacketPlayOutUnset::new),
+		REL_ENTITY_MOVE_LOOK("RelEntityMoveLook", NPacketPlayOutUnset::new),
+		REMOVE_ENTITY_EFFECT("RemoveEntityEffect", NPacketPlayOutUnset::new),
+		RESOURCE_PACK_SEND("ResourcePackSend", NPacketPlayOutUnset::new),
+		RESPAWN("Respawn", NPacketPlayOutUnset::new),
+		SCOREBOARD_DISPLAY_OBJECTIVE("ScoreboardDisplayObjective", NPacketPlayOutUnset::new),
+		SCOREBOARD_OBJECTIVE("ScoreboardObjective", NPacketPlayOutUnset::new),
+		SCOREBOARD_SCORE("ScoreboardScore", NPacketPlayOutUnset::new),
+		SCOREBOARD_TEAM("ScoreboardTeam", NPacketPlayOutUnset::new),
+		SERVER_DIFFICULTY("ServerDifficulty", NPacketPlayOutUnset::new),
+		SET_COMPRESSION("SetCompression", NPacketPlayOutUnset::new),
+		SET_COOLDOWN("SetCooldown", NPacketPlayOutUnset::new),
+		SET_SLOT("SetSlot", NPacketPlayOutUnset::new),
+		SPAWN_ENTITY("SpawnEntity", NPacketPlayOutUnset::new),
+		SPAWN_ENTITY_EXPERIENCE_ORB("SpawnEntityExperienceOrb", NPacketPlayOutUnset::new),
+		SPAWN_ENTITY_LIVING("SpawnEntityLiving", NPacketPlayOutUnset::new),
+		SPAWN_ENTITY_PAINTING("SpawnEntityPainting", NPacketPlayOutUnset::new),
+		SPAWN_ENTITY_WEATHER("SpawnEntityWeather", NPacketPlayOutUnset::new),
+		SPAWN_PLAYER("SpawnPlayer", NPacketPlayOutUnset::new),
+		SPAWN_POSITION("SpawnPosition", NPacketPlayOutUnset::new),
+		STATISTIC("Statistic", NPacketPlayOutUnset::new),
+		STOP_SOUND("StopSound", NPacketPlayOutUnset::new),
+		TAB_COMPLETE("TabComplete", NPacketPlayOutUnset::new),
+		TAGS("Tags", NPacketPlayOutUnset::new),
+		TILE_ENTITY_DATA("TileEntityData", NPacketPlayOutUnset::new),
+		TITLE("Title", NPacketPlayOutUnset::new),
+		PING("Ping", NPacketPlayOutPing::new, "Transaction", "ContainerAckPacket"),
+		UNLOAD_CHUNK("UnloadChunk", NPacketPlayOutUnset::new),
+		UPDATE_ATTRIBUTES("UpdateAttributes", NPacketPlayOutUnset::new),
+		UPDATE_ENTITY_NBT("UpdateEntityNBT", NPacketPlayOutUnset::new),
+		UPDATE_HEALTH("UpdateHealth", NPacketPlayOutUnset::new),
+		UPDATE_SIGN("UpdateSign", NPacketPlayOutUnset::new),
+		UPDATE_TIME("UpdateTime", NPacketPlayOutUnset::new),
+		VEHICLE_MOVE("VehicleMove", NPacketPlayOutUnset::new),
+		VIEW_DISTANCE("ViewDistance", NPacketPlayOutUnset::new),
+		VIEW_CENTRE("ViewCentre", NPacketPlayOutUnset::new),
+		WINDOW_DATA("WindowData", NPacketPlayOutUnset::new),
+		WINDOW_ITEMS("WindowItems", NPacketPlayOutUnset::new),
+		WORLD_BORDER("WorldBorder", NPacketPlayOutUnset::new),
+		WORLD_EVENT("WorldEvent", NPacketPlayOutUnset::new),
+		WORLD_PARTICLES("WorldParticles", NPacketPlayOutUnset::new),
+		UNSET("Unset", NPacketPlayOutUnset::new);
 		
 		private final String packetName, fullName;
 		private final Callable<NPacket> fun;

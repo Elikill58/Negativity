@@ -3,11 +3,11 @@ package com.elikill58.negativity.universal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.api.entity.OfflinePlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.item.ItemBuilder;
 import com.elikill58.negativity.api.item.ItemStack;
-import com.elikill58.negativity.api.utils.Utils;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.universal.permissions.Perm;
 
@@ -87,8 +87,8 @@ public class Sanction {
 	 * @return the item
 	 */
 	public ItemStack getItem(OfflinePlayer cible) {
-		return ItemBuilder.Builder(type).displayName(Utils.coloredMessage(applyPlaceholders(getName(), cible)))
-				.lore(getLore().stream().map((s) -> Utils.coloredMessage(applyPlaceholders(s, cible))).collect(Collectors.toList())).build();
+		return ItemBuilder.Builder(type).displayName(ChatColor.color(applyPlaceholders(getName(), cible)))
+				.lore(getLore().stream().map((s) -> ChatColor.color(applyPlaceholders(s, cible))).collect(Collectors.toList())).build();
 	}
 
 	/**

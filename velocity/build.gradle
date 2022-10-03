@@ -33,8 +33,8 @@ processResources {
 }
 
 shadowJar {
-    archiveBaseName.set('negativity')
-    archiveAppendix.set('velocity')
+    archiveBaseName.set('NegativityVelocity')
+    archiveAppendix.set(null)
     archiveClassifier.set(null)
 
     mergeServiceFiles()

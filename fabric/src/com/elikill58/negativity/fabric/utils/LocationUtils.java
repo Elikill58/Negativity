@@ -11,8 +11,7 @@ import net.minecraft.world.World;
 
 public class LocationUtils {
 
-	public static boolean hasLineOfSight(ServerPlayerEntity p, Vec3d loc) {
-		World w = p.getWorld();
+	public static boolean hasLineOfSight(ServerPlayerEntity p, World w, Vec3d loc) {
 		Vec3d vec3d = Utils.getPlayerVec(p), vec3d1 = new Vec3d(loc.getX(), loc.getY() + 1.74F, loc.getZ());
 		if (!Double.isNaN(vec3d.getX()) && !Double.isNaN(vec3d.getY()) && !Double.isNaN(vec3d.getZ())) {
 			if (!Double.isNaN(vec3d1.getX()) && !Double.isNaN(vec3d1.getY()) && !Double.isNaN(vec3d1.getZ())) {

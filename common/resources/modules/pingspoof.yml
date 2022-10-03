@@ -33,7 +33,6 @@ verif:
 
 # Disable one check and not all detections
 checks:
-  # Check difference between ping and reachable value
-  reachable:
+  # Check for packet order
+  packet:
     active: true
-    min_ping: 400

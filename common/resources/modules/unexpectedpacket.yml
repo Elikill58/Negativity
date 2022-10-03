@@ -1,0 +1,43 @@
+# Receive packet that should not be sent
+
+# The display name of cheat
+exact_name: "UnexpectedPacket"
+
+# enable/disable detection
+active: true
+
+# Even with very high ping, it's not possible to send packet so far
+ping: 1000
+
+# The minimum porcent to create reliability
+reliability_alert: 60
+
+# Manage the kick of players
+kick:
+  active: false
+  # Required alert to kick player
+  alert: 5
+
+# Remove the cheat effect
+set_back:
+  active: false
+  # To know how to configure, check this wiki :
+  # https://github.com/Elikill58/Negativity/wiki/setBack
+  action: []
+
+# Option for /negativity verif
+verif:
+  # Enable/disable the detection when the verification is enabled
+  check_in_verif: true
+
+# Disable one check and not all detections
+checks:
+  # When moving in vehicle, but not in vehicle
+  vehicle-steer:
+    active: true
+  # Spectate someone without in spectator
+  spectator:
+    active: true
+  # Change held slot to the same
+  held-change:
+    active: true

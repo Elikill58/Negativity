@@ -7,16 +7,21 @@ import com.elikill58.negativity.api.events.PlayerEvent;
 
 public class BlockPlaceEvent extends PlayerEvent implements CancellableEvent {
 
-	private final Block b;
+	private final Block b, oldBlock;
 	private boolean cancel;
 	
-	public BlockPlaceEvent(Player p, Block b) {
+	public BlockPlaceEvent(Player p, Block b, Block oldblock) {
 		super(p);
 		this.b = b;
+		this.oldBlock = oldblock;
 	}
 	
 	public Block getBlock() {
 		return b;
+	}
+	
+	public Block getOldBlock() {
+		return oldBlock;
 	}
 
 	@Override

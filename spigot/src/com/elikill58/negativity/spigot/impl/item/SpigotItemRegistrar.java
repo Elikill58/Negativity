@@ -7,7 +7,9 @@ import java.util.StringJoiner;
 import org.bukkit.Material;
 
 import com.elikill58.negativity.api.item.ItemRegistrar;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.spigot.SpigotNegativity;
+import com.elikill58.negativity.spigot.SubPlatform;
 
 public class SpigotItemRegistrar extends ItemRegistrar {
 
@@ -15,7 +17,20 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 
 	@Override
 	public synchronized com.elikill58.negativity.api.item.Material get(String id, String... alias) {
-		return cache.computeIfAbsent(id, key -> new SpigotMaterial(getMaterial(key, alias), id));
+		return cache.computeIfAbsent(id, key -> {
+			Material m = getMaterial(key.toUpperCase(), alias);
+			if(m == null) {
+				StringJoiner sj = new StringJoiner(", ", " : ", "");
+				for(String tempAlias : alias) {
+					if(tempAlias.equals(Materials.IGNORE_KEY))
+						return null; // ignore not found item
+					sj.add(tempAlias);
+				}
+				SpigotNegativity.getInstance().getLogger().info("[SpigotItemRegistrar] Cannot find material " + id + ", alias: " + sj);
+				return null;
+			}
+			return new SpigotMaterial(m, id);
+		});
 	}
 	
 	private org.bukkit.Material getMaterial(String id, String... alias){
@@ -43,17 +58,26 @@ public class SpigotItemRegistrar extends ItemRegistrar {
 				return type;
 		}*/
 		StringJoiner sj = new StringJoiner(", ", " : ", "");
-		for(String tempAlias : alias) sj.add(tempAlias);
-		SpigotNegativity.getInstance().getLogger().info("[SpigotItemRegistrar] Cannot find material " + id + sj);
+		for(String tempAlias : alias) {
+			if(tempAlias.equals(Materials.IGNORE_KEY))
+				return null; // ignore not found item
+			sj.add(tempAlias);
+		}
 		return null;
 	}
 	
 	private Material get(String name) {
+		name = name.toUpperCase();
 		try {
-			return (Material) Material.class.getField(name.toUpperCase()).get(Material.class);
+			return (Material) Material.class.getField(name).get(Material.class);
 		} catch (IllegalArgumentException | IllegalAccessException | SecurityException e2) {
 			e2.printStackTrace();
 		} catch (NoSuchFieldException e) {}
+		if(SpigotNegativity.getSubPlatform().equals(SubPlatform.MOHIST)) {
+			try {
+				return Material.valueOf(name);
+			} catch (Exception e) {}
+		}
 		return null;
 	}
 }

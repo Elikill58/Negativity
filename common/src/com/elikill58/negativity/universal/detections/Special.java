@@ -57,6 +57,16 @@ public abstract class Special extends AbstractDetection<SpecialKeys> {
 	}
 	
 	/**
+	 * Get special detection from the key
+	 * 
+	 * @param key the special key
+	 * @return the special detection or null
+	 */
+	public static Special forKey(SpecialKeys key) {
+		return SPECIALS.stream().filter((c) -> c.getKey().equals(key)).findAny().orElse(null);
+	}
+	
+	/**
 	 * Load all special detection
 	 * Support reload
 	 */

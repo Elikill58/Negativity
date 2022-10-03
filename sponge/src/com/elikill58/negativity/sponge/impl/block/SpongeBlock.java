@@ -107,9 +107,9 @@ public class SpongeBlock extends Block {
 	
 	@Override
 	public Location getLocation() {
-		World world = Sponge.server().worldManager().world(block.world())
+		World world = World.getWorld(block.world().asString(), a -> Sponge.server().worldManager().world(block.world())
 			.map(SpongeWorld::new)
-			.orElseThrow(() -> new IllegalStateException("Failed to get world " + block.world() + " from Block"));
+			.orElseThrow(() -> new IllegalStateException("Failed to get world " + block.world() + " from Block")));
 		return new Location(world, getX(), getY(), getZ());
 	}
 	

@@ -11,6 +11,7 @@ import org.spongepowered.api.item.ItemType;
 
 import com.elikill58.negativity.api.item.ItemRegistrar;
 import com.elikill58.negativity.api.item.Material;
+import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.sponge7.SpongeNegativity;
 
 public class SpongeItemRegistrar extends ItemRegistrar {
@@ -38,7 +39,11 @@ public class SpongeItemRegistrar extends ItemRegistrar {
 			}
 			
 			StringJoiner sj = new StringJoiner(", ", " : ", "");
-			for(String alias : parsedAliases) sj.add(alias + " (" + parse(alias) + ")");
+			for(String alias : parsedAliases) {
+				if(alias.equals(Materials.IGNORE_KEY))
+					return null; // ignore not found item
+				sj.add(alias + " (" + parse(alias) + ")");
+			}
 			SpongeNegativity.getInstance().getLogger().info("[SpongeItemRegistrar] Cannot find material " + id + sj);
 			return null;
 		});

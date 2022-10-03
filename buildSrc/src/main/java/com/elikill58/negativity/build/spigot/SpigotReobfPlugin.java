@@ -111,6 +111,24 @@ public class SpigotReobfPlugin implements Plugin<Project> {
 	}
 	
 	public static void configureSpigotRemapDeps(Project project, String spigotVersion, String specialSourceVersion) {
+		project.getRepositories().mavenLocal(mavenLocal -> {
+			mavenLocal.metadataSources(metadataSources -> {
+				metadataSources.mavenPom();
+				metadataSources.artifact();
+			});
+		});
+		project.getRepositories().exclusiveContent(exclusiveContent -> {
+			exclusiveContent.forRepository(() -> project.getRepositories().mavenLocal(mavenLocal -> {
+				mavenLocal.metadataSources(metadataSources -> {
+					metadataSources.mavenPom();
+					metadataSources.artifact();
+				});
+			}));
+			exclusiveContent.filter(contentDescriptor -> {
+				contentDescriptor.includeGroup("org.spigotmc");
+			});
+		});
+		
 		DependencyHandler deps = project.getDependencies();
 		deps.add(CONFIG_SPIGOT_OBF_MOJANG, "org.spigotmc:spigot:%s:remapped-mojang".formatted(spigotVersion));
 		deps.add(CONFIG_SPIGOT_OBF, "org.spigotmc:spigot:%s:remapped-obf".formatted(spigotVersion));

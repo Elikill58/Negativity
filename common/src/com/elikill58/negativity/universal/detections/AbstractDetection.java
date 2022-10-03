@@ -4,14 +4,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.api.yaml.YamlConfiguration;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.detections.keys.IDetectionKey;
-import com.elikill58.negativity.universal.file.FileSaverTimer;
-import com.elikill58.negativity.universal.file.hook.FileRunnableSaverAction;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 
 public abstract class AbstractDetection<T extends IDetectionKey<T>> implements Comparable<T> {
@@ -72,7 +71,7 @@ public abstract class AbstractDetection<T extends IDetectionKey<T>> implements C
 	 * Save the configuration of the cheat
 	 */
 	public void saveConfig() {
-		FileSaverTimer.getInstance().addAction(new FileRunnableSaverAction(config::save));
+		CompletableFuture.runAsync(config::save);
 	}
 	
 	/**
@@ -107,6 +106,11 @@ public abstract class AbstractDetection<T extends IDetectionKey<T>> implements C
 	
 	public boolean isDisabledForBedrock() {
 		return config.getBoolean("bedrock.disabled", false);
+	}
+	
+	public boolean setDisabledForBedrock(boolean b) {
+		config.getBoolean("bedrock.disabled", b);
+		return b;
 	}
 	
 	@Override

@@ -36,4 +36,5 @@ public @interface Check {
 	 * @return true if should ignore everything
 	 */
 	boolean ignoreCancel() default false;
+	
 }

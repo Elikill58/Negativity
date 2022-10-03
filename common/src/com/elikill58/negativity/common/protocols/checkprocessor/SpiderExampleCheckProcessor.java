@@ -19,11 +19,10 @@ import com.elikill58.negativity.api.protocols.CheckProcessor;
  */
 public class SpiderExampleCheckProcessor implements CheckProcessor {
 
-	private final NegativityPlayer np;
 	public List<Double> lastY = new ArrayList<>();
 	
 	public SpiderExampleCheckProcessor(NegativityPlayer np) {
-		this.np = np;
+		
 	}
 	
 	@Override
@@ -53,7 +52,7 @@ public class SpiderExampleCheckProcessor implements CheckProcessor {
 					++amount;
 					--i;
 				} else {
-					if (i == np.lastY.size() - 1) {
+					if (i == lastY.size() - 1) {
 						lastY.clear();
 						break;
 					}

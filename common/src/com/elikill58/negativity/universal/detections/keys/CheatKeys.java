@@ -15,7 +15,6 @@ public enum CheatKeys implements IDetectionKey<CheatKeys> {
 	ANTI_POTION("ANTIPOTION"),
 	AUTO_CLICK("AUTOCLICK"),
 	AUTO_STEAL("AUTOSTEAL"),
-	BLINK("BLINK"),
 	CHAT("CHAT"),
 	CRITICAL("CRITICAL"),
 	ELYTRA_FLY("ELYTRAFLY", Version.V1_9),
@@ -35,6 +34,7 @@ public enum CheatKeys implements IDetectionKey<CheatKeys> {
 	NO_SLOW_DOWN("NOSLOWDOWN"),
 	NO_WEB("NOWEB"),
 	NUKER("NUKER"),
+	MOTION("MOTION"),
 	PINGSPOOF("PINGSPOOF"),
 	PHASE("PHASE"),
 	REACH("REACH"),
@@ -47,6 +47,7 @@ public enum CheatKeys implements IDetectionKey<CheatKeys> {
 	STEP("STEP"),
 	SUPER_KNOCKBACK("SUPERKNOCKBACK"),
 	TIMER("TIMER"),
+	UNEXPECTED_PACKET("UNEXPECTEDPACKET"),
 	XRAY("XRAY");
 
 	public static final String BUNDLED_MODULES_BASE = "/modules/";
@@ -66,7 +67,7 @@ public enum CheatKeys implements IDetectionKey<CheatKeys> {
 	private final Version minVersion;
 	
 	private CheatKeys(String key) {
-		this(key, Version.V1_7);
+		this(key, Version.V1_8);
 	}
 	
 	private CheatKeys(String key, Version minVersion) {

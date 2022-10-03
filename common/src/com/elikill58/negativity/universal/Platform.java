@@ -4,6 +4,7 @@ public enum Platform {
 
 	BUNGEE("bungee", true),
 	FABRIC("fabric", false),
+	MINESTOM("minestom", false),
 	SPIGOT("spigot", false),
 	SPONGE("sponge", false),
 	SPONGE8("sponge8", false),

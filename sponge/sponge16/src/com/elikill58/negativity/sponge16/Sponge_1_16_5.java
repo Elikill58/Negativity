@@ -2,15 +2,16 @@ package com.elikill58.negativity.sponge16;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.util.Queue;
 
 import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 
+import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockPlace;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
@@ -25,8 +26,8 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInSteerVehi
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInTeleportAccept;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
@@ -39,8 +40,8 @@ import com.elikill58.negativity.universal.Adapter;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientboundContainerAckPacket;
 import net.minecraft.network.protocol.game.ServerboundAcceptTeleportationPacket;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
@@ -50,9 +51,11 @@ import net.minecraft.network.protocol.game.ServerboundPickItemPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
-import net.minecraft.network.protocol.status.ClientboundPongResponsePacket;
+import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
+import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
 import net.minecraft.network.protocol.status.ServerboundPingRequestPacket;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
 @SuppressWarnings("unchecked")
@@ -114,6 +117,13 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 			return new NPacketPlayInSteerVehicle(packet.getXxa(), packet.getZza(), packet.isJumping(), packet.isShiftKeyDown());
 		});
 		packetsPlayIn.put("ServerboundAcceptTeleportationPacket", (p, f) -> new NPacketPlayInTeleportAccept(((ServerboundAcceptTeleportationPacket) f).getId()));
+		packetsPlayIn.put("ServerboundUseItemPacket", (p, f) -> new NPacketPlayInUseItem(Hand.getHand(((ServerboundUseItemPacket) f).getHand().name())));
+		packetsPlayIn.put("ServerboundUseItemOnPacket", (p, f) -> {
+			ServerboundUseItemOnPacket packet = (ServerboundUseItemOnPacket) f;
+			BlockHitResult rs = packet.getHitResult();
+			BlockPos pos = rs == null || rs.getBlockPos() == null ? new BlockPos(0, 0, 0) : rs.getBlockPos();
+			return new NPacketPlayInBlockPlace(Hand.getHand(packet.getHand().name()), pos.getX(), pos.getY(), pos.getZ(), BlockFace.valueOf(rs.getDirection().name()));
+		});
 		
 		packetsPlayOut.put("ClientboundBlockBreakAckPacket", (p, f) -> {
 			BlockPos pos = get(f, "pos");
@@ -129,34 +139,33 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 		packetsPlayOut.put("ClientboundExplodePacket", (p, f) -> {
 			return new NPacketPlayOutExplosion(get(f, "x"), get(f, "y"), get(f, "z"), get(f, "knockbackX"), get(f, "knockbackY"), get(f, "knockbackZ"));
 		});
-		packetsPlayOut.put("ClientboundPlayerPositionPacket", (p, f) ->  new NPacketPlayOutEntity(get(f, "id"), get(f, "x"), get(f, "y"), get(f, "z")));
 		packetsPlayOut.put("ClientboundSetEntityMotionPacket", (p, f) -> {
 			return new NPacketPlayOutEntityVelocity(get(f, "id"), get(f, "xa"), get(f, "ya"), get(f, "za"));
 		});
 		packetsPlayOut.put("ClientboundUpdateMobEffectPacket", (p, f) -> {
 			return new NPacketPlayOutEntityEffect(get(f, "entityId"), (int) get(f, "effectId"), get(f, "effectAmplifier"), get(f, "effectDurationTicks"), get(f, "flags"));
 		});
-		packetsPlayOut.put("ClientboundPongResponsePacket", (p, f) -> new NPacketPlayOutPing(get(f, "time")));
+		packetsPlayOut.put("ClientboundContainerAckPacket", (p, f) -> new NPacketPlayOutPing((short) get(f, "uid")));
 
-		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundPongResponsePacket(((NPacketPlayOutPing) f).id));
+		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundContainerAckPacket(0, (short) ((NPacketPlayOutPing) f).id, false));
 
 		log();
 	}
 
-	private DigFace translateDigDirection(Direction direction) {
+	private BlockFace translateDigDirection(Direction direction) {
 		switch (direction) {
 		case DOWN:
-			return DigFace.BOTTOM;
+			return BlockFace.DOWN;
 		case EAST:
-			return DigFace.EAST;
+			return BlockFace.EAST;
 		case NORTH:
-			return DigFace.NORTH;
+			return BlockFace.NORTH;
 		case SOUTH:
-			return DigFace.SOUTH;
+			return BlockFace.SOUTH;
 		case UP:
-			return DigFace.TOP;
+			return BlockFace.UP;
 		case WEST:
-			return DigFace.WEST;
+			return BlockFace.WEST;
 		}
 		return null;
 	}
@@ -271,15 +280,9 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 		((net.minecraft.server.level.ServerPlayer) p).connection.send((Packet<?>) basicPacket);
 	}
 	
-	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public void queuePacket(ServerPlayer p, Object basicPacket) {
-		try {
-			Object packetQueued = callFirstConstructor(Connection.class.getDeclaredClasses()[0], basicPacket, null);
-			
-			((Queue) get(((net.minecraft.server.level.ServerPlayer) p).connection, "queue")).add(packetQueued);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+		Adapter.getAdapter().debug("> " + basicPacket.getClass().getSimpleName() + " : " + basicPacket);
+		((net.minecraft.server.level.ServerPlayer) p).connection.send((Packet<?>) basicPacket);
 	}
 }

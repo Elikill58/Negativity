@@ -8,6 +8,7 @@ import java.util.UUID;
 import java.util.function.Supplier;
 
 import com.elikill58.negativity.universal.Adapter;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.storage.DatabaseActiveBanStorage;
 import com.elikill58.negativity.universal.database.Database;
 
@@ -51,7 +52,7 @@ public class OldBansDbMigrator {
 				bansProcessed++;
 				// only retain active bans
 				if (def || now <= time) {
-					Ban ban = new Ban(uuid, reason, by, BanType.UNKNOW, time, cheat, null, BanStatus.ACTIVE);
+					Ban ban = new Ban(uuid, reason, by, SanctionnerType.UNKNOW, time, cheat, null, BanStatus.ACTIVE);
 					storage.save(ban);
 					bansTransferred++;
 				}

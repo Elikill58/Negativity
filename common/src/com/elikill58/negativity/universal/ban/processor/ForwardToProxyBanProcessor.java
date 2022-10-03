@@ -12,11 +12,11 @@ import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.PlatformDependentExtension;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
@@ -35,7 +35,7 @@ public class ForwardToProxyBanProcessor implements BanProcessor {
 	@Override
 	public BanResult revokeBan(UUID playerId) {
 		Adapter.getAdapter().getOnlinePlayers().get(0).sendPluginMessage(NegativityMessagesManager.CHANNEL_ID, new ProxyRevokeBanMessage(playerId));
-		return new BanResult(BanResultType.DONE, new Ban(playerId, "", "", BanType.UNKNOW, -1, null, null, BanStatus.REVOKED, -1, System.currentTimeMillis()));
+		return new BanResult(BanResultType.DONE, new Ban(playerId, "", "", SanctionnerType.UNKNOW, -1, null, null, BanStatus.REVOKED, -1, System.currentTimeMillis()));
 	}
 
 	@Nullable

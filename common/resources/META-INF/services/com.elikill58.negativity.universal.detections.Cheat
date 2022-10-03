@@ -5,7 +5,6 @@ com.elikill58.negativity.common.protocols.AntiKnockback
 com.elikill58.negativity.common.protocols.AntiPotion
 com.elikill58.negativity.common.protocols.AutoClick
 com.elikill58.negativity.common.protocols.AutoSteal
-com.elikill58.negativity.common.protocols.Blink
 com.elikill58.negativity.common.protocols.Chat
 com.elikill58.negativity.common.protocols.Critical
 com.elikill58.negativity.common.protocols.ElytraFly
@@ -25,7 +24,7 @@ com.elikill58.negativity.common.protocols.NoPitchLimit
 com.elikill58.negativity.common.protocols.NoSlowDown
 com.elikill58.negativity.common.protocols.NoWeb
 com.elikill58.negativity.common.protocols.Nuker
-com.elikill58.negativity.common.protocols.Phase
+com.elikill58.negativity.common.protocols.Motion
 com.elikill58.negativity.common.protocols.PingSpoof
 com.elikill58.negativity.common.protocols.Reach
 com.elikill58.negativity.common.protocols.Regen
@@ -37,4 +36,5 @@ com.elikill58.negativity.common.protocols.Spider
 com.elikill58.negativity.common.protocols.Step
 com.elikill58.negativity.common.protocols.SuperKnockback
 com.elikill58.negativity.common.protocols.Timer
+com.elikill58.negativity.common.protocols.UnexpectedPacket
 com.elikill58.negativity.common.protocols.XRay

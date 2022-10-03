@@ -15,9 +15,10 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.plugin.messaging.Messenger;
 
-import com.elikill58.negativity.api.NegativityPlayer;
+import com.elikill58.negativity.api.location.World;
 import com.elikill58.negativity.api.yaml.Configuration;
 import com.elikill58.negativity.spigot.impl.entity.SpigotFakePlayer;
+import com.elikill58.negativity.spigot.impl.location.SpigotWorld;
 import com.elikill58.negativity.spigot.listeners.BlockListeners;
 import com.elikill58.negativity.spigot.listeners.ChannelListeners;
 import com.elikill58.negativity.spigot.listeners.CommandsListeners;
@@ -31,7 +32,6 @@ import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.ban.BanManager;
 import com.elikill58.negativity.universal.database.Database;
@@ -42,7 +42,10 @@ import com.elikill58.negativity.universal.utils.ReflectionUtils;
 public class SpigotNegativity extends JavaPlugin {
 
 	private static SpigotNegativity INSTANCE;
-	public static boolean isCraftBukkit = false;
+	private static final SubPlatform platform = SubPlatform.getSubPlatform();
+	public static SubPlatform getSubPlatform() {
+		return platform;
+	}
 	public static String CHANNEL_NAME_FML = "";
 	private NegativityPacketManager packetManager;
 		
@@ -70,19 +73,13 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().warning("Unknow server version " + Utils.VERSION + " ! Some problems can appears.");
 		else {
 			SpigotVersionAdapter.getVersionAdapter();
-			getLogger().info("Detected server version: " + v.name().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ")");
+			getLogger().info("Detected server version: " + v.name().toLowerCase(Locale.ROOT) + " (" + Utils.VERSION + ") using " + getSubPlatform().getName() + " server.");
 		}
 		getLogger().info("Running with Java " + System.getProperty("java.version"));
 		
 		packetManager = new NegativityPacketManager(this);
 		packetManager.getPacketManager().load();
-		
-		try {
-			Class.forName("org.spigotmc.SpigotConfig");
-			isCraftBukkit = false;
-		} catch (ClassNotFoundException e) {
-			isCraftBukkit = true;
-		}
+
 		Negativity.loadNegativity();
 		SpigotFakePlayer.loadClass();
 
@@ -114,6 +111,10 @@ public class SpigotNegativity extends JavaPlugin {
 		Stats.sendStartupStats(Bukkit.getServer().getPort());
 		
 		NegativityAccountStorage.setDefaultStorage("file");
+		
+		getServer().getScheduler().runTaskTimer(this, () -> {
+			new ArrayList<>(World.getWorlds().values()).forEach(w -> ((SpigotWorld) w).clearEntities());
+		}, 20 * 30, 20 * 30);
 		
 		getServer().getScheduler().runTaskTimerAsynchronously(this, () -> {
 			try {
@@ -156,7 +157,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (!commandSection.getBoolean("kick", true))
 			unRegisterBukkitCommand(kickCmd);
 		else {
-			kickCmd.setAliases(Arrays.asList("negkick"));
+			kickCmd.setAliases(Arrays.asList("kigk"));
 			kickCmd.setExecutor(command);
 			kickCmd.setTabCompleter(command);
 		}
@@ -182,7 +183,7 @@ public class SpigotNegativity extends JavaPlugin {
 		if (!banConfig.getBoolean("ban", true))
 			unRegisterBukkitCommand(banCmd);
 		else {
-			banCmd.setAliases(Arrays.asList("negban"));
+			banCmd.setAliases(Arrays.asList("ban"));
 			banCmd.setExecutor(command);
 			banCmd.setTabCompleter(command);
 		}
@@ -191,10 +192,22 @@ public class SpigotNegativity extends JavaPlugin {
 		if (!banConfig.getBoolean("unban", true))
 			unRegisterBukkitCommand(unbanCmd);
 		else {
-			unbanCmd.setAliases(Arrays.asList("negunban"));
+			unbanCmd.setAliases(Arrays.asList("unban"));
 			unbanCmd.setExecutor(command);
 			unbanCmd.setTabCompleter(command);
 		}
+
+		
+		Configuration warnConfig = BanManager.getBanConfig().getSection("commands");
+		PluginCommand warnCmd = getCommand("nwarn");
+		if (!warnConfig.getBoolean("warn", true))
+			unRegisterBukkitCommand(banCmd);
+		else {
+			warnCmd.setAliases(Arrays.asList("warn"));
+			warnCmd.setExecutor(command);
+			warnCmd.setTabCompleter(command);
+		}
+		
 
 		PluginCommand clearCheatCmd = getCommand("nclearchat");
 		if (!commandSection.getBoolean("chat.clear", true))
@@ -215,10 +228,8 @@ public class SpigotNegativity extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
-		new Thread(() -> new ArrayList<>(NegativityPlayer.getAllPlayers().keySet()).forEach(NegativityPlayer::removeFromCache)).start();
-		Database.close();
-		Stats.updateStats(StatsType.ONLINE, 0 + "");
 		packetManager.getPacketManager().clear();
+		Negativity.closeNegativity();
 	}
 	
 	public NegativityPacketManager getPacketManager() {

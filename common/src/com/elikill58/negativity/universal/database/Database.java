@@ -29,7 +29,7 @@ public class Database {
 		Database.password = password;
 		try {
 			databaseType.loadDriver();
-			connection = DriverManager.getConnection("jdbc:" + databaseType.getType() + "://" + url, username, password);
+			connection = DriverManager.getConnection("jdbc:" + databaseType.getType() + "://" + url + "?autoReconnect=true", username, password);
 			Adapter.getAdapter().getLogger().info("Connection to database " + url + " (with " + databaseType.getName() + ") done !");
 			Database.hasCustom = true;
 		} catch (SQLException e) {
@@ -49,8 +49,7 @@ public class Database {
 	 */
 	public static Connection getConnection() throws SQLException {
 		if(!hasCustom) {
-			new IllegalStateException("You are trying to use database without active it.").printStackTrace();
-			return null;
+			throw new IllegalStateException("You are trying to use database without active it.");
 		}
 		if (connection == null || connection.isClosed() || !isConnectionValid())
 			connect(url, username, password);

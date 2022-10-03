@@ -60,8 +60,13 @@ public class AlertMessage implements NegativityMessage {
 	}
 
 	private Cheat.@Nullable CheatHover readCheatHover(DataInputStream input) throws IOException {
-		String key = input.readUTF();
-		if (key.isEmpty()) {
+		String key;
+		try {
+			key = input.readUTF();
+			if (key.isEmpty()) {
+				return null;
+			}
+		} catch (IOException e) { // no cheathover sent
 			return null;
 		}
 

@@ -20,6 +20,8 @@ public class InventoryListeners implements Listener {
 	
 	@EventHandler
 	public void onInventoryOpen(org.bukkit.event.inventory.InventoryOpenEvent e) {
+		if(e.isCancelled())
+			return;
 		InventoryOpenEvent event = new InventoryOpenEvent(SpigotEntityManager.getPlayer((Player) e.getPlayer()));
 		EventManager.callEvent(event);
 		if(event.isCancelled())

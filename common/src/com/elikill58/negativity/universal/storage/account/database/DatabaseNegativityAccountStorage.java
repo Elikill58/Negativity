@@ -25,11 +25,14 @@ import com.elikill58.negativity.universal.storage.account.NegativityAccountStora
 
 public class DatabaseNegativityAccountStorage extends NegativityAccountStorage {
 
-	public DatabaseNegativityAccountStorage() {
+	@Override
+	public void enable() {
 		try {
 			Connection connection = Database.getConnection();
 			if (connection != null) {
 				DatabaseMigrator.executeRemainingMigrations(connection, "accounts");
+			} else {
+				Adapter.getAdapter().getLogger().warn("Can't load account storage because the database isn't fully available.");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

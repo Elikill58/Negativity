@@ -49,7 +49,7 @@ public class SpongeItemBuilder extends ItemBuilder {
 
 	@Override
 	public ItemBuilder displayName(String displayName) {
-		item.offer(Keys.DISPLAY_NAME, Text.of(ChatColor.RESET + displayName));
+		item.offer(Keys.DISPLAY_NAME, Text.of(ChatColor.WHITE + displayName));
 		return this;
 	}
 

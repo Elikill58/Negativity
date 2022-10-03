@@ -6,7 +6,6 @@ import org.spongepowered.api.entity.living.player.server.ServerPlayer;
 import org.spongepowered.api.entity.projectile.Potion;
 import org.spongepowered.api.entity.projectile.arrow.Arrow;
 import org.spongepowered.api.projectile.source.ProjectileSource;
-import org.spongepowered.api.util.Nameable;
 
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.commands.CommandSender;
@@ -36,15 +35,12 @@ public class SpongeEntityManager {
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
-	public static @Nullable CommandSender getExecutor(@Nullable Object src) {
+	public static @Nullable CommandSender getExecutor(@Nullable Audience src) {
 		if(src == null)
 			return null;
 		if(src instanceof ServerPlayer)
 			return new SpongePlayer((ServerPlayer) src);
-		if (src instanceof Audience && src instanceof Nameable)
-			//noinspection rawtypes
-			return new SpongeCommandSender((Audience) src);
-		throw new RuntimeException("Could not find appropriate CommandSender implementation for " + src);
+		return new SpongeCommandSender(src);
 	}
 
 	public static @Nullable Entity getProjectile(@Nullable ProjectileSource shooter) {

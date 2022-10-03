@@ -16,6 +16,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.common.protocols.data.EmptyData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.report.ReportType;
@@ -25,13 +26,13 @@ public class AirPlace extends Cheat {
 	public static final List<BlockFace> BLOCK_FACES = Arrays.asList(BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST);
 
 	public AirPlace() {
-		super(AIR_PLACE, CheatCategory.WORLD, Materials.GLASS_BOTTLE, CheatDescription.BLOCKS);
+		super(AIR_PLACE, CheatCategory.WORLD, Materials.GLASS_BOTTLE, EmptyData::new, CheatDescription.BLOCKS);
 	}
 
 	@Check(name = "block-around", description = "Check blocks around", conditions = { CheckConditions.SURVIVAL })
 	public void onPlaceBlock(BlockPlaceEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
-		if(e.isCancelled())
+		if(e.isCancelled() || !e.getOldBlock().getType().equals(Materials.AIR))
 			return;
 		Block theBlock = e.getBlock();
 		Material type = theBlock.getType();

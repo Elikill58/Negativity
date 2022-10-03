@@ -11,6 +11,7 @@ import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
+import com.elikill58.negativity.common.protocols.data.GroundSpoofData;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -21,37 +22,36 @@ public class GroundSpoof extends Cheat {
             BlockFace.NORTH, BlockFace.NORTH_WEST, BlockFace.SOUTH_WEST, BlockFace.NORTH_EAST, BlockFace.SOUTH_EAST);
 
     public GroundSpoof() {
-        super(CheatKeys.GROUND_SPOOF, CheatCategory.MOVEMENT, Materials.STONE);
+        super(CheatKeys.GROUND_SPOOF, CheatCategory.MOVEMENT, Materials.STONE, GroundSpoofData::new);
     }
 
     @Check(name = "check-blocks-under", description = "Block under player have to be considered as ground",
     		conditions = { CheckConditions.SURVIVAL, CheckConditions.GROUND, CheckConditions.NO_SNEAK })
-    public void onGroundSpoof(PlayerMoveEvent e, NegativityPlayer np) {
+    public void onGroundSpoof(PlayerMoveEvent e, NegativityPlayer np, GroundSpoofData data) {
         Player p = e.getPlayer();
 		if (e.isCancelled() || !p.isOnGround()) {// cancelled or player say he is not on ground
-			np.booleans.remove(getKey(), "was-alert");
+			data.wasAlert = false;
 			return;
 		}
         if (isOnGround(e.getTo()) || p.getFallDistance() > 3 || p.getFallDistance() > p.getWalkSpeed()) {
-			np.booleans.remove(getKey(), "was-alert");
+			data.wasAlert = false;
             return;
         }
         Block block = e.getTo().getBlock();
         Block downBlock = block.getRelative(BlockFace.DOWN);
         if (blockJustAroundAreNotAir(block) || blockJustAroundAreNotAir(downBlock)) {
-			np.booleans.remove(getKey(), "was-alert");
+			data.wasAlert = false;
             return;
         }
         double diffY = e.getTo().getY() - e.getFrom().getY();
         if(diffY >= 0.3 || diffY <= 0)
         	return;
-        boolean b = np.booleans.get(getKey(), "was-alert", false);
-        if(b)
+        if(data.wasAlert)
         	Negativity.alertMod(ReportType.WARNING, p, this, getReliability(p), "check-blocks-under",
                 "Air BlockFaces: " + getAirBlocks(p).toString() + ", fall: " + p.getFallDistance() + ", sneaking: " + p.isSneaking() + ", Y diff: " + diffY,
                 new CheatHover.Literal("Ground Spoof (Fly, NoFall, and other movement hacks)"));
         else
-        	np.booleans.set(getKey(), "was-alert", true);
+        	data.wasAlert = true;
     }
     
     private boolean blockJustAroundAreNotAir(Block block) {

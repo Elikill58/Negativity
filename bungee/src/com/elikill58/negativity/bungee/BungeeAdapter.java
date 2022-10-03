@@ -3,9 +3,7 @@ package com.elikill58.negativity.bungee;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -30,7 +28,6 @@ import com.elikill58.negativity.universal.logger.LoggerAdapter;
 import com.elikill58.negativity.universal.translation.NegativityTranslationProviderFactory;
 import com.elikill58.negativity.universal.translation.TranslationProviderFactory;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
-import com.google.gson.Gson;
 
 import net.md_5.bungee.api.ProxyServer;
 import net.md_5.bungee.api.chat.ClickEvent;
@@ -75,12 +72,6 @@ public class BungeeAdapter extends ProxyAdapter {
 	}
 
 	@Override
-	public void debug(String msg) {
-		if(getConfig().getBoolean("debug", false))
-			getLogger().info(msg);
-	}
-
-	@Override
 	public TranslationProviderFactory getPlatformTranslationProviderFactory() {
 		return this.translationProviderFactory;
 	}
@@ -114,26 +105,6 @@ public class BungeeAdapter extends ProxyAdapter {
 	@Override
 	public void runConsoleCommand(String cmd) {
 		pl.getProxy().getPluginManager().dispatchCommand(pl.getProxy().getConsole(), cmd);
-	}
-
-	@Override
-	public CompletableFuture<Boolean> isUsingMcLeaks(UUID playerId) {
-		return UniversalUtils.requestMcleaksData(playerId.toString()).thenApply(response -> {
-			if (response == null) {
-				return false;
-			}
-			try {
-				Gson gson = new Gson();
-				Map<?, ?> data = gson.fromJson(response, Map.class);
-				Object isMcleaks = data.get("isMcleaks");
-				if (isMcleaks != null) {
-					return Boolean.parseBoolean(isMcleaks.toString());
-				}
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			return false;
-		});
 	}
 
 	@Override

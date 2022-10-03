@@ -23,6 +23,15 @@ public abstract class Block implements NegativityObject {
 	public abstract void setType(Material type);
 	
 	public abstract boolean isWaterLogged();
+
+    public float getFriction() {
+    	String id = getType().getId().toLowerCase();
+        if (id.contains("slime"))
+            return 0.8f;
+        else if (id.contains("ice"))
+            return 0.98f;
+        return 0.6f;
+    }
 	
 	@Override
 	public boolean equals(Object obj) {

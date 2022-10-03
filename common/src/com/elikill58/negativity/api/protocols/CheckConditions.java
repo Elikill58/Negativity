@@ -6,7 +6,6 @@ import com.elikill58.negativity.api.GameMode;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.utils.LocationUtils;
-import com.elikill58.negativity.api.utils.Utils;
 
 public enum CheckConditions {
 
@@ -23,22 +22,25 @@ public enum CheckConditions {
 	ALLOW_FLY("Allow to fly", Player::getAllowFlight),
 	GROUND("On ground", Player::isOnGround),
 
-	NO_BLOCK_MID_AROUND("No block MID (fence, slab...) around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "SLAB", "STEP", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
-	NO_BLOCK_MID_AROUND_BELOW("No block MID (fence, slab...) below", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "SLAB", "STEP", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
-	NO_LIQUID_AROUND("No liquid around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "WATER", "LAVA"), true),
-	NO_STAIRS_AROUND("No stairs around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "STAIRS", "SCAFFOLD"), true),
-	NO_FALL_LESS_BLOCK("No block that reduce fall fear", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "STAIRS", "SCAFFOLD", "STEP", "SLAB", "HONEY_BLOCK"), true),
-	NO_FALL_LESS_BLOCK_BELOW("No block that reduce fall fear below", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "STAIRS", "SCAFFOLD", "STEP", "SLAB", "HONEY_BLOCK"), true),
-	NO_CLIMB_BLOCK("No climb block around", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation(), "STAIRS", "SCAFFOLD", "LADDER", "VINE"), true),
-	
+	NO_BLOCK_MID_AROUND("No block MID (fence, slab...) around", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("SLAB", "STEP", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
+	//NO_BLOCK_MID_AROUND_BELOW("No block MID (fence, slab...) below", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("SLAB", "STEP", "FENCE", "STAIRS", "ICE", "TRAPDOOR", "CARPET", "LILY", "CAKE", "SNOW", "SCAFFOLD"), true),
+	NO_LIQUID_AROUND("No liquid around", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("WATER", "LAVA"), true),
+	NO_STAIRS_AROUND("No stairs around", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("STAIRS", "SCAFFOLD"), true),
+	NO_ICE_AROUND("No ice around", (p) -> NegativityPlayer.getNegativityPlayer(p).iceCounter == 0, false),
+	NO_FALL_LESS_BLOCK("No block that reduce fall fear", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("STAIRS", "SCAFFOLD", "STEP", "SLAB", "HONEY_BLOCK"), true),
+	//NO_FALL_LESS_BLOCK_BELOW("No block that reduce fall fear below", (p) -> !LocationUtils.hasMaterialsAround(p.getLocation().clone().sub(0, 1, 0), "STAIRS", "SCAFFOLD", "STEP", "SLAB", "HONEY_BLOCK"), true),
+	NO_CLIMB_BLOCK("No climb block around", (p) -> !p.getBoundingBox().expand(1).getBlocks(p.getWorld()).has("STAIRS", "SCAFFOLD", "LADDER", "VINE"), true),
+
+	NO_FIGHT("Not fighting", p -> !NegativityPlayer.getNegativityPlayer(p).isInFight),
 	NO_TELEPORT("No teleport", p -> !NegativityPlayer.getNegativityPlayer(p).isTeleporting),
 	NO_BOAT_AROUND("No boat around", (p) -> !LocationUtils.hasBoatAroundHim(p.getLocation()), true),
 	NO_ON_BEDROCK("Not on bedrock", (p) -> !NegativityPlayer.getNegativityPlayer(p).isBedrockPlayer()),
 	NO_USE_TRIDENT("Using trident", (p) -> !p.getItemInHand().getType().getId().contains("TRIDENT")),
 	NO_USE_SLIME("Using slime", (p) -> !NegativityPlayer.getNegativityPlayer(p).isUsingSlimeBlock),
+	NO_USE_JUMP_BOOST("Using jump boost", (p) -> !NegativityPlayer.getNegativityPlayer(p).isUsingJumpBoost),
 	NO_USE_ELEVATOR("Using elevator", (p) -> !LocationUtils.isUsingElevator(p), true),
 	NO_IRON_TARGET("Target by iron golem", (p) -> !NegativityPlayer.getNegativityPlayer(p).isTargetByIronGolem(), true),
-	NO_THORNS("Thorns", p -> !Utils.hasThorns(p), true),
+	NO_THORNS("Thorns", p -> !p.hasThorns(), true),
 	NO_INSIDE_VEHICLE("Not inside vehicle", (p) -> !p.isInsideVehicle()),
 	NO_SPRINT("Not sprinting", (p) -> !p.isSprinting()),
 	NO_SNEAK("Not sneaking", (p) -> !p.isSneaking()),

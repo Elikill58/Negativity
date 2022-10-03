@@ -21,7 +21,7 @@ public enum SpecialKeys implements IDetectionKey<SpecialKeys> {
 	private final Version minVersion;
 	
 	private SpecialKeys(String key) {
-		this(key, Version.V1_7);
+		this(key, Version.V1_8);
 	}
 	
 	private SpecialKeys(String key, Version minVersion) {

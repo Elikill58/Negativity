@@ -120,6 +120,7 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 			while(cheatSection.contains(String.valueOf(key)))
 				key++;
 			Configuration proofConfig = cheatSection.createSection(String.valueOf(key));
+			proofConfig.set("report_type", proof.getReportType().name());
 			proofConfig.set("check.name", proof.getCheckName());
 			proofConfig.set("check.informations", proof.getCheckInformations());
 			proofConfig.set("ping", proof.getPing());
@@ -129,17 +130,17 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 			proofConfig.set("version", proof.getVersion().name());
 			proofConfig.set("warn", proof.getWarn());
 			proofConfig.set("tps", tpsToFile(proof.getTps()));
-			accountConfig.save();
+			accountConfig.directSave();
 		});
 	}
 	
 	@Override
 	public void saveProof(List<Proof> allProofs) {
 		CompletableFuture.runAsync(() -> {
-			HashMap<UUID, List<Proof>> proofs = new HashMap<>();
-			allProofs.forEach(p -> proofs.computeIfAbsent(p.getUUID(), (a) -> new ArrayList<>()).add(p));
+			HashMap<UUID, HashMap<CheatKeys, List<Proof>>> proofsPerUUID = new HashMap<>();
+			allProofs.forEach(p -> proofsPerUUID.computeIfAbsent(p.getUUID(), (a) -> new HashMap<>()).computeIfAbsent(p.getCheatKey(), a -> new ArrayList<>()).add(p));
 			
-			proofs.forEach((uuid, list) -> {
+			proofsPerUUID.forEach((uuid, proofPerKey) -> {
 				File file = new File(proofDir, uuid.toString() + ".yml");
 				if(!file.exists()) {
 					try {
@@ -150,25 +151,29 @@ public class FileNegativityProofStorage extends NegativityProofStorage {
 					}
 				}
 				Configuration accountConfig = YamlConfiguration.load(file);
-				list.forEach(proof -> {
-					Configuration cheatSection = accountConfig.getSection(proof.getCheatKey().getLowerKey());
+				proofPerKey.forEach((cheatKey, proofs) -> {
+					Configuration cheatSection = accountConfig.getSection(cheatKey.getLowerKey());
 					if(cheatSection == null)
-						cheatSection = accountConfig.createSection(proof.getCheatKey().getLowerKey());
+						cheatSection = accountConfig.createSection(cheatKey.getLowerKey());
 					int key = 0;
 					while(cheatSection.contains(String.valueOf(key)))
 						key++;
-					Configuration proofConfig = cheatSection.createSection(String.valueOf(key));
-					proofConfig.set("check.name", proof.getCheckName());
-					proofConfig.set("check.informations", proof.getCheckInformations());
-					proofConfig.set("ping", proof.getPing());
-					proofConfig.set("amount", proof.getAmount());
-					proofConfig.set("reliability", proof.getReliability());
-					proofConfig.set("time", proof.getTime().getTime());
-					proofConfig.set("version", proof.getVersion().name());
-					proofConfig.set("warn", proof.getWarn());
-					proofConfig.set("tps", tpsToFile(proof.getTps()));
+					for(Proof proof : proofs) {
+						Configuration proofConfig = cheatSection.createSection(String.valueOf(key));
+						proofConfig.set("report_type", proof.getReportType().name());
+						proofConfig.set("check.name", proof.getCheckName());
+						proofConfig.set("check.informations", proof.getCheckInformations());
+						proofConfig.set("ping", proof.getPing());
+						proofConfig.set("amount", proof.getAmount());
+						proofConfig.set("reliability", proof.getReliability());
+						proofConfig.set("time", proof.getTime().getTime());
+						proofConfig.set("version", proof.getVersion().name());
+						proofConfig.set("warn", proof.getWarn());
+						proofConfig.set("tps", tpsToFile(proof.getTps()));
+						key++;
+					}
 				});
-				accountConfig.save();
+				accountConfig.directSave();
 			});
 		});
 	}

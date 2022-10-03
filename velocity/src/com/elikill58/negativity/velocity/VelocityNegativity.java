@@ -18,8 +18,6 @@ import org.slf4j.Logger;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.Stats;
-import com.elikill58.negativity.universal.Stats.StatsType;
-import com.elikill58.negativity.universal.database.Database;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.storage.account.NegativityAccountStorage;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
@@ -92,8 +90,7 @@ public class VelocityNegativity {
 	
 	@Subscribe
 	public void onProxyDisable(ProxyShutdownEvent e) {
-		Database.close();
-		Stats.updateStats(StatsType.ONLINE, 0 + "");
+		Negativity.closeNegativity();
 	}
 	
 	public final File getDataFolder() {

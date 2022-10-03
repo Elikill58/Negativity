@@ -5,13 +5,16 @@ import org.bukkit.craftbukkit.v1_15_R1.CraftServer;
 import org.bukkit.craftbukkit.v1_15_R1.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
+import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigFace;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 
 import net.minecraft.server.v1_15_R1.BlockPosition;
 import net.minecraft.server.v1_15_R1.MathHelper;
 import net.minecraft.server.v1_15_R1.PacketPlayInBlockDig;
+import net.minecraft.server.v1_15_R1.PacketPlayInBlockPlace;
 
 @SuppressWarnings("resource")
 public class Spigot_1_15_R1 extends SpigotVersionAdapter {
@@ -21,8 +24,10 @@ public class Spigot_1_15_R1 extends SpigotVersionAdapter {
 		packetsPlayIn.put("PacketPlayInBlockDig", (player, packet) -> {
 			PacketPlayInBlockDig blockDig = (PacketPlayInBlockDig) packet;
 			BlockPosition pos = blockDig.b();
-			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), DigAction.getById(blockDig.c().ordinal()), DigFace.getById((int) blockDig.b().asLong()));
+			return new NPacketPlayInBlockDig(pos.getX(), pos.getY(), pos.getZ(), DigAction.getById(blockDig.c().ordinal()), BlockFace.getById((int) blockDig.b().asLong()));
 		});
+		packetsPlayIn.put("PacketPlayInBlockPlace", (p, packet) -> new NPacketPlayInUseItem(Hand.getHand(((PacketPlayInBlockPlace) packet).b().name())));
+		
 		log();
 	}
 	
@@ -52,8 +57,8 @@ public class Spigot_1_15_R1 extends SpigotVersionAdapter {
 	}
 	
 	@Override
-	public com.elikill58.negativity.api.location.BlockPosition getBlockPosition(Object obj) {
+	public com.elikill58.negativity.api.block.BlockPosition getBlockPosition(Object obj) {
 		BlockPosition pos = (BlockPosition) obj;
-		return new com.elikill58.negativity.api.location.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
+		return new com.elikill58.negativity.api.block.BlockPosition(pos.getX(), pos.getY(), pos.getZ());
 	}
 }

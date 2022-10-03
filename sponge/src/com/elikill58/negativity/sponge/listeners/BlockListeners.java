@@ -25,7 +25,7 @@ public class BlockListeners {
 			});*/
 		e.transactions(Operations.PLACE.get())
 			.forEach(transaction -> {
-				BlockPlaceEvent event = new BlockPlaceEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(transaction.original()));
+				BlockPlaceEvent event = new BlockPlaceEvent(SpongeEntityManager.getPlayer(p), new SpongeBlock(transaction.finalReplacement()), new SpongeBlock(transaction.original()));
 				EventManager.callEvent(event);
 				if (event.isCancelled()) {
 					transaction.invalidate();

@@ -15,26 +15,18 @@ import com.elikill58.negativity.api.packets.AbstractPacket;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.impl.packet.SpigotPacketManager;
-import com.elikill58.negativity.spigot.packets.custom.channel.ChannelAbstract;
-import com.elikill58.negativity.spigot.packets.custom.channel.INCChannel;
-import com.elikill58.negativity.spigot.packets.custom.channel.NMUChannel;
-import com.elikill58.negativity.spigot.utils.Utils;
 import com.elikill58.negativity.universal.Adapter;
-import com.elikill58.negativity.universal.Version;
 
 public class CustomPacketManager extends SpigotPacketManager implements Listener {
 	
-	private ChannelAbstract channel;
-	private Plugin pl;
+	private final INCChannel channel;
+	private final Plugin pl;
 	public HashMap<Object, Integer> protocolVersionPerChannel = new HashMap<>();
 	private boolean isStarted = false;
 
 	public CustomPacketManager(Plugin pl) {
 		this.pl = pl;
-		if (Version.getVersion(Utils.VERSION).equals(Version.V1_7))
-			channel = new NMUChannel(this);
-		else
-			channel = new INCChannel(this);
+		this.channel = new INCChannel(this);
 	}
 	
 	public Plugin getPlugin() {

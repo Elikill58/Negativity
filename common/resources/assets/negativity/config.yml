@@ -123,64 +123,84 @@ Permissions:
       default: "negativity.bypass.ban"
     all:
       default: "negativity.bypass.all"
-    forcefield:
-      default: "negativity.bypass.forcefield"
-    fastplace:
-      default: "negativity.bypass.fastplace"
-    speed:
-      default: "negativity.bypass.speed"
-    autoclick:
-      default: "negativity.bypass.autoclick"
-    fly:
-      default: "negativity.bypass.fly"
-    antipotion:
-      default: "negativity.bypass.antipotion"
-    fasteat:
-      default: "negativity.bypass.fasteat"
-    regen:
-      default: "negativity.bypass.regen"
+    aimbot:
+      default: "negativity.bypass.aimbot"
+    airjump:
+      default: "negativity.bypass.airjump"
+    airplace:
+      default: "negativity.bypass.airplace"
     antiknockback:
       default: "negativity.bypass.antiknockback"
+    antipotion:
+      default: "negativity.bypass.antipotion"
+    autoclick:
+      default: "negativity.bypass.autoclick"
+    autosteal:
+      default: "negativity.bypass.autosteal"
+    blink:
+      default: "negativity.bypass.blink"
+    chat:
+      default: "negativity.bypass.chat"
+    critical:
+      default: "negativity.bypass.critical"
+    elytrafly:
+      default: "negativity.bypass.elytrafly"
+    fastbow:
+      default: "negativity.bypass.fastbow"
+    fasteat:
+      default: "negativity.bypass.fasteat"
+    fastladder:
+      default: "negativity.bypass.fastladder"
+    fastplace:
+      default: "negativity.bypass.fastplace"
+    faststairs:
+      default: "negativity.bypass.faststairs"
+    fly:
+      default: "negativity.bypass.fly"
+    forcefield:
+      default: "negativity.bypass.forcefield"
+    groundspoof:
+      default: "negativity.bypass.groundspoof"
+    incorrectpacket:
+      default: "negativity.bypass.incorrectpacket"
+    inventorymove:
+      default: "negativity.bypass.inventorymove"
     jesus:
       default: "negativity.bypass.jesus"
     nofall:
       default: "negativity.bypass.nofall"
-    blink:
-      default: "negativity.bypass.blink"
-    spider:
-      default: "negativity.bypass.spider"
-    fastbow:
-      default: "negativity.bypass.fastbow"
-    scaffold:
-      default: "negativity.bypass.scaffold"
-    step:
-      default: "negativity.bypass.step"
-    noslowdown:
-      default: "negativity.bypass.noslowdown"
-    fastladder:
-      default: "negativity.bypass.fastladder"
-    phase:
-      default: "negativity.bypass.phase"
-    autosteal:
-      default: "negativity.bypass.autosteal"
-    nuker:
-      default: "negativity.bypass.nuker"
-    airjump:
-      default: "negativity.bypass.airjump"
-    chat:
-      default: "negativity.bypass.chat"
-    noweb:
-      default: "negativity.bypass.noweb"
-    critical:
-      default: "negativity.bypass.critical"
-    inventorymove:
-      default: "negativity.bypass.inventorymove"
-    faststairs:
-      default: "negativity.bypass.faststairs"
     nopitchlimit:
       default: "negativity.bypass.nopitchlimit"
+    noslowdown:
+      default: "negativity.bypass.noslowdown"
+    noweb:
+      default: "negativity.bypass.noweb"
+    nuker:
+      default: "negativity.bypass.nuker"
+    pingspoof:
+      default: "negativity.bypass.pingspoof"
+    reach:
+      default: "negativity.bypass.reach"
+    regen:
+      default: "negativity.bypass.regen"
+    scaffold:
+      default: "negativity.bypass.scaffold"
+    sneak:
+      default: "negativity.bypass.sneak"
+    speed:
+      default: "negativity.bypass.speed"
+    spider:
+      default: "negativity.bypass.spider"
+    step:
+      default: "negativity.bypass.step"
+    strafe:
+      default: "negativity.bypass.strafe"
+    superknockback:
+      default: "negativity.bypass.superknockback"
     timer:
       default: "negativity.bypass.timer"
+    xray:
+      default: "negativity.bypass.xray"
 
 Translation:
   active: false # enable or disable the translation
@@ -205,6 +225,7 @@ Translation:
   - sq_SQ
   - sv_SV
   - th_TH
+  - tr_TR
   - vi_VN
   - zh_CN
   default: en_US
@@ -400,6 +421,10 @@ webhooks:
           enabled: true
           # Cooldown between 2 alerts sent to discord (will combine all)
           cooldown: 5000
+          # Reliability needed to send the webhook
+          reliability_need: 90
+          # Amount of alert needed to send the webhook
+          amount_need: 1
           # The name which will send the message
           username: "Negativity Alert"
           # The content of the message
@@ -512,7 +537,7 @@ webhooks:
               name: "Negativity"
               link: "https://github.com/Elikill58/Negativity"
               icon: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
-        # Configure discord webhook message for ban.
+        # Configure discord webhook message for kick.
         #
         # Placeholders available :
         # %reason% : Name of the banned player
@@ -558,7 +583,7 @@ webhooks:
               name: "Negativity"
               link: "https://github.com/Elikill58/Negativity"
               icon: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
-        # Configure discord webhook message for ban.
+        # Configure discord webhook message for report.
         #
         # Placeholders available :
         # %reason% : Name of the banned player
@@ -578,6 +603,52 @@ webhooks:
             title: "Report"
             # Main description
             description: "%name% have been reported by %sender% for %reason%"
+            # All fields.
+            # There is 3 fields per line MAX.
+            # Else, they will automatically be on the next line.
+            fields:
+              1:
+                # The key which will be at top of field (and bold)
+                key: "Player name"
+                # The value of the field
+                value: "%name%"
+                # If the field is inline
+                inline: true
+              2:
+                key: "Player UUID"
+                value: "%uuid%"
+                inline: true
+            # Thumbnail of the message
+            thumbnail: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
+            # The footer of the message
+            footer:
+              name: "Negativity - %date%"
+              link: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
+            # Author details of the message
+            author:
+              name: "Negativity"
+              link: "https://github.com/Elikill58/Negativity"
+              icon: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
+        # Configure discord webhook message for warn.
+        #
+        # Placeholders available :
+        # %reason% : Name of the warned player
+        warn:
+          enabled: true
+          # The name which will send the message
+          username: "Negativity"
+          # The content of the message
+          content: ""
+          # The URL of the message avatar
+          avatar_url: "https://www.spigotmc.org/data/resource_icons/86/86874.jpg"
+          # Now let's configure embed message (the section with black background)
+          embed:
+            # Color of the embed (used with the line on the left)
+            color: "red"
+            # The embed title
+            title: "Warn"
+            # Main description
+            description: "%name% have been warned by %sender% for %reason%"
             # All fields.
             # There is 3 fields per line MAX.
             # Else, they will automatically be on the next line.

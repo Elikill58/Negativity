@@ -2,7 +2,7 @@ package com.elikill58.negativity.spigot.nms;
 
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.api.location.BlockPosition;
+import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.spigot.SpigotNegativity;
 
 public class Spigot_UnknowVersion extends SpigotVersionAdapter {

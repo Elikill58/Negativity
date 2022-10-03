@@ -10,6 +10,7 @@
 !/build.gradle
 !/settings.gradle
 !/gradle.properties
+!/setup_spigot.sh
 
 !/README.md
 
@@ -23,3 +24,4 @@
 !/sponge7/
 !/velocity/
 !/fabric/
+!/minestom/

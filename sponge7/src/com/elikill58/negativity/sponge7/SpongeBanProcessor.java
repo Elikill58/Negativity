@@ -9,7 +9,6 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.checkerframework.checker.nullness.qual.Nullable;
-
 import org.spongepowered.api.Sponge;
 import org.spongepowered.api.profile.GameProfile;
 import org.spongepowered.api.service.ban.BanService;
@@ -22,11 +21,11 @@ import com.elikill58.negativity.api.colors.ChatColor;
 import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Platform;
 import com.elikill58.negativity.universal.PlatformDependentExtension;
+import com.elikill58.negativity.universal.SanctionnerType;
 import com.elikill58.negativity.universal.ban.Ban;
 import com.elikill58.negativity.universal.ban.BanResult;
 import com.elikill58.negativity.universal.ban.BanResult.BanResultType;
 import com.elikill58.negativity.universal.ban.BanStatus;
-import com.elikill58.negativity.universal.ban.BanType;
 import com.elikill58.negativity.universal.ban.BanUtils;
 import com.elikill58.negativity.universal.ban.processor.BanProcessor;
 import com.elikill58.negativity.universal.ban.processor.BanProcessorProvider;
@@ -133,7 +132,7 @@ public class SpongeBanProcessor implements BanProcessor {
 		String bannedBy = profile.getBanSource().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
 		long expirationTime = profile.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
 		long executionTime = profile.getCreationDate().toEpochMilli();
-		return new Ban(profile.getProfile().getUniqueId(), reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, BanStatus.ACTIVE, executionTime);
+		return new Ban(profile.getProfile().getUniqueId(), reason, bannedBy, SanctionnerType.UNKNOW, expirationTime, null, null, BanStatus.ACTIVE, executionTime);
 	}
 
 	private Ban toNegativityBan(org.spongepowered.api.util.ban.Ban activeBan, UUID uuid) {
@@ -141,7 +140,7 @@ public class SpongeBanProcessor implements BanProcessor {
 		String bannedBy = activeBan.getBanSource().map(TextSerializers.FORMATTING_CODE::serialize).orElse("");
 		long expirationTime = activeBan.getExpirationDate().map(Instant::toEpochMilli).orElse(-1L);
 		long executionTime = activeBan.getCreationDate().toEpochMilli();
-		return new Ban(uuid, reason, bannedBy, BanType.UNKNOW, expirationTime, null, null, BanStatus.ACTIVE, executionTime);
+		return new Ban(uuid, reason, bannedBy, SanctionnerType.UNKNOW, expirationTime, null, null, BanStatus.ACTIVE, executionTime);
 	}
 	
 	public static class Provider implements BanProcessorProvider, PlatformDependentExtension {

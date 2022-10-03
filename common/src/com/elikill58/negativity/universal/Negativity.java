@@ -3,7 +3,6 @@ package com.elikill58.negativity.universal;
 import static com.elikill58.negativity.universal.verif.VerificationManager.hasVerifications;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -37,7 +36,6 @@ import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.Cheat.CheatHover;
 import com.elikill58.negativity.universal.detections.Special;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
-import com.elikill58.negativity.universal.file.FileSaverTimer;
 import com.elikill58.negativity.universal.multiVersion.PlayerVersionManager;
 import com.elikill58.negativity.universal.permissions.Perm;
 import com.elikill58.negativity.universal.playerModifications.PlayerModificationsManager;
@@ -50,6 +48,7 @@ import com.elikill58.negativity.universal.storage.proof.NegativityProofStorage;
 import com.elikill58.negativity.universal.utils.SemVer;
 import com.elikill58.negativity.universal.utils.UniversalUtils;
 import com.elikill58.negativity.universal.verif.VerificationManager;
+import com.elikill58.negativity.universal.warn.WarnManager;
 import com.elikill58.negativity.universal.webhooks.WebhookManager;
 import com.elikill58.negativity.universal.webhooks.messages.AlertWebhookMessage;
 import com.elikill58.negativity.universal.webhooks.messages.WebhookMessage.WebhookMessageType;
@@ -131,10 +130,6 @@ public class Negativity {
 		if(!c.isActive() || reliability < 55 || tpsDrop || amount <= 0)
 			return false;
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
-		if (!np.already_blink && c.getKey().equals(CheatKeys.BLINK)) {
-			np.already_blink = true;
-			return false;
-		}
 		if(VerificationManager.isDisablingAlertOnVerif() && hasVerifications(p.getUniqueId()))
 			return false;
 		int ping = p.getPing();
@@ -149,8 +144,7 @@ public class Negativity {
 			if (!bypassEvent.isCancelled())
 				return false;
 		}
-		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(type, p, c, reliability,
-				c.getReliabilityAlert() < reliability, ping, proof, hover, amount);
+		PlayerCheatAlertEvent alert = new PlayerCheatAlertEvent(type, p, c, reliability, c.getReliabilityAlert() < reliability, ping, checkName, proof, hover, amount);
 		EventManager.callEvent(alert);
 		if (alert.isCancelled() || !alert.isAlert())
 			return false;
@@ -258,13 +252,7 @@ public class Negativity {
 					ada.sendMessageRunnableHover(pl, Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
 									"%reliability%", reliability, "%nb%", alert.getNbAlert()),
 							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%", reliability, "%ping%", ping)
-							+ ChatColor.RESET + (hoverMsg == null ? "" : "\n\n" + hoverMsg.compile(npMod)), "/negativity " + p.getName());
-					/*new ClickableText().addRunnableHoverEvent(
-							Messages.getMessage(pl, alert.getAlertMessageKey(), "%name%", p.getName(), "%cheat%", c.getName(),
-									"%reliability%", String.valueOf(reliability), "%nb%", String.valueOf(alert.getNbAlert())),
-							Messages.getMessage(pl, "negativity.alert_hover", "%reliability%", reliability, "%ping%", ping)
-									+ ChatColor.RESET + (hoverMsg == null ? "" : "\n\n" + hoverMsg.compile(npMod)),
-								"/negativity " + p.getName()).sendToPlayer(pl);*/
+							+ "\n" + ChatColor.GRAY + "Check: " + alert.getCheckName() + (hoverMsg == null ? "" : "\n\n" + hoverMsg.compile(npMod)), "/negativity " + p.getName());
 					hasPermPeople = true;
 				}
 			}
@@ -321,6 +309,7 @@ public class Negativity {
 		Database.init();
 		Perm.init();
 		BanManager.init();
+		WarnManager.init();
 		TranslatedMessages.init();
 		NegativityAccountStorage.init();
 		EventManager.load();
@@ -339,11 +328,6 @@ public class Negativity {
 				NegativityPlayer.getNegativityPlayer(p).setClientName(new String(msg).substring(1));
 			});
 			AlertSender.initAlertShower(ada);
-			FileSaverTimer old = FileSaverTimer.getInstance();
-			if(old != null)
-				old.runAll();
-			else
-				ada.getScheduler().runRepeatingAsync(new FileSaverTimer(), Duration.ofSeconds(1), Duration.ofSeconds(1), "Negativity FileSaver");
 			if(actualizeInvTimer != null)
 				actualizeInvTimer.cancel();
 			actualizeInvTimer = ada.getScheduler().runRepeating(new ActualizeInvTimer(), 10, 10);
@@ -360,7 +344,6 @@ public class Negativity {
 				}
 			}
 		}
-		UniversalUtils.init();
 		log = config.getBoolean("log_alerts", true);
 		log_console = config.getBoolean("log_alerts_in_console", true);
 		hasBypass = config.getBoolean("Permissions.bypass.active", false);
@@ -413,5 +396,15 @@ public class Negativity {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public static void closeNegativity() {
+		if(actualizeInvTimer != null)
+			actualizeInvTimer.cancel();
+		if(analyzePacketTimer != null)
+			analyzePacketTimer.cancel();
+		Database.close();
+		Stats.updateStats(StatsType.ONLINE, 0 + "");
+		NegativityPlayer.getAllNegativityPlayers().forEach(NegativityPlayer::destroy);
 	}
 }

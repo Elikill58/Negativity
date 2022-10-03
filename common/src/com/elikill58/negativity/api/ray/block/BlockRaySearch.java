@@ -11,8 +11,8 @@ public enum BlockRaySearch {
 	private final Function<BlockRayBuilder, Boolean> checkIfValid;
 
 	private BlockRaySearch(Function<BlockRayBuilder, Boolean> checkIfValid) {
-			this.checkIfValid = checkIfValid;
-		}
+		this.checkIfValid = checkIfValid;
+	}
 
 	public boolean isValid(BlockRayBuilder builder) {
 		return checkIfValid.apply(builder);

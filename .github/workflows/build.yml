@@ -29,4 +29,4 @@ jobs:
     - name: Run setup spigot script
       run: bash setup_spigot.sh
     - name: Build with Gradle
-      run: ./gradlew shadowJar
+      run: ./gradlew build

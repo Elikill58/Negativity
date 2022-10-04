@@ -39,4 +39,11 @@ public class SpeedData extends CheckData {
 		}
 		return 1;
 	}
+	
+	public void reduceWalkSpeedBuffer() {
+		walkSpeedBuffer -= 0.5;
+    	if(walkSpeedBuffer < 0) {
+    		walkSpeedBuffer = 0;
+    	}
+	}
 }

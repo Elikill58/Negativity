@@ -121,6 +121,7 @@ public class Speed extends Cheat implements Listeners {
         	if(deltaXZ != 0)
         		p.sendMessage("Distance X/Z: " + deltaXZ);
         	data.deltaXZ = deltaXZ;
+        	data.reduceWalkSpeedBuffer();
         	return;
         }
 
@@ -167,10 +168,7 @@ public class Speed extends Cheat implements Listeners {
             }
         } else {
             //p.sendMessage((deltaXZ > minSpeed ? "§c" : "§e") + String.format("%.4f", deltaXZ) + " > " + String.format("%.3f", minSpeed) + " §f&& " + (predicted > multiplication ? "§c" : "§a") + String.format("%.4f", predicted) + " > " + String.format("%.3f", multiplication) + " §f&& " + (Math.abs(difference) > minDifference ? "§c" : "§b") + String.format("%.4f", Math.abs(difference)) + " > " + String.format("%.4f", minDifference));
-        	data.walkSpeedBuffer -= 0.5;
-        	if(data.walkSpeedBuffer < 0) {
-        		data.walkSpeedBuffer = 0;
-        	}
+        	data.reduceWalkSpeedBuffer();
         }
         data.deltaXZ = deltaXZ;
 	}

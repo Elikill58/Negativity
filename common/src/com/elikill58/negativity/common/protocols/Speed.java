@@ -27,7 +27,9 @@ public class Speed extends Cheat implements Listeners {
 		super(CheatKeys.SPEED, CheatCategory.MOVEMENT, Materials.BEACON, SpeedData::new, CheatDescription.NO_FIGHT);
 	}
 
-	@Check(name = "distance-jumping", description = "Distance when jumping", conditions = { CheckConditions.NO_USE_TRIDENT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND, CheckConditions.NO_INSIDE_VEHICLE })
+	@Check(name = "distance-jumping", description = "Distance when jumping", conditions = {
+			CheckConditions.NO_USE_TRIDENT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND,
+			CheckConditions.NO_INSIDE_VEHICLE })
 	public void onDistanceJumping(PlayerMoveEvent e, NegativityPlayer np) {
 		Player p = e.getPlayer();
 		Location from = e.getFrom(), to = e.getTo();
@@ -66,19 +68,20 @@ public class Speed extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "walk-speed-work", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND })
+	@Check(name = "walk-speed-work", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT,
+			CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND })
 	public void onWalkSpeedWork(PacketReceiveEvent e, SpeedData data) {
-		if(!e.getPacket().getPacketType().isFlyingPacket())
+		if (!e.getPacket().getPacketType().isFlyingPacket())
 			return;
 		NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
-		if(!flying.hasPos || flying.hasPos) // true if to disable it temporary
+		if (!flying.hasPos || flying.hasPos) // true if to disable it temporary
 			return;
 		Player p = e.getPlayer();
 		Location from = p.getLocation(), to = flying.getLocation(p.getWorld());
 		double yDif = to.getY() - from.getY();
 
 		double maxDistance;
-		if(p.isFlying())
+		if (p.isFlying())
 			maxDistance = p.getFlySpeed() * (p.isSprinting() ? 2 : 1);
 		else
 			maxDistance = p.getWalkSpeed() * (p.isSprinting() ? 1.32 : 1);
@@ -86,91 +89,118 @@ public class Speed extends Cheat implements Listeners {
 		maxDistance *= data.getSpeedModifier();
 		maxDistance *= data.getSlowModifier();
 
-		double maxDistanceX = maxDistance + Math.max(Math.abs(p.getTheoricVelocity().getX()), Math.abs(p.getVelocity().getX())); // to prevent lag issue
-		double maxDistanceZ = maxDistance + Math.max(Math.abs(p.getTheoricVelocity().getZ()), Math.abs(p.getVelocity().getZ())); // to prevent lag issue
-		
+		double maxDistanceX = maxDistance
+				+ Math.max(Math.abs(p.getTheoricVelocity().getX()), Math.abs(p.getVelocity().getX())); // to prevent lag
+																										// issue
+		double maxDistanceZ = maxDistance
+				+ Math.max(Math.abs(p.getTheoricVelocity().getZ()), Math.abs(p.getVelocity().getZ())); // to prevent lag
+																										// issue
+
 		double distanceX = Math.abs(from.getX() - to.getX());
 		double distanceZ = Math.abs(from.getZ() - to.getZ());
-		
-		Adapter.getAdapter().debug((yDif < maxDistance && !(flying.isGround && !p.isOnGround()) ? (distanceX > maxDistanceX && distanceZ > maxDistanceZ ? "X" : (distanceX > maxDistanceX || distanceZ > maxDistanceZ ? "D" : ":")) : "_") + ": " + String.format("%.4f", distanceX) +"/"+ String.format("%.4f", maxDistanceX) + " >> "+ String.format("%.4f", distanceZ) +"/"+ String.format("%.4f", maxDistanceZ) + ", yDif: " + String.format("%.4f", yDif));
-		if ((distanceX > maxDistanceX || distanceZ > maxDistanceZ) && yDif < maxDistance && !(flying.isGround && !p.isOnGround())) { // go too far, not just change dir & not just fall on ground
+
+		Adapter.getAdapter()
+				.debug((yDif < maxDistance && !(flying.isGround && !p.isOnGround())
+						? (distanceX > maxDistanceX && distanceZ > maxDistanceZ ? "X"
+								: (distanceX > maxDistanceX || distanceZ > maxDistanceZ ? "D" : ":"))
+						: "_") + ": " + String.format("%.4f", distanceX) + "/" + String.format("%.4f", maxDistanceX)
+						+ " >> " + String.format("%.4f", distanceZ) + "/" + String.format("%.4f", maxDistanceZ)
+						+ ", yDif: " + String.format("%.4f", yDif));
+		if ((distanceX > maxDistanceX || distanceZ > maxDistanceZ) && yDif < maxDistance
+				&& !(flying.isGround && !p.isOnGround())) { // go too far, not just change dir & not just fall on ground
 			double difDistance = distanceX - maxDistance;
 			int relia = UniversalUtils.parseInPorcent(difDistance * 500);
-			if(relia > 50)
+			if (relia > 50)
 				Negativity.alertMod(ReportType.WARNING, p, this, relia, "walk-speed",
-						"Distance X/Z: " + distanceX + "/" + distanceZ + ", maxDistance X/Z: " + maxDistanceX
-						+ "/" + maxDistanceZ + ", yDif: " + yDif + ", fall: " + p.getFallDistance() + ", vel: " + p.getTheoricVelocity(),
+						"Distance X/Z: " + distanceX + "/" + distanceZ + ", maxDistance X/Z: " + maxDistanceX + "/"
+								+ maxDistanceZ + ", yDif: " + yDif + ", fall: " + p.getFallDistance() + ", vel: "
+								+ p.getTheoricVelocity(),
 						null, (long) (difDistance * 50));
 		}
 	}
 
-
-	@Check(name = "walk-speed", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT, CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND })
+	@Check(name = "walk-speed", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT,
+			CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND })
 	public void onWalkSpeed(PacketReceiveEvent e, NegativityPlayer np, SpeedData data) {
-		if(!e.getPacket().getPacketType().isFlyingPacket())
+		if (!e.getPacket().getPacketType().isFlyingPacket())
 			return;
 		NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
-        if (!flying.hasPos)
-        	return;
-        Player p = e.getPlayer();
+		if (!flying.hasPos)
+			return;
+		Player p = e.getPlayer();
 
-        Location blockLoc = flying.getLocation(p.getWorld());
-        double deltaXZ = blockLoc.distanceXZ(p.getLocation());
-        
-        if (deltaXZ == 0 /*|| !p.isOnGround()*/) {
-        	if(deltaXZ != 0)
-        		p.sendMessage("Distance X/Z: " + deltaXZ);
-        	data.deltaXZ = deltaXZ;
-        	data.reduceWalkSpeedBuffer();
-        	return;
-        }
+		Location blockLoc = flying.getLocation(p.getWorld());
+		double deltaXZ = blockLoc.distanceXZ(p.getLocation());
 
-        blockLoc.setY(p.getBoundingBox().getMinY() - 1);
-        Block block = blockLoc.getBlock();
+		if (deltaXZ == 0 /* || !p.isOnGround() */) {
+			if (deltaXZ != 0)
+				p.sendMessage("Distance X/Z: " + deltaXZ);
+			data.deltaXZ = deltaXZ;
+			data.reduceWalkSpeedBuffer();
+			return;
+		}
 
-        /*
-         * Air resistance is automatically being calculated;
-         * We don't need to exempt AIR blocks since they have
-         * a friction of 0.6 and not 0.98 (default drag)
-         *
-         * if (block.getType() == Material.AIR) break friction;
-         */
+		blockLoc.setY(p.getBoundingBox().getMinY() - 1);
+		Block block = blockLoc.getBlock();
 
-        double friction = block.getFriction() * 0.91f;
+		/*
+		 * Air resistance is automatically being calculated; We don't need to exempt AIR
+		 * blocks since they have a friction of 0.6 and not 0.98 (default drag)
+		 *
+		 * if (block.getType() == Material.AIR) break friction;
+		 */
 
-        double predicted = data.deltaXZ * friction;
+		double friction = block.getFriction() * 0.91f;
 
-        double difference = predicted - data.deltaXZ;
+		double predicted = data.deltaXZ * friction;
 
-        double minSpeed = p.getWalkSpeed() + (np.blockAbove == 0 ? 0 : 0.1) + 0.0864;
-        double speedEffect = data.getSpeedModifier();
-        if(p.isOnGround()) {
-        	//minSpeed += 0.08;
-        	if(speedEffect != 1)
-        		minSpeed *= speedEffect;
-        } else {
-        	//minSpeed += 0.16;
-        	if(speedEffect != 1)
-        		minSpeed *= speedEffect * 0.28;
-        }
-        double multiplication = minSpeed - 0.07;
-        double minDifference = np.blockAbove == 0 ? multiplication : multiplication + 0.5;
+		double difference = predicted - data.deltaXZ;
 
-        if (deltaXZ > minSpeed && predicted > multiplication && Math.abs(difference) > minDifference) {
+		double minSpeed = p.getWalkSpeed() + (np.blockAbove == 0 ? 0 : 0.1) + 0.0864;
+		double speedEffect = data.getSpeedModifier();
+		if (p.isOnGround()) {
+			// minSpeed += 0.08;
+			if (speedEffect != 1)
+				minSpeed *= speedEffect;
+		} else {
+			// minSpeed += 0.16;
+			if (speedEffect != 1)
+				minSpeed *= speedEffect * 0.28;
+		}
+		double multiplication = minSpeed - 0.07;
+		double minDifference = np.blockAbove == 0 ? multiplication : multiplication + 0.5;
 
-        	//p.sendMessage("!! " + (deltaXZ > minSpeed ? "§c" : "§e") + String.format("%.4f", deltaXZ) + " > " + String.format("%.3f", minSpeed) + " §f&& " + (predicted > multiplication ? "§c" : "§a") + String.format("%.4f", predicted) + " > " + String.format("%.3f", multiplication) + " §f&& " + (Math.abs(difference) > minDifference ? "§c" : "§b") + String.format("%.4f", Math.abs(difference)) + " > " + String.format("%.4f", minDifference));
-        	
-            if (++data.walkSpeedBuffer > 2.8) {
-            	Negativity.alertMod(ReportType.WARNING, p, this, 99, "walk-speed",
-            			String.format("xz=%.3f p=%.4f d=%.4f m=%.3f f=%.2f", data.deltaXZ, predicted, difference, minDifference, friction), null, (long) (data.walkSpeedBuffer - 1.8));
+		if (deltaXZ > minSpeed && predicted > multiplication && Math.abs(difference) > minDifference) {
 
-                data.walkSpeedBuffer *= 0.7;
-            }
-        } else {
-            //p.sendMessage((deltaXZ > minSpeed ? "§c" : "§e") + String.format("%.4f", deltaXZ) + " > " + String.format("%.3f", minSpeed) + " §f&& " + (predicted > multiplication ? "§c" : "§a") + String.format("%.4f", predicted) + " > " + String.format("%.3f", multiplication) + " §f&& " + (Math.abs(difference) > minDifference ? "§c" : "§b") + String.format("%.4f", Math.abs(difference)) + " > " + String.format("%.4f", minDifference));
-        	data.reduceWalkSpeedBuffer();
-        }
-        data.deltaXZ = deltaXZ;
+			// p.sendMessage("!! " + (deltaXZ > minSpeed ? "§c" : "§e") +
+			// String.format("%.4f", deltaXZ) + " > " + String.format("%.3f", minSpeed) + "
+			// §f&& " + (predicted > multiplication ? "§c" : "§a") + String.format("%.4f",
+			// predicted) + " > " + String.format("%.3f", multiplication) + " §f&& " +
+			// (Math.abs(difference) > minDifference ? "§c" : "§b") + String.format("%.4f",
+			// Math.abs(difference)) + " > " + String.format("%.4f", minDifference));
+
+			if (++data.walkSpeedBuffer > 2.8) {
+				Negativity.alertMod(ReportType.WARNING, p, this, 99, "walk-speed",
+						(deltaXZ > minSpeed ? "Y " : "X ") + String.format("%.4f", deltaXZ) + " > "
+								+ String.format("%.3f", minSpeed) + " && " + (predicted > multiplication ? "Y " : "X ")
+								+ String.format("%.4f", predicted) + " > " + String.format("%.3f", multiplication)
+								+ " && " + (Math.abs(difference) > minDifference ? "Y " : "X ")
+								+ String.format("%.4f", Math.abs(difference)) + " > "
+								+ String.format("%.4f", minDifference) + ", buffer: " + data.walkSpeedBuffer + ", ws: " + String.format("%.2f", p.getWalkSpeed()),
+						null, (long) (data.walkSpeedBuffer - 1.8));
+
+				data.walkSpeedBuffer *= 0.7;
+			}
+		} else {
+			// p.sendMessage((deltaXZ > minSpeed ? "§c" : "§e") + String.format("%.4f",
+			// deltaXZ) + " > " + String.format("%.3f", minSpeed) + " §f&& " + (predicted >
+			// multiplication ? "§c" : "§a") + String.format("%.4f", predicted) + " > " +
+			// String.format("%.3f", multiplication) + " §f&& " + (Math.abs(difference) >
+			// minDifference ? "§c" : "§b") + String.format("%.4f", Math.abs(difference)) +
+			// " > " + String.format("%.4f", minDifference));
+			data.reduceWalkSpeedBuffer();
+		}
+		data.deltaXZ = deltaXZ;
 	}
 
 	@Check(name = "high-speed", description = "Distance with high speed", conditions = {
@@ -202,5 +232,5 @@ public class Speed extends Cheat implements Listeners {
 				data.highSpeedAmount = 0;
 		}
 	}
-	
+
 }

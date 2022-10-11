@@ -133,8 +133,6 @@ public class Speed extends Cheat implements Listeners {
 		double deltaXZ = blockLoc.distanceXZ(p.getLocation());
 
 		if (deltaXZ == 0 /* || !p.isOnGround() */) {
-			if (deltaXZ != 0)
-				p.sendMessage("Distance X/Z: " + deltaXZ);
 			data.deltaXZ = deltaXZ;
 			data.reduceWalkSpeedBuffer();
 			return;
@@ -156,21 +154,24 @@ public class Speed extends Cheat implements Listeners {
 
 		double difference = predicted - data.deltaXZ;
 
-		double minSpeed = p.getWalkSpeed() + (np.blockAbove == 0 ? 0 : 0.1) + 0.0864;
+		double minSpeed;
+		if (p.isFlying())
+			minSpeed = (p.getFlySpeed() + (np.blockAbove == 0 ? 0 : 0.1) + 0.0864) * (p.isSprinting() ? 2 : 1);
+		else
+			minSpeed = (p.getWalkSpeed() + (np.blockAbove == 0 ? 0 : 0.1) + 0.0864) * (p.isSprinting() ? 1.32 : 1);
+
 		double speedEffect = data.getSpeedModifier();
 		if (p.isOnGround()) {
 			// minSpeed += 0.08;
-			if (speedEffect != 1)
-				minSpeed *= speedEffect;
+			minSpeed *= speedEffect;
 		} else {
 			// minSpeed += 0.16;
-			if (speedEffect != 1)
+			if(speedEffect != 1)
 				minSpeed *= speedEffect * 0.28;
 		}
-		double multiplication = minSpeed - 0.07;
-		double minDifference = np.blockAbove == 0 ? multiplication : multiplication + 0.5;
+		double minDifference = np.blockAbove == 0 ? minSpeed : minSpeed + 0.5;
 
-		if (deltaXZ > minSpeed && predicted > multiplication && Math.abs(difference) > minDifference) {
+		if (deltaXZ > minSpeed && predicted > minSpeed && Math.abs(difference) > minDifference) {
 
 			// p.sendMessage("!! " + (deltaXZ > minSpeed ? "§c" : "§e") +
 			// String.format("%.4f", deltaXZ) + " > " + String.format("%.3f", minSpeed) + "
@@ -182,8 +183,8 @@ public class Speed extends Cheat implements Listeners {
 			if (++data.walkSpeedBuffer > 2.8) {
 				Negativity.alertMod(ReportType.WARNING, p, this, 99, "walk-speed",
 						(deltaXZ > minSpeed ? "Y " : "X ") + String.format("%.4f", deltaXZ) + " > "
-								+ String.format("%.3f", minSpeed) + " && " + (predicted > multiplication ? "Y " : "X ")
-								+ String.format("%.4f", predicted) + " > " + String.format("%.3f", multiplication)
+								+ String.format("%.3f", minSpeed) + " && " + (predicted > minSpeed ? "Y " : "X ")
+								+ String.format("%.4f", predicted) + " > " + String.format("%.3f", minSpeed)
 								+ " && " + (Math.abs(difference) > minDifference ? "Y " : "X ")
 								+ String.format("%.4f", Math.abs(difference)) + " > "
 								+ String.format("%.4f", minDifference) + ", buffer: " + data.walkSpeedBuffer + ", ws: " + String.format("%.2f", p.getWalkSpeed()),

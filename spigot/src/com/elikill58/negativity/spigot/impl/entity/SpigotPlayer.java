@@ -113,7 +113,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public float getWalkSpeed() {
-		return entity.getWalkSpeed();
+		return entity.getWalkSpeed() / 2.0f;
 	}
 
 	@Override
@@ -325,7 +325,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 
 	@Override
 	public float getFlySpeed() {
-		return entity.getFlySpeed();
+		return entity.getFlySpeed() / 2.0f;
 	}
 
 	@Override

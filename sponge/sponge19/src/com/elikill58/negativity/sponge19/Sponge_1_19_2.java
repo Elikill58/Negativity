@@ -1,4 +1,4 @@
-package com.elikill58.negativity.sponge16;
+package com.elikill58.negativity.sponge19;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -16,6 +16,7 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInGround;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInHeldItemSlot;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInLook;
@@ -41,7 +42,7 @@ import com.elikill58.negativity.universal.Adapter;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientboundContainerAckPacket;
+import net.minecraft.network.protocol.game.ClientboundPingPacket;
 import net.minecraft.network.protocol.game.ServerboundAcceptTeleportationPacket;
 import net.minecraft.network.protocol.game.ServerboundChatPacket;
 import net.minecraft.network.protocol.game.ServerboundInteractPacket;
@@ -51,17 +52,17 @@ import net.minecraft.network.protocol.game.ServerboundPickItemPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerActionPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerCommandPacket;
 import net.minecraft.network.protocol.game.ServerboundPlayerInputPacket;
+import net.minecraft.network.protocol.game.ServerboundPongPacket;
 import net.minecraft.network.protocol.game.ServerboundUseItemOnPacket;
 import net.minecraft.network.protocol.game.ServerboundUseItemPacket;
-import net.minecraft.network.protocol.status.ServerboundPingRequestPacket;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
 
-public class Sponge_1_16_5 extends SpongeVersionAdapter {
+public class Sponge_1_19_2 extends SpongeVersionAdapter {
 
-	public Sponge_1_16_5() {
-		super("v1_16_5");
+	public Sponge_1_19_2() {
+		super("v1_19_2");
 		packetsPlayIn.put("ServerboundPlayerActionPacket", (p, f) -> {
 			ServerboundPlayerActionPacket packet = (ServerboundPlayerActionPacket) f;
 			BlockPos pos = packet.getPos();
@@ -69,7 +70,7 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 					translateDigAction(packet.getAction()), translateDigDirection(packet.getDirection()));
 		});
 
-		packetsPlayIn.put("ServerboundChatPacket", (p, packet) -> new NPacketPlayInChat(((ServerboundChatPacket) packet).getMessage()));
+		packetsPlayIn.put("ServerboundChatPacket", (p, packet) -> new NPacketPlayInChat(((ServerboundChatPacket) packet).message()));
 
 		packetsPlayIn.put("ServerboundMovePlayerPacket$PosRot", (p, f) -> {
 			Class<?> sup = ServerboundMovePlayerPacket.class;
@@ -86,6 +87,12 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 			return new NPacketPlayInLook(get(f, sup, "x"), get(f, sup, "y"), get(f, sup, "z"),
 					get(f, sup, "yRot"), get(f, sup, "xRot"), get(f, sup, "onGround"));
 		});
+		packetsPlayIn.put("ServerboundMovePlayerPacket$StatusOnly", (player, raw) -> {
+			if(raw instanceof ServerboundMovePlayerPacket.StatusOnly packet) {
+				return new NPacketPlayInGround(packet.isOnGround());
+			}
+			return null;
+		});
 		packetsPlayIn.put("ServerboundMovePlayerPacket", (p, f) -> {
 			return new NPacketPlayInFlying(get(f, "x"), get(f, "y"), get(f, "z"),
 					get(f, "yRot"), get(f, "xRot"), get(f,  "onGround"), get(f, "hasPos"), get(f, "hasRot"));
@@ -93,9 +100,11 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 		packetsPlayIn.put("ServerboundKeepAlivePacket", (p, f) -> new NPacketPlayInKeepAlive(((ServerboundKeepAlivePacket) f).getId()));
 		packetsPlayIn.put("ServerboundInteractPacket", (pl, f) -> {
 			ServerboundInteractPacket p = (ServerboundInteractPacket) f;
-			Vec3 v = p.getLocation();
+			Object action = get(p, "action");
+			Enum<?> actionType = getFromMethod(action, "getType");
+			Vec3 v = get(action, "location");
 			return new NPacketPlayInUseEntity(0, v == null ? new Vector(0, 0, 0) : new Vector(v.x, v.y, v.z),
-					EnumEntityUseAction.valueOf(p.getAction().name()));
+					EnumEntityUseAction.valueOf(actionType.name()));
 		});
 		packetsPlayIn.put("ServerboundPlayerCommandPacket", (p, f) -> {
 			try {
@@ -109,7 +118,7 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 				return null;
 			}
 		});
-		packetsPlayIn.put("ServerboundPingRequestPacket", (p, f) -> new NPacketPlayInPong(((ServerboundPingRequestPacket) f).getTime()));
+		packetsPlayIn.put("ServerboundPongPacket", (p, f) -> new NPacketPlayInPong(((ServerboundPongPacket) f).getId()));
 		packetsPlayIn.put("ServerboundPickItemPacket", (p, f) -> new NPacketPlayInHeldItemSlot(((ServerboundPickItemPacket) f).getSlot()));
 		packetsPlayIn.put("ServerboundPlayerInputPacket", (p, f) -> {
 			ServerboundPlayerInputPacket packet = (ServerboundPlayerInputPacket) f;
@@ -144,9 +153,9 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 		packetsPlayOut.put("ClientboundUpdateMobEffectPacket", (p, f) -> {
 			return new NPacketPlayOutEntityEffect(get(f, "entityId"), (int) get(f, "effectId"), get(f, "effectAmplifier"), get(f, "effectDurationTicks"), get(f, "flags"));
 		});
-		packetsPlayOut.put("ClientboundContainerAckPacket", (p, f) -> new NPacketPlayOutPing((short) get(f, "uid")));
+		packetsPlayOut.put("ClientboundPingPacket", (p, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
 
-		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundContainerAckPacket(0, (short) ((NPacketPlayOutPing) f).id, false));
+		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new ClientboundPingPacket((int) ((NPacketPlayOutPing) f).id));
 
 		log();
 	}
@@ -281,7 +290,6 @@ public class Sponge_1_16_5 extends SpongeVersionAdapter {
 	
 	@Override
 	public void queuePacket(ServerPlayer p, Object basicPacket) {
-		Adapter.getAdapter().debug("> " + basicPacket.getClass().getSimpleName() + " : " + basicPacket);
-		((net.minecraft.server.level.ServerPlayer) p).connection.send((Packet<?>) basicPacket);
+		((net.minecraft.server.level.ServerPlayer) p).connection.getConnection().send((Packet<?>) basicPacket);
 	}
 }

@@ -240,6 +240,7 @@ Translation:
   - tr_TR
   - vi_VN
   - zh_CN
+  - zh_TW
   # Default language for players
   default: en_US
   # The provider used to get translated messages, useful if you want to customize the way Negativity gets its messages.

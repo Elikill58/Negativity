@@ -127,7 +127,7 @@ public class Speed extends Cheat implements Listeners {
 			// (Math.abs(difference) > minDifference ? "§c" : "§b") + String.format("%.4f",
 			// Math.abs(difference)) + " > " + String.format("%.4f", minDifference));
 
-			if (++data.walkSpeedBuffer > 2.8) {
+			if (++data.walkSpeedBuffer > getConfig().getInt("checks.walk-speed.buffer", 3)) {
 				Negativity.alertMod(ReportType.WARNING, p, this, 99, "walk-speed",
 						(deltaXZ > minSpeed ? "Y " : "X ") + String.format("%.4f", deltaXZ) + " > "
 								+ String.format("%.3f", minSpeed) + " && " + (predicted > minSpeed ? "Y " : "X ")

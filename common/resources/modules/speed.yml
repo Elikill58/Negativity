@@ -45,3 +45,4 @@ checks:
   # Check the walk speed
   walk-speed:
     active: true
+    buffer: 3

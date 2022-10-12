@@ -39,9 +39,11 @@ public class JesusProtocol extends Cheat implements Listener {
 			return;
 		if (np.hasElytra() || p.isInsideVehicle() || Utils.isSwimming(p) || np.isUsingTrident())
 			return;
-		SpigotLocation loc = new SpigotLocation(p.getLocation()), to = e.getTo(), from = e.getFrom(), under = loc.clone().subtract(0, 1, 0);
+		SpigotLocation loc = new SpigotLocation(p.getLocation()), to = e.getTo(), from = e.getFrom(),
+				under = loc.clone().subtract(0, 1, 0);
 		if (hasMaterialsAround(loc, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE", "BED")
-				|| hasMaterialsAround(under, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE", "BED"))
+				|| hasMaterialsAround(under, "ICE", "TRAPDOOR", "SLAB", "STAIRS", "CARPET", "LILY", "STEP", "FENCE",
+						"BED"))
 			return;
 		Material type = loc.getBlock().getType(), underType = under.getBlock().getType();
 		boolean isInWater = type.name().contains("WATER"), isOnWater = underType.name().contains("WATER");
@@ -63,24 +65,23 @@ public class JesusProtocol extends Cheat implements Listener {
 				else if (dif == 0.0)
 					reliability = 90;
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(reliability),
-						"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Diff: " + dif
-								+ " and ping: " + np.ping);
+						"(Stationary_water aroud him) Diff: " + dif + " and ping: " + np.ping);
 			}
 		}
 		if (dif == -0.5 && (isInWater || isOnWater) && !type.name().contains("FENCE")) {
-			mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98), "Warn for Jesus: "
-					+ np.getWarn(this) + ", dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + ", type: " + type.name() + ", type Under: " + underType.name());
+			mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, this, parseInPorcent(98),
+					"dif: -0.5, isIn: " + isInWater + ", isOn: " + isOnWater + ", type: " + type.name()
+							+ ", type Under: " + underType.name());
 		}
 
 		boolean jesusState = np.contentBoolean.getOrDefault("jesus-state", false);
 		if (dif == np.contentDouble.getOrDefault("jesus-last-y-" + jesusState, 0.0) && isInWater && !np.isInFight) {
-			if (!hasOtherThan(under, STATIONARY_WATER) && !Utils.isSwimming(p)) {
+			if (!hasOtherThan(under, "AIR", "WATER")) {
 				mayCancel = SpigotNegativity.alertMod(np.getWarn(this) > 10 ? ReportType.VIOLATION : ReportType.WARNING,
 						p, this, parseInPorcent((dif + 5) * 10),
-						"Warn for Jesus: " + np.getWarn(this) + " (Stationary_water aroud him) Difference between 2 y: "
-								+ dif + " (other: "
-								+ np.contentDouble.getOrDefault("jesus-last-y-" + (!jesusState), 0.0)
-								+ ") and ping: " + np.ping);
+						"(Stationary_water aroud him) Difference between 2 y: " + dif + " (other: "
+								+ np.contentDouble.getOrDefault("jesus-last-y-" + (!jesusState), 0.0) + ") and ping: "
+								+ np.ping);
 			}
 		}
 		np.contentDouble.put("jesus-last-y-" + jesusState, dif);
@@ -89,8 +90,8 @@ public class JesusProtocol extends Cheat implements Listener {
 		double distanceAbs = to.distance(from) - Math.abs(from.getY() - to.getY());
 		SpigotLocation upper = loc.clone().add(0, 1, 0);
 		float distanceFall = p.getFallDistance();
-		if (isInWater && isOnWater && distanceFall < 1 && distanceAbs > p.getWalkSpeed()
-				&& !upper.getBlock().isLiquid() && !p.isFlying()) {
+		if (isInWater && isOnWater && distanceFall < 1 && distanceAbs > p.getWalkSpeed() && !upper.getBlock().isLiquid()
+				&& !p.isFlying()) {
 			if (!hasMaterialsAround(loc, "WATER_LILY") && !hasMaterialsAround(upper, "WATER_LILY")
 					&& !hasOtherThan(under, "WATER")) {
 				mayCancel = SpigotNegativity.alertMod(ReportType.WARNING, p, Cheat.forKey(CheatKeys.JESUS), 98,
@@ -102,7 +103,7 @@ public class JesusProtocol extends Cheat implements Listener {
 		if (isSetBack() && mayCancel)
 			p.teleport(p.getLocation().subtract(0, 1, 0));
 	}
-	
+
 	@Override
 	public boolean isBlockedInFight() {
 		return true;

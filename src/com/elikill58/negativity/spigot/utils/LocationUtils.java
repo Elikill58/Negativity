@@ -234,23 +234,23 @@ public class LocationUtils {
 	 * @param name the name that we are searching in material names
 	 * @return true if one of specified material if around
 	 */
-	public static boolean hasOtherThan(SpigotLocation loc, String name) {
+	public static boolean hasOtherThan(SpigotLocation loc, String... name) {
 		loc = loc.clone();
-		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(name))
+		if (!blockIsOneOfThem(loc.add(0, 0, 1).getBlock(), name))
 			return true;
-		if (!loc.add(1, 0, 0).getBlock().getType().name().contains(name))
+		if (!blockIsOneOfThem(loc.add(1, 0, 0).getBlock(), name))
 			return true;
-		if (!loc.add(0, 0, -1).getBlock().getType().name().contains(name))
+		if (!blockIsOneOfThem(loc.add(0, 0, -1).getBlock(), name))
 			return true;
-		if (!loc.add(0, 0, -1).getBlock().getType().name().contains(name))
+		if (!blockIsOneOfThem(loc.add(0, 0, -1).getBlock(), name))
 			return true;
-		if (!loc.add(-1, 0, 0).getBlock().getType().name().contains(name))
+		if (!blockIsOneOfThem(loc.add(-1, 0, 0).getBlock(), name))
 			return true;
-		if (!loc.add(-1, 0, 0).getBlock().getType().name().contains(name))
+		if (!blockIsOneOfThem(loc.add(-1, 0, 0).getBlock(), name))
 			return true;
-		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(name))
+		if (!blockIsOneOfThem(loc.add(0, 0, 1).getBlock(), name))
 			return true;
-		if (!loc.add(0, 0, 1).getBlock().getType().name().contains(name))
+		if (!blockIsOneOfThem(loc.add(0, 0, 1).getBlock(), name))
 			return true;
 		return false;
 	}

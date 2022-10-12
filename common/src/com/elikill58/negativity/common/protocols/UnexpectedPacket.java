@@ -61,9 +61,9 @@ public class UnexpectedPacket extends Cheat {
 	}
 
 	@Check(name = "held-change", description = "Change held slot to the same")
-	public void onHeldChange(PacketReceiveEvent e) {
+	public void onHeldChange(PacketReceiveEvent e, UnexpectedPacketData data) {
 		Player p = e.getPlayer();
-		if (e.getPacket().getPacketType().equals(Client.HELD_ITEM_SLOT) && NegativityPlayer.getNegativityPlayer(p).loginTime <= 1000 + System.currentTimeMillis()) {
+		if (e.getPacket().getPacketType().equals(Client.HELD_ITEM_SLOT) && data.alreadySend) {
 			NPacketPlayInHeldItemSlot slot = (NPacketPlayInHeldItemSlot) e.getPacket().getPacket();
 			if (p.getInventory().getHeldItemSlot() == slot.slot) {
 				boolean cancel = Negativity.alertMod(ReportType.WARNING, p, this, 100, "held-change",
@@ -73,5 +73,6 @@ public class UnexpectedPacket extends Cheat {
 					e.setCancelled(true);
 			}
 		}
+		data.alreadySend = true;
 	}
 }

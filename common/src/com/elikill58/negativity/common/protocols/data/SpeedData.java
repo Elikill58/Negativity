@@ -40,8 +40,8 @@ public class SpeedData extends CheckData {
 		return 1;
 	}
 	
-	public void reduceWalkSpeedBuffer() {
-		walkSpeedBuffer -= 0.5;
+	public void reduceWalkSpeedBuffer(double r) {
+		walkSpeedBuffer -= r;
     	if(walkSpeedBuffer < 0) {
     		walkSpeedBuffer = 0;
     	}

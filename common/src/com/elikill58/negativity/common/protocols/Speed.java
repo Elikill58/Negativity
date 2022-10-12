@@ -14,7 +14,6 @@ import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
 import com.elikill58.negativity.common.protocols.data.SpeedData;
-import com.elikill58.negativity.universal.Adapter;
 import com.elikill58.negativity.universal.Negativity;
 import com.elikill58.negativity.universal.detections.Cheat;
 import com.elikill58.negativity.universal.detections.keys.CheatKeys;
@@ -68,57 +67,6 @@ public class Speed extends Cheat implements Listeners {
 		}
 	}
 
-	@Check(name = "walk-speed-work", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT,
-			CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND })
-	public void onWalkSpeedWork(PacketReceiveEvent e, SpeedData data) {
-		if (!e.getPacket().getPacketType().isFlyingPacket())
-			return;
-		NPacketPlayInFlying flying = (NPacketPlayInFlying) e.getPacket().getPacket();
-		if (!flying.hasPos || flying.hasPos) // true if to disable it temporary
-			return;
-		Player p = e.getPlayer();
-		Location from = p.getLocation(), to = flying.getLocation(p.getWorld());
-		double yDif = to.getY() - from.getY();
-
-		double maxDistance;
-		if (p.isFlying())
-			maxDistance = p.getFlySpeed() * (p.isSprinting() ? 2 : 1);
-		else
-			maxDistance = p.getWalkSpeed() * (p.isSprinting() ? 1.32 : 1);
-
-		maxDistance *= data.getSpeedModifier();
-		maxDistance *= data.getSlowModifier();
-
-		double maxDistanceX = maxDistance
-				+ Math.max(Math.abs(p.getTheoricVelocity().getX()), Math.abs(p.getVelocity().getX())); // to prevent lag
-																										// issue
-		double maxDistanceZ = maxDistance
-				+ Math.max(Math.abs(p.getTheoricVelocity().getZ()), Math.abs(p.getVelocity().getZ())); // to prevent lag
-																										// issue
-
-		double distanceX = Math.abs(from.getX() - to.getX());
-		double distanceZ = Math.abs(from.getZ() - to.getZ());
-
-		Adapter.getAdapter()
-				.debug((yDif < maxDistance && !(flying.isGround && !p.isOnGround())
-						? (distanceX > maxDistanceX && distanceZ > maxDistanceZ ? "X"
-								: (distanceX > maxDistanceX || distanceZ > maxDistanceZ ? "D" : ":"))
-						: "_") + ": " + String.format("%.4f", distanceX) + "/" + String.format("%.4f", maxDistanceX)
-						+ " >> " + String.format("%.4f", distanceZ) + "/" + String.format("%.4f", maxDistanceZ)
-						+ ", yDif: " + String.format("%.4f", yDif));
-		if ((distanceX > maxDistanceX || distanceZ > maxDistanceZ) && yDif < maxDistance
-				&& !(flying.isGround && !p.isOnGround())) { // go too far, not just change dir & not just fall on ground
-			double difDistance = distanceX - maxDistance;
-			int relia = UniversalUtils.parseInPorcent(difDistance * 500);
-			if (relia > 50)
-				Negativity.alertMod(ReportType.WARNING, p, this, relia, "walk-speed",
-						"Distance X/Z: " + distanceX + "/" + distanceZ + ", maxDistance X/Z: " + maxDistanceX + "/"
-								+ maxDistanceZ + ", yDif: " + yDif + ", fall: " + p.getFallDistance() + ", vel: "
-								+ p.getTheoricVelocity(),
-						null, (long) (difDistance * 50));
-		}
-	}
-
 	@Check(name = "walk-speed", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT,
 			CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND })
 	public void onWalkSpeed(PacketReceiveEvent e, NegativityPlayer np, SpeedData data) {
@@ -134,7 +82,7 @@ public class Speed extends Cheat implements Listeners {
 
 		if (deltaXZ == 0 /* || !p.isOnGround() */) {
 			data.deltaXZ = deltaXZ;
-			data.reduceWalkSpeedBuffer();
+			data.reduceWalkSpeedBuffer(1);
 			return;
 		}
 
@@ -162,10 +110,9 @@ public class Speed extends Cheat implements Listeners {
 
 		double speedEffect = data.getSpeedModifier();
 		if (p.isOnGround()) {
-			// minSpeed += 0.08;
 			minSpeed *= speedEffect;
 		} else {
-			// minSpeed += 0.16;
+			minSpeed += 0.08;
 			if(speedEffect != 1)
 				minSpeed *= speedEffect * 0.28;
 		}
@@ -199,7 +146,7 @@ public class Speed extends Cheat implements Listeners {
 			// String.format("%.3f", multiplication) + " §f&& " + (Math.abs(difference) >
 			// minDifference ? "§c" : "§b") + String.format("%.4f", Math.abs(difference)) +
 			// " > " + String.format("%.4f", minDifference));
-			data.reduceWalkSpeedBuffer();
+			data.reduceWalkSpeedBuffer(p.isOnGround() ? 0.5 : 0.8);
 		}
 		data.deltaXZ = deltaXZ;
 	}

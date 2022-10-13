@@ -17,6 +17,7 @@ import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.SpigotNegativityPlayer;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.PacketContent;
+import com.elikill58.negativity.spigot.packets.PacketContent.ContentModifier;
 import com.elikill58.negativity.spigot.packets.event.PacketReceiveEvent;
 import com.elikill58.negativity.spigot.utils.HandUtils;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
@@ -35,21 +36,23 @@ public class NukerProtocol extends Cheat implements Listener {
 	
 	public NukerProtocol() {
 		super(CheatKeys.NUKER, true, Material.BEDROCK, CheatCategory.WORLD, true, "breaker", "bed breaker", "bedbreaker");
-		try {
-			Class<?> baseBpClass = PacketUtils.getNmsClass("BaseBlockPosition", "core.");
+		if(Version.getVersion().isNewerOrEquals(Version.V1_8)) {
 			try {
-				getX = baseBpClass.getDeclaredMethod("getX");
-				getY = baseBpClass.getDeclaredMethod("getY");
-				getZ = baseBpClass.getDeclaredMethod("getZ");
-				SpigotNegativity.getInstance().getLogger().info("Founded getX baseBlock's methods");
+				Class<?> baseBpClass = PacketUtils.getNmsClass("BaseBlockPosition", "core.");
+				try {
+					getX = baseBpClass.getDeclaredMethod("getX");
+					getY = baseBpClass.getDeclaredMethod("getY");
+					getZ = baseBpClass.getDeclaredMethod("getZ");
+					SpigotNegativity.getInstance().getLogger().info("Founded getX baseBlock's methods");
+				} catch (Exception e) {
+					getX = baseBpClass.getDeclaredMethod("u");
+					getY = baseBpClass.getDeclaredMethod("v");
+					getZ = baseBpClass.getDeclaredMethod("w");
+					SpigotNegativity.getInstance().getLogger().info("Founded u/v/w baseBlock's methods");
+				}
 			} catch (Exception e) {
-				getX = baseBpClass.getDeclaredMethod("u");
-				getY = baseBpClass.getDeclaredMethod("v");
-				getZ = baseBpClass.getDeclaredMethod("w");
-				SpigotNegativity.getInstance().getLogger().info("Founded u/v/w baseBlock's methods");
+				e.printStackTrace();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -84,13 +87,21 @@ public class NukerProtocol extends Cheat implements Listener {
 			return;
 		PacketContent content = packet.getContent();
 		Object dig = content.getSpecificModifier(PacketUtils.getNmsClass("PacketPlayInBlockDig$EnumPlayerDigType", "network.protocol.game.")).read("c");
-		if(!dig.toString().contains("STOP_DESTROY_BLOCK") || getX == null || getY == null || getZ == null)
+		if(!dig.toString().contains("STOP_DESTROY_BLOCK"))
 			return;
 		try {
-			Object bp = content.getSpecificModifier(PacketUtils.getNmsClass("BlockPosition", "core.")).read("a");
-			int x = (int) getX.invoke(bp);
-			int y = (int) getY.invoke(bp);
-			int z = (int) getZ.invoke(bp);
+			int x, y, z;
+			if(Version.getVersion().isNewerOrEquals(Version.V1_8)) {
+				Object bp = content.getSpecificModifier(PacketUtils.getNmsClass("BlockPosition", "core.")).read("a");
+				x = (int) getX.invoke(bp);
+				y = (int) getY.invoke(bp);
+				z = (int) getZ.invoke(bp);
+			} else {
+				ContentModifier<Integer> ints = content.getIntegers();
+				x = ints.read("a");
+				y = ints.read("b");
+				z = ints.read("c");
+			}
 			Block b = p.getWorld().getBlockAt(x, y, z);
 			manageNuker(e, p, np, b);
 		} catch (Exception exc) {

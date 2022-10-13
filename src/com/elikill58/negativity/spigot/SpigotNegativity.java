@@ -135,12 +135,14 @@ public class SpigotNegativity extends JavaPlugin {
 			getLogger().info("I'm trying to make the best anti-cheat as possible.");
 			getLogger().info("If you get error/false positive, or just have suggestion, you can contact me via:");
 			getLogger().info("Discord: @Elikill58#0743, @Elikill58 on twitter or in all other web site like Spigotmc ...");
+			getLogger().info("WARN: This version will be dropped in next 2 years (since september 2022)");
 			getLogger().info("");
 			getLogger().info("------ Negativity Information ------");
 			getConfig().options().copyDefaults();
 			saveDefaultConfig();
 		}
-		getLogger().info("This plugin is free, but you can buy the premium version : https://www.spigotmc.org/resources/86874 <3");
+		if(!v.equals(Version.V1_7))// MC 1.7 isn't supported
+			getLogger().info("This plugin is free, but you can buy the premium version : https://www.spigotmc.org/resources/86874 <3");
 		UniversalUtils.init();
 		Cheat.loadCheat();
 		if(!v.isNewerOrEquals(Version.V1_17))

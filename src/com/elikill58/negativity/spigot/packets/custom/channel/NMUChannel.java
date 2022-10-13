@@ -7,15 +7,17 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.logging.Level;
 
+import org.bukkit.Bukkit;
+import org.bukkit.craftbukkit.v1_7_R4.CraftServer;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.spigot.SpigotNegativity;
 import com.elikill58.negativity.spigot.packets.AbstractPacket;
 import com.elikill58.negativity.spigot.packets.custom.CustomPacketManager;
-import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.PacketType;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
+import net.minecraft.server.v1_7_R4.ServerConnection;
 import net.minecraft.util.io.netty.channel.Channel;
 import net.minecraft.util.io.netty.channel.ChannelFuture;
 import net.minecraft.util.io.netty.channel.ChannelHandler;
@@ -30,11 +32,8 @@ public class NMUChannel extends ChannelAbstract {
 	public NMUChannel(CustomPacketManager customPacketManager) {
 		super(customPacketManager);
 		try {
-			Object dedicatedSrv = PacketUtils.getCraftServer();
-			Object mcServer = dedicatedSrv.getClass().getMethod("getServer").invoke(dedicatedSrv);
-			Object co = ReflectionUtils.getFirstWith(mcServer, PacketUtils.getNmsClass("MinecraftServer", "server."), PacketUtils.getNmsClass("ServerConnection", "network."));
-			@SuppressWarnings("unchecked")
-			List<ChannelFuture> g = (List<ChannelFuture>) ReflectionUtils.getField(co, "g");
+			ServerConnection co = ((CraftServer) Bukkit.getServer()).getServer().getServerConnection();
+			List<ChannelFuture> g = (List<ChannelFuture>) ReflectionUtils.getField(co, "e");
 			g.forEach((channelFuture) -> {
 				channelFuture.channel().pipeline().addFirst(new ChannelInboundHandlerAdapter() {
 					@Override

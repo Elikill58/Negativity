@@ -177,7 +177,7 @@ public class PacketUtils {
 	 */
 	private static Class<?> getEnumPlayerInfoAction() throws SecurityException, ClassNotFoundException {
 		try {
-			return getNmsClass("PacketPlayOutPlayerInfo$EnumPlayerInfoAction", "network.protocol.game.");
+			return Class.forName(NMS_PREFIX + (Version.getVersion(VERSION).isNewerOrEquals(Version.V1_17) ? "network.protocol.game." : "") + "PacketPlayOutPlayerInfo$EnumPlayerInfoAction");
 		} catch (Exception e) {
 			for(Class<?> clazz : getNmsClass("PacketPlayOutPlayerInfo", "network.protocol.game.").getDeclaredClasses())
 				if(clazz.getName().contains("EnumPlayerInfoAction"))

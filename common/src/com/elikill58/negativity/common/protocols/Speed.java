@@ -68,7 +68,7 @@ public class Speed extends Cheat implements Listeners {
 	}
 
 	@Check(name = "walk-speed", description = "Check the walk speed", conditions = { CheckConditions.NO_FIGHT,
-			CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND })
+			CheckConditions.SURVIVAL, CheckConditions.NO_ICE_AROUND, CheckConditions.NO_ELYTRA, CheckConditions.NO_USE_TRIDENT })
 	public void onWalkSpeed(PacketReceiveEvent e, NegativityPlayer np, SpeedData data) {
 		if (!e.getPacket().getPacketType().isFlyingPacket())
 			return;

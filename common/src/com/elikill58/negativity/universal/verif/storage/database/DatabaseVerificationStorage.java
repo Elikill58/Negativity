@@ -59,7 +59,6 @@ public class DatabaseVerificationStorage extends VerificationStorage {
 		});
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public CompletableFuture<Void> saveVerification(Verificator verif) {
 		return CompletableFuture.runAsync(() -> {

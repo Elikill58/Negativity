@@ -463,7 +463,6 @@ public class NegativityPlayer {
 		leftFinished = 0;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public <D extends CheckData> D getCheckData(Cheat cheat) {
 	    return (D) this.checkDatas.computeIfAbsent(cheat.getKey(), a -> cheat.getCheckDataCreator().apply(this));
 	}

@@ -13,7 +13,6 @@ import java.util.concurrent.CompletableFuture;
 
 import com.elikill58.negativity.universal.Adapter;
 
-@SuppressWarnings("unchecked")
 public final class Configuration {
 	
     //private static final char SEPARATOR = '.';
@@ -21,6 +20,7 @@ public final class Configuration {
 	protected final Configuration defaults;
 	protected final File file;
 	protected boolean isSaving = false;
+	protected long lastSaveAsked = 0;
     
     public Configuration() {
         this(null);
@@ -329,26 +329,27 @@ public final class Configuration {
     }
     
     /**
-     * Save but thread-safely. Will use {@link FileSaverTimer} feature
+     * Save but thread-safely.
      */
     public void save() {
     	if(isSaving)
     		return;
     	isSaving = true;
-    	CompletableFuture.runAsync(() -> {
-    		directSave();
-        	isSaving = false;
-    	});
+    	CompletableFuture.runAsync(this::directSave);
     }
     
     /**
      * Directly save on the current thread
      */
     public void directSave() {
+    	if(lastSaveAsked + 500 > System.currentTimeMillis())
+    		return;
+    	lastSaveAsked = System.currentTimeMillis();
     	try {
 			YamlConfiguration.save(this, file);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+    	isSaving = false;
     }
 }

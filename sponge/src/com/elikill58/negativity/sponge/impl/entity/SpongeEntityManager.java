@@ -34,7 +34,7 @@ public class SpongeEntityManager {
 			return new SpongeEntity<>(e);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	public static @Nullable CommandSender getExecutor(@Nullable Audience src) {
 		if(src == null)
 			return null;

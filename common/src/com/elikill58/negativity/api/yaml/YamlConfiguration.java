@@ -12,28 +12,19 @@ import java.util.Map;
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.nodes.Node;
-import org.yaml.snakeyaml.representer.Represent;
 import org.yaml.snakeyaml.representer.Representer;
 
-@SuppressWarnings("unchecked")
 public class YamlConfiguration {
 	private static final ThreadLocal<Yaml> yaml = new ThreadLocal<Yaml>() {
 		@Override
 		protected Yaml initialValue() {
-			final Representer representer = new Representer() {
-				{
-					this.representers.put(Configuration.class, new Represent() {
-						@Override
-						public Node representData(final Object data) {
-							return represent(((Configuration) data).self);
-						}
-					});
-				}
-			};
 			final DumperOptions options = new DumperOptions();
 			options.setDefaultFlowStyle(DumperOptions.FlowStyle.BLOCK);
-			return new Yaml(new Constructor(), representer, options);
+			return new Yaml(new Constructor(), new Representer() {
+				{
+					this.representers.put(Configuration.class, (data) -> represent(((Configuration) data).self));
+				}
+			}, options);
 		}
 	};
 

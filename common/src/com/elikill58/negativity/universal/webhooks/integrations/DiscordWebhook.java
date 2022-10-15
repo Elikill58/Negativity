@@ -306,7 +306,6 @@ public class DiscordWebhook implements Webhook {
 			this.embeds.add(embed);
 		}
 
-		@SuppressWarnings("unchecked")
 		public Tuple<Integer, String> execute() throws IOException {
 			if (this.content == null && this.embeds.isEmpty()) {
 				throw new IllegalArgumentException("Set content or add at least one EmbedObject");

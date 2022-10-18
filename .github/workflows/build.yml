@@ -30,3 +30,9 @@ jobs:
       run: bash setup_spigot.sh
     - name: Build with Gradle
       run: ./gradlew build
+    - name: Send file to discord channel
+      uses: sinshutu/upload-to-discord@master
+      env:
+        DISCORD_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+      with:
+        args: build/libs/*.jar

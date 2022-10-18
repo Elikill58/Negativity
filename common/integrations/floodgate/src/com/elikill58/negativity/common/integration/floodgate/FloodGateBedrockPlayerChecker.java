@@ -25,7 +25,7 @@ public class FloodGateBedrockPlayerChecker implements BedrockPlayerChecker {
 		
 		@Override
 		public String getPluginId() {
-			return "floodgate-bukkit";
+			return "floodgate";
 		}
 	}
 }

@@ -267,7 +267,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public void removePotionEffect(PotionEffectType type) {
 		org.bukkit.potion.PotionEffectType spigotType = SpigotPotionEffectType.fromCommon(type);
 		if(spigotType != null)
-			entity.removePotionEffect(spigotType);
+			Adapter.getAdapter().runSync(() -> entity.removePotionEffect(spigotType));
 		// else can have error
 	}
 
@@ -294,7 +294,7 @@ public class SpigotPlayer extends SpigotEntity<org.bukkit.entity.Player> impleme
 	public void addPotionEffect(PotionEffectType type, int duration, int amplifier) {
 		org.bukkit.potion.PotionEffectType spigotType = SpigotPotionEffectType.fromCommon(type);
 		if(spigotType != null)
-			entity.addPotionEffect(new org.bukkit.potion.PotionEffect(spigotType, duration, amplifier));
+			Adapter.getAdapter().runSync(() -> entity.addPotionEffect(new org.bukkit.potion.PotionEffect(spigotType, duration, amplifier)));
 	}
 
 	@Override

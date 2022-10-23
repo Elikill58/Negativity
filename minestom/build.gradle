@@ -16,7 +16,7 @@ java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 dependencies {
     api project(':common')
 
-    compileOnly 'com.github.Minestom:Minestom:-SNAPSHOT'
+    compileOnly 'com.github.Minestom:Minestom:master-SNAPSHOT'
 }
 
 compileJava.javaCompiler.set(

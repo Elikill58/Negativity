@@ -223,7 +223,7 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 		getPlayerConnection(p).send((Packet<?>) packet);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public void queuePacket(Player p, Object packet) {
 		try {
@@ -239,7 +239,6 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 		return getPlayerConnection(p).connection.channel;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<Entity> getEntities(World w) {
 		List<Entity> entities = new ArrayList<>();

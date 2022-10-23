@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.SocketTimeoutException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -202,8 +203,9 @@ public class UniversalUtils {
 	public static Optional<String> getContentFromURL(String urlName, String post){
 		try {
 			return getContentFromURLWithException(urlName, post);
-        } catch (SSLException e) {
-        	Adapter.getAdapter().getLogger().warn("Failed to connect with the internet connection to check for update or send stats.");
+        } catch (SSLException | SocketTimeoutException e) {
+        	Adapter.getAdapter().getLogger().warn("Failed to connect with the internet connection to check for update.");
+        	HAVE_INTERNET = false;
         } catch (Exception e) {
         	Adapter.getAdapter().getLogger().info("An error occured while trying to make web request to: " + urlName);
         	e.printStackTrace();

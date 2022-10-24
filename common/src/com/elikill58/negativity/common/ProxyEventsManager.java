@@ -21,6 +21,7 @@ import com.elikill58.negativity.universal.pluginMessages.AlertMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessage;
 import com.elikill58.negativity.universal.pluginMessages.NegativityMessagesManager;
 import com.elikill58.negativity.universal.pluginMessages.PlayerVersionMessage;
+import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteBanMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyExecuteWarnMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyPingMessage;
 import com.elikill58.negativity.universal.pluginMessages.ProxyRevokeBanMessage;
@@ -80,8 +81,11 @@ public class ProxyEventsManager implements Listeners {
 			if (e.isShouldBeSendToMultiProxy() && MultiProxyManager.isUsingMultiProxy())
 				MultiProxyManager.getMultiProxy().sendMessage(p, message);
 		} else if (message instanceof ProxyExecuteWarnMessage) {
-			ProxyExecuteWarnMessage banMessage = (ProxyExecuteWarnMessage) message;
-			WarnManager.executeWarn(banMessage.getWarn());
+			ProxyExecuteWarnMessage warnMessage = (ProxyExecuteWarnMessage) message;
+			WarnManager.executeWarn(warnMessage.getWarn());
+		} else if (message instanceof ProxyExecuteBanMessage) {
+			ProxyExecuteBanMessage banMessage = (ProxyExecuteBanMessage) message;
+			BanManager.executeBan(banMessage.getBan());
 		} else if (message instanceof ProxyRevokeBanMessage) {
 			ProxyRevokeBanMessage revocationMessage = (ProxyRevokeBanMessage) message;
 			BanManager.revokeBan(revocationMessage.getPlayerId());

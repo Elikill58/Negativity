@@ -16,7 +16,7 @@ public abstract class MinestomVersionAdapter extends VersionAdapter<Player> {
 		return packetClassName.substring(packetClassName.lastIndexOf('.') + 1);
 	}
 	
-	private static MinestomVersionAdapter instance = new Minestom_1_18_2();
+	private static MinestomVersionAdapter instance = new Minestom_1_19_2();
 	
 	public static MinestomVersionAdapter getVersionAdapter() {
 		return instance;

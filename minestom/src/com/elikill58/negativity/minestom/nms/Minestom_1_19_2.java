@@ -65,10 +65,10 @@ import net.minestom.server.network.packet.server.play.PingPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.server.potion.Potion;
 
-public class Minestom_1_18_2 extends MinestomVersionAdapter {
+public class Minestom_1_19_2 extends MinestomVersionAdapter {
 
-	public Minestom_1_18_2() {
-		super("v1_18_2");
+	public Minestom_1_19_2() {
+		super("v1_19_2");
 		packetsPlayIn.put(getNameOfPacket(ClientPlayerDiggingPacket.class), (p, packet) -> {
 			ClientPlayerDiggingPacket blockDig = (ClientPlayerDiggingPacket) packet;
 			Point pos = blockDig.blockPosition();

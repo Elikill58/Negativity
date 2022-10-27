@@ -14,7 +14,7 @@ import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -154,7 +154,7 @@ public class Fly extends Cheat implements Listeners {
 			CheckConditions.NO_CLIMB_BLOCK })
 	public void onGroundChecker(PacketReceiveEvent e, NegativityPlayer np, FlyData data) {
 		Player p = e.getPlayer();
-		AbstractPacket packet = e.getPacket();
+		Packet packet = e.getPacket();
 		if (packet.getPacketType().equals(PacketType.Client.POSITION)
 				|| packet.getPacketType().equals(PacketType.Client.POSITION_LOOK)) {
 			NPacketPlayInFlying flying = (NPacketPlayInFlying) packet.getPacket();

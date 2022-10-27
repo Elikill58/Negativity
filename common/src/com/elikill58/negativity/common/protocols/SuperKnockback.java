@@ -11,7 +11,7 @@ import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent;
 import com.elikill58.negativity.api.events.player.PlayerToggleActionEvent.ToggleAction;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInEntityAction.EnumPlayerAction;
@@ -35,7 +35,7 @@ public class SuperKnockback extends Cheat implements Listeners {
 		if (!e.hasPlayer())
 			return;
 		Player p = e.getPlayer();
-		AbstractPacket packet = e.getPacket();
+		Packet packet = e.getPacket();
 		PacketType type = packet.getPacketType();
 		long time = System.currentTimeMillis();
 		if (!type.equals(PacketType.Client.ENTITY_ACTION) && !type.equals(PacketType.Client.USE_ENTITY)) {

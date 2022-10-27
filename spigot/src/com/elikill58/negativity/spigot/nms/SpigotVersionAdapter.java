@@ -58,7 +58,6 @@ import com.elikill58.negativity.universal.utils.ReflectionUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 
-@SuppressWarnings("unchecked")
 public abstract class SpigotVersionAdapter extends VersionAdapter<Player> {
 
 	public SpigotVersionAdapter(String version) {

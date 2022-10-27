@@ -201,7 +201,7 @@ public class Sponge_1_12_2 extends SpongeVersionAdapter {
 		((EntityPlayerMP) p).connection.sendPacket((Packet<?>) basicPacket);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public void queuePacket(Player p, Object basicPacket) {
 		try {

@@ -210,7 +210,7 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 		getPlayerConnection(p).send((Packet<?>) packet);
 	}
 	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@SuppressWarnings({ "rawtypes" })
 	@Override
 	public void queuePacket(Player p, Object packet) {
 		try {
@@ -243,7 +243,6 @@ public class Spigot_1_18_R2 extends SpigotVersionAdapter {
 		return (DedicatedServer) ((CraftServer) Bukkit.getServer()).getServer();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelFuture> getFuturChannel() {
 		try {

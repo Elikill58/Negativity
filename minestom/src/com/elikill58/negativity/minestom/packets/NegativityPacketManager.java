@@ -2,7 +2,7 @@ package com.elikill58.negativity.minestom.packets;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.minestom.impl.entity.MinestomEntityManager;
@@ -40,16 +40,16 @@ public class NegativityPacketManager extends FabricPacketManager {
 		e.setCancelled(onPacketSent(commonPacket, p, e.getPacket()).isCancelled());
 	}
 	
-	public AbstractPacket onPacketSent(NPacket packet, Player sender, Object nmsPacket) {
-		MinestomPacket customPacket = new MinestomPacket(packet, nmsPacket, sender);
+	public Packet onPacketSent(NPacket packet, Player sender, Object nmsPacket) {
+		Packet customPacket = new Packet(packet, nmsPacket, sender);
 		notifyHandlersSent(PacketSourceType.CUSTOM, customPacket);
 		return customPacket;
 	}
 
-	public AbstractPacket onPacketReceive(NPacket packet, Player sender, Object nmsPacket) {
+	public Packet onPacketReceive(NPacket packet, Player sender, Object nmsPacket) {
 		if(packet.getPacketType().isUnset())
 			Adapter.getAdapter().debug("Received unset: " + packet.getClass().getSimpleName() + " > " + MinestomVersionAdapter.getVersionAdapter().getNameOfPacket(nmsPacket));
-		MinestomPacket customPacket = new MinestomPacket(packet, nmsPacket, sender);
+		Packet customPacket = new Packet(packet, nmsPacket, sender);
 		notifyHandlersReceive(PacketSourceType.CUSTOM, customPacket);
 		return customPacket;
 	}

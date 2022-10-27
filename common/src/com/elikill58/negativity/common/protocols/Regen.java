@@ -65,7 +65,7 @@ public class Regen extends Cheat implements Listeners {
 				&& (data.lastRegen != System.currentTimeMillis() && Version.getVersion().isNewerOrEquals(Version.V1_14))
 				&& !p.getWorld().getDifficulty().equals(Difficulty.PEACEFUL)) {
 			int ping = p.getPing();
-			if (dif + ping < (Version.getVersion().getTimeBetweenTwoRegenFromVersion())) {
+			if (dif + ping < 5) {
 				boolean mayCancel = Negativity.alertMod(ReportType.WARNING, p, this,
 						UniversalUtils.parseInPorcent(200 - dif - ping), "time", "Player regen, last regen: "
 						+ data.lastRegen + " Actual time: " + actual + " Difference: " + dif + "ms",

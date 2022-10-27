@@ -11,7 +11,7 @@ import org.bukkit.plugin.Plugin;
 
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.impl.packet.SpigotPacketManager;
@@ -78,8 +78,8 @@ public class CustomPacketManager extends SpigotPacketManager implements Listener
 			channel.getRemoveChannelExecutor().shutdownNow();
 	}
 
-	public AbstractPacket onPacketSent(NPacket commonPacket, Player sender, Object packet) {
-		CustomPacket customPacket = new CustomPacket(commonPacket, packet, sender);
+	public Packet onPacketSent(NPacket commonPacket, Player sender, Object packet) {
+		Packet customPacket = new Packet(commonPacket, packet, sender);
 		if (commonPacket == null) {
 			return customPacket;
 		}
@@ -87,8 +87,8 @@ public class CustomPacketManager extends SpigotPacketManager implements Listener
 		return customPacket;
 	}
 
-	public AbstractPacket onPacketReceive(NPacket commonPacket, Player sender, Object packet) {
-		CustomPacket customPacket = new CustomPacket(commonPacket, packet, sender);
+	public Packet onPacketReceive(NPacket commonPacket, Player sender, Object packet) {
+		Packet customPacket = new Packet(commonPacket, packet, sender);
 		if (commonPacket == null) {
 			return customPacket;
 		}

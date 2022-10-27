@@ -3,7 +3,7 @@ package com.elikill58.negativity.api.packets;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.packets.packet.NPacket;
 
-public abstract class AbstractPacket {
+public class Packet {
 
 	protected final Player player;
 	protected Object nmsPacket;
@@ -11,7 +11,7 @@ public abstract class AbstractPacket {
 	protected final NPacket nPacket;
 	protected boolean cancel = false;
 	
-	public AbstractPacket(Object nmsPacket, NPacket nPacket, Player player) {
+	public Packet(NPacket nPacket, Object nmsPacket, Player player) {
 		this.player = player;
 		this.nmsPacket = nmsPacket;
 		this.nPacket = nPacket;

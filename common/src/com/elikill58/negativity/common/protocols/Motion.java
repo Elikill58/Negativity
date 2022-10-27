@@ -3,7 +3,7 @@ package com.elikill58.negativity.common.protocols;
 import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.protocols.Check;
@@ -23,7 +23,7 @@ public class Motion extends Cheat {
 
 	@Check(name = "y-motion", description = "Consistent y-axis motions", conditions = { CheckConditions.NO_FLY, CheckConditions.NO_CLIMB_BLOCK, CheckConditions.NO_USE_JUMP_BOOST, CheckConditions.NO_USE_ELEVATOR, CheckConditions.NO_USE_TRIDENT })
     public void onReceivePacket(PacketReceiveEvent e, NegativityPlayer np, MotionData data) {
-		AbstractPacket pa = e.getPacket();
+		Packet pa = e.getPacket();
 		PacketType type = pa.getPacketType();
         if (!type.isFlyingPacket())
         	return;

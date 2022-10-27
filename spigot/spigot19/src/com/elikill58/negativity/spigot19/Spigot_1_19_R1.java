@@ -263,7 +263,6 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 		return (DedicatedServer) ((CraftServer) Bukkit.getServer()).getServer();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<ChannelFuture> getFuturChannel() {
 		try {

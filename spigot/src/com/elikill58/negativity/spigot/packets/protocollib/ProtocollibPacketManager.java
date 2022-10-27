@@ -14,9 +14,10 @@ import com.comphenix.protocol.events.PacketAdapter;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.injector.packet.PacketRegistry;
 import com.elikill58.negativity.api.events.packets.PacketEvent.PacketSourceType;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.packet.NPacket;
+import com.elikill58.negativity.spigot.impl.entity.SpigotEntityManager;
 import com.elikill58.negativity.spigot.impl.packet.SpigotPacketManager;
 import com.elikill58.negativity.spigot.nms.SpigotVersionAdapter;
 
@@ -33,8 +34,8 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 						Server.KEEP_ALIVE, Server.EXPLOSION, Server.POSITION, Server.ENTITY_TELEPORT, Server.PING)));
 	}
 
-	public AbstractPacket onPacketSent(NPacket commonPacket, Player sender, Object packet, PacketEvent event) {
-		ProtocollibPacket customPacket = new ProtocollibPacket(commonPacket, packet, sender, event);
+	public Packet onPacketSent(NPacket commonPacket, Player sender, Object packet, PacketEvent event) {
+		Packet customPacket = new Packet(commonPacket, packet, SpigotEntityManager.getPlayer(sender));
 		if (commonPacket == null) {
 			return customPacket;
 		}
@@ -42,8 +43,8 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 		return customPacket;
 	}
 
-	public AbstractPacket onPacketReceive(NPacket commonPacket, Player sender, Object packet, PacketEvent event) {
-		ProtocollibPacket customPacket = new ProtocollibPacket(commonPacket, packet, sender, event);
+	public Packet onPacketReceive(NPacket commonPacket, Player sender, Object packet, PacketEvent event) {
+		Packet customPacket = new Packet(commonPacket, packet, SpigotEntityManager.getPlayer(sender));
 		if (commonPacket == null) {
 			return customPacket;
 		}
@@ -72,7 +73,7 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 					PacketDirection.SERVER_TO_CLIENT, nmsPacket);
 			if (commonPacket == null)
 				return;
-			AbstractPacket packet = ProtocollibPacketManager.this.onPacketSent(commonPacket, player, nmsPacket, e);
+			Packet packet = ProtocollibPacketManager.this.onPacketSent(commonPacket, player, nmsPacket, e);
 			if (!e.isCancelled()) {
 				e.setCancelled(packet.isCancelled());
 			}
@@ -92,7 +93,7 @@ public class ProtocollibPacketManager extends SpigotPacketManager {
 					PacketDirection.CLIENT_TO_SERVER, nmsPacket);
 			if (commonPacket == null)
 				return;
-			AbstractPacket packet = ProtocollibPacketManager.this.onPacketReceive(commonPacket, player, nmsPacket, e);
+			Packet packet = ProtocollibPacketManager.this.onPacketReceive(commonPacket, player, nmsPacket, e);
 			if (!e.isCancelled()) {
 				e.setCancelled(packet.isCancelled());
 			}

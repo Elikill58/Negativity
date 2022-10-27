@@ -50,7 +50,6 @@ import net.minecraft.network.protocol.status.ServerboundPingRequestPacket;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
-@SuppressWarnings("unchecked")
 public class Sponge_UnknowVersion extends SpongeVersionAdapter {
 
 	public Sponge_UnknowVersion() {

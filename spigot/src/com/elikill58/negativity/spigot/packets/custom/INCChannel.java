@@ -9,7 +9,7 @@ import java.util.logging.Level;
 
 import org.bukkit.entity.Player;
 
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketDirection;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.NPacket;
@@ -172,7 +172,7 @@ public class INCChannel {
 				super.channelRead(ctx, packet);
 				return;
 			}
-			AbstractPacket nextPacket = getPacketManager().onPacketReceive(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
+			Packet nextPacket = getPacketManager().onPacketReceive(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
 			if(!nextPacket.isCancelled())
 				super.channelRead(ctx, nextPacket.getNmsPacket() != null ? nextPacket.getNmsPacket() : packet);
 		}
@@ -204,7 +204,7 @@ public class INCChannel {
 				super.write(ctx, packet, promise);
 				return;
 			}
-			AbstractPacket nextPacket = getPacketManager().onPacketSent(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
+			Packet nextPacket = getPacketManager().onPacketSent(commonPacket, SpigotEntityManager.getPlayer(this.owner), packet);
 			if(!nextPacket.isCancelled())
 				super.write(ctx, nextPacket.getNmsPacket() != null ? nextPacket.getNmsPacket() : packet, promise);
 		}
@@ -233,7 +233,7 @@ public class INCChannel {
 				PacketType packetType = PacketType.getType(packet.getClass().getSimpleName());
 				if(!(packetType instanceof PacketType.Client || packetType instanceof PacketType.Server)) {
 					NPacket commonPacket = SpigotVersionAdapter.getVersionAdapter().getPacket((Player) null, PacketDirection.HANDSHAKE, packet);
-					AbstractPacket nextPacket = getPacketManager().onPacketReceive(commonPacket, null, packet);
+					Packet nextPacket = getPacketManager().onPacketReceive(commonPacket, null, packet);
 					if(nextPacket != null && nextPacket.isCancelled())
 						return;
 					if(commonPacket instanceof NPacketHandshakeInSetProtocol)

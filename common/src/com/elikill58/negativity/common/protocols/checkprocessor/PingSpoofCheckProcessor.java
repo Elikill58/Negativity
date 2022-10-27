@@ -10,7 +10,7 @@ import com.elikill58.negativity.api.NegativityPlayer;
 import com.elikill58.negativity.api.entity.Player;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
@@ -42,7 +42,7 @@ public class PingSpoofCheckProcessor implements CheckProcessor {
 		if(!np.hasDetectionActive(c) || !c.checkActive("packet"))
 			return;
 		Player p = e.getPlayer();
-		AbstractPacket packet = e.getPacket();
+		Packet packet = e.getPacket();
 		if(packet.getPacketType().equals(PacketType.Server.KEEP_ALIVE)) {
 			long pingId = R.nextInt(50000);
 			waitingIds.add(pingId);
@@ -57,7 +57,7 @@ public class PingSpoofCheckProcessor implements CheckProcessor {
 		if(!np.hasDetectionActive(c) || !c.checkActive("packet"))
 			return;
 		Player p = e.getPlayer();
-		AbstractPacket packet = e.getPacket();
+		Packet packet = e.getPacket();
 		if(packet.getPacketType().equals(PacketType.Client.KEEP_ALIVE)) {
 			lastKeepAliveSent = null;
 		} else if(packet.getPacket() instanceof NPacketPlayInPong || packet.getPacket().getPacketType().equals(PacketType.Client.PONG)) {

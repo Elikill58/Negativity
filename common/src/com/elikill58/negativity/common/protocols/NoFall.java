@@ -12,7 +12,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -166,7 +166,7 @@ public class NoFall extends Cheat {
 	@Check(name = "packet", description = "Player send spoofing packet when risk to have fall damage", conditions = CheckConditions.SURVIVAL)
 	public void onPacket(PacketReceiveEvent e, NegativityPlayer np, NoFallData data) {
 		Player p = e.getPlayer();
-		AbstractPacket packet = e.getPacket();
+		Packet packet = e.getPacket();
 		PacketType type = packet.getPacketType();
 		if (!type.isFlyingPacket())
 			return;

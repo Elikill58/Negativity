@@ -18,7 +18,7 @@ import com.elikill58.negativity.api.events.player.PlayerDamageEntityEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.World;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
@@ -41,7 +41,7 @@ public class PacketListener implements Listeners {
 		if(!e.hasPlayer() || e.getPacket().getPacketType() == null)
 			return;
 		Player p = e.getPlayer();
-		AbstractPacket packet = e.getPacket();
+		Packet packet = e.getPacket();
 		NegativityPlayer np = NegativityPlayer.getNegativityPlayer(p);
 		np.allPackets++;
 		PacketType type = packet.getPacketType();

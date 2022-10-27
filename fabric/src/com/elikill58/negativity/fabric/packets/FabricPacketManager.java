@@ -13,14 +13,14 @@ import com.elikill58.negativity.api.events.player.PlayerCommandPreProcessEvent;
 import com.elikill58.negativity.api.events.player.PlayerMoveEvent;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketManager;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInChat;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInFlying;
 
 public abstract class FabricPacketManager extends PacketManager {
 
-	public void notifyHandlersReceive(PacketSourceType source, AbstractPacket packet) {
+	public void notifyHandlersReceive(PacketSourceType source, Packet packet) {
 		Player p = packet.getPlayer();
 		PacketReceiveEvent event = new PacketReceiveEvent(source, packet, p);
 		if (packet.getPacket() instanceof NPacketPlayInChat) {
@@ -64,7 +64,7 @@ public abstract class FabricPacketManager extends PacketManager {
 		EventManager.callEvent(event);
 	}
 
-	public void notifyHandlersSent(PacketSourceType source, AbstractPacket packet) {
+	public void notifyHandlersSent(PacketSourceType source, Packet packet) {
 		PacketSendEvent event = new PacketSendEvent(source, packet, packet.getPlayer());
 		EventManager.callEvent(event);
 	}

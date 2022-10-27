@@ -17,7 +17,7 @@ import com.elikill58.negativity.api.item.Material;
 import com.elikill58.negativity.api.item.Materials;
 import com.elikill58.negativity.api.location.Location;
 import com.elikill58.negativity.api.location.Vector;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.protocols.Check;
 import com.elikill58.negativity.api.protocols.CheckConditions;
@@ -125,7 +125,7 @@ public class Scaffold extends Cheat {
 
 	@Check(name = "packet", description = "Distance of move with packet", conditions = CheckConditions.SURVIVAL)
 	public void onPacket(PacketReceiveEvent e) {
-		AbstractPacket pa = e.getPacket();
+		Packet pa = e.getPacket();
 		if (pa.getPacketType().equals(PacketType.Client.BLOCK_PLACE)) {
 			Player p = e.getPlayer();
 			pa.getContent().getSpecificModifier(float.class).getContent().forEach((field, value) -> {

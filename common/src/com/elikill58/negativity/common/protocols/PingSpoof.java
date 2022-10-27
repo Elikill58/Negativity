@@ -10,7 +10,7 @@ import com.elikill58.negativity.api.events.packets.PacketEvent;
 import com.elikill58.negativity.api.events.packets.PacketReceiveEvent;
 import com.elikill58.negativity.api.events.packets.PacketSendEvent;
 import com.elikill58.negativity.api.item.Materials;
-import com.elikill58.negativity.api.packets.AbstractPacket;
+import com.elikill58.negativity.api.packets.Packet;
 import com.elikill58.negativity.api.packets.PacketType;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInKeepAlive;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
@@ -35,7 +35,7 @@ public class PingSpoof extends Cheat implements Listeners {
 	
 	@EventListener
 	public void onPacketSent(PacketSendEvent e) {
-		AbstractPacket packet = e.getPacket();
+		Packet packet = e.getPacket();
 		if(packet.getPacketType().equals(PacketType.Server.KEEP_ALIVE)) {
 			PingSpoofData data = NegativityPlayer.getNegativityPlayer(e.getPlayer()).getCheckData(this);
 			data.pingId = ((NPacketPlayOutKeepAlive) packet.getPacket()).time;
@@ -45,7 +45,7 @@ public class PingSpoof extends Cheat implements Listeners {
 	
 	@EventListener
 	public void onPacketReceive(PacketReceiveEvent e) {
-		AbstractPacket packet = e.getPacket();
+		Packet packet = e.getPacket();
 		if(packet.getPacketType().equals(PacketType.Client.KEEP_ALIVE)) {
 			NPacketPlayInKeepAlive keepAlive = (NPacketPlayInKeepAlive) packet.getPacket();
 			PingSpoofData data = NegativityPlayer.getNegativityPlayer(e.getPlayer()).getCheckData(this);

@@ -2,6 +2,8 @@ package com.elikill58.negativity.spigot.nms;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.util.HashMap;
+import java.util.function.BiConsumer;
 
 import org.bukkit.entity.Player;
 
@@ -11,16 +13,19 @@ import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.DigAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Version;
 import com.elikill58.negativity.universal.utils.ReflectionUtils;
 
 public abstract class NoRemapSpigotVersionAdapter extends SpigotVersionAdapter {
 
-	public Method baseBlockGetX, baseBlockGetY, baseBlockGetZ, getPlayerHandle, mathCos, mathSin, mathTps;
+	public Method baseBlockGetX, baseBlockGetY, baseBlockGetZ, getPlayerHandle, mathCos, mathSin, mathTps, blockCombinedId;
 	public Field pingField, tpsField;
 	public Object dedicatedServer;
 
+	@SuppressWarnings("rawtypes")
 	public NoRemapSpigotVersionAdapter(String version) {
 		super(version);
 		Version v = Version.getVersion(version);
@@ -41,6 +46,16 @@ public abstract class NoRemapSpigotVersionAdapter extends SpigotVersionAdapter {
 			dedicatedServer = PacketUtils.getDedicatedServer();
 			
 			tpsField = PacketUtils.getNmsClass("MinecraftServer").getDeclaredField(getTpsFieldName());
+			
+			Class<?> block = PacketUtils.getNmsClass("Block");
+			
+			if(v.equals(Version.V1_8)) {
+				for(Method m : PacketUtils.getNmsClass("RegistryID").getDeclaredMethods())
+					if(m.getName().equalsIgnoreCase("b") && m.getParameterCount() == 1)
+						blockCombinedId = m;
+			} else {
+				blockCombinedId = block.getMethod("getCombinedId", PacketUtils.getNmsClass("IBlockData"));
+			}
 
 			if (v.isNewerOrEquals(Version.V1_13)) {
 				packetsPlayIn.put("PacketPlayInBlockDig", (player, packet) -> {
@@ -68,6 +83,36 @@ public abstract class NoRemapSpigotVersionAdapter extends SpigotVersionAdapter {
 					}
 
 					return new NPacketPlayInUseItem(Hand.MAIN);
+				});
+			}
+			packetsPlayOut.put("PacketPlayOutBlockChange", (player, f) -> {
+				return new NPacketPlayOutBlockChange(getBlockPosition(get(f, "a")), getBlockStateIdFromRegistry(get(f, "block")));
+			});
+
+			if (v.isNewerOrEquals(Version.V1_16)) {
+				packetsPlayOut.put("PacketPlayOutMultiBlockChange", (player, f) -> {
+					Object chunkCoords = get(f, "a");
+					HashMap<BlockPosition, Long> blocks = new HashMap<>();
+					try {
+						f.getClass().getMethod("a", BiConsumer.class).invoke(f, (BiConsumer) (pos, data) -> {
+							blocks.put(getBlockPosition(pos), getBlockStateIdFromRegistry(get(data, "c")));
+						});
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+					return new NPacketPlayOutMultiBlockChange(getFromMethod(chunkCoords, "getX"), getFromMethod(chunkCoords, "getZ"), blocks);
+				});
+			} else {
+				packetsPlayOut.put("PacketPlayOutMultiBlockChange", (player, f) -> {
+					Object chunkCoords = get(f, "a");
+					int chunkX = get(chunkCoords, "x");
+					int chunkZ = get(chunkCoords, "z");
+					HashMap<BlockPosition, Long> blocks = new HashMap<>();
+					Object[] blockDatas = get(f, "b");
+					for(Object blockData : blockDatas) {
+						blocks.put(getBlockPosition(getFromMethod(blockData, "a")), getBlockStateIdFromRegistry(get(blockData, "c")));
+					}
+					return new NPacketPlayOutMultiBlockChange((long) chunkX, (long) chunkZ, blocks);
 				});
 			}
 		} catch (Exception e) {
@@ -124,6 +169,19 @@ public abstract class NoRemapSpigotVersionAdapter extends SpigotVersionAdapter {
 			e.printStackTrace();
 			return 0;
 		}
+	}
+	
+	public long getBlockStateIdFromRegistry(Object obj) {
+		try {
+			if(Version.getVersion().isNewerOrEquals(Version.V1_9)) {
+				return (long) blockCombinedId.invoke(null, obj);
+			} else {
+				return (long) (int) blockCombinedId.invoke(PacketUtils.getNmsClass("Block").getField("d").get(null), obj);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 	
 	public abstract String getTpsFieldName();

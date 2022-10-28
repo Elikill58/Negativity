@@ -19,7 +19,6 @@ import com.elikill58.negativity.api.packets.packet.NPacketStatus;
 import com.elikill58.negativity.api.packets.packet.login.NPacketLoginUnset;
 import com.elikill58.negativity.universal.Adapter;
 
-@SuppressWarnings("unchecked")
 public abstract class VersionAdapter<R> {
 
 	protected final HashMap<String, BiFunction<R, Object, NPacketPlayOut>> packetsPlayOut = new HashMap<>();
@@ -102,7 +101,7 @@ public abstract class VersionAdapter<R> {
 			e.printStackTrace();
 		}
 		NPacket packet = PacketType.createEmptyOrUnsetPacket(dir, packetName);
-		if(!unknownPacket.contains(packetName) && !dir.equals(PacketDirection.HANDSHAKE) && !packet.getPacketType().isUnset()) { // if wasn't present
+		if(!unknownPacket.contains(packetName) && !dir.equals(PacketDirection.HANDSHAKE)) { // if wasn't present
 			unknownPacket.add(packetName);
 			Adapter a = Adapter.getAdapter();
 			a.debug("[VersionAdapter] Unknow packet " + packetName + " for dir " + dir.name() + ":");

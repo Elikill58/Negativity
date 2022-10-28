@@ -1,6 +1,7 @@
 package com.elikill58.negativity.spigot19;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Queue;
 
@@ -13,6 +14,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.entity.BoundingBox;
 import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.location.Vector;
@@ -28,14 +30,16 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPong;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPosition;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInPositionLook;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
-import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
+import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -49,13 +53,16 @@ import com.elikill58.negativity.universal.utils.ReflectionUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.SectionPos;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.Packet;
 import net.minecraft.network.protocol.game.ClientboundBlockDestructionPacket;
+import net.minecraft.network.protocol.game.ClientboundBlockUpdatePacket;
 import net.minecraft.network.protocol.game.ClientboundExplodePacket;
 import net.minecraft.network.protocol.game.ClientboundKeepAlivePacket;
 import net.minecraft.network.protocol.game.ClientboundPingPacket;
 import net.minecraft.network.protocol.game.ClientboundPlayerPositionPacket;
+import net.minecraft.network.protocol.game.ClientboundSectionBlocksUpdatePacket;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.network.protocol.game.ClientboundTeleportEntityPacket;
 import net.minecraft.network.protocol.game.ClientboundUpdateMobEffectPacket;
@@ -74,6 +81,7 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.network.ServerGamePacketListenerImpl;
 import net.minecraft.util.Mth;
 import net.minecraft.world.effect.MobEffect;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.entity.LevelEntityGetter;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
@@ -163,6 +171,17 @@ public class Spigot_1_19_R1 extends SpigotVersionAdapter {
 			return new NPacketPlayOutEntityEffect(packet.getEntityId(), getTypeFromNMSEffect(packet.getEffect()), packet.getEffectAmplifier(), packet.getEffectDurationTicks(), (byte) 0);
 		});
 		packetsPlayOut.put(ClientboundPingPacket.class.getSimpleName(), (player, f) -> new NPacketPlayOutPing(((ClientboundPingPacket) f).getId()));
+		packetsPlayOut.put(ClientboundBlockUpdatePacket.class.getSimpleName(), (player, f) -> {
+			ClientboundBlockUpdatePacket p = (ClientboundBlockUpdatePacket) f;
+			return new NPacketPlayOutBlockChange(getBlockPosition(p.getPos()), Block.BLOCK_STATE_REGISTRY.getId(p.blockState));
+		});
+		packetsPlayOut.put(ClientboundSectionBlocksUpdatePacket.class.getSimpleName(), (player, f) -> {
+			ClientboundSectionBlocksUpdatePacket p = (ClientboundSectionBlocksUpdatePacket) f;
+			SectionPos section = get(f, "b");
+			HashMap<BlockPosition, Long> blocks = new HashMap<>();
+			p.runUpdates((pos, state) -> blocks.put(getBlockPosition(pos), (long) Block.BLOCK_STATE_REGISTRY.getId(state)));
+			return new NPacketPlayOutMultiBlockChange(section.getX(), section.getZ(), blocks);
+		});
 
 		packetsHandshake.put("PacketHandshakingInSetProtocol", (player, raw) -> {
 			ClientIntentionPacket packet = (ClientIntentionPacket) raw;

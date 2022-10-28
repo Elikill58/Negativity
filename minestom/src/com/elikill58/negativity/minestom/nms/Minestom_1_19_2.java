@@ -3,6 +3,7 @@ package com.elikill58.negativity.minestom.nms;
 import org.jetbrains.annotations.NotNull;
 
 import com.elikill58.negativity.api.block.BlockFace;
+import com.elikill58.negativity.api.block.BlockPosition;
 import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.location.Vector;
 import com.elikill58.negativity.api.packets.PacketType;
@@ -25,11 +26,13 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity.EnumEntityUseAction;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
 import com.elikill58.negativity.api.potion.PotionEffectType;
@@ -56,11 +59,13 @@ import net.minestom.server.network.packet.client.play.ClientTeleportConfirmPacke
 import net.minestom.server.network.packet.client.play.ClientUseItemPacket;
 import net.minestom.server.network.packet.server.SendablePacket;
 import net.minestom.server.network.packet.server.play.BlockBreakAnimationPacket;
+import net.minestom.server.network.packet.server.play.BlockChangePacket;
 import net.minestom.server.network.packet.server.play.EntityEffectPacket;
 import net.minestom.server.network.packet.server.play.EntityTeleportPacket;
 import net.minestom.server.network.packet.server.play.EntityVelocityPacket;
 import net.minestom.server.network.packet.server.play.ExplosionPacket;
 import net.minestom.server.network.packet.server.play.KeepAlivePacket;
+import net.minestom.server.network.packet.server.play.MultiBlockChangePacket;
 import net.minestom.server.network.packet.server.play.PingPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
 import net.minestom.server.potion.Potion;
@@ -170,6 +175,14 @@ public class Minestom_1_19_2 extends MinestomVersionAdapter {
 					PotionEffectType.fromName(po.effect().key().asString()), po.amplifier(), po.duration(), po.flags());
 		});
 		packetsPlayOut.put(getNameOfPacket(PingPacket.class), (p, f) -> new NPacketPlayOutPing(((PingPacket) f).id()));
+		packetsPlayOut.put(getNameOfPacket(BlockChangePacket.class), (p, f) -> {
+			Point pos = ((BlockChangePacket) f).blockPosition();
+			return new NPacketPlayOutBlockChange(new BlockPosition(pos.blockX(), pos.blockY(), pos.blockZ()), ((BlockChangePacket) f).blockStateId());
+		});
+		packetsPlayOut.put(getNameOfPacket(MultiBlockChangePacket.class), (p, f) -> {
+			MultiBlockChangePacket m = (MultiBlockChangePacket) f;
+			return new NPacketPlayOutMultiBlockChange(m.chunkSectionPosition() >> 42, m.chunkSectionPosition() << 22 >> 42, m.blocks());
+		});
 
 		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new PingPacket((int) ((NPacketPlayOutPing) f).id));
 

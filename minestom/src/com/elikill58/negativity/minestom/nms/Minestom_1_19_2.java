@@ -35,11 +35,14 @@ import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAli
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
 import com.elikill58.negativity.api.potion.PotionEffectType;
 import com.elikill58.negativity.universal.Adapter;
 
 import net.minestom.server.coordinate.Point;
 import net.minestom.server.coordinate.Pos;
+import net.minestom.server.entity.EntityType;
 import net.minestom.server.entity.Player;
 import net.minestom.server.network.packet.client.play.ClientChatMessagePacket;
 import net.minestom.server.network.packet.client.play.ClientEntityActionPacket;
@@ -68,6 +71,8 @@ import net.minestom.server.network.packet.server.play.KeepAlivePacket;
 import net.minestom.server.network.packet.server.play.MultiBlockChangePacket;
 import net.minestom.server.network.packet.server.play.PingPacket;
 import net.minestom.server.network.packet.server.play.PlayerPositionAndLookPacket;
+import net.minestom.server.network.packet.server.play.SpawnEntityPacket;
+import net.minestom.server.network.packet.server.play.SpawnPlayerPacket;
 import net.minestom.server.potion.Potion;
 
 public class Minestom_1_19_2 extends MinestomVersionAdapter {
@@ -182,6 +187,16 @@ public class Minestom_1_19_2 extends MinestomVersionAdapter {
 		packetsPlayOut.put(getNameOfPacket(MultiBlockChangePacket.class), (p, f) -> {
 			MultiBlockChangePacket m = (MultiBlockChangePacket) f;
 			return new NPacketPlayOutMultiBlockChange(m.chunkSectionPosition() >> 42, m.chunkSectionPosition() << 22 >> 42, m.blocks());
+		});
+		packetsPlayOut.put(getNameOfPacket(SpawnEntityPacket.class), (p, f) -> {
+			SpawnEntityPacket m = (SpawnEntityPacket) f;
+			Point pos = m.position();
+			return new NPacketPlayOutSpawnEntity(com.elikill58.negativity.api.entity.EntityType.get(EntityType.fromId(m.type()).key().asString()), m.entityId(), m.uuid(),pos.x(), pos.y(), pos.z());
+		});
+		packetsPlayOut.put(getNameOfPacket(SpawnPlayerPacket.class), (p, f) -> {
+			SpawnPlayerPacket m = (SpawnPlayerPacket) f;
+			Point pos = m.position();
+			return new NPacketPlayOutSpawnPlayer(m.entityId(), m.playerUuid(),pos.x(), pos.y(), pos.z());
 		});
 
 		negativityToPlatform.put(PacketType.Server.PING, (p, f) -> new PingPacket((int) ((NPacketPlayOutPing) f).id));

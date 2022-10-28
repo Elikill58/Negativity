@@ -30,13 +30,17 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUnset;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseEntity;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockBreakAnimation;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityEffect;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityTeleport;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutEntityVelocity;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutExplosion;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutKeepAlive;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPing;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutPosition;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
+import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutUnset;
 import com.elikill58.negativity.api.packets.packet.status.NPacketStatusUnset;
 
@@ -268,7 +272,7 @@ public interface PacketType {
 		BLOCK_ACTION("BlockAction", NPacketPlayOutUnset::new),
 		BLOCK_BREAK("BlockBreak", NPacketPlayOutUnset::new),
 		BLOCK_BREAK_ANIMATION("BlockBreakAnimation", NPacketPlayOutBlockBreakAnimation::new),
-		BLOCK_CHANGE("BlockChange", NPacketPlayOutUnset::new),
+		BLOCK_CHANGE("BlockChange", NPacketPlayOutBlockChange::new),
 		BOSS("Boss", NPacketPlayOutUnset::new),
 		CAMERA("Camera", NPacketPlayOutUnset::new),
 		CHAT("Chat", NPacketPlayOutUnset::new),
@@ -302,7 +306,7 @@ public interface PacketType {
 		MAP_CHUNK("MapChunk", NPacketPlayOutUnset::new),
 		MAP_CHUNK_BULK("MapChunkBulk", NPacketPlayOutUnset::new),
 		MOUNT("Mount", NPacketPlayOutUnset::new),
-		MULTI_BLOCK_CHANGE("MultiBlockChange", NPacketPlayOutUnset::new),
+		MULTI_BLOCK_CHANGE("MultiBlockChange", NPacketPlayOutMultiBlockChange::new),
 		NAMED_ENTITY_SPAWN("NamedEntitySpawn", NPacketPlayOutUnset::new),
 		NAMED_SOUND_EFFECT("NamedSoundEffect", NPacketPlayOutUnset::new),
 		NBT_QUERY("NBTQuery", NPacketPlayOutUnset::new),
@@ -329,12 +333,11 @@ public interface PacketType {
 		SET_COMPRESSION("SetCompression", NPacketPlayOutUnset::new),
 		SET_COOLDOWN("SetCooldown", NPacketPlayOutUnset::new),
 		SET_SLOT("SetSlot", NPacketPlayOutUnset::new),
-		SPAWN_ENTITY("SpawnEntity", NPacketPlayOutUnset::new),
+		SPAWN_ENTITY("SpawnEntity", NPacketPlayOutSpawnEntity::new, "SpawnEntityLiving"),
 		SPAWN_ENTITY_EXPERIENCE_ORB("SpawnEntityExperienceOrb", NPacketPlayOutUnset::new),
-		SPAWN_ENTITY_LIVING("SpawnEntityLiving", NPacketPlayOutUnset::new),
 		SPAWN_ENTITY_PAINTING("SpawnEntityPainting", NPacketPlayOutUnset::new),
 		SPAWN_ENTITY_WEATHER("SpawnEntityWeather", NPacketPlayOutUnset::new),
-		SPAWN_PLAYER("SpawnPlayer", NPacketPlayOutUnset::new),
+		SPAWN_PLAYER("SpawnPlayer", NPacketPlayOutSpawnPlayer::new),
 		SPAWN_POSITION("SpawnPosition", NPacketPlayOutUnset::new),
 		STATISTIC("Statistic", NPacketPlayOutUnset::new),
 		STOP_SOUND("StopSound", NPacketPlayOutUnset::new),

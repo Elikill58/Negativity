@@ -3,14 +3,12 @@ package com.elikill58.negativity.spigot.nms;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
-import java.util.UUID;
 import java.util.function.BiConsumer;
 
 import org.bukkit.entity.Player;
 
 import com.elikill58.negativity.api.block.BlockFace;
 import com.elikill58.negativity.api.block.BlockPosition;
-import com.elikill58.negativity.api.entity.EntityType;
 import com.elikill58.negativity.api.inventory.Hand;
 import com.elikill58.negativity.api.packets.PacketContent;
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig;
@@ -18,8 +16,6 @@ import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInBlockDig.
 import com.elikill58.negativity.api.packets.packet.playin.NPacketPlayInUseItem;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutBlockChange;
 import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutMultiBlockChange;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnEntity;
-import com.elikill58.negativity.api.packets.packet.playout.NPacketPlayOutSpawnPlayer;
 import com.elikill58.negativity.spigot.utils.PacketUtils;
 import com.elikill58.negativity.universal.Version;
 
@@ -81,11 +77,11 @@ public abstract class NoRemapSpigotVersionAdapter extends SpigotVersionAdapter {
 					return new NPacketPlayInUseItem(Hand.getHand(new PacketContent(packet).getSpecificModifier(PacketUtils.getNmsClass("EnumHand")).read(0).toString()));
 				});
 			}
-			packetsPlayOut.put("PacketPlayOutSpawnEntity", (player, f) -> {
+			/*packetsPlayOut.put("PacketPlayOutSpawnEntity", (player, f) -> {
 				return new NPacketPlayOutSpawnEntity(EntityType.UNKNOWN, get(f, "a"), v.isNewerOrEquals(Version.V1_8) ? UUID.randomUUID() : UUID.fromString(get(f, "b")),
 						get(f, "c"), get(f, "d"), get(f, "e"));
 			});
-			packetsPlayOut.put("PacketPlayOutNamedEntitySpawn", (p, f) -> new NPacketPlayOutSpawnPlayer(get(f, "a"), UUID.fromString(get(f, "b")), get(f, "c"), get(f, "d"), get(f, "e")));
+			packetsPlayOut.put("PacketPlayOutNamedEntitySpawn", (p, f) -> new NPacketPlayOutSpawnPlayer(get(f, "a"), UUID.fromString(get(f, "b")), get(f, "c"), get(f, "d"), get(f, "e")));*/
 			packetsPlayOut.put("PacketPlayOutBlockChange", (p, f) -> new NPacketPlayOutBlockChange(getBlockPosition(get(f, "a")), getBlockStateIdFromRegistry(get(f, "block"))));
 
 			if (v.isNewerOrEquals(Version.V1_16)) {
